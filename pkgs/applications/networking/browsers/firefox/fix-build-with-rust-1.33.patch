@@ -1,0 +1,21 @@
+--- a/servo/components/style/gecko/regen_atoms.py
++++ b/servo/components/style/gecko/regen_atoms.py
+@@ -171,6 +171,7 @@
+ '''[1:]
+ 
+ MACRO_TEMPLATE = '''
++/// Returns a static atom by passing the literal string it represents.
+ #[macro_export]
+ macro_rules! atom {{
+ {body}\
+--- a/servo/components/style/gecko_string_cache/namespace.rs
++++ b/servo/components/style/gecko_string_cache/namespace.rs
+@@ -11,6 +11,8 @@
+ use std::fmt;
+ use std::ops::Deref;
+ 
++/// In Gecko namespaces are just regular atoms, so this is a simple macro to
++/// forward one macro to the other.
+ #[macro_export]
+ macro_rules! ns {
+     () => {

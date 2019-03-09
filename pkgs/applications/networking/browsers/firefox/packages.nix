@@ -18,6 +18,16 @@ rec {
 
     patches = [
       ./no-buildconfig-ffx65.patch
+      (fetchpatch {
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/f63ebd7e9e28";
+        sha256 = "0xmms4f3qxp6wfr76bqp8ymk14ksf86mmiwm2ka540zwqzhrc24b";
+      })
+      (fetchpatch {
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/4f2e84dc490d";
+        sha256 = "18ba9riwplchii60664j2shydb19s2gyd3jldr1225bqj3wky521";
+      })
+      # Modified version of: https://hg.mozilla.org/mozilla-central/rev/1a1d8b9f1a3a 
+      ./fix-build-with-rust-1.33.patch
     ];
 
     extraNativeBuildInputs = [ python3 ];

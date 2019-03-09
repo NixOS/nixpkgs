@@ -11,7 +11,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, nodejs
+, rust-cbindgen, nodejs, fetchpatch
 , debugBuild ? false
 
 ### optionals
