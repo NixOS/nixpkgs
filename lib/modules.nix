@@ -394,12 +394,12 @@ rec {
      to refer to the full configuration without creating an infinite
      recursion.
   */
-  pushDownProperties = cfg:
-    if cfg._type or "" == "merge" then
+  pushDownProperties = cfg: let type = cfg._type or ""; in
+    if type == "merge" then
       concatMap pushDownProperties cfg.contents
-    else if cfg._type or "" == "if" then
+    else if type == "if" then
       map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
-    else if cfg._type or "" == "override" then
+    else if type == "override" then
       map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
     else # FIXME: handle mkOrder?
       [ cfg ];
