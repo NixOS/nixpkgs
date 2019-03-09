@@ -108,25 +108,25 @@ in
       ([ pkgs.pantheon.switchboard-plug-power ])
       (mkIf config.services.printing.enable  ([pkgs.system-config-printer]) )
     ];
-    services.pantheon.contractor.enable = true;
+    services.pantheon.contractor.enable = mkDefault true;
     services.geoclue2.enable = mkDefault true;
     # pantheon has pantheon-agent-geoclue2
     services.geoclue2.enableDemoAgent = false;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
-    services.gnome3.file-roller.enable = true;
+    services.gnome3.file-roller.enable = mkDefault true;
     # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gvfs.enable = true;
-    services.gnome3.rygel.enable = true;
-    services.gsignond.enable = true;
+    services.gnome3.rygel.enable = mkDefault true;
+    services.gsignond.enable = mkDefault true;
     services.gsignond.plugins = with pkgs.gsignondPlugins; [ lastfm mail oauth ];
     services.udev.packages = [ pkgs.pantheon.elementary-settings-daemon ];
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.xserver.libinput.enable = mkDefault true;
     services.xserver.updateDbusEnvironment = true;
-    services.zeitgeist.enable = true;
+    services.zeitgeist.enable = mkDefault true;
 
     networking.networkmanager.enable = mkDefault true;
     networking.networkmanager.basePackages =
