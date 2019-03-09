@@ -3,16 +3,17 @@
 , squashfsTools, iproute, iptables, ebtables, libcap, dqlite
 , sqlite-replication
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
+, bash
 }:
 
 buildGoPackage rec {
-  name = "lxd-3.0.2";
+  name = "lxd-3.10";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${name}/${name}.tar.gz";
-    sha256 = "1ha8ijzblf15p0kcpgwshswz6s2rdd2b4qnzjw3l72ww620hr84j";
+    sha256 = "0vd0p3xf54s7f9vcjfiin29py6hxyyxnisvp6am67l5nwhg7rnnc";
   };
 
   preBuild = ''
@@ -27,11 +28,11 @@ buildGoPackage rec {
   buildFlags = [ "-tags libsqlite3" ];
 
   postInstall = ''
-    # binaries from test/
-    rm $bin/bin/{deps,macaroon-identity}
+    # test binaries, code generation
+    rm $bin/bin/{deps,macaroon-identity,generate}
 
-    wrapProgram $bin/bin/lxd --prefix PATH ":" ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables
+    wrapProgram $bin/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
+      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash
       (writeShellScriptBin "apparmor_parser" ''
         exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
       '')

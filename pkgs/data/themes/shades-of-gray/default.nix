@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "shades-of-gray-theme-${version}";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "WernerFP";
     repo = "Shades-of-gray-theme";
     rev = version;
-    sha256 = "1i5mra1ib3c8xqnhwjh8yzjcdnhvqdmccw5x52sfh9xq797px39l";
+    sha256 = "1ql8rkbm5l94b842hg53cwf02vbw2785rlrs4cr60d4kn2c0lj2y";
   };
 
   buildInputs = [ gtk_engines ];

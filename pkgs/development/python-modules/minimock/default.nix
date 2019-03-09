@@ -13,9 +13,11 @@ buildPythonPackage rec {
     sha256 = "c88fa8a7120623f23990a7f086a9657f6ced09025a55e3be8649a30b4945441a";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ nose ];
 
-  checkPhase = "./test";
+  checkPhase = ''
+    ./test
+  '';
 
   meta = with stdenv.lib; {
     description = "A minimalistic mocking library for python";

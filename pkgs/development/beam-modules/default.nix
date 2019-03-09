@@ -23,18 +23,17 @@ let
         hexRegistrySnapshot = callPackage ./hex-registry-snapshot.nix { };
 
         rebar = callPackage ../tools/build-managers/rebar { };
-        rebar3-open = callPackage ../tools/build-managers/rebar3 {
-          hermeticRebar3 = false;
-        };
-        rebar3 = callPackage ../tools/build-managers/rebar3 {
-          hermeticRebar3 = true;
-        };
+        rebar3-open = callPackage ../tools/build-managers/rebar3 { };
+        rebar3 = callPackage ../tools/build-managers/rebar3 { };
 
         # rebar3 port compiler plugin is required by buildRebar3
         pc_1_6_0 = callPackage ./pc {};
         pc = pc_1_6_0;
 
         fetchHex = callPackage ./fetch-hex.nix { };
+
+        fetchRebar3Deps = callPackage ./fetch-rebar-deps.nix { };
+        rebar3Relx = callPackage ./rebar3-release.nix { };
 
         buildRebar3 = callPackage ./build-rebar3.nix {};
         buildHex = callPackage ./build-hex.nix {};
@@ -74,25 +73,6 @@ let
 
         lfe = lfe_1_2;
         lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
-
-        # We list all base hex packages for beam tooling explicitly to ensure
-        # tha the tooling does not break during hex-packages.nix updates.
-        erlware_commons_1_0_0 = buildHex {
-          name    = "erlware_commons";
-          version = "1.0.0";
-          sha256 = "0wkphbrjk19lxdwndy92v058qwcaz13bcgdzp33h21aa7vminzx7";
-          beamDeps = [ cf_0_2_2 ];
-        };
-        cf_0_2_2 = buildHex {
-          name = "cf";
-          version = "0.2.2";
-          sha256 = "08cvy7skn5d2k4manlx5k3anqgjdvajjhc5jwxbaszxw34q3na28";
-        };
-        getopt_0_8_2 = buildHex {
-          name = "getopt";
-          version = "0.8.2";
-          sha256 = "1xw30h59zbw957cyjd8n50hf9y09jnv9dyry6x3avfwzcyrnsvkk";
-        };
 
         # Non hex packages. Examples how to build Rebar/Mix packages with and
         # without helper functions buildRebar3 and buildMix.

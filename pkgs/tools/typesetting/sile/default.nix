@@ -1,6 +1,7 @@
 { stdenv, darwin, fetchurl, makeWrapper, pkgconfig
 , harfbuzz, icu, lpeg, luaexpat, luazlib, luafilesystem, luasocket, luasec
 , fontconfig, lua, libiconv
+, makeFontsConf, gentium, gentium-book-basic, dejavu_fonts
 }:
 
 with stdenv.lib;
@@ -18,11 +19,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "sile-${version}";
-  version = "0.9.5";
+  version = "0.9.5.1";
 
   src = fetchurl {
     url = "https://github.com/simoncozens/sile/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "0m80rkbkma11xsr7bbrmq5mdwi5k79clsrmc75blbnsf9wqil8dp";
+    sha256 = "0fh0jbpsyqyq0hzq4midn7yw2z11hqdgqb9mmgz766cp152wrkb0";
   };
 
   nativeBuildInputs = [pkgconfig makeWrapper];
@@ -40,14 +41,36 @@ stdenv.mkDerivation rec {
   LUA_PATH = luaPath;
   LUA_CPATH = luaCPath;
 
+  FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [
+      gentium
+      gentium-book-basic
+      dejavu_fonts
+    ];
+  };
+
+  doCheck = stdenv.targetPlatform == stdenv.hostPlatform
+  && ! stdenv.isAarch64 # random seg. faults
+  && ! stdenv.isDarwin; # dy lib not found
+
+  enableParallelBuilding = true;
+
+  checkPhase = ''
+    make documentation/developers.pdf documentation/sile.pdf
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/sile \
       --set LUA_PATH "${luaPath};" \
       --set LUA_CPATH "${luaCPath};" \
+
+    install -D -t $out/share/doc/sile documentation/*.pdf
   '';
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+
+  outputs = [ "out" "doc" ];
 
   meta = {
     description = "A typesetting system";

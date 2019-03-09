@@ -11,11 +11,11 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "3.5.10";
+  version = "3.5.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9041d17556b9652cd9cf13b56a4efad7b51df6c567279ced26584cb4eb712b09";
+    sha256 = "6116e750f98018febc08dfee6df20446cf954adbcfa378d2c703d56c8864aff3";
   };
 
   checkInputs = [ glibcLocales ];

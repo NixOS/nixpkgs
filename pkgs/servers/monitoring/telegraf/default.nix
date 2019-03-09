@@ -28,6 +28,6 @@ buildGoPackage rec {
     license = licenses.mit;
     homepage = https://www.influxdata.com/time-series-platform/telegraf/;
     maintainers = with maintainers; [ mic92 roblabla ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

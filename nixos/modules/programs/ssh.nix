@@ -88,7 +88,8 @@ in
         type = types.lines;
         default = "";
         description = ''
-          Extra configuration text appended to <filename>ssh_config</filename>.
+          Extra configuration text prepended to <filename>ssh_config</filename>. Other generated
+          options will be added after a <code>Host *</code> pattern.
           See <citerefentry><refentrytitle>ssh_config</refentrytitle><manvolnum>5</manvolnum></citerefentry>
           for help.
         '';
@@ -203,6 +204,11 @@ in
     # generation in the sshd service.
     environment.etc."ssh/ssh_config".text =
       ''
+        # Custom options from `extraConfig`, to override generated options
+        ${cfg.extraConfig}
+
+        # Generated options from other settings
+        Host *
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
 
         ${optionalString cfg.setXAuthLocation ''
@@ -213,8 +219,6 @@ in
 
         ${optionalString (cfg.pubkeyAcceptedKeyTypes != []) "PubkeyAcceptedKeyTypes ${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
         ${optionalString (cfg.hostKeyAlgorithms != []) "HostKeyAlgorithms ${concatStringsSep "," cfg.hostKeyAlgorithms}"}
-
-        ${cfg.extraConfig}
       '';
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;

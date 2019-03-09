@@ -130,7 +130,7 @@ in
       group = "gnunet";
       description = "GNUnet User";
       home = homeDir;
-      createHome = true; 
+      createHome = true;
       uid = config.ids.uids.gnunet;
     };
 
@@ -146,7 +146,7 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.miniupnpc ];
       environment.TMPDIR = "/tmp";
-      serviceConfig.PrivateTemp = true;
+      serviceConfig.PrivateTmp = true;
       serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c ${configFile}";
       serviceConfig.User = "gnunet";
       serviceConfig.UMask = "0007";

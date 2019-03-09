@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fontconfig freetype libpng zlib libjpeg openssl
     libX11 libXext libXrender
-    qt5.qtwebkit qt5.qtsvg
+    qt5.qtwebkit qt5.qtsvg qt5.qtxmlpatterns
   ];
 
   prePatch = ''

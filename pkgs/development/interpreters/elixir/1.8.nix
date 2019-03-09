@@ -1,7 +1,7 @@
 { mkDerivation }:
 
 mkDerivation rec {
-  version = "1.8.0-rc.1";
-  sha256 = "06k9q46cwn79ic6kw0b0mskf9rqlgm02jb8n1ajz55kmw134kq6m";
+  version = "1.8.1";
+  sha256 = "1npnrkn21kqqfqrsn06mr78jxs6n5l8c935jpxvnmj7iysp50pf9";
   minimumOTPVersion = "20";
 }

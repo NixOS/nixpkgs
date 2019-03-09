@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.1.3";
+  version = "1.2.3";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "man" "doc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "12xqhszx50pmw2nx7n1pym7n47z95ddwwkyx35bfgmxsd9hjpmh2";
+    sha256 = "0i0dn3w3545lvmjlzqj3j70lk8yrq64r9frp1rk6a161gwq20ixv";
   };
 
   patches = [

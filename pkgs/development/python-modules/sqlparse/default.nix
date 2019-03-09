@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "ce028444cfab83be538752a2ffdb56bc417b7784ff35bb9a3062413717807dec";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
   checkPhase = ''
     py.test
   '';

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "1.3.1";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4420f5b320145bf097ca9a12b18ec27c067886e2832d181f268c46c3bcb0d2e4";
+    sha256 = "0f204a1cc95bcd708102ad86665da2dff53c1b9f47d490506e45cc96c93978ad";
   };
 
   checkInputs = [ pytest mock ];

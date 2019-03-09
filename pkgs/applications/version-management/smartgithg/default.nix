@@ -1,4 +1,5 @@
 { stdenv, fetchurl, lib, makeWrapper
+, substituteAll
 , jre
 , gtk2, glib
 , libXtst
@@ -21,7 +22,10 @@ stdenv.mkDerivation rec {
   buildCommand = let
     pkg_path = "$out/${name}";
     bin_path = "$out/bin";
-    install_freedesktop_items = ./install_freedesktop_items.sh;
+    install_freedesktop_items = substituteAll {
+      inherit (stdenv) shell;
+      src = ./install_freedesktop_items.sh;
+    };
     runtime_paths = lib.makeBinPath [
       jre
       #git mercurial subversion # the paths are requested in configuration

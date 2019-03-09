@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
   buildFlags = "CC=cc";
   installFlags = "PREFIX=$(out)";
 
-  postInstall = "wrapProgram $out/bin/chronic --prefix PERL5LIB : $PERL5LIB";
+  postInstall = ''
+    wrapProgram $out/bin/chronic --prefix PERL5LIB : $PERL5LIB
+    wrapProgram $out/bin/ts --prefix PERL5LIB : $PERL5LIB
+  '';
 
   meta = {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";

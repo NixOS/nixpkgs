@@ -24,5 +24,6 @@ buildPythonPackage rec {
     '';
     maintainers = [ maintainers.mic92 ];
     license = licenses.mit;
+    broken = true;
   };
 }

@@ -2,18 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "tikzit-${version}";
-  version = "2.1";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "tikzit";
     repo = "tikzit";
-    # We don't reference the revision by the appropriate tag (v2.1) here,
-    # as the version of that tag still has the old version number in the
-    # relevant header file. This would cause a bad user experience, as
-    # "Help > About" would still display the old version number even though
-    # we indeed ship the new version 2.1.
-    rev = "97c2a2a7ecae12bf376558997805c24c3b6e3e07";
-    sha256 = "0sbgijbln18gac9989x484r62jlxyagkq0ap0fvzislrkac4z3y9";
+    rev = "v2.1.4";
+    sha256 = "121pgl2cdkksw48mjg6hzk7324ax6iw6fq7q3v1kdgwm8rwxm1fl";
   };
 
   nativeBuildInputs = [ qmake qttools flex bison ];

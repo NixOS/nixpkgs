@@ -28,7 +28,7 @@ let params =
       propagatedBuildInputs = [ coq-ext-lib simple-io ];
     };
   };
-  param = params."${coq.coq-version}" or params."8.8";
+  param = params."${coq.coq-version}";
 in
 
 stdenv.mkDerivation rec {

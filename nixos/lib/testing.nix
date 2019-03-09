@@ -3,7 +3,7 @@
   # Use a minimal kernel?
 , minimal ? false
   # Ignored
-, config ? null
+, config ? {}
   # Modules to add to each VM
 , extraConfigurations ? [] }:
 

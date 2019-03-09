@@ -4,7 +4,7 @@ with lib;
 
 buildGoPackage rec {
   name = "gnatsd-${version}";
-  version = "1.2.0";
+  version = "1.4.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/nats-io/gnatsd";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "nats-io";
     repo = "gnatsd";
-    sha256 = "186xywzdrmvlhlh9wgjs71rqvgab8vinlr3gkzkknny82nv7hcjw";
+    sha256 = "0wxdvaxl273kd3wcas634hx1wx5piljgbfr6vhf669b1frkgrh2b";
   };
 
   meta = {

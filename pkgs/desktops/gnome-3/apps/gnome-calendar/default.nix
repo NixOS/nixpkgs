@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib, python3
-, gettext, libxml2, gnome3, gtk, evolution-data-server, libsoup
+, gettext, libxml2, gnome3, gtk3, evolution-data-server, libsoup
 , glib, gnome-online-accounts, gsettings-desktop-schemas }:
 
 let
@@ -22,8 +22,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook python3 ];
   buildInputs = [
-    gtk evolution-data-server libsoup glib gnome-online-accounts libdazzle libgweather geoclue2 geocode-glib
-    gsettings-desktop-schemas gnome3.defaultIconTheme
+    gtk3 evolution-data-server libsoup glib gnome-online-accounts libdazzle libgweather geoclue2 geocode-glib
+    gsettings-desktop-schemas gnome3.adwaita-icon-theme
   ];
 
   postPatch = ''

@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig vala gettext libxml2 desktop-file-utils wrapGAppsHook ];
 
-  buildInputs = [ glib gtk3 libgtop gnome3.defaultIconTheme ];
+  buildInputs = [ glib gtk3 libgtop gnome3.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x build-aux/meson/postinstall.sh

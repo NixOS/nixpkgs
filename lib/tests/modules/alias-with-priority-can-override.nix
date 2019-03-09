@@ -1,5 +1,8 @@
 # This is a test to show that mkAliasOptionModule sets the priority correctly
 # for aliased options.
+#
+# This test shows that an alias with a high priority is able to override
+# a non-aliased option.
 
 { config, lib, ... }:
 
@@ -32,10 +35,10 @@ with lib;
 
   imports = [
     # Create an alias for the "enable" option.
-    (mkAliasOptionModuleWithPriority [ "enableAlias" ] [ "enable" ])
+    (mkAliasOptionModule [ "enableAlias" ] [ "enable" ])
 
-    # Disable the aliased option, but with a default (low) priority so it
-    # should be able to be overridden by the next import.
+    # Disable the aliased option with a high priority so it
+    # should override the next import.
     ( { config, lib, ... }:
       {
         enableAlias = lib.mkForce false;

@@ -1,6 +1,6 @@
-{ bdbSupport ? false # build support for Berkeley DB repositories
+{ bdbSupport ? true # build support for Berkeley DB repositories
 , httpServer ? false # build Apache DAV module
-, httpSupport ? false # client must support http
+, httpSupport ? true # client must support http
 , pythonBindings ? false
 , perlBindings ? false
 , javahlBindings ? false

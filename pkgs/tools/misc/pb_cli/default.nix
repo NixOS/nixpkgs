@@ -6,17 +6,15 @@ assert video -> capture != null;
 assert clipboard -> xclip != null;
 
 stdenv.mkDerivation rec {
-  name = "pb_cli-${version}";
-  version = "1.0";
+  name = "pb_cli-unstable-${version}";
+  version = "2019-03-10";
 
   src = fetchFromGitHub {
     owner = "ptpb";
     repo = "pb_cli";
-    rev  = "5242382b3d6b5c0ddaf6e4843a69746b40866e57";
-    sha256 = "0543x3377apinhxnsfq82zlp5sm8g1bf6hmsvvcwra5rsshv2ybk";
+    rev  = "6b9ce1ee45fe651d06d7c479a20026a173dd328b";
+    sha256 = "0w6a789zffvz4ixsb92q45n5s4xyx7s2l2f07972i3dajaaai8z7";
   };
-
-  patches = [ ./0001-eval-fix.patch ];
 
   buildInputs = [ makeWrapper ];
 
@@ -33,8 +31,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A no bullshit ptpb client";
+    description = "A no bullshit 0x0.st client";
     homepage = "https://github.com/ptpb/pb_cli";
     maintainers = [ maintainers.ar1a ];
+    license = licenses.gpl3Plus;
   };
 }

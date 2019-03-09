@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "hex";
-  version = "1.2.0";
+  version = "1.3.0";
 
   minimumOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/hex-${version}.tbz";
-    sha256 = "17hqf7z5afp2z2c55fk5myxkm7cm74259rqm94hcxkqlpdaqhm8h";
+    url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/hex-v${version}.tbz";
+    sha256 = "193567pn58df3b824vmfanncdfgf9cxzl7q3rq39zl9szvzhvkja";
   };
 
   propagatedBuildInputs = [ cstruct ];

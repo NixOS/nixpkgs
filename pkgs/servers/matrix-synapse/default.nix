@@ -23,15 +23,16 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "0.34.1.1";
+  version = "0.99.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13jmbcabll3gk0b6yqwfwpc7aymqhpv6iririzskhm4pgbjcp3yk";
+    sha256 = "0y6vic0fjx9k8178vsns0ab4ngqx8qhiyampqnil0b1biqcd68bw";
   };
 
   patches = [
-    ./matrix-synapse.patch
+    # adds an entry point for the service
+    ./homeserver-script.patch
   ];
 
   propagatedBuildInputs = [
@@ -39,13 +40,12 @@ in buildPythonApplication rec {
     bleach
     canonicaljson
     daemonize
-    dateutil
     frozendict
     jinja2
     jsonschema
     lxml
     matrix-synapse-ldap3
-    msgpack-python
+    msgpack
     netaddr
     phonenumbers
     pillow
@@ -59,8 +59,7 @@ in buildPythonApplication rec {
     psutil
     psycopg2
     pyasn1
-    pydenticon
-    pymacaroons-pynacl
+    pymacaroons
     pynacl
     pyopenssl
     pysaml2
@@ -73,16 +72,16 @@ in buildPythonApplication rec {
     unpaddedbase64
   ] ++ lib.optional enableSystemd systemd;
 
-  checkInputs = [ mock ];
+  checkInputs = [ mock parameterized ];
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" trial tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
   '';
 
   meta = with stdenv.lib; {
     homepage = https://matrix.org;
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ralith roblabla ekleog ];
+    maintainers = with maintainers; [ ralith roblabla ekleog pacien ];
   };
 }

@@ -5,18 +5,19 @@
 , grpc_google_iam_v1
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iot";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1502fa6d64f8f0f7c0e34e71c82c5daacc8fd8f78256cfadef5ae06c5efcc3b4";
+    sha256 = "b274fb5d38cfaa556a07943d9c9a23ca4aa3ecca51135a70325e1c95fa699474";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 grpc_google_iam_v1 google_api_core ];
 
   checkPhase = ''

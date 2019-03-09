@@ -2,6 +2,9 @@
 , minorVersion
 , maintenanceVersion
 , src_sha256
+# source deps
+, libuvVersion
+, libuvSha256
 }:
 { stdenv, fetchurl, fetchzip
 # build tools
@@ -34,10 +37,9 @@ let
     sha256 = "03kaqbjbi6viz0n33dk5jlf6ayxqlsq4804n7kwkndiga9s4hd42";
   };
 
-  libuvVersion = "ed3700c849289ed01fe04273a7bf865340b2bd7e";
   libuv = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
-    sha256 = "137w666zsjw1p0ma3lf94d75hr1q45sgkfmbizkyji2qm57cnxjs";
+    sha256 = libuvSha256;
   };
 
   rmathVersion = "0.1";

@@ -73,9 +73,33 @@ in {
       };
     };
 
+    kubeconfig = mkOption {
+      description = ''
+        Path to kubeconfig to use for storing flannel config using the
+        Kubernetes API
+      '';
+      type = types.nullOr types.path;
+      default = null;
+    };
+
     network = mkOption {
       description = " IPv4 network in CIDR format to use for the entire flannel network.";
       type = types.str;
+    };
+
+    nodeName = mkOption {
+      description = ''
+        Needed when running with Kubernetes as backend as this cannot be auto-detected";
+      '';
+      type = types.nullOr types.str;
+      default = with config.networking; (hostName + optionalString (!isNull domain) ".${domain}");
+      example = "node1.example.com";
+    };
+
+    storageBackend = mkOption {
+      description = "Determines where flannel stores its configuration at runtime";
+      type = types.enum ["etcd" "kubernetes"];
+      default = "etcd";
     };
 
     subnetLen = mkOption {
@@ -122,17 +146,25 @@ in {
       after = [ "network.target" ];
       environment = {
         FLANNELD_PUBLIC_IP = cfg.publicIp;
+        FLANNELD_IFACE = cfg.iface;
+      } // optionalAttrs (cfg.storageBackend == "etcd") {
         FLANNELD_ETCD_ENDPOINTS = concatStringsSep "," cfg.etcd.endpoints;
         FLANNELD_ETCD_KEYFILE = cfg.etcd.keyFile;
         FLANNELD_ETCD_CERTFILE = cfg.etcd.certFile;
         FLANNELD_ETCD_CAFILE = cfg.etcd.caFile;
-        FLANNELD_IFACE = cfg.iface;
         ETCDCTL_CERT_FILE = cfg.etcd.certFile;
         ETCDCTL_KEY_FILE = cfg.etcd.keyFile;
         ETCDCTL_CA_FILE = cfg.etcd.caFile;
         ETCDCTL_PEERS = concatStringsSep "," cfg.etcd.endpoints;
+      } // optionalAttrs (cfg.storageBackend == "kubernetes") {
+        FLANNELD_KUBE_SUBNET_MGR = "true";
+        FLANNELD_KUBECONFIG_FILE = cfg.kubeconfig;
+        NODE_NAME = cfg.nodeName;
       };
       preStart = ''
+        mkdir -p /run/flannel
+        touch /run/flannel/docker
+      '' + optionalString (cfg.storageBackend == "etcd") ''
         echo "setting network configuration"
         until ${pkgs.etcdctl.bin}/bin/etcdctl set /coreos.com/network/config '${builtins.toJSON networkConfig}'
         do
@@ -140,15 +172,19 @@ in {
           sleep 1
         done
       '';
-      postStart = ''
-        while [ ! -f /run/flannel/subnet.env ]
-        do
-          sleep 1
-        done
-      '';
-      serviceConfig.ExecStart = "${cfg.package}/bin/flannel";
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/flannel";
+        Restart = "always";
+        RestartSec = "10s";
+      };
     };
 
-    services.etcd.enable = mkDefault (cfg.etcd.endpoints == ["http://127.0.0.1:2379"]);
+    services.etcd.enable = mkDefault (cfg.storageBackend == "etcd" && cfg.etcd.endpoints == ["http://127.0.0.1:2379"]);
+
+    # for some reason, flannel doesn't let you configure this path
+    # see: https://github.com/coreos/flannel/blob/master/Documentation/configuration.md#configuration
+    environment.etc."kube-flannel/net-conf.json" = mkIf (cfg.storageBackend == "kubernetes") {
+      source = pkgs.writeText "net-conf.json" (builtins.toJSON networkConfig);
+    };
   };
 }

@@ -6,6 +6,8 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/zaquestion/lab";
 
+  subPackages = [ "." ];
+
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";

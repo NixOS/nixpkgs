@@ -1,8 +1,8 @@
 { stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, freetype, gdk_pixbuf
-, glib, gtk2, harfbuzz, jdk, lib, xorg
-, libbsd, libjack2, libpng
+, wrapGAppsHook, gtk2, gtk3, harfbuzz, jdk, lib, xorg
+, libbsd, libjack2, libpng, ffmpeg
 , libxkbcommon
-, makeWrapper, pixman
+, makeWrapper, pixman, autoPatchelfHook
 , xdg_utils, zenity, zlib }:
 
 stdenv.mkDerivation rec {
@@ -14,22 +14,21 @@ stdenv.mkDerivation rec {
     sha256 = "0n0fxh9gnmilwskjcayvjsjfcs3fz9hn00wh7b3gg0cv3qqhich8";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
 
   unpackCmd = "mkdir root ; dpkg-deb -x $curSrc root";
 
   dontBuild    = true;
-  dontPatchELF = true;
-  dontStrip    = true;
+  dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
-  libPath = with xorg; lib.makeLibraryPath [
-    alsaLib bzip2.out cairo freetype gdk_pixbuf glib gtk2 harfbuzz libX11 libXau
+  buildInputs = with xorg; [
+    alsaLib bzip2.out cairo freetype gdk_pixbuf gtk2 gtk3 harfbuzz libX11 libXau
     libXcursor libXdmcp libXext libXfixes libXrender libbsd libjack2 libpng libxcb
     libxkbfile pixman xcbutil xcbutilwm zlib
   ];
 
   binPath = lib.makeBinPath [
-    xdg_utils zenity
+    xdg_utils zenity ffmpeg
   ];
 
   installPhase = ''
@@ -49,6 +48,16 @@ stdenv.mkDerivation rec {
     rm -rf $out/libexec/lib/jre
     ln -s ${jdk.home}/jre $out/libexec/lib/jre
 
+    mkdir -p $out/bin
+    ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
+
+    cp -r usr/share $out/share
+    substitute usr/share/applications/bitwig-studio.desktop \
+      $out/share/applications/bitwig-studio.desktop \
+      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
+  '';
+
+  postFixup = ''
     # Bitwig’s `libx11-windowing-system.so` has several problems:
     #
     #   • has some old version of libxkbcommon linked statically (ಠ_ಠ),
@@ -67,22 +76,11 @@ stdenv.mkDerivation rec {
       -not -name '*.so' \
       -not -path '*/resources/*' | \
     while IFS= read -r f ; do
-      patchelf \
-        --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
-        $f && \
       wrapProgram $f \
         --prefix PATH : "${binPath}" \
-        --prefix LD_LIBRARY_PATH : "${libPath}" \
+        "''${gappsWrapperArgs[@]}" \
         --set LD_PRELOAD "${libxkbcommon.out}/lib/libxkbcommon.so" || true
     done
-
-    mkdir -p $out/bin
-    ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
-
-    cp -r usr/share $out/share
-    substitute usr/share/applications/bitwig-studio.desktop \
-      $out/share/applications/bitwig-studio.desktop \
-      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
   '';
 
   meta = with stdenv.lib; {

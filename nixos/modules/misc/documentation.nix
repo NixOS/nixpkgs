@@ -1,10 +1,12 @@
-{ config, lib, pkgs, baseModules, ... }:
+{ config, lib, pkgs, baseModules, extraModules, modules, ... }:
 
 with lib;
 
 let
 
   cfg = config.documentation;
+
+  manualModules = baseModules ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
 
   /* For the purpose of generating docs, evaluate options with each derivation
     in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
@@ -18,7 +20,7 @@ let
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ baseModules;
+          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
           args = (config._module.args) // { modules = [ ]; };
           specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
         };
@@ -146,6 +148,17 @@ in
         '';
       };
 
+      nixos.includeAllModules = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether the generated NixOS's documentation should include documentation for all
+          the options from all the NixOS modules included in the current
+          <literal>configuration.nix</literal>. Disabling this will make the manual
+          generator to ignore options defined outside of <literal>baseModules</literal>.
+        '';
+      };
+
     };
 
   };
@@ -156,6 +169,7 @@ in
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
+      environment.etc."man.conf".source = "${pkgs.man-db}/etc/man_db.conf";
     })
 
     (mkIf cfg.info.enable {

@@ -1,17 +1,18 @@
 { fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobject-introspection
 , intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3, gcr
 , p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre
-, vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
+, vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib
+, glib, gtk3, gnome-online-accounts, libgweather, libgdata }:
 
 stdenv.mkDerivation rec {
   name = "evolution-data-server-${version}";
-  version = "3.30.4";
+  version = "3.30.5";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1j8lwl04zz59sg7k3hpkzp829z8xyd1isz8xavm9vzxfvw5w776y";
+    sha256 = "1s952wyhgcbmq9nfgk75v15zdy1h3wy5p5rmkqibaavmc0pk3mli";
   };
 
   patches = [
@@ -19,19 +20,20 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit tzdata;
     })
+    ./hardcode-gsettings.patch
   ];
 
   nativeBuildInputs = [
     cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobject-introspection vala
   ];
-  buildInputs = with gnome3; [
-    glib libsoup libxml2 gtk gnome-online-accounts
+  buildInputs = [
+    glib libsoup libxml2 gtk3 gnome-online-accounts
     gcr p11-kit libgweather libgdata libaccounts-glib json-glib
     icu sqlite kerberos openldap webkitgtk glib-networking
     libcanberra-gtk3 pcre
   ];
 
-  propagatedBuildInputs = [ libsecret nss nspr libical db ];
+  propagatedBuildInputs = [ libsecret nss nspr libical db libsoup ];
 
   cmakeFlags = [
     "-DENABLE_UOA=OFF"
@@ -40,6 +42,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
   ];
+
+  postPatch = ''
+    substituteInPlace src/libedataserver/e-source-registry.c --subst-var-by ESD_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
+  '';
 
 
   passthru = {

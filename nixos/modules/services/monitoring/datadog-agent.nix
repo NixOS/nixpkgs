@@ -202,7 +202,7 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps ];
+    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute ];
 
     users.extraUsers.datadog = {
       description = "Datadog Agent User";
@@ -216,7 +216,7 @@ in {
 
     systemd.services = let
       makeService = attrs: recursiveUpdate {
-        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps ];
+        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "datadog";
@@ -260,7 +260,7 @@ in {
         path = [ ];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
-          ${pkgs.datadog-trace-agent}/bin/trace-agent -config /etc/datadog-agent/datadog.yaml
+          ${datadogPkg}/bin/trace-agent -config /etc/datadog-agent/datadog.yaml
         '';
       });
 

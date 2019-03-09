@@ -38,6 +38,8 @@ let
       bind_timelimit ${toString cfg.bind.timeLimit}
       ${optionalString (cfg.bind.distinguishedName != "")
         "binddn ${cfg.bind.distinguishedName}" }
+      ${optionalString (cfg.daemon.rootpwmoddn != "")
+        "rootpwmoddn ${cfg.daemon.rootpwmoddn}" }
       ${optionalString (cfg.daemon.extraConfig != "") cfg.daemon.extraConfig }
     '';
   };
@@ -126,6 +128,26 @@ in
             the end of the nslcd configuration file (nslcd.conf).
           '' ;
         } ;
+
+        rootpwmoddn = mkOption {
+          default = "";
+          example = "cn=admin,dc=example,dc=com";
+          type = types.str;
+          description = ''
+            The distinguished name to use to bind to the LDAP server
+            when the root user tries to modify a user's password.
+          '';
+        };
+
+        rootpwmodpw = mkOption {
+          default = "";
+          example = "/run/keys/nslcd.rootpwmodpw";
+          type = types.str;
+          description = ''
+            The path to a file containing the credentials with which
+            to bind to the LDAP server if the root user tries to change a user's password
+          '';
+        };
       };
 
       bind = {
@@ -203,9 +225,11 @@ in
     system.activationScripts = mkIf insertLdapPassword {
       ldap = stringAfter [ "etc" "groups" "users" ] ''
         if test -f "${cfg.bind.password}" ; then
-          echo "bindpw "$(cat ${cfg.bind.password})"" | cat ${ldapConfig.source} - > /etc/ldap.conf.bindpw
-          mv -fT /etc/ldap.conf.bindpw /etc/ldap.conf
-          chmod 600 /etc/ldap.conf
+          umask 0077
+          conf="$(mktemp)"
+          printf 'bindpw %s\n' "$(cat ${cfg.bind.password})" |
+          cat ${ldapConfig.source} - >"$conf"
+          mv -fT "$conf" /etc/ldap.conf
         fi
       '';
     };
@@ -232,21 +256,31 @@ in
         wantedBy = [ "multi-user.target" ];
 
         preStart = ''
-          mkdir -p /run/nslcd
-          rm -f /run/nslcd/nslcd.pid;
-          chown nslcd.nslcd /run/nslcd
-          ${optionalString (cfg.bind.distinguishedName != "") ''
-            if test -s "${cfg.bind.password}" ; then
-              ln -sfT "${cfg.bind.password}" /run/nslcd/bindpw
-            fi
-          ''}
+          umask 0077
+          conf="$(mktemp)"
+          {
+            cat ${nslcdConfig.source}
+            test -z '${cfg.bind.distinguishedName}' -o ! -f '${cfg.bind.password}' ||
+            printf 'bindpw %s\n' "$(cat '${cfg.bind.password}')"
+            test -z '${cfg.daemon.rootpwmoddn}' -o ! -f '${cfg.daemon.rootpwmodpw}' ||
+            printf 'rootpwmodpw %s\n' "$(cat '${cfg.daemon.rootpwmodpw}')"
+          } >"$conf"
+          mv -fT "$conf" /etc/nslcd.conf
         '';
+
+        # NOTE: because one cannot pass a custom config path to `nslcd`
+        # (which is only able to use `/etc/nslcd.conf`)
+        # changes in `nslcdConfig` won't change `serviceConfig`,
+        # and thus won't restart `nslcd`.
+        # Therefore `restartTriggers` is used on `/etc/nslcd.conf`.
+        restartTriggers = [ nslcdConfig.source ];
 
         serviceConfig = {
           ExecStart = "${nss_pam_ldapd}/sbin/nslcd";
           Type = "forking";
           PIDFile = "/run/nslcd/nslcd.pid";
           Restart = "always";
+          RuntimeDirectory = [ "nslcd" ];
         };
       };
 

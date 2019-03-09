@@ -54,6 +54,8 @@ in lib.init bootStages ++ [
              then buildPackages.darwin.iosSdkPkgs.clang
            else if crossSystem.useAndroidPrebuilt or false
              then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".gcc
+           else if crossSystem.useLLVM or false
+             then buildPackages.llvmPackages_7.lldClang
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs

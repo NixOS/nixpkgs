@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://libwps.sourceforge.net/;
     description = "Microsoft Works document format import filter library";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl21;
   };
 }

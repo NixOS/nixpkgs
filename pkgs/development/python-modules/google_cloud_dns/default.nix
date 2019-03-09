@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dns";
-  version = "0.29.0";
+  version = "0.29.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f6ea35676c59b6bfd4a2e6aa42670c6ed3505ba46f7117cdc953094e568f404e";
+    sha256 = "d1476115c983094f124fe8b7a1350414072c048bf236336f3ab0816912e6e6bf";
   };
 
   checkInputs = [ pytest mock ];

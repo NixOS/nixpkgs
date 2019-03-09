@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "watchexec-${version}";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "watchexec";
     repo = "watchexec";
     rev = version;
-    sha256 = "15fnf3r4pvl9gyvq0fy0l7p8xjaz44z9g4dzkn1l0fdhldib6z1c";
+    sha256 = "0azfnqx5v1shsd7jdxzn41awh9dbjykv8h1isrambc86ygr1c1cy";
   };
 
   cargoSha256 = "1xlcfr2q2pw47sav9iryjva7w9chv90g18hszq8s0q0w71sccv6j";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurlBoot, buildPackages
+{ lib, stdenv, fetchurl, buildPackages
 , enableThreading ? stdenv ? glibc, makeWrapper
 }:
 
@@ -27,7 +27,7 @@ let
 
     name = "perl-${version}";
 
-    src = fetchurlBoot {
+    src = fetchurl {
       url = "mirror://cpan/src/5.0/${name}.tar.gz";
       inherit sha256;
     };
@@ -46,7 +46,7 @@ let
       ]
       ++ optional (versionOlder version "5.29.6")
         # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
-        (fetchurlBoot {
+        (fetchurl {
           url = "https://rt.perl.org/Public/Ticket/Attachment/1502646/807252/0001-Fix-missing-build-dependency-for-pods.patch";
           sha256 = "1bb4mldfp8kq1scv480wm64n2jdsqa3ar46cjp1mjpby8h5dr2r0";
         })
@@ -88,7 +88,10 @@ let
 
     enableParallelBuilding = !crossCompiling;
 
-    preConfigure = optionalString (!crossCompiling) ''
+    preConfigure = ''
+        substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
+        substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
+      '' + optionalString (!crossCompiling) ''
         configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
       '' + optionalString (stdenv.isAarch32 || stdenv.isMips) ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
@@ -156,7 +159,7 @@ let
   } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
     crossVersion = "276849e62f472c1b241d9e7b38a28e4cc9f98563"; # Dez 02, 2018
 
-    perl-cross-src = fetchurlBoot {
+    perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
       sha256 = "1fpr1m9lgkwdp1vmdr0s6gvmcpd0m8q6jwn024bkczc2h37bdynd";
     };

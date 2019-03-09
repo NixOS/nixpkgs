@@ -1,0 +1,583 @@
+From d55c3e36094f06bb1fb02f5eac19fdccf1d91f7e Mon Sep 17 00:00:00 2001
+From: "H.J. Lu" <hjl.tools@gmail.com>
+Date: Wed, 8 Aug 2018 06:09:15 -0700
+Subject: [PATCH] x86: Properly merge GNU_PROPERTY_X86_ISA_1_USED
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Without the GNU_PROPERTY_X86_ISA_1_USED property, all ISAs may be used.
+If a bit in the GNU_PROPERTY_X86_ISA_1_USED property is unset, the
+corresponding x86 instruction set isn’t used.  When merging properties
+from 2 input files and one input file doesn't have the
+GNU_PROPERTY_X86_ISA_1_USED property, the output file shouldn't have
+it neither.  This patch removes the GNU_PROPERTY_X86_ISA_1_USED
+property if an input file doesn't have it.
+
+This patch replaces the GNU_PROPERTY_X86_ISA_1_USED property with the
+GNU_PROPERTY_X86_ISA_1_NEEDED property which is the minimum ISA
+requirement.
+
+bfd/
+
+	PR ld/23486
+	* elfxx-x86.c (_bfd_x86_elf_merge_gnu_properties): Remove
+	GNU_PROPERTY_X86_ISA_1_USED if an input file doesn't have it.
+	(_bfd_x86_elf_link_setup_gnu_properties): Adding the
+	GNU_PROPERTY_X86_ISA_1_NEEDED, instead of
+	GNU_PROPERTY_X86_ISA_1_USED, property.
+
+ld/
+
+	PR ld/23486
+	* testsuite/ld-i386/i386.exp: Run PR ld/23486 tests.
+	* testsuite/ld-x86-64/x86-64.exp: Likewise.
+	* testsuite/ld-i386/pr23486a.d: New file.
+	* testsuite/ld-i386/pr23486b.d: Likewise.
+	* testsuite/ld-x86-64/pr23486a-x32.d: Likewise.
+	* testsuite/ld-x86-64/pr23486a.d: Likewise.
+	* testsuite/ld-x86-64/pr23486a.s: Likewise.
+	* testsuite/ld-x86-64/pr23486b-x32.d: Likewise.
+	* testsuite/ld-x86-64/pr23486b.d: Likewise.
+	* testsuite/ld-x86-64/pr23486b.s: Likewise.
+	* testsuite/ld-i386/property-3.r: Remove "x86 ISA used".
+	* testsuite/ld-i386/property-4.r: Likewise.
+	* testsuite/ld-i386/property-5.r: Likewise.
+	* testsuite/ld-i386/property-x86-ibt3a.d: Likewise.
+	* testsuite/ld-i386/property-x86-ibt3b.d: Likewise.
+	* testsuite/ld-i386/property-x86-shstk3a.d: Likewise.
+	* testsuite/ld-i386/property-x86-shstk3b.d: Likewise.
+	* testsuite/ld-x86-64/property-3.r: Likewise.
+	* testsuite/ld-x86-64/property-4.r: Likewise.
+	* testsuite/ld-x86-64/property-5.r: Likewise.
+	* testsuite/ld-x86-64/property-x86-ibt3a-x32.d: Likewise.
+	* testsuite/ld-x86-64/property-x86-ibt3a.d: Likewise.
+	* testsuite/ld-x86-64/property-x86-ibt3b-x32.d: Likewise.
+	* testsuite/ld-x86-64/property-x86-ibt3b.d: Likewise.
+	* testsuite/ld-x86-64/property-x86-shstk3a-x32.d: Likewise.
+	* testsuite/ld-x86-64/property-x86-shstk3a.d: Likewise.
+	* testsuite/ld-x86-64/property-x86-shstk3b-x32.d: Likewise.
+	* testsuite/ld-x86-64/property-x86-shstk3b.d: Likewise.
+
+(cherry picked from commit f7309df20c4e787041cedc4a6aced89c15259e54)
+---
+ bfd/elfxx-x86.c                               | 25 ++++++++++++---
+ ld/testsuite/ld-i386/i386.exp                 |  2 ++
+ ld/testsuite/ld-i386/pr23486a.d               | 10 ++++++
+ ld/testsuite/ld-i386/pr23486b.d               | 10 ++++++
+ ld/testsuite/ld-i386/property-3.r             |  1 -
+ ld/testsuite/ld-i386/property-4.r             |  1 -
+ ld/testsuite/ld-i386/property-5.r             |  1 -
+ ld/testsuite/ld-i386/property-x86-ibt3a.d     |  5 ++-
+ ld/testsuite/ld-i386/property-x86-ibt3b.d     |  5 ++-
+ ld/testsuite/ld-i386/property-x86-shstk3a.d   |  5 ++-
+ ld/testsuite/ld-i386/property-x86-shstk3b.d   |  5 ++-
+ ld/testsuite/ld-x86-64/pr23486a-x32.d         | 10 ++++++
+ ld/testsuite/ld-x86-64/pr23486a.d             | 10 ++++++
+ ld/testsuite/ld-x86-64/pr23486a.s             | 30 +++++++++++++++++
+ ld/testsuite/ld-x86-64/pr23486b-x32.d         | 10 ++++++
+ ld/testsuite/ld-x86-64/pr23486b.d             | 10 ++++++
+ ld/testsuite/ld-x86-64/pr23486b.s             | 30 +++++++++++++++++
+ ld/testsuite/ld-x86-64/property-3.r           |  1 -
+ ld/testsuite/ld-x86-64/property-4.r           |  1 -
+ ld/testsuite/ld-x86-64/property-5.r           |  1 -
+ .../ld-x86-64/property-x86-ibt3a-x32.d        |  5 ++-
+ ld/testsuite/ld-x86-64/property-x86-ibt3a.d   |  5 ++-
+ .../ld-x86-64/property-x86-ibt3b-x32.d        |  5 ++-
+ ld/testsuite/ld-x86-64/property-x86-ibt3b.d   |  5 ++-
+ .../ld-x86-64/property-x86-shstk3a-x32.d      |  5 ++-
+ ld/testsuite/ld-x86-64/property-x86-shstk3a.d |  5 ++-
+ .../ld-x86-64/property-x86-shstk3b-x32.d      |  5 ++-
+ ld/testsuite/ld-x86-64/property-x86-shstk3b.d |  5 ++-
+ ld/testsuite/ld-x86-64/x86-64.exp             |  4 +++
+ 31 files changed, 211 insertions(+), 47 deletions(-)
+ create mode 100644 ld/testsuite/ld-i386/pr23486a.d
+ create mode 100644 ld/testsuite/ld-i386/pr23486b.d
+ create mode 100644 ld/testsuite/ld-x86-64/pr23486a-x32.d
+ create mode 100644 ld/testsuite/ld-x86-64/pr23486a.d
+ create mode 100644 ld/testsuite/ld-x86-64/pr23486a.s
+ create mode 100644 ld/testsuite/ld-x86-64/pr23486b-x32.d
+ create mode 100644 ld/testsuite/ld-x86-64/pr23486b.d
+ create mode 100644 ld/testsuite/ld-x86-64/pr23486b.s
+
+--- a/bfd/elfxx-x86.c
++++ b/bfd/elfxx-x86.c
+@@ -2407,12 +2407,27 @@ _bfd_x86_elf_merge_gnu_properties (struct bfd_link_info *info,
+   switch (pr_type)
+     {
+     case GNU_PROPERTY_X86_ISA_1_USED:
++      if (aprop == NULL || bprop == NULL)
++	{
++	  /* Only one of APROP and BPROP can be NULL.  */
++	  if (aprop != NULL)
++	    {
++	      /* Remove this property since the other input file doesn't
++		 have it.  */
++	      aprop->pr_kind = property_remove;
++	      updated = TRUE;
++	    }
++	  break;
++	}
++      goto or_property;
++
+     case GNU_PROPERTY_X86_ISA_1_NEEDED:
+       if (aprop != NULL && bprop != NULL)
+ 	{
++or_property:
+ 	  number = aprop->u.number;
+ 	  aprop->u.number = number | bprop->u.number;
+-	  /* Remove the property if ISA bits are empty.  */
++	  /* Remove the property if all bits are empty.  */
+ 	  if (aprop->u.number == 0)
+ 	    {
+ 	      aprop->pr_kind = property_remove;
+@@ -2428,14 +2443,14 @@ _bfd_x86_elf_merge_gnu_properties (struct bfd_link_info *info,
+ 	    {
+ 	      if (aprop->u.number == 0)
+ 		{
+-		  /* Remove APROP if ISA bits are empty.  */
++		  /* Remove APROP if all bits are empty.  */
+ 		  aprop->pr_kind = property_remove;
+ 		  updated = TRUE;
+ 		}
+ 	    }
+ 	  else
+ 	    {
+-	      /* Return TRUE if APROP is NULL and ISA bits of BPROP
++	      /* Return TRUE if APROP is NULL and all bits of BPROP
+ 		 aren't empty to indicate that BPROP should be added
+ 		 to ABFD.  */
+ 	      updated = bprop->u.number != 0;
+@@ -2582,9 +2597,9 @@ _bfd_x86_elf_link_setup_gnu_properties
+ 	{
+ 	  /* If the separate code program header is needed, make sure
+ 	     that the first read-only PT_LOAD segment has no code by
+-	     adding a GNU_PROPERTY_X86_ISA_1_USED note.  */
++	     adding a GNU_PROPERTY_X86_ISA_1_NEEDED note.  */
+ 	  prop = _bfd_elf_get_property (ebfd,
+-					GNU_PROPERTY_X86_ISA_1_USED,
++					GNU_PROPERTY_X86_ISA_1_NEEDED,
+ 					4);
+ 	  prop->u.number = GNU_PROPERTY_X86_ISA_1_486;
+ 	  prop->pr_kind = property_number;
+diff --git a/ld/testsuite/ld-i386/i386.exp b/ld/testsuite/ld-i386/i386.exp
+index 6d794fe653..78dad02579 100644
+--- a/ld/testsuite/ld-i386/i386.exp
++++ b/ld/testsuite/ld-i386/i386.exp
+@@ -462,6 +462,8 @@ run_dump_test "pr23189"
+ run_dump_test "pr23194"
+ run_dump_test "pr23372a"
+ run_dump_test "pr23372b"
++run_dump_test "pr23486a"
++run_dump_test "pr23486b"
+ 
+ if { !([istarget "i?86-*-linux*"]
+        || [istarget "i?86-*-gnu*"]
+diff --git a/ld/testsuite/ld-i386/pr23486a.d b/ld/testsuite/ld-i386/pr23486a.d
+new file mode 100644
+index 0000000000..41a6dcf7d5
+--- /dev/null
++++ b/ld/testsuite/ld-i386/pr23486a.d
+@@ -0,0 +1,10 @@
++#source: ../ld-x86-64/pr23486a.s
++#source: ../ld-x86-64/pr23486b.s
++#as: --32
++#ld: -r -m elf_i386
++#readelf: -n
++
++Displaying notes found in: .note.gnu.property
++  Owner                 Data size	Description
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586
+diff --git a/ld/testsuite/ld-i386/pr23486b.d b/ld/testsuite/ld-i386/pr23486b.d
+new file mode 100644
+index 0000000000..08019b7274
+--- /dev/null
++++ b/ld/testsuite/ld-i386/pr23486b.d
+@@ -0,0 +1,10 @@
++#source: ../ld-x86-64/pr23486b.s
++#source: ../ld-x86-64/pr23486a.s
++#as: --32
++#ld: -r -m elf_i386
++#readelf: -n
++
++Displaying notes found in: .note.gnu.property
++  Owner                 Data size	Description
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586
+diff --git a/ld/testsuite/ld-i386/property-3.r b/ld/testsuite/ld-i386/property-3.r
+index 0ed91f5922..d03203c1e5 100644
+--- a/ld/testsuite/ld-i386/property-3.r
++++ b/ld/testsuite/ld-i386/property-3.r
+@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+       Properties: stack size: 0x800000
+-	x86 ISA used: 586, SSE
+ 	x86 ISA needed: i486, 586
+ #pass
+diff --git a/ld/testsuite/ld-i386/property-4.r b/ld/testsuite/ld-i386/property-4.r
+index cb2bc15d9a..da295eb6c7 100644
+--- a/ld/testsuite/ld-i386/property-4.r
++++ b/ld/testsuite/ld-i386/property-4.r
+@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+       Properties: stack size: 0x800000
+-	x86 ISA used: i486, 586, SSE
+ 	x86 ISA needed: i486, 586, SSE
+ #pass
+diff --git a/ld/testsuite/ld-i386/property-5.r b/ld/testsuite/ld-i386/property-5.r
+index 552965058c..e4141594b3 100644
+--- a/ld/testsuite/ld-i386/property-5.r
++++ b/ld/testsuite/ld-i386/property-5.r
+@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+       Properties: stack size: 0x900000
+-	x86 ISA used: i486, 586, SSE
+ 	x86 ISA needed: i486, 586, SSE
+ #pass
+diff --git a/ld/testsuite/ld-i386/property-x86-ibt3a.d b/ld/testsuite/ld-i386/property-x86-ibt3a.d
+index 4bb35b00fb..0aedea1614 100644
+--- a/ld/testsuite/ld-i386/property-x86-ibt3a.d
++++ b/ld/testsuite/ld-i386/property-x86-ibt3a.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: i486, 586, SSE2, SSE3
+-	x86 ISA needed: 586, SSE, SSE3, SSE4_1
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: 586, SSE, SSE3, SSE4_1
+diff --git a/ld/testsuite/ld-i386/property-x86-ibt3b.d b/ld/testsuite/ld-i386/property-x86-ibt3b.d
+index 418d58a8f7..bd69ac6478 100644
+--- a/ld/testsuite/ld-i386/property-x86-ibt3b.d
++++ b/ld/testsuite/ld-i386/property-x86-ibt3b.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: i486, 586, SSE2, SSE3
+-	x86 ISA needed: 586, SSE, SSE3, SSE4_1
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: 586, SSE, SSE3, SSE4_1
+diff --git a/ld/testsuite/ld-i386/property-x86-shstk3a.d b/ld/testsuite/ld-i386/property-x86-shstk3a.d
+index e261038f60..76d2a39f2c 100644
+--- a/ld/testsuite/ld-i386/property-x86-shstk3a.d
++++ b/ld/testsuite/ld-i386/property-x86-shstk3a.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: i486, 586, SSE2, SSE3
+-	x86 ISA needed: 586, SSE, SSE3, SSE4_1
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: 586, SSE, SSE3, SSE4_1
+diff --git a/ld/testsuite/ld-i386/property-x86-shstk3b.d b/ld/testsuite/ld-i386/property-x86-shstk3b.d
+index 25f3d2361e..e770ecffa5 100644
+--- a/ld/testsuite/ld-i386/property-x86-shstk3b.d
++++ b/ld/testsuite/ld-i386/property-x86-shstk3b.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: i486, 586, SSE2, SSE3
+-	x86 ISA needed: 586, SSE, SSE3, SSE4_1
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: 586, SSE, SSE3, SSE4_1
+diff --git a/ld/testsuite/ld-x86-64/pr23486a-x32.d b/ld/testsuite/ld-x86-64/pr23486a-x32.d
+new file mode 100644
+index 0000000000..6d9fa68cdb
+--- /dev/null
++++ b/ld/testsuite/ld-x86-64/pr23486a-x32.d
+@@ -0,0 +1,10 @@
++#source: pr23486a.s
++#source: pr23486b.s
++#as: --x32
++#ld: -r -m elf32_x86_64
++#readelf: -n
++
++Displaying notes found in: .note.gnu.property
++  Owner                 Data size	Description
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586
+diff --git a/ld/testsuite/ld-x86-64/pr23486a.d b/ld/testsuite/ld-x86-64/pr23486a.d
+new file mode 100644
+index 0000000000..dc2b7bf760
+--- /dev/null
++++ b/ld/testsuite/ld-x86-64/pr23486a.d
+@@ -0,0 +1,10 @@
++#source: pr23486a.s
++#source: pr23486b.s
++#as: --64 -defsym __64_bit__=1
++#ld: -r -m elf_x86_64
++#readelf: -n
++
++Displaying notes found in: .note.gnu.property
++  Owner                 Data size	Description
++  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586
+diff --git a/ld/testsuite/ld-x86-64/pr23486a.s b/ld/testsuite/ld-x86-64/pr23486a.s
+new file mode 100644
+index 0000000000..a07d0c7ced
+--- /dev/null
++++ b/ld/testsuite/ld-x86-64/pr23486a.s
+@@ -0,0 +1,30 @@
++	.section ".note.gnu.property", "a"
++.ifdef __64_bit__
++	.p2align 3
++.else
++	.p2align 2
++.endif
++	.long 1f - 0f		/* name length.  */
++	.long 4f - 1f		/* data length.  */
++	/* NT_GNU_PROPERTY_TYPE_0 */
++	.long 5			/* note type.  */
++0:
++	.asciz "GNU"		/* vendor name.  */
++1:
++.ifdef __64_bit__
++	.p2align 3
++.else
++	.p2align 2
++.endif
++	/* GNU_PROPERTY_X86_ISA_1_USED */
++	.long 0xc0000000	/* pr_type.  */
++	.long 3f - 2f		/* pr_datasz.  */
++2:
++	.long 0xa
++3:
++.ifdef __64_bit__
++	.p2align 3
++.else
++	.p2align 2
++.endif
++4:
+diff --git a/ld/testsuite/ld-x86-64/pr23486b-x32.d b/ld/testsuite/ld-x86-64/pr23486b-x32.d
+new file mode 100644
+index 0000000000..0445e69d82
+--- /dev/null
++++ b/ld/testsuite/ld-x86-64/pr23486b-x32.d
+@@ -0,0 +1,10 @@
++#source: pr23486b.s
++#source: pr23486a.s
++#as: --x32
++#ld: -r -m elf32_x86_64
++#readelf: -n
++
++Displaying notes found in: .note.gnu.property
++  Owner                 Data size	Description
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586
+diff --git a/ld/testsuite/ld-x86-64/pr23486b.d b/ld/testsuite/ld-x86-64/pr23486b.d
+new file mode 100644
+index 0000000000..dc2b7bf760
+--- /dev/null
++++ b/ld/testsuite/ld-x86-64/pr23486b.d
+@@ -0,0 +1,10 @@
++#source: pr23486a.s
++#source: pr23486b.s
++#as: --64 -defsym __64_bit__=1
++#ld: -r -m elf_x86_64
++#readelf: -n
++
++Displaying notes found in: .note.gnu.property
++  Owner                 Data size	Description
++  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586
+diff --git a/ld/testsuite/ld-x86-64/pr23486b.s b/ld/testsuite/ld-x86-64/pr23486b.s
+new file mode 100644
+index 0000000000..c5167eeb65
+--- /dev/null
++++ b/ld/testsuite/ld-x86-64/pr23486b.s
+@@ -0,0 +1,30 @@
++	.section ".note.gnu.property", "a"
++.ifdef __64_bit__
++	.p2align 3
++.else
++	.p2align 2
++.endif
++	.long 1f - 0f		/* name length.  */
++	.long 4f - 1f		/* data length.  */
++	/* NT_GNU_PROPERTY_TYPE_0 */
++	.long 5			/* note type.  */
++0:
++	.asciz "GNU"		/* vendor name.  */
++1:
++.ifdef __64_bit__
++	.p2align 3
++.else
++	.p2align 2
++.endif
++	/* GNU_PROPERTY_X86_ISA_1_NEEDED */
++	.long 0xc0000001	/* pr_type.  */
++	.long 3f - 2f		/* pr_datasz.  */
++2:
++	.long 0x3
++3:
++.ifdef __64_bit__
++	.p2align 3
++.else
++	.p2align 2
++.endif
++4:
+diff --git a/ld/testsuite/ld-x86-64/property-3.r b/ld/testsuite/ld-x86-64/property-3.r
+index 0ed91f5922..d03203c1e5 100644
+--- a/ld/testsuite/ld-x86-64/property-3.r
++++ b/ld/testsuite/ld-x86-64/property-3.r
+@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+       Properties: stack size: 0x800000
+-	x86 ISA used: 586, SSE
+ 	x86 ISA needed: i486, 586
+ #pass
+diff --git a/ld/testsuite/ld-x86-64/property-4.r b/ld/testsuite/ld-x86-64/property-4.r
+index cb2bc15d9a..da295eb6c7 100644
+--- a/ld/testsuite/ld-x86-64/property-4.r
++++ b/ld/testsuite/ld-x86-64/property-4.r
+@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+       Properties: stack size: 0x800000
+-	x86 ISA used: i486, 586, SSE
+ 	x86 ISA needed: i486, 586, SSE
+ #pass
+diff --git a/ld/testsuite/ld-x86-64/property-5.r b/ld/testsuite/ld-x86-64/property-5.r
+index 552965058c..e4141594b3 100644
+--- a/ld/testsuite/ld-x86-64/property-5.r
++++ b/ld/testsuite/ld-x86-64/property-5.r
+@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+       Properties: stack size: 0x900000
+-	x86 ISA used: i486, 586, SSE
+ 	x86 ISA needed: i486, 586, SSE
+ #pass
+diff --git a/ld/testsuite/ld-x86-64/property-x86-ibt3a-x32.d b/ld/testsuite/ld-x86-64/property-x86-ibt3a-x32.d
+index 011426f5a4..4cec728dc7 100644
+--- a/ld/testsuite/ld-x86-64/property-x86-ibt3a-x32.d
++++ b/ld/testsuite/ld-x86-64/property-x86-ibt3a-x32.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+-	x86 ISA needed: i486, 586, SSE2, SSE3
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+diff --git a/ld/testsuite/ld-x86-64/property-x86-ibt3a.d b/ld/testsuite/ld-x86-64/property-x86-ibt3a.d
+index 1b4229a037..a8df49a351 100644
+--- a/ld/testsuite/ld-x86-64/property-x86-ibt3a.d
++++ b/ld/testsuite/ld-x86-64/property-x86-ibt3a.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000020	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+-	x86 ISA needed: i486, 586, SSE2, SSE3
++  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+diff --git a/ld/testsuite/ld-x86-64/property-x86-ibt3b-x32.d b/ld/testsuite/ld-x86-64/property-x86-ibt3b-x32.d
+index 290ed6abf1..c112626711 100644
+--- a/ld/testsuite/ld-x86-64/property-x86-ibt3b-x32.d
++++ b/ld/testsuite/ld-x86-64/property-x86-ibt3b-x32.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+-	x86 ISA needed: i486, 586, SSE2, SSE3
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+diff --git a/ld/testsuite/ld-x86-64/property-x86-ibt3b.d b/ld/testsuite/ld-x86-64/property-x86-ibt3b.d
+index 1142e03272..f10dffdc2c 100644
+--- a/ld/testsuite/ld-x86-64/property-x86-ibt3b.d
++++ b/ld/testsuite/ld-x86-64/property-x86-ibt3b.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000020	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+-	x86 ISA needed: i486, 586, SSE2, SSE3
++  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+diff --git a/ld/testsuite/ld-x86-64/property-x86-shstk3a-x32.d b/ld/testsuite/ld-x86-64/property-x86-shstk3a-x32.d
+index 819542d181..0147a3c7b6 100644
+--- a/ld/testsuite/ld-x86-64/property-x86-shstk3a-x32.d
++++ b/ld/testsuite/ld-x86-64/property-x86-shstk3a-x32.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+-	x86 ISA needed: i486, 586, SSE2, SSE3
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+diff --git a/ld/testsuite/ld-x86-64/property-x86-shstk3a.d b/ld/testsuite/ld-x86-64/property-x86-shstk3a.d
+index 4c5d0e0a18..1f8c2dc929 100644
+--- a/ld/testsuite/ld-x86-64/property-x86-shstk3a.d
++++ b/ld/testsuite/ld-x86-64/property-x86-shstk3a.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000020	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+-	x86 ISA needed: i486, 586, SSE2, SSE3
++  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+diff --git a/ld/testsuite/ld-x86-64/property-x86-shstk3b-x32.d b/ld/testsuite/ld-x86-64/property-x86-shstk3b-x32.d
+index ba181e0bc5..7ca2539ca5 100644
+--- a/ld/testsuite/ld-x86-64/property-x86-shstk3b-x32.d
++++ b/ld/testsuite/ld-x86-64/property-x86-shstk3b-x32.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+-	x86 ISA needed: i486, 586, SSE2, SSE3
++  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+diff --git a/ld/testsuite/ld-x86-64/property-x86-shstk3b.d b/ld/testsuite/ld-x86-64/property-x86-shstk3b.d
+index 5216f385dd..f66a40e449 100644
+--- a/ld/testsuite/ld-x86-64/property-x86-shstk3b.d
++++ b/ld/testsuite/ld-x86-64/property-x86-shstk3b.d
+@@ -6,6 +6,5 @@
+ 
+ Displaying notes found in: .note.gnu.property
+   Owner                 Data size	Description
+-  GNU                  0x00000020	NT_GNU_PROPERTY_TYPE_0
+-      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+-	x86 ISA needed: i486, 586, SSE2, SSE3
++  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
++      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+diff --git a/ld/testsuite/ld-x86-64/x86-64.exp b/ld/testsuite/ld-x86-64/x86-64.exp
+index 6edb9e86f4..ae21e554ad 100644
+--- a/ld/testsuite/ld-x86-64/x86-64.exp
++++ b/ld/testsuite/ld-x86-64/x86-64.exp
+@@ -403,6 +403,10 @@ run_dump_test "pr23372a"
+ run_dump_test "pr23372a-x32"
+ run_dump_test "pr23372b"
+ run_dump_test "pr23372b-x32"
++run_dump_test "pr23486a"
++run_dump_test "pr23486a-x32"
++run_dump_test "pr23486b"
++run_dump_test "pr23486b-x32"
+ 
+ if { ![istarget "x86_64-*-linux*"] && ![istarget "x86_64-*-nacl*"]} {
+     return
+-- 
+2.20.1
+

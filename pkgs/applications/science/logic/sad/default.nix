@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ghc, spass }:
+{ stdenv, fetchurl, haskell, spass }:
 
 stdenv.mkDerivation {
   name = "system-for-automated-deduction-2.3.25";
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     url = "http://nevidal.org/download/sad-2.3-25.tar.gz";
     sha256 = "10jd93xgarik7xwys5lq7fx4vqp7c0yg1gfin9cqfch1k1v8ap4b";
   };
-  buildInputs = [ ghc spass ];
+  buildInputs = [ haskell.compiler.ghc844 spass ];
   patches = [
     ./patch
     # Since the LTS 12.0 update, <> is an operator in Prelude, colliding with

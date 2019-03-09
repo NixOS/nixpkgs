@@ -153,9 +153,6 @@ self: super: builtins.intersectAttrs super {
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
 
-  # Add necessary reference to gtk3 package, plus specify needed dbus version, plus turn on strictDeps to fix build
-  taffybar = ((addPkgconfigDepend super.taffybar pkgs.gtk3).overrideDerivation (drv: { strictDeps = true; }));
-
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
 
@@ -289,7 +286,7 @@ self: super: builtins.intersectAttrs super {
   # Tries to run GUI in tests
   leksah = dontCheck (overrideCabal super.leksah (drv: {
     executableSystemDepends = (drv.executableSystemDepends or []) ++ (with pkgs; [
-      gnome3.defaultIconTheme # Fix error: Icon 'window-close' not present in theme ...
+      gnome3.adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
       wrapGAppsHook           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
       gtk3                    # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ]);
@@ -490,6 +487,9 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
+  # https://github.com/haskell-servant/servant/pull/1128
+  servant-client-core = appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch;
+
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
   intero = overrideCabal super.intero (drv: {
@@ -546,6 +546,19 @@ self: super: builtins.intersectAttrs super {
           --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
       '';
     });
+
+  # On Darwin, git-annex mis-detects options to `cp`, so we wrap the binary to
+  # ensure it uses Nixpkgs' coreutils.
+  git-annex = with pkgs;
+    if (!stdenv.isLinux) then
+      let path = stdenv.lib.makeBinPath [ coreutils ];
+      in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
+        postFixup = ''
+          wrapProgram $out/bin/git-annex \
+            --prefix PATH : "${path}"
+        '';
+      })
+    else super.git-annex;
 
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;

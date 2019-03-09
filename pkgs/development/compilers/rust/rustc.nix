@@ -1,6 +1,6 @@
 { stdenv, targetPackages, removeReferencesTo
 , fetchurl, fetchgit, fetchzip, file, python2, tzdata, ps
-, llvm, jemalloc, ncurses, darwin, rustPlatform, git, cmake, curl
+, llvm, ncurses, darwin, rustPlatform, git, cmake, curl
 , which, libffi, gdb
 , version
 , withBundledLLVM ? false
@@ -19,8 +19,6 @@ let
   inherit (darwin.apple_sdk.frameworks) Security;
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
-
-  prefixedJemalloc = jemalloc.override { stripPrefix = false; };
 
   target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
 in
@@ -62,7 +60,6 @@ stdenv.mkDerivation {
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath"
                      "--enable-vendor"
-                     "--jemalloc-root=${prefixedJemalloc}/lib"
                      "--default-linker=${targetPackages.stdenv.cc}/bin/cc" ]
                 ++ optional (!withBundledLLVM) [ "--enable-llvm-link-shared" "--llvm-root=${llvmShared}" ]
                 ++ optional (targets != []) "--target=${target}";
@@ -85,7 +82,6 @@ stdenv.mkDerivation {
     patchShebangs src/etc
 
     ${optionalString (!withBundledLLVM) ''rm -rf src/llvm''}
-    rm -rf src/jemalloc
 
     # Fix the configure script to not require curl as we won't use it
     sed -i configure \
@@ -97,7 +93,7 @@ stdenv.mkDerivation {
     # https://github.com/rust-lang/rust/issues/39522
     echo removing gdb-version-sensitive tests...
     find src/test/debuginfo -type f -execdir grep -q ignore-gdb-version '{}' \; -print -delete
-    rm src/test/debuginfo/{borrowed-c-style-enum.rs,c-style-enum-in-composite.rs,gdb-pretty-struct-and-enums-pre-gdb-7-7.rs,generic-enum-with-different-disr-sizes.rs}
+    rm src/test/debuginfo/{borrowed-c-style-enum.rs,c-style-enum-in-composite.rs,gdb-pretty-struct-and-enums.rs,generic-enum-with-different-disr-sizes.rs}
 
     # Useful debugging parameter
     # export VERBOSE=1

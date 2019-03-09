@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, file, openssl, perl, unzip }:
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, file, openssl, perl, perlPackages, unzip, nettools, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "net-snmp-5.7.3";
+  name = "net-snmp-5.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/net-snmp/${name}.zip";
-    sha256 = "0gkss3zclm23zwpqfhddca8278id7pk6qx1mydpimdrrcndwgpz8";
+    url = "mirror://sourceforge/net-snmp/${name}.tar.gz";
+    sha256 = "1pvajzj9gmj56dmwix0ywmkmy2pglh6nny646hkm7ghfhh03bz5j";
   };
 
   patches =
@@ -14,22 +14,10 @@ stdenv.mkDerivation rec {
       inherit name sha256;
     };
   in [
-    (fetchAlpinePatch "CVE-2015-5621.patch" "05098jyvd9ddr5q26z7scbbvk1bk6x4agpjm6pyprvpc1zpi0y09")
-    (fetchAlpinePatch "fix-Makefile-PL.patch" "14ilnkj3cr6mpi242hrmmmv8nv4dj0fdgn42qfk9aa7scwsc0lc7")
     (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
     (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
-    (fetchAlpinePatch "remove-U64-typedef.patch" "1msxyhcqkvhqa03dwb50288g7f6nbrcd9cs036m9xc8jdgjb8k8j")
-    ./CVE-2018-18065.patch
+    ./0002-autoconf-version.patch
   ];
-
-  preConfigure =
-    ''
-      perlarchname=$(perl -e 'use Config; print $Config{archname};')
-      installFlags="INSTALLSITEARCH=$out/${perl.libPrefix}/${perl.version}/$perlarchname INSTALLSITEMAN3DIR=$out/share/man/man3"
-
-      # http://article.gmane.org/gmane.network.net-snmp.user/32434
-      substituteInPlace "man/Makefile.in" --replace 'grep -vE' '@EGREP@ -v'
-    '';
 
   configureFlags =
     [ "--with-default-snmp-version=3"
@@ -38,13 +26,20 @@ stdenv.mkDerivation rec {
       "--with-logfile=/var/log/net-snmpd.log"
       "--with-persistent-directory=/var/lib/net-snmp"
       "--with-openssl=${openssl.dev}"
+      "--disable-embedded-perl"
+      "--without-perl-modules"
     ] ++ stdenv.lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ file perl unzip openssl ];
+  postPatch = ''
+    substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
+  '';
+
+  nativeBuildInputs = [ autoreconfHook nettools ];
+  buildInputs = [ file perl unzip openssl ncurses ];
+  propagatedBuildInputs = with perlPackages; [ perl JSON Tk TermReadKey ];
 
   enableParallelBuilding = true;
-  doCheck = false; # fails
+  doCheck = false;  # tries to use networking
 
   postInstall = ''
     for f in "$out/lib/"*.la $out/bin/net-snmp-config $out/bin/net-snmp-create-v3-user; do

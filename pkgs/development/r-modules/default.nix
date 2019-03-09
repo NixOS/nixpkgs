@@ -290,6 +290,7 @@ let
     pbdPROF = [ pkgs.openmpi ];
     pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
+    phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
     PopGenome = [ pkgs.zlib.dev ];
@@ -463,9 +464,7 @@ let
     "BCA"
     "BEQI2"
     "betapart"
-    "betaper"
     "BiodiversityR"
-    "BioGeoBEARS"
     "bio_infer"
     "bipartite"
     "biplotbootGUI"
@@ -482,7 +481,6 @@ let
     "DALY"
     "dave"
     "Deducer"
-    "DeducerExtras"
     "DeducerPlugInExample"
     "DeducerPlugInScaling"
     "DeducerSpatial"
@@ -546,7 +544,6 @@ let
     "likeLTD"
     "logmult"
     "LS2Wstat"
-    "MAR1"
     "MareyMap"
     "memgene"
     "MergeGUI"
@@ -579,7 +576,6 @@ let
     "phylotools"
     "picante"
     "PKgraph"
-    "playwith"
     "plotSEMM"
     "plsRbeta"
     "plsRglm"
@@ -635,7 +631,6 @@ let
     "RHRV"
     "rich"
     "rioja"
-    "ripa"
     "RNCEP"
     "RQDA"
     "RSDA"

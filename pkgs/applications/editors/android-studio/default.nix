@@ -8,19 +8,19 @@ let
     inherit (gnome2) GConf gnome_vfs;
   };
   stableVersion = {
-    version = "3.3.0.20"; # "Android Studio 3.3"
-    build = "182.5199772";
-    sha256Hash = "0dracganibnkyapn2pk2qqnxpwmii57371ycri4nccaci9v9pcjw";
+    version = "3.3.2.0"; # "Android Studio 3.3.2"
+    build = "182.5314842";
+    sha256Hash = "0smh3d3v8n0isxg7fkls20622gp52f58i2b6wa4a0g8wnvmd6mw2";
   };
   betaVersion = {
-    version = "3.4.0.11"; # "Android Studio 3.4 Beta 2"
-    build = "183.5240537";
-    sha256Hash = "0mv7ayqjkw97jzdifw1cdvjhnzygzkd2a9rc0h99fclhf2nii5yr";
+    version = "3.4.0.15"; # "Android Studio 3.4 RC 1"
+    build = "183.5341121";
+    sha256Hash = "0s7wadnzbrd031ls43b5nbh1nx0paj74bxy2yiczr4qb9n562zzy";
   };
   latestVersion = { # canary & dev
-    version = "3.5.0.1"; # "Android Studio 3.5 Canary 2"
-    build = "183.5240547";
-    sha256Hash = "0z52ig9v2w9i6bqiqpdvgcr6g6sgl8p5317jamg72d5csm9hgfx3";
+    version = "3.5.0.6"; # "Android Studio 3.5 Canary 7"
+    build = "183.5346365";
+    sha256Hash = "0dfkhzsxabrv8cwgyv3gicpglgpccmi1ig5shlhp6a006awgfyj0";
   };
 in rec {
   # Old alias (TODO @primeos: Remove after 19.03 is branched off):

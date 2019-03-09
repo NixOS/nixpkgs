@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ config, stdenv, fetchFromGitHub, pkgconfig, cmake
 
 # dependencies
 , glib, libXinerama
@@ -27,7 +27,7 @@
 
 , wirelessSupport     ? true      , wirelesstools ? null
 , nvidiaSupport       ? false     , libXNVCtrl ? null
-, pulseSupport        ? false     , libpulseaudio ? null
+, pulseSupport        ? config.pulseaudio or false, libpulseaudio ? null
 
 , curlSupport         ? true      , curl ? null
 , rssSupport          ? curlSupport
@@ -68,13 +68,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "conky-${version}";
-  version = "1.11.2";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "0yalcpwx85smh6nnvxxsgqi344nk7jzlkkam7yjghm87df4v7xmx";
+    sha256 = "0pdl31xvmy8niagzqx9sd2b6hc6lzwfiaz66m4djf1gz9bksc8qv";
   };
 
   postPatch = ''

@@ -19,8 +19,14 @@ let
       rev = "v1.0-8.8";
       sha256 = "0dd7zd5j2sv5cw3mfwg33ss2vcj634q3qykakc41sv7f3rfgqfnn";
     };
+
+    "8.9" = {
+      version = "1.2beta";
+      rev = "v1.2-beta-8.9";
+      sha256 = "1sj7vyarmvp1w5kvbhgpgap1yd0yrj4n1jrla0wv70k0jrq5hhpz";
+    };
   };
-  param = params."${coq.coq-version}" or params."8.8";
+  param = params."${coq.coq-version}";
 in
 
 stdenv.mkDerivation rec {

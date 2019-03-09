@@ -41,8 +41,10 @@ stdenv.mkDerivation (args // rec {
   };
 
   prefixKey = "-prefix ";
-  configureFlags = optionals useX11 [ "-x11lib" x11lib
-                                      "-x11include" x11inc ]
+  configureFlags = optionals useX11 (
+    if stdenv.lib.versionAtLeast version "4.08"
+    then [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}"]
+    else [ "-x11lib" x11lib "-x11include" x11inc ])
   ++ optional flambdaSupport "-flambda"
   ;
 

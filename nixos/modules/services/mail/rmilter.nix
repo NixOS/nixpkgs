@@ -8,7 +8,7 @@ let
   postfixCfg = config.services.postfix;
   cfg = config.services.rmilter;
 
-  inetSocket = addr: port: "inet:[${toString port}@${addr}]";
+  inetSocket = addr: port: "inet:${addr}:${toString port}";
   unixSocket = sock: "unix:${sock}";
 
   systemdSocket = if cfg.bindSocket.type == "unix" then cfg.bindSocket.path
@@ -97,7 +97,7 @@ in
 
       bindSocket.address = mkOption {
         type = types.str;
-        default = "::1";
+        default = "[::1]";
         example = "0.0.0.0";
         description = ''
           Inet address to listen on.

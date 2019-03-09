@@ -1,35 +1,39 @@
-{ lib, fetchFromGitHub, python, buildPythonPackage, pytest, pkgconfig, cairo, xlibsWrapper, isPyPy }:
+{ lib, fetchFromGitHub, meson, ninja, buildPythonPackage, pytest, pkgconfig, cairo, xlibsWrapper, isPy33, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pycairo";
-  version = "1.16.3";
+  version = "1.18.0";
 
-  disabled = isPyPy;
+  format = "other";
+
+  disabled = isPy33;
 
   src = fetchFromGitHub {
     owner = "pygobject";
     repo = "pycairo";
     rev = "v${version}";
-    sha256 = "0clk6wrfls3fa1xrn844762qfaw6gs4ivwkrfysidbzmlbxhpngl";
+    sha256 = "0k266cf477j74v7mv0d4jxaq3wx8b7qa85qgh68cn094gzaasqd9";
   };
 
-  # We need to create the pkgconfig file but it cannot be installed as a wheel since wheels
-  # are supposed to be relocatable and do not support --prefix option
-  buildPhase = ''
-    ${python.interpreter} setup.py build
-  '';
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+  ];
 
-  installPhase = ''
-    ${python.interpreter} setup.py install --skip-build --prefix="$out" --optimize=1
-  '';
+  buildInputs = [
+    cairo
+    xlibsWrapper
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python cairo xlibsWrapper ];
   checkInputs = [ pytest ];
 
-  meta.platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  mesonFlags = [ "-Dpython=${if isPy3k then "python3" else "python"}" ];
+
+  meta = with lib; {
+    description = "Python 2/3 bindings for cairo";
+    homepage = https://pycairo.readthedocs.io/;
+    license = with licenses; [ lgpl2 mpl11 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  };
 }

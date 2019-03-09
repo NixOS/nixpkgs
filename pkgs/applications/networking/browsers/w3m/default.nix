@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , ncurses, boehmgc, gettext, zlib
 , sslSupport ? true, openssl ? null
-, graphicsSupport ? true, imlib2 ? null
+, graphicsSupport ? !stdenv.isDarwin, imlib2 ? null
 , x11Support ? graphicsSupport, libX11 ? null
 , mouseSupport ? !stdenv.isDarwin, gpm-ncurses ? null
 , perl, man, pkgconfig, buildPackages, w3m

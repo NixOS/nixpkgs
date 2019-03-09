@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
-      url = "http://git.alpinelinux.org/cgit/aports/plain/main/iperf3/remove-pg-flags.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/iperf3/remove-pg-flags.patch?id=99ec9e1c84e338629cf1b27b0fdc808bde4d8564";
       name = "remove-pg-flags.patch";
-      sha256 = "0lnczhass24kgq59drgdipnhjnw4l1cy6gqza7f2ah1qr4q104rm";
+      sha256 = "0b3vcw1pdyk10764p4vlglwi1acrm7wz2jjd6li7p11v4rggrb5c";
     })
   ];
 

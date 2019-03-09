@@ -1,4 +1,4 @@
-{ stdenv
+{ config, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -26,9 +26,9 @@
 , swig
 , python3
 
-, alsaSupport ? false
+, alsaSupport ? stdenv.isLinux
 , alsaLib
-, pulseaudioSupport ? false
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 }:
 

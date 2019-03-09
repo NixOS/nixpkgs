@@ -14,13 +14,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.8.8";
+  version = "0.8.9";
   pname    = "eyeD3";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "197lszkyzm377ym5r0ssryfsiz20yjx8y4rii3wc81n92d1qzlaq";
+    sha256 = "b6bb626566f2949da409d7a871576271e2d6254dfb3d416b21713dabc4b6b00f";
   };
 
   # https://github.com/nicfit/eyeD3/pull/284

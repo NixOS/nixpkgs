@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkgconfig, libtool
-, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
+, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
 }:
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2 libheif
+      libpng libtiff libxml2 libheif djvulibre
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
+    broken = ghostscript != null; # https://github.com/NixOS/nixpkgs/issues/55118
     maintainers = with maintainers; [ the-kenny ];
   };
 }

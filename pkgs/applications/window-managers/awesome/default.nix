@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobject-introspection
-, which, dbus, nettools, git, asciidoc, doxygen
+, which, dbus, nettools, git, doxygen
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
 , libxkbcommon, xcbutilxrm, hicolor-icon-theme
 , asciidoctor
@@ -19,7 +19,6 @@ with luaPackages; stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    asciidoc
     cmake
     doxygen
     imagemagick

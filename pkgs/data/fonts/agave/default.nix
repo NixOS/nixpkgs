@@ -1,20 +1,21 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "agave-${version}";
-  version = "008";
+  pname = "agave";
+  version = "009";
 
   src = fetchurl {
-    url = "https://github.com/agarick/agave/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0g50mqpffn4dq761vibaf8dwfkbcl5da1cc89qz6pq35ircipbns";
+    url = "https://github.com/agarick/agave/releases/download/v${version}/agave-r.ttf";
+    sha256 = "05766gp2glm1p2vknk1nncxigq28hg8s58kjwsbn8zpwy8ivywpk";
   };
 
   sourceRoot = ".";
 
+  unpackPhase = ":";
   dontBuild = true;
   installPhase = ''
     mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
+    cp $src $out/share/fonts/truetype/
   '';
 
   meta = with stdenv.lib; {

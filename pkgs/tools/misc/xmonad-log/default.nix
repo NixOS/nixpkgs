@@ -19,7 +19,7 @@ buildGoPackage rec {
     description = "xmonad DBus monitoring solution";
     homepage = https://github.com/xintron/xmonad-log;
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ joko ];
   };
 }

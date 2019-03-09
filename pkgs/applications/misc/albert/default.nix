@@ -4,13 +4,13 @@
 
 mkDerivation rec {
   pname = "albert";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "063z9yq6bsxcsqsw1n93ks5dzhzv6i252mjz1d5mxhxvgmqlfk0v";
+    sha256 = "04sr35fqz66i24lv7r2p9qfqxs55i8xpj7aam0v9yakcr33lf55a";
     fetchSubmodules = true;
   };
 
@@ -25,7 +25,7 @@ mkDerivation rec {
 
   postPatch = ''
     sed -i "/QStringList dirs = {/a    \"$out/libs\"," \
-      lib/albertcore/src/core/albert.cpp
+      src/app/main.cpp
   '';
 
   preBuild = ''

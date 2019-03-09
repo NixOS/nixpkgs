@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patchPhase =
     '' for i in `find cnee/test -name \*.sh`
        do
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g ; s|/usr/bin/env bash|/bin/sh|g'
+         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g ; s|/usr/bin/env bash|${stdenv.shell}|g'
        done
     '';
 

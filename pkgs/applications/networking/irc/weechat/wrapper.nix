@@ -1,5 +1,5 @@
 { stdenv, lib, runCommand, writeScriptBin, buildEnv
-, pythonPackages, perlPackages
+, pythonPackages, perlPackages, runtimeShell
 }:
 
 weechat:
@@ -60,12 +60,12 @@ let
     in "${scripts};${init}";
 
     mkWeechat = bin: (writeScriptBin bin ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
       ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
       exec ${weechat}/bin/${bin} "$@" --run-command ${lib.escapeShellArg init}
     '') // {
-      inherit (weechat) name meta;
+      inherit (weechat) name;
       unwrapped = weechat;
     };
   in buildEnv {
@@ -74,7 +74,7 @@ let
       (mkWeechat "weechat")
       (mkWeechat "weechat-headless")
     ];
-    meta = weechat.meta;
+    meta = builtins.removeAttrs weechat.meta [ "outputsToInstall" ];
   };
 
 in lib.makeOverridable wrapper

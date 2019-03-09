@@ -30,6 +30,7 @@
 , numpy
 , pari
 , pkgconfig
+, pkg-config
 , planarity
 , ppl
 , pynac
@@ -63,11 +64,14 @@ buildPythonPackage rec {
     iml
     perl
     jupyter_core
+    pkg-config
+    pip # needed to query installed packages
   ];
 
   buildInputs = [
     gd
     readline
+    iml
   ];
 
   propagatedBuildInputs = [

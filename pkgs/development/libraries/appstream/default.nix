@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "appstream-${version}";
-  version = "0.12.4";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner  = "ximion";
     repo   = "appstream";
     rev    = "APPSTREAM_${stdenv.lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1ag00w13fqvv584svcml7cykvgy0mi709qsm5mgy2ygy9d8r2vfw";
+    sha256 = "0hbl26aw3g2hag7z4di9z59qz057qcywrxpnnmp86z7rngvjbqpx";
   };
 
   nativeBuildInputs = [

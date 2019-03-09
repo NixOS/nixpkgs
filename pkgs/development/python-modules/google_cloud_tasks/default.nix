@@ -5,18 +5,19 @@
 , grpc_google_iam_v1
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f874a7aabad225588263c6cbcd4d67455cc682ebb6d9f00bd06c8d2d5673b4db";
+    sha256 = "3c5f26dd3750f9b222a69c37e85ee1acf198456dfebe1e0058f366dd27729559";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 grpc_google_iam_v1 google_api_core ];
 
   checkPhase = ''

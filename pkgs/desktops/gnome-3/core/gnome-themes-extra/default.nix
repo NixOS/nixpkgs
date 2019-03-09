@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
-  buildInputs = [ gtk3 librsvg pango atk gtk2 gdk_pixbuf gnome3.defaultIconTheme ];
+  buildInputs = [ gtk3 librsvg pango atk gtk2 gdk_pixbuf gnome3.adwaita-icon-theme ];
 
   postFixup = ''
     gtk-update-icon-cache "$out"/share/icons/HighContrast

@@ -21,7 +21,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = https://www.keybase.io;
     description = "The Keybase FS FUSE driver";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ rvolosatovs bennofs np ];
     license = licenses.bsd3;
   };

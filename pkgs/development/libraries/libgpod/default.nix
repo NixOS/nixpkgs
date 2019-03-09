@@ -1,7 +1,7 @@
 {stdenv, lib, fetchurl, gettext, perlPackages, intltool, pkgconfig, glib,
   libxml2, sqlite, zlib, sg3_utils, gdk_pixbuf, taglib,
   libimobiledevice, pythonPackages, mutagen,
-  monoSupport ? true, mono, gtk-sharp-2_0
+  monoSupport ? false, mono, gtk-sharp-2_0
 }:
 
 let

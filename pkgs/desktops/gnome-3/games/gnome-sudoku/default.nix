@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, vala, pkgconfig, gobject-introspection, gettext, gtk3, gnome3, wrapGAppsHook
-, json-glib, qqwing, itstool, libxml2, python3, desktop-file-utils }:
+, libgee, json-glib, qqwing, itstool, libxml2, python3, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   name = "gnome-sudoku-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja vala pkgconfig gobject-introspection gettext itstool libxml2 python3 desktop-file-utils wrapGAppsHook ];
-  buildInputs = [ gtk3 gnome3.libgee json-glib qqwing ];
+  buildInputs = [ gtk3 libgee json-glib qqwing ];
 
   postPatch = ''
     chmod +x post_install.py # patchShebangs requires executable file

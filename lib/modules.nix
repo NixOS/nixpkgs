@@ -214,23 +214,25 @@ rec {
           qux = [ "module.hidden=baz,value=bar" "module.hidden=fli,value=gne" ];
         }
       */
-      byName = attr: f: modules: foldl' (acc: module:
-        foldl' (inner: name:
-          inner // { ${name} = (acc.${name} or []) ++ (f module module.${attr}.${name}); }
-          ) acc (attrNames module.${attr})
-        ) {} modules;
+      byName = attr: f: modules:
+        foldl' (acc: module:
+                acc // (mapAttrs (n: v:
+                                   (acc.${n} or []) ++ f module v
+                                 ) module.${attr}
+                       )
+               ) {} modules;
       # an attrset 'name' => list of submodules that declare ‘name’.
-      declsByName = byName "options"
-        (module: option: [{ inherit (module) file; options = option; }])
-        options;
+      declsByName = byName "options" (module: option:
+          [{ inherit (module) file; options = option; }]
+        ) options;
       # an attrset 'name' => list of submodules that define ‘name’.
       defnsByName = byName "config" (module: value:
-        map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+          map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
         ) configs;
       # extract the definitions for each loc
-      defnsByName' = byName "config"
-        (module: value: [{ inherit (module) file; inherit value; }])
-        configs;
+      defnsByName' = byName "config" (module: value:
+          [{ inherit (module) file; inherit value; }]
+        ) configs;
     in
     (flip mapAttrs declsByName (name: decls:
       # We're descending into attribute ‘name’.
@@ -362,7 +364,6 @@ rec {
         values = defs''';
         inherit (defs'') highestPrio;
       };
-
     defsFinal = defsFinal'.values;
 
     # Type-check the remaining definitions, and merge them.
@@ -609,6 +610,9 @@ rec {
 
      forwards any definitions of boot.copyKernels to
      boot.loader.grub.copyKernels while printing a warning.
+
+     This also copies over the priority from the aliased option to the
+     non-aliased option.
   */
   mkRenamedOptionModule = from: to: doRename {
     inherit from to;
@@ -703,16 +707,7 @@ rec {
     use = id;
   };
 
-  /* Like ‘mkAliasOptionModule’, but copy over the priority of the option as well. */
-  mkAliasOptionModuleWithPriority = from: to: doRename {
-    inherit from to;
-    visible = true;
-    warn = false;
-    use = id;
-    withPriority = true;
-  };
-
-  doRename = { from, to, visible, warn, use, withPriority ? false }:
+  doRename = { from, to, visible, warn, use, withPriority ? true }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;

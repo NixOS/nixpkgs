@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "gnome3";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ domenkozar eelco chaoflow lethalman ];
+    maintainers = [ domenkozar eelco lethalman ];
   };
 
   machine =

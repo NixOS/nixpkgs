@@ -21,7 +21,7 @@ fix-misc-xml:
 
 .PHONY: clean
 clean:
-	rm -f ${MD_TARGETS} .version manual-full.xml functions/library/locations.xml
+	rm -f ${MD_TARGETS} .version manual-full.xml functions/library/locations.xml functions/library/generated
 	rm -rf ./out/ ./highlightjs
 
 .PHONY: validate
@@ -71,16 +71,22 @@ highlightjs:
 	cp -r "$$HIGHLIGHTJS/loader.js" highlightjs/
 
 
-manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml *.xml **/*.xml **/**/*.xml
+manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml functions/library/generated *.xml **/*.xml **/**/*.xml
 	xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
 
 .version:
 	nix-instantiate --eval \
 		-E '(import ../lib).version' > .version
 
+function_locations := $(shell nix-build --no-out-link ./lib-function-locations.nix)
+
 functions/library/locations.xml:
-	nix-build ./lib-function-locations.nix \
-		--out-link ./functions/library/locations.xml
+	ln -s $(function_locations) ./functions/library/locations.xml
+
+functions/library/generated:
+	nix-build ./lib-function-docs.nix \
+		--arg locationsXml $(function_locations)\
+		--out-link ./functions/library/generated
 
 %.section.xml: %.section.md
 	pandoc $^ -w docbook+smart \

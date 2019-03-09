@@ -142,7 +142,6 @@ in
       description = "Collection of named nylon instances";
       type = with types; loaOf (submodule nylonOpts);
       internal = true;
-      options = [ nylonOpts ];
     };
 
   };

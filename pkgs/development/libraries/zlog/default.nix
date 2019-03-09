@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = http://hardysimpson.github.com/zlog;
     license = licenses.lgpl21;
     platforms = platforms.linux; # cannot test on something else
-    maintainers = [ ];
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 
 }

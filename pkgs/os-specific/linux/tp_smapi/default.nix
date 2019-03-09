@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts
+{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
-    "SHELL=/bin/sh"
+    "SHELL=${stdenv.shell}"
     "HDAPS=1"
   ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = import ./update.nix {
-    inherit stdenv lib writeScript coreutils gnugrep jq curl common-updater-scripts;
+    inherit stdenv lib writeScript coreutils gnugrep jq curl common-updater-scripts runtimeShell;
   };
 
   meta = {

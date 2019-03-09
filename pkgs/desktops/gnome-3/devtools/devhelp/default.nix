@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook appstream-glib gobject-introspection python3 ];
   buildInputs = [
     glib gtk3 webkitgtk amtk
-    gnome3.defaultIconTheme gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme gsettings-desktop-schemas
   ];
 
   doCheck = true;

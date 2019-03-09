@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.28.0";
+  version = "3.28.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "02xgky22xgvhgd525khqh64l5i21ca839fj9jzaqdi3yvb8pbq8m";
+    sha256 = "12qn7mcmxb45lz1gq3s3b34rimiyrrshkrpvxdw1fc0w26i4l84m";
   };
 
   passthru = {

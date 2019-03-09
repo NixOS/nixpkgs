@@ -86,7 +86,12 @@ in {
               '';
               description = ''
                 Use this option to configure advanced authentication methods like EAP.
-                See wpa_supplicant.conf(5) for example configurations.
+                See
+                <citerefentry>
+                  <refentrytitle>wpa_supplicant.conf</refentrytitle>
+                  <manvolnum>5</manvolnum>
+                </citerefentry>
+                for example configurations.
 
                 Mutually exclusive with <varname>psk</varname> and <varname>pskRaw</varname>.
               '';
@@ -122,7 +127,12 @@ in {
               '';
               description = ''
                 Extra configuration lines appended to the network block.
-                See wpa_supplicant.conf(5) for available options.
+                See
+                <citerefentry>
+                  <refentrytitle>wpa_supplicant.conf</refentrytitle>
+                  <manvolnum>5</manvolnum>
+                </citerefentry>
+                for available options.
               '';
             };
 
@@ -174,7 +184,12 @@ in {
         '';
         description = ''
           Extra lines appended to the configuration file.
-          See wpa_supplicant.conf(5) for available options.
+          See
+          <citerefentry>
+            <refentrytitle>wpa_supplicant.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for available options.
         '';
       };
     };

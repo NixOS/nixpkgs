@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, qtbase, qtx11extras, qmake, pkgconfig, boost }:
+{ stdenv, fetchFromGitHub, qtbase, qtx11extras, qmake, pkgconfig, boost }:
 
 stdenv.mkDerivation rec {
-  name = "twmn-git-2014-09-23";
+  name = "twmn-git-2018-10-01";
 
-  src = fetchgit {
-    url = "https://github.com/sboli/twmn.git";
-    rev = "9492a47e25547e602dd57efd807033677c90b150";
-    sha256 = "1a68gka9gyxyzhc9rn8df59rzcdwkjw90cxp1kk0rdfp6svhxhsa";
+  src = fetchFromGitHub {
+    owner = "sboli";
+    repo = "twmn";
+    rev = "80f48834ef1a07087505b82358308ee2374b6dfb";
+    sha256 = "0mpjvp800x07lp9i3hfcc5f4bqj1fj4w3dyr0zwaxc6wqmm0fdqz";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];

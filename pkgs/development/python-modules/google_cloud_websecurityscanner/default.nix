@@ -3,18 +3,19 @@
 , fetchPypi
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d41a9e1a093862aa1b181fa7fdc2a94e185eb4a8f290dbdb928bc9ebd253a95f";
+    sha256 = "d965d986053b49e4005b6b6cdf035d7dd4a3b64dcfb6325050b70c97831f8d6f";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ google_api_core ];
 
   checkPhase = ''

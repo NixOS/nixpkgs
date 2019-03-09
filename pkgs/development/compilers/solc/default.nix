@@ -1,9 +1,14 @@
-{ stdenv, fetchzip, fetchFromGitHub, boost, cmake, z3 }:
+{ stdenv, fetchzip, fetchFromGitHub, boost, cmake
+, z3Support ? true, z3 ? null
+}:
+
+assert z3Support -> z3 != null;
+assert z3Support -> stdenv.lib.versionAtLeast z3.version "4.6.0";
 
 let
-  version = "0.5.2";
-  rev = "1df8f40cd2fd7b47698d847907b8ca7b47eb488d";
-  sha256 = "009kjyb3r2p64wpdzfcmqr9swm5haaixbzvsbw1nd4wipwbp66y0";
+  version = "0.5.4";
+  rev = "9549d8fff7343908228c3e8bedc309d1b83fc204";
+  sha256 = "1r6wklp3ab2s1lrm70zv6p7blv9917ph1arjsb250j7b7bpjg5pq";
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.8.4.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
@@ -33,6 +38,8 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DBoost_USE_STATIC_LIBS=OFF"
     "-DBUILD_SHARED_LIBS=ON"
+  ] ++ stdenv.lib.optionals (!z3Support) [
+    "-DUSE_Z3=OFF"
   ];
 
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform;
@@ -40,7 +47,8 @@ stdenv.mkDerivation {
                "./test/soltest -p -- --no-ipc --no-smt --testpath ../test";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost z3 ];
+  buildInputs = [ boost ]
+    ++ stdenv.lib.optionals z3Support [ z3 ];
 
   outputs = [ "out" "dev" ];
 

@@ -11,8 +11,9 @@ let
   avahiEnabled = config.services.avahi.enable;
   polkitEnabled = config.security.polkit.enable;
 
-  additionalBackends = pkgs.runCommand "additional-cups-backends" { }
-    ''
+  additionalBackends = pkgs.runCommand "additional-cups-backends" {
+      preferLocalBuild = true;
+    } ''
       mkdir -p $out
       if [ ! -e ${cups.out}/lib/cups/backend/smb ]; then
         mkdir -p $out/lib/cups/backend
@@ -316,6 +317,10 @@ in
             mkdir -m 0755 -p ${cfg.tempDir}
 
             mkdir -m 0755 -p /var/lib/cups
+            # While cups will automatically create self-signed certificates if accessed via TLS,
+            # this directory to store the certificates needs to be created manually.
+            mkdir -m 0700 -p /var/lib/cups/ssl
+
             # Backwards compatibility
             if [ ! -L /etc/cups ]; then
               mv /etc/cups/* /var/lib/cups

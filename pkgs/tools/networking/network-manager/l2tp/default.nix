@@ -1,5 +1,5 @@
 { stdenv, substituteAll, fetchFromGitHub, autoreconfHook, libtool, intltool, pkgconfig
-, networkmanager, ppp, xl2tpd, strongswan, libsecret
+, gtk3, networkmanager, ppp, xl2tpd, strongswan, libsecret
 , withGnome ? true, gnome3, networkmanagerapplet }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ networkmanager ppp ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret networkmanagerapplet ];
 
   nativeBuildInputs = [ autoreconfHook libtool intltool pkgconfig ];
 

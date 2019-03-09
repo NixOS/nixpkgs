@@ -1,11 +1,12 @@
-{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, writeText, withLibvirt ? true}:
+{ stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
+, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux }:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.0";
+  version = "2.2.3";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "1wa8l3j6hpy0m0snz7wvfcf0wsjikp22c2z29crpk10f7xl7c56b";
+  sha256 = "1j00glqn8b1zsgqg2nyk5as405a6s6vclswg2ri0a229hnsiabvs";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -48,10 +49,22 @@ in buildRubyGem rec {
 
   # PATH additions:
   #   - libarchive: Make `bsdtar` available for extracting downloaded boxes
-  postInstall = ''
+  # withLibvirt only:
+  #   - libguestfs: Make 'virt-sysprep' available for 'vagrant package'
+  #   - qemu: Make 'qemu-img' available for 'vagrant package'
+  postInstall =
+    let
+      pathAdditions = lib.makeSearchPath "bin"
+        (map (x: "${lib.getBin x}") ([
+          libarchive
+        ] ++ lib.optionals withLibvirt [
+          libguestfs
+          qemu
+        ]));
+    in ''
     wrapProgram "$out/bin/vagrant" \
       --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
-      --prefix PATH ':' "${lib.getBin libarchive}/bin"
+      --prefix PATH ':' ${pathAdditions}
 
     mkdir -p "$out/vagrant-plugins/plugins.d"
     echo '{}' > "$out/vagrant-plugins/plugins.json"

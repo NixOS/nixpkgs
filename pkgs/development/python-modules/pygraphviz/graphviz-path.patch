@@ -7,7 +7,7 @@ index 8f72024..2d8358e 100644
          import glob
  
 -        paths = os.environ["PATH"]
-+        paths = '@graphvizPath@:' + os.environ["PATH"]
++        paths = '@graphviz@/bin:' + os.environ["PATH"]
          if os.name == "nt":
              exe = ".exe"
          else:

@@ -1,14 +1,14 @@
 { monolithic ? true # build monolithic Quassel
 , daemon ? false # build Quassel daemon
 , client ? false # build Quassel client
-, tag ? "" # tag added to the package name
+, tag ? "-kf5" # tag added to the package name
 , static ? false # link statically
 
 , stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
 , qtbase, qtscript
 , phonon, libdbusmenu, qca-qt5
 
-, withKDE ? stdenv.isLinux # enable KDE integration
+, withKDE ? true # enable KDE integration
 , extra-cmake-modules
 , kconfigwidgets
 , kcoreaddons

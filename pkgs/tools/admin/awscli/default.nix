@@ -14,16 +14,23 @@ let
           sha256 = "25df4e10c263fb88b5ace923dd84bf9aa7f5019687b5e55382ffcdb8bede9db5";
         };
       });
+      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.9";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1";
+        };
+      });
     };
   };
 
 in py.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.16.89"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.16.106"; # N.B: if you change this, change botocore to a matching version too
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1i2f8nx8w6150jws0b732pvh8s5r6wq9yvv2m0a2k7cz1ihnzkxd";
+    sha256 = "169810cb895ac8608747e81480aebd2712f654ad2e49e1f1315f34d6052d5e2d";
   };
 
   # No tests included

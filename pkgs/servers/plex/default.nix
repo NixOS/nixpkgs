@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, rpmextract, glibc
+{ config, stdenv, fetchurl, rpmextract, glibc
 , dataDir ? "/var/lib/plex" # Plex's data directory must be baked into the package due to symlinks.
-, enablePlexPass ? false
+, enablePlexPass ? config.plex.enablePlexPass or false
 }:
 
 let

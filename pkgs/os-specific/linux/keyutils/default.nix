@@ -9,6 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "05bi5ja6f3h3kdi7p9dihlqlfrsmi1wh1r2bdgxc0180xh6g5bnk";
   };
 
+  patches = [
+    (fetchurl {
+      # improve reproducibility
+      url = "https://salsa.debian.org/debian/keyutils/raw/4cecffcb8e2a2aa4ef41777ed40e4e4bcfb2e5bf/debian/patches/Make-build-reproducible.patch";
+      sha256 = "0wnvbjfrbk7rghd032z684l7vk7mhy3bd41zvhkrhgp3cd5id0bm";
+    })
+  ];
+
+  BUILDDATE = "1970-01-01";
   outputs = [ "out" "lib" "dev" ];
 
   installFlags = [

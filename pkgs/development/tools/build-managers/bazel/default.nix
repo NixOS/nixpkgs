@@ -6,6 +6,7 @@
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , buildJdkName
+, runtimeShell
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
@@ -60,7 +61,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  version = "0.21.0";
+  version = "0.22.0";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -83,8 +84,8 @@ stdenv.mkDerivation rec {
   name = "bazel-${version}";
 
   src = fetchurl {
-    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1d3x0f1hzaiqq00pd65bks7v8kbv57m13jsing7y0y9id0g87jvc";
+    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
+    sha256 = "0hannnvia8rvmi2v5d97j1f6wv0m1kxkd5hq4aqp0dqjr0ka4q38";
   };
 
   sourceRoot = ".";
@@ -245,6 +246,7 @@ stdenv.mkDerivation rec {
     scripts/generate_bash_completion.sh \
         --bazel=./output/bazel \
         --output=output/bazel-complete.bash \
+        --prepend=scripts/bazel-complete-header.bash \
         --prepend=scripts/bazel-complete-template.bash
   '';
 
@@ -280,7 +282,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p tools
     cat > tools/bazel <<"EOF"
-    #!${stdenv.shell} -e
+    #!${runtimeShell} -e
     exit 1
     EOF
     chmod +x tools/bazel
@@ -289,7 +291,7 @@ stdenv.mkDerivation rec {
     ! hello_test
 
     cat > tools/bazel <<"EOF"
-    #!${stdenv.shell} -e
+    #!${runtimeShell} -e
     exec "$BAZEL_REAL" "$@"
     EOF
 

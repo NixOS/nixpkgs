@@ -34,12 +34,12 @@ let newPython = python3.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.11.2";
+  version = "1.12.0";
   pname = "conan";
 
   src = newPython.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0b4r9n6541jjp2lsdzc1nc6mk1a953w0d4ynjss3ns7pp89y4nd4";
+    sha256 = "0hgy3wfy96likdchz42h9mawfjw4dxx7k2iinrrlhph7128kji1j";
   };
   checkInputs = [
     git

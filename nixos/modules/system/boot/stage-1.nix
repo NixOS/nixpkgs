@@ -196,9 +196,10 @@ let
     ''; # */
 
 
-  udevRules = pkgs.runCommand "udev-rules"
-    { allowedReferences = [ extraUtils ]; }
-    ''
+  udevRules = pkgs.runCommand "udev-rules" {
+      allowedReferences = [ extraUtils ];
+      preferLocalBuild = true;
+    } ''
       mkdir -p $out
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
@@ -298,9 +299,10 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu"
-            { src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf"; }
-            ''
+        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
+              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+              preferLocalBuild = true;
+            } ''
               target=$out
               ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
             '';
@@ -525,16 +527,18 @@ in
       };
 
     fileSystems = mkOption {
-      options.neededForBoot = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          If set, this file system will be mounted in the initial
-          ramdisk.  By default, this applies to the root file system
-          and to the file system containing
-          <filename>/nix/store</filename>.
-        '';
-      };
+      type = with lib.types; loaOf (submodule {
+        options.neededForBoot = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            If set, this file system will be mounted in the initial
+            ramdisk.  By default, this applies to the root file system
+            and to the file system containing
+            <filename>/nix/store</filename>.
+          '';
+        };
+      });
     };
 
   };

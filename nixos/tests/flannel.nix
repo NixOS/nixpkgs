@@ -21,8 +21,9 @@ import ./make-test.nix ({ pkgs, ...} : rec {
       services = {
         etcd = {
           enable = true;
-          listenClientUrls = ["http://etcd:2379"];
-          listenPeerUrls = ["http://etcd:2380"];
+          listenClientUrls = ["http://0.0.0.0:2379"]; # requires ip-address for binding
+          listenPeerUrls = ["http://0.0.0.0:2380"]; # requires ip-address for binding
+          advertiseClientUrls = ["http://etcd:2379"];
           initialAdvertisePeerUrls = ["http://etcd:2379"];
           initialCluster = ["etcd=http://etcd:2379"];
         };

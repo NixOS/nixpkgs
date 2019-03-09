@@ -8,7 +8,7 @@ assertExecutable() {
 }
 
 # construct an executable file that wraps the actual executable
-# makeWrapper EXECUTABLE ARGS
+# makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
 # --argv0       NAME    : set name of executed process to NAME

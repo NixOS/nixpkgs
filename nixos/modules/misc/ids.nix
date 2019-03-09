@@ -272,7 +272,7 @@
       nzbget = 245;
       mosquitto = 246;
       toxvpn = 247;
-      squeezelite = 248;
+      # squeezelite = 248; # DynamicUser = true
       turnserver = 249;
       smokeping = 250;
       gocd-agent = 251;
@@ -290,7 +290,7 @@
       riak-cs = 263;
       infinoted = 264;
       sickbeard = 265;
-      # glance = 266; # unused, removed 2017-12-13
+      headphones = 266;
       couchpotato = 267;
       gogs = 268;
       pdns-recursor = 269;
@@ -590,7 +590,7 @@
       riak-cs = 263;
       infinoted = 264;
       sickbeard = 265;
-      # glance = 266; # unused, removed 2017-12-13
+      headphones = 266;
       couchpotato = 267;
       gogs = 268;
       kresd = 270;

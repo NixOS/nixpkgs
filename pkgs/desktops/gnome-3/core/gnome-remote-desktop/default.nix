@@ -2,15 +2,15 @@
 , glib, pipewire, systemd, libvncserver, libsecret, libnotify, gdk_pixbuf, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-remote-desktop-${version}";
-  version = "0.1.6";
+  pname = "gnome-remote-desktop";
+  version = "0.1.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jadahl";
     repo = "gnome-remote-desktop";
     rev = version;
-    sha256 = "1d49kxhi1bn8ssh6nybg7d6zajqwc653czbsms2d59dbhj8mn75f";
+    sha256 = "0gmazc8ww0lyhx9iclhi982bkpjsnflrzv4qfm3q6hcy0il21fsc";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig python3 wrapGAppsHook ];
@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace meson.build --replace pipewire-0.1 pipewire-0.2
-
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
   '';

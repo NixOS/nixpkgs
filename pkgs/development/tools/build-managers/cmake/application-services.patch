@@ -1,6 +1,24 @@
-diff -ur cmake-3.12.1/Source/cmGlobalXCodeGenerator.cxx cmake-3.12.1-patched/Source/cmGlobalXCodeGenerator.cxx
---- cmake-3.12.1/Source/cmGlobalXCodeGenerator.cxx	2018-08-09 21:14:08.000000000 +0900
-+++ cmake-3.12.1-patched/Source/cmGlobalXCodeGenerator.cxx	2018-08-12 02:47:28.719691934 +0900
+diff --git a/Source/CMakeLists.txt b/Source/CMakeLists.txt
+index 8aff8f6..af1852d 100644
+--- a/Source/CMakeLists.txt
++++ b/Source/CMakeLists.txt
+@@ -791,12 +791,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR MATCHES "sparc"
+   endif()
+ endif()
+ 
+-# On Apple we need CoreFoundation and CoreServices
+-if(APPLE)
+-  target_link_libraries(CMakeLib "-framework CoreFoundation")
+-  target_link_libraries(CMakeLib "-framework CoreServices")
+-endif()
+-
+ if(WIN32 AND NOT UNIX)
+   # We need the rpcrt4 library on Windows.
+   # We need the crypt32 library on Windows for crypto/cert APIs.
+diff --git a/Source/cmGlobalXCodeGenerator.cxx b/Source/cmGlobalXCodeGenerator.cxx
+index e353a37..b06f842 100644
+--- a/Source/cmGlobalXCodeGenerator.cxx
++++ b/Source/cmGlobalXCodeGenerator.cxx
 @@ -35,11 +35,6 @@
  
  struct cmLinkImplementation;
@@ -13,3 +31,19 @@ diff -ur cmake-3.12.1/Source/cmGlobalXCodeGenerator.cxx cmake-3.12.1-patched/Sou
  #if defined(CMAKE_BUILD_WITH_CMAKE)
  #  include "cmXMLParser.h"
  
+diff --git a/Utilities/cmlibarchive/CMakeLists.txt b/Utilities/cmlibarchive/CMakeLists.txt
+index d7af6e2..d4808fc 100644
+--- a/Utilities/cmlibarchive/CMakeLists.txt
++++ b/Utilities/cmlibarchive/CMakeLists.txt
+@@ -1662,11 +1662,6 @@ IF(MSVC)
+   ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
+ ENDIF(MSVC)
+ 
+-# We need CoreServices on Mac OS.
+-IF(APPLE)
+-  LIST(APPEND ADDITIONAL_LIBS "-framework CoreServices")
+-ENDIF(APPLE)
+-
+ add_subdirectory(libarchive)
+ 
+ install(FILES COPYING DESTINATION ${CMAKE_DOC_DIR}/cmlibarchive)

@@ -558,6 +558,10 @@ _addToEnv() {
             (( "$depHostOffset" <= "$depTargetOffset" )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
             if [[ -z "${strictDeps-}" ]]; then
+
+                # Keep track of which packages we have visited before.
+                local visitedPkgs=""
+
                 # Apply environment hooks to all packages during native
                 # compilation to ease the transition.
                 #
@@ -570,7 +574,11 @@ _addToEnv() {
                     ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
                     ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
                 do
+                    if [[ "$visitedPkgs" = *"$pkg"* ]]; then
+                        continue
+                    fi
                     runHook "${!hookRef}" "$pkg"
+                    visitedPkgs+=" $pkg"
                 done
             else
                 local pkgsRef="${pkgsVar}[$depTargetOffset - $depHostOffset]"
@@ -1012,13 +1020,11 @@ buildPhase() {
     else
         foundMakefile=1
 
-        # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
-        makeFlags="SHELL=$SHELL $makeFlags"
-
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
@@ -1057,6 +1063,7 @@ checkPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
             ${checkTarget}
@@ -1082,6 +1089,7 @@ installPhase() {
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
+        SHELL=$SHELL
         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
         $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
         ${installTargets:-install}
@@ -1189,6 +1197,7 @@ installCheckPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
             ${installCheckTarget:-installcheck}

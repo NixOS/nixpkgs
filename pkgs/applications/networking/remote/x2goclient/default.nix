@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cups, libssh, libXpm, nxproxy, openldap, openssh
+{ stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
 , makeWrapper, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
    sha256 = "05gfs11m259bchy3k0ihqpwg9wf8lp94rbca5dzla9fjzrb7pyy4";
   };
 
-  buildInputs = [ cups libssh libXpm nxproxy openldap openssh
+  buildInputs = [ cups libssh libXpm nx-libs openldap openssh
                   qtbase qtsvg qtx11extras qttools phonon pkgconfig ];
   nativeBuildInputs = [ makeWrapper ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install_client" "install_man" ];
   postInstall = ''
-    wrapProgram "$out/bin/x2goclient" --suffix PATH : "${nxproxy}/bin:${openssh}/libexec";
+    wrapProgram "$out/bin/x2goclient" --suffix PATH : "${nx-libs}/bin:${openssh}/libexec";
   '';
 
   meta = with stdenv.lib; {

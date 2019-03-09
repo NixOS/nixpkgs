@@ -21,21 +21,22 @@ stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    export NIX_CFLAGS_COMPILE+="-D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
+    export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
   '';
 
-  patches = [ (fetchpatch {
-    name = "boehm-gc-7.6.0-sys_select.patch";
-    url = "https://gitweb.gentoo.org/proj/musl.git/plain/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch?id=85b6a600996bdd71162b357e9ba93d8559342432";
-    sha256 = "1gydwlklvci30f5dpp5ccw2p2qpph5y41r55wx9idamjlq66fbb3";
-  }) ] ++
+  patches =
     # https://github.com/ivmai/bdwgc/pull/208
     lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
 
   configureFlags =
     [ "--enable-cplusplus" ]
     ++ lib.optional enableLargeConfig "--enable-large-config"
-    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static";
+    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static"
+    # Configure script can't detect whether C11 atomic intrinsics are available
+    # when cross-compiling, so it links to libatomic_ops, which has to be
+    # propagated to all dependencies. To avoid this, assume that the intrinsics
+    # are available.
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-libatomic-ops=none";
 
   doCheck = true; # not cross;
 

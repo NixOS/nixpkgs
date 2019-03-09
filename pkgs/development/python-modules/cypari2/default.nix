@@ -29,8 +29,11 @@ buildPythonPackage rec {
     ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install --no-index --prefix=$out --no-cache --build=tmpdir .
   '';
 
-  buildInputs = [
+  nativeBuildInputs = [
     pari
+  ];
+
+  buildInputs = [
     gmp
   ];
 

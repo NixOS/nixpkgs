@@ -11,7 +11,8 @@
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk2, gtk3, dbus-glib
+, glib, gtk3, dbus-glib
+, glibc
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
@@ -103,7 +104,7 @@ let
        else result;
 
   base = rec {
-    name = "${packageName}-${version}";
+    name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -119,7 +120,7 @@ let
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 gtk3 dbus-glib
+      glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libGLU_combined
       pciutils protobuf speechd libXdamage at-spi2-core
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
@@ -131,6 +132,8 @@ let
     patches = optional enableWideVine ./patches/widevine.patch ++ [
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
+      ./patches/jumbo-sorted.patch
+      ./patches/no-build-timestamps.patch
 
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
@@ -162,6 +165,17 @@ let
         --replace \
           'return sandbox_binary;' \
           'return base::FilePath(GetDevelSandboxPath());'
+
+      substituteInPlace services/audio/audio_sandbox_hook_linux.cc \
+        --replace \
+          '/usr/share/alsa/' \
+          '${alsaLib}/share/alsa/' \
+        --replace \
+          '/usr/lib/x86_64-linux-gnu/gconv/' \
+          '${glibc}/lib/gconv/' \
+        --replace \
+          '/usr/share/locale/' \
+          '${glibc}/share/locale/'
 
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc

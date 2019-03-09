@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, libdrm, libva
+{ stdenv, fetchFromGitHub, pkgconfig
+, libdrm, libva, libX11, libXext, libXfixes, wayland, meson, ninja
 }:
 
 stdenv.mkDerivation rec {
@@ -10,12 +10,18 @@ stdenv.mkDerivation rec {
     owner  = "01org";
     repo   = "libva-utils";
     rev    = version;
-    sha256 = "0k5v72prcq462x780j9vpqf4ckrpqf536z6say81wpna0l0qbd98";
+    sha256 = "1yk9bg1wg4nqva3l01s6bghcvc3hb02gp62p1sy5qk0r9mn5kpik";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
 
-  buildInputs = [ libdrm libva ];
+  buildInputs = [ libdrm libva libX11 libXext libXfixes wayland ];
+
+  mesonFlags = [
+    "-Ddrm=true"
+    "-Dx11=true"
+    "-Dwayland=true"
+  ];
 
   enableParallelBuilding = true;
 

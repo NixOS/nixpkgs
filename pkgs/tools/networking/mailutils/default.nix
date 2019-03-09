@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkgconfig
 , gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
-, python, gss, mysql, sendmailPath ? "/run/wrappers/bin/sendmail" }:
+, python, gss, mysql, system-sendmail }:
 
 stdenv.mkDerivation rec {
   name = "${project}-${version}";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "--with-gssapi"
     "--with-gsasl"
     "--with-mysql"
-    "--with-path-sendmail=${sendmailPath}"
+    "--with-path-sendmail=${system-sendmail}/bin/sendmail"
   ];
 
   readmsg-tests = let

@@ -33,11 +33,14 @@ buildPythonPackage rec {
 
   hardeningDisable = [ "format" ];
 
-  propagatedBuildInputs = [ pkgconfig ]
-    ++ (lib.optional openglSupport pyopengl)
-    ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK (wxGTK.gtk) libX11 ])
-    ++ (lib.optionals stdenv.isDarwin [ wxmac darwin.apple_sdk.frameworks.Cocoa ])
-    ;
+  nativeBuildInputs = [ pkgconfig ]
+    ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK libX11 ])
+    ++ (lib.optionals stdenv.isDarwin [ wxmac darwin.apple_sdk.frameworks.Cocoa ]);
+
+  buildInputs = [ ]
+    ++ (lib.optionals (!stdenv.isDarwin) [  (wxGTK.gtk) ])
+    ++ (lib.optional openglSupport pyopengl);
+
   preConfigure = ''
     cd wxPython
     # remove wxPython's darwin hack that interference with python-2.7-distutils-C++.patch
@@ -59,8 +62,6 @@ buildPythonPackage rec {
         ("appsvc",     None)
       ]}'
   '';
-
-  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lX11 -lgdk-x11-2.0";
 
   buildPhase = "";
 

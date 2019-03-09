@@ -13,12 +13,12 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "signing-party";
-  version = "2.8";
+  version = "2.9";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/s/${pname}/${pname}_${version}.orig.tar.gz";
-    sha256 = "1dfry04gsa8kv7a2kr4p7a4b616sql41hsyff4pmfvrhiv2fz39z";
+    sha256 = "14pgi45zqa0zd1ldfj9mnf9jgv5kfrhl78lr8iy7k88p9h6b9n7n";
   };
 
   # TODO: Get this patch upstream...
@@ -190,7 +190,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://salsa.debian.org/debian/signing-party;
+    homepage = https://salsa.debian.org/signing-party-team/signing-party;
     description = "A collection of several projects relating to OpenPGP";
     longDescription = ''
       This is a collection of several projects relating to OpenPGP.

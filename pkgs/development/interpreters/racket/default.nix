@@ -1,4 +1,5 @@
 { stdenv, fetchurl, makeFontsConf, makeWrapper
+, cacert
 , cairo, coreutils, fontconfig, freefont_ttf
 , glib, gmp
 , gtk3
@@ -41,7 +42,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "7.1"; # always change at once with ./minimal.nix
+  version = "7.2"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl rec {
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     inherit name;
-    sha256 = "180z0z6srzyipi9wfnbh61nbvzxr5d1cls7wxapv6fw92y52jwz9";
+    sha256 = "12cq0kiigmf9bxb4rcgxdhwc2fcdwvlyb1q3f8x4hswcpgq1ybg4";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -60,14 +61,14 @@ stdenv.mkDerivation rec {
     (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ cacert wrapGAppsHook ];
 
   buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
 
   preConfigure = ''
     unset AR
-    for f in src/configure src/racket/src/string.c; do
+    for f in src/lt/configure src/cs/c/configure src/racket/src/string.c; do
       substituteInPlace "$f" --replace /usr/bin/uname ${coreutils}/bin/uname
     done
     mkdir src/build
@@ -101,5 +102,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    broken = stdenv.isDarwin; # No support yet for setting FFI lookup path
   };
 }

@@ -231,11 +231,11 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "4.1";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "150rrm549fy1x71c9whmyi5knyd9sliwvmcsm438bdgg4v8c93m3";
+    sha256 = "11id9pm4azfrhpa4vr2yaw31dzgd55kl1zsxwn24sczx9n14jdrp";
   };
 
   prePatch = ''
@@ -419,7 +419,7 @@ stdenv.mkDerivation rec {
     ++ optionals nvenc [ nvidia-video-sdk nv-codec-headers ]
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
-                                   libiconv ];
+                                   libiconv cf-private /* For _OBJC_EHTYPE_$_NSException */ ];
 
   # Build qt-faststart executable
   buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';

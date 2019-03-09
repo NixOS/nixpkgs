@@ -38,6 +38,8 @@ let
 
   git-fame = callPackage ./git-fame {};
 
+  gita = callPackage ./gita {};
+
   # The full-featured Git.
   gitFull = gitBase.override {
     svnSupport = true;
@@ -79,6 +81,8 @@ let
   git-extras = callPackage ./git-extras { };
 
   git-hub = callPackage ./git-hub { };
+
+  git-ignore = callPackage ./git-ignore { };
 
   git-imerge = callPackage ./git-imerge { };
 
