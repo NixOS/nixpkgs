@@ -49,8 +49,8 @@ let
     # Database
     ZM_DB_TYPE=mysql
     ZM_DB_HOST=${cfg.database.host}
-    ZM_DB_NAME=${if cfg.database.createLocally then user else cfg.database.username}
-    ZM_DB_USER=${cfg.database.username}
+    ZM_DB_NAME=${cfg.database.name}
+    ZM_DB_USER=${if cfg.database.createLocally then user else cfg.database.username}
     ZM_DB_PASS=${cfg.database.password}
 
     # Web
