@@ -40,6 +40,13 @@ stdenv.mkDerivation rec {
       url = https://github.com/gnome/gtk/compare/3.24.5..47e4a111c2666961ab47b6df48460d3c9075d92d.patch;
       sha256 = "0ky4kmgcywg0qlwndn9aw083bkwnkr49bnlsz0ii93fxzvbiqglr";
     })
+    (fetchpatch {
+      # https://gitlab.gnome.org/GNOME/gtk/merge_requests/505 already merged
+      # but isn't in 3.24.5
+      name = "export-missing-symbols.patch";
+      url = https://gitlab.gnome.org/GNOME/gtk/commit/95c0f07295fd300ab7f3416a39290ae33585ea6c.patch;
+      sha256 = "0z9w7f39xcn1cbcd8jhx731vq64nvi5q6kyc86bq8r00daysjwnl";
+    })
   ] ++ optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
