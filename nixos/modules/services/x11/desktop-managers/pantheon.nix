@@ -152,19 +152,15 @@ in
       "/share"
     ];
 
-    environment.systemPackages = pkgs.pantheon.artwork ++ pkgs.pantheon.desktop ++ pkgs.pantheon.services ++ cfg.sessionPath
-      ++ (pkgs.gnome3.removePackagesByName pkgs.pantheon.apps config.environment.pantheon.excludePackages)
-      ++ (with pkgs.gnome3;
-      [
-        adwaita-icon-theme
-        dconf
-        epiphany
+    environment.systemPackages =
+      pkgs.pantheon.artwork ++ pkgs.pantheon.desktop ++ pkgs.pantheon.services ++ cfg.sessionPath
+      ++ (with pkgs; gnome3.removePackagesByName
+      ([
+        gnome3.geary
+        gnome3.epiphany
+        gnome3.gnome-font-viewer
         evince
-        geary
-        gnome-bluetooth
-        gnome-font-viewer
-        gnome-power-manager
-      ])
+      ] ++ pantheon.apps) config.environment.pantheon.excludePackages)
       ++ (with pkgs;
       [
         adwaita-qt
@@ -172,6 +168,8 @@ in
         glib
         glib-networking
         gnome-menus
+        gnome3.adwaita-icon-theme
+        gnome3.dconf
         gtk3.out
         hicolor-icon-theme
         lightlocker
@@ -187,6 +185,7 @@ in
       roboto-mono
       pantheon.elementary-redacted-script # needed by screenshot-tool
     ];
+
     fonts.fontconfig.defaultFonts = {
       monospace = [ "Roboto Mono" ];
       sansSerif = [ "Open Sans" ];
