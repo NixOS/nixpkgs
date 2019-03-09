@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       -DPACKAGE_MODE=TRUE \
       -DPLUGIN_DIR="$out/lib/pcsx2" \
       -DREBUILD_SHADER=TRUE \
+      -DXDG_STD=TRUE \
       ..
   '';
 
