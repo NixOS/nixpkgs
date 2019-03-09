@@ -49,8 +49,8 @@
     })
   ];
 } else {
-  version = "5.1.0.20181214";
-  sha256 = "07g1gfyjq7rypjdwxw495sk8k1y2i3y3nsm1rh9kgx3z47z28aah";
-  rev = "11972c0dab34e088c55c16a94d26c399ca7a26d8";
+  version = "5.1.0.20190305";
+  sha256 = "0qink34bjv0lshf3c8997w39r8yxgbhxpjbxw47l5xkvimlpc0dl";
+  rev = "ff61c86cb26f71c06af22574d9d4cc3a77292781";
   patches = [];
 })
