@@ -2962,7 +2962,7 @@
   mfossen = {
     email = "msfossen@gmail.com";
     github = "mfossen";
-    name = "Mitchell Fossen"
+    name = "Mitchell Fossen";
   };
   mgdelacroix = {
     email = "mgdelacroix@gmail.com";
