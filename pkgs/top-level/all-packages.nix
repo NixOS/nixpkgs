@@ -1713,6 +1713,8 @@ in
 
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
+  moosefs = callPackage ../tools/filesystems/moosefs { };
+
   mozlz4a = callPackage ../tools/compression/mozlz4a { };
 
   msr-tools = callPackage ../os-specific/linux/msr-tools { };
