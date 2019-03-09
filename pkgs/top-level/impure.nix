@@ -10,15 +10,16 @@ let
   # Return ‘x’ if it evaluates, or ‘def’ if it throws an exception.
   try = x: def: let res = tryEval x; in if res.success then res.value else def;
 
-  configFile = getEnv "NIXPKGS_CONFIG";
+  configFile  = getEnv "NIXPKGS_CONFIG";
   configFile2 = homeDir + "/.config/nixpkgs/config.nix";
   configFile3 = homeDir + "/.nixpkgs/config.nix"; # obsolete
 
-  config_ =
-    if configFile != "" && pathExists configFile then import configFile
-    else if homeDir != "" && pathExists configFile2 then import configFile2
-    else if homeDir != "" && pathExists configFile3 then import configFile3
-    else {};
+  mkConfigs = config:
+    if config != null then [ { file = "nixpkgs.config-argument"; value = config; } ]
+    else if configFile != "" && pathExists configFile  then [ configFile  ]
+    else if homeDir    != "" && pathExists configFile2 then [ configFile2 ]
+    else if homeDir    != "" && pathExists configFile3 then [ configFile3 ]
+    else [];
 
   isDir = path: pathExists (path + "/.");
   pathOverlays = try (toString <nixpkgs-overlays>) "";
@@ -69,7 +70,10 @@ in
 
 , # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.config/nixpkgs/config.nix.
-  config ? config_
+  config ? null
+
+, # This is what actually gets evaluated for config.
+  configs ? mkConfigs config
 
 , # Overlays are used to extend Nixpkgs collection with additional
   # collections of packages.  These collection of packages are part of the
@@ -83,8 +87,8 @@ in
 # not be passed.
 assert args ? localSystem -> !(args ? system || args ? platform);
 
-import ./. (removeAttrs args [ "system" "platform" ] // {
-  inherit config overlays crossSystem;
+import ./. (removeAttrs args [ "system" "platform" "config" ] // {
+  inherit configs overlays crossSystem;
   # Fallback: Assume we are building packages on the current (build, in GNU
   # Autotools parlance) system.
   localSystem = (if args ? localSystem then {}

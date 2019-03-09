@@ -41,6 +41,12 @@ let
       internal = true;
     };
 
+    unknowns = mkOption {
+      type = types.attrsOf (types.uniq types.unspecified);
+      default = {};
+      internal = true;
+    };
+
     /* Config options */
 
     inHydra = mkMeta {
