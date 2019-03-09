@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "aide-${version}";
-  version = "0.16";
+  version = "0.16.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/aide/${version}/aide-${version}.tar.gz";
-    sha256 = "0ibkv4z2gk14fn014kq13rp2ysiq6nn2cflv2q5i7zf466hm6758";
+    url = "https://github.com/aide/aide/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "1dqhc0c24wa4zid06pfy61k357yvzh28ij86bk9jf6hcqzn7qaqg";
   };
 
   buildInputs = [ flex bison libmhash zlib acl attr libselinux pcre ];
