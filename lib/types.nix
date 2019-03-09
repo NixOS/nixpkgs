@@ -94,7 +94,7 @@ rec {
 
 
   # When adding new types don't forget to document them in
-  # nixos/doc/manual/development/option-types.xml!
+  # ../nixos/doc/manual/development/option-types.xml!
   types = rec {
     unspecified = mkOptionType {
       name = "unspecified";
@@ -368,6 +368,16 @@ rec {
       getSubOptions = elemType.getSubOptions;
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);
+    };
+
+    # An opaque value. The result of evaluation of an option of this
+    # type is a list of { file, value } pairs describing all the
+    # values assigned to this option (with corresponding files where
+    # these values were applied).
+    opaque = mkOptionType {
+      name = "opaque";
+      description = "opaque value";
+      merge = loc: args: args;
     };
 
     # A submodule (like typed attribute set). See NixOS manual.
