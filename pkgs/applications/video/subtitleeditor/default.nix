@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, intltool, file,
-  desktop-file-utils, enchant, gnome3, gst_all_1, hicolor-icon-theme,
+  desktop-file-utils, enchant, gnome3, gtk3, gst_all_1, hicolor-icon-theme,
   libsigcxx, libxmlxx, xdg_utils, isocodes, wrapGAppsHook
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs =  [
     desktop-file-utils
     enchant
-    gnome3.gtk
+    gtk3
     gnome3.gtkmm
     gst_all_1.gstreamer
     gst_all_1.gstreamermm
