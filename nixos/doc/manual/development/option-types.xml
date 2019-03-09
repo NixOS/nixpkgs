@@ -364,6 +364,20 @@
   </variablelist>
  </section>
 
+ <section xml:id='section-option-types-opaque>
+  <title>Opaque</title>
+
+  <para>
+   <literal>opaque</literal> is a type that simply collects assignments to itself into
+   a list of <literal>{ file, value }</literal> pairs.
+  </para>
+
+  <para>
+   This is useful when you want to merge these values outside of
+   <literal>evalModules</literal> done by NixOS.
+  </para>
+ </section>
+
  <section xml:id='section-option-types-submodule'>
   <title>Submodule</title>
 
