@@ -125,8 +125,14 @@ in
         done
       ''}
 
+      # Strip directory prefix from include files, but include a symlink to
+      # support packages including just <node_version.h>
+      mv $out/include/node/* $out/include/
+      rmdir $out/include/node
+      ln -s $out/include $out/include/node
+
       # install the missing headers for node-gyp
-      cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
+      cp -r ${concatStringsSep " " copyLibHeaders} $out/include
     '' + optionalString (stdenv.isDarwin && enableNpm) ''
       sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
     '';
