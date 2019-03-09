@@ -2960,7 +2960,7 @@
     name = "Celine Mercier";
   };
   mfossen = {
-    email = "mfossen@gmail.com";
+    email = "msfossen@gmail.com";
     github = "mfossen";
     name = "Mitchell Fossen"
   };
