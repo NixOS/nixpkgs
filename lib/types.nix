@@ -382,7 +382,7 @@ rec {
         merge = loc: defs:
           let
             coerce = def: if isFunction def then def else { config = def; };
-            modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
+            modules = opts' ++ map (def: { inherit (def) file; imports = [(coerce def.value)]; }) defs;
           in (evalModules {
             inherit modules;
             args.name = last loc;

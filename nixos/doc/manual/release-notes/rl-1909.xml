@@ -46,6 +46,30 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
+         xml:id="sec-release-19.09-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     The internal top-level NixOS module option <option>_file</option> was
+     renamed to <option>file</option>. Using the wrong name will cause a
+     evaluation error, but the indicated location of the error might be
+     incorrect since that option is one of the sources for those locations.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
          xml:id="sec-release-19.09-notable-changes">
   <title>Other Notable Changes</title>
 

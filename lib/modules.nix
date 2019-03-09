@@ -35,9 +35,9 @@ rec {
       # attribute.  These options are fragile, as they are used by the
       # module system to change the interpretation of modules.
       internalModule = rec {
-        _file = ./modules.nix;
+        file = ./modules.nix;
 
-        key = _file;
+        key = file;
 
         options = {
           _module.args = mkOption {
@@ -121,11 +121,11 @@ rec {
       else {};
     in
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta"]; in
+      let badAttrs = removeAttrs m ["file" "key" "disabledModules" "imports" "options" "config" "meta"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by assignments to the top-level attributes `config' or `options'."
       else
-        { file = m._file or file;
+        { file = m.file or file;
           key = toString m.key or key;
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
@@ -133,12 +133,12 @@ rec {
           config = mkMerge [ (m.config or {}) metaSet ];
         }
     else
-      { file = m._file or file;
+      { file = m.file or file;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = mkMerge [ (removeAttrs m ["_file" "key" "disabledModules" "require" "imports"]) metaSet ];
+        config = mkMerge [ (removeAttrs m ["file" "key" "disabledModules" "require" "imports"]) metaSet ];
       };
 
   applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
@@ -176,7 +176,7 @@ rec {
      of the submodule. (see applyIfFunction) */
   unpackSubmodule = unpack: m: args:
     if isType "submodule" m then
-      { _file = m.file; } // (unpack m.submodule args)
+      { inherit (m) file; } // (unpack m.submodule args)
     else unpack m args;
 
   packSubmodule = file: m:
