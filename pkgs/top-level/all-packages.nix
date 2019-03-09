@@ -16528,10 +16528,8 @@ in
     pygments = python27Packages.pygments;
   };
 
-  csound-qt = callPackage ../applications/audio/csound/csound-qt {
+  csound-qt = libsForQt59.callPackage ../applications/audio/csound/csound-qt {
     python = python27;
-    qmake = qt59.qmake;
-    qtwebengine = qt59.qtwebengine;
   };
 
   cinepaint = callPackage ../applications/graphics/cinepaint {
