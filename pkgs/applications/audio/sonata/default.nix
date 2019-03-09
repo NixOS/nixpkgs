@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook
+{ stdenv, fetchFromGitHub, pkgconfig, gettext, intltool, wrapGAppsHook
 , python3Packages, gnome3, gtk3, gobject-introspection}:
 
 let
@@ -16,7 +16,7 @@ in buildPythonApplication rec {
 
   disabled = !isPy3k;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gettext ];
   buildInputs = [
     intltool wrapGAppsHook
     gnome3.adwaita-icon-theme
