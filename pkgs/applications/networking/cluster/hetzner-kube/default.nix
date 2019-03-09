@@ -1,7 +1,6 @@
 { lib, buildGoPackage, fetchFromGitHub, ... }:
 
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "hetzner-kube";
   version = "0.3.2-rc1";
 
