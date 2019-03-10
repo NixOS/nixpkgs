@@ -12,16 +12,19 @@ let
       inherit synctexSupport;
     };
 
-    zathura_pdf_poppler = callPackage ./pdf-poppler { };
+    zathura_cb = callPackage ./cb { };
+
+    zathura_djvu = callPackage ./djvu { };
 
     zathura_pdf_mupdf = callPackage ./pdf-mupdf { };
 
-    zathura_djvu = callPackage ./djvu { };
+    zathura_pdf_poppler = callPackage ./pdf-poppler { };
 
     zathura_ps = callPackage ./ps { };
 
     zathuraWrapper = callPackage ./wrapper.nix {
       plugins = [
+        zathura_cb
         zathura_djvu
         zathura_ps
         (if useMupdf then zathura_pdf_mupdf else zathura_pdf_poppler)
