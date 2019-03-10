@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
-, libjpeg, qtbase
+, libjpeg, libpng, qtbase
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   LUA_PACKAGE = "lua";
 
   buildInputs = [
-    libjpeg zlib qtbase freetype cairo lua5 texlive ghostscript
+    libjpeg libpng zlib qtbase freetype cairo lua5 texlive ghostscript
   ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
