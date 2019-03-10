@@ -160,7 +160,10 @@ in {
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
 
-    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell-fonts ];
+    fonts.fonts = [
+      pkgs.dejavu_fonts pkgs.cantarell-fonts
+      pkgs.source-sans-pro # Default monospace font in 3.32
+    ];
 
     services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ]
       ++ map
