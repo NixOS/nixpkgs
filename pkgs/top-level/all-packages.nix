@@ -17000,6 +17000,8 @@ in
 
   inherit (gnome3) epiphany;
 
+  ephemeral = callPackage ../applications/networking/browsers/ephemeral { };
+
   epic5 = callPackage ../applications/networking/irc/epic5 { };
 
   eq10q = callPackage ../applications/audio/eq10q { };
