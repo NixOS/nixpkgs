@@ -516,6 +516,8 @@ in {
         gitAndTools.git
         cfg.packages.gitaly.rubyEnv
         cfg.packages.gitaly.rubyEnv.wrappedRuby
+        gzip
+        bzip2
       ];
       serviceConfig = {
         Type = "simple";
