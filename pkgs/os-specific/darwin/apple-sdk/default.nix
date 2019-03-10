@@ -40,12 +40,6 @@ let
       pushd lib
       ln -s -L /usr/lib/libcups*.dylib .
       popd
-
-      cd Library/Frameworks/QuartzCore.framework/Versions/A/Headers
-      for file in CI*.h; do
-        rm $file
-        ln -s ../Frameworks/CoreImage.framework/Headers/$file
-      done
     '';
 
     meta = with stdenv.lib; {
@@ -80,13 +74,12 @@ let
 
         # Keep track of if this is a child or a child rescue as with
         # ApplicationServices in the 10.9 SDK
-        local isChild
+        local isChild=0
 
         if [ -d "${sdk.out}/Library/Frameworks/$path/Versions/$current/Headers" ]; then
           isChild=1
           cp -R "${sdk.out}/Library/Frameworks/$path/Versions/$current/Headers" .
-        else
-          isChild=0
+        elif [ -d "${sdk.out}/Library/Frameworks/$name.framework/Versions/$current/Headers" ]; then
           current="$(readlink "/System/Library/Frameworks/$name.framework/Versions/Current")"
           cp -R "${sdk.out}/Library/Frameworks/$name.framework/Versions/$current/Headers" .
         fi
@@ -103,11 +96,6 @@ let
           pushd "${sdk.out}/Library/Frameworks/$name.framework/Versions/$current" >/dev/null
         fi
         local children=$(echo Frameworks/*.framework)
-        if [ "$name" == "ApplicationServices" ]; then
-          # Fixing up ApplicationServices which is missing
-          # CoreGraphics in the 10.9 SDK
-          children="$children Frameworks/CoreGraphics.framework"
-        fi
         popd >/dev/null
 
         for child in $children; do

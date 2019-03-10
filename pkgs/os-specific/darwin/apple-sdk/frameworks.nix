@@ -29,6 +29,7 @@ with frameworks; with libs; {
   CoreAudioKit            = [ AudioUnit ];
   CoreData                = [];
   CoreGraphics            = [ Accelerate CF IOKit IOSurface SystemConfiguration ];
+  CoreImage               = [ ];
   CoreLocation            = [];
   CoreMIDI                = [ CF ];
   CoreMIDIServer          = [];
@@ -37,13 +38,11 @@ with frameworks; with libs; {
   CoreText                = [ CF CoreGraphics ];
   CoreVideo               = [ ApplicationServices CF CoreGraphics IOSurface OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
-  DVComponentGlue         = [ CoreServices QuickTime ];
   DVDPlayback             = [];
   DirectoryService        = [ CF ];
   DiscRecording           = [ CF CoreServices IOKit ];
   DiscRecordingUI         = [];
   DiskArbitration         = [ CF IOKit ];
-  DrawSprocket            = [ Carbon ];
   EventKit                = [];
   ExceptionHandling       = [];
   FWAUserLib              = [];
@@ -84,7 +83,6 @@ with frameworks; with libs; {
   PubSub                  = [];
   QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
   QuickLook               = [ ApplicationServices CF ];
-  QuickTime               = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
   SceneKit                = [];
   ScreenSaver             = [];
   Scripting               = [];
@@ -114,7 +112,8 @@ with frameworks; with libs; {
   JavaVM              = [];
   OpenDirectory       = [];
   Quartz              = [ QuickLook QTKit ];
-  QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL ];
+  QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL CoreImage ];
+  QuickTime           = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
 
   vmnet = [];
 }
