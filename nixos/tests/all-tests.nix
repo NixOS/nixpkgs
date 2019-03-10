@@ -216,6 +216,7 @@ in
   switchTest = handleTest ./switch-test.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
+  systemd-chroot = handleTest ./systemd-chroot.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
   tomcat = handleTest ./tomcat.nix {};
