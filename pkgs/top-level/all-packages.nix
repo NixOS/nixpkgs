@@ -3511,6 +3511,8 @@ in
 
   intecture-cli = callPackage ../tools/admin/intecture/cli.nix { };
 
+  intel-media-sdk = callPackage ../development/libraries/intel-media-sdk { };
+
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
   inxi = callPackage ../tools/system/inxi { };
