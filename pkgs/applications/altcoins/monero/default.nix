@@ -11,7 +11,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name    = "monero-${version}";
-  version = "0.13.0.4";
+  version = "0.14.0.2";
 
   src = fetchgit {
     url    = "https://github.com/monero-project/monero.git";
