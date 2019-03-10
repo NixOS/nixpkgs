@@ -15,11 +15,11 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "golden-cheetah-${version}";
-  version = "3.4";
+  version = "3.5-DEV1903";
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "https://github.com/GoldenCheetah/GoldenCheetah/archive/V${version}.tar.gz";
-    sha256 = "0fiz2pj155cd357kph50lc6rjyzwp045glfv4y68qls9j7m9ayaf";
+    url = "https://github.com/GoldenCheetah/GoldenCheetah/archive/v${version}.tar.gz";
+    sha256 = "1042q5yh6k4m9hiyapz10bmg5jwa6s1hy086mq0768wybiqzilb2";
   };
   buildInputs = [
     qtbase qtsvg qtserialport qtwebkit qtmultimedia qttools zlib
