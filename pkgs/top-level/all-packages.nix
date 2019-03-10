@@ -3991,7 +3991,6 @@ in
   libite = callPackage ../development/libraries/libite { };
 
   liblangtag = callPackage ../development/libraries/liblangtag {
-    inherit (gnome2) gtkdoc;
     inherit (gnome3) gnome-common;
   };
 
@@ -4581,7 +4580,7 @@ in
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
-  oathToolkit = callPackage ../tools/security/oath-toolkit { inherit (gnome2) gtkdoc;  };
+  oathToolkit = callPackage ../tools/security/oath-toolkit { };
 
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
 
@@ -9927,9 +9926,7 @@ in
 
   gdl = callPackage ../development/libraries/gdl { };
 
-  gdome2 = callPackage ../development/libraries/gdome2 {
-    inherit (gnome2) gtkdoc;
-  };
+  gdome2 = callPackage ../development/libraries/gdome2 { };
 
   gdbm = callPackage ../development/libraries/gdbm { };
 
@@ -11480,7 +11477,7 @@ in
   libunibreak = callPackage ../development/libraries/libunibreak { };
 
   libunique = callPackage ../development/libraries/libunique { };
-  libunique3 = callPackage ../development/libraries/libunique/3.x.nix { inherit (gnome2) gtkdoc; };
+  libunique3 = callPackage ../development/libraries/libunique/3.x.nix { };
 
   liburcu = callPackage ../development/libraries/liburcu { };
 
