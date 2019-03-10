@@ -29,6 +29,6 @@ python3Packages.buildPythonApplication rec {
     description = "Yet another simple static gallery generator";
     homepage    = http://sigal.saimon.org/en/latest/index.html;
     license     = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ domenkozar matthiasbeyer ];
   };
 }

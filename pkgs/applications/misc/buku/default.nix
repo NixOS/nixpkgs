@@ -69,7 +69,7 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = https://github.com/jarun/Buku;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [ matthiasbeyer infinisil ];
   };
 }
 

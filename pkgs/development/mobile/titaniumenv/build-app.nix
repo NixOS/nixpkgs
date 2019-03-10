@@ -173,7 +173,7 @@ stdenv.mkDerivation ({
         echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
 
         ${stdenv.lib.optionalString enableWirelessDistribution ''
-          appname="$(basename "$out/*.ipa" .ipa)"
+          appname="$(basename $out/*.ipa .ipa)"
           bundleId=$(grep '<id>[a-zA-Z0-9.]*</id>' tiapp.xml | sed -e 's|<id>||' -e 's|</id>||' -e 's/ //g')
           version=$(grep '<version>[a-zA-Z0-9.]*</version>' tiapp.xml | sed -e 's|<version>||' -e 's|</version>||' -e 's/ //g')
 

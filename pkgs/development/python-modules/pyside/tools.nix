@@ -19,7 +19,7 @@ buildPythonPackage rec {
     description = "Tools for pyside, the LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
     license = lib.licenses.gpl2;
     homepage = http://www.pyside.org;
-    maintainers = [ lib.maintainers.chaoflow ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

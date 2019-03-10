@@ -7,17 +7,20 @@
 
 buildPythonPackage rec {
   pname = "regex";
-  version = "2018.11.22";
+  version = "2019.02.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "79a6a60ed1ee3b12eb0e828c01d75e3b743af6616d69add6c2fde1d425a4ba3f";
+    sha256 = "587bd4cad11c7294f89799c45778abca271d7c6668a0e85c41a6dbfa8096f9bb";
   };
 
   postCheck = ''
     echo "We now run tests ourselves, since the setuptools installer doesn't."
     ${python.interpreter} -c 'import test_regex; test_regex.test_main();'
   '';
+
+  # No tests in archive
+  doCheck = false;
 
   meta = {
     description = "Alternative regular expression module, to replace re";

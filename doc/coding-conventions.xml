@@ -197,20 +197,14 @@ args.stdenv.mkDerivation (args // {
   <title>Package naming</title>
 
   <para>
-    The key words
-    <emphasis>must</emphasis>,
-    <emphasis>must not</emphasis>,
-    <emphasis>required</emphasis>,
-    <emphasis>shall</emphasis>,
-    <emphasis>shall not</emphasis>,
-    <emphasis>should</emphasis>,
-    <emphasis>should not</emphasis>,
-    <emphasis>recommended</emphasis>,
-    <emphasis>may</emphasis>,
-    and <emphasis>optional</emphasis> in this section
-    are to be interpreted as described in
-    <link xlink:href="https://tools.ietf.org/html/rfc2119">RFC 2119</link>.
-    Only <emphasis>emphasized</emphasis> words are to be interpreted in this way.
+   The key words <emphasis>must</emphasis>, <emphasis>must not</emphasis>,
+   <emphasis>required</emphasis>, <emphasis>shall</emphasis>, <emphasis>shall
+   not</emphasis>, <emphasis>should</emphasis>, <emphasis>should
+   not</emphasis>, <emphasis>recommended</emphasis>, <emphasis>may</emphasis>,
+   and <emphasis>optional</emphasis> in this section are to be interpreted as
+   described in <link xlink:href="https://tools.ietf.org/html/rfc2119">RFC
+   2119</link>. Only <emphasis>emphasized</emphasis> words are to be
+   interpreted in this way.
   </para>
 
   <para>
@@ -253,15 +247,15 @@ args.stdenv.mkDerivation (args // {
    <itemizedlist>
     <listitem>
      <para>
-       The <literal>name</literal> attribute <emphasis>should</emphasis>
-       be identical to the upstream package name.
+      The <literal>name</literal> attribute <emphasis>should</emphasis> be
+      identical to the upstream package name.
      </para>
     </listitem>
     <listitem>
      <para>
-       The <literal>name</literal> attribute <emphasis>must not</emphasis>
-       contain uppercase letters — e.g., <literal>"mplayer-1.0rc2"</literal>
-       instead of <literal>"MPlayer-1.0rc2"</literal>.
+      The <literal>name</literal> attribute <emphasis>must not</emphasis>
+      contain uppercase letters — e.g., <literal>"mplayer-1.0rc2"</literal>
+      instead of <literal>"MPlayer-1.0rc2"</literal>.
      </para>
     </listitem>
     <listitem>
@@ -275,28 +269,29 @@ args.stdenv.mkDerivation (args // {
      <para>
       If a package is not a release but a commit from a repository, then the
       version part of the name <emphasis>must</emphasis> be the date of that
-      (fetched) commit. The date <emphasis>must</emphasis> be in <literal>"YYYY-MM-DD"</literal>
-      format. Also append <literal>"unstable"</literal> to the name - e.g.,
+      (fetched) commit. The date <emphasis>must</emphasis> be in
+      <literal>"YYYY-MM-DD"</literal> format. Also append
+      <literal>"unstable"</literal> to the name - e.g.,
       <literal>"pkgname-unstable-2014-09-23"</literal>.
      </para>
     </listitem>
     <listitem>
      <para>
-      Dashes in the package name <emphasis>should</emphasis> be preserved in new variable names,
-      rather than converted to underscores or camel cased — e.g.,
-      <varname>http-parser</varname> instead of <varname>http_parser</varname>
-      or <varname>httpParser</varname>. The hyphenated style is preferred in
-      all three package names.
+      Dashes in the package name <emphasis>should</emphasis> be preserved in
+      new variable names, rather than converted to underscores or camel cased
+      — e.g., <varname>http-parser</varname> instead of
+      <varname>http_parser</varname> or <varname>httpParser</varname>. The
+      hyphenated style is preferred in all three package names.
      </para>
     </listitem>
     <listitem>
      <para>
-      If there are multiple versions of a package, this <emphasis>should</emphasis> be reflected in
-      the variable names in <filename>all-packages.nix</filename>, e.g.
-      <varname>json-c-0-9</varname> and <varname>json-c-0-11</varname>. If
-      there is an obvious “default” version, make an attribute like
-      <literal>json-c = json-c-0-9;</literal>. See also
-      <xref linkend="sec-versioning" />
+      If there are multiple versions of a package, this
+      <emphasis>should</emphasis> be reflected in the variable names in
+      <filename>all-packages.nix</filename>, e.g. <varname>json-c-0-9</varname>
+      and <varname>json-c-0-11</varname>. If there is an obvious “default”
+      version, make an attribute like <literal>json-c = json-c-0-9;</literal>.
+      See also <xref linkend="sec-versioning" />
      </para>
     </listitem>
    </itemizedlist>
@@ -814,8 +809,8 @@ args.stdenv.mkDerivation (args // {
 
   <para>
    There are multiple ways to fetch a package source in nixpkgs. The general
-   guideline is that you should package reproducible sources with a high degree of
-   availability. Right now there is only one fetcher which has mirroring
+   guideline is that you should package reproducible sources with a high degree
+   of availability. Right now there is only one fetcher which has mirroring
    support and that is <literal>fetchurl</literal>. Note that you should also
    prefer protocols which have a corresponding proxy environment variable.
   </para>
@@ -869,8 +864,10 @@ src = fetchFromGitHub {
 }
 </programlisting>
       Find the value to put as <literal>sha256</literal> by running
-      <literal>nix run -f '&lt;nixpkgs&gt;' nix-prefetch-github -c nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix</literal>
-      or <literal>nix-prefetch-url --unpack https://github.com/NixOS/nix/archive/1f795f9f44607cc5bec70d1300150bfefcef2aae.tar.gz</literal>.
+      <literal>nix run -f '&lt;nixpkgs&gt;' nix-prefetch-github -c
+      nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS
+      nix</literal> or <literal>nix-prefetch-url --unpack
+      https://github.com/NixOS/nix/archive/1f795f9f44607cc5bec70d1300150bfefcef2aae.tar.gz</literal>.
      </para>
     </listitem>
    </itemizedlist>
@@ -953,17 +950,23 @@ $ nix-hash --type sha256 --to-base32 <replaceable>HASH</replaceable>
      would be replace hash with a fake one and rebuild. Nix build will fail and
      error message will contain desired hash.
     </para>
-    <warning><para>This method has security problems. Check below for details.</para></warning>
+    <warning>
+     <para>
+      This method has security problems. Check below for details.
+     </para>
+    </warning>
    </listitem>
   </orderedlist>
 
   <section xml:id="sec-source-hashes-security">
    <title>Obtaining hashes securely</title>
+
    <para>
-    Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of fetching
-    source you can fetch malware, and instead of source hash you get hash of malware. Here are
-    security considerations for this scenario:
+    Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead
+    of fetching source you can fetch malware, and instead of source hash you
+    get hash of malware. Here are security considerations for this scenario:
    </para>
+
    <itemizedlist>
     <listitem>
      <para>
@@ -972,7 +975,8 @@ $ nix-hash --type sha256 --to-base32 <replaceable>HASH</replaceable>
     </listitem>
     <listitem>
      <para>
-      hashes from upstream (in method 3) should be obtained via secure protocol;
+      hashes from upstream (in method 3) should be obtained via secure
+      protocol;
      </para>
     </listitem>
     <listitem>
@@ -982,12 +986,12 @@ $ nix-hash --type sha256 --to-base32 <replaceable>HASH</replaceable>
     </listitem>
     <listitem>
      <para>
-      <literal>https://</literal> URLs are not secure in method 5. When obtaining hashes
-      with fake hash method, TLS checks are disabled. So
-      refetch source hash from several different networks to exclude MITM scenario.
-      Alternatively, use fake hash method to make Nix error, but instead of extracting
-      hash from error, extract <literal>https://</literal> URL and prefetch it
-      with method 1.
+      <literal>https://</literal> URLs are not secure in method 5. When
+      obtaining hashes with fake hash method, TLS checks are disabled. So
+      refetch source hash from several different networks to exclude MITM
+      scenario. Alternatively, use fake hash method to make Nix error, but
+      instead of extracting hash from error, extract
+      <literal>https://</literal> URL and prefetch it with method 1.
      </para>
     </listitem>
    </itemizedlist>

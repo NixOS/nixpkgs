@@ -592,6 +592,8 @@ let
 
       BLK_DEV_INTEGRITY       = yes;
 
+      BLK_SED_OPAL = whenAtLeast "4.14" yes;
+
       BSD_PROCESS_ACCT_V3 = yes;
 
       BT_HCIUART_BCSP = option yes;
@@ -633,6 +635,8 @@ let
 
       MLX4_EN_VXLAN = whenOlder "4.8" yes;
       MLX5_CORE_EN       = option yes;
+
+      PSI = whenAtLeast "4.20" yes;
 
       MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension

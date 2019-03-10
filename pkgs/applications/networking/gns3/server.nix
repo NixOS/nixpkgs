@@ -1,9 +1,9 @@
 { stable, branch, version, sha256Hash }:
 
-{ stdenv, python36, fetchFromGitHub }:
+{ stdenv, python3, fetchFromGitHub, fetchpatch }:
 
 let
-  python = if stable then python36.override {
+  python = if stable then python3.override {
     packageOverrides = self: super: {
       async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.1";
@@ -31,7 +31,7 @@ let
           ++ stdenv.lib.optional (pythonOlder "3.5") typing;
       });
     };
-  } else python36;
+  } else python3;
 
 in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
@@ -44,9 +44,14 @@ in python.pkgs.buildPythonPackage {
     sha256 = sha256Hash;
   };
 
+  postPatch = ''
+    # "typing" is only required for Python 3.4 and breaks Python 3.7:
+    sed -iE "s/.*typing.*//" requirements.txt
+  '';
+
   propagatedBuildInputs = with python.pkgs; [
     aiohttp-cors yarl aiohttp multidict
-    jinja2 psutil zipstream raven jsonschema typing
+    jinja2 psutil zipstream raven jsonschema
     (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
   ] ++ stdenv.lib.optional (!stable) python.pkgs.distro;
 

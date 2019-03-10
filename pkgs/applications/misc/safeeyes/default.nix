@@ -17,7 +17,7 @@ in buildPythonApplication rec {
   buildInputs = [
     gtk3
     gobject-introspection
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
     gnome3.adwaita-icon-theme
   ];
 

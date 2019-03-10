@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock, six, twisted,isPy37 }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest_3, mock, six, twisted,isPy37 }:
 
 buildPythonPackage rec {
   pname = "txaio";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "67e360ac73b12c52058219bb5f8b3ed4105d2636707a36a7cdafb56fe06db7fe";
   };
 
-  checkInputs = [ pytest mock ];
+  checkInputs = [ pytest_3 mock ];
 
   propagatedBuildInputs = [ six twisted ];
 

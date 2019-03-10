@@ -4,7 +4,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "munin";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ domenkozar eelco chaoflow ];
+    maintainers = [ domenkozar eelco ];
   };
 
   nodes = {

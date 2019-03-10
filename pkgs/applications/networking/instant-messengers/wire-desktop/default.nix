@@ -43,7 +43,7 @@ let
     xorg.libxcb
   ];
 
-  version = "3.5.2881";
+  version = "3.6.2885";
 
   plat = {
     "i686-linux" = "i386";
@@ -51,8 +51,8 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i686-linux" = "0s5j6acsiymsikvah9f1ywandzvcdx5m8csrc7ymhv0gx2a9xm1d";
-    "x86_64-linux" = "17siis4xws27jmhf1gyb6cvip6clak27zxckyk0b312kkc4q363i";
+    "i686-linux" = "1lj2gjv69z94dj7b4zjhls420fs5zzxkdlwv25p2gp4lkv0v6l98";
+    "x86_64-linux" = "1dl88fpy8v3aprzdp1nnwg08sy7yiljqjnpnl3rw0h5nix6xmv9v";
   }.${stdenv.hostPlatform.system};
 
 in
@@ -60,7 +60,7 @@ in
     name = "wire-desktop-${version}";
 
     src = fetchurl {
-      url = "https://wire-app.wire.com/linux/debian/pool/main/wire_${version}_${plat}.deb";
+      url = "https://wire-app.wire.com/linux/debian/pool/main/Wire-${version}_${plat}.deb";
       inherit sha256;
     };
 
@@ -103,9 +103,9 @@ in
 
     meta = with stdenv.lib; {
       description = "A modern, secure messenger";
-      homepage    = https://wire.com/;
-      license     = licenses.gpl3;
+      homepage = https://wire.com/;
+      license = licenses.gpl3;
       maintainers = with maintainers; [ worldofpeace ];
-      platforms   = [ "i686-linux" "x86_64-linux" ];
+      platforms = [ "i686-linux" "x86_64-linux" ];
     };
   }

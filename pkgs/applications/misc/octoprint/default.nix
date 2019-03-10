@@ -32,14 +32,17 @@ let
     "flask"
     "future"
     "futures"
+    "monotonic"
     "pkginfo"
     "psutil"
     "pyserial"
     "python-dateutil"
     "requests"
     "rsa"
+    "sarge"
     "scandir"
     "semantic_version"
+    "watchdog"
     "websocket-client"
     "werkzeug"
     "wrapt"
@@ -47,13 +50,13 @@ let
 
 in py.pkgs.buildPythonApplication rec {
   pname = "OctoPrint";
-  version = "1.3.9";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner  = "foosel";
     repo   = "OctoPrint";
     rev    = version;
-    sha256 = "1yqbsfmkx4wiykjrh66a05lhn15qhpc9ay67l37kv8bhdqf2xkj4";
+    sha256 = "1pvh7ay76zrvfzcsadh3sl48sgf3by9vpiaqlrkscsw02zirx9r7";
   };
 
   propagatedBuildInputs = with py.pkgs; [
@@ -75,7 +78,9 @@ in py.pkgs.buildPythonApplication rec {
       setup.py
   '';
 
-  checkPhase = "nosetests";
+  checkPhase = ''
+    HOME=$(mktemp -d) nosetests
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://octoprint.org/;

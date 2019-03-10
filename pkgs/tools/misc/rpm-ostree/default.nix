@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2019.1";
+  version = "2019.2";
 
   src = fetchurl {
     url = "https://github.com/projectatomic/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "14qk8mq5yc67j3wl3fa9xnhh8ii8x5qdiavf7ybw7mp4ma4lwa8k";
+    sha256 = "0sxjlcq15avb0fv6v89z2xrqv095dck4k5s9f0pk6y7sm063n2pk";
   };
 
   patches = [

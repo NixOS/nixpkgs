@@ -3,8 +3,6 @@
 , lua
 , stdenv
 , wrapLua
-, unzip
-, writeText
 # Whether the derivation provides a lua module or not.
 , toLuaModule
 }:
@@ -117,14 +115,16 @@ builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
     cat > ${luarocks_config} <<EOF
     ${luarocks_content}
     EOF
-    export LUAROCKS_CONFIG=$PWD/${luarocks_config};
+    export LUAROCKS_CONFIG="$PWD/${luarocks_config}";
   ''
   + lib.optionalString (knownRockspec != null) ''
 
     # prevents the following type of error:
     # Inconsistency between rockspec filename (42fm1b3d7iv6fcbhgm9674as3jh6y2sh-luv-1.22.0-1.rockspec) and its contents (luv-1.22.0-1.rockspec)
     rockspecFilename="$TMP/$(stripHash ''${knownRockspec})"
-    cp ''${knownRockspec} $rockspecFilename
+    cp ''${knownRockspec} "$rockspecFilename"
+  ''
+  + ''
     runHook postConfigure
   '';
 
@@ -165,7 +165,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
     # to prevent collisions when creating environments
     # also added -f as it doesn't always exist
     # don't remove the whole directory as
-    rm -rf $out/lib/luarocks/rocks/manifest
+    rm -rf $out/lib/luarocks/rocks-${lua.luaversion}/manifest
 
     runHook postInstall
   '';

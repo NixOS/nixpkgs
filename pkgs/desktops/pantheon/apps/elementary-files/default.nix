@@ -61,11 +61,6 @@ stdenv.mkDerivation rec {
     substituteInPlace filechooser-module/FileChooserDialog.vala --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
   '';
 
-  # xdg.mime will create this
-  postInstall = ''
-    rm $out/share/applications/mimeinfo.cache
-  '';
-
   meta = with stdenv.lib; {
     description = "File browser designed for elementary OS";
     homepage = https://github.com/elementary/files;

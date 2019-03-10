@@ -1,7 +1,7 @@
 { stdenv, fetchurl, openssl, python2, zlib, libuv, utillinux, http-parser
 , pkgconfig, which
 # Updater dependencies
-, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix
+, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
 , darwin, xcbuild
 , procps
@@ -104,7 +104,7 @@ in
     '';
 
     passthru.updateScript = import ./update.nix {
-      inherit stdenv writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix;
+      inherit stdenv writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
       inherit (stdenv) lib;
       inherit majorVersion;
     };

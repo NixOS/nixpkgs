@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obconf-qt";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "00v5w8qr3vs0k91flij9lz7y1cpp2g8ivgnmmm43ymjfiz5j6l27";
+    sha256 = "15dizs072ylmld1lxwgqkvybqy8ms8zki5586xm305jnlmrkb4lq";
   };
 
   nativeBuildInputs = [

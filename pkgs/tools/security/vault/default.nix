@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ go gox removeReferencesTo ];
 
+  GOCACHE="$TMPDIR/go-cache";
+
   preBuild = ''
     patchShebangs ./
     substituteInPlace scripts/build.sh --replace 'git rev-parse HEAD' 'echo ${src.rev}'

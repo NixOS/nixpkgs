@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool itstool libxml2 ];
   buildInputs = [
-    gtk3 librsvg libcanberra-gtk3 clutter-gtk gnome3.defaultIconTheme
+    gtk3 librsvg libcanberra-gtk3 clutter-gtk gnome3.adwaita-icon-theme
     libgee libgnome-games-support
   ];
 

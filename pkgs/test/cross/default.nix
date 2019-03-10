@@ -26,13 +26,19 @@ let
     # We need to remove whitespace, unfortunately
     # Windows programs use \r but Unix programs use \n
 
+    echo Running native-built program natively
+
     # find expected value natively
     ${getExecutable hostPkgs pkgFun exec} ${args'} \
       | dos2unix > $out/expected
 
+    echo Running cross-built program in emulator
+
     # run emulator to get actual value
     ${emulator} ${getExecutable crossPkgs pkgFun exec} ${args'} \
       | dos2unix > $out/actual
+
+    echo Comparing results...
 
     if [ "$(cat $out/actual)" != "$(cat $out/expected)" ]; then
       echo "${pkgName} did not output expected value:"
@@ -47,10 +53,10 @@ let
     fi
   '';
 
-  mapMultiPlatformTest = test: lib.mapAttrs (name: system: test rec {
+  mapMultiPlatformTest = crossSystemFun: test: lib.mapAttrs (name: system: test rec {
     crossPkgs = import pkgs.path {
       localSystem = { inherit (pkgs.hostPlatform) config; };
-      crossSystem = system;
+      crossSystem = crossSystemFun system;
     };
 
     emulator = crossPkgs.hostPlatform.emulator pkgs;
@@ -65,26 +71,30 @@ let
       } else pkg;
   }) testedSystems;
 
-in
+  tests = {
 
-lib.mapAttrs (_: mapMultiPlatformTest) {
+    file = {platformFun, crossPkgs, emulator}: compareTest {
+      inherit emulator crossPkgs;
+      hostPkgs = pkgs;
+      exec = "/bin/file";
+      args = [
+        "${pkgs.file}/share/man/man1/file.1.gz"
+        "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuMathTeXGyre.ttf"
+      ];
+      pkgFun = pkgs: platformFun pkgs.file;
+    };
 
-  file = {platformFun, crossPkgs, emulator}: compareTest {
-    inherit emulator crossPkgs;
-    hostPkgs = pkgs;
-    exec = "/bin/file";
-    args = [
-      "${pkgs.file}/share/man/man1/file.1.gz"
-      "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuMathTeXGyre.ttf"
-    ];
-    pkgFun = pkgs: platformFun pkgs.file;
+    hello = {platformFun, crossPkgs, emulator}: compareTest {
+      inherit emulator crossPkgs;
+      hostPkgs = pkgs;
+      exec = "/bin/hello";
+      pkgFun = pkgs: pkgs.hello;
+    };
+
   };
 
-  hello = {platformFun, crossPkgs, emulator}: compareTest {
-    inherit emulator crossPkgs;
-    hostPkgs = pkgs;
-    exec = "/bin/hello";
-    pkgFun = pkgs: pkgs.hello;
-  };
-
-}
+in (lib.mapAttrs (_: mapMultiPlatformTest builtins.id) tests)
+// (lib.mapAttrs' (name: test: {
+    name = "${name}-llvm";
+    value = mapMultiPlatformTest (system: system // {useLLVM = true;}) test;
+  }) tests)

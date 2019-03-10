@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "GOCACHE=off"
+    "GOCACHE=$TMPDIR/go-cache"
   ];
 
   passthru.updateScript = deepin.updateScript { inherit name; };

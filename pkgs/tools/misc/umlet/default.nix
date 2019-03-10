@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, unzip }:
+{ stdenv, fetchurl, jre, unzip, runtimeShell }:
 
 stdenv.mkDerivation rec {
   major = "14";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp -R * "$out/lib"
 
     cat > "$out/bin/umlet" << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     programDir="$out/lib"
     cd "\$programDir"

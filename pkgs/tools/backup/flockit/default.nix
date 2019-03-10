@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "flockit-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp ./libflockit.so $out/lib
 
     (cat <<EOI
-    #!${stdenv.shell}
+    #!${runtimeShell}
     env LD_PRELOAD="$out/lib/libflockit.so" FLOCKIT_FILE_PREFIX=\$1 \''${@:2}
     EOI
     ) > $out/bin/flockit

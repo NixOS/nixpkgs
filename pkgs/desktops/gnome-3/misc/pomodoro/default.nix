@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     dbus-glib libcanberra gst_all_1.gstreamer
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gnome3.gsettings-desktop-schemas
-    gnome3.gnome-shell gtk3 gnome3.defaultIconTheme
+    gnome3.gnome-shell gtk3 gnome3.adwaita-icon-theme
   ];
 
   meta = with stdenv.lib; {

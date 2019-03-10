@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
 
 let
 
@@ -15,12 +15,12 @@ rec {
   /* Run the shell command `buildCommand' to produce a store path named
   * `name'.  The attributes in `env' are added to the environment
   * prior to running the command. By default `runCommand' runs using
-  * stdenv with no compiler environment. `runCommandCC` 
+  * stdenv with no compiler environment. `runCommandCC`
   *
   * Examples:
   * runCommand "name" {envVariable = true;} ''echo hello''
   * runCommandNoCC "name" {envVariable = true;} ''echo hello'' # equivalent to prior
-  * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out''; 
+  * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
   */
   runCommand = runCommandNoCC;
   runCommandNoCC = runCommand' stdenvNoCC;
@@ -145,11 +145,11 @@ rec {
       executable = true;
       destination = "/bin/${name}";
       text = ''
-        #!${stdenv.shell}
+        #!${runtimeShell}
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out/bin/${name}
+        ${runtimeShell} -n $out/bin/${name}
       '';
     };
 
@@ -215,7 +215,7 @@ rec {
    * myhellohook = makeSetupHook { deps = [ hello ]; } ./myscript.sh;
    *
    * # wrotes a setup hook where @bash@ myscript.sh is substituted for the
-   * # bash interpreter. 
+   * # bash interpreter.
    * myhellohookSub = makeSetupHook {
    *                 deps = [ hello ];
    *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
@@ -278,7 +278,7 @@ rec {
    * packages that cannot be built automatically.
    *
    * Examples:
-   * 
+   *
    * requireFile {
    *   name = "my-file";
    *   url = "http://example.com/download/";

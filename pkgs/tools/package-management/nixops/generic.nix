@@ -1,6 +1,7 @@
 { lib, python2Packages, libxslt, docbook_xsl_ns, openssh, cacert
 # version args
 , src, version
+, meta ? {}
 }:
 
 python2Packages.buildPythonApplication {
@@ -55,5 +56,5 @@ python2Packages.buildPythonApplication {
     maintainers = with lib.maintainers; [ eelco rob domenkozar ];
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl3;
-  };
+  } // meta;
 }

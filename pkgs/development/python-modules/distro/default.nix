@@ -2,18 +2,17 @@
 
 buildPythonPackage rec {
   pname = "distro";
-  version = "1.3.0";
+  version = "1.4.0";
 
-  checkInputs = [ pytest pytestcov tox];
+  checkInputs = [ pytest pytestcov ];
 
   checkPhase = ''
-    touch tox.ini
-    tox
+    py.test
   '';
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "224041cef9600e72d19ae41ba006e71c05c4dc802516da715d7fda55ba3d8742";
+    sha256 = "362dde65d846d23baee4b5c058c8586f219b5a54be1cf5fc6ff55c4578392f57";
   };
 
   meta = with stdenv.lib; {
@@ -21,5 +20,7 @@ buildPythonPackage rec {
     description = "Linux Distribution - a Linux OS platform information API.";
     license = licenses.asl20;
     maintainers = with maintainers; [ nand0p ];
+    # Many failing tests
+    broken = true;
   };
 }

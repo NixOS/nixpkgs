@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = [ gtk libofx intltool hicolor-icon-theme libsoup
-    gnome3.defaultIconTheme ];
+    gnome3.adwaita-icon-theme ];
 
   meta = with stdenv.lib; {
     description = "Free, easy, personal accounting for everyone";

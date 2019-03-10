@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.xrdp;
-  confDir = pkgs.runCommand "xrdp.conf" { } ''
+  confDir = pkgs.runCommand "xrdp.conf" { preferLocalBuild = true; } ''
     mkdir $out
 
     cp ${cfg.package}/etc/xrdp/{km-*,xrdp,sesman,xrdp_keyboard}.ini $out

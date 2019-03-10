@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname   = "twitter.common.collections";
-  version = "0.3.9";
+  version = "0.3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wf8ks6y2kalx2inzayq0w4kh3kg25daik1ac7r6y79i03fslsc5";
+    sha256 = "c27f11612572f614cadf181cc65bcd0275d8b08f182bcb4ea1b74cd662625f21";
   };
 
   propagatedBuildInputs = [ twitter-common-lang ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeDesktopItem, makeWrapper, pkgconfig
+{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, pkgconfig
 , cmake, epoxy, libzip, ffmpeg, imagemagick, SDL2, qtbase, qtmultimedia, libedit
 , qttools, minizip }:
 
@@ -15,13 +15,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mgba-${version}";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    sha256 = "0m1pkxa6i94gq95cankv390wsbp88b3x41c7hf415rp9rkfq25vk";
+    sha256 = "0s4dl4pi8rxqahvzxnh37xdgsfax36cn5wlh1srdcmabwsrfpb3w";
   };
 
   enableParallelBuilding = true;
@@ -31,11 +31,6 @@ in stdenv.mkDerivation rec {
     libzip epoxy ffmpeg imagemagick SDL2 qtbase qtmultimedia libedit minizip
     qttools
   ];
-
-  patches = [(fetchpatch {
-      url = "https://github.com/mgba-emu/mgba/commit/7f41dd354176b720c8e3310553c6b772278b9dca.patch";
-      sha256 = "0j334v8wf594kg8s1hngmh58wv1pi003z8avy6fjhj5qpjmbbavh";
-  })];
 
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share

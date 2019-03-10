@@ -1,0 +1,11 @@
+--- ./setup.py	2018-07-30 15:40:14.000000000 +0000
++++ ./setup.py	2019-02-12 18:33:24.984430303 +0000
+@@ -17,7 +17,7 @@
+     packages=['contextvars'],
+     provides=['contextvars'],
+     install_requires=[
+-        'immutables==0.6',
++        'immutables>=0.6',
+     ],
+     license='Apache License, Version 2.0',
+     classifiers=[

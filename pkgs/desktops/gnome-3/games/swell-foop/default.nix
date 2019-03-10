@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja vala pkgconfig wrapGAppsHook python3 itstool gettext libxml2 desktop-file-utils ];
-  buildInputs = [ glib gtk3 gnome3.defaultIconTheme clutter clutter-gtk ];
+  buildInputs = [ glib gtk3 gnome3.adwaita-icon-theme clutter clutter-gtk ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file

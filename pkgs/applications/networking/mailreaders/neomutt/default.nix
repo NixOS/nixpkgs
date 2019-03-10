@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
-, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap
+, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell
 }:
 
 let
   muttWrapper = writeScript "mutt" ''
-    #!${stdenv.shell} -eu
+    #!${runtimeShell} -eu
 
     echo 'The neomutt project has renamed the main binary from `mutt` to `neomutt`.'
     echo ""

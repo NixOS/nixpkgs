@@ -1,12 +1,12 @@
 { stdenv, writeScript, fetchFromGitHub
 , libGL, libX11, libXext, python3, libXrandr, libXrender, libpulseaudio, libXcomposite
-, enableGlfw ? false, glfw }:
+, enableGlfw ? false, glfw, runtimeShell }:
 
 let
   inherit (stdenv.lib) optional makeLibraryPath;
 
   wrapperScript = writeScript "glava" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     case "$1" in
       --copy-config)
         # The binary would symlink it, which won't work in Nix because the

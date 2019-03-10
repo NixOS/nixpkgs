@@ -4,6 +4,7 @@
 , extraProfile ? "" # string to append to profile
 , nativeOnly ? false
 , runtimeOnly ? false
+, runtimeShell
 
 # DEPRECATED
 , withJava ? config.steam.java or false
@@ -35,7 +36,7 @@ let
            ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
 
   runSh = writeScript "run.sh" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     runtime_paths="${lib.concatStringsSep ":" ldPath}"
     if [ "$1" == "--print-steam-runtime-library-paths" ]; then
       echo "$runtime_paths"
@@ -195,7 +196,7 @@ in buildFHSUserEnv rec {
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
       ${glxinfo-i686}/bin/glxinfo >/dev/null 2>&1
       # If there was an error running glxinfo, we know something is wrong with the configuration
@@ -204,7 +205,7 @@ in buildFHSUserEnv rec {
     **
     WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
     and then run \`sudo nixos-rebuild switch\`:
-    { 
+    {
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;
     }
@@ -226,7 +227,7 @@ in buildFHSUserEnv rec {
     inherit multiPkgs extraBuildCommands;
 
     runScript = writeScript "steam-run" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       run="$1"
       if [ "$run" = "" ]; then
         echo "Usage: steam-run command-to-run args..." >&2

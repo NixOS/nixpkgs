@@ -10,6 +10,7 @@
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
+, siteStart ? ./site-start.el
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -100,7 +101,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
-    cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
+    cp ${siteStart} $out/share/emacs/site-lisp/site-start.el
     $out/bin/emacs --batch -f batch-byte-compile $out/share/emacs/site-lisp/site-start.el
 
     rm -rf $out/var
@@ -133,7 +134,7 @@ stdenv.mkDerivation rec {
     description = "The extensible, customizable GNU text editor";
     homepage    = https://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chaoflow lovek323 peti the-kenny jwiegley ];
+    maintainers = with maintainers; [ lovek323 peti the-kenny jwiegley ];
     platforms   = platforms.all;
 
     longDescription = ''

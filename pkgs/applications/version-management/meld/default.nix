@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     intltool itstool libxml2 gobject-introspection wrapGAppsHook
   ];
   buildInputs = [
-    gtk3 gtksourceview gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme
+    gtk3 gtksourceview gnome3.gsettings-desktop-schemas gnome3.adwaita-icon-theme
   ];
   propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo ];
   checkInputs = [ xvfb_run python3.pkgs.pytest dbus ];

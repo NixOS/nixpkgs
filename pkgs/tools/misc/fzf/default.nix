@@ -1,4 +1,4 @@
-{ stdenv, ncurses, buildGoPackage, fetchFromGitHub, writeText }:
+{ stdenv, ncurses, buildGoPackage, fetchFromGitHub, writeText, runtimeShell }:
 
 buildGoPackage rec {
   name = "fzf-${version}";
@@ -47,7 +47,7 @@ buildGoPackage rec {
 
     cp -R $src/shell $bin/share/fzf
     cat <<SCRIPT > $bin/bin/fzf-share
-    #!${stdenv.shell}
+    #!${runtimeShell}
     # Run this script to find the fzf shared folder where all the shell
     # integration scripts are living.
     echo $bin/share/fzf

@@ -109,7 +109,7 @@ let
   nixos-taskserver = pkgs.pythonPackages.buildPythonApplication {
     name = "nixos-taskserver";
 
-    src = pkgs.runCommand "nixos-taskserver-src" {} ''
+    src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
       mkdir -p "$out"
       cat "${pkgs.substituteAll {
         src = ./helper-tool.py;

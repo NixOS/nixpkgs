@@ -20,6 +20,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ curl openssl.out ];
+  nativeBuildInputs = [ curl ];
 
   checkInputs = [ bottle pytest nose flaky ];
 

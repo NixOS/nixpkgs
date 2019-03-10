@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, ant }:
+{ stdenv, fetchFromGitHub, jdk, ant, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "zap-${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share"
     tar xvf  "ZAP_${version}_Linux.tar.gz" -C "$out/share/"
     mkdir -p "$out/bin"
-    echo "#!${stdenv.shell}" > "$out/bin/zap"
+    echo "#!${runtimeShell}" > "$out/bin/zap"
     echo \"$out/share/ZAP_${version}/zap.sh\" >> "$out/bin/zap"
     chmod +x "$out/bin/zap"
   '';
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://www.owasp.org/index.php/ZAP;
     description = "Java application for web penetration testing";
-    maintainers = with maintainers; [ mog ]; 
+    maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;
     license = licenses.asl20;
   };

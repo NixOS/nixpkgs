@@ -131,7 +131,7 @@ let
               --set GDK_BACKEND "wayland" \
             ''}${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-                  --suffix XDG_DATA_DIRS : '${gnome3.defaultIconTheme}/share'
+                  --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share'
                 ''
             }
 

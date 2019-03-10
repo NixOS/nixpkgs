@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     gtk3 wrapGAppsHook librsvg libcanberra-gtk3
-    intltool itstool libxml2 gnome3.defaultIconTheme
+    intltool itstool libxml2 gnome3.adwaita-icon-theme
   ];
 
   meta = with stdenv.lib; {

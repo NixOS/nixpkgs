@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "REPL for taskwarrior";
     homepage = http://tasktools.org;
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.linux;
   };
 }

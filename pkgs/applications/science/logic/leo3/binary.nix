@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openjdk}:
+{stdenv, fetchurl, openjdk, runtimeShell}:
 stdenv.mkDerivation rec {
   pname = "leo3";
   version = "1.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out"/{bin,lib/java/leo3}
     cp "${jar}" "$out/lib/java/leo3/leo3.jar"
-    echo "#!${stdenv.shell}" > "$out/bin/leo3"
+    echo "#!${runtimeShell}" > "$out/bin/leo3"
     echo "'${openjdk}/bin/java' -jar '$out/lib/java/leo3/leo3.jar' \"\$@\""  > "$out/bin/leo3"
     chmod a+x "$out/bin/leo3"
   '';

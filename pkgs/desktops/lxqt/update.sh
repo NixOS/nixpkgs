@@ -7,7 +7,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 root=../../..
 export NIXPKGS_ALLOW_UNFREE=1
 
-lxqt_version=0.14.0
+lxqt_version=0.14.1
 lxqtrepo=https://downloads.lxqt.org/${lxqt_version}.html
 
 version() {

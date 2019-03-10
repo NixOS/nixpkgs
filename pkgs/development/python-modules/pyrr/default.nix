@@ -2,12 +2,12 @@
 , setuptools, multipledispatch, numpy }:
 
 buildPythonPackage rec {
-  version = "0.7.2";
+  version = "0.10.1";
   pname = "pyrr";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04a65a9fb5c746b41209f55b21abf47a0ef80a4271159d670ca9579d9be3b4fa";
+    sha256 = "06305b2f555f8b8091a6c29a05d5d33f131c9dd268e22d94985e43ab5df70c1d";
   };
 
   buildInputs = [ setuptools ];

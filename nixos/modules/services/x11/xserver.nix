@@ -61,7 +61,9 @@ let
       '';
       description = ''
         Extra lines to append to the <literal>Monitor</literal> section
-        verbatim.
+        verbatim. Available options are documented in the MONITOR section in
+        <citerefentry><refentrytitle>xorg.conf</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry>.
       '';
     };
   };
@@ -113,6 +115,7 @@ let
     { xfs = optionalString (cfg.useXFS != false)
         ''FontPath "${toString cfg.useXFS}"'';
       inherit (cfg) config;
+      preferLocalBuild = true;
     }
       ''
         echo 'Section "Files"' >> $out
@@ -240,7 +243,7 @@ in
       videoDrivers = mkOption {
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
+        default = [ "ati" "cirrus" "vesa" "vmware" "modesetting" ];
         example = [
           "ati_unfree" "amdgpu" "amdgpu-pro"
           "nv" "nvidia" "nvidiaLegacy340" "nvidiaLegacy304"
@@ -632,7 +635,7 @@ in
 
     environment.pathsToLink = [ "/share/X11" ];
 
-    xdg = { 
+    xdg = {
       autostart.enable = true;
       menus.enable = true;
       mime.enable = true;
@@ -705,6 +708,7 @@ in
     system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
       nativeBuildInputs = [ pkgs.xkbvalidate ];
+      preferLocalBuild = true;
     } ''
       validate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"

@@ -6,15 +6,15 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "geoclue-${version}";
-  version = "2.5.1";
+  pname = "geoclue";
+  version = "2.5.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "geoclue";
-    repo = "geoclue";
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "0vww6irijw5ss7vawkdi5z5wdpcgw4iqljn5vs3vbd4y3d0lzrbs";
+    sha256 = "1zk6n28q030a9v03whad928b9zwq16d30ch369qv2c0994axdr5p";
   };
 
   patches = [

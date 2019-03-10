@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     sqlite
     librsvg
     gnome3.gtk
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   patches = [ ./correct-post-install.patch ];

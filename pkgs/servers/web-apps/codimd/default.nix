@@ -1,5 +1,5 @@
 { stdenv, pkgs, buildEnv, fetchFromGitHub, makeWrapper
-, fetchpatch, nodejs-6_x, phantomjs2 }:
+, fetchpatch, nodejs-6_x, phantomjs2, runtimeShell }:
 let
   nodePackages = import ./node.nix {
     inherit pkgs;
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cat > $out/bin/codimd <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       ${nodejs-6_x}/bin/node $out/app.js
     EOF
     cp -R {app.js,bin,lib,locales,package.json,public} $out/
