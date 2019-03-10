@@ -11,14 +11,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "zathura-core-${version}";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura/download/zathura-${version}.tar.xz";
-    sha256 = "1znr3psqda06xklzj8mn452w908llapcg1rj468jwpg0wzv6pxfn";
+    sha256 = "0hgx5x09i6d0z45llzdmh4l348fxh1y102sb1w76f2fp4r21j4ky";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];
+
+  mesonFlags = [ "-Dmanpages=enabled" ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig appstream-glib desktop-file-utils python3.pkgs.sphinx
