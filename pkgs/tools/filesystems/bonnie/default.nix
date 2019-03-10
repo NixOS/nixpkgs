@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   name = "bonnie++-1.98";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
+
+  buildInputs = [ perl ];
 
   meta = {
     homepage = http://www.coker.com.au/bonnie++/;
