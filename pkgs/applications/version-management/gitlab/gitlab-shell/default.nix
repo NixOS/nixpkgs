@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   patches = [ ./remove-hardcoded-locations.patch ];
 
   installPhase = ''
+    export GOCACHE="$TMPDIR/go-cache"
+
     ruby bin/compile
     mkdir -p $out/
     cp -R . $out/
