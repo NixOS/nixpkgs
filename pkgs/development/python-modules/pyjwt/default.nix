@@ -4,26 +4,16 @@
 
 buildPythonPackage rec {
   pname = "PyJWT";
-  version = "1.6.4";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176";
+    sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
   };
 
   propagatedBuildInputs = [ cryptography ecdsa ];
 
   checkInputs = [ pytestrunner pytestcov pytest ];
-
-  # pytest 3.9.0 changed behavior of deprecated_call, see release notes
-  postPatch = ''
-    for x in tests/test_api_*py; do
-      substituteInPlace "$x" --replace AssertionError pytest.fail.Exception
-    done
-  '';
-
-  # https://github.com/jpadilla/pyjwt/issues/382
-  doCheck = false;
 
   meta = with lib; {
     description = "JSON Web Token implementation in Python";

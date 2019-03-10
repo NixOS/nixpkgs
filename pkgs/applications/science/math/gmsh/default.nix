@@ -1,14 +1,14 @@
 { stdenv, fetchurl, cmake, openblasCompat, gfortran, gmm, fltk, libjpeg
 , zlib, libGLU_combined, libGLU, xorg }:
 
-let version = "4.1.3"; in
+let version = "4.1.5"; in
 
 stdenv.mkDerivation {
   name = "gmsh-${version}";
 
   src = fetchurl {
     url = "http://gmsh.info/src/gmsh-${version}-source.tgz";
-    sha256 = "0padylvicyhcm4vqkizpknjfw8qxh39scw3mj5xbs9bs8c442kmx";
+    sha256 = "654d38203f76035a281006b77dcb838987a44fd549287f11c53a1e9cdf598f46";
   };
 
   buildInputs = [ cmake openblasCompat gmm fltk libjpeg zlib libGLU_combined

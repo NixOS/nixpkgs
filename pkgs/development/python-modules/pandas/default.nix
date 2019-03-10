@@ -20,6 +20,7 @@
 , openpyxl
 , tables
 , xlwt
+, runtimeShell
 , libcxx ? null
 }:
 
@@ -97,8 +98,8 @@ in buildPythonPackage rec {
   #       Until then we disable the tests.
   + optionalString isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
-    echo "#!${stdenv.shell}" > pbcopy
-    echo "#!${stdenv.shell}" > pbpaste
+    echo "#!${runtimeShell}" > pbcopy
+    echo "#!${runtimeShell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''

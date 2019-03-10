@@ -29,7 +29,7 @@ pythonPackages.buildPythonApplication rec {
     description = "An interactive command-line HTTP client featuring autocomplete and syntax highlighting";
     homepage = https://github.com/eliangcs/http-prompt;
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.linux; # can only test on linux
   };
 }

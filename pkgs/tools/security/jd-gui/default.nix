@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gradle_2_5, perl, makeWrapper, jre, makeDesktopItem, writeText }:
+{ stdenv, fetchurl, gradle_2_5, perl, makeWrapper, jre, makeDesktopItem, writeText, runtimeShell }:
 
 let
   version = "1.4.0";
@@ -81,7 +81,7 @@ in stdenv.mkDerivation rec {
     cp src/linux/resources/jd_icon_128.png $out/share/icons/hicolor/128x128/apps/jd-gui.png
 
     cat > $out/bin/jd-gui <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     export JAVA_HOME=${jre}
     ${jre}/bin/java -jar ${jar} $@
     EOF

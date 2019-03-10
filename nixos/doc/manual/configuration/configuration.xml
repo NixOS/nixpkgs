@@ -23,5 +23,6 @@
  <xi:include href="linux-kernel.xml" />
  <xi:include href="../generated/modules.xml" xpointer="xpointer(//section[@id='modules']/*)" />
  <xi:include href="profiles.xml" />
+ <xi:include href="kubernetes.xml" />
 <!-- Apache; libvirtd virtualisation -->
 </part>

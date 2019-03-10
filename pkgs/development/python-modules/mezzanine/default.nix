@@ -64,7 +64,7 @@ buildPythonPackage rec {
     downloadPage = https://github.com/stephenmcd/mezzanine/releases;
     license = licenses.free;
     maintainers = with maintainers; [ prikhi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

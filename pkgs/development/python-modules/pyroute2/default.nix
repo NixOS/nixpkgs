@@ -17,6 +17,6 @@ buildPythonPackage rec {
     homepage = https://github.com/svinota/pyroute2;
     license = licenses.asl20;
     maintainers = [maintainers.mic92];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

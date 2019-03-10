@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 ];
-  buildInputs = [ glib gtk3 gdk_pixbuf libgnome-games-support gnome3.defaultIconTheme ];
+  buildInputs = [ glib gtk3 gdk_pixbuf libgnome-games-support gnome3.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x meson_post_install.py

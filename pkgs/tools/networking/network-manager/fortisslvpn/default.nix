@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, openfortivpn, intltool, pkgconfig,
+{ stdenv, fetchurl, substituteAll, openfortivpn, intltool, pkgconfig, gtk3,
 networkmanager, ppp, libsecret, withGnome ? true, gnome3 }:
 
 let
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openfortivpn networkmanager ppp ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret gnome3.networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 

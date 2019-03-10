@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   pname = "sundials";
-  version = "4.0.2";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
-    sha256 = "0xfk0icsi63yi1dby4rn02ppwkzfykciw6q03bk454gdia9xcmk6";
+    sha256 = "19ca4nmlf6i9ijqcibyvpprxzsdfnackgjs6dw51fq13gg1f2398";
   };
 
   preConfigure = ''

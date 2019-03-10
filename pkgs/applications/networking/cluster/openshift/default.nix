@@ -83,6 +83,6 @@ in buildGoPackage rec {
     license = licenses.asl20;
     homepage = http://www.openshift.org;
     maintainers = with maintainers; [offline bachp moretea];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ libpulseaudio gtkmm3 libcanberra-gtk3 makeWrapper
-                  gnome3.defaultIconTheme ];
+                  gnome3.adwaita-icon-theme ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
 

@@ -15,7 +15,7 @@ let
     '';
   };
 
-  nixos-gsettings-desktop-schemas = pkgs.runCommand "nixos-gsettings-desktop-schemas" {}
+  nixos-gsettings-desktop-schemas = pkgs.runCommand "nixos-gsettings-desktop-schemas" { preferLocalBuild = true; }
     ''
      mkdir -p $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
      cp -rf ${pkgs.gnome3.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
@@ -151,6 +151,7 @@ in {
     services.colord.enable = mkDefault true;
     services.packagekit.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
+    services.hardware.bolt.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
     services.udev.packages = [ pkgs.gnome3.gnome-settings-daemon ];
     systemd.packages = [ pkgs.gnome3.vino ];

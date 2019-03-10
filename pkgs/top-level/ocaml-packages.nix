@@ -355,7 +355,13 @@ let
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
-    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
+    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 {
+      cairo2 = cairo2.override { enableGtkSupport = false; };
+    };
+
+    lablgtk3-gtkspell3 = callPackage ../development/ocaml-modules/lablgtk3/gtkspell3.nix { };
+
+    lablgtk3-sourceview3 = callPackage ../development/ocaml-modules/lablgtk3/sourceview3.nix { };
 
     lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
       inherit (pkgs.gnome2) libgnomecanvas libglade gtksourceview;

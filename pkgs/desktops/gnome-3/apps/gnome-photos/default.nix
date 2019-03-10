@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 glib gegl babl libgdata libdazzle
     gnome3.gsettings-desktop-schemas
-    gdk_pixbuf gnome3.defaultIconTheme
+    gdk_pixbuf gnome3.adwaita-icon-theme
     gfbgraph grilo-plugins grilo
     gnome-online-accounts tracker
     gexiv2 geocode-glib dleyna-renderer

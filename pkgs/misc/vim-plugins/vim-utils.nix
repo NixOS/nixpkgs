@@ -1,6 +1,6 @@
 { stdenv, vim, vimPlugins, vim_configurable, neovim, buildEnv, writeText, writeScriptBin
 , nix-prefetch-hg, nix-prefetch-git
-, fetchFromGitHub
+, fetchFromGitHub, runtimeShell
 }:
 
 /*
@@ -362,7 +362,7 @@ rec {
   vimWithRC = {vimExecutable, name ? null, vimrcFile ? null, gvimrcFile ? null}:
     let rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
     in writeScriptBin (if name == null then "vim" else name) ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
       '';
 

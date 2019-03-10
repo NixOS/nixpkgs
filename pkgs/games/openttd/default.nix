@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchzip, pkgconfig, SDL, libpng, zlib, xz, freetype, fontconfig
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
 , withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
-, writeScriptBin, makeWrapper
+, writeScriptBin, makeWrapper, runtimeShell
 }:
 
 let
@@ -21,7 +21,7 @@ let
   };
 
   playmidi = writeScriptBin "playmidi" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     trap "${procps}/bin/pkill fluidsynth" EXIT
     ${fluidsynth}/bin/fluidsynth -a ${audioDriver} -i ${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2 $*
   '';

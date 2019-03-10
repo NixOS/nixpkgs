@@ -1,4 +1,8 @@
-{ stdenv, fetchzip, fetchFromGitHub, boost, cmake, z3 }:
+{ stdenv, fetchzip, fetchFromGitHub, boost, cmake
+, z3Support ? true, z3 ? null
+}:
+
+assert z3Support -> z3 != null;
 
 let
   version = "0.5.3";
@@ -33,6 +37,8 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DBoost_USE_STATIC_LIBS=OFF"
     "-DBUILD_SHARED_LIBS=ON"
+  ] ++ stdenv.lib.optionals (!z3Support) [
+    "-DUSE_Z3=OFF"
   ];
 
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform;
@@ -40,7 +46,8 @@ stdenv.mkDerivation {
                "./test/soltest -p -- --no-ipc --no-smt --testpath ../test";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost z3 ];
+  buildInputs = [ boost ]
+    ++ stdenv.lib.optionals z3Support [ z3 ];
 
   outputs = [ "out" "dev" ];
 

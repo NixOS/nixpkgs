@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, unzip, jre }:
+{ stdenv, fetchurl, makeDesktopItem, unzip, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "swingsane-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = let
 
     execWrapper = ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
     '';
 

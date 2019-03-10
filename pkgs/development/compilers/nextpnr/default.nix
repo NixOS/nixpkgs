@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nextpnr-${version}";
-  version = "2019.01.08";
+  version = "2019.02.20";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "nextpnr";
-    rev    = "c1d15c749c2aa105ee7b38ebe1b60a27e3743e8c";
-    sha256 = "082ac03s6164s7dwz1l9phshl8m1lizn45jykabrhks5jcccchbh";
+    rev    = "e8d3aaaf34895a073e4023192d97fc936d090990";
+    sha256 = "0ijqpjnn7x16crd6cmd4nmgay320flizmjb7bbvg9hv464z3p4x7";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];

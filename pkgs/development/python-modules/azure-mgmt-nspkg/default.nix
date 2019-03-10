@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
+  version = "3.0.2";
   pname = "azure-mgmt-nspkg";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1rq92fj3kvnqkk18596dybw0kvhgscvc6cd8hp1dhy3wrkqnhwmq";
+    sha256 = "8b2287f671529505b296005e6de9150b074344c2c7d1c805b3f053d081d58c52";
   };
 
   propagatedBuildInputs = [ azure-nspkg ];

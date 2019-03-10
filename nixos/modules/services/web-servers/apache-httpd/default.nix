@@ -217,7 +217,7 @@ let
     ) null ([ cfg ] ++ subservices);
 
     documentRoot = if maybeDocumentRoot != null then maybeDocumentRoot else
-      pkgs.runCommand "empty" {} "mkdir -p $out";
+      pkgs.runCommand "empty" { preferLocalBuild = true; } "mkdir -p $out";
 
     documentRootConf = ''
       DocumentRoot "${documentRoot}"
@@ -426,6 +426,7 @@ let
   phpIni = pkgs.runCommand "php.ini"
     { options = concatStringsSep "\n"
         ([ mainCfg.phpOptions ] ++ (map (svc: svc.phpOptions) allSubservices));
+      preferLocalBuild = true;
     }
     ''
       cat ${php}/etc/php.ini > $out

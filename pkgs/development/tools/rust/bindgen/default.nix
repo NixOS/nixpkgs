@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin }:
+{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin,
+  runtimeShell }:
 
 rustPlatform.buildRustPackage rec {
   name = "rust-bindgen-${version}";
@@ -32,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
   checkInputs =
     let fakeRustup = writeScriptBin "rustup" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       shift
       shift
       exec "$@"

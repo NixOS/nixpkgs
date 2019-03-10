@@ -21,6 +21,7 @@ rec {
     isSparc        = { cpu = { family = "sparc"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
     isAvr          = { cpu = { family = "avr"; }; };
+    isAlpha        = { cpu = { family = "alpha"; }; };
 
     is32bit        = { cpu = { bits = 32; }; };
     is64bit        = { cpu = { bits = 64; }; };

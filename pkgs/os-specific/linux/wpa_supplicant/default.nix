@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, openssl, pkgconfig, libnl
+{ stdenv, fetchpatch, fetchurl, openssl, pkgconfig, libnl
 , dbus, readline ? null, pcsclite ? null
 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "2.6";
+  version = "2.7";
 
   name = "wpa_supplicant-${version}";
 
   src = fetchurl {
     url = "https://w1.fi/releases/${name}.tar.gz";
-    sha256 = "0l0l5gz3d5j9bqjsbjlfcv4w4jwndllp9fmyai4x9kg6qhs6v4xl";
+    sha256 = "0x1hqyahq44jyla8jl6791nnwrgicrhidadikrnqxsm2nw36pskn";
   };
 
   # TODO: Patch epoll so that the dbus actually responds
@@ -82,46 +82,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   patches = [
-    ./build-fix.patch
-
-    # KRACKAttack.com
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch";
-      sha256 = "02zl2x4pxay666yq18g4f3byccrzipfjbky1ydw62v15h76174aj";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0002-Prevent-reinstallation-of-an-already-in-use-group-ke.patch";
-      sha256 = "1mrmqg00x1bqa43dyhxb14msk74lh3kvr4avni43c3qpfjmlfvfq";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0003-Extend-protection-of-GTK-IGTK-reinstallation-of-WNM-.patch";
-      sha256 = "10byyi8wfpcc8i788ag7ndycd3xvq2iwnssyb3rwf34sfcv5wlyl";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0004-Prevent-installation-of-an-all-zero-TK.patch";
-      sha256 = "02z2rsbh4sw81wsc56xjbblbi76ii0clmpnr1m1szdb1h5s58fkr";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch";
-      sha256 = "17pbrn5h6l5v14y6gn2yr2knqya9i0n2vyq4ck8hasb00yz8lz0l";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0006-TDLS-Reject-TPK-TK-reconfiguration.patch";
-      sha256 = "19mgcqbdyzm4myi182jcn1rn26xi3jib74cpxbbrx1gaccxlsvar";
-    })
-    (fetchurl { # wpa-supplicant only
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0007-WNM-Ignore-WNM-Sleep-Mode-Response-without-pending-r.patch";
-      sha256 = "0di71j8762dkvr0c7h5mrbkqyfdy8mljvnp0dk2qhbgc9bw7m8f5";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0008-FT-Do-not-allow-multiple-Reassociation-Response-fram.patch";
-      sha256 = "1ca312cixbld70rp12q7h66lnjjxzz0qag0ii2sg6cllgf2hv168";
-    })
-
-    # Unauthenticated EAPOL-Key decryption (CVE-2018-14526)
-    (fetchurl {
-      url = "https://w1.fi/security/2018-1/rebased-v2.6-0001-WPA-Ignore-unauthenticated-encrypted-EAPOL-Key-data.patch";
-      sha256 = "0z0zxc9wrikmvciyqpdhx0l5v7qsd8c6b5ph9h5rniqllpr3q34n";
+    (fetchpatch {
+      name = "build-fix.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-wireless/wpa_supplicant/files/wpa_supplicant-2.7-fix-undefined-remove-ie.patch?id=e0288112138a70a8acc3ae0196772fd7ccb677ce";
+      sha256 = "0ysazfcyn195mvkb1v10mgzzmpmqgv5kwqxwzfbsfhzq5bbaihld";
     })
   ];
 

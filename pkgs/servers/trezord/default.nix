@@ -21,6 +21,6 @@ buildGoPackage rec {
     homepage = https://trezor.io;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ canndrew jb55 maintainers."1000101"];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

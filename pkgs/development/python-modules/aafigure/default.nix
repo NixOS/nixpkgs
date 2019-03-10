@@ -26,6 +26,6 @@ buildPythonPackage rec {
     homepage = https://launchpad.net/aafigure/;
     license = licenses.bsd2;
     maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

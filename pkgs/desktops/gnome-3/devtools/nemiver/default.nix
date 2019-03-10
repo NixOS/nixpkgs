@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gnome3, gtk3, libxml2, intltool, itstool, gdb,
-  boost, sqlite, libgtop, glibmm, gtkmm, vte, gtksourceview, gsettings-desktop-schemas,
+  boost, sqlite, libgtop, glibmm, gtkmm3, vte, gtksourceview, gsettings-desktop-schemas,
   gtksourceviewmm, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3 gdb boost sqlite libgtop
-    glibmm gtkmm vte gtksourceview gtksourceviewmm
+    glibmm gtkmm3 vte gtksourceview gtksourceviewmm
     gsettings-desktop-schemas
   ];
 

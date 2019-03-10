@@ -752,6 +752,11 @@
     github = "calbrecht";
     name = "Christian Albrecht";
   };
+  callahad = {
+    email = "dan.callahan@gmail.com";
+    github = "callahad";
+    name = "Dan Callahan";
+  };
   calvertvl = {
     email = "calvertvl@gmail.com";
     github = "calvertvl";
@@ -811,6 +816,11 @@
     email = "cdep.illabout@gmail.com";
     github = "cdepillabout";
     name = "Dennis Gosnell";
+  };
+  ceedubs = {
+    email = "ceedubs@gmail.com";
+    github = "ceedubs";
+    name = "Cody Allen";
   };
   cfouche = {
     email = "chaddai.fouche@gmail.com";
@@ -1618,6 +1628,10 @@
     email = "fpletz@fnordicwalking.de";
     github = "fpletz";
     name = "Franz Pletz";
+    keys = [{
+      longkeyid = "rsa4096/0x846FDED7792617B4";
+      fingerprint = "8A39 615D CE78 AF08 2E23  F303 846F DED7 7926 17B4";
+    }];
   };
   fps = {
     email = "mista.tapas@gmx.net";
@@ -2438,6 +2452,11 @@
     email = "kisonecat@gmail.com";
     github = "kisonecat";
     name = "Jim Fowler";
+  };
+  kjuvi = {
+    email = "quentin.vaucher@pm.me";
+    github = "kjuvi";
+    name = "Quentin Vaucher";
   };
   kkallio = {
     email = "tierpluspluslists@gmail.com";
@@ -4303,6 +4322,15 @@
     github = "sleexyz";
     name = "Sean Lee";
   };
+  smakarov = {
+    email = "setser200018@gmail.com";
+    github = "setser";
+    name = "Sergey Makarov";
+    keys = [{
+      longkeyid = "rsa2048/6AA23A1193B7064B";
+      fingerprint = "6F8A 18AE 4101 103F 3C54  24B9 6AA2 3A11 93B7 064B";
+    }];
+  };
   smaret = {
     email = "sebastien.maret@icloud.com";
     github = "smaret";
@@ -4336,6 +4364,15 @@
     email = "scott@solson.me";
     github = "solson";
     name = "Scott Olson";
+  };
+  sondr3 = {
+    email = "nilsen.sondre@gmail.com";
+    github = "sondr3";
+    name = "Sondre Nilsen";
+    keys = [{
+      longkeyid = "ed25519/0x25676BCBFFAD76B1";
+      fingerprint = "0EC3 FA89 EFBA B421 F82E  40B0 2567 6BCB FFAD 76B1";
+    }];
   };
   sorki = {
     email = "srk@48.io";
@@ -4876,9 +4913,13 @@
     name = "Vincent Bernardoff";
   };
   vcunat = {
-    email = "vcunat@gmail.com";
-    github = "vcunat";
     name = "Vladimír Čunát";
+    email = "v@cunat.cz"; # vcunat@gmail.com predominated in commits before 2019/03
+    github = "vcunat";
+    keys = [{
+      longkeyid = "rsa4096/0xE747DF1F9575A3AA";
+      fingerprint = "B600 6460 B60A 80E7 8206  2449 E747 DF1F 9575 A3AA";
+    }];
   };
   vdemeester = {
     email = "vincent@sbr.pm";
@@ -5000,6 +5041,11 @@
   winden = {
     email = "windenntw@gmail.com";
     name = "Antonio Vargas Gonzalez";
+  };
+  winpat = {
+    email = "patrickwinter@posteo.ch";
+    github = "winpat";
+    name = "Patrick Winter";
   };
   wizeman = {
     email = "rcorreia@wizy.org";

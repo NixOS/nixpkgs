@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     gnome3.gnome-online-accounts zeitgeist
     gnome3.gsettings-desktop-schemas
     evolution-data-server
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   mesonFlags = [

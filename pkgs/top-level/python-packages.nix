@@ -268,7 +268,7 @@ in {
 
   bayespy = callPackage ../development/python-modules/bayespy { };
 
-  beanstalkc = disabledIf isPy3k (callPackage ../development/python-modules/beanstalkc {});
+  beanstalkc = callPackage ../development/python-modules/beanstalkc { };
 
   bitarray = callPackage ../development/python-modules/bitarray { };
 
@@ -418,6 +418,8 @@ in {
 
   guestfs = callPackage ../development/python-modules/guestfs { };
 
+  gumath = callPackage ../development/python-modules/gumath { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
@@ -495,6 +497,8 @@ in {
   nbsphinx = callPackage ../development/python-modules/nbsphinx { };
 
   nbval = callPackage ../development/python-modules/nbval { };
+
+  ndtypes = callPackage ../development/python-modules/ndtypes { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
@@ -677,7 +681,6 @@ in {
   pyres = callPackage ../development/python-modules/pyres { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
-    pythonPackages = self;
     inherit (pkgs) pkgconfig;
   };
 
@@ -719,6 +722,8 @@ in {
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
+
+  python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
 
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 
@@ -809,6 +814,8 @@ in {
   sly = callPackage ../development/python-modules/sly { };
 
   snapcast = callPackage ../development/python-modules/snapcast { };
+
+  sparse = callPackage ../development/python-modules/sparse { };
 
   spglib = callPackage ../development/python-modules/spglib { };
 
@@ -1502,9 +1509,15 @@ in {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
-  pytest = self.pytest_39;
+  pytest = self.pytest_42;
 
-  pytest_39 = callPackage ../development/python-modules/pytest {
+  pytest_42 = callPackage ../development/python-modules/pytest {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override { doCheck = false; };
+  };
+
+  # Keep 3 because many test suites are not yet compatible with Pytest 4.
+  pytest_3 = callPackage ../development/python-modules/pytest/3.10.nix {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
@@ -1545,7 +1558,7 @@ in {
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
-  pytestflakes = callPackage ../development/python-modules/pytest-flakes { };
+  pytest-flakes = callPackage ../development/python-modules/pytest-flakes { };
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
@@ -1568,6 +1581,8 @@ in {
   pytestquickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
+
+  pytest-services = callPackage ../development/python-modules/pytest-services { };
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
@@ -1608,6 +1623,8 @@ in {
   dask-jobqueue = callPackage ../development/python-modules/dask-jobqueue { };
 
   dask-ml = callPackage ../development/python-modules/dask-ml { };
+
+  dask-mpi = callPackage ../development/python-modules/dask-mpi { };
 
   dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
 
@@ -2139,7 +2156,9 @@ in {
 
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
 
-  pythonix = toPythonModule (callPackage ../development/python-modules/pythonix { });
+  pythonix = callPackage ../development/python-modules/pythonix {
+    inherit (pkgs) pkgconfig;
+  };
 
   pyramid = callPackage ../development/python-modules/pyramid { };
 
@@ -2778,6 +2797,8 @@ in {
 
   xdis = callPackage ../development/python-modules/xdis { };
 
+  xnd = callPackage ../development/python-modules/xnd { };
+
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
 
   lsi = callPackage ../development/python-modules/lsi { };
@@ -2791,6 +2812,8 @@ in {
   ifaddr = callPackage ../development/python-modules/ifaddr { };
 
   imageio = callPackage ../development/python-modules/imageio { };
+
+  imageio-ffmpeg = callPackage ../development/python-modules/imageio-ffmpeg { };
 
   imgaug = callPackage ../development/python-modules/imgaug { };
 
@@ -2945,7 +2968,7 @@ in {
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
-  libarcus = callPackage ../development/python-modules/libarcus { };
+  libarcus = callPackage ../development/python-modules/libarcus { inherit (pkgs) protobuf; };
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
@@ -3923,6 +3946,8 @@ in {
 
   retry_decorator = callPackage ../development/python-modules/retry_decorator { };
 
+  quamash = callPackage ../development/python-modules/quamash { };
+
   quandl = callPackage ../development/python-modules/quandl { };
   # alias for an older package which did not support Python 3
   Quandl = callPackage ../development/python-modules/quandl { };
@@ -3987,6 +4012,8 @@ in {
   isodate = callPackage ../development/python-modules/isodate { };
 
   owslib = callPackage ../development/python-modules/owslib { };
+
+  readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
   resampy = callPackage ../development/python-modules/resampy { };
 
@@ -4458,6 +4485,8 @@ in {
 
   sorl_thumbnail = callPackage ../development/python-modules/sorl_thumbnail { };
 
+  soupsieve = callPackage ../development/python-modules/soupsieve { };
+
   sphinx_rtd_theme = callPackage ../development/python-modules/sphinx_rtd_theme { };
 
   sphinxcontrib-blockdiag = callPackage ../development/python-modules/sphinxcontrib-blockdiag { };
@@ -4587,6 +4616,8 @@ in {
   webtest = callPackage ../development/python-modules/webtest { };
 
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
+
+  wurlitzer = callPackage ../development/python-modules/wurlitzer { };
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
@@ -4983,17 +5014,19 @@ in {
 
   zerobin = callPackage ../development/python-modules/zerobin { };
 
+  tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
+
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
-  tensorflow = disabledIf isPy37 (
+  tensorflow =
     if stdenv.isDarwin
     then callPackage ../development/python-modules/tensorflow/bin.nix { }
     else callPackage ../development/python-modules/tensorflow/bin.nix rec {
       cudaSupport = pkgs.config.cudaSupport or false;
       inherit (pkgs.linuxPackages) nvidia_x11;
-      cudatoolkit = pkgs.cudatoolkit_9_0;
-      cudnn = pkgs.cudnn_cudatoolkit_9_0;
-    });
+      cudatoolkit = pkgs.cudatoolkit_10_0;
+      cudnn = pkgs.cudnn_cudatoolkit_10_0;
+    };
 
   tensorflowWithoutCuda = self.tensorflow.override {
     cudaSupport = false;
@@ -5041,7 +5074,9 @@ in {
 
   inflect = callPackage ../development/python-modules/inflect { };
 
-  more-itertools = callPackage ../development/python-modules/more-itertools { };
+  more-itertools = if isPy27 then
+    callPackage ../development/python-modules/more-itertools/2.7.nix { }
+  else callPackage ../development/python-modules/more-itertools { };
 
   jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
 

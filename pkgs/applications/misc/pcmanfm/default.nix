@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mb8hg76x1z0szdyl0w7jpz0bdblc6a29is1vvnh79z37qxh8138";
   };
 
-  buildInputs = [ glib gtk libfm' libX11 pango gnome3.defaultIconTheme ];
+  buildInputs = [ glib gtk libfm' libX11 pango gnome3.adwaita-icon-theme ];
   nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
 
   configureFlags = optional withGtk3 "--with-gtk=3";

@@ -30,6 +30,11 @@ in buildPythonApplication rec {
     sha256 = "1ych13x3c2cam7af4q2ariwvzwvr65g3j2x8ajjn33ydwxxbqbg6";
   };
 
+  patches = [
+    # adds an entry point for the service
+    ./homeserver-script.patch
+  ];
+
   propagatedBuildInputs = [
     bcrypt
     bleach
@@ -70,13 +75,13 @@ in buildPythonApplication rec {
   checkInputs = [ mock parameterized ];
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" trial tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
   '';
 
   meta = with stdenv.lib; {
     homepage = https://matrix.org;
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ralith roblabla ekleog ];
+    maintainers = with maintainers; [ ralith roblabla ekleog pacien ];
   };
 }

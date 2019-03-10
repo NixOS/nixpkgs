@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "mecab-python3";
-  version = "0.7";
+  version = "0.996.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "007dg4f5fby2yl7cc44x6xwvcrf2w2ifmn0rmk56ss33mhs8l6qy";
+    sha256 = "5aca4d0d196161e41452b89921042c0e61a6b7e7e9373211c0c1c50d1809055d";
   };
 
   propagatedBuildInputs = [ mecab ];

@@ -30,7 +30,7 @@ buildPythonPackage rec {
     homepage = https://pypi.python.org/pypi/PyICU/;
     description = "Python extension wrapping the ICU C++ API";
     license = licenses.mit;
-    platforms = platforms.linux; # Maybe other non-darwin Unix
+    platforms = platforms.unix;
     maintainers = [ maintainers.rycee ];
   };
 

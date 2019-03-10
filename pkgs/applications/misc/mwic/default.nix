@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = http://jwilk.net/software/mwic;
     description = "spell-checker that groups possible misspellings and shows them in their contexts";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }
 

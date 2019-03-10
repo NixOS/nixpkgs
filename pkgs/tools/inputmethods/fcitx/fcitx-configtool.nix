@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ makeWrapper fcitx cmake isocodes gtk3
-    gnome3.defaultIconTheme ];
+    gnome3.adwaita-icon-theme ];
 
   preFixup = ''
     wrapProgram $out/bin/fcitx-config-gtk3 \

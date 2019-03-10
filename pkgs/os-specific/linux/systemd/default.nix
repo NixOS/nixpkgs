@@ -18,7 +18,7 @@ let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
-  version = "239.20190110";
+  version = "239.20190219";
   name = "systemd-${version}";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     owner = "NixOS";
     repo = "systemd";
     rev = "nixos-v${version}";
-    sha256 = "1m9mhv7b4kfa43z79106gpgxx51zlhvvfjrlmimdsvsiw72nzldj";
+    sha256 = "0aczg25ih2gfjq810x8rw6rnpr6sw1lz6z0lvlyw2qphyih68b4x";
   };
 
   prePatch = let

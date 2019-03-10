@@ -53,7 +53,7 @@ GEM
     coderay (1.1.2)
     concurrent-ruby (1.1.4)
     crass (1.0.4)
-    css_parser (1.6.0)
+    css_parser (1.7.0)
       addressable
     docile (1.1.5)
     erubis (2.7.0)
@@ -120,7 +120,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (12.3.2)
-    rbpdf (1.19.7)
+    rbpdf (1.19.8)
       htmlentities
       rbpdf-font (~> 1.19.0)
     rbpdf-font (1.19.1)
@@ -191,7 +191,7 @@ DEPENDENCIES
   rdoc (~> 4.3)
   redcarpet (~> 3.4.0)
   request_store (= 1.0.5)
-  rmagick (>= 2.14.0)
+  rmagick (~> 2.16.0)
   roadie (~> 3.2.1)
   roadie-rails (~> 1.1.1)
   ruby-openid (~> 2.3.0)

@@ -17,8 +17,8 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
   buildInputs = with gst_all_1; [
-    gtk3 glib libmediaart gnome-online-accounts
-    gdk_pixbuf gnome3.defaultIconTheme python3
+    gtk3 glib libmediaart gnome-online-accounts gobject-introspection
+    gdk_pixbuf gnome3.adwaita-icon-theme python3
     grilo grilo-plugins libnotify libdazzle libsoup
     gnome3.gsettings-desktop-schemas tracker
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly

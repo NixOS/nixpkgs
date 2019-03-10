@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gettext glib gtk3 libmowgli dbus-glib libxml2
-    xorg.libXcomposite gnome3.defaultIconTheme alsaLib libjack2
+    xorg.libXcomposite gnome3.adwaita-icon-theme alsaLib libjack2
     libpulseaudio fluidsynth libmad libogg libvorbis libcdio
     libcddb flac ffmpeg mpg123 libcue libmms libbs2b libsndfile
     libmodplug libsamplerate soxr lirc curl wavpack neon faad2

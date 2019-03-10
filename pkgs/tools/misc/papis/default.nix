@@ -14,11 +14,18 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1b481sj92z9nw7gwbrpkgd4nlmqc1n73qilkc51k2r56cy1kjvss";
   };
 
-  # Update click version to 7.0.0
-  patches = fetchpatch {
-    url = https://github.com/papis/papis/commit/fddb80978a37a229300b604c26e992e2dc90913f.patch;
-    sha256 = "0cmagfdaaml1pxhnxggifpb47z5g1p231qywnvnqpd3dm93382w1";
-  };
+  patches = [
+    # Update click version to 7.0.0
+    (fetchpatch {
+      url = https://github.com/papis/papis/commit/fddb80978a37a229300b604c26e992e2dc90913f.patch;
+      sha256 = "0cmagfdaaml1pxhnxggifpb47z5g1p231qywnvnqpd3dm93382w1";
+    })
+    # Allow python-slugify >= 2.0.0
+    (fetchpatch {
+      url = https://github.com/papis/papis/commit/b023ca0e551a29c0c15f73fa071addd3e61fa36d.patch;
+      sha256 = "0ybfzr5v1zg9m201jq4hyc6imqd8l4mx9azgjjxkgxcwd3ib1ymq";
+    })
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click requests filetype pyparsing configparser

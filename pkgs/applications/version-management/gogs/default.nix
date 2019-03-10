@@ -7,13 +7,13 @@ with stdenv.lib;
 
 buildGoPackage rec {
   name = "gogs-${version}";
-  version = "0.11.66";
+  version = "0.11.86";
 
   src = fetchFromGitHub {
     owner = "gogs";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "1b9ilk4xlsllsj5pzmxwsz4a1zvgd06a8mi9ni9hbvmfl3w8xf28";
+    sha256 = "0l8mwy0cyy3cdxqinf8ydb35kf7c8pj09xrhpr7rr7lldnvczabw";
   };
 
   patches = [ ./static-root-path.patch ];

@@ -131,6 +131,18 @@ let
         '';
       };
 
+      duoSecurity = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            If set, use the Duo Security pam module
+            <literal>pam_duo</literal> for authentication.  Requires
+            configuration of <option>security.duosec</option> options.
+          '';
+        };
+      };
+
       startSession = mkOption {
         default = false;
         type = types.bool;
@@ -340,7 +352,8 @@ let
             || cfg.pamMount
             || cfg.enableKwallet
             || cfg.enableGnomeKeyring
-            || cfg.googleAuthenticator.enable)) ''
+            || cfg.googleAuthenticator.enable
+            || cfg.duoSecurity.enable)) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
@@ -350,9 +363,11 @@ let
                 ("auth optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
                  " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
               ${optionalString cfg.enableGnomeKeyring
-                ("auth optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so")}
+                "auth optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so"}
               ${optionalString cfg.googleAuthenticator.enable
-                  "auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp"}
+                "auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp"}
+              ${optionalString cfg.duoSecurity.enable
+                "auth required ${pkgs.duo-unix}/lib/security/pam_duo.so"}
             '') + ''
           ${optionalString cfg.unixAuth
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}

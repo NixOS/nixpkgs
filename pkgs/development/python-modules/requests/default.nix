@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.20.1";
+  version = "2.21.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea881206e59f41dbd0bd445437d792e43906703fff75ca8ff43ccdb11f33f263";
+    sha256 = "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e";
   };
 
   nativeBuildInputs = [ pytest ];

@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "1.12.1";
+  version = "1.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d89bc6acafb31d124e6e5b295ef26ac77030bf098960c2a4c4e058335827c5c";
+    sha256 = "d6c29c933ecfc74e9b1d9fa13aa1f87c5d5770e119f5a4ce032092f0ff5b14dc";
   };
 
   propagatedBuildInputs = [ pkginfo requests requests_toolbelt tqdm pyblake2 readme_renderer ];

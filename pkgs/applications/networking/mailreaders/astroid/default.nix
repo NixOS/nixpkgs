@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, gnome3, gmime3, webkitgtk
 , libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf, vim_configurable
+, gtkmm3, libpeas, gsettings-desktop-schemas
 , makeWrapper, python3, python3Packages
 , vim ? vim_configurable.override {
                     features = "normal";
@@ -21,10 +22,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ronn pkgconfig wrapGAppsHook ];
 
-  buildInputs = [ gnome3.gtkmm gmime3 webkitgtk libsass gnome3.libpeas
-                  python3 python3Packages.pygobject3
-                  notmuch boost gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme
-                  glib-networking protobuf ] ++ (if vim == null then [] else [ vim ]);
+  buildInputs = [
+    gtkmm3 gmime3 webkitgtk libsass libpeas
+    python3 python3Packages.pygobject3
+    notmuch boost gsettings-desktop-schemas gnome3.adwaita-icon-theme
+    glib-networking protobuf
+   ] ++ (if vim == null then [] else [ vim ]);
 
   postPatch = ''
     sed -i "s~gvim ~${vim}/bin/vim -g ~g" src/config.cc

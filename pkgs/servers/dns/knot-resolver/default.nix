@@ -19,6 +19,11 @@ unwrapped = stdenv.mkDerivation rec {
     sha256 = "d1396888ec3a63f19dccdf2b7dbcb0d16a5d8642766824b47f4c21be90ce362b";
   };
 
+  # Short-lived cross fix, as upstream is migrating to meson anyway.
+  postPatch = ''
+    substituteInPlace platform.mk --replace "objdump" "$OBJDUMP"
+  '';
+
   outputs = [ "out" "dev" ];
 
   configurePhase = "patchShebangs scripts/";
