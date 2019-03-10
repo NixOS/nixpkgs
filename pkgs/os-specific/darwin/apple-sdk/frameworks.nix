@@ -47,7 +47,7 @@ with frameworks; with libs; {
   ExceptionHandling       = [];
   FWAUserLib              = [];
   ForceFeedback           = [ CF IOKit ];
-  Foundation              = [ CF libobjc Security ApplicationServices SystemConfiguration ];
+  Foundation              = [ cf-private libobjc Security ApplicationServices SystemConfiguration ];
   GLKit                   = [ CF ];
   GLUT                    = [ OpenGL ];
   GSS                     = [];
