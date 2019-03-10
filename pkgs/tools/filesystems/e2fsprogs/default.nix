@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ];
 
   checkInputs = [ perl ];
-  doCheck = false; # fails
+  doCheck = true;
 
   postInstall = ''
     # avoid cycle between outputs
