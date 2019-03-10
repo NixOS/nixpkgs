@@ -1154,7 +1154,15 @@ self: super: {
 
   xmonad-extras = doJailbreak super.xmonad-extras;
 
-  arbtt = doJailbreak super.arbtt;
+  arbtt = overrideSrc (dontCheck super.arbtt) {
+    version = "2019-01-27";
+    src = pkgs.fetchFromGitHub {
+      owner = "nomeata";
+      repo = "arbtt";
+      rev = "a297b8ec7c84d586807b615167157d95d53e1c7d";
+      sha256 = "14zjxz1m3zw49kiqmh6nmp73f5fms7zmbnzl5g3i4vfn5irhiz74";
+    };
+  };
 
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
