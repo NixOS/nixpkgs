@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d, libXcursor
-, pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
+{ stdenv, lib, fetchpatch, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm
+, Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, cf-private, AppKit, GSS, ImageIO, m17n_lib, libotf
 , systemd ? null
@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./clean-env.patch
     ./tramp-detect-wrapped-gvfsd.patch
+
+    # should drop this at next package update
+    (fetchpatch {
+      name = "support-hunspell-1.7.0-in-ispell.el.patch";
+      url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=2925ce5a7ec1424cfaea9f2f86bd3cab27832584";
+      sha256 = "0w7cgw6zgr7phbivb98innps1rlqf5q2lhwkrwdmai8sbca5bd11";
+    })
   ];
 
   postPatch = lib.optionalString srcRepo ''
