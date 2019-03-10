@@ -13,12 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "007jhkh0k6qk52r77i067999dwdiimazix6ggp2hvyc4pj6n5dip";
   };
 
-  patches = [(fetchpatch {
-               name = "examplepath.patch";
-               url = "https://github.com/CsoundQt/CsoundQt/commit/09f2d515bff638cbcacb450979d66e273a59fdec.diff";
-               sha256 = "0y23kf8m1mh9mklsvf908b2b8m2w2rji8qvws44paf1kpwnwdmgm";
-              })
-              ./rtmidipath.patch];
+  patches = [
+    (fetchpatch {
+      name = "examplepath.patch";
+      url = "https://github.com/CsoundQt/CsoundQt/commit/09f2d515bff638cbcacb450979d66e273a59fdec.diff";
+      sha256 = "0y23kf8m1mh9mklsvf908b2b8m2w2rji8qvws44paf1kpwnwdmgm";
+    })
+    ./rtmidipath.patch
+  ];
 
   nativeBuildInputs = [ qmake qtwebengine qtxmlpatterns ];
 
