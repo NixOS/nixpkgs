@@ -410,6 +410,8 @@ in
 
   ### TOOLS
 
+  _0x0 = callPackage ../tools/misc/0x0 { };
+
   _1password = callPackage ../applications/misc/1password { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
