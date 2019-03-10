@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase libsForQt5.poppler ];
 
   # src/data/tikzlexer.l:29:10: fatal error: tikzparser.parser.hpp: No such file or directory
-  #enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     description = "A graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";
