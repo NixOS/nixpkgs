@@ -61,7 +61,9 @@ let
       '';
       description = ''
         Extra lines to append to the <literal>Monitor</literal> section
-        verbatim.
+        verbatim. Available options are documented in the MONITOR section in
+        <citerefentry><refentrytitle>xorg.conf</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry>.
       '';
     };
   };
@@ -633,7 +635,7 @@ in
 
     environment.pathsToLink = [ "/share/X11" ];
 
-    xdg = { 
+    xdg = {
       autostart.enable = true;
       menus.enable = true;
       mime.enable = true;

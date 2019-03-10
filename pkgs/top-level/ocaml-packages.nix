@@ -709,6 +709,8 @@ let
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
 
+    stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
+
     stog = callPackage ../applications/misc/stog { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };

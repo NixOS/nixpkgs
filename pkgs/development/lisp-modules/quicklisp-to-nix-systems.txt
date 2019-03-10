@@ -95,6 +95,9 @@ let-plus
 lev
 lisp-namespace
 local-time
+lfarm-client
+lfarm-server
+lfarm-ssl
 lparallel
 lquery
 marshal

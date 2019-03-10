@@ -12,7 +12,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "2.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Willow";
+    inherit version;
     sha256 = "818ee11803c90a0a6d49c94b0453d6266be1ef83ae00de72731c45fae4d3e78c";
   };
 

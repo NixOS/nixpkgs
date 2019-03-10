@@ -112,6 +112,9 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch?id=a05b6b038e1571ab15464e98f76d1927c0c3fd12";
       sha256 = "05yq97pq84xi60wb1p9skrad5h5x770gq98ll4frr7hvvmlwsf58";
     })
+
+    # https://trac.sagemath.org/ticket/27405
+    ./patches/ignore-pip-deprecation.patch
   ];
 
   patches = nixPatches ++ packageUpgradePatches;

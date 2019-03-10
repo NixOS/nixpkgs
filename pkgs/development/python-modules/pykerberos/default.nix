@@ -9,7 +9,9 @@ buildPythonPackage rec {
     sha256 = "0v47p840myqgc7hr4lir72xshcfpa0w8j9n077h3njpqyn6wlbag";
   };
 
-  nativeBuildInputs = [ krb5 ];
+  nativeBuildInputs = [ krb5 ]; # for krb5-config
+
+  buildInputs = [ krb5 ];
 
   # there are no tests
   doCheck = false;

@@ -131,7 +131,7 @@ in
           ${optionalString (cfg.tlsCertFile!=null)
             "--tls-cert-file=${cfg.tlsCertFile}"} \
           ${optionalString (cfg.tlsKeyFile!=null)
-            "--tls-key-file=${cfg.tlsKeyFile}"} \
+            "--tls-private-key-file=${cfg.tlsKeyFile}"} \
           ${optionalString (elem "RBAC" top.apiserver.authorizationMode)
             "--use-service-account-credentials"} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \

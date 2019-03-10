@@ -1075,6 +1075,9 @@ self: super: {
   cborg = doJailbreak super.cborg;
   serialise = doJailbreak (dontCheck super.serialise);
 
+  # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
+  netrc = doJailbreak super.netrc;
+
   # https://github.com/phadej/tree-diff/issues/19
   tree-diff = doJailbreak super.tree-diff;
 
@@ -1216,8 +1219,11 @@ self: super: {
 
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  pandoc = doDistribute (dontCheck super.pandoc_2_6);
-  pandoc-citeproc = self.pandoc-citeproc_0_16_1;
+  pandoc = doDistribute super.pandoc_2_7;
+  pandoc-citeproc = self.pandoc-citeproc_0_16_1_1;
+  skylighting = self.skylighting_0_7_7;
+  skylighting-core = self.skylighting-core_0_7_7;
+  texmath = self.texmath_0_11_2_1;
 
   # https://github.com/qfpl/tasty-hedgehog/issues/24
   tasty-hedgehog = dontCheck super.tasty-hedgehog;

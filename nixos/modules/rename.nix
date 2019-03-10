@@ -186,6 +186,9 @@ with lib;
     # parsoid
     (mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] [ "services" "parsoid" "wikis" ])
 
+    # plexpy / tautulli
+    (mkRenamedOptionModule [ "services" "plexpy" ] [ "services" "tautulli" ])
+
     # piwik was renamed to matomo
     (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
     (mkRenamedOptionModule [ "services" "piwik" "webServerUser" ] [ "services" "matomo" "webServerUser" ])

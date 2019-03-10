@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , requests-cache
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -15,8 +16,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests-cache ];
 
+  checkInputs = [ pytest ];
+
+  # requires network access
+  doCheck = false;
+
   meta = with stdenv.lib; {
-    description = "Simple to use TVDB (thetvdb.com) API in Python.";
+    description = "Simple to use TVDB (thetvdb.com) API in Python";
     homepage = "https://github.com/dbr/tvdb_api";
     license = licenses.unlicense;
     maintainers = with maintainers; [ peterhoeg ];

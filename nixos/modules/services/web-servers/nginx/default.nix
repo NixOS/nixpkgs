@@ -194,11 +194,12 @@ let
             then filter (x: x.ssl) defaultListen
             else defaultListen;
 
-        listenString = { addr, port, ssl, ... }:
+        listenString = { addr, port, ssl, extraParameters ? [], ... }:
           "listen ${addr}:${toString port} "
           + optionalString ssl "ssl "
-          + optionalString (ssl && vhost.http2) "http2 "
+          + optionalString vhost.http2 "http2 "
           + optionalString vhost.default "default_server "
+          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
           + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
@@ -491,8 +492,8 @@ in
 
       sslProtocols = mkOption {
         type = types.str;
-        default = "TLSv1.2";
-        example = "TLSv1 TLSv1.1 TLSv1.2";
+        default = "TLSv1.2 TLSv1.3";
+        example = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
         description = "Allowed TLS protocol versions.";
       };
 

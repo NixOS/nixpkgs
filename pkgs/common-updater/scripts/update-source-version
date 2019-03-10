@@ -1,29 +1,79 @@
 #!/usr/bin/env bash
 set -e
 
+scriptName=update-source-versions # do not use the .wrapped name
+
 die() {
-    echo "$0: error: $1" >&2
+    echo "$scriptName: error: $1" >&2
     exit 1
 }
 
-# Usage: update-source-hash <attr> <version> [<new-source-hash>] [<new-source-url>] [<version-key>]
-attr=$1
-newVersion=$2
-newHash=$3
-newUrl=$4
-versionKey=$5
+usage() {
+    echo "Usage: $scriptName <attr> <version> [<new-source-hash>] [<new-source-url>]"
+    echo "                              [--version-key=<version-key>] [--system=<system>] [--file=<file-to-update>]"
+}
+
+args=()
+
+for arg in "$@"; do
+    case $arg in
+        --system=*)
+            systemArg="--system ${arg#*=}"
+        ;;
+        --version-key=*)
+            versionKey="${arg#*=}"
+        ;;
+        --file=*)
+            nixFile="${arg#*=}"
+            if [ ! -f "$nixFile" ]; then
+                die "Could not find provided file $nixFile"
+            fi
+        ;;
+        --help)
+            usage
+            exit 0
+        ;;
+        --*)
+            echo "$scriptName: Unknown argument: " $arg
+            usage
+            exit 1
+        ;;
+        *)
+            args["${#args[*]}"]=$arg
+        ;;
+    esac
+done
+
+attr=${args[0]}
+newVersion=${args[1]}
+newHash=${args[2]}
+newUrl=${args[3]}
+
+if [ "${#args[*]}" -lt 2 ]; then
+    echo "$scriptName: Too few arguments"
+    usage
+    exit 1
+fi
+
+if [ "${#args[*]}" -gt 4 ]; then
+    echo "$scriptName: Too many arguments"
+    usage
+    exit 1
+fi
 
 if [ -z "$versionKey" ]; then
     versionKey=version
 fi
 
-nixFile=$(nix-instantiate --eval --strict -A "$attr.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
-if [ ! -f "$nixFile" ]; then
-    die "Couldn't evaluate '$attr.meta.position' to locate the .nix file!"
+if [ -z "$nixFile" ]; then
+    nixFile=$(nix-instantiate $systemArg --eval --strict -A "$attr.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+    if [ ! -f "$nixFile" ]; then
+        die "Couldn't evaluate '$attr.meta.position' to locate the .nix file!"
+    fi
 fi
 
-oldHashAlgo=$(nix-instantiate --eval --strict -A "$attr.src.drvAttrs.outputHashAlgo" | tr -d '"')
-oldHash=$(nix-instantiate --eval --strict -A "$attr.src.drvAttrs.outputHash" | tr -d '"')
+oldHashAlgo=$(nix-instantiate $systemArg --eval --strict -A "$attr.src.drvAttrs.outputHashAlgo" | tr -d '"')
+oldHash=$(nix-instantiate $systemArg --eval --strict -A "$attr.src.drvAttrs.outputHash" | tr -d '"')
 
 if [ -z "$oldHashAlgo" -o -z "$oldHash" ]; then
     die "Couldn't evaluate old source hash from '$attr.src'!"
@@ -33,21 +83,21 @@ if [ $(grep -c "$oldHash" "$nixFile") != 1 ]; then
     die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
 fi
 
-oldUrl=$(nix-instantiate --eval -E "with import ./. {}; builtins.elemAt $attr.src.drvAttrs.urls 0" | tr -d '"')
+oldUrl=$(nix-instantiate $systemArg --eval -E "with import ./. {}; builtins.elemAt $attr.src.drvAttrs.urls 0" | tr -d '"')
 
 if [ -z "$oldUrl" ]; then
     die "Couldn't evaluate source url from '$attr.name'!"
 fi
 
-drvName=$(nix-instantiate --eval -E "with import ./. {}; (builtins.parseDrvName $attr.name).name" | tr -d '"')
-oldVersion=$(nix-instantiate --eval -E "with import ./. {}; $attr.version or (builtins.parseDrvName $attr.name).version" | tr -d '"')
+drvName=$(nix-instantiate $systemArg --eval -E "with import ./. {}; (builtins.parseDrvName $attr.name).name" | tr -d '"')
+oldVersion=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.version or (builtins.parseDrvName $attr.name).version" | tr -d '"')
 
 if [ -z "$drvName" -o -z "$oldVersion" ]; then
     die "Couldn't evaluate name and version from '$attr.name'!"
 fi
 
 if [ "$oldVersion" = "$newVersion" ]; then
-    echo "$0: New version same as old version, nothing to do." >&2
+    echo "$scriptName: New version same as old version, nothing to do." >&2
     exit 0
 fi
 
@@ -94,7 +144,7 @@ fi
 
 # If new hash not given on the command line, recalculate it ourselves.
 if [ -z "$newHash" ]; then
-    nix-build --no-out-link -A "$attr.src" 2>"$attr.fetchlog" >/dev/null || true
+    nix-build $systemArg --no-out-link -A "$attr.src" 2>"$attr.fetchlog" >/dev/null || true
     # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
     newHash=$(egrep -v "killing process|dependencies couldn't be built|wanted: " "$attr.fetchlog" | tail -n2 | sed "s~output path .* has .* hash ‘\(.*\)’ when .* was expected\|fixed-output derivation produced path '.*' with .* hash '\(.*\)' instead of the expected hash '.*'\|  got:    .*:\(.*\)~\1\2\3~" | head -n1)
 fi

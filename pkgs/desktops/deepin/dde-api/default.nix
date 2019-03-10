@@ -44,6 +44,7 @@ buildGoPackage rec {
   '';
 
   buildPhase = ''
+    export GOCACHE="$TMPDIR/go-cache";
     make -C go/src/${goPackagePath}
   '';
 

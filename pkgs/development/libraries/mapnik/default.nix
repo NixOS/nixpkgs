@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
 
   prefixKey = "PREFIX=";
 
+  preConfigure = ''
+    patchShebangs ./configure
+  '';
+
   configureFlags = [
     "BOOST_INCLUDES=${boost.dev}/include"
     "BOOST_LIBS=${boost.out}/lib"

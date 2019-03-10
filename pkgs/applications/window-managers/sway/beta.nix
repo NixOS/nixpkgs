@@ -10,13 +10,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "sway";
-  version = "1.0-rc4";
+  version = "1.0-rc5";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "1f0mvf48dvsivdd850r1gd2h90cbn62qflwiff6x2addn868bvxa";
+    sha256 = "1jkacibmxy9rpq5mxnq7bkwcy0c592zk4vf20j5qbbljp9h7c87i";
   };
 
   postPatch = ''

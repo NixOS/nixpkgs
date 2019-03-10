@@ -24,6 +24,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pantsbuild/pex";
     license = licenses.asl20;
     maintainers = with maintainers; [ copumpkin ];
+    broken = true;
   };
 
 }

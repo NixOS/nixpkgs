@@ -87,9 +87,9 @@ rec {
   # 4. example of pulling an image. could be used as a base for other images
   nixFromDockerHub = pullImage {
     imageName = "nixos/nix";
-    imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b";
-    sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8";
-    finalImageTag = "1.11";
+    imageDigest = "sha256:85299d86263a3059cf19f419f9d286cc9f06d3c13146a8ebbb21b3437f598357";
+    sha256 = "0vnp3mhpk4ny3xa3cgngqsargnmvfgld54d5sn4b5av6yqzzp67z";
+    finalImageTag = "2.2.1";
   };
 
   # 5. example of multiple contents, emacs and vi happily coexisting

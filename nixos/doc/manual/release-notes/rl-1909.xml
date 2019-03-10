@@ -51,7 +51,17 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     The <option>documentation</option> module gained an option named
+     <option>documentation.nixos.includeAllModules</option> which makes the generated
+     <citerefentry><refentrytitle>configuration.nix</refentrytitle>
+     <manvolnum>5</manvolnum></citerefentry> manual page include all options from all NixOS modules
+     included in a given <literal>configuration.nix</literal> configuration file. Currently, it is
+     set to <literal>false</literal> by default as enabling it frequently prevents evaluation. But
+     the plan is to eventually have it set to <literal>true</literal> by default. Please set it to
+     <literal>true</literal> now in your <literal>configuration.nix</literal> and fix all the bugs
+     it uncovers.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

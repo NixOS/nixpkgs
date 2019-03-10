@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "code";
-  version = "3.0.2";
+  version = "3.1.0";
 
   name = "elementary-${pname}-${version}";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0zmm4a7galrs9phiplf6cygwq3rplghv7r8g47mi4nlndgxqyssg";
+    sha256 = "04clzms1gw7dr611kr8bhca2dww0x65186al4sjqmln4g12ry1gx";
   };
 
   passthru = {
@@ -50,9 +50,6 @@ stdenv.mkDerivation rec {
     webkitgtk
     zeitgeist
   ];
-
-  # See: https://github.com/elementary/code/pull/626
-  LIBRARY_PATH = stdenv.lib.makeLibraryPath [ editorconfig-core-c ];
 
   # install script fails with UnicodeDecodeError because of printing a fancy elipsis character
   LC_ALL = "C.UTF-8";

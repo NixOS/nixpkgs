@@ -10,7 +10,7 @@ let __dune = dune; in
 let dune = __dune.override { ocamlPackages = { inherit ocaml findlib; }; }; in
 
 stdenv.mkDerivation rec {
-  version = "3.0.beta4";
+  version = "3.0.beta5";
   pname = "lablgtk3";
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "garrigue";
     repo = "lablgtk";
     rev = version;
-    sha256 = "1lppb7k4xb1a35i7klm9mz98hw8l2f8s7rivgzysi1sviqy1ds5d";
+    sha256 = "05n3pjy4496gbgxwbypfm2462njv6dgmvkcv26az53ianpwa4vzz";
   };
 
   nativeBuildInputs = [ pkgconfig ];

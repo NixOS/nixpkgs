@@ -179,33 +179,34 @@ in
   config = mkIf cfg.enable {
 
     services.phpfpm.poolConfigs = {
-      "${poolName}" = ''
-        listen = "${phpfpmSocketName}";
-        listen.owner = nginx
-        listen.group = nginx
-        listen.mode = 0600
-        user = ${cfg.user}
-        group = ${cfg.group}
-        pm = dynamic
-        pm.max_children = 75
-        pm.start_servers = 10
-        pm.min_spare_servers = 5
-        pm.max_spare_servers = 20
-        pm.max_requests = 500
-        catch_workers_output = 1
-      '';
+      "${poolName}" = {
+        listen = phpfpmSocketName;
+        phpOptions = ''
+          date.timezone = "CET"
+
+          ${optionalString (!isNull cfg.email.server) ''
+            SMTP = ${cfg.email.server}
+            smtp_port = ${toString cfg.email.port}
+            auth_username = ${cfg.email.login}
+            auth_password = ${cfg.email.password}
+          ''}
+        '';
+        extraConfig = ''
+          listen.owner = nginx
+          listen.group = nginx
+          listen.mode = 0600
+          user = ${cfg.user}
+          group = ${cfg.group}
+          pm = dynamic
+          pm.max_children = 75
+          pm.start_servers = 10
+          pm.min_spare_servers = 5
+          pm.max_spare_servers = 20
+          pm.max_requests = 500
+          catch_workers_output = 1
+        '';
+      };
     };
-
-    services.phpfpm.phpOptions = ''
-      date.timezone = "CET"
-
-      ${optionalString (!isNull cfg.email.server) ''
-        SMTP = ${cfg.email.server}
-        smtp_port = ${toString cfg.email.port}
-        auth_username = ${cfg.email.login}
-        auth_password = ${cfg.email.password}
-      ''}
-    '';
 
     services.nginx.enable = true;
     services.nginx.virtualHosts."${cfg.virtualHost.serverName}" = {

@@ -3,13 +3,13 @@
 with qt5;
 
 stdenv.mkDerivation rec {
-  version = "0.9.2";
+  version = "0.9.4";
   name = "featherpad-${version}";
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "FeatherPad";
     rev = "V${version}";
-    sha256 = "1kpv8x3m4hiz7q9k7qadgbrys5nyzm7v5mhjyk22hawnp98m9x4q";
+    sha256 = "18zna6rx2qyiplr44wrkvr4avk9yy2l1s23fy3d7ql9f1fq12z3w";
   };
   nativeBuildInputs = [ qmake pkgconfig qttools ];
   buildInputs = [ qtbase qtsvg qtx11extras ];

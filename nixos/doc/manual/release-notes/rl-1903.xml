@@ -456,8 +456,8 @@
   </listitem>
   <listitem>
    <para>
-    Support for NixOS module system type <literal>types.optionSet</literal> and
-    <literal>lib.mkOption</literal> argument <literal>options</literal> is removed.
+    NixOS module system type <literal>types.optionSet</literal> and
+    <literal>lib.mkOption</literal> argument <literal>options</literal> are deprecated.
     Use <literal>types.submodule</literal> instead.
     (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/54637">#54637</link>)
    </para>
@@ -577,7 +577,7 @@
        but is still possible by setting <literal>zramSwap.swapDevices</literal> explicitly.
      </para>
      <para>
-      Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
+      ZRAM algorithm can be changed now.
      </para>
      <para>
       Changes to ZRAM algorithm are applied during <literal>nixos-rebuild switch</literal>,
@@ -666,6 +666,10 @@
         Some OpenCL and VA-API applications might also break
         (Beignet seems to provide OpenCL support with
         <literal>modesetting</literal> driver, too).
+        Kernel mode setting API does not support backlight control,
+        so <literal>xbacklight</literal> tool will not work;
+        backlight level can be controlled directly via <literal>/sys/</literal>
+        or with <literal>brightnessctl</literal>.
         Users who need this functionality more than multi-output XRandR are advised
         to add `intel` to `videoDrivers` and report an issue (or provide additional
         details in an existing one)
@@ -677,6 +681,9 @@
        This may break some older applications that still rely on those symbols.
        An upgrade guide can be found <link xlink:href="https://www.open-mpi.org/faq/?category=mpi-removed">here</link>.
      </para>
+    <para>
+     The nginx package now relies on OpenSSL 1.1 and supports TLS 1.3 by default. You can set the protocols used by the nginx service using <xref linkend="opt-services.nginx.sslProtocols"/>.
+    </para>
    </listitem>
    <listitem>
      <para>

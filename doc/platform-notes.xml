@@ -96,8 +96,8 @@
     </programlisting>
     <para>
      The package <literal>xcbuild</literal> can be used to build projects that
-     really depend on Xcode. However, this replacement is not 100%
-     compatible with Xcode and can occasionally cause issues.
+     really depend on Xcode. However, this replacement is not 100% compatible
+     with Xcode and can occasionally cause issues.
     </para>
    </listitem>
   </itemizedlist>

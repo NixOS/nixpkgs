@@ -1612,16 +1612,16 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xdm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, libXt }: stdenv.mkDerivation {
-    name = "xdm-1.1.11";
+  xdm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+    name = "xdm-1.1.12";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xdm-1.1.11.tar.bz2;
-      sha256 = "0iqw11977lpr9nk1is4fca84d531vck0mq7jldwl44m0vrnl5nnl";
+      url = mirror://xorg/individual/app/xdm-1.1.12.tar.bz2;
+      sha256 = "1x17hdymf6rd8jmh4n1sd4g5a8ayr5w94nwjw84qs2fs5pvq7lhd";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm libXt ];
+    buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2432,11 +2432,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xinit = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
-    name = "xinit-1.4.0";
+    name = "xinit-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinit-1.4.0.tar.bz2;
-      sha256 = "1vw2wlg74ig52naw0cha3pgzcwwk25l834j42cg8m5zmybp3a213";
+      url = mirror://xorg/individual/app/xinit-1.4.1.tar.bz2;
+      sha256 = "1fdbakx59vyh474skjydj1bbglpby3y03nl7mxn0z9v8gdhqz6yy";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
