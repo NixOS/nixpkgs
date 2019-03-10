@@ -1745,11 +1745,13 @@ in
 
   asciidoc-full = appendToName "full" (asciidoc.override {
     inherit (python2Packages) pygments;
+    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
     enableStandardFeatures = true;
   });
 
   asciidoc-full-with-plugins = appendToName "full-with-plugins" (asciidoc.override {
     inherit (python2Packages) pygments;
+    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
     enableStandardFeatures = true;
     enableExtraPlugins = true;
   });
@@ -2090,6 +2092,8 @@ in
   cfssl = callPackage ../tools/security/cfssl { };
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
+
+  civetweb = callPackage ../development/libraries/civetweb { };
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
@@ -3175,9 +3179,7 @@ in
 
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
 
-  gssdp = callPackage ../development/libraries/gssdp {
-    inherit (gnome2) libsoup;
-  };
+  gssdp = callPackage ../development/libraries/gssdp { };
 
   gt5 = callPackage ../tools/system/gt5 { };
 
@@ -3204,9 +3206,7 @@ in
 
   gup = callPackage ../development/tools/build-managers/gup {};
 
-  gupnp = callPackage ../development/libraries/gupnp {
-    inherit (gnome2) libsoup;
-  };
+  gupnp = callPackage ../development/libraries/gupnp { };
 
   gupnp-av = callPackage ../development/libraries/gupnp-av {};
 
@@ -3996,6 +3996,8 @@ in
   liblouis = callPackage ../development/libraries/liblouis { };
 
   liboauth = callPackage ../development/libraries/liboauth { };
+
+  libr3 = callPackage ../development/libraries/libr3 { };
 
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
 
@@ -4913,7 +4915,11 @@ in
 
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
-  plantuml = callPackage ../tools/misc/plantuml { };
+  plantuml = callPackage ../tools/misc/plantuml {
+    # Graphviz 2.39 and 2.40 are discouraged by the PlantUML project, see
+    # http://plantuml.com/faq (heading: "Which version of Graphviz should I use ?")
+    graphviz = graphviz_2_32;
+  };
 
   plan9port = callPackage ../tools/system/plan9port { };
 
@@ -4926,7 +4932,7 @@ in
 
   plex = callPackage ../servers/plex { };
 
-  plexpy = callPackage ../servers/plexpy { python = python2; };
+  tautulli = callPackage ../servers/tautulli { python = python2; };
 
   ploticus = callPackage ../tools/graphics/ploticus {
     libpng = libpng12;
@@ -7073,7 +7079,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc863.override {
+  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc864.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
   });
 
@@ -7087,7 +7093,8 @@ in
 
   all-cabal-hashes = callPackage ../data/misc/hackage { };
 
-  purescript = haskell.lib.justStaticExecutables haskellPackages.purescript;
+  # Build with ghc 8.4 due to https://github.com/NixOS/nixpkgs/issues/53597
+  purescript = haskell.lib.justStaticExecutables haskell.packages.ghc844.purescript;
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
 
@@ -7273,13 +7280,6 @@ in
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
   jikes = callPackage ../development/compilers/jikes { };
-
-  julia_06 = callPackage ../development/compilers/julia {
-    gmp = gmp6;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-    llvm = llvm_39;
-  };
 
   julia_07 = callPackage ../development/compilers/julia/0.7.nix {
     gmp = gmp6;
@@ -8580,6 +8580,7 @@ in
 
   ccls = callPackage ../development/tools/misc/ccls {
     llvmPackages = llvmPackages_latest;
+    stdenv = llvmPackages_latest.stdenv;
   };
 
   credstash = with python3Packages; toPythonApplication credstash;
@@ -9243,6 +9244,8 @@ in
 
   trellis = callPackage ../development/tools/trellis { };
 
+  ttyd = callPackage ../servers/ttyd { };
+
   tweak = callPackage ../applications/editors/tweak { };
 
   tychus = callPackage ../development/tools/tychus {
@@ -9838,6 +9841,8 @@ in
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
   flann = callPackage ../development/libraries/flann { };
+
+  flatcc = callPackage ../development/libraries/flatcc { };
 
   flint = callPackage ../development/libraries/flint { };
 
@@ -10994,9 +10999,7 @@ in
   libgudev = callPackage ../development/libraries/libgudev { };
 
   libguestfs-appliance = callPackage ../development/libraries/libguestfs/appliance.nix {};
-  libguestfs = callPackage ../development/libraries/libguestfs {
-    appliance = libguestfs-appliance;
-  };
+  libguestfs = callPackage ../development/libraries/libguestfs { };
 
   libhangul = callPackage ../development/libraries/libhangul { };
 
@@ -13033,8 +13036,6 @@ in
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
-  webkit = webkitgtk;
-
   wcslib = callPackage ../development/libraries/wcslib { };
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
@@ -14027,6 +14028,8 @@ in
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
+
+  prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
 
   psqlodbc = callPackage ../development/libraries/psqlodbc { };
 
@@ -15037,6 +15040,8 @@ in
     callPackage ../os-specific/linux/kmod/aggregator.nix {
       inherit modules;
     };
+
+  multipart-parser-c = callPackage ../development/libraries/multipart-parser-c { };
 
   multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
@@ -16163,6 +16168,8 @@ in
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
+  appeditor = callPackage ../applications/misc/appeditor { };
+
   aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
 
   ardour = callPackage ../applications/audio/ardour {
@@ -16485,7 +16492,7 @@ in
 
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
 
-  clipgrab = callPackage ../applications/video/clipgrab { };
+  clipgrab = qt5.callPackage ../applications/video/clipgrab { };
 
   clipmenu = callPackage ../applications/misc/clipmenu { };
 
@@ -16606,7 +16613,6 @@ in
     pythonPackages = datadog-integrations-core {};
   };
   datadog-process-agent = callPackage ../tools/networking/dd-agent/datadog-process-agent.nix { };
-  datadog-trace-agent = callPackage ../tools/networking/dd-agent/datadog-trace-agent.nix { };
   datadog-integrations-core = extras: callPackage ../tools/networking/dd-agent/integrations-core.nix {
     python = python27;
     extraIntegrations = extras;
@@ -17592,9 +17598,7 @@ in
 
   gspell = callPackage ../development/libraries/gspell { };
 
-  gtk2fontsel = callPackage ../applications/misc/gtk2fontsel {
-    inherit (gnome2) gtk;
-  };
+  gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
   guake = callPackage ../applications/misc/guake { };
 
@@ -19688,6 +19692,8 @@ in
     inherit (pkgs.gnome2) libgnome libgnomeui;
   };
 
+  ticpp = callPackage ../development/libraries/ticpp { };
+
   tig = gitAndTools.tig;
 
   tilda = callPackage ../applications/misc/tilda {
@@ -19743,6 +19749,8 @@ in
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     inherit (pythonPackages) wrapPython wxPython;
   };
+
+  torrential = callPackage ../applications/networking/p2p/torrential { };
 
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 
@@ -19816,7 +19824,7 @@ in
   uwimap = callPackage ../tools/networking/uwimap { };
 
   uzbl = callPackage ../applications/networking/browsers/uzbl {
-    webkit = webkitgtk24x-gtk2;
+    webkitgtk = webkitgtk24x-gtk2;
   };
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
@@ -20333,6 +20341,8 @@ in
   xournal = callPackage ../applications/graphics/xournal {
     inherit (gnome2) libgnomeprint libgnomeprintui libgnomecanvas;
   };
+
+  xournalpp = callPackage ../applications/graphics/xournalpp { };
 
   apvlv = callPackage ../applications/misc/apvlv { };
 
@@ -21328,20 +21338,7 @@ in
     callPackage = newScope pkgs.enlightenment;
   });
 
-  gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 {
-    callPackage = pkgs.newScope pkgs.gnome2;
-    self = pkgs.gnome2;
-  } // {
-    inherit (pkgs)
-      # GTK Libs
-      glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
-
-      # Included for backwards compatibility
-      libsoup libwnck gtk-doc gnome-doc-utils;
-
-    gtk = res.gtk2;
-    gtkmm = res.gtkmm2;
-  });
+  gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 { });
 
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
 
@@ -22087,6 +22084,12 @@ in
     ecl-fasl = true;
     sbcl = null;
   };
+  # old version temporarily kept for sage
+  maxima-ecl-5_41 = callPackage ../applications/science/math/maxima/5.41.nix {
+    ecl = ecl_16_1_2;
+    ecl-fasl = true;
+    sbcl = null;
+  };
 
   mxnet = callPackage ../applications/science/math/mxnet {
     inherit (linuxPackages) nvidia_x11;
@@ -22368,7 +22371,7 @@ in
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
-  ekiga = newScope pkgs.gnome2 ../applications/networking/instant-messengers/ekiga { };
+  ekiga = callPackage ../applications/networking/instant-messengers/ekiga { };
 
   emulationstation = callPackage ../misc/emulators/emulationstation {
     stdenv = overrideCC stdenv gcc5;
@@ -22935,6 +22938,8 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
+  jx = callPackage ../applications/networking/cluster/jx {};
+
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_11
     terraform_0_11-full
@@ -23023,7 +23028,7 @@ in
   });
 
   vimprobable2-unwrapped = callPackage ../applications/networking/browsers/vimprobable2 {
-    webkit = webkitgtk24x-gtk2;
+    webkitgtk = webkitgtk24x-gtk2;
   };
   vimprobable2 = wrapFirefox vimprobable2-unwrapped { };
 
@@ -23138,6 +23143,8 @@ in
    # or xterm -ti 340
    SDL = SDL_sixel;
   };
+
+  xteddy = callPackage ../applications/misc/xteddy { };
 
   xwiimote = callPackage ../misc/drivers/xwiimote {
     bluez = pkgs.bluez5.override {

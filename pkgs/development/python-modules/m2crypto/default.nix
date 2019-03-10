@@ -25,6 +25,7 @@ buildPythonPackage rec {
   ];
   patchFlags = "-p0";
 
+  nativeBuildInputs = [ swig2 ];
   buildInputs = [ swig2 openssl ];
 
   propagatedBuildInputs = [ typing ];

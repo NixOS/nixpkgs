@@ -42,6 +42,10 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ self.mkfontscale ];
   });
 
+  editres = super.editres.overrideAttrs (attrs: {
+    hardeningDisable = [ "format" ];
+  });
+
   fontbhttf = super.fontbhttf.overrideAttrs (attrs: {
     meta = attrs.meta // { license = lib.licenses.unfreeRedistributable; };
   });
@@ -283,6 +287,10 @@ self: super:
 
   libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
     meta = attrs.meta // { platforms = stdenv.lib.platforms.linux; };
+  });
+
+  oclock = super.oclock.overrideAttrs (attrs: {
+    buildInputs = attrs.buildInputs ++ [ self.libxkbfile ];
   });
 
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {

@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "unifont-${version}";
-  version = "11.0.03";
+  version = "12.0.01";
 
   ttf = fetchurl {
     url = "mirror://gnu/unifont/${name}/${name}.ttf";
-    sha256 = "1fqlf3kczh1y7vhpcdcs1i9043idg5x9jisfqfd99sikvcbw7w75";
+    sha256 = "191vgddv5fksg7g01q692nfcb02ks2y28fi9fv8aghvs36q4iana";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/${name}/${name}.pcf.gz";
-    sha256 = "0wqcmvkqdww60hqh245whzh4mx3frrx2712lay826f9h5s4ywz6g";
+    sha256 = "14xbrsdrnllly8h2afan3b4v486vd4y8iff8zqmcfliw0cipm8v4";
   };
 
   nativeBuildInputs = [ mkfontscale mkfontdir ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "006jbla4zfwccyy84sm4ck869sq5az5s5cfkcmdgj7ah3rz4d7dn";
+  outputHash = "1jccbz7wyyk7rpyapgsppcgakgpm1l9fqqxs7fg9naav7i0nzzpg";
 
   meta = with stdenv.lib; {
     description = "Unicode font for Base Multilingual Plane";

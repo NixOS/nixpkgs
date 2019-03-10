@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "filet";
-  version = "0.1.0";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "buffet";
     repo = "filet";
     rev = version;
-    sha256 = "0f73c4ipc13c7f4xzi3z103kvxpsw9chdfbvk0ahc60clkxy21k3";
+    sha256 = "0hm7589ih30axafqxhhs4fg1pvfhlqzyzzmfi2ilx8haq5111fsf";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

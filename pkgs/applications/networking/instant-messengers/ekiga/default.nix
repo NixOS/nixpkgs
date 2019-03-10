@@ -1,6 +1,6 @@
 { stdenv, glib, fetchurl, fetchpatch, cyrus_sasl, gettext, openldap, ptlib, opal, libXv, rarian, intltool
 , perlPackages, evolution-data-server, gnome-doc-utils, avahi, autoreconfHook
-, libsigcxx, gtk, dbus-glib, libnotify, libXext, xorgproto, gnome3, boost, libsecret
+, libsigcxx, gtk2, dbus-glib, libnotify, libXext, xorgproto, gnome3, boost, libsecret
 , pkgconfig, libxml2, unixODBC, db, nspr, nss, zlib
 , libXrandr, which, libxslt, libtasn1, gmp, nettle, sqlite, makeWrapper }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cyrus_sasl gettext openldap ptlib opal libXv rarian intltool
                   evolution-data-server gnome-doc-utils avahi
-                  libsigcxx gtk dbus-glib libnotify libXext xorgproto sqlite
+                  libsigcxx gtk2 dbus-glib libnotify libXext xorgproto sqlite
                   gnome3.libsoup glib gnome3.adwaita-icon-theme boost
                   autoreconfHook pkgconfig libxml2 unixODBC db nspr
                   nss zlib libsecret libXrandr which libxslt libtasn1

@@ -273,6 +273,37 @@ let
       };
     };
 
+    makeLuksRootTest = name: luksFormatOpts: makeInstallerTest "luksroot-format2"
+      { createPartitions = ''
+          $machine->succeed(
+            "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+            . " mkpart primary ext2 1M 50MB" # /boot
+            . " mkpart primary linux-swap 50M 1024M"
+            . " mkpart primary 1024M -1s", # LUKS
+            "udevadm settle",
+            "mkswap /dev/vda2 -L swap",
+            "swapon -L swap",
+            "modprobe dm_mod dm_crypt",
+            "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
+            "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
+            "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
+            "mount LABEL=nixos /mnt",
+            "mkfs.ext3 -L boot /dev/vda1",
+            "mkdir -p /mnt/boot",
+            "mount LABEL=boot /mnt/boot",
+          );
+        '';
+        extraConfig = ''
+          boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+        '';
+        enableOCR = true;
+        preBootCommands = ''
+          $machine->start;
+          $machine->waitForText(qr/Passphrase for/);
+          $machine->sendChars("supersecret\n");
+        '';
+      };
+
 
 in {
 
@@ -446,37 +477,14 @@ in {
         '';
     };
 
-  # Boot off an encrypted root partition
-  luksroot = makeInstallerTest "luksroot"
-    { createPartitions = ''
-        $machine->succeed(
-          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          . " mkpart primary ext2 1M 50MB" # /boot
-          . " mkpart primary linux-swap 50M 1024M"
-          . " mkpart primary 1024M -1s", # LUKS
-          "udevadm settle",
-          "mkswap /dev/vda2 -L swap",
-          "swapon -L swap",
-          "modprobe dm_mod dm_crypt",
-          "echo -n supersecret | cryptsetup luksFormat -q /dev/vda3 -",
-          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
-          "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
-          "mount LABEL=nixos /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
-          "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
-        );
-      '';
-      extraConfig = ''
-        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-      '';
-      enableOCR = true;
-      preBootCommands = ''
-        $machine->start;
-        $machine->waitForText(qr/Passphrase for/);
-        $machine->sendChars("supersecret\n");
-      '';
-    };
+  # Boot off an encrypted root partition with the default LUKS header format
+  luksroot = makeLuksRootTest "luksroot-format1" "";
+
+  # Boot off an encrypted root partition with LUKS1 format
+  luksroot-format1 = makeLuksRootTest "luksroot-format1" "--type=LUKS1";
+
+  # Boot off an encrypted root partition with LUKS2 format
+  luksroot-format2 = makeLuksRootTest "luksroot-format2" "--type=LUKS2";
 
   # Test whether opening encrypted filesystem with keyfile
   # Checks for regression of missing cryptsetup, when no luks device without

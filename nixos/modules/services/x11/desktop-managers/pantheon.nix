@@ -185,6 +185,7 @@ in
     fonts.fonts = with pkgs; [
       opensans-ttf
       roboto-mono
+      pantheon.elementary-redacted-script # needed by screenshot-tool
     ];
     fonts.fontconfig.defaultFonts = {
       monospace = [ "Roboto Mono" ];

@@ -290,6 +290,7 @@ let
     pbdPROF = [ pkgs.openmpi ];
     pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
+    phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
     PopGenome = [ pkgs.zlib.dev ];

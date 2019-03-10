@@ -32,5 +32,5 @@ writeScript "update-${attrPath}" ''
            sort --version-sort | \
            tail -n 1`
 
-  update-source-version ${attrPath} "$version" "" "" ${versionKey}
+  update-source-version ${attrPath} "$version" "" "" --version-key=${versionKey}
 ''

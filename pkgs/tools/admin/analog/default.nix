@@ -1,14 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, unzip }:
 
-let
-  name = "analog-6.0";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+
+  name = "analog-6.0.13";
+
+  buildInputs = [ unzip ];
 
   src = fetchurl {
-    url = "http://www.analog.cx/${name}.tar.gz";
-    sha256 = "31c0e2bedd0968f9d4657db233b20427d8c497be98194daf19d6f859d7f6fcca";
+    url = "http://www.c-amie.co.uk/static/analog/6013/analog-src-6013ce.zip";
+    sha256 = "1njfsclmxk8sn1i07k3qfk8fmsnz7qw9kmydk3bil7qjf4ngmzc6";
   };
 
   configurePhase = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.analog.cx/;
+    homepage = http://www.c-amie.co.uk/software/analog/;
     license = stdenv.lib.licenses.gpl2;
     description = "Powerful tool to generate web server statistics";
     maintainers = [ stdenv.lib.maintainers.peti ];

@@ -4,10 +4,10 @@
 }:
 
 let
-  version = "1.31.0";
+  version = "1.32.0";
 
   # Update these on version bumps according to Makefile
-  centOsIsoVersion = "v1.14.0";
+  centOsIsoVersion = "v1.15.0";
   openshiftVersion = "v3.11.0";
 
 in buildGoPackage rec {
@@ -18,7 +18,7 @@ in buildGoPackage rec {
     owner = "minishift";
     repo = "minishift";
     rev = "v${version}";
-    sha256 = "0v5hngfz393yi3x4c328g5bjazw02jr59ljqh6ws0j6wzxzm8jxf";
+    sha256 = "06qhcycnr06fw5dmmzwizmknm0j34j43894nl3kxa5mxh8x542pa";
   };
 
   nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];

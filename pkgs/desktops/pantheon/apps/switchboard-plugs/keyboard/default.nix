@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1997hnhlcp2jmf3z70na42vl1b7i5vxhp7k5ga5sl68dv0g4126y";
+    sha256 = "17iijb7imxw5zv7vkrbc1vsp87k900yqgyv7ycz1gw37xb4klsyp";
   };
 
   passthru = {
@@ -42,8 +42,6 @@ stdenv.mkDerivation rec {
       config = "${xorg.xkeyboardconfig}/share/X11/xkb/rules/evdev.xml";
     })
   ];
-
-  LIBRARY_PATH = stdenv.lib.makeLibraryPath [ libgnomekbd ];
 
   PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "lib/switchboard";
 
