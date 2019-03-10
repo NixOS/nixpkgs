@@ -9,7 +9,7 @@
 
 let
   pname = "kdevelop";
-  version = "5.3.1";
+  version = "5.3.2";
   qtVersion = "5.${lib.versions.minor qtbase.version}";
 in
 mkDerivation rec {
@@ -17,7 +17,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "1098ra7qpal6578hsv20kvxc63v47sp85wjhqr5rgzr2fm7jf6fr";
+    sha256 = "0akgdnvrab6mbwnmvgzsplk0qh83k1hnm5xc06yxr1s1a5sxbk08";
   };
 
   nativeBuildInputs = [
