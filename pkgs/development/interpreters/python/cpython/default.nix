@@ -101,10 +101,15 @@ in with passthru; stdenv.mkDerivation {
     # Upstream distutils is calling C compiler to compile C++ code, which
     # only works for GCC and Apple Clang. This makes distutils to call C++
     # compiler when needed.
-    (fetchpatch {
-      url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";
-      sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
-    })
+    (
+      if isPy35 then
+        ./3.5/python-3.x-distutils-C++.patch
+      else
+        fetchpatch {
+          url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";
+          sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
+        }
+    )
   ];
 
   postPatch = ''
