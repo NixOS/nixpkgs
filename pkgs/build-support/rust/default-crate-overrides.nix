@@ -10,20 +10,6 @@ in
     buildInputs = [ cairo ];
   };
 
-  cargo = attrs: {
-    buildInputs = [ openssl zlib curl ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv ];
-    # TODO: buildRustCrate seems to use incorrect default inference
-    crateBin = [ {  name = "cargo"; path = "src/bin/cargo.rs"; } ];
-  };
-
-  cargo-vendor = attrs: {
-    buildInputs = [ openssl zlib curl ];
-    # TODO: this defaults to cargo_vendor; needs to be cargo-vendor to
-    # be considered a cargo subcommand.
-    crateBin = [ { name = "cargo-vendor"; path = "src/main.rs"; } ];
-  };
-
   curl-sys = attrs: {
     buildInputs = [ pkgconfig zlib curl ];
     propagatedBuildInputs = [ curl zlib ];
