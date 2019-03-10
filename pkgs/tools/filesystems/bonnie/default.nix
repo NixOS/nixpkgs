@@ -1,10 +1,10 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "bonnie++-1.97.3";
+  name = "bonnie++-1.98";
   src = fetchurl {
-    url = "https://fossies.org/linux/privat/${name}.tgz";
-    sha256 = "0vkl42rsrsy95fc1ykc6g8rsdbnpxayvdaihnnkly1fww1m3hyz2";
+    url = "https://www.coker.com.au/bonnie++/${name}.tgz";
+    sha256 = "010bmlmi0nrlp3aq7p624sfaj5a65lswnyyxk3cnz1bqig0cn2vf";
   };
 
   enableParallelBuilding = true;
