@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url    = "https://github.com/monero-project/monero.git";
     rev    = "v${version}";
-    sha256 = "1ambgakapijhsi1pd70vw8vvnlwa3nid944lqkbfq3wl25lmc70d";
+    sha256 = "1471iy6c8dfdqcmcwcp0m7fp9xl74dcm5hqlfdfi217abhawfs8k";
   };
 
   nativeBuildInputs = [ cmake pkgconfig git ];
