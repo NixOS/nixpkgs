@@ -136,13 +136,6 @@ in
       cfg.certs.schedulerClient.cert
       cfg.certs.schedulerClient.key
     ];
-    controllerManagerPaths = [
-      top.controllerManager.rootCaFile
-      top.controllerManager.tlsCertFile
-      top.controllerManager.tlsKeyFile
-      cfg.certs.controllerManagerClient.cert
-      cfg.certs.controllerManagerClient.key
-    ];
     kubeletPaths = [
       top.kubelet.clientCaFile
       top.kubelet.tlsCertFile
@@ -304,19 +297,6 @@ in
         pathConfig = {
           PathExists = certmgrPaths;
           PathChanged = certmgrPaths;
-        };
-      };
-
-      systemd.services.kube-controller-manager = mkIf top.controllerManager.enable {
-        environment = { inherit (cfg.certs.controllerManagerClient) cert key; };
-        unitConfig.ConditionPathExists = controllerManagerPaths;
-      };
-
-      systemd.paths.kube-controller-manager = mkIf top.controllerManager.enable {
-        wantedBy = [ "kube-controller-manager.service" ];
-        pathConfig = {
-          PathExists = controllerManagerPaths;
-          PathChanged = controllerManagerPaths;
         };
       };
 
