@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lightdm, pkgconfig, intltool
 , hicolor-icon-theme, makeWrapper
 , useGTK2 ? false, gtk2, gtk3 # gtk3 seems better supported
-, exo
+, exo, at-spi2-core
 }:
 
 #ToDo: bad icons with gtk2;
@@ -23,9 +23,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ lightdm exo intltool makeWrapper hicolor-icon-theme ]
     ++ (if useGTK2 then [ gtk2 ] else [ gtk3 ]);
 
-  configureFlags = [
+  configureFlagsArray = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    "--enable-at-spi-command=${at-spi2-core}/libexec/at-spi-bus-launcher  --launch-immediately"
   ] ++ stdenv.lib.optional useGTK2 "--with-gtk2";
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
