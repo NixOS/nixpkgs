@@ -22,6 +22,16 @@ buildPythonPackage rec {
       url = "https://github.com/mitmproxy/mitmproxy/commit/1b6a8d6acd3d70f9b9627ad4ae9def08103f8250.patch";
       sha256 = "03y79c25yir7d8xj79czdc81y3irqq1i3ks9ca0mv1az8b7xsvfv";
     })
+    (fetchpatch {
+      # 0.13 <= wsproto < 0.14 patch
+      # https://github.com/mitmproxy/mitmproxy/issues/3459
+      # TODO: remove on next update
+      name = "wsproto-0.13.patch";
+      url = https://github.com/mitmproxy/mitmproxy/commit/70777a1b6ed64af9cafcdef223a8a260ecc96864.patch;
+      sha256 = "1ddxdr7js510kzyq3gyks4k5k1n8zb1i9amxw7wzmi1dcg8kqw9a";
+      # We strip these bounds anyway
+      excludes = [ "setup.py" ];
+    })
   ];
 
   postPatch = ''
