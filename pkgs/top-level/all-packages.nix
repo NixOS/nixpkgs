@@ -8720,6 +8720,8 @@ in
 
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
+  findnewest = callPackage ../development/tools/misc/findnewest { };
+
   flootty = callPackage ../development/tools/flootty { };
 
   flow = callPackage ../development/tools/analysis/flow {
