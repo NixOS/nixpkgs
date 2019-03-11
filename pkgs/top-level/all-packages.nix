@@ -22031,6 +22031,7 @@ in
     wxGTK = wxGTK30;
     boost = boost160;
   };
+  kicad-with-3dpackages = kicad.override { with3DPackages = true; };
 
   kicad-unstable = python.pkgs.callPackage ../applications/science/electronics/kicad/unstable.nix {
     wxGTK = wxGTK30;
