@@ -2875,6 +2875,11 @@
     github = "matthiasbeyer";
     name = "Matthias Beyer";
   };
+  matti-kariluoma = {
+    email = "matti@kariluo.ma";
+    github = "matti-kariluoma";
+    name = "Matti Kariluoma";
+  };
   maurer = {
     email = "matthew.r.maurer+nix@gmail.com";
     github = "maurer";
