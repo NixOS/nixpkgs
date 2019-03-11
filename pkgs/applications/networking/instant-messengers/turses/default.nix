@@ -1,4 +1,4 @@
-{ stdenv, python3Packages }:
+{ stdenv, fetchpatch, python3Packages }:
 
 with stdenv.lib;
 with python3Packages;
@@ -16,6 +16,13 @@ buildPythonPackage rec {
   buildInputs = [ mock pytest coverage tox ];
   propagatedBuildInputs = [ urwid tweepy future ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/louipc/turses/commit/be0961b51f502d49fd9e2e5253ac130e543a31c7.patch";
+      sha256 = "17s1n0275mcj03vkf3n39dmc09niwv4y7ssrfk7k3vqx22kppzg3";
+    })
+  ];
+
   checkPhase = ''
     TMP_TURSES=`echo turses-$RANDOM`
     mkdir $TMP_TURSES
@@ -23,7 +30,7 @@ buildPythonPackage rec {
     rm -rf $TMP_TURSES
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's|urwid==1.3.0|urwid==${getVersion urwid}|' setup.py
     sed -i -e "s|future==0.14.3|future==${getVersion future}|" setup.py
     sed -i -e "s|tweepy==3.3.0|tweepy==${getVersion tweepy}|" setup.py
