@@ -3,8 +3,8 @@
 with lib;
 
 let
-  cfg = config.programs.sway-beta;
-  swayPackage = cfg.package;
+  cfg = config.programs.sway;
+  swayPackage = pkgs.sway;
 
   swayWrapped = pkgs.writeShellScriptBin "sway" ''
     set -o errexit
@@ -26,19 +26,14 @@ let
     paths = [ swayWrapped swayPackage ];
   };
 in {
-  options.programs.sway-beta = {
+  options.programs.sway = {
     enable = mkEnableOption ''
-      Sway, the i3-compatible tiling Wayland compositor. This module will be removed after the final release of Sway 1.0
-    '';
-
-    package = mkOption {
-      type = types.package;
-      default = pkgs.sway-beta;
-      defaultText = "pkgs.sway-beta";
-      description = ''
-        The package to be used for `sway`.
-      '';
-    };
+      Sway, the i3-compatible tiling Wayland compositor. You can manually launch
+      Sway by executing "exec sway" on a TTY. Copy /etc/sway/config to
+      ~/.config/sway/config to modify the default configuration. See
+      https://github.com/swaywm/sway/wiki and "man 5 sway" for more information.
+      Please have a look at the "extraSessionCommands" example for running
+      programs natively under Wayland'';
 
     extraSessionCommands = mkOption {
       type = types.lines;
@@ -80,7 +75,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ swayJoined ] ++ cfg.extraPackages;
+    environment = {
+      systemPackages = [ swayJoined ] ++ cfg.extraPackages;
+      etc = {
+        "sway/config".source = "${swayPackage}/etc/sway/config";
+        #"sway/security.d".source = "${swayPackage}/etc/sway/security.d/";
+        #"sway/config.d".source = "${swayPackage}/etc/sway/config.d/";
+      };
+    };
     security.pam.services.swaylock = {};
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;
