@@ -124,10 +124,6 @@ in
       top.caFile
       certmgrAPITokenPath
     ];
-    flannelPaths = [
-      cfg.certs.flannelClient.cert
-      cfg.certs.flannelClient.key
-    ];
     proxyPaths = mkIf top.proxy.enable [
       cfg.certs.kubeProxyClient.cert
       cfg.certs.kubeProxyClient.key
@@ -375,27 +371,6 @@ in
         127.0.0.1 etcd.${top.addons.dns.clusterDomain} etcd.local
       '';
 
-      services.flannel = with cfg.certs.flannelClient; {
-        kubeconfig = top.lib.mkKubeConfig "flannel" {
-          server = top.apiserverAddress;
-          certFile = cert;
-          keyFile = key;
-        };
-      };
-
-      systemd.services.flannel = mkIf top.flannel.enable {
-        environment = { inherit (top.pki.certs.flannelClient) cert key; };
-        unitConfig.ConditionPathExists = flannelPaths;
-      };
-
-      systemd.paths.flannel = mkIf top.flannel.enable {
-        wantedBy = [ "flannel.service" ];
-        pathConfig = {
-          PathExists = flannelPaths;
-          PathChanged = flannelPaths;
-        };
-      };
-
       systemd.services.kube-proxy = mkIf top.proxy.enable {
         environment = { inherit (top.pki.certs.kubeProxyClient) cert key; };
         unitConfig.ConditionPathExists = proxyPaths;
@@ -451,6 +426,12 @@ in
           kubeconfig = with cfg.certs.controllerManagerClient; {
             certFile = mkDefault cert;
             keyFile = mkDefault key;
+          };
+        };
+        flannel = mkIf top.flannel.enable {
+          kubeconfig = with cfg.certs.flannelClient; {
+            certFile = cert;
+            keyFile = key;
           };
         };
         scheduler = mkIf top.scheduler.enable {

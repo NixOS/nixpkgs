@@ -24,16 +24,26 @@ in
   ###### interface
   options.services.kubernetes.flannel = {
     enable = mkEnableOption "enable flannel networking";
+    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes flannel";
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = let
+
+    flannelPaths = filter (a: a != null) [
+      cfg.kubeconfig.caFile
+      cfg.kubeconfig.certFile
+      cfg.kubeconfig.keyFile
+    ];
+    kubeconfig = top.lib.mkKubeConfig "flannel" cfg.kubeconfig;
+
+  in mkIf cfg.enable {
     services.flannel = {
 
       enable = mkDefault true;
       network = mkDefault top.clusterCidr;
-      inherit storageBackend;
-      nodeName = config.services.kubernetes.kubelet.hostname;
+      inherit storageBackend kubeconfig;
+      nodeName = top.kubelet.hostname;
     };
 
     services.kubernetes.kubelet = {
@@ -79,15 +89,34 @@ in
       wantedBy = [ "flannel.target" ];
       after = [ "kubelet.target" ];
       before = [ "flannel.target" ];
-      path = [ pkgs.iptables ];
-      preStart = ''
-        ${top.lib.mkWaitCurl ( with config.systemd.services.flannel; {
-          path = "/api/v1/nodes";
-          cacert = top.caFile;
-          args = "-o - | grep podCIDR >/dev/null";
-        } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
+      path = with pkgs; [ iptables kubectl ];
+      environment.KUBECONFIG = kubeconfig;
+      preStart = let
+        args = [
+          "--selector=kubernetes.io/hostname=${top.kubelet.hostname}"
+          # flannel exits if node is not registered yet, before that there is no podCIDR
+          "--output=jsonpath={.items[0].spec.podCIDR}"
+          # if jsonpath cannot be resolved exit with status 1
+          "--allow-missing-template-keys=false"
+        ];
+      in ''
+        until kubectl get nodes ${concatStringsSep " " args} 2>/dev/null; do
+          echo Waiting for ${top.kubelet.hostname} to be RegisteredNode
+          sleep 1
+        done
       '';
+      unitConfig.ConditionPathExists = flannelPaths;
     };
+
+    systemd.paths.flannel = {
+      wantedBy = [ "flannel.service" ];
+      pathConfig = {
+        PathExists = flannelPaths;
+        PathChanged = flannelPaths;
+      };
+    };
+
+    services.kubernetes.flannel.kubeconfig.server = mkDefault top.apiserverAddress;
 
     systemd.services.docker = {
       environment.DOCKER_OPTS = "-b none";
