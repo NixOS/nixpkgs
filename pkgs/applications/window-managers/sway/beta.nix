@@ -19,17 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "09cndc2nl39d3l7g5634xp0pxcz60pvc5277mfw89r22mh0j78rx";
   };
 
-  # TODO: The following patch introduced a compiler warning which leads to a
-  # build failure (we'll revert it for now as this patch is not supposed to
-  # change any functionality):
-  patch-remove-unused-functions = fetchpatch {
-    url = "https://github.com/swaywm/sway/commit/2b70e8518b7327d29eec4f9593e9b8f4238cebfe.patch";
-    sha256 = "1bq1i8dzxwckahzna6s9swvhpj1c1ics14pc1f1jcxwya50lk1rz";
-  };
-
-  postPatch = ''
-    patch -p1 --reverse < ${patch-remove-unused-functions}
-  '';
+  patches = [
+    # Fix for a compiler warning that causes a build failure
+    # (see https://github.com/swaywm/sway/issues/3862):
+    (fetchpatch {
+      url = "https://github.com/swaywm/sway/commit/bcde298a719f60b9913133dbd2a169dedbc8dd7d.patch";
+      sha256 = "0r583nmqvq43ib93yv6flw8pj833v32lbs0q0xld56s3rnzvvdcp";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig meson ninja
