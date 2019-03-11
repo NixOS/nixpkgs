@@ -124,10 +124,6 @@ in
       top.caFile
       certmgrAPITokenPath
     ];
-    proxyPaths = mkIf top.proxy.enable [
-      cfg.certs.kubeProxyClient.cert
-      cfg.certs.kubeProxyClient.key
-    ];
     schedulerPaths = mkIf top.scheduler.enable [
       cfg.certs.schedulerClient.cert
       cfg.certs.schedulerClient.key
@@ -365,19 +361,6 @@ in
       networking.extraHosts = mkIf (config.services.etcd.enable) ''
         127.0.0.1 etcd.${top.addons.dns.clusterDomain} etcd.local
       '';
-
-      systemd.services.kube-proxy = mkIf top.proxy.enable {
-        environment = { inherit (top.pki.certs.kubeProxyClient) cert key; };
-        unitConfig.ConditionPathExists = proxyPaths;
-      };
-
-      systemd.paths.kube-proxy = mkIf top.proxy.enable {
-        wantedBy = [ "kube-proxy.service" ];
-        pathConfig = {
-          PathExists = proxyPaths;
-          PathChanged = proxyPaths;
-        };
-      };
 
       services.kubernetes = {
 

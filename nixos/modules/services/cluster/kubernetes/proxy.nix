@@ -45,18 +45,27 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    systemd.services.kube-proxy = {
+  config = let
+
+    proxyPaths = filter (a: a != null) [
+      cfg.kubeconfig.caFile
+      cfg.kubeconfig.certFile
+      cfg.kubeconfig.keyFile
+    ];
+
+  in mkIf cfg.enable {
+    systemd.services.kube-proxy = rec {
       description = "Kubernetes Proxy Service";
       wantedBy = [ "kube-node-online.target" ];
       after = [ "kubelet-online.service" ];
       before = [ "kube-node-online.target" ];
-      path = with pkgs; [ iptables conntrack_tools ];
+      environment.KUBECONFIG = top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig;
+      path = with pkgs; [ iptables conntrack_tools kubectl ];
       preStart = ''
-        ${top.lib.mkWaitCurl ( with config.systemd.services.kube-proxy; {
-          path = "/api/v1/nodes/${top.kubelet.hostname}";
-          cacert = top.caFile;
-        } // optionalAttrs (environment ? cert) { inherit (environment) cert key; })}
+        until kubectl auth can-i get nodes/${top.kubelet.hostname} -q 2>/dev/null; do
+          echo kubectl auth can-i get nodes/${top.kubelet.hostname}: exit status $?
+          sleep 2
+        done
       '';
       serviceConfig = {
         Slice = "kubernetes.slice";
@@ -66,13 +75,22 @@ in
             "--cluster-cidr=${top.clusterCidr}"} \
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
+          --kubeconfig=${environment.KUBECONFIG} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
           ${cfg.extraOpts}
         '';
         WorkingDirectory = top.dataDir;
         Restart = "on-failure";
         RestartSec = 5;
+      };
+      unitConfig.ConditionPathExists = proxyPaths;
+    };
+
+    systemd.paths.kube-proxy = {
+      wantedBy = [ "kube-proxy.service" ];
+      pathConfig = {
+        PathExists = proxyPaths;
+        PathChanged = proxyPaths;
       };
     };
 
