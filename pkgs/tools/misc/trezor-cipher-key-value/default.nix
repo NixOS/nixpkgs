@@ -17,12 +17,12 @@ buildGoPackage rec {
   };
 
   patchPhase = ''
-  sed -i 's|/lib/cryptsetup/askpass|trezor-askpass|g' "main.go"
+    sed -i 's|/lib/cryptsetup/askpass|trezor-askpass|g' "main.go"
   '';
 
   # Compile helper Askpass from debian cryptsetup package
   postInstall = ''
-  gcc -pedantic -std=c99 $src/tools/askpass.c -o $bin/bin/trezor-askpass
+    gcc -pedantic -std=c99 $src/tools/askpass.c -o $bin/bin/trezor-askpass
   '';
 
   goDeps = ./deps.nix;
@@ -30,7 +30,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Pipeline utlility to encrypt/decrypt values using TREZOR device";
     homepage = https://www.github.com/xaionaro-go/trezorCipherKeyValue;
-    #license = licenses.lgpl3;
+    license = stdenv.lib.licenses.unfree;
     maintainers = with maintainers; [ petrkr ];
     platforms = platforms.linux;
   };
