@@ -26,7 +26,7 @@ let
     paths = [ swayWrapped swayPackage ];
   };
 in {
-  options.programs.sway= {
+  options.programs.sway = {
     enable = mkEnableOption ''
       Sway, the i3-compatible tiling Wayland compositor.
     '';
