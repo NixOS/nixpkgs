@@ -124,10 +124,6 @@ in
       top.caFile
       certmgrAPITokenPath
     ];
-    schedulerPaths = mkIf top.scheduler.enable [
-      cfg.certs.schedulerClient.cert
-      cfg.certs.schedulerClient.key
-    ];
   in
   {
 
@@ -284,19 +280,6 @@ in
         pathConfig = {
           PathExists = certmgrPaths;
           PathChanged = certmgrPaths;
-        };
-      };
-
-      systemd.services.kube-scheduler = mkIf top.scheduler.enable {
-        environment = { inherit (top.pki.certs.schedulerClient) cert key; };
-        unitConfig.ConditionPathExists = schedulerPaths;
-      };
-
-      systemd.paths.kube-scheduler = mkIf top.scheduler.enable {
-        wantedBy = [ "kube-scheduler.service" ];
-        pathConfig = {
-          PathExists = schedulerPaths;
-          PathChanged = schedulerPaths;
         };
       };
 
