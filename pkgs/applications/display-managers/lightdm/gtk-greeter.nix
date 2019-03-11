@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   configureFlagsArray = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    "--disable-indicator-services-command"
     "--enable-at-spi-command=${at-spi2-core}/libexec/at-spi-bus-launcher  --launch-immediately"
   ] ++ stdenv.lib.optional useGTK2 "--with-gtk2";
 
