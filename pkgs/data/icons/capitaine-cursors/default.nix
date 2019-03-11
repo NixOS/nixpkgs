@@ -2,12 +2,12 @@
 , inkscape, xcursorgen }:
 
 stdenv.mkDerivation rec {
-  name = "capitaine-cursors-${version}";
+  pname = "capitaine-cursors";
   version = "3";
 
   src = fetchFromGitHub {
     owner = "keeferrourke";
-    repo = "capitaine-cursors";
+    repo = pname;
     rev = "r${version}";
     sha256 = "0pnfbmrn9nv8pryv6cbjcq5hl9366hzvz1kd8vsdkgb2nlfv5gdv";
   };
