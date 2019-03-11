@@ -4399,6 +4399,8 @@ in {
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
+  weasyprint = callPackage ../development/python-modules/weasyprint { };
+
   webassets = callPackage ../development/python-modules/webassets { };
 
   webcolors = callPackage ../development/python-modules/webcolors { };
