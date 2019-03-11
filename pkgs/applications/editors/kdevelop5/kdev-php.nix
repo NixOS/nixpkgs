@@ -12,10 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "1xiz4v6w30dsa7l4nk3jw3hxpkx71b0yaaj2k8s7xzgjif824bgl";
   };
 
-  cmakeFlags = [
-    "-DBUILD_TESTING=OFF"
-  ];
-
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [ kdevelop-pg-qt threadweaver ktexteditor kdevelop-unwrapped ];
 
