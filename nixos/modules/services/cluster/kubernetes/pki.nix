@@ -27,12 +27,11 @@ let
   certmgrAPITokenPath = "${top.secretsPath}/${cfsslAPITokenBaseName}";
   cfsslAPITokenLength = 32;
 
-  clusterAdminKubeconfig = with cfg.certs.clusterAdmin;
-    top.lib.mkKubeConfig "cluster-admin" {
-        server = top.apiserverAddress;
-        certFile = cert;
-        keyFile = key;
-    };
+  clusterAdminKubeconfig = with cfg.certs.clusterAdmin; {
+    server = top.apiserverAddress;
+    certFile = cert;
+    keyFile = key;
+  };
 
   remote = with config.services; "https://${kubernetes.masterAddress}:${toString cfssl.port}";
 in
@@ -141,12 +140,6 @@ in
       config.services.etcd.certFile
       config.services.etcd.keyFile
       config.services.etcd.trustedCaFile
-    ];
-    addonManagerPaths = mkIf top.addonManager.enable [
-      cfg.certs.addonManager.cert
-      cfg.certs.addonManager.key
-      cfg.certs.clusterAdmin.cert
-      cfg.certs.clusterAdmin.key
     ];
     flannelPaths = [
       cfg.certs.flannelClient.cert
@@ -331,38 +324,6 @@ in
         };
       };
 
-      systemd.services.kube-addon-manager-bootstrap = mkIf (top.apiserver.enable && top.addonManager.bootstrapAddons != {}) {
-        environment = {
-          KUBECONFIG = clusterAdminKubeconfig;
-          inherit (cfg.certs.clusterAdmin) cert key;
-        };
-      };
-
-      #TODO: Get rid of kube-addon-manager in the future for the following reasons
-      # - it is basically just a shell script wrapped around kubectl
-      # - it assumes that it is clusterAdmin or can gain clusterAdmin rights through serviceAccount
-      # - it is designed to be used with k8s system components only
-      # - it would be better with a more Nix-oriented way of managing addons
-      systemd.services.kube-addon-manager = mkIf top.addonManager.enable {
-        environment = with cfg.certs.addonManager; {
-          KUBECONFIG = top.lib.mkKubeConfig "kube-addon-manager" {
-              server = top.apiserverAddress;
-              certFile = cert;
-              keyFile = key;
-          };
-          inherit cert key;
-        };
-        unitConfig.ConditionPathExists = addonManagerPaths;
-      };
-
-      systemd.paths.kube-addon-manager = mkIf top.addonManager.enable {
-        wantedBy = [ "kube-addon-manager.service" ];
-        pathConfig = {
-          PathExists = addonManagerPaths;
-          PathChanged = addonManagerPaths;
-        };
-      };
-
       systemd.services.kube-controller-manager = mkIf top.controllerManager.enable {
         environment = { inherit (cfg.certs.controllerManagerClient) cert key; };
         unitConfig.ConditionPathExists = controllerManagerPaths;
@@ -396,7 +357,7 @@ in
       };
 
       environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
-        clusterAdminKubeconfig;
+        (top.lib.mkKubeConfig "cluster-admin" clusterAdminKubeconfig);
 
       environment.systemPackages = mkIf (top.kubelet.enable || top.proxy.enable) [
       (pkgs.writeScriptBin "nixos-kubernetes-node-join" ''
@@ -538,6 +499,13 @@ in
           kubeletClientCertFile = mkDefault cfg.certs.apiserverKubeletClient.cert;
           kubeletClientKeyFile = mkDefault cfg.certs.apiserverKubeletClient.key;
         });
+        addonManager = mkIf top.addonManager.enable {
+          kubeconfig = with cfg.certs.addonManager; {
+            certFile = mkDefault cert;
+            keyFile = mkDefault key;
+          };
+          bootstrapAddonsKubeconfig = clusterAdminKubeconfig;
+        };
         controllerManager = mkIf top.controllerManager.enable {
           serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.key;
           rootCaFile = cfg.certs.controllerManagerClient.caCert;
