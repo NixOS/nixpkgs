@@ -97,6 +97,20 @@ while [ "$#" -gt 0 ]; do
 done
 
 
+# if necessary, request elevated privileges early on
+if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$upgrade" = 1 ]; then
+    if [ $EUID != 0 ]; then
+    	if [ -x "$(which sudo 2>/dev/null)" ]; then
+            sudo "$0" "$origArgs"
+            exit $?
+        else
+        	su root -c "$0 $origArgs"
+        	exit $?
+        fi
+    fi
+fi
+
+
 if [ -z "$buildHost" -a -n "$targetHost" ]; then
     buildHost="$targetHost"
 fi
