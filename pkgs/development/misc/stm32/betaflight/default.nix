@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     sed -ri "s/REVISION.*=.*git log.*/REVISION = ${builtins.substring 0 10 src.rev}/" Makefile # Simulate abbrev'd rev.
     sed -ri "s/binary hex/hex/" Makefile # No need for anything besides .hex
 
-    substitutateInPlace Makefile \
+    substituteInPlace Makefile \
       --replace "--specs=nano.specs" ""
   '';
 
