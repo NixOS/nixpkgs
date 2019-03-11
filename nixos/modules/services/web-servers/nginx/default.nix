@@ -174,6 +174,10 @@ let
     ${cfg.appendConfig}
   '';
 
+  configPath = if cfg.exposeConfig
+    then "/etc/nginx/nginx.conf"
+    else configFile;
+
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
         onlySSL = vhost.onlySSL || vhost.enableSSL;
@@ -373,7 +377,7 @@ in
       preStart =  mkOption {
         type = types.lines;
         default = ''
-          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs  
+          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs
           test `stat -c %a ${cfg.stateDir}` = "750" || chmod 750 ${cfg.stateDir}
           test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
           chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
@@ -451,6 +455,15 @@ in
           This is mutually exclusive with using config and httpConfig for
           specifying the whole http block verbatim.
         ";
+      };
+
+      exposeConfig = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to expose generated config file as /etc/nginx/nginx.conf.
+          This also allows nginx reload config on changes instead of restart.
+        '';
       };
 
       stateDir = mkOption {
@@ -651,15 +664,32 @@ in
       preStart =
         ''
         ${cfg.preStart}
-        ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
+        ${cfg.package}/bin/nginx -c ${configPath} -p ${cfg.stateDir} -t
         '';
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        ExecStart = "${cfg.package}/bin/nginx -c ${configPath} -p ${cfg.stateDir}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "10s";
         StartLimitInterval = "1min";
       };
+    };
+
+    environment.etc."nginx/nginx.conf" = mkIf cfg.exposeConfig {
+      source = configFile;
+    };
+
+    systemd.services.nginx-config-reload = mkIf cfg.exposeConfig {
+      wantedBy = [ "nginx.service" ];
+      restartTriggers = [ configFile ];
+      script = ''
+        if ${pkgs.systemd}/bin/systemctl -q is-active nginx.service ; then
+          ${pkgs.systemd}/bin/systemctl reload nginx.service
+        else
+          true
+        fi
+      '';
+      serviceConfig.RemainAfterExit = true;
     };
 
     security.acme.certs = filterAttrs (n: v: v != {}) (
