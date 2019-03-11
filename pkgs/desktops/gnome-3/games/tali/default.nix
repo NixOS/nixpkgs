@@ -1,22 +1,32 @@
 { stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf
-, librsvg, intltool, itstool, libxml2, wrapGAppsHook }:
+, librsvg, gettext, itstool, libxml2, wrapGAppsHook
+, meson, ninja, python3, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
   name = "tali-${version}";
-  version = "3.22.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/tali/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "5ba17794d6fb06b794daaffa62a6aaa372b7de8886ce5ec596c37e62bb71728b";
+    sha256 = "0s5clkn0qm298mvphx1xdymg67w1p8vvgvypvs97k6lfjqijkx3v";
   };
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "tali"; attrPath = "gnome3.tali"; };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk_pixbuf librsvg
-                  libxml2 itstool intltool wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson ninja python3 desktop-file-utils
+    pkgconfig gnome3.adwaita-icon-theme
+    libxml2 itstool gettext wrapGAppsHook
+  ];
+  buildInputs = [ gtk3 gdk_pixbuf librsvg ];
+
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   enableParallelBuilding = true;
 
