@@ -124,23 +124,6 @@ in
       top.caFile
       certmgrAPITokenPath
     ];
-    apiserverPaths = [
-      top.apiserver.clientCaFile
-      top.apiserver.etcd.caFile
-      top.apiserver.etcd.certFile
-      top.apiserver.etcd.keyFile
-      top.apiserver.kubeletClientCaFile
-      top.apiserver.kubeletClientCertFile
-      top.apiserver.kubeletClientKeyFile
-      top.apiserver.serviceAccountKeyFile
-      top.apiserver.tlsCertFile
-      top.apiserver.tlsKeyFile
-    ];
-    etcdPaths = [
-      config.services.etcd.certFile
-      config.services.etcd.keyFile
-      config.services.etcd.trustedCaFile
-    ];
     flannelPaths = [
       cfg.certs.flannelClient.cert
       cfg.certs.flannelClient.key
@@ -411,30 +394,6 @@ in
       networking.extraHosts = mkIf (config.services.etcd.enable) ''
         127.0.0.1 etcd.${top.addons.dns.clusterDomain} etcd.local
       '';
-
-      systemd.services.kube-apiserver = mkIf top.apiserver.enable {
-        unitConfig.ConditionPathExists = apiserverPaths;
-      };
-
-      systemd.paths.kube-apiserver = mkIf top.apiserver.enable {
-        wantedBy = [ "kube-apiserver.service" ];
-        pathConfig = {
-          PathExists = apiserverPaths;
-          PathChanged = apiserverPaths;
-        };
-      };
-
-      systemd.services.etcd = mkIf top.apiserver.enable {
-        unitConfig.ConditionPathExists = etcdPaths;
-      };
-
-      systemd.paths.etcd = mkIf top.apiserver.enable {
-        wantedBy = [ "etcd.service" ];
-        pathConfig = {
-          PathExists = etcdPaths;
-          PathChanged = etcdPaths;
-        };
-      };
 
       services.flannel = with cfg.certs.flannelClient; {
         kubeconfig = top.lib.mkKubeConfig "flannel" {
