@@ -40,8 +40,9 @@ in buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace "3.0a3" "3.0.0a3"
-    substituteInPlace setup.py --replace "3.0a3" "3.0.0a3"
+    substituteInPlace setup.py --replace \
+      "requests-toolbelt>=0.8.0,<0.9.0" \
+      "requests-toolbelt>=0.8.0,<0.10.0"
   '';
 
   propagatedBuildInputs = [
