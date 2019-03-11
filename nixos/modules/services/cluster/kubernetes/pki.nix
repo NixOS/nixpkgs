@@ -182,12 +182,12 @@ in
       description = "Wait for ${remote} to be reachable.";
       wantedBy = [ "cfssl-online.target" ];
       before = [ "cfssl-online.target" ];
+      path = [ pkgs.curl ];
       preStart = ''
-        ${top.lib.mkWaitCurl {
-          address = remote;
-          path = "/api/v1/cfssl/info";
-          args = "-kd '{}' -o /dev/null";
-        }}
+        until curl --fail-early -fskd '{}' ${remote}/api/v1/cfssl/info -o /dev/null; do
+          echo curl ${remote}/api/v1/cfssl/info: exit status $?
+          sleep 2
+        done
       '';
       script = "echo Ok";
       serviceConfig = {
@@ -200,6 +200,7 @@ in
       wantedBy = [ "cfssl-online.target" ];
       after = [ "cfssl-online.target" ];
       before = [ "certmgr.service" ];
+      path = with pkgs; [ curl cfssl ];
       script = concatStringsSep "\n" [''
         set -e
 
@@ -218,11 +219,12 @@ in
       ''
       (optionalString (cfg.pkiTrustOnBootstrap) ''
         if [ ! -s "${top.caFile}" ]; then
-          ${top.lib.mkWaitCurl {
-            address = "https://${top.masterAddress}:${cfsslPort}";
-            path = "/api/v1/cfssl/info";
-            args = "-kd '{}' -o - | ${pkgs.cfssl}/bin/cfssljson -stdout >${top.caFile}";
-          }}
+          until test -s ${top.caFile}.json; do
+            sleep 2
+            curl --fail-early -fskd '{}' ${remote}/api/v1/cfssl/info -o ${top.caFile}.json
+          done
+          cfssljson -f ${top.caFile}.json -stdout >${top.caFile}
+          rm ${top.caFile}.json
         fi
       '')
       ];
