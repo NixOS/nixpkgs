@@ -10,11 +10,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "openvpn-${version}";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/${name}.tar.xz";
-    sha256 = "09lck4wmkas3iyrzaspin9gn3wiclqb1m9sf8diy7j8wakx38r2g";
+    sha256 = "0j7na936isk9j8nsdrrbw7wmy09inmjqvsb8mw8az7k61xbm6bx4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
