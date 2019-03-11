@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, jre, graphviz }:
 
 stdenv.mkDerivation rec {
-  version = "1.2019.1";
+  version = "1.2019.2";
   name = "plantuml-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/plantuml/${version}/plantuml.${version}.jar";
-    sha256 = "1prbb5c8y44p1x7vj4lpap2gbxd9bavbgvi6p7zw6nb0lfral6vg";
+    sha256 = "17b9nwj0r4nbajql611lhy1kkgzigq8p8hkyv90psm7avwyd7fk2";
   };
 
   nativeBuildInputs = [ makeWrapper ];
