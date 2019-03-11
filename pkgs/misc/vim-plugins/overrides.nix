@@ -424,4 +424,19 @@ self: super: {
       license = stdenv.lib.licenses.publicDomain;
     };
   });
+
+  unicode-vim = let
+    unicode-data = fetchurl {
+      url = http://www.unicode.org/Public/UNIDATA/UnicodeData.txt;
+      sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
+    };
+  in super.unicode-vim.overrideAttrs(old: {
+
+      # redirect to /dev/null else changes terminal color
+      buildPhase = ''
+        cp "${unicode-data}" autoload/unicode/UnicodeData.txt
+        echo "Building unicode cache"
+        ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
+      '';
+  });
 }

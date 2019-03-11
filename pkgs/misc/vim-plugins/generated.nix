@@ -593,6 +593,17 @@ let
     };
   };
 
+  far-vim = buildVimPluginFrom2Nix {
+    pname = "far-vim";
+    version = "2019-02-20";
+    src = fetchFromGitHub {
+      owner = "brooth";
+      repo = "far.vim";
+      rev = "6c095d577220ff362fb04b19fd5a571819efcc56";
+      sha256 = "1x8hxzf401s8i06fsx6lysdsl57mds4jxzm9n8xqp8jqml4625l7";
+    };
+  };
+
   fastfold = buildVimPluginFrom2Nix {
     pname = "fastfold";
     version = "2019-03-28";
@@ -849,12 +860,12 @@ let
 
   jedi-vim = buildVimPluginFrom2Nix {
     pname = "jedi-vim";
-    version = "2019-03-22";
+    version = "2019-04-05";
     src = fetchFromGitHub {
       owner = "davidhalter";
       repo = "jedi-vim";
-      rev = "f26b2a8802ad47406a0ab1e7b68234fa22d88891";
-      sha256 = "01bbs70j5z00rn4bmf05zvl3mavyv8w6faj59z0mldvxnfidw2bb";
+      rev = "914754a04e0ea0882b3172230199fd771b02dc95";
+      sha256 = "0wj0fgvbvwhgx0ij9lrka5an2xc8gy6pq7add8ildk25fls23ig4";
       fetchSubmodules = true;
     };
   };
@@ -1274,6 +1285,17 @@ let
       repo = "nvim-completion-manager";
       rev = "45a026afb8b309b3b80f2c1b5910f72a54a9b563";
       sha256 = "0znwgry4ill0nxm096hc8s9vf20rf9xcq3dz8y8h7xlqzzsycl7a";
+    };
+  };
+
+  nvim-hs-vim = buildVimPluginFrom2Nix {
+    pname = "nvim-hs-vim";
+    version = "2019-01-05";
+    src = fetchFromGitHub {
+      owner = "neovimhaskell";
+      repo = "nvim-hs.vim";
+      rev = "64798535eb0f77bf808e7538b5d4ed6a99358a0d";
+      sha256 = "1jqlm3lnrzjzvnd023y10j415l233z7jbjwyzb6yc8rk5nph4bii";
     };
   };
 
@@ -1838,6 +1860,17 @@ let
     };
   };
 
+  unicode-vim = buildVimPluginFrom2Nix {
+    pname = "unicode-vim";
+    version = "2019-03-08";
+    src = fetchFromGitHub {
+      owner = "chrisbra";
+      repo = "unicode.vim";
+      rev = "e0a060444af297eef131dd140e55c8c3602a72fd";
+      sha256 = "0difrn1p406p9g7xdw4xgmpx8f4ahml5gkmnsx03yv02svlfxp68";
+    };
+  };
+
   unite-vim = buildVimPluginFrom2Nix {
     pname = "unite-vim";
     version = "2019-03-29";
@@ -1846,6 +1879,17 @@ let
       repo = "unite.vim";
       rev = "e1d3bb9f836a8645807b790345b69666bf22bb2f";
       sha256 = "0i0lys3926s7n6iq03fg0flsp2rmvzwvfjmldcv31vjjrhzlbqmx";
+    };
+  };
+
+  vCoolor-vim = buildVimPluginFrom2Nix {
+    pname = "vCoolor-vim";
+    version = "2018-10-06";
+    src = fetchFromGitHub {
+      owner = "KabbAmine";
+      repo = "vCoolor.vim";
+      rev = "8fc037e453f4c2274f590bde4f9fb56167b14e57";
+      sha256 = "193cjxfha5xcpfjqqpyfa6xidys1zmmmwlcj7w2cxbr5j5bdnybm";
     };
   };
 
@@ -3357,6 +3401,17 @@ let
     };
   };
 
+  vim-rsi = buildVimPluginFrom2Nix {
+    pname = "vim-rsi";
+    version = "2019-03-15";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-rsi";
+      rev = "8b7abe2d470b7fffac6562818468e14594735564";
+      sha256 = "1fvswbqd51gs4qhcabnz3zdmmlhcijs3pnbp3f2zgfi7lqvjc6s5";
+    };
+  };
+
   vim-ruby = buildVimPluginFrom2Nix {
     pname = "vim-ruby";
     version = "2019-04-04";
@@ -3475,6 +3530,17 @@ let
       repo = "vim-smalls";
       rev = "9619eae81626bd63f88165e0520c467698264e34";
       sha256 = "0s5z3zv220cg95yky2av6w0jmpc56ysyhsx0596ksvgz5jwhpbad";
+    };
+  };
+
+  vim-sneak = buildVimPluginFrom2Nix {
+    pname = "vim-sneak";
+    version = "2018-08-29";
+    src = fetchFromGitHub {
+      owner = "justinmk";
+      repo = "vim-sneak";
+      rev = "91192d8969af1d86c98beff4001612976ea25d7a";
+      sha256 = "0nmbrp0ma9s3yfzb8z70l0pcxv8p115zv6fz4injxn1c436x9337";
     };
   };
 
@@ -3876,12 +3942,12 @@ let
 
   vimtex = buildVimPluginFrom2Nix {
     pname = "vimtex";
-    version = "2019-04-02";
+    version = "2019-04-05";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
-      rev = "068ef61e6e9364093272edc4f0cf997a349c0a98";
-      sha256 = "1p81l2ckl1s2xddzhd9fxjsv9a6vhz77gn5jxwlp0in284v2lp2i";
+      rev = "556930ecc21810d5cdeef0d29938bdfbc36cae81";
+      sha256 = "147qr89xghw75g0ypyf04f1q40kbm5dmza8gc5s1i2vsn17gv61y";
     };
   };
 
@@ -4020,12 +4086,12 @@ let
 
   youcompleteme = buildVimPluginFrom2Nix {
     pname = "youcompleteme";
-    version = "2019-03-19";
+    version = "2019-04-05";
     src = fetchFromGitHub {
       owner = "valloric";
       repo = "youcompleteme";
-      rev = "25ebc0b9abb1b135c809ee850085a0305cbc5533";
-      sha256 = "0jv8h8wx8486n8add2ispcr7np278rvdndb2az4s72plh59xk05d";
+      rev = "72ed996089ab0948edebd015213a5aeac0e72310";
+      sha256 = "1hhkvf4010z84gj9bl03y3rfixxd7wh1y7sbkqhsdz019yjiaq19";
       fetchSubmodules = true;
     };
   };

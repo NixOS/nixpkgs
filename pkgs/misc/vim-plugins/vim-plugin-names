@@ -33,6 +33,7 @@ chikatoike/sourcemap.vim
 chrisbra/CheckAttach
 chrisbra/Recover.vim
 chrisbra/csv.vim
+chrisbra/unicode.vim
 chrisgeo/sparkup
 chriskempson/base16-vim
 christoomey/vim-sort-motion
