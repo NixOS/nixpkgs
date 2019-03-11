@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1fp3zzgpkm1l4d0g5194wnriz2spxa9kgrgy98kvvffl7ac860kk";
+    sha256 = "033in6221vlp8fyskrpls71x3bwbb5i0l33xfs4qhylj5wcskmzi";
   };
 
   patches = [
