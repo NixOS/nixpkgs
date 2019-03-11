@@ -8,6 +8,7 @@ build-idris-package  {
   name = "yaml";
   version = "2018-01-25";
 
+  ipkgName = "Yaml";
   idrisDeps = [ contrib lightyear ];
 
   src = fetchFromGitHub {

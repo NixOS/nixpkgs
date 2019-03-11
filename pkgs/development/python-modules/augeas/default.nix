@@ -1,14 +1,14 @@
 { stdenv, lib, buildPythonPackage, fetchFromGitHub, augeas, cffi }:
 buildPythonPackage rec {
     pname = "augeas";
-    version = "1.0.2";
+    version = "1.0.3";
     name = pname + "-" + version;
 
     src = fetchFromGitHub {
       owner = "hercules-team";
       repo = "python-augeas";
       rev = "v${version}";
-      sha256 = "1xk51m58ym3qpf0z5y98kzxb5jw7s92rca0v1yflj422977najxh";
+      sha256 = "1fb904ym8g8hkd82zlibzk6wrldnfd5v5d0rkynsy1zlhcylq4f6";
     };
 
     # TODO: not very nice!

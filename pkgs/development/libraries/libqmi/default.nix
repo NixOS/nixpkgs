@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     description = "Modem protocol helper library";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

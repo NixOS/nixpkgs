@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bzip2, qt4, qmake4Hook, libX11, xextproto, libXtst }:
+{ stdenv, fetchurl, bzip2, qt4, qmake4Hook, libX11, xorgproto, libXtst }:
 
 stdenv.mkDerivation rec {
   name = "keepassx-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./random.patch ];
 
-  buildInputs = [ bzip2 qt4 libX11 xextproto libXtst ];
+  buildInputs = [ bzip2 qt4 libX11 xorgproto libXtst ];
 
   nativeBuildInputs = [ qmake4Hook ];
 

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "inflect";
-  version = "1.0.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ll34l5b2wsbcw9i2hvkhmq6szxrp7fzc2hjmpz1cvny81bhg3kx";
+    sha256 = "4ded1b2a6fcf0fc0397419c7727f131a93b67b80d899f2973be7758628e12b73";
   };
 
   buildInputs = [ setuptools_scm ];

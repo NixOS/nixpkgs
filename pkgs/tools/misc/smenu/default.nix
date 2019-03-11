@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       your selection will be sent to standard output.
     '';
     license     = licenses.gpl2;
-    maintainers = [ ];
+    maintainers = [ maintainers.matthiasbeyer ];
     platforms   = platforms.linux;
   };
 }

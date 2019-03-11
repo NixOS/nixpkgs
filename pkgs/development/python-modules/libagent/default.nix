@@ -1,18 +1,18 @@
 { stdenv, fetchPypi, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
   unidecode, mock, pytest , backports-shutil-which, ConfigArgParse,
-  pythondaemon, pymsgbox }:
+  python-daemon, pymsgbox }:
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchPypi{
     inherit pname version;
-    sha256 = "55af1ad2a6c95aef1fc5588c2002c9e54edbb14e248776b64d00628235ceda3e";
+    sha256 = "ecd6854ba8f04d04e39cb00ae3a179d6a1d5dc8e0b60ac5208c0a62e10e3106e";
   };
 
   propagatedBuildInputs = [ unidecode backports-shutil-which ConfigArgParse
-    pythondaemon pymsgbox ecdsa ed25519 mnemonic semver ];
+    python-daemon pymsgbox ecdsa ed25519 mnemonic semver ];
 
   checkInputs = [ mock pytest ];
 

@@ -1,13 +1,12 @@
 { gui ? true,
   buildPythonPackage, fetchFromGitHub, lib,
-  sphinx_1_2, lxml, isodate, numpy, pytest,
-  tkinter ? null, py3to2, isPy3k,
+  sphinx, lxml, isodate, numpy, pytest, openpyxl,
+  tkinter ? null, py3to2, isPy3k, python,
   ... }:
 
 buildPythonPackage rec {
-  pname = "arelle-${version}${lib.optionalString (!gui) "-headless"}";
-  version = "2017-08-24";
-  name = pname + "-" + version;
+  pname = "arelle${lib.optionalString (!gui) "-headless"}";
+  version = "18.3";
 
   disabled = !isPy3k;
 
@@ -16,30 +15,36 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
-    rev = "cb24e35d57b562a864ae3dd4542c4d9fcf3865fe";
-    sha256 = "1sbvhb3xlfnyvf1xj9dxwpcrfiaf7ikkdwvvap7aaxfxgiz85ip2";
+    rev = "edgr${version}";
+    sha256 = "12a94ipdp6xalqyds7rcp6cjwps6fbj3byigzfy403hlqc9n1g33";
   };
   outputs = ["out" "doc"];
   patches = [
     ./tests.patch
   ];
   postPatch = "rm testParser2.py";
-  buildInputs = [
-    sphinx_1_2
-    pytest
+  nativeBuildInputs = [
+    sphinx
     py3to2
   ];
   propagatedBuildInputs = [
     lxml
     isodate
     numpy
-  ] ++ lib.optional gui [
+    openpyxl
+  ] ++ lib.optionals gui [
     tkinter
   ];
 
   # arelle-gui is useless without gui dependencies, so delete it when !gui.
   postInstall = lib.optionalString (!gui) ''
     find $out/bin -name "*arelle-gui*" -delete
+  '' +
+  # By default, not the entirety of the src dir is copied. This means we don't
+  # copy the `images` dir, which is needed for the gui version.
+  lib.optionalString (gui) ''
+    targetDir=$out/${python.sitePackages}
+    cp -vr $src/arelle $targetDir
   '';
 
   # Documentation
@@ -47,13 +52,20 @@ buildPythonPackage rec {
     (cd apidocs && make html && cp -r _build $doc)
     '';
 
-  doCheck = if gui then true else false;
+  doCheck = false;
 
-  meta = {
-    description = "An open source facility for XBRL, the eXtensible Business Reporting Language supporting various standards, exposed through a python or REST API" + lib.optionalString gui " and a graphical user interface";
+  checkPhase = ''
+    py.test
+  '';
+
+  meta = with lib; {
+    description = ''
+      An open source facility for XBRL, the eXtensible Business Reporting
+      Language supporting various standards, exposed through a Python or
+      REST API'' + lib.optionalString gui " and a graphical user interface";
     homepage = http://arelle.org/;
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ roberth ];
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ roberth ];
   };
 }

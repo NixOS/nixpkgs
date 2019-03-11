@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-settings-daemon-${version}";
-  version = "1.21.0";
+  version = "1.20.4";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1k0xbwxpv3wfl7z3hgaf2ylzaz3aky4j7awdy8cfgxr0d6nqhp3w";
+    sha256 = "10xlg2gb7fypnn5cnr14kbpjy5jdfz98ji615scz61zf5lljksxh";
   };
 
   nativeBuildInputs = [

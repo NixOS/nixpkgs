@@ -14,9 +14,9 @@ let
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.29.0";
+  version = "0.35.0";
 
-  kubernetesVersion = "1.11.2";
+  kubernetesVersion = "1.13.4";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -24,7 +24,7 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "09px8pxml7xrnfhyjvlhf1hw7zdj9sw47a0fv5wj5aard54lhs1l";
+    sha256 = "1qb342zs50sdfvfb8vbn7vrx11qqjy1hw518c053s7p34ljb24qd";
   };
 
   buildInputs = [ go-bindata makeWrapper gpgme ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin vmnet;
@@ -35,7 +35,9 @@ in buildGoPackage rec {
 
     go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets deploy/addons/...
 
-    ISO_VERSION=$(grep "^ISO_VERSION" Makefile | sed "s/^.*\s//")
+    VERSION_MAJOR=$(grep "^VERSION_MAJOR" Makefile | sed "s/^.*\s//")
+    VERSION_MINOR=$(grep "^VERSION_MINOR" Makefile | sed "s/^.*\s//")
+    ISO_VERSION=v$VERSION_MAJOR.$VERSION_MINOR.0
     ISO_BUCKET=$(grep "^ISO_BUCKET" Makefile | sed "s/^.*\s//")
     KUBERNETES_VERSION=${kubernetesVersion}
 
@@ -66,7 +68,7 @@ in buildGoPackage rec {
     homepage    = https://github.com/kubernetes/minikube;
     description = "A tool that makes it easy to run Kubernetes locally";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ ebzzry copumpkin ];
+    maintainers = with maintainers; [ ebzzry copumpkin vdemeester ];
     platforms   = with platforms; unix;
   };
 }

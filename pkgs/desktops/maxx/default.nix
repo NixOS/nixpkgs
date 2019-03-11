@@ -18,11 +18,11 @@ in stdenv.mkDerivation {
 
   srcs = [
     (fetchurl {
-      url = "http://maxxinteractive.com/downloads/${version}/FEDORA/MaXX-${version}-NO-ARCH.tar.gz";
+      url = "http://maxxdesktop.arcadedaydream.com/Indy-Releases/Installers/MaXX-${version}-NO-ARCH.tar.gz";
       sha256 = "1d23j08wwrrn5cp7csv70pcz9jppcn0xb1894wkp0caaliy7g31y";
     })
     (fetchurl {
-      url = "http://maxxinteractive.com/downloads/${version}/FEDORA/MaXX-${version}-x86_64.tar.gz";
+      url = "http://maxxdesktop.arcadedaydream.com/Indy-Releases/Installers/MaXX-${version}-x86_64.tar.gz";
       sha256 = "156p2lra184wyvibrihisd7cr1ivqaygsf0zfm26a12gx23b7708";
     })
   ];

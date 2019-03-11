@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "5.2.3";
+  version = "5.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "27befcf0446b01e29853014d6a902dd101ad7d7f94e2252b1adca17c3466b761";
+    sha256 = "b5f9cb06105c1d2d30719db5ffb3ea67da60919fb68deaefa583deccd8813551";
   };
 
   checkInputs = [ ipykernel ipython mock pytest ];

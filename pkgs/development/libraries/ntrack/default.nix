@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "ntrack-${version}";
 
   src = fetchurl {
-    url = "http://launchpad.net/ntrack/main/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/ntrack/main/${version}/+download/${name}.tar.gz";
     sha256 = "037ig5y0mp327m0hh4pnfr3vmsk3wrxgfjy3645q4ws9vdhx807w";
   };
 
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     sed -e "s@/usr\(/lib/ntrack/modules/\)@$out&@" -i common/ntrack.c
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Network Connectivity Tracking library for Desktop Applications";
     homepage = https://launchpad.net/ntrack;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.lgpl3Plus;
   };
 }

@@ -6,8 +6,12 @@ with lib;
 
 let
   cfg = config.services.buildbot-master;
+
+  python = cfg.package.pythonModule;
+
   escapeStr = s: escape ["'"] s;
-  masterCfg = if cfg.masterCfg == null then pkgs.writeText "master.cfg" ''
+
+  defaultMasterCfg = pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
@@ -27,8 +31,28 @@ let
       factory.addStep(step)
 
     ${cfg.extraConfig}
-  ''
-  else cfg.masterCfg;
+  '';
+
+  tacFile = pkgs.writeText "buildbot-master.tac" ''
+    import os
+
+    from twisted.application import service
+    from buildbot.master import BuildMaster
+
+    basedir = '${cfg.buildbotDir}'
+
+    configfile = '${cfg.masterCfg}'
+
+    # Default umask for server
+    umask = None
+
+    # note: this line is matched against to check that this is a buildmaster
+    # directory; do not edit it.
+    application = service.Application('buildmaster')
+
+    m = BuildMaster(basedir, configfile, umask)
+    m.setServiceParent(application)
+  '';
 
 in {
   options = {
@@ -66,9 +90,9 @@ in {
       };
 
       masterCfg = mkOption {
-        type = types.nullOr types.path;
+        type = types.path;
         description = "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
-        default = null;
+        default = defaultMasterCfg;
         example = "/etc/nixos/buildbot/master.cfg";
       };
 
@@ -175,17 +199,24 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.buildbot-full;
-        defaultText = "pkgs.buildbot-full";
+        default = pkgs.pythonPackages.buildbot-full;
+        defaultText = "pkgs.pythonPackages.buildbot-full";
         description = "Package to use for buildbot.";
-        example = literalExample "pkgs.buildbot-full";
+        example = literalExample "pkgs.python3Packages.buildbot-full";
       };
 
       packages = mkOption {
-        default = with pkgs; [ python27Packages.twisted git ];
+        default = [ pkgs.git ];
         example = literalExample "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
+      };
+
+      pythonPackages = mkOption {
+        default = pythonPackages: with pythonPackages; [ ];
+        defaultText = "pythonPackages: with pythonPackages; [ ]";
+        description = "Packages to add the to the PYTHONPATH of the buildbot process.";
+        example = literalExample "pythonPackages: with pythonPackages; [ requests ]";
       };
     };
   };
@@ -210,14 +241,15 @@ in {
       description = "Buildbot Continuous Integration Server.";
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = cfg.packages;
+      path = cfg.packages ++ cfg.pythonPackages python.pkgs;
+      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ cfg.package ])}/${python.sitePackages}";
 
       preStart = ''
-        env > envvars
-        mkdir -vp ${cfg.buildbotDir}
-        ln -sfv ${masterCfg} ${cfg.buildbotDir}/master.cfg
-        rm -fv $cfg.buildbotDir}/buildbot.tac
-        ${cfg.package}/bin/buildbot create-master ${cfg.buildbotDir}
+        mkdir -vp "${cfg.buildbotDir}"
+        # Link the tac file so buildbot command line tools recognize the directory
+        ln -sf "${tacFile}" "${cfg.buildbotDir}/buildbot.tac"
+        ${cfg.package}/bin/buildbot create-master --db "${cfg.dbUrl}" "${cfg.buildbotDir}"
+        rm -f buildbot.tac.new master.cfg.sample
       '';
 
       serviceConfig = {
@@ -225,12 +257,11 @@ in {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStart = "${cfg.package}/bin/buildbot start --nodaemon ${cfg.buildbotDir}";
+        # NOTE: call twistd directly with stdout logging for systemd
+        ExecStart = "${python.pkgs.twisted}/bin/twistd -o --nodaemon --pidfile= --logfile - --python ${tacFile}";
       };
-
     };
   };
 
   meta.maintainers = with lib.maintainers; [ nand0p mic92 ];
-
 }

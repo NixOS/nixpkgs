@@ -10,12 +10,11 @@ build-idris-package  {
 
   idrisDeps = [ contrib pruviloj ];
 
-  # https://github.com/david-christiansen/derive-all-the-instances/pull/9
   src = fetchFromGitHub {
-    owner = "infinisil";
+    owner = "david-christiansen";
     repo = "derive-all-the-instances";
-    rev = "61c3e12e26f599379299fcbb9c40a81bfc3e0604";
-    sha256 = "0g2lb8nrwqwf3gm5fir43cxz6db84n19xiwkv8cmmqc1fgy6v0qn";
+    rev = "0a9a5082d4ab6f879a2c141d1a7b645fa73fd950";
+    sha256 = "06za15m1kv9mijzll5712crry4iwx3b0fjv76gy9vv1p10gy2g4m";
   };
 
   meta = {

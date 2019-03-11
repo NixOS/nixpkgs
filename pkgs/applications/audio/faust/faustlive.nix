@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, llvm, qt48Full, libqrencode, libmicrohttpd, libjack2, alsaLib, faust, curl
+, llvm, qt48Full, qrencode, libmicrohttpd, libjack2, alsaLib, faust, curl
 , bc, coreutils, which
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    llvm qt48Full libqrencode libmicrohttpd libjack2 alsaLib faust curl
+    llvm qt48Full qrencode libmicrohttpd libjack2 alsaLib faust curl
     bc coreutils which
   ];
 

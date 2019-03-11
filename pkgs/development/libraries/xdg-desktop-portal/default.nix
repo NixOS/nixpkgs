@@ -1,27 +1,30 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libxml2, glib, pipewire, fuse }:
+{ stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkgconfig, libxml2, glib, pipewire, fontconfig, flatpak, gsettings-desktop-schemas, acl, dbus, fuse, geoclue2, wrapGAppsHook }:
 
-let
-  version = "1.0.2";
-in stdenv.mkDerivation rec {
-  name = "xdg-desktop-portal-${version}";
+stdenv.mkDerivation rec {
+  pname = "xdg-desktop-portal";
+  version = "1.2.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "flatpak";
-    repo = "xdg-desktop-portal";
+    repo = pname;
     rev = version;
-    sha256 = "1vl0150gz20x106di9yfa6l3zjw0nd2lr44rkq2147n2a254p79p";
+    sha256 = "1gjyif4gly0mkdx6ir6wc4vhfh1raah9jq03q28i88hr7phjdy71";
   };
 
   patches = [
     ./respect-path-env-var.patch
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit flatpak;
+    })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libxml2 ];
-  buildInputs = [ glib pipewire fuse ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig libxml2 wrapGAppsHook ];
+  buildInputs = [ glib pipewire fontconfig flatpak acl dbus geoclue2 fuse gsettings-desktop-schemas ];
 
-  doCheck = true;
+  doCheck = true; # XXX: investigate!
 
   configureFlags = [
     "--enable-installed-tests"

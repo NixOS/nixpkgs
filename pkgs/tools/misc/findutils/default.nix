@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.gnu.org/software/findutils/;
+    homepage = https://www.gnu.org/software/findutils/;
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
 
     longDescription = ''

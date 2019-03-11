@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXi, libXtst, pkgconfig, xextproto }:
+{ stdenv, fetchurl, libX11, libXi, libXtst, pkgconfig, xorgproto }:
 
 stdenv.mkDerivation rec {
   name = "libfakekey-${version}";
@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libX11 libXi libXtst xextproto ];
+  buildInputs = [ libX11 libXi libXtst xorgproto ];
+  NIX_LDFLAGS = [
+    "-lX11"
+  ];
 
   meta = with stdenv.lib; {
     description = "X virtual keyboard library";

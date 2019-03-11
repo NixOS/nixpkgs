@@ -1,8 +1,8 @@
 { stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 buildLinux (rec {
-  mptcpVersion = "0.94";
-  modDirVersion = "4.14.24";
+  mptcpVersion = "0.94.1";
+  modDirVersion = "4.14.70";
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
   # autoModules= true;
 
@@ -15,7 +15,7 @@ buildLinux (rec {
     owner = "multipath-tcp";
     repo = "mptcp";
     rev = "v${mptcpVersion}";
-    sha256 = "01y3jf5awdxcv6vfpr30n0vaa8w1wgip0whiv88d610550299hkv";
+    sha256 = "13mi672jr1x463kzig1hi9cpdi8x6nqdfd4bqlrjn8zca48f4ln4";
   };
 
   extraConfig = ''

@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nheko-${version}";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
-    owner = "mujx";
+    owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "00jigca7kcqwm57qalz7ifz9p6v7p3pnamjvpkxjjix2rm9wmg2q";
+    sha256 = "1h95lixciiq904dnfpwxhyf545yfsrphhwqyvs4yrzdfr9k0cf98";
   };
 
   # If, on Darwin, you encounter the error
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Desktop client for the Matrix protocol";
+    homepage = https://github.com/Nheko-Reborn/nheko;
     maintainers = with maintainers; [ ekleog fpletz ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;

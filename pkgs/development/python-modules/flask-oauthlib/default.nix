@@ -3,13 +3,13 @@
 , mock, nose}:
 buildPythonPackage rec {
   pname = "Flask-OAuthlib";
-  version = "0.9.3";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "flask-oauthlib";
     rev = "v${version}";
-    sha256 = "1vnr2kmbwl6mv2fsv92jjxzfibq2m3pnbcs6ba9k32jr1ci7wfh7";
+    sha256 = "1l82niwrpm7411xvwh65bj263si90kcbrbfg5fa52mpixhxcp40f";
   };
 
   buildInputs = [ mock nose ];

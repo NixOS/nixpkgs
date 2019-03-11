@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
     badPlatforms = platforms.riscv;
-    maintainers = with maintainers; [ thoughtpolice wkennington ];
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

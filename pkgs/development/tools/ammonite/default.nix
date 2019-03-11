@@ -5,12 +5,12 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "ammonite-${version}";
-  version = "1.2.1";
+  version = "1.6.4";
   scalaVersion = "2.12";
 
   src = fetchurl {
     url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
-    sha256 = "096xychdq1pmyjfv4cv4pvm29dk539rxpq3iaz9rpznp01af4mjf";
+    sha256 = "16mx2394wmm4jvy26rlp46mb2nf8cayvxclpa6fn0sb4klqs7mc2";
   };
 
   propagatedBuildInputs = [ jre ] ;

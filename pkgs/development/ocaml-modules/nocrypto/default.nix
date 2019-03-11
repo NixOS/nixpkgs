@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "0zshi9hlhcz61n5z1k6fx6rsi0pl4xgahsyl2jp0crqkaf3hqwlg";
   };
 
-  unpackCmd = "tar xjf $curSrc";
-
   patches = [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/nocrypto/nocrypto.0.5.4-1/files/0001-add-missing-runtime-dependencies-in-_tags.patch";

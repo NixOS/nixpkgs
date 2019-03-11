@@ -53,6 +53,9 @@ in
         Type = "notify";
         NotifyAccess = "all";
       };
+      restartTriggers = [
+        config.environment.etc."salt/master".source
+      ];
     };
   };
 

@@ -18,11 +18,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "at-spi2-atk";
-  version = "2.26.2";
+  version = "2.30.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0vkan52ab9vrkknnv8y4f1cspk8x7xd10qx92xk9ys71p851z2b1";
+    sha256 = "1rxqp9kgf8mcyg84b9pq2kpqr1ws81ijn9nfdis2w0ixy9cbjfyr";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ]

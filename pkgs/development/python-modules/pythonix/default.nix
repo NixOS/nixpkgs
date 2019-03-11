@@ -18,15 +18,12 @@ buildPythonPackage rec {
 
   buildInputs = [ nix boost ];
 
-  checkPhase = ''
-    ninja test
-  '';
-
   meta = with stdenv.lib; {
     description = ''
        Eval nix code from python.
     '';
     maintainers = [ maintainers.mic92 ];
     license = licenses.mit;
+    broken = true;
   };
 }

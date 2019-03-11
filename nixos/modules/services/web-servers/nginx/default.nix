@@ -44,9 +44,21 @@ let
     }
   ''));
 
-  configFile = pkgs.writeText "nginx.conf" ''
+  awkFormat = builtins.toFile "awkFormat-nginx.awk" ''
+    awk -f
+    {sub(/^[ \t]+/,"");idx=0}
+    /\{/{ctx++;idx=1}
+    /\}/{ctx--}
+    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
+  '';
+
+  configFile = pkgs.runCommand "nginx.conf" {} (''
+    awk -f ${awkFormat} ${pre-configFile} | sed '/^\s*$/d' > $out
+  '');
+
+  pre-configFile = pkgs.writeText "pre-nginx.conf" ''
     user ${cfg.user} ${cfg.group};
-    error_log stderr;
+    error_log ${cfg.logError};
     daemon off;
 
     ${cfg.config}
@@ -182,11 +194,12 @@ let
             then filter (x: x.ssl) defaultListen
             else defaultListen;
 
-        listenString = { addr, port, ssl, ... }:
+        listenString = { addr, port, ssl, extraParameters ? [], ... }:
           "listen ${addr}:${toString port} "
           + optionalString ssl "ssl "
-          + optionalString (ssl && vhost.http2) "http2 "
+          + optionalString vhost.http2 "http2 "
           + optionalString vhost.default "default_server "
+          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
           + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
@@ -341,6 +354,35 @@ in
         ";
       };
 
+      logError = mkOption {
+        default = "stderr";
+        description = "
+          Configures logging.
+          The first parameter defines a file that will store the log. The
+          special value stderr selects the standard error file. Logging to
+          syslog can be configured by specifying the “syslog:” prefix.
+          The second parameter determines the level of logging, and can be
+          one of the following: debug, info, notice, warn, error, crit,
+          alert, or emerg. Log levels above are listed in the order of
+          increasing severity. Setting a certain log level will cause all
+          messages of the specified and more severe log levels to be logged.
+          If this parameter is omitted then error is used.
+        ";
+      };
+
+      preStart =  mkOption {
+        type = types.lines;
+        default = ''
+          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs  
+          test `stat -c %a ${cfg.stateDir}` = "750" || chmod 750 ${cfg.stateDir}
+          test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
+          chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
+        '';
+        description = "
+          Shell commands executed before the service's nginx is started.
+        ";
+      };
+
       config = mkOption {
         default = "";
         description = "
@@ -450,8 +492,8 @@ in
 
       sslProtocols = mkOption {
         type = types.str;
-        default = "TLSv1.2";
-        example = "TLSv1 TLSv1.1 TLSv1.2";
+        default = "TLSv1.2 TLSv1.3";
+        example = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
         description = "Allowed TLS protocol versions.";
       };
 
@@ -608,9 +650,7 @@ in
       stopIfChanged = false;
       preStart =
         ''
-        mkdir -p ${cfg.stateDir}/logs
-        chmod 700 ${cfg.stateDir}
-        chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
+        ${cfg.preStart}
         ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
         '';
       serviceConfig = {

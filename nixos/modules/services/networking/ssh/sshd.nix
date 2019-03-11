@@ -11,7 +11,7 @@ let
 
   userOptions = {
 
-    openssh.authorizedKeys = {
+    options.openssh.authorizedKeys = {
       keys = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -130,7 +130,7 @@ in
       };
 
       ports = mkOption {
-        type = types.listOf types.int;
+        type = types.listOf types.port;
         default = [22];
         description = ''
           Specifies on which ports the SSH daemon listens.
@@ -320,7 +320,7 @@ in
     };
 
     users.users = mkOption {
-      options = [ userOptions ];
+      type = with types; loaOf (submodule userOptions);
     };
 
   };
@@ -351,6 +351,10 @@ in
             stopIfChanged = false;
             path = [ cfgc.package pkgs.gawk ];
             environment.LD_LIBRARY_PATH = nssModulesPath;
+
+            restartTriggers = optionals (!cfg.startWhenNeeded) [
+              config.environment.etc."ssh/sshd_config".source
+            ];
 
             preStart =
               ''
@@ -387,6 +391,7 @@ in
                 Restart = "always";
                 Type = "simple";
               });
+
           };
       in
 
@@ -395,7 +400,10 @@ in
         sockets.sshd =
           { description = "SSH Socket";
             wantedBy = [ "sockets.target" ];
-            socketConfig.ListenStream = cfg.ports;
+            socketConfig.ListenStream = if cfg.listenAddresses != [] then
+              map (l: "${l.addr}:${toString (if l.port != null then l.port else 22)}") cfg.listenAddresses
+            else
+              cfg.ports;
             socketConfig.Accept = true;
           };
 

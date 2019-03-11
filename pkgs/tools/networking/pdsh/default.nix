@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       while timeouts occur on some connections.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

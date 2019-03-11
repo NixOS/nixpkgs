@@ -1,5 +1,6 @@
 { stdenv, fetchurl
-, CoreServices ? null }:
+, CoreServices ? null
+, buildPackages }:
 
 let version = "4.20"; in
 
@@ -21,6 +22,8 @@ stdenv.mkDerivation {
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
 
+  HOST_CC = "cc";
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   configureFlags = [
     "--enable-optimize"
     "--disable-debug"
@@ -35,9 +38,10 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.mozilla.org/projects/nspr/;
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.mpl20;
   };
 }

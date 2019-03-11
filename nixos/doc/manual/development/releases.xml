@@ -62,13 +62,6 @@
     </listitem>
     <listitem>
      <para>
-      <link xlink:href="https://github.com/NixOS/nixpkgs/settings/branches">
-      Let a GitHub nixpkgs admin lock the branch on github for you. (so
-      developers can’t force push) </link>
-     </para>
-    </listitem>
-    <listitem>
-     <para>
       <link xlink:href="https://github.com/NixOS/nixpkgs/compare/bdf161ed8d21...6b63c4616790">
       Bump the <literal>system.defaultChannel</literal> attribute in
       <literal>nixos/modules/misc/version.nix</literal> </link>

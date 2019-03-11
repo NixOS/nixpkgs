@@ -33,6 +33,7 @@
 , libXxf86vm
 , libdrm
 , libffi
+, libglvnd
 , libpng
 , libvdpau
 , libxcb
@@ -49,19 +50,19 @@
 
 stdenv.mkDerivation rec {
   name = "flashplayer-standalone-${version}";
-  version = "31.0.0.108";
+  version = "32.0.0.142";
 
   src = fetchurl {
     url =
       if debug then
-        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/31/flash_player_sa_linux_debug.x86_64.tar.gz"
+        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux_debug.x86_64.tar.gz"
       else
-        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/31/flash_player_sa_linux.x86_64.tar.gz";
+        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
       if debug then
-        "0i047fvj3x9lx7x8bf7jl1ybf9xpmr6g77q0h7n2s8qvscsw0pmm"
+        "1vp1nfys9pjmh3fmyp95yymmyvwrbmwjsmjhl5rnpwv5a0xn9nc6"
       else
-        "19wfs452ix57yfi4cy2din6mi5jky9hjzbdjny1bl8w32fy8xmm3";
+        "05r1z87zpllyb2hvj0fbps39hvkx5jzsqafyg62am8qm9khzs2qh";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -88,8 +89,8 @@ stdenv.mkDerivation rec {
       alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk_pixbuf glib
       glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
-      libXrandr libXrender libXt libXxf86vm libdrm libffi libpng libvdpau
-      libxcb libxshmfence nspr nss pango pcre pixman zlib
+      libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
+      libvdpau libxcb libxshmfence nspr nss pango pcre pixman zlib
     ];
 
   meta = {
@@ -98,5 +99,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.unfree;
     maintainers = [];
     platforms = [ "x86_64-linux" ];
+    # Application crashed with an unhandled SIGSEGV
+    # Not on all systems, though. Video driver problem?
+    broken = false;
   };
 }

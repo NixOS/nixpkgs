@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, xorg, libGLU
+{ config, lib, stdenv, fetchFromGitHub, cmake, pkgconfig, xorg, libGLU
 , libGL, glew, ocl-icd, python3
-, cudaSupport ? false, cudatoolkit
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
 , darwin
 }:
 

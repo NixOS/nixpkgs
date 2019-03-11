@@ -8,14 +8,14 @@ with builtins;
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2018.09.30";
+  version = "2019.02.22";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "4d2917447cc14c590b4fee5ba36948fb4ee6884b";
-      sha256 = "0b9mmzq2jhx8x8b58nk97fzh70nbhlc3lcfln5facxddv4mp2gl1";
+      rev    = "c521f4632f1c82b48a5538c832980668044e8fd9";
+      sha256 = "18pg1ry5qhhx8c49n2gqwlf55sd9bfsfk3khfyh1a1vjh1qpfgdf";
       name   = "yosys";
     })
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     (fetchFromGitHub {
       owner  = "berkeley-abc";
       repo   = "abc";
-      rev    = "ae6716b064c842f45109a88e84dca71fe4cc311f";
-      sha256 = "0g39k16dmrl6q73q39yr5yd9r4rcliz5zxzbnwzh29z9xwi6ipw8";
+      rev    = "2ddc57d8760d94e86699be39a628178cff8154f8";
+      sha256 = "0da7nnnnl9cq2r7s301xgdc8nlr6hqmqpvd9zn4b58m125sp0scl";
       name   = "yosys-abc";
     })
   ];

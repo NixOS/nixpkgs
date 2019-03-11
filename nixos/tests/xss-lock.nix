@@ -9,7 +9,6 @@ with lib;
   machine = {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     programs.xss-lock.enable = true;
-    programs.xss-lock.lockerCommand = "${pkgs.xlockmore}/bin/xlock";
     services.xserver.displayManager.auto.user = "alice";
   };
 
@@ -20,6 +19,6 @@ with lib;
 
     $machine->fail("pgrep xlock");
     $machine->succeed("su -l alice -c 'xset dpms force standby'");
-    $machine->waitUntilSucceeds("pgrep xlock");
+    $machine->waitUntilSucceeds("pgrep i3lock");
   '';
 })

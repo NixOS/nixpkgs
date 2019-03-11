@@ -7,36 +7,26 @@ let
   rubyEnv = bundlerEnv {
     name = "gitlab-env-${version}";
     inherit ruby;
-    gemdir = ./.;
+    gemdir = ./rubyEnv- + "${if gitlabEnterprise then "ee" else "ce"}";
     groups = [ "default" "unicorn" "ed25519" "metrics" ];
   };
 
-  version = "11.3.0";
+  flavour = if gitlabEnterprise then "ee" else "ce";
+  data = (builtins.fromJSON (builtins.readFile ./data.json)).${flavour};
 
-  sources = if gitlabEnterprise then {
-    gitlabDeb = fetchurl {
-      url = "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_${version}-ee.0_amd64.deb/download.deb";
-      sha256 = "1l5cfbc45xa3gq90wyly3szn93szh162g9szc6dnkqx0db70j9l3";
-    };
+  version = data.version;
+  sources = {
     gitlab = fetchFromGitLab {
-      owner = "gitlab-org";
-      repo = "gitlab-ee";
-      rev = "v${version}-ee";
-      sha256 = "0gmainjhs21hipbvshga5dzkjrpmlkk9vxxnxgwjaqbg9wrhw47m";
+      owner = data.owner;
+      repo = data.repo;
+      rev = data.rev;
+      sha256 = data.repo_hash;
     };
-  } else {
     gitlabDeb = fetchurl {
-      url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_${version}-ce.0_amd64.deb/download.deb";
-      sha256 = "162xy8xpa2qhz10nh2dw0vbd0665pz9984vnim9i30xcafr5picq";
-    };
-    gitlab = fetchFromGitLab {
-      owner = "gitlab-org";
-      repo = "gitlab-ce";
-      rev = "v${version}";
-      sha256 = "158n2qnp1zsj5kk2w3v9xyakgdb739n955hlq3i9sl80q8f4xda3";
+      url = data.deb_url;
+      sha256 = data.deb_hash;
     };
   };
-
 in
 
 stdenv.mkDerivation rec {
@@ -63,17 +53,7 @@ stdenv.mkDerivation rec {
         --replace "ps -U" "${procps}/bin/ps -U"
 
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
-
-    # required for some gems:
-    cat > config/database.yml <<EOF
-      production:
-        adapter: <%= ENV["GITLAB_DATABASE_ADAPTER"] || sqlite %>
-        database: gitlab
-        host: <%= ENV["GITLAB_DATABASE_HOST"] || "127.0.0.1" %>
-        password: <%= ENV["GITLAB_DATABASE_PASSWORD"] || "blerg" %>
-        username: gitlab
-        encoding: utf8
-    EOF
+    sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
   '';
 
   buildPhase = ''
@@ -111,6 +91,10 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit rubyEnv;
     ruby = rubyEnv.wrappedRuby;
+    GITALY_SERVER_VERSION = data.passthru.GITALY_SERVER_VERSION;
+    GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
+    GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
+    GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
   };
 
   meta = with lib; {

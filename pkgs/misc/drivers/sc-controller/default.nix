@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
-, gtk3, gobjectIntrospection, libappindicator-gtk3, librsvg
+, gtk3, gobject-introspection, libappindicator-gtk3, librsvg
 , evdev, pygobject3, pylibacl, pytest, bluez
 , linuxHeaders
 , libX11, libXext, libXfixes, libusb1, udev
@@ -7,26 +7,22 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.4";
+  version = "0.4.6.1";
 
   src = fetchFromGitHub {
     owner  = "kozec";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0ki9x28i5slpnygkpdglcvj8cssvvjyz732y1cnpzw1f0sj0kris";
+    sha256 = "1kcqsnrlwl4s94j6ahgkz3w4sy9hsr95y624zab6g10w0fl5sqrc";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gobjectIntrospection libappindicator-gtk3 librsvg ];
+  buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
 
   propagatedBuildInputs = [ evdev pygobject3 pylibacl ];
 
   checkInputs = [ pytest ];
-
-  patches = [ 
-    ./fix-udev.patch  # fix upstream issue #401, remove with the next update
-  ];
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"

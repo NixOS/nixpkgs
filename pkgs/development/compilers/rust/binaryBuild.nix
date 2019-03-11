@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, bash, buildRustPackage, curl, darwin
+{ stdenv, makeWrapper, bash, curl, darwin
 , version
 , src
 , platform
@@ -18,8 +18,6 @@ let
 in
 
 rec {
-  inherit buildRustPackage;
-
   rustc = stdenv.mkDerivation rec {
     name = "rustc-${versionType}-${version}";
 

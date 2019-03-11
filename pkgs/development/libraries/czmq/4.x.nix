@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchpatch, zeromq }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.1";
+  version = "4.2.0";
   name = "czmq-${version}";
 
   src = fetchurl {
     url = "https://github.com/zeromq/czmq/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1h5hrcsc30fcwb032vy5gxkq4j4vv1y4dj460rfs1hhxi0cz83zh";
+    sha256 = "1szciz62sk3fm4ga9qjpxz0n0lazvphm32km95bq92ncng12kayg";
   };
 
   # Needs to be propagated for the .pc file to work
@@ -17,6 +17,5 @@ stdenv.mkDerivation rec {
     description = "High-level C Binding for ZeroMQ";
     license = licenses.mpl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

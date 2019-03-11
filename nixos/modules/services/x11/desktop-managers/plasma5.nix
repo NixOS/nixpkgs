@@ -163,6 +163,8 @@ in
 
           libsForQt56.phonon-backend-gstreamer
           libsForQt5.phonon-backend-gstreamer
+
+          xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ]
 
         ++ lib.optionals cfg.enableQt4Support [ pkgs.phonon-backend-gstreamer ]
@@ -175,9 +177,9 @@ in
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
 
-      environment.pathsToLink = [ 
+      environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
-        "/share" 
+        "/share"
       ];
 
       environment.etc = singleton {
@@ -185,10 +187,8 @@ in
         target = "X11/xkb";
       };
 
-      environment.variables = {
-        # Enable GTK applications to load SVG icons
-        GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-      };
+      # Enable GTK applications to load SVG icons
+      services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
       fonts.fontconfig.defaultFonts = {

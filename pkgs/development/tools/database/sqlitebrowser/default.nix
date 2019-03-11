@@ -16,6 +16,10 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake antlr qttools ];
 
+  NIX_LDFLAGS = [
+    "-lQt5PrintSupport"
+  ];
+
   enableParallelBuilding = true;
 
   # We have to patch out Test and PrintSupport to make this work with Qt 5.9

@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -999,6 +999,8 @@ foreach(libtype ${TEST_LIBTYPES})
+ 
+   add_test(djpeg-${libtype}-rgb-islow-icc-cmp
+     ${MD5CMP} b06a39d730129122e85c1363ed1bbc9e testout_rgb_islow.icc)
++  set_tests_properties(djpeg-${libtype}-rgb-islow-icc-cmp PROPERTIES
++    DEPENDS djpeg-${libtype}-rgb-islow)
+ 
+   add_bittest(jpegtran icc "-copy;all;-icc;${TESTIMAGES}/test2.icc"
+     testout_rgb_islow2.jpg testout_rgb_islow.jpg ${MD5_JPEG_RGB_ISLOW2})

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = http://code.google.com/p/cryptsetup/;
     description = "LUKS for dm-crypt";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

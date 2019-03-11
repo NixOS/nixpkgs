@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=strict-aliasing";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags = [ "-GNinja" ];
 
@@ -62,5 +62,6 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/facebook/xcbuild;
     platforms = platforms.unix;
     maintainers = with maintainers; [ copumpkin matthewbauer ];
+    license = with licenses; [ bsd2 bsd3 ];
   };
 }

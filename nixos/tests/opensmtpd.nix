@@ -17,11 +17,12 @@ import ./make-test.nix {
         extraServerArgs = [ "-v" ];
         serverConfiguration = ''
           listen on 0.0.0.0
+          action do_relay relay
           # DO NOT DO THIS IN PRODUCTION!
           # Setting up authentication requires a certificate which is painful in
           # a test environment, but THIS WOULD BE DANGEROUS OUTSIDE OF A
           # WELL-CONTROLLED ENVIRONMENT!
-          accept from any for any relay
+          match from any for any action do_relay
         '';
       };
     };
@@ -41,8 +42,9 @@ import ./make-test.nix {
         extraServerArgs = [ "-v" ];
         serverConfiguration = ''
           listen on 0.0.0.0
-          accept from any for local deliver to mda \
+          action dovecot_deliver mda \
             "${pkgs.dovecot}/libexec/dovecot/deliver -d %{user.username}"
+          match from any for local action dovecot_deliver
         '';
       };
       services.dovecot2 = {
@@ -118,4 +120,6 @@ import ./make-test.nix {
     $smtp2->waitUntilFails('smtpctl show queue | egrep .');
     $client->succeed('check-mail-landed >&2');
   '';
+
+  meta.timeout = 30;
 }

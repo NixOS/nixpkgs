@@ -15,8 +15,8 @@ perlPackages.buildPerlPackage rec {
     # minimum requirements from INSTALL.html#System_Requirements
     AlgorithmDiff ArchiveTar AuthenSASL CGI CGISession CryptPasswdMD5
     EmailMIME Encode Error FileCopyRecursive HTMLParser HTMLTree
-    IOSocketIP IOSocketSSL JSON
-    LocaleMaketext LocaleMaketextLexicon LocaleMsgfmt
+    IOSocketSSL JSON
+    LocaleMaketextLexicon LocaleMsgfmt
     LWP URI perlPackages.version
     /*# optional dependencies
     libapreq2 DBI DBDmysql DBDPg DBDSQLite FCGI FCGIProcManager

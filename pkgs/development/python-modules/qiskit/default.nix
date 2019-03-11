@@ -13,19 +13,21 @@
 , requests
 , requests_ntlm
 , IBMQuantumExperience
+, jsonschema
+, psutil
 , cmake
 , llvmPackages 
 }:
 
 buildPythonPackage rec {
   pname = "qiskit";
-  version = "0.5.7";
+  version = "0.7.3";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a5a2c6c074f8479dc83d1d599dfebf2363402a182835b8fa5742804055148b17";
+    sha256 = "63e7a7c3033fe955d715cc825b3fb61d27c25ad66e1761493ca2243b5dbfb4f9";
   };
 
   buildInputs = [ cmake ]
@@ -43,6 +45,8 @@ buildPythonPackage rec {
     requests
     requests_ntlm
     IBMQuantumExperience
+    jsonschema
+    psutil
   ];
 
   # Pypi's tarball doesn't contain tests

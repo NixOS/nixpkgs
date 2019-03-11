@@ -1,26 +1,33 @@
 { stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gnome3,
-  pango, gobjectIntrospection, wrapGAppsHook,
+  pango, gobject-introspection, wrapGAppsHook,
 # Optional packages:
- enableOSM ? true, osm-gps-map
+ enableOSM ? true, osm-gps-map,
+ enableGraphviz ? true, graphviz,
+ enableGhostscript ? true, ghostscript
  }:
 
 let
   inherit (pythonPackages) python buildPythonApplication;
 in buildPythonApplication rec {
-  version = "5.0.0";
+  version = "5.0.1";
   name = "gramps-${version}";
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs = [ intltool gtk3 gobjectIntrospection pango gnome3.gexiv2 ] 
+  buildInputs = [ intltool gtk3 gobject-introspection pango gnome3.gexiv2 ] 
     # Map support
     ++ stdenv.lib.optional enableOSM osm-gps-map
+    # Graphviz support
+    ++ stdenv.lib.optional enableGraphviz graphviz
+    # Ghostscript support
+    ++ stdenv.lib.optional enableGhostscript ghostscript
+    
   ;
 
   src = fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps";
     rev = "v${version}";
-    sha256 = "056l4ihmd3gdsiv6wwv4ckgh8bfzd5nii6z4afsdn2nmjbj4hw9m";
+    sha256 = "1jz1fbjj6byndvir7qxzhd2ryirrd5h2kwndxpp53xdc05z1i8g7";
   };
 
   pythonPath = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ];
@@ -53,5 +60,6 @@ in buildPythonApplication rec {
     description = "Genealogy software";
     homepage = https://gramps-project.org;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ joncojonathan ];
   };
 }

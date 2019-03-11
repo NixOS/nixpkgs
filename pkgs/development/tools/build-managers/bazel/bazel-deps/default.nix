@@ -2,7 +2,7 @@
 
 buildBazelPackage rec {
   name = "bazel-deps-${version}";
-  version = "2018-08-16";
+  version = "2019-02-01";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/johnynek/bazel-deps";
@@ -15,8 +15,8 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "johnynek";
     repo = "bazel-deps";
-    rev = "942a0b03cbf159dd6e0f0f40787d6d8e4e832d81";
-    sha256 = "0ls2jvz9cxa169a8pbbykv2d4dik4ipf7dj1lkqx5g0ss7lgs6q5";
+    rev = "6585033409e09028852403ec15ec0c77851234be";
+    sha256 = "0hypf7mcbpx2djqm92k82vn1k6pbnv564xbnazx8nw60f6ns0x87";
   };
 
   bazelTarget = "//src/scala/com/github/johnynek/bazel_deps:parseproject_deploy.jar";
@@ -66,12 +66,13 @@ buildBazelPackage rec {
       find . -type d -empty -delete
     '';
 
-    sha256 = "0jkzf1hay0h8ksk9lhfvdliac6c5d7nih934i1xjbrn6zqlivy19";
+    sha256 = "1yirrzhhrsmbgd27fg709plhrhyi8pzwqv84yg72sd3799kswh9m";
   };
 
   buildAttrs = {
     installPhase = ''
       mkdir -p $out/bin/bazel-bin/src/scala/com/github/johnynek/bazel_deps
+
       cp gen_maven_deps.sh $out/bin
       wrapProgram "$out/bin/gen_maven_deps.sh" --set JAVA_HOME "${jre}" --prefix PATH : ${lib.makeBinPath [ jre ]}
       cp bazel-bin/src/scala/com/github/johnynek/bazel_deps/parseproject_deploy.jar $out/bin/bazel-bin/src/scala/com/github/johnynek/bazel_deps

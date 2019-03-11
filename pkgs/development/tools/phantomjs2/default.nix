@@ -37,27 +37,27 @@ in stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-hardening.patch?id=42c9154d8c87c9fe434908259b0eddde4d892ca3";
+      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-hardening.patch;
       sha256 = "1qs1r76w90qgpw742i7lf0y3b7m9zh5wxcbrhrak6mq1kqaphqb5";
     })
     (fetchpatch {
-      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-qt-components.patch?id=9b5c1ce95a7044ebffc634f773edf7d4eb9b6cd3";
+      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt-components.patch;
       sha256 = "1fw2q59aqcks3abvwkqg9903yif6aivdsznc0h6frhhjvpp19vsb";
     })
     (fetchpatch {
-      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-qt55-evaluateJavaScript.patch?id=9b5c1ce95a7044ebffc634f773edf7d4eb9b6cd3";
+      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt55-evaluateJavaScript.patch;
       sha256 = "1avig9cfny8kv3s4mf3mdzvf3xlzgyh351yzwc4bkpnjvzv4fmq6";
     })
     (fetchpatch {
-      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-qt55-no-websecurity.patch?id=9b5c1ce95a7044ebffc634f773edf7d4eb9b6cd3";
+      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt55-no-websecurity.patch;
       sha256 = "1nykqpxa7lcf9iarz5lywgg3v3b1h19iwvjdg4kgq0ai6idhcab8";
     })
     (fetchpatch {
-      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-qt55-print.patch?id=9b5c1ce95a7044ebffc634f773edf7d4eb9b6cd3";
+      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt55-print.patch;
       sha256 = "1fydmdjxnplglpbd3ypaih5l237jkxjirpdhzz92mcpy29yla6jw";
     })
     (fetchpatch {
-      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/unlock-qt.patch";
+      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/unlock-qt.patch;
       sha256 = "13bwz4iw17d6hq5pwkbpcckqyw7fhc6648lvs26m39pp31zwyp03";
     })
     ./system-qtbase.patch

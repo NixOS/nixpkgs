@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "mysqlclient";
-  version = "1.3.13";
+  version = "1.4.2.post1";
 
   buildInputs = [
     mysql.connector-c
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff8ee1be84215e6c30a746b728c41eb0701a46ca76e343af445b35ce6250644f";
+    sha256 = "f257d250f2675d0ef99bd318906f3cfc05cef4a2f385ea695ff32a3f04b9f9a7";
   };
 
   meta = with stdenv.lib; {

@@ -9,11 +9,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "lxc-${version}";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "0p1gy553cm4mhwxi85fl6qiwz61rjmvysm8c8pd20qh62xxi3dva";
+    sha256 = "1igxqgx8q9cp15mcp1y8j564bl85ijw04jcmgb1s5bmfbg1751sd";
   };
 
   nativeBuildInputs = [
@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington globin fpletz ];
+    maintainers = with maintainers; [ globin fpletz ];
   };
 }

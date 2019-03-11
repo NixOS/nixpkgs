@@ -1,14 +1,14 @@
 --- a/tests/libtest.sh
 +++ b/tests/libtest.sh
-@@ -296,7 +296,7 @@
-         # running installed-tests: assume we know what we're doing
-         :
-     elif ! "$FLATPAK_BWRAP" --unshare-ipc --unshare-net --unshare-pid \
--            --ro-bind / / /bin/true > bwrap-result 2>&1; then
-+            --ro-bind / / @coreutils@/bin/true > bwrap-result 2>&1; then
-         sed -e 's/^/# /' < bwrap-result
-         echo "1..0 # SKIP Cannot run bwrap"
-         exit 0
+@@ -328,7 +328,7 @@
+     # running installed-tests: assume we know what we're doing
+     _flatpak_bwrap_works=true
+ elif ! "$FLATPAK_BWRAP" --unshare-ipc --unshare-net --unshare-pid \
+-        --ro-bind / / /bin/true > bwrap-result 2>&1; then
++        --ro-bind / / @coreutils@/bin/true > bwrap-result 2>&1; then
+     _flatpak_bwrap_works=false
+ else
+     _flatpak_bwrap_works=true
 @@ -309,12 +309,12 @@
  export DBUS_SESSION_BUS_ADDRESS="$(cat dbus-session-bus-address)"
  DBUS_SESSION_BUS_PID="$(cat dbus-session-bus-pid)"
@@ -24,6 +24,24 @@
      gpg-connect-agent --homedir "${FL_GPG_HOMEDIR}" killagent /bye || true
      fusermount -u $XDG_RUNTIME_DIR/doc || :
      if test -n "${TEST_SKIP_CLEANUP:-}"; then
+--- a/tests/make-test-app.sh
++++ b/tests/make-test-app.sh
+@@ -114,13 +114,13 @@ msgid "Hello world"
+ msgstr "Hallo Welt"
+ EOF
+ mkdir -p ${DIR}/files/de/share/de/LC_MESSAGES
+-msgfmt --output-file ${DIR}/files/de/share/de/LC_MESSAGES/helloworld.mo de.po
++@gettext@/bin/msgfmt --output-file ${DIR}/files/de/share/de/LC_MESSAGES/helloworld.mo de.po
+ cat > fr.po <<EOF
+ msgid "Hello world"
+ msgstr "Bonjour le monde"
+ EOF
+ mkdir -p ${DIR}/files/fr/share/fr/LC_MESSAGES
+-msgfmt --output-file ${DIR}/files/fr/share/fr/LC_MESSAGES/helloworld.mo fr.po
++@gettext@/bin/msgfmt --output-file ${DIR}/files/fr/share/fr/LC_MESSAGES/helloworld.mo fr.po
+ 
+ flatpak build-finish ${DIR}
+ mkdir -p repos
 --- a/tests/make-test-runtime.sh
 +++ b/tests/make-test-runtime.sh
 @@ -26,6 +26,7 @@
@@ -61,7 +79,7 @@
 -    fi
 -}
 -
- for i in $@; do
+ for i in $@ bash ls cat echo readlink; do
 -    I=`which $i`
 -    add_bin $I
 -done

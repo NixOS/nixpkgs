@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "2.2.4";
@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
 
   patches = ./fix-configure-path.patch;
   configureScript = "./configure.sh";
+
+  configureFlags = [
+    "--enable-all-features"
+    "--pkg-config"
+    "--shared"
+    "--with-fenced-code"
+  ];
 
   meta = with stdenv.lib; {
     description = "Implementation of Markdown markup language in C";

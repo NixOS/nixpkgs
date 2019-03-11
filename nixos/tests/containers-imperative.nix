@@ -3,7 +3,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "containers-imperative";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aristid aszlig eelco chaoflow kampfschlaefer ];
+    maintainers = [ aristid aszlig eelco kampfschlaefer ];
   };
 
   machine =
@@ -85,6 +85,9 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # Execute commands via the root shell.
       $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;
+
+      # Execute a nix command via the root shell. (regression test for #40355)
+      $machine->succeed("nixos-container run $id1 -- nix-instantiate -E 'derivation { name = \"empty\"; builder = \"false\"; system = \"false\"; }'");
 
       # Stop and start (regression test for #4989)
       $machine->succeed("nixos-container stop $id1");

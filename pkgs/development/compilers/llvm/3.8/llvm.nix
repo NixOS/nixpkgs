@@ -79,8 +79,8 @@ in stdenv.mkDerivation rec {
     "-DLLVM_ENABLE_RTTI=ON"
 
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
   ] ++ stdenv.lib.optional enableSharedLibraries [
     "-DLLVM_LINK_LLVM_DYLIB=ON"
   ] ++ stdenv.lib.optional (!isDarwin)
@@ -97,8 +97,6 @@ in stdenv.mkDerivation rec {
 
   postBuild = ''
     rm -fR $out
-
-    paxmark m bin/{lli,llvm-rtdyld}
   '';
 
   postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''

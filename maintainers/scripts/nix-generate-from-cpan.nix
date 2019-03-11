@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "nix-generate-from-cpan-3";
 
   buildInputs = with perlPackages; [
-    makeWrapper perl CPANMeta GetoptLongDescriptive CPANPLUS Readonly LogLog4perl
+    makeWrapper perl GetoptLongDescriptive CPANPLUS Readonly LogLog4perl
   ];
 
   phases = [ "installPhase" ];

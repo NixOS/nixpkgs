@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, python2Packages }:
+{ stdenv, fetchurl, python3Packages }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "syncplay-${version}";
-  version = "1.5.5";
+  version = "1.6.2";
 
   format = "other";
 
   src = fetchurl {
-    url = https://github.com/Syncplay/syncplay/archive/v1.5.5.tar.gz;
-    sha256 = "0g12hm84c48fjrmwljl0ii62f55vm6fk2mv8vna7fadabmk6dwhr";
+    url = https://github.com/Syncplay/syncplay/archive/v1.6.2.tar.gz;
+    sha256 = "1850icvifq4487gqh8awvmvrjdbbkx2kshmysr0fbi6vcf0f3wj2";
   };
 
-  propagatedBuildInputs = with python2Packages; [ pyside twisted ];
+  propagatedBuildInputs = with python3Packages; [ pyside twisted ];
 
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
 

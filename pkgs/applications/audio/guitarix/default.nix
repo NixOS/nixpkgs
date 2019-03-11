@@ -2,7 +2,7 @@
 , avahi, bluez, boost, eigen, fftw, glib, glib-networking
 , glibmm, gsettings-desktop-schemas, gtkmm2, libjack2
 , ladspaH, libav, librdf, libsndfile, lilv, lv2, serd, sord, sratom
-, wrapGAppsHook, zita-convolver, zita-resampler, curl
+, wrapGAppsHook, zita-convolver, zita-resampler, curl, wafHook
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wfm8wrwrnqpb4ihy75n7l9i6vml536jlq9pdx2pblbc4ba3paac";
   };
 
-  nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python2 ];
+  nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python2 wafHook ];
 
   buildInputs = [
     avahi bluez boost eigen fftw glib glibmm glib-networking.out
@@ -37,12 +37,6 @@ stdenv.mkDerivation rec {
     "--includeresampler"
     "--convolver-ffmpeg"
   ] ++ optional optimizationSupport "--optimization";
-
-  configurePhase = ''python2 waf configure --prefix=$out $configureFlags'';
-
-  buildPhase = ''python2 waf build'';
-
-  installPhase = ''python2 waf install'';
 
   meta = with stdenv.lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";

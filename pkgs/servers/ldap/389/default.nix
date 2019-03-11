@@ -60,6 +60,5 @@ stdenv.mkDerivation rec {
     description = "Enterprise-class Open Source LDAP server for Linux";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

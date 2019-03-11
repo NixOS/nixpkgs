@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-lz4";
-  version = "2.1.0";
+  version = "2.1.2";
 
   # get full repository inorder to run tests
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vjfplj37jcw1mf8l810dv76dx0raia3ylgyfy7sfsb3g17brjq6";
+    sha256 = "1kzzdfkrq9nnlh0wssa6ccncvv0sk4wmhivhgyndjxz6d6przl5d";
   };
 
   buildInputs = [ setuptools_scm pkgconfig pytestrunner ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = {
      description = "LZ4 Bindings for Python";
      homepage = https://github.com/python-lz4/python-lz4;
-     license = lib.licenses.bsd0;
+     license = lib.licenses.bsd3;
      maintainers = with lib.maintainers; [ costrouc ];
   };
 }

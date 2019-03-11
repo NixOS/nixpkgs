@@ -2,7 +2,7 @@
 , openssl, readline }:
 
 stdenv.mkDerivation rec {
-  name = "icr";
+  pname = "icr";
   version = "0.5.0";
 
   src = fetchFromGitHub {

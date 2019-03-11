@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/miscfiles/;
+    homepage = https://www.gnu.org/software/miscfiles/;
     license = licenses.gpl2Plus;
     description = "Collection of files not of crucial importance for sysadmins";
     maintainers = with maintainers; [ pSub ];

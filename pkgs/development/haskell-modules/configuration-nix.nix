@@ -153,9 +153,6 @@ self: super: builtins.intersectAttrs super {
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
 
-  # Add necessary reference to gtk3 package, plus specify needed dbus version, plus turn on strictDeps to fix build
-  taffybar = ((addPkgconfigDepend super.taffybar pkgs.gtk3).overrideDerivation (drv: { strictDeps = true; }));
-
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
 
@@ -289,7 +286,7 @@ self: super: builtins.intersectAttrs super {
   # Tries to run GUI in tests
   leksah = dontCheck (overrideCabal super.leksah (drv: {
     executableSystemDepends = (drv.executableSystemDepends or []) ++ (with pkgs; [
-      gnome3.defaultIconTheme # Fix error: Icon 'window-close' not present in theme ...
+      gnome3.adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
       wrapGAppsHook           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
       gtk3                    # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ]);
@@ -321,6 +318,9 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/bos/pcap/issues/5
   pcap = addExtraLibrary super.pcap pkgs.libpcap;
+
+  # https://github.com/NixOS/nixpkgs/issues/53336
+  greenclip = addExtraLibrary super.greenclip pkgs.xorg.libXdmcp;
 
   # The cabal files for these libraries do not list the required system dependencies.
   miniball = overrideCabal super.miniball (drv: {
@@ -474,7 +474,7 @@ self: super: builtins.intersectAttrs super {
   hapistrano = addBuildTool super.hapistrano pkgs.buildPackages.git;
 
   # This propagates this to everything depending on haskell-gi-base
-  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
+  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobject-introspection;
 
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
@@ -486,6 +486,9 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
+
+  # https://github.com/haskell-servant/servant/pull/1128
+  servant-client-core = appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch;
 
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
@@ -528,4 +531,42 @@ self: super: builtins.intersectAttrs super {
 
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
+
+  futhark = if pkgs.stdenv.isDarwin then super.futhark else with pkgs;
+    let path = stdenv.lib.makeBinPath [ gcc ];
+    in overrideCabal (addBuildTool super.futhark makeWrapper) (_drv: {
+      postInstall = ''
+        wrapProgram $out/bin/futhark-c \
+          --prefix PATH : "${path}"
+
+        wrapProgram $out/bin/futhark-opencl \
+          --prefix PATH : "${path}" \
+          --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
+          --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
+          --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
+      '';
+    });
+
+  # On Darwin, git-annex mis-detects options to `cp`, so we wrap the binary to
+  # ensure it uses Nixpkgs' coreutils.
+  git-annex = with pkgs;
+    if (!stdenv.isLinux) then
+      let path = stdenv.lib.makeBinPath [ coreutils ];
+      in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
+        postFixup = ''
+          wrapProgram $out/bin/git-annex \
+            --prefix PATH : "${path}"
+        '';
+      })
+    else super.git-annex;
+
+  # The test suite has undeclared dependencies on git.
+  githash = dontCheck super.githash;
+
+  # Avoid infitite recursion with yaya.
+  yaya-hedgehog = super.yaya-hedgehog.override { yaya = dontCheck self.yaya; };
+
+  # Avoid infitite recursion with tonatona.
+  tonaparser = dontCheck super.tonaparser;
+
 }

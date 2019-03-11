@@ -1,10 +1,12 @@
---- a/src/_macosx.m	2015-10-30 00:46:20.000000000 +0200
-+++ b/src/_macosx.m	2015-11-01 14:52:25.000000000 +0200
-@@ -6264,6 +6264,7 @@
+diff -ruN matplotlib-3.0.0/src/_macosx.m matplotlib-3.0.0.patched/src/_macosx.m
+--- matplotlib-3.0.0/src/_macosx.m	2018-09-16 00:35:21.000000000 +0200
++++ matplotlib-3.0.0.patched/src/_macosx.m	2018-11-03 13:14:33.000000000 +0100
+@@ -2577,6 +2577,7 @@
  
  static bool verify_framework(void)
  {
 +    return true;  /* nixpkgs darwin stdenv */
- #ifdef COMPILING_FOR_10_6
-     NSRunningApplication* app = [NSRunningApplication currentApplication];
-     NSApplicationActivationPolicy activationPolicy = [app activationPolicy];
+     ProcessSerialNumber psn;
+     /* These methods are deprecated, but they don't require the app to
+        have started  */
+

@@ -15,6 +15,11 @@ fixCmakeFiles() {
 cmakeConfigurePhase() {
     runHook preConfigure
 
+    export CTEST_OUTPUT_ON_FAILURE=1
+    if [ -n "${enableParallelChecking-1}" ]; then
+        export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
+    fi
+
     if [ -z "$dontFixCmake" ]; then
         fixCmakeFiles .
     fi
@@ -69,6 +74,13 @@ cmakeConfigurePhase() {
     # Avoid cmake resetting the rpath of binaries, on make install
     # And build always Release, to ensure optimisation flags
     cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
+
+    # Disable user package registry to avoid potential side effects
+    # and unecessary attempts to access non-existent home folder
+    # https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html#disabling-the-package-registry
+    cmakeFlags="-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON $cmakeFlags"
+    cmakeFlags="-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON $cmakeFlags"
+    cmakeFlags="-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON $cmakeFlags"
 
     if [ "$buildPhase" = ninjaBuildPhase ]; then
         cmakeFlags="-GNinja $cmakeFlags"

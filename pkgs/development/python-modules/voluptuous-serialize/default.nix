@@ -1,17 +1,14 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, voluptuous, pytest }:
+{ stdenv, buildPythonPackage, isPy3k, fetchPypi, voluptuous, pytest }:
 
 buildPythonPackage rec  {
   pname = "voluptuous-serialize";
-  version = "2018-03-10";
+  version = "2.1.0";
 
   disabled = !isPy3k;
 
-  # no tests in PyPI tarball
-  src = fetchFromGitHub {
-    owner = "balloob";
-    repo = pname;
-    rev = "567f0d96f928cf6c30c9f1b8bdee729e651aac82";
-    sha256 = "0b16f1bxlqyvi1hy8wmzp2k0rzqcycmdhs8zwsyx0swnvkgwnv50";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "d30fef4f1aba251414ec0b315df81a06da7bf35201dcfb1f6db5253d738a154f";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +22,9 @@ buildPythonPackage rec  {
   checkPhase = ''
     py.test
   '';
+
+  # no tests in PyPI tarball
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/balloob/voluptuous-serialize;

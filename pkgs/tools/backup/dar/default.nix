@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.5.17";
+  version = "2.6.2";
   name = "dar-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/dar/${name}.tar.gz";
-    sha256 = "1pw6l9nh7w9n7ysh8m6wdzr3k4i9sd6fkmrprnssay5cz7rsbx3v";
+    sha256 = "0bjrv6pxrzmb4d09yikl5wg6hz3llc30xl0ldzik4jzjrr8bcfpn";
   };
 
   buildInputs = [ zlib bzip2 openssl lzo libgcrypt gpgme xz ]

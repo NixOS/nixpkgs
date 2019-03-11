@@ -68,10 +68,6 @@ mkDerivation {
   # ./plasma-workspace.patch.
   patches = [
     ./plasma-workspace.patch
-    (fetchpatch {
-      url = "https://github.com/KDE/plasma-workspace/commit/11e570d861858f3b3e2694e5f9ec242d7f9f12b9.patch";
-      sha256 = "1vk9yacb59k0v5mgbpgmciflca9r0ll4wh1d83ffx2y2v8sqwiv2";
-    })
   ];
 
   preConfigure = ''

@@ -5,18 +5,18 @@
 
 stdenv.mkDerivation rec {
   name = "yelp-${version}";
-  version = "3.28.1";
+  version = "3.30.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "033w5qnhm495pnvscnb3k2dagzgq4fsnzcrh0k2rgr10mw2mv2p8";
+    sha256 = "060a902j15k76fyhk8xfl38ipvrrcc0qd7nm2mcck4ifb45b0zv4";
   };
 
   nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook ];
   buildInputs = [
     gtk3 glib webkitgtk sqlite
     libxml2 libxslt gnome3.yelp-xsl
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
 

@@ -1,6 +1,9 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 
 let
   readyFile  = "/tmp/readerReady";
@@ -96,7 +99,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       homerow.expect = [ "a" "r" "s" "t" "n" "e" "i" "o"         ];
     };
 
-    extraConfig.i18n.consoleKeyMap = "en-latin9";
+    extraConfig.i18n.consoleKeyMap = "colemak/colemak";
     extraConfig.services.xserver.layout = "us";
     extraConfig.services.xserver.xkbVariant = "colemak";
   };

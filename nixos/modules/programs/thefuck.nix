@@ -29,8 +29,8 @@ in
 
     config = mkIf cfg.enable {
       environment.systemPackages = with pkgs; [ thefuck ];
-      environment.shellInit = initScript;
 
+      programs.bash.interactiveShellInit = initScript;
       programs.zsh.interactiveShellInit = mkIf prg.zsh.enable initScript;
       programs.fish.interactiveShellInit = mkIf prg.fish.enable ''
         ${pkgs.thefuck}/bin/thefuck --alias | source

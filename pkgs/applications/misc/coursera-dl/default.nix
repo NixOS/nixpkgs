@@ -22,6 +22,11 @@ in pythonPackages.buildPythonApplication rec {
 
   checkInputs = with pythonPackages; [ pytest mock ];
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace '==' '>='
+  '';
+
   preConfigure = ''
     export LC_ALL=en_US.utf-8
   '';

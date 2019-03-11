@@ -2,15 +2,15 @@
 , hicolor-icon-theme, libsoup, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "homebank-5.2.1";
+  name = "homebank-5.2.2";
   src = fetchurl {
     url = "http://homebank.free.fr/public/${name}.tar.gz";
-    sha256 = "0i3pb4v4fs98xd6d4x2gjvhqrsrjvssaws3nkpjia4fagd4dvqbz";
+    sha256 = "19cm49p2x6nwia2yvwj3fv7jxbhw0vx4bs1zqbfvdr5vzwgj5j5c";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = [ gtk libofx intltool hicolor-icon-theme libsoup
-    gnome3.defaultIconTheme ];
+    gnome3.adwaita-icon-theme ];
 
   meta = with stdenv.lib; {
     description = "Free, easy, personal accounting for everyone";

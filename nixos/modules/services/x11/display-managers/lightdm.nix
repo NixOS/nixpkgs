@@ -80,6 +80,8 @@ in
   imports = [
     ./lightdm-greeters/gtk.nix
     ./lightdm-greeters/mini.nix
+    ./lightdm-greeters/enso-os.nix
+    ./lightdm-greeters/pantheon.nix
   ];
 
   options = {
@@ -195,7 +197,7 @@ in
       { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
         message = ''
           LightDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
+          services.xserver.windowManager.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
         '';
       }
@@ -207,15 +209,11 @@ in
       }
     ];
 
-    services.xserver.displayManager.job = {
-      logToFile = true;
-
-      # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-      execCmd = ''
-        export PATH=${lightdm}/sbin:$PATH
-        exec ${lightdm}/sbin/lightdm
-      '';
-    };
+    # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
+    services.xserver.displayManager.job.execCmd = ''
+      export PATH=${lightdm}/sbin:$PATH
+      exec ${lightdm}/sbin/lightdm
+    '';
 
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
     environment.etc."lightdm/users.conf".source = usersConf;

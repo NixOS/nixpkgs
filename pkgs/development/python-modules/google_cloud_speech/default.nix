@@ -3,18 +3,19 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "0.35.0";
+  version = "0.36.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5db2d69315b3d95d067c9bffe17994b6ee9252702888cc300d76252b451638e1";
+    sha256 = "3d77da6086c01375908c8b800808ff83748a34b98313f885bd86df95448304fc";
   };
 
   propagatedBuildInputs = [ google_api_core ];
   checkInputs = [ pytest mock ];
 
-  # needs credentials
-  doCheck = false;
+  checkPhase = ''
+    pytest tests/unit
+  '';
 
   meta = with stdenv.lib; {
     description = "Cloud Speech API enables integration of Google speech recognition into applications.";

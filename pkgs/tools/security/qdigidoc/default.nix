@@ -1,14 +1,14 @@
 { stdenv, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
-, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations }:
+, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
 
 stdenv.mkDerivation rec {
   name = "qdigidoc-${version}";
-  version = "3.13.6";
+  version = "4.1.0";
 
   src = fetchgit {
-    url = "https://github.com/open-eid/qdigidoc";
+    url = "https://github.com/open-eid/DigiDoc4-Client";
     rev = "v${version}";
-    sha256 = "1qq9fgvkc7fi37ly3kgxksrm4m5rxk9k5s5cig8z0cszsfk6h9lx";
+    sha256 = "1iry36h3pfnw2gqjnfhv53i2svybxj8jf18qh486djyai84hjr4d";
     fetchSubmodules = true;
   };
 
@@ -24,11 +24,6 @@ stdenv.mkDerivation rec {
       --replace $\{TSL_URL} file://${tsl}
   '';
 
-  patches = [
-    # https://github.com/open-eid/qdigidoc/pull/163
-    ./qt511.patch
-  ];
-
   buildInputs = [
     libdigidocpp
     opensc
@@ -36,11 +31,12 @@ stdenv.mkDerivation rec {
     openssl
     pcsclite
     qtbase
+    qtsvg
     qttranslations
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/qdigidocclient \
+    wrapProgram $out/bin/qdigidoc4 \
       --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
   '';
 

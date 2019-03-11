@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "libsignal-protocol-c";
+  pname = "libsignal-protocol-c";
   version = "2.3.2";
 
   src = fetchFromGitHub {

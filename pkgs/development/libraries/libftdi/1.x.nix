@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, libusb1, confuse
+{ stdenv, fetchurl, cmake, pkgconfig, libusb1, libconfuse
 , cppSupport ? true, boost ? null
 , pythonSupport ? true, python ? null, swig ? null
 , docSupport ? true, doxygen ? null
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0x0vncf6i92slgrn0h7ghkskqbglbs534220qa84d0qg114zndpc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = with stdenv.lib; [ cmake confuse ]
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = with stdenv.lib; [ libconfuse ]
     ++ optionals cppSupport [ boost ]
     ++ optionals pythonSupport [ python swig ]
     ++ optionals docSupport [ doxygen ];

@@ -1,62 +1,78 @@
 { stdenv, fetchFromGitHub, cmake, doxygen, makeWrapper
 , msgpack, neovim, pythonPackages, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "neovim-qt-${version}";
-  version = "0.2.10";
+let
+  unwrapped = stdenv.mkDerivation rec {
+    pname = "neovim-qt-unwrapped";
+    version = "0.2.11";
 
-  src = fetchFromGitHub {
-    owner  = "equalsraf";
-    repo   = "neovim-qt";
-    rev    = "v${version}";
-    sha256 = "0hq3w9d6qbzf0j7zm3ls0wpvnab64kypb4i0bhmsnk605mvx63r4";
+    src = fetchFromGitHub {
+      owner  = "equalsraf";
+      repo   = "neovim-qt";
+      rev    = "v${version}";
+      sha256 = "0pc1adxc89p2rdvb6nxyqr9sjzqz9zw2dg7a4ardxsl3a8jga1wh";
+    };
+
+    cmakeFlags = [
+      "-DUSE_SYSTEM_MSGPACK=1"
+    ];
+
+    buildInputs = [
+      neovim.unwrapped # only used to generate help tags at build time
+      qtbase
+    ] ++ (with pythonPackages; [
+      jinja2 python msgpack
+    ]);
+
+    nativeBuildInputs = [ cmake doxygen makeWrapper ];
+
+    enableParallelBuilding = true;
+
+    preCheck = ''
+      # The GUI tests require a running X server, disable them
+      sed -i ../test/CMakeLists.txt \
+        -e '/^add_xtest_gui/d'
+    '';
+
+    doCheck = true;
+
+    meta = with stdenv.lib; {
+      description = "Neovim client library and GUI, in Qt5";
+      license     = licenses.isc;
+      maintainers = with maintainers; [ peterhoeg ];
+      inherit (neovim.meta) platforms;
+      inherit version;
+    };
   };
+in
+  stdenv.mkDerivation {
+    pname = "neovim-qt";
+    version = unwrapped.version;
+    buildCommand = if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      cp -r ${unwrapped}/bin/nvim-qt.app $out/Applications
 
-  cmakeFlags = [
-    "-DUSE_SYSTEM_MSGPACK=1"
-  ];
+      chmod -R a+w "$out/Applications/nvim-qt.app/Contents/MacOS"
+      wrapProgram "$out/Applications/nvim-qt.app/Contents/MacOS/nvim-qt" \
+        --prefix PATH : "${neovim}/bin"
+    '' else ''
+      makeWrapper '${unwrapped}/bin/nvim-qt' "$out/bin/nvim-qt" \
+        --prefix PATH : "${neovim}/bin"
 
-  buildInputs = with pythonPackages; [
-    neovim qtbase msgpack
-  ] ++ (with pythonPackages; [
-    jinja2 msgpack python
-  ]);
+      # link .desktop file
+      mkdir -p "$out/share"
+      ln -s '${unwrapped}/share/applications' "$out/share/applications"
+    '';
 
-  nativeBuildInputs = [ cmake doxygen makeWrapper ];
+    preferLocalBuild = true;
 
-  enableParallelBuilding = true;
+    nativeBuildInputs = [
+      makeWrapper
+    ];
 
-  preConfigure = ''
-    # we rip out a number of tests that fail in the build env
-    # the GUI tests will never work but the others should - they did before neovim 0.2.0
-    # was released
-    sed -i test/CMakeLists.txt \
-      -e '/^add_xtest_gui/d' \
-      -e '/tst_neovimobject/d' \
-      -e '/tst_neovimconnector/d' \
-      -e '/tst_callallmethods/d' \
-      -e '/tst_encoding/d'
-  '';
+    passthru = {
+      inherit unwrapped;
+    };
 
-  doCheck = true;
-
-  postInstall = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv $out/bin/nvim-qt.app $out/Applications
-    rmdir $out/bin || :
-
-    wrapProgram "$out/Applications/nvim-qt.app/Contents/MacOS/nvim-qt" \
-      --prefix PATH : "${neovim}/bin"
-  '' else ''
-    wrapProgram "$out/bin/nvim-qt" \
-      --prefix PATH : "${neovim}/bin"
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Neovim client library and GUI, in Qt5";
-    license     = licenses.isc;
-    maintainers = with maintainers; [ peterhoeg ];
-    inherit (neovim.meta) platforms;
-    inherit version;
-  };
-}
+    inherit (unwrapped) meta;
+  }

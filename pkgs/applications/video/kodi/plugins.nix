@@ -1,12 +1,15 @@
 { stdenv, callPackage, fetchurl, fetchFromGitHub, unzip
-, cmake, kodiPlain, libcec_platform, tinyxml
-, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib }:
+, cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
+, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
+, python2Packages, expat, glib, nspr, nss, openssl
+, libssh, libarchive, lzma, bzip2, lz4, lzo }:
 
 with stdenv.lib;
 
 let self = rec {
 
   pluginDir = "/share/kodi/addons";
+  rel = "Leia";
 
   kodi = kodiPlain;
 
@@ -53,6 +56,8 @@ let self = rec {
 
     dontStrip = true;
 
+    extraRuntimeDependencies = [ ];
+
     installPhase = ''
       ${if isNull sourceDir then "" else "cd $src/$sourceDir"}
       d=$out${pluginDir}/${namespace}
@@ -63,7 +68,8 @@ let self = rec {
     '';
   } // args));
 
-  mkKodiABIPlugin = { plugin, namespace, version, extraBuildInputs ? [], ... }@args:
+  mkKodiABIPlugin = { plugin, namespace, version, extraBuildInputs ? [],
+    extraRuntimeDependencies ? [], extraInstallPhase ? "", ... }@args:
   toKodiPlugin (stdenv.mkDerivation (rec {
     name = "kodi-plugin-${plugin}-${version}";
 
@@ -71,6 +77,8 @@ let self = rec {
 
     buildInputs = [ cmake kodiPlain kodi-platform libcec_platform ]
                ++ extraBuildInputs;
+
+    inherit extraRuntimeDependencies;
 
     # disables check ensuring install prefix is that of kodi
     cmakeFlags = [
@@ -83,6 +91,7 @@ let self = rec {
     installPhase = let n = namespace; in ''
       make install
       ln -s $out/lib/addons/${n}/${n}.so.${version} $out${pluginDir}/${n}/${n}.so.${version}
+      ${extraInstallPhase}
     '';
   } // args));
 
@@ -180,26 +189,6 @@ let self = rec {
     // (mkController "ps")
     // (mkController "snes");
 
-  exodus = mkKodiPlugin rec {
-
-    plugin = "exodus";
-    namespace = "plugin.video.exodus";
-    version = "3.1.13";
-
-    src = fetchurl {
-      url = "https://offshoregit.com/${plugin}/${namespace}/${namespace}-${version}.zip";
-      sha256 = "1zyay7cinljxmpzngzlrr4pnk2a7z9wwfdcsk6a4p416iglyggdj";
-    };
-
-    buildInputs = [ unzip ];
-
-    meta = {
-      description = "A streaming plugin for Kodi";
-      platforms = platforms.all;
-      maintainers = with maintainers; [ edwtjo ];
-    };
-  };
-
   hyper-launcher = let
     pname = "hyper-launcher";
     version = "1.5.2";
@@ -231,14 +220,14 @@ let self = rec {
 
   joystick = mkKodiABIPlugin rec {
     namespace = "peripheral.joystick";
-    version = "1.3.2";
+    version = "1.4.7";
     plugin = namespace;
 
     src = fetchFromGitHub {
-      owner = "kodi-game";
+      owner = "xbmc";
       repo = namespace;
-      rev = "96171dd32899553ffe8fc775fca66e8df5ff5cf1";
-      sha256 = "18m61v8z9fbh4imvzhh4g9629r9df49g2yk9ycaczirg131dhfbh";
+      rev = "v${version}";
+      sha256 = "03gsp4kg41s3n4ib4wsv7m3krfipgwc2z07i4mnd5zvg0c4xrmap";
     };
 
     meta = {
@@ -249,6 +238,25 @@ let self = rec {
 
     extraBuildInputs = [ libusb pcre-cpp ];
 
+  };
+
+  simpleplugin = mkKodiPlugin rec {
+    plugin = "simpleplugin";
+    namespace = "script.module.simpleplugin";
+    version = "2.3.2";
+
+    src = fetchFromGitHub {
+      owner = "romanvm";
+      repo = namespace;
+      rev = "v.${version}";
+      sha256 = "0myar8dqjigb75pcc8zx3i5z79p1ifgphgb82s5syqywk0zaxm3j";
+    };
+
+    meta = {
+      homepage = src.meta.homepage;
+      description = "Simpleplugin API";
+      license = licenses.gpl3;
+    };
   };
 
   svtplay = mkKodiPlugin rec {
@@ -282,14 +290,14 @@ let self = rec {
 
   steam-controller = mkKodiABIPlugin rec {
     namespace = "peripheral.steamcontroller";
-    version = "0.9.0";
+    version = "0.10.0";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = namespace;
-      rev = "76f640fad4f68118f4fab6c4c3338d13daca7074";
-      sha256 = "0yqlfdiiymb8z6flyhpval8w3kdc9qv3mli3jg1xn5ac485nxsxh";
+      rev = "ea345392ab5aa4485f3a48d2037fa8a8e8ab82de";
+      sha256 = "1hbd8fdvn7xkr9csz1g9wah78nhnq1rkazl4zwa31y70830k3279";
     };
 
     extraBuildInputs = [ libusb ];
@@ -355,13 +363,13 @@ let self = rec {
 
     plugin = "pvr-hts";
     namespace = "pvr.hts";
-    version = "3.4.16";
+    version = "4.4.14";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hts";
-      rev = "b39e4e9870d68841279cbc7d7214f3ad9b27f330";
-      sha256 = "0pmlgqr4kd0gvckz77mj6v42kcx6lb23anm8jnf2fbn877snnijx";
+      rev = "${version}-${rel}";
+      sha256 = "1bcwcwd2yjhw85yk6lyhf0iqiclrsz7r7vpbxgc650fwqbb146gr";
     };
 
     meta = {
@@ -377,13 +385,13 @@ let self = rec {
 
     plugin = "pvr-hdhomerun";
     namespace = "pvr.hdhomerun";
-    version = "2.4.7";
+    version = "3.5.0";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hdhomerun";
-      rev = "60d89d16dd953d38947e8a6da2f8bb84a0f764ef";
-      sha256 = "0dvdv0vk2q12nj0i5h51iaypy3i7jfsxjyxwwpxfy82y8260ragy";
+      rev = "${version}-${rel}";
+      sha256 = "1zrkvfn0im2qmvqm93pa3cg8xkxv61sxlj8nsz4r5z9v9nhqadf6";
     };
 
     meta = {
@@ -401,13 +409,13 @@ let self = rec {
 
     plugin = "pvr-iptvsimple";
     namespace = "pvr.iptvsimple";
-    version = "2.4.14";
+    version = "3.5.7";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.iptvsimple";
-      rev = "2a649d7e21b64c4fa4a8b14c2cc139261eebc7e8";
-      sha256 = "1f1im2gachrxnr3z96h5cg2c13vapgkvkdwvrbl4hxlnyp1a6jyz";
+      rev = "${version}-${rel}";
+      sha256 = "17znib7c491h2ii4gagxradh0jyvgga0d548gbk4yjj2nc9qqc6d";
     };
 
     meta = {
@@ -418,20 +426,20 @@ let self = rec {
       license = licenses.gpl2Plus;
     };
 
-    extraBuildInputs = [ zlib ];
+    extraBuildInputs = [ zlib rapidxml ];
   };
 
   osmc-skin = mkKodiPlugin rec {
 
     plugin = "osmc-skin";
     namespace = "skin.osmc";
-    version = "17.0.4";
+    version = "18.0.0";
 
     src = fetchFromGitHub {
       owner = "osmc";
       repo = namespace;
-      rev = "a9268937f49286bab9fb49de430b8aafd7a60a9e";
-      sha256 = "1b3fm02annsq58pcfc985glrmh21rmqksdj3q8wn6gyza06jdf3v";
+      rev = "40a6c318641e2cbeac58fb0e7dde9c2beac737a0";
+      sha256 = "1l7hyfj5zvjxjdm94y325bmy1naak455b9l8952sb0gllzrcwj6s";
     };
 
     meta = {
@@ -443,4 +451,103 @@ let self = rec {
     };
   };
 
+  yatp = python2Packages.toPythonModule (mkKodiPlugin rec {
+    plugin = "yatp";
+    namespace = "plugin.video.yatp";
+    version = "3.3.2";
+
+    src = fetchFromGitHub {
+      owner = "romanvm";
+      repo = "kodi.yatp";
+      rev = "v.${version}";
+      sha256 = "12g1f57sx7dy6wy7ljl7siz2qs1kxcmijcg7xx2xpvmq61x9qa2d";
+    };
+
+    patches = [ ./yatp/dont-monkey.patch ];
+
+    propagatedBuildInputs = [
+      simpleplugin
+      python2Packages.requests
+      python2Packages.libtorrentRasterbar
+    ];
+
+    meta = {
+      homepage = src.meta.homepage;
+      description = "Yet Another Torrent Player: libtorrent-based torrent streaming for Kodi";
+      license = licenses.gpl3;
+    };
+  });
+
+  inputstream-adaptive = mkKodiABIPlugin rec {
+
+    plugin = "inputstream-adaptive";
+    namespace = "inputstream.adaptive";
+    version = "2.3.12";
+
+    src = fetchFromGitHub {
+      owner = "peak3d";
+      repo = "inputstream.adaptive";
+      rev = "${version}";
+      sha256 = "09d9b35mpaf3g5m51viyan9hv7d2i8ndvb9wm0j7rs5gwsf0k71z";
+    };
+
+    extraBuildInputs = [ expat ];
+
+    extraRuntimeDependencies = [ glib nspr nss stdenv.cc.cc.lib ];
+
+    extraInstallPhase = let n = namespace; in ''
+      ln -s $out/lib/addons/${n}/libssd_wv.so $out/${pluginDir}/${n}/libssd_wv.so
+    '';
+
+    meta = {
+      homepage = https://github.com/peak3d/inputstream.adaptive;
+      description = "Kodi inputstream addon for several manifest types";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ sephalon ];
+    };
+  };
+
+  vfs-sftp = mkKodiABIPlugin rec {
+    namespace = "vfs.sftp";
+    version = "1.0.1";
+    plugin = namespace;
+
+    src = fetchFromGitHub {
+      owner = "xbmc";
+      repo = namespace;
+      rev = "${version}-${rel}";
+      sha256 = "1l9igrl168s91c15v9klyaaz226ik3xlbzjk2f1346fvzmp87g9v";
+    };
+
+    meta = with stdenv.lib; {
+      description = "SFTP Virtual Filesystem add-on for Kodi";
+      license = licenses.gpl2Plus;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ minijackson ];
+    };
+
+    extraBuildInputs = [ openssl libssh zlib ];
+  };
+
+  vfs-libarchive = mkKodiABIPlugin rec {
+    namespace = "vfs.libarchive";
+    version = "1.0.5";
+    plugin = namespace;
+
+    src = fetchFromGitHub {
+      owner = "xbmc";
+      repo = namespace;
+      rev = "${version}-${rel}";
+      sha256 = "0l1f1fijflr1ia30r0dcz1x2zn35c4lxy30az1cqxdf8nipza0b8";
+    };
+
+    meta = with stdenv.lib; {
+      description = "LibArchive Virtual Filesystem add-on for Kodi";
+      license = licenses.gpl2Plus;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ minijackson ];
+    };
+
+    extraBuildInputs = [ libarchive lzma bzip2 zlib lz4 lzo openssl ];
+  };
 }; in self

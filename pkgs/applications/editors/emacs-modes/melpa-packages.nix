@@ -89,6 +89,12 @@ self:
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
 
+      forge = super.forge.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       # build timeout
       graphene = markBroken super.graphene;
 
@@ -167,6 +173,12 @@ self:
           (attrs.nativeBuildInputs or []) ++ [ external.git ];
       });
 
+      magit-filenotify = super.magit-filenotify.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       # missing OCaml
       merlin = markBroken super.merlin;
 
@@ -200,6 +212,13 @@ self:
 
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
+
+      racer = super.racer.overrideAttrs (attrs: {
+        postPatch = attrs.postPatch or "" + ''
+          substituteInPlace racer.el \
+            --replace /usr/local/src/rust/src ${external.rustPlatform.rustcSrc}
+        '';
+      });
 
       # upstream issue: missing file footer
       seoul256-theme = markBroken super.seoul256-theme;

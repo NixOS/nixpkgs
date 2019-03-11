@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bootstrap_cmds, coreutils, glibc, m4 }:
+{ stdenv, fetchurl, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
 
 let
   options = rec {
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     cp -r .  "$out/share/ccl-installation"
 
     mkdir -p "$out/bin"
-    echo -e '#!${stdenv.shell}\n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
+    echo -e '#!${runtimeShell}\n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
     chmod a+x "$out"/bin/"${CCL_RUNTIME}"
     ln -s "$out"/bin/"${CCL_RUNTIME}" "$out"/bin/ccl
   '';

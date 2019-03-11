@@ -4,7 +4,7 @@
 , glib
 , gnome3
 , gsettings-desktop-schemas
-, gtk
+, gtk3
 , libcanberra-gtk3
 , libgtop
 , libstartup_notification
@@ -16,13 +16,13 @@
 
 let
   pname = "metacity";
-  version = "3.28.0";
+  version = "3.30.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0kzap0lzlkcgkna3h426xgwrn2zpipy8cfsxpfynnaf74vyas3aw";
+    sha256 = "12kr472gblx7jxh9rvnamy09bkg29ms2pgc0c3373piqmavi24qg";
   };
 
   patches = [
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gsettings-desktop-schemas
-    gtk
+    gtk3
     libcanberra-gtk3
     libgtop
     libstartup_notification

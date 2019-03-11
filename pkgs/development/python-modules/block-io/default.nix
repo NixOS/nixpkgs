@@ -2,12 +2,19 @@
 
 buildPythonPackage rec {
   pname = "block-io";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15468pvpcp41ly7kjpmikpyi4av57d9zhf5j1v01j78r1xqqk56g";
+    sha256 = "4909d58b32ab7f93d3cd83fa4bbe4edef42ab7566f016bdb6a405a0d8b1907c9";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/BlockIo/block_io-python/commit/8ec0a0cd1afcfcb439d6dc306d8497dd9e4a0993.patch";
+      sha256 = "1i6c153wvkr5ncm3cpn34faxvavz534x5kndwn4adlaxlzq30snn";
+    })
+  ];
 
   propagatedBuildInputs = [
     base58

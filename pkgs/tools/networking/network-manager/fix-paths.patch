@@ -1,17 +1,41 @@
 --- a/clients/common/nm-vpn-helpers.c
 +++ b/clients/common/nm-vpn-helpers.c
-@@ -205,7 +205,7 @@
- 	char *argv[4];
- 	const char *path;
+@@ -214,10 +214,7 @@
+ 		NULL,
+ 	};
  
--	path = nm_utils_find_helper ("openconnect", "/usr/sbin/openconnect", error);
+-	path = nm_utils_file_search_in_paths ("openconnect", "/usr/sbin/openconnect", DEFAULT_PATHS,
+-	                                      G_FILE_TEST_IS_EXECUTABLE, NULL, NULL, error);
+-	if (!path)
+-		return FALSE;
 +	path = "@openconnect@/bin/openconnect";
- 	if (!path)
- 		return FALSE;
  
+ 	argv[0] = (char *) path;
+ 	argv[1] = "--authenticate";
+--- a/data/84-nm-drivers.rules
++++ b/data/84-nm-drivers.rules
+@@ -7,6 +7,6 @@
+ # Determine ID_NET_DRIVER if there's no ID_NET_DRIVER or DRIVERS (old udev?)
+ ENV{ID_NET_DRIVER}=="?*", GOTO="nm_drivers_end"
+ DRIVERS=="?*", GOTO="nm_drivers_end"
+-PROGRAM="/bin/sh -c 'ethtool -i $1 | sed -n s/^driver:\ //p' -- $env{INTERFACE}", RESULT=="?*", ENV{ID_NET_DRIVER}="%c"
++PROGRAM="@shell@ -c '@ethtool@/bin/ethtool -i $1 | @coreutils@/bin/sed -n s/^driver:\ //p' -- $env{INTERFACE}", RESULT=="?*", ENV{ID_NET_DRIVER}="%c"
+ 
+ LABEL="nm_drivers_end"
+--- a/data/NetworkManager.service.in
++++ b/data/NetworkManager.service.in
+@@ -8,7 +8,7 @@
+ [Service]
+ Type=dbus
+ BusName=org.freedesktop.NetworkManager
+-ExecReload=/usr/bin/dbus-send --print-reply --system --type=method_call --dest=org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager.Reload uint32:0
++ExecReload=@dbus@/bin/dbus-send --print-reply --system --type=method_call --dest=org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager.Reload uint32:0
+ #ExecReload=/bin/kill -HUP $MAINPID
+ ExecStart=@sbindir@/NetworkManager --no-daemon
+ Restart=on-failure
 --- a/src/devices/nm-device.c
 +++ b/src/devices/nm-device.c
-@@ -11828,14 +11828,14 @@
+@@ -12350,14 +12350,14 @@
  			gw = nm_ip4_config_best_default_route_get (priv->ip_config_4);
  			if (gw) {
  				nm_utils_inet4_ntop (NMP_OBJECT_CAST_IP4_ROUTE (gw)->gateway, buf);
@@ -30,7 +54,7 @@
  		}
 --- a/src/nm-core-utils.c
 +++ b/src/nm-core-utils.c
-@@ -428,7 +428,7 @@
+@@ -421,7 +421,7 @@
  
  	/* construct the argument list */
  	argv = g_ptr_array_sized_new (4);

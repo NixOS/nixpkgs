@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pgmanage-${version}";
-  version = "10.3.1";
+  version = "11.0.1";
 
   src = fetchFromGitHub {
     owner  = "pgManage";
     repo   = "pgManage";
     rev    = "v${version}";
-    sha256 = "0ym1arla9wfkmr5n6h6dfyd680vlnng5s5j5nyxi2gl2wxqqhxzz";
+    sha256 = "1a1dbc32b3y0ph8ydf800h6pz7dg6g1gxgid4gffk7k58xj0c5yf";
   };
 
   patchPhase = ''

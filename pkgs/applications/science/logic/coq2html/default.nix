@@ -1,4 +1,4 @@
-{ stdenv, make, fetchgit, ocaml }:
+{ stdenv, fetchgit, ocaml }:
 
 let 
   version = "20170720";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "1x466j0pyjggyz0870pdllv9f5vpnfrgkd0w7ajvm9rkwyp3f610";
   };
 
-  buildInputs = [ make ocaml ];
+  buildInputs = [ ocaml ];
 
   installPhase = ''
     mkdir -p $out/bin

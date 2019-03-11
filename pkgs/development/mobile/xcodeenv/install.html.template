@@ -4,14 +4,14 @@
     <head>
         <title>Install IPA</title>
     </head>
-    
+
     <body>
         <a id="forwardlink" href="@INSTALL_URL@">Go to the install page or wait a second</a>
-        
+
         <script type="text/javascript">
             setTimeout(function() {
                 var link = document.getElementById('forwardlink');
-                
+
                 if(document.createEvent) {
                     var eventObj = document.createEvent('MouseEvents');
                     eventObj.initEvent('click', true, false);

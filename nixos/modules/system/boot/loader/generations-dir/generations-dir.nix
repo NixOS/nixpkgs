@@ -7,8 +7,8 @@ let
   generationsDirBuilder = pkgs.substituteAll {
     src = ./generations-dir-builder.sh;
     isExecutable = true;
-    inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+    inherit (pkgs.buildPackages) bash;
+    path = with pkgs.buildPackages; [coreutils gnused gnugrep];
     inherit (config.boot.loader.generationsDir) copyKernels;
   };
 

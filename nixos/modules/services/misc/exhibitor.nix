@@ -405,6 +405,9 @@ in
         cp -Rf ${pkgs.zookeeper}/* ${cfg.baseDir}/zookeeper
         chown -R zookeeper ${cfg.baseDir}/zookeeper/conf
         chmod -R u+w ${cfg.baseDir}/zookeeper/conf
+        replace_what=$(echo ${pkgs.zookeeper} | sed 's/[\/&]/\\&/g')
+        replace_with=$(echo ${cfg.baseDir}/zookeeper | sed 's/[\/&]/\\&/g')
+        sed -i 's/'"$replace_what"'/'"$replace_with"'/g' ${cfg.baseDir}/zookeeper/bin/zk*.sh
       '';
     };
     users.users = singleton {

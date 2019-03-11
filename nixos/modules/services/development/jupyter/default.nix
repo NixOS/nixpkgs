@@ -145,6 +145,7 @@ in {
       systemd.services.jupyter = {
         description = "Jupyter development server";
 
+        after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
         # TODO: Patch notebook so we can explicitly pass in a shell

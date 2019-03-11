@@ -19,7 +19,7 @@ starting VDE switch for network 1
 &gt; startAll
 &gt; testScript
 &gt; $machine->succeed("touch /tmp/foo")
-&gt; print($machine->succeed("pwd"), "\n") # Show stdout of command
+&gt; print($machine->succeed("pwd")) # Show stdout of command
 </screen>
   The function <command>testScript</command> executes the entire test script
   and drops you back into the test driver command line upon its completion.

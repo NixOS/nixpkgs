@@ -4,36 +4,29 @@
 , libxslt, gst_all_1 ? null
 , withPdfReader        ? true
 , withMediaPlayback    ? true
-, withWebEngineDefault ? true
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
 
 let
-  pdfjs = stdenv.mkDerivation rec {
-    name = "pdfjs-${version}";
+  pdfjs = let
     version = "1.10.100";
-
-    src = fetchzip {
-      url = "https://github.com/mozilla/pdf.js/releases/download/${version}/${name}-dist.zip";
-      sha256 = "04df4cf6i6chnggfjn6m1z9vb89f01a0l9fj5rk21yr9iirq9rkq";
-      stripRoot = false;
-    };
-
-    buildCommand = ''
-      mkdir $out
-      cp -r $src $out
-    '';
+  in
+  fetchzip rec {
+    name = "pdfjs-${version}";
+    url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
+    sha256 = "04df4cf6i6chnggfjn6m1z9vb89f01a0l9fj5rk21yr9iirq9rkq";
+    stripRoot = false;
   };
 
 in python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.4.2";
+  version = "1.6.0";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "1pnj47mllg1x34qakxs7s59x8mj262nfhdxgihsb2h2ywjq4fpgx";
+    sha256 = "1pkbzhd5syn7m8q0i7zlxjdgd693z0gj0h22nkc48zjkn214w236";
   };
 
   # Needs tox
@@ -45,7 +38,7 @@ in python3Packages.buildPythonApplication rec {
   ] ++ lib.optionals withMediaPlayback (with gst_all_1; [
     gst-plugins-base gst-plugins-good
     gst-plugins-bad gst-plugins-ugly gst-libav
-  ]) ++ lib.optional (!withWebEngineDefault) python3Packages.qtwebkit-plugins;
+  ]);
 
   nativeBuildInputs = [
     makeWrapper wrapGAppsHook asciidoc
@@ -60,7 +53,13 @@ in python3Packages.buildPythonApplication rec {
     pyreadability pykeepass stem
   ];
 
+  patches = [
+    ./fix-restart.patch
+  ];
+
   postPatch = ''
+    substituteInPlace qutebrowser/app.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
+
     sed -i "s,/usr/share/,$out/share/,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
@@ -94,10 +93,6 @@ in python3Packages.buildPythonApplication rec {
     for i in $scripts; do
       patchPythonScript "$i"
     done
-  '';
-
-  postFixup = lib.optionalString (! withWebEngineDefault) ''
-    wrapProgram $out/bin/qutebrowser --add-flags "--backend webkit"
   '';
 
   meta = with stdenv.lib; {

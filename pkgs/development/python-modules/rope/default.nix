@@ -1,13 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "rope";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a108c445e1cd897fe19272ab7877d172e7faf3d4148c80e7d20faba42ea8f7b2";
+    sha256 = "031eb54b3eeec89f4304ede816995ed2b93a21e6fba16bd02aff10a0d6c257b7";
   };
+
+  checkInputs = [ nose ];
+  checkPhase = ''
+    # tracked upstream here https://github.com/python-rope/rope/issues/247
+    NOSE_IGNORE_FILES=type_hinting_test.py nosetests ropetest
+  '';
 
   meta = with stdenv.lib; {
     description = "Python refactoring library";

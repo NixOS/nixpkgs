@@ -5,14 +5,18 @@ with lib;
 let
   cfg = config.services.nextcloud;
 
+  phpPackage = pkgs.php73;
+  phpPackages = pkgs.php73Packages;
+
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
   };
 
   phpOptionsExtensions = ''
-    ${optionalString cfg.caching.apcu "extension=${cfg.phpPackages.apcu}/lib/php/extensions/apcu.so"}
-    ${optionalString cfg.caching.redis "extension=${cfg.phpPackages.redis}/lib/php/extensions/redis.so"}
-    ${optionalString cfg.caching.memcached "extension=${cfg.phpPackages.memcached}/lib/php/extensions/memcached.so"}
+    ${optionalString cfg.caching.apcu "extension=${phpPackages.apcu}/lib/php/extensions/apcu.so"}
+    ${optionalString cfg.caching.redis "extension=${phpPackages.redis}/lib/php/extensions/redis.so"}
+    ${optionalString cfg.caching.memcached "extension=${phpPackages.memcached}/lib/php/extensions/memcached.so"}
+    extension=${phpPackages.imagick}/lib/php/extensions/imagick.so
     zend_extension = opcache.so
     opcache.enable = 1
   '';
@@ -45,6 +49,11 @@ in {
       default = "/var/lib/nextcloud";
       description = "Storage path of nextcloud.";
     };
+    logLevel = mkOption {
+      type = types.ints.between 0 4;
+      default = 2;
+      description = "Log level value between 0 (DEBUG) and 4 (FATAL).";
+    };
     https = mkOption {
       type = types.bool;
       default = false;
@@ -70,7 +79,15 @@ in {
       '';
     };
 
-    nginx.enable = mkEnableOption "nginx vhost management";
+    nginx.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable nginx virtual host management.
+        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+      '';
+    };
 
     webfinger = mkOption {
       type = types.bool;
@@ -78,18 +95,6 @@ in {
       description = ''
         Enable this option if you plan on using the webfinger plugin.
         The appropriate nginx rewrite rules will be added to your configuration.
-      '';
-    };
-
-    phpPackages = mkOption {
-      type = types.attrs;
-      default = pkgs.php71Packages;
-      defaultText = "pkgs.php71Packages";
-      description = ''
-        Overridable attribute of the PHP packages set to use.  If any caching
-        module is enabled, it will be taken from here.  Therefore it should
-        match the version of PHP given to
-        <literal>services.phpfpm.phpPackage</literal>.
       '';
     };
 
@@ -111,6 +116,21 @@ in {
       };
       description = ''
         Options for PHP's php.ini file for nextcloud.
+      '';
+    };
+
+    poolConfig = mkOption {
+      type = types.lines;
+      default = ''
+        pm = dynamic
+        pm.max_children = 32
+        pm.start_servers = 2
+        pm.min_spare_servers = 2
+        pm.max_spare_servers = 4
+        pm.max_requests = 500
+      '';
+      description = ''
+        Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
       '';
     };
 
@@ -148,7 +168,12 @@ in {
       dbhost = mkOption {
         type = types.nullOr types.str;
         default = "localhost";
-        description = "Database host.";
+        description = ''
+          Database host.
+
+          Note: for using Unix authentication with PostgreSQL, this should be
+          set to <literal>/tmp</literal>.
+        '';
       };
       dbport = mkOption {
         type = with types; nullOr (either int str);
@@ -169,7 +194,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         description = ''
-          Database password.  Use <literal>adminpassFile</literal> to avoid this
+          Admin password.  Use <literal>adminpassFile</literal> to avoid this
           being world-readable in the <literal>/nix/store</literal>.
         '';
       };
@@ -188,6 +213,19 @@ in {
           Trusted domains, from which the nextcloud installation will be
           acessible.  You don't need to add
           <literal>services.nextcloud.hostname</literal> here.
+        '';
+      };
+
+      overwriteProtocol = mkOption {
+        type = types.nullOr (types.enum [ "http" "https" ]);
+        default = null;
+        example = "https";
+
+        description = ''
+          Force Nextcloud to always use HTTPS i.e. for link generation. Nextcloud
+          uses the currently used protocol by default, but when behind a reverse-proxy,
+          it may use <literal>http</literal> for everything although Nextcloud
+          may be served via HTTPS.
         '';
       };
     };
@@ -253,6 +291,8 @@ in {
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
+              'log_level' => '${builtins.toString cfg.logLevel}',
+              ${optionalString (cfg.config.overwriteProtocol != null) "'overwriteprotocol' => '${cfg.config.overwriteProtocol}',"}
             ];
           '';
           occInstallCmd = let
@@ -325,25 +365,21 @@ in {
       };
 
       services.phpfpm = {
-        phpOptions = phpOptionsExtensions;
-        phpPackage = pkgs.php71;
         pools.nextcloud = let
           phpAdminValues = (toKeyValue
             (foldr (a: b: a // b) {}
               (mapAttrsToList (k: v: { "php_admin_value[${k}]" = v; })
                 phpOptions)));
         in {
+          phpOptions = phpOptionsExtensions;
+          phpPackage = phpPackage;
           listen = "/run/phpfpm/nextcloud";
           extraConfig = ''
             listen.owner = nginx
             listen.group = nginx
             user = nextcloud
             group = nginx
-            pm = dynamic
-            pm.max_children = 32
-            pm.start_servers = 2
-            pm.min_spare_servers = 2
-            pm.max_spare_servers = 4
+            ${cfg.poolConfig}
             env[NEXTCLOUD_CONFIG_DIR] = ${cfg.home}/config
             env[PATH] = /run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin
             ${phpAdminValues}
@@ -377,7 +413,7 @@ in {
               };
               "/" = {
                 priority = 200;
-                extraConfig = "rewrite ^ /index.php$uri;";
+                extraConfig = "rewrite ^ /index.php$request_uri;";
               };
               "~ ^/store-apps" = {
                 priority = 201;
@@ -391,19 +427,19 @@ in {
                 priority = 210;
                 extraConfig = "return 301 $scheme://$host/remote.php/dav;";
               };
-              "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/" = {
+              "~ ^\\/(?:build|tests|config|lib|3rdparty|templates|data)\\/" = {
                 priority = 300;
                 extraConfig = "deny all;";
               };
-              "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
+              "~ ^\\/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
                 priority = 300;
                 extraConfig = "deny all;";
               };
-              "~ ^/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|ocs-provider/.+)\\.php(?:$|/)" = {
+              "~ ^\\/(?:index|remote|public|cron|core/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|ocs-provider\\/.+|ocm-provider\\/.+)\\.php(?:$|\\/)" = {
                 priority = 500;
                 extraConfig = ''
-                  include ${pkgs.nginxMainline}/conf/fastcgi.conf;
-                  fastcgi_split_path_info ^(.+\.php)(/.*)$;
+                  include ${config.services.nginx.package}/conf/fastcgi.conf;
+                  fastcgi_split_path_info ^(.+\.php)(\\/.*)$;
                   fastcgi_param PATH_INFO $fastcgi_path_info;
                   fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
                   fastcgi_param modHeadersAvailable true;
@@ -414,22 +450,23 @@ in {
                   fastcgi_read_timeout 120s;
                 '';
               };
-              "~ ^/(?:updater|ocs-provider)(?:$|/)".extraConfig = ''
+              "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
                 try_files $uri/ =404;
                 index index.php;
               '';
-              "~ \\.(?:css|js|woff|svg|gif)$".extraConfig = ''
-                try_files $uri /index.php$uri$is_args$args;
+              "~ \\.(?:css|js|woff2?|svg|gif)$".extraConfig = ''
+                try_files $uri /index.php$request_uri;
                 add_header Cache-Control "public, max-age=15778463";
                 add_header X-Content-Type-Options nosniff;
                 add_header X-XSS-Protection "1; mode=block";
                 add_header X-Robots-Tag none;
                 add_header X-Download-Options noopen;
                 add_header X-Permitted-Cross-Domain-Policies none;
+                add_header Referrer-Policy no-referrer;
                 access_log off;
               '';
               "~ \\.(?:png|html|ttf|ico|jpg|jpeg)$".extraConfig = ''
-                try_files $uri /index.php$uri$is_args$args;
+                try_files $uri /index.php$request_uri;
                 access_log off;
               '';
             };
@@ -439,10 +476,12 @@ in {
               add_header X-Robots-Tag none;
               add_header X-Download-Options noopen;
               add_header X-Permitted-Cross-Domain-Policies none;
+              add_header Referrer-Policy no-referrer;
               error_page 403 /core/templates/403.php;
               error_page 404 /core/templates/404.php;
               client_max_body_size ${cfg.maxUploadSize};
               fastcgi_buffers 64 4K;
+              fastcgi_hide_header X-Powered-By;
               gzip on;
               gzip_vary on;
               gzip_comp_level 4;
@@ -460,4 +499,6 @@ in {
       };
     })
   ]);
+
+  meta.doc = ./nextcloud.xml;
 }

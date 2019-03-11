@@ -1,8 +1,8 @@
 { stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk2, libXrender, pango, gnome2, cairo, freetype, fontconfig
+, libXfixes, atk, gtk3, libXrender, pango, gnome2, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem
+, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme
 }:
 
 with stdenv.lib;
@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "4.0.5";
+  version = "4.2.2";
 
   src = fetchurl {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "15wxcahlnz2k3331wqv30d5gq38fqh178hv87xky9b9vyh8qpcvz";
+    sha256 = "0zbnw2x15688hjdj10kpp2ipka3j7b2p945a4mzwlsc8a245ljgb";
   };
 
   libPath = makeLibraryPath [
@@ -49,9 +49,10 @@ stdenv.mkDerivation rec {
     libXcomposite
     libXfixes
     libXrender
-    gtk2
+    gtk3
     gnome2.GConf
     libgnome-keyring
+    openssl
   ];
 
   desktopItem = makeDesktopItem {
@@ -64,8 +65,8 @@ stdenv.mkDerivation rec {
     comment = "Graphical Git client from Axosoft";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ dpkg ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
 
   unpackCmd = ''
     mkdir out
@@ -84,6 +85,7 @@ stdenv.mkDerivation rec {
     rm -rf bin/gitkraken share/lintian
     cp -av share bin $out/
     popd
+
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
   '';
 

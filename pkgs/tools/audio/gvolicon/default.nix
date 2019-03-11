@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    makeWrapper alsaLib gnome3.gtk gdk_pixbuf gnome3.defaultIconTheme
+    makeWrapper alsaLib gnome3.gtk gdk_pixbuf gnome3.adwaita-icon-theme
     librsvg wrapGAppsHook
   ];
 

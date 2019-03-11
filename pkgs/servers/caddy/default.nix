@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "caddy-${version}";
-  version = "0.11.0";
+  version = "0.11.4";
 
   goPackagePath = "github.com/mholt/caddy";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "mholt";
     repo = "caddy";
     rev = "v${version}";
-    sha256 = "0lvzvsblw4zpdfigaad4y577wfh7skx1ln5xhiz0k7vaqfj96ijy";
+    sha256 = "1h7zx5gzv40xkxab8pc6hgd9zkpbnhiy1hnldriybpf2ya2lac9a";
   };
 
   buildFlagsArray = ''

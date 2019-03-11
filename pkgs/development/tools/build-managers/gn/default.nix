@@ -1,9 +1,9 @@
 { stdenv, lib, fetchgit, fetchzip, fetchpatch, darwin, writeText
-, git, ninja, python }:
+, git, ninja, python2 }:
 
 let
-  rev = "106b823805adcc043b2bfe5bc21d58f160a28a7b";
-  sha256 = "1a5s6i07s8l4f1bakh3fyaym00xz7zgd49sp6awm10xb7yjh95ba";
+  rev = "96ff462cddf35f98e25fd5d098fc27bc81eab94a";
+  sha256 = "1ny23sprl7ygb2lpdnqxv60m8kaf4h2dmpqjp61l5vc2s7f32g97";
 
   shortRev = builtins.substring 0 7 rev;
   lastCommitPosition = writeText "last_commit_position.h" ''
@@ -18,7 +18,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gn-${version}";
-  version = "20180830";
+  version = "20181031";
 
   src = fetchgit {
     url = "https://gn.googlesource.com/gn";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       --replace "NSArray<NSString*>*" "NSArray*"
   '';
 
-  nativeBuildInputs = [ ninja python git ];
+  nativeBuildInputs = [ ninja python2 git ];
   buildInputs = lib.optionals stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
     libobjc
     cctools

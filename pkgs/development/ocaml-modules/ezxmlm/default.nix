@@ -1,23 +1,17 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune, xmlm }:
+{ stdenv, fetchFromGitHub, buildDunePackage, xmlm }:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
+  pname = "ezxmlm";
   version = "1.0.2";
-  name = "ocaml${ocaml.version}-ezxmlm-${version}";
 
   src = fetchFromGitHub {
     owner = "avsm";
-    repo = "ezxmlm";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1dgr61f0hymywikn67inq908x5adrzl3fjx3v14l9k46x7kkacl9";
   };
 
   propagatedBuildInputs = [ xmlm ];
-
-  buildInputs = [ ocaml findlib dune ];
-
-  buildFlags = "build";
-
-  inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
     description = "Combinators to use with xmlm for parsing and selection";
@@ -34,7 +28,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.carlosdagos ];
     inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
     license = licenses.isc;
   };
 }

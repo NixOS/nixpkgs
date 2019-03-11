@@ -13,82 +13,102 @@ let
               else "ia32";
   git_url = "https://chromium.googlesource.com";
 
+  # This data is from the DEPS file in the root of a V8 checkout
   deps = {
     "base/trace_event/common" = fetchgit {
-      url = "${git_url}/chromium/src/base/trace_event/common.git";
-      rev = "65d1d42a5df6c0a563a6fdfa58a135679185e5d9";
-      sha256 = "0ikk0dj12adzr0138jrmwzhx8n9sl5qzs86a3mc3gva08a8wc84p";
+      url    = "${git_url}/chromium/src/base/trace_event/common.git";
+      rev    = "211b3ed9d0481b4caddbee1322321b86a483ca1f";
+      sha256 = "080sya1dg32hi5gj7zr3r5l18r6w8g0imajyf3xfvnz67a2i8dd7";
     };
     "build" = fetchgit {
-      url = "${git_url}/chromium/src/build.git";
-      rev = "48a2b7b39debc7c77c868c9ddb0a360af1ebc367";
-      sha256 = "0aj554dfdbwnikwaapznfq55wkwbvg4114h7qamixy8ryjkaiy0k";
+      url    = "${git_url}/chromium/src/build.git";
+      rev    = "7315579e388589b62236ad933f09afd1e838d234";
+      sha256 = "14gsigyjfm03kfzmz0v6429b6qnycvzx0yj3vwaks8may26aiv71";
     };
     "buildtools" = fetchgit {
-      url = "${git_url}/chromium/buildtools.git";
-      rev = "5af0a3a8b89827a8634132080a39ab4b63dee489";
-      sha256 = "1841803m40w1hmnmm7qzdpk4b6q1m8cb7q4hsflqfpddpf4lp3v1";
+      url    = "${git_url}/chromium/buildtools.git";
+      rev    = "0dd5c6f980d22be96b728155249df2da355989d9";
+      sha256 = "0m1fh0qjcx9c69khnqcsqvrnqs7ji6wfxns9vv9mknj20sph5ydr";
     };
     "test/benchmarks/data" = fetchgit {
-      url = "${git_url}/v8/deps/third_party/benchmarks.git";
-      rev = "05d7188267b4560491ff9155c5ee13e207ecd65f";
+      url    = "${git_url}/v8/deps/third_party/benchmarks.git";
+      rev    = "05d7188267b4560491ff9155c5ee13e207ecd65f";
       sha256 = "0ad2ay14bn67d61ks4dmzadfnhkj9bw28r4yjdjjyzck7qbnzchl";
     };
     "test/mozilla/data" = fetchgit {
-      url = "${git_url}/v8/deps/third_party/mozilla-tests.git";
-      rev = "f6c578a10ea707b1a8ab0b88943fe5115ce2b9be";
+      url    = "${git_url}/v8/deps/third_party/mozilla-tests.git";
+      rev    = "f6c578a10ea707b1a8ab0b88943fe5115ce2b9be";
       sha256 = "0rfdan76yfawqxbwwb35aa57b723j3z9fx5a2w16nls02yk2kqyn";
     };
     "test/test262/data" = fetchgit {
-      url = "${git_url}/external/github.com/tc39/test262.git";
-      rev = "1b911a8f8abf4cb63882cfbe72dcd4c82bb8ad91";
-      sha256 = "1hbp7vv41k7jka8azc78hhw4qng7gckr6dz1van7cyd067znwvr4";
+      url    = "${git_url}/external/github.com/tc39/test262.git";
+      rev    = "a6c1d05ac4fed084fa047e4c52ab2a8c9c2a8aef";
+      sha256 = "1cy3val2ih6r4sbaxd1v9fir87mrlw1kr54s64g68gnch53ck9s3";
     };
     "test/test262/harness" = fetchgit {
-      url = "${git_url}/external/github.com/test262-utils/test262-harness-py.git";
-      rev = "0f2acdd882c84cff43b9d60df7574a1901e2cdcd";
+      url    = "${git_url}/external/github.com/test262-utils/test262-harness-py.git";
+      rev    = "0f2acdd882c84cff43b9d60df7574a1901e2cdcd";
       sha256 = "00brj5avp43yamc92kinba2mg3a2x1rcd7wnm7z093l73idprvkp";
     };
     "test/wasm-js" = fetchgit {
-      url = "${git_url}/external/github.com/WebAssembly/spec.git";
-      rev = "17b4a4d98c80b1ec736649d5a73496a0e6d12d4c";
-      sha256 = "03nyrrqffzj6xrmqi1v7f9m9395bdk53x301fy5mcq4hhpq6rsjr";
+      url    = "${git_url}/external/github.com/WebAssembly/spec.git";
+      rev    = "2113ea7e106f8a964e0445ba38f289d2aa845edd";
+      sha256 = "07aw7x2xzmzk905mqf8gbbb1bi1a5kv99g8iv6x2p07d3zns7xzx";
     };
-    "testing/gmock" = fetchgit {
-      url = "${git_url}/external/googlemock.git";
-      rev = "0421b6f358139f02e102c9c332ce19a33faf75be";
-      sha256 = "1xiky4v98maxs8fg1avcd56y0alv3hw8qyrlpd899zgzbq2k10pp";
+    "third_party/depot_tools" = fetchgit {
+      url    = "${git_url}/chromium/tools/depot_tools.git";
+      rev    = "fb734036f4b5ae6d5afc63cbfc41d3a5d1c29a82";
+      sha256 = "1738y7xgfnn0hfdr8g5jw7555841ycxbn580mdffwv4jnbn7120s";
     };
-    "testing/gtest" = fetchgit {
-      url = "${git_url}/external/github.com/google/googletest.git";
-      rev = "6f8a66431cb592dad629028a50b3dd418a408c87";
-      sha256 = "0bdba2lr6pg15bla9600zg0r0vm4lnrx0wqz84p376wfdxra24vw";
+    "third_party/googletest/src" = fetchgit {
+      url    = "${git_url}/external/github.com/google/googletest.git";
+      rev    = "ce468a17c434e4e79724396ee1b51d86bfc8a88b";
+      sha256 = "0nik8wb1b0zk2sslawgp5h211r5bc4x7m962dgnmbk11ccvsmr23";
     };
     "third_party/icu" = fetchgit {
-      url = "${git_url}/chromium/deps/icu.git";
-      rev = "08cb956852a5ccdba7f9c941728bb833529ba3c6";
-      sha256 = "0vn2iv068kmcjqqx5cgyha80x9iraz11hpx3q4n3rkvrlvbb3d7b";
+      url    = "${git_url}/chromium/deps/icu.git";
+      rev    = "a9a2bd3ee4f1d313651c5272252aaf2a3e7ed529";
+      sha256 = "1bfyxakgv9z0rxbqsy5csi85kg8dqy7i6zybmng5wyzag9cns4f9";
     };
     "third_party/instrumented_libraries" = fetchgit {
-      url = "${git_url}/chromium/src/third_party/instrumented_libraries.git";
-      rev = "644afd349826cb68204226a16c38bde13abe9c3c";
-      sha256 = "0d1vkwilgv1a4ghazn623gwmm7h51padpfi94qrmig1y748xfwfa";
+      url    = "${git_url}/chromium/src/third_party/instrumented_libraries.git";
+      rev    = "323cf32193caecbf074d1a0cb5b02b905f163e0f";
+      sha256 = "0q3n3ivqva28qpn67ds635521pwzpc9apcyagz65i9j17bb1k231";
     };
-    # templates of code generator require jinja2 2.8 (while nixpkgs has 2.9.5, which breaks the template)
     "third_party/jinja2" = fetchgit {
-      url = "${git_url}/chromium/src/third_party/jinja2.git";
-      rev = "d34383206fa42d52faa10bb9931d6d538f3a57e0";
-      sha256 = "0d9hyw0bvp3p0dbwy833cm9vdqxcam0qbm9jc561ynphddxlkmgd";
+      url    = "${git_url}/chromium/src/third_party/jinja2.git";
+      rev    = "b41863e42637544c2941b574c7877d3e1f663e25";
+      sha256 = "1qgilclkav67m6cl2xq2kmzkswrkrb2axc2z8mw58fnch4j1jf1r";
     };
     "third_party/markupsafe" = fetchgit {
-      url = "${git_url}/chromium/src/third_party/markupsafe.git";
-      rev = "8f45f5cfa0009d2a70589bcda0349b8cb2b72783";
+      url    = "${git_url}/chromium/src/third_party/markupsafe.git";
+      rev    = "8f45f5cfa0009d2a70589bcda0349b8cb2b72783";
       sha256 = "168ppjmicfdh4i1l0l25s86mdbrz9fgxmiq1rx33x79mph41scfz";
     };
+    "third_party/proguard" = fetchgit {
+      url    = "${git_url}/chromium/src/third_party/proguard.git";
+      rev    = "eba7a98d98735b2cc65c54d36baa5c9b46fe4f8e";
+      sha256 = "1yx86z2p243b0ykixgqz6nlqfp8swa6n0yl5fgb29fa4jvsjz3d1";
+    };
     "tools/clang" = fetchgit {
-      url = "${git_url}/chromium/src/tools/clang.git";
-      rev = "40f69660bf3cd407e72b8ae240fdd6c513dddbfe";
-      sha256 = "1plkb9dcn34yd6lad7w59s9vqwmcc592dasgdk232spkafpg8qcf";
+      url    = "${git_url}/chromium/src/tools/clang.git";
+      rev    = "c0b1d892b2bc1291eb287d716ca239c1b03fb215";
+      sha256 = "1mz1pqzr2b37mymbkqkmpmj48j7a8ig0ibaw3dfilbx5nbl4wd2z";
+    };
+    "tools/gyp" = fetchgit {
+      url    = "${git_url}/external/gyp.git";
+      rev    = "d61a9397e668fa9843c4aa7da9e79460fe590bfb";
+      sha256 = "1z081h72mjy285jb1kj5xd0pb4p12n9blvsimsavyn3ldmswv0r0";
+    };
+    "tools/luci-go" = fetchgit {
+      url    = "${git_url}/chromium/src/tools/luci-go.git";
+      rev    = "abcd908f74fdb155cc8870f5cae48dff1ece7c3c";
+      sha256 = "07c8vanc31wal6aw8v0s499l7ifrgvdvi2sx4ln3nyha5ngxinld";
+    };
+    "tools/swarming_client" = fetchgit {
+      url    = "${git_url}/infra/luci/client-py.git";
+      rev    = "9a518d097dca20b7b00ce3bdfc5d418ccc79893a";
+      sha256 = "1d8nly7rp24gx7q0m01jvsc15nw5fahayfczwd40gzzzkmvhjazi";
     };
   };
 
@@ -96,7 +116,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "v8-${version}";
-  version = "6.2.414.27";
+  version = "6.9.427.14";
 
   inherit doCheck;
 
@@ -104,7 +124,7 @@ stdenv.mkDerivation rec {
     owner = "v8";
     repo = "v8";
     rev = version;
-    sha256 = "15zrb9bcpnhljhrilqnjaak3a4xnhj8li6ra12g3gkrw3fzir9a2";
+    sha256 = "13d50iz87qh7v8l8kjky8wqs9rvz02pgw74q8crqi5ywnvvill1x";
   };
 
   postUnpack = ''
@@ -133,11 +153,13 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     tools/dev/v8gen.py -vv ${arch}.release -- \
-        is_component_build=true \
-        ${if snapshot then "v8_use_external_startup_data=false" else "v8_use_snapshot=false" } \
-        is_clang=false \
-        linux_use_bundled_binutils=false \
-        treat_warnings_as_errors=false
+        is_component_build=true               \
+        ${if snapshot then "v8_use_external_startup_data=false" else "v8_use_snapshot=false"} \
+        is_clang=false                        \
+        linux_use_bundled_binutils=false      \
+        treat_warnings_as_errors=false        \
+        use_custom_libcxx=false               \
+        use_custom_libcxx_for_host=false
   '';
 
   nativeBuildInputs = [ gn ninja pkgconfig ];

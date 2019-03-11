@@ -13,9 +13,10 @@ appleDerivation {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
     for f in Products/Release/*; do
-      install -D $f $out/bin/$(basename $f)
+      if [ -f $f ]; then
+        install -D $f $out/bin/$(basename $f)
+      fi
     done
   '';
 

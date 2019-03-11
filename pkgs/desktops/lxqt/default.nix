@@ -18,7 +18,6 @@ let
     lxqt-admin = callPackage ./lxqt-admin { };
     lxqt-config = callPackage ./lxqt-config { };
     lxqt-globalkeys = callPackage ./lxqt-globalkeys { };
-    lxqt-l10n = callPackage ./lxqt-l10n { };
     lxqt-notificationd = callPackage ./lxqt-notificationd { };
     lxqt-openssh-askpass = callPackage ./lxqt-openssh-askpass { };
     lxqt-policykit = callPackage ./lxqt-policykit { };
@@ -29,8 +28,6 @@ let
     lxqt-themes = callPackage ./lxqt-themes { };
     pavucontrol-qt = libsForQt5.callPackage ./pavucontrol-qt { };
     qtermwidget = callPackage ./qtermwidget { };
-    # for now keep version 0.7.1 because virt-manager-qt currently does not compile with qtermwidget-0.8.0
-    qtermwidget_0_7_1 = callPackage ./qtermwidget/0.7.1.nix { };
 
     ### CORE 2
     lxqt-panel = callPackage ./lxqt-panel { };
@@ -70,7 +67,6 @@ let
       lxqt-admin
       lxqt-config
       lxqt-globalkeys
-      lxqt-l10n
       lxqt-notificationd
       lxqt-openssh-askpass
       lxqt-policykit

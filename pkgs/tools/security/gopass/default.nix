@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, makeWrapper }:
 
 buildGoPackage rec {
-  version = "1.8.2";
+  version = "1.8.4";
   name = "gopass-${version}";
 
   goPackagePath = "github.com/gopasspw/gopass";
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "gopasspw";
     repo = "gopass";
     rev = "v${version}";
-    sha256 = "0a2nnm3liilp2jcsvgyp87cjw92gspcc3azaszfvx125l63r4c9f";
+    sha256 = "1gw16k09vwarh5qz118s7w2j090phdrrgd2h1q52pv93jpi3br7n";
   };
 
   wrapperPath = with stdenv.lib; makeBinPath ([

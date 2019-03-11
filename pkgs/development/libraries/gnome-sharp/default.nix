@@ -1,17 +1,35 @@
-{stdenv, fetchurl, pkgconfig, gtk2, mono, gtk-sharp-2_0, gnome2}:
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkgconfig
+, gtk2
+, mono
+, gtk-sharp-2_0
+, gnome2
+, autoconf
+, automake
+, libtool
+, which
+}:
 
-stdenv.mkDerivation {
-  name = "gnome-sharp-2.24.1";
-  src = fetchurl {
-    url = http://ftp.gnome.org/pub/gnome/sources/gnome-sharp/2.24/gnome-sharp-2.24.1.tar.gz;
-    sha256 = "0cfvs7hw67fp0wimskqd0gdfx323gv6hi0c5pf59krnmhdrl6z8p";
+stdenv.mkDerivation rec {
+  name = "gnome-sharp-${version}";
+  version = "2.24.4";
+
+  src = fetchFromGitHub {
+    owner = "mono";
+    repo = "gnome-sharp";
+    rev = "${version}";
+    sha256 = "15jsm6n0sih0nf3w8vmvik97q7l3imz4vkdzmp9k7bssiz4glj1z";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoconf automake libtool which ];
   buildInputs = [ gtk2 mono gtk-sharp-2_0 ]
-  ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui]);
+  ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui ]);
 
-  patches = [ ./Makefile.in.patch ];
+  preConfigure = ''
+    ./bootstrap-${lib.versions.majorMinor version}
+  '';
 
   dontStrip = true;
 

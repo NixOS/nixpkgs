@@ -12,6 +12,7 @@
 , gunicorn
 , jinja2
 , virtualenv
+, mock
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,8 @@ buildPythonPackage rec {
   buildInputs = [
     webtest Mako genshi Kajiki sqlalchemy gunicorn jinja2 virtualenv
   ];
+
+  checkInputs = [ mock ];
 
   meta = with stdenv.lib; {
     description = "Pecan";

@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, libxslt, docbook_xsl
-, docbook_xml_dtd_43, python3, gobjectIntrospection, glib, udev, kmod, parted, libyaml
+, docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted, libyaml
 , cryptsetup, lvm2, dmraid, utillinux, libbytesize, libndctl, nss, volume_key
 }:
 
 let
-  version = "2.19";
+  version = "2.20";
 in stdenv.mkDerivation rec {
   name = "libblockdev-${version}";
 
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     owner = "storaged-project";
     repo = "libblockdev";
     rev = "${version}-1";
-    sha256 = "1ny31vaarzbpw0h863p2r5cvjsfs77d33nnisf8bhjc6ps6js3ys";
+    sha256 = "13xy8vx2dnnxczpnwapchc5ncigcxb2fhpmrmglbpkjqmhn2zbdj";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig gtk-doc libxslt docbook_xsl docbook_xml_dtd_43 python3 gobjectIntrospection
+    autoreconfHook pkgconfig gtk-doc libxslt docbook_xsl docbook_xml_dtd_43 python3 gobject-introspection
   ];
 
   buildInputs = [

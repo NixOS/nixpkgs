@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.bitlbee.org/;
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ wkennington pSub ];
+    maintainers = with maintainers; [ pSub ];
     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

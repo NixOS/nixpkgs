@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  installFlags = [ "PREFIX=/" "DESTDIR=$(out)" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A simple web browser based on WebKit/GTK+";

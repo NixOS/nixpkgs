@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   patches =
     [(fetchpatch { # see https://www.cmake.org/Bug/view.php?id=13959
       name = "FindFreetype-2.5.patch";
-      url = "https://www.cmake.org/Bug/file_download.php?file_id=4660&type=bug";
+      url = "https://public.kitware.com/Bug/file/4660/0001-Support-finding-freetype2-using-pkg-config.patch";
       sha256 = "136z63ff83hnwd247cq4m8m8164pklzyl5i2csf5h6wd8p01pdkj";
     })] ++
     # Don't search in non-Nix locations such as /usr, but do search in our libc.

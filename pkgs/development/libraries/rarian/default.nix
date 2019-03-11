@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libxml2, libxslt, docbook_xml_dtd_42, gnome3}:
+{stdenv, fetchurl, pkgconfig, perlPackages, libxml2, libxslt, docbook_xml_dtd_42, gnome3}:
 let
   pname = "rarian";
   version = "0.8.1";
@@ -11,7 +11,8 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ perl perlXMLParser libxml2 libxslt];
+  buildInputs = [ libxml2 libxslt ]
+    ++ (with perlPackages; [ perl XMLParser ]);
   configureFlags = [ "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/docbook.cat" ];
 
   passthru = {

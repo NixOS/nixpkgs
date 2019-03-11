@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "jsbeautifier";
-  version = "1.7.5";
+  version = "1.8.9";
 
   propagatedBuildInputs = [ six ];
 
@@ -10,7 +10,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78eb1e5c8535484f0d0b588aca38da3fb5e0e34de2d1ab53c077e71c55757473";
+    sha256 = "7d02baa9b0459bf9c5407c1b99ad5566de04a3b664b18a58ac64f52832034204";
   };
 
   meta = with lib; {

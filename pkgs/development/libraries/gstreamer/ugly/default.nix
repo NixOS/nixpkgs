@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-ugly-${version}";
-  version = "1.14.2";
+  version = "1.14.4";
 
   meta = with lib; {
     description = "Gstreamer Ugly Plugins";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-ugly/${name}.tar.xz";
-    sha256 = "0s9xrz8knfv06fj1nbv3iq4xj7dj4cnzj3xvgb7zs89rv7crgq2m";
+    sha256 = "08vd1xgwmapnviah47zv5h2r02qdd20y4f07rvv5zhv6y4vxh0mc";
   };
 
   outputs = [ "out" "dev" ];
@@ -39,4 +39,6 @@ stdenv.mkDerivation rec {
     libintl
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks;
     [ IOKit CoreFoundation DiskArbitration ]);
+
+  NIX_LDFLAGS = [ "-lm" ];
 }

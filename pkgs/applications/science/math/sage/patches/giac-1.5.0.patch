@@ -1,0 +1,14 @@
+--- a/src/sage/interfaces/giac.py	2018-12-08 22:11:56.285500644 +0100
++++ b/src/sage/interfaces/giac.py	2018-12-08 22:11:56.285500644 +0100
+@@ -617,10 +617,7 @@
+             '4\n3'
+             sage: s='g(x):={\nx+1;\nx+2;\n}'
+             sage: giac(s)
+-            (x)->{
+-            x+1;
+-            x+2;
+-            }
++            (x)->[x+1,x+2]
+             sage: giac.g(5)
+             7
+         """

@@ -2,14 +2,14 @@
 
 python2Packages.buildPythonApplication rec {
   pname = "zeronet";
-  version = "0.6.2";
+  version = "0.6.5";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "HelloZeroNet";
     repo = "ZeroNet";
     rev = "v${version}";
-    sha256 = "0v19jjirkyv8hj2yfdj0c40zwynn51h2bj4issn5blr95vhfm8s7";
+    sha256 = "1b9jg525jq40czyw9xh9ck90fl9rzrdmzl2mzhqqhz23idb60j4a";
   };
 
   propagatedBuildInputs = with python2Packages; [ msgpack gevent ];

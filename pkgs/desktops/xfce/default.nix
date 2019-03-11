@@ -3,7 +3,7 @@
 lib.makeScope pkgs.newScope (self: with self; {
   #### NixOS support
 
-  inherit (pkgs.gnome2) libglade libwnck vte gtksourceview;
+  inherit (pkgs.gnome2) libglade vte gtksourceview;
   inherit (pkgs.gnome3) dconf;
   inherit (pkgs.perlPackages) URI;
 

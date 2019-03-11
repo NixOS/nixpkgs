@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "lf-${version}";
-  version = "8";
+  version = "11";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "0rmcac9wx9lldl57m1cim1adf2fqkva1yi4v6934jgccqhlqvk58";
+    sha256 = "13622sx6xmbm8gf38dn8y8mkfnlbpamg4hmzsy9jnzg4h8qbjm6b";
   };
 
   goPackagePath = "github.com/gokcehan/lf";

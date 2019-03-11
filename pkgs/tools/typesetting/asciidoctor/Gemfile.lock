@@ -69,7 +69,7 @@ GEM
     public_suffix (3.0.3)
     pygments.rb (1.2.1)
       multi_json (>= 1.0.0)
-    rack (2.0.5)
+    rack (2.0.6)
     ruby-enum (0.7.2)
       i18n
     ruby-rc4 (0.1.5)
@@ -103,4 +103,4 @@ DEPENDENCIES
   pygments.rb
 
 BUNDLED WITH
-   1.14.6
+   1.16.4

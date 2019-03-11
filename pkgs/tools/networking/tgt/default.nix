@@ -2,7 +2,7 @@
 , docbook_xsl }:
 
 let
-  version = "1.0.73";
+  version = "1.0.74";
 in stdenv.mkDerivation rec {
   name = "tgt-${version}";
 
@@ -10,14 +10,19 @@ in stdenv.mkDerivation rec {
     owner = "fujita";
     repo = "tgt";
     rev = "v${version}";
-    sha256 = "0alrdrklh5wq8x4xbp30zwnxkp0brx1mjkbp70dhaz0zbzvyydr0";
+    sha256 = "1k146w49dda77fd8frmc0nyr07ca1wh5vcw59fjid6knaj9vgck5";
   };
 
   buildInputs = [ libxslt systemd libaio docbook_xsl ];
 
-  DESTDIR = "$(out)";
-  PREFIX = "/";
-  SD_NOTIFY="1";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "SD_NOTIFY=1"
+  ];
+
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile

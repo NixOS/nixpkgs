@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gobjectIntrospection, mpv }:
+{ stdenv, fetchFromGitHub, pkgconfig, gobject-introspection, mpv }:
 
 stdenv.mkDerivation rec {
   name = "mpv-mpris-${version}.so";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ gobjectIntrospection mpv ];
+  buildInputs = [ gobject-introspection mpv ];
 
   installPhase = ''
     cp mpris.so $out

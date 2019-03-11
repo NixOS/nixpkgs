@@ -6,7 +6,7 @@ let
 
   cfg = config.services.jira;
 
-  pkg = pkgs.atlassian-jira.override (optionalAttrs cfg.sso.enable {
+  pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
     enableSSO = cfg.sso.enable;
     crowdProperties = ''
       application.name                        ${cfg.sso.applicationName}
@@ -131,6 +131,13 @@ in
         };
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.atlassian-jira;
+        defaultText = "pkgs.atlassian-jira";
+        description = "Atlassian JIRA package to use.";
+      };
+
       jrePackage = mkOption {
         type = types.package;
         default = pkgs.oraclejre8;
@@ -171,7 +178,7 @@ in
         ln -sf ${cfg.home}/{logs,work,temp,server.xml} /run/atlassian-jira
         ln -sf ${cfg.home} /run/atlassian-jira/home
 
-        chown -R ${cfg.user} ${cfg.home}
+        chown ${cfg.user} ${cfg.home}
 
         sed -e 's,port="8080",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''

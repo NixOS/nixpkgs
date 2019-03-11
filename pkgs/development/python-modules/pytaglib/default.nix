@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname   = "pytaglib";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44ab26dc4b33962b8db0bb8856e7b166539c0c555bc933a6bbbc96f4ec51c7a2";
+    sha256 = "c3458e64cea61a7d4189f26c601e7bfd82053f3c02c2247cb8c430847927ef18";
   };
 
   buildInputs = [ taglib cython ];

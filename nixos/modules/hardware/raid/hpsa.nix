@@ -8,7 +8,7 @@ let
     version = "2.40-13.0";
 
     src = pkgs.fetchurl {
-      url = "http://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/${name}_amd64.deb";
+      url = "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/${name}_amd64.deb";
       sha256 = "11w7fwk93lmfw0yya4jpjwdmgjimqxx6412sqa166g1pz4jil4sw";
     };
 
@@ -34,7 +34,7 @@ let
 
     meta = with lib; {
       description = "HP Smart Array CLI";
-      homepage = http://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/;
+      homepage = https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/;
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ volth ];

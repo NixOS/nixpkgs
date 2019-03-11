@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, gtk3, intltool, glib
-, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3, gobjectIntrospection
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
+, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3, gobject-introspection
+, gtk-doc, docbook_xsl, docbook_xml_dtd_43, python3 }:
 
 let
   pname = "gnome-bluetooth";
@@ -17,12 +17,12 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja intltool itstool pkgconfig libxml2 wrapGAppsHook gobjectIntrospection
-    gtk-doc docbook_xsl docbook_xml_dtd_43
+    meson ninja intltool itstool pkgconfig libxml2 wrapGAppsHook gobject-introspection
+    gtk-doc docbook_xsl docbook_xml_dtd_43 python3
   ];
   buildInputs = [
     glib gtk3 udev libnotify libcanberra-gtk3
-    gnome3.defaultIconTheme gnome3.gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
   ];
 
   mesonFlags = [

@@ -20,13 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = if withQt5 then null else [ ./0001-Fixes-build-with-Qt4.patch ];
 
-  cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ]
-    ++ stdenv.lib.optional stdenv.isDarwin [
-       # correctly detect the compiler
-       # for details see cmake --help-policy CMP0025
-       "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
-       ]
-   ;
+  cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
   nativeBuildInputs = [ cmake ];
 

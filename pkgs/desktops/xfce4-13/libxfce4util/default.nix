@@ -1,4 +1,4 @@
-{ lib, mkXfceDerivation, gobjectIntrospection }:
+{ lib, mkXfceDerivation, gobject-introspection }:
 
 mkXfceDerivation rec {
   category = "xfce";
@@ -7,7 +7,7 @@ mkXfceDerivation rec {
 
   sha256 = "0sb6pzhmh0qzfdhixj1ard56zi68318k86z3a1h3f2fhqy7gyf98";
 
-  buildInputs = [ gobjectIntrospection ];
+  buildInputs = [ gobject-introspection ];
 
   meta = with lib; {
     description = "Extension library for Xfce";

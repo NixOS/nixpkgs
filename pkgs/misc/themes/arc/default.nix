@@ -1,46 +1,47 @@
-{ stdenv, fetchFromGitHub, sassc, autoreconfHook, pkgconfig, gtk3
-, gnome-themes-extra, gtk-engine-murrine, optipng, inkscape}:
-
-let
-  pname = "arc-theme";
-in
+{ stdenv, fetchFromGitHub, sassc, autoreconfHook, pkgconfig, gtk3, gnome3
+, gtk-engine-murrine, optipng, inkscape }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "20180715";
+  pname = "arc-theme";
+  version = "20190213";
 
   src = fetchFromGitHub {
     owner  = "NicoHood";
     repo   = pname;
     rev    = version;
-    sha256 = "1kkfnkiih0i3pds5mgd1v9lrdrp4nh4hk42mw7sa4fpbjff4jh6j";
+    sha256 = "1qalf61xh6a8yz2a98z3ih0w9ky12v3wc61gdczbfnyfasgzc254";
   };
 
-  preBuild = ''
-    # Shut up inkscape's warnings
-    export HOME="$NIX_BUILD_ROOT"
-  '';
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconfig
+    sassc
+    optipng
+    inkscape
+    gtk3
+    gnome3.gnome-shell
+  ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig sassc optipng inkscape ];
-  buildInputs = [ gtk3 ];
+  propagatedUserEnvPkgs = [
+    gnome3.gnome-themes-extra
+    gtk-engine-murrine
+  ];
 
-  propagatedUserEnvPkgs = [ gnome-themes-extra gtk-engine-murrine ];
+  enableParallelBuilding = true;
 
   postPatch = ''
-    find . -name render-assets.sh |
-    while read filename
-    do
-      substituteInPlace "$filename" \
-        --replace "/usr/bin/inkscape" "${inkscape.out}/bin/inkscape" \
-        --replace "/usr/bin/optipng" "${optipng.out}/bin/optipng"
-    done
     patchShebangs .
+  '';
+
+  preBuild = ''
+    # Shut up inkscape's warnings about creating profile directory
+    export HOME="$NIX_BUILD_ROOT"
   '';
 
   configureFlags = [ "--disable-unity" ];
 
   postInstall = ''
-    install -Dm644 -t $out/share/doc/${pname}        AUTHORS *.md
+    install -Dm644 -t $out/share/doc/${pname} AUTHORS *.md
   '';
 
   meta = with stdenv.lib; {

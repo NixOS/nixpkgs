@@ -1,15 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi, six }:
+{ stdenv, buildPythonPackage, fetchPypi, mock, six }:
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "1.1.3";
+  version = "1.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ahzsxk52ws8k3kdq52qbsbsx2r9z350j8gg9adw4x5fjwksz4r8";
+    sha256 = "14013e7563102d808aae0cb5b3b2326979236d4bcd54c343ea636761629920cd";
   };
 
   propagatedBuildInputs = [ six ];
+  checkInputs = [ mock ];
 
   meta = with stdenv.lib; {
     homepage = http://graphite.wikidot.com/;

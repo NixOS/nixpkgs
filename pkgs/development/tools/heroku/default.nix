@@ -1,15 +1,15 @@
 { stdenv, lib, fetchurl, makeWrapper, nodejs }:
 
 stdenv.mkDerivation rec {
-  name = "heroku-${version}";
-  version = "7.16.0";
+  pname = "heroku";
+  version = "7.22.4";
 
   src = fetchurl {
     url = "https://cli-assets.heroku.com/heroku-v${version}/heroku-v${version}.tar.xz";
-    sha256 = "434573b4773ce7ccbb21b43b19529475d941fa7dd219b01b75968b42e6b62abe";
+    sha256 = "067kvkdn7yvzb3ws6yjsfbypww914fclhnxrh2dw1hc6cazfgmqp";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
 

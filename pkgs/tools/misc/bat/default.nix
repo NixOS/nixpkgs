@@ -4,17 +4,17 @@
 
 rustPlatform.buildRustPackage rec {
   name    = "bat-${version}";
-  version = "0.7.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = "bat";
     rev    = "v${version}";
-    sha256 = "1fzk0z7r70rjvv2c6531zaa1jzbcb7j9wbi0xqb9y4dls538bmz0";
+    sha256 = "1q22lbyrwh58vhznpjpkiaa8v4qv6a3a8lrxzaypd8wg78p9dca6";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "19syz0sxcpk3i4675bfq5gpb9i6hp81in36w820kkvamaimq10nd";
+  cargoSha256 = "0npj2rf4vr45gq3qwqq6kqnv9dh58v5lpx0gsmy2qrq44dxb75rq";
 
   nativeBuildInputs = [ cmake pkgconfig zlib ];
 

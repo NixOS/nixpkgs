@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   patches = [ ./gentoo-prototypes.patch ];
 
   postPatch = ''
-     # Fix http://sourceforge.net/p/gltron/bugs/15
+     # Fix https://sourceforge.net/p/gltron/bugs/15
      sed -i /__USE_MISC/d lua/src/lib/liolib.c
   '';
 

@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.free;
-    downloadPage = http://sourceforge.net/projects/soi/files/;
+    downloadPage = https://sourceforge.net/projects/soi/files/;
   };
 }

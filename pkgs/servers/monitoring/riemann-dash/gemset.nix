@@ -16,10 +16,10 @@
   rack = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "09bs295yq6csjnkzj7ncj50i6chfxrhmzg1pk6p0vd2lb9ac8pj5";
+      sha256 = "1g9926ln2lw12lfxm4ylq1h6nl0rafl10za3xvjzc87qvnqic87f";
       type = "gem";
     };
-    version = "1.6.4";
+    version = "1.6.11";
   };
   rack-protection = {
     dependencies = ["rack"];
@@ -30,6 +30,7 @@
     version = "1.5.3";
   };
   riemann-dash = {
+    dependencies = ["erubis" "multi_json" "sass" "sinatra" "webrick"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "1y2vh9vcl21b6k2wqgz1y8bbcrl07r43s6q2vkgp35z1b28xcszy";
@@ -46,6 +47,7 @@
     version = "3.4.22";
   };
   sinatra = {
+    dependencies = ["rack" "rack-protection" "tilt"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "1b81kbr65mmcl9cdq2r6yc16wklyp798rxkgmm5pr9fvsj7jwmxp";

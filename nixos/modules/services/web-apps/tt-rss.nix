@@ -34,7 +34,14 @@ let
       define('DB_HOST', '${optionalString (cfg.database.host != null) cfg.database.host}');
       define('DB_USER', '${cfg.database.user}');
       define('DB_NAME', '${cfg.database.name}');
-      define('DB_PASS', '${optionalString (cfg.database.password != null) (escape ["'" "\\"] cfg.database.password)}');
+      define('DB_PASS', ${
+        if (cfg.database.password != null) then
+          "'${(escape ["'" "\\"] cfg.database.password)}'"
+        else if (cfg.database.passwordFile != null) then
+          "file_get_contents('${cfg.database.passwordFile}')"
+        else
+          "''"
+      });
       define('DB_PORT', '${toString dbPort}');
 
       define('AUTH_AUTO_CREATE', ${boolToString cfg.auth.autoCreate});
@@ -46,7 +53,17 @@ let
       define('SINGLE_USER_MODE', ${boolToString cfg.singleUserMode});
 
       define('SIMPLE_UPDATE_MODE', ${boolToString cfg.simpleUpdateMode});
-      define('CHECK_FOR_UPDATES', ${boolToString cfg.checkForUpdates});
+
+      // Never check for updates - the running version of the code should be
+      // controlled entirely by the version of TT-RSS active in the current Nix
+      // profile. If TT-RSS updates itself to a version requiring a database
+      // schema upgrade, and then the SystemD tt-rss.service is restarted, the
+      // old code copied from the Nix store will overwrite the updated version,
+      // causing the code to detect the need for a schema "upgrade" (since the
+      // schema version in the database is different than in the code), but the
+      // update schema operation in TT-RSS will do nothing because the schema
+      // version in the database is newer than that in the code.
+      define('CHECK_FOR_UPDATES', false);
 
       define('FORCE_ARTICLE_PURGE', ${toString cfg.forceArticlePurge});
       define('SESSION_COOKIE_LIFETIME', ${toString cfg.sessionCookieLifetime});
@@ -161,6 +178,14 @@ let
         };
 
         password = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            The database user's password.
+          '';
+        };
+
+        passwordFile = mkOption {
           type = types.nullOr types.str;
           default = null;
           description = ''
@@ -399,14 +424,6 @@ let
         '';
       };
 
-      checkForUpdates = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Check for updates automatically if running Git version
-        '';
-      };
-
       enableGZipOutput = mkOption {
         type = types.bool;
         default = true;
@@ -474,26 +491,43 @@ let
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule ["services" "tt-rss" "checkForUpdates"] ''
+      This option was removed because setting this to true will cause TT-RSS
+      to be unable to start if an automatic update of the code in
+      services.tt-rss.root leads to a database schema upgrade that is not
+      supported by the code active in the Nix store.
+    '')
+  ];
 
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    services.phpfpm.poolConfigs = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = ''
-        listen = "${phpfpmSocketName}";
-        listen.owner = nginx
-        listen.group = nginx
-        listen.mode = 0600
-        user = ${cfg.user}
-        pm = dynamic
-        pm.max_children = 75
-        pm.start_servers = 10
-        pm.min_spare_servers = 5
-        pm.max_spare_servers = 20
-        pm.max_requests = 500
-        catch_workers_output = 1
-      '';
+    assertions = [
+      {
+        assertion = cfg.database.password != null -> cfg.database.passwordFile == null;
+        message = "Cannot set both password and passwordFile";
+      }
+    ];
+
+    services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
+      "${poolName}" = {
+        listen = "/var/run/phpfpm/${poolName}.sock";
+        extraConfig = ''
+          listen.owner = nginx
+          listen.group = nginx
+          listen.mode = 0600
+          user = ${cfg.user}
+          pm = dynamic
+          pm.max_children = 75
+          pm.start_servers = 10
+          pm.min_spare_servers = 5
+          pm.max_spare_servers = 20
+          pm.max_requests = 500
+          catch_workers_output = 1
+        '';
+      };
     };
 
     # NOTE: No configuration is done if not using virtual host
@@ -510,7 +544,7 @@ let
           locations."~ \.php$" = {
             extraConfig = ''
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
-              fastcgi_pass unix:${phpfpmSocketName};
+              fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.listen};
               fastcgi_index index.php;
             '';
           };
@@ -528,6 +562,7 @@ let
           callSql = e:
               if cfg.database.type == "pgsql" then ''
                   ${optionalString (cfg.database.password != null) "PGPASSWORD=${cfg.database.password}"} \
+                  ${optionalString (cfg.database.passwordFile != null) "PGPASSWORD=$(cat ${cfg.database.passwordFile})"} \
                   ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${config.services.postgresql.package}/bin/psql \
                     -U ${cfg.database.user} \
                     ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} --port ${toString dbPort}"} \

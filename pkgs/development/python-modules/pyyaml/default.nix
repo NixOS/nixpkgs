@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, libyaml }:
+{ lib, buildPythonPackage, fetchPypi, libyaml, buildPackages }:
 
 buildPythonPackage rec {
   pname = "PyYAML";
@@ -8,6 +8,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
   };
+
+  nativeBuildInputs = [ buildPackages.stdenv.cc ];
 
   propagatedBuildInputs = [ libyaml ];
 

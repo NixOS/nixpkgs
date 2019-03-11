@@ -30,7 +30,7 @@ least specific (the system profile)"
                  woman-manpath)))
 
 ;;; Make tramp work for remote NixOS machines
-(eval-after-load 'tramp
+(eval-after-load 'tramp-sh
   ;; TODO: We should also add the other `NIX_PROFILES' to this path.
   ;; However, these are user-specific, so we would need to discover
   ;; them dynamically after connecting via `tramp'

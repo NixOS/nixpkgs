@@ -79,6 +79,15 @@ stdenv.mkDerivation rec {
     for a in $out/opt/google/earth/free/*.so* ; do
       patchelf --set-rpath "${fullPath}:\$ORIGIN" $a
     done
+    
+    # Add desktop config file and icons
+    mkdir -p $out/share/{applications,icons/hicolor/{16x16,22x22,24x24,32x32,48x48,64x64,128x128,256x256}/apps,pixmaps}
+    ln -s $out/opt/google/earth/free/google-earth.desktop $out/share/applications/google-earth.desktop
+    sed -i -e "s|Exec=.*|Exec=$out/bin/googleearth|g" $out/opt/google/earth/free/google-earth.desktop
+    for size in 16 22 24 32 48 64 128 256; do
+      ln -s $out/opt/google/earth/free/product_logo_"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/google-earth.png
+    done
+    ln -s $out/opt/google/earth/free/product_logo_256.png $out/share/pixmaps/google-earth.png
   '';
 
   checkPhase = ''

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go_1_10, go-bindata, makeWrapper, rsync
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
 , components ? [
     "cmd/kubeadm"
     "cmd/kubectl"
@@ -15,16 +15,16 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.12.0";
+  version = "1.13.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "0bnfhrli9xqf7ygfq5i5p6nsgv7ic57b5b705zbqsxrc24pvsy4s";
+    sha256 = "1q3dc416fr9nzy64pl7rydahygnird0vpk9yflssw7v9gx84m6x9";
   };
 
-  buildInputs = [ removeReferencesTo makeWrapper which go_1_10 rsync go-bindata ];
+  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go_1_10} '{}' +
+    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = {

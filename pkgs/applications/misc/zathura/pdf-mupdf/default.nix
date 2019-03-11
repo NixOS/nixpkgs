@@ -1,13 +1,20 @@
-{ stdenv, lib, meson, ninja, fetchurl, pkgconfig, zathura_core, cairo,
-gtk-mac-integration, girara, mupdf }:
+{ stdenv, lib, meson, ninja, fetchurl, fetchFromGitHub
+, pkgconfig, zathura_core, cairo , gtk-mac-integration, girara, mupdf }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.3";
+  version = "0.3.4";
   name = "zathura-pdf-mupdf-${version}";
 
-  src = fetchurl {
-    url = "https://pwmt.org/projects/zathura-pdf-mupdf/download/${name}.tar.xz";
-    sha256 = "1zbdqimav4wfgimpy3nfzl10qj7vyv23rdy2z5z7z93jwbp2rc2j";
+  # pwmt.org server was down at the time of last update
+  # src = fetchurl {
+  #   url = "https://pwmt.org/projects/zathura-pdf-mupdf/download/${name}.tar.xz";
+  #   sha256 = "1zbaqimav4wfgimpy3nfzl10qj7vyv23rdy2z5z7z93jwbp2rc2j";
+  # };
+  src = fetchFromGitHub {
+    owner = "pwmt";
+    repo = "zathura-pdf-mupdf";
+    rev = version;
+    sha256 = "1m4w4jrybpjmx6pi33a5saxzmfd8rrym2k13jpd1fv543s17d9dy";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];

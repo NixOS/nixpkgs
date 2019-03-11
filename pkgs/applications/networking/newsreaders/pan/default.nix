@@ -2,7 +2,7 @@
 , stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
 , perl, gmime2, gettext, intltool, itstool, libxml2, dbus-glib, libnotify, gnutls
 , makeWrapper, gnupg
-, gnomeSupport ? true, gnome3, libsecret
+, gnomeSupport ? true, libsecret, gcr
 }:
 
 assert spellChecking -> gtkspell3 != null;
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig gettext intltool itstool libxml2 makeWrapper ];
   buildInputs = [ gtk3 gmime2 libnotify gnutls ]
     ++ stdenv.lib.optional spellChecking gtkspell3
-    ++ stdenv.lib.optionals gnomeSupport [ libsecret gnome3.gcr ];
+    ++ stdenv.lib.optionals gnomeSupport [ libsecret gcr ];
 
   configureFlags = [
     "--with-dbus"

@@ -30,6 +30,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -pv $out
     cp -r ./* $out
+    ln -s $out/share/doc/gcc-arm-none-eabi/man $out/man
 
     for f in $(find $out); do
       if [ -f "$f" ] && patchelf "$f" 2> /dev/null; then

@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage = https://phonon.kde.org/;
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
+    license = with licenses; [ bsd3 lgpl2Plus ];
   };
 
   src = fetchurl {

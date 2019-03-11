@@ -12,15 +12,15 @@
   An automatic setup is not suported by Matomo, so you need to configure Matomo
   itself in the browser-based Matomo setup.
  </para>
+
  <section xml:id="module-services-matomo-database-setup">
   <title>Database Setup</title>
-
   <para>
    You also need to configure a MariaDB or MySQL database and -user for Matomo
    yourself, and enter those credentials in your browser. You can use
    passwordless database authentication via the UNIX_SOCKET authentication
    plugin with the following SQL commands:
-<programlisting>
+   <programlisting>
         # For MariaDB
         INSTALL PLUGIN unix_socket SONAME 'auth_socket';
         CREATE DATABASE matomo;
@@ -32,7 +32,7 @@
         CREATE DATABASE matomo;
         CREATE USER 'matomo'@'localhost' IDENTIFIED WITH auth_socket;
         GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
-      </programlisting>
+   </programlisting>
    Then fill in <literal>matomo</literal> as database user and database name,
    and leave the password field blank. This authentication works by allowing
    only the <literal>matomo</literal> unix user to authenticate as the
@@ -46,9 +46,30 @@
    database is not on the same host.
   </para>
  </section>
+
+ <section xml:id="module-services-matomo-archive-processing">
+  <title>Archive Processing</title>
+  <para>
+   This module comes with the systemd service <literal>matomo-archive-processing.service</literal>
+   and a timer that automatically triggers archive processing every hour.
+   This means that you can safely
+   <link xlink:href="https://matomo.org/docs/setup-auto-archiving/#disable-browser-triggers-for-matomo-archiving-and-limit-matomo-reports-to-updating-every-hour">
+    disable browser triggers for Matomo archiving
+   </link> at <literal>Administration > System > General Settings</literal>.
+  </para>
+  <para>
+   With automatic archive processing, you can now also enable to
+   <link xlink:href="https://matomo.org/docs/privacy/#step-2-delete-old-visitors-logs">
+    delete old visitor logs
+   </link> at <literal>Administration > System > Privacy</literal>,
+   but make sure that you run <literal>systemctl start matomo-archive-processing.service</literal>
+   at least once without errors if you have already collected data before,
+   so that the reports get archived before the source data gets deleted.
+  </para>
+ </section>
+
  <section xml:id="module-services-matomo-backups">
   <title>Backup</title>
-
   <para>
    You only need to take backups of your MySQL database and the
    <filename>/var/lib/matomo/config/config.ini.php</filename> file. Use a user
@@ -57,9 +78,9 @@
    <link xlink:href="https://matomo.org/faq/how-to-install/faq_138/" />.
   </para>
  </section>
+
  <section xml:id="module-services-matomo-issues">
   <title>Issues</title>
-
   <itemizedlist>
    <listitem>
     <para>
@@ -76,6 +97,7 @@
    </listitem>
   </itemizedlist>
  </section>
+
  <section xml:id="module-services-matomo-other-web-servers">
   <title>Using other Web Servers than nginx</title>
 

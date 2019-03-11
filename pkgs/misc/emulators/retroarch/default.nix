@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, which, pkgconfig, makeWrapper
-, ffmpeg, libGLU_combined, freetype, libxml2, python34
+, ffmpeg, libGLU_combined, freetype, libxml2, python3
 , libobjc, AppKit, Foundation
 , alsaLib ? null
 , libpulseaudio ? null
@@ -27,19 +27,19 @@ let
 
 in stdenv.mkDerivation rec {
   name = "retroarch-bare-${version}";
-  version = "1.7.1";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "0qv8ci76f5kwv5b49ijgpc6jdfp6sm21fw5hq06mq6ygyiy9vdzf";
+    sha256 = "1jfpgl34jjxn3dvxd1kd564swkw7v98hnn562v998b7vllz3dxdm";
     rev = "v${version}";
   };
 
   nativeBuildInputs = [ pkgconfig ]
                       ++ optional withVulkan [ makeWrapper ];
 
-  buildInputs = [ ffmpeg freetype libxml2 libGLU_combined python34 SDL2 which ]
+  buildInputs = [ ffmpeg freetype libxml2 libGLU_combined python3 SDL2 which ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
                 ++ optional withVulkan [ vulkan-loader ]
                 ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]

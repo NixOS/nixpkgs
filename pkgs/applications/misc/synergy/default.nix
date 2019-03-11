@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, cmake, xlibsWrapper
-, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
+, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver, cf-private
 , libX11, libXi, libXtst, libXrandr, xinput, curl, openssl, unzip }:
 
 stdenv.mkDerivation rec {
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake curl openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices Carbon Cocoa CoreServices ScreenSaver
+    ApplicationServices Carbon Cocoa CoreServices ScreenSaver cf-private
   ] ++ lib.optionals stdenv.isLinux [ xlibsWrapper libX11 libXi libXtst libXrandr xinput ];
 
   installPhase = ''

@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bashplotlib";
-  version = "2017-10-11";
+  version = "2019-01-02";
 
   src = fetchFromGitHub {
     owner = "glamp";
     repo = "bashplotlib";
-    rev = "fdc52be2c1fed13753692eced328143ab1db6f3d";
-    sha256 = "1ycql6j65zywyav2n3c0x1i5cm9w6glzqc3v0cgdvv1bdg4wi0gf";
+    rev = "f7533172c4dc912b5accae42edd5c0f655d7468f";
+    sha256 = "1sifqslvvz2c05spwrl81kcdg792l6jwvfd3ih9q5wjkvkm0plz8";
   };
 
   # No tests

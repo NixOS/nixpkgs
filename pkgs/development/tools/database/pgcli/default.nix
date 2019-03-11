@@ -1,26 +1,28 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "pgcli-${version}";
-  version = "1.11.0";
+python3Packages.buildPythonApplication rec {
+  pname = "pgcli";
+  version = "2.0.2";
 
-  src = fetchFromGitHub {
-    owner = "dbcli";
-    repo = "pgcli";
-    rev = "v${version}";
-    sha256 = "01qcvl0iwabinq3sb4340js8v3sbwkbxi64sg4xy76wj8xr6kgsk";
+  # Python 2 won't have prompt_toolkit 2.x.x
+  # See: https://github.com/NixOS/nixpkgs/blob/f49e2ad3657dede09dc998a4a98fd5033fb52243/pkgs/top-level/python-packages.nix#L3408
+  disabled = python3Packages.isPy27;
+
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "1p4j2dbcfxd3kz86qi519jkqjx1mg5wdgn1gxdjx3lk1vpsd7x04";
   };
 
-  buildInputs = with pythonPackages; [ pytest mock ];
-  checkPhase = ''
-    mkdir /tmp/homeless-shelter
-    HOME=/tmp/homeless-shelter py.test tests -k 'not test_missing_rc_dir and not test_quoted_db_uri and not test_port_db_uri'
-  '';
-
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     cli-helpers click configobj humanize prompt_toolkit psycopg2
     pygments sqlparse pgspecial setproctitle keyring
   ];
+
+  checkInputs = with python3Packages; [ pytest mock ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";

@@ -31,7 +31,7 @@ in buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    pykickstart pyparted pyblock pyudev selinuxWithPython cryptsetupWithPython
+    pykickstart pyparted pyblock pyudev selinuxWithPython.py cryptsetupWithPython
     six
   ];
 

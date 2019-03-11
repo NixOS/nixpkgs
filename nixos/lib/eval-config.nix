@@ -51,15 +51,16 @@ in rec {
   # system configuration.
   inherit (lib.evalModules {
     inherit prefix check;
-    modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
+    modules = baseModules ++ extraModules ++ [ pkgsModule ] ++ modules;
     args = extraArgs;
-    specialArgs = { modulesPath = ../modules; } // specialArgs;
+    specialArgs =
+      { modulesPath = builtins.toString ../modules; } // specialArgs;
   }) config options;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
   extraArgs = extraArgs_ // {
-    inherit modules baseModules;
+    inherit baseModules extraModules modules;
   };
 
   inherit (config._module.args) pkgs;

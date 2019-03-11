@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libvorbis, libogg, libtheora, SDL, libXft, SDL_image, zlib, libX11, libpng, openal, requireFile, commercialVersion ? false }:
+{ stdenv, fetchurl, libvorbis, libogg, libtheora, SDL, libXft, SDL_image, zlib, libX11, libpng, openal, runtimeShell, requireFile, commercialVersion ? false }:
 
 let plainName = "andyetitmoves";
     version   = "1.2.2";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $fullPath $out/opt/andyetitmoves/lib/$binName
     cat > $out/bin/$binName << EOF
-    #!/bin/sh
+    #!${runtimeShell}
     cd $out/opt/andyetitmoves
     exec ./lib/$binName
     EOF

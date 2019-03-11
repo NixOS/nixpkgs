@@ -3,12 +3,12 @@
   flex, yacc, zlib, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "igraph";
+  pname = "igraph";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "igraph";
-    repo = name;
+    repo = pname;
     rev = version;
     sha256 = "1wsy0r511gk069il6iqjs27q8cjvqz20gf0a7inybx1bw84845z8";
   };

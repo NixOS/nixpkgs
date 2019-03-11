@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, spice-protocol, gettext, celt_0_5_1
-, openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
+, openssl, libpulseaudio, pixman, gobject-introspection, libjpeg_turbo, zlib
 , cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
 , withPolkit ? true, polkit, acl, usbutils
 , vala, gtk3, epoxy, libdrm, gst_all_1, phodav, opusfile }:
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy libdrm phodav opusfile
   ] ++ optionals withPolkit [ polkit acl usbutils ] ;
 
-  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobject-introspection ];
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
       Python bindings are available too.
     '';
 
-    homepage = http://www.spice-space.org/;
+    homepage = https://www.spice-space.org/;
     license = licenses.lgpl21;
     maintainers = [ maintainers.xeji ];
     platforms = platforms.linux;

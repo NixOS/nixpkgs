@@ -8,8 +8,7 @@ stdenv.mkDerivation rec {
 
   # master branch has legacy (1.2.0.2) protocol 1201 and gcc 6 fix.
   pname = "assaultcube";
-  version = "01052017";
-  name = "${pname}-${version}";
+  version = "unstable-2017-05-01";
 
   meta = {
     description = "Fast and fun first-person-shooter based on the Cube fps";

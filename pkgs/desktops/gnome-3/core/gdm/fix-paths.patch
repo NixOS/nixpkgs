@@ -1,17 +1,17 @@
 --- a/daemon/gdm-local-display-factory.c
 +++ b/daemon/gdm-local-display-factory.c
-@@ -450,7 +450,7 @@
+@@ -201,7 +201,7 @@
  #ifdef ENABLE_WAYLAND_SUPPORT
-                         gboolean wayland_enabled = FALSE;
-                         if (gdm_settings_direct_get_boolean (GDM_KEY_WAYLAND_ENABLE, &wayland_enabled)) {
--                                if (wayland_enabled && g_file_test ("/usr/bin/Xwayland", G_FILE_TEST_IS_EXECUTABLE) ) {
-+                                if (wayland_enabled && g_file_test ("@xwayland@/bin/Xwayland", G_FILE_TEST_IS_EXECUTABLE) ) {
-                                         session_type = "wayland";
-                                 }
-                         }
+         gboolean wayland_enabled = FALSE;
+         if (gdm_settings_direct_get_boolean (GDM_KEY_WAYLAND_ENABLE, &wayland_enabled)) {
+-                if (wayland_enabled && g_file_test ("/usr/bin/Xwayland", G_FILE_TEST_IS_EXECUTABLE) )
++                if (wayland_enabled && g_file_test ("@xwayland@/bin/Xwayland", G_FILE_TEST_IS_EXECUTABLE) )
+                         return TRUE;
+         }
+ #endif
 --- a/daemon/gdm-manager.c
 +++ b/daemon/gdm-manager.c
-@@ -147,7 +147,7 @@
+@@ -145,7 +145,7 @@
          GError  *error;
  
          error = NULL;
@@ -20,7 +20,7 @@
                                           NULL, NULL, &status, &error);
          if (! res) {
                  g_debug ("Could not ping plymouth: %s", error->message);
-@@ -165,7 +165,7 @@
+@@ -163,7 +163,7 @@
          GError  *error;
  
          error = NULL;
@@ -29,7 +29,7 @@
                                           NULL, NULL, NULL, &error);
          if (! res) {
                  g_warning ("Could not deactivate plymouth: %s", error->message);
-@@ -180,7 +180,7 @@
+@@ -178,7 +178,7 @@
          GError  *error;
  
          error = NULL;
@@ -38,7 +38,7 @@
          if (! res) {
                  g_warning ("Could not quit plymouth: %s", error->message);
                  g_error_free (error);
-@@ -196,7 +196,7 @@
+@@ -194,7 +194,7 @@
          GError  *error;
  
          error = NULL;
@@ -49,12 +49,12 @@
                  g_error_free (error);
 --- a/data/gdm.service.in
 +++ b/data/gdm.service.in
-@@ -28,7 +28,7 @@
+@@ -28,7 +28,7 @@ BusName=org.gnome.DisplayManager
  StandardOutput=syslog
  StandardError=inherit
  EnvironmentFile=-@LANG_CONFIG_FILE@
 -ExecReload=/bin/kill -SIGHUP $MAINPID
 +ExecReload=@coreutils@/bin/kill -SIGHUP $MAINPID
+ KeyringMode=shared
  
  [Install]
- Alias=display-manager.service

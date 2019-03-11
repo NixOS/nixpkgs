@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     perl
     DBI
     DBDSQLite
-    DigestMD5
     HTMLTagset
     TimeDate # == DateParse
     HTMLTemplate

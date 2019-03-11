@@ -18,9 +18,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ]; # upstream compiles with -O0
 
   makeFlags = [
-    "DESTDIR=$(out)"
-    "PLUGIN_DIR_PURPLE=/lib/pidgin/"
-    "DATA_ROOT_DIR_PURPLE=/share"
+    "PLUGIN_DIR_PURPLE=${placeholder "out"}/lib/purple-2"
+    "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
   ];
 
   meta = with stdenv.lib; {

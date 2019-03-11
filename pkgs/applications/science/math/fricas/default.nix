@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url    = "http://sourceforge.net/projects/fricas/files/fricas/${version}/${name}-full.tar.bz2";
+    url    = "mirror://sourceforge/fricas/files/fricas/${version}/${name}-full.tar.bz2";
     sha256 = "156k9az1623y5808j845c56z2nvvdrm48dzg1v0ivpplyl7vp57x";
   };
 

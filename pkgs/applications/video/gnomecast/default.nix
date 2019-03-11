@@ -1,4 +1,4 @@
-{ lib, python3Packages, gtk3, gobjectIntrospection, ffmpeg, wrapGAppsHook }:
+{ lib, python3Packages, gtk3, gobject-introspection, ffmpeg, wrapGAppsHook }:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -13,7 +13,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook ];
   propagatedBuildInputs = [
     PyChromecast bottle pycaption paste html5lib pygobject3 dbus-python
-    gtk3 gobjectIntrospection
+    gtk3 gobject-introspection
   ];
 
   preFixup = ''

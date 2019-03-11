@@ -75,8 +75,6 @@
 
     cube = callPackage ./cube.nix {};
 
-    curses = callPackage ./curses.nix {};
-
     data = callPackage ./data.nix {};
 
     derive = callPackage ./derive.nix {};

@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, file, which, intltool, gobjectIntrospection,
+{ stdenv, fetchurl, file, which, intltool, gobject-introspection,
   findutils, xdg_utils, gnome3, pythonPackages, hicolor-icon-theme,
   wrapGAppsHook
 }:
 
 pythonPackages.buildPythonApplication rec {
   majorver = "1.4";
-  minorver = "6";
+  minorver = "7";
   version = "${majorver}.${minorver}";
   pname = "catfish";
 
   src = fetchurl {
     url = "https://archive.xfce.org/src/apps/${pname}/${majorver}/${pname}-${version}.tar.bz2";
-    sha256 = "1gxdk5gx0gjq95jhdbpiq39cxpzd4vmw00a78f0wg2i6qlafxjp1";
+    sha256 = "1s97jb1r07ff40jnz8zianpn1f0c67hssn8ywdi2g7njfb4amjj8";
   };
 
   nativeBuildInputs = [
@@ -19,7 +19,7 @@ pythonPackages.buildPythonApplication rec {
     file
     which
     intltool
-    gobjectIntrospection
+    gobject-introspection
     wrapGAppsHook
   ];
 

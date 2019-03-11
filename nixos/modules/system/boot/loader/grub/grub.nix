@@ -586,7 +586,7 @@ in
         in pkgs.writeScript "install-grub.sh" (''
         #!${pkgs.runtimeShell}
         set -e
-        export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare ])}
+        export PERL5LIB=${with pkgs.perlPackages; makePerlPath [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare ]}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
         ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@

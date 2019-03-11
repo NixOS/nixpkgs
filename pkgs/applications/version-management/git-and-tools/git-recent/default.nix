@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "git-recent-${version}";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-recent";
     rev = "v${version}";
-    sha256 = "0dbnm5b2v04fy0jgzphm3xvz9scx0n4p10fw8wjd0cy56308h79k";
+    sha256 = "06r1jzmzdv3d4vxdh5qyf5g5rgavxfmh2rpbs7a7byg3k7d77hpn";
   };
 
   buildInputs = [ makeWrapper ];

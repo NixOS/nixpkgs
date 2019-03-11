@@ -1,4 +1,5 @@
 { stdenv, fetchurl, lib, makeWrapper
+, substituteAll
 , jre
 , gtk2, glib
 , libXtst
@@ -7,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "smartgithg-${version}";
-  version = "18_1_4";
+  version = "18.2.4";
 
   src = fetchurl {
-    url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${version}.tar.gz";
-    sha256 = "18gyfcs5g7xq8fqnn1zjzx350jaynrniain0giay8sxych12p4cm";
+    url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
+    sha256 = "0ch6vcvndn1fpx05ym9yp2ssfw2af6ac0pw8ssvjkc676zc0jr73";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,7 +22,10 @@ stdenv.mkDerivation rec {
   buildCommand = let
     pkg_path = "$out/${name}";
     bin_path = "$out/bin";
-    install_freedesktop_items = ./install_freedesktop_items.sh;
+    install_freedesktop_items = substituteAll {
+      inherit (stdenv) shell;
+      src = ./install_freedesktop_items.sh;
+    };
     runtime_paths = lib.makeBinPath [
       jre
       #git mercurial subversion # the paths are requested in configuration

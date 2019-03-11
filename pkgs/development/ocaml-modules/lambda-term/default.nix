@@ -1,25 +1,18 @@
-{ stdenv, fetchurl, libev, ocaml, findlib, dune
-, zed, lwt_log, lwt_react
-}:
+{ stdenv, fetchurl, libev, buildDunePackage, zed, lwt_log, lwt_react }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.02";
-
-stdenv.mkDerivation rec {
+buildDunePackage rec {
+  pname = "lambda-term";
   version = "1.13";
-  name = "ocaml${ocaml.version}-lambda-term-${version}";
+
+  minimumOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/diml/lambda-term/archive/${version}.tar.gz";
+    url = "https://github.com/diml/${pname}/archive/${version}.tar.gz";
     sha256 = "1hy5ryagqclgdm9lzh1qil5mrynlypv7mn6qm858hdcnmz9zzn0l";
   };
 
-  buildInputs = [ libev ocaml findlib dune ];
-
+  buildInputs = [ libev ];
   propagatedBuildInputs = [ zed lwt_log lwt_react ];
-
-  buildPhase = "dune build -p lambda-term";
-
-  inherit (dune) installPhase;
 
   hasSharedObjects = true;
 
@@ -41,7 +34,6 @@ stdenv.mkDerivation rec {
 
     homepage = https://github.com/diml/lambda-term;
     license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.gal_bolle
     ];

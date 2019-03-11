@@ -1,17 +1,17 @@
 { stdenv, buildPythonPackage, fetchPypi, nose, dnspython
-,  chardet, lmtpd, pythondaemon, six, jinja2, mock }:
+,  chardet, lmtpd, python-daemon, six, jinja2, mock }:
 
 buildPythonPackage rec {
   pname = "salmon-mail";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e2f5c9cfe95e178813755c2df2f9f7c792246356d7489caa72f06b2553da8cdc";
+    sha256 = "cb2f9c3bf2b9f8509453ca8bc06f504350e19488eb9d3d6a4b9e4b8c160b527d";
   };
 
   checkInputs = [ nose jinja2 mock ];
-  propagatedBuildInputs = [ chardet dnspython lmtpd pythondaemon six ];
+  propagatedBuildInputs = [ chardet dnspython lmtpd python-daemon six ];
 
   # The tests use salmon executable installed by salmon itself so we need to add
   # that to PATH

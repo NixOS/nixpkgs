@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "duply-${version}";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/2.1.x/duply_${version}.tgz";
-    sha256 = "0i5j7h7h6ssrwhll0sfhymisshg54kx7j45zcqffzjxa0ylvzlm8";
+    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/2.2.x/duply_${version}.tgz";
+    sha256 = "1bd7ivswxmxg64n0fnwgz6bkgckhdhz2qnnlkqqx4ccdxx15krbr";
   };
 
   buildInputs = [ txt2man makeWrapper ];
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     description = "Shell front end for the duplicity backup tool";
     longDescription = ''
       Duply is a shell front end for the duplicity backup tool
-      http://duplicity.nongnu.org/. It greatly simplifies it's usage by
+      https://www.nongnu.org/duplicity. It greatly simplifies its usage by
       implementing backup job profiles, batch commands and more. Who says
       secure backups on non-trusted spaces are no child's play?
     '';
-    homepage = http://duply.net/;
+    homepage = https://duply.net/;
     license = licenses.gpl2;
     maintainers = [ maintainers.bjornfor ];
     platforms = stdenv.lib.platforms.unix;

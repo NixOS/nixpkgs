@@ -16,7 +16,8 @@ appleDerivation {
     substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
       --replace "FD201DC214369B4200906237 /* pkill.c in Sources */," "" \
       --replace "FDF278D60FC6204E00D7A3C6 /* locale.cc in Sources */," "" \
-      --replace '/usr/lib/libtermcap.dylib' 'libncurses.dylib'
+      --replace '/usr/lib/libtermcap.dylib' 'libncurses.dylib' \
+      --replace 'DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";' ""
   '';
 
   buildPhase = ''

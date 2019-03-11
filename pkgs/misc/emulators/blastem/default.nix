@@ -44,5 +44,7 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
+    # Makefile:140: *** aarch64 is not a supported architecture.  Stop.
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

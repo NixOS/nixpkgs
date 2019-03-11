@@ -34,8 +34,8 @@ import ./make-test.nix ({ pkgs, ... }: {
 
       # To test the pullImage tool
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.nixFromDockerHub}'");
-      $docker->succeed("docker run --rm nixos/nix:1.11 nix-store --version");
-      $docker->succeed("docker rmi nixos/nix:1.11");
+      $docker->succeed("docker run --rm nixos/nix:2.2.1 nix-store --version");
+      $docker->succeed("docker rmi nixos/nix:2.2.1");
 
       # To test runAsRoot and entry point
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.nginx}'");
@@ -62,5 +62,10 @@ import ./make-test.nix ({ pkgs, ... }: {
       # Ensure Layered Docker images work
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.layered-image}'");
       $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.layered-image.imageName}");
+      $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.layered-image.imageName} cat extraCommands");
+
+      # Ensure building an image on top of a layered Docker images work
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.layered-on-top}'");
+      $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.layered-on-top.imageName}");
     '';
 })

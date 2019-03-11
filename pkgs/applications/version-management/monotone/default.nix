@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/${name}
     cp -rv contrib/ $out/share/${name}/contrib
-    mkdir -p $out/lib/perl5/site_perl/${perlVersion}
-    cp -v contrib/Monotone.pm $out/lib/perl5/site_perl/${perlVersion}
+    mkdir -p $out/${perl.libPrefix}/${perlVersion}
+    cp -v contrib/Monotone.pm $out/${perl.libPrefix}/${perlVersion}
   '';
 
   #doCheck = true; # some tests fail (and they take VERY long)

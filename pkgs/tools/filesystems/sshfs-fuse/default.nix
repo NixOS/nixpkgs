@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.5.0";
+  version = "3.5.1";
   name = "sshfs-fuse-${version}";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     rev = "sshfs-${version}";
-    sha256 = "1mczf13ic5ycfhcxmxma50n5h32vygcll0d8m39vam237s95aqy6";
+    sha256 = "07ryavfbbzfxaswsbr8ifnnfn6g8yxgxam6mk6gvcskld6rkf6gd";
   };
 
   nativeBuildInputs = [ meson pkgconfig ninja docutils ];

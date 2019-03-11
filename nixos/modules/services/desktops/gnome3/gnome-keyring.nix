@@ -33,7 +33,7 @@ with lib;
 
     environment.systemPackages = [ pkgs.gnome3.gnome-keyring ];
 
-    services.dbus.packages = [ pkgs.gnome3.gnome-keyring pkgs.gnome3.gcr ];
+    services.dbus.packages = [ pkgs.gnome3.gnome-keyring pkgs.gcr ];
 
   };
 

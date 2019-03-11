@@ -3,7 +3,7 @@
 , buildPythonPackage
 , pkgconfig
 , gtk3
-, gobjectIntrospection
+, gobject-introspection
 , pygtk
 , pygobject3
 , goocanvas2
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "ca3950c2728916d9fb703c886f3940ac9b76739f99ec840b0e1c2c282510e1ab";
   };
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig gobject-introspection ];
   propagatedBuildInputs = [
     pygtk
     pygobject3

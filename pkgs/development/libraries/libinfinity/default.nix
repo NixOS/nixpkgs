@@ -1,7 +1,7 @@
 { gtkWidgets ? false # build GTK widgets for libinfinity
 , avahiSupport ? false # build support for Avahi in libinfinity
 , stdenv, fetchurl, pkgconfig, glib, libxml2, gnutls, gsasl
-, gobjectIntrospection
+, gobject-introspection
 , gtk3 ? null, gtk-doc, docbook_xsl, docbook_xml_dtd_412, avahi ? null, libdaemon, libidn, gss
 , libintl }:
 
@@ -21,7 +21,7 @@ let
 
     outputs = [ "bin" "out" "dev" "man" "devdoc" ];
 
-    nativeBuildInputs = [ pkgconfig gtk-doc docbook_xsl docbook_xml_dtd_412 gobjectIntrospection ];
+    nativeBuildInputs = [ pkgconfig gtk-doc docbook_xsl docbook_xml_dtd_412 gobject-introspection ];
     buildInputs = [ glib libxml2 gsasl libidn gss libintl libdaemon ]
       ++ stdenv.lib.optional gtkWidgets gtk3
       ++ stdenv.lib.optional avahiSupport avahi;

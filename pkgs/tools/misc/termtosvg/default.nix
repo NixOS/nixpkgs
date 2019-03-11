@@ -2,24 +2,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "termtosvg";
-  version = "0.3.0";
+  version = "0.8.0";
 
   # tests are not available when fetching from pypi
   src = fetchFromGitHub {
     owner = "nbedos";
     repo = pname;
     rev = version;
-    sha256 = "09hw0467pyfj5gwn3768b3rvs5ch3wb1kaax7zsqjd7mw2qh0cjw";
+    sha256 = "0si5l8cdbzapcibr4yavhld2vhfrpk7qj4cy7m4ws7js8g9iwzd4";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ svgwrite pyte ];
-
-  checkInputs = [ python3.pkgs.mock ];
-  preCheck = "export HOME=$(mktemp -d)";
-  postCheck = "unset HOME";
+  propagatedBuildInputs = with python3.pkgs; [ lxml pyte ];
 
   meta = with lib; {
-    homepage = https://github.com/nbedos/termtosvg;
+    homepage = https://nbedos.github.io/termtosvg/;
     description = "Record terminal sessions as SVG animations";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ma27 ];

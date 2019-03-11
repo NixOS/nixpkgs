@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, tbb }:
+{ stdenv, fetchFromGitHub, zlib, tbb, python, perl }:
 
 stdenv.mkDerivation rec {
   pname = "bowtie2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zl3cf327y2p7p03cavymbh7b00djc7lncfaqih33n96iy9q8ibp";
   };
 
-  buildInputs = [ zlib tbb ];
+  buildInputs = [ zlib tbb python perl ];
 
   installFlags = [ "prefix=$(out)" ];
 

@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, lxqt, libconfig }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, lxqt,
+  libconfig }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "compton-conf";
-  version = "0.4.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1r187fx1vivzq1gcwwawax36mnlmfig5j1ba4s4wfdi3q2wcq7mw";
+    sha256 = "0bx21r83ahmsqf7bm1h17pi4y9js1iqsv7nwnlq58rc0ddkkhcdb";
   };
 
   nativeBuildInputs = [
@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
     qttools
     libconfig
   ];
-
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
   preConfigure = ''
     substituteInPlace autostart/CMakeLists.txt \

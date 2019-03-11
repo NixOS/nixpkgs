@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''clack-socket'';
-  version = ''clack-20180831-git'';
+  version = ''clack-20181018-git'';
 
   description = '''';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2018-08-31/clack-20180831-git.tgz'';
-    sha256 = ''0pfpm3l7l47j0mmwimy7c61ym8lg5m1dkzmz394snyywzcx54647'';
+    url = ''http://beta.quicklisp.org/archive/clack/2018-10-18/clack-20181018-git.tgz'';
+    sha256 = ''1f16i1pdqkh56ahnhxni3182q089d7ya8gxv4vyczsjzw93yakcf'';
   };
 
   packageName = "clack-socket";
@@ -18,10 +18,10 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM clack-socket DESCRIPTION NIL SHA256
-    0pfpm3l7l47j0mmwimy7c61ym8lg5m1dkzmz394snyywzcx54647 URL
-    http://beta.quicklisp.org/archive/clack/2018-08-31/clack-20180831-git.tgz
-    MD5 5042ece3b0a8b07cb4b318fbc250b4fe NAME clack-socket FILENAME
-    clack-socket DEPS NIL DEPENDENCIES NIL VERSION clack-20180831-git SIBLINGS
+    1f16i1pdqkh56ahnhxni3182q089d7ya8gxv4vyczsjzw93yakcf URL
+    http://beta.quicklisp.org/archive/clack/2018-10-18/clack-20181018-git.tgz
+    MD5 16121d921667ee8d0d70324da7281849 NAME clack-socket FILENAME
+    clack-socket DEPS NIL DEPENDENCIES NIL VERSION clack-20181018-git SIBLINGS
     (clack-handler-fcgi clack-handler-hunchentoot clack-handler-toot
      clack-handler-wookie clack-test clack-v1-compat clack t-clack-handler-fcgi
      t-clack-handler-hunchentoot t-clack-handler-toot t-clack-handler-wookie

@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
+{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, pythonPackages
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd
 , jackaudioSupport ? false, libjack2
-, cudaSupport ? false, cudatoolkit
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
 , colladaSupport ? true, opencollada
 , enableNumpy ? false, makeWrapper
 }:
@@ -51,10 +51,10 @@ stdenv.mkDerivation rec {
       "-DWITH_SYSTEM_OPENJPEG=ON"
       "-DWITH_PLAYER=ON"
       "-DWITH_OPENSUBDIV=ON"
-      "-DPYTHON_LIBRARY=python${python.majorVersion}m"
+      "-DPYTHON_LIBRARY=${python.libPrefix}m"
       "-DPYTHON_LIBPATH=${python}/lib"
-      "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
-      "-DPYTHON_VERSION=${python.majorVersion}"
+      "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}m"
+      "-DPYTHON_VERSION=${python.pythonVersion}"
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
     ]
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       ]
     ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
+  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   postInstall = optionalString enableNumpy
     ''
       wrapProgram $out/bin/blender \
-        --prefix PYTHONPATH : ${pythonPackages.numpy}/lib/python${python.majorVersion}/site-packages
+        --prefix PYTHONPATH : ${pythonPackages.numpy}/${python.sitePackages}
     '';
 
   meta = with stdenv.lib; {

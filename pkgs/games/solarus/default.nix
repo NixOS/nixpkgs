@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "solarus-${version}";
-  version = "1.5.3";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = "solarus";
-    rev = "v1.5.3";
-    sha256 = "035hkdw3a1ryasj5wfa1xla1xmpnc3hjp4s20sl9ywip41675vaz";
+    rev = "v1.6.0";
+    sha256 = "0mlpa1ijaxy84f7xjgs2kjnpm035b8q9ckva6lg14q49gzy10fr2";
   };
 
   buildInputs = [ cmake luajit SDL2

@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ php makeWrapper flex ];
 
   unpackPhase = ''
-    cp -R ${libphutil} libphutil
-    cp -R ${arcanist} arcanist
+    cp -aR ${libphutil} libphutil
+    cp -aR ${arcanist} arcanist
     chmod +w -R libphutil arcanist
   '';
 

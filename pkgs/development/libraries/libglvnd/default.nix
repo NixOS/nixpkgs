@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python2, pkgconfig, libX11, libXext, glproto }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python2, pkgconfig, libX11, libXext, xorgproto }:
 
 let
   driverLink = "/run/opengl-driver" + lib.optionalString stdenv.isi686 "-32";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig python2 ];
-  buildInputs = [ libX11 libXext glproto ];
+  buildInputs = [ libX11 libXext xorgproto ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/GLX/Makefile.am \

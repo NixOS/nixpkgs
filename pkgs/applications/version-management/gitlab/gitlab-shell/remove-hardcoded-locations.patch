@@ -1,0 +1,58 @@
+diff --git a/go/internal/config/config.go b/go/internal/config/config.go
+index 435cb29..078c1df 100644
+--- a/go/internal/config/config.go
++++ b/go/internal/config/config.go
+@@ -2,7 +2,6 @@ package config
+ 
+ import (
+ 	"io/ioutil"
+-	"os"
+ 	"path"
+ 
+ 	yaml "gopkg.in/yaml.v2"
+@@ -26,16 +25,13 @@ type Config struct {
+ }
+ 
+ func New() (*Config, error) {
+-	dir, err := os.Getwd()
+-	if err != nil {
+-		return nil, err
+-	}
++	dir := "/run/gitlab"
+ 
+ 	return NewFromDir(dir)
+ }
+ 
+ func NewFromDir(dir string) (*Config, error) {
+-	return newFromFile(path.Join(dir, configFile))
++	return newFromFile("/run/gitlab/shell-config.yml")
+ }
+ 
+ func newFromFile(filename string) (*Config, error) {
+diff --git a/lib/gitlab_shell.rb b/lib/gitlab_shell.rb
+index 57c70f5..700569b 100644
+--- a/lib/gitlab_shell.rb
++++ b/lib/gitlab_shell.rb
+@@ -187,7 +187,8 @@ class GitlabShell # rubocop:disable Metrics/ClassLength
+ 
+     args = [executable, gitaly_address, json_args]
+     # We use 'chdir: ROOT_PATH' to let the next executable know where config.yml is.
+-    Kernel.exec(env, *args, unsetenv_others: true, chdir: ROOT_PATH)
++    # Except we don't, because we're already in the right directory on nixos!
++    Kernel.exec(env, *args, unsetenv_others: true)
+   end
+ 
+   def api
+diff --git a/lib/gitlab_keys.rb b/lib/gitlab_keys.rb
+index 0600a18..6814f0a 100644
+--- a/lib/gitlab_keys.rb
++++ b/lib/gitlab_keys.rb
+@@ -10,7 +10,7 @@ class GitlabKeys # rubocop:disable Metrics/ClassLength
+   attr_accessor :auth_file, :key
+
+   def self.command(whatever)
+-    "#{ROOT_PATH}/bin/gitlab-shell #{whatever}"
++    "/run/current-system/sw/bin/gitlab-shell #{whatever}"
+   end
+
+   def self.command_key(key_id)

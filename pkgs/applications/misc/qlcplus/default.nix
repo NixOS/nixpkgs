@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   name = "qlcplus-${version}";
-  version = "4.11.2";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    sha256 = "0ry7j8d5mm3h3mzd49xqlagnldmfhfr6plwk73pz62hxr4j58s6w";
+    sha256 = "056ccgcz3rpbic2hqg4r1rq8svq7070j2h6l3hbb1p8h3qxwamzh";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];
@@ -25,7 +25,7 @@ mkDerivation rec {
     patchShebangs .
     sed -i -e '/unix:!macx:INSTALLROOT += \/usr/d' \
             -e "s@\$\$LIBSDIR/qt4/plugins@''${qtPluginPrefix}@" \
-            -e "s@/etc/udev/rules.d@''${out}/lib/udev@" \
+            -e "s@/etc/udev/rules.d@''${out}/lib/udev/rules.d@" \
       variables.pri
   '';
 

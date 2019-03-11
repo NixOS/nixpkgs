@@ -19,17 +19,11 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.12";
+  version = "3.16";
   
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c9ef49f72c2d83976d2841ab7e70faee3c77f4d7dbb2d3390ef0f0509473ea9a";
-  };
-
-  # ImportError: cannot import name '_to_ascii'
-  patches = fetchpatch {
-    url = "${meta.homepage}/commit/8a48e01cb68b514b532f56037e4f5a6c19662de5.patch";
-    sha256 = "0v1yja5lvdjk6vh13lvh07n7aw5hjcy7v9lrs2dfb0y0cjw4kx9n";
+    sha256 = "1xrfph277bgjln3jbpzpgkhxad04fjvj7s3xfil42q1sxi4s3q3g";
   };
 
   doCheck = false;

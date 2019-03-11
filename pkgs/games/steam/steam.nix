@@ -1,15 +1,15 @@
-{stdenv, fetchurl, traceDeps ? false}:
+{stdenv, fetchurl, runtimeShell, traceDeps ? false}:
 
 let
   traceLog = "/tmp/steam-trace-dependencies.log";
-  version = "1.0.0.56";
+  version = "1.0.0.59";
 
 in stdenv.mkDerivation rec {
   name = "steam-original-${version}";
 
   src = fetchurl {
     url = "http://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz";
-    sha256 = "01jgp909biqf4rr56kb08jkl7g5xql6r2g4ch6lc71njgcsbn5fs";
+    sha256 = "17yrziy2bmzcppp5v3ycdjll250k4idak4rjakmw8gvr96whs255";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     rm $out/bin/steamdeps
     ${stdenv.lib.optionalString traceDeps ''
       cat > $out/bin/steamdeps <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       echo \$1 >> ${traceLog}
       cat \$1 >> ${traceLog}
       echo >> ${traceLog}

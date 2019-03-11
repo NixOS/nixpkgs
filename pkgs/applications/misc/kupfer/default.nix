@@ -2,12 +2,13 @@
 , fetchurl
 , intltool
 , python3Packages
-, gobjectIntrospection
+, gobject-introspection
 , gtk3
 , libwnck3
 , keybinder3
 , hicolor-icon-theme
 , wrapGAppsHook
+, wafHook
 }:
 
 with python3Packages;
@@ -24,37 +25,20 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     wrapGAppsHook intltool
     # For setup hook
-    gobjectIntrospection
+    gobject-introspection wafHook
   ];
   buildInputs = [ hicolor-icon-theme docutils libwnck3 keybinder3 ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
 
-  configurePhase = ''
-    runHook preConfigure
-    python ./waf configure --prefix=$prefix
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    python ./waf
-    runHook postBuild
-  '';
-
-  installPhase = let
+  postInstall = let
     pythonPath = (stdenv.lib.concatMapStringsSep ":"
       (m: "${m}/lib/${python.libPrefix}/site-packages")
       propagatedBuildInputs);
   in ''
-    runHook preInstall
-    python ./waf install
-
     gappsWrapperArgs+=(
       "--prefix" "PYTHONPATH" : "${pythonPath}"
       "--set" "PYTHONNOUSERSITE" "1"
     )
-
-    runHook postInstall
   '';
 
   doCheck = false; # no tests

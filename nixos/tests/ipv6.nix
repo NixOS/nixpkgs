@@ -4,7 +4,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "ipv6";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   nodes =

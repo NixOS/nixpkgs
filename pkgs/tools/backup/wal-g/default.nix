@@ -1,15 +1,19 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, brotli }:
 
 buildGoPackage rec {
   name = "wal-g-${version}";
-  version = "0.1.12";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner  = "wal-g";
     repo   = "wal-g";
     rev    = "v${version}";
-    sha256 = "06k71xz96jpg6966xj48a8j07v0vk37b5v2k1bnqrbin4sma3s0c";
+    sha256 = "08lk7by1anxpd9v97xbf9443kk4n1w63zaar2nz86w8i3k3b4id9";
   };
+
+  buildInputs = [ brotli ];
+
+  doCheck = true;
 
   goPackagePath = "github.com/wal-g/wal-g";
   meta = {

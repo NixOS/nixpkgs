@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, runCommand, pkgconfig, hexdump, which
+{ stdenv, fetchurl, fetchpatch, runCommand, pkgconfig, hexdump, which
 , knot-dns, luajit, libuv, lmdb, gnutls, nettle
 , cmocka, systemd, dns-root-data, makeWrapper
 , extraFeatures ? false /* catch-all if defaults aren't enough */
@@ -12,12 +12,25 @@ inherit (stdenv.lib) optional concatStringsSep;
 
 unwrapped = stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "3.0.0";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "68a0137e0e15061ee7dec53a2e424aa3266611720db3843853c6e7774a414f40";
+    sha256 = "d1396888ec3a63f19dccdf2b7dbcb0d16a5d8642766824b47f4c21be90ce362b";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "support-libzscanner-2.8.diff";
+      url = "https://gitlab.labs.nic.cz/knot/knot-resolver/commit/186f263.diff";
+      sha256 = "19zqigvc7m2a4j6bk9whx7gj0v009568rz5qwk052z7pzfikr8mk";
+    })
+  ];
+
+  # Short-lived cross fix, as upstream is migrating to meson anyway.
+  postPatch = ''
+    substituteInPlace platform.mk --replace "objdump" "$OBJDUMP"
+  '';
 
   outputs = [ "out" "dev" ];
 

@@ -2,15 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "usbmuxd";
-  version = "2018-07-22";
-
-  name = "${pname}-${version}";
+  version = "2018-10-10";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "ee85938c21043ef5f7cd4dfbc7677f385814d4d8";
-    sha256 = "1qsnxvcagxa92rz0w78m0n2drgaghi0pqpbjdk2080sczzi1g76y";
+    rev = "96e4aabe0b9a46ea9da4955a10c774a8e58fe677";
+    sha256 = "03xnj4y606adbhl829vv46qa78f6w2ik4mjz19a34x9lhkcrqxqi";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

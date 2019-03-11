@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   name = "openscenegraph-${version}";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
-    rev = "fb40a0d1db018ff39a08699a7f17f7eb6d949c36";
-    sha256 = "03jk6lclyd4biniaw04w7j0z1spkm69f1c19i37b8v9x3zv1p1id";
+    rev = "d011ca4e8d83549a3688bf6bb8cd468dd9684822";
+    sha256 = "0h32z15sa8sbq276j0iib0n707m8bs4p5ji9z2ah411446paad9q";
   };
 
   nativeBuildInputs = [ pkgconfig cmake doxygen ];

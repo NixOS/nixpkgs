@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     # Libraries for build
     buildPackages.readline buildPackages.ncurses
   ];
-  buildInputs = [ readline ];
+  buildInputs = [ readline flex ];
 
   doCheck = true; # not cross
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU software calculator";
-    homepage = http://www.gnu.org/software/bc/;
+    homepage = https://www.gnu.org/software/bc/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };

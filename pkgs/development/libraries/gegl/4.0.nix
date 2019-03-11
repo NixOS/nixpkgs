@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
 , librsvg, pango, gtk, bzip2, json-glib, intltool, autoreconfHook, libraw
-, libwebp, gnome3, libintl }:
+, gexiv2, libwebp, gnome3, libintl }:
 
 let
-  version = "0.4.8";
+  version = "0.4.12";
 in stdenv.mkDerivation rec {
   name = "gegl-${version}";
 
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "0jdfhf8wikba4h68k505x0br3gisiwivc33aca8v3ibaqpp6i53i";
+    sha256 = "0ljqxc4iyy2hrj31pxcy1xp4xm5zbx1nigqisphmg4p8mcz2jrz9";
   };
 
   enableParallelBuilding = true;
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng cairo libjpeg librsvg pango gtk bzip2
-    libraw libwebp gnome3.gexiv2
+    libraw libwebp gexiv2
   ];
 
   propagatedBuildInputs = [ glib json-glib babl ]; # for gegl-4.0.pc

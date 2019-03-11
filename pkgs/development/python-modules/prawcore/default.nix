@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, buildPythonPackage, fetchPypi
 , requests
 , testfixtures, mock, requests_toolbelt
 , betamax, betamax-serializers, betamax-matchers
@@ -6,18 +6,12 @@
 
 buildPythonPackage rec {
   pname = "prawcore";
-  version = "0.15.0";
+  version = "1.0.1";
 
-  src = fetchFromGitHub {
-    owner = "praw-dev";
-    repo = "prawcore";
-    rev = "v${version}";
-    sha256 = "0v16n6bzf483i00bn0qykrg3wvw9dbnfdl512pw8n635ld1g7cb8";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "ab5558efb438aa73fc66c4178bfc809194dea3ce2addf4dec873de7e2fd2824e";
   };
-
-  postPatch = ''
-    sed -i "s/'testfixtures >4.13.2, <6'/'testfixtures >4.13.2'/g" setup.py
-  '';
 
   propagatedBuildInputs = [
     requests

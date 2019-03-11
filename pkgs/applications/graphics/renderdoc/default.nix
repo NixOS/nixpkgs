@@ -7,19 +7,19 @@ let
   custom_swig = fetchFromGitHub {
     owner = "baldurk";
     repo = "swig";
-    rev = "renderdoc-modified-5";
-    sha256 = "0ihrxbx56p5wn589fbbsns93fp91sypqdzfxdy7l7v9sf69a41mw";
+    rev = "renderdoc-modified-6";
+    sha256 = "00ykqlzx1k9iwqjlc54kfch7cnzsj53hxn7ql70dj3rxqzrnadc0";
   };
 in
 stdenv.mkDerivation rec {
-  version = "1.1";
+  version = "1.2";
   name = "renderdoc-${version}";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "0kb9m1dm0mnglqyh1srvl0f1bgjghxzbqarn0xfqw49wphqwhmcd";
+    sha256 = "0s1q5d58x18yz3nf94pv5i1qd2hc0a4gdj4qkpcn8s6ms2x05pz4";
   };
 
   buildInputs = [

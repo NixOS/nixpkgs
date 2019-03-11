@@ -1,28 +1,22 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune, qtest, result }:
+{ stdenv, fetchFromGitHub, buildDunePackage, qtest, result }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
-then throw "sequence is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  pname = "sequence";
+  version = "1.1";
 
-let version = "1.1"; in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-sequence-${version}";
+  minimumOCamlVersion = "4.02";
 
   src = fetchFromGitHub {
     owner = "c-cube";
-    repo = "sequence";
+    repo = pname;
     rev = version;
     sha256 = "08j37nldw47syq3yw4mzhhvya43knl0d7biddp0q9hwbaxhzgi44";
   };
 
-  buildInputs = [ ocaml findlib dune qtest ];
+  buildInputs = [ qtest ];
   propagatedBuildInputs = [ result ];
 
   doCheck = true;
-  checkPhase = "dune runtest";
-
-  inherit (dune) installPhase;
 
   meta = {
     homepage = https://github.com/c-cube/sequence;
@@ -34,6 +28,5 @@ stdenv.mkDerivation {
       sequence is iterated/folded on.
     '';
     license = stdenv.lib.licenses.bsd2;
-    platforms = ocaml.meta.platforms or [];
   };
 }

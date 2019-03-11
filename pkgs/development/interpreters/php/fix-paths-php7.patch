@@ -1,16 +1,8 @@
---- php-7.0.0beta1/configure	    2015-07-10 12:11:41.810045613 +0000
-+++ php-7.0.0beta1-new/configure	2015-07-17 16:10:21.775528267 +0000
-@@ -6172,7 +6172,7 @@
-     as_fn_error $? "Please note that Apache version >= 2.0.44 is required" "$LINENO" 5
-   fi
- 
--  APXS_LIBEXECDIR='$(INSTALL_ROOT)'`$APXS -q LIBEXECDIR`
-+  APXS_LIBEXECDIR="$prefix/modules"
-   if test -z `$APXS -q SYSCONFDIR`; then
-     INSTALL_IT="\$(mkinstalldirs) '$APXS_LIBEXECDIR' && \
-                  $APXS -S LIBEXECDIR='$APXS_LIBEXECDIR' \
-@@ -37303,9 +37303,7 @@
- 
+diff -ru a/ext/gettext/config.m4 b/ext/gettext/config.m4
+--- a/ext/gettext/config.m4	2018-11-07 15:35:26.000000000 +0000
++++ b/ext/gettext/config.m4	2018-11-27 00:33:07.000000000 +0000
+@@ -6,9 +6,7 @@
+ [  --with-gettext[=DIR]      Include GNU gettext support])
  
  if test "$PHP_GETTEXT" != "no"; then
 -  for i in $PHP_GETTEXT /usr/local /usr; do
@@ -19,5 +11,16 @@
 +  GETTEXT_DIR=$PHP_GETTEXT
  
    if test -z "$GETTEXT_DIR"; then
-     as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5
-
+     AC_MSG_ERROR(Cannot locate header file libintl.h)
+diff -ru a/sapi/apache2handler/config.m4 b/sapi/apache2handler/config.m4
+--- a/sapi/apache2handler/config.m4	2018-11-07 15:35:23.000000000 +0000
++++ b/sapi/apache2handler/config.m4	2018-11-27 00:32:28.000000000 +0000
+@@ -66,7 +66,7 @@
+     AC_MSG_ERROR([Please note that Apache version >= 2.0.44 is required])
+   fi
+ 
+-  APXS_LIBEXECDIR='$(INSTALL_ROOT)'`$APXS -q LIBEXECDIR`
++  APXS_LIBEXECDIR="$prefix/modules"
+   if test -z `$APXS -q SYSCONFDIR`; then
+     INSTALL_IT="\$(mkinstalldirs) '$APXS_LIBEXECDIR' && \
+                  $APXS -S LIBEXECDIR='$APXS_LIBEXECDIR' \

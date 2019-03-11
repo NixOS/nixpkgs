@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2, zlib, pkgconfig, glib, ncurses, perl
+{ stdenv, fetchurl, afl, python2, zlib, pkgconfig, glib, ncurses, perl
 , attr, libcap, vde2, texinfo, libuuid, flex, bison, lzo, snappy
 , libaio, libcap_ng, gnutls, pixman, autoconf
 , writeText
@@ -7,59 +7,65 @@
 with stdenv.lib;
 
 let
-  n = "qemu-2.3.0";
-
-  aflHeaderFile = writeText "afl-qemu-cpu-inl.h"
-    (builtins.readFile ./qemu-patches/afl-qemu-cpu-inl.h);
-  aflConfigFile = writeText "afl-config.h"
-    (builtins.readFile ./qemu-patches/afl-config.h);
-  aflTypesFile = writeText "afl-types.h"
-    (builtins.readFile ./qemu-patches/afl-types.h);
-
+  qemuName = "qemu-2.10.0";
+  aflName = afl.name;
   cpuTarget = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux-user"
     else if stdenv.hostPlatform.system == "i686-linux" then "i386-linux-user"
     else throw "afl: no support for ${stdenv.hostPlatform.system}!";
 in
 stdenv.mkDerivation rec {
-  name = "afl-${n}";
+  name = "afl-${qemuName}";
 
-  src = fetchurl {
-    url = "http://wiki.qemu.org/download/${n}.tar.bz2";
-    sha256 = "120m53c3p28qxmfzllicjzr8syjv6v4d9rsyrgkp7gnmcgvvgfmn";
-  };
+  srcs = [
+    (fetchurl {
+      url = "http://wiki.qemu.org/download/${qemuName}.tar.bz2";
+      sha256 = "0j3dfxzrzdp1w21k21fjvmakzc6lcha1rsclaicwqvbf63hkk7vy";
+    })
+    afl.src
+  ];
 
-  buildInputs =
-    [ python2 zlib pkgconfig glib pixman ncurses perl attr libcap
-      vde2 texinfo libuuid flex bison lzo snappy autoconf
-      libcap_ng gnutls
-    ]
-    ++ optionals (hasSuffix "linux" stdenv.hostPlatform.system) [ libaio ];
+  sourceRoot = qemuName;
+
+  postUnpack = ''
+    cp ${aflName}/types.h $sourceRoot/afl-types.h
+    substitute ${aflName}/config.h $sourceRoot/afl-config.h \
+      --replace "types.h" "afl-types.h"
+    substitute ${aflName}/qemu_mode/patches/afl-qemu-cpu-inl.h $sourceRoot/afl-qemu-cpu-inl.h \
+      --replace "../../config.h" "afl-config.h"
+    substituteInPlace ${aflName}/qemu_mode/patches/cpu-exec.diff \
+      --replace "../patches/afl-qemu-cpu-inl.h" "afl-qemu-cpu-inl.h"
+  '';
+
+  nativeBuildInputs = [
+    python2 perl pkgconfig flex bison autoconf texinfo
+  ];
+
+  buildInputs = [
+    zlib glib pixman ncurses attr libcap
+    vde2 libuuid lzo snappy libcap_ng gnutls
+  ] ++ optionals (stdenv.isLinux) [ libaio ];
 
   enableParallelBuilding = true;
 
-  patches =
-    [ ./qemu-patches/elfload.patch
-      ./qemu-patches/cpu-exec.patch
-      ./qemu-patches/no-etc-install.patch
-      ./qemu-patches/translate-all.patch
-      ./qemu-patches/syscall.patch
-      ./qemu-patches/qemu-2.3.0-glibc-2.26.patch
-    ];
-
-  preConfigure = ''
-    cp ${aflTypesFile}  afl-types.h
-    cp ${aflConfigFile} afl-config.h
-    cp ${aflHeaderFile} afl-qemu-cpu-inl.h
-  '';
+  patches = [
+    # patches extracted from afl source
+    "../${aflName}/qemu_mode/patches/cpu-exec.diff"
+    "../${aflName}/qemu_mode/patches/elfload.diff"
+    "../${aflName}/qemu_mode/patches/syscall.diff"
+    # nix-specific patches to make installation more well-behaved
+    ./qemu-patches/no-etc-install.patch
+    ./qemu-patches/qemu-2.10.0-glibc-2.27.patch
+  ];
 
   configureFlags =
     [ "--disable-system"
       "--enable-linux-user"
-      "--enable-guest-base"
       "--disable-gtk"
       "--disable-sdl"
       "--disable-vnc"
       "--target-list=${cpuTarget}"
+      "--enable-pie"
+      "--enable-kvm"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
     ];

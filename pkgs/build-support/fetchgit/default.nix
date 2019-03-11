@@ -19,6 +19,7 @@ in
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
+, preferLocalBuild ? true
 }:
 
 /* NOTE:
@@ -66,5 +67,5 @@ stdenvNoCC.mkDerivation {
     "GIT_PROXY_COMMAND" "SOCKS_SERVER"
   ];
 
-  preferLocalBuild = true;
+  inherit preferLocalBuild;
 }

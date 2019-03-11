@@ -32,11 +32,6 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkInputs = [ check ];
-  checkPhase = ''
-    runHook preCheck
-    ctest -VV
-    runHook postCheck
-  '';
 
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";

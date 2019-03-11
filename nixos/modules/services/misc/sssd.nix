@@ -75,7 +75,6 @@ in {
       };
 
       system.nssModules = optional cfg.enable pkgs.sssd;
-      services.nscd.config = builtins.readFile ./nscd-sssd.conf;
       services.dbus.packages = [ pkgs.sssd ];
     })
 

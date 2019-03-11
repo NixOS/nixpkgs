@@ -1,17 +1,16 @@
 #! /usr/bin/env perl
 
-# Typical command to generate the list of tarballs:
-
-# export i="mirror://xorg/X11R7.7/src/everything/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs-7.7.list
-# manually update extra.list
-# then run: cat tarballs-7.7.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
-# tarballs-x.y.list is generated + changes for individual packages
-# extra.list are packages not contained in the tarballs
-# old.list are packages that used to be part of the tarballs
+# Usage:
+#
+# manually update tarballs.list
+# then run: cat tarballs.list | perl ./generate-expr-from-tarballs.pl
 
 
 use strict;
 use warnings;
+
+use File::Basename;
+use File::Spec::Functions;
 
 my $tmpDir = "/tmp/xorg-unpack";
 
@@ -20,6 +19,7 @@ my %pkgURLs;
 my %pkgHashes;
 my %pkgNames;
 my %pkgRequires;
+my %pkgNativeRequires;
 
 my %pcMap;
 
@@ -37,13 +37,12 @@ $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
 $pcMap{"gbm"} = "mesa_noglu";
 $pcMap{"\$PIXMAN"} = "pixman";
-$pcMap{"\$RENDERPROTO"} = "renderproto";
-$pcMap{"\$DRI3PROTO"} = "dri3proto";
-$pcMap{"\$DRI2PROTO"} = "dri2proto";
+$pcMap{"\$RENDERPROTO"} = "xorgproto";
+$pcMap{"\$DRI3PROTO"} = "xorgproto";
+$pcMap{"\$DRI2PROTO"} = "xorgproto";
 
 
 my $downloadCache = "./download-cache";
-$ENV{'NIX_DOWNLOAD_CACHE'} = $downloadCache;
 mkdir $downloadCache, 0755;
 
 
@@ -63,7 +62,7 @@ while (<>) {
       #next unless $pkg eq "xcbutil";
     }
 
-    $tarball =~ /\/([^\/]*)\.tar\.(bz2|gz|xz)$/;
+    $tarball =~ /\/([^\/]*)\.(tar\.(bz2|gz|xz)|tgz)$/;
     my $pkgName = $1;
 
     print "  $pkg $pkgName\n";
@@ -76,7 +75,17 @@ while (<>) {
     $pkgURLs{$pkg} = $tarball;
     $pkgNames{$pkg} = $pkgName;
 
-    my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball'`;
+    my $cachePath = catdir($downloadCache, basename($tarball));
+    my $hash;
+    my $path;
+    if (-e $cachePath) {
+        $path = readlink($cachePath);
+        $hash = `nix-hash --type sha256 --base32 --flat $cachePath`;
+    }
+    else {
+        ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball'`;
+        `nix-store --realise --add-root $cachePath --indirect $path`;
+    }
     chomp $hash;
     chomp $path;
     $pkgHashes{$pkg} = $hash;
@@ -94,6 +103,7 @@ while (<>) {
     my $provides = `find $pkgDir -name "*.pc.in"`;
     my @provides2 = split '\n', $provides;
     my @requires = ();
+    my @nativeRequires = ();
 
     foreach my $pcFile (@provides2) {
         my $pc = $pcFile;
@@ -151,13 +161,13 @@ while (<>) {
     }
 
     if ($file =~ /AM_PATH_PYTHON/) {
-        push @requires, "python";
+        push @nativeRequires, "python";
     }
 
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
         # Don't run fc-cache.
         die if defined $extraAttrs{$pkg};
-        $extraAttrs{$pkg} = " preInstall = \"installFlags=(FCCACHE=true)\"; ";
+        push @{$extraAttrs{$pkg}}, "preInstall = \"installFlags=(FCCACHE=true)\";";
     }
 
     my $isFont;
@@ -178,7 +188,7 @@ while (<>) {
     }
 
     if ($isFont) {
-        $extraAttrs{$pkg} = " configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ]; ";
+        push @{$extraAttrs{$pkg}}, "configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ];";
     }
 
     sub process {
@@ -215,10 +225,12 @@ while (<>) {
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
     push @requires, "libxslt" if $pkg =~ /libxcb/;
-    push @requires, "gperf", "m4", "xproto" if $pkg =~ /xcbutil/;
+    push @requires, "gperf", "m4", "xorgproto" if $pkg =~ /xcbutil/;
 
     print "REQUIRES $pkg => @requires\n";
+    print "NATIVE_REQUIRES $pkg => @nativeRequires\n";
     $pkgRequires{$pkg} = \@requires;
+    $pkgNativeRequires{$pkg} = \@nativeRequires;
 
     print "done\n";
 }
@@ -231,23 +243,9 @@ open OUT, ">default.nix";
 print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
-, libxslt, expat, libpng, zlib, perl, mesa_noglu, mesa_drivers, spice-protocol
-, dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
-, autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
+{ lib, newScope, pixman }:
 
-let
-
-  mkDerivation = name: attrs:
-    let newAttrs = (overrides."\${name}" or (x: x)) attrs;
-        stdenv = newAttrs.stdenv or args.stdenv;
-      in stdenv.mkDerivation ((removeAttrs newAttrs [ "stdenv" ]) // {
-        hardeningDisable = [ "bindnow" "relro" ];
-      });
-
-  overrides = import ./overrides.nix {inherit args xorg;};
-
-  xorg = rec {
+lib.makeScope newScope (self: with self; {
 
   inherit pixman;
 
@@ -257,14 +255,28 @@ EOF
 foreach my $pkg (sort (keys %pkgURLs)) {
     print "$pkg\n";
 
+    my %nativeRequires = ();
+    my @nativeBuildInputs;
+    foreach my $req (sort @{$pkgNativeRequires{$pkg}}) {
+        if (defined $pcMap{$req}) {
+            # Some packages have .pc that depends on itself.
+            next if $pcMap{$req} eq $pkg;
+            if (!defined $nativeRequires{$pcMap{$req}}) {
+                push @nativeBuildInputs, $pcMap{$req};
+                $nativeRequires{$pcMap{$req}} = 1;
+            }
+        } else {
+            print "  NOT FOUND: $req\n";
+        }
+    }
     my %requires = ();
-    my $inputs = "";
+    my @buildInputs;
     foreach my $req (sort @{$pkgRequires{$pkg}}) {
         if (defined $pcMap{$req}) {
             # Some packages have .pc that depends on itself.
             next if $pcMap{$req} eq $pkg;
             if (!defined $requires{$pcMap{$req}}) {
-                $inputs .= "$pcMap{$req} ";
+                push @buildInputs, $pcMap{$req};
                 $requires{$pcMap{$req}} = 1;
             }
         } else {
@@ -272,25 +284,36 @@ foreach my $pkg (sort (keys %pkgURLs)) {
         }
     }
 
-    my $extraAttrs = $extraAttrs{"$pkg"};
-    $extraAttrs = "" unless defined $extraAttrs;
+    my $nativeBuildInputsStr = join "", map { $_ . " " } @nativeBuildInputs;
+    my $buildInputsStr = join "", map { $_ . " " } @buildInputs;
+
+    my @arguments = @buildInputs;
+    push @arguments, @nativeBuildInputs;
+    unshift @arguments, "stdenv", "pkgconfig", "fetchurl";
+    my $argumentsStr = join ", ", @arguments;
+
+    my $extraAttrsStr = "";
+    if (defined $extraAttrs{$pkg}) {
+      $extraAttrsStr = join "", map { "\n    " . $_ } @{$extraAttrs{$pkg}};
+    }
 
     print OUT <<EOF
-  $pkg = (mkDerivation "$pkg" {
+  $pkg = callPackage ({ $argumentsStr }: stdenv.mkDerivation {
     name = "$pkgNames{$pkg}";
     builder = ./builder.sh;
     src = fetchurl {
       url = $pkgURLs{$pkg};
       sha256 = "$pkgHashes{$pkg}";
     };
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ $inputs];$extraAttrs
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig $nativeBuildInputsStr];
+    buildInputs = [ $buildInputsStr];$extraAttrsStr
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit $inputs;};
+  }) {};
 
 EOF
 }
 
-print OUT "}; in xorg\n";
+print OUT "})\n";
 
 close OUT;

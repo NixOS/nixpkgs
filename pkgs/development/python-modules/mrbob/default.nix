@@ -1,4 +1,4 @@
-{ buildPythonPackage, stdenv, glibcLocales, mock, nose, isPy3k, argparse, jinja2, six
+{ buildPythonPackage, stdenv, glibcLocales, mock, nose, isPy3k, jinja2, six
 , fetchPypi
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" nosetests
   '';
 
-  propagatedBuildInputs = [ argparse jinja2 six ];
+  propagatedBuildInputs = [ jinja2 six ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/domenkozar/mr.bob;

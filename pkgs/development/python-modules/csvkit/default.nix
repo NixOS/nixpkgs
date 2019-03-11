@@ -1,6 +1,6 @@
 { lib, fetchPypi, buildPythonPackage, isPy3k
 , agate, agate-excel, agate-dbf, agate-sql, six
-, argparse, ordereddict, simplejson
+, ordereddict, simplejson
 , glibcLocales, nose, mock, unittest2
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     agate agate-excel agate-dbf agate-sql six
   ] ++ lib.optionals (!isPy3k) [
-    argparse ordereddict simplejson
+    ordereddict simplejson
   ];
 
   checkInputs = [

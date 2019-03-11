@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "MechanicalSoup";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "22423efd025c3eedb06f41d3ff1127174a59f40dc560e82dce143956976195bf";
+    sha256 = "0k59wwk75q7nz6i6gynvzhagy02ql0bv7py3qqcwgjw7607yq4i7";
   };
 
   checkInputs = [ pytest pytestrunner requests-mock pytestcov ];

@@ -1,8 +1,10 @@
 { system ? builtins.currentSystem
+, config ? {}
+, pkgs ? import ../.. { inherit system config; }
 # bool: whether to use networkd in the tests
 , networkd }:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -17,7 +19,6 @@ let
       networking = {
         useDHCP = false;
         useNetworkd = networkd;
-        firewall.allowPing = true;
         firewall.checkReversePath = true;
         firewall.allowedUDPPorts = [ 547 ];
         interfaces = mkOverride 0 (listToAttrs (flip map vlanIfs (n:
@@ -86,7 +87,6 @@ let
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
-          firewall.allowPing = true;
           useDHCP = false;
           defaultGateway = "192.168.1.1";
           interfaces.eth1.ipv4.addresses = mkOverride 0 [
@@ -139,7 +139,6 @@ let
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
-          firewall.allowPing = true;
           useDHCP = true;
           interfaces.eth1 = {
             ipv4.addresses = mkOverride 0 [ ];
@@ -194,7 +193,6 @@ let
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
-          firewall.allowPing = true;
           useDHCP = false;
           interfaces.eth1 = {
             ipv4.addresses = mkOverride 0 [ ];
@@ -234,7 +232,6 @@ let
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
-          firewall.allowPing = true;
           useDHCP = false;
           bonds.bond = {
             interfaces = [ "eth1" "eth2" ];
@@ -271,7 +268,6 @@ let
         virtualisation.vlans = [ vlan ];
         networking = {
           useNetworkd = networkd;
-          firewall.allowPing = true;
           useDHCP = false;
           interfaces.eth1.ipv4.addresses = mkOverride 0
             [ { inherit address; prefixLength = 24; } ];
@@ -285,7 +281,6 @@ let
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
-          firewall.allowPing = true;
           useDHCP = false;
           bridges.bridge.interfaces = [ "eth1" "eth2" ];
           interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
@@ -329,7 +324,6 @@ let
           # reverse path filtering rules for the macvlan interface seem
           # to be incorrect, causing the test to fail. Disable temporarily.
           firewall.checkReversePath = false;
-          firewall.allowPing = true;
           useDHCP = true;
           macvlans.macvlan.interface = "eth1";
           interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
@@ -415,7 +409,6 @@ let
         #virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
-          firewall.allowPing = true;
           useDHCP = false;
           vlans.vlan = {
             id = 1;
@@ -613,7 +606,4 @@ let
 
 in mapAttrs (const (attrs: makeTest (attrs // {
   name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ wkennington ];
-  };
 }))) testCases

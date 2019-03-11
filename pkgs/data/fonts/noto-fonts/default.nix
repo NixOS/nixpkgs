@@ -2,11 +2,14 @@
 
 let
   mkNoto = { name, weights, sha256, }:
-    let version = "2017-10-24-phase3-second-cleanup"; in
+    let
+      version = "2018-11-30";
+      ref = "85e78f831469323c85847e23f95026c894159135";
+    in
     fetchzip {
       name = "${name}-${version}";
       inherit sha256;
-      url = "https://github.com/googlei18n/noto-fonts/archive/v${version}.zip";
+      url = "https://github.com/googlei18n/noto-fonts/archive/${ref}.zip";
       postFetch = ''
         unzip $downloadedFile
         mkdir -p $out/share/fonts/noto
@@ -47,12 +50,12 @@ rec {
   noto-fonts = mkNoto {
     name = "noto-fonts";
     weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
-    sha256 = "1dmarbsfank6xzzx31h5jdv6n99rzblqyb1iqjkpll6dl3627pnb";
+    sha256 = "0kvq5ldip2ra2njlxg9fxj46nfqzq5l3n359d3kwfbsld7hixm2d";
   };
   noto-fonts-extra = mkNoto {
     name = "noto-fonts-extra";
     weights = "{Black,Condensed,Extra,Medium,Semi,Thin}*";
-    sha256 = "1lih49bqmsmblczvbl7qb1bhn0bq8v5xkr991b3gjghpdkx584bc";
+    sha256 = "0l94aiy1b3qirg2mmbagbr0014vqk32za79pzck1acy2hgy716kq";
   };
   noto-fonts-cjk = let version = "1.004"; in fetchzip {
     name = "noto-fonts-cjk-${version}";
@@ -86,14 +89,14 @@ rec {
       maintainers = with maintainers; [ mathnerd314 ];
     };
   };
-  noto-fonts-emoji = let version = "2018-04-24-pistol-update"; in stdenv.mkDerivation {
+  noto-fonts-emoji = let version = "2018-08-10-unicode11"; in stdenv.mkDerivation {
     name = "noto-fonts-emoji-${version}";
 
     src = fetchFromGitHub {
       owner = "googlei18n";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "1f9k182j0619xvwk60gw2hng3lcd483sva2fabjdhznk8yf9f7jg";
+      sha256 = "1y54zsvwf5pqhcd9cl2zz5l52qyswn6kycvrq03zm5kqqsngbw3p";
     };
 
     buildInputs = [ cairo ];
@@ -116,7 +119,7 @@ rec {
       inherit version;
       description = "Color and Black-and-White emoji fonts";
       homepage = https://github.com/googlei18n/noto-emoji;
-      license = licenses.asl20;
+      license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
       maintainers = with maintainers; [ mathnerd314 ];
     };

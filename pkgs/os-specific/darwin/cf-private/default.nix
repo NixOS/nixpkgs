@@ -1,4 +1,4 @@
-{ CF, apple_sdk }:
+{ CF, apple_sdk, osx_private_sdk }:
 
 # cf-private is a bit weird, but boils down to CF with a weird setup-hook that
 # makes a build link against the system CoreFoundation rather than our pure one.
@@ -13,10 +13,10 @@
 # because of their magic "toll-free bridging" support, the symbols for those types
 # live in CoreFoundation with an ObjC runtime. And because that isn't public, we have
 # this hack in place to let people link properly anyway. Phew!
-# 
+#
 # This can be revisited if Apple ever decide to release the ObjC backend in a publicly
 # buildable form.
-# 
+#
 # This doesn't really need to rebuild CF, but it's cheap, and adding a setup hook to
 # an existing package was annoying. We need a buildEnv that knows how to add those
 CF.overrideAttrs (orig: {
@@ -38,19 +38,21 @@ CF.overrideAttrs (orig: {
   # this is watchman, who can almost certainly switch to the pure CF once the header
   # and functionality is merged in.
   installPhase = orig.installPhase + ''
+    # Copy or overwrite private headers, some of these might already
+    # exist in CF but the private versions have more information.
     basepath="Library/Frameworks/CoreFoundation.framework/Headers"
-    path="$basepath/CFFileDescriptor.h"
+    cp -Lfv --no-preserve mode ${osx_private_sdk}/include/CoreFoundationPrivateHeaders/* "$out/$basepath"
 
     # Append the include at top level or nobody will notice the header we're about to add
     sed -i '/CFNotificationCenter.h/a #include <CoreFoundation/CFFileDescriptor.h>' \
       "$out/$basepath/CoreFoundation.h"
 
-    cp ${apple_sdk.frameworks.CoreFoundation}/$path $out/$path
+    cp ${apple_sdk.frameworks.CoreFoundation}/$basepath/CFFileDescriptor.h $out/$basepath/CFFileDescriptor.h
   '' +
   # This one is less likely to go away, but I'll mention it anyway. The issue is at
   # https://bugs.swift.org/browse/SR-8744, and the main user I know of is qtbase
   ''
-    path="$basepath/CFURLEnumerator.h"    
+    path="$basepath/CFURLEnumerator.h"
     sed -i '/CFNotificationCenter.h/a #include <CoreFoundation/CFURLEnumerator.h>' \
       "$out/$basepath/CoreFoundation.h"
 

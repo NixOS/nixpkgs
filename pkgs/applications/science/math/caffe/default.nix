@@ -1,4 +1,4 @@
-{ stdenv, lib, runCommand
+{ config, stdenv, lib, runCommand
 , fetchFromGitHub
 , fetchurl
 , cmake
@@ -13,10 +13,11 @@
 , Accelerate, CoreGraphics, CoreVideo
 , lmdbSupport ? true, lmdb
 , leveldbSupport ? true, leveldb, snappy
-, cudaSupport ? stdenv.isLinux, cudatoolkit
-, cudnnSupport ? false, cudnn ? null
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
+, cudnnSupport ? cudaSupport, cudnn ? null
 , ncclSupport ? false, nccl ? null
 , pythonSupport ? false, python ? null, numpy ? null
+, substituteAll
 }:
 
 assert leveldbSupport -> (leveldb != null && snappy != null);
@@ -50,7 +51,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake doxygen ];
 
   cmakeFlags =
-    [ (if pythonSupport then "-Dpython_version=${python.version}" else "-DBUILD_python=OFF")
+    # It's important that caffe is passed the major and minor version only because that's what
+    # boost_python expects
+    [ (if pythonSupport then "-Dpython_version=3${python.pythonVersion}" else "-DBUILD_python=OFF")
       "-DBLAS=open"
     ] ++ (if cudaSupport then [
            "-DCUDA_ARCH_NAME=All"
@@ -75,16 +78,21 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out"];
   propagatedBuildOutputs = []; # otherwise propagates out -> bin cycle
 
-  patches = [ ./darwin.patch ];
+  patches = [
+    ./darwin.patch
+  ] ++ lib.optional pythonSupport (substituteAll {
+    src = ./python.patch;
+    inherit (python.sourceVersion) major minor;  # Should be changed in case of PyPy
+  });
 
-  preConfigure = lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''
+  postPatch = lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''
     # CUDA 9.0 doesn't support sm_20
     sed -i 's,20 21(20) ,,' cmake/Cuda.cmake
-  '' + lib.optionalString (python.isPy3 or false) ''
-    sed -i \
-      -e 's,"python-py''${boost_py_version}",python3,g' \
-      -e 's,''${Boost_PYTHON-PY''${boost_py_version}_FOUND},''${Boost_PYTHON3_FOUND},g' \
-      cmake/Dependencies.cmake
+  '';
+
+  preConfigure = lib.optionalString pythonSupport ''
+    # We need this when building with Python bindings
+    export BOOST_LIBRARYDIR="${boost.out}/lib";
   '';
 
   postInstall = ''

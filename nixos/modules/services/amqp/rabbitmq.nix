@@ -87,9 +87,19 @@ in {
           }
         '';
         description = ''
-          New style config options.
+          Configuration options in RabbitMQ's new config file format,
+          which is a simple key-value format that can not express nested
+          data structures. This is known as the <literal>rabbitmq.conf</literal> file,
+          although outside NixOS that filename may have Erlang syntax, particularly
+          prior to RabbitMQ 3.7.0.
 
-          See http://www.rabbitmq.com/configure.html
+          If you do need to express nested data structures, you can use
+          <literal>config</literal> option. Configuration from <literal>config</literal>
+          will be merged into these options by RabbitMQ at runtime to
+          form the final configuration.
+
+          See http://www.rabbitmq.com/configure.html#config-items
+          For the distinct formats, see http://www.rabbitmq.com/configure.html#config-file-formats
         '';
       };
 
@@ -97,10 +107,17 @@ in {
         default = "";
         type = types.str;
         description = ''
-          Verbatim advanced configuration file contents.
-          Prefered way is to use configItems.
+          Verbatim advanced configuration file contents using the Erlang syntax.
+          This is also known as the <literal>advanced.config</literal> file or the old config format.
 
-          See http://www.rabbitmq.com/configure.html
+          <literal>configItems</literal> is preferred whenever possible. However, nested
+          data structures can only be expressed properly using the <literal>config</literal> option.
+
+          The contents of this option will be merged into the <literal>configItems</literal>
+          by RabbitMQ at runtime to form the final configuration.
+
+          See the second table on http://www.rabbitmq.com/configure.html#config-items
+          For the distinct formats, see http://www.rabbitmq.com/configure.html#config-file-formats
         '';
       };
 

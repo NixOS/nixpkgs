@@ -2,7 +2,8 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   grantlee, kcodecs, kconfigwidgets, kemoticons, ki18n, kiconthemes, kio,
-  kdesignerplugin, ktextwidgets, sonnet, syntax-highlighting, qttools,
+  kdesignerplugin, ktextwidgets, sonnet, syntax-highlighting, qttools, 
+  qtspeech
 }:
 
 mkDerivation {
@@ -14,7 +15,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     grantlee kcodecs kconfigwidgets kemoticons ki18n kiconthemes kio kdesignerplugin
-    sonnet syntax-highlighting qttools
+    sonnet syntax-highlighting qttools qtspeech
   ];
   propagatedBuildInputs = [ ktextwidgets ];
   outputs = [ "out" "dev" ];

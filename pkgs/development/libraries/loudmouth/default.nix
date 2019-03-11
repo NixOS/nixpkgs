@@ -18,11 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A lightweight C library for the Jabber protocol";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
     downloadPage = "http://mcabber.com/files/loudmouth/";
     downloadURLRegexp = "loudmouth-[0-9.]+[.]tar[.]bz2$";
     updateWalker = true;
+    license = licenses.lgpl21;
   };
 }

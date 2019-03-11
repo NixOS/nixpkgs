@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, vala, gettext, libxml2, gobjectIntrospection, gtk-doc, wrapGAppsHook, glib, gssdp, gupnp, gupnp-av, gupnp-dlna, gst_all_1, libgee, libsoup, gtk3, libmediaart, sqlite, systemd, tracker, shared-mime-info, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, vala, gettext, libxml2, gobject-introspection, gtk-doc, wrapGAppsHook, glib, gssdp, gupnp, gupnp-av, gupnp-dlna, gst_all_1, libgee, libsoup, gtk3, libmediaart, sqlite, systemd, tracker, shared-mime-info, gnome3 }:
 
 let
   pname = "rygel";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig vala gettext libxml2 gobjectIntrospection gtk-doc wrapGAppsHook
+    pkgconfig vala gettext libxml2 gobject-introspection gtk-doc wrapGAppsHook
   ];
   buildInputs = [
     glib gssdp gupnp gupnp-av gupnp-dlna libgee libsoup gtk3 libmediaart sqlite systemd tracker shared-mime-info

@@ -1,16 +1,16 @@
-{ stdenv, meson, ninja, gettext, fetchurl, pkgconfig, gtk, glib, icu
+{ stdenv, meson, ninja, gettext, fetchurl, pkgconfig, gtk3, glib, icu
 , wrapGAppsHook, gnome3, libxml2, libxslt, itstool
 , webkitgtk, libsoup, glib-networking, libsecret, gnome-desktop, libnotify, p11-kit
 , sqlite, gcr, isocodes, desktop-file-utils, python3
-, gdk_pixbuf, gst_all_1, json-glib }:
+, gdk_pixbuf, gst_all_1, json-glib, libdazzle }:
 
 stdenv.mkDerivation rec {
   name = "epiphany-${version}";
-  version = "3.28.3.1";
+  version = "3.30.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1xz6xl6b0iihvczyr0cs1z5ifvpai6anb4m0ng1caiph06klc1b9";
+    sha256 = "05qdzx18ld1m3xiajpz6y6snfj56bgyjsgm7f4rqrnpjdbdvikbn";
   };
 
   # Tests need an X display
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk glib webkitgtk libsoup libxml2 libsecret gnome-desktop libnotify
+    gtk3 glib webkitgtk libsoup libxml2 libsecret gnome-desktop libnotify
     sqlite isocodes p11-kit icu
-    gdk_pixbuf gnome3.defaultIconTheme gcr
+    gdk_pixbuf gnome3.adwaita-icon-theme gcr
     glib-networking gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav json-glib
+    gst_all_1.gst-libav json-glib libdazzle
   ];
 
   postPatch = ''

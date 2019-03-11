@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-caffeine-${version}";
-  version = "unstable-2017-06-21";
+  version = "unstable-2018-09-25";
 
   src = fetchFromGitHub {
     owner = "eonpatapon";
     repo = "gnome-shell-extension-caffeine";
-    rev = "ce0d0d4d3a9fed4b35b82cf59609a00502862271";
-    sha256 = "01gf9c8nhhm78iakqf30900y6lywxks1pm5h2cs0jvp8d3ygd7sd";
+    rev = "71b6392c53e063563602c3d919c0ec6a4c5c9733";
+    sha256 = "170zyxa41hvyi463as650nw3ygr297901inr3xslrhvjq1qacxri";
   };
 
   uuid = "caffeine@patapon.info";

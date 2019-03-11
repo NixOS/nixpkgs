@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "httpsig";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19ng7y7blp13z081z5a6dxng1p8xlih7g6frmsg3q5ri8lvpybc7";
+    sha256 = "1rkc3zwsq53rjsmc47335m4viljiwdbmw3y2zry4z70j8q1dbmki";
   };
 
   buildInputs = [ setuptools_scm ];

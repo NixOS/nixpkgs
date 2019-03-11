@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ dbus libcap ];
+  NIX_LDFLAGS = [ "-lrt" ];
 
   meta = with stdenv.lib; {
     homepage = http://0pointer.de/blog/projects/rtkit;

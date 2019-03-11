@@ -10,15 +10,14 @@ stdenv.mkDerivation {
   };
 
   # for the builder script
-  inherit xauth fontDirectories perl;
-  gcc = stdenv.cc.cc;
+  inherit fontDirectories;
 
   hardeningDisable = [ "format" ];
 
   buildInputs = [ xlibsWrapper zlib libjpeg imake gccmakedep libXmu libXaw
                   libXpm libXp xauth openssh ];
 
-  patchPhase = ''
+  postPatch = ''
     fontPath=
     for i in $fontDirectories; do
       for j in $(find $i -name fonts.dir); do
@@ -27,37 +26,38 @@ stdenv.mkDerivation {
     done
 
     sed -i "s@/usr/bin/ssh@${openssh}/bin/ssh@g" vncviewer/vncviewer.h
-  '';
 
-  buildPhase = ''
-    xmkmf
-    make World
     sed -e 's@/usr/bin/perl@${perl}/bin/perl@' \
         -e 's@unix/:7100@'$fontPath'@' \
         -i vncserver
 
-    cd Xvnc
-    sed -e 's@.* CppCmd .*@#define CppCmd		'$gcc'/bin/cpp@' -i config/cf/linux.cf
-    sed -e 's@.* CppCmd .*@#define CppCmd		'$gcc'/bin/cpp@' -i config/cf/Imake.tmpl
+    sed -e 's@.* CppCmd .*@#define CppCmd		cpp@' -i Xvnc/config/cf/linux.cf
+    sed -e 's@.* CppCmd .*@#define CppCmd		cpp@' -i Xvnc/config/cf/Imake.tmpl
     sed -i \
         -e 's@"uname","xauth","Xvnc","vncpasswd"@"uname","Xvnc","vncpasswd"@g' \
         -e "s@\<xauth\>@${xauth}/bin/xauth@g" \
-        ../vncserver
-    ./configure
-    make
-    cd ..
+        vncserver
+  '';
+
+  preInstall = ''
+    mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man1
+    runHook preInstall
+
     ./vncinstall $out/bin $out/share/man
 
+    runHook postInstall
+  '';
+
+  postInstall = ''
     # fix HTTP client:
-    t=$out/share/tightvnc
-    mkdir -p $t
-    sed -i "s@/usr/local/vnc/classes@$out/vnc/classes@g" $out/bin/vncserver
-    cp -r classes $t
+    mkdir -p $out/share/tightvnc
+    cp -r classes $out/share/tightvnc
+    substituteInPlace $out/bin/vncserver \
+      --replace /usr/local/vnc/classes $out/share/tightvnc/classes
   '';
 
   meta = {

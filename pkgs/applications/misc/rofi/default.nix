@@ -4,26 +4,18 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.5.1";
+  version = "1.5.2";
   name = "rofi-unwrapped-${version}";
 
   src = fetchurl {
     url = "https://github.com/DaveDavenport/rofi/releases/download/${version}/rofi-${version}.tar.gz";
-    sha256 = "1dc33zf33z38jcxb0lxpyd31waalpf6d4cd9z5f9m5qphdk1g679";
+    sha256 = "1rczxz6l32vnclarzga1sm1d5iq9rfscb9j7f8ih185n59hf0517";
   };
-
-  # config.patch may be removed in the future - https://github.com/DaveDavenport/rofi/pull/781
-  patches = [ ./config.patch ];
 
   preConfigure = ''
     patchShebangs "script"
     # root not present in build /etc/passwd
     sed -i 's/~root/~nobody/g' test/helper-expand.c
-  '';
-
-  postFixup = ''
-    substituteInPlace "$out"/bin/rofi-theme-selector \
-        --replace "%ROFIOUT%" "$out/share"
   '';
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -37,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = https://davedavenport.github.io/rofi;
     license = licenses.mit;
     maintainers = with maintainers; [ mbakke garbas ma27 ];
-    platforms = with platforms; unix;
+    platforms = with platforms; linux;
   };
 }

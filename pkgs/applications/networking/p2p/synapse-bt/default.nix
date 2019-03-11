@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "synapse-bt-unstable-${version}";
-  version = "2018-06-04";
+  version = "2018-10-17";
 
   src = fetchFromGitHub {
     owner = "Luminarys";
     repo = "synapse";
-    rev = "ec8f23a14af21426ab0c4f8953dd954f747850ab";
-    sha256 = "0d1rrwnk333zz9g8s40i75xgdkpz6a1j01ajsh32yvzvbi045zkw";
+    rev = "76d5e9a23ad00c25cfd0469b1adb479b9ded113a";
+    sha256 = "1lsfvcsmbsg51v8c2hkpwkx0zg25sdjc3q7x72b5bwwnw9l0iglz";
   };
 
-  cargoSha256 = "1psrmgf6ddzqwx7gf301rx84asfnvxpsvkx2fan453v65819k960";
+  cargoSha256 = "1sc8c0w2dbvcdv16idw02y35x0jx5ff6ddzij09pmqjx55zgsjf7";
 
   buildInputs = [ pkgconfig openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 

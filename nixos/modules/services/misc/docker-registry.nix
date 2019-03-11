@@ -18,7 +18,7 @@ let
       delete.enabled = cfg.enableDelete;
     };
     http = {
-      addr = ":${builtins.toString cfg.port}";
+      addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
     };
     health.storagedriver = {

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, writeScript, writeText, php }:
+{ stdenv, lib, fetchurl, writeScript, writeText, php, runtimeShell }:
 
 let
   version = "2.0.1";
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin $dir
 
     cat <<_EOF > $out/bin/wp
-#!${stdenv.shell}
+#!${runtimeShell}
 
 set -euo pipefail
 

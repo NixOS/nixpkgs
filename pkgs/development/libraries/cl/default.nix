@@ -1,14 +1,14 @@
 {stdenv, fetchFromGitHub, rebar, erlang, opencl-headers, ocl-icd }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.3";
+  version = "1.2.4";
   name = "cl-${version}";
 
   src = fetchFromGitHub {
     owner = "tonyrog";
     repo = "cl";
     rev = "cl-${version}";
-    sha256 = "1dk0k03z0ipxvrnn0kihph135hriw96jpnd31lbq44k6ckh6bm03";
+    sha256 = "1gwkjl305a0231hz3k0w448dsgbgdriaq764sizs5qfn59nzvinz";
   };
 
   buildInputs = [ erlang rebar opencl-headers ocl-icd ];

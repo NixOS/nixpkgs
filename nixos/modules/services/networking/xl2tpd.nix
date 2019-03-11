@@ -5,7 +5,7 @@ with lib;
 {
   options = {
     services.xl2tpd = {
-      enable = mkEnableOption "Whether xl2tpd should be run on startup.";
+      enable = mkEnableOption "xl2tpd, the Layer 2 Tunnelling Protocol Daemon";
 
       serverIp = mkOption {
         type        = types.string;

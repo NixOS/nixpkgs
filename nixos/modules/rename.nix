@@ -28,7 +28,10 @@ with lib;
       (config:
         let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
         in if enabled then [ pkgs.gutenprint ] else [ ]))
-    (mkRenamedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ])
+    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
+      (config:
+        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
+        in if value != "" then [ value ] else []))
     (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
     (mkRenamedOptionModule [ "services" "elasticsearch" "host" ] [ "services" "elasticsearch" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "api" "host" ] [ "services" "graphite" "api" "listenAddress" ])
@@ -37,9 +40,19 @@ with lib;
     (mkRenamedOptionModule [ "services" "kibana" "host" ] [ "services" "kibana" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "admissionControl" ] [ "services" "kubernetes" "apiserver" "enableAdmissionPlugins" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])
+    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "port" ] ["services" "kubernetes" "apiserver" "insecurePort"])
     (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "publicAddress" ] "")
     (mkRenamedOptionModule [ "services" "kubernetes" "addons" "dashboard" "enableRBAC" ] [ "services" "kubernetes" "addons" "dashboard" "rbac" "enable" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "address" ] ["services" "kubernetes" "controllerManager" "bindAddress"])
+    (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "port" ] ["services" "kubernetes" "controllerManager" "insecurePort"])
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "servers" ] [ "services" "kubernetes" "apiserver" "etcd" "servers" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "keyFile" ] [ "services" "kubernetes" "apiserver" "etcd" "keyFile" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "certFile" ] [ "services" "kubernetes" "apiserver" "etcd" "certFile" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "caFile" ] [ "services" "kubernetes" "apiserver" "etcd" "caFile" ])
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "applyManifests" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "cadvisorPort" ] "")
+    (mkRenamedOptionModule [ "services" "kubernetes" "proxy" "address" ] ["services" "kubernetes" "proxy" "bindAddress"])
+    (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
     (mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "mpd" "network" "host" ] [ "services" "mpd" "network" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "neo4j" "host" ] [ "services" "neo4j" "defaultListenAddress" ])
@@ -56,6 +69,7 @@ with lib;
     (mkRenamedOptionModule [ "services" "statsd" "host" ] [ "services" "statsd" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "subsonic" "host" ] [ "services" "subsonic" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "tor" "relay" "portSpec" ] [ "services" "tor" "relay" "port" ])
+    (mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
     (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
 
     (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
@@ -65,6 +79,9 @@ with lib;
 
     (mkRemovedOptionModule [ "security" "setuidOwners" ] "Use security.wrappers instead")
     (mkRemovedOptionModule [ "security" "setuidPrograms" ] "Use security.wrappers instead")
+
+    # PAM
+    (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
 
     (mkRemovedOptionModule [ "services" "rmilter" "bindInetSockets" ] "Use services.rmilter.bindSocket.* instead")
     (mkRemovedOptionModule [ "services" "rmilter" "bindUnixSockets" ] "Use services.rmilter.bindSocket.* instead")
@@ -168,6 +185,9 @@ with lib;
 
     # parsoid
     (mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] [ "services" "parsoid" "wikis" ])
+
+    # plexpy / tautulli
+    (mkRenamedOptionModule [ "services" "plexpy" ] [ "services" "tautulli" ])
 
     # piwik was renamed to matomo
     (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
@@ -278,6 +298,10 @@ with lib;
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+
+    # ckb
+    (mkRenamedOptionModule [ "hardware" "ckb" "enable" ] [ "hardware" "ckb-next" "enable" ])
+    (mkRenamedOptionModule [ "hardware" "ckb" "package" ] [ "hardware" "ckb-next" "package" ])
 
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"

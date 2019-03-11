@@ -1,6 +1,4 @@
-{ stdenv, fetchFromGitHub, which, git, ronn, perl, ShellCommand
-, TestMost, TestDifferences, TestDeep, TestException, TestWarn
-}:
+{ stdenv, fetchFromGitHub, which, git, ronn, perlPackages }:
 
 stdenv.mkDerivation rec {
   version = "1.20170915";       # date of commit we're pulling
@@ -13,10 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wfzp8167lcq6akdpbi8fikjv0z3h1i5minh3423dljc04q0klm1";
   };
 
-  buildInputs = [
-    which git ronn perl ShellCommand TestMost TestDifferences TestDeep
-    TestException TestWarn
-  ];
+  buildInputs = [ which git ronn ]
+    ++ (with perlPackages; [ perl ShellCommand TestMost TestDifferences TestDeep TestException TestWarn ]);
 
   installPhase = "make install PREFIX=$out";
 

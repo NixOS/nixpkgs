@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd }:
+{ lib, stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd, hostname }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
@@ -6,22 +6,22 @@ let
 
 in buildGoPackage rec {
   name = "datadog-agent-${version}";
-  version = "6.4.2";
+  version = "6.10.1";
   owner   = "DataDog";
   repo    = "datadog-agent";
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev    = "155fddb3547919bd54530dfdb250e0cb2defae7d";
-    sha256 = "0l7ic0p2h27x386k1gzzm20af2s06cpalmqz0h0c5zq4wszmw5zy";
+    rev    = "${version}";
+    sha256 = "1yxwlf0kwjhadq6f1p9z100d363x1s1xzni3rw42m08mzx9fr469";
   };
 
   subPackages = [
     "cmd/agent"
+    "cmd/cluster-agent"
     "cmd/dogstatsd"
     "cmd/py-launcher"
-    # Does not compile: go/src/github.com/DataDog/datadog-agent/cmd/cluster-agent/main.go:31:12: undefined: app.ClusterAgentCmd
-    #"cmd/cluster-agent"
+    "cmd/trace-agent"
   ];
   goDeps = ./deps.nix;
   goPackagePath = "github.com/${owner}/${repo}";
@@ -51,13 +51,15 @@ in buildGoPackage rec {
     sed -e "s|PyChecksPath =.*|PyChecksPath = \"$bin/${python.sitePackages}\"|" \
         -e "s|distPath =.*|distPath = \"$bin/share/datadog-agent\"|" \
         -i cmd/agent/common/common_nix.go
+    sed -e "s|/bin/hostname|${lib.getBin hostname}/bin/hostname|" \
+        -i pkg/util/hostname_nix.go
   '';
 
   # Install the config files and python modules from the "dist" dir
   # into standard paths.
   postInstall = ''
     mkdir -p $bin/${python.sitePackages} $bin/share/datadog-agent
-    cp -R $src/cmd/agent/dist/{conf.d,trace-agent.conf} $bin/share/datadog-agent
+    cp -R $src/cmd/agent/dist/conf.d $bin/share/datadog-agent
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $bin/${python.sitePackages}
 
     cp -R $src/pkg/status/dist/templates $bin/share/datadog-agent

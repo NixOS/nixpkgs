@@ -1,14 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, perl
-, MIMEtools, HTMLParser
-, cursesSupport ? true, CursesUI
-, uriFindSupport ? true, URIFind
+{ stdenv, lib, fetchFromGitHub, makeWrapper, perlPackages
+, cursesSupport ? true
+, uriFindSupport ? true
 }:
 
 let
   perlDeps =
-    [ MIMEtools HTMLParser ]
-    ++ lib.optional cursesSupport CursesUI
-    ++ lib.optional uriFindSupport URIFind;
+    [ perlPackages.MIMEtools perlPackages.HTMLParser ]
+    ++ lib.optional cursesSupport perlPackages.CursesUI
+    ++ lib.optional uriFindSupport perlPackages.URIFind;
 
 in stdenv.mkDerivation rec {
   name = "extract_url-${version}";
@@ -22,14 +21,14 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ] ++ perlDeps;
+  buildInputs = [ perlPackages.perl ] ++ perlDeps;
 
   makeFlags = [ "prefix=$(out)" ];
   installFlags = [ "INSTALL=install" ];
 
   postFixup = ''
     wrapProgram "$out/bin/extract_url" \
-      --set PERL5LIB "${lib.makeFullPerlPath perlDeps}"
+      --set PERL5LIB "${perlPackages.makeFullPerlPath perlDeps}"
   '';
 
   meta = with lib; {

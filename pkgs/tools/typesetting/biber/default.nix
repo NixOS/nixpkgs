@@ -20,8 +20,8 @@ perlPackages.buildPerlModule rec {
     DateTime DateTimeFormatBuilder DateTimeCalendarJulian
     ExtUtilsLibBuilder FileSlurper FileWhich IPCRun3 LogLog4perl LWPProtocolHttps ListAllUtils
     ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
-    UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
+    UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
+    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit SortKey
     TestDifferences
   ];
 

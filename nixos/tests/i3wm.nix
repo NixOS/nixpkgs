@@ -28,7 +28,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     $machine->waitForFile("/home/alice/.config/i3/config");
     $machine->sleep(2);
     $machine->sendKeys("alt-ret");
-    $machine->waitForWindow(qr/machine.*alice/);
+    $machine->waitForWindow(qr/alice.*machine/);
     $machine->sleep(2);
     $machine->screenshot("terminal");
   '';

@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
+{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d, libXcursor
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
+, alsaLib, cairo, acl, gpm, cf-private, AppKit, GSS, ImageIO, m17n_lib, libotf
 , systemd ? null
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
@@ -10,6 +10,7 @@
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
+, siteStart ? ./site-start.el
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./clean-env.patch
+    ./tramp-detect-wrapped-gvfsd.patch
   ];
 
   postPatch = lib.optionalString srcRepo ''
@@ -64,9 +66,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
-    ++ lib.optionals (withX && withXwidgets) [ webkitgtk ];
-
-  propagatedBuildInputs = lib.optionals withNS [ AppKit GSS ImageIO ];
+    ++ lib.optionals (withX && withXwidgets) [ webkitgtk ]
+    ++ lib.optionals withNS [
+      AppKit GSS ImageIO
+      # Needed for CFNotificationCenterAddObserver symbols.
+      cf-private
+    ];
 
   hardeningDisable = [ "format" ];
 
@@ -96,7 +101,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
-    cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
+    cp ${siteStart} $out/share/emacs/site-lisp/site-start.el
     $out/bin/emacs --batch -f batch-byte-compile $out/share/emacs/site-lisp/site-start.el
 
     rm -rf $out/var
@@ -114,11 +119,22 @@ stdenv.mkDerivation rec {
     mv nextstep/Emacs.app $out/Applications
   '';
 
+  postFixup =
+    let libPath = lib.makeLibraryPath [
+      libXcursor
+    ];
+    in lib.optionalString (withX && toolkit == "lucid") ''
+      patchelf --set-rpath \
+        "$(patchelf --print-rpath "$out/bin/emacs"):${libPath}" \
+        "$out/bin/emacs"
+      patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
+    '';
+
   meta = with stdenv.lib; {
     description = "The extensible, customizable GNU text editor";
-    homepage    = http://www.gnu.org/software/emacs/;
+    homepage    = https://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chaoflow lovek323 peti the-kenny jwiegley ];
+    maintainers = with maintainers; [ lovek323 peti the-kenny jwiegley ];
     platforms   = platforms.all;
 
     longDescription = ''

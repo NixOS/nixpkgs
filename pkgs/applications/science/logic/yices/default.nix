@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, gmp-static, gperf, autoreconfHook, libpoly }:
+{ stdenv, fetchFromGitHub, gmp-static, gperf, autoreconfHook, libpoly }:
 
 stdenv.mkDerivation rec {
   name    = "yices-${version}";
-  version = "2.6.0";
+  version = "2.6.1";
 
-  src = fetchurl {
-    url = "https://github.com/SRI-CSL/yices2/archive/Yices-${version}.tar.gz";
-    name = "${name}-src.tar.gz";
-    sha256 = "10ikq7ib8jhx7hlxfm6mp5qg6r8dflqs8242q5zaicn80qixpm12";
+  src = fetchFromGitHub {
+    owner  = "SRI-CSL";
+    repo   = "yices2";
+    rev    = "Yices-${version}";
+    sha256 = "04vf468spsh00jh7gj94cjnq8kjyfwy9l6r4z7l2pm0zgwkqgyhm";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -38,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://yices.csl.sri.com";
     license     = licenses.gpl3;
     platforms   = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }
