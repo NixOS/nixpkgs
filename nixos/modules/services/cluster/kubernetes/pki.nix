@@ -283,12 +283,6 @@ in
         };
       };
 
-      systemd.services.kube-control-plane-online.environment = let
-        client = with cfg.certs; if top.apiserver.enable then clusterAdmin else kubelet;
-      in {
-        inherit (client) cert key;
-      };
-
       environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
         (top.lib.mkKubeConfig "cluster-admin" clusterAdminKubeconfig);
 
