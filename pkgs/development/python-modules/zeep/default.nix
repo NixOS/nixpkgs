@@ -25,11 +25,11 @@
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bfpdy3hi8aa45piwg5gj0xxa187v13d66qr1ki73qn7c6rbizp5";
+    sha256 = "144dk7gw93l4amrwmp5vzxxkcjsgkx6fjqzvsawx2iap23j605j9";
   };
 
   propagatedBuildInputs = [
