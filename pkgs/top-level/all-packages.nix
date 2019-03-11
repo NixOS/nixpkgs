@@ -17865,6 +17865,7 @@ in
   ipe = libsForQt5.callPackage ../applications/graphics/ipe {
     ghostscript = ghostscriptX;
     texlive = texlive.combine { inherit (texlive) scheme-small; };
+    lua5 = lua5_3;
   };
 
   iptraf = callPackage ../applications/networking/iptraf { };
