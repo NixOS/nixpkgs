@@ -1737,6 +1737,8 @@ in
 
   appleseed = callPackage ../tools/graphics/appleseed { };
 
+  applespi = callPackage ../os-specific/linux/applespi {};
+
   arping = callPackage ../tools/networking/arping { };
 
   arpoison = callPackage ../tools/networking/arpoison { };
