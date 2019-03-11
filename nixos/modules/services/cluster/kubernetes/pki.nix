@@ -132,11 +132,6 @@ in
       cfg.certs.schedulerClient.cert
       cfg.certs.schedulerClient.key
     ];
-    kubeletPaths = [
-      top.kubelet.clientCaFile
-      top.kubelet.tlsCertFile
-      top.kubelet.tlsKeyFile
-    ];
   in
   {
 
@@ -374,18 +369,6 @@ in
       systemd.services.kube-proxy = mkIf top.proxy.enable {
         environment = { inherit (top.pki.certs.kubeProxyClient) cert key; };
         unitConfig.ConditionPathExists = proxyPaths;
-      };
-
-      systemd.services.kubelet = mkIf top.kubelet.enable {
-        unitConfig.ConditionPathExists = kubeletPaths;
-      };
-
-      systemd.paths.kubelet = mkIf top.kubelet.enable {
-        wantedBy =  [ "kubelet.service" ];
-        pathConfig = {
-          PathExists = kubeletPaths;
-          PathChanged = kubeletPaths;
-        };
       };
 
       systemd.paths.kube-proxy = mkIf top.proxy.enable {

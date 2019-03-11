@@ -241,7 +241,18 @@ in
 
   ###### implementation
   config = mkMerge [
-    (mkIf cfg.enable {
+    (let
+
+      kubeletPaths = filter (a: a != null) [
+        cfg.kubeconfig.caFile
+        cfg.kubeconfig.certFile
+        cfg.kubeconfig.keyFile
+        cfg.clientCaFile
+        cfg.tlsCertFile
+        cfg.tlsKeyFile
+      ];
+
+    in mkIf cfg.enable {
       services.kubernetes.kubelet.seedDockerImages = [infraContainer];
 
       systemd.services.kubelet = {
@@ -304,6 +315,15 @@ in
           '';
           WorkingDirectory = top.dataDir;
         };
+        unitConfig.ConditionPathExists = kubeletPaths;
+      };
+
+      systemd.paths.kubelet = {
+        wantedBy =  [ "kubelet.service" ];
+        pathConfig = {
+          PathExists = kubeletPaths;
+          PathChanged = kubeletPaths;
+        };
       };
 
       systemd.services.docker.before = [ "kubelet.service" ];
@@ -321,6 +341,7 @@ in
         '';
         script = "echo Ok";
         serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
         serviceConfig.Slice = "kubernetes.slice";
       };
 
@@ -337,7 +358,7 @@ in
           flannel-date = "stat --print=%Y ${docker-env}";
           docker-date = "systemctl show --property=ActiveEnterTimestamp --value docker";
         in ''
-          while ! test -f ${docker-env} ; do sleep 1 ; done
+          until test -f ${docker-env} ; do sleep 1 ; done
           while test `${flannel-date}` -gt `date +%s --date="$(${docker-date})"` ; do
             sleep 1
           done
