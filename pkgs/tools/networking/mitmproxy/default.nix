@@ -32,6 +32,16 @@ buildPythonPackage rec {
       # We strip these bounds anyway
       excludes = [ "setup.py" ];
     })
+    (fetchpatch {
+      # Fix for newer pytest disallowing calling fixtures
+      # https://github.com/mitmproxy/mitmproxy/issues/3403
+      # TODO: remove on next update
+      name = "dont-call-fixtures.patch";
+      url = https://github.com/mitmproxy/mitmproxy/commit/ce28721458c8cc71de86513a5110676e9763041b.patch;
+      sha256 = "05pljr28lx7l1xgswqr9sz8dnhvc7npzh8xg2p9hignf159kd54d";
+      # Irrelevant in nixpkgs
+      excludes = [ "setup.py" "setup.cfg" "release/docker/*" ];
+    })
   ];
 
   postPatch = ''
