@@ -311,6 +311,7 @@ tpope/vim-pathogen
 tpope/vim-projectionist
 tpope/vim-repeat
 tpope/vim-rhubarb
+tpope/vim-rsi
 tpope/vim-scriptease
 tpope/vim-sensible
 tpope/vim-sleuth
