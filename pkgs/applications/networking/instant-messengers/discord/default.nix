@@ -7,7 +7,7 @@
 stdenv.mkDerivation rec {
 
     pname = "discord";
-    version = "0.0.8";
+    version = "0.0.9";
     name = "${pname}-${version}";
 
     src = fetchurl {
