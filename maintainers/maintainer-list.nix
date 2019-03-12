@@ -4036,6 +4036,11 @@
     github = "rprospero";
     name = "Adam Washington";
   };
+  rps = {
+    email = "robbpseaton@gmail.com";
+    github = "robertseaton";
+    name = "Robert P. Seaton";
+  };
   rszibele = {
     email = "richard@szibele.com";
     github = "rszibele";

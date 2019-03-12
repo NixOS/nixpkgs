@@ -15990,6 +15990,8 @@ in
 
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
+  tamsyn = callPackage ../data/fonts/tamsyn { };
+
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
     gtk = res.gtk2;
   };
