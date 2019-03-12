@@ -179,11 +179,11 @@
     };
   };
   kwin = {
-    version = "5.15.3";
+    version = "5.15.3.1";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.15.3/kwin-5.15.3.tar.xz";
-      sha256 = "1zfjf0jf77r3knlznzcpi73wbsfvixfr3m2b8vbracmjm0s7v0gn";
-      name = "kwin-5.15.3.tar.xz";
+      url = "${mirror}/stable/plasma/5.15.3/kwin-5.15.3.1.tar.xz";
+      sha256 = "0v7qmbwn7j7la10g7cy4hmqdh5wahnv203xrbklfb158p73pn5yr";
+      name = "kwin-5.15.3.1.tar.xz";
     };
   };
   kwrited = {
@@ -235,11 +235,11 @@
     };
   };
   plasma-desktop = {
-    version = "5.15.3";
+    version = "5.15.3.1";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.15.3/plasma-desktop-5.15.3.tar.xz";
-      sha256 = "1k1xx9kwrwzy440748xf9xfkldyyrqk5mld1pzabgzfivsxssbrg";
-      name = "plasma-desktop-5.15.3.tar.xz";
+      url = "${mirror}/stable/plasma/5.15.3/plasma-desktop-5.15.3.1.tar.xz";
+      sha256 = "0mrn729zcwx8k6xqkaxrs80kmd263h2n12gyy1f7lik3gydpcwk9";
+      name = "plasma-desktop-5.15.3.1.tar.xz";
     };
   };
   plasma-integration = {
@@ -339,11 +339,11 @@
     };
   };
   systemsettings = {
-    version = "5.15.3";
+    version = "5.15.3.1";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.15.3/systemsettings-5.15.3.tar.xz";
-      sha256 = "0qa0qz6286byjky4f0nx1y9raa8d56lfryyvfnx3fdzz9xypvwxj";
-      name = "systemsettings-5.15.3.tar.xz";
+      url = "${mirror}/stable/plasma/5.15.3/systemsettings-5.15.3.1.tar.xz";
+      sha256 = "1ll5mkil5f8byi6zc55ars4sw720fkcd1jckfa19jqa2axmjfkn5";
+      name = "systemsettings-5.15.3.1.tar.xz";
     };
   };
   user-manager = {
