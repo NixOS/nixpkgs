@@ -22,8 +22,8 @@
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
-  src = fetch "llvm" "193aiag8914sr3a6w9msaiwjjl0w9i5h0dd994by85j4abczaqw3";
-  polly_src = fetch "polly" "111p8f4nqawl9rrykd784dkjgjrkq92ska9l8n91jwr5jir6f86b";
+  src = fetch "llvm" "1hb5if7vmgkb52dpj9lyvn986mnk2jbpryng2r1rc5vy25wxw759";
+  polly_src = fetch "polly" "07l3y20j8124x24yqiq0qmz9rhkfh3c48q6vnpgldj2scr3vgyb2";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;

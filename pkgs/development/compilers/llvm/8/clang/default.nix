@@ -9,7 +9,7 @@ let
     name = "clang-${version}";
 
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "0i4ak817issrainsrxkb57i2mqscmrjkmlf9lqr6kcy2x4glrv10"}
+      unpackFile ${fetch "cfe" "07k6vcxnf9n8x21mala3rfvf450iqy24wcsqw4yc8b8lp1fwii6p"}
       mv cfe-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
