@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "2.8.1";
+  version = "2.8.2";
 in stdenv.mkDerivation rec {
   name = "udisks-${version}";
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     owner = "storaged-project";
     repo = "udisks";
     rev = name;
-    sha256 = "073iqa0pwa7ab0qw33h3ic89508a78incmg6rq914d6br7s030zy";
+    sha256 = "000xf99id1f6w8l20jxm3f2g32v9wx68rzv6q2bwrfz6vmy76xwy";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
