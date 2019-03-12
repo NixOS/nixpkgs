@@ -3,7 +3,8 @@
 let
   version = "1.11"; 
 in stdenv.mkDerivation {
-  name = "tamsyn-font-${version}";
+  pname = "tamsyn-font";
+  inherit version;
 
   src = fetchurl {
     url = "http://www.fial.com/~scott/tamsyn-font/download/tamsyn-font-${version}.tar.gz";
