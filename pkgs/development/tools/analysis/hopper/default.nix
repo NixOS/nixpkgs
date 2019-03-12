@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgs, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name    = "hopper-${version}";
+  pname    = "hopper";
   version = "4.5.7";
   rev = "v{lib.versions.major version}";
 
