@@ -2673,6 +2673,11 @@
     github = "listx";
     name = "Linus Arver";
   };
+  luis = {
+      email = "luis.nixos@gmail.com";
+      github = "Luis-Hebendanz";
+      name = "Luis Hebendanz";
+  };
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
