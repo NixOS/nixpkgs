@@ -2,7 +2,7 @@
 
 let
   version = "1.11"; 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "tamsyn-font-${version}";
 
   src = fetchurl {
