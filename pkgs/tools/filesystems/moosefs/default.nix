@@ -11,12 +11,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "moosefs-${version}";
+  pname = "moosefs";
   version = "3.0.103";
 
   src = fetchFromGitHub {
-    owner = "moosefs";
-    repo = "moosefs";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
     sha256 = "0pqralv57ci4zwd75hz4pxmd4l9d4nib2mcsvrb6jndxqkaqcvns";
   };
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   buildInputs =
-    [ fuse libpcap zlib   
-    ];
+    [ fuse libpcap zlib ];
 
   postInstall = ''
     wrapProgram $out/sbin/mfscgiserv \
