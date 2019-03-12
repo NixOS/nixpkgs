@@ -23366,5 +23366,6 @@ in
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
   };
-
+  
+  ghidra = callPackage ../development/tools/misc/ghidra { };
 }

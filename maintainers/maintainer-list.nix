@@ -2087,6 +2087,11 @@
     github = "j-keck";
     name = "Jürgen Keck";
   };
+  j03 = {
+    email = "git@johannesloetzsch";
+    github = "johannesloetzsch";
+    name = "Johannes Lötzsch";
+  };
   jagajaga = {
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
@@ -3280,6 +3285,11 @@
     email = "ndowens04@gmail.com";
     github = "ndowens";
     name = "Nathan Owens";
+  };
+  nea = {
+    email = "neda.sultova@gmail.com";
+    github = "N-eA";
+    name = "Neda Sultova";
   };
   neeasade = {
     email = "nathanisom27@gmail.com";
