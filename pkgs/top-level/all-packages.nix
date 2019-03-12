@@ -13545,7 +13545,6 @@ with pkgs;
   };
 
   deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
-  deadpixi-sam = deadpixi-sam-unstable;
 
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
