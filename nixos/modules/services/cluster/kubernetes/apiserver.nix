@@ -184,6 +184,12 @@ in
       type = bool;
     };
 
+    preferredAddressTypes = mkOption {
+      description = "List of the preferred NodeAddressTypes to use for kubelet connections.";
+      type = nullOr str;
+      default = null;
+    };
+
     runtimeConfig = mkOption {
       description = ''
         Api runtime configuration. See
@@ -316,6 +322,8 @@ in
                 "--kubelet-client-certificate=${cfg.kubeletClientCertFile}"} \
               ${optionalString (cfg.kubeletClientKeyFile != null)
                 "--kubelet-client-key=${cfg.kubeletClientKeyFile}"} \
+              ${optionalString (cfg.preferredAddressTypes != null)
+                "--kubelet-preferred-address-types=${cfg.preferredAddressTypes}"} \
               --insecure-bind-address=${cfg.insecureBindAddress} \
               --insecure-port=${toString cfg.insecurePort} \
               ${optionalString (cfg.runtimeConfig != "")
