@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sdparm-${version}";
-  version = "1.10";
+  version = "1.11r320";
 
   src = fetchurl {
     url = "http://sg.danny.cz/sg/p/${name}.tar.xz";
-    sha256 = "1jjq3lzgfy4r76rc26q02lv4wm5cb4dx5nh913h489zjrr4f3jbx";
+    sha256 = "1crl9j1xq84sh9crwcfvnybnzif1zkrgbyz42m4iahrwima83xha";
   };
 
   meta = with stdenv.lib; {
