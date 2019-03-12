@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Scripting library for tmux";
     homepage = https://libtmux.readthedocs.io/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
   };
 }
