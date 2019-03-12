@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name    = "hopper-${version}";
   version = "4.5.7";
-  rev = "v4";
+  rev = "v{lib.versions.major version}";
 
   src = fetchurl {
     url = "https://d2ap6ypl1xbe4k.cloudfront.net/Hopper-${rev}-${version}-Linux.pkg.tar.xz";
