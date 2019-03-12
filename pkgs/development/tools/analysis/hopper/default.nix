@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgs, makeWrapper }:
+{ stdenv, fetchurl, pkgs, makeWrapper, lib }:
 
 stdenv.mkDerivation rec {
   pname    = "hopper";
   version = "4.5.7";
-  rev = "v{lib.versions.major version}";
+  rev = "v${lib.versions.major version}";
 
   src = fetchurl {
     url = "https://d2ap6ypl1xbe4k.cloudfront.net/Hopper-${rev}-${version}-Linux.pkg.tar.xz";
