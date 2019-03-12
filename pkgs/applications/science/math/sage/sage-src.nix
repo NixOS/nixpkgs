@@ -50,6 +50,15 @@ stdenv.mkDerivation rec {
 
     # Fixes a potential race condition which can lead to transient doctest failures.
     ./patches/fix-ecl-race.patch
+
+    # Parallelize docubuild using subprocesses, fixing an isolation issue. See
+    # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
+    (fetchpatch {
+      name = "sphinx-docbuild-subprocesses.patch";
+      url = "https://salsa.debian.org/science-team/sagemath/raw/8a215b17e6f791ddfae6df8ce6d01dfb89acb434/debian/patches/df-subprocess-sphinx.patch";
+      sha256 = "07p9i0fwjgapmfvmi436yn6v60p8pvmxqjc93wsssqgh5kd8qw3n";
+      stripLen = 1;
+    })
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -112,6 +121,9 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch?id=a05b6b038e1571ab15464e98f76d1927c0c3fd12";
       sha256 = "05yq97pq84xi60wb1p9skrad5h5x770gq98ll4frr7hvvmlwsf58";
     })
+
+    # https://trac.sagemath.org/ticket/27405
+    ./patches/ignore-pip-deprecation.patch
   ];
 
   patches = nixPatches ++ packageUpgradePatches;

@@ -65,11 +65,13 @@ buildPythonPackage rec {
     perl
     jupyter_core
     pkg-config
+    pip # needed to query installed packages
   ];
 
   buildInputs = [
     gd
     readline
+    iml
   ];
 
   propagatedBuildInputs = [

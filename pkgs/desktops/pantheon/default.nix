@@ -217,6 +217,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-icon-theme = callPackage ./artwork/elementary-icon-theme { };
 
+  elementary-redacted-script = callPackage ./artwork/elementary-redacted-script { };
+
   elementary-sound-theme = callPackage ./artwork/elementary-sound-theme { };
 
   elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };

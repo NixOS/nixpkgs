@@ -419,7 +419,7 @@ stdenv.mkDerivation rec {
     ++ optionals nvenc [ nvidia-video-sdk nv-codec-headers ]
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
-                                   libiconv ];
+                                   libiconv cf-private /* For _OBJC_EHTYPE_$_NSException */ ];
 
   # Build qt-faststart executable
   buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';

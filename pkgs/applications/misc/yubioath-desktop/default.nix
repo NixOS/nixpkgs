@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  buildInputs = [ stdenv qtbase qtquickcontrols pyotherside python3 ];
+  buildInputs = [ stdenv qtbase qtquickcontrols python3 ];
 
   nativeBuildInputs = [ qmake makeWrapper python3.pkgs.wrapPython ];
 
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     wrapProgram $out/bin/yubioath-desktop \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
+      --prefix QML2_IMPORT_PATH : "${pyotherside}/${qtbase.qtQmlPrefix}" \
       --prefix LD_PRELOAD : "${yubikey-personalization}/lib/libykpers-1.so" \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib"
 
