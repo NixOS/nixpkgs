@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, postgresql, freetds }:
 
 stdenv.mkDerivation rec {
-  name = "tds_fdw-${version}";
+  pname = "tds_fdw";
   version = "1.0.8";
 
   buildInputs = [ postgresql freetds ];
 
   src = fetchFromGitHub {
     owner  = "tds-fdw";
-    repo   = "tds_fdw";
+    repo   =  pname;
     rev    = "refs/tags/v${version}";
     sha256 = "0dlv1imiy773yplqqpl26xka65bc566k2x81wkrbvwqagnwvcai2";
   };
