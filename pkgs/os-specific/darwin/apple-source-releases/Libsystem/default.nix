@@ -1,7 +1,7 @@
 { stdenv, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolv, Libnotify, libplatform, libpthread
-, mDNSResponder, launchd, libutil, hfs }:
+, mDNSResponder, launchd, libutil, hfs, darling }:
 
 appleDerivation rec {
   dontBuild = true;
@@ -30,6 +30,11 @@ appleDerivation rec {
     (cd ${cctools.dev}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
 
     mkdir -p $out/include/os
+
+    cp ${darling.src}/src/libc/os/activity.h $out/include/os
+    cp ${darling.src}/src/libc/os/log.h $out/include/os
+    cp ${darling.src}/src/duct/include/os/trace.h $out/include/os
+
     cat <<EOF > $out/include/os/availability.h
     #ifndef __OS_AVAILABILITY__
     #define __OS_AVAILABILITY__

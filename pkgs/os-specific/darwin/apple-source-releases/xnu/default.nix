@@ -114,8 +114,6 @@ appleDerivation ({
     # Get rid of some junk lying around
     rm -rf $out/internal_hdr $out/usr $out/local
 
-    mv $out/include/libkern/os/log.h $out/include/os/log.h
-
     # Add some symlinks
     ln -s $out/Library/Frameworks/System.framework/Versions/B \
           $out/Library/Frameworks/System.framework/Versions/Current
