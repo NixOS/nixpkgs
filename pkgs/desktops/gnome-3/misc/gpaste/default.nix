@@ -2,20 +2,16 @@
 , pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  version = "3.30.2";
+  version = "3.32.0";
   name = "gpaste-${version}";
 
   src = fetchurl {
     url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
-    sha256 = "0vlbvv6rjxq7h9cl3ilndjk7d51ac1x7agj8k6a7bwjx8h1fr62x";
+    sha256 = "1fvpl9vqmrr1w22hm0ybabn9pjfii5qj9ghnc2jzihgrn2h486v6";
   };
 
   patches = [
     ./fix-paths.patch
-    (fetchpatch {
-      url = https://github.com/Keruspe/GPaste/commit/eacd9ecbcf6db260a2bdc22275c7a855cad66424.patch;
-      sha256 = "1668xcmx90gpjlgv2iyp6yqbxq3r5sw5cxds0dmzlyvbqdmc3py2";
-    })
   ];
 
   # TODO: switch to substituteAll with placeholder

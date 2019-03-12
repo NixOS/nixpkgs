@@ -17,7 +17,7 @@
  
 +imports.gi.GIRepository.Repository.prepend_search_path('@typelibPath@');
 +
- const GPaste = imports.gi.GPaste;
+ const { GPaste } = imports.gi;
  
  const ExtensionUtils = imports.misc.extensionUtils;
 --- a/src/libgpaste/settings/gpaste-settings.c
@@ -44,7 +44,7 @@
  g_paste_settings_init (GPasteSettings *self)
  {
      GPasteSettingsPrivate *priv = g_paste_settings_get_instance_private (self);
--    GSettings *settings = priv->settings = g_settings_new (G_PASTE_SETTINGS_NAME);
+-    GSettings *settings = priv->settings = create_g_settings ();
 +
 +    // library used by introspection requires schemas but we cannot set XDG_DATA_DIRS for the library
 +    GSettingsSchemaSource *schema_source = priv->schema_source = g_settings_schema_source_new_from_directory ("@gschemasCompiled@", NULL, FALSE, NULL);
