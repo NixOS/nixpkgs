@@ -2,7 +2,6 @@
 , buildPackages
 , newScope, callPackage
 , CoreFoundation, Security
-, gcc6
 }: rec {
   makeRustPlatform = { rustc, cargo, ... }: {
     rust = {
@@ -49,19 +48,15 @@
       buildRustPackages = buildPackages.rust.packages.stable;
       # Analogous to stdenv
       rustPlatform = makeRustPlatform self.buildRustPackages;
-      rustc = self.callPackage ./rustc.nix ({
+      rustc = self.callPackage ./rustc.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
-      } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-        stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
-      });
-      cargo = self.callPackage ./cargo.nix ({
+      };
+      cargo = self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
         inherit CoreFoundation Security;
-      } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-        stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
-      });
+      };
     });
   };
 }
