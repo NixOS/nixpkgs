@@ -22,14 +22,14 @@ libbsd.out libffi.out gmpxx.out python27Full.out python27Packages.libxml2 qt5.qt
      mkdir -p $out/bin
      mkdir -p $out/lib
      mkdir -p $out/share
-     cp $sourceRoot/opt/hopper-${rev}/bin/Hopper $out/bin
+     cp $sourceRoot/opt/hopper-${rev}/bin/Hopper $out/bin/hopper
      cp -r $sourceRoot/opt/hopper-${rev}/lib $out
      cp -r $sourceRoot/usr/share $out/share
     patchelf \
     --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
-    $out/bin/Hopper
+    $out/bin/hopper
     # Details: https://nixos.wiki/wiki/Qt
-     wrapProgram $out/bin/Hopper \
+     wrapProgram $out/bin/hopper \
     --suffix LD_LIBRARY_PATH : ${ldLibraryPath} \
     --suffix QT_PLUGIN_PATH : ${pkgs.qt5.qtbase}/lib/qt-${pkgs.qt5.qtbase.qtCompatVersion}/plugins
   '';
