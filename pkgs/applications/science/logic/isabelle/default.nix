@@ -1,22 +1,20 @@
 { stdenv, fetchurl, perl, nettools, java, polyml, z3 }:
 # nettools needed for hostname
 
-let
-  dirname = "Isabelle2017";
-in
+stdenv.mkDerivation rec {
+  pname = "isabelle";
+  version = "2018";
 
-stdenv.mkDerivation {
-  name = "isabelle-2017";
-  inherit dirname;
+  dirname = "Isabelle${version}";
 
   src = if stdenv.isDarwin
     then fetchurl {
       url = "http://isabelle.in.tum.de/website-${dirname}/dist/${dirname}.dmg";
-      sha256 = "1awgg39i72pivwfijdwffvil3glnpimjz2x04qbl5la2j6la48nb";
+      sha256 = "0jwnvsf5whklq14ihaxs7b9nbic94mm56nvxljrdbvl6y628j9r5";
     }
     else fetchurl {
       url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
-      sha256 = "01v1zrajyfamjq5b8v18qr3ffivjckifsvvx2vs13di6wsnmm9gw";
+      sha256 = "1928lwrw1v1p9s23kix30ncpqm8djmrnjixj82f3ni2a8sc3hrsp";
     };
 
   buildInputs = [ perl polyml z3 ]
@@ -36,15 +34,22 @@ stdenv.mkDerivation {
       --subst-var-by ML_HOME "${polyml}/bin"
     substituteInPlace contrib/jdk/etc/settings \
       --replace ISABELLE_JDK_HOME= '#ISABELLE_JDK_HOME='
-    substituteInPlace contrib/polyml-*/etc/settings \
-      --replace '$POLYML_HOME/$ML_PLATFORM' ${polyml}/bin \
-      --replace '$POLYML_HOME/$PLATFORM/polyml' ${polyml}/bin/poly
     substituteInPlace lib/scripts/run-polyml* lib/scripts/polyml-version \
       --replace '$ML_HOME/poly' ${polyml}/bin/poly
     substituteInPlace contrib/z3*/etc/settings \
       --replace '$Z3_HOME/z3' '${z3}/bin/z3'
 
-    for comp in contrib/jdk contrib/polyml*; do
+    cat >contrib/polyml-*/etc/settings <<EOF
+      ML_SYSTEM_64=true
+      ML_SYSTEM=${polyml.name}
+      ML_PLATFORM=${stdenv.system}
+      ML_HOME=${polyml}/bin
+      ML_OPTIONS="--minheap 1000"
+      POLYML_HOME="\$COMPONENT"
+      ML_SOURCES="\$POLYML_HOME/src"
+    EOF
+
+    for comp in contrib/jdk contrib/polyml-*; do
       rm -rf $comp/x86*
     done
     '' + (if ! stdenv.isLinux then "" else ''

@@ -21878,7 +21878,10 @@ in
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
 
   isabelle = callPackage ../applications/science/logic/isabelle {
-    polyml = polyml56;
+    polyml = stdenv.lib.overrideDerivation polyml (attrs: {
+      configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
+    });
+
     java = if stdenv.isLinux then jre else jdk;
   };
 
