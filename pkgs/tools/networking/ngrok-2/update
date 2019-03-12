@@ -16,8 +16,9 @@ get_download_info() {
          channel=stable \
          os=$1 \
          goarm= \
-         target_version=2.2.8 \
          arch=$2
+
+#         target_version=2.2.8 \
 
     echo "}"
 }
