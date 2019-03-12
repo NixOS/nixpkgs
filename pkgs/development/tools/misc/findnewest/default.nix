@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "findnewest-${version}";
+  pname = "findnewest";
   version = "0.3";
 
   src = fetchFromGitHub {
