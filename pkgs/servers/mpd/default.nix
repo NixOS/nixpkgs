@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, systemd, boost, darwin
 # Inputs
 , curl, libmms, libnfs, samba
 # Archive support
@@ -11,23 +11,23 @@
 # Outputs
 , alsaLib, libjack2, libpulseaudio, libshout
 # Misc
-, icu, sqlite, avah, dbus
+, icu, sqlite, avahi, dbus
 # Services
 , yajl
 # Client support
 , mpd_clientlib
 # Tag support
 , libid3tag
+#, features ? []
 }:
 
 let
-  major = "0.20";
-  minor = "23";
+  major = "0.21";
+  minor = "5";
 
   lib = stdenv.lib;
-  mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
-  mkDisable = f: "--disable-${f}";
-  mkEnable = f: "--enable-${f}";
+  mkDisable = f: "-D${f}=disabled";
+  mkEnable = f: "-D${f}=enabled";
   keys = lib.mapAttrsToList (k: v: k);
 
   featureDependencies = {
@@ -41,7 +41,7 @@ let
     zzip          = [ zziplib ];
     # Decoder plugins
     audiofile     = [ audiofile ];
-    aac           = [ faad2 ];
+    faad          = [ faad2 ];
     ffmpeg        = [ ffmpeg ];
     flac          = [ flac ];
     fluidsynth    = [ fluidsynth ];
@@ -52,10 +52,10 @@ let
     opus          = [ libopus ];
     vorbis        = [ libvorbis ];
     # Encoder plugins
-    vorbis_encoder = [ libvorbis ];
-    lame_encoder  = [ lame ];
+    vorbisenc     = [ libvorbis ];
+    lame          = [ lame ];
     # Filter plugins
-    lsr           = [ libsamplerate ];
+    libsamplerate = [ libsamplerate ];
     # Output plugins
     alsa          = [ alsaLib ];
     jack          = [ libjack2 ];
@@ -66,13 +66,14 @@ let
     sqlite        = [ sqlite ];
     zeroconf      = [ avahi dbus ];
     # Commercial services
-    soundcloud    = [ yajl ];
+    soundcloud    = [ curl yajl ];
     # Client support
     libmpdclient  = [ mpd_clientlib ];
     # Tag support
-    id3           = [ libid3tag ];
-    # Debug
-    debug         = [];
+    id3tag        = [ libid3tag ];
+    # Misc
+    systemd       = [ systemd ];
+    yajl          = [ yajl ];
   };
 
   features = keys featureDependencies;
@@ -92,33 +93,24 @@ in stdenv.mkDerivation rec {
     owner  = "MusicPlayerDaemon";
     repo   = "MPD";
     rev    = "v${version}";
-    sha256 = "1z1pdgiddimnmck0ardrpxkvgk1wn9zxri5wfv5ppasbb7kfm350";
+    sha256 = "0bdnng34hwmwy5hll6ks3yksw3l77w9vaip2l6wkilqhzyibkbpl";
   };
-
-  patches = [ ./x86.patch ];
 
   buildInputs = [ glib boost ]
     ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
     ++ lib.optional stdenv.isLinux systemd;
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
+  mesonFlags =
     map mkEnable features_ ++ map mkDisable (lib.subtractLists features_ (keys featureDependencies))
-    ++ [
-      (mkFlag stdenv.isDarwin "osx")
-    ]
     ++ lib.optional (lib.any (x: x == "zeroconf") features_)
-      "--with-zeroconf=avahi"
+      "-Dzeroconf=avahi"
     ++ lib.optional stdenv.isLinux
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system";
-
-  NIX_LDFLAGS = ''
-    ${if (lib.any (x: x == "shout") features_) then "-lshout" else ""}
-  '';
+      "-Dsystemd_system_unit_dir=$(out)/etc/systemd/system";
 
   meta = with stdenv.lib; {
     description = "A flexible, powerful daemon for playing music";
