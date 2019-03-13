@@ -33,7 +33,10 @@ in stdenv.mkDerivation rec {
   # .rlib files in "lib/".
   #
   # See https://github.com/NixOS/nixpkgs/pull/34227
-  stripDebugList = if stdenv.isDarwin then [ "bin" ] else null;
+  #
+  # Running `strip -S` when cross compiling can harm the cross rlibs.
+  # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
+  stripDebugList = [ "bin" ];
 
 
   NIX_LDFLAGS =
