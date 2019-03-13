@@ -1,0 +1,32 @@
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mfrac>
+   <mrow>
+    <mrow>
+     <mi>propagated-dep</mi>
+     <mo> &#x2061;<!--FUNCTION APPLICATION-->
+     </mo>
+     <mfenced>
+      <mi>h</mi>
+      <mi>t</mi>
+      <mi>A</mi>
+      <mi>B</mi>
+     </mfenced>
+    </mrow>
+   </mrow>
+   <mrow>
+    <mi>dep</mi>
+    <mo> &#x2061;<!--FUNCTION APPLICATION-->
+    </mo>
+    <mfenced>
+     <mi>h</mi>
+     <mi>t</mi>
+     <mi>A</mi>
+     <mi>B</mi>
+    </mfenced>
+   </mrow>
+  </mfrac>
+  <mtext>Propagated deps count as deps
+</mtext>
+ </mrow>
+</math>

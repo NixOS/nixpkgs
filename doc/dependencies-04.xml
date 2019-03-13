@@ -1,0 +1,119 @@
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mtable columnspacing="0">
+  <mtr>
+   <mtd columnalign="right">
+    <mtext>mapOffset</mtext>
+    <mo> &#x2061;<!--FUNCTION APPLICATION-->
+    </mo>
+    <mfenced>
+     <mi>h</mi>
+     <mi>t</mi>
+     <mi>i</mi>
+    </mfenced>
+   </mtd>
+   <mtd columnalign="left">
+    <mo>=</mo>
+    <mi>i</mi>
+    <mo>+</mo>
+    <mrow>
+     <mo form="prefix">(</mo>
+     <mtext>if</mtext>
+     <mspace width="0.5em"/>
+     <mrow>
+      <mi>i</mi>
+      <mo>≤</mo>
+      <mn>0</mn>
+     </mrow>
+     <mspace width="0.5em"/>
+     <mtext>then</mtext>
+     <mspace width="0.5em"/>
+     <mrow>
+      <mi>h</mi>
+     </mrow>
+     <mspace width="0.5em"/>
+     <mtext>else</mtext>
+     <mspace width="0.5em"/>
+     <mrow>
+      <mi>t</mi>
+      <mo>-</mo>
+      <mn>1</mn>
+     </mrow>
+     <mo form="postfix">)</mo>
+    </mrow>
+   </mtd>
+  </mtr>
+  <mtr>
+   <mtd columnalign="right"></mtd>
+   <mtd columnalign="left">
+    <mo>=</mo>
+    <mi>i</mi>
+    <mo>+</mo>
+    <mrow>
+     <mo form="prefix">(</mo>
+     <mtext>if</mtext>
+     <mspace width="0.5em"/>
+     <mrow>
+      <mi>i</mi>
+      <mo>≤</mo>
+      <mn>0</mn>
+     </mrow>
+     <mspace width="0.5em"/>
+     <mtext>then</mtext>
+     <mspace width="0.5em"/>
+     <mrow>
+      <mi>h</mi>
+     </mrow>
+     <mspace width="0.5em"/>
+     <mtext>else</mtext>
+     <mspace width="0.5em"/>
+     <mrow>
+      <mrow>
+       <mo form="prefix">(</mo>
+       <mi>h</mi>
+       <mo>+</mo>
+       <mn>1</mn>
+       <mo form="postfix">)</mo>
+      </mrow>
+      <mo>-</mo>
+      <mn>1</mn>
+     </mrow>
+     <mo form="postfix">)</mo>
+    </mrow>
+   </mtd>
+  </mtr>
+  <mtr>
+   <mtd columnalign="right"></mtd>
+   <mtd columnalign="left">
+    <mo>=</mo>
+    <mi>i</mi>
+    <mo>+</mo>
+    <mrow>
+     <mo form="prefix">(</mo>
+     <mtext>if</mtext>
+     <mspace width="0.5em"/>
+     <mi>i</mi>
+     <mo>≤</mo>
+     <mn>0</mn>
+     <mspace width="0.5em"/>
+     <mtext>then</mtext>
+     <mspace width="0.5em"/>
+     <mi>h</mi>
+     <mspace width="0.5em"/>
+     <mtext>else</mtext>
+     <mspace width="0.5em"/>
+     <mi>h</mi>
+     <mo form="postfix">)</mo>
+    </mrow>
+   </mtd>
+  </mtr>
+  <mtr>
+   <mtd columnalign="right"></mtd>
+   <mtd columnalign="left">
+    <mo>=</mo>
+    <mi>i</mi>
+    <mo>+</mo>
+    <mi>h</mi>
+   </mtd>
+  </mtr>
+ </mtable>
+</math>

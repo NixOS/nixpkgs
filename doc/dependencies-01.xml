@@ -1,0 +1,131 @@
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mfrac>
+   <mrow>
+    <mrow>
+     <mi>propagated-dep</mi>
+     <mo> &#x2061;<!--FUNCTION APPLICATION-->
+     </mo>
+     <mfenced>
+      <msub>
+       <mi>h</mi>
+       <mn>0</mn>
+      </msub>
+      <msub>
+       <mi>t</mi>
+       <mn>0</mn>
+      </msub>
+      <mi>A</mi>
+      <mi>B</mi>
+     </mfenced>
+    </mrow>
+    <mspace width="2em" />
+    <mrow>
+     <mi>propagated-dep</mi>
+     <mo> &#x2061;<!--FUNCTION APPLICATION-->
+     </mo>
+     <mfenced>
+      <msub>
+       <mi>h</mi>
+       <mn>1</mn>
+      </msub>
+      <msub>
+       <mi>t</mi>
+       <mn>1</mn>
+      </msub>
+      <mi>B</mi>
+      <mi>C</mi>
+     </mfenced>
+    </mrow>
+    <mspace width="2em" />
+    <mrow>
+     <mrow>
+      <msub>
+       <mi>h</mi>
+       <mn>0</mn>
+      </msub>
+      <mo>+</mo>
+      <msub>
+       <mi>h</mi>
+       <mn>1</mn>
+      </msub>
+     </mrow>
+     <mo>∈</mo>
+     <mfenced open="{" close="}">
+      <mn>-1</mn>
+      <mn>0</mn>
+      <mn>1</mn>
+     </mfenced>
+    </mrow>
+    <mspace width="2em" />
+    <mrow>
+     <mrow>
+      <msub>
+       <mi>h</mi>
+       <mn>0</mn>
+      </msub>
+      <mo>+</mo>
+      <msub>
+       <mi>t</mi>
+       <mn>1</mn>
+      </msub>
+     </mrow>
+     <mo>∈</mo>
+     <mfenced open="{" close="}">
+      <mn>-1</mn>
+      <mn>0</mn>
+      <mn>1</mn>
+     </mfenced>
+    </mrow>
+   </mrow>
+   <mrow>
+    <mi>propagated-dep</mi>
+    <mo> &#x2061;<!--FUNCTION APPLICATION-->
+    </mo>
+    <mfenced>
+     <mrow>
+      <mi>mapOffset</mi>
+      <mo> &#x2061;<!--FUNCTION APPLICATION-->
+      </mo>
+      <mfenced>
+       <msub>
+        <mi>h</mi>
+        <mn>0</mn>
+       </msub>
+       <msub>
+        <mi>t</mi>
+        <mn>0</mn>
+       </msub>
+       <msub>
+        <mi>h</mi>
+        <mn>1</mn>
+       </msub>
+      </mfenced>
+     </mrow>
+     <mrow>
+      <mi>mapOffset</mi>
+      <mo> &#x2061;<!--FUNCTION APPLICATION-->
+      </mo>
+      <mfenced>
+       <msub>
+        <mi>h</mi>
+        <mn>0</mn>
+       </msub>
+       <msub>
+        <mi>t</mi>
+        <mn>0</mn>
+       </msub>
+       <msub>
+        <mi>t</mi>
+        <mn>1</mn>
+       </msub>
+      </mfenced>
+     </mrow>
+     <mi>A</mi>
+     <mi>C</mi>
+    </mfenced>
+   </mrow>
+  </mfrac>
+  <mtext>Transitive property</mtext>
+ </mrow>
+</math>
