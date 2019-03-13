@@ -66,7 +66,8 @@ let
     inherit (attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
-      mapAttrs' mapAttrsToList mapAttrsRecursive mapAttrsRecursiveCond
+      mapAttrs' mapAttrsToList mapAttrsToString mapAttrsToStringSep
+      mapAttrsRecursive mapAttrsRecursiveCond
       genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs overrideExisting getOutput getBin
