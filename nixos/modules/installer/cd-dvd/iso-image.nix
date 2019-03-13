@@ -336,8 +336,10 @@ let
 
   efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools pkgs.libfaketime ]; }
     # Be careful about determinism: du --apparent-size,
-    #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
+    #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i),
+    #   mcopy's write order (-s uses `readdir` order)
     ''
+      # Prepare the ./EFI and ./boot directories
       mkdir ./contents && cd ./contents
       cp -rp "${efiDir}"/EFI .
       mkdir ./boot
@@ -345,6 +347,7 @@ let
         "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
       touch --date=@0 ./EFI ./boot
 
+      # Prepare the image file
       usage_size=$(du -sb --apparent-size . | tr -cd '[:digit:]')
       # Make the image 110% as big as the files need to make up for FAT overhead
       image_size=$(( ($usage_size * 110) / 100 ))
@@ -354,8 +357,16 @@ let
       echo "Usage size: $usage_size"
       echo "Image size: $image_size"
       truncate --size=$image_size "$out"
+
+      # Make the filesystem
       ${pkgs.libfaketime}/bin/faketime "2000-01-01 00:00:00" ${pkgs.dosfstools}/sbin/mkfs.vfat -i 12345678 -n EFIBOOT "$out"
-      mcopy -psvm -i "$out" ./EFI ./boot ::
+
+      # Copy the files
+      # Note: we can't use mcopy's recursive copying as it uses `readdir` order.
+      # So just copy file-after-file
+      find ./EFI ./boot -type f -print0 | sort -z | \
+        xargs -0I '{}' mcopy -pvm -i "$out" '{}' ::
+
       # Verify the FAT partition.
       ${pkgs.dosfstools}/sbin/fsck.vfat -vn "$out"
     ''; # */
