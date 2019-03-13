@@ -505,6 +505,8 @@ in
 
   aldo = callPackage ../applications/radio/aldo { };
 
+  almanah = callPackage ../applications/misc/almanah { };
+
   amazon-ecs-cli = callPackage ../tools/virtualization/amazon-ecs-cli { };
 
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
@@ -3751,6 +3753,8 @@ in
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
 
   libcroco = callPackage ../development/libraries/libcroco { };
+
+  libcryptui = callPackage ../development/libraries/libcryptui { };
 
   libsmi = callPackage ../development/libraries/libsmi { };
 
