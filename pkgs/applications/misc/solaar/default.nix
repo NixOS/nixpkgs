@@ -1,8 +1,8 @@
 {fetchFromGitHub, stdenv, gtk3, pythonPackages, gobject-introspection}:
 pythonPackages.buildPythonApplication rec {
-  name = "solaar-unstable-${version}";
+  pname = "solaar-unstable";
   version = "2019-01-30";
-  namePrefix = "";
+
   src = fetchFromGitHub {
     owner = "pwr";
     repo = "Solaar";
