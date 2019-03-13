@@ -2955,6 +2955,11 @@
     github = "meisternu";
     name = "Matt Miemiec";
   };
+  melchips = {
+    email = "truphemus.francois@gmail.com";
+    github = "melchips";
+    name = "Francois Truphemus";
+  };
   melsigl = {
     email = "melanie.bianca.sigl@gmail.com";
     github = "melsigl";
