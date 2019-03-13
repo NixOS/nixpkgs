@@ -4469,6 +4469,11 @@
     github = "stesie";
     name = "Stefan Siegl";
   };
+  steve-chavez = {
+    email = "stevechavezast@gmail.com";
+    github = "steve-chavez";
+    name = "Steve Chávez";
+  };
   steveej = {
     email = "mail@stefanjunker.de";
     github = "steveej";
