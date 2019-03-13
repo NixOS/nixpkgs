@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, lib, makeWrapper, patchelf
+{ stdenv, fetchurl, unzip, lib, makeWrapper, autoPatchelfHook
 , openjdk11, pam
 }: let
 
@@ -15,22 +15,16 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
-    patchelf
+    autoPatchelfHook
     unzip
   ];
 
+  buildInputs = [
+    stdenv.cc.cc.lib
+    pam
+  ];
+
   dontStrip = true;
-
-  postPatch = ''
-    for f in Ghidra/Features/Decompiler/os/linux64/* GPL/DemanglerGnu/os/linux64/*; do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${stdenv.cc.libc}/lib:${stdenv.cc.cc.lib}/lib" "$f"
-    done
-
-    for f in Ghidra/Features/GhidraServer/os/linux64/*; do
-      patchelf --set-rpath "${stdenv.cc.libc}/lib:${pam}/lib" "$f"
-    done
-  '';
 
   installPhase = ''
     mkdir -p "${pkg_path}"
