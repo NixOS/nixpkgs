@@ -23,18 +23,21 @@ stdenv.mkDerivation rec {
   buildInputs = [ lightdm exo intltool makeWrapper hicolor-icon-theme ]
     ++ (if useGTK2 then [ gtk2 ] else [ gtk3 ]);
 
-  configureFlagsArray = [
+  configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-indicator-services-command"
-    "--enable-at-spi-command=${at-spi2-core}/libexec/at-spi-bus-launcher  --launch-immediately"
   ] ++ stdenv.lib.optional useGTK2 "--with-gtk2";
+
+  preConfigure = ''
+    configureFlagsArray+=( --enable-at-spi-command="${at-spi2-core}/libexec/at-spi-bus-launcher --launch-immediately" )
+  '';
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
   installFlags = [
     "localstatedir=\${TMPDIR}"
-    "sysconfdir=\${out}/etc"
+    "sysconfdir=${placeholder "out"}/etc"
   ];
 
   postInstall = ''
