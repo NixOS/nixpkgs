@@ -323,11 +323,11 @@
     };
   };
   kirigami2 = {
-    version = "5.56.0";
+    version = "5.56.1";
     src = fetchurl {
-      url = "${mirror}/stable/frameworks/5.56/kirigami2-5.56.0.tar.xz";
-      sha256 = "0pbyr50anbzrqmw1rzf46dck9gsrfs7zxw5jlcax98bpsajix87y";
-      name = "kirigami2-5.56.0.tar.xz";
+      url = "${mirror}/stable/frameworks/5.56/kirigami2-5.56.1.tar.xz";
+      sha256 = "0npq65kslwkdsylmv5hgcqsa5i9386dmnx8ig79rlf3409awn2f8";
+      name = "kirigami2-5.56.1.tar.xz";
     };
   };
   kitemmodels = {
@@ -563,11 +563,11 @@
     };
   };
   plasma-framework = {
-    version = "5.56.0";
+    version = "5.56.1";
     src = fetchurl {
-      url = "${mirror}/stable/frameworks/5.56/plasma-framework-5.56.0.tar.xz";
-      sha256 = "0hw90975c00v5v4xhs18w5gnklwhnygk6jls3n132xflilgc5k0a";
-      name = "plasma-framework-5.56.0.tar.xz";
+      url = "${mirror}/stable/frameworks/5.56/plasma-framework-5.56.1.tar.xz";
+      sha256 = "0wn7q2cfrgzcprzgqj1d4calc0mmrrn615698fish7x9s1n7ag6w";
+      name = "plasma-framework-5.56.1.tar.xz";
     };
   };
   prison = {
