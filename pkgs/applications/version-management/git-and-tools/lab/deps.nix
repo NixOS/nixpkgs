@@ -301,9 +301,9 @@
     goPackagePath = "github.com/spf13/cobra";
     fetch = {
       type = "git";
-      url = "https://github.com/spf13/cobra";
-      rev = "615425954c3b";
-      sha256 = "01zsislgc72j86a1zq7xs7xj3lvxjjviz4lgn4144jzgppwanpk6";
+      url = "https://github.com/rsteube/cobra";
+      rev = "v0.0.1-zsh-completion-custom";
+      sha256 = "0l0c9p5pdv3fq27ich4psaffivwv43acknqnzyql3bgx08vhnsxd";
     };
   }
   {
