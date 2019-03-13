@@ -26,12 +26,15 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
   ];
   buildInputs = [
+    # common deps:
     cmake
     qtbase qtsvg qtmultimedia qttools
     karchive
     # optional deps:
+    #   server-specific:
     libsodium # ext-auth support
     libmicrohttpd # HTTP admin api
+    #   client-specific:
     giflib # gif animation export support
     miniupnpc # automatic port forwarding
     kdnssd # local server discovery with Zeroconf
