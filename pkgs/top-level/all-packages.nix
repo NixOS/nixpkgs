@@ -4829,6 +4829,8 @@ in
 
   parted = callPackage ../tools/misc/parted { };
 
+  paulstretch = callPackage ../applications/audio/paulstretch { };
+
   pell = callPackage ../applications/misc/pell { };
 
   pepper = callPackage ../tools/admin/salt/pepper { };
