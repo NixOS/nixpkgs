@@ -22,6 +22,10 @@ stdenv.mkDerivation {
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
 
+  # Avoid timestamp-based impurity
+  # Patch proposed upstream on 2019-03-15 to dev-tech-nspr@lists.mozilla.org
+  patches = [ ./source_date_epoch.patch ];
+
   HOST_CC = "cc";
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   configureFlags = [

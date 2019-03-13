@@ -1,0 +1,57 @@
+diff --git a/nspr/lib/ds/Makefile.in b/nspr/lib/ds/Makefile.in
+--- a/nspr/lib/ds/Makefile.in
++++ b/nspr/lib/ds/Makefile.in
+@@ -101,8 +101,8 @@
+ TINC = $(OBJDIR)/_pl_bld.h
+ PROD = $(notdir $(SHARED_LIBRARY))
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date $${SOURCE_DATE_EPOCH:+-d "@$$SOURCE_DATE_EPOCH"} "+%Y-%m-%d %T")
++SH_NOW = $(shell echo $${SOURCE_DATE_EPOCH:-$(shell $(NOW))})
+ 
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	SUF = i64
+diff --git a/nspr/lib/libc/src/Makefile.in b/nspr/lib/libc/src/Makefile.in
+--- a/nspr/lib/libc/src/Makefile.in
++++ b/nspr/lib/libc/src/Makefile.in
+@@ -103,8 +103,8 @@
+ TINC = $(OBJDIR)/_pl_bld.h
+ PROD = $(notdir $(SHARED_LIBRARY))
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date $${SOURCE_DATE_EPOCH:+-d "@$$SOURCE_DATE_EPOCH"} "+%Y-%m-%d %T")
++SH_NOW = $(shell echo $${SOURCE_DATE_EPOCH:-$(shell $(NOW))})
+ 
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	SUF = i64
+diff --git a/nspr/lib/prstreams/Makefile.in b/nspr/lib/prstreams/Makefile.in
+--- a/nspr/lib/prstreams/Makefile.in
++++ b/nspr/lib/prstreams/Makefile.in
+@@ -105,8 +105,8 @@
+ TINC = $(OBJDIR)/_pl_bld.h
+ PROD = $(notdir $(SHARED_LIBRARY))
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date $${SOURCE_DATE_EPOCH:+-d "@$$SOURCE_DATE_EPOCH"} "+%Y-%m-%d %T")
++SH_NOW = $(shell echo $${SOURCE_DATE_EPOCH:-$(shell $(NOW))})
+ 
+ ifeq ($(OS_ARCH), WINNT)
+ 	SUF = i64
+diff --git a/nspr/pr/src/Makefile.in b/nspr/pr/src/Makefile.in
+--- a/nspr/pr/src/Makefile.in
++++ b/nspr/pr/src/Makefile.in
+@@ -311,8 +311,8 @@
+ endif
+ 
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date $${SOURCE_DATE_EPOCH:+-d "@$$SOURCE_DATE_EPOCH"} "+%Y-%m-%d %T")
++SH_NOW = $(shell echo $${SOURCE_DATE_EPOCH:-$(shell $(NOW))})
+ 
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	SUF = i64
+
