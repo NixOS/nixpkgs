@@ -1,7 +1,7 @@
 { buildPythonPackage, python, tornado, pycrypto, pycurl, pytz
 , pillow, derpconf, python_magic, libthumbor, webcolors
 , piexif, futures, statsd, thumborPexif, fetchFromGitHub, isPy3k, lib
-, mock, raven, nose, yanc, remotecv, pyssim, cairosvg1, preggy, opencv3
+, mock, raven, nose, yanc, remotecv, pyssim, cairosvg, preggy, opencv3
 , pkgs, coreutils, substituteAll
 }:
 
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     webcolors
     piexif
     statsd
-    cairosvg1
+    cairosvg
   ] ++ lib.optionals (!isPy3k) [ futures thumborPexif ];
 
   # Remove the source tree before running nosetests because otherwise nosetests
