@@ -8,13 +8,13 @@
 
 let
 
-  version = "c862322702eea2fd561b1a04de18ab1c1ef4810b";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     repo = "concourse";
     owner = "concourse";
-    rev = "${version}";
-    sha256 = "1l8grpr6w5badz9khwdcrhf07a8g8p9gax6djkbr0sq50xn68lfc";
+    rev = "v${version}";
+    sha256 = "0srnfawisvpisypiklhjbnfm8ppnx9g221vg23wi7vrpsk7bzin7";
   };
 
   main-asset = callPackage ./assets/main {
@@ -62,7 +62,7 @@ in
     passthru = {
       inherit resources main-asset mkResourcesDir resourceDir;
     };
-    packages = [ "bin/cmd/concourse" ];
+    packages = [ "cmd/concourse" ];
     platforms = stdenv.lib.platforms.linux;
     preBuild =''
       cp -R ${main-asset}/. go/src/github.com/concourse/concourse/web/
