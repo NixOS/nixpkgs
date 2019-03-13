@@ -16,16 +16,16 @@ let
   }.${system};
 
   sha256 = {
-    "i686-linux" = "0iqsbny25946fyvrm8qwgbd1xmwb8psg2n2c4wdk8x52259pxfvq";
-    "x86_64-linux" = "0v1gbaqlaismrykl8igks5dl9bh5xh56v5aw8mffg8wxdr0alrvv";
-    "x86_64-darwin" = "0awq1jgqbpirrhs09x7hn4m96idb4lazm053nf5jf5yrx8pq1l9i";
+    "i686-linux" = "08pyc33v2k00r3xasl3nxy090kv75l25l0kc42b5wnf46n6l50rz";
+    "x86_64-linux" = "1r139a8ddxw9pww773f8p10hy6kkakn9ql83ab2pg7nzy9r0kfmk";
+    "x86_64-darwin" = "11i5w0hdyjhjprckvcazwcj56l8bflbrgs3gzdhl8n5cjgxmxnzk";
   }.${system};
 
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
-    version = "1.32.1";
+    version = "1.32.2";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
