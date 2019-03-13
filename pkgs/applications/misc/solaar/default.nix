@@ -18,6 +18,9 @@ pythonPackages.buildPythonApplication rec {
     wrapProgram "$out/bin/solaar-cli" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
+
+    mkdir -p $out/lib/udev/rules.d
+    cp rules.d/*.rules $out/lib/udev/rules.d/
   '';
 
   enableParallelBuilding = true;
