@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , pkgconfig, cmake, autoconf, automake, libtool
-, wget, xxd, desktop-file-utils
+, wget, xxd, desktop-file-utils, file
 , glib, zlib, cairo, openssl, fuse, xz, squashfuse, inotify-tools, libarchive
 , squashfsTools
 , gtest

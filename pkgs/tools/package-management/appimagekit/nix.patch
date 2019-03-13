@@ -172,3 +172,16 @@ index cf5fd5c..4f48dbc 100644
  #include "shared.h"
  
  #if HAVE_LIBARCHIVE3 == 1 // CentOS
+diff --git a/src/appimagetool.c b/src/appimagetool.c
+index 69beaa1..b797ae6 100644
+--- a/src/appimagetool.c
++++ b/src/appimagetool.c
+@@ -348,7 +345,7 @@ void extract_arch_from_text(gchar *archname, const gchar* sourcename, bool* arch
+ void guess_arch_of_file(const gchar *archfile, bool* archs) {
+     char line[PATH_MAX];
+     char command[PATH_MAX];
+-    sprintf(command, "/usr/bin/file -L -N -b %s", archfile);
++    sprintf(command, "file -L -N -b %s", archfile);
+     FILE* fp = popen(command, "r");
+     if (fp == NULL)
+         die("Failed to run file command");
