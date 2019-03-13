@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.89.1";
+  version = "0.89.2";
   components = {
     "abode" = ps: with ps; [  ];
     "abode.alarm_control_panel" = ps: with ps; [  ];
