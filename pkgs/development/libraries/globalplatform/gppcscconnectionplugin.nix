@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, globalplatform, openssl, pcsclite }:
+{ stdenv, fetchurl, pkgconfig, globalplatform, openssl_1_0_2, pcsclite }:
 
 stdenv.mkDerivation rec {
   name = "gppcscconnectionplugin-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ globalplatform openssl pcsclite ];
+  buildInputs = [ globalplatform openssl_1_0_2 pcsclite ];
 
   meta = with stdenv.lib; {
     homepage = https://sourceforge.net/p/globalplatform/wiki/Home/;

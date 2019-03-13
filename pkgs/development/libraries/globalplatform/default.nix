@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, zlib, openssl, pcsclite }:
+{ stdenv, fetchurl, pkgconfig, zlib, openssl_1_0_2, pcsclite }:
 
 stdenv.mkDerivation rec {
   name = "globalplatform-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib openssl pcsclite ];
+  buildInputs = [ zlib openssl_1_0_2 pcsclite ];
 
   meta = with stdenv.lib; {
     homepage = https://sourceforge.net/p/globalplatform/wiki/Home/;
