@@ -1,42 +1,88 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, systemd, boost, darwin
-, alsaSupport ? true, alsaLib
-, avahiSupport ? true, avahi, dbus
-, flacSupport ? true, flac
-, vorbisSupport ? true, libvorbis
-, madSupport ? true, libmad
-, id3tagSupport ? true, libid3tag
-, mikmodSupport ? true, libmikmod
-, shoutSupport ? true, libshout
-, sqliteSupport ? true, sqlite
-, curlSupport ? true, curl
-, audiofileSupport ? true, audiofile
-, bzip2Support ? true, bzip2
-, ffmpegSupport ? true, ffmpeg
-, fluidsynthSupport ? true, fluidsynth
-, zipSupport ? true, zziplib
-, samplerateSupport ? true, libsamplerate
-, mmsSupport ? true, libmms
-, mpg123Support ? true, mpg123
-, aacSupport ? true, faad2
-, lameSupport ? true, lame
-, pulseaudioSupport ? true, libpulseaudio
-, jackSupport ? true, libjack2
-, gmeSupport ? true, game-music-emu
-, icuSupport ? true, icu
-, clientSupport ? true, mpd_clientlib
-, opusSupport ? true, libopus
-, soundcloudSupport ? true, yajl
-, nfsSupport ? true, libnfs
-, smbSupport ? true, samba
+# Inputs
+, curl, libmms, libnfs, samba
+# Archive support
+, bzip2, zziplib
+# Codecs
+, audiofile, faad2, ffmpeg, flac, fluidsynth, game-music-emu
+, libmad, libmikmod, mpg123, libopus, libvorbis, lame
+# Filters
+, libsamplerate
+# Outputs
+, alsaLib, libjack2, libpulseaudio, libshout
+# Misc
+, icu, sqlite, avah, dbus
+# Services
+, yajl
+# Client support
+, mpd_clientlib
+# Tag support
+, libid3tag
 }:
 
-assert avahiSupport -> avahi != null && dbus != null;
-
 let
-  opt = stdenv.lib.optional;
-  mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.20";
   minor = "23";
+
+  lib = stdenv.lib;
+  mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
+  mkDisable = f: "--disable-${f}";
+  mkEnable = f: "--enable-${f}";
+  keys = lib.mapAttrsToList (k: v: k);
+
+  featureDependencies = {
+    # Input plugins
+    curl          = [ curl ];
+    mms           = [ libmms ];
+    nfs           = [ libnfs ];
+    smbclient     = [ samba ];
+    # Archive support
+    bzip2         = [ bzip2 ];
+    zzip          = [ zziplib ];
+    # Decoder plugins
+    audiofile     = [ audiofile ];
+    aac           = [ faad2 ];
+    ffmpeg        = [ ffmpeg ];
+    flac          = [ flac ];
+    fluidsynth    = [ fluidsynth ];
+    gme           = [ game-music-emu ];
+    mad           = [ libmad ];
+    mikmod        = [ libmikmod ];
+    mpg123        = [ mpg123 ];
+    opus          = [ libopus ];
+    vorbis        = [ libvorbis ];
+    # Encoder plugins
+    vorbis_encoder = [ libvorbis ];
+    lame_encoder  = [ lame ];
+    # Filter plugins
+    lsr           = [ libsamplerate ];
+    # Output plugins
+    alsa          = [ alsaLib ];
+    jack          = [ libjack2 ];
+    pulse         = [ libpulseaudio ];
+    shout         = [ libshout ];
+    # Misc
+    icu           = [ icu ];
+    sqlite        = [ sqlite ];
+    zeroconf      = [ avahi dbus ];
+    # Commercial services
+    soundcloud    = [ yajl ];
+    # Client support
+    libmpdclient  = [ mpd_clientlib ];
+    # Tag support
+    id3           = [ libid3tag ];
+    # Debug
+    debug         = [];
+  };
+
+  features = keys featureDependencies;
+
+  # Disable platform specific features if needed
+  # using libmad to decode mp3 files on darwin is causing a segfault -- there
+  # is probably a solution, but I'm disabling it for now
+  platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smb" ]
+              ++ lib.optionals (!stdenv.isLinux) [ "alsa" ];
+  features_ = lib.subtractLists platformMask features;
 
 in stdenv.mkDerivation rec {
   pname = "mpd";
@@ -52,84 +98,26 @@ in stdenv.mkDerivation rec {
   patches = [ ./x86.patch ];
 
   buildInputs = [ glib boost ]
-    ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
-    ++ opt stdenv.isLinux systemd
-    ++ opt (stdenv.isLinux && alsaSupport) alsaLib
-    ++ opt avahiSupport avahi
-    ++ opt avahiSupport dbus
-    ++ opt flacSupport flac
-    ++ opt vorbisSupport libvorbis
-    # using libmad to decode mp3 files on darwin is causing a segfault -- there
-    # is probably a solution, but I'm disabling it for now
-    ++ opt (!stdenv.isDarwin && madSupport) libmad
-    ++ opt id3tagSupport libid3tag
-    ++ opt mikmodSupport libmikmod
-    ++ opt shoutSupport libshout
-    ++ opt sqliteSupport sqlite
-    ++ opt curlSupport curl
-    ++ opt bzip2Support bzip2
-    ++ opt audiofileSupport audiofile
-    ++ opt ffmpegSupport ffmpeg
-    ++ opt fluidsynthSupport fluidsynth
-    ++ opt samplerateSupport libsamplerate
-    ++ opt mmsSupport libmms
-    ++ opt mpg123Support mpg123
-    ++ opt aacSupport faad2
-    ++ opt lameSupport lame
-    ++ opt zipSupport zziplib
-    ++ opt (!stdenv.isDarwin && pulseaudioSupport) libpulseaudio
-    ++ opt (!stdenv.isDarwin && jackSupport) libjack2
-    ++ opt gmeSupport game-music-emu
-    ++ opt icuSupport icu
-    ++ opt clientSupport mpd_clientlib
-    ++ opt opusSupport libopus
-    ++ opt soundcloudSupport yajl
-    ++ opt (!stdenv.isDarwin && nfsSupport) libnfs
-    ++ opt (!stdenv.isDarwin && smbSupport) samba;
+    ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
+    ++ lib.optional stdenv.isLinux systemd;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   enableParallelBuilding = true;
 
   configureFlags =
-    [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
-      (mkFlag flacSupport "flac")
-      (mkFlag vorbisSupport "vorbis")
-      (mkFlag vorbisSupport "vorbis-encoder")
-      (mkFlag (!stdenv.isDarwin && madSupport) "mad")
-      (mkFlag mikmodSupport "mikmod")
-      (mkFlag id3tagSupport "id3")
-      (mkFlag shoutSupport "shout")
-      (mkFlag sqliteSupport "sqlite")
-      (mkFlag curlSupport "curl")
-      (mkFlag audiofileSupport "audiofile")
-      (mkFlag bzip2Support "bzip2")
-      (mkFlag ffmpegSupport "ffmpeg")
-      (mkFlag fluidsynthSupport "fluidsynth")
-      (mkFlag zipSupport "zzip")
-      (mkFlag samplerateSupport "lsr")
-      (mkFlag mmsSupport "mms")
-      (mkFlag mpg123Support "mpg123")
-      (mkFlag aacSupport "aac")
-      (mkFlag lameSupport "lame-encoder")
-      (mkFlag (!stdenv.isDarwin && pulseaudioSupport) "pulse")
-      (mkFlag (!stdenv.isDarwin && jackSupport) "jack")
+    map mkEnable features_ ++ map mkDisable (lib.subtractLists features_ (keys featureDependencies))
+    ++ [
       (mkFlag stdenv.isDarwin "osx")
-      (mkFlag icuSupport "icu")
-      (mkFlag gmeSupport "gme")
-      (mkFlag clientSupport "libmpdclient")
-      (mkFlag opusSupport "opus")
-      (mkFlag soundcloudSupport "soundcloud")
-      (mkFlag (!stdenv.isDarwin && nfsSupport) "libnfs")
-      (mkFlag (!stdenv.isDarwin && smbSupport) "smbclient")
-      "--enable-debug"
-      "--with-zeroconf=avahi"
     ]
-    ++ opt stdenv.isLinux
+    ++ lib.optional (lib.any (x: x == "zeroconf") features_)
+      "--with-zeroconf=avahi"
+    ++ lib.optional stdenv.isLinux
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system";
 
   NIX_LDFLAGS = ''
-    ${if shoutSupport then "-lshout" else ""}
+    ${if (lib.any (x: x == "shout") features_) then "-lshout" else ""}
   '';
 
   meta = with stdenv.lib; {
