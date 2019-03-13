@@ -1,6 +1,6 @@
 # This file defines the structure of the `config` nixpkgs option.
 
-{ lib, config, ... }:
+{ lib, options, config, ... }:
 
 with lib;
 
@@ -31,7 +31,7 @@ let
     default = super: {};
   } // args);
 
-  options = {
+  optionsDef = {
 
     /* Internal stuff */
 
@@ -125,6 +125,12 @@ let
       description = "Poor man's global overlay.";
     };
 
+    haskellPackageOverrides = mkMassRebuild {
+      type = types.uniq types.unspecified;
+      default = self: super: {};
+      description = "Haskell's overlay.";
+    };
+
     perlPackageOverrides = mkOverrides {
       description = "Poor man's perl overlay.";
     };
@@ -147,6 +153,11 @@ let
 
 in {
 
-  inherit options;
+  options = optionsDef;
+
+  config = {
+    warnings = optional (options.haskellPackageOverrides.highestPrio != 1500)
+      "`config.haskellPackageOverrides` is deprecated, override `haskell.packageOverrides` using overlays instead.";
+  };
 
 }

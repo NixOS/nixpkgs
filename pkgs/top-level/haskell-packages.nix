@@ -1,4 +1,4 @@
-{ buildPackages, pkgs
+{ config, buildPackages, pkgs
 , newScope
 }:
 
@@ -103,7 +103,7 @@ in {
   };
 
   # Default overrides that are applied to all package sets.
-  packageOverrides = self : super : {};
+  packageOverrides = config.haskellPackageOverrides;
 
   # Always get compilers from `buildPackages`
   packages = let bh = buildPackages.haskell; in {
