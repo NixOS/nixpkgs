@@ -35,7 +35,6 @@ in stdenv.mkDerivation rec {
     "APPEND_CPPPATH=${ZLIB_HOME}/include"
     "APPEND_LIBPATH=${ZLIB_HOME}/lib"
     "NSIS_CONFIG_CONST_DATA=no"
-    "STRIP=no"
   ];
 
   preBuild = ''
@@ -44,8 +43,6 @@ in stdenv.mkDerivation rec {
 
   prefixKey = "PREFIX=";
   installTargets = "install-compiler";
-
-  dontStrip = true;
 
   meta = with stdenv.lib; {
     description = "NSIS is a free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
