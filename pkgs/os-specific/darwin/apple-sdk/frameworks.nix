@@ -73,6 +73,7 @@ with frameworks; with libs; {
   MapKit                  = [];
   MediaAccessibility      = [ CF CoreGraphics CoreText QuartzCore ];
   MediaToolbox            = [ AudioToolbox CF CoreMedia ];
+  Metal                   = [];
   NetFS                   = [ CF ];
   OSAKit                  = [ Carbon ];
   OpenAL                  = [];
@@ -112,7 +113,7 @@ with frameworks; with libs; {
   JavaVM              = [];
   OpenDirectory       = [];
   Quartz              = [ QuickLook QTKit ];
-  QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL CoreImage ];
+  QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL CoreImage Metal ];
   QuickTime           = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
 
   vmnet = [];
