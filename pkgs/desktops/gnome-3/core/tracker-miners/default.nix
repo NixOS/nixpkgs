@@ -64,6 +64,7 @@ in stdenv.mkDerivation rec {
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
     "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
+    "-Dsystemd_user_services=${placeholder "out"}/lib/systemd/user"
   ];
 
   patches = [
