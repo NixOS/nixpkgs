@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, nettools, java, polyml, z3 }:
+{ stdenv, fetchurl, perl, nettools, java, polyml, z3, rlwrap }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
@@ -23,21 +23,14 @@ stdenv.mkDerivation rec {
   sourceRoot = dirname;
 
   postPatch = ''
-    ENV=$(type -p env)
-    patchShebangs "."
-    substituteInPlace lib/Tools/env \
-      --replace /usr/bin/env $ENV
-    substituteInPlace lib/Tools/install \
-      --replace /usr/bin/env $ENV
-    sed -i 's|isabelle_java java|${java}/bin/java|g' lib/Tools/java
-    substituteInPlace etc/settings \
-      --subst-var-by ML_HOME "${polyml}/bin"
-    substituteInPlace contrib/jdk/etc/settings \
-      --replace ISABELLE_JDK_HOME= '#ISABELLE_JDK_HOME='
-    substituteInPlace lib/scripts/run-polyml* lib/scripts/polyml-version \
-      --replace '$ML_HOME/poly' ${polyml}/bin/poly
-    substituteInPlace contrib/z3*/etc/settings \
-      --replace '$Z3_HOME/z3' '${z3}/bin/z3'
+    patchShebangs .
+
+    cat >contrib/z3*/etc/settings <<EOF
+      Z3_HOME=${z3}
+      Z3_VERSION=${z3.version}
+      Z3_SOLVER=${z3}/bin/z3
+      Z3_INSTALLED=yes
+    EOF
 
     cat >contrib/polyml-*/etc/settings <<EOF
       ML_SYSTEM_64=true
@@ -49,7 +42,14 @@ stdenv.mkDerivation rec {
       ML_SOURCES="\$POLYML_HOME/src"
     EOF
 
-    for comp in contrib/jdk contrib/polyml-*; do
+    cat >contrib/jdk/etc/settings <<EOF
+      ISABELLE_JAVA_PLATFORM=${stdenv.system}
+      ISABELLE_JDK_HOME=${java}
+    EOF
+
+    echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
+
+    for comp in contrib/jdk contrib/polyml-* contrib/z3-*; do
       rm -rf $comp/x86*
     done
     '' + (if ! stdenv.isLinux then "" else ''
