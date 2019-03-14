@@ -1765,6 +1765,11 @@
     github = "Gerschtli";
     name = "Tobias Happ";
   };
+  ghuntley = {
+    email = "ghuntley@ghuntley.com";
+    github = "ghuntley";
+    name = "Geoffrey Huntley";
+  };
   gilligan = {
     email = "tobias.pflug@gmail.com";
     github = "gilligan";
