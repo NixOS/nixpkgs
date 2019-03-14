@@ -1,6 +1,5 @@
-{ stdenv, fetchFromGitHub, qt5, qt4, openscenegraph, mygui, bullet, ffmpeg
-, boost, cmake, SDL2, unshield, openal, libXt, pkgconfig
-, useQt5 ? true }:
+{ stdenv, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg
+, boost, cmake, SDL2, unshield, openal, libXt, pkgconfig }:
 
 let
   openscenegraph_ = openscenegraph.overrideDerivation (self: {
@@ -25,10 +24,10 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake boost ffmpeg bullet mygui openscenegraph_ SDL2 unshield openal libXt ]
-  ++ [ (if useQt5 then qt5.qtbase else qt4) ];
+  buildInputs = [ cmake boost ffmpeg bullet mygui openscenegraph_ SDL2 unshield openal libXt qtbase ];
+
   cmakeFlags = [
-    "-DDESIRED_QT_VERSION:INT=${if useQt5 then "5" else "4"}"
+    "-DDESIRED_QT_VERSION:INT=5"
   ];
 
   meta = with stdenv.lib; {
