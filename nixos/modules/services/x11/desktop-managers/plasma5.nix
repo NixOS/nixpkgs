@@ -244,7 +244,7 @@ in
 
         # Remove the kbuildsyscoca5 cache. It will be regenerated
         # immediately after. This is necessary for kbuildsyscoca5 to
-        recognize that software that has been removed.
+        # recognize that software that has been removed.
         rm -fv $HOME/.cache/ksycoca*
 
         ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5
