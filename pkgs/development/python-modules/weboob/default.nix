@@ -40,16 +40,11 @@ in buildPythonPackage rec {
     }; p' weboob/browser/browsers.py weboob/browser/pages.py
   '';
 
-  # Would fail with `Could not find executable: pyuic5`.
-  # That executable will be looked up from an environment variable
-  # in this format when available
-  #
-  # See: https://git.weboob.org/weboob/weboob/blob/1.3/setup.py#L32
-  PYUIC5_EXECUTABLE = "${pyqt5}/bin/pyuic5";
-
   setupPyBuildFlags = ["--qt" "--xdg"];
 
   checkInputs = [ nose ];
+
+  nativeBuildInputs = [ pyqt5 ];
 
   propagatedBuildInputs = [ pillow prettytable pyyaml dateutil
     gdata requests mechanize feedparser lxml gnupg pyqt5 libyaml
