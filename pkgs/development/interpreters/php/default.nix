@@ -3,7 +3,8 @@
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pcre2, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2, libzip
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
+, libzip, re2c, valgrind
 }:
 
 with lib;
@@ -52,12 +53,16 @@ let
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
   , argon2Support ? (config.php.argon2 or true) && (versionAtLeast version "7.2")
-  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.3")
+  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.2")
   , phpdbgSupport ? config.php.phpdbg or true
   , cgiSupport ? config.php.cgi or true
   , cliSupport ? config.php.cli or true
   , pharSupport ? config.php.phar or true
   , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
+  , re2cSupport ? config.php.re2c or true
+  , cgotoSupport ? (config.php.cgoto or false) && (re2cSupport)
+  , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
+  , valgrindPcreSupport ? (config.php.valgrindPcreSupport or false) && (valgrindSupport) && (versionAtLeast version "7.2")
   }:
 
     let
@@ -102,7 +107,9 @@ let
         ++ optional sodiumSupport libsodium
         ++ optional tidySupport html-tidy
         ++ optional argon2Support libargon2
-        ++ optional libzipSupport libzip;
+        ++ optional libzipSupport libzip
+        ++ optional re2cSupport re2c
+        ++ optional valgrindSupport valgrind;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
 
@@ -183,7 +190,10 @@ let
       ++ optional (!cgiSupport) "--disable-cgi"
       ++ optional (!cliSupport) "--disable-cli"
       ++ optional (!pharSupport) "--disable-phar"
-      ++ optional xmlrpcSupport "--with-xmlrpc";
+      ++ optional xmlrpcSupport "--with-xmlrpc"
+      ++ optional cgotoSupport "--enable-re2c-cgoto"
+      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}"
+      ++ optional valgrindPcreSupport "--with-pcre-valgrind";
 
       hardeningDisable = [ "bindnow" ];
 
