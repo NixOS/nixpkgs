@@ -1936,6 +1936,8 @@ in {
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
 
+  pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
+
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
