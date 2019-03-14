@@ -1,15 +1,19 @@
 { callPackage }:
 rec {
 
+  concourse-pipeline = callPackage ./concourse-pipeline-resource {};
+
+  docker-image = callPackage ./docker-image-resource {};
+
   git = callPackage ./git-resource {};
 
   github-release = callPackage ./github-release-resource {};
 
-  docker-image = callPackage ./docker-image-resource {};
-
   registry-image = callPackage ./registry-image-resource {};
 
   s3 = callPackage ./s3-resource {};
+
+  semver = callPackage ./semver-resource {};
 
   time = callPackage ./time-resource {};
 
