@@ -21,6 +21,22 @@ in {
         '';
       };
 
+      options.confinement.fullUnit = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to include the full closure of the systemd unit file into the
+          chroot, instead of just the dependencies for the executables.
+
+          <warning><para>While it may be tempting to just enable this option to
+          make things work quickly, please be aware that this might add paths
+          to the closure of the chroot that you didn't anticipate. It's better
+          to use <option>confinement.packages</option> to <emphasis
+          role="strong">explicitly</emphasis> add additional store paths to the
+          chroot.</para></warning>
+        '';
+      };
+
       options.confinement.packages = lib.mkOption {
         type = types.listOf (types.either types.str types.package);
         default = [];
@@ -32,7 +48,9 @@ in {
           ${lib.concatMapStringsSep ", " mkScOption [
             "ExecReload" "ExecStartPost" "ExecStartPre" "ExecStop"
             "ExecStopPost"
-          ]} and ${mkScOption "ExecStart"} options.
+          ]} and ${mkScOption "ExecStart"} options. If you want to have all the
+          dependencies of this systemd unit, you can use
+          <option>confinement.fullUnit</option>.
 
           <note><para><emphasis role="strong">Only</emphasis> the latter
           (${mkScOption "ExecStart"}) will be used if
@@ -87,7 +105,7 @@ in {
 
       config = let
         rootName = "${mkPathSafeName name}-chroot";
-        inherit (config.confinement) binSh;
+        inherit (config.confinement) binSh fullUnit;
       in lib.mkIf config.confinement.enable {
         serviceConfig = {
           RootDirectory = pkgs.runCommand rootName {} "mkdir \"$out\"";
@@ -111,7 +129,10 @@ in {
           execPkgs = lib.concatMap (opt: let
             isSet = config.serviceConfig ? ${opt};
           in lib.optional isSet config.serviceConfig.${opt}) execOpts;
-        in execPkgs ++ lib.optional (binSh != null) binSh;
+          unitAttrs = toplevelConfig.systemd.units."${name}.service";
+          allPkgs = lib.singleton (builtins.toJSON unitAttrs);
+          unitPkgs = if fullUnit then allPkgs else execPkgs;
+        in unitPkgs ++ lib.optional (binSh != null) binSh;
       };
     }));
   };

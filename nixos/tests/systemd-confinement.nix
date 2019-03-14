@@ -132,6 +132,19 @@ import ./make-test.nix {
           );
         '';
       }
+      { description = "check if only Exec* dependencies are included";
+        config.environment.FOOBAR = pkgs.writeText "foobar" "eek\n";
+        testScript = ''
+          $machine->succeed('test "$(chroot-exec \'cat "$FOOBAR"\')" != eek');
+        '';
+      }
+      { description = "check if all unit dependencies are included";
+        config.environment.FOOBAR = pkgs.writeText "foobar" "eek\n";
+        config.confinement.fullUnit = true;
+        testScript = ''
+          $machine->succeed('test "$(chroot-exec \'cat "$FOOBAR"\')" = eek');
+        '';
+      }
     ];
 
     options.__testSteps = lib.mkOption {
