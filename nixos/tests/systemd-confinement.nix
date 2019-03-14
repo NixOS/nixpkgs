@@ -1,5 +1,5 @@
 import ./make-test.nix {
-  name = "systemd-chroot";
+  name = "systemd-confinement";
 
   machine = { pkgs, lib, ... }: let
     testServer = pkgs.writeScript "testserver.sh" ''
@@ -26,13 +26,13 @@ import ./make-test.nix {
       };
 
       systemd.services."test${toString num}@" = {
-        description = "Chrooted Test Service ${toString num}";
-        chroot = (config.chroot or {}) // { enable = true; };
+        description = "Confined Test Service ${toString num}";
+        confinement = (config.confinement or {}) // { enable = true; };
         serviceConfig = (config.serviceConfig or {}) // {
           ExecStart = testServer;
           StandardInput = "socket";
         };
-      } // removeAttrs config [ "chroot" "serviceConfig" ];
+      } // removeAttrs config [ "confinement" "serviceConfig" ];
 
       __testSteps = lib.mkOrder num ''
         subtest '${lib.escape ["\\" "'"] description}', sub {
@@ -45,7 +45,7 @@ import ./make-test.nix {
   in {
     imports = lib.imap1 mkTestStep [
       { description = "chroot-only confinement";
-        config.chroot.confinement = "chroot-only";
+        config.confinement.mode = "chroot-only";
         testScript = ''
           $machine->succeed(
             'test "$(chroot-exec ls -1 / | paste -sd,)" = bin,nix',
@@ -88,7 +88,7 @@ import ./make-test.nix {
         } "ln -s \"$target\" \"$out\"";
       in {
         description = "check if symlinks are properly bind-mounted";
-        config.chroot.packages = lib.singleton symlink;
+        config.confinement.packages = lib.singleton symlink;
         testScript = ''
           $machine->fail('chroot-exec test -e /etc');
           $machine->succeed('chroot-exec cat ${symlink} >&2');

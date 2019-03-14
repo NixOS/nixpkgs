@@ -8,7 +8,7 @@ let
 in {
   options.systemd.services = lib.mkOption {
     type = types.attrsOf (types.submodule ({ name, config, ... }: {
-      options.chroot.enable = lib.mkOption {
+      options.confinement.enable = lib.mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -20,7 +20,7 @@ in {
         '';
       };
 
-      options.chroot.packages = lib.mkOption {
+      options.confinement.packages = lib.mkOption {
         type = types.listOf (types.either types.str types.package);
         default = [];
         description = let
@@ -44,7 +44,7 @@ in {
         '';
       };
 
-      options.chroot.withBinSh = lib.mkOption {
+      options.confinement.withBinSh = lib.mkOption {
         type = types.bool;
         default = true;
         description = ''
@@ -59,7 +59,7 @@ in {
         '';
       };
 
-      options.chroot.confinement = lib.mkOption {
+      options.confinement.mode = lib.mkOption {
         type = types.enum [ "full-apivfs" "chroot-only" ];
         default = "full-apivfs";
         description = ''
@@ -81,16 +81,16 @@ in {
         '';
       };
 
-      config = lib.mkIf config.chroot.enable {
+      config = lib.mkIf config.confinement.enable {
         serviceConfig = let
           rootName = "${mkPathSafeName name}-chroot";
         in {
           RootDirectory = pkgs.runCommand rootName {} "mkdir \"$out\"";
           TemporaryFileSystem = "/";
           MountFlags = lib.mkDefault "private";
-        } // lib.optionalAttrs config.chroot.withBinSh {
+        } // lib.optionalAttrs config.confinement.withBinSh {
           BindReadOnlyPaths = [ "${pkgs.dash}/bin/dash:/bin/sh" ];
-        } // lib.optionalAttrs (config.chroot.confinement == "full-apivfs") {
+        } // lib.optionalAttrs (config.confinement.mode == "full-apivfs") {
           MountAPIVFS = true;
           PrivateDevices = true;
           PrivateTmp = true;
@@ -99,7 +99,7 @@ in {
           ProtectKernelModules = true;
           ProtectKernelTunables = true;
         };
-        chroot.packages = let
+        confinement.packages = let
           startOnly = config.serviceConfig.RootDirectoryStartOnly or false;
           execOpts = if startOnly then [ "ExecStart" ] else [
             "ExecReload" "ExecStart" "ExecStartPost" "ExecStartPre" "ExecStop"
@@ -108,7 +108,7 @@ in {
           execPkgs = lib.concatMap (opt: let
             isSet = config.serviceConfig ? ${opt};
           in lib.optional isSet config.serviceConfig.${opt}) execOpts;
-        in execPkgs ++ lib.optional config.chroot.withBinSh pkgs.dash;
+        in execPkgs ++ lib.optional config.confinement.withBinSh pkgs.dash;
       };
     }));
   };
@@ -116,8 +116,8 @@ in {
   config.assertions = lib.concatLists (lib.mapAttrsToList (name: cfg: let
     whatOpt = optName: "The 'serviceConfig' option '${optName}' for"
                     + " service '${name}' is enabled in conjunction with"
-                    + " 'chroot.enable'";
-  in lib.optionals cfg.chroot.enable [
+                    + " 'confinement.enable'";
+  in lib.optionals cfg.confinement.enable [
     { assertion = !cfg.serviceConfig.RootDirectoryStartOnly or false;
       message = "${whatOpt "RootDirectoryStartOnly"}, but right now systemd"
               + " doesn't support restricting bind-mounts to 'ExecStart'."
@@ -133,7 +133,7 @@ in {
 
   config.systemd.packages = lib.concatLists (lib.mapAttrsToList (name: cfg: let
     rootPaths = let
-      contents = lib.concatStringsSep "\n" cfg.chroot.packages;
+      contents = lib.concatStringsSep "\n" cfg.confinement.packages;
     in pkgs.writeText "${mkPathSafeName name}-string-contexts.txt" contents;
 
     chrootPaths = pkgs.runCommand "${mkPathSafeName name}-chroot-paths" {
@@ -156,5 +156,5 @@ in {
         fi
       done < "$closureInfo/store-paths" >> "$serviceFile"
     '';
-  in lib.optional cfg.chroot.enable chrootPaths) config.systemd.services);
+  in lib.optional cfg.confinement.enable chrootPaths) config.systemd.services);
 }

@@ -170,7 +170,7 @@
   ./security/rtkit.nix
   ./security/wrappers/default.nix
   ./security/sudo.nix
-  ./security/systemd-chroot.nix
+  ./security/systemd-confinement.nix
   ./services/admin/oxidized.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
