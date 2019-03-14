@@ -82,7 +82,7 @@ let
   # using libmad to decode mp3 files on darwin is causing a segfault -- there
   # is probably a solution, but I'm disabling it for now
   platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smb" ]
-              ++ lib.optionals (!stdenv.isLinux) [ "alsa" ];
+              ++ lib.optionals (!stdenv.isLinux) [ "alsa" "systemd" ];
   features_ = lib.subtractLists platformMask features;
 
 in stdenv.mkDerivation rec {
@@ -98,8 +98,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ glib boost ]
     ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
-    ++ lib.optional stdenv.isLinux systemd;
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AudioToolbox;
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
 
