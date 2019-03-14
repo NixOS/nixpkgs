@@ -1,0 +1,10 @@
+--- a/src/totem-properties-main.c
++++ b/src/totem-properties-main.c
+@@ -109,6 +109,7 @@
+ 	/* okay, make the page, init'ing the backend first if necessary */
+ 	if (backend_inited == FALSE) {
+ 		gst_init (NULL, NULL);
++		@load_plugins@
+ 		backend_inited = TRUE;
+ 	}
+ 

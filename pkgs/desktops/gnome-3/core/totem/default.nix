@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, intltool, gst_all_1
+{ stdenv, substituteAll, fetchurl, meson, ninja, intltool, gst_all_1
 , clutter-gtk, clutter-gst, python3Packages, shared-mime-info
 , pkgconfig, gtk3, glib, gobject-introspection, totem-pl-parser
 , wrapGAppsHook, itstool, libxml2, vala, gnome3, grilo, grilo-plugins
@@ -13,6 +13,21 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0rahkybxbmxhlmrrgrzxny1xm7wycx7ib4blxp1i2l1q3i8s84b0";
   };
+
+  patches = [
+    # Make codecs available in Nautilus plug-in
+    # https://github.com/NixOS/nixpkgs/issues/53631
+    (substituteAll {
+      src = ./nautilus-extension-codecs.patch;
+      load_plugins = stdenv.lib.concatMapStrings (plugin: ''gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'') (with gst_all_1; [
+        gst-plugins-base
+        gst-plugins-good
+        gst-plugins-bad
+        gst-plugins-ugly
+        gst-libav
+      ]);
+    })
+  ];
 
   doCheck = true;
 
