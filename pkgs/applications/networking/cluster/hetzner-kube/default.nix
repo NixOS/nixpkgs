@@ -13,6 +13,11 @@ buildGoModule rec {
 
   modSha256 = "1mx74nci7j7h44pw1qf5fxkvfnhppj46898f8895ay8hhxd28lbm";
 
+  buildFlagsArray = ''
+    -ldflags=
+    -X github.com/xetys/hetzner-kube/cmd.version=${version}
+  '';
+
   meta = {
     description = "A CLI tool for provisioning Kubernetes clusters on Hetzner Cloud";
     homepage = https://github.com/xetys/hetzner-kube;
