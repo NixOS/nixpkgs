@@ -291,6 +291,15 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    # Same as attrsOf, but lazy towards attribute values (at the cost of not supporting mkIf and etc)
+    lazyAttrsOf = elemType: attrsOf elemType // {
+      merge = loc: defs: zipAttrsWith (name: defs:
+            (mergeDefinitions (loc ++ [name]) elemType defs).mergedValue
+          )
+          # Push down position info.
+          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs);
+    };
+
     # List or attribute set of ...
     loaOf = elemType:
       let
