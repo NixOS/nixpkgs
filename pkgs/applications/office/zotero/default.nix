@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wrapGAppsHook
+{ stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
 , atk
 , cairo
 , curl
@@ -89,6 +89,19 @@ stdenv.mkDerivation rec {
     sed -i '/pref("app.update.enabled", true);/c\pref("app.update.enabled", false);' defaults/preferences/prefs.js
   '';
 
+  desktopItem = makeDesktopItem rec {
+    name = "zotero-${version}";
+    exec = "zotero -url %U";
+    icon = "zotero";
+    type = "Application";
+    comment = meta.description;
+    desktopName = "Zotero";
+    genericName = "Reference Management";
+    categories = "Office;Database;";
+    startupNotify = "true";
+    mimeType = "text/plain";
+  };
+
   installPhase =
   ''
      mkdir -p "$prefix/usr/lib/zotero-bin-${version}"
@@ -96,7 +109,9 @@ stdenv.mkDerivation rec {
      mkdir -p "$out/bin"
      ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
 
-     install -Dm444 zotero.desktop $out/share/applications/zotero.desktop
+     # install desktop file and icons.
+     mkdir -p $out/share/applications
+     cp ${desktopItem}/share/applications/* $out/share/applications/
      for size in 16 32 48 256; do
        install -Dm444 chrome/icons/default/default$size.png \
          $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png
