@@ -106,6 +106,32 @@ import ./make-test.nix {
           $machine->succeed('test ! -e /tmp/canary');
         '';
       }
+      { description = "check if /bin/sh works";
+        testScript = ''
+          $machine->succeed(
+            'chroot-exec test -e /bin/sh',
+            'test "$(chroot-exec \'/bin/sh -c "echo bar"\')" = bar',
+          );
+        '';
+      }
+      { description = "check if suppressing /bin/sh works";
+        config.confinement.binSh = null;
+        testScript = ''
+          $machine->succeed(
+            'chroot-exec test ! -e /bin/sh',
+            'test "$(chroot-exec \'/bin/sh -c "echo foo"\')" != foo',
+          );
+        '';
+      }
+      { description = "check if we can set /bin/sh to something different";
+        config.confinement.binSh = "${pkgs.hello}/bin/hello";
+        testScript = ''
+          $machine->succeed(
+            'chroot-exec test -e /bin/sh',
+            'test "$(chroot-exec /bin/sh -g foo)" = foo',
+          );
+        '';
+      }
     ];
 
     options.__testSteps = lib.mkOption {

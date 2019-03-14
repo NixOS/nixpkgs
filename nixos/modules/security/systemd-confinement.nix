@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  toplevelConfig = config;
   inherit (lib) types;
   inherit (import ../system/boot/systemd-lib.nix {
     inherit config pkgs lib;
@@ -44,12 +45,15 @@ in {
         '';
       };
 
-      options.confinement.withBinSh = lib.mkOption {
-        type = types.bool;
-        default = true;
+      options.confinement.binSh = lib.mkOption {
+        type = types.nullOr types.path;
+        default = toplevelConfig.environment.binsh;
+        defaultText = "config.environment.binsh";
+        example = lib.literalExample "\${pkgs.dash}/bin/dash";
         description = ''
-          Whether to symlink <command>dash</command> as
-          <filename>/bin/sh</filename> to the chroot.
+          The program to make available as <filename>/bin/sh</filename> inside
+          the chroot. If this is set to <literal>null</literal>, no
+          <filename>/bin/sh</filename> is provided at all.
 
           This is useful for some applications, which for example use the
           <citerefentry>
@@ -81,15 +85,14 @@ in {
         '';
       };
 
-      config = lib.mkIf config.confinement.enable {
-        serviceConfig = let
-          rootName = "${mkPathSafeName name}-chroot";
-        in {
+      config = let
+        rootName = "${mkPathSafeName name}-chroot";
+        inherit (config.confinement) binSh;
+      in lib.mkIf config.confinement.enable {
+        serviceConfig = {
           RootDirectory = pkgs.runCommand rootName {} "mkdir \"$out\"";
           TemporaryFileSystem = "/";
           MountFlags = lib.mkDefault "private";
-        } // lib.optionalAttrs config.confinement.withBinSh {
-          BindReadOnlyPaths = [ "${pkgs.dash}/bin/dash:/bin/sh" ];
         } // lib.optionalAttrs (config.confinement.mode == "full-apivfs") {
           MountAPIVFS = true;
           PrivateDevices = true;
@@ -108,7 +111,7 @@ in {
           execPkgs = lib.concatMap (opt: let
             isSet = config.serviceConfig ? ${opt};
           in lib.optional isSet config.serviceConfig.${opt}) execOpts;
-        in execPkgs ++ lib.optional config.confinement.withBinSh pkgs.dash;
+        in execPkgs ++ lib.optional (binSh != null) binSh;
       };
     }));
   };
@@ -145,6 +148,14 @@ in {
       serviceFile="$out/lib/systemd/system/$serviceName"
 
       echo '[Service]' > "$serviceFile"
+
+      # /bin/sh is special here, because the option value could contain a
+      # symlink and we need to properly resolve it.
+      ${lib.optionalString (cfg.confinement.binSh != null) ''
+        binsh=${lib.escapeShellArg cfg.confinement.binSh}
+        realprog="$(readlink -e "$binsh")"
+        echo "BindReadOnlyPaths=$realprog:/bin/sh" >> "$serviceFile"
+      ''}
 
       while read storePath; do
         if [ -L "$storePath" ]; then
