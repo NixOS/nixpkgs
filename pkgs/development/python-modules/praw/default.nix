@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = http://praw.readthedocs.org/;
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -20,14 +20,14 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py
     (mkOverride "aiohttp" "3.5.4"
       "9c4c83f4fa1938377da32bc2d59379025ceeee8e24b89f72fcbccd8ca22dc9bf")
-    (mkOverride "astral" "1.8"
-      "7d624ccd09c591e56103f077733bc36194940076939875d84909d5086afd99c8")
+    (mkOverride "astral" "1.10.1"
+      "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
     (mkOverride "async-timeout" "3.0.1"
       "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f")
     (mkOverride "attrs" "18.2.0"
       "10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69")
-    (mkOverride "bcrypt" "3.1.5"
-      "136243dc44e5bab9b61206bd46fff3018bd80980b1a1dfbab64a22ff5745957f")
+    (mkOverride "bcrypt" "3.1.6"
+      "44636759d222baa62806bbceb20e96f75a015a6381690d1bc2eda91c01ec02ea")
     (self: super: {
       pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
         version = "1.6.4";
@@ -38,29 +38,20 @@ let
         doCheck = false; # https://github.com/jpadilla/pyjwt/issues/382
       });
     })
-    (self: super: {
-      cryptography = super.cryptography.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6";
-        };
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ self.idna ];
-        checkInputs = with self; [ pytest_3 pretend iso8601 pytz hypothesis ];
-      });
-    })
-    (mkOverride "cryptography_vectors" "2.3.1" # required by cryptography==2.3.1
-      "bf4d9b61dce69c49e830950aa36fad194706463b0b6dfe81425b9e0bc6644d46")
+    (mkOverride "cryptography" "2.5"
+      "00c4d7gvsymlaw0r13zrm32dcnarmpayjyrh65yymlmr6mrbcij9")
+    (mkOverride "cryptography_vectors" "2.5" # required by cryptography==2.5
+      "15qfl3pnw2f11r0z0zhwl56f6pb60ysav8fxmpnz5p80cfwljdik")
     (mkOverride "python-slugify" "1.2.6"
       "7723daf30996db26573176bddcdf5fcb98f66dc70df05c9cb29f2c79b8193245")
     (mkOverride "requests" "2.21.0"
       "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e")
-    (mkOverride "ruamel_yaml" "0.15.85"
-      "34af6e2f9787acd3937b55c0279f46adff43124c5d72dced84aab6c89d1a960f")
+    (mkOverride "ruamel_yaml" "0.15.88"
+      "ac56193c47a31c9efa151064a9e921865cdad0f7a991d229e7197e12fe8e0cd7")
     (mkOverride "voluptuous" "0.11.5"
       "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
-    (mkOverride "voluptuous-serialize" "2.0.0"
-      "44be04d87aec34bd7d31ab539341fadc505205f2299031ed9be985112c21aa41")
+    (mkOverride "voluptuous-serialize" "2.1.0"
+      "d30fef4f1aba251414ec0b315df81a06da7bf35201dcfb1f6db5253d738a154f")
 
     # used by auth.mfa_modules.totp
     (mkOverride "pyotp" "2.2.6"
@@ -104,7 +95,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.87.1";
+  hassVersion = "0.89.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -119,7 +110,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "1f1l4a78dix1mwkpg84b3iw69nxx1dqbl3c698qg857kwac6w9d5";
+    sha256 = "1k91mq45nq80dwkzqrlax7bvmv556ipr3pqh7i3k1lcaryn5p0l7";
   };
 
   propagatedBuildInputs = [
@@ -139,8 +130,8 @@ in with py.pkgs; buildPythonApplication rec {
     py.test --ignore tests/components
     # Some basic components should be tested however
     py.test \
-      tests/components/{group,http,frontend,config,websocket_api} \
-      tests/components/test_{api,configurator,demo,discovery,init,introduction,logger,script,shell_command,system_log}.py
+      tests/components/{api,config,configurator,demo,discovery,frontend,group,history,history_graph} \
+      tests/components/{http,init,introduction,logger,script,shell_command,system_log,websocket_api}
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";

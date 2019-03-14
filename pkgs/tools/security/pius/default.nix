@@ -18,7 +18,8 @@ pythonPackages.buildPythonApplication {
     done
   '';
 
-  buildInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
+  propagatedBuildInputs = with pythonPackages; [ six ];
 
   meta = {
     homepage = https://www.phildev.net/pius/;

@@ -81,7 +81,7 @@ index b68f0c68..a18efd96 100644
  fi
  
  # Boot sequence:
-@@ -33,62 +42,134 @@ fi
+@@ -33,61 +42,142 @@ fi
  #
  # * Then ksmserver is started which takes control of the rest of the startup sequence
  
@@ -101,6 +101,15 @@ index b68f0c68..a18efd96 100644
 +# installing new applications to update the cache.
 +# See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
 +rm -fv $HOME/.cache/icon-cache.kcache
++
++# xdg-desktop-settings generates this empty file but
++# it makes kbuildsyscoca5 fail silently. To fix this
++# remove that menu if it exists.
++rm -fv $HOME/.config/menus/applications-merged/xdg-desktop-menu-dummy.menu
++
++# Remove the kbuildsyscoca5 cache. It will be regenerated immediately after.
++# This is necessary for kbuildsyscoca5 to recognize that software that has been removed.
++rm -fv $HOME/.cache/ksycoca*
 +
 +# Qt writes a weird ‘libraryPath’ line to
 +# ~/.config/Trolltech.conf that causes the KDE plugin
@@ -632,7 +641,7 @@ diff --git a/startkde/startplasmacompositor.cmake b/startkde/startplasmacomposit
 index dcb473a4..48dbf465 100644
 --- a/startkde/startplasmacompositor.cmake
 +++ b/startkde/startplasmacompositor.cmake
-@@ -1,118 +1,165 @@
+@@ -1,118 +1,174 @@
  #!/bin/sh
  #
 -#  DEFAULT Plasma STARTUP SCRIPT ( @PROJECT_VERSION@ )
@@ -659,6 +668,15 @@ index dcb473a4..48dbf465 100644
 +# installing new applications to update the cache.
 +# See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
 +rm -fv $HOME/.cache/icon-cache.kcache
++
++# xdg-desktop-settings generates this empty file but
++# it makes kbuildsyscoca5 fail silently. To fix this
++# remove that menu if it exists.
++rm -fv $HOME/.config/menus/applications-merged/xdg-desktop-menu-dummy.menu
++
++# Remove the kbuildsyscoca5 cache. It will be regenerated immediately after.
++# This is necessary for kbuildsyscoca5 to recognize that software that has been removed.
++rm -fv $HOME/.cache/ksycoca*
 +
 +# Qt writes a weird ‘libraryPath’ line to
 +# ~/.config/Trolltech.conf that causes the KDE plugin

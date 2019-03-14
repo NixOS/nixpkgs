@@ -368,6 +368,8 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  distlib = callPackage ../development/python-modules/distlib { };
+
   distributed = callPackage ../development/python-modules/distributed { };
 
   docutils = callPackage ../development/python-modules/docutils { };
@@ -495,6 +497,9 @@ in {
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
+
+  msrestazure = callPackage ../development/python-modules/msrestazure { };
+  msrest = callPackage ../development/python-modules/msrest { };
 
   multiset = callPackage ../development/python-modules/multiset { };
 
@@ -1311,11 +1316,15 @@ in {
 
   canmatrix = callPackage ../development/python-modules/canmatrix {};
 
-  cairocffi = callPackage ../development/python-modules/cairocffi {};
 
-  cairosvg1 = callPackage ../development/python-modules/cairosvg/1_x.nix {};
+  cairocffi = let
+    inherit (callPackage ../development/python-modules/cairocffi {}) cairocffi_1_0 cairocffi_0_9;
+  in if isPy3k then cairocffi_1_0 else cairocffi_0_9;
 
-  cairosvg = callPackage ../development/python-modules/cairosvg {};
+  cairosvg = if isPy3k then
+    callPackage ../development/python-modules/cairosvg {}
+  else
+    callPackage ../development/python-modules/cairosvg/1_x.nix {};
 
   carrot = callPackage ../development/python-modules/carrot {};
 
@@ -1324,6 +1333,8 @@ in {
   case = callPackage ../development/python-modules/case {};
 
   cbor = callPackage ../development/python-modules/cbor {};
+
+  cbor2 = callPackage ../development/python-modules/cbor2 {};
 
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
@@ -3983,6 +3994,8 @@ in {
 
   retry_decorator = callPackage ../development/python-modules/retry_decorator { };
 
+  qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
+
   quamash = callPackage ../development/python-modules/quamash { };
 
   quandl = callPackage ../development/python-modules/quandl { };
@@ -3991,8 +4004,8 @@ in {
 
   qscintilla-qt4 = callPackage ../development/python-modules/qscintilla { };
 
-  qscintilla-qt5 = callPackage ../development/python-modules/qscintilla-qt5 {
-    qscintillaCpp = pkgs.libsForQt5.qscintilla;
+  qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
+    pythonPackages = self;
     lndir = pkgs.xorg.lndir;
   };
 

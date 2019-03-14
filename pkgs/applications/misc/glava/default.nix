@@ -22,13 +22,13 @@ let
 in
   stdenv.mkDerivation rec {
     name = "glava-${version}";
-    version = "1.5.8";
+    version = "1.6.0";
 
     src = fetchFromGitHub {
       owner = "wacossusca34";
       repo = "glava";
       rev = "v${version}";
-      sha256 = "0mps82qw2mhxx8069jvqz1v8n4x7ybrrjv92ij6cms8xi1y8v0fm";
+      sha256 = "1zzaq9x98prlgjnb3fxbrnhqpg50f9qqkwl6r4a1xnsfs93qmqpl";
     };
 
     buildInputs = [
@@ -45,6 +45,9 @@ in
     ];
 
     preConfigure = ''
+      substituteInPlace Makefile \
+        --replace 'unknown' 'v${version}'
+
       export CFLAGS="-march=native"
     '';
 

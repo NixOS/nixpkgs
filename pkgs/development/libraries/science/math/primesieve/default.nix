@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "primesieve-${version}";
-  version = "7.3";
+  version = "7.4";
 
   nativeBuildInputs = [cmake];
 
   src = fetchurl {
     url = "https://github.com/kimwalisch/primesieve/archive/v${version}.tar.gz";
-    sha256 = "0l7h5r4c7hijh0c0nsdxvjqzc9dbhlx535b87fglf2i2p9la1x5v";
+    sha256 = "16930d021ai8cl3gsnn2v6l30n6mklwwqd53z51cddd3dj69x6zz";
   };
 
   meta = with stdenv.lib; {
