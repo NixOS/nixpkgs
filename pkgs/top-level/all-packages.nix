@@ -1071,6 +1071,8 @@ in
 
   buildah = callPackage ../development/tools/buildah { };
 
+  buildkit = callPackage ../development/tools/buildkit { };
+
   bukubrow = callPackage ../tools/networking/bukubrow { };
 
   burpsuite = callPackage ../tools/networking/burpsuite {};
