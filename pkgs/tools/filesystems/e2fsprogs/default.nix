@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo, perl }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       "--enable-libuuid --disable-e2initrd-helper"
     ];
 
-  checkInputs = [ perl ];
+  checkInputs = [ buildPackages.perl ];
   doCheck = true;
 
   postInstall = ''
