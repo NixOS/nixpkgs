@@ -1818,6 +1818,8 @@ in
 
   nyx = callPackage ../tools/networking/nyx { };
 
+  ocrmypdf = callPackage ../tools/text/ocrmypdf { };
+
   onboard = callPackage ../applications/misc/onboard { };
 
   xkbd = callPackage ../applications/misc/xkbd { };
