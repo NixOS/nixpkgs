@@ -1692,6 +1692,8 @@ in
 
   hid-listen = callPackage ../tools/misc/hid-listen { };
 
+  hocr-tools = with python3Packages; toPythonApplication hocr-tools;
+
   home-manager = callPackage ../tools/package-management/home-manager {};
 
   hostsblock = callPackage ../tools/misc/hostsblock { };

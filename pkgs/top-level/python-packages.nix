@@ -639,6 +639,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  hocr-tools = callPackage ../development/python-modules/hocr-tools { };
+
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
