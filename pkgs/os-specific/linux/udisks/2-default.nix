@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, substituteAll, libtool, pkgconfig, intltool, gnused
-, gnome3, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash
+{ stdenv, fetchFromGitHub, substituteAll, libtool, pkgconfig, gettext, gnused
+, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
-, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43
+, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
 , xfsprogs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
 }:
 
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig gnome3.gnome-common libtool intltool gobject-introspection
+    autoconf automake pkgconfig libtool gettext which gobject-introspection
     gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 
@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
     expat libgudev libblockdev acl systemd glib libatasmart polkit
   ];
 
-  preConfigure = "./autogen.sh";
+  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
     "--enable-gtk-doc"
