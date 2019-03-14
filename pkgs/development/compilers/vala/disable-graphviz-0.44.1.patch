@@ -1,0 +1,261 @@
+diff --git a/Makefile.am b/Makefile.am
+index f70234759..b3d6c3833 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -13,19 +13,9 @@ SUBDIRS = \
+ 	doc \
+ 	gobject-introspection \
+ 	vapigen \
+-	$(NULL)
+-
+-if ENABLE_VALADOC
+-SUBDIRS += \
+ 	libvaladoc \
+ 	valadoc \
+ 	$(NULL)
+-endif
+-
+-DISTCHECK_CONFIGURE_FLAGS = \
+-	--enable-valadoc \
+-	--enable-unversioned \
+-	$(NULL)
+ 
+ if ENABLE_UNVERSIONED
+ aclocaldir = $(datadir)/aclocal
+diff --git a/configure.ac b/configure.ac
+index 16ebd1f81..cf23db4b8 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -156,10 +156,11 @@ PKG_CHECK_MODULES(GMODULE, gmodule-2.0 >= $GLIB_REQUIRED)
+ AC_SUBST(GMODULE_CFLAGS)
+ AC_SUBST(GMODULE_LIBS)
+ 
+-AC_ARG_ENABLE(valadoc, AS_HELP_STRING([--disable-valadoc], [Disable valadoc]), enable_valadoc=$enableval, enable_valadoc=yes)
+-if test x$enable_valadoc = xyes; then
++AC_ARG_ENABLE(graphviz, AS_HELP_STRING([--disable-graphviz], [Disable graphviz usage for valadoc]), enable_graphviz=$enableval, enable_graphviz=yes)
++if test x$enable_graphviz = xyes; then
+ 	PKG_CHECK_MODULES(LIBGVC, libgvc >= $LIBGVC_REQUIRED)
+ 	AC_MSG_CHECKING([for CGRAPH])
++	VALAFLAGS="$VALAFLAGS -D HAVE_GRAPHVIZ"
+ 	cgraph_tmp_LIBADD="$LIBADD"
+ 	cgraph_tmp_CFLAGS="$CFLAGS"
+ 	LIBADD="$LIBADD $LIBGVC_LIBS"
+@@ -186,8 +187,8 @@ if test x$enable_valadoc = xyes; then
+ 	LIBADD="$cgraph_tmp_LIBADD"
+ 	CFLAGS="$cgraph_tmp_CFLAGS"
+ fi
++AM_CONDITIONAL(ENABLE_GRAPHVIZ, test x$enable_graphviz = xyes)
+ AM_CONDITIONAL(HAVE_CGRAPH, test "$have_cgraph" = "yes")
+-AM_CONDITIONAL(ENABLE_VALADOC, test x$enable_valadoc = xyes)
+ 
+ AC_PATH_PROG([XSLTPROC], [xsltproc], :)
+ AM_CONDITIONAL(HAVE_XSLTPROC, test "$XSLTPROC" != :)
+diff --git a/doc/Makefile.am b/doc/Makefile.am
+index d2684a0e0..b343c7c10 100644
+--- a/doc/Makefile.am
++++ b/doc/Makefile.am
+@@ -6,16 +6,11 @@ SUBDIRS = \
+ 
+ dist_man_MANS = \
+ 	valac.1 \
++	valadoc.1 \
+ 	vala-gen-introspect.1 \
+ 	vapigen.1 \
+ 	$(NULL)
+ 
+-if ENABLE_VALADOC
+-dist_man_MANS += \
+-	valadoc.1 \
+-	$(NULL)
+-endif
+-
+ EXTRA_DIST = \
+ 	valac.h2m \
+ 	valadoc.h2m \
+@@ -24,11 +19,7 @@ EXTRA_DIST = \
+ 	$(NULL)
+ 
+ if HAVE_HELP2MAN
+-if ENABLE_VALADOC
+ manpages: valac.1 valadoc.1 vala-gen-introspect.1 vapigen.1
+-else
+-manpages: valac.1 vala-gen-introspect.1 vapigen.1
+-endif
+ 	@rm $^
+ 	$(MAKE) $(AM_MAKEFLAGS) $^
+ 
+@@ -37,13 +28,11 @@ valac.1:
+ 		--include $(srcdir)/valac.h2m \
+ 		--libtool --no-info \
+ 		--output=$@
+-if ENABLE_VALADOC
+ valadoc.1:
+ 	$(HELP2MAN) $(top_builddir)/valadoc/valadoc \
+ 		--include $(srcdir)/valadoc.h2m \
+ 		--libtool --no-info \
+ 		--output=$@
+-endif
+ vala-gen-introspect.1:
+ 	$(HELP2MAN) $(top_builddir)/gobject-introspection/gen-introspect \
+ 		--include $(srcdir)/vala-gen-introspect.h2m \
+@@ -60,15 +49,12 @@ endif
+ if ENABLE_UNVERSIONED
+ install-data-hook:
+ 	cd $(DESTDIR)$(man1dir) && $(LN_S) -f valac@PACKAGE_SUFFIX@.1 valac.1
+-if ENABLE_VALADOC
+ 	cd $(DESTDIR)$(man1dir) && $(LN_S) -f valadoc@PACKAGE_SUFFIX@.1 valadoc.1
+-endif
+ 	cd $(DESTDIR)$(man1dir) && $(LN_S) -f vala-gen-introspect@PACKAGE_SUFFIX@.1 vala-gen-introspect.1
+ 	cd $(DESTDIR)$(man1dir) && $(LN_S) -f vapigen@PACKAGE_SUFFIX@.1 vapigen.1
+ endif
+ 
+ 
+-if ENABLE_VALADOC
+ COMMON_VALADOCFLAGS = \
+ 	--force \
+ 	--verbose \
+@@ -150,7 +136,6 @@ internal-apis/valadoc: $(valadoc_VALASOURCES) internal-apis/codegen
+ 	@touch $@
+ 
+ internal-api-docs: internal-apis/gee internal-apis/vala internal-apis/ccode internal-apis/codegen internal-apis/valadoc
+-endif
+ 
+ clean-local:
+ 	rm -rf $(builddir)/internal-apis
+diff --git a/libvaladoc/Makefile.am b/libvaladoc/Makefile.am
+index 7456fb836..107338e91 100644
+--- a/libvaladoc/Makefile.am
++++ b/libvaladoc/Makefile.am
+@@ -119,10 +119,6 @@ libvaladoc_la_VALASOURCES = \
+ 	content/tablerow.vala \
+ 	content/taglet.vala \
+ 	content/text.vala \
+-	charts/chart.vala \
+-	charts/chartfactory.vala \
+-	charts/hierarchychart.vala \
+-	charts/simplechartfactory.vala \
+ 	parser/manyrule.vala \
+ 	parser/oneofrule.vala \
+ 	parser/optionalrule.vala \
+@@ -149,13 +145,24 @@ libvaladoc_la_VALASOURCES = \
+ 	highlighter/codetoken.vala \
+ 	highlighter/highlighter.vala \
+ 	html/basicdoclet.vala \
+-	html/htmlchartfactory.vala \
+ 	html/linkhelper.vala \
+ 	html/cssclassresolver.vala \
+ 	html/htmlmarkupwriter.vala \
+ 	html/htmlrenderer.vala \
+ 	$(NULL)
+ 
++if ENABLE_GRAPHVIZ
++libvaladoc_la_VALASOURCES += \
++	charts/chart.vala \
++	charts/chartfactory.vala \
++	charts/hierarchychart.vala \
++	charts/simplechartfactory.vala \
++	html/htmlchartfactory.vala \
++	$(NULL)
++
++LIBGVC_PKG = --vapidir $(top_srcdir)/vapi --pkg libgvc
++endif
++
+ libvaladoc@PACKAGE_SUFFIX@_la_SOURCES = \
+ 	libvaladoc.vala.stamp \
+ 	$(libvaladoc_la_VALASOURCES:.vala=.c) \
+@@ -175,11 +182,11 @@ libvaladoc.vala.stamp: $(libvaladoc_la_VALASOURCES)
+ 		--library valadoc \
+ 		--vapi valadoc@PACKAGE_SUFFIX@.vapi \
+ 		--vapidir $(top_srcdir)/vapi --pkg gmodule-2.0 \
+-		--vapidir $(top_srcdir)/vapi --pkg libgvc \
+ 		--vapidir $(top_srcdir)/gee --pkg gee \
+ 		--vapidir $(top_srcdir)/vala --pkg vala \
+ 		--vapidir $(top_srcdir)/ccode --pkg ccode \
+ 		--vapidir $(top_srcdir)/codegen --pkg codegen \
++		$(LIBGVC_PKG) \
+ 		--pkg config \
+ 		$(filter %.vala %.c,$^)
+ 	touch $@
+@@ -207,6 +214,9 @@ nodist_pkgconfig_DATA = valadoc@PACKAGE_SUFFIX@.pc
+ 
+ valadoc@PACKAGE_SUFFIX@.pc: valadoc.pc
+ 	cp $< $@
++if !ENABLE_GRAPHVIZ
++	sed -i "s/libgvc //g" $@
++endif
+ 
+ vapidir = $(datadir)/vala/vapi
+ dist_vapi_DATA = valadoc@PACKAGE_SUFFIX@.vapi
+@@ -214,6 +224,9 @@ nodist_vapi_DATA = valadoc@PACKAGE_SUFFIX@.deps
+ 
+ valadoc@PACKAGE_SUFFIX@.deps: valadoc.deps
+ 	cp $< $@
++if !ENABLE_GRAPHVIZ
++	sed -i "s/libgvc//g" $@
++endif
+ 
+ EXTRA_DIST = \
+ 	$(libvaladoc_la_VALASOURCES) \
+diff --git a/libvaladoc/html/basicdoclet.vala b/libvaladoc/html/basicdoclet.vala
+index 46578c28f..f6ce7097c 100644
+--- a/libvaladoc/html/basicdoclet.vala
++++ b/libvaladoc/html/basicdoclet.vala
+@@ -46,7 +46,11 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 	protected HtmlRenderer _renderer;
+ 	protected Html.MarkupWriter writer;
+ 	protected Html.CssClassResolver cssresolver;
++#if HAVE_GRAPHVIZ
+ 	protected Charts.Factory image_factory;
++#else
++	protected void* image_factory;
++#endif
+ 	protected ErrorReporter reporter;
+ 	protected string package_list_link = "../index.html";
+ 
+@@ -120,7 +124,9 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 		this.linker = new LinkHelper ();
+ 
+ 		_renderer = new HtmlRenderer (settings, this.linker, this.cssresolver);
++#if HAVE_GRAPHVIZ
+ 		this.image_factory = new SimpleChartFactory (settings, linker);
++#endif
+ 	}
+ 
+ 
+@@ -1025,6 +1031,7 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 	}
+ 
+ 	protected void write_image_block (Api.Node element) {
++#if HAVE_GRAPHVIZ
+ 		if (element is Class || element is Interface || element is Struct) {
+ 			unowned string format = (settings.use_svg_images ? "svg" : "png");
+ 			var chart = new Charts.Hierarchy (image_factory, element);
+@@ -1044,6 +1051,7 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 									   this.get_img_path_html (element, format)});
+ 			writer.add_usemap (chart);
+ 		}
++#endif
+ 	}
+ 
+ 	public void write_namespace_content (Namespace node, Api.Node? parent) {
+diff --git a/libvaladoc/html/htmlmarkupwriter.vala b/libvaladoc/html/htmlmarkupwriter.vala
+index 5aa4afdea..e79b0b8f5 100644
+--- a/libvaladoc/html/htmlmarkupwriter.vala
++++ b/libvaladoc/html/htmlmarkupwriter.vala
+@@ -51,12 +51,16 @@ public class Valadoc.Html.MarkupWriter : Valadoc.MarkupWriter {
+ 		}
+ 	}
+ 
++#if HAVE_GRAPHVIZ
+ 	public unowned MarkupWriter add_usemap (Charts.Chart chart) {
+ 		string? buf = (string?) chart.write_buffer ("cmapx");
+ 		if (buf != null) {
+ 			raw_text ("\n");
+ 			raw_text ((!) buf);
+ 		}
++#else
++	public unowned MarkupWriter add_usemap (void* chart) {
++#endif
+ 
+ 		return this;
+ 	}

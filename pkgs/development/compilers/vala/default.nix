@@ -39,6 +39,12 @@ let
           sha256 = "112qhdzix0d7lfpfcam1cxprzmfzpwypb1226m5ma1vq9qy0sn7g";
         };
 
+        # NOTE: the openembedded-core project doesn't have a patch for 0.44.1
+        # We've reverted the addition of the "--disable-valadoc" option
+        # and then applied the following patch.
+        #     0.42.4: https://github.com/openembedded/openembedded-core/raw/f2b4f9ec6f44dced7f88df849cca68961419eeb8/meta/recipes-devtools/vala/vala/disable-graphviz.patch
+        "0.44" = ./disable-graphviz-0.44.1.patch;
+
       }.${major} or (throw "no graphviz patch for this version of vala");
 
     disableGraphviz = atLeast "0.38" && !withGraphviz;
@@ -120,5 +126,11 @@ in rec {
     sha256  = "14024gvs23q323fmd62hqd8jiypaxbjjvamyd782ixbhxmpz8x1p";
   };
 
-  vala = vala_0_42;
+  vala_0_44 = generic {
+    major   = "0.44";
+    minor   = "1";
+    sha256 = "1qiglkgymws6a3m8xz1v8b3na165ywx2dbipp3bdg134bi0w3a4n";
+  };
+
+  vala = vala_0_44;
 }
