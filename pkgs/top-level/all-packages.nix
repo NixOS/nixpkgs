@@ -235,6 +235,8 @@ in
 
   pet = callPackage ../development/tools/pet { };
 
+  mod = callPackage ../development/tools/mod { };
+
   mht2htm = callPackage ../tools/misc/mht2htm { };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
