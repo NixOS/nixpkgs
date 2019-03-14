@@ -58,10 +58,10 @@ in let
                 else lib.systems.elaborate crossSystem0;
 
   # Massage e into a NixOS module.
+  # We need all this stuff only because we want to support unknown options,
+  # without them this can be simplified a lot.
   mkModule = e: { options, ... }@args:
     let
-      # We need all this stuff only because we want to support unknown options,
-      # without them this can be simplified a lot.
       unify = file: value: lib.unifyModuleSyntax file file (lib.applyIfFunction file value args);
 
       fake = "nixpkgs.configs element";
@@ -112,14 +112,6 @@ in let
   # compiling toolchains and 32-bit packages on x86_64). In both those cases we
   # want the provided non-native `localSystem` argument to affect the stdenv
   # chosen.
-  #
-  # NB!!! This thing gets its `config` argument from `args`, i.e. it's actually
-  # `config0`. It is important to keep it to `config0` format (as opposed to the
-  # result of `evalModules`, i.e. the `config` variable above) throughout all
-  # nixpkgs evaluations since the above function `config0 -> config` implemented
-  # via `evalModules` is not idempotent. In other words, if you add `config` to
-  # `newArgs`, expect strange very hard to debug errors! (Yes, I'm speaking from
-  # experience here.)
   nixpkgsFun = newArgs: import ./. (args // newArgs);
 
   # Partially apply some arguments for building bootstraping stage pkgs
