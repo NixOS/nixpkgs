@@ -5057,6 +5057,8 @@ in {
 
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
 
+  ruffus = callPackage ../development/python-modules/ruffus { };
+
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
