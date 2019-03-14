@@ -18,30 +18,34 @@ in stdenv.mkDerivation rec {
       sha256 = "1g31vz73x4d3cmsw2wfk43qa06bpqp5815fb5qq9vmwms6hym6y2";
     };
 
+  postUnpack = ''
+    mkdir -p $out/share/nsis
+    cp -avr ${srcWinDistributable}/{Contrib,Include,Plugins,Stubs} \
+      $out/share/nsis
+  '';
+
   nativeBuildInputs = [ scons ];
   buildInputs = [ zlib ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  sconsFlags = [
+    "SKIPSTUBS=all"
+    "SKIPPLUGINS=all"
+    "SKIPUTILS=all"
+    "SKIPMISC=all"
+    "APPEND_CPPPATH=${ZLIB_HOME}/include"
+    "APPEND_LIBPATH=${ZLIB_HOME}/lib"
+    "NSIS_CONFIG_CONST_DATA=no"
+    "STRIP=no"
+  ];
+
+  preBuild = ''
+    sconsFlagsArray+=("PATH=$PATH")
+  '';
+
+  prefixKey = "PREFIX=";
+  installTargets = "install-compiler";
 
   dontStrip = true;
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/nsis/Contrib $out/share/nsis/Include $out/share/nsis/Plugins $out/share/nsis/Stubs
-    cp -avr ${srcWinDistributable}/Contrib ${srcWinDistributable}/Include ${srcWinDistributable}/Plugins ${srcWinDistributable}/Stubs \
-      $out/share/nsis
-
-    scons \
-      SKIPSTUBS=all SKIPPLUGINS=all SKIPUTILS=all SKIPMISC=all \
-      PATH="$PATH" \
-      APPEND_CPPPATH="${ZLIB_HOME}/include" \
-      APPEND_LIBPATH="${ZLIB_HOME}/lib" \
-      NSIS_CONFIG_CONST_DATA=no \
-      STRIP=no \
-      PREFIX=$out install-compiler
-
-    runHook postInstall
-  '';
 
   meta = with stdenv.lib; {
     description = "NSIS is a free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
