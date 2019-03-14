@@ -4113,6 +4113,8 @@ in {
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
 
+  pikepdf = callPackage ../development/python-modules/pikepdf { };
+
   kmapper = callPackage ../development/python-modules/kmapper { };
 
   kmsxx = (callPackage ../development/libraries/kmsxx {
