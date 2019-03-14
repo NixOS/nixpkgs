@@ -6148,6 +6148,8 @@ in
 
   welkin = callPackage ../tools/graphics/welkin {};
 
+  wf-recorder = callPackage ../applications/video/wf-recorder { };
+
   whipper = callPackage ../applications/audio/whipper { };
 
   whois = callPackage ../tools/networking/whois { };
