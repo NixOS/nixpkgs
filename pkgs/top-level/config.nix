@@ -27,7 +27,7 @@ let
   });
 
   mkOverrides = args: mkMassRebuild ({
-    type = types.functionTo (types.attrsOf (types.uniq types.unspecified));
+    type = types.functionTo (types.lazyAttrsOf (types.uniq types.unspecified));
     default = super: {};
   } // args);
 
