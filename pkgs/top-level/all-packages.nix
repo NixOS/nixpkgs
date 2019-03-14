@@ -1834,6 +1834,8 @@ in
 
   onboard = callPackage ../applications/misc/onboard { };
 
+  virtboard = callPackage ../applications/misc/virtboard { };
+
   xkbd = callPackage ../applications/misc/xkbd { };
 
   optar = callPackage ../tools/graphics/optar {};
