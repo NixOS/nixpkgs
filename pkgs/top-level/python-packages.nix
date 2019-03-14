@@ -5637,6 +5637,8 @@ in {
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
 
+  python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
+
   pluggy = callPackage ../development/python-modules/pluggy {};
 
   xcffib = callPackage ../development/python-modules/xcffib {};
