@@ -48,6 +48,7 @@ let
 
     [service]
     DISABLE_REGISTRATION = ${boolToString cfg.disableRegistration}
+    REQUIRE_SIGNIN_VIEW = ${boolToString cfg.requireSigninView}
 
     ${cfg.extraConfig}
   '';
@@ -260,6 +261,15 @@ in
           deploy unless <link linkend="opt-services.gitea.useWizard">services.gitea.useWizard</link>
           is <literal>true</literal> as the first registered user will be the administrator if
           no install wizard is used.
+        '';
+      };
+
+      requireSigninView = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Require signin to view any pages.
+          This along with <literal>disableRegistration = true</literal> is useful to create a private git server.
         '';
       };
 
