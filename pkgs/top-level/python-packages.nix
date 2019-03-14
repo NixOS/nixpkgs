@@ -2655,7 +2655,17 @@ in {
 
   google_api_core = callPackage ../development/python-modules/google_api_core { };
 
-  google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
+  google_api_python_client = let
+    google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
+  in if isPy3k then google_api_python_client else
+    # Python 2.7 support was deprecated but is still needed by weboob
+    google_api_python_client.overridePythonAttrs (old: rec {
+      version = "1.7.6";
+      src = old.src.override {
+        inherit version;
+        sha256 = "14w5sdrp0bk9n0r2lmpqmrbf2zclpfq6q7giyahnskkfzdkb165z";
+      };
+    });
 
   google_apputils = callPackage ../development/python-modules/google_apputils { };
 
