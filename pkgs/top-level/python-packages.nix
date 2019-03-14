@@ -1334,6 +1334,8 @@ in {
 
   cbor = callPackage ../development/python-modules/cbor {};
 
+  cbor2 = callPackage ../development/python-modules/cbor2 {};
+
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
   cccolutils = callPackage ../development/python-modules/cccolutils {};
