@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "lab-${version}";
-  version = "0.14.0";
+  version = "0.15.2";
 
   goPackagePath = "github.com/zaquestion/lab";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "0dqahzm721kpps4i33qgk78y982n8gj5afpk73qyzbraf5y3cw92";
+    sha256 = "1210cf6ss4ivm2jxq3k3c34vpra02pl91fpmvqbvw5sm53j7xfaf";
   };
 
   goDeps = ./deps.nix;
