@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, writeText, makeWrapper, php }:
+{ stdenv, fetchFromGitHub, writeText }:
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "0d6dgw9af492vn5yg2hq82ipq4p80c19lhky0dpwrm5kv67kxbhv";
   };
 
-  buildInputs = [ makeWrapper ];
-
   phpConfig = writeText "config.php" ''
   <?php
     return require(getenv('LIMESURVEY_CONFIG'));
@@ -20,17 +18,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,share/limesurvey}
-    cp -R . $out/share/limesurvey
+    mkdir -p $out/share/limesurvey
+    cp -r . $out/share/limesurvey
     cp ${phpConfig} $out/share/limesurvey/application/config/config.php
-    makeWrapper ${php}/bin/php $out/bin/limesurvey-console \
-      --add-flags "$out/share/limesurvey/application/commands/console.php"
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Open source survey application";
     license = licenses.gpl2;
-    homepage = https://www.limesurvey.org;
+    homepage = "https://www.limesurvey.org";
     maintainers = with maintainers; [offline];
     platforms = with platforms; unix;
   };
