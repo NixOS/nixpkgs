@@ -73,7 +73,7 @@
   <para>
   To enable auto-login, you need to define your default window manager and
   desktop environment. If you wanted no desktop environment and i3 as your your
-  windowzmanager, you'd define:
+  window manager, you'd define:
 <programlisting>
 <xref linkend="opt-services.xserver.desktopManager.default"/> = "none";
 <xref linkend="opt-services.xserver.windowManager.default"/> = "i3";
