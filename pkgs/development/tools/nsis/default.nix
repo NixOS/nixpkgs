@@ -1,9 +1,6 @@
-{ stdenv, symlinkJoin, fetchurl, fetchzip, scons, zlib }:
+{ stdenv, fetchurl, fetchzip, scons, zlib }:
 
-let
-  ZLIB_HOME = symlinkJoin { name="zlib-wrap"; paths = [ zlib zlib.dev ]; };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "nsis-${version}";
   version = "3.04";
 
@@ -32,8 +29,8 @@ in stdenv.mkDerivation rec {
     "SKIPPLUGINS=all"
     "SKIPUTILS=all"
     "SKIPMISC=all"
-    "APPEND_CPPPATH=${ZLIB_HOME}/include"
-    "APPEND_LIBPATH=${ZLIB_HOME}/lib"
+    "APPEND_CPPPATH=${zlib.dev}/include"
+    "APPEND_LIBPATH=${zlib}/lib"
     "NSIS_CONFIG_CONST_DATA=no"
   ];
 
