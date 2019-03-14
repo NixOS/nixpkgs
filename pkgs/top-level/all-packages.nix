@@ -235,6 +235,8 @@ in
 
   pet = callPackage ../development/tools/pet { };
 
+  mod = callPackage ../development/tools/mod { };
+
   mht2htm = callPackage ../tools/misc/mht2htm { };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
@@ -13346,14 +13348,20 @@ in
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo110Package = callPackage ../development/go-modules/generic {
+  buildGo110Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_10;
   };
-  buildGo111Package = callPackage ../development/go-modules/generic {
+  buildGo111Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_11;
   };
 
   buildGoPackage = buildGo111Package;
+
+  buildGo111Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_11;
+  };
+
+  buildGoModule = buildGo111Module;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
