@@ -7,14 +7,14 @@ then throw "${pname} is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "0.5.2";
+  version = "0.6";
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = pname;
     rev = version;
-    sha256 = "00rz1i61w2dy108hzv38rblnsv6b56b5a1mk5h3zddpivcljp2dh";
+    sha256 = "1hw98a4pndq6ms4vfsyz0ynfz8g21fm73fc7s1gx824fhdx4ywgd";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];
