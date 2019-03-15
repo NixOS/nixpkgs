@@ -1,6 +1,8 @@
 { stdenv, fetchurl, fetchpatch, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
-, docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, jasper, gobject-introspection, doCheck ? false, makeWrapper }:
+, docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, gnome3
+, jasper, gobject-introspection, doCheck ? false, makeWrapper
+, x11Support ? !stdenv.isDarwin, libX11
+}:
 
 let
   pname = "gdk-pixbuf";
@@ -33,7 +35,7 @@ in stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
-  buildInputs = [ libX11 ];
+  buildInputs = stdenv.lib.optional x11Support [ libX11 ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext python3 libxml2 libxslt docbook_xsl docbook_xml_dtd_43
@@ -46,7 +48,7 @@ in stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocs=true"
     "-Djasper=true"
-    "-Dx11=true"
+    "-Dx11=${if x11Support then "true" else "false"}"
     "-Dgir=${if gobject-introspection != null then "true" else "false"}"
   ];
 
