@@ -178,6 +178,8 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  aplpy = callPackage ../development/python-modules/aplpy { };
+
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
   asana = callPackage ../development/python-modules/asana { };
@@ -193,6 +195,10 @@ in {
   astral = callPackage ../development/python-modules/astral { };
 
   astropy = callPackage ../development/python-modules/astropy { };
+
+  astropy-helpers = callPackage ../development/python-modules/astropy-helpers { };
+
+  astropy-healpix = callPackage ../development/python-modules/astropy-healpix { };
 
   astroquery = callPackage ../development/python-modules/astroquery { };
 
@@ -793,6 +799,8 @@ in {
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
   relatorio = callPackage ../development/python-modules/relatorio { };
+
+  reproject = callPackage ../development/python-modules/reproject { };
 
   remotecv = callPackage ../development/python-modules/remotecv { };
 
@@ -1525,6 +1533,8 @@ in {
   bcrypt = callPackage ../development/python-modules/bcrypt { };
 
   cffi = callPackage ../development/python-modules/cffi { };
+
+  pyavm = callPackage ../development/python-modules/pyavm { };
 
   pycollada = callPackage ../development/python-modules/pycollada { };
 
@@ -4976,6 +4986,8 @@ in {
   };
 
   potr = callPackage ../development/python-modules/potr {};
+
+  pyregion = callPackage ../development/python-modules/pyregion {};
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
 
