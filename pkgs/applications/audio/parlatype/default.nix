@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "parlatype";
-  version = "v1.6-beta";
+  version = "1.6-beta";
 
   src = fetchFromGitHub {
     owner  = "gkarsay";
