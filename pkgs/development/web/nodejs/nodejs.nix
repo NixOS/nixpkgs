@@ -101,7 +101,7 @@ in
 
       # install the missing headers for node-gyp
       cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
-    '' + optionalString stdenv.isDarwin ''
+    '' + optionalString (stdenv.isDarwin && enableNpm) ''
       sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
     '';
 
