@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pythonPackages
 , pkgconfig, autoreconfHook, rsync
-, swig, qt4, fcgi
+, swig, qt48Full, fcgi
 , bitcoin, procps, utillinux
 }:
 let
@@ -16,7 +16,6 @@ in buildPythonApplication {
     owner = "goatpig";
     repo = "BitcoinArmory";
     rev = "v${version}";
-    #sha256 = "023c7q1glhrkn4djz3pf28ckd1na52lsagv4iyfgchqvw7qm7yx2";
     sha256 = "0pjk5qx16n3kvs9py62666qkwp2awkgd87by4karbj7vk6p1l14h"; fetchSubmodules = true;
   };
 
@@ -25,13 +24,17 @@ in buildPythonApplication {
   # FIXME bitcoind doesn't die on shutdown. Need some sort of patch to fix that.
   #patches = [ ./shutdown-fix.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
+  nativeBuildInputs = [
     autoreconfHook
+    pkgconfig
     swig
-    qt4
-    fcgi
+    pyqt4
+    qt48Full
     rsync # used by silly install script (TODO patch upstream)
+  ];
+  buildInputs = [
+    qt48Full
+    fcgi
   ];
 
   propagatedBuildInputs = [
