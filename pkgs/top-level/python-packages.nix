@@ -2697,6 +2697,8 @@ in {
 
   google-auth-httplib2 = callPackage ../development/python-modules/google-auth-httplib2 { };
 
+  google-auth-oauthlib = callPackage ../development/python-modules/google-auth-oauthlib { };
+
   google_api_core = callPackage ../development/python-modules/google_api_core { };
 
   google_api_python_client = let
