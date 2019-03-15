@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "devhelp-${version}";
-  version = "3.30.1";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/devhelp/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "036sddvhs0blqpc2ixmjdl9vxynvkn5jpgn0jxr1fxcm4rh3q07a";
+    sha256 = "06sa83zggk29wcg75fl3gqh0rmi7cd3gsbk09a2z23r7vpy7xanq";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook appstream-glib gobject-introspection python3 ];
