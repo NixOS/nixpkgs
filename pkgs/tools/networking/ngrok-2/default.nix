@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl }:
 
 with stdenv.lib;
 
@@ -13,13 +13,11 @@ stdenv.mkDerivation rec {
     url = "https://bin.equinox.io/a/iVLSfdAz1X4/ngrok-${version}-linux-amd64.tar.gz";
     sha256 = "1mn9iwgy6xzrjihikwc2k2j59igqmph0cwx17qp0ziap9lp5xxad";
   } else if stdenv.isDarwin then fetchurl {
-    url = "https://bin.equinox.io/a/dFaKVcgrvJ3/ngrok-${version}-darwin-386.zip";
-    sha256 = "0yfd250b55wcpgqd00rqfaa7a82f35fmybb31q5xwdbgc2i47pbh";
+    url = "https://bin.equinox.io/a/n1hZCd9dMfL/ngrok-${version}-darwin-386.tar.gz";
+    sha256 = "0rzy3m1zdnlm1mvz2q5lw359llspva7lr4fbzjwhxwznnszqpmh1";
   } else throw "platform ${stdenv.hostPlatform.system} not supported!";
 
   sourceRoot = ".";
-
-  nativeBuildInputs = optional stdenv.isDarwin unzip;
 
   installPhase = ''
     install -D ngrok $out/bin/ngrok
