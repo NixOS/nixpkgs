@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, meson, gnome3, at-spi2-core, dbus, gst_all_1, sphinxbase, pocketsphinx, ninja, gettext, appstream-glib, python3, glib, gobject-introspection, gsettings-desktop-schemas, itstool, wrapGAppsHook, makeWrapper, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "parlatype-${version}";
+  pname = "parlatype";
   version = "v1.6-beta";
 
   src = fetchFromGitHub {
