@@ -1169,9 +1169,6 @@ self: super: {
   # });
   libnix = dontCheck super.libnix;
 
-  # https://github.com/jmillikin/chell/issues/1
-  chell = super.chell.override { patience = self.patience_0_1_1; };
-
   # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
   xmobar = dontCheck super.xmobar;
 
