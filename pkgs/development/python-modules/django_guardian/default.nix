@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k
 , django_environ, mock, django, six
 , pytest, pytestrunner, pytest-django
 }:
@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Per object permissions for Django";
     homepage = https://github.com/django-guardian/django-guardian;
     license = [ licenses.mit licenses.bsd2 ];
+    broken = !isPy3k; # https://github.com/django-guardian/django-guardian/pull/605
   };
 }
