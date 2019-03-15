@@ -19852,6 +19852,26 @@ in
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
+
+  neovimConfig = structuredConfigure:
+    let
+      module = import ../applications/editors/neovim/module.nix;
+      # Generate init.vim configuration
+      cfg =  (lib.evalModules {
+        specialArgs = {
+          inherit vimUtils python3Packages bundlerEnv ruby pythonPackages haskellPackages;
+          inherit nodePackages;
+        };
+        modules = [
+          module
+          { customRC = structuredConfigure.configure.customRC or "";}
+          structuredConfigure
+        ];
+      });
+    in
+      cfg.config;
+
+
   wrapNeovim = callPackage ../applications/editors/neovim/wrapper.nix { };
 
   neovim-unwrapped = callPackage ../applications/editors/neovim {
