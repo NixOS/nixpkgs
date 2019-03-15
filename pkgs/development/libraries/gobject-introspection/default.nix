@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       cairoLib = "${getLib cairo}/lib";
     });
 
-  doCheck = true;
+  doCheck = !stdenv.isAarch64;
 
   passthru = {
     updateScript = gnome3.updateScript {
