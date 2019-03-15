@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
   pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
-  vala, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
+  vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     vala
     gnome3.yelp-tools
     wrapGAppsHook
-    # For setup hook
+    # For https://github.com/FontManager/master/blob/master/lib/unicode/meson.build
     gobject-introspection
   ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     json-glib
     sqlite
     librsvg
-    gnome3.gtk
+    gtk3
     gnome3.adwaita-icon-theme
   ];
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://fontmanager.github.io/;
     description = "Simple font management for GTK+ desktop environments";
     longDescription = ''
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
 
       Font Manager is NOT a professional-grade font management solution.
     '';
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
     repositories.git = https://github.com/FontManager/master;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }
