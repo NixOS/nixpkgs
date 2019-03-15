@@ -18835,6 +18835,8 @@ in
 
   paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
 
+  parlatype = callPackage ../applications/audio/parlatype { };
+
   packet = callPackage ../development/tools/packet { };
 
   pb_cli = callPackage ../tools/misc/pb_cli {};
