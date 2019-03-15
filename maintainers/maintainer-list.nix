@@ -4683,6 +4683,11 @@
     github = "teozkr";
     name = "Teo Klestrup Röijezon";
   };
+  terlar = {
+    email = "terlar@gmail.com";
+    github = "terlar";
+    name = "Terje Larsen";
+  };
   teto = {
     email = "mcoudron@hotmail.com";
     github = "teto";
