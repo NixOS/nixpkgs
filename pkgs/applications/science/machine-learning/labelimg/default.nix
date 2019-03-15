@@ -6,6 +6,9 @@
       url = "https://github.com/tzutalin/labelImg/archive/v${version}.tar.gz";
       sha256 = "126kc4r7xm9170kh7snqsfkkc868m5bcnswrv7b4cq9ivlrdwbm4";
     };
+    nativeBuildInputs = with python2Packages; [
+      pyqt4
+    ];
     propagatedBuildInputs = with python2Packages; [
       pyqt4
       lxml
