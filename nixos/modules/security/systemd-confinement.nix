@@ -106,19 +106,31 @@ in {
       config = let
         rootName = "${mkPathSafeName name}-chroot";
         inherit (config.confinement) binSh fullUnit;
+        wantsAPIVFS = lib.mkDefault (config.confinement.mode == "full-apivfs");
       in lib.mkIf config.confinement.enable {
         serviceConfig = {
           RootDirectory = pkgs.runCommand rootName {} "mkdir \"$out\"";
           TemporaryFileSystem = "/";
           MountFlags = lib.mkDefault "private";
-        } // lib.optionalAttrs (config.confinement.mode == "full-apivfs") {
-          MountAPIVFS = true;
-          PrivateDevices = true;
-          PrivateTmp = true;
-          PrivateUsers = true;
-          ProtectControlGroups = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
+
+          # https://github.com/NixOS/nixpkgs/issues/14645 is a future attempt
+          # to change some of these to default to true.
+          #
+          # If we run in chroot-only mode, having something like PrivateDevices
+          # set to true by default will mount /dev within the chroot, whereas
+          # with "chroot-only" it's expected that there are no /dev, /proc and
+          # /sys file systems available.
+          #
+          # However, if this suddenly becomes true, the attack surface will
+          # increase, so let's explicitly set these options to true/false
+          # depending on the mode.
+          MountAPIVFS = wantsAPIVFS;
+          PrivateDevices = wantsAPIVFS;
+          PrivateTmp = wantsAPIVFS;
+          PrivateUsers = wantsAPIVFS;
+          ProtectControlGroups = wantsAPIVFS;
+          ProtectKernelModules = wantsAPIVFS;
+          ProtectKernelTunables = wantsAPIVFS;
         };
         confinement.packages = let
           startOnly = config.serviceConfig.RootDirectoryStartOnly or false;
