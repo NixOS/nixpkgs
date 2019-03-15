@@ -37,7 +37,7 @@ xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/system/et
  </para>
  <para xml:id="para-module-syn">
   In <xref
-linkend="sec-configuration-syntax"/>, we saw the following structure
+linkend="sec-configuration-file"/>, we saw the following structure
   of NixOS modules:
 <programlisting>
 { config, pkgs, ... }:

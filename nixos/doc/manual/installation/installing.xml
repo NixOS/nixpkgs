@@ -314,7 +314,7 @@
      <emphasis>declarative</emphasis> configuration model: you create or edit a
      description of the desired configuration of your system, and then NixOS
      takes care of making it happen. The syntax of the NixOS configuration file
-     is described in <xref linkend="sec-configuration-syntax"/>, while a list
+     is described in <xref linkend="sec-options-management"/>, while a list
      of available configuration options appears in
      <xref
     linkend="ch-options"/>. A minimal example is shown in

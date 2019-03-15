@@ -4,6 +4,19 @@
     version="5.0"
     xml:id="sec-configuration-file">
  <title>NixOS Configuration File</title>
+ <para>
+  The NixOS configuration file
+  <filename>/etc/nixos/configuration.nix</filename> is actually a <emphasis>Nix
+  expression</emphasis>, which is the Nix package manager’s purely functional
+  language for describing how to build packages and configurations. This means
+  you have all the expressive power of that language at your disposal,
+  including the ability to abstract over common patterns, which is very useful
+  when managing complex systems. The syntax and semantics of the Nix language
+  are fully described in the
+  <link xlink:href="http://nixos.org/nix/manual/#chap-writing-nix-expressions">
+  Nix manual</link>, but here we give a short overview of the most important
+  constructs useful in NixOS configuration files.
+ </para>
 
  <para>
   The NixOS configuration file generally looks like this:
