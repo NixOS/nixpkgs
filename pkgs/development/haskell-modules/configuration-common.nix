@@ -1237,4 +1237,7 @@ self: super: {
       };
   }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck]));
 
+  # Fix build with attr-2.4.48 (see #53716)
+  xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
