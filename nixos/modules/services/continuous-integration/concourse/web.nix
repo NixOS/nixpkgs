@@ -215,7 +215,12 @@ in
         else
           [ "--postgres-socket" cfg.postgres-socket ]
       )
-      ++ optionals (!isNull cfg.postgres-password) [ "--postgres-password" cfg.postgres-password ];
+      ++ optionals
+        (!isNull cfg.postgres-password)
+        [
+          "--postgres-password"
+          (replaceChars ["$"] ["$$"] cfg.postgres-password)
+        ];
     args = concatStringsSep " " (map escapeShellArgs [regularArgs extraArgs extraFlags]);
   in
     mkIf cfg.enable {
