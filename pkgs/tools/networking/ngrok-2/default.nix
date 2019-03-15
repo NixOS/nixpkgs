@@ -4,17 +4,17 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "ngrok-${version}";
-  version = "2.2.8";
+  version = "2.3.18";
 
   src = if stdenv.isLinux && stdenv.isi686 then fetchurl {
-    url = "https://bin.equinox.io/a/bAxP1reZDmJ/ngrok-${version}-linux-386.tar.gz";
-    sha256 = "0s5ymlaxrvm13q3mlvfirh74sx60qh56c5sgdma2r7q5qlsq41xg";
+    url = "https://bin.equinox.io/a/dxXUN9EdeBT/ngrok-${version}-linux-386.tar.gz";
+    sha256 = "108x3qchcklbkn7n3af0zxwpwmfp7wddblsn62ycnn9krcxhrn6f";
   } else if stdenv.isLinux && stdenv.isx86_64 then fetchurl {
-    url = "https://bin.equinox.io/a/iVLSfdAz1X4/ngrok-${version}-linux-amd64.tar.gz";
-    sha256 = "1mn9iwgy6xzrjihikwc2k2j59igqmph0cwx17qp0ziap9lp5xxad";
+    url = "https://bin.equinox.io/a/hUH1g1ZF2Gp/ngrok-${version}-linux-amd64.tar.gz";
+    sha256 = "04zg6m8kv77wrh4bm5gpkzh1h348dlml04m786yb44x07klkc4lc";
   } else if stdenv.isDarwin then fetchurl {
-    url = "https://bin.equinox.io/a/n1hZCd9dMfL/ngrok-${version}-darwin-386.tar.gz";
-    sha256 = "0rzy3m1zdnlm1mvz2q5lw359llspva7lr4fbzjwhxwznnszqpmh1";
+    url = "https://bin.equinox.io/a/dGemqkBEuXf/ngrok-${version}-darwin-386.tar.gz";
+    sha256 = "0zgfr0wmk7alz3qlal6x2knmxcp31gkljlhqgidi4d6wvv4c17zq";
   } else throw "platform ${stdenv.hostPlatform.system} not supported!";
 
   sourceRoot = ".";
