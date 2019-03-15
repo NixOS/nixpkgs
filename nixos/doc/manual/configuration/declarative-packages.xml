@@ -14,10 +14,9 @@
 <programlisting>
 <xref linkend="opt-environment.systemPackages"/> = [ pkgs.thunderbird ];
 </programlisting>
-  The <literal>pkgs</literal> variable is used to reference packages in your
-  root channel. The effect of this specification is that the Thunderbird
-  package from your root Nixpkgs channel will be built or downloaded as part of
-  the system when you run <command>nixos-rebuild switch</command>.
+  The effect of this specification is that the Thunderbird package from Nixpkgs
+  will be built or downloaded as part of the system when you run
+  <command>nixos-rebuild switch</command>.
  </para>
 
  <para>
@@ -28,10 +27,13 @@ nixos.firefox   firefox-23.0   Mozilla Firefox - the browser, reloaded
 <replaceable>...</replaceable>
 </screen>
   The first column in the output is the <emphasis>attribute name</emphasis>,
-  such as <literal>nixos.thunderbird</literal>. The <literal>nixos</literal>
-  prefix tells us that we want to get the package from the `nixos` channel.
-  Some systems have other channels installed, such as `nixpkgs` or custom
-  channels for development purposes.
+  such as <literal>nixos.thunderbird</literal>.
+ </para>
+ <para>
+  Note: the <literal>nixos</literal> prefix tells us that we want to get the
+  package from the <literal>nixos</literal> channel and works only in CLI tools.
+
+  In declarative configuration use <literal>pkgs</literal> prefix (variable).
  </para>
 
  <para>
