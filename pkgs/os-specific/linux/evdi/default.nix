@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "evdi-${version}";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     rev = "v${version}";
-    sha256 = "0jy0ia5fsx54d2wv4d2jqnc8rc5x16781a3bcb857apc47zr387h";
+    sha256 = "1mv2sydynhqxhzyqqma4hjpm8y7pzxpg1gdmwnjq8h2680q70m91";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
