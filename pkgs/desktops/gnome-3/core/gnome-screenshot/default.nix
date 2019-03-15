@@ -4,13 +4,13 @@
 
 let
   pname = "gnome-screenshot";
-  version = "3.30.0";
+  version = "3.32.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "06dx3svxq6sar4913mrz5lzb7hmc66wck138vmyxj8x8iv1iw0w8";
+    sha256 = "09ha7dizjm5ymqpjyrqd10ijfb3xlqc1mwg9ajkrbfry11q9yq4b";
   };
 
   doCheck = true;
