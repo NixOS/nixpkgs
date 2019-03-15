@@ -17,14 +17,10 @@ stdenv.mkDerivation {
     mkdir $out
     mkdir $out/bin
 
-    cp -R * $out/
+    cp -R usr/share/flexibee $out/
+    cp usr/bin/flexibee $out/bin/.flexibee-wrapped
 
-    # Remove unused files
-    rm  $out/usr/bin/winstrom
-    rm -R $out/usr/sbin
-    rm -R $out/etc
-
-    makeWrapper $out/usr/bin/flexibee $out/bin/flexibee --set JAVA_HOME ${jre} --set FLEXIBEE_DIR "$out/usr/share/flexibee"
+    makeWrapper $out/bin/.flexibee-wrapped $out/bin/flexibee --set JAVA_HOME ${jre} --set FLEXIBEE_DIR "$out/flexibee"
   '';
 
   meta = {
