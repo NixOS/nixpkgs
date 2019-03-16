@@ -1169,9 +1169,6 @@ self: super: {
   # });
   libnix = dontCheck super.libnix;
 
-  # https://github.com/jmillikin/chell/issues/1
-  chell = super.chell.override { patience = self.patience_0_1_1; };
-
   # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
   xmobar = dontCheck super.xmobar;
 
@@ -1219,8 +1216,8 @@ self: super: {
 
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  pandoc = doDistribute (dontCheck super.pandoc_2_6);
-  pandoc-citeproc = self.pandoc-citeproc_0_16_1;
+  pandoc = doDistribute super.pandoc_2_7;
+  pandoc-citeproc = self.pandoc-citeproc_0_16_1_3;
 
   # https://github.com/qfpl/tasty-hedgehog/issues/24
   tasty-hedgehog = dontCheck super.tasty-hedgehog;
@@ -1228,12 +1225,12 @@ self: super: {
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
     (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
-      version = "2019.02.22-git";
+      version = "20190307-git";
       src = pkgs.fetchFromGitHub {
         owner = "haskell-CI";
         repo = "haskell-ci";
-        rev = "3a861aa7d6099296a9ac1003c7218e3ed831ca8c";
-        sha256 = "0hwfg3ab5mh3xml3nlabbr1x8bhg26gw6sxn8bgb8bh6r0ccq9pi";
+        rev = "2baceb59bc2f36e798ff9fb6e8865c449f01d3a2";
+        sha256 = "1wqhqajxni6h9rrj22xj6421d4m0gs8qk2glghpdp307ns5gr2j4";
       };
   }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck]));
 
