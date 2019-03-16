@@ -5447,6 +5447,10 @@ in
 
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
 
+  shadowsocks-rust = callPackage ../tools/networking/shadowsocks-rust {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   sharutils = callPackage ../tools/archivers/sharutils { };
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
