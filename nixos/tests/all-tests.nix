@@ -135,6 +135,7 @@ in
   leaps = handleTest ./leaps.nix {};
   lidarr = handleTest ./lidarr.nix {};
   #lightdm = handleTest ./lightdm.nix {};
+  limesurvey = handleTest ./limesurvey.nix {};
   login = handleTest ./login.nix {};
   #logstash = handleTest ./logstash.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
