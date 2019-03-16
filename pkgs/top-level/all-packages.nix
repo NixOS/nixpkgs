@@ -19829,6 +19829,8 @@ in
 
   testssl = callPackage ../applications/networking/testssl { };
 
+  ulauncher = callPackage ../applications/misc/ulauncher { };
+
   umurmur = callPackage ../applications/networking/umurmur { };
 
   udocker = pythonPackages.callPackage ../tools/virtualization/udocker { };
