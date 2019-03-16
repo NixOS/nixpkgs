@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dhfw6d9z4dv82q9zg2g025hgr179kamz9chy7v5w9b71aam8jf8";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig attr ];
   buildInputs = [ openssl attr keyutils asciidoc libxslt ];
 
   patches = [ ./xattr.patch ];
