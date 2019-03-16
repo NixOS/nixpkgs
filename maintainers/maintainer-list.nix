@@ -62,6 +62,19 @@
     github = "aanderse";
     name = "Aaron Andersen";
   };
+  aaronjanse = {
+    email = "aaron@ajanse.me";
+    github = "aaronjanse";
+    name = "Aaron Janse";
+    keys = [
+      { longkeyid = "rsa2048/0x651BD4B37D75E234"; # Email only
+        fingerprint = "490F 5009 34E7 20BD 4C53  96C2 651B D4B3 7D75 E234";
+      }
+      { longkeyid = "rsa4096/0xBE6C92145BFF4A34"; # Git, etc
+        fingerprint = "CED9 6DF4 63D7 B86A 1C4B  1322 BE6C 9214 5BFF 4A34";
+      }
+    ];
+  };
   aaronschif = {
     email = "aaronschif@gmail.com";
     github = "aaronschif";
