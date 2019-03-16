@@ -76,6 +76,7 @@ rec {
     armv7r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
     armv7m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
     armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
+    armv7    = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
     armv8a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
     armv8r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
     armv8m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
@@ -106,7 +107,7 @@ rec {
 
     wasm32   = { bits = 32; significantByte = littleEndian; family = "wasm"; };
     wasm64   = { bits = 64; significantByte = littleEndian; family = "wasm"; };
-    
+
     alpha    = { bits = 64; significantByte = littleEndian; family = "alpha"; };
 
     avr      = { bits = 8; family = "avr"; };
