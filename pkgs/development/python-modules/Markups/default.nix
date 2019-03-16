@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "A wrapper around various text markup languages.";
     homepage = https://github.com/retext-project/pymarkups;
-    license = lib.licenses.bsd;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ klntsky ];
   };
 }
