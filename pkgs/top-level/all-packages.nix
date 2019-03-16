@@ -5189,6 +5189,8 @@ in
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
+  retext = callPackage ../applications/editors/retext { };
+
   richgo = callPackage ../development/tools/richgo {  };
 
   rst2html5 = callPackage ../tools/text/rst2html5 { };

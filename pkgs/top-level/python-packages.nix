@@ -3123,6 +3123,8 @@ in {
 
   marisa-trie = callPackage ../development/python-modules/marisa-trie { };
 
+  Markups = callPackage ../development/python-modules/Markups { };
+
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
@@ -3958,6 +3960,8 @@ in {
   pysqlite = callPackage ../development/python-modules/pysqlite { };
 
   pysvn = callPackage ../development/python-modules/pysvn { };
+
+  python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 
