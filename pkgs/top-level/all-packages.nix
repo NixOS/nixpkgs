@@ -4850,6 +4850,8 @@ in
 
   pdfcrack = callPackage ../tools/security/pdfcrack { };
 
+  pdfsandwich = callPackage ../tools/typesetting/pdfsandwich { };
+
   pdftag = callPackage ../tools/graphics/pdftag { };
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
