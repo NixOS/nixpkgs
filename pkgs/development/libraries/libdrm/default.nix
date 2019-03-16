@@ -1,18 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light }:
+{ stdenv, fetchgit, meson, ninja, pkgconfig,
+  libpthreadstubs, libpciaccess, valgrind-light }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.97";
+  name = "libdrm-${version}";
+  version = "2.4.97";
+  rev = "${name}";
+  sha256 = "065w0zyyfv3yzlw76pvsdjrkxd46wp5cwv472766is0mbi212rdp";
 
-  src = fetchurl {
-    url = "https://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "08yimlp6jir1rs5ajgdx74xa5qdzcqahpdzdk0rmkmhh7vdcrl3p";
+  src = fetchgit {
+    url = "https://gitlab.freedesktop.org/mesa/drm";
+    inherit rev sha256;
   };
 
   outputs = [ "out" "dev" "bin" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig meson ninja ];
   buildInputs = [ libpthreadstubs libpciaccess valgrind-light ];
-    # libdrm as of 2.4.70 does not actually do anything with udev.
 
   patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
 
@@ -25,12 +28,14 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = [ "--enable-install-test-programs" ]
+  mesonFlags =
+    [ "-Dinstall-test-programs=true" ]
     ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
       [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-C"
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-intel"
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-Dintel=false"
     ;
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = https://dri.freedesktop.org/libdrm/;
