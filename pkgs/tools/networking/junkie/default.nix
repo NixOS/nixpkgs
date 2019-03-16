@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "rixed";
     repo = "junkie";
     rev = "v${version}";
-    sha256 = "c9b57bd6e06d4f90e6a88b775f33fa00f66313ba0f663df70198eddf1d4be298";
+    sha256 = "0kfdjgch667gfb3qpiadd2dj3fxc7r19nr620gffb1ahca02wq31";
   };
   buildInputs = [ libpcap guile openssl ];
   nativeBuildInputs = [ pkgconfig ];
