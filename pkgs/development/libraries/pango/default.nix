@@ -26,6 +26,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     harfbuzz fribidi
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ApplicationServices
     Carbon
     CoreGraphics
     CoreText
