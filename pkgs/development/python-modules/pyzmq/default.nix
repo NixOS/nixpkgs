@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "17.1.3";
+  version = "18.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "83722236bd6ae6a07dec0cb728906785040e91826c7575709a258b4e21d0f812";
+    sha256 = "0k3y6k3l9dmih3qmc4vrw26dpjggdk5c6r6806qhgjgpyq2rhccb";
   };
 
   checkInputs = [  pytest tornado ];
