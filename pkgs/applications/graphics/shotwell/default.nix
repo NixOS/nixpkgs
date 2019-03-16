@@ -1,31 +1,93 @@
-{ fetchurl, stdenv, meson, ninja, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
-, webkitgtk, pkgconfig, gnome3, gst_all_1, libgudev, libraw, glib, json-glib, gcr
-, gettext, desktop-file-utils, gdk_pixbuf, librsvg, wrapGAppsHook
-, gobject-introspection, itstool, libgdata, python3 }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, gtk3
+, libexif
+, libgphoto2
+, libsoup
+, libxml2
+, vala
+, sqlite
+, webkitgtk
+, pkgconfig
+, gnome3
+, gst_all_1
+, libgudev
+, libraw
+, glib
+, json-glib
+, gcr
+, libgee
+, gexiv2
+, librest
+, gettext
+, desktop-file-utils
+, gdk_pixbuf
+, librsvg
+, wrapGAppsHook
+, gobject-introspection
+, itstool
+, libgdata
+, python3
+}:
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
-let
+stdenv.mkDerivation rec {
   pname = "shotwell";
   version = "0.30.2";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0pam0si110vkc65kh59lrmgkv91f9zxmf1gpfm99ixjgw25rfi8r";
   };
 
+  patches = [
+    # fix building against gexiv2 0.12
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/shotwell/commit/318c30394f4661e8d96e4fd906356a0736a30504.patch;
+      sha256 = "0wnvdia25dw7wzr0ix5y26mrfpli8jxc8w9rywrd988q3zr1y54g";
+    })
+  ];
+
   nativeBuildInputs = [
-    meson ninja vala pkgconfig itstool gettext desktop-file-utils python3 wrapGAppsHook gobject-introspection
+    meson
+    ninja
+    vala
+    pkgconfig
+    itstool
+    gettext
+    desktop-file-utils
+    python3
+    wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gtk3 libexif libgphoto2 libsoup libxml2 sqlite webkitgtk
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee
-    libgudev gnome3.gexiv2 gnome3.gsettings-desktop-schemas
-    libraw json-glib glib gdk_pixbuf librsvg gnome3.rest
-    gcr gnome3.adwaita-icon-theme libgdata
+    gtk3
+    libexif
+    libgphoto2
+    libsoup
+    libxml2
+    sqlite
+    webkitgtk
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    libgee
+    libgudev
+    gexiv2
+    gnome3.gsettings-desktop-schemas
+    libraw
+    json-glib
+    glib
+    gdk_pixbuf
+    librsvg
+    librest
+    gcr
+    gnome3.adwaita-icon-theme
+    libgdata
   ];
 
   postPatch = ''
