@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gettext, pth, libgpgerror }:
+{ fetchurl, stdenv, gettext, pth, libgpgerror, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "libassuan-2.5.2";
@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # libassuan-config
 
-  buildInputs = [ libgpgerror pth gettext];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  buildInputs = [ pth gettext ];
+
+  configureFlags = [
+    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+  ];
 
   doCheck = true;
 
