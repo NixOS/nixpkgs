@@ -1195,8 +1195,6 @@ in {
 
   csscompressor = callPackage ../development/python-modules/csscompressor {};
 
-  csvkit =  callPackage ../development/python-modules/csvkit { };
-
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
   cupy = callPackage ../development/python-modules/cupy {

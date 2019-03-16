@@ -1250,6 +1250,8 @@ in
 
   crudini = callPackage ../tools/misc/crudini { };
 
+  csvkit = callPackage ../tools/text/csvkit { };
+
   cucumber = callPackage ../development/tools/cucumber {};
 
   daemontools = callPackage ../tools/admin/daemontools { };
