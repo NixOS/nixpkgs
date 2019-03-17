@@ -26,12 +26,16 @@ buildPythonPackage rec {
     sha256 = "19ixs811ndx8qh72dif0ywjss3rv7pf1khsgg6rvfjb9nw8wgjc2";
   } else {
     python = "py2";
-    sha256 = "1mkyb5gn952i4s7fmc9ay4yh74ysrqbiqna6dl1qmahjpbaavbf5";
+    sha256 = "0qpv6jsf6jjvdl95qvarn006kfj5a99mq925d73xg4af50ssvkrf";
   }));
 
-  propagatedBuildInputs = [ numpy werkzeug protobuf
-                            markdown
-                            grpcio absl-py ]; # ++ lib.optional (!isPy3k) futures;
+  propagatedBuildInputs = [
+    numpy
+    werkzeug
+    protobuf
+    markdown
+    grpcio absl-py
+  ] ++ lib.optional (!isPy3k) futures;
 
   meta = with stdenv.lib; {
     description = "TensorFlow's Visualization Toolkit";
