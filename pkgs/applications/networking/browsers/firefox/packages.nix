@@ -58,11 +58,6 @@ rec {
       description = "A web browser built from Firefox Extended Support Release source tree";
       knownVulnerabilities = [ "Support ended in August 2018." ];
     };
-    updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-52-unwrapped";
-      ffversionSuffix = "esr";
-      versionKey = "ffversion";
-    };
   };
 
   firefox-esr-60 = common rec {
