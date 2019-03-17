@@ -11,6 +11,19 @@ in
 # "${mktplcRef.publisher}.${mktplcRef.name}".
 #
 rec {
+
+  alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vscode-hie-server";
+      publisher = "alanz";
+      version = "0.0.25"; # see the note above
+      sha256 = "0m21w03v94qxm0i54ki5slh6rg7610zfxinfpngr0hfpgw2nnxvc";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   bbenoist.Nix = buildVscodeMarketplaceExtension {
     mktplcRef = {
         name = "Nix";
