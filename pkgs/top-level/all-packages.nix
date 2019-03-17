@@ -19522,7 +19522,6 @@ in
   spotify = callPackage ../applications/audio/spotify {
     libgcrypt = libgcrypt_1_5;
     libpng = libpng12;
-    ffmpeg = ffmpeg_2;
     curl = curl.override {
       sslSupport = false; gnutlsSupport = true;
     };
