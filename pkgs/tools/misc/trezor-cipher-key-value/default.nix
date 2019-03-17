@@ -30,7 +30,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Pipeline utlility to encrypt/decrypt values using TREZOR device";
     homepage = https://www.github.com/xaionaro-go/trezorCipherKeyValue;
-    license = stdenv.lib.licenses.unfree;
+    license = stdenv.lib.licenses.gpl3;
     maintainers = with maintainers; [ petrkr ];
     platforms = platforms.linux;
   };
