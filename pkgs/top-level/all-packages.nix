@@ -17969,6 +17969,8 @@ in
 
   kanboard = callPackage ../applications/misc/kanboard { };
 
+  kanshi = callPackage ../tools/misc/kanshi { };
+
   kdeApplications =
     let
       mkApplications = import ../applications/kde;

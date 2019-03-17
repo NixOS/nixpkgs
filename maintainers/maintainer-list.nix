@@ -523,6 +523,11 @@
     email = "sivaraman.balaji@gmail.com";
     name = "Balaji Sivaraman";
   };
+  balsoft = {
+    email = "balsoft75@gmail.com";
+    github = "balsoft";
+    name = "Alexander Bantyev";
+  };
   bandresen = {
     email = "bandresen@gmail.com";
     github = "bandresen";
