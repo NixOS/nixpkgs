@@ -112,6 +112,8 @@ stdenv.mkDerivation rec {
     sed -i '/TestCredentialNoSetGroups/areturn' src/os/exec/exec_posix_test.go
     sed -i '/TestRead0/areturn' src/os/os_test.go
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
+    sed -i '/TestBadLocationErrMsg/areturn' src/time/zoneinfo_test.go
+    sed -i '/TestTerminalSignal/areturn' src/os/signal/signal_cgo_test.go
 
     sed -i '/TestGoInstallRebuildsStalePackagesInOtherGOPATH/areturn' src/cmd/go/go_test.go
     sed -i '/TestBuildDashIInstallsDependencies/areturn' src/cmd/go/go_test.go
@@ -230,6 +232,8 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   disallowedReferences = [ goBootstrap ];
+
+  __darwinAllowLocalNetworking = true;  # tests need localhost networking
 
   meta = with stdenv.lib; {
     branch = "1.11";
