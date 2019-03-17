@@ -1,6 +1,6 @@
 { go, cacert, git, lib, removeReferencesTo, stdenv }:
 
-{ name
+{ name ? "${args'.pname}-${args'.version}"
 , src
 , buildInputs ? []
 , nativeBuildInputs ? []
