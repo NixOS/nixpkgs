@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, libudev }:
+{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, udev }:
 rustPlatform.buildRustPackage 
 {
   pname = "kanshi-unstable";
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage
     sha256 = "10lfdan86bmwazpma6ixnv46z9cnf879gxln8gx87v7a1x3ss0bh";
   };
 
-  buildInputs = [ pkgconfig libudev ];
+  buildInputs = [ pkgconfig udev ];
 
   cargoSha256 = "sha256:0lf1zfmq9ypxk86ma0n4nczbklmjs631wdzfx4wd3cvhghyr8nkq";
 
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage
     homepage = "https://github.com/emersion/kanshi";
     downloadPage = "https://github.com/emersion/kanshi";
     license = stdenv.lib.licenses.mit;
-    maintainers = stdenv.lib.maintainers.balsoft;
+    maintainers = [ stdenv.lib.maintainers.balsoft ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
