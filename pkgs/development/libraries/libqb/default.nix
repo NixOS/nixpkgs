@@ -21,7 +21,7 @@ stdenv.mkDerivation rec{
   ];
 
   # Purity fix
-  preFixup = ''
+  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
     grep -q "$TMPDIR" "$out"/lib/libqb.la
     sed -i "s,\(inherited_linker_flags='\).*,\1'," "$out"/lib/libqb.la
   '';
