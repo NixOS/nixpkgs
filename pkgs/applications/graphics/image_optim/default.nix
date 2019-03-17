@@ -27,8 +27,7 @@ assert withSvgo           -> svgo != null;
 with lib;
 
 let
-  optionalDepsPath = makeBinPath (
-    []
+  optionalDepsPath = []
     ++ optional withPngcrush pngcrush
     ++ optional withPngout pngout
     ++ optional withAdvpng advancecomp
@@ -39,8 +38,7 @@ let
     ++ optional withJpegrecompress jpeg-archive
     ++ optional withJpegtran libjpeg
     ++ optional withGifsicle gifsicle
-    ++ optional withSvgo svgo
-  );
+    ++ optional withSvgo svgo;
 in
 
 bundlerApp {
@@ -55,7 +53,7 @@ bundlerApp {
 
   postBuild = ''
     wrapProgram $out/bin/image_optim \
-      --prefix PATH : ${optionalDepsPath}
+      --prefix PATH : ${makeBinPath optionalDepsPath}
   '';
 
   meta = with lib; {
