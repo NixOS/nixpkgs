@@ -2672,6 +2672,8 @@ in
 
   ferm = callPackage ../tools/networking/ferm { };
 
+  ffsend = callPackage ../tools/misc/ffsend { };
+
   fgallery = callPackage ../tools/graphics/fgallery { };
 
   flannel = callPackage ../tools/networking/flannel { };
