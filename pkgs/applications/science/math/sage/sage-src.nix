@@ -61,6 +61,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Since sage unfortunately does not release bugfix releases, packagers must
+  # fix those bugs themselves. This is for critical bugfixes, where "critical"
+  # == "causes (transient) doctest failures / somebody complained".
+  bugfixPatches = [
+    # Transient doctest failure in src/sage/modular/abvar/torsion_subgroup.py
+    # https://trac.sagemath.org/ticket/27477
+    (fetchpatch {
+      name = "sig_on_in_matrix_sparce.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id2=10407524b18659e14e184114b61c043fb816f3c2&id=c9b0cc9d0b8748ab85e568f8f57f316c5e8cbe54";
+      sha256 = "0wgp7yvn9sm1ynlhcr4l0hzmvr2n28llg4xc01p6k1zz4im64c17";
+    })
+  ];
+
   # Patches needed because of package updates. We could just pin the versions of
   # dependencies, but that would lead to rebuilds, confusion and the burdons of
   # maintaining multiple versions of dependencies. Instead we try to make sage
@@ -126,7 +139,7 @@ stdenv.mkDerivation rec {
     ./patches/ignore-pip-deprecation.patch
   ];
 
-  patches = nixPatches ++ packageUpgradePatches;
+  patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
 
   postPatch = ''
     # make sure shebangs etc are fixed, but sage-python23 still works
