@@ -302,6 +302,7 @@ tpope/vim-eunuch
 tpope/vim-fireplace
 tpope/vim-flagship
 tpope/vim-fugitive
+tpope/vim-liquid
 tpope/vim-obsession
 tpope/vim-pathogen
 tpope/vim-projectionist

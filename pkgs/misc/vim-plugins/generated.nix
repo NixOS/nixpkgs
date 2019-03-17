@@ -2928,6 +2928,17 @@ let
     };
   };
 
+  vim-liquid = buildVimPluginFrom2Nix {
+    pname = "vim-liquid";
+    version = "2016-02-11";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-liquid";
+      rev = "209f77c9550a90b0b88492c93852195c171f6ebd";
+      sha256 = "1ghspgjr6r0csmqacmsmkvrqvfgplx033yb3qwzddby991fpvfaa";
+    };
+  };
+
   vim-localvimrc = buildVimPluginFrom2Nix {
     pname = "vim-localvimrc";
     version = "2018-11-06";
