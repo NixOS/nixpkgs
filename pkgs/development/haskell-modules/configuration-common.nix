@@ -1027,6 +1027,11 @@ self: super: {
     testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
+  arbtt = overrideCabal super.arbtt (drv: {
+    preCheck = ''
+      for n in $PWD/dist/build/*; do PATH+=":$n"; done
+    '';
+  });
 
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
@@ -1155,8 +1160,6 @@ self: super: {
   generic-lens = dontCheck super.generic-lens;
 
   xmonad-extras = doJailbreak super.xmonad-extras;
-
-  arbtt = doJailbreak super.arbtt;
 
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;

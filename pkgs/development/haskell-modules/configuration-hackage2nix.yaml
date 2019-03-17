@@ -2823,7 +2823,6 @@ broken-packages:
   - arbor-monad-metric
   - arbor-monad-metric-datadog
   - arbor-postgres
-  - arbtt
   - archiver
   - archlinux
   - archlinux-web
