@@ -3624,6 +3624,8 @@ in
 
   jp2a = callPackage ../applications/misc/jp2a { };
 
+  jpeg-archive = callPackage ../applications/graphics/jpeg-archive { };
+
   jpeginfo = callPackage ../applications/graphics/jpeginfo { };
 
   jpegoptim = callPackage ../applications/graphics/jpegoptim { };
