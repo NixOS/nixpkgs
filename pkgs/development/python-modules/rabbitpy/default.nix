@@ -14,12 +14,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gmr";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "0fd80zlr4p2sh77rxyyfi9l0h2zqi2csgadr0rhnpgpqsy10qck6";
   };
 
   propagatedBuildInputs = [ pamqp ];
-  doCheck = true;
   checkInputs = [ mock nose ];
 
   checkPhase = ''
