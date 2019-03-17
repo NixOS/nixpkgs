@@ -11,11 +11,12 @@ let
   opString = lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygemsSrc = import ./rubygems-src.nix { inherit fetchurl; };
-  rubygemsPatch = fetchpatch {
-    url = "https://github.com/zimbatm/rubygems/compare/v2.6.6...v2.6.6-nix.patch";
-    sha256 = "0297rdb1m6v75q8665ry9id1s74p9305dv32l95ssf198liaihhd";
-  };
+  rubygemsSrc = import ./rubygems/src.nix { inherit fetchurl; };
+  rubygemsPatches = [
+    rubygems/0001-add-post-extract-hook.patch
+    rubygems/0002-binaries-with-env-shebang.patch
+    rubygems/0003-gem-install-default-to-user.patch
+  ];
   unpackdir = obj:
     lib.removeSuffix ".tgz"
       (lib.removeSuffix ".tar.gz" obj.name);
@@ -99,10 +100,12 @@ let
             patchLevel = ver.patchLevel;
           })."${ver.majMinTiny}";
 
+        inherit rubygemsPatches;
+
         postUnpack = ''
           cp -r ${unpackdir rubygemsSrc} ${sourceRoot}/rubygems
           pushd ${sourceRoot}/rubygems
-          patch -p1 < ${rubygemsPatch}
+          cat $rubygemsPatchesArray | patch -p1
           popd
         '';
 
