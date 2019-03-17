@@ -7,6 +7,9 @@
 let
   # TO UPDATE: just execute the ./update.sh script (won't do anything if there is no update)
   # "rev" decides what is actually being downloaded
+  # If an update breaks things, one of those might have valuable info:
+  # https://aur.archlinux.org/packages/spotify/
+  # https://community.spotify.com/t5/Desktop-Linux
   version = "1.0.96.181.gf6bc1b6b-12";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
