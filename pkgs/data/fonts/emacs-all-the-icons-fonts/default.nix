@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "3.1.1";
+  version = "3.2.0";
 in fetchzip {
   name = "emacs-all-the-icons-fonts-${version}";
 
