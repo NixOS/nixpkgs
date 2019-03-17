@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zuki-themes";
-  version = "3.30-1";
+  version = "3.32-1";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d7i0jhjiarqnwkc1k505bw8r9bvbwk3x8yzqmc3vnwcd7mr3m9x";
+    sha256 = "0x6ghc7n5y7p0agm2yp7rygz9154f58s891zxzhd07wc2c4mzp0s";
   };
 
   buildInputs = [ gdk_pixbuf librsvg ];
