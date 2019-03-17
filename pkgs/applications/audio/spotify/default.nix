@@ -1,6 +1,6 @@
 { fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curl, zlib, gnome3
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
 , at-spi2-atk
 }:
 
@@ -26,7 +26,7 @@ let
     curl
     dbus
     expat
-    ffmpeg
+    ffmpeg_3
     fontconfig
     freetype
     gdk_pixbuf
@@ -118,8 +118,8 @@ stdenv.mkDerivation {
       ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
       ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
-      ln -s ${ffmpeg.out}/lib/libavcodec.so.56 $libdir/libavcodec-ffmpeg.so.56
-      ln -s ${ffmpeg.out}/lib/libavformat.so.56 $libdir/libavformat-ffmpeg.so.56
+      ln -s ${ffmpeg_3.out}/lib/libavcodec.so* $libdir
+      ln -s ${ffmpeg_3.out}/lib/libavformat.so* $libdir
 
       rpath="$out/share/spotify:$libdir"
 
