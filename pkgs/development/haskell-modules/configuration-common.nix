@@ -1156,7 +1156,13 @@ self: super: {
 
   xmonad-extras = doJailbreak super.xmonad-extras;
 
-  arbtt = doJailbreak super.arbtt;
+  arbtt = overrideCabal super.arbtt (drv: {
+    # See this for context:
+    # https://github.com/NixOS/nixpkgs/commit/7c04e3eb7571ad8ce31a15a22beb11bfe921a387
+    preCheck = ''
+      for n in $PWD/dist/build/*; do PATH+=":$n"; done
+    '';
+  });
 
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
