@@ -1159,8 +1159,6 @@ self: super: {
   # https://github.com/kcsongor/generic-lens/pull/65
   generic-lens = dontCheck super.generic-lens;
 
-  xmonad-extras = doJailbreak super.xmonad-extras;
-
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
 
