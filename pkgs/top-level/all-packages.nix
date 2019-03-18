@@ -3230,6 +3230,8 @@ in
 
   gtk-vnc = callPackage ../tools/admin/gtk-vnc {};
 
+  gtk-wave-cleaner = callPackage ../applications/audio/gtk-wave-cleaner { };
+
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
 
   gup = callPackage ../development/tools/build-managers/gup {};
