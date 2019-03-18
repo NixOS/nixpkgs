@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     # [1] http://refspecs.linuxbase.org/LSB_4.0.0/LSB-Core-generic/LSB-Core-generic/baselib---strdup-1.html
     # Use objcopy magic to make the change:
     stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
-      find ./ghc-${version}/rts -name "libHSrts*.a" -exec objcopy --redefine-sym __strdup=strdup {} \;
+      find ./ghc-${version}/rts -name "libHSrts*.a" -exec ''${OBJCOPY:-objcopy} --redefine-sym __strdup=strdup {} \;
     '';
 
   configurePlatforms = [ ];
