@@ -237,6 +237,8 @@ in
 
   mod = callPackage ../development/tools/mod { };
 
+  broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
+
   mht2htm = callPackage ../tools/misc/mht2htm { };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
@@ -870,6 +872,10 @@ in
 
   avahi = callPackage ../development/libraries/avahi (config.avahi or {});
 
+  avahi-compat = callPackage ../development/libraries/avahi ((config.avahi or {}) // {
+    withLibdnssdCompat = true;
+  });
+
   avro-c = callPackage ../development/libraries/avro-c { };
 
   avro-cpp = callPackage ../development/libraries/avro-c++ { boost = boost160; };
@@ -1249,6 +1255,8 @@ in
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
+
+  csvkit = callPackage ../tools/text/csvkit { };
 
   cucumber = callPackage ../development/tools/cucumber {};
 
@@ -2671,6 +2679,8 @@ in
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
   ferm = callPackage ../tools/networking/ferm { };
+
+  ffsend = callPackage ../tools/misc/ffsend { };
 
   fgallery = callPackage ../tools/graphics/fgallery { };
 
@@ -14149,7 +14159,7 @@ in
 
   sambaFull = samba4Full;
 
-  shairplay = callPackage ../servers/shairplay { };
+  shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
@@ -18505,9 +18515,7 @@ in
   multimon-ng = callPackage ../applications/radio/multimon-ng { };
 
   inherit (callPackages ../applications/networking/mumble {
-      avahi = avahi.override {
-        withLibdnssdCompat = true;
-      };
+      avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;
@@ -18515,9 +18523,7 @@ in
     }) mumble mumble_git murmur;
 
   inherit (callPackages ../applications/networking/mumble {
-      avahi = avahi.override {
-        withLibdnssdCompat = true;
-      };
+      avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;

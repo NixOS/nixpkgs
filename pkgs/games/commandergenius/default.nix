@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, SDL2, SDL2_image, pkgconfig
+{ stdenv, fetchFromGitLab, SDL2, SDL2_image, pkgconfig
 , libvorbis, libGL, boost, cmake, zlib, curl, SDL2_mixer, python3
 }:
 
 stdenv.mkDerivation rec {
   name = "commandergenius-${version}";
-  version = "2.2.2";
+  version = "2.3.2";
 
-  src = fetchFromGitHub {
-    owner = "gerstrong";
+  src = fetchFromGitLab {
+    owner = "Dringgstein";
     repo = "Commander-Genius";
     rev = "v${version}";
-    sha256 = "1mfw25pgr492ayqw3b85mwp20wh6anrr90gdy605nv1yjma62pmj";
+    sha256 = "1a8as56ycbq8csnssd5wqv2jand5c9yskld6prh3dn9gy96jbvgj";
   };
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer libGL boost libvorbis zlib curl python3 ];

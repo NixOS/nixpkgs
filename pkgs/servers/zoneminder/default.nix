@@ -142,9 +142,10 @@ in stdenv.mkDerivation rec {
     curl ffmpeg glib libjpeg libselinux libsepol mp4v2 mysql pcre perl polkit x264 zlib
     utillinuxMinimal # for libmount
   ] ++ (with perlPackages; [
+    # build-time dependencies
     DateManip DBI DBDmysql LWP SysMmap
-    # runtime dependencies not checked at build-time
-    JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
+    # run-time dependencies not checked at build-time
+    ClassStdFast DataDump JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
