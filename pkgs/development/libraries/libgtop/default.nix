@@ -1,22 +1,34 @@
-{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, perl, gettext, gobject-introspection, libtool, gnome3, gtk-doc }:
-let
+{ stdenv
+, fetchurl
+, glib
+, pkgconfig
+, perl
+, gettext
+, gobject-introspection
+, gnome3
+, gtk-doc
+}:
+
+stdenv.mkDerivation rec {
   pname = "libgtop";
   version = "2.40.0";
-in
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1m6jbqk8maa52gxrf223442fr5bvvxgb7ham6v039i3r1i62gwvq";
   };
 
-  propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig gnome3.gnome-common libtool gtk-doc perl gettext gobject-introspection ];
+  nativeBuildInputs = [
+    pkgconfig
+    gtk-doc
+    perl
+    gettext
+    gobject-introspection
+  ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  propagatedBuildInputs = [
+    glib
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
