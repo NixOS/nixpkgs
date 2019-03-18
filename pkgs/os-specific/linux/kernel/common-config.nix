@@ -681,6 +681,9 @@ let
       HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
+      # Enable AMD's ROCm GPU compute stack
+      HSA_AMD = whenAtLeast "4.20" yes;
+
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable memory hotplug support
       # Allows you to dynamically add & remove memory to a VM client running NixOS without requiring a reboot
