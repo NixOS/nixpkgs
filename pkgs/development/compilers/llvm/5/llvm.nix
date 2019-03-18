@@ -137,6 +137,7 @@ in stdenv.mkDerivation (rec {
 
   passthru.src = src;
 
+  requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
