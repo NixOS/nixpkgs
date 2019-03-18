@@ -1,23 +1,35 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, boost,
-  openal, glm, freetype, libGLU_combined, glew, SDL2,
-  dejavu_fonts, inkscape, optipng, imagemagick }:
+{ stdenv, fetchFromGitHub, cmake, zlib, boost
+, openal, glm, freetype, libGLU, SDL2, epoxy
+, dejavu_fonts, inkscape, optipng, imagemagick
+, withCrashReporter ? !stdenv.isDarwin
+,   qt5  ? null
+,   curl ? null
+,   gdb  ? null
+}:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "arx-libertatis-${version}";
-  version = "2018-08-26";
+  version = "2019-02-16";
 
   src = fetchFromGitHub {
     owner  = "arx";
     repo   = "ArxLibertatis";
-    rev    = "7b551739cc22fa25dae83bcc1a2b784ddecc729c";
-    sha256 = "1ybv3p74rywn0ajdbw7pyk7pd7py1db9h6x2pav2d28ndkkj4z8n";
+    rev    = "fbce6ccbc7f58583f33f29b838c38ef527edc267";
+    sha256 = "0qrygp09dqhpb5q6a1zl6l03qh9bi7xcahd8hy9177z1cix3k0kz";
   };
 
-  buildInputs = [
-    cmake zlib boost openal glm
-    freetype libGLU_combined glew SDL2 inkscape
-    optipng imagemagick
+
+  nativeBuildInputs = [
+    cmake inkscape imagemagick optipng
   ];
+
+  buildInputs = [
+    zlib boost openal glm
+    freetype libGLU SDL2 epoxy
+  ] ++ optionals withCrashReporter [ qt5.qtbase curl ]
+    ++ optionals stdenv.isLinux    [ gdb ];
 
   cmakeFlags = [
     "-DDATA_DIR_PREFIXES=$out/share"
@@ -33,7 +45,7 @@ stdenv.mkDerivation rec {
       $out/share/games/arx/misc/dejavusansmono.ttf
   '';
   
-  meta = with stdenv.lib; {
+  meta = {
     description = ''
       A cross-platform, open source port of Arx Fatalis, a 2002
       first-person role-playing game / dungeon crawler
