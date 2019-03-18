@@ -4644,6 +4644,10 @@ in
 
   ola = callPackage ../applications/misc/ola { };
 
+  olive-editor = libsForQt5.callPackage ../applications/video/olive-editor { 
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+  };
+
   omping = callPackage ../applications/networking/omping { };
 
   onioncircuits = callPackage ../tools/security/onioncircuits { };
