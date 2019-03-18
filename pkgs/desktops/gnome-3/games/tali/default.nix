@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Tali;
     description = "Sort of poker with dice and less money";
