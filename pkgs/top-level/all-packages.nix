@@ -3177,6 +3177,9 @@ in
   };
 
   gx = callPackage ../tools/package-management/gx { };
+
+  gxi = callPackage ../applications/editors/gxi { };
+
   gx-go = callPackage ../tools/package-management/gx/go { };
 
   efitools = callPackage ../tools/security/efitools { };
