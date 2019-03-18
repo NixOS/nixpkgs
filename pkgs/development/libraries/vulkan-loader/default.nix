@@ -28,10 +28,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  postInstall = ''
-    cp -r "${vulkan-headers}/include" "$dev"
-  '';
-
   meta = with stdenv.lib; {
     description = "LunarG Vulkan loader";
     homepage    = https://www.lunarg.com;
