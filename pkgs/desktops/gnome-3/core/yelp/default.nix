@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
+{ stdenv, gettext, fetchurl, webkitgtk, pkgconfig, gtk3, glib
 , gnome3, sqlite
 , itstool, libxml2, libxslt, gst_all_1
 , wrapGAppsHook }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "090klk2mhd87y5w228gd1ia1lvvxaj913lkvxzcb1apz8n0i8mm7";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig gettext itstool wrapGAppsHook ];
   buildInputs = [
     gtk3 glib webkitgtk sqlite
     libxml2 libxslt gnome3.yelp-xsl
