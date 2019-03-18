@@ -30,12 +30,14 @@ let
         };
 
         # NOTE: the openembedded-core project doesn't have a patch for 0.40.12
-        # or 0.42.4 just yet; we've fixed the single merge conflict in the
-        # patches below and checked them in here.
+        # We've fixed the single merge conflict in the following patch.
         #     0.40.12: https://github.com/openembedded/openembedded-core/raw/8553c52f174af4c8c433c543f806f5ed5c1ec48c/meta/recipes-devtools/vala/vala/disable-graphviz.patch
-        #     0.42.4:  https://github.com/openembedded/openembedded-core/raw/dfbbff39cfd413510abbd60930232a9c6b35d765/meta/recipes-devtools/vala/vala/disable-graphviz.patch
         "0.40" = ./disable-graphviz-0.40.12.patch;
-        "0.42" = ./disable-graphviz-0.42.4.patch;
+
+        "0.42" = fp {
+          commit = "f2b4f9ec6f44dced7f88df849cca68961419eeb8";
+          sha256 = "112qhdzix0d7lfpfcam1cxprzmfzpwypb1226m5ma1vq9qy0sn7g";
+        };
 
       }.${major} or (throw "no graphviz patch for this version of vala");
 
@@ -114,8 +116,8 @@ in rec {
 
   vala_0_42 = generic {
     major   = "0.42";
-    minor   = "4";
-    sha256  = "07jgkx812y7wq4cswwfsf1f4k3lq9hcjra45682bdi8a11nr0a5m";
+    minor   = "6";
+    sha256  = "14024gvs23q323fmd62hqd8jiypaxbjjvamyd782ixbhxmpz8x1p";
   };
 
   vala = vala_0_42;
