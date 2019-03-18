@@ -2,17 +2,20 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "hy-${version}";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "mirror://pypi/h/hy/${name}.tar.gz";
-    sha256 = "01vzaib1imr00j5d7f7xk44v800h06s3yv9inhlqm6f3b25ywpl1";
+    sha256 = "00lq38ppikrpyw38fn5iy9iwrsamsv22507cp146dsjbzkwjpzrd";
   };
+
+  patches = [ ./bytecode-error-handling.patch ];
 
   propagatedBuildInputs = with pythonPackages; [
     appdirs
     astor
     clint
+    fastentrypoints
     funcparserlib
     rply
   ];
