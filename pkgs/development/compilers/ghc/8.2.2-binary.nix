@@ -107,6 +107,15 @@ stdenv.mkDerivation rec {
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
+    '' +
+    # We're kludging a glibc bindist into working with non-glibc...
+    # Here we patch up the use of `__strdup` (part of glibc binary ABI)
+    # to instead use `strdup` since musl doesn't provide __strdup
+    # (`__strdup` is defined to be an alias of `strdup` anyway[1]).
+    # [1] http://refspecs.linuxbase.org/LSB_4.0.0/LSB-Core-generic/LSB-Core-generic/baselib---strdup-1.html
+    # Use objcopy magic to make the change:
+    stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      find ./ghc-${version}/rts -name "libHSrts*.a" -exec ''${OBJCOPY:-objcopy} --redefine-sym __strdup=strdup {} \;
     '';
 
   configurePlatforms = [ ];
