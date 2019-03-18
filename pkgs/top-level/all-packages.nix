@@ -5616,6 +5616,8 @@ in
 
   rescuetime = callPackage ../applications/misc/rescuetime { };
 
+  reuse = callPackage ../tools/package-management/reuse { };
+
   rewritefs = callPackage ../os-specific/linux/rewritefs { };
 
   rdiff-backup = callPackage ../tools/backup/rdiff-backup { };
