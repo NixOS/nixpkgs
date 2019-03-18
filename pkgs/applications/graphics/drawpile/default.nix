@@ -17,10 +17,10 @@
 
 stdenv.mkDerivation rec {
   name = "drawpile-${version}";
-  version = "2.1.2";
+  version = "2.1.3";
   src = fetchurl {
     url = "https://drawpile.net/files/src/drawpile-${version}.tar.gz";
-    sha256 = "02kkn317w9xhdqq2b4fq2bvipsnbp9945b6vghx3q2p6mckr9mhi";
+    sha256 = "0fngj5hfinj66xpij2h3ag79mgmqcfrjpwynxdbjr5brch25ldwj";
   };
   nativeBuildInputs = [
     extra-cmake-modules
