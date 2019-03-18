@@ -191,7 +191,23 @@ let
       ExecStartPre = "-${pkgs.docker}/bin/docker rm -f %n";
       ExecStop = "${pkgs.docker}/bin/docker stop %n";
       ExecStopPost = "-${pkgs.docker}/bin/docker rm -f %n";
-      ExecReload = "${pkgs.docker}/bin/docker restart %n";
+
+      ### There is no generalized way of supporting `reload` for docker
+      ### containers. Some containers may respond well to SIGHUP sent to their
+      ### init process, but it is not guaranteed; some apps have other reload
+      ### mechanisms, some don't have a reload signal at all, and some docker
+      ### images just have broken signal handling.  The best compromise in this
+      ### case is probably to leave ExecReload undefined, so `systemctl reload`
+      ### will at least result in an error instead of potentially undefined
+      ### behaviour.
+      ###
+      ### Advanced users can still override this part of the unit to implement
+      ### a custom reload handler, since the result of all this is a normal
+      ### systemd service from the perspective of the NixOS module system.
+      ###
+      # ExecReload = ...;
+      ###
+
       TimeoutStartSec = 0;
       TimeoutStopSec = 120;
       Restart = "always";
