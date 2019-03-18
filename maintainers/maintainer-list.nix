@@ -1840,6 +1840,11 @@
     github = "gridaphobe";
     name = "Eric Seidel";
   };
+  growpotkin = {
+   email = "Alex.Ameen.TX@gmail.com";
+   github = "BadDecisionsAlex";
+   name = "Alex Ameen";
+  };
   guibert = {
     email = "david.guibert@gmail.com";
     github = "dguibert";
