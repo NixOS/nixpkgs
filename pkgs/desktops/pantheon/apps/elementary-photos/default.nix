@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix build against gexiv2 0.12
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/elementary/photos/pull/498.patch";
-      sha256 = "13h3j3gkbj65sl154lqfxka1g3p0vbl0qdbcqqh0xiqk2r531nij";
+      url = "https://github.com/elementary/photos/commit/86df00ced674abb2ee430ea24422079cfabb314c.patch";
+      sha256 = "0836fzja93w36jf7ldqypsmnqn46mwsl93q41m104zn8qm0wrkmy";
     })
   ];
 
