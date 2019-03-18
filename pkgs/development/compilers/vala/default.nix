@@ -30,12 +30,20 @@ let
         };
 
         # NOTE: the openembedded-core project doesn't have a patch for 0.40.12
-        # or 0.42.4 just yet; we've fixed the single merge conflict in the
-        # patches below and checked them in here.
+        # We've fixed the single merge conflict in the following patch.
         #     0.40.12: https://github.com/openembedded/openembedded-core/raw/8553c52f174af4c8c433c543f806f5ed5c1ec48c/meta/recipes-devtools/vala/vala/disable-graphviz.patch
-        #     0.42.4:  https://github.com/openembedded/openembedded-core/raw/dfbbff39cfd413510abbd60930232a9c6b35d765/meta/recipes-devtools/vala/vala/disable-graphviz.patch
         "0.40" = ./disable-graphviz-0.40.12.patch;
-        "0.42" = ./disable-graphviz-0.42.4.patch;
+
+        "0.42" = fp {
+          commit = "f2b4f9ec6f44dced7f88df849cca68961419eeb8";
+          sha256 = "112qhdzix0d7lfpfcam1cxprzmfzpwypb1226m5ma1vq9qy0sn7g";
+        };
+
+        # NOTE: the openembedded-core project doesn't have a patch for 0.44.1
+        # We've reverted the addition of the "--disable-valadoc" option
+        # and then applied the following patch.
+        #     0.42.4: https://github.com/openembedded/openembedded-core/raw/f2b4f9ec6f44dced7f88df849cca68961419eeb8/meta/recipes-devtools/vala/vala/disable-graphviz.patch
+        "0.44" = ./disable-graphviz-0.44.1.patch;
 
       }.${major} or (throw "no graphviz patch for this version of vala");
 
@@ -88,15 +96,15 @@ let
       homepage = https://wiki.gnome.org/Projects/Vala;
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar lethalman peterhoeg ];
+      maintainers = with maintainers; [ antono jtojnar lethalman peterhoeg worldofpeace ];
     };
   });
 
 in rec {
   vala_0_36 = generic {
     major   = "0.36";
-    minor   = "17";
-    sha256  = "1f6qg40zd6jzhbwr3dy4fb66k4qs1xlk2whdyqh64zxxjw0k9pv7";
+    minor   = "18";
+    sha256  = "0csb9skgy663y05kl813dsarzjbfcdsmx5fvz13p8gas3hycciq9";
   };
 
   vala_0_38 = generic {
@@ -108,15 +116,21 @@ in rec {
 
   vala_0_40 = generic {
     major   = "0.40";
-    minor   = "12";
-    sha256  = "1nhk45w5iwg97q3cfybn0i4qz5w9qvk423ndpg6mq6cnna076snx";
+    minor   = "14";
+    sha256  = "0llid9b9cgjcrcclc0pw2skkssb7br7b2clq9cql3p14dl94gki0";
   };
 
   vala_0_42 = generic {
     major   = "0.42";
-    minor   = "4";
-    sha256  = "07jgkx812y7wq4cswwfsf1f4k3lq9hcjra45682bdi8a11nr0a5m";
+    minor   = "6";
+    sha256  = "14024gvs23q323fmd62hqd8jiypaxbjjvamyd782ixbhxmpz8x1p";
   };
 
-  vala = vala_0_42;
+  vala_0_44 = generic {
+    major   = "0.44";
+    minor   = "1";
+    sha256 = "1qiglkgymws6a3m8xz1v8b3na165ywx2dbipp3bdg134bi0w3a4n";
+  };
+
+  vala = vala_0_44;
 }
