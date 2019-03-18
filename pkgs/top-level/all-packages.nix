@@ -7251,6 +7251,7 @@ with pkgs;
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
+  rustPlatform_1_31 = recurseIntoAttrs (makeRustPlatform rust_1_31);
 
   makeRustPlatform = rust: lib.fix (self:
     let
