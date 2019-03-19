@@ -50,10 +50,6 @@ self: super:
     meta = attrs.meta // { license = lib.licenses.unfreeRedistributable; };
   });
 
-  fontcursormisc = super.fontcursormisc.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.mkfontscale ];
-  });
-
   fontmiscmisc = super.fontmiscmisc.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -291,10 +287,6 @@ self: super:
     meta = attrs.meta // { platforms = stdenv.lib.platforms.linux; };
   });
 
-  oclock = super.oclock.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.libxkbfile ];
-  });
-
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -340,7 +332,6 @@ self: super:
     outputs = [ "out" "dev" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
-    buildInputs = attrs.buildInputs ++ [ mtdev libevdev ];
   });
 
   xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
@@ -353,7 +344,6 @@ self: super:
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: rec {
     outputs = [ "out" "dev" ];
-    buildInputs = attrs.buildInputs ++ [ libinput ];
     installFlags = "sdkdir=\${dev}/include/xorg";
   });
 
@@ -692,7 +682,7 @@ self: super:
   });
 
   xwd = super.xwd.overrideAttrs (attrs: {
-    buildInputs = with self; attrs.buildInputs ++ [libXt libxkbfile];
+    buildInputs = with self; attrs.buildInputs ++ [libXt];
   });
 
   xrdb = super.xrdb.overrideAttrs (attrs: {

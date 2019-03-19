@@ -1625,7 +1625,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xdriinfo = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
+  xdriinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libGL, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "xdriinfo-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1634,7 +1634,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ xorgproto libX11 ];
+    buildInputs = [ libGL xorgproto libX11 ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
