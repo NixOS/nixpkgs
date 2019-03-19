@@ -26,7 +26,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4");
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo" );
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
