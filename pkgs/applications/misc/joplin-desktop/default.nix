@@ -1,8 +1,8 @@
 { stdenv, appimage-run, fetchurl }:
 
 let
-  version = "1.0.135";
-  sha256 = "139nk1pvwqjn6grzpq6dh9jad7450gy4b3rms1hbkj8cjcqaks9z";
+  version = "1.0.140";
+  sha256 = "1114v141jayqhvkkxf7dr864j09nf5nz002c7z0pprzr00fifqzx";
 in
   stdenv.mkDerivation rec {
   name = "joplin-${version}";
