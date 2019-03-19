@@ -1,15 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonAtLeast
+, isPy3k
 , requests
 , requests_oauthlib
 , isodate
 , certifi
+, enum34
+, typing
 , aiohttp
 , aiodns
 , pytest
 , httpretty
+, mock
+, futures
 , trio
 }:
 
@@ -28,12 +32,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests requests_oauthlib isodate certifi
-    # optional
-    aiohttp aiodns
-  ];
+  ] ++ lib.optionals (!isPy3k) [ enum34 typing ]
+    ++ lib.optionals isPy3k [ aiohttp aiodns ];
 
   checkInputs = [ pytest httpretty ]
-    ++ lib.optional (pythonAtLeast "3.5") trio;
+    ++ lib.optionals (!isPy3k) [ mock futures ]
+    ++ lib.optional isPy3k trio;
 
   # Deselected tests require network access
   checkPhase = ''
