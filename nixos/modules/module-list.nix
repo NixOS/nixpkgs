@@ -607,6 +607,7 @@
   ./services/networking/nixops-dns.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nsd.nix
+  ./services/networking/nsq.nix
   ./services/networking/ntopng.nix
   ./services/networking/ntpd.nix
   ./services/networking/nullidentdmod.nix
