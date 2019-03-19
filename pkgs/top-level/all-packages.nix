@@ -18031,8 +18031,6 @@ in
 
   caps = callPackage ../applications/audio/caps { };
 
-  lastwatch = callPackage ../applications/audio/lastwatch { };
-
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
 
   lbdb = callPackage ../tools/misc/lbdb { abook = null; gnupg = null; goobook = null; khard = null; mu = null; };
