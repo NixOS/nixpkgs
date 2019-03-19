@@ -188,6 +188,7 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 ```nix
 { lib, buildPythonPackage, fetchPypi }:
 
+let
   toolz = buildPythonPackage rec {
     pname = "toolz";
     version = "0.7.4";
@@ -206,7 +207,7 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
       maintainers = with maintainers; [ fridh ];
     };
   };
-}
+in toolz
 ```
 
 What happens here? The function `buildPythonPackage` is called and as argument
