@@ -3053,6 +3053,8 @@ in
     inherit (pythonPackages) buildPythonApplication pygtk numpy;
   };
 
+  etcher = callPackage ../tools/misc/etcher { };
+
   ethtool = callPackage ../tools/misc/ethtool { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap {
