@@ -45,6 +45,13 @@ buildPythonPackage rec {
     funcsigs
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace 'click>=6.7,<7.0' 'click'
+    substituteInPlace setup.py \
+      --replace 'click>=6.7,<7.0' 'click'
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/elastic/curator;
     description = "Curate, or manage, your Elasticsearch indices and snapshots";
