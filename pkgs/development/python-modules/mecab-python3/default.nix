@@ -23,8 +23,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python wrapper for mecab: Morphological Analysis engine";
-    homepage =  https://github.com/LuminosoInsight/wordfreq/;
-    license = licenses.bsd0;
+    homepage =  https://github.com/SamuraiT/mecab-python3;
+    license = with licenses; [ gpl2 lgpl21 bsd3 ]; # any of the three
     maintainers = with maintainers; [ ixxie ];
   };
 }
