@@ -32,6 +32,8 @@ stdenv.mkDerivation {
     install -D ngrok $out/bin/ngrok
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "ngrok";
     longDescription = ''
