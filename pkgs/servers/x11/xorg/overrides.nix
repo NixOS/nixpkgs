@@ -75,8 +75,10 @@ self: super:
     inherit tradcpp;
   });
 
-  mkfontdir = super.mkfontdir.overrideAttrs (attrs: {
-    preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${self.mkfontscale}/bin";
+  mkfontdir = self.mkfontscale;
+
+  mkfontscale = super.mkfontscale.overrideAttrs (attrs: {
+    preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${placeholder "out"}/bin";
   });
 
   libxcb = super.libxcb.overrideAttrs (attrs: {

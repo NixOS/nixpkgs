@@ -26,7 +26,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "mkfontdir", "bdftopcf", "libxslt", "openssl", "gperf", "m4");
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4");
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -157,7 +157,7 @@ while (<>) {
     }
 
     if ($file =~ /AC_PATH_PROG\(MKFONTDIR/) {
-        push @requires, "mkfontdir";
+        push @requires, "mkfontscale";
     }
 
     if ($file =~ /AM_PATH_PYTHON/) {
@@ -173,12 +173,12 @@ while (<>) {
     my $isFont;
 
     if ($file =~ /XORG_FONT_BDF_UTILS/) {
-        push @requires, "bdftopcf", "mkfontdir";
+        push @requires, "bdftopcf", "mkfontscale";
         $isFont = 1;
     }
 
     if ($file =~ /XORG_FONT_SCALED_UTILS/) {
-        push @requires, "mkfontscale", "mkfontdir";
+        push @requires, "mkfontscale";
         $isFont = 1;
     }
 
