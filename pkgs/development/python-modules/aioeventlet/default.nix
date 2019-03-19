@@ -3,7 +3,6 @@
 , fetchPypi
 , eventlet
 , trollius
-, asyncio
 , mock
 , python
 }:
@@ -17,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "cecb51ea220209e33b53cfb95124d90e4fcbee3ff8ba8a179a57120b8624b16a";
   };
 
-  propagatedBuildInputs = [ eventlet trollius asyncio ];
+  propagatedBuildInputs = [ eventlet trollius ];
   buildInputs = [ mock ];
 
   # 2 tests error out
