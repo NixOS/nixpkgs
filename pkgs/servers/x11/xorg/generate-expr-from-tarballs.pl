@@ -40,6 +40,7 @@ $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
 $pcMap{"\$DRI2PROTO"} = "xorgproto";
+$pcMap{"\${XKBMODULE}"} = "libxkbfile";
 
 
 my $downloadCache = "./download-cache";

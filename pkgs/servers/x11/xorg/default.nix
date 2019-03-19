@@ -1248,7 +1248,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  oclock = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXmu, libXt }: stdenv.mkDerivation {
+  oclock = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt }: stdenv.mkDerivation {
     name = "oclock-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1257,7 +1257,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXext libXmu libXt ];
+    buildInputs = [ libxkbfile libX11 libXext libXmu libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2340,7 +2340,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xfd = callPackage ({ stdenv, pkgconfig, fetchurl, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+  xfd = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     name = "xfd-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2349,7 +2349,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ fontconfig libXaw libXft libXmu xorgproto libXrender libXt ];
+    buildInputs = [ libxkbfile fontconfig libXaw libXft libXmu xorgproto libXrender libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2860,7 +2860,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xwd = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+  xwd = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xwd-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2869,7 +2869,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 xorgproto ];
+    buildInputs = [ libxkbfile libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
