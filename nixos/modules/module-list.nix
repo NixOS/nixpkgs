@@ -35,6 +35,7 @@
   ./config/users-groups.nix
   ./config/vpnc.nix
   ./config/zram.nix
+  ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/bladeRF.nix
   ./hardware/brightnessctl.nix
