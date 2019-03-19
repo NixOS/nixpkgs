@@ -5,17 +5,17 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "ffsend-${version}";
-  version = "0.2.36";
+  pname = "ffsend";
+  version = "0.2.37";
 
   src = fetchFromGitLab {
     owner = "timvisee";
-    repo = "ffsend";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0k2sl1f5isxj8qajmhf36xh6k9j9qq7nkqm27wfm3gvc6b4flk0r";
+    sha256 = "1c2iihd9abri6019qyl78n7l86pbh7ahy7hp2ijdzhrlsjdanzcr";
   };
 
-  cargoSha256 = "1l4060kawba56gxsngba2yjshhaygrs17k1msjbj38vrg07zrnbp";
+  cargoSha256 = "04gcsjjn3fnc5q0z6jbyd439x4hylyfl912245wmpjchm0k2k22b";
 
   # Note: On Linux, the clipboard feature requires `xclip` to be in the `PATH`. Ideally we'd
   # depend on `xclip` and patch the source to run `xclip` from the Nix store instead of from `PATH`.
@@ -30,8 +30,9 @@ buildRustPackage rec {
   ;
 
   postInstall = ''
-    mkdir -p $out/share/zsh/site-functions
-    cp contrib/completions/zsh/_ffsend $out/share/zsh/site-functions/_ffsend
+    install -DTm755 {contrib/completions,$out/share/zsh/site-functions}/_ffsend
+    install -DTm755 {contrib/completions,$out/share/bash-completion/completions}/ffsend.bash
+    install -DTm755 {contrib/completions,$out/etc/fish/completions}/ffsend.fish
   '';
 
   meta = with stdenv.lib; {
