@@ -7251,6 +7251,7 @@ with pkgs;
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
+  rustPlatform_1_31 = recurseIntoAttrs (makeRustPlatform rust_1_31);
 
   makeRustPlatform = rust: lib.fix (self:
     let
@@ -7282,6 +7283,9 @@ with pkgs;
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen { };
   rust-cbindgen_0_6_7 = callPackage ../development/tools/rust/cbindgen/0_6_7.nix { };
+  rust-cbindgen_0_8_0 = callPackage ../development/tools/rust/cbindgen/0_8_0.nix {
+    rustPlatform = rustPlatform_1_31;
+  };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
