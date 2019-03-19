@@ -997,8 +997,6 @@ in {
 
   astor = callPackage ../development/python-modules/astor {};
 
-  asyncio = callPackage ../development/python-modules/asyncio {};
-
   asyncssh = callPackage ../development/python-modules/asyncssh { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
