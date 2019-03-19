@@ -141,9 +141,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     find . -name '*.orig' -exec rm {} ';'
-  '' + optionalString stdenv.isDarwin ''
-    echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
-    substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
   '';
 
   GOOS = stdenv.targetPlatform.parsed.kernel.name;
