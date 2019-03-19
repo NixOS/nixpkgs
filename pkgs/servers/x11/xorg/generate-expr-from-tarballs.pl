@@ -150,15 +150,15 @@ while (<>) {
     }
 
     if ($file =~ /AC_PATH_PROG\(BDFTOPCF/) {
-        push @requires, "bdftopcf";
+        push @nativeRequires, "bdftopcf";
     }
 
     if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/) {
-        push @requires, "mkfontscale";
+        push @nativeRequires, "mkfontscale";
     }
 
     if ($file =~ /AC_PATH_PROG\(MKFONTDIR/) {
-        push @requires, "mkfontscale";
+        push @nativeRequires, "mkfontscale";
     }
 
     if ($file =~ /AM_PATH_PYTHON/) {
@@ -174,17 +174,17 @@ while (<>) {
     my $isFont;
 
     if ($file =~ /XORG_FONT_BDF_UTILS/) {
-        push @requires, "bdftopcf", "mkfontscale";
+        push @nativeRequires, "bdftopcf", "mkfontscale";
         $isFont = 1;
     }
 
     if ($file =~ /XORG_FONT_SCALED_UTILS/) {
-        push @requires, "mkfontscale";
+        push @nativeRequires, "mkfontscale";
         $isFont = 1;
     }
 
     if ($file =~ /XORG_FONT_UCS2ANY/) {
-        push @requires, "fontutil", "mkfontscale";
+        push @nativeRequires, "fontutil", "mkfontscale";
         $isFont = 1;
     }
 
