@@ -5762,6 +5762,8 @@ in
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
 
+  tayga = callPackage ../tools/networking/tayga { };
+
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
   tcptraceroute = callPackage ../tools/networking/tcptraceroute { };
