@@ -19521,7 +19521,9 @@ in
 
   soulseekqt = libsForQt5.callPackage ../applications/networking/p2p/soulseekqt { };
 
-  sox = callPackage ../applications/misc/audio/sox { };
+  sox = callPackage ../applications/misc/audio/sox {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
   soxr = callPackage ../applications/misc/audio/soxr { };
 
