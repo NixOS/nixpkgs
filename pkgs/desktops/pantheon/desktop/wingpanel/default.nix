@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1knkqh9q6yp7qf27zi6ki20fq4w0ia2hklvv84ivfmfa0irz0j6r";
+    sha256 = "1kd1w3mxysg33niryrz5yp6fdayzjpg73ihvq7dlasj8ls5d0qyj";
   };
 
   passthru = {
@@ -42,11 +42,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./indicators.patch
-    # Fix wingpanel potentially overlapping windows: https://github.com/elementary/wingpanel/pull/198
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel/commit/fc1b8ea3d6cfc5d6e4034af177eecd4542a59833.patch";
-      sha256 = "0w5z56di5lxwg9vb96f9y4r2q05znwpn814m2w12l3impf5xsdqs";
-    })
   ];
 
   postPatch = ''
