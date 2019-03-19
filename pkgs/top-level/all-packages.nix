@@ -22594,7 +22594,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  websocat = callPackage ../tools/misc/websocat { };
+  websocat = callPackage ../tools/misc/websocat {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 

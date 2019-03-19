@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform
+{ stdenv, fetchFromGitHub, rustPlatform, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0vkb3jmyb3zg3xiig5vlxhh74m27rvqbkgrwdqzprifn9vcj17ir";
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   meta = with stdenv.lib; {
     description = "Command-line client for WebSockets (like netcat/socat)";
