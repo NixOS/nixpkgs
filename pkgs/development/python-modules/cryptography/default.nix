@@ -53,14 +53,6 @@ buildPythonPackage rec {
     py.test --disable-pytest-warnings tests
   '';
 
-  # The test assumes that if we're on Sierra or higher, that we use `getentropy`, but for binary
-  # compatibility with pre-Sierra for binary caches, we hide that symbol so the library doesn't
-  # use it. This boils down to them checking compatibility with `getentropy` in two different places,
-  # so let's neuter the second test.
-  postPatch = ''
-    substituteInPlace ./tests/hazmat/backends/test_openssl.py --replace '"16.0"' '"99.0"'
-  '';
-
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
   # can do until nix 1.11's release
   __impureHostDeps = [ "/usr/lib" ];
