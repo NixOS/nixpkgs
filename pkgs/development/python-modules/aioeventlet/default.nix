@@ -9,7 +9,8 @@
 
 buildPythonPackage rec {
   pname = "aioeventlet";
-  version = "0.5.1";
+  # version is called 0.5.1 on PyPI, but the filename is aioeventlet-0.5.2.tar.gz
+  version = "0.5.2";
 
   src = fetchPypi {
     inherit pname version;
