@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , requests
 , requests_oauthlib
 , isodate
@@ -9,17 +10,15 @@
 , aiodns
 , pytest
 , httpretty
+, trio
 }:
 
 buildPythonPackage rec {
   version = "0.6.4";
   pname = "msrest";
 
-  #src = fetchPypi {
-  #  inherit pname version;
-  #  sha256 = "5dadd54bec98d52cd9f43fb095015c346135b8cafaa35f24c7309cc25d3ad266";
-  #};
-
+  # no tests in PyPI tarball
+  # see https://github.com/Azure/msrest-for-python/pull/152
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "msrest-for-python";
@@ -33,10 +32,12 @@ buildPythonPackage rec {
     aiohttp aiodns
   ];
 
-  checkInputs = [ pytest httpretty ];
+  checkInputs = [ pytest httpretty ]
+    ++ lib.optional (pythonAtLeast "3.5") trio;
 
+  # Deselected tests require network access
   checkPhase = ''
-    pytest tests/
+    pytest tests/ -k "not test_conf_async_trio_requests"
   '';
 
   meta = with lib; {
