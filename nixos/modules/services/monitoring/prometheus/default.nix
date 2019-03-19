@@ -10,11 +10,19 @@ let
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
+  promVersion = removePrefix "prometheus-" cfg.package.name;
+  promMajorVersion = builtins.head (splitString "." promVersion);
+  isVersionTwo = if promMajorVersion == "2" then true else false;
+
+  promtoolCommand = what: if isVersionTwo 
+                          then builtins.replaceStrings ["-"] [" "] what
+                          else what;
+
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file: pkgs.runCommand "${name}-${what}-checked"
     { buildInputs = [ cfg.package ]; } ''
     ln -s ${file} $out
-    promtool ${what} $out
+    promtool ${promtoolCommand what} $out
   '';
 
   # Pretty-print JSON to a file
@@ -41,13 +49,23 @@ let
     in promtoolCheck "check-config" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
-    "-storage.local.path=${cfg.dataDir}/metrics"
-    "-config.file=${prometheusYml}"
-    "-web.listen-address=${cfg.listenAddress}"
-    "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
-    "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
-    (optionalString (cfg.alertmanagerURL != []) "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}")
-    (optionalString (cfg.webExternalUrl != null) "-web.external-url=${cfg.webExternalUrl}")
+    (if isVersionTwo then "--storage.tsdb.path=${cfg.dataDir}/metrics" else "-storage.local.path=${cfg.dataDir}/metrics")
+    (if isVersionTwo then "--config.file=${prometheusYml}" else "-config.file=${prometheusYml}")
+    (if isVersionTwo then "--web.listen-address=${cfg.listenAddress}" else "-web.listen-address=${cfg.listenAddress}")
+    (if isVersionTwo
+      then "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
+      else "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}")
+    (if isVersionTwo
+      then "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
+      else "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s")
+    (optionalString (cfg.alertmanagerURL != []) 
+      (if isVersionTwo 
+        then "--alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}"
+        else "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}"))
+    (optionalString (cfg.webExternalUrl != null) 
+      (if isVersionTwo
+        then "--web.external-url=${cfg.webExternalUrl}"
+        else "-web.external-url=${cfg.webExternalUrl}"))
   ];
 
   promTypes.globalConfig = types.submodule {
