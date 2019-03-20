@@ -1571,6 +1571,8 @@ in
 
   ipvsadm = callPackage ../os-specific/linux/ipvsadm { };
 
+  ir-standard-fonts = callPackage ../data/fonts/ir-standard-fonts { };
+
   lynis = callPackage ../tools/security/lynis { };
 
   mathics = pythonPackages.mathics;
