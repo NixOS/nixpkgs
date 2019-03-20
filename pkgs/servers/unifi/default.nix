@@ -49,8 +49,8 @@ in rec {
   };
 
   unifiStable = generic {
-    version = "5.10.19";
-    sha256  = "01ylf11z4f86qrw9x0fn1mnxkb8iw0p2kslp7vgxgjp0i3mg3f2q";
+    version = "5.10.20";
+    sha256  = "1zfgwvw7biy8ynrd00invkfv7g2szb482h16aag4ws92x0r376v6";
   };
 
   unifiTesting = unifiStable;
