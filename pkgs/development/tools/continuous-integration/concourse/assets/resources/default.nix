@@ -1,7 +1,7 @@
-{ callPackage }:
+{ callPackage, fly }:
 rec {
 
-  concourse-pipeline = callPackage ./concourse-pipeline-resource {};
+  concourse-pipeline = callPackage ./concourse-pipeline-resource { inherit fly; };
 
   docker-image = callPackage ./docker-image-resource {};
 

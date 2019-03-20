@@ -21,7 +21,7 @@ let
     inherit src;
   };
 
-  resources = import ./assets/resources { inherit callPackage; };
+  resources = import ./assets/resources { inherit callPackage fly; };
 
   # TODO: Set this
   worker_vesion = "";
@@ -55,6 +55,12 @@ let
         maintainers = with stdenv.lib.maintainers; [ edude03 dxf ];
       };
     };
+
+  fly = buildConcourse {
+    name = "fly-unstable";
+    packages = [ "fly" ];
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+  };
 in
 {
   concourse = buildConcourse {
@@ -70,9 +76,5 @@ in
     '';
   };
 
-  fly = buildConcourse {
-    name = "fly-unstable";
-    packages = [ "fly" ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-  };
+  inherit fly;
 }

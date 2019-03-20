@@ -4,6 +4,7 @@
   callPackage,
   dockerTools,
   fetchFromGitHub,
+  fly,
   pkgs,
   runCommand,
   stdenv,
@@ -24,6 +25,7 @@ let
     goPackagePath = "github.com/concourse/concourse-pipeline-resource";
     subPackages = [ "cmd/in" "cmd/out" "cmd/check" ];
     goDeps = ./deps.nix;
+    patches = [ ./fly.patch ];
   };
 
   env = buildEnv {
@@ -33,6 +35,7 @@ let
       bashInteractive
       cacert
       tzdata
+      fly
     ];
     postBuild = ''
       mkdir -p $out/opt/resource
