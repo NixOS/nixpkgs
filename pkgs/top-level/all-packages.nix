@@ -7137,7 +7137,7 @@ in
 
   all-cabal-hashes = callPackage ../data/misc/hackage { };
 
-  purescript = callPackage ../development/compilers/purescript/purescript { inherit pkgs; };
+  purescript = callPackage ../development/compilers/purescript/purescript { };
 
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
