@@ -223,6 +223,8 @@ let
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
+    dune = callPackage ../development/tools/ocaml/dune { };
+
     earley = callPackage ../development/ocaml-modules/earley { };
 
     earley_ocaml = callPackage ../development/ocaml-modules/earley_ocaml { };
