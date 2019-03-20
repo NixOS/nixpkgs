@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
@@ -20,13 +20,18 @@ stdenv.mkDerivation rec {
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+    "-DCOMPILER_RT_BUILD_XRAY=OFF"
+    "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
+    "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ];
 
   outputs = [ "out" "dev" ];
 
   patches = [
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
+  ]# ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./crtbegin-and-end.patch
     ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin ./compiler-rt-clock_gettime.patch;
 
