@@ -20,6 +20,7 @@
 , "dhcp"
 , "dnschain"
 , "elasticdump"
+, "elm-doc-preview"
 , "elm-live"
 , "elm-oracle"
 , "elm-test"
