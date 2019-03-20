@@ -2370,6 +2370,11 @@
     github = "juliendehos";
     name = "Julien Dehos";
   };
+  justinwoo = {
+    email = "moomoowoo@gmail.com";
+    github = "justinwoo";
+    name = "Justin Woo";
+  };
   jwiegley = {
     email = "johnw@newartisans.com";
     github = "jwiegley";
