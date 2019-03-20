@@ -84,6 +84,11 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn ];
+    knownVulnerabilities = [
+      "CVE-2019-1000018"
+      "CVE-2019-3463"
+      "CVE-2019-3464"
+    ];
   };
 
   passthru = {
