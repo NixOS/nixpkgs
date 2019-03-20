@@ -50,4 +50,11 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/etc/bash_completion.d/
     $PURS --bash-completion-script $PURS > $out/etc/bash_completion.d/purs-completion.bash
   '';
+    meta = with stdenv.lib; {
+    description = "A strongly-typed functional programming language that compiles to JavaScript";
+    homepage = http://www.purescript.org/;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.justinwoo ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+  };
 }
