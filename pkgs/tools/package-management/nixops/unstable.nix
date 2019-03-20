@@ -1,4 +1,4 @@
-{ callPackage, fetchurl }:
+{ pkgs, newScope, callPackage, fetchurl }:
 
 # To upgrade pick the hydra job of the nixops revision that you want to upgrade
 # to from: https://hydra.nixos.org/job/nixops/master/tarball
@@ -13,15 +13,15 @@ callPackage ./generic.nix (rec {
   # # Marking unstable as broken, instead of using the pinned version,
   # # like stable does You might be able to use the following code (as
   # # in stable), to run unstable against the pinned packages
-  # python2Packages = pkgs.python2Packages.override {
-  #   overrides = (self: super: let callPackage = newScope self; in {
-  #     azure-mgmt-compute = callPackage ./azure-mgmt-compute { };
-  #     azure-mgmt-network = callPackage ./azure-mgmt-network { };
-  #     azure-mgmt-nspkg = callPackage ./azure-mgmt-nspkg { };
-  #     azure-mgmt-resource = callPackage ./azure-mgmt-resource { };
-  #     azure-mgmt-storage = callPackage ./azure-mgmt-storage { };
-  #   });
-  # };
+   python2Packages = pkgs.python2Packages.override {
+     overrides = (self: super: let callPackage = newScope self; in {
+       azure-mgmt-compute = callPackage ./azure-mgmt-compute { };
+       azure-mgmt-network = callPackage ./azure-mgmt-network { };
+       azure-mgmt-nspkg = callPackage ./azure-mgmt-nspkg { };
+       azure-mgmt-resource = callPackage ./azure-mgmt-resource { };
+       azure-mgmt-storage = callPackage ./azure-mgmt-storage { };
+     });
+   };
   # # otherwise
   # # see https://github.com/NixOS/nixpkgs/pull/52550
   # # see https://github.com/NixOS/nixops/issues/1065
