@@ -22577,6 +22577,8 @@ in
 
   muse = callPackage ../applications/audio/muse { };
 
+  musly = callPackage ../applications/audio/musly { };
+
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
 
   inherit (callPackage ../tools/package-management/nix {
