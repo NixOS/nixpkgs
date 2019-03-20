@@ -59,9 +59,9 @@ in stdenv.mkDerivation rec {
     "USE_SYSTEM_ZLIB=1"
     "NSS_USE_SYSTEM_SQLITE=1"
     "NATIVE_CC=${buildPackages.stdenv.cc}/bin/cc"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "OS_TEST=${cpu}"
     "CPU_ARCH=${cpu}"
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=1"
     "NSS_DISABLE_GTESTS=1" # don't want to build tests when cross-compiling
   ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1"
