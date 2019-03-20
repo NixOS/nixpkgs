@@ -2,6 +2,7 @@
 , intltool, spidermonkey_52 , gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
 , useSystemd ? stdenv.isLinux, systemd
+, withGnome ? true
 , doCheck ? stdenv.isLinux
 }:
 
@@ -42,11 +43,12 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   nativeBuildInputs =
-    [ gtk-doc pkgconfig autoreconfHook intltool gobject-introspection perl ]
+    [ glib gtk-doc pkgconfig intltool perl ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
-    [ glib expat pam spidermonkey_52 gobject-introspection ]
-    ++ stdenv.lib.optional useSystemd systemd;
+    [ glib expat pam spidermonkey_52 ]
+    ++ stdenv.lib.optional useSystemd systemd
+    ++ stdenv.lib.optional withGnome gobject-introspection;
 
   NIX_CFLAGS_COMPILE = " -Wno-deprecated-declarations "; # for polkit 0.114 and glib 2.56
 
@@ -73,7 +75,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-polkitd-user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "--with-os-type=NixOS" # not recognized but prevents impurities on non-NixOS
-    "--enable-introspection"
+    (if withGnome then "--enable-introspection" else "--disable-introspection")
   ] ++ stdenv.lib.optional (!doCheck) "--disable-test";
 
   makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0 INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
