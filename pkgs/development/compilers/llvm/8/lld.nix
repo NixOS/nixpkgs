@@ -9,7 +9,7 @@
 stdenv.mkDerivation {
   name = "lld-${version}";
 
-  src = fetch "lld" "1w0f3s5rzv90yiv4k9wdvkpc89k3g9crbwf1sh8xbi5jsjnz4539";
+  src = fetch "lld" "0dvf38pbm7jy88g66mz7ikkdfhm2qpj0iyzh62hzycifjbnciblw";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvm libxml2 ];
