@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch, autoreconfHook
 , coreutils, gnugrep, gnused, lm_sensors, net_snmp, openssh, openssl, perl
-, mysql, zlib, openldap
+, dnsutils, mysql, zlib, openldap
 , runtimeShell }:
 
 with stdenv.lib;
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   '';
 
   # !!! make openssh a runtime dependency only
-  buildInputs = [ mysql net_snmp openldap openssh openssl perl zlib ];
+  buildInputs = [ dnsutils mysql net_snmp openldap openssh openssl perl zlib ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
