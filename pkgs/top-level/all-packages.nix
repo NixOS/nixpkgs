@@ -2520,7 +2520,7 @@ in
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   elk5Version = "5.6.9";
-  elk6Version = "6.5.1";
+  elk6Version = "6.6.2";
 
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
   elasticsearch6 = callPackage ../servers/search/elasticsearch { };
@@ -3707,8 +3707,11 @@ in
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
   kibana5 = callPackage ../development/tools/misc/kibana/5.x.nix { };
-  kibana6 = callPackage ../development/tools/misc/kibana/default.nix { };
+  kibana6 = callPackage ../development/tools/misc/kibana/default.nix {
+    nodejs = nodejs-10_x;
+  };
   kibana6-oss = callPackage ../development/tools/misc/kibana/default.nix {
+    nodejs = nodejs-10_x;
     enableUnfree = false;
   };
   kibana = kibana6;

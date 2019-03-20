@@ -18,12 +18,12 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "0lip4bj3jazv83gydw99dnp03cb0fd1p4z3lvpjbisgmqffbbg5v";
-      "x86_64-darwin" = "0hjdnqagcwbjhpcfyr6w0zmy4sjnx4fyp79czb0vp7dig5arnwm3";
+      "x86_64-linux"  = "1c56l3z2k9ncmx3kbam2hr2m4pkhxv0l226bla5vz0y6adh2zcs5";
+      "x86_64-darwin" = "08hq8fjc93j25dpd8l61a2rfvpdgl0my75gg0pfqfaspknbdq2a1";
     }
     else {
-      "x86_64-linux"  = "1jybn4q7pz61iijzl85d948szlacfcbldn2nhhsb6063xwvf30sa";
-      "x86_64-darwin" = "1bl1h6hgp9l5cjq6pzj2x855wjaka8hbs0fn2c03lbzsc991dppr";
+      "x86_64-linux"  = "0jrjbg63nxnpc2cx8m6z6fw28mj1yq0dw1whbykaxdwzhjcf0v96";
+      "x86_64-darwin" = "07fm15mpg7ljyjmz2dq16jwxhsml9hxdmnbb3qpcl9bidvjdlw4k";
     };
 
   # For the correct phantomjs version see:
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Kibana specifies it specifically needs nodejs 8.11.4 but nodejs in nixpkgs is at 8.12.0.
+    # Kibana specifies it specifically needs nodejs 10.15.2 but nodejs in nixpkgs is at 10.15.3.
     # The <nixpkgs/nixos/tests/elk.nix> test succeeds with this newer version so lets just
     # disable the version check.
     ./disable-nodejs-version-check.patch
