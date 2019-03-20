@@ -22,7 +22,7 @@ let version_ = lib.splitString "-" crateVersion;
     version = lib.splitString "." (lib.head version_);
     rustcOpts = lib.lists.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
-        (["-C codegen-units=1"] ++ extraRustcOpts);
+        (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
     buildDeps = makeDeps buildDependencies;
     authors = lib.concatStringsSep ":" crateAuthors;
     optLevel = if release then 3 else 0;
