@@ -3837,6 +3837,8 @@ in
 
   mcfly = callPackage ../tools/misc/mcfly { };
 
+  mcos-dark-xfce-edition = callPackage ../data/themes/mcos-dark-xfce-edition { };
+
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
