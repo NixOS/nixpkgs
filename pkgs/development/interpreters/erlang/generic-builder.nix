@@ -6,6 +6,7 @@
 , libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
 , parallelBuild ? false
 , withSystemd ? stdenv.isLinux, systemd # systemd support in epmd
+, buildPackages
 }:
 
 { baseName ? "erlang"
@@ -43,6 +44,8 @@ let
   inherit (stdenv.lib) optional optionals optionalAttrs optionalString;
   wxPackages2 = if stdenv.isDarwin then [ wxmac ] else wxPackages;
 
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+
 in stdenv.mkDerivation ({
   name = "${baseName}-${version}"
     + optionalString javacSupport "-javac"
@@ -50,7 +53,15 @@ in stdenv.mkDerivation ({
 
   inherit src version;
 
-  nativeBuildInputs = [ autoconf makeWrapper perl gnum4 libxslt libxml2 ];
+  nativeBuildInputs = [
+    buildPackages.autoreconfHook
+    buildPackages.makeWrapper
+    buildPackages.perl
+    buildPackages.gnum4
+    buildPackages.libxslt
+    buildPackages.libxml2
+  ]
+    ++ optional isCross buildPackages.erlang;
 
   buildInputs = [ ncurses openssl ]
     ++ optionals wxSupport wxPackages2
@@ -85,7 +96,7 @@ in stdenv.mkDerivation ({
     ++ optional enableThreads "--enable-threads"
     ++ optional enableSmpSupport "--enable-smp-support"
     ++ optional enableKernelPoll "--enable-kernel-poll"
-    ++ optional enableHipe "--enable-hipe"
+    ++ optional (enableHipe && !isCross) "--enable-hipe"
     ++ optional javacSupport "--with-javac"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional wxSupport "--enable-wx"
