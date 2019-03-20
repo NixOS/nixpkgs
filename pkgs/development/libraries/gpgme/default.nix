@@ -3,6 +3,7 @@
 , autoreconfHook, fetchpatch
 , git
 , texinfo
+, buildPackages
 , qtbase ? null
 , pythonSupport ? false, swig2 ? null, python ? null
 }:
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo ]
   ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   patches = [
     (fetchpatch {
       name = "fix-key-expiry.patch";
@@ -46,6 +49,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
     "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
   ] ++ lib.optional pythonSupport "--enable-languages=python";
 
   NIX_CFLAGS_COMPILE =
