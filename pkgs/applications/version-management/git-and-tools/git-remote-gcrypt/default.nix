@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, docutils, makeWrapper
-, gnupg1compat, curl, rsync, coreutils
+, gnupg, curl, rsync, coreutils
 , gawk, gnused, gnugrep
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     prefix="$out" ./install.sh
     wrapProgram "$out/bin/git-remote-gcrypt" \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg1compat curl rsync coreutils
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg curl rsync coreutils
                                                     gawk gnused gnugrep ]}"
   '';
 

@@ -4,7 +4,7 @@
 , cabextract
 , gettext
 , glxinfo
-, gnupg1compat
+, gnupg
 , icoutils
 , imagemagick
 , netcat-gnu
@@ -30,7 +30,7 @@ let
       python2Packages.python
       gettext
       glxinfo
-      gnupg1compat
+      gnupg
       icoutils
       imagemagick
       netcat-gnu
