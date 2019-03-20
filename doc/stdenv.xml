@@ -222,9 +222,10 @@ genericBuild
    </footnote>
    But even if one is not cross compiling, the platforms imply whether or not
    the dependency is needed at run-time or build-time, a concept that makes
-   perfect sense outside of cross compilation. For now, the run-time/build-time
-   distinction is just a hint for mental clarity, but in the future it perhaps
-   could be enforced.
+   perfect sense outside of cross compilation. By default, the
+   run-time/build-time distinction is just a hint for mental clarity, but with
+   <varname>strictDeps</varname> set it is somewhat enforced even in the native
+   case.
   </para>
 
   <para>
@@ -348,7 +349,10 @@ let f(h, h + 1, i) = i + h
   <para>
    Overall, the unifying theme here is that propagation shouldn't be
    introducing transitive dependencies involving platforms the depending
-   package is unaware of. The offset bounds checking and definition of
+   package is unaware of. [One can imagine the dependending package asking for
+   dependencies with the platforms it knows about; other platforms it doesn't
+   know how to ask for. The platform description in that scenario is a kind of
+   unforagable capability.] The offset bounds checking and definition of
    <function>mapOffset</function> together ensure that this is the case.
    Discovering a new offset is discovering a new platform, and since those
    platforms weren't in the derivation "spec" of the needing package, they
