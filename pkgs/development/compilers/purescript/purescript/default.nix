@@ -1,11 +1,53 @@
-{ fetchFromGitHub }:
+{ pkgs ? import <nixpkgs> {} }:
+
+# from justinwoo/easy-purescript-nix
+# https://github.com/justinwoo/easy-purescript-nix/blob/d383972c82620a712ead4033db14110497bc2c9c/purs.nix
 
 let
-  easyPS = import (fetchFromGitHub {
-    owner = "justinwoo";
-    repo = "easy-purescript-nix";
-    rev = "d383972c82620a712ead4033db14110497bc2c9c";
-    sha256 = "0hj85y3k0awd21j5s82hkskzp4nlzhi0qs4npnv172kaac03x8ms";
-  });
+  dynamic-linker = pkgs.stdenv.cc.bintools.dynamicLinker;
 
-in easyPS.purs
+  patchelf = libPath :
+    if pkgs.stdenv.isDarwin
+      then ""
+      else
+        ''
+          chmod u+w $PURS
+          patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
+          chmod u-w $PURS
+        '';
+
+in pkgs.stdenv.mkDerivation rec {
+  name = "purs-simple";
+  version = "v0.12.3";
+
+  src =
+    if pkgs.stdenv.isDarwin
+    then
+    pkgs.fetchurl {
+      url = "https://github.com/purescript/purescript/releases/download/v0.12.3/macos.tar.gz";
+      sha256 = "1f916gv4fz571l4jvr15xjnsvjyy4nljv2ii9njwlm7k6yr5m0qn";
+    }
+    else
+    pkgs.fetchurl {
+      url = "https://github.com/purescript/purescript/releases/download/v0.12.3/linux64.tar.gz";
+      sha256 = "1fad862a2sv4njxbbcfzibbi585m6is3ywb94nmjl8ax254baj3i";
+    };
+
+
+  buildInputs = [ pkgs.zlib
+                  pkgs.gmp
+                  pkgs.ncurses5];
+  libPath = pkgs.lib.makeLibraryPath buildInputs;
+  dontStrip = true;
+
+  installPhase = ''
+    mkdir -p $out/bin
+    PURS="$out/bin/purs"
+
+    install -D -m555 -T purs $PURS
+    ${patchelf libPath}
+
+    mkdir -p $out/etc/bash_completion.d/
+    $PURS --bash-completion-script $PURS > $out/etc/bash_completion.d/purs-completion.bash
+  '';
+}
