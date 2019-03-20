@@ -35,12 +35,11 @@ let
       bashInteractive
       cacert
       tzdata
-      fly
     ];
     postBuild = ''
       mkdir -p $out/opt/resource
       pushd $out
-        ln -st opt/resource/ ${concourse-pipeline-resource}/bin/*
+        ln -st opt/resource/ ${concourse-pipeline-resource}/bin/* ${fly}/bin/fly
       popd
     '';
   };
