@@ -2534,6 +2534,11 @@ in
     callPackage ../servers/search/elasticsearch/plugins.nix { }
   );
 
+  elastic-apm-server = callPackage ../servers/misc/elastic-apm-server { };
+  elastic-apm-server-oss = callPackage ../servers/misc/elastic-apm-server {
+    enableUnfree = false;
+  };
+
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
   emem = callPackage ../applications/misc/emem { };
