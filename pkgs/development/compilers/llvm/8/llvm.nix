@@ -71,6 +71,8 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+    # valgrind unhappy with musl or glibc, but fails w/musl only
+    rm test/CodeGen/AArch64/wineh4.mir
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';
