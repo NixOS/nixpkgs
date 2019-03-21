@@ -219,7 +219,7 @@ in
         (!isNull cfg.postgres-password)
         [
           "--postgres-password"
-          (replaceChars ["$"] ["$$"] cfg.postgres-password)
+          (replaceChars ["$" "%"] ["$$" "%%"] cfg.postgres-password)
         ];
     args = concatStringsSep " " (map escapeShellArgs [regularArgs extraArgs extraFlags]);
   in
