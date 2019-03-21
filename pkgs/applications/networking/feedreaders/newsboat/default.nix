@@ -1,18 +1,26 @@
-{ stdenv, rustPlatform, fetchurl, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
+{ stdenv, rustPlatform, fetchurl, fetchpatch, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
 , asciidoc, docbook_xml_dtd_45, libxslt, docbook_xsl, libiconv, Security, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   name = "newsboat-${version}";
-  version = "2.14";
+  version = "2.14.1";
 
   src = fetchurl {
     url = "https://newsboat.org/releases/${version}/${name}.tar.xz";
-    sha256 = "13bdwnwxa66c69lqhb02basff0aa6q1jhl7fgahcxmdy7snbmg37";
+    sha256 = "0rnz61in715xgma6phvmn5bil618gic01f3kxzhcfgqsj2qx7l2b";
   };
 
-  cargoSha256 = "11s50qy1b833r2b5kr1wx9imi9h7s00c0hs36ricgbd0xw7n76hd";
+  cargoSha256 = "05pf020jp20ffmvin6d1g8zbwf1zk03bm1cb99b7iqkk4r54g6dn";
 
-  prePatch = ''
+  cargoPatches = [
+    # Bump versions in Cargo.lock
+    (fetchpatch {
+      url = https://github.com/newsboat/newsboat/commit/cbad27a19d270f2f0fce9317651e2c9f0aa22865.patch;
+      sha256 = "05n31b6mycsmzilz7f3inkmav34210c4nlr1fna4zapbhxjdlhqn";
+    })
+  ];
+
+  postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""
     # Allow other ncurses versions on Darwin
     substituteInPlace config.sh \
