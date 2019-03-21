@@ -386,6 +386,7 @@
   ./services/misc/emby.nix
   ./services/misc/errbot.nix
   ./services/misc/etcd.nix
+  ./services/misc/ethminer.nix
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
