@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mpl20;
     maintainers = with maintainers; [ ggpeti ];
-    platforms = with platforms; [ darwin linux ];
+    platforms = with platforms; darwin ++ linux;
   };
 }
