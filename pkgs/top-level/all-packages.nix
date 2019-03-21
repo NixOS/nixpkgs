@@ -9203,6 +9203,21 @@ in
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
   }));
 
+  octaveQt5Full = let
+    octave = callPackage ../development/interpreters/octave {
+      qt = null;
+      openblas = if stdenv.isDarwin then openblasCompat else openblas;
+      overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
+      suitesparse = null;
+    };
+
+    octaveQt5 = pkgs.lib.overrideDerivation octave (p: {
+      buildInputs       = p.buildInputs ++ (with pkgs.qt511; [ qtbase qtsvg qtscript qttools ]);
+      nativeBuildInputs = with pkgs.qt511; [ qttools ];
+      configureFlags    = p.configureFlags ++ [ "--with-qt=5" ];
+    });
+  in libsForQt511.callPackage octaveQt5 {};
+
   ocropus = callPackage ../applications/misc/ocropus { };
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
