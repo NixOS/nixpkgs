@@ -9729,6 +9729,8 @@ in
 
   capnproto = callPackage ../development/libraries/capnproto { };
 
+  captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
+
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
   cddlib = callPackage ../development/libraries/cddlib {};
