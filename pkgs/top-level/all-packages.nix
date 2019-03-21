@@ -10820,9 +10820,7 @@ in
 
   libdbiDrivers = callPackage ../development/libraries/libdbi-drivers { };
 
-  libunity = callPackage ../development/libraries/libunity {
-    inherit (gnome3) gnome-common;
-  };
+  libunity = callPackage ../development/libraries/libunity { };
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu { };
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
