@@ -9212,11 +9212,11 @@ in
     };
 
     octaveQt5 = pkgs.lib.overrideDerivation octave (p: {
-      buildInputs       = p.buildInputs ++ (with pkgs.qt511; [ qtbase qtsvg qtscript qttools ]);
-      nativeBuildInputs = with pkgs.qt511; [ qttools ];
+      buildInputs       = p.buildInputs ++ (with pkgs.qt512; [ qtbase qtsvg qtscript qttools ]);
+      nativeBuildInputs = with pkgs.qt512; [ qttools ];
       configureFlags    = p.configureFlags ++ [ "--with-qt=5" ];
     });
-  in libsForQt511.callPackage octaveQt5 {};
+  in libsForQt512.callPackage octaveQt5 {};
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
