@@ -9,6 +9,7 @@ let
 
 common =
   { lib, stdenv, fetchurl, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
+  , bash, coreutils, gzip, gnutar
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline
   , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
   , busybox-sandbox-shell
@@ -97,6 +98,21 @@ common =
       # socket path becomes too long otherwise
       preInstallCheck = lib.optional stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
+      '';
+
+      # substitute build-time binaries with host-binaries
+      preInstall = ''
+        substituteInPlace corepkgs/config.nix.in \
+          --subst-var-by bash ${bash}/bin/bash \
+          --subst-var-by coreutils ${coreutils}/bin \
+          --subst-var-by bzip2 ${bzip2}/bin/bzip2 \
+          --subst-var-by gzip ${gzip}/bin/gzip \
+          --subst-var-by xz ${xz}/bin/xz \
+          --subst-var-by tar ${gnutar}/bin/tar \
+          --subst-var-by tr ${coreutils}/bin/tr
+
+        substituteInPlace scripts/nix-profile.sh.in \
+          --subst-var-by coreutils ${coreutils}/bin
       '';
 
       separateDebugInfo = stdenv.isLinux;
