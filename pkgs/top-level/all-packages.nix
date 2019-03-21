@@ -3752,6 +3752,8 @@ in
 
   k6 = callPackage ../development/tools/k6 { };
 
+  la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme { };
+
   ldc = callPackage ../development/compilers/ldc { };
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
