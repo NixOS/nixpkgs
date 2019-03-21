@@ -4037,6 +4037,8 @@ in {
 
   restructuredtext_lint = callPackage ../development/python-modules/restructuredtext_lint { };
 
+  retry = callPackage ../development/python-modules/retry { };
+
   robomachine = callPackage ../development/python-modules/robomachine { };
 
   robotframework = callPackage ../development/python-modules/robotframework { };
