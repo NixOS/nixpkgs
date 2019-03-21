@@ -6741,8 +6741,8 @@ in
       };
     };
   };
-  llvm-polly = llvmPackages_8.llvm-polly;
-  clang-polly = clang_8.override { cc = llvmPackages_latest.clang-polly-unwrapped; };
+  llvm-polly = llvmPackages_latest.llvm-polly;
+  clang-polly = llvmPackages_latest.clang.override { cc = llvmPackages_latest.clang-polly-unwrapped; };
 
   clang_8  = llvmPackages_8.clang;
   clang_7  = llvmPackages_7.clang;
