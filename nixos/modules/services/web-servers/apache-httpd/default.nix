@@ -318,7 +318,12 @@ let
   '';
 
 
-  confFile = pkgs.writeText "httpd.conf" ''
+  confFile = pkgs.writeTextFile {
+    name = "httpd.conf";
+    checkPhase = ''
+      ${httpd}/bin/apachectl configtext $out
+    '';
+    text = ''
 
     ServerRoot ${httpd}
 
