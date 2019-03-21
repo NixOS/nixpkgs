@@ -1809,7 +1809,9 @@ in {
   # alias
   elasticsearchdsl = self.elasticsearch-dsl;
 
-  elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
+  elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator {
+    click = callPackage ../development/python-modules/click { version = "6.7"; };
+  };
 
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
