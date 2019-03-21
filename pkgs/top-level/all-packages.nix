@@ -545,6 +545,8 @@ in
 
   adminer = callPackage ../servers/adminer { };
 
+  adr-tools = callPackage ../tools/misc/adr-tools { };
+
   advancecomp = callPackage ../tools/compression/advancecomp {};
 
   aefs = callPackage ../tools/filesystems/aefs { };

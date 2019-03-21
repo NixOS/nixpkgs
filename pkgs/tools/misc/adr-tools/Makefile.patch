@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 736a0db..68e4685 100644
+--- a/Makefile
++++ b/Makefile
+@@ -17,7 +17,7 @@ $(BUILDDIR)/tests/%.output: tests/%.sh tests/%.expected $(SRC)
+ 	@rm -rf $(dir $@)/$*
+ 	@mkdir -p $(dir $@)/$*
+ 	@(cd $(dir $@)/$* && \
+-	  PATH=/bin:/usr/bin:$(abspath src):$(abspath tests) \
++	  PATH=$(PATH):$(abspath src):$(abspath tests) \
+ 	  ADR_DATE=1992-01-12 \
+ 	  VISUAL= \
+ 	  EDITOR= \
