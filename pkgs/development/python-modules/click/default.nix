@@ -1,19 +1,24 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll, locale, pytest }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, substituteAll, locale, pytest, version ? "7.0" }:
 
 buildPythonPackage rec {
   pname = "click";
-  version = "7.0";
+  inherit version;
 
-  src = fetchPypi {
-    pname = "Click";
-    inherit version;
-    sha256 = "5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7";
+  src = fetchFromGitHub {
+    owner = "pallets";
+    repo = "click";
+    rev = version;
+    sha256 = if version == "7.0"
+      then "13mpfazsbiwwwma19z473sc92mwrla8rcnhvnb9vsgiyd2pz33g0"  # 7.0
+      else "1mhns6c00gnfjzqka995aah0445jzh56mipmypj3xpmrxl3acpq2"; # 6.7
   };
 
-  patches = stdenv.lib.optional (stdenv.lib.versionAtLeast version "6.7") (substituteAll {
-    src = ./fix-paths.patch;
+  patches = [(substituteAll {
+    src = if stdenv.lib.versionAtLeast version "7.0"
+      then ./fix-paths.patch
+      else ./fix-paths67.patch;
     locale = "${locale}/bin/locale";
-  });
+  })];
 
   buildInputs = [ pytest ];
 
