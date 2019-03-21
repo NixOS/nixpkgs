@@ -1638,6 +1638,8 @@ in
 
   pbzx = callPackage ../tools/compression/pbzx { };
 
+  persepolis = python3Packages.callPackage ../tools/networking/persepolis { };
+
   pev = callPackage ../development/tools/analysis/pev { };
 
   photon = callPackage ../tools/networking/photon { };
