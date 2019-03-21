@@ -673,6 +673,11 @@ in
 
   bonfire = callPackage ../tools/misc/bonfire { };
 
+  buildbot = with python3Packages; toPythonApplication buildbot;
+  buildbot-ui = with python3Packages; toPythonApplication buildbot-ui;
+  buildbot-full = with python3Packages; toPythonApplication buildbot-full;
+  buildbot-worker = with python3Packages; toPythonApplication buildbot-worker;
+
   bunny = callPackage ../tools/package-management/bunny { };
 
   chezmoi = callPackage ../tools/misc/chezmoi { };
