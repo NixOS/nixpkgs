@@ -1236,11 +1236,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   mkfontscale = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, freetype, xorgproto, zlib }: stdenv.mkDerivation {
-    name = "mkfontscale-1.2.0";
+    name = "mkfontscale-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/mkfontscale-1.2.0.tar.bz2;
-      sha256 = "1gn423m0v1w98df7ni74zrj2rkhsapnqfzr8139l638kkyz7far8";
+      url = mirror://xorg/individual/app/mkfontscale-1.2.1.tar.bz2;
+      sha256 = "1ixsnsm2mn0zy9ksdid0lj6irnhvasfik9mz8bbrs5sajzmra16a";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

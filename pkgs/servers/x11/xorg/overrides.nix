@@ -73,10 +73,6 @@ self: super:
 
   mkfontdir = self.mkfontscale;
 
-  mkfontscale = super.mkfontscale.overrideAttrs (attrs: {
-    preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${placeholder "out"}/bin";
-  });
-
   libxcb = super.libxcb.overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
