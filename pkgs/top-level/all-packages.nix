@@ -2015,6 +2015,8 @@ in
 
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
 
+  ethminer = callPackage ../tools/misc/ethminer { };
+
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
   u3-tool = callPackage ../tools/filesystems/u3-tool { };
