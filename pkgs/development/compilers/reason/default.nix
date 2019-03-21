@@ -1,33 +1,29 @@
-{ stdenv, makeWrapper, buildOcaml, fetchFromGitHub,
-  ocaml, opam, jbuilder, menhir, merlin_extend, ppx_tools_versioned, utop }:
+{ stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune
+, menhir, merlin_extend, ppx_tools_versioned, utop
+}:
 
-buildOcaml rec {
-  name = "reason";
-  version = "3.0.4";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-reason-${version}";
+  version = "3.3.7";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "reason";
-    rev = version;
-    sha256 = "15qhx85him5rr4j0ygj3jh3qv9ijrn82ibr9scbn0qrnn43kj047";
+    rev = "4d20e5b535c29c5ef1283e65958b32996e449e5a";
+    sha256 = "0f3pb61wg58g8f3wcnp1h4gpmnwmp7bq0cnqdfwldmh9cs0dqyfk";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
 
-  buildInputs = [ makeWrapper opam jbuilder utop menhir ];
+  buildInputs = [ ocaml findlib dune utop menhir ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
-  createFindlibDestdir = true;
+  inherit (dune) installPhase;
 
-  postPatch = ''
-    substituteInPlace src/reasonbuild/myocamlbuild.ml \
-      --replace "refmt --print binary" "$out/bin/refmt --print binary"
-  '';
-
-  installPhase = ''
-    ${jbuilder.installPhase}
-
+  postInstall = ''
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
       --set OCAMLPATH $out/lib/ocaml/${ocaml.version}/site-lib:$OCAMLPATH
@@ -36,7 +32,8 @@ buildOcaml rec {
   meta = with stdenv.lib; {
     homepage = https://reasonml.github.io/;
     description = "Facebook's friendly syntax to OCaml";
-    license = licenses.bsd3;
+    license = licenses.mit;
+    inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.volth ];
   };
 }

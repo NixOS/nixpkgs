@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "double-conversion-${version}";
-  version = "3.0.0";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "double-conversion";
     rev = "v${version}";
-    sha256 = "05m78wlwrg310mxh1cl3d8d0ishzfvzh84x64xmvng252m0vc8yz";
+    sha256 = "082w15xq8f4c422a71phvcahgc8vmqrig97av9g9628q5n2ybbgg";
   };
 
   nativeBuildInputs = [ cmake ];

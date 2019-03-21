@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform
+{ lib, fetchFromGitHub, rustPlatform
 , openssl, zeromq, czmq, pkgconfig, cmake, zlib }:
 
 with rustPlatform;

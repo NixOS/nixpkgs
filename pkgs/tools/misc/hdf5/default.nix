@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, gcc
 , removeReferencesTo
 , cpp ? false
 , gfortran ? null
@@ -17,12 +16,12 @@ assert !cpp || mpi == null;
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.2";
+  version = "1.10.4";
   name = "hdf5-${version}";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
-    sha256 = "0wfb3w6dzi6zr2g1sdswqy9lxbp7yr4blvyi7k2xya7izmxmpb8w";
- };
+    sha256 = "1pr85fa1sh2ky6ai2hs3f21lp252grl2cq3wbyi4rh7dm83gyrqj";
+  };
 
   passthru = {
     mpiSupport = (mpi != null);
@@ -46,7 +45,13 @@ stdenv.mkDerivation rec {
     ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
     ++ optional enableShared "--enable-shared";
 
-  patches = [./bin-mv.patch];
+  patches = [
+    ./bin-mv.patch
+    # upstream patches for openmpi-4 compatiblity
+    # To be removed with the upgrade to 1.10.5
+    ./0001-Updated-H5S-to-use-the-MPI-2-function-MPI_Type_get_e.patch
+    ./0001-Yanked-all-MPI-1-calls.patch
+  ];
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
@@ -60,7 +65,7 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    license = stdenv.lib.licenses.free; # BSD-like
+    license = stdenv.lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
     homepage = https://www.hdfgroup.org/HDF5/;
     platforms = stdenv.lib.platforms.unix;
     broken = (gfortran != null) && stdenv.isDarwin;

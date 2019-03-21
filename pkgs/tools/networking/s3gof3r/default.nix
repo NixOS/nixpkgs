@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "s3gof3r-${version}";

@@ -1,142 +1,24 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    CFPropertyList (2.3.1)
-    beefcake (1.1.0)
-    builder (3.2.2)
-    excon (0.45.3)
-    faraday (0.9.1)
-      multipart-post (>= 1.2, < 3)
-    fission (0.5.0)
-      CFPropertyList (~> 2.2)
-    fog (1.31.0)
-      fog-atmos
-      fog-aws (~> 0.0)
-      fog-brightbox (~> 0.4)
-      fog-core (~> 1.30)
-      fog-ecloud
-      fog-google (>= 0.0.2)
-      fog-json
-      fog-local
-      fog-powerdns (>= 0.1.1)
-      fog-profitbricks
-      fog-radosgw (>= 0.0.2)
-      fog-riakcs
-      fog-sakuracloud (>= 0.0.4)
-      fog-serverlove
-      fog-softlayer
-      fog-storm_on_demand
-      fog-terremark
-      fog-vmfusion
-      fog-voxel
-      fog-xml (~> 0.1.1)
-      ipaddress (~> 0.5)
-      nokogiri (~> 1.5, >= 1.5.11)
-    fog-atmos (0.1.0)
-      fog-core
-      fog-xml
-    fog-aws (0.6.0)
-      fog-core (~> 1.27)
-      fog-json (~> 1.0)
-      fog-xml (~> 0.1)
-      ipaddress (~> 0.8)
-    fog-brightbox (0.7.2)
-      fog-core (~> 1.22)
-      fog-json
-      inflecto (~> 0.0.2)
-    fog-core (1.31.1)
-      builder
-      excon (~> 0.45)
-      formatador (~> 0.2)
-      mime-types
-      net-scp (~> 1.1)
-      net-ssh (>= 2.1.3)
-    fog-ecloud (0.3.0)
-      fog-core
-      fog-xml
-    fog-google (0.0.6)
-      fog-core
-      fog-json
-      fog-xml
-    fog-json (1.0.2)
-      fog-core (~> 1.0)
-      multi_json (~> 1.10)
-    fog-local (0.2.1)
-      fog-core (~> 1.27)
-    fog-powerdns (0.1.1)
-      fog-core (~> 1.27)
-      fog-json (~> 1.0)
-      fog-xml (~> 0.1)
-    fog-profitbricks (0.0.3)
-      fog-core
-      fog-xml
-      nokogiri
-    fog-radosgw (0.0.4)
-      fog-core (>= 1.21.0)
-      fog-json
-      fog-xml (>= 0.0.1)
-    fog-riakcs (0.1.0)
-      fog-core
-      fog-json
-      fog-xml
-    fog-sakuracloud (1.0.1)
-      fog-core
-      fog-json
-    fog-serverlove (0.1.2)
-      fog-core
-      fog-json
-    fog-softlayer (0.4.7)
-      fog-core
-      fog-json
-    fog-storm_on_demand (0.1.1)
-      fog-core
-      fog-json
-    fog-terremark (0.1.0)
-      fog-core
-      fog-xml
-    fog-vmfusion (0.1.0)
-      fission
-      fog-core
-    fog-voxel (0.1.0)
-      fog-core
-      fog-xml
-    fog-xml (0.1.2)
-      fog-core
-      nokogiri (~> 1.5, >= 1.5.11)
-    formatador (0.2.5)
-    inflecto (0.0.2)
-    ipaddress (0.8.0)
-    mime-types (2.6.1)
-    mini_portile (0.6.2)
+    beefcake (1.0.0)
+    json (1.8.6)
     mtrc (0.0.4)
-    multi_json (1.11.1)
-    multipart-post (2.0.0)
-    munin-ruby (0.2.5)
-    net-scp (1.2.1)
-      net-ssh (>= 2.6.5)
-    net-ssh (2.9.2)
-    nokogiri (1.6.6.2)
-      mini_portile (~> 0.6.0)
-    riemann-client (0.2.5)
-      beefcake (>= 0.3.5)
+    riemann-client (0.2.6)
+      beefcake (>= 0.3.5, <= 1.0.0)
       mtrc (>= 0.0.4)
       trollop (>= 1.16.2)
-    riemann-tools (0.2.6)
-      faraday (>= 0.8.5)
-      fog (>= 1.4.0)
-      munin-ruby (>= 0.2.1)
-      nokogiri (>= 1.5.6)
-      riemann-client (>= 0.2.2)
+    riemann-tools (0.2.13)
+      json (~> 1.8)
+      riemann-client (>= 0.2.6)
       trollop (>= 1.16.2)
-      yajl-ruby (>= 1.1.0)
     trollop (2.1.2)
-    yajl-ruby (1.2.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  riemann-tools (= 0.2.6)
+  riemann-tools (= 0.2.13)
 
 BUNDLED WITH
-   1.10.2
+   1.14.6

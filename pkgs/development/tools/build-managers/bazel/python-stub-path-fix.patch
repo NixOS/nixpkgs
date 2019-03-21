@@ -1,0 +1,13 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt b/src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt
+index dac21c9a83..69b11c283f 100644
+--- a/src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt
++++ b/src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt
+@@ -67,7 +67,7 @@ def FindPythonBinary(module_space):
+     return os.path.join(module_space, PYTHON_BINARY)
+   else:
+     # Case 4: Path has to be looked up in the search path.
+-    return SearchPath(PYTHON_BINARY)
++    return "NIX_STORE_PYTHON_PATH"
+ 
+ def CreatePythonPathEntries(python_imports, module_space):
+   parts = python_imports.split(':');

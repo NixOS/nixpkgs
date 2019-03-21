@@ -1,20 +1,21 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl }:
 
 let arch = if stdenv.isx86_64 then "x86-64" else
            if stdenv.isi686 then "x86-32" else
            "unknown";
+
+    version = "10";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "stockfish-8";
+  name = "stockfish-${version}";
 
   src = fetchurl {
-    url = "https://stockfish.s3.amazonaws.com/${name}-src.zip";
-    sha256 = "1sachz41kbni88yjxwv5y4vl0gjbnyqvp1kpdm7v56k43zr3dbbv";
+    url = "https://github.com/official-stockfish/Stockfish/archive/sf_${version}.tar.gz";
+    sha256 = "1lrxqq8fw1wrw5b45r4s3ddd51yr85a2k8a9i1wjvyd6v9vm7761";
   };
 
-  buildInputs = [ unzip ];
   postUnpack = "sourceRoot+=/src";
   makeFlags = [ "PREFIX=$(out)" "ARCH=${arch}" ];
   buildFlags = "build ";

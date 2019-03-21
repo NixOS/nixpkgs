@@ -12,16 +12,3 @@ index baf29e7..b63f368 100644
      test(_TestTCPWritev)
      test(_TestTCPExpect)
      test(_TestTCPMute)
-diff --git a/packages/net/http/_test.pony b/packages/net/http/_test.pony
-index e55d5a7..40a4cb6 100644
---- a/packages/net/http/_test.pony
-+++ b/packages/net/http/_test.pony
-@@ -29,8 +29,6 @@ actor Main is TestList
-     test(_Valid)
-     test(_ToStringFun)
- 
--    test(_HTTPConnTest)
--
- class iso _Encode is UnitTest
-   fun name(): String => "net/http/URLEncode.encode"
- 

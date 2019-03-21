@@ -1,22 +1,20 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , pruviloj
 , lib
-, idris
 }:
 build-idris-package  {
   name = "derive";
-  version = "2018-02-15";
+  version = "2018-07-02";
 
-  idrisDeps = [ prelude contrib pruviloj ];
+  idrisDeps = [ contrib pruviloj ];
 
   src = fetchFromGitHub {
-    owner = "davlum";
+    owner = "david-christiansen";
     repo = "derive-all-the-instances";
-    rev = "2c8956807bd094ba33569227de921c6726401c42";
-    sha256 = "0l7263s04r52ql292vnnx2kngld6s1dipmaz5na7m82lj9p4x17y";
+    rev = "0a9a5082d4ab6f879a2c141d1a7b645fa73fd950";
+    sha256 = "06za15m1kv9mijzll5712crry4iwx3b0fjv76gy9vv1p10gy2g4m";
   };
 
   meta = {
@@ -24,6 +22,5 @@ build-idris-package  {
     homepage = https://github.com/davlum/derive-all-the-instances;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

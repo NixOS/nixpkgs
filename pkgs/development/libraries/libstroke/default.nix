@@ -1,4 +1,4 @@
-{stdenv, fetchurl, automake, autoconf, x11}:
+{stdenv, fetchurl, automake, autoconf, xlibsWrapper}:
 
 stdenv.mkDerivation {
   name = "libstroke-0.5.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0bbpqzsqh9zrc6cg62f6vp1p4dzvv37blsd0gdlzdskgwvyzba8d";
   };
 
-  buildInputs = [ automake autoconf x11 ];
+  buildInputs = [ automake autoconf xlibsWrapper ];
 
   # libstroke ships with an ancient config.sub that doesn't know about x86_64, so regenerate it.
   # Also, modern automake doesn't like things and returns error code 63.  But it generates the file.

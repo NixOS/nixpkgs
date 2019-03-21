@@ -3,12 +3,12 @@
 import ./make-test.nix ( { pkgs, ... } : {
   name = "firewall";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   nodes =
     { walled =
-        { config, pkgs, nodes, ... }:
+        { ... }:
         { networking.firewall.enable = true;
           networking.firewall.logRefusedPackets = true;
           services.httpd.enable = true;
@@ -20,13 +20,13 @@ import ./make-test.nix ( { pkgs, ... } : {
       # original walled configuration so that there is a change in the service
       # file.
       walled2 =
-        { config, pkgs, nodes, ... }:
+        { ... }:
         { networking.firewall.enable = true;
           networking.firewall.rejectPackets = true;
         };
 
       attacker =
-        { config, pkgs, ... }:
+        { ... }:
         { services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           networking.firewall.enable = false;

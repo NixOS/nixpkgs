@@ -11,12 +11,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf ];
   buildInputs = [ fuse samba glib attr libsecret ];
 
+  postPatch = ''
+    substituteInPlace src/function.c --replace "attr/xattr.h" "sys/xattr.h"
+  '';
+
   meta = with stdenv.lib; {
     description = "A FUSE FS for mounting Samba shares";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;
-    downloadPage = "http://sourceforge.net/projects/smbnetfs/files/smbnetfs";
+    downloadPage = "https://sourceforge.net/projects/smbnetfs/files/smbnetfs";
     updateWalker = true;
     inherit version;
     homepage = https://sourceforge.net/projects/smbnetfs/;

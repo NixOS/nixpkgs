@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "0.1.5.978";
 
   src = fetchurl {
-    url = "http://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
+    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
     sha256 = p.sha256;
   };
 

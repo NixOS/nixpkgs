@@ -1,51 +1,38 @@
-{ buildPythonApplication, lib, fetchFromGitHub, bashInteractive
-, argcomplete, arxiv2bib, beautifulsoup4, bibtexparser
-, configparser, dmenu-python, habanero, papis-python-rofi
-, pylibgen, prompt_toolkit, pyparser, pytest, python_magic
-, pyyaml, requests, unidecode, urwid, vobject, tkinter
-, vim
+{ lib, fetchFromGitHub, fetchpatch
+, python3, xdg_utils
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "papis";
-  version = "0.5.3";
+  version = "0.8.2";
 
   # Missing tests on Pypi
   src = fetchFromGitHub {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1yc4ilb7bw099pi2vwawyf8mi0n1kp87wgwgwcwc841ibq62q8ic";
+    sha256 = "0sa4hpgjvqkjcmp9bjr27b5m5jg4pfspdc8nf1ny80sr0kzn72hb";
   };
 
-  postPatch = ''
-    sed -i 's/configparser>=3.0.0/# configparser>=3.0.0/' setup.py
-    patchShebangs tests
-  '';
-
-  propagatedBuildInputs = [
-    argcomplete arxiv2bib beautifulsoup4 bibtexparser
-    configparser dmenu-python habanero papis-python-rofi
-    pylibgen prompt_toolkit pyparser python_magic pyyaml
-    requests unidecode urwid vobject tkinter
-    vim
+  propagatedBuildInputs = with python3.pkgs; [
+    requests filetype pyparsing configparser arxiv2bib
+    pyyaml chardet beautifulsoup4 colorama bibtexparser
+    pylibgen click python-slugify habanero isbnlib
+    prompt_toolkit pygments
+    # optional dependencies
+    jinja2 whoosh
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = (with python3.pkgs; [
+    pytest
+  ]) ++ [
+    xdg_utils
+  ];
 
-  # Papis tries to create the config folder under $HOME during the tests
+  # most of the downloader tests and 4 other tests require a network connection
   checkPhase = ''
-    mkdir -p check-phase
-    export PATH=$out/bin:$PATH
-    # Still don't know why this fails
-    sed -i 's/--set dir=hello //' tests/bash/test_default.sh
-
-    # This test has been disabled since it requires a network connaction
-    sed -i 's/test_downloader_getter(self):/disabled_test_downloader_getter(self):/' papis/downloaders/tests/test_main.py
-
-    export HOME=$(pwd)/check-phase
-    make test
-    SH=${bashInteractive}/bin/bash make test-non-pythonic
+    HOME=$(mktemp -d) pytest papis tests --ignore tests/downloaders \
+      -k "not test_get_data and not test_doi_to_data and not test_general and not get_document_url"
   '';
 
   meta = {

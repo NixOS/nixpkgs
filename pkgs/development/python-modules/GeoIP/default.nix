@@ -1,9 +1,7 @@
-{lib, buildPythonPackage, fetchPypi, isPy3k, incremental, ipaddress, twisted
-, automat, zope_interface, idna, pyopenssl, service-identity, pytest, mock, lsof
+{lib, buildPythonPackage, fetchPypi
 , geoip, nose}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "GeoIP";
   version = "1.3.2";
 

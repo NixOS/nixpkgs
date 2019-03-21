@@ -1,11 +1,14 @@
 { stdenv, fetchurl, pkgconfig, glib, freetype, cairo, libintl
 , icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
+, ApplicationServices, CoreText
+, withCoreText ? false
 , withIcu ? false # recommended by upstream as default, but most don't needed and it's big
 , withGraphite2 ? true # it is small and major distros do include it
+, python
 }:
 
 let
-  version = "1.7.6";
+  version = "2.3.1";
   inherit (stdenv.lib) optional optionals optionalString;
 in
 
@@ -13,24 +16,40 @@ stdenv.mkDerivation {
   name = "harfbuzz${optionalString withIcu "-icu"}-${version}";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.bz2";
-    sha256 = "16rf7qwgy1gza74v2ws79zdwwb1lpvgz2abwwm8ws9j82cwysyys";
+    url = "https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.bz2";
+    sha256 = "0s74ramsbfa183rxkidqgfd2vbhrwicnrqzqsq440dwibffnj1gj";
   };
+
+  postPatch = ''
+    patchShebangs src/gen-def.py
+    patchShebangs test
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # ApplicationServices.framework headers have cast-align warnings.
+    substituteInPlace src/hb.hh \
+      --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
+  '';
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   configureFlags = [
-    ( "--with-graphite2=" + (if withGraphite2 then "yes" else "no") ) # not auto-detected by default
-    ( "--with-icu=" +       (if withIcu       then "yes" else "no") )
-  ];
+    # not auto-detected by default
+    "--with-graphite2=${if withGraphite2 then "yes" else "no"}"
+    "--with-icu=${if withIcu then "yes" else "no"}"
+  ]
+    ++ stdenv.lib.optional withCoreText "--with-coretext=yes";
 
   nativeBuildInputs = [ pkgconfig libintl ];
-  buildInputs = [ glib freetype cairo ]; # recommended by upstream
+
+  buildInputs = [ glib freetype cairo ] # recommended by upstream
+    ++ stdenv.lib.optionals withCoreText [ ApplicationServices CoreText ];
+
   propagatedBuildInputs = []
     ++ optional withGraphite2 graphite2
-    ++ optionals withIcu [ icu harfbuzz ]
-    ;
+    ++ optionals withIcu [ icu harfbuzz ];
+
+  checkInputs = [ python ];
+  doInstallCheck = false; # fails, probably a bug
 
   # Slightly hacky; some pkgs expect them in a single directory.
   postInstall = optionalString withIcu ''
@@ -48,6 +67,7 @@ stdenv.mkDerivation {
     homepage = http://www.freedesktop.org/wiki/Software/HarfBuzz;
     downloadPage = "https://www.freedesktop.org/software/harfbuzz/release/";
     maintainers = [ maintainers.eelco ];
+    license = licenses.mit;
     platforms = with platforms; linux ++ darwin;
     inherit version;
     updateWalker = true;

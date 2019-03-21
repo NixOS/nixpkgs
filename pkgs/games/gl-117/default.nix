@@ -13,12 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libGLU_combined SDL freeglut SDL_mixer autoconf automake libtool ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An air combat simulator";
-    maintainers = with stdenv.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://sourceforge.net/projects/gl-117;
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

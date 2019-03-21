@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
   **
   ** Ideally in the future this would be less of a hack and could be
   ** done by Chez itself. Alternatively, there could just be a big
-  ** case statement matching to the different stdenv.platform values...
+  ** case statement matching to the different stdenv.hostPlatform.platform
+  ** values...
   */
   postInstall = ''
     m="$(ls ./work/boot)"
@@ -82,6 +83,7 @@ stdenv.mkDerivation rec {
     homepage    = https://cisco.github.io/ChezScheme/;
     license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.unix;
+    badPlatforms = [ "aarch64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
   };
 }

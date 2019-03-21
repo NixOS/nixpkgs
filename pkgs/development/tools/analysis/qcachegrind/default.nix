@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qmake, qtbase, perl, python, php, kcachegrind, fetchpatch }:
+{ stdenv, qmake, qtbase, perl, python, php, kcachegrind }:
 
 let
   name = stdenv.lib.replaceStrings ["kcachegrind"] ["qcachegrind"] kcachegrind.name;

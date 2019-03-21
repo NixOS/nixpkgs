@@ -1,24 +1,24 @@
 { lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
-, gtk3, gobjectIntrospection, libappindicator-gtk3, librsvg
-, evdev, pygobject3, pylibacl, pytest
+, gtk3, gobject-introspection, libappindicator-gtk3, librsvg
+, evdev, pygobject3, pylibacl, pytest, bluez
 , linuxHeaders
-, libX11, libXext, libXfixes, libusb1
+, libX11, libXext, libXfixes, libusb1, udev
 }:
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.2";
+  version = "0.4.6.1";
 
   src = fetchFromGitHub {
     owner  = "kozec";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "19i9z5cjjgi3a94hrz5g3a6m4vj71p1gs6mhklc6dq8ydwsadwzz";
+    sha256 = "1kcqsnrlwl4s94j6ahgkz3w4sy9hsr95y624zab6g10w0fl5sqrc";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gobjectIntrospection libappindicator-gtk3 librsvg ];
+  buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
 
   propagatedBuildInputs = [ evdev pygobject3 pylibacl ];
 
@@ -27,9 +27,10 @@ buildPythonApplication rec {
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
     substituteInPlace scc/uinput.py --replace /usr/include ${linuxHeaders}/include
+    substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 udev bluez ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")

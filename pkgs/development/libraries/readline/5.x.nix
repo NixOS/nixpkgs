@@ -11,8 +11,10 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ncurses];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./shobj-darwin.patch;
-  meta = {
+
+  meta = with stdenv.lib; {
     branch = "5";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

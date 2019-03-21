@@ -1,22 +1,27 @@
-{ stdenv, buildPythonPackage, fetchPypi, lib
-, six, protobuf, enum34, futures, isPy26, isPy27, isPy34 }:
+{ stdenv, buildPythonPackage, fetchPypi, lib, darwin
+, six, protobuf, enum34, futures, isPy27, isPy34, pkgconfig }:
 
+with stdenv.lib;
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.9.1";
+  version = "1.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e7c43b5619deff48cc177c1b0618c4beeb2797f910f160e3c2035d5baf790a5d";
+    sha256 = "abe825aa49e6239d5edf4e222c44170d2c7f6f4b1fd5286b4756a62d8067e112";
   };
 
+  nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin darwin.cctools;
+
   propagatedBuildInputs = [ six protobuf ]
-                        ++ lib.optionals (isPy26 || isPy27 || isPy34) [ enum34 ]
-                        ++ lib.optionals (isPy26 || isPy27) [ futures ];
+                        ++ lib.optionals (isPy27 || isPy34) [ enum34 ]
+                        ++ lib.optionals (isPy27) [ futures ];
+
+  preBuild = optionalString stdenv.isDarwin "unset AR";
 
   meta = with stdenv.lib; {
     description = "HTTP/2-based RPC framework";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
     maintainers = with maintainers; [ vanschelven ];
   };

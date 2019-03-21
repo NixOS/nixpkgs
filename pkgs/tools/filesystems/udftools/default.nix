@@ -1,14 +1,17 @@
-{ stdenv, fetchurl, ncurses, readline }:
+{ stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "udftools-${version}";
-  version = "1.0.0b3";
-  src = fetchurl {
-    url = "mirror://sourceforge/linux-udf/udftools/${version}/${name}.tar.gz";
-    sha256 = "180414z7jblby64556i8p24rcaas937zwnyp1zg073jdin3rw1y5";
+  version = "2.0";
+  src = fetchFromGitHub {
+    owner = "pali";
+    repo = "udftools";
+    rev = "${version}";
+    sha256 = "0mz04h3rki6ljwfs15z83gf4vv816w7xgz923waiqgmfj9xpvx87";
   };
 
   buildInputs = [ ncurses readline ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -21,6 +24,12 @@ stdenv.mkDerivation rec {
     sed -e '38i#include <string.h>' -i wrudf/wrudf-cdrw.c
     sed -e '12i#include <string.h>' -i wrudf/wrudf-cdr.c
     sed -e '37i#include <stdlib.h>' -i wrudf/ide-pc.c
+
+    sed -e "s@\$(DESTDIR)/lib/udev/rules.d@$out/lib/udev/rules.d@" -i pktsetup/Makefile.am
+  '';
+
+  postFixup = ''
+    sed -i -e "s@/usr/sbin/pktsetup@$out/sbin/pktsetup@" $out/lib/udev/rules.d/80-pktsetup.rules
   '';
 
   meta = with stdenv.lib; {

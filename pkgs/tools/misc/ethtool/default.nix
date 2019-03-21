@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ethtool-${version}";
-  version = "4.15";
+  version = "5.0";
 
   src = fetchurl {
     url = "mirror://kernel/software/network/ethtool/${name}.tar.xz";
-    sha256 = "06pr3s7wg2pbvfbf7js61bgh3caff4qf50nqqk3cgz9z90rgvxvi";
+    sha256 = "16gfkf001mdid1vjrxwri7fs4iwiy6d4lkrssljr2n13y0xj7m7c";
   };
 
   meta = with stdenv.lib; {

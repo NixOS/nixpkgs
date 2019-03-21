@@ -1,15 +1,21 @@
 { stdenv, fetchurl, openssl, lzo, zlib, iproute, which, ronn }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.8";
-  name = "zerotierone";
+  version = "1.2.12";
+  name = "zerotierone-${version}";
 
   src = fetchurl {
     url = "https://github.com/zerotier/ZeroTierOne/archive/${version}.tar.gz";
-    sha256 = "0iwaaicf3wa1xi20k2w18q01d0dlmf5w9akf227bcsqdalsdzqh8";
+    sha256 = "1m7ynrgzpg2sp37hcmjkx6w173icfhakzn1c1zrdzrxmmszrj9r1";
   };
 
   preConfigure = ''
+      substituteInPlace ./osdep/ManagedRoute.cpp \
+        --replace '/usr/sbin/ip' '${iproute}/bin/ip'
+
+      substituteInPlace ./osdep/ManagedRoute.cpp \
+        --replace '/sbin/ip' '${iproute}/bin/ip'
+
       substituteInPlace ./osdep/LinuxEthernetTap.cpp \
         --replace 'execlp("ip",' 'execlp("${iproute}/bin/ip",'
 

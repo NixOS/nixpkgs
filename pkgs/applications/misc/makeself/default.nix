@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1lw3gx1zpzp2wmzrw5v7k31vfsrdzadqha9ni309fp07g8inrr9n";
   };
 
-  patchPhase = ''
+  # backported from https://github.com/megastep/makeself/commit/77156e28ff21231c400423facc7049d9c60fd1bd
+  patches = [ ./Use-rm-from-PATH.patch ];
+
+  postPatch = ''
     sed -e "s|^HEADER=.*|HEADER=$out/share/${name}/makeself-header.sh|" -i makeself.sh
   '';
 

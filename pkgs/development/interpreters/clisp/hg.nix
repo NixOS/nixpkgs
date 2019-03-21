@@ -4,7 +4,7 @@
 #   by default
 # - full: contains base plus modules in withModules
 { stdenv, fetchhg, libsigsegv, gettext, ncurses, readline, libX11
-, libXau, libXt, pcre, zlib, libXpm, xproto, libXext, xextproto
+, libXau, libXt, pcre, zlib, libXpm, xorgproto, libXext
 , libffi, libffcall, automake
 , coreutils
 # build options
@@ -20,7 +20,7 @@
 }:
 
 assert x11Support -> (libX11 != null && libXau != null && libXt != null
-  && libXpm != null && xproto != null && libXext != null && xextproto != null);
+  && libXpm != null && xorgproto != null && libXext != null);
 
 stdenv.mkDerivation rec {
   v = "2.50pre20171114";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional (ffcallAvailable && (libffi != null)) libffi
   ++ stdenv.lib.optional ffcallAvailable libffcall
   ++ stdenv.lib.optionals x11Support [
-    libX11 libXau libXt libXpm xproto libXext xextproto
+    libX11 libXau libXt libXpm xorgproto libXext
   ];
 
   # First, replace port 9090 (rather low, can be used)
@@ -62,15 +62,15 @@ stdenv.mkDerivation rec {
     substituteInPlace modules/bindings/glibc/linux.lisp --replace "(def-c-type __swblk_t)" ""
   '';
 
-  configureFlags = "builddir"
-  + stdenv.lib.optionalString (!dllSupport) " --without-dynamic-modules"
-  + stdenv.lib.optionalString (readline != null) " --with-readline"
+  configureFlags = [ "builddir" ]
+  ++ stdenv.lib.optional (!dllSupport) "--without-dynamic-modules"
+  ++ stdenv.lib.optional (readline != null) "--with-readline"
   # --with-dynamic-ffi can only exist with --with-ffcall - foreign.d does not compile otherwise
-  + stdenv.lib.optionalString (ffcallAvailable && (libffi != null)) " --with-dynamic-ffi"
-  + stdenv.lib.optionalString ffcallAvailable " --with-ffcall"
-  + stdenv.lib.optionalString (!ffcallAvailable) " --without-ffcall"
-  + stdenv.lib.concatMapStrings (x: " --with-module=" + x) withModules
-  + stdenv.lib.optionalString threadSupport " --with-threads=POSIX_THREADS";
+  ++ stdenv.lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
+  ++ stdenv.lib.optional ffcallAvailable "--with-ffcall"
+  ++ stdenv.lib.optional (!ffcallAvailable) "--without-ffcall"
+  ++ builtins.map (x: " --with-module=" + x) withModules
+  ++ stdenv.lib.optional threadSupport "--with-threads=POSIX_THREADS";
 
   preBuild = ''
     sed -e '/avcall.h/a\#include "config.h"' -i src/foreign.d

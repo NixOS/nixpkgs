@@ -15,7 +15,7 @@ if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
-source @out@/nix-support/utils.sh
+source @out@/nix-support/utils.bash
 
 # Flirting with a layer violation here.
 if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
@@ -126,7 +126,7 @@ fi
 
 if [[ "$isCpp" = 1 ]]; then
     if [[ "$cppInclude" = 1 ]]; then
-        NIX_@infixSalt@_CFLAGS_COMPILE+=" ${NIX_@infixSalt@_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
+        NIX_@infixSalt@_CFLAGS_COMPILE+=" ${NIX_@infixSalt@_CXXSTDLIB_COMPILE:-@default_cxx_stdlib_compile@}"
     fi
     NIX_@infixSalt@_CFLAGS_LINK+=" $NIX_@infixSalt@_CXXSTDLIB_LINK"
 fi
@@ -134,8 +134,8 @@ fi
 source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
-extraAfter=($NIX_@infixSalt@_CFLAGS_COMPILE "${hardeningCFlags[@]}")
-extraBefore=()
+extraAfter=($NIX_@infixSalt@_CFLAGS_COMPILE)
+extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"})
 
 if [ "$dontLink" != 1 ]; then
 

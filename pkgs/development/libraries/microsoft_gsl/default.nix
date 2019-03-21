@@ -1,9 +1,8 @@
 { stdenv, fetchgit, cmake
-, hostPlatform, buildPlatform
 }:
 
 let
-  nativeBuild = hostPlatform == buildPlatform;
+  nativeBuild = stdenv.hostPlatform == stdenv.buildPlatform;
 in
 stdenv.mkDerivation rec {
   name = "microsoft_gsl-${version}";

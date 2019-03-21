@@ -1,19 +1,28 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
-, git, coreutils, bash, gzip, openssh
+, git, bash, gzip, openssh, pam
 , sqliteSupport ? true
+, pamSupport ? true
 }:
 
 with stdenv.lib;
 
 buildGoPackage rec {
   name = "gitea-${version}";
-  version = "1.4.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${version}";
-    sha256 = "1mid67c4021m7mi4ablx1w5v43831gzn8xpg8n30a4zmr70781wm";
+    sha256 = "0q33xn2l2ii8vd3hxr0f6ipk8mv2ahb3p8fzdzylhgg9w15snvsr";
+    # Required to generate the same checksum on MacOS due to unicode encoding differences
+    # More information: https://github.com/NixOS/nixpkgs/pull/48128
+    extraPostFetch = ''
+      rm -rf $out/integrations
+      rm -rf $out/vendor/github.com/Unknown/cae/tz/testdata
+      rm -rf $out/vendor/github.com/Unknown/cae/zip/testdata
+      rm -rf $out/vendor/gopkg.in/macaron.v1/fixtures
+    '';
   };
 
   patches = [ ./static-root-path.patch ];
@@ -23,15 +32,22 @@ buildGoPackage rec {
     substituteInPlace modules/setting/setting.go --subst-var data
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optional pamSupport pam;
 
-  buildFlags = optionalString sqliteSupport "-tags sqlite";
+  buildFlags = optional sqliteSupport "-tags sqlite"
+    ++ optional pamSupport "-tags pam";
+  buildFlagsArray = ''
+    -ldflags=
+      -X=main.Version=${version}
+      ${optionalString sqliteSupport "-X=main.Tags=sqlite"}
+  '';
 
   outputs = [ "bin" "out" "data" ];
 
   postInstall = ''
     mkdir $data
-    cp -R $src/{public,templates} $data
+    cp -R $src/{public,templates,options} $data
     mkdir -p $out
     cp -R $src/options/locale $out/locale
 

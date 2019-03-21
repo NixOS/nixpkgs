@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   sourceName = "sawfish_${version}";
 
   src = fetchurl {
-    url = "http://download.tuxfamily.org/sawfish/${sourceName}.tar.xz";
+    url = "https://download.tuxfamily.org/sawfish/${sourceName}.tar.xz";
     sha256 = "18p8srqqj9vjffg13qhspfz2gr1h4vfs10qzlv89g76r289iam31";
   };
 

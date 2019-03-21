@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "MPD plugin for Xfce panel";
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 }

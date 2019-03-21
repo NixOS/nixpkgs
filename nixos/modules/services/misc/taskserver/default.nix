@@ -7,16 +7,6 @@ let
 
   taskd = "${pkgs.taskserver}/bin/taskd";
 
-  mkVal = val:
-    if val == true then "true"
-    else if val == false then "false"
-    else if isList val then concatStringsSep ", " val
-    else toString val;
-
-  mkConfLine = key: val: let
-    result = "${key} = ${mkVal val}";
-  in optionalString (val != null && val != []) result;
-
   mkManualPkiOption = desc: mkOption {
     type = types.nullOr types.path;
     default = null;
@@ -94,7 +84,7 @@ let
     in flatten (mapAttrsToList mkSublist attrs);
   in all isNull (findPkiDefinitions [] manualPkiOptions);
 
-  orgOptions = { name, ... }: {
+  orgOptions = { ... }: {
     options.users = mkOption {
       type = types.uniq (types.listOf types.str);
       default = [];
@@ -119,7 +109,7 @@ let
   nixos-taskserver = pkgs.pythonPackages.buildPythonApplication {
     name = "nixos-taskserver";
 
-    src = pkgs.runCommand "nixos-taskserver-src" {} ''
+    src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
       mkdir -p "$out"
       cat "${pkgs.substituteAll {
         src = ./helper-tool.py;

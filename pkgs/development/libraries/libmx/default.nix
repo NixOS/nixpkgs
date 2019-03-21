@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , libtool, pkgconfig, automake, autoconf, intltool
-, glib, gobjectIntrospection, gtk2, gtk-doc
+, glib, gobject-introspection, gtk2, gtk-doc
 , clutter, clutter-gtk
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     automake autoconf libtool
     intltool
-    gobjectIntrospection glib
+    gobject-introspection glib
     gtk2 gtk-doc clutter clutter-gtk
   ];
 

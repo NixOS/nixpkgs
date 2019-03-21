@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = http://editorconfig.org/;
+    homepage = https://editorconfig.org/;
     description = "EditorConfig core library written in C";
     longDescription = ''
       EditorConfig makes it easy to maintain the correct coding style when

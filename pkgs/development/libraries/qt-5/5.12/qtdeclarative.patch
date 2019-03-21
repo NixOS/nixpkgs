@@ -1,0 +1,33 @@
+diff --git a/src/qml/qml/qqmlimport.cpp b/src/qml/qml/qqmlimport.cpp
+index 005db4248..685c5b1b2 100644
+--- a/src/qml/qml/qqmlimport.cpp
++++ b/src/qml/qml/qqmlimport.cpp
+@@ -1760,6 +1760,15 @@ QQmlImportDatabase::QQmlImportDatabase(QQmlEngine *e)
+     QString installImportsPath =  QLibraryInfo::location(QLibraryInfo::Qml2ImportsPath);
+     addImportPath(installImportsPath);
+ 
++    // Add import paths derived from PATH
++    const QStringList paths = QFile::decodeName(qgetenv("PATH")).split(':');
++    const QString qmldir = QStringLiteral("../" NIXPKGS_QML2_IMPORT_PREFIX);
++    for (const QString &path: paths) {
++        if (!path.isEmpty()) {
++            addImportPath(QDir::cleanPath(path + QDir::separator() + qmldir));
++        }
++    }
++
+     // env import paths
+     if (Q_UNLIKELY(!qEnvironmentVariableIsEmpty("QML2_IMPORT_PATH"))) {
+         const QString envImportPath = qEnvironmentVariable("QML2_IMPORT_PATH");
+diff --git a/tools/qmlcachegen/qmlcache.prf b/tools/qmlcachegen/qmlcache.prf
+index 537eaf62e..e21de58f6 100644
+--- a/tools/qmlcachegen/qmlcache.prf
++++ b/tools/qmlcachegen/qmlcache.prf
+@@ -26,7 +26,7 @@ defineReplace(qmlCacheOutputFileName) {
+ }
+ 
+ qmlcacheinst.base = $$QMLCACHE_DESTDIR
+-qmlcacheinst.path = $$[QT_INSTALL_QML]/$$TARGETPATH
++qmlcacheinst.path = $$NIX_OUTPUT_QML/$$TARGETPATH
+ qmlcacheinst.CONFIG = no_check_exist
+ 
+ qmlcachegen.input = CACHEGEN_FILES

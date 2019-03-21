@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , makeWrapper
 , pkgconfig
-, clang
 , llvm
 , emscripten
 , openssl
@@ -28,7 +27,7 @@ let
 
   meta = with stdenv.lib; {
     homepage = http://faust.grame.fr/;
-    downloadPage = http://sourceforge.net/projects/faudiostream/files/;
+    downloadPage = https://sourceforge.net/projects/faudiostream/files/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ magnetophon pmahoney ];
@@ -71,6 +70,13 @@ let
       # For now, fix this by 1) pinning the llvm version; 2) manually setting LLVM_VERSION
       # to something the makefile will recognize.
       sed '52iLLVM_VERSION=${stdenv.lib.getVersion llvm}' -i compiler/Makefile.unix
+    '';
+
+    postPatch = ''
+      # fix build with llvm 5.0.2 by adding it to the list of known versions
+      # TODO: check if still needed on next update
+      substituteInPlace compiler/Makefile.unix \
+        --replace "5.0.0 5.0.1" "5.0.0 5.0.1 5.0.2"
     '';
 
     # Remove most faust2appl scripts since they won't run properly
@@ -192,6 +198,7 @@ let
       buildInputs = [ makeWrapper ];
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
+
 
       postFixup = ''
 

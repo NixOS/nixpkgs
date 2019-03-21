@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.9.73";
 
   src = fetchurl {
-    url = "http://archive.notam02.no/arkiv/src/${name}.tar.gz";
+    url = "https://archive.notam02.no/arkiv/src/${name}.tar.gz";
     sha256 = "1pji0zdwm3kxjrkbzj7fnxhr8ncrc8pyqnwyrh47fhypgqjv1br1";
   };
 

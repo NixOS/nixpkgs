@@ -14,5 +14,6 @@ stdenv.mkDerivation {
     homepage = http://www.libee.org/;
     description = "An Event Expression Library inspired by CEE";
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.lgpl21Plus;
   };
 }

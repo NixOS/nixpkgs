@@ -1,5 +1,5 @@
-{stdenv, fetchurl, pkgconfig, libxml2Python, libxslt, intltool
-, makeWrapper, python2Packages }:
+{fetchurl, pkgconfig, libxml2Python, libxslt, intltool
+, python2Packages }:
 
 python2Packages.buildPythonApplication {
   name = "gnome-doc-utils-0.20.10";
@@ -10,10 +10,10 @@ python2Packages.buildPythonApplication {
     sha256 = "19n4x25ndzngaciiyd8dd6s2mf9gv6nv3wv27ggns2smm7zkj1nb";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig libxslt.dev ];
   buildInputs = [ libxslt ];
 
-  configureFlags = "--disable-scrollkeeper";
+  configureFlags = [ "--disable-scrollkeeper" ];
 
   preBuild = ''
     substituteInPlace xml2po/xml2po/Makefile --replace '-e "s+^#!.*python.*+#!$(PYTHON)+"' '-e "s\"^#!.*python.*\"#!$(PYTHON)\""'

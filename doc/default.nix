@@ -1,10 +1,9 @@
+{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
 let
-  pkgs = import ./.. { };
   lib = pkgs.lib;
-  sources = lib.sourceFilesBySuffices ./. [".xml"];
-  sources-langs = ./languages-frameworks;
-in
-pkgs.stdenv.mkDerivation {
+  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs; };
+  functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs; };
+in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
   buildInputs = with pkgs; [ pandoc libxml2 libxslt zip jing  xmlformat ];
@@ -16,7 +15,7 @@ pkgs.stdenv.mkDerivation {
   # $ nix-shell --run "make clean all"
   # otherwise they won't reapply :)
   HIGHLIGHTJS = pkgs.documentation-highlighter;
-  XSL = "${pkgs.docbook5_xsl}/xml/xsl";
+  XSL = "${pkgs.docbook_xsl_ns}/xml/xsl";
   RNG = "${pkgs.docbook5}/xml/rng/docbook/docbook.rng";
   XMLFORMAT_CONFIG = ../nixos/doc/xmlformat.conf;
   xsltFlags = lib.concatStringsSep " " [
@@ -31,6 +30,9 @@ pkgs.stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    rm -rf ./functions/library/locations.xml
+    ln -s ${locationsXml} ./functions/library/locations.xml
+    ln -s ${functionDocs} ./functions/library/generated
     echo ${lib.version} > .version
   '';
 
@@ -44,5 +46,6 @@ pkgs.stdenv.mkDerivation {
 
     mkdir -p $out/nix-support/
     echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
+    echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
 }

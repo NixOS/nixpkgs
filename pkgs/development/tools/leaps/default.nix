@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "leaps-${version}";
@@ -20,7 +20,7 @@ buildGoPackage rec {
     homepage = https://github.com/jeffail/leaps/;
     license = "MIT";
     maintainers = with stdenv.lib.maintainers; [ qknight ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
 

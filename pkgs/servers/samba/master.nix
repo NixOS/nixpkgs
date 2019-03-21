@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ fetchFromGitHub
 , samba4
 , nettle
 } :

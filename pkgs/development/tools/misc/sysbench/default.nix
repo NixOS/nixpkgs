@@ -2,7 +2,7 @@
 , libaio }:
 
 stdenv.mkDerivation rec {
-  name = "sysbench-1.0.14";
+  name = "sysbench-1.0.16";
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ vim mysql.connector-c libaio ];
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "akopytov";
     repo = "sysbench";
-    rev = "1.0.14";
-    sha256 = "0mp1wqdm87zqyn55z23qf1izqz7ijgcbsysdwqndd98w6m5d86rp";
+    rev = "1.0.16";
+    sha256 = "0ypain0m1yqn7yqfb5847fdph6a6m0rn2rnqbnkxcxz5g85kv1rg";
   };
 
   meta = {

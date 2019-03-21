@@ -3,19 +3,19 @@
 
 stdenv.mkDerivation rec {
   name = "duperemove-${version}";
-  version = "0.10";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
     rev = "v${version}";
-    sha256 = "1fll0xjg1p3pabgjiddild4ragk9spbdmdzrkq0hv5pxb1qrv7lp";
+    sha256 = "1scz76pvpljvrpfn176125xwaqwyy4pirlm11sc9spb2hyzknw2z";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libgcrypt glib linuxHeaders sqlite ];
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with stdenv.lib; {
     description = "A simple tool for finding duplicated extents and submitting them for deduplication";

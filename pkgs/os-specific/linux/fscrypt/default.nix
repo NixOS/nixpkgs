@@ -4,7 +4,7 @@
 
 buildGoPackage rec {
   name = "fscrypt-${version}";
-  version = "0.2.3";
+  version = "0.2.4";
 
   goPackagePath = "github.com/google/fscrypt";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "google";
     repo = "fscrypt";
     rev = "v${version}";
-    sha256 = "126bbxim4nj56kplvyv528i88mfray50r2rc6ysblkmaw6x0fd9c";
+    sha256 = "10gbyqzgi30as1crvqbb4rc5p8zzbzk1q5j080h1gnz56qzwivr8";
   };
 
   buildInputs = [ pam ];

@@ -1,32 +1,33 @@
-{buildVersion, x32sha256, x64sha256}:
+{buildVersion, x32sha256, x64sha256, dev ? false}:
 
-{ fetchurl, stdenv, glib, xorg, cairo, gtk2, pango, makeWrapper, openssl, bzip2,
+{ fetchurl, stdenv, glib, xorg, cairo, gtk2, gtk3, pango, makeWrapper, wrapGAppsHook, openssl, bzip2, runtimeShell,
   pkexecPath ? "/run/wrappers/bin/pkexec", libredirect,
-  gksuSupport ? false, gksu, unzip, zip, bash}:
+  gksuSupport ? false, gksu, unzip, zip, bash,
+  writeScript, common-updater-scripts, curl, gnugrep}:
 
 assert gksuSupport -> gksu != null;
 
 let
-
-  libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk2 cairo pango];
+  legacy = stdenv.lib.versionOlder buildVersion "3181";
+  libPath = stdenv.lib.makeLibraryPath [ glib xorg.libX11 (if legacy then gtk2 else gtk3) cairo pango ];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
     ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
 in let
   archSha256 =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       x32sha256
     else
       x64sha256;
 
   arch =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       "x32"
     else
       "x64";
 
   # package with just the binaries
   sublime = stdenv.mkDerivation {
-    name = "sublimetext3-${buildVersion}-bin";
+    name = "sublimetext3-bin-${buildVersion}";
     src =
       fetchurl {
         name = "sublimetext-${buildVersion}.tar.bz2";
@@ -36,11 +37,14 @@ in let
 
     dontStrip = true;
     dontPatchELF = true;
-    buildInputs = [ makeWrapper zip unzip ];
+    buildInputs = stdenv.lib.optionals (!legacy) [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
+    nativeBuildInputs = [ makeWrapper zip unzip ] ++ stdenv.lib.optional (!legacy) wrapGAppsHook;
 
     # make exec.py in Default.sublime-package use own bash with
     # an LD_PRELOAD instead of "/bin/bash"
     patchPhase = ''
+      runHook prePatch
+
       mkdir Default.sublime-package-fix
       ( cd Default.sublime-package-fix
         unzip -q ../Packages/Default.sublime-package
@@ -50,9 +54,13 @@ in let
         zip -q ../Packages/Default.sublime-package **/*
       )
       rm -r Default.sublime-package-fix
+
+      runHook postPatch
     '';
 
     buildPhase = ''
+      runHook preBuild
+
       for i in sublime_text plugin_host crash_reporter; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -62,9 +70,13 @@ in let
 
       # Rewrite pkexec|gksudo argument. Note that we can't delete bytes in binary.
       sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' sublime_text
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       # Correct sublime_text.desktop to exec `sublime' instead of /opt/sublime_text
       sed -e "s,/opt/sublime_text/sublime_text,$out/sublime_text," -i sublime_text.desktop
 
@@ -74,12 +86,20 @@ in let
       # We can't just call /usr/bin/env bash because a relocation error occurs
       # when trying to run a build from within Sublime Text
       ln -s ${bash}/bin/bash $out/sublime_bash
+
+      runHook postInstall
+    '';
+
+    dontWrapGApps = true; # non-standard location, need to wrap the executables manually
+
+    postFixup = ''
       wrapProgram $out/sublime_bash \
         --set LD_PRELOAD "${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1"
 
       wrapProgram $out/sublime_text \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-        --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects}
+        --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
+        ${stdenv.lib.optionalString (!legacy) ''"''${gappsWrapperArgs[@]}"''}
 
       # Without this, plugin_host crashes, even though it has the rpath
       wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
@@ -96,7 +116,7 @@ in stdenv.mkDerivation (rec {
     mkdir -p $out/bin
 
     cat > $out/bin/subl <<-EOF
-    #!/bin/sh
+    #!${runtimeShell}
     exec $sublime/sublime_text "\$@"
     EOF
     chmod +x $out/bin/subl
@@ -106,6 +126,22 @@ in stdenv.mkDerivation (rec {
     mkdir -p $out/share/applications
     ln -s $sublime/sublime_text.desktop $out/share/applications/sublime_text.desktop
     ln -s $sublime/Icon/256x256/ $out/share/icons
+  '';
+
+  passthru.updateScript = writeScript "sublime3-update-script" ''
+    #!${stdenv.shell}
+    set -o errexit
+    PATH=${stdenv.lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
+
+    latestVersion=$(curl https://www.sublimetext.com/3${stdenv.lib.optionalString dev "dev"} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
+
+    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+        package=sublime3${stdenv.lib.optionalString dev "-dev"}
+        # The script will not perform an update when the version attribute is up to date from previous platform run
+        # We need to clear it before each run
+        update-source-version ''${package}.sublime 0 0000000000000000000000000000000000000000000000000000000000000000 --file=pkgs/applications/editors/sublime/3/packages.nix --version-key=buildVersion --system=$platform
+        update-source-version ''${package}.sublime $latestVersion --file=pkgs/applications/editors/sublime/3/packages.nix --version-key=buildVersion --system=$platform
+    done
   '';
 
   meta = with stdenv.lib; {

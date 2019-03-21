@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "rustup-${version}";
-  version = "1.11.0";
-
-  cargoSha256 = "1r9mnj3x9sn16hi1r09gl5q0cnsa2g6kbjw2g115858i2a9k6hkr";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
-    owner = "rust-lang-nursery";
+    owner = "rust-lang";
     repo = "rustup.rs";
     rev = version;
-    sha256 = "05rbgkz4fk6c1x6bpmpx108bg2qcrf6vv3yfz378s7bmr3l319iz";
+    sha256 = "1mf92z89wqqaj3cg2cqf6basvcz47krldmy8ianfkzp323fimqmn";
   };
+
+  cargoSha256 = "0y7kbihdrpd35dw24qqqzmccvjdy6arka10p5rnv38d420f1bpzd";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -32,10 +32,16 @@ rustPlatform.buildRustPackage rec {
     '')
   ];
 
+  doCheck = !stdenv.isAarch64;
+
   postInstall = ''
     pushd $out/bin
     mv rustup-init rustup
-    for link in cargo rustc rustdoc rust-gdb rust-lldb rls rustfmt cargo-fmt; do
+    binlinks=(
+      cargo rustc rustdoc rust-gdb rust-lldb rls rustfmt cargo-fmt
+      cargo-clippy clippy-driver cargo-miri
+    )
+    for link in ''${binlinks[@]}; do
       ln -s rustup $link
     done
     popd

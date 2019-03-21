@@ -32,7 +32,8 @@ xlink:href="https://nixos.org/nixpkgs/manual/#sec-package-naming">
   The function <varname>mkOption</varname> accepts the following arguments.
   <variablelist>
    <varlistentry>
-    <term><varname>type</varname>
+    <term>
+     <varname>type</varname>
     </term>
     <listitem>
      <para>
@@ -43,7 +44,8 @@ xlink:href="https://nixos.org/nixpkgs/manual/#sec-package-naming">
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>default</varname>
+    <term>
+     <varname>default</varname>
     </term>
     <listitem>
      <para>
@@ -55,7 +57,8 @@ xlink:href="https://nixos.org/nixpkgs/manual/#sec-package-naming">
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>example</varname>
+    <term>
+     <varname>example</varname>
     </term>
     <listitem>
      <para>
@@ -64,7 +67,8 @@ xlink:href="https://nixos.org/nixpkgs/manual/#sec-package-naming">
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>description</varname>
+    <term>
+     <varname>description</varname>
     </term>
     <listitem>
      <para>

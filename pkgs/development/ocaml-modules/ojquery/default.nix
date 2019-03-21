@@ -1,4 +1,8 @@
-{ stdenv, fetchgit, ocaml, findlib, ocamlbuild, js_of_ocaml, js_of_ocaml-camlp4, camlp4, lwt3, react }:
+{ stdenv, fetchgit, ocaml, findlib, ocamlbuild, js_of_ocaml, js_of_ocaml-camlp4, camlp4, ocaml_lwt, react }:
+
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "ojquery is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
   version = "0.1";
@@ -10,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ocaml findlib ocamlbuild js_of_ocaml-camlp4 camlp4 ];
-  propagatedBuildInputs = [ js_of_ocaml lwt3 react ];
+  propagatedBuildInputs = [ js_of_ocaml ocaml_lwt react ];
 
   createFindlibDestdir = true;
 

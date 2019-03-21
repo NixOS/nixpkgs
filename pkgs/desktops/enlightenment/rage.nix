@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, gst_all_1, pcre, wrapGAppsHook }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, gst_all_1, pcre, mesa_noglu, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "rage-${version}";
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     (pkgconfig.override { vanilla = true; })
+    mesa_noglu.dev
     wrapGAppsHook
   ];
 

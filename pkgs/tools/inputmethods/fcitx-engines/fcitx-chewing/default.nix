@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "fcitx-chewing-${version}";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx-chewing/${name}.tar.xz";
-    sha256 = "0l548xdx2fvjya1ixp37pn382yak0m4kwfh9lgh7l3y2sblqw9zs";
+    sha256 = "1w5smp5zvjx681cp1znjypyr9sw5x6v0wnsk8a7ncwxi9q9wf4xk";
   };
 
   nativeBuildInputs = [ pkgconfig ];

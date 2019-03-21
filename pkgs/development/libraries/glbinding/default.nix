@@ -2,13 +2,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "glbinding";
-  version = "2.1.4";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "cginternals";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1yic3p2iqzxc7wrjnqclx7vcaaqx5fiysq9rqbi6v390jqkg3zlz";
+    sha256 = "1lvcps0n0p8gg0p2bkm5aq4b4kv8bvxlaaf4fcham2pgbgzil9d4";
   };
 
   buildInputs = [ cmake libGLU xlibsWrapper ];

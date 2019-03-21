@@ -14,11 +14,4 @@ mkDerivation {
     breeze-qt5 kconfig kconfigwidgets kiconthemes kio knotifications kwayland
     libXcursor qtquickcontrols2
   ];
-  patches = [
-    # See also: https://phabricator.kde.org/D9070
-    # ttuegel: The patch is checked into Nixpkgs because I could not get
-    # Phabricator to give me a stable link to it.
-    ./D9070.patch
-  ];
-  patchFlags = "-p0";
 }

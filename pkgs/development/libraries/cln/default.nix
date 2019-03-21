@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "C/C++ library for numbers, a part of GiNaC";
     homepage = http://www.ginac.de/CLN/;
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
+    license = licenses.gpl2;
+    platforms = platforms.unix; # Once had cygwin problems
   };
 }

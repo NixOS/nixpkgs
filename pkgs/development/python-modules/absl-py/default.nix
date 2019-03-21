@@ -1,19 +1,25 @@
 { buildPythonPackage
 , lib
+, pythonOlder
 , fetchPypi
 , six
+, enum34
 }:
 
 buildPythonPackage rec {
   pname = "absl-py";
-  version = "0.1.13";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d160f7dc39f2f05ddc0bbf3a7bea4cc659fedc45fd9042e87346b24fe1cd00bb";
+    sha256 = "8718189e4bd6013bf79910b9d1cb0a76aecad8ce664f78e1144980fabdd2cd23";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    six
+  ] ++ lib.optionals (pythonOlder "3.4") [
+    enum34
+  ];
 
   # checks use bazel; should be revisited
   doCheck = false;

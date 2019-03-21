@@ -19,6 +19,5 @@ stdenv.mkDerivation {
     homepage = https://sourceforge.net/projects/mstpd/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

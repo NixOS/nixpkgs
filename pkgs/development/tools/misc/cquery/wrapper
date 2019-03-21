@@ -1,6 +1,6 @@
 #! @shell@ -e
 
-initString="--init={\"extraClangArguments\": [@standard_library_includes@"
+initString="--init={\"cacheDirectory\": \"/tmp/cquery\", \"extraClangArguments\": [@standard_library_includes@"
 
 if [ "${NIX_CFLAGS_COMPILE}" != "" ]; then
   read -a cflags_array <<< ${NIX_CFLAGS_COMPILE}

@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   };
 
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";
-  
+
   configureFlags = [
      (if enableApacheWebApplication then "--with-apache" else "--without-apache")
      (if enableAxis2WebService then "--with-axis2" else "--without-axis2")
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
      (if enableMongoDatabase then "--with-mongodb" else "--without-mongodb")
      "--with-job-template=${jobTemplate}"
    ];
-  
+
   buildInputs = [ getopt ]
     ++ stdenv.lib.optional enableEjabberdDump ejabberd
     ++ stdenv.lib.optional enableMySQLDatabase mysql.out

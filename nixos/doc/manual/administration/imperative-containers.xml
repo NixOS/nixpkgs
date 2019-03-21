@@ -27,7 +27,7 @@
 <screen>
 # nixos-container create foo --config '
   <xref linkend="opt-services.openssh.enable"/> = true;
-  <link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">users.extraUsers.root.openssh.authorizedKeys.keys</link> = ["ssh-dss AAAAB3N…"];
+  <link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">users.users.root.openssh.authorizedKeys.keys</link> = ["ssh-dss AAAAB3N…"];
 '
 </screen>
  </para>

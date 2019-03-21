@@ -1,5 +1,5 @@
 
-{ pkgs, newScope }:
+{ newScope }:
 
 let
   callPackage = newScope self;

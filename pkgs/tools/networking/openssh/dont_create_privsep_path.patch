@@ -1,11 +1,12 @@
-diff -ur openssh-7.2p2_orig/Makefile.in openssh-7.2p2/Makefile.in
---- openssh-7.2p2_orig/Makefile.in	2016-03-09 19:04:48.000000000 +0100
-+++ openssh-7.2p2/Makefile.in	2016-07-16 09:56:05.643903293 +0200
-@@ -301,7 +301,6 @@
- 	$(srcdir)/mkinstalldirs $(DESTDIR)$(mandir)/$(mansubdir)5
- 	$(srcdir)/mkinstalldirs $(DESTDIR)$(mandir)/$(mansubdir)8
- 	$(srcdir)/mkinstalldirs $(DESTDIR)$(libexecdir)
--	(umask 022 ; $(srcdir)/mkinstalldirs $(DESTDIR)$(PRIVSEP_PATH))
+diff --git i/Makefile.in w/Makefile.in
+index 04e1c8e5..9bd5d01b 100644
+--- i/Makefile.in
++++ w/Makefile.in
+@@ -329,7 +329,6 @@ install-files:
+ 	$(MKDIR_P) $(DESTDIR)$(mandir)/$(mansubdir)5
+ 	$(MKDIR_P) $(DESTDIR)$(mandir)/$(mansubdir)8
+ 	$(MKDIR_P) $(DESTDIR)$(libexecdir)
+-	$(MKDIR_P) -m 0755 $(DESTDIR)$(PRIVSEP_PATH)
  	$(INSTALL) -m 0755 $(STRIP_OPT) ssh$(EXEEXT) $(DESTDIR)$(bindir)/ssh$(EXEEXT)
  	$(INSTALL) -m 0755 $(STRIP_OPT) scp$(EXEEXT) $(DESTDIR)$(bindir)/scp$(EXEEXT)
  	$(INSTALL) -m 0755 $(STRIP_OPT) ssh-add$(EXEEXT) $(DESTDIR)$(bindir)/ssh-add$(EXEEXT)

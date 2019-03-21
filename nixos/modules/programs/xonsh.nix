@@ -6,8 +6,6 @@ with lib;
 
 let
 
-  cfge = config.environment;
-
   cfg = config.programs.xonsh;
 
 in

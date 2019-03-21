@@ -8,12 +8,12 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0prc0s28pdflgzyvk1g0yfx982q2grivmz3858nwpqmbkha81r7f";
   };
 
   nativeBuildInputs = [ pkgconfig vala wrapGAppsHook intltool itstool libxml2 appstream-glib desktop-file-utils ];
-  buildInputs = [ glib gtk3 librsvg libgee libgnome-games-support gnome3.defaultIconTheme ];
+  buildInputs = [ glib gtk3 librsvg libgee libgnome-games-support gnome3.adwaita-icon-theme ];
 
   passthru = {
     updateScript = gnome3.updateScript {

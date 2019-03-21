@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, pcre, libevent, libiconv }:
+{ stdenv, fetchurl, pcre, libiconv, openssl }:
 
 
 let
@@ -23,13 +23,14 @@ in
       "--enable-agent"
       "--with-libpcre=${pcre.dev}"
       "--with-iconv=${libiconv}"
+      "--with-openssl=${openssl.dev}"
     ];
-    buildInputs = [ pcre libiconv ];
+    buildInputs = [ pcre libiconv openssl ];
 
     meta = with stdenv.lib; {
       inherit branch;
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
-      homepage = http://www.zabbix.com/;
+      homepage = https://www.zabbix.com/;
       license = licenses.gpl2;
       maintainers = [ maintainers.eelco ];
       platforms = platforms.linux;

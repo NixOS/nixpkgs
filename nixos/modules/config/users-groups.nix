@@ -120,8 +120,8 @@ let
 
       shell = mkOption {
         type = types.either types.shellPackage types.path;
-        default = pkgs.nologin;
-        defaultText = "pkgs.nologin";
+        default = pkgs.shadow;
+        defaultText = "pkgs.shadow";
         example = literalExample "pkgs.bashInteractive";
         description = ''
           The path to the user's shell. Can use shell derivations,
@@ -266,7 +266,7 @@ let
         (mkIf config.isNormalUser {
           group = mkDefault "users";
           createHome = mkDefault true;
-          home = mkDefault "/home/${name}";
+          home = mkDefault "/home/${config.name}";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
         })
@@ -282,7 +282,7 @@ let
 
   };
 
-  groupOpts = { name, config, ... }: {
+  groupOpts = { name, ... }: {
 
     options = {
 
@@ -524,6 +524,8 @@ in {
       utmp.gid = ids.gids.utmp;
       adm.gid = ids.gids.adm;
       input.gid = ids.gids.input;
+      kvm.gid = ids.gids.kvm;
+      render.gid = ids.gids.render;
     };
 
     system.activationScripts.users = stringAfter [ "stdio" ]
@@ -532,8 +534,8 @@ in {
         install -m 0755 -d /home
 
         ${pkgs.perl}/bin/perl -w \
-          -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl \
-          -I${pkgs.perlPackages.JSON}/lib/perl5/site_perl \
+          -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} \
+          -I${pkgs.perlPackages.JSON}/${pkgs.perl.libPrefix} \
           ${./update-users-groups.pl} ${spec}
       '';
 

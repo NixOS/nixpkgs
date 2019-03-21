@@ -1,23 +1,24 @@
-{ stdenv, fetchgit, autoreconfHook, readline, python3Packages }:
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, coreutils, readline, python3Packages }:
 
 let
   ell = fetchgit {
      url = https://git.kernel.org/pub/scm/libs/ell/ell.git;
-     rev = "0.4";
-     sha256 = "0l203n1jnqa2mcifir8ydxhcvbiwlvk89ailm0lida83l9vdlwpv";
+     rev = "0.17";
+     sha256 = "0yk1qmvpy61qp82bb0w55n062jqzlkzbz0b1v5k763j98czz9rvz";
   };
 in stdenv.mkDerivation rec {
   name = "iwd-${version}";
-  version = "0.1";
+  version = "0.14";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
     rev = version;
-    sha256 = "1f8c6xvcvqw8z78mskynd2fkghggcl7vfz8vxzvpx0fkqcprn5n0";
+    sha256 = "08ijlnwvj1w354gbv3hdnm3l4iy24qzq4bq5a9z0wynysasw09lv";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    pkgconfig
     python3Packages.wrapPython
   ];
 
@@ -31,11 +32,12 @@ in stdenv.mkDerivation rec {
     python3Packages.pygobject3
   ];
 
-  enableParallelBuilding = true;
-
   configureFlags = [
-    "--with-dbus-datadir=$(out)/etc/"
-    "--disable-systemd-service"
+    "--with-dbus-datadir=${placeholder "out"}/etc/"
+    "--with-dbus-busdir=${placeholder "out"}/share/dbus-1/system-services/"
+    "--with-systemd-unitdir=${placeholder "out"}/lib/systemd/system/"
+    "--localstatedir=/var/"
+    "--enable-wired"
   ];
 
   postUnpack = ''
@@ -52,6 +54,13 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapPythonPrograms
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/share/dbus-1/system-services/net.connman.ead.service \
+                      --replace /bin/false ${coreutils}/bin/false
+    substituteInPlace $out/share/dbus-1/system-services/net.connman.iwd.service \
+                      --replace /bin/false ${coreutils}/bin/false
   '';
 
   meta = with stdenv.lib; {

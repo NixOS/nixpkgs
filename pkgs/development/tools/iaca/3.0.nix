@@ -1,4 +1,4 @@
-{ stdenv, requireFile, patchelf, unzip }:
+{ stdenv, requireFile, unzip }:
 with stdenv.lib;
 
 stdenv.mkDerivation {

@@ -1,87 +1,117 @@
-{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem,
-  makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
+{ stdenv, lib, fetchurl, makeDesktopItem
+, unzip, libsecret, libXScrnSaver, wrapGAppsHook
+, gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
+, systemd, fontconfig
+, isInsiders ? false }:
 
 let
-  version = "1.23.0";
-  channel = "stable";
+  executableName = "code" + lib.optionalString isInsiders "-insiders";
+  longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
+  shortName = "Code" + lib.optionalString isInsiders " - Insiders";
+
+  inherit (stdenv.hostPlatform) system;
 
   plat = {
     "i686-linux" = "linux-ia32";
     "x86_64-linux" = "linux-x64";
     "x86_64-darwin" = "darwin";
-  }.${stdenv.system};
+  }.${system};
 
   sha256 = {
-    "i686-linux" = "1nyrcgnf18752n3i7xaq6gpb2k4wsfzk671kxg6za4ycrriw1f5l";
-    "x86_64-linux" = "1mkxyavzav522sl3fjn2hdlbj0bkdl3hagqiw9i6h8wgkxcvsszy";
-    "x86_64-darwin" = "123ggzssd5qd80jxar2pf5g2n2473pd2j8pfjyir1c7xkaqji2w6";
-  }.${stdenv.system};
+    "i686-linux" = "1qll0hyqyn3vb0v35h9y8rk4l3r6zzc5bkra6pb23bnr4bna4y80";
+    "x86_64-linux" = "1sfvv4g7kmvabqxasil41gasr7hsmgf8wwc4dl1940pb7x19fllq";
+    "x86_64-darwin" = "0gjdppr59pyb2wawvf7yyk7357a5naxga74zf9gc7d9s1fz78hls";
+  }.${system};
 
-  archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
-
-  rpath = lib.concatStringsSep ":" [
-    atomEnv.libPath
-    "${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0"
-    "${lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1"
-    "${lib.makeLibraryPath [libxkbfile]}/libxkbfile.so.1"
-    "$out/lib/vscode"
-  ];
-
+  archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
+    version = "1.32.3";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
-      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/${channel}";
+      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/stable";
       inherit sha256;
     };
 
-    desktopItem = makeDesktopItem {
-      name = "code";
-      exec = "code";
-      icon = "code";
-      comment = "Code editor redefined and optimized for building and debugging modern web and cloud applications";
-      desktopName = "Visual Studio Code";
-      genericName = "Text Editor";
-      categories = "GNOME;GTK;Utility;TextEditor;Development;";
+    passthru = {
+      inherit executableName;
     };
 
-    buildInputs = if stdenv.system == "x86_64-darwin"
-      then [ unzip makeWrapper libXScrnSaver libsecret ]
-      else [ makeWrapper libXScrnSaver libxkbfile libsecret ];
+    desktopItem = makeDesktopItem {
+      name = executableName;
+      desktopName = longName;
+      comment = "Code Editing. Redefined.";
+      genericName = "Text Editor";
+      exec = executableName;
+      icon = "@out@/share/pixmaps/code.png";
+      startupNotify = "true";
+      categories = "Utility;TextEditor;Development;IDE;";
+      mimeType = "text/plain;inode/directory;";
+      extraEntries = ''
+        StartupWMClass=${shortName}
+        Actions=new-empty-window;
+        Keywords=vscode;
+
+        [Desktop Action new-empty-window]
+        Name=New Empty Window
+        Exec=${executableName} --new-window %F
+        Icon=@out@/share/pixmaps/code.png
+      '';
+    };
+
+    urlHandlerDesktopItem = makeDesktopItem {
+      name = executableName + "-url-handler";
+      desktopName = longName + " - URL Handler";
+      comment = "Code Editing. Redefined.";
+      genericName = "Text Editor";
+      exec = executableName + " --open-url %U";
+      icon = "@out@/share/pixmaps/code.png";
+      startupNotify = "true";
+      categories = "Utility;TextEditor;Development;IDE;";
+      mimeType = "x-scheme-handler/vscode;";
+      extraEntries = ''
+        NoDisplay=true
+        Keywords=vscode;
+      '';
+    };
+
+    buildInputs = (if stdenv.isDarwin
+      then [ unzip ]
+      else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
+        ++ [ libsecret libXScrnSaver ];
+
+    nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+
+    dontBuild = true;
+    dontConfigure = true;
 
     installPhase =
-      if stdenv.system == "x86_64-darwin" then ''
+      if system == "x86_64-darwin" then ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
-        ln -s $out/lib/vscode/Contents/Resources/app/bin/code $out/bin
+        ln -s $out/lib/vscode/Contents/Resources/app/bin/${executableName} $out/bin
       '' else ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
 
-        substituteInPlace $out/lib/vscode/bin/code --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
+        substituteInPlace $out/lib/vscode/bin/${executableName} --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
 
-        ln -s $out/lib/vscode/bin/code $out/bin
+        ln -s $out/lib/vscode/bin/${executableName} $out/bin
 
         mkdir -p $out/share/applications
-        cp $desktopItem/share/applications/* $out/share/applications
+        substitute $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop \
+          --subst-var out
+        substitute $urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop $out/share/applications/${executableName}-url-handler.desktop \
+          --subst-var out
 
         mkdir -p $out/share/pixmaps
         cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
       '';
 
-    postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
-      patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${rpath}" \
-        $out/lib/vscode/code
-
-      patchelf \
-        --set-rpath "${rpath}" \
-        $out/lib/vscode/resources/app/node_modules.asar.unpacked/keytar/build/Release/keytar.node
-
-      ln -s ${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0 $out/lib/vscode/libsecret-1.so.0
+    preFixup = lib.optionalString (system == "i686-linux" || system == "x86_64-linux") ''
+      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd fontconfig ]})
     '';
 
     meta = with stdenv.lib; {
@@ -96,9 +126,10 @@ in
         and code refactoring. It is also customizable, so users can change the
         editor's theme, keyboard shortcuts, and preferences
       '';
-      homepage = http://code.visualstudio.com/;
+      homepage = https://code.visualstudio.com/;
       downloadPage = https://code.visualstudio.com/Updates;
       license = licenses.unfree;
+      maintainers = with maintainers; [ eadwu ];
       platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     };
   }

@@ -2,18 +2,13 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, kactivities
 , kconfig
 , kcrash
 , kguiaddons
 , kiconthemes
 , ki18n
 , kinit
-, kio
-, kio-extras
-, kwindowsystem
 , kdbusaddons
-, plasma-framework
 , knotifications
 , knewstuff
 , karchive
@@ -34,9 +29,6 @@
 
 mkDerivation {
   name = "kdenlive";
-  patches = [
-    ./kdenlive-cmake-concurrent-module.patch
-  ];
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools

@@ -43,7 +43,7 @@ with lib;
         message = "Must specify 4Store database name.";
       };
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = fourStoreUser;
         uid = config.ids.uids.fourstore;
         description = "4Store database user";

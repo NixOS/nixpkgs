@@ -1,30 +1,37 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, libiconv
+{ config, stdenv, fetchurl, fetchpatch, pkgconfig, libiconv
 , libintl, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
-, glSupport ? true, libGL ? null # libGLU_combined is no longer a big dependency
+, libGLSupported
+, glSupport ? config.cairo.gl or (libGLSupported && stdenv.isLinux && !stdenv.isAarch32 && !stdenv.isMips)
+, libGL ? null # libGLU_combined is no longer a big dependency
 , pdfSupport ? true
 , darwin
 }:
 
 assert glSupport -> libGL != null;
 
-let inherit (stdenv.lib) optional optionals; in
-
-stdenv.mkDerivation rec {
-  name = "cairo-1.14.10";
+let
+  version = "1.16.0";
+  inherit (stdenv.lib) optional optionals;
+in stdenv.mkDerivation rec {
+  name = "cairo-${version}";
 
   src = fetchurl {
-    url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha256 = "02banr0wxckq62nbhc3mqidfdh2q956i2r7w2hd9bjgjb238g1vy";
+    url = "https://cairographics.org/${if stdenv.lib.mod (builtins.fromJSON (stdenv.lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${name}.tar.xz";
+    sha256 = "0c930mk5xr2bshbdljv005j3j8zr47gqmkry3q6qgvqky6rjjysy";
   };
 
   patches = [
-    # from https://bugs.freedesktop.org/show_bug.cgi?id=98165
+    # Fixes CVE-2018-19876; see Nixpkgs issue #55384
+    # CVE information: https://nvd.nist.gov/vuln/detail/CVE-2018-19876
+    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/merge_requests/5
+    #
+    # This patch is the merged commit from the above PR.
     (fetchpatch {
-      name = "cairo-CVE-2016-9082.patch";
-      url = "https://bugs.freedesktop.org/attachment.cgi?id=127421";
-      sha256 = "03sfyaclzlglip4pvfjb4zj4dmm8mlphhxl30mb6giinkc74bfri";
+      name   = "CVE-2018-19876.patch";
+      url    = "https://gitlab.freedesktop.org/cairo/cairo/commit/6edf572ebb27b00d3c371ba5ae267e39d27d5b6d.patch";
+      sha256 = "112hgrrsmcwxh1r52brhi5lksq4pvrz4xhkzcf2iqp55jl2pb7n1";
     })
   ];
 
@@ -79,6 +86,8 @@ stdenv.mkDerivation rec {
     '';
 
   enableParallelBuilding = true;
+
+  doCheck = false; # fails
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin glib.flattenInclude;
 

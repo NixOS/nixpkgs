@@ -12,12 +12,14 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = with xorg; [ dri2proto libXext ];
+  buildInputs = with xorg; [ xorgproto libXext ];
 
   propagatedBuildInputs = [ xorg.libX11 ];
 
   configureFlags = stdenv.lib.optional stdenv.isLinux
     "--with-module-dir=${libGL_driver.driverLink}/lib/vdpau";
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lX11" else null;
 
   installFlags = [ "moduledir=$(out)/lib/vdpau" ];
 

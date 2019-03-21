@@ -1,16 +1,26 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{ lib, fetchPypi, buildPythonPackage, pytest, hypothesis, eth-utils }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "rlp";
-  version = "0.6.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d3gx4mp8q4z369s5yk1n9c55sgfw9fidbwqxq67d6s7l45rm1w7";
+    sha256 = "0742hdnhwcx1bm7pdk83290rxfcb0i2xskgl8yn6lg8fql1hms7b";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest hypothesis ];
+  propagatedBuildInputs = [ eth-utils ];
+
+  # setuptools-markdown uses pypandoc which is broken at the moment
+  preConfigure = ''
+    substituteInPlace setup.py --replace \'setuptools-markdown\' ""
+    substituteInPlace setup.py --replace "long_description_markdown_filename='README.md'," ""
+  '';
+
+  checkPhase = ''
+    pytest .
+  '';
 
   meta = {
     description = "A package for encoding and decoding data in and from Recursive Length Prefix notation";

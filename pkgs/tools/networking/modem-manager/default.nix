@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, udev, libgudev, polkit, dbus-glib, ppp, gettext, pkgconfig
+{ stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkgconfig
 , libmbim, libqmi, systemd, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "modem-manager-${version}";
-  pname = "ModemManager";
   version = "1.7.990";
 
+  package = "ModemManager";
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
     sha256 = "1v4hixmghlrw7w4ajq2x4k62js0594h223d0yma365zwqr7hjrfl";
   };
 
   nativeBuildInputs = [ gettext pkgconfig ];
 
-  buildInputs = [ udev libgudev polkit dbus-glib ppp libmbim libqmi systemd ];
+  buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 
   patches = [
     # Patch dependency on glib headers, this breaks packages using core headers (networkmanager-qt)

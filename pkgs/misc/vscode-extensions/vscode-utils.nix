@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, runCommand, vscode, unzip }:
+{ stdenv, lib, fetchurl, vscode, unzip }:
 
 let
   extendedPkgVersion = lib.getVersion vscode;
@@ -65,10 +65,10 @@ let
     "sha256"
   ];
 
-  mktplcExtRefToExtDrv = ext: 
-    buildVscodeMarketplaceExtension ((removeAttrs ext mktplcRefAttrList) // { 
-      mktplcRef = ext; 
-    }); 
+  mktplcExtRefToExtDrv = ext:
+    buildVscodeMarketplaceExtension ((removeAttrs ext mktplcRefAttrList) // {
+      mktplcRef = ext;
+    });
 
   extensionFromVscodeMarketplace = mktplcExtRefToExtDrv;
   extensionsFromVscodeMarketplace = mktplcExtRefList:
@@ -77,7 +77,7 @@ let
 in
 
 {
-  inherit fetchVsixFromVscodeMarketplace buildVscodeExtension 
+  inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
           buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
           extensionsFromVscodeMarketplace;
 }

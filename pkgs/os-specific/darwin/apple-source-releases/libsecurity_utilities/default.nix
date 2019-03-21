@@ -1,4 +1,4 @@
-{ IOKit, appleDerivation, apple_sdk, libauto, libobjc, libsecurity_codesigning, sqlite, stdenv, osx_private_sdk }:
+{ IOKit, appleDerivation, apple_sdk, libauto, libobjc, sqlite, stdenv, osx_private_sdk }:
 appleDerivation {
   buildInputs = [
     libauto

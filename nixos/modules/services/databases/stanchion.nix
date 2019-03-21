@@ -143,14 +143,14 @@ in
       ${cfg.extraConfig}
     '';
 
-    users.extraUsers.stanchion = {
+    users.users.stanchion = {
       name = "stanchion";
       uid = config.ids.uids.stanchion;
       group = "stanchion";
       description = "Stanchion server user";
     };
 
-    users.extraGroups.stanchion.gid = config.ids.gids.stanchion;
+    users.groups.stanchion.gid = config.ids.gids.stanchion;
 
     systemd.services.stanchion = {
       description = "Stanchion Server";

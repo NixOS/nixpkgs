@@ -4,7 +4,9 @@ with lib;
 
 let
   cfg = config.services.gitea;
+  gitea = cfg.package;
   pg = config.services.postgresql;
+  useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
@@ -13,7 +15,7 @@ let
 
     [database]
     DB_TYPE = ${cfg.database.type}
-    HOST = ${cfg.database.host}:${toString cfg.database.port}
+    HOST = ${if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port}
     NAME = ${cfg.database.name}
     USER = ${cfg.database.user}
     PASSWD = #dbpass#
@@ -44,6 +46,9 @@ let
     ROOT_PATH = ${cfg.log.rootPath}
     LEVEL = ${cfg.log.level}
 
+    [service]
+    DISABLE_REGISTRATION = ${boolToString cfg.disableRegistration}
+
     ${cfg.extraConfig}
   '';
 in
@@ -55,6 +60,13 @@ in
         default = false;
         type = types.bool;
         description = "Enable Gitea Service.";
+      };
+
+      package = mkOption {
+        default = pkgs.gitea;
+        type = types.package;
+        defaultText = "pkgs.gitea";
+        description = "gitea derivation to use";
       };
 
       useWizard = mkOption {
@@ -140,6 +152,13 @@ in
           '';
         };
 
+        socket = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/run/mysqld/mysqld.sock";
+          description = "Path to the unix socket file to use for authentication.";
+        };
+
         path = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/gitea.db";
@@ -152,6 +171,30 @@ in
           description = ''
             Whether to create a local postgresql database automatically.
             This only applies if database type "postgres" is selected.
+          '';
+        };
+      };
+
+      dump = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enable a timer that runs gitea dump to generate backup-files of the
+            current gitea database and repositories.
+          '';
+        };
+
+        interval = mkOption {
+          type = types.str;
+          default = "04:31";
+          example = "hourly";
+          description = ''
+            Run a gitea dump at this interval. Runs by default at 04:31 every day.
+
+            The format is described in
+            <citerefentry><refentrytitle>systemd.time</refentrytitle>
+            <manvolnum>7</manvolnum></citerefentry>.
           '';
         };
       };
@@ -203,9 +246,21 @@ in
 
       staticRootPath = mkOption {
         type = types.str;
-        default = "${pkgs.gitea.data}";
+        default = "${gitea.data}";
         example = "/var/lib/gitea/data";
         description = "Upper level of template and static files path.";
+      };
+
+      disableRegistration = mkEnableOption "the registration lock" // {
+        description = ''
+          By default any user can create an account on this <literal>gitea</literal> instance.
+          This can be disabled by using this option.
+
+          <emphasis>Note:</emphasis> please keep in mind that this should be added after the initial
+          deploy unless <link linkend="opt-services.gitea.useWizard">services.gitea.useWizard</link>
+          is <literal>true</literal> as the first registered user will be the administrator if
+          no install wizard is used.
+        '';
       };
 
       extraConfig = mkOption {
@@ -221,15 +276,16 @@ in
 
     systemd.services.gitea = {
       description = "gitea";
-      after = [ "network.target" "postgresql.service" ];
+      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.gitea.bin ];
+      path = [ gitea.bin pkgs.gitAndTools.git ];
 
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
         secretKey = "${cfg.stateDir}/custom/conf/secret_key";
       in ''
-        mkdir -p ${cfg.stateDir}
+        # Make sure that the stateDir exists, as well as the conf dir in there
+        mkdir -p ${cfg.stateDir}/conf
 
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
@@ -250,18 +306,25 @@ in
 
         mkdir -p ${cfg.repositoryRoot}
         # update all hooks' binary paths
-        HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 4 -type f -wholename "*git/hooks/*")
+        HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
         if [ "$HOOKS" ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${pkgs.gitea.bin}/bin/gitea,g' $HOOKS
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
         fi
-        if [ ! -d ${cfg.stateDir}/conf/locale ]
+        # If we have a folder or symlink with gitea locales, remove it
+        if [ -e ${cfg.stateDir}/conf/locale ]
         then
-          mkdir -p ${cfg.stateDir}/conf
-          cp -r ${pkgs.gitea.out}/locale ${cfg.stateDir}/conf/locale
+          rm -r ${cfg.stateDir}/conf/locale
+        fi
+        # And symlink the current gitea locales in place
+        ln -s ${gitea.out}/locale ${cfg.stateDir}/conf/locale
+        # update command option in authorized_keys
+        if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
+        then
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
         fi
       '' + optionalString (usePostgresql && cfg.database.createDatabase) ''
         if ! test -e "${cfg.stateDir}/db-created"; then
@@ -288,7 +351,7 @@ in
         User = cfg.user;
         WorkingDirectory = cfg.stateDir;
         PermissionsStartOnly = true;
-        ExecStart = "${pkgs.gitea.bin}/bin/gitea web";
+        ExecStart = "${gitea.bin}/bin/gitea web";
         Restart = "always";
       };
 
@@ -300,7 +363,7 @@ in
     };
 
     users = mkIf (cfg.user == "gitea") {
-      extraUsers.gitea = {
+      users.gitea = {
         description = "Gitea Service";
         home = cfg.stateDir;
         createHome = true;
@@ -318,5 +381,32 @@ in
         name = "gitea-database-password";
         text = cfg.database.password;
       })));
+
+    systemd.services.gitea-dump = mkIf cfg.dump.enable {
+       description = "gitea dump";
+       after = [ "gitea.service" ];
+       wantedBy = [ "default.target" ];
+       path = [ gitea.bin ];
+
+       environment = {
+         USER = cfg.user;
+         HOME = cfg.stateDir;
+         GITEA_WORK_DIR = cfg.stateDir;
+       };
+
+       serviceConfig = {
+         Type = "oneshot";
+         User = cfg.user;
+         ExecStart = "${gitea.bin}/bin/gitea dump";
+         WorkingDirectory = cfg.stateDir;
+       };
+    };
+
+    systemd.timers.gitea-dump = mkIf cfg.dump.enable {
+      description = "Update timer for gitea-dump";
+      partOf = [ "gitea-dump.service" ];
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnCalendar = cfg.dump.interval;
+    };
   };
 }

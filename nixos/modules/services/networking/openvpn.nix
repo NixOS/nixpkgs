@@ -131,6 +131,9 @@ in
               Configuration of this OpenVPN instance.  See
               <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
               for details.
+
+              To import an external config file, use the following definition:
+              <literal>config = "config /path/to/config.ovpn"</literal>
             '';
           };
 

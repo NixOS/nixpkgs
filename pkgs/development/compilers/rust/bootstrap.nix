@@ -3,32 +3,32 @@
 let
   # Note: the version MUST be one version prior to the version we're
   # building
-  version = "1.24.1";
+  version = "1.31.1";
 
-  # fetch hashes by running `print-hashes.sh 1.24.1`
+  # fetch hashes by running `print-hashes.sh 1.31.1`
   hashes = {
-    i686-unknown-linux-gnu = "a483576bb2ab237aa1ef62b66c0814f934afd8129d7c9748cb9a75da4a678c98";
-    x86_64-unknown-linux-gnu = "4567e7f6e5e0be96e9a5a7f5149b5452828ab6a386099caca7931544f45d5327";
-    armv7-unknown-linux-gnueabihf = "1169ab005b771c4befcdab536347a90242cae544b6b76eccd0f76796b61a534c";
-    aarch64-unknown-linux-gnu = "64bb25a9689b18ddadf025b90d9bdb150b809ebfb74432dc69cc2e46120adbb2";
-    i686-apple-darwin = "c96f7579e2406220895da80a989daaa194751c141e112ebe95761f2ed4ecb662";
-    x86_64-apple-darwin = "9d4aacdb5849977ea619d399903c9378163bd9c76ea11dac5ef6eca27849f501";
+    i686-unknown-linux-gnu = "1e77e5e8c745320faad9ce6f319a77b4a2e75d972eb68a195acd081ad910ab6d";
+    x86_64-unknown-linux-gnu = "a64685535d0c457f49a8712a096a5c21564cd66fd2f7da739487f028192ebe3c";
+    armv7-unknown-linux-gnueabihf = "11c717b781a7af5bdc829894139f8f45d4c12a061f7f9e39481f21426a04eb21";
+    aarch64-unknown-linux-gnu = "29a7c6eb536fefd0ca459e48dfaea006aa8bff8a87aa82a9b7d483487033632a";
+    i686-apple-darwin = "46566dc25fcbd8badc9950b8c9f9b0faeca065b5a09cd96258e4f4b10d686aed";
+    x86_64-apple-darwin = "8398b1b303bdf0e7605d08b87070a514a4f588797c6fb3593718cb9cec233ad6";
   };
 
   platform =
-    if stdenv.system == "i686-linux"
+    if stdenv.hostPlatform.system == "i686-linux"
     then "i686-unknown-linux-gnu"
-    else if stdenv.system == "x86_64-linux"
+    else if stdenv.hostPlatform.system == "x86_64-linux"
     then "x86_64-unknown-linux-gnu"
-    else if stdenv.system == "armv7l-linux"
+    else if stdenv.hostPlatform.system == "armv7l-linux"
     then "armv7-unknown-linux-gnueabihf"
-    else if stdenv.system == "aarch64-linux"
+    else if stdenv.hostPlatform.system == "aarch64-linux"
     then "aarch64-unknown-linux-gnu"
-    else if stdenv.system == "i686-darwin"
+    else if stdenv.hostPlatform.system == "i686-darwin"
     then "i686-apple-darwin"
-    else if stdenv.system == "x86_64-darwin"
+    else if stdenv.hostPlatform.system == "x86_64-darwin"
     then "x86_64-apple-darwin"
-    else throw "missing bootstrap url for platform ${stdenv.system}";
+    else throw "missing bootstrap url for platform ${stdenv.hostPlatform.system}";
 
   src = fetchurl {
      url = "https://static.rust-lang.org/dist/rust-${version}-${platform}.tar.gz";
@@ -37,6 +37,5 @@ let
 
 in callPackage ./binaryBuild.nix
   { inherit version src platform;
-    buildRustPackage = null;
     versionType = "bootstrap";
   }

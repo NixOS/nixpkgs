@@ -1,5 +1,5 @@
 { stdenv, multiStdenv, cmake, fetchFromGitHub, file, libX11, makeWrapper
-, overrideCC, qt5, requireFile, unzip, wine
+, qt5, requireFile, unzip, wine
 }:
 
 let

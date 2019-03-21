@@ -1,16 +1,16 @@
 { lib, buildPythonPackage, fetchPypi
-, translationstring, iso8601 }:
+, translationstring, iso8601, enum34 }:
 
 buildPythonPackage rec {
   pname = "colander";
-  version = "1.4";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e20e9acf190e5711cf96aa65a5405dac04b6e841028fc361d953a9923dbc4e72";
+    sha256 = "d758163a22d22c39b9eaae049749a5cd503f341231a02ed95af480b1145e81f2";
   };
 
-  propagatedBuildInputs = [ translationstring iso8601 ];
+  propagatedBuildInputs = [ translationstring iso8601 enum34 ];
 
   meta = with lib; {
     description = "A simple schema-based serialization and deserialization library";

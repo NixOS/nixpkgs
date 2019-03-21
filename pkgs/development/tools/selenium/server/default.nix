@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, jdk, gcc, xorg
+{ stdenv, fetchurl, makeWrapper, jre
 , htmlunit-driver, chromedriver, chromeSupport ? true }:
 
 with stdenv.lib;
@@ -6,9 +6,6 @@ with stdenv.lib;
 let
   minorVersion = "3.6";
   patchVersion = "0";
-  arch = if stdenv.system == "x86_64-linux" then "amd64"
-         else if stdenv.system == "i686-linux" then "i386"
-         else "";
 
 in stdenv.mkDerivation rec {
   name = "selenium-server-standalone-${version}";

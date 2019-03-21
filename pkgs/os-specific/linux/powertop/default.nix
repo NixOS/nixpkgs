@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchpatch, gettext, libnl, ncurses, pciutils, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "powertop-${version}";
-  version = "2.9";
+  pname = "powertop";
+  version = "2.10";
 
   src = fetchurl {
-    url = "https://01.org/sites/default/files/downloads/powertop/powertop-v${version}.tar.gz";
-    sha256 = "0l4jjlf05li2mc6g8nrss3h435wjhmnqd8m7v3kha3x0x7cbfzxa";
+    url = "https://01.org/sites/default/files/downloads/${pname}-v${version}.tar.gz";
+    sha256 = "0xaazqccyd42v2q532dxx40nqhb9sfsa6cyx8641rl57mfg4bdyk";
   };
 
   outputs = [ "out" "man" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Analyze power consumption on Intel-based laptops";
     homepage = https://01.org/powertop;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ chaoflow fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;
   };
 }

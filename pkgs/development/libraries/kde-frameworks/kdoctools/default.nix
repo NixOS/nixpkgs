@@ -1,6 +1,6 @@
 {
   mkDerivation, lib,
-  extra-cmake-modules, docbook_xml_dtd_45, docbook5_xsl,
+  extra-cmake-modules, docbook_xml_dtd_45, docbook_xsl_ns,
   karchive, ki18n, qtbase,
   perl, perlPackages
 }:
@@ -24,7 +24,7 @@ mkDerivation {
   patches = [ ./kdoctools-no-find-docbook-xml.patch ];
   cmakeFlags = [
     "-DDocBookXML4_DTD_DIR=${docbook_xml_dtd_45}/xml/dtd/docbook"
-    "-DDocBookXSL_DIR=${docbook5_xsl}/xml/xsl/docbook"
+    "-DDocBookXSL_DIR=${docbook_xsl_ns}/xml/xsl/docbook"
   ];
   postFixup = ''
     moveToOutput "share/doc" "$dev"

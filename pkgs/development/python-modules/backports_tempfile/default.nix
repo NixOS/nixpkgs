@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "backports.tempfile";
   version = "1.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

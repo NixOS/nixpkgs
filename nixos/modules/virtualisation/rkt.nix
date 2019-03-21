@@ -59,6 +59,6 @@ in
       };
     };
 
-    users.extraGroups.rkt = {};
+    users.groups.rkt = {};
   };
 }

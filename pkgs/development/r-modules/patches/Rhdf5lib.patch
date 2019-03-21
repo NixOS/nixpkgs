@@ -1,0 +1,12 @@
+diff --git a/configure b/configure
+index e2d292e..b13c0db 100755
+--- a/configure
++++ b/configure
+@@ -2880,6 +2880,7 @@ $MAKE
+ echo "building the hdf5 library...";
+ cd ../;
+ ## we add the '-w' flag to suppress all the warnings hdf5 prints
++sed -i 's#/bin/mv#mv#' configure
+ ./configure --with-pic --enable-shared=no --enable-cxx \
+     --with-szlib \
+     CXX="${CXX}" CXFLAGS="${CXXFLAGS} -w" \

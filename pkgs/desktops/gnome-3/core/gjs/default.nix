@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, gtk3, atk, gobjectIntrospection
-, spidermonkey_52, pango, readline, glib, libxml2, dbus, gdk_pixbuf
+{ fetchurl, stdenv, pkgconfig, gnome3, gtk3, atk, gobject-introspection
+, spidermonkey_60, pango, readline, glib, libxml2, dbus, gdk_pixbuf
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "gjs-${version}";
-  version = "1.52.2";
+  version = "1.54.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gjs/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "00x08ypx61i3k84bmvkhdj37q81g79lzm5sxqm1lz4xzzad9rg98";
+    url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1cd65d4nq5xxlyjz1b83hm5zklyry6lillzf782nr0z97k60vcvn";
   };
 
   passthru = {
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "installedTests" ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ libxml2 gobjectIntrospection gtk3 glib pango readline dbus ];
+  buildInputs = [ libxml2 gobject-introspection gtk3 glib pango readline dbus ];
 
-  propagatedBuildInputs = [ spidermonkey_52 ];
+  propagatedBuildInputs = [ spidermonkey_60 ];
 
   configureFlags = [
     "--enable-installed-tests"

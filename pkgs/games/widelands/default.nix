@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, python, gettext
 , boost, libpng, zlib, glew, lua, doxygen, icu
-, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf, SDL2_gfx
+, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://launchpad.net/widelands/build${version}/build${version}/+download/widelands-build${version}-src-gcc7.tar.bz2";
+    url = "https://launchpad.net/widelands/build${version}/build${version}/+download/widelands-build${version}-src-gcc7.tar.bz2";
     sha256 = "0n2lb1c2dix32j90nir96zfqivn63izr1pmabjnhns3wbb7vhwzg";
   };
 

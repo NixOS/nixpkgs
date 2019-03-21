@@ -1,17 +1,13 @@
 diff --git a/kded/engine/backends/cryfs/cryfsbackend.cpp b/kded/engine/backends/cryfs/cryfsbackend.cpp
-index f6ef54f..160034a 100644
+index 58a6929..7212980 100644
 --- a/kded/engine/backends/cryfs/cryfsbackend.cpp
 +++ b/kded/engine/backends/cryfs/cryfsbackend.cpp
-@@ -136,11 +136,10 @@ bool CryFsBackend::isInitialized(const Device &device) const
+@@ -241,7 +241,7 @@ QProcess *CryFsBackend::cryfs(const QStringList &arguments) const
+     auto config = KSharedConfig::openConfig(PLASMAVAULT_CONFIG_FILE);
+     KConfigGroup backendConfig(config, "CryfsBackend");
  
- QProcess *CryFsBackend::cryfs(const QStringList &arguments) const
- {
 -    return process("cryfs",
 +    return process(NIXPKGS_CRYFS,
-                    arguments,
+                    arguments + backendConfig.readEntry("extraMountOptions", QStringList{}),
                     { { "CRYFS_FRONTEND", "noninteractive" } });
  }
- 
- 
- } // namespace PlasmaVault
--

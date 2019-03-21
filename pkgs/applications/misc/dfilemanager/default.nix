@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, file, qtbase, qttools, qtx11extras, solid }:
+{ stdenv, fetchgit, cmake, file, qtbase, qttools, solid }:
 
 let
   version = "git-2016-01-10";
@@ -20,6 +20,5 @@ stdenv.mkDerivation {
     description = "File manager written in Qt/C++";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.eduarrrd ];
   };
 }

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.2";
 
   src = fetchurl {
-    url = "http://routino.org/download/${name}.tgz";
+    url = "https://routino.org/download/${name}.tgz";
     sha256 = "0lkmpi8gn7qf40cx93jcp7nxa9dfwi1d6rjrhcqbdymszzm33972";
   };
 

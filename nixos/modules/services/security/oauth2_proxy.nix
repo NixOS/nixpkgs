@@ -72,6 +72,7 @@ let
 
   mapConfig = key: attr:
   if (!isNull attr && attr != []) then (
+    if isDerivation attr then mapConfig key (toString attr) else
     if (builtins.typeOf attr) == "set" then concatStringsSep " "
       (mapAttrsToList (name: value: mapConfig (key + "-" + name) value) attr) else
     if (builtins.typeOf attr) == "list" then concatMapStringsSep " " (mapConfig key) attr else
@@ -543,7 +544,7 @@ in
       cookie.secret = mkDefault null;
     };
 
-    users.extraUsers.oauth2_proxy = {
+    users.users.oauth2_proxy = {
       description = "OAuth2 Proxy";
     };
 

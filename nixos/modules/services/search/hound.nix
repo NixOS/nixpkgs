@@ -88,12 +88,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = optional (cfg.group == "hound") {
+    users.groups = optional (cfg.group == "hound") {
       name = "hound";
       gid = config.ids.gids.hound;
     };
 
-    users.extraUsers = optional (cfg.user == "hound") {
+    users.users = optional (cfg.user == "hound") {
       name = "hound";
       description = "hound code search";
       createHome = true;

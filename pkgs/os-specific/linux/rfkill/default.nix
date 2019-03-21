@@ -10,10 +10,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=$(out)";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://wireless.kernel.org/en/users/Documentation/rfkill;
     description = "A tool to query, enable and disable wireless devices";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.eelco ];
+    license = licenses.isc;
   };
 }

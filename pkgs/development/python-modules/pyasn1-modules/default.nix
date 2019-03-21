@@ -1,14 +1,13 @@
 { stdenv, buildPythonPackage, fetchPypi, pyasn1, isPyPy }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyasn1-modules";
-  version = "0.2.1";
+  version = "0.2.4";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "af00ea8f2022b6287dc375b2c70f31ab5af83989fc6fe9eacd4976ce26cd7ccc";
+    sha256 = "a52090e8c5841ebbf08ae455146792d9ef3e8445b21055d3a3b7ed9c712b7c7c";
   };
 
   propagatedBuildInputs = [ pyasn1 ];

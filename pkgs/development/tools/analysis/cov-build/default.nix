@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "7.0.2";
 
   src =
-    if stdenv.system == "i686-linux"
+    if stdenv.hostPlatform.system == "i686-linux"
     then requireFile {
       name = "cov-analysis-linux32-${version}.tar.gz";
       sha256 = "0i06wbd7blgx9adh9w09by4i18vwmldfp9ix97a5dph2cjymsviy";

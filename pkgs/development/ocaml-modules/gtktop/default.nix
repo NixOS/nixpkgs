@@ -2,6 +2,10 @@
 
 let pname = "gtktop-2.0"; in
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "${pname} is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation {
   name = "ocaml-${pname}";
 

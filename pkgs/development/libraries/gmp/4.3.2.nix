@@ -27,8 +27,12 @@ let self = stdenv.mkDerivation rec {
     then "ln -sf configfsf.guess config.guess"
     else ''echo "Darwin host is `./config.guess`."'';
 
-  configureFlags = (if cxx then "--enable-cxx" else "--disable-cxx") +
-    stdenv.lib.optionalString stdenv.isDarwin " ac_cv_build=x86_64-apple-darwin13.4.0 ac_cv_host=x86_64-apple-darwin13.4.0";
+  configureFlags = [
+    (stdenv.lib.enableFeature cxx "cxx")
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "ac_cv_build=x86_64-apple-darwin13.4.0"
+    "ac_cv_host=x86_64-apple-darwin13.4.0"
+  ];
 
   # The test t-lucnum_ui fails (on Linux/x86_64) when built with GCC 4.8.
   # Newer versions of GMP don't have that issue anymore.

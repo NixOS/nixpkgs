@@ -32,6 +32,7 @@
     version = "1.5.1";
   };
   ledger_web = {
+    dependencies = ["database_cleaner" "directory_watcher" "pg" "rack" "rspec" "sequel" "sinatra" "sinatra-contrib" "sinatra-session"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0i4vagaiyayymlr41rsy4lg2cl1r011ib0ql9dgjadfy6imb4kqh";
@@ -58,10 +59,10 @@
   rack = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "09bs295yq6csjnkzj7ncj50i6chfxrhmzg1pk6p0vd2lb9ac8pj5";
+      sha256 = "1g9926ln2lw12lfxm4ylq1h6nl0rafl10za3xvjzc87qvnqic87f";
       type = "gem";
     };
-    version = "1.6.4";
+    version = "1.6.11";
   };
   rack-protection = {
     dependencies = ["rack"];
@@ -82,6 +83,7 @@
     version = "0.6.3";
   };
   rspec = {
+    dependencies = ["rspec-core" "rspec-expectations" "rspec-mocks"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "16g3mmih999f0b6vcz2c3qsc7ks5zy4lj1rzjh8hf6wk531nvc6s";
@@ -90,6 +92,7 @@
     version = "3.5.0";
   };
   rspec-core = {
+    dependencies = ["rspec-support"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "12yndf7y6g3s1306bv1aycsmd0gjy5m172spdhx54svca2fcpzy1";
@@ -98,6 +101,7 @@
     version = "3.5.2";
   };
   rspec-expectations = {
+    dependencies = ["diff-lcs" "rspec-support"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0bbqfrb1x8gmwf8x2xhhwvvlhwbbafq4isbvlibxi6jk602f09gs";
@@ -106,6 +110,7 @@
     version = "3.5.0";
   };
   rspec-mocks = {
+    dependencies = ["diff-lcs" "rspec-support"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0nl3ksivh9wwrjjd47z5dggrwx40v6gpb3a0gzbp1gs06a5dmk24";
@@ -130,6 +135,7 @@
     version = "4.37.0";
   };
   sinatra = {
+    dependencies = ["rack" "rack-protection" "tilt"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "1b81kbr65mmcl9cdq2r6yc16wklyp798rxkgmm5pr9fvsj7jwmxp";
@@ -138,6 +144,7 @@
     version = "1.4.7";
   };
   sinatra-contrib = {
+    dependencies = ["backports" "multi_json" "rack-protection" "rack-test" "sinatra" "tilt"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0vi3i0icbi2figiayxpvxbqpbn1syma7w4p4zw5mav1ln4c7jnfr";
@@ -146,6 +153,7 @@
     version = "1.4.7";
   };
   sinatra-session = {
+    dependencies = ["sinatra"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "183xl8i4d2hc03afd1i52gwn2xi3vzrv02g22llhfy5wkmm44gmq";

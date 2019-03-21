@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pycryptodome }:
+{ buildPythonPackage, pycryptodome }:
 
 # This is a dummy package providing the drop-in replacement pycryptodome.
 # https://github.com/NixOS/nixpkgs/issues/21671
@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   version = pycryptodome.version;
   pname = "pycrypto";
-  name = "${pname}-${version}";
 
   # Cannot build wheel otherwise (zip 1980 issue)
   SOURCE_DATE_EPOCH=315532800;

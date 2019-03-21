@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mandoc-${version}";
-  version = "1.13.4";
+  version = "1.14.4";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/snapshots/mdocml-${version}.tar.gz";
-    sha256 = "1vz0g5nvjbz1ckrg9cn6ivlnb13bcl1r6nc4yzb7300qvfnw2m8a";
+    url = "https://mandoc.bsd.lv/snapshots/mandoc-${version}.tar.gz";
+    sha256 = "24eb72103768987dcc63b53d27fdc085796330782f44b3b40c4660b1e1ee9b9c";
   };
 
   buildInputs = [ zlib ];
@@ -19,17 +19,23 @@ stdenv.mkDerivation rec {
     HAVE_MANPATH=1
     LD_OHASH="-lutil"
     BUILD_DB=0
+    CC=${stdenv.cc.targetPrefix}cc
   '';
+
+  patches = [
+    ./remove-broken-cc-check.patch
+  ];
 
   preConfigure = ''
     echo $configureLocal > configure.local
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://mdocml.bsd.lv/;
+    homepage = https://mandoc.bsd.lv/;
     description = "suite of tools compiling mdoc and man";
+    downloadPage = "http://mandoc.bsd.lv/snapshots/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ramkromberg ];
+    maintainers = with maintainers; [ bb010g ramkromberg ];
   };
 }

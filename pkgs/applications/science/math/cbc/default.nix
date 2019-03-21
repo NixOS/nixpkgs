@@ -4,11 +4,11 @@ stdenv.mkDerivation {
   name = "cbc-2.9.9";
 
   src = fetchurl {
-    url = "http://www.coin-or.org/download/source/Cbc/Cbc-2.9.9.tgz";
+    url = "https://www.coin-or.org/download/source/Cbc/Cbc-2.9.9.tgz";
     sha256 = "1w8axdzm05xf5y13c31w7rc5z6ywxqxiwafnxcq3p195kgj0915a";
   };
 
-  configureFlags = "-C";
+  configureFlags = [ "-C" ];
 
   enableParallelBuilding = true;
 

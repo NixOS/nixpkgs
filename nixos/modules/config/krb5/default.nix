@@ -79,7 +79,7 @@ in {
 
   options = {
     krb5 = {
-      enable = mkEnableOption "Whether to enable Kerberos V.";
+      enable = mkEnableOption "building krb5.conf, configuration file for Kerberos V";
 
       kerberos = mkOption {
         type = types.package;

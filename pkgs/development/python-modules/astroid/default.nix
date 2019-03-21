@@ -1,37 +1,29 @@
-{ lib, fetchPypi, buildPythonPackage, python, logilab_common, six
-, lazy-object-proxy, wrapt, singledispatch, enum34, pythonOlder
-, backports_functools_lru_cache
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy
+, lazy-object-proxy, six, wrapt, typing, typed-ast
+, pytestrunner, pytest
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "astroid";
-  version = "1.6.3";
+  version = "2.1.0";
+
+  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35cfae47aac19c7b407b7095410e895e836f2285ccf1220336afba744cc4c5f2";
+    sha256 = "08hz675knh4294bancdapql392fmbjyimhbyrmfkz1ka7l035c1m";
   };
 
-  propagatedBuildInputs = [ logilab_common six lazy-object-proxy wrapt ]
-    ++ lib.optionals (pythonOlder "3.4") [ enum34 singledispatch]
-    ++ lib.optionals (pythonOlder "3.3") [ backports_functools_lru_cache ];
+  # From astroid/__pkginfo__.py
+  propagatedBuildInputs = [ lazy-object-proxy six wrapt ]
+    ++ lib.optional (pythonOlder "3.5") typing
+    ++ lib.optional (pythonOlder "3.7" && !isPyPy) typed-ast;
 
-  postPatch = ''
-    cd astroid/tests
-    for i in $(ls unittest*); do mv -v $i test_$i; done
-    cd ../..
-    rm -vf astroid/tests/test_unittest_inference.py
-    rm -vf astroid/tests/test_unittest_manager.py
-  '';
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ pytestrunner pytest ];
 
   meta = with lib; {
-    description = "A abstract syntax tree for Python with inference support";
-    homepage = https://bitbucket.org/logilab/astroid;
+    description = "An abstract syntax tree for Python with inference support";
+    homepage = https://github.com/PyCQA/astroid;
     license = licenses.lgpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ nand0p ];

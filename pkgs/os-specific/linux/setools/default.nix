@@ -30,7 +30,7 @@ buildPythonApplication rec {
   setupPyBuildFlags = [ "-i" ];
 
   preBuild = ''
-    export SEPOL="${libsepol}/lib/libsepol.a"
+    export SEPOL="${stdenv.lib.getLib libsepol}/lib/libsepol.a"
   '';
 
   meta = {

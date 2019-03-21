@@ -2,13 +2,13 @@
 
 with stdenv.lib; stdenv.mkDerivation rec {
   name = "tbb-${version}";
-  version = "2018_U1";
+  version = "2018_U5";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "tbb";
     rev = version;
-    sha256 = "1lygz07va6hsv2vlx9zwz5d2n81rxsdhmh0pqxgj8n1bvb1rp0qw";
+    sha256 = "080df8h2whnly6n9pslpg07dc9vr0p45gqgy9qijpjvxkjwfkdkp";
   };
 
   makeFlags = concatStringsSep " " (
@@ -41,6 +41,6 @@ with stdenv.lib; stdenv.mkDerivation rec {
       details and threading mechanisms for scalability and performance.
     '';
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ peti thoughtpolice dizfer ];
+    maintainers = with maintainers; [ thoughtpolice dizfer ];
   };
 }

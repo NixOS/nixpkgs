@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3Plus;
     maintainers = [ maintainers.taktoa ];
     platforms   = with platforms; linux;
+    broken      = true; # 2018-09-08
   };
 }

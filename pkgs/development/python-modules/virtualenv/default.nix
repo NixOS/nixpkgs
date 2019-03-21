@@ -6,12 +6,11 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "15.2.0";
-  name = "${pname}-${version}";
+  version = "16.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d7e241b431e7afce47e77f8843a276f652699d1fa4f93b9d8ce0076fd7b0b54";
+    sha256 = "5a3ecdfbde67a4a3b3111301c4d64a5b71cf862c8c42958d30cf3253df1f29dd";
   };
 
   # Doubt this is needed - FRidh 2017-07-07

@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "Flask-Mail";
-  name = "${pname}-${version}";
   version = "0.9.1";
 
   meta = {

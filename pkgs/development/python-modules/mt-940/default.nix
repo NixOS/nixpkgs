@@ -1,35 +1,36 @@
-{ buildPythonPackage, stdenv, pytestrunner, pyyaml, pytest, enum34
-, pytestpep8, pytestflakes,fetchFromGitHub, isPy3k, lib, glibcLocales
+{ buildPythonPackage, stdenv, pyyaml, pytest, enum34
+, pytestpep8, pytest-flakes, fetchFromGitHub, isPy3k, lib, glibcLocales
 }:
 
 buildPythonPackage rec {
-  version = "v4.10.0";
-  pname = "mt940";
+  version = "4.13.2";
+  pname = "mt-940";
 
+  # No tests in PyPI tarball
+  # See https://github.com/WoLpH/mt940/pull/72
   src = fetchFromGitHub {
     owner = "WoLpH";
-    repo = pname;
-    rev = version;
-    sha256 = "1dsf2di8rr0iw2vaz6dppalby3y7i8x2bl0qjqvaiqacjxxvwj65";
+    repo = "mt940";
+    rev = "v${version}";
+    sha256 = "1lvw3qyv7qhjabcvg55br8x4pnc7hv8xzzaf6wnr8cfjg0q7dzzg";
   };
 
-  patches = [
-    ./no-coverage.patch
-  ];
+  postPatch = ''
+    # No coverage report
+    sed -i "/--\(no-\)\?cov/d" pytest.ini
+  '';
 
-  propagatedBuildInputs = [ pyyaml pytestrunner ]
-    ++ lib.optional (!isPy3k) enum34;
+  propagatedBuildInputs = lib.optional (!isPy3k) enum34;
 
-  LC_ALL="en_US.UTF-8";
+  checkInputs = [ pyyaml pytestpep8 pytest-flakes pytest ];
 
-  checkInputs = [ pytestpep8 pytestflakes pytest glibcLocales ];
   checkPhase = ''
     py.test
   '';
 
   meta = with stdenv.lib; {
     description = "A library to parse MT940 files and returns smart Python collections for statistics and manipulation";
-    homepage = "http://pythonhosted.org/mt-940/";
+    inherit (src.meta) homepage;
     license = licenses.bsd3;
   };
 }

@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  inherit (pkgs) stdenv writeText procps;
-
   udev = config.systemd.package;
 
   cfg = config.services.udev;

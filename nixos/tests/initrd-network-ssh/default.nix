@@ -1,4 +1,4 @@
-import ../make-test.nix ({ pkgs, lib, ... }:
+import ../make-test.nix ({ lib, ... }:
 
 {
   name = "initrd-network-ssh";
@@ -8,7 +8,7 @@ import ../make-test.nix ({ pkgs, lib, ... }:
 
   nodes = with lib; rec {
     server =
-      { config, pkgs, ... }:
+      { config, ... }:
       {
         boot.kernelParams = [
           "ip=${config.networking.primaryIPAddress}:::255.255.255.0::eth1:none"
@@ -33,7 +33,7 @@ import ../make-test.nix ({ pkgs, lib, ... }:
       };
 
     client =
-      { config, pkgs, ... }:
+      { config, ... }:
       {
         environment.etc.knownHosts = {
           text = concatStrings [

@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba
 , libiconv, npth, gettext, texinfo, pcsclite, sqlite
 
 # Each of the dependencies below are optional.
@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.2.6";
+  version = "2.2.14";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "110rf476l3cgn52gh9ia5y0y06y2ialq9dqc12jkhnfhl9gqqkg6";
+    sha256 = "0yzqrg24j9fc4f8ss5pclyvg70a9z53sv89vl77xii8yvi3fvy8v";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ./fix-libusb-include-path.patch
   ];
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
-    sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+    sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ wkennington peti fpletz vrthra ];
+    maintainers = with maintainers; [ peti fpletz vrthra ];
     platforms = platforms.all;
   };
 }

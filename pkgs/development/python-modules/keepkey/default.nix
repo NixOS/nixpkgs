@@ -2,15 +2,14 @@
 , ecdsa , mnemonic, protobuf, hidapi, trezor }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "keepkey";
-  version = "4.0.0";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "keepkey";
     repo = "python-keepkey";
     rev = "v${version}";
-    sha256 = "144awjkc169z2n1ffirs697y6m97izh3pbh3sjhy3nji7jszh592";
+    sha256 = "1778c9vabn9a7b7lbirwclswnqmzqm00slklvnhqacbbdf4rp417";
   };
 
   propagatedBuildInputs = [ protobuf hidapi trezor ];

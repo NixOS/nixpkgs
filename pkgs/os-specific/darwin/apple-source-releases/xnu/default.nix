@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, fetchzip, bootstrap_cmds, bison, flex, gnum4, unifdef, perl, python }:
+{ appleDerivation, bootstrap_cmds, bison, flex, gnum4, unifdef, perl, python }:
 
 appleDerivation {
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];

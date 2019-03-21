@@ -1,54 +1,47 @@
-{ fetchurl, stdenv, makeWrapper, python, alsaLib
-, libX11, libGLU, SDL, lua5, zlib, bam, freetype
+{ fetchFromGitHub, fetchurl, stdenv, bam, pkgconfig, makeWrapper, python, alsaLib
+, libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack
 }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.6.4";
+  name = "teeworlds-0.7.2";
 
-  src = fetchurl {
-    url = "https://downloads.teeworlds.com/teeworlds-0.6.4-src.tar.gz";
-    sha256 = "1qlqzp4wqh1vnip081lbsjnx5jj5m5y4msrcm8glbd80pfgd2qf2";
+  src = fetchFromGitHub {
+    owner = "teeworlds";
+    repo = "teeworlds";
+    rev = "0.7.2";
+    sha256 = "15l988qcsqgb6rjais0qd5sd2rjanm2708jmzvkariqzz0d6pb93";
   };
 
-  # we always want to use system libs instead of these
-  postPatch = "rm -r other/{freetype,sdl}/{include,lib32,lib64}";
+  postPatch = ''
+    # set compiled-in DATA_DIR so resources can be found
+    substituteInPlace src/engine/shared/storage.cpp \
+      --replace '#define DATA_DIR "data"' \
+                '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
+  '';
 
-  buildInputs = [
-    python makeWrapper alsaLib libX11 libGLU SDL lua5 zlib bam freetype
-  ];
+  nativeBuildInputs = [ bam pkgconfig ];
+
+  configurePhase = ''
+    bam config
+  '';
 
   buildPhase = ''
-    bam -a -v release
+    bam conf=release
   '';
 
   installPhase = ''
-    # Copy the graphics, sounds, etc.
-    mkdir -p "$out/share/${name}"
-    cp -rv data other/icons "$out/share/${name}"
+    mkdir -p $out/bin $out/share/teeworlds
+    cp build/x86_64/release/teeworlds{,_srv} $out/bin
+    cp -r build/x86_64/release/data $out/share/teeworlds
+  '';
 
-    # Copy the executables (client, server, etc.).
-    mkdir -p "$out/bin"
-    executables=""
-    for file in *
-    do
-      if [ -f "$file" ] && [ -x "$file" ]
-      then
-          executables="$file $executables"
-      fi
-    done
-    cp -v $executables "$out/bin"
+  buildInputs = [
+    python alsaLib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
+  ];
 
-    # Make sure the programs are executed from the right directory so
-    # that they can access the graphics and sounds.
-    for program in $executables
-    do
-      wrapProgram $out/bin/$program \
-        --run "cd $out/share/${name}"
-    done
-
-    # Copy the documentation.
-    mkdir -p "$out/doc/${name}"
-    cp -v *.txt "$out/doc/${name}"
+  postInstall = ''
+    mkdir -p $out/share/doc/teeworlds
+    cp -v *.txt $out/share/doc/teeworlds/
   '';
 
   meta = {
@@ -64,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = https://teeworlds.com/;
     license = "BSD-style, see `license.txt'";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = ["x86_64-linux" "i686-linux"];
   };
 }

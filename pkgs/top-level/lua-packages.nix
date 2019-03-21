@@ -5,17 +5,48 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{ fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
-, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
-, perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+{ fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig
+, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
+, glib, gobject-introspection, libevent, zlib, autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
+, pkgs
+, fetchgit
+, lib
 }:
 
 let
-  isLua51 = lua.luaversion == "5.1";
-  isLua52 = lua.luaversion == "5.2";
+  packages = ( self:
+
+let
+  luaAtLeast = lib.versionAtLeast lua.luaversion;
+  luaOlder = lib.versionOlder lua.luaversion;
+  isLua51 = (lib.versions.majorMinor lua.version) == "5.1";
+  isLua52 = (lib.versions.majorMinor lua.version) == "5.2";
+  isLua53 = lua.luaversion == "5.3";
   isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
+
+  lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
+
+  # Check whether a derivation provides a lua module.
+  hasLuaModule = drv: drv ? luaModule ;
+
+  callPackage = pkgs.newScope self;
+
+  requiredLuaModules = drvs: with stdenv.lib; let
+    modules =  filter hasLuaModule drvs;
+  in unique ([lua] ++ modules ++ concatLists (catAttrs "requiredLuaModules" modules));
+
+  # Convert derivation to a lua module.
+  toLuaModule = drv:
+    drv.overrideAttrs( oldAttrs: {
+      # Use passthru in order to prevent rebuilds when possible.
+      passthru = (oldAttrs.passthru or {})// {
+        luaModule = lua;
+        requiredLuaModules = requiredLuaModules drv.propagatedBuildInputs;
+      };
+    });
+
 
   platformString =
     if stdenv.isDarwin then "macosx"
@@ -24,10 +55,22 @@ let
     else if stdenv.isSunOS then "solaris"
     else throw "unsupported platform";
 
-  self = _self;
-  _self = with self; {
-  inherit lua;
-  inherit (stdenv.lib) maintainers;
+  buildLuaApplication = args: buildLuarocksPackage ({namePrefix="";} // args );
+
+  buildLuarocksPackage = with pkgs.lib; makeOverridable( callPackage ../development/interpreters/lua-5/build-lua-package.nix {
+    inherit toLuaModule;
+    inherit lua;
+  });
+in
+with self; {
+
+  getLuaPathList = majorVersion: [
+     "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
+    "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
+  ];
+  getLuaCPathList = majorVersion: [
+     "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
+  ];
 
   # helper functions for dealing with LUA_PATH and LUA_CPATH
   getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
@@ -39,9 +82,22 @@ let
     inherit lua writeText;
   };
 
+
+  inherit toLuaModule lua-setup-hook;
+  inherit buildLuarocksPackage buildLuaApplication;
+  inherit requiredLuaModules luaOlder luaAtLeast
+    isLua51 isLua52 isLua53 isLuaJIT lua callPackage;
+
+  # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
+  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
+    inherit lua; inherit (pkgs) makeSetupHook makeWrapper;
+  };
+
   luarocks = callPackage ../development/tools/misc/luarocks {
     inherit lua;
   };
+
+  luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
   bit32 = buildLuaPackage rec {
     version = "5.3.0";
@@ -72,68 +128,96 @@ let
     };
   };
 
-  luabitop = buildLuaPackage rec {
-    version = "1.0.2";
-    name = "bitop-${version}";
+  compat53 = buildLuaPackage rec {
+    version = "0.7";
+    name = "compat53-${version}";
 
-    src = fetchurl {
-      url = "http://bitop.luajit.org/download/LuaBitOp-${version}.tar.gz";
-      sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
+    src = fetchFromGitHub {
+      owner = "keplerproject";
+      repo = "lua-compat-5.3";
+      rev = "v${version}";
+      sha256 = "02a14nvn7aggg1yikj9h3dcf8aqjbxlws1bfvqbpfxv9d5phnrpz";
     };
 
-    buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
+    nativeBuildInputs = [ pkgconfig ];
 
-    postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace Makefile --replace 10.4 10.5
+    postConfigure = ''
+      CFLAGS+=" -shared $(pkg-config --libs ${if isLuaJIT then "luajit" else "lua"})"
     '';
 
-    preBuild = ''
-      makeFlagsArray=(
-        ${stdenv.lib.optionalString stdenv.cc.isClang "CC=$CC"}
-        INCLUDES="-I${lua}/include"
-        LUA="${lua}/bin/lua");
+    buildPhase = ''
+      cc lstrlib.c $CFLAGS -o string.so
+      cc ltablib.c $CFLAGS -o table.so
+      cc lutf8lib.c $CFLAGS -o utf8.so
     '';
 
+    # There's no need to separate *.lua and *.so, I guess?  TODO: conventions?
     installPhase = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}
-      install -p bit.so $out/lib/lua/${lua.luaversion}
+      install -Dt "$out/lib/lua/${lua.luaversion}/compat53" \
+        compat53/*.lua *.so
     '';
 
     meta = with stdenv.lib; {
-      description = "C extension module for Lua which adds bitwise operations on numbers";
-      homepage = "http://bitop.luajit.org";
+      description = "Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1";
+      homepage = "https://github.com/keplerproject/lua-compat-5.3";
       license = licenses.mit;
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.all;
     };
   };
 
-  luacheck = buildLuaPackage rec {
-    pname = "luacheck";
-    version = "0.20.0";
-    name = "${pname}-${version}";
+  cqueues = buildLuaPackage rec {
+    name = "cqueues-${version}";
+    version = "20171014";
 
-    src = fetchFromGitHub {
-      owner = "mpeterv";
-      repo = "luacheck";
-      rev = "${version}";
-      sha256 = "0ahfkmqcjhlb7r99bswy1sly6d7p4pyw5f4x4fxnxzjhbq0c5qcs";
+    src = fetchurl {
+      url = "https://www.25thandclement.com/~william/projects/releases/${name}.tgz";
+      sha256 = "1dabhpn6r0hlln8vx9hxm34pfcm46qzgpb2apmziwg5z51fi4ksb";
     };
 
-    propagatedBuildInputs = [ lua ];
+    preConfigure = ''export prefix=$out'';
 
-    # No Makefile.
-    dontBuild = true;
+    nativeBuildInputs = [ gnum4 ];
+    buildInputs = [ openssl ];
 
+    meta = with stdenv.lib; {
+      description = "A type of event loop for Lua";
+      homepage = "https://www.25thandclement.com/~william/projects/cqueues.html";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.unix;
+    };
+  };
+
+  http = buildLuaPackage rec {
+    version = "0.2";
+    name = "http-${version}";
+
+    src = fetchFromGitHub {
+      owner = "daurnimator";
+      repo = "lua-http";
+      rev = "v${version}";
+      sha256 = "0a8vsj49alaf1fkhv51n5mgpjq8izfff3shcjs8xk7p2bc46vd7i";
+    };
+
+    /* TODO: separate docs derivation? (pandoc is heavy)
+    nativeBuildInputs = [ pandoc ];
+    makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
+    */
+
+    buildPhase = ":";
     installPhase = ''
-      ${lua}/bin/lua install.lua $out
+      install -Dt "$out/lib/lua/${lua.luaversion}/http" \
+        http/*.lua
+      install -Dt "$out/lib/lua/${lua.luaversion}/http/compat" \
+        http/compat/*.lua
     '';
 
     meta = with stdenv.lib; {
-      description = "A tool for linting and static analysis of Lua code";
-      homepage = https://github.com/mpeterv/luacheck;
+      description = "HTTP library for lua";
+      homepage = "https://daurnimator.github.io/lua-http/${version}/";
       license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = platforms.unix;
+      maintainers = with maintainers; [ vcunat ];
     };
   };
 
@@ -166,37 +250,6 @@ let
     };
   };
 
-  luaevent = buildLuaPackage rec {
-    version = "0.4.4";
-    name = "luaevent-${version}";
-
-    src = fetchFromGitHub {
-      owner = "harningt";
-      repo = "luaevent";
-      rev = "v${version}";
-      sha256 = "1krzxr0jkv3gmhpckp02byhdd9s5dd0hpyqc8irc8i79dd8x0p53";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INSTALL_DIR_LUA="$out/share/lua/${lua.luaversion}"
-        INSTALL_DIR_BIN="$out/lib/lua/${lua.luaversion}"
-        LUA_INC_DIR="${lua}/include"
-      );
-    '';
-
-    buildInputs = [ libevent ];
-
-    propagatedBuildInputs = [ luasocket ];
-
-    meta = with stdenv.lib; {
-      homepage = http://luaforge.net/projects/luaevent/;
-      description = "Binding of libevent to Lua";
-      license = licenses.mit;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
-
   luaexpat = buildLuaPackage rec {
     version = "1.3.0";
     name = "expat-${version}";
@@ -220,7 +273,7 @@ let
         EXPAT_INC="-I${expat.dev}/include");
     '';
 
-    disabled = isLuaJIT;
+    disabled = isLua53 || isLuaJIT;
 
     meta = with stdenv.lib; {
       description = "SAX XML parser based on the Expat library";
@@ -233,35 +286,36 @@ let
 
   luadbi = buildLuaPackage rec {
     name = "luadbi-${version}";
-    version = "0.5";
-    src = fetchurl {
-      url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/luadbi/luadbi.${version}.tar.gz";
-      sha256 = "07ikxgxgfpimnwf7zrqwcwma83ss3wm2nzjxpwv2a1c0vmc684a9";
+    version = "0.7.1";
+
+    src = fetchFromGitHub {
+      owner = "mwild1";
+      repo = "luadbi";
+      rev = "v${version}";
+      sha256 = "01i8018zb7w2bhaqglm7cnvbiirgd95b9d07irgz3sci91p08cwp";
     };
-    sourceRoot = ".";
 
-    buildInputs = [ mysql.connector-c postgresql sqlite ];
+    MYSQL_INC="-I${mysql.connector-c}/include/mysql";
 
-    preConfigure = ''
-      substituteInPlace Makefile --replace CC=gcc CC=cc
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    buildInputs = [ mysql.client mysql.connector-c postgresql sqlite ];
+
+    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
       substituteInPlace Makefile \
         --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
     '';
 
-    NIX_CFLAGS_COMPILE = [
-      "-I${mysql.connector-c}/include/mysql"
-      "-L${mysql.connector-c}/lib/mysql"
-      "-I${postgresql}/include/server"
+    installFlags = [
+      "LUA_CDIR=$(out)/lib/lua/${lua.luaversion}"
+      "LUA_LDIR=$(out)/share/lua/${lua.luaversion}"
     ];
 
-    installPhase = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}
-      install -p DBI.lua *.so $out/lib/lua/${lua.luaversion}
-    '';
+    installTargets = [
+      "install_lua" "install_mysql" "install_psql" "install_sqlite3"
+    ];
 
     meta = with stdenv.lib; {
-      homepage = "https://code.google.com/archive/p/luadbi/";
+      homepage = https://github.com/mwild1/luadbi;
+      license = licenses.mit;
       platforms = stdenv.lib.platforms.unix;
     };
   };
@@ -296,6 +350,28 @@ let
     };
   };
 
+  luaossl = buildLuaPackage rec {
+    name = "luaossl-${version}";
+    version = "20170903";
+
+    src = fetchurl {
+      url = "https://www.25thandclement.com/~william/projects/releases/${name}.tgz";
+      sha256 = "10392bvd0lzyibipblgiss09zlqh3a5zgqg1b9lgbybpqb9cv2k3";
+    };
+
+    preConfigure = ''export prefix=$out'';
+
+    buildInputs = [ openssl ];
+
+    meta = with stdenv.lib; {
+      description = "Comprehensive binding to OpenSSL for Lua 5.1+";
+      homepage = "https://www.25thandclement.com/~william/projects/luaossl.html";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.unix;
+    };
+  };
+
   luaposix = buildLuaPackage rec {
     name = "posix-${version}";
     version = "34.0.4";
@@ -326,60 +402,6 @@ let
       homepage = "https://github.com/luaposix/luaposix";
       license = licenses.mit;
       maintainers = with maintainers; [ vyp lblasc ];
-      platforms = platforms.unix;
-    };
-  };
-
-  lpty = buildLuaPackage rec {
-    version = "1.2.1";
-    name = "lpty-${version}";
-
-    src = fetchurl {
-      url = "http://www.tset.de/downloads/lpty-${version}-1.tar.gz";
-      sha256 = "0rgvbpymcgdkzdwfag607xfscs9xyqxg0dj0qr5fv906mi183gs6";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
-        INST_LUADIR="$out/share/lua/${lua.luaversion}"
-        LUA_BINDIR="${lua}/bin"
-        LUA_INCDIR="-I${lua}/include"
-        LUA_LIBDIR="-L${lua}/lib"
-        );
-    '';
-
-    meta = with stdenv.lib; {
-      description = "PTY control for Lua";
-      homepage = "http://www.tset.de/lpty";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = platforms.linux;
-    };
-  };
-
-  lua-iconv = buildLuaPackage rec {
-    name = "lua-iconv-${version}";
-    version = "7";
-
-    src = fetchFromGitHub {
-      owner = "ittner";
-      repo = "lua-iconv";
-      rev = name;
-      sha256 = "0rd76966qlxfp8ypkyrbif76nxnm1acclqwfs45wz3972jsk654i";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(
-        INSTALL_PATH="$out/lib/lua/${lua.luaversion}"
-      );
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Lua bindings for POSIX iconv";
-      homepage = "https://ittner.github.io/lua-iconv/";
-      license = licenses.mit;
-      maintainers = with maintainers; [ richardipsum ];
       platforms = platforms.unix;
     };
   };
@@ -426,7 +448,7 @@ let
     };
 
     patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace src/makefile --replace gcc cc \
+      substituteInPlace src/makefile \
         --replace 10.3 10.5
     '';
 
@@ -434,9 +456,13 @@ let
       makeFlagsArray=(
         LUAV=${lua.luaversion}
         PLAT=${platformString}
+        CC=''${CC}
+        LD=''${CC}
         prefix=$out
       );
     '';
+
+    doCheck = false; # fails to find itself
 
     installTargets = [ "install" "install-unix" ];
 
@@ -498,7 +524,7 @@ let
     patches = [ ../development/lua-modules/zip.patch ];
 
     # Does not currently work under Lua 5.2 or LuaJIT.
-    disabled = isLua52 || isLuaJIT;
+    disabled = isLua52 || isLua53 || isLuaJIT;
 
     meta = with stdenv.lib; {
       description = "Lua library to read files stored inside zip files";
@@ -619,6 +645,8 @@ let
       sha256 = "05k8zs8nsdmlwja3hdhckwknf7ww5cvbp3sxhk2xd1i3ij6aa10b";
     };
 
+    disabled = isLua53;
+
     buildInputs = [ sqlite ];
 
     patches = [ ../development/lua-modules/luasql.patch ];
@@ -632,13 +660,33 @@ let
     };
   };
 
+  lfs = buildLuaPackage rec {
+    name = "lfs-${version}";
+    version = "1.7.0.2";
+
+    src = fetchFromGitHub {
+      owner = "keplerproject";
+      repo = "luafilesystem";
+      rev = "v" + stdenv.lib.replaceStrings ["."] ["_"] version;
+      sha256 = "0zmprgkm9zawdf9wnw0v3w6ibaj442wlc6alp39hmw610fl4vghi";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Portable library for filesystem operations";
+      homepage = https://keplerproject.github.com/luafilesystem;
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.all;
+    };
+  };
+
   lpeg = buildLuaPackage rec {
     name = "lpeg-${version}";
-    version = "0.12";
+    version = "1.0.1";
 
     src = fetchurl {
       url = "http://www.inf.puc-rio.br/~roberto/lpeg/${name}.tar.gz";
-      sha256 = "0xlbfw1w7l65a5qhnx5sfw327hkq1zcj8xmg4glfw6fj9ha4b9gg";
+      sha256 = "62d9f7a9ea3c1f215c77e0cadd8534c6ad9af0fb711c3f89188a8891c72f026b";
     };
 
     preBuild = ''
@@ -693,43 +741,6 @@ let
     };
   };
 
-  lgi = stdenv.mkDerivation rec {
-    name = "lgi-${version}";
-    version = "0.9.2";
-
-    src = fetchFromGitHub {
-      owner = "pavouk";
-      repo = "lgi";
-      rev = version;
-      sha256 = "03rbydnj411xpjvwsyvhwy4plm96481d7jax544mvk7apd8sd5jj";
-    };
-
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ glib gobjectIntrospection lua ];
-
-    makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
-
-    preBuild = ''
-      sed -i "s|/usr/local|$out|" lgi/Makefile
-    '';
-
-    patches = [
-        (fetchpatch {
-            name = "lgi-find-cairo-through-typelib.patch";
-            url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
-            sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
-        })
-    ];
-
-    meta = with stdenv.lib; {
-      description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
-      homepage    = https://github.com/pavouk/lgi;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lovek323 rasendubi ];
-      platforms   = platforms.unix;
-    };
-  };
-
   mpack = buildLuaPackage rec {
     name = "mpack-${version}";
     version = "1.0.7";
@@ -756,6 +767,8 @@ let
       "MPACK_LUA_VERSION=${lua.version}"
       "LUA_CMOD_INSTALLDIR=$(out)/lib/lua/${lua.luaversion}"
     ];
+
+    hardeningDisable = [ "fortify" ];
 
     meta = with stdenv.lib; {
       description = "Lua bindings for libmpack";
@@ -824,7 +837,7 @@ let
     };
   };
 
-  vicious = stdenv.mkDerivation rec {
+  vicious = toLuaModule(stdenv.mkDerivation rec {
     name = "vicious-${version}";
     version = "2.3.1";
 
@@ -850,6 +863,7 @@ let
       maintainers = with maintainers; [ makefu mic92 ];
       platforms   = platforms.linux;
     };
-  };
+  });
 
-}; in self
+});
+in packages

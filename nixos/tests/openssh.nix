@@ -5,37 +5,55 @@ let inherit (import ./ssh-keys.nix pkgs)
 in {
   name = "openssh";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aszlig eelco chaoflow ];
+    maintainers = [ aszlig eelco ];
   };
 
   nodes = {
 
     server =
-      { config, pkgs, ... }:
+      { ... }:
 
       {
         services.openssh.enable = true;
         security.pam.services.sshd.limits =
           [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
-        users.extraUsers.root.openssh.authorizedKeys.keys = [
+        users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey
         ];
       };
 
     server_lazy =
-      { config, pkgs, ... }:
+      { ... }:
 
       {
         services.openssh = { enable = true; startWhenNeeded = true; };
         security.pam.services.sshd.limits =
           [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
-        users.extraUsers.root.openssh.authorizedKeys.keys = [
+        users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey
         ];
       };
 
+    server_localhost_only =
+      { ... }:
+
+      {
+        services.openssh = {
+          enable = true; listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+        };
+      };
+
+    server_localhost_only_lazy =
+      { ... }:
+
+      {
+        services.openssh = {
+          enable = true; startWhenNeeded = true; listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+        };
+      };
+
     client =
-      { config, pkgs, ... }: { };
+      { ... }: { };
 
   };
 
@@ -77,5 +95,10 @@ in {
                        " server_lazy true");
 
     };
+
+    subtest "localhost-only", sub {
+      $server_localhost_only->succeed("ss -nlt | grep '127.0.0.1:22'");
+      $server_localhost_only_lazy->succeed("ss -nlt | grep '127.0.0.1:22'");
+    }
   '';
 })

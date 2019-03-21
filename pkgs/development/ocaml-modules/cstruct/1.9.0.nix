@@ -1,4 +1,4 @@
-{ stdenv, writeText, fetchFromGitHub, ocaml, ocamlbuild, ocplib-endian, sexplib, findlib, ppx_tools
+{ stdenv, fetchFromGitHub, ocaml, ocamlbuild, ocplib-endian, sexplib, findlib, ppx_tools
 , async ? null, lwt ? null
 }:
 

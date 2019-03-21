@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
   '';
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=728129#c15
-  doCheck = stdenv.system != "i686-linux"; # not sure about cross-compiling
+  doCheck = stdenv.hostPlatform.system != "i686-linux"; # not sure about cross-compiling
 
   meta = with stdenv.lib; {
     description = "The Oil Runtime Compiler";
-    homepage = http://code.entropywave.com/orc/;
+    homepage = https://gstreamer.freedesktop.org/projects/orc.html;
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
-    license = licenses.bsd3;
+    license = with licenses; [ bsd3 bsd2 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.fuuzetsu ];
   };

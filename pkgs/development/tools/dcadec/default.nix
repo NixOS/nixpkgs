@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   installPhase = "make PREFIX=/ DESTDIR=$out install";
 
+  doCheck = false; # fails with "ERROR: Run 'git submodule update --init test/samples' first."
+
   meta = with stdenv.lib; {
     description = "DTS Coherent Acoustics decoder with support for HD extensions";
     maintainers = with maintainers; [ edwtjo ];

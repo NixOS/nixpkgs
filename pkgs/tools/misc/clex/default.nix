@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "clex-${version}";
-  version = "4.6.patch6";
+  version = "4.6.patch9";
 
   src = fetchurl {
-    sha256 = "0bqa2hc9721d62cfsy5c7a5pzgh9b4px7g4q60xlybkwll19qbbp";
+    sha256 = "1qj5yp8k90wag5sb3zrm2pn90qqx3zbrgf2gqpqpdqmlgffnv1jc";
     url = "${meta.homepage}/download/${name}.tar.gz";
   };
 

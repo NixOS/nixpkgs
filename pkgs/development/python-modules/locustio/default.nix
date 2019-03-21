@@ -1,8 +1,8 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , mock
 , unittest2
-, msgpack-python
+, msgpack
 , requests
 , flask
 , gevent
@@ -11,18 +11,16 @@
 
 buildPythonPackage rec {
   pname = "locustio";
-  version = "0.8.1";
+  version = "0.9.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "64583987ba1c330bb071aee3e29d2eedbfb7c8b342fa064bfb74fafcff660d61";
+  src = fetchFromGitHub {
+    owner = "locustio";
+    repo = "locust";
+    rev = "${version}";
+    sha256 = "1645d63ig4ymw716b6h53bhmjqqc13p9r95k1xfx66ck6vdqnisd";
   };
 
-  patchPhase = ''
-    sed -i s/"pyzmq=="/"pyzmq>="/ setup.py
-  '';
-
-  propagatedBuildInputs = [ msgpack-python requests flask gevent pyzmq ];
+  propagatedBuildInputs = [ msgpack requests flask gevent pyzmq ];
   buildInputs = [ mock unittest2 ];
 
   meta = {

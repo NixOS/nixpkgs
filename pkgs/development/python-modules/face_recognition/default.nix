@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchFromGitHub, pillow, click, dlib, numpy
-, face_recognition_models, stdenv, flake8, tox, pytest, glibcLocales
+, face_recognition_models, stdenv, flake8, pytest, glibcLocales
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow click dlib numpy face_recognition_models ];
 
-  checkInputs = [ flake8 tox pytest glibcLocales ];
+  checkInputs = [ flake8 pytest glibcLocales ];
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test
   '';

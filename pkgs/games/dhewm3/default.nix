@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "dhewm3-${version}";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "dhewm";
     repo = "dhewm3";
     rev = version;
-    sha256 = "1s64xr1ir4d2z01fhldy577b0x80nd1k6my7y1hxp57lggr8dy5y";
+    sha256 = "0wsabvh1x4g12xmhzs2m2pgri2q9sir1w3m2r7fpy6kzxp32hqdk";
   };
 
   # Add libGLU_combined linking

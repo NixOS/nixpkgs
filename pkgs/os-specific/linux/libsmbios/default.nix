@@ -1,21 +1,23 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, help2man, gettext
-, libxml2, perl, doxygen }:
+, libxml2, perl, python3, doxygen }:
 
 
 stdenv.mkDerivation rec {
   name = "libsmbios-${version}";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "dell";
     repo = "libsmbios";
     rev = "v${version}";
-    sha256 = "158w5fz777is7nr5yhpr69b17nn6i1pavycxq1q9899frrpkzbsc";
+    sha256 = "0bck3byk62a69ngyj0zjpzf4wxwjmkhwhvsqb8z24dww9wz41l9k";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen gettext libxml2 help2man perl pkgconfig ];
 
-  configureFlags = [ "--disable-python" "--disable-graphviz" ];
+  buildInputs = [ python3 ];
+
+  configureFlags = [ "--disable-graphviz" ];
 
   enableParallelBuilding = true;
 

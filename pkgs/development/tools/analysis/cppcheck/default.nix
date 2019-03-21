@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "1.83";
+  version = "1.87";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "14d4afjz0jshwpqryvwvzrs3rrqnd7cgg3x19awgy116591ibd83";
+    sha256 = "1jl1qlr8la1rix1ffcvl6s4arv2n9fvx85sl4zgp29428xks9c73";
   };
 
   buildInputs = [ pcre ];

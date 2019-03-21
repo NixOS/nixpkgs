@@ -39,9 +39,9 @@ let
       sha256 = "05c12fmac4ha72k1ckl6i780rckd7jh4g5s5hiic7fjxnf1kx8d0";
     };
   };
-  cfg = options.${stdenv.system};
+  cfg = options.${stdenv.hostPlatform.system};
 in
-assert builtins.hasAttr stdenv.system options;
+assert builtins.hasAttr stdenv.hostPlatform.system options;
 stdenv.mkDerivation rec {
   name    = "sbcl-bootstrap-${version}";
   version = cfg.version;

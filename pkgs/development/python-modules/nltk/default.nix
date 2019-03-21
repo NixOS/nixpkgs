@@ -1,9 +1,8 @@
-{ fetchurl, buildPythonPackage, isPy33, lib, six, pythonAtLeast, pythonOlder }:
+{ fetchurl, buildPythonPackage, lib, six, pythonAtLeast, pythonOlder }:
 
 buildPythonPackage rec {
   version = "3.2.5";
   pname = "nltk";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/n/nltk/nltk-${version}.tar.gz";

@@ -1,45 +1,41 @@
-{ stdenv, fetchgit, go, Security }:
+{ stdenv, buildGoPackage, fetchFromGitHub, groff, Security, utillinux }:
 
-stdenv.mkDerivation rec {
-  name = "hub-${version}";
-  version = "2.2.9";
+buildGoPackage rec {
+  pname = "hub";
+  version = "2.10.0";
 
-  src = fetchgit {
-    url = https://github.com/github/hub.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "195ckp1idz2azv0mm1q258yjz2n51sia9xdcjnqlprmq9aig5ldh";
+  goPackagePath = "github.com/github/hub";
+
+  # Only needed to build the man-pages
+  excludedPackages = [ "github.com/github/hub/md2roff-bin" ];
+
+  src = fetchFromGitHub {
+    owner = "github";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1vvrc3k81jm9c664g0j9666i7ypn7n7jfyj4gxcybq3sg2d4di27";
   };
 
+  nativeBuildInputs = [ groff utillinux ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
-  buildInputs = [ go ] ++ stdenv.lib.optional stdenv.isDarwin Security;
-
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
-  buildPhase = ''
+  postPatch = ''
     patchShebangs .
-    sh script/build
   '';
 
-  installPhase = ''
-    mkdir -p "$out/bin"
-    cp bin/hub "$out/bin/"
+  postInstall = ''
+    cd go/src/${goPackagePath}
+    install -D etc/hub.zsh_completion "$bin/share/zsh/site-functions/_hub"
+    install -D etc/hub.bash_completion.sh "$bin/share/bash-completion/completions/hub"
+    install -D etc/hub.fish_completion  "$bin/share/fish/vendor_completions.d/hub.fish"
 
-    mkdir -p "$out/share/man/man1"
-    cp "man/hub.1" "$out/share/man/man1/"
-
-    mkdir -p "$out/share/zsh/site-functions"
-    cp "etc/hub.zsh_completion" "$out/share/zsh/site-functions/_hub"
-
-    mkdir -p "$out/etc/bash_completion.d"
-    cp "etc/hub.bash_completion.sh" "$out/etc/bash_completion.d/"
-
-# Should we also install provided git-hooks?
-# ?
+    LC_ALL=C.UTF8 \
+    make man-pages
+    cp -vr --parents share/man/man[1-9]/*.[1-9] $bin/
   '';
 
   meta = with stdenv.lib; {
     description = "Command-line wrapper for git that makes you better at GitHub";
-
     license = licenses.mit;
     homepage = https://hub.github.com/;
     maintainers = with maintainers; [ the-kenny ];

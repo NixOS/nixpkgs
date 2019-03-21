@@ -4,16 +4,20 @@
 # often change with updating of git or cgit.
 # stripLen acts as the -p parameter when applying a patch.
 
-{ lib, fetchurl, patchutils }:
-{ stripLen ? 0, extraPrefix ? null, excludes ? [], ... }@args:
+{ lib, fetchurl, buildPackages }:
+{ stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
 
 fetchurl ({
   postFetch = ''
     tmpfile="$TMPDIR/${args.sha256}"
-    "${patchutils}/bin/lsdiff" "$out" \
+    if [ ! -s "$out" ]; then
+      echo "error: Fetched patch file '$out' is empty!" 1>&2
+      exit 1
+    fi
+    "${buildPackages.patchutils}/bin/lsdiff" "$out" \
       | sort -u | sed -e 's/[*?]/\\&/g' \
       | xargs -I{} \
-        "${patchutils}/bin/filterdiff" \
+        "${buildPackages.patchutils}/bin/filterdiff" \
         --include={} \
         --strip=${toString stripLen} \
         ${lib.optionalString (extraPrefix != null) ''
@@ -21,10 +25,29 @@ fetchurl ({
            --addnewprefix=b/${extraPrefix} \
         ''} \
         --clean "$out" > "$tmpfile"
-    ${patchutils}/bin/filterdiff \
+    if [ ! -s "$tmpfile" ]; then
+      echo "error: Normalized patch '$tmpfile' is empty (while the fetched file was not)!" 1>&2
+      echo "Did you maybe fetch a HTML representation of a patch instead of a raw patch?" 1>&2
+      echo "Fetched file was:" 1>&2
+      cat "$out" 1>&2
+      exit 1
+    fi
+    ${buildPackages.patchutils}/bin/filterdiff \
       -p1 \
-      ${builtins.toString (builtins.map (x: "-x ${x}") excludes)} \
+      ${builtins.toString (builtins.map (x: "-x ${lib.escapeShellArg x}") excludes)} \
+      ${builtins.toString (builtins.map (x: "-i ${lib.escapeShellArg x}") includes)} \
       "$tmpfile" > "$out"
-    ${args.postFetch or ""}
-  '';
-} // builtins.removeAttrs args ["stripLen" "extraPrefix" "excludes" "postFetch"])
+
+    if [ ! -s "$out" ]; then
+      echo "error: Filtered patch '$out$' is empty (while the original patch file was not)!" 1>&2
+      echo "Check your includes and excludes." 1>&2
+      echo "Normalizd patch file was:" 1>&2
+      cat "$tmpfile" 1>&2
+      exit 1
+    fi
+  '' + lib.optionalString revert ''
+    ${buildPackages.patchutils}/bin/interdiff "$out" /dev/null > "$tmpfile"
+    mv "$tmpfile" "$out"
+  '' + (args.postFetch or "");
+  meta.broken = excludes != [] && includes != [];
+} // builtins.removeAttrs args ["stripLen" "extraPrefix" "excludes" "includes" "revert" "postFetch"])

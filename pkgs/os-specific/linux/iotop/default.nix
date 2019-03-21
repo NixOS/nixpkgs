@@ -10,9 +10,11 @@ python2Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool to find out the processes doing the most IO";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://guichaz.free.fr/iotop;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

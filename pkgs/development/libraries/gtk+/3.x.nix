@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, makeWrapper, shared-mime-info
-, expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobjectIntrospection
-, xorg, epoxy, json-glib, libxkbcommon, gmp
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, makeWrapper, shared-mime-info, isocodes
+, expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobject-introspection, fribidi
+, xorg, epoxy, json-glib, libxkbcommon, gmp, gnome3, autoreconfHook
+, x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux, mesa_noglu, wayland, wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
-, darwin, gnome3
+, AppKit, Cocoa
 }:
 
 assert cupsSupport -> cups != null;
@@ -12,20 +13,20 @@ assert cupsSupport -> cups != null;
 with stdenv.lib;
 
 let
-  version = "3.22.29";
+  version = "3.24.5";
 in
 stdenv.mkDerivation rec {
   name = "gtk+3-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/${gnome3.versionBranch version}/gtk+-${version}.tar.xz";
-    sha256 = "1y5vzdbgww9l7xcrg13azff2rs94kggkywmpcsh39h7w76wn8zd0";
+    url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
+    sha256 = "0bxhvnixc1hjxbzx063lghmix0wmv282khsqmckdxhrb606zpr8b";
   };
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl makeWrapper ];
+  nativeBuildInputs = [ pkgconfig gettext gobject-introspection perl makeWrapper autoreconfHook ];
 
   patches = [
     ./3.0-immodules.cache.patch
@@ -34,14 +35,25 @@ stdenv.mkDerivation rec {
       url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
     })
+    (fetchpatch {
+      name = "fix-fribidi-linking.patch";
+      url = https://github.com/gnome/gtk/compare/3.24.5..47e4a111c2666961ab47b6df48460d3c9075d92d.patch;
+      sha256 = "0ky4kmgcywg0qlwndn9aw083bkwnkr49bnlsz0ii93fxzvbiqglr";
+    })
+  ] ++ optionals stdenv.isDarwin [
+    # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
+    # let’s drop that dependency in similar way to how other parts of the library do it
+    # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
+    ./3.0-darwin-x11.patch
   ];
 
-  buildInputs = [ libxkbcommon epoxy json-glib ];
+  buildInputs = [ libxkbcommon epoxy json-glib isocodes ]
+    ++ optional stdenv.isDarwin AppKit;
   propagatedBuildInputs = with xorg; with stdenv.lib;
-    [ expat glib cairo pango gdk_pixbuf atk at-spi2-atk gnome3.gsettings-desktop-schemas
+    [ expat glib cairo pango gdk_pixbuf atk at-spi2-atk gnome3.gsettings-desktop-schemas fribidi
       libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
+    ++ optional stdenv.isDarwin Cocoa  # explicitly propagated, always needed
     ++ optionals waylandSupport [ mesa_noglu wayland wayland-protocols ]
-    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa ])
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
   #TODO: colord?
@@ -55,13 +67,15 @@ stdenv.mkDerivation rec {
     "--disable-debug"
     "--disable-dependency-tracking"
     "--disable-glibtest"
-    "--with-gdktarget=quartz"
+  ] ++ optional (stdenv.isDarwin && !x11Support)
     "--enable-quartz-backend"
-  ] ++ optional stdenv.isLinux [
+    ++ optional x11Support [
     "--enable-x11-backend"
   ] ++ optional waylandSupport [
     "--enable-wayland-backend"
   ];
+
+  doCheck = false; # needs X11
 
   postInstall = optionalString (!stdenv.isDarwin) ''
     substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \

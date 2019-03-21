@@ -1,4 +1,4 @@
-{ stdenv, pkgs, lib, fetchurl, makeWrapper, perl, unrar, unzip, gzip, file, extraBackends ? [] }:
+{ stdenv, lib, fetchurl, makeWrapper, perl, unrar, unzip, gzip, file, extraBackends ? [] }:
 
 stdenv.mkDerivation rec {
   name = "unp-${version}";

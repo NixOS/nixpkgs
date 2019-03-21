@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "antfs-cli-unstable-2017-02-11";
+python3Packages.buildPythonApplication rec {
+  pname = "antfs-cli";
+  version = "unstable-2017-02-11";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/Tigge/antfs-cli;
@@ -17,5 +18,5 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0v8y64kldfbs809j1g9d75dd1vxq7mfxnp4b45pz8anpxhjf64fy";
   };
 
-  propagatedBuildInputs = [ pythonPackages.openant ];
+  propagatedBuildInputs = [ python3Packages.openant ];
 }

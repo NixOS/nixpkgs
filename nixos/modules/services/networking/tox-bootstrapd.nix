@@ -56,7 +56,7 @@ in
 
   config = mkIf config.services.toxBootstrapd.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "tox-bootstrapd";
         uid = config.ids.uids.tox-bootstrapd;
         description = "Tox bootstrap daemon user";

@@ -1,17 +1,17 @@
-{ stdenv, lib, copyPathsToStore, fetchurl, autoconf, automake, gettext, libtool
+{ stdenv, fetchurl, autoconf, automake, gettext, libtool
 , gfortran, openblas }:
 
 with stdenv.lib;
 
 let
-  version = "3.5.0";
+  version = "3.6.3";
 in
 stdenv.mkDerivation {
   name = "arpack-${version}";
 
   src = fetchurl {
     url = "https://github.com/opencollab/arpack-ng/archive/${version}.tar.gz";
-    sha256 = "0f8jx3fifmj9qdp289zr7r651y1q48k1jya859rqxq62mvis7xsh";
+    sha256 = "0lzlcsrjsi36pv5bnipwjnyg2fx3nrv31bw2klwrg11gb8g5bwv4";
   };
 
   nativeBuildInputs = [ autoconf automake gettext libtool ];

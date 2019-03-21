@@ -2,19 +2,22 @@
 
 buildPythonPackage rec {
   pname = "distro";
-  version = "1.2.0";
-
-  buildInputs = [ pytest pytestcov tox];
-
-  checkPhase = ''
-    touch tox.ini
-    tox
-  '';
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d94370e43b676ac44fbe1ab68ca903a6147eaba3a9e8eff85b2c05556a455b76";
+    sha256 = "0mrg75w4ap7mdzyga75yaid9n8bgb345ih5mwjp3plj6v1jxwb9n";
   };
+
+  # TODO: Enable more tests on NixOS (20 out of 173 are failing, 10 due to the
+  # missing lsb_release binary):
+  patches = [ ./nixos.patch ];
+
+  checkInputs = [ pytest pytestcov ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/nir0s/distro;

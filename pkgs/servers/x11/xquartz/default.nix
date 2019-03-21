@@ -1,6 +1,7 @@
-{ stdenv, lib, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, substituteAll, xterm, makeWrapper, ruby
-, openssl, quartz-wm, fontconfig, xlsfonts, xfontsel
+{ stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, makeWrapper, ruby
+, quartz-wm, fontconfig, xlsfonts, xfontsel
 , ttf_bitstream_vera, freefont_ttf, liberation_ttf
+, cf-private
 , shell ? "${bashInteractive}/bin/bash"
 }:
 
@@ -95,9 +96,13 @@ let
     ];
   };
 in stdenv.mkDerivation {
-  name = "xquartz";
+  name = "xquartz-${stdenv.lib.getVersion xorg.xorgserver}";
 
-  buildInputs = [ ruby makeWrapper ];
+  buildInputs = [
+    ruby makeWrapper
+    # Needed for NSDefaultRunLoopMode symbols.
+    cf-private
+  ];
 
   unpackPhase = "sourceRoot=.";
 
@@ -118,6 +123,7 @@ in stdenv.mkDerivation {
 
     cp ${./startx} $out/bin/startx
     substituteInPlace $out/bin/startx \
+      --replace "@shell@"             "${stdenv.shell}" \
       --replace "@PATH@"              "$out/bin:${env}" \
       --replace "@XAUTH@"             "${xorg.xauth}/bin/xauth" \
       --replace "@FONT_CACHE@"        "$out/bin/font_cache" \
@@ -134,7 +140,7 @@ in stdenv.mkDerivation {
     defaultStartX="$out/bin/startx -- $out/bin/Xquartz"
 
     ruby ${./patch_plist.rb} \
-      ${lib.escapeShellArg (builtins.toXML {
+      ${stdenv.lib.escapeShellArg (builtins.toXML {
         XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
         XQUARTZ_DEFAULT_SHELL  = "${shell}";
         XQUARTZ_DEFAULT_STARTX = "@STARTX@";
@@ -148,12 +154,14 @@ in stdenv.mkDerivation {
     mkdir -p $out/lib/X11/xinit/privileged_startx.d
     cp ${./privileged} $out/lib/X11/xinit/privileged_startx.d/privileged
     substituteInPlace $out/lib/X11/xinit/privileged_startx.d/privileged \
+      --replace "@shell@"           "${stdenv.shell}" \
       --replace "@PATH@"            "$out/bin:${env}" \
       --replace "@FONTCONFIG_FILE@" "$fontsConfPath" \
       --replace "@FONT_CACHE@"      "$out/bin/font_cache"
 
     cp ${./font_cache} $out/bin/font_cache
     substituteInPlace $out/bin/font_cache \
+      --replace "@shell@"           "${stdenv.shell}" \
       --replace "@PATH@"            "$out/bin:${env}" \
       --replace "@ENCODINGSDIR@"    "${xorg.encodings}/share/fonts/X11/encodings" \
       --replace "@MKFONTDIR@"       "${xorg.mkfontdir}/bin/mkfontdir" \
@@ -163,6 +171,7 @@ in stdenv.mkDerivation {
 
     cp ${./xinitrc} $out/etc/X11/xinit/xinitrc
     substituteInPlace $out/etc/X11/xinit/xinitrc \
+      --replace "@shell@"           "${stdenv.shell}" \
       --replace "@PATH@"            "$out/bin:${env}" \
       --replace "@XSET@"            "${xorg.xset}/bin/xset" \
       --replace "@XMODMAP@"         "${xorg.xmodmap}/bin/xmodmap" \
@@ -173,13 +182,14 @@ in stdenv.mkDerivation {
 
     cp ${./X11} $out/Applications/XQuartz.app/Contents/MacOS/X11
     substituteInPlace $out/Applications/XQuartz.app/Contents/MacOS/X11 \
+      --replace "@shell@"           "${stdenv.shell}" \
       --replace "@DEFAULT_SHELL@"   "${shell}" \
       --replace "@DEFAULT_STARTX@"  "$defaultStartX" \
       --replace "@DEFAULT_CLIENT@"  "${xterm}/bin/xterm" \
       --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     platforms   = platforms.darwin;
     maintainers = with maintainers; [ cstrahan ];
     license     = licenses.mit;

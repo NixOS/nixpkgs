@@ -1,4 +1,5 @@
-{ mkXfceDerivation, autoreconfHook, autoconf, automake, glib, gtk_doc, intltool, libtool }:
+{ mkXfceDerivation, autoreconfHook, autoconf, automake
+, glib, gtk-doc, intltool, libtool }:
 
 mkXfceDerivation rec {
   category = "xfce";
@@ -13,7 +14,7 @@ mkXfceDerivation rec {
     autoconf
     automake
     glib
-    gtk_doc
+    gtk-doc
     intltool
     libtool
   ];

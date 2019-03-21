@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, libxfcegui4, xfconf, gtk}:
+{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, libxfcegui4, xfconf, gtk, hicolor-icon-theme }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -15,11 +15,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  buildInputs = [ libxfce4util libxfce4ui xfce4-panel libxfcegui4 xfconf gtk ];
+  buildInputs = [ libxfce4util libxfce4ui xfce4-panel libxfcegui4 xfconf gtk hicolor-icon-theme ];
 
   enableParallelBuilding = true;
-
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

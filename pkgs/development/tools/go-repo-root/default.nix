@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, gotools, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "go-repo-root-${version}";

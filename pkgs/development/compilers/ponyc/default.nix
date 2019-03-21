@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation ( rec {
   name = "ponyc-${version}";
-  version = "0.21.3";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
     rev = version;
-    sha256 = "0cdp6wbpirl3jnlqkm0hbxyz67v00nwhi4hvk4sq2g74f36j2bnm";
+    sha256 = "11vdfvv9xirfi92y7zza9pqimfx33w74vw7rg5n7l60qqc8y2cla";
   };
 
   buildInputs = [ llvm makeWrapper which ];
@@ -25,24 +25,14 @@ stdenv.mkDerivation ( rec {
     substituteInPlace packages/process/_test.pony \
         --replace '=/bin' "${coreutils}/bin"
 
-
-    # Fix llvm-ar check for darwin
-    substituteInPlace Makefile \
-        --replace "llvm-ar-3.8" "llvm-ar"
-
     # Remove impure system refs
     substituteInPlace src/libponyc/pkg/package.c \
-        --replace "/usr/local/lib" ""
-    substituteInPlace src/libponyc/pkg/package.c \
+        --replace "/usr/local/lib" "" \
         --replace "/opt/local/lib" ""
 
     for file in `grep -irl '/usr/local/opt/libressl/lib' ./*`; do
       substituteInPlace $file  --replace '/usr/local/opt/libressl/lib' "${stdenv.lib.getLib libressl}/lib"
     done
-
-    # Fix ponypath issue
-    substituteInPlace Makefile \
-        --replace "PONYPATH=." "PONYPATH=.:\$(PONYPATH)"
 
     export LLVM_CONFIG=${llvm}/bin/llvm-config
   '' + stdenv.lib.optionalString ((!stdenv.isDarwin) && (!cc.isClang) && lto) ''
@@ -73,9 +63,7 @@ stdenv.mkDerivation ( rec {
     wrapProgram $out/bin/ponyc \
       --prefix PATH ":" "${stdenv.cc}/bin" \
       --set-default CC "$CC" \
-      --prefix PONYPATH : "$out/lib" \
-      --prefix PONYPATH : "${stdenv.lib.getLib pcre2}/lib" \
-      --prefix PONYPATH : "${stdenv.lib.getLib libressl}/lib"
+      --prefix PONYPATH : "${stdenv.lib.makeLibraryPath [ pcre2 libressl (placeholder "out") ]}"
   '';
 
   # Stripping breaks linking for ponyc
@@ -83,7 +71,7 @@ stdenv.mkDerivation ( rec {
 
   meta = with stdenv.lib; {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
-    homepage = http://www.ponylang.org;
+    homepage = https://www.ponylang.org;
     license = licenses.bsd2;
     maintainers = with maintainers; [ doublec kamilchm patternspandemic ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

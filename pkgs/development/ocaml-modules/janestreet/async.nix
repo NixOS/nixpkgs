@@ -1,4 +1,4 @@
-{stdenv, buildOcamlJane, fetchurl, async_kernel,
+{stdenv, buildOcamlJane, async_kernel,
  async_unix, async_extra}:
 
 buildOcamlJane rec {

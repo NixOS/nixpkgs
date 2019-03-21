@@ -1,16 +1,19 @@
 # set VAMP_PATH ?
 # plugins availible on sourceforge and http://www.vamp-plugins.org/download.html (various licenses)
 
-{ stdenv, fetchurl, pkgconfig, libsndfile }:
+{ stdenv, fetchFromGitHub, pkgconfig, libsndfile }:
 
 rec {
 
   vampSDK = stdenv.mkDerivation {
-    name = "vamp-sdk-2.5";
+    name = "vamp-sdk-2.7.1";
+    # version = "2.7.1";
 
-    src = fetchurl {
-      url = http://code.soundsoftware.ac.uk/attachments/download/690/vamp-plugin-sdk-2.5.tar.gz;
-      sha256 = "178kfgq08cmgdzv7g8dwyjp4adwx8q04riimncq4nqkm8ng9ywbv";
+    src = fetchFromGitHub {
+      owner = "c4dm";
+      repo = "vamp-plugin-sdk";
+      rev = "vamp-plugin-sdk-v2.7.1";
+      sha256 = "1ifd6l6b89pg83ss4gld5i72fr0cczjnl2by44z5jnndsg3sklw4";
     };
 
   nativeBuildInputs = [ pkgconfig ];

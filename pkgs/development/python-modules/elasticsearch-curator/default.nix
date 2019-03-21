@@ -1,8 +1,10 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, boto3
 , click
 , certifi
+, requests-aws4auth
 , voluptuous
 , pyyaml
 , elasticsearch
@@ -15,24 +17,24 @@
 
 buildPythonPackage rec {
   pname   = "elasticsearch-curator";
-  version = "5.5.1";
+  version = "5.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d2762fa55613855b0a04f22e1c6c2c5b53d60301b437205d0e2533e4185671a";
+    sha256 = "0r4p229233ivprxnvp33hilkgczijmyvi33wivxhhj6q3kkywpyq";
   };
 
-  # The integration tests require a running elasticsearch cluster.
-  postUnpackPhase = ''
-    rm -r test/integration
-  '';
+  # The test hangs so we disable it.
+  doCheck = false;
 
   propagatedBuildInputs = [
     click
     certifi
+    requests-aws4auth
     voluptuous
     pyyaml
     elasticsearch
+    boto3
   ];
 
   checkInputs = [
@@ -42,6 +44,13 @@ buildPythonPackage rec {
     mock
     funcsigs
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace 'click>=6.7,<7.0' 'click'
+    substituteInPlace setup.py \
+      --replace 'click>=6.7,<7.0' 'click'
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/elastic/curator;

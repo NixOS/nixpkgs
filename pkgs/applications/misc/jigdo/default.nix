@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ db gtk2 bzip2 ];
 
-  configureFlags = "--without-libdb";
+  configureFlags = [ "--without-libdb" ];
 
   meta = {
     description = "Download utility that can fetch files from several sources simultaneously";

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, buildPerlPackage, stdenv, perl }:
+{ fetchFromGitHub, buildPerlPackage, stdenv }:
 
 buildPerlPackage rec {
   name = "MNI-Perllib-2012-04-13";

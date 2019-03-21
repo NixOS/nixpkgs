@@ -1,24 +1,24 @@
-{ stdenv, itstool, fetchurl, fetchpatch, gdk_pixbuf, adwaita-icon-theme
+{ stdenv, itstool, fetchurl, gdk_pixbuf, adwaita-icon-theme
 , telepathy-glib, gjs, meson, ninja, gettext, telepathy-idle, libxml2, desktop-file-utils
-, pkgconfig, gtk3, glib, libsecret, libsoup, gobjectIntrospection, appstream-glib
+, pkgconfig, gtk3, glib, libsecret, libsoup, gobject-introspection, appstream-glib
 , gnome3, wrapGAppsHook, telepathy-logger, gspell }:
 
 let
   pname = "polari";
-  version = "3.28.0";
+  version = "3.30.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "08zgdqrnxl752nv0gac1k7wvjd4j7h5n4c0flrq7q337p40k3dd5";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "02wxkdq5s5ami9wj9vpqhs6n8qxr299bpmvpvd89mn49x73lq2w2";
   };
 
   propagatedUserEnvPkgs = [ telepathy-idle telepathy-logger ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig itstool gettext wrapGAppsHook libxml2
-    desktop-file-utils gobjectIntrospection appstream-glib
+    desktop-file-utils gobject-introspection appstream-glib
   ];
 
   buildInputs = [

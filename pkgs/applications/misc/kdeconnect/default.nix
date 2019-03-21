@@ -20,12 +20,12 @@
 
 stdenv.mkDerivation rec {
   pname = "kdeconnect";
-  version = "1.3.0";
+  version = "1.3.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${pname}-kde-${version}.tar.xz";
-    sha256 = "0gzv55hks6j37pf7d18l40n1q6j8b74j9qg3v44p8sp0gnglwkcm";
+    sha256 = "1vac0mw1myrswr61adv7lgif0c4wzw5wnsj0sqxj6msp4l4pfgsg";
   };
 
   buildInputs = [

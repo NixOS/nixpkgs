@@ -20,6 +20,7 @@ let
     zoneStats = length (collect (x: (x.zoneStats or null) != null) cfg.zones) > 0;
   };
 
+  mkZoneFileName = name: if name == "." then "root" else name;
 
   nsdEnv = pkgs.buildEnv {
     name = "nsd-env";
@@ -50,8 +51,9 @@ let
   };
 
   writeZoneData = name: text: pkgs.writeTextFile {
-    inherit name text;
-    destination = "/zones/${name}";
+    name = "nsd-zone-${mkZoneFileName name}";
+    inherit text;
+    destination = "/zones/${mkZoneFileName name}";
   };
 
 
@@ -146,7 +148,7 @@ let
   zoneConfigFile = name: zone: ''
     zone:
       name:         "${name}"
-      zonefile:     "${stateDir}/zones/${name}"
+      zonefile:     "${stateDir}/zones/${mkZoneFileName name}"
       ${maybeString "outgoing-interface: " zone.outgoingInterface}
     ${forEach     "  rrl-whitelist: "      zone.rrlWhitelist}
       ${maybeString "zonestats: "          zone.zoneStats}
@@ -433,7 +435,9 @@ let
 
   dnssecZones = (filterAttrs (n: v: if v ? dnssec then v.dnssec else false) zoneConfigs);
 
-  dnssec = length (attrNames dnssecZones) != 0; 
+  dnssec = dnssecZones != {};
+
+  dnssecTools = pkgs.bind.override { enablePython = true; };
 
   signZones = optionalString dnssec ''
     mkdir -p ${stateDir}/dnssec
@@ -443,8 +447,8 @@ let
     ${concatStrings (mapAttrsToList signZone dnssecZones)}
   '';
   signZone = name: zone: ''
-    ${pkgs.bind}/bin/dnssec-keymgr -g ${pkgs.bind}/bin/dnssec-keygen -s ${pkgs.bind}/bin/dnssec-settime -K ${stateDir}/dnssec -c ${policyFile name zone.dnssecPolicy} ${name}
-    ${pkgs.bind}/bin/dnssec-signzone -S -K ${stateDir}/dnssec -o ${name} -O full -N date ${stateDir}/zones/${name}
+    ${dnssecTools}/bin/dnssec-keymgr -g ${dnssecTools}/bin/dnssec-keygen -s ${dnssecTools}/bin/dnssec-settime -K ${stateDir}/dnssec -c ${policyFile name zone.dnssecPolicy} ${name}
+    ${dnssecTools}/bin/dnssec-signzone -S -K ${stateDir}/dnssec -o ${name} -O full -N date ${stateDir}/zones/${name}
     ${nsdPkg}/sbin/nsd-checkzone ${name} ${stateDir}/zones/${name}.signed && mv -v ${stateDir}/zones/${name}.signed ${stateDir}/zones/${name}
   '';
   policyFile = name: policy: pkgs.writeText "${name}.policy" ''
@@ -887,14 +891,20 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions = singleton {
+      assertion = zoneConfigs ? "." -> cfg.rootServer;
+      message = "You have a root zone configured. If this is really what you "
+              + "want, please enable 'services.nsd.rootServer'.";
+    };
+
     environment.systemPackages = [ nsdPkg ];
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = username;
       gid = config.ids.gids.nsd;
     };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = username;
       description = "NSD service user";
       home = stateDir;
@@ -943,10 +953,6 @@ in
 
         ${copyKeys}
       '';
-    };
-
-    nixpkgs.config = mkIf dnssec {
-      bind.enablePython = true;
     };
 
     systemd.timers."nsd-dnssec" = mkIf dnssec {

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, perl, unzip, zip, which, pkgconfig
-, qtbase, qtscript, SDL2, libtheora, openal, glew, physfs, fribidi
+, qtbase, qtscript, SDL2, libtheora, openal, glew, physfs, fribidi, libXrandr
 , withVideos ? false
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "10kmpr4cby95zwqsl1zwx95d9achli6khq7flv6xmrq30a39xazw";
   };
 
-  buildInputs = [ qtbase qtscript SDL2 libtheora openal glew physfs fribidi ];
+  buildInputs = [ qtbase qtscript SDL2 libtheora openal glew physfs fribidi libXrandr ];
   nativeBuildInputs = [ perl zip unzip pkgconfig ];
 
   postPatch = ''

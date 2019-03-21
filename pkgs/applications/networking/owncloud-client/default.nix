@@ -2,14 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "owncloud-client-${version}";
-  version = "2.3.4";
+  version = "2.5.3.11470";
 
   src = fetchurl {
     url = "https://download.owncloud.com/desktop/stable/owncloudclient-${version}.tar.xz";
-    sha256 = "1fpi1mlp2b8sx2993b4mava5c6qw794dmlayih430299z1l9wh49";
+    sha256 = "0cznis8qadsnlgm046lxn8vmbxli6zp4b8nk93n53mkfxlcw355n";
   };
-
-  patches = [ ../nextcloud-client/find-sql.patch ];
 
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ qtbase qtwebkit qtkeychain sqlite ];
@@ -25,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://owncloud.org;
     maintainers = [ maintainers.qknight ];
     platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
 }

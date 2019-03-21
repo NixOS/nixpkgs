@@ -4,20 +4,20 @@
 , pytest
 , jinja2
 , selenium
+, six
 }:
 
 buildPythonPackage rec {
   pname = "branca";
-  version = "0.2.0";
-  name = "${pname}-${version}";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "327b0bae73a519f25dc2f320d8d9f1885aad2e8e5105add1496269d5391b8ea4";
+    sha256 = "3e762c9bdf40725f3d05ea1fda8fae9b470bfada6474e43a1242c8204a7bb15e";
   };
 
   checkInputs = [ pytest selenium ];
-  propagatedBuildInputs = [ jinja2 ];
+  propagatedBuildInputs = [ jinja2 six ];
 
   # Seems to require a browser
   doCheck = false;

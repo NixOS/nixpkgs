@@ -1,14 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, iana-etc, libredirect,
-  pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
+{ stdenv, buildPythonPackage, fetchPypi, isPy37, fetchpatch, iana-etc, libredirect
+, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.1.0";
+  version = "4.3.0rc1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dcb0s6kdcd3vc9pwvazngppkdbhwpmpjmghq6rifsld34q3gzvp";
+    sha256 = "1jmg47l0b3bnwmg44x48bwziwyk6xqs1y5plvr99a3ikz1l807yf";
   };
 
   # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  buildInputs = [ pytest case ];
+  checkInputs = [ case pytest boto3 moto ];
   propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
 
   meta = with stdenv.lib; {

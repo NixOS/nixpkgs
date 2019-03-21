@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "unetbootin-${version}";
-  version = "657";
+  version = "661";
 
   src = fetchFromGitHub {
     owner  = "unetbootin";
     repo   = "unetbootin";
     rev    = version;
-    sha256 = "18bbcrjk6ladr46kl3dvqz5pq2xcv4nnwmajqllb4sl3k1xqsngy";
+    sha256 = "0jwmmym86x9hc6yr619dxdbxdawx8x0zwld0dfrhzwxvwbqbpav5";
   };
 
   setSourceRoot = ''

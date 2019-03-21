@@ -8,7 +8,7 @@
   under attribute <varname>texlive</varname>.
  </para>
 
- <section>
+ <section xml:id="sec-language-texlive-users-guide">
   <title>User's guide</title>
 
   <itemizedlist>
@@ -49,12 +49,12 @@ texlive.combine {
    </listitem>
    <listitem>
     <para>
-     You can list packages e.g. by <command>nix-repl</command>.
-<programlisting>
-$ nix-repl
-nix-repl> :l &lt;nixpkgs>
-nix-repl> texlive.collection-&lt;TAB>
-      </programlisting>
+     You can list packages e.g. by <command>nix repl</command>.
+<programlisting><![CDATA[
+$ nix repl
+nix-repl> :l <nixpkgs>
+nix-repl> texlive.collection-<TAB>
+]]></programlisting>
     </para>
    </listitem>
    <listitem>
@@ -68,7 +68,7 @@ nix-repl> texlive.collection-&lt;TAB>
   </itemizedlist>
  </section>
 
- <section>
+ <section xml:id="sec-language-texlive-known-problems">
   <title>Known problems</title>
 
   <itemizedlist>

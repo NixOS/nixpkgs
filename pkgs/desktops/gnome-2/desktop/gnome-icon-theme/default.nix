@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, gtk }:
+{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-icon-theme-2.91.93";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "cc7f15e54e2640697b58c26e74cc3f6ebadeb4ef6622bffe9c1e6874cc3478d6";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk ];
+  nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk2 ];
 
   # remove a tree of dirs with no files within
   postInstall = '' rm -r "$out/share/locale" '';

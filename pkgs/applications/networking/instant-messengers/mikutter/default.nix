@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, bundlerEnv, ruby, pkgconfig
+, bundlerEnv, ruby
 , alsaUtils, libnotify, which, wrapGAppsHook, gtk2
 }:
 
@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An extensible Twitter client";
     homepage = https://mikutter.hachune.net;
-    maintainers = with maintainers; [ midchildan ];
     platforms = ruby.meta.platforms;
     license = licenses.mit;
   };

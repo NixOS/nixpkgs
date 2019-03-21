@@ -4,12 +4,12 @@ stdenv.mkDerivation rec {
   name = "antlr-${version}";
   version = "3.4";
   src = fetchurl {
-    url ="http://www.antlr3.org/download/antlr-${version}-complete.jar";
+    url ="https://www.antlr3.org/download/antlr-${version}-complete.jar";
     sha256 = "1xqbam8vf04q5fasb0m2n1pn5dbp2yw763sj492ncq04c5mqcglx";
   };
 
   unpackPhase = "true";
- 
+
   installPhase = ''
     mkdir -p "$out"/{lib/antlr,bin}
     cp "$src" "$out/lib/antlr/antlr-${version}-complete.jar"
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
       walk parse trees.
     '';
     homepage = http://www.antlr.org/;
+    license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.2.0";
 
   src = fetchurl {
-    url = "http://wpitchoune.net/psensor/files/psensor-${version}.tar.gz";
+    url = "https://wpitchoune.net/psensor/files/psensor-${version}.tar.gz";
     sha256 = "1smbidbby4rh14jnh9kn7y64qf486aqnmyxcgacjvkz27cqqnw4r";
   };
 

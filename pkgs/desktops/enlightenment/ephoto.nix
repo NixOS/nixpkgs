@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl, pcre, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, efl, pcre, mesa_noglu, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "ephoto-${version}";
@@ -9,9 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "09kraa5zz45728h2dw1ssh23b87j01bkfzf977m48y1r507sy3vb";
   };
 
-  nativeBuildInputs = [ (pkgconfig.override { vanilla = true; }) makeWrapper ];
+  nativeBuildInputs = [
+    (pkgconfig.override { vanilla = true; })
+    mesa_noglu.dev # otherwise pkg-config does not find gbm
+    makeWrapper
+  ];
 
-  buildInputs = [ efl pcre ];
+  buildInputs = [
+    efl
+    pcre
+  ];
 
   meta = {
     description = "Image viewer and editor written using the Enlightenment Foundation Libraries";

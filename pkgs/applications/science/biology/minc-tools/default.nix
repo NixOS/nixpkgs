@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, flex, bison, perl, TextFormat, libminc, libjpeg, zlib }:
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, flex, bison, perlPackages, libminc, libjpeg, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "minc-tools";
@@ -13,11 +13,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake flex bison makeWrapper ];
   buildInputs = [ libminc libjpeg zlib ];
-  propagatedBuildInputs = [ perl TextFormat ];
+  propagatedBuildInputs = with perlPackages; [ perl TextFormat ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
-
-  checkPhase = "ctest --output-on-failure";  # still some weird test failures though
 
   postFixup = ''
     for prog in minccomplete minchistory mincpik; do

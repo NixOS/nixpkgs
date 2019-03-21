@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, python3, udev, systemd }:
 
 let
-  name = "media-player-info-23";
+  name = "media-player-info-24";
 in
 
   stdenv.mkDerivation {
@@ -9,7 +9,7 @@ in
 
     src = fetchurl {
       url = "https://www.freedesktop.org/software/media-player-info/${name}.tar.gz";
-      sha256 = "1jy8xh4xjgjc4wj4qrw6sx2j3606zsj4bgiczhzf3xlpnkh6vax9";
+      sha256 = "0d0i7av8v369hzvlynwlrbickv1brlzsmiky80lrjgjh1gdldkz6";
     };
 
     buildInputs = [ udev systemd ];

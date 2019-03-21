@@ -1,4 +1,4 @@
-{stdenv, fetch, fetchpatch, llvm, gmp, mpfr, libmpc, ncurses, zlib, version}:
+{stdenv, fetch, llvm, gmp, mpfr, libmpc, ncurses, zlib, version}:
 
 stdenv.mkDerivation rec {
   name = "dragonegg-${version}";

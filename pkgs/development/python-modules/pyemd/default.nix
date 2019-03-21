@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, numpy, cython }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyemd";
   version = "0.5.1";
 

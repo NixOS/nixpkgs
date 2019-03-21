@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://sng.sourceforge.net/;
     license = licenses.zlib;
     maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

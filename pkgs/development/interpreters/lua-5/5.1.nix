@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, readline }:
+{ stdenv, fetchurl, readline
+, self
+, callPackage
+, packageOverrides ? (self: super: {})
+}:
 
 let
   dsoPatch = fetchurl {
@@ -6,6 +10,7 @@ let
     sha256 = "11fcyb4q55p4p7kdb8yp85xlw8imy14kzamp2khvcyxss4vw8ipw";
     name = "lua-arch.patch";
   };
+  luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
 in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
@@ -13,19 +18,18 @@ stdenv.mkDerivation rec {
   luaversion = "5.1";
 
   src = fetchurl {
-    url = "http://www.lua.org/ftp/${name}.tar.gz";
+    url = "https://www.lua.org/ftp/${name}.tar.gz";
     sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
   };
+
+  LuaPathSearchPaths    = luaPackages.getLuaPathList luaversion;
+  LuaCPathSearchPaths   = luaPackages.getLuaCPathList luaversion;
+  setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   buildInputs = [ readline ];
 
   patches = (if stdenv.isDarwin then [ ./5.1.darwin.patch ] else [ dsoPatch ])
-    ++ [(fetchpatch {
-      name = "CVE-2014-5461.patch";
-      url = "http://anonscm.debian.org/cgit/pkg-lua/lua5.1.git/plain/debian/patches/"
-        + "0004-Fix-stack-overflow-in-vararg-functions.patch?id=b75a2014db2ad65683521f7bb295bfa37b48b389";
-      sha256 = "05i5vh53d9i6dy11ibg9i9qpwz5hdm0s8bkx1d9cfcvy80cm4c7f";
-    })];
+    ++ [ ./5.1.0004-Fix-stack-overflow-in-vararg-functions.patch ];
 
   configurePhase =
     if stdenv.isDarwin
@@ -44,6 +48,16 @@ stdenv.mkDerivation rec {
     rmdir $out/{share,lib}/lua/5.1 $out/{share,lib}/lua
   '';
 
+  passthru = rec {
+    buildEnv = callPackage ./wrapper.nix {
+      lua=self;
+      inherit (luaPackages) requiredLuaModules;
+    };
+    withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
+    pkgs = luaPackages;
+    interpreter = "${self}/bin/lua";
+  };
+
   meta = {
     homepage = http://www.lua.org;
     description = "Powerful, fast, lightweight, embeddable scripting language";
@@ -56,6 +70,7 @@ stdenv.mkDerivation rec {
       for configuration, scripting, and rapid prototyping.
     '';
     license = stdenv.lib.licenses.mit;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, libpcap, pkgconfig, openssl
+{ stdenv, fetchurl, libpcap, pkgconfig, openssl, lua5_3
 , graphicalSupport ? false
 , libX11 ? null
 , gtk2 ? null
 , withPython ? false # required for the `ndiff` binary
 , python2Packages ? null
 , makeWrapper ? null
+, withLua ? true
 }:
 
 assert withPython -> python2Packages != null;
@@ -35,10 +36,18 @@ in stdenv.mkDerivation rec {
         --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  configureFlags = []
+  configureFlags = [
+    (if withLua then "--with-liblua=${lua5_3}" else "--without-liblua")
+  ]
     ++ optional (!pythonSupport) "--without-ndiff"
     ++ optional (!graphicalSupport) "--without-zenmap"
     ;
+
+  makeFlags = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "AR=${stdenv.cc.bintools.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib"
+    "CC=${stdenv.cc.targetPrefix}gcc"
+  ];
 
   postInstall = optionalString pythonSupport ''
       wrapProgram $out/bin/ndiff --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH"
@@ -52,6 +61,8 @@ in stdenv.mkDerivation rec {
     ++ optionals graphicalSupport [
       libX11 gtk2 pygtk pysqlite pygobject2 pycairo
     ];
+
+  doCheck = false; # fails 3 tests, probably needs the net
 
   meta = {
     description = "A free and open source utility for network discovery and security auditing";

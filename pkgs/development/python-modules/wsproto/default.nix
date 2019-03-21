@@ -1,14 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, h11, enum34 }:
+{ buildPythonPackage, fetchPypi, h11, enum34, pytest }:
 
 buildPythonPackage rec {
   pname = "wsproto";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "092qk4pbyaxx8b81hv9p7pc3ww54bwfqybhya4madka3pgv19wh2";
+    sha256 = "fd6020d825022247053400306448e161d8740bdd52e328e5553cd9eee089f705";
   };
 
   propagatedBuildInputs = [ h11 enum34 ];
+
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    py.test
+  '';
 
 }

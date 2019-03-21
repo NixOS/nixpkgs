@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex bison ];
 
-  configureFlags = "--with-mta=${sendmailPath}";
+  configureFlags = [ "--with-mta=${sendmailPath}" ];
 
   enableParallelBuilding = true;
 

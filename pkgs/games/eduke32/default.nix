@@ -1,5 +1,5 @@
 { stdenv, fetchurl, flac, gtk2, libvorbis, libvpx, makeDesktopItem, libGLU_combined, nasm
-, pkgconfig, SDL2, SDL2_mixer }:
+, pkgconfig, SDL2, SDL2_mixer, runtimeShell }:
 
 let
   year = "2015";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ flac gtk2 libvorbis libvpx libGLU_combined SDL2 SDL2_mixer ]
-    ++ stdenv.lib.optional (stdenv.system == "i686-linux") nasm;
+    ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
   nativeBuildInputs = [ pkgconfig ];
 
   postPatch = ''
@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     # Make wrapper script
     cat > eduke32-wrapper <<EOF
-    #!/bin/sh
+    #!${runtimeShell}
 
     if [ "$EDUKE32_DATA_DIR" = "" ]; then
         EDUKE32_DATA_DIR=/var/lib/games/eduke32

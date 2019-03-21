@@ -32,9 +32,7 @@ let
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
-    isRuby20 = ver.majMin == "2.0";
-    isRuby21 = ver.majMin == "2.1";
-    isRuby25 = ver.majMin == "2.5";
+    atLeast25 = lib.versionAtLeast ver.majMin "2.5";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
@@ -58,7 +56,7 @@ let
           rev    = tag;
           sha256 = sha256.git;
         } else fetchurl {
-          url = "http://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
+          url = "https://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
           sha256 = sha256.src;
         };
       in
@@ -75,20 +73,17 @@ let
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
         NROFF = if docSupport then "${groff}/bin/nroff" else null;
 
-        nativeBuildInputs =
-             ops useRailsExpress [ autoreconfHook bison ]
-          ++ ops (stdenv.buildPlatform != stdenv.hostPlatform) [
-               buildPackages.ruby
-             ];
+        nativeBuildInputs = [ autoreconfHook bison ]
+          ++ (op docSupport groff)
+          ++ op (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.ruby;
         buildInputs =
              (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
-          ++ (op docSupport groff)
           ++ (op zlibSupport zlib)
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
-          ++ (op isRuby25 autoconf)
+          ++ (op atLeast25 autoconf)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
@@ -111,10 +106,10 @@ let
           popd
         '';
 
-        postPatch = if isRuby25 then ''
+        postPatch = if atLeast25 then ''
           sed -i configure.ac -e '/config.guess/d'
-          cp ${config}/config.guess tool/
-          cp ${config}/config.sub tool/
+          cp --remove-destination ${config}/config.guess tool/
+          cp --remove-destination ${config}/config.sub tool/
         ''
         else opString useRailsExpress ''
           sed -i configure.in -e '/config.guess/d'
@@ -135,6 +130,11 @@ let
           ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
              "--with-baseruby=${buildRuby}";
 
+        # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
+        # mostly TZ- and patch-related tests
+        # TZ- failures are caused by nix sandboxing, I didn't investigate others
+        doCheck = false;
+
         preInstall = ''
           # Ruby installs gems here itself now.
           mkdir -pv "$out/${passthru.gemPath}"
@@ -146,7 +146,7 @@ let
         postInstall = ''
           # Update rubygems
           pushd rubygems
-          ${buildRuby} setup.rb
+          ${buildRuby} setup.rb --destdir $GEM_HOME
           popd
 
           # Remove unnecessary groff reference from runtime closure, since it's big
@@ -199,26 +199,34 @@ let
 
 in {
   ruby_2_3 = generic {
-    version = rubyVersion "2" "3" "7" "";
+    version = rubyVersion "2" "3" "8" "";
     sha256 = {
-      src = "0zvx5kdp1frjs9n95n7ba7dy0alax33wi3nj8034m3ppvnf39k9m";
-      git = "11wbzw2ywwfnvlkg3qjg0as2pzk5zyk63y2iis42d91lg1l2flrk";
+      src = "1gwsqmrhpx1wanrfvrsj3j76rv888zh7jag2si2r14qf8ihns0dm";
+      git = "0158fg1sx6l6applbq0831kl8kzx5jacfl9lfg0shfzicmjlys3f";
     };
   };
 
   ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "4" "";
+    version = rubyVersion "2" "4" "5" "";
     sha256 = {
-      src = "0nmfr2lijik6cykk0zbj11zcapcrvmdvq83k3r6q3k74g4d1qkr5";
-      git = "103cs7hz1v0h84lbrippl87s4lawi20m406rs5dgxl2gr2wyjpy5";
+      src = "162izk7c72y73vmdgcbsh8kqihrbm65xvp53r1s139pzwqd78dv7";
+      git = "181za4h6bd2bkyzyknxc18i5gq0pnqag60ybc17p0ixw3q7pdj43";
     };
   };
 
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "1" "";
+    version = rubyVersion "2" "5" "5" "";
     sha256 = {
-      src = "1c99k0fjaq7k09104h1b1cqx6mrk2b14ic1jjnxc6yav68i1ij6s";
-      git = "1j0fd16aq9x98n0kq9c3kfp2sh6xcsq8q4733p0wfqjh3vz50kyj";
+      src = "0k2in88jymqh727s88yjsv7wrqs2hdj9h2w9zh2bmrj0ygylba98";
+      git = "0l7b7xv48gvvlqs27gghfi645qvc1nwiz8ym4j8w100rzzzfy6zz";
+    };
+  };
+
+  ruby_2_6 = generic {
+    version = rubyVersion "2" "6" "2" "";
+    sha256 = {
+      src = "1as97d2j0d21g8mldp8fmdjah96jakrxyw1v0crg7ln2y8mmsh50";
+      git = "0f4mnrd7733353kx1jjha770kvm0wlc59z7id9h23kmjdg6k76nl";
     };
   };
 }

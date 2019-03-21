@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchurl }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name = "pylru-${version}";
-  version = "1.0.9";
+  pname = "pylru";
+  version = "1.1.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pylru/${name}.tar.gz";
-    sha256 = "0b0pq0l7xv83dfsajsc49jcxzc99kb9jfx1a1dlx22hzcy962dvi";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "e03a3d354eb8fdfa11638698e8a1f06cd3b3a214ebc0a120c603a79290d9ebec";
   };
 
   meta = with lib; {

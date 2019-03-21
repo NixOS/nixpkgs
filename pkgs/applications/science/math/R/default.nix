@@ -1,25 +1,29 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, cf-private, libobjc, libcxx, tzdata, fetchpatch
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
+, javaSupport ? (!stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64)
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.5.0";
+  name = "R-3.5.3";
 
   src = fetchurl {
-    url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0w38865laqg28cdhikxdxhx4rfp0kgcn72gakwypsy91br9ja5zx";
+    url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
+    sha256 = "1337irx9y0r3jm1rcq1dcwnxsgfhnvgjs5wadcyh17vhpnvkgyib";
   };
+
+  dontUseImakeConfigure = true;
 
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which jdk openblas curl
+    pkgconfig bison imake which openblas curl
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ]
+    ++ stdenv.lib.optional javaSupport jdk;
 
   patches = [ ./no-usr-local-search-paths.patch ];
 
@@ -47,7 +51,7 @@ stdenv.mkDerivation rec {
       CC=$(type -p cc)
       CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-      JAVA_HOME="${jdk}"
+      ${stdenv.lib.optionalString javaSupport "JAVA_HOME=\"${jdk}\""}
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
@@ -65,8 +69,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
-  doCheck = withRecommendedPackages;  # R 3.5.0 fails the test suite if the
-                                      # recommended packages are not built
+  doCheck = true;
   preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;

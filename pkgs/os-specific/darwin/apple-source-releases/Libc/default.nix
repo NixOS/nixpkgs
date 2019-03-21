@@ -1,8 +1,6 @@
-{ stdenv, appleDerivation, ed, unifdef, Libc_old, Libc_10-9 }:
+{ appleDerivation, ed, unifdef, Libc_old, Libc_10-9 }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
-
   nativeBuildInputs = [ ed unifdef ];
 
   # TODO: asl.h actually comes from syslog project now

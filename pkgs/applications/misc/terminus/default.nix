@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchurl, dpkg, gtk2, atk, glib, pango, gdk_pixbuf, cairo
+{ stdenv, lib, fetchurl, dpkg, gnome2, gtk2, atk, glib, pango, gdk_pixbuf, cairo
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr
 , libXcomposite, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver
 , libxcb, makeWrapper, nodejs
-, GConf, nss, nspr, alsaLib, cups, expat, libudev, libpulseaudio }:
+, nss, nspr, alsaLib, cups, expat, systemd, libpulseaudio }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
     stdenv.cc.cc gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
-    libXrender libX11 libXtst libXScrnSaver GConf nss nspr alsaLib cups expat libudev libpulseaudio
+    libXrender libX11 libXtst libXScrnSaver gnome2.GConf nss nspr alsaLib cups expat systemd libpulseaudio
   ];
 in
 stdenv.mkDerivation rec {

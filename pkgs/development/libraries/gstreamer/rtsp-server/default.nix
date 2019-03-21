@@ -1,9 +1,10 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig
-, gst-plugins-base, gettext, gobjectIntrospection
+, gst-plugins-base, gettext, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-rtsp-server-1.14.0";
+  name = "gst-rtsp-server-${version}";
+  version = "1.14.4";
 
   meta = with stdenv.lib; {
     description = "Gstreamer RTSP server";
@@ -18,12 +19,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-rtsp-server/${name}.tar.xz";
-    sha256 = "0mlp9ms5hfbyzyvmc9xgi7934g4zrh1sbgky2p9zc5fqprvs0rbb";
+    sha256 = "1wc4d0y57hpfvv9sykjg8mxj86dw60mf696fbqbiqq6dzlmcw3ix";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja gettext gobjectIntrospection pkgconfig ];
+  nativeBuildInputs = [ meson ninja gettext gobject-introspection pkgconfig ];
 
   buildInputs = [ gst-plugins-base ];
 }

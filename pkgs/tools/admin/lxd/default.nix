@@ -1,16 +1,30 @@
-{ stdenv, lib, pkgconfig, lxc, buildGoPackage, fetchurl
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, squashfsTools, iproute, iptables
+{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl, fetchpatch
+, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
+, squashfsTools, iproute, iptables, ebtables, libcap, dqlite
+, sqlite-replication
+, writeShellScriptBin, apparmor-profiles, apparmor-parser
+, bash
 }:
 
 buildGoPackage rec {
-  name = "lxd-3.0.0";
+  pname = "lxd";
+  version = "3.11";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://github.com/lxc/lxd/releases/download/${name}/${name}.tar.gz";
-    sha256 = "0m5prdf9sk8k5bws1zva4n9ycggmy76wnjr6wb423066pszz24ww";
+    url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "0xxzrwhyzzp23arj57vjs1yh91gy3r4wpd5qy9ksifzd390clf2x";
   };
+
+  patches = [
+    (fetchpatch {
+      url = https://github.com/CanonicalLtd/go-dqlite/commit/88a96df66e3e3bdc290fd4a0d41615d284d2c92c.patch;
+      sha256 = "0z6r4shh1rlf0in9xk1gi6ms2kcvplc3878106d2zzzfz7ad83a4";
+      extraPrefix = "dist/src/github.com/CanonicalLtd/go-dqlite/";
+      stripLen = 1;
+    })
+  ];
 
   preBuild = ''
     # unpack vendor
@@ -21,17 +35,22 @@ buildGoPackage rec {
     popd
   '';
 
-  postInstall = ''
-    # binaries from test/
-    rm $bin/bin/{deps,macaroon-identity}
+  buildFlags = [ "-tags libsqlite3" ];
 
-    wrapProgram $bin/bin/lxd --prefix PATH ":" ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables
+  postInstall = ''
+    # test binaries, code generation
+    rm $bin/bin/{deps,macaroon-identity,generate}
+
+    wrapProgram $bin/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
+      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash
+      (writeShellScriptBin "apparmor_parser" ''
+        exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+      '')
     ]}
   '';
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ lxc acl ];
+  buildInputs = [ lxc acl libcap dqlite sqlite-replication ];
 
   meta = with stdenv.lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";

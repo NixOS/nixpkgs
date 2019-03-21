@@ -4,21 +4,21 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "ipv6";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   nodes =
-    { client = { config, pkgs, ... }: { };
+    { client = { ... }: { };
 
       server =
-        { config, pkgs, ... }:
+        { ... }:
         { services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           networking.firewall.allowedTCPPorts = [ 80 ];
         };
 
       router =
-        { config, pkgs, ... }:
+        { ... }:
         { services.radvd.enable = true;
           services.radvd.config =
             ''

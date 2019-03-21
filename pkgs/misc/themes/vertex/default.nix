@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gnome3, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";

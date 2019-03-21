@@ -1,10 +1,14 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg
-, ppx_tools, ppx_sexp_conv, result, x509, nocrypto, cstruct, ppx_cstruct, cstruct-unix, ounit
+, ppx_sexp_conv, result, x509, nocrypto, cstruct, ppx_cstruct, cstruct-unix, ounit
 , lwt     ? null}:
 
 with stdenv.lib;
 
 let withLwt = lwt != null; in
+
+if !versionAtLeast ocaml.version "4.04"
+then throw "tls is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
   version = "0.9.0";

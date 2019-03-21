@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, libX11, libXt, libXext, libXpm, imake
-, svgSupport ? true, librsvg, glib, gdk_pixbuf, pkgconfig
+{ stdenv, fetchurl, libX11, libXt, libXext, libXpm, imake, gccmakedep
+, svgSupport ? false, librsvg, glib, gdk_pixbuf, pkgconfig
 }:
 
 assert svgSupport ->
@@ -13,20 +13,21 @@ stdenv.mkDerivation rec {
     sha256 = "0hl1i38z9xnbgfjkaz04vv1n8xbgfg88g5z8fyzyb2hxv2z37anf";
   };
 
+  nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [
-    imake
     libX11 libXt libXext libXpm
   ] ++ stdenv.lib.optionals svgSupport [ librsvg glib gdk_pixbuf pkgconfig ];
 
   outputs = [ "out" "man" ];
 
-  configurePhase = ''
-    xmkmf ${stdenv.lib.optionalString svgSupport "-DWITH_SVG_SUPPORT"}
-  '';
+  imakeFlags = stdenv.lib.optionalString svgSupport "-DWITH_SVG_SUPPORT";
 
-  preBuild = ''
-    makeFlagsArray=( BINDIR=$out/bin PIXMAPDIR=$out/share/xxkb XAPPLOADDIR=$out/etc/X11/app-defaults MANDIR=$man/share/man )
-  '';
+  makeFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "PIXMAPDIR=${placeholder "out"}/share/xxkb"
+    "XAPPLOADDIR=${placeholder "out"}/etc/X11/app-defaults"
+    "MANDIR=${placeholder "man"}/share/man"
+  ];
 
   installTargets = "install install.man";
 

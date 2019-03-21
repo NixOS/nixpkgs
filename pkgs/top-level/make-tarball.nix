@@ -42,7 +42,7 @@ releaseTools.sourceTarball rec {
 
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
 
-    # Make sure that Nixpkgs does not use <nixpkgs>
+    # Make sure that Nixpkgs does not use <nixpkgs>.
     badFiles=$(find pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs\/' || true)
     if [[ -n $badFiles ]]; then
         echo "Nixpkgs is not allowed to use <nixpkgs> to refer to itself."
@@ -54,7 +54,7 @@ releaseTools.sourceTarball rec {
     mkdir $TMPDIR/foo
     ln -s $(readlink -f .) $TMPDIR/foo/bar
     p1=$(nix-instantiate ./. --dry-run -A firefox --show-trace)
-    p2=$(nix-instantiate $TMPDIR/foo/bar --dry-run -A firefox)
+    p2=$(nix-instantiate $TMPDIR/foo/bar --dry-run -A firefox --show-trace)
     if [ "$p1" != "$p2" ]; then
         echo "Nixpkgs evaluation depends on Nixpkgs path ($p1 vs $p2)!"
         exit 1
@@ -63,9 +63,9 @@ releaseTools.sourceTarball rec {
     # Run the regression tests in `lib'.
     if
         # `set -e` doesn't work inside here, so need to && instead :(
-        res="$(nix-instantiate --eval --strict lib/tests/misc.nix)" \
+        res="$(nix-instantiate --eval --strict lib/tests/misc.nix --show-trace)" \
         && [[ "$res" == "[ ]" ]] \
-        && res="$(nix-instantiate --eval --strict lib/tests/systems.nix)" \
+        && res="$(nix-instantiate --eval --strict lib/tests/systems.nix --show-trace)" \
         && [[ "$res" == "[ ]" ]]
     then
         true
@@ -101,7 +101,7 @@ releaseTools.sourceTarball rec {
     stopNest
 
     header "checking find-tarballs.nix"
-    nix-instantiate --eval --strict --show-trace --json \
+    nix-instantiate --readonly-mode --eval --strict --show-trace --json \
        ./maintainers/scripts/find-tarballs.nix \
       --arg expr 'import ./maintainers/scripts/all-tarballs.nix' > $TMPDIR/tarballs.json
     nrUrls=$(jq -r '.[].url' < $TMPDIR/tarballs.json | wc -l)

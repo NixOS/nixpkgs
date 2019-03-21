@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook
-, coreutils, gnugrep, gnused, lm_sensors, net_snmp, openssh, openssl, perl }:
+, coreutils, gnugrep, gnused, lm_sensors, net_snmp, openssh, openssl, perl
+, runtimeShell }:
 
 with stdenv.lib;
 
@@ -50,7 +51,7 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     mkdir -p $out
     cat <<_EOF > $out/share
-#!${stdenv.shell}
+#!${runtimeShell}
 exit 0
 _EOF
     chmod 755 $out/share

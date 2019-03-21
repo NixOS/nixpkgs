@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "libspatialindex-${version}";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/libspatialindex/spatialindex-src-${version}.tar.gz";
+    url = "https://download.osgeo.org/libspatialindex/spatialindex-src-${version}.tar.gz";
     sha256 = "1vxzm7kczwnb6qdmc0hb00z8ykx11zk3sb68gc7rch4vrfi4dakw";
   };
 

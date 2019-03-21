@@ -1,11 +1,11 @@
 {stdenv, fetchzip}:
 
 let
-  version = "2014-11-11";
+  version = "2016-06-23";
 in fetchzip {
   name = "open-dyslexic-${version}";
 
-  url = https://github.com/antijingoist/open-dyslexic/archive/f4b5ba89018b44d633608907e15f93fb3fabbabc.zip;
+  url = https://github.com/antijingoist/open-dyslexic/archive/20160623-Stable.zip;
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
@@ -13,7 +13,7 @@ in fetchzip {
     unzip -j $downloadedFile \*/README.md -d $out/share/doc/open-dyslexic
   '';
 
-  sha256 = "045xc7kj56q4ygnjppm8f8fwqqvf21x1piabm4nh8hwgly42a3w2";
+  sha256 = "1vl8z5rknh2hpr2f0v4b2qgs5kclx5pzyk8al7243k5db82a2cyi";
 
   meta = with stdenv.lib; {
     homepage = https://opendyslexic.org/;

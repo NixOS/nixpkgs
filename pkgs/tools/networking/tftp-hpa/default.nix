@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcp_wrappers }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "tftp-hpa-${version}";

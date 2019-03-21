@@ -1,18 +1,18 @@
-{ stdenv, glib, autoreconfHook, pkgconfig, libgsystem, fetchgit }:
+{ stdenv, glib, autoreconfHook, pkgconfig, systemd, fetchgit }:
 
 stdenv.mkDerivation rec {
-  version = "2016.1";
+  version = "2018.1";
   name = "gnome-desktop-testing-${version}";
 
   src = fetchgit {
-    url = https://git.gnome.org/browse/gnome-desktop-testing;
+    url = https://gitlab.gnome.org/GNOME/gnome-desktop-testing.git;
     rev = "v${version}";
-    sha256 = "18qhmsab6jc01qrfzjx8m4799gbs72c4jg830mp0p865rcbl68dc";
+    sha256 = "1bcd8v101ynsv2p5swh30hnajjf6z8dxzd89h9racp847hgjgyxc";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ glib libgsystem ];
+  buildInputs = [ glib systemd ];
 
   enableParallelBuilding = true;
 

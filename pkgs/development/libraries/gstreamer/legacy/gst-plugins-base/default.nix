@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, python, gstreamer, xorg, alsaLib, cdparanoia
+{ fetchurl, stdenv, pkgconfig, gstreamer, xorg, alsaLib, cdparanoia
 , libogg, libtheora, libvorbis, freetype, pango, liboil, glib, cairo, orc
 , libintl
 , ApplicationServices

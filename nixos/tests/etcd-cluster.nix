@@ -102,7 +102,7 @@ in {
   };
 
   nodes = {
-    node1 = { config, pkgs, nodes, ... }: {
+    node1 = { ... }: {
       require = [nodeConfig];
       services.etcd = {
         initialCluster = ["node1=https://node1:2380" "node2=https://node2:2380"];
@@ -110,7 +110,7 @@ in {
       };
     };
 
-    node2 = { config, pkgs, ... }: {
+    node2 = { ... }: {
       require = [nodeConfig];
       services.etcd = {
         initialCluster = ["node1=https://node1:2380" "node2=https://node2:2380"];
@@ -118,7 +118,7 @@ in {
       };
     };
 
-    node3 = { config, pkgs, ... }: {
+    node3 = { ... }: {
       require = [nodeConfig];
       services.etcd = {
         initialCluster = ["node1=https://node1:2380" "node2=https://node2:2380" "node3=https://node3:2380"];

@@ -2,6 +2,7 @@
 
 let
   cfg = config.programs.nano;
+  LF = "\n";
 in
 
 {
@@ -33,9 +34,9 @@ in
 
   ###### implementation
 
-  config = lib.mkIf (cfg.nanorc != "") {
+  config = lib.mkIf (cfg.nanorc != "" || cfg.syntaxHighlight) {
     environment.etc."nanorc".text = lib.concatStrings [ cfg.nanorc
-      (lib.optionalString cfg.syntaxHighlight ''include "${pkgs.nano}/share/nano/*.nanorc"'') ];
+      (lib.optionalString cfg.syntaxHighlight ''${LF}include "${pkgs.nano}/share/nano/*.nanorc"'') ];
   };
 
 }

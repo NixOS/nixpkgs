@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pass-otp-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "tadfisher";
     repo = "pass-otp";
     rev = "v${version}";
-    sha256 = "1cgj4zc8fq88n3h6c0vkv9i5al785mdprpgpbv5m22dz9p1wqvbb";
+    sha256 = "0m8x5dqwcr9jim530685nsq4zn941hhl7ridmmd63b204z141rwa";
   };
 
   buildInputs = [ oathToolkit ];

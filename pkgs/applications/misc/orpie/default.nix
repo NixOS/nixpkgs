@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses gsl ] ++ (with ocamlPackages; [ ocaml camlp4 ]);
 
   meta = {
-    homepage = http://pessimization.com/software/orpie/;
+    homepage = https://github.com/pelzlpj/orpie;
     description = "A fullscreen RPN calculator for the console";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;

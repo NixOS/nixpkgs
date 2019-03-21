@@ -33,5 +33,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.rlupton20 ];
     platforms = platforms.linux;
+    # error: architecture aarch64 is not supported by strace
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

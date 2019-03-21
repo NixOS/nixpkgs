@@ -1,4 +1,0 @@
-    preFixup = ''
-      sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc}/lib/libclang.so')|" \
-        -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
-    '';

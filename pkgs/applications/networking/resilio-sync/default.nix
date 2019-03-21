@@ -4,19 +4,19 @@ let
   arch = {
     "x86_64-linux" = "x64";
     "i686-linux" = "i386";
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
 
 in stdenv.mkDerivation rec {
   name = "resilio-sync-${version}";
-  version = "2.5.12";
+  version = "2.6.2";
 
   src = fetchurl {
     url = "https://download-cdn.resilio.com/${version}/linux-${arch}/resilio-sync_${arch}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "176gf5704wh22kqig8n0gg83048w71grw7h37k2qvxjaf4vypnc7";
-      "i686-linux"   = "15m2s2cqrkpb7ladbwimbs9agqb4ww9jr4gf0ifjwzm2grv5ffnh";
-    }.${stdenv.system};
+      "x86_64-linux" = "0vq8jz4v740zz3pvgqfya8mhy35fh49wpn8d08xjrs5062hl1yc2";
+      "i686-linux"   = "1gvq29bkdqvbcgnnhl3018h564rswk3r88s33lx5iph1rpxc6v5h";
+    }.${stdenv.hostPlatform.system};
   };
 
   dontStrip = true; # Don't strip, otherwise patching the rpaths breaks

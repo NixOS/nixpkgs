@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "treesheets-${version}";
-  version = "2017-03-27";
+  version = "2018-08-18";
 
   src = fetchFromGitHub {
     owner  = "aardappel";
     repo   = "treesheets";
-    rev    = "1d1d6b214e3ae88445eb1ec0032d5fef14160f32";
-    sha256 = "0np91c4skq3yxq76c4zi33w73qb1w2nrcin490kkvrxk53jspklb";
+    rev    = "3af41d99c8f9f32603a36ab64af3560b6d61dd73";
+    sha256 = "147y8ggh3clwjgsi15z8i4jnzlkh8p17mmlg532jym53zzbcva65";
   };
 
   buildInputs = [ wxGTK makeWrapper ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage    = http://strlen.com/treesheets/;
-    maintainers = with maintainers; [ obadz ];
+    maintainers = with maintainers; [ obadz avery ];
     platforms   = platforms.linux;
     license     = licenses.zlib;
   };

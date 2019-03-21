@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, melpaBuild }:
+{ fetchurl, lib, melpaBuild }:
 
 melpaBuild {
   pname = "thingatpt-plus";
@@ -10,7 +10,7 @@ melpaBuild {
     name = "thingatpt+.el";
   };
 
-  recipeFile = fetchurl {
+  recipe = fetchurl {
     url = "https://raw.githubusercontent.com/milkypostman/melpa/a5d15f875b0080b12ce45cf696c581f6bbf061ba/recipes/thingatpt+";
     sha256 = "0w031lzjl5phvzsmbbxn2fpziwkmdyxsn08h6b9lxbss1prhx7aa";
     name = "thingatpt-plus";

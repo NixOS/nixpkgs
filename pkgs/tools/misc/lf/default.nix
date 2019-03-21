@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "lf-${version}";
-  version = "3";
+  version = "11";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "1w4nly8g1p28ixq1vjg7qv07mb1vryys7cf6b7jdb523swra6a97";
+    sha256 = "13622sx6xmbm8gf38dn8y8mkfnlbpamg4hmzsy9jnzg4h8qbjm6b";
   };
 
   goPackagePath = "github.com/gokcehan/lf";
@@ -28,6 +28,10 @@ buildGoPackage rec {
     runHook postBuild
   '';
 
+  postInstall = ''
+    install -D --mode=444 lf.1 $out/share/man/man1/lf.1
+  '';
+
   meta = with stdenv.lib; {
     description = "A terminal file manager written in Go and heavily inspired by ranger";
     longDescription = ''
@@ -38,7 +42,7 @@ buildGoPackage rec {
     '';
     homepage = https://godoc.org/github.com/gokcehan/lf;
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };
 }

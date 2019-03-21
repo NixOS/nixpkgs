@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sourceRoot=$(echo */src)
   '';
 
-  configureFlags = "--sysconfdir=${confdir}";
+  configureFlags = [ "--sysconfdir=${confdir}" ];
 
   installPhase = ''
     mkdir -p $out/{bin,etc}

@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.nzbget;
-  nzbget = pkgs.nzbget; in {
+  dataDir = builtins.dirOf cfg.configFile;
+in {
   options = {
     services.nzbget = {
       enable = mkEnableOption "NZBGet";
@@ -14,6 +15,20 @@ let
         default = pkgs.nzbget;
         defaultText = "pkgs.nzbget";
         description = "The NZBGet package to use";
+      };
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/nzbget";
+        description = "The directory where NZBGet stores its configuration files.";
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for the NZBGet web interface
+        '';
       };
 
       user = mkOption {
@@ -26,6 +41,12 @@ let
         type = types.str;
         default = "nzbget";
         description = "Group under which NZBGet runs";
+      };
+
+      configFile = mkOption {
+        type = types.str;
+        default = "/var/lib/nzbget/nzbget.conf";
+        description = "Path for NZBGet's config file. (If this doesn't exist, the default config template is copied here.)";
       };
     };
   };
@@ -40,35 +61,25 @@ let
         p7zip
       ];
       preStart = ''
-        datadir=/var/lib/nzbget
         cfgtemplate=${cfg.package}/share/nzbget/nzbget.conf
-        test -d $datadir || {
-          echo "Creating nzbget data directory in $datadir"
-          mkdir -p $datadir
-        }
-        test -f $configfile || {
-          echo "nzbget.conf not found. Copying default config $cfgtemplate to $configfile"
-          cp $cfgtemplate $configfile
-          echo "Setting $configfile permissions to 0700 (needs to be written and contains plaintext credentials)"
-          chmod 0700 $configfile
+        if [ ! -f ${cfg.configFile} ]; then
+          echo "${cfg.configFile} not found. Copying default config $cfgtemplate to ${cfg.configFile}"
+          install -m 0700 $cfgtemplate ${cfg.configFile}
           echo "Setting temporary \$MAINDIR variable in default config required in order to allow nzbget to complete initial start"
           echo "Remember to change this to a proper value once NZBGet startup has been completed"
-          sed -i -e 's/MainDir=.*/MainDir=\/tmp/g' $configfile
-        }
-        echo "Ensuring proper ownership of $datadir (${cfg.user}:${cfg.group})."
-        chown -R ${cfg.user}:${cfg.group} $datadir
+          sed -i -e 's/MainDir=.*/MainDir=\/tmp/g' ${cfg.configFile}
+        fi
       '';
 
       script = ''
-        configfile=/var/lib/nzbget/nzbget.conf
-        args="--daemon --configfile $configfile"
-        # The script in preStart (above) copies nzbget's config template to datadir on first run, containing paths that point to the nzbget derivation installed at the time. 
-        # These paths break when nzbget is upgraded & the original derivation is garbage collected. If such broken paths are found in the config file, override them to point to 
+        args="--daemon --configfile ${cfg.configFile}"
+        # The script in preStart (above) copies nzbget's config template to datadir on first run, containing paths that point to the nzbget derivation installed at the time.
+        # These paths break when nzbget is upgraded & the original derivation is garbage collected. If such broken paths are found in the config file, override them to point to
         # the currently installed nzbget derivation.
         cfgfallback () {
-          local hit=`grep -Po "(?<=^$1=).*+" "$configfile" | sed 's/[ \t]*$//'` # Strip trailing whitespace
+          local hit=`grep -Po "(?<=^$1=).*+" "${cfg.configFile}" | sed 's/[ \t]*$//'` # Strip trailing whitespace
           ( test $hit && test -e $hit ) || {
-            echo "In $configfile, valid $1 not found; falling back to $1=$2"
+            echo "In ${cfg.configFile}, valid $1 not found; falling back to $1=$2"
             args+=" -o $1=$2"
           }
         }
@@ -78,6 +89,8 @@ let
       '';
 
       serviceConfig = {
+        StateDirectory = dataDir;
+        StateDirectoryMode = "0700";
         Type = "forking";
         User = cfg.user;
         Group = cfg.group;
@@ -86,14 +99,18 @@ let
       };
     };
 
-    users.extraUsers = mkIf (cfg.user == "nzbget") {
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 8989 ];
+    };
+
+    users.users = mkIf (cfg.user == "nzbget") {
       nzbget = {
         group = cfg.group;
         uid = config.ids.uids.nzbget;
       };
     };
 
-    users.extraGroups = mkIf (cfg.group == "nzbget") {
+    users.groups = mkIf (cfg.group == "nzbget") {
       nzbget = {
         gid = config.ids.gids.nzbget;
       };

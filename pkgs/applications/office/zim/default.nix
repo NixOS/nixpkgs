@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, python2Packages }:
+{ stdenv, fetchurl, python2Packages }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -9,11 +9,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "zim-${version}";
-  version = "0.68";
+  version = "0.69.1";
 
   src = fetchurl {
     url = "http://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "05fzb24a2s3pm89zb6gwa48wb925an5i652klx8yk9pn23h1h5fr";
+    sha256 = "1yzb8x4mjp96zshcw7xbd4mvqn8zmbcm7cndskpxyk5yccyn5awq";
   };
 
   propagatedBuildInputs = with python2Packages; [ pyGtkGlade pyxdg pygobject2 ];
@@ -42,5 +42,6 @@ python2Packages.buildPythonApplication rec {
     homepage = http://zim-wiki.org;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
+    broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790
   };
 }

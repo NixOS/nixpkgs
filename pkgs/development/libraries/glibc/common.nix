@@ -18,9 +18,8 @@
 */
 
 { stdenv, lib
-, buildPlatform, hostPlatform
 , buildPackages
-, fetchurl, fetchpatch ? null
+, fetchurl ? null
 , linuxHeaders ? null
 , gd ? null, libpng ? null
 , bison
@@ -29,7 +28,6 @@
 { name
 , withLinuxHeaders ? false
 , profilingLibraries ? false
-, installLocales ? false
 , withGd ? false
 , meta
 , ...
@@ -39,18 +37,14 @@ let
   version = "2.27";
   patchSuffix = "";
   sha256 = "0wpwq7gsm7sd6ysidv0z575ckqdg13cr2njyfgrbgh4f65adwwji";
-  cross = if buildPlatform != hostPlatform then hostPlatform else null;
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
 stdenv.mkDerivation ({
-  inherit version installLocales;
+  inherit version;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
-
-  # The host/target system.
-  crossConfig = if cross != null then cross.config else null;
 
   inherit (stdenv) is64bit;
 
@@ -93,9 +87,15 @@ stdenv.mkDerivation ({
         less linux-*?/arch/x86/kernel/syscall_table_32.S
        */
       ./allow-kernel-2.6.32.patch
+      /* Provide utf-8 locales by default, so we can use it in stdenv without depending on our large locale-archive. */
+      (fetchurl {
+        url = "https://salsa.debian.org/glibc-team/glibc/raw/49767c9f7de4828220b691b29de0baf60d8a54ec/debian/patches/localedata/locale-C.diff";
+        sha256 = "0irj60hs2i91ilwg5w7sqrxb695c93xg0ik7yhhq9irprd7fidn4";
+      })
     ]
     ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch
-    ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch;
+    ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
+    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
 
   postPatch =
     ''
@@ -115,19 +115,15 @@ stdenv.mkDerivation ({
       "--enable-obsolete-rpc"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
-      (if withLinuxHeaders
-       then "--with-headers=${linuxHeaders}/include"
-       else "--without-headers")
-      (if profilingLibraries
-       then "--enable-profile"
-       else "--disable-profile")
+      (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
+      (lib.enableFeature profilingLibraries "profile")
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
-    ] ++ lib.optionals (cross != null) [
-      (if cross ? float && cross.float == "soft" then "--without-fp" else "--with-fp")
-    ] ++ lib.optionals (cross != null) [
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      (lib.flip lib.withFeature "fp"
+         (stdenv.hostPlatform.platform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
       "--with-__thread"
-    ] ++ lib.optionals (cross == null && stdenv.isAarch32) [
+    ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
       "--host=arm-linux-gnueabi"
       "--build=arm-linux-gnueabi"
 
@@ -142,12 +138,14 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ];
-  buildInputs = lib.optionals withGd [ gd libpng ];
+  buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
   BASH_SHELL = "/bin/sh";
+
+  passthru = { inherit version; };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
@@ -179,7 +177,7 @@ stdenv.mkDerivation ({
     }
 
 
-  '' + lib.optionalString (cross != null) ''
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
     cat > config.cache << "EOF"
@@ -191,8 +189,10 @@ stdenv.mkDerivation ({
 
   preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
 
+  doCheck = false; # fails
+
   meta = {
-    homepage = http://www.gnu.org/software/libc/;
+    homepage = https://www.gnu.org/software/libc/;
     description = "The GNU C Library";
 
     longDescription =
@@ -211,7 +211,7 @@ stdenv.mkDerivation ({
   } // meta;
 }
 
-// lib.optionalAttrs (cross != null) {
+// lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preInstall = null; # clobber the native hook
 
   dontStrip = true;

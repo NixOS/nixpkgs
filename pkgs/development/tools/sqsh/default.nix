@@ -34,6 +34,7 @@ in stdenv.mkDerivation rec {
       it is intended as a replacement for the venerable 'isql' program supplied
       by Sybase.
     '';
+    license = licenses.gpl2;
     homepage = https://sourceforge.net/projects/sqsh/;
     platforms = platforms.all;
   };

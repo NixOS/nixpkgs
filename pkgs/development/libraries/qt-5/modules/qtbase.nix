@@ -3,14 +3,14 @@
   src, patches, version, qtCompatVersion,
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
-  ruby, which,
+  which,
   # darwin support
-  darwin, libiconv, libcxx,
+  darwin, libiconv,
 
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
-  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xorg,
+  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm,
   zlib,
 
   # optional dependencies
@@ -18,7 +18,7 @@
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
-  libGLSupported ? (!stdenv.isDarwin),
+  libGLSupported ? !stdenv.isDarwin,
   libGL,
   buildExamples ? false,
   buildTests ? false,
@@ -53,6 +53,7 @@ stdenv.mkDerivation {
       if stdenv.isDarwin
       then with darwin.apple_sdk.frameworks;
         [
+          # TODO: move to buildInputs, this should not be propagated.
           AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL
           darwin.libobjc libiconv
@@ -77,6 +78,9 @@ stdenv.mkDerivation {
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
+    ++ lib.optional stdenv.isDarwin
+      # Needed for OBJC_CLASS_$_NSDate symbols.
+      [ darwin.cf-private ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.connector-c
@@ -191,7 +195,7 @@ stdenv.mkDerivation {
     [
       "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
       ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
-      ''-DNIXPKGS_LIBRESOLV="${stdenv.cc.libc.out}/lib/libresolv"''
+      ''-D${if compareVersion "5.11.0" >= 0 then "LIBRESOLV_SO" else "NIXPKGS_LIBRESOLV"}="${stdenv.cc.libc.out}/lib/libresolv"''
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ]
 
@@ -243,9 +247,12 @@ stdenv.mkDerivation {
       "-gui"
       "-widgets"
       "-opengl desktop"
-      "-qml-debug"
       "-icu"
       "-pch"
+    ]
+    ++ lib.optionals (compareVersion "5.11.0" < 0)
+    [
+      "-qml-debug"
     ]
     ++ lib.optionals (compareVersion "5.9.0" < 0)
     [
@@ -298,6 +305,7 @@ stdenv.mkDerivation {
           "-no-fontconfig"
           "-qt-freetype"
           "-qt-libpng"
+          "-no-framework"
         ]
       else
         [
@@ -327,6 +335,12 @@ stdenv.mkDerivation {
         ]
         ++ lib.optional withGtk3 "-gtk"
         ++ lib.optional (compareVersion "5.9.0" >= 0) "-inotify"
+        ++ lib.optionals (compareVersion "5.10.0" >= 0) [
+          # Without these, Qt stops working on kernels < 3.17. See:
+          # https://github.com/NixOS/nixpkgs/issues/38832
+          "-no-feature-renameat2"
+          "-no-feature-getentropy"
+        ]
     );
 
   enableParallelBuilding = true;
@@ -367,24 +381,6 @@ stdenv.mkDerivation {
     ''
 
     + (
-      if stdenv.isDarwin
-      then
-        ''
-          fixDarwinDylibNames_rpath() {
-            local flags=()
-
-            for fn in "$@"; do
-              flags+=(-change "@rpath/$fn.framework/Versions/5/$fn" "$out/lib/$fn.framework/Versions/5/$fn")
-            done
-
-            for fn in "$@"; do
-              echo "$fn: fixing dylib"
-              install_name_tool -id "$out/lib/$fn.framework/Versions/5/$fn" "''${flags[@]}" "$out/lib/$fn.framework/Versions/5/$fn"
-            done
-          }
-          fixDarwinDylibNames_rpath "QtConcurrent" "QtPrintSupport" "QtCore" "QtSql" "QtDBus" "QtTest" "QtGui" "QtWidgets" "QtNetwork" "QtXml" "QtOpenGL"
-        ''
-      else
         # fixup .pc file (where to find 'moc' etc.)
         ''
           sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
@@ -398,7 +394,7 @@ stdenv.mkDerivation {
     homepage = http://www.qt.io;
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ qknight ttuegel periklis ];
+    maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
   };
 

@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   # because it has bundled a lot of external libraries (like QT and Webkit)
   # and no easy/nice way to use the system versions of these
 
-  src = if stdenv.system == "i686-linux" then
+  src = if stdenv.hostPlatform.system == "i686-linux" then
           fetchurl {
             url = "https://bitbucket.org/ariya/phantomjs/downloads/${name}-linux-i686.tar.bz2";
             sha256 = "11fzmssz9pqf3arh4f36w06sl2nyz8l9h8iyxyd7w5aqnq5la0j1";
           }
         else
-          if stdenv.system == "x86_64-linux" then
+          if stdenv.hostPlatform.system == "x86_64-linux" then
             fetchurl {
               url = "https://bitbucket.org/ariya/phantomjs/downloads/${name}-linux-x86_64.tar.bz2";
               sha256 = "0fhnqxxsxhy125fmif1lwgnlhfx908spy7fx9mng4w72320n5nd1";

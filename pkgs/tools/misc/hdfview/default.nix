@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, cmake, ant, javac, hdf_java }:
+{ stdenv, fetchurl, ant, javac, hdf_java }:
 
 stdenv.mkDerivation rec {
   name = "hdfview-${version}";
   version = "2.14";
 
   src = fetchurl {
-    url = "http://support.hdfgroup.org/ftp/HDF5/hdf-java/current/src/${name}.tar.gz";
+    url = "https://support.hdfgroup.org/ftp/HDF5/hdf-java/current/src/${name}.tar.gz";
     sha256 = "0lv9djfm7hnp14mcyzbiax3xjb8vkbzhh7bdl6cvgy53pc08784p";
   };
 

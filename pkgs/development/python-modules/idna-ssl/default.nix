@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "idna-ssl";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1293f030bc608e9aa9cdee72aa93c1521bbb9c7698068c61c9ada6772162b979";
+    sha256 = "a933e3bb13da54383f9e8f35dc4f9cb9eb9b3b78c6b36f311254d6d0d92c6c7c";
   };
 
   propagatedBuildInputs = [ idna ];

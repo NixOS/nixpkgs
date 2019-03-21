@@ -8,12 +8,12 @@ import ./make-test.nix ({ pkgs, ...} : let
 in {
   name = "mongodb";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ bluescreen303 offline wkennington cstrahan rvl ];
+    maintainers = [ bluescreen303 offline cstrahan rvl ];
   };
 
   nodes = {
     one =
-      { config, pkgs, ... }:
+      { ... }:
         {
           services = {
            mongodb.enable = true;

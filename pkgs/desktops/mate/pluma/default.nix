@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pluma-${version}";
-  version = "1.21.0";
+  version = "1.20.4";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1y3zl0rzp069pix1vgrhzkkfc3lvhq9ahfgbmc88cwqw9aw3mgk0";
+    sha256 = "0qdbm5y6q8lbabd81mg3rnls5bdvbmfii82f6syqw1cw6381mzgz";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     python
     gnome3.gtksourceview
     gnome3.libpeas
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
     mate.mate-desktop
   ];
 

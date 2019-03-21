@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
-    homepage = http://tox.dhs.org/;
+    homepage = https://github.com/jin-eld/tox-prpl;
     description = "Tox plugin for Pidgin / libpurple";
     license = licenses.gpl3;
     platforms = platforms.linux;

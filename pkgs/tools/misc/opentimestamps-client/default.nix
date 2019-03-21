@@ -1,5 +1,6 @@
 { lib, buildPythonApplication, fetchFromGitHub, isPy3k
-, opentimestamps, appdirs, GitPython, pysocks }:
+, opentimestamps, appdirs, GitPython, pysocks, fetchpatch, git
+}:
 
 buildPythonApplication rec {
   pname = "opentimestamps-client";
@@ -14,6 +15,15 @@ buildPythonApplication rec {
     rev = "opentimestamps-client-v${version}";
     sha256 = "05m8nllqad3k69mvby5q08y22i0wrj84gqifdgcldimrrn1i00xp";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/opentimestamps/opentimestamps-client/commit/1b328269ceee66916e9a639e8d5d7d13cd70d5d8.patch";
+      sha256 = "0bd3yalyvk5n4sflw9zilpay5k653ybdgkkfppyrk7c8z3i81hbl";
+    })
+  ];
+
+  checkInputs = [ git ];
 
   propagatedBuildInputs = [ opentimestamps appdirs GitPython pysocks ];
 

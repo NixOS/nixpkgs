@@ -12,11 +12,11 @@ in
 {
   name = "udisks2";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   machine =
-    { config, pkgs, ... }:
+    { ... }:
     { services.udisks2.enable = true;
       imports = [ ./common/user-account.nix ];
 

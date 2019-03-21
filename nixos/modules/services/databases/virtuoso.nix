@@ -54,7 +54,7 @@ with lib;
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = virtuosoUser;
         uid = config.ids.uids.virtuoso;
         description = "virtuoso user";

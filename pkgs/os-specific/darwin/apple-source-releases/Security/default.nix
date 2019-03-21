@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation }:
+{ appleDerivation }:
 
 appleDerivation {
   phases = [ "unpackPhase" "installPhase" ];

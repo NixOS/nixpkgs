@@ -32,24 +32,24 @@
 , autorunLinkHandler ? true
 # Update script
 , writeScript
+, runtimeShell
 }:
 
 let
   arch32 = "i686-linux";
-  arch64 = "x86_64-linux";
 
-  arch = if stdenv.system == arch32
+  arch = if stdenv.hostPlatform.system == arch32
     then "i386"
     else "amd64";
 
-  shortVersion = "1.18-stable";
+  shortVersion = "1.19.1-stable";
 
   version = "${shortVersion}_${arch}";
 
   url = "http://desktop-download.mendeley.com/download/apt/pool/main/m/mendeleydesktop/mendeleydesktop_${version}.deb";
-  sha256 = if stdenv.system == arch32
-    then "046v1j4sc6m0bf89f52zsg8riygrhldplyih5p0cjhcsd45q6fx8"
-    else "072fppgxhiryb6m1fb4qvq8nbblx88xpknnklygch1sw0lyks69h";
+  sha256 = if stdenv.hostPlatform.system == arch32
+    then "0fcyl5i8xdgb5j0x1643qc0j74d8p11jczvqmgqkqh0wgid1y1ad"
+    else "1dzwa2cnn9xakrhhq159fhh71gw5wlbf017rrikdlia694m8akq6";
 
   deps = [
     qtbase
@@ -113,7 +113,6 @@ stdenv.mkDerivation {
     patchelf --set-interpreter $interpreter \
              --set-rpath ${stdenv.lib.makeLibraryPath deps}:$out/lib \
              $out/bin/mendeleydesktop
-    paxmark m $out/bin/mendeleydesktop
 
     wrapProgram $out/bin/mendeleydesktop \
       --add-flags "--unix-distro-build" \
@@ -132,7 +131,7 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchElf = true;
 
-  updateScript = import ./update.nix { inherit writeScript; };
+  updateScript = import ./update.nix { inherit stdenv writeScript runtimeShell; };
 
   meta = with stdenv.lib; {
     homepage = http://www.mendeley.com;

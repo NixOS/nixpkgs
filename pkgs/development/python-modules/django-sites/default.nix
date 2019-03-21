@@ -2,8 +2,7 @@
 
 buildPythonPackage rec {
   pname = "django-sites";
-  name = "${pname}-${version}";
-  version = "0.9";
+  version = "0.10";
 
   meta = {
     description = ''
@@ -16,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05nrydk4a5a99qrxjrcnacs8nbbq5pfjikdpj4w9yn5yfayp057s";
+    sha256 = "f6f9ae55a05288a95567f5844222052b6b997819e174f4bde4e7c23763be6fc3";
   };
 
   propagatedBuildInputs = [ django ];

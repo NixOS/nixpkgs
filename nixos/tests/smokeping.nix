@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     sm =
-      { pkgs, config, ... }:
+      { ... }:
       {
         services.smokeping = {
           enable = true;

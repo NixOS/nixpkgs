@@ -9,6 +9,23 @@ in
   options = {
     services.duplicati = {
       enable = mkEnableOption "Duplicati";
+
+      port = mkOption {
+        default = 8200;
+        type = types.int;
+        description = ''
+          Port serving the web interface
+        '';
+      };
+
+      interface = mkOption {
+        default = "lo";
+        type = types.str;
+        description = ''
+          Listening interface for the web UI
+          Set it to "any" to listen on all available interfaces
+        '';
+      };
     };
   };
 
@@ -22,18 +39,18 @@ in
       serviceConfig = {
         User = "duplicati";
         Group = "duplicati";
-        ExecStart = "${pkgs.duplicati}/bin/duplicati-server --webservice-interface=any --webservice-port=8200 --server-datafolder=/var/lib/duplicati";
+        ExecStart = "${pkgs.duplicati}/bin/duplicati-server --webservice-interface=${cfg.interface} --webservice-port=${toString cfg.port} --server-datafolder=/var/lib/duplicati";
         Restart = "on-failure";
       };
     };
 
-    users.extraUsers.duplicati = {
+    users.users.duplicati = {
       uid = config.ids.uids.duplicati;
       home = "/var/lib/duplicati";
       createHome = true;
       group = "duplicati";
     };
-    users.extraGroups.duplicati.gid = config.ids.gids.duplicati;
+    users.groups.duplicati.gid = config.ids.gids.duplicati;
 
   };
 }

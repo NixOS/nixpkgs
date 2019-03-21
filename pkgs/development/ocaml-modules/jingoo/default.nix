@@ -1,18 +1,24 @@
-{stdenv, buildOcaml, fetchurl, batteries, pcre}:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ounit, pcre, uutf }:
 
-buildOcaml rec {
-  name = "jingoo";
-  version = "1.2.7";
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "jingoo is not available for OCaml ${ocaml.version}"
+else
 
-  src = fetchurl {
-    url = "https://github.com/tategakibunko/jingoo/archive/v${version}.tar.gz";
-    sha256 = "8ffc5723d77b323a12761981d048c046af77db47543a4b1076573aa5f4003009";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-jingoo-${version}";
+  version = "1.2.18";
+
+  src = fetchFromGitHub {
+    owner = "tategakibunko";
+    repo = "jingoo";
+    rev = "v${version}";
+    sha256 = "0gciiysrjy5r4yiisc41k4h0p530yawzqnr364xg8fdkk444fgkn";
   };
 
-  propagatedBuildInputs = [ batteries pcre ];
+  buildInputs = [ ocaml findlib ];
+  propagatedBuildInputs = [ pcre uutf ];
 
-  preInstall = "mkdir -p $out/bin";
-  installFlags = "BINDIR=$(out)/bin";
+  createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/tategakibunko/jingoo;

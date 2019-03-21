@@ -6,12 +6,12 @@ stdenv.mkDerivation rec {
   version = "3.28.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/four-in-a-row/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1iszaay2r92swb0q67lmip6r1w3hw2dwmlgnz9v2h6blgdyncs4k";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook gettext itstool libxml2 ];
-  buildInputs = [ gtk3 libcanberra-gtk3 librsvg gnome3.defaultIconTheme ];
+  buildInputs = [ gtk3 libcanberra-gtk3 librsvg gnome3.adwaita-icon-theme ];
 
   passthru = {
     updateScript = gnome3.updateScript {

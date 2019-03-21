@@ -1,16 +1,13 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
-, base
 , contrib
 , lib
-, idris
 }:
 build-idris-package  {
   name = "smproc";
   version = "2018-02-08";
 
-  idrisDeps = [ prelude base contrib ];
+  idrisDeps = [ contrib ];
 
   src = fetchFromGitHub {
     owner = "jameshaydon";
@@ -24,6 +21,5 @@ build-idris-package  {
     homepage = https://github.com/jameshaydon/smproc;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

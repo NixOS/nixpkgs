@@ -1,16 +1,14 @@
 { stdenv
 , fetch
 , cmake
-, zlib
 , llvm
-, python
 , version
 }:
 
 stdenv.mkDerivation {
   name = "lld-${version}";
 
-  src = fetch "lld" "15fq2zvkliyiw5qi7ig2r8bshgbz4kzvs5in16mhfkw20l06rcym";
+  src = fetch "lld" "1ah75rjly6747jk1zbwca3z0svr9b09ylgxd4x9ns721xir6sia6";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvm ];

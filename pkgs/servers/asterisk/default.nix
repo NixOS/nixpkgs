@@ -1,8 +1,8 @@
-{ stdenv, pkgs, lib, fetchurl, fetchgit, fetchsvn, fetchpatch,
+{ stdenv, lib, fetchurl, fetchsvn,
   jansson, libxml2, libxslt, ncurses, openssl, sqlite,
   utillinux, dmidecode, libuuid, newt,
   lua, speex,
-  srtp, wget, curl
+  srtp, wget, curl, iksemel
 }:
 
 let
@@ -10,7 +10,7 @@ let
     inherit version;
     name = "asterisk-${version}";
 
-    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid newt lua speex srtp wget curl ];
+    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid newt lua speex srtp wget curl iksemel ];
 
     patches = [
       # We want the Makefile to install the default /var skeleton
@@ -26,7 +26,7 @@ let
     '';
 
     src = fetchurl {
-      url = "http://downloads.asterisk.org/pub/telephony/asterisk/old-releases/asterisk-${version}.tar.gz";
+      url = "https://downloads.asterisk.org/pub/telephony/asterisk/old-releases/asterisk-${version}.tar.gz";
       inherit sha256;
     };
 
@@ -76,7 +76,7 @@ let
 
   mp3-202 = fetchsvn {
     url = http://svn.digium.com/svn/thirdparty/mp3/trunk;
-    rev = 202;
+    rev = "202";
     sha256 = "1s9idx2miwk178sa731ig9r4fzx4gy1q8xazfqyd7q4lfd70s1cy";
   };
 

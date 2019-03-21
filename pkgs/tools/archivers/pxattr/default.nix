@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "pxattr-2.1.0";
 
   src = fetchurl {
-    url = "http://www.lesbonscomptes.com/pxattr/pxattr-2.1.0.tar.gz";
+    url = "https://www.lesbonscomptes.com/pxattr/pxattr-2.1.0.tar.gz";
     sha256 = "1dwcqc5z7gzma1zhis2md49bj2nq7m6jimh4zlx9szw6svisz56z";
   };
 

@@ -10,7 +10,7 @@ let
 
   # interface options
 
-  interfaceOpts = { name, ... }: {
+  interfaceOpts = { ... }: {
 
     options = {
 
@@ -190,10 +190,11 @@ let
     nameValuePair "wireguard-${name}"
       {
         description = "WireGuard Tunnel - ${name}";
-        after = [ "network.target" ];
+        requires = [ "network-online.target" ];
+        after = [ "network.target" "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         environment.DEVICE = name;
-        path = with pkgs; [ kmod iproute wireguard ];
+        path = with pkgs; [ kmod iproute wireguard-tools ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -201,7 +202,7 @@ let
         };
 
         script = ''
-          modprobe wireguard
+          ${optionalString (!config.boot.isContainer) "modprobe wireguard"}
 
           ${values.preSetup}
 
@@ -236,7 +237,7 @@ let
           ${values.postSetup}
         '';
 
-        preStop = ''
+        postStop = ''
           ip link del dev ${name}
           ${values.postShutdown}
         '';
@@ -279,7 +280,7 @@ in
   config = mkIf (cfg.interfaces != {}) {
 
     boot.extraModulePackages = [ kernel.wireguard ];
-    environment.systemPackages = [ pkgs.wireguard ];
+    environment.systemPackages = [ pkgs.wireguard-tools ];
 
     systemd.services = mapAttrs' generateUnit cfg.interfaces;
 

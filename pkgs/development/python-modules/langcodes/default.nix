@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A toolkit for working with and comparing the standardized codes for languages, such as ‘en’ for English or ‘es’ for Spanish";
-    homepage =  http://github.com/LuminosoInsight/langcodes;
+    homepage =  https://github.com/LuminosoInsight/langcodes;
     license = licenses.mit;
     maintainers = with maintainers; [ ixxie ];
   };

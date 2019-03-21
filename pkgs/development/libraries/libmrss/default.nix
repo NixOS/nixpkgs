@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "libmrss-0.19.2";
 
   src = fetchurl {
-    url = "http://www.autistici.org/bakunin/libmrss/libmrss-0.19.2.tar.gz";
+    url = "https://www.autistici.org/bakunin/libmrss/libmrss-0.19.2.tar.gz";
     sha256 = "02r1bgj8qlkn63xqfi5yq8y7wrilxcnkycaag8qskhg5ranic507";
   };
 

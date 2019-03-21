@@ -11,7 +11,7 @@
   value definitions.
  </para>
 
- <section>
+ <section xml:id="sec-option-types-basic">
   <title>Basic Types</title>
 
   <para>
@@ -22,7 +22,18 @@
 
   <variablelist>
    <varlistentry>
-    <term><varname>types.bool</varname>
+    <term>
+     <varname>types.attrs</varname>
+    </term>
+    <listitem>
+     <para>
+      A free-form attribute set.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>types.bool</varname>
     </term>
     <listitem>
      <para>
@@ -32,7 +43,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.path</varname>
+    <term>
+     <varname>types.path</varname>
     </term>
     <listitem>
      <para>
@@ -43,7 +55,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.package</varname>
+    <term>
+     <varname>types.package</varname>
     </term>
     <listitem>
      <para>
@@ -59,7 +72,8 @@
 
   <variablelist>
    <varlistentry>
-    <term><varname>types.int</varname>
+    <term>
+     <varname>types.int</varname>
     </term>
     <listitem>
      <para>
@@ -68,7 +82,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.ints.{s8, s16, s32}</varname>
+    <term>
+     <varname>types.ints.{s8, s16, s32}</varname>
     </term>
     <listitem>
      <para>
@@ -82,7 +97,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.ints.unsigned</varname>
+    <term>
+     <varname>types.ints.unsigned</varname>
     </term>
     <listitem>
      <para>
@@ -90,8 +106,9 @@
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
-    <term><varname>types.ints.{u8, u16, u32}</varname>
+   <varlistentry xml:id='types.ints.ux'>
+    <term>
+     <varname>types.ints.{u8, u16, u32}</varname>
     </term>
     <listitem>
      <para>
@@ -105,11 +122,23 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.ints.positive</varname>
+    <term>
+     <varname>types.ints.positive</varname>
     </term>
     <listitem>
      <para>
       A positive integer (that is > 0).
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>types.port</varname>
+    </term>
+    <listitem>
+     <para>
+      A port number. This type is an alias to
+      <link linkend='types.ints.ux'><varname>types.ints.u16</varname></link>.
      </para>
     </listitem>
    </varlistentry>
@@ -121,7 +150,8 @@
 
   <variablelist>
    <varlistentry>
-    <term><varname>types.str</varname>
+    <term>
+     <varname>types.str</varname>
     </term>
     <listitem>
      <para>
@@ -130,7 +160,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.lines</varname>
+    <term>
+     <varname>types.lines</varname>
     </term>
     <listitem>
      <para>
@@ -140,7 +171,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.commas</varname>
+    <term>
+     <varname>types.commas</varname>
     </term>
     <listitem>
      <para>
@@ -150,7 +182,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.envVar</varname>
+    <term>
+     <varname>types.envVar</varname>
     </term>
     <listitem>
      <para>
@@ -160,7 +193,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.strMatching</varname>
+    <term>
+     <varname>types.strMatching</varname>
     </term>
     <listitem>
      <para>
@@ -173,7 +207,7 @@
   </variablelist>
  </section>
 
- <section>
+ <section xml:id="sec-option-types-value">
   <title>Value Types</title>
 
   <para>
@@ -182,7 +216,8 @@
 
   <variablelist>
    <varlistentry>
-    <term><varname>types.enum</varname><replaceable>l</replaceable>
+    <term>
+     <varname>types.enum</varname> <replaceable>l</replaceable>
     </term>
     <listitem>
      <para>
@@ -193,7 +228,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.separatedString</varname><replaceable>sep</replaceable>
+    <term>
+     <varname>types.separatedString</varname> <replaceable>sep</replaceable>
     </term>
     <listitem>
      <para>
@@ -203,7 +239,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.ints.between</varname><replaceable>lowest</replaceable><replaceable>highest</replaceable>
+    <term>
+     <varname>types.ints.between</varname> <replaceable>lowest</replaceable> <replaceable>highest</replaceable>
     </term>
     <listitem>
      <para>
@@ -214,7 +251,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.submodule</varname><replaceable>o</replaceable>
+    <term>
+     <varname>types.submodule</varname> <replaceable>o</replaceable>
     </term>
     <listitem>
      <para>
@@ -230,7 +268,7 @@
   </variablelist>
  </section>
 
- <section>
+ <section xml:id="sec-option-types-composed">
   <title>Composed Types</title>
 
   <para>
@@ -241,7 +279,8 @@
 
   <variablelist>
    <varlistentry>
-    <term><varname>types.listOf</varname><replaceable>t</replaceable>
+    <term>
+     <varname>types.listOf</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
      <para>
@@ -251,7 +290,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.attrsOf</varname><replaceable>t</replaceable>
+    <term>
+     <varname>types.attrsOf</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
      <para>
@@ -262,7 +302,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.loaOf</varname><replaceable>t</replaceable>
+    <term>
+     <varname>types.loaOf</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
      <para>
@@ -272,7 +313,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.nullOr</varname><replaceable>t</replaceable>
+    <term>
+     <varname>types.nullOr</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
      <para>
@@ -282,7 +324,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.uniq</varname><replaceable>t</replaceable>
+    <term>
+     <varname>types.uniq</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
      <para>
@@ -292,7 +335,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.either</varname><replaceable>t1</replaceable><replaceable>t2</replaceable>
+    <term>
+     <varname>types.either</varname> <replaceable>t1</replaceable> <replaceable>t2</replaceable>
     </term>
     <listitem>
      <para>
@@ -303,7 +347,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>types.coercedTo</varname><replaceable>from</replaceable><replaceable>f</replaceable><replaceable>to</replaceable>
+    <term>
+     <varname>types.coercedTo</varname> <replaceable>from</replaceable> <replaceable>f</replaceable> <replaceable>to</replaceable>
     </term>
     <listitem>
      <para>
@@ -449,7 +494,7 @@ config.mod.two = { foo = 2; bar = "two"; };</screen>
   </example>
  </section>
 
- <section>
+ <section xml:id="sec-option-types-extending">
   <title>Extending types</title>
 
   <para>
@@ -459,14 +504,15 @@ config.mod.two = { foo = 2; bar = "two"; };</screen>
 
   <variablelist>
    <varlistentry>
-    <term><varname>check</varname>
+    <term>
+     <varname>check</varname>
     </term>
     <listitem>
      <para>
       The function to type check the value. Takes a value as parameter and
       return a boolean. It is possible to extend a type check with the
       <literal>addCheck</literal> function
-      (<xref 
+      (<xref
           linkend='ex-extending-type-check-1' />), or to fully
       override the check function
       (<xref linkend='ex-extending-type-check-2' />).
@@ -476,7 +522,7 @@ config.mod.two = { foo = 2; bar = "two"; };</screen>
 <screen>
 byte = mkOption {
   description = "An integer between 0 and 255.";
-  type = addCheck types.int (x: x &gt;= 0 &amp;&amp; x &lt;= 255);
+  type = types.addCheck types.int (x: x &gt;= 0 &amp;&amp; x &lt;= 255);
 };</screen>
      </example>
      <example xml:id='ex-extending-type-check-2'>
@@ -492,7 +538,8 @@ nixThings = mkOption {
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>merge</varname>
+    <term>
+     <varname>merge</varname>
     </term>
     <listitem>
      <para>
@@ -507,14 +554,14 @@ nixThings = mkOption {
   </variablelist>
  </section>
 
- <section>
+ <section xml:id="sec-option-types-custom">
   <title>Custom Types</title>
 
   <para>
    Custom types can be created with the <literal>mkOptionType</literal>
    function. As type creation includes some more complex topics such as
    submodule handling, it is recommended to get familiar with
-   <filename 
+   <filename
   xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/types.nix">types.nix</filename>
    code before creating a new type.
   </para>
@@ -525,7 +572,8 @@ nixThings = mkOption {
 
   <variablelist>
    <varlistentry>
-    <term><varname>name</varname>
+    <term>
+     <varname>name</varname>
     </term>
     <listitem>
      <para>
@@ -534,7 +582,8 @@ nixThings = mkOption {
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>definition</varname>
+    <term>
+     <varname>definition</varname>
     </term>
     <listitem>
      <para>
@@ -544,7 +593,8 @@ nixThings = mkOption {
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>check</varname>
+    <term>
+     <varname>check</varname>
     </term>
     <listitem>
      <para>
@@ -556,7 +606,8 @@ nixThings = mkOption {
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>merge</varname>
+    <term>
+     <varname>merge</varname>
     </term>
     <listitem>
      <para>
@@ -564,7 +615,8 @@ nixThings = mkOption {
      </para>
      <variablelist>
       <varlistentry>
-       <term><replaceable>loc</replaceable>
+       <term>
+        <replaceable>loc</replaceable>
        </term>
        <listitem>
         <para>
@@ -574,7 +626,8 @@ nixThings = mkOption {
        </listitem>
       </varlistentry>
       <varlistentry>
-       <term><replaceable>defs</replaceable>
+       <term>
+        <replaceable>defs</replaceable>
        </term>
        <listitem>
         <para>
@@ -591,7 +644,8 @@ nixThings = mkOption {
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>getSubOptions</varname>
+    <term>
+     <varname>getSubOptions</varname>
     </term>
     <listitem>
      <para>
@@ -606,7 +660,8 @@ nixThings = mkOption {
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>getSubModules</varname>
+    <term>
+     <varname>getSubModules</varname>
     </term>
     <listitem>
      <para>
@@ -619,7 +674,8 @@ nixThings = mkOption {
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>substSubModules</varname>
+    <term>
+     <varname>substSubModules</varname>
     </term>
     <listitem>
      <para>
@@ -635,7 +691,8 @@ nixThings = mkOption {
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>typeMerge</varname>
+    <term>
+     <varname>typeMerge</varname>
     </term>
     <listitem>
      <para>
@@ -645,7 +702,8 @@ nixThings = mkOption {
      </para>
      <variablelist>
       <varlistentry>
-       <term><replaceable>f</replaceable>
+       <term>
+        <replaceable>f</replaceable>
        </term>
        <listitem>
         <para>
@@ -661,7 +719,8 @@ nixThings = mkOption {
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>functor</varname>
+    <term>
+     <varname>functor</varname>
     </term>
     <listitem>
      <para>
@@ -670,7 +729,8 @@ nixThings = mkOption {
      </para>
      <variablelist>
       <varlistentry>
-       <term><varname>type</varname>
+       <term>
+        <varname>type</varname>
        </term>
        <listitem>
         <para>
@@ -679,7 +739,8 @@ nixThings = mkOption {
        </listitem>
       </varlistentry>
       <varlistentry>
-       <term><varname>wrapped</varname>
+       <term>
+        <varname>wrapped</varname>
        </term>
        <listitem>
         <para>
@@ -688,7 +749,8 @@ nixThings = mkOption {
        </listitem>
       </varlistentry>
       <varlistentry>
-       <term><varname>payload</varname>
+       <term>
+        <varname>payload</varname>
        </term>
        <listitem>
         <para>
@@ -700,7 +762,8 @@ nixThings = mkOption {
        </listitem>
       </varlistentry>
       <varlistentry>
-       <term><varname>binOp</varname>
+       <term>
+        <varname>binOp</varname>
        </term>
        <listitem>
         <para>

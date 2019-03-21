@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "flake8-import-order";
-  version = "0.17.1";
+  version = "0.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "68d430781a9ef15c85a0121500cf8462f1a4bc7672acb2a32bfdbcab044ae0b7";
+    sha256 = "9be5ca10d791d458eaa833dd6890ab2db37be80384707b0f76286ddd13c16cbf";
   };
 
   propagatedBuildInputs = [ pycodestyle ] ++ lib.optional (!isPy3k) enum34;

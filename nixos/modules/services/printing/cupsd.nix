@@ -11,8 +11,9 @@ let
   avahiEnabled = config.services.avahi.enable;
   polkitEnabled = config.security.polkit.enable;
 
-  additionalBackends = pkgs.runCommand "additional-cups-backends" { }
-    ''
+  additionalBackends = pkgs.runCommand "additional-cups-backends" {
+      preferLocalBuild = true;
+    } ''
       mkdir -p $out
       if [ ! -e ${cups.out}/lib/cups/backend/smb ]; then
         mkdir -p $out/lib/cups/backend
@@ -121,6 +122,16 @@ in
         default = false;
         description = ''
           Whether to enable printing support through the CUPS daemon.
+        '';
+      };
+
+      startWhenNeeded = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, CUPS is socket-activated; that is,
+          instead of having it permanently running as a daemon,
+          systemd will start it on the first incoming connection.
         '';
       };
 
@@ -240,7 +251,7 @@ in
       drivers = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ pkgs.gutenprint pkgs.hplip pkgs.splix ]";
+        example = literalExample "with pkgs; [ gutenprint hplip splix cups-googlecloudprint ]";
         description = ''
           CUPS drivers to use. Drivers provided by CUPS, cups-filters,
           Ghostscript and Samba are added unconditionally. If this list contains
@@ -268,7 +279,7 @@ in
 
   config = mkIf config.services.printing.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "cups";
         uid = config.ids.uids.cups;
         group = "lp";
@@ -287,8 +298,13 @@ in
 
     systemd.packages = [ cups.out ];
 
+    systemd.sockets.cups = mkIf cfg.startWhenNeeded {
+      wantedBy = [ "sockets.target" ];
+      listenStreams = map (x: replaceStrings ["localhost"] ["127.0.0.1"] (removePrefix "*:" x)) cfg.listenAddresses;
+    };
+
     systemd.services.cups =
-      { wantedBy = [ "multi-user.target" ];
+      { wantedBy = optionals (!cfg.startWhenNeeded) [ "multi-user.target" ];
         wants = [ "network.target" ];
         after = [ "network.target" ];
 
@@ -301,6 +317,10 @@ in
             mkdir -m 0755 -p ${cfg.tempDir}
 
             mkdir -m 0755 -p /var/lib/cups
+            # While cups will automatically create self-signed certificates if accessed via TLS,
+            # this directory to store the certificates needs to be created manually.
+            mkdir -m 0700 -p /var/lib/cups/ssl
+
             # Backwards compatibility
             if [ ! -L /etc/cups ]; then
               mv /etc/cups/* /var/lib/cups

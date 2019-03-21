@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     description = "Compression/decompression library for very high speeds";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

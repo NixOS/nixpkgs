@@ -1,13 +1,12 @@
-{stdenv, buildPythonPackage, fetchurl}:
+{stdenv, buildPythonPackage, fetchPypi}:
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.5.0";
-  name = "${pname}-${version}";
+  version = "0.5.4";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pyroute2/${name}.tar.gz";
-    sha256 = "bb02fe5a02fb4e8baad4d7ccf7ba5e748044ee0a1ad7d2fa4927f68f396863c4";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0w6z4j8l9898bj214v2mh7vx2g43j1b70ijjvc7q3316fscal469";
   };
 
   # requires root priviledges
@@ -18,6 +17,6 @@ buildPythonPackage rec {
     homepage = https://github.com/svinota/pyroute2;
     license = licenses.asl20;
     maintainers = [maintainers.mic92];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

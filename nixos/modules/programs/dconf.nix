@@ -32,6 +32,8 @@ in
     environment.etc = optionals (cfg.profiles != {})
       (mapAttrsToList mkDconfProfile cfg.profiles);
 
+    services.dbus.packages = [ pkgs.gnome3.dconf ];
+
     environment.variables.GIO_EXTRA_MODULES = optional cfg.enable
       "${pkgs.gnome3.dconf.lib}/lib/gio/modules";
     # https://github.com/NixOS/nixpkgs/pull/31891

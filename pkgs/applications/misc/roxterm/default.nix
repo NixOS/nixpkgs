@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, docbook_xsl, dbus_libs, dbus-glib, expat, gettext
-, gsettings-desktop-schemas, gdk_pixbuf, gtk2, gtk3, hicolor-icon-theme
-, imagemagick, itstool, librsvg, libtool, libxslt, lockfile, makeWrapper
+{ stdenv, fetchurl, docbook_xsl, dbus, dbus-glib, expat
+, gsettings-desktop-schemas, gdk_pixbuf, gtk3, hicolor-icon-theme
+, imagemagick, itstool, librsvg, libtool, libxslt, makeWrapper
 , pkgconfig, python, pythonPackages, vte
 , wrapGAppsHook}:
 
@@ -22,13 +22,13 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ docbook_xsl expat imagemagick itstool librsvg libtool libxslt
-      makeWrapper python pythonPackages.lockfile dbus_libs dbus-glib
+      makeWrapper python pythonPackages.lockfile dbus dbus-glib
       gdk_pixbuf gsettings-desktop-schemas gtk3
       hicolor-icon-theme vte ];
 
   NIX_CFLAGS_COMPILE = [ "-I${dbus-glib.dev}/include/dbus-1.0"
-                         "-I${dbus_libs.dev}/include/dbus-1.0"
-                         "-I${dbus_libs.lib}/lib/dbus-1.0/include" ];
+                         "-I${dbus.dev}/include/dbus-1.0"
+                         "-I${dbus.lib}/lib/dbus-1.0/include" ];
 
   # Fix up python path so the lockfile library is on it.
   PYTHONPATH = stdenv.lib.makeSearchPathOutput "lib" python.sitePackages [

@@ -117,7 +117,7 @@ in
       };
     };
 
-    users.extraUsers.cntlm = {
+    users.users.cntlm = {
       name = "cntlm";
       description = "cntlm system-wide daemon";
       isSystemUser = true;

@@ -6,11 +6,11 @@ assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name = "libgcrypt-${version}";
-  version = "1.8.2";
+  version = "1.8.4";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "01sca9m8hm6b5v8hmqsfdjhyz013869p1f0fxw9ln52qfnp4q1n8";
+    sha256 = "09r27ywj9zplq6n9qw3mn7zmvf6y2jdmwx5d1kg8yqkj0qx18f7n";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -27,12 +27,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
 
-  preConfigure = stdenv.lib.optionalString stdenv.isCross ''
-    # This is intentional: gpg-error-config is a shell script that will work during the build
-    mkdir -p "$NIX_BUILD_TOP"/bin
-    ln -s ${libgpgerror.dev}/bin/gpg-error-config "$NIX_BUILD_TOP/bin"
-    export PATH="$NIX_BUILD_TOP/bin:$PATH"
-  '';
+  configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ];
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
@@ -56,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "General-purpose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.wkennington maintainers.vrthra ];
+    maintainers = with maintainers; [ vrthra ];
     repositories.git = git://git.gnupg.org/libgcrypt.git;
   };
 }

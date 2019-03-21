@@ -1,17 +1,17 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
-, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree, libselinux
+{ stdenv, buildGoPackage, fetchFromGitHub
+, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, ostree, libselinux, libseccomp
 , go-md2man }:
 
 let
-  version = "0.12";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    owner = "projectatomic";
+    owner = "containers";
     repo = "buildah";
-    sha256 = "0xyq7rv0lj6bxwh2rnf44w9gjcqbdkfcdff88023b9vlsc8h4k0m";
+    sha256 = "083s0bcajks2qnxq6cn9lax5aiyvicf60rf3ifgqksl9skr748qb";
   };
-  goPackagePath = "github.com/projectatomic/buildah";
+  goPackagePath = "github.com/containers/buildah";
 
 in buildGoPackage rec {
   name = "buildah-${version}";
@@ -22,8 +22,11 @@ in buildGoPackage rec {
   inherit goPackagePath;
   excludedPackages = [ "tests" ];
 
+  # Optimizations break compilation of libseccomp c bindings
+  hardeningDisable = [ "fortify" ];
+
   nativeBuildInputs = [ pkgconfig go-md2man.bin ];
-  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree libselinux ];
+  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs ostree libselinux libseccomp ];
 
   # Copied from the skopeo package, doesn’t seem to make a difference?
   # If something related to these libs failed, uncomment these lines.
@@ -42,7 +45,7 @@ in buildGoPackage rec {
 
   meta = {
     description = "A tool which facilitates building OCI images";
-    homepage = https://github.com/projectatomic/buildah;
+    homepage = https://github.com/containers/buildah;
     maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
     license = stdenv.lib.licenses.asl20;
   };

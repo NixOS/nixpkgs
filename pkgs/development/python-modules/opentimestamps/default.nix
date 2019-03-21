@@ -1,9 +1,9 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, bitcoinlib, GitPython, pysha3 }:
+, bitcoinlib, GitPython, pysha3, git }:
 
 buildPythonPackage rec {
   pname = "opentimestamps";
-  version = "0.3.0";
+  version = "0.4.0";
   disabled = (!isPy3k);
 
   # We can't use the pypi source because it doesn't include README.md which is
@@ -12,15 +12,16 @@ buildPythonPackage rec {
     owner = "opentimestamps";
     repo = "python-opentimestamps";
     rev = "python-opentimestamps-v${version}";
-    sha256 = "1i843mbz4h9vqc3y2x09ix6bv9wc0gzq36zhbnmf5by08iaiydks";
+    sha256 = "165rj08hwmbn44ra9n0cj5vfn6p49dqfn5lz2mks962mx19c7l0m";
   };
 
   # Remove a failing test which expects the test source file to reside in the
   # project's Git repo
-  patchPhase = ''
+  postPatch = ''
     rm opentimestamps/tests/core/test_git.py
   '';
 
+  checkInputs = [ git ];
   propagatedBuildInputs = [ bitcoinlib GitPython pysha3 ];
 
   meta = {

@@ -4,13 +4,13 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  version = "2018-04-25";
+  version = "2019-01-15";
   name = "oh-my-zsh-${version}";
 
   src = fetchgit {
     url = "https://github.com/robbyrussell/oh-my-zsh";
-    rev = "9cd3701ac0297f4bdf9673ea0dffa8ffdaea63e8";
-    sha256 = "0pjw5m7wpmcfdhrj322icplw3hsbbdxjgfw12kr2zpzl95xqkkhs";
+    rev = "586ca16902d9dae4d95d5256a824572f60219c83";
+    sha256 = "0hzc1fv848h9vlmrw487818l30xfw2vnv50yhkrgvw8lqaam3bs8";
   };
 
   pathsToLink = [ "/share/oh-my-zsh" ];
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
     $ cp -v $(nix-env -q --out-path oh-my-zsh | cut -d' ' -f3)/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
   '';
-  homepage        = "http://ohmyz.sh/";
+  homepage        = https://ohmyz.sh/;
   license         = licenses.mit;
   platforms       = platforms.all;
   maintainers     = with maintainers; [ scolobb nequissimus ];

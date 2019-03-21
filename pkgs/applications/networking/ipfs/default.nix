@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "ipfs-${version}";
-  version = "0.4.14";
+  version = "0.4.19";
   rev = "v${version}";
 
   goPackagePath = "github.com/ipfs/go-ipfs";
@@ -10,7 +10,7 @@ buildGoPackage rec {
   extraSrcPaths = [
     (fetchgx {
       inherit name src;
-      sha256 = "0gad5y5clkrk5jsjj9gmrlnx8kbn2vg50vka1b8jg7b55hdvvlcg";
+      sha256 = "0bj2kzxjssp7szp1wr9pp08bsi55jgf0k7gi4h70phlib2q673j2";
     })
   ];
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
     owner = "ipfs";
     repo = "go-ipfs";
     inherit rev;
-    sha256 = "0wvjw8jziwhvfwhksg26qlj2irznl5bs2yll9jkv335pnwb5qi3v";
+    sha256 = "061mgkawimhw3gq506h8m6kw50a2v26qysa5kc5jdqgaqx5yvqh4";
   };
 
   meta = with stdenv.lib; {

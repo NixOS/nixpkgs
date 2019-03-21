@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchurl, pytest, mock }:
 buildPythonPackage rec {
   pname = "pep257";
-  name = "${pname}-${version}";
   version = "0.7.0";
 
   src = fetchurl {
@@ -9,7 +8,7 @@ buildPythonPackage rec {
     sha256 = "1ldpgil0kaf6wz5gvl9xdx35a62vc6bmgi3wbh9320dj5v2qk4wh";
   };
 
-  buildInputs = [ pytest mock ];
+  checkInputs = [ pytest mock ];
 
   checkPhase = ''
     py.test

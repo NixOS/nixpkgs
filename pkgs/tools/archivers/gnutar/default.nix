@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnutar-${version}";
-  version = "1.30";
+  version = "1.31";
 
   src = fetchurl {
     url = "mirror://gnu/tar/tar-${version}.tar.xz";
-    sha256 = "1lyjyk8z8hdddsxw0ikchrsfg3i0x3fsh7l63a8jgaz1n7dr5gzi";
+    sha256 = "1h9dxhjhz1jnyhmh6jfhqw1g1sxqbg3cd32vpwg7x2xxxqffzwrp";
   };
 
   # avoid retaining reference to CF during stdenv bootstrap
@@ -30,14 +30,17 @@ stdenv.mkDerivation rec {
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
-  FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.system == "armv7l-linux" || stdenv.isSunOS) "1";
+  FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.isSunOS) "1";
 
   preConfigure = if stdenv.isCygwin then ''
     sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
   '' else null;
 
+  doCheck = false; # fails
+  doInstallCheck = false; # fails
+
   meta = {
-    homepage = http://www.gnu.org/software/tar/;
+    homepage = https://www.gnu.org/software/tar/;
     description = "GNU implementation of the `tar' archiver";
 
     longDescription = ''

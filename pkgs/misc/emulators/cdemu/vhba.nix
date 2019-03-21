@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, libelf }:
+{ stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation rec {
   name = "vhba-${version}";

@@ -48,6 +48,23 @@ in
           https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/pattern.md
         '';
       };
+      styles = mkOption {
+        default = {};
+        type = types.attrsOf types.string;
+
+        example = literalExample ''
+          {
+            "alias" = "fg=magenta,bold";
+          }
+        '';
+
+        description = ''
+          Specifies custom styles to be highlighted by zsh-syntax-highlighting.
+
+          Please refer to the docs for more information about the usage:
+          https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
+        '';
+      };
     };
   };
 
@@ -73,6 +90,11 @@ in
             pattern: design:
             "ZSH_HIGHLIGHT_PATTERNS+=('${pattern}' '${design}')"
           ) cfg.patterns)
+        ++ optionals (length(attrNames cfg.styles) > 0)
+          (mapAttrsToList (
+            styles: design:
+            "ZSH_HIGHLIGHT_STYLES[${styles}]='${design}'"
+          ) cfg.styles)
       );
   };
 }

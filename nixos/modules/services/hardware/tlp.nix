@@ -17,6 +17,7 @@ tlp = pkgs.tlp.override {
 confFile = pkgs.runCommand "tlp"
   { config = cfg.extraConfig;
     passAsFile = [ "config" ];
+    preferLocalBuild = true;
   }
   ''
     cat ${tlp}/etc/default/tlp > $out
@@ -56,6 +57,8 @@ in
 
     powerManagement.scsiLinkPolicy = null;
     powerManagement.cpuFreqGovernor = null;
+    powerManagement.cpufreq.max = null;
+    powerManagement.cpufreq.min = null;
 
     systemd.sockets."systemd-rfkill".enable = false;
 

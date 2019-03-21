@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, intltool, mate, pythonPackages }:
+{ stdenv, python, fetchurl, pkgconfig, intltool, mate, gtk3, glib, wrapGAppsHook, gobject-introspection }:
 
-stdenv.mkDerivation rec {
-  name = "mozo-${version}";
-  version = "1.20.0";
+python.pkgs.buildPythonApplication rec {
+  pname = "mozo";
+  version = "1.20.2";
+
+  format = "other";
+  doCheck = false;
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1108avdappfjadd46ld7clhh5m9f4b5khl5y33l377m8ky9dy87g";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${pname}-${version}.tar.xz";
+    sha256 = "1q4hqhigimxav2a8xxyd53lq8q80szsphcv37y2jhm6g6wvdmvhd";
   };
-  
-  pythonPath = [ mate.mate-menus pythonPackages.pygobject3 ];
 
-  nativeBuildInputs = [ pkgconfig intltool pythonPackages.wrapPython ];
+  nativeBuildInputs = [ pkgconfig intltool gobject-introspection wrapGAppsHook ];
 
-  buildInputs = [ pythonPackages.python ] ++ pythonPath;
+  propagatedBuildInputs =  [ mate.mate-menus python.pkgs.pygobject3 ];
 
-  preFixup = "wrapPythonPrograms";
+  buildInputs = [ gtk3 glib ];
 
   meta = with stdenv.lib; {
     description = "MATE Desktop menu editor";

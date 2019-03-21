@@ -1,28 +1,36 @@
-{ newScope, stdenv, makeWrapper, makeDesktopItem, ed
+{ newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_7
+, makeWrapper, makeDesktopItem, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 
 # package customization
 , channel ? "stable"
 , enableNaCl ? false
-, enableHotwording ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
 , cupsSupport ? true
-, pulseSupport ? false
+, pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
 }:
 
 let
+  stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_7.stdenv;
+  llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_7;
+in let
+  stdenv = stdenv_;
+  llvmPackages = llvmPackages_;
+
   callPackage = newScope chromium;
 
   chromium = {
+    inherit stdenv llvmPackages;
+
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
-      inherit enableNaCl enableHotwording gnomeSupport gnome
+      inherit enableNaCl gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
               enableWideVine;
     };
@@ -65,8 +73,6 @@ let
 
   version = chromium.browser.version;
 
-  inherit (stdenv.lib) versionAtLeast;
-
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;
@@ -78,7 +84,7 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   outputs = ["out" "sandbox"];

@@ -1,14 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, python
+{ buildPythonPackage, fetchPypi, python
 , mock, testrepository, testtools
 , requests, six }:
 
 buildPythonPackage rec {
   pname = "requests-mock";
-  version = "1.4.0";
+  version = "1.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2931887853c42e1d73879983d5bf03041109472991c5b4b8dba5d11ed23b9d0b";
+    sha256 = "7a5fa99db5e3a2a961b6f20ed40ee6baeff73503cf0a553cc4d679409e6170fb";
   };
 
   patchPhase = ''

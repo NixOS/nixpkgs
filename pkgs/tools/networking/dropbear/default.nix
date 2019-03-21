@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "dropbear-2018.76";
 
   src = fetchurl {
-    url = "http://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
+    url = "https://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
     sha256 = "0rgavbzw7jrs5wslxm0dnwx2m409yzxd9hazd92r7kx8xikr3yzj";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
 
-  # http://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
+  # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
     makeFlags=VPATH=`cat $NIX_CC/nix-support/orig-libc`/lib
   '';

@@ -1,16 +1,10 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
-, base
 , lib
-, idris
 }:
-
 build-idris-package  {
   name = "cube";
   version = "2017-07-05";
-
-  idrisDeps = [ prelude base ];
 
   src = fetchFromGitHub {
     owner = "aatxe";
@@ -24,6 +18,5 @@ build-idris-package  {
     homepage = https://github.com/aatxe/cube.idr;
     license = lib.licenses.agpl3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

@@ -11,8 +11,10 @@ let
 
   nagiosObjectDefs = cfg.objectDefs;
 
-  nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {inherit nagiosObjectDefs;}
-    "mkdir -p $out; ln -s $nagiosObjectDefs $out/";
+  nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {
+      inherit nagiosObjectDefs;
+      preferLocalBuild = true;
+    } "mkdir -p $out; ln -s $nagiosObjectDefs $out/";
 
   nagiosCfgFile = pkgs.writeText "nagios.cfg"
     ''
@@ -143,7 +145,7 @@ in
 
 
   config = mkIf cfg.enable {
-    users.extraUsers.nagios = {
+    users.users.nagios = {
       description = "Nagios user ";
       uid         = config.ids.uids.nagios;
       home        = nagiosState;

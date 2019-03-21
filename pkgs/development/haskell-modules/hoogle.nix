@@ -28,7 +28,6 @@
 }:
 
 let
-  inherit (stdenv.lib) optional;
   wrapper = ./hoogle-local-wrapper.sh;
   isGhcjs = ghc.isGhcjs or false;
   opts = lib.optionalString;
@@ -36,10 +35,6 @@ let
     if !isGhcjs
     then "haddock"
     else "haddock-ghcjs";
-  ghcName =
-    if !isGhcjs
-    then "ghc"
-    else "ghcjs";
   ghcDocLibDir =
     if !isGhcjs
     then ghc.doc + ''/share/doc/ghc*/html/libraries''

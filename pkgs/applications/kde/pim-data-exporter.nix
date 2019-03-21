@@ -4,7 +4,7 @@
   akonadi, kcmutils, kcrash, kdbusaddons, kidentitymanagement, kldap,
   kmailtransport, knewstuff, knotifications, knotifyconfig, kparts, kross, ktexteditor,
   kwallet, libkdepim, libkleo, pimcommon, qttools,
-  karchive, mailcommon, messagelib, pim-data-exporter
+  karchive, mailcommon, messagelib
 }:
 
 mkDerivation {

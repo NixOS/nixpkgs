@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python3 }:
 
 let
 
-  version = "2018.02.15";
+  major = "2019";
+  minor = "01";
+  patch = "19";
+
+  version = "${major}.${minor}.${patch}";
 
   serious-proton = stdenv.mkDerivation rec {
     name = "serious-proton-${version}";
@@ -12,7 +16,7 @@ let
       owner = "daid";
       repo = "SeriousProton";
       rev = "EE-${version}";
-      sha256 = "0b4n4pn7x3y63i9y15f8983zlpdvmx7151iph1lcc49j3hmpd0gy";
+      sha256 = "1a5g16vvjrykmdgy5fc8x0v4ipfm0qdaimmy5jz84am14dqi3f8w";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -38,14 +42,18 @@ stdenv.mkDerivation rec {
     owner = "daid";
     repo = "EmptyEpsilon";
     rev = "EE-${version}";
-    sha256 = "1by0wrw00frrlcs1kd003zkmfkwa1pnbnva2qn8km3xnl9chf11d";
+    sha256 = "082v27w3n4jdm4a5884607rwsw4s00cnpqmh7bsdg9q3l29jpygn";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ serious-proton sfml glew libX11 python ];
+  buildInputs = [ serious-proton sfml glew libX11 python3 ];
 
   cmakeFlags = [
     "-DSERIOUS_PROTON_DIR=${serious-proton.src}"
+    "-DCPACK_PACKAGE_VERSION=${version}"
+    "-DCPACK_PACKAGE_VERSION_MAJOR=${major}"
+    "-DCPACK_PACKAGE_VERSION_MINOR=${minor}"
+    "-DCPACK_PACKAGE_VERSION_PATCH=${patch}"
   ];
 
   meta = with lib; {

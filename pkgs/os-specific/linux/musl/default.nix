@@ -1,5 +1,4 @@
 { stdenv, lib, fetchurl
-, buildPackages
 , linuxHeaders ? null
 , useBSDCompatHeaders ? true
 }:
@@ -29,12 +28,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name    = "musl-${version}";
-  version = "1.1.19";
+  pname = "musl";
+  version = "1.1.21";
 
   src = fetchurl {
-    url    = "http://www.musl-libc.org/releases/musl-${version}.tar.gz";
-    sha256 = "1nf1wh44bhm8gdcfr75ayib29b99vpq62zmjymrq7f96h9bshnfv";
+    url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
+    sha256 = "0i2z52zgc86af1n1gjiz43hgd85mxjgvgn345zsybja9dxpvchn7";
   };
 
   enableParallelBuilding = true;
@@ -58,16 +57,15 @@ stdenv.mkDerivation rec {
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
   ];
-  preConfigure = ''
-    configureFlagsArray+=("--syslibdir=$out/lib")
-  '';
+  CFLAGS = [ "-fstack-protector-strong" ]
+    ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
 
   configureFlags = [
     "--enable-shared"
     "--enable-static"
     "--enable-debug"
-    "CFLAGS=-fstack-protector-strong"
     "--enable-wrapper=all"
+    "--syslibdir=${placeholder "out"}/lib"
   ];
 
   outputs = [ "out" "dev" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, patchelf, glibc, libX11, libXt, perl }:
+{ stdenv, fetchFromGitHub, fetchurl, glibc, libX11, libXt, perl }:
 
 stdenv.mkDerivation rec {
   name = "rebol-nightly-${version}";

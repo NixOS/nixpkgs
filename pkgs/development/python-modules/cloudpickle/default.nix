@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "0.5.2";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b0e63dd89ed5285171a570186751bc9b84493675e99e12789e9a5dc5490ef554";
+    sha256 = "18d3a5dfc82f752b9f4c844cceb663213e26e130f4a2894a18ad1f11d57a30bc";
   };
 
   buildInputs = [ pytest mock ];

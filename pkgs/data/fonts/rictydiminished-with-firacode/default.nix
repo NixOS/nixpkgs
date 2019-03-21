@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     fontforge
     (pythonFull.withPackages (ps: [
       ps.jinja2
-      ps."3to2"
+      ps.py3to2
       ps.fonttools
     ]))
   ];

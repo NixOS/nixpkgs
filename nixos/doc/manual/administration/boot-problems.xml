@@ -14,7 +14,8 @@
   NixOS boot scripts or by systemd:
   <variablelist>
    <varlistentry>
-    <term><literal>boot.shell_on_fail</literal>
+    <term>
+     <literal>boot.shell_on_fail</literal>
     </term>
     <listitem>
      <para>
@@ -25,7 +26,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>boot.debug1</literal>
+    <term>
+     <literal>boot.debug1</literal>
     </term>
     <listitem>
      <para>
@@ -37,7 +39,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>boot.trace</literal>
+    <term>
+     <literal>boot.trace</literal>
     </term>
     <listitem>
      <para>
@@ -46,7 +49,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>single</literal>
+    <term>
+     <literal>single</literal>
     </term>
     <listitem>
      <para>
@@ -59,7 +63,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>systemd.log_level=debug systemd.log_target=console</literal>
+    <term>
+     <literal>systemd.log_level=debug systemd.log_target=console</literal>
     </term>
     <listitem>
      <para>

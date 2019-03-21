@@ -88,6 +88,8 @@ in {
         ExecStart = "${cfg.package}/sbin/collectd -C ${conf} -f";
         User = cfg.user;
         PermissionsStartOnly = true;
+        Restart = "on-failure";
+        RestartSec = 3;
       };
 
       preStart = ''
@@ -97,7 +99,7 @@ in {
       '';
     };
 
-    users.extraUsers = optional (cfg.user == "collectd") {
+    users.users = optional (cfg.user == "collectd") {
       name = "collectd";
     };
   };

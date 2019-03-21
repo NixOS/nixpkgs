@@ -1,7 +1,7 @@
-{ buildPythonPackage,
+{ stdenv, fetchurl, buildPythonPackage, pythonOlder,
   cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
-  fetchFromGitHub, fetchpatch, lib, numpy, pyyaml, cffi, cmake,
-  git, stdenv, linkFarm, symlinkJoin,
+  fetchFromGitHub, lib, numpy, pyyaml, cffi, typing, cmake, hypothesis, numactl,
+  linkFarm, symlinkJoin,
   utillinux, which }:
 
 assert cudnn == null || cudatoolkit != null;
@@ -25,65 +25,85 @@ let
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} ";
 
 in buildPythonPackage rec {
-  version = "0.3.1";
+  version = "1.0.0";
   pname = "pytorch";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner  = "pytorch";
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1k8fr97v5pf7rni5cr2pi21ixc3pdj3h3lkz28njbjbgkndh7mr3";
+    sha256 = "076cpbig4sywn9vv674c0xdg832sdrd5pk1d0725pjkm436kpvlm";
   };
 
-  patches = [
-    (fetchpatch {
-      # make sure stdatomic.h is included when checking for ATOMIC_INT_LOCK_FREE
-      # Fixes this test failure:
-      # RuntimeError: refcounted file mapping not supported on your system at /tmp/nix-build-python3.6-pytorch-0.3.0.drv-0/source/torch/lib/TH/THAllocator.c:525
-      url = "https://github.com/pytorch/pytorch/commit/502aaf39cf4a878f9e4f849e5f409573aa598aa9.patch";
-      stripLen = 3;
-      extraPrefix = "torch/lib/";
-      sha256 = "1miz4lhy3razjwcmhxqa4xmlcmhm65lqyin1czqczj8g16d3f62f";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace test/run_test.sh --replace \
-      "INIT_METHOD='file://'\$TEMP_DIR'/shared_init_file' \$PYCMD ./test_distributed.py" \
-      "echo Skipped for Nix package"
-  '';
+  patches =
+    [ # Skips two tests that are only meant to run on multi GPUs
+      (fetchurl {
+        url = "https://github.com/pytorch/pytorch/commit/bfa666eb0deebac21b03486e26642fd70d66e478.patch";
+        sha256 = "1fgblcj02gjc0y62svwc5gnml879q3x2z7m69c9gax79dpr37s9i";
+      })
+    ];
 
   preConfigure = lib.optionalString cudaSupport ''
-    export CC=${cudatoolkit.cc}/bin/gcc
+    export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
   '';
 
-  buildInputs = [
+  preFixup = ''
+    function join_by { local IFS="$1"; shift; echo "$*"; }
+    function strip2 {
+      IFS=':'
+      read -ra RP <<< $(patchelf --print-rpath $1)
+      IFS=' '
+      RP_NEW=$(join_by : ''${RP[@]:2})
+      patchelf --set-rpath \$ORIGIN:''${RP_NEW} "$1"
+    }
+
+    for f in $(find ''${out} -name 'libcaffe2*.so')
+    do
+      strip2 $f
+    done
+  '';
+
+  # Override the (weirdly) wrong version set by default. See
+  # https://github.com/NixOS/nixpkgs/pull/52437#issuecomment-449718038
+  # https://github.com/pytorch/pytorch/blob/v1.0.0/setup.py#L267
+  PYTORCH_BUILD_VERSION = version;
+  PYTORCH_BUILD_NUMBER = 0;
+
+  # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
+  # (upstream seems to have fixed this in the wrong place?)
+  # https://github.com/intel/mkl-dnn/commit/8134d346cdb7fe1695a2aa55771071d455fae0bc
+  NIX_CFLAGS_COMPILE = lib.optionals (numpy.blasImplementation == "mkl") [ "-Wno-error=array-bounds" ];
+
+  nativeBuildInputs = [
      cmake
-     git
-     numpy.blas
      utillinux
      which
-  ] ++ lib.optionals cudaSupport [cudatoolkit_joined cudnn];
+  ];
+
+  buildInputs = [
+     numpy.blas
+  ] ++ lib.optionals cudaSupport [ cudatoolkit_joined cudnn ]
+    ++ lib.optionals stdenv.isLinux [ numactl ];
 
   propagatedBuildInputs = [
     cffi
     numpy
     pyyaml
-  ];
+  ] ++ lib.optional (pythonOlder "3.5") typing;
 
+  checkInputs = [ hypothesis ];
   checkPhase = ''
-    ${cudaStubEnv}${stdenv.shell} test/run_test.sh
+    ${cudaStubEnv}python test/run_test.py --exclude dataloader sparse torch utils thd_distributed distributed cpp_extensions
   '';
 
   meta = {
-    description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration.";
-    homepage = http://pytorch.org/;
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ teh ];
+    description = "Open source, prototype-to-production deep learning platform";
+    homepage    = https://pytorch.org/;
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ teh thoughtpolice ];
   };
 }

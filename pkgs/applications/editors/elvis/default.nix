@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = "--ioctl=termios";
+  configureFlags = [ "--ioctl=termios" ];
 
   meta = {
     homepage = http://elvis.vi-editor.org/;

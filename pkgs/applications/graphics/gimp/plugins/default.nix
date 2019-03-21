@@ -22,9 +22,8 @@ let
     '';
   }
   // a
-    # don't call this gimp-* unless you want nix replace gimp by a plugin :-)
   // {
-      name = "${a.name}-${gimp.name}-plugin";
+      name = "gimp-plugin-${a.name}";
       buildInputs = [ gimp gimp.gtk glib ] ++ (a.buildInputs or []);
       nativeBuildInputs = [ pkgconfig intltool ] ++ (a.nativeBuildInputs or []);
     }

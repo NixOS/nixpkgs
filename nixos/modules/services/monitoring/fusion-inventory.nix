@@ -46,7 +46,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "fusion-inventory";
       description = "FusionInventory user";
     };

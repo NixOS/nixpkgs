@@ -1,7 +1,6 @@
 { stdenv, fetchurl, python2Packages
 , wpa_supplicant, dhcp, dhcpcd, wirelesstools
-, nettools, openresolv, iproute, iputils
-, locale ? "C" }:
+, nettools, openresolv, iproute, iputils }:
 
 let
   inherit (python2Packages) python pygobject2 dbus-python pyGtkGlade pycairo;

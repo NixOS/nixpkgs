@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpm, cpio, substituteAll }:
+{ stdenv, rpm, cpio, substituteAll }:
 
 stdenv.mkDerivation rec {
   name = "rpmextract";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   script = substituteAll {
     src = ./rpmextract.sh;
     inherit rpm cpio;
+    inherit (stdenv) shell;
   };
 
   meta = with stdenv.lib; {

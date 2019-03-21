@@ -1,23 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, python, cmake, sip, protobuf }:
+{ stdenv, buildPythonPackage, fetchFromGitHub
+, cmake, sip, protobuf, pythonOlder }:
 
-if lib.versionOlder python.version "3.4.0"
-then throw "libArcus not supported for interpreter ${python.executable}"
-else
-
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "libarcus";
-  name = "${pname}-${version}";
-  version = "3.2.1";
-  
+  version = "3.6.0";
+  format = "other";
+
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "0mln8myvfl7rq2p4g1vadvlykckd8490jijag4xa5hhj3w3p19bk";
+    sha256 = "1zbp6axai47k3p2q497wiajls1h17wss143zynbwbwrqinsfiw43";
   };
-  
-  propagatedBuildInputs = [ sip protobuf ];
+
+  disabled = pythonOlder "3.4.0";
+
+  propagatedBuildInputs = [ sip ];
   nativeBuildInputs = [ cmake ];
+  buildInputs = [ protobuf ];
 
   postPatch = ''
     # To workaround buggy SIP detection which overrides PYTHONPATH
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Communication library between internal components for Ultimaker software";
-    homepage = "https://github.com/Ultimaker/libArcus";
-    license = licenses.agpl3;
+    homepage = https://github.com/Ultimaker/libArcus;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

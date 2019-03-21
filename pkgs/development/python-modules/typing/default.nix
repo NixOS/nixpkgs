@@ -5,11 +5,11 @@ let
 
 in buildPythonPackage rec {
   pname = "typing";
-  version = "3.6.4";
+  version = "3.6.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d400a9344254803a2368533e4533a4200d21eb7b6b729c173bc38201a74db3f2";
+    sha256 = "4027c5f6127a6267a435201981ba156de91ad0d1d98e9ddc2aa173453453492d";
   };
 
   # Error for Python3.6: ImportError: cannot import name 'ann_module'

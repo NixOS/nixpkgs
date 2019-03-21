@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, melpaBuild }:
+{ fetchurl, lib, melpaBuild }:
 
 melpaBuild {
   pname = "hexrgb";
@@ -10,7 +10,7 @@ melpaBuild {
     name = "hexrgb.el";
   };
 
-  recipeFile = fetchurl {
+  recipe = fetchurl {
     url = "https://raw.githubusercontent.com/milkypostman/melpa/a5d15f875b0080b12ce45cf696c581f6bbf061ba/recipes/hexrgb";
     sha256 = "0mzqslrrf7sc262syj3ja7b7rnbg80dwf2p9bzxdrzx6b8vvsx06";
     name = "hexrgb";

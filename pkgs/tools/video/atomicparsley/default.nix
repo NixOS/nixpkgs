@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, autoreconfHook, zlib, darwin }:
+{ stdenv, fetchhg, autoreconfHook, zlib, cf-private, Cocoa }:
 
 stdenv.mkDerivation rec {
   name = "atomicparsley-${version}";
@@ -9,10 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "05n4kbn91ps52h3wi1qb2jwygjsc01qzx4lgkv5mvwl5i49rj8fm";
   };
 
-  buildInputs =
-    [ autoreconfHook
-      zlib
-    ] ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = [ zlib ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [
+      Cocoa
+      # Needed for OBJC_CLASS_$_NSDictionary symbols.
+      cf-private
+    ];
 
   installPhase = "install -D AtomicParsley $out/bin/AtomicParsley";
 

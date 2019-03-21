@@ -5,14 +5,13 @@ import ./make-test.nix ({pkgs, ...}: rec {
   };
 
   nodes = {
-    aio = { config, pkgs, ... }: {
+    aio = { pkgs, ... }: {
       virtualisation = {
         emptyDiskImages = [ 20480 20480 ];
         vlans = [ 1 ];
       };
-      
+
       networking = {
-        firewall.allowPing = true;
         useDHCP = false;
         interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
           { address = "192.168.1.1"; prefixLength = 24; }
@@ -54,8 +53,8 @@ import ./make-test.nix ({pkgs, ...}: rec {
       };
     };
   };
-  
-  testScript = { nodes, ... }: ''
+
+  testScript = { ... }: ''
     startAll;
 
     $aio->waitForUnit("network.target");
@@ -83,7 +82,7 @@ import ./make-test.nix ({pkgs, ...}: rec {
 
     # Can't check ceph status until a mon is up
     $aio->succeed("ceph -s | grep 'mon: 1 daemons'");
-          
+
     # Start the ceph-mgr daemon, it has no deps and hardly any setup
     $aio->mustSucceed(
       "ceph auth get-or-create mgr.aio mon 'allow profile mgr' osd 'allow *' mds 'allow *' > /var/lib/ceph/mgr/ceph-aio/keyring",

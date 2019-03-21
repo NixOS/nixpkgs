@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  x11Fonts = pkgs.runCommand "X11-fonts" { } ''
+  x11Fonts = pkgs.runCommand "X11-fonts" { preferLocalBuild = true; } ''
     mkdir -p "$out/share/X11-fonts"
     find ${toString config.fonts.fonts} \
       \( -name fonts.dir -o -name '*.ttf' -o -name '*.otf' \) \

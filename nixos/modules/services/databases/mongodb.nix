@@ -93,7 +93,7 @@ in
 
   config = mkIf config.services.mongodb.enable {
 
-    users.extraUsers.mongodb = mkIf (cfg.user == "mongodb")
+    users.users.mongodb = mkIf (cfg.user == "mongodb")
       { name = "mongodb";
         uid = config.ids.uids.mongodb;
         description = "MongoDB server user";

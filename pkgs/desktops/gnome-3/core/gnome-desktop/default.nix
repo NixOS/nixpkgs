@@ -1,27 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
-, intltool, gnome-doc-utils, xkeyboard_config, isocodes, itstool, wayland
-, libseccomp, bubblewrap, gobjectIntrospection }:
+{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
+, gettext, libxml2, xkeyboard_config, isocodes, itstool, wayland, fetchpatch
+, libseccomp, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "gnome-desktop-${version}";
-  version = "3.28.1";
+  version = "3.30.2.1";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-desktop/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "16nbgrp0hihvrsa6kmqk0z8y7ajravyagmkmq1nnwn27psi9g8vq";
+    url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "07s95fpfl3kjq51yxbrx6q87w812pq6bl0xdn0zzyi6qvg33m00v";
   };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-desktop"; attrPath = "gnome3.gnome-desktop"; };
-  };
-
-  # this should probably be setuphook for glib
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig which itstool intltool libxslt gnome-doc-utils gobjectIntrospection
+    pkgconfig which itstool gettext libxslt libxml2 gobject-introspection
+    gtk-doc docbook_xsl
   ];
   buildInputs = [
     libX11 bubblewrap xkeyboard_config isocodes wayland
@@ -31,13 +27,28 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gnome3.gsettings-desktop-schemas ];
 
   patches = [
-    ./bubblewrap-paths.patch
+    (substituteAll {
+      src = ./bubblewrap-paths.patch;
+      bubblewrap_bin = "${bubblewrap}/bin/bwrap";
+      inherit (builtins) storeDir;
+    })
+    (fetchpatch {
+      name = "fix-missing-font-cache";
+      url = https://gitlab.gnome.org/GNOME/gnome-desktop/commit/b87de7495160dbf48f01aa1ddb361fc2556ffd0c.patch;
+      sha256 = "1aw7lw93kcflmqmbx25cwja25441i8xzvgjm1pfsxvw3vr8j6scb";
+    })
   ];
 
-  postPatch = ''
-    substituteInPlace libgnome-desktop/gnome-desktop-thumbnail-script.c --subst-var-by \
-      BUBBLEWRAP_BIN "${bubblewrap}/bin/bwrap"
-  '';
+  configureFlags = [
+    "--enable-gtk-doc"
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-desktop";
+      attrPath = "gnome3.gnome-desktop";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Library with common API for various GNOME modules";

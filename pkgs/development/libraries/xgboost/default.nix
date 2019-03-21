@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchgit, cmake
-, avxSupport ? false
-, cudaSupport ? false, cudatoolkit
+{ config, stdenv, lib, fetchgit, cmake
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
 , ncclSupport ? false, nccl
 , llvmPackages
 }:
@@ -9,13 +8,13 @@ assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   name = "xgboost-${version}";
-  version = "0.7";
+  version = "0.72";
 
   # needs submodules
   src = fetchgit {
     url = "https://github.com/dmlc/xgboost";
     rev = "refs/tags/v${version}";
-    sha256 = "1wxh020l4q037hc5z7vgxflb70l41a97anl8g6y4wxb74l5zv61l";
+    sha256 = "1d4kw2jm7d12g8qwi7p9r3429y7sjks9xp9yhvfpx5jh7qakkxj6";
   };
 
   enableParallelBuilding = true;

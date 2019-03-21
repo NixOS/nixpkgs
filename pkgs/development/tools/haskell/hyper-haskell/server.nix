@@ -3,7 +3,7 @@
 let
 hyperHaskellEnv = ghcWithPackages (self: [ self.hyper-haskell-server ] ++ packages self);
 in stdenv.mkDerivation {
-  name = "hyper-haskell-server-with-packages";
+  name = "hyper-haskell-server-with-packages-${hyperHaskellEnv.version}";
 
   nativeBuildInputs = [ makeWrapper ];
 

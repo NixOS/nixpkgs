@@ -1,0 +1,49 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (5.2.2)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
+    concurrent-ruby (1.1.4)
+    faraday (0.15.4)
+      multipart-post (>= 1.2, < 3)
+    faraday-http-cache (2.0.0)
+      faraday (~> 0.8)
+    github_changelog_generator (1.14.3)
+      activesupport
+      faraday-http-cache
+      multi_json
+      octokit (~> 4.6)
+      rainbow (>= 2.1)
+      rake (>= 10.0)
+      retriable (~> 2.1)
+    i18n (1.2.0)
+      concurrent-ruby (~> 1.0)
+    minitest (5.11.3)
+    multi_json (1.13.1)
+    multipart-post (2.0.0)
+    octokit (4.13.0)
+      sawyer (~> 0.8.0, >= 0.5.3)
+    public_suffix (3.0.3)
+    rainbow (3.0.0)
+    rake (12.3.2)
+    retriable (2.1.0)
+    sawyer (0.8.1)
+      addressable (>= 2.3.5, < 2.6)
+      faraday (~> 0.8, < 1.0)
+    thread_safe (0.3.6)
+    tzinfo (1.2.5)
+      thread_safe (~> 0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  github_changelog_generator (= 1.14.3)
+
+BUNDLED WITH
+   1.16.3

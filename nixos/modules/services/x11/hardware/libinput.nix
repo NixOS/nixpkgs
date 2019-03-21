@@ -116,7 +116,7 @@ in {
       };
 
       scrollMethod = mkOption {
-        type = types.enum [ "twofinger" "edge" "none" ];
+        type = types.enum [ "twofinger" "edge" "button" "none" ];
         default = "twofinger";
         example = "edge";
         description =
@@ -205,7 +205,7 @@ in {
       })
     ];
 
-    services.udev.packages = [ pkgs.libinput ];
+    services.udev.packages = [ pkgs.libinput.out ];
 
     services.xserver.config =
       ''

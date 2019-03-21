@@ -1,40 +1,72 @@
-{ stdenv, fetchurl, makeWrapper, jre, utillinux }:
+{ elk6Version
+, enableUnfree ? true
+, stdenv
+, fetchurl
+, makeWrapper
+, jre_headless
+, utillinux
+, autoPatchelfHook
+, zlib
+}:
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "elasticsearch-1.7.2";
+stdenv.mkDerivation (rec {
+  version = elk6Version;
+  name = "elasticsearch-${optionalString (!enableUnfree) "oss-"}${version}";
 
   src = fetchurl {
-    url = "https://download.elastic.co/elasticsearch/elasticsearch/${name}.tar.gz";
-    sha256 = "1lix4asvx1lbc227gzsrws3xqbcbqaal7v10w60kch0c4xg970bg";
+    url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
+    sha256 =
+      if enableUnfree
+      then "096i8xiy7mfwlslym9mkjb2f5vqdcqhk65583526rcybqxc2zkqp"
+      else "0j3q02c4rw8272w07hm64sk5ssmj4gj8s3qigsbrq5pgf8b03fvs";
   };
 
-  patches = [ ./es-home.patch ];
+  patches = [ ./es-home-6.x.patch ];
 
-  buildInputs = [ makeWrapper jre utillinux ];
+  postPatch = ''
+    substituteInPlace bin/elasticsearch-env --replace \
+      "ES_CLASSPATH=\"\$ES_HOME/lib/\*\"" \
+      "ES_CLASSPATH=\"$out/lib/*\""
+
+    substituteInPlace bin/elasticsearch-cli --replace \
+      "ES_CLASSPATH=\"\$ES_CLASSPATH:\$ES_HOME/\$additional_classpath_directory/\*\"" \
+      "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/\*\""
+  '';
+
+  buildInputs = [ makeWrapper jre_headless utillinux ]
+             ++ optional enableUnfree zlib;
 
   installPhase = ''
     mkdir -p $out
-    cp -R bin config lib $out
+    cp -R bin config lib modules plugins $out
 
-    # don't want to have binary with name plugin
-    mv $out/bin/plugin $out/bin/elasticsearch-plugin
+    chmod -x $out/bin/*.*
 
-    # set ES_CLASSPATH and JAVA_HOME
     wrapProgram $out/bin/elasticsearch \
-      --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*":"$out/lib/sigar/*" \
-      --prefix PATH : "${utillinux}/bin" \
-      --set JAVA_HOME "${jre}"
-    wrapProgram $out/bin/elasticsearch-plugin \
-      --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*":"$out/lib/sigar/*" \
-      --set JAVA_HOME "${jre}"
+      --prefix PATH : "${utillinux}/bin/" \
+      --set JAVA_HOME "${jre_headless}"
+
+    wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
   '';
+
+  passthru = { inherit enableUnfree; };
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
-    license = licenses.asl20;
+    license = if enableUnfree then licenses.elastic else licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers.offline ];
+    maintainers = with maintainers; [ apeschar basvandijk ];
   };
-}
+} // optionalAttrs enableUnfree {
+  dontPatchELF = true;
+  nativeBuildInputs = [ autoPatchelfHook ];
+  runtimeDependencies = [ zlib ];
+  postFixup = ''
+    for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do
+      echo "patching $exe..."
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$exe"
+    done
+  '';
+})

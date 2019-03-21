@@ -1,14 +1,14 @@
-{ autoconf, automake, boost, cbor-diag, cddl, fetchFromGitHub, file, gcc, libpcap, libtins, libtool, lzma, openssl, pkgconfig, stdenv, tcpdump, wireshark-cli }:
+{ autoconf, automake, boost, cbor-diag, cddl, fetchFromGitHub, file, libpcap, libtins, libtool, lzma, openssl, pkgconfig, stdenv, tcpdump, wireshark-cli }:
 
 stdenv.mkDerivation rec {
   name = "compactor-${version}";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "dns-stats";
     repo = "compactor";
     rev = "${version}";
-    sha256 = "1zn6w99xqq5igaz0n89429i78a5pj4nnfn1mm5yv1yfbn1lm0y3l";
+    sha256 = "0bd82956nkpdmfj8f05z37hy7f33cd2nfdxr7s9fgz1xi5flnzjc";
   };
 
   # cbor-diag, cddl and wireshark-cli are only used for tests.

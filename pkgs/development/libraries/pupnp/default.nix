@@ -2,14 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "libupnp-${version}";
-  version = "1.6.21";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "mrjimenez";
     repo = "pupnp";
     rev = "release-${version}";
-    sha256 = "07ksfhadinaa20542gblrxi9pqz0v6y70a836hp3qr4037id4nm9";
+    sha256 = "1daml02z4rs9cxls95p2v24jvwcsp43a0gqv06s84ay5yn6r47wx";
   };
+  outputs = [ "dev" "out" ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

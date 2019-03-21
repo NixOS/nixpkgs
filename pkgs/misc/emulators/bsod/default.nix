@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "bsod-0.1";
 
   src = fetchurl {
-    url = http://www.vanheusden.com/bsod/bsod-0.1.tgz;
+    url = https://www.vanheusden.com/bsod/bsod-0.1.tgz;
     sha256 = "0hqwacazyq5rhc04j8w8w0j0dgb6ca8k66c9lxf6bsyi6wvbhvmd";
   };
 

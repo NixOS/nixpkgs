@@ -114,18 +114,19 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.unifi = {
+    users.users.unifi = {
       uid = config.ids.uids.unifi;
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
 
     networking.firewall = mkIf cfg.openPorts {
-      # https://help.ubnt.com/hc/en-us/articles/204910084-UniFi-Change-Default-Ports-for-Controller-and-UAPs
+      # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
         8080  # Port for UAP to inform controller.
         8880  # Port for HTTP portal redirect, if guest portal is enabled.
         8843  # Port for HTTPS portal redirect, ditto.
+        6789  # Port for UniFi mobile speed test.
       ];
       allowedUDPPorts = [
         3478  # UDP port used for STUN.
@@ -184,4 +185,5 @@ in
 
   };
 
+  meta.maintainers = with lib.maintainers; [ erictapen ];
 }

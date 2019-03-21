@@ -6,6 +6,8 @@ stdenv.mkDerivation rec {
   version = "2017.3.23";
   name = "${pname}-${version}";
 
+  outputs = [ "out" "dev" "man" "doc" ];
+
   buildInputs = [ libuuid ] ++ stdenv.lib.optionals crypto [ gnutls libgcrypt ];
   nativeBuildInputs = stdenv.lib.optional crypto pkgconfig;
 

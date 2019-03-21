@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f354370e0..c9fa23c6d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -159,7 +159,6 @@ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/externalized")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/game")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/sgp")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/slog")
+-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/rust")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-smacker")
+
+ if(BUILD_LAUNCHER)
+@@ -235,8 +234,6 @@ copy_assets_dir_to_ja2_binary_after_build("externalized")
+ copy_assets_dir_to_ja2_binary_after_build("unittests")
+ copy_assets_dir_to_ja2_binary_after_build("mods")
+
+-get_property(STRACCIATELLA_SHARED_LIB TARGET rust-stracciatella PROPERTY IMPORTED_LOCATION)
+-
+ if (MSVC OR APPLE)
+     add_custom_command(TARGET ${JA2_BINARY} POST_BUILD
+             COMMAND ${CMAKE_COMMAND} -E copy

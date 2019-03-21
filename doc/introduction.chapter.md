@@ -30,7 +30,7 @@ Packages, including the Nix packages collection, are distributed through
 distributed for users of Nix on non-NixOS distributions through the channel
 `nixpkgs`. Users of NixOS generally use one of the `nixos-*` channels, e.g.
 `nixos-16.03`, which includes all packages and modules for the stable NixOS
-16.03. The purpose of stable NixOS releases are generally only given
+16.03. Stable NixOS releases are generally only given
 security updates. More up to date packages and modules are available via the
 `nixos-unstable` channel.
 

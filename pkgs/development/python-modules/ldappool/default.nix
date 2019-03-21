@@ -1,14 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi
 , pbr, ldap, fixtures, testresources, testtools }:
 
 buildPythonPackage rec {
   name = "ldappool-${version}";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchPypi {
     pname = "ldappool";
     inherit version;
-    sha256 = "1akmzf51cjfvmd0nvvm562z1w9vq45zsx6fa72kraqgsgxhnrhqz";
+    sha256 = "d9c9ec29be3f3e64164be84fe080a3087108836f307a12ec62f7d18988293df3";
   };
 
   nativeBuildInputs = [ pbr ];

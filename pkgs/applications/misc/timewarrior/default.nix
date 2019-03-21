@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libuuid, gnutls }:
+{ stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   name = "timewarrior-${version}";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command-line time tracker";
-    homepage = https://tasktools.org/projects/timewarrior.html;
+    homepage = https://taskwarrior.org/docs/timewarrior;
     license = licenses.mit;
-    maintainers = with maintainers; [ mrVanDalo ];
+    maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

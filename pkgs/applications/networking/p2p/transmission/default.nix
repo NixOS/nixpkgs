@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, file, wrapGAppsHook
-, openssl, curl, libevent, inotify-tools, systemd, zlib
+{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
+, openssl, curl, libevent, inotify-tools, systemd, zlib, hicolor-icon-theme
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool file openssl curl libevent zlib ]
     ++ optionals enableGTK3 [ gtk3 ]
     ++ optionals enableSystemd [ systemd ]
-    ++ optionals stdenv.isLinux [ inotify-tools ];
+    ++ optionals stdenv.isLinux [ inotify-tools ]
+    ++ optionals enableGTK3 [ hicolor-icon-theme ];
 
   postPatch = ''
     substituteInPlace ./configure \
@@ -38,10 +39,6 @@ stdenv.mkDerivation rec {
     ]
     ++ optional enableSystemd "--with-systemd-daemon"
     ++ optional enableGTK3 "--with-gtk";
-
-  preFixup = optionalString enableGTK3 ''
-    rm "$out/share/icons/hicolor/icon-theme.cache"
-  '';
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";
 

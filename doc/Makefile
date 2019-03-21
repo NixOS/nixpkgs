@@ -9,12 +9,19 @@ debug:
 
 .PHONY: format
 format:
-	find . -iname '*.xml' -type f -print0 | xargs -0 -I{} -n1 \
-		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i {}
+	find . -iname '*.xml' -type f | while read f; do \
+		echo $$f ;\
+		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i $$f ;\
+	done
+
+.PHONY: fix-misc-xml
+fix-misc-xml:
+	find . -iname '*.xml' -type f \
+		-exec ../nixos/doc/varlistentry-fixer.rb {} ';'
 
 .PHONY: clean
 clean:
-	rm -f ${MD_TARGETS} .version manual-full.xml
+	rm -f ${MD_TARGETS} .version manual-full.xml functions/library/locations.xml functions/library/generated
 	rm -rf ./out/ ./highlightjs
 
 .PHONY: validate
@@ -64,12 +71,22 @@ highlightjs:
 	cp -r "$$HIGHLIGHTJS/loader.js" highlightjs/
 
 
-manual-full.xml: ${MD_TARGETS} .version *.xml
+manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml functions/library/generated *.xml **/*.xml **/**/*.xml
 	xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
 
 .version:
 	nix-instantiate --eval \
 		-E '(import ../lib).version' > .version
+
+function_locations := $(shell nix-build --no-out-link ./lib-function-locations.nix)
+
+functions/library/locations.xml:
+	ln -s $(function_locations) ./functions/library/locations.xml
+
+functions/library/generated:
+	nix-build ./lib-function-docs.nix \
+		--arg locationsXml $(function_locations)\
+		--out-link ./functions/library/generated
 
 %.section.xml: %.section.md
 	pandoc $^ -w docbook+smart \

@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
+{ stdenv, fetchurl, qtbase, qttools, qmake }:
 
 let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation rec {
   name = "qt5ct-${version}";
-  version = "0.35";
+  version = "0.37";
 
   src = fetchurl {
     url = "mirror://sourceforge/qt5ct/${name}.tar.bz2";
-    sha256 = "0xzgd12cvm4vyzl8qax6izdmaf46bf18h055z6k178s8pybm1sqw";
+    sha256 = "0n8csvbpislxjr2s1xi8r5a4q4bqn4kylcy2zws6w7z4m8pdzrny";
   };
 
   nativeBuildInputs = [ qmake qttools ];

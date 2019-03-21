@@ -28,7 +28,7 @@ let
 
 in
 
-  import ./make-test.nix ({ pkgs, lib, ... }@args: {
+  import ./make-test.nix ({ lib, ... }@args: {
     name = "radicale";
     meta.maintainers = with lib.maintainers; [ aneeshusa infinisil ];
 

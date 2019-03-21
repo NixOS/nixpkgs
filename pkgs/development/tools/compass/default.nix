@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, ruby }:
+{ lib, bundlerEnv, ruby }:
 
 bundlerEnv {
   name = "compass-1.0.3";

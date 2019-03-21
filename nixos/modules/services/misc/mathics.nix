@@ -26,23 +26,23 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.mathics = {
-      group = config.users.extraGroups.mathics.name;
+    users.users.mathics = {
+      group = config.users.groups.mathics.name;
       description = "Mathics user";
       home = "/var/lib/mathics";
       createHome = true;
       uid = config.ids.uids.mathics;
     };
 
-    users.extraGroups.mathics.gid = config.ids.gids.mathics;
+    users.groups.mathics.gid = config.ids.gids.mathics;
 
     systemd.services.mathics = {
       description = "Mathics notebook server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        User = config.users.extraUsers.mathics.name;
-        Group = config.users.extraGroups.mathics.name;
+        User = config.users.users.mathics.name;
+        Group = config.users.groups.mathics.name;
         ExecStart = concatStringsSep " " [
           "${pkgs.mathics}/bin/mathicsserver"
           "--port" (toString cfg.port)

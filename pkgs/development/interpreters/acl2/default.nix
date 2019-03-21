@@ -4,15 +4,20 @@
 
 let hashes = {
   "8.0" = "1x1giy2c1y6krg3kf8pf9wrmvk981shv0pxcwi483yjqm90xng4r";
+  "8.1" = "0isi75j94q79x4341rhd94c60228iwvccy71ssnyvh1025m93xcd";
+};
+revs = {
+  "8.0" = "8.0";
+  "8.1" = "8.1";
 };
 in stdenv.mkDerivation rec {
   name = "acl2-${version}";
-  version = "8.0";
+  version = "8.1";
 
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
-    rev = "${version}";
+    rev = revs."${version}";
     sha256 = hashes."${version}";
   };
 

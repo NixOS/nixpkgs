@@ -9,12 +9,12 @@ assert gestures -> libstroke != null;
 
 stdenv.mkDerivation rec {
   pname = "fvwm";
-  version = "2.6.7";
+  version = "2.6.8";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/fvwmorg/fvwm/releases/download/${version}/${name}.tar.gz";
-    sha256 = "01654d5abdcde6dac131cae9befe5cf6f01f9f7524d097c3b0f316e39f84ef73";
+    sha256 = "0hgkkdzcqjnaabvv9cnh0bz90nnjskbhjg9qnzpi2x0mbliwjdpv";
   };
 
   nativeBuildInputs = [ pkgconfig ];

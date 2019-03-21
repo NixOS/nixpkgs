@@ -6,10 +6,6 @@
 with lib;
 with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
-let
-  kernel = config.boot.kernelPackages.kernel;
-in
-
 {
 
   # This option is a dummy that if used in conjunction with
@@ -58,6 +54,9 @@ in
     systemd.services."serial-getty@${qemuSerialDevice}".enable = false;
     systemd.services."serial-getty@hvc0".enable = false;
 
+    # Only use a serial console, no TTY.
+    virtualisation.qemu.consoles = [ qemuSerialDevice ];
+
     boot.initrd.preDeviceCommands =
       ''
         echo 600 > /proc/sys/kernel/hung_task_timeout_secs
@@ -103,8 +102,12 @@ in
         MaxLevelConsole=debug
       '';
 
-    # Don't clobber the console with duplicate systemd messages.
-    systemd.extraConfig = "ShowStatus=no";
+    systemd.extraConfig = ''
+      # Don't clobber the console with duplicate systemd messages.
+      ShowStatus=no
+      # Allow very slow start
+      DefaultTimeoutStartSec=300
+    '';
 
     boot.consoleLogLevel = 7;
 
@@ -123,9 +126,12 @@ in
     networking.usePredictableInterfaceNames = false;
 
     # Make it easy to log in as root when running the test interactively.
-    users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
+    users.users.root.initialHashedPassword = mkOverride 150 "";
 
     services.xserver.displayManager.job.logToJournal = true;
+
+    # set default stateVersion to avoid warnings during eval
+    system.stateVersion = mkDefault "18.03";
   };
 
 }

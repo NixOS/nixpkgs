@@ -1,4 +1,4 @@
-{ stdenv, lib, libpcap, buildGoPackage, fetchFromGitHub }:
+{ lib, libpcap, buildGoPackage, fetchFromGitHub }:
 
 with lib;
 

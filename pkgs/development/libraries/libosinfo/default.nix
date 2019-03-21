@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gobjectIntrospection, gtk-doc, docbook_xsl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gobject-introspection, gtk-doc, docbook_xsl
 , glib, libsoup, libxml2, libxslt, check, curl, perl, hwdata, osinfo-db, vala ? null
 }:
 
 stdenv.mkDerivation rec {
-  name = "libosinfo-1.1.0";
+  name = "libosinfo-1.4.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${name}.tar.gz";
-    sha256 = "0diigllgni6m0sc2h8aid6hmyaq9qb54pm5305m0irfsm2j463v0";
+    sha256 = "0ra1p2rnnwkq0181ayn0l0rs1pvk4a0i8fa08nqjfmqs5fl637m2";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig vala intltool gobjectIntrospection gtk-doc docbook_xsl
-  ] ++ stdenv.lib.optionals doCheck checkInputs;
-  checkInputs = [ check curl perl ];
+    pkgconfig vala intltool gobject-introspection gtk-doc docbook_xsl
+  ];
   buildInputs = [ glib libsoup libxml2 libxslt ];
+  checkInputs = [ check curl perl ];
 
   patches = [
     ./osinfo-db-data-dir.patch
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-usb-ids-path=${hwdata}/data/hwdata/usb.ids"
-    "--with-pci-ids-path=${hwdata}/data/hwdata/pci.ids"
+    "--with-usb-ids-path=${hwdata}/share/hwdata/usb.ids"
+    "--with-pci-ids-path=${hwdata}/share/hwdata/pci.ids"
     "--enable-gtk-doc"
   ];
 

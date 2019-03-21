@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl }:
 
 let
   version = "2.04";

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/dpayne/cli-visualizer;
     description = "CLI based audio visualizer";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A client for the WHOIS protocol allowing you to query the owner of a domain name";
-    homepage = http://www.gnu.org/software/jwhois/;
+    homepage = https://www.gnu.org/software/jwhois/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;
   };

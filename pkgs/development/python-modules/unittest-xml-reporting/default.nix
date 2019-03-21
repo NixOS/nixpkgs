@@ -1,9 +1,8 @@
 {lib, fetchPypi, buildPythonPackage, six}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "unittest-xml-reporting";
-  version = "2.1.1";
+  version = "2.2.1";
 
   propagatedBuildInputs = [six];
 
@@ -12,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jwkqx5gfphkymp3xwqvlb94ng22gpbqh36vbbnsrpk1a0mammm6";
+    sha256 = "1cn870jgf4h0wb4bnafw527g1dj6rd3rgyjz4f64khd0zx9qs84z";
   };
   meta = with lib; {
     homepage = https://github.com/xmlrunner/unittest-xml-reporting/tree/master/;

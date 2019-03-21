@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "appstream-qt-${version}";
-  inherit (appstream) version src patches prePatch;
+  inherit (appstream) version src prePatch;
 
   buildInputs = appstream.buildInputs ++ [ appstream qtbase ];
 

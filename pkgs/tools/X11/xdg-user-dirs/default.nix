@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "xdg-user-dirs-0.17";
 
   src = fetchurl {
-    url = "http://user-dirs.freedesktop.org/releases/${name}.tar.gz";
+    url = "https://user-dirs.freedesktop.org/releases/${name}.tar.gz";
     sha256 = "13216b8rfkzak5k6bvpx6jvqv3cnbgpijnjwj8a8d3kq4cl0a1ra";
   };
 

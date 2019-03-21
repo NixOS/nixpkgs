@@ -1,4 +1,4 @@
-{ callPackage, pythonPackages, gtk3, glib, libnotify, intltool, makeWrapper, gobjectIntrospection, gnome3, gdk_pixbuf, librsvg }:
+{ callPackage, pythonPackages, gtk3, glib, libnotify, intltool, makeWrapper, gnome3, gdk_pixbuf, librsvg }:
 let
   pkg = import ./base.nix {
     version = "3.1.0";
@@ -8,7 +8,7 @@ let
   inherit (pythonPackages) python pygobject3;
 in callPackage pkg {
   buildInputs = [ python pygobject3 gtk3 glib libnotify intltool makeWrapper
-                  gnome3.defaultIconTheme gdk_pixbuf librsvg ];
+                  gnome3.adwaita-icon-theme gdk_pixbuf librsvg ];
   drvParams = {
     postFixup = ''
       wrapProgram $out/bin/gcdemu \

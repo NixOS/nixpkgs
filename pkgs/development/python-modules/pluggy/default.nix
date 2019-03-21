@@ -1,16 +1,16 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, pytest
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "0.6.0";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f8ae7f5bdf75671a718d2daf0a64b7885f74510bcd98b1a0bb420eb9a9d0cff";
+    sha256 = "8ddc32f03971bfdf900a81961a48ccf2fb677cf7715108f85295c67405798616";
   };
 
   checkPhase = ''
@@ -20,10 +20,12 @@ buildPythonPackage rec {
   # To prevent infinite recursion with pytest
   doCheck = false;
 
+  buildInputs = [ setuptools_scm ];
+
   meta = {
     description = "Plugin and hook calling mechanisms for Python";
     homepage = "https://pypi.python.org/pypi/pluggy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jgeerds ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

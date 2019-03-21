@@ -15,11 +15,12 @@ in
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (darwin) cctools;
     inherit (pkgs) binutils-unwrapped;
+    inherit (pkgs.llvmPackages_5) llvm;
   };
 
   binutils = pkgs.wrapBintoolsWith {
     libc =
-      if pkgs.targetPlatform != pkgs.hostPlatform
+      if stdenv.targetPlatform != stdenv.hostPlatform
       then pkgs.libcCross
       else pkgs.stdenv.cc.libc;
     bintools = darwin.binutils-unwrapped;
@@ -29,12 +30,10 @@ in
     inherit (darwin) libobjc maloader;
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
     libcxxabi = pkgs.libcxxabi;
-    xctoolchain = darwin.xcode.toolchain;
   };
 
   cf-private = callPackage ../os-specific/darwin/cf-private {
-    inherit (apple-source-releases) CF;
-    inherit (darwin) osx_private_sdk;
+    inherit (darwin) CF apple_sdk osx_private_sdk;
   };
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
@@ -45,14 +44,17 @@ in
 
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
 
-  iosSdkPkgs = darwin.callPackage ../os-specific/darwin/ios-sdk-pkgs {
+  iosSdkPkgs = darwin.callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
     buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
     targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
+    xcode = darwin.xcode;
     inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 
+  iproute2mac = callPackage ../os-specific/darwin/iproute2mac { };
+
   libobjc = apple-source-releases.objc4;
-  
+
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
@@ -65,15 +67,19 @@ in
 
   stubs = callPackages ../os-specific/darwin/stubs { };
 
-  trash = callPackage ../os-specific/darwin/trash { inherit (darwin.apple_sdk) frameworks; };
+  trash = darwin.callPackage ../os-specific/darwin/trash { };
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 
-  xcode = callPackage ../os-specific/darwin/xcode { };
+  inherit (callPackages ../os-specific/darwin/xcode { } )
+          xcode_8_1 xcode_8_2 xcode_9_1 xcode_9_2 xcode_9_4 xcode;
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 
-  swift-corelibs = callPackages ../os-specific/darwin/swift-corelibs { };
+  CF = callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { inherit (darwin) objc4 ICU; };
+
+  # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
+  # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { inherit (darwin) apple_sdk_sierra xnu; };
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
 

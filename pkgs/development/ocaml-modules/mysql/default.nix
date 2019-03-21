@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, mysql, openssl }:
+{ stdenv, fetchurl, fetchpatch, ocaml, findlib, mysql }:
 
 # TODO: la versione stabile da' un errore di compilazione dovuto a
 # qualche cambiamento negli header .h

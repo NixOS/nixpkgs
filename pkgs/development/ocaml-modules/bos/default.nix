@@ -4,13 +4,11 @@
 
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-bos-${version}";
-	version = "0.1.6";
+	version = "0.2.0";
 	src = fetchurl {
 		url = "http://erratique.ch/software/bos/releases/bos-${version}.tbz";
-		sha256 = "1z9sbziqddf770y94pd0bffsp1wdr1v3kp2p00pr27adv7h7dgls";
+		sha256 = "1s10iqx8rgnxr5n93lf4blwirjf8nlm272yg5sipr7lsr35v49wc";
 	};
-
-	unpackCmd = "tar xjf $src";
 
 	buildInputs = [ ocaml findlib ocamlbuild topkg ];
 	propagatedBuildInputs = [ astring fmt fpath logs rresult ];

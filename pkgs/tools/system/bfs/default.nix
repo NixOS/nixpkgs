@@ -1,25 +1,17 @@
-{ stdenv, fetchFromGitHub, bash }:
+{ stdenv, fetchFromGitHub, libcap, acl }:
 
 stdenv.mkDerivation rec {
   name = "bfs-${version}";
-  version = "1.2.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "1dgc31l5d20i0v78c51xga4lr78b5x8dz6yzsvbhlgs0abi0nynx";
+    sha256 = "0yjbv6j5sn2yq57rx50h284krxyx5gcviwv8ac7zxwr2qggn8lqy";
   };
 
-  # Disable fstype test, tries to read /etc/mtab
-  patches = [ ./tests.patch ];
-  postPatch = ''
-    # Patch tests (both shebangs and usage in scripts)
-    for f in $(find -type f -name '*.sh'); do
-      substituteInPlace $f --replace "/bin/bash" "${bash}/bin/bash"
-    done
-  '';
-  doCheck = true;
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ libcap acl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "release" ]; # "release" enables compiler optimizations
@@ -32,7 +24,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/tavianator/bfs;
     license = licenses.bsd0;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ yesbox ];
   };
 }

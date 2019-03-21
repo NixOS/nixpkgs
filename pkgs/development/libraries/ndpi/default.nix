@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, which, autoconf, automake, libtool, libpcap }:
 
-let version = "1.8"; in
+let version = "2.2"; in
 
 stdenv.mkDerivation rec {
   name = "ndpi-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "ntop";
     repo = "nDPI";
     rev = "${version}";
-    sha256 = "0kxp9dv4d1nmr2cxv6zsfy2j14wyb0q6am0qyxg0npjb08p7njf4";
+    sha256 = "06gg8lhn944arlczmv5i40jkjdnl1nrvsmvm843l9ybcswpayv4m";
   };
 
   configureScript = "./autogen.sh";

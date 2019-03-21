@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, ocaml, findlib, camlp4, core_p4, async_p4, async_unix_p4
 , re2_p4, async_extra_p4, sexplib_p4, async_shell, core_extended_p4, async_find
-, cohttp, conduit, magic-mime, tzdata
+, cohttp, conduit, magic-mime
 }:
 
 assert stdenv.lib.versionOlder "4.02" ocaml.version;

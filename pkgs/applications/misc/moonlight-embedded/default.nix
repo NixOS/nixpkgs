@@ -1,25 +1,26 @@
-{ stdenv, fetchgit, cmake, perl
-, alsaLib, libevdev, libopus, libudev, SDL2
+{ stdenv, fetchFromGitHub, cmake, perl
+, alsaLib, libevdev, libopus, udev, SDL2
 , ffmpeg, pkgconfig, xorg, libvdpau, libpulseaudio, libcec
 , curl, expat, avahi, enet, libuuid
 }:
 
 stdenv.mkDerivation rec {
   name = "moonlight-embedded-${version}";
-  version = "2.4.6";
+  version = "2.4.7";
 
-  # fetchgit used to ensure submodules are available
-  src = fetchgit {
-    url = "git://github.com/irtimmer/moonlight-embedded";
-    rev = "refs/tags/v${version}";
-    sha256 = "0vs6rjmz8058s9lscagiif6pcizwfrvfpk9rxxgacfi0xisfgmf1";
+  src = fetchFromGitHub {
+    owner = "irtimmer";
+    repo = "moonlight-embedded";
+    rev = "v${version}";
+    sha256 = "0ihgb0kh4rhbgn55s25rfbs8063zqvcyqn137jn3nsc0is1595a9";
+    fetchSubmodules = true;
   };
 
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [
-    alsaLib libevdev libopus libudev SDL2
+    alsaLib libevdev libopus udev SDL2
     ffmpeg pkgconfig xorg.libxcb libvdpau libpulseaudio libcec
     xorg.libpthreadstubs curl expat avahi enet libuuid
   ];

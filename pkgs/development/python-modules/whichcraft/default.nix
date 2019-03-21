@@ -1,13 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "whichcraft";
-  version = "0.4.1";
+  version = "0.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e0d51c9387cb7e9f28b7edb549e6a03da758f7784f991eb4397d7f7808c57fd";
+    sha256 = "fecddd531f237ffc5db8b215409afb18fa30300699064cca4817521b4fc81815";
   };
+
+  LC_ALL="en_US.utf-8";
+  buildInputs = [ glibcLocales ];
 
   checkInputs = [ pytest ];
 

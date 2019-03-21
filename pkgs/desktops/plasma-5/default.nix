@@ -26,8 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   libsForQt5, lib, fetchurl,
-  gconf, gsettings-desktop-schemas,
-  debug ? false,
+  gconf, gsettings-desktop-schemas
 }:
 
 let
@@ -124,6 +123,7 @@ let
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
+      plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
       plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};

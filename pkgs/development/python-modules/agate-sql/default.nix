@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage, agate, sqlalchemy }:
 
 buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "agate-sql";
     version = "0.5.3";
 

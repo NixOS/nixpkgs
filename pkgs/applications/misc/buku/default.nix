@@ -1,28 +1,23 @@
 { stdenv, python3, fetchFromGitHub, fetchpatch }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "3.7";
+  version = "4.1";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "0qc6xkrhf2phaj9fhym19blr4rr2vllvnyljjz909xr4vsynvb41";
-  };
-
-  patches = fetchpatch {
-    url = https://github.com/jarun/Buku/commit/495d6eac4d9371e8ce6d3f601e2bb9e5e74962b4.patch;
-    sha256 = "0py4l5qcgdzqr0iqmcc8ddld1bspk8iwypz4dcr88y70j86588gk";
+    sha256 = "166l1fmpqn4hys4l0ssc4yd590mmav1w62vm9l5ijhjhmlnrzfax";
   };
 
   checkInputs = [
     pytestcov
-    pytest-catchlog
     hypothesis
     pytest
     pylint
     flake8
+    pyyaml
   ];
 
   propagatedBuildInputs = [
@@ -30,7 +25,24 @@ with python3.pkgs; buildPythonApplication rec {
     beautifulsoup4
     requests
     urllib3
+    flask
+    flask-api
+    flask-bootstrap
+    flask-paginate
+    flask_wtf
+    arrow
+    werkzeug
+    click
+    html5lib
+    vcrpy
   ];
+
+  postPatch = ''
+    # Jailbreak problematic dependencies
+    sed -i \
+      -e "s,'PyYAML.*','PyYAML',g" \
+      setup.py
+  '';
 
   preCheck = ''
     # Fixes two tests for wrong encoding
@@ -43,7 +55,7 @@ with python3.pkgs; buildPythonApplication rec {
       --replace "self.assertEqual(url, 'https://www.google.com')" ""
   '';
 
-  installPhase = ''
+  postInstall = ''
     make install PREFIX=$out
 
     mkdir -p $out/share/zsh/site-functions $out/share/bash-completion/completions $out/share/fish/vendor_completions.d
@@ -57,7 +69,7 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = https://github.com/jarun/Buku;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [ matthiasbeyer infinisil ];
   };
 }
 

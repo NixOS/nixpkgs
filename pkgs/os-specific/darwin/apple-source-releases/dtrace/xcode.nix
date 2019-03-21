@@ -1,7 +1,9 @@
-{ appleDerivation, xcbuild, CoreSymbolication, xnu, bison, flex, darling, stdenv }:
+{ appleDerivation, xcbuildHook, CoreSymbolication
+, xnu, bison, flex, darling, stdenv }:
 
 appleDerivation {
-  buildInputs = [ xcbuild CoreSymbolication xnu bison flex darling ];
+  nativeBuildInputs = [ xcbuildHook flex bison ];
+  buildInputs = [ CoreSymbolication darling ];
   NIX_CFLAGS_COMPILE = "-DCTF_OLD_VERSIONS -DPRIVATE -DYYDEBUG=1 -I${xnu}/Library/Frameworks/System.framework/Headers";
   NIX_LDFLAGS = "-L./Products/Release";
   xcbuildFlags = "-target dtrace";

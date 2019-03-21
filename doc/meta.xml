@@ -8,16 +8,16 @@
   and so on. For instance, the GNU Hello package has a <varname>meta</varname>
   declaration like this:
 <programlisting>
-meta = {
+meta = with stdenv.lib; {
   description = "A program that produces a familiar, friendly greeting";
   longDescription = ''
     GNU Hello is a program that prints "Hello, world!" when you run it.
     It is fully customizable.
   '';
-  homepage = http://www.gnu.org/software/hello/manual/;
-  license = stdenv.lib.licenses.gpl3Plus;
-  maintainers = [ stdenv.lib.maintainers.eelco ];
-  platforms = stdenv.lib.platforms.all;
+  homepage = https://www.gnu.org/software/hello/manual/;
+  license = licenses.gpl3Plus;
+  maintainers = [ maintainers.eelco ];
+  platforms = platforms.all;
 };
 </programlisting>
  </para>
@@ -35,7 +35,7 @@ $ nix-env -qa hello --json
     "hello": {
         "meta": {
             "description": "A program that produces a familiar, friendly greeting",
-            "homepage": "http://www.gnu.org/software/hello/manual/",
+            "homepage": "https://www.gnu.org/software/hello/manual/",
             "license": {
                 "fullName": "GNU General Public License version 3 or later",
                 "shortName": "GPLv3+",
@@ -83,7 +83,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
 
   <variablelist>
    <varlistentry>
-    <term><varname>description</varname>
+    <term>
+     <varname>description</varname>
     </term>
     <listitem>
      <para>
@@ -106,7 +107,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>longDescription</varname>
+    <term>
+     <varname>longDescription</varname>
     </term>
     <listitem>
      <para>
@@ -115,7 +117,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>branch</varname>
+    <term>
+     <varname>branch</varname>
     </term>
     <listitem>
      <para>
@@ -126,27 +129,30 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>homepage</varname>
+    <term>
+     <varname>homepage</varname>
     </term>
     <listitem>
      <para>
       The package’s homepage. Example:
-      <literal>http://www.gnu.org/software/hello/manual/</literal>
+      <literal>https://www.gnu.org/software/hello/manual/</literal>
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>downloadPage</varname>
+    <term>
+     <varname>downloadPage</varname>
     </term>
     <listitem>
      <para>
       The page where a link to the current version can be found. Example:
-      <literal>http://ftp.gnu.org/gnu/hello/</literal>
+      <literal>https://ftp.gnu.org/gnu/hello/</literal>
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>license</varname>
+    <term>
+     <varname>license</varname>
     </term>
     <listitem>
      <para>
@@ -198,7 +204,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>maintainers</varname>
+    <term>
+     <varname>maintainers</varname>
     </term>
     <listitem>
      <para>
@@ -213,7 +220,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>priority</varname>
+    <term>
+     <varname>priority</varname>
     </term>
     <listitem>
      <para>
@@ -225,7 +233,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>platforms</varname>
+    <term>
+     <varname>platforms</varname>
     </term>
     <listitem>
      <para>
@@ -242,7 +251,62 @@ meta.platforms = stdenv.lib.platforms.linux;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>hydraPlatforms</varname>
+    <term>
+     <varname>tests</varname>
+    </term>
+    <listitem>
+     <warning>
+      <para>
+       This attribute is special in that it is not actually under the
+       <literal>meta</literal> attribute set but rather under the
+       <literal>passthru</literal> attribute set. This is due to a current
+       limitation of Nix, and will change as soon as Nixpkgs will be able to
+       depend on a new enough version of Nix. See
+       <link xlink:href="https://github.com/NixOS/nix/issues/2532">the relevant
+       issue</link> for more details.
+      </para>
+     </warning>
+     <para>
+      An attribute set with as values tests. A test is a derivation, which
+      builds successfully when the test passes, and fails to build otherwise. A
+      derivation that is a test needs to have <literal>meta.timeout</literal>
+      defined.
+     </para>
+     <para>
+      The NixOS tests are available as <literal>nixosTests</literal> in
+      parameters of derivations. For instance, the OpenSMTPD derivation
+      includes lines similar to:
+<programlisting>
+{ /* ... */, nixosTests }:
+{
+  # ...
+  passthru.tests = {
+    basic-functionality-and-dovecot-integration = nixosTests.opensmtpd;
+  };
+}
+</programlisting>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>timeout</varname>
+    </term>
+    <listitem>
+     <para>
+      A timeout (in seconds) for building the derivation. If the derivation
+      takes longer than this time to build, it can fail due to breaking the
+      timeout. However, all computers do not have the same computing power,
+      hence some builders may decide to apply a multiplicative factor to this
+      value. When filling this value in, try to keep it approximately
+      consistent with other values already present in
+      <literal>nixpkgs</literal>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>hydraPlatforms</varname>
     </term>
     <listitem>
      <para>
@@ -261,7 +325,8 @@ meta.hydraPlatforms = [];
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>broken</varname>
+    <term>
+     <varname>broken</varname>
     </term>
     <listitem>
      <para>
@@ -273,7 +338,8 @@ meta.hydraPlatforms = [];
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>updateWalker</varname>
+    <term>
+     <varname>updateWalker</varname>
     </term>
     <listitem>
      <para>
@@ -305,8 +371,8 @@ meta.hydraPlatforms = [];
    generic options are available:
    <variablelist>
     <varlistentry>
-     <term><varname>stdenv.lib.licenses.free</varname>,
-    <varname>"free"</varname>
+     <term>
+      <varname>stdenv.lib.licenses.free</varname>, <varname>"free"</varname>
      </term>
      <listitem>
       <para>
@@ -315,8 +381,8 @@ meta.hydraPlatforms = [];
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>stdenv.lib.licenses.unfreeRedistributable</varname>,
-    <varname>"unfree-redistributable"</varname>
+     <term>
+      <varname>stdenv.lib.licenses.unfreeRedistributable</varname>, <varname>"unfree-redistributable"</varname>
      </term>
      <listitem>
       <para>
@@ -336,8 +402,8 @@ meta.hydraPlatforms = [];
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>stdenv.lib.licenses.unfree</varname>,
-    <varname>"unfree"</varname>
+     <term>
+      <varname>stdenv.lib.licenses.unfree</varname>, <varname>"unfree"</varname>
      </term>
      <listitem>
       <para>
@@ -348,8 +414,8 @@ meta.hydraPlatforms = [];
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>stdenv.lib.licenses.unfreeRedistributableFirmware</varname>,
-    <varname>"unfree-redistributable-firmware"</varname>
+     <term>
+      <varname>stdenv.lib.licenses.unfreeRedistributableFirmware</varname>, <varname>"unfree-redistributable-firmware"</varname>
      </term>
      <listitem>
       <para>

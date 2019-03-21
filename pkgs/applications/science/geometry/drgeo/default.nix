@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
     cp drgeo.desktop.in drgeo.desktop
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Interactive geometry program";
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://sourceforge.net/projects/ofset;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

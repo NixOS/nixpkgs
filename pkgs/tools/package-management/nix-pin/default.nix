@@ -1,15 +1,16 @@
-{ lib, pkgs, stdenv, fetchFromGitHub, mypy, python3, nix, git, makeWrapper }:
+{ lib, pkgs, stdenv, fetchFromGitHub, mypy, python3, nix, git, makeWrapper
+, runtimeShell }:
 let self = stdenv.mkDerivation rec {
   name = "nix-pin-${version}";
-  version = "0.3.0";
+  version = "0.4.0";
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "nix-pin";
-    rev = "version-0.3.0";
-    sha256 = "1kq50v8m8y1wji63b7y3wh6nv3ahvdxvvbsb07day2zzf5ysy8kj";
+    rev = "version-${version}";
+    sha256 = "1pccvc0iqapms7kidrh09g5fdx44x622r5l9k7bkmssp3v4c68vy";
   };
   buildInputs = [ python3 mypy makeWrapper ];
-  buildPhase = ''
+  checkPhase = ''
     mypy bin/*
   '';
   installPhase = ''
@@ -26,6 +27,7 @@ let self = stdenv.mkDerivation rec {
         let impl = import "${self}/share/nix/api.nix" { inherit pkgs pinConfig; }; in
         { inherit (impl) augmentedPkgs pins callPackage; };
       updateScript = ''
+        #!${runtimeShell}
         set -e
         echo
         cd ${toString ./.}
@@ -36,6 +38,7 @@ let self = stdenv.mkDerivation rec {
           --set repo nix-pin \
           --set type fetchFromGitHub \
           --set rev 'version-{version}' \
+          --substitute rev 'version-''${{version}}' \
           --modify-nix default.nix
       '';
     };
