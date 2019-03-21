@@ -10,13 +10,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name    = "godot-${version}";
-  version = "3.0.6";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "0g64h0x8dlv6aa9ggfcidk2mknkfl5li7z1phcav8aqp9srj8avf";
+    sha256 = "1z37znqzbn0x8s04pb9dxzni9jzl8m59nfrr14vypww42f9l5i7i";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -51,10 +51,10 @@ in stdenv.mkDerivation rec {
     cp misc/dist/linux/godot.6 "$man/share/man/man6/"
 
     mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
-    cp misc/dist/linux/godot.desktop "$out/share/applications/"
+    cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/"
     cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
     cp icon.png "$out/share/icons/godot.png"
-    substituteInPlace "$out/share/applications/godot.desktop" \
+    substituteInPlace "$out/share/applications/org.godotengine.Godot.desktop" \
       --replace "Exec=godot" "Exec=$out/bin/godot"
   '';
 
