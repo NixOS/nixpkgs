@@ -39,14 +39,9 @@ let
       nativeBuildInputs = [ go-packr ];
       inherit src passthru preBuild;
 
-      # TODO: Get Worker version
-      #-X github.com/concourse/atc/atccmd.WorkerVersion=${worker_version}
-      #-X main.WorkerVersion=${worker_version}
       buildFlagsArray = ''
         -ldflags=
-        -X github.com/concourse/concourse/fly/version.Version=${version}
-        -X main.Version=${version}
-        -X github.com/concourse/concourse/atc/atccmd.Version=${version}
+        -X github.com/concourse/concourse.Version=${version}
       '';
 
       meta = {
