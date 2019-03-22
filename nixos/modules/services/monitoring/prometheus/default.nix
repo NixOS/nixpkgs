@@ -7,8 +7,6 @@ let
   cfg2 = config.services.prometheus2;
   promUser = "prometheus";
   promGroup = "prometheus";
-  prom2User = "prometheus2";
-  prom2Group = "prometheus2";
 
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
@@ -693,11 +691,11 @@ in {
       };
     })
     (mkIf cfg2.enable {
-      users.groups.${prom2Group}.gid = config.ids.gids.prometheus2;
-      users.users.${prom2User} = {
+      users.groups.${promGroup}.gid = config.ids.gids.prometheus2;
+      users.users.${promUser} = {
         description = "Prometheus2 daemon user";
         uid = config.ids.uids.prometheus2;
-        group = prom2Group;
+        group = promGroup;
         home = cfg2.dataDir;
         createHome = true;
       };
@@ -710,7 +708,7 @@ in {
             ${concatStringsSep " \\\n  " cmdlineArgs2}
         '';
         serviceConfig = {
-          User = prom2User;
+          User = promUser;
           Restart  = "always";
           WorkingDirectory = cfg2.dataDir;
         };
