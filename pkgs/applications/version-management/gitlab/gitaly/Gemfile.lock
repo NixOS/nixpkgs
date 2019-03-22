@@ -36,7 +36,7 @@ GEM
     ffi (1.10.0)
     gemojione (3.3.0)
       json
-    gitaly-proto (1.10.0)
+    gitaly-proto (1.13.0)
       grpc (~> 1.0)
     github-linguist (6.2.0)
       charlock_holmes (~> 0.7.6)
@@ -64,7 +64,7 @@ GEM
     gollum-grit_adapter (1.0.1)
       gitlab-grit (~> 2.7, >= 2.7.1)
     google-protobuf (3.6.1)
-    googleapis-common-protos-types (1.0.2)
+    googleapis-common-protos-types (1.0.3)
       google-protobuf (~> 3.0)
     grpc (1.15.0)
       google-protobuf (~> 3.1)
@@ -79,6 +79,7 @@ GEM
     listen (0.5.3)
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
+    method_source (0.9.2)
     mime-types (3.2.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2018.0812)
@@ -102,6 +103,9 @@ GEM
       parser
       unparser
     procto (0.0.3)
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
     public_suffix (3.0.3)
     rainbow (3.0.0)
     rbtrace (0.4.11)
@@ -137,7 +141,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.10.0)
-    rugged (0.27.5)
+    rugged (0.28.0)
     safe_yaml (1.0.4)
     sanitize (4.6.6)
       crass (~> 1.0.2)
@@ -178,7 +182,7 @@ DEPENDENCIES
   bundler (>= 1.16.5)
   factory_bot
   faraday (~> 0.12)
-  gitaly-proto (~> 1.10.0)
+  gitaly-proto (~> 1.13.0)
   github-linguist (~> 6.1)
   gitlab-gollum-lib (~> 4.2)
   gitlab-gollum-rugged_adapter (~> 0.4.4)
@@ -187,12 +191,13 @@ DEPENDENCIES
   grpc (~> 1.15.0)
   licensee (~> 8.9.0)
   listen (~> 0.5.0)
+  pry (~> 0.12.2)
   rbtrace
   rdoc (~> 4.2)
   rspec
   rspec-parameterized
   rubocop (~> 0.50)
-  rugged (~> 0.27)
+  rugged (~> 0.28)
   sentry-raven (~> 2.7.2)
   simplecov (~> 0.9.0)
   timecop
