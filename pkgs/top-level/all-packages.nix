@@ -825,6 +825,8 @@ in
     inherit (androidenv.androidPkgs_9_0) platform-tools;
   };
 
+  anbox = callPackage ../os-specific/linux/anbox { };
+
   androidenv = callPackage ../development/mobile/androidenv {
     pkgs_i686 = pkgsi686Linux;
   };
@@ -14786,6 +14788,8 @@ in
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
 
+    anbox = callPackage ../os-specific/linux/anbox/kmod.nix { };
+
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
     bcc = callPackage ../os-specific/linux/bcc {
@@ -19039,6 +19043,8 @@ in
   profanity = callPackage ../applications/networking/instant-messengers/profanity ({
     python = python3;
   } // (config.profanity or {}));
+
+  properties-cpp = callPackage ../development/libraries/properties-cpp { };
 
   protonmail-bridge = libsForQt511.callPackage ../applications/networking/protonmail-bridge { };
 
