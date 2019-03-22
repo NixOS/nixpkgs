@@ -13,7 +13,7 @@ buildGoModule rec {
     sha256 = "1qfic9prdbldvjw0n15jfc9qr4p5h87mjripq2pc4c6x8244phfw";
   };
 
-  modSha256 = "017ybvyfk9bhmp8xwn484gmz4dl03gllv780ssi2arpmcyrwlymw";
+  modSha256 = "1p9cw92ivwgpkvjxvwd9anbd1vzhpicm9il4pg37z2kgr2ihhnyh";
 
   meta = with lib; {
     description = "The fastest shell plugin manager";

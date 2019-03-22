@@ -16,7 +16,7 @@ buildGoModule rec {
     ./3321-fix-location-of-thrift.patch
   ];
 
-  modSha256 = "0l6ccxzfxl918hzbky5ivlw413hiwagwc2cbp3f05i21qdi5mw5p";
+  modSha256 = "0ljf0c0c3pc12nmhdbrwflcaj6hs8igzjw5hi6fyhi6n9cy87vac";
 
   subPackages = [ "cmd/jx" ];
 
