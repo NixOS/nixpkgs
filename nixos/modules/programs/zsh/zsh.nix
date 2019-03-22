@@ -189,9 +189,10 @@ in
 
         . /etc/zinputrc
 
-        export SAVEHIST=${toString cfg.histSize}
-        export HISTSIZE=${toString cfg.histSize}
-        export HISTFILE=${cfg.histFile}
+        # Don't export these, otherwise other shells (bash) will try to use same histfile
+        SAVEHIST=${toString cfg.histSize}
+        HISTSIZE=${toString cfg.histSize}
+        HISTFILE=${cfg.histFile}
 
         ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
 
