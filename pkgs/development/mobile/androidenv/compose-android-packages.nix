@@ -1,10 +1,10 @@
 {stdenv, fetchurl, requireFile, makeWrapper, unzip, autoPatchelfHook, pkgs, pkgs_i686, licenseAccepted ? false}:
 
-{ toolsVersion ? "25.2.5"
-, platformToolsVersion ? "28.0.1"
+{ toolsVersion ? "26.1.1"
+, platformToolsVersion ? "28.0.2"
 , buildToolsVersions ? [ "28.0.3" ]
 , includeEmulator ? false
-, emulatorVersion ? "28.0.14"
+, emulatorVersion ? "28.0.23"
 , platformVersions ? []
 , includeSources ? false
 , includeDocs ? false
@@ -14,7 +14,7 @@
 , lldbVersions ? [ ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "18.1.5063045"
+, ndkVersion ? "19.2.5345600"
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
 , includeExtras ? []
