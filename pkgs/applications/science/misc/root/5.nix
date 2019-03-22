@@ -24,11 +24,24 @@ stdenv.mkDerivation rec {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/enable_new_gcc.patch?h=root5&id=91c50876081a0af36f84ec4f0f9dba869107fa4f";
       sha256 = "1rnp0xlw0yqi7mjs4w145njd79i8kkir1qik7zwicdik9axf8ygm";
     })
+
+    # prevents rootcint from looking in /usr/includes and such
+    ./purify_include_paths_root5.patch
+
+    # disable dictionary generation for stuff that includes libc headers
+    # our glibc requires a modern compiler
+    ./disable_libc_dicts_root5.patch
   ];
 
   preConfigure = ''
     patchShebangs build/unix/
     ln -s ${stdenv.lib.getDev stdenv.cc.libc}/include/AvailabilityMacros.h cint/cint/include/
+  ''
+  # Fix CINTSYSDIR for "build" version of rootcint
+  # This is probably a bug that breaks out-of-source builds
+  + ''
+    substituteInPlace cint/cint/src/loadfile.cxx\
+      --replace 'env = "cint";' 'env = "'`pwd`'/cint";'
   '' + stdenv.lib.optionalString noSplash ''
     substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '';
