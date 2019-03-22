@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   name = "elan-${version}";
-  version = "0.7.4";
+  version = "0.7.5";
 
   cargoSha256 = "0vv7kr7rc3lvas7ngp5dp99ajjd5v8k5937ish7zqz1k4970q2f1";
 
@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     owner = "kha";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "0yf8mfgp4l78f5cjq1imh462axaa24jfhn69cgf7prw4jrmw3bch";
+    sha256 = "1147f3lzr6lgvf580ppspn20bdwnf6l8idh1h5ana0p0lf5a0dn1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
