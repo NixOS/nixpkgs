@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = [
-    "-DBASH_COMPLETION_COMPLETIONSDIR=./share/bash-completion/completions"
-  ];
+  installTargets = [ "install" "install-doc" ];
 
-  installTargets = "install install-doc";
+  postInstall = ''
+    install -Dm644 -T ../contrib/lpass_zsh_completion $out/share/zsh/site-functions/_lpass
+    install -Dm644 -T ../contrib/completions-lpass.fish $out/share/fish/vendor_completions.d/lpass.fish
+  '';
 
   meta = with lib; {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
