@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   version = "8.6.3";
 
   name = "ghc-${version}-binary";
+  outputs = [ "out" "doc" ];
 
   src = fetchurl ({
     "i686-linux" = {
