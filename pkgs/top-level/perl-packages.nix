@@ -6031,8 +6031,6 @@ let
 
   FileSlurp = buildPerlPackage {
     name = "File-Slurp-9999.26";
-    # WARNING: check on next update if deprecation warning is gone
-    patches = [ ../development/perl-modules/File-Slurp/silence-deprecation.patch ];
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CA/CAPOEIRAB/File-Slurp-9999.26.tar.gz;
       sha256 = "0c09ivl50sg9j75si6cahfp1wgvhqawakb6h5j6hlca6vwjqs9qy";
