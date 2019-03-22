@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "yattag";
-  version = "1.10.1";
+  version = "1.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r3pwfygvpkgc0hzxc6z8dl56g6brlh52r0x8kcjhywr1biahqb2";
+    sha256 = "94210945c868f696a31812a510c01724d61c9a4d279eb4adf340c0d2a4c0bfd7";
   };
 
   meta = with lib; {

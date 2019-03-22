@@ -28,7 +28,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     gtk3.out # for gtk-update-icon-cache
     glib-networking gvfs dconf gnome-backgrounds gnome-control-center
     gnome-menus gnome-settings-daemon gnome-shell
-    gnome-themes-extra defaultIconTheme gnome-shell-extensions
+    gnome-themes-extra adwaita-icon-theme gnome-shell-extensions
     pkgs.hicolor-icon-theme
   ];
 
@@ -51,22 +51,11 @@ lib.makeScope pkgs.newScope (self: with self; {
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
-    libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
-    easytag meld orca rhythmbox shotwell gnome-usage
-    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus gdl;
-
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   gnome3 = self // { recurseForDerivations = false; };
-  gtk = gtk3;
-  gtkmm = gtkmm3;
   vala = pkgs.vala_0_42;
-  gegl_0_4 = pkgs.gegl_0_4.override { inherit gtk; };
-  rest = librest;
-
-# Simplify the nixos module and gnome packages
-  defaultIconTheme = adwaita-icon-theme;
+  gegl_0_4 = pkgs.gegl_0_4.override { gtk = pkgs.gtk3; };
 
 # ISO installer
 # installerIso = callPackage ./installer.nix {};
@@ -372,8 +361,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   bijiben = gnome-notes; # added 2018-09-26
   evolution_data_server = evolution-data-server; # added 2018-02-25
-  geocode_glib = geocode-glib; # added 2018-02-25
-  glib_networking = glib-networking; # added 2018-02-25
+  geocode_glib = pkgs.geocode-glib; # added 2018-02-25
+  glib_networking = pkgs.glib-networking; # added 2018-02-25
   gnome_common = gnome-common; # added 2018-02-25
   gnome_control_center = gnome-control-center; # added 2018-02-25
   gnome_desktop = gnome-desktop; # added 2018-02-25
@@ -399,4 +388,13 @@ lib.makeScope pkgs.newScope (self: with self; {
   yelp_xsl = yelp-xsl; # added 2018-02-25
   yelp_tools = yelp-tools; # added 2018-02-25
 
+  # added 2019-02-08
+  inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
+      libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
+      easytag meld orca rhythmbox shotwell gnome-usage
+      clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus gdl;
+  defaultIconTheme = adwaita-icon-theme;
+  gtk = gtk3;
+  gtkmm = gtkmm3;
+  rest = librest;
 })

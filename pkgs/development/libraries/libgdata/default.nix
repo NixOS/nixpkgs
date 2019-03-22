@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];
 
-  buildInputs = with gnome3;
-    [ libsoup libxml2 glib liboauth gcr gnome-online-accounts p11-kit openssl uhttpmock ];
+  buildInputs = [ gnome3.libsoup libxml2 glib liboauth gcr gnome3.gnome-online-accounts p11-kit openssl uhttpmock ];
 
   propagatedBuildInputs = [ json-glib ];
 

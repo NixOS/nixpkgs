@@ -82,6 +82,6 @@ in stdenv.mkDerivation {
     homepage = http://www.hipchat.com;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jgeerds puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh ];
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, packagekit, polkit
-, systemd, wrapGAppsHook, desktop-file-utils }:
+, gtk3, systemd, wrapGAppsHook, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   name = "gnome-packagekit-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig meson ninja gettext wrapGAppsHook desktop-file-utils ];
-  buildInputs = [ gnome3.gtk packagekit systemd polkit ];
+  buildInputs = [ gtk3 packagekit systemd polkit ];
 
   postPatch = ''
     patchShebangs meson_post_install.sh

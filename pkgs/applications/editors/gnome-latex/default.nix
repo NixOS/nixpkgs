@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wrapGAppsHook
+{ stdenv, fetchurl, wrapGAppsHook, gsettings-desktop-schemas, gspell, gtksourceview4, libgee
 , tepl, amtk, gnome3, glib, pkgconfig, intltool, itstool, libxml2 }:
 let
   version = "3.30.2";
@@ -21,9 +21,9 @@ in stdenv.mkDerivation {
     intltool
   ];
 
-  buildInputs = with gnome3; [
+  buildInputs = [
     amtk
-    defaultIconTheme
+    gnome3.adwaita-icon-theme
     glib
     gsettings-desktop-schemas
     gspell

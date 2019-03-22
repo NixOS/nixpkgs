@@ -1,5 +1,5 @@
 { lib, stdenv
-, python, cmake, vim, ruby
+, python, cmake, meson, vim, ruby
 , which, fetchgit, fetchurl
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim
@@ -62,7 +62,7 @@ self: super: {
     version = "0.1.140";
     src = LanguageClient-neovim-src;
 
-    propogatedBuildInputs = [ LanguageClient-neovim-bin ];
+    propagatedBuildInputs = [ LanguageClient-neovim-bin ];
 
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
@@ -159,6 +159,12 @@ self: super: {
   gist-vim = super.gist-vim.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
+
+  meson = buildVimPluginFrom2Nix {
+    inherit (meson) pname version src;
+    preInstall = "cd data/syntax-highlighting/vim";
+    meta.maintainers = with stdenv.lib.maintainers; [ vcunat ];
+  };
 
   ncm2 = super.ncm2.overrideAttrs(old: {
     dependencies = with super; [ nvim-yarp ];

@@ -5,23 +5,22 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "2.2.2";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c158699026eb5a19f95c1ca742e2e82bc20c27013ef5785f10836283e2233f8a";
+    sha256 = "9f4bc7cd132c0005deb6b36c7041ee213a69bbdfcd8c0b1a9f1ae8c1fba733f6";
   };
+
+  postPatch = ''
+    # Tests require network
+    rm altair/examples/boxplot_max_min.py altair/examples/line_percent.py
+  '';
 
   checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales recommonmark ];
 
   propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz ]
     ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
-
-  # hack to prevent typing from being required for python > 3.5
-  postPatch = ''
-    substituteInPlace requirements.txt \
-       --replace "typing" ""
-  '';
 
   checkPhase = ''
     export LANG=en_US.UTF-8

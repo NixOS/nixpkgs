@@ -290,6 +290,7 @@ let
     pbdPROF = [ pkgs.openmpi ];
     pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
+    phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
     PopGenome = [ pkgs.zlib.dev ];
@@ -302,7 +303,6 @@ let
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
     readxl = [ pkgs.libiconv ];
-    rbamtools = [ pkgs.zlib.dev ];
     rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl_1 ];

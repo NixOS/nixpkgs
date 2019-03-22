@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3, gobject-introspection, vala
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3, gobject-introspection, vala, libgee
 , overrideCC, gcc6
 , mysqlSupport ? false, mysql ? null
 , postgresSupport ? false, postgresql ? null
@@ -24,7 +24,7 @@ assert postgresSupport -> postgresql != null;
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkgconfig intltool itstool libxml2 gobject-introspection vala ];
-  buildInputs = with stdenv.lib; [ gtk3 openssl gnome3.libgee ]
+  buildInputs = with stdenv.lib; [ gtk3 openssl libgee ]
     ++ optional (mysqlSupport) mysql.connector-c
     ++ optional (postgresSupport) postgresql;
 

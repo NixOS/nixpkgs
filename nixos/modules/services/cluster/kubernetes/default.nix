@@ -10,7 +10,7 @@ let
     kind = "Config";
     clusters = [{
       name = "local";
-      cluster.certificate-authority = cfg.caFile;
+      cluster.certificate-authority = conf.caFile or cfg.caFile;
       cluster.server = conf.server;
     }];
     users = [{

@@ -6,7 +6,7 @@
 
 let
   pname = "wlroots";
-  version = "0.4";
+  version = "0.5.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "1gwdwdyfnsn65bxn1yyy15f1q2gagakkl9k89zz8wv72sgniwxri";
+    sha256 = "1phiidyddzgaxy4gbqwmykxn0y8za6y5mp66l9dpd9i6fml153yq";
   };
 
   # $out for the library, $bin for rootston, and $examples for the example

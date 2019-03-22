@@ -23,9 +23,8 @@ buildPythonPackage rec {
     ./tests.patch
   ];
   postPatch = "rm testParser2.py";
-  buildInputs = [
+  nativeBuildInputs = [
     sphinx
-    pytest
     py3to2
   ];
   propagatedBuildInputs = [
@@ -33,7 +32,7 @@ buildPythonPackage rec {
     isodate
     numpy
     openpyxl
-  ] ++ lib.optional gui [
+  ] ++ lib.optionals gui [
     tkinter
   ];
 
@@ -53,7 +52,11 @@ buildPythonPackage rec {
     (cd apidocs && make html && cp -r _build $doc)
     '';
 
-  doCheck = if gui then true else false;
+  doCheck = false;
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with lib; {
     description = ''

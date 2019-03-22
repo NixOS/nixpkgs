@@ -5,7 +5,10 @@
 , cracklib, libkrb5, networkmanagerapplet, networkmanager, glibc
 , libwacom, samba, shared-mime-info, tzdata, libtool, libgnomekbd
 , docbook_xsl, modemmanager, clutter, clutter-gtk, cheese, gnome-session
-, fontconfig, sound-theme-freedesktop, grilo, python3 }:
+, fontconfig, sound-theme-freedesktop, grilo, python3
+, gtk3, glib, glib-networking, gsettings-desktop-schemas
+, gnome-desktop, gnome-settings-daemon, gnome-online-accounts
+, vino, gnome-bluetooth, tracker, adwaita-icon-theme }:
 
 let
   pname = "gnome-control-center";
@@ -23,13 +26,13 @@ in stdenv.mkDerivation rec {
     shared-mime-info python3
   ];
 
-  buildInputs = with gnome3; [
-    ibus gtk glib glib-networking upower gsettings-desktop-schemas
+  buildInputs = [
+    ibus gtk3 glib glib-networking upower gsettings-desktop-schemas
     libxml2 gnome-desktop gnome-settings-daemon polkit libgtop
     gnome-online-accounts libsoup colord libpulseaudio fontconfig colord-gtk
     accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify
     grilo libpwquality cracklib vino libcanberra-gtk3 libgudev libsecret
-    gdk_pixbuf defaultIconTheme librsvg clutter clutter-gtk cheese
+    gdk_pixbuf adwaita-icon-theme librsvg clutter clutter-gtk cheese
     networkmanager modemmanager gnome-bluetooth tracker
   ];
 

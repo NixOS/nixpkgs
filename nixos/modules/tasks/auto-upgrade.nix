@@ -57,7 +57,7 @@ let cfg = config.system.autoUpgrade; in
 
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
 
     system.autoUpgrade.flags =
       [ "--no-build-output" ]
@@ -84,7 +84,7 @@ let cfg = config.system.autoUpgrade; in
         ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}
       '';
 
-      startAt = optional cfg.enable cfg.dates;
+      startAt = cfg.dates;
     };
 
   };

@@ -43,7 +43,7 @@ stageFuns: let
 
   /* "dfold" a ternary function `op' between successive elements of `list' as if
      it was a doubly-linked list with `lnul' and `rnul` base cases at either
-     end. In precise terms, `fold op lnul rnul [x_0 x_1 x_2 ... x_n-1]` is the
+     end. In precise terms, `dfold op lnul rnul [x_0 x_1 x_2 ... x_n-1]` is the
      same as
 
        let

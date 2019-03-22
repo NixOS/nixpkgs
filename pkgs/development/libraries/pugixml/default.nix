@@ -1,17 +1,27 @@
-{ stdenv, fetchurl, cmake, shared ? false }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, shared ? false }:
 
 stdenv.mkDerivation rec {
   name = "pugixml-${version}";
   version = "1.9";
 
-  src = fetchurl {
-    url = "https://github.com/zeux/pugixml/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "19nv3zhik3djp4blc4vrjwrl8dfhzmal8b21sq7y907nhddx6mni";
+  src = fetchFromGitHub {
+    owner = "zeux";
+    repo = "pugixml";
+    rev = "v${version}";
+    sha256 = "0iraznwm78pyyzc9snvd3dyz8gddvmxsm1b3kpw7wixkvcawdviv";
   };
+
+  patches = [
+    # To be removed after a version newer than 1.9 is released
+    (fetchpatch {
+      url = "https://github.com/zeux/pugixml/pull/193.patch";
+      sha256 = "0s4anqlr2ppfibxyl29nrqbcprrg89k7il6303dm91s6620ydmka";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"} -DBUILD_PKGCONFIG=ON" ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}" ];
 
   preConfigure = ''
     # Enable long long support (required for filezilla)

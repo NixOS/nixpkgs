@@ -512,7 +512,7 @@ config.mod.two = { foo = 2; bar = "two"; };</screen>
       The function to type check the value. Takes a value as parameter and
       return a boolean. It is possible to extend a type check with the
       <literal>addCheck</literal> function
-      (<xref 
+      (<xref
           linkend='ex-extending-type-check-1' />), or to fully
       override the check function
       (<xref linkend='ex-extending-type-check-2' />).
@@ -522,7 +522,7 @@ config.mod.two = { foo = 2; bar = "two"; };</screen>
 <screen>
 byte = mkOption {
   description = "An integer between 0 and 255.";
-  type = addCheck types.int (x: x &gt;= 0 &amp;&amp; x &lt;= 255);
+  type = types.addCheck types.int (x: x &gt;= 0 &amp;&amp; x &lt;= 255);
 };</screen>
      </example>
      <example xml:id='ex-extending-type-check-2'>

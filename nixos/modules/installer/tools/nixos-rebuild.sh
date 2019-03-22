@@ -267,6 +267,14 @@ if [ -n "$rollback" -o "$action" = dry-build ]; then
     buildNix=
 fi
 
+nixSystem() {
+    machine="$(uname -m)"
+    if [[ "$machine" =~ i.86 ]]; then
+        machine=i686
+    fi
+    echo $machine-linux
+}
+
 prebuiltNix() {
     machine="$1"
     if [ "$machine" = x86_64 ]; then
@@ -286,7 +294,9 @@ if [ -n "$buildNix" ]; then
     nixDrv=
     if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root $tmpDir/nix.drv --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then
         if ! nixDrv="$(nix-instantiate '<nixpkgs>' --add-root $tmpDir/nix.drv --indirect -A nix "${extraBuildFlags[@]}")"; then
-            nixStorePath="$(prebuiltNix "$(uname -m)")"
+            if ! nixStorePath="$(nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A $(nixSystem) | sed -e 's/^"//' -e 's/"$//')"; then
+                nixStorePath="$(prebuiltNix "$(uname -m)")"
+            fi
             if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
                 --option extra-binary-caches https://cache.nixos.org/; then
                 echo "warning: don't know how to get latest Nix" >&2

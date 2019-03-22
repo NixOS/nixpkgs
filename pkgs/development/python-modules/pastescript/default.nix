@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.2";
+  version = "3.0.0";
   pname = "PasteScript";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c03f249805538cc2328741ae8d262a9200ae1c993119b3d9bac4cd422cb476c0";
+    sha256 = "d9d4d98df8606ad3bfa77be4722207d1a53a0fbcc714ee75d0fcd8a5c3f775c3";
   };
 
   buildInputs = [ nose ];

@@ -13,7 +13,7 @@
 , glib
 , libsoup
 , gnome-online-accounts
-, rest
+, librest
 , json-glib
 , gnome-autoar
 , gspell
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
     glib
     libsoup
     gnome-online-accounts
-    rest
+    librest
     json-glib
     gnome-autoar
     gspell

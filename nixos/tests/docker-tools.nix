@@ -34,8 +34,8 @@ import ./make-test.nix ({ pkgs, ... }: {
 
       # To test the pullImage tool
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.nixFromDockerHub}'");
-      $docker->succeed("docker run --rm nixos/nix:1.11 nix-store --version");
-      $docker->succeed("docker rmi nixos/nix:1.11");
+      $docker->succeed("docker run --rm nixos/nix:2.2.1 nix-store --version");
+      $docker->succeed("docker rmi nixos/nix:2.2.1");
 
       # To test runAsRoot and entry point
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.nginx}'");

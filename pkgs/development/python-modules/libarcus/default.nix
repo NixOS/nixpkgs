@@ -15,8 +15,9 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.4.0";
 
-  propagatedBuildInputs = [ sip protobuf ];
+  propagatedBuildInputs = [ sip ];
   nativeBuildInputs = [ cmake ];
+  buildInputs = [ protobuf ];
 
   postPatch = ''
     # To workaround buggy SIP detection which overrides PYTHONPATH

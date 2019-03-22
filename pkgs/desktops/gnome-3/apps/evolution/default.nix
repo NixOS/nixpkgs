@@ -1,5 +1,7 @@
 { stdenv, cmake, ninja, intltool, fetchurl, libxml2, webkitgtk, highlight
-, pkgconfig, gtk3, glib, libnotify, gtkspell3
+, pkgconfig, gtk3, glib, libnotify, gtkspell3, evolution-data-server
+, adwaita-icon-theme, gnome-desktop, libgdata
+, libgweather, glib-networking, gsettings-desktop-schemas
 , wrapGAppsHook, itstool, shared-mime-info, libical, db, gcr, sqlite
 , gnome3, librsvg, gdk_pixbuf, libsecret, nss, nspr, icu
 , libcanberra-gtk3, bogofilter, gst_all_1, procps, p11-kit, openldap }:
@@ -14,17 +16,17 @@ in stdenv.mkDerivation rec {
     sha256 = "1hhxj3rh921pp3l3c5k33bdypcas1p66krzs65k1qn82c5fpgl2h";
   };
 
-  propagatedUserEnvPkgs = [ gnome3.evolution-data-server ];
+  propagatedUserEnvPkgs = [ evolution-data-server ];
 
   buildInputs = [
-    gtk3 glib gdk_pixbuf gnome3.defaultIconTheme librsvg db icu
-    gnome3.evolution-data-server libsecret libical gcr
-    webkitgtk shared-mime-info gnome3.gnome-desktop gtkspell3
-    libcanberra-gtk3 bogofilter gnome3.libgdata sqlite
+    gtk3 glib gdk_pixbuf adwaita-icon-theme librsvg db icu
+    evolution-data-server libsecret libical gcr
+    webkitgtk shared-mime-info gnome-desktop gtkspell3
+    libcanberra-gtk3 bogofilter libgdata sqlite
     gst_all_1.gstreamer gst_all_1.gst-plugins-base p11-kit
-    nss nspr libnotify procps highlight gnome3.libgweather
-    gnome3.gsettings-desktop-schemas
-    gnome3.glib-networking openldap
+    nss nspr libnotify procps highlight libgweather
+    gsettings-desktop-schemas
+    glib-networking openldap
   ];
 
   nativeBuildInputs = [ cmake ninja intltool itstool libxml2 pkgconfig wrapGAppsHook ];

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     description = "Configuration manager for python applications";
     homepage = https://kaptan.readthedocs.io/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
   };
 
 }

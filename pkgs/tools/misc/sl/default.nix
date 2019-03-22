@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "sl-${version}";
-  version = "5.02";
+  version = "5.04";
 
   src = fetchFromGitHub {
-    owner = "mtoyoda";
+    owner = "eyJhb";
     repo = "sl";
-    rev = version;
-    sha256 = "1zrfd71zx2px2xpapg45s8xvi81xii63yl0h60q72j71zh4sif8b";
+    rev = "${version}";
+    sha256 = "029lv6vw39c7gj8bkfyqs8q4g32174vbmghhhgfk8wrhnxq60qn7";
   };
 
   buildInputs = [ ncurses ];
@@ -18,17 +18,18 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
     cp sl $out/bin
-    cp sl.1 $out/share/man/man1
+    cp sl.1 $outputMan
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/index_e.html;
     license = rec {
       shortName = "Toyoda Masashi's free software license";
       fullName = shortName;
-      url = https://github.com/mtoyoda/sl/blob/master/LICENSE;
+      url = https://github.com/eyJhb/sl/blob/master/LICENSE;
     };
+    maintainers = [ maintainers.eyjhb ];
     description = "Steam Locomotive runs across your terminal when you type 'sl'";
-    platforms = with stdenv.lib.platforms; unix;
+    platforms = platforms.unix;
   };
 }

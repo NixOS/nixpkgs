@@ -1,13 +1,13 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
-, libjpeg, qtbase
+, libjpeg, libpng, qtbase
 }:
 
 stdenv.mkDerivation rec {
-  name = "ipe-7.2.10";
+  name = "ipe-7.2.11";
 
   src = fetchurl {
     url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${name}-src.tar.gz";
-    sha256 = "0rm31kvyg30452bz12yi49bkhdmi4bjdx6zann5cdlbi0pvmx7xh";
+    sha256 = "09d71fdpiz359mcnb57460w2mcfizvlnidd6g1k4c3v6rglwlbd2";
   };
 
   sourceRoot = "${name}/src";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   LUA_PACKAGE = "lua";
 
   buildInputs = [
-    libjpeg zlib qtbase freetype cairo lua5 texlive ghostscript
+    libjpeg libpng zlib qtbase freetype cairo lua5 texlive ghostscript
   ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];

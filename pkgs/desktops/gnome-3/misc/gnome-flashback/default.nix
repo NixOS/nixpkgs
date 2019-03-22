@@ -10,7 +10,7 @@
 , gnome-session
 , gnome3
 , gsettings-desktop-schemas
-, gtk
+, gtk3
 , ibus
 , intltool
 , libcanberra-gtk3
@@ -85,7 +85,7 @@ let
       gnome-bluetooth
       gnome-desktop
       gsettings-desktop-schemas
-      gtk
+      gtk3
       ibus
       libcanberra-gtk3
       libpulseaudio

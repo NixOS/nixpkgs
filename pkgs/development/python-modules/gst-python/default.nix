@@ -46,7 +46,7 @@ in buildPythonPackage rec {
     substituteInPlace meson.build --replace python3 python${if isPy3k then "3" else "2"}
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig python gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkgconfig python gobject-introspection gst-plugins-base ];
 
   mesonFlags = [
     "-Dpython=python${if isPy3k then "3" else "2"}"

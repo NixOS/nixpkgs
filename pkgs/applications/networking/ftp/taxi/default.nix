@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3
-, gtk3, gnome3, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
+, gtk3, libgee, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "taxi";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pantheon.granite
-    gnome3.libgee
+    libgee
     gtk3
     libsecret
     libsoup

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, meson, ninja, intltool, gtk-doc, pkgconfig, networkmanager, gnome3
 , libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl, docbook_xml_dtd_43
 , mobile-broadband-provider-info, glib-networking, gsettings-desktop-schemas
-, libgudev, jansson, wrapGAppsHook, gobject-introspection, python3
+, libgudev, jansson, wrapGAppsHook, gobject-introspection, python3, gtk3
 , libappindicator-gtk3, withGnome ? false, gcr }:
 
 let
@@ -25,10 +25,10 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "devdoc" "man" ];
 
   buildInputs = [
-    gnome3.gtk networkmanager libnotify libsecret gsettings-desktop-schemas
+    gtk3 networkmanager libnotify libsecret gsettings-desktop-schemas
     polkit isocodes mobile-broadband-provider-info libgudev
     modemmanager jansson glib-networking
-    libappindicator-gtk3 gnome3.defaultIconTheme
+    libappindicator-gtk3 gnome3.adwaita-icon-theme
   ] ++ stdenv.lib.optionals withGnome [ gcr ]; # advanced certificate chooser
 
   nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobject-introspection python3 gtk-doc docbook_xsl docbook_xml_dtd_43 libxml2 ];

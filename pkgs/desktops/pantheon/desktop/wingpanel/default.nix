@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, pantheon, wrapGAppsHook, pkgconfig, meson, ninja
+{ stdenv, fetchFromGitHub, pantheon, fetchpatch, wrapGAppsHook, pkgconfig, meson, ninja
 , vala, gala, gtk3, libgee, granite, gettext, glib-networking, mutter, json-glib
 , python3, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1knkqh9q6yp7qf27zi6ki20fq4w0ia2hklvv84ivfmfa0irz0j6r";
+    sha256 = "1kd1w3mxysg33niryrz5yp6fdayzjpg73ihvq7dlasj8ls5d0qyj";
   };
 
   passthru = {
@@ -40,7 +40,9 @@ stdenv.mkDerivation rec {
     mutter
   ];
 
-  patches = [ ./indicators.patch ];
+  patches = [
+    ./indicators.patch
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py

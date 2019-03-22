@@ -1,12 +1,12 @@
 { lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.7.3";
+  version = "0.8.2";
   pname = "gita";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0ccqjf288513im7cvafiw4ypbp9s3z0avyzd4jzr13m38jrsss3r";
+    sha256 = "16jpnl323x86dkrnh4acyvi9jknhgi3r0ccv63rkjcmd0srkaxkk";
   };
 
   propagatedBuildInputs = with python3Packages; [

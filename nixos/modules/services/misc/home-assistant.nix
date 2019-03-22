@@ -9,13 +9,13 @@ let
   configJSON = pkgs.writeText "configuration.json"
     (builtins.toJSON (if cfg.applyDefaultConfig then
     (recursiveUpdate defaultConfig cfg.config) else cfg.config));
-  configFile = pkgs.runCommand "configuration.yaml" { } ''
+  configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
   '';
 
   lovelaceConfigJSON = pkgs.writeText "ui-lovelace.json"
     (builtins.toJSON cfg.lovelaceConfig);
-  lovelaceConfigFile = pkgs.runCommand "ui-lovelace.yaml" { } ''
+  lovelaceConfigFile = pkgs.runCommand "ui-lovelace.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigJSON} -o $out
   '';
 
@@ -29,14 +29,24 @@ let
   #   platform = "luftdaten";
   #   ...
   # } ];
+  #
+  # Beginning with 0.87 Home Assistant is migrating their components to the
+  # scheme "platform.subComponent", e.g. "hue.light" instead of "light.hue".
+  # See https://developers.home-assistant.io/blog/2019/02/19/the-great-migration.html.
+  # Hence, we also check whether we find an entry in the config when interpreting
+  # the first part of the path as the component.
   useComponentPlatform = component:
     let
       path = splitString "." component;
+      # old: platform is the last part of path
       parentConfig = attrByPath (init path) null cfg.config;
       platform = last path;
-    in isList parentConfig && any
-      (item: item.platform or null == platform)
-      parentConfig;
+      # new: platform is the first part of the path
+      parentConfig' = attrByPath (tail path) null cfg.config;
+      platform' = head path;
+    in
+      (isList parentConfig && any (item: item.platform or null == platform) parentConfig)
+      || (isList parentConfig' && any (item: item.platform or null == platform') parentConfig');
 
   # Returns whether component is used in config
   useComponent = component:

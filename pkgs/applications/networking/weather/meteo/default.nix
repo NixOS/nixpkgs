@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitLab, vala, python3, pkgconfig, meson, ninja, gtk3, geocode-glib, json-glib, libsoup, webkitgtk, libappindicator, desktop-file-utils, hicolor-icon-theme, appstream, wrapGAppsHook }:
+{ stdenv, fetchFromGitLab, vala, python3, pkgconfig, meson, ninja, gtk3
+, json-glib, libsoup, clutter, clutter-gtk, libchamplain, webkitgtk, geocode-glib
+, libappindicator, desktop-file-utils, appstream, gobject-introspection, wrapGAppsHook, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "meteo";
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    clutter
+    clutter-gtk
     geocode-glib
     gtk3
     hicolor-icon-theme

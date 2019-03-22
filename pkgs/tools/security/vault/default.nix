@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     ln -s $(pwd) src/github.com/hashicorp/vault
 
     export GOPATH=$(pwd)
+    export GOCACHE="$TMPDIR/go-cache"
   '';
 
   installPhase = ''

@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ meson ninja gettext pkgconfig wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
-  buildInputs = [ gtk3 glib gnome3.defaultIconTheme python3 ];
+  buildInputs = [ gtk3 glib gnome3.adwaita-icon-theme python3 ];
   propagatedBuildInputs = with python3.pkgs; [ lxml evdev pygobject3 ];
 
   postPatch = ''

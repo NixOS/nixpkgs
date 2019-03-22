@@ -11,11 +11,11 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "2.1.1";
+  version = "2.1.2";
   name = "hyper-${version}";
   src = fetchurl {
     url = "https://github.com/zeit/hyper/releases/download/${version}/hyper_${version}_amd64.deb";
-    sha256 = "1vr4j2vb2wpn8qzgq30l8kfck2an03jwchwywyx4zsl2vz3qp70x";
+    sha256 = "1n4qlbk7q9zkhhg72mdks95g15xgyrc6ixf882ghvrqghd4zxplm";
   };
   buildInputs = [ dpkg ];
   unpackPhase = ''

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation  rec {
   name = "ams-lv2-${version}";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "blablack";
     repo = "ams-lv2";
     rev = version;
-    sha256 = "1n1dnqnj24xhiy9323lj52nswr5120cj56fpckg802miss05sr6x";
+    sha256 = "1lz2mvk4gqsyf92yxd3aaldx0d0qi28h4rnnvsaz4ls0ccqm80nk";
   };
 
   nativeBuildInputs = [ pkgconfig wafHook ];

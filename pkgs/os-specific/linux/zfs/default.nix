@@ -159,17 +159,18 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.20";
+    # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.7.12";
+    version = "0.7.13";
 
-    sha256 = "1j432nb3a86isghdysir9xi6l5djmb5fbc5s9zr0rwg4ziisskbh";
+    sha256 = "1l77bq7pvc54vl15pnrjd0njgpf00qjzy0x85dpfh5jxng84x1fb";
 
     extraPatches = [
+      # in case this gets out of date, just send Mic92 a pull request!
       (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc3...nixos-zfs-0.7.0-rc3.patch";
-        sha256 = "1vlw98v8xvi8qapzl1jwm69qmfslwnbg3ry1lmacndaxnyckkvhh";
+        url = "https://github.com/Mic92/zfs/commit/cf23c1d38bfc698a8a729fc0c5f9ca41591f4d95.patch";
+        sha256 = "14v3x9ipvg2qd1vyf70nv909jd5zdxlsw5y8k60pfyvwm7g80wr5";
       })
     ];
 
@@ -187,6 +188,7 @@ in {
     isUnstable = true;
 
     extraPatches = [
+      # in case this gets out of date, just send Mic92 a pull request!
       (fetchpatch {
         url = "https://github.com/Mic92/zfs/commit/bc29b5783da0af2c80c85126a1831ce1d52bfb69.patch";
         sha256 = "1sdcr1w2jp3djpwlf1f91hrxxmc34q0jl388smdkxh5n5bpw5gzw";

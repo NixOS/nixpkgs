@@ -1,5 +1,6 @@
 { stdenv,  fetchurl, gnome3, itstool, libxml2, pkgconfig, intltool,
   exiv2, libjpeg, libtiff, gst_all_1, libraw, libsoup, libsecret,
+  glib, gtk3, gsettings-desktop-schemas,
   libchamplain, librsvg, libwebp, json-glib, webkitgtk, lcms2, bison,
   flex, wrapGAppsHook, shared-mime-info }:
 
@@ -16,10 +17,10 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ itstool libxml2 intltool pkgconfig bison flex wrapGAppsHook ];
 
-  buildInputs = with gnome3; [
-    glib gtk gsettings-desktop-schemas gst_all_1.gstreamer gst_all_1.gst-plugins-base
+  buildInputs = [
+    glib gtk3 gsettings-desktop-schemas gst_all_1.gstreamer gst_all_1.gst-plugins-base
     exiv2 libjpeg libtiff libraw libsoup libsecret libchamplain
-    librsvg libwebp json-glib webkitgtk lcms2 defaultIconTheme
+    librsvg libwebp json-glib webkitgtk lcms2 gnome3.adwaita-icon-theme
   ];
 
   enableParallelBuilding = true;

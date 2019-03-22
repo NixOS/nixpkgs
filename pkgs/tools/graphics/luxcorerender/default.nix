@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
      # needed for GSETTINGS_SCHEMAS_PATH
      gsettings-desktop-schemas glib gnome3.gtk
      # needed for XDG_ICON_DIRS
-     gnome3.defaultIconTheme
+     gnome3.adwaita-icon-theme
      makeWrapper
      (stdenv.lib.getLib gnome3.dconf)
    ] ++ stdenv.lib.optionals withOpenCL [opencl-headers ocl-icd opencl-clhpp];
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/luxcoreui" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_DATA_DIRS : '${gnome3.defaultIconTheme}/share' \
+      --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share' \
       --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
   '';
 
