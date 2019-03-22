@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       p11 = p11-kit;
     })
+    (substituteAll {
+      src = ./bubblewrap-paths.patch;
+      inherit (builtins) storeDir;
+    })
     # patch taken from gtk_doc
     ./respect-xml-catalog-files-var.patch
     ./use-flatpak-from-path.patch

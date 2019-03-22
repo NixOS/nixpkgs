@@ -8,13 +8,17 @@ let
 
   efi = config.boot.loader.efi;
 
-  realGrub = if cfg.version == 1 then pkgs.grub
-    else if cfg.zfsSupport then pkgs.grub2.override { zfsSupport = true; }
+  grubPkgs = 
+    # Package set of targeted architecture
+    if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
+
+  realGrub = if cfg.version == 1 then grubPkgs.grub
+    else if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
     else if cfg.trustedBoot.enable
          then if cfg.trustedBoot.isHPLaptop
-              then pkgs.trustedGrub-for-HP
-              else pkgs.trustedGrub
-         else pkgs.grub2;
+              then grubPkgs.trustedGrub-for-HP
+              else grubPkgs.trustedGrub
+         else grubPkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -58,14 +62,10 @@ let
         version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
         extraEntriesBeforeNixOS extraPrepareConfig extraInitrd configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
-      path = (makeBinPath ([
-        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
-        pkgs.utillinux ]
-        ++ (optional (cfg.efiSupport && (cfg.version == 2)) pkgs.efibootmgr)
-        ++ (optionals cfg.useOSProber [pkgs.busybox pkgs.os-prober])
-      )) + ":" + (makeSearchPathOutput "bin" "sbin" [
-        pkgs.mdadm pkgs.utillinux
-      ]);
+      path = with pkgs; makeBinPath (
+        [ coreutils gnused gnugrep findutils diffutils btrfs-progs utillinux mdadm ]
+        ++ optional (cfg.efiSupport && (cfg.version == 2)) efibootmgr
+        ++ optionals cfg.useOSProber [ busybox os-prober ]);
       font = if cfg.font == null then ""
         else (if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
@@ -509,6 +509,15 @@ in
           Whether to try and forcibly install GRUB even if problems are
           detected. It is not recommended to enable this unless you know what
           you are doing.
+        '';
+      };
+
+      forcei686 = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to force the use of a ia32 boot loader on x64 systems. Required 
+          to install and run NixOS on 64bit x86 systems with 32bit (U)EFI.
         '';
       };
 

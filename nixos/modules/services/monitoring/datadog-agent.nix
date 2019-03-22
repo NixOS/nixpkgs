@@ -235,7 +235,7 @@ in {
         '';
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
-          exec ${datadogPkg}/bin/agent start -c /etc/datadog-agent/datadog.yaml
+          exec ${datadogPkg}/bin/agent run -c /etc/datadog-agent/datadog.yaml
         '';
         serviceConfig.PermissionsStartOnly = true;
       };

@@ -22,8 +22,8 @@
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
-  src = fetch "llvm" "1hb5if7vmgkb52dpj9lyvn986mnk2jbpryng2r1rc5vy25wxw759";
-  polly_src = fetch "polly" "07l3y20j8124x24yqiq0qmz9rhkfh3c48q6vnpgldj2scr3vgyb2";
+  src = fetch "llvm" "0k124sxkfhfi1rca6kzkdraf4axhx99x3cw2rk55056628dvwwl8";
+  polly_src = fetch "polly" "1x4xv3j226rqdddp7b61d71wsx2b8vmmri02ycx27y2fg7ba7xg3";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
@@ -71,6 +71,8 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+    # valgrind unhappy with musl or glibc, but fails w/musl only
+    rm test/CodeGen/AArch64/wineh4.mir
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';

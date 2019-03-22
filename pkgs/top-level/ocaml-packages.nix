@@ -522,6 +522,8 @@ let
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
 
+    syslog = callPackage ../development/ocaml-modules/syslog { };
+
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
     ocf = callPackage ../development/ocaml-modules/ocf { };

@@ -112,9 +112,8 @@ true
 $ nixos-option <xref linkend="opt-boot.kernelModules"/>
 [ "tun" "ipv6" "loop" <replaceable>...</replaceable> ]
 </screen>
-  Interactive exploration of the configuration is possible using
-  <command>nix repl</command>, a read-eval-print loop for Nix expressions.
-  A typical use:
+  Interactive exploration of the configuration is possible using <command>nix
+  repl</command>, a read-eval-print loop for Nix expressions. A typical use:
 <screen>
 $ nix repl '&lt;nixpkgs/nixos>'
 
@@ -127,11 +126,10 @@ nix-repl> map (x: x.hostName) config.<xref linkend="opt-services.httpd.virtualHo
  </para>
 
  <para>
-   While abstracting your configuration, you may find it useful to generate
-   modules using code, instead of writing files. The example
-   below would have the same effect as importing a file which sets those
-   options.
-   <screen>
+  While abstracting your configuration, you may find it useful to generate
+  modules using code, instead of writing files. The example below would have
+  the same effect as importing a file which sets those options.
+<screen>
      { config, pkgs, ... }:
 
      let netConfig = { hostName }: {
@@ -143,5 +141,5 @@ nix-repl> map (x: x.hostName) config.<xref linkend="opt-services.httpd.virtualHo
 
     { imports = [ (netConfig "nixos.localdomain") ]; }
   </screen>
-</para>
+ </para>
 </section>

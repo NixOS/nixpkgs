@@ -2236,6 +2236,8 @@ in
 
   darkstat = callPackage ../tools/networking/darkstat { };
 
+  dav1d = callPackage ../development/libraries/dav1d { };
+
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
   dbeaver = callPackage ../applications/misc/dbeaver { };
@@ -2416,6 +2418,8 @@ in
 
   duo-unix = callPackage ../tools/security/duo-unix { };
 
+  duplicacy = callPackage ../tools/backup/duplicacy { };
+  
   duplicati = callPackage ../tools/backup/duplicati { };
 
   duplicity = callPackage ../tools/backup/duplicity {
@@ -2679,6 +2683,8 @@ in
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
   ferm = callPackage ../tools/networking/ferm { };
+
+  ffsend = callPackage ../tools/misc/ffsend { };
 
   fgallery = callPackage ../tools/graphics/fgallery { };
 
@@ -3624,6 +3630,8 @@ in
 
   john = callPackage ../tools/security/john { };
 
+  joplin-desktop = callPackage ../applications/misc/joplin-desktop { };
+
   journalbeat = callPackage ../tools/system/journalbeat { };
 
   journaldriver = callPackage ../tools/misc/journaldriver { };
@@ -3649,6 +3657,8 @@ in
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
   jsduck = callPackage ../development/tools/jsduck { };
+
+  jumpapp = callPackage ../tools/X11/jumpapp {};
 
   jucipp = callPackage ../applications/editors/jucipp { };
 
@@ -5760,6 +5770,8 @@ in
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
 
+  tayga = callPackage ../tools/networking/tayga { };
+
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
   tcptraceroute = callPackage ../tools/networking/tcptraceroute { };
@@ -6735,9 +6747,10 @@ in
       };
     };
   };
-  llvm-polly = llvmPackages_7.llvm-polly;
-  clang-polly = clang_7.override { cc = llvmPackages_7.clang-polly-unwrapped; };
+  llvm-polly = llvmPackages_latest.llvm-polly;
+  clang-polly = llvmPackages_latest.clang.override { cc = llvmPackages_latest.clang-polly-unwrapped; };
 
+  clang_8  = llvmPackages_8.clang;
   clang_7  = llvmPackages_7.clang;
   clang_6  = llvmPackages_6.clang;
   clang_5  = llvmPackages_5.clang;
@@ -7131,8 +7144,8 @@ in
 
   all-cabal-hashes = callPackage ../data/misc/hackage { };
 
-  # Build with ghc 8.4 due to https://github.com/NixOS/nixpkgs/issues/53597
-  purescript = haskell.lib.justStaticExecutables haskell.packages.ghc844.purescript;
+  purescript = callPackage ../development/compilers/purescript/purescript { };
+
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
 
@@ -7359,16 +7372,19 @@ in
   lld_5 = llvmPackages_5.lld;
   lld_6 = llvmPackages_6.lld;
   lld_7 = llvmPackages_7.lld;
+  lld_8 = llvmPackages_8.lld;
 
   lldb = llvmPackages.lldb;
   lldb_4 = llvmPackages_4.lldb;
   lldb_5 = llvmPackages_5.lldb;
   lldb_6 = llvmPackages_6.lldb;
   lldb_7 = llvmPackages_7.lldb;
+  lldb_8 = llvmPackages_8.lldb;
 
   llvm = llvmPackages.llvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
+  llvm_8  = llvmPackages_8.llvm;
   llvm_7  = llvmPackages_7.llvm;
   llvm_6  = llvmPackages_6.llvm;
   llvm_5  = llvmPackages_5.llvm;
@@ -13377,7 +13393,11 @@ in
     go = buildPackages.go_1_11;
   };
 
-  buildGoModule = buildGo111Module;
+  buildGo112Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_12;
+  };
+
+  buildGoModule = buildGo112Module;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -14901,7 +14921,7 @@ in
   });
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_4_14;
+  linuxPackages = linuxPackages_4_19;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
@@ -17753,6 +17773,10 @@ in
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
 
+  waybar = callPackage ../applications/misc/waybar {
+    pulseSupport = config.pulseaudio or false;
+  };
+
   velox = callPackage ../applications/window-managers/velox {
     stConf = config.st.conf or null;
     stPatches = config.st.patches or null;
@@ -17797,6 +17821,8 @@ in
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
+
+  wmfs = callPackage ../applications/window-managers/wmfs/default.nix { };
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
@@ -18103,8 +18129,6 @@ in
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   caps = callPackage ../applications/audio/caps { };
-
-  lastwatch = callPackage ../applications/audio/lastwatch { };
 
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
 
@@ -19517,7 +19541,9 @@ in
 
   soulseekqt = libsForQt5.callPackage ../applications/networking/p2p/soulseekqt { };
 
-  sox = callPackage ../applications/misc/audio/sox { };
+  sox = callPackage ../applications/misc/audio/sox {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
   soxr = callPackage ../applications/misc/audio/soxr { };
 
@@ -20688,7 +20714,7 @@ in
 
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
-  duckmarines = callPackage ../games/duckmarines { love = love_0_9; };
+  duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
 
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
@@ -22570,6 +22596,8 @@ in
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
   muse = callPackage ../applications/audio/muse { };
+
+  musly = callPackage ../applications/audio/musly { };
 
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
 
