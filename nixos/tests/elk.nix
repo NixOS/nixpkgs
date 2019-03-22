@@ -96,6 +96,16 @@ let
                       unit_count: 1
                 '';
               };
+
+              beats.apm-server = {
+                enable = true;
+                extraConfig = {
+                  setup.dashboards = {
+                    always_kibana = true;
+                    retry.enabled = true;
+                  };
+                };
+              };
             };
           };
       };
@@ -124,6 +134,10 @@ let
       # See if logstash messages arive in elasticsearch.
       $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' -d '{\"query\" : { \"match\" : { \"message\" : \"flowers\"}}}' | jq .hits.total | grep -v 0");
       $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' -d '{\"query\" : { \"match\" : { \"message\" : \"dragons\"}}}' | jq .hits.total | grep 0");
+
+      # See if apm-server is healthy.
+      $one->waitForUnit("apm-server.service");
+      $one->waitUntilSucceeds("curl --silent --show-error 'http://localhost:8200/' | grep 'ok'");
 
       # Test elasticsearch-curator.
       $one->systemctl("stop logstash");
