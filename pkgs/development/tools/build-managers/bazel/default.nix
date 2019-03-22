@@ -15,8 +15,8 @@
 let
   srcDeps = lib.singleton (
     fetchurl {
-      url = "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
-      sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
+      url = "https://github.com/google/desugar_jdk_libs/archive/e0b0291b2c51fbe5a7cfa14473a1ae850f94f021.zip";
+      sha256 = "17a19zn1j57h8rrhw6vcj2i6yz32qvnh508vv54rvig83kwh8bpy";
     }
   );
 
@@ -61,7 +61,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  version = "0.22.0";
+  version = "0.23.2";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
-    sha256 = "0hannnvia8rvmi2v5d97j1f6wv0m1kxkd5hq4aqp0dqjr0ka4q38";
+    sha256 = "0fblj5gvvhhswrnkga9b1yhbci8xl6a8v5g6npp1h1hyhmymlfi9";
   };
 
   sourceRoot = ".";
