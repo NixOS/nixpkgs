@@ -19,11 +19,11 @@ let
   withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
 in
 stdenv.mkDerivation rec {
-  name = "gnuplot-5.2.5";
+  name = "gnuplot-5.2.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${name}.tar.gz";
-    sha256 = "1ajw8xcb1kg2vy8n3rhrz71knjr2yivfavv9lqqzvp1dwv6b5783";
+    sha256 = "1vllgap08nhvdmc03idmkdnk9cfl2bp81hps50q1pqrr640qzp9m";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig texinfo ] ++ lib.optional withQt qttools;
