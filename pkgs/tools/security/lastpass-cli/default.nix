@@ -2,15 +2,14 @@
 , bash-completion, openssl, curl, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "lastpass-cli-${version}";
-
-  version = "1.3.1";
+  pname = "lastpass-cli";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "lastpass";
-    repo = "lastpass-cli";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "11drzmfdvb8ydw1dxaz9zz8rk0jjqmfv076vydz05qqvgx59s38h";
+    sha256 = "12qjqvqzi3pq7hrdpq59bcxqy6yj1mhx145g9rky1jm2ipzpfayq";
   };
 
   nativeBuildInputs = [ asciidoc cmake docbook_xsl pkgconfig ];
