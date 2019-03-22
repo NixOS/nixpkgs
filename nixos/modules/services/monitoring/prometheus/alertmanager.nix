@@ -4,33 +4,31 @@ with lib;
 
 let
   cfg = config.services.prometheus.alertmanager;
-  cfg2 = config.services.prometheus2.alertmanager;
-  mkConfigFile = amCfg:
-    pkgs.writeText "alertmanager.yml" (builtins.toJSON amCfg.configuration);
+  mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
 
-  mkAlertmanagerYml = amCfg: let
-      checkedConfig = file:
-        pkgs.runCommand "checked-config" { buildInputs = [ amCfg.package ]; } ''
-        ln -s ${file} $out
-        amtool check-config $out
-      '';
-      yml = if amCfg.configText != null then
-        pkgs.writeText "alertmanager.yml" amCfg.configText
-        else mkConfigFile amCfg;
-    in
-      checkedConfig yml;
+  checkedConfig = file: pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
+    ln -s ${file} $out
+    amtool check-config $out
+  '';
 
-  mkCmdlineArgs = amCfg:
-    amCfg.extraFlags ++ [
-    "--config.file ${mkAlertmanagerYml amCfg}"
-    "--web.listen-address ${amCfg.listenAddress}:${toString amCfg.port}"
-    "--log.level ${amCfg.logLevel}"
-    ] ++ (optional (amCfg.webExternalUrl != null)
-      "--web.external-url ${amCfg.webExternalUrl}"
-    ) ++ (optional (amCfg.logFormat != null)
-      "--log.format ${amCfg.logFormat}"
-    );
-    amOptions = {
+  alertmanagerYml = let
+    yml = if cfg.configText != null then
+        pkgs.writeText "alertmanager.yml" cfg.configText
+        else mkConfigFile;
+    in checkedConfig yml;
+
+  cmdlineArgs = cfg.extraFlags ++ [
+    "--config.file ${alertmanagerYml}"
+    "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
+    "--log.level ${cfg.logLevel}"
+    ] ++ (optional (cfg.webExternalUrl != null)
+      "--web.external-url ${cfg.webExternalUrl}"
+    ) ++ (optional (cfg.logFormat != null)
+      "--log.format ${cfg.logFormat}"
+  );
+in {
+  options = {
+    services.prometheus.alertmanager = {
       enable = mkEnableOption "Prometheus Alertmanager";
 
       package = mkOption {
@@ -136,40 +134,36 @@ let
         '';
       };
     };
-    mkAMConfig = amCfg: amVersion: [
-      (mkIf amCfg.enable {
-        assertions = singleton {
-          assertion = amCfg.configuration != null || amCfg.configText != null;
-          message = "Can not enable alertmanager without a configuration. "
-           + "Set either the `configuration` or `configText` attribute.";
-        };
-      })
-      (mkIf amCfg.enable {
-        networking.firewall.allowedTCPPorts = optional amCfg.openFirewall amCfg.port;
-
-        systemd.services."alertmanager${amVersion}" = {
-          wantedBy = [ "multi-user.target" ];
-          after    = [ "network.target" ];
-          script = ''
-            ${amCfg.package}/bin/alertmanager \
-              ${concatStringsSep " \\\n  " (mkCmdlineArgs amCfg)}
-          '';
-          serviceConfig = {
-            User = amCfg.user;
-            Group = amCfg.group;
-            Restart  = "always";
-            PrivateTmp = true;
-            WorkingDirectory = "/tmp";
-            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          };
-        };
-      })
-    ];
-in {
-  options = {
-    services.prometheus.alertmanager = amOptions;
-    services.prometheus2.alertmanager = amOptions;
   };
 
-  config = mkMerge ((mkAMConfig cfg "") ++ (mkAMConfig cfg2 "2"));
+  config = mkMerge [
+    (mkIf cfg.enable {
+      assertions = singleton {
+        assertion = cfg.configuration != null || cfg.configText != null;
+        message = "Can not enable alertmanager without a configuration. "
+         + "Set either the `configuration` or `configText` attribute.";
+      };
+    })
+    (mkIf cfg.enable {
+      networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
+      systemd.services.alertmanager = {
+        wantedBy = [ "multi-user.target" ];
+        after    = [ "network.target" ];
+        script = ''
+          ${cfg.package}/bin/alertmanager \
+            ${concatStringsSep " \\\n  " cmdlineArgs}
+        '';
+
+        serviceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          Restart  = "always";
+          PrivateTmp = true;
+          WorkingDirectory = "/tmp";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        };
+      };
+    })
+  ];
 }
