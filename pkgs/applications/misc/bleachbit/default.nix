@@ -1,25 +1,26 @@
-{ stdenv, pythonPackages, fetchurl }:
+{ stdenv, pythonPackages, fetchurl, gettext }:
 pythonPackages.buildPythonApplication rec {
-  name = "bleachbit-${version}";
-  version = "2.0";
-
-  namePrefix = "";
+  pname = "bleachbit";
+  version = "2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bleachbit/${name}.tar.bz2";
-    sha256 = "0ps98zx4n13q92bq7ykqi6hj3i7brdqgm87i9gk6ibvljp1vxdz9";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "1yj9bc3k6s1aib7znb79h5rybfv691zz4szxkwf9fm9nr0dws603";
   };
 
+  nativeBuildInputs = [ gettext ];
   buildInputs = [  pythonPackages.wrapPython ];
+
+  # Patch the many hardcoded uses of /usr/share/ and /usr/bin
+  postPatch = ''
+    find -type f -exec sed -i -e 's@/usr/share@${placeholder "out"}/share@g' {} \;
+    find -type f -exec sed -i -e 's@/usr/bin@${placeholder "out"}/bin@g' {} \;
+  '';
 
   doCheck = false;
 
   postInstall = ''
-    mkdir -p $out/bin
-    cp bleachbit.py $out/bin/bleachbit
-    chmod +x $out/bin/bleachbit
-
-    substituteInPlace $out/bin/bleachbit --replace "#!/usr/bin/env python" "#!${pythonPackages.python.interpreter}"
+    make install SHELL=${stdenv.shell} prefix=${placeholder "out"}
   '';
 
   propagatedBuildInputs = with pythonPackages; [ pygtk ];
