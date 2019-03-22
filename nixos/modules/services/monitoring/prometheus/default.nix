@@ -91,7 +91,7 @@ let
     "--web.listen-address=${cfg2.listenAddress}"
     "--alertmanager.notification-queue-capacity=${toString cfg2.alertmanagerNotificationQueueCapacity}"
     "--alertmanager.timeout=${toString cfg2.alertmanagerTimeout}s"
-    (optionalString (cfg2.webExternalUrl != null) "-web.external-url=${cfg2.webExternalUrl}")
+    (optionalString (cfg2.webExternalUrl != null) "--web.external-url=${cfg2.webExternalUrl}")
   ];
 
   promTypes.globalConfig = types.submodule {
