@@ -218,13 +218,6 @@
    </listitem>
    <listitem>
     <para>
-      The NetworkManager systemd unit was renamed back from network-manager.service to
-      NetworkManager.service for better compatibility with other applications expecting this name.
-      The same applies to ModemManager where modem-manager.service is now called ModemManager.service again.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      Package <varname>rabbitmq_server</varname> is renamed to
      <varname>rabbitmq-server</varname>.
     </para>
