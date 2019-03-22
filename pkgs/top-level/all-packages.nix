@@ -19252,6 +19252,8 @@ in
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
 
+  repo = callPackage ../applications/version-management/repo { };
+
   retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
   retroshare06 = retroshare;
 
