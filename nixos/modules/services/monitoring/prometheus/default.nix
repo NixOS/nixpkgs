@@ -52,7 +52,7 @@ let
     in promtoolCheck "check-config" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
-    "-storage.local.path=${cfg.dataDir}/metrics"
+    "-storage.local.path=/var/lib/prometheus/metrics"
     "-config.file=${prometheusYml}"
     "-web.listen-address=${cfg.listenAddress}"
     "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
@@ -86,7 +86,7 @@ let
     in prom2toolCheck "check config" "prometheus.yml" yml;
 
   cmdlineArgs2 = cfg2.extraFlags ++ [
-    "--storage.tsdb.path=${cfg2.dataDir}/data/"
+    "--storage.tsdb.path=/var/lib/prometheus2/data/"
     "--config.file=${prometheus2Yml}"
     "--web.listen-address=${cfg2.listenAddress}"
     "--alertmanager.notification-queue-capacity=${toString cfg2.alertmanagerNotificationQueueCapacity}"
@@ -446,14 +446,6 @@ in {
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
-        default = "/var/lib/prometheus";
-        description = ''
-          Directory to store Prometheus metrics data.
-        '';
-      };
-
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -568,14 +560,6 @@ in {
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
-        default = "/var/lib/prometheus2";
-        description = ''
-          Directory to store Prometheus 2 metrics data.
-        '';
-      };
-
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -666,15 +650,15 @@ in {
    };
 
   config = mkMerge [
-    (mkIf cfg.enable {
+    (mkIf (cfg.enable || cfg2.enable) {
       users.groups.${promGroup}.gid = config.ids.gids.prometheus;
       users.users.${promUser} = {
         description = "Prometheus daemon user";
         uid = config.ids.uids.prometheus;
         group = promGroup;
-        home = cfg.dataDir;
-        createHome = true;
       };
+    })
+    (mkIf cfg.enable {
       systemd.services.prometheus = {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
@@ -686,19 +670,12 @@ in {
         serviceConfig = {
           User = promUser;
           Restart  = "always";
-          WorkingDirectory = cfg.dataDir;
+          WorkingDirectory = /var/lib/prometheus;
+          StateDirectory = "prometheus";
         };
       };
     })
     (mkIf cfg2.enable {
-      users.groups.${promGroup}.gid = config.ids.gids.prometheus2;
-      users.users.${promUser} = {
-        description = "Prometheus2 daemon user";
-        uid = config.ids.uids.prometheus2;
-        group = promGroup;
-        home = cfg2.dataDir;
-        createHome = true;
-      };
       systemd.services.prometheus2 = {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
@@ -710,7 +687,8 @@ in {
         serviceConfig = {
           User = promUser;
           Restart  = "always";
-          WorkingDirectory = cfg2.dataDir;
+          WorkingDirectory = /var/lib/prometheus2;
+          StateDirectory = "prometheus2";
         };
       };
     })
