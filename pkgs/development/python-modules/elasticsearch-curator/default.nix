@@ -45,13 +45,6 @@ buildPythonPackage rec {
     funcsigs
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace 'click>=6.7,<7.0' 'click'
-    substituteInPlace setup.py \
-      --replace 'click>=6.7,<7.0' 'click'
-  '';
-
   meta = with stdenv.lib; {
     homepage = https://github.com/elastic/curator;
     description = "Curate, or manage, your Elasticsearch indices and snapshots";
@@ -69,5 +62,8 @@ buildPythonPackage rec {
       * Perform various actions on the items which remain in the actionable list.
     '';
     maintainers = with maintainers; [ basvandijk ];
+
+    # https://github.com/elastic/curator/pull/1280
+    broken = versionAtLeast click.version "7.0";
   };
 }
