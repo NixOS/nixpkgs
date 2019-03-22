@@ -44,6 +44,6 @@ in pythonPackages.buildPythonApplication rec {
     homepage = https://github.com/pulb/mailnag;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
   };
 }

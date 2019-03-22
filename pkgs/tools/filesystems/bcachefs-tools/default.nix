@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bcachefs-tools";
-  version = "2019-02-09";
+  version = "2019-03-13";
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs-tools.git";
-    rev = "17c5215c1c542dd7b6b4f891a0da16d8c98e0591";
-    sha256 = "1zm2lnvijfmz483m2nhxz1rhk7ghgh0c450nyiwi6wa7lc1y3339";
+    rev = "0894d547501fb9306ae7b1c669b66a7b49fb2205";
+    sha256 = "1vwzwag413kzlij2f1hw1b8g592m40dr03zwkc8k5snbl4daiwr6";
   };
 
   enableParallelBuilding = true;

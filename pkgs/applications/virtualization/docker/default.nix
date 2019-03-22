@@ -94,13 +94,14 @@ rec {
 
     dontStrip = true;
 
-    buildPhase = (optionalString (stdenv.isLinux) ''
+    buildPhase = ''
+      export GOCACHE="$TMPDIR/go-cache"
+    '' + (optionalString (stdenv.isLinux) ''
       # build engine
       cd ./components/engine
       export AUTO_GOPATH=1
       export DOCKER_GITCOMMIT="${rev}"
       export VERSION="${version}"
-      export GOCACHE="$TMPDIR/go-cache"
       ./hack/make.sh dynbinary
       cd -
     '') + ''

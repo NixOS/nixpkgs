@@ -50,6 +50,6 @@ stdenv.mkDerivation  rec {
     homepage = https://www.rockbox.org;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu jgeerds ];
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

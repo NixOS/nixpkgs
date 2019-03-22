@@ -1,21 +1,21 @@
 { stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
-  name = "broot-${version}";
-  version = "0.6.3";
+  pname = "broot";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "Canop";
-    repo = "broot";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1080rhmm3q5h00q6xk2xzbjlvr5n7gq5fscvgkyk1vwbbyh9vc79";
+    sha256 = "1hv9plgbwffdv94d8h6qlmazbwi56967wzqvfzr47iigbvx81vwj";
   };
 
-  cargoSha256 = "0722nzip3rl47rjrzyb2y3xbsy9ww1ldjv84qbzyy3flcyh2adjm";
+  cargoSha256 = "0cq78im3hg7wns260gwvajikj80l7kjbg3zycy3nvdx34llgv0n5";
 
   meta = with stdenv.lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
-    homepage = "https://github.com/Canop/broot";
+    homepage = "https://dystroy.org/broot/";
     maintainers = with maintainers; [ magnetophon ];
     license = with licenses; [ mit ];
     platforms = platforms.all;

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "lxtask-${version}";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/lxde/${name}.tar.xz";
-    sha256 = "0h7g1fdngv939z1d05nzs86dplww5a3bpm0isxd7p1bjby047d6z";
+    sha256 = "0cv4hx5dg01hbyi5p10pl78n0a40xajpq4wx9c7886pkmpq8isj1";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

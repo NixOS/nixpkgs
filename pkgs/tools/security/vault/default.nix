@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ go gox removeReferencesTo ];
 
-  GOCACHE="$TMPDIR/go-cache";
-
   preBuild = ''
     patchShebangs ./
     substituteInPlace scripts/build.sh --replace 'git rev-parse HEAD' 'echo ${src.rev}'
@@ -24,6 +22,7 @@ stdenv.mkDerivation rec {
     ln -s $(pwd) src/github.com/hashicorp/vault
 
     export GOPATH=$(pwd)
+    export GOCACHE="$TMPDIR/go-cache"
   '';
 
   installPhase = ''

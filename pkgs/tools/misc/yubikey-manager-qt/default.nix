@@ -27,16 +27,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "yubikey-manager-qt";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/yubikey-manager-qt/Releases/${pname}-${version}.tar.gz";
-    sha256 = "8049a233a8cca07543d745a9f619c0fc3afb324f5d0030b93f037b34ac1c5e66";
+    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
+    sha256 = "0hcfl0mh4gqy9c8ghmi58asqr8v009n6li0mgcy3r8fyjr7qryvy";
   };
 
   nativeBuildInputs = [ makeWrapper python3.pkgs.wrapPython qmake ];
-
-  sourceRoot = ".";
 
   postPatch = ''
     substituteInPlace ykman-gui/deployment.pri --replace '/usr/bin' "$out/bin"

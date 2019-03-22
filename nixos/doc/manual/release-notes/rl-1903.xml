@@ -476,6 +476,8 @@
     and will be <link xlink:href="https://matrix.org/blog/2019/02/05/synapse-0-99-0/">the last version to accept self-signed certificates</link>.
     As such, it is now recommended to use a proper certificate verified by a
     root CA (for example Let's Encrypt).
+    The new <link linkend="module-services-matrix">manual chapter on Matrix</link> contains a working example of using nginx as a reverse proxy
+    in front of <literal>matrix-synapse</literal>, using Let's Encrypt certificates.
    </para>
   </listitem>
    <listitem>
@@ -559,6 +561,15 @@
        The quassel-webserver package and module was removed from nixpkgs due to the lack
        of maintainers.
      </para>
+   </listitem>
+   <listitem>
+    <para>
+     The manual gained a
+     <link linkend="module-services-matrix">
+      new chapter on self-hosting <literal>matrix-synapse</literal> and <literal>riot-web</literal>
+     </link>, the most prevalent server and client implementations for the
+     <link xlink:href="https://matrix.org/">Matrix</link> federated communication network.
+    </para>
    </listitem>
    <listitem>
      <para>

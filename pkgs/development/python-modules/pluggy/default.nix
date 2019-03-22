@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Plugin and hook calling mechanisms for Python";
     homepage = "https://pypi.python.org/pypi/pluggy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jgeerds ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -3,8 +3,8 @@
 }:
 
 let
-  date = "20180220";
-  rev = "47849be3a900c546cf92066849be0806f4e611d9";
+  date = "20190310";
+  rev = "b6ffe28a21c53a0946d95751c905d9e0b6c3b630";
 in
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://git.ipxe.org/ipxe.git;
-    sha256 = "1f4pi1dp2zqnrbfnggnzycfvrxv0bqgw73dxbyy3hfy4mhdj6z45";
+    sha256 = "1s8sy75lpx8zq60wc0i35d8c1wwm1rq3scxpkq31623d097mch59";
     inherit rev;
   };
 

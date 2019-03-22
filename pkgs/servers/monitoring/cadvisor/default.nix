@@ -2,20 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "cadvisor-${version}";
-  version = "0.32.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
     rev = "v${version}";
-    sha256 = "1li2qgfi4lfa2i1m7ykjxy1xm9hlq42fgdkb2wh2db9chyg5r4qp";
+    sha256 = "14v4xjycr34kvilidhhavc8yvhkxb7mxc9qd56jd1x2c42lfna8k";
   };
 
   nativeBuildInputs = [ go ];
 
-  GOCACHE="$TMPDIR/go-cache";
-
   buildPhase = ''
+    export GOCACHE="$TMPDIR/go-cache"
     mkdir -p Godeps/_workspace/src/github.com/google/
     ln -s $(pwd) Godeps/_workspace/src/github.com/google/cadvisor
     GOPATH=$(pwd)/Godeps/_workspace go build -v -o cadvisor github.com/google/cadvisor

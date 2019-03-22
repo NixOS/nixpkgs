@@ -1,7 +1,6 @@
 { abiCompat ? null,
   stdenv, makeWrapper, lib, fetchurl, fetchpatch, buildPackages,
-
-  automake, autoconf, libiconv, libtool, intltool, mtdev, libevdev, libinput,
+  automake, autoconf, gettext, libiconv, libtool, intltool, mtdev, libevdev, libinput,
   freetype, tradcpp, fontconfig, meson, ninja,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
@@ -435,6 +434,10 @@ self: super:
       ln -s share "$out/etc"
       mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
     '';
+  });
+
+  xload = super.xload.overrideAttrs (attrs: {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ gettext ];
   });
 
   xlsfonts = super.xlsfonts.overrideAttrs (attrs: {

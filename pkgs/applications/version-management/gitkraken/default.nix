@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "4.2.2";
+  version = "5.0.1";
 
   src = fetchurl {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "0zbnw2x15688hjdj10kpp2ipka3j7b2p945a4mzwlsc8a245ljgb";
+    sha256 = "14n0xqp6y7ij26r5k7h0phf29krbpx54yzfbvrax5sd9cwg2762g";
   };
 
   libPath = makeLibraryPath [
@@ -78,9 +78,7 @@ stdenv.mkDerivation rec {
     pushd usr
     pushd share
     substituteInPlace applications/gitkraken.desktop \
-      --replace /usr/share/gitkraken $out/bin \
-      --replace Icon=app Icon=gitkraken
-    mv pixmaps/app.png pixmaps/gitkraken.png
+      --replace /usr/share/gitkraken $out/bin
     popd
     rm -rf bin/gitkraken share/lintian
     cp -av share bin $out/

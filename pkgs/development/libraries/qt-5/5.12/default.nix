@@ -60,7 +60,10 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = [ ./qtwebengine-no-build-skip.patch ];
+    qtwebengine = [
+      ./qtwebengine-no-build-skip.patch
+      ./qtwebengine-CVE-2019-5786.patch
+    ];
     qtwebkit = [ ./qtwebkit.patch ]
       ++ optionals stdenv.isDarwin [
         ./qtwebkit-darwin-no-readline.patch

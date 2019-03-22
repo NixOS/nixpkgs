@@ -13,8 +13,6 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   checkPhase = ''
-    # https://github.com/sffjunkie/astral/pull/26
-    touch src/test/.api_key
     py.test -m "not webtest"
   '';
 

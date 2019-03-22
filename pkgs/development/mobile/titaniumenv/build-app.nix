@@ -40,8 +40,7 @@ in
 stdenv.mkDerivation ({
   name = stdenv.lib.replaceChars [" "] [""] name;
 
-  buildInputs = [ nodejs titanium alloy python which file jdk ]
-    ++ stdenv.lib.optional (target == "iphone") xcodewrapper;
+  buildInputs = [ nodejs titanium alloy python which file jdk ];
 
   buildPhase = ''
     ${preBuild}
@@ -91,6 +90,10 @@ stdenv.mkDerivation ({
       ''}
     ''
     else if target == "iphone" then ''
+      # Be sure that the Xcode wrapper has priority over everything else.
+      # When using buildInputs this does not seem to be the case.
+      export PATH=${xcodewrapper}/bin:$PATH
+
       # Configure the path to Xcode
       titanium --config-file $TMPDIR/config.json --no-colors config paths.xcode ${xcodeBaseDir}
 

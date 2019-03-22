@@ -14,7 +14,7 @@
   installPhase = ''
     mkdir $out
 
-    cp -ra feedly feedly.css $out
+    cp -ra feedly *.css $out
   '';
 
   meta = with stdenv.lib; {

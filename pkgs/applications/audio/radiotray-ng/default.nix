@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "radiotray-ng-${version}";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
     rev = "v${version}";
-    sha256 = "1jk80fv8ivwdx7waivls0mczn0rx4wv0fy7a28k77m88i5gkfgyw";
+    sha256 = "1crvpn1mgrv7bd2k683mpgs59785mkrjvmp1f14iyq4qrr0f9zzi";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
     wxGTK
   ] ++ gstInputs
     ++ pythonInputs;
+
+  patches = [ ./no-dl-googletest.patch ];
 
   postPatch = ''
     for x in debian/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
@@ -80,8 +82,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   checkInputs = [ gtest ];
-  # doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  doCheck = false; # fails to pick up supplied gtest, tries to download it instead
+  doCheck = !stdenv.isAarch64; # single failure that I can't explain
 
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${stdenv.lib.makeBinPath [ dbus ]})

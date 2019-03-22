@@ -31,7 +31,6 @@ buildGoPackage rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [
-      jgeerds
     ];
   };
 }
