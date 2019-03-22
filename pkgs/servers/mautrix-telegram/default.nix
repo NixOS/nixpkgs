@@ -4,11 +4,11 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3d5156f205b94dbac76f7eafb0ca732ba16fa568d4440210f7dd4be5c3252dda";
+    sha256 = "51951845e52c4ca5410e0f4a51d99014dd6df2fcedfca8b7241e045359cbf112";
   };
 
   propagatedBuildInputs = [
