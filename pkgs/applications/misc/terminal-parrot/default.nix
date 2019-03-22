@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1b4vr4s1zpkpf5kc1r2kdlp3hf88qp1f7h05g8kd62zf4sfbj722";
   };
 
-  modSha256 = "0ymqhrkgk94z4f2p3c6v75g2h8qlqzdi7byivqzxzmdczmq9zq2s";
+  modSha256 = "01i8fim9z2l8rpdgfaih9ldvbap7gcx5767a15miv8q7sxpr90cp";
 
   meta = with stdenv.lib; {
     description = "Shows colorful, animated party parrot in your terminial";

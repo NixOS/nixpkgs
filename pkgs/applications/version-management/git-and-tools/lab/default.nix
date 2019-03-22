@@ -13,7 +13,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  modSha256 = "1g72fnkibmdd9i20wgp5fjf556xp2xwan06dmn3f5rkmnicy3ccl";
+  modSha256 = "0bw47dd1b46ywsian2b957a4ipm77ncidipzri9ra39paqlv7abb";
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
