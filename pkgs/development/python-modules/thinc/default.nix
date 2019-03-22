@@ -63,7 +63,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "pathlib==1.0.1" "pathlib>=1.0.0,<2.0.0" \
       --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6" \
-      --replace "msgpack-numpy<0.4.4" "msgpack-numpy"
+      --replace "msgpack-numpy<0.4.4" "msgpack-numpy" \
+      --replace "wheel>=0.32.0,<0.33.0" "wheel" \
+      --replace "wrapt>=1.10.0,<1.11.0" "wrapt" \
+      --replace "msgpack>=0.5.6,<0.6.0" "msgpack"
   '';
 
   # Cannot find cython modules.
