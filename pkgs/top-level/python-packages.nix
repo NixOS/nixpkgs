@@ -792,6 +792,8 @@ in {
 
   pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
 
+  pytricia = callPackage ../development/python-modules/pytricia { };
+
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
