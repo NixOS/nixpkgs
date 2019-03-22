@@ -15175,9 +15175,7 @@ in
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
-  go-langserver = callPackage ../development/tools/go-langserver {
-    buildGoPackage = buildGo110Package;
-  };
+  go-langserver = callPackage ../development/tools/go-langserver { };
 
   gotests = callPackage ../development/tools/gotests { };
 
