@@ -17820,6 +17820,8 @@ in
 
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
 
+  wmfs = callPackage ../applications/window-managers/wmfs/default.nix { };
+
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icewm = callPackage ../applications/window-managers/icewm {};
