@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnome3.dconf
     gtk3
-    gnome3.libgtop
+    libgtop
     gnome3.zenity
     bamf
     json-glib
