@@ -41,7 +41,8 @@ in python.pkgs.buildPythonApplication {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ makeWrapper pythonEnv ];
+  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = [ pythonEnv ];
 
   postInstall = ''
     mv $out/bin/retext $out/bin/.retext
