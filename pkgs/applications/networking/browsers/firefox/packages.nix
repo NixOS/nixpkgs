@@ -10,10 +10,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "66.0";
+    ffversion = "66.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "1izxikivz0jb8kzq4cd040a70s3j83nw324yvvbmi7g808s7s6b8ljia5allbrkqcgrvrx3rq4w09kwffwmwd43jxgc1bfl8af3v8d9";
+      sha512 = "3nh42a9s8hzs3823mddqdcrhjb2nrphaz9v94mmp4xx4vra18mhsyddszk6xg5mx33wamvlalicws6l9h1d4i4dnnpchh2l6ch8m9kc";
     };
 
     patches = [
