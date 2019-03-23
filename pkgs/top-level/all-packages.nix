@@ -6240,6 +6240,8 @@ in
 
   rcm = callPackage ../tools/misc/rcm {};
 
+  td = callPackage ../tools/misc/td { };
+
   tegola = callPackage ../servers/tegola {};
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
