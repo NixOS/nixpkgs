@@ -4,10 +4,12 @@
          version="5.0"
          xml:id="sec-profile-qemu-guest">
  <title>QEMU Guest</title>
+
  <para>
   This profile contains common configuration for virtual machines running under
   QEMU (using virtio).
  </para>
+
  <para>
   It makes virtio modules available on the initrd, sets the system time from
   the hardware clock to work around a bug in qemu-kvm, and

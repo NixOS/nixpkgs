@@ -1,8 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi, certifi, six }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, certifi, six }:
 
 buildPythonPackage rec {
   pname = "pylast";
   version = "3.0.0";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

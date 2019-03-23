@@ -1,29 +1,38 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl }:
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "ngrok-${version}";
-  version = "2.2.8";
+let versions = builtins.fromJSON (builtins.readFile ./versions.json);
+    arch = if stdenv.isi686 then "386"
+           else if stdenv.isx86_64 then "amd64"
+           else if stdenv.isAarch64 then "arm64"
+           else if stdenv.isArm then "arm"
+           else throw "Unsupported architecture";
+    os = if stdenv.isLinux then "linux"
+         else if stdenv.isDarwin then "darwin"
+         else throw "Unsupported os";
+    versionInfo = versions."${os}-${arch}";
+    inherit (versionInfo) version sha256 url;
 
-  src = if stdenv.isLinux && stdenv.isi686 then fetchurl {
-    url = "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-i386.tgz";
-    sha256 = "0s5ymlaxrvm13q3mlvfirh74sx60qh56c5sgdma2r7q5qlsq41xg";
-  } else if stdenv.isLinux && stdenv.isx86_64 then fetchurl {
-    url = "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.tgz";
-    sha256 = "1mn9iwgy6xzrjihikwc2k2j59igqmph0cwx17qp0ziap9lp5xxad";
-  } else if stdenv.isDarwin then fetchurl {
-    url = "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-386.zip";
-    sha256 = "0yfd250b55wcpgqd00rqfaa7a82f35fmybb31q5xwdbgc2i47pbh";
-  } else throw "platform ${stdenv.hostPlatform.system} not supported!";
+in
+stdenv.mkDerivation {
+  name = "ngrok-${version}";
+  version = "${version}";
+
+  # run ./update
+  src = fetchurl { inherit sha256 url; };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = optional stdenv.isDarwin unzip;
+  unpackPhase = "cp $src ngrok";
+
+  buildPhase = "chmod a+x ngrok";
 
   installPhase = ''
     install -D ngrok $out/bin/ngrok
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "ngrok";
@@ -32,7 +41,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://ngrok.com/;
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.bobvanderlinden ];
   };
 }

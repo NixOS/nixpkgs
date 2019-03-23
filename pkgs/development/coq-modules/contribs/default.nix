@@ -14,7 +14,9 @@ let mkContrib = repo: revs: param:
 
     buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
 
-    installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+    installFlags =
+       stdenv.lib.optional (stdenv.lib.versionAtLeast coq.coq-version "8.9") "-f Makefile.coq"
+    ++ [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
     passthru = {
       compatibleCoqVersions = v: builtins.elem v revs;
@@ -196,7 +198,7 @@ let mkContrib = repo: revs: param:
     sha256 = "1ddwzg12pbzpnz3njin4zhpph92kscrbsn3bzds26yj8fp76zc33";
   };
 
-  containers = mkContrib "containers" [ "8.6" "8.7" "8.8" ] {
+  containers = mkContrib "containers" [ "8.6" "8.7" "8.8" "8.9" ] {
     "8.6" = {
       version = "8.6.0";
       rev = "fa1fec7";
@@ -211,6 +213,11 @@ let mkContrib = repo: revs: param:
       version = "20180330";
       rev = "52b86bed1671321b25fe4d7495558f9f221b12aa";
       sha256 = "0hbnrwdgryr52170cfrlbiymr88jsyxilnpr343vnprqq3zk1xz0";
+    };
+    "8.9" = {
+      version = "20190222";
+      rev = "aa33052c1edfc5a65885942a67c2773b5d96f8cc";
+      sha256 = "0mjgfdr9bzsch0dlk4vq1frkaig14dqh46r54cv0l15flxapg0iw";
     };
   }."${coq.coq-version}";
 

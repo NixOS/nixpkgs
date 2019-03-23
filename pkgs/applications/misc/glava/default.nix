@@ -22,13 +22,13 @@ let
 in
   stdenv.mkDerivation rec {
     name = "glava-${version}";
-    version = "1.6.0";
+    version = "1.6.3";
 
     src = fetchFromGitHub {
       owner = "wacossusca34";
       repo = "glava";
       rev = "v${version}";
-      sha256 = "1zzaq9x98prlgjnb3fxbrnhqpg50f9qqkwl6r4a1xnsfs93qmqpl";
+      sha256 = "0kqkjxmpqkmgby05lsf6c6iwm45n33jk5qy6gi3zvjx4q4yzal1i";
     };
 
     buildInputs = [

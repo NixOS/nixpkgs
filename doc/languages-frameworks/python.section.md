@@ -188,25 +188,24 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 ```nix
 { lib, buildPythonPackage, fetchPypi }:
 
-  toolz = buildPythonPackage rec {
-    pname = "toolz";
-    version = "0.7.4";
+buildPythonPackage rec {
+  pname = "toolz";
+  version = "0.7.4";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
-    };
-
-    doCheck = false;
-
-    meta = with lib; {
-      homepage = https://github.com/pytoolz/toolz;
-      description = "List processing tools and functional utilities";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
-}
+
+  doCheck = false;
+
+  meta = with lib; {
+    homepage = https://github.com/pytoolz/toolz;
+    description = "List processing tools and functional utilities";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
+  };
+};
 ```
 
 What happens here? The function `buildPythonPackage` is called and as argument

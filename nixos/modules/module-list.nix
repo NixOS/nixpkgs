@@ -35,6 +35,7 @@
   ./config/users-groups.nix
   ./config/vpnc.nix
   ./config/zram.nix
+  ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/bladeRF.nix
   ./hardware/brightnessctl.nix
@@ -136,6 +137,7 @@
   ./programs/vim.nix
   ./programs/wavemon.nix
   ./programs/way-cooler.nix
+  ./programs/waybar.nix
   ./programs/wireshark.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
@@ -310,6 +312,7 @@
   ./services/hardware/ratbagd.nix
   ./services/hardware/sane.nix
   ./services/hardware/sane_extra_backends/brscan4.nix
+  ./services/hardware/sane_extra_backends/dsseries.nix
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
@@ -577,6 +580,7 @@
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
   ./services/networking/kippo.nix
+  ./services/networking/knot.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
@@ -764,6 +768,7 @@
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/nginx/gitweb.nix
   ./services/web-servers/phpfpm/default.nix
+  ./services/web-servers/unit/default.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/traefik.nix
@@ -871,6 +876,7 @@
   ./tasks/trackpoint.nix
   ./tasks/powertop.nix
   ./testing/service-runner.nix
+  ./virtualisation/anbox.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
   ./virtualisation/docker.nix
