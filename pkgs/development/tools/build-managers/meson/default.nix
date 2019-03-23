@@ -10,13 +10,6 @@ python3Packages.buildPythonApplication rec {
   };
 
   postFixup = ''
-    pushd $out/bin
-    # undo shell wrapper as meson tools are called with python
-    for i in *; do
-      mv ".$i-wrapped" "$i"
-    done
-    popd
-
     # Do not propagate Python
     rm $out/nix-support/propagated-build-inputs
   '';

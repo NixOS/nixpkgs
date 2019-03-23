@@ -29,14 +29,14 @@ makeSetupHook {
         '';
 
         # This preamble does two things:
-        # * Sets argv[0] to the original application's name; otherwise it would be .foo-wrapped.
-        #   Python doesn't support `exec -a`.
+        # * Adds all required binary directories to PATH
         # * Adds all required libraries to sys.path via `site.addsitedir`. It also handles *.pth files.
         preamble = ''
+          import os
           import sys
           import site
           import functools
-          sys.argv[0] = '"'$(readlink -f "$f")'"'
+          os.environ["PATH"] = ":".join(['"$([ -n "$program_PATH" ] && (echo "'$program_PATH'" | sed "s|:|','|g") || true)"']) + (":" + os.environ["PATH"] if os.environ.get("PATH") else "")
           functools.reduce(lambda k, p: site.addsitedir(p, k), ['"$([ -n "$program_PYTHONPATH" ] && (echo "'$program_PYTHONPATH'" | sed "s|:|','|g") || true)"'], site._init_pathinfo())
         '';
 

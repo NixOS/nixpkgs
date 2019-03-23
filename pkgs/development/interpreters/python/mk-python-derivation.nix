@@ -39,10 +39,6 @@
 # Raise an error if two packages are installed with the same name
 , catchConflicts ? true
 
-# Additional arguments to pass to the makeWrapper function, which wraps
-# generated binaries.
-, makeWrapperArgs ? []
-
 # Skip wrapping of python programs altogether
 , dontWrapPythonPrograms ? false
 
