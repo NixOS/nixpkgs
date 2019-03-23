@@ -38,6 +38,10 @@ let
 
   cfg = config.networking.firewall;
 
+  uniqueListOf = type: let
+    elemType = types.listOf type;
+  in elemType // { merge = loc: defs: unique (elemType.merge loc defs); };
+
   inherit (config.boot.kernelPackages) kernel;
 
   kernelHasRPFilter = ((kernel.config.isEnabled or (x: false)) "IP_NF_MATCH_RPFILTER") || (kernel.features.netfilterRPFilter or false);
@@ -263,29 +267,29 @@ let
 
   commonOptions = {
     allowedTCPPorts = mkOption {
-      type = types.listOf types.int;
+      type = with types; uniqueListOf port;
       default = [ ];
       example = [ 22 80 ];
       description =
-        '' 
+        ''
           List of TCP ports on which incoming connections are
           accepted.
         '';
     };
 
     allowedTCPPortRanges = mkOption {
-      type = types.listOf (types.attrsOf types.int);
+      type = with types; uniqueListOf (types.attrsOf port);
       default = [ ];
       example = [ { from = 8999; to = 9003; } ];
       description =
-        '' 
+        ''
           A range of TCP ports on which incoming connections are
           accepted.
         '';
     };
 
     allowedUDPPorts = mkOption {
-      type = types.listOf types.int;
+      type = with types; uniqueListOf port;
       default = [ ];
       example = [ 53 ];
       description =
@@ -295,7 +299,7 @@ let
     };
 
     allowedUDPPortRanges = mkOption {
-      type = types.listOf (types.attrsOf types.int);
+      type = with types; uniqueListOf (attrsOf port);
       default = [ ];
       example = [ { from = 60000; to = 61000; } ];
       description =

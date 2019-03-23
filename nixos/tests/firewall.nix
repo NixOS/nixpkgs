@@ -31,6 +31,20 @@ import ./make-test.nix ( { pkgs, ... } : {
           services.httpd.adminAddr = "foo@example.org";
           networking.firewall.enable = false;
         };
+
+      duplicatePortsAllowed = {
+        imports = [
+          ({ ... }: {
+            networking.firewall.enable = true;
+            networking.firewall.allowedTCPPorts = [ 8080 ];
+            networking.firewall.allowedUDPPorts = [ 5353 ];
+          })
+          ({ ... }: {
+            networking.firewall.allowedTCPPorts = [ 8080 ];
+            networking.firewall.allowedUDPPorts = [ 5353 ];
+          })
+        ];
+      };
     };
 
   testScript = { nodes, ... }: let
@@ -38,6 +52,7 @@ import ./make-test.nix ( { pkgs, ... } : {
   in ''
     $walled->start;
     $attacker->start;
+    $duplicatePortsAllowed->start;
 
     $walled->waitForUnit("firewall");
     $walled->waitForUnit("httpd");
@@ -61,5 +76,11 @@ import ./make-test.nix ( { pkgs, ... } : {
     # Check whether activation of a new configuration reloads the firewall.
     $walled->succeed("${newSystem}/bin/switch-to-configuration test 2>&1" .
                      " | grep -qF firewall.service");
+
+    # On the host with duplicate allowed port lines there should only be one
+    # rule per port
+    $duplicatePortsAllowed->waitForUnit("firewall");
+    $duplicatePortsAllowed->succeed("test 1 -eq \$(iptables-save | grep --count -- '-A nixos-fw -p tcp -m tcp --dport 8080')");
+    $duplicatePortsAllowed->succeed("test 1 -eq \$(iptables-save | grep --count -- '-A nixos-fw -p udp -m udp --dport 5353')");
   '';
 })
