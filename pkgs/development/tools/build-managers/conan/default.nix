@@ -77,6 +77,11 @@ in newPython.pkgs.buildPythonApplication rec {
     mkdir -p "$HOME"
   '';
 
+  postPatch = ''
+    substituteInPlace conans/requirements_server.txt \
+      --replace "pluginbase>=0.5, < 1.0" "pluginbase>=0.5"
+  '';
+
   meta = with lib; {
     homepage = https://conan.io;
     description = "Decentralized and portable C/C++ package manager";
