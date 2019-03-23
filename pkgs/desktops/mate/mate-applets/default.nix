@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    gnome3.gtksourceview
+    gtksourceview3
     gnome3.gucharmap
     libwnck3
     libgtop
