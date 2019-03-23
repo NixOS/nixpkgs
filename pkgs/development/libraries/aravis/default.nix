@@ -31,14 +31,13 @@ in
   stdenv.mkDerivation rec {
 
     pname = "aravis";
-    version = "0.5.13";
-    name = "${pname}-${version}";
+    version = "0.6.1";
 
     src = fetchFromGitHub {
       owner = "AravisProject";
-      repo = "aravis";
-      rev= "c56e530b8ef53b84e17618ea2f334d2cbae04f48";
-      sha256 = "1dj24dir239zmiscfhyy1m8z5rcbw0m1vx9lipx0r7c39bzzj5gy";
+      repo = pname;
+      rev= "ARAVIS_${builtins.replaceStrings ["."] ["_"] version}";
+      sha256 = "0v0hv1iyhp2azxij3ighp1b4rsw99zyqmkpdqnnxdmkcna031iga";
     };
 
     outputs = [ "bin" "dev" "out" "lib" ];
@@ -80,7 +79,7 @@ in
       longDescription = ''
         Implements the gigabit ethernet and USB3 protocols used by industrial cameras.
       '';
-      homepage = https://aravisproject.github.io/docs/aravis-0.5;
+      homepage = "https://aravisproject.github.io/docs/aravis-0.5";
       license = stdenv.lib.licenses.lgpl2;
       maintainers = [];
       platforms = stdenv.lib.platforms.unix;
