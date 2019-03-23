@@ -17,9 +17,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
   buildInputs = [
     gtk3 gtksourceview gnome3.gsettings-desktop-schemas gnome3.adwaita-icon-theme
+    gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
   ];
   propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo ];
-  checkInputs = [ xvfb_run python3.pkgs.pytest dbus ];
+  checkInputs = [ xvfb_run python3.pkgs.pytest dbus gtksourceview gtk3 ];
 
   installPhase = ''
     runHook preInstall

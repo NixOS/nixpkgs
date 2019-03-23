@@ -2,14 +2,14 @@
 , avahi, libao }:
 
 stdenv.mkDerivation rec {
-  name = "shairplay-${version}";
-  version = "2016-01-01";
+  name = "shairplay-unstable-${version}";
+  version = "2018-08-24";
 
   src = fetchFromGitHub {
     owner  = "juhovh";
     repo   = "shairplay";
-    rev    = "ce80e005908f41d0e6fde1c4a21e9cb8ee54007b";
-    sha256 = "10b4bmqgf4rf1wszvj066mc42p90968vqrmyqyrdal4k6f8by1r6";
+    rev    = "096b61ad14c90169f438e690d096e3fcf87e504e";
+    sha256 = "02xkd9al79pbqh8rhzz5w99vv43jg5vqkqg7kxsw8c8sz9di9wsa";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
-    description = "Apple airplay and raop protocol server";
+    description = "Apple AirPlay and RAOP protocol server";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;

@@ -108,26 +108,26 @@ in
       ([ pkgs.pantheon.switchboard-plug-power ])
       (mkIf config.services.printing.enable  ([pkgs.system-config-printer]) )
     ];
-    services.pantheon.contractor.enable = true;
+    services.pantheon.contractor.enable = mkDefault true;
     services.geoclue2.enable = mkDefault true;
     # pantheon has pantheon-agent-geoclue2
     services.geoclue2.enableDemoAgent = false;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
-    services.gnome3.file-roller.enable = true;
+    services.gnome3.file-roller.enable = mkDefault true;
     # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;
     services.gnome3.gnome-settings-daemon.package = pkgs.pantheon.elementary-settings-daemon;
     services.gnome3.gvfs.enable = true;
-    services.gnome3.rygel.enable = true;
-    services.gsignond.enable = true;
+    services.gnome3.rygel.enable = mkDefault true;
+    services.gsignond.enable = mkDefault true;
     services.gsignond.plugins = with pkgs.gsignondPlugins; [ lastfm mail oauth ];
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.xserver.libinput.enable = mkDefault true;
     services.xserver.updateDbusEnvironment = true;
-    services.zeitgeist.enable = true;
+    services.zeitgeist.enable = mkDefault true;
 
     networking.networkmanager.enable = mkDefault true;
     networking.networkmanager.basePackages =
@@ -152,19 +152,15 @@ in
       "/share"
     ];
 
-    environment.systemPackages = pkgs.pantheon.artwork ++ pkgs.pantheon.desktop ++ pkgs.pantheon.services ++ cfg.sessionPath
-      ++ (pkgs.gnome3.removePackagesByName pkgs.pantheon.apps config.environment.pantheon.excludePackages)
-      ++ (with pkgs.gnome3;
-      [
-        adwaita-icon-theme
-        dconf
-        epiphany
+    environment.systemPackages =
+      pkgs.pantheon.artwork ++ pkgs.pantheon.desktop ++ pkgs.pantheon.services ++ cfg.sessionPath
+      ++ (with pkgs; gnome3.removePackagesByName
+      ([
+        gnome3.geary
+        gnome3.epiphany
+        gnome3.gnome-font-viewer
         evince
-        geary
-        gnome-bluetooth
-        gnome-font-viewer
-        gnome-power-manager
-      ])
+      ] ++ pantheon.apps) config.environment.pantheon.excludePackages)
       ++ (with pkgs;
       [
         adwaita-qt
@@ -172,6 +168,8 @@ in
         glib
         glib-networking
         gnome-menus
+        gnome3.adwaita-icon-theme
+        gnome3.dconf
         gtk3.out
         hicolor-icon-theme
         lightlocker
@@ -185,7 +183,9 @@ in
     fonts.fonts = with pkgs; [
       opensans-ttf
       roboto-mono
+      pantheon.elementary-redacted-script # needed by screenshot-tool
     ];
+
     fonts.fontconfig.defaultFonts = {
       monospace = [ "Roboto Mono" ];
       sansSerif = [ "Open Sans" ];

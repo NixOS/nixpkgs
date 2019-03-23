@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy33, pythonOlder,
-  asyncio
+{ lib, buildPythonPackage, fetchPypi, pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,8 +15,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "17vrl6jajr81bql7kjgq0zkxy225px97z4g9wmbhbbnvzn1p92c0";
   };
-
-  buildInputs = lib.optionals isPy33 [ asyncio ];
 
   disabled = pythonOlder "3.3";
 }

@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "IPython: Productive Interactive Computing";
     homepage = http://ipython.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor jgeerds fridh ];
+    maintainers = with lib.maintainers; [ bjornfor fridh ];
   };
 }

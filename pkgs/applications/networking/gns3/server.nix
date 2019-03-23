@@ -53,7 +53,7 @@ in python.pkgs.buildPythonPackage {
     aiohttp-cors yarl aiohttp multidict
     jinja2 psutil zipstream raven jsonschema
     (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
-  ] ++ stdenv.lib.optional (!stable) python.pkgs.distro;
+  ] ++ stdenv.lib.optional (!stable) [ distro async_generator aiofiles ];
 
   # Requires network access
   doCheck = false;

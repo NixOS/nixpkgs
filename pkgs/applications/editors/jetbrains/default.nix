@@ -175,7 +175,7 @@ let
           providing you almost everything you need for your comfortable
           and productive development!
         '';
-        maintainers = with maintainers; [ jgeerds ];
+        maintainers = with maintainers; [ ];
         platforms = platforms.linux;
       };
     }).override {

@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "pgmetrics-${version}";
-  version = "1.5.0";
+  pname = "pgmetrics";
+  version = "1.6.1";
 
   goPackagePath = "github.com/rapidloop/pgmetrics";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "rapidloop";
     repo   = "pgmetrics";
     rev    = "refs/tags/v${version}";
-    sha256 = "1l3vd1lvp4a6irx0zpjb5bkskkb9krx9j7pwii8jy9dcjy4gj24f";
+    sha256 = "0dj4b4gghzzwnzb0fdix1ps97scfr24f6dfa7d0vwak95ds5vz3s";
   };
 
   goDeps = ./deps.nix;

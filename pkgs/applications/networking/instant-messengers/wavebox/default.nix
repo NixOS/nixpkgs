@@ -8,7 +8,7 @@ with stdenv.lib;
 let
   bits = "x86_64";
 
-  version = "4.7.1";
+  version = "4.7.3";
 
   desktopItem = makeDesktopItem rec {
     name = "Wavebox";
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   name = "wavebox-${version}";
   src = fetchurl {
     url = "https://github.com/wavebox/waveboxapp/releases/download/v${version}/${tarball}";
-    sha256 = "0kyi84wdvd5363vx7bhss3cmc8kfdkrs6h8q51hscrja3qabp0bg";
+    sha256 = "1yg2lib4h5illz0ss4hvr78s4v1cjbxlczjzaw6bqigyk95smm23";
   };
 
   # don't remove runtime deps

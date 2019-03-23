@@ -2185,6 +2185,22 @@ let
     };
   };
 
+  ClassStdFast = buildPerlModule rec {
+    name = "${pname}-${version}";
+    pname = "Class-Std-Fast";
+    version = "0.0.8";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AC/ACID/${pname}-v${version}.tar.gz";
+      sha256 = "1057rz95jsr66gam472i4zdv04v7bmzph3m3jwq1hwx3qrikgm0v";
+    };
+    propagatedBuildInputs = [ ClassStd ];
+    checkInputs = [ TestPod TestPodCoverage ];
+    meta = with stdenv.lib; {
+      description = "Faster but less secure than Class::Std";
+      license = with licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ClassUnload = buildPerlPackage rec {
     name = "Class-Unload-0.11";
     src = fetchurl {
@@ -7874,11 +7890,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     name = "Image-ExifTool-${version}";
-    version = "11.11";
+    version = "11.30";
 
     src = fetchurl {
       url = "https://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-      sha256 = "1szg1k82nz88pp5n7lg71ja7q3hh5i5f9bcbb7m482dwrmsywkp6";
+      sha256 = "0vkjb2c1a3jdlq8rx1jywx4p3f1bmgjn7rzfwx6dxgij2lx76lrs";
     };
 
     meta = with stdenv.lib; {

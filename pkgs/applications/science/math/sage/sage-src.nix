@@ -50,6 +50,28 @@ stdenv.mkDerivation rec {
 
     # Fixes a potential race condition which can lead to transient doctest failures.
     ./patches/fix-ecl-race.patch
+
+    # Parallelize docubuild using subprocesses, fixing an isolation issue. See
+    # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
+    (fetchpatch {
+      name = "sphinx-docbuild-subprocesses.patch";
+      url = "https://salsa.debian.org/science-team/sagemath/raw/8a215b17e6f791ddfae6df8ce6d01dfb89acb434/debian/patches/df-subprocess-sphinx.patch";
+      sha256 = "07p9i0fwjgapmfvmi436yn6v60p8pvmxqjc93wsssqgh5kd8qw3n";
+      stripLen = 1;
+    })
+  ];
+
+  # Since sage unfortunately does not release bugfix releases, packagers must
+  # fix those bugs themselves. This is for critical bugfixes, where "critical"
+  # == "causes (transient) doctest failures / somebody complained".
+  bugfixPatches = [
+    # Transient doctest failure in src/sage/modular/abvar/torsion_subgroup.py
+    # https://trac.sagemath.org/ticket/27477
+    (fetchpatch {
+      name = "sig_on_in_matrix_sparce.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id2=10407524b18659e14e184114b61c043fb816f3c2&id=c9b0cc9d0b8748ab85e568f8f57f316c5e8cbe54";
+      sha256 = "0wgp7yvn9sm1ynlhcr4l0hzmvr2n28llg4xc01p6k1zz4im64c17";
+    })
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -117,7 +139,7 @@ stdenv.mkDerivation rec {
     ./patches/ignore-pip-deprecation.patch
   ];
 
-  patches = nixPatches ++ packageUpgradePatches;
+  patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
 
   postPatch = ''
     # make sure shebangs etc are fixed, but sage-python23 still works

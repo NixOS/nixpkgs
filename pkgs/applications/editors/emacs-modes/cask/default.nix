@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/cask/cask;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.jgeerds ];
+    maintainers = [ ];
   };
 }

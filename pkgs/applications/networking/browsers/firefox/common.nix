@@ -11,7 +11,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, nodejs
+, rust-cbindgen, nodejs, nasm
 , debugBuild ? false
 
 ### optionals
@@ -121,6 +121,12 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!isTorBrowserLike) [ nspr nss ]
   ++ lib.optional (lib.versionOlder ffversion "61") hunspell
+
+  # >= 66 requires nasm for the AV1 lib dav1d
+  # yasm can potentially be removed in future versions
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
+  # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
+  ++ lib.optional (lib.versionAtLeast ffversion "66") nasm
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
@@ -188,7 +194,13 @@ stdenv.mkDerivation rec {
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
     # please get your own set of keys.
     echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/ga
-    configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
+    # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
+    ${if (lib.versionAtLeast ffversion "60.6" && lib.versionOlder ffversion "61") || (lib.versionAtLeast ffversion "66") then ''
+      configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/ga")
+      configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/ga")
+    '' else ''
+      configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
+    ''}
   '' + lib.optionalString (lib.versionOlder ffversion "58") ''
     cd obj-*
   ''

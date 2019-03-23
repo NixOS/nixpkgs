@@ -62,7 +62,7 @@ self: super: {
     version = "0.1.140";
     src = LanguageClient-neovim-src;
 
-    propogatedBuildInputs = [ LanguageClient-neovim-bin ];
+    propagatedBuildInputs = [ LanguageClient-neovim-bin ];
 
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \

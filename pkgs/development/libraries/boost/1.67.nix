@@ -1,7 +1,7 @@
 { stdenv, callPackage, fetchurl, fetchpatch, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "1.67_0";
+  version = "1.67.0";
 
   patches = [ (fetchpatch {
     url = "https://github.com/boostorg/lockfree/commit/12726cda009a855073b9bedbdce57b6ce7763da2.patch";
