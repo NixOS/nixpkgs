@@ -1,23 +1,21 @@
-{ stdenv, fetchgit, which, libX11, libXt, fontconfig, freetype
+{ stdenv, fetchFromGitHub, which, libX11, libXt, fontconfig, freetype
 , xorgproto ? null
 , libXext ? null
 , zlib ? null
-  # For building web manuals
-, perl ? null
-, samChordingSupport ? true #from 9front
+, perl ? null  # For building web manuals
 }:
 
 stdenv.mkDerivation rec {
-  name = "plan9port-2018-09-20";
+  pname = "plan9port";
+  version = "2019-02-25";
+  name = "${pname}-${version}";
 
-  src = fetchgit {
-    # Latest, same as on github, google code is old
-    url = "https://github.com/9fans/plan9port.git";
-    rev = "a82a8b6368274d77d42f526e379b74e79c137e26";
-    sha256 = "1icywcnqv0dz1mkm7giakii536nycp0ajxnmzkx4944dxsmhcwq1";
+  src =  fetchFromGitHub {
+    owner = "9fans";
+    repo = "plan9port";
+    rev = "047fd921744f39a82a86d9370e03f7af511e6e84";
+    sha256 = "1lp17948q7vpl8rc2bf5a45bc8jqyj0s3zffmks9r25ai42vgb43";
   };
-
-  patches = stdenv.lib.optionals samChordingSupport [ ./sam_chord_9front.patch ];
 
   postPatch = ''
     #hardcoded path
@@ -36,37 +34,20 @@ stdenv.mkDerivation rec {
       --replace "case Kcmd+'v':" "case 0x16: case Kcmd+'v':"
   '';
 
-  builder = ./builder.sh;
-
-  NIX_LDFLAGS="-lgcc_s";
   buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [
-    which
-    perl
-    libX11
-    fontconfig
-    xorgproto
-    libXt
-    libXext
-    freetype #fontsrv wants ft2build.h. provides system fonts for acme and sam.
+    which perl libX11 fontconfig xorgproto libXt libXext
+    freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
   ];
 
-  enableParallelBuilding = true;
+  builder = ./builder.sh;
 
-  meta = with stdenv.lib; {
-    homepage = http://swtch.com/plan9port/;
-    description = "Plan 9 from User Space";
-    license = licenses.lpl-102;
-    maintainers = with maintainers; [ bbarker ftrvxmtrx kovirobi ];
-    platforms = platforms.unix;
-  };
-  
   libX11_dev = libX11.dev;
   libXt_dev = libXt.dev;
   libXext_dev = libXext.dev;
   fontconfig_dev = fontconfig.dev;
   freetype_dev = freetype.dev;
   zlib_dev = zlib.dev;
-  
+
   xorgproto_exp = xorgproto;
   libX11_exp = libX11;
   libXt_exp = libXt;
@@ -75,4 +56,21 @@ stdenv.mkDerivation rec {
   zlib_exp = zlib;
 
   fontconfig_lib = fontconfig.lib;
+
+  NIX_LDFLAGS="-lgcc_s";
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    homepage = https://9fans.github.io/plan9port/;
+    description = "Plan 9 from User Space";
+    longDescription = ''
+      Plan 9 from User Space (aka plan9port) is a port of many Plan 9 programs
+      from their native Plan 9 environment to Unix-like operating systems.
+    '';
+    license = licenses.lpl-102;
+    maintainers = with maintainers; [ AndersonTorres bbarker
+                                      ftrvxmtrx kovirobi ];
+    platforms = platforms.unix;
+  };
 }
+# TODO: investigate the mouse chording support patch
