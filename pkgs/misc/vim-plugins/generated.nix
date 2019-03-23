@@ -1244,6 +1244,17 @@ let
     };
   };
 
+  nord-vim = buildVimPluginFrom2Nix {
+    pname = "nord-vim";
+    version = "2019-03-21";
+    src = fetchFromGitHub {
+      owner = "arcticicestudio";
+      repo = "nord-vim";
+      rev = "bfa069b12b3af000b07eb23c01ff516bab452db7";
+      sha256 = "1wyslhazi9vwnk3z68ibd4gswvc340mwnffg9lnpskqi56qpw005";
+    };
+  };
+
   nvim-cm-racer = buildVimPluginFrom2Nix {
     pname = "nvim-cm-racer";
     version = "2017-07-27";

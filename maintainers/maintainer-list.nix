@@ -1588,6 +1588,11 @@
     github = "fdns";
     name = "Felipe Espinoza";
   };
+  ffinkdevs = {
+    email = "fink@h0st.space";
+    github = "ffinkdevs";
+    name = "Fabian Fink";
+  };
   fgaz = {
     email = "fgaz@fgaz.me";
     github = "fgaz";
@@ -1769,6 +1774,11 @@
     email = "tobias.happ@gmx.de";
     github = "Gerschtli";
     name = "Tobias Happ";
+  };
+  ggpeti = {
+    email = "ggpeti@gmail.com";
+    github = "ggpeti";
+    name = "Peter Ferenczy";
   };
   gilligan = {
     email = "tobias.pflug@gmail.com";

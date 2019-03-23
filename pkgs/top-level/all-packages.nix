@@ -825,6 +825,8 @@ in
     inherit (androidenv.androidPkgs_9_0) platform-tools;
   };
 
+  anbox = callPackage ../os-specific/linux/anbox { };
+
   androidenv = callPackage ../development/mobile/androidenv {
     pkgs_i686 = pkgsi686Linux;
   };
@@ -1694,6 +1696,8 @@ in
 
   ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
 
+  riot-desktop = callPackage ../applications/networking/instant-messengers/riot/riot-desktop.nix { };
+
   riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix {
     conf = config.riot-web.conf or null;
   };
@@ -2434,6 +2438,8 @@ in
 
   duo-unix = callPackage ../tools/security/duo-unix { };
 
+  duplicacy = callPackage ../tools/backup/duplicacy { };
+  
   duplicati = callPackage ../tools/backup/duplicati { };
 
   duplicity = callPackage ../tools/backup/duplicity {
@@ -2551,6 +2557,18 @@ in
   elasticsearchPlugins = recurseIntoAttrs (
     callPackage ../servers/search/elasticsearch/plugins.nix { }
   );
+
+  elasticsearch-curator = with (python3.override {
+    packageOverrides = self: super: {
+      click = super.click.overridePythonAttrs (oldAttrs: rec {
+        version = "6.7";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
+        };
+      });
+    };
+  }).pkgs; toPythonApplication elasticsearch-curator;
 
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
@@ -6242,6 +6260,8 @@ in
 
   rcm = callPackage ../tools/misc/rcm {};
 
+  td = callPackage ../tools/misc/td { };
+
   tegola = callPackage ../servers/tegola {};
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
@@ -8980,6 +9000,8 @@ in
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
   libtool_2 = callPackage ../development/tools/misc/libtool/libtool2.nix { };
+
+  libwhich = callPackage ../development/tools/misc/libwhich { };
 
   linuxkit = callPackage ../development/tools/misc/linuxkit { };
 
@@ -14168,6 +14190,12 @@ in
     boost = boost167;
   };
 
+  rippled-validator-keys-tool = callPackage ../servers/rippled/validator-keys-tool.nix {
+    boost = boost167.override {
+      enableStatic = true;
+    };
+  };
+
   s6 = skawarePackages.s6;
 
   s6-rc = skawarePackages.s6-rc;
@@ -14819,6 +14847,8 @@ in
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
+
+    anbox = callPackage ../os-specific/linux/anbox/kmod.nix { };
 
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
@@ -17855,6 +17885,8 @@ in
 
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
 
+  wmfs = callPackage ../applications/window-managers/wmfs/default.nix { };
+
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icewm = callPackage ../applications/window-managers/icewm {};
@@ -19068,6 +19100,8 @@ in
   profanity = callPackage ../applications/networking/instant-messengers/profanity ({
     python = python3;
   } // (config.profanity or {}));
+
+  properties-cpp = callPackage ../development/libraries/properties-cpp { };
 
   protonmail-bridge = libsForQt511.callPackage ../applications/networking/protonmail-bridge { };
 
@@ -22628,6 +22662,8 @@ in
 
   muse = callPackage ../applications/audio/muse { };
 
+  musly = callPackage ../applications/audio/musly { };
+
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
 
   inherit (callPackage ../tools/package-management/nix {
@@ -22971,6 +23007,7 @@ in
   mfcl8690cdwcupswrapper = callPackage ../misc/cups/drivers/mfcl8690cdwcupswrapper { };
   mfcl8690cdwlpr = callPackage ../misc/cups/drivers/mfcl8690cdwlpr { };
 
+  samsung-unified-linux-driver_1_00_36 = callPackage ../misc/cups/drivers/samsung/1.00.36/default.nix { };
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung/1.00.37.nix { };
   samsung-unified-linux-driver_4_00_39 = callPackage ../misc/cups/drivers/samsung/4.00.39 { };
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };

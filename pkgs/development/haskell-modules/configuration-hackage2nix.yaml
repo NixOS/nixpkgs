@@ -2474,7 +2474,6 @@ unsupported-platforms:
   gi-ostree:                                    [ x86_64-darwin ]
   gtk-mac-integration:                          [ i686-linux, x86_64-linux ]
   hcwiid:                                       [ x86_64-darwin ]
-  hfsevents:                                    [ x86_64-darwin ]
   HFuse:                                        [ x86_64-darwin ]
   hommage-ds:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   lio-fs:                                       [ x86_64-darwin ]
