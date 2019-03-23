@@ -1,8 +1,6 @@
 { fetchPypi
 , lib
 , buildPythonPackage
-, python
-, isPy3k
 , appdirs
 , cached-property
 , defusedxml
@@ -12,11 +10,13 @@
 , requests_toolbelt
 , six
 # test dependencies
+, aiohttp
+, aioresponses
 , freezegun
 , mock
 , nose
 , pretend
-, pytest
+, pytest_3
 , pytestcov
 , requests-mock
 , tornado
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    aiohttp
     attrs
     appdirs
     cached-property
@@ -44,24 +45,19 @@ buildPythonPackage rec {
     six
   ];
 
-  # testtools dependency not supported for py3k
-  doCheck = !isPy3k;
-
   checkInputs = [
+    aioresponses
     tornado
-  ];
-
-  buildInputs = if isPy3k then [] else [
+    pytest_3
     freezegun
     mock
     nose
     pretend
-    pytest
-    pytestcov
     requests-mock
+    pytestcov
   ];
 
-  patchPhase = ''
+  postPatch = ''
     # remove overly strict bounds and lint requirements
     sed -e "s/freezegun==.*'/freezegun'/" \
         -e "s/pytest-cov==.*'/pytest-cov'/" \
@@ -81,9 +77,7 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m pytest tests
-    runHook postCheck
+    pytest tests
   '';
 
   meta = with lib; {
