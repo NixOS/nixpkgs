@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
     description = "Android in a box";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];
-    platforms = [ "armv7l-linux" "aarch64-linux" "x86-64-linux" ];
+    platforms = [ "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
   };
 
 }
