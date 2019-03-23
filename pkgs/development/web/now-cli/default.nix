@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl }:
 stdenv.mkDerivation rec {
   name = "now-cli-${version}";
-  version = "14.0.3";
+  version = "14.2.3";
 
   # TODO: switch to building from source, if possible
   src = fetchurl {
     url = "https://github.com/zeit/now-cli/releases/download/${version}/now-linux.gz";
-    sha256 = "0nnwaj3iik8anx7xd5mzbrgq5g5ng8gqmhxyyfgkmawsg34bk6nj";
+    sha256 = "57f21f6f7dc259912d74e898a5a732415262996a59d95d765b06f5fe3e286c41";
   };
 
   sourceRoot = ".";
