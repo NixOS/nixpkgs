@@ -2967,6 +2967,8 @@ in
 
   ggobi = callPackage ../tools/graphics/ggobi { };
 
+  giada = callPackage ../applications/audio/giada { };
+
   gibo = callPackage ../tools/misc/gibo { };
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
