@@ -12,7 +12,6 @@
 , portaudio
 , libsamplerate
 }:
-with (import <nixpkgs> {});
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "2.2-2";
 
   meta = with stdenv.lib;
-    { description = "Produces high quality extreme sound stretching.";
+    { description = "Produces high quality extreme sound stretching";
       longDescription = ''
         This is a program for stretching the audio. It is suitable only for
         extreme sound stretching of the audio (like 50x) and for applying
@@ -39,6 +38,8 @@ stdenv.mkDerivation rec {
     sha256 = "06dy03dbz1yznhsn0xvsnkpc5drzwrgxbxdx0hfpsjn2xcg0jrnc";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [
     audiofile
     libvorbis
@@ -46,7 +47,6 @@ stdenv.mkDerivation rec {
     fftw
     fftwFloat
     minixml
-    pkgconfig
     libmad
     libjack2
     portaudio
@@ -58,7 +58,6 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
-    cp paulstretch $out
+    install -Dm555 ./paulstretch $out/bin/paulstretch
   '';
 }
