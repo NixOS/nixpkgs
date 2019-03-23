@@ -278,32 +278,31 @@ The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
 
 ```nix
-{ # ...
+{ lib, buildPythonPackage, fetchPypi, numpy, multipledispatch, dateutil, pytest }:
 
-  datashape = buildPythonPackage rec {
-    pname = "datashape";
-    version = "0.4.7";
+buildPythonPackage rec {
+  pname = "datashape";
+  version = "0.4.7";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
-    };
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
+  };
 
-    checkInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
+  checkInputs = [ pytest ];
+  propagatedBuildInputs = [ numpy multipledispatch dateutil ];
 
-    meta = with lib; {
-      homepage = https://github.com/ContinuumIO/datashape;
-      description = "A data description language";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ fridh ];
-    };
+  meta = with lib; {
+    homepage = https://github.com/ContinuumIO/datashape;
+    description = "A data description language";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fridh ];
   };
 }
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
-`dateutil`. Furthermore, we have one `buildInput`, i.e. `pytest`. `pytest` is a
+`dateutil`. Furthermore, we have one `checkInputs`, i.e. `pytest`. `pytest` is a
 test runner and is only used during the `checkPhase` and is therefore not added
 to `propagatedBuildInputs`.
 
@@ -313,25 +312,24 @@ Python bindings to `libxml2` and `libxslt`. These libraries are only required
 when building the bindings and are therefore added as `buildInputs`.
 
 ```nix
-{ # ...
+{ lib, pkgs, buildPythonPackage, fetchPypi }:
 
-  lxml = buildPythonPackage rec {
-    pname = "lxml";
-    version = "3.4.4";
+buildPythonPackage rec {
+  pname = "lxml";
+  version = "3.4.4";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
-    };
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
+  };
 
-    buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
+  buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
 
-    meta = with lib; {
-      description = "Pythonic binding for the libxml2 and libxslt libraries";
-      homepage = https://lxml.de;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ sjourdois ];
-    };
+  meta = with lib; {
+    description = "Pythonic binding for the libxml2 and libxslt libraries";
+    homepage = https://lxml.de;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sjourdois ];
   };
 }
 ```
@@ -347,35 +345,34 @@ find each of them in a different folder, and therefore we have to set `LDFLAGS`
 and `CFLAGS`.
 
 ```nix
-{ # ...
+{ lib, pkgs, buildPythonPackage, fetchPypi, numpy, scipy }:
 
-  pyfftw = buildPythonPackage rec {
-    pname = "pyFFTW";
-    version = "0.9.2";
+buildPythonPackage rec {
+  pname = "pyFFTW";
+  version = "0.9.2";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "f6bbb6afa93085409ab24885a1a3cdb8909f095a142f4d49e346f2bd1b789074";
-    };
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "f6bbb6afa93085409ab24885a1a3cdb8909f095a142f4d49e346f2bd1b789074";
+  };
 
-    buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
+  buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
 
-    propagatedBuildInputs = with self; [ numpy scipy ];
+  propagatedBuildInputs = [ numpy scipy ];
 
-    # Tests cannot import pyfftw. pyfftw works fine though.
-    doCheck = false;
+  # Tests cannot import pyfftw. pyfftw works fine though.
+  doCheck = false;
 
-    preConfigure = ''
-      export LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
-      export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
-    '';
+  preConfigure = ''
+    export LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
+    export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
+  '';
 
-    meta = with lib; {
-      description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
-      homepage = http://hgomersall.github.com/pyFFTW;
-      license = with licenses; [ bsd2 bsd3 ];
-      maintainers = with maintainers; [ fridh ];
-    };
+  meta = with lib; {
+    description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
+    homepage = http://hgomersall.github.com/pyFFTW;
+    license = with licenses; [ bsd2 bsd3 ];
+    maintainers = with maintainers; [ fridh ];
   };
 }
 ```
@@ -403,7 +400,7 @@ Indeed, we can just add any package we like to have in our environment to `propa
 
 ```nix
 with import <nixpkgs> {};
-with pkgs.python35Packages;
+with python35Packages;
 
 buildPythonPackage rec {
   name = "mypackage";
@@ -436,7 +433,7 @@ Let's split the package definition from the environment definition.
 We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 
 ```nix
-{ lib, pkgs, buildPythonPackage }:
+{ lib, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "toolz";
@@ -456,18 +453,17 @@ buildPythonPackage rec {
 }
 ```
 
-It takes two arguments, `pkgs` and `buildPythonPackage`.
+It takes an argument `buildPythonPackage`.
 We now call this function using `callPackage` in the definition of our environment
 
 ```nix
 with import <nixpkgs> {};
 
 ( let
-    toolz = pkgs.callPackage /path/to/toolz/release.nix {
-      pkgs = pkgs;
-      buildPythonPackage = pkgs.python35Packages.buildPythonPackage;
+    toolz = callPackage /path/to/toolz/release.nix {
+      buildPythonPackage = python35Packages.buildPythonPackage;
     };
-  in pkgs.python35.withPackages (ps: [ ps.numpy toolz ])
+  in python35.withPackages (ps: [ ps.numpy toolz ])
 ).env
 ```
 
@@ -565,7 +561,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ hypothesis ];
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy ];
 
   meta = with lib; {
@@ -584,11 +580,6 @@ The `buildPythonPackage` mainly does four things:
   wrap all programs in the `$out/bin/*` directory to include `$PATH`
   environment variable and add dependent libraries to script's `sys.path`.
 * In the `installCheck` phase, `${python.interpreter} setup.py test` is ran.
-
-As in Perl, dependencies on other Python packages can be specified in the
-`buildInputs` and `propagatedBuildInputs` attributes.  If something is
-exclusively a build-time dependency, use `buildInputs`; if it is (also) a runtime
-dependency, use `propagatedBuildInputs`.
 
 By default tests are run because `doCheck = true`. Test dependencies, like
 e.g. the test runner, should be added to `checkInputs`.
@@ -733,7 +724,7 @@ Saving the following as `default.nix`
 with import <nixpkgs> {};
 
 python.buildEnv.override {
-  extraLibs = [ pkgs.pythonPackages.pyramid ];
+  extraLibs = [ pythonPackages.pyramid ];
   ignoreCollisions = true;
 }
 ```
@@ -815,11 +806,12 @@ Given a `default.nix`:
 ```nix
 with import <nixpkgs> {};
 
-buildPythonPackage { name = "myproject";
+pythonPackages.buildPythonPackage {
+  name = "myproject";
+  buildInputs = with pythonPackages; [ pyramid ];
 
-buildInputs = with pkgs.pythonPackages; [ pyramid ];
-
-src = ./.; }
+  src = ./.;
+}
 ```
 
 Running `nix-shell` with no arguments should give you
@@ -1005,10 +997,13 @@ Create this `default.nix` file, together with a `requirements.txt` and simply ex
 
 ```nix
 with import <nixpkgs> {};
-with pkgs.python27Packages;
+with python27Packages;
 
 stdenv.mkDerivation {
   name = "impurePythonEnv";
+
+  src = null;
+
   buildInputs = [
     # these packages are required for virtualenv and pip to work:
     #
@@ -1028,14 +1023,15 @@ stdenv.mkDerivation {
     libxslt
     libzip
     stdenv
-    zlib ];
-  src = null;
+    zlib
+  ];
+
   shellHook = ''
-  # set SOURCE_DATE_EPOCH so that we can use python wheels
-  SOURCE_DATE_EPOCH=$(date +%s)
-  virtualenv --no-setuptools venv
-  export PATH=$PWD/venv/bin:$PATH
-  pip install -r requirements.txt
+    # set SOURCE_DATE_EPOCH so that we can use python wheels
+    SOURCE_DATE_EPOCH=$(date +%s)
+    virtualenv --no-setuptools venv
+    export PATH=$PWD/venv/bin:$PATH
+    pip install -r requirements.txt
   '';
 }
 ```
