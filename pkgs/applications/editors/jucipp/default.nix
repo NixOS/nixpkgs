@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, gnome3, at-spi2-core,
+{ stdenv, fetchgit, gnome3, gtksourceview3, at-spi2-core, gtksourceviewmm,
   boost, epoxy, cmake, aspell, llvmPackages, libgit2, pkgconfig, pcre,
-  libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts,
+  libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts, gtkmm3,
   coreutils, glibc, dbus, openssl, libxml2, gnumake, ctags }:
 
 with stdenv.lib;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     dbus
     openssl
     libxml2
-    gnome3.gtksourceview
+    gtksourceview3
     at-spi2-core
     pcre
     epoxy
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
     aspell
     libgit2
     libxkbcommon
-    gnome3.gtkmm3
+    gtkmm3
     libpthreadstubs
-    gnome3.gtksourceviewmm
+    gtksourceviewmm
     llvmPackages.clang.cc
     llvmPackages.lldb
     gnome3.dconf
