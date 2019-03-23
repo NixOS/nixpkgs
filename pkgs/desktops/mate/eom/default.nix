@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libxml2
     shared-mime-info
     gtk3
-    gnome3.libpeas
+    libpeas
     mate.mate-desktop
     hicolor-icon-theme
   ];
