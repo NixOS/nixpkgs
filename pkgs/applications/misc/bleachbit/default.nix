@@ -9,7 +9,6 @@ pythonPackages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ gettext ];
-  buildInputs = [  pythonPackages.wrapPython ];
 
   # Patch the many hardcoded uses of /usr/share/ and /usr/bin
   postPatch = ''
