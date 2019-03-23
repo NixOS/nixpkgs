@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, gtk3, bamf,
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, gtk3, libgtop, bamf,
   json-glib, libcanberra-gtk3, libxkbcommon, libstartup_notification,
   deepin-wallpapers, deepin-desktop-schemas, deepin }:
 
