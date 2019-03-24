@@ -1,0 +1,32 @@
+From b93f74990440a9fdde0238a262839c4f87b4a449 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Sun, 24 Mar 2019 13:40:16 -0500
+Subject: [PATCH] tracepath: include fix
+
+---
+ tracepath.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tracepath.c b/tracepath.c
+index a72fbcb..fc2247a 100644
+--- a/tracepath.c
++++ b/tracepath.c
+@@ -12,6 +12,7 @@
+ #include <arpa/inet.h>
+ #include <errno.h>
+ #include <limits.h>
++#include <sys/time.h>
+ #include <linux/errqueue.h>
+ #include <linux/icmp.h>
+ #include <linux/icmpv6.h>
+@@ -23,7 +24,6 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <sys/socket.h>
+-#include <sys/time.h>
+ #include <sys/uio.h>
+ #include <unistd.h>
+ 
+-- 
+2.21.GIT
+
