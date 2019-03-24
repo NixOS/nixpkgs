@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk3, wrapGAppsHook
 , webkitgtk, json-glib, librest, libsecret, gtk-doc, gobject-introspection
-, gettext, icu, glib-networking
+, gettext, icu, glib-networking, hicolor-icon-theme
 , libsoup, docbook_xsl, docbook_xml_dtd_412, gnome3, gcr, kerberos
 }:
 
@@ -31,6 +31,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig gobject-introspection vala gettext wrapGAppsHook
     libxslt docbook_xsl docbook_xml_dtd_412 gtk-doc
+    hicolor-icon-theme # for setup-hook
   ];
   buildInputs = [
     glib gtk3 webkitgtk json-glib librest libsecret glib-networking icu libsoup
