@@ -5,14 +5,14 @@
 , oceSupport ? true, opencascade
 , ngspiceSupport ? true, libngspice
 , swig, python, pythonPackages
-, lndir, withLibraries ? true, with3DPackages ? false
+, lndir, with3DPackages ? false
 }:
 
 assert ngspiceSupport -> libngspice != null;
 
 with lib;
 let
-  mkLib = version: name: sha256: stdenv.mkDerivation {
+  mkLib = version: name: sha256: attrs: stdenv.mkDerivation ({
     name = "kicad-${name}-${version}";
     src = fetchFromGitHub {
       owner = "KiCad";
@@ -23,7 +23,7 @@ let
     nativeBuildInputs = [
       cmake
     ];
-  };
+  } // attrs);
 
 in stdenv.mkDerivation rec {
   name = "kicad-${version}";
@@ -71,31 +71,37 @@ in stdenv.mkDerivation rec {
   # this breaks other applications in kicad
   dontWrapGApps = true;
 
-  i18n = (mkLib version "i18n" "1hkc240gymhmyv6r858mq5d2slz0vjqc47ah8wn82vvmb83fpnjy").overrideAttrs (_: {
-    buildInputs = [
-      gettext
-    ];
-  });
+  passthru = {
+    i18n = mkLib version "i18n" "1hkc240gymhmyv6r858mq5d2slz0vjqc47ah8wn82vvmb83fpnjy" {
+      buildInputs = [
+        gettext
+      ];
+      meta.license = licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
+    };
+    symbols = mkLib version "symbols" "1rjh2pjcrc3bhcgyyskj5pssm7vffrjk0ymwr70fb7sjpmk96yjk" {
+      meta.license = licenses.cc-by-sa-40;
+    };
+    footprints = mkLib version "footprints" "19khqyrbrqsdzxvm1b1vxfscxhss705fqky0ilrbvnbvf27fnx8w" {
+      meta.license = licenses.cc-by-sa-40;
+    };
+    templates = mkLib version "templates" "0rlzq1n09n0sf2kj5c9bvbnkvs6cpycjxmxwcswql0fbpcp0sql7" {
+      meta.license = licenses.cc-by-sa-40;
+    };
+    packages3d = mkLib version "packages3d" "135jyrljgknnv2y35skhnwcxg16yxxkfbcx07nad3vr4r76zk3am" {
+      hydraPlatforms = []; # this is a ~1 GiB download, occupies ~5 GiB in store
+      meta.license = licenses.cc-by-sa-40;
+    };
+  };
 
-  symbols = mkLib version "symbols" "1rjh2pjcrc3bhcgyyskj5pssm7vffrjk0ymwr70fb7sjpmk96yjk";
-
-  footprints = mkLib version "footprints" "19khqyrbrqsdzxvm1b1vxfscxhss705fqky0ilrbvnbvf27fnx8w";
-
-  templates = mkLib version "templates" "0rlzq1n09n0sf2kj5c9bvbnkvs6cpycjxmxwcswql0fbpcp0sql7";
-
-  packages3d = (mkLib version "packages3d" "135jyrljgknnv2y35skhnwcxg16yxxkfbcx07nad3vr4r76zk3am").overrideAttrs (_: {
-    hydraPlatforms = []; # Disable big package3d library
-    preferLocalBuild = true;
-  });
+  modules = with passthru;
+    [ i18n symbols footprints templates ]
+    ++ optional with3DPackages packages3d;
 
   postInstall = ''
-    lndir -silent $i18n/share $out/share
-  '' + optionalString withLibraries ''
-    lndir -silent $symbols/share $out/share
-    lndir -silent $footprints/share $out/share
-    lndir -silent $templates/share $out/share
-  '' + optionalString with3DPackages ''
-    lndir -silent $packages3d/share $out/share
+    mkdir -p $out/share
+    for module in $modules; do
+      lndir $module/share $out/share
+    done
   '';
 
   preFixup = ''
@@ -108,7 +114,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Free Software EDA Suite";
     homepage = http://www.kicad-pcb.org/;
-    license = [ licenses.gpl2 ] ++ optional (withLibraries || with3DPackages) licenses.cc-by-sa-40;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; linux;
   };
