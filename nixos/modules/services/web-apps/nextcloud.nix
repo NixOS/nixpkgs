@@ -172,7 +172,7 @@ in {
           Database host.
 
           Note: for using Unix authentication with PostgreSQL, this should be
-          set to <literal>/tmp</literal>.
+          set to <literal>/run/postgresql</literal>.
         '';
       };
       dbport = mkOption {
