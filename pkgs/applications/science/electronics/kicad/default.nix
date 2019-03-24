@@ -5,7 +5,7 @@
 , oceSupport ? true, opencascade
 , ngspiceSupport ? true, libngspice
 , swig, python, pythonPackages
-, lndir, with3DPackages ? false
+, lndir
 }:
 
 assert ngspiceSupport -> libngspice != null;
@@ -93,9 +93,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  modules = with passthru;
-    [ i18n symbols footprints templates ]
-    ++ optional with3DPackages packages3d;
+  modules = with passthru; [ i18n symbols footprints templates ];
 
   postInstall = ''
     mkdir -p $out/share
