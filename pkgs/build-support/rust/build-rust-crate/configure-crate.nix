@@ -1,4 +1,4 @@
-{ lib, stdenv, echo_build_heading, noisily, makeDeps }:
+{ lib, echo_build_heading, noisily, makeDeps }:
 { build
 , buildDependencies
 , colors
@@ -14,6 +14,7 @@
 , libName
 , libPath
 , release
+, stdenv
 , target_os
 , verbose
 , workspace_member }:
@@ -104,6 +105,7 @@ in ''
   elif [[ -e "build.rs" ]]; then
      BUILD="build.rs"
   fi
+
   if [[ ! -z "$BUILD" ]] ; then
      echo_build_heading "$BUILD" ${libName}
      mkdir -p target/build/${crateName}

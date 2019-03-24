@@ -6,6 +6,13 @@
 
 { lib, stdenv, defaultCrateOverrides, fetchCrate, rustc }:
 
+crate_: lib.makeOverridable ({ rust, stdenv, release, verbose, features, buildInputs,
+  propagatedBuildInputs, crateOverrides,
+  dependencies, buildDependencies,
+  extraRustcOpts,
+  preUnpack, postUnpack, prePatch, patches, postPatch,
+  preConfigure, postConfigure, preBuild, postBuild, preInstall, postInstall }:
+
 let
     # This doesn't appear to be officially documented anywhere yet.
     # See https://github.com/rust-lang-nursery/rust-forge/issues/101.
@@ -53,28 +60,21 @@ let
       }
     '';
 
-    configureCrate = import ./configure-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps; };
-    buildCrate = import ./build-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps; };
+    configureCrate = import ./configure-crate.nix { inherit lib echo_build_heading noisily makeDeps; };
+    buildCrate = import ./build-crate.nix { inherit lib echo_build_heading noisily makeDeps; };
     installCrate = import ./install-crate.nix;
 
-    in
-
-crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, crateOverrides,
-  dependencies, buildDependencies,
-  extraRustcOpts,
-  preUnpack, postUnpack, prePatch, patches, postPatch,
-  preConfigure, postConfigure, preBuild, postBuild, preInstall, postInstall }:
-
-let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_);
+ crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_);
     dependencies_ = dependencies;
     buildDependencies_ = buildDependencies;
     processedAttrs = [
-      "src" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
-      "buildDependencies" "dependencies" "features"
+      "src" "buildInputs" "propagatedBuildInputs" "crateBin" "crateLib"
+      "libName" "libPath" "buildDependencies" "dependencies" "features"
       "crateName" "version" "build" "authors" "colors" "edition"
     ];
     extraDerivationAttrs = lib.filterAttrs (n: v: ! lib.elem n processedAttrs) crate;
     buildInputs_ = buildInputs;
+    propagatedBuildInputs_ = propagatedBuildInputs;
     extraRustcOpts_ = extraRustcOpts;
 in
 stdenv.mkDerivation (rec {
@@ -89,14 +89,20 @@ stdenv.mkDerivation (rec {
     name = "rust_${crate.crateName}-${crate.version}";
     depsBuildBuild = [ rust stdenv.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
+    propagatedBuildInputs =
+      lib.lists.foldr
+        (dep: inputs: inputs ++ dep.propagatedBuildInputs)
+        ((crate.propagatedBuildInputs or []) ++ propagatedBuildInputs_)
+        dependencies_;
+
     dependencies =
       builtins.map
-        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
+        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; stdenv = stdenv; })
         dependencies_;
 
     buildDependencies =
       builtins.map
-        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
+        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; stdenv = stdenv; })
         buildDependencies_;
 
     completeDeps = lib.lists.unique (dependencies ++ lib.lists.concatMap (dep: dep.completeDeps) dependencies);
@@ -143,11 +149,11 @@ stdenv.mkDerivation (rec {
     configurePhase = configureCrate {
       inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
               crateFeatures libName build workspace_member release libPath crateVersion
-              extraLinkFlags extraRustcOpts
+              extraLinkFlags extraRustcOpts stdenv
               crateAuthors verbose colors target_os;
     };
     buildPhase = buildCrate {
-      inherit crateName dependencies
+      inherit crateName dependencies stdenv
               crateFeatures libName release libPath crateType
               metadata crateBin hasCrateBin verbose colors
               extraRustcOpts;
@@ -157,11 +163,13 @@ stdenv.mkDerivation (rec {
 } // extraDerivationAttrs
 )) {
   rust = rustc;
+  stdenv = stdenv;
   release = crate_.release or true;
   verbose = crate_.verbose or true;
   extraRustcOpts = [];
   features = [];
   buildInputs = [];
+  propagatedBuildInputs = [];
   crateOverrides = defaultCrateOverrides;
   preUnpack = crate_.preUnpack or "";
   postUnpack = crate_.postUnpack or "";
