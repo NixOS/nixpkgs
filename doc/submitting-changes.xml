@@ -354,23 +354,22 @@ Additional information.
    <title>Tested compilation of all pkgs that depend on this change using <command>nix-review</command></title>
 
    <para>
-    If you are updating a package's version, you can use nix-review to make sure all
-    packages that depend on the updated package still compile correctly.
-    The <command>nix-review</command> utility can look for and build all dependencies
-    either based on uncommited changes with the <literal>wip</literal> option or
-    specifying a github pull request number.
+    If you are updating a package's version, you can use nix-review to make
+    sure all packages that depend on the updated package still compile
+    correctly. The <command>nix-review</command> utility can look for and build
+    all dependencies either based on uncommited changes with the
+    <literal>wip</literal> option or specifying a github pull request number.
    </para>
 
    <para>
-     review changes from pull request number 12345:
-     <screen>nix-shell -p nix-review --run "nix-review pr 12345"</screen>
+    review changes from pull request number 12345:
+<screen>nix-shell -p nix-review --run "nix-review pr 12345"</screen>
    </para>
 
    <para>
-     review uncommitted changes:
-     <screen>nix-shell -p nix-review --run "nix-review wip"</screen>
+    review uncommitted changes:
+<screen>nix-shell -p nix-review --run "nix-review wip"</screen>
    </para>
-
   </section>
 
   <section xml:id="submitting-changes-tested-execution">

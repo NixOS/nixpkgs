@@ -189,7 +189,8 @@ $ git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD <co
      </listitem>
      <listitem>
       <para>
-       The <link xlink:href="https://github.com/Mic92/nix-review">nix-review</link>
+       The
+       <link xlink:href="https://github.com/Mic92/nix-review">nix-review</link>
        tool can be used to review a pull request content in a single command.
        <varname>PRNUMBER</varname> should be replaced by the number at the end
        of the pull request title. You can also provide the full github pull
