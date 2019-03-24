@@ -194,6 +194,10 @@ let
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
+  language-server = pkgs.callPackage ../development/php-packages/language-server {
+    inherit php buildComposerEnv;
+  };
+
   mailparse = buildPecl {
     version = "3.0.3";
     pname = "mailparse";
