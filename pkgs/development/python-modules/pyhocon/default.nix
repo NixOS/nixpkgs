@@ -8,7 +8,7 @@
 , mock
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "pyhocon";
   version = "0.3.51";
 
