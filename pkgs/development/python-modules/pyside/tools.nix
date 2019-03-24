@@ -15,7 +15,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ pyside qt4 pysideShiboken ];
+  buildInputs = [ qt4 ];
+
+  propagatedBuildInputs = [ pyside pysideShiboken ];
 
   meta = {
     description = "Tools for pyside, the LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
