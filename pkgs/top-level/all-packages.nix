@@ -15636,7 +15636,7 @@ in
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    blcr = callPackage ../os-specific/linux/blcr { };
+    blcr = if builtins.compareVersions "3.18" kernel.version == 1 then callPackage ../os-specific/linux/blcr { } else null;
 
     chipsec = callPackage ../tools/security/chipsec {
       inherit kernel;
@@ -15657,7 +15657,7 @@ in
 
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
-    e1000e = callPackage ../os-specific/linux/e1000e {};
+    e1000e = if stdenv.lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
 
@@ -15706,7 +15706,7 @@ in
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
-    jool = callPackage ../os-specific/linux/jool { };
+    jool = if stdenv.lib.versionOlder kernel.version "4.18" then  callPackage ../os-specific/linux/jool { } else null;
 
     mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
 
@@ -15725,7 +15725,8 @@ in
 
     phc-intel = callPackage ../os-specific/linux/phc-intel { };
 
-    prl-tools = callPackage ../os-specific/linux/prl-tools { };
+    # Disable for kernels 4.15 and above due to compatibility issues
+    prl-tools = if stdenv.lib.versionOlder kernel.version "4.15" then null else callPackage ../os-specific/linux/prl-tools { };
 
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
