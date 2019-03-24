@@ -2428,7 +2428,7 @@ in
   duo-unix = callPackage ../tools/security/duo-unix { };
 
   duplicacy = callPackage ../tools/backup/duplicacy { };
-  
+
   duplicati = callPackage ../tools/backup/duplicati { };
 
   duplicity = callPackage ../tools/backup/duplicity {
@@ -14765,13 +14765,6 @@ in
       ];
   };
 
-  linux_4_20 = callPackage ../os-specific/linux/kernel/linux-4.20.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.modinst_arg_list_too_long
-      ];
-  };
-
   linux_5_0 = callPackage ../os-specific/linux/kernel/linux-5.0.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -14974,7 +14967,6 @@ in
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
-  linuxPackages_4_20 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_20);
   linuxPackages_5_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_0);
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
