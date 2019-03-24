@@ -14848,6 +14848,8 @@ in
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
 
+    it87 = callPackage ../os-specific/linux/it87 {};
+
     ena = callPackage ../os-specific/linux/ena {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
