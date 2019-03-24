@@ -15370,6 +15370,8 @@ in
 
   speedometer = callPackage ../os-specific/linux/speedometer { };
 
+  statik = callPackage ../development/tools/statik { };
+
   statifier = callPackage ../os-specific/linux/statifier { };
 
   sysdig = callPackage ../os-specific/linux/sysdig {
