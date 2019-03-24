@@ -278,7 +278,7 @@ The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
 
 ```nix
-{ # ...
+{ lib, buildPythonPackage, fetchPypi, numpy, multipledispatch, dateutil, pytest }:
 
 buildPythonPackage rec {
   pname = "datashape";
@@ -312,7 +312,7 @@ Python bindings to `libxml2` and `libxslt`. These libraries are only required
 when building the bindings and are therefore added as `buildInputs`.
 
 ```nix
-{ # ...
+{ lib, pkgs, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "lxml";
@@ -345,7 +345,7 @@ find each of them in a different folder, and therefore we have to set `LDFLAGS`
 and `CFLAGS`.
 
 ```nix
-{ # ...
+{ lib, pkgs, buildPythonPackage, fetchPypi, numpy, scipy }:
 
 buildPythonPackage rec {
   pname = "pyFFTW";
@@ -366,7 +366,7 @@ buildPythonPackage rec {
   preConfigure = ''
     export LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
     export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
-    '';
+  '';
 
   meta = with lib; {
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
