@@ -23470,4 +23470,5 @@ in
     stdenv = crossLibcStdenv;
   };
 
+  colorls = callPackage ../tools/misc/colorls {};
 }
