@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/"
+    makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/ CXX=$CXX AR=$AR"
   '';
 
   meta = with stdenv.lib; {

@@ -17,8 +17,8 @@ buildPythonApplication rec {
     sha256 = "0iyj35fff93cprjkzbkg9dn5xz8dg5h2kjx3476fl625nxxskndn";
   };
 
-  nativeBuildInputs = [ bison flex ];
-  buildInputs = [ libsepol swig ];
+  nativeBuildInputs = [ bison flex swig ];
+  buildInputs = [ libsepol ];
   propagatedBuildInputs = [ enum34 libselinux networkx ]
     ++ optionals withGraphics [ pyqt5 ];
 

@@ -199,10 +199,10 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pythonPackages.buildbot-full;
-        defaultText = "pkgs.pythonPackages.buildbot-full";
+        default = pkgs.python3Packages.buildbot-full;
+        defaultText = "pkgs.python3Packages.buildbot-full";
         description = "Package to use for buildbot.";
-        example = literalExample "pkgs.python3Packages.buildbot-full";
+        example = literalExample "pkgs.python3Packages.buildbot";
       };
 
       packages = mkOption {

@@ -49,7 +49,19 @@
          xml:id="sec-release-19.09-incompatibilities">
   <title>Backward Incompatibilities</title>
 
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
   <itemizedlist>
+   <listitem>
+    <para>
+     Buildbot no longer supports Python 2, as support was dropped upstream in
+     version 2.0.0. Configurations may need to be modified to make them
+     compatible with Python 3.
+    </para>
+   </listitem>
    <listitem>
     <para>
      PostgreSQL now uses
@@ -74,14 +86,17 @@
    <listitem>
     <para>
      The <option>documentation</option> module gained an option named
-     <option>documentation.nixos.includeAllModules</option> which makes the generated
-     <citerefentry><refentrytitle>configuration.nix</refentrytitle>
-     <manvolnum>5</manvolnum></citerefentry> manual page include all options from all NixOS modules
-     included in a given <literal>configuration.nix</literal> configuration file. Currently, it is
-     set to <literal>false</literal> by default as enabling it frequently prevents evaluation. But
-     the plan is to eventually have it set to <literal>true</literal> by default. Please set it to
-     <literal>true</literal> now in your <literal>configuration.nix</literal> and fix all the bugs
-     it uncovers.
+     <option>documentation.nixos.includeAllModules</option> which makes the
+     generated <citerefentry>
+     <refentrytitle>configuration.nix</refentrytitle>
+     <manvolnum>5</manvolnum></citerefentry> manual page include all options
+     from all NixOS modules included in a given
+     <literal>configuration.nix</literal> configuration file. Currently, it is
+     set to <literal>false</literal> by default as enabling it frequently
+     prevents evaluation. But the plan is to eventually have it set to
+     <literal>true</literal> by default. Please set it to
+     <literal>true</literal> now in your <literal>configuration.nix</literal>
+     and fix all the bugs it uncovers.
     </para>
    </listitem>
   </itemizedlist>

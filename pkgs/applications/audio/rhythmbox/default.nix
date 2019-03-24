@@ -4,6 +4,7 @@
 , perlPackages
 , gtk3
 , intltool
+, libpeas
 , libsoup
 , gnome3
 , totem-pl-parser
@@ -48,7 +49,7 @@ in stdenv.mkDerivation rec {
     json-glib
 
     gtk3
-    gnome3.libpeas
+    libpeas
     totem-pl-parser
     gnome3.adwaita-icon-theme
 

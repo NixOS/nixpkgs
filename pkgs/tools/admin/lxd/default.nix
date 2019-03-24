@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
+{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl, fetchpatch
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
 , squashfsTools, iproute, iptables, ebtables, libcap, dqlite
 , sqlite-replication
@@ -7,14 +7,24 @@
 }:
 
 buildGoPackage rec {
-  name = "lxd-3.10";
+  pname = "lxd";
+  version = "3.11";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://github.com/lxc/lxd/releases/download/${name}/${name}.tar.gz";
-    sha256 = "0vd0p3xf54s7f9vcjfiin29py6hxyyxnisvp6am67l5nwhg7rnnc";
+    url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "0xxzrwhyzzp23arj57vjs1yh91gy3r4wpd5qy9ksifzd390clf2x";
   };
+
+  patches = [
+    (fetchpatch {
+      url = https://github.com/CanonicalLtd/go-dqlite/commit/88a96df66e3e3bdc290fd4a0d41615d284d2c92c.patch;
+      sha256 = "0z6r4shh1rlf0in9xk1gi6ms2kcvplc3878106d2zzzfz7ad83a4";
+      extraPrefix = "dist/src/github.com/CanonicalLtd/go-dqlite/";
+      stripLen = 1;
+    })
+  ];
 
   preBuild = ''
     # unpack vendor

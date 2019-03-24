@@ -1,15 +1,15 @@
 { stdenv, makeDesktopItem, fetchurl, unzip
 , gdk_pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
-, xorg, mozjpeg, makeWrapper, gsettings-desktop-schemas
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook, hicolor-icon-theme, libuuid
 }:
 
 stdenv.mkDerivation rec {
   name = "avocode-${version}";
-  version = "3.6.2";
+  version = "3.6.12";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "1slxxr3j0djqdnbk645sriwl99jp9imndyxiwd8aqggmmlp145a2";
+    sha256 = "1qsxwqnkqfp4b9sgmhlv6wjl4mirhnx4bjj2vaq8iyz94pz637c8";
   };
 
   libPath = stdenv.lib.makeLibraryPath (with xorg; [
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXScrnSaver
+    libuuid
   ]);
 
   desktopItem = makeDesktopItem {
@@ -54,8 +55,8 @@ stdenv.mkDerivation rec {
     comment = "The bridge between designers and developers";
   };
 
-  nativeBuildInputs = [makeWrapper];
-  buildInputs = [ unzip gtk3 gsettings-desktop-schemas];
+  nativeBuildInputs = [makeWrapper wrapGAppsHook];
+  buildInputs = [ unzip gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
 
   # src is producing multiple folder on unzip so we must
   # override unpackCmd to extract it into newly created folder
@@ -84,11 +85,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/avocode
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-      patchelf --set-rpath ${libPath}:$out/ $file
-    done
-    for file in $out/bin/*; do
-      wrapProgram $file \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+      patchelf --set-rpath ${libPath}:$out/ $file || true
     done
   '';
 

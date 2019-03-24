@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.89.2";
+  version = "0.90.1";
   components = {
     "abode" = ps: with ps; [  ];
     "abode.alarm_control_panel" = ps: with ps; [  ];
@@ -60,6 +60,8 @@
     "android_ip_webcam.binary_sensor" = ps: with ps; [  ];
     "android_ip_webcam.sensor" = ps: with ps; [  ];
     "android_ip_webcam.switch" = ps: with ps; [  ];
+    "androidtv" = ps: with ps; [  ];
+    "androidtv.media_player" = ps: with ps; [  ];
     "apcupsd" = ps: with ps; [  ];
     "apcupsd.binary_sensor" = ps: with ps; [  ];
     "apcupsd.sensor" = ps: with ps; [  ];
@@ -180,6 +182,8 @@
     "canary" = ps: with ps; [  ];
     "cast" = ps: with ps; [ PyChromecast ];
     "cast.media_player" = ps: with ps; [ PyChromecast ];
+    "cisco_mobility_express" = ps: with ps; [  ];
+    "cisco_mobility_express.device_tracker" = ps: with ps; [  ];
     "climate" = ps: with ps; [  ];
     "climate.const" = ps: with ps; [  ];
     "climate.coolmaster" = ps: with ps; [  ];
@@ -202,13 +206,10 @@
     "climate.touchline" = ps: with ps; [  ];
     "climate.venstar" = ps: with ps; [  ];
     "climate.zhong_hong" = ps: with ps; [  ];
-    "cloud" = ps: with ps; [ aiohttp-cors warrant ];
-    "cloud.auth_api" = ps: with ps; [  ];
-    "cloud.cloud_api" = ps: with ps; [  ];
-    "cloud.cloudhooks" = ps: with ps; [  ];
+    "cloud" = ps: with ps; [ aiohttp-cors ];
+    "cloud.binary_sensor" = ps: with ps; [ aiohttp-cors ];
     "cloud.const" = ps: with ps; [  ];
     "cloud.http_api" = ps: with ps; [  ];
-    "cloud.iot" = ps: with ps; [  ];
     "cloud.prefs" = ps: with ps; [  ];
     "cloud.utils" = ps: with ps; [  ];
     "cloudflare" = ps: with ps; [  ];
@@ -217,16 +218,15 @@
     "comfoconnect.fan" = ps: with ps; [  ];
     "comfoconnect.sensor" = ps: with ps; [  ];
     "config" = ps: with ps; [ aiohttp-cors ];
-    "config.area_registry" = ps: with ps; [ aiohttp-cors ];
+    "config.area_registry" = ps: with ps; [  ];
     "config.auth" = ps: with ps; [  ];
     "config.automation" = ps: with ps; [  ];
     "config.config_entries" = ps: with ps; [  ];
     "config.core" = ps: with ps; [  ];
     "config.customize" = ps: with ps; [  ];
-    "config.device_registry" = ps: with ps; [ aiohttp-cors ];
-    "config.entity_registry" = ps: with ps; [ aiohttp-cors ];
+    "config.device_registry" = ps: with ps; [  ];
+    "config.entity_registry" = ps: with ps; [  ];
     "config.group" = ps: with ps; [  ];
-    "config.hassbian" = ps: with ps; [  ];
     "config.script" = ps: with ps; [  ];
     "config.zwave" = ps: with ps; [  ];
     "configurator" = ps: with ps; [  ];
@@ -245,6 +245,8 @@
     "cover.opengarage" = ps: with ps; [  ];
     "cover.rflink" = ps: with ps; [  ];
     "cover.template" = ps: with ps; [  ];
+    "cppm_tracker" = ps: with ps; [  ];
+    "cppm_tracker.device_tracker" = ps: with ps; [  ];
     "daikin" = ps: with ps; [  ];
     "daikin.climate" = ps: with ps; [  ];
     "daikin.config_flow" = ps: with ps; [  ];
@@ -267,7 +269,7 @@
     "deconz.scene" = ps: with ps; [  ];
     "deconz.sensor" = ps: with ps; [  ];
     "deconz.switch" = ps: with ps; [  ];
-    "default_config" = ps: with ps; [ pynacl aiohttp-cors distro netdisco sqlalchemy warrant ];
+    "default_config" = ps: with ps; [ pynacl aiohttp-cors distro sqlalchemy zeroconf ];
     "demo" = ps: with ps; [ aiohttp-cors ];
     "demo.remote" = ps: with ps; [  ];
     "device_sun_light_trigger" = ps: with ps; [  ];
@@ -317,6 +319,7 @@
     "device_tracker.unifi" = ps: with ps; [ pyunifi ];
     "device_tracker.unifi_direct" = ps: with ps; [ pexpect ];
     "device_tracker.upc_connect" = ps: with ps; [ defusedxml ];
+    "device_tracker.xfinity" = ps: with ps; [  ];
     "device_tracker.xiaomi" = ps: with ps; [  ];
     "dialogflow" = ps: with ps; [ aiohttp-cors ];
     "digital_ocean" = ps: with ps; [ digital-ocean ];
@@ -373,6 +376,8 @@
     "emulated_roku.binding" = ps: with ps; [  ];
     "emulated_roku.config_flow" = ps: with ps; [  ];
     "emulated_roku.const" = ps: with ps; [  ];
+    "enigma2" = ps: with ps; [  ];
+    "enigma2.media_player" = ps: with ps; [  ];
     "enocean" = ps: with ps; [  ];
     "enocean.binary_sensor" = ps: with ps; [  ];
     "enocean.light" = ps: with ps; [  ];
@@ -490,9 +495,13 @@
     "homekit_controller.alarm_control_panel" = ps: with ps; [  ];
     "homekit_controller.binary_sensor" = ps: with ps; [  ];
     "homekit_controller.climate" = ps: with ps; [  ];
+    "homekit_controller.config_flow" = ps: with ps; [  ];
+    "homekit_controller.connection" = ps: with ps; [  ];
+    "homekit_controller.const" = ps: with ps; [  ];
     "homekit_controller.cover" = ps: with ps; [  ];
     "homekit_controller.light" = ps: with ps; [  ];
     "homekit_controller.lock" = ps: with ps; [  ];
+    "homekit_controller.sensor" = ps: with ps; [  ];
     "homekit_controller.switch" = ps: with ps; [  ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematic.binary_sensor" = ps: with ps; [ pyhomematic ];
@@ -516,6 +525,7 @@
     "homematicip_cloud.light" = ps: with ps; [  ];
     "homematicip_cloud.sensor" = ps: with ps; [  ];
     "homematicip_cloud.switch" = ps: with ps; [  ];
+    "homematicip_cloud.weather" = ps: with ps; [  ];
     "homeworks" = ps: with ps; [  ];
     "homeworks.light" = ps: with ps; [  ];
     "http" = ps: with ps; [ aiohttp-cors ];
@@ -551,6 +561,7 @@
     "ihc.light" = ps: with ps; [ defusedxml ];
     "ihc.sensor" = ps: with ps; [ defusedxml ];
     "ihc.switch" = ps: with ps; [ defusedxml ];
+    "ihc.util" = ps: with ps; [  ];
     "image_processing" = ps: with ps; [ aiohttp-cors ];
     "image_processing.demo" = ps: with ps; [  ];
     "image_processing.dlib_face_detect" = ps: with ps; [ face_recognition ];
@@ -622,6 +633,9 @@
     "knx.switch" = ps: with ps; [  ];
     "konnected" = ps: with ps; [ aiohttp-cors ];
     "konnected.binary_sensor" = ps: with ps; [ aiohttp-cors ];
+    "konnected.const" = ps: with ps; [  ];
+    "konnected.handlers" = ps: with ps; [  ];
+    "konnected.sensor" = ps: with ps; [ aiohttp-cors ];
     "konnected.switch" = ps: with ps; [ aiohttp-cors ];
     "lametric" = ps: with ps; [  ];
     "lametric.notify" = ps: with ps; [  ];
@@ -651,7 +665,7 @@
     "light.litejet" = ps: with ps; [  ];
     "light.lw12wifi" = ps: with ps; [  ];
     "light.mystrom" = ps: with ps; [  ];
-    "light.nanoleaf_aurora" = ps: with ps; [ nanoleaf ];
+    "light.nanoleaf" = ps: with ps; [  ];
     "light.niko_home_control" = ps: with ps; [  ];
     "light.opple" = ps: with ps; [  ];
     "light.osramlightify" = ps: with ps; [  ];
@@ -739,7 +753,6 @@
     "media_player.dunehd" = ps: with ps; [  ];
     "media_player.emby" = ps: with ps; [  ];
     "media_player.epson" = ps: with ps; [  ];
-    "media_player.firetv" = ps: with ps; [ firetv ];
     "media_player.frontier_silicon" = ps: with ps; [  ];
     "media_player.gpmdp" = ps: with ps; [ websocket_client ];
     "media_player.gstreamer" = ps: with ps; [  ];
@@ -788,6 +801,14 @@
     "meteo_france.weather" = ps: with ps; [  ];
     "microsoft_face" = ps: with ps; [ aiohttp-cors ];
     "mobile_app" = ps: with ps; [ pynacl aiohttp-cors ];
+    "mobile_app.binary_sensor" = ps: with ps; [ pynacl aiohttp-cors ];
+    "mobile_app.const" = ps: with ps; [  ];
+    "mobile_app.entity" = ps: with ps; [  ];
+    "mobile_app.helpers" = ps: with ps; [  ];
+    "mobile_app.http_api" = ps: with ps; [  ];
+    "mobile_app.sensor" = ps: with ps; [ pynacl aiohttp-cors ];
+    "mobile_app.webhook" = ps: with ps; [  ];
+    "mobile_app.websocket_api" = ps: with ps; [  ];
     "mochad" = ps: with ps; [  ];
     "mochad.light" = ps: with ps; [  ];
     "mochad.switch" = ps: with ps; [  ];
@@ -1305,6 +1326,11 @@
     "spider.switch" = ps: with ps; [  ];
     "splunk" = ps: with ps; [  ];
     "statsd" = ps: with ps; [ statsd ];
+    "stream" = ps: with ps; [ aiohttp-cors av ];
+    "stream.const" = ps: with ps; [  ];
+    "stream.core" = ps: with ps; [  ];
+    "stream.hls" = ps: with ps; [  ];
+    "stream.worker" = ps: with ps; [  ];
     "sun" = ps: with ps; [  ];
     "switch" = ps: with ps; [  ];
     "switch.acer_projector" = ps: with ps; [ pyserial ];
@@ -1391,6 +1417,8 @@
     "tibber.notify" = ps: with ps; [  ];
     "tibber.sensor" = ps: with ps; [  ];
     "timer" = ps: with ps; [  ];
+    "tof" = ps: with ps; [  ];
+    "tof.sensor" = ps: with ps; [  ];
     "toon" = ps: with ps; [  ];
     "toon.binary_sensor" = ps: with ps; [  ];
     "toon.climate" = ps: with ps; [  ];
@@ -1516,6 +1544,7 @@
     "websocket_api.error" = ps: with ps; [  ];
     "websocket_api.http" = ps: with ps; [  ];
     "websocket_api.messages" = ps: with ps; [  ];
+    "websocket_api.permissions" = ps: with ps; [  ];
     "wemo" = ps: with ps; [  ];
     "wemo.binary_sensor" = ps: with ps; [  ];
     "wemo.fan" = ps: with ps; [  ];

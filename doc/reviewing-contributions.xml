@@ -189,14 +189,14 @@ $ git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD <co
      </listitem>
      <listitem>
       <para>
-       The <link xlink:href="https://github.com/madjar/nox">nox</link> tool can
-       be used to review a pull request content in a single command. It doesn't
-       rebase on a channel branch so it might trigger multiple source builds.
+       The <link xlink:href="https://github.com/Mic92/nix-review">nix-review</link>
+       tool can be used to review a pull request content in a single command.
        <varname>PRNUMBER</varname> should be replaced by the number at the end
-       of the pull request title.
+       of the pull request title. You can also provide the full github pull
+       request url.
       </para>
 <screen>
-$ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
+$ nix-shell -p nix-review --run "nix-review pr PRNUMBER"
 </screen>
      </listitem>
     </itemizedlist>

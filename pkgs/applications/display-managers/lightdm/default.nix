@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
   pname = "lightdm";
   version = "1.28.0";
 
-  name = "${pname}-${version}";
-
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
@@ -40,9 +38,9 @@ stdenv.mkDerivation rec {
     accountsservice
     audit
     glib
+    libXdmcp
     libgcrypt
     libxcb
-    libXdmcp
     libxklavier
     pam
     polkit
@@ -50,7 +48,6 @@ stdenv.mkDerivation rec {
     ++ optional withQt5 qtbase;
 
   patches = [
-    ./run-dir.patch
     # Adds option to disable writing dmrc files
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/lightdm/raw/4cf0d2bed8d1c68970b0322ccd5dbbbb7a0b12bc/f/lightdm-1.25.1-disable_dmrc.patch";

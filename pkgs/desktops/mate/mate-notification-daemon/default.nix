@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, dbus-glib, libcanberra-gtk3,
-  libnotify, libwnck3, gnome3, mate, wrapGAppsHook }:
+  libnotify, libwnck3, gnome3, gtk3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-notification-daemon-${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     libnotify
     libwnck3
-    gnome3.gtk
+    gtk3
   ];
 
   meta = with stdenv.lib; {

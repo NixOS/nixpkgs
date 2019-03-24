@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.23";
-  name = "pynac-${version}";
+  version = "0.7.24";
+  pname = "pynac";
 
   src = fetchFromGitHub {
     owner = "pynac";
     repo = "pynac";
     rev = "pynac-${version}";
-    sha256 = "02yhl8v9l6aj3wl6dk9iacz4hdv08i1d750rxpygjp43nlgvvb2h";
+    sha256 = "0i3qxww28576jim0abgkqy9mi2k0lfllgyx8xpfqsqb75ai970ik";
   };
 
   buildInputs = [

@@ -1,0 +1,59 @@
+diff --git a/System/Clock.hsc b/System/Clock.hsc
+index 297607b..c21196b 100644
+--- a/System/Clock.hsc
++++ b/System/Clock.hsc
+@@ -41,7 +41,9 @@ import GHC.Generics (Generic)
+ #  endif
+ #endif
+
+-#let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
++#if __GLASGOW_HASKELL__ < 800
++#  let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
++#endif
+
+ -- | Clock types. A clock may be system-wide (that is, visible to all processes)
+ --   or per-process (measuring time that is meaningful only within a process).
+diff --git a/cbits/hs_clock_win32.c b/cbits/hs_clock_win32.c
+index 5dcc2a9..ebdb7fe 100644
+--- a/cbits/hs_clock_win32.c
++++ b/cbits/hs_clock_win32.c
+@@ -28,12 +28,22 @@ static void to_timespec_from_100ns(ULONGLONG t_100ns, long long *t)
+     t[1] = 100*(long)(t_100ns % 10000000UL);
+ }
+
++/* See https://ghc.haskell.org/trac/ghc/ticket/15094 */
++#if defined(_WIN32) && !defined(_WIN64)
++__attribute__((optimize("-fno-expensive-optimizations")))
++#endif
+ void hs_clock_win32_gettime_monotonic(long long* t)
+ {
+    LARGE_INTEGER time;
+-   LARGE_INTEGER frequency;
++   static LARGE_INTEGER frequency;
++   static int hasFreq = 0;
++
+    QueryPerformanceCounter(&time);
+-   QueryPerformanceFrequency(&frequency);
++   if (!hasFreq)
++   {
++      hasFreq = 1;
++      QueryPerformanceFrequency(&frequency);
++   }
+    // seconds
+    t[0] = time.QuadPart / frequency.QuadPart;
+    // nanos =
+diff --git a/clock.cabal b/clock.cabal
+index 0f2d18a..67d232e 100644
+--- a/clock.cabal
++++ b/clock.cabal
+@@ -41,8 +41,8 @@ description:   A package for convenient access to high-resolution clock and
+ copyright:     Copyright © Cetin Sert 2009-2016, Eugene Kirpichov 2010, Finn Espen Gundersen 2013, Gerolf Seitz 2013, Mathieu Boespflug 2014 2015, Chris Done 2015, Dimitri Sabadie 2015, Christian Burger 2015, Mario Longobardi 2016
+ license:       BSD3
+ license-file:  LICENSE
+-author:        Cetin Sert <cetin@corsis.eu>, Corsis Research
+-maintainer:    Cetin Sert <cetin@corsis.eu>, Corsis Research
++author:        Cetin Sert <cetin@corsis.tech>, Corsis Research
++maintainer:    Cetin Sert <cetin@corsis.tech>, Corsis Research
+ homepage:      https://github.com/corsis/clock
+ bug-reports:   https://github.com/corsis/clock/issues
+ category:      System

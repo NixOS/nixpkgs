@@ -1,29 +1,15 @@
-{ lib, fetchpatch, python3 }:
+{ lib, python3 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.4.0.post1";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7a51e55a7f362013ce1cce7d850c65dc8d4651dd05c63004429bc521b461d029";
+    sha256 = "51951845e52c4ca5410e0f4a51d99014dd6df2fcedfca8b7241e045359cbf112";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/tulir/mautrix-telegram/commit/a258c59ca3558ad91b1fee190c624763ca835d2f.patch";
-      sha256 = "04z4plsmqmg38rsw9irp5xc9wdgjvg6xba69mixi5v82h9lg3zzp";
-    })
-
-    ./fix_patch_conflicts.patch
-
-    (fetchpatch {
-      url = "https://github.com/tulir/mautrix-telegram/commit/8021fcc24cbf8c88d9bcb2601333863c9615bd4f.patch";
-      sha256 = "0cdfv8ggnjdwdhls1lk6498b233lvnb6175xbxr206km5mxyvqyk";
-    })
-  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -36,10 +22,16 @@ buildPythonPackage rec {
     python_magic
     telethon
     telethon-session-sqlalchemy
+    pillow
+    lxml
   ];
 
-  # No tests available
-  doCheck = false;
+  checkInputs = [
+    pytest
+    pytestrunner
+    pytest-mock
+    pytest-asyncio
+  ];
 
   meta = with lib; {
     homepage = https://github.com/tulir/mautrix-telegram;
