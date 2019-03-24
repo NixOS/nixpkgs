@@ -2,16 +2,16 @@
 , kernel ? null, withDriver ? false }:
 python27Packages.buildPythonApplication rec {
   name = "chipsec-${version}";
-  version = "1.3.6";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
-    rev = "v${version}";
-    sha256 = "18iwbh74j4igrvfx9cc2bfk014ha0b40mvwnn05yabij22kl9l49";
+    rev = if (version == "1.3.7") then version else "v${version}";
+    sha256 = "00hwhi5f24y429zazhm77l1pp31q7fmx7ks3sfm6d16v89zbcp9a";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     nasm libelf
   ];
 
