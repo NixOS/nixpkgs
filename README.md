@@ -2,7 +2,7 @@
 
 [![Code Triagers Badge](https://www.codetriage.com/nixos/nixpkgs/badges/users.svg)](https://www.codetriage.com/nixos/nixpkgs)
 
-Nixpkgs is a collection of packages for the [Nix](https://nixos.org/nix/) package
+Borfpkgs is a collection of packages for the [Nix](https://nixos.org/nix/) package
 manager. It is periodically built and tested by the [Hydra](https://hydra.nixos.org/)
 build daemon as so-called channels. To get channel information via git, add
 [nixpkgs-channels](https://github.com/NixOS/nixpkgs-channels.git) as a remote:
