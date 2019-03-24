@@ -1,7 +1,7 @@
-diff --git a/debian/elementary-default-settings.gsettings-override b/debian/elementary-default-settings.gsettings-override
-index 6452c30..899972d 100644
---- a/debian/elementary-default-settings.gsettings-override
-+++ b/debian/elementary-default-settings.gsettings-override
+diff --git a/overrides/default-settings.gschema.override b/overrides/default-settings.gschema.override
+index 1aef29c..08de164 100644
+--- a/overrides/default-settings.gschema.override
++++ b/overrides/default-settings.gschema.override
 @@ -1,5 +1,5 @@
  [net.launchpad.plank.dock.settings]
 -dock-items=['gala-multitaskingview.dockitem','org.gnome.Epiphany.dockitem','org.pantheon.mail.dockitem','io.elementary.calendar.dockitem','io.elementary.music.dockitem','io.elementary.videos.dockitem','io.elementary.photos.dockitem','io.elementary.switchboard.dockitem','io.elementary.appcenter.dockitem']
