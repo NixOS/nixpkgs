@@ -56,6 +56,9 @@
 , # A list of overlays (Additional `self: super: { .. }` customization
   # functions) to be fixed together in the produced package set
   overlays
+
+, # Extra scope for newScope, callPackage, and similar
+  extraScope
 } @args:
 
 let
@@ -87,7 +90,11 @@ let
     inherit (hostPlatform) system;
   };
 
-  splice = self: super: import ./splice.nix lib self (buildPackages != null);
+  splice = self: super: import ./splice.nix {
+    inherit lib extraScope;
+    pkgs = self;
+    actuallySplice = buildPackages != null;
+  };
 
   allPackages = self: super:
     let res = import ./all-packages.nix
@@ -111,8 +118,7 @@ let
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
   configOverrides = self: super:
-    lib.optionalAttrs allowCustomOverrides
-      ((config.packageOverrides or (super: {})) super);
+    lib.optionalAttrs allowCustomOverrides (config.packageOverrides super);
 
   # Convenience attributes for instantitating package sets. Each of
   # these will instantiate a new version of allPackages. Currently the

@@ -94,7 +94,7 @@ rec {
 
 
   # When adding new types don't forget to document them in
-  # nixos/doc/manual/development/option-types.xml!
+  # ../nixos/doc/manual/development/option-types.xml!
   types = rec {
     unspecified = mkOptionType {
       name = "unspecified";
@@ -356,6 +356,30 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    # A function to something mergeable (i.e., to a monoid). You
+    # should use something else. This type is a last resort and should
+    # only be used when there is absolutely nothing else you can do.
+    # Most uses of this type imply bad design.
+    functionTo = elemType: mkOptionType {
+      name = "function that evaluates to a(n) ${elemType.name}";
+      check = isFunction;
+      merge = loc: defs:
+        fnArgs: elemType.merge loc (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs);
+      getSubOptions = elemType.getSubOptions;
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: functionTo (elemType.substSubModules m);
+    };
+
+    # An opaque value. The result of evaluation of an option of this
+    # type is a list of { file, value } pairs describing all the
+    # values assigned to this option (with corresponding files where
+    # these values were applied).
+    opaque = mkOptionType {
+      name = "opaque";
+      description = "opaque value";
+      merge = loc: args: args;
+    };
+
     # A submodule (like typed attribute set). See NixOS manual.
     submodule = opts:
       let
@@ -368,7 +392,7 @@ rec {
         merge = loc: defs:
           let
             coerce = def: if isFunction def then def else { config = def; };
-            modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
+            modules = opts' ++ map (def: { inherit (def) file; imports = [(coerce def.value)]; }) defs;
           in (evalModules {
             inherit modules;
             args.name = last loc;

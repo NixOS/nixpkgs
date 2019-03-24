@@ -35,9 +35,9 @@ rec {
       # attribute.  These options are fragile, as they are used by the
       # module system to change the interpretation of modules.
       internalModule = rec {
-        _file = ./modules.nix;
+        file = ./modules.nix;
 
-        key = _file;
+        key = file;
 
         options = {
           _module.args = mkOption {
@@ -116,29 +116,29 @@ rec {
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
-    let metaSet = if m ? meta
-      then { meta = m.meta; }
-      else {};
+    let addMetaSet = arg: if m ? meta
+      then mkMerge [ arg { meta = m.meta; } ]
+      else arg;
     in
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta"]; in
+      let badAttrs = removeAttrs m ["file" "key" "disabledModules" "imports" "options" "config" "meta"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by assignments to the top-level attributes `config' or `options'."
       else
-        { file = m._file or file;
+        { file = m.file or file;
           key = toString m.key or key;
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
           options = m.options or {};
-          config = mkMerge [ (m.config or {}) metaSet ];
+          config = addMetaSet (m.config or {});
         }
     else
-      { file = m._file or file;
+      { file = m.file or file;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = mkMerge [ (removeAttrs m ["_file" "key" "disabledModules" "require" "imports"]) metaSet ];
+        config = addMetaSet (removeAttrs m ["file" "key" "disabledModules" "require" "imports"]);
       };
 
   applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
@@ -176,7 +176,7 @@ rec {
      of the submodule. (see applyIfFunction) */
   unpackSubmodule = unpack: m: args:
     if isType "submodule" m then
-      { _file = m.file; } // (unpack m.submodule args)
+      { inherit (m) file; } // (unpack m.submodule args)
     else unpack m args;
 
   packSubmodule = file: m:
@@ -394,12 +394,12 @@ rec {
      to refer to the full configuration without creating an infinite
      recursion.
   */
-  pushDownProperties = cfg:
-    if cfg._type or "" == "merge" then
+  pushDownProperties = cfg: let type = cfg._type or ""; in
+    if type == "merge" then
       concatMap pushDownProperties cfg.contents
-    else if cfg._type or "" == "if" then
+    else if type == "if" then
       map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
-    else if cfg._type or "" == "override" then
+    else if type == "override" then
       map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
     else # FIXME: handle mkOrder?
       [ cfg ];

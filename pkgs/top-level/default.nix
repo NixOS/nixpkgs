@@ -23,10 +23,10 @@
   localSystem
 
 , # The system packages will ultimately be run on.
-  crossSystem ? localSystem
+  crossSystem
 
-, # Allow a configuration attribute set to be passed in as an argument.
-  config ? {}
+, # List of configuration modules to apply.
+  configs ? []
 
 , # List of overlays layers used to extend Nixpkgs.
   overlays ? []
@@ -40,46 +40,51 @@
   stdenvStages ? import ../stdenv
 } @ args:
 
-let # Rename the function arguments
-  config0 = config;
-  crossSystem0 = crossSystem;
-
-in let
+let
   lib = import ../../lib;
 
-  # Allow both:
-  # { /* the config */ } and
-  # { pkgs, ... } : { /* the config */ }
-  config1 =
-    if lib.isFunction config0
-    then config0 { inherit pkgs; }
-    else config0;
+  # Massage e into a NixOS module.
+  mkModule = e: { options, ... }@args:
+    let
+      # We need all this stuff only because we want to support unknown options,
+      # without them this can be simplified a lot.
+      unify = file: value: lib.unifyModuleSyntax file file (lib.applyIfFunction file value args);
 
-  # From a minimum of `system` or `config` (actually a target triple, *not*
-  # nixpkgs configuration), infer the other one and platform as needed.
-  localSystem = lib.systems.elaborate (
-    # Allow setting the platform in the config file. This take precedence over
-    # the inferred platform, but not over an explicitly passed-in one.
-    builtins.intersectAttrs { platform = null; } config1
-    // args.localSystem);
+      fake = "nixpkgs.configs element";
+      module =
+        if lib.isFunction e then unify fake e # { ... }: config
+        else if lib.isAttrs e then
+          (if e ? file && e ? value then unify e.file e.value # types.opaque
+           else unify fake e) # plain config
+        else unify (toString e) (import e); # path
 
-  crossSystem = if crossSystem0 == null then localSystem
-                else lib.systems.elaborate crossSystem0;
+      # a bit of magic to move all options unknown to the ./config.nix
+      # under "unknowns" option so that the module checker won't complain
+      # FIXME: remove this eventually
+      configWithoutUnknowns = builtins.intersectAttrs options module.config // {
+        unknowns = lib.filterAttrs (n: v: !(options ? ${n})) module.config;
+      };
+    in module // {
+      config = configWithoutUnknowns;
+    };
 
+  # Eval configs.
   configEval = lib.evalModules {
     modules = [
+      {
+        _module.args = { inherit pkgs; };
+      }
+      {
+        inherit localSystem crossSystem;
+      }
       ./config.nix
-      ({ options, ... }: {
-        _file = "nixpkgs.config";
-        # filter-out known options, FIXME: remove this eventually
-        config = builtins.intersectAttrs options config1;
-      })
-    ];
+    ] ++ map mkModule configs;
   };
 
-  # take all the rest as-is
-  config = lib.showWarnings configEval.config.warnings
-    (config1 // builtins.removeAttrs configEval.config [ "_module" ]);
+  # Do the reverse of configWithoutUnknowns.
+  configWithUnknowns = configEval.config // configEval.config.unknowns;
+
+  config = lib.showWarnings configEval.config.warnings configWithUnknowns;
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
@@ -112,12 +117,14 @@ in let
   # sets. Only apply arguments which no stdenv would want to override.
   allPackages = newArgs: import ./stage.nix ({
     inherit lib nixpkgsFun;
+    inherit (config) extraScope;
   } // newArgs);
 
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
   stages = stdenvStages {
-    inherit lib localSystem crossSystem config overlays crossOverlays;
+    inherit lib config overlays crossOverlays;
+    inherit (config) localSystem crossSystem;
   };
 
   pkgs = boot stages;
