@@ -141,6 +141,16 @@ in {
         <command>redshift</command>.
       '';
     };
+
+    earlyStartup = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Start redshift before the graphical interface is up.
+        This will automatically set the method to "drm".
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -158,6 +168,8 @@ in {
     environment.systemPackages = [ cfg.package ];
 
     services.geoclue2.enable = mkIf (cfg.provider == "geoclue2") true;
+
+    services.redshift.method = mkIf cfg.earlyStartup "drm";
 
     systemd.user.services.redshift = 
     let
@@ -180,11 +192,15 @@ in {
         };
       configFile = lib.generators.toINI {}
       ( lib.filterAttrsRecursive (n: v: v != null) allOptions );
+      target =
+        if cfg.earlyStartup
+        then "basic.target"
+        else "graphical-session.target";
    in
     {
       description = "Redshift colour temperature adjuster";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+      wantedBy = [ target ];
+      partOf = [ target ];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/redshift \
