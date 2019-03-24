@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, gtk3, libwnck3, libgtop, libxml2, libnotify, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, gtk3, gtksourceview3, libwnck3, libgtop, libxml2, libnotify, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-applets-${version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    gnome3.gtksourceview
+    gtksourceview3
     gnome3.gucharmap
     libwnck3
     libgtop
