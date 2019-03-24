@@ -4,7 +4,6 @@
 # Runtime inputs:
 , pyparsing
 # Check inputs:
-, setuptools
 , pytest
 , mock
 }:
@@ -20,7 +19,7 @@ buildPythonPackage rec{
 
   propagatedBuildInputs = [ pyparsing ];
 
-  checkInputs = [ setuptools pytest mock ];
+  checkInputs = [ pytest mock ];
 
   # Tests fail because necessary data files aren't packaged for PyPi yet.
   # See https://github.com/chimpler/pyhocon/pull/203
