@@ -433,7 +433,7 @@ Let's split the package definition from the environment definition.
 We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 
 ```nix
-{ lib, pkgs, buildPythonPackage }:
+{ lib, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "toolz";
@@ -453,18 +453,17 @@ buildPythonPackage rec {
 }
 ```
 
-It takes two arguments, `pkgs` and `buildPythonPackage`.
+It takes an argument `buildPythonPackage`.
 We now call this function using `callPackage` in the definition of our environment
 
 ```nix
 with import <nixpkgs> {};
 
 ( let
-    toolz = pkgs.callPackage /path/to/toolz/release.nix {
-      pkgs = pkgs;
-      buildPythonPackage = pkgs.python35Packages.buildPythonPackage;
+    toolz = callPackage /path/to/toolz/release.nix {
+      buildPythonPackage = python35Packages.buildPythonPackage;
     };
-  in pkgs.python35.withPackages (ps: [ ps.numpy toolz ])
+  in python35.withPackages (ps: [ ps.numpy toolz ])
 ).env
 ```
 
