@@ -47,6 +47,25 @@ in {
       '';
     };
 
+    method = mkOption {
+      type = types.nullOr (types.enum [ "drm" "randr" "vidmode" "dummy" ]);
+      default = null;
+      description = ''
+        Method to use for making the adjustments.
+      '';
+    };
+
+    methodOptions = mkOption {
+      type = types.attrsOf types.str;
+      default = {};
+      description = ''
+        Additional method specific options to pass to redshift.
+      '';
+      example = {
+        crtc = "0";
+      };
+    };
+
     temperature = {
       day = mkOption {
         type = types.int;
@@ -85,12 +104,31 @@ in {
       };
     };
 
+    fade = mkOption {
+      type = types.nullOr types.bool;
+      default = null;
+      apply = lib.mapNullable (f: if f then 1 else 0);
+      description = ''
+        Enable fading between color temperatures when redshift
+        starts or stops.
+      '';
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.redshift;
       defaultText = "pkgs.redshift";
       description = ''
         redshift derivation to use.
+      '';
+    };
+
+    extraConfig = mkOption {
+      type = types.attrsOf types.string;
+      default = {};
+      description = ''
+        Additional options to append to the [redshift]
+        section of the configuration file (see man redshift).
       '';
     };
 
@@ -123,11 +161,26 @@ in {
 
     systemd.user.services.redshift = 
     let
-      providerString = 
-        if cfg.provider == "manual"
-        then "${cfg.latitude}:${cfg.longitude}"
-        else cfg.provider;
-    in
+      allOptions = {
+          redshift = {
+            temp-day = cfg.temperature.day;
+            temp-night = cfg.temperature.night;
+            brightness-day = cfg.brightness.day;
+            brightness-night = cfg.brightness.night;
+            location-provider = cfg.provider;
+            adjustment-method = cfg.method;
+            fade = cfg.fade;
+          } // cfg.extraConfig;
+          manual = {
+            lat = cfg.latitude;
+            lon = cfg.longitude;
+          };
+        } // lib.optionalAttrs (!builtins.isNull cfg.method) {
+          "${cfg.method}" = cfg.methodOptions;
+        };
+      configFile = lib.generators.toINI {}
+      ( lib.filterAttrsRecursive (n: v: v != null) allOptions );
+   in
     {
       description = "Redshift colour temperature adjuster";
       wantedBy = [ "graphical-session.target" ];
@@ -135,9 +188,7 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/redshift \
-            -l ${providerString} \
-            -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
-            -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
+          -c ${builtins.toFile "redshift-config" configFile} \
             ${lib.strings.concatStringsSep " " cfg.extraOptions}
         '';
         RestartSec = 3;
