@@ -3,15 +3,15 @@
 
 buildGoPackage rec {
   name = "coyim-${version}";
-  version = "0.3.7_1";
+  version = "0.3.11";
 
-  goPackagePath = "github.com/twstrike/coyim";
+  goPackagePath = "github.com/coyim/coyim";
 
   src = fetchFromGitHub {
-    owner = "twstrike";
+    owner = "coyim";
     repo = "coyim";
-    rev = "df2c52fe865d38fa27e8a7af1d87612e8c048805";
-    sha256 = "1sna1n9dz1crws6cb1yjhy2kznbngjlbiw2diycshvbfigf7y7xl";
+    rev = "v${version}";
+    sha256 = "1g8nf56j17rdhhj7pv3ha1rb2mfc0mdvyzl35pgcki08w7iw08j3";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook glib cairo gdk_pixbuf gtk3 gnome3.adwaita-icon-theme ];
