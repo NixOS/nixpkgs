@@ -63,8 +63,8 @@ let
     configureCrate = import ./configure-crate.nix { inherit lib echo_build_heading noisily makeDeps; };
     buildCrate = import ./build-crate.nix { inherit lib echo_build_heading noisily makeDeps; };
     installCrate = import ./install-crate.nix;
-
- crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_);
+    crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_);
+    stdenv_ = crate.stdenv or stdenv;
     dependencies_ = dependencies;
     buildDependencies_ = buildDependencies;
     processedAttrs = [
@@ -77,7 +77,7 @@ let
     propagatedBuildInputs_ = propagatedBuildInputs;
     extraRustcOpts_ = extraRustcOpts;
 in
-stdenv.mkDerivation (rec {
+stdenv_.mkDerivation (rec {
 
     inherit (crate) crateName;
     inherit preUnpack postUnpack prePatch patches postPatch preConfigure postConfigure preBuild postBuild preInstall postInstall;
@@ -87,7 +87,7 @@ stdenv.mkDerivation (rec {
       else
         fetchCrate { inherit (crate) crateName version sha256; };
     name = "rust_${crate.crateName}-${crate.version}";
-    depsBuildBuild = [ rust stdenv.cc ];
+    depsBuildBuild = [ rust stdenv_.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     propagatedBuildInputs =
       lib.lists.foldr
@@ -97,12 +97,12 @@ stdenv.mkDerivation (rec {
 
     dependencies =
       builtins.map
-        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; stdenv = stdenv; })
+        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; stdenv = stdenv_; })
         dependencies_;
 
     buildDependencies =
       builtins.map
-        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; stdenv = stdenv; })
+        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; stdenv = stdenv_; })
         buildDependencies_;
 
     completeDeps = lib.lists.unique (dependencies ++ lib.lists.concatMap (dep: dep.completeDeps) dependencies);
@@ -149,14 +149,16 @@ stdenv.mkDerivation (rec {
     configurePhase = configureCrate {
       inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
               crateFeatures libName build workspace_member release libPath crateVersion
-              extraLinkFlags extraRustcOpts stdenv
+              extraLinkFlags extraRustcOpts
               crateAuthors verbose colors target_os;
+      stdenv = stdenv_;
     };
     buildPhase = buildCrate {
-      inherit crateName dependencies stdenv
+      inherit crateName dependencies
               crateFeatures libName release libPath crateType
               metadata crateBin hasCrateBin verbose colors
               extraRustcOpts;
+      stdenv = stdenv_;
     };
     installPhase = installCrate crateName metadata;
 
