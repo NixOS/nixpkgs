@@ -8,7 +8,7 @@ let
   # Prioritize nautilus by default when opening directories
   mimeAppsList = pkgs.writeTextFile {
     name = "gnome-mimeapps";
-    destination = "/share/applications/mimeapps.list";
+    destination = "/share/applications/gnome-mimeapps.list";
     text = ''
       [Default Applications]
       inode/directory=nautilus.desktop;org.gnome.Nautilus.desktop
