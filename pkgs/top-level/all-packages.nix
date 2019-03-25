@@ -696,6 +696,8 @@ in
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
+  colorls = callPackage ../tools/misc/colorls {};
+
   deskew = callPackage ../applications/graphics/deskew { };
 
   detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
@@ -23479,5 +23481,4 @@ in
     stdenv = crossLibcStdenv;
   };
 
-  colorls = callPackage ../tools/misc/colorls {};
 }
