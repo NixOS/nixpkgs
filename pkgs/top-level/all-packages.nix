@@ -10671,7 +10671,7 @@ in
   lcms2 = callPackage ../development/libraries/lcms2 { };
 
   ldb = callPackage ../development/libraries/ldb {
-    python = python2;
+    python = python3;
   };
 
   lensfun = callPackage ../development/libraries/lensfun {};
