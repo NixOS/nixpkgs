@@ -14,6 +14,9 @@ let
 in
 
 {
+
+  meta.maintainers = pkgs.pantheon.maintainers;
+
   options = {
 
     services.xserver.desktopManager.pantheon = {

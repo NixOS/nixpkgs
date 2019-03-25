@@ -673,6 +673,11 @@ in
 
   bonfire = callPackage ../tools/misc/bonfire { };
 
+  buildbot = with python3Packages; toPythonApplication buildbot;
+  buildbot-ui = with python3Packages; toPythonApplication buildbot-ui;
+  buildbot-full = with python3Packages; toPythonApplication buildbot-full;
+  buildbot-worker = with python3Packages; toPythonApplication buildbot-worker;
+
   bunny = callPackage ../tools/package-management/bunny { };
 
   chezmoi = callPackage ../tools/misc/chezmoi { };
@@ -2423,7 +2428,7 @@ in
   duo-unix = callPackage ../tools/security/duo-unix { };
 
   duplicacy = callPackage ../tools/backup/duplicacy { };
-  
+
   duplicati = callPackage ../tools/backup/duplicati { };
 
   duplicity = callPackage ../tools/backup/duplicity {
@@ -4829,6 +4834,8 @@ in
 
   parted = callPackage ../tools/misc/parted { };
 
+  paulstretch = callPackage ../applications/audio/paulstretch { };
+
   pell = callPackage ../applications/misc/pell { };
 
   pepper = callPackage ../tools/admin/salt/pepper { };
@@ -4885,6 +4892,8 @@ in
   pdf-redact-tools = callPackage ../tools/graphics/pdfredacttools { };
 
   pdfcrack = callPackage ../tools/security/pdfcrack { };
+
+  pdfsandwich = callPackage ../tools/typesetting/pdfsandwich { };
 
   pdftag = callPackage ../tools/graphics/pdftag { };
 
@@ -8484,6 +8493,8 @@ in
 
   bazel-watcher = callPackage ../development/tools/bazel-watcher { };
 
+  bazelisk = callPackage ../development/tools/bazelisk { };
+
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
@@ -8529,6 +8540,8 @@ in
   buildkite-agent3 = callPackage ../development/tools/continuous-integration/buildkite-agent/3.x.nix { };
 
   byacc = callPackage ../development/tools/parsing/byacc { };
+
+  cadre = callPackage ../development/tools/cadre { };
 
   casperjs = callPackage ../development/tools/casperjs {
     inherit (texFunctions) fontsConf;
@@ -10848,9 +10861,7 @@ in
 
   libdbiDrivers = callPackage ../development/libraries/libdbi-drivers { };
 
-  libunity = callPackage ../development/libraries/libunity {
-    inherit (gnome3) gnome-common;
-  };
+  libunity = callPackage ../development/libraries/libunity { };
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu { };
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
@@ -14758,13 +14769,6 @@ in
       ];
   };
 
-  linux_4_20 = callPackage ../os-specific/linux/kernel/linux-4.20.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.modinst_arg_list_too_long
-      ];
-  };
-
   linux_5_0 = callPackage ../os-specific/linux/kernel/linux-5.0.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -14845,6 +14849,8 @@ in
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
+
+    it87 = callPackage ../os-specific/linux/it87 {};
 
     ena = callPackage ../os-specific/linux/ena {};
 
@@ -14965,7 +14971,6 @@ in
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
-  linuxPackages_4_20 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_20);
   linuxPackages_5_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_0);
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
@@ -15370,6 +15375,8 @@ in
   smem = callPackage ../os-specific/linux/smem { };
 
   speedometer = callPackage ../os-specific/linux/speedometer { };
+
+  statik = callPackage ../development/tools/statik { };
 
   statifier = callPackage ../os-specific/linux/statifier { };
 
@@ -20511,6 +20518,8 @@ in
   };
 
   xtrace = callPackage ../tools/X11/xtrace { };
+
+  xtruss = callPackage ../tools/X11/xtruss { };
 
   xmacro = callPackage ../tools/X11/xmacro { };
 

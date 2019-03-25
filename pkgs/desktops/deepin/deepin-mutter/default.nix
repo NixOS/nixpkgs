@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, xorg,
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, gtk3, xorg,
   libcanberra-gtk3, upower, xkeyboard_config, libxkbcommon,
   libstartup_notification, libinput, cogl, clutter, systemd, deepin }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.gtk
+    gtk3
     gnome3.gnome-desktop
     gnome3.gsettings-desktop-schemas
     gnome3.libgudev

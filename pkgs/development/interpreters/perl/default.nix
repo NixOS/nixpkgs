@@ -185,7 +185,7 @@ in rec {
 
   # the latest Devel version
   perldevel = common {
-    version = "5.29.6";
-    sha256 = "0wj2bia8s30788f69mf5s533l72zbhqpdr85kkk97yrh1c9sgcd6";
+    version = "5.29.9";
+    sha256 = "017x3nghyc5m8q1yqnrdma96b3d5rlfx87vv5mi64jq0r8k6zppm";
   };
 }

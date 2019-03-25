@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-nautilus" # Do not build nautilus plugin
+    "--enable-ps"
     "--enable-introspection"
     (if supportXPS then "--enable-xps" else "--disable-xps")
   ];

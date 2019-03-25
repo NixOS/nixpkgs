@@ -1218,6 +1218,14 @@ self: super: {
     })];
   });
 
+  # Remove unecessary constraint:
+  # https://github.com/agrafix/superbuffer/pull/2
+  superbuffer = overrideCabal super.superbuffer (drv: {
+    postPatch = ''
+      sed -i 's#QuickCheck < 2.10#QuickCheck < 2.13#' superbuffer.cabal
+    '';
+  });
+
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
   pandoc = doDistribute super.pandoc_2_7_1;
