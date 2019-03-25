@@ -224,7 +224,7 @@ genericBuild
    the dependency is needed at run-time or build-time, a concept that makes
    perfect sense outside of cross compilation. By default, the
    run-time/build-time distinction is just a hint for mental clarity, but with
-   <varname>strictDeps</varname> set it is somewhat enforced even in the native
+   <varname>strictDeps</varname> set it is mostly enforced even in the native
    case.
   </para>
 

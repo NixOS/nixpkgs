@@ -259,8 +259,8 @@
     machine-code-producing tools, we're done. And indeed
     <varname>buildInputs</varname> and <varname>nativeBuildInputs</varname>
     have covered these simpler build-time and run-time (respectively) changes
-    for many years. But if the depedency does produce machine code, we might
-    need to worry about it's target platform too. In principle, that target
+    for many years. But if the dependency does produce machine code, we might
+    need to worry about its target platform too. In principle, that target
     platform might be any of the depending package's build, host, or target
     platforms, but we prohibit dependencies from a "later" platform to an
     earlier platform to limit confusion because we've never seen a legitimate
@@ -270,7 +270,7 @@
    <para>
     Finally, if the depending package is a compiler or other
     machine-code-producing tool, it might need dependencies that run at "emit
-    time". This is for compilers that (regrettably) insist on being in built
+    time". This is for compilers that (regrettably) insist on being built
     together with their source langauges' standard libraries. Assuming build !=
     host != target, a run-time dependency of the standard library cannot be run
     at the compiler's build time or run time, but only at the run time of code
@@ -485,9 +485,9 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
     <xref
     linkend="ssec-cross-dependency-categorization"/> are specified as
     lists of derivations given to <varname>mkDerivation</varname>, as
-    documented in <xref linkend="ssec-stdenv-dependencies"/>. In short, the
+    documented in <xref linkend="ssec-stdenv-dependencies"/>. In short,
     each list of dependencies for "host → target" of "foo → bar" is called
-    <varname>depsFooBar</varname>, with the exceptions for backwards
+    <varname>depsFooBar</varname>, with exceptions for backwards
     compatibility that <varname>depsBuildHost</varname> is instead called
     <varname>nativeBuildInputs</varname> and <varname>depsHostTarget</varname>
     is instead called <varname>buildInputs</varname>. Nixpkgs is now structured
@@ -501,13 +501,13 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
    </para>
 
    <para>
-    Now, for most of Nixpkgs's history, there was no
+    Now, for most of Nixpkgs's history, there were no
     <varname>pkgsFooBar</varname> attributes, and most packages have not been
     refactored to use it explicitly. Prior to those, there were just
     <varname>buildPackages</varname>, <varname>pkgs</varname>, and
     <varname>targetPackages</varname>. Those are now redefined as aliases to
     <varname>pkgsBuildHost</varname>, <varname>pkgsHostTarget</varname>, and
-    <varname>pkgsTargetTarget</varname>. It is fine, indeed if anything
+    <varname>pkgsTargetTarget</varname>. It is acceptable, even
     recommended, to use them for libraries to show that the host platform is
     irrelevant.
    </para>
@@ -523,12 +523,12 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
     their dependencies into the multiple lists described above. And indeed,
     asking that users both sort their dependencies, <emphasis>and</emphasis>
     take them from the right attribute set, is both too onerous and redundant,
-    so the recommend approach (for now) is to continue just categorizing by
+    so the recommended approach (for now) is to continue just categorizing by
     list and not using an explicit package set.
    </para>
 
    <para>
-    No make this work, we "splice" together the six
+    To make this work, we "splice" together the six
     <varname>pkgsFooBar</varname> package sets and have
     <varname>callPackage</varname> actually take its arguments from that. This
     is currently implemented in <filename>pkgs/top-level/splice.nix</filename>.
@@ -550,7 +550,7 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
     <filename>pkgs/top-level/stage.nix</filename> "ties the knot" (creates the
     fixed point) of each stage. The package sets are defined per-stage however,
     so they can be thought of as edges between stages (the nodes) in a graph.
-    Compositions like <literal>pkgsBuildTarget.TargetPackages</literal> can be
+    Compositions like <literal>pkgsBuildTarget.targetPackages</literal> can be
     thought of as paths to this graph.
    </para>
 
@@ -581,12 +581,12 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
     <varname>pkgsHostTarget</varname> refers to the current one, and
     <varname>pkgsTargetTarget</varname> refers to the next one. When there is
     no previous or next stage, they instead refer to the current stage. Note
-    how all the invariants about the mapping between dependency and depending
+    how all the invariants regarding the mapping between dependency and depending
     packages' build host and target platforms are preserved.
     <varname>pkgsBuildTarget</varname> and <varname>pkgsHostHost</varname> are
     more complex in that the stage fitting the requirements isn't always a
     fixed chain of "prevs" and "nexts" away (modulo the "saturating"
-    self-references at the ends). We just special case instead. All the primary
+    self-references at the ends). We just special case each instead. All the primary
     edges are implemented is in <filename>pkgs/stdenv/booter.nix</filename>,
     and secondarily aliases in <filename>pkgs/top-level/stage.nix</filename>.
    </para>
@@ -642,10 +642,10 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
     </para>
     <para>
      Second, it is because this is a frequent source of hard-to-follow
-     "infinite recursions" / cycles. When only packages sets that don't mention
-     target are used, the package set forms a directly acyclic graph. This
-     means that all cycles that exist are confirmed to one stage. This means
-     they are a lot smaller, so easier to follow in the code or a backtrace. It
+     "infinite recursions" / cycles. When only package sets that don't mention
+     target are used, the package set forms a directed acyclic graph. This
+     means that all cycles that exist are confined to one stage. This means
+     they are a lot smaller, and easier to follow in the code or a backtrace. It
      also means they are present in native and cross builds alike, and so more
      likely to be caught by CI and other users.
     </para>
@@ -653,7 +653,7 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
      Thirdly, it is because everything target-mentioning only exists to
      accommodate compilers with lousy build systems that insist on the compiler
      itself and standard library being built together. Of course that is bad
-     because bigger derivation means longer rebuilds. It is also subpar because
+     because bigger derivations means longer rebuilds. It is also problematic because
      it tends to make the standard libraries less like other libraries than
      they could be, complicating code and build systems alike. Because of the
      other problems, and because of these innate disadvantages, compilers ought
