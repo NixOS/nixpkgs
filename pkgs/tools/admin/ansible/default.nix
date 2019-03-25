@@ -17,11 +17,11 @@
 
   ansible_2_5 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
     pname = "ansible";
-    version = "2.5.14";
+    version = "2.5.15";
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "0sd04h2k5qv4m48dn76jkjlwlqfdk15hzyagj9i71r8brvmwhnk9";
+      sha256 = "1w9wfv1s2jq6vkx1hm6n69zwxv2pgjj7nidyg452miwh684jpg7z";
     };
   }));
 }
