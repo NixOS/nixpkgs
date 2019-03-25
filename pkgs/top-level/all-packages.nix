@@ -3614,6 +3614,8 @@ in
 
   jade = callPackage ../tools/text/sgml/jade { };
 
+  jadx = callPackage ../tools/security/jadx-bin { };
+
   jazzy = callPackage ../development/tools/jazzy { };
 
   jd = callPackage ../development/tools/jd { };
