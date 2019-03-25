@@ -2,8 +2,8 @@
 
 let
   goPackagePath = "github.com/prometheus/prometheus";
-
-  generic = { version, sha256, ... }@attrs:
+in rec {
+  generic = { version, sha256, doCheck ? true, ... }@attrs:
     let attrs' = builtins.removeAttrs attrs ["version" "sha256"]; in
       buildGoPackage ({
         name = "prometheus-${version}";
@@ -16,8 +16,6 @@ let
           repo = "prometheus";
           inherit sha256;
         };
-
-        doCheck = true;
 
         buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''
           -ldflags=
@@ -43,7 +41,7 @@ let
           platforms = platforms.unix;
         };
     } // attrs');
-in rec {
+
   prometheus_1 = generic {
     version = "1.8.2";
     sha256 = "088flpg3qgnj9afl9vbaa19v2s1d21yxy38nrlv5m7cxwy2pi5pv";
