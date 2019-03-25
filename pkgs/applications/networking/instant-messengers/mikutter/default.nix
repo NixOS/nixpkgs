@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "An extensible Twitter client";
     homepage = https://mikutter.hachune.net;
     platforms = ruby.meta.platforms;
