@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ ncurses ];
 
-  configureFlags = [ "--enable-widec" ];
-
   postInstall = ''
     find $out/lib -type f | grep '\.\(la\|pc\)''$' | xargs sed -i \
       -e 's,-lncurses[a-z]*,-L${ncurses.out}/lib -lncursesw,g'
