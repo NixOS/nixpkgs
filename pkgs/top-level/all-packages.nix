@@ -14133,6 +14133,8 @@ in
 
   timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
+  timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
+
   inherit (import ../servers/sql/postgresql pkgs)
     postgresql_9_4
     postgresql_9_5
