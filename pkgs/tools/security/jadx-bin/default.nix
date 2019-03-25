@@ -1,13 +1,12 @@
 { stdenv, fetchurl, makeWrapper, jre, unzip, makeDesktopItem }:
 
-let
+stdenv.mkDerivation rec {
   version = "0.9.0";
   name = "jadx-bin-${version}";
 
-
-  desktopItem = launcher: makeDesktopItem {
+  desktopItem = makeDesktopItem {
     name = "jadx-gui";
-    exec = "${launcher} %F";
+    exec = "jadx-gui %F";
     comment = "Java Decompiler";
     desktopName = "jadx GUI";
     genericName = "Java and Android Decompiler";
@@ -23,33 +22,22 @@ let
     maintainers = [ maintainers.artemist ];
   };
 
-    src = fetchurl {
-      url    = "https://github.com/skylot/jadx/archive/v${version}/jadx-${version}.zip";
-      sha256 = "00yi5gfnz0zxkc4v405w5b8sg0x4xb2q5cai0v1gz2yzd7q9vx6j";
-    };
-
-    nativeBuildInputs = [ unzip makeWrapper ];
-
-    unpackCmd = "unzip -d jadx-${version} $curSrc"; # This would otherwise create multiple directories
-
-  origJadx = stdenv.mkDerivation rec {
-    inherit src name version nativeBuildInputs unpackCmd;
-
-    installPhase = ''
-      mkdir -p $out/bin $out/lib
-      cp lib/*.jar $out/lib
-      cp bin/jadx bin/jadx-gui $out/bin
-    '';
+  src = fetchurl {
+    url    = "https://github.com/skylot/jadx/archive/v${version}/jadx-${version}.zip";
+    sha256 = "00yi5gfnz0zxkc4v405w5b8sg0x4xb2q5cai0v1gz2yzd7q9vx6j";
   };
 
-in stdenv.mkDerivation rec {
-  inherit src name version meta nativeBuildInputs unpackCmd;
+  nativeBuildInputs = [ unzip makeWrapper ];
+
+  unpackCmd = "unzip -d jadx-${version} $curSrc"; # This would otherwise create multiple directories
+
 
   installPhase = ''
-    mkdir -p $out/bin
-    makeWrapper ${origJadx}/bin/jadx-gui $out/bin/jadx-gui \
-      --set JAVA_HOME ${jre.home}
-    makeWrapper ${origJadx}/bin/jadx $out/bin/jadx \
-      --set JAVA_HOME ${jre.home}
+    mkdir -p $out/bin $out/lib
+    cp lib/*.jar $out/lib
+    cp bin/jadx bin/jadx-gui $out/bin
+    wrapProgram $out/bin/jadx-gui --set JAVA_HOME ${jre.home}
+    wrapProgram $out/bin/jadx --set JAVA_HOME ${jre.home}
+    install -Dm644 "${desktopItem}/share/applications/"* -t "$out/share/applications/"
   '';
 }
