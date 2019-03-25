@@ -3,8 +3,10 @@
 , poppler, ghostscriptX, djvulibre, libspectre, libarchive, libsecret, wrapGAppsHook
 , librsvg, gobject-introspection, yelp-tools, gspell, adwaita-icon-theme, gsettings-desktop-schemas
 , libgxps
+, gst_all_1
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? false    # Open XML Paper Specification via libgxps
+, supportMultimedia ? true
 , autoreconfHook, pruneLibtoolFiles
 }:
 
@@ -30,13 +32,16 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     poppler ghostscriptX djvulibre libspectre libarchive
     libsecret librsvg adwaita-icon-theme gspell
-  ] ++ stdenv.lib.optional supportXPS libgxps;
+  ] ++ stdenv.lib.optional supportXPS libgxps
+    ++ stdenv.lib.optionals supportMultimedia (with gst_all_1; [
+      gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
 
   configureFlags = [
     "--disable-nautilus" # Do not build nautilus plugin
     "--enable-ps"
     "--enable-introspection"
     (if supportXPS then "--enable-xps" else "--disable-xps")
+    (if supportMultimedia then "--enable-multimedia" else "--disable-multimedia")
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
