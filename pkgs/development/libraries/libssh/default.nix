@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, cmake, zlib, openssl, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "libssh-0.8.5";
+  name = "libssh-0.8.7";
 
   src = fetchurl {
     url = "https://www.libssh.org/files/0.8/${name}.tar.xz";
-    sha256 = "0dd3nmd20jw4z116qbz3wbffxbzrczi6mcxw0rmqzj0g4hqw9lh7";
+    sha256 = "14nmwfnnrhkwcfk5hn7azl905ivbh4wllmsbw5abd80b5yi4qc23";
   };
 
   postPatch = ''
