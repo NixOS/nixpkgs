@@ -44,8 +44,6 @@
 }:
 
 assert partitionTableType == "legacy" || partitionTableType == "efi" || partitionTableType == "none";
-# We use -E offset=X below, which is only supported by e2fsprogs
-assert partitionTableType != "none" -> fsType == "ext4";
 
 with lib;
 
@@ -70,14 +68,14 @@ let format' = format; in let
     legacy = ''
       parted --script $diskImage -- \
         mklabel msdos \
-        mkpart primary ext4 1MiB -1
+        mkpart primary ${fsType} 1MiB -1
     '';
     efi = ''
       parted --script $diskImage -- \
         mklabel gpt \
         mkpart ESP fat32 8MiB 256MiB \
         set 1 boot on \
-        mkpart primary ext4 256MiB -1
+        mkpart primary ${fsType} 256MiB -1
     '';
     none = "";
   }.${partitionTableType};
@@ -96,11 +94,16 @@ let format' = format; in let
     echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
   '';
 
+  fsTools = with pkgs; {
+    ext4 = e2fsprogs;
+    btrfs = btrfs-progs;
+  };
+
   binPath = with pkgs; makeBinPath (
     [ rsync
       utillinux
       parted
-      e2fsprogs
+      fsTools.${fsType}
       lkl
       config.system.build.nixos-install
       config.system.build.nixos-enter
@@ -114,6 +117,11 @@ let format' = format; in let
   targets = map (x: x.target) contents;
 
   closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel channelSources ]; };
+
+  mkfsFlags = {
+    ext4 = label: dest: "-F -L ${label} ${dest} -F $(sectorsToKilobytes $SECTORS)K";
+    btrfs = label: dest: "-f -L ${label} -b $(sectorsToBytes $SECTORS) ${dest}";
+  };
 
   prepareImage = ''
     export PATH=${binPath}
@@ -137,9 +145,12 @@ let format' = format; in let
       # Get start & length of the root partition in sectors to $START and $SECTORS.
       eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-      mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+      partImage=part.raw
+      truncate -s $(sectorsToBytes $SECTORS) $partImage
+      mkfs.${fsType} ${mkfsFlags.${fsType} label "$partImage"}
+      dd if=$partImage of=$diskImage bs=1M oflag=seek_bytes seek=$(sectorsToBytes $START)
     '' else ''
-      mkfs.${fsType} -F -L ${label} $diskImage
+      mkfs.${fsType} ${mkfsFlags.${fsType} label "$diskImage"}
     ''}
 
     root="$PWD/root"
@@ -190,7 +201,7 @@ let format' = format; in let
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
     { preVM = prepareImage;
-      buildInputs = with pkgs; [ utillinux e2fsprogs dosfstools ];
+      buildInputs = with pkgs; [ utillinux fsTools.${fsType} dosfstools ];
       postVM = ''
         ${if format == "raw" then ''
           mv $diskImage $out/${filename}
