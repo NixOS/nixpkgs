@@ -1,4 +1,4 @@
-{ buildRubyGem, ruby, fetchurl, fontconfig }:
+{ buildRubyGem, ruby, fetchurl, fontconfig, stdenv }:
 
 let
   gemName = "colorls";
@@ -47,10 +47,16 @@ buildRubyGem {
   inherit ruby gemName version;
   name = "${gemName}-${version}";
   source.sha256 = "ac553738fc05778a6683cd66ca533a879e521f8a3673e3fa2c0c9b5c40572194";
-  buildInputs = [ clocale filesize manpages rainbow fontconfig ];
+  buildInputs = [ clocale filesize manpages rainbow ];
   postInstall = ''
     mkdir -p $out/share/fonts
-    cp ${nerdFont} "$out/share/fonts/SauceCodeProNerdFontComplete.ttf"
-    ${fontconfig}/bin/fc-cache -fv || true
+    cp ${nerdFont} "$out/share/fonts/"
+    ${fontconfig}/bin/fc-cache -fv $out/share/fonts || true
   '';
+
+  meta = {
+    description = "A Ruby gem that colorizes the ls output with color and icons";
+    homepage = https://github.com/athityakumar/colorls;
+    license = stdenv.lib.licenses.mit;
+  };
 }
