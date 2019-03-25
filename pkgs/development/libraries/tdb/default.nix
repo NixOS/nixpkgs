@@ -1,19 +1,18 @@
-{ stdenv, fetchurl, python2, pkgconfig, readline, libxslt
+{ stdenv, fetchurl, python, pkgconfig, which, readline, libxslt
 , docbook_xsl, docbook_xml_dtd_42, buildPackages
 }:
 
 stdenv.mkDerivation rec {
-  name = "tdb-1.3.16";
+  pname = "tdb";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "mirror://samba/tdb/${name}.tar.gz";
-    sha256 = "1ibcz466xwk1x6xvzlgzd5va4lyrjzm3rnjak29kkwk7cmhw4gva";
+    url = "mirror://samba/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0d9d2f1c83gmmq30bkfs50yb8399mr9xjjzscma4kyq0ajf75861";
   };
 
-  nativeBuildInputs = [ pkgconfig python2 ];
-  buildInputs = [
-    readline libxslt docbook_xsl docbook_xml_dtd_42
-  ];
+  nativeBuildInputs = [ pkgconfig python which docbook_xsl docbook_xml_dtd_42 ];
+  buildInputs = [ readline libxslt python ];
 
   preConfigure = ''
     patchShebangs buildtools/bin/waf

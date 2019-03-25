@@ -12924,7 +12924,7 @@ in
     python = python2;
   };
 
-  tdb = callPackage ../development/libraries/tdb {};
+  tdb = callPackage ../development/libraries/tdb { python = python3; };
 
   tecla = callPackage ../development/libraries/tecla { };
 
