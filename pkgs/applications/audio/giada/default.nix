@@ -64,8 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
-    cp giada $out
+    install -Dm555 ./giada $out/bin/giada
   '';
 
   # you need to create $HOME/.giada/midimaps directory for midi assignment
