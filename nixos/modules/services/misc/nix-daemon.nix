@@ -60,6 +60,7 @@ let
         ${optionalString (isNix20 && !cfg.distributedBuilds) ''
           builders =
         ''}
+        system-features = ${toString cfg.systemFeatures}
         $extraOptions
         END
       '' + optionalString cfg.checkConfig (
@@ -357,6 +358,15 @@ in
           The default Nix expression search path, used by the Nix
           evaluator to look up paths enclosed in angle brackets
           (e.g. <literal>&lt;nixpkgs&gt;</literal>).
+        '';
+      };
+
+      systemFeatures = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "kvm" "big-parallel" "gccarch-skylake" ];
+        description = ''
+          The supported features of a machine
         '';
       };
 
