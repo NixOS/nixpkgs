@@ -14171,6 +14171,8 @@ in
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
+  showoff = callPackage ../servers/http/showoff {};
+
   serfdom = callPackage ../servers/serf { };
 
   seyren = callPackage ../servers/monitoring/seyren { };
