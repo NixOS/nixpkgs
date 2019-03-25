@@ -14,7 +14,7 @@ buildPythonPackage rec {
     py.test -k 'not test_includeme' pyramid_beaker/tests.py
   '';
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
 
   propagatedBuildInputs = [ beaker pyramid ];
 
