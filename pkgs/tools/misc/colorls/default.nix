@@ -56,9 +56,10 @@ buildRubyGem {
     printf '\033[0m' # no color
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A Ruby gem that colorizes the ls output with color and icons";
     homepage = https://github.com/athityakumar/colorls;
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = with maintainers; [ SomeDer ];
   };
 }
