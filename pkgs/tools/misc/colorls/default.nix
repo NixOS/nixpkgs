@@ -1,4 +1,4 @@
-{ buildRubyGem, ruby, fetchurl, fontconfig, stdenv }:
+{ buildRubyGem, ruby, fetchurl, stdenv }:
 
 let
   gemName = "colorls";
@@ -51,7 +51,9 @@ buildRubyGem {
   postInstall = ''
     mkdir -p $out/share/fonts
     cp ${nerdFont} "$out/share/fonts/"
-    ${fontconfig}/bin/fc-cache -fv $out/share/fonts || true
+    printf '\033[0;31m' # red
+    echo "You may need to run fc-cache -r and/or open a new terminal for fonts to work"
+    printf '\033[0m' # no color
   '';
 
   meta = {
