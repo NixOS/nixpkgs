@@ -1548,11 +1548,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xcompmgr = callPackage ({ stdenv, pkgconfig, fetchurl, libXcomposite, libXdamage, libXext, libXfixes, libXrender }: stdenv.mkDerivation {
-    name = "xcompmgr-1.1.7";
+    name = "xcompmgr-1.1.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xcompmgr-1.1.7.tar.bz2;
-      sha256 = "14k89mz13jxgp4h2pz0yq0fbkw1lsfcb3acv8vkknc9i4ld9n168";
+      url = mirror://xorg/individual/app/xcompmgr-1.1.8.tar.bz2;
+      sha256 = "0hvjkanrdlvk3ln5a1jx3c9ggziism2jr1na7jl3zyk0y3sdm28b";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
