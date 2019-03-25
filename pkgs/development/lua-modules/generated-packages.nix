@@ -104,7 +104,7 @@ fifo = buildLuarocksPackage {
     url    = https://luarocks.org/fifo-0.2-0.src.rock;
     sha256 = "082c5g1m8brnsqj5gnjs65bm7z50l6b05cfwah14lqaqsr5a5pjk";
   };
-  
+
   propagatedBuildInputs = [ lua ];
   buildType = "builtin";
 
@@ -150,7 +150,6 @@ ldoc = buildLuarocksPackage {
     sha256 = "1fvsmmjwk996ypzizcy565hj82bhj17vdb83ln6ff63mxr3zs1la";
   };
 
-  
   propagatedBuildInputs = [ penlight markdown ];
   buildType = "builtin";
 
@@ -190,7 +189,7 @@ lpeg_patterns = buildLuarocksPackage {
     url    = https://luarocks.org/lpeg_patterns-0.5-0.src.rock;
     sha256 = "0mlw4nayrsdxrh98i26avz5i4170a9brciybw88kks496ra36v8f";
   };
-  
+
   propagatedBuildInputs = [ lua lpeg ];
   buildType = "builtin";
 
@@ -292,13 +291,12 @@ lua-cmsgpack = buildLuarocksPackage {
   }).outPath;
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
-  "url": "git://github.com/antirez/lua-cmsgpack.git",
-  "rev": "57b1f90cf6cec46450e87289ed5a676165d31071",
-  "date": "2018-06-14T11:56:56+02:00",
-  "sha256": "0yiwl4p1zh9qid3ksc4n9fv5bwaa9vjb0vgwnkars204xmxdj8fj",
-  "fetchSubmodules": true
-}
- '') ["date"]) ;
+    "url": "git://github.com/antirez/lua-cmsgpack.git",
+    "rev": "57b1f90cf6cec46450e87289ed5a676165d31071",
+    "date": "2018-06-14T11:56:56+02:00",
+    "sha256": "0yiwl4p1zh9qid3ksc4n9fv5bwaa9vjb0vgwnkars204xmxdj8fj",
+    "fetchSubmodules": true
+  } '') ["date"]) ;
 
   disabled = ( luaOlder "5.1" );
   propagatedBuildInputs = [ lua ];
@@ -366,8 +364,6 @@ lua-term = buildLuarocksPackage {
     sha256 = "0c3zc0cl3a5pbdn056vnlan16g0wimv0p9bq52h7w507f72x18f1";
   };
 
-  
-  
   buildType = "builtin";
 
   meta = {
@@ -388,13 +384,12 @@ luabitop = buildLuarocksPackage {
   }).outPath;
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
-  "url": "git://github.com/LuaDist/luabitop.git",
-  "rev": "81bb23b0e737805442033535de8e6d204d0e5381",
-  "date": "2013-02-18T16:36:42+01:00",
-  "sha256": "0lsc556hlkddjbmcdbg7wc2g55bfy743p8ywdzl8x7kk847r043q",
-  "fetchSubmodules": true
-}
- '') ["date"]) ;
+    "url": "git://github.com/LuaDist/luabitop.git",
+    "rev": "81bb23b0e737805442033535de8e6d204d0e5381",
+    "date": "2013-02-18T16:36:42+01:00",
+    "sha256": "0lsc556hlkddjbmcdbg7wc2g55bfy743p8ywdzl8x7kk847r043q",
+    "fetchSubmodules": true
+  } '') ["date"]) ;
 
   disabled = ( luaOlder "5.1" ) || ( luaAtLeast "5.3" );
   propagatedBuildInputs = [ lua ];
@@ -522,7 +517,6 @@ penlight = buildLuarocksPackage {
     sha256 = "138f921p6kdqkmf4pz115phhj0jsqf28g33avws80d2vq2ixqm8q";
   };
 
-  
   propagatedBuildInputs = [ luafilesystem ];
   buildType = "builtin";
 
@@ -668,8 +662,7 @@ mpack = buildLuarocksPackage {
     url    = http://luarocks.org/manifests/teto/mpack-1.0.7-0.src.rock;
     sha256 = "0nq4ixaminkc7fwfpivysyv0al3j5dffsvgdrnwnqdg3w7jgfbw7";
   };
-  
-  
+
   buildType = "builtin";
 
   meta = {
@@ -760,8 +753,7 @@ coxpcall = buildLuarocksPackage {
     url    = https://luarocks.org/manifests/hisham/coxpcall-1.17.0-1.src.rock;
     sha256 = "0n1jmda4g7x06458596bamhzhcsly6x0p31yp6q3jz4j11zv1zhi";
   };
-  
-  
+
   buildType = "builtin";
 
   meta = {
