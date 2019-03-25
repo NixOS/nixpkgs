@@ -6,7 +6,7 @@
 , libgxps
 , gst_all_1
 , recentListSize ? null # 5 is not enough, allow passing a different number
-, supportXPS ? false    # Open XML Paper Specification via libgxps
+, supportXPS ? true    # Open XML Paper Specification via libgxps
 , supportMultimedia ? true
 , autoreconfHook, pruneLibtoolFiles
 }:
