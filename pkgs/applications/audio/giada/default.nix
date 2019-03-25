@@ -15,7 +15,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "giada";
   version = "0.15.4";
 
@@ -30,20 +29,23 @@ stdenv.mkDerivation rec {
       '';
       homepage = https://www.giadamusic.com;
       platforms = platforms.linux;
-      license = lib.licenses.gpl3;
+      license = lib.licenses.gpl3Plus;
     };
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = "giada";
-    rev = "0e9a7aa5184dc73c6d39e2e5ee6c088c46b28aa6";
+    rev = "v${version}";
     sha256 = "17ggz04gczldhy2lf0v36bgc29dyjpjbxd0f3jj7y4sv2ya5bwv9";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     autoconf
     automake
     libtool
+  ];
+
+  buildInputs = [
     fltk
     libsndfile
     libsamplerate
@@ -57,11 +59,14 @@ stdenv.mkDerivation rec {
     libpulseaudio
   ];
 
-  buildPhase = ''
-    bash autogen.sh
-    ./configure --target=linux
-    make
+  preConfigure = ''
+    ${stdenv.shell} autogen.sh
   '';
+
+  configureFlags = [
+    "--target=linux"
+    "--enable-system-catch"
+  ];
 
   installPhase = ''
     install -Dm555 ./giada $out/bin/giada
