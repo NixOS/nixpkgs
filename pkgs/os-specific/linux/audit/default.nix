@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     # and pulls in an extra openldap dependency otherwise
     "--disable-zos-remote"
     (if enablePython then "--with-python" else "--without-python")
+    "--with-arm"
+    "--with-aarch64"
   ];
 
   enableParallelBuilding = true;
