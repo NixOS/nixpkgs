@@ -160,6 +160,20 @@ let
      '';
   };
 
+  gitlab-rails = pkgs.stdenv.mkDerivation rec {
+    name = "gitlab-rails";
+    buildInputs = [ pkgs.makeWrapper ];
+    dontBuild = true;
+    unpackPhase = ":";
+    installPhase = ''
+      mkdir -p $out/bin
+      makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
+          ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --run 'cd ${cfg.packages.gitlab}/share/gitlab'
+     '';
+  };
+
   smtpSettings = pkgs.writeText "gitlab-smtp-settings.rb" ''
     if Rails.env.production?
       Rails.application.config.action_mailer.delivery_method = :smtp
@@ -439,7 +453,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.git gitlab-rake cfg.packages.gitlab-shell ];
+    environment.systemPackages = [ pkgs.git gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
 
     # Redis is required for the sidekiq queue runner.
     services.redis.enable = mkDefault true;
