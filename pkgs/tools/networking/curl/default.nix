@@ -94,6 +94,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
+  '' + stdenv.lib.optionalString scpSupport ''
     sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
   '' + stdenv.lib.optionalString gnutlsSupport ''
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so
