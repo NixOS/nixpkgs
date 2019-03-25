@@ -2,6 +2,7 @@
 , glib, gtk3, pango, atk, gdk_pixbuf, shared-mime-info, itstool, gnome3
 , poppler, ghostscriptX, djvulibre, libspectre, libarchive, libsecret, wrapGAppsHook
 , librsvg, gobject-introspection, yelp-tools, gspell, adwaita-icon-theme, gsettings-desktop-schemas
+, nautilus
 , libgxps
 , gst_all_1
 , recentListSize ? null # 5 is not enough, allow passing a different number
@@ -32,12 +33,12 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     poppler ghostscriptX djvulibre libspectre libarchive
     libsecret librsvg adwaita-icon-theme gspell
+    nautilus
   ] ++ stdenv.lib.optional supportXPS libgxps
     ++ stdenv.lib.optionals supportMultimedia (with gst_all_1; [
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
 
   configureFlags = [
-    "--disable-nautilus" # Do not build nautilus plugin
     "--enable-ps"
     "--enable-introspection"
     (if supportXPS then "--enable-xps" else "--disable-xps")
