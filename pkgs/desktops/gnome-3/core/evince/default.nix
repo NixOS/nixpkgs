@@ -5,6 +5,7 @@
 , nautilus
 , libgxps
 , gst_all_1
+, texlive
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? true    # Open XML Paper Specification via libgxps
 , supportMultimedia ? true
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     poppler ghostscriptX djvulibre libspectre libarchive
     libsecret librsvg adwaita-icon-theme gspell
     nautilus
+    texlive.bin.core # kpathsea for DVI support
   ] ++ stdenv.lib.optional supportXPS libgxps
     ++ stdenv.lib.optionals supportMultimedia (with gst_all_1; [
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
