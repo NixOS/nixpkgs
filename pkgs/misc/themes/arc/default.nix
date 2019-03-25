@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+    # TODO: remove this after update
+    ln -s 3.30 common/gnome-shell/3.32
   '';
 
   preBuild = ''
