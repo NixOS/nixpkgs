@@ -21,6 +21,7 @@ luaevent,
 luacheck
 luaffi,,http://luarocks.org/dev,
 luuid,
+markdown,
 penlight,
 say,
 std__debug,std._debug,

@@ -488,6 +488,26 @@ luuid = buildLuarocksPackage {
     };
   };
 };
+markdown = buildLuarocksPackage {
+  pname = "markdown";
+  version = "0.33-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/markdown-0.33-1.src.rock;
+    sha256 = "01xw4b4jvmrv1hz2gya02g3nphsj3hc94hsbc672ycj8pcql5n5y";
+  };
+  disabled = ( luaOlder "5.1" ) || ( luaAtLeast "5.4" );
+  propagatedBuildInputs = [ lua ];
+  buildType = "builtin";
+
+  meta = {
+    homepage = "https://github.com/mpeterv/markdown";
+    description = "Markdown text-to-html markup system.";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 penlight = buildLuarocksPackage {
   pname = "penlight";
   version = "1.5.4-1";
