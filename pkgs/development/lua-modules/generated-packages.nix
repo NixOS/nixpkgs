@@ -1,7 +1,7 @@
 
 /* pkgs/development/lua-modules/generated-packages.nix is an auto-generated file -- DO NOT EDIT!
 Regenerate it with:
-nixpkgs$ maintainers/scripts/update-luarocks-packages pkgs/development/lua-modules/generated-packages.nix
+nixpkgs$ ./maintainers/scripts/update-luarocks-packages pkgs/development/lua-modules/generated-packages.nix
 
 These packages are manually refined in lua-overrides.nix
 */
@@ -508,53 +508,13 @@ say = buildLuarocksPackage {
     };
   };
 };
-std__debug = buildLuarocksPackage {
-  pname = "std._debug";
-  version = "1.0.1-1";
-
-  src = fetchurl {
-      url    = https://luarocks.org/std._debug-1.0.1-1.src.rock;
-      sha256 = "1qkcc5rph3ns9mzrfsa1671pb3hzbzfnaxvyw7zdly2b7ll88svz";
-  };
-  disabled = ( luaOlder "5.1") || ( luaAtLeast "5.5");
-  propagatedBuildInputs = [ lua ];  
-  buildType = "builtin";
-
-  meta = {
-    homepage = "http://lua-stdlib.github.io/_debug";
-    description="Debug Hints Library";
-    license = {
-      fullName = "MIT/X11";
-    };
-  };
-};
-std_normalize = buildLuarocksPackage {
-  pname = "std.normalize";
-  version = "2.0.2-1";
-
-  src = fetchurl {
-      url    = https://luarocks.org/std.normalize-2.0.2-1.src.rock;
-      sha256 = "0yn60zqnxflhhlv6xk6w0ifdfxk1qcg8gq1wnrrbwsxwpipsrfjh";
-  };
-  disabled = ( luaOlder "5.1") || ( luaAtLeast "5.4");
-  propagatedBuildInputs = [ lua std__debug ];  
-  buildType = "builtin";
-
-  meta = {
-    homepage = "https://lua-stdlib.github.io/normalize";
-    description="Normalized Lua Functions";
-    license = {
-      fullName = "MIT/X11";
-    };
-  };
-};
 luv = buildLuarocksPackage {
   pname = "luv";
-  version = "1.26.0-0";
+  version = "1.27.0-0";
 
   src = fetchurl {
-      url    = https://luarocks.org/luv-1.26.0-0.src.rock;
-      sha256 = "005yzcxlribnc45qr1g7q4psakximb9fbz07k6yzy1d94mhcxxr7";
+      url    = https://luarocks.org/luv-1.27.0-0.src.rock;
+      sha256 = "16csnnypi2m71ncr8qwc9drqbrb40l5li1nk7zpsxnslg5fiax6x";
   };
   disabled = ( luaOlder "5.1");
   propagatedBuildInputs = [ lua ];  
@@ -715,6 +675,32 @@ coxpcall = buildLuarocksPackage {
   meta = {
     homepage = "http://keplerproject.github.io/coxpcall";
     description="Coroutine safe xpcall and pcall";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
+ldoc = buildLuarocksPackage {
+  pname = "ldoc";
+  version = "1.4.6-2";
+
+         knownRockspec = (fetchurl {
+      url    = https://luarocks.org/ldoc-1.4.6-2.rockspec;
+      sha256 = "14yb0qihizby8ja0fa82vx72vk903mv6m7izn39mzfrgb8mha0pm";
+  }).outPath;
+
+       src = fetchurl {
+      url    = http://stevedonovan.github.io/files/ldoc-1.4.6.zip;
+      sha256 = "1fvsmmjwk996ypzizcy565hj82bhj17vdb83ln6ff63mxr3zs1la";
+  };
+       
+  
+  propagatedBuildInputs = [ penlight markdown ];  
+  buildType = "builtin";
+
+  meta = {
+    homepage = "http://stevedonovan.github.com/ldoc";
+    description="A Lua Documentation Tool";
     license = {
       fullName = "MIT/X11";
     };
