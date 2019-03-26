@@ -21630,6 +21630,8 @@ in
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
 
+  clustal-omega = callPackage ../applications/science/biology/clustal-omega { };
+
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
