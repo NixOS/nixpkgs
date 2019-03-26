@@ -8,7 +8,11 @@
 { lib, noSysDirs, config, overlays }:
 res: pkgs: super:
 
-with pkgs;
+# Using `__splicedPackages` makes simple overriding not mess up cross.
+# We'd really like to get rid of splicing and `__splicedPackages` should
+# remain thought of as an unstable attribute. But this makes the status
+# quo more tolerable.
+with pkgs.__splicedPackages;
 
 let
   self =
