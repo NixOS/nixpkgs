@@ -35,6 +35,7 @@ rec {
       attrPath = "firefox-unwrapped";
       versionKey = "ffversion";
     };
+    installAutoConfig = true;
   };
 
   # Do not remove. This is the last version of Firefox that supports
