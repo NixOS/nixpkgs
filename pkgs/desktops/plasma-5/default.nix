@@ -124,6 +124,7 @@ let
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
+      plasma-phone = callPackage ./plasma-phone {};
       plasma-desktop = callPackage ./plasma-desktop {};
       plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};

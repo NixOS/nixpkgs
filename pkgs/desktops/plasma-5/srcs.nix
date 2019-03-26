@@ -234,6 +234,14 @@
       name = "plasma-browser-integration-5.14.5.tar.xz";
     };
   };
+  # TODO: Change to use "${mirror}" once available
+  plasma-phone = {
+     version = "5.14.5";
+     src = fetchurl {
+       url = "https://invent.kde.org/kde/plasma-phone-components/-/archive/master/plasma-phone-components-master.tar.gz";
+       sha256 = "0jmw0c2pj4dmak1w49r4lwwg3c4zvgn5d3h3ihrzksh23ni7kb3b";
+     };
+  };
   plasma-desktop = {
     version = "5.14.5";
     src = fetchurl {
