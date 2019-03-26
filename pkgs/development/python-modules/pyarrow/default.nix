@@ -25,6 +25,10 @@ buildPythonPackage rec {
     "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
   ];
 
+  preBuild = ''
+    export PYARROW_PARALLEL=$NIX_BUILD_CORES
+  '';
+
   preCheck = ''
     rm pyarrow/tests/test_jvm.py
     rm pyarrow/tests/test_hdfs.py
