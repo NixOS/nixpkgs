@@ -30,6 +30,13 @@ in
         '';
       };
 
+      mobile.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable support for running the Plasma Mobile shell.
+        '';
+      };
     };
 
   };
@@ -168,6 +175,7 @@ in
         ]
 
         ++ lib.optionals cfg.enableQt4Support [ pkgs.phonon-backend-gstreamer ]
+        ++ lib.optional cfg.mobile.enable plasma-phone
 
         # Optional hardware support features
         ++ lib.optional config.hardware.bluetooth.enable bluedevil
