@@ -3661,6 +3661,8 @@ in
 
   jp2a = callPackage ../applications/misc/jp2a { };
 
+  jpeg-archive = callPackage ../applications/graphics/jpeg-archive { };
+
   jpeginfo = callPackage ../applications/graphics/jpeginfo { };
 
   jpegoptim = callPackage ../applications/graphics/jpegoptim { };
@@ -22585,6 +22587,8 @@ in
   igraph = callPackage ../development/libraries/igraph { };
 
   illum = callPackage ../tools/system/illum { };
+
+  image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
 
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
