@@ -186,6 +186,7 @@ stdenv.mkDerivation {
         }.${targetPlatform.parsed.cpu.name}
       else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
       else if targetPlatform.isSparc then "sparc"
+      else if targetPlatform.isMsp430 then "msp430"
       else if targetPlatform.isAvr then "avr"
       else if targetPlatform.isAlpha then "alpha"
       else throw "unknown emulation for platform: " + targetPlatform.config;
