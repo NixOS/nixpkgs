@@ -23130,6 +23130,8 @@ in
 
   vaultenv = haskellPackages.vaultenv;
 
+  vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
+
   vbam = callPackage ../misc/emulators/vbam {
     ffmpeg = ffmpeg_2;
   };
