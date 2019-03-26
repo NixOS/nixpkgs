@@ -12,7 +12,7 @@ in stdenvNoCC.mkDerivation {
 
   buildCommand = ''
     install -Dm0644 -t $out/lib $src/include/*.ld
-    install -Dm0644 -t $out/include $src/include/*.h
+    install -Dm0644 -t $out/include $src/include/*.h $src/include/devices.csv
 
     # appease bintoolsWrapper_addLDVars, search path needed for ld scripts
     touch $out/lib/lib
@@ -20,7 +20,7 @@ in stdenvNoCC.mkDerivation {
 
   meta = with stdenvNoCC.lib; {
     description = ''
-      Development headers and linker scripts for TI MSP430 microcontrollers.
+      Development headers and linker scripts for TI MSP430 microcontrollers
     '';
     homepage = https://www.ti.com/tool/msp430-gcc-opensource;
     license = licenses.bsd3;
