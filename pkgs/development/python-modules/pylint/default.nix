@@ -12,7 +12,9 @@ buildPythonPackage rec {
     sha256 = "689de29ae747642ab230c6d37be2b969bf75663176658851f456619aacf27492";
   };
 
-  checkInputs = [ pytest pytestrunner pyenchant ];
+  nativeBuildInputs = [ pytestrunner ];
+
+  checkInputs = [ pytest pyenchant ];
 
   propagatedBuildInputs = [ astroid isort mccabe ];
 
