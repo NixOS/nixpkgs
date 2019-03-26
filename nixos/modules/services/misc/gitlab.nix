@@ -160,6 +160,8 @@ let
      '';
   };
 
+  extraGitlabRb = pkgs.writeText "extra-gitlab.rb" cfg.extraGitlabRb;
+
   smtpSettings = pkgs.writeText "gitlab-smtp-settings.rb" ''
     if Rails.env.production?
       Rails.application.config.action_mailer.delivery_method = :smtp
@@ -264,6 +266,26 @@ in {
         type = types.attrs;
         default = {};
         description = "Extra configuration in config/database.yml.";
+      };
+
+      extraGitlabRb = mkOption {
+        type = types.str;
+        default = "";
+        example = ''
+          if Rails.env.production?
+            Rails.application.config.action_mailer.delivery_method = :sendmail
+            ActionMailer::Base.delivery_method = :sendmail
+            ActionMailer::Base.sendmail_settings = {
+              location: "/run/wrappers/bin/sendmail",
+              arguments: "-i -t"
+            }
+          end
+        '';
+        description = ''
+          Extra configuration to be placed in config/extra-gitlab.rb. This can
+          be used to add configuration not otherwise exposed through this module's
+          options.
+        '';
       };
 
       host = mkOption {
@@ -586,6 +608,7 @@ in {
         [ -L /run/gitlab/uploads ] || ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
         cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
         cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
         ${optionalString cfg.smtp.enable ''
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
         ''}
