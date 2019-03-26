@@ -1938,7 +1938,7 @@ in
 
   cksfv = callPackage ../tools/networking/cksfv { };
 
-  clementine = callPackage ../applications/audio/clementine {
+  clementine = libsForQt5.callPackage ../applications/audio/clementine {
     gst_plugins =
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
   };
@@ -2419,7 +2419,7 @@ in
   duo-unix = callPackage ../tools/security/duo-unix { };
 
   duplicacy = callPackage ../tools/backup/duplicacy { };
-  
+
   duplicati = callPackage ../tools/backup/duplicati { };
 
   duplicity = callPackage ../tools/backup/duplicity {
