@@ -1214,6 +1214,7 @@ mapAliases ({
     qqc2-breeze-style
     sddm-kcm systemsettings
     xdg-desktop-portal-kde
+    plasma-phone-components
   ;
   inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus
