@@ -8,7 +8,9 @@
   provides = flakes:
     let pkgs = import ./. { system = "x86_64-linux"; }; in
     {
-      lib = import ./lib;
+      lib = (import ./lib) // {
+        nixosSystem = import ./nixos/lib/eval-config.nix;
+      };
 
       builders = {
         inherit (pkgs) stdenv fetchurl;
