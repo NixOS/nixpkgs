@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage
+{ stdenv, lib, fetchurl, buildDunePackage
 , pkgconfig, cairo
 }:
 
@@ -14,7 +14,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cairo ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     homepage = "https://github.com/Chris00/ocaml-cairo";
