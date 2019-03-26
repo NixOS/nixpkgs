@@ -179,6 +179,52 @@ let
           Optional http login credentials for metrics scraping.
         '';
       };
+      tls_config = mkOption {
+        type = types.nullOr (types.submodule {
+          options = {
+            ca_file = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                CA certificate to validate API server certificate with.
+              '';
+            };
+            cert_file = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                Certificate file for client cert authentication to the server.
+              '';
+            };
+            key_file = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                Key file for client cert authentication to the server.
+              '';
+            };
+            server_name = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                ServerName extension to indicate the name of the server.
+              '';
+            };
+            insecure_skip_verify = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Disable validation of the server certificate.
+              '';
+            };
+          };
+        });
+        default = null;
+        apply = x: mapNullable _filter x;
+        description = ''
+          Optional TLS configuration for metrics scraping.
+        '';
+      };
       dns_sd_configs = mkOption {
         type = types.listOf promTypes.dns_sd_config;
         default = [];
