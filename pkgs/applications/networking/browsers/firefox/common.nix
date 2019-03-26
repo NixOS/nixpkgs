@@ -1,5 +1,5 @@
 { pname, ffversion, meta, updateScript ? null
-, src, unpackPhase ? null, patches ? []
+, src, unpackPhase ? null, patches ? [], installAutoConfig ? false
 , extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? []
 , isIceCatLike ? false, icversion ? null
 , isTorBrowserLike ? false, tbversion ? null }:
@@ -311,6 +311,15 @@ stdenv.mkDerivation rec {
 
     # Needed to find Mozilla runtime
     gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
+  ''
+    # As for why this is needed, see: https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig
+    + lib.optionalString (stdenv.isLinux && installAutoConfig) ''
+    # Prepare for autoconfig
+    mkdir -p "$out/lib/firefox/defaults/pref"
+    cat > "$out/lib/firefox/defaults/pref/autoconfig.js" <<EOF
+      pref("general.config.filename", "mozilla.cfg");
+      pref("general.config.obscure_value", 0);
+    EOF
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
