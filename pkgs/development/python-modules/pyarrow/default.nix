@@ -16,6 +16,7 @@ buildPythonPackage rec {
   checkInputs = [ hypothesis pandas pytest ];
 
   PYARROW_BUILD_TYPE = "release";
+  PYARROW_WITH_PARQUET = true;
   PYARROW_CMAKE_OPTIONS = [
     "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
 
@@ -47,8 +48,6 @@ buildPythonPackage rec {
 
   ARROW_HOME = _arrow-cpp;
   PARQUET_HOME = _arrow-cpp;
-
-  setupPyBuildFlags = ["--with-parquet" ];
 
   checkPhase = ''
     mv pyarrow/tests tests
