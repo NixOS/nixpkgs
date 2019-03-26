@@ -13251,6 +13251,8 @@ in
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
+  waylandpp = callPackage ../development/libraries/waylandpp { };
+
   wcslib = callPackage ../development/libraries/wcslib { };
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
