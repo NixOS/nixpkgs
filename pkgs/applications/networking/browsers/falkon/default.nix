@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "falkon-${version}";
-  version = "3.0.1";
+  pname = "falkon";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
-    repo   = "falkon";
+    repo   = pname;
     rev    = "v${version}";
     sha256 = "1ay1ljrdjcfqwjv4rhf4psh3dfihnvhpmpqcayd3p9lh57x7fh41";
   };
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "QtWebEngine based cross-platform web browser";
-    homepage    = https://community.kde.org/Incubator/Projects/Falkon;
+    homepage    = https://www.falkon.org/;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;
