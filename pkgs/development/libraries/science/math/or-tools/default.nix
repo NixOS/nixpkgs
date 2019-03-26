@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake, google-gflags, which
+{ stdenv, fetchFromGitHub, cmake, abseil-cpp, google-gflags, which
 , lsb-release, glog, protobuf, cbc, zlib
 , ensureNewerSourcesForZipFilesHook, python, swig
 , pythonProtobuf }:
 
 stdenv.mkDerivation rec {
   name = "or-tools-${version}";
-  version = "v6.10";
+  version = "v7.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = version;
-    sha256 = "11k3671rpv968dsglc6bgarr9yi8ijaaqm2wq3m0rn4wy8fj7za2";
+    sha256 = "09rs2j3w4ljw9qhhnsjlvfii297njjszwvkbgj1i6kns3wnlr7cp";
   };
 
   # The original build system uses cmake which does things like pull
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   # dependencies straight from nixpkgs and use the make build method.
   configurePhase = ''
     cat <<EOF > Makefile.local
+    UNIX_ABSL_DIR=${abseil-cpp}
     UNIX_GFLAGS_DIR=${google-gflags}
     UNIX_GLOG_DIR=${glog}
     UNIX_PROTOBUF_DIR=${protobuf}
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     python.pkgs.setuptools python.pkgs.wheel
   ];
   propagatedBuildInputs = [
-    google-gflags glog protobuf cbc
+    abseil-cpp google-gflags glog protobuf cbc
     pythonProtobuf python.pkgs.six
   ];
 
