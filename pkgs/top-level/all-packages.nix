@@ -21618,6 +21618,8 @@ in
 
   ants = callPackage ../applications/science/biology/ants { };
 
+  aragorn = callPackage ../applications/science/biology/aragorn { };
+
   archimedes = callPackage ../applications/science/electronics/archimedes {
     stdenv = overrideCC stdenv gcc49;
   };
