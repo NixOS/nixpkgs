@@ -205,6 +205,14 @@ in
       default = {};
       type = kdeConfigurationType;
     };
+
+    mobile.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable support for running the Plasma Mobile shell.
+      '';
+    };
   };
 
   imports = [
@@ -364,6 +372,9 @@ in
         # Phonon audio backend
         ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
         ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
+
+        # Plasma mobile
+        ++ lib.optional cfg.mobile.enable plasma-phone-components
 
         # Optional hardware support features
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
