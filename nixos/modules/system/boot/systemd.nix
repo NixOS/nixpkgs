@@ -108,11 +108,13 @@ let
       # Hibernate / suspend.
       "hibernate.target"
       "suspend.target"
+      "suspend-then-hibernate.target"
       "sleep.target"
       "hybrid-sleep.target"
       "systemd-hibernate.service"
       "systemd-hybrid-sleep.service"
       "systemd-suspend.service"
+      "systemd-suspend-then-hibernate.service"
 
       # Reboot stuff.
       "reboot.target"
@@ -673,6 +675,28 @@ in
       '';
     };
 
+    services.sleep.hibernateDelaySec = mkOption {
+      default = 3600;
+      type = types.int;
+      description = ''
+        The amount of time in seconds that will pass before the system is automatically
+        put into hibernate when using 
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd-suspend-then-hibernate.service.html">
+        systemd-suspend-then-hibernate.service(8)</link>.
+      '';
+    };
+
+    services.sleep.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "AllowHybridSleep=no";
+      description = ''
+        Extra config options for systemd-sleep.conf. See
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd-sleep.conf.html">
+        systemd-sleep.conf(5)</link> for available options.
+      '';
+    };
+
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -819,6 +843,8 @@ in
 
       "systemd/sleep.conf".text = ''
         [Sleep]
+        HibernateDelaySec=${toString config.services.sleep.hibernateDelaySec}
+        ${config.services.sleep.extraConfig}
       '';
 
       "tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
