@@ -8,10 +8,11 @@
  EXTRA_DIST =
  CLEANFILES =
  MOSTLYCLEANFILES =
-@@ -113,7 +112,6 @@
+@@ -113,8 +112,7 @@
  	Packaging/FontForge-doc.spec \
  	Packaging/FontForge.spec \
  	Packaging/FontForge.static.spec \
+ 	README \
 -	uthash/src \
  	$(NULL)
  

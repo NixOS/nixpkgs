@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub, lib
+{ stdenv, fetchurl, lib
 , autoconf, automake, gnum4, libtool, perl, gnulib, uthash, pkgconfig, gettext
-, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, pango
+, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, cairo, pango
+, readline, woff2, zeromq
 , withSpiro ? false, libspiro
 , withGTK ? false, gtk2
 , withPython ? true
+, withExtras ? true
 , Carbon ? null, Cocoa ? null
 }:
 
 stdenv.mkDerivation rec {
-  name = "fontforge-${version}";
-  version = "20170730";
+  pname = "fontforge";
+  version = "20190317";
 
-  src = fetchFromGitHub {
-    owner = "fontforge";
-    repo = "fontforge";
-    rev = version;
-    sha256 = "15k6x97383p8l40jvcivalhwgbbcdg5vciyjz6m9r0lrlnjqkv99";
+  src = fetchurl {
+    url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1ddqbpc32cgbccdnv0lfw0qhj59hcqzb7616ph5lkvm91pnas4dp";
   };
 
   patches = [ ./fontforge-20140813-use-system-uthash.patch ];
 
-  # use $SOURCE_DATE_EPOCH instead of non-determenistic timestamps
+  # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
   postPatch = ''
     find . -type f -name '*.c' -exec sed -r -i 's#\btime\(&(.+)\)#if (getenv("SOURCE_DATE_EPOCH")) \1=atol(getenv("SOURCE_DATE_EPOCH")); else &#g' {} \;
     sed -r -i 's#author\s*!=\s*NULL#& \&\& !getenv("SOURCE_DATE_EPOCH")#g'                            fontforge/cvexport.c fontforge/dumppfa.c fontforge/print.c fontforge/svg.c fontforge/splineutil2.c
@@ -32,19 +32,20 @@ stdenv.mkDerivation rec {
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.isi686 [ "-msse2" "-mfpmath=sse" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoconf automake gnum4 libtool perl gettext ];
   buildInputs = [
-    autoconf automake gnum4 libtool perl gettext uthash
+    readline uthash woff2 zeromq
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
   ]
     ++ lib.optionals withSpiro [libspiro]
-    ++ lib.optionals withGTK [ gtk2 pango ]
+    ++ lib.optionals withGTK [ gtk2 cairo pango ]
     ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
-  configureFlags =
-    lib.optionals (!withPython) [ "--disable-python-scripting" "--disable-python-extension" ]
+    configureFlags = [ "--enable-woff2" ]
+    ++ lib.optionals (!withPython) [ "--disable-python-scripting" "--disable-python-extension" ]
     ++ lib.optional withGTK "--enable-gtk2-use"
-    ++ lib.optional (!withGTK) "--without-x";
+    ++ lib.optional (!withGTK) "--without-x"
+    ++ lib.optional withExtras "--enable-fontforge-extras";
 
   # work-around: git isn't really used, but configuration fails without it
   preConfigure = ''
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     export GIT="$(type -P true)"
     cp -r "${gnulib}" ./gnulib
     chmod +w -R ./gnulib
-    ./bootstrap --skip-git --gnulib-srcdir=./gnulib
+    ./bootstrap --skip-git --gnulib-srcdir=./gnulib --force
   '';
 
   doCheck = false; # tries to wget some fonts
