@@ -1,4 +1,4 @@
-{ lib, symlinkJoin, makeWrapper, idris-no-deps, gcc, gmp }:
+{ stdenv, lib, symlinkJoin, makeWrapper, idris-no-deps, gcc, gmp }:
 
 symlinkJoin {
   inherit (idris-no-deps) name src meta;
@@ -7,6 +7,8 @@ symlinkJoin {
   postBuild = ''
     wrapProgram $out/bin/idris \
       --run 'export IDRIS_CC=''${IDRIS_CC:-${lib.getBin gcc}/bin/gcc}' \
-      --suffix LIBRARY_PATH : ${lib.makeLibraryPath [ gmp ]}
+      --set NIX_CC_WRAPPER_${stdenv.cc.infixSalt}_TARGET_HOST 1 \
+      --prefix NIX_CFLAGS_COMPILE " " "-I${lib.getDev gmp}/include" \
+      --prefix NIX_CFLAGS_LINK " " "-L${lib.getLib gmp}/lib"
   '';
 }
