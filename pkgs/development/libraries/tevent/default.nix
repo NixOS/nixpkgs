@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, python, pkgconfig, readline, talloc
+{ stdenv, fetchurl, python, pkgconfig, which, readline, talloc
 , libxslt, docbook_xsl, docbook_xml_dtd_42
 }:
 
 stdenv.mkDerivation rec {
-  name = "tevent-0.9.37";
+  pname = "tevent";
+  version = "0.10.0";
 
   src = fetchurl {
-    url = "mirror://samba/tevent/${name}.tar.gz";
-    sha256 = "1q77vbjic2bb79li2a54ffscnrnwwww55fbpry2kgh7acpnlb0qn";
+    url = "mirror://samba/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1rm4d9245ya15wyrh9vqn1dnz14l2ic88mr46ykyc6kdrl99dwrk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig python docbook_xsl docbook_xml_dtd_42 which ];
   buildInputs = [
-    python readline talloc libxslt docbook_xsl docbook_xml_dtd_42
+    python readline talloc libxslt
   ];
 
   preConfigure = ''
-    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,g' buildtools/bin/waf
+    patchShebangs buildtools/bin/waf
   '';
 
   configureFlags = [

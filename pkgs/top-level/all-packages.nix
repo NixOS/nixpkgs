@@ -12942,9 +12942,7 @@ in
 
   termbox = callPackage ../development/libraries/termbox { };
 
-  tevent = callPackage ../development/libraries/tevent {
-    python = python2;
-  };
+  tevent = callPackage ../development/libraries/tevent { python = python3; };
 
   tet = callPackage ../development/tools/misc/tet { };
 
