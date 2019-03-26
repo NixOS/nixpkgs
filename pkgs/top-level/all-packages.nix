@@ -256,6 +256,7 @@ in
     curl = buildPackages.curl.override rec {
       # break dependency cycles
       fetchurl = stdenv.fetchurlBoot;
+      zlib = buildPackages.zlib.override { fetchurl = stdenv.fetchurlBoot; };
       pkgconfig = buildPackages.pkgconfig.override { fetchurl = stdenv.fetchurlBoot; };
       perl = buildPackages.perl.override { fetchurl = stdenv.fetchurlBoot; };
       openssl = buildPackages.openssl.override {
@@ -265,7 +266,7 @@ in
       };
       libssh2 = buildPackages.libssh2.override {
         fetchurl = stdenv.fetchurlBoot;
-        inherit openssl;
+        inherit zlib openssl;
       };
       # On darwin, libkrb5 needs bootstrap_cmds which would require
       # converting many packages to fetchurl_boot to avoid evaluation cycles.
@@ -277,7 +278,7 @@ in
       };
       nghttp2 = buildPackages.nghttp2.override {
         fetchurl = stdenv.fetchurlBoot;
-        inherit pkgconfig openssl;
+        inherit zlib pkgconfig openssl;
         c-ares = buildPackages.c-ares.override { fetchurl = stdenv.fetchurlBoot; };
         libev = buildPackages.libev.override { fetchurl = stdenv.fetchurlBoot; };
       };
