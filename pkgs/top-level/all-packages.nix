@@ -15681,6 +15681,8 @@ in
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 
+  documize-community = callPackage ../servers/documize-community { };
+
   doulos-sil = callPackage ../data/fonts/doulos-sil { };
 
   cabin = callPackage ../data/fonts/cabin { };

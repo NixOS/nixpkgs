@@ -65,6 +65,7 @@ in
   docker-registry = handleTest ./docker-registry.nix {};
   docker-tools = handleTestOn ["x86_64-linux"] ./docker-tools.nix {};
   docker-tools-overlay = handleTestOn ["x86_64-linux"] ./docker-tools-overlay.nix {};
+  documize = handleTest ./documize.nix {};
   dovecot = handleTest ./dovecot.nix {};
   # ec2-config doesn't work in a sandbox as the simulated ec2 instance needs network access
   #ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
