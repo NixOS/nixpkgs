@@ -24,7 +24,7 @@ in stdenvNoCC.mkDerivation {
     '';
     homepage = https://www.ti.com/tool/msp430-gcc-opensource;
     license = licenses.bsd3;
-    platforms = platforms.all;
+    platforms = [ "msp430-none" ];
     maintainers = with maintainers; [ aerialx ];
   };
 }
