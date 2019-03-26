@@ -25,9 +25,6 @@ let
 in
 {
 
-  # Allow callPackage to fill in the pkgs argument
-  inherit pkgs;
-
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
   # just the plain stdenv.
