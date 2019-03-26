@@ -9,8 +9,6 @@ with python3.pkgs; buildPythonApplication rec {
     sha256 = "1p49f3g25x900vk32spjbr2aipj12kcbhayny2vwhdpkjlv6k396";
   };
 
-  LC_ALL = "C.UTF-8";
-
   propagatedBuildInputs = [
     atomicwrites
     click
