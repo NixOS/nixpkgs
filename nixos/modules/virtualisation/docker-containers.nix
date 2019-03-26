@@ -222,7 +222,7 @@ in {
     description = "Docker containers to run as systemd services.";
   };
 
-  config = mkIf (cfg != []) {
+  config = mkIf (cfg != {}) {
 
     systemd.services = mapAttrs' (n: v: nameValuePair "docker-${n}" (mkService n v)) cfg;
 
