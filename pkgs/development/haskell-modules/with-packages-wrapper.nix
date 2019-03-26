@@ -2,6 +2,9 @@
 , withLLVM ? false
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
+
+# Wrap ghc executables with the given argument.
+, makeWrapperArgs ? []
 }:
 
 assert ghcLibdir != null -> (ghc.isGhcjs or false);
@@ -74,7 +77,8 @@ symlinkJoin {
           ${lib.optionalString (ghc.isGhcjs or false)
             ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
           } \
-          ${lib.optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''}
+          ${lib.optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''} \
+          ${stdenv.lib.concatStringsSep " " makeWrapperArgs}
       fi
     done
 
