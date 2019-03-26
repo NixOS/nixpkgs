@@ -19316,6 +19316,8 @@ in
 
   rofi-systemd = callPackage ../tools/system/rofi-systemd { };
 
+  rootlesskit = callPackage ../tools/virtualization/rootlesskit {};
+
   rpcs3 = libsForQt5.callPackage ../misc/emulators/rpcs3 { };
 
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
