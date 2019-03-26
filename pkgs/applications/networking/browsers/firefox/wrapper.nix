@@ -1,4 +1,4 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
+{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, runCommand, writeText, config
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
@@ -25,6 +25,8 @@ let
     , nameSuffix ? ""
     , icon ? browserName
     , extraPlugins ? []
+    , extraPrefs ? ""
+    , extraPolicies ? {}
     , extraNativeMessagingHosts ? []
     , gdkWayland ? false
     }:
@@ -81,6 +83,25 @@ let
             ++ lib.optional (config.pulseaudio or true) libpulseaudio;
       gtk_modules = [ libcanberra-gtk2 ];
 
+      enterprisePolicies = {
+        policies = extraPolicies;
+      };
+
+      policiesJson = writeText "policies.json"
+        (builtins.toJSON enterprisePolicies);
+
+      mozillaCfg = writeText "mozilla.cfg" ''
+        // First line must be a comment
+        // User customization
+        ${extraPrefs}
+      '';
+
+      firefox-user-config = runCommand "firefox-user-config" {} ''
+        mkdir $out
+        cp ${policiesJson} "$out/policies.json"
+        cp ${mozillaCfg} "$out/mozilla.cfg"
+      '';
+
     in stdenv.mkDerivation {
       inherit name;
 
@@ -127,6 +148,8 @@ let
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
+            --set MOZ_POLICIES_DIR "${firefox-user-config}" \
+            --set MOZ_AUTOCONFIG_DIR "${firefox-user-config}" \
             ${lib.optionalString gdkWayland ''
               --set GDK_BACKEND "wayland" \
             ''}${lib.optionalString (browser ? gtk3)
