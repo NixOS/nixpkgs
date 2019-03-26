@@ -1,0 +1,33 @@
+diff --git a/extensions/pref/autoconfig/src/nsReadConfig.cpp b/extensions/pref/autoconfig/src/nsReadConfig.cpp
+--- a/extensions/pref/autoconfig/src/nsReadConfig.cpp
++++ b/extensions/pref/autoconfig/src/nsReadConfig.cpp
+@@ -23,6 +23,7 @@
+ #include "nsString.h"
+ #include "nsCRT.h"
+ #include "nspr.h"
++#include "prenv.h"
+ #include "nsXULAppAPI.h"
+ 
+ extern bool sandboxEnabled;
+@@ -237,8 +238,19 @@ nsresult nsReadConfig::openAndEvaluateJSFile(const char *aFileName,
+   nsCOMPtr<nsIInputStream> inStr;
+   if (isBinDir) {
+     nsCOMPtr<nsIFile> jsFile;
+-    rv = NS_GetSpecialDirectory(NS_GRE_DIR, getter_AddRefs(jsFile));
+-    if (NS_FAILED(rv)) return rv;
++
++    const char* pathVar = PR_GetEnv("MOZ_AUTOCONFIG_DIR");
++    if (pathVar && *pathVar) {
++      rv = NS_NewNativeLocalFile(nsDependentCString(pathVar), false, getter_AddRefs(jsFile));
++      if (NS_FAILED(rv)) {
++        rv = NS_GetSpecialDirectory(NS_GRE_DIR, getter_AddRefs(jsFile));
++        if (NS_FAILED(rv)) return rv;
++      }
++    } else {
++      rv = NS_GetSpecialDirectory(NS_GRE_DIR, getter_AddRefs(jsFile));
++      if (NS_FAILED(rv)) return rv;
++    }
++
+ 
+     rv = jsFile->AppendNative(nsDependentCString(aFileName));
+     if (NS_FAILED(rv)) return rv;

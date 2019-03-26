@@ -18,6 +18,8 @@ rec {
 
     patches = [
       ./no-buildconfig-ffx65.patch
+      ./env_var_for_policies.patch
+      ./env_var_for_autoconfig.patch
     ];
 
     extraNativeBuildInputs = [ python3 ];

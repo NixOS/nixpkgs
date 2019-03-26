@@ -1,0 +1,22 @@
+diff --git a/browser/components/enterprisepolicies/EnterprisePolicies.js b/browser/components/enterprisepolicies/EnterprisePolicies.js
+--- a/browser/components/enterprisepolicies/EnterprisePolicies.js
++++ b/browser/components/enterprisepolicies/EnterprisePolicies.js
+@@ -5,6 +5,8 @@
+ ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
+ ChromeUtils.import("resource://gre/modules/Services.jsm");
+ ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
++ChromeUtils.import("resource://gre/modules/FileUtils.jsm");
++ChromeUtils.import("resource://gre/modules/Subprocess.jsm");
+ 
+ XPCOMUtils.defineLazyModuleGetters(this, {
+   WindowsGPOParser: "resource:///modules/policies/WindowsGPOParser.jsm",
+@@ -341,7 +343,8 @@ class JSONPoliciesProvider {
+   _getConfigurationFile() {
+     let configFile = null;
+     try {
+-      configFile = Services.dirsvc.get("XREAppDist", Ci.nsIFile);
++      const env = Subprocess.getEnvironment();
++      configFile = env.MOZ_POLICIES_DIR ? new FileUtils.File(env.MOZ_POLICIES_DIR) : Services.dirsvc.get("XREAppDist", Ci.nsIFile);
+       configFile.append(POLICIES_FILENAME);
+     } catch (ex) {
+       // Getting the correct directory will fail in xpcshell tests. This should
