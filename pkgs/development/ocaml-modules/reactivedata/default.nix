@@ -3,10 +3,10 @@
 assert stdenv.lib.versionAtLeast ocaml.version "3.11";
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-reactiveData-0.2.1";
+  name = "ocaml${ocaml.version}-reactiveData-0.2.2";
   src = fetchurl {
-    url = https://github.com/ocsigen/reactiveData/archive/0.2.1.tar.gz;
-    sha256 = "0wcs0z50nia1cpk8mh6i5qbc6sff9cc8x7s7q1q89d7m73bnv4vf";
+    url = https://github.com/ocsigen/reactiveData/archive/0.2.2.tar.gz;
+    sha256 = "0jzagyp4zla28wykvcgqwd8df71ir0vb4s8akp02cfacd5v86sng";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild opaline ];
