@@ -1,0 +1,30 @@
+From e548aa2074f03bc4ea07c53a5c1fc9f44dc73e62 Mon Sep 17 00:00:00 2001
+From: Jaka Hudoklin <jaka@gatehub.net>
+Date: Tue, 19 Mar 2019 13:23:44 +0100
+Subject: [PATCH] Change ImagePullPolicy to IfNotPresent
+
+---
+ provisioner.go | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/provisioner.go b/provisioner.go
+index dd408a4..989d84a 100644
+--- a/provisioner.go
++++ b/provisioner.go
+@@ -325,9 +325,10 @@ func (p *LocalPathProvisioner) createHelperPod(action ActionType, cmdsForPath []
+ 			NodeName:      node,
+ 			Containers: []v1.Container{
+ 				{
+-					Name:    "local-path-" + string(action),
+-					Image:   p.helperImage,
+-					Command: append(cmdsForPath, filepath.Join("/data/", volumeDir)),
++					Name:            "local-path-" + string(action),
++					Image:           p.helperImage,
++					ImagePullPolicy: "IfNotPresent",
++					Command:         append(cmdsForPath, filepath.Join("/data/", volumeDir)),
+ 					VolumeMounts: []v1.VolumeMount{
+ 						{
+ 							Name:      "data",
+-- 
+2.19.2
+
