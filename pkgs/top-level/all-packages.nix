@@ -21529,6 +21529,8 @@ in
     gtk = gtk2;
   };
 
+  solarc-gtk-theme = callPackage ../misc/themes/solarc { };
+
   xfce = xfce4-12;
   xfceUnstable = xfce4-13;
 
