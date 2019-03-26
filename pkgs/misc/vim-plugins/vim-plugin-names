@@ -203,6 +203,7 @@ motus/pig.vim
 mpickering/hlint-refactor-vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
+nathangrigg/vim-beancount
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
 ncm2/ncm2
