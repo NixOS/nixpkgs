@@ -2431,6 +2431,8 @@ package-maintainers:
     - lambdabot-core
     - lambdabot-irc-plugins
     - language-nix
+    - liquid-fixpoint
+    - liquidhaskell
     - logging-facade-syslog
     - nix-paths
     - pandoc
@@ -6570,8 +6572,6 @@ broken-packages:
   - lio-simple
   - lipsum-gen
   - liquid
-  - liquid-fixpoint
-  - liquidhaskell
   - liquidhaskell-cabal
   - liquidhaskell-cabal-demo
   - list-fusion-probe
