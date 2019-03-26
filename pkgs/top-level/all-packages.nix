@@ -21642,6 +21642,8 @@ in
 
   ezminc = callPackage ../applications/science/biology/EZminc { };
 
+  exonerate = callPackage ../applications/science/biology/exonerate { };
+
   hisat2 = callPackage ../applications/science/biology/hisat2 { };
 
   htslib = callPackage ../development/libraries/science/biology/htslib { };
