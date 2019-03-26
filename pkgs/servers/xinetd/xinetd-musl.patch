@@ -1,0 +1,12 @@
+--- xinetd-2.3.15.orig/configure	2007-09-20 16:58:27.000000000 +0200
++++ xinetd-2.3.15/configure	2014-09-16 17:20:22.787665449 +0200
+@@ -7909,7 +7909,7 @@
+ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+-#include <sys/types.h>
++#include <sys/resource.h>
+ #if STDC_HEADERS
+ #include <stdlib.h>
+ #endif
+--

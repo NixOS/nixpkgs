@@ -1,4 +1,5 @@
-{ stdenv, fetchpatch, python3Packages, acl, libb2, lz4, zstd, openssl, openssh }:
+{ stdenv, fetchpatch, python3Packages, acl, libb2, lz4, zstd, openssl, openssh,
+  lib, buildPackages, withDocs ? true }:
 
 python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
@@ -18,15 +19,16 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python3Packages; lib.optionals withDocs [
     # For building documentation:
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
     libb2 lz4 zstd openssl python3Packages.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
+  propagatedNativeBuildInputs = with buildPackages.python3Packages; [ cython ];
   propagatedBuildInputs = with python3Packages; [
-    cython msgpack-python
+    msgpack-python
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
   preConfigure = ''
@@ -41,13 +43,15 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    make -C docs singlehtml
-    mkdir -p $out/share/doc/borg
-    cp -R docs/_build/singlehtml $out/share/doc/borg/html
+    ${lib.optionalString withDocs ''
+       make -C docs singlehtml
+       mkdir -p $out/share/doc/borg
+       cp -R docs/_build/singlehtml $out/share/doc/borg/html
 
-    make -C docs man
-    mkdir -p $out/share/man
-    cp -R docs/_build/man $out/share/man/man1
+       make -C docs man
+       mkdir -p $out/share/man
+       cp -R docs/_build/man $out/share/man/man1
+       ''}
 
     mkdir -p $out/share/bash-completion/completions
     cp scripts/shell_completions/bash/borg $out/share/bash-completion/completions/

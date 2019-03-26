@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, readline, which, nettools }:
+{ stdenv, lib, fetchurl, openssl, readline, which, nettools }:
 
 stdenv.mkDerivation rec {
   name = "socat-1.7.3.2";
@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
     url = "http://www.dest-unreach.org/socat/download/${name}.tar.bz2";
     sha256 = "0lcj6zpra33xhgvhmz9l3cqz10v8ybafb8dd1yqkwf1rhy01ymp3";
   };
+
+  patches = lib.optional (stdenv.hostPlatform.isMusl) ./socat-musl.patch;
 
   postPatch = ''
     patchShebangs test.sh

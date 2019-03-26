@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPythonPackage, pkgconfig, pytest, fuse, attr, which
-, contextlib2
+, contextlib2, buildPackages
 }:
 
 buildPythonPackage rec {
@@ -12,7 +12,8 @@ buildPythonPackage rec {
     sha256 = "6e412a3d9be69162d49b8a4d6fb3c343d1c1fba847f4535d229e0ece2548ead8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  # need to explicitly scope, otherwise, we bring in the python pkgconfig package
+  nativeBuildInputs = [ buildPackages.pkgconfig ];
   buildInputs = [ pytest fuse attr which ];
 
   propagatedBuildInputs = [ contextlib2 ];

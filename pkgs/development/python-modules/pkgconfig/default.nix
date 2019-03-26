@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  propagatedBuildInputs = [ pkgconfig ];
+  propagatedNativeBuildInputs = [ pkgconfig ];
 
   checkPhase = ''
     nosetests
