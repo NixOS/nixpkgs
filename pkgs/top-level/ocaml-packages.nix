@@ -357,9 +357,7 @@ let
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
-    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 {
-      cairo2 = cairo2.override { enableGtkSupport = false; };
-    };
+    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
 
     lablgtk3-gtkspell3 = callPackage ../development/ocaml-modules/lablgtk3/gtkspell3.nix { };
 
