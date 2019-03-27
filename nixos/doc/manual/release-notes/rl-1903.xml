@@ -516,6 +516,13 @@
      Graylog</link> for details.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The option <literal>users.ldap.bind.password</literal> was renamed to <literal>users.ldap.bind.passwordFile</literal>,
+      and needs to be readable by the <literal>nslcd</literal> user.
+      Same applies to the new <literal>users.ldap.daemon.rootpwmodpwFile</literal> option.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
