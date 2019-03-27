@@ -28,9 +28,8 @@ let
       users.ldap.daemon = {
         enable = useDaemon;
         rootpwmoddn = "cn=admin,${dbSuffix}";
-        rootpwmodpw = "/etc/nslcd.rootpwmodpw";
+        rootpwmodpwFile = "/etc/nslcd.rootpwmodpw";
       };
-      # NOTE: password stored in clear in Nix's store, but this is a test.
       environment.etc."nslcd.rootpwmodpw".source = pkgs.writeText "rootpwmodpw" dbAdminPwd;
       users.ldap.loginPam = true;
       users.ldap.nsswitch = true;
@@ -38,7 +37,7 @@ let
       users.ldap.base = "ou=posix,${dbSuffix}";
       users.ldap.bind = {
         distinguishedName = "cn=admin,${dbSuffix}";
-        password = "/etc/ldap/bind.password";
+        passwordFile = "/etc/ldap/bind.password";
       };
       # NOTE: password stored in clear in Nix's store, but this is a test.
       environment.etc."ldap/bind.password".source = pkgs.writeText "password" dbAdminPwd;
