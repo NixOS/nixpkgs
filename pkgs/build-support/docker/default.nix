@@ -344,7 +344,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tar -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
+      tar --transform='s|^\./||' -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."
