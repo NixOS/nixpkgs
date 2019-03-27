@@ -24,16 +24,6 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.upower;
-        defaultText = "pkgs.upower";
-        example = lib.literalExample "pkgs.upower";
-        description = ''
-          Which upower package to use.
-        '';
-      };
-
     };
 
   };
@@ -43,11 +33,11 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ pkgs.upower ];
 
-    services.dbus.packages = [ cfg.package ];
+    services.dbus.packages = [ pkgs.upower ];
 
-    services.udev.packages = [ cfg.package ];
+    services.udev.packages = [ pkgs.upower ];
 
     systemd.services.upower =
       { description = "Power Management Daemon";
@@ -55,7 +45,7 @@ in
         serviceConfig =
           { Type = "dbus";
             BusName = "org.freedesktop.UPower";
-            ExecStart = "@${cfg.package}/libexec/upowerd upowerd";
+            ExecStart = "@${pkgs.upower}/libexec/upowerd upowerd";
             Restart = "on-failure";
             # Upstream lockdown:
             # Filesystem lockdown
