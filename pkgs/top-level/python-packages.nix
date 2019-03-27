@@ -615,6 +615,8 @@ in {
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
+  pybullet = callPackage ../development/python-modules/pybullet { };
+
   pycairo = callPackage ../development/python-modules/pycairo {
     inherit (pkgs) pkgconfig;
   };
