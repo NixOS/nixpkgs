@@ -4028,6 +4028,10 @@ in {
 
   retry_decorator = callPackage ../development/python-modules/retry_decorator { };
 
+  roboschool = callPackage ../development/python-modules/roboschool {
+    inherit (pkgs) pkgconfig; # use normal pkgconfig, not the python package
+  };
+
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
   quamash = callPackage ../development/python-modules/quamash { };
