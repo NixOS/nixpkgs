@@ -37,8 +37,6 @@ in stdenv.mkDerivation {
 
   postFixup = ''
     mkdir -p "$out/bin"
-    #makeWrapper "${pkg_path}/ghidraRun" "$out/bin/ghidraRun" \
-    #  --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
     ${lib.concatMapStrings jdkWrapper [
         "ghidraRun" "support/analyzeHeadless" "support/buildGhidraJar"
         "support/convertStorage" "support/dumpGhidraThreads" "support/ghidraDebug"
