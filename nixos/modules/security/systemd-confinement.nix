@@ -107,7 +107,7 @@ in {
         serviceConfig = {
           RootDirectory = pkgs.runCommand rootName {} "mkdir \"$out\"";
           TemporaryFileSystem = "/";
-          MountFlags = lib.mkDefault "private";
+          PrivateMounts = lib.mkDefault true;
 
           # https://github.com/NixOS/nixpkgs/issues/14645 is a future attempt
           # to change some of these to default to true.
