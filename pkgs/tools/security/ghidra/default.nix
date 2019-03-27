@@ -1,6 +1,6 @@
 {pkgs}:
 let
-  ghidra = pkgs.callPackage ./default.nix {};
+  ghidra = pkgs.callPackage ./ghidra.nix {};
 in
 {
   inherit ghidra;
