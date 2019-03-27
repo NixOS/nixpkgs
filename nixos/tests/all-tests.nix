@@ -131,6 +131,7 @@ in
   #lightdm = handleTest ./lightdm.nix {};
   login = handleTest ./login.nix {};
   #logstash = handleTest ./logstash.nix {};
+  mailcatcher = handleTest ./mailcatcher.nix {};
   mathics = handleTest ./mathics.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
   memcached = handleTest ./memcached.nix {};
