@@ -274,6 +274,8 @@ in {
     bap = pkgs.ocamlPackages.bap;
   };
 
+  baselines = callPackage ../development/python-modules/baselines { };
+
   bash_kernel = callPackage ../development/python-modules/bash_kernel { };
 
   bayespy = callPackage ../development/python-modules/bayespy { };
