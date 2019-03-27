@@ -52,11 +52,7 @@ in {
           dependencies of this systemd unit, you can use
           <option>confinement.fullUnit</option>.
 
-          <note><para><emphasis role="strong">Only</emphasis> the latter
-          (${mkScOption "ExecStart"}) will be used if
-          ${mkScOption "RootDirectoryStartOnly"} is enabled.</para></note>
-
-          <note><para>Also, the store paths listed in <option>path</option> are
+          <note><para>The store paths listed in <option>path</option> are
           <emphasis role="strong">not</emphasis> included in the closure as
           well as paths from other options except those listed
           above.</para></note>
@@ -133,8 +129,7 @@ in {
           ProtectKernelTunables = wantsAPIVFS;
         };
         confinement.packages = let
-          startOnly = config.serviceConfig.RootDirectoryStartOnly or false;
-          execOpts = if startOnly then [ "ExecStart" ] else [
+          execOpts = [
             "ExecReload" "ExecStart" "ExecStartPost" "ExecStartPre" "ExecStop"
             "ExecStopPost"
           ];
