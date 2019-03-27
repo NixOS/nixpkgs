@@ -11,8 +11,9 @@ in stdenvNoCC.mkDerivation {
   };
 
   buildCommand = ''
-    install -Dm0644 -t $out/lib $src/include/*.ld
-    install -Dm0644 -t $out/include $src/include/*.h $src/include/devices.csv
+    find $src/include -name '*.ld' | xargs install -Dm0644 -t $out/lib
+    find $src/include -name '*.h' | xargs install -Dm0644 -t $out/include
+    install -Dm0644 -t $out/include $src/include/devices.csv
 
     # appease bintoolsWrapper_addLDVars, search path needed for ld scripts
     touch $out/lib/lib
