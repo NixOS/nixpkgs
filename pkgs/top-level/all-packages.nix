@@ -6552,9 +6552,9 @@ in
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
-
-  yarn2nix = callPackage ../development/tools/yarn2nix { };
-  inherit (yarn2nix) mkYarnPackage;
+  
+  yarn2nix = throw "Use upstream https://github.com/moretea/yarn2nix";
+  mkYarnPackage = yarn2nix;
 
   yasr = callPackage ../applications/audio/yasr { };
 
