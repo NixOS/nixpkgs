@@ -139,13 +139,13 @@ in
           '';
         };
 
-        rootpwmodpw = mkOption {
+        rootpwmodpwFile = mkOption {
           default = "";
           example = "/run/keys/nslcd.rootpwmodpw";
           type = types.str;
           description = ''
-            The path to a file containing the credentials with which
-            to bind to the LDAP server if the root user tries to change a user's password
+            The path to a file containing the credentials with which to bind to
+            the LDAP server if the root user tries to change a user's password.
           '';
         };
       };
@@ -161,7 +161,7 @@ in
           '';
         };
 
-        password = mkOption {
+        passwordFile = mkOption {
           default = "/etc/ldap/bind.password";
           type = types.str;
           description = ''
@@ -224,10 +224,10 @@ in
 
     system.activationScripts = mkIf insertLdapPassword {
       ldap = stringAfter [ "etc" "groups" "users" ] ''
-        if test -f "${cfg.bind.password}" ; then
+        if test -f "${cfg.bind.passwordFile}" ; then
           umask 0077
           conf="$(mktemp)"
-          printf 'bindpw %s\n' "$(cat ${cfg.bind.password})" |
+          printf 'bindpw %s\n' "$(cat ${cfg.bind.passwordFile})" |
           cat ${ldapConfig.source} - >"$conf"
           mv -fT "$conf" /etc/ldap.conf
         fi
@@ -260,10 +260,10 @@ in
           conf="$(mktemp)"
           {
             cat ${nslcdConfig.source}
-            test -z '${cfg.bind.distinguishedName}' -o ! -f '${cfg.bind.password}' ||
-            printf 'bindpw %s\n' "$(cat '${cfg.bind.password}')"
-            test -z '${cfg.daemon.rootpwmoddn}' -o ! -f '${cfg.daemon.rootpwmodpw}' ||
-            printf 'rootpwmodpw %s\n' "$(cat '${cfg.daemon.rootpwmodpw}')"
+            test -z '${cfg.bind.distinguishedName}' -o ! -f '${cfg.bind.passwordFile}' ||
+            printf 'bindpw %s\n' "$(cat '${cfg.bind.passwordFile}')"
+            test -z '${cfg.daemon.rootpwmoddn}' -o ! -f '${cfg.daemon.rootpwmodpwFile}' ||
+            printf 'rootpwmodpw %s\n' "$(cat '${cfg.daemon.rootpwmodpwFile}')"
           } >"$conf"
           mv -fT "$conf" /etc/nslcd.conf
         '';
@@ -287,4 +287,8 @@ in
     };
 
   };
+
+  imports =
+    [ (mkRenamedOptionModule [ "users" "ldap" "bind" "password"] [ "users" "ldap" "bind" "passwordFile"])
+    ];
 }
