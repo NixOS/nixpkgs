@@ -3,6 +3,10 @@
 }: let
 
   pkg_path = "$out/lib/ghidra";
+  jdkWrapper = binName: ''
+    makeWrapper "${pkg_path}/${binName}" "$out/bin/${builtins.baseNameOf binName}" \
+      --prefix PATH : '${lib.makeBinPath [ openjdk11 ]}'
+    '';
 
 in stdenv.mkDerivation {
 
@@ -33,8 +37,13 @@ in stdenv.mkDerivation {
 
   postFixup = ''
     mkdir -p "$out/bin"
-    makeWrapper "${pkg_path}/ghidraRun" "$out/bin/ghidra" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
+    #makeWrapper "${pkg_path}/ghidraRun" "$out/bin/ghidraRun" \
+    #  --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
+    ${lib.concatMapStrings jdkWrapper [
+        "ghidraRun" "support/analyzeHeadless" "support/buildGhidraJar"
+        "support/convertStorage" "support/dumpGhidraThreads" "support/ghidraDebug"
+        "support/pythonRun" "support/sleigh"
+        ]}
   '';
 
   meta = with lib; {
