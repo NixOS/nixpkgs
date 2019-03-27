@@ -16489,7 +16489,7 @@ in
 
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
 
-  brig = callPackages ../applications/networking/brig { };
+  brig = callPackage ../applications/networking/brig { };
 
   bristol = callPackage ../applications/audio/bristol { };
 
