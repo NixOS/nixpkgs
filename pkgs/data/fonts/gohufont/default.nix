@@ -1,49 +1,55 @@
-{ stdenv, fetchurl, mkfontdir, mkfontscale, bdf2psf }:
+{ stdenv, fetchurl, fetchFromGitHub
+, mkfontdir, mkfontscale, bdf2psf, bdftopcf
+}:
 
 stdenv.mkDerivation rec {
-  name = "gohufont-2.0";
+  name = "gohufont-${version}";
+  version = "2.1";
 
-  pcf = fetchurl {
-    url = "http://font.gohu.org/gohufont-2.0.tar.gz";
-    sha256 = "0vi87fvj3m52piz2k6vqday03cah6zvz3dzrvjch3qjna1i1nb7s";
+  src = fetchurl {
+    url = "http://font.gohu.org/${name}.tar.gz";
+    sha256 = "10dsl7insnw95hinkcgmp9rx39lyzb7bpx5g70vswl8d6p4n53bm";
   };
 
-  bdf = fetchurl {
-    url = "http://font.gohu.org/gohufont-bdf-2.0.tar.gz";
-    sha256 = "0rqqavhqbs7pajcblg92mjlz2dxk8b60vgdh271axz7kjs2wf9mr";
+  bdf = fetchFromGitHub {
+    owner  = "hchargois";
+    repo   = "gohufont";
+    rev    = "cc36b8c9fed7141763e55dcee0a97abffcf08224";
+    sha256 = "1hmp11mrr01b29phw0xyj4h9b92qz19cf56ssf6c47c5j2c4xmbv";
   };
 
-  nativeBuildInputs = [ mkfontdir mkfontscale bdf2psf ];
+  nativeBuildInputs = [ mkfontdir mkfontscale bdf2psf bdftopcf ];
 
-  unpackPhase = ''
-    mkdir pcf bdf
-    tar -xzf $pcf --strip-components=1 -C pcf
-    tar -xzf $bdf --strip-components=1 -C bdf
+  buildPhase = ''
+    # convert bdf to psf fonts
+    build=$(pwd)
+    mkdir psf
+    cd ${bdf2psf}/usr/share/bdf2psf
+    for i in $bdf/*.bdf; do
+      bdf2psf \
+        --fb "$i" standard.equivalents \
+        ascii.set+useful.set+linux.set 512 \
+        "$build/psf/$(basename $i .bdf).psf"
+    done
+    cd $build
+
+    # convert hidpi variant to pcf
+    for i in $bdf/hidpi/*.bdf; do
+        name=$(basename $i .bdf).pcf
+        bdftopcf -o "$name" "$i"
+    done
   '';
 
   installPhase = ''
-    # convert bdf to psf fonts
-    sourceRoot="$(pwd)"
-    mkdir psf
-
-    cd "${bdf2psf}/usr/share/bdf2psf"
-    for i in $sourceRoot/bdf/*.bdf; do
-      bdf2psf --fb $i standard.equivalents \
-                      ascii.set+useful.set+linux.set 512 \
-                      "$sourceRoot/psf/$(basename $i .bdf).psf"
-    done
-    cd "$sourceRoot"
-
     # install the psf fonts (for the virtual console)
     fontDir="$out/share/consolefonts"
     mkdir -p "$fontDir"
-    mv psf/*.psf "$fontDir"
-
+    mv -t "$fontDir" psf/*.psf
 
     # install the pcf fonts (for xorg applications)
     fontDir="$out/share/fonts/misc"
     mkdir -p "$fontDir"
-    mv pcf/*.pcf.gz "$fontDir"
+    mv -t "$fontDir" *.pcf.gz *.pcf
 
     cd "$fontDir"
     mkfontdir
@@ -52,15 +58,15 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "0msl5y9q6hjbhc85v121x1b1rhsh2rbqqy4k234i5mpp8l3087r7";
+  outputHash     = "0kl7k8idl0fnsap2c4j02i33z017p2s4gi2cgspy6ica46fczcc1";
 
   meta = with stdenv.lib; {
     description = ''
       A monospace bitmap font well suited for programming and terminal use
     '';
-    homepage = http://font.gohu.org/;
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ epitrochoid ];
-    platforms = platforms.linux;
+    homepage    = http://font.gohu.org/;
+    license     = licenses.wtfpl;
+    maintainers = with maintainers; [ epitrochoid rnhmjoj ];
+    platforms   = platforms.unix;
   };
 }
