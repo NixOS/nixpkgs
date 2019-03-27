@@ -9381,6 +9381,8 @@ in
 
   aalib = callPackage ../development/libraries/aalib { };
 
+  abseil-cpp = callPackage ../development/libraries/abseil-cpp { };
+
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
   acl = callPackage ../development/libraries/acl { };
