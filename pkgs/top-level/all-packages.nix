@@ -21721,6 +21721,11 @@ in
 
   strelka = callPackage ../applications/science/biology/strelka { };
 
+  inherit (callPackages ../applications/science/biology/sumatools {})
+      sumalibs
+      sumaclust
+      sumatra;
+
   seaview = callPackage ../applications/science/biology/seaview { };
 
   varscan = callPackage ../applications/science/biology/varscan { };
