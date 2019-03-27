@@ -11,11 +11,9 @@ in stdenv.mkDerivation {
     sha256 = "0prgwb5vx6fd4bj12ss1bbb6axj2kjyriyjxqrzd58s5jyyy8d3c";
   };
 
-  buildInputs = [ readline libusb ];
-  makeFlags = [
-    "PREFIX=$(out)"
-    "INSTALL=install"
-  ] ++ (if readline == null then ["WITHOUT_READLINE=1"] else []);
+  buildInputs = [ libusb readline ];
+  makeFlags = [ "PREFIX=$(out)" "INSTALL=install" ] ++
+    (if readline == null then [ "WITHOUT_READLINE=1" ] else []);
 
   meta = with stdenv.lib; {
     description = "A free programmer, debugger, and gdb proxy for MSP430 MCUs";
