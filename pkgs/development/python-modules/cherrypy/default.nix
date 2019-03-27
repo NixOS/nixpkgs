@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "cherrypy";
-  version = "18.1.0";
+  version = "18.1.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     pname = "CherryPy";
     inherit version;
-    sha256 = "4dd2f59b5af93bd9ca85f1ed0bb8295cd0f5a8ee2b84d476374d4e070aa5c615";
+    sha256 = "6585c19b5e4faffa3613b5bf02c6a27dcc4c69a30d302aba819639a2af6fa48b";
   };
 
   propagatedBuildInputs = [
@@ -30,9 +30,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    # test_2_File_Concurrency also fails upstream: https://github.com/cherrypy/cherrypy/issues/1306
-    # ...and skipping it makes 2 other tests fail
-    pytest -k "not test_2_File_Concurrency and not test_3_Redirect and not test_4_File_deletion"
+    pytest
   '';
 
   meta = with lib; {
