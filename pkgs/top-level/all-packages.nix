@@ -2124,6 +2124,8 @@ in
 
   cfssl = callPackage ../tools/security/cfssl { };
 
+  chafa = callPackage ../tools/misc/chafa { };
+
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
   civetweb = callPackage ../development/libraries/civetweb { };
