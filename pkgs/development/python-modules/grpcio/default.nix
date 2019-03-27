@@ -1,17 +1,22 @@
-{ stdenv, buildPythonPackage, fetchPypi, lib, darwin
-, six, protobuf, enum34, futures, isPy27, isPy34, pkgconfig }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, lib, darwin
+, six, protobuf, enum34, futures, isPy27, isPy34, pkgconfig
+, cython}:
 
 with stdenv.lib;
 buildPythonPackage rec {
   pname = "grpcio";
   version = "1.18.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "abe825aa49e6239d5edf4e222c44170d2c7f6f4b1fd5286b4756a62d8067e112";
+  src = fetchFromGitHub {
+    owner = "grpc";
+    repo = "grpc";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "0cilbhk35gv46mk40jl5f3iqa94x14qyxbavpfq0kh0rld82nx4m";
   };
 
-  nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin darwin.cctools;
+  nativeBuildInputs = [ cython pkgconfig ]
+                    ++ optional stdenv.isDarwin darwin.cctools;
 
   propagatedBuildInputs = [ six protobuf ]
                         ++ lib.optionals (isPy27 || isPy34) [ enum34 ]
