@@ -23332,6 +23332,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
+  bullet-roboschool = callPackage ../development/libraries/bullet/roboschool-fork.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
+  };
+
   inherit (callPackages ../development/libraries/spdlog { })
     spdlog_0 spdlog_1;
 
