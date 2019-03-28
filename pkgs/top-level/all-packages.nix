@@ -4427,6 +4427,8 @@ in
 
   nabi = callPackage ../tools/inputmethods/nabi { };
 
+  nahid-fonts = callPackage ../data/fonts/nahid-fonts { };
+
   namazu = callPackage ../tools/text/namazu { };
 
   nano-wallet = libsForQt5.callPackage ../applications/altcoins/nano-wallet { };
@@ -6552,9 +6554,6 @@ in
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
-  
-  yarn2nix = throw "Use upstream https://github.com/moretea/yarn2nix";
-  mkYarnPackage = yarn2nix;
 
   yasr = callPackage ../applications/audio/yasr { };
 
@@ -21658,7 +21657,7 @@ in
   igv = callPackage ../applications/science/biology/igv { };
 
   inormalize = callPackage ../applications/science/biology/inormalize { };
-  
+
   itsx = callPackage ../applications/science/biology/itsx { };
 
   iv = callPackage ../applications/science/biology/iv {
