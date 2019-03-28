@@ -7,9 +7,18 @@ stdenv.mkDerivation rec {
   version = "8-2018-q4-major";
   subdir = "8-2018q4";
 
-  urlString = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-linux.tar.bz2";
-
-  src = fetchurl { url=urlString; sha256="fb31fbdfe08406ece43eef5df623c0b2deb8b53e405e2c878300f7a1f303ee52"; };
+  src =
+  if stdenv.isLinux then
+    fetchurl {
+      url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-linux.tar.bz2";
+      sha256="fb31fbdfe08406ece43eef5df623c0b2deb8b53e405e2c878300f7a1f303ee52";
+    }
+  else if stdenv.isDarwin then
+    fetchurl {
+      url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-mac.tar.bz2";
+      sha256="0q44r57fizpk1z3ngcjwal3rxgsnzjyfknpgwlwzmw5r9p98wlhb";
+    }
+  else throw "unsupported platform";
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
