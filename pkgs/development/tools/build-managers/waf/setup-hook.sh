@@ -1,8 +1,9 @@
 wafConfigurePhase() {
     runHook preConfigure
 
-    if ! [ -f ./waf ]; then
-        cp @waf@ waf
+    if ! [ -f "${wafPath:=./waf}" ]; then
+        echo "copying waf to $wafPath..."
+        cp @waf@ "$wafPath"
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
@@ -14,7 +15,7 @@ wafConfigurePhase() {
         ${configureTargets:-configure}
     )
     echoCmd 'configure flags' "${flagsArray[@]}"
-    python waf "${flagsArray[@]}"
+    python "$wafPath" "${flagsArray[@]}"
 
     runHook postConfigure
 }
@@ -33,7 +34,7 @@ wafBuildPhase () {
     )
 
     echoCmd 'build flags' "${flagsArray[@]}"
-    python waf "${flagsArray[@]}"
+    python "$wafPath" "${flagsArray[@]}"
 
     runHook postBuild
 }
@@ -52,7 +53,7 @@ wafInstallPhase() {
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
-    python waf "${flagsArray[@]}"
+    python "$wafPath" "${flagsArray[@]}"
 
     runHook postInstall
 }
