@@ -35,12 +35,6 @@ let
     version = "3.0.0";
     source.sha256 = "13ce4ffc3c94fb7a842117ecabdcdc5ff7fa27bec15ea44137b9f9abe575622d";
   };
-
-  nerdFont = fetchurl {
-    name = "nerd-font-complete";
-    url = https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf;
-    sha256 = "0sv3by8gqymrsvipfddrmlhi8zirqb14y9x63wrqks6mvg7jjgl9";
-  };
 in
 
 buildRubyGem {
@@ -48,16 +42,10 @@ buildRubyGem {
   name = "${gemName}-${version}";
   source.sha256 = "ac553738fc05778a6683cd66ca533a879e521f8a3673e3fa2c0c9b5c40572194";
   buildInputs = [ clocale filesize manpages rainbow ];
-  postInstall = ''
-    mkdir -p $out/share/fonts
-    cp ${nerdFont} "$out/share/fonts/"
-    printf '\033[0;31m' # red
-    echo "You may need to run fc-cache -r and/or open a new terminal for fonts to work"
-    printf '\033[0m' # no color
-  '';
 
   meta = with stdenv.lib; {
     description = "A Ruby gem that colorizes the ls output with color and icons";
+    longDescription = "Note that you may need to install some fonts - see homepage for details.";
     homepage = https://github.com/athityakumar/colorls;
     license = licenses.mit;
     maintainers = with maintainers; [ SomeDer ];
