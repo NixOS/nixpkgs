@@ -13,12 +13,18 @@ wafConfigurePhase() {
     local flagsArray=();
     for flag in $configureFlags "${configureFlagsArray[@]}";
     do
+        if [[
         # waf does not support these flags, but they are "blindly" added by the
         # pkgsStatic overlay, for example.
-        if [[ $flag != "--enable-static"
+              $flag != "--enable-static"
            && $flag != "--disable-static"
            && $flag != "--enable-shared"
-           && $flag != "--disable-shared" ]];
+           && $flag != "--disable-shared"
+        # these flags are added by configurePlatforms but waf just uses them
+        # to bail out in cross compilation cases
+           && $flag != --build=* 
+           && $flag != --host=* 
+           ]];
         then
             flagsArray=("${flagsArray[@]}" "$flag");
         fi;
