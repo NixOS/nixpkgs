@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
     let libPath = lib.makeLibraryPath [
       libXcursor
     ];
-    in lib.optionalString (withX && toolkit == "lucid") ''
+    in lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
       patchelf --set-rpath \
         "$(patchelf --print-rpath "$out/bin/emacs"):${libPath}" \
         "$out/bin/emacs"
