@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "postman-${version}";
-  version = "6.7.3";
+  version = "7.0.6";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "04gfdb2pk2y8yv9ixq4ac5pk0rdfspd0810izij3hjnyqlv32hfg";
+    sha256 = "8b97c3203d880413f3c9010aab867517c0a05d66a1d6b193afe07c3467dbbd4c";
     name = "${name}.tar.gz";
   };
 
