@@ -6366,7 +6366,11 @@ in
   waf = callPackage ../development/tools/build-managers/waf { python = python3; };
   wafHook = makeSetupHook {
     deps = [ python ];
-    substitutions = { inherit waf; };
+    substitutions = {
+      inherit waf;
+      crossFlags = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform)
+        ''--cross-compile "--cross-execute=${stdenv.targetPlatform.emulator pkgs}"'';
+    };
   } ../development/tools/build-managers/waf/setup-hook.sh;
 
   wakelan = callPackage ../tools/networking/wakelan { };
