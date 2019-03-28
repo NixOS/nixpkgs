@@ -10,8 +10,21 @@ wafConfigurePhase() {
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
-    local flagsArray=(
-        $configureFlags ${configureFlagsArray[@]}
+    local flagsArray=();
+    for flag in $configureFlags "${configureFlagsArray[@]}";
+    do
+        # waf does not support these flags, but they are "blindly" added by the
+        # pkgsStatic overlay, for example.
+        if [[ $flag != "--enable-static"
+           && $flag != "--disable-static"
+           && $flag != "--enable-shared"
+           && $flag != "--disable-shared" ]];
+        then
+            flagsArray=("${flagsArray[@]}" "$flag");
+        fi;
+    done
+    flagsArray=(
+        "${flagsArray[@]}"
         ${configureTargets:-configure}
     )
     echoCmd 'configure flags' "${flagsArray[@]}"
