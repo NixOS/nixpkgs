@@ -6552,7 +6552,7 @@ in
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
-  
+
   yarn2nix = throw "Use upstream https://github.com/moretea/yarn2nix";
   mkYarnPackage = yarn2nix;
 
@@ -11916,6 +11916,8 @@ in
   nix-plugins = callPackage ../development/libraries/nix-plugins {
     nix = nixUnstable;
   };
+
+  nika-fonts = callPackage ../data/fonts/nika-fonts { };
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
@@ -21658,7 +21660,7 @@ in
   igv = callPackage ../applications/science/biology/igv { };
 
   inormalize = callPackage ../applications/science/biology/inormalize { };
-  
+
   itsx = callPackage ../applications/science/biology/itsx { };
 
   iv = callPackage ../applications/science/biology/iv {
