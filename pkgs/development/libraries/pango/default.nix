@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   ninjaFlags = [ "--verbose" ];
 
   mesonFlags = [
-    "-Denable_docs=true"
+    "-Denable_docs=${if stdenv.isDarwin then "false" else "true"}"
   ];
 
   enableParallelBuilding = true;
