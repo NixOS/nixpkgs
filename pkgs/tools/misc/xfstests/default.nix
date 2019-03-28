@@ -22,7 +22,9 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
 
-  patchPhase = ''
+  patches =  [ ./xattr.patch ];
+
+  postPatch = ''
     # Patch the destination directory
     sed -i include/builddefs.in -e "s|^PKG_LIB_DIR\s*=.*|PKG_LIB_DIR=$out/lib/xfstests|"
 

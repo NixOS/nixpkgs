@@ -129,7 +129,6 @@
   ./programs/sysdig.nix
   ./programs/systemtap.nix
   ./programs/sway.nix
-  ./programs/sway-beta.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
   ./programs/udevil.nix
@@ -337,6 +336,7 @@
   ./services/logging/syslog-ng.nix
   ./services/logging/syslogd.nix
   ./services/mail/clamsmtp.nix
+  ./services/mail/davmail.nix
   ./services/mail/dkimproxy-out.nix
   ./services/mail/dovecot.nix
   ./services/mail/dspam.nix
@@ -573,6 +573,7 @@
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
   ./services/networking/kippo.nix
+  ./services/networking/knot.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix

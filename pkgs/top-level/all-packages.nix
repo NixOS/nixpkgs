@@ -1240,6 +1240,8 @@ in
 
   crudini = callPackage ../tools/misc/crudini { };
 
+  csvkit = callPackage ../tools/text/csvkit { };
+
   cucumber = callPackage ../development/tools/cucumber {};
 
   daemontools = callPackage ../tools/admin/daemontools { };
@@ -2503,6 +2505,18 @@ in
   elasticsearchPlugins = recurseIntoAttrs (
     callPackage ../servers/search/elasticsearch/plugins.nix { }
   );
+
+  elasticsearch-curator = with (python3.override {
+    packageOverrides = self: super: {
+      click = super.click.overridePythonAttrs (oldAttrs: rec {
+        version = "6.7";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
+        };
+      });
+    };
+  }).pkgs; toPythonApplication elasticsearch-curator;
 
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
@@ -4763,6 +4777,8 @@ in
   patchutils = callPackage ../tools/text/patchutils { };
 
   parted = callPackage ../tools/misc/parted { };
+
+  paulstretch = callPackage ../applications/audio/paulstretch { };
 
   pell = callPackage ../applications/misc/pell { };
 
@@ -7063,7 +7079,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc863.override {
+  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc864.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
   });
 
@@ -10966,9 +10982,7 @@ in
   libgudev = callPackage ../development/libraries/libgudev { };
 
   libguestfs-appliance = callPackage ../development/libraries/libguestfs/appliance.nix {};
-  libguestfs = callPackage ../development/libraries/libguestfs {
-    appliance = libguestfs-appliance;
-  };
+  libguestfs = callPackage ../development/libraries/libguestfs { };
 
   libhangul = callPackage ../development/libraries/libhangul { };
 
@@ -13299,14 +13313,20 @@ in
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo110Package = callPackage ../development/go-modules/generic {
+  buildGo110Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_10;
   };
-  buildGo111Package = callPackage ../development/go-modules/generic {
+  buildGo111Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_11;
   };
 
   buildGoPackage = buildGo111Package;
+
+  buildGo111Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_11;
+  };
+
+  buildGoModule = buildGo111Module;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -14052,7 +14072,6 @@ in
   spamassassin = callPackage ../servers/mail/spamassassin { };
 
   deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
-  deadpixi-sam = deadpixi-sam-unstable;
 
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
@@ -14640,13 +14659,6 @@ in
       ];
   };
 
-  linux_4_20 = callPackage ../os-specific/linux/kernel/linux-4.20.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.modinst_arg_list_too_long
-      ];
-  };
-
   linux_5_0 = callPackage ../os-specific/linux/kernel/linux-5.0.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -14831,7 +14843,7 @@ in
   });
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_4_14;
+  linuxPackages = linuxPackages_4_19;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
@@ -14845,7 +14857,6 @@ in
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
-  linuxPackages_4_20 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_20);
   linuxPackages_5_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_0);
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
@@ -17673,7 +17684,6 @@ in
   orbment = callPackage ../applications/window-managers/orbment { };
 
   sway = callPackage ../applications/window-managers/sway { };
-  sway-beta = callPackage ../applications/window-managers/sway/beta.nix { };
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
 
@@ -18025,8 +18035,6 @@ in
 
   caps = callPackage ../applications/audio/caps { };
 
-  lastwatch = callPackage ../applications/audio/lastwatch { };
-
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
 
   lbdb = callPackage ../tools/misc/lbdb { abook = null; gnupg = null; goobook = null; khard = null; mu = null; };
@@ -18077,7 +18085,6 @@ in
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     libreoffice = callPackage ../applications/office/libreoffice/still.nix
       (libreoffice-args // {
-          poppler = poppler_0_61;
       });
   });
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
@@ -20605,7 +20612,7 @@ in
 
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
-  duckmarines = callPackage ../games/duckmarines { love = love_0_9; };
+  duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
 
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
@@ -20903,7 +20910,9 @@ in
 
   pacvim = callPackage ../games/pacvim { };
 
-  performous = callPackage ../games/performous { };
+  performous = callPackage ../games/performous {
+    boost = boost166;
+  };
 
   pingus = callPackage ../games/pingus {};
 
@@ -22202,7 +22211,7 @@ in
 
   ### SCIENCE/ROBOTICS
 
-  apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
+  apmplanner2 = libsForQt59.callPackage ../applications/science/robotics/apmplanner2 { };
 
   ### MISC
 

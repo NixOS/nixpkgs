@@ -6,6 +6,9 @@
 
 , libiconv ? null, ncurses
 
+, # GHC can be built with system libffi or a bundled one.
+  libffi ? null
+
 , useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
@@ -65,6 +68,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
+    ++ [libffi]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
@@ -78,12 +82,12 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.6.2";
+  version = "8.6.4";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "1mbn3n2ynmpfpb7jfnhpzzli31qqxqyi8ws71blws3i846fq3ana";
+    sha256 = "0fihs1sr0hpk67dn9cmrsav13kkcp9hz8ggdqcrs80rj8vj0fpav";
   };
 
   enableParallelBuilding = true;
@@ -149,6 +153,7 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+  ] ++ stdenv.lib.optionals (libffi != null) ["--with-system-libffi" "--with-ffi-includes=${libffi.dev}/include" "--with-ffi-libraries=${libffi.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
@@ -168,7 +173,7 @@ stdenv.mkDerivation (rec {
   strictDeps = true;
 
   # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
-  dontAddExtraLibs = true;
+	dontAddExtraLibs = true;
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3 sphinx
@@ -213,7 +218,7 @@ stdenv.mkDerivation (rec {
     inherit enableShared;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc-8.6.2";
+    haskellCompilerName = "ghc-8.6.4";
   };
 
   meta = {

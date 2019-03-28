@@ -1155,8 +1155,6 @@ in {
 
   csscompressor = callPackage ../development/python-modules/csscompressor {};
 
-  csvkit =  callPackage ../development/python-modules/csvkit { };
-
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
   cupy = callPackage ../development/python-modules/cupy {
@@ -1284,11 +1282,16 @@ in {
 
   canmatrix = callPackage ../development/python-modules/canmatrix {};
 
-  cairocffi = callPackage ../development/python-modules/cairocffi {};
 
-  cairosvg1 = callPackage ../development/python-modules/cairosvg/1_x.nix {};
+  cairocffi = if isPy3k then
+    callPackage ../development/python-modules/cairocffi {}
+  else
+    callPackage ../development/python-modules/cairocffi/0_9.nix {};
 
-  cairosvg = callPackage ../development/python-modules/cairosvg {};
+  cairosvg = if isPy3k then
+    callPackage ../development/python-modules/cairosvg {}
+  else
+    callPackage ../development/python-modules/cairosvg/1_x.nix {};
 
   carrot = callPackage ../development/python-modules/carrot {};
 
@@ -2651,7 +2654,17 @@ in {
 
   google_api_core = callPackage ../development/python-modules/google_api_core { };
 
-  google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
+  google_api_python_client = let
+    google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
+  in if isPy3k then google_api_python_client else
+    # Python 2.7 support was deprecated but is still needed by weboob
+    google_api_python_client.overridePythonAttrs (old: rec {
+      version = "1.7.6";
+      src = old.src.override {
+        inherit version;
+        sha256 = "14w5sdrp0bk9n0r2lmpqmrbf2zclpfq6q7giyahnskkfzdkb165z";
+      };
+    });
 
   google_apputils = callPackage ../development/python-modules/google_apputils { };
 
@@ -3949,6 +3962,8 @@ in {
 
   retry_decorator = callPackage ../development/python-modules/retry_decorator { };
 
+  qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
+
   quamash = callPackage ../development/python-modules/quamash { };
 
   quandl = callPackage ../development/python-modules/quandl { };
@@ -4021,6 +4036,8 @@ in {
   resampy = callPackage ../development/python-modules/resampy { };
 
   restructuredtext_lint = callPackage ../development/python-modules/restructuredtext_lint { };
+
+  retry = callPackage ../development/python-modules/retry { };
 
   robomachine = callPackage ../development/python-modules/robomachine { };
 
@@ -4143,6 +4160,15 @@ in {
   spark_parser = callPackage ../development/python-modules/spark_parser { };
 
   sphinx = callPackage ../development/python-modules/sphinx { };
+
+  sphinx_1_7_9 = (callPackage ../development/python-modules/sphinx { })
+    .overridePythonAttrs (oldAttrs: rec {
+      version = "1.7.9";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "217a7705adcb573da5bbe1e0f5cab4fa0bd89fd9342c9159121746f593c2d5a4";
+      };
+    });
 
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
 

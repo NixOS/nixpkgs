@@ -1,0 +1,107 @@
+diff --git a/ltp/fsstress.c b/ltp/fsstress.c
+index 1bffa115..edbb3f2f 100644
+--- a/ltp/fsstress.c
++++ b/ltp/fsstress.c
+@@ -10,9 +10,6 @@
+ #include <stddef.h>
+ #include "global.h"
+ 
+-#ifdef HAVE_ATTR_XATTR_H
+-#include <attr/xattr.h>
+-#endif
+ #ifdef HAVE_ATTR_ATTRIBUTES_H
+ #include <attr/attributes.h>
+ #endif
+ diff --git a/src/t_immutable.c b/src/t_immutable.c
+index 9a4e0169..eadef78f 100644
+--- a/src/t_immutable.c
++++ b/src/t_immutable.c
+@@ -23,7 +23,7 @@
+ #include <grp.h>
+ #include <libgen.h>
+ #include <sys/acl.h>
+-#include <attr/xattr.h>
++#include <sys/xattr.h>
+ #include <linux/fs.h>
+ #include <linux/magic.h>
+ #include <xfs/xfs.h>
+ diff --git a/configure.ac b/configure.ac
+index 57092f1c..63ea032d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -51,7 +51,6 @@ AC_PACKAGE_NEED_XFSCTL_MACRO
+ AC_PACKAGE_NEED_XFS_HANDLE_H
+ 
+ AC_PACKAGE_NEED_ATTRLIST_LIBHANDLE
+-AC_PACKAGE_NEED_ATTR_XATTR_H
+ AC_PACKAGE_NEED_ATTRIBUTES_H
+ AC_PACKAGE_WANT_ATTRLIST_LIBATTR
+ AC_PACKAGE_NEED_GETXATTR_LIBATTR
+diff --git a/m4/package_attrdev.m4 b/m4/package_attrdev.m4
+index 12251ceb..9a82f241 100644
+--- a/m4/package_attrdev.m4
++++ b/m4/package_attrdev.m4
+@@ -1,14 +1,3 @@
+-AC_DEFUN([AC_PACKAGE_NEED_ATTR_XATTR_H],
+-  [ AC_CHECK_HEADERS([attr/xattr.h])
+-    if test "$ac_cv_header_attr_xattr_h" != "yes"; then
+-        echo
+-        echo 'FATAL ERROR: attr/xattr.h does not exist.'
+-        echo 'Install the extended attributes (attr) development package.'
+-        echo 'Alternatively, run "make install-dev" from the attr source.'
+-        exit 1
+-    fi
+-  ])
+-
+ AC_DEFUN([AC_PACKAGE_NEED_ATTR_ERROR_H],
+   [ AC_CHECK_HEADERS([attr/error_context.h])
+     if test "$ac_cv_header_attr_error_context_h" != "yes"; then
+@@ -37,20 +26,6 @@ AC_DEFUN([AC_PACKAGE_WANT_ATTRLIST_LIBATTR],
+     AC_SUBST(have_attr_list)
+   ])
+ 
+-AC_DEFUN([AC_PACKAGE_NEED_GETXATTR_LIBATTR],
+-  [ AC_CHECK_LIB(attr, getxattr,, [
+-        echo
+-        echo 'FATAL ERROR: could not find a valid Extended Attributes library.'
+-        echo 'Install the extended attributes (attr) development package.'
+-        echo 'Alternatively, run "make install-lib" from the attr source.'
+-        exit 1
+-    ])
+-    libattr="-lattr"
+-    test -f ${libexecdir}${libdirsuffix}/libattr.la && \
+-	libattr="${libexecdir}${libdirsuffix}/libattr.la"
+-    AC_SUBST(libattr)
+-  ])
+-
+ AC_DEFUN([AC_PACKAGE_NEED_ATTRGET_LIBATTR],
+   [ AC_CHECK_LIB(attr, attr_get,, [
+         echo
+diff --git a/configure.ac b/configure.ac
+index 63ea032d..aede4f59 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -53,7 +53,7 @@ AC_PACKAGE_NEED_XFS_HANDLE_H
+ AC_PACKAGE_NEED_ATTRLIST_LIBHANDLE
+ AC_PACKAGE_NEED_ATTRIBUTES_H
+ AC_PACKAGE_WANT_ATTRLIST_LIBATTR
+-AC_PACKAGE_NEED_GETXATTR_LIBATTR
++AC_PACKAGE_NEED_ATTRSET_LIBATTR
+ 
+ AC_PACKAGE_NEED_SYS_ACL_H
+ AC_PACKAGE_NEED_ACL_LIBACL_H
+diff --git a/m4/package_attrdev.m4 b/m4/package_attrdev.m4
+index 9a82f241..d994cfc2 100644
+--- a/m4/package_attrdev.m4
++++ b/m4/package_attrdev.m4
+@@ -26,8 +26,8 @@ AC_DEFUN([AC_PACKAGE_WANT_ATTRLIST_LIBATTR],
+     AC_SUBST(have_attr_list)
+   ])
+ 
+-AC_DEFUN([AC_PACKAGE_NEED_ATTRGET_LIBATTR],
+-  [ AC_CHECK_LIB(attr, attr_get,, [
++AC_DEFUN([AC_PACKAGE_NEED_ATTRSET_LIBATTR],
++  [ AC_CHECK_LIB(attr, attr_set,, [
+         echo
+         echo 'FATAL ERROR: could not find a valid Extended Attributes library.'
+         echo 'Install the extended attributes (attr) development package.'

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ boto3 pytest pytestcov packaging hypothesis ];
-  buildInputs = [ cython ];
+  nativeBuildInputs = [ cython gdal ];
   propagatedBuildInputs = [ gdal numpy attrs affine cligj click-plugins snuggs ];
 
   meta = with lib; {

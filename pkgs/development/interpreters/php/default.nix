@@ -248,24 +248,24 @@ let
 
 in {
   php71 = generic {
-    version = "7.1.26";
-    sha256 = "1riaaizyl0jv9p6b8sm8xxj8iqz4p4dddwdag03n1r67dfl1qdav";
+    version = "7.1.27";
+    sha256 = "0jzcyilvdy05w30vz5ln46lqm9hi36h5bibiwhl1b4a1179yrmys";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
   };
 
   php72 = generic {
-    version = "7.2.15";
-    sha256 = "0m05dmad138qfxcb2z4czf9pfv1746g9yzlch48kjikajhb7cgn9";
+    version = "7.2.16";
+    sha256 = "0f3zkv803banqdrhj5ixfg973fnrsvn4hcij2k6r91nmac0d22ic";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.2";
-    sha256 = "1p8amf91i6lrrphd6ypfh3kic64bpqf04dxp7dj1xxnjrgd50vwl";
+    version = "7.3.3";
+    sha256 = "1riw0a1mzc5ymaj02rni57l5pyfkxl0ygf1l39q7ksnz7aa9x5k1";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;

@@ -4,7 +4,7 @@
 
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
-  hsPkgs = haskell.packages.ghc863.override {
+  hsPkgs = haskell.packages.ghc864.override {
     overrides = self: super: with haskell.lib;
       let elmPkgs = {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
