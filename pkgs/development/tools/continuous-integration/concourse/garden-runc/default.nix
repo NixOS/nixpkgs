@@ -38,12 +38,13 @@ let
       buildFlags = [ "-tags daemon" ];
       dontInstall = true;
 
-      preBuild = ''
+      buildPhase = ''
         LINUX_ASSETS=$PWD/linux
         mkdir -p $LINUX_ASSETS/bin
         mkdir -p $LINUX_ASSETS/sbin
         export GOPATH=$GOPATH:$PWD
 
+        export HOME=$PWD
         go install code.cloudfoundry.org/guardian/cmd/dadoo
         cp bin/dadoo "$LINUX_ASSETS/bin"
 
@@ -57,7 +58,8 @@ let
 
         go-bindata -nomemcopy -pkg bindata -o src/code.cloudfoundry.org/guardian/bindata/bindata.go linux/...
         go build -tags daemon -o $out/bin/gdn code.cloudfoundry.org/guardian/cmd/gdn
-
+      '';
+      installPhase = ''
         cp -r $LINUX_ASSETS/. $out/assets
       '';
     };
