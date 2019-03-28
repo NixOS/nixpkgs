@@ -8129,6 +8129,7 @@ in
 
   polyml = callPackage ../development/compilers/polyml { };
   polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
+  polyml57 = callPackage ../development/compilers/polyml/5.7.nix { };
 
   pure = callPackage ../development/interpreters/pure {
     llvm = llvm_35;
@@ -22000,7 +22001,7 @@ in
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
 
   isabelle = callPackage ../applications/science/logic/isabelle {
-    polyml = stdenv.lib.overrideDerivation polyml (attrs: {
+    polyml = stdenv.lib.overrideDerivation polyml57 (attrs: {
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
     });
 
