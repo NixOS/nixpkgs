@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "matomo-${version}";
-  version = "3.9.0";
+  version = "3.9.1";
 
   src = fetchurl {
     url = "https://builds.matomo.org/matomo-${version}.tar.gz";
-    sha256 = "0bh89mc0y1b2y2nz0bjvx4c3z8mbb8irj8r4lbdqsa82znr9gk0b";
+    sha256 = "1y406dnwn4jyrjr2d5qfsg3b4v7nfbh09v74dm1vlcy3mkbhv2bp";
   };
 
   nativeBuildInputs = [ makeWrapper ];
