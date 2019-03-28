@@ -52,5 +52,17 @@ rec {
 
   ms-python.python = callPackage ./python {};
 
+  vscodevim.vim = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vim";
+      publisher = "vscodevim";
+      version = "1.2.0";
+      sha256 = "0c7nv3razc3xjjzmb0q9a89dgry77h79rbkmc8nbfpa1if7lsvcp";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   WakaTime.vscode-wakatime = callPackage ./wakatime {};
 }
