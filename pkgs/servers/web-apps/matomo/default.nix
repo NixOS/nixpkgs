@@ -5,9 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.9.0";
 
   src = fetchurl {
-    # TODO: As soon as the tarballs are renamed as well on future releases, this should be enabled again
-    # url = "https://builds.matomo.org/${name}.tar.gz";
-    url = "https://builds.matomo.org/piwik-${version}.tar.gz";
+    url = "https://builds.matomo.org/matomo-${version}.tar.gz";
     sha256 = "0bh89mc0y1b2y2nz0bjvx4c3z8mbb8irj8r4lbdqsa82znr9gk0b";
   };
 
