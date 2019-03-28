@@ -41,6 +41,8 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+  ninjaFlags = [ "--verbose" ];
+
   mesonFlags = [
     "-Denable_docs=true"
   ];
@@ -75,6 +77,6 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.darwin;
   };
 }
