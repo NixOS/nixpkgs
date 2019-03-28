@@ -997,6 +997,8 @@ in
     cudnn = cudnn_cudatoolkit_9_0;
   };
 
+  behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
+
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
   bliss = callPackage ../applications/science/math/bliss { };
@@ -6552,7 +6554,7 @@ in
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
-  
+
   yarn2nix = throw "Use upstream https://github.com/moretea/yarn2nix";
   mkYarnPackage = yarn2nix;
 
@@ -21658,7 +21660,7 @@ in
   igv = callPackage ../applications/science/biology/igv { };
 
   inormalize = callPackage ../applications/science/biology/inormalize { };
-  
+
   itsx = callPackage ../applications/science/biology/itsx { };
 
   iv = callPackage ../applications/science/biology/iv {
