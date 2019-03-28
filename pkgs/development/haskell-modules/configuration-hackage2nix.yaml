@@ -2820,6 +2820,7 @@ broken-packages:
   - applicative-parsec
   - applicative-quoters
   - applicative-splice
+  - approveapi
   - ApproxFun-hs
   - arb-fft
   - arbb-vm
@@ -3007,6 +3008,7 @@ broken-packages:
   - beam
   - beam-core
   - beam-migrate
+  - beam-mysql
   - beam-newtype-field
   - beam-postgres
   - beam-sqlite
@@ -3096,6 +3098,7 @@ broken-packages:
   - BiobaseBlast
   - BiobaseDotP
   - BiobaseEnsembl
+  - BiobaseFasta
   - BiobaseFR3D
   - BiobaseHTTP
   - BiobaseHTTPTools
@@ -3104,6 +3107,7 @@ broken-packages:
   - BiobaseNewick
   - BiobaseTrainingData
   - BiobaseTurner
+  - BiobaseTypes
   - BiobaseVienna
   - BiobaseXNA
   - biocore
@@ -3427,6 +3431,7 @@ broken-packages:
   - Checked
   - checked
   - checkmate
+  - chessIO
   - chevalier-common
   - chiasma
   - chitauri
@@ -5532,6 +5537,7 @@ broken-packages:
   - hist-pl-types
   - historian
   - hit-graph
+  - hit-on
   - HJavaScript
   - hjcase
   - hjs
@@ -6323,6 +6329,7 @@ broken-packages:
   - Ketchup
   - keter
   - kevin
+  - keycloak-hs
   - keyed
   - keyring
   - keysafe
@@ -6774,6 +6781,7 @@ broken-packages:
   - matplotlib
   - matrix-as-xyz
   - matsuri
+  - matterhorn
   - maude
   - maxent
   - maxent-learner-hw
@@ -6985,6 +6993,8 @@ broken-packages:
   - more-containers
   - morfette
   - morfeusz
+  - morley
+  - morley-prelude
   - morph
   - morphisms-functors
   - morphisms-functors-inventory
@@ -7179,6 +7189,7 @@ broken-packages:
   - neural
   - neural-network-blashs
   - neural-network-hmatrix
+  - newhope
   - newports
   - newt
   - newtype-deriving
@@ -7863,6 +7874,7 @@ broken-packages:
   - quickcheck-state-machine
   - quickcheck-state-machine-distributed
   - quickcheck-webdriver
+  - quickcheck-with-counterexamples
   - QuickCheckVariant
   - QuickPlot
   - quickpull
@@ -7996,6 +8008,7 @@ broken-packages:
   - reflection-extras
   - reflex
   - reflex-animation
+  - reflex-basic-host
   - reflex-dom-core
   - reflex-gloss
   - reflex-gloss-scene
@@ -8265,6 +8278,7 @@ broken-packages:
   - scholdoc-citeproc
   - scholdoc-texmath
   - scholdoc-types
+  - SciBaseTypes
   - science-constants-dimensional
   - scion
   - scion-browser
@@ -8531,6 +8545,7 @@ broken-packages:
   - skeletons
   - skell
   - skemmtun
+  - skews
   - skulk
   - skylark-client
   - skype4hs
@@ -8908,6 +8923,7 @@ broken-packages:
   - symantic
   - symantic-cli
   - symantic-grammar
+  - symantic-http-test
   - symantic-lib
   - symengine
   - symengine-hs
@@ -8950,6 +8966,7 @@ broken-packages:
   - Tablify
   - tabloid
   - tabs
+  - taffybar
   - tag-bits
   - tag-stream
   - tagged-exception-core
@@ -8974,6 +8991,7 @@ broken-packages:
   - tamper
   - Tape
   - target
+  - tart
   - task
   - task-distribution
   - taskell
@@ -8998,6 +9016,7 @@ broken-packages:
   - tcp-streams-openssl
   - tdd-util
   - tdigest-Chart
+  - tds
   - TeaHS
   - teams
   - teeth
@@ -9030,6 +9049,7 @@ broken-packages:
   - terminal-punch
   - terminal-text
   - termination-combinators
+  - termonad
   - termplot
   - terntup
   - terrahs
@@ -9201,6 +9221,7 @@ broken-packages:
   - traced
   - tracetree
   - tracker
+  - trackit
   - traction
   - tracy
   - traildb
@@ -9224,6 +9245,7 @@ broken-packages:
   - trasa
   - trasa-client
   - trasa-server
+  - trasa-th
   - travis
   - travis-meta-yaml
   - trawl
@@ -9754,6 +9776,7 @@ broken-packages:
   - xml-tydom-core
   - xml2json
   - xml2x
+  - xmlbf-xmlhtml
   - XmlHtmlWriter
   - XMLParser
   - xmltv
