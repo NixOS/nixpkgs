@@ -45,13 +45,18 @@ rec {
     , sha256
     , os ? "linux"
     , arch ? "amd64"
+
+      # This is used to set name to the pulled image
+    , finalImageName ? imageName
       # This used to set a tag to the pulled image
     , finalImageTag ? "latest"
-    , name ? fixName "docker-image-${imageName}-${finalImageTag}.tar"
+
+    , name ? fixName "docker-image-${finalImageName}-${finalImageTag}.tar"
     }:
 
     runCommand name {
-      inherit imageName imageDigest;
+      inherit imageDigest;
+      imageName = finalImageName;
       imageTag = finalImageTag;
       impureEnvVars = pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
       outputHashMode = "flat";
@@ -62,7 +67,7 @@ rec {
       SSL_CERT_FILE = "${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt";
 
       sourceURL = "docker://${imageName}@${imageDigest}";
-      destNameTag = "${imageName}:${finalImageTag}";
+      destNameTag = "${finalImageName}:${finalImageTag}";
     } ''
       skopeo --override-os ${os} --override-arch ${arch} copy "$sourceURL" "docker-archive://$out:$destNameTag"
     '';
