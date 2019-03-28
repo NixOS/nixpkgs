@@ -4536,6 +4536,8 @@ in
 
   nabi = callPackage ../tools/inputmethods/nabi { };
 
+  nahid-fonts = callPackage ../data/fonts/nahid-fonts { };
+
   namazu = callPackage ../tools/text/namazu { };
 
   nano-wallet = libsForQt5.callPackage ../applications/altcoins/nano-wallet { };
