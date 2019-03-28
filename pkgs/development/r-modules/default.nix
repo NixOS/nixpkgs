@@ -443,6 +443,11 @@ let
     Matrix = [ pkgs.libiconv ];
     mgcv = [ pkgs.libiconv ];
     igraph = [ pkgs.libiconv ];
+    ape = [ pkgs.libiconv ];
+    expm = [ pkgs.libiconv ];
+    mnormt = [ pkgs.libiconv ];
+    phangorn = [ pkgs.libiconv ];
+    quadprog = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
