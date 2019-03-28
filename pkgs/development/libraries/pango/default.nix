@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1lnxldmv1a12dq5h0dlq5jyzl4w75k76dp8cn360x2ijlm9w5h6j";
   };
 
-  outputs = [ "bin" "dev" "out" ] ++ optional !stdenv.isDarwin "devdoc";
+  outputs = [ "bin" "dev" "out" ] ++ optional (!stdenv.isDarwin) "devdoc";
 
   nativeBuildInputs = [
     meson ninja
