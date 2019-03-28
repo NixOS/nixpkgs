@@ -10,7 +10,7 @@ wafConfigurePhase() {
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
-    local flagsArray=();
+    local flagsArray=(@crossFlags@);
     for flag in $configureFlags "${configureFlagsArray[@]}";
     do
         if [[
