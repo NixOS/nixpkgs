@@ -2900,6 +2900,8 @@ in
 
   gandi-cli = callPackage ../tools/networking/gandi-cli { };
 
+  gandom-fonts = callPackage ../data/fonts/gandom-fonts { };
+
   garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
 
   garmintools = callPackage ../development/libraries/garmintools {};
@@ -6552,7 +6554,7 @@ in
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
-  
+
   yarn2nix = throw "Use upstream https://github.com/moretea/yarn2nix";
   mkYarnPackage = yarn2nix;
 
@@ -21658,7 +21660,7 @@ in
   igv = callPackage ../applications/science/biology/igv { };
 
   inormalize = callPackage ../applications/science/biology/inormalize { };
-  
+
   itsx = callPackage ../applications/science/biology/itsx { };
 
   iv = callPackage ../applications/science/biology/iv {
