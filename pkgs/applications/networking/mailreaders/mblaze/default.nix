@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libiconv }:
+{ stdenv, fetchFromGitHub, fetchpatch, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "mblaze-${version}";
@@ -12,6 +12,13 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "11x548dl2jy9cmgsakqrzfdq166whhk4ja7zkiaxrapkjmkf6pbh";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/leahneukirchen/mblaze/commit/53151f4f890f302291eb8d3375dec4f8ecb66ed7.patch";
+      sha256 = "1mcyrh053iiyzdhgm09g5h3a77np496whnc7jr4agpk1nkbcpfxc";
+    })
+  ];
 
   makeFlags = "PREFIX=$(out)";
 
