@@ -2,7 +2,7 @@
 , perl, gmp, autogen, libidn, p11-kit, libiconv
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
-, unbound, dns-root-data, gettext
+, unbound, dns-root-data, gettext, Security
 
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
@@ -44,6 +44,7 @@ stdenv.mkDerivation {
   buildInputs = [ lzo lzip libtasn1 libidn p11-kit zlib gmp autogen libunistring unbound gettext libiconv ]
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile
+    ++ lib.optional stdenv.isDarwin Security
     ++ buildInputs;
 
   nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs
