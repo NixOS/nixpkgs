@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, boost, cairo, gettext, glibmm, gtk3, gtkmm3
 , libjack2, libsigcxx, libxmlxx, makeWrapper, mlt-qt5, pango, pkgconfig
-, imagemagick, intltool, autoreconfHook, which, defaultIconTheme
+, imagemagick, intltool, autoreconfHook, which, gnome3
 }:
 
 let
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ETL boost cairo glibmm gtk3 gtkmm3 imagemagick intltool
     libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5
-    synfig which defaultIconTheme
+    synfig which gnome3.adwaita-icon-theme
   ];
 
   postInstall = ''

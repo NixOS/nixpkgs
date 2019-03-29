@@ -23,13 +23,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "pulseaudio-modules-bt-${version}";
-  version = "unstable-2018-11-01";
+  version = "unstable-2019-03-15";
 
   src = fetchFromGitHub {
     owner = "EHfive";
     repo = "pulseaudio-modules-bt";
-    rev = "a2f62fcaa702bb883c07d074ebca8d7135520ab8";
-    sha256 = "1fhg7q9064zikhy0xxldn4fvh49pc47mgikcbd9yhsk66gcn6zj3";
+    rev = "0b397c26eb4fd5dc611bd3e2baa79776de646856";
+    sha256 = "09q0xh9iz0crik6xpln9lijirf62aljxa1jrds1i1zgflyfidd0z";
     fetchSubmodules = true;
   };
 

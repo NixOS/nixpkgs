@@ -19,21 +19,21 @@ let
         description = "The block device is backed by an encrypted one, adds this device as a initrd luks entry.";
       };
 
-      options.blkDev = mkOption {
+      blkDev = mkOption {
         default = null;
         example = "/dev/sda1";
         type = types.nullOr types.str;
         description = "Location of the backing encrypted device.";
       };
 
-      options.label = mkOption {
+      label = mkOption {
         default = null;
         example = "rootfs";
         type = types.nullOr types.str;
         description = "Label of the unlocked encrypted device. Set <literal>fileSystems.&lt;name?&gt;.device</literal> to <literal>/dev/mapper/&lt;label&gt;</literal> to mount the unlocked device.";
       };
 
-      options.keyFile = mkOption {
+      keyFile = mkOption {
         default = null;
         example = "/mnt-root/root/.swapkey";
         type = types.nullOr types.str;

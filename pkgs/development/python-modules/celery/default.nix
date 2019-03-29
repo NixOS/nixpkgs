@@ -1,32 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, iana-etc, libredirect,
-  pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
+{ stdenv, buildPythonPackage, fetchPypi, isPy37, fetchpatch, iana-etc, libredirect
+, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 
-let
-
-  # Needed for celery
-  pytest_32 = pytest.overridePythonAttrs( oldAttrs: rec {
-    version = "3.2.5";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "6d5bd4f7113b444c55a3bbb5c738a3dd80d43563d063fc42dcb0aaefbdd78b81";
-    };
-  });
-
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "celery";
-  version = "4.2.1";
+  version = "4.3.0rc1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y66rz7z8dfcgs3s0qxmdddlaq57bzbgxgfz896nbp14grkv9nkp";
-  };
-
-  # Skip test_RedisBackend.test_timeouts_in_url_coerced
-  # See https://github.com/celery/celery/pull/4847
-  patches = fetchpatch {
-    url = https://github.com/celery/celery/commit/b2668607c909c61becd151905b4525190c19ff4a.patch;
-    sha256 = "11w0z2ycyh8kccj4y69zb7bxppiipcwwigg6jn1q9yrcsvz170jq";
+    sha256 = "1jmg47l0b3bnwmg44x48bwziwyk6xqs1y5plvr99a3ikz1l807yf";
   };
 
   # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
@@ -38,7 +20,7 @@ in buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  checkInputs = [ pytest_32 case ];
+  checkInputs = [ case pytest boto3 moto ];
   propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
 
   meta = with stdenv.lib; {

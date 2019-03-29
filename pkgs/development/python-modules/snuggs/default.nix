@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "snuggs";
-  version = "1.4.2";
+  version = "1.4.3";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = pname;
     rev = version;
-    sha256 = "1q6jqwai4qgghdjgwhyx3yz8mlrm7p1vvnwc339lfl028hrgb5kb";
+    sha256 = "198nbgkhlg4ik2i1r2cp900iqlairh2hnii2y8v5wy1qk3rv0s9g";
   };
 
   propagatedBuildInputs = [ click numpy pyparsing ];

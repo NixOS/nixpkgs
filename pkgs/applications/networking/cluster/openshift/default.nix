@@ -33,8 +33,6 @@ in buildGoPackage rec {
 
   goPackagePath = "github.com/openshift/origin";
 
-  # go > 1.10
-  # [FATAL] [14:44:02+0000] Please install Go version go or use PERMISSIVE_GO=y to bypass this check.
   buildInputs = [ which rsync go-bindata kerberos clang ];
 
   patchPhase = ''
@@ -83,6 +81,6 @@ in buildGoPackage rec {
     license = licenses.asl20;
     homepage = http://www.openshift.org;
     maintainers = with maintainers; [offline bachp moretea];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

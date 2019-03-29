@@ -10,12 +10,12 @@ with stdenv.lib;
 
 python3Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "2.0.0";
+  version = "2.1.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "1b48xbrx99mfiv80c60k3ydzkpcpbq57c8h8dl0gnffmnzbs8vzb";
+    sha256 = "1m038kyngmxlgz91c7z8g73lb2wy0ajyah871a3g3wb5cnd0dsil";
   };
 
   nativeBuildInputs = [
@@ -23,10 +23,11 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
   ];
 
-  buildInputs =
-    [ libvirt-glib vte dconf gtk-vnc gnome3.defaultIconTheme avahi
-      gsettings-desktop-schemas libosinfo gtk3
-    ] ++ optional spiceSupport spice-gtk;
+  buildInputs = [
+    libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
+    gsettings-desktop-schemas libosinfo gtk3
+    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
+  ] ++ optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python3Packages;
     [

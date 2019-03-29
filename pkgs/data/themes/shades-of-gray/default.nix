@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gtk_engines, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "shades-of-gray-theme-${version}";
-  version = "1.1.4";
+  pname = "shades-of-gray-theme";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "WernerFP";
-    repo = "Shades-of-gray-theme";
+    repo = pname;
     rev = version;
-    sha256 = "1i5mra1ib3c8xqnhwjh8yzjcdnhvqdmccw5x52sfh9xq797px39l";
+    sha256 = "0jp4p0wdmac5dkz1hqhzqmn59zgxqd77gn0napy3wbqr5yc60pp1";
   };
 
   buildInputs = [ gtk_engines ];

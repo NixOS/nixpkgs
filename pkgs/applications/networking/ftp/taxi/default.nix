@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, vala, pkgconfig, meson, ninja, python3, granite
-, gtk3, gnome3, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3
+, gtk3, libgee, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "taxi";
@@ -15,18 +15,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    pantheon.vala
     gobject-introspection
     meson
     ninja
     pkgconfig
     python3
-    vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome3.libgee
-    granite
+    pantheon.granite
+    libgee
     gtk3
     libsecret
     libsoup

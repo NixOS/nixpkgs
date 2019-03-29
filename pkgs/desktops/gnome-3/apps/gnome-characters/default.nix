@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, glib, gtk3, pango, wrapGAppsHook, python3
-, gobject-introspection, gjs, libunistring }:
+, gobject-introspection, gjs, libunistring, gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop }:
 
 stdenv.mkDerivation rec {
   name = "gnome-characters-${version}";
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 gobject-introspection ];
   buildInputs = [
-    glib gtk3 gjs pango gnome3.gsettings-desktop-schemas
-    gnome3.defaultIconTheme libunistring
+    glib gtk3 gjs pango gsettings-desktop-schemas
+    adwaita-icon-theme libunistring
     # typelib
-    gnome3.gnome-desktop
+    gnome-desktop
   ];
 
   mesonFlags = [

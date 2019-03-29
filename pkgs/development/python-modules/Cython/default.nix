@@ -26,11 +26,11 @@ let
 
 in buildPythonPackage rec {
   pname = "Cython";
-  version = "0.29.1";
+  version = "0.29.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15zv9c4ami9hzya28wz1shqljbbk5sxdvqbjxqnf15ssk137daqq";
+    sha256 = "9d5290d749099a8e446422adfb0aa2142c711284800fb1eb70f595101e32cbf1";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,12 @@ in buildPythonPackage rec {
         ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 
-  doCheck = !stdenv.isDarwin;
+  # https://github.com/cython/cython/issues/2785
+  # Temporary solution
+  doCheck = false;
+
+#   doCheck = !stdenv.isDarwin;
+
 
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";

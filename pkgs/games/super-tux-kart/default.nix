@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchsvn, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, fetchsvn, fetchpatch, cmake, pkgconfig
 , openal, freealut, libGLU_combined, libvorbis, libogg, gettext, curl, freetype
 , fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr }:
 
@@ -32,6 +32,14 @@ in stdenv.mkDerivation rec {
     libX11 libXrandr
     openal freealut libGLU_combined libvorbis libogg zlib freetype
     curl fribidi bluez libjpeg libpng
+  ];
+
+  # https://github.com/supertuxkart/stk-code/issues/3557#issuecomment-440794379
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/supertuxkart/stk-code/commit/3a3953f38c3555e87f3608d0291dbfccf34e9775.patch";
+      sha256 = "13mr5pwf45g7frpxzlxiyiq39qi3z9spd7l6gi8i3dr3li9wrb1k";
+    })
   ];
 
   enableParallelBuilding = true;

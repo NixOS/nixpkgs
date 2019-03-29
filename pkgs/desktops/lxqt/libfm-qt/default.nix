@@ -5,15 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "libfm-qt";
-  version = "0.13.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1g8j1lw74qvagqhqsx45b290fjwh3jfl3i0366m0w4la03v0rw5j";
+    sha256 = "00rn5i16h659zyp1dx213nc3jz7rx9phiw71zf6nspxzxsb8w2sc";
   };
 
   nativeBuildInputs = [
@@ -33,8 +32,6 @@ stdenv.mkDerivation rec {
     libfm
     menu-cache
   ];
-
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
   meta = with stdenv.lib; {
     description = "Core library of PCManFM-Qt (Qt binding for libfm)";

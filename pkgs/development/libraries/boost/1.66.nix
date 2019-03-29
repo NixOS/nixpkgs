@@ -1,7 +1,7 @@
 { stdenv, callPackage, fetchurl, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "1.66_0";
+  version = "1.66.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/boost/boost_1_66_0.tar.bz2";

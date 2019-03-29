@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     # change sudoers dir from /var/google-sudoers.d to /run/google-sudoers.d (managed through systemd-tmpfiles)
     substituteInPlace pam_module/pam_oslogin_admin.cc --replace /var/google-sudoers.d /run/google-sudoers.d
     # fix "User foo not allowed because shell /bin/bash does not exist"
-    substituteInPlace utils/oslogin_utils.cc --replace /bin/bash /bin/sh
+    substituteInPlace utils/oslogin_utils.cc --replace /bin/bash ${stdenv.shell}
   '';
 
   buildInputs = [ curl.dev pam ];

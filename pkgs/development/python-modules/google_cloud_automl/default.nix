@@ -4,18 +4,19 @@
 , enum34
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "793d463f78d22a822196cb3e34b247fbdba07eeae15ceadb911f5ccecd843f87";
+    sha256 = "32890d1e043eb09a86ff1839096dfb49051cd436bdf1a1708299484cfd06db1a";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 google_api_core ];
 
   checkPhase = ''

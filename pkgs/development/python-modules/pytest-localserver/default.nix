@@ -9,18 +9,18 @@
 
 buildPythonPackage rec {
   pname = "pytest-localserver";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0615b1698bdd2a1e6e396caf2f496020f4f69bccc0518df5050aeb02800f7c07";
+    sha256 = "3a5427909d1dfda10772c1bae4b9803679c0a8f04adb66c338ac607773bfefc2";
   };
 
   propagatedBuildInputs = [ werkzeug ];
-  buildInputs = [ pytest six requests ];
+  checkInputs = [ pytest six requests ];
 
   checkPhase = ''
-    py.test
+    pytest
   '';
 
   meta = {

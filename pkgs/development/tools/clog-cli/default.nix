@@ -19,7 +19,7 @@ buildRustPackage rec {
     description = "Generate changelogs from local git metadata";
     homepage = https://github.com/clog-tool/clog-cli;
     license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [stdenv.lib.maintainers.nthorne];
   };
 }

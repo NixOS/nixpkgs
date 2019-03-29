@@ -15,9 +15,9 @@ preInstallPhases+=" glibPreInstallPhase"
 
 glibPreFixupPhase() {
     # Move gschemas in case the install flag didn't help
-    if [ -d "${!outputLib}/share/glib-2.0/schemas" ]; then
+    if [ -d "$prefix/share/glib-2.0/schemas" ]; then
         mkdir -p "${!outputLib}/share/gsettings-schemas/$name/glib-2.0"
-        mv "${!outputLib}/share/glib-2.0/schemas" "${!outputLib}/share/gsettings-schemas/$name/glib-2.0/"
+        mv "$prefix/share/glib-2.0/schemas" "${!outputLib}/share/gsettings-schemas/$name/glib-2.0/"
     fi
 
     addToSearchPath GSETTINGS_SCHEMAS_PATH "${!outputLib}/share/gsettings-schemas/$name"

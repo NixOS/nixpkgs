@@ -1,6 +1,6 @@
-{ bdbSupport ? false # build support for Berkeley DB repositories
+{ bdbSupport ? true # build support for Berkeley DB repositories
 , httpServer ? false # build Apache DAV module
-, httpSupport ? false # client must support http
+, httpSupport ? true # client must support http
 , pythonBindings ? false
 , perlBindings ? false
 , javahlBindings ? false
@@ -121,8 +121,8 @@ in {
   };
 
   subversion_1_10 = common {
-    version = "1.10.3";
-    sha256 = "1z6r3n91a4znsh68rl3jisfr7k4faymhbpalmmvsmvsap34al3cz";
+    version = "1.10.4";
+    sha256 = "18c1vdq32nil76w678lxmp73jsbqha3dmzgmfrj76nc0xjmywql2";
     extraBuildInputs = [ lz4 utf8proc ];
   };
 

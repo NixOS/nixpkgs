@@ -64,10 +64,12 @@ in rec {
         #(all nixos.tests.containers)
         (all nixos.tests.containers-imperative)
         (all nixos.tests.containers-ipv4)
+        (all nixos.tests.containers-ipv6)
         nixos.tests.chromium.x86_64-linux or []
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (except ["aarch64-linux"] nixos.tests.gnome3)
+        (except ["aarch64-linux"] nixos.tests.pantheon)
         nixos.tests.installer.zfsroot.x86_64-linux or [] # ZFS is 64bit only
         (except ["aarch64-linux"] nixos.tests.installer.lvm)
         (except ["aarch64-linux"] nixos.tests.installer.luksroot)

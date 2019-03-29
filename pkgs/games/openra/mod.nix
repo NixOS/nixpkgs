@@ -67,7 +67,7 @@ in stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
 
     make -C ${engineSourceName} install-engine install-common-mod-files DATA_INSTALL_DIR=$out/lib/${pname}
 
-    cp -r ${engineSourceName}/mods/{${concatStringsSep "," ([ "common" "modcontent" ] ++ engine.mods)}} mods/${mod.name} \
+    cp -r ${engineSourceName}/mods/{${concatStringsSep "," ([ "common" "modcontent" ] ++ engine.mods)}} mods/* \
       $out/lib/${pname}/mods/
 
     substitute ${./mod-launch-game.sh} $out/lib/${pname}/launch-game.sh \
@@ -81,7 +81,8 @@ in stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
 
     substitute ${./openra-mod.desktop} $(mkdirp $out/share/applications)/${pname}.desktop \
       --subst-var-by name ${escapeShellArg mod.name} \
-      --subst-var-by title ${escapeShellArg mod.title}
+      --subst-var-by title ${escapeShellArg mod.title} \
+      --subst-var-by description ${escapeShellArg mod.description}
 
     cp README.md $(mkdirp $out/share/doc/packages/${pname})/README.md
 

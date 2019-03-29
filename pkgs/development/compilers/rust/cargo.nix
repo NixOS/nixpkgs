@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
   inherit version src patches;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
-  cargoVendorDir = "src/vendor";
-  preBuild = "cd src; pushd tools/cargo";
+  cargoVendorDir = "vendor";
+  preBuild = "pushd src/tools/cargo";
   postBuild = "popd";
 
   passthru.rustc = rustc;

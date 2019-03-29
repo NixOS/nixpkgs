@@ -10,13 +10,13 @@
 
 buildBazelPackage rec {
   name = "bazel-watcher-${version}";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "0yphks1qlp3xcbq5mg95lxrhl3q8pza5g3f9i2j6y7dsfz0s0l4v";
+    sha256 = "1gjbv67ydyb0mafpp59qr9n8f8vva2mwhgan6lxxl0i9yfx7qc6p";
   };
 
   nativeBuildInputs = [ go git python ];
@@ -29,9 +29,6 @@ buildBazelPackage rec {
 
       # tell rules_go to use the Go binary found in the PATH
       sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
-
-      # tell rules_go to invoke GIT with custom CAINFO path
-      export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
 
     preInstall = ''
@@ -52,7 +49,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "14k1cpw4h78c2gk294xzq9a9nv09yabdrahbzgin8xizbgdxn1q8";
+    sha256 = "0p6yarz4wlb6h33n4slkczkdkaa93zc9jx55h8wl9vv81ahp0md5";
   };
 
   buildAttrs = {

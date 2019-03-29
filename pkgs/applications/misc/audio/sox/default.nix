@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl
+{ config, lib, stdenv, fetchurl, CoreAudio
 , enableAlsa ? true, alsaLib ? null
 , enableLibao ? true, libao ? null
-, enableLame ? false, lame ? null
+, enableLame ? config.sox.enableLame or false, lame ? null
 , enableLibmad ? true, libmad ? null
 , enableLibogg ? true, libogg ? null, libvorbis ? null
 , enableFLAC ? true, flac ? null
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     optional enablePNG libpng ++
     optional enableLibsndfile libsndfile ++
     optionals enableAMR [ amrnb amrwb ] ++
-    optional enableLibpulseaudio libpulseaudio;
+    optional enableLibpulseaudio libpulseaudio ++
+    optional (stdenv.isDarwin) CoreAudio;
 
   meta = {
     description = "Sample Rate Converter for audio";

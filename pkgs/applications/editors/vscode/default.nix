@@ -1,39 +1,33 @@
-{ stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
-  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret,
-  isInsiders ? false }:
+{ stdenv, lib, fetchurl, makeDesktopItem
+, unzip, libsecret, libXScrnSaver, wrapGAppsHook
+, gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
+, systemd, fontconfig
+, isInsiders ? false }:
 
 let
   executableName = "code" + lib.optionalString isInsiders "-insiders";
   longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
   shortName = "Code" + lib.optionalString isInsiders " - Insiders";
 
+  inherit (stdenv.hostPlatform) system;
+
   plat = {
     "i686-linux" = "linux-ia32";
     "x86_64-linux" = "linux-x64";
     "x86_64-darwin" = "darwin";
-  }.${stdenv.hostPlatform.system};
+  }.${system};
 
   sha256 = {
-    "i686-linux" = "1g73fay6fxlqhalkqq5m6rjbp68k9npk0rrxrkhdj8mw0cz74dpm";
-    "x86_64-linux" = "0mil8n5i2ajdyrgq862wq59ajy2122rvvn7m7mxq4ab92sk26rix";
-    "x86_64-darwin" = "07r52scs1sgafzxqal39r8vf9p9qqvwwx8f6z09gqcf6clr6k48q";
-  }.${stdenv.hostPlatform.system};
+    "i686-linux" = "1qll0hyqyn3vb0v35h9y8rk4l3r6zzc5bkra6pb23bnr4bna4y80";
+    "x86_64-linux" = "1sfvv4g7kmvabqxasil41gasr7hsmgf8wwc4dl1940pb7x19fllq";
+    "x86_64-darwin" = "0gjdppr59pyb2wawvf7yyk7357a5naxga74zf9gc7d9s1fz78hls";
+  }.${system};
 
-  archive_fmt = if stdenv.hostPlatform.system == "x86_64-darwin" then "zip" else "tar.gz";
-
-  rpath = lib.concatStringsSep ":" [
-    atomEnv.libPath
-    "${lib.makeLibraryPath [gtk2]}"
-    "${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0"
-    "${lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1"
-    "${lib.makeLibraryPath [libxkbfile]}/libxkbfile.so.1"
-    "$out/lib/vscode"
-  ];
-
+  archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
-    version = "1.30.2";
+    version = "1.32.3";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
@@ -83,12 +77,18 @@ in
       '';
     };
 
-    buildInputs = if stdenv.hostPlatform.system == "x86_64-darwin"
-      then [ unzip libXScrnSaver libsecret ]
-      else [ wrapGAppsHook libXScrnSaver libxkbfile libsecret ];
+    buildInputs = (if stdenv.isDarwin
+      then [ unzip ]
+      else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
+        ++ [ libsecret libXScrnSaver ];
+
+    nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+
+    dontBuild = true;
+    dontConfigure = true;
 
     installPhase =
-      if stdenv.hostPlatform.system == "x86_64-darwin" then ''
+      if system == "x86_64-darwin" then ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
         ln -s $out/lib/vscode/Contents/Resources/app/bin/${executableName} $out/bin
@@ -110,22 +110,8 @@ in
         cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
       '';
 
-    postFixup = lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux") ''
-      patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${rpath}" \
-        $out/lib/vscode/${executableName}
-
-      patchelf \
-        --set-rpath "${rpath}" \
-        $out/lib/vscode/resources/app/node_modules.asar.unpacked/keytar/build/Release/keytar.node
-
-      patchelf \
-        --set-rpath "${rpath}" \
-        "$out/lib/vscode/resources/app/node_modules.asar.unpacked/native-keymap/build/Release/\
-      keymapping.node"
-
-      ln -s ${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0 $out/lib/vscode/libsecret-1.so.0
+    preFixup = lib.optionalString (system == "i686-linux" || system == "x86_64-linux") ''
+      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd fontconfig ]})
     '';
 
     meta = with stdenv.lib; {
@@ -140,9 +126,10 @@ in
         and code refactoring. It is also customizable, so users can change the
         editor's theme, keyboard shortcuts, and preferences
       '';
-      homepage = http://code.visualstudio.com/;
+      homepage = https://code.visualstudio.com/;
       downloadPage = https://code.visualstudio.com/Updates;
       license = licenses.unfree;
+      maintainers = with maintainers; [ eadwu ];
       platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     };
   }

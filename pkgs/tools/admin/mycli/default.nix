@@ -14,6 +14,8 @@ buildPythonApplication rec {
     sha256 = "0x5vzl4vvirqy03fnjwkamhzrqkknlajamwz1rmbnqh4bfmijh9m";
   };
 
+  patches = [ ./fix-tests.patch ];
+
   propagatedBuildInputs = [
     pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
   ];

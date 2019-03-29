@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
+{ config, stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
 , libX11, xorgproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
@@ -7,7 +7,7 @@
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python2 ? null
 , extensionPack ? null, fakeroot ? null
-, pulseSupport ? false, libpulseaudio ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
@@ -19,9 +19,10 @@ with stdenv.lib;
 let
   python = python2;
   buildType = "release";
-  # Remember to change the extpackRev and version in extpack.nix as well.
-  main = "1m48ywa913g6zgqslvrihxs2fbr4gmljypbdpjma2hck6isyi02m";
-  version = "5.2.22";
+  # Remember to change the extpackRev and version in extpack.nix and
+  # guest-additions/default.nix as well.
+  main = "0rylf1g0vmv0q19iyvyq4dj5h9yvyqqnmmqaqrx93qrv8s1ybssd";
+  version = "5.2.26";
 in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 

@@ -22,7 +22,9 @@
   referencesByPopularity,
   writeScript,
   writeText,
-  closureInfo
+  closureInfo,
+  substituteAll,
+  runtimeShell
 }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
@@ -43,13 +45,18 @@ rec {
     , sha256
     , os ? "linux"
     , arch ? "amd64"
+
+      # This is used to set name to the pulled image
+    , finalImageName ? imageName
       # This used to set a tag to the pulled image
     , finalImageTag ? "latest"
-    , name ? fixName "docker-image-${imageName}-${finalImageTag}.tar"
+
+    , name ? fixName "docker-image-${finalImageName}-${finalImageTag}.tar"
     }:
 
     runCommand name {
-      inherit imageName imageDigest;
+      inherit imageDigest;
+      imageName = finalImageName;
       imageTag = finalImageTag;
       impureEnvVars = pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
       outputHashMode = "flat";
@@ -60,7 +67,7 @@ rec {
       SSL_CERT_FILE = "${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt";
 
       sourceURL = "docker://${imageName}@${imageDigest}";
-      destNameTag = "${imageName}:${finalImageTag}";
+      destNameTag = "${finalImageName}:${finalImageTag}";
     } ''
       skopeo --override-os ${os} --override-arch ${arch} copy "$sourceURL" "docker-archive://$out:$destNameTag"
     '';
@@ -75,6 +82,7 @@ rec {
 
     cp ${./tarsum.go} tarsum.go
     export GOPATH=$(pwd)
+    export GOCACHE="$TMPDIR/go-cache"
     mkdir -p src/github.com/docker/docker/pkg
     ln -sT ${docker.src}/components/engine/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
     go build
@@ -118,7 +126,7 @@ rec {
     export PATH=${shadow}/bin:$PATH
     mkdir -p /etc/pam.d
     if [[ ! -f /etc/passwd ]]; then
-      echo "root:x:0:0::/root:${stdenv.shell}" > /etc/passwd
+      echo "root:x:0:0::/root:${runtimeShell}" > /etc/passwd
       echo "root:!x:::::::" > /etc/shadow
     fi
     if [[ ! -f /etc/group ]]; then
@@ -197,7 +205,7 @@ rec {
       # Unpack all of the parent layers into the image.
       lowerdir=""
       extractionID=0
-      for layerTar in $(cat layer-list); do
+      for layerTar in $(tac layer-list); do
         echo "Unpacking layer $layerTar"
         extractionID=$((extractionID + 1))
 
@@ -260,7 +268,7 @@ rec {
   # things like `ls` or `echo` will be missing.
   shellScript = name: text:
     writeScript name ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       set -e
       export PATH=${coreutils}/bin:/bin
       ${text}
@@ -279,6 +287,13 @@ rec {
     # of room for extension
     maxLayers ? 24
   }:
+    let
+      storePathToLayer = substituteAll
+      { inherit (stdenv) shell;
+        isExecutable = true;
+        src = ./store-path-to-layer.sh;
+      };
+    in
     runCommand "${name}-granular-docker-layers" {
       inherit maxLayers;
       paths = referencesByPopularity closure;
@@ -298,9 +313,9 @@ rec {
       # following head and tail call lines, double-check that your
       # code behaves properly when the number of layers equals:
       #      maxLayers-1, maxLayers, and maxLayers+1
-      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${./store-path-to-layer.sh}
+      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
       if [ $(cat $paths | wc -l) -ge $maxLayers ]; then
-        tail -n+$maxLayers $paths | xargs ${./store-path-to-layer.sh} $maxLayers
+        tail -n+$maxLayers $paths | xargs ${storePathToLayer} $maxLayers
       fi
 
       echo "Finished building layer '$name'"
@@ -334,7 +349,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tar -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
+      tar --transform='s|^\./||' -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."
@@ -776,7 +791,7 @@ rec {
         imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
 
-        for layerTar in $(cat ./layer-list); do
+        for layerTar in $(tac ./layer-list); do
           layerChecksum=$(sha256sum image/$layerTar | cut -d ' ' -f1)
           imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"$(jq -r .created ${baseJson})\"}] + .")
           imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")

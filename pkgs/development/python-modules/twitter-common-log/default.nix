@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname   = "twitter.common.log";
-  version = "0.3.9";
+  version = "0.3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bdzbxx2bxwpf57xaxfz1nblzgfvhlidz8xqd7s84c62r3prh02v";
+    sha256 = "81af4b0f51f3fb589f39b410d7031da6792e0ae650a45e9207a25a52a343a555";
   };
 
   propagatedBuildInputs = [ twitter-common-options twitter-common-dirutil ];

@@ -1,39 +1,40 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
-, cheroot, contextlib2, portend, routes, six
-, setuptools_scm, zc_lockfile
-, backports_unittest-mock, objgraph, pathpy, pytest, pytestcov
-, backports_functools_lru_cache, requests_toolbelt
+, setuptools_scm
+, cheroot, portend, more-itertools, zc_lockfile, routes
+, objgraph, pytest, pytestcov, pathpy, requests_toolbelt, pytest-services
 }:
 
-let
-  srcInfo = if isPy3k then {
-    version = "18.0.1";
-    sha256 = "3002fc47b982c3df4d08dbe5996b093fd73f85b650ab8df19e8b9b95f5c00520";
-  } else {
-    version = "17.4.1";
-    sha256 = "1kl17anzz535jgkn9qcy0c2m0zlafph0iv7ph3bb9mfrs2bgvagv";
-  };
-in buildPythonPackage rec {
-  pname = "CherryPy";
-  inherit (srcInfo) version;
+buildPythonPackage rec {
+  pname = "cherrypy";
+  version = "18.1.1";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
-    inherit pname;
-    inherit (srcInfo) version sha256;
+    pname = "CherryPy";
+    inherit version;
+    sha256 = "6585c19b5e4faffa3613b5bf02c6a27dcc4c69a30d302aba819639a2af6fa48b";
   };
 
-  propagatedBuildInputs = [ cheroot contextlib2 portend routes six zc_lockfile ];
+  propagatedBuildInputs = [
+    # required
+    cheroot portend more-itertools zc_lockfile
+    # optional
+    routes
+  ];
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
 
-  checkInputs = [ backports_unittest-mock objgraph pathpy pytest pytestcov backports_functools_lru_cache requests_toolbelt ];
+  checkInputs = [
+    objgraph pytest pytestcov pathpy requests_toolbelt pytest-services
+  ];
 
   checkPhase = ''
-    LANG=en_US.UTF-8 pytest
+    pytest
   '';
 
   meta = with lib; {
-    homepage = "http://www.cherrypy.org";
+    homepage = https://www.cherrypy.org;
     description = "A pythonic, object-oriented HTTP framework";
     license = licenses.bsd3;
   };

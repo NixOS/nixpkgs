@@ -3,12 +3,12 @@
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
-  pyre-version = "0.0.18";  # also change typeshed revision below with $pyre-src/.typeshed-version
+  pyre-version = "0.0.20";  # also change typeshed revision below with $pyre-src/.typeshed-version
   pyre-src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyre-check";
     rev = "v${pyre-version}";
-    sha256 = "1sy1lk9j3hq20dabfkr9s4r7prrcndrs345a5iqz6yzvakr4r74d";
+    sha256 = "1alkhdhvmigdhxvvarh0lr5s3b1s6q4arykip2dqb62vs8064s17";
   };
   versionFile = writeScript "version.ml" ''
     cat > "./version.ml" <<EOF
@@ -83,8 +83,8 @@ typeshed = stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "python";
     repo = "typeshed";
-    rev = "bc3f9fe1d3c43b00c04cedb23e0eeebc9e1734b6";
-    sha256 = "06b2kj4n49h4sgi8hn5kalmir8llhanfdc7f1924cxvrkj5ry94b";
+    rev = "0b49ce75b478fdf283dda5dd1368759ac342dfe2";
+    sha256 = "1w5aqbbcfk5ki8n9fgdikkyadjb318ipqyi517s9xnwlzi1jv0fh";
   };
   phases = [ "unpackPhase" "installPhase" ];
   installPhase = "cp -r $src $out";

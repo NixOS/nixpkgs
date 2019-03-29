@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Intel ACPI Compiler";
     homepage = http://www.acpica.org/;
     license = stdenv.lib.licenses.iasl;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

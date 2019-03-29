@@ -2,6 +2,7 @@
 , pyperclip, six, pyparsing, vim
 , contextlib2 ? null, subprocess32 ? null
 , pytest, mock, which, fetchFromGitHub, glibcLocales
+, runtimeShell
 }:
 buildPythonPackage rec {
   pname = "cmd2";
@@ -19,8 +20,8 @@ buildPythonPackage rec {
   postPatch = stdenv.lib.optional stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     mkdir bin
-    echo '#/bin/sh' > bin/pbpaste
-    echo '#/bin/sh' > bin/pbcopy
+    echo '#${runtimeShell}' > bin/pbpaste
+    echo '#${runtimeShell}' > bin/pbcopy
     chmod +x bin/{pbcopy,pbpaste}
     export PATH=$(realpath bin):$PATH
   '';

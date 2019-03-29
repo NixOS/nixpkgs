@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lxqt-globalkeys";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1fmi0n5chnrpbgf7zwzc3hi55r85hkxaq5jylbwaahmxhnb5hdid";
+    sha256 = "0q7hfbs4dhsgyzch2msq2hsfzzfgbc611ki9x1x132n7zqk76pmp";
   };
 
   nativeBuildInputs = [
@@ -27,13 +26,14 @@ stdenv.mkDerivation rec {
     libqtxdg
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
   postPatch = ''
     for dir in autostart xdg; do
       substituteInPlace $dir/CMakeLists.txt \
         --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
     done
+
+    substituteInPlace config/CMakeLists.txt \
+      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
   '';
 
   meta = with stdenv.lib; {

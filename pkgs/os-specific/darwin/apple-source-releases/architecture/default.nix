@@ -3,6 +3,12 @@
 appleDerivation {
   dontBuild = true;
 
+  postPatch = ''
+    substituteInPlace Makefile \
+        --replace '/bin/mkdir' 'mkdir' \
+        --replace '/usr/bin/install' 'install'
+  '';
+
   installFlags = [ "EXPORT_DSTDIR=/include/architecture" ];
 
   DSTROOT = "$(out)";

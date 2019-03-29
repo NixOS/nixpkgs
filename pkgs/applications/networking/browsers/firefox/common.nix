@@ -11,7 +11,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, nodejs
+, rust-cbindgen, nodejs, nasm
 , debugBuild ? false
 
 ### optionals
@@ -22,6 +22,7 @@
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, waylandSupport ? true, libxkbcommon
 , gssSupport ? true, kerberos
 
 ## privacy-related options
@@ -74,7 +75,7 @@ let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 
   default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
-                    else "cairo-gtk${if gtk3Support then "3" else "2"}";
+                    else "cairo-gtk${if gtk3Support then "3${lib.optionalString waylandSupport "-wayland"}" else "2"}";
 
   binaryName = if isIceCatLike then "icecat" else "firefox";
   binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName) + lib.substring 1 (-1) binaryName;
@@ -120,10 +121,17 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!isTorBrowserLike) [ nspr nss ]
   ++ lib.optional (lib.versionOlder ffversion "61") hunspell
+
+  # >= 66 requires nasm for the AV1 lib dav1d
+  # yasm can potentially be removed in future versions
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
+  # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
+  ++ lib.optional (lib.versionAtLeast ffversion "66") nasm
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
+  ++ lib.optional  waylandSupport libxkbcommon
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
@@ -186,7 +194,13 @@ stdenv.mkDerivation rec {
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
     # please get your own set of keys.
     echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/ga
-    configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
+    # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
+    ${if (lib.versionAtLeast ffversion "60.6" && lib.versionOlder ffversion "61") || (lib.versionAtLeast ffversion "66") then ''
+      configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/ga")
+      configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/ga")
+    '' else ''
+      configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
+    ''}
   '' + lib.optionalString (lib.versionOlder ffversion "58") ''
     cd obj-*
   ''
@@ -237,8 +251,10 @@ stdenv.mkDerivation rec {
   # and wants these
   ++ lib.optionals isTorBrowserLike ([
     "--with-tor-browser-version=${tbversion}"
+    "--with-distribution-id=org.torproject"
     "--enable-signmar"
     "--enable-verify-mar"
+    "--enable-bundled-fonts"
   ])
 
   ++ flag alsaSupport "alsa"

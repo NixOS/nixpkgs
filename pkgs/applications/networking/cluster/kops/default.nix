@@ -1,9 +1,8 @@
-
 { stdenv, buildGoPackage, fetchFromGitHub, go-bindata }:
 
 buildGoPackage rec {
   name = "kops-${version}";
-  version = "1.11.0";
+  version = "1.11.1";
 
   goPackagePath = "k8s.io/kops";
 
@@ -11,7 +10,7 @@ buildGoPackage rec {
     rev = version;
     owner = "kubernetes";
     repo = "kops";
-    sha256 = "1z67jl66g79q6v5kjy9qxx2xp656ybv5hrc10h3wmzy0b0n30s4n";
+    sha256 = "0jia8dhawh786grnbpn64hvsdm6wz5p7hqir01q5xxpd1psnzygj";
   };
 
   buildInputs = [go-bindata];

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "PyChromecast";
-  version = "2.4.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q012ghssk2xhm17v28sc2lv62vk7wd5p7zzdbgxk6kywfx8yvm2";
+    sha256 = "15zaka9zjyx5lb78f0qs6w8g1rgz94gjgrgxm6iwih0a2l0pv5h9";
   };
 
   disabled = !isPy3k;
@@ -18,6 +18,6 @@ buildPythonPackage rec {
     homepage    = https://github.com/balloob/pychromecast;
     license     = licenses.mit;
     maintainers = with maintainers; [ abbradar ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }

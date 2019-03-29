@@ -3,17 +3,19 @@
 let
   common = { stname, target, postInstall ? "" }:
     buildGoPackage rec {
-      version = "1.0.0";
+      version = "1.1.0";
       name = "${stname}-${version}";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "1qkjnij9jw3d4pjkdr6npz5ps604qg6g36jnsng0k1r2qnrydnwh";
+        sha256 = "1qmrh3c4p5vxzjqd0zdmvcqffq75gl4qfg0s8qpkgvdc7qrzzi7i";
       };
 
       goPackagePath = "github.com/syncthing/syncthing";
+
+      goDeps = ./deps.nix;
 
       patches = [
         ./add-stcli-target.patch
@@ -63,19 +65,19 @@ in {
       done
 
     '' + lib.optionalString (stdenv.isLinux) ''
-      mkdir -p $out/lib/systemd/{system,user}
+      mkdir -p $bin/lib/systemd/{system,user}
 
       substitute etc/linux-systemd/system/syncthing-resume.service \
-                 $out/lib/systemd/system/syncthing-resume.service \
+                 $bin/lib/systemd/system/syncthing-resume.service \
                  --replace /usr/bin/pkill ${procps}/bin/pkill
 
       substitute etc/linux-systemd/system/syncthing@.service \
-                 $out/lib/systemd/system/syncthing@.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 $bin/lib/systemd/system/syncthing@.service \
+                 --replace /usr/bin/syncthing $bin/bin/syncthing
 
       substitute etc/linux-systemd/user/syncthing.service \
-                 $out/lib/systemd/user/syncthing.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 $bin/lib/systemd/user/syncthing.service \
+                 --replace /usr/bin/syncthing $bin/bin/syncthing
     '';
   };
 
@@ -99,7 +101,7 @@ in {
 
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
                  $out/lib/systemd/system/strelaysrv.service \
-                 --replace /usr/bin/strelaysrv $out/bin/strelaysrv
+                 --replace /usr/bin/strelaysrv $bin/bin/strelaysrv
     '';
   };
 }

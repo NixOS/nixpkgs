@@ -7,8 +7,8 @@ assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
-    version = "1.6.4";
-    sha256 = "16mlwck0wngr5pmlr8dxc471zzhhcja3mv4xf4n8jm9nhb3iikvh";
+    version = "1.6.5";
+    sha256 = "03c0amszy28shinvz61hm340jz446zz5763a1pdqlza36kwcj0p0";
     buildInputs = [ dune ];
     extra = {
       inherit (dune) installPhase;

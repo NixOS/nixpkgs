@@ -6,7 +6,7 @@
 
 buildGoPackage rec {
   name = "amass-${version}";
-  version = "2.8.5";
+  version = "2.9.1";
 
   goPackagePath = "github.com/OWASP/Amass";
 
@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "OWASP";
     repo = "Amass";
     rev = version;
-    sha256 = "1nsqg1p7hcv369d53n13xps3ks6fgzkkp6v9q87l04yj32nbr5qy";
+    sha256 = "07vs741vmhi735ba26wscldwdx0i2yamr2g8bq7jr3sjik8ncd29";
   };
 
   outputs = [ "bin" "out" "wordlists" ];

@@ -1,20 +1,23 @@
-{stdenv, fetchurl, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper, ncurses
+{stdenv, fetchFromGitHub, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper, ncurses
 , enableX11 ? true}:
 
 stdenv.mkDerivation (rec {
 
-  name = "unison-2.48.4";
-  src = fetchurl {
-    url = "http://www.seas.upenn.edu/~bcpierce/unison/download/releases/stable/${name}.tar.gz";
-    sha256 = "30aa53cd671d673580104f04be3cf81ac1e20a2e8baaf7274498739d59e99de8";
+  name = "unison-${version}";
+  version = "2.51.2";
+  src = fetchFromGitHub {
+    owner = "bcpierce00";
+    repo = "unison";
+    rev = "v${version}";
+    sha256 = "1bykiyc0dc5pkw8x370qkg2kygq9pq7yqzsgczd3y13b6ivm4sdq";
   };
 
   buildInputs = [ ocaml makeWrapper ncurses ];
 
   preBuild = (if enableX11 then ''
-    sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" Makefile.OCaml
+    sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" src/Makefile.OCaml
   '' else "") + ''
-  echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> fsmonitor/linux/Makefile
+  echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> src/fsmonitor/linux/Makefile
   '';
 
   makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then " UISTYLE=gtk2" else "")

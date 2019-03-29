@@ -25,6 +25,15 @@ with lib; {
       '';
     };
 
+    phpOptions = mkOption {
+      type = types.lines;
+      default = fpmCfg.phpOptions;
+      defaultText = "config.services.phpfpm.phpOptions";
+      description = ''
+        "Options appended to the PHP configuration file <filename>php.ini</filename> used for this PHP-FPM pool."
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       example = ''

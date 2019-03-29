@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "modsecurity-${version}";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "https://www.modsecurity.org/tarball/${version}/${name}.tar.gz";
-    sha256 = "41a8f73476ec891f3a9e8736b98b64ea5c2105f1ce15ea57a1f05b4bf2ffaeb5";
+    sha256 = "0611nskd2y6yagrciqafxdn4rxbdk2v4swf45kc1sgwx2sfh34j1";
   };
 
   nativeBuildInputs = [ pkgconfig ];

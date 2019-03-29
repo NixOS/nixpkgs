@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   name = "mapnik-${version}";
-  version = "3.0.21";
+  version = "3.0.22";
 
   src = fetchzip {
     # this one contains all git submodules and is cheaper than fetchgit
     url = "https://github.com/mapnik/mapnik/releases/download/v${version}/mapnik-v${version}.tar.bz2";
-    sha256 = "0cq2gbmf1sssg72sq4b5s3x1z6wvl1pzxliymm06flw5bpim5as2";
+    sha256 = "18yvnnbwqndagzaa2nwh3g7gb52dghaypxpkmc2h5l88770bl17f";
   };
 
   # a distinct dev output makes python-mapnik fail
@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
     ];
 
   prefixKey = "PREFIX=";
+
+  preConfigure = ''
+    patchShebangs ./configure
+  '';
 
   configureFlags = [
     "BOOST_INCLUDES=${boost.dev}/include"

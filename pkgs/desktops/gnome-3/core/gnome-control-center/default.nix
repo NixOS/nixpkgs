@@ -4,18 +4,21 @@
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
 , cracklib, libkrb5, networkmanagerapplet, networkmanager, glibc
 , libwacom, samba, shared-mime-info, tzdata, libtool, libgnomekbd
-, docbook_xsl, modemmanager, clutter, clutter-gtk, cheese
-, fontconfig, sound-theme-freedesktop, grilo, python3 }:
+, docbook_xsl, modemmanager, clutter, clutter-gtk, cheese, gnome-session
+, fontconfig, sound-theme-freedesktop, grilo, python3
+, gtk3, glib, glib-networking, gsettings-desktop-schemas
+, gnome-desktop, gnome-settings-daemon, gnome-online-accounts
+, vino, gnome-bluetooth, tracker, adwaita-icon-theme }:
 
 let
   pname = "gnome-control-center";
-  version = "3.30.2";
+  version = "3.30.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0rn4r0ng4pd9smpay4rf4dkcl09b2ipr9srryybhd1srmd02ps51";
+    sha256 = "0gih1cmqbv803kp30704sllghb0impa0mmv3j8pndfg4zr2mnq9r";
   };
 
   nativeBuildInputs = [
@@ -23,13 +26,13 @@ in stdenv.mkDerivation rec {
     shared-mime-info python3
   ];
 
-  buildInputs = with gnome3; [
-    ibus gtk glib glib-networking upower gsettings-desktop-schemas
+  buildInputs = [
+    ibus gtk3 glib glib-networking upower gsettings-desktop-schemas
     libxml2 gnome-desktop gnome-settings-daemon polkit libgtop
     gnome-online-accounts libsoup colord libpulseaudio fontconfig colord-gtk
     accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify
     grilo libpwquality cracklib vino libcanberra-gtk3 libgudev libsecret
-    gdk_pixbuf defaultIconTheme librsvg clutter clutter-gtk cheese
+    gdk_pixbuf adwaita-icon-theme librsvg clutter clutter-gtk cheese
     networkmanager modemmanager gnome-bluetooth tracker
   ];
 
@@ -45,6 +48,10 @@ in stdenv.mkDerivation rec {
     chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
     patchShebangs build-aux/meson/meson_post_install.py
   '';
+
+  mesonFlags = [
+    "-Dgnome_session_libexecdir=${gnome-session}/libexec"
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

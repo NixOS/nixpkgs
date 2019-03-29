@@ -1,34 +1,31 @@
-{ stdenv, fetchFromGitHub, fetchpatch, vala_0_40, pkgconfig, meson, ninja, python3, granite, gtk3
-, gnome3, desktop-file-utils, json-glib, libsoup, poppler, gobject-introspection, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, fetchpatch, pantheon, pkgconfig, meson, ninja, python3, gtk3
+, desktop-file-utils, json-glib, libsoup, libgee, poppler, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "aesop";
-  version = "1.0.7";
-
-  name = "${pname}-${version}";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "17hjg4qcy8q9xl170yapbhn9vdsn3jf537jsggq51pp0fnhvsnqs";
+    sha256 = "0gh1xwxlzyicw059g6h1icckinf5d9rqfnwml0cy85bbawm6w0xq";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig
     python3
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    pantheon.vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
-    gnome3.libgee
-    granite
+    pantheon.elementary-icon-theme
+    libgee
+    pantheon.granite
     gtk3
     json-glib
     libsoup

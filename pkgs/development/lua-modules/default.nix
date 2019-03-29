@@ -6,12 +6,25 @@
 
 let
 
-  inherit (lib) extends makeExtensible;
+  inherit (lib) extends;
 
   initialPackages = (pkgs.callPackage ../../top-level/lua-packages.nix {
     inherit lua;
   });
 
-  extensible-self = makeExtensible initialPackages;
+  overridenPackages = import ./overrides.nix { inherit pkgs; };
+
+  generatedPackages = if (builtins.pathExists ./generated-packages.nix) then
+        pkgs.callPackage ./generated-packages.nix { } else (self: super: {});
+
+  extensible-self = lib.makeExtensible
+    (extends overrides
+        (extends overridenPackages
+          (extends generatedPackages
+              initialPackages
+              )
+          )
+    )
+          ;
 in
   extensible-self

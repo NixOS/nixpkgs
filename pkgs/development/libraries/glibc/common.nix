@@ -28,7 +28,6 @@
 { name
 , withLinuxHeaders ? false
 , profilingLibraries ? false
-, installLocales ? false
 , withGd ? false
 , meta
 , ...
@@ -44,7 +43,7 @@ assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
 stdenv.mkDerivation ({
-  inherit version installLocales;
+  inherit version;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
 
   inherit (stdenv) is64bit;
@@ -88,9 +87,15 @@ stdenv.mkDerivation ({
         less linux-*?/arch/x86/kernel/syscall_table_32.S
        */
       ./allow-kernel-2.6.32.patch
+      /* Provide utf-8 locales by default, so we can use it in stdenv without depending on our large locale-archive. */
+      (fetchurl {
+        url = "https://salsa.debian.org/glibc-team/glibc/raw/49767c9f7de4828220b691b29de0baf60d8a54ec/debian/patches/localedata/locale-C.diff";
+        sha256 = "0irj60hs2i91ilwg5w7sqrxb695c93xg0ik7yhhq9irprd7fidn4";
+      })
     ]
     ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch
-    ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch;
+    ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
+    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
 
   postPatch =
     ''

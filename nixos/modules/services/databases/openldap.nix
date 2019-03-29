@@ -146,7 +146,7 @@ in
         chown -R "${cfg.user}:${cfg.group}" "${cfg.dataDir}"
       '';
       serviceConfig.ExecStart =
-        "${openldap.out}/libexec/slapd -d ${cfg.logLevel} " +
+        "${openldap.out}/libexec/slapd -d '${cfg.logLevel}' " +
           "-u '${cfg.user}' -g '${cfg.group}' " +
           "-h '${concatStringsSep " " cfg.urlList}' " +
           "${configOpts}";

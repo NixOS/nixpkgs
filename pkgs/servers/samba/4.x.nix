@@ -20,11 +20,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "samba-${version}";
-  version = "4.7.10";
+  version = "4.7.12";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "0w5y6a7kiw5ap7hd84yglzk7cjax6lxlszd0wz1sxnmqx4a6hn9l";
+    sha256 = "0jmg39xigrh48j39r4f1390kmr1p3xbfxzfabln4b0r9qdmki70f";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -33,9 +33,17 @@ stdenv.mkDerivation rec {
     [ ./4.x-no-persistent-install.patch
       ./patch-source3__libads__kerberos_keytab.c.patch
       ./4.x-no-persistent-install-dynconfig.patch
+
+      # conditionall disable MacOS incompatible tests
       (fetchpatch {
         url = "https://patch-diff.githubusercontent.com/raw/samba-team/samba/pull/107.patch";
         sha256 = "0r6q34vjj0bdzmcbnrkad9rww58k4krbwicv4gs1g3dj49skpvd6";
+      })
+
+      (fetchpatch {
+        name = "CVE-2019-3824.patch";
+        url = "https://attachments.samba.org/attachment.cgi?id=14859";
+        sha256 = "02qf3zr55mzbimqdv01k3b22jjb084vfr5zabapyr5h1f588mw0q";
       })
     ];
 
@@ -72,7 +80,9 @@ stdenv.mkDerivation rec {
       "--sysconfdir=/etc"
       "--localstatedir=/var"
     ]
-    ++ optional (!enableDomainController) "--without-ad-dc"
+    ++ [(if enableDomainController
+         then "--with-experimental-mit-ad-dc"
+         else "--without-ad-dc")]
     ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ]
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam";

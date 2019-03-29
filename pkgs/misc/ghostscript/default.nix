@@ -1,12 +1,13 @@
-{ stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
+{ config, stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs
-, x11Support ? false, xlibsWrapper ? null
-, cupsSupport ? false, cups ? null
+, libiconv, ijs, lcms2, fetchpatch
+, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
+, x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
 }:
 
 assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
+
 let
   version = "9.${ver_min}";
   ver_min = "26";
@@ -45,6 +46,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./urw-font-files.patch
     ./doc-no-ref.diff
+    (fetchpatch {
+      name = "CVE-2019-6116";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=d3537a54740d78c5895ec83694a07b3e4f616f61";
+      sha256 = "1hr8bpi87bbg1kvv28kflmfh1dhzxw66p9q0ddvbrj72qd86p3kx";
+    })
   ];
 
   outputs = [ "out" "man" "doc" ];
@@ -55,16 +61,15 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ zlib expat openssl
       libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-      libiconv ijs
+      libiconv ijs lcms2
     ]
     ++ lib.optional x11Support xlibsWrapper
     ++ lib.optional cupsSupport cups
     ;
-  # No lcms2; upstream "is in process of forking it" and thus won't use one from a library.
 
   preConfigure = ''
     # requires in-tree (heavily patched) openjpeg
-    rm -rf jpeg libpng zlib jasper expat tiff lcms{,2} jbig2dec freetype cups/libs ijs
+    rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs
 
     sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@; s@INCLUDE=/usr/include@INCLUDE=/no-such-path@" -i base/unix-aux.mak
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac

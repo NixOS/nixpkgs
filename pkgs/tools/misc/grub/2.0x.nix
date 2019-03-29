@@ -47,6 +47,21 @@ stdenv.mkDerivation rec {
     sha256 = "03vvdfhdmf16121v7xs8is2krwnv15wpkhkf16a4yf8nsfc3f2w1";
   };
 
+  patches = [
+    ./fix-bash-completion.patch
+    # This patch makes grub compatible with the XFS sparse inode
+    # feature introduced by xfsprogs-4.16.
+    # to be removed in grub-2.03
+    (fetchpatch {
+      url = https://git.savannah.gnu.org/cgit/grub.git/patch/?id=cda0a857dd7a27cd5d621747464bfe71e8727fff;
+      sha256 = "0k9qrkdxwdqk6sz05q9smqwjr6pvgc9adx1mlf0807g4im91xnm0";
+    })
+    ./relocation-not-implemented.diff
+  ];
+  postPatch = ''
+    substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
+  '';
+
   nativeBuildInputs = [ bison flex python pkgconfig ];
   buildInputs = [ ncurses libusb freetype gettext lvm2 fuse ]
     ++ optional doCheck qemu
@@ -57,14 +72,10 @@ stdenv.mkDerivation rec {
   # Work around a bug in the generated flex lexer (upstream flex bug?)
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  postPatch = ''
-    substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
-  '';
-
   preConfigure =
     '' for i in "tests/util/"*.in
        do
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
        done
 
        # Apparently, the QEMU executable is no longer called
@@ -81,17 +92,6 @@ stdenv.mkDerivation rec {
 
       unset CPP # setting CPP intereferes with dependency calculation
     '';
-
-  patches = [
-    ./fix-bash-completion.patch
-    # This patch makes grub compatible with the XFS sparse inode
-    # feature introduced by xfsprogs-4.16.
-    # to be removed in grub-2.03
-    (fetchpatch {
-      url = https://git.savannah.gnu.org/cgit/grub.git/patch/?id=cda0a857dd7a27cd5d621747464bfe71e8727fff;
-      sha256 = "0k9qrkdxwdqk6sz05q9smqwjr6pvgc9adx1mlf0807g4im91xnm0";
-    })
-  ];
 
   configureFlags = [ "--enable-grub-mount" ] # dep of os-prober
     ++ optional zfsSupport "--enable-libzfs"

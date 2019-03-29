@@ -25,6 +25,7 @@ in
   atd = handleTest ./atd.nix {};
   avahi = handleTest ./avahi.nix {};
   bcachefs = handleTestOn ["x86_64-linux"] ./bcachefs.nix {}; # linux-4.18.2018.10.12 is unsupported on aarch64
+  beanstalkd = handleTest ./beanstalkd.nix {};
   beegfs = handleTestOn ["x86_64-linux"] ./beegfs.nix {}; # beegfs is unsupported on aarch64
   bind = handleTest ./bind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
@@ -42,6 +43,7 @@ in
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
   codimd = handleTest ./codimd.nix {};
+  colord = handleTest ./colord.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
   containers-extra_veth = handleTest ./containers-extra_veth.nix {};
   containers-hosts = handleTest ./containers-hosts.nix {};
@@ -57,6 +59,7 @@ in
   dhparams = handleTest ./dhparams.nix {};
   dnscrypt-proxy = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy.nix {};
   docker = handleTestOn ["x86_64-linux"] ./docker.nix {};
+  docker-containers = handleTestOn ["x86_64-linux"] ./docker-containers.nix {};
   docker-edge = handleTestOn ["x86_64-linux"] ./docker-edge.nix {};
   docker-preloader = handleTestOn ["x86_64-linux"] ./docker-preloader.nix {};
   docker-registry = handleTest ./docker-registry.nix {};
@@ -73,6 +76,8 @@ in
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix {};
   firewall = handleTest ./firewall.nix {};
+  fish = handleTest ./fish.nix {};
+  flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   flatpak = handleTest ./flatpak.nix {};
   fsck = handleTest ./fsck.nix {};
   fwupd = handleTestOn ["x86_64-linux"] ./fwupd.nix {}; # libsmbios is unsupported on aarch64
@@ -114,6 +119,7 @@ in
   kernel-latest = handleTest ./kernel-latest.nix {};
   kernel-lts = handleTest ./kernel-lts.nix {};
   keymap = handleTest ./keymap.nix {};
+  knot = handleTest ./knot.nix {};
   kubernetes.dns = handleTestOn ["x86_64-linux"] ./kubernetes/dns.nix {};
   # kubernetes.e2e should eventually replace kubernetes.rbac when it works
   #kubernetes.e2e = handleTestOn ["x86_64-linux"] ./kubernetes/e2e.nix {};
@@ -125,10 +131,12 @@ in
   #lightdm = handleTest ./lightdm.nix {};
   login = handleTest ./login.nix {};
   #logstash = handleTest ./logstash.nix {};
+  mailcatcher = handleTest ./mailcatcher.nix {};
   mathics = handleTest ./mathics.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
   memcached = handleTest ./memcached.nix {};
   mesos = handleTest ./mesos.nix {};
+  minio = handleTest ./minio.nix {};
   misc = handleTest ./misc.nix {};
   mongodb = handleTest ./mongodb.nix {};
   morty = handleTest ./morty.nix {};
@@ -142,6 +150,8 @@ in
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
+  ndppd = handleTest ./ndppd.nix {};
+  neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };
   networking.scripted = handleTest ./networking.nix { networkd = false; };
@@ -160,10 +170,16 @@ in
   openldap = handleTest ./openldap.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
   openssh = handleTest ./openssh.nix {};
+  # openstack-image-userdata doesn't work in a sandbox as the simulated openstack instance needs network access
+  #openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
+  openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
   osquery = handleTest ./osquery.nix {};
+  osrm-backend = handleTest ./osrm-backend.nix {};
   ostree = handleTest ./ostree.nix {};
+  overlayfs = handleTest ./overlayfs.nix {};
   pam-oath-login = handleTest ./pam-oath-login.nix {};
   pam-u2f = handleTest ./pam-u2f.nix {};
+  pantheon = handleTest ./pantheon.nix {};
   peerflix = handleTest ./peerflix.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
@@ -205,6 +221,7 @@ in
   switchTest = handleTest ./switch-test.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
+  systemd-confinement = handleTest ./systemd-confinement.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
   tomcat = handleTest ./tomcat.nix {};

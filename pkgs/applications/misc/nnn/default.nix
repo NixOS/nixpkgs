@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, conf ? null }:
+{ stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, conf ? null }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "nnn-${version}";
-  version = "2.2";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "nnn";
     rev = "v${version}";
-    sha256 = "01y2vkw1wakpnpzhzia3d44iir060i8vma3b3ww5wgwg7bfpzs4b";
+    sha256 = "0y55h5pxd20qw2ajhz8fsk45aynx0xzgr9kfr545hyhmfkg2nc49";
   };
 
   configFile = optionalString (conf!=null) (builtins.toFile "nnn.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} nnn.h";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses ];
+  buildInputs = [ readline ncurses ];
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
 

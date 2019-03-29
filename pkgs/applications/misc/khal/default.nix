@@ -45,6 +45,6 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = http://lostpackets.de/khal/;
     description = "CLI calendar application";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgeerds gebner ];
+    maintainers = with maintainers; [ gebner ];
   };
 }

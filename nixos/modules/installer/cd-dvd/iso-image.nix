@@ -88,7 +88,7 @@ let
   #     result in incorrect boot entries.
 
   baseIsolinuxCfg = ''
-    SERIAL 0 38400
+    SERIAL 0 115200
     TIMEOUT ${builtins.toString syslinuxTimeout}
     UI vesamenu.c32
     MENU TITLE NixOS
@@ -165,6 +165,8 @@ let
     else
       "# No refind for ${targetArch}"
   ;
+  
+  grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs; 
 
   grubMenuCfg = ''
     #
@@ -241,7 +243,7 @@ let
     # Modules that may or may not be available per-platform.
     echo "Adding additional modules:"
     for mod in efi_uga; do
-      if [ -f ${pkgs.grub2_efi}/lib/grub/${pkgs.grub2_efi.grubTarget}/$mod.mod ]; then
+      if [ -f ${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget}/$mod.mod ]; then
         echo " - $mod"
         MODULES+=" $mod"
       fi
@@ -249,9 +251,9 @@ let
 
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
-    ${pkgs.grub2_efi}/bin/grub-mkimage -o $out/EFI/boot/boot${targetArch}.efi -p /EFI/boot -O ${pkgs.grub2_efi.grubTarget} \
+    ${grubPkgs.grub2_efi}/bin/grub-mkimage -o $out/EFI/boot/boot${targetArch}.efi -p /EFI/boot -O ${grubPkgs.grub2_efi.grubTarget} \
       $MODULES
-    cp ${pkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
+    cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 
     cat <<EOF > $out/EFI/boot/grub.cfg
 
@@ -339,11 +341,11 @@ let
     #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
     ''
       mkdir ./contents && cd ./contents
-      cp -rp "${efiDir}"/* .
+      cp -rp "${efiDir}"/EFI .
       mkdir ./boot
       cp -p "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" \
         "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
-      touch --date=@0 ./*
+      touch --date=@0 ./EFI ./boot
 
       usage_size=$(du -sb --apparent-size . | tr -cd '[:digit:]')
       # Make the image 110% as big as the files need to make up for FAT overhead
@@ -355,14 +357,14 @@ let
       echo "Image size: $image_size"
       truncate --size=$image_size "$out"
       ${pkgs.libfaketime}/bin/faketime "2000-01-01 00:00:00" ${pkgs.dosfstools}/sbin/mkfs.vfat -i 12345678 -n EFIBOOT "$out"
-      mcopy -psvm -i "$out" ./* ::
+      mcopy -psvm -i "$out" ./EFI ./boot ::
       # Verify the FAT partition.
       ${pkgs.dosfstools}/sbin/fsck.vfat -vn "$out"
     ''; # */
 
   # Name used by UEFI for architectures.
   targetArch =
-    if pkgs.stdenv.isi686 then
+    if pkgs.stdenv.isi686 || config.boot.loader.grub.forcei686 then
       "ia32"
     else if pkgs.stdenv.isx86_64 then
       "x64"
@@ -506,7 +508,7 @@ in
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    environment.systemPackages = [ pkgs.grub2 pkgs.grub2_efi ]
+    environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
       ++ optional canx86BiosBoot pkgs.syslinux
     ;
 

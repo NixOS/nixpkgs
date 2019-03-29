@@ -4,18 +4,19 @@
 , enum34
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "408e5c6820dc53dd589a7bc378d25c2cf5817c448b7c7b1268bc745ecbe04ec3";
+    sha256 = "5cc7e40842b6c3dc586d04e3d2b2326b44afbe3896da6a30032d64650a7c6b00";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 google_api_core ];
 
   checkPhase = ''

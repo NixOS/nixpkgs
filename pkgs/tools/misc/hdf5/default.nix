@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
     sha256 = "1pr85fa1sh2ky6ai2hs3f21lp252grl2cq3wbyi4rh7dm83gyrqj";
- };
+  };
 
   passthru = {
     mpiSupport = (mpi != null);
@@ -45,7 +45,13 @@ stdenv.mkDerivation rec {
     ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
     ++ optional enableShared "--enable-shared";
 
-  patches = [./bin-mv.patch];
+  patches = [
+    ./bin-mv.patch
+    # upstream patches for openmpi-4 compatiblity
+    # To be removed with the upgrade to 1.10.5
+    ./0001-Updated-H5S-to-use-the-MPI-2-function-MPI_Type_get_e.patch
+    ./0001-Yanked-all-MPI-1-calls.patch
+  ];
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +

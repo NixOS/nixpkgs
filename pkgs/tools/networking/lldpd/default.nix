@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, pkgconfig, removeReferencesTo
-, libevent, readline, net_snmp }:
+, libevent, readline, net_snmp, openssl
+}:
 
 stdenv.mkDerivation rec {
   name = "lldpd-${version}";
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig removeReferencesTo ];
-  buildInputs = [ libevent readline net_snmp ];
+  buildInputs = [ libevent readline net_snmp openssl ];
 
   enableParallelBuilding = true;
 

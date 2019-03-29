@@ -10,9 +10,10 @@ buildPythonPackage rec {
     sha256 = "11g7dx21brfmi5vrq289cw983rydalx0cy91afv5gigyadsmyam2";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [
     at-spi2-core
-    pkgconfig
     pygobject3
   ];
 
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     description = "Python client bindings for D-Bus AT-SPI";
     homepage = https://wiki.linuxfoundation.org/accessibility/d-bus;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jgeerds jtojnar ];
+    maintainers = with maintainers; [ jtojnar ];
     platforms = with platforms; unix;
   };
 }

@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
 
   checkInputs = with python3.pkgs; [ pytest pytest_xdist pyflakes pycodestyle polib xvfb_run dbus.daemon glibcLocales ];
 
-  buildInputs = [ gnome3.defaultIconTheme libsoup glib glib-networking gtk3 webkitgtk gdk_pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
+  buildInputs = [ gnome3.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk_pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
     ++ (if xineBackend then [ xineLib ] else with gst_all_1;
     [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
 

@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "LDCONFIG=true"
-    "ARCH=${stdenv.targetPlatform.uname.processor}"
-    "SYS=${stdenv.targetPlatform.uname.system}"
+    "ARCH=${stdenv.hostPlatform.uname.processor}"
+    "SYS=${stdenv.hostPlatform.uname.system}"
   ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error" ];

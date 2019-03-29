@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/jstedfast/gmime/;
     description = "A C/C++ library for creating, editing and parsing MIME messages and structures";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ chaoflow ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

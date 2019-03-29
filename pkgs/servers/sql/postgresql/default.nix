@@ -60,7 +60,7 @@ let
         (if atLeast "9.6" then ./patches/less-is-more-96.patch             else ./patches/less-is-more.patch)
         (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
         ./patches/specify_pkglibdir_at_runtime.patch
-      ];
+      ] ++ lib.optional stdenv.isLinux ./patches/socketdir-in-run.patch;
 
     installTargets = [ "install-world" ];
 
@@ -76,7 +76,8 @@ let
     postInstall =
       ''
         moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        moveToOutput "lib/*.a" "$out"
+        moveToOutput "lib/libpgcommon.a" "$out"
+        moveToOutput "lib/libpgport.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
@@ -84,7 +85,7 @@ let
 
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
-          for i in $out/lib/*.a; do
+          for i in $out/lib/*.a $lib/lib/*.a; do
             name="$(basename "$i")"
             ext="${stdenv.hostPlatform.extensions.sharedLibrary}"
             if [ -e "$lib/lib/''${name%.a}$ext" ] || [ -e "''${i%.a}$ext" ]; then
@@ -153,9 +154,9 @@ let
     '';
   };
 
-in self: super: {
+in self: {
 
-  postgresql_9_4 = super.callPackage generic {
+  postgresql_9_4 = self.callPackage generic {
     version = "9.4.20";
     psqlSchema = "9.4";
     sha256 = "0zzqjz5jrn624hzh04drpj6axh30a9k6bgawid6rwk45nbfxicgf";
@@ -163,7 +164,7 @@ in self: super: {
     inherit self;
   };
 
-  postgresql_9_5 = super.callPackage generic {
+  postgresql_9_5 = self.callPackage generic {
     version = "9.5.15";
     psqlSchema = "9.5";
     sha256 = "0i2lylgmsmy2g1ixlvl112fryp7jmrd0i2brk8sxb7vzzpg3znnv";
@@ -171,7 +172,7 @@ in self: super: {
     inherit self;
   };
 
-  postgresql_9_6 = super.callPackage generic {
+  postgresql_9_6 = self.callPackage generic {
     version = "9.6.11";
     psqlSchema = "9.6";
     sha256 = "0c55akrkzqd6p6a8hr0338wk246hl76r9j16p4zn3s51d7f0l99q";
@@ -179,18 +180,18 @@ in self: super: {
     inherit self;
   };
 
-  postgresql_10 = super.callPackage generic {
+  postgresql_10 = self.callPackage generic {
     version = "10.6";
-    psqlSchema = "10.0";
+    psqlSchema = "10.0"; # should be 10, but changing it is invasive
     sha256 = "0jv26y3f10svrjxzsgqxg956c86b664azyk2wppzpa5x11pjga38";
     this = self.postgresql_10;
     inherit self;
   };
 
-  postgresql_11 = super.callPackage generic {
-    version = "11.1";
-    psqlSchema = "11.1";
-    sha256 = "026v0sicsh7avzi45waf8shcbhivyxmi7qgn9fd1x0vl520mx0ch";
+  postgresql_11 = self.callPackage generic {
+    version = "11.2";
+    psqlSchema = "11.1"; # should be 11, but changing it is invasive
+    sha256 = "01clq2lw0v83zh5dc89xdr3mmap0jr37kdkh401ph6f2177bjxi6";
     this = self.postgresql_11;
     inherit self;
   };

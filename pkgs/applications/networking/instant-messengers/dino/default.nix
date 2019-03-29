@@ -2,7 +2,7 @@
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
 , gobject-introspection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
-, libnotify, libsoup
+, libnotify, libsoup, libgee
 , libgcrypt
 , epoxy
 , at-spi2-core
@@ -11,16 +11,17 @@
 , gpgme
 , pcre
 , qrencode
+, icu
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2018-11-29";
+  name = "dino-unstable-2019-03-07";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "680d28360c781ff29e810821801cfaba0493c526";
-    sha256 = "1w08xc842p2nggdxf0dwqw8izhwsrqah10w3s0v1i7dp33yhycln";
+    rev = "cc7b0aa7bd5b6599159f654fdd8a2fd111e16a3e";
+    sha256 = "1cq62vif92fz38si2bl49qwy4ys9gxdrvzkv25av6c6nwmyih4gv";
     fetchSubmodules = true;
   };
 
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     wrapGAppsHook
+    gettext
   ];
 
   buildInputs = [
@@ -37,8 +39,8 @@ stdenv.mkDerivation rec {
     gobject-introspection
     glib-networking
     glib
-    gnome3.libgee
-    gnome3.defaultIconTheme
+    libgee
+    gnome3.adwaita-icon-theme
     sqlite
     gdk_pixbuf
     gtk3
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
     epoxy
     at-spi2-core
     dbus
-    gettext
+    icu
   ];
 
   enableParallelBuilding = true;

@@ -11,9 +11,9 @@ let
       repo = "OpenRA" ;
       inherit rev sha256 extraPostFetch;
     };
-  } name).overrideAttrs (oldAttrs: {
+  } name).overrideAttrs (origAttrs: {
     postInstall = ''
-      ${oldAttrs.postInstall}
+      ${origAttrs.postInstall}
       cp -r mods/ts $out/lib/openra/mods/
       cp mods/ts/icon.png $(mkdirp $out/share/pixmaps)/openra-ts.png
       ( cd $out/share/applications; sed -e 's/Dawn/Sun/g' -e 's/cnc/ts/g' openra-cnc.desktop > openra-ts.desktop )
@@ -21,21 +21,21 @@ let
   });
 
 in {
-  release = buildUpstreamOpenRAEngine rec {
+  release = name: (buildUpstreamOpenRAEngine rec {
     version = "20181215";
-    rev = "release-${version}";
+    rev = "${name}-${version}";
     sha256 = "0p0izykjnz7pz02g2khp7msqa00jhjsrzk9y0g29dirmdv75qa4r";
-  };
+  } name);
 
-  playtest = buildUpstreamOpenRAEngine rec {
+  playtest = name: (buildUpstreamOpenRAEngine rec {
     version = "20190106";
-    rev = "playtest-${version}";
+    rev = "${name}-${version}";
     sha256 = "0ps9x379plrrj1hnj4fpr26lc46mzgxknv5imxi0bmrh5y4781ql";
-  };
+  } name);
 
-  bleed = let commit = "6de92de8d982094a766eab97a92225c240d85493"; in buildUpstreamOpenRAEngine {
-    version = abbrevCommit commit;
-    rev = commit;
-    sha256 = "0p0izykjnz7pz02g2khp7msqa00jhjsrzk9y0g29dirmdv75qa4r";
+  bleed = buildUpstreamOpenRAEngine {
+    version = "9c9cad1";
+    rev = "9c9cad1a15c3a34dc2a61b305e4a9a735381a5f8";
+    sha256 = "0100p7wrnnlvkmy581m0gbyg3cvi4i1w3lzx2gq91ndz1sbm8nd2";
   };
 }

@@ -16,14 +16,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.7";
+  version = "1.8.0";
   name = "unit-${version}";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
     rev = "${version}";
-    sha256 = "1klwricr0mxhw5wka35vnl919821vcvaf5w3ixvkbxaisml19qq4";
+    sha256 = "1s5pfyhabnf9p5z2h1fh0wb4hqzkrha5bxahjnikmlkhw59s8zip";
   };
 
   nativeBuildInputs = [ which ];
@@ -40,9 +40,14 @@ stdenv.mkDerivation rec {
     ++ optional withRuby ruby
     ++ optional withSSL openssl;
 
+  # Used patch to enable work with unprivileged user - https://github.com/nginx/unit/issues/228
+  patches = [ ./unit-rootless.patch ];
+
   configureFlags = [
-    "--control=unix:/run/control.unit.sock"
-    "--pid=/run/unit.pid"
+    "--control=unix:/run/unit/control.unit.sock"
+    "--pid=/run/unit/unit.pid"
+    "--user=unit"
+    "--group=unit"
   ] ++ optional withSSL     [ "--openssl" ]
     ++ optional (!withIPv6) [ "--no-ipv6" ]
     ++ optional withDebug   [ "--debug" ];

@@ -56,15 +56,24 @@ let
       ./qtbase-fixguicmake.patch
     ] ++ optionals stdenv.isDarwin [
       ./qtbase-darwin-nseventtype.patch
+      ./qtbase-darwin-revert-69221.patch
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine =
-         optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
-      ++ optional stdenv.isDarwin ./qtwebengine-darwin-sdk-10.10.patch;
-    qtwebkit = [ ./qtwebkit.patch ];
+    qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
+      ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
+      ++ optionals stdenv.isDarwin [
+        ./qtwebengine-darwin-no-platform-check.patch
+        ./qtwebengine-darwin-sdk-10.10.patch
+        ./qtwebengine-darwin-old-sdk.patch
+      ];
+    qtwebkit = [ ./qtwebkit.patch ]
+      ++ optionals stdenv.isDarwin [
+        ./qtwebkit-darwin-no-readline.patch
+        ./qtwebkit-darwin-no-qos-classes.patch
+      ];
   };
 
   mkDerivation =
@@ -93,7 +102,9 @@ let
       };
 
       qtcharts = callPackage ../modules/qtcharts.nix {};
-      qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
+      qtconnectivity = callPackage ../modules/qtconnectivity.nix {
+        inherit cf-private;
+      };
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
@@ -122,6 +133,7 @@ let
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
       qtwebkit = callPackage ../modules/qtwebkit.nix {};
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
+      qtwebview = callPackage ../modules/qtwebview.nix {};
       qtx11extras = callPackage ../modules/qtx11extras.nix {};
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
@@ -131,7 +143,7 @@ let
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
-        qtx11extras qtxmlpatterns
+        qtwebview qtx11extras qtxmlpatterns
       ] ++ optional (!stdenv.isDarwin) qtwayland
         ++ optional (stdenv.isDarwin) qtmacextras);
 

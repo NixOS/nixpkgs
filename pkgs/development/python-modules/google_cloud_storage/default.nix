@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc32b9be41a45016ba2387e3ad23e70ccba399d626ef596409316f7cee477956";
+    sha256 = "aef243b533144c11c9ff750565c43dffe5445debb143697002edb6205f64a437";
   };
 
   checkInputs = [ pytest mock ];

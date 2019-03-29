@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ config, stdenv, fetchurl
 , libX11, wxGTK
 , libiconv, fontconfig, freetype
 , libGLU_combined
@@ -8,8 +8,8 @@
 , spellcheckSupport ? true, hunspell ? null
 , automationSupport ? true, lua ? null
 , openalSupport ? false, openal ? null
-, alsaSupport ? true, alsaLib ? null
-, pulseaudioSupport ? true, libpulseaudio ? null
+, alsaSupport ? stdenv.isLinux, alsaLib ? null
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , portaudioSupport ? false, portaudio ? null }:
 
 assert spellcheckSupport -> (hunspell != null);

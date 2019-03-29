@@ -1,14 +1,14 @@
 { monolithic ? true # build monolithic Quassel
 , daemon ? false # build Quassel daemon
 , client ? false # build Quassel client
-, tag ? "" # tag added to the package name
+, tag ? "-kf5" # tag added to the package name
 , static ? false # link statically
 
 , stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
 , qtbase, qtscript
 , phonon, libdbusmenu, qca-qt5
 
-, withKDE ? stdenv.isLinux # enable KDE integration
+, withKDE ? true # enable KDE integration
 , extra-cmake-modules
 , kconfigwidgets
 , kcoreaddons
@@ -33,13 +33,13 @@ let
 
 in with stdenv; mkDerivation rec {
   name = "quassel${tag}-${version}";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "quassel";
     repo = "quassel";
     rev = version;
-    sha256 = "1jnmc0xky91h81xjjgwg5zylfns0f1pvjy2rv39wlah890k143zr";
+    sha256 = "0z8p7iv90yrrjbh31cyxhpr6hsynfmi23rlayn7p2f6ki5az7yc3";
   };
 
   enableParallelBuilding = true;

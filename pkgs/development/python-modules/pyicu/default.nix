@@ -4,7 +4,7 @@
 , pytest
 , six
 , fetchpatch
-, pkgs
+, icu
 }:
 
 buildPythonPackage rec {
@@ -23,14 +23,16 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ pkgs.icu pytest ];
+  nativeBuildInputs = [ icu ]; # for icu-config
+  buildInputs = [ icu ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {
     homepage = https://pypi.python.org/pypi/PyICU/;
     description = "Python extension wrapping the ICU C++ API";
     license = licenses.mit;
-    platforms = platforms.linux; # Maybe other non-darwin Unix
+    platforms = platforms.unix;
     maintainers = [ maintainers.rycee ];
   };
 

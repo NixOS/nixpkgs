@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/dvorka/hstr;
     description = "Shell history suggest box - easily view, navigate, search and use your command history";
     license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
     platforms = with stdenv.lib.platforms; linux; # Cannot test others
   };
 

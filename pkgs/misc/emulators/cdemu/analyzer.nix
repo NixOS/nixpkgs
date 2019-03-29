@@ -6,7 +6,7 @@ let pkg = import ./base.nix {
 };
 in callPackage pkg {
   buildInputs = [ glib gtk3 libxml2 gnuplot (callPackage ./libmirage.nix {}) makeWrapper
-                  gnome3.defaultIconTheme gdk_pixbuf librsvg intltool ];
+                  gnome3.adwaita-icon-theme gdk_pixbuf librsvg intltool ];
   drvParams = {
     postFixup = ''
       wrapProgram $out/bin/image-analyzer \

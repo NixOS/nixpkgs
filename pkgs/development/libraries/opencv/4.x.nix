@@ -8,13 +8,13 @@
 , enablePNG       ? true, libpng
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
-, enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
+, enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
 , enableJPEG2K    ? true, jasper
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas
 , enableContrib   ? true
 
-, enableCuda      ? (config.cudaSupport or false), cudatoolkit
+, enableCuda      ? config.cudaSupport or false, cudatoolkit
 
 , enableUnfree    ? false
 , enableIpp       ? false

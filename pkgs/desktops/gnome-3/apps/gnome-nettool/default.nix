@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     gtk3 wrapGAppsHook libgtop intltool itstool libxml2
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   propagatedUserEnvPkgs = [ nmap inetutils ];

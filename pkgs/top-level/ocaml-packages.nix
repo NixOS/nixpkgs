@@ -223,6 +223,8 @@ let
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
+    dune = callPackage ../development/tools/ocaml/dune { };
+
     earley = callPackage ../development/ocaml-modules/earley { };
 
     earley_ocaml = callPackage ../development/ocaml-modules/earley_ocaml { };
@@ -231,16 +233,7 @@ let
 
     elina = callPackage ../development/ocaml-modules/elina { };
 
-    eliom = callPackage ../development/ocaml-modules/eliom {
-      js_of_ocaml-lwt = js_of_ocaml-lwt.override {
-        ocaml_lwt = lwt3;
-        lwt_log = lib.overrideDerivation
-          (lwt_log.override { lwt = lwt3; })
-          (_: { inherit (lwt3) src; });
-      };
-      lwt_react = lwt_react.override { lwt = lwt3; };
-      lwt_ssl = lwt_ssl.override { lwt = lwt3; };
-    };
+    eliom = callPackage ../development/ocaml-modules/eliom { };
 
     elpi = callPackage ../development/ocaml-modules/elpi { };
 
@@ -366,6 +359,10 @@ let
 
     lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
 
+    lablgtk3-gtkspell3 = callPackage ../development/ocaml-modules/lablgtk3/gtkspell3.nix { };
+
+    lablgtk3-sourceview3 = callPackage ../development/ocaml-modules/lablgtk3/sourceview3.nix { };
+
     lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
       inherit (pkgs.gnome2) libgnomecanvas libglade gtksourceview;
     };
@@ -383,6 +380,8 @@ let
     };
 
     labltk = callPackage ../development/ocaml-modules/labltk { };
+
+    lacaml = callPackage ../development/ocaml-modules/lacaml { };
 
     lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { lwt = lwt2; };
     lambdaTerm =
@@ -411,6 +410,8 @@ let
     lwt4 = callPackage ../development/ocaml-modules/lwt/4.x.nix { };
 
     ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt4 else lwt2;
+
+    lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
 
     lwt_log = callPackage ../development/ocaml-modules/lwt_log {
       lwt = lwt4;
@@ -523,6 +524,8 @@ let
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
 
+    syslog = callPackage ../development/ocaml-modules/syslog { };
+
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
     ocf = callPackage ../development/ocaml-modules/ocf { };
@@ -541,10 +544,7 @@ let
 
     ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
-    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server {
-      lwt_react = lwt_react.override { lwt = lwt3; };
-      lwt_ssl = lwt_ssl.override { lwt = lwt3; };
-    };
+    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
     ocsigen-start = callPackage ../development/ocaml-modules/ocsigen-start { };
 
@@ -712,6 +712,8 @@ let
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
+
+    stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
 
     stog = callPackage ../applications/misc/stog { };
 
@@ -1081,6 +1083,8 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_4_06 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.06.nix { });
 
   ocamlPackages_4_07 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.07.nix { });
+
+  ocamlPackages_4_08 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.08.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_07;
 

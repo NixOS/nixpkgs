@@ -39,11 +39,12 @@
 
 let
   drvName = "android-studio-${channel}-${version}";
+  archiveFormat = if builtins.elem channel [ "dev" "canary" ] then "tar.gz" else "zip";
   androidStudio = stdenv.mkDerivation {
     name = drvName;
 
     src = fetchurl {
-      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
+      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.${archiveFormat}";
       sha256 = sha256Hash;
     };
 

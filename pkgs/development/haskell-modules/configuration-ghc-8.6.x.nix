@@ -45,15 +45,14 @@ self: super: {
   unordered-containers = dontCheck super.unordered-containers;
 
   # Test suite does not compile.
-  cereal = dontCheck super.cereal;
   data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
   dates = doJailbreak super.dates; # base >=4.9 && <4.12
   Diff = dontCheck super.Diff;
+  equivalence = dontCheck super.equivalence; # test suite doesn't compile https://github.com/pa-ba/equivalence/issues/5
   HaTeX = doJailbreak super.HaTeX; # containers >=0.4 && <0.6 is too tight; https://github.com/Daniel-Diaz/HaTeX/issues/126
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
   http-api-data = doJailbreak super.http-api-data;
   persistent-sqlite = dontCheck super.persistent-sqlite;
-  psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
@@ -68,7 +67,25 @@ self: super: {
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
 
-  # https://github.com/pikajude/stylish-cabal/issues/11
-  stylish-cabal = markBrokenVersion "0.4.1.0" super.stylish-cabal;
+  # Needs a recent version from the "develop" branch of the upstream git
+  # repository to compile with ghc 8.6.4.
+  liquid-fixpoint = assert super.liquid-fixpoint.version == "0.7.0.7"; overrideSrc super.liquid-fixpoint {
+    src = pkgs.fetchFromGitHub {
+      owner = "ucsd-progsys";
+      repo = "liquid-fixpoint";
+      rev = "42c027ab9ae47907c588a2f1f9c05a5e0aa881e9";
+      sha256 = "17qmzq1vx7h04yd38drr6sh6hys3q2rz62qh3pna9kbxlcnikkqf";
+    };
+    version = "0.8.0.2-pre-release";
+  };
+  liquidhaskell = assert super.liquidhaskell.version == "0.8.2.4"; overrideSrc super.liquidhaskell {
+    src = pkgs.fetchFromGitHub {
+      owner = "ucsd-progsys";
+      repo = "liquidhaskell";
+      rev = "254e77da9cd36e95b72c526bfb9eec50d3447050";
+      sha256 = "089x41z51iw542ijz32j9ns6flcc4hsbjqx7rfznvmm7a4q78yza";
+    };
+    version = "0.8.6.0-pre-release";
+  };
 
 }

@@ -6,11 +6,20 @@ let
   cfg = config.services.home-assistant;
 
   # cfg.config != null can be assumed here
-  configFile = pkgs.writeText "configuration.json"
+  configJSON = pkgs.writeText "configuration.json"
     (builtins.toJSON (if cfg.applyDefaultConfig then
-    (lib.recursiveUpdate defaultConfig cfg.config) else cfg.config));
+    (recursiveUpdate defaultConfig cfg.config) else cfg.config));
+  configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
+    ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
+  '';
 
-  availableComponents = pkgs.home-assistant.availableComponents;
+  lovelaceConfigJSON = pkgs.writeText "ui-lovelace.json"
+    (builtins.toJSON cfg.lovelaceConfig);
+  lovelaceConfigFile = pkgs.runCommand "ui-lovelace.yaml" { preferLocalBuild = true; } ''
+    ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigJSON} -o $out
+  '';
+
+  availableComponents = cfg.package.availableComponents;
 
   # Given component "parentConfig.platform", returns whether config.parentConfig
   # is a list containing a set with set.platform == "platform".
@@ -20,14 +29,24 @@ let
   #   platform = "luftdaten";
   #   ...
   # } ];
+  #
+  # Beginning with 0.87 Home Assistant is migrating their components to the
+  # scheme "platform.subComponent", e.g. "hue.light" instead of "light.hue".
+  # See https://developers.home-assistant.io/blog/2019/02/19/the-great-migration.html.
+  # Hence, we also check whether we find an entry in the config when interpreting
+  # the first part of the path as the component.
   useComponentPlatform = component:
     let
       path = splitString "." component;
+      # old: platform is the last part of path
       parentConfig = attrByPath (init path) null cfg.config;
       platform = last path;
-    in isList parentConfig && any
-      (item: item.platform or null == platform)
-      parentConfig;
+      # new: platform is the first part of the path
+      parentConfig' = attrByPath (tail path) null cfg.config;
+      platform' = head path;
+    in
+      (isList parentConfig && any (item: item.platform or null == platform) parentConfig)
+      || (isList parentConfig' && any (item: item.platform or null == platform') parentConfig');
 
   # Returns whether component is used in config
   useComponent = component:
@@ -44,7 +63,9 @@ let
   # If you are changing this, please update the description in applyDefaultConfig
   defaultConfig = {
     homeassistant.time_zone = config.time.timeZone;
-    http.server_port = (toString cfg.port);
+    http.server_port = cfg.port;
+  } // optionalAttrs (cfg.lovelaceConfig != null) {
+    lovelace.mode = "yaml";
   };
 
 in {
@@ -99,6 +120,53 @@ in {
       '';
     };
 
+    configWritable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to make <filename>configuration.yaml</filename> writable.
+        This only has an effect if <option>config</option> is set.
+        This will allow you to edit it from Home Assistant's web interface.
+        However, bear in mind that it will be overwritten at every start of the service.
+      '';
+    };
+
+    lovelaceConfig = mkOption {
+      default = null;
+      type = with types; nullOr attrs;
+      # from https://www.home-assistant.io/lovelace/yaml-mode/
+      example = literalExample ''
+        {
+          title = "My Awesome Home";
+          views = [ {
+            title = "Example";
+            cards = [ {
+              type = "markdown";
+              title = "Lovelace";
+              content = "Welcome to your **Lovelace UI**.";
+            } ];
+          } ];
+        }
+      '';
+      description = ''
+        Your <filename>ui-lovelace.yaml</filename> as a Nix attribute set.
+        Setting this option will automatically add
+        <literal>lovelace.mode = "yaml";</literal> to your <option>config</option>.
+        Beware that setting this option will delete your previous <filename>ui-lovelace.yaml</filename>
+      '';
+    };
+
+    lovelaceConfigWritable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to make <filename>ui-lovelace.yaml</filename> writable.
+        This only has an effect if <option>lovelaceConfig</option> is set.
+        This will allow you to edit it from Home Assistant's web interface.
+        However, bear in mind that it will be overwritten at every start of the service.
+      '';
+    };
+
     package = mkOption {
       default = pkgs.home-assistant;
       defaultText = "pkgs.home-assistant";
@@ -144,12 +212,17 @@ in {
     systemd.services.home-assistant = {
       description = "Home Assistant";
       after = [ "network.target" ];
-      preStart = lib.optionalString (cfg.config != null) ''
-        config=${cfg.configDir}/configuration.yaml
-        rm -f $config
-        ${pkgs.remarshal}/bin/json2yaml -i ${configFile} -o $config
-        chmod 444 $config
-      '';
+      preStart = optionalString (cfg.config != null) (if cfg.configWritable then ''
+        cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
+      '' else ''
+        rm -f "${cfg.configDir}/configuration.yaml"
+        ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
+      '') + optionalString (cfg.lovelaceConfig != null) (if cfg.lovelaceConfigWritable then ''
+        cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+      '' else ''
+        rm -f "${cfg.configDir}/ui-lovelace.yaml"
+        ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+      '');
       serviceConfig = {
         ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
         User = "hass";

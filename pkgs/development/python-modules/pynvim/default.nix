@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pynvim";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yxh8zdigzs330m4gchxk6m323glz81x85q5fzgc4saq0naib26x";
+    sha256 = "01dybk4vs452pljn1q3il5z2sd313ki0lgiglc0xmjc6wp290r6g";
   };
 
   checkInputs = [ nose ];

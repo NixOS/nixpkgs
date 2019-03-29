@@ -5,7 +5,7 @@
 , hunspell, libevent, libstartup_notification
 , icu, libpng, jemalloc
 , autoconf213, which, m4
-, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
+, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl, runtimeShell
 , cargo, rustc, llvmPackages
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
 , enableCalendar ? true
@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.5.0";
+  version = "60.6.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "39biv0yk08l4kkfrsiqgsdsvpa7ih992jmakjnf2wqzrnbk4pfsrck6bnl038bihs1v25ia8c2vs25sm4wzbxzjr0z82fn31qysv2xi";
+    sha512 = "2s8h6z3rkylrclng1cpmj5dvsbhqymrdwvjy3g2s8rq66xca13wkyswdhgh8671d0dw9bmminikk53d2xqg7lqvvd1rdsminwscln4z";
   };
 
   # from firefox, but without sound libraries
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
       hunspell libevent libstartup_notification /* cairo */
       icu libpng jemalloc
     ]
-    ++ lib.optionals enableGTK3 [ gtk3 gnome3.defaultIconTheme ];
+    ++ lib.optionals enableGTK3 [ gtk3 gnome3.adwaita-icon-theme ];
 
   # from firefox + m4 + wrapperTool
   nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
@@ -193,6 +193,6 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
+    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl runtimeShell;
   };
 }

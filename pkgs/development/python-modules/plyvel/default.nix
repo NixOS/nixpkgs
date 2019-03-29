@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Fast and feature-rich Python interface to LevelDB";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     homepage = https://github.com/wbolster/plyvel;
     license = licenses.bsd3;
   };

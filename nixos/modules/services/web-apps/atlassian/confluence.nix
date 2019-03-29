@@ -6,7 +6,7 @@ let
 
   cfg = config.services.confluence;
 
-  pkg = pkgs.atlassian-confluence.override (optionalAttrs cfg.sso.enable {
+  pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
     enableSSO = cfg.sso.enable;
     crowdProperties = ''
       application.name                        ${cfg.sso.applicationName}
@@ -125,7 +125,12 @@ in
         };
       };
 
-
+      package = mkOption {
+        type = types.package;
+        default = pkgs.atlassian-confluence;
+        defaultText = "pkgs.atlassian-confluence";
+        description = "Atlassian Confluence package to use.";
+      };
 
       jrePackage = mkOption {
         type = types.package;

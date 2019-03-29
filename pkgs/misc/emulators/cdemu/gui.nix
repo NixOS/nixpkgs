@@ -8,7 +8,7 @@ let
   inherit (pythonPackages) python pygobject3;
 in callPackage pkg {
   buildInputs = [ python pygobject3 gtk3 glib libnotify intltool makeWrapper
-                  gnome3.defaultIconTheme gdk_pixbuf librsvg ];
+                  gnome3.adwaita-icon-theme gdk_pixbuf librsvg ];
   drvParams = {
     postFixup = ''
       wrapProgram $out/bin/gcdemu \

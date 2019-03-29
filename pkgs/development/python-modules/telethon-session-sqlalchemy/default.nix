@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, sqlalchemy, telethon }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, sqlalchemy }:
 
 buildPythonPackage rec {
   pname = "telethon-session-sqlalchemy";
-  version = "0.2.5";
+  version = "0.2.14";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b392096b14e5cdc4040d3900cc2be7847b160ed77e5c861a6bd07d75d8e17a85";
+    sha256 = "94aaf98afc051b4e167783f3d972bd9b51ab736a1e45df100bf52984e53eebac";
   };
 
   propagatedBuildInputs = [

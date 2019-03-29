@@ -2,8 +2,9 @@
 { lib, stdenv, fetchurl, flex, bison, autoconf
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pcre2, pkgconfig, sqlite, config, libjpeg, libpng, freetype
-, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2, libzip
+, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
+, libzip, re2c, valgrind
 }:
 
 with lib;
@@ -28,6 +29,7 @@ let
   , curlSupport ? config.php.curl or true
   , gettextSupport ? config.php.gettext or true
   , pcntlSupport ? config.php.pcntl or true
+  , pdo_odbcSupport ? config.php.pdo_odbc or true
   , postgresqlSupport ? config.php.postgresql or true
   , pdo_pgsqlSupport ? config.php.pdo_pgsql or true
   , readlineSupport ? config.php.readline or true
@@ -51,12 +53,16 @@ let
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
   , argon2Support ? (config.php.argon2 or true) && (versionAtLeast version "7.2")
-  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.3")
+  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.2")
   , phpdbgSupport ? config.php.phpdbg or true
   , cgiSupport ? config.php.cgi or true
   , cliSupport ? config.php.cli or true
   , pharSupport ? config.php.phar or true
   , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
+  , re2cSupport ? config.php.re2c or true
+  , cgotoSupport ? (config.php.cgoto or false) && (re2cSupport)
+  , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
+  , valgrindPcreSupport ? (config.php.valgrindPcreSupport or false) && (valgrindSupport) && (versionAtLeast version "7.2")
   }:
 
     let
@@ -88,6 +94,7 @@ let
         ++ optional readlineSupport readline
         ++ optional sqliteSupport sqlite
         ++ optional postgresqlSupport postgresql
+        ++ optional pdo_odbcSupport unixODBC
         ++ optional pdo_pgsqlSupport postgresql
         ++ optional pdo_mysqlSupport mysqlBuildInputs
         ++ optional mysqliSupport mysqlBuildInputs
@@ -100,7 +107,9 @@ let
         ++ optional sodiumSupport libsodium
         ++ optional tidySupport html-tidy
         ++ optional argon2Support libargon2
-        ++ optional libzipSupport libzip;
+        ++ optional libzipSupport libzip
+        ++ optional re2cSupport re2c
+        ++ optional valgrindSupport valgrind;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
 
@@ -141,6 +150,7 @@ let
       ++ optional readlineSupport "--with-readline=${readline.dev}"
       ++ optional sqliteSupport "--with-pdo-sqlite=${sqlite.dev}"
       ++ optional postgresqlSupport "--with-pgsql=${postgresql}"
+      ++ optional pdo_odbcSupport "--with-pdo-odbc=unixODBC,${unixODBC}"
       ++ optional pdo_pgsqlSupport "--with-pdo-pgsql=${postgresql}"
       ++ optional pdo_mysqlSupport "--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"
       ++ optionals mysqliSupport [
@@ -180,7 +190,10 @@ let
       ++ optional (!cgiSupport) "--disable-cgi"
       ++ optional (!cliSupport) "--disable-cli"
       ++ optional (!pharSupport) "--disable-phar"
-      ++ optional xmlrpcSupport "--with-xmlrpc";
+      ++ optional xmlrpcSupport "--with-xmlrpc"
+      ++ optional cgotoSupport "--enable-re2c-cgoto"
+      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}"
+      ++ optional valgrindPcreSupport "--with-pcre-valgrind";
 
       hardeningDisable = [ "bindnow" ];
 
@@ -245,24 +258,24 @@ let
 
 in {
   php71 = generic {
-    version = "7.1.26";
-    sha256 = "1riaaizyl0jv9p6b8sm8xxj8iqz4p4dddwdag03n1r67dfl1qdav";
+    version = "7.1.27";
+    sha256 = "0jzcyilvdy05w30vz5ln46lqm9hi36h5bibiwhl1b4a1179yrmys";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
   };
 
   php72 = generic {
-    version = "7.2.14";
-    sha256 = "15v5gbdxi6jkgdflpj5rqqzzfvwdb55hls4azh71xgy793934qgm";
+    version = "7.2.16";
+    sha256 = "0f3zkv803banqdrhj5ixfg973fnrsvn4hcij2k6r91nmac0d22ic";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.1";
-    sha256 = "13iqfkz9rmx9vy106lvw1nbk88qgwdkvxam0l5s14r7jsw62pvxg";
+    version = "7.3.3";
+    sha256 = "1riw0a1mzc5ymaj02rni57l5pyfkxl0ygf1l39q7ksnz7aa9x5k1";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;

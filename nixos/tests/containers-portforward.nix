@@ -10,7 +10,7 @@ in
 import ./make-test.nix ({ pkgs, ...} : {
   name = "containers-portforward";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aristid aszlig eelco chaoflow kampfschlaefer ianwookim ];
+    maintainers = [ aristid aszlig eelco kampfschlaefer ianwookim ];
   };
 
   machine =

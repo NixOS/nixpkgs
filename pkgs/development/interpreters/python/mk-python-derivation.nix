@@ -72,17 +72,25 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
 
   name = namePrefix + name;
 
-  nativeBuildInputs = [ ensureNewerSourcesForZipFilesHook ]
-    ++ nativeBuildInputs;
-
-  buildInputs = [ wrapPython ]
-    ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
+  nativeBuildInputs = [
+    python
+    wrapPython
+    ensureNewerSourcesForZipFilesHook
+    setuptools
 #     ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
-    ++ buildInputs
-    ++ pythonPath;
+  ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
+    unzip
+  ] ++ nativeBuildInputs;
+
+  buildInputs = buildInputs ++ pythonPath;
 
   # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
+
+  # Enabled to detect some (native)BuildInputs mistakes
+  strictDeps = true;
+
+  LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
 
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;

@@ -30,7 +30,7 @@
 , libcanberra-gtk2
 , libgnome
 , libgnomeui
-, defaultIconTheme
+, gnome3
 , libGLU_combined
 , nspr
 , nss
@@ -41,6 +41,7 @@
 , gnused
 , gnugrep
 , gnupg
+, runtimeShell
 }:
 
 # imports `version` and `sources`
@@ -117,7 +118,7 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
-  buildInputs = [ gtk3 defaultIconTheme ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -159,7 +160,7 @@ stdenv.mkDerivation {
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit name stdenv writeScript xidel coreutils gnused gnugrep curl gnupg;
+    inherit name stdenv writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";

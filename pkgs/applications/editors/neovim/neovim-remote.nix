@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   pname = "neovim-remote";
   version = "2.1.4";
   disabled = !pythonPackages.isPy3k;

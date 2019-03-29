@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, rustPlatform, cmake, pkgconfig, openssl, CoreServices, cf-private }:
 
 rustPlatform.buildRustPackage rec {
-  name = "zola-${version}";
-  version = "0.5.0";
+  pname = "zola";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "getzola";
-    repo = "zola";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0as8nrzw9zz10w4xxiibgz8ylghc879b2pwaxnw8sjbji2d9qv63";
+    sha256 = "11y5gb6lx040ax4b16fr3whkj4vmv8hlkvb50h58gs77payglf6l";
   };
 
-  cargoSha256 = "0a14hq8d3xjr6yfg5qn5r7npqivm816f1p53bbm826igvpc9hsxa";
+  cargoSha256 = "19hqkj27dbsy4pi0i8mjjlhi4351yifvc6zln6scc2nd60p251h6";
 
-  nativeBuildInputs = [ cmake pkgconfig openssl ];
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices cf-private ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices cf-private ];
 
   postInstall = ''
     install -D -m 444 completions/zola.bash \

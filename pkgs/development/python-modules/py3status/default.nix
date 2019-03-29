@@ -5,6 +5,10 @@
 , requests
 , pytz
 , tzlocal
+, i3ipc
+, pydbus
+, pygobject3
+, pyserial
 
 , file
 , acpi
@@ -19,15 +23,15 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.15";
-  
+  version = "3.16";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78aa7fa0af707641e215ea93bfd4bb5fd47f18a7193d84ed60bb9e6cccb75b7f";
+    sha256 = "1xrfph277bgjln3jbpzpgkhxad04fjvj7s3xfil42q1sxi4s3q3g";
   };
 
   doCheck = false;
-  propagatedBuildInputs = [ pytz requests tzlocal ];
+  propagatedBuildInputs = [ pytz requests tzlocal i3ipc pydbus pygobject3 pyserial ];
   buildInputs = [ file ];
   prePatch = ''
     sed -i -e "s|'file|'${file}/bin/file|" py3status/parse_config.py

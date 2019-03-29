@@ -1,6 +1,7 @@
 { lib, stdenv
-, python, cmake, vim, ruby
-, which, fetchgit, llvmPackages, rustPlatform
+, python, cmake, meson, vim, ruby
+, which, fetchgit, fetchurl
+, llvmPackages, rustPlatform
 , xkb-switch, fzf, skim
 , python3, boost, icu, ncurses
 , ycmd, rake
@@ -39,16 +40,15 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    LanguageClient-neovim-src = fetchgit {
-      url = "https://github.com/autozimu/LanguageClient-neovim";
-      rev = "59f0299e8f7d7edd0653b5fc005eec74c4bf4aba";
-      sha256 = "0x6729w7v3bxlpvm8jz1ybn23qa0zqfgxl88q2j0bbs6rvp0w1jq";
+    LanguageClient-neovim-src = fetchurl {
+      url = "https://github.com/autozimu/LanguageClient-neovim/archive/0.1.140.tar.gz";
+      sha256 = "0cixwm9wnn6vlam6mp57j436n92c4bvj5rs6j2qcv7qip8d2ggyw";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "1afmz14j7ma2nrsx0njcqbh2wa430dr10hds78c031286ppgwjls";
+      cargoSha256 = "0f591zv4f7spks2hx22nkq78sj42259gi7flnnpr1nfs40d7n13n";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -59,10 +59,10 @@ self: super: {
     };
   in buildVimPluginFrom2Nix {
     pname = "LanguageClient-neovim";
-    version = "2018-09-07";
+    version = "0.1.140";
     src = LanguageClient-neovim-src;
 
-    propogatedBuildInputs = [ LanguageClient-neovim-bin ];
+    propagatedBuildInputs = [ LanguageClient-neovim-bin ];
 
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
@@ -159,6 +159,12 @@ self: super: {
   gist-vim = super.gist-vim.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
+
+  meson = buildVimPluginFrom2Nix {
+    inherit (meson) pname version src;
+    preInstall = "cd data/syntax-highlighting/vim";
+    meta.maintainers = with stdenv.lib.maintainers; [ vcunat ];
+  };
 
   ncm2 = super.ncm2.overrideAttrs(old: {
     dependencies = with super; [ nvim-yarp ];

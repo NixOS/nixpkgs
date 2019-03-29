@@ -19,7 +19,8 @@ buildPythonPackage rec {
     sha256 = "fd64def9a51dd7dc61913a7a08eeba5b9785522740bec5a7c5995b2a90525025";
   };
 
-  propagatedBuildInputs = [ llvm ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
+  nativeBuildInputs = [ llvm ];
+  propagatedBuildInputs = [ ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
 
   # Disable static linking
   # https://github.com/numba/llvmlite/issues/93

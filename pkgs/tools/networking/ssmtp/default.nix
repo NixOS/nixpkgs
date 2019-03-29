@@ -1,4 +1,4 @@
-{stdenv, fetchurl, tlsSupport ? false, openssl ? null}:
+{stdenv, fetchurl, tlsSupport ? true, openssl ? null}:
 
 assert tlsSupport -> openssl != null;
 

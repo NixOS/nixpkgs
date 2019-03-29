@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
-, mailcap
-, buildPackages, targetPackages }:
+, mailcap, runtimeShell
+, buildPackages, pkgsTargetTarget
+}:
 
 let
 
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     # This source produces shell script at run time,
     # and thus it is not corrected by patchShebangs.
     substituteInPlace misc/cgo/testcarchive/carchive_test.go \
-      --replace '#!/usr/bin/env bash' '#!${stdenv.shell}'
+      --replace '#!/usr/bin/env bash' '#!${runtimeShell}'
 
     # Patch the mimetype database location which is missing on NixOS.
     substituteInPlace src/mime/type_unix.go \
@@ -100,7 +101,7 @@ stdenv.mkDerivation rec {
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isAarch32 ''
-    echo '#!${stdenv.shell}' > misc/cgo/testplugin/test.bash
+    echo '#!${runtimeShell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
     substituteInPlace src/race.bash --replace \
       "sysctl machdep.cpu.extfeatures | grep -qv EM64T" true
@@ -152,16 +153,12 @@ stdenv.mkDerivation rec {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
-      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc"
-    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${stdenv.cc.targetPrefix}cc"
+  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
     else
       null;
-  CXX_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
-      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++"
-    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${stdenv.cc.targetPrefix}c++"
+  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++"
     else
       null;
 

@@ -112,6 +112,66 @@ rec {
     avr      = { bits = 8; family = "avr"; };
   };
 
+  # Determine where two CPUs are compatible with each other. That is,
+  # can we run code built for system b on system a? For that to
+  # happen, then the set of all possible possible programs that system
+  # b accepts must be a subset of the set of all programs that system
+  # a accepts. This compatibility relation forms a category where each
+  # CPU is an object and each arrow from a to b represents
+  # compatibility. CPUs with multiple modes of Endianness are
+  # isomorphic while all CPUs are endomorphic because any program
+  # built for a CPU can run on that CPU.
+  isCompatible = a: b: with cpuTypes; lib.any lib.id [
+    # x86
+    (b == i386 && isCompatible a i486)
+    (b == i486 && isCompatible a i586)
+    (b == i586 && isCompatible a i686)
+    # NOTE: Not true in some cases. Like in WSL mode.
+    (b == i686 && isCompatible a x86_64)
+
+    # ARM
+    (b == arm && isCompatible a armv5tel)
+    (b == armv5tel && isCompatible a armv6m)
+    (b == armv6m && isCompatible a armv6l)
+    (b == armv6l && isCompatible a armv7a)
+    (b == armv7a && isCompatible a armv7r)
+    (b == armv7r && isCompatible a armv7m)
+    (b == armv7m && isCompatible a armv7l)
+    (b == armv7l && isCompatible a armv8a)
+    (b == armv8a && isCompatible a armv8r)
+    (b == armv8r && isCompatible a armv8m)
+    # NOTE: not always true! Some arm64 cpus don’t support arm32 mode.
+    (b == armv8m && isCompatible a aarch64)
+    (b == aarch64 && a == aarch64_be)
+    (b == aarch64_be && isCompatible a aarch64)
+
+    # PowerPC
+    (b == powerpc && isCompatible a powerpc64)
+    (b == powerpcle && isCompatible a powerpc)
+    (b == powerpc && a == powerpcle)
+    (b == powerpc64le && isCompatible a powerpc64)
+    (b == powerpc64 && a == powerpc64le)
+
+    # MIPS
+    (b == mips && isCompatible a mips64)
+    (b == mips && a == mipsel)
+    (b == mipsel && isCompatible a mips)
+    (b == mips64 && a == mips64el)
+    (b == mips64el && isCompatible a mips64)
+
+    # RISCV
+    (b == riscv32 && isCompatible a riscv64)
+
+    # SPARC
+    (b == sparc && isCompatible a sparc64)
+
+    # WASM
+    (b == wasm32 && isCompatible a wasm64)
+
+    # identity
+    (b == a)
+  ];
+
   ################################################################################
 
   types.openVendor = mkOptionType {

@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.37";
+  version = "2.0.43";
   name = "munin-${version}";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "10niyzckx90dwdr4d7vj07d1qjy3nk7xzp30nqnlxzbaww7n5v78";
+    sha256 = "1ydhf9hcb3n5h0ss5f1zf9yz4r4njqxazlz931ixvx5gyhj9gq5l";
   };
 
   buildInputs = [
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
+    echo "${version}" > RELEASE
     substituteInPlace "Makefile" \
       --replace "/bin/pwd" "pwd" \
       --replace "HTMLOld.3pm" "HTMLOld.3"

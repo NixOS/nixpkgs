@@ -2,14 +2,14 @@
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation ( rec {
-  name = "ponyc-${version}";
-  version = "0.25.0";
+  pname = "ponyc";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
-    repo = "ponyc";
+    repo = pname;
     rev = version;
-    sha256 = "0ghmjp03q7k58yzfkvnl05xc2i2gmgnzpj3hs6g7ls4ny8n3i6hv";
+    sha256 = "011qxhiq75j6d37ws4nb6a8bdfw2cvlcsb2fgdkn1hx2xb81h6wc";
   };
 
   buildInputs = [ llvm makeWrapper which ];
@@ -25,24 +25,14 @@ stdenv.mkDerivation ( rec {
     substituteInPlace packages/process/_test.pony \
         --replace '=/bin' "${coreutils}/bin"
 
-
-    # Fix llvm-ar check for darwin
-    substituteInPlace Makefile \
-        --replace "llvm-ar-3.8" "llvm-ar"
-
     # Remove impure system refs
     substituteInPlace src/libponyc/pkg/package.c \
-        --replace "/usr/local/lib" ""
-    substituteInPlace src/libponyc/pkg/package.c \
+        --replace "/usr/local/lib" "" \
         --replace "/opt/local/lib" ""
 
     for file in `grep -irl '/usr/local/opt/libressl/lib' ./*`; do
       substituteInPlace $file  --replace '/usr/local/opt/libressl/lib' "${stdenv.lib.getLib libressl}/lib"
     done
-
-    # Fix ponypath issue
-    substituteInPlace Makefile \
-        --replace "PONYPATH=." "PONYPATH=.:\$(PONYPATH)"
 
     export LLVM_CONFIG=${llvm}/bin/llvm-config
   '' + stdenv.lib.optionalString ((!stdenv.isDarwin) && (!cc.isClang) && lto) ''
@@ -73,9 +63,7 @@ stdenv.mkDerivation ( rec {
     wrapProgram $out/bin/ponyc \
       --prefix PATH ":" "${stdenv.cc}/bin" \
       --set-default CC "$CC" \
-      --prefix PONYPATH : "$out/lib" \
-      --prefix PONYPATH : "${stdenv.lib.getLib pcre2}/lib" \
-      --prefix PONYPATH : "${stdenv.lib.getLib libressl}/lib"
+      --prefix PONYPATH : "${stdenv.lib.makeLibraryPath [ pcre2 libressl (placeholder "out") ]}"
   '';
 
   # Stripping breaks linking for ponyc

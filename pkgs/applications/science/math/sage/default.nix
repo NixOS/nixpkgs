@@ -35,6 +35,7 @@ let
         inherit flint ecl arb;
         inherit sage-src pynac singular;
         linbox = pkgs.linbox.override { withSage = true; };
+        pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
       };
     };
   };
@@ -59,7 +60,7 @@ let
   # the files its looking fore are located. Also see `sage-env`.
   env-locations = callPackage ./env-locations.nix {
     inherit pari_data ecl;
-    inherit singular;
+    inherit singular maxima-ecl;
     cysignals = python.pkgs.cysignals;
     three = nodePackages.three;
     mathjax = nodePackages.mathjax;
@@ -70,21 +71,21 @@ let
   sage-env = callPackage ./sage-env.nix {
     sagelib = python.pkgs.sagelib;
     inherit env-locations;
-    inherit python ecl singular palp flint pynac pythonEnv;
+    inherit python ecl singular palp flint pynac pythonEnv maxima-ecl;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
   };
 
   # The documentation for sage, building it takes a lot of ram.
   sagedoc = callPackage ./sagedoc.nix {
     inherit sage-with-env;
-    inherit python;
+    inherit python maxima-ecl;
   };
 
   # sagelib with added wrappers and a dependency on sage-tests to make sure thet tests were run.
   sage-with-env = callPackage ./sage-with-env.nix {
     inherit pythonEnv;
     inherit sage-env;
-    inherit pynac singular;
+    inherit pynac singular maxima-ecl;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
     three = nodePackages.three;
   };
@@ -127,6 +128,9 @@ let
   arb = pkgs.arb.override { inherit flint; };
 
   singular = pkgs.singular.override { inherit flint; };
+
+  # https://trac.sagemath.org/ticket/26625
+  maxima-ecl = pkgs.maxima-ecl-5_41;
 
   # *not* to confuse with the python package "pynac"
   pynac = pkgs.pynac.override { inherit singular flint; };

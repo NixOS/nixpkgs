@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://conkeror.org/;
     license = with licenses; [ mpl11 gpl2 lgpl21 ];
-    maintainers = with maintainers; [ astsmtl chaoflow ];
+    maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;
   };
 }
