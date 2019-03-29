@@ -1,15 +1,14 @@
 { stdenv, fetchurl, unzip, lib, makeWrapper, autoPatchelfHook
 , openjdk11, pam
-}: let
+}:
 
+let
   pkg_path = "$out/lib/ghidra";
   jdkWrapper = binName: ''
     makeWrapper "${pkg_path}/${binName}" "$out/bin/${builtins.baseNameOf binName}" \
       --prefix PATH : '${lib.makeBinPath [ openjdk11 ]}'
     '';
-
 in stdenv.mkDerivation {
-
   name = "ghidra-9.0";
 
   src = fetchurl {
@@ -51,5 +50,4 @@ in stdenv.mkDerivation {
     license = licenses.asl20;
     maintainers = [ maintainers.ck3d ];
   };
-
 }

@@ -1,9 +1,10 @@
-ghidraDevZip: {eclipses, fetchzip}:
-  eclipses.plugins.buildEclipseUpdateSite rec {
-    name = "GhidraDev";
-    version = "2.0.0";
+ghidraDevZip: { eclipses, fetchzip }:
 
-    sourceRoot = ".";
+eclipses.plugins.buildEclipseUpdateSite rec {
+  name = "GhidraDev";
+  version = "2.0.0";
 
-    src = ghidraDevZip;
-    }
+  sourceRoot = ".";
+
+  src = ghidraDevZip;
+}
