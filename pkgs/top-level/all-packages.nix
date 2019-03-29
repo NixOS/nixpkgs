@@ -8376,8 +8376,8 @@ in
 
   msp430Newlib      = callPackage ../development/misc/msp430/newlib.nix { };
   msp430NewlibCross = callPackage ../development/misc/msp430/newlib.nix {
-    inherit (pkgs.buildPackages.xorg) lndir;
-    newlib = pkgs.newlibCross;
+    inherit (buildPackages.xorg) lndir;
+    newlib = newlibCross;
   };
 
   mspdebug = callPackage ../development/misc/msp430/mspdebug.nix { };
