@@ -26,11 +26,11 @@ in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "1c4ga3p0jshs9xyfq07j6jl9hj42p47q6nbmy42cijax90bhayz3";
+    sha256 = "0d0yc2j5gr36j2r9dzd5bwlp0n8y52wnvp5f0bh40sln39ispwi7";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
