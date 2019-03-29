@@ -20951,6 +20951,8 @@ in
   liquidwar5 = callPackage ../games/liquidwar/5.nix {
   };
 
+  lugaru = callPackage ../games/lugaru {};
+
   macopix = callPackage ../games/macopix {
     gtk = gtk2;
   };
