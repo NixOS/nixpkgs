@@ -68,6 +68,17 @@
      <xref linkend="sec-kubernetes"/> for details.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       There is now a set of <option>confinement</option> options for
+       <option>systemd.services</option>, which allows to restrict services
+       into a <citerefentry>
+        <refentrytitle>chroot</refentrytitle>
+        <manvolnum>2</manvolnum>
+      </citerefentry>ed environment that only contains the store paths from
+      the runtime closure of the service.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
