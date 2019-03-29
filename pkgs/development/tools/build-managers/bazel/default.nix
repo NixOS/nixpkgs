@@ -212,7 +212,7 @@ stdenv.mkDerivation rec {
         --replace /bin:/usr/bin ${defaultShellPath}
 
       # append the PATH with defaultShellPath in tools/bash/runfiles/runfiles.bash
-      echo "PATH=$PATH:${defaultShellPath}" >> runfiles.bash.tmp
+      echo "PATH=\$PATH:${defaultShellPath}" >> runfiles.bash.tmp
       cat tools/bash/runfiles/runfiles.bash >> runfiles.bash.tmp
       mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
 
