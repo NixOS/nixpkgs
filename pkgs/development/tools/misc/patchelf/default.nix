@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-0.9";
+  name = "patchelf-0.10";
 
   src = fetchurl {
     url = "https://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
-    sha256 = "a0f65c1ba148890e9f2f7823f4bedf7ecad5417772f64f994004f59a39014f83";
+    sha256 = "1wzwvnlyf853hw9zgqq5522bvf8gqadk8icgqa41a5n7593csw7n";
   };
 
   setupHook = [ ./setup-hook.sh ];
