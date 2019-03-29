@@ -27,7 +27,14 @@ in buildGoPackage rec {
 
   postInstall = ''
     mkdir -p $ruby
-    cp -rv $src/ruby/{bin,lib} $ruby
+    cp -rv $src/ruby/{bin,lib,git-hooks,vendor} $ruby
+
+    # gitlab-shell will try to read its config relative to the source
+    # code by default which doesn't work in nixos because it's a
+    # read-only filesystem
+    substituteInPlace $ruby/vendor/gitlab-shell/lib/gitlab_config.rb --replace \
+       "File.join(ROOT_PATH, 'config.yml')" \
+       "'/run/gitlab/shell-config.yml'"
   '';
 
   outputs = [ "bin" "out" "ruby" ];
