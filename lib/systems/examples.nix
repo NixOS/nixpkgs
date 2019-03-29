@@ -102,6 +102,11 @@ rec {
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
+  msp430 = {
+    config = "msp430-elf";
+    libc = "newlib";
+  };
+
   avr = {
     config = "avr";
   };
