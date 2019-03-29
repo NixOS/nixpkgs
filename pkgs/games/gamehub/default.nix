@@ -1,6 +1,6 @@
-{ stdenv, meson, ninja, pkgconfig, fetchFromGitHub, glib, vala, ctpl
+{ stdenv, meson, ninja, pkgconfig, fetchFromGitHub, glib, ctpl
 , libgee, libsoup, fcgi, pantheon, gtk3, webkitgtk, json-glib, sqlite
-, xml2, polkit, gobject-introspection, libunity }:
+, xml2, polkit, gobject-introspection, libunity, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gamehub";
@@ -20,10 +20,11 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     gobject-introspection
+    pantheon.vala
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    vala
     pantheon.granite
     gtk3
     #ctpl
@@ -38,6 +39,10 @@ stdenv.mkDerivation rec {
     #fcgi
     libunity
   ];
+
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://tkashkin.tk/projects/gamehub/;
