@@ -11314,6 +11314,8 @@ in
 
   libfakekey = callPackage ../development/libraries/libfakekey { };
 
+  libfido2 = callPackage ../development/libraries/libfido2 { };
+
   libfilezilla = callPackage ../development/libraries/libfilezilla { };
 
   libfm = callPackage ../development/libraries/libfm { };
