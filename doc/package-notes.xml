@@ -654,6 +654,83 @@ overrides = self: super: rec {
 </screen>
   </section>
  </section>
+ <section xml:id="sec-firefox">
+  <title>Firefox</title>
+
+  <section xml:id="sec-firefox-config">
+   <title>Configuring the Firefox Wrapper</title>
+
+   <para>
+    The firefox (wrapper) package can be configured through several mechanisms.
+    The
+    <link xlink:href="https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig">
+    AutoConfig </link> method, and the more recent
+    <link xlink:href="https://github.com/mozilla/policy-templates/blob/master/README.md">
+    enterprise policies</link> corresponding to the <literal> extraPrefs
+    </literal> and <literal> extraPolicies </literal> arguments of the firefox
+    wrapper package.
+   </para>
+
+   <para>
+    For example the option <literal>media.autoplay.default=1</literal> which
+    disables autoplaying videos, could be specified as follows (the syntax of
+    AutoConfig is a superset of user.js):
+<programlisting>
+firefox.override {
+  extraPrefs = ''
+    pref("media.autoplay.default",1);
+  '';
+}
+</programlisting>
+    To disable upload of telemetry data, you could use:
+<programlisting>
+firefox.override {
+  extraPolicies = {
+    DisableTelemetry = true;
+  };
+}
+</programlisting>
+    Notice that <literal>extraPolicies</literal> uses nix syntax, which will
+    get converted to json internally for the policies.json file.
+   </para>
+
+   <para>
+    The policies framework can also be used to enforce the installation of
+    extensions, but with a few caveats, as this approach to managing extensions
+    is somewhat imperative in nature:
+   </para>
+
+   <para>
+    At the time of this writing, this method will only install the extensions
+    on startup. For example if you remove the option from the override, the
+    extension will still persist. This is currently a limitation of the
+    upstream policies framework, as the extension will get installed
+    <emphasis>into the users firefox profile directory</emphasis>. Also note,
+    that the way this is handled upstream is still very much in flow, so this
+    should be considered <emphasis>experimental</emphasis>.
+   </para>
+
+   <para>
+<programlisting>
+firefox.override {
+  extraPolicies.Extensions.Install = [ <literal> extension-url </literal> ];
+}
+</programlisting>
+    where <literal> extension-url </literal> is an url pointing to the xpi file
+    of the extension. For example
+<programlisting>
+https://addons.mozilla.org/firefox/downloads/file/1189923/noscript_security_suite-latest-fx.xpi
+</programlisting>
+    for the latest version of the noscript suite. It can also be a local file
+    (a zip file containing the extensions files, renamed after its addon id,
+    followed by the <literal>.xpi</literal> extension to be precise), but then
+    you likely need to set <literal>xpinstall.signatures.required</literal> to
+    <literal>false</literal> in <literal>extraPrefs</literal> or
+    <literal>user.js / about:config</literal>, unless your local extension is
+    signed by mozilla.
+   </para>
+  </section>
+ </section>
  <section xml:id="sec-weechat">
   <title>Weechat</title>
 
