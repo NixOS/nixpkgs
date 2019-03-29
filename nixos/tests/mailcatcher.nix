@@ -21,6 +21,6 @@ import ./make-test.nix ({ lib, ... }:
     $machine->waitForUnit('mailcatcher.service');
     $machine->waitForOpenPort('1025');
     $machine->succeed('echo "this is the body of the email" | mail -s "subject" root@example.org');
-    $machine->succeed('curl http://localhost:1080/messages/1.json') =~ /this is the body of the email/ or die;
+    $machine->succeed('curl http://localhost:1080/messages/1.source') =~ /this is the body of the email/ or die;
   '';
 })
