@@ -142,10 +142,10 @@
     dependencies = ["addressable"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0gwvf8mc8gnz4aizfijplv3594998h2j44ydakpzsdmkivs07v61";
+      sha256 = "1y4vc018b5mzp7winw4pbb22jk0dpxp22pzzxq7w0rgvfxzi89pd";
       type = "gem";
     };
-    version = "1.6.0";
+    version = "1.7.0";
   };
   docile = {
     source = {
@@ -350,10 +350,10 @@
   rack = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0in0amn0kwvzmi8h5zg6ijrx5wpsf8h96zrfmnk1kwh2ql4sxs2q";
+      sha256 = "1g9926ln2lw12lfxm4ylq1h6nl0rafl10za3xvjzc87qvnqic87f";
       type = "gem";
     };
-    version = "1.6.10";
+    version = "1.6.11";
   };
   rack-openid = {
     dependencies = ["rack" "ruby-openid"];
@@ -430,10 +430,10 @@
     dependencies = ["htmlentities" "rbpdf-font"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0i00mmc028p7hnpwlx9r6zdwwz589kd9ns6qpxmgl6f620n1fvs2";
+      sha256 = "0fnhcn4z2zz6ic1yvl5hmhwmkdnybh8f8fnk1ni7bvl2s4ig5195";
       type = "gem";
     };
-    version = "1.19.7";
+    version = "1.19.8";
   };
   rbpdf-font = {
     source = {

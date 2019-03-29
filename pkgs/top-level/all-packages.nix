@@ -4542,6 +4542,8 @@ with pkgs;
 
   parted = callPackage ../tools/misc/parted { };
 
+  paulstretch = callPackage ../applications/audio/paulstretch { };
+
   pell = callPackage ../applications/misc/pell { };
 
   pepper = callPackage ../tools/admin/salt/pepper { };
@@ -7251,6 +7253,7 @@ with pkgs;
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
+  rustPlatform_1_31 = recurseIntoAttrs (makeRustPlatform rust_1_31);
 
   makeRustPlatform = rust: lib.fix (self:
     let
@@ -7282,6 +7285,9 @@ with pkgs;
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen { };
   rust-cbindgen_0_6_7 = callPackage ../development/tools/rust/cbindgen/0_6_7.nix { };
+  rust-cbindgen_0_8_0 = callPackage ../development/tools/rust/cbindgen/0_8_0.nix {
+    rustPlatform = rustPlatform_1_31;
+  };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -13545,7 +13551,6 @@ with pkgs;
   };
 
   deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
-  deadpixi-sam = deadpixi-sam-unstable;
 
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
@@ -20143,7 +20148,9 @@ with pkgs;
 
   pacvim = callPackage ../games/pacvim { };
 
-  performous = callPackage ../games/performous { };
+  performous = callPackage ../games/performous {
+    boost = boost166;
+  };
 
   pingus = callPackage ../games/pingus {};
 

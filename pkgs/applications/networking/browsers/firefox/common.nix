@@ -11,6 +11,7 @@
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, rust-cbindgen_0_6_7, nodejs, rust_1_31
+, nasm, rust-cbindgen_0_8_0
 , debugBuild ? false
 
 ### optionals
@@ -101,8 +102,14 @@ stdenv.mkDerivation (rec {
     libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc glib
   ]
-  ++ lib.optionals (!isTorBrowserLike) [ nss ]
+  ++ lib.optionals (!isTorBrowserLike) [ nspr nss ]
   ++ lib.optional (lib.versionOlder version "61") hunspell
+
+  # >= 66 requires nasm for the AV1 lib dav1d
+  # yasm can potentially be removed in future versions
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
+  # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
+  ++ lib.optional (lib.versionAtLeast version "66") nasm
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
@@ -134,8 +141,10 @@ stdenv.mkDerivation (rec {
     ++ (if (lib.versionAtLeast version "63") then [
       nodejs rust_1_31.rustc rust_1_31.cargo
     ] else [ cargo rustc ])
-    ++ (if (lib.versionAtLeast version "64") then [
+    ++ (if (lib.versionAtLeast version "64" && lib.versionOlder version "66") then [
       rust-cbindgen_0_6_7
+    ] else if (lib.versionAtLeast version "66") then [
+      rust-cbindgen_0_8_0
     ] else [
       rust-cbindgen
     ])
@@ -177,7 +186,13 @@ stdenv.mkDerivation (rec {
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
     # please get your own set of keys.
     echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/ga
-    configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
+    # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
+    ${if (lib.versionAtLeast version "60.6" && lib.versionOlder version "61") || (lib.versionAtLeast version "66") then ''
+      configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/ga")
+      configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/ga")
+    '' else ''
+      configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
+    ''}
   '' + lib.optionalString (lib.versionOlder version "58") ''
     cd obj-*
   ''

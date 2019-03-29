@@ -22,7 +22,8 @@ let
       password = cfg.databasePassword;
       username = cfg.databaseUsername;
       encoding = "utf8";
-    };
+      pool = cfg.databasePool;
+    } // cfg.extraDatabaseConfig;
   };
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
@@ -251,6 +252,18 @@ in {
         type = types.str;
         default = "gitlab";
         description = "Gitlab database user.";
+      };
+
+      databasePool = mkOption {
+        type = types.int;
+        default = 5;
+        description = "Database connection pool size.";
+      };
+
+      extraDatabaseConfig = mkOption {
+        type = types.attrs;
+        default = {};
+        description = "Extra configuration in config/database.yml.";
       };
 
       host = mkOption {
@@ -498,7 +511,15 @@ in {
     systemd.services.gitaly = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv cfg.packages.gitaly.rubyEnv.wrappedRuby ];
+      path = with pkgs; [
+        openssh
+        procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
+        gitAndTools.git
+        cfg.packages.gitaly.rubyEnv
+        cfg.packages.gitaly.rubyEnv.wrappedRuby
+        gzip
+        bzip2
+      ];
       serviceConfig = {
         Type = "simple";
         User = cfg.user;

@@ -12,13 +12,12 @@ let
   '';
 
   package = pythonPackages.buildPythonApplication rec {
-    name = "${pname}-${version}";
     pname = "buildbot";
-    version = "1.2.0";
+    version = "1.4.0";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "02gwmls8kgm6scy36hdy0bg645zs1pxlrgwkcn79wrl7cfmabcbv";
+      sha256 = "0dfa926nh642i3bnpzlz0q347zicyx6wswjfqbniri59ya64fncx";
     };
 
     buildInputs = with pythonPackages; [

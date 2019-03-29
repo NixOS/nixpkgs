@@ -11,6 +11,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ curtsies greenlet pygments requests urwid ];
 
+  postInstall = ''
+    substituteInPlace "$out/share/applications/bpython.desktop" \
+      --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
+  '';
+
   checkInputs = [ mock ];
 
   # tests fail: https://github.com/bpython/bpython/issues/712

@@ -2,7 +2,6 @@
 
 {
   www = pythonPackages.buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "buildbot_www";
     version = buildbot-pkg.version;
 
@@ -11,7 +10,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version format;
-      sha256 = "001kxjcyn5sxiq7m1izy4djj7alw6qpgaid4f518s9xgm4a8hwcb";
+      sha256 = "1m5dsp1gn9m5vfh5hnqp8g6hmhw1f1ydnassd33nhk521f2akz0v";
     };
 
     meta = with stdenv.lib; {
@@ -23,13 +22,12 @@
   };
 
   console-view = pythonPackages.buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "buildbot-console-view";
     version = buildbot-pkg.version;
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "11p9l9r9rh8cq0ihzjcdxfbi55n7inbsz45zqq67rkvqn5nhj5b6";
+      sha256 = "0vblaxmihgb4w9aa5q0wcgvxs7qzajql8s22w0pl9qs494g05s9r";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -43,13 +41,12 @@
   };
 
   waterfall-view = pythonPackages.buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "buildbot-waterfall-view";
     version = buildbot-pkg.version;
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "1yx63frfpbvwy4hfib1psyq5ad0wysyzfrla8d7lgbdaip021wzw";
+      sha256 = "18v1a6dapwjc2s9hi0cv3ry3s048w84md908zwaa3033gz3zwzy7";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -63,13 +60,12 @@
   };
 
   grid-view = pythonPackages.buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "buildbot-grid-view";
     version = buildbot-pkg.version;
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "06my75hli3w1skdkx1qz6zqw2wckanhrcvlqm4inylj9v9pcrgv6";
+      sha256 = "0iawsy892v6rn88hsgiiwaf689jqzhnb2wbxh6zkz3c0hvq4g0qd";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -83,13 +79,12 @@
   };
 
   wsgi-dashboards = pythonPackages.buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "buildbot-wsgi-dashboards";
     version = buildbot-pkg.version;
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "073gz44fa5k1p8k46k0ld9gg16j8zdj6sc297qfyqpiw28ybhc5s";
+      sha256 = "00cpjna3bffh1qbq6a3sqffd1g7qhbrmn9gpzxf9k38jam6jgfpz";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
