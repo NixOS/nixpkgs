@@ -52,7 +52,7 @@ index bcf3225..3530997 100755
      site_filename_dst = change_prefix(site_filename, home_dir)
      site_dir = os.path.dirname(site_filename_dst)
      writefile(site_filename_dst, SITE_PY)
-+    wrapper_path = join(prefix, "lib", py_version, "site-packages")
++    wrapper_path = join(prefix, "lib", PY_VERSION, "site-packages")
 +    writefile(
 +        join(site_dir, 'sitecustomize.py',),
 +        "import sys; sys.path.append('%s')" % wrapper_path
