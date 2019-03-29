@@ -241,6 +241,7 @@ stdenv.mkDerivation rec {
   # Change this to $(mktemp -d) as soon as we figure out why.
 
   buildPhase = ''
+    # Hello
     export TMPDIR=/tmp/.bazel-$UID
     ./compile.sh
     scripts/generate_bash_completion.sh \
