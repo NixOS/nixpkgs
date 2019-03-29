@@ -21717,6 +21717,8 @@ in
 
   somatic-sniper = callPackage ../applications/science/biology/somatic-sniper { };
 
+  stacks = callPackage ../applications/science/biology/stacks { };
+
   star = callPackage ../applications/science/biology/star { };
 
   strelka = callPackage ../applications/science/biology/strelka { };
