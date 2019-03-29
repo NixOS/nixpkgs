@@ -11,19 +11,18 @@
 # Outputs
 , alsaLib, libjack2, libpulseaudio, libshout
 # Misc
-, icu, sqlite, avahi, dbus
+, icu, sqlite, avahi, dbus, pcre, libgcrypt, expat
 # Services
 , yajl
 # Client support
 , mpd_clientlib
 # Tag support
 , libid3tag
-#, features ? []
 }:
 
 let
   major = "0.21";
-  minor = "5";
+  minor = "6";
 
   lib = stdenv.lib;
   mkDisable = f: "-D${f}=disabled";
@@ -31,6 +30,9 @@ let
   keys = lib.mapAttrsToList (k: v: k);
 
   featureDependencies = {
+    # Storage plugins
+    udisks        = [ dbus ];
+    webdav        = [ curl expat ];
     # Input plugins
     curl          = [ curl ];
     mms           = [ libmms ];
@@ -61,19 +63,23 @@ let
     jack          = [ libjack2 ];
     pulse         = [ libpulseaudio ];
     shout         = [ libshout ];
-    # Misc
-    icu           = [ icu ];
-    sqlite        = [ sqlite ];
-    zeroconf      = [ avahi dbus ];
     # Commercial services
+    qobuz         = [ curl libgcrypt yajl ];
     soundcloud    = [ curl yajl ];
+    tidal         = [ curl yajl ];
     # Client support
     libmpdclient  = [ mpd_clientlib ];
     # Tag support
     id3tag        = [ libid3tag ];
     # Misc
+    dbus          = [ dbus ];
+    expat         = [ expat ];
+    icu           = [ icu ];
+    pcre          = [ pcre ];
+    sqlite        = [ sqlite ];
     systemd       = [ systemd ];
     yajl          = [ yajl ];
+    zeroconf      = [ avahi dbus ];
   };
 
   features = keys featureDependencies;
@@ -93,7 +99,7 @@ in stdenv.mkDerivation rec {
     owner  = "MusicPlayerDaemon";
     repo   = "MPD";
     rev    = "v${version}";
-    sha256 = "0bdnng34hwmwy5hll6ks3yksw3l77w9vaip2l6wkilqhzyibkbpl";
+    sha256 = "14523la9jz16sf267m4a5n3hl3nx5a3ki42j17z7fz668bjw1v9s";
   };
 
   buildInputs = [ glib boost ]
