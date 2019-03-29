@@ -108,6 +108,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "*" ];
   };
 
+  FsLexYaccRuntime = fetchNuGet {
+    baseName = "FsLexYacc.Runtime";
+    version = "6.1.0";
+    sha256 = "18vrx4lxsn4hkfishg4abv0d4q21dsph0bm4mdq5z8afaypp5cr7";
+    outputFiles = [ "lib/net40/*" ];
+  };
+
   FsPickler = fetchNuGet {
     baseName = "FsPickler";
     version = "1.2.9";
