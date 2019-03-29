@@ -21656,6 +21656,8 @@ in
 
   kallisto = callPackage ../applications/science/biology/kallisto { };
 
+  migrate = callPackage ../applications/science/biology/migrate { };
+
   mirtk = callPackage ../development/libraries/science/biology/mirtk { };
 
   muscle = callPackage ../applications/science/biology/muscle { };
