@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "nika-fonts";
+  pname = "nika-fonts";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/rastikerdar/nika-font;
+    homepage = https://github.com/font-store/NikaFont/;
     description = "Persian/Arabic Open Source Font";
     license = licenses.ofl;
     platforms = platforms.all;
