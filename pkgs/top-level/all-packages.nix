@@ -11077,6 +11077,8 @@ in
     then pkgs.libcanberra
     else pkgs.libcanberra-gtk2;
 
+  libcbor = callPackage ../development/libraries/libcbor { };
+
   libcec = callPackage ../development/libraries/libcec { };
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
