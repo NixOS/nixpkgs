@@ -182,16 +182,16 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.0-rc3";
+    version = "2019-03-29";
+    rev = "1b939560be5c51deecf875af9dada9d094633bf7";
 
-    sha256 = "0wmkis0q2gbj7sgx3ipxngbgzjcf7ay353v3mglf2ay50q4da5i7";
+    sha256 = "18isg2i8ig6rp1r4ylhz1n5shksrhkzf0mpadhai71v0y21599n0";
     isUnstable = true;
 
     extraPatches = [
-      # in case this gets out of date, just send Mic92 a pull request!
       (fetchpatch {
-        url = "https://github.com/Mic92/zfs/commit/bc29b5783da0af2c80c85126a1831ce1d52bfb69.patch";
-        sha256 = "1sdcr1w2jp3djpwlf1f91hrxxmc34q0jl388smdkxh5n5bpw5gzw";
+        url = "https://www.sjau.ch/zfs/zfs_nixos_trim.patch";
+        sha256 = "0xsgdk66bdgy0pqwk7x1gn0bkdjzj486icpyy5ll3lvbycvmzf3z";
       })
     ];
 
