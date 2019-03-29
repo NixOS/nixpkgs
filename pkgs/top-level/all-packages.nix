@@ -9601,11 +9601,7 @@ in
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
-  cachix = (callPackage ../development/tools/cachix { }).overrideAttrs (drv: {
-    meta = drv.meta // {
-      hydraPlatforms = stdenv.lib.platforms.unix;
-    };
-  });
+  cachix = callPackage ../development/tools/cachix { };
 
   capnproto = callPackage ../development/libraries/capnproto { };
 
