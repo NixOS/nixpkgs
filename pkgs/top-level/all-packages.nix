@@ -960,6 +960,8 @@ in
 
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
+  blur-effect = callPackage ../tools/graphics/blur-effect { };
+
   charles = charles4;
   inherit (callPackage ../applications/networking/charles {})
     charles3
