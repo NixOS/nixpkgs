@@ -20168,9 +20168,7 @@ in
     xwayland = null;
   };
 
-  weston = callPackage ../applications/window-managers/weston {
-    freerdp = freerdp_legacy;
-  };
+  weston = callPackage ../applications/window-managers/weston { };
 
   whitebox-tools = callPackage ../applications/gis/whitebox-tools {
     inherit (darwin.apple_sdk.frameworks) Security;
