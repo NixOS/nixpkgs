@@ -20915,6 +20915,8 @@ in
 
   gogui = callPackage ../games/gogui {};
 
+  gscrabble = python3Packages.callPackage ../games/gscrabble {};
+
   gshogi = python3Packages.callPackage ../games/gshogi {};
 
   gtetrinet = callPackage ../games/gtetrinet {
