@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, coreutils
 , sharutils
 , version
 , sha256
@@ -17,11 +18,17 @@ stdenv.mkDerivation rec {
     rev    = "${version}";
   };
 
-  buildInputs = [ sharutils ]; # for uuencode
+  buildInputs = [ coreutils sharutils ]; # for uuencode
 
   makeFlags = [
     "PREFIX=$(out)"
   ];
+
+  buildPhase = ''
+    sed -i 's,/bin/cat,${coreutils}/bin/cat,g' vimpager
+    make
+  '';
+
 
   meta = with stdenv.lib; {
     description = "Use Vim as PAGER";
