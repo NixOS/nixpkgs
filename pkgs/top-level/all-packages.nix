@@ -15968,6 +15968,8 @@ in
 
   papis = callPackage ../tools/misc/papis { };
 
+  paps = callPackage ../tools/misc/paps { };
+
   pecita = callPackage ../data/fonts/pecita {};
 
   paratype-pt-mono = callPackage ../data/fonts/paratype-pt/mono.nix {};
