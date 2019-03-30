@@ -58,11 +58,11 @@
 /doc/languages-frameworks/python.section.md     @FRidh
 
 # Haskell
-/pkgs/development/compilers/ghc                       @peti @basvandijk
-/pkgs/development/haskell-modules                     @peti @basvandijk
-/pkgs/development/haskell-modules/default.nix         @peti @basvandijk
-/pkgs/development/haskell-modules/generic-builder.nix @peti @basvandijk
-/pkgs/development/haskell-modules/hoogle.nix          @peti @basvandijk
+/pkgs/development/compilers/ghc                       @basvandijk
+/pkgs/development/haskell-modules                     @basvandijk
+/pkgs/development/haskell-modules/default.nix         @basvandijk
+/pkgs/development/haskell-modules/generic-builder.nix @basvandijk
+/pkgs/development/haskell-modules/hoogle.nix          @basvandijk
 
 # Perl
 /pkgs/development/interpreters/perl @volth
