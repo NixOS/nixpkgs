@@ -1,8 +1,11 @@
-{ stdenv, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg
-, boost, cmake, SDL2, unshield, openal, libXt, pkgconfig }:
+{ stdenv, fetchFromGitHub, cmake, doxygen, pkgconfig
+, qtbase, openscenegraph, mygui, bullet, ffmpeg, boost, SDL2, unshield, openal
+, giflib, libXt }:
 
 let
   openscenegraph_ = openscenegraph.overrideDerivation (self: {
+    name = "openmw-openscenegraph";
+
     src = fetchFromGitHub {
       owner = "OpenMW";
       repo = "osg";
@@ -10,31 +13,36 @@ let
       sha256 = "0admnllxic6dcpic0h100927yw766ab55dix002vvdx36i6994jb";
     };
   });
+
 in stdenv.mkDerivation rec {
-  version = "0.44.0";
+  version = "0.45.0";
   name = "openmw-${version}";
 
   src = fetchFromGitHub {
     owner = "OpenMW";
     repo = "openmw";
     rev = name;
-    sha256 = "0rxkw0bzag7qffifg28dyyga47aaaf5ziiccpv7p8yax1wglvymh";
+    sha256 = "1r87zrsnza2v9brksh809zzqj6zhk5xj15qs8iq11v1bscm2a2j4";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake boost ffmpeg bullet mygui openscenegraph_ SDL2 unshield openal libXt qtbase ];
+  nativeBuildInputs = [ cmake doxygen pkgconfig ];
+
+  buildInputs = [
+    qtbase
+    boost bullet ffmpeg libXt mygui openal openscenegraph_ SDL2 unshield
+  ];
 
   cmakeFlags = [
-    "-DDESIRED_QT_VERSION:INT=5"
+    "-DDESIRED_QT_VERSION=5"
   ];
 
   meta = with stdenv.lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";
-    homepage = http://openmw.org;
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    homepage    = "https://openmw.org";
+    license     = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
+    platforms   = platforms.linux;
   };
 }
