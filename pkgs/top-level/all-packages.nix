@@ -7214,7 +7214,24 @@ in
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
-  glslang = callPackage ../development/compilers/glslang { };
+  glslang = callPackage ../development/compilers/glslang {
+    spirv-tools = spirv-tools.overrideAttrs (_: {
+      src = fetchFromGitHub {
+        owner = "KhronosGroup";
+        repo = "SPIRV-Tools";
+        rev = "117a1fd11f11e9bef9faa563c3d5156cc6ab529c";
+        sha256 = "1w5hb6sgy71g279wsghixxc75r7rsm7wki011mpz039q66827sym";
+      };
+    });
+    spirv-headers = spirv-tools.overrideAttrs (_: {
+      src = fetchFromGitHub {
+        owner = "KhronosGroup";
+        repo = "SPIRV-Tools";
+        rev = "79b6681aadcb53c27d1052e5f8a0e82a981dbf2f";
+        sha256 = "0flng2rdmc4ndq3j71h6wk1ibcjvhjrg2rzd6rv445vcsf0jh2pj";
+      };
+    });
+  };
 
   go_bootstrap = if stdenv.isAarch64 then
     srcOnly {
@@ -9286,6 +9303,7 @@ in
 
   spin = callPackage ../development/tools/analysis/spin { };
 
+  spirv-headers = callPackage ../development/libraries/spirv-headers { };
   spirv-tools = callPackage ../development/tools/spirv-tools { };
 
   splint = callPackage ../development/tools/analysis/splint {
@@ -13117,7 +13135,33 @@ in
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
   vulkan-loader = callPackage ../development/libraries/vulkan-loader { };
   vulkan-tools = callPackage ../tools/graphics/vulkan-tools { };
-  vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
+  vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers {
+    glslang = (glslang.override {
+      spirv-tools = spirv-tools.overrideAttrs (_: {
+        src = fetchFromGitHub {
+          owner = "KhronosGroup";
+          repo = "SPIRV-Tools";
+          rev = "5994ae2a045015004cce24802dc47c33736486ea";
+          sha256 = "1w1zkql03aggma31nz4xb1b5waxxf2jcg99slzvmihg9ngmmlbm6";
+        };
+      });
+      spirv-headers = spirv-tools.overrideAttrs (_: {
+        src = fetchFromGitHub {
+          owner = "KhronosGroup";
+          repo = "SPIRV-Headers";
+          rev = "79b6681aadcb53c27d1052e5f8a0e82a981dbf2f";
+          sha256 = "0flng2rdmc4ndq3j71h6wk1ibcjvhjrg2rzd6rv445vcsf0jh2pj";
+        };
+      });
+    }).overrideAttrs (_: {
+      src = fetchFromGitHub {
+        owner = "KhronosGroup";
+        repo = "glslang";
+        rev = "5432f0dd8f331f15182681664d7486681e8514e6";
+        sha256 = "0spdm93qkx83z8bks61am2g3ary7fkibvhqq706nj4z9wx4k0cbm";
+      };
+    });
+  };
 
   vtkWithQt4 = vtk.override { qtLib = qt4; };
 
