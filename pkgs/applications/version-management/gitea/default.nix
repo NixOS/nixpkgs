@@ -33,11 +33,16 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildFlags = optional sqliteSupport "-tags sqlite";
-  buildFlagsArray = ''
-    -ldflags=
-      -X=main.Version=${version}
-      ${optionalString sqliteSupport "-X=main.Tags=sqlite"}
+  preBuild = let
+    tags = optional pamSupport "pam"
+        ++ optional sqliteSupport "sqlite";
+    tagsString = concatStringsSep " " tags;
+  in ''
+    set -x
+    export buildFlagsArray=(
+      -tags="${tagsString}"
+      -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
+    )
   '';
 
   outputs = [ "bin" "out" "data" ];
