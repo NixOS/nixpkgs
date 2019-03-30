@@ -32,7 +32,7 @@
     <note>
      <para>
       <varname>services.xserver.desktopManager.pantheon</varname> default
-      enables lightdm as a display manager and using Pantheon's greeter.
+      enables lightdm as a display manager.
      </para>
      <para>
       This is because of limitations with the screenlocking implementation,
@@ -50,7 +50,7 @@
       </listitem>
       <listitem>
        <para>
-        <option>services.xserver.displayManager.lightdm.greeters.pantheon.enable</option>
+        <option>services.xserver.displayManager.lightdm.greeters.gtk.enable</option>
        </para>
       </listitem>
      </itemizedlist>
@@ -58,6 +58,11 @@
       to <literal>false</literal> and enable your preferred display manager.
      </para>
     </note>
+    <para>
+      Also be aware that we haven't enabled lightdm with Pantheon's greeter by
+      default. That's because it has numerous issues in NixOS and isn't optimal
+      for use here yet.
+    </para>
    </listitem>
    <listitem>
     <para>
