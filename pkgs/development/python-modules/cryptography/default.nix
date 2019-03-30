@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ openssl cryptography_vectors ]
+  buildInputs = [ openssl ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
     asn1crypto
@@ -41,11 +41,12 @@ buildPythonPackage rec {
   ++ stdenv.lib.optional (!isPyPy) cffi;
 
   checkInputs = [
-    pytest
-    pretend
-    iso8601
-    pytz
+    cryptography_vectors
     hypothesis
+    iso8601
+    pretend
+    pytest
+    pytz
   ];
 
   checkPhase = ''
