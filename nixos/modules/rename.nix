@@ -4,11 +4,6 @@ with lib;
 
 {
   imports = [
-    # !!! These were renamed the other way, but got reverted later.
-    # !!! Drop these before 18.09 is released.
-    (mkRenamedOptionModule [ "system" "nixos" "stateVersion" ] [ "system" "stateVersion" ])
-    (mkRenamedOptionModule [ "system" "nixos" "defaultChannel" ] [ "system" "defaultChannel" ])
-
     (mkRenamedOptionModule [ "networking" "enableRT73Firmware" ] [ "hardware" "enableRedistributableFirmware" ])
     (mkRenamedOptionModule [ "networking" "enableIntel3945ABGFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
     (mkRenamedOptionModule [ "networking" "enableIntel2100BGFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
