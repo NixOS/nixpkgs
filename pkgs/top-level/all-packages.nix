@@ -6135,6 +6135,9 @@ in
 
   vimer = callPackage ../tools/misc/vimer { };
 
+  vimpager = callPackage ../tools/misc/vimpager { };
+  vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
+
   visidata = (newScope python3Packages) ../applications/misc/visidata {
   };
 
