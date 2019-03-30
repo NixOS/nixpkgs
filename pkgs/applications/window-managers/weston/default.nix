@@ -6,6 +6,7 @@
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "weston-${version}";
   version = "6.0.0";
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     "-Dbackend-wayland=true"
     "-Dbackend-headless=true"
     "-Dbackend-fbdev=true"
-    "-Dbackend-rdp=${if freerdp == null then "true" else "false"}"
+    "-Dbackend-rdp=${boolToString (freerdp != null)}"
     "-Dscreenshare=true"
     "-Dweston-launch=true"
     "-Dremoting=false" # TODO
@@ -37,13 +38,13 @@ stdenv.mkDerivation rec {
     "-Dtest-junit-xml=false"
     #"--enable-clients"
     #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
-  ] ++ stdenv.lib.optional (vaapi != null) "-Dbackend-drm-screencast-vaapi=true"
-    ++ stdenv.lib.optionals (xwayland != null) [
+    "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
+  ] ++ stdenv.lib.optionals (xwayland != null) [
     "-Dxwayland=true"
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Reference implementation of a Wayland compositor";
     homepage = https://wayland.freedesktop.org/;
     license = licenses.mit;
