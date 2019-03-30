@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub }:
+
 stdenv.mkDerivation rec {
   name = "janet-${version}";
 
@@ -12,15 +13,9 @@ stdenv.mkDerivation rec {
   };
 
   JANET_BUILD=''\"release\"'';
+  PREFIX = placeholder "out";
 
-  buildPhase = ''
-    PREFIX="$out" make
-  '';
-
-  installPhase = ''
-    mkdir "$out"
-    PREFIX="$out" make install
-  '';
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Janet programming language";
