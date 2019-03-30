@@ -4,19 +4,20 @@
 
 stdenv.mkDerivation rec {
   pname = "tilix";
-  version = "1.8.9";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
     rev = version;
-    sha256 = "1l1ib3g01mxiywbwjxc2522qgjy3ymjzy8bxl42k0hprpp95rw9d";
+    sha256 = "1k8hqpq6bzmn06b4s8c257n37ghgp3fl7l9g6fy0giwk1x0ix735";
   };
 
   nativeBuildInputs = [
     autoreconfHook dmd desktop-file-utils perlPackages.Po4a pkgconfig xdg_utils
     wrapGAppsHook
   ];
+
   buildInputs = [ gnome3.dconf gettext gsettings-desktop-schemas gtkd dbus libsecret ];
 
   preBuild = ''
@@ -34,7 +35,10 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/share/applications/com.gexperts.Tilix.desktop \
       --replace "Exec=tilix" "Exec=$out/bin/tilix"
-    sed -i '/^DBusActivatable=/d' $out/share/applications/com.gexperts.Tilix.desktop
+
+    # TODO: Won't be needed after the switch to Meson
+    substituteInPlace $out/share/dbus-1/services/com.gexperts.Tilix.service \
+     --replace "/usr/bin/tilix" "$out/bin/tilix"
   '';
 
   meta = with stdenv.lib; {
