@@ -7894,6 +7894,8 @@ in
 
   j = callPackage ../development/interpreters/j {};
 
+  janet = callPackage ../development/interpreters/janet {};
+
   jimtcl = callPackage ../development/interpreters/jimtcl {};
 
   jmeter = callPackage ../applications/networking/jmeter {};
