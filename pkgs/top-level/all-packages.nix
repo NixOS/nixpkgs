@@ -4095,6 +4095,8 @@ in
 
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
+  libmicrodns = callPackage ../development/libraries/libmicrodns { };
+
   libnids = callPackage ../tools/networking/libnids { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
