@@ -19106,6 +19106,8 @@ in
 
   protonmail-bridge = libsForQt511.callPackage ../applications/networking/protonmail-bridge { };
 
+  protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
+
   psi = callPackage ../applications/networking/instant-messengers/psi { };
 
   psi-plus = callPackage ../applications/networking/instant-messengers/psi-plus { };
