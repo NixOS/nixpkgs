@@ -2838,6 +2838,8 @@ in
 
   freebind = callPackage ../tools/networking/freebind { };
 
+  freediag = callPackage ../applications/misc/freediag { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
