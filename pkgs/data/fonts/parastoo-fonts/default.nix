@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "parastoo-fonts";
+  pname = "parastoo-fonts";
   version = "1.0.0-alpha5";
 
   src = fetchFromGitHub {
