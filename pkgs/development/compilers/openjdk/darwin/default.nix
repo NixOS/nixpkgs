@@ -1,18 +1,28 @@
 { stdenv, fetchurl, unzip, setJavaClassPath, freetype }:
 let
-  jdk = stdenv.mkDerivation {
-    name = "openjdk-7u60b30";
+  jce-policies = fetchurl {
+    # Ugh, unversioned URLs... I hope this doesn't change often enough to cause pain before we move to a Darwin source build of OpenJDK!
+    url    = "http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
+    sha256 = "0nk7m0lgcbsvldq2wbfni2pzq8h818523z912i7v8hdcij5s48c0";
+  };
 
-    # From https://github.com/alexkasko/openjdk-unofficial-builds
+  jdk = stdenv.mkDerivation rec {
+    name = "zulu12.1.3-ca-jdk12";
+
     src = fetchurl {
-      url = https://bitbucket.org/alexkasko/openjdk-unofficial-builds/downloads/openjdk-1.7.0-u60-unofficial-macosx-x86_64-bundle.zip;
-      sha256 = "af510a4d566712d82c17054bb39f91d98c69a85586e244c6123669a0bd4b7401";
+      url = "https://cdn.azul.com/zulu/bin/${name}-macosx_x64.tar.gz";
+      sha256 = "05q3v4vwjd7xhqr21bzlip5x4xhq5rpdshfpb8i86n4zvn7l0mxy";
+      curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 
     buildInputs = [ unzip freetype ];
 
     installPhase = ''
-      mv */Contents/Home $out
+      mkdir -p $out
+      mv * $out
+
+      unzip ${jce-policies}
+      mv -f ZuluJCEPolicies/*.jar $out/lib/security/
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/darwin/*_md.h $out/include/
@@ -24,13 +34,13 @@ let
     '';
 
     preFixup = ''
-      # Propagate the setJavaClassPath setup hook from the JRE so that
-      # any package that depends on the JRE has $CLASSPATH set up
+      # Propagate the setJavaClassPath setup hook from the JDK so that
+      # any package that depends on the JDK has $CLASSPATH set up
       # properly.
       mkdir -p $out/nix-support
       printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
-      install_name_tool -change /usr/X11/lib/libfreetype.6.dylib ${freetype}/lib/libfreetype.6.dylib $out/jre/lib/libfontmanager.dylib
+      install_name_tool -change /usr/X11/lib/libfreetype.6.dylib ${freetype}/lib/libfreetype.6.dylib $out/lib/libfontmanager.dylib
 
       # Set JAVA_HOME automatically.
       cat <<EOF >> $out/nix-support/setup-hook
@@ -39,7 +49,6 @@ let
     '';
 
     passthru = {
-      jre = jdk;
       home = jdk;
     };
 
