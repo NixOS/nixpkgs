@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "sahel-fonts";
+  pname = "sahel-fonts";
   version = "1.0.0-alpha22";
 
   src = fetchFromGitHub {
