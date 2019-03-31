@@ -4838,6 +4838,8 @@ in
 
   parallel = callPackage ../tools/misc/parallel { };
 
+  parastoo-fonts = callPackage ../data/fonts/parastoo-fonts { };
+
   parcellite = callPackage ../tools/misc/parcellite { };
 
   patchutils = callPackage ../tools/text/patchutils { };
