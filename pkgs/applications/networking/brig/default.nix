@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "brig-${version}";
-  version = "0.3.0";
+  version = "0.4.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/sahib/brig";
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "sahib";
     repo = "brig";
     inherit rev;
-    sha256 = "01hpb6cvq8cw21ka74jllggkv5pavc0sbl1207x32gzxslw3gsvy";
+    sha256 = "0gi39jmnzqrgj146yw8lcmgmvzx7ii1dgw4iqig7kx8c0jiqi600";
   };
 
   meta = with stdenv.lib; {
