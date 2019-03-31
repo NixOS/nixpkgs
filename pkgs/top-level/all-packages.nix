@@ -997,6 +997,8 @@ in
     cudnn = cudnn_cudatoolkit_9_0;
   };
 
+  behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
+
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
   bliss = callPackage ../applications/science/math/bliss { };
