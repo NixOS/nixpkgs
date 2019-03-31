@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jdk11 }:
+{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jdk11, libXxf86vm }:
 
 stdenv.mkDerivation rec {
   name = "josm-${version}";
@@ -21,12 +21,14 @@ stdenv.mkDerivation rec {
     categories = "Education;Geoscience;Maps;";
   };
 
+  # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
   buildCommand = ''
     mkdir -p $out/bin $out/share/java
     cp -v $src $out/share/java/josm.jar
 
     makeWrapper ${jdk11}/bin/java $out/bin/josm \
-      --add-flags "-jar $out/share/java/josm.jar"
+      --add-flags "-jar $out/share/java/josm.jar" \
+      --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
 
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications"/"* $out/share/applications
