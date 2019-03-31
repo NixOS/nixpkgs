@@ -12206,6 +12206,8 @@ in
     newlib = newlibCross;
   };
 
+  mspds = callPackage ../development/misc/msp430/mspds { };
+
   mspdebug = callPackage ../development/misc/msp430/mspdebug.nix { };
 
   vc4-newlib = callPackage ../development/misc/vc4/newlib.nix {};
