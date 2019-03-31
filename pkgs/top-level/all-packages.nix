@@ -11739,6 +11739,8 @@ in
       };
   });
 
+  libykclient = callPackage ../development/libraries/libykclient { };
+
   libykneomgr = callPackage ../development/libraries/libykneomgr { };
 
   libytnef = callPackage ../development/libraries/libytnef { };
@@ -13323,6 +13325,8 @@ in
   yojimbo = callPackage ../development/libraries/yojimbo { };
 
   yubioath-desktop = libsForQt5.callPackage ../applications/misc/yubioath-desktop { };
+
+  yubico-pam = callPackage ../development/libraries/yubico-pam { };
 
   yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool { };
 
