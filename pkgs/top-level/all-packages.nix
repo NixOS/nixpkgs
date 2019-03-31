@@ -12207,6 +12207,7 @@ in
   };
 
   mspds = callPackage ../development/misc/msp430/mspds { };
+  mspds-bin = callPackage ../development/misc/msp430/mspds/binary.nix { };
 
   mspdebug = callPackage ../development/misc/msp430/mspdebug.nix { };
 
