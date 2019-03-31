@@ -1,6 +1,6 @@
 { stdenv, fetchpatch, fetchFromGitHub, pkgconfig, autoreconfHook
 , openssl, c-ares, libxml2, sqlite, zlib, libssh2
-, cppunit
+, cppunit, sphinx
 , Security
 }:
 
@@ -23,12 +23,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook sphinx ];
 
   buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
     stdenv.lib.optional stdenv.isDarwin Security;
 
   configureFlags = [ "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" ];
+
+  prePatch = ''
+    patchShebangs doc/manual-src/en/mkapiref.py
+  '';
 
   checkInputs = [ cppunit ];
   doCheck = false; # needs the net

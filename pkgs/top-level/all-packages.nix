@@ -858,6 +858,7 @@ in
 
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (pythonPackages) sphinx;
   };
   aria = aria2;
 
