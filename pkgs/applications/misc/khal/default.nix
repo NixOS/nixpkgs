@@ -33,7 +33,7 @@ with python3.pkgs; buildPythonApplication rec {
     install -D misc/__khal $out/share/zsh/site-functions/__khal
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isAarch64;
 
   checkPhase = ''
     py.test
