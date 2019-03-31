@@ -1,1 +1,1 @@
-WGET_ARGS=( https://download.kde.org/stable/frameworks/5.54/ )
+WGET_ARGS=( https://download.kde.org/stable/frameworks/5.56/ )
