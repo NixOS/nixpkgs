@@ -40,7 +40,7 @@ rec {
   # the web, there are many old useful plugins targeting offline
   # activities (e.g. ebook readers, syncronous translation, etc) that
   # will probably never be ported to WebExtensions API.
-  firefox-esr-52 = common rec {
+  firefox-esr-52 = (common rec {
     pname = "firefox-esr";
     ffversion = "52.9.0esr";
     src = fetchurl {
@@ -58,6 +58,8 @@ rec {
       description = "A web browser built from Firefox Extended Support Release source tree";
       knownVulnerabilities = [ "Support ended in August 2018." ];
     };
+  }).override {
+    gtk3Support = false;
   };
 
   firefox-esr-60 = common rec {
