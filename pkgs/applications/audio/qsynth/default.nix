@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation  rec {
   name = "qsynth-${version}";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsynth/${name}.tar.gz";
-    sha256 = "1rfkaxq1pyc4hv3l0i6wicianbcbm1wp53kh9i5d4jsljgisd1dv";
+    sha256 = "0kpq5fxr96wnii18ax780w1ivq8ksk892ac0bprn92iz0asfysrd";
   };
 
-  # cmake is looking for qsynth.desktop.in and fails if it doesn't find it
-  # seems like a bug and can presumable go in the next version after 0.5.2
-  postPatch = ''
-    mv src/qsynth.desktop src/qsynth.desktop.in
+  # cmake is looking for qsynth.desktop in the build directory instead of the
+  # src directory and fails at the install phase if it doesn't find it
+  preInstall = ''
+    mv ../src/qsynth.desktop src/qsynth.desktop
   '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
