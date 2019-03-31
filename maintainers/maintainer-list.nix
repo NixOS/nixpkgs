@@ -1613,6 +1613,11 @@
     github = "FireyFly";
     name = "Jonas Höglund";
   };
+  flexw = {
+    email = "felix.weilbach@t-online.de";
+    github = "FlexW";
+    name = "Felix Weilbach";
+  };
   flokli = {
     email = "flokli@flokli.de";
     github = "flokli";

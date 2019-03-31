@@ -8591,6 +8591,8 @@ in
 
   cadre = callPackage ../development/tools/cadre { };
 
+  cask = callPackage ../development/tools/cask { };
+
   casperjs = callPackage ../development/tools/casperjs {
     inherit (texFunctions) fontsConf;
   };
