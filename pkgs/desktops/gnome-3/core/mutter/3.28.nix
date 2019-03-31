@@ -1,4 +1,4 @@
-{ fetchFromGitLab, stdenv, fetchpatch, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
+{ fetchFromGitLab, stdenv, substituteAll, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
 , glib, gtk3, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
 , gsettings-desktop-schemas, gnome-desktop
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
     rev = "4af8d9d4752a94612a98d619e65828f0070a7b0e"; # HEAD of https://gitlab.gnome.org/GNOME/mutter/tree/gnome-3-28
     sha256 = "1rmc1bf80yq776xhygi1jzgia1y44j2mr2n94vlxgzqc0whamx2v";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths-328.patch;
+      inherit zenity;
+    })
+  ];
 
   configureFlags = [
     "--with-x"
