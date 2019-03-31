@@ -9264,6 +9264,8 @@ in
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
+  semver-tool = callPackage ../development/tools/misc/semver-tool { };
+
   sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_latest;
 
