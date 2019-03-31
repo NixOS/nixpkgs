@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "samim-font";
+  pname = "samim-fonts";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
-    repo = name;
+    repo = "samim-font";
     rev = "v${version}";
     sha256 = "1mp0pgbn9r098ilajwzag7c21shwb13mq61ly9av0mfbpnhkkjqk";
   };
