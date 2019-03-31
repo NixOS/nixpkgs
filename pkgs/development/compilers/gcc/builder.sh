@@ -213,9 +213,24 @@ preInstall() {
 
 postInstall() {
     # Move runtime libraries to $lib.
-    moveToOutput "lib/lib*.so*" "$lib"
-    moveToOutput "lib/lib*.la"  "$lib"
-    moveToOutput "lib/lib*.dylib" "$lib"
+    if [[ -d "$out/$target_triple/lib" && -n "$(ls -A $out/$target_triple/lib)" ]]; then
+        moveToOutput "$target_triple/lib/lib*.so*" "$lib"
+        moveToOutput "$target_triple/lib/lib*.la" "$lib"
+        moveToOutput "$target_triple/lib/lib*.dylib" "$lib"
+        mv "$lib/$target_triple"/lib/* "$lib/lib/"
+        rmdir -p --ignore-fail-on-non-empty "$lib/$target_triple/lib" || :
+    elif [[ -d "$out/$target_triple/lib64" && -n "$(ls -A $out/$target_triple/lib64)" ]]; then
+        moveToOutput "$target_triple/lib64/lib*.so*" "$lib"
+        moveToOutput "$target_triple/lib64/lib*.la" "$lib"
+        moveToOutput "$target_triple/lib64/lib*.dylib" "$lib"
+        mv "$lib/$target_triple"/lib64/* "$lib/lib/"
+        rmdir -p --ignore-fail-on-non-empty "$lib/$target_triple/lib64" || :
+    else
+        moveToOutput "lib/lib*.so*" "$lib"
+        moveToOutput "lib/lib*.la"  "$lib"
+        moveToOutput "lib/lib*.dylib" "$lib"
+    fi
+
     moveToOutput "share/gcc-*/python" "$lib"
 
     for i in "$lib"/lib/*.{la,py}; do

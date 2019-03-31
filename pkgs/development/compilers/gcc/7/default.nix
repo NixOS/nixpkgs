@@ -152,6 +152,9 @@ stdenv.mkDerivation ({
 
   libc_dev = stdenv.cc.libc_dev;
 
+  # set this var to use in builder.sh
+  target_triple = targetPlatform.config;
+
   hardeningDisable = [ "format" "pie" ];
 
   # This should kill all the stdinc frameworks that gcc and friends like to
