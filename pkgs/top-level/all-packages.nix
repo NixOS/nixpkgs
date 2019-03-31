@@ -13318,6 +13318,8 @@ in
 
   yubioath-desktop = libsForQt5.callPackage ../applications/misc/yubioath-desktop { };
 
+  yubico-pam = callPackage ../development/libraries/yubico-pam { };
+
   yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool { };
 
   yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
