@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "ledger-${version}";
-  version = "3.1.2";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner  = "ledger";
     repo   = "ledger";
-    rev    = version;
-    sha256 = "0hwnipj2m9p95hhyv6kyq54m27g14r58gnsy2my883kxhpcyb2vc";
+    rev    = "v${version}";
+    sha256 = "0bfnrqrd6wqgsngfpqi30xh6yy86pwl25iwzrqy44q31r0zl4mm3";
   };
 
   buildInputs = [
