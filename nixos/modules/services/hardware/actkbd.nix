@@ -83,7 +83,7 @@ in
 
           See <command>actkbd</command> <filename>README</filename> for documentation.
 
-          The example shows a piece of what <option>sound.enableMediaKeys</option> does when enabled.
+          The example shows a piece of what <option>services.actkbd.volumeControl.enable</option> does when enabled.
         '';
       };
 
@@ -93,6 +93,34 @@ in
         description = ''
           Literal contents to append to the end of actkbd configuration file.
         '';
+      };
+
+      volumeControl = {
+
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to enable ALSA volume and capture control with keyboard media keys.
+
+            You want to leave this disabled if you run a desktop environment
+            like KDE, Gnome, Xfce, etc, as those handle such things themselves.
+            You might want to enable this if you run a minimalistic desktop
+            environment or work from bare linux ttys/framebuffers.
+          '';
+        };
+
+        step = mkOption {
+          type = types.string;
+          default = "1";
+          example = "1%";
+          description = ''
+            The value by which to increment/decrement volume on media keys.
+
+            See amixer(1) for allowed values.
+          '';
+        };
+
       };
 
     };
@@ -127,6 +155,21 @@ in
 
     # For testing
     environment.systemPackages = [ pkgs.actkbd ];
+
+    services.actkbd.bindings = []
+      ++ optionals cfg.volumeControl.enable [
+        # "Mute" media key
+        { keys = [ 113 ]; events = [ "key" ];       command = "${pkgs.alsaUtils}/bin/amixer -q set Master toggle"; }
+
+        # "Lower Volume" media key
+        { keys = [ 114 ]; events = [ "key" "rep" ]; command = "${pkgs.alsaUtils}/bin/amixer -q set Master ${cfg.volumeControl.step}- unmute"; }
+
+        # "Raise Volume" media key
+        { keys = [ 115 ]; events = [ "key" "rep" ]; command = "${pkgs.alsaUtils}/bin/amixer -q set Master ${cfg.volumeControl.step}+ unmute"; }
+
+        # "Mic Mute" media key
+        { keys = [ 190 ]; events = [ "key" ];       command = "${pkgs.alsaUtils}/bin/amixer -q set Capture toggle"; }
+      ];
 
   };
 

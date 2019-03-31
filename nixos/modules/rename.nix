@@ -126,6 +126,8 @@ with lib;
 
     # alsa
     (mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "sound" "mediaKeys" "enable" ])
+    (mkRenamedOptionModule [ "sound" "mediaKeys" "enable" ] [ "services" "actkbd" "volumeControl" "enable" ])
+    (mkRenamedOptionModule [ "sound" "mediaKeys" "volumeStep" ] [ "services" "actkbd" "volumeControl" "step" ])
 
     # postgrey
     (mkMergedOptionModule [ [ "services" "postgrey" "inetAddr" ] [ "services" "postgrey" "inetPort" ] ] [ "services" "postgrey" "socket" ] (config: let
