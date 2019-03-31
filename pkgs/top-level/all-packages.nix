@@ -11731,6 +11731,8 @@ in
       };
   });
 
+  libykclient = callPackage ../development/libraries/libykclient { };
+
   libykneomgr = callPackage ../development/libraries/libykneomgr { };
 
   libytnef = callPackage ../development/libraries/libytnef { };
