@@ -360,7 +360,7 @@ in
                         echo "Creating initial database: ${database.name}"
                         ( echo 'create database `${database.name}`;'
 
-                          ${optionalString (database ? "schema") ''
+                          ${optionalString (database.schema != null) ''
                           echo 'use `${database.name}`;'
 
                           if [ -f "${database.schema}" ]
