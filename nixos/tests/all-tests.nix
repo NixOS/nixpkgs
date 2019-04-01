@@ -118,6 +118,7 @@ in
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-latest = handleTest ./kernel-latest.nix {};
   kernel-lts = handleTest ./kernel-lts.nix {};
+  kernel-testing = handleTest ./kernel-testing.nix {};
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
   kubernetes.dns = handleTestOn ["x86_64-linux"] ./kubernetes/dns.nix {};
