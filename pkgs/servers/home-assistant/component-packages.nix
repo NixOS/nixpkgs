@@ -387,7 +387,7 @@
     "envisalink.alarm_control_panel" = ps: with ps; [  ];
     "envisalink.binary_sensor" = ps: with ps; [  ];
     "envisalink.sensor" = ps: with ps; [  ];
-    "esphome" = ps: with ps; [  ];
+    "esphome" = ps: with ps; [ aioesphomeapi ];
     "esphome.binary_sensor" = ps: with ps; [  ];
     "esphome.config_flow" = ps: with ps; [  ];
     "esphome.cover" = ps: with ps; [  ];

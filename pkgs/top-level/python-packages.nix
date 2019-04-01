@@ -5458,6 +5458,8 @@ in {
   lzstring = callPackage ../development/python-modules/lzstring { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
+
+  aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 });
 
 in fix' (extends overrides packages)
