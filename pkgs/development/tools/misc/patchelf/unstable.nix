@@ -1,14 +1,12 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  pname = "patchelf";
-  version = "0.10-pre-20190328";
+  name = "patchelf-${version}";
+  version = "0.10";
 
-  src = fetchFromGitHub {
-    owner = "NixOS";
-    repo = "patchelf";
-    rev = "e1e39f3639e39360ceebb2f7ed533cede4623070";
-    sha256 = "09q1b1yqfzg1ih51v7qjh55vxfdbd8x5anycl8sfz6qy107wr02k";
+  src = fetchurl {
+    url = "https://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
+    sha256 = "1wzwvnlyf853hw9zgqq5522bvf8gqadk8icgqa41a5n7593csw7n";
   };
 
   # Drop test that fails on musl (?)
