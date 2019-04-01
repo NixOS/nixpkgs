@@ -23317,6 +23317,8 @@ in
 
   vttest = callPackage ../tools/misc/vttest { };
 
+  wasm-pack = callPackage ../development/tools/wasm-pack { };
+
   wavegain = callPackage ../applications/audio/wavegain { };
 
   wcalc = callPackage ../applications/misc/wcalc { };
