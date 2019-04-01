@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, bamf,
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, gtk3, libgtop, bamf,
   json-glib, libcanberra-gtk3, libxkbcommon, libstartup_notification,
   deepin-wallpapers, deepin-desktop-schemas, deepin }:
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnome3.dconf
-    gnome3.gtk
-    gnome3.libgtop
+    gtk3
+    libgtop
     gnome3.zenity
     bamf
     json-glib

@@ -87,7 +87,8 @@ in buildEnv {
     export TEXMFSYSVAR="$out/share/texmf-var"
     export PERL5LIB="$out/share/texmf/scripts/texlive"
   '' +
-    # patch texmf-{dist,local} -> texmf to be sure
+    # patch texmf-dist  -> $out/share/texmf
+    # patch texmf-local -> $out/share/texmf-local
     # TODO: perhaps do lua actions?
     # tried inspiration from install-tl, sub do_texmf_cnf
   ''
@@ -99,8 +100,7 @@ in buildEnv {
         rm ./texmfcnf.lua
         sed \
           -e 's,texmf-dist,texmf,g' \
-          -e 's,texmf-local,texmf,g' \
-          -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf\",g" \
+          -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
           -e "s,\$SELFAUTOLOC,$out,g" \
           -e "s,selfautodir:/,$out/share/,g" \
           -e "s,selfautodir:,$out/share/,g" \
@@ -116,7 +116,6 @@ in buildEnv {
       rm ./texmf.cnf
       sed \
         -e 's,texmf-dist,texmf,g' \
-        -e 's,texmf-local,texmf,g' \
         -e "s,\$SELFAUTOLOC,$out,g" \
         -e "s,\$SELFAUTODIR,$out/share,g" \
         -e "s,\$SELFAUTOPARENT,$out/share,g" \
@@ -125,6 +124,8 @@ in buildEnv {
         "$cnfOrig" > ./texmf.cnf
 
       patchCnfLua "./texmfcnf.lua"
+
+      mkdir $out/share/texmf-local
 
       rm updmap.cfg
     )

@@ -16,11 +16,36 @@
 , protobufc
 , python
 , lxc
+, writeText
+, writeScript
+, runtimeShell
 }:
+
+let
+
+  dbus-service = writeText "org.anbox.service" ''
+    [D-BUS Service]
+    Name=org.anbox
+    Exec=@out@/libexec/anbox-session-manager
+  '';
+
+  anbox-application-manager = writeScript "anbox-application-manager" ''
+    #!${runtimeShell}
+
+    ${systemd}/bin/busctl --user call \
+        org.freedesktop.DBus \
+        /org/freedesktop/DBus \
+        org.freedesktop.DBus \
+        StartServiceByName "su" org.anbox 0
+
+    @out@/bin/anbox launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity
+  '';
+
+in
 
 stdenv.mkDerivation rec {
   pname = "anbox";
-  version = "2019-03-07";
+  version = "unstable-2019-03-07";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -29,10 +54,14 @@ stdenv.mkDerivation rec {
     sha256 = "1wfx4bsyxvrjl16dq5pqgial8rnnsnxzbak2ap0waddz847czxwz";
   };
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   buildInputs = [
     cmake pkgconfig dbus boost libcap gtest systemd mesa glib
     SDL2 SDL2_image protobuf protobufc properties-cpp lxc python
-    makeWrapper libGL
+    libGL
   ];
 
   patchPhase = ''
@@ -68,60 +97,42 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [libGL libglvnd]} \
       --prefix PATH : ${git}/bin
 
-    mkdir -p $out/share/dbus-1/services/
-    cat <<END > $out/share/dbus-1/services/org.anbox.service
-    [D-BUS Service]
-    Name=org.anbox
-    Exec=$out/libexec/anbox-session-manager
-    END
+    mkdir -p $out/share/dbus-1/services
+    substitute ${dbus-service} $out/share/dbus-1/services/org.anbox.service \
+      --subst-var out
 
     mkdir $out/libexec
-    cat > $out/libexec/anbox-session-manager <<EOF
-    #!${stdenv.shell}
-    exec $out/bin/anbox session-manager
-    EOF
-    chmod +x $out/libexec/anbox-session-manager
+    makeWrapper $out/bin/anbox $out/libexec/anbox-session-manager \
+      --add-flags session-manager
 
-    cat > $out/bin/anbox-application-manager <<EOF
-    #!${stdenv.shell}
-    ${systemd}/bin/busctl --user call \
-      org.freedesktop.DBus \
-      /org/freedesktop/DBus \
-      org.freedesktop.DBus \
-      StartServiceByName "su" org.anbox 0
-
-    $out/bin/anbox launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity
-    EOF
-    chmod +x $out/bin/anbox-application-manager
+    substitute ${anbox-application-manager} $out/bin/anbox-application-manager \
+      --subst-var out
   '';
 
   passthru.image = let
     imgroot = "https://build.anbox.io/android-images";
-    arches = {
-      armv7l-linux = {
+  in
+    {
+      armv7l-linux = fetchurl {
         url = imgroot + "/2017/06/12/android_1_armhf.img";
         sha256 = "1za4q6vnj8wgphcqpvyq1r8jg6khz7v6b7h6ws1qkd5ljangf1w5";
       };
-      aarch64-linux = {
+      aarch64-linux = fetchurl {
         url = imgroot + "/2017/08/04/android_1_arm64.img";
         sha256 = "02yvgpx7n0w0ya64y5c7bdxilaiqj9z3s682l5s54vzfnm5a2bg5";
       };
-      x86_64-linux = {
+      x86_64-linux = fetchurl {
         url = imgroot + "/2018/07/19/android_amd64.img";
         sha256 = "1jlcda4q20w30cm9ikm6bjq01p547nigik1dz7m4v0aps4rws13b";
       };
-    };
-  in
-  fetchurl {
-    inherit (arches.${stdenv.system}) url sha256;
-  };
+    }.${stdenv.system} or null;
 
   meta = with stdenv.lib; {
     homepage = https://anbox.io;
-    description = "Android in a box.";
+    description = "Android in a box";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.linux;
+    platforms = [ "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
   };
 
 }

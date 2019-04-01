@@ -1749,6 +1749,8 @@ in {
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
 
+  dnslib = callPackage ../development/python-modules/dnslib { };
+
   dnspython = callPackage ../development/python-modules/dnspython { };
   dns = self.dnspython; # Alias for compatibility, 2017-12-10
 
@@ -3122,6 +3124,8 @@ in {
 
   marisa-trie = callPackage ../development/python-modules/marisa-trie { };
 
+  Markups = callPackage ../development/python-modules/Markups { };
+
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
@@ -3928,6 +3932,8 @@ in {
 
   purepng = callPackage ../development/python-modules/purepng { };
 
+  pyhocon = callPackage ../development/python-modules/pyhocon { };
+
   pymaging = callPackage ../development/python-modules/pymaging { };
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
@@ -3957,6 +3963,8 @@ in {
   pysqlite = callPackage ../development/python-modules/pysqlite { };
 
   pysvn = callPackage ../development/python-modules/pysvn { };
+
+  python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 

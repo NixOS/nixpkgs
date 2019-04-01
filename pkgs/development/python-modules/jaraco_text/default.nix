@@ -1,14 +1,15 @@
 { buildPythonPackage, fetchPypi, setuptools_scm
-, jaraco_functools, jaraco_collections }:
+, jaraco_functools
+}:
 
 buildPythonPackage rec {
   pname = "jaraco.text";
-  version = "2.0";
+  version = "3.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3660678d395073626e72a455b24bacf07c064138a4cc6c1dae63e616f22478aa";
+    sha256 = "1l5hq2jvz9xj05aayc42f85v8wx8rpi16lxph8blw51wgnvymsyx";
   };
   doCheck = false;
   buildInputs =[ setuptools_scm ];
-  propagatedBuildInputs = [ jaraco_functools jaraco_collections ];
+  propagatedBuildInputs = [ jaraco_functools ];
 }

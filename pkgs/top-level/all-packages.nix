@@ -25,9 +25,6 @@ let
 in
 {
 
-  # Allow callPackage to fill in the pkgs argument
-  inherit pkgs;
-
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
   # just the plain stdenv.
@@ -259,6 +256,7 @@ in
     curl = buildPackages.curl.override rec {
       # break dependency cycles
       fetchurl = stdenv.fetchurlBoot;
+      zlib = buildPackages.zlib.override { fetchurl = stdenv.fetchurlBoot; };
       pkgconfig = buildPackages.pkgconfig.override { fetchurl = stdenv.fetchurlBoot; };
       perl = buildPackages.perl.override { fetchurl = stdenv.fetchurlBoot; };
       openssl = buildPackages.openssl.override {
@@ -268,7 +266,7 @@ in
       };
       libssh2 = buildPackages.libssh2.override {
         fetchurl = stdenv.fetchurlBoot;
-        inherit openssl;
+        inherit zlib openssl;
       };
       # On darwin, libkrb5 needs bootstrap_cmds which would require
       # converting many packages to fetchurl_boot to avoid evaluation cycles.
@@ -280,7 +278,7 @@ in
       };
       nghttp2 = buildPackages.nghttp2.override {
         fetchurl = stdenv.fetchurlBoot;
-        inherit pkgconfig openssl;
+        inherit zlib pkgconfig openssl;
         c-ares = buildPackages.c-ares.override { fetchurl = stdenv.fetchurlBoot; };
         libev = buildPackages.libev.override { fetchurl = stdenv.fetchurlBoot; };
       };
@@ -477,6 +475,8 @@ in
     stdenv = clangStdenv;
   };
 
+  libdislocator = callPackage ../tools/security/afl/libdislocator.nix { };
+
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
 
   agrep = callPackage ../tools/text/agrep { };
@@ -672,6 +672,11 @@ in
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
   bonfire = callPackage ../tools/misc/bonfire { };
+
+  buildbot = with python3Packages; toPythonApplication buildbot;
+  buildbot-ui = with python3Packages; toPythonApplication buildbot-ui;
+  buildbot-full = with python3Packages; toPythonApplication buildbot-full;
+  buildbot-worker = with python3Packages; toPythonApplication buildbot-worker;
 
   bunny = callPackage ../tools/package-management/bunny { };
 
@@ -1355,7 +1360,7 @@ in
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
-  dune = callPackage ../development/tools/ocaml/dune { };
+  inherit (ocamlPackages) dune;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
@@ -2439,7 +2444,7 @@ in
   duo-unix = callPackage ../tools/security/duo-unix { };
 
   duplicacy = callPackage ../tools/backup/duplicacy { };
-  
+
   duplicati = callPackage ../tools/backup/duplicati { };
 
   duplicity = callPackage ../tools/backup/duplicity {
@@ -3557,6 +3562,8 @@ in
 
   intecture-cli = callPackage ../tools/admin/intecture/cli.nix { };
 
+  intel-media-sdk = callPackage ../development/libraries/intel-media-sdk { };
+
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
   inxi = callPackage ../tools/system/inxi { };
@@ -3671,6 +3678,8 @@ in
   jp = callPackage ../development/tools/jp { };
 
   jp2a = callPackage ../applications/misc/jp2a { };
+
+  jpeg-archive = callPackage ../applications/graphics/jpeg-archive { };
 
   jpeginfo = callPackage ../applications/graphics/jpeginfo { };
 
@@ -4849,6 +4858,8 @@ in
 
   parted = callPackage ../tools/misc/parted { };
 
+  paulstretch = callPackage ../applications/audio/paulstretch { };
+
   pell = callPackage ../applications/misc/pell { };
 
   pepper = callPackage ../tools/admin/salt/pepper { };
@@ -4905,6 +4916,8 @@ in
   pdf-redact-tools = callPackage ../tools/graphics/pdfredacttools { };
 
   pdfcrack = callPackage ../tools/security/pdfcrack { };
+
+  pdfsandwich = callPackage ../tools/typesetting/pdfsandwich { };
 
   pdftag = callPackage ../tools/graphics/pdftag { };
 
@@ -5244,6 +5257,8 @@ in
   redmine_4 = callPackage ../applications/version-management/redmine/4.x { ruby = pkgs.ruby_2_5; };
 
   redsocks = callPackage ../tools/networking/redsocks { };
+
+  retext = callPackage ../applications/editors/retext { };
 
   richgo = callPackage ../development/tools/richgo {  };
 
@@ -8504,6 +8519,8 @@ in
 
   bazel-watcher = callPackage ../development/tools/bazel-watcher { };
 
+  bazelisk = callPackage ../development/tools/bazelisk { };
+
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
@@ -8549,6 +8566,8 @@ in
   buildkite-agent3 = callPackage ../development/tools/continuous-integration/buildkite-agent/3.x.nix { };
 
   byacc = callPackage ../development/tools/parsing/byacc { };
+
+  cadre = callPackage ../development/tools/cadre { };
 
   casperjs = callPackage ../development/tools/casperjs {
     inherit (texFunctions) fontsConf;
@@ -9910,6 +9929,7 @@ in
     libjack2 = if stdenv.isDarwin then null else libjack2;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
     openal = if stdenv.isDarwin then null else openal;
+    libmfx = if stdenv.isDarwin then null else intel-media-sdk;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
     samba = if stdenv.isDarwin then null else samba;
     vid-stab = if stdenv.isDarwin then null else vid-stab;
@@ -10869,9 +10889,7 @@ in
 
   libdbiDrivers = callPackage ../development/libraries/libdbi-drivers { };
 
-  libunity = callPackage ../development/libraries/libunity {
-    inherit (gnome3) gnome-common;
-  };
+  libunity = callPackage ../development/libraries/libunity { };
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu { };
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
@@ -13625,10 +13643,9 @@ in
 
   apcupsd = callPackage ../servers/apcupsd { };
 
-  asterisk = asterisk-stable;
-
   inherit (callPackages ../servers/asterisk { })
-    asterisk-stable asterisk-lts;
+    asterisk asterisk-stable asterisk-lts
+    asterisk_13 asterisk_15 asterisk_16;
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
@@ -14794,13 +14811,6 @@ in
       ];
   };
 
-  linux_4_20 = callPackage ../os-specific/linux/kernel/linux-4.20.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.modinst_arg_list_too_long
-      ];
-  };
-
   linux_5_0 = callPackage ../os-specific/linux/kernel/linux-5.0.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -14881,6 +14891,8 @@ in
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
+
+    it87 = callPackage ../os-specific/linux/it87 {};
 
     ena = callPackage ../os-specific/linux/ena {};
 
@@ -15001,7 +15013,6 @@ in
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
-  linuxPackages_4_20 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_20);
   linuxPackages_5_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_0);
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
@@ -15406,6 +15417,8 @@ in
   smem = callPackage ../os-specific/linux/smem { };
 
   speedometer = callPackage ../os-specific/linux/speedometer { };
+
+  statik = callPackage ../development/tools/statik { };
 
   statifier = callPackage ../os-specific/linux/statifier { };
 
@@ -16511,6 +16524,8 @@ in
   brave = callPackage ../applications/networking/browsers/brave { };
 
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
+
+  brig = callPackages ../applications/networking/brig { };
 
   bristol = callPackage ../applications/audio/bristol { };
 
@@ -19339,6 +19354,8 @@ in
 
   rofi-systemd = callPackage ../tools/system/rofi-systemd { };
 
+  rootlesskit = callPackage ../tools/virtualization/rootlesskit {};
+
   rpcs3 = libsForQt5.callPackage ../misc/emulators/rpcs3 { };
 
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
@@ -20545,6 +20562,8 @@ in
 
   xtrace = callPackage ../tools/X11/xtrace { };
 
+  xtruss = callPackage ../tools/X11/xtruss { };
+
   xmacro = callPackage ../tools/X11/xmacro { };
 
   xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor { };
@@ -21077,7 +21096,9 @@ in
 
   pacvim = callPackage ../games/pacvim { };
 
-  performous = callPackage ../games/performous { };
+  performous = callPackage ../games/performous {
+    boost = boost166;
+  };
 
   pingus = callPackage ../games/pingus {};
 
@@ -21551,6 +21572,8 @@ in
     gtk = gtk2;
   };
 
+  solarc-gtk-theme = callPackage ../misc/themes/solarc { };
+
   xfce = xfce4-12;
   xfceUnstable = xfce4-13;
 
@@ -21668,6 +21691,8 @@ in
   igv = callPackage ../applications/science/biology/igv { };
 
   inormalize = callPackage ../applications/science/biology/inormalize { };
+  
+  itsx = callPackage ../applications/science/biology/itsx { };
 
   iv = callPackage ../applications/science/biology/iv {
     neuron-version = neuron.version;
@@ -21692,6 +21717,8 @@ in
   neuron-full = neuron-mpi.override { inherit python; };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
+
+  messer-slim = callPackage ../applications/science/biology/messer-slim { };
 
   minc_tools = callPackage ../applications/science/biology/minc-tools { };
 
@@ -22610,6 +22637,8 @@ in
 
   illum = callPackage ../tools/system/illum { };
 
+  image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
+
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
 
@@ -23144,6 +23173,8 @@ in
   vault = callPackage ../tools/security/vault { };
 
   vaultenv = haskellPackages.vaultenv;
+
+  vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
 
   vbam = callPackage ../misc/emulators/vbam {
     ffmpeg = ffmpeg_2;

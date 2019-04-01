@@ -46,7 +46,7 @@ default-package-overrides:
   # Newer versions don't work in LTS-12.x
   - alsa-mixer < 0.3
   - cassava-megaparsec < 2
-  # LTS Haskell 13.13
+  # LTS Haskell 13.14
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -263,6 +263,7 @@ default-package-overrides:
   - bazel-runfiles ==0.7.0.1
   - bbdb ==0.8
   - bcrypt ==0.0.11
+  - beam-core ==0.8.0.0
   - bench ==1.0.12
   - benchpress ==0.2.2.12
   - bencode ==0.6.0.0
@@ -386,7 +387,7 @@ default-package-overrides:
   - cheapskate-highlight ==0.1.0.0
   - cheapskate-lucid ==0.1.0.0
   - check-email ==1.0.2
-  - checkers ==0.4.11
+  - checkers ==0.4.14
   - checksum ==0.0
   - choice ==0.2.2
   - chronologique ==0.3.1.1
@@ -600,7 +601,7 @@ default-package-overrides:
   - direct-sqlite ==2.3.24
   - discount ==0.1.1
   - disk-free-space ==0.1.0.1
-  - distributed-closure ==0.4.1
+  - distributed-closure ==0.4.1.1
   - distribution-opensuse ==1.1.1
   - distributive ==0.6
   - dlist ==0.8.0.5
@@ -743,7 +744,7 @@ default-package-overrides:
   - fmt ==0.6.1.1
   - fn ==0.3.0.2
   - focus ==1.0.1.2
-  - focuslist ==0.1.0.1
+  - focuslist ==0.1.0.2
   - foldable1 ==0.1.0.0
   - fold-debounce ==0.2.0.8
   - fold-debounce-conduit ==0.2.0.3
@@ -1034,7 +1035,7 @@ default-package-overrides:
   - html-entity-map ==0.1.0.0
   - htoml ==1.0.0.3
   - http2 ==1.6.4
-  - HTTP ==4000.3.12
+  - HTTP ==4000.3.13
   - http-api-data ==0.4
   - http-client ==0.5.14
   - http-client-tls ==0.3.5.3
@@ -1134,7 +1135,7 @@ default-package-overrides:
   - io-storage ==0.3
   - io-streams ==1.5.1.0
   - io-streams-haproxy ==1.0.1.0
-  - ip ==1.4.2
+  - ip ==1.4.2.1
   - ip6addr ==1.0.0
   - iproute ==1.7.7
   - IPv6Addr ==1.1.2
@@ -1153,6 +1154,7 @@ default-package-overrides:
   - jack ==0.7.1.4
   - jose ==0.8.0.0
   - jose-jwt ==0.8.0
+  - js-dgtable ==0.5.2
   - js-flot ==0.8.3
   - js-jquery ==3.3.1
   - json ==0.9.3
@@ -1188,7 +1190,7 @@ default-package-overrides:
   - lame ==0.1.1
   - language-c ==0.8.2
   - language-c-quote ==0.12.2
-  - language-docker ==8.0.1
+  - language-docker ==8.0.2
   - language-ecmascript ==0.19
   - language-haskell-extract ==0.2.4
   - language-java ==0.2.9
@@ -1268,7 +1270,7 @@ default-package-overrides:
   - machines-directory ==0.2.1.0
   - machines-io ==0.2.0.13
   - mainland-pretty ==0.7
-  - main-tester ==0.2.0.0
+  - main-tester ==0.2.0.1
   - makefile ==1.1.0.0
   - managed ==1.0.6
   - mapquest-api ==0.3.1
@@ -1294,7 +1296,7 @@ default-package-overrides:
   - mega-sdist ==0.3.3.2
   - memory ==0.14.18
   - MemoTrie ==0.6.9
-  - menshen ==0.0.1
+  - menshen ==0.0.2
   - mercury-api ==0.1.0.2
   - merkle-tree ==0.1.1
   - mersenne-random-pure64 ==0.2.2.0
@@ -1401,7 +1403,7 @@ default-package-overrides:
   - ndjson-conduit ==0.1.0.5
   - neat-interpolation ==0.3.2.4
   - netlib-ffi ==0.1.1
-  - netpbm ==1.0.2
+  - netpbm ==1.0.3
   - netrc ==0.2.0.0
   - nettle ==0.3.0
   - netwire ==5.0.3
@@ -1840,7 +1842,7 @@ default-package-overrides:
   - siggy-chardust ==1.0.0
   - signal ==0.1.0.4
   - silently ==1.2.5
-  - simple-cmd ==0.1.3
+  - simple-cmd ==0.1.3.1
   - simple-cmd-args ==0.1.0.1
   - simple-log ==0.9.11
   - simple-reflect ==0.3.3
@@ -2050,7 +2052,7 @@ default-package-overrides:
   - th-strict-compat ==0.1.0.1
   - th-utilities ==0.2.1.0
   - thyme ==0.3.5.5
-  - tidal ==1.0.8
+  - tidal ==1.0.10
   - tile ==0.3.0.0
   - time-compat ==0.1.0.3
   - timeit ==2.0
@@ -2154,7 +2156,7 @@ default-package-overrides:
   - users-test ==0.5.0.1
   - utf8-light ==0.4.2
   - utf8-string ==1.0.1.1
-  - util ==0.1.12.0
+  - util ==0.1.13.0
   - utility-ht ==0.0.14
   - uuid ==1.3.13
   - uuid-types ==1.0.3
@@ -2231,7 +2233,7 @@ default-package-overrides:
   - webrtc-vad ==0.1.0.3
   - websockets ==0.12.5.3
   - websockets-snap ==0.10.3.0
-  - weigh ==0.0.13
+  - weigh ==0.0.14
   - wide-word ==0.1.0.8
   - wikicfp-scraper ==0.1.0.10
   - wild-bind ==0.1.2.3
@@ -2304,7 +2306,7 @@ default-package-overrides:
   - yesod-auth-hashdb ==1.7.1
   - yesod-auth-oauth2 ==0.6.1.1
   - yesod-bin ==1.6.0.3
-  - yesod-core ==1.6.12
+  - yesod-core ==1.6.13
   - yesod-csp ==0.2.4.0
   - yesod-eventsource ==1.6.0
   - yesod-fb ==0.5.0
@@ -2429,6 +2431,8 @@ package-maintainers:
     - lambdabot-core
     - lambdabot-irc-plugins
     - language-nix
+    - liquid-fixpoint
+    - liquidhaskell
     - logging-facade-syslog
     - nix-paths
     - pandoc
@@ -6568,8 +6572,6 @@ broken-packages:
   - lio-simple
   - lipsum-gen
   - liquid
-  - liquid-fixpoint
-  - liquidhaskell
   - liquidhaskell-cabal
   - liquidhaskell-cabal-demo
   - list-fusion-probe
@@ -8871,7 +8873,6 @@ broken-packages:
   - sunroof-server
   - super-user-spark
   - superbubbles
-  - superbuffer
   - supercollider-ht
   - supercollider-midi
   - superconstraints

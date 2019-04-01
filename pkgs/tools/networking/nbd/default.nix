@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, which }:
 
 stdenv.mkDerivation rec {
-  name = "nbd-3.18";
+  name = "nbd-3.19";
 
   src = fetchurl {
     url = "mirror://sourceforge/nbd/${name}.tar.xz";
-    sha256 = "0cb0sjiv0j9sh9dk24nrjm7sa0axbrcp2av5hc91g1ryzk764dyq";
+    sha256 = "1446rdg490fxd8mg5gvrf4nddbw1w7lf2daxy9cpc19yy4968iml";
   };
 
   buildInputs = [ glib ]

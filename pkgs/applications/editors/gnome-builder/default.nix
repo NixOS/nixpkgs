@@ -17,6 +17,7 @@
 , json-glib
 , jsonrpc-glib
 , libdazzle
+, libpeas
 , libxml2
 , meson
 , ninja
@@ -64,7 +65,7 @@ in stdenv.mkDerivation {
     flatpak
     gnome3.devhelp
     libgit2-glib
-    gnome3.libpeas
+    libpeas
     vte
     gspell
     gtk3

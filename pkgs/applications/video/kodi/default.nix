@@ -44,14 +44,14 @@ assert vdpauSupport -> libvdpau != null;
 
 let
   kodiReleaseDate = "20190129";
-  kodiVersion = "18.0";
+  kodiVersion = "18.1";
   rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "1ci5jjvqly01lysdp6j6jrnn49z4is9z5kan5zl3cpqm9w7rqarg";
+    sha256 = "1w26aqvzxv4c70gcd1vw1pldapsc2xcacwq9b7dqx5m44j0zx1dc";
   };
 
   kodiDependency = { name, version, rev, sha256, ... } @attrs:
@@ -70,8 +70,8 @@ let
   ffmpeg = kodiDependency rec {
     name    = "FFmpeg";
     version = "4.0.3";
-    rev     = "${version}-${rel}-RC5";
-    sha256  = "0l20bysv2y711khwpnpw4dz6mzd37qllki3fnv4dx1lj8ivydrlx";
+    rev     = "${version}-${rel}-18.2";
+    sha256  = "1krsjlr949iy5l6ljxancza1yi6w1annxc5s6k283i9mb15qy8cy";
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
     '';

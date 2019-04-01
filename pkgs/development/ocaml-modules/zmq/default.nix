@@ -1,15 +1,8 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune, czmq, stdint }:
+{ lib, fetchFromGitHub, buildDunePackage, czmq, stdint }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "zmq is not available for OCaml ${ocaml.version}"
-else
-
-let __dune = dune; in
-let dune = __dune.override { ocamlPackages = { inherit ocaml findlib; }; };
-in
-
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-zmq-${version}";
+buildDunePackage rec {
+  minimumOCamlVersion = "4.03";
+  pname = "zmq";
   version = "20180726";
   src = fetchFromGitHub {
     owner = "issuu";
@@ -22,19 +15,14 @@ stdenv.mkDerivation rec {
     ./ocaml-zmq-issue43.patch
   ];
 
-  buildInputs = [ ocaml findlib dune czmq ];
+  buildInputs = [ czmq ];
 
   propagatedBuildInputs = [ stdint ];
 
-  buildPhase = "dune build -p zmq";
-
-  inherit (dune) installPhase;
-
-  meta = with stdenv.lib; {
+  meta = {
     description = "ZeroMQ bindings for OCaml";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ akavel ];
+    license     = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ akavel ];
     inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
   };
 }

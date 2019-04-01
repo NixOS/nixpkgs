@@ -18,9 +18,9 @@ let
     sha256Hash = "0d7d6n7n1zzhxpdykbwwbrw139mqxkp20d4l0570pk7975p1s2q9";
   };
   latestVersion = { # canary & dev
-    version = "3.5.0.6"; # "Android Studio 3.5 Canary 7"
-    build = "183.5346365";
-    sha256Hash = "0dfkhzsxabrv8cwgyv3gicpglgpccmi1ig5shlhp6a006awgfyj0";
+    version = "3.5.0.7"; # "Android Studio 3.5 Canary 8"
+    build = "191.5375575";
+    sha256Hash = "0vssynvj0j4xbin9h95lciilc3j9mkm53vwzxxr3kqxwl74qx4mj";
   };
 in rec {
   # Old alias (TODO @primeos: Remove after 19.03 is branched off):
