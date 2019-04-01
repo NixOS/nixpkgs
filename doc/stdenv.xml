@@ -1,5 +1,6 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
          xml:id="chap-stdenv">
  <title>The Standard Environment</title>
  <para>
@@ -291,43 +292,26 @@ genericBuild
    They're confusing in very different ways so... hopefully if something
    doesn't make sense in one presentation, it will in the other!
 <programlisting>
-let mapOffset(h, t, i) = i + (if i &lt;= 0 then h else t - 1)
-
-propagated-dep(h0, t0, A, B)
-propagated-dep(h1, t1, B, C)
-h0 + h1 in {-1, 0, 1}
-h0 + t1 in {-1, 0, 1}
--------------------------------------- Transitive property
-propagated-dep(mapOffset(h0, t0, h1),
-               mapOffset(h0, t0, t1),
-               A, C)</programlisting>
-<programlisting>
-let mapOffset(h, t, i) = i + (if i &lt;= 0 then h else t - 1)
-
-dep(h0, _, A, B)
-propagated-dep(h1, t1, B, C)
-h0 + h1 in {-1, 0, 1}
-h0 + t1 in {-1, 0, -1}
------------------------------ Take immediate dependencies' propagated dependencies
-propagated-dep(mapOffset(h0, t0, h1),
-               mapOffset(h0, t0, t1),
-               A, C)</programlisting>
-<programlisting>
-propagated-dep(h, t, A, B)
------------------------------ Propagated dependencies count as dependencies
-dep(h, t, A, B)</programlisting>
+let mapOffset(h, t, i) = i + (if i ≤ 0 then h else t - 1)
+</programlisting>
+   <equation>
+    <xi:include href="dependencies-01.xml"/>
+   </equation>
+   <equation>
+    <xi:include href="dependencies-02.xml"/>
+   </equation>
+   <equation>
+    <xi:include href="dependencies-03.xml"/>
+   </equation>
    Some explanation of this monstrosity is in order. In the common case, the
-   target offset of a dependency is the successor to the target offset:
+   target offset of a dependency is the successor to the host offset:
    <literal>t = h + 1</literal>. That means that:
-<programlisting>
-let f(h, t, i) = i + (if i &lt;= 0 then h else t - 1)
-let f(h, h + 1, i) = i + (if i &lt;= 0 then h else (h + 1) - 1)
-let f(h, h + 1, i) = i + (if i &lt;= 0 then h else h)
-let f(h, h + 1, i) = i + h
-  </programlisting>
+   <equation>
+    <xi:include href="dependencies-04.xml"/>
+   </equation>
    This is where "sum-like" comes in from above: We can just sum all of the
    host offsets to get the host offset of the transitive dependency. The target
-   offset is the transitive dependency is simply the host offset + 1, just as
+   offset of the transitive dependency is simply the host offset + 1, just as
    it was with the dependencies composed to make this transitive one; it can be
    ignored as it doesn't add any new information.
   </para>
