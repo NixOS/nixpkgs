@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x build-aux/post_install.py
     patchShebangs build-aux/post_install.py
+
+    chmod +x desktop/geary-attach
   '';
 
   preFixup = ''
