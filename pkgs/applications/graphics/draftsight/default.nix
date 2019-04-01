@@ -4,7 +4,7 @@
   libX11, libXcursor, libXrandr, libxcb, libXi, libSM, libICE,
   libXrender, libXcomposite }:
 
-let version = "2018SP2"; in
+let version = "2019SP0"; in
 stdenv.mkDerivation {
   name = "draftsight-${version}";
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     name = "draftSight.deb";
     url = "http://dl-ak.solidworks.com/nonsecure/draftsight/${version}/draftSight.deb";
-    sha256 = "05lrvml0zkzqg0sj6sj2h8h66hxdmsw5fg9fwz923r1y8j48qxdx";
+    sha256 = "0bdsxs0qvpnvvrlmhs3zcpdmlw9wb32riarl9385lcgymmh3sxy4";
   };
 
   libPath = stdenv.lib.makeLibraryPath [ gcc.cc libGLU_combined xdg_utils
