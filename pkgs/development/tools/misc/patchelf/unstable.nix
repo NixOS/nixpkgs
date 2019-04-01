@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = stdenv.hostPlatform.isMusl;
 
   meta = with stdenv.lib; {
     homepage = https://nixos.org/patchelf.html;
