@@ -1,4 +1,4 @@
-{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3, overrideCC, gccStdenv, gcc6 }:
 
 let
 
@@ -59,6 +59,7 @@ rec {
       knownVulnerabilities = [ "Support ended in August 2018." ];
     };
   }).override {
+    stdenv = overrideCC gccStdenv gcc6; # gcc7 fails with "undefined reference to `__divmoddi4'"
     gtk3Support = false;
   };
 
