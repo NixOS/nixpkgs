@@ -95,6 +95,10 @@ in
         message = "Cannot use both password and passwordFile for shadowsocks-libev";
       };
 
+    networking.firewall.allowedTCPPorts = mkIf (cfg.mode == "tcp_and_udp" || cfg.mode == "tcp_only") [ cfg.port ];
+
+    networking.firewall.allowedUDPPorts = mkIf (cfg.mode == "tcp_and_udp" || cfg.mode == "udp_only") [ cfg.port ];
+
     systemd.services.shadowsocks-libev = {
       description = "shadowsocks-libev Daemon";
       after = [ "network.target" ];
