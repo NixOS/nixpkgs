@@ -130,7 +130,7 @@ let
       "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
     ];
 
-    buildFlags = [ "all" ];
+    buildFlags = [ "all" "DISABLE_HOTSPOT_OS_VERSION_CHECK=ok" ];
 
     doCheck = false; # fails with "No rule to make target 'y'."
 
