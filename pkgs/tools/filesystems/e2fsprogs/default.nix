@@ -1,11 +1,12 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo, perl }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "e2fsprogs-1.44.5";
+  pname = "e2fsprogs";
+  version = "1.45.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/e2fsprogs/${name}.tar.gz";
-    sha256 = "1k6iwv2bz2a8mcd1gg9kb5jpry7pil5v2h2f9apxax7g4yp1y89f";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1sgcjarfksa8bkx81q5cd6rzqvhzgs28a0ljwyr4ggqpfx7d18vk";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -33,13 +34,12 @@ stdenv.mkDerivation rec {
       "--enable-libuuid --disable-e2initrd-helper"
     ];
 
-  checkInputs = [ perl ];
-  doCheck = false; # fails
+  checkInputs = [ buildPackages.perl ];
+  doCheck = true;
 
-  # hacky way to make it install *.pc
   postInstall = ''
-    make install-libs
-    rm "$out"/lib/*.a
+    # avoid cycle between outputs
+    mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
   '';
 
   enableParallelBuilding = true;

@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
   # objects.
   cmakeFlags = [ "-DCMAKE_C_FLAGS=-fPIC" "-DCMAKE_CXX_FLAGS=-fPIC" ]
     ++ optional (qtLib != null) [ "-DVTK_USE_QT:BOOL=ON" ]
-    ++ optional stdenv.isDarwin [ "-DBUILD_TESTING:BOOL=OFF"
-                                  "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ];
+    ++ optional stdenv.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-7.0|' ./Parallel/Core/CMakeLists.txt

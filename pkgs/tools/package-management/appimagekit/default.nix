@@ -91,7 +91,6 @@ in stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_LIBARCHIVE=ON"
     "-DUSE_SYSTEM_GTEST=ON"
     "-DUSE_SYSTEM_MKSQUASHFS=ON"
-    "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}"
   ];
 
   postInstall = ''

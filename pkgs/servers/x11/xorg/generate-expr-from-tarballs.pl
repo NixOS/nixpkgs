@@ -26,7 +26,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "mkfontdir", "bdftopcf", "libxslt", "openssl", "gperf", "m4");
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext" );
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -35,11 +35,13 @@ $pcMap{"dbus-1"} = "dbus";
 $pcMap{"uuid"} = "libuuid";
 $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
+$pcMap{"GL"} = "libGL";
 $pcMap{"gbm"} = "mesa_noglu";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
 $pcMap{"\$DRI2PROTO"} = "xorgproto";
+$pcMap{"\${XKBMODULE}"} = "libxkbfile";
 
 
 my $downloadCache = "./download-cache";
@@ -149,15 +151,15 @@ while (<>) {
     }
 
     if ($file =~ /AC_PATH_PROG\(BDFTOPCF/) {
-        push @requires, "bdftopcf";
+        push @nativeRequires, "bdftopcf";
     }
 
     if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/) {
-        push @requires, "mkfontscale";
+        push @nativeRequires, "mkfontscale";
     }
 
     if ($file =~ /AC_PATH_PROG\(MKFONTDIR/) {
-        push @requires, "mkfontdir";
+        push @nativeRequires, "mkfontscale";
     }
 
     if ($file =~ /AM_PATH_PYTHON/) {
@@ -173,17 +175,17 @@ while (<>) {
     my $isFont;
 
     if ($file =~ /XORG_FONT_BDF_UTILS/) {
-        push @requires, "bdftopcf", "mkfontdir";
+        push @nativeRequires, "bdftopcf", "mkfontscale";
         $isFont = 1;
     }
 
     if ($file =~ /XORG_FONT_SCALED_UTILS/) {
-        push @requires, "mkfontscale", "mkfontdir";
+        push @nativeRequires, "mkfontscale";
         $isFont = 1;
     }
 
     if ($file =~ /XORG_FONT_UCS2ANY/) {
-        push @requires, "fontutil", "mkfontscale";
+        push @nativeRequires, "fontutil", "mkfontscale";
         $isFont = 1;
     }
 
@@ -213,6 +215,7 @@ while (<>) {
 
     #process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,\s*[\[]?([^\)\[]*)/g;
     process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,([^\)\,]*)/g;
+    process \@requires, $1 while $file =~ /AC_SEARCH_LIBS\([^,]*,([^\)\,]*)/g;
     process \@requires, $1 while $file =~ /MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRED_LIBS=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRED_MODULES=\"(.*)\"/g;
@@ -224,6 +227,7 @@ while (<>) {
     process \@requires, $1 while $file =~ /ivo_requires=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
+    push @nativeRequires, "gettext" if $file =~ /USE_GETTEXT/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
     push @requires, "gperf", "m4", "xorgproto" if $pkg =~ /xcbutil/;
 

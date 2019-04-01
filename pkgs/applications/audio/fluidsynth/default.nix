@@ -11,8 +11,8 @@ let
       sha256 = "0n75jq3xgq46hfmjkaaxz3gic77shs4fzajq40c8gk043i84xbdh";
     };
     "2" = {
-      fluidsynthVersion = "2.0.3";
-      sha256 = "00f6bhw4ddrinb5flvg5y53rcvnf4km23a6nbvnswmpq13568v78";
+      fluidsynthVersion = "2.0.4";
+      sha256 = "1v2vji02fbrjgypwb4fw2r90hnfwfbfh3d24j8vjwlbqxhxp16s0";
     };
   };
 in

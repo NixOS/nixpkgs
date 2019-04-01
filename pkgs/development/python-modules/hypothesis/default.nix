@@ -9,7 +9,7 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "3.88.3";
+  version = "4.7.3";
   pname = "hypothesis";
 
   # Use github tarballs that includes tests

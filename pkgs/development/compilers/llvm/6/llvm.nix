@@ -14,9 +14,6 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-# Mesa requires AMDGPU target
-# BPF is used by bcc
-, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" "BPF" ]
 }:
 
 let

@@ -1,10 +1,10 @@
-{ mkDerivation, lib, extra-cmake-modules, gtk2, qtbase, }:
+{ mkDerivation, lib, extra-cmake-modules, gtk2, qtbase, sassc, python3, breeze-qt5 }:
 
 let inherit (lib) getLib; in
 
 mkDerivation {
   name = "breeze-gtk";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules sassc python3 python3.pkgs.pycairo breeze-qt5 ];
   buildInputs = [ qtbase ];
   postPatch = ''
     sed -i cmake/FindGTKEngine.cmake \

@@ -38,7 +38,11 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/NVIDIA/libglvnd/commit/0177ade40262e31a80608a8e8e52d3da7163dccf.patch";
       sha256 = "1rnz5jw2gvx4i1lcp0k85jz9xgr3dgzsd583m2dlxkaf2a09j89d";
     })
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin
+    (fetchpatch {
+      url = "https://github.com/NVIDIA/libglvnd/commit/294ccb2f49107432567e116e13efac586580a4cc.patch";
+      sha256 = "01339wg27cypv93221rhk3885vxbsg8kvbfyia77jmjdcnwrdwm2";
+    });
   outputs = [ "out" "dev" ];
 
   passthru = { inherit driverLink; };

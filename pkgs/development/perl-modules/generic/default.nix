@@ -1,4 +1,4 @@
-{ lib, stdenv, perl }:
+{ lib, stdenv, perl, buildPackages }:
 
 { nativeBuildInputs ? [], name, ... } @ attrs:
 
@@ -37,6 +37,6 @@ stdenv.mkDerivation (
     name = "perl${perl.version}-${name}";
     builder = ./builder.sh;
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
-    inherit perl;
+    perl = buildPackages.perl;
   }
 )

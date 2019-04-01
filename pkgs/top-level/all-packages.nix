@@ -943,7 +943,11 @@ in
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  inherit (callPackages ../misc/logging/beats/6.x.nix { })
+  inherit (callPackages ../misc/logging/beats/6.x.nix {
+    # XXX: this is failing with Go 1.12. Error is related to cgo, an
+    # update to this package might fix it.
+    buildGoPackage = buildGo111Package;
+  })
     filebeat6
     heartbeat6
     metricbeat6
@@ -955,7 +959,11 @@ in
   metricbeat = metricbeat6;
   packetbeat = packetbeat6;
 
-  inherit (callPackages ../misc/logging/beats/5.x.nix { })
+  inherit (callPackages ../misc/logging/beats/5.x.nix {
+    # XXX: this is failing with Go 1.12. Error is related to cgo, an
+    # update to this package might fix it.
+    buildGoPackage = buildGo111Package;
+  })
     filebeat5
     heartbeat5
     metricbeat5
@@ -1742,7 +1750,11 @@ in
 
   mongodb-compass = callPackage ../tools/misc/mongodb-compass { };
 
-  mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
+  mongodb-tools = callPackage ../tools/misc/mongodb-tools {
+    # XXX: this is failing with Go 1.12. Error is related to cgo, an
+    # update to this package might fix it.
+    buildGoPackage = buildGo111Package;
+  };
 
   moosefs = callPackage ../tools/filesystems/moosefs { };
 
@@ -1825,7 +1837,11 @@ in
 
   bepasty = callPackage ../tools/misc/bepasty { };
 
-  bettercap = callPackage ../tools/security/bettercap { };
+  bettercap = callPackage ../tools/security/bettercap {
+    # XXX: this is failing with Go 1.12. Error is related to cgo, an
+    # update to this package might fix it.
+    buildGoPackage = buildGo111Package;
+  };
 
   bfg-repo-cleaner = gitAndTools.bfg-repo-cleaner;
 
@@ -4329,7 +4345,11 @@ in
 
   miredo = callPackage ../tools/networking/miredo { };
 
-  mirrorbits = callPackage ../servers/mirrorbits { };
+  mirrorbits = callPackage ../servers/mirrorbits {
+    # XXX: this is failing with Go 1.12. Error is related to cgo, an
+    # update to this package might fix it.
+    buildGoPackage = buildGo111Package;
+  };
 
   mitmproxy = callPackage ../tools/networking/mitmproxy { };
 
@@ -6948,6 +6968,7 @@ in
     libcCross1 =
       if stdenv.targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
       else if stdenv.targetPlatform.libc == "libSystem" then darwin.xcode
+      else if stdenv.targetPlatform.libc == "nblibc" then netbsd.headers
       else null;
     binutils1 = wrapBintoolsWith {
       bintools = binutils-unwrapped;
@@ -7750,6 +7771,7 @@ in
     vala_0_38
     vala_0_40
     vala_0_42
+    vala_0_44
     vala;
 
   valadoc = callPackage ../development/tools/valadoc { };
@@ -10145,6 +10167,7 @@ in
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
     else if name == "libSystem" then targetPackages.darwin.xcode
+    else if name == "nblibc" then targetPackages.netbsdCross.libc
     else throw "Unknown libc";
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
@@ -11768,8 +11791,11 @@ in
 
   ## libGL/libGLU/Mesa stuff
 
-  # Default libGL implementation, should provide headers and libGL.so/libEGL.so/... to link agains them
-  libGL = mesa_noglu.stubs;
+  # Default libGL implementation, should provide headers and
+  # libGL.so/libEGL.so/... to link agains them. Android NDK provides
+  # an OpenGL implementation, we can just use that.
+  libGL = if stdenv.hostPlatform.useAndroidPrebuilt then stdenv
+          else mesa_noglu.stubs;
 
   # Default libGLU
   libGLU = mesa_glu;
@@ -12577,10 +12603,13 @@ in
 
   schroedinger = callPackage ../development/libraries/schroedinger { };
 
-  SDL = callPackage ../development/libraries/SDL {
+  SDL = callPackage ../development/libraries/SDL ({
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa;
-  };
+  } // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
+    # libGLU doesn’t work with Android’s SDL
+    libGLU = null;
+  });
 
   SDL_sixel = callPackage ../development/libraries/SDL_sixel { };
 
@@ -12683,7 +12712,11 @@ in
     sdnotify-wrapper = callPackage ../os-specific/linux/sdnotify-wrapper { };
   };
 
-  skydive = callPackage ../tools/networking/skydive { };
+  skydive = callPackage ../tools/networking/skydive {
+    # XXX: this is failing with Go 1.12. Error is related to cgo, an
+    # update to this package might fix it.
+    buildGoPackage = buildGo111Package;
+  };
 
   slang = callPackage ../development/libraries/slang { };
 
@@ -13419,8 +13452,11 @@ in
   buildGo111Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_11;
   };
+  buildGo112Package = callPackage ../development/go-packages/generic {
+    go = buildPackages.go_1_12;
+  };
 
-  buildGoPackage = buildGo111Package;
+  buildGoPackage = buildGo112Package;
 
   buildGo111Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_11;
@@ -14471,7 +14507,11 @@ in
 
   cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
-  cockroachdb = callPackage ../servers/sql/cockroachdb { };
+  cockroachdb = callPackage ../servers/sql/cockroachdb {
+    # XXX: this is failing with Go 1.12. Error is related to cgo, an
+    # update to this package might fix it.
+    buildGoPackage = buildGo111Package;
+  };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_3_compat;
@@ -14551,9 +14591,7 @@ in
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
-  ffado = callPackage ../os-specific/linux/ffado {
-    inherit (python2Packages) python pyqt4 dbus-python;
-  };
+  ffado = callPackage ../os-specific/linux/ffado { };
   libffado = ffado;
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
@@ -17789,10 +17827,7 @@ in
 
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
-  singularity = callPackage ../applications/virtualization/singularity {
-    # XXX: the build is finding references to Go when compiled with go v1.12
-    go = go_1_11;
-  };
+  singularity = callPackage ../applications/virtualization/singularity { };
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
@@ -21435,7 +21470,7 @@ in
   clearlooks-phenix = callPackage ../misc/themes/clearlooks-phenix { };
 
   deepin = recurseIntoAttrs (import ../desktops/deepin {
-    inherit pkgs libsForQt5 go_1_11;
+    inherit pkgs libsForQt5;
     inherit (lib) makeScope;
   });
 
@@ -23465,8 +23500,10 @@ in
 
   fts = if stdenv.hostPlatform.isMusl then netbsd.fts else null;
 
-  inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
-          netbsd;
+  netbsd = callPackages ../os-specific/bsd/netbsd {};
+  netbsdCross = callPackages ../os-specific/bsd/netbsd {
+    stdenv = crossLibcStdenv;
+  };
 
   yrd = callPackage ../tools/networking/yrd { };
 
