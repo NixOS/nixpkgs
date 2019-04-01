@@ -99,6 +99,16 @@
      and fix all the bugs it uncovers.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>vlc</literal> package gained support for Chromecast
+     streaming, enabled by default. TCP port 8010 must be open for it to work,
+     so something like <literal>networking.firewall.allowedTCPPorts = [ 8010
+     ];</literal> may be required in your configuration. Also consider enabling
+     <link xlink:href="https://nixos.wiki/wiki/Accelerated_Video_Playback">
+     Accelerated Video Playback</link> for better transcoding performance.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
