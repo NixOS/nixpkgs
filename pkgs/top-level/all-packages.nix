@@ -8475,7 +8475,7 @@ in
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
   ant = apacheAnt;
 
-  apacheKafka = apacheKafka_2_1;
+  apacheKafka = apacheKafka_2_2;
   apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
   apacheKafka_0_10 = callPackage ../servers/apache-kafka { majorVersion = "0.10"; };
   apacheKafka_0_11 = callPackage ../servers/apache-kafka { majorVersion = "0.11"; };
@@ -8483,6 +8483,7 @@ in
   apacheKafka_1_1 = callPackage ../servers/apache-kafka { majorVersion = "1.1"; };
   apacheKafka_2_0 = callPackage ../servers/apache-kafka { majorVersion = "2.0"; };
   apacheKafka_2_1 = callPackage ../servers/apache-kafka { majorVersion = "2.1"; };
+  apacheKafka_2_2 = callPackage ../servers/apache-kafka { majorVersion = "2.2"; };
 
   kt = callPackage ../tools/misc/kt {};
 
