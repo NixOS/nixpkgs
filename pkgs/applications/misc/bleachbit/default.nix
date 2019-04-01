@@ -22,10 +22,6 @@ pythonPackages.buildPythonApplication rec {
 
   installFlags = [ "prefix=${placeholder "out"}" ];
 
-  doCheck = true;
-
-  checkTarget = "tests";
-
   propagatedBuildInputs = with pythonPackages; [ pygtk ];
 
   meta = {
