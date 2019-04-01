@@ -13,10 +13,6 @@ stdenv.mkDerivation rec {
   postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace tests/Makefile.am \
       --replace "set-rpath-library.sh" ""
-  '' +
-  # extend version identifier to more informative than "0.10".
-  ''
-    echo -n ${version} > version
   '';
 
   setupHook = [ ./setup-hook.sh ];
@@ -26,11 +22,11 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://nixos.org/patchelf.html;
-    license = "GPL";
+    license = licenses.gpl3;
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.all;
   };
 }
