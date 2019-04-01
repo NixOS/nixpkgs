@@ -2,7 +2,7 @@
 , python, cmake, meson, vim, ruby
 , which, fetchgit, fetchurl
 , llvmPackages, rustPlatform
-, xkb-switch, fzf, skim
+, xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
 , ycmd, rake
 , gobject-introspection, glib, wrapGAppsHook
@@ -403,6 +403,14 @@ self: super: {
       description = "code-completion for python using python-jedi";
       license = stdenv.lib.licenses.mit;
     };
+  });
+
+  vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
+    postPatch = old.postPatch or "" + ''
+      substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace \
+        'g:stylish_haskell_command = "stylish-haskell"' \
+        'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
+    '';
   });
 
 }
