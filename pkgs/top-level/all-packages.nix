@@ -2511,6 +2511,8 @@ in
 
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
+  zzuf = callPackage ../tools/security/zzuf { };
+
   ### DEVELOPMENT / EMSCRIPTEN
 
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
