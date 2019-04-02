@@ -13,6 +13,11 @@
 
 with stdenv.lib;
 
+assert builtins.isString name;
+assert builtins.isString diskImage.name;
+assert builtins.isAttrs  src;
+assert src ? version -> builtins.isString src.version;
+
 vmTools.runInLinuxImage (stdenv.mkDerivation (
 
   {
