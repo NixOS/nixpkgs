@@ -4030,6 +4030,8 @@ let
 
   DBDmysql = callPackage ../development/perl-modules/DBD-mysql { };
 
+  DBDOracle = callPackage ../development/perl-modules/DBD-Oracle { };
+
   DBDPg = callPackage ../development/perl-modules/DBD-Pg { };
 
   DBDsybase = callPackage ../development/perl-modules/DBD-sybase { };
