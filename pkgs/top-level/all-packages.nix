@@ -145,6 +145,8 @@ in
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  buildRecDebpkg = callPackage ../build-support/build-debian {};
+
   castxml = callPackage ../development/tools/castxml { };
 
   cmark = callPackage ../development/libraries/cmark { };
