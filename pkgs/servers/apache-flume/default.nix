@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, hadoop, majorVersion ? "1.9.0" }:
+{ stdenv, fetchurl, jre, makeWrapper, majorVersion ? "1.9.0" }:
 
 let
   versionMap = {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ hadoop jre makeWrapper ];
+  buildInputs = [ jre makeWrapper ];
 
   installPhase = ''
     mkdir -p $out
@@ -28,11 +28,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp bin/flume-ng $out/bin
-
     wrapProgram $out/bin/flume-ng \
-      --set JAVA_HOME "${jre}" \
       --set FLUME_HOME "$out" \
-      --set FLUME_JAVA_LIBRARY_PATH "${hadoop}/lib/native"
+      --set JAVA_HOME "${jre}"
     chmod +x $out/bin\/*
   '';
 
