@@ -7,6 +7,7 @@ let
   # folder
   v2 = callPackage ./2.nix {};
 in buildGoPackage rec {
+  name = "${pname}-${version}";
   pname = "browserpass";
   version = "3.0.1";
 
