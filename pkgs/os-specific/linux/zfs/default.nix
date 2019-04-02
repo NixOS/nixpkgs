@@ -182,17 +182,14 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.0-rc3";
+    rev = "bd15ac764fb8fe1995d3b2f6c8ddb643447d92aa";
+    version = "unstable-2019-04-01";
 
-    sha256 = "0wmkis0q2gbj7sgx3ipxngbgzjcf7ay353v3mglf2ay50q4da5i7";
+    sha256 = "194yjl270r6cwhiv6hb5mc5r74kwhr55p2y0ys4hzryn35lgrvl4";
     isUnstable = true;
 
     extraPatches = [
-      # in case this gets out of date, just send Mic92 a pull request!
-      (fetchpatch {
-        url = "https://github.com/Mic92/zfs/commit/bc29b5783da0af2c80c85126a1831ce1d52bfb69.patch";
-        sha256 = "1sdcr1w2jp3djpwlf1f91hrxxmc34q0jl388smdkxh5n5bpw5gzw";
-      })
+      ./build-fixes-unstable.patch
     ];
 
     spl = null;
