@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
-  version = "6.0";
+  version = "7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "978349ae00687504fd0f9d0970c37199ccd89cbdb0cb8c4ed7ee417ede582b40";
+    sha256 = "1zfm9v80bqfdapygy9wmi6j6y5c179ixpnh9ih27py4v6cqwzjgk";
   };
 
-  checkInputs = [ mock ];
+  checkInputs = [ mock pytest ];
 
   propagatedBuildInputs = [ pytest ];
 
