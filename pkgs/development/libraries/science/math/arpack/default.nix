@@ -28,8 +28,11 @@ stdenv.mkDerivation {
     "-DINTERFACE64=${optionalString openblas.blas64 "1"}"
   ];
 
-  preCheck = ''
+  preCheck = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:`pwd`/lib
+  '' else ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/lib
+  '' + ''
     # Prevent tests from using all cores
     export OMP_NUM_THREADS=2
   '';
