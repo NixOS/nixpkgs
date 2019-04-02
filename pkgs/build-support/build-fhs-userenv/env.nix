@@ -36,12 +36,14 @@ let
 
   # base packages of the chroot
   # these match the host's architecture, glibc_multi is used for multilib
-  # builds.
+  # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
+  # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
   basePkgs = with pkgs;
-    [ (if isMultiBuild then glibc_multi else glibc)
+    [ glibcLocales
+      (if isMultiBuild then glibc_multi else glibc)
       (toString gcc.cc.lib) bashInteractive coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
-      gnutar gzip bzip2 xz glibcLocales
+      gnutar gzip bzip2 xz
     ];
   baseMultiPkgs = with pkgsi686Linux;
     [ (toString gcc.cc.lib)
