@@ -1,12 +1,12 @@
 { stdenv, fetchPypi, buildPythonPackage, swig, pcsclite, PCSC }:
 
 buildPythonPackage rec {
-  version = "1.9.7";
+  version = "1.9.8";
   pname = "pyscard";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "412c74c83e7401566e9d3d7b8b5ca965e74582a1f33179b3c1fabf1da73ebf80";
+    sha256 = "15fh00z1an6r5j7hrz3jlq0rb3jygwf3x4jcwsa008bv8vpcg7gm";
   };
 
   postPatch = ''
