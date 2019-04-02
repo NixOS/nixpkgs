@@ -190,7 +190,7 @@ in stdenv.mkDerivation rec {
   + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
-      --prefix PYTHONPATH : "${vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
+      --prefix PYTHONPATH : "${python3.pkgs.vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
   '';
 
   installPhase = ''

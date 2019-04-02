@@ -5460,6 +5460,10 @@ in {
   flickrapi = callPackage ../development/python-modules/flickrapi { };
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
+
+  vapoursynth = disabledIf (!pythonAtLeast "3.7") (toPythonModule (pkgs.vapoursynth.override {
+    python3 = python;
+  })).python;
 });
 
 in fix' (extends overrides packages)
