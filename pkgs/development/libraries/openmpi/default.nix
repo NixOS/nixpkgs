@@ -9,23 +9,15 @@
 }:
 
 let
-  version = "4.0.0";
+  version = "4.0.1";
 
 in stdenv.mkDerivation rec {
   name = "openmpi-${version}";
 
   src = with stdenv.lib.versions; fetchurl {
     url = "http://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${name}.tar.bz2";
-    sha256 = "0srnjwzsmyhka9hhnmqm86qck4w3xwjm8g6sbns58wzbrwv8l2rg";
+    sha256 = "02cpzcp113gj5hb0j2xc0cqma2fn04i2i0bzf80r71120p9bdryc";
   };
-
-  patches = [ (fetchpatch {
-   # Fix a bug that ignores OMPI_MCA_rmaps_base_oversubscribe (upstream patch).
-   # This bug breaks the test from libs, such as scalapack,
-   # on machines with less than 4 cores.
-   url = https://github.com/open-mpi/ompi/commit/98c8492057e6222af6404b352430d0dd7553d253.patch;
-   sha256 = "1mpd8sxxprgfws96qqlzvqf58pn2vv2d0qa8g8cpv773sgw3b3gj";
-  }) ];
 
   postPatch = ''
     patchShebangs ./
