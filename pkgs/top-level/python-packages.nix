@@ -450,6 +450,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  hacking = callPackage ../development/python-modules/hacking { };
+
   helper = callPackage ../development/python-modules/helper { };
 
   histbook = callPackage ../development/python-modules/histbook { };
@@ -553,7 +555,11 @@ in {
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
+  openstackdocstheme = callPackage ../development/python-modules/openstackdocstheme { };
+
   ordered-set = callPackage ../development/python-modules/ordered-set { };
+
+  oslotest = callPackage ../development/python-modules/oslotest { };
 
   osmnx = callPackage ../development/python-modules/osmnx { };
 
@@ -656,6 +662,8 @@ in {
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
 
   pygdbmi = callPackage ../development/python-modules/pygdbmi { };
+
+  pyghmi = callPackage ../development/python-modules/pyghmi { };
 
   pygmo = callPackage ../development/python-modules/pygmo { };
 

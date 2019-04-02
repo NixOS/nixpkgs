@@ -13,16 +13,13 @@
 
 buildPythonPackage rec {
   pname = "mox3";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b13c0b8459d6fb0688f9a4e70feeec43fa2cca05b727fc01156789596e083bb1";
+    sha256 = "210ccaf5829de3e133f0fb8ab798cdb82663aae09b715130fc4765f18234162a";
   };
 
-  patchPhase = ''
-    sed -i 's@python@${python.interpreter}@' .testr.conf
-  '';
 
   buildInputs = [ subunit testrepository testtools six ];
   propagatedBuildInputs = [ pbr fixtures ];
