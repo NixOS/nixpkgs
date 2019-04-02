@@ -141,6 +141,9 @@ in runCommand
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;
+    passthru = {
+      unwrapped = androidStudio;
+    };
     meta = with stdenv.lib; {
       description = "The Official IDE for Android (${channel} channel)";
       longDescription = ''
