@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     qmake
     qttools
+    deepin.setupHook
   ];
 
   buildInputs = [
@@ -25,10 +26,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
-
-    sed -i dpa-ext-gnomekeyring.pro gnomekeyringextention.cpp \
-      -e "s,/usr,$out,"
+    searchHardCodedPaths
+    patchShebangs translate_generation.sh
+    fixPath $out /usr dpa-ext-gnomekeyring.pro gnomekeyringextention.cpp
   '';
 
   passthru.updateScript = deepin.updateScript { inherit name; };
