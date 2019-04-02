@@ -632,6 +632,7 @@
   ./services/networking/prosody.nix
   ./services/networking/quagga.nix
   ./services/networking/quassel.nix
+  ./services/networking/quicktun.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
