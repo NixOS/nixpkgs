@@ -4,13 +4,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pcl-1.8.1";
+  name = "pcl-1.9.1";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     rev = name;
-    sha256 = "05wvqqi2fyk5innw4mg356r71c1hmc9alc7xkf4g81ds3b3867xq";
+    sha256 = "40668357738d682c71929d7bc21a4db39312187855c6456751e2aae9dc6b29de";
   };
 
   patches = [
