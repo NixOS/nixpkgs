@@ -258,7 +258,6 @@ rec {
     name = "armeabi";
     gcc = {
       arch = "armv5te";
-      float = "soft";
       float-abi = "soft";
     };
   };
@@ -268,7 +267,6 @@ rec {
     name = "armeabi-v7a";
     gcc = {
       arch = "armv7-a";
-      float = "hard";
       float-abi = "softfp";
       fpu = "vfpv3-d16";
     };

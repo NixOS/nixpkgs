@@ -91,8 +91,7 @@ rec {
           $out/bin/${stdenv.targetPlatform.config}-c++ \
           $out/bin/${stdenv.targetPlatform.config}-gcc \
           $out/bin/${stdenv.targetPlatform.config}-g++ \
-          -e '130i    extraBefore+=(-Wl,--fix-cortex-a8)' \
-          -e 's|^(extraBefore=)\(\)$|\1(${builtins.toString flags})|'
+          -e 's|^(extraBefore=)\((.*)\)$|\1(\2 -Wl,--fix-cortex-a8 ${builtins.toString flags})|'
       '')
       # GCC 4.9 is the first relase with "-fstack-protector"
       + lib.optionalString (lib.versionOlder targetInfo.gccVer "4.9") ''
