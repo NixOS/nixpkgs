@@ -8285,6 +8285,8 @@ in
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
 
+  bundler-audit = callPackage ../tools/security/bundler-audit { };
+
   solargraph = callPackage ../development/ruby-modules/solargraph { };
 
   inherit (callPackage ../development/interpreters/ruby {
