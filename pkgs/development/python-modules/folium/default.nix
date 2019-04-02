@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04mhdl3k644j45rlfkamxz1paf58fxrmnwgvkrvza2fcwcs4nr9n";
+    sha256 = "0f25fhwxnix8hddzf67barzjwwsvpww112zisrvz2lpl08j388rn";
   };
 
   checkInputs = [ pytest nbconvert pandas mock ];

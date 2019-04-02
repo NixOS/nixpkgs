@@ -110,6 +110,11 @@ in releaseTools.nixBuild rec {
       url = "https://github.com/NixOS/hydra/commit/08de434bdd0b0a22abc2081be6064a6c846d3920.patch";
       sha256 = "0kz77njp5ynn9l81g3q8zrryvnsr06nk3iw0a60187wxqzf5fmf8";
     })
+  ] ++ [
+    (fetchpatch {
+      url = "https://github.com/NixOS/hydra/pull/648/commits/4171ab4c4fd576c516dc03ba64d1c7945f769af0.patch";
+      sha256 = "1fxa2459kdws6qc419dv4084c1ssmys7kqg4ic7n643kybamsgrx";
+    })
   ];
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];

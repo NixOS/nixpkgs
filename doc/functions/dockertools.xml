@@ -417,10 +417,11 @@ pkgs.dockerTools.buildLayeredImage {
 pullImage {
   imageName = "nixos/nix"; <co xml:id='ex-dockerTools-pullImage-1' />
   imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b"; <co xml:id='ex-dockerTools-pullImage-2' />
-  finalImageTag = "1.11";  <co xml:id='ex-dockerTools-pullImage-3' />
-  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8"; <co xml:id='ex-dockerTools-pullImage-4' />
-  os = "linux"; <co xml:id='ex-dockerTools-pullImage-5' />
-  arch = "x86_64"; <co xml:id='ex-dockerTools-pullImage-6' />
+  finalImageName = "nix"; <co xml:id='ex-dockerTools-pullImage-3' />
+  finalImageTag = "1.11";  <co xml:id='ex-dockerTools-pullImage-4' />
+  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8"; <co xml:id='ex-dockerTools-pullImage-5' />
+  os = "linux"; <co xml:id='ex-dockerTools-pullImage-6' />
+  arch = "x86_64"; <co xml:id='ex-dockerTools-pullImage-7' />
 }
 </programlisting>
   </example>
@@ -452,25 +453,33 @@ sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
    </callout>
    <callout arearefs='ex-dockerTools-pullImage-3'>
     <para>
+     <varname>finalImageName</varname>, if specified, this is the name of the
+     image to be created. Note it is never used to fetch the image since we
+     prefer to rely on the immutable digest ID. By default it's equal to
+     <varname>imageName</varname>.
+    </para>
+   </callout>
+   <callout arearefs='ex-dockerTools-pullImage-4'>
+    <para>
      <varname>finalImageTag</varname>, if specified, this is the tag of the
      image to be created. Note it is never used to fetch the image since we
      prefer to rely on the immutable digest ID. By default it's
      <literal>latest</literal>.
     </para>
    </callout>
-   <callout arearefs='ex-dockerTools-pullImage-4'>
+   <callout arearefs='ex-dockerTools-pullImage-5'>
     <para>
      <varname>sha256</varname> is the checksum of the whole fetched image. This
      argument is required.
     </para>
    </callout>
-   <callout arearefs='ex-dockerTools-pullImage-5'>
+   <callout arearefs='ex-dockerTools-pullImage-6'>
     <para>
      <varname>os</varname>, if specified, is the operating system of the
      fetched image. By default it's <literal>linux</literal>.
     </para>
    </callout>
-   <callout arearefs='ex-dockerTools-pullImage-6'>
+   <callout arearefs='ex-dockerTools-pullImage-7'>
     <para>
      <varname>arch</varname>, if specified, is the cpu architecture of the
      fetched image. By default it's <literal>x86_64</literal>.

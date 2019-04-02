@@ -222,9 +222,10 @@ genericBuild
    </footnote>
    But even if one is not cross compiling, the platforms imply whether or not
    the dependency is needed at run-time or build-time, a concept that makes
-   perfect sense outside of cross compilation. For now, the run-time/build-time
-   distinction is just a hint for mental clarity, but in the future it perhaps
-   could be enforced.
+   perfect sense outside of cross compilation. By default, the
+   run-time/build-time distinction is just a hint for mental clarity, but with
+   <varname>strictDeps</varname> set it is mostly enforced even in the native
+   case.
   </para>
 
   <para>
@@ -348,7 +349,10 @@ let f(h, h + 1, i) = i + h
   <para>
    Overall, the unifying theme here is that propagation shouldn't be
    introducing transitive dependencies involving platforms the depending
-   package is unaware of. The offset bounds checking and definition of
+   package is unaware of. [One can imagine the dependending package asking for
+   dependencies with the platforms it knows about; other platforms it doesn't
+   know how to ask for. The platform description in that scenario is a kind of
+   unforagable capability.] The offset bounds checking and definition of
    <function>mapOffset</function> together ensure that this is the case.
    Discovering a new offset is discovering a new platform, and since those
    platforms weren't in the derivation "spec" of the needing package, they
@@ -2633,21 +2637,20 @@ addEnvHooks "$hostOffset" myBashFunction
        happens. It prevents nix from cleaning up the build environment
        immediately and allows the user to attach to a build environment using
        the <command>cntr</command> command. Upon build error it will print
-       instructions on how to use <command>cntr</command>, which can be used
-       to enter the environment for debugging. Installing cntr and
-       running the command will provide shell access to the build sandbox of
-       failed build. At <filename>/var/lib/cntr</filename> the sandboxed
-       filesystem is mounted. All commands and files of the system are still
-       accessible within the shell. To execute commands from the sandbox use
-       the cntr exec subcommand. Note that <command>cntr</command> also needs
-       to be executed on the machine that is doing the build, which might not
-       be the case when remote builders are enabled. <command>cntr</command> is
-       only supported on Linux-based platforms. To use it first add
-       <literal>cntr</literal> to your
-       <literal>environment.systemPackages</literal> on NixOS or alternatively
-       to the root user on non-NixOS systems. Then in the package that is
-       supposed to be inspected, add <literal>breakpointHook</literal> to
-       <literal>nativeBuildInputs</literal>.
+       instructions on how to use <command>cntr</command>, which can be used to
+       enter the environment for debugging. Installing cntr and running the
+       command will provide shell access to the build sandbox of failed build.
+       At <filename>/var/lib/cntr</filename> the sandboxed filesystem is
+       mounted. All commands and files of the system are still accessible
+       within the shell. To execute commands from the sandbox use the cntr exec
+       subcommand. Note that <command>cntr</command> also needs to be executed
+       on the machine that is doing the build, which might not be the case when
+       remote builders are enabled. <command>cntr</command> is only supported
+       on Linux-based platforms. To use it first add <literal>cntr</literal> to
+       your <literal>environment.systemPackages</literal> on NixOS or
+       alternatively to the root user on non-NixOS systems. Then in the package
+       that is supposed to be inspected, add <literal>breakpointHook</literal>
+       to <literal>nativeBuildInputs</literal>.
 <programlisting>
          nativeBuildInputs = [ breakpointHook ];
        </programlisting>

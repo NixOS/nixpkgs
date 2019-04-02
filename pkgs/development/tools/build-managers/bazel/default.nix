@@ -13,12 +13,17 @@
 }:
 
 let
-  srcDeps = lib.singleton (
-    fetchurl {
+  srcDeps = [
+    (fetchurl {
       url = "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
       sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
-    }
-  );
+    })
+
+    (fetchurl {
+        url = "https://mirror.bazel.build/bazel_java_tools/java_tools_pkg-0.5.1.tar.gz";
+        sha256 = "1ld8m5cj9j0r474f56pixcfi0xvx3w7pzwahxngs8f6ns0yimz5w";
+    })
+  ];
 
   distDir = runCommand "bazel-deps" {} ''
     mkdir -p $out
@@ -61,7 +66,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  version = "0.22.0";
+  version = "0.24.0";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -85,8 +90,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
-    sha256 = "0hannnvia8rvmi2v5d97j1f6wv0m1kxkd5hq4aqp0dqjr0ka4q38";
+    sha256 = "11gsc00ghxqkbci8nrflkwq1lcvqawlgkaryj458b24si6bjl7b2";
   };
+
+  # Necessary for the tests to pass on Darwin with sandbox enabled.
+  # Bazel starts a local server and needs to bind a local address.
+  __darwinAllowLocalNetworking = true;
 
   sourceRoot = ".";
 
@@ -168,6 +177,10 @@ stdenv.mkDerivation rec {
           --replace "/usr/bin/env python" "${python}/bin/python" \
           --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
 
+      # md5sum is part of coreutils
+      sed -i 's|/sbin/md5|md5sum|' \
+        src/BUILD
+
       # substituteInPlace is rather slow, so prefilter the files with grep
       grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
@@ -211,8 +224,17 @@ stdenv.mkDerivation rec {
         src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java \
         --replace /bin:/usr/bin ${defaultShellPath}
 
+      # This is necessary to avoid:
+      # "error: no visible @interface for 'NSDictionary' declares the selector
+      # 'initWithContentsOfURL:error:'"
+      # This can be removed when the apple_sdk is upgraded beyond 10.13+
+      sed -i '/initWithContentsOfURL:versionPlistUrl/ {
+        N
+        s/error:nil\];/\];/
+      }' tools/osx/xcode_locator.m
+
       # append the PATH with defaultShellPath in tools/bash/runfiles/runfiles.bash
-      echo "PATH=$PATH:${defaultShellPath}" >> runfiles.bash.tmp
+      echo "PATH=\$PATH:${defaultShellPath}" >> runfiles.bash.tmp
       cat tools/bash/runfiles/runfiles.bash >> runfiles.bash.tmp
       mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
 
@@ -236,18 +258,27 @@ stdenv.mkDerivation rec {
     customBash
   ] ++ lib.optionals (stdenv.isDarwin) [ cctools clang libcxx CoreFoundation CoreServices Foundation ];
 
-  # If TMPDIR is in the unpack dir we run afoul of blaze's infinite symlink
-  # detector (see com.google.devtools.build.lib.skyframe.FileFunction).
-  # Change this to $(mktemp -d) as soon as we figure out why.
+  # Bazel makes extensive use of symlinks in the WORKSPACE.
+  # This causes problems with infinite symlinks if the build output is in the same location as the
+  # Bazel WORKSPACE. This is why before executing the build, the source code is moved into a
+  # subdirectory.
+  # Failing to do this causes "infinite symlink expansion detected"
+  preBuildPhases = ["preBuildPhase"];
+  preBuildPhase = ''
+    mkdir bazel_src
+    shopt -s dotglob extglob
+    mv !(bazel_src) bazel_src
+  '';
 
   buildPhase = ''
-    export TMPDIR=/tmp/.bazel-$UID
-    ./compile.sh
-    scripts/generate_bash_completion.sh \
-        --bazel=./output/bazel \
-        --output=output/bazel-complete.bash \
-        --prepend=scripts/bazel-complete-header.bash \
-        --prepend=scripts/bazel-complete-template.bash
+    # Increasing memory during compilation might be necessary.
+    # export BAZEL_JAVAC_OPTS="-J-Xmx2g -J-Xms200m"
+    ./bazel_src/compile.sh
+    ./bazel_src/scripts/generate_bash_completion.sh \
+        --bazel=./bazel_src/output/bazel \
+        --output=./bazel_src/output/bazel-complete.bash \
+        --prepend=./bazel_src/scripts/bazel-complete-header.bash \
+        --prepend=./bazel_src/scripts/bazel-complete-template.bash
   '';
 
   installPhase = ''
@@ -255,15 +286,15 @@ stdenv.mkDerivation rec {
 
     # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
     # if it can’t find something in tools, it calls $out/bin/bazel-real
-    cp scripts/packages/bazel.sh $out/bin/bazel
-    mv output/bazel $out/bin/bazel-real
+    cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
+    mv ./bazel_src/output/bazel $out/bin/bazel-real
 
     wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
 
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
-    mv output/bazel-complete.bash $out/share/bash-completion/completions/bazel
-    cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
+    mv ./bazel_src/output/bazel-complete.bash $out/share/bash-completion/completions/bazel
+    cp ./bazel_src/scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
   '';
 
   doInstallCheck = true;
@@ -277,6 +308,8 @@ stdenv.mkDerivation rec {
         examples/cpp:hello-success_test \
         examples/java-native/src/test/java/com/example/myproject:hello
     }
+
+    cd ./bazel_src
 
     # test whether $WORKSPACE_ROOT/tools/bazel works
 

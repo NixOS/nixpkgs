@@ -88,8 +88,9 @@ rec {
   nixFromDockerHub = pullImage {
     imageName = "nixos/nix";
     imageDigest = "sha256:85299d86263a3059cf19f419f9d286cc9f06d3c13146a8ebbb21b3437f598357";
-    sha256 = "0vnp3mhpk4ny3xa3cgngqsargnmvfgld54d5sn4b5av6yqzzp67z";
+    sha256 = "07q9y9r7fsd18sy95ybrvclpkhlal12d30ybnf089hq7v1hgxbi7";
     finalImageTag = "2.2.1";
+    finalImageName = "nix";
   };
 
   # 5. example of multiple contents, emacs and vi happily coexisting

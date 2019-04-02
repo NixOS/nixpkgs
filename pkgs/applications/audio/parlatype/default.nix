@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, meson, gnome3, at-spi2-core, dbus, gst_all_1, sphinxbase, pocketsphinx, ninja, gettext, appstream-glib, python3, glib, gobject-introspection, gsettings-desktop-schemas, itstool, wrapGAppsHook, makeWrapper, hicolor-icon-theme }:
+{ stdenv, fetchFromGitHub, pkgconfig, meson, gtk3, at-spi2-core, dbus, gst_all_1, sphinxbase, pocketsphinx, ninja, gettext, appstream-glib, python3, glib, gobject-introspection, gsettings-desktop-schemas, itstool, wrapGAppsHook, makeWrapper, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "parlatype";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.gtk
+    gtk3
     at-spi2-core
     dbus
     gst_all_1.gstreamer

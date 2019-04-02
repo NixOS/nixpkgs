@@ -240,7 +240,7 @@ let
       FANOTIFY        = yes;
       TMPFS           = yes;
       TMPFS_POSIX_ACL = yes;
-      FS_ENCRYPTION   = { optional = true; tristate = whenAtLeast "4.9" "m"; };
+      FS_ENCRYPTION   = if (versionAtLeast version "5.1") then yes else whenAtLeast "4.9" (option module);
 
       EXT2_FS_XATTR     = yes;
       EXT2_FS_POSIX_ACL = yes;

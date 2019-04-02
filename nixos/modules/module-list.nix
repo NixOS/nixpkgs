@@ -172,6 +172,7 @@
   ./security/rtkit.nix
   ./security/wrappers/default.nix
   ./security/sudo.nix
+  ./security/systemd-confinement.nix
   ./services/admin/oxidized.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
@@ -349,6 +350,7 @@
   ./services/mail/exim.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
+  ./services/mail/mailcatcher.nix
   ./services/mail/mailhog.nix
   ./services/mail/mlmmj.nix
   ./services/mail/offlineimap.nix
@@ -630,6 +632,7 @@
   ./services/networking/prosody.nix
   ./services/networking/quagga.nix
   ./services/networking/quassel.nix
+  ./services/networking/quicktun.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
@@ -880,6 +883,7 @@
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
   ./virtualisation/docker.nix
+  ./virtualisation/docker-containers.nix
   ./virtualisation/ecs-agent.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix

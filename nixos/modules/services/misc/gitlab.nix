@@ -160,6 +160,22 @@ let
      '';
   };
 
+  gitlab-rails = pkgs.stdenv.mkDerivation rec {
+    name = "gitlab-rails";
+    buildInputs = [ pkgs.makeWrapper ];
+    dontBuild = true;
+    unpackPhase = ":";
+    installPhase = ''
+      mkdir -p $out/bin
+      makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
+          ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --run 'cd ${cfg.packages.gitlab}/share/gitlab'
+     '';
+  };
+
+  extraGitlabRb = pkgs.writeText "extra-gitlab.rb" cfg.extraGitlabRb;
+
   smtpSettings = pkgs.writeText "gitlab-smtp-settings.rb" ''
     if Rails.env.production?
       Rails.application.config.action_mailer.delivery_method = :smtp
@@ -264,6 +280,26 @@ in {
         type = types.attrs;
         default = {};
         description = "Extra configuration in config/database.yml.";
+      };
+
+      extraGitlabRb = mkOption {
+        type = types.str;
+        default = "";
+        example = ''
+          if Rails.env.production?
+            Rails.application.config.action_mailer.delivery_method = :sendmail
+            ActionMailer::Base.delivery_method = :sendmail
+            ActionMailer::Base.sendmail_settings = {
+              location: "/run/wrappers/bin/sendmail",
+              arguments: "-i -t"
+            }
+          end
+        '';
+        description = ''
+          Extra configuration to be placed in config/extra-gitlab.rb. This can
+          be used to add configuration not otherwise exposed through this module's
+          options.
+        '';
       };
 
       host = mkOption {
@@ -439,7 +475,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.git gitlab-rake cfg.packages.gitlab-shell ];
+    environment.systemPackages = [ pkgs.git gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
 
     # Redis is required for the sidekiq queue runner.
     services.redis.enable = mkDefault true;
@@ -512,6 +548,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         openssh
+        procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
         gitAndTools.git
         cfg.packages.gitaly.rubyEnv
         cfg.packages.gitaly.rubyEnv.wrappedRuby
@@ -586,6 +623,7 @@ in {
         [ -L /run/gitlab/uploads ] || ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
         cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
         cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
         ${optionalString cfg.smtp.enable ''
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
         ''}

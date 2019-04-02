@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "logcheck-${version}";
-  version = "1.3.19";
+  version = "1.3.20";
   _name    = "logcheck_${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";
-    sha256 = "1a9ccy92lg1lnx86di6i1wpdv4ccf5w7gials2iyq5915c4lqa86";
+    sha256 = "1rmkvxhcwr9gb6z4dlgr6rrx5l70hshlxdggs6qx0w1ljcmx1dlz";
   };
 
   prePatch = ''

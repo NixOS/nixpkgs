@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
 , mailcap, runtimeShell
-, buildPackages, targetPackages }:
+, buildPackages, pkgsTargetTarget
+}:
 
 let
 
@@ -152,16 +153,12 @@ stdenv.mkDerivation rec {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
-      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc"
-    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${stdenv.cc.targetPrefix}cc"
+  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
     else
       null;
-  CXX_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
-      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++"
-    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${stdenv.cc.targetPrefix}c++"
+  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++"
     else
       null;
 

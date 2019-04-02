@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "amqp";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6816eed27521293ee03aa9ace300a07215b11fee4e845588a9b863a7ba30addb";
+    sha256 = "043beb485774ca69718a35602089e524f87168268f0d1ae115f28b88d27f92d7";
   };
 
   checkInputs = [ pytest case pytest-sugar ];

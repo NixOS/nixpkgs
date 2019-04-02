@@ -1,4 +1,4 @@
-{ stdenv, targetPackages
+{ stdenv, pkgsBuildTarget, targetPackages
 
 # build-tools
 , bootPkgs
@@ -30,6 +30,10 @@
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "perf-cross"
+
+, # Whether to disable the large address space allocator
+  # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
+  disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -69,11 +73,9 @@ let
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
-  toolsForTarget =
-    if hostPlatform == buildPlatform then
-      [ targetPackages.stdenv.cc ] ++ stdenv.lib.optional useLLVM llvmPackages.llvm
-    else assert targetPlatform == hostPlatform; # build != host == target
-      [ stdenv.cc ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
+  toolsForTarget = [
+    pkgsBuildTarget.targetPackages.stdenv.cc
+  ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
 
@@ -159,8 +161,7 @@ stdenv.mkDerivation (rec {
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
-  ] ++ stdenv.lib.optionals (targetPlatform.isDarwin && targetPlatform.isAarch64) [
-    # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
+  ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
   ];
 

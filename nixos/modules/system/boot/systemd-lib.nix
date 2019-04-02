@@ -9,12 +9,11 @@ in rec {
 
   shellEscape = s: (replaceChars [ "\\" ] [ "\\\\" ] s);
 
+  mkPathSafeName = lib.replaceChars ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""];
+
   makeUnit = name: unit:
-    let
-      pathSafeName = lib.replaceChars ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""] name;
-    in
     if unit.enable then
-      pkgs.runCommand "unit-${pathSafeName}"
+      pkgs.runCommand "unit-${mkPathSafeName name}"
         { preferLocalBuild = true;
           allowSubstitutes = false;
           inherit (unit) text;
@@ -24,7 +23,7 @@ in rec {
           echo -n "$text" > $out/${shellEscape name}
         ''
     else
-      pkgs.runCommand "unit-${pathSafeName}-disabled"
+      pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
         { preferLocalBuild = true;
           allowSubstitutes = false;
         }

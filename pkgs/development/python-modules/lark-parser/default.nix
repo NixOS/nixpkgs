@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "lark-parser";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     rev = version;
-    sha256 = "0mf10xm9blqik8mwrpw0r07vqlk2y4r98yqvk1sq849zqlxmqpsr";
+    sha256 = "0kaiw8zzzcp92p6mzm9zkyhv578p0x4lzjsyl8b4rnsafplmbscs";
   };
 
   checkPhase = ''

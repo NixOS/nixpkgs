@@ -9,6 +9,8 @@ let
 in
 {
 
+  meta.maintainers = pkgs.pantheon.maintainers;
+
   ###### interface
 
   options = {

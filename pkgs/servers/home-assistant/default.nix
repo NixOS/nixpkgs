@@ -44,6 +44,8 @@ let
       "15qfl3pnw2f11r0z0zhwl56f6pb60ysav8fxmpnz5p80cfwljdik")
     (mkOverride "python-slugify" "1.2.6"
       "7723daf30996db26573176bddcdf5fcb98f66dc70df05c9cb29f2c79b8193245")
+    (mkOverride "pyyaml" "3.13"
+      "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf")
     (mkOverride "requests" "2.21.0"
       "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e")
     (mkOverride "ruamel_yaml" "0.15.88"
@@ -95,7 +97,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.89.2";
+  hassVersion = "0.90.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -110,7 +112,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "1k91mq45nq80dwkzqrlax7bvmv556ipr3pqh7i3k1lcaryn5p0l7";
+    sha256 = "0byikidvrvx8nxgddhpqz609rxb91j1kcppziv4ibb57g6lj7iwx";
   };
 
   propagatedBuildInputs = [

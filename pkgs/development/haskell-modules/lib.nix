@@ -181,6 +181,8 @@ rec {
   enableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = true; });
   disableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = false; });
 
+  enableSeparateBinOutput = drv: overrideCabal drv (drv: { enableSeparateBinOutput = true; });
+
   appendPatch = drv: x: appendPatches drv [x];
   appendPatches = drv: xs: overrideCabal drv (drv: { patches = (drv.patches or []) ++ xs; });
 

@@ -274,6 +274,8 @@ in {
     bap = pkgs.ocamlPackages.bap;
   };
 
+  baselines = callPackage ../development/python-modules/baselines { };
+
   bash_kernel = callPackage ../development/python-modules/bash_kernel { };
 
   bayespy = callPackage ../development/python-modules/bayespy { };
@@ -614,6 +616,8 @@ in {
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
+
+  pybullet = callPackage ../development/python-modules/pybullet { };
 
   pycairo = callPackage ../development/python-modules/pycairo {
     inherit (pkgs) pkgconfig;
@@ -1363,7 +1367,10 @@ in {
 
   cheetah = callPackage ../development/python-modules/cheetah { };
 
-  cherrypy = callPackage ../development/python-modules/cherrypy {};
+  cherrypy = if isPy3k then
+    callPackage ../development/python-modules/cherrypy { }
+  else
+    callPackage ../development/python-modules/cherrypy/17.nix { };
 
   cfgv = callPackage ../development/python-modules/cfgv { };
 
@@ -1748,6 +1755,8 @@ in {
   discogs_client = callPackage ../development/python-modules/discogs_client { };
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
+
+  dnslib = callPackage ../development/python-modules/dnslib { };
 
   dnspython = callPackage ../development/python-modules/dnspython { };
   dns = self.dnspython; # Alias for compatibility, 2017-12-10
@@ -3122,6 +3131,8 @@ in {
 
   marisa-trie = callPackage ../development/python-modules/marisa-trie { };
 
+  Markups = callPackage ../development/python-modules/Markups { };
+
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
@@ -3180,6 +3191,8 @@ in {
   milksnake = callPackage ../development/python-modules/milksnake { };
 
   minimock = callPackage ../development/python-modules/minimock { };
+
+  minio = callPackage ../development/python-modules/minio { };
 
   moviepy = callPackage ../development/python-modules/moviepy { };
 
@@ -3928,6 +3941,8 @@ in {
 
   purepng = callPackage ../development/python-modules/purepng { };
 
+  pyhocon = callPackage ../development/python-modules/pyhocon { };
+
   pymaging = callPackage ../development/python-modules/pymaging { };
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
@@ -3957,6 +3972,8 @@ in {
   pysqlite = callPackage ../development/python-modules/pysqlite { };
 
   pysvn = callPackage ../development/python-modules/pysvn { };
+
+  python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 
@@ -4016,6 +4033,10 @@ in {
   requests_toolbelt = self.requests-toolbelt; # Old attr, 2017-09-26
 
   retry_decorator = callPackage ../development/python-modules/retry_decorator { };
+
+  roboschool = callPackage ../development/python-modules/roboschool {
+    inherit (pkgs) pkgconfig; # use normal pkgconfig, not the python package
+  };
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
@@ -5437,6 +5458,8 @@ in {
   lzstring = callPackage ../development/python-modules/lzstring { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
+
+  aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 });
 
 in fix' (extends overrides packages)

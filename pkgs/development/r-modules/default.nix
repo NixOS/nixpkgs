@@ -424,7 +424,6 @@ let
     showtext = [ pkgs.pkgconfig ];
     spate = [ pkgs.pkgconfig ];
     stringi = [ pkgs.pkgconfig ];
-    sys = [ pkgs.libapparmor ];
     sysfonts = [ pkgs.pkgconfig ];
     tesseract = [ pkgs.pkgconfig ];
     Cairo = [ pkgs.pkgconfig ];
@@ -443,6 +442,11 @@ let
     Matrix = [ pkgs.libiconv ];
     mgcv = [ pkgs.libiconv ];
     igraph = [ pkgs.libiconv ];
+    ape = [ pkgs.libiconv ];
+    expm = [ pkgs.libiconv ];
+    mnormt = [ pkgs.libiconv ];
+    phangorn = [ pkgs.libiconv ];
+    quadprog = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [

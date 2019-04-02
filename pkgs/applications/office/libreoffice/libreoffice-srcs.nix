@@ -56,11 +56,11 @@
     md5name = "00b516f4704d4a7cb50a1d97e6e8e15b-bzip2-1.0.6.tar.gz";
   }
   {
-    name = "cairo-1.15.12.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/cairo-1.15.12.tar.xz";
-    sha256 = "7623081b94548a47ee6839a7312af34e9322997806948b6eec421a8c6d0594c9";
+    name = "cairo-1.16.0.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/cairo-1.16.0.tar.xz";
+    sha256 = "5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331";
     md5 = "";
-    md5name = "7623081b94548a47ee6839a7312af34e9322997806948b6eec421a8c6d0594c9-cairo-1.15.12.tar.xz";
+    md5name = "5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331-cairo-1.16.0.tar.xz";
   }
   {
     name = "libcdr-0.1.5.tar.xz";
@@ -658,11 +658,11 @@
     md5name = "cdd6cffdebcd95161a73305ec13fc7a78e9707b46ca9f84fb897cd5626df3824-openldap-2.4.45.tgz";
   }
   {
-    name = "openssl-1.0.2p.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/openssl-1.0.2p.tar.gz";
-    sha256 = "50a98e07b1a89eb8f6a99477f262df71c6fa7bef77df4dc83025a2845c827d00";
+    name = "openssl-1.0.2r.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/openssl-1.0.2r.tar.gz";
+    sha256 = "ae51d08bba8a83958e894946f15303ff894d75c2b8bbd44a852b64e3fe11d0d6";
     md5 = "";
-    md5name = "50a98e07b1a89eb8f6a99477f262df71c6fa7bef77df4dc83025a2845c827d00-openssl-1.0.2p.tar.gz";
+    md5name = "ae51d08bba8a83958e894946f15303ff894d75c2b8bbd44a852b64e3fe11d0d6-openssl-1.0.2r.tar.gz";
   }
   {
     name = "liborcus-0.14.1.tar.gz";

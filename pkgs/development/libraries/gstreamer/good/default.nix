@@ -6,6 +6,9 @@
 , libsoup, libpulseaudio, libintl
 , darwin, lame, mpg123, twolame
 , gtkSupport ? false, gtk3 ? null
+, libXdamage
+, libXext
+, libXfixes
 , ncurses
 }:
 
@@ -49,6 +52,11 @@ stdenv.mkDerivation rec {
     libdv libvpx speex flac taglib
     cairo gdk_pixbuf aalib libcaca
     libsoup libshout lame mpg123 twolame libintl
+    # TODO: Remove the comments once https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/commit/e234932dc703e51a0e1aa3b9c408f12758b12335
+    # is merged and available in nixpkgs.
+    libXdamage # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
+    libXext # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
+    libXfixes # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
     ncurses
   ]
   ++ optional gtkSupport gtk3 # for gtksink
