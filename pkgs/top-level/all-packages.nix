@@ -2351,6 +2351,8 @@ in
     inherit (pythonPackages) mutagen python wrapPython;
   };
 
+  picotts = callPackage ../tools/audio/picotts { };
+
   wgetpaste = callPackage ../tools/text/wgetpaste { };
 
   dirmngr = callPackage ../tools/security/dirmngr { };
