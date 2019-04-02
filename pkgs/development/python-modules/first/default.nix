@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "first";
-  version = "2.0.1";
+  version = "2.0.2";
   name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pn9hl2y0pz61la1xhkdz6vl9i2dg3nh0ksizcf0f9ybh8sxxcrv";
+    sha256 = "1gykyrm6zlrbf9iz318p57qwk594mx1jf0d79v79g32zql45na7z";
   };
 
   doCheck = false; # no tests
