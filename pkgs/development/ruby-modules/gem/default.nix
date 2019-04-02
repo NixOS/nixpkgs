@@ -179,7 +179,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       '${version}' \
       '${lib.escapeShellArgs buildFlags}' \
       '${attrs.source.url}' \
-      '${src}' \
+      '.' \
       '${attrs.source.rev}'
     ''}
 
