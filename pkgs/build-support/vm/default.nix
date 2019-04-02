@@ -803,7 +803,7 @@ rec {
 
     # Note: no i386 release for 7.x
     centos7x86_64 =
-      let version = "7.4.1708";
+      let version = "7.6.1810";
       in rec {
         name = "centos-${version}-x86_64";
         fullName = "CentOS ${version} (x86_64)";
@@ -812,7 +812,7 @@ rec {
         urlPrefix = "http://mirror.centos.org/centos-7/${version}/os/x86_64";
         packagesList = fetchurl rec {
           url = "${urlPrefix}/repodata/${sha256}-primary.xml.gz";
-          sha256 = "b686d3a0f337323e656d9387b9a76ce6808b26255fc3a138b1a87d3b1cb95ed5";
+          sha256 = "25cd2c29e5adb2b6f8a5b091237dd9f760e97815b37f2557f2cd1c12a5f294f0";
         };
         archs = ["noarch" "x86_64"];
         packages = commonCentOSPackages ++ [ "procps-ng" ];
