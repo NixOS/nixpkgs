@@ -20,12 +20,6 @@ stdenv.mkDerivation rec {
     patchShebangs configure
   '';
 
-  # remove after 6.4 version:
-  # makefile needs to ignore install directory easier than applying patch
-  preInstall = ''
-    printf "\n.PHONY: install\n" >> Makefile
-  '';
-
   buildInputs = [ fftw openblas gfortran ]
     ++ (stdenv.lib.optionals (mpi != null) [ mpi ]);
 
