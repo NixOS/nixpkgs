@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, runCommand, fetchFromGitHub, autoreconfHook, gconf, intltool, makeWrapper, pkgconfig
+{ stdenv, fetchurl, runCommand, fetchFromGitHub, autoreconfHook, gettext, makeWrapper, pkgconfig
 , vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobject-introspection, gtk2
 , gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePythonLibrary ? true
 , enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null
@@ -50,6 +50,24 @@ let
     };
     nativeBuildInputs = [ autoreconfHook ];
   };
+  ucdSrcs = {
+    NamesList = fetchurl {
+      url = "https://www.unicode.org/Public/UNIDATA/NamesList.txt";
+      sha256 = "c17c7726f562bd9ef869096807f0297e1edef9a58fdae1fbae487378fa43586f";
+    };
+    Blocks = fetchurl {
+      url = "https://www.unicode.org/Public/UNIDATA/Blocks.txt";
+      sha256 = "a1a3ca4381eb91f7b65afe7cb7df615cdcf67993fef4b486585f66b349993a10";
+    };
+  };
+  ucd = stdenv.mkDerivation rec {
+    name = "ucd-12.0.0";
+    unpackPhase = ":";
+    installPhase = ''
+      mkdir $out
+      ${builtins.toString (flip mapAttrsToList ucdSrcs (k: v: "cp ${v} $out/${k}.txt;"))}
+    '';
+  };
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
   python3BuildEnv = python3.buildEnv.override {
     # ImportError: No module named site
@@ -59,24 +77,17 @@ let
       makeWrapper ${glib.dev}/bin/glib-mkenums $out/bin/glib-mkenums --unset PYTHONPATH
     '';
   };
-
-  # stop gconf from leaking into environment
-  # can be removed in ibus 1.6 which will not use gconf anymore
-  gsettings-schema-convert = runCommand "name" {} ''
-    mkdir -p $out/bin
-    ln -s ${gconf}/bin/gsettings-schema-convert $out/bin
-  '';
 in
 
 stdenv.mkDerivation rec {
   name = "ibus-${version}";
-  version = "1.5.17";
+  version = "1.5.20";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "09mrj9d8qpl9cbylg1zx8c3ymc5gdy4jrf6zs125wjz0b574g5av";
+    sha256 = "1npavb896qrp6qbqayb0va4mpsi68wybcnlbjknzgssqyw2ylh9r";
   };
 
   postPatch = ''
@@ -88,10 +99,8 @@ stdenv.mkDerivation rec {
   '';
 
   preAutoreconf = "touch ChangeLog";
-  preConfigure = "intltoolize";
 
   configureFlags = [
-    "--disable-gconf"
     "--disable-memconf"
     (enableFeature (dconf != null) "dconf")
     (enableFeature (libnotify != null) "libnotify")
@@ -100,13 +109,13 @@ stdenv.mkDerivation rec {
     (enableFeature enableUI "ui")
     "--with-unicode-emoji-dir=${emojiData}"
     "--with-emoji-annotation-dir=${cldrEmojiAnnotation}/share/unicode/cldr/common/annotations"
+    "--with-ucd-dir=${ucd}"
   ];
 
   nativeBuildInputs = [
     autoreconfHook
-    gsettings-schema-convert
     gtk-doc
-    intltool
+    gettext
     makeWrapper
     pkgconfig
     python3BuildEnv
