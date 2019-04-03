@@ -64,7 +64,7 @@ in {
         cfgtemplate=${cfg.package}/share/nzbget/nzbget.conf
         if [ ! -f ${cfg.configFile} ]; then
           echo "${cfg.configFile} not found. Copying default config $cfgtemplate to ${cfg.configFile}"
-          install -m 0700 $cfgtemplate ${cfg.configFile}
+          install -o ${cfg.user} -g ${cfg.group} -m 0700 $cfgtemplate ${cfg.configFile}
           echo "Setting temporary \$MAINDIR variable in default config required in order to allow nzbget to complete initial start"
           echo "Remember to change this to a proper value once NZBGet startup has been completed"
           sed -i -e 's/MainDir=.*/MainDir=\/tmp/g' ${cfg.configFile}
