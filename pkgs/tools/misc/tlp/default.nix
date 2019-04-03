@@ -17,25 +17,28 @@ in stdenv.mkDerivation rec {
   version = "1.2.1";
 
   src = fetchFromGitHub {
-        owner = "linrunner";
-        repo = "TLP";
-        rev = "${version}";
-        sha256 = "1msldl6y8fpvxa9p87lv3hvgxwk2vpiahqmapq485ihdjkshc558";
-      };
+    owner = "linrunner";
+    repo = "TLP";
+    rev = version;
+    sha256 = "1msldl6y8fpvxa9p87lv3hvgxwk2vpiahqmapq485ihdjkshc558";
+  };
 
-  makeFlags = [ "DESTDIR=$(out)"
-                "TLP_SBIN=$(out)/bin"
-                "TLP_BIN=$(out)/bin"
-                "TLP_TLIB=$(out)/share/tlp-pm"
-                "TLP_PLIB=$(out)/lib/pm-utils"
-                "TLP_ULIB=$(out)/lib/udev"
-                "TLP_NMDSP=$(out)/etc/NetworkManager/dispatcher.d"
-                "TLP_SHCPL=$(out)/share/bash-completion/completions"
-                "TLP_MAN=$(out)/share/man"
+  outRef = placeholder "out";
 
-                "TLP_NO_INIT=1"
-                "TLP_NO_PMUTILS=1"
-              ];
+  makeFlags = [
+    "DESTDIR=${outRef}"
+    "TLP_SBIN=${outRef}/bin"
+    "TLP_BIN=${outRef}/bin"
+    "TLP_TLIB=${outRef}/share/tlp"
+    "TLP_FLIB=${outRef}/share/tlp/func.d"
+    "TLP_ULIB=${outRef}/lib/udev"
+    "TLP_NMDSP=${outRef}/etc/NetworkManager/dispatcher.d"
+    "TLP_SHCPL=${outRef}/share/bash-completion/completions"
+    "TLP_MAN=${outRef}/share/man"
+    "TLP_META=${outRef}/share/metainfo"
+
+    "TLP_NO_INIT=1"
+  ];
 
   nativeBuildInputs = [ makeWrapper file ];
 
