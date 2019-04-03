@@ -1,6 +1,7 @@
 { stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, glibc, gnome2, gnome3
-, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg }:
+, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
+, at-spi2-atk }:
 
 let
 
@@ -11,6 +12,7 @@ let
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     atk
+    at-spi2-atk
     cairo
     cups
     curl
