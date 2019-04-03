@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "postman-${version}";
-  version = "6.7.3";
+  version = "7.0.7";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "04gfdb2pk2y8yv9ixq4ac5pk0rdfspd0810izij3hjnyqlv32hfg";
+    sha256 = "47be1b955759520f3a2c7dcdecb85b4c52c38df717da294ba184f46f2058014a";
     name = "${name}.tar.gz";
   };
 
@@ -36,9 +36,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
-    iconDir=$out/share/icons/hicolor/128x128/apps
-    mkdir -p $iconDir
-    ln -s $out/share/postman/resources/app/assets/icon.png $iconDir/postman.png
+    iconRootDir=$out/share/icons
+    iconSizeDir=$out/share/icons/hicolor/128x128/apps
+    mkdir -p $iconSizeDir
+    ln -s $out/share/postman/resources/app/assets/icon.png $iconRootDir/postman.png
+    ln -s $out/share/postman/resources/app/assets/icon.png $iconSizeDir/postman.png
   '';
 
   preFixup = let
