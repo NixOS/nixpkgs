@@ -15935,6 +15935,8 @@ in
 
   lobster-two = callPackage ../data/fonts/lobster-two {};
 
+  logitech-udev-rules = callPackage ../os-specific/linux/logitech-udev-rules {};
+
   # lohit-fonts.assamese lohit-fonts.bengali lohit-fonts.devanagari lohit-fonts.gujarati lohit-fonts.gurmukhi
   # lohit-fonts.kannada lohit-fonts.malayalam lohit-fonts.marathi lohit-fonts.nepali lohit-fonts.odia
   # lohit-fonts.tamil-classical lohit-fonts.tamil lohit-fonts.telugu

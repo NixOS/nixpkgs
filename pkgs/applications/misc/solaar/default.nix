@@ -1,5 +1,9 @@
-{fetchFromGitHub, stdenv, gtk3, pythonPackages, gobject-introspection}:
-pythonPackages.buildPythonApplication rec {
+{ fetchFromGitHub, lib, gobject-introspection, gtk3, python3Packages }:
+
+# Although we copy in the udev rules here, you probably just want to use logitech-udev-rules instead of
+# adding this to services.udev.packages on NixOS
+
+python3Packages.buildPythonApplication rec {
   pname = "solaar-unstable";
   version = "2019-01-30";
 
@@ -10,7 +14,8 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0xg181xcwzzs8pdqvjrkjyaaga7ir93hzjvd17j9g3ns8xfj2mvr";
   };
 
-  propagatedBuildInputs = [pythonPackages.pygobject3 pythonPackages.pyudev gobject-introspection gtk3];
+  propagatedBuildInputs = with python3Packages; [ gobject-introspection gtk3 pygobject3 pyudev ];
+
   postInstall = ''
     wrapProgram "$out/bin/solaar" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
@@ -19,12 +24,12 @@ pythonPackages.buildPythonApplication rec {
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
 
-    mkdir -p $out/lib/udev/rules.d
-    cp rules.d/*.rules $out/lib/udev/rules.d/
+    install -Dm644 -t $out/etc/udev/rules.d rules.d/*.rules
   '';
 
   enableParallelBuilding = true;
-  meta = with stdenv.lib; {
+
+  meta = with lib; {
     description = "Linux devices manager for the Logitech Unifying Receiver";
     longDescription = ''
       Solaar is a Linux device manager for Logitech’s Unifying Receiver
@@ -40,6 +45,6 @@ pythonPackages.buildPythonApplication rec {
     license = licenses.gpl2;
     homepage = https://pwr.github.io/Solaar/;
     platforms = platforms.linux;
-    maintainers = [maintainers.spinus maintainers.ysndr];
+    maintainers = with maintainers; [ spinus ysndr ];
   };
 }
