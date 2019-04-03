@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "roccat-tools-${version}";
-  version = "5.7.0";
+  version = "5.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/roccat/${name}.tar.bz2";
-    sha256 = "15gxplcm62167xhk65k8v6gg3j6jr0c5a64wlz72y1vfq0ai7qm6";
+    sha256 = "0fr1ibgsyx756fz43hxq0cik51rkq1ymgimw8mz2d0jy63d7h48q";
   };
 
   postPatch = ''
