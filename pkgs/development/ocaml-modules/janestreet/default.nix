@@ -441,13 +441,6 @@ rec {
     meta.description = "Async helpers for writing expectation tests";
   };
 
-  bignum = janePackage {
-    pname = "bignum";
-    hash = "0hqd88fb90rsj1wjj4k79gigcf31c6a45msasw99zzifzppr3w3f";
-    propagatedBuildInputs = [ core_kernel zarith num ];
-    meta.description = "Core-flavoured wrapper around zarith's arbitrary-precision rationals";
-  };
-
   cinaps = janePackage {
     pname = "cinaps";
     hash = "0f8cx4xkkk4wqpcbvva8kxdndbgawljp17dwppc6zpjpkjl8s84j";
