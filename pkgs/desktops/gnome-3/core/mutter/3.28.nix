@@ -1,6 +1,6 @@
 { fetchFromGitLab, stdenv, substituteAll, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
 , glib, gtk3, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
-, gsettings-desktop-schemas, gnome-desktop
+, gsettings-desktop-schemas, gnome-desktop, wrapGAppsHook
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , geocode-glib, libgudev, libwacom, xwayland, autoreconfHook }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libXtst
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool wrapGAppsHook ];
 
   buildInputs = [
     glib gobject-introspection gtk3 gsettings-desktop-schemas upower
@@ -50,11 +50,6 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile
     libxkbcommon
   ];
-
-  preFixup = ''
-    wrapProgram "$out/bin/mutter" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-  '';
 
   enableParallelBuilding = true;
 
