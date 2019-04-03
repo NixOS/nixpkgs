@@ -1175,6 +1175,8 @@ in
 
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
+  charliecloud = callPackage ../applications/virtualization/charliecloud { };
+
   chelf = callPackage ../tools/misc/chelf { };
 
   cht-sh = callPackage ../tools/misc/cht.sh { };
