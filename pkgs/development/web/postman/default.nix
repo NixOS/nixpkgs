@@ -36,9 +36,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
-    iconDir=$out/share/icons/hicolor/128x128/apps
-    mkdir -p $iconDir
-    ln -s $out/share/postman/resources/app/assets/icon.png $iconDir/postman.png
+    iconRootDir=$out/share/icons
+    iconSizeDir=$out/share/icons/hicolor/128x128/apps
+    mkdir -p $iconSizeDir
+    ln -s $out/share/postman/resources/app/assets/icon.png $iconRootDir/postman.png
+    ln -s $out/share/postman/resources/app/assets/icon.png $iconSizeDir/postman.png
   '';
 
   preFixup = let
