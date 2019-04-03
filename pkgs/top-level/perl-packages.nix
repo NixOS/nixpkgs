@@ -1752,6 +1752,18 @@ let
     propagatedBuildInputs = [ CGI ];
   };
 
+  CGIMinimal = buildPerlPackage rec {
+    name = "CGI-Minimal-1.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SN/SNOWHARE/${name}.tar.gz";
+      sha256 = "36c785ffacf5cdee4f1a7219ca1848b7e1700bdd71cd9116e1f00545ec88475d";
+    };
+    meta = {
+      description = "A lightweight CGI form processing package";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CGIPSGI = buildPerlPackage {
     name = "CGI-PSGI-0.15";
     src = fetchurl {
