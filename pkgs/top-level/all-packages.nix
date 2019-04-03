@@ -21828,6 +21828,8 @@ in
 
   ecopcr = callPackage ../applications/science/biology/ecopcr { };
 
+  eggnog-mapper = callPackage ../applications/science/biology/eggnog-mapper { };
+
   emboss = callPackage ../applications/science/biology/emboss { };
 
   ezminc = callPackage ../applications/science/biology/EZminc { };
