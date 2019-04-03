@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "02wq3jw3mkdld90irh5vdfd5bri2g1p89mhrmj56kvif1fqak46x";
   };
 
-  buildInputs = [ glib polkit python gobject-introspection vala ]
+  buildInputs = [ glib polkit python gobject-introspection ]
                   ++ lib.optional enableSystemd systemd
                   ++ lib.optional enableBashCompletion bash-completion;
   propagatedBuildInputs = [ sqlite nix boost ];
-  nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
+  nativeBuildInputs = [ vala intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
 
   preAutoreconf = ''
     gtkdocize
