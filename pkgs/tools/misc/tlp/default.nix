@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub, perl, makeWrapper, file, systemd, iw, rfkill
 , hdparm, ethtool, inetutils , kmod, pciutils, smartmontools
 , x86_energy_perf_policy, gawk, gnugrep, coreutils, utillinux
+, checkbashisms, shellcheck
 , enableRDW ? false, networkmanager
 }:
 
@@ -45,6 +46,14 @@ in stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   installTargets = [ "install-tlp" "install-man" ] ++ stdenv.lib.optional enableRDW "install-rdw";
+
+  checkInputs = [
+    checkbashisms
+    shellcheck
+  ];
+
+  doCheck = true;
+  checkTarget = [ "checkall" ];
 
   postInstall = ''
     cp -r $out/$out/* $out
