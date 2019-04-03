@@ -1,0 +1,11 @@
+diff -r -u charliecloud-0.2.2.orig/Makefile charliecloud-0.2.2/Makefile
+--- charliecloud-0.2.2.orig/Makefile	2017-09-18 23:50:55.000000000 +0200
++++ charliecloud-0.2.2/Makefile	2017-11-17 17:28:15.596178797 +0100
+@@ -84,7 +84,6 @@
+ 	chmod 755 $(TEST)/chtest/*.py
+ 	install -d $(TEST)/bats.src
+ 	install -pm 644 -t $(TEST)/bats.src \
+-	        test/bats.src/CONDUCT.md test/bats.src/LICENSE \
+                 test/bats.src/README.md
+ 	install -d $(TEST)/bats.src/libexec
+ 	install -pm 755 -t $(TEST)/bats.src/libexec \
