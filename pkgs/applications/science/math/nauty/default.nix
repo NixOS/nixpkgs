@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = ''Programs for computing automorphism groups of graphs and digraphs'';
     license = licenses.asl20;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin timokau ];
     platforms = platforms.linux;
     homepage = http://pallini.di.uniroma1.it/;
   };
