@@ -1,23 +1,17 @@
-{ stdenv, fetchurl, alsaLib, fluidsynth, libjack2, qtbase, qttools, qtx11extras, cmake, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, fluidsynth, libjack2, qt5, autoconf, pkgconfig }:
 
 stdenv.mkDerivation  rec {
   name = "qsynth-${version}";
-  version = "0.5.2";
+  version = "0.5.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsynth/${name}.tar.gz";
-    sha256 = "1rfkaxq1pyc4hv3l0i6wicianbcbm1wp53kh9i5d4jsljgisd1dv";
+    sha256 = "08x7znvbwi9miavcarymi7dsv8njmxzwzma20dbmz8j2aswm53w5";
   };
 
-  # cmake is looking for qsynth.desktop.in and fails if it doesn't find it
-  # seems like a bug and can presumable go in the next version after 0.5.2
-  postPatch = ''
-    mv src/qsynth.desktop src/qsynth.desktop.in
-  '';
+  nativeBuildInputs = [ autoconf pkgconfig ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-
-  buildInputs = [ alsaLib fluidsynth libjack2 qtbase qttools qtx11extras ];
+  buildInputs = [ alsaLib fluidsynth libjack2 qt5.qtbase qt5.qttools qt5.qtx11extras ];
 
   enableParallelBuilding = true;
 
