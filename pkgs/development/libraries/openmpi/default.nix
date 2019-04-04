@@ -30,6 +30,13 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./
+
+    # Ensure build is reproducible
+    ts=`date -d @$SOURCE_DATE_EPOCH`
+    sed -i 's/OPAL_CONFIGURE_USER=.*/OPAL_CONFIGURE_USER="nixbld"/' configure
+    sed -i 's/OPAL_CONFIGURE_HOST=.*/OPAL_CONFIGURE_HOST="localhost"/' configure
+    sed -i "s/OPAL_CONFIGURE_DATE=.*/OPAL_CONFIGURE_DATE=\"$ts\"/" configure
+    find -name "Makefile.in" -exec sed -i "s/\`date\`/$ts/" \{} \;
   '';
 
   buildInputs = with stdenv; [ gfortran zlib ]
