@@ -3905,10 +3905,7 @@ in
 
   nodejs = hiPrio nodejs-8_x;
 
-  nodejs-slim = nodejs-slim-6_x;
-
-  nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {};
-  nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix { enableNpm = false; };
+  nodejs-slim = nodejs-slim-8_x;
 
   nodejs-8_x = callPackage ../development/web/nodejs/v8.nix {};
   nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix { enableNpm = false; };
@@ -3934,10 +3931,6 @@ in
 
   nodePackages_8_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v8.nix {
     nodejs = pkgs.nodejs-8_x;
-  });
-
-  nodePackages_6_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v6.nix {
-    nodejs = pkgs.nodejs-6_x;
   });
 
   nodePackages = nodePackages_10_x;
