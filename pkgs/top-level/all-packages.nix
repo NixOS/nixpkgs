@@ -17733,7 +17733,7 @@ in
 
   graphicsmagick-imagemagick-compat = callPackage ../applications/graphics/graphicsmagick/compat.nix { };
 
-  grisbi = callPackage ../applications/office/grisbi { gtk = gtk2; };
+  grisbi = callPackage ../applications/office/grisbi { gtk = gtk3; };
 
   gtkpod = callPackage ../applications/audio/gtkpod { };
 
