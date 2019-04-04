@@ -149,7 +149,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${runtimeShell} -n $out/bin/${name}
+        ${stdenv.shell} -n $out/bin/${name}
       '';
     };
 
