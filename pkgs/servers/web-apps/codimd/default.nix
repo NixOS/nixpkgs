@@ -1,5 +1,5 @@
 { stdenv, pkgs, buildEnv, fetchFromGitHub, makeWrapper
-, fetchpatch, nodejs-6_x, phantomjs2, runtimeShell }:
+, fetchpatch, nodejs-8_x, phantomjs2, runtimeShell }:
 let
   nodePackages = import ./node.nix {
     inherit pkgs;
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   inherit name version src;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ nodejs-6_x ];
+  buildInputs = [ nodejs-8_x ];
 
   NODE_PATH = "${nodeEnv}/lib/node_modules";
 
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cat > $out/bin/codimd <<EOF
       #!${runtimeShell}
-      ${nodejs-6_x}/bin/node $out/app.js
+      ${nodejs-8_x}/bin/node $out/app.js
     EOF
     cp -R {app.js,bin,lib,locales,package.json,public} $out/
   '';

@@ -534,6 +534,13 @@
       Same applies to the new <literal>users.ldap.daemon.rootpwmodpwFile</literal> option.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       <literal>nodejs-6_x</literal> is end-of-life.
+       <literal>nodejs-6_x</literal>, <literal>nodejs-slim-6_x</literal> and
+       <literal>nodePackages_6_x</literal> are removed.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
