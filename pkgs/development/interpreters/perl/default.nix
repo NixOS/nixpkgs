@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, buildPackages
 , enableThreading ? stdenv ? glibc, makeWrapper
+, coreutils
 }:
 
 with lib;
@@ -55,9 +56,8 @@ let
       ++ optional crossCompiling ./MakeMaker-cross.patch;
 
     postPatch = ''
-      pwd="$(type -P pwd)"
       substituteInPlace dist/PathTools/Cwd.pm \
-        --replace "/bin/pwd" "$pwd"
+        --replace "/bin/pwd" "${coreutils}/bin/pwd"
     '' + stdenv.lib.optionalString crossCompiling ''
       substituteInPlace cnf/configure_tool.sh --replace "cc -E -P" "cc -E"
     '';
