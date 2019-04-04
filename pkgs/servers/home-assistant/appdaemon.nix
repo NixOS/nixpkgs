@@ -40,10 +40,10 @@ let
       });
 
       pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "3.13";
+        version = "5.1";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
+          sha256 = "436bc774ecf7c103814098159fbb84c2715d25980175292c648f2da143909f95";
         };
       });
 
@@ -52,11 +52,11 @@ let
 
 in python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "3e2f5184a51a3b2b473610704344d188226bd7e9a2c2fb762ee90621d38390c6";
+    sha256 = "e2393b5e0bb34e94e61f5debc95ad74c1c6929635b74bf8ba15c22b40cbdec69";
   };
 
   propagatedBuildInputs = with python.pkgs; [
