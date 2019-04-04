@@ -1,4 +1,4 @@
-{stdenv
+{ stdenv
 , removeReferencesTo
 , lib
 , fetchgit
@@ -13,18 +13,24 @@
 , squashfsTools
 , buildGoPackage
 
+
 # Attributes inherit from specific versions
 , version
-, src
+, sha256
 }:
 
 with lib;
 
 buildGoPackage rec {
-    
+  inherit version;
   name = "singularity-${version}";
-
-  inherit src;
+  
+  src = fetchFromGitHub {
+    owner = "sylabs";
+    repo = "singularity";
+    rev = "v${version}";
+    inherit sha256;
+  };
 
   goPackagePath = "github.com/sylabs/singularity";
   goDeps = ./deps.nix;
