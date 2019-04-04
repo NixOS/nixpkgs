@@ -1,4 +1,7 @@
-{stdenv, fetchurl}:
+{ stdenv
+, lib
+, fetchurl
+}:
 stdenv.mkDerivation rec {
   name = "nauty-${version}";
   version = "26r11";
@@ -14,18 +17,18 @@ stdenv.mkDerivation rec {
     find . -type f -perm -111 \! -name '*.*' \! -name configure -exec cp '{}' "$out/bin" \;
     cp [Rr][Ee][Aa][Dd]* COPYRIGHT This* [Cc]hange* "$out/share/doc/nauty"
 
-    cp *.h $dev/include/nauty
+    cp *.h "$dev/include/nauty"
     for i in *.a; do
       cp "$i" "$dev/lib/lib$i";
     done
   '';
   checkTarget = "checks";
-  meta = {
+  meta = with lib; {
     inherit version;
     description = ''Programs for computing automorphism groups of graphs and digraphs'';
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
     homepage = http://pallini.di.uniroma1.it/;
   };
 }
