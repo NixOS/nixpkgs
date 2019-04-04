@@ -3,23 +3,23 @@
 , alsaUtils, libnotify, which, wrapGAppsHook, gtk2
 }:
 
-stdenv.mkDerivation rec {
-  name = "mikutter-${version}";
-  version = "3.5.13";
-
-  src = fetchurl {
-    url = "https://mikutter.hachune.net/bin/mikutter.${version}.tar.gz";
-    sha256 = "2e01cd6cfe0caad663a381e5263f6d8030f0fb7cd8d4f858d320166516c7c320";
-  };
-
-  env = bundlerEnv {
-    name = "mikutter-${version}-gems";
+let
+  gemEnv = bundlerEnv {
+    name = "mikutter-gems";
     gemdir = ./.;
 
     inherit ruby;
   };
+in stdenv.mkDerivation rec {
+  name = "mikutter-${version}";
+  version = "3.8.6";
 
-  buildInputs = [ alsaUtils libnotify which gtk2 ruby ];
+  src = fetchurl {
+    url = "https://mikutter.hachune.net/bin/mikutter.${version}.tar.gz";
+    sha256 = "1bx45avq8ll6b0nk5x11k0bqizxn8v2ap5f3djbsq2247djdgn92";
+  };
+
+  buildInputs = [ alsaUtils libnotify which gtk2 ruby gemEnv ];
   nativeBuildInputs = [ wrapGAppsHook ];
 
   postUnpack = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
     gappsWrapperArgs+=(
       --prefix PATH : "${ruby}/bin:${alsaUtils}/bin:${libnotify}/bin"
-      --prefix GEM_HOME : "${env}/${env.ruby.gemPath}"
+      --prefix GEM_HOME : "${gemEnv}/${gemEnv.ruby.gemPath}"
       --set DISABLE_BUNDLER_SETUP 1
     )
 
