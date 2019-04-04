@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
-, rdma-core, zlib, numactl, libevent, hwloc
+, rdma-core, zlib, numactl, libevent, hwloc, pkgsTargetTarget
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -57,6 +57,23 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     rm -f $out/lib/*.la
    '';
+
+  postFixup = ''
+    # default compilers should be indentical to the
+    # compilers at build time
+
+    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc:' \
+      $out/share/openmpi/mpicc-wrapper-data.txt
+
+    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc:' \
+       $out/share/openmpi/ortecc-wrapper-data.txt
+
+    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++:' \
+       $out/share/openmpi/mpic++-wrapper-data.txt
+
+    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.gfortran}/bin/${pkgsTargetTarget.gfortran.targetPrefix}gfortran:'  \
+       $out/share/openmpi/mpifort-wrapper-data.txt
+  '';
 
   doCheck = true;
 
