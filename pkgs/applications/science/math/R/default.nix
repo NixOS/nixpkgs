@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
     echo >>etc/Renviron.in "TZDIR=${tzdata}/share/zoneinfo"
   '';
 
+  postInstall = "echo ${which} > $out/nix-support/ugly-hack";
+
   installTargets = [ "install" "install-info" "install-pdf" ];
 
   doCheck = true;
