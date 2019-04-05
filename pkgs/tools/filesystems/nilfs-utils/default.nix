@@ -35,7 +35,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ "--with-libmount" ];
+  configureFlags = [
+    "--with-libmount"
+    # when cross-compiling we assume that the host system will return a valid
+    # pointer for calls to malloc(0) or realloc(0)
+    # https://www.uclibc.org/FAQ.html#gnu_malloc
+    # https://www.gnu.org/software/autoconf/manual/autoconf.html#index-AC_005fFUNC_005fMALLOC-454
+    # the upstream source should be patched to avoid needing this
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   # FIXME: https://github.com/NixOS/patchelf/pull/98 is in, but stdenv
   # still doesn't use it
