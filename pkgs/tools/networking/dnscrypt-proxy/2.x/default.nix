@@ -9,7 +9,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "dnscrypt-proxy";
-    rev = "${version}";
+    rev = version;
     sha256 = "0rmiyqxbbc3gjnfvyggf2lckckliiijq528993gv0n875r7ahkix";
   };
 
