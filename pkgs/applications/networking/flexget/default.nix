@@ -1,4 +1,4 @@
-{ lib, python36 }:
+{ lib, python3 }:
 
 # Flexget have been a trouble maker in the past,
 # if you see flexget breaking when updating packages, don't worry.
@@ -6,7 +6,7 @@
 # -- Mic92
 
 let
-  python' = python36.override { inherit packageOverrides; };
+  python' = python3.override { inherit packageOverrides; };
 
   packageOverrides = self: super: {
     guessit = super.guessit.overridePythonAttrs (old: rec {
@@ -24,16 +24,14 @@ with python'.pkgs;
 
 buildPythonApplication rec {
   pname = "FlexGet";
-  version = "2.17.20";
+  version = "2.20.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a09ef9482ed54f7e96eb8b4d08c59687c5c43a3341c9d2675383693e6c3681c3";
+    sha256 = "ed021d8d5c10555dad8dc1cb93c012e17b541fc25fc122b7ca76bb7e53fe82b3";
   };
 
   postPatch = ''
-    # build for the correct python version
-    substituteInPlace setup.cfg --replace $'[bdist_wheel]\npython-tag = py27' ""
     # remove dependency constraints
     sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
   '';
@@ -47,12 +45,13 @@ buildPythonApplication rec {
     beautifulsoup4 html5lib
     PyRSS2Gen pynzb rpyc jinja2
     requests dateutil jsonschema
-    pathpy guessit APScheduler
+    pathpy guessit rebulk APScheduler
     terminaltables colorclass
     cherrypy flask flask-restful
     flask-restplus flask-compress
     flask_login flask-cors
     pyparsing zxcvbn-python future
+    progressbar
     # Optional requirements
     deluge-client
     # Plugins
