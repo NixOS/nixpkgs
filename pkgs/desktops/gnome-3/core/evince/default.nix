@@ -1,6 +1,7 @@
-{ fetchurl
+{ fetchFromGitLab
 , stdenv
-, autoreconfHook
+, meson
+, ninja
 , pkgconfig
 , gettext
 , libxml2
@@ -26,21 +27,37 @@
 , gspell
 , adwaita-icon-theme
 , gsettings-desktop-schemas
+, gnome-desktop
+, dbus
+, python3
+, texlive
+, t1lib
+, gst_all_1
+, supportMultimedia ? true # PDF multimedia
 , libgxps
-, supportXPS ? false # Open XML Paper Specification via libgxps
+, supportXPS ? true # Open XML Paper Specification via libgxps
 }:
 
 stdenv.mkDerivation rec {
   pname = "evince";
   version = "3.32.0";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0h2c6b2h6g3zy0gnycrjk1y7rp0kf7ppci76dmd2zvb6chhpgngh";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = version;
+    sha256 = "1klq8j70q8r8hyqv1wi6jcx8g76yh46bh8614y82zzggn4cx6y3r";
   };
 
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
+
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     pkgconfig
     gobject-introspection
     gettext
@@ -48,6 +65,7 @@ stdenv.mkDerivation rec {
     yelp-tools
     appstream
     wrapGAppsHook
+    python3
   ];
 
   buildInputs = [
@@ -67,13 +85,19 @@ stdenv.mkDerivation rec {
     librsvg
     adwaita-icon-theme
     gspell
-  ] ++ stdenv.lib.optional supportXPS libgxps;
+    gnome-desktop
+    dbus # only needed to find the service directory
+    texlive.bin.core # kpathsea for DVI support
+    t1lib
+  ] ++ stdenv.lib.optional supportXPS libgxps
+    ++ stdenv.lib.optionals supportMultimedia (with gst_all_1; [
+      gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
 
-  configureFlags = [
-    "--disable-nautilus" # Do not build nautilus plugin
-    "--enable-ps"
-    "--enable-introspection"
-    (if supportXPS then "--enable-xps" else "--disable-xps")
+  mesonFlags = [
+    "-Dauto_features=enabled"
+    "-Dnautilus=false"
+    "-Dps=enabled"
+    "-Dgtk_doc=false"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
