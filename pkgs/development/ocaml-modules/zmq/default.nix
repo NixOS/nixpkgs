@@ -11,10 +11,6 @@ buildDunePackage rec {
     sha256 = "1f5l4bw78y4drabhyvmpj3z8k30bill33ca7bzhr02m55yf6gqpf";
   };
 
-  patches = [
-    ./ocaml-zmq-issue43.patch
-  ];
-
   buildInputs = [ czmq ];
 
   propagatedBuildInputs = [ stdint ];

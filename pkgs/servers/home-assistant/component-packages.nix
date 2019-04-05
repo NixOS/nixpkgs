@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.90.1";
+  version = "0.90.2";
   components = {
     "abode" = ps: with ps; [  ];
     "abode.alarm_control_panel" = ps: with ps; [  ];
@@ -387,7 +387,7 @@
     "envisalink.alarm_control_panel" = ps: with ps; [  ];
     "envisalink.binary_sensor" = ps: with ps; [  ];
     "envisalink.sensor" = ps: with ps; [  ];
-    "esphome" = ps: with ps; [  ];
+    "esphome" = ps: with ps; [ aioesphomeapi ];
     "esphome.binary_sensor" = ps: with ps; [  ];
     "esphome.config_flow" = ps: with ps; [  ];
     "esphome.cover" = ps: with ps; [  ];

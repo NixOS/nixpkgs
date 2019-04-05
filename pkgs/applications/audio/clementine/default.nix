@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
-, qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
+, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
 , libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, projectm, protobuf
 , qca2, pkgconfig, sparsehash, config, makeWrapper, gst_plugins }:
 
@@ -49,7 +49,6 @@ let
     protobuf
     qca2
     qjson
-    qt4
     sqlite
     taglib
   ]

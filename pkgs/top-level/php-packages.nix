@@ -369,12 +369,12 @@ let
   };
 
   phpcs = pkgs.stdenv.mkDerivation rec {
-    name = "phpcs-${version}";
-    version = "3.4.0";
+    pname = "phpcs";
+    version = "3.4.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "1d6zf0ab76r5ibb80q46silhy87hrwh50gfvhd0i25wzad7r09mw";
+      sha256 = "07zwj8msy0awnrwmv3gcilbsj9jyrvxw0q523yf16ydv55422pl0";
     };
 
     phases = [ "installPhase" ];
@@ -396,12 +396,12 @@ let
   };
 
   phpcbf = pkgs.stdenv.mkDerivation rec {
-    name = "phpcbf-${version}";
-    version = "3.4.0";
+    pname = "phpcbf";
+    version = "3.4.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-      sha256 = "0iscs4hg1msk8198pmkdmbxn1g53gbq3i5qgszs0bi6hz3ng9ag9";
+      sha256 = "052fsgzc39mfjy34mv1ip2qdghypsy218wfp8vh3a593pzkmzdcv";
     };
 
     phases = [ "installPhase" ];
@@ -423,12 +423,12 @@ let
   };
 
   phpstan = pkgs.stdenv.mkDerivation rec {
-    name = "phpstan-${version}";
-    version = "0.11.3";
+    pname = "phpstan";
+    version = "0.11.5";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "0wiyrjymnhh0bzf0di27k59j2dprczwxiq19spj9gyfkbfw8fgci";
+      sha256 = "13akllfr5dav0y61i4ym5ww8z32ynwj5lpvsfiwx6z52avmcrc29";
     };
 
     phases = [ "installPhase" ];

@@ -109,6 +109,7 @@ rec {
     
     alpha    = { bits = 64; significantByte = littleEndian; family = "alpha"; };
 
+    msp430   = { bits = 16; significantByte = littleEndian; family = "msp430"; };
     avr      = { bits = 8; family = "avr"; };
   };
 

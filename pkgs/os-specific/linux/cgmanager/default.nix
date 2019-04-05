@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, libnih, dbus, pam }:
+{ stdenv, fetchurl, pkgconfig, libnih, dbus, pam, popt }:
 
 stdenv.mkDerivation rec {
-  name = "cgmanager-0.41";
+  pname = "cgmanager";
+  version = "0.42";
 
   src = fetchurl {
-    url = "https://linuxcontainers.org/downloads/cgmanager/${name}.tar.gz";
-    sha256 = "0n5l4g78ifvyfnj8x9xz06mqn4y8j73sgg4xsbak7hiszfz5bc99";
+    url = "https://linuxcontainers.org/downloads/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "15np08h9jrvc1y1iafr8v654mzgsv5hshzc0n4p3pbf0rkra3h7c";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libnih dbus pam ];
+  buildInputs = [ libnih dbus pam popt ];
 
   configureFlags = [
     "--with-init-script=systemd"

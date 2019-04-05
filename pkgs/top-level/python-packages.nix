@@ -274,6 +274,8 @@ in {
     bap = pkgs.ocamlPackages.bap;
   };
 
+  baselines = callPackage ../development/python-modules/baselines { };
+
   bash_kernel = callPackage ../development/python-modules/bash_kernel { };
 
   bayespy = callPackage ../development/python-modules/bayespy { };
@@ -614,6 +616,8 @@ in {
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
+
+  pybullet = callPackage ../development/python-modules/pybullet { };
 
   pycairo = callPackage ../development/python-modules/pycairo {
     inherit (pkgs) pkgconfig;
@@ -1363,7 +1367,10 @@ in {
 
   cheetah = callPackage ../development/python-modules/cheetah { };
 
-  cherrypy = callPackage ../development/python-modules/cherrypy {};
+  cherrypy = if isPy3k then
+    callPackage ../development/python-modules/cherrypy { }
+  else
+    callPackage ../development/python-modules/cherrypy/17.nix { };
 
   cfgv = callPackage ../development/python-modules/cfgv { };
 
@@ -3185,6 +3192,8 @@ in {
 
   minimock = callPackage ../development/python-modules/minimock { };
 
+  minio = callPackage ../development/python-modules/minio { };
+
   moviepy = callPackage ../development/python-modules/moviepy { };
 
   mozterm = callPackage ../development/python-modules/mozterm { };
@@ -4025,6 +4034,10 @@ in {
 
   retry_decorator = callPackage ../development/python-modules/retry_decorator { };
 
+  roboschool = callPackage ../development/python-modules/roboschool {
+    inherit (pkgs) pkgconfig; # use normal pkgconfig, not the python package
+  };
+
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
   quamash = callPackage ../development/python-modules/quamash { };
@@ -4724,6 +4737,8 @@ in {
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 
   zfec = callPackage ../development/python-modules/zfec { };
+
+  zipp = callPackage ../development/python-modules/zipp { };
 
   zope_broken = callPackage ../development/python-modules/zope_broken { };
 
@@ -5445,6 +5460,8 @@ in {
   lzstring = callPackage ../development/python-modules/lzstring { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
+
+  aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 });
 
 in fix' (extends overrides packages)

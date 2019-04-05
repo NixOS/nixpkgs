@@ -137,6 +137,13 @@ stdenv.mkDerivation rec {
 
     # https://trac.sagemath.org/ticket/27405
     ./patches/ignore-pip-deprecation.patch
+
+    # https://trac.sagemath.org/ticket/27360
+    (fetchpatch {
+      name = "eclib-20190226.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=f570e3a7fc2965764b84c04ce301a88ded2c42df";
+      sha256 = "0l5c4giixkn15v2a06sfzq5mkxila6l67zkjbacirwprrlpcnmmp";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

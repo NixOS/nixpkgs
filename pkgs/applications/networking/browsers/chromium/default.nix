@@ -11,7 +11,7 @@
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
-, useVaapi ? true
+, useVaapi ? false # test video on radeon, before enabling this
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""

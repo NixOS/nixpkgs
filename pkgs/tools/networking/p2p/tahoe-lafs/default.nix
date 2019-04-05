@@ -59,7 +59,7 @@ pythonPackages.buildPythonApplication rec {
     service-identity pyyaml magic-wormhole treq
   ];
 
-  checkInputs = with pythonPackages; [ hypothesis ];
+  checkInputs = with pythonPackages; [ hypothesis twisted ];
 
   # Install the documentation.
   postInstall = ''

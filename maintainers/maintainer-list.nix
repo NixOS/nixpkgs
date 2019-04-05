@@ -147,6 +147,11 @@
     github = "aepsil0n";
     name = "Eduard Bopp";
   };
+  aerialx = {
+    email = "aaron+nixos@aaronlindsay.com";
+    github = "AerialX";
+    name = "Aaron Lindsay";
+  };
   aespinosa = {
     email = "allan.espinosa@outlook.com";
     github = "aespinosa";
@@ -334,6 +339,11 @@
     email = "andrew@du.nham.ca";
     github = "andrew-d";
     name = "Andrew Dunham";
+  };
+  andrewchambers = {
+    email = "ac@acha.ninja";
+    github = "andrewchambers";
+    name = "Andrew Chambers";
   };
   andrewrk = {
     email = "superjoe30@gmail.com";
@@ -5390,5 +5400,10 @@
     email = "minijackson@riseup.net";
     github = "minijackson";
     name = "Rémi Nicole";
+  };
+  shazow = {
+    email = "andrey.petrov@shazow.net";
+    github = "shazow";
+    name = "Andrey Petrov";
   };
 }
