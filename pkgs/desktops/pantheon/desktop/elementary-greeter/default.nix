@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./gsd.patch;
-      elementary-settings-daemon = "${elementary-settings-daemon}/libexec";
+      elementary_settings_daemon = "${elementary-settings-daemon}/libexec/";
     })
     (substituteAll {
       src = ./numlockx.patch;
