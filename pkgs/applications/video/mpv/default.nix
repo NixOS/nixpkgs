@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ config, stdenv, fetchpatch, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_4
 , freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null, darwin
@@ -104,6 +104,22 @@ in stdenv.mkDerivation rec {
     rev    = "v${version}";
     sha256 = "138921kx8g6qprim558xin09xximjhsj9ss8b71ifg2m6kclym8m";
   };
+
+  # Upstream currently relies on the system having a "C.UTF-8" locale for
+  # libarchive, which NixOS does not have. This causes issues with at least
+  # playback from zip files. There is currently a pull request open (6438) that
+  # solves this, but upstream hasn't really moved yet, so let's use it until a
+  # fixed release is out.
+  #
+  # Further reading:
+  # https://github.com/mpv-player/mpv/commit/1e70e82baa9193f6f027338b0fab0f5078971fbe
+  # https://github.com/mpv-player/mpv/issues/5759
+  # https://github.com/mpv-player/mpv/issues/6488
+  # https://github.com/mpv-player/mpv/pull/6438
+  patches = optional archiveSupport (fetchpatch {
+    url = "https://github.com/mpv-player/mpv/commit/4b2f25822a70d82afe48aeb9e2c68ccd7aa8c86c.patch";
+    sha256 = "07q2v3pgnr3wgcvzib11jr1c65l13m194m9x5mmd913gs7qv7zgv";
+  });
 
   postPatch = ''
     patchShebangs ./TOOLS/
