@@ -60,6 +60,8 @@ let
 
     TempDir ${cfg.tempDir}
 
+    SetEnv PATH /var/lib/cups/path/lib/cups/filter:/var/lib/cups/path/bin
+
     # User and group used to run external programs, including
     # those that actually send the job to the printer.  Note that
     # Udev sets the group of printer devices to `lp', so we want
@@ -75,8 +77,6 @@ let
       Listen ${addr}
     '') cfg.listenAddresses}
     Listen /var/run/cups/cups.sock
-
-    SetEnv PATH /var/lib/cups/path/lib/cups/filter:/var/lib/cups/path/bin
 
     DefaultShared ${if cfg.defaultShared then "Yes" else "No"}
 
