@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Opinionated code formatter for Scala";
-    homepage = http://scalafmt.org;
+    homepage = http://scalameta.org/scalafmt;
     license = licenses.asl20;
     maintainers = [ maintainers.markus1189 ];
   };
