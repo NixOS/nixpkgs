@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, pbr, ldap, fixtures, testresources, testtools }:
+, pbr, ldap, prettytable, fixtures, testresources, testtools }:
 
 buildPythonPackage rec {
   name = "ldappool-${version}";
@@ -11,9 +11,14 @@ buildPythonPackage rec {
     sha256 = "d9c9ec29be3f3e64164be84fe080a3087108836f307a12ec62f7d18988293df3";
   };
 
+  postPatch = ''
+    # Tests run without most of the dependencies
+    echo "" > test-requirements.txt
+  '';
+
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [ ldap ];
+  propagatedBuildInputs = [ ldap prettytable ];
 
   checkInputs = [ fixtures testresources testtools ];
 
