@@ -1,0 +1,12 @@
+diff --git a/cmd/gomobile/env.go b/cmd/gomobile/env.go
+index dbf9c8c..538cf35 100644
+--- a/cmd/gomobile/env.go
++++ b/cmd/gomobile/env.go
+@@ -138,6 +138,7 @@ func envInit() (err error) {
+ 			panic(fmt.Errorf("unknown GOARCH: %q", arch))
+ 		}
+ 		cflags += " -fembed-bitcode"
++		cflags += " -Wno-nullability-completeness"
+ 		if err != nil {
+ 			return err
+ 		}

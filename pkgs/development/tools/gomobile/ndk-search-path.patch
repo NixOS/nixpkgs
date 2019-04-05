@@ -1,0 +1,20 @@
+diff --git a/cmd/gomobile/env.go b/cmd/gomobile/env.go
+index dbf9c8c..a1c835a 100644
+--- a/cmd/gomobile/env.go
++++ b/cmd/gomobile/env.go
+@@ -165,10 +165,13 @@ func ndkRoot() (string, error) {
+ 	if androidHome == "" {
+ 		return "", errors.New("The Android SDK was not found. Please set ANDROID_HOME to the root of the Android SDK.")
+ 	}
+-	ndkRoot := filepath.Join(androidHome, "ndk-bundle")
++	ndkRoot := os.Getenv("ANDROID_NDK_HOME")
++	if ndkRoot == "" {
++		ndkRoot = filepath.Join(androidHome, "ndk-bundle")
++	}
+ 	_, err := os.Stat(ndkRoot)
+ 	if err != nil {
+-		return "", fmt.Errorf("The NDK was not found in $ANDROID_HOME/ndk-bundle (%q). Install the NDK with `sdkmanager 'ndk-bundle'`", ndkRoot)
++		return "", fmt.Errorf("The NDK was not found in $ANDROID_HOME/ndk-bundle (%q) nor in ANDROID_NDK_HOME. Install the NDK with `sdkmanager 'ndk-bundle'`", ndkRoot)
+ 	}
+ 	return ndkRoot, nil
+ }

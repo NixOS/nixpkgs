@@ -16707,6 +16707,8 @@ in
     buildGoModule = buildGo112Module;
   };
 
+  gomobile = callPackage ../development/tools/gomobile { xcodeWrapper = xcodeenv.composeXcodeWrapper; inherit (androidenv.androidPkgs_9_0) platform-tools; };
+
   impl = callPackage ../development/tools/impl { };
 
   quicktemplate = callPackage ../development/tools/quicktemplate { };
