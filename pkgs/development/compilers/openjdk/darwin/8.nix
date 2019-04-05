@@ -6,9 +6,8 @@ let
     sha256 = "0nk7m0lgcbsvldq2wbfni2pzq8h818523z912i7v8hdcij5s48c0";
   };
 
-  update = "202";
   jdk = stdenv.mkDerivation {
-    name = "openjdk-zulu-8u${update}";
+    name = "zulu8.36.0.1-ca-jdk8.0.202";
 
     src = fetchurl {
       url = "http://cdn.azul.com/zulu/bin/zulu8.36.0.1-ca-jdk8.0.202-macosx_x64.zip";
