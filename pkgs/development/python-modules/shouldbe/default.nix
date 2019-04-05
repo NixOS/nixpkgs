@@ -14,10 +14,8 @@ buildPythonPackage rec {
     sha256 = "16zbvjxf71dl4yfbgcr6idyim3mdrfvix1dv8b95p0s9z07372pj";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ nose ];
   propagatedBuildInputs = [ forbiddenfruit ];
-
-  doCheck = false;  # Segmentation fault on py 3.5
 
   meta = with stdenv.lib; {
     description = "Python Assertion Helpers inspired by Shouldly";
