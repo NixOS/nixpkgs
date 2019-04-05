@@ -6,13 +6,14 @@ let
     sha256 = "0nk7m0lgcbsvldq2wbfni2pzq8h818523z912i7v8hdcij5s48c0";
   };
 
+  update = "202";
   jdk = stdenv.mkDerivation {
-    name = "zulu1.8.0_202-8.36.0.1";
+    name = "openjdk-zulu-8u${update}";
 
     src = fetchurl {
       url = "http://cdn.azul.com/zulu/bin/zulu8.36.0.1-ca-jdk8.0.202-macosx_x64.zip";
       sha256 = "37556902100779fc2a1aab88015fb59de383a75054e7dd50975b004779a02269";
-      curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-linux/";
+      curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 
     buildInputs = [ unzip freetype ];
