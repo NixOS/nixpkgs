@@ -19761,6 +19761,10 @@ in
 
   sublime3-dev = sublime3Packages.sublime3-dev;
 
+  inherit (callPackage ../applications/version-management/sublime-merge {})
+    sublime-merge
+    sublime-merge-dev;
+
   inherit (callPackages ../applications/version-management/subversion { sasl = cyrus_sasl; })
     subversion18 subversion19 subversion_1_10 subversion_1_11;
 
