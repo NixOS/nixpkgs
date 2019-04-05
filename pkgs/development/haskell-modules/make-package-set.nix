@@ -183,7 +183,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     callHackageDirect = {pkg, ver, sha256}@args:
       let pkgver = "${pkg}-${ver}";
       in self.callCabal2nix pkg (pkgs.fetchzip {
-           url = "http://hackage.haskell.org/package/${pkgver}/${pkgver}.tar.gz";
+           url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
            inherit sha256;
          });
 
