@@ -1,24 +1,11 @@
-From f72924a59d4a30daefccf84526bd854ebbe65ac8 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Tor=20Hedin=20Br=C3=B8nner?= <torhedinbronner@gmail.com>
-Date: Tue, 3 Apr 2018 14:13:12 +0200
-Subject: [PATCH] Fix gmenu typelib path
-
----
- extensions/apps-menu/extension.js | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/extensions/apps-menu/extension.js b/extensions/apps-menu/extension.js
-index 5b38213..d706f64 100644
 --- a/extensions/apps-menu/extension.js
 +++ b/extensions/apps-menu/extension.js
-@@ -1,5 +1,7 @@
+@@ -1,6 +1,8 @@
  /* -*- mode: js2; js2-basic-offset: 4; indent-tabs-mode: nil -*- */
+ /* exported init enable disable */
  
 +imports.gi.GIRepository.Repository.prepend_search_path('@gmenu_path@');
 +
- const Atk = imports.gi.Atk;
- const DND = imports.ui.dnd;
- const GMenu = imports.gi.GMenu;
--- 
-2.16.2
-
+ const {
+     Atk, Clutter, Gio, GLib, GMenu, GObject, Gtk, Meta, Shell, St
+ } = imports.gi;

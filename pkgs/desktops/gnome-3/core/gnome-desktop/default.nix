@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
-, gettext, libxml2, xkeyboard_config, isocodes, itstool, wayland, fetchpatch
+{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, ninja, libX11, gnome3, gtk3, glib
+, gettext, libxml2, xkeyboard_config, isocodes, meson, wayland, fetchpatch
 , libseccomp, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "gnome-desktop-${version}";
-  version = "3.30.2.1";
+  version = "3.32.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "07s95fpfl3kjq51yxbrx6q87w812pq6bl0xdn0zzyi6qvg33m00v";
+    sha256 = "0m3vs3rhhykr4xnwzi18h4bb1l05l8ykpiw4mi90dz19zk2ksfd6";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig which itstool gettext libxslt libxml2 gobject-introspection
+    pkgconfig meson ninja gettext libxslt libxml2 gobject-introspection
     gtk-doc docbook_xsl
   ];
   buildInputs = [
@@ -32,15 +32,11 @@ stdenv.mkDerivation rec {
       bubblewrap_bin = "${bubblewrap}/bin/bwrap";
       inherit (builtins) storeDir;
     })
-    (fetchpatch {
-      name = "fix-missing-font-cache";
-      url = https://gitlab.gnome.org/GNOME/gnome-desktop/commit/b87de7495160dbf48f01aa1ddb361fc2556ffd0c.patch;
-      sha256 = "1aw7lw93kcflmqmbx25cwja25441i8xzvgjm1pfsxvw3vr8j6scb";
-    })
   ];
 
-  configureFlags = [
-    "--enable-gtk-doc"
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Ddesktop_docs=false"
   ];
 
   passthru = {

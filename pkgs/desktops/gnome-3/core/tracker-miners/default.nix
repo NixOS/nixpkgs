@@ -8,11 +8,11 @@ let
   pname = "tracker-miners";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "2.1.5";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1kdq7fk9c80ngg65p31pjdk4za0fq7nfhblqsma9alvkam5kvzgm";
+    sha256 = "1xbjbd994jxhdan7227kzdnmiblfy0f1vnsws5l809ydgk58f0qr";
   };
 
   nativeBuildInputs = [
@@ -64,6 +64,7 @@ in stdenv.mkDerivation rec {
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
     "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
+    "-Dsystemd_user_services=${placeholder "out"}/lib/systemd/user"
   ];
 
   patches = [

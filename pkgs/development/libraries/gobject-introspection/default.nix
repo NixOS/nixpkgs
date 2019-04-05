@@ -9,7 +9,7 @@
 
 let
   pname = "gobject-introspection";
-  version = "1.58.3";
+  version = "1.60.0";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1j63rll0s608s0v4kqxkjapkpf46l069mlahzh8wykclplmn6nq2";
+    sha256 = "0pgk9lcvz3i79m6g2ynlp00ghws7g0p0d5qyf0k72warrf841zly";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       cairoLib = "${getLib cairo}/lib";
     });
 
-  doCheck = true;
+  doCheck = !stdenv.isAarch64;
 
   passthru = {
     updateScript = gnome3.updateScript {

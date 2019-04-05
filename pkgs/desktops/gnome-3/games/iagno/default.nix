@@ -1,16 +1,21 @@
 { stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
-, intltool, itstool, libcanberra-gtk3, libxml2, dconf }:
+, intltool, itstool, libcanberra-gtk3, libxml2
+, meson, ninja, python3, vala, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
   name = "iagno-${version}";
-  version = "3.30.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/iagno/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "15skh7186gp0k1lvzpv0l7dsr7mhb57njc3wjbgjwixym67h2d1z";
+    sha256 = "1rcqb4gpam16xw87n4q2akkrg94ksrn16ry21pr6bsd7qs7hw17d";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook itstool libxml2 ];
+  nativeBuildInputs = [
+    meson ninja python3 vala desktop-file-utils
+    pkgconfig wrapGAppsHook itstool libxml2
+  ];
   buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk_pixbuf librsvg libcanberra-gtk3 ];
 
   enableParallelBuilding = true;

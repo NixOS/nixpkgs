@@ -1,28 +1,67 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, python3, wrapGAppsHook
-, gettext, gnome3, glib, gtk3, libpeas
-, gnome-online-accounts, gsettings-desktop-schemas
-, evolution-data-server, libxml2, libsoup, libical, librest, json-glib }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, pkgconfig
+, python3
+, wrapGAppsHook
+, gettext
+, gnome3
+, glib
+, gtk3
+, libpeas
+, gnome-online-accounts
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, evolution-data-server
+, libxml2
+, libsoup
+, libical
+, librest
+, json-glib
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-todo";
   version = "3.28.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "08ygqbib72jlf9y0a16k54zz51sncpq2wa18wp81v46q8301ymy7";
   };
 
-  nativeBuildInputs = [
-    meson ninja pkgconfig gettext python3 wrapGAppsHook
+  patches = [
+    # fix build with e-d-s 3.32
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/gnome-todo/commit/6cdabc4dd0c6c804a093b94c269461ce376fed4f.patch;
+      sha256 = "08ldgyxv9216dgr8y9asqd7j2y82y9yqnqhkqaxc9i8a67yz1gzy";
+    })
   ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    python3
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    glib gtk3 libpeas gnome-online-accounts
-    gsettings-desktop-schemas gnome3.adwaita-icon-theme
+    glib
+    gtk3
+    libpeas
+    gnome-online-accounts
+    gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme
     # Plug-ins
-    evolution-data-server libxml2 libsoup libical
-    librest json-glib
+    evolution-data-server
+    libxml2
+    libsoup
+    libical
+    librest
+    json-glib
   ];
 
   postPatch = ''

@@ -1,6 +1,8 @@
+diff --git a/panels/color/cc-color-panel.c b/panels/color/cc-color-panel.c
+index 49ca35220..adefb87b9 100644
 --- a/panels/color/cc-color-panel.c
 +++ b/panels/color/cc-color-panel.c
-@@ -599,7 +599,7 @@
+@@ -599,7 +599,7 @@ gcm_prefs_calibrate_cb (GtkWidget *widget, CcColorPanel *prefs)
  
    /* run with modal set */
    argv = g_ptr_array_new_with_free_func (g_free);
@@ -9,7 +11,7 @@
    g_ptr_array_add (argv, g_strdup ("--device"));
    g_ptr_array_add (argv, g_strdup (cd_device_get_id (prefs->current_device)));
    g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -1038,7 +1038,7 @@
+@@ -1038,7 +1038,7 @@ gcm_prefs_profile_view (CcColorPanel *prefs, CdProfile *profile)
  
    /* open up gcm-viewer as a info pane */
    argv = g_ptr_array_new_with_free_func (g_free);
@@ -18,7 +20,7 @@
    g_ptr_array_add (argv, g_strdup ("--profile"));
    g_ptr_array_add (argv, g_strdup (cd_profile_get_id (profile)));
    g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -1288,15 +1288,12 @@
+@@ -1288,15 +1288,12 @@ gcm_prefs_device_clicked (CcColorPanel *prefs, CdDevice *device)
  static void
  gcm_prefs_profile_clicked (CcColorPanel *prefs, CdProfile *profile, CdDevice *device)
  {
@@ -35,6 +37,8 @@
      gtk_widget_set_sensitive (prefs->toolbutton_profile_view, TRUE);
    else
      gtk_widget_set_sensitive (prefs->toolbutton_profile_view, FALSE);
+diff --git a/panels/datetime/tz.h b/panels/datetime/tz.h
+index 96b25140c..1ad704d4a 100644
 --- a/panels/datetime/tz.h
 +++ b/panels/datetime/tz.h
 @@ -27,11 +27,7 @@
@@ -50,24 +54,96 @@
  
  typedef struct _TzDB TzDB;
  typedef struct _TzLocation TzLocation;
---- a/panels/region/cc-region-panel.c
-+++ b/panels/region/cc-region-panel.c
-@@ -1265,10 +1265,10 @@
+diff --git a/panels/network/connection-editor/net-connection-editor.c b/panels/network/connection-editor/net-connection-editor.c
+index 9390a3308..d30b4a68e 100644
+--- a/panels/network/connection-editor/net-connection-editor.c
++++ b/panels/network/connection-editor/net-connection-editor.c
+@@ -247,9 +247,9 @@ net_connection_editor_do_fallback (NetConnectionEditor *editor, const gchar *typ
+         GError *error = NULL;
+ 
+         if (editor->is_new_connection) {
+-                cmdline = g_strdup_printf ("nm-connection-editor --type='%s' --create", type);
++                cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --type='%s' --create", type);
+         } else {
+-                cmdline = g_strdup_printf ("nm-connection-editor --edit='%s'",
++                cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --edit='%s'",
+                                            nm_connection_get_uuid (editor->connection));
          }
  
-         if (variant && variant[0])
+diff --git a/panels/network/net-device-wifi.c b/panels/network/net-device-wifi.c
+index 360fbfc72..870157a11 100644
+--- a/panels/network/net-device-wifi.c
++++ b/panels/network/net-device-wifi.c
+@@ -1385,7 +1385,7 @@ device_wifi_edit (NetObject *object)
+                 return;
+         }
+         uuid = nm_connection_get_uuid (NM_CONNECTION (connection));
+-        cmdline = g_strdup_printf ("nm-connection-editor --edit %s", uuid);
++        cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --edit %s", uuid);
+         g_debug ("Launching '%s'\n", cmdline);
+         if (!g_spawn_command_line_async (cmdline, &error)) {
+                 g_warning ("Failed to launch nm-connection-editor: %s", error->message);
+diff --git a/panels/network/net-device.c b/panels/network/net-device.c
+index d73b537b9..e2ee54294 100644
+--- a/panels/network/net-device.c
++++ b/panels/network/net-device.c
+@@ -197,7 +197,7 @@ net_device_edit (NetObject *object)
+ 
+         connection = net_device_get_find_connection (device);
+         uuid = nm_connection_get_uuid (connection);
+-        cmdline = g_strdup_printf ("nm-connection-editor --edit %s", uuid);
++        cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --edit %s", uuid);
+         g_debug ("Launching '%s'\n", cmdline);
+         if (!g_spawn_command_line_async (cmdline, &error)) {
+                 g_warning ("Failed to launch nm-connection-editor: %s", error->message);
+diff --git a/panels/printers/pp-host.c b/panels/printers/pp-host.c
+index f53ba217e..d24bcaeb9 100644
+--- a/panels/printers/pp-host.c
++++ b/panels/printers/pp-host.c
+@@ -256,7 +256,7 @@ _pp_host_get_snmp_devices_thread (GTask        *task,
+   devices = g_new0 (PpDevicesList, 1);
+ 
+   argv = g_new0 (gchar *, 3);
+-  argv[0] = g_strdup ("/usr/lib/cups/backend/snmp");
++  argv[0] = g_strdup ("@cups@/lib/cups/backend/snmp");
+   argv[1] = g_strdup (priv->hostname);
+ 
+   /* Use SNMP to get printer's informations */
+diff --git a/panels/region/cc-region-panel.c b/panels/region/cc-region-panel.c
+index 35859526d..21486c917 100644
+--- a/panels/region/cc-region-panel.c
++++ b/panels/region/cc-region-panel.c
+@@ -755,10 +755,10 @@ row_layout_cb (CcRegionPanel *self,
+         layout_variant = cc_input_source_get_layout_variant (source);
+ 
+         if (layout_variant && layout_variant[0])
 -                commandline = g_strdup_printf ("gkbd-keyboard-display -l \"%s\t%s\"",
 +                commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l \"%s\t%s\"",
-                                                layout, variant);
+                                                layout, layout_variant);
          else
 -                commandline = g_strdup_printf ("gkbd-keyboard-display -l %s",
 +                commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l %s",
                                                 layout);
  
          g_spawn_command_line_async (commandline, NULL);
+diff --git a/panels/user-accounts/run-passwd.c b/panels/user-accounts/run-passwd.c
+index 00239ce0f..617c98870 100644
+--- a/panels/user-accounts/run-passwd.c
++++ b/panels/user-accounts/run-passwd.c
+@@ -150,7 +150,7 @@ spawn_passwd (PasswdHandler *passwd_handler, GError **error)
+         gchar  **envp;
+         gint    my_stdin, my_stdout, my_stderr;
+ 
+-        argv[0] = "/usr/bin/passwd";    /* Is it safe to rely on a hard-coded path? */
++        argv[0] = "/run/wrappers/bin/passwd";    /* Is it safe to rely on a hard-coded path? */
+         argv[1] = NULL;
+ 
+         envp = g_get_environ ();
+diff --git a/tests/datetime/test-endianess.c b/tests/datetime/test-endianess.c
+index 9cb92007a..84d2f0fa3 100644
 --- a/tests/datetime/test-endianess.c
 +++ b/tests/datetime/test-endianess.c
-@@ -26,7 +26,7 @@
+@@ -26,7 +26,7 @@ test_endianess (void)
  	g_autoptr(GDir) dir = NULL;
  	const char *name;
  

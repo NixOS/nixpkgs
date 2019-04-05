@@ -1,15 +1,48 @@
-{ fetchurl, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, perl, gettext, gtk3, glib, libnotify, lcms2, libXtst
-, libxkbfile, libpulseaudio, alsaLib, libcanberra-gtk3, upower, colord, libgweather, polkit, gsettings-desktop-schemas
-, geoclue2, librsvg, xf86_input_wacom, udev, libgudev, libwacom, libxslt, libxml2, networkmanager
-, gnome-desktop, geocode-glib, docbook_xsl, wrapGAppsHook, python3, ibus, xkeyboard_config, tzdata, nss }:
+{ stdenv
+, substituteAll
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gnome3
+, perl
+, gettext
+, gtk3
+, glib
+, libnotify
+, libgnomekbd
+, lcms2
+, libpulseaudio
+, alsaLib
+, libcanberra-gtk3
+, upower
+, colord
+, libgweather
+, polkit
+, gsettings-desktop-schemas
+, geoclue2
+, systemd
+, libgudev
+, libwacom
+, libxslt
+, libxml2
+, networkmanager
+, gnome-desktop
+, geocode-glib
+, docbook_xsl
+, wrapGAppsHook
+, python3
+, tzdata
+, nss
+}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-settings-daemon-${version}";
-  version = "3.30.2";
+  pname = "gnome-settings-daemon";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0c663csa3gnsr6wm0xfll6aani45snkdj7zjwjfzcwfh8w4a3z12";
+    url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "15w3sn9qf1zqlmk8c93kgrh2a20s62m5yfizkp21m5ylrrd07f63";
   };
 
   patches = [
@@ -19,13 +52,41 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig perl gettext libxml2 libxslt docbook_xsl wrapGAppsHook python3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    perl
+    gettext
+    libxml2
+    libxslt
+    docbook_xsl
+    wrapGAppsHook
+    python3
+  ];
 
   buildInputs = [
-    ibus gtk3 glib gsettings-desktop-schemas networkmanager
-    libnotify gnome-desktop lcms2 libXtst libxkbfile libpulseaudio alsaLib
-    libcanberra-gtk3 upower colord libgweather xkeyboard_config nss
-    polkit geocode-glib geoclue2 librsvg xf86_input_wacom udev libgudev libwacom
+    gtk3
+    glib
+    gsettings-desktop-schemas
+    networkmanager
+    libnotify
+    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
+    gnome-desktop
+    lcms2
+    libpulseaudio
+    alsaLib
+    libcanberra-gtk3
+    upower
+    colord
+    libgweather
+    nss
+    polkit
+    geocode-glib
+    geoclue2
+    systemd
+    libgudev
+    libwacom
   ];
 
   mesonFlags = [
@@ -41,8 +102,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gnome-settings-daemon";
-      attrPath = "gnome3.gnome-settings-daemon";
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
     };
   };
 

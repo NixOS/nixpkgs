@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, vala_0_40
+{ stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, vala
 , libxml2, perl, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info }:
 
 stdenv.mkDerivation rec {
   name = "gtksourceview-${version}";
-  version = "4.0.3";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0wwxgw43dmmaz07lzdzpladir26l2bly3lnf2ks6pna152wafm9x";
+    sha256 = "0xgnjj7jd56wbl99s76sa1vjq9bkz4mdsxwgwlcphg689liyncf4";
   };
 
   propagatedBuildInputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gettext perl gobject-introspection vala_0_40 ];
+  nativeBuildInputs = [ pkgconfig gettext perl gobject-introspection vala ];
 
   checkInputs = [ xvfb_run dbus ];
 

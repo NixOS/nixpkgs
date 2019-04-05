@@ -2,18 +2,18 @@
 , desktop-file-utils, python3, wrapGAppsHook , gtk3, gnome3, gnome-autoar
 , glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
 , librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk_pixbuf
-, substituteAll, bubblewrap
+, substituteAll, bubblewrap, gst_all_1
 }:
 
 let
   pname = "nautilus";
-  version = "3.30.5";
+  version = "3.32.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "144r4py9b8w9ycsg6fggjg05kwvymh003qsb3h6apgpch5y3zgnv";
+    sha256 = "1pnh32fal7dkwadga5savg1nv0zqnbakhk0hxr5726087i6y6ii2";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     glib-networking shared-mime-info libexif gtk3 exempi libnotify libselinux
-    tracker tracker-miners gexiv2 libseccomp bubblewrap
+    tracker tracker-miners gexiv2 libseccomp bubblewrap gst_all_1.gst-plugins-base
     gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
   ];
 

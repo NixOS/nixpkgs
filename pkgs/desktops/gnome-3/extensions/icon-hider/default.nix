@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Icon Hider is a GNOME Shell extension for managing status area items";
     license = licenses.bsd3;
+    broken = true; # not compatable with latest GNOME
     maintainers = with maintainers; [ jonafato ];
     platforms = platforms.linux;
     homepage = https://github.com/ikalnytskyi/gnome-shell-extension-icon-hider;
