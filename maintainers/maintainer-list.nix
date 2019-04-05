@@ -2773,6 +2773,11 @@
     github = "lucas8";
     name = "Luc Chabassier";
   };
+  lucus16 = {
+    email = "lars.jellema@gmail.com";
+    github = "Lucus16";
+    name = "Lars Jellema";
+  };
   ludo = {
     email = "ludo@gnu.org";
     github = "civodul";

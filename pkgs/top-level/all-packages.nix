@@ -4029,6 +4029,8 @@ in
 
   latex2html = callPackage ../tools/misc/latex2html { };
 
+  latexrun = callPackage ../tools/typesetting/tex/latexrun { };
+
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns {
