@@ -8,13 +8,13 @@
 
 let
 
-  version = "5.0.0";
+  version = "5.0.2-pre";
 
   src = fetchFromGitHub {
     repo = "concourse";
     owner = "concourse";
-    rev = "v${version}";
-    sha256 = "0srnfawisvpisypiklhjbnfm8ppnx9g221vg23wi7vrpsk7bzin7";
+    rev = "6c13d21d0efc407a12eb03196b1c3533e34e494d"; #"v${version}";
+    sha256 = "1rd2j7lffwgcbg0yi4vjb3z5xrfs9g36db4i719l9d973qkwfxx1";
   };
 
   main-asset = callPackage ./assets/main {
@@ -22,9 +22,6 @@ let
   };
 
   resources = import ./assets/resources { inherit callPackage fly; };
-
-  # TODO: Set this
-  worker_vesion = "";
 
   mkResourcesDir = callPackage ./assets/resources/make-resource-dir.nix {};
 

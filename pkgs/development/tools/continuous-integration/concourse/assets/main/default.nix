@@ -1,6 +1,8 @@
 {
   cacert,
+  elmPackages,
   gmp,
+  lib,
   mkYarnPackage,
   nodePackages,
   nss,
@@ -9,20 +11,52 @@
   stdenv,
   zlib,
 }:
+let
+  mkElmPackage =
+    { srcs ? ./elm-srcs.nix
+    , src
+    , name
+    , srcdir ? "./src"
+    , targets ? []
+    , versionsDat ? ./versions.dat
+    }:
+    stdenv.mkDerivation {
+      inherit name src;
+
+      buildInputs = [ elmPackages.elm ];
+
+      buildPhase = elmPackages.fetchElmDeps {
+        elmPackages = import srcs;
+        inherit versionsDat;
+      };
+
+      installPhase = let
+        elmfile = module: "${srcdir}/${builtins.replaceStrings ["."] ["/"] module}.elm";
+      in ''
+        mkdir -p $out/share/doc
+        ${lib.concatStrings (map (module: ''
+          echo "compiling ${elmfile module}"
+          elm make ${elmfile module} --output $out/${module}.js
+        '') targets)}
+      '';
+    };
+  elm-package = mkElmPackage {
+    src = src + "/web/elm";
+    name = "concourse-web";
+    targets = [ "Main" ];
+  };
+in
 mkYarnPackage {
   name = "concourse-main-assets";
-  nativeBuildInputs = [ nodePackages.yarn patchelf cacert ];
+  nativeBuildInputs = [
+    cacert
+    nodePackages.uglify-js
+    nodePackages.yarn
+    patchelf
+  ];
   buildInputs = [ cacert ];
   inherit src;
   yarnNix = ./yarn.nix;
-  pkgConfig = {
-    elm = {
-      postInstall = ''
-        find . -type f -executable -exec patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" {} \;
-        find . -type f -executable -exec patchelf --set-rpath "${gmp}/lib:${zlib}/lib:${nss}/lib" {} \;
-      '';
-    };
-  };
   yarnFlags = [
     "--offline"
     "--frozen-lockfile"
@@ -30,7 +64,8 @@ mkYarnPackage {
   preBuild = ''
     mkdir -p elm_home
     export HOME=`realpath elm_home`
-    yarn build
+    yarn run build-less
+    uglifyjs < ${elm-package}/Main.js > web/public/elm.min.js
   '';
   installPhase = ''
     mkdir -p $out
