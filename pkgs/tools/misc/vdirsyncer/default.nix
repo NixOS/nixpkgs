@@ -68,7 +68,6 @@ python3Packages.buildPythonApplication rec {
 
   checkPhase = ''
     rm -rf vdirsyncer
-    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
     make DETERMINISTIC_TESTS=true test
   '';
 
