@@ -6,10 +6,10 @@
 stdenv.mkDerivation rec {
   version = "2019-01-15";
   name = "oh-my-zsh-${version}";
+  rev = "586ca16902d9dae4d95d5256a824572f60219c83";
 
-  src = fetchgit {
+  src = fetchgit { inherit rev;
     url = "https://github.com/robbyrussell/oh-my-zsh";
-    rev = "586ca16902d9dae4d95d5256a824572f60219c83";
     sha256 = "0hzc1fv848h9vlmrw487818l30xfw2vnv50yhkrgvw8lqaam3bs8";
   };
 
