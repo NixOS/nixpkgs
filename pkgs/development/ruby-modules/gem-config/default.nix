@@ -23,7 +23,7 @@
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib
+, file, libvirt, glib, vips, taglib, libopus
 , libselinux ? null, libsepol ? null
 }@args:
 
@@ -273,6 +273,15 @@ in
       "--with-exslt-lib=${libxslt.out}/lib"
       "--with-exslt-include=${libxslt.dev}/include"
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+  };
+
+  opus-ruby = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace lib/opus-ruby.rb \
+        --replace "ffi_lib 'opus'" \
+                  "ffi_lib '${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    '';
   };
 
   ovirt-engine-sdk = attrs: {
