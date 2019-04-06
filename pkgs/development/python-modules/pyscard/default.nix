@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, swig, pcsclite, PCSC }:
+{ stdenv, fetchPypi, fetchpatch, buildPythonPackage, swig, pcsclite, PCSC }:
 
 buildPythonPackage rec {
   version = "1.9.8";
@@ -15,6 +15,15 @@ buildPythonPackage rec {
   '';
 
   NIX_CFLAGS_COMPILE = "-isystem ${stdenv.lib.getDev pcsclite}/include/PCSC/";
+
+  patches = [
+    # Fixes darwin tests
+    # See: https://github.com/LudovicRousseau/pyscard/issues/77
+    (fetchpatch {
+      url = "https://github.com/LudovicRousseau/pyscard/commit/62e675028086c75656444cc21d563d9f08ebf8e7.patch";
+      sha256 = "1lr55npcpc8j750vf7vaisqyk18d5f00l7nii2lvawg4sssjaaf7";
+    })
+  ];
 
   propagatedBuildInputs = [ pcsclite ];
   buildInputs = stdenv.lib.optional stdenv.isDarwin PCSC;
