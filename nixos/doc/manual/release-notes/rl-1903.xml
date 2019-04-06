@@ -79,6 +79,15 @@
       the runtime closure of the service.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       A UEFI installer image for Aarch64 is now
+       <link xlink:href="https://hydra.nixos.org/job/nixos/release-19.03/nixos.iso_minimal.aarch64-linux/latest">
+         built by Hydra</link>.
+       It should work on all devices with a UEFI implementation
+       such as upstream u-boot.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -761,6 +770,20 @@
     <para>
      A new subcommand <command>nixos-rebuild edit</command> was added.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <function>stdenv.mkDerivation</function> may now be passed
+       <varname>pname</varname> and <varname>version</varname> attributes
+       instead of <varname>name</varname>, and will now automatically
+       construct the package name by joining them with a dash.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The Sway tiling Wayland compositor has been updated to version 1.0, and the
+       corresponding NixOS module has been refined to fix some bugs.
+     </para>
    </listitem>
   </itemizedlist>
  </section>
