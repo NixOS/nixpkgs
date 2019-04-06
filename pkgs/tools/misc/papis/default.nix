@@ -2,7 +2,7 @@
 , python3, xdg_utils
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "papis";
   version = "0.8.2";
 

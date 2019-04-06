@@ -16058,7 +16058,7 @@ in
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme { };
 
-  papis = callPackage ../tools/misc/papis { };
+  papis = with python3Packages; toPythonApplication papis;
 
   paps = callPackage ../tools/misc/paps { };
 
