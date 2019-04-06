@@ -24,6 +24,7 @@ buildPythonApplication rec {
 
   makeWrapperArgs = [
     "--set PYTHONPATH \"$PYTHONPATH\""
+    "--set PIP_IGNORE_INSTALLED 1"
   ];
 
   meta = with stdenv.lib; {
