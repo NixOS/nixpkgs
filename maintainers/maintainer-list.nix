@@ -2885,6 +2885,11 @@
     github = "martingms";
     name = "Martin Gammelsæter";
   };
+  marius851000 = {
+    email = "mariusdavid@laposte.net";
+    name = "Marius DAVID";
+    github = "marius851000";
+  };
   matejc = {
     email = "cotman.matej@gmail.com";
     github = "matejc";
