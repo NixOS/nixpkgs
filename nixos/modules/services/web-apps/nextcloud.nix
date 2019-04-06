@@ -32,7 +32,7 @@ let
     cd ${pkgs.nextcloud}
     exec /run/wrappers/bin/sudo -u nextcloud \
       NEXTCLOUD_CONFIG_DIR="${cfg.home}/config" \
-      ${config.services.phpfpm.phpPackage}/bin/php \
+      ${phpPackage}/bin/php \
       -c ${pkgs.writeText "php.ini" phpOptionsStr}\
       occ $*
   '';
@@ -360,7 +360,7 @@ in {
           environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${pkgs.php}/bin/php -f ${pkgs.nextcloud}/cron.php";
+          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${pkgs.nextcloud}/cron.php";
         };
       };
 
