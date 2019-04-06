@@ -2750,6 +2750,8 @@ in
 
   conda = callPackage ../tools/package-management/conda { };
 
+  console-bridge = callPackage ../development/libraries/console-bridge { };
+
   convmv = callPackage ../tools/misc/convmv { };
 
   convoy = callPackage ../tools/filesystems/convoy { };
