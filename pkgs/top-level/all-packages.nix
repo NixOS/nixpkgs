@@ -2083,7 +2083,6 @@ in
   libkkc = callPackage ../tools/inputmethods/libkkc { };
 
   ibus = callPackage ../tools/inputmethods/ibus {
-    gconf = gnome2.GConf;
     inherit (gnome3) dconf;
   };
 
