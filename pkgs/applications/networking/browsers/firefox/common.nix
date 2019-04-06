@@ -30,11 +30,13 @@
 , privacySupport ? isTorBrowserLike || isIceCatLike
 
 # WARNING: NEVER set any of the options below to `true` by default.
-# Set to `privacySupport` or `false`.
+# Set to `!privacySupport` or `false`.
 
-# webrtcSupport breaks the aarch64 build on version >= 60.
+# webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
 # https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
-, webrtcSupport ? (if lib.versionAtLeast ffversion "60" && stdenv.isAarch64 then false else !privacySupport)
+, webrtcSupport ? !privacySupport && (!stdenv.isAarch64 || !(
+    lib.versionAtLeast ffversion "60" && lib.versionOlder ffversion "63"
+  ))
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
