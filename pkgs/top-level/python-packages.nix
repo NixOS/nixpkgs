@@ -4422,6 +4422,8 @@ in {
 
   xlwt = callPackage ../development/python-modules/xlwt { };
 
+  xxhash = callPackage ../development/python-modules/xxhash { };
+
   youtube-dl = callPackage ../tools/misc/youtube-dl {};
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
