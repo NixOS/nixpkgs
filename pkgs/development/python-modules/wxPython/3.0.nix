@@ -56,10 +56,9 @@ buildPythonPackage rec {
       --replace "return wxPyTestDisplayAvailable();" "return true;"
   '' + lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace wx/lib/wxcairo.py \
-      --replace 'cairoLib = None' 'cairoLib = ctypes.CDLL("${cairo}/lib/libcairo.so")'
-    substituteInPlace wx/lib/wxcairo.py \
+      --replace 'cairoLib = None' 'cairoLib = ctypes.CDLL("${cairo}/lib/libcairo.so")' \
       --replace '_dlls = dict()' '_dlls = {k: ctypes.CDLL(v) for k, v in [
-        ("gdk",        "${wxGTK.gtk}/lib/libgtk-x11-2.0.so"),
+        ("gdk",        "${wxGTK.gtk}/lib/libgdk-3.so"),
         ("pangocairo", "${pango.out}/lib/libpangocairo-1.0.so"),
         ("appsvc",     None)
       ]}'
@@ -68,7 +67,7 @@ buildPythonPackage rec {
   buildPhase = "";
 
   installPhase = ''
-    ${python.interpreter} setup.py install WXPORT=${if stdenv.isDarwin then "osx_cocoa" else "gtk2"} NO_HEADERS=0 BUILD_GLCANVAS=${if openglSupport then "1" else "0"} UNICODE=1 --prefix=$out
+    ${python.interpreter} setup.py install WXPORT=${if stdenv.isDarwin then "osx_cocoa" else "gtk3"} NO_HEADERS=0 BUILD_GLCANVAS=${if openglSupport then "1" else "0"} UNICODE=1 --prefix=$out
     wrapPythonPrograms
   '';
 
