@@ -68,6 +68,7 @@ let
         };
       };
       uri = uri.override {
+        legacy = true;
         inherit (janeStreet_0_9_0) ppx_sexp_conv sexplib;
       };
     };
