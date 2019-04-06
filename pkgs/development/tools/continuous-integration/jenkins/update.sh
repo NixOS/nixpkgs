@@ -3,11 +3,20 @@
 
 set -eu -o pipefail
 
-core_json="$(curl --fail --location https://updates.jenkins.io/stable/update-center.actual.json | jq .core)"
+core_json="$(curl -s --fail --location https://updates.jenkins.io/stable/update-center.actual.json | jq .core)"
+oldVersion=$(nix-instantiate --eval -E "with import ./. {}; jenkins.version or (builtins.parseDrvName jenkins.name).version" | tr -d '"')
 
 version="$(jq -r .version <<<$core_json)"
 sha256="$(jq -r .sha256 <<<$core_json)"
 hash="$(nix-hash --type sha256 --to-base32 "$sha256")"
 url="$(jq -r .url <<<$core_json)"
 
-update-source-version jenkins "$version" "$hash" "$url"
+if [ ! "${oldVersion}" = "${version}" ]; then
+  update-source-version jenkins "$version" "$hash" "$url"
+  nixpkgs="$(git rev-parse --show-toplevel)"
+  default_nix="$nixpkgs/pkgs/development/tools/continuous-integration/jenkins/default.nix"
+  git add "${default_nix}"
+  git commit -m "jenkins: ${oldVersion} -> ${version}"
+else
+  echo "jenkins is already up-to-date"
+fi
