@@ -21,8 +21,8 @@ let
   };
 
   apcu_bc = buildPecl {
-    name = "apcu_bc-1.0.4";
-    sha256 = "1raww7alwayg9nk0akly1mdrjypxlwg8safnmaczl773cwpw5cbw";
+    name = "apcu_bc-1.0.5";
+    sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
     buildInputs = [ apcu (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
