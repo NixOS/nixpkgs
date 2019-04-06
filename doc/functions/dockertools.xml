@@ -437,18 +437,7 @@ pullImage {
    <callout arearefs='ex-dockerTools-pullImage-2'>
     <para>
      <varname>imageDigest</varname> specifies the digest of the image to be
-     downloaded. Skopeo can be used to get the digest of an image, with its
-     <varname>inspect</varname> subcommand. Since a given
-     <varname>imageName</varname> may transparently refer to a manifest list of
-     images which support multiple architectures and/or operating systems,
-     supply the `--override-os` and `--override-arch` arguments to specify
-     exactly which image you want. By default it will match the OS and
-     architecture of the host the command is run on.
-<programlisting>
-$ nix-shell --packages skopeo jq --command "skopeo --override-os linux --override-arch x86_64 inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'"
-sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
-</programlisting>
-     This argument is required.
+     downloaded. This argument is required.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-pullImage-3'>
@@ -486,6 +475,34 @@ sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
     </para>
    </callout>
   </calloutlist>
+
+  <para>
+    <literal>nix-prefetch-docker</literal> command can be used to get required
+    image parameters:
+
+<programlisting>
+$ nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql --image-tag 5
+</programlisting>
+
+    Since a given <varname>imageName</varname> may transparently refer to a
+    manifest list of images which support multiple architectures and/or
+    operating systems, you can supply the <option>--os</option> and
+    <option>--arch</option> arguments to specify exactly which image you want.
+    By default it will match the OS and architecture of the host the command is
+    run on.
+
+<programlisting>
+$ nix-prefetch-docker --image-name mysql --image-tag 5 --arch x86_64 --os linux
+</programlisting>
+
+    Desired image name and tag can be set using
+    <option>--final-image-name</option> and <option>--final-image-tag</option>
+    arguments:
+
+<programlisting>
+$ nix-prefetch-docker --image-name mysql --image-tag 5 --final-image-name eu.gcr.io/my-project/mysql --final-image-tag prod
+</programlisting>
+  </para>
  </section>
 
  <section xml:id="ssec-pkgs-dockerTools-exportImage">
