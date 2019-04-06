@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     "-Dlibcolordcompat=true"
     "-Dsane=true"
     "-Dvapi=true"
+    "-Ddaemon_user=colord"
   ];
 
   nativeBuildInputs = [

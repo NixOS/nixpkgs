@@ -1,13 +1,15 @@
 { stdenv, buildGoPackage, fetchFromGitHub, fetchpatch, pkgconfig,
   dbus-factory, go-dbus-factory, go-gir-generator, go-lib,
-  deepin-gettext-tools, dde-api, alsaLib, glib, gtk3, libinput, libnl,
-  librsvg, linux-pam, networkmanager, pulseaudio, xorg, gnome3,
-  python3Packages, hicolor-icon-theme, go, deepin }:
+  deepin-gettext-tools, dde-api, deepin-desktop-schemas,
+  deepin-wallpapers, deepin-desktop-base, alsaLib, glib, gtk3,
+  libgudev, libinput, libnl, librsvg, linux-pam, networkmanager,
+  pulseaudio, xorg, python3, hicolor-icon-theme, glibc, tzdata, go,
+  deepin, makeWrapper, wrapGAppsHook }:
 
 buildGoPackage rec {
   name = "${pname}-${version}";
   pname = "dde-daemon";
-  version = "3.6.0";
+  version = "3.24.1";
 
   goPackagePath = "pkg.deepin.io/dde/daemon";
 
@@ -15,15 +17,14 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0gn2zp34wg79lvzdfla6yb4gs3f9ll83kj765zvig1wpx51nq1aj";
+    sha256 = "1qxj0mqnl10qj8qidpc1sv8gm4gj5965i07d003yxlxcw9cqwx7y";
   };
 
   patches = [
     # https://github.com/linuxdeepin/dde-daemon/issues/51
     (fetchpatch {
-      name = "dde-daemon_3.2.3.patch";
-      url = https://github.com/jouyouyun/tap-gesture-patches/raw/master/patches/dde-daemon_3.2.3.patch;
-      sha256 = "0a3xb15czpfl2vajpf7ycw37vr7fbw2png1a67mvjjkgx7d1k7dg";
+      url = https://github.com/jouyouyun/tap-gesture-patches/raw/master/patches/dde-daemon_3.8.0.patch;
+      sha256 = "1ampdsp9zlg263flswdw9gj10n7gxh7zi6w6z9jgh29xlai05pvh";
     })
   ];
 
@@ -38,46 +39,70 @@ buildGoPackage rec {
     go-gir-generator
     go-lib
     deepin-gettext-tools
-    dde-api
     linux-pam
     networkmanager
     networkmanager.dev
-    python3Packages.python
+    python3
+    makeWrapper
+    wrapGAppsHook
+    deepin.setupHook
   ];
 
   buildInputs = [
     alsaLib
+    dde-api
+    deepin-desktop-base
+    deepin-desktop-schemas
+    deepin-wallpapers
     glib
-    gnome3.libgudev
+    libgudev
     gtk3
     hicolor-icon-theme
     libinput
     libnl
     librsvg
     pulseaudio
+    tzdata
   ];
 
   postPatch = ''
-    patchShebangs .
+    searchHardCodedPaths
+    patchShebangs network/nm_generator/gen_nm_consts.py
 
-    sed -i network/nm_generator/Makefile -e 's,/usr/share/gir-1.0/NM-1.0.gir,${networkmanager.dev}/share/gir-1.0/NM-1.0.gir,'
+    fixPath $out /usr/share/dde/data launcher/manager.go dock/dock_manager_init.go
+    fixPath ${networkmanager.dev} /usr/share/gir-1.0/NM-1.0.gir network/nm_generator/Makefile
+    fixPath ${glibc.bin} /usr/bin/getconf systeminfo/utils.go
+    fixPath ${deepin-desktop-base} /etc/deepin-version systeminfo/version.go accounts/deepinversion.go
+    fixPath ${tzdata} /usr/share/zoneinfo timedate/zoneinfo/zone.go
+    fixPath ${dde-api} /usr/lib/deepin-api grub2/modify_manger.go accounts/image_blur.go
+    fixPath ${deepin-wallpapers} /usr/share/wallpapers appearance/background/list.go accounts/user.go
 
     sed -i -e "s|{DESTDIR}/etc|{DESTDIR}$out/etc|" Makefile
     sed -i -e "s|{DESTDIR}/var|{DESTDIR}$out/var|" Makefile
     sed -i -e "s|{DESTDIR}/lib|{DESTDIR}$out/lib|" Makefile
 
     find -type f -exec sed -i -e "s,/usr/lib/deepin-daemon,$out/lib/deepin-daemon," {} +
+
+    searchHardCodedPaths
   '';
 
   buildPhase = ''
-    make -C go/src/${goPackagePath}
     # compilation of the nm module is failing
     #make -C go/src/${goPackagePath}/network/nm_generator gen-nm-code
+    make -C go/src/${goPackagePath}
   '';
 
   installPhase = ''
     make install PREFIX="$out" -C go/src/${goPackagePath}
     remove-references-to -t ${go} $out/lib/deepin-daemon/*
+    searchHardCodedPaths $out
+  '';
+
+  postFixup = ''
+    # wrapGAppsHook does not work with binaries outside of $out/bin or $out/libexec
+    for binary in $out/lib/deepin-daemon/*; do
+      wrapProgram $binary "''${gappsWrapperArgs[@]}"
+    done
   '';
 
   passthru.updateScript = deepin.updateScript { inherit name; };

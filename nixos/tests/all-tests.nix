@@ -59,6 +59,7 @@ in
   dhparams = handleTest ./dhparams.nix {};
   dnscrypt-proxy = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy.nix {};
   docker = handleTestOn ["x86_64-linux"] ./docker.nix {};
+  docker-containers = handleTestOn ["x86_64-linux"] ./docker-containers.nix {};
   docker-edge = handleTestOn ["x86_64-linux"] ./docker-edge.nix {};
   docker-preloader = handleTestOn ["x86_64-linux"] ./docker-preloader.nix {};
   docker-registry = handleTest ./docker-registry.nix {};
@@ -113,10 +114,11 @@ in
   ipv6 = handleTest ./ipv6.nix {};
   jackett = handleTest ./jackett.nix {};
   jenkins = handleTest ./jenkins.nix {};
-  #kafka = handleTest ./kafka.nix {}; # broken since openjdk: 8u181 -> 8u192
+  kafka = handleTest ./kafka.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-latest = handleTest ./kernel-latest.nix {};
   kernel-lts = handleTest ./kernel-lts.nix {};
+  kernel-testing = handleTest ./kernel-testing.nix {};
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
   kubernetes.dns = handleTestOn ["x86_64-linux"] ./kubernetes/dns.nix {};
@@ -130,6 +132,7 @@ in
   #lightdm = handleTest ./lightdm.nix {};
   login = handleTest ./login.nix {};
   #logstash = handleTest ./logstash.nix {};
+  mailcatcher = handleTest ./mailcatcher.nix {};
   mathics = handleTest ./mathics.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
   memcached = handleTest ./memcached.nix {};
@@ -219,6 +222,8 @@ in
   switchTest = handleTest ./switch-test.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
+  systemd-confinement = handleTest ./systemd-confinement.nix {};
+  pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
   tomcat = handleTest ./tomcat.nix {};
@@ -228,6 +233,7 @@ in
   upnp = handleTest ./upnp.nix {};
   vault = handleTest ./vault.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
+  wireguard = handleTest ./wireguard {};
   wordpress = handleTest ./wordpress.nix {};
   xautolock = handleTest ./xautolock.nix {};
   xdg-desktop-portal = handleTest ./xdg-desktop-portal.nix {};

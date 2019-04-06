@@ -1,4 +1,4 @@
-{ stdenv, callPackage, vscode-utils }:
+{ stdenv, callPackage, vscode-utils, llvmPackages_8 }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -51,6 +51,20 @@ rec {
   ms-vscode.cpptools = callPackage ./cpptools {};
 
   ms-python.python = callPackage ./python {};
+
+  vscodevim.vim = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vim";
+      publisher = "vscodevim";
+      version = "1.3.0";
+      sha256 = "18z24w7smjjnv945f8qyy6dl95xckyqa6gg3gijfcigvq5sgyawc";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
   WakaTime.vscode-wakatime = callPackage ./wakatime {};
 }

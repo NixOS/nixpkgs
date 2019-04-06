@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.3";
+  version = "6.4";
   name = "quantum-espresso-${version}";
 
   src = fetchurl {
     url = "https://gitlab.com/QEF/q-e/-/archive/qe-${version}/q-e-qe-${version}.tar.gz";
-    sha256 = "1738z3nhkzcrgnhnfg1r4lipbwvcrcprwhzjbjysnylmzbzwhrs0";
+    sha256 = "1zjblzf0xzwmhmpjm56xvv8wsv5jmp5a204irzyicmd77p86c4vq";
   };
 
   passthru = {
@@ -18,12 +18,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs configure
-  '';
-
-  # remove after 6.3 version:
-  # makefile needs to ignore install directory easier than applying patch
-  preInstall = ''
-    printf "\n.PHONY: install\n" >> Makefile
   '';
 
   buildInputs = [ fftw openblas gfortran ]

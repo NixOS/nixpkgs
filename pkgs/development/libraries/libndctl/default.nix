@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     [ autoreconfHook asciidoctor pkgconfig xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+      which
     ];
 
   buildInputs =
@@ -31,7 +32,6 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     patchShebangs test
-    substituteInPlace configure.ac --replace "which" "${which}/bin/which"
 
     substituteInPlace git-version --replace /bin/bash ${stdenv.shell}
     substituteInPlace git-version-gen --replace /bin/sh ${stdenv.shell}

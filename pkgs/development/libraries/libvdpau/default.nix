@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libvdpau-${version}";
-  version = "1.1.1";
+  version = "1.2";
 
   src = fetchurl {
-    url = "https://people.freedesktop.org/~aplattner/vdpau/${name}.tar.bz2";
-    sha256 = "857a01932609225b9a3a5bf222b85e39b55c08787d0ad427dbd9ec033d58d736";
+    url = "https://gitlab.freedesktop.org/vdpau/libvdpau/uploads/14b620084c027d546fa0b3f083b800c6/${name}.tar.bz2";
+    sha256 = "6a499b186f524e1c16b4f5b57a6a2de70dfceb25c4ee546515f26073cd33fa06";
   };
 
   outputs = [ "out" "dev" ];

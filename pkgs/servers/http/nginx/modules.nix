@@ -1,5 +1,22 @@
 { fetchFromGitHub, lib, pkgs }:
 
+let
+
+  http_proxy_connect_module_generic = patchName: rec {
+    src = fetchFromGitHub {
+      owner = "chobits";
+      repo = "ngx_http_proxy_connect_module";
+      rev = "8201639082cba702211585b03d4cc7bc51c65167";
+      sha256 = "0z71x3xnlczrr2kq43w3drxj9g14fkk4jz66x921v0yb8r9mnn5a";
+    };
+
+    patches = [
+      "${src}/patch/${patchName}.patch"
+    ];
+  };
+
+in
+
 {
   brotli = {
     src = let gitsrc = pkgs.fetchFromGitHub {
@@ -317,5 +334,13 @@
       rev = "v0.1.18";
       sha256 = "1jq2s9k7hah3b317hfn9y3g1q4g4x58k209psrfsqs718a9sw8c7";
     };
+  };
+
+  http_proxy_connect_module_v15 = http_proxy_connect_module_generic "proxy_connect_rewrite_1015" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "15";
+  };
+
+  http_proxy_connect_module_v14 = http_proxy_connect_module_generic "proxy_connect_rewrite_1014" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "14";
   };
 }

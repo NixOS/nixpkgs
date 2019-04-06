@@ -19,6 +19,7 @@ let
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-extensible-records = callPackage ../development/coq-modules/coq-extensible-records {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
+      coqhammer = callPackage ../development/coq-modules/coqhammer {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
       corn = callPackage ../development/coq-modules/corn {};

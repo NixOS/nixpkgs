@@ -4,22 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pcl-1.8.1";
+  name = "pcl-1.9.1";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     rev = name;
-    sha256 = "05wvqqi2fyk5innw4mg356r71c1hmc9alc7xkf4g81ds3b3867xq";
+    sha256 = "0g0am3bf14sadfw231l5nmf5d2g1p9i7yq12c6q8rl7nw501ny9j";
   };
-
-  patches = [
-    # boost-1.67 compatibility
-    (fetchpatch {
-      url = "https://github.com/PointCloudLibrary/pcl/commit/2309bdab20fb2a385d374db6a87349199279db18.patch";
-      sha256 = "112p4687xrm0vsm0magmkvsm1hpks9hj42fm0lncy3yy2j1v3r4h";
-      name = "boost167-random.patch";
-  })];
 
   enableParallelBuilding = true;
 

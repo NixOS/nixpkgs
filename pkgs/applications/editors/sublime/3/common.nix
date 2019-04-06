@@ -1,6 +1,6 @@
 {buildVersion, x32sha256, x64sha256, dev ? false}:
 
-{ fetchurl, stdenv, glib, xorg, cairo, gtk2, gtk3, pango, makeWrapper, wrapGAppsHook, openssl, bzip2, runtimeShell,
+{ fetchurl, stdenv, glib, glibcLocales, xorg, cairo, gtk2, gtk3, pango, makeWrapper, wrapGAppsHook, openssl, bzip2, runtimeShell,
   pkexecPath ? "/run/wrappers/bin/pkexec", libredirect,
   gksuSupport ? false, gksu, unzip, zip, bash,
   writeScript, common-updater-scripts, curl, gnugrep}:
@@ -99,6 +99,7 @@ in let
       wrapProgram $out/sublime_text \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
+        --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
         ${stdenv.lib.optionalString (!legacy) ''"''${gappsWrapperArgs[@]}"''}
 
       # Without this, plugin_host crashes, even though it has the rpath

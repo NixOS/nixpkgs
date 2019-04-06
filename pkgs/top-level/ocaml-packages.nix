@@ -223,6 +223,8 @@ let
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
+    dune = callPackage ../development/tools/ocaml/dune { };
+
     earley = callPackage ../development/ocaml-modules/earley { };
 
     earley_ocaml = callPackage ../development/ocaml-modules/earley_ocaml { };
@@ -355,9 +357,7 @@ let
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
-    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 {
-      cairo2 = cairo2.override { enableGtkSupport = false; };
-    };
+    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
 
     lablgtk3-gtkspell3 = callPackage ../development/ocaml-modules/lablgtk3/gtkspell3.nix { };
 
@@ -380,6 +380,8 @@ let
     };
 
     labltk = callPackage ../development/ocaml-modules/labltk { };
+
+    lacaml = callPackage ../development/ocaml-modules/lacaml { };
 
     lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { lwt = lwt2; };
     lambdaTerm =
@@ -1057,9 +1059,7 @@ let
       enableX11 = config.unison.enableX11 or true;
     };
 
-    hol_light = callPackage ../applications/science/logic/hol_light {
-      camlp5 = callPackage ../development/tools/ocaml/camlp5 { legacy = true; };
-    };
+    hol_light = callPackage ../applications/science/logic/hol_light { };
 
   })).overrideScope' liftJaneStreet;
 

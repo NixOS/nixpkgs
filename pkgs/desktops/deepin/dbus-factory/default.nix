@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     go-dbus-generator
   ];
 
-  makeFlags = [ "GOPATH=$(out)/share/go" ];
+  makeFlags = [ "GOPATH=${placeholder ''out''}/share/go" ];
 
   postPatch = ''
     sed -i -e 's:/share/gocode:/share/go:' Makefile

@@ -4,22 +4,14 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "go-gir-generator";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0grp4ffy3vmlknzmymnxq1spwshff2ylqsw82pj4y2v2fcvnqfvb";
+    sha256 = "0d93qzp3dlia5d1yxw0rwca76qk3jyamj9xzmk13vzig8zw0jx16";
   };
-
-  patches = [
-    # fix: dde-api build error with gobject-introspection 1.58+
-    (fetchurl {
-      url = https://github.com/linuxdeepin/go-gir-generator/commit/a7ab229201e28d1be727f5021b3588fa4a1acf5f.patch;
-      sha256 = "13ywalwkjg8wwvd0pvmc2rv1h38airyvimdn9jfb5wis9xm48401";
-    })
-  ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -36,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder ''out''}"
     "GOCACHE=$(TMPDIR)/go-cache"
   ];
 

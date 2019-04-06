@@ -5,7 +5,8 @@
 , enableGhostscript ? false, ghostscript ? null, gtk3
 , enableGtk2 ? false, pygtk ? null, gobject-introspection
 , enableGtk3 ? false, cairo
-, enableTk ? false, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
+# darwin has its own "MacOSX" backend
+, enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
 , enableQt ? false, pyqt4
 , libcxx
 , Cocoa

@@ -44,19 +44,7 @@ let
     }
   ''));
 
-  awkFormat = builtins.toFile "awkFormat-nginx.awk" ''
-    awk -f
-    {sub(/^[ \t]+/,"");idx=0}
-    /\{/{ctx++;idx=1}
-    /\}/{ctx--}
-    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
-  '';
-
-  configFile = pkgs.runCommand "nginx.conf" {} (''
-    awk -f ${awkFormat} ${pre-configFile} | sed '/^\s*$/d' > $out
-  '');
-
-  pre-configFile = pkgs.writeText "pre-nginx.conf" ''
+  configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log ${cfg.logError};
     daemon off;
@@ -276,6 +264,7 @@ let
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
       ${optionalString (config.alias != null) "alias ${config.alias};"}
+      ${optionalString (config.return != null) "return ${config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
@@ -373,7 +362,7 @@ in
       preStart =  mkOption {
         type = types.lines;
         default = ''
-          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs  
+          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs
           test `stat -c %a ${cfg.stateDir}` = "750" || chmod 750 ${cfg.stateDir}
           test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
           chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}

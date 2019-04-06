@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoPatchelfHook, makeWrapper
 , alsaLib, xorg
-, gnome3, pango, gdk_pixbuf, cairo, glib, freetype
+, gnome3, gtk3, pango, gdk_pixbuf, cairo, glib, freetype
 , libpulseaudio, xdg_utils
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    gnome3.gtk
+    gtk3
   ];
 
   dontBuild = true;

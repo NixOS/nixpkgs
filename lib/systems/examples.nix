@@ -102,6 +102,11 @@ rec {
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
+  msp430 = {
+    config = "msp430-elf";
+    libc = "newlib";
+  };
+
   avr = {
     config = "avr";
   };
@@ -211,5 +216,12 @@ rec {
     config = "x86_64-pc-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
+  };
+
+  # BSDs
+
+  amd64-netbsd = {
+    config = "x86_64-unknown-netbsd";
+    libc = "nblibc";
   };
 }

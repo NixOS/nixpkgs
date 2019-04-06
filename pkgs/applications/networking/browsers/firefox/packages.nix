@@ -4,16 +4,23 @@ let
 
   common = opts: callPackage (import ./common.nix opts) {};
 
+  # Needed on older branches since rustc: 1.32.0 -> 1.33.0
+  missing-documentation-patch = fetchurl {
+    name = "missing-documentation.patch";
+    url = "https://aur.archlinux.org/cgit/aur.git/plain/deny_missing_docs.patch"
+        + "?h=firefox-esr&id=03bdd01f9cf";
+    sha256 = "1i33n3fgwc8d0v7j4qn7lbdax0an6swar12gay3q2nwrhg3ic4fb";
+  };
 in
 
 rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "66.0";
+    ffversion = "66.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "1izxikivz0jb8kzq4cd040a70s3j83nw324yvvbmi7g808s7s6b8ljia5allbrkqcgrvrx3rq4w09kwffwmwd43jxgc1bfl8af3v8d9";
+      sha512 = "1dzqzigrwb7q75zlyd74ncic3b39yvziccpgbzh7881lzshj7x6f2r6ssj8ssdkh8lm2ckhjzbn6pf44vlh8ciql9bxb8g8sjpg6ii2";
     };
 
     patches = [
@@ -62,10 +69,10 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.6.0esr";
+    ffversion = "60.6.1esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "14vymgczx37q3yj8ndxq6wmmachaf08kx6n3wgjd0qqg5xr18abns999f7ng51abnfrribkrpzmn22vc061sm6wldszawwq6w5r2lg4";
+      sha512 = "3nl3cisn1sw3y6dxnv0bm143dpp091h1s9j7g73qfx5s6sfxl832lan177ikm00ay7fsly251vi1xz17wwicch1himsmhjisnd3ws51";
     };
 
     patches = [
@@ -74,6 +81,8 @@ rec {
       # this one is actually an omnipresent bug
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
       ./fix-pa-context-connect-retval.patch
+
+      missing-documentation-patch
     ];
 
     meta = firefox.meta // {
@@ -139,6 +148,7 @@ in rec {
 
     patches = [
       ./no-buildconfig.patch
+      missing-documentation-patch
     ];
   };
 
@@ -232,17 +242,21 @@ in rec {
   };
 
   tor-browser-8-0 = tbcommon rec {
-    ffversion = "60.5.1esr";
-    tbversion = "8.0.6";
+    ffversion = "60.6.1esr";
+    tbversion = "8.0.8";
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-60.5.1esr-8.0-1-slnos"
-      rev   = "89be91fc7cbc420b7c4a3bfc36d2b0d500dd3ccf";
-      sha256 = "022zjfwsdl0dkg6ck2kha4nf91xm3j9ag5n21zna98szg3x82dj1";
+      # branch "tor-browser-60.6.1esr-8.0-1-slnos"
+      rev   = "dda14213c550afc522ef0bb0bb1643289c298736";
+      sha256 = "0lj79nczcix9mx6d0isbizg0f8apf6vgkp7r0q7id92691frj7fz";
     };
+
+    patches = [
+      missing-documentation-patch
+    ];
   };
 
   tor-browser = tor-browser-8-0;

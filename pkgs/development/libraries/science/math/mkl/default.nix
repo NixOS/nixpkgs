@@ -6,19 +6,19 @@
 stdenvNoCC.mkDerivation rec {
   name = "mkl-${version}";
   version = "${date}.${rel}";
-  date = "2019.0";
-  rel = "117";
+  date = "2019.3";
+  rel = "199";
 
   src = if stdenvNoCC.isDarwin
     then
       (fetchurl {
-        url = "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13565/m_mkl_${version}.dmg";
-        sha256 = "1f1jppac7vqwn00hkws0p4njx38ajh0n25bsjyb5d7jcacwfvm02";
+        url = "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15235/m_mkl_${version}.dmg";
+        sha256 = "14b3ciz7995sqcd6jz7hc8g2x4zwvqxmgxgni46vrlb7n523l62f";
       })
     else
       (fetchurl {
-        url = "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13575/l_mkl_${version}.tgz";
-        sha256 = "1bf7i54iqlf7x7fn8kqwmi06g30sxr6nq3ac0r871i6g0p3y47sf";
+        url = "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15275/l_mkl_${version}.tgz";
+        sha256 = "13rb2v2872jmvzcqm4fqsvhry0j2r5cn4lqql4wpqbl1yia2pph6";
       });
 
   buildInputs = if stdenvNoCC.isDarwin then [ undmg ] else [ rpmextract ];
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
   '' else ''
     rpmextract rpm/intel-mkl-common-c-${date}-${rel}-${date}-${rel}.noarch.rpm
     rpmextract rpm/intel-mkl-core-rt-${date}-${rel}-${date}-${rel}.x86_64.rpm
-    rpmextract rpm/intel-openmp-19.0.0-${rel}-19.0.0-${rel}.x86_64.rpm
+    rpmextract rpm/intel-openmp-19.0.3-${rel}-19.0.3-${rel}.x86_64.rpm
   '';
 
   installPhase = if stdenvNoCC.isDarwin then ''
@@ -60,8 +60,8 @@ stdenvNoCC.mkDerivation rec {
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = if stdenvNoCC.isDarwin
-    then "00d49ls9vcjan1ngq2wx2q4p6lnm05zwh67hsmj7bnq43ykrfibw"
-    else "1amagcaan0hk3x9v7gg03gkw02n066v4kmjb32yyzsy5rfrivb1a";
+    then "0rwm46v9amq2clm6wxhr98zzbafr485dz05pihlqsbrbabmlfw30"
+    else "101krzh2mjbfx8kvxim2zphdvgg7iijhbf9xdz3ad3ncgybxbdvw";
 
   meta = with stdenvNoCC.lib; {
     description = "Intel Math Kernel Library";

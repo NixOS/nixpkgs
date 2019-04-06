@@ -30,6 +30,13 @@ let newPython = python3.override {
         sha256 = "1fyybgbmlr8ms32j7h76hz5g9xc6nf0644mwhc40a0s5k14makav";
       };
     });
+    pluginbase = super.pluginbase.overridePythonAttrs (oldAttrs: rec {
+      version = "0.7";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "c0abe3218b86533cca287e7057a37481883c07acef7814b70583406938214cc8";
+      };
+    });
   };
 };
 

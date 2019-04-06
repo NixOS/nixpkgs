@@ -381,7 +381,7 @@ in {
       enableACME = false;
       sslCertificate = siteCertFile;
       sslCertificateKey = siteKeyFile;
-      locations.${tosPath}.extraConfig = "alias ${tosFile};";
+      locations."= ${tosPath}".alias = tosFile;
     };
 
     systemd.services = {

@@ -1,14 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols2, curaengine }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols2, qtgraphicaleffects, curaengine }:
 
 mkDerivation rec {
   name = "cura-${version}";
-  version = "3.6.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "0wzkbqdd1670smw1vnq634rkpcjwnhwcvimhvjq904gy2fylgr90";
+    sha256 = "18pxlmrw8m2mir177f0j9bma7rk29vam91gd86c0d458nw21q2qf";
   };
 
   materials = fetchFromGitHub {
@@ -18,7 +18,7 @@ mkDerivation rec {
     sha256 = "0g2dkph0ll7d9109n17vmfwb4fpc8lhyb1z1q68j8vblyvg08d12";
   };
 
-  buildInputs = [ qtbase qtquickcontrols2 ];
+  buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
   propagatedBuildInputs = with python3.pkgs; [
     libsavitar numpy-stl pyserial requests uranium zeroconf
   ];
@@ -27,6 +27,12 @@ mkDerivation rec {
   cmakeFlags = [
     "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
     "-DCURA_VERSION=${version}"
+
+    # see https://github.com/Ultimaker/Cura/issues/5142
+    "-DCURA_SDK_VERSION=6.0.0"
+
+    # remove after 4.0.0, see https://github.com/void-linux/void-packages/pull/9880#issuecomment-475453025
+    "-DCURA_CLOUD_API_VERSION=1"
   ];
 
   postPatch = ''

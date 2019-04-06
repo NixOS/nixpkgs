@@ -251,8 +251,10 @@ stdenv.mkDerivation rec {
   # and wants these
   ++ lib.optionals isTorBrowserLike ([
     "--with-tor-browser-version=${tbversion}"
+    "--with-distribution-id=org.torproject"
     "--enable-signmar"
     "--enable-verify-mar"
+    "--enable-bundled-fonts"
   ])
 
   ++ flag alsaSupport "alsa"

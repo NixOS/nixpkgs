@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "bf8634c3fd6309ef786ec03b913a5366163fdb094ebcfdebc35626400d790e0d";
   };
 
-  buildInputs = [ setuptools_scm pytest ];
+  nativeBuildInputs = [ setuptools_scm pytest ];
   checkInputs = [ pytest-mock ];
   propagatedBuildInputs = lib.optional (pythonOlder "3.0") faulthandler;
 

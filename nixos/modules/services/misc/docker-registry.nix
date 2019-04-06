@@ -14,9 +14,10 @@ let
     log.fields.service = "registry";
     storage = {
       cache.blobdescriptor = blobCache;
-      filesystem.rootdirectory = cfg.storagePath;
       delete.enabled = cfg.enableDelete;
-    };
+    } // (if cfg.storagePath != null
+          then { filesystem.rootdirectory = cfg.storagePath; }
+          else {});
     http = {
       addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
@@ -61,9 +62,12 @@ in {
     };
 
     storagePath = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
       default = "/var/lib/docker-registry";
-      description = "Docker registry storage path.";
+      description = ''
+        Docker registry storage path for the filesystem storage backend. Set to
+        null to configure another backend via extraConfig.
+      '';
     };
 
     enableDelete = mkOption {
@@ -140,9 +144,12 @@ in {
       startAt = optional cfg.enableGarbageCollect cfg.garbageCollectDates;
     };
 
-    users.users.docker-registry = {
-      createHome = true;
-      home = cfg.storagePath;
-    };
+    users.users.docker-registry =
+      if cfg.storagePath != null
+      then {
+        createHome = true;
+        home = cfg.storagePath;
+      }
+      else {};
   };
 }
