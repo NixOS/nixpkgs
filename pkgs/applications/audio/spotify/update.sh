@@ -29,7 +29,7 @@ spotify_nix="$nixpkgs/pkgs/applications/audio/spotify/default.nix"
 
 # create bash array from snap info
 snap_info=($(
-  curl -H 'X-Ubuntu-Series: 16' \
+  curl -s -H 'X-Ubuntu-Series: 16' \
     "https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=$channel" \
   | jq --raw-output \
     '.revision,.download_sha512,.version,.last_updated'
@@ -61,7 +61,7 @@ echo "Current nix version: $current_nix_version"
 #
 
 if [[ "$current_nix_version" = "$upstream_version" ]]; then
-  echo "Spotify is already up ot date"
+  echo "Spotify is already up-to-date"
   exit 0
 fi
 
