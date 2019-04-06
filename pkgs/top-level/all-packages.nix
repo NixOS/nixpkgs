@@ -20070,6 +20070,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  vdirsyncerStable = callPackage ../tools/misc/vdirsyncer/stable.nix { };
+
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
   verbiste = callPackage ../applications/misc/verbiste {
