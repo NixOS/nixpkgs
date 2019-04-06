@@ -153,9 +153,7 @@ let
 
     cohttp =
       if lib.versionOlder "4.03" ocaml.version
-      then callPackage ../development/ocaml-modules/cohttp {
-        base64 = base64_2;
-      }
+      then callPackage ../development/ocaml-modules/cohttp { }
       else cohttp_p4;
 
     cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
