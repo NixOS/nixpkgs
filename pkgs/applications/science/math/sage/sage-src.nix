@@ -144,6 +144,13 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch/?id=f570e3a7fc2965764b84c04ce301a88ded2c42df";
       sha256 = "0l5c4giixkn15v2a06sfzq5mkxila6l67zkjbacirwprrlpcnmmp";
     })
+
+    # https://trac.sagemath.org/ticket/27420
+    (fetchpatch {
+      name = "cypari-2.1.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=e351bf2f2914e683d5e2028597c45ae8d1b7f855";
+      sha256 = "00faa7fl0vaqcqbw0bidkhl78qa8l34d3a07zirbcl0vm74bdn1p";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
