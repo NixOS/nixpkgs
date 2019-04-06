@@ -217,4 +217,11 @@ rec {
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
   };
+
+  # BSDs
+
+  amd64-netbsd = {
+    config = "x86_64-unknown-netbsd";
+    libc = "nblibc";
+  };
 }
