@@ -12,6 +12,7 @@
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
 , pkgs
 , fetchgit
+, overrides ? (self: super: {})
 , lib
 }:
 
@@ -866,4 +867,4 @@ with self; {
   });
 
 });
-in packages
+in (lib.extends overrides packages)
