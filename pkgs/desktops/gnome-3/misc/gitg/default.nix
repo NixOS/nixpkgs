@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , fetchpatch
-, vala
+, vala_0_42
 , intltool
 , pkgconfig
 , gtk3
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    vala
+    vala_0_42 # fails build with 0.44, drop in >3.30.1
     wrapGAppsHook
   ];
 
