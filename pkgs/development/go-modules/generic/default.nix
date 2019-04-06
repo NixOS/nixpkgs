@@ -10,6 +10,10 @@
 # modSha256 is the sha256 of the vendored dependencies
 , modSha256
 
+# Additional attributes for the modules derivation. Can be used to set
+# hooks.
+, modAttrs ? {}
+
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
@@ -27,13 +31,13 @@
 with builtins;
 
 let
-  args = removeAttrs args' [ "modSha256" "disabled" ];
+  args = removeAttrs args' [ "modSha256" "disabled" "modAttrs" ];
 
   removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
-  go-modules = go.stdenv.mkDerivation {
+  go-modules = go.stdenv.mkDerivation ({
     name = "${name}-go-modules";
 
     nativeBuildInputs = [ go git cacert ];
@@ -78,7 +82,12 @@ let
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     outputHash = modSha256;
-  };
+  }
+    // (lib.optionalAttrs (args ? sourceRoot) {
+      inherit (args) sourceRoot;
+    })
+    // modAttrs
+  );
 
   package = go.stdenv.mkDerivation (args // {
     nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;
