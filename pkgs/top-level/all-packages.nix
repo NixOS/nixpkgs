@@ -5017,6 +5017,8 @@ in
 
   prototypejs = callPackage ../development/libraries/prototypejs { };
 
+  proxmark3 = callPackage ../tools/security/proxmark3 { };
+
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
