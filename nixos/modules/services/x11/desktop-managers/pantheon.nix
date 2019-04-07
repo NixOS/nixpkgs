@@ -70,6 +70,12 @@ in
 
     # Ensure lightdm is used when Pantheon is enabled
     # Without it screen locking will be nonfunctional because of the use of lightlocker
+
+    warnings = optional (config.services.xserver.displayManager.lightdm.enable != true)
+      ''
+        Using Pantheon without LightDM as a displayManager will break screenlocking from the UI.
+      '';
+
     services.xserver.displayManager.lightdm.enable = mkDefault true;
     services.xserver.displayManager.lightdm.greeters.gtk.enable = mkDefault true;
 
