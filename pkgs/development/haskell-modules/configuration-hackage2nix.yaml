@@ -8230,6 +8230,8 @@ broken-packages:
   - sai-shape-syb
   - sajson
   - salak
+  - salak-toml
+  - salak-yaml
   - Salsa
   - saltine-quickcheck
   - salvia
