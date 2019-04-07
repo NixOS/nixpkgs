@@ -3740,8 +3740,6 @@ in {
 
   pyblock = callPackage ../development/python-modules/pyblock { };
 
-  pybcrypt = callPackage ../development/python-modules/pybcrypt { };
-
   pyblosxom = callPackage ../development/python-modules/pyblosxom { };
 
   pycapnp = callPackage ../development/python-modules/pycapnp { };
