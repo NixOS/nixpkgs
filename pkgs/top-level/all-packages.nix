@@ -10746,6 +10746,8 @@ in
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
+  lib3mf = callPackage ../development/libraries/lib3mf { };
+
   libaacs = callPackage ../development/libraries/libaacs { };
 
   libaal = callPackage ../development/libraries/libaal { };
