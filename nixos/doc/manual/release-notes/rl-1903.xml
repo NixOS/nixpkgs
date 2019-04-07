@@ -480,14 +480,6 @@
    </listitem>
    <listitem>
     <para>
-     The ibus-table input method has had a change in config format, which
-     causes all previous settings to be lost. See
-     <link xlink:href="https://github.com/mike-fabian/ibus-table/commit/f9195f877c5212fef0dfa446acb328c45ba5852b">this
-     commit message</link> for details.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      NixOS module system type <literal>types.optionSet</literal> and
      <literal>lib.mkOption</literal> argument <literal>options</literal> are
      deprecated. Use <literal>types.submodule</literal> instead.
