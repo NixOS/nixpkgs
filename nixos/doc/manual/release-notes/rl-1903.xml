@@ -325,7 +325,7 @@
    <listitem>
     <para>
      The versioned <varname>postgresql</varname> have been renamed to use
-     underscore number seperators. For example, <varname>postgresql96</varname>
+     underscore number separators. For example, <varname>postgresql96</varname>
      has been renamed to <varname>postgresql_9_6</varname>.
     </para>
    </listitem>
@@ -480,7 +480,7 @@
      account module verification was exited prematurely in case a nss module
      provided the account name to <literal>pam_unix</literal>. The LDAP and
      SSSD NixOS modules already add their NSS modules when enabled. In case
-     your setup breaks due to some later PAM account module previosuly
+     your setup breaks due to some later PAM account module previously
      shadowed, or failing NSS lookups, please file a bug. You can get back the
      old behaviour by manually setting <literal>
 <![CDATA[security.pam.services.<name?>.text]]>
@@ -733,7 +733,7 @@
    </listitem>
    <listitem>
     <para>
-     Note that the default value of
+     The default value of
      <varname>services.kubernetes.apiserver.bindAddress</varname> has changed
      from 127.0.0.1 to 0.0.0.0, allowing the apiserver to be accessible from
      outside the master node itself. If the apiserver insecurePort is enabled,
@@ -751,7 +751,7 @@
    </listitem>
    <listitem>
     <para>
-     The kubernetes module does no longer add the kubernetes package to
+     The kubernetes module no longer adds the kubernetes package to
      <varname>environment.systemPackages</varname> implicitly.
     </para>
    </listitem>
@@ -762,16 +762,17 @@
      drivers</link>. The <literal>modesetting</literal> driver should take over
      automatically, it is better maintained upstream and has less problems with
      advanced X11 features. This can lead to a change in the output names used
-     by <literal>xrandr</literal>. Some performance regressions on some GPU
+     by <command>xrandr</command>. Some performance regressions on some GPU
      models might happen. Some OpenCL and VA-API applications might also break
      (Beignet seems to provide OpenCL support with
      <literal>modesetting</literal> driver, too). Kernel mode setting API does
-     not support backlight control, so <literal>xbacklight</literal> tool will
+     not support backlight control, so <command>xbacklight</command> tool will
      not work; backlight level can be controlled directly via
-     <literal>/sys/</literal> or with <literal>brightnessctl</literal>. Users
+     <filename>/sys/</filename> or with <command>brightnessctl</command> or
+     <command>light</command>. Users
      who need this functionality more than multi-output XRandR are advised to
-     add `intel` to `videoDrivers` and report an issue (or provide additional
-     details in an existing one)
+     add <literal>intel</literal> to <varname>videoDrivers</varname> and report
+     an issue (or provide additional details in an existing one).
     </para>
    </listitem>
    <listitem>
@@ -781,6 +782,8 @@
      those symbols. An upgrade guide can be found
      <link xlink:href="https://www.open-mpi.org/faq/?category=mpi-removed">here</link>.
     </para>
+   </listitem>
+   <listitem>
     <para>
      The nginx package now relies on OpenSSL 1.1 and supports TLS 1.3 by
      default. You can set the protocols used by the nginx service using
