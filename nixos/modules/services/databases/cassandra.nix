@@ -8,6 +8,7 @@ let
   cassandraConfig = flip recursiveUpdate cfg.extraConfig
     ({ commitlog_sync = "batch";
        commitlog_sync_batch_window_in_ms = 2;
+       start_native_transport = cfg.allowClients;
        partitioner = "org.apache.cassandra.dht.Murmur3Partitioner";
        endpoint_snitch = "SimpleSnitch";
        seed_provider =
@@ -160,6 +161,18 @@ in {
       '';
       description = ''
         XML logback configuration for cassandra
+      '';
+    };
+    allowClients = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Enables or disables the native transport server (CQL binary protocol).
+        This server uses the same address as the <literal>rpcAddress</literal>,
+        but the port it uses is not <literal>rpc_port</literal> but
+        <literal>native_transport_port</literal>. See the official Cassandra
+        docs for more information on these variables and set them using
+        <literal>extraConfig</literal>.
       '';
     };
     extraConfig = mkOption {
