@@ -13,7 +13,7 @@ let
        endpoint_snitch = "SimpleSnitch";
        seed_provider =
          [{ class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
-            parameters = [ { seeds = "127.0.0.1"; } ];
+            parameters = [ { seeds = concatStringsSep "," cfg.seedAddresses; } ];
          }];
        data_file_directories = [ "${cfg.homeDir}/data" ];
        commitlog_directory = "${cfg.homeDir}/commitlog";
@@ -161,6 +161,16 @@ in {
       '';
       description = ''
         XML logback configuration for cassandra
+      '';
+    };
+    seedAddresses = mkOption {
+      type = types.listOf types.str;
+      default = [ "127.0.0.1" ];
+      description = ''
+        The addresses of hosts designated as contact points in the cluster. A
+        joining node contacts one of the nodes in the seeds list to learn the
+        topology of the ring.
+        Set to 127.0.0.1 for a single node cluster.
       '';
     };
     allowClients = mkOption {
