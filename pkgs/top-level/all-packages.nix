@@ -12613,6 +12613,8 @@ in
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
 
+  patchwork = callPackage ../applications/social/patchwork { };
+
   qradiolink = callPackage ../applications/radio/qradiolink { };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
