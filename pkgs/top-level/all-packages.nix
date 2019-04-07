@@ -167,6 +167,8 @@ in
 
   dockerTools = callPackage ../build-support/docker { };
 
+  nix-prefetch-docker = callPackage ../build-support/docker/nix-prefetch-docker.nix { };
+
   docker-compose = python3Packages.callPackage ../applications/virtualization/docker-compose {};
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
@@ -4044,6 +4046,8 @@ in
 
   latex2html = callPackage ../tools/misc/latex2html { };
 
+  latexrun = callPackage ../tools/typesetting/tex/latexrun { };
+
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns {
@@ -5117,6 +5121,8 @@ in
   proot = callPackage ../tools/system/proot { };
 
   prototypejs = callPackage ../development/libraries/prototypejs { };
+
+  proxmark3 = callPackage ../tools/security/proxmark3 { };
 
   proxychains = callPackage ../tools/networking/proxychains { };
 
@@ -6867,15 +6873,7 @@ in
 
   cpp-gsl = callPackage ../development/libraries/cpp-gsl { };
 
-  # Users installing via `nix-env` will likely be using the REPL,
-  # which has a hard dependency on Z3, so make sure it is available.
-  cryptol = haskellPackages.cryptol.overrideDerivation (oldAttrs: {
-    buildInputs = (oldAttrs.buildInputs or []) ++ [ makeWrapper ];
-    installPhase = (oldAttrs.installPhase or "") + ''
-      wrapProgram $out/bin/cryptol \
-        --prefix 'PATH' ':' "${lib.getBin z3}/bin"
-    '';
-  });
+  cryptol = haskell.lib.justStaticExecutables haskellPackages.cryptol;
 
   inherit (callPackages ../development/compilers/crystal {})
     crystal_0_25
@@ -16191,6 +16189,7 @@ in
   maligned = callPackage ../development/tools/maligned { };
 
   inter-ui = callPackage ../data/fonts/inter-ui { };
+  inter = callPackage ../data/fonts/inter { };
 
   siji = callPackage ../data/fonts/siji { };
 
@@ -16804,6 +16803,8 @@ in
   ctop = callPackage ../tools/system/ctop { };
 
   cuneiform = callPackage ../tools/graphics/cuneiform {};
+
+  curseradio = callPackage ../applications/audio/curseradio { };
 
   cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
 
@@ -21614,6 +21615,7 @@ in
     sound-output-device-chooser = callPackage ../desktops/gnome-3/extensions/sound-output-device-chooser { };
     system-monitor = callPackage ../desktops/gnome-3/extensions/system-monitor { };
     taskwhisperer = callPackage ../desktops/gnome-3/extensions/taskwhisperer { };
+    tilingnome = callPackage ../desktops/gnome-3/extensions/tilingnome { };
     timepp = callPackage ../desktops/gnome-3/extensions/timepp { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
     window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
@@ -21809,6 +21811,8 @@ in
   };
 
   kallisto = callPackage ../applications/science/biology/kallisto { };
+
+  migrate = callPackage ../applications/science/biology/migrate { };
 
   mirtk = callPackage ../development/libraries/science/biology/mirtk { };
 

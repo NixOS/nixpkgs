@@ -52,13 +52,14 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./gsd.patch;
-      elementary-settings-daemon = "${elementary-settings-daemon}/libexec";
+      elementary_settings_daemon = "${elementary-settings-daemon}/libexec/";
     })
     (substituteAll {
       src = ./numlockx.patch;
       inherit numlockx;
     })
     ./01-sysconfdir-install.patch
+    ./hardcode-theme.patch
   ];
 
   mesonFlags = [
@@ -70,9 +71,6 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # GTK+ reads default settings (such as icons and themes) from elementary's settings.ini here
-      --prefix XDG_CONFIG_DIRS : "${elementary-default-settings}/etc"
-
       # dbus-launch needed in path
       --prefix PATH : "${dbus}/bin"
 

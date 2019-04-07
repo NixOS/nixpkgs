@@ -2773,6 +2773,11 @@
     github = "lucas8";
     name = "Luc Chabassier";
   };
+  lucus16 = {
+    email = "lars.jellema@gmail.com";
+    github = "Lucus16";
+    name = "Lars Jellema";
+  };
   ludo = {
     email = "ludo@gnu.org";
     github = "civodul";
@@ -3518,6 +3523,11 @@
     email = "owen@olynch.me";
     github = "olynch";
     name = "Owen Lynch";
+  };
+  omnipotententity = {
+    email = "omnipotententity@gmail.com";
+    github = "omnipotententity";
+    name = "Michael Reilly";
   };
   OPNA2608 = {
     email = "christoph.neidahl@gmail.com";

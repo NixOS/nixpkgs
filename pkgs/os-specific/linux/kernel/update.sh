@@ -56,7 +56,7 @@ ls $NIXPKGS/pkgs/os-specific/linux/kernel | while read FILE; do
 
   # Commit the changes
   git add -u $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
-  git commit -m "kernel: $OLDVER -> $V" >/dev/null 2>&1
+  git commit -m "linux: $OLDVER -> $V" >/dev/null 2>&1
 
   echo "Updated $OLDVER -> $V"
 done

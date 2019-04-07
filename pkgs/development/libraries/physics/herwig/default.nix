@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "herwig-${version}";
-  version = "7.1.4";
+  version = "7.1.5";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    sha256 = "1awr1jz0q873x8bgwiilzklhk1zkgm6slvpychpnvsf9vk05mmdx";
+    sha256 = "0jnrv59zfa41gc37pqr3vaiz5jkh7w0k0alcax37b3mlbsnacr9r";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ++ (with lhapdf.pdf_sets; [ MMHT2014lo68cl MMHT2014nlo68cl ]);
 
   postPatch = ''
-    patchShebangs ./cat_with_cpplines
+    patchShebangs ./
   '';
 
   configureFlags = [
