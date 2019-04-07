@@ -40,8 +40,11 @@ let
         mkdir -p "$out"
 
         echo "$cassandraYaml" > "$out/cassandra.yaml"
-        ln -s "$cassandraEnvPkg" "$out/cassandra-env.sh"
         ln -s "$cassandraLogbackConfig" "$out/logback.xml"
+
+        cp "$cassandraEnvPkg" "$out/cassandra-env.sh"
+        # Delete default JMX Port, otherwise we can't set it using env variable
+        sed -i '/JMX_PORT="7199"/d' "$out/cassandra-env.sh"
       '';
     };
 in {
@@ -237,19 +240,90 @@ in {
           Options passed through to the incremental repair command.
         '';
     };
+    maxHeapSize = mkOption {
+      type = types.nullOr types.string;
+      default = null;
+      example = "4G";
+      description = ''
+        Must be left blank or set together with heapNewSize.
+        If left blank a sensible value for the available amount of RAM and CPU
+        cores is calculated.
+
+        Override to set the amount of memory to allocate to the JVM at
+        start-up. For production use you may wish to adjust this for your
+        environment. MAX_HEAP_SIZE is the total amount of memory dedicated
+        to the Java heap. HEAP_NEWSIZE refers to the size of the young
+        generation.
+
+        The main trade-off for the young generation is that the larger it
+        is, the longer GC pause times will be. The shorter it is, the more
+        expensive GC will be (usually).
+      '';
+    };
+    heapNewSize = mkOption {
+      type = types.nullOr types.string;
+      default = null;
+      example = "800M";
+      description = ''
+        Must be left blank or set together with heapNewSize.
+        If left blank a sensible value for the available amount of RAM and CPU
+        cores is calculated.
+
+        Override to set the amount of memory to allocate to the JVM at
+        start-up. For production use you may wish to adjust this for your
+        environment. HEAP_NEWSIZE refers to the size of the young
+        generation.
+
+        The main trade-off for the young generation is that the larger it
+        is, the longer GC pause times will be. The shorter it is, the more
+        expensive GC will be (usually).
+
+        The example HEAP_NEWSIZE assumes a modern 8-core+ machine for decent pause
+        times. If in doubt, and if you do not particularly want to tweak, go with
+        100 MB per physical CPU core.
+      '';
+    };
+    mallocArenaMax = mkOption {
+      type = types.nullOr types.int;
+      default = null;
+      example = 4;
+      description = ''
+        Set this to control the amount of arenas per-thread in glibc.
+      '';
+    };
+    remoteJmx = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Cassandra ships with JMX accessible *only* from localhost.
+        To enable remote JMX connections set to true.
+
+        Be sure to also enable authentication and/or TLS.
+        See: https://wiki.apache.org/cassandra/JmxSecurity
+      '';
+    };
+    jmxPort = mkOption {
+      type = types.int;
+      default = 7199;
+      description = ''
+        Specifies the default port over which Cassandra will be available for
+        JMX connections.
+        For security reasons, you should not expose this port to the internet.
+        Firewall it if needed.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     assertions =
-      [ { assertion =
-          (cfg.listenAddress == null || cfg.listenInterface == null)
-          && !(cfg.listenAddress == null && cfg.listenInterface == null);
+      [ { assertion = (cfg.listenAddress == null) != (cfg.listenInterface == null);
           message = "You have to set either listenAddress or listenInterface";
         }
-        { assertion =
-          (cfg.rpcAddress == null || cfg.rpcInterface == null)
-          && !(cfg.rpcAddress == null && cfg.rpcInterface == null);
+        { assertion = (cfg.rpcAddress == null) != (cfg.rpcInterface == null);
           message = "You have to set either rpcAddress or rpcInterface";
+        }
+        { assertion = (cfg.maxHeapSize == null) == (cfg.heapNewSize == null);
+          message = "If you set either of maxHeapSize or heapNewSize you have to set both";
         }
       ];
     users = mkIf (cfg.user == defaultUser) {
@@ -269,6 +343,11 @@ in {
         environment =
           { CASSANDRA_CONF = "${cassandraEtc}";
             JVM_OPTS = builtins.concatStringsSep " " cfg.jvmOpts;
+            MAX_HEAP_SIZE = toString cfg.maxHeapSize;
+            HEAP_NEWSIZE = toString cfg.heapNewSize;
+            MALLOC_ARENA_MAX = toString cfg.mallocArenaMax;
+            LOCAL_JMX = if cfg.remoteJmx then "no" else "yes";
+            JMX_PORT = toString cfg.jmxPort;
           };
         wantedBy = [ "multi-user.target" ];
         serviceConfig =
