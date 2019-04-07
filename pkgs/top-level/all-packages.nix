@@ -8877,6 +8877,8 @@ in
 
   pmd = callPackage ../development/tools/analysis/pmd { };
 
+  pmdk = callPackage ../development/libraries/pmdk { };
+
   jdepend = callPackage ../development/tools/analysis/jdepend { };
 
   fedpkg = pythonPackages.callPackage ../development/tools/fedpkg { };
