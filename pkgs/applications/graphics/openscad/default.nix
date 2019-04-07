@@ -1,30 +1,27 @@
 { stdenv, fetchFromGitHub, qt5, libsForQt5
 , bison, flex, eigen, boost, libGLU_combined, glew, opencsg, cgal
 , mpfr, gmp, glib, pkgconfig, harfbuzz, gettext, freetype, fontconfig
+, double-conversion, lib3mf, libzip
 }:
 
 stdenv.mkDerivation rec {
-  version = "2018.04-git";
-  name = "openscad-${version}";
+  pname = "openscad";
+  version = "2019.05";
 
-#  src = fetchurl {
-#    url = "http://files.openscad.org/${name}.src.tar.gz";
-#    sha256 = "0djsgi9yx1nxr2gh1kgsqw5vrbncp8v5li0p1pp02higqf1psajx";
-#  };
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "179074dff8c23cbc0e651ce8463737df0006f4ca";
-    sha256 = "1y63yqyd0v255liik4ff5ak6mj86d8d76w436x76hs5dk6jgpmfb";
+    rev = "${pname}-${version}";
+    sha256 = "1qz384jqgk75zxk7sqd22ma9pyd94kh4h6a207ldx7p9rny6vc5l";
   };
 
-  nativeBuildInputs = [ bison flex pkgconfig ];
+  nativeBuildInputs = [ bison flex pkgconfig gettext qt5.qmake ];
 
   buildInputs = [
     eigen boost glew opencsg cgal mpfr gmp glib
-    harfbuzz gettext freetype fontconfig
+    harfbuzz lib3mf libzip double-conversion freetype fontconfig
   ] ++ stdenv.lib.optional stdenv.isLinux libGLU_combined
-    ++ (with qt5; [qtbase qmake] ++ stdenv.lib.optional stdenv.isDarwin qtmacextras)
+    ++ (with qt5; [qtbase qtmultimedia] ++ stdenv.lib.optional stdenv.isDarwin qtmacextras)
     ++ (with libsForQt5; [qscintilla])
   ;
 
@@ -32,8 +29,6 @@ stdenv.mkDerivation rec {
 
   # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
   enableParallelBuilding = false; # true by default due to qmake
-
-  doCheck = false;
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications
@@ -63,6 +58,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers;
-      [ bjornfor raskin the-kenny ];
+      [ bjornfor raskin the-kenny gebner ];
   };
 }
