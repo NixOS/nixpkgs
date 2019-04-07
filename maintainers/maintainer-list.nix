@@ -1195,6 +1195,11 @@
     github = "dgonyeo";
     name = "Derek Gonyeo";
   };
+  dhkl = {
+    email = "david@davidslab.com";
+    github = "dhl";
+    name = "David Leung";
+  };
   dipinhora = {
     email = "dipinhora+github@gmail.com";
     github = "dipinhora";
