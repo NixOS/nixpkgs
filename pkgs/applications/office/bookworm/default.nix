@@ -1,22 +1,25 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pantheon, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, gnome3, glib, webkitgtk
-, gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, fetchpatch, pantheon, python3, python2, pkgconfig,
+libxml2, cmake, ninja, gtk3, gnome3, glib, webkitgtk , gobject-introspection,
+sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash,
+unzip, unar, wrapGAppsHook, pcre, libpthreadstubs, libXdmcp, utillinux,
+libselinux, libsepol, libxkbcommon, epoxy, at-spi2-core, dbus }:
 
 stdenv.mkDerivation rec {
   pname = "bookworm";
-  version = "unstable-2018-11-19";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "babluboy";
     repo = pname;
-    rev = "4c3061784ff42151cac77d12bf2a28bf831fdfc5";
-    sha256 = "0yrqxa60xlvz249kx966z5krx8i7h17ac0hjgq9p8f0irzy5yp0n";
+    rev = version;
+    sha256 = "0qzwvlwv3nbgzqxxd7kd4rlvld7k03ivmyh099rzm6z00mm4y031";
   };
 
   nativeBuildInputs = [
     bash
     gobject-introspection
     libxml2
-    meson
+    cmake
     ninja
     pkgconfig
     python3
@@ -25,26 +28,32 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pantheon.elementary-icon-theme
-    pantheon.granite
+    at-spi2-core
+    dbus
+    epoxy
     glib
     gnome3.libgee
     gtk3
     html2text
+    libpthreadstubs
+    libselinux
+    libsepol
+    libXdmcp
+    libxkbcommon
+    pantheon.elementary-icon-theme
+    pantheon.granite
+    pcre
     poppler
     python2
     sqlite
+    utillinux
     webkitgtk
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   # These programs are expected in PATH from the source code and scripts
   preFixup = ''
     gappsWrapperArgs+=(
+      --argv0 "$out/bin/com.github.babluboy.bookworm"
       --prefix PATH : "${stdenv.lib.makeBinPath [ unzip unar poppler_utils html2text coreutils curl gnugrep ]}"
       --prefix PATH : $out/bin
     )
