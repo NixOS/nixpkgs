@@ -12,21 +12,24 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "frab-2016-12-28";
+  name = "frab-2019-03-22";
 
   src = fetchFromGitHub {
     owner = "frab";
     repo = "frab";
-    rev = "e4bbcfd1a9db7f89f53a8702c236d9628bafb72c";
-    sha256 = "04pzmif8jxjww3fdf2zbg3k7cm49vxc9hhf4xhmvdmvywgin6fqp";
+    rev = "2b2785e03aaa5de7d7e3b97e2915fb11dd156b51";
+    sha256 = "0n4g9nsqzrn7rla1ag0r28vih22a11crmqa9nd87ab4ymkadm37d";
   };
 
-  buildInputs = [ env nodejs ];
+  buildInputs = [ nodejs env env.wrappedRuby ];
+
+  RAILS_ENV = "production";
+  SECRET_KEY_BASE = "dummy";
 
   buildPhase = ''
     cp config/database.yml.template config/database.yml
     cp .env.development .env.production
-    bundler exec rake assets:precompile RAILS_ENV=production
+    rake assets:precompile
     rm .env.production
   '';
 
@@ -41,13 +44,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit env ruby;
+    inherit env;
   };
 
   meta = with stdenv.lib; {
     description = "Web-based conference planning and management system";
     homepage = https://github.com/frab/frab;
+    maintainers = with maintainers; [ manveru ];
     license = licenses.mit;
-    broken = true; # 2018-09-08; no successful hydra build since 2018-02-14
   };
 }

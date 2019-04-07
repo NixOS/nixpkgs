@@ -5,46 +5,21 @@ with lib;
 let
   cfg = config.services.frab;
 
-  package = pkgs.frab;
-
   databaseConfig = builtins.toJSON { production = cfg.database; };
-
-  frabEnv = {
-    RAILS_ENV = "production";
-    RACK_ENV = "production";
-    SECRET_KEY_BASE = cfg.secretKeyBase;
-    FRAB_HOST = cfg.host;
-    FRAB_PROTOCOL = cfg.protocol;
-    FROM_EMAIL = cfg.fromEmail;
-    RAILS_SERVE_STATIC_FILES = "1";
-  } // cfg.extraEnvironment;
-
-  frab-rake = pkgs.stdenv.mkDerivation rec {
-    name = "frab-rake";
-    buildInputs = [ package.env pkgs.makeWrapper ];
-    phases = "installPhase fixupPhase";
-    installPhase = ''
-      mkdir -p $out/bin
-      makeWrapper ${package.env}/bin/bundle $out/bin/frab-bundle \
-          ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") frabEnv)} \
-          --set PATH '${lib.makeBinPath (with pkgs; [ nodejs file imagemagick ])}:$PATH' \
-          --set RAKEOPT '-f ${package}/share/frab/Rakefile' \
-          --run 'cd ${package}/share/frab'
-      makeWrapper $out/bin/frab-bundle $out/bin/frab-rake \
-          --add-flags "exec rake"
-     '';
-  };
 
 in
 
 {
   options = {
     services.frab = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
+      enable = mkEnableOption "frab";
+
+      package = mkOption {
+        default = pkgs.frab;
+        defaultText = "pkgs.frab";
+        type = types.package;
         description = ''
-          Enable the frab service.
+          Frab package to use.
         '';
       };
 
@@ -171,8 +146,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ frab-rake ];
-
     users.users = [
       { name = cfg.user;
         group = cfg.group;
@@ -183,12 +156,34 @@ in
     users.groups = [ { name = cfg.group; } ];
 
     systemd.services.frab = {
-      after = [ "network.target" "gitlab.service" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = frabEnv;
+
+      path = with cfg.package; [
+        env
+        env.wrappedRuby
+        pkgs.nodejs
+      ];
+
+      environment = {
+        RAILS_ENV = "production";
+        RACK_ENV = "production";
+        SECRET_KEY_BASE = cfg.secretKeyBase;
+        FRAB_HOST = cfg.host;
+        FRAB_PROTOCOL = cfg.protocol;
+        FROM_EMAIL = cfg.fromEmail;
+        RAILS_SERVE_STATIC_FILES = "1";
+        EXECJS_RUNTIME = "Node";
+        BOOTSNAP_CACHE_DIR = "${cfg.statePath}/tmp/cache";
+      } // cfg.extraEnvironment;
+
+      # FIXME(manveru): even though we create the cache dir, bootsnap fails on
+      # the first try, it works after the service restarts itself the first
+      # time. Would be nice if we could get faster initial startup.
 
       preStart = ''
         mkdir -p ${cfg.statePath}/system/attachments
+        mkdir -p $BOOTSNAP_CACHE_DIR
         chown ${cfg.user}:${cfg.group} -R ${cfg.statePath}
 
         mkdir /run/frab -p
@@ -196,10 +191,10 @@ in
         ln -sf ${cfg.statePath}/system /run/frab/system
 
         if ! test -e "${cfg.statePath}/db-setup-done"; then
-          ${frab-rake}/bin/frab-rake db:setup
+          rake db:setup
           touch ${cfg.statePath}/db-setup-done
         else
-          ${frab-rake}/bin/frab-rake db:migrate
+          rake db:migrate
         fi
       '';
 
@@ -213,9 +208,8 @@ in
         TimeoutSec = "300s";
         Restart = "on-failure";
         RestartSec = "10s";
-        WorkingDirectory = "${package}/share/frab";
-        ExecStart = "${frab-rake}/bin/frab-bundle exec rails server " +
-          "--binding=${cfg.listenAddress} --port=${toString cfg.listenPort}";
+        WorkingDirectory = "${cfg.package}/share/frab";
+        ExecStart = "${cfg.package.env}/bin/rails server --binding=${cfg.listenAddress} --port=${toString cfg.listenPort}";
       };
     };
 
