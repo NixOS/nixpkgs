@@ -48,8 +48,8 @@ let
       "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf")
     (mkOverride "requests" "2.21.0"
       "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e")
-    (mkOverride "ruamel_yaml" "0.15.88"
-      "ac56193c47a31c9efa151064a9e921865cdad0f7a991d229e7197e12fe8e0cd7")
+    (mkOverride "ruamel_yaml" "0.15.89"
+      "86d034aa9e2ab3eacc5f75f5cd6a469a2af533b6d9e60ea92edbba540d21b9b7")
     (mkOverride "voluptuous" "0.11.5"
       "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
     (mkOverride "voluptuous-serialize" "2.1.0"
@@ -97,7 +97,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.90.2";
+  hassVersion = "0.91.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -112,7 +112,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "0byikidvrvx8nxgddhpqz609rxb91j1kcppziv4ibb57g6lj7iwx";
+    sha256 = "1y2sv9qq7zmb85n2f5b3csnc60xi87ccpkmhz8ii9gkjw6swikyh";
   };
 
   propagatedBuildInputs = [
@@ -133,7 +133,7 @@ in with py.pkgs; buildPythonApplication rec {
     # Some basic components should be tested however
     py.test \
       tests/components/{api,config,configurator,demo,discovery,frontend,group,history,history_graph} \
-      tests/components/{http,init,introduction,logger,script,shell_command,system_log,websocket_api}
+      tests/components/{homeassistant,http,introduction,logger,script,shell_command,system_log,websocket_api}
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";

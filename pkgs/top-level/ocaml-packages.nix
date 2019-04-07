@@ -1059,9 +1059,7 @@ let
       enableX11 = config.unison.enableX11 or true;
     };
 
-    hol_light = callPackage ../applications/science/logic/hol_light {
-      camlp5 = callPackage ../development/tools/ocaml/camlp5 { legacy = true; };
-    };
+    hol_light = callPackage ../applications/science/logic/hol_light { };
 
   })).overrideScope' liftJaneStreet;
 
