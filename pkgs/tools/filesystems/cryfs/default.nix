@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCRYFS_UPDATE_CHECKS=OFF"
     "-DBoost_USE_STATIC_LIBS=OFF" # this option is case sensitive
-    "-DBUILD_TESTING=ON"
   ];
 
   doCheck = true;

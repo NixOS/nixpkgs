@@ -8,16 +8,19 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-documents-${version}";
-  version = "3.30.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0zchkjpc9algmxrpj0f9i2lc4h1yp8z0h76vn32xa9jr46x4lsh6";
+    sha256 = "1gqddzbr4d8s0asmrhy0sfmwggzhbmpm61mqf8rxpdjk7s26086c";
   };
 
   doCheck = true;
 
-  mesonFlags = [ "-Dgetting-started=true" ];
+  mesonFlags = [
+    "-Dgetting-started=true"
+    "--buildtype=plain"
+  ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl docbook_xml_dtd_42 wrapGAppsHook python3
@@ -29,14 +32,6 @@ stdenv.mkDerivation rec {
     libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata
     gnome-desktop libzapojit libgepub
-  ];
-
-  patches = [
-    # fix RPATH to libgd
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-documents/commit/d18a92e0a940073ac766f609937539e4fc6cdbb7.patch";
-      sha256 = "0s3mk8vrl1gzk93yvgqbnz44i27qw1d9yvvmnck3fv23phrxkzk9";
-    })
   ];
 
   postPatch = ''

@@ -4,22 +4,25 @@
 , grilo, gnome-online-accounts
 , desktop-file-utils, wrapGAppsHook
 , gnome3, gdk_pixbuf, gexiv2, geocode-glib
-, dleyna-renderer }:
+, dleyna-renderer, dbus, meson, ninja, python3 }:
 
 let
   pname = "gnome-photos";
-  version = "3.30.1";
+  version = "3.32.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1mf1887x0pk46h6l51rfkpn29fwp3yvmqkk99kr1iwpz0lakyx6f";
+    sha256 = "160vqmcqvyzby27wd2lzwzgbfl6jxxk7phhnqh9498r3clr73haj";
   };
 
   # doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig gettext itstool libxml2 desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [
+    pkgconfig gettext itstool meson ninja libxml2
+    desktop-file-utils wrapGAppsHook python3
+  ];
   buildInputs = [
     gtk3 glib gegl babl libgdata libdazzle
     gnome3.gsettings-desktop-schemas
@@ -28,8 +31,17 @@ in stdenv.mkDerivation rec {
     gnome-online-accounts tracker
     gexiv2 geocode-glib dleyna-renderer
     tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
+    dbus
   ];
 
+  mesonFlags = [
+    "--buildtype=plain" # don't do any git commands
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

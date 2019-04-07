@@ -1,47 +1,62 @@
-{ stdenv, callPackage, recurseIntoAttrs, makeRustPlatform, llvm, fetchurl
+{ stdenv, lib, overrideCC
+, buildPackages
+, newScope, callPackage
 , CoreFoundation, Security
-, targets ? []
-, targetToolchains ? []
-, targetPatches ? []
-}:
+}: rec {
+  makeRustPlatform = { rustc, cargo, ... }: {
+    rust = {
+      inherit rustc cargo;
+    };
 
-let
-  rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.33.0";
-  cargoVersion = "1.33.0";
-  src = fetchurl {
-    url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "152x91mg7bz4ygligwjb05fgm1blwy2i70s2j03zc9jiwvbsh0as";
-  };
-in rec {
-  rustc = callPackage ./rustc.nix {
-    inherit stdenv llvm targets targetPatches targetToolchains rustPlatform version src;
+    buildRustPackage = callPackage ../../../build-support/rust {
+      inherit rustc cargo;
 
-    patches = [
-      ./patches/net-tcp-disable-tests.patch
+      fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
+        inherit cargo;
+      };
+    };
 
-      # Re-evaluate if this we need to disable this one
-      #./patches/stdsimd-disable-doctest.patch
-    ];
-
-    withBundledLLVM = false;
-
-    configureFlags = [ "--release-channel=stable" ];
-
-    # 1. Upstream is not running tests on aarch64:
-    # see https://github.com/rust-lang/rust/issues/49807#issuecomment-380860567
-    # So we do the same.
-    # 2. Tests run out of memory for i686
-    #doCheck = !stdenv.isAarch64 && !stdenv.isi686;
-
-    # Disabled for now; see https://github.com/NixOS/nixpkgs/pull/42348#issuecomment-402115598.
-    doCheck = false;
+    rustcSrc = callPackage ./rust-src.nix {
+      inherit rustc;
+    };
   };
 
-  cargo = callPackage ./cargo.nix rec {
-    version = cargoVersion;
-    inherit src stdenv CoreFoundation Security;
-    inherit rustc; # the rustc that will be wrapped by cargo
-    inherit rustPlatform; # used to build cargo
+  # This just contains tools for now. But it would conceivably contain
+  # libraries too, say if we picked some default/recommended versions from
+  # `cratesIO` to build by Hydra and/or try to prefer/bias in Cargo.lock for
+  # all vendored Carnix-generated nix.
+  #
+  # In the end game, rustc, the rust standard library (`core`, `std`, etc.),
+  # and cargo would themselves be built with `buildRustCreate` like
+  # everything else. Tools and `build.rs` and procedural macro dependencies
+  # would be taken from `buildRustPackages` (and `bootstrapRustPackages` for
+  # anything provided prebuilt or their build-time dependencies to break
+  # cycles / purify builds). In this way, nixpkgs would be in control of all
+  # bootstrapping.
+  packages = {
+    prebuilt = callPackage ./bootstrap.nix {};
+    stable = lib.makeScope newScope (self: let
+      # Like `buildRustPackages`, but may also contain prebuilt binaries to
+      # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
+      # nothing in the final package set should refer to this.
+      bootstrapRustPackages = self.buildRustPackages.overrideScope' (_: _:
+        lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
+          buildPackages.rust.packages.prebuilt);
+      bootRustPlatform = makeRustPlatform bootstrapRustPackages;
+    in {
+      # Packages suitable for build-time, e.g. `build.rs`-type stuff.
+      buildRustPackages = buildPackages.rust.packages.stable;
+      # Analogous to stdenv
+      rustPlatform = makeRustPlatform self.buildRustPackages;
+      rustc = self.callPackage ./rustc.nix {
+        # Use boot package set to break cycle
+        rustPlatform = bootRustPlatform;
+      };
+      cargo = self.callPackage ./cargo.nix {
+        # Use boot package set to break cycle
+        rustPlatform = bootRustPlatform;
+        inherit CoreFoundation Security;
+      };
+    });
   };
 }

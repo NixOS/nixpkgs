@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "libtermkey-${version}";
 
-  version = "0.22";
+  version = "0.20";
 
   src = fetchzip {
     url = "http://www.leonerd.org.uk/code/libtermkey/libtermkey-${version}.tar.gz";
-    sha256 = "02dks6bj7n23lj005yq41azf95wh3hapmgc2lzyh12vigkjh67rg";
+    sha256 = "1i5a2zangq61ba1vdkag34ig5g4gzccldccdbcmqmk93saa6lkbx";
   };
 
   makeFlags = [ "PREFIX=$(out)" ]

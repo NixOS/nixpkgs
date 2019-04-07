@@ -4738,6 +4738,8 @@ in {
 
   zfec = callPackage ../development/python-modules/zfec { };
 
+  zipp = callPackage ../development/python-modules/zipp { };
+
   zope_broken = callPackage ../development/python-modules/zope_broken { };
 
   zope_component = callPackage ../development/python-modules/zope_component { };

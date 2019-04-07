@@ -1,17 +1,27 @@
-{ fetchurl, stdenv, fetchpatch, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
+{ fetchFromGitLab, stdenv, substituteAll, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
 , glib, gtk3, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
-, gsettings-desktop-schemas, gnome-desktop
+, gsettings-desktop-schemas, gnome-desktop, wrapGAppsHook
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
-, geocode-glib, pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
+, geocode-glib, libgudev, libwacom, xwayland, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "mutter-${version}";
+  pname = "mutter";
   version = "3.28.3";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/mutter/3.28/${name}.tar.xz";
-    sha256 = "0vq3rmq20d6b1mi6sf67wkzqys6hw5j7n7fd4hndcp19d5i26149";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = "4af8d9d4752a94612a98d619e65828f0070a7b0e"; # HEAD of https://gitlab.gnome.org/GNOME/mutter/tree/gnome-3-28
+    sha256 = "1rmc1bf80yq776xhygi1jzgia1y44j2mr2n94vlxgzqc0whamx2v";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths-328.patch;
+      inherit zenity;
+    })
+  ];
 
   configureFlags = [
     "--with-x"
@@ -31,20 +41,15 @@ stdenv.mkDerivation rec {
     libXtst
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool wrapGAppsHook ];
 
   buildInputs = [
     glib gobject-introspection gtk3 gsettings-desktop-schemas upower
     gnome-desktop cairo pango cogl clutter zenity libstartup_notification
     geocode-glib libinput libgudev libwacom
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile
-    libxkbcommon pipewire
+    libxkbcommon
   ];
-
-  preFixup = ''
-    wrapProgram "$out/bin/mutter" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-  '';
 
   enableParallelBuilding = true;
 

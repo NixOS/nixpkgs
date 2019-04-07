@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DBUILD_TESTING=OFF"
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_SHARED_LIBS=ON"
     "-DModule_ITKMINC=ON"

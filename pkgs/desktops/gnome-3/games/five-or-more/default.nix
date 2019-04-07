@@ -1,16 +1,19 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libgnome-games-support, gettext, itstool, libxml2, python3 }:
+, librsvg, libgnome-games-support, gettext, itstool, libxml2, python3, vala }:
 
 stdenv.mkDerivation rec {
   name = "five-or-more-${version}";
-  version = "3.30.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/five-or-more/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "00d729p251kh96624i7qg2370r5mxwafs016i6hy01vsr71jzb9x";
+    sha256 = "0v52i22ygv6y4zqs8nyb1qmacmj9whhqrw7qss6vn7by4nsikhrn";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool libxml2 python3 wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext itstool libxml2 python3 wrapGAppsHook
+    vala
+  ];
   buildInputs = [
     gtk3 librsvg libgnome-games-support gnome3.adwaita-icon-theme
   ];

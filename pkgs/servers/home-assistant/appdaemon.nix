@@ -23,6 +23,14 @@ let
         };
       });
 
+      jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
+        version = "2.10";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4";
+        };
+      });
+
       aiohttp-jinja2 = super.aiohttp-jinja2.overridePythonAttrs (oldAttrs: rec {
         version = "0.15.0";
         src = oldAttrs.src.override {
@@ -31,16 +39,24 @@ let
         };
       });
 
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "3.13";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
+        };
+      });
+
     };
   };
 
 in python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "c32d9139566cc8147c39196a18c317accd1f0b2ef8e6c0ff31bddd4bc0f80bd3";
+    sha256 = "3e2f5184a51a3b2b473610704344d188226bd7e9a2c2fb762ee90621d38390c6";
   };
 
   propagatedBuildInputs = with python.pkgs; [

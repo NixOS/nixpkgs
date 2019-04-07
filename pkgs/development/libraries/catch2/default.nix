@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-H.."
-    "-DBUILD_TESTING=OFF"];
+  cmakeFlags = [ "-H.." ];
 
   meta = with stdenv.lib; {
     description = "A multi-paradigm automated test framework for C++ and Objective-C (and, maybe, C)";

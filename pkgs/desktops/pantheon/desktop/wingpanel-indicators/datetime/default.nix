@@ -43,14 +43,15 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./calendar-exec.patch;
-      elementary-calendar = "${elementary-calendar}/bin/io.elementary.calendar";
-    })
     # Use "clock-format" GSettings key that's been moved to granite
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/wingpanel-indicator-datetime/raw/c8d515b76aa812c141212d5515621a6febd781a3/f/00-move-clock-format-settings-to-granite.patch";
       sha256 = "1sq3aw9ckkm057rnrclnw9lyrxbpl37fyzfnbixi2q3ypr70n880";
+    })
+    # See: https://github.com/elementary/wingpanel-indicator-datetime/pull/117
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel-indicator-datetime/commit/4859e72a52d8dac5cad87b192fc912fb013b0ecd.patch";
+      sha256 = "0jfhb5sax4sivdfx7il1rc1dvhy0yfv27qhvwbdy0hza9wf8q9k0";
     })
   ];
 
@@ -59,6 +60,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
+  '';
+
+  # launches elementary-calendar on selection
+  preFixup = ''
+     gappsWrapperArgs+=( --prefix PATH : "${elementary-calendar}/bin" )
   '';
 
   meta = with stdenv.lib; {

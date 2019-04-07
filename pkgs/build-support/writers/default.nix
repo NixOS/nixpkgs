@@ -178,6 +178,16 @@ rec {
   writeJSBin = name:
     writeJS "/bin/${name}";
 
+  writeNginxConfig = name: text: pkgs.runCommand name {
+    inherit text;
+    passAsFile = [ "text" ];
+  } /* sh */ ''
+    cp "$textPath" $out
+    ${pkgs.nginx-config-formatter}/bin/nginxfmt $out
+    ${pkgs.gnused}/bin/sed -i '/^$/d' $out
+    ${pkgs.gixy}/bin/gixy $out
+  '';
+
   # writePerl takes a name an attributeset with libraries and some perl sourcecode and
   # returns an executable
   #

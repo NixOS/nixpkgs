@@ -1,4 +1,4 @@
-{ stdenv, callPackage, vscode-utils }:
+{ stdenv, callPackage, vscode-utils, llvmPackages_8 }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -63,6 +63,8 @@ rec {
       license = stdenv.lib.licenses.mit;
     };
   };
+
+  llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
   WakaTime.vscode-wakatime = callPackage ./wakatime {};
 }

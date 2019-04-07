@@ -1,19 +1,16 @@
-{ pkgs, makeScope, libsForQt5, go_1_11 }:
+{ pkgs, makeScope, libsForQt5 }:
 
 let
   packages = self: with self; {
+    setupHook = ./setup-hook.sh;
+
     updateScript = callPackage ./update.nix { };
 
     dbus-factory = callPackage ./dbus-factory { };
-    dde-api = callPackage ./dde-api {
-      # XXX: the build is finding references to Go when compiled with go v1.12
-      go = go_1_11;
-    };
+    dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
-    dde-daemon = callPackage ./dde-daemon {
-      # XXX: the build is finding references to Go when compiled with go v1.12
-      go = go_1_11;
-    };
+    dde-daemon = callPackage ./dde-daemon { };
+    dde-polkit-agent = callPackage ./dde-polkit-agent { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     dde-session-ui = callPackage ./dde-session-ui { };
     deepin-desktop-base = callPackage ./deepin-desktop-base { };
@@ -29,11 +26,11 @@ let
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-sound-theme = callPackage ./deepin-sound-theme { };
     deepin-terminal = callPackage ./deepin-terminal {
-      inherit (pkgs.gnome3) libgee;
       wnck = pkgs.libwnck3;
     };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
     deepin-wm = callPackage ./deepin-wm { };
+    dpa-ext-gnomekeyring = callPackage ./dpa-ext-gnomekeyring { };
     dtkcore = callPackage ./dtkcore { };
     dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };
