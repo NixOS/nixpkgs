@@ -11,7 +11,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, nodejs, nasm
+, rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
 
 ### optionals
@@ -30,11 +30,13 @@
 , privacySupport ? isTorBrowserLike || isIceCatLike
 
 # WARNING: NEVER set any of the options below to `true` by default.
-# Set to `privacySupport` or `false`.
+# Set to `!privacySupport` or `false`.
 
-# webrtcSupport breaks the aarch64 build on version >= 60.
+# webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
 # https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
-, webrtcSupport ? (if lib.versionAtLeast ffversion "60" && stdenv.isAarch64 then false else !privacySupport)
+, webrtcSupport ? !privacySupport && (!stdenv.isAarch64 || !(
+    lib.versionAtLeast ffversion "60" && lib.versionOlder ffversion "63"
+  ))
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
@@ -92,6 +94,15 @@ let
 
   browserPatches = [
     ./env_var_for_system_dir.patch
+  ] ++ lib.optionals (stdenv.isAarch64 && lib.versionAtLeast ffversion "66") [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/arm.patch";
+      sha256 = "1vbpih23imhv5r3g21m3m541z08n9n9j1nvmqax76bmyhn7mxp32";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
+      sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
+    })
   ] ++ patches;
 
 in
