@@ -9,6 +9,7 @@ let
     ({ commitlog_sync = "batch";
        commitlog_sync_batch_window_in_ms = 2;
        start_native_transport = cfg.allowClients;
+       cluster_name = cfg.clusterName;
        partitioner = "org.apache.cassandra.dht.Murmur3Partitioner";
        endpoint_snitch = "SimpleSnitch";
        seed_provider =
@@ -52,6 +53,15 @@ in {
     enable = mkEnableOption ''
       Apache Cassandra – Scalable and highly available database.
     '';
+    clusterName = mkOption {
+      type = types.str;
+      default = "NixOS Test Cluster";
+      description = ''
+        The name of the cluster.
+        This setting prevents nodes in one logical cluster from joining
+        another. All nodes in a cluster must have the same value.
+      '';
+    };
     user = mkOption {
       type = types.str;
       default = defaultUser;
