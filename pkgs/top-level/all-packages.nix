@@ -11481,6 +11481,8 @@ in
 
   libotr = callPackage ../development/libraries/libotr { };
 
+  libow = callPackage ../development/libraries/libow { };
+
   libp11 = callPackage ../development/libraries/libp11 { };
 
   libpar2 = callPackage ../development/libraries/libpar2 { };
