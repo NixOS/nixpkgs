@@ -1,12 +1,14 @@
 {
   cacert,
+  callPackage,
   elmPackages,
   gmp,
+  gnused,
   lib,
-  mkYarnPackage,
   nodePackages,
   nss,
   patchelf,
+  pkgs,
   src,
   stdenv,
   zlib,
@@ -45,25 +47,23 @@ let
     name = "concourse-web";
     targets = [ "Main" ];
   };
+  offline-cache = (callPackage ./yarn.nix {}).offline_cache;
 in
-mkYarnPackage {
+stdenv.mkDerivation {
   name = "concourse-main-assets";
   nativeBuildInputs = [
-    cacert
+    gnused
     nodePackages.uglify-js
     nodePackages.yarn
     patchelf
   ];
-  buildInputs = [ cacert ];
   inherit src;
-  yarnNix = ./yarn.nix;
-  yarnFlags = [
-    "--offline"
-    "--frozen-lockfile"
-  ];
-  preBuild = ''
+  buildPhase = ''
     mkdir -p elm_home
     export HOME=`realpath elm_home`
+    yarn config set yarn-offline-mirror ${offline-cache}
+    sed -i -E '/resolved /{s|https://registry.yarnpkg.com/||;s|[@/:-]|_|g}' yarn.lock
+    yarn install --offline --frozen-lockfile
     yarn run build-less
     uglifyjs < ${elm-package}/Main.js > web/public/elm.min.js
   '';
