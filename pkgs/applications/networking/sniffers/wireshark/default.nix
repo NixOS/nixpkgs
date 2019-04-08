@@ -56,25 +56,29 @@ in stdenv.mkDerivation {
     export LD_LIBRARY_PATH="$PWD/run"
   '';
 
-  postInstall = if (stdenv.isDarwin && withQt) then ''
-      mkdir -p $out/Applications
-      mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
+  postInstall = ''
+    # to remove "cycle detected in the references"
+    mkdir -p $dev/lib/wireshark
+    mv $out/lib/wireshark/cmake $dev/lib/wireshark
+  '' + (if stdenv.isDarwin && withQt then ''
+    mkdir -p $out/Applications
+    mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
 
-      for so in $out/Applications/Wireshark.app/Contents/PlugIns/wireshark/*.so; do
+    for so in $out/Applications/Wireshark.app/Contents/PlugIns/wireshark/*.so; do
         install_name_tool $so -change libwireshark.10.dylib $out/lib/libwireshark.10.dylib
         install_name_tool $so -change libwiretap.7.dylib $out/lib/libwiretap.7.dylib
         install_name_tool $so -change libwsutil.8.dylib $out/lib/libwsutil.8.dylib
-      done
+    done
 
-      wrapProgram $out/Applications/Wireshark.app/Contents/MacOS/Wireshark \
+    wrapProgram $out/Applications/Wireshark.app/Contents/MacOS/Wireshark \
         --set QT_PLUGIN_PATH ${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}
   '' else optionalString withQt ''
-      install -Dm644 -t $out/share/applications ../wireshark.desktop
-      wrapProgram $out/bin/wireshark \
+    install -Dm644 -t $out/share/applications ../wireshark.desktop
+    wrapProgram $out/bin/wireshark \
         --set QT_PLUGIN_PATH ${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}
 
     substituteInPlace $out/share/applications/*.desktop \
-      --replace "Exec=wireshark" "Exec=$out/bin/wireshark"
+        --replace "Exec=wireshark" "Exec=$out/bin/wireshark"
 
     install -Dm644 ../image/wsicon.svg $out/share/icons/wireshark.svg
     mkdir $dev/include/{epan/{wmem,ftypes,dfilter},wsutil,wiretap} -pv
@@ -87,12 +91,7 @@ in stdenv.mkDerivation {
     cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
     cp ../wsutil/*.h $dev/include/wsutil/
     cp ../wiretap/*.h $dev/include/wiretap
-
-  '' + ''
-      # to remove "cycle detected in the references"
-      mkdir -p $dev/lib/wireshark
-      mv $out/lib/wireshark/cmake $dev/lib/wireshark
-    '';
+  '');
 
   enableParallelBuilding = true;
 
