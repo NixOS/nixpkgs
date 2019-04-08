@@ -4203,6 +4203,8 @@ in {
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
+  serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
+
   shippai = callPackage ../development/python-modules/shippai {};
 
   simanneal = callPackage ../development/python-modules/simanneal { };
