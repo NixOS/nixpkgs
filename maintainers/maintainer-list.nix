@@ -2738,6 +2738,11 @@
     github = "lo1tuma";
     name = "Mathias Schreck";
   };
+  loewenheim = {
+    email = "loewenheim@mailbox.org";
+    github = "loewenheim";
+    name = "Sebastian Zivota";
+  };
   lopsided98 = {
     email = "benwolsieffer@gmail.com";
     github = "lopsided98";
