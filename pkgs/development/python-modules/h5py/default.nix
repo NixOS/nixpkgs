@@ -30,7 +30,7 @@ in buildPythonPackage rec {
 
   preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
 
-  checkInputs = optional isPy27 unittest2;
+  checkInputs = optional isPy27 unittest2 ++ [ openssh ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ hdf5 cython ]
     ++ optional mpiSupport mpi;
