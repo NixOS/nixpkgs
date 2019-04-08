@@ -5517,6 +5517,8 @@ in
 
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
 
+  shabnam-fonts = callPackage ../data/fonts/shabnam-fonts { };
+
   shadowsocks-rust = callPackage ../tools/networking/shadowsocks-rust {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
