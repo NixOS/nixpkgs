@@ -662,12 +662,10 @@ in {
       systemd.services.prometheus = {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
-        script = ''
-          #!/bin/sh
-          exec ${cfg.package}/bin/prometheus \
-            ${concatStringsSep " \\\n  " cmdlineArgs}
-        '';
         serviceConfig = {
+        ExecStart = "${cfg.package}/bin/prometheus" +
+          optionalString (length cmdlineArgs != 0) (" \\\n  " +
+            concatStringsSep " \\\n  " cmdlineArgs);
           User = promUser;
           Restart  = "always";
           WorkingDirectory = /var/lib/prometheus;
@@ -679,12 +677,10 @@ in {
       systemd.services.prometheus2 = {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
-        script = ''
-          #!/bin/sh
-          exec ${cfg2.package}/bin/prometheus \
-            ${concatStringsSep " \\\n  " cmdlineArgs2}
-        '';
         serviceConfig = {
+          ExecStart = "${cfg2.package}/bin/prometheus" +
+            optionalString (length cmdlineArgs2 != 0) (" \\\n  " +
+              concatStringsSep " \\\n  " cmdlineArgs2);
           User = promUser;
           Restart  = "always";
           WorkingDirectory = /var/lib/prometheus2;
