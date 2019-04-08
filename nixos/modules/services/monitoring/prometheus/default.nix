@@ -511,12 +511,10 @@ in {
     systemd.services.prometheus = {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
-      script = ''
-        #!/bin/sh
-        exec ${cfg.package}/bin/prometheus \
-          ${concatStringsSep " \\\n  " cmdlineArgs}
-      '';
       serviceConfig = {
+        ExecStart = "${cfg.package}/bin/prometheus" +
+          optionalString (length cmdlineArgs != 0) (" \\\n  " +
+            concatStringsSep " \\\n  " cmdlineArgs);
         User = promUser;
         Restart  = "always";
         WorkingDirectory = cfg.dataDir;
