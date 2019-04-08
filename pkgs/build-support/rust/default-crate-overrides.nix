@@ -1,6 +1,6 @@
-{ stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
+{ stdenv, clangStdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
   openssl, sqlite, zlib, dbus, dbus-glib, gdk_pixbuf, cairo, python3,
-  libsodium, postgresql, gmp, foundationdb, ... }:
+  libsodium, postgresql, gmp, foundationdb, nettle, llvmPackages, ... }:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -79,6 +79,13 @@ in
 
   libdbus-sys = attrs: {
     buildInputs = [ pkgconfig dbus ];
+  };
+
+  nettle-sys = attrs: {
+    buildInputs = [ pkgconfig nettle ];
+    propagatedBuildInputs = [ gmp ];
+    stdenv = clangStdenv;
+    LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
   };
 
   openssl = attrs: {

@@ -1,5 +1,5 @@
-{ lib, stdenv, echo_build_heading, noisily, makeDeps }:
-{ crateName,
+{ lib, echo_build_heading, noisily, makeDeps }:
+{ crateName, stdenv,
   dependencies,
   crateFeatures, libName, release, libPath,
   crateType, metadata, crateBin, hasCrateBin,
