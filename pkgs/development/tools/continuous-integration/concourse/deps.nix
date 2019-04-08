@@ -2476,8 +2476,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/vbauerster/mpb";
-      rev = "v4.6.1-0.20190319154207-3a6acfe12ac6";
-      sha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+      rev = "3a6acfe12ac6";
+      sha256 = "03ffjpg5xis0w1bp5mlqvxmr1cbl2gs97j3s71g5klayfrsrr9p6";
     };
   }
 
@@ -2536,8 +2536,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/census-instrumentation/opencensus-go";
-      rev = "v0.18.1-0.20181204023538-aab39bd6a98b";
-      sha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+      rev = "aab39bd6a98b";
+      sha256 = "1x1ysvpyak1hcmfgvy0mk30g1ammbsmw19c9s0brz5h9wn7m4vva";
     };
   }
 
