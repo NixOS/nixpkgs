@@ -58,8 +58,8 @@ let
     "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
   ] ++
-    (optional (cfg.alertmanagerURL != []) "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}") ++
-    (optional (cfg.webExternalUrl != null) "-web.external-url=${cfg.webExternalUrl}");
+  optional (cfg.alertmanagerURL != []) "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}" ++
+  optional (cfg.webExternalUrl != null) "-web.external-url=${cfg.webExternalUrl}";
 
   # This becomes the main config file for Prometheus 2
   promConfig2 = {
@@ -92,7 +92,7 @@ let
     "--alertmanager.notification-queue-capacity=${toString cfg2.alertmanagerNotificationQueueCapacity}"
     "--alertmanager.timeout=${toString cfg2.alertmanagerTimeout}s"
   ] ++
-    (optional (cfg2.webExternalUrl != null) "--web.external-url=${cfg2.webExternalUrl}");
+  optional (cfg2.webExternalUrl != null) "--web.external-url=${cfg2.webExternalUrl}";
 
   promTypes.globalConfig = types.submodule {
     options = {
@@ -663,9 +663,9 @@ in {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
         serviceConfig = {
-        ExecStart = "${cfg.package}/bin/prometheus" +
-          optionalString (length cmdlineArgs != 0) (" \\\n  " +
-            concatStringsSep " \\\n  " cmdlineArgs);
+          ExecStart = "${cfg.package}/bin/prometheus" +
+            optionalString (length cmdlineArgs != 0) (" \\\n  " +
+              concatStringsSep " \\\n  " cmdlineArgs);
           User = promUser;
           Restart  = "always";
           WorkingDirectory = /var/lib/prometheus;
