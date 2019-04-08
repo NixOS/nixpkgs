@@ -8,6 +8,20 @@ let
   promUser = "prometheus";
   promGroup = "prometheus";
 
+  stateDir =
+    if cfg.stateDir != null
+    then cfg.stateDir
+    else
+      if cfg.dataDir != null
+      then
+        # This assumes /var/lib/ is a prefix of cfg.dataDir.
+        # This is checked as an assertion below.
+        removePrefix stateDirBase cfg.dataDir
+      else "prometheus";
+  stateDirBase = "/var/lib/";
+  workingDir  = stateDirBase + stateDir;
+  workingDir2 = stateDirBase + cfg2.stateDir;
+
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
@@ -52,7 +66,7 @@ let
     in promtoolCheck "check-config" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
-    "-storage.local.path=/var/lib/prometheus/metrics"
+    "-storage.local.path=${workingDir}/metrics"
     "-config.file=${prometheusYml}"
     "-web.listen-address=${cfg.listenAddress}"
     "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
@@ -86,7 +100,7 @@ let
     in prom2toolCheck "check config" "prometheus.yml" yml;
 
   cmdlineArgs2 = cfg2.extraFlags ++ [
-    "--storage.tsdb.path=/var/lib/prometheus2/data/"
+    "--storage.tsdb.path=${workingDir2}/data/"
     "--config.file=${prometheus2Yml}"
     "--web.listen-address=${cfg2.listenAddress}"
     "--alertmanager.notification-queue-capacity=${toString cfg2.alertmanagerNotificationQueueCapacity}"
@@ -446,6 +460,25 @@ in {
         '';
       };
 
+      dataDir = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Directory to store Prometheus metrics data.
+          This option is deprecated, please use <option>services.prometheus.stateDir</option>.
+        '';
+      };
+
+      stateDir = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Directory below <literal>${stateDirBase}</literal> to store Prometheus metrics data.
+          This directory will be created automatically using systemd's StateDirectory mechanism.
+          Defaults to <literal>prometheus</literal>.
+        '';
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -560,6 +593,16 @@ in {
         '';
       };
 
+      stateDir = mkOption {
+        type = types.str;
+        default = "prometheus2";
+        description = ''
+          Directory below <literal>${stateDirBase}</literal> to store Prometheus metrics data.
+          This directory will be created automatically using systemd's StateDirectory mechanism.
+          Defaults to <literal>prometheus2</literal>.
+        '';
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -659,6 +702,37 @@ in {
       };
     })
     (mkIf cfg.enable {
+      warnings =
+        optional (cfg.dataDir != null) ''
+          The option services.prometheus.dataDir is deprecated, please use
+          services.prometheus.stateDir.
+        '';
+      assertions = [
+        {
+          assertion = !(cfg.dataDir != null && cfg.stateDir != null);
+          message =
+            "The options services.prometheus.dataDir and services.prometheus.stateDir" +
+            " can't both be set at the same time! It's recommended to only set the latter" +
+            " since the former is deprecated.";
+        }
+        {
+          assertion = cfg.dataDir != null -> hasPrefix stateDirBase cfg.dataDir;
+          message =
+            "The option services.prometheus.dataDir should have ${stateDirBase} as a prefix!";
+        }
+        {
+          assertion = cfg.stateDir != null -> !hasPrefix "/" cfg.stateDir;
+          message =
+            "The option services.prometheus.stateDir shouldn't be an absolute directory." +
+            " It should be a directory relative to ${stateDirBase}.";
+        }
+        {
+          assertion = cfg2.stateDir != null -> !hasPrefix "/" cfg2.stateDir;
+          message =
+            "The option services.prometheus2.stateDir shouldn't be an absolute directory." +
+            " It should be a directory relative to ${stateDirBase}.";
+        }
+      ];
       systemd.services.prometheus = {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
@@ -668,8 +742,8 @@ in {
               concatStringsSep " \\\n  " cmdlineArgs);
           User = promUser;
           Restart  = "always";
-          WorkingDirectory = /var/lib/prometheus;
-          StateDirectory = "prometheus";
+          WorkingDirectory = workingDir;
+          StateDirectory = stateDir;
         };
       };
     })
@@ -683,8 +757,8 @@ in {
               concatStringsSep " \\\n  " cmdlineArgs2);
           User = promUser;
           Restart  = "always";
-          WorkingDirectory = /var/lib/prometheus2;
-          StateDirectory = "prometheus2";
+          WorkingDirectory = workingDir2;
+          StateDirectory = cfg2.stateDir;
         };
       };
     })
