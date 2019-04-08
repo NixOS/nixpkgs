@@ -1177,6 +1177,8 @@ in {
 
   cheroot = callPackage ../development/python-modules/cheroot {};
 
+  chevron = callPackage ../development/python-modules/chevron {};
+
   cli-helpers = callPackage ../development/python-modules/cli-helpers {};
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
