@@ -10,6 +10,7 @@
 , pycodestyle ? null
 , pydocstyle ? null
 , pyflakes ? null
+, pylint ? null
 , rope ? null
 , yapf ? null
 }:
@@ -20,13 +21,13 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.21.2";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "11fvrpv1kymj2fzh8fhys4qk1xc64j1rbdrz252awyab7b3509i7";
+    sha256 = "10la48m10j4alfnpw0xw359fb833scf5kv7kjvh7djf6ij7cfsvq";
   };
 
   # The tests require all the providers, disable otherwise.
@@ -49,6 +50,7 @@ buildPythonPackage rec {
     ++ stdenv.lib.optional (withProvider "pycodestyle") pycodestyle
     ++ stdenv.lib.optional (withProvider "pydocstyle") pydocstyle
     ++ stdenv.lib.optional (withProvider "pyflakes") pyflakes
+    ++ stdenv.lib.optional (withProvider "pylint") pylint
     ++ stdenv.lib.optional (withProvider "rope") rope
     ++ stdenv.lib.optional (withProvider "yapf") yapf
     ++ stdenv.lib.optional isPy27 configparser

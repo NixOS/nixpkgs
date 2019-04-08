@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "940828183c937bcec530753211b70f673c0a9aab831e43273489b310538dff86";
+    sha256 = "42d51be54e74a8e80a4d76d1fa6e4edd997098fce24ad2d94a2eab5ef247193e";
   };
 
   checkInputs = [ nose mock parameterized six glibcLocales ];

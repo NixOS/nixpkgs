@@ -31,7 +31,7 @@ let
     if !canEval x then []
     else if isDerivation x then optional (canEval x.drvPath) x
     else if isList x then concatLists (map derivationsIn' x)
-    else if isAttrs x then concatLists (mapAttrsToList (n: v: derivationsIn' v) x)
+    else if isAttrs x then concatLists (mapAttrsToList (n: v: addErrorContext "while finding tarballs in '${n}':" (derivationsIn' v)) x)
     else [ ];
 
   keyDrv = drv: if canEval drv.drvPath then { key = drv.drvPath; value = drv; } else { };

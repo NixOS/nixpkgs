@@ -11,7 +11,8 @@ let
   cfg = config.programs.zsh;
 
   zshAliases = concatStringsSep "\n" (
-    mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}") cfg.shellAliases
+    mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
+      (filterAttrs (k: v: !isNull v) cfg.shellAliases)
   );
 
 in
@@ -34,13 +35,12 @@ in
       };
 
       shellAliases = mkOption {
-        default = config.environment.shellAliases;
+        default = {};
         description = ''
-          Set of aliases for zsh shell. Overrides the default value taken from
-           <option>environment.shellAliases</option>.
+          Set of aliases for zsh shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
         '';
-        type = types.attrs; # types.attrsOf types.stringOrPath;
+        type = with types; attrsOf (nullOr (either str path));
       };
 
       shellInit = mkOption {
@@ -79,6 +79,33 @@ in
         type = types.lines;
       };
 
+      histSize = mkOption {
+        default = 2000;
+        description = ''
+          Change history size.
+        '';
+        type = types.int;
+      };
+
+      histFile = mkOption {
+        default = "$HOME/.zsh_history";
+        description = ''
+          Change history file.
+        '';
+        type = types.str;
+      };
+
+      setOptions = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "HIST_IGNORE_DUPS" "SHARE_HISTORY" "HIST_FCNTL_LOCK"
+        ];
+        example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
+        description = ''
+          Configure zsh options.
+        '';
+      };
+
       enableCompletion = mkOption {
         default = true;
         description = ''
@@ -105,6 +132,8 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    programs.zsh.shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
 
     environment.etc."zshenv".text =
       ''
@@ -160,12 +189,12 @@ in
 
         . /etc/zinputrc
 
-        # history defaults
-        SAVEHIST=2000
-        HISTSIZE=2000
-        HISTFILE=$HOME/.zsh_history
+        # Don't export these, otherwise other shells (bash) will try to use same histfile
+        SAVEHIST=${toString cfg.histSize}
+        HISTSIZE=${toString cfg.histSize}
+        HISTFILE=${cfg.histFile}
 
-        setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
+        ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
 
@@ -201,7 +230,6 @@ in
 
     environment.shells =
       [ "/run/current-system/sw/bin/zsh"
-        "/var/run/current-system/sw/bin/zsh"
         "${pkgs.zsh}/bin/zsh"
       ];
 

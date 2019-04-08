@@ -1,10 +1,11 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p bash ruby bundler bundix
 
-rm Gemfile.lock
-bundler install
-bundix
+BUNDIX_CACHE="$(mktemp -d)"
 
-if [ "clean" == "$1" ]; then
-  rm -rf ~/.gem
-fi
+rm -f Gemfile.lock
+bundler package --path "$BUNDIX_CACHE"
+bundix --bundle-pack-path="$BUNDIX_CACHE"
+
+rm -rf "$BUNDIX_CACHE"
+rm -rf .bundle

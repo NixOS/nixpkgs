@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "A modern and easy-to-use crypto library";
     homepage = http://doc.libsodium.org/;
     license = licenses.isc;
-    maintainers = with maintainers; [ raskin wkennington ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.all;
   };
 }

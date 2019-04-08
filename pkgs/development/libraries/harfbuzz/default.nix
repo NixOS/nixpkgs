@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "1.8.8";
+  version = "2.3.1";
   inherit (stdenv.lib) optional optionals optionalString;
 in
 
@@ -17,12 +17,16 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.bz2";
-    sha256 = "1ag3scnm1fcviqgx2p4858y433mr0ndqw6zccnccrqcr9mpcird8";
+    sha256 = "0s74ramsbfa183rxkidqgfd2vbhrwicnrqzqsq440dwibffnj1gj";
   };
 
   postPatch = ''
     patchShebangs src/gen-def.py
     patchShebangs test
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # ApplicationServices.framework headers have cast-align warnings.
+    substituteInPlace src/hb.hh \
+      --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
   '';
 
   outputs = [ "out" "dev" ];
@@ -63,6 +67,7 @@ stdenv.mkDerivation {
     homepage = http://www.freedesktop.org/wiki/Software/HarfBuzz;
     downloadPage = "https://www.freedesktop.org/software/harfbuzz/release/";
     maintainers = [ maintainers.eelco ];
+    license = licenses.mit;
     platforms = with platforms; linux ++ darwin;
     inherit version;
     updateWalker = true;

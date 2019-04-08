@@ -1,11 +1,11 @@
 { stdenv, config, fetchurl, libX11, libXext, libXinerama, libXrandr
-, libXrender, fontconfig, freetype, openal }:
+, libXrender, fontconfig, freetype, openal, runtimeShell }:
 
 let inherit (stdenv.lib) makeLibraryPath; in
 
 stdenv.mkDerivation {
   name = "oilrush";
-  src = 
+  src =
   let
     url = config.oilrush.url or null;
     sha256 = config.oilrush.sha256 or null;
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     cp -r * "$out/opt/oilrush"
     mkdir -p "$out/bin"
     cat << EOF > "$out/bin/oilrush"
-    #! /bin/sh
+    #!${runtimeShell}
     LD_LIBRARY_PATH=.:${makeLibraryPath [ openal ]}:\$LD_LIBRARY_PATH
     cd "$out/opt/oilrush"
     exec ./launcher_$arch.sh "\$@"
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     longDescription = ''
       Oil Rush is a real-time naval strategy game based on group control. It
       combines the strategic challenge of a classical RTS with the sheer fun
-      of Tower Defense. 
+      of Tower Defense.
     '';
     homepage = http://oilrush-game.com/;
     license = stdenv.lib.licenses.unfree;

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, python3, ibus, pkgconfig, gtk3, m17n_lib
-, wrapGAppsHook, gobjectIntrospection
+, wrapGAppsHook, gobject-introspection
 }:
 
 let
@@ -13,18 +13,18 @@ in
 
 stdenv.mkDerivation rec {
   name = "ibus-typing-booster-${version}";
-  version = "2.1.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "mike-fabian";
     repo = "ibus-typing-booster";
     rev = version;
-    sha256 = "01kpxplk9nh56f32fkq3nnsqykbzpi7pcxbfp38dq0prgrhw9a6b";
+    sha256 = "1d32p9k9vp64rpmj2cs3552ak9jn54vyi2hqdpzag33v16cydsl4";
   };
 
   patches = [ ./hunspell-dirs.patch ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook gobjectIntrospection ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook gobject-introspection ];
   buildInputs = [ python ibus gtk3 m17n_lib ];
 
   preFixup = ''

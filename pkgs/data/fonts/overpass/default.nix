@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "3.0.2";
+  version = "3.0.3";
 in fetchzip rec {
   name = "overpass-${version}";
 
@@ -12,7 +12,7 @@ in fetchzip rec {
     mkdir -p $out/share/doc/${name}    ; unzip -j $downloadedFile \*.md  -d $out/share/doc/${name}
   '';
 
-  sha256 = "05zv3zcfc9a707sn3hhf46b126k19d9byzvi5ixp5y2548vjvl6s";
+  sha256 = "1m6p7rrlyqikjvypp4698sn0lp3a4z0z5al4swblfhg8qaxzv5pg";
 
   meta = with stdenv.lib; {
     homepage = http://overpassfont.org/;

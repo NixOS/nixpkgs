@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pdf2image";
-  version = "0.1.14";
+  version = "1.4.1";
 
-  buildInputs = [ pillow poppler_utils ];
+  propagatedBuildInputs = [ pillow poppler_utils ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2926ebbf327e909d594619e520a1986c18d0cf60ae62acc7ebc503ccdef21f0f";
+    sha256 = "c417149cb5ca52021203943e0eeb95db53580afebe728086e69671add4daeb08";
   };
 
   meta = with stdenv.lib; {

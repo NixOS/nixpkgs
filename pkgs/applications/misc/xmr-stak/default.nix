@@ -12,13 +12,13 @@ in
 
 stdenv'.mkDerivation rec {
   name = "xmr-stak-${version}";
-  version = "2.4.7";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "fireice-uk";
     repo = "xmr-stak";
     rev = "${version}";
-    sha256 = "072gapchmd05ir5ygrvbgdhpjhm7pdjyl61n1ykxzvnvi81z6817";
+    sha256 = "0381r4nr5cx0zv3dhsvld4ibpp5gq911815h03v92688za3swhng";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";
@@ -40,6 +40,6 @@ stdenv'.mkDerivation rec {
     description = "Unified All-in-one Monero miner";
     homepage = "https://github.com/fireice-uk/xmr-stak";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz bfortz ];
   };
 }

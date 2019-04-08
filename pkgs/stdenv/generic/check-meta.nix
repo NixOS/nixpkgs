@@ -4,6 +4,10 @@
 { lib, config, hostPlatform, meta }:
 
 let
+  # If we're in hydra, we can dispense with the more verbose error
+  # messages and make problems easier to spot.
+  inHydra = config.inHydra or false;
+
   # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
   shouldCheckMeta = config.checkMeta or false;
@@ -42,8 +46,7 @@ let
   allowUnsupportedSystem = config.allowUnsupportedSystem or false
     || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
-  isUnfree = licenses: lib.lists.any (l:
-    !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
+  isUnfree = licenses: lib.lists.any (l: !l.free or true) licenses;
 
   # Alow granular checks to allow only some unfree packages
   # Example:
@@ -56,7 +59,7 @@ let
 
   # Check whether unfree packages are allowed and if not, whether the
   # package has an unfree license and is not explicitely allowed by the
-  # `allowUNfreePredicate` function.
+  # `allowUnfreePredicate` function.
   hasDeniedUnfreeLicense = attrs:
     !allowUnfree &&
     hasLicense attrs &&
@@ -142,10 +145,12 @@ let
 
   handleEvalIssue = attrs: { reason , errormsg ? "" }:
     let
-      msg = ''
-        Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
+      msg = if inHydra
+        then "Failed to evaluate ${attrs.name or "«name-missing»"}: «${reason}»: ${errormsg}"
+        else ''
+          Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
 
-      '' + (builtins.getAttr reason remediation) attrs;
+        '' + (builtins.getAttr reason remediation) attrs;
 
       handler = if config ? "handleEvalIssue"
         then config.handleEvalIssue reason
@@ -166,6 +171,17 @@ let
     platforms = listOf (either str lib.systems.parsedPlatform.types.system);
     hydraPlatforms = listOf str;
     broken = bool;
+    # TODO: refactor once something like Profpatsch's types-simple will land
+    # This is currently dead code due to https://github.com/NixOS/nix/issues/2532
+    tests = attrsOf (mkOptionType {
+      name = "test";
+      check = x: x == {} || ( # Accept {} for tests that are unsupported
+        isDerivation x &&
+        x ? meta.timeout
+      );
+      merge = lib.options.mergeOneOption;
+    });
+    timeout = int;
 
     # Weirder stuff that doesn't appear in the documentation?
     knownVulnerabilities = listOf str;
@@ -185,8 +201,6 @@ let
     isIbusEngine = bool;
     isGutenprint = bool;
     badPlatforms = platforms;
-    # Hydra build timeout
-    timeout = int;
   };
 
   checkMetaAttr = k: v:

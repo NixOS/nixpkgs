@@ -11,7 +11,7 @@
 # the more recent adv_cmds release is used for everything else in this package
 
 let recentAdvCmds = fetchzip {
-  url = "http://opensource.apple.com/tarballs/adv_cmds/adv_cmds-158.tar.gz";
+  url = "https://opensource.apple.com/tarballs/adv_cmds/adv_cmds-158.tar.gz";
   sha256 = "0z081kcprzg5jcvqivfnwvvv6wfxzkjg2jc2lagsf8c7j7vgm8nn";
 };
 
@@ -65,6 +65,12 @@ in appleDerivation {
   '';
 
   installPhase = ''
+    for f in Products/Release/*; do
+      if [ -f $f ]; then
+        install -D $file $out/bin/$(basename $f)
+      fi
+    done
+
     bsdmake -C usr-share-locale.tproj install DESTDIR="$locale/share/locale"
 
     # need to get rid of runtime dependency on flex

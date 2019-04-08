@@ -1,4 +1,4 @@
-{ stdenv, lib, runCommand, buildEnv, vscode, which, writeScript
+{ stdenv, lib, runCommand, buildEnv, vscode, makeWrapper
 , vscodeExtensions ? [] }:
 
 /*
@@ -43,6 +43,7 @@
 
 let
 
+  inherit (vscode) executableName;
   wrappedPkgVersion = lib.getVersion vscode;
   wrappedPkgName = lib.removeSuffix "-${wrappedPkgVersion}" vscode.name;
 
@@ -51,22 +52,12 @@ let
     paths = vscodeExtensions;
   };
 
-  wrappedExeName = "code";
-  exeName = wrappedExeName;
-
-  wrapperExeFile = writeScript "${exeName}" ''
-    #!${stdenv.shell}
-    exec ${vscode}/bin/${wrappedExeName} \
-      --extensions-dir "${combinedExtensionsDrv}/share/${wrappedPkgName}/extensions" \
-      "$@"
-  '';
-
 in
 
 # When no extensions are requested, we simply redirect to the original
 # non-wrapped vscode executable.
 runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
-  buildInputs = [ vscode which ];
+  buildInputs = [ vscode makeWrapper ];
   dontPatchELF = true;
   dontStrip = true;
   meta = vscode.meta;
@@ -75,13 +66,9 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   mkdir -p "$out/share/applications"
   mkdir -p "$out/share/pixmaps"
 
-  ln -sT "${vscode}/share/applications/code.desktop" "$out/share/applications/code.desktop"
   ln -sT "${vscode}/share/pixmaps/code.png" "$out/share/pixmaps/code.png"
-  ${if [] == vscodeExtensions
-    then ''
-      ln -sT "${vscode}/bin/${wrappedExeName}" "$out/bin/${exeName}"
-    ''
-    else ''
-      ln -sT "${wrapperExeFile}" "$out/bin/${exeName}"
-    ''}
+  ln -sT "${vscode}/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
+  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${lib.optionalString (vscodeExtensions != []) ''
+    --add-flags "--extensions-dir ${combinedExtensionsDrv}/share/${wrappedPkgName}/extensions"
+  ''}
 ''

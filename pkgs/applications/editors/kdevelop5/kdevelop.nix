@@ -9,7 +9,7 @@
 
 let
   pname = "kdevelop";
-  version = "5.2.4";
+  version = "5.3.2";
   qtVersion = "5.${lib.versions.minor qtbase.version}";
 in
 mkDerivation rec {
@@ -17,7 +17,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "1jbks7nh9rybz4kg152l39hfj2x0p6mjins8x9mz03bbv8jf8gic";
+    sha256 = "0akgdnvrab6mbwnmvgzsplk0qh83k1hnm5xc06yxr1s1a5sxbk08";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,19 @@ mkDerivation rec {
     threadweaver kxmlgui kwindowsystem grantlee plasma-framework krunner
     shared-mime-info libksysguard konsole kcrash karchive kguiaddons kpurpose
   ];
+
+  # https://cgit.kde.org/kdevelop.git/commit/?id=716372ae2e8dff9c51e94d33443536786e4bd85b
+  # required as nixos seems to be unable to find CLANG_BUILTIN_DIR
+  cmakeFlags = [
+    "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${(builtins.parseDrvName llvmPackages.clang.name).version}/include"
+  ];
+
+  postPatch = ''
+    # FIXME: temporary until https://invent.kde.org/kde/kdevelop/merge_requests/8 is merged
+    substituteInPlace kdevplatform/language/backgroundparser/parsejob.cpp --replace \
+      'if (internalFilePath.startsWith(dataPath.canonicalPath() + QStringLiteral("/kdev"))) {' \
+      'if (internalFilePath.startsWith(dataPath.canonicalPath() + QStringLiteral("/kdev")) || localFile.startsWith(path + QStringLiteral("/kdev"))) {'
+  '';
 
   postInstall = ''
     # The kdevelop! script (shell environment) needs qdbus and kioclient5 in PATH.

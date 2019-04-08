@@ -1,39 +1,44 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, cmake, vala, python3, gnome3, gtk3, granite, gobjectIntrospection, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, cmake, pantheon, python3, gnome3, gtk3, gobject-introspection, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "hashit";
-  version = "0.2.0";
-
-  name = "${pname}-${version}";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "artemanufrij";
     repo = pname;
     rev = version;
-    sha256 = "1d2g7cm7hhs354waidak9xkhhcvqlwnsl9d0bar9p82gfnpjdg7v";
+    sha256 = "1ba38qmwdk7vkarsxqn89irbymzx52gbks4isx0klg880xm2z4dv";
   };
 
   nativeBuildInputs = [
-    gobjectIntrospection
+    desktop-file-utils
+    gobject-introspection
     meson
     ninja
     pkgconfig
     python3
-    vala
+    pantheon.vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    granite
-    gtk3
+    pantheon.elementary-icon-theme
     gnome3.libgee
+    pantheon.granite
+    gtk3
   ];
+
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
 
   meta = with stdenv.lib; {
     description = "A simple app for checking usual checksums";
-    homepage    = https://github.com/artemanufrij/hashit;
-    license     = licenses.gpl2Plus;
+    homepage = https://github.com/artemanufrij/hashit;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ worldofpeace ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

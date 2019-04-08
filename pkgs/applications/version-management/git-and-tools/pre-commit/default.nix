@@ -1,11 +1,12 @@
 { stdenv, python3Packages }:
 with python3Packages; buildPythonApplication rec {
-  pname = "pre_commit";
-  version = "1.11.1";
+  pname = "pre-commit";
+  version = "1.14.4";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1kjrq8z78b6aqhyyw07dlwf6cqls88kik6f5l07hs71fj5ddvs9w";
+    inherit version;
+    pname = "pre_commit";
+    sha256 = "1ly40348x9lkzsr7a9grkn7m8m6lhfsv0ihlnp288xbvmrirrmnk";
   };
 
   propagatedBuildInputs = [
@@ -17,7 +18,9 @@ with python3Packages; buildPythonApplication rec {
     six
     toml
     virtualenv
-  ];
+    importlib-metadata
+  ] ++ stdenv.lib.optional (pythonOlder "3.7") importlib-resources
+    ++ stdenv.lib.optional (pythonOlder "3.2") futures;
 
   # Tests fail due to a missing windll dependency
   doCheck = false;

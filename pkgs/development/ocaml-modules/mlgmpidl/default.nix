@@ -2,25 +2,23 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-mlgmpidl-${version}";
-  version = "1.2.7";
+  version = "1.2.8";
   src = fetchFromGitHub {
     owner = "nberth";
     repo = "mlgmpidl";
     rev = version;
-    sha256 = "063hy1divbiabqm5x307iamw942sivzw9fr8vczy3kgndfp12nic";
+    sha256 = "1csqplyxi5gq6ma7g4la2x20mhz1plmjallsankv0mn0x69zb1id";
   };
 
   buildInputs = [ perl gmp mpfr ocaml findlib camlidl ];
 
-  configurePhase = ''
-    echo CAML_PREFIX = ${ocaml} > Makefile.config
-    cat Makefile.config.model >> Makefile.config
-    sed -i Makefile.config \
-      -e 's|^MLGMPIDL_PREFIX.*$|MLGMPIDL_PREFIX = $out|' \
-      -e 's|^GMP_PREFIX.*$|GMP_PREFIX = ${gmp.dev}|' \
-      -e 's|^MPFR_PREFIX.*$|MPFR_PREFIX = ${mpfr.dev}|' \
-      -e 's|^CAMLIDL_DIR.*$|CAMLIDL_DIR = ${camlidl}/lib/ocaml/${ocaml.version}/site-lib/camlidl|'
-    echo HAS_NATIVE_PLUGINS = 1 >> Makefile.config
+  prefixKey = "-prefix ";
+  configureFlags = [
+    "--gmp-prefix ${gmp.dev}"
+    "--mpfr-prefix ${mpfr.dev}"
+  ];
+
+  postConfigure = ''
     sed -i Makefile \
       -e 's|^	/bin/rm |	rm |'
   '';

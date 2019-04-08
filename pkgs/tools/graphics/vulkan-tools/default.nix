@@ -3,17 +3,17 @@
 
 stdenv.mkDerivation rec {
   name = "vulkan-tools-${version}";
-  version = "1.1.82.0";
+  version = "1.1.101.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "sdk-${version}";
-    sha256 = "1viaqp1zfdgli3hw674rz8mrfzxpgv12vxcd07czwr8nyb19f2g5";
+    sha256 = "03227qxa8q19qgzk30h0h49sh03idr6vh9srnrhiziw2vzmahmpp";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake python3 vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ python3 vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
   enableParallelBuilding = true;
 
   cmakeFlags = [ "-DBUILD_ICD=OFF" "-DGLSLANG_INSTALL_DIR=${glslang}" ];

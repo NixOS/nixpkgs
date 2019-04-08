@@ -21,6 +21,10 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
+  NIX_LDFLAGS = [
+    "-ldl"
+  ];
+
   meta = {
     homepage = http://www.bergo.eng.br/eboard/;
     description = "Chess interface for Unix-like systems";

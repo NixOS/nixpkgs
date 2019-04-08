@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   name    = "why3-${version}";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchurl {
-    url    = https://gforge.inria.fr/frs/download.php/file/37604/why3-1.0.0.tar.gz;
-    sha256 = "18h00diw1c051v7ya0lv09ns5630qi9savwffx0652mcc4b4qpxn";
+    url = https://gforge.inria.fr/frs/download.php/file/37903/why3-1.2.0.tar.gz;
+    sha256 = "0xz001jhi71ja8vqrjz27v63bidrzj4qvg1yqarq6p4dmpxhk348";
   };
 
   buildInputs = (with ocamlPackages; [
       ocaml findlib num lablgtk ocamlgraph zarith menhir ]) ++
-    stdenv.lib.optionals (ocamlPackages.ocaml == coq.ocaml ) [
-      coq coq.camlp5
+    stdenv.lib.optionals (ocamlPackages.ocaml == coq.ocamlPackages.ocaml ) [
+      coq ocamlPackages.camlp5
     ];
 
   installTargets = [ "install" "install-lib" ];

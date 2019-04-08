@@ -7,13 +7,13 @@ stdenv.mkDerivation rec {
   version = "3.24.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-nibbles/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-nibbles/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "19g44cnrb191v50bdvy2qkrfhvyfsahd0kx9hz95x9gkjfn2nn35";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool itstool libxml2 ];
   buildInputs = [
-    gtk3 librsvg libcanberra-gtk3 clutter-gtk gnome3.defaultIconTheme
+    gtk3 librsvg libcanberra-gtk3 clutter-gtk gnome3.adwaita-icon-theme
     libgee libgnome-games-support
   ];
 

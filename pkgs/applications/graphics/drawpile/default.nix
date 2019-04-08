@@ -11,25 +11,34 @@
 , libmicrohttpd
 , giflib
 , miniupnpc
+, extra-cmake-modules
+, libvpx
 }:
 
 stdenv.mkDerivation rec {
   name = "drawpile-${version}";
-  version = "2.0.11";
+  version = "2.1.4";
   src = fetchurl {
     url = "https://drawpile.net/files/src/drawpile-${version}.tar.gz";
-    sha256 = "0h018rxhc0lwpqwmlihalz634nd0xaafk4p2b782djjd87irnjpk";
+    sha256 = "0n54p5day6gnmxqmgx4yd7q6y0mgv1nwh84yrz5r953yhd9m37rn";
   };
+  nativeBuildInputs = [
+    extra-cmake-modules
+  ];
   buildInputs = [
+    # common deps:
     cmake
     qtbase qtsvg qtmultimedia qttools
     karchive
     # optional deps:
+    #   server-specific:
     libsodium # ext-auth support
     libmicrohttpd # HTTP admin api
+    #   client-specific:
     giflib # gif animation export support
     miniupnpc # automatic port forwarding
     kdnssd # local server discovery with Zeroconf
+    libvpx # WebM video export
   ];
   configurePhase = "cmake -DCMAKE_INSTALL_PREFIX=$out .";
 

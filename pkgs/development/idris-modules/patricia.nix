@@ -16,10 +16,6 @@ build-idris-package  {
     sha256 = "093q3qjmr93wv8pqwk0zfm3hzf14c235k9c9ip53rhg6yzcm0yqz";
   };
 
-  postUnpack = ''
-    rm source/patricia-nix.ipkg
-  '';
-
   meta = {
     description = "Immutable map from integer keys to values based on patricia tree. Basically persistent array.";
     homepage = https://github.com/ChShersh/idris-patricia;

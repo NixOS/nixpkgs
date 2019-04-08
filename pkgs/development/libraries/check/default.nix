@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

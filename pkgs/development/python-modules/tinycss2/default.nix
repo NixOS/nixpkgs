@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, webencodings, pytestrunner, pytestcov, pytest-flake8, pytest-isort, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, webencodings, pytest, pytestrunner, pytestcov, pytest-flake8, pytest-isort, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "tinycss2";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ webencodings ];
 
-  checkInputs = [ pytestrunner pytestcov pytest-flake8 pytest-isort glibcLocales ];
+  checkInputs = [ pytest pytestrunner pytestcov pytest-flake8 pytest-isort glibcLocales ];
 
   LC_ALL = "en_US.UTF-8";
 

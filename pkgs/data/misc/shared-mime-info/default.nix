@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gettext, perl, perlXMLParser, intltool
+{stdenv, fetchurl, pkgconfig, gettext, perlPackages, intltool
 , libxml2, glib}:
 
 let version = "1.10"; in
@@ -10,9 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1gxyvwym3xgpmp262gfn8jg5sla6k5hy6m6dmy6grgiq90xsh9f6";
   };
 
-  nativeBuildInputs = [
-    pkgconfig gettext intltool perl perlXMLParser libxml2 glib
-  ];
+  nativeBuildInputs = [ pkgconfig gettext intltool ] ++ (with perlPackages; [ perl XMLParser ]);
+  buildInputs = [ libxml2 glib ];
 
   meta = with stdenv.lib; {
     inherit version;

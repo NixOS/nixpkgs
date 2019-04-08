@@ -108,6 +108,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "*" ];
   };
 
+  FsLexYaccRuntime = fetchNuGet {
+    baseName = "FsLexYacc.Runtime";
+    version = "6.1.0";
+    sha256 = "18vrx4lxsn4hkfishg4abv0d4q21dsph0bm4mdq5z8afaypp5cr7";
+    outputFiles = [ "lib/net40/*" ];
+  };
+
   FsPickler = fetchNuGet {
     baseName = "FsPickler";
     version = "1.2.9";
@@ -210,8 +217,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   SharpFont = fetchNuGet {
     baseName = "SharpFont";
-    version = "3.1.0";
-    sha256 = "137y514i4zi0i0qsx7nv4ibl4kifbr8xr23rqdkwf7yxf88jjmh2";
+    version = "4.0.1";
+    sha256 = "1yd3cm4ww0hw2k3aymf792hp6skyg8qn491m2a3fhkzvsl8z7vs8";
     outputFiles = [ "lib/*" "config/*" ];
   };
 

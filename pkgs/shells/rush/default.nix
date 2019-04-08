@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
          sftp-server or scp, that lack this ability.
       '';
 
-    homepage = http://www.gnu.org/software/rush/;
+    homepage = https://www.gnu.org/software/rush/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.bjg ];

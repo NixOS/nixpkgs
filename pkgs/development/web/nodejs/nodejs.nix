@@ -1,7 +1,7 @@
 { stdenv, fetchurl, openssl, python2, zlib, libuv, utillinux, http-parser
 , pkgconfig, which
 # Updater dependencies
-, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix
+, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
 , darwin, xcbuild
 , procps
@@ -12,12 +12,16 @@ with stdenv.lib;
 { enableNpm ? true, version, sha256, patches ? [] } @args:
 
 let
-
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+
+  majorVersion = versions.major version;
+  minorVersion = versions.minor version;
 
   baseName = if enableNpm then "nodejs" else "nodejs-slim";
 
-  sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs (!stdenv.isDarwin) { inherit http-parser; });
+  useSharedHttpParser = !stdenv.isDarwin && versionOlder "${majorVersion}.${minorVersion}" "11.4";
+
+  sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs useSharedHttpParser { inherit http-parser; });
 
   sharedConfigureFlags = concatMap (name: [
     "--shared-${name}"
@@ -68,7 +72,6 @@ in
 
     postPatch = ''
       patchShebangs .
-      sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
 
       # fix tests
       for a in test/parallel/test-child-process-env.js \
@@ -80,6 +83,7 @@ in
           --replace "/usr/bin/env" "${coreutils}/bin/env"
       done
     '' + optionalString stdenv.isDarwin ''
+      sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
       sed -i -e "s|tr1/type_traits|type_traits|g" \
              -e "s|std::tr1|std|" src/util.h
     '';
@@ -88,22 +92,29 @@ in
     doCheck = false; # fails 4 out of 1453 tests
 
     postInstall = ''
-      paxmark m $out/bin/node
       PATH=$out/bin:$PATH patchShebangs $out
 
       ${optionalString enableNpm ''
         mkdir -p $out/share/bash-completion/completions/
         $out/bin/npm completion > $out/share/bash-completion/completions/npm
+        for dir in "$out/lib/node_modules/npm/man/"*; do
+          mkdir -p $out/share/man/$(basename "$dir")
+          for page in "$dir"/*; do
+            ln -rs $page $out/share/man/$(basename "$dir")
+          done
+        done
       ''}
 
       # install the missing headers for node-gyp
       cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
+    '' + optionalString (stdenv.isDarwin && enableNpm) ''
+      sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
     '';
 
     passthru.updateScript = import ./update.nix {
-      inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix;
+      inherit stdenv writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
       inherit (stdenv) lib;
-      majorVersion = with stdenv.lib; elemAt (splitString "." version) 0;
+      inherit majorVersion;
     };
 
     meta = {

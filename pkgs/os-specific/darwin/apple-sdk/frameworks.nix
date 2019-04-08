@@ -34,7 +34,7 @@ with frameworks; with libs; {
   CoreMIDIServer          = [];
   CoreMedia               = [ ApplicationServices AudioToolbox CoreAudio CF CoreGraphics CoreVideo ];
   CoreMediaIO             = [ CF CoreMedia ];
-  CoreText                = [ CF CoreGraphics cf-private ];
+  CoreText                = [ CF CoreGraphics ];
   CoreVideo               = [ ApplicationServices CF CoreGraphics IOSurface OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
   DVComponentGlue         = [ CoreServices QuickTime ];
@@ -48,8 +48,7 @@ with frameworks; with libs; {
   ExceptionHandling       = [];
   FWAUserLib              = [];
   ForceFeedback           = [ CF IOKit ];
-  # cf-private was moved first in list because of https://github.com/NixOS/nixpkgs/pull/28635
-  Foundation              = [ cf-private CF libobjc Security ApplicationServices SystemConfiguration ];
+  Foundation              = [ CF libobjc Security ApplicationServices SystemConfiguration ];
   GLKit                   = [ CF ];
   GLUT                    = [ OpenGL ];
   GSS                     = [];

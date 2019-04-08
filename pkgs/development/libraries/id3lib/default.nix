@@ -17,7 +17,10 @@ stdenv.mkDerivation {
 
   doCheck = false; # fails to compile
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Library for reading, writing, and manipulating ID3v1 and ID3v2 tags";
+    homepage = http://id3lib.sourceforge.net;
+    platforms = platforms.unix;
+    license = licenses.lgpl2;
   };
 }

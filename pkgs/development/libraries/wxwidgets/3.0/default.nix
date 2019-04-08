@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, fetchurl, fetchpatch, pkgconfig
 , gtk2, gtk3, libXinerama, libSM, libXxf86vm
-, xf86vidmodeproto , gstreamer, gst-plugins-base, GConf, setfile
-, withMesa ? true, libGLU ? null, libGL ? null
+, xorgproto, gstreamer, gst-plugins-base, GConf, setfile
+, libGLSupported
+, withMesa ? libGLSupported, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
 , withGtk2 ? true
 , withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk ? null
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
+    [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xorgproto gstreamer
       gst-plugins-base GConf ]
     ++ optional withMesa libGLU
     ++ optional withWebKit (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk)

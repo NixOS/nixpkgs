@@ -4,11 +4,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec{
   name = "atari800-${version}";
-  version = "3.1.0";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/atari800/atari800/${version}/${name}.tar.gz";
-    sha256 = "030yz5l1wyq9l0dmiimiiwpzrjr43whycd409xhhpnrdx76046wh";
+    sha256 = "1dcynsf8i52y7zyg62bkbhl3rdd22ss95zs2s9jm4y5jvn4vks88";
   };
 
   buildInputs = [ unzip zlib SDL readline libGLU_combined libX11 ];

@@ -9,13 +9,13 @@ in stdenv.mkDerivation rec {
   version = "3.22.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/quadrapassel/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/quadrapassel/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0ed44ef73c8811cbdfc3b44c8fd80eb6e2998d102d59ac324e4748f5d9dddb55";
   };
 
   nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook ];
   buildInputs = [
-    gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg
+    gtk3 gnome3.adwaita-icon-theme gdk_pixbuf librsvg
     libcanberra-gtk3 clutter libxml2 clutter-gtk
   ];
 

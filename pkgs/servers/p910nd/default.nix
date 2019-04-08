@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       this protocol and the syntax is lp=remotehost%9100 in /etc/printcap.
     '';
     homepage = http://p910nd.sourceforge.net/;
-    downloadPage = http://sourceforge.net/projects/p910nd/;
+    downloadPage = https://sourceforge.net/projects/p910nd/;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

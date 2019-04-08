@@ -24,12 +24,14 @@
 , libsndfile
 , libebur128
 , boost
+, dbus
 , fftwFloat
 , calf
 , zita-convolver
 , zam-plugins
 , rubberband
 , mda_lv2
+, lsp-plugins
 , hicolor-icon-theme
 }:
 
@@ -37,20 +39,21 @@ let
   lv2Plugins = [
     calf # limiter, compressor exciter, bass enhancer and others
     mda_lv2 # loudness
+    lsp-plugins # delay
   ];
   ladspaPlugins = [
     rubberband # pitch shifting
     zam-plugins # maximizer
   ];
 in stdenv.mkDerivation rec {
-  name = "pulseeffects-${version}";
-  version = "4.3.7";
+  pname = "pulseeffects";
+  version = "4.5.5";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "1x1jnbpbc9snya9k2xq39gssf0k4lnd1hr4cjrnwscg5rqybxqsk";
+    sha256 = "0ll85c9xll2i42r1bdgbnxi5mc5jq2vxgp179jj2iq7wczq5psj1";
   };
 
   nativeBuildInputs = [
@@ -71,8 +74,8 @@ in stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base # gst-fft
+    gst_all_1.gst-plugins-good # pulsesrc
     gst_all_1.gst-plugins-bad
     lilv lv2 serd sord sratom
     libbs2b
@@ -80,6 +83,7 @@ in stdenv.mkDerivation rec {
     libsamplerate
     libsndfile
     boost
+    dbus
     fftwFloat
     zita-convolver
     hicolor-icon-theme
@@ -91,8 +95,6 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    addToSearchPath GST_PLUGIN_SYSTEM_PATH_1_0 $out/lib/gstreamer-1.0
-
     gappsWrapperArgs+=(
       --set LV2_PATH "${stdenv.lib.makeSearchPath "lib/lv2" lv2Plugins}"
       --set LADSPA_PATH "${stdenv.lib.makeSearchPath "lib/ladspa" ladspaPlugins}"

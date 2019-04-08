@@ -14,6 +14,7 @@
 , mock
 , backports_weakref
 , enum34
+, tensorflow-estimator
 , tensorflow-tensorboard
 , cudaSupport ? false
 , cudatoolkit ? null
@@ -22,6 +23,8 @@
 , zlib
 , python
 , symlinkJoin
+, keras-applications
+, keras-preprocessing
 }:
 
 # We keep this binary build for two reasons:
@@ -39,21 +42,21 @@ let
 
 in buildPythonPackage rec {
   pname = "tensorflow";
-  version = "1.9.0";
+  version = "1.13.1";
   format = "wheel";
 
   src = let
-    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) "${python.majorVersion}";
+    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) "${python.pythonVersion}";
     pyver = if stdenv.isDarwin then builtins.substring 0 1 pyVerNoDot else pyVerNoDot;
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyver}_${unit}";
-    dls = import ./tf1.9.0-hashes.nix;
+    dls = import (./. + "/tf${version}-hashes.nix");
   in fetchurl dls.${key};
 
-  propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-tensorboard ]
+  propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-estimator tensorflow-tensorboard keras-applications keras-preprocessing ]
                  ++ lib.optional (!isPy3k) mock
-                 ++ lib.optionals (pythonOlder "3.4") [ backports_weakref enum34 ];
+                 ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
   # and the propageted input tensorflow-tensorboard which causes environment collisions.
@@ -63,7 +66,6 @@ in buildPythonPackage rec {
     rm $out/bin/tensorboard
   '';
 
-  installFlags = "--no-dependencies"; # tensorflow wants setuptools 39, can't allow that.
   # Note that we need to run *after* the fixup phase because the
   # libraries are loaded at runtime. If we run in preFixup then
   # patchelf --shrink-rpath will remove the cuda libraries.
@@ -72,7 +74,7 @@ in buildPythonPackage rec {
       ([ stdenv.cc.cc.lib zlib ] ++ lib.optionals cudaSupport [ cudatoolkit_joined cudnn nvidia_x11 ]);
   in
   lib.optionalString (stdenv.isLinux) ''
-    rrPath="$out/${python.sitePackages}/tensorflow/:${rpath}"
+    rrPath="$out/${python.sitePackages}/tensorflow/:$out/${python.sitePackages}/tensorflow/contrib/tensor_forest/:${rpath}"
     internalLibPath="$out/${python.sitePackages}/tensorflow/python/_pywrap_tensorflow_internal.so"
     find $out -name '*${stdenv.hostPlatform.extensions.sharedLibrary}' -exec patchelf --set-rpath "$rrPath" {} \;
   '';

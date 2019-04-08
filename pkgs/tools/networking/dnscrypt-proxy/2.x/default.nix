@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "dnscrypt-proxy2-${version}";
-  version = "2.0.15";
+  version = "2.0.22";
 
   goPackagePath = "github.com/jedisct1/dnscrypt-proxy";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "dnscrypt-proxy";
-    rev = "${version}";
-    sha256 = "0iwvndk1h550zmwhwablb0smv9n2l51hqbmzj354mcgi6frnx819";
+    rev = version;
+    sha256 = "0rmiyqxbbc3gjnfvyggf2lckckliiijq528993gv0n875r7ahkix";
   };
 
   meta = with stdenv.lib; {

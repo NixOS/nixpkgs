@@ -1,19 +1,24 @@
-{ stdenv, buildPythonPackage, fetchurl }:
+{ stdenv, buildPythonPackage, fetchPypi, python }:
 
 buildPythonPackage rec {
   pname = "amqplib";
-  version = "0.6.1";
+  version = "1.0.2";
 
-  src = fetchurl {
-    url = https://github.com/barryp/py-amqplib/archive/0.6.1.tar.gz;
-    sha256 = "04nsn68wz9m24rvbssirkyighazbn20j60wjmi0r7jcpcf00sb3s";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "tgz";
+    sha256 = "843d69b681a60afd21fbf50f310404ec67fcdf9d13dfcf6e9d41f3b456217e5b";
   };
 
-  # error: invalid command 'test'
+  # testing assumes network connection
   doCheck = false;
 
+  checkPhase = ''
+    ${python.interpreter} tests/client_0_8/run_all.py
+  '';
+
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/py-amqplib/;
+    homepage = https://github.com/barryp/py-amqplib;
     description = "Python client for the Advanced Message Queuing Procotol (AMQP)";
     license = licenses.lgpl21;
   };

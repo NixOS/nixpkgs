@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/pipeseroni/pipes.sh;
     description = "Animated pipes terminal screensaver";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.unix;
   };
 }

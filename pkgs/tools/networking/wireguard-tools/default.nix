@@ -1,19 +1,19 @@
-{ stdenv, fetchzip, libmnl ? null, makeWrapper ? null, wireguard-go ? null }:
+{ stdenv, fetchzip, openresolv ? null, libmnl ? null, procps ? null, iproute ? null, makeWrapper ? null, wireguard-go ? null }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "wireguard-tools-${version}";
-  version = "0.0.20180925";
+  version = "0.0.20190227";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "10k63ld0f5q5aykpcrg9m3xmrsf3qmlkvhiv18q73hnky2cjfx62";
+    sha256 = "1kaq0mjcdr4hxr3rx8z11rvlh4ycjsn5654fjw1gh1fdbjgczax5";
   };
 
   sourceRoot = "source/src/tools";
 
-  nativeBuildInputs = optional stdenv.isDarwin makeWrapper;
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = optional stdenv.isLinux libmnl;
 
   makeFlags = [
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
   postFixup = ''
     substituteInPlace $out/lib/systemd/system/wg-quick@.service \
       --replace /usr/bin $out/bin
+  '' + optionalString stdenv.isLinux ''
+    for f in $out/bin/*; do
+      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute openresolv]}
+    done
   '' + optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
       wrapProgram $f --prefix PATH : ${wireguard-go}/bin
@@ -38,7 +42,7 @@ stdenv.mkDerivation rec {
     downloadPage = https://git.zx2c4.com/WireGuard/refs/;
     homepage = https://www.wireguard.com/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ericsagnes mic92 zx2c4 ];
+    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 ];
     platforms = platforms.unix;
   };
 }

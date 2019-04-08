@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libXft, cairo, harfbuzz
-, libintl, gobjectIntrospection, darwin, fribidi, gnome3
+, libintl, gobject-introspection, darwin, fribidi, gnome3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, makeFontsConf, freefont_ttf
 }:
 
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "devdoc" ];
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection gtk-doc docbook_xsl docbook_xml_dtd_43 ];
+  nativeBuildInputs = [ pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43 ];
   buildInputs = optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Carbon
     CoreGraphics

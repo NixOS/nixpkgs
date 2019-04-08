@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXext, libXt, xextproto, xproto }:
+{ stdenv, fetchurl, libX11, libXext, libXt, xorgproto }:
 
 stdenv.mkDerivation rec {
   name = "xosd-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "025m7ha89q29swkc7s38knnbn8ysl24g2h5s7imfxflm91psj7sg";
   };
 
-  buildInputs = [ libX11 libXext libXt xextproto xproto ];
+  buildInputs = [ libX11 libXext libXt xorgproto ];
 
   meta = with stdenv.lib; {
     description = "Displays text on your screen";

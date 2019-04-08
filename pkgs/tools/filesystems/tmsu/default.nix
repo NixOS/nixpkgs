@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "tmsu-${version}";
-  version = "0.7.1";
+  version = "0.7.4";
 
   go-sqlite3 = fetchgit {
     url = "git://github.com/mattn/go-sqlite3";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "oniony";
     repo = "tmsu";
     rev = "v${version}";
-    sha256 = "0d1sryq80chb9vrf9z0lfx4xb3sdkg01f9hqf3bb9c89vm6v2lwg";
+    sha256 = "1g9gxlll2g4qkqbrshq3888sy1lgw6p5dvcrl5qyh6w73yimi1cq";
   };
 
   buildInputs = [ go fuse ];
@@ -38,16 +38,17 @@ stdenv.mkDerivation rec {
     patchShebangs tests/.
 
     export GOPATH=$PWD
+    export GOCACHE=$TMPDIR/go-cache
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/sbin
-    mkdir -p $out/share/man
+    mkdir -p $out/share/man/man1
     mkdir -p $out/share/zsh/site-functions
     make install INSTALL_DIR=$out/bin \
                  MOUNT_INSTALL_DIR=$out/sbin \
-                 MAN_INSTALL_DIR=$out/share/man \
+                 MAN_INSTALL_DIR=$out/share/man/man1 \
                  ZSH_COMP_INSTALL_DIR=$out/share/zsh/site-functions
   '';
 

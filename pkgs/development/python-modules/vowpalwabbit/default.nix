@@ -22,7 +22,8 @@ buildPythonPackage rec {
     export HOME=$PWD
   '';
 
-  buildInputs = [ python.pkgs.boost zlib.dev clang ncurses pytest docutils pygments ];
+  nativeBuildInputs = [ clang ];
+  buildInputs = [ python.pkgs.boost zlib.dev ncurses pytest docutils pygments ];
   propagatedBuildInputs = [ numpy scipy scikitlearn ];
 
   # Python ctypes.find_library uses DYLD_LIBRARY_PATH.

@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, fetchzip, pkgs, fetchurlBoot }:
+{ stdenv, buildPackages, fetchurl, fetchzip, pkgs }:
 
 let
   # This attrset can in theory be computed automatically, but for that to work nicely we need
@@ -141,7 +141,7 @@ let
     # in an infinite recursion without this. It's not clear why this
     # worked fine when not cross-compiling
     fetch = if name == "libiconv"
-      then fetchurlBoot
+      then stdenv.fetchurlBoot
       else fetchurl;
   in fetch {
     url = "http://www.opensource.apple.com/tarballs/${name}/${name}-${versions.${version}.${name}}.tar.gz";

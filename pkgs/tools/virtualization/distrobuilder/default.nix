@@ -8,8 +8,8 @@ let binPath = stdenv.lib.makeBinPath [
 in
 buildGoPackage rec {
   name = "distrobuilder-${version}";
-  version = "2018_06_29";
-  rev = "e5acd73f81ad37151f3a2088fde650cea9b6a7e6";
+  version = "2018_10_04";
+  rev = "d2329be9569d45028a38836186d2353b8ddfe1ca";
 
   goPackagePath = "github.com/lxc/distrobuilder";
 
@@ -17,7 +17,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "lxc";
     repo = "distrobuilder";
-    sha256 = "19rc11s0paqga72jr8bziixihfv7dlkszmfk6xkg0349hzdg0gac";
+    sha256 = "1sn1wif86p089kr6zq83k81hjd1d73kamnawc2p0k0vd0w91d3v4";
   };
 
   goDeps = ./deps.nix;

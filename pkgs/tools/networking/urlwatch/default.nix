@@ -2,17 +2,18 @@
 
 python3Packages.buildPythonApplication rec {
   name = "urlwatch-${version}";
-  version = "2.14";
+  version = "2.16";
 
   src = fetchFromGitHub {
     owner  = "thp";
     repo   = "urlwatch";
     rev    = version;
-    sha256 = "1m7qdh2lk5napncmfnk86dj4wqcahq8y24xnylxa4qlx2ivwkr6b";
+    sha256 = "1bkwr151bnv72aka2r9jwaq8lkz1p6031wr5pss4sij978qn5xld";
   };
 
   propagatedBuildInputs = with python3Packages; [
     appdirs
+    cssselect
     keyring
     lxml
     minidb

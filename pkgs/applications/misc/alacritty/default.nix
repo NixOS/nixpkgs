@@ -1,6 +1,6 @@
 { stdenv,
   lib,
-  fetchgit,
+  fetchFromGitHub,
   rustPlatform,
   cmake,
   makeWrapper,
@@ -17,7 +17,10 @@
   libXrandr,
   libGL,
   xclip,
+  wayland,
+  libxkbcommon,
   # Darwin Frameworks
+  cf-private,
   AppKit,
   CoreFoundation,
   CoreGraphics,
@@ -39,30 +42,22 @@ let
     libXrandr
     libGL
     libXi
-  ];
-  darwinFrameworks = [
-    AppKit
-    CoreFoundation
-    CoreGraphics
-    CoreServices
-    CoreText
-    Foundation
-    OpenGL
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland
+    libxkbcommon
   ];
 in buildRustPackage rec {
-  name = "alacritty-unstable-${version}";
-  version = "0.2.0";
+  name = "alacritty-${version}";
+  version = "0.2.9";
 
-  # At the moment we cannot handle git dependencies in buildRustPackage.
-  # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
-  src = fetchgit {
-    url = https://github.com/Mic92/alacritty.git;
-    rev = "rev-${version}";
-    sha256 = "1c9izflacm693rwkxwakxgnpkvxwc8mqasr5p7x0ys6xg91h9sxn";
-    fetchSubmodules = true;
+  src = fetchFromGitHub {
+    owner = "jwilm";
+    repo = "alacritty";
+    rev = "v${version}";
+    sha256 = "01wzkpbz6jjmpmnkqswilnn069ir3cx3jvd3j7zsvqdxqpwncz39";
   };
 
-  cargoSha256 = "1ijgkwv9ij4haig1h6n2b9xbhp5vahy9vp1sx72wxaaj9476msjx";
+  cargoSha256 = "0h9wczgpjh52lhrqg0r2dkrh5svmyvrvh4yj7p0nz45skgrnl8w9";
 
   nativeBuildInputs = [
     cmake
@@ -73,9 +68,13 @@ in buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-             ++ lib.optionals stdenv.isDarwin darwinFrameworks;
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL
+      # Needed for CFURLResourceIsReachable symbols.
+      cf-private
+    ];
 
- outputs = [ "out" "terminfo" ];
+  outputs = [ "out" "terminfo" ];
 
   postPatch = ''
     substituteInPlace copypasta/src/x11.rs \

@@ -32,25 +32,25 @@ let
 in {
   tomcat7 = common {
     versionMajor = "7";
-    versionMinor = "0.82";
-    sha256 = "0vb7c5i50ral4rr39ss95k7cxnzd7fs21zd7f97d1f3qslzwl69g";
+    versionMinor = "0.92";
+    sha256 = "0j015mf15drl92kvgyi1ppzjziw0k1rwvfnih8r20h92ylk8mznk";
   };
 
   tomcat8 = common {
     versionMajor = "8";
-    versionMinor = "0.47";
-    sha256 = "0xv4v3i08rwzfmz7rkhglq5cbjgnfava8dw0i33vsp7dk162a4g4";
+    versionMinor = "0.53";
+    sha256 = "1ymp5n6xjqzpqjjlwql195v8r5fsmry7nfax46bafkjw8b24g80r";
   };
 
   tomcat85 = common {
     versionMajor = "8";
-    versionMinor = "5.23";
-    sha256 = "1qnww70x75c0qf2wn8mkpz5lszggjnh78dpb4chyw2fnbm3wxain";
+    versionMinor = "5.35";
+    sha256 = "0n6agr2wn8m5mv0asz73hy2194n9rk7mh5wsp2pz7aq0andbhh5s";
   };
 
   tomcat9 = common {
     versionMajor = "9";
-    versionMinor = "0.2";
-    sha256 = "0aaykzi0b2xsdmjp60ihcjzh1m95p0a79kn5l2v7vgbkyg449638";
+    versionMinor = "0.13";
+    sha256 = "1rsrnmkkrbzrj56jk2wh8hrr79kfkk3fz1j0abk3midn1jnbgxxq";
   };
 }

@@ -1,5 +1,6 @@
-{ stdenv, fetchgit, bash, libconfig, libevent, openssl,
-  readline, zlib, lua5_2, python, pkgconfig, jansson
+{ stdenv, fetchgit, bash, libconfig, libevent, openssl
+, readline, zlib, lua5_2, python, pkgconfig, jansson
+, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     cp ./bin/telegram-cli $out/bin/telegram-wo-key
     cp ./tg-server.pub $out/
     cat > $out/bin/telegram-cli <<EOF
-    #!${bash}/bin/sh
+    #!${runtimeShell}
     $out/bin/telegram-wo-key -k $out/tg-server.pub "\$@"
     EOF
     chmod +x $out/bin/telegram-cli

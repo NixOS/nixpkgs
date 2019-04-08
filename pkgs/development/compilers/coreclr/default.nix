@@ -1,4 +1,4 @@
-{ stdenv
+{ config, stdenv
 , fetchFromGitHub
 , fetchpatch
 , which
@@ -14,7 +14,7 @@
 , liburcu
 , libuuid
 , libkrb5
-, debug ? false
+, debug ? config.coreclr.debug or false
 }:
 
 stdenv.mkDerivation rec {

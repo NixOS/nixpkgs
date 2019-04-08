@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qmake, pkgconfig, boost, wirelesstools, iw, qwt }:
+{ stdenv, fetchurl, qtbase, qtsvg, qmake, pkgconfig, boost, wirelesstools, iw, qwt, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "linssid-${version}";
@@ -9,24 +9,28 @@ stdenv.mkDerivation rec {
     sha256 = "13d35rlcjncd8lx3khkgn9x8is2xjd5fp6ns5xsn3w6l4xj9b4gl";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkgconfig qmake makeWrapper ];
   buildInputs = [ qtbase qtsvg boost qwt ];
 
   patches = [ ./0001-unbundled-qwt.patch ];
 
   postPatch = ''
+    sed -e "s|/usr/include/qt5.*$|& ${qwt}/include|" -i linssid-app/linssid-app.pro
     sed -e "s|/usr/include/|/nonexistent/|g" -i linssid-app/*.pro
     sed -e 's|^LIBS .*= .*libboost_regex.a|LIBS += -lboost_regex|' \
         -e "s|/usr|$out|g" \
         -i linssid-app/linssid-app.pro linssid-app/linssid.desktop
     sed -e "s|\.\./\.\./\.\./\.\./usr|$out|g" -i linssid-app/*.ui
 
-    sed -e "s|iwlist|${wirelesstools}/sbin/iwlist|g" -i linssid-app/Getter.cpp
-    sed -e "s|iw dev|${iw}/sbin/iw dev|g" -i linssid-app/MainForm.cpp
-
     # Remove bundled qwt
     rm -fr qwt-lib
   '';
+
+  postInstall = ''
+    wrapProgram $out/bin/linssid \
+      --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix} \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ wirelesstools iw ]}  
+      '';
 
   meta = with stdenv.lib; {
     description = "Graphical wireless scanning for Linux";

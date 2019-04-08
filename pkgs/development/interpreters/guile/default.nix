@@ -1,4 +1,4 @@
-{ stdenv, buildPackages
+{ stdenv, pkgsBuildBuild, buildPackages
 , fetchurl, makeWrapper, gawk, pkgconfig
 , libffi, libtool, readline, gmp, boehmgc, libunistring
 , coverageAnalysis ? null
@@ -23,7 +23,7 @@
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-                           buildPackages.buildPackages.guile;
+                           pkgsBuildBuild.guile;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
 
@@ -90,7 +90,7 @@
 
   meta = {
     description = "Embeddable Scheme implementation";
-    homepage    = http://www.gnu.org/software/guile/;
+    homepage    = https://www.gnu.org/software/guile/;
     license     = stdenv.lib.licenses.lgpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ ludo lovek323 vrthra ];
     platforms   = stdenv.lib.platforms.all;

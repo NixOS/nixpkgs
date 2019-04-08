@@ -1,13 +1,19 @@
-{ system ? builtins.currentSystem, enableUnfree ? false }:
-with import ../lib/testing.nix { inherit system; };
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; },
+  enableUnfree ? false
+}:
+
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
+
 let
   esUrl = "http://localhost:9200";
 
   mkElkTest = name : elk : makeTest {
     inherit name;
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ eelco chaoflow offline basvandijk ];
+      maintainers = [ eelco offline basvandijk ];
     };
     nodes = {
       one =

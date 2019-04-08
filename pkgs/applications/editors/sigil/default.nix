@@ -6,10 +6,10 @@
 
 stdenv.mkDerivation rec {
   name = "sigil-${version}";
-  version = "0.9.10";
+  version = "0.9.13";
 
   src = fetchFromGitHub {
-    sha256 = "11r7043kbqv67z1aqk929scsg6yllldpl8icl32dw3dai7f1c658";
+    sha256 = "05wnq7av7fgqgcqd88qjwgn55vr4ciy4f0rgi722f52vy97bw9bj";
     rev = version;
     repo = "Sigil";
     owner = "Sigil-Ebook";

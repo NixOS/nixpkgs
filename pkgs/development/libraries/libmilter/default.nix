@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
     cd libmilter
     cat > a.m4 <<EOF
+      define(\`confCC', \`$CC')
+      define(\`confAR', \`$AR')
       define(\`confEBINDIR', \`$out/libexec')
       define(\`confINCLUDEDIR', \`$out/include')
       define(\`confLIBDIR', \`$out/lib')
@@ -29,13 +31,14 @@ stdenv.mkDerivation rec {
     sh Build -f ./a.m4
   '';
 
-  patches = [ ./install.patch ./sharedlib.patch];
+  patches = [ ./install.patch ./sharedlib.patch ];
 
-  buildInputs = [ m4 ];
+  nativeBuildInputs = [ m4 ];
 
   meta = with stdenv.lib; {
     description = "Sendmail Milter mail filtering API library";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];
+    license = licenses.sendmail;
   };
 }

@@ -10,12 +10,12 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in buildPythonPackage rec {
-  version = "2.8.0";
+  version = "2.9.0";
   pname = "h5py";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mdr6wrq02ac93m1aqx9kad0ppfzmm4imlxqgyy1x4l7hmdcc9p6";
+    sha256 = "9d41ca62daf36d6b6515ab8765e4c8c4388ee18e2a665701fef2b41563821002";
   };
 
   configure_flags = "--hdf5=${hdf5}" + optionalString mpiSupport " --mpi";
@@ -30,15 +30,12 @@ in buildPythonPackage rec {
 
   preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
 
-  checkInputs = optional isPy27 unittest2;
+  checkInputs = optional isPy27 unittest2 ++ [ openssh ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ hdf5 cython ]
     ++ optional mpiSupport mpi;
   propagatedBuildInputs = [ numpy six]
     ++ optionals mpiSupport [ mpi4py openssh ];
-
-  # https://github.com/h5py/h5py/issues/1088
-  doCheck = false;
 
   meta = {
     description =

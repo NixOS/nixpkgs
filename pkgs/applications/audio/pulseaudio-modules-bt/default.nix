@@ -1,14 +1,17 @@
 { stdenv
 , runCommand
 , fetchFromGitHub
-, libpulseaudio
 , pulseaudio
 , pkgconfig
+, ffmpeg_4
+, patchelf
+, fdk_aac
 , libtool
 , cmake
 , bluez
 , dbus
 , sbc
+, lib
 }:
 
 let
@@ -20,42 +23,58 @@ let
 
 in stdenv.mkDerivation rec {
   name = "pulseaudio-modules-bt-${version}";
-  version = "unstable-2018-09-11";
+  version = "unstable-2019-03-15";
 
   src = fetchFromGitHub {
     owner = "EHfive";
     repo = "pulseaudio-modules-bt";
-    rev = "9c6ad75382f3855916ad2feaa6b40e37356d80cc";
-    sha256 = "1iz4m3y6arsvwcyvqc429w252dl3apnhvl1zhyvfxlbg00d2ii0h";
+    rev = "0b397c26eb4fd5dc611bd3e2baa79776de646856";
+    sha256 = "09q0xh9iz0crik6xpln9lijirf62aljxa1jrds1i1zgflyfidd0z";
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./fix-install-path.patch
+  ];
+
   nativeBuildInputs = [
     pkgconfig
+    patchelf
     cmake
   ];
 
   buildInputs = [
-    libpulseaudio
     pulseaudio
+    ffmpeg_4
+    fdk_aac
     libtool
     bluez
     dbus
     sbc
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-L${pulseaudio}/lib/pulseaudio"
-  ];
-
-  prePatch = ''
+  postPatch = ''
+    # Upstream bundles pulseaudio as a submodule
     rm -r pa
     ln -s ${pulseSources} pa
+
+    # Pulseaudio version is detected with a -rebootstrapped suffix which build system assumptions
+    substituteInPlace config.h.in --replace PulseAudio_VERSION ${pulseaudio.version}
+    substituteInPlace CMakeLists.txt --replace '${"\${PulseAudio_VERSION}"}' ${pulseaudio.version}
+  '';
+
+  postFixup = ''
+    for so in $out/lib/pulse-${pulseaudio.version}/modules/*.so; do
+      orig_rpath=$(patchelf --print-rpath "$so")
+      patchelf \
+        --set-rpath "${lib.getLib ffmpeg_4}/lib:$out/lib/pulse-${pulseaudio.version}/modules:$orig_rpath" \
+        "$so"
+    done
   '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/EHfive/pulseaudio-modules-bt;
-    description = "SBC, Sony LDAC codec (A2DP Audio) support for Pulseaudio";
+    description = "LDAC, aptX, aptX HD, AAC codecs (A2DP Audio) support for Linux PulseAudio";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ adisbladis ];

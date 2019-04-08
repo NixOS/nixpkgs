@@ -1,0 +1,114 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.09">
+ <title>Release 19.09 (“Loris”, 2019/09/??)</title>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.09-highlights">
+  <title>Highlights</title>
+
+  <para>
+   In addition to numerous new and upgraded packages, this release has the
+   following highlights:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.09-new-services">
+  <title>New Services</title>
+
+  <para>
+   The following new services were added since the last release:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.09-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Buildbot no longer supports Python 2, as support was dropped upstream in
+     version 2.0.0. Configurations may need to be modified to make them
+     compatible with Python 3.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     PostgreSQL now uses
+     <filename class="directory">/run/postgresql</filename> as its socket
+     directory instead of <filename class="directory">/tmp</filename>. So
+     if you run an application like eg. Nextcloud, where you need to use
+     the Unix socket path as the database host name, you need to change it
+     accordingly.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.09-notable-changes">
+  <title>Other Notable Changes</title>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     The <option>documentation</option> module gained an option named
+     <option>documentation.nixos.includeAllModules</option> which makes the
+     generated <citerefentry>
+     <refentrytitle>configuration.nix</refentrytitle>
+     <manvolnum>5</manvolnum></citerefentry> manual page include all options
+     from all NixOS modules included in a given
+     <literal>configuration.nix</literal> configuration file. Currently, it is
+     set to <literal>false</literal> by default as enabling it frequently
+     prevents evaluation. But the plan is to eventually have it set to
+     <literal>true</literal> by default. Please set it to
+     <literal>true</literal> now in your <literal>configuration.nix</literal>
+     and fix all the bugs it uncovers.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>vlc</literal> package gained support for Chromecast
+     streaming, enabled by default. TCP port 8010 must be open for it to work,
+     so something like <literal>networking.firewall.allowedTCPPorts = [ 8010
+     ];</literal> may be required in your configuration. Also consider enabling
+     <link xlink:href="https://nixos.wiki/wiki/Accelerated_Video_Playback">
+     Accelerated Video Playback</link> for better transcoding performance.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+</section>

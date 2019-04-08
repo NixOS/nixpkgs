@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   name = "muse-sequencer-${version}";
-  version = "3.0.2";
+  version = "3.1pre1";
 
   meta = with stdenv.lib; {
     homepage = http://www.muse-sequencer.org;
@@ -38,10 +38,15 @@ stdenv.mkDerivation rec {
     fetchFromGitHub {
       owner = "muse-sequencer";
       repo = "muse";
-      rev = "02d9dc6abd757c3c1783fdd46dacd3c4ef2c0a6d";
-      sha256 = "0pn0mcg79z3bhjwxbss3ylypdz3gg70q5d1ij3x8yw65ryxbqf51";
+      rev = "2167ae053c16a633d8377acdb1debaac10932838";
+      sha256 = "0rsdx8lvcbz5bapnjvypw8h8bq587s9z8cf2znqrk6ah38s6fsrf";
     };
 
+
+  nativeBuildInputs = [
+    pkgconfig
+    gitAndTools.gitFull
+  ];
 
   buildInputs = [
     libjack2
@@ -57,8 +62,6 @@ stdenv.mkDerivation rec {
     lash
     dssi
     liblo
-    pkgconfig
-    gitAndTools.gitFull
   ];
 
   sourceRoot = "source/muse3";

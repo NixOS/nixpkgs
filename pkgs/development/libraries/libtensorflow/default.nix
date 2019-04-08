@@ -1,7 +1,7 @@
-{ stdenv
+{ config, stdenv
 , fetchurl
 , patchelf
-, cudaSupport ? false, symlinkJoin, cudatoolkit, cudnn, nvidia_x11
+, cudaSupport ? config.cudaSupport or false, symlinkJoin, cudatoolkit, cudnn, nvidia_x11
 }:
 with stdenv.lib;
 let
@@ -57,6 +57,17 @@ in stdenv.mkDerivation rec {
     ${patchLibs}
     chmod -w $out/lib/libtensorflow.so
     chmod -w $out/lib/libtensorflow_framework.so
+
+    # Write pkgconfig file.
+    mkdir $out/lib/pkgconfig
+    cat > $out/lib/pkgconfig/tensorflow.pc << EOF
+    Name: TensorFlow
+    Version: ${version}
+    Description: Library for computation using data flow graphs for scalable machine learning
+    Requires:
+    Libs: -L$out/lib -ltensorflow
+    Cflags: -I$out/include/tensorflow
+    EOF
   '';
 
   meta = {

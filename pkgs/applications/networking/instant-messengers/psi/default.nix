@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, enchant, qt4, zlib, sox, libX11, xproto, libSM
+{ stdenv, fetchurl, enchant, qt4, zlib, sox, libX11, xorgproto, libSM
 , libICE, qca2, pkgconfig, which, glib
-, libXScrnSaver, scrnsaverproto
+, libXScrnSaver
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ enchant qt4 zlib sox libX11 xproto libSM libICE
-      qca2 pkgconfig which glib scrnsaverproto libXScrnSaver
+    [ enchant qt4 zlib sox libX11 xorgproto libSM libICE
+      qca2 pkgconfig which glib libXScrnSaver
     ];
 
   NIX_CFLAGS_COMPILE="-I${qca2}/include/QtCrypto";

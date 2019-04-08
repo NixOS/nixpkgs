@@ -1,28 +1,33 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, python }:
+{ stdenv, fetchFromGitHub, pkgconfig, qmake, python3, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-qt-dbus-factory";
-  version = "1.0.4";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0j0f57byzlz2ixgj6qr1pda83bpwn2q8kxv4i2jv99n6g0qw4nmw";
+    sha256 = "1b2i5m6fzkga72hbl85v2rng3qq53di39p7jj2f119wmlfbyp2vg";
   };
 
   nativeBuildInputs = [
     qmake
-    python
+    python3
+    deepin.setupHook
   ];
 
   postPatch = ''
-    sed -i libdframeworkdbus/{DFrameworkdbusConfig.in,libdframeworkdbus.pro} \
-      -e "s,/usr,$out,"
+    searchHardCodedPaths
+    fixPath $out /usr \
+      libdframeworkdbus/DFrameworkdbusConfig.in \
+      libdframeworkdbus/libdframeworkdbus.pro
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Qt DBus interface library for Deepin software";

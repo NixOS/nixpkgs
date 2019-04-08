@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "IBMQuantumExperience";
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2a5662d7457c297af0751985979e64a88569beb07cfedad0ce1dfa5a7237842";
+    sha256 = "0szn743sbm3cs80982cf4994c1xcg6iz5xkhdbpm1kfv5qn1phja";
   };
 
   propagatedBuildInputs = [

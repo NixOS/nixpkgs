@@ -1,50 +1,57 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, libxml2
-, m2crypto, ply, pyyaml, six
-, httpretty, lxml, mock, pytest, requests
+{ lib, buildPythonPackage, fetchPypi, libxml2
+, m2crypto, ply, pyyaml, six, pbr, pythonOlder, isPy37, python
+, httpretty, lxml, mock, pytest, requests, decorator, unittest2
 }:
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "0.10.0";
+  version = "0.12.6";
 
-  src = fetchFromGitHub {
-    owner  = "pywbem";
-    repo   = "pywbem";
-    rev    = "v${version}";
-    sha256 = "0jcwklip03xcni0dvsk9va8ilqz21g4fxwqd5kzvv91slaadfcym";
+  # Support added in master https://github.com/pywbem/pywbem/commit/b2f2f1a151a30355bbc6652dca69a7b30bfe941e awaiting release
+  disabled = isPy37;
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1dc6b745rrys600n05apdf6lb2vv5arlcwv7aiz9whgkbcd9qhki";
   };
 
-  patches = [
-    # fix timezone handling so the tests pass again. Can go when 0.10.1 is released
-    # https://github.com/pywbem/pywbem/issues/755#issuecomment-327508681
-    ./make_cimdatetime_timezone_aware.patch
+  propagatedBuildInputs = [
+    mock
+    pbr
+    ply
+    pyyaml
+    six
+  ] ++ lib.optionals (pythonOlder "3.0") [ m2crypto ];
+
+  checkInputs = [
+    decorator
+    httpretty
+    libxml2
+    lxml
+    pytest
+    requests
+    unittest2
   ];
 
-  propagatedBuildInputs = [ m2crypto ply pyyaml six ];
+  postPatch = ''
+    # Uses deprecated library yamlordereddictloader
+    rm testsuite/test_client.py
 
-  checkInputs = [ httpretty lxml mock pytest requests ];
-
-  # 1 test fails because it doesn't like running in our sandbox. Deleting the
-  # whole file is admittedly a little heavy-handed but at least the vast
-  # majority of tests are run.
-  checkPhase = ''
-    rm testsuite/testclient/networkerror.yaml
-
-    substituteInPlace makefile \
-      --replace "PYTHONPATH=." "" \
-      --replace '--cov $(package_name) --cov-config coveragerc' ""
-
-    for f in testsuite/test_cim_xml.py testsuite/validate.py ; do
-      substituteInPlace $f --replace "'xmllint" "'${stdenv.lib.getBin libxml2}/bin/xmllint"
-    done
-
-    make PATH=$PATH:${stdenv.lib.getBin libxml2}/bin test
+    # Wants `wbemcli` in PATH
+    rm testsuite/test_wbemcli.py
+    
+    # Disables tests that use testfixtures which is currently broken by nonbuilding zope_component
+    rm testsuite/{test_logging,test_recorder,test_wbemconnection_mock}.*
   '';
 
-  meta = with stdenv.lib; {
-    description = "Support for the WBEM standard for systems management.";
-    homepage = http://pywbem.github.io/pywbem/;
-    license = licenses.gpl2;
+  checkPhase = ''
+    pytest testsuite/
+  '';
+
+  meta = with lib; {
+    description = "Support for the WBEM standard for systems management";
+    homepage = https://pywbem.github.io;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

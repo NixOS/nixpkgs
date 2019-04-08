@@ -6,13 +6,11 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "1.11.15";
-
-  disabled = pythonOlder "2.7";
+  version = "1.11.20";
 
   src = fetchurl {
-    url = "http://www.djangoproject.com/m/releases/1.11/${pname}-${version}.tar.gz";
-    sha256 = "0h2sl02x2mxr3rl3dy750pzm5kvmx77116fys8rrgw164kc3b0mi";
+    url = "https://www.djangoproject.com/m/releases/1.11/${pname}-${version}.tar.gz";
+    sha256 = "0h90kdq8r4y8wa73hdxmyy5psnwlg61dcq3qsa098cpfiyh9vaa3";
   };
 
   patches = stdenv.lib.optionals withGdal [
@@ -34,8 +32,9 @@ buildPythonPackage rec {
   # too complicated to setup
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A high-level Python Web framework";
     homepage = https://www.djangoproject.com/;
+    license = licenses.bsd3;
   };
 }

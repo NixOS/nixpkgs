@@ -40,7 +40,7 @@ in buildPythonApplication rec {
     sha256 = "17yj5n8byxp09l5zkap73hpphjy35px84wy68ps824w8l0l8kcd4";
   };
 
-  propagatedBuildInputs = [ argparse pytz ];
+  propagatedBuildInputs = [ pytz ];
 
   prePatch = ''
     siteDir=$out/${python.sitePackages}

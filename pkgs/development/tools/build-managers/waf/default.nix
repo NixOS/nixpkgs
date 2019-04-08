@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "waf-${version}";
-  version = "2.0.10";
+  version = "2.0.14";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "waf";
     rev = name;
-    sha256 = "12p5myq72r5qg7wp2gwbnyvh6lzzcrwp9h3dw194x38g52m0prc7";
+    sha256 = "006a4wb9i569pahs8ji86hrv58g2hm8xikgchnll3bdqgxllhnrs";
   };
 
   buildInputs = [ python ensureNewerSourcesForZipFilesHook ];

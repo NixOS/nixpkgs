@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl }:
+{ lib, callPackage, fetchurl, stdenv }:
 
 let
   generic = args: callPackage (import ./generic.nix args) { };
@@ -16,28 +16,38 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = generic {
-    version = "390.87";
-    sha256_32bit = "0rlr1f4lnpb8c4qz4w5r8xw5gdy9bzz26qww45qyl1qav3wwaaaw";
-    sha256_64bit = "07k1kq8lkgbvjyr2dnbxcz6nppcwpq17wf925w8kfq78345hla9q";
-    settingsSha256 = "0xlaiy7jr95z0v2c6cwll89nxnb142pybw7m08jg44r7n13ffv3r";
-    persistencedSha256 = "0mhwk321garyl6m12261cj03ycv0qz1sbrlbq6cqwjpq4f1s7h58";
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_418 else legacy_390;
+
+  # No active beta right now
+  beta = stable;
+
+  stable_418 = generic {
+    version = "418.43";
+    sha256_64bit = "0zrjd8wfc8cknfwiyy3llsnn1mympfxxszz7gzakncp3vs1jrghq";
+    settingsSha256 = "1rzxxn7nrhwndl2lgjakxi0rblfkqjyl1n70fl7rcs6g75mi1qsq";
+    persistencedSha256 = "14m4x5r0yc23sg4xx523ccfpxsr6dgm2n3xy9zdibl1cpzz50ikc";
+  };
+
+  # Last one supporting x86
+  legacy_390 = generic {
+    version = "390.116";
+    sha256_32bit = "0aavzi99ps7r6nrchf4h9gw3fkvm2z6wppkqkz5fwcy7x03ky4qk";
+    sha256_64bit = "106qc62a7m9imchqfq8rfn8fwyrjxg383354q7z2wr8112fyhyg1";
+    settingsSha256 = "0inmzjhnlal5ih2iyv2x4y3jx7c4lz9xln8sy9j20yj9azp51qz0";
+    persistencedSha256 = "04ycijijlcbib2afcxjsyyzza1i3adh17sddrz3sah7rj38mrlgx";
 
     patches = lib.optional (kernel.meta.branch == "4.19") ./drm_mode_connector.patch;
   };
 
-  beta = stable; # not enough interest to maintain beta ATM
-
-
   legacy_340 = generic {
-    version = "340.104";
-    sha256_32bit = "1l8w95qpxmkw33c4lsf5ar9w2fkhky4x23rlpqvp1j66wbw1b473";
-    sha256_64bit = "18k65gx6jg956zxyfz31xdp914sq3msn665a759bdbryksbk3wds";
-    settingsSha256 = "1vvpqimvld2iyfjgb9wvs7ca0b0f68jzfdpr0icbyxk4vhsq7sxk";
-    persistencedSha256 = "0zqws2vsrxbxhv6z0nn2galnghcsilcn3s0f70bpm6jqj9wzy7x8";
+    version = "340.107";
+    sha256_32bit = "0mh83affz6bim26ws7kkwwcfj2s6vkdy4d45hifsbshr82qd52wd";
+    sha256_64bit = "0pv9yv3x0kg9hfkmc50xb54ahxkbnyy2vyy4hj2h0s6m9sb5kqz3";
+    settingsSha256 = "1rgaa24acdyqa1rqrx56293vxpskr792njqqpigqmps04llsx703";
+    persistencedSha256 = "0nwv6kh4gxgy80x1zs6gcg5hy3amg25xhsfa2v4mwqa36sblxz6l";
     useGLVND = false;
 
-    patches = maybePatch_drm_legacy ++ [ ./vm_operations_struct-fault.patch ];
+    patches = [ ./vm_operations_struct-fault.patch ];
   };
 
   legacy_304 = generic {
@@ -65,5 +75,6 @@ rec {
         '';
     in applyPatches [ "fix-typos" ];
     patches = maybePatch_drm_legacy;
+    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
   };
 }

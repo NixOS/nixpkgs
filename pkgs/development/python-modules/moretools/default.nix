@@ -15,8 +15,9 @@ buildPythonPackage rec {
     py.test test
   '';
 
-  buildInputs = [ six pathpy pytest ];
-  propagatedBuildInputs = [ decorator zetup ];
+  nativeBuildInputs = [ zetup ];
+  checkInputs = [ six pathpy pytest ];
+  propagatedBuildInputs = [ decorator ];
 
   meta = with stdenv.lib; {
     description = ''
@@ -24,6 +25,6 @@ buildPythonPackage rec {
     '';
     homepage = https://bitbucket.org/userzimmermann/python-moretools;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

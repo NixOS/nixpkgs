@@ -9,12 +9,9 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "1mnh0h9m96p78b9ln1gbl4lw1mgl16qbyfi9fj2l13p3nxaq1sib";
   };
 
-  argparse = null;
-
   doCheck = false;
   propagatedBuildInputs = [
     python.pkgs.requests
-    python.pkgs.argparse
     python.pkgs.pyyaml
   ];
 

@@ -1,43 +1,32 @@
 { stdenv, lib, fetchurl, fetchpatch, autoconf, automake, libtool, bison
-, libasr, libevent, zlib, openssl, db, pam
-
-# opensmtpd requires root for no reason to encrypt passwords, this patch fixes it
-# see also https://github.com/OpenSMTPD/OpenSMTPD/issues/678
-, unpriviledged_smtpctl_encrypt ? true
-
-# Deprecated: use the subaddressing-delimiter in the config file going forward
-, tag_char ? null
+, libasr, libevent, zlib, libressl, db, pam, nixosTests
 }:
 
-if (tag_char != null)
-then throw "opensmtpd: the tag_char argument is deprecated as it can now be specified at runtime via the 'subaddressing-delimiter' option of the configuration file"
-else stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
-  version = "6.0.3p1";
+  version = "6.4.1p2";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
-  buildInputs = [ libasr libevent zlib openssl db pam ];
+  buildInputs = [ libasr libevent zlib libressl db pam ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "291881862888655565e8bbe3cfb743310f5dc0edb6fd28a889a9a547ad767a81";
+    sha256 = "0cppqlx4fk6l8rbim5symh2fm1kzshf421256g596j6c9f9q96xn";
   };
 
   patches = [
-    ./proc_path.diff
-    (fetchpatch {
-      url = "https://github.com/OpenSMTPD/OpenSMTPD/commit/725ba4fa2ddf23bbcd1ff9ec92e86bbfaa6825c8.diff";
-      sha256 = "19rla0b2r53jpdiz25fcza29c2msz6j6paivxhp9jcy1xl457dqa";
-    })
+    ./proc_path.diff # TODO: upstream to OpenSMTPD, see https://github.com/NixOS/nixpkgs/issues/54045
   ];
 
-  postPatch = with builtins; with lib;
-    optionalString unpriviledged_smtpctl_encrypt ''
-      substituteInPlace smtpd/smtpctl.c --replace \
-        'if (geteuid())' \
-        'if (geteuid() != 0 && !(argc > 1 && !strcmp(argv[1], "encrypt")))'
-      substituteInPlace mk/smtpctl/Makefile.in --replace "chmod 2555" "chmod 0555"
-    '';
+  # See https://github.com/OpenSMTPD/OpenSMTPD/issues/885 for the `sh bootstrap`
+  # requirement
+  postPatch = ''
+    substituteInPlace smtpd/parse.y \
+      --replace "/usr/libexec/" "$out/libexec/opensmtpd/"
+    substituteInPlace mk/smtpctl/Makefile.am --replace "chgrp" "true"
+    substituteInPlace mk/smtpctl/Makefile.am --replace "chmod 2555" "chmod 0555"
+    sh bootstrap
+  '';
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -54,6 +43,9 @@ else stdenv.mkDerivation rec {
     "--with-table-db"
   ];
 
+  # See https://github.com/OpenSMTPD/OpenSMTPD/pull/884
+  makeFlags = [ "CFLAGS=-ffunction-sections" "LDFLAGS=-Wl,--gc-sections" ];
+
   installFlags = [
     "sysconfdir=\${out}/etc"
     "localstatedir=\${TMPDIR}"
@@ -67,6 +59,9 @@ else stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rickynils obadz ];
+    maintainers = with maintainers; [ rickynils obadz ekleog ];
+  };
+  passthru.tests = {
+    basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
   };
 }

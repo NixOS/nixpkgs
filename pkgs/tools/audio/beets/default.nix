@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales, diffPlugins
-, pythonPackages, imagemagick, gobjectIntrospection, gst_all_1
+, pythonPackages, imagemagick, gobject-introspection, gst_all_1
+, runtimeShell
+, fetchpatch
 
 # Attributes needed for tests of the external plugins
 , callPackage, beets
@@ -120,7 +122,7 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.unidecode
     pythonPackages.gst-python
     pythonPackages.pygobject3
-    gobjectIntrospection
+    gobject-introspection
   ] ++ optional enableAcoustid      pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
@@ -139,22 +141,33 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional enableAlternatives  plugins.alternatives
     ++ optional enableCopyArtifacts plugins.copyartifacts;
 
-  buildInputs = with pythonPackages; [
-    beautifulsoup4
+  buildInputs = [
     imagemagick
-    mock
-    nose
-    rarfile
-    responses
   ] ++ (with gst_all_1; [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
   ]);
 
+  checkInputs = with pythonPackages; [
+    beautifulsoup4
+    mock
+    nose
+    rarfile
+    responses
+  ];
+
   patches = [
     ./replaygain-default-bs1770gain.patch
     ./keyfinder-default-bin.patch
+
+    # Fix Python 3.7 compatibility
+    (fetchpatch {
+      url = "https://github.com/beetbox/beets/commit/"
+          + "15d44f02a391764da1ce1f239caef819f08beed8.patch";
+      sha256 = "12rjb4959nvnrm3fvvki7chxjkipa0cy8i0yi132xrcn8141dnpm";
+      excludes = [ "docs/changelog.rst" ];
+    })
   ];
 
   postPatch = ''
@@ -203,9 +216,7 @@ in pythonPackages.buildPythonApplication rec {
     LOCALE_ARCHIVE=${assert stdenv.isLinux; glibcLocales}/lib/locale/locale-archive \
     BEETS_TEST_SHELL="${testShell}" \
     BASH_COMPLETION_SCRIPT="${completion}" \
-    HOME="$(mktemp -d)" \
-      # Exclude failing test https://github.com/beetbox/beets/issues/2652
-      nosetests -v --exclude=test_single_month_nonmatch_ --exclude=test_asciify_variable --exclude=test_asciify_character_expanding_to_slash
+    HOME="$(mktemp -d)" nosetests -v
 
     runHook postCheck
   '';
@@ -218,7 +229,7 @@ in pythonPackages.buildPythonApplication rec {
     tmphome="$(mktemp -d)"
 
     EDITOR="${writeScript "beetconfig.sh" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cat > "$1" <<CFG
       plugins: ${concatStringsSep " " allEnabledPlugins}
       CFG

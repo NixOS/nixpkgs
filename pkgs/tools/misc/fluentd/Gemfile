@@ -11,4 +11,3 @@ gem 'fluent-plugin-scribe'
 gem 'fluent-plugin-mongo'
 gem 'fluent-plugin-webhdfs'
 gem 'fluent-plugin-rewrite-tag-filter'
-

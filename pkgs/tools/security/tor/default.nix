@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap
+, libseccomp, systemd, libcap, lzma, zstd, scrypt
 
 # for update.nix
 , writeScript
@@ -14,17 +14,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.3.4.8";
+  name = "tor-0.3.5.7";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${name}.tar.gz";
-    sha256 = "08qhzcmzxp5xr2l5721vagksqnnbrzzzy5hmz5y9r8lrq2r4qsl2";
+    sha256 = "17l31p58rsd30w4b6r4d8pbr84z3y7awahvjxbpmnlxc47y8f20v";
   };
 
   outputs = [ "out" "geoip" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libevent openssl zlib ] ++
+  buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";

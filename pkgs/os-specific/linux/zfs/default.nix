@@ -3,7 +3,7 @@
 , configFile ? "all"
 
 # Userspace dependencies
-, zlib, libuuid, python, attr, openssl
+, zlib, libuuid, python3, attr, openssl
 , libtirpc
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
@@ -54,7 +54,7 @@ let
         ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
       buildInputs =
            optionals buildKernel [ spl ]
-        ++ optionals buildUser [ zlib libuuid python attr ]
+        ++ optionals buildUser [ zlib libuuid python3 attr ]
         ++ optionals (buildUser && (isUnstable || isLegacyCrypto)) [ openssl ]
         ++ optional stdenv.hostPlatform.isMusl [ libtirpc ];
 
@@ -93,6 +93,7 @@ let
 
       configureFlags = [
         "--with-config=${configFile}"
+        "--with-python=${python3.interpreter}"
       ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
@@ -149,7 +150,7 @@ let
         homepage = http://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
-        maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
+        maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
       };
     };
 in {
@@ -158,17 +159,18 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    # incompatibleKernelVersion = null;
+    # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.7.11";
+    version = "0.7.13";
 
-    sha256 = "0m9wkq6wf4cg8w38s3avd0bvybnv0avqwxk3gwz9rgb9rn0m98jg";
+    sha256 = "1l77bq7pvc54vl15pnrjd0njgpf00qjzy0x85dpfh5jxng84x1fb";
 
     extraPatches = [
+      # in case this gets out of date, just send Mic92 a pull request!
       (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc3...nixos-zfs-0.7.0-rc3.patch";
-        sha256 = "1vlw98v8xvi8qapzl1jwm69qmfslwnbg3ry1lmacndaxnyckkvhh";
+        url = "https://github.com/Mic92/zfs/commit/cf23c1d38bfc698a8a729fc0c5f9ca41591f4d95.patch";
+        sha256 = "14v3x9ipvg2qd1vyf70nv909jd5zdxlsw5y8k60pfyvwm7g80wr5";
       })
     ];
 
@@ -177,18 +179,18 @@ in {
 
   zfsUnstable = common rec {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = null;
+    # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.0-rc1";
+    version = "0.8.0-rc3";
 
-    rev = "b8a90418f3a9c23b89c5d2c729a4dd0fea644508";
-    sha256 = "041b7h8gbb042x9mhg8y87bgq9y793bawglc7b0fg871k6190drx";
+    sha256 = "0wmkis0q2gbj7sgx3ipxngbgzjcf7ay353v3mglf2ay50q4da5i7";
     isUnstable = true;
 
     extraPatches = [
+      # in case this gets out of date, just send Mic92 a pull request!
       (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/${rev}...nixos-zfs-2018-08-13.patch";
+        url = "https://github.com/Mic92/zfs/commit/bc29b5783da0af2c80c85126a1831ce1d52bfb69.patch";
         sha256 = "1sdcr1w2jp3djpwlf1f91hrxxmc34q0jl388smdkxh5n5bpw5gzw";
       })
     ];

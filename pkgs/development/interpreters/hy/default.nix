@@ -2,20 +2,20 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "hy-${version}";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchurl {
     url = "mirror://pypi/h/hy/${name}.tar.gz";
-    sha256 = "0cbdh1q0zm00p4h7i44kir4qhw0p6sid78xf6llrx2p21llsnv98";
+    sha256 = "01vzaib1imr00j5d7f7xk44v800h06s3yv9inhlqm6f3b25ywpl1";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ appdirs clint astor rply ];
-
-  # The build generates a .json parser file in the home directory under .cache.
-  # This is needed to get it to not try and open files in /homeless-shelter
-  preConfigure = ''
-    export HOME=$TMP
-  '';
+  propagatedBuildInputs = with pythonPackages; [
+    appdirs
+    astor
+    clint
+    funcparserlib
+    rply
+  ];
 
   meta = {
     description = "A LISP dialect embedded in Python";

@@ -3,14 +3,14 @@
 
 let
 in stdenv.mkDerivation rec {
-  version = "3.3.15";
+  version = "3.3.19";
   name    = "arangodb-${version}";
 
   src = fetchFromGitHub {
     repo = "arangodb";
     owner = "arangodb";
     rev = "v${version}";
-    sha256 = "177n2l8k8fswxvz102n6lm0qsn0fvq0s2zx6skrfg4g7gil3wkyb";
+    sha256 = "1qg4lqnn5x0xsmkq41mjj301mfh76r8ys1rkzhinxlq30jld3155";
   };
 
   buildInputs = [

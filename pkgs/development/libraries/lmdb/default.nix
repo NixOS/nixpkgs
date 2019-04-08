@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "lmdb-${version}";
-  version = "0.9.22";
+  version = "0.9.23";
 
   src = fetchFromGitHub {
     owner = "LMDB";
     repo = "lmdb";
     rev = "LMDB_${version}";
-    sha256 = "0lng4ra2qrbqcf8klvqp68qarha0z4bkqhhv8lhh45agsxyrhfkj";
+    sha256 = "0ag7l5180ajvm73y59m7sn3p52xm8m972d08cshxhpwgwa4v35k6";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" ];
 
-  makeFlags = [ "prefix=$(out)" "CC=cc" ]
+  makeFlags = [
+    "prefix=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ]
     ++ stdenv.lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so";
 
   doCheck = true;
@@ -26,7 +30,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput bin "$bin"
-    moveToOutput "lib/*.a" REMOVE # until someone needs it
   ''
     # add lmdb.pc (dynamic only)
     + ''

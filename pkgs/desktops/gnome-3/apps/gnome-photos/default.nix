@@ -8,13 +8,13 @@
 
 let
   pname = "gnome-photos";
-  version = "3.28.0";
+  version = "3.30.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1n280j7crgwlzyf09j66f1zkrnnhfrr8pshn824njs1xyk3g0q11";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1mf1887x0pk46h6l51rfkpn29fwp3yvmqkk99kr1iwpz0lakyx6f";
   };
 
   # doCheck = true;
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 glib gegl babl libgdata libdazzle
     gnome3.gsettings-desktop-schemas
-    gdk_pixbuf gnome3.defaultIconTheme
+    gdk_pixbuf gnome3.adwaita-icon-theme
     gfbgraph grilo-plugins grilo
     gnome-online-accounts tracker
     gexiv2 geocode-glib dleyna-renderer

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, ocaml, findlib, camlp4
+{ stdenv, fetchzip, which, ocaml, findlib, camlp4
 , camlzip, camomile, extlib
 }:
 
@@ -8,15 +8,14 @@ else
 
 let
   pname = "javalib";
-  webpage = "http://sawja.inria.fr/";
 in
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "2.3.5";
+  version = "3.0";
 
-  src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/37655/javalib-2.3.5.tar.bz2";
-    sha256 = "1gks12ghcmv9lm8j4diw8bvjqxfl7xwk0sxbi227saxg9irpwwkd";
+  src = fetchzip {
+    url = "https://github.com/javalib-team/javalib/archive/v${version}.tar.gz";
+    sha256 = "02zgn1z1wj3rbg9xqmbagys91bnsy27iwrngkivzhlykyaw9vf6n";
   };
 
   buildInputs = [ which ocaml findlib camlp4 ];
@@ -30,17 +29,11 @@ stdenv.mkDerivation rec {
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
 
-  preBuild = ''
-    make ptrees;
-    make installptrees;
-    export OCAMLPATH=$out/lib/ocaml/${ocaml.version}/site-lib/:$OCAMLPATH;
-  '';
-
   propagatedBuildInputs = [ camlzip camomile extlib ];
 
   meta = with stdenv.lib; {
     description = "A library that parses Java .class files into OCaml data structures";
-    homepage = "${webpage}";
+    homepage = https://javalib-team.github.io/javalib/;
     license = licenses.lgpl3;
     maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms or [];

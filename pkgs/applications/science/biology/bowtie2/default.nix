@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, zlib, tbb }:
+{ stdenv, fetchFromGitHub, zlib, tbb, python, perl }:
 
 stdenv.mkDerivation rec {
   pname = "bowtie2";
-  version = "2.3.4.2";
+  version = "2.3.5";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gsfaf7rjg4nwhs7vc1vf63xd5r5v1yq58w7x3barycplzbvixzz";
+    sha256 = "12v240wnbc541hl4z2fiymxd3bd6czazs13fjkygldflg48w45m0";
   };
 
-  buildInputs = [ zlib tbb ];
+  buildInputs = [ zlib tbb python perl ];
 
   installFlags = [ "prefix=$(out)" ];
 

@@ -163,6 +163,8 @@ in
 
           libsForQt56.phonon-backend-gstreamer
           libsForQt5.phonon-backend-gstreamer
+
+          xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ]
 
         ++ lib.optionals cfg.enableQt4Support [ pkgs.phonon-backend-gstreamer ]
@@ -175,9 +177,9 @@ in
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
 
-      environment.pathsToLink = [ 
+      environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
-        "/share" 
+        "/share"
       ];
 
       environment.etc = singleton {
@@ -185,10 +187,8 @@ in
         target = "X11/xkb";
       };
 
-      environment.variables = {
-        # Enable GTK applications to load SVG icons
-        GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-      };
+      # Enable GTK applications to load SVG icons
+      services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
       fonts.fontconfig.defaultFonts = {
@@ -225,11 +225,30 @@ in
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
 
-      # Update the start menu for each user that has `isNormalUser` set.
-      system.activationScripts.plasmaSetup = stringAfter [ "users" "groups" ]
-        (concatStringsSep "\n"
-          (mapAttrsToList (name: value: "${pkgs.su}/bin/su ${name} -c ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5")
-            (filterAttrs (n: v: v.isNormalUser) config.users.users)));
+      # Update the start menu for each user that is currently logged in
+      system.userActivationScripts.plasmaSetup = ''
+        # The KDE icon cache is supposed to update itself
+        # automatically, but it uses the timestamp on the icon
+        # theme directory as a trigger.  Since in Nix the
+        # timestamp is always the same, this doesn't work.  So as
+        # a workaround, nuke the icon cache on login.  This isn't
+        # perfect, since it may require logging out after
+        # installing new applications to update the cache.
+        # See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
+        rm -fv $HOME/.cache/icon-cache.kcache
+
+        # xdg-desktop-settings generates this empty file but
+        # it makes kbuildsyscoca5 fail silently. To fix this
+        # remove that menu if it exists.
+        rm -fv $HOME/.config/menus/applications-merged/xdg-desktop-menu-dummy.menu
+
+        # Remove the kbuildsyscoca5 cache. It will be regenerated
+        # immediately after. This is necessary for kbuildsyscoca5 to
+        # recognize that software that has been removed.
+        rm -fv $HOME/.cache/ksycoca*
+
+        ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5
+      '';
     })
   ];
 

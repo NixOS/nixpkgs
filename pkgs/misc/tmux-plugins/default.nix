@@ -1,4 +1,9 @@
-{ fetchgit, stdenv, pkgs }:
+{ fetchgit
+, lib
+, pkgs
+, reattach-to-user-namespace
+, stdenv
+}:
 
 let
   rtpPath = "share/tmux-plugins";
@@ -187,6 +192,9 @@ in rec {
       rev = "e91b178ff832b7bcbbf4d99d9f467f63fd1b76b5";
       sha256 = "1z8dfbwblrbmb8sgb0k8h1q0dvfdz7gw57las8nwd5gj6ss1jyvx";
     };
+    postInstall = lib.optionalString pkgs.stdenv.isDarwin ''
+      sed -e 's:reattach-to-user-namespace:${reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
+    '';
   };
 
   sessionist = mkDerivation {
@@ -218,6 +226,15 @@ in rec {
       sed -i -e '14,20{s|urlview|${pkgs.urlview}/bin/urlview|g}' $target/urlview.tmux
     '';
     dependencies = [ pkgs.urlview ];
+  };
+
+  vim-tmux-navigator = mkDerivation {
+    pluginName = "vim-tmux-navigator";
+    src = fetchgit {
+      url = "https://github.com/christoomey/vim-tmux-navigator";
+      rev = "4e1a877f51a17a961b8c2a285ee80aebf05ccf42";
+      sha256 = "1b8sgbzl4pcpaabqk254n97mjz767ganrmqbsr6rqzz3j9a3s1fv";
+    };
   };
 
   yank = mkDerivation {

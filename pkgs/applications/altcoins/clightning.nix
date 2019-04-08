@@ -1,31 +1,37 @@
 { stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
-  autogen, sqlite, gmp, zlib, fetchFromGitHub }:
+  autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "clightning-${version}";
-  version = "0.6.1";
+  version = "0.7.0";
 
-  src = fetchFromGitHub {
-    fetchSubmodules = true;
-    owner = "ElementsProject";
-    repo = "lightning";
-    rev = "v${version}";
-    sha256 = "0qx30i1c97ic4ii8bm0sk9dh76nfg4ihl9381gxjj14i4jr1q8y4";
+  src = fetchurl {
+    url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
+    sha256 = "448022c2433cbf19bbd0f726344b0500c0c21ee5cc2291edf6b622f094cb3a15";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ which sqlite gmp zlib autoconf libtool automake autogen python3 pkgconfig ];
+  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which unzip ];
+  buildInputs = [ sqlite gmp zlib python3 ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=$(out) VERSION=v${version}" ];
+
+  patches = [
+    # remove after 0.7.0
+    (fetchpatch {
+      name = "fix-0.7.0-build.patch";
+      url = "https://github.com/ElementsProject/lightning/commit/ffc03d2bc84dc42f745959fbb6c8007cf0a6f701.patch";
+      sha256 = "1m5fiz3m8k3nk09nldii8ij94bg6fqllqgdbiwj3sy12vihs8c4v";
+    })
+  ];
 
   configurePhase = ''
     ./configure --prefix=$out --disable-developer --disable-valgrind
   '';
 
   postPatch = ''
-    echo "" > tools/refresh-submodules.sh
     patchShebangs tools/generate-wire.py
   '';
 

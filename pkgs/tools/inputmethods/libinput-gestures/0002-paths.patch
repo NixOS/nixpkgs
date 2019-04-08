@@ -1,29 +1,28 @@
 diff --git a/libinput-gestures b/libinput-gestures
-index f337ba3..5f5b05d 100755
+index aca94ac..c2f03ca 100755
 --- a/libinput-gestures
 +++ b/libinput-gestures
-@@ -75,17 +75,13 @@ def get_libinput_vers():
+@@ -77,7 +77,7 @@ def get_libinput_vers():
      'Return the libinput installed version number string'
      # Try to use newer libinput interface then fall back to old
      # (depreciated) interface.
 -    res = run(('libinput', '--version'), check=False)
 +    res = run(('@libinput@', '--version'), check=False)
-     return res.strip() if res else run(('libinput-list-devices', '--version'))
+     return res.strip() if res else \
+             run(('libinput-list-devices', '--version'), check=False)
  
- # Libinput changed the way in which it's utilities are called
- libvers = get_libinput_vers()
--if Version(libvers) >= Version('1.8'):
+@@ -87,8 +87,8 @@ if not libvers:
+     sys.exit('libinput helper tools do not seem to be installed?')
+ 
+ if Version(libvers) >= Version('1.8'):
 -    cmd_debug_events = 'libinput debug-events'
 -    cmd_list_devices = 'libinput list-devices'
--else:
--    cmd_debug_events = 'libinput-debug-events'
--    cmd_list_devices = 'libinput-list-devices'
-+cmd_debug_events = '@libinput@ debug-events'
-+cmd_list_devices = '@libinput@ list-devices'
- 
- def get_devices_list():
-     'Get list of devices and their attributes (as a dict) from libinput'
-@@ -187,7 +183,7 @@ class COMMAND_internal(COMMAND):
++    cmd_debug_events = '@libinput@ debug-events'
++    cmd_list_devices = '@libinput@ list-devices'
+ else:
+     cmd_debug_events = 'libinput-debug-events'
+     cmd_list_devices = 'libinput-list-devices'
+@@ -199,7 +199,7 @@ class COMMAND_internal(COMMAND):
  
      def run(self):
          'Get list of current workspaces and select next one'
@@ -32,7 +31,7 @@ index f337ba3..5f5b05d 100755
          if not stdout:
              # This command can fail on GNOME when you have only a single
              # dynamic workspace using Xorg (probably a GNOME bug) so let's
-@@ -220,7 +216,7 @@ class COMMAND_internal(COMMAND):
+@@ -233,7 +233,7 @@ class COMMAND_internal(COMMAND):
  
          # Switch to desired workspace
          if index >= minindex and index < maxindex:
@@ -41,3 +40,6 @@ index f337ba3..5f5b05d 100755
  
  # Table of gesture handlers
  handlers = OrderedDict()
+-- 
+2.19.1
+

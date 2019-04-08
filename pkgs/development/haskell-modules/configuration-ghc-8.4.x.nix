@@ -20,6 +20,7 @@ self: super: {
   ghc-boot = null;
   ghc-boot-th = null;
   ghc-compact = null;
+  ghc-heap = null;
   ghc-prim = null;
   ghci = null;
   haskeline = null;
@@ -39,6 +40,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Restricts aeson to <1.4
+  # https://github.com/purescript/purescript/pull/3537
+  purescript = doJailbreak super.purescript;
+
   # https://github.com/jcristovao/enclosed-exceptions/issues/12
   enclosed-exceptions = dontCheck super.enclosed-exceptions;
 
@@ -55,5 +60,20 @@ self: super: {
             stripLen = 1;
           };
     in appendPatch super.hadoop-rpc patch;
+
+  # stack-1.9.1 needs Cabal 2.4.x, a recent version of hpack, and a non-recent
+  # version of yaml. Go figure. We avoid overrideScope here because using it to
+  # change Cabal would re-compile every single package instead of just those
+  # that have it as an actual library dependency. The explicit overrides are
+  # more verbose but friendlier for Hydra.
+  stack = (doJailbreak super.stack).override {
+    Cabal = self.Cabal_2_4_1_0;
+    hpack = self.hpack.override { Cabal = self.Cabal_2_4_1_0; };
+    hackage-security = self.hackage-security.override { Cabal = self.Cabal_2_4_1_0; };
+  };
+
+  # Older GHC versions need these additional dependencies.
+  aeson = addBuildDepend super.aeson self.contravariant;
+  base-compat-batteries = addBuildDepend super.base-compat-batteries self.contravariant;
 
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc, libX11, libGLU_combined }:
+{ stdenv, fetchurl, glibc, libX11, runtimeShell, libGLU_combined }:
 
 with stdenv.lib;
 stdenv.mkDerivation {
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
     # The wrapper script itself. We use $LD_LIBRARY_PATH for libGL.
     cat << EOF > "$out/bin/Tibia"
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $out/res
     ${glibc.out}/lib/ld-linux.so.2 --library-path \$LD_LIBRARY_PATH ./Tibia "\$@"
     EOF

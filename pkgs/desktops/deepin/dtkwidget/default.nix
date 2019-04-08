@@ -1,18 +1,17 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, qtmultimedia,
   qtsvg, qtx11extras, librsvg, libstartup_notification, gsettings-qt,
-  dde-qt-dbus-factory, dtkcore
-}:
+  dde-qt-dbus-factory, dtkcore, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dtkwidget";
-  version = "2.0.9.4";
+  version = "2.0.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "06iyb3ryxrqkwxdazpv8cgabqa4djldgm3q5icsa2grqrgy8vw5m";
+    sha256 = "11a7yirfkcj3rq7va9av4m1pr22mq1yx1j9k18xrqv36n0rlbrr6";
   };
 
   nativeBuildInputs = [
@@ -40,6 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Deepin graphical user interface library";

@@ -1,21 +1,28 @@
 { stdenv, buildPythonPackage, fetchPypi
 , setuptools_scm, pathpy, nbconvert
-, pytest }:
+, pytest_3 }:
 
 buildPythonPackage rec {
   pname = "zetup";
-  version = "0.2.43";
+  version = "0.2.45";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee92ba93a03336962525536f237ae0decf99a9b5d484ba34a3cf06ef017dae8e";
+    sha256 = "f1cde33d0ef3bedaf697e432201fa86da698dadd3445c0efd2a114753853c675";
   };
+
+  # Python 3.7 compatibility
+  # See https://github.com/zimmermanncode/zetup/pull/1
+  postPatch = ''
+    substituteInPlace zetup/zetup_config.py \
+      --replace "'3.6']" "'3.6', '3.7']"
+  '';
 
   checkPhase = ''
     py.test test
   '';
 
-  checkInputs = [ pytest pathpy nbconvert ];
+  checkInputs = [ pytest_3 pathpy nbconvert ];
   propagatedBuildInputs = [ setuptools_scm ];
 
   meta = with stdenv.lib; {
@@ -24,6 +31,6 @@ buildPythonPackage rec {
     '';
     homepage = https://github.com/zimmermanncode/zetup;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

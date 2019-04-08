@@ -4,25 +4,23 @@
 , fetchFromGitHub
 , ffmpeg
 , gettext
-, gtk2-x11
 , libGLU_combined
 , openal
 , pkgconfig
 , SDL2
 , sfml
-, wxGTK
 , zip
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   name = "visualboyadvance-m-${version}";
-  version = "unstable-2017-09-04";
+  version = "2.1.1";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
-    rev = "ceef480";
-    sha256 = "1lpmlj8mv6fwlfg9m58hzggx8ld6cnjvaqx5ka5sffxd9v95qq2l";
+    rev = "v${version}";
+    sha256 = "03cs7wn01flx925sxhpz1j5sxa6s7wfxq71955kasn7a3xr1kxwn";
   };
 
   buildInputs = [
@@ -30,13 +28,11 @@ stdenv.mkDerivation rec {
     cmake
     ffmpeg
     gettext
-    gtk2-x11
     libGLU_combined
     openal
     pkgconfig
     SDL2
     sfml
-    wxGTK
     zip
     zlib
   ];
@@ -44,8 +40,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE='Release'"
     "-DENABLE_FFMPEG='true'"
-    #"-DENABLE_LINK='true'" currently broken :/
+    "-DENABLE_LINK='true'"
     "-DSYSCONFDIR=etc"
+    "-DENABLE_WX='false'"
+    "-DENABLE_SDL='true'"
   ];
 
   meta = {

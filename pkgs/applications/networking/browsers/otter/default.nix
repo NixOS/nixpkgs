@@ -1,7 +1,7 @@
 { stdenv, cmake, fetchFromGitHub
 , qtbase, qtmultimedia, qtwebengine
-, version ? "0.9.99.3"
-, sourceSha ? "0dkismjs3daz5afx6s5arwvynsw5qpvv2rqbzvmpihn6khnhap55"
+, version ? "1.0.01"
+, sourceSha ? "1jw8bj3lcqngr0mqwvz1gf47qjxbwiyda7x4sm96a6ckga7pcwyb"
 }:
 stdenv.mkDerivation {
   name = "otter-browser-${version}";
@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   buildInputs = [ qtbase qtmultimedia qtwebengine ];
 
   meta = with stdenv.lib; {
+    homepage = https://otter-browser.org;
     license = licenses.gpl3Plus;
     description = "Browser aiming to recreate the best aspects of the classic Opera (12.x) UI using Qt5";
     maintainers = with maintainers; [ lheckemann ];
