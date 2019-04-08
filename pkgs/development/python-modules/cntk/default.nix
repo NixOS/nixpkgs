@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  inherit (pkgs.cntk) name version src meta;
+  inherit (pkgs.cntk) name version src;
 
   buildInputs = [ pkgs.cntk pkgs.swig pkgs.openmpi ];
   propagatedBuildInputs = [ numpy scipy enum34 protobuf pip ];
@@ -35,4 +35,12 @@ buildPythonPackage rec {
     cd $NIX_BUILD_TOP
     ${python.interpreter} -c "import cntk"
   '';
+
+  meta = {
+    inherit (pkgs.cntk.meta) homepage description license maintainers;
+    # broken in CNTK 2.4 starting with python-3.7
+    # ("ImportError: cannot import name 'GenericMeta' from 'typing'")
+    broken = stdenv.lib.versionAtLeast python.version "3.7";
+
+  };
 }
