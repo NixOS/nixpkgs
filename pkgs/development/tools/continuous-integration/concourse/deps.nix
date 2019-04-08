@@ -1857,7 +1857,7 @@
       type = "git";
       url = "https://github.com/mattbaird/elastigo";
       rev = "2fe47fd29e4b";
-      sha256 = "049gq6qindnah2cl7x19vxcmhngp1d7az696d9frh2lyd0m447w2";
+      sha256 = "01dy7ab531hvpg2izj4cbl7438n0pgpb27plwrka9n8lqlhcm3ln";
     };
   }
 
