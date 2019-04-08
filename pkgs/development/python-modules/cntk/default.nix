@@ -12,7 +12,8 @@
 buildPythonPackage rec {
   inherit (pkgs.cntk) name version src;
 
-  buildInputs = [ pkgs.cntk pkgs.swig pkgs.openmpi ];
+  nativeBuildInputs = [ pkgs.swig pkgs.openmpi ];
+  buildInputs = [ pkgs.cntk pkgs.openmpi ];
   propagatedBuildInputs = [ numpy scipy enum34 protobuf pip ];
 
   CNTK_LIB_PATH = "${pkgs.cntk}/lib";
