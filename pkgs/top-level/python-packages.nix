@@ -1028,6 +1028,8 @@ in {
 
   avro3k = callPackage ../development/python-modules/avro3k {};
 
+  aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
+
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify {};
