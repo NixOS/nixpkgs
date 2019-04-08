@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://guacamole.incubator.apache.org/";
     maintainers = [ stdenv.lib.maintainers.tomberek ];
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
