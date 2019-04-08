@@ -64,6 +64,20 @@ let
     (mkOverride "colorlog" "4.0.2"
       "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
 
+    # required by home-assistant-frontend
+    (self: super: {
+      user-agents = super.user-agents.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.0";
+        src = fetchFromGitHub {
+          owner = "selwin";
+          repo = "python-user-agents";
+          rev = "v${version}";
+          sha256 = "14kxd780zhp8718xr1z63xffaj3bvxgr4pldh9sv943m4hvi0gw5";
+        };
+        doCheck = false; # can be dropped for 2.0
+      });
+    })
+
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
