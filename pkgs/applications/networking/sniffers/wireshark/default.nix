@@ -64,10 +64,10 @@ in stdenv.mkDerivation {
     mkdir -p $out/Applications
     mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
 
-    for so in $out/Applications/Wireshark.app/Contents/PlugIns/wireshark/*.so; do
-        install_name_tool $so -change libwireshark.10.dylib $out/lib/libwireshark.10.dylib
-        install_name_tool $so -change libwiretap.7.dylib $out/lib/libwiretap.7.dylib
-        install_name_tool $so -change libwsutil.8.dylib $out/lib/libwsutil.8.dylib
+    for f in $(find $out/Applications/Wireshark.app/Contents/PlugIns -name "*.so"); do
+        for dylib in $(otool -L $f | awk '/^\t*lib/ {print $1}'); do
+            install_name_tool -change "$dylib" "$out/lib/$dylib" "$f"
+        done
     done
 
     wrapProgram $out/Applications/Wireshark.app/Contents/MacOS/Wireshark \
