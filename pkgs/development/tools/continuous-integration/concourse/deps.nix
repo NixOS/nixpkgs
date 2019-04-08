@@ -85,9 +85,9 @@
     goPackagePath = "git.apache.org/thrift.git";
     fetch = {
       type = "git";
-      url = "git.apache.org/thrift";
+      url = "https://github.com/apache/thrift";
       rev = "2566ecd5d999";
-      sha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+      sha256 = "14gl0j85x3hj3gncf417f8zf92phrpvkj4clxmvbcq1dcgjdn6mc";
     };
   }
 
