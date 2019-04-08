@@ -37,7 +37,42 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+       Besides the existing <option>services.prometheus</option> module which
+       targets Prometheus-1 a new <option>services.prometheus2</option> module
+       has been added which targets Prometheus-2.
+    </para>
+    <para>
+       Both modules can be enabled at the same time. In fact
+       <link xlink:href="https://prometheus.io/docs/prometheus/latest/migration/#storage">
+       this is needed for upgrading existing Prometheus-1 data to Prometheus-2
+       </link>.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.09-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+      The option <option>services.prometheus.dataDir</option> has been
+      removed. The directory where Prometheus will store its metric data will
+      now always be set to <literal>/var/lib/prometheus</literal> and to
+      <literal>/var/lib/prometheus2</literal> when using
+      <option>services.prometheus2</option>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
