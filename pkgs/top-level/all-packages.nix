@@ -20151,6 +20151,8 @@ in
   };
   cura = qt5.callPackage ../applications/misc/cura { };
 
+  curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
+
   curaLulzbot = callPackage ../applications/misc/cura/lulzbot.nix { };
 
   curaByDagoma = callPackage ../applications/misc/curabydagoma { };
