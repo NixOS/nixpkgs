@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/Alecaddd/sequeler;
     license = licenses.gpl3;
-    maintainers = [ maintainers.etu ];
+    maintainers = [ maintainers.etu ] ++ pantheon.maintainers;
     platforms = platforms.linux;
   };
 }
