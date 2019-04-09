@@ -18,12 +18,17 @@ stdenv.mkDerivation rec {
       "-DgRPC_SSL_PROVIDER=package"
       "-DgRPC_PROTOBUF_PROVIDER=package"
       "-DgRPC_GFLAGS_PROVIDER=package"
+      "-DBUILD_SHARED_LIBS=ON"
     ];
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.
   preConfigure = ''
     rm -vf BUILD
+  '';
+
+  preBuild = ''
+    export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH
   '';
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
