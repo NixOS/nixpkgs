@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "macdylibbundler";
+  name = "macdylibbundler-${version}";
+  version = "20180825";
 
   src = fetchFromGitHub {
     owner = "auriamg";
