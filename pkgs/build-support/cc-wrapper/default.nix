@@ -279,24 +279,51 @@ stdenv.mkDerivation {
       export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
     ''
 
+    # Machine flags. These are necessary to support
+
+    # TODO: We should make a way to support miscellaneous machine
+    # flags and other gcc flags as well.
+
+    # Always add -march based on cpu in triple. Sometimes there is a
+    # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
+    # that case.
+    + optionalString (targetPlatform ? platform.gcc.arch || targetPlatform.parsed.cpu ? arch) ''
+      echo "-march=${targetPlatform.platform.gcc.arch or targetPlatform.parsed.cpu.arch}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # -mcpu is not very useful. You should use mtune and march
+    # instead. It’s provided here for backwards compatibility.
+    + optionalString (targetPlatform ? platform.gcc.cpu) ''
+      echo "-mcpu=${targetPlatform.platform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # -mfloat-abi only matters on arm32 but we set it here
+    # unconditionally just in case. If the abi specifically sets hard
+    # vs. soft floats we use it here.
+    + optionalString (targetPlatform ? platform.gcc.float-abi || targetPlatform.parsed.abi ? float) ''
+      echo "-mfloat-abi=${targetPlatform.platform.gcc.float-abi or targetPlatform.parsed.abi.float}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.fpu) ''
+      echo "-mfpu=${targetPlatform.platform.gcc.fpu}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.mode) ''
+      echo "-mmode=${targetPlatform.platform.gcc.mode}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.tune) ''
+      echo "-mtune=${targetPlatform.platform.gcc.tune}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # TODO: categorize these and figure out a better place for them
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
-    ''
-
-    + optionalString targetPlatform.isMinGW ''
+    '' + optionalString targetPlatform.isMinGW ''
       hardening_unsupported_flags+=" stackprotector"
-    ''
-
-    + optionalString targetPlatform.isAvr ''
+    '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
-    ''
-
-    + optionalString targetPlatform.isNetBSD ''
-      hardening_unsupported_flags+=" stackprotector fortify"
-    ''
-
-    + optionalString (targetPlatform.libc == "newlib") ''
+    '' + optionalString (targetPlatform.libc == "newlib") ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    '' + optionalString targetPlatform.isNetBSD ''
+      hardening_unsupported_flags+=" stackprotector fortify"
     ''
 
     + optionalString (libc != null && targetPlatform.isAvr) ''
