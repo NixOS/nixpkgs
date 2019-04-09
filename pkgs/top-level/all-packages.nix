@@ -1594,6 +1594,8 @@ in
 
   ipvsadm = callPackage ../os-specific/linux/ipvsadm { };
 
+  ir-standard-fonts = callPackage ../data/fonts/ir-standard-fonts { };
+
   lynis = callPackage ../tools/security/lynis { };
 
   mathics = pythonPackages.mathics;
@@ -2562,7 +2564,7 @@ in
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   elk5Version = "5.6.9";
-  elk6Version = "6.5.1";
+  elk6Version = "6.7.1";
 
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
   elasticsearch6 = callPackage ../servers/search/elasticsearch { };
@@ -3991,10 +3993,7 @@ in
 
   nodejs = hiPrio nodejs-8_x;
 
-  nodejs-slim = nodejs-slim-6_x;
-
-  nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {};
-  nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix { enableNpm = false; };
+  nodejs-slim = nodejs-slim-8_x;
 
   nodejs-8_x = callPackage ../development/web/nodejs/v8.nix {};
   nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix { enableNpm = false; };
@@ -4020,10 +4019,6 @@ in
 
   nodePackages_8_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v8.nix {
     nodejs = pkgs.nodejs-8_x;
-  });
-
-  nodePackages_6_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v6.nix {
-    nodejs = pkgs.nodejs-6_x;
   });
 
   nodePackages = nodePackages_10_x;
@@ -5543,6 +5538,8 @@ in
 
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
 
+  shabnam-fonts = callPackage ../data/fonts/shabnam-fonts { };
+
   shadowsocks-rust = callPackage ../tools/networking/shadowsocks-rust {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -5989,6 +5986,8 @@ in
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
+
+  tox-node = callPackage ../tools/networking/tox-node { };
 
   toxvpn = callPackage ../tools/networking/toxvpn { };
 
@@ -8189,6 +8188,7 @@ in
 
   polyml = callPackage ../development/compilers/polyml { };
   polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
+  polyml57 = callPackage ../development/compilers/polyml/5.7.nix { };
 
   pure = callPackage ../development/interpreters/pure {
     llvm = llvm_35;
@@ -8901,6 +8901,8 @@ in
 
   pmd = callPackage ../development/tools/analysis/pmd { };
 
+  pmdk = callPackage ../development/libraries/pmdk { };
+
   jdepend = callPackage ../development/tools/analysis/jdepend { };
 
   fedpkg = pythonPackages.callPackage ../development/tools/fedpkg { };
@@ -9278,8 +9280,6 @@ in
   retdec-full = retdec.override {
     withPEPatterns = true;
   };
-
-  rhc = callPackage ../development/tools/rhc { };
 
   rman = callPackage ../development/tools/misc/rman { };
 
@@ -13413,7 +13413,7 @@ in
   zmqpp = callPackage ../development/libraries/zmqpp { };
 
   zig = callPackage ../development/compilers/zig {
-    llvmPackages = llvmPackages_7;
+    llvmPackages = llvmPackages_8;
   };
 
   zimlib = callPackage ../development/libraries/zimlib { };
@@ -14346,6 +14346,8 @@ in
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
   shairport-sync = callPackage ../servers/shairport-sync { };
+
+  showoff = callPackage ../servers/http/showoff {};
 
   serfdom = callPackage ../servers/serf { };
 
@@ -15806,6 +15808,8 @@ in
     docbook_xsl_ns;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
+
+  documize-community = callPackage ../servers/documize-community { };
 
   doulos-sil = callPackage ../data/fonts/doulos-sil { };
 
@@ -18460,6 +18464,8 @@ in
 
   mac = callPackage ../development/libraries/mac { };
 
+  macdylibbundler = callPackage ../development/tools/misc/macdylibbundler { };
+
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
@@ -20091,6 +20097,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  vdirsyncerStable = callPackage ../tools/misc/vdirsyncer/stable.nix { };
+
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
   verbiste = callPackage ../applications/misc/verbiste {
@@ -21552,6 +21560,8 @@ in
 
   xsokoban = callPackage ../games/xsokoban { };
 
+  xtris = callPackage ../games/xtris { };
+
   inherit (callPackage ../games/quake2/yquake2 { })
     yquake2
     yquake2-ctf
@@ -22153,7 +22163,7 @@ in
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
 
   isabelle = callPackage ../applications/science/logic/isabelle {
-    polyml = stdenv.lib.overrideDerivation polyml (attrs: {
+    polyml = stdenv.lib.overrideDerivation polyml57 (attrs: {
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
     });
 

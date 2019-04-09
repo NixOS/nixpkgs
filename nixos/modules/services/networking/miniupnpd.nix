@@ -71,7 +71,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.miniupnpd}/bin/miniupnpd -f ${configFile}";
-        PIDFile = "/var/run/miniupnpd.pid";
+        PIDFile = "/run/miniupnpd.pid";
         Type = "forking";
       };
     };

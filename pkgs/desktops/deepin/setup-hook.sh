@@ -11,7 +11,7 @@ searchHardCodedPaths() {
     grep --color=always -r -E '\<(ExecStart|Exec|startDetached|execute|exec\.(Command|LookPath))\>' $dir || true
 
     echo ----------- looking for hard coded paths
-    grep --color=always -r -E '/(usr|bin|sbin|etc|var|opt)\>' $dir || true
+    grep --color=always -a -r -E '/(usr|bin|sbin|etc|var|opt)\>' $dir || true
 
     echo ----------- done
 }

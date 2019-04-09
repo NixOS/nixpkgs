@@ -9,7 +9,7 @@ let
 
   zabbix = cfg.package;
 
-  stateDir = "/var/run/zabbix";
+  stateDir = "/run/zabbix";
 
   logDir = "/var/log/zabbix";
 

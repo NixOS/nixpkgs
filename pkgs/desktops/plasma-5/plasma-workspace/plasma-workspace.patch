@@ -1,5 +1,5 @@
 diff --git a/sddm-theme/theme.conf.cmake b/sddm-theme/theme.conf.cmake
-index 69d30705..52e91028 100644
+index 69d3070..52e9102 100644
 --- a/sddm-theme/theme.conf.cmake
 +++ b/sddm-theme/theme.conf.cmake
 @@ -1,4 +1,4 @@
@@ -9,7 +9,7 @@ index 69d30705..52e91028 100644
 -background=${CMAKE_INSTALL_PREFIX}/${WALLPAPER_INSTALL_DIR}/Next/contents/images/3200x2000.png
 +background=${NIXPKGS_WALLPAPER_INSTALL_DIR}/Next/contents/images/3200x2000.png
 diff --git a/startkde/CMakeLists.txt b/startkde/CMakeLists.txt
-index 6a1a2121..f03fd349 100644
+index 6a1a212..f03fd34 100644
 --- a/startkde/CMakeLists.txt
 +++ b/startkde/CMakeLists.txt
 @@ -4,11 +4,6 @@ add_subdirectory(ksyncdbusenv)
@@ -25,7 +25,7 @@ index 6a1a2121..f03fd349 100644
  configure_file(startplasmacompositor.cmake ${CMAKE_CURRENT_BINARY_DIR}/startplasmacompositor  @ONLY)
  configure_file(startplasma.cmake ${CMAKE_CURRENT_BINARY_DIR}/startplasma  @ONLY)
 diff --git a/startkde/kstartupconfig/kstartupconfig.cpp b/startkde/kstartupconfig/kstartupconfig.cpp
-index 493218ea..d507aa55 100644
+index 493218e..d507aa5 100644
 --- a/startkde/kstartupconfig/kstartupconfig.cpp
 +++ b/startkde/kstartupconfig/kstartupconfig.cpp
 @@ -147,5 +147,5 @@ int main()
@@ -36,7 +36,7 @@ index 493218ea..d507aa55 100644
 +    return system( NIXPKGS_KDOSTARTUPCONFIG5 );
      }
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index b68f0c68..a18efd96 100644
+index b68f0c6..a0ec214 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,22 +1,31 @@
@@ -81,7 +81,7 @@ index b68f0c68..a18efd96 100644
  fi
 
  # Boot sequence:
-@@ -33,62 +42,134 @@ fi
+@@ -33,62 +42,143 @@ fi
  #
  # * Then ksmserver is started which takes control of the rest of the startup sequence
 
@@ -254,7 +254,7 @@ index b68f0c68..a18efd96 100644
 
  #Do not sync any of this section with the wayland versions as there scale factors are
  #sent properly over wl_output
-@@ -104,26 +185,33 @@ fi
+@@ -104,26 +194,33 @@ fi
  #otherwise apps that manually opt in for high DPI get auto scaled by the developer AND manually scaled by us
  export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
@@ -301,7 +301,7 @@ index b68f0c68..a18efd96 100644
  Xft.dpi: $kcmfonts_general_forcefontdpi
  EOF
  fi
-@@ -132,11 +220,11 @@ dl=$DESKTOP_LOCKED
+@@ -132,11 +229,11 @@ dl=$DESKTOP_LOCKED
  unset DESKTOP_LOCKED # Don't want it in the environment
 
  ksplash_pid=
@@ -315,7 +315,7 @@ index b68f0c68..a18efd96 100644
        ;;
      None)
        ;;
-@@ -145,27 +233,6 @@ if test -z "$dl"; then
+@@ -145,27 +242,6 @@ if test -z "$dl"; then
    esac
  fi
 
@@ -343,7 +343,7 @@ index b68f0c68..a18efd96 100644
  # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
  # from some users that they're confused and don't know what to do. This is
  # especially necessary on slow machines, where starting KDE takes one or two
-@@ -221,44 +288,65 @@ export XDG_DATA_DIRS
+@@ -221,44 +297,65 @@ export XDG_DATA_DIRS
  #
  KDE_FULL_SESSION=true
  export KDE_FULL_SESSION
@@ -422,7 +422,7 @@ index b68f0c68..a18efd96 100644
 
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
-@@ -270,12 +358,16 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
+@@ -270,12 +367,16 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
  # We only check for 255 which means that the ksmserver process could not be
  # started, any problems thereafter, e.g. ksmserver failing to initialize,
  # will remain undetected.
@@ -442,7 +442,7 @@ index b68f0c68..a18efd96 100644
  if test $? -eq 255; then
    # Startup error
    echo 'startkde: Could not start ksmserver. Check your installation.'  1>&2
-@@ -286,36 +378,36 @@ fi
+@@ -286,36 +387,36 @@ fi
  #Anything after here is logout
  #It is not called after shutdown/restart
 
@@ -493,7 +493,7 @@ index b68f0c68..a18efd96 100644
 
  echo 'startkde: Done.'  1>&2
 diff --git a/startkde/startplasma.cmake b/startkde/startplasma.cmake
-index 1fe41c59..39c0b521 100644
+index 1fe41c5..11757df 100644
 --- a/startkde/startplasma.cmake
 +++ b/startkde/startplasma.cmake
 @@ -1,6 +1,6 @@
@@ -592,10 +592,10 @@ index 1fe41c59..39c0b521 100644
  #It is not called after shutdown/restart
 
 -wait_drkonqi=`kreadconfig5 --file startkderc --group WaitForDrKonqi --key Enabled --default true`
--
--if test x"$wait_drkonqi"x = x"true"x ; then
 +wait_drkonqi=$(@NIXPKGS_KREADCONFIG5@ --file startkderc --group WaitForDrKonqi --key Enabled --default true)
-+
+
+-if test x"$wait_drkonqi"x = x"true"x ; then
+>>>>>>> upstream/master
 +if [ x"$wait_drkonqi"x = x"true"x ]; then
      # wait for remaining drkonqi instances with timeout (in seconds)
 -    wait_drkonqi_timeout=`kreadconfig5 --file startkderc --group WaitForDrKonqi --key Timeout --default 900`
@@ -638,7 +638,7 @@ index 1fe41c59..39c0b521 100644
 
  echo 'startplasma: Done.'  1>&2
 diff --git a/startkde/startplasmacompositor.cmake b/startkde/startplasmacompositor.cmake
-index dcb473a4..48dbf465 100644
+index dcb473a..0988740 100644
 --- a/startkde/startplasmacompositor.cmake
 +++ b/startkde/startplasmacompositor.cmake
 @@ -1,118 +1,174 @@
@@ -851,18 +851,18 @@ index dcb473a4..48dbf465 100644
  #otherwise apps that manually opt in for high DPI get auto scaled by the developer AND scaled by the wl_output
  export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
+-# XCursor mouse theme needs to be applied here to work even for kded or ksmserver
+-if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
+-    @EXPORT_XCURSOR_PATH@
 +XCURSOR_PATH=~/.icons
 +IFS=":" read -r -a xdgDirs <<< "$XDG_DATA_DIRS"
 +for xdgDir in "${xdgDirs[@]}"; do
 +    XCURSOR_PATH="$XCURSOR_PATH:$xdgDir/icons"
 +done
 +export XCURSOR_PATH
-+
- # XCursor mouse theme needs to be applied here to work even for kded or ksmserver
--if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
--    @EXPORT_XCURSOR_PATH@
--
+
 -    # TODO: is kapplymousetheme a core app?
++# XCursor mouse theme needs to be applied here to work even for kded or ksmserver
 +if [ -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ]; then
      #kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
 -    if test $? -eq 10; then
@@ -889,7 +889,7 @@ index dcb473a4..48dbf465 100644
      export QT_WAYLAND_FORCE_DPI=$kcmfonts_general_forcefontdpiwayland
  else
      export QT_WAYLAND_FORCE_DPI=96
-@@ -120,12 +167,12 @@ fi
+@@ -120,12 +176,12 @@ fi
 
  # Get a property value from org.freedesktop.locale1
  queryLocale1() {
@@ -904,7 +904,7 @@ index dcb473a4..48dbf465 100644
      # Do not overwrite existing values. There is no point in setting only some
      # of them as then they would not match anymore.
      if [ -z "${XKB_DEFAULT_MODEL}" -a -z "${XKB_DEFAULT_LAYOUT}" -a \
-@@ -141,41 +188,10 @@ if qdbus --system org.freedesktop.locale1 >/dev/null 2>/dev/null; then
+@@ -141,41 +197,10 @@ if qdbus --system org.freedesktop.locale1 >/dev/null 2>/dev/null; then
      fi
  fi
 
@@ -947,7 +947,7 @@ index dcb473a4..48dbf465 100644
      : # ok
  else
      echo 'startplasmacompositor: Could not start D-Bus. Can you call qdbus?'  1>&2
-@@ -212,7 +228,7 @@ export KDE_FULL_SESSION
+@@ -212,7 +237,7 @@ export KDE_FULL_SESSION
  KDE_SESSION_VERSION=5
  export KDE_SESSION_VERSION
 
@@ -956,7 +956,7 @@ index dcb473a4..48dbf465 100644
  export KDE_SESSION_UID
 
  XDG_CURRENT_DESKTOP=KDE
-@@ -221,20 +237,41 @@ export XDG_CURRENT_DESKTOP
+@@ -221,20 +246,41 @@ export XDG_CURRENT_DESKTOP
  XDG_SESSION_TYPE=wayland
  export XDG_SESSION_TYPE
 
@@ -1008,3 +1008,5 @@ index dcb473a4..48dbf465 100644
 
  echo 'startplasmacompositor: Shutting down...'  1>&2
 
+--
+2.19.2

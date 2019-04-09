@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, fetchurl, python, dropbox }:
+{ stdenv, pkgconfig, fetchurl, python3, dropbox }:
 let
   version = "2019.02.14";
   dropboxd = "${dropbox}/bin/dropbox";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   phases = "unpackPhase installPhase";
 

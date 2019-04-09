@@ -11,6 +11,7 @@ let
     dde-calendar = callPackage ./dde-calendar { };
     dde-daemon = callPackage ./dde-daemon { };
     dde-polkit-agent = callPackage ./dde-polkit-agent { };
+    dde-network-utils = callPackage ./dde-network-utils { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     dde-session-ui = callPackage ./dde-session-ui { };
     deepin-desktop-base = callPackage ./deepin-desktop-base { };
@@ -28,12 +29,13 @@ let
     deepin-terminal = callPackage ./deepin-terminal {
       wnck = pkgs.libwnck3;
     };
+    deepin-turbo = callPackage ./deepin-turbo { };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
     deepin-wm = callPackage ./deepin-wm { };
     dpa-ext-gnomekeyring = callPackage ./dpa-ext-gnomekeyring { };
     dtkcore = callPackage ./dtkcore { };
-    dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };
+    dtkwm = callPackage ./dtkwm { };
     go-dbus-factory = callPackage ./go-dbus-factory { };
     go-dbus-generator = callPackage ./go-dbus-generator { };
     go-gir-generator = callPackage ./go-gir-generator { };
