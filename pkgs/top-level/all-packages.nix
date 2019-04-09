@@ -9261,8 +9261,6 @@ in
     withPEPatterns = true;
   };
 
-  rhc = callPackage ../development/tools/rhc { };
-
   rman = callPackage ../development/tools/misc/rman { };
 
   rolespec = callPackage ../development/tools/misc/rolespec { };
