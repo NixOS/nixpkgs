@@ -1,8 +1,8 @@
-{ stdenv, appimage-run, fetchurl }:
+{ stdenv, appimage-run, fetchurl, gsettings-desktop-schemas, gtk3, gobject-introspection, wrapGAppsHook }:
 
 let
-  version = "1.0.140";
-  sha256 = "1114v141jayqhvkkxf7dr864j09nf5nz002c7z0pprzr00fifqzx";
+  version = "1.0.142";
+  sha256 = "0k7lnv3qqz17a2a2d431sic3ggi3373r5k0kwxm4017ama7d72m1";
 in
   stdenv.mkDerivation rec {
   name = "joplin-${version}";
@@ -12,7 +12,8 @@ in
     inherit sha256;
   };
 
-  buildInputs = [ appimage-run ];
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [ appimage-run gtk3 gsettings-desktop-schemas gobject-introspection ];
 
   unpackPhase = ":";
 

@@ -32,19 +32,23 @@ rec {
    *
    * Examples:
    * # Writes my-file to /nix/store/<store path>
-   * writeTextFile "my-file"
-   *   ''
-   *   Contents of File
+   * writeTextFile {
+   *   name = "my-file";
+   *   text = ''
+   *     Contents of File
    *   '';
+   * }
+   * # See also the `writeText` helper function below.
    *
    * # Writes executable my-file to /nix/store/<store path>/bin/my-file
-   * writeTextFile "my-file"
-   *   ''
-   *   Contents of File
-   *   ''
-   *   true
-   *   "/bin/my-file";
-   *   true
+   * writeTextFile {
+   *   name = "my-file";
+   *   text = ''
+   *     Contents of File
+   *   '';
+   *   executable = true;
+   *   destination = "/bin/my-file";
+   * }
    */
   writeTextFile =
     { name # the name of the derivation

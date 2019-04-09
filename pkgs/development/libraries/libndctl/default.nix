@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, autoreconfHook
 , asciidoctor, pkgconfig, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
-, json_c, kmod, which, file, utillinux, systemd
+, json_c, kmod, which, file, utillinux, systemd, keyutils
 }:
 
 stdenv.mkDerivation rec {
   name = "libndctl-${version}";
-  version = "63";
+  version = "64.1";
 
   src = fetchFromGitHub {
     owner  = "pmem";
     repo   = "ndctl";
     rev    = "v${version}";
-    sha256 = "060nsza8xic769bxj3pvl70a9885bwrc0myw16l095i3z6w7yzwq";
+    sha256 = "1la82fqbdwjkw6il498nkdfgqc4aszv481xf2p9p07jfvankx24v";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ];
 
   buildInputs =
-    [ json_c kmod utillinux systemd
+    [ json_c kmod utillinux systemd keyutils
     ];
 
   configureFlags =

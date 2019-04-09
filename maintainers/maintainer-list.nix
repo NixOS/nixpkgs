@@ -1219,6 +1219,11 @@
     github = "dgonyeo";
     name = "Derek Gonyeo";
   };
+  dhkl = {
+    email = "david@davidslab.com";
+    github = "dhl";
+    name = "David Leung";
+  };
   dipinhora = {
     email = "dipinhora+github@gmail.com";
     github = "dipinhora";
@@ -2733,6 +2738,11 @@
     github = "lo1tuma";
     name = "Mathias Schreck";
   };
+  loewenheim = {
+    email = "loewenheim@mailbox.org";
+    github = "loewenheim";
+    name = "Sebastian Zivota";
+  };
   lopsided98 = {
     email = "benwolsieffer@gmail.com";
     github = "lopsided98";
@@ -3292,6 +3302,11 @@
     github = "mvnetbiz";
     name = "Matt Votava";
   };
+  mwilsoninsight = {
+    email = "max.wilson@insight.com";
+    github = "mwilsoninsight";
+    name = "Max Wilson";
+  };
   myrl = {
     email = "myrl.0xf@gmail.com";
     github = "myrl";
@@ -3430,6 +3445,11 @@
     email = "nocoolnametom@gmail.com";
     github = "nocoolnametom";
     name = "Tom Doggett";
+  };
+  nomeata = {
+    email = "mail@joachim-breitner.de";
+    github = "nomeata";
+    name = "Joachim Breitner";
   };
   noneucat = {
     email = "andy@lolc.at";
@@ -4583,6 +4603,11 @@
     email = "samoss@gmail.com";
     github = "stumoss";
     name = "Stuart Moss";
+  };
+  suhr = {
+    email = "suhr@i2pmail.org";
+    github = "suhr";
+    name = "Сухарик";
   };
   SuprDewd = {
     email = "suprdewd@gmail.com";

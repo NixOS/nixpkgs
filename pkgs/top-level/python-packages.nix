@@ -1072,6 +1072,8 @@ in {
 
   avro3k = callPackage ../development/python-modules/avro3k {};
 
+  aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
+
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify {};
@@ -1176,6 +1178,8 @@ in {
   channels = callPackage ../development/python-modules/channels {};
 
   cheroot = callPackage ../development/python-modules/cheroot {};
+
+  chevron = callPackage ../development/python-modules/chevron {};
 
   cli-helpers = callPackage ../development/python-modules/cli-helpers {};
 
@@ -3740,8 +3744,6 @@ in {
 
   pyblock = callPackage ../development/python-modules/pyblock { };
 
-  pybcrypt = callPackage ../development/python-modules/pybcrypt { };
-
   pyblosxom = callPackage ../development/python-modules/pyblosxom { };
 
   pycapnp = callPackage ../development/python-modules/pycapnp { };
@@ -4200,6 +4202,8 @@ in {
   serpy = callPackage ../development/python-modules/serpy { };
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
+
+  serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
   shippai = callPackage ../development/python-modules/shippai {};
 

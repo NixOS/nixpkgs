@@ -134,7 +134,7 @@ with lib;
         inetPort = [ "services" "postgrey" "inetPort" ];
       in
         if value inetAddr == null
-        then { path = "/var/run/postgrey.sock"; }
+        then { path = "/run/postgrey.sock"; }
         else { addr = value inetAddr; port = value inetPort; }
     ))
 

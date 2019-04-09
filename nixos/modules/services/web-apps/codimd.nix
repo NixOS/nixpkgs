@@ -67,7 +67,7 @@ in
       path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/run/codimd.sock";
+        example = "/run/codimd.sock";
         description = ''
           Specify where a UNIX domain socket should be placed.
         '';
