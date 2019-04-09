@@ -386,6 +386,8 @@ in {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  drmaa = callPackage ../development/python-modules/drmaa { };
+
   eradicate = callPackage ../development/python-modules/eradicate {  };
 
   face = callPackage ../development/python-modules/face { };

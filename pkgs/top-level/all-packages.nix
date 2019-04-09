@@ -10896,6 +10896,8 @@ in
 
   libclxclient = callPackage ../development/libraries/libclxclient  { };
 
+  libcondordrmaa = callPackage ../development/libraries/libcondordrmaa { };
+
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
