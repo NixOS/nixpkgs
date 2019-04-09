@@ -1,8 +1,15 @@
-{ stdenv, buildPythonPackage, fetchurl, isPyPy, gmp, mpfr, libmpc } :
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, isPyPy
+, gmp
+, mpfr
+, libmpc
+}:
 
 let
   pname = "gmpy2";
-  version = "2.0.8";
+  version = "2.1a4";
 in
 
 buildPythonPackage {
@@ -10,9 +17,11 @@ buildPythonPackage {
 
   disabled = isPyPy;
 
-  src = fetchurl {
-    url = "mirror://pypi/g/gmpy2/${pname}-${version}.zip";
-    sha256 = "0grx6zmi99iaslm07w6c2aqpnmbkgrxcqjrqpfq223xri0r3w8yx";
+  src = fetchFromGitHub {
+    owner = "aleaxit";
+    repo = "gmpy";
+    rev = "gmpy2-${version}";
+    sha256 = "1wg4w4q2l7n26ksrdh4rwqmifgfm32n7x29cgdvmmbv5lmilb5hz";
   };
 
   buildInputs = [ gmp mpfr libmpc ];
