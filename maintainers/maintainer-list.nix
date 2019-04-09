@@ -3302,6 +3302,11 @@
     github = "mvnetbiz";
     name = "Matt Votava";
   };
+  mwilsoninsight = {
+    email = "max.wilson@insight.com";
+    github = "mwilsoninsight";
+    name = "Max Wilson";
+  };
   myrl = {
     email = "myrl.0xf@gmail.com";
     github = "myrl";
