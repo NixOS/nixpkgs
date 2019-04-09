@@ -584,6 +584,10 @@
   ./services/misc/matrix-conduit.nix
   ./services/misc/mautrix-facebook.nix
   ./services/misc/mautrix-telegram.nix
+  ./services/misc/mantisbt.nix
+  ./services/misc/mathics.nix
+  ./services/misc/matrix-synapse.nix
+  ./services/misc/mautrix-whatsapp.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
   ./services/misc/metabase.nix
