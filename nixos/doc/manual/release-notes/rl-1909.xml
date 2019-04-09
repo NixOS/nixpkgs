@@ -67,11 +67,21 @@
   <itemizedlist>
    <listitem>
     <para>
+      The directory where Prometheus will store its metric data is now
+      managed by systemd's StateDirectory mechanism. It still defaults
+      to <literal>/var/lib/prometheus</literal>.
+    </para>
+    <para>
+      Its location can be specified by the new
+      <option>services.prometheus.stateDir</option> option which
+      defaults to <literal>prometheus</literal>. Note that this should
+      be a directory relative to <literal>/var/lib/</literal>.
+    </para>
+    <para>
       The option <option>services.prometheus.dataDir</option> has been
-      removed. The directory where Prometheus will store its metric data will
-      now always be set to <literal>/var/lib/prometheus</literal> and to
-      <literal>/var/lib/prometheus2</literal> when using
-      <option>services.prometheus2</option>.
+      deprecated. You can still set it but it's now required to have
+      <literal>/var/lib/</literal> as a prefix and you can't set
+      <option>services.prometheus.stateDir</option> at the same time.
     </para>
    </listitem>
   </itemizedlist>
