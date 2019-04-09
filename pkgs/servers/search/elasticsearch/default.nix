@@ -19,20 +19,20 @@ stdenv.mkDerivation (rec {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
     sha256 =
       if enableUnfree
-      then "096i8xiy7mfwlslym9mkjb2f5vqdcqhk65583526rcybqxc2zkqp"
-      else "0j3q02c4rw8272w07hm64sk5ssmj4gj8s3qigsbrq5pgf8b03fvs";
+      then "1qh6iz3qhw8zcvxfss5w3h89zarwvk6dp5bbbag7c30kh94gkqvv"
+      else "13v8qpslanfn5w81qvbg0aqh510yfbl3x59kisvdkz9ifhjbcavi";
   };
 
   patches = [ ./es-home-6.x.patch ];
 
   postPatch = ''
     substituteInPlace bin/elasticsearch-env --replace \
-      "ES_CLASSPATH=\"\$ES_HOME/lib/\*\"" \
+      "ES_CLASSPATH=\"\$ES_HOME/lib/*\"" \
       "ES_CLASSPATH=\"$out/lib/*\""
 
     substituteInPlace bin/elasticsearch-cli --replace \
-      "ES_CLASSPATH=\"\$ES_CLASSPATH:\$ES_HOME/\$additional_classpath_directory/\*\"" \
-      "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/\*\""
+      "ES_CLASSPATH=\"\$ES_CLASSPATH:\$ES_HOME/\$additional_classpath_directory/*\"" \
+      "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
   buildInputs = [ makeWrapper jre_headless utillinux ]

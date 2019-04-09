@@ -2549,7 +2549,7 @@ in
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   elk5Version = "5.6.9";
-  elk6Version = "6.5.1";
+  elk6Version = "6.7.1";
 
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
   elasticsearch6 = callPackage ../servers/search/elasticsearch { };
