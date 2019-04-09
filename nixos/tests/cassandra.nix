@@ -2,25 +2,23 @@ import ./make-test.nix ({ pkgs, ...}:
 let
   # Change this to test a different version of Cassandra:
   testPackage = pkgs.cassandra;
-  cassandraCfg = 
+  cassandraCfg = hostname:
     { enable = true;
-      listenAddress = null;
-      listenInterface = "eth1";
-      rpcAddress = null;
-      rpcInterface = "eth1";
+      listenAddress = hostname;
+      rpcAddress = hostname;
       extraConfig =
         { start_native_transport = true;
           seed_provider =
             [{ class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
-               parameters = [ { seeds = "cass0"; } ];
+               parameters = [ { seeds = "192.168.1.1"; } ];
             }];
         };
       package = testPackage;
     };
-  nodeCfg = extra: {pkgs, config, ...}:
+  nodeCfg = hostname: extra: {pkgs, config, ...}:
     { environment.systemPackages = [ testPackage ];
       networking.firewall.enable = false;
-      services.cassandra = cassandraCfg // extra;
+      services.cassandra = cassandraCfg hostname // extra;
       virtualisation.memorySize = 1024;
     };
 in
@@ -28,9 +26,9 @@ in
   name = "cassandra-ci";
 
   nodes = {
-    cass0 = nodeCfg {};
-    cass1 = nodeCfg {};
-    cass2 = nodeCfg { jvmOpts = [ "-Dcassandra.replace_address=cass1" ]; };
+    cass0 = nodeCfg "192.168.1.1" {};
+    cass1 = nodeCfg "192.168.1.2" {};
+    cass2 = nodeCfg "192.168.1.3" { jvmOpts = [ "-Dcassandra.replace_address=cass1" ]; };
   };
 
   testScript = ''
