@@ -4433,6 +4433,8 @@ in {
 
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
+  zerorpc = callPackage ../development/python-modules/zerorpc { };
+
   zipstream = callPackage ../development/python-modules/zipstream { };
 
   zodb = callPackage ../development/python-modules/zodb {};
