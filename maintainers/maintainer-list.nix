@@ -4599,6 +4599,11 @@
     github = "stumoss";
     name = "Stuart Moss";
   };
+  suhr = {
+    email = "suhr@i2pmail.org";
+    github = "suhr";
+    name = "Сухарик";
+  };
   SuprDewd = {
     email = "suprdewd@gmail.com";
     github = "SuprDewd";

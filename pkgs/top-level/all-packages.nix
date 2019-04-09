@@ -5968,6 +5968,8 @@ in
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
+  tox-node = callPackage ../tools/networking/tox-node { };
+
   toxvpn = callPackage ../tools/networking/toxvpn { };
 
   toybox = callPackage ../tools/misc/toybox { };
