@@ -28,13 +28,20 @@ let
   resourceDir = mkResourcesDir resources;
 
   buildConcourse = { name, packages, platforms, passthru ? {}, preBuild ? "" }:
+    let
+      preBuild_ = preBuild;
+    in
     buildGoPackage rec {
       inherit name;
       goPackagePath = "github.com/concourse/concourse";
       subPackages = packages;
       goDeps = ./deps.nix;
       nativeBuildInputs = [ go-packr ];
-      inherit src passthru preBuild;
+      inherit src passthru;
+      preBuild = ''
+        rm -rf $NIX_BUILD_TOP/go/src/github.com/concourse/dex/vendor/github.com/lib/pq
+        ${preBuild_}
+      '';
 
       buildFlagsArray = ''
         -ldflags=
