@@ -44,6 +44,25 @@ let
     };
   };
 
+  brightness = pkgs.writeShellScriptBin "brightness.sh" ''
+    set -o errexit
+    set -o nounset
+
+    bl_dev=`echo /sys/class/backlight/*`
+    current=$(< $bl_dev/brightness)
+    max=$(< $bl_dev/max_brightness)
+    level=$(($max * $2 / 100))
+    next_level=$(($current $1 $level))
+
+    if [ $next_level -gt $max ]; then
+      next_level=$max
+    elif [ $next_level -lt 1 ]; then
+      next_level=1
+    fi
+
+    echo $next_level > $bl_dev/brightness
+  '';
+
 in
 
 {
@@ -123,6 +142,23 @@ in
 
       };
 
+      brightnessControl = {
+        enable = mkEnableOption ''
+          display brightness control via sysfs facility.
+          Step percentage is adjusted in accordance with hardware maximum
+          brightness value.
+        '';
+
+        step = mkOption {
+          type = (types.ints.between 0 100);
+          default = 1;
+          example = 10;
+          description = ''
+            The percentage by which to increment/decrement brightness on media keys.
+          '';
+        };
+      };
+
     };
 
   };
@@ -169,6 +205,10 @@ in
 
         # "Mic Mute" media key
         { keys = [ 190 ]; events = [ "key" ];       command = "${pkgs.alsaUtils}/bin/amixer -q set Capture toggle"; }
+      ]
+      ++ optionals cfg.brightnessControl.enable [
+        { keys = [ 224 ]; events = [ "key" "rep" ]; command = "${brightness}/bin/brightness.sh - ${toString cfg.brightnessControl.step}"; }
+        { keys = [ 225 ]; events = [ "key" "rep" ]; command = "${brightness}/bin/brightness.sh + ${toString cfg.brightnessControl.step}"; }
       ];
 
   };
