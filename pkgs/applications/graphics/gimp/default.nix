@@ -8,12 +8,12 @@
 let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
-  name = "gimp-${version}";
-  version = "2.10.8";
+  pname = "gimp";
+  version = "2.10.10";
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "16sb4kslwin2jbgdb4nhks78pd0af8mvj8g5hap3hj946p7w2jfq";
+    url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "0xwck5nbpb945s1cyij3kfqw1pchbhx8i5vf5hgywyjw4r1z5l8j";
   };
 
   nativeBuildInputs = [ pkgconfig intltool gettext wrapPython ];
