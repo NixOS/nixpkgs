@@ -50,7 +50,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = with pythonPackages; [ sphinx texinfo ];
 
-  buildInputs = with pythonPackages; [ unzip numpy mock ];
+  buildInputs = with pythonPackages; [ unzip mock wheel ];
 
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with pythonPackages; [
