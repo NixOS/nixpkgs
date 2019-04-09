@@ -8,7 +8,7 @@
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
-, hunspell, libevent, libstartup_notification, libvpx
+, hunspell, libXdamage, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
@@ -131,6 +131,7 @@ stdenv.mkDerivation rec {
     icu libpng jemalloc glib
   ]
   ++ lib.optionals (!isTorBrowserLike) [ nspr nss ]
+  ++ lib.optional (lib.versionOlder ffversion "53") libXdamage
   ++ lib.optional (lib.versionOlder ffversion "61") hunspell
 
   # >= 66 requires nasm for the AV1 lib dav1d
