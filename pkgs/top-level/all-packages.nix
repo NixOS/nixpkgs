@@ -18441,6 +18441,8 @@ in
 
   mac = callPackage ../development/libraries/mac { };
 
+  macdylibbundler = callPackage ../development/tools/misc/macdylibbundler { };
+
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};

@@ -3446,6 +3446,11 @@
     github = "nocoolnametom";
     name = "Tom Doggett";
   };
+  nomeata = {
+    email = "mail@joachim-breitner.de";
+    github = "nomeata";
+    name = "Joachim Breitner";
+  };
   noneucat = {
     email = "andy@lolc.at";
     github = "noneucat";
