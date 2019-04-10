@@ -101,6 +101,15 @@
       <option>services.prometheus.stateDir</option> at the same time.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The options <option>services.prometheus.alertmanager.user</option> and
+      <option>services.prometheus.alertmanager.group</option> have been removed
+      because the alertmanager service is now using systemd's <link
+      xlink:href="http://0pointer.net/blog/dynamic-users-with-systemd.html">
+      DynamicUser mechanism</link> which obviates these options.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
