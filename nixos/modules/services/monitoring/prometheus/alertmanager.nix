@@ -151,17 +151,15 @@ in {
       systemd.services.alertmanager = {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
-        script = ''
-          ${cfg.package}/bin/alertmanager \
-            ${concatStringsSep " \\\n  " cmdlineArgs}
-        '';
-
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;
           Restart  = "always";
           PrivateTmp = true;
           WorkingDirectory = "/tmp";
+          ExecStart = "${cfg.package}/bin/alertmanager" +
+            optionalString (length cmdlineArgs != 0) (" \\\n  " +
+              concatStringsSep " \\\n  " cmdlineArgs);
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
       };
