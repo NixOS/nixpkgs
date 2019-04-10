@@ -1,28 +1,35 @@
-{ stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
+{ stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses, python, pythonPackages
 , dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU_combined, freetype, pngcrush, advancecomp
 , tileMode ? false, enableSound ? tileMode
 }:
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.22.1";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    sha256 = "19yzl241glv2zazifgz59bw3jlh4hj59xx5w002hnh9rp1w15rnr";
+    sha256 = "1d6mip4rvp81839yf2xm63hf34aza5wg4g5z5hi5275j94szaacs";
   };
 
   # Patch hard-coded paths in the makefile
   patches = [ ./crawl_purify.patch ];
 
-  nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
+  nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp python pythonPackages.pyyaml ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
                 ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ]
                 ++ lib.optional enableSound SDL2_mixer;
+
+  # A windows compatability patch removed the SDL2 prefix. Simplest thing is to
+  # just add it back in the patch phase.
+  # https://github.com/crawl/crawl/commit/e56fa010db5c8a24da55cafe5b21429c3ec65785
+  postPatch = ''
+    sed -i 's|SDL_image.h|SDL2/SDL_image.h|' crawl-ref/source/windowmanager-sdl.cc
+  '';
 
   preBuild = ''
     cd crawl-ref/source
