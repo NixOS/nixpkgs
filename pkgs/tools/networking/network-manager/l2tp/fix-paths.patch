@@ -1,5 +1,5 @@
 diff --git a/shared/utils.c b/shared/utils.c
-index c978a1f..d2c36cd 100644
+index c978a1f..25673cb 100644
 --- a/shared/utils.c
 +++ b/shared/utils.c
 @@ -52,7 +52,7 @@ nm_find_ipsec (void)
@@ -7,7 +7,7 @@ index c978a1f..d2c36cd 100644
  	static const char *ipsec_binary_paths[] =
  		{
 -			"/sbin/ipsec",
-+			"@strongswan@/bin/ipsec",
++			"@strongswan@/sbin/ipsec",
  			"/usr/sbin/ipsec",
  			"/usr/local/sbin/ipsec",
  			"/sbin/strongswan",
@@ -16,7 +16,7 @@ index c978a1f..d2c36cd 100644
  	static const char *l2tp_binary_paths[] =
  		{
 -			"/sbin/xl2tpd",
-+			"@xl2tpd@/bin/xl2tpd",
++			"@xl2tpd@/sbin/xl2tpd",
  			"/usr/sbin/xl2tpd",
  			"/usr/local/sbin/xl2tpd",
  			NULL

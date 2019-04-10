@@ -1,18 +1,18 @@
 { stdenv, substituteAll, fetchFromGitHub, autoreconfHook, libtool, intltool, pkgconfig
 , file, findutils
-, gtk3, networkmanager, ppp, xl2tpd, strongswan, libsecret
+, gtk3, networkmanager, ppp, xl2tpd, strongswan, libsecret, openssl, nss
 , withGnome ? true, gnome3, networkmanagerapplet }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-l2tp";
-  version = "1.2.12";
+  version = "1.7.0-dev";
 
   src = fetchFromGitHub {
     owner = "nm-l2tp";
     repo = "network-manager-l2tp";
-    rev = "${version}";
-    sha256 = "0cq07kvlm98s8a7l4a3zmqnif8x3307kv7n645zx3f1r7x72b8m4";
+    rev = "8a72e8f57f61083a8e0663103bb8c1394d93439a";
+    sha256 = "1d2q041n9sbcnnvkdwngkr0mwj99qdjarn14n3zh6i4jzpmmqy5a";
   };
 
   patches = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ networkmanager ppp ]
+  buildInputs = [ networkmanager ppp openssl nss ]
     ++ stdenv.lib.optionals withGnome [ gtk3 libsecret networkmanagerapplet ];
 
   nativeBuildInputs = [ autoreconfHook libtool intltool pkgconfig file findutils ];

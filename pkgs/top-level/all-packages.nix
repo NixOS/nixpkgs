@@ -4523,7 +4523,9 @@ in
 
   networkmanager-openvpn = callPackage ../tools/networking/network-manager/openvpn { };
 
-  networkmanager-l2tp = callPackage ../tools/networking/network-manager/l2tp { };
+  networkmanager-l2tp = callPackage ../tools/networking/network-manager/l2tp {
+    openssl = openssl_1_1;
+  };
 
   networkmanager-vpnc = callPackage ../tools/networking/network-manager/vpnc { };
 
