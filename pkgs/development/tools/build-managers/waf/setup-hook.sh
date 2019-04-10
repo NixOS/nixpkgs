@@ -6,31 +6,14 @@ wafConfigurePhase() {
         cp @waf@ "$wafPath"
     fi
 
-    if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
-        configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
+    if [ -z "${dontAddPrefix:-}" ] && [ -n "$prefix" ]; then
+        wafConfigureFlags="${prefixKey:---prefix=}$prefix $wafConfigureFlags"
     fi
 
-    local flagsArray=(@crossFlags@);
-    for flag in $configureFlags "${configureFlagsArray[@]}";
-    do
-        if [[
-        # waf does not support these flags, but they are "blindly" added by the
-        # pkgsStatic overlay, for example.
-              $flag != "--enable-static"
-           && $flag != "--disable-static"
-           && $flag != "--enable-shared"
-           && $flag != "--disable-shared"
-        # these flags are added by configurePlatforms but waf just uses them
-        # to bail out in cross compilation cases
-           && $flag != --build=* 
-           && $flag != --host=* 
-           ]];
-        then
-            flagsArray=("${flagsArray[@]}" "$flag");
-        fi;
-    done
-    flagsArray=(
+    local flagsArray=(
+        @crossFlags@
         "${flagsArray[@]}"
+        $wafConfigureFlags "${wafConfigureFlagsArray[@]}"
         ${configureTargets:-configure}
     )
     echoCmd 'configure flags' "${flagsArray[@]}"
