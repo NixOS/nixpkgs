@@ -12,6 +12,7 @@
 , pyopenssl
 , service-identity
 , idna
+, appdirs
 }:
 buildPythonPackage rec {
   pname = "Twisted";
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs ];
 
   passthru.extras.tls = [ pyopenssl service-identity idna ];
+  passthru.extras.conch = [ appdirs ];
 
   # Patch t.p._inotify to point to libc. Without this,
   # twisted.python.runtime.platform.supportsINotify() == False

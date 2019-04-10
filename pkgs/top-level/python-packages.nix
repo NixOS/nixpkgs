@@ -1824,6 +1824,8 @@ in {
 
   elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
 
+  eliot = callPackage ../development/python-modules/eliot { };
+
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
   enzyme = callPackage ../development/python-modules/enzyme {};
@@ -2258,6 +2260,8 @@ in {
   sarge = callPackage ../development/python-modules/sarge { };
 
   subliminal = callPackage ../development/python-modules/subliminal {};
+
+  subunitreporter = callPackage ../development/python-modules/subunitreporter { };
 
   hyperlink = callPackage ../development/python-modules/hyperlink {};
 
@@ -3038,6 +3042,8 @@ in {
   };
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
+
+  python-subunit = callPackage ../development/python-modules/python-subunit { };
 
   fs = callPackage ../development/python-modules/fs { };
 
