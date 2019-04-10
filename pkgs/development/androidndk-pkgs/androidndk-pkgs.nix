@@ -27,7 +27,7 @@ let
     "x86_64-unknown-linux-android" = {
       triple = "x86_64-linux-android";
       arch = "x86_64";
-      toolchain = "x86";
+      toolchain = "x86_64";
       gccVer = "4.9";
     };
     "armv7a-unknown-linux-androideabi" = {
