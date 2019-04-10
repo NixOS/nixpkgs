@@ -105,10 +105,12 @@ in with passthru; stdenv.mkDerivation {
       if isPy35 then
         ./3.5/python-3.x-distutils-C++.patch
       else
-        fetchpatch {
-          url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";
-          sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
-        }
+        if isPy37
+        then null # TODO: apply the patch 
+        else fetchpatch {
+             url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";
+             sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
+           }
     )
   ];
 
