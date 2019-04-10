@@ -992,7 +992,9 @@ in
     libqmatrixclient_0_5
     libqmatrixclient;
 
-  quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
+  inherit (libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { })
+    quaternion
+    quaternion-git;
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
