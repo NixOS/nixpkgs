@@ -50,7 +50,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = with pythonPackages; [ sphinx texinfo wheel ];
 
-  buildInputs = with pythonPackages; [ unzip mock ];
+  buildInputs = with pythonPackages; [ unzip ];
 
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with pythonPackages; [
@@ -59,7 +59,7 @@ pythonPackages.buildPythonApplication rec {
     service-identity pyyaml magic-wormhole treq
   ];
 
-  checkInputs = with pythonPackages; [ hypothesis twisted ];
+  checkInputs = with pythonPackages; [ mock hypothesis twisted ];
 
   # Install the documentation.
   postInstall = ''
