@@ -50,8 +50,6 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = with pythonPackages; [ sphinx texinfo wheel ];
 
-  buildInputs = with pythonPackages; [ unzip ];
-
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with pythonPackages; [
     twisted foolscap nevow simplejson zfec pycryptopp darcsver
