@@ -65,6 +65,8 @@ let
       platforms = platforms.unix;
       license = licenses.bsd2;
     };
+  } // lib.optionalAttrs stdenv'.isDarwin {
+    MKRELRO = "no";
   } // lib.optionalAttrs (stdenv'.cc.isClang or false) {
     HAVE_LLVM = lib.head (lib.splitString "." (lib.getVersion stdenv'.cc.cc));
   } // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
