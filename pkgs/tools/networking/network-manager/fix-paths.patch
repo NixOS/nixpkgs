@@ -35,7 +35,7 @@
  Restart=on-failure
 --- a/src/devices/nm-device.c
 +++ b/src/devices/nm-device.c
-@@ -12350,14 +12350,14 @@
+@@ -12453,14 +12453,14 @@
  			gw = nm_ip4_config_best_default_route_get (priv->ip_config_4);
  			if (gw) {
  				nm_utils_inet4_ntop (NMP_OBJECT_CAST_IP4_ROUTE (gw)->gateway, buf);
@@ -43,7 +43,7 @@
 +				ping_binary = "@inetutils@/bin/ping";
  				log_domain = LOGD_IP4;
  			}
- 		} else if (priv->ip_config_6 && priv->ip6_state == IP_DONE) {
+ 		} else if (priv->ip_config_6 && priv->ip_state_6 == NM_DEVICE_IP_STATE_DONE) {
  			gw = nm_ip6_config_best_default_route_get (priv->ip_config_6);
  			if (gw) {
  				nm_utils_inet6_ntop (&NMP_OBJECT_CAST_IP6_ROUTE (gw)->gateway, buf);
@@ -54,12 +54,45 @@
  		}
 --- a/src/nm-core-utils.c
 +++ b/src/nm-core-utils.c
-@@ -421,7 +421,7 @@
+@@ -442,7 +442,7 @@
  
  	/* construct the argument list */
  	argv = g_ptr_array_sized_new (4);
 -	g_ptr_array_add (argv, "/sbin/modprobe");
 +	g_ptr_array_add (argv, "@kmod@/bin/modprobe");
+ 	g_ptr_array_add (argv, "--use-blacklist");
  	g_ptr_array_add (argv, (char *) arg1);
+
+--- a/src/platform/tests/test-link.c
++++ b/src/platform/tests/test-link.c
+@@ -273,7 +273,7 @@
+ 			 * `ip link` also claims master to be up, accept it. */
+ 			char *stdout_str = NULL;
  
- 	va_start (ap, arg1);
+-			nmtst_spawn_sync (NULL, &stdout_str, NULL, 0, "/sbin/ip", "link", "show", "dev", nm_platform_link_get_name (NM_PLATFORM_GET, master));
++			nmtst_spawn_sync (NULL, &stdout_str, NULL, 0, "@iproute@/bin/ip", "link", "show", "dev", nm_platform_link_get_name (NM_PLATFORM_GET, master));
+ 
+ 			g_assert (strstr (stdout_str, "LOWER_UP"));
+ 			g_free (stdout_str);
+
+--- a/src/settings/plugins/ibft/nms-ibft-plugin.c
++++ b/src/settings/plugins/ibft/nms-ibft-plugin.c
+@@ -68,7 +68,7 @@
+ 	GError *error = NULL;
+ 	NMSIbftConnection *connection;
+ 
+-	if (!nms_ibft_reader_load_blocks ("/sbin/iscsiadm", &blocks, &error)) {
++	if (!nms_ibft_reader_load_blocks ("@openiscsi@/bin/iscsiadm", &blocks, &error)) {
+ 		nm_log_dbg (LOGD_SETTINGS, "ibft: failed to read iscsiadm records: %s", error->message);
+ 		g_error_free (error);
+ 		return;
+--- a/src/settings/plugins/ifupdown/tests/test-ifupdown.c
++++ b/src/settings/plugins/ifupdown/tests/test-ifupdown.c
+@@ -355,7 +355,7 @@
+ 	b = expected_block_new ("iface", "pppoe");
+ 	expected_add_block (e, b);
+ 	expected_block_add_key (b, expected_key_new ("inet", "manual"));
+-	expected_block_add_key (b, expected_key_new ("pre-up", "/sbin/ifconfig eth0 up"));
++	expected_block_add_key (b, expected_key_new ("pre-up", "@nettools@/bin/ifconfig eth0 up"));
+ 
+ 	compare_expected_to_ifparser (parser, e);
