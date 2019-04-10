@@ -1,6 +1,6 @@
 { buildVersion, sha256, dev ? false }:
 
-{ fetchurl, stdenv, xorg, glib, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+{ fetchurl, stdenv, xorg, glib, glibcLocales, gtk2, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec", gksuSupport ? false, gksu
 , writeScript, common-updater-scripts, curl, gnugrep
 }:
@@ -8,38 +8,50 @@
 assert gksuSupport -> gksu != null;
 
 let
-  libPath = stdenv.lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango ];
+  pname = "sublime-merge";
+  packageAttribute = "sublime-merge${stdenv.lib.optionalString dev "-dev"}";
+  binaries = [ "sublime_merge" "crash_reporter" "git-credential-sublime" "ssh-askpass-sublime" ];
+  primaryBinary = "sublime_merge";
+  primaryBinaryAliases = [ "smerge" ];
+  downloadUrl = "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
+  downloadArchiveType = "tar.xz";
+  versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
+  versionFile = "pkgs/applications/version-management/sublime-merge/default.nix";
+  usesGtk2 = false;
+  archSha256 = sha256;
+  arch = "x64";
+
+  libPath = stdenv.lib.makeLibraryPath [ xorg.libX11 glib (if usesGtk2 then gtk2 else gtk3) cairo pango ];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
     ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
 in let
-  # package with just the binaries
-  sublime_merge = stdenv.mkDerivation {
-    pname = "sublime-merge-bin";
+  binaryPackage = stdenv.mkDerivation {
+    pname = "${pname}-bin";
     version = buildVersion;
 
     src = fetchurl {
-      name = "sublime-merge-${buildVersion}.tar.xz";
-      url = "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_x64.tar.xz";
-      inherit sha256;
+      name = "${pname}-bin-${buildVersion}.${downloadArchiveType}";
+      url = downloadUrl;
+      sha256 = archSha256;
     };
 
     dontStrip = true;
     dontPatchELF = true;
-    buildInputs = [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
-    nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+    buildInputs = stdenv.lib.optionals (!usesGtk2) [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
+    nativeBuildInputs = [ makeWrapper ] ++ stdenv.lib.optional (!usesGtk2) wrapGAppsHook;
 
     buildPhase = ''
       runHook preBuild
 
-      for binary in sublime_merge crash_reporter git-credential-sublime ssh-askpass-sublime; do
+      for binary in ${ builtins.concatStringsSep " " binaries }; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib64 \
+          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
           $binary
       done
 
       # Rewrite pkexec|gksudo argument. Note that we can't delete bytes in binary.
-      sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' sublime_merge
+      sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' ${primaryBinary}
 
       runHook postBuild
     '';
@@ -56,43 +68,49 @@ in let
     dontWrapGApps = true; # non-standard location, need to wrap the executables manually
 
     postFixup = ''
-      wrapProgram $out/sublime_merge \
+      wrapProgram $out/${primaryBinary} \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
-        "''${gappsWrapperArgs[@]}"
+        --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
+        ${stdenv.lib.optionalString (!usesGtk2) ''"''${gappsWrapperArgs[@]}"''}
     '';
   };
-in stdenv.mkDerivation {
-  pname = "sublime-merge";
+in stdenv.mkDerivation (rec {
+  inherit pname;
   version = buildVersion;
 
   phases = [ "installPhase" ];
 
-  inherit sublime_merge;
+  ${primaryBinary} = binaryPackage;
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p "$out/bin"
-    makeWrapper "$sublime_merge/sublime_merge" "$out/bin/sublime_merge"
-    ln -s "$out/bin/sublime_merge" "$out/bin/smerge"
+    makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+  '' + builtins.concatStringsSep "" (map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases) + ''
     mkdir -p "$out/share/applications"
-    substitute "$sublime_merge/sublime_merge.desktop" "$out/share/applications/sublime_merge.desktop" --replace "/opt/sublime_merge/sublime_merge" "$out/bin/sublime_merge"
-    for directory in $sublime_merge/Icon/*; do
+    substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+    for directory in ''$${primaryBinary}/Icon/*; do
       size=$(basename $directory)
       mkdir -p "$out/share/icons/hicolor/$size/apps"
-      ln -s "$sublime_merge/Icon/$size/sublime-merge.png" "$out/share/icons/hicolor/$size/apps"
+      ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
     done
   '';
 
-  passthru.updateScript = writeScript "sublime-merge-update-script" ''
+  passthru.updateScript = writeScript "${pname}-update-script" ''
     #!${stdenv.shell}
     set -o errexit
     PATH=${stdenv.lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
 
-    latestVersion=$(curl -s https://www.sublimemerge.com/${if dev then "dev" else "download"} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
+    latestVersion=$(curl -s ${versionUrl} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
 
-    update-source-version sublime-merge${stdenv.lib.optionalString dev "-dev"}.sublime_merge $latestVersion --file=pkgs/applications/version-management/sublime-merge/default.nix --version-key=buildVersion --system=x86_64-linux
+    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+        # The script will not perform an update when the version attribute is up to date from previous platform run
+        # We need to clear it before each run
+        update-source-version ${packageAttribute}.${primaryBinary} 0 0000000000000000000000000000000000000000000000000000000000000000 --file=${versionFile} --version-key=buildVersion --system=$platform
+        update-source-version ${packageAttribute}.${primaryBinary} $latestVersion --file=${versionFile} --version-key=buildVersion --system=$platform
+    done
   '';
 
   meta = with stdenv.lib; {
@@ -102,4 +120,4 @@ in stdenv.mkDerivation {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

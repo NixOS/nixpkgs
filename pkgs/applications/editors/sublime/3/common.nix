@@ -1,47 +1,55 @@
-{buildVersion, x32sha256, x64sha256, dev ? false}:
+{ buildVersion, x32sha256, x64sha256, dev ? false }:
 
-{ fetchurl, stdenv, glib, glibcLocales, xorg, cairo, gtk2, gtk3, pango, makeWrapper, wrapGAppsHook, openssl, bzip2, runtimeShell,
-  pkexecPath ? "/run/wrappers/bin/pkexec", libredirect,
-  gksuSupport ? false, gksu, unzip, zip, bash,
-  writeScript, common-updater-scripts, curl, gnugrep}:
+{ fetchurl, stdenv, xorg, glib, glibcLocales, gtk2, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+, pkexecPath ? "/run/wrappers/bin/pkexec", gksuSupport ? false, gksu
+, writeScript, common-updater-scripts, curl, gnugrep
+, openssl, bzip2, bash, unzip, zip
+}:
 
 assert gksuSupport -> gksu != null;
 
 let
-  legacy = stdenv.lib.versionOlder buildVersion "3181";
-  libPath = stdenv.lib.makeLibraryPath [ glib xorg.libX11 (if legacy then gtk2 else gtk3) cairo pango ];
-  redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
-    ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
-in let
+  pname = "sublimetext3";
+  packageAttribute = "sublime3${stdenv.lib.optionalString dev "-dev"}";
+  binaries = [ "sublime_text" "plugin_host" "crash_reporter" ];
+  primaryBinary = "sublime_text";
+  primaryBinaryAliases = [ "subl" "sublime" "sublime3" ];
+  downloadUrl = "https://download.sublimetext.com/sublime_text_3_build_${buildVersion}_${arch}.tar.bz2";
+  downloadArchiveType = "tar.bz2";
+  versionUrl = "https://www.sublimetext.com/${if dev then "3dev" else "3"}";
+  versionFile = "pkgs/applications/editors/sublime/3/packages.nix";
+  usesGtk2 = stdenv.lib.versionOlder buildVersion "3181";
   archSha256 =
     if stdenv.hostPlatform.system == "i686-linux" then
       x32sha256
     else
       x64sha256;
-
   arch =
     if stdenv.hostPlatform.system == "i686-linux" then
       "x32"
     else
       "x64";
 
-  # package with just the binaries
-  sublime = stdenv.mkDerivation {
-    name = "sublimetext3-bin-${buildVersion}";
-    src =
-      fetchurl {
-        name = "sublimetext-${buildVersion}.tar.bz2";
-        url = "https://download.sublimetext.com/sublime_text_3_build_${buildVersion}_${arch}.tar.bz2";
-        sha256 = archSha256;
-      };
+  libPath = stdenv.lib.makeLibraryPath [ xorg.libX11 glib (if usesGtk2 then gtk2 else gtk3) cairo pango ];
+  redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
+    ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
+in let
+  binaryPackage = stdenv.mkDerivation {
+    pname = "${pname}-bin";
+    version = buildVersion;
+
+    src = fetchurl {
+      name = "${pname}-bin-${buildVersion}.${downloadArchiveType}";
+      url = downloadUrl;
+      sha256 = archSha256;
+    };
 
     dontStrip = true;
     dontPatchELF = true;
-    buildInputs = stdenv.lib.optionals (!legacy) [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
-    nativeBuildInputs = [ makeWrapper zip unzip ] ++ stdenv.lib.optional (!legacy) wrapGAppsHook;
+    buildInputs = stdenv.lib.optionals (!usesGtk2) [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
+    nativeBuildInputs = [ zip unzip makeWrapper ] ++ stdenv.lib.optional (!usesGtk2) wrapGAppsHook;
 
-    # make exec.py in Default.sublime-package use own bash with
-    # an LD_PRELOAD instead of "/bin/bash"
+    # make exec.py in Default.sublime-package use own bash with an LD_PRELOAD instead of "/bin/bash"
     patchPhase = ''
       runHook prePatch
 
@@ -61,15 +69,15 @@ in let
     buildPhase = ''
       runHook preBuild
 
-      for i in sublime_text plugin_host crash_reporter; do
+      for binary in ${ builtins.concatStringsSep " " binaries }; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
-          $i
+          $binary
       done
 
       # Rewrite pkexec|gksudo argument. Note that we can't delete bytes in binary.
-      sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' sublime_text
+      sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' ${primaryBinary}
 
       runHook postBuild
     '';
@@ -77,11 +85,8 @@ in let
     installPhase = ''
       runHook preInstall
 
-      # Correct sublime_text.desktop to exec `sublime' instead of /opt/sublime_text
-      sed -e "s,/opt/sublime_text/sublime_text,$out/sublime_text," -i sublime_text.desktop
-
       mkdir -p $out
-      cp -prvd * $out/
+      cp -r * $out/
 
       # We can't just call /usr/bin/env bash because a relocation error occurs
       # when trying to run a build from within Sublime Text
@@ -96,52 +101,51 @@ in let
       wrapProgram $out/sublime_bash \
         --set LD_PRELOAD "${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1"
 
-      wrapProgram $out/sublime_text \
+      wrapProgram $out/${primaryBinary} \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
-        ${stdenv.lib.optionalString (!legacy) ''"''${gappsWrapperArgs[@]}"''}
+        ${stdenv.lib.optionalString (!usesGtk2) ''"''${gappsWrapperArgs[@]}"''}
 
       # Without this, plugin_host crashes, even though it has the rpath
       wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
     '';
   };
 in stdenv.mkDerivation (rec {
-  name = "sublimetext3-${buildVersion}";
+  inherit pname;
+  version = buildVersion;
 
   phases = [ "installPhase" ];
 
-  inherit sublime;
+  ${primaryBinary} = binaryPackage;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/bin
-
-    cat > $out/bin/subl <<-EOF
-    #!${runtimeShell}
-    exec $sublime/sublime_text "\$@"
-    EOF
-    chmod +x $out/bin/subl
-
-    ln $out/bin/subl $out/bin/sublime
-    ln $out/bin/subl $out/bin/sublime3
-    mkdir -p $out/share/applications
-    ln -s $sublime/sublime_text.desktop $out/share/applications/sublime_text.desktop
-    ln -s $sublime/Icon/256x256/ $out/share/icons
+    mkdir -p "$out/bin"
+    makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+  '' + builtins.concatStringsSep "" (map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases) + ''
+    mkdir -p "$out/share/applications"
+    substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+    for directory in ''$${primaryBinary}/Icon/*; do
+      size=$(basename $directory)
+      mkdir -p "$out/share/icons/hicolor/$size/apps"
+      ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+    done
   '';
 
-  passthru.updateScript = writeScript "sublime3-update-script" ''
+  passthru.updateScript = writeScript "${pname}-update-script" ''
     #!${stdenv.shell}
     set -o errexit
     PATH=${stdenv.lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
 
-    latestVersion=$(curl https://www.sublimetext.com/3${stdenv.lib.optionalString dev "dev"} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
+    latestVersion=$(curl -s ${versionUrl} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
 
     for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
-        package=sublime3${stdenv.lib.optionalString dev "-dev"}
         # The script will not perform an update when the version attribute is up to date from previous platform run
         # We need to clear it before each run
-        update-source-version ''${package}.sublime 0 0000000000000000000000000000000000000000000000000000000000000000 --file=pkgs/applications/editors/sublime/3/packages.nix --version-key=buildVersion --system=$platform
-        update-source-version ''${package}.sublime $latestVersion --file=pkgs/applications/editors/sublime/3/packages.nix --version-key=buildVersion --system=$platform
+        update-source-version ${packageAttribute}.${primaryBinary} 0 0000000000000000000000000000000000000000000000000000000000000000 --file=${versionFile} --version-key=buildVersion --system=$platform
+        update-source-version ${packageAttribute}.${primaryBinary} $latestVersion --file=${versionFile} --version-key=buildVersion --system=$platform
     done
   '';
 
