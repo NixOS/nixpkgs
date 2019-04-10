@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ openssl doxygen boost sqlite python pythonPackages.sphinx];
-  configureFlags = [
+  wafConfigureFlags = [
     "--with-openssl=${openssl.dev}"
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--enable-talloc-compat1"
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
