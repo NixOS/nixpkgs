@@ -5451,4 +5451,9 @@
     github = "shazow";
     name = "Andrey Petrov";
   };
+  freezeboy = {
+    email = "freezeboy@users.noreply.github.com";
+    github = "freezeboy";
+    name = "freezeboy";
+  };
 }
