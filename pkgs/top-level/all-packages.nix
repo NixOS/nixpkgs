@@ -21930,6 +21930,10 @@ in
 
   m4rie = callPackage ../development/libraries/science/math/m4rie { };
 
+  mkchromecast = callPackage ../applications/misc/mkchromecast {
+    inherit (python3Packages) buildPythonApplication PyChromecast psutil mutagen flask pyqt5 netifaces requests soco;
+  };
+
   mkl = callPackage ../development/libraries/science/math/mkl { };
 
   nasc = callPackage ../applications/science/math/nasc { };
