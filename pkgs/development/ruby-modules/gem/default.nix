@@ -202,6 +202,8 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     rm -fv $out/${ruby.gemPath}/doc/*/*/created.rid || true
     rm -fv $out/${ruby.gemPath}/gems/*/ext/*/mkmf.log || true
 
+    rm -rf $out/${ruby.gemPath}/cache/bundler/git
+
     # write out metadata and binstubs
     spec=$(echo $out/${ruby.gemPath}/specifications/*.gemspec)
     ruby ${./gem-post-build.rb} "$spec"
