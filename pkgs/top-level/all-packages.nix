@@ -8237,7 +8237,7 @@ in
 
   svg2tikz = python27Packages.svg2tikz;
 
-  svg-tikz = (callPackage ../tools/typesetting/svg2tikz {}).svg_tikz {};
+  svg-tikz = (callPackage ../tools/typesetting/svgtikz { }).svg_tikz { };
 
   pew = callPackage ../development/tools/pew {};
   pipenv = callPackage ../development/tools/pipenv {};
