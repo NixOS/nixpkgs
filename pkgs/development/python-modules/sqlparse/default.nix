@@ -2,25 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.2.4";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce028444cfab83be538752a2ffdb56bc417b7784ff35bb9a3062413717807dec";
+    sha256 = "7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873";
   };
 
   checkInputs = [ pytest ];
   checkPhase = ''
     py.test
   '';
-
-  # Package supports 3.x, but tests are clearly 2.x only.
-  doCheck = !isPy3k;
 
   meta = with stdenv.lib; {
     description = "Non-validating SQL parser for Python";
