@@ -1595,6 +1595,8 @@ in
 
   nfdump = callPackage ../tools/networking/nfdump { };
 
+  nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
+
   noteshrink = callPackage ../tools/misc/noteshrink { };
 
   noti = callPackage ../tools/misc/noti {

@@ -3324,6 +3324,8 @@ in {
 
   nixpkgs = callPackage ../development/python-modules/nixpkgs { };
 
+  nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
+
   nodeenv = callPackage ../development/python-modules/nodeenv { };
 
   nose = callPackage ../development/python-modules/nose { };
