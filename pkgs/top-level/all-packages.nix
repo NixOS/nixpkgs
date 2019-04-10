@@ -14846,6 +14846,8 @@ in
       ];
   };
 
+  linux_rt = callPackage ../os-specific/linux/kernel/linux-rt.nix {};
+
   linux_4_9 = callPackage ../os-specific/linux/kernel/linux-4.9.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
