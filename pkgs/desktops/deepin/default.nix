@@ -11,6 +11,7 @@ let
     dde-calendar = callPackage ./dde-calendar { };
     dde-daemon = callPackage ./dde-daemon { };
     dde-dock = callPackage ./dde-dock { };
+    dde-file-manager = callPackage ./dde-file-manager { };
     dde-network-utils = callPackage ./dde-network-utils { };
     dde-polkit-agent = callPackage ./dde-polkit-agent { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
