@@ -2,9 +2,10 @@
 , cf-private, Cocoa, AudioToolbox, OpenGL, Foundation, ForceFeedback
 }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lobster-${version}";
-  version = "2019-04-07-git";
+  pname = "lobster";
+  version = "unstable-2019-04-07";
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
@@ -12,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0w9zn5xnw3y97qlfs5sakl1rbjbrwwjcjgahydp98l1a77h55ad3";
   };
   nativeBuildInputs = [ cmake ];
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libX11 libXext ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [
+  buildInputs = optionals (!stdenv.isDarwin) [ libGL libX11 libXext ]
+    ++ optionals stdenv.isDarwin [
     cf-private Cocoa AudioToolbox OpenGL Foundation ForceFeedback
     ];
   sourceRoot = "source/dev";
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
       --replace "#ifdef __linux__" "#if defined __linux__ || defined __APPLE__ "
   '';
   cmakeFlags = [
-  "-DCMAKE_BUILD_TYPE=Release"
-  "-DVIDEO_VULKAN=OFF"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DVIDEO_VULKAN=OFF"
   ];
   installPhase = ''
     install -d $out/bin
@@ -40,8 +41,8 @@ stdenv.mkDerivation rec {
   '';
   enableParallelBuilding = true;
   meta = {
-    homepage="http://strlen.com/lobster";
+    homepage = http://strlen.com/lobster;
     description = "The Lobster programming language";
-    license = stdenv.lib.licenses.asl20 ;
+    license = licenses.asl20 ;
   };
 }
