@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, alcotest }:
+{ lib, fetchFromGitHub, buildDunePackage, alcotest, bigstringaf }:
 
 buildDunePackage rec {
   pname = "faraday";
-  version = "0.5.0";
+  version = "0.7.0";
 
   minimumOCamlVersion = "4.02";
 
@@ -10,16 +10,17 @@ buildDunePackage rec {
     owner = "inhabitedtype";
     repo = pname;
     rev = version;
-    sha256 = "1kql0il1frsbx6rvwqd7ahi4m14ik6la5an6c2w4x7k00ndm4d7n";
+    sha256 = "0z6ikwlqad91iac0q5z88p3wzq5k15y86ckzmhdq1aqwrcm14bq2";
   };
 
   buildInputs = [ alcotest ];
+  propagatedBuildInputs = [ bigstringaf ];
   doCheck = true;
 
   meta = {
     description = "Serialization library built for speed and memory efficiency";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
 }
