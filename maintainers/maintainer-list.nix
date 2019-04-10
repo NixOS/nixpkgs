@@ -5267,6 +5267,11 @@
     github = "xnwdd";
     name = "Guillermo NWDD";
   };
+  xrelkd = {
+    email = "46590321+xrelkd@users.noreply.github.com";
+    github = "xrelkd";
+    name = "xrelkd";
+  };
   xurei = {
     email = "olivier.bourdoux@gmail.com";
     github = "xurei";

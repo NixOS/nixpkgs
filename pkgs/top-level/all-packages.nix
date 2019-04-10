@@ -1053,6 +1053,8 @@ in
 
   bro = callPackage ../applications/networking/ids/bro { };
 
+  brook = callPackage ../tools/networking/brook { };
+
   broot = callPackage ../tools/misc/broot { };
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
