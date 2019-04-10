@@ -31,33 +31,22 @@
     </para>
     <note>
      <para>
-      <varname>services.xserver.desktopManager.pantheon</varname> default
-      enables lightdm as a display manager and using Pantheon's greeter.
+      By default, <varname>services.xserver.desktopManager.pantheon</varname>
+      enables LightDM as a display manager, as pantheon's screen locking
+      implementation relies on it.
      </para>
      <para>
-      This is because of limitations with the screenlocking implementation,
-      whereas the screenlocker would be non-functional without it.
-     </para>
-     <para>
-      Because of that it is recommended to retain this precaution, however if
-      you'd like to change this set:
-     </para>
-     <itemizedlist>
-      <listitem>
-       <para>
-        <option>services.xserver.displayManager.lightdm.enable</option>
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        <option>services.xserver.displayManager.lightdm.greeters.pantheon.enable</option>
-       </para>
-      </listitem>
-     </itemizedlist>
-     <para>
-      to <literal>false</literal> and enable your preferred display manager.
+      Because of that it is recommended to leave LightDM enabled. If you'd like
+      to disable it anyway, set
+      <option>services.xserver.displayManager.lightdm.enable</option> to
+      <literal>false</literal> and enable your preferred display manager.
      </para>
     </note>
+    <para>
+     Also note that Pantheon's LightDM greeter is not enabled by default,
+     because it has numerous issues in NixOS and isn't optimal for use here
+     yet.
+    </para>
    </listitem>
    <listitem>
     <para>
