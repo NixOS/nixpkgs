@@ -5063,7 +5063,7 @@ let
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
       sha256 = "303d396477c94c43c2f83da1a8025d68de76bd7e52c2cc35fbdf5c59b4c2cffa";
     };
-    postInstall = ''rm $out/bin/{enc2xs,encguess,piconv} $out/share/man/man1/{enc2xs,encguess,piconv}.1''; # remote the files perl-5.28 already has
+    postInstall = "rm $out/bin/{enc2xs,encguess,piconv} $out/share/man/man1/{enc2xs,encguess,piconv}.1"; # remove the files perl-5.28 already has
     meta = {
       description = "Character encodings in Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
