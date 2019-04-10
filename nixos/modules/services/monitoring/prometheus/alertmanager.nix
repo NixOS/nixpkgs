@@ -40,22 +40,6 @@ in {
         '';
       };
 
-      user = mkOption {
-        type = types.str;
-        default = "nobody";
-        description = ''
-          User name under which Alertmanager shall be run.
-        '';
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "nogroup";
-        description = ''
-          Group under which Alertmanager shall be run.
-        '';
-      };
-
       configuration = mkOption {
         type = types.nullOr types.attrs;
         default = null;
@@ -152,10 +136,8 @@ in {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
         serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
           Restart  = "always";
-          PrivateTmp = true;
+          DynamicUser = true;
           WorkingDirectory = "/tmp";
           ExecStart = "${cfg.package}/bin/alertmanager" +
             optionalString (length cmdlineArgs != 0) (" \\\n  " +
