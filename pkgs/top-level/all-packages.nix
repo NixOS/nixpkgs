@@ -15209,6 +15209,13 @@ in
       ];
   };
 
+  linux_5_0_ck = callPackage ../os-specific/linux/kernel/linux-5.0-ck.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.modinst_arg_list_too_long
+      ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
