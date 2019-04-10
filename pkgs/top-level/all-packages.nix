@@ -15186,6 +15186,13 @@ in
       ];
   };
 
+  linux_4_19_ck = callPackage ../os-specific/linux/kernel/linux-4.19-ck.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.modinst_arg_list_too_long
+      ];
+  };
+
   linux_5_0 = callPackage ../os-specific/linux/kernel/linux-5.0.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
