@@ -1,22 +1,25 @@
-{ stdenv, lib, file, fetchurl, makeWrapper, autoPatchelfHook, jsoncpp }:
+{ stdenv, lib, file, fetchurl, makeWrapper,
+  autoPatchelfHook, jsoncpp, libpulseaudio }:
 let
-  versionMajor = "6.3";
-  versionMinor = "6_1";
+  versionMajor = "6.6";
+  versionMinor = "8";
+  versionBuild_x86_64 = "5";
+  versionBuild_i686 = "5";
 in
   stdenv.mkDerivation rec {
-    name = "nomachine-client-${version}";
+    pname = "nomachine-client";
     version = "${versionMajor}.${versionMinor}";
   
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_x86_64.tar.gz";
-          sha256 = "1035j2z2rqmdfb8cfm1pakd05c575640604b8lkljmilpky9mw5d";
+          url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_x86_64}_x86_64.tar.gz";
+          sha256 = "0hsx1nd9m1l35pj4jri88jib1hgf2wh1f42s650y2br2h6bhaixs";
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
-          url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_i686.tar.gz";
-          sha256 = "07j9f6mlq9m01ch8ik5dybi283vrp5dlv156jr5n7n2chzk34kf3";
+          url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_i686}_i686.tar.gz";
+          sha256 = "1hrp8s17pcqkb4jcnayx81qmm7c1njjp69fkpyqgcnv9vshias1b";
         }
       else
         throw "NoMachine client is not supported on ${stdenv.hostPlatform.system}";
@@ -31,7 +34,7 @@ in
     '';
   
     nativeBuildInputs = [ file makeWrapper autoPatchelfHook ];
-    buildInputs = [ jsoncpp ];
+    buildInputs = [ jsoncpp libpulseaudio ];
 
     installPhase = ''
       rm bin/nxplayer bin/nxclient
@@ -63,6 +66,10 @@ in
     postFixup = ''
       makeWrapper $out/bin/nxplayer.bin $out/bin/nxplayer --set NX_SYSTEM $out/NX
       makeWrapper $out/bin/nxclient.bin $out/bin/nxclient --set NX_SYSTEM $out/NX
+
+      # libnxcau.so needs libpulse.so.0 for audio to work, but doesn't
+      # have a DT_NEEDED entry for it.
+      patchelf --add-needed libpulse.so.0 $out/NX/lib/libnxcau.so
     '';
   
     dontBuild = true;

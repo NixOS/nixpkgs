@@ -6,7 +6,7 @@ let
   cfg = config.services.codimd;
 
   prettyJSON = conf:
-    pkgs.runCommand "codimd-config.json" { } ''
+    pkgs.runCommand "codimd-config.json" { preferLocalBuild = true; } ''
       echo '${builtins.toJSON conf}' | ${pkgs.jq}/bin/jq \
         '{production:del(.[]|nulls)|del(.[][]?|nulls)}' > $out
     '';
@@ -67,7 +67,7 @@ in
       path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/run/codimd.sock";
+        example = "/run/codimd.sock";
         description = ''
           Specify where a UNIX domain socket should be placed.
         '';

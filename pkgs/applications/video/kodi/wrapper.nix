@@ -14,7 +14,10 @@ buildEnv {
     do
       makeWrapper ${kodi}/bin/$exe $out/bin/$exe \
         --prefix PYTHONPATH : ${kodi.pythonPackages.makePythonPath plugins} \
-        --prefix KODI_HOME : $out/share/kodi
+        --prefix KODI_HOME : $out/share/kodi \
+        --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
+          (stdenv.lib.concatMap
+            (plugin: plugin.extraRuntimeDependencies) plugins)}"
     done
   '';
 

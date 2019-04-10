@@ -1,12 +1,11 @@
-{ pkgs, pkgsCross, lib }:
+{ pkgs, lib }:
 
 let
 
-  emulators = {
-    mingw32 = "WINEDEBUG=-all ${pkgs.winePackages.minimal}/bin/wine";
-    mingwW64 = "WINEDEBUG=-all ${pkgs.wineWowPackages.minimal}/bin/wine";
-    # TODO: add some qemu-based emulaltors here
-  };
+  testedSystems = lib.filterAttrs (name: value: let
+    platform = lib.systems.elaborate value;
+  in platform.isLinux || platform.isWindows
+  ) lib.systems.examples;
 
   getExecutable = pkgs: pkgFun: exec:
     "${pkgFun pkgs}${exec}${pkgs.hostPlatform.extensions.executable}";
@@ -17,19 +16,29 @@ let
   in pkgs.runCommand "test-${pkgName}-${crossPkgs.hostPlatform.config}" {
     nativeBuildInputs = [ pkgs.dos2unix ];
   } ''
+    # Just in case we are using wine, get rid of that annoying extra
+    # stuff.
+    export WINEDEBUG=-all
+
     HOME=$(pwd)
     mkdir -p $out
 
     # We need to remove whitespace, unfortunately
     # Windows programs use \r but Unix programs use \n
 
+    echo Running native-built program natively
+
     # find expected value natively
     ${getExecutable hostPkgs pkgFun exec} ${args'} \
       | dos2unix > $out/expected
 
+    echo Running cross-built program in emulator
+
     # run emulator to get actual value
     ${emulator} ${getExecutable crossPkgs pkgFun exec} ${args'} \
       | dos2unix > $out/actual
+
+    echo Comparing results...
 
     if [ "$(cat $out/actual)" != "$(cat $out/expected)" ]; then
       echo "${pkgName} did not output expected value:"
@@ -44,37 +53,48 @@ let
     fi
   '';
 
-in
+  mapMultiPlatformTest = crossSystemFun: test: lib.mapAttrs (name: system: test rec {
+    crossPkgs = import pkgs.path {
+      localSystem = { inherit (pkgs.hostPlatform) config; };
+      crossSystem = crossSystemFun system;
+    };
 
-lib.mapAttrs (name: emulator: let
-  crossPkgs = pkgsCross.${name};
+    emulator = crossPkgs.hostPlatform.emulator pkgs;
 
-  # Apply some transformation on windows to get dlls in the right
-  # place. Unfortunately mingw doesn’t seem to be able to do linking
-  # properly.
-  platformFun = pkg: if crossPkgs.hostPlatform.isWindows then
-    pkgs.buildEnv {
-      name = "${pkg.name}-winlinks";
-      paths = [pkg] ++ pkg.buildInputs;
-    } else pkg;
-in {
+    # Apply some transformation on windows to get dlls in the right
+    # place. Unfortunately mingw doesn’t seem to be able to do linking
+    # properly.
+    platformFun = pkg: if crossPkgs.hostPlatform.isWindows then
+      pkgs.buildEnv {
+        name = "${pkg.name}-winlinks";
+        paths = [pkg] ++ pkg.buildInputs;
+      } else pkg;
+  }) testedSystems;
 
-  hello = compareTest {
-    inherit emulator crossPkgs;
-    hostPkgs = pkgs;
-    exec = "/bin/hello";
-    pkgFun = pkgs: pkgs.hello;
+  tests = {
+
+    file = {platformFun, crossPkgs, emulator}: compareTest {
+      inherit emulator crossPkgs;
+      hostPkgs = pkgs;
+      exec = "/bin/file";
+      args = [
+        "${pkgs.file}/share/man/man1/file.1.gz"
+        "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuMathTeXGyre.ttf"
+      ];
+      pkgFun = pkgs: platformFun pkgs.file;
+    };
+
+    hello = {platformFun, crossPkgs, emulator}: compareTest {
+      inherit emulator crossPkgs;
+      hostPkgs = pkgs;
+      exec = "/bin/hello";
+      pkgFun = pkgs: pkgs.hello;
+    };
+
   };
 
-  file = compareTest {
-    inherit emulator crossPkgs;
-    hostPkgs = pkgs;
-    exec = "/bin/file";
-    args = [
-      "${pkgs.file}/share/man/man1/file.1.gz"
-      "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuMathTeXGyre.ttf"
-    ];
-    pkgFun = pkgs: platformFun pkgs.file;
-  };
-
-}) emulators
+in (lib.mapAttrs (_: mapMultiPlatformTest builtins.id) tests)
+// (lib.mapAttrs' (name: test: {
+    name = "${name}-llvm";
+    value = mapMultiPlatformTest (system: system // {useLLVM = true;}) test;
+  }) tests)

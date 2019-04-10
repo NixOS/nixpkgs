@@ -182,10 +182,9 @@ with lib;
       serviceConfig = rec {
         DynamicUser = true;
         RuntimeDirectory = StateDirectory;
-        RuntimeDirectoryMode = "0750";
         StateDirectory = builtins.baseNameOf dataDir;
         Type = "oneshot";
-        ExecStartPre = "!${lib.getBin pkgs.coreutils}/bin/install -m660 ${cfg.configFile} /run/${RuntimeDirectory}/ddclient.conf";
+        ExecStartPre = "!${lib.getBin pkgs.coreutils}/bin/install -m666 ${cfg.configFile} /run/${RuntimeDirectory}/ddclient.conf";
         ExecStart = "${lib.getBin pkgs.ddclient}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
       };
     };

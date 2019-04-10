@@ -1,21 +1,22 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytest_3
 , setuptools_scm
 , apipkg
 }:
 
 buildPythonPackage rec {
   pname = "execnet";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rpk1vyclhg911p3hql0m0nrpq7q7mysxnaaw6vs29cpa6kx8vgn";
+    sha256 = "a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a";
   };
 
-  buildInputs = [ pytest setuptools_scm ];
+  checkInputs = [ pytest_3  ];
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ apipkg ];
 
   # remove vbox tests
@@ -29,6 +30,9 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test testing
   '';
+
+  # not yet compatible with pytest 4
+  doCheck = false;
 
   __darwinAllowLocalNetworking = true;
 

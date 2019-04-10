@@ -5,7 +5,7 @@
 let
   extlinux-conf-builder =
     import ../../system/boot/loader/generic-extlinux-compatible/extlinux-conf-builder.nix {
-      inherit pkgs;
+      pkgs = pkgs.buildPackages;
     };
 in
 {
@@ -14,13 +14,6 @@ in
     ../../profiles/installation-device.nix
     ./sd-image.nix
   ];
-
-  assertions = lib.singleton {
-    assertion = pkgs.stdenv.hostPlatform.system == "armv7l-linux"
-      && pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system;
-    message = "sd-image-armv7l-multiplatform.nix can be only built natively on ARMv7; " +
-      "it cannot be cross compiled";
-  };
 
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;

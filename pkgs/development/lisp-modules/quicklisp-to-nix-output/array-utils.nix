@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''array-utils'';
-  version = ''20180831-git'';
+  version = ''20181018-git'';
 
   description = ''A few utilities for working with arrays.'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/array-utils/2018-08-31/array-utils-20180831-git.tgz'';
-    sha256 = ''1m3ciz73psy3gln5f2q1c6igfmhxjjq97bqbjsvmyj2l9f6m6bl7'';
+    url = ''http://beta.quicklisp.org/archive/array-utils/2018-10-18/array-utils-20181018-git.tgz'';
+    sha256 = ''1w13zwdhms4xbsnp9p6j71a4ppzglhxm81savyq0spf3zlm2l5yn'';
   };
 
   packageName = "array-utils";
@@ -18,8 +18,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM array-utils DESCRIPTION A few utilities for working with arrays.
-    SHA256 1m3ciz73psy3gln5f2q1c6igfmhxjjq97bqbjsvmyj2l9f6m6bl7 URL
-    http://beta.quicklisp.org/archive/array-utils/2018-08-31/array-utils-20180831-git.tgz
-    MD5 fa07e8fac5263d4fed7acb3d53e5855a NAME array-utils FILENAME array-utils
-    DEPS NIL DEPENDENCIES NIL VERSION 20180831-git SIBLINGS (array-utils-test)
+    SHA256 1w13zwdhms4xbsnp9p6j71a4ppzglhxm81savyq0spf3zlm2l5yn URL
+    http://beta.quicklisp.org/archive/array-utils/2018-10-18/array-utils-20181018-git.tgz
+    MD5 e32cc0474cf299ad1f5666e2864aa3d8 NAME array-utils FILENAME array-utils
+    DEPS NIL DEPENDENCIES NIL VERSION 20181018-git SIBLINGS (array-utils-test)
     PARASITES NIL) */

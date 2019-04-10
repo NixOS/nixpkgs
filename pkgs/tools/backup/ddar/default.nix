@@ -23,6 +23,7 @@ python2.pkgs.buildPythonApplication rec {
     make -f Makefile.prep synctus/ddar_pb2.py
   '';
 
+  nativeBuildInputs = with python2.pkgs; [ protobuf.protobuf ];
   propagatedBuildInputs = with python2.pkgs; [ protobuf ];
 
   checkInputs = [ roundup ];

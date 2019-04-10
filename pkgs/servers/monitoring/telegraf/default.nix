@@ -2,17 +2,19 @@
 
 buildGoPackage rec {
   name = "telegraf-${version}";
-  version = "1.7.0";
+  version = "1.9.2";
 
   goPackagePath = "github.com/influxdata/telegraf";
 
   excludedPackages = "test";
 
+  subPackages = [ "cmd/telegraf" ];
+
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "telegraf";
     rev = "${version}";
-    sha256 = "1jinvncbn1srfmclhys6khvaczawy243vgmj2gsgm9szrnrf7klv";
+    sha256 = "1416nx7mxa0b3bmnkarksicgvw6wja6s8xrf22yzak38qmmrpz2m";
   };
 
   buildFlagsArray = [ ''-ldflags=
@@ -26,6 +28,6 @@ buildGoPackage rec {
     license = licenses.mit;
     homepage = https://www.influxdata.com/time-series-platform/telegraf/;
     maintainers = with maintainers; [ mic92 roblabla ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

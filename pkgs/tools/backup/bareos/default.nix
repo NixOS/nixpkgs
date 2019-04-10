@@ -77,6 +77,5 @@ stdenv.mkDerivation rec {
     description = "A fork of the bacula project";
     license = licenses.agpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

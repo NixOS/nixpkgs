@@ -1,17 +1,20 @@
-{ fetchurl, stdenv, ocamlPackages }:
+{ fetchurl, stdenv, which, dune, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   name = "alt-ergo-${version}";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchurl {
     url    = "https://alt-ergo.ocamlpro.com/download_manager.php?target=${name}.tar.gz";
     name   = "${name}.tar.gz";
-    sha256 = "106zfgisq6qxr7dlk8z7gi68ly7qff4frn8wab2g8z2nkkwla92w";
+    sha256 = "1ycr3ff0gacq1aqzs16n6swgfniwpim0m7rvhcam64kj0a80c6bz";
   };
 
-  buildInputs = with ocamlPackages;
-    [ ocaml findlib camlzip ocamlgraph zarith lablgtk ocplib-simplex psmt2-frontend menhir num ];
+  buildInputs = [ dune which ] ++ (with ocamlPackages; [
+    ocaml findlib camlzip lablgtk menhir num ocplib-simplex psmt2-frontend seq zarith
+  ]);
+
+  preConfigure = "patchShebangs ./configure";
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

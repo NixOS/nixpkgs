@@ -29,9 +29,19 @@ let
       sha256 = "13vg0wm2fsd06pfw05m4bhcgbjmb2bmd4i31zfs48w0f7hjc8qf2";
     };
     "2.0" = {
-      kafkaVersion = "2.0.0";
+      kafkaVersion = "2.0.1";
       scalaVersion = "2.12";
-      sha256 = "0mbrp8rafv1bra9nrdicpxy6w59ixanaj50c9pkgdrih82f57wdm";
+      sha256 = "0i62q3542cznf711kiskaa30l06gq9ckszlxja4k1vs1flxz5khl";
+    };
+    "2.1" = {
+      kafkaVersion = "2.1.1";
+      scalaVersion = "2.12";
+      sha256 = "1gm7xiqkbg415mbj9mlazcndmky81xvg4wmz0h94yv1whp7fslr0";
+    };
+    "2.2" = {
+      kafkaVersion = "2.2.0";
+      scalaVersion = "2.12";
+      sha256 = "09q028kagpkzrvfdb040z8q9mspv8n7f2igrd1cs73v7mr7n42d0";
     };
   };
 in

@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin }:
+{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin,
+  runtimeShell }:
 
 rustPlatform.buildRustPackage rec {
   name = "rust-bindgen-${version}";
@@ -29,10 +30,10 @@ rustPlatform.buildRustPackage rec {
     chmod +x $out/bin/bindgen
   '';
 
-  doCheck = false; # half the tests fail because our rustfmt is not nightly enough
+  doCheck = true;
   checkInputs =
     let fakeRustup = writeScriptBin "rustup" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       shift
       shift
       exec "$@"
@@ -42,6 +43,10 @@ rustPlatform.buildRustPackage rec {
     fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
     clang
   ];
+  preCheck = ''
+    # for the ci folder, notably
+    patchShebangs .
+  '';
 
   meta = with stdenv.lib; {
     description = "C and C++ binding generator";

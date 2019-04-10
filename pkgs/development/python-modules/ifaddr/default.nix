@@ -7,24 +7,18 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.1.4";
+  version = "0.1.6";
   pname = "ifaddr";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "cf2a8fbb578da2844d999a0a453825f660ed2d3fc47dcffc5f673dd8de4f0f8b";
+    sha256 = "c19c64882a7ad51a394451dabcbbed72e98b5625ec1e79789924d5ea3e3ecb93";
   };
-
-  # ipaddress is provided in python stdlib > 3.3
-  postPatch = if pythonOlder "3.4" then "" else ''
-    sed -i "s/'ipaddress'//" setup.py
-  '';
 
   propagatedBuildInputs = [ ipaddress ];
 
   checkPhase = ''
-   ${python.interpreter} ifaddr/test_ifaddr.py
+   ${python.interpreter} -m unittest discover
   '';
 
   meta = with stdenv.lib; {

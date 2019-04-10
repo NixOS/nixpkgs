@@ -46,9 +46,24 @@ neovim.override {
 }
 ```
 
+If you want to use `neovim-qt` as a graphical editor, you can configure it by overriding neovim in an overlay
+or passing it an overridden neovimn:
+
+```
+neovim-qt.override {
+  neovim = neovim.override {
+    configure = {
+      customRC = ''
+        # your custom configuration
+      '';
+    };
+  };
+}
+```
+
 ## Managing plugins with Vim packages
 
-To store you plugins in Vim packages the following example can be used:
+To store you plugins in Vim packages (the native vim plugin manager, see `:help packages`) the following example can be used:
 
 ```
 vim_configurable.customize {
@@ -56,6 +71,8 @@ vim_configurable.customize {
     # loaded on launch
     start = [ youcompleteme fugitive ];
     # manually loadable by calling `:packadd $plugin-name`
+    # however, if a vim plugin has a dependency that is not explicitly listed in
+	# opt that dependency will always be added to start to avoid confusion.
     opt = [ phpCompletion elm-vim ];
     # To automatically load a plugin when opening a filetype, add vimrc lines like:
     # autocmd FileType php :packadd phpCompletion
@@ -63,6 +80,7 @@ vim_configurable.customize {
 }
 ```
 
+`myVimPackage` is an arbitrary name for the generated package. You can choose any name you like.
 For Neovim the syntax is:
 
 ```
@@ -74,6 +92,8 @@ neovim.override {
     packages.myVimPackage = with pkgs.vimPlugins; {
       # see examples below how to use custom packages
       start = [ ];
+      # If a vim plugin has a dependency that is not explicitly listed in
+      # opt that dependency will always be added to start to avoid confusion.
       opt = [ ];
     };
   };

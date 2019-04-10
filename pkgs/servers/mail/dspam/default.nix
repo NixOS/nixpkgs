@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper
 , gawk, gnused, gnugrep, coreutils, which
-, perl, libnet
+, perlPackages
 , withMySQL ? false, zlib, mysql57
 , withPgSQL ? false, postgresql
 , withSQLite ? false, sqlite
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1acklnxn1wvc7abn31l3qdj8q6k13s51k5gv86vka7q20jb5cxmf";
   };
 
-  buildInputs = [ perl ]
+  buildInputs = [ perlPackages.perl ]
                 ++ lib.optionals withMySQL [ zlib mysql57.connector-c ]
                 ++ lib.optional withPgSQL postgresql
                 ++ lib.optional withSQLite sqlite
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     rm -rf $out/var
 
     wrapProgram $out/bin/dspam_notify \
-      --set PERL5LIB "${lib.makePerlPath [ libnet ]}"
+      --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.libnet ]}"
 
     # Install SQL scripts
     mkdir -p $out/share/dspam/sql

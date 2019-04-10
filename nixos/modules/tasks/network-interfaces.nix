@@ -995,7 +995,7 @@ in
       '';
 
     environment.etc."hostid" = mkIf (cfg.hostId != null)
-      { source = pkgs.runCommand "gen-hostid" {} ''
+      { source = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
           hi="${cfg.hostId}"
           ${if pkgs.stdenv.isBigEndian then ''
             echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out

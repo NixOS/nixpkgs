@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/naihe2010/apvlv/commit/a3a895772a27d76dab0c37643f0f4c73f9970e62.patch";
       sha256 = "1fpc7wr1ajilvwi5gjsy5g9jcx4bl03gp5dmajg90ljqbhwz2bfi";
     })
+    ./fix-build-with-poppler-0.73.0.patch
   ];
 
   installPhase = ''

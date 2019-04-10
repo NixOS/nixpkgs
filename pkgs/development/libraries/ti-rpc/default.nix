@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
                 '#if defined __APPLE_CC__ || defined __FreeBSD__ || !defined __GLIBC__'
   '';
 
+  KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
 

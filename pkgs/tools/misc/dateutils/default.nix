@@ -1,12 +1,12 @@
 { stdenv, fetchurl, autoreconfHook, tzdata }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.5";
+  version = "0.4.6";
   name = "dateutils-${version}";
 
   src = fetchurl {
     url = "https://bitbucket.org/hroptatyr/dateutils/downloads/${name}.tar.xz";
-    sha256 = "1pnbc186mnvmyb5rndm0ym50sjihsy6m6crz62xxsjbxggza1mhn";
+    sha256 = "1kaphw474lz7336awr9rzsgcsr1p9njsjsryd8i0ywg5g8qp3816";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

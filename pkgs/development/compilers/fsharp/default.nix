@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     sed -i '988d' src/FSharpSource.targets
-    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "/bin/sh"
+    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "${stdenv.shell}"
     ./autogen.sh --prefix $out
   '';
 

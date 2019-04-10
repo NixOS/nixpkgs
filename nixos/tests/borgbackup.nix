@@ -130,6 +130,9 @@ in {
       # Make sure keepFile has the correct content
       $client->succeed("$borg extract '${localRepo}::${archiveName}'");
       $client->succeed('c=$(cat ${dataDir}/${keepFile}) && [[ "$c" == "${keepFileData}" ]]');
+      # Make sure the same is true when using `borg mount`
+      $client->succeed("mkdir -p /mnt/borg && $borg mount '${localRepo}::${archiveName}' /mnt/borg");
+      $client->succeed('c=$(cat /mnt/borg/${dataDir}/${keepFile}) && [[ "$c" == "${keepFileData}" ]]');
     };
 
     subtest "remote", sub {

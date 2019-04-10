@@ -8,30 +8,32 @@ let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "32d3ec319909fcad0b2b308fe1635198773e8316";
-    sha256 = "1kmgjv5kbrjy6azpgwnjcn3cj8vg5i8hnyk3m969sc0gq2j1rbjj";
+    rev = "712cd6618df2c77e126d68042ad7a81a69ee4a6f";
+    sha256 = "0wncdj6q1hn40lc7cnz97mx5qjvb8p13mhxilnncgcmf0crsvblz";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "fe2fbee294a8ad4434f828a8b4d99eafe9aac88c";
-    sha256 = "03rq4ypwqnz34n8ip85n95a3b9rxb34j26azzm3b3invaqchv19x";
+    rev = "df5bd2d05ac1fd3ec3024439f885ec21cc949b22";
+    sha256 = "0l8ds4nn2qcfi8535ai8891i3547x35hscs2jxwwq6qjgw1sgkax";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "3ce3e49d73b8abbf2ffe33f829f941fb2a40f552";
-    sha256 = "0yk4bzqifdqpmdxkhvrxbdqhf5ngkga0ig1yyz7khr7rklqfz7wp";
+    rev = "79b6681aadcb53c27d1052e5f8a0e82a981dbf2f";
+    sha256 = "0flng2rdmc4ndq3j71h6wk1ibcjvhjrg2rzd6rv445vcsf0jh2pj";
   };
 in stdenv.mkDerivation rec {
-  name = "shaderc-git-${version}";
-  version = "2018-06-01";
+  name = "shaderc-${version}";
+  version = "2018.0";
+
+  outputs = [ "out" "lib" "bin" "dev" "static" ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "shaderc";
-    rev = "be8e0879750303a1de09385465d6b20ecb8b380d";
-    sha256 = "16p25ry2i4zrj00zihfpf210f8xd7g398ffbw25igvi9mbn4nbfd";
+    rev = "v${version}";
+    sha256 = "0qigmj0riw43pgjn5f6kpvk72fajssz1lc2aiqib5qvmj9rqq3hl";
   };
 
   patchPhase = ''
@@ -40,7 +42,14 @@ in stdenv.mkDerivation rec {
     ln -s ${spirv-headers} third_party/spirv-tools/external/spirv-headers
   '';
 
-  buildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python ];
+
+  postInstall = ''
+    moveToOutput "lib/*.a" $static
+  '';
+
+  preConfigure = ''cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_BINDIR=$bin/bin"'';
+
   enableParallelBuilding = true;
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
@@ -48,5 +57,6 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "A collection of tools, libraries and tests for shader compilation.";
+    license = [ licenses.asl20 ];
   };
 }

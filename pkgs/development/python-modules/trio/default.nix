@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.9.0";
+  version = "0.11.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6d905d950dfa1db3fad6b5ef5637c221947123fd2b0e112033fecfc582318c3b";
+    sha256 = "3796774aedbf5be581c68f98c79b565654876de6e9a01c6a95e3ec6cd4e4b4c3";
   };
 
   checkInputs = [ pytest pyopenssl trustme jedi pylint ];

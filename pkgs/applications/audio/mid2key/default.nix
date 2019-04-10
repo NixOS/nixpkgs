@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libX11, libXi, libXtst, xextproto }:
+{ stdenv, fetchurl, alsaLib, libX11, libXi, libXtst, xorgproto }:
 
 stdenv.mkDerivation rec {
   name = "mid2key-r1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "tar xvzf $src";
 
-  buildInputs = [ alsaLib libX11 libXi libXtst xextproto ];
+  buildInputs = [ alsaLib libX11 libXi libXtst xorgproto ];
 
   buildPhase = "make";
 

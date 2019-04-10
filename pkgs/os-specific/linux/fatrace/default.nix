@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.13";
 
   src = fetchurl {
-    url = "http://launchpad.net/fatrace/trunk/${version}/+download/${name}.tar.bz2";
+    url = "https://launchpad.net/fatrace/trunk/${version}/+download/${name}.tar.bz2";
     sha256 = "0hrh45bpzncw0jkxw3x2smh748r65k2yxvfai466043bi5q0d2vx";
   };
 

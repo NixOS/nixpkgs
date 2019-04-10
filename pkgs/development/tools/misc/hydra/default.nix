@@ -1,12 +1,16 @@
 { stdenv, nix, perlPackages, buildEnv, releaseTools, fetchFromGitHub
 , makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
-, guile, perl, postgresql, nukeReferences, git, boehmgc
+, guile, perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
 , rpm, dpkg, cdrkit, pixz, lib, fetchpatch, boost, autoreconfHook
 }:
 
 with stdenv;
+
+if lib.versions.major nix.version == "1"
+  then throw "This Hydra version doesn't support Nix 1.x"
+else
 
 let
   isGreaterNix20 = with lib.versions;
@@ -34,8 +38,8 @@ let
         CatalystViewDownload
         CatalystViewJSON
         CatalystViewTT
-        CatalystXRoleApplicator
         CatalystXScriptServerStarman
+        CatalystXRoleApplicator
         CryptRandPasswd
         DBDPg
         DBDSQLite
@@ -71,23 +75,24 @@ let
   };
 in releaseTools.nixBuild rec {
   name = "hydra-${version}";
-  version = "2018-08-07";
+  version = "2019-03-18";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "4dca8fe14d3f782bdf927f37efce722acefffff3";
-    sha256 = "1yas4psmvfp7lhcp81ia2sy93b78j9hiw9a6n3q2m1a616hwpm25";
+    rev = "0721f6623ffb5a4b6a77b499af4eee7d6e4dd6a7";
+    sha256 = "0b2g2bnbaqpwxx8p81i4gpl4y16i57z5pnjm90fpd0jxnkij3pcg";
   };
 
   buildInputs =
-    [ makeWrapper autoconf automake libtool unzip nukeReferences pkgconfig sqlite libpqxx
+    [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx
       gitAndTools.topGit mercurial darcs subversion bazaar openssl bzip2 libxslt
       guile # optional, for Guile + Guix support
       perlDeps perl nix
       postgresql # for running the tests
+      nlohmann_json
     ] ++ lib.optionals isGreaterNix20 [ boost ];
 
   hydraPath = lib.makeBinPath (
@@ -95,7 +100,7 @@ in releaseTools.nixBuild rec {
       gzip bzip2 lzma gnutar unzip git gitAndTools.topGit mercurial darcs gnused bazaar
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   # adds a patch which ensures compatibility with the API of Nix 2.0.
   # it has been reverted in https://github.com/NixOS/hydra/commit/162d671c48a418bd10a8a171ca36787ef3695a44,
@@ -105,9 +110,16 @@ in releaseTools.nixBuild rec {
       url = "https://github.com/NixOS/hydra/commit/08de434bdd0b0a22abc2081be6064a6c846d3920.patch";
       sha256 = "0kz77njp5ynn9l81g3q8zrryvnsr06nk3iw0a60187wxqzf5fmf8";
     })
+  ] ++ [
+    (fetchpatch {
+      url = "https://github.com/NixOS/hydra/pull/648/commits/4171ab4c4fd576c516dc03ba64d1c7945f769af0.patch";
+      sha256 = "1fxa2459kdws6qc419dv4084c1ssmys7kqg4ic7n643kybamsgrx";
+    })
   ];
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
+
+  NIX_CFLAGS_COMPILE = [ "-pthread" ];
 
   shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH

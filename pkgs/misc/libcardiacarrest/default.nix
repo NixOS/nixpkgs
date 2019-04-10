@@ -4,13 +4,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "libcardiacarrest-${version}";
-  version = "12.1-7"; # <PA API version>-<version>
+  version = "12.2.8"; # <PA API version>.<version>
 
   src = fetchFromGitHub {
     owner = "oxij";
     repo = "libcardiacarrest";
-    rev = "d44288d9a24d6b7793fb36a4c9a548b6b55375ec";
-    sha256 = "0j3l5s6r9hgpy5y7q7kx0rkh05rk0bgfdvzbmadqps720lqjs4xm";
+    rev = "d89639f5b2d298cf74af26880f5ebf50e645166d";
+    sha256 = "0vrigwcw3g8zknqyznv6y3437ahn1w00gv3d303smmygr0p8bd94";
   };
 
   outputs = [ "out" "dev" ];

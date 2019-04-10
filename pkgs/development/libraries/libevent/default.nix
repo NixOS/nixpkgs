@@ -68,6 +68,5 @@ stdenv.mkDerivation rec {
     homepage = http://libevent.org/;
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

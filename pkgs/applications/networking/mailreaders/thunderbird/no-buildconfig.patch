@@ -1,0 +1,23 @@
+diff -ru -x '*~' a/docshell/base/nsAboutRedirector.cpp b/docshell/base/nsAboutRedirector.cpp
+--- a/docshell/base/nsAboutRedirector.cpp	2017-07-31 18:20:51.000000000 +0200
++++ b/docshell/base/nsAboutRedirector.cpp	2017-09-26 22:02:00.814151731 +0200
+@@ -32,8 +32,6 @@
+     {"about", "chrome://global/content/aboutAbout.xhtml", 0},
+     {"addons", "chrome://mozapps/content/extensions/extensions.xul",
+      nsIAboutModule::ALLOW_SCRIPT},
+-    {"buildconfig", "chrome://global/content/buildconfig.html",
+-     nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT},
+     {"checkerboard", "chrome://global/content/aboutCheckerboard.xhtml",
+      nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT |
+          nsIAboutModule::ALLOW_SCRIPT},
+diff -ru -x '*~' a/toolkit/content/jar.mn b/toolkit/content/jar.mn
+--- a/toolkit/content/jar.mn	2017-07-31 18:20:52.000000000 +0200
++++ b/toolkit/content/jar.mn	2017-09-26 22:01:42.383350314 +0200
+@@ -39,7 +39,6 @@
+    content/global/plugins.css
+    content/global/browser-child.js
+    content/global/browser-content.js
+-*   content/global/buildconfig.html
+    content/global/buildconfig.css
+    content/global/contentAreaUtils.js
+    content/global/datepicker.xhtml

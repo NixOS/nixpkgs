@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook gettext itstool libxml2 ];
-  buildInputs = [ gtk3 libcanberra-gtk3 librsvg gnome3.defaultIconTheme ];
+  buildInputs = [ gtk3 libcanberra-gtk3 librsvg gnome3.adwaita-icon-theme ];
 
   passthru = {
     updateScript = gnome3.updateScript {

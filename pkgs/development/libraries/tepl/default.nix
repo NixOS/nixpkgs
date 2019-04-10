@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, amtk, gnome3, gtksourceview4, libuchardet, libxml2, pkgconfig }:
+, amtk, gnome3, gtk3, gtksourceview4, libuchardet, libxml2, pkgconfig }:
 let
   version = "4.2.0";
   pname = "tepl";
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
     libxml2
     gtksourceview4
     libuchardet
-    gnome3.gtk
+    gtk3
   ];
 
   doCheck = false;

@@ -22,7 +22,8 @@ let
       password = cfg.databasePassword;
       username = cfg.databaseUsername;
       encoding = "utf8";
-    };
+      pool = cfg.databasePool;
+    } // cfg.extraDatabaseConfig;
   };
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
@@ -159,6 +160,22 @@ let
      '';
   };
 
+  gitlab-rails = pkgs.stdenv.mkDerivation rec {
+    name = "gitlab-rails";
+    buildInputs = [ pkgs.makeWrapper ];
+    dontBuild = true;
+    unpackPhase = ":";
+    installPhase = ''
+      mkdir -p $out/bin
+      makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
+          ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --run 'cd ${cfg.packages.gitlab}/share/gitlab'
+     '';
+  };
+
+  extraGitlabRb = pkgs.writeText "extra-gitlab.rb" cfg.extraGitlabRb;
+
   smtpSettings = pkgs.writeText "gitlab-smtp-settings.rb" ''
     if Rails.env.production?
       Rails.application.config.action_mailer.delivery_method = :smtp
@@ -251,6 +268,38 @@ in {
         type = types.str;
         default = "gitlab";
         description = "Gitlab database user.";
+      };
+
+      databasePool = mkOption {
+        type = types.int;
+        default = 5;
+        description = "Database connection pool size.";
+      };
+
+      extraDatabaseConfig = mkOption {
+        type = types.attrs;
+        default = {};
+        description = "Extra configuration in config/database.yml.";
+      };
+
+      extraGitlabRb = mkOption {
+        type = types.str;
+        default = "";
+        example = ''
+          if Rails.env.production?
+            Rails.application.config.action_mailer.delivery_method = :sendmail
+            ActionMailer::Base.delivery_method = :sendmail
+            ActionMailer::Base.sendmail_settings = {
+              location: "/run/wrappers/bin/sendmail",
+              arguments: "-i -t"
+            }
+          end
+        '';
+        description = ''
+          Extra configuration to be placed in config/extra-gitlab.rb. This can
+          be used to add configuration not otherwise exposed through this module's
+          options.
+        '';
       };
 
       host = mkOption {
@@ -426,7 +475,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.git gitlab-rake cfg.packages.gitlab-shell ];
+    environment.systemPackages = [ pkgs.git gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
 
     # Redis is required for the sidekiq queue runner.
     services.redis.enable = mkDefault true;
@@ -497,7 +546,15 @@ in {
     systemd.services.gitaly = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv cfg.packages.gitaly.rubyEnv.wrappedRuby ];
+      path = with pkgs; [
+        openssh
+        procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
+        gitAndTools.git
+        cfg.packages.gitaly.rubyEnv
+        cfg.packages.gitaly.rubyEnv.wrappedRuby
+        gzip
+        bzip2
+      ];
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -564,11 +621,12 @@ in {
         [ -L /run/gitlab/log ] || ln -sf ${cfg.statePath}/log /run/gitlab/log
         [ -L /run/gitlab/tmp ] || ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
         [ -L /run/gitlab/uploads ] || ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
+        cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
         ${optionalString cfg.smtp.enable ''
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
         ''}
-        cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
-        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
         ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
         # JSON is a subset of YAML
@@ -608,10 +666,6 @@ in {
             GITLAB_ROOT_PASSWORD='${cfg.initialRootPassword}' GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}'
           touch "${cfg.statePath}/db-seeded"
         fi
-
-        # The gitlab:shell:setup regenerates the authorized_keys file so that
-        # the store path to the gitlab-shell in it gets updated
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H force=yes ${gitlab-rake}/bin/gitlab-rake gitlab:shell:setup
 
         # The gitlab:shell:create_hooks task seems broken for fixing links
         # so we instead delete all the hooks and create them anew

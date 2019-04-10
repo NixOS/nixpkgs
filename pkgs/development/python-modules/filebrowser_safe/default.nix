@@ -34,7 +34,7 @@ buildPythonPackage rec {
     downloadPage = https://pypi.python.org/pypi/filebrowser_safe/;
     license = licenses.free;
     maintainers = with maintainers; [ prikhi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

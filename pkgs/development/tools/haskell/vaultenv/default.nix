@@ -33,4 +33,6 @@ mkDerivation rec {
   description = "Runs processes with secrets from HashiCorp Vault";
   license = stdenv.lib.licenses.bsd3;
   maintainers = with stdenv.lib.maintainers; [ lnl7 ];
+  hydraPlatforms = [];
+  broken = true;  # does not compile any longer
 }

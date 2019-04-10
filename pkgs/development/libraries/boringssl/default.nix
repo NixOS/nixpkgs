@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
+  makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
+
   installPhase = ''
     mkdir -p $out/bin $out/include $out/lib
 

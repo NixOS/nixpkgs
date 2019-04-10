@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gobjectIntrospection
+{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gobject-introspection
 , itstool, libxml2, python3Packages, at-spi2-core
 , dbus, intltool, libwnck3 }:
 
@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig wrapGAppsHook itstool intltool
-    gobjectIntrospection # For setup hook
+    gobject-introspection # For setup hook
   ];
   buildInputs = [
     gtk3 libxml2 python3Packages.python python3Packages.pyatspi
     python3Packages.pygobject3 python3Packages.ipython
-    at-spi2-core dbus libwnck3 gnome3.defaultIconTheme
+    at-spi2-core dbus libwnck3 gnome3.adwaita-icon-theme
   ];
 
   wrapPrefixVariables = [ "PYTHONPATH" ];

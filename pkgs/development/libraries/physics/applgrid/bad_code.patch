@@ -37,3 +37,14 @@ index d25288e..be354df 100644
    };
  
    typedef double (igrid::*transform_t)(double) const;
+diff --git a/src/lumi_pdf.cxx b/src/lumi_pdf.cxx
+--- a/src/lumi_pdf.cxx
++++ b/src/lumi_pdf.cxx
+@@ -235,6 +235,6 @@ void lumi_pdf::write(const std::string& filename) const {
+ // std::string lumi_pdf::summary(std::ostream& s=std::cout) const { 
+ std::string lumi_pdf::summary() const { 
+   std::stringstream s;
+-  s << "lumi_pdf::lumi_pdf() " << s << "\tsize " << m_combinations.size() << " lookup size " << m_lookup.size() << " " << this; 
++  s << "lumi_pdf::lumi_pdf() " << "\tsize " << m_combinations.size() << " lookup size " << m_lookup.size() << " " << this; 
+   return s.str();
+ }

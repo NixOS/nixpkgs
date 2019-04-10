@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     description = "A Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington montag451 ];
+    maintainers = with maintainers; [ montag451 ];
   };
 }

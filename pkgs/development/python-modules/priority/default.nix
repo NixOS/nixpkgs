@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, hypothesis }:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, pytest, hypothesis }:
 
 buildPythonPackage rec {
   pname = "priority";
@@ -8,6 +8,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1gpzn9k9zgks0iw5wdmad9b4dry8haiz2sbp6gycpjkzdld9dhbb";
   };
+
+  patches = [
+    # https://github.com/python-hyper/priority/pull/135
+    ./deadline.patch
+  ];
 
   checkInputs = [ pytest hypothesis ];
   checkPhase = ''

@@ -30,6 +30,13 @@ let
     ${cfg.extraConfig}
   '';
 
+  additionalEnvironment = pkgs.writeText "additional_environment.rb" ''
+    config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
+    config.logger.level = Logger::INFO
+
+    ${cfg.extraEnv}
+  '';
+
   unpackTheme = unpack "theme";
   unpackPlugin = unpack "plugin";
   unpack = id: (name: source:
@@ -54,12 +61,20 @@ in
         description = "Enable the Redmine service.";
       };
 
+      # default to the 4.x series not forcing major version upgrade of those on the 3.x series
       package = mkOption {
         type = types.package;
-        default = pkgs.redmine;
+        default = if versionAtLeast config.system.stateVersion "19.03"
+          then pkgs.redmine_4
+          else pkgs.redmine
+        ;
         defaultText = "pkgs.redmine";
-        description = "Which Redmine package to use.";
-        example = "pkgs.redmine.override { ruby = pkgs.ruby_2_3; }";
+        description = ''
+          Which Redmine package to use. This defaults to version 3.x if
+          <literal>system.stateVersion &lt; 19.03</literal> and version 4.x
+          otherwise.
+        '';
+        example = "pkgs.redmine_4.override { ruby = pkgs.ruby_2_4; }";
       };
 
       user = mkOption {
@@ -100,6 +115,19 @@ in
             smtp_settings:
               address: mail.example.com
               port: 25
+        '';
+      };
+
+      extraEnv = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra configuration in additional_environment.rb.
+
+          See https://svn.redmine.org/redmine/trunk/config/additional_environment.rb.example
+        '';
+        example = literalExample ''
+          config.logger.level = Logger::DEBUG
         '';
       };
 
@@ -206,16 +234,39 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
+    # create symlinks for the basic directory layout the redmine package expects
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/cache' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/config' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/files' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/plugins' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/public' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/public/plugin_assets' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/public/themes' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/tmp' 0750 ${cfg.user} ${cfg.group} - -"
+
+      "d /run/redmine - - - - -"
+      "d /run/redmine/public - - - - -"
+      "L+ /run/redmine/config - - - - ${cfg.stateDir}/config"
+      "L+ /run/redmine/files - - - - ${cfg.stateDir}/files"
+      "L+ /run/redmine/log - - - - ${cfg.stateDir}/log"
+      "L+ /run/redmine/plugins - - - - ${cfg.stateDir}/plugins"
+      "L+ /run/redmine/public/plugin_assets - - - - ${cfg.stateDir}/public/plugin_assets"
+      "L+ /run/redmine/public/themes - - - - ${cfg.stateDir}/public/themes"
+      "L+ /run/redmine/tmp - - - - ${cfg.stateDir}/tmp"
+    ];
+
     systemd.services.redmine = {
       after = [ "network.target" (if cfg.database.type == "mysql2" then "mysql.service" else "postgresql.service") ];
       wantedBy = [ "multi-user.target" ];
-      environment.HOME = "${cfg.package}/share/redmine";
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
       environment.REDMINE_LANG = "en";
       environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
       path = with pkgs; [
-        imagemagickBig
+        imagemagick
         bazaar
         cvs
         darcs
@@ -224,34 +275,24 @@ in
         subversion
       ];
       preStart = ''
-        # ensure cache directory exists for db:migrate command
-        mkdir -p "${cfg.stateDir}/cache"
-
-        # create the basic directory layout the redmine package expects
-        mkdir -p /run/redmine/public
-
-        for i in config files log plugins tmp; do
-          mkdir -p "${cfg.stateDir}/$i"
-          ln -fs "${cfg.stateDir}/$i" /run/redmine/
-        done
-
-        for i in plugin_assets themes; do
-          mkdir -p "${cfg.stateDir}/public/$i"
-          ln -fs "${cfg.stateDir}/public/$i" /run/redmine/public/
-        done
-
+        rm -rf "${cfg.stateDir}/plugins/"*
+        rm -rf "${cfg.stateDir}/public/themes/"*
 
         # start with a fresh config directory
         # the config directory is copied instead of linked as some mutable data is stored in there
-        rm -rf "${cfg.stateDir}/config/"*
+        find "${cfg.stateDir}/config" ! -name "secret_token.rb" -type f -exec rm -f {} +
         cp -r ${cfg.package}/share/redmine/config.dist/* "${cfg.stateDir}/config/"
+
+        chmod -R u+w "${cfg.stateDir}/config"
 
         # link in the application configuration
         ln -fs ${configurationYml} "${cfg.stateDir}/config/configuration.yml"
 
+        # link in the additional environment configuration
+        ln -fs ${additionalEnvironment} "${cfg.stateDir}/config/additional_environment.rb"
+
 
         # link in all user specified themes
-        rm -rf "${cfg.stateDir}/public/themes/"*
         for theme in ${concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
           ln -fs $theme/* "${cfg.stateDir}/public/themes"
         done
@@ -261,14 +302,9 @@ in
 
 
         # link in all user specified plugins
-        rm -rf "${cfg.stateDir}/plugins/"*
         for plugin in ${concatStringsSep " " (mapAttrsToList unpackPlugin cfg.plugins)}; do
           ln -fs $plugin/* "${cfg.stateDir}/plugins/''${plugin##*-redmine-plugin-}"
         done
-
-
-        # ensure correct permissions for most files
-        chmod -R ug+rwX,o-rwx+x "${cfg.stateDir}/"
 
 
         # handle database.passwordFile & permissions
@@ -284,24 +320,13 @@ in
           chmod 440 "${cfg.stateDir}/config/initializers/secret_token.rb"
         fi
 
-
-        # ensure everything is owned by ${cfg.user}
-        chown -R ${cfg.user}:${cfg.group} "${cfg.stateDir}"
-
-
         # execute redmine required commands prior to starting the application
-        # NOTE: su required in case using mysql socket authentication
-        /run/wrappers/bin/su -s ${pkgs.bash}/bin/bash -m -l redmine -c '${bundle} exec rake db:migrate'
-        /run/wrappers/bin/su -s ${pkgs.bash}/bin/bash -m -l redmine -c '${bundle} exec rake redmine:load_default_data'
-
-
-        # log files don't exist until after first command has been executed
-        # correct ownership of files generated by calling exec rake ...
-        chown -R ${cfg.user}:${cfg.group} "${cfg.stateDir}/log"
+        ${bundle} exec rake db:migrate
+        ${bundle} exec rake redmine:plugins:migrate
+        ${bundle} exec rake redmine:load_default_data
       '';
 
       serviceConfig = {
-        PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
@@ -316,7 +341,6 @@ in
       { name = "redmine";
         group = cfg.group;
         home = cfg.stateDir;
-        createHome = true;
         uid = config.ids.uids.redmine;
       });
 

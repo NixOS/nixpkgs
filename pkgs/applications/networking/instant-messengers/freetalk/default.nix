@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
-    downloadPage = "http://www.gnu.org/software/freetalk/";
+    downloadPage = "https://www.gnu.org/software/freetalk/";
   };
 }

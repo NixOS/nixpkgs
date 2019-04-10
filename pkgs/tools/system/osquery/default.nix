@@ -4,7 +4,7 @@
 , beecrypt, augeas, libxml2, sleuthkit, yara, lldpd, google-gflags
 , thrift, boost, rocksdb_lite, glog, gbenchmark, snappy
 , openssl, file, doxygen
-, gtest, sqlite, fpm, zstd, rdkafka, rapidjson
+, gtest, sqlite, fpm, zstd, rdkafka, rapidjson, fetchgit, fetchurl
 }:
 
 let
@@ -39,9 +39,37 @@ stdenv.mkDerivation rec {
     pkgconfig cmake pythonPackages.python pythonPackages.jinja2 doxygen fpm
   ];
 
+  NIX_LDFLAGS = [
+    "-lcrypto"
+  ];
+
   buildInputs = let
     gflags' = google-gflags.overrideAttrs (old: {
       cmakeFlags = stdenv.lib.filter (f: isNull (builtins.match ".*STATIC.*" f)) old.cmakeFlags;
+    });
+
+    # use older `lvm2` source for osquery, the 2.03 sourcetree
+    # will break osquery due to the lacking header `lvm2app.h`.
+    #
+    # https://github.com/NixOS/nixpkgs/pull/51756#issuecomment-446035295
+    lvm2' = lvm2.overrideAttrs (old: rec {
+      name = "lvm2-${version}";
+      version = "2.02.183";
+      src = fetchgit {
+        url = "git://sourceware.org/git/lvm2.git";
+        rev = "v${version}";
+        sha256 = "1ny3srcsxd6kj59zq1cman5myj8kzw010wbyc6mrpk4kp823r5nx";
+      };
+    });
+
+    # dpkg 1.19.2 dropped api in `<dpkg/dpkg-db.h>` which breaks compilation.
+    dpkg' = dpkg.overrideAttrs (old: rec {
+      name = "dpkg-${version}";
+      version = "1.19.0.5";
+      src = fetchurl {
+        url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
+        sha256 = "1dc5kp3fqy1k66fly6jfxkkg7w6d0jy8szddpfyc2xvzga94d041";
+      };
     });
   in [
     udev audit
@@ -51,7 +79,7 @@ stdenv.mkDerivation rec {
       customMemoryManagement = false;
     })
 
-    lvm2 libgcrypt libarchive libgpgerror libuuid iptables dpkg
+    lvm2' libgcrypt libarchive libgpgerror libuuid iptables dpkg'
     lzma bzip2 rpm beecrypt augeas libxml2 sleuthkit
     yara lldpd gflags' thrift boost
     glog gbenchmark snappy openssl

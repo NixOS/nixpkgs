@@ -1,10 +1,7 @@
-{ stdenv, cacert, git, rust, cargo-vendor, python3 }:
-let
-  fetchcargo = import ./fetchcargo.nix {
-    inherit stdenv cacert git rust cargo-vendor python3;
-  };
-in
-{ name, cargoSha256 ? "unset"
+{ stdenv, cacert, git, cargo, rustc, cargo-vendor, fetchcargo, python3 }:
+
+{ name ? "${args.pname}-${args.version}"
+, cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
 , cargoPatches ? []
@@ -45,7 +42,7 @@ in stdenv.mkDerivation (args // {
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
+  buildInputs = [ cacert git cargo rustc ] ++ buildInputs;
 
   patches = cargoPatches ++ patches;
 

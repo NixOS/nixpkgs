@@ -13,5 +13,5 @@ with lib;
 
   documentation.enable = mkDefault false;
 
-  sound.enable = mkDefault false;
+  documentation.nixos.enable = mkDefault false;
 }

@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, gettext, zsh, pinentry, cryptsetup, gnupg, makeWrapper }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper
+, gettext, zsh, pinentry, cryptsetup, gnupg, utillinux, e2fsprogs
+}:
 
 stdenv.mkDerivation rec {
   name = "tomb-${version}";
@@ -11,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wk1aanzfln88min29p5av2j8gd8vj5afbs2gvarv7lvx1vi7kh1";
   };
 
+  buildInputs = [ zsh pinentry ];
+
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
@@ -19,19 +23,15 @@ stdenv.mkDerivation rec {
       --replace 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
   '';
 
-  buildPhase = ''
-    # manually patch the interpreter
-    sed -i -e "1s|.*|#!${zsh}/bin/zsh|g" tomb
-  '';
+  doInstallCheck = true;
+  installCheckPhase = "$out/bin/tomb -h 2>/dev/null";
 
   installPhase = ''
     install -Dm755 tomb       $out/bin/tomb
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
-    ln -s ${gnupg}/bin/gpg $out/bin/gpg
-
     wrapProgram $out/bin/tomb \
-      --prefix PATH : $out/bin:${lib.makeBinPath [ cryptsetup gettext pinentry ]}
+      --prefix PATH : $out/bin:${lib.makeBinPath [ cryptsetup gettext gnupg pinentry utillinux e2fsprogs ]}
   '';
 
   meta = with stdenv.lib; {

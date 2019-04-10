@@ -1,19 +1,20 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
-, git, bash, gzip, openssh
+, git, bash, gzip, openssh, pam
 , sqliteSupport ? true
+, pamSupport ? true
 }:
 
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "gitea-${version}";
-  version = "1.5.2";
+  pname = "gitea";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${version}";
-    sha256 = "168pbndlh7c148p8wzkd39kd7idiba9zw7v0alp9zqcqzzayaydj";
+    sha256 = "063rfb0jwxfq91cw7gp0achqsgi3dpj1pqfi7k5md67bhp2i2si3";
     # Required to generate the same checksum on MacOS due to unicode encoding differences
     # More information: https://github.com/NixOS/nixpkgs/pull/48128
     extraPostFetch = ''
@@ -31,9 +32,19 @@ buildGoPackage rec {
     substituteInPlace modules/setting/setting.go --subst-var data
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optional pamSupport pam;
 
-  buildFlags = optionalString sqliteSupport "-tags sqlite";
+  preBuild = let
+    tags = optional pamSupport "pam"
+        ++ optional sqliteSupport "sqlite";
+    tagsString = concatStringsSep " " tags;
+  in ''
+    export buildFlagsArray=(
+      -tags="${tagsString}"
+      -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
+    )
+  '';
 
   outputs = [ "bin" "out" "data" ];
 

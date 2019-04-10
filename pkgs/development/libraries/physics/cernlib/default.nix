@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace 2006/src/config/site.def \
       --replace "# define MakeCmd gmake" "# define MakeCmd make"
+    substituteInPlace 2006/src/config/lnxLib.rules \
+      --replace "# lib" "// lib"
   '';
 
   configurePhase = ''
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = http://cernlib.web.cern.ch;
     description = "Legacy collection of libraries and modules for data analysis in high energy physics";
     broken = stdenv.isDarwin;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
     license = stdenv.lib.licenses.gpl2;
   };

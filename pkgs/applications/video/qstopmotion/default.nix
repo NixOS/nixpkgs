@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "qstopmotion";
-  version = "2.4.0";
+  version = "2.4.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/Version_2_4_0/${name}-Source.tar.gz";
-    sha256 = "0pbyq6nrr9g3crlsng660768167s0fybvcpzbfc0w9kkhs2jwrr2";
+    url = "mirror://sourceforge/project/${pname}/Version_${builtins.replaceStrings ["."] ["_"] version}/${name}-Source.tar.gz";
+    sha256 = "03r6jxyq0bak2vsy2b78nk27m7fm96hnl8cx11l3l17704j4iglh";
   };
 
   buildInputs = with qt5; [ v4l_utils libv4l pcre qtbase qtmultimedia ffmpeg guvcview

@@ -13,6 +13,7 @@ mkDerivation {
     url = "https://github.com/elm/compiler";
     sha256 = "13jks6c6i80z71mjjfg46ri570g5ini0k3xw3857v6z66zcl56x4";
     rev = "d5cbc41aac23da463236bbc250933d037da4055a";
+    fetchSubmodules = true;
   };
   isLibrary = false;
   isExecutable = true;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gjs, gobjectIntrospection
+{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gjs, gobject-introspection
 , libgweather, intltool, itstool, geoclue2, gnome-desktop }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook ];
   buildInputs = [
-    gtk3 gjs gobjectIntrospection gnome-desktop
-    libgweather gnome3.defaultIconTheme geoclue2 gnome3.gsettings-desktop-schemas
+    gtk3 gjs gobject-introspection gnome-desktop
+    libgweather gnome3.adwaita-icon-theme geoclue2 gnome3.gsettings-desktop-schemas
   ];
 
   # The .service file isn't wrapped with the correct environment

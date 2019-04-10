@@ -1,5 +1,4 @@
 { buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, pkgconfig ? null, ncurses ? null
 , libelf
 , utillinux
 , writeTextFile
@@ -89,7 +88,10 @@ let
 
       inherit src;
 
-      patches = map (p: p.patch) kernelPatches;
+      patches =
+        map (p: p.patch) kernelPatches
+        # Required for deterministic builds along with some postPatch magic.
+        ++ optional (stdenv.lib.versionAtLeast version "4.13") ./randstruct-provide-seed.patch;
 
       prePatch = ''
         for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
@@ -98,6 +100,19 @@ let
         done
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
         sed -i scripts/ld-version.sh -e "s|/usr/bin/awk|${buildPackages.gawk}/bin/awk|"
+      '';
+
+      postPatch = ''
+        # Set randstruct seed to a deterministic but diversified value. Note:
+        # we could have instead patched gen-random-seed.sh to take input from
+        # the buildFlags, but that would require also patching the kernel's
+        # toplevel Makefile to add a variable export. This would be likely to
+        # cause future patch conflicts.
+        if [ -f scripts/gcc-plugins/gen-random-seed.sh ]; then
+          substituteInPlace scripts/gcc-plugins/gen-random-seed.sh \
+            --replace NIXOS_RANDSTRUCT_SEED \
+            $(echo ${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
+        fi
       '';
 
       configurePhase = ''
@@ -266,10 +281,9 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
       ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
       ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optionals stdenv.lib.inNixShell [ pkgconfig ncurses ]
       ;
 
-  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
+  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
   # Absolute paths for compilers avoid any PATH-clobbering issues.
   makeFlags = commonMakeFlags ++ [

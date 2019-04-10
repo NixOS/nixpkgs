@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, firefox, libX11, xproto }:
+{ stdenv, fetchurl, firefox, libX11, xorgproto }:
 
 stdenv.mkDerivation rec {
   name = "mozplugger-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vszkq4kdbaxsrqr2xn9rq6ipza9fngdri79gvjqk3bvsdmg0k19";
   };
 
-  buildInputs = [ firefox libX11 xproto ];
+  buildInputs = [ firefox libX11 xorgproto ];
 
   installPhase = ''
     mkdir -p "$out/etc" "$out/bin" "$out/lib/mozilla/plugins" "$out/share/man/man7"

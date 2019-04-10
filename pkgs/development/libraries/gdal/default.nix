@@ -9,11 +9,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gdal-${version}";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchurl {
     url = "https://download.osgeo.org/gdal/${version}/${name}.tar.xz";
-    sha256 = "191jknma0vricrgdcdmwh8588rwly6a77lmynypxdl87i3z7hv9z";
+    sha256 = "09qgy36z0jc9w05373m4n0vm4j54almdzql6z9p9zr9pdp61syf3";
   };
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
@@ -51,6 +51,20 @@ stdenv.mkDerivation rec {
       #ifdef swap\
       #undef swap\
       #endif' ogr/ogrsf_frmts/mysql/ogr_mysql.h
+
+    # poppler 0.73.0 support
+    patch -lp2 <${
+      fetchpatch {
+        url = "https://github.com/OSGeo/gdal/commit/29f4dfbcac2de718043f862166cd639ab578b552.diff";
+        sha256 = "1h2rsjjrgwqfgqzppmzv5jgjs1dbbg8pvfmay0j9y0618qp3r734";
+      }
+    } || true
+    patch -p2 <${
+      fetchpatch {
+        url = "https://github.com/OSGeo/gdal/commit/19967e682738977e11e1d0336e0178882c39cad2.diff";
+        sha256 = "12yqd77226i6xvzgqmxiac5ghdinixh8k2crg1r2gnhc0xlc3arj";
+      }
+    }
   '';
 
   # - Unset CC and CXX as they confuse libtool.

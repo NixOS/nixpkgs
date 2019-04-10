@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     description = "An alternative C driver for MongoDB";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -6,11 +6,11 @@ with pythonPackages;
 
 buildPythonApplication rec {
   pname = "diceware";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "22a998361fd2afbc7890062e228235b3501084de1e6a5bb61f16d2637977f50d";
+    sha256 = "0klb0ysybzlh2wihvir82hgq62v0jjmlcqklwajyms7c0p529yby";
   };
 
   nativeBuildInputs = [ pytestrunner ];

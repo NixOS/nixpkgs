@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, fetchurl, writeScript
+{ stdenv, writeScript, fetchFromGitHub
 , libGL, libX11, libXext, python3, libXrandr, libXrender, libpulseaudio, libXcomposite
-, enableGlfw ? false, glfw }:
+, enableGlfw ? false, glfw, runtimeShell }:
 
 let
   inherit (stdenv.lib) optional makeLibraryPath;
 
   wrapperScript = writeScript "glava" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     case "$1" in
       --copy-config)
         # The binary would symlink it, which won't work in Nix because the
@@ -22,12 +22,13 @@ let
 in
   stdenv.mkDerivation rec {
     name = "glava-${version}";
-    version = "1.5.5";
+    version = "1.6.3";
 
-    src = fetchgit {
-      url = "https://github.com/wacossusca34/glava.git";
+    src = fetchFromGitHub {
+      owner = "wacossusca34";
+      repo = "glava";
       rev = "v${version}";
-      sha256 = "0mpbgllwz45wkax6pgvnh1pz2q4yvbzq2l8z8kff13wrsdvl8lh0";
+      sha256 = "0kqkjxmpqkmgby05lsf6c6iwm45n33jk5qy6gi3zvjx4q4yzal1i";
     };
 
     buildInputs = [
@@ -44,6 +45,9 @@ in
     ];
 
     preConfigure = ''
+      substituteInPlace Makefile \
+        --replace 'unknown' 'v${version}'
+
       export CFLAGS="-march=native"
     '';
 

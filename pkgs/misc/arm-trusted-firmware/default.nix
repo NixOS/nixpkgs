@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPackages }:
+{ stdenv, fetchFromGitHub, pkgsCross, buildPackages }:
 
 let
   buildArmTrustedFirmware = { filesToInstall
@@ -6,20 +6,24 @@ let
             , platform
             , extraMakeFlags ? []
             , extraMeta ? {}
+            , version ? "2.0"
             , ... } @ args:
            stdenv.mkDerivation (rec {
 
     name = "arm-trusted-firmware-${platform}-${version}";
-    version = "1.5";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "refs/tags/v${version}";
-      sha256 = "1gm0bn2llzfzz9bfsz11fhwxj5lxvyrq7bc13fjj033nljzxn7k8";
+      sha256 = "087pkwa6slxff0aiz3v42gww007nww97bl1p96fvvs7rr1y14gjx";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+    # For Cortex-M0 firmware in RK3399
+    nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
 
     makeFlags = [
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
@@ -79,6 +83,13 @@ in rec {
   armTrustedFirmwareRK3328 = buildArmTrustedFirmware rec {
     extraMakeFlags = [ "bl31" ];
     platform = "rk3328";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
+  };
+
+  armTrustedFirmwareRK3399 = buildArmTrustedFirmware rec {
+    extraMakeFlags = [ "bl31" ];
+    platform = "rk3399";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
   };

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
+, fetchpatch
 , doit
 , glibcLocales
 , pytest
@@ -30,11 +31,12 @@
 , pyyaml
 , toml
 , notebook
+, ruamel_yaml
 }:
 
 buildPythonPackage rec {
   pname = "Nikola";
-  version = "8.0.1";
+  version = "8.0.2";
 
   # Nix contains only Python 3 supported version of doit, which is a dependency
   # of Nikola. Python 2 support would require older doit 0.29.0 (which on the
@@ -46,12 +48,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pygments pillow dateutil docutils Mako unidecode lxml Yapsy PyRSS2Gen
     Logbook blinker setuptools natsort requests piexif markdown phpserialize
-    jinja2 doit Babel pyyaml toml notebook
+    jinja2 doit Babel pyyaml toml notebook ruamel_yaml
   ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18bq68f9v7xk9ahjl6x4k77yysq5g6g07ng2ndbg35kcsdnw4nk6";
+    sha256 = "1a5y1qriy76hl4yxvbf365b1ggsxybm06mi1pwb5jkgbkwk2gkrf";
   };
 
   checkPhase = ''

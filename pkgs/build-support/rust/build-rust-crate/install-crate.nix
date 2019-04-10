@@ -20,9 +20,11 @@ crateName: metadata:
     mkdir -p $out/lib
     cp -r target/build/* $out/lib # */
   fi
-  if [[ "$(ls -A target/bin)" ]]; then
-    mkdir -p $out/bin
-    cp -P target/bin/* $out/bin # */
+  if [[ -d target/bin ]]; then
+    if [[ "$(ls -A target/bin)" ]]; then
+      mkdir -p $out/bin
+      cp -P target/bin/* $out/bin # */
+    fi
   fi
   runHook postInstall
 ''

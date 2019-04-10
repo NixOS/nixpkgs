@@ -2,18 +2,11 @@
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "901500666de5e265d93e611dc05066bb020481c85550d6bcbf8030212938902c";
-  };
-
-  # Fix build with pip 10
-  # https://github.com/tweepy/tweepy/pull/1030
-  patches = fetchpatch {
-    url = "${meta.homepage}/commit/778bd7a31d2f5fae98652735e7844533589ca221.patch";
-    sha256 = "1sqmjn0ngiynhfkdkcs33qmvl49ysfp8522hvxjk8bx252y9qw2h";
+    sha256 = "fe85a79f58a01dd335968523b91c5fce760e7fe78bf25a6e71c72204fe499d0b";
   };
 
   doCheck = false;

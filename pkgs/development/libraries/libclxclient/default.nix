@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "10bq6fy8d3pr1x2x3xx9qhf2hdxrwdgvg843a2y6lx70y1jfj0c5";
   };
 
-  buildInputs = [ libclthreads libX11 libXft xorg.xproto ];
+  buildInputs = [ libclthreads libX11 libXft xorg.xorgproto ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  NIX_CFLAGS_COMPILE = "-I${xorg.xproto}/include -I${libXft.dev}/include";
+  NIX_CFLAGS_COMPILE = "-I${xorg.xorgproto}/include -I${libXft.dev}/include";
 
   patchPhase = ''
     cd source

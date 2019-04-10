@@ -1,8 +1,9 @@
 { stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
 , file, which, ncurses
-, autoreconfHook
+, autoreconfHook, fetchpatch
 , git
 , texinfo
+, buildPackages
 , qtbase ? null
 , pythonSupport ? false, swig2 ? null, python ? null
 }:
@@ -31,6 +32,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo ]
   ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-key-expiry.patch";
+      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=66376f3e206a1aa791d712fb8577bb3490268f60";
+      sha256 = "0i777dzcbv4r568l8623ar6y6j44bv46bbxi751qa5mdcihpya02";
+    })
+  ];
+
   postPatch =''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
   '';
@@ -38,6 +49,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
     "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
   ] ++ lib.optional pythonSupport "--enable-languages=python";
 
   NIX_CFLAGS_COMPILE =

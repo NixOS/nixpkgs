@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, dbus-glib,
   libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3,
-  desktop-file-utils, gnome3, mate, hicolor-icon-theme, wrapGAppsHook
+  desktop-file-utils, gnome3, gtk3, mate, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   name = "mate-control-center-${version}";
-  version = "1.21.0";
+  version = "1.20.4";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0m40jr1midh5fzk3k97sydihlqfqjvzxlgmkx8w2j30a09h7230w";
+    sha256 = "1rjxndikj0w516nlvyzcss31l9qjwkzvns7ygasnjbl02bgml9a4";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     librsvg
     libappindicator-gtk3
-    gnome3.gtk
+    gtk3
     gnome3.dconf
     hicolor-icon-theme
     mate.mate-desktop

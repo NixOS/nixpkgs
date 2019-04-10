@@ -1,5 +1,5 @@
 { fetchurl, stdenv, buildPackages
-, curl, openssl, zlib, expat, perl, python, gettext, cpio
+, curl, openssl, zlib, expat, perlPackages, python, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
@@ -20,7 +20,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.19.1";
+  version = "2.19.2";
   svn = subversionClient.override { perlBindings = perlSupport; };
 in
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1dfv43lmdnxz42504jc89sihbv1d4d6kgqcz3c5ji140kfm5cl1l";
+    sha256 = "1scbggzghkzzfqg4ky3qh7h9w87c3zya4ls5disz7dbx56is7sgw";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
@@ -59,11 +59,11 @@ stdenv.mkDerivation {
         --subst-var-by gettext ${gettext}
   '';
 
-  nativeBuildInputs = [ gettext perl ]
+  nativeBuildInputs = [ gettext perlPackages.perl ]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]
-    ++ stdenv.lib.optionals perlSupport [ perl ]
+    ++ stdenv.lib.optionals perlSupport [ perlPackages.perl ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
     ++ stdenv.lib.optionals withpcre2 [ pcre2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ]
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
     "prefix=\${out}"
     "SHELL_PATH=${stdenv.shell}"
   ]
-  ++ (if perlSupport then ["PERL_PATH=${perl}/bin/perl"] else ["NO_PERL=1"])
+  ++ (if perlSupport then ["PERL_PATH=${perlPackages.perl}/bin/perl"] else ["NO_PERL=1"])
   ++ (if pythonSupport then ["PYTHON_PATH=${python}/bin/python"] else ["NO_PYTHON=1"])
   ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
   ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc/"])
@@ -133,7 +133,6 @@ stdenv.mkDerivation {
       # Install contrib stuff.
       mkdir -p $out/share/git
       cp -a contrib $out/share/git/
-      ln -s "$out/share/git/contrib/credential/netrc/git-credential-netrc" $out/bin/
       mkdir -p $out/share/emacs/site-lisp
       ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/etc/bash_completion.d
@@ -153,7 +152,7 @@ stdenv.mkDerivation {
             '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
             '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
             '${coreutils}/bin/wc', '${coreutils}/bin/tr'
-            ${stdenv.lib.optionalString perlSupport ", '${perl}/bin/perl'"}
+            ${stdenv.lib.optionalString perlSupport ", '${perlPackages.perl}/bin/perl'"}
           );
         }
         foreach $c (@a) {
@@ -174,47 +173,37 @@ stdenv.mkDerivation {
       mv $out/share/gitweb $gitweb/
 
       # wrap perl commands
-      gitperllib=$out/lib/perl5/site_perl
-      for i in ${builtins.toString perlLibs}; do
-        gitperllib=$gitperllib:$i/lib/perl5/site_perl
-      done
+      makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc" $out/bin/git-credential-netrc \
+                  --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-cvsimport \
-                  --set GITPERLLIB "$gitperllib"
+                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-add--interactive \
-                  --set GITPERLLIB "$gitperllib"
+                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-archimport \
-                  --set GITPERLLIB "$gitperllib"
+                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-instaweb \
-                  --set GITPERLLIB "$gitperllib"
+                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-cvsexportcommit \
-                  --set GITPERLLIB "$gitperllib"
+                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
     ''
 
-   + (if svnSupport then
-
-      ''# wrap git-svn
-        gitperllib=$out/lib/perl5/site_perl
-        for i in ${builtins.toString perlLibs} ${svn.out}; do
-          gitperllib=$gitperllib:$i/lib/perl5/site_perl
-        done
-        wrapProgram $out/libexec/git-core/git-svn     \
-                     --set GITPERLLIB "$gitperllib"   \
+   + (if svnSupport then ''
+        # wrap git-svn
+        wrapProgram $out/libexec/git-core/git-svn                                                                                \
+                     --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath (perlLibs ++ [svn.out])}" \
                      --prefix PATH : "${svn.out}/bin" ''
        else '' # replace git-svn by notification script
         notSupported $out/libexec/git-core/git-svn
-       '')
+     '')
 
-   + (if sendEmailSupport then
-      ''# wrap git-send-email
-        gitperllib=$out/lib/perl5/site_perl
-        for i in ${builtins.toString smtpPerlLibs}; do
-          gitperllib=$gitperllib:$i/lib/perl5/site_perl
-        done
+   + (if sendEmailSupport then ''
+        # wrap git-send-email
         wrapProgram $out/libexec/git-core/git-send-email \
-                     --set GITPERLLIB "$gitperllib" ''
-       else '' # replace git-send-email by notification script
+                     --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath smtpPerlLibs}"
+      '' else ''
+        # replace git-send-email by notification script
         notSupported $out/libexec/git-core/git-send-email
-       '')
+      '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
        make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-info \
@@ -236,9 +225,9 @@ stdenv.mkDerivation {
    + stdenv.lib.optionalString stdenv.isDarwin ''
     # enable git-credential-osxkeychain by default if darwin
     cat > $out/etc/gitconfig << EOF
-[credential]
-	helper = osxkeychain
-EOF
+    [credential]
+      helper = osxkeychain
+    EOF
   '';
 
 

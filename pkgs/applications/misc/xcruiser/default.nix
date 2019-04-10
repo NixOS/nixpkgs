@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gccmakedep, xorg }:
+{ stdenv, fetchurl, gccmakedep, xorg, imake, libXt, libXaw, libXpm, libXext }:
 
 stdenv.mkDerivation {
   name = "xcruiser-0.30";
@@ -8,13 +8,13 @@ stdenv.mkDerivation {
       sha256 = "1r8whva38xizqdh7jmn6wcmfmsndc67pkw22wzfzr6rq0vf6hywi";
     };
 
-  buildInputs = with xorg; [ gccmakedep imake libXt libXaw libXpm libXext ];
+  nativeBuildInputs = [ gccmakedep imake ];
+  buildInputs = [ libXt libXaw libXpm libXext ];
 
-  configurePhase = "xmkmf -a";
-
-  preBuild = ''
-    makeFlagsArray=( BINDIR=$out/bin XAPPLOADDIR=$out/etc/X11/app-defaults)
-  '';
+  makeFlags = [
+    "BINDIR=$(out)/bin"
+    "XAPPLOADDIR=$(out)/etc/X11/app-defaults"
+  ];
 
   meta = with stdenv.lib; {
     description = "Filesystem visualization utility";

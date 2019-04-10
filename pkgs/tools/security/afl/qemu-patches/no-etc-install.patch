@@ -2,13 +2,12 @@ diff --git a/Makefile b/Makefile
 index d6b9dc1..ce7c493 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -384,8 +384,7 @@ install-confdir:
- install-sysconfig: install-datadir install-confdir
- 	$(INSTALL_DATA) $(SRC_PATH)/sysconfigs/target/target-x86_64.conf "$(DESTDIR)$(qemu_confdir)"
+@@ -601,7 +601,7 @@ install-localstatedir:
+ endif
  
--install: all $(if $(BUILD_DOCS),install-doc) install-sysconfig \
--install-datadir install-localstatedir
+ 
+-install: all $(if $(BUILD_DOCS),install-doc) install-datadir install-localstatedir
 +install: all $(if $(BUILD_DOCS),install-doc) install-datadir
  ifneq ($(TOOLS),)
- 	$(call install-prog,$(TOOLS),$(DESTDIR)$(bindir))
+ 	$(call install-prog,$(subst qemu-ga,qemu-ga$(EXESUF),$(TOOLS)),$(DESTDIR)$(bindir))
  endif

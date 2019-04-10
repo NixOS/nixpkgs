@@ -1,0 +1,25 @@
+diff --git a/insert-ordered-containers.cabal b/insert-ordered-containers.cabal
+index 0e8923a..bfbbec4 100644
+--- a/insert-ordered-containers.cabal
++++ b/insert-ordered-containers.cabal
+@@ -21,8 +21,8 @@ tested-with:
+   GHC==7.10.3,
+   GHC==8.0.1,
+   GHC==8.2.2,
+-  GHC==8.4.3,
+-  GHC==8.6.1
++  GHC==8.4.4,
++  GHC==8.6.3
+ 
+ extra-source-files:
+     CHANGELOG.md
+@@ -70,7 +70,7 @@ test-suite ins-ord-containers-tests
+     , unordered-containers
+     , base
+     , insert-ordered-containers
+-    , tasty             >= 0.10.1.2 && <1.2
++    , tasty             >= 0.10.1.2 && <1.3
+     , tasty-quickcheck  >= 0.8.3.2  && <0.11
+     , QuickCheck        >=2.7.6     && <2.13
+   default-language: Haskell2010
+

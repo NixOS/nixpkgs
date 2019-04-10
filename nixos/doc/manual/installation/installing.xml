@@ -378,6 +378,10 @@
      the grub menu.
     </para>
     <para>
+     If you need to configure networking for your machine the configuration
+     options are described in <xref linkend="sec-networking"/>.
+    </para>
+    <para>
      Another critical option is <option>fileSystems</option>, specifying the
      file systems that need to be mounted by NixOS. However, you typically
      don’t need to set it yourself, because

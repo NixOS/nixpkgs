@@ -1,6 +1,6 @@
 { stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
   openssl, sqlite, zlib, dbus, dbus-glib, gdk_pixbuf, cairo, python3,
-  libsodium, postgresql, gmp, ... }:
+  libsodium, postgresql, gmp, foundationdb, ... }:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -32,6 +32,20 @@ in
 
   dbus = attrs: {
     buildInputs = [ pkgconfig dbus ];
+  };
+
+  foundationdb-sys = attrs: {
+    buildInputs = [ foundationdb ];
+    # needed for 0.4+ release, when the FFI bindings are auto-generated
+    #
+    # patchPhase = ''
+    #   substituteInPlace ./foundationdb-sys/build.rs \
+    #     --replace /usr/local/include ${foundationdb.dev}/include
+    # '';
+  };
+
+  foundationdb = attrs: {
+    buildInputs = [ foundationdb ];
   };
 
   gobject-sys = attrs: {

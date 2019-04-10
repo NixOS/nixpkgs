@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp astral async-timeout attrs certifi jinja2 pyjwt cryptography pip pytz pyyaml requests voluptuous ])"
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp astral async-timeout attrs certifi jinja2 pyjwt cryptography pip pytz pyyaml requests ruamel_yaml voluptuous python-slugify ])"
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each component has an associated .py file,
@@ -36,7 +36,8 @@ PKG_PREFERENCES = {
 
 def get_version():
     with open(os.path.dirname(sys.argv[0]) + '/default.nix') as f:
-        m = re.search('hassVersion = "([\\d\\.]+)";', f.read())
+        # A version consists of digits, dots, and possibly a "b" (for beta)
+        m = re.search('hassVersion = "([\\d\\.b]+)";', f.read())
         return m.group(1)
 
 def parse_components(version='master'):
@@ -93,7 +94,7 @@ def name_to_attr_path(req):
             except KeyError:
                 pass
     # Let's hope there's only one derivation with a matching name
-    assert(len(attr_paths) <= 1)
+    assert len(attr_paths) <= 1, "{} matches more than one derivation: {}".format(req, attr_paths)
     if len(attr_paths) == 1:
         return attr_paths.pop()
     else:

@@ -7,7 +7,7 @@
 , glib
 , glibcLocales
 , gnome3
-, gobjectIntrospection
+, gobject-introspection
 , gsettings-desktop-schemas
 , gtk3
 , hunspell
@@ -88,7 +88,7 @@ in python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     glibcLocales
-    gobjectIntrospection # populate GI_TYPELIB_PATH
+    gobject-introspection # populate GI_TYPELIB_PATH
     intltool
     pkgconfig
   ];

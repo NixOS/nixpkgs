@@ -26,6 +26,13 @@ sub isInPathsToLink {
     return 0;
 }
 
+# Similar to `lib.isStorePath`
+sub isStorePath {
+    my $path = shift;
+    my $storePath = "@storeDir@";
+
+    return substr($path, 0, 1) eq "/" && dirname($path) eq $storePath;
+}
 
 # For each activated package, determine what symlinks to create.
 
@@ -83,6 +90,11 @@ sub checkCollision {
 
 sub findFiles {
     my ($relName, $target, $baseName, $ignoreCollisions, $checkCollisionContents, $priority) = @_;
+
+    # The store path must not be a file
+    if (-f $target && isStorePath $target) {
+        die "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv!";
+    }
 
     # Urgh, hacky...
     return if

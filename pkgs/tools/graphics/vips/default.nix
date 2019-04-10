@@ -5,21 +5,21 @@
   fetchFromGitHub,
   autoreconfHook,
   gtk-doc,
-  gobjectIntrospection,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
   name = "vips-${version}";
-  version = "8.7.0";
+  version = "8.7.4";
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
     rev = "v${version}";
-    sha256 = "1dwcpmpqbgb9lkajnqv50mrsn97mxbxpq6b5aya7fgfkgdnrs9sw";
+    sha256 = "0mcax1qg5i4iqlvgkz3s0c938d7ymx24pv3q2n3w2pjylnnd489s";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook gtk-doc gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook gtk-doc gobject-introspection ];
   buildInputs = [ glib libxml2 fftw orc lcms
     imagemagick openexr libtiff libjpeg
     libgsf libexif python27 libpng expat ]

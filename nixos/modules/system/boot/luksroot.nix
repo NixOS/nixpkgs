@@ -144,7 +144,7 @@ let
                     fi
                 fi
             done
-            echo -n "Verifiying passphrase for ${device}..."
+            echo -n "Verifying passphrase for ${device}..."
             echo -n "$passphrase" | ${csopen} --key-file=-
             if [ $? == 0 ]; then
                 echo " - success"

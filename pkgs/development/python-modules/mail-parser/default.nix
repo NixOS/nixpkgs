@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "mail-parser";
-  version = "3.4.1";
+  version = "3.9.3";
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "SpamScope";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0nxilshq4gwpicdklja9p275yf8l5kr1lk620c3cx9w4qai4cmbv";
+    sha256 = "0v6hgsz6yvp6csgx4y440ksqj24rdsd06vyfqcihiy3dfvp9229y";
   };
 
   LC_ALL = "en_US.utf-8";

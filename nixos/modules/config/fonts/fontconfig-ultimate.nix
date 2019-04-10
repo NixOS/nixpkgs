@@ -7,7 +7,7 @@ let cfg = config.fonts.fontconfig.ultimate;
     latestVersion  = pkgs.fontconfig.configVersion;
 
     # The configuration to be included in /etc/font/
-    confPkg = pkgs.runCommand "font-ultimate-conf" {} ''
+    confPkg = pkgs.runCommand "font-ultimate-conf" { preferLocalBuild = true; } ''
       support_folder=$out/etc/fonts/conf.d
       latest_folder=$out/etc/fonts/${latestVersion}/conf.d
 

@@ -7,11 +7,11 @@
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.30.0";
-  cargoVersion = "1.30.0";
+  version = "1.33.0";
+  cargoVersion = "1.33.0";
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "1vh8q5i273xyjvpipqisny11iz0xfgz30cgjr7068nx5rhzsh2yd";
+    sha256 = "152x91mg7bz4ygligwjb05fgm1blwy2i70s2j03zc9jiwvbsh0as";
   };
 in rec {
   rustc = callPackage ./rustc.nix {
@@ -22,14 +22,9 @@ in rec {
 
       # Re-evaluate if this we need to disable this one
       #./patches/stdsimd-disable-doctest.patch
-
-      # Fails on hydra - not locally; the exact reason is unknown.
-      # Comments in the test suggest that some non-reproducible environment
-      # variables such $RANDOM can make it fail.
-      ./patches/disable-test-inherit-env.patch
     ];
 
-    forceBundledLLVM = true;
+    withBundledLLVM = false;
 
     configureFlags = [ "--release-channel=stable" ];
 

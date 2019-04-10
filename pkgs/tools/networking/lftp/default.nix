@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-readline=${readline.dev}"
+    "--with-zlib=${zlib.dev}"
+    "--without-expat"
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A file transfer program supporting a number of network protocols";

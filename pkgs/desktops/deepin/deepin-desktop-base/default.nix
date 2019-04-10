@@ -1,42 +1,58 @@
-{ stdenv, fetchFromGitHub, deepin-wallpapers }:
+{ stdenv, fetchFromGitHub, deepin-wallpapers, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-desktop-base";
-  version = "2018.7.23";
+  version = "2019.03.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1n1bjkvhgq138jcg3zkwg55r41056x91mh191mirlpvpic574ydc";
+    sha256 = "1d016h95nsn5yay9f4c13hixfxj0q01hpxwj2x84i6qpx63dxdwq";
   };
+
+  nativeBuildInputs = [ deepin.setupHook ];
 
   buildInputs = [ deepin-wallpapers ];
 
+  # TODO: Fedora recommended dependencies:
+  #   deepin-wallpapers
+  #   plymouth-theme-deepin
+
   postPatch = ''
-    sed -i Makefile -e "s:/usr:$out:" -e "s:/etc:$out/etc:"
+    searchHardCodedPaths
+
+    fixPath $out /etc Makefile
+    fixPath $out /usr Makefile
+
+    # Remove Deepin distro's lsb-release
+    # Don't override systemd timeouts
+    # Remove apt-specific templates
+    echo ----------------------------------------------------------------
+    echo grep --color=always -E 'lsb-release|systemd|python-apt|backgrounds' Makefile
+    grep --color=always -E 'lsb-release|systemd|python-apt|backgrounds' Makefile
+    echo ----------------------------------------------------------------
+    sed -i -E '/lsb-release|systemd|python-apt|backgrounds/d' Makefile
   '';
 
   postInstall = ''
-    # Remove Deepin distro's lsb-release
-    rm $out/etc/lsb-release
-
-    # Don't override systemd timeouts
-    rm -r $out/etc/systemd
-
-    # Remove apt-specific templates
-    rm -r $out/share/python-apt
-
-    # Remove empty backgrounds directory
-    rm -r $out/share/backgrounds
-
     # Make a symlink for deepin-version
     ln -s ../lib/deepin/desktop-version $out/etc/deepin-version
   '';
 
+  passthru.updateScript = deepin.updateScript { inherit name; };
+
   meta = with stdenv.lib; {
     description = "Base assets and definitions for Deepin Desktop Environment";
+    # TODO: revise
+    longDescription = ''
+      This package provides some components for Deepin desktop environment.
+      - deepin logo
+      - deepin desktop version
+      - login screen background image
+      - language information
+    '';
     homepage = https://github.com/linuxdeepin/deepin-desktop-base;
     license = licenses.gpl3;
     platforms = platforms.linux;

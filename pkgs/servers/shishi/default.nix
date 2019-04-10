@@ -72,10 +72,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = http://www.gnu.org/software/shishi/;
+    homepage    = https://www.gnu.org/software/shishi/;
     description = "An implementation of the Kerberos 5 network security system";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjg lovek323 wkennington ];
+    maintainers = with maintainers; [ bjg lovek323 ];
     platforms   = platforms.linux;
   };
 }

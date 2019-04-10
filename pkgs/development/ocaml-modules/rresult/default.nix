@@ -2,13 +2,11 @@
 
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-rresult-${version}";
-	version = "0.5.0";
+	version = "0.6.0";
 	src = fetchurl {
 		url = "http://erratique.ch/software/rresult/releases/rresult-${version}.tbz";
-		sha256 = "1xxycxhdhaq8p9vhwi93s2mlxjwgm44fcxybx5vghzgbankz9yhm";
+		sha256 = "1k69a3gvrk7f2cshwjzvk7818f0bwxhacgd14wxy6d4gmrggci86";
 	};
-
-	unpackCmd = "tar xjf $src";
 
 	buildInputs = [ ocaml findlib ocamlbuild topkg ];
 

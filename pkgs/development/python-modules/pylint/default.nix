@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.1.1";
+  version = "2.2.2";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "31142f764d2a7cd41df5196f9933b12b7ee55e73ef12204b648ad7e556c119fb";
+    sha256 = "689de29ae747642ab230c6d37be2b969bf75663176658851f456619aacf27492";
   };
 
   checkInputs = [ pytest pytestrunner pyenchant ];
@@ -23,8 +23,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     pytest pylint/test -k "not ${lib.concatStringsSep " and not " (
-      # Broken test
-      [ "test_good_comprehension_checks" ] ++
+      # Broken tests
+      [ "member_checks_py37" "iterable_context_py36" ] ++
       # Disable broken darwin tests
       lib.optionals stdenv.isDarwin [
         "test_parallel_execution"

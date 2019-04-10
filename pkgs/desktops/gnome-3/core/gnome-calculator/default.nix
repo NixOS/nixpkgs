@@ -1,24 +1,24 @@
 { stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkgconfig, libxml2
-, gtk3, glib, gtksourceview3, wrapGAppsHook, gobjectIntrospection, python3
+, gtk3, glib, gtksourceview3, wrapGAppsHook, gobject-introspection, python3
 , gnome3, mpfr, gmp, libsoup, libmpc }:
 
 stdenv.mkDerivation rec {
   name = "gnome-calculator-${version}";
-  version = "3.28.2";
+  version = "3.30.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0izsrqc9fm2lh25jr3nzi94p5hh2d3cklxqczbq16by85wr1xm5s";
+    sha256 = "0qkzcmj51cjmljxl1nc84h6jgq1a51xj4g6jwh3ymgm19m3sqypc";
   };
 
   nativeBuildInputs = [
     meson ninja pkgconfig vala gettext itstool wrapGAppsHook python3
-    gobjectIntrospection # for finding vapi files
+    gobject-introspection # for finding vapi files
   ];
 
   buildInputs = [
     gtk3 glib libxml2 gtksourceview3 mpfr gmp
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
     gnome3.gsettings-desktop-schemas libsoup libmpc
   ];
 

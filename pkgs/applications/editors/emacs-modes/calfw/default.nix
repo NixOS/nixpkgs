@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

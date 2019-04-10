@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "stepmania-${version}";
-  version = "5.0.12";
+  version = "5.1.0-b2";
 
   src = fetchFromGitHub {
     owner = "stepmania";
     repo  = "stepmania";
     rev   = "v${version}";
-    sha256 = "0ig5pnw78j45b35kfr76phaqbac9b2f6wg3c63l6mf0nrq17wslz";
+    sha256 = "0a7y9l7xm510vgnpmj1is7p9m6d6yd0fcaxrjcickz295k5w3rdn";
   };
 
   nativeBuildInputs = [ cmake nasm ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    ln -s $out/stepmania-5.0/stepmania $out/bin/stepmania
+    ln -s $out/stepmania-5.1/stepmania $out/bin/stepmania
   '';
 
   enableParallelBuilding = true;

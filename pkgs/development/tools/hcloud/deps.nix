@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hetznercloud/hcloud-go";
-      rev = "eaf050e4f37028d2ca5f99a2fb38ead2c9b293d3";
-      sha256 = "0ki4vk02da4dj6prx3gz8cvrfkj6xb72sjkwqcrbdp4n4klasngi";
+      rev = "ecee721a51a772254d0104bf4d796358e40d6bbd";
+      sha256 = "0bwym7f8am14yfh584p28d8lnj4f9mhqi05l1mlrl315xn0c78v3";
     };
   }
   {
@@ -50,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/pelletier/go-toml";
-      rev = "81a861c69d25a841d0c4394f0e6f84bc8c5afae0";
-      sha256 = "1sk301rm7rm5hfcx7z7vgask5i80wx3mhyxjr3xnm5q1rvdj6vsl";
+      rev = "27c6b39a135b7dc87a14afb068809132fb7a9a8f";
+      sha256 = "13ldxh43xf4prmcrjzriz3gxpnijpqlzrgyhh7bnkj7lkhryfpk9";
     };
   }
   {
@@ -59,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/spf13/cobra";
-      rev = "8d114be902bc9f08717804830a55c48378108a28";
-      sha256 = "1ipmdjwqxyvj6cv33xm1m4ngyx49jsnp8n9jd8fjbkng8aw3q4al";
+      rev = "d2d81d9a96e23f0255397222bb0b4e3165e492dc";
+      sha256 = "14nhpiyhz2lm468y5sm1vyxks5aky12kmbhmqq319s92lkm494cy";
     };
   }
   {
@@ -68,8 +68,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/spf13/pflag";
-      rev = "298182f68c66c05229eb03ac171abe6e309ee79a";
-      sha256 = "1cj3cjm7d3zk0mf1xdybh0jywkbbw7a6yr3y22x9sis31scprswd";
+      rev = "24fa6976df40757dce6aea913e7b81ade90530e1";
+      sha256 = "0rf6prz6gl0l1b3wijzdgq887cdwigvzxvz6gqbm5l8pkq3fx1m9";
     };
   }
   {
@@ -86,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "0c41d7ab0a0ee717d4590a44bcb987dfd9e183eb";
-      sha256 = "1mff9l49dffsak7vxg3dzxlzkgm5nqfksh9cbsjpmngpc5pk0fbc";
+      rev = "ff983b9c42bc9fbf91556e191cc8efb585c16908";
+      sha256 = "1hpr06kzn8jnn3gvzp0p9zn4fz4l9h69f7x66idx142w4xdlaanz";
     };
   }
   {
@@ -95,8 +95,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "fa43e7bc11baaae89f3f902b2b4d832b68234844";
-      sha256 = "1z96xhgw930jpd53g1sy9x6wiijgz751czbvr2zzgc55y0md1mfw";
+      rev = "7fbe1cd0fcc20051e1fcb87fbabec4a1bacaaeba";
+      sha256 = "0y49s4kazign9nsw2x3h39cgs14lqi57m4hrka26w49z8a1xdyc6";
     };
   }
 ]

@@ -32,7 +32,7 @@ let
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
-    isRuby25 = ver.majMin == "2.5";
+    atLeast25 = lib.versionAtLeast ver.majMin "2.5";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
@@ -56,7 +56,7 @@ let
           rev    = tag;
           sha256 = sha256.git;
         } else fetchurl {
-          url = "http://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
+          url = "https://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
           sha256 = sha256.src;
         };
       in
@@ -73,20 +73,17 @@ let
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
         NROFF = if docSupport then "${groff}/bin/nroff" else null;
 
-        nativeBuildInputs =
-             ops useRailsExpress [ autoreconfHook bison ]
-          ++ ops (stdenv.buildPlatform != stdenv.hostPlatform) [
-               buildPackages.ruby
-             ];
+        nativeBuildInputs = [ autoreconfHook bison ]
+          ++ (op docSupport groff)
+          ++ op (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.ruby;
         buildInputs =
              (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
-          ++ (op docSupport groff)
           ++ (op zlibSupport zlib)
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
-          ++ (op isRuby25 autoconf)
+          ++ (op atLeast25 autoconf)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
@@ -109,7 +106,7 @@ let
           popd
         '';
 
-        postPatch = if isRuby25 then ''
+        postPatch = if atLeast25 then ''
           sed -i configure.ac -e '/config.guess/d'
           cp --remove-destination ${config}/config.guess tool/
           cp --remove-destination ${config}/config.sub tool/
@@ -149,7 +146,7 @@ let
         postInstall = ''
           # Update rubygems
           pushd rubygems
-          ${buildRuby} setup.rb
+          ${buildRuby} setup.rb --destdir $GEM_HOME
           popd
 
           # Remove unnecessary groff reference from runtime closure, since it's big
@@ -218,10 +215,18 @@ in {
   };
 
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "3" "";
+    version = rubyVersion "2" "5" "5" "";
     sha256 = {
-      src = "0v4442aqqlzxwc792kbkfs2k61qg97r680is6gx20z63a8wd0a4q";
-      git = "0r9mgvqk6gj8pc9q6qmy7j2kbln7drc8wy67sb2ij8ciclcw9nn2";
+      src = "0k2in88jymqh727s88yjsv7wrqs2hdj9h2w9zh2bmrj0ygylba98";
+      git = "0l7b7xv48gvvlqs27gghfi645qvc1nwiz8ym4j8w100rzzzfy6zz";
+    };
+  };
+
+  ruby_2_6 = generic {
+    version = rubyVersion "2" "6" "2" "";
+    sha256 = {
+      src = "1as97d2j0d21g8mldp8fmdjah96jakrxyw1v0crg7ln2y8mmsh50";
+      git = "0f4mnrd7733353kx1jjha770kvm0wlc59z7id9h23kmjdg6k76nl";
     };
   };
 }

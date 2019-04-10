@@ -4,16 +4,17 @@
 , numpy
 , decorator
 , imageio
+, isPy3k
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "moviepy";
-  version = "0.2.2.11";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d937d817e534efc54eaee2fc4c0e70b48fcd81e1528cd6425f22178704681dc3";
+    sha256 = "16c7ffca23d90c76dd7b163f648c8166dfd589b7c180b8ff75aa327ae0a2fc6d";
   };
 
   # No tests

@@ -81,9 +81,7 @@ makeScope newScope (self: with self; {
 
   xfce4-taskmanager = callPackage ./xfce4-taskmanager { };
 
-  xfce4-terminal = callPackage ./xfce4-terminal {
-    inherit (gnome3) vte;
-  };
+  xfce4-terminal = callPackage ./xfce4-terminal { };
 
   xfce4-volumed-pulse = callPackage ./xfce4-volumed-pulse { };
 

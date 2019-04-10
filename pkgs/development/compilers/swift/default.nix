@@ -27,7 +27,6 @@
 , git
 , libgit2
 , fetchFromGitHub
-, paxctl
 , findutils
 , makeWrapper
 , gnumake
@@ -35,7 +34,7 @@
 }:
 
 let
-  v_base = "4.2.1";
+  v_base = "4.2.3";
   version = "${v_base}-RELEASE";
   version_friendly = "${v_base}";
 
@@ -85,16 +84,16 @@ let
     };
     foundation = fetch {
       repo = "swift-corelibs-foundation";
-      sha256 = "1bfnkj8s3v327cy0czkngz0ryzmz7amjzkkxbsg2zyrhf9a9f0f7";
+      sha256 = "11kwc5pcq4ibxkyglmqs7h7gka3xkzl9j856x1rq2xdvq756wq2s";
     };
     libdispatch = fetch {
       repo = "swift-corelibs-libdispatch";
-      sha256 = "0fibrx54nbaawhsgd7cbr356ji9qvf8y8ahd5bdx28fpj6q0cnwc";
+      sha256 = "09c15mn9s5lf2akzfhik70zk91h97nnm8pq1ppfqry2nn3vmib2i";
       fetchSubmodules = true;
     };
     swift = fetch {
       repo = "swift";
-      sha256 = "0y277wi0m6zp1yph9s14mmc65m21q5fm6lgzkn2rkrbaz25fdzak";
+      sha256 = "09wksqad0w6pk3xdxc278w4mj300h48rvbvx0m4an7npkj6i7n9q";
     };
   };
 
@@ -150,7 +149,7 @@ stdenv.mkDerivation rec {
     findutils
     makeWrapper
     gnumake
-  ] ++ stdenv.lib.optional stdenv.needsPax paxctl;
+  ];
 
   # TODO: Revisit what's propagated and how
   propagatedBuildInputs = [
@@ -218,9 +217,6 @@ stdenv.mkDerivation rec {
     substituteInPlace swift/utils/build-script-impl \
       --replace '/usr/include/c++' "${clang.cc.gcc}/include/c++"
     patch -p1 -d swift -i ${./patches/glibc-arch-headers.patch}
-  '' + stdenv.lib.optionalString stdenv.needsPax ''
-    patch -p1 -d swift -i ${./patches/build-script-pax.patch}
-  '' + ''
     patch -p1 -d swift -i ${./patches/0001-build-presets-linux-don-t-require-using-Ninja.patch}
     patch -p1 -d swift -i ${./patches/0002-build-presets-linux-allow-custom-install-prefix.patch}
     patch -p1 -d swift -i ${./patches/0004-build-presets-linux-plumb-extra-cmake-options.patch}
@@ -265,9 +261,6 @@ stdenv.mkDerivation rec {
     PREFIX=''${out/#\/}
     tar xf $INSTALLABLE_PACKAGE -C $out --strip-components=3 $PREFIX
     find $out -type d -empty -delete
-
-    paxmark pmr $out/bin/swift
-    paxmark pmr $out/bin/*
 
     # TODO: Use wrappers to get these on the PATH for swift tools, instead
     ln -s ${clang}/bin/* $out/bin/

@@ -16,7 +16,7 @@ let
     isExecutable = true;
     inherit (pkgs) perl;
     inherit (cfg) dbPath;
-    perlFlags = concatStrings (map (path: "-I ${path}/lib/perl5/site_perl ")
+    perlFlags = concatStrings (map (path: "-I ${path}/${pkgs.perl.libPrefix} ")
       [ pkgs.perlPackages.DBI pkgs.perlPackages.DBDSQLite pkgs.perlPackages.StringShellQuote ]);
   };
 

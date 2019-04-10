@@ -13,11 +13,11 @@ with lib;
 stdenv.mkDerivation rec {
   name = "kicad-${version}";
   series = "5.0";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchurl {
     url = "https://launchpad.net/kicad/${series}/${version}/+download/kicad-${version}.tar.xz";
-    sha256 = "0skig2wdxxc2677m8a8m1xrg3pkhqiqnmkcyr2hv0b2j30rzdr2z";
+    sha256 = "10605rr10x0353n6yk2z095ydnkd1i6j1ncbq64pfxdn5vkhcd1g";
   };
 
   postPatch = ''

@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "face_recognition";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "ageitgey";
-    rev = "v${version}";
-    sha256 = "17jnyr80j1p74gyvh1jabvwd3zsxvip2y7cjhh2g6gsjv2dpvrjv";
+    rev = "634db2e4309a365cee2503cb65d6f2e88f519d1e";
+    sha256 = "06zw5hq417d5yp17zynhxhb73074lx2qy64fqfzf711rw5vrn2mx";
   };
 
   postPatch = ''
@@ -19,6 +19,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow click dlib numpy face_recognition_models ];
 
+  # Our dlib is compiled with AVX instructions by default which breaks
+  # with "Illegal instruction" on some builders due to missing hardware features.
+  #
+  # As this makes the build fairly unreliable, it's better to skip the test and to ensure that
+  # the build is working and after each change to the package, manual testing should be done.
+  doCheck = false;
+
+  # Although tests are disabled by default, checkPhase still exists, so
+  # maintainers can check the package's functionality locally before modifying it.
   checkInputs = [ flake8 pytest glibcLocales ];
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test

@@ -1,5 +1,5 @@
 { stdenv, meson, ninja, gettext, fetchurl
-, pkgconfig, gtk3, glib, libxml2
+, pkgconfig, gtk3, glib, libxml2, gnome-desktop, adwaita-icon-theme
 , wrapGAppsHook, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -11,17 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "1wwnx2zrlbd2d6np7m9s78alx6j6ranrnh1g2z6zrv9qcj8rpzz5";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-font-viewer"; attrPath = "gnome3.gnome-font-viewer"; };
-  };
-
   doCheck = true;
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook libxml2 ];
-  buildInputs = [ gtk3 glib gnome3.gnome-desktop gnome3.defaultIconTheme ];
+  buildInputs = [ gtk3 glib gnome-desktop adwaita-icon-theme ];
 
   # Do not run meson-postinstall.sh
   preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-font-viewer";
+      attrPath = "gnome3.gnome-font-viewer";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Program that can preview fonts and create thumbnails for fonts";

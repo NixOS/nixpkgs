@@ -4,29 +4,27 @@
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.3.5";
+  version = "1.3.6";
   name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/l/llfuse/${name}.tar.bz2";
-    sha256 = "6e412a3d9be69162d49b8a4d6fb3c343d1c1fba847f4535d229e0ece2548ead8";
+    sha256 = "1j9fzxpgmb4rxxyl9jcf84zvznhgi3hnh4hg5vb0qaslxkvng8ii";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pytest fuse attr which ];
+  buildInputs = [ fuse ];
+  checkInputs = [ pytest attr which ];
 
   propagatedBuildInputs = [ contextlib2 ];
 
   checkPhase = ''
-    py.test
+    py.test -k "not test_listdir"
   '';
-
-  # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
-  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python bindings for the low-level FUSE API";
-    homepage = https://code.google.com/p/python-llfuse/;
+    homepage = https://github.com/python-llfuse/python-llfuse;
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];

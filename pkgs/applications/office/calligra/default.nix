@@ -65,5 +65,7 @@ mkDerivation rec {
     maintainers = with maintainers; [ phreedom ebzzry zraexy ];
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2 ];
+    hydraPlatforms = [];
+    broken = true; # fails to start, kde home not found
   };
 }

@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk, wrapGAppsHook
-, webkitgtk, json-glib, rest, libsecret, dbus-glib, gtk-doc
-, telepathy-glib, gettext, icu, glib-networking
-, libsoup, docbook_xsl, docbook_xsl_ns, gnome3, gcr, kerberos
+{ stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk3, wrapGAppsHook
+, webkitgtk, json-glib, librest, libsecret, gtk-doc, gobject-introspection
+, gettext, icu, glib-networking
+, libsoup, docbook_xsl, docbook_xml_dtd_412, gnome3, gcr, kerberos
 }:
 
 let
   pname = "gnome-online-accounts";
-  version = "3.28.0";
+  version = "3.30.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "035lmm21imr7ddpzffqabv53g3ggjscmqvlzy3j1qkv00zrlxg47";
+    sha256 = "1p1gdgryziklrgngn6m13xnvfx4gb01h723nndfi9944r24fbiq5";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
@@ -23,16 +23,17 @@ in stdenv.mkDerivation rec {
     "--enable-lastfm"
     "--enable-todoist"
     "--enable-gtk-doc"
+    "--enable-documentation"
   ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig vala gettext wrapGAppsHook
-    libxslt docbook_xsl docbook_xsl_ns gtk-doc
+    pkgconfig gobject-introspection vala gettext wrapGAppsHook
+    libxslt docbook_xsl docbook_xml_dtd_412 gtk-doc
   ];
   buildInputs = [
-    glib gtk webkitgtk json-glib rest libsecret dbus-glib telepathy-glib glib-networking icu libsoup
+    glib gtk3 webkitgtk json-glib librest libsecret glib-networking icu libsoup
     gcr kerberos
   ];
 

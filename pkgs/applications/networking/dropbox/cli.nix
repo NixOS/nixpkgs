@@ -1,18 +1,18 @@
-{ stdenv, pkgconfig, fetchurl, python, dropbox }:
+{ stdenv, pkgconfig, fetchurl, python3, dropbox }:
 let
-  version = "2015.10.28";
+  version = "2019.02.14";
   dropboxd = "${dropbox}/bin/dropbox";
 in
 stdenv.mkDerivation {
   name = "dropbox-cli-${version}";
 
   src = fetchurl {
-    url = "https://linux.dropbox.com/packages/nautilus-dropbox-${version}.tar.bz2";
-    sha256 = "1ai6vi5227z2ryxl403693xi63b42ylyfmzh8hbv4shp69zszm9c";
+    url = "https://linux.dropboxstatic.com/packages/nautilus-dropbox-${version}.tar.bz2";
+    sha256 = "09yg7q45sycl88l3wq0byz4a9k6sxx3m0r3szinvisfay9wlj35f";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   phases = "unpackPhase installPhase";
 

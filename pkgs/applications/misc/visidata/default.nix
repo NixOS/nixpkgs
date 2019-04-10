@@ -4,13 +4,13 @@
 buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "visidata";
-  version = "1.3.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "1d5sx1kfil1vjkynaac5sjsnn9azxxw834gwbh9plzd5fwxg4dz2";
+    sha256 = "19gs8i6chrrwibz706gib5sixx1cjgfzh7v011kp3izcrn524mc0";
   };
 
   propagatedBuildInputs = [dateutil pyyaml openpyxl xlrd h5py fonttools

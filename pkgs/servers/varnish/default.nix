@@ -47,8 +47,8 @@ in
     sha256 = "1cqlj12m426c1lak1hr1fx5zcfsjjvka3hfirz47hvy1g2fjqidq";
   };
   varnish6 = common {
-    version = "6.1.0";
-    sha256 = "0zg2aqkg7a4zsjpxj0s7mphxv5f9xy279hjwln30h901k18r46qn";
+    version = "6.1.1";
+    sha256 = "0gf9hzzrr1lndbbqi8cwlfasi7l517cy3nbgna88i78lm247rvp0";
     extraBuildInputs = [ python2.pkgs.sphinx ];
   };
 }

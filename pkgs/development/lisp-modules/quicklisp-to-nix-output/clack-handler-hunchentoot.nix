@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''clack-handler-hunchentoot'';
-  version = ''clack-20180831-git'';
+  version = ''clack-20181018-git'';
 
   description = ''Clack handler for Hunchentoot.'';
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."clack-socket" args."flexi-streams" args."hunchentoot" args."md5" args."rfc2388" args."split-sequence" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2018-08-31/clack-20180831-git.tgz'';
-    sha256 = ''0pfpm3l7l47j0mmwimy7c61ym8lg5m1dkzmz394snyywzcx54647'';
+    url = ''http://beta.quicklisp.org/archive/clack/2018-10-18/clack-20181018-git.tgz'';
+    sha256 = ''1f16i1pdqkh56ahnhxni3182q089d7ya8gxv4vyczsjzw93yakcf'';
   };
 
   packageName = "clack-handler-hunchentoot";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM clack-handler-hunchentoot DESCRIPTION Clack handler for Hunchentoot.
-    SHA256 0pfpm3l7l47j0mmwimy7c61ym8lg5m1dkzmz394snyywzcx54647 URL
-    http://beta.quicklisp.org/archive/clack/2018-08-31/clack-20180831-git.tgz
-    MD5 5042ece3b0a8b07cb4b318fbc250b4fe NAME clack-handler-hunchentoot
+    SHA256 1f16i1pdqkh56ahnhxni3182q089d7ya8gxv4vyczsjzw93yakcf URL
+    http://beta.quicklisp.org/archive/clack/2018-10-18/clack-20181018-git.tgz
+    MD5 16121d921667ee8d0d70324da7281849 NAME clack-handler-hunchentoot
     FILENAME clack-handler-hunchentoot DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -42,7 +42,7 @@ rec {
      cl-ppcre clack-socket flexi-streams hunchentoot md5 rfc2388 split-sequence
      trivial-backtrace trivial-features trivial-garbage trivial-gray-streams
      usocket)
-    VERSION clack-20180831-git SIBLINGS
+    VERSION clack-20181018-git SIBLINGS
     (clack-handler-fcgi clack-handler-toot clack-handler-wookie clack-socket
      clack-test clack-v1-compat clack t-clack-handler-fcgi
      t-clack-handler-hunchentoot t-clack-handler-toot t-clack-handler-wookie

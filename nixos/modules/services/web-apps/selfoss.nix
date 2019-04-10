@@ -4,7 +4,7 @@ let
   cfg = config.services.selfoss;
 
   poolName = "selfoss_pool";
-  phpfpmSocketName = "/var/run/phpfpm/${poolName}.sock";
+  phpfpmSocketName = "/run/phpfpm/${poolName}.sock";
 
   dataDir = "/var/lib/selfoss";
 
@@ -21,8 +21,8 @@ let
       db_database=${cfg.database.name}
       db_username=${cfg.database.user}
       db_password=${cfg.database.password}
-      db_port=${if (cfg.database.port != null) then cfg.database.port
-                    else default_port}
+      db_port=${toString (if (cfg.database.port != null) then cfg.database.port
+                    else default_port)}
     ''
     }
     ${cfg.extraConfig}

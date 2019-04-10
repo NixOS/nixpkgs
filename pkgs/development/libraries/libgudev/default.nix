@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, glib, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, udev, glib, gobject-introspection, gnome3 }:
 
 let
   pname = "libgudev";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "ee4cb2b9c573cdf354f6ed744f01b111d4b5bed3503ffa956cefff50489c7860";
   };
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig gobject-introspection ];
   buildInputs = [ udev glib ];
 
   # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.

@@ -1,13 +1,21 @@
-{ system ? builtins.currentSystem, enableUnfree ? false }:
-with import ../lib/testing.nix { inherit system; };
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; },
+  enableUnfree ? false
+  # To run the test on the unfree ELK use the folllowing command:
+  # NIXPKGS_ALLOW_UNFREE=1 nix-build nixos/tests/elk.nix -A ELK-6 --arg enableUnfree true
+}:
+
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
+
 let
   esUrl = "http://localhost:9200";
 
   mkElkTest = name : elk : makeTest {
     inherit name;
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ eelco chaoflow offline basvandijk ];
+      maintainers = [ eelco offline basvandijk ];
     };
     nodes = {
       one =

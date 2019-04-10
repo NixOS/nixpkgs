@@ -25,7 +25,7 @@ lib.overrideDerivation (buildLinux (args // rec {
     efiBootStub = false;
   } // (args.features or {});
 
-  extraMeta.hydraPlatforms = [];
+  extraMeta.hydraPlatforms = [ "aarch64-linux" ];
 })) (oldAttrs: {
   postConfigure = ''
     # The v7 defconfig has this set to '-v7' which screws up our modDirVersion.

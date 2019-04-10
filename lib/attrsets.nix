@@ -94,6 +94,15 @@ rec {
   attrValues = builtins.attrValues or (attrs: attrVals (attrNames attrs) attrs);
 
 
+  /* Given a set of attribute names, return the set of the corresponding
+     attributes from the given set.
+
+     Example:
+       getAttrs [ "a" "b" ] { a = 1; b = 2; c = 3; }
+       => { a = 1; b = 2; }
+  */
+  getAttrs = names: attrs: genAttrs names (name: attrs.${name});
+
   /* Collect each attribute named `attr' from a list of attribute
      sets.  Sets that don't contain the named attribute are ignored.
 

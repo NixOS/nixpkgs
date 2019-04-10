@@ -1,6 +1,6 @@
 # This module provides the proprietary NVIDIA X11 / OpenGL drivers.
 
-{ stdenv, config, lib, pkgs, pkgs_i686, ... }:
+{ stdenv, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -20,12 +20,14 @@ let
       kernelPackages.nvidia_x11_legacy304
     else if elem "nvidiaLegacy340" drivers then
       kernelPackages.nvidia_x11_legacy340
+    else if elem "nvidiaLegacy390" drivers then
+      kernelPackages.nvidia_x11_legacy390
     else null;
 
   nvidia_x11 = nvidiaForKernel config.boot.kernelPackages;
   nvidia_libs32 =
     if versionOlder nvidia_x11.version "391" then
-      ((nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; }).out
+      ((nvidiaForKernel pkgs.pkgsi686Linux.linuxPackages).override { libsOnly = true; kernel = null; }).out
     else
       (nvidiaForKernel config.boot.kernelPackages).lib32;
 
@@ -101,8 +103,8 @@ in
   config = mkIf enabled {
     assertions = [
       {
-        assertion = config.services.xserver.displayManager.gdm.wayland;
-        message = "NVIDIA drivers don't support wayland";
+        assertion = with config.services.xserver.displayManager; gdm.enable -> !gdm.wayland;
+        message = "NVIDIA drivers don't support wayland, set services.xserver.displayManager.gdm.wayland=false";
       }
       {
         assertion = !optimusCfg.enable ||
@@ -169,6 +171,11 @@ in
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];
+
+    systemd.tmpfiles.rules = optional config.virtualisation.docker.enableNvidia
+        "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
+      ++ optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+        "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
     boot.extraModulePackages = [ nvidia_x11.bin ];
 

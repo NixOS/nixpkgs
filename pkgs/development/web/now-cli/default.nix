@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl }:
 stdenv.mkDerivation rec {
   name = "now-cli-${version}";
-  version = "11.4.6";
+  version = "14.0.3";
 
   # TODO: switch to building from source, if possible
   src = fetchurl {
     url = "https://github.com/zeit/now-cli/releases/download/${version}/now-linux.gz";
-    sha256 = "1bl0yrzxdfy6sks674qlfch8mg3b0x1wj488v83glags8ibsg3cl";
+    sha256 = "0nnwaj3iik8anx7xd5mzbrgq5g5ng8gqmhxyyfgkmawsg34bk6nj";
   };
 
   sourceRoot = ".";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     # ^-- grep points here
     #
     # var_* are as described above
-    # shift_by seems to be safe so long as all patchelf adjustments occur 
+    # shift_by seems to be safe so long as all patchelf adjustments occur
     # before any locations pointed to by hardcoded offsets
 
     var_skip=20

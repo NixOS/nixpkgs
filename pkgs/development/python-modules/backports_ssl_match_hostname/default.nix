@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "backports.ssl_match_hostname";
-  version = "3.5.0.1";
+  version = "3.7.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wndipik52cyqy0677zdgp90i435pmvwd89cz98lm7ri0y3xjajh";
+    sha256 = "bb82e60f9fbf4c080eabd957c39f0641f0fc247d9a16e31e26d594d8f42b9fd2";
   };
 
   meta = with lib; {

@@ -7,6 +7,7 @@
 , vimPlugins
 , makeWrapper
 , wrapGAppsHook
+, runtimeShell
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
@@ -157,22 +158,22 @@ in stdenv.mkDerivation rec {
 
     rewrap () {
       rm -f "$out/bin/$1"
-      echo -e '#!${stdenv.shell}\n"'"$out/bin/vim"'" '"$2"' "$@"' > "$out/bin/$1"
+      echo -e '#!${runtimeShell}\n"'"$out/bin/vim"'" '"$2"' "$@"' > "$out/bin/$1"
       chmod a+x "$out/bin/$1"
     }
 
-    rewrap ex -e	
-    rewrap view -R	
-    rewrap gvim -g	
-    rewrap gex -eg	
-    rewrap gview -Rg	
-    rewrap rvim -Z	
-    rewrap rview -RZ	
-    rewrap rgvim -gZ	
+    rewrap ex -e
+    rewrap view -R
+    rewrap gvim -g
+    rewrap gex -eg
+    rewrap gview -Rg
+    rewrap rvim -Z
+    rewrap rview -RZ
+    rewrap rgvim -gZ
     rewrap rgview -RgZ
     rewrap evim    -y
     rewrap eview   -yR
-    rewrap vimdiff -d	
+    rewrap vimdiff -d
     rewrap gvimdiff -gd
   '';
 

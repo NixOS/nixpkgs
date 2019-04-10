@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
+{ stdenv, fetchurl, pkgconfig, xlibsWrapper, xorgproto, libXi
 , freeglut, libGLU_combined, libjpeg, zlib, libXft, libpng
-, darwin, libtiff, freetype
+, libtiff, freetype, cf-private, Cocoa, AGL, GLUT
 }:
 
 let
-  version = "1.3.4";
+  version = "1.3.5";
 in stdenv.mkDerivation {
   name = "fltk-${version}";
 
   src = fetchurl {
     url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
-    sha256 = "13y57pnayrkfzm8azdfvysm8b77ysac8zhhdsh8kxmb0x3203ay8";
+    sha256 = "00jp24z1818k9n6nn6lx7qflqf2k13g4kxr0p8v1d37kanhb4ac7";
   };
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
@@ -33,9 +33,9 @@ in stdenv.mkDerivation {
     "--enable-xft"
   ];
 
-  propagatedBuildInputs = [ inputproto ]
+  propagatedBuildInputs = [ xorgproto ]
     ++ (if stdenv.isDarwin
-        then (with darwin.apple_sdk.frameworks; [Cocoa AGL GLUT freetype libtiff])
+        then [ Cocoa AGL GLUT freetype libtiff cf-private  /* Needed for NSDefaultRunLoopMode */ ]
         else [ xlibsWrapper libXi freeglut ]);
 
   enableParallelBuilding = true;

@@ -19,7 +19,7 @@ fetchzip rec {
       (PostScript Type0, TrueType, OpenType...) fonts covering the ISO
       10646/Unicode UCS (Universal Character Set).
     '';
-    homepage = http://www.gnu.org/software/freefont/;
+    homepage = https://www.gnu.org/software/freefont/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.all;
     maintainers = [];

@@ -9,7 +9,7 @@
 { stdenv, fetchurl, unzip, glib, libSM, libICE, gtk2, libXext, libXft
 , fontconfig, libXrender, libXfixes, libX11, libXi, libXrandr, libXcursor
 , freetype, libXinerama, libxcb, zlib, pciutils
-, makeDesktopItem, xkeyboardconfig
+, makeDesktopItem, xkeyboardconfig, runtimeShell
 }:
 
 let
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     # Make wrapper script that uses the LD_PRELOAD library
     mkdir -p "$out/bin"
     cat > "$out/bin/saleae-logic" << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     export LD_PRELOAD="$out/lib/preload.so"
     export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"
     export PATH="${pciutils}/bin:\$PATH"

@@ -4,11 +4,36 @@ with lib;
 
 let
   cfg = config.services.jackett;
+
 in
 {
   options = {
     services.jackett = {
       enable = mkEnableOption "Jackett";
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/jackett/.config/Jackett";
+        description = "The directory where Jackett stores its data files.";
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Open ports in the firewall for the Jackett web interface.";
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "jackett";
+        description = "User account under which Jackett runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "jackett";
+        description = "Group under which Jackett runs.";
+      };
     };
   };
 
@@ -18,30 +43,38 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        test -d /var/lib/jackett/ || {
-          echo "Creating jackett data directory in /var/lib/jackett/"
-          mkdir -p /var/lib/jackett/
+        test -d ${cfg.dataDir} || {
+          echo "Creating jackett data directory in ${cfg.dataDir}"
+          mkdir -p ${cfg.dataDir}
         }
-        chown -R jackett:jackett /var/lib/jackett/
-        chmod 0700 /var/lib/jackett/
+        chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
+        chmod 0700 ${cfg.dataDir}
       '';
 
       serviceConfig = {
         Type = "simple";
-        User = "jackett";
-        Group = "jackett";
+        User = cfg.user;
+        Group = cfg.group;
         PermissionsStartOnly = "true";
-        ExecStart = "${pkgs.jackett}/bin/Jackett";
+        ExecStart = "${pkgs.jackett}/bin/Jackett --NoUpdates --DataFolder '${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
-    users.users.jackett = {
-      uid = config.ids.uids.jackett;
-      home = "/var/lib/jackett";
-      group = "jackett";
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 9117 ];
     };
-    users.groups.jackett.gid = config.ids.gids.jackett;
 
+    users.users = mkIf (cfg.user == "jackett") {
+      jackett = {
+        group = cfg.group;
+        home = cfg.dataDir;
+        uid = config.ids.uids.jackett;
+      };
+    };
+
+    users.groups = mkIf (cfg.group == "jackett") {
+      jackett.gid = config.ids.gids.jackett;
+    };
   };
 }

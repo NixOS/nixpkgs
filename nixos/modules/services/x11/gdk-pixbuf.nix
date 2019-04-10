@@ -10,7 +10,7 @@ let
 
   # Generate the cache file by running gdk-pixbuf-query-loaders for each
   # package and concatenating the results.
-  loadersCache = pkgs.runCommand "gdk-pixbuf-loaders.cache" {} ''
+  loadersCache = pkgs.runCommand "gdk-pixbuf-loaders.cache" { preferLocalBuild = true; } ''
     (
       for package in ${concatStringsSep " " effectivePackages}; do
         module_dir="$package/${pkgs.gdk_pixbuf.moduleDir}"

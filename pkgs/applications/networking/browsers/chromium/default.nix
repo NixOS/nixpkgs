@@ -1,5 +1,7 @@
-{ newScope, stdenv, llvmPackages, makeWrapper, makeDesktopItem, ed
+{ newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_7
+, makeWrapper, makeDesktopItem, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
+, libva ? null
 
 # package customization
 , channel ? "stable"
@@ -9,13 +11,19 @@
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
+, useVaapi ? false # test video on radeon, before enabling this
 , cupsSupport ? true
-, pulseSupport ? false
+, pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
 }:
 
-assert stdenv.cc.isClang -> (stdenv == llvmPackages.stdenv);
 let
+  stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_7.stdenv;
+  llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_7;
+in let
+  stdenv = stdenv_;
+  llvmPackages = llvmPackages_;
+
   callPackage = newScope chromium;
 
   chromium = {
@@ -26,6 +34,7 @@ let
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableNaCl gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
+              useVaapi
               enableWideVine;
     };
 
@@ -78,7 +87,7 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   outputs = ["out" "sandbox"];
@@ -86,6 +95,10 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
+    libPath = stdenv.lib.makeLibraryPath ([]
+      ++ stdenv.lib.optional useVaapi libva
+    );
+
   in with stdenv.lib; ''
     mkdir -p "$out/bin"
 
@@ -102,6 +115,8 @@ in stdenv.mkDerivation {
     else
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi
+
+    export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:${libPath}"
 
     # libredirect causes chromium to deadlock on startup
     export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"

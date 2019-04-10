@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, substituteAll, pkgconfig, gettext, gtk3, glib
-, gtk-doc, libarchive, gobjectIntrospection, libxslt, pngquant
+, gtk-doc, libarchive, gobject-introspection, libxslt, pngquant
 , sqlite, libsoup, attr, acl, docbook_xsl, docbook_xml_dtd_42
-, libuuid, json-glib, meson, gperf, ninja
+, libuuid, json-glib, meson, gperf, ninja, gdk_pixbuf
 }:
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.13";
+  name = "appstream-glib-0.7.15";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
   outputBin = "dev";
@@ -13,23 +13,23 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings ["." "-"] ["_" "_"] name;
-    sha256 = "0r1gb806p68axspzwvpn1ygmd6pfc17mncg3i6yazk3n10k5cl06";
+    sha256 = "16cqs1s7nqc551sipgaxbbzwap1km0n12s4lcgfbxzzl9bcjbp9m";
   };
 
   nativeBuildInputs = [
-    meson pkgconfig ninja gtk-doc libxslt docbook_xsl docbook_xml_dtd_42
+    meson pkgconfig ninja gtk-doc libxslt docbook_xsl docbook_xml_dtd_42 gobject-introspection
   ];
   buildInputs = [
     glib gettext sqlite libsoup
     attr acl libuuid json-glib
-    libarchive gobjectIntrospection gperf
+    libarchive gperf gdk_pixbuf
   ];
   propagatedBuildInputs = [ gtk3 ];
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      pngquant= "${pngquant}/bin/pngquant";
+      pngquant = "${pngquant}/bin/pngquant";
     })
   ];
 

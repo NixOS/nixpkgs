@@ -13,6 +13,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       virtualisation.memorySize = 768;
       virtualisation.vlans = [];
 
+      networking.useDHCP = false;
       networking.bridges = {
         br0 = {
           interfaces = [];

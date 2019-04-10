@@ -1,4 +1,4 @@
-{ stdenv, lib, writeText, fetchurl, upx, libGLU, glib, gtk2, alsaLib, libSM, libX11, gdk_pixbuf, pango, libXinerama, mpg123 }:
+{ stdenv, lib, writeText, fetchurl, upx, libGLU, glib, gtk2, alsaLib, libSM, libX11, gdk_pixbuf, pango, libXinerama, mpg123, runtimeShell }:
 
 let
   libPath = lib.makeLibraryPath [ stdenv.cc.cc libGLU glib gtk2 alsaLib libSM libX11 gdk_pixbuf pango libXinerama ];
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   };
 
   runner = writeText "kega-fusion" ''
-    #!${stdenv.shell} -ex
+    #!${runtimeShell} -ex
 
     kega_libdir="@out@/lib/kega-fusion"
     kega_localdir="$HOME/.Kega Fusion"

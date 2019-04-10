@@ -1,10 +1,8 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, cmake, vala_0_40, python3, gnome3, gtk3, granite, gobjectIntrospection, desktop-file-utils, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, cmake, pantheon, python3, gnome3, gtk3, gobject-introspection, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "hashit";
   version = "1.0.0";
-
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "artemanufrij";
@@ -15,19 +13,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig
     python3
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    pantheon.vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
+    pantheon.elementary-icon-theme
     gnome3.libgee
-    granite
+    pantheon.granite
     gtk3
   ];
 

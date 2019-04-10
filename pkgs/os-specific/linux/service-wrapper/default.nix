@@ -1,4 +1,4 @@
-{ lib, runCommand, substituteAll, coreutils }:
+{ stdenv, runCommand, substituteAll, coreutils }:
 
 let
   name = "service-wrapper-${version}";
@@ -7,10 +7,11 @@ in
 runCommand "${name}" {
   script = substituteAll {
     src = ./service-wrapper.sh;
+    inherit (stdenv) shell;
     inherit coreutils;
   };
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "A convenient wrapper for the systemctl commands, borrow from Ubuntu";
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;

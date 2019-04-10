@@ -8,7 +8,7 @@
   <link xlink:href="https://weechat.org/">WeeChat</link> is a fast and
   extensible IRC client.
  </para>
- <section>
+ <section xml:id="module-services-weechat-basic-usage">
   <title>Basic Usage</title>
 
   <para>
@@ -35,7 +35,7 @@
    in the state directory <literal>/var/lib/weechat</literal>.
   </para>
  </section>
- <section>
+ <section xml:id="module-services-weechat-reattach">
   <title>Re-attaching to WeeChat</title>
 
   <para>

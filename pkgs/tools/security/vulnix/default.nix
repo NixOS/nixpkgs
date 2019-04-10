@@ -2,14 +2,15 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.7.1";
+  version = "1.8.1";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "15c32976sgb5clixngi6z1fk5h02v1kn1a89h8rkbkvyhfnjgg8m";
+    sha256 = "1kpwqsnz7jisi622halzl4s5q42d76nbq6ra800gscnfx48hqw9r";
   };
 
-  buildInputs = [ ronn ];
+  outputs = [ "out" "doc" "man" ];
+  nativeBuildInputs = [ ronn ];
 
   checkInputs = with pythonPackages; [
     freezegun
@@ -30,17 +31,15 @@ pythonPackages.buildPythonApplication rec {
     zodb
   ]);
 
-  outputs = [ "out" "doc" ];
-
   postBuild = "make -C doc";
 
   checkPhase = "py.test src/vulnix";
 
   postInstall = ''
-    install -D -t $out/share/man/man1 doc/vulnix.1
-    install -D -t $out/share/man/man5 doc/vulnix-whitelist.5
     install -D -t $doc/share/doc/vulnix README.rst CHANGES.rst
     gzip $doc/share/doc/vulnix/*.rst
+    install -D -t $man/share/man/man1 doc/vulnix.1
+    install -D -t $man/share/man/man5 doc/vulnix-whitelist.5
   '';
 
   dontStrip = true;

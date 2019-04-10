@@ -1,6 +1,6 @@
 { fetchFromGitHub, stdenv, pythonPackages, gnupg, perl }:
 
-let version = "2.2.6"; in
+let version = "2.2.7"; in
 pythonPackages.buildPythonApplication {
   name = "pius-${version}";
   namePrefix = "";
@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication {
     owner = "jaymzh";
     repo = "pius";
     rev = "v${version}";
-    sha256 = "1rffwyjd84rwx1w5yyqckirm1kdj80ldfwjlw91kk74swhpbpzzj";
+    sha256 = "1kjj44lf9di4ylvmc949dxncllzd8afp0yknr3152dmxkw1vl127";
   };
 
   patchPhase = ''
@@ -18,7 +18,8 @@ pythonPackages.buildPythonApplication {
     done
   '';
 
-  buildInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
+  propagatedBuildInputs = with pythonPackages; [ six ];
 
   meta = {
     homepage = https://www.phildev.net/pius/;
