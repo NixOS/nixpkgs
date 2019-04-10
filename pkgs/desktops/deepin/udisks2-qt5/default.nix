@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, deepin }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, pkgconfig, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
     deepin.setupHook
+    qmake
+  ];
+
+  buildInputs = [
+    qtbase
   ];
 
   postPatch = ''
