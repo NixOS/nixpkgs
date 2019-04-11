@@ -81,6 +81,10 @@ in
   # built. Will delay failures, if any, to compile time.
   allowInconsistentDependencies ? false
 , maxBuildCores ? 4 # GHC usually suffers beyond -j4. https://ghc.haskell.org/trac/ghc/ticket/9221
+, # Build a pre-linked .o file for this Haskell library.  This can make it
+  # slightly faster to load this library into GHCi, but takes extra disk space
+  # and compile time.
+  enableLibraryForGhci ? true
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -169,7 +173,7 @@ let
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
     (enableFeature doBenchmark "benchmarks")
     "--enable-library-vanilla"  # TODO: Should this be configurable?
-    "--enable-library-for-ghci" # TODO: Should this be configurable?
+    (enableFeature enableLibraryForGhci "library-for-ghci")
   ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" ghc.version)) [
      "--ghc-option=-split-sections"
   ] ++ optionals dontStrip [
