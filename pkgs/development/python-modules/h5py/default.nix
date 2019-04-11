@@ -1,5 +1,5 @@
 { stdenv, fetchPypi, isPy27, python, buildPythonPackage
-, numpy, hdf5, cython, six, pkgconfig, unittest2
+, numpy, hdf5, cython, six, pkgconfig, unittest2, fetchpatch
 , mpi4py ? null, openssh }:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
@@ -17,6 +17,12 @@ in buildPythonPackage rec {
     inherit pname version;
     sha256 = "9d41ca62daf36d6b6515ab8765e4c8c4388ee18e2a665701fef2b41563821002";
   };
+
+  patches = [ ( fetchpatch {
+    # Skip a test that probes an already fixed bug in HDF5 (upstream patch)
+    url = "https://github.com/h5py/h5py/commit/141eafa531c6c09a06efe6a694251a1eea84908d.patch";
+    sha256 = "0lmdn0gznr7gadx7qkxybl945fvwk6r0cc4lg3ylpf8ril1975h8";
+  })];
 
   configure_flags = "--hdf5=${hdf5}" + optionalString mpiSupport " --mpi";
 

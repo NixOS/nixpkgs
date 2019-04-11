@@ -67,6 +67,23 @@
   <itemizedlist>
    <listitem>
     <para>
+     Buildbot no longer supports Python 2, as support was dropped upstream in
+     version 2.0.0. Configurations may need to be modified to make them
+     compatible with Python 3.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     PostgreSQL now uses
+     <filename class="directory">/run/postgresql</filename> as its socket
+     directory instead of <filename class="directory">/tmp</filename>. So
+     if you run an application like eg. Nextcloud, where you need to use
+     the Unix socket path as the database host name, you need to change it
+     accordingly.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The directory where Prometheus will store its metric data is now
       managed by systemd's StateDirectory mechanism. It still defaults
       to <literal>/var/lib/prometheus</literal>.
@@ -84,37 +101,13 @@
       <option>services.prometheus.stateDir</option> at the same time.
     </para>
    </listitem>
-  </itemizedlist>
- </section>
-
- <section xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         version="5.0"
-         xml:id="sec-release-19.09-incompatibilities">
-  <title>Backward Incompatibilities</title>
-
-  <para>
-   When upgrading from a previous release, please be aware of the following
-   incompatible changes:
-  </para>
-
-  <itemizedlist>
    <listitem>
     <para>
-     Buildbot no longer supports Python 2, as support was dropped upstream in
-     version 2.0.0. Configurations may need to be modified to make them
-     compatible with Python 3.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     PostgreSQL now uses
-     <filename class="directory">/run/postgresql</filename> as its socket
-     directory instead of <filename class="directory">/tmp</filename>. So
-     if you run an application like eg. Nextcloud, where you need to use
-     the Unix socket path as the database host name, you need to change it
-     accordingly.
+      The options <option>services.prometheus.alertmanager.user</option> and
+      <option>services.prometheus.alertmanager.group</option> have been removed
+      because the alertmanager service is now using systemd's <link
+      xlink:href="http://0pointer.net/blog/dynamic-users-with-systemd.html">
+      DynamicUser mechanism</link> which obviates these options.
     </para>
    </listitem>
    <listitem>

@@ -95,9 +95,6 @@ in {
     static = true;
     shared = false;
   };
-  libjpeg = super.libjpeg.override {
-    static = true;
-  };
   gifsicle = super.gifsicle.override {
     static = true;
   };

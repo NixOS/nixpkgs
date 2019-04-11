@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "nvme-cli-${version}";
-  version = "1.8";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
     rev = "v${version}";
-    sha256 = "0k4qnxm9sgr4bqhg7c3g870f3jpawm5yp0vp0p031a9qgnzmklb9";
+    sha256 = "0agnxfcwgnnimmxrdpg4lmiqc5ai9b4amk8krriw01lflxi3xzn0";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];

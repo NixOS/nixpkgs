@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     downloadPage = https://drawpile.net/download/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.unix;
   };
 }
 
