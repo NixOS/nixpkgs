@@ -16,6 +16,7 @@ python3Packages.buildPythonApplication rec {
     pulseaudio vorbis-tools sox lame flac faac ffmpeg
   ];
 
+  # mkchromecast does not include tests.
   doCheck = false;
 
   meta = with lib; {
