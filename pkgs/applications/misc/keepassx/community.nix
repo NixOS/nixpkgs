@@ -69,8 +69,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     export LC_ALL="en_US.UTF-8"
+	export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+    make test ARGS+="-E testgui --output-on-failure"
   '';
-    # make test ARGS+="-E testgui --output-on-failure"
 
   nativeBuildInputs = [ cmake makeWrapper qttools ];
 
