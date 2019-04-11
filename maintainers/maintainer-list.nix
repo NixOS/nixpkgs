@@ -4773,6 +4773,15 @@
     github = "the-kenny";
     name = "Moritz Ulrich";
   };
+  thesola10 = {
+    email = "thesola10@bobile.fr";
+    github = "thesola10";
+    keys = [{
+      longkeyid = "rsa4096/0x89245619BEBB95BA";
+      fingerprint = "1D05 13A6 1AC4 0D8D C6D6  5F2C 8924 5619 BEBB 95BA";
+    }];
+    name = "Karim Vergnes";
+  };
   theuni = {
     email = "ct@flyingcircus.io";
     github = "ctheune";
