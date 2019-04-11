@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional (libpulseaudio != null) libpulseaudio
     ++ lib.optional (libjack2 != null) libjack2;
 
+  configureFlags = [
+    "--with-alsalconfdir=${placeholder "out"}/etc/alsa/conf.d"
+  ];
+
   meta = with lib; {
     description = "Various plugins for ALSA";
     homepage = http://alsa-project.org/;
