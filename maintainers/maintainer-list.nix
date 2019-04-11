@@ -5461,4 +5461,9 @@
     github = "freezeboy";
     name = "freezeboy";
   };
+  tesq0 = {
+  	email = "mikolaj.galkowski@gmail.com";
+    github = "tesq0";
+    name = "Mikolaj Galkowski";
+	};
 }
