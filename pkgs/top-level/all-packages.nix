@@ -23684,6 +23684,8 @@ in
   newlib = callPackage ../development/misc/newlib { };
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
-  };
-
+    };
+    
+	omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
+  
 }
