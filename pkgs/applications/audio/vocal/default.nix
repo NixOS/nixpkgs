@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vocal";
-  version = "2.3.0";
+  version = "2.4.0";
 
   name = "${pname}-${version}";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "needle-and-thread";
     repo = pname;
     rev = version;
-    sha256 = "1wkkyai14in4yk3q4qq23wk3l49px2xi8z819y3glna236qsq6qp";
+    sha256 = "09g9692rckdwh1i5krqgfwdx4p67b1q5834cnxahxzpq4p08rf5w";
   };
 
   nativeBuildInputs = [
