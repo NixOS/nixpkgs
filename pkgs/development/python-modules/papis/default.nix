@@ -1,8 +1,13 @@
-{ lib, fetchFromGitHub, fetchpatch
-, python3, xdg_utils
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, xdg_utils
+, requests, filetype, pyparsing, configparser, arxiv2bib
+, pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
+, pylibgen, click, python-slugify, habanero, isbnlib
+, prompt_toolkit, pygments
+#, optional, dependencies
+, jinja2, whoosh, pytest
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "papis";
   version = "0.8.2";
 
@@ -14,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0sa4hpgjvqkjcmp9bjr27b5m5jg4pfspdc8nf1ny80sr0kzn72hb";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     requests filetype pyparsing configparser arxiv2bib
     pyyaml chardet beautifulsoup4 colorama bibtexparser
     pylibgen click python-slugify habanero isbnlib
@@ -23,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     jinja2 whoosh
   ];
 
-  checkInputs = (with python3.pkgs; [
+  checkInputs = ([
     pytest
   ]) ++ [
     xdg_utils
@@ -39,6 +44,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Powerful command-line document and bibliography manager";
     homepage = http://papis.readthedocs.io/en/latest/;
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.nico202 ];
+    maintainers = with lib.maintainers; [ nico202 teto ];
   };
 }
