@@ -1,11 +1,11 @@
 { stdenv, fetchurl, lib, pkgconfig, alsaLib, libogg, libpulseaudio ? null, libjack2 ? null }:
 
 stdenv.mkDerivation rec {
-  name = "alsa-plugins-${version}";
+  pname = "alsa-plugins";
   version = "1.1.8";
 
   src = fetchurl {
-    url = "mirror://alsa/plugins/${name}.tar.bz2";
+    url = "mirror://alsa/plugins/${pname}-${version}.tar.bz2";
     sha256 = "152r82i6f97gfilfgiax5prxkd4xlcipciv8ha8yrk452qbxyxvz";
   };
 
