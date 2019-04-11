@@ -5,23 +5,26 @@
 
 let
   makeArgs = pkg: {
-    src         = if pkg ? src then pkg.src else pkg;
-    name        = pkg.name;
-    diskImage   = vm;
-    extraDebs   = let
-      bInputs = pkgs.lib.flatten pkg.buildInputs; # force to be list
-      debList = builtins.map makeDebList bInputs;
-    in
-      pkgs.lib.flatten debList;
+    meta.schedulingPriority = 50;
+    memSize        = 2047;
+    debRequires    = [];
+    debMaintainer  = "No Body <no@bo.dy>";
+    doInstallCheck = true;
+
+    src            = if pkg ? src then pkg.src else pkg;
+    name           = if pkg ? name then pkg.name else "noname-package";
+    diskImage      = vm;
+    extraDebs      =
+      pkgs.lib.flatten (builtins.map makeDebList (pkgs.lib.flatten pkg.buildInputs));
   };
 
   makeDebList = pkg:
   let
     root = makeArgs pkg;
-    attrList = builtins.filter builtins.isAttrs pkg.buildInputs;
+    attrList = if pkg ? buildInputs then builtins.filter builtins.isAttrs pkg.buildInputs else [];
     mapf     =  p: makeDebList p;
 
-    list = if pkg.buildInputs == null
+    list = if pkg ? buildInputs && pkg.buildInputs == null
       then [] 
       else builtins.map makeDebList attrList;
   in
