@@ -1,7 +1,6 @@
-{ lib, fetchFromGitHub, buildPythonApplication, pulseaudio
-, PyChromecast, psutil, mutagen, flask, pyqt5, netifaces, requests, soco
+{ lib, fetchFromGitHub, pulseaudio, python3Packages
 , vorbis-tools, sox, lame, flac, faac, ffmpeg }:
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mkchromecast";
   version = "unstable-2019-04-07";
   src = fetchFromGitHub {
@@ -11,8 +10,9 @@ buildPythonApplication rec {
     sha256 = "05ldgx583s4b3qqn2r3sj7wjmfdqndkm59g2bwdkpz7pbcahkfmr";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     PyChromecast psutil mutagen flask pyqt5 netifaces requests soco
+  ] ++ [
     pulseaudio vorbis-tools sox lame flac faac ffmpeg
   ];
 
