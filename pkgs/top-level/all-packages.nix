@@ -9957,7 +9957,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
   ffmpeg_4 = callPackage ../development/libraries/ffmpeg/4.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
   };
 
   # Aliases
