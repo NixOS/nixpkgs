@@ -1,17 +1,10 @@
-{ lib, bundlerEnv, ruby
+{ lib, bundlerApp, ruby
 , withOptionalDependencies ? false
 }:
 
-# Bundix:
-# nix-shell -p bundix zlib
-bundlerEnv rec {
-  name = pname + "-" + version;
+bundlerApp rec {
   pname = "jekyll";
-  version = (import
-    (if withOptionalDependencies
-      then ./full/gemset.nix
-      else ./basic/gemset.nix))
-    .jekyll.version;
+  exes = [ "jekyll" ];
 
   inherit ruby;
   gemdir = if withOptionalDependencies
