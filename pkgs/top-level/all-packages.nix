@@ -10398,6 +10398,8 @@ in
 
   glib-networking = callPackage ../development/libraries/glib-networking {};
 
+  gom = callPackage ../development/libraries/gom { };
+
   ace = callPackage ../development/libraries/ace { };
 
   atk = callPackage ../development/libraries/atk { };
