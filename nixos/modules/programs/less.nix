@@ -43,10 +43,6 @@ in
         example = literalExample "$${pkgs.my-configs}/lesskey";
         description = ''
           Path to lesskey configuration file.
-
-          <option>configFile</option> takes precedence over <option>commands</option>,
-          <option>clearDefaultCommands</option>, <option>lineEditingKeys</option>, and
-          <option>envVariables</option>.
         '';
       };
 
@@ -107,6 +103,37 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    assertions = [
+      { assertion = cfg.configFile != null -> cfg.commands == {};
+        message = ''
+          config.programs.less.configFile is assigned and
+          config.programs.less.commands is not empty.
+          Only one of these options should be configured.
+        '';
+      }
+      { assertion = cfg.configFile != null -> !cfg.clearDefaultCommands;
+        message = ''
+          config.programs.less.configFile is assigned and
+          config.programs.less.clearDefaultCommands is true.
+          Only one of these options should be configured.
+        '';
+      }
+      { assertion = cfg.configFile != null -> cfg.lineEditingKeys == {};
+        message = ''
+          config.programs.less.configFile is assigned and
+          config.programs.less.lineEditingKeys is not empty.
+          Only one of these options should be configured.
+        '';
+      }
+      { assertion = cfg.configFile != null -> cfg.envVariables == {};
+        message = ''
+          config.programs.less.configFile is assigned and
+          config.programs.less.envVariables is not empty.
+          Only one of these options should be configured.
+        '';
+      }
+    ];
 
     environment.systemPackages = [ pkgs.less ];
 
