@@ -71,4 +71,7 @@ in stdenv.mkDerivation rec {
     license = licenses.unfree;
     homepage = http://www.displaylink.com/;
   };
+
+  # see issue https://github.com/NixOS/nixpkgs/issues/59312
+  meta.broken = true;
 }
