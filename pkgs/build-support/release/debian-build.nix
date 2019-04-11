@@ -27,10 +27,9 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
 
     prePhases = "installExtraDebsPhase sysInfoPhase";
   }
-
-  // removeAttrs args ["vmTools"] //
-
+  //
   {
+    inherit src diskImage stdenv checkinstall fsTranslation debProvides debRequires;
     name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
 
     # !!! cut&paste from rpm-build.nix
