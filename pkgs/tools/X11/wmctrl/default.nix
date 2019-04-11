@@ -1,14 +1,20 @@
-{stdenv, fetchurl, libX11, glib, pkgconfig, libXmu }:
+{ stdenv
+, fetchurl
+, libX11
+, glib
+, pkgconfig
+, libXmu
+}:
 
 stdenv.mkDerivation rec {
-  
+
   name = "wmctrl-1.07";
- 
+
   src = fetchurl {
     url = "http://tomas.styblo.name/wmctrl/dist/${name}.tar.gz";
     sha256 = "1afclc57b9017a73mfs9w7lbdvdipmf9q0xdk116f61gnvyix2np";
   };
- 
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 libXmu glib ];
 
@@ -19,5 +25,7 @@ stdenv.mkDerivation rec {
     description = "Command line tool to interact with an EWMH/NetWM compatible X Window Manager";
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; all;
+    maintainers = [ stdenv.lib.maintainers.Anton-Latukha ];
   };
+
 }
