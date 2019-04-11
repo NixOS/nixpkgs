@@ -1087,7 +1087,14 @@ in
 
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };
 
-    services.udev.packages = mkIf (cfg.wlanInterfaces != {}) [
+    services.udev.packages =  [
+      (pkgs.writeTextFile rec {
+        name = "99-ipv6-privacy-extensions.rules";
+        destination = "/etc/udev/rules.d/99-${name}";
+        text = ''
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.%k.use_tempaddr=2"
+        '';
+      }) ] ++ lib.optional (cfg.wlanInterfaces != {})
       (pkgs.writeTextFile {
         name = "99-zzz-40-wlanInterfaces.rules";
         destination = "/etc/udev/rules.d/99-zzz-40-wlanInterfaces.rules";
@@ -1161,8 +1168,7 @@ in
             # Generate the same systemd events for both 'add' and 'move' udev events.
             ACTION=="move", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}
           '');
-      }) ];
-
+      });
   };
 
 }
