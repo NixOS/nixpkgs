@@ -81,44 +81,37 @@ in {
     };
     ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix {
       bootPkgs = mkBootPkgs "ghc861" "ghc822";
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghc862 = callPackage ../development/compilers/ghc/8.6.2.nix {
       bootPkgs = mkBootPkgs "ghc862" "ghc822";
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
-    ghc863 = builtins.trace ''
-
-      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      ************************************ WARNING ***********************************
-      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-               You are using GHC 8.6.3.  This version is known to
-               be busted on windows!  See GHC issue #16057.  Make
-               sure you revert commit
-                 ghc:ed86e3b531322f74d2c2d00d7ff8662b08fabde6
-               before using GHC 8.6.3 in any form on windows.
-
-               --
-               https://ghc.haskell.org/trac/ghc/ticket/16057
-
-      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      ************************************ WARNING ***********************************
-      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      '' callPackage ../development/compilers/ghc/8.6.3.nix {
+    ghc863 = callPackage ../development/compilers/ghc/8.6.3.nix {
       bootPkgs = mkBootPkgs "ghc863" "ghc822";
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghc864 = callPackage ../development/compilers/ghc/8.6.4.nix {
       bootPkgs = mkBootPkgs "ghc864" "ghc822";
+      inherit (buildPackages.python3Packages) sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_6;
+      llvmPackages = pkgs.llvmPackages_6;
+    };
+    ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
+      bootPkgs = mkBootPkgs "ghc864" "ghc822";
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = mkBootPkgs "ghcHEAD" "ghc821Binary";
+      bootPkgs = mkBootPkgs "ghcHEAD" "ghc863";
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
@@ -245,6 +238,11 @@ in {
     ghc864 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc864;
       ghc = bh.compiler.ghc864;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+    };
+    ghc865 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc865;
+      ghc = bh.compiler.ghc865;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
