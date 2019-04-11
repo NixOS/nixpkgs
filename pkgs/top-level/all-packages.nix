@@ -10535,6 +10535,8 @@ in
 
   hiredis = callPackage ../development/libraries/hiredis { };
 
+  hiredis-vip = callPackage ../development/libraries/hiredis-vip { };
+
   hivex = callPackage ../development/libraries/hivex { };
 
   hound = callPackage ../development/tools/misc/hound { };
