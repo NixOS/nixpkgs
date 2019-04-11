@@ -15,6 +15,8 @@
 , libXi
 , qtx11extras
 , qtmacextras
+, qtsvg
+, qrencode
 
 , withKeePassBrowser ? true
 , withKeePassSSHAgent ? true
@@ -26,13 +28,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "keepassxc-${version}";
-  version = "2.3.4";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = "${version}";
-    sha256 = "1gja402dsbws4z8ybnhqbw7rc9svgqnshqjgf7158d6x0ni386m3";
+    sha256 = "1k8s56003gym2dv6c54gxwzs20i7lf6w5g5qnr449jfmf6wvbivr";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
@@ -50,7 +52,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch
-    ./qt511.patch
   ];
 
   cmakeFlags = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     "-DWITH_GUI_TESTS=ON"
     "-DWITH_XC_AUTOTYPE=ON"
     "-DWITH_XC_YUBIKEY=ON"
+    "-DWITH_XC_KEESHARE=ON"
   ]
   ++ (optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
   ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON")
@@ -67,6 +69,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     export LC_ALL="en_US.UTF-8"
+    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM=offscreen
     make test ARGS+="-E testgui --output-on-failure"
   '';
 
@@ -85,8 +89,10 @@ stdenv.mkDerivation rec {
     libyubikey
     qtbase
     qtx11extras
+    qtsvg
     yubikey-personalization
     zlib
+    qrencode
   ] ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
 
   postInstall = optionalString stdenv.isDarwin ''

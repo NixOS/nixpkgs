@@ -2124,6 +2124,8 @@ in {
 
   paperwork-backend = callPackage ../applications/office/paperwork/backend.nix { };
 
+  papis = callPackage ../development/python-modules/papis { };
+
   papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
 
   pathspec = callPackage ../development/python-modules/pathspec { };
