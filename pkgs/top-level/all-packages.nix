@@ -20975,6 +20975,8 @@ in
 
   exult = callPackage ../games/exult { };
 
+  fltrator = callPackage ../games/fltrator { };
+
   factorio = callPackage ../games/factorio { releaseType = "alpha"; };
 
   factorio-experimental = factorio.override { releaseType = "alpha"; experimental = true; };
