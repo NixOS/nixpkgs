@@ -3,11 +3,11 @@
 , vorbis-tools, sox, lame, flac, faac, ffmpeg }:
 buildPythonApplication rec {
   pname = "mkchromecast";
-  version = "5872a246f0610b74fc2b197eb02dc91b96fb68cc";
+  version = "unstable-2019-04-07";
   src = fetchFromGitHub {
     owner  = "muammar";
     repo   = "mkchromecast";
-    rev    = version;
+    rev    = "5872a246f0610b74fc2b197eb02dc91b96fb68cc";
     sha256 = "05ldgx583s4b3qqn2r3sj7wjmfdqndkm59g2bwdkpz7pbcahkfmr";
   };
 
