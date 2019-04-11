@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, emacsPackages }:
+{ stdenv, fetchurl, python, emacsPackagesNg }:
 
 stdenv.mkDerivation rec {
   name = "cask-${version}";
@@ -10,8 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
-  buildInputs = with emacsPackages; [ s dash f ansi ecukes servant ert-runner el-mock
-                                      noflet ert-async shell-split-string git package-build ];
+  buildInputs = with emacsPackagesNg; [
+    s f dash ansi ecukes servant ert-runner el-mock
+    noflet ert-async shell-split-string git package-build
+  ];
   buildPhase = ''
     emacs --batch -L . -f batch-byte-compile cask.el cask-cli.el
   '';
@@ -42,5 +44,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.flexw ];
   };
 
-  nativeBuildInputs = [ emacsPackages.emacs python ];
+  nativeBuildInputs = [ emacsPackagesNg.emacs python ];
 }
