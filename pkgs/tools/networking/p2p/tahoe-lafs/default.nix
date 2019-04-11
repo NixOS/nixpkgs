@@ -48,7 +48,7 @@ pythonPackages.buildPythonApplication rec {
     )
   '';
 
-  nativeBuildInputs = with pythonPackages; [ sphinx texinfo wheel ];
+  nativeBuildInputs = with pythonPackages; [ sphinx texinfo ];
 
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with pythonPackages; [
