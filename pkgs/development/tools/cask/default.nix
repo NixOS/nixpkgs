@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, emacs, python }:
+{ stdenv, fetchurl, python, emacsPackages }:
 
 stdenv.mkDerivation rec {
   name = "cask-${version}";
@@ -10,18 +10,21 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
-
-  dontBuild = true;
+  buildInputs = with emacsPackages; [ s dash f ansi ecukes servant ert-runner el-mock
+                                      noflet ert-async shell-split-string git package-build ];
+  buildPhase = ''
+    emacs --batch -L . -f batch-byte-compile cask.el cask-cli.el
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/templates
-    install -Dm644 *.el $out/
-    install -Dm755 bin/cask $out/bin
+    mkdir -p $out/share/emacs/site-lisp/cask/bin
+    install -Dm644 *.el *.elc $out/share/emacs/site-lisp/cask
+    install -Dm755 bin/cask $out/share/emacs/site-lisp/cask/bin
     install -Dm644 templates/* $out/templates/
     touch $out/.no-upgrade
-    mkdir -p $out/usr/share/emacs/site-lisp/cask
-    ln -s cask{,-bootstrap}.el $out/usr/share/emacs/site-lisp/cask/
+    ln -s $out/share/emacs/site-lisp/cask/bin/cask $out/bin/cask
   '';
 
   meta = with stdenv.lib; {
@@ -39,5 +42,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.flexw ];
   };
 
-  nativeBuildInputs = [ emacs python ];
+  nativeBuildInputs = [ emacsPackages.emacs python ];
 }
