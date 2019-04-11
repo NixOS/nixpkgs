@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
+{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3, fetchpatch,
   pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
   vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.7.4.3";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
-    rev = version;
-    sha256 = "0v6zn25vxsn3ng31zgsgkb2wwrl0kdv4ikw4ij4yqv49aid3qjd5";
+    rev = "cc057f3e93f5b1033b04decee03cdb44177e48b3";
+    sha256 = "1xg80bi2465p5r8zfmb34iga9yqs3is1k4f13hw0ligvhb58gas0";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,9 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
   ];
 
-  patches = [ ./correct-post-install.patch ];
+  patches = [
+   ./correct-post-install.patch
+  ];
 
   mesonFlags = [
     "-Ddisable_pycompile=true"
