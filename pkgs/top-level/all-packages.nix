@@ -20517,10 +20517,16 @@ in
 
   kodiPlain = callPackage ../applications/video/kodi { };
 
+  kodiPlainWayland = callPackage ../applications/video/kodi { useWayland = true; };
+
   kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
 
   kodi = wrapKodi {
     kodi = kodiPlain;
+  };
+
+  kodi-wayland = wrapKodi {
+    kodi = kodiPlainWayland;
   };
 
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
