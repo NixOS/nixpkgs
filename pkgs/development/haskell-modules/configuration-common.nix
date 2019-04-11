@@ -860,6 +860,7 @@ self: super: {
 
   # test suite does not compile with recent versions of QuickCheck
   integer-logarithms = dontCheck (super.integer-logarithms);
+  Diff = dontCheck super.Diff;
 
   # missing dependencies: blaze-html >=0.5 && <0.9, blaze-markup >=0.5 && <0.8
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;

@@ -6911,6 +6911,8 @@ in
 
   elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
 
+  elmPackages_0_18 = recurseIntoAttrs (callPackage ../development/compilers/elm_0_18 { });
+
   apache-flex-sdk = callPackage ../development/compilers/apache-flex-sdk { };
 
   fasm = pkgsi686Linux.callPackage ../development/compilers/fasm {
