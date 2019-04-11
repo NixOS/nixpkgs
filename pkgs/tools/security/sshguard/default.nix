@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  buildInputs = [ ipset ];
   nativeBuildInputs = [ autoreconfHook yacc flex ];
 
   configureFlags = [ "--sysconfdir=/etc" ];
