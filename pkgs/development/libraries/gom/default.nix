@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/worldofpeace/gom/commit/b621c15600b1c32826c9878565eb2398a50907f2.patch";
       sha256 = "1hqck9bb7sxn4akisnn26sbddlphjsavgksick5k4h3rsc0xwx1v";
     })
+    ./longer-stress-timeout.patch
   ];
 
   nativeBuildInputs = [
