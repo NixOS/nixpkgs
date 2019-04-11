@@ -7,7 +7,7 @@ let
 in
 {
   options.services.mautrix-whatsapp = {
-    enable = mkOption {
+    enable = mkEnableOption {
       type = types.bool;
       default = false;
       description = ''
@@ -18,8 +18,8 @@ in
     };
 
     config = mkOption {
-      type = types.lines;
-      description = "YAML configuration file for the bridge";
+      type = types.attrs;
+      description = "This JSON will be transform in YAML configuration file for the bridge";
     };
   };
 
@@ -30,18 +30,10 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        Type = "simple";
-        User = "mautrix-whatsapp";
-        WorkingDirectory = /var/lib/mautrix-whatsapp;
-        ExecStart = "${pkg.mautrix-whatsapp}/bin/mautrix-whatsapp -c ${pkgs.writeText "mwa-config.yaml" cfg.config}";
+        DynamicUser = true;
+        StateDirectory = "mautrix-whatsapp";
+        ExecStart = "${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp -c ${pkgs.writeText "mwa-config.yaml" cfg.config}";
         Restart = "on-failure";
-      };
-
-      users.users.mautrix-whatsapp = {
-        uid = config.ids.uids.mautrix-whatsapp;
-        description = "User for bridge Matrix<->WhatsApp";
-        home = /var/lib/mautrix-whatsapp;
-        createHome = true;
       };
     };
   };
