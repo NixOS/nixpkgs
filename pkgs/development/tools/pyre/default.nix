@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, ocamlPackages, writeScript
-, dune, python3, rsync, buck, watchman }:
+, dune, python3, rsync, buck, watchman, sqlite }:
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
-  pyre-version = "0.0.20";  # also change typeshed revision below with $pyre-src/.typeshed-version
+  pyre-version = "0.0.22";  # also change typeshed revision below with $pyre-src/.typeshed-version
   pyre-src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyre-check";
     rev = "v${pyre-version}";
-    sha256 = "1alkhdhvmigdhxvvarh0lr5s3b1s6q4arykip2dqb62vs8064s17";
+    sha256 = "057vy6zmgwsi0ag9n4m6sszhahmfk2s1ywm36nyfs7w4d0wnk92s";
   };
   versionFile = writeScript "version.ml" ''
     cat > "./version.ml" <<EOF
@@ -41,6 +41,8 @@ let
     ppxlib
     dune
     ounit
+    base64
+    sqlite.dev
     # python36Packages.python36Full # TODO
   ];
 
@@ -115,7 +117,16 @@ in python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [ pyre-bin ];
   nativeBuildInputs = [ rsync ]; # only required for build-pypi-package.sh
-  propagatedBuildInputs = with python3.pkgs; [ docutils typeshed ];
+  propagatedBuildInputs = with python3.pkgs; [
+    docutils
+    typeshed
+    click-log
+    ipython
+    sqlalchemy
+    munch
+    xxhash
+    ujson
+  ];
   buildPhase = ''
     bash scripts/build-pypi-package.sh --version ${pyre-version} --bundle-typeshed ${typeshed}
     cp -r build/dist dist

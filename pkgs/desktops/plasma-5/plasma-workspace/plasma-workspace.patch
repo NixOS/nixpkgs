@@ -595,7 +595,6 @@ index 1fe41c5..11757df 100644
 +wait_drkonqi=$(@NIXPKGS_KREADCONFIG5@ --file startkderc --group WaitForDrKonqi --key Enabled --default true)
 
 -if test x"$wait_drkonqi"x = x"true"x ; then
->>>>>>> upstream/master
 +if [ x"$wait_drkonqi"x = x"true"x ]; then
      # wait for remaining drkonqi instances with timeout (in seconds)
 -    wait_drkonqi_timeout=`kreadconfig5 --file startkderc --group WaitForDrKonqi --key Timeout --default 900`

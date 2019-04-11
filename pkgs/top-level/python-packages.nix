@@ -4422,6 +4422,8 @@ in {
 
   xlwt = callPackage ../development/python-modules/xlwt { };
 
+  xxhash = callPackage ../development/python-modules/xxhash { };
+
   youtube-dl = callPackage ../tools/misc/youtube-dl {};
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
@@ -4432,6 +4434,8 @@ in {
   zconfig = callPackage ../development/python-modules/zconfig { };
 
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
+
+  zerorpc = callPackage ../development/python-modules/zerorpc { };
 
   zipstream = callPackage ../development/python-modules/zipstream { };
 
