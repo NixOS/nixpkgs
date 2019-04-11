@@ -1,7 +1,8 @@
 {stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate}:
 
 stdenv.mkDerivation rec {
-  name = "alsa-oss-1.1.8";
+  name = "alsa-oss-${version}";
+  version = "1.1.8";
 
   src = fetchurl {
     url = "mirror://alsa/oss-lib/${name}.tar.bz2";
