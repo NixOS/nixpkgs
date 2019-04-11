@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     repo = "wordgrinder";
     owner = "davidgiven";
     rev = "${version}";
-    sha256 = "1zqx3p9l22njni44ads3fyw3xh6807wmb5k1x2glg61z81cwc6sf";
+    sha256 = "08lnq5wmspfqdjmqm15gizcq0xr7mg4h62qhvwj63v0sd6ks1cal";
   };
 
   makeFlags = [
