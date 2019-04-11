@@ -1,9 +1,16 @@
-{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3, overrideCC, gccStdenv, gcc6 }:
 
 let
 
   common = opts: callPackage (import ./common.nix opts) {};
 
+  # Needed on older branches since rustc: 1.32.0 -> 1.33.0
+  missing-documentation-patch = fetchurl {
+    name = "missing-documentation.patch";
+    url = "https://aur.archlinux.org/cgit/aur.git/plain/deny_missing_docs.patch"
+        + "?h=firefox-esr&id=03bdd01f9cf";
+    sha256 = "1i33n3fgwc8d0v7j4qn7lbdax0an6swar12gay3q2nwrhg3ic4fb";
+  };
 in
 
 rec {
@@ -40,7 +47,7 @@ rec {
   # the web, there are many old useful plugins targeting offline
   # activities (e.g. ebook readers, syncronous translation, etc) that
   # will probably never be ported to WebExtensions API.
-  firefox-esr-52 = common rec {
+  firefox-esr-52 = (common rec {
     pname = "firefox-esr";
     ffversion = "52.9.0esr";
     src = fetchurl {
@@ -58,6 +65,9 @@ rec {
       description = "A web browser built from Firefox Extended Support Release source tree";
       knownVulnerabilities = [ "Support ended in August 2018." ];
     };
+  }).override {
+    stdenv = overrideCC gccStdenv gcc6; # gcc7 fails with "undefined reference to `__divmoddi4'"
+    gtk3Support = false;
   };
 
   firefox-esr-60 = common rec {
@@ -74,6 +84,8 @@ rec {
       # this one is actually an omnipresent bug
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
       ./fix-pa-context-connect-retval.patch
+
+      missing-documentation-patch
     ];
 
     meta = firefox.meta // {
@@ -139,6 +151,7 @@ in rec {
 
     patches = [
       ./no-buildconfig.patch
+      missing-documentation-patch
     ];
   };
 
@@ -243,6 +256,10 @@ in rec {
       rev   = "dda14213c550afc522ef0bb0bb1643289c298736";
       sha256 = "0lj79nczcix9mx6d0isbizg0f8apf6vgkp7r0q7id92691frj7fz";
     };
+
+    patches = [
+      missing-documentation-patch
+    ];
   };
 
   tor-browser = tor-browser-8-0;

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "future-fstrings";
-  version = "0.4.5";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit version;
     pname = "future_fstrings";
-    sha256 = "891c5d5f073b3e3ff686bebde0a4c45c479065f45c8cbd6de19323d5a50738a8";
+    sha256 = "1pra33in6rinrcs5wvdb1rbxmx223j93ahdwhzwgf7wyfsnjda98";
   };
 
   # No tests included in Pypi archive

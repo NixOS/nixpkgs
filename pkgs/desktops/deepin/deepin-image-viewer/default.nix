@@ -6,19 +6,20 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-image-viewer";
-  version = "1.3.1";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0dxdvm6hzj6izfxka35za8y7vacd06nksfgzx6xsv7ywzagri4k5";
+    sha256 = "0paanw9sd67ic9yrbzqhrwi4bf4lpvsk16jynx99n76j3jgyijkk";
   };
 
   nativeBuildInputs = [
     pkgconfig
     qmake
     qttools
+    deepin.setupHook
   ];
 
   buildInputs = [
@@ -33,12 +34,12 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    searchHardCodedPaths
+    patchShebangs viewer/generate_translations.sh
+    fixPath $out /usr viewer/com.deepin.ImageViewer.service
     sed -i qimage-plugins/freeimage/freeimage.pro \
            qimage-plugins/libraw/libraw.pro \
       -e "s,\$\$\[QT_INSTALL_PLUGINS\],$out/$qtPluginPrefix,"
-    sed -i viewer/com.deepin.ImageViewer.service \
-      -e "s,/usr,$out,"
   '';
 
   passthru.updateScript = deepin.updateScript { inherit name; };

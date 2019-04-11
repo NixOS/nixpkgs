@@ -871,8 +871,38 @@ self: super: {
   # https://github.com/takano-akio/filelock/issues/5
   filelock = dontCheck super.filelock;
 
-  # cryptol-2.5.0 doesn't want happy 1.19.6+.
-  cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
+  # fix GHC 8.6 builds by using irrefutable patterns. jailbreak is also
+  # required due to a constraint failure for base-compat.
+  cryptol = doJailbreak (overrideCabal super.cryptol (drv: {
+
+    # the last patch fixes ghc 8.6 builds; the other two (small) patches fix a
+    # few bugs between them, but are also hard dependencies
+    patches = drv.patches or [] ++ [
+      (pkgs.fetchpatch {
+        url    = https://github.com/GaloisInc/cryptol/commit/634c5a03e757663bf86d1ffad1ce2c6086d4483f.patch;
+        sha256 = "16dvfihsl2c4jnyfndgrjarkm3z5pyn7rzg2svnidx0qipwrxzm7";
+      })
+      (pkgs.fetchpatch {
+        url    = https://github.com/GaloisInc/cryptol/commit/515642328aff6d958ff1b534b9effdd726901b60.patch;
+        sha256 = "1fml71b720igyh8s7mj1z1c2bbv1vk490iy7blvxp625nymzjij6";
+      })
+      (pkgs.fetchpatch {
+        url    = https://github.com/GaloisInc/cryptol/commit/a8eab11b319f6434f9b01b26d419b8305ff30bc2.patch;
+        sha256 = "1bbznp3kbj8l83q979gf4gr2khwbyqi85ykwsf2jnkhzda6pr0n8";
+      })
+    ];
+
+    buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
+
+    # make sure the binaries always start up. previously this was in
+    # all-packages.nix but it's almost certainly better to do it here (e.g. a
+    # haskell deps may use cryptol in the test suite or something, etc)
+    postInstall = drv.postInstall or "" + ''
+      for b in $out/bin/cryptol $out/bin/cryptol-html; do
+        wrapProgram $b --prefix 'PATH' ':' "${pkgs.lib.getBin pkgs.z3}/bin"
+      done
+    '';
+  }));
 
   # Tests try to invoke external process and process == 1.4
   grakn = dontCheck (doJailbreak super.grakn);
@@ -1248,5 +1278,8 @@ self: super: {
 
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
+
+  # Break out of pandoc >=2.0 && <2.7 (https://github.com/pbrisbin/yesod-markdown/pull/65)
+  yesod-markdown = doJailbreak super.yesod-markdown;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

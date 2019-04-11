@@ -301,7 +301,6 @@ stdenv.mkDerivation {
       then
         [
           "-platform macx-clang"
-          "-no-use-gold-linker"
           "-no-fontconfig"
           "-qt-freetype"
           "-qt-libpng"
@@ -329,9 +328,6 @@ stdenv.mkDerivation {
           "-glib"
           "-system-libjpeg"
           "-system-libpng"
-          # gold linker of binutils 2.28 generates duplicate symbols
-          # TODO: remove for newer version of binutils
-          "-no-use-gold-linker"
         ]
         ++ lib.optional withGtk3 "-gtk"
         ++ lib.optional (compareVersion "5.9.0" >= 0) "-inotify"

@@ -9,7 +9,6 @@
 , pcsclite ? null
 , systemd ? null
 , buildServer ? true
-, optimize ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +57,7 @@ stdenv.mkDerivation rec {
     ++ optional (cups != null)                "-DWITH_CUPS=ON"
     ++ optional (pcsclite != null)            "-DWITH_PCSC=ON"
     ++ optional buildServer                   "-DWITH_SERVER=ON"
-    ++ optional (optimize && stdenv.isx86_64) "-DWITH_SSE2=ON";
+    ++ optional (stdenv.isx86_64)             "-DWITH_SSE2=ON";
 
   meta = with lib; {
     description = "A Remote Desktop Protocol Client";

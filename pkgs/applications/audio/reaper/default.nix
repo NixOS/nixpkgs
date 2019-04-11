@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "reaper-${version}";
-  version = "5.965";
+  version = "5.973";
 
   src = fetchurl {
     url = "https://www.reaper.fm/files/${stdenv.lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
-    sha256 = "05fn7r3v4qcb1b31g8layzvqilrwdr0s8yskr61yvbhx2dnjp9iw";
+    sha256 = "02ymi2rn29zrb71krx43nrpfldhkcvwry4gz228apff2hb2lmqdx";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];

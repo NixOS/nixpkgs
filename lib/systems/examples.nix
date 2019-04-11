@@ -44,14 +44,6 @@ rec {
     platform = platforms.aarch64-multiplatform;
   };
 
-  armv5te-android-prebuilt = rec {
-    config = "armv5tel-unknown-linux-androideabi";
-    sdkVer = "21";
-    ndkVer = "18b";
-    platform = platforms.armv5te-android;
-    useAndroidPrebuilt = true;
-  };
-
   armv7a-android-prebuilt = rec {
     config = "armv7a-unknown-linux-androideabi";
     sdkVer = "24";
@@ -216,5 +208,12 @@ rec {
     config = "x86_64-pc-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
+  };
+
+  # BSDs
+
+  amd64-netbsd = {
+    config = "x86_64-unknown-netbsd";
+    libc = "nblibc";
   };
 }

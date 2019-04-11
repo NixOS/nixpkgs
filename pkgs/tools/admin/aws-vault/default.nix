@@ -2,7 +2,7 @@
 buildGoPackage rec {
   name = "${pname}-${version}";
   pname = "aws-vault";
-  version = "4.3.0";
+  version = "4.5.1";
 
   goPackagePath = "github.com/99designs/${pname}";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "99designs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cwzvw1rcvg7y3m8dahr9r05s4i9apnfw5xhiaf0rlkdh3vy33wp";
+    sha256 = "0y64fx15p9ls829lif7c0jaxyclzpnr8l5cyw25q545878dzmcs5";
   };
 
   # set the version. see: aws-vault's Makefile

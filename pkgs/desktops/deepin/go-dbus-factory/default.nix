@@ -3,16 +3,16 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "go-dbus-factory";
-  version = "0.0.7.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0gj2xxv45gh7wr5ry3mcsi46kdsyq9nbd7znssn34kapiv40ixcx";
+    sha256 = "1i1ymi2qpcbf4d6rnfzrbq5n2vwnn8dvbq9xlw7jls3jpr3d5r00";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=${placeholder ''out''}" ];
 
   postPatch = ''
     sed -i -e 's:/share/gocode:/share/go:' Makefile

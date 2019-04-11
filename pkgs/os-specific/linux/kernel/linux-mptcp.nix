@@ -1,7 +1,7 @@
 { stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, structuredExtraConfig ? {}, ... } @ args:
 let
-  mptcpVersion = "0.94.3";
-  modDirVersion = "4.14.105";
+  mptcpVersion = "0.94.4";
+  modDirVersion = "4.14.110";
 in
 buildLinux ({
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
@@ -16,7 +16,7 @@ buildLinux ({
     owner = "multipath-tcp";
     repo = "mptcp";
     rev = "v${mptcpVersion}";
-    sha256 = "1pic86icrlmxajw4hkqyljha8a3k4w9kb5z74xj4yiyapmk9wprm";
+    sha256 = "1ng6p1djhm3m5g44yyq7gpqqbzsnhm9rimsafp5g4dx8cm27a70f";
   };
 
   structuredExtraConfig = with import ../../../../lib/kernel.nix { inherit (stdenv) lib; version = null; };

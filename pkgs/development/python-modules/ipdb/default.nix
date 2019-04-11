@@ -7,16 +7,19 @@
 
 buildPythonPackage rec {
   pname = "ipdb";
-  version = "0.8.1";
+  version = "0.12";
   disabled = isPyPy;  # setupterm: could not find terminfo database
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "1763d1564113f5eb89df77879a8d3213273c4d7ff93dcb37a3070cdf0c34fd7c";
+    sha256 = "dce2112557edfe759742ca2d0fee35c59c97b0cc7a05398b791079d78f1519ce";
   };
 
   propagatedBuildInputs = [ ipython ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/gotcha/ipdb;

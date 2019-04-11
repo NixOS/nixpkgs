@@ -95,7 +95,7 @@ in
         type = with types; nullOr path;
         default = null;
         description = "The path to the socket to bind to.";
-        example = "/var/run/redis.sock";
+        example = "/run/redis.sock";
       };
 
       logLevel = mkOption {

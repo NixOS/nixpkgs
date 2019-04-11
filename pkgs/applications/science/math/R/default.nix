@@ -69,6 +69,11 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
+  # The store path to "which" is baked into src/library/base/R/unix/system.unix.R,
+  # but Nix cannot detect it as a run-time dependency because the installed file
+  # is compiled and compressed, which hides the store path.
+  postFixup = "echo ${which} > $out/nix-support/undetected-runtime-dependencies";
+
   doCheck = true;
   preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 

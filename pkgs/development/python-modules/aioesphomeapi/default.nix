@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, attrs, protobuf, zeroconf }:
+{ lib, buildPythonPackage, fetchPypi, attrs, protobuf, zeroconf }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
@@ -11,5 +11,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ attrs protobuf zeroconf ];
 
-  meta = {};
+  # no tests implemented
+  doCheck = false;
+
+  meta = with lib; {
+    description = "Python Client for ESPHome native API";
+    homepage = https://github.com/esphome/aioesphomeapi;
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+  };
 }

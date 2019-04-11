@@ -34,7 +34,7 @@ with lib;
       networkmanager-openvpn = super.networkmanager-openvpn.override { withGnome = false; };
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
-      pinentry = super.pinentry.override { gtk2 = null; qt = null; };
+      pinentry = super.pinentry.override { gtk2 = null; gcr = null; qt = null; };
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
     }));
   };

@@ -230,7 +230,6 @@ in
 
     environment.shells =
       [ "/run/current-system/sw/bin/zsh"
-        "/var/run/current-system/sw/bin/zsh"
         "${pkgs.zsh}/bin/zsh"
       ];
 

@@ -1,78 +1,55 @@
 { stdenv, fetchurl, fontconfig, libjpeg, libcap, freetype, fribidi, pkgconfig
-, gettext, ncurses, systemd, perl
+, gettext, systemd, perl, lib
 , enableSystemd ? true
 , enableBidi ? true
-}:
-let
-
-  version = "2.4.0";
+}: stdenv.mkDerivation rec {
 
   name = "vdr-${version}";
+  version = "2.4.0";
 
-  mkPlugin = name: stdenv.mkDerivation {
-    name = "vdr-${name}-${version}";
-    inherit (vdr) src;
-    buildInputs = [ vdr ];
-    preConfigure = "cd PLUGINS/src/${name}";
-    installFlags = [ "DESTDIR=$(out)" ];
+  src = fetchurl {
+    url = "ftp://ftp.tvdr.de/vdr/${name}.tar.bz2";
+    sha256 = "1klcgy9kr7n6z8d2c77j63bl8hvhx5qnqppg73f77004hzz4kbwk";
   };
 
-  vdr = stdenv.mkDerivation {
+  enableParallelBuilding = true;
 
-    inherit name;
+  postPatch = "substituteInPlace Makefile --replace libsystemd-daemon libsystemd";
 
-    src = fetchurl {
-      url = "ftp://ftp.tvdr.de/vdr/${name}.tar.bz2";
-      sha256 = "1klcgy9kr7n6z8d2c77j63bl8hvhx5qnqppg73f77004hzz4kbwk";
-    };
+  buildInputs = [ fontconfig libjpeg libcap freetype ]
+  ++ lib.optional enableSystemd systemd
+  ++ lib.optional enableBidi fribidi;
 
-    enableParallelBuilding = true;
+  buildFlags = [ "vdr" "i18n" ]
+  ++ lib.optional enableSystemd "SDNOTIFY=1"
+  ++ lib.optional enableBidi "BIDI=1";
 
-    postPatch = "substituteInPlace Makefile --replace libsystemd-daemon libsystemd";
+  nativeBuildInputs = [ perl ];
 
-    buildInputs = [ fontconfig libjpeg libcap freetype ]
-    ++ stdenv.lib.optional enableSystemd systemd
-    ++ stdenv.lib.optional enableBidi fribidi;
+  # plugins uses the same build environment as vdr
+  propagatedNativeBuildInputs = [ pkgconfig gettext ];
 
-    buildFlags = [ "vdr" "i18n" ]
-    ++ stdenv.lib.optional enableSystemd "SDNOTIFY=1"
-    ++ stdenv.lib.optional enableBidi "BIDI=1";
+  installFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX=" # needs to be empty, otherwise plugins try to install at same prefix
+  ];
 
-    nativeBuildInputs = [ perl ];
+  installTargets = [ "install-pc" "install-bin" "install-doc" "install-i18n"
+    "install-includes" ];
 
-    # plugins uses the same build environment as vdr
-    propagatedNativeBuildInputs = [ pkgconfig gettext ];
+  postInstall = ''
+    mkdir -p $out/lib/vdr # only needed if vdr is started without any plugin
+    mkdir -p $out/share/vdr/conf
+    cp *.conf $out/share/vdr/conf
+    '';
 
-    installFlags = [
-      "DESTDIR=$(out)"
-      "PREFIX=" # needs to be empty, otherwise plugins try to install at same prefix
-    ];
+  outputs = [ "out" "dev" "man" ];
 
-    installTargets = [ "install-pc" "install-bin" "install-doc" "install-i18n"
-      "install-includes" ];
-
-    postInstall = ''
-      mkdir -p $out/lib/vdr # only needed if vdr is started without any plugin
-      mkdir -p $out/share/vdr/conf
-      cp *.conf $out/share/vdr/conf
-      '';
-
-    outputs = [ "out" "dev" "man" ];
-
-    meta = with stdenv.lib; {
-      homepage = http://www.tvdr.de/;
-      description = "Video Disc Recorder";
-      maintainers = [ maintainers.ck3d ];
-      platforms = [ "i686-linux" "x86_64-linux" ];
-      license = licenses.gpl2;
-    };
-
+  meta = with lib; {
+    homepage = http://www.tvdr.de/;
+    description = "Video Disc Recorder";
+    maintainers = [ maintainers.ck3d ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.gpl2;
   };
-in vdr // {
-  plugins = {
-    skincurses = (mkPlugin "skincurses").overrideAttrs(
-    oldAttr: { buildInputs = oldAttr.buildInputs ++ [ ncurses ]; });
-  } // (stdenv.lib.genAttrs [
-    "epgtableid0" "hello" "osddemo" "pictures" "servicedemo" "status" "svdrpdemo"
-  ] mkPlugin);
 }

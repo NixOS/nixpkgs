@@ -3788,7 +3788,6 @@ broken-packages:
   - crypto-simple
   - cryptocompare
   - cryptoconditions
-  - cryptol
   - cryptsy-api
   - crystalfontz
   - cse-ghc-plugin
