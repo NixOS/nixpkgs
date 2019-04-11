@@ -1234,6 +1234,11 @@
     github = "disassembler";
     name = "Samuel Leathers";
   };
+  disserman = {
+    email = "disserman@gmail.com";
+    github = "divi255";
+    name = "Sergei S.";
+  };
   dizfer = {
     email = "david@izquierdofernandez.com";
     github = "dizfer";
