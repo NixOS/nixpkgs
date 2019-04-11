@@ -329,6 +329,7 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
+      priority = 10;
   } // optionalAttrs useMacosReexportHack {
     platforms = stdenv.lib.platforms.darwin;
   };

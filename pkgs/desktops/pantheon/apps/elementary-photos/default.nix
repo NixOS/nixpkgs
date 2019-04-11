@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, desktop-file-utils
-, gtk3, glib, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2
+, gtk3, glib, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2, fetchpatch
 , granite, gst_all_1, libgudev, json-glib, libraw, librest, libsoup, sqlite, python3
 , scour, webkitgtk, libwebp, appstream, libunity, wrapGAppsHook, gobject-introspection, elementary-icon-theme }:
 
@@ -64,6 +64,14 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dplugins=false"
+  ];
+
+  patches = [
+    # Fix build against gexiv2 0.12
+    (fetchpatch {
+      url = "https://github.com/elementary/photos/commit/86df00ced674abb2ee430ea24422079cfabb314c.patch";
+      sha256 = "0836fzja93w36jf7ldqypsmnqn46mwsl93q41m104zn8qm0wrkmy";
+    })
   ];
 
   postPatch = ''

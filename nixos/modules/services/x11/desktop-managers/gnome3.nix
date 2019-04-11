@@ -126,6 +126,7 @@ in {
     services.dleyna-renderer.enable = mkDefault true;
     services.dleyna-server.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
+    services.gnome3.evince.enable = mkDefault true;
     services.gnome3.evolution-data-server.enable = true;
     services.gnome3.file-roller.enable = mkDefault true;
     services.gnome3.gnome-disks.enable = mkDefault true;
@@ -160,7 +161,11 @@ in {
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
 
-    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell-fonts ];
+    fonts.fonts = [
+      pkgs.dejavu_fonts pkgs.cantarell-fonts
+      pkgs.source-sans-pro
+      pkgs.source-code-pro # Default monospace font in 3.32
+    ];
 
     services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ]
       ++ map

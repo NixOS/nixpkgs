@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DBUILD_TESTING=OFF"
     "-DPYTHON_EXECUTABLE=${python}/bin/python"
   ];
 

@@ -122,6 +122,7 @@ in
     # pantheon has pantheon-agent-geoclue2
     services.geoclue2.enableDemoAgent = false;
     services.gnome3.at-spi2-core.enable = true;
+    services.gnome3.evince.enable = mkDefault true;
     services.gnome3.evolution-data-server.enable = true;
     services.gnome3.file-roller.enable = mkDefault true;
     # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
@@ -168,7 +169,6 @@ in
         gnome3.geary
         gnome3.epiphany
         gnome3.gnome-font-viewer
-        evince
       ] ++ pantheon.apps) config.environment.pantheon.excludePackages)
       ++ (with pkgs;
       [

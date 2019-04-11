@@ -1,26 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk3, vala, enchant2, wrapGAppsHook, meson, ninja
+{ stdenv, fetchurl, pkgconfig, gtk3, vala, enchant2, wrapGAppsHook, meson, ninja
 , desktop-file-utils, gnome-online-accounts, gsettings-desktop-schemas, adwaita-icon-theme
 , libnotify, libcanberra-gtk3, libsecret, gmime, isocodes, libxml2, gettext
 , sqlite, gcr, json-glib, itstool, libgee, gnome3, webkitgtk, python3
-, xvfb_run, dbus, shared-mime-info, libunwind, glib-networking }:
+, xvfb_run, dbus, shared-mime-info, libunwind, folks, glib-networking }:
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "0.13.2";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1fp3zzgpkm1l4d0g5194wnriz2spxa9kgrgy98kvvffl7ac860kk";
+    sha256 = "1mxlzkmwzg1fyf4r1izwnskm5z681c6hiby48n606n89gjcq565j";
   };
-
-  patches = [
-    # gobject-introspection is not needed
-    # https://gitlab.gnome.org/GNOME/geary/merge_requests/138
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/geary/commit/d2f1b1076aa942d140e83fdf03b66621c11229f5.patch;
-      sha256 = "1dsj4ybnibpi572w9hafm0w90jbjv7wzdl6j8d4c2qg5h7knlvfk";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils gettext itstool libxml2 meson ninja
@@ -31,7 +22,7 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme enchant2 gcr gmime gnome-online-accounts
     gsettings-desktop-schemas gtk3 isocodes json-glib libcanberra-gtk3
     libgee libnotify libsecret sqlite webkitgtk glib-networking
-    libunwind
+    libunwind folks
   ];
 
   checkInputs = [ xvfb_run dbus ];
@@ -43,11 +34,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x build-aux/post_install.py
     patchShebangs build-aux/post_install.py
-  '';
 
-  preFixup = ''
-    # Add geary to path for geary-attach
-    gappsWrapperArgs+=(--prefix PATH : "$out/bin")
+    chmod +x desktop/geary-attach
   '';
 
   doCheck = true;
@@ -58,6 +46,11 @@ stdenv.mkDerivation rec {
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test -v --no-stdsplit
+  '';
+
+  preFixup = ''
+    # Add geary to path for geary-attach
+    gappsWrapperArgs+=(--prefix PATH : "$out/bin")
   '';
 
   passthru = {
