@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
+{ stdenv, fetch, fetchpatch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
@@ -39,6 +39,12 @@ let
     patches = [
       ./purity.patch
       ./clang-xpc.patch
+      # Backport for -static-pie, which the latter touches, and which is nice in
+      # its own right.
+      ./static-pie.patch
+      # Backport for the `--unwindlib=[libgcc|complier-rt]` flag, which is
+      # needed for our bootstrapping to not interfere with C.
+      ./unwindlib.patch
     ];
 
     postPatch = ''
