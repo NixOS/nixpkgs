@@ -86,14 +86,10 @@ if [ $(grep -c "$oldHash" "$nixFile") != 1 ]; then
     die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
 fi
 
-oldUrl=$(nix-instantiate $systemArg --eval -E "with import ./. {}; builtins.elemAt $attr.src.drvAttrs.urls 0" | tr -d '"')
+oldUrl=$(nix-instantiate $systemArg --eval -E "with import ./. {}; builtins.elemAt ($attr.src.drvAttrs.urls or [ $attr.src.url ]) 0" | tr -d '"')
 
 if [ -z "$oldUrl" ]; then
-    oldUrl=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.src.url" | tr -d '"')
-
-    if [ -z "$oldUrl" ]; then
-      die "Couldn't evaluate source url from '$attr.src'!"
-    fi
+    die "Couldn't evaluate source url from '$attr.src'!"
 fi
 
 drvName=$(nix-instantiate $systemArg --eval -E "with import ./. {}; (builtins.parseDrvName $attr.name).name" | tr -d '"')
