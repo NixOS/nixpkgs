@@ -47,6 +47,22 @@
 , jupyter_core
 , libhomfly
 , libbraiding
+, pybrial
+, sagenb
+, cvxopt
+, networkx
+, service-identity
+, psutil
+, sympy
+, fpylll
+, matplotlib
+, tkinter # optional, as a matplotlib backend (use with `%matplotlib tk`)
+, scipy
+, ipywidgets
+, rpy2
+, sphinx
+, typing
+, pillow
 }:
 
 # This is the core sage python package. Everything else is just wrappers gluing
@@ -115,6 +131,23 @@ buildPythonPackage rec {
     cysignals
     libhomfly
     libbraiding
+
+    pybrial
+    sagenb
+    cvxopt
+    networkx
+    service-identity
+    psutil
+    sympy
+    fpylll
+    matplotlib
+    tkinter # optional, as a matplotlib backend (use with `%matplotlib tk`)
+    scipy
+    ipywidgets
+    rpy2
+    sphinx
+    typing
+    pillow
   ];
 
   buildPhase = ''

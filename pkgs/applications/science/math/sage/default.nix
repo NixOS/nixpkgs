@@ -66,13 +66,21 @@ let
     mathjax = nodePackages.mathjax;
   };
 
+  makePythonWrapper = callPackage ./wrap.nix {};
+
   # The shell file that gets sourced on every sage start. Will also source
   # the env-locations file.
   sage-env = callPackage ./sage-env.nix {
     sagelib = python.pkgs.sagelib;
-    inherit env-locations;
+    inherit env-locations makePythonWrapper;
+    inherit sage-src;
     inherit python ecl singular palp flint pynac pythonEnv maxima-ecl;
     pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
+
+    inherit pari_data;
+    cysignals = python.pkgs.cysignals;
+    three = nodePackages.three;
+    mathjax = nodePackages.mathjax;
   };
 
   # The documentation for sage, building it takes a lot of ram.
@@ -166,7 +174,7 @@ let
   ecl = pkgs.ecl_16_1_2;
 in
 # A wrapper around sage that makes sure sage finds its docs (if they were build).
-callPackage ./sage.nix {
+(callPackage ./sage.nix {
   inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition;
   inherit withDoc;
-}
+}) // { env = sage-env; }
