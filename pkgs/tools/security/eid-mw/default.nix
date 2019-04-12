@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   let
     eid-nssdb-in = substituteAll {
       inherit (stdenv) shell;
+      isExecutable = true;
       src = ./eid-nssdb.in;
     };
   in
