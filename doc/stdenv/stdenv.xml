@@ -475,10 +475,48 @@ passthru.updateScript = writeScript "update-zoom-us" ''
 <programlisting>
 passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
 </programlisting>
+      Finally, the attribute can be an attribute set, listing the extra supported features among other things.
+<programlisting>
+passthru.updateScript = {
+  command = [ ../../update.sh pname ];
+  supportedFeatures = [ "commit" ];
+};
+</programlisting>
+      <note>
+       <para>
+        The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
+       </para>
+      </note>
      </para>
-     <para>
-      The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
-     </para>
+     <variablelist>
+      <title>Supported features</title>
+      <varlistentry>
+       <term>
+        <varname>commit</varname>
+       </term>
+       <listitem>
+        <para>
+         Whenever the update script exits with <literal>0</literal> return
+         status, it is expected to print a JSON list containing an object for
+         each updated attribute. Empty list can be returned when the script did
+         not update any files: for example, when the attribute is already the
+         latest version. The required keys can be seen below:
+<programlisting>
+[
+  {
+    "attrPath": "volume_key",
+    "oldVersion": "0.3.11",
+    "newVersion": "0.3.12",
+    "files": [
+      "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
+    ]
+  }
+]
+</programlisting>
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
      <para>
       For information about how to run the updates, execute <command>nix-shell maintainers/scripts/update.nix</command>.
      </para>
