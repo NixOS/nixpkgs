@@ -6589,7 +6589,6 @@ broken-packages:
   - lio-simple
   - lipsum-gen
   - liquid
-  - liquidhaskell-cabal
   - liquidhaskell-cabal-demo
   - list-fusion-probe
   - list-mux
