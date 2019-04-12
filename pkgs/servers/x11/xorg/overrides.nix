@@ -49,10 +49,6 @@ self: super:
     meta = attrs.meta // { license = lib.licenses.unfreeRedistributable; };
   });
 
-  fontcursormisc = super.fontcursormisc.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.mkfontscale ];
-  });
-
   fontmiscmisc = super.fontmiscmisc.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -74,9 +70,7 @@ self: super:
     inherit tradcpp;
   });
 
-  mkfontdir = super.mkfontdir.overrideAttrs (attrs: {
-    preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${self.mkfontscale}/bin";
-  });
+  mkfontdir = self.mkfontscale;
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
@@ -288,10 +282,6 @@ self: super:
     meta = attrs.meta // { platforms = stdenv.lib.platforms.linux; };
   });
 
-  oclock = super.oclock.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.libxkbfile ];
-  });
-
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -337,7 +327,6 @@ self: super:
     outputs = [ "out" "dev" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
-    buildInputs = attrs.buildInputs ++ [ mtdev libevdev ];
   });
 
   xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
@@ -349,19 +338,12 @@ self: super:
   });
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: rec {
-    name = "xf86-input-libinput-0.28.0";
-    src = fetchurl {
-      url = "mirror://xorg/individual/driver/${name}.tar.bz2";
-      sha256 = "189h8vl0005yizwrs4d0sng6j8lwkd3xi1zwqg8qavn2bw34v691";
-    };
     outputs = [ "out" "dev" ];
-    buildInputs = attrs.buildInputs ++ [ libinput ];
     installFlags = "sdkdir=\${dev}/include/xorg";
   });
 
   xf86inputsynaptics = super.xf86inputsynaptics.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ]; # *.pc pulls xorgserver.dev
-    buildInputs = attrs.buildInputs ++ [mtdev libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   });
 
@@ -426,7 +408,7 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [intltool];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [intltool];
 
     #TODO: resurrect patches for US_intl?
     patches = [ ./xkeyboard-config-eo.patch ];
@@ -614,8 +596,16 @@ self: super:
       }));
 
   lndir = super.lndir.overrideAttrs (attrs: {
+    buildInputs = [];
     preConfigure = ''
+      export XPROTO_CFLAGS=" "
+      export XPROTO_LIBS=" "
       substituteInPlace lndir.c \
+        --replace '<X11/Xos.h>' '<string.h>' \
+        --replace '<X11/Xfuncproto.h>' '<unistd.h>' \
+        --replace '_X_ATTRIBUTE_PRINTF(1,2)' '__attribute__((__format__(__printf__,1,2)))' \
+        --replace '_X_ATTRIBUTE_PRINTF(2,3)' '__attribute__((__format__(__printf__,2,3)))' \
+        --replace '_X_NORETURN' '__attribute__((noreturn))' \
         --replace 'n_dirs--;' ""
     '';
   });
@@ -690,7 +680,7 @@ self: super:
   });
 
   xwd = super.xwd.overrideAttrs (attrs: {
-    buildInputs = with self; attrs.buildInputs ++ [libXt libxkbfile];
+    buildInputs = with self; attrs.buildInputs ++ [libXt];
   });
 
   xrdb = super.xrdb.overrideAttrs (attrs: {

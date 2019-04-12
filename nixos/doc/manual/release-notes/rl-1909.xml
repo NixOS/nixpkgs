@@ -37,7 +37,85 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+       Besides the existing <option>services.prometheus</option> module which
+       targets Prometheus-1 a new <option>services.prometheus2</option> module
+       has been added which targets Prometheus-2.
+    </para>
+    <para>
+       Both modules can be enabled at the same time. In fact
+       <link xlink:href="https://prometheus.io/docs/prometheus/latest/migration/#storage">
+       this is needed for upgrading existing Prometheus-1 data to Prometheus-2
+       </link>.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.09-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Buildbot no longer supports Python 2, as support was dropped upstream in
+     version 2.0.0. Configurations may need to be modified to make them
+     compatible with Python 3.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     PostgreSQL now uses
+     <filename class="directory">/run/postgresql</filename> as its socket
+     directory instead of <filename class="directory">/tmp</filename>. So
+     if you run an application like eg. Nextcloud, where you need to use
+     the Unix socket path as the database host name, you need to change it
+     accordingly.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The directory where Prometheus will store its metric data is now
+      managed by systemd's StateDirectory mechanism. It still defaults
+      to <literal>/var/lib/prometheus</literal>.
+    </para>
+    <para>
+      Its location can be specified by the new
+      <option>services.prometheus.stateDir</option> option which
+      defaults to <literal>prometheus</literal>. Note that this should
+      be a directory relative to <literal>/var/lib/</literal>.
+    </para>
+    <para>
+      The option <option>services.prometheus.dataDir</option> has been
+      deprecated. You can still set it but it's now required to have
+      <literal>/var/lib/</literal> as a prefix and you can't set
+      <option>services.prometheus.stateDir</option> at the same time.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The options <option>services.prometheus.alertmanager.user</option> and
+      <option>services.prometheus.alertmanager.group</option> have been removed
+      because the alertmanager service is now using systemd's <link
+      xlink:href="http://0pointer.net/blog/dynamic-users-with-systemd.html">
+      DynamicUser mechanism</link> which obviates these options.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The NetworkManager systemd unit was renamed back from network-manager.service to
+      NetworkManager.service for better compatibility with other applications expecting this name.
+      The same applies to ModemManager where modem-manager.service is now called ModemManager.service again.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -64,6 +142,16 @@
      <literal>true</literal> by default. Please set it to
      <literal>true</literal> now in your <literal>configuration.nix</literal>
      and fix all the bugs it uncovers.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>vlc</literal> package gained support for Chromecast
+     streaming, enabled by default. TCP port 8010 must be open for it to work,
+     so something like <literal>networking.firewall.allowedTCPPorts = [ 8010
+     ];</literal> may be required in your configuration. Also consider enabling
+     <link xlink:href="https://nixos.wiki/wiki/Accelerated_Video_Playback">
+     Accelerated Video Playback</link> for better transcoding performance.
     </para>
    </listitem>
   </itemizedlist>

@@ -2,12 +2,12 @@
 , setuptools }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
+  version = "2.1.0";
   pname = "pyshp";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "049xj760s75nkvs7rhz710a6x3lvvfajddknmfz1vkf2p3f2l2as";
+    sha256 = "1h75a5fisqqj48m6wq7jhdxv6arjg3mvnr5q404pvfbjscj7yp76";
   };
 
   buildInputs = [ setuptools ];

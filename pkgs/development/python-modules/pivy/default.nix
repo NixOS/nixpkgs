@@ -16,8 +16,13 @@ buildPythonPackage rec {
     sha256 = "18n14ha2d3j3ghg2f2aqnf2mks94nn7ma9ii7vkiwcay93zm82cf";
   };
 
+  nativeBuildInputs = with pkgs; [
+    swig1 coin3d soqt
+  ];
+
   buildInputs = with pkgs; with xorg; [
-    swig1 coin3d soqt libGLU_combined
+    coin3d soqt
+    libGLU_combined
     libXi libXext libSM libICE libX11
   ];
 

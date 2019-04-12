@@ -6,12 +6,12 @@ let
   modulesDirs = lib.concatMapStringsSep ":" (x: "${x}/lib/modules") systems;
 
 in stdenv.mkDerivation rec {
-  name = "kmod-${version}";
-  version = "25";
+  pname = "kmod";
+  version = "26";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
-    sha256 = "1kgixs4m3jvwk7fb3d18n6j77qhgi9qfv4csj35rs5ancr4ycrbi";
+    url = "mirror://kernel/linux/utils/kernel/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "17dvrls70nr3b3x1wm8pwbqy4r8a5c20m0dhys8mjhsnpg425fsp";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];

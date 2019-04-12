@@ -274,6 +274,8 @@ in {
     bap = pkgs.ocamlPackages.bap;
   };
 
+  baselines = callPackage ../development/python-modules/baselines { };
+
   bash_kernel = callPackage ../development/python-modules/bash_kernel { };
 
   bayespy = callPackage ../development/python-modules/bayespy { };
@@ -615,6 +617,8 @@ in {
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
+  pybullet = callPackage ../development/python-modules/pybullet { };
+
   pycairo = callPackage ../development/python-modules/pycairo {
     inherit (pkgs) pkgconfig;
   };
@@ -936,6 +940,8 @@ in {
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
+  aioresponses = callPackage ../development/python-modules/aioresponses { };
+
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
@@ -1068,6 +1074,8 @@ in {
 
   avro3k = callPackage ../development/python-modules/avro3k {};
 
+  aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
+
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify {};
@@ -1172,6 +1180,8 @@ in {
   channels = callPackage ../development/python-modules/channels {};
 
   cheroot = callPackage ../development/python-modules/cheroot {};
+
+  chevron = callPackage ../development/python-modules/chevron {};
 
   cli-helpers = callPackage ../development/python-modules/cli-helpers {};
 
@@ -1363,7 +1373,10 @@ in {
 
   cheetah = callPackage ../development/python-modules/cheetah { };
 
-  cherrypy = callPackage ../development/python-modules/cherrypy {};
+  cherrypy = if isPy3k then
+    callPackage ../development/python-modules/cherrypy { }
+  else
+    callPackage ../development/python-modules/cherrypy/17.nix { };
 
   cfgv = callPackage ../development/python-modules/cfgv { };
 
@@ -1749,6 +1762,8 @@ in {
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
 
+  dnslib = callPackage ../development/python-modules/dnslib { };
+
   dnspython = callPackage ../development/python-modules/dnspython { };
   dns = self.dnspython; # Alias for compatibility, 2017-12-10
 
@@ -2110,6 +2125,8 @@ in {
   paperspace = callPackage ../development/python-modules/paperspace { };
 
   paperwork-backend = callPackage ../applications/office/paperwork/backend.nix { };
+
+  papis = callPackage ../development/python-modules/papis { };
 
   papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
 
@@ -3122,6 +3139,8 @@ in {
 
   marisa-trie = callPackage ../development/python-modules/marisa-trie { };
 
+  Markups = callPackage ../development/python-modules/Markups { };
+
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
@@ -3180,6 +3199,8 @@ in {
   milksnake = callPackage ../development/python-modules/milksnake { };
 
   minimock = callPackage ../development/python-modules/minimock { };
+
+  minio = callPackage ../development/python-modules/minio { };
 
   moviepy = callPackage ../development/python-modules/moviepy { };
 
@@ -3352,6 +3373,8 @@ in {
   };
 
   nixpkgs = callPackage ../development/python-modules/nixpkgs { };
+
+  nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
 
   nodeenv = callPackage ../development/python-modules/nodeenv { };
 
@@ -3727,8 +3750,6 @@ in {
 
   pyblock = callPackage ../development/python-modules/pyblock { };
 
-  pybcrypt = callPackage ../development/python-modules/pybcrypt { };
-
   pyblosxom = callPackage ../development/python-modules/pyblosxom { };
 
   pycapnp = callPackage ../development/python-modules/pycapnp { };
@@ -3928,6 +3949,8 @@ in {
 
   purepng = callPackage ../development/python-modules/purepng { };
 
+  pyhocon = callPackage ../development/python-modules/pyhocon { };
+
   pymaging = callPackage ../development/python-modules/pymaging { };
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
@@ -3957,6 +3980,8 @@ in {
   pysqlite = callPackage ../development/python-modules/pysqlite { };
 
   pysvn = callPackage ../development/python-modules/pysvn { };
+
+  python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 
@@ -4016,6 +4041,10 @@ in {
   requests_toolbelt = self.requests-toolbelt; # Old attr, 2017-09-26
 
   retry_decorator = callPackage ../development/python-modules/retry_decorator { };
+
+  roboschool = callPackage ../development/python-modules/roboschool {
+    inherit (pkgs) pkgconfig; # use normal pkgconfig, not the python package
+  };
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
@@ -4179,6 +4208,8 @@ in {
   serpy = callPackage ../development/python-modules/serpy { };
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
+
+  serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
   shippai = callPackage ../development/python-modules/shippai {};
 
@@ -4397,6 +4428,8 @@ in {
 
   xlwt = callPackage ../development/python-modules/xlwt { };
 
+  xxhash = callPackage ../development/python-modules/xxhash { };
+
   youtube-dl = callPackage ../tools/misc/youtube-dl {};
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
@@ -4407,6 +4440,8 @@ in {
   zconfig = callPackage ../development/python-modules/zconfig { };
 
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
+
+  zerorpc = callPackage ../development/python-modules/zerorpc { };
 
   zipstream = callPackage ../development/python-modules/zipstream { };
 
@@ -4716,6 +4751,8 @@ in {
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 
   zfec = callPackage ../development/python-modules/zfec { };
+
+  zipp = callPackage ../development/python-modules/zipp { };
 
   zope_broken = callPackage ../development/python-modules/zope_broken { };
 
@@ -5437,6 +5474,8 @@ in {
   lzstring = callPackage ../development/python-modules/lzstring { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
+
+  aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 });
 
 in fix' (extends overrides packages)

@@ -12,6 +12,10 @@ stdenv.mkDerivation {
     sha256 = "0vjms4j75zvv5b2siyafg7hh924ysx2cwjad8spzp7x87n8n929c";
   };
 
+  patches = [
+    ./0001-Makefile-use-SOURCE_DATE_EPOCH-for-reproducibility.patch
+  ];
+
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 

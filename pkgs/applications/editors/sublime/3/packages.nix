@@ -5,10 +5,10 @@ let
 in
   rec {
     sublime3-dev = common {
-      buildVersion = "3184";
+      buildVersion = "3203";
       dev = true;
-      x32sha256 = "1b6f1fid75g5z247dbnyyj276lrlv99scrdk1vvfcr6vyws77vzr";
-      x64sha256 = "03127jhfjr17ai96p3axh5b5940fds8jcw6vkid8y6dmvd2dpylz";
+      x32sha256 = "004hnlm2dvcfagf3bkbfqxlnkgqk46jrm8w9yagpjwkpdy76mgyx";
+      x64sha256 = "0dp4vi39s2gq5a7snz0byrf44i0csbzwq6hn7i2zqa6rpvfywa1d";
     } {};
 
     sublime3 = common {

@@ -7,17 +7,17 @@
 let
   unicode-data = callPackage ./unicode-data.nix {};
 in stdenv.mkDerivation rec {
-  name = "gucharmap-${version}";
-  version = "11.0.3";
+  pname = "gucharmap";
+  version = "12.0.1";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = "gucharmap";
+    repo = pname;
     rev = version;
-    sha256 = "1a590nxy8jdf6zxh6jdsyvhxyaz94ixx3aa1pj7gicf1aqp26vnh";
+    sha256 = "0si3ymyfzc5v7ly0dmcs3qgw2wp8cyasycq5hmcr8frl09lr6gkw";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gucharmap";
+      packageName = pname;
     };
   };
 

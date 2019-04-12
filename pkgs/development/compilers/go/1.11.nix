@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
+{ stdenv, fetchurl, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
 , mailcap, runtimeShell
-, buildPackages, targetPackages }:
+, buildPackages, pkgsTargetTarget
+}:
 
 let
 
@@ -29,13 +30,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.11.5";
+  version = "1.11.6";
 
-  src = fetchFromGitHub {
-    owner = "golang";
-    repo = "go";
-    rev = "go${version}";
-    sha256 = "0d45057rc0bngq0nja847cagxji42qmlywr68f0dkg51im8nyr9y";
+  src = fetchurl {
+    url = "https://dl.google.com/go/go${version}.src.tar.gz";
+    sha256 = "0cz1sdhxf9283p1p4jxb020pym0ncd0qlfh36r3hkv6bbm1a2vd9";
   };
 
   # perl is used for testing go vet
@@ -125,7 +124,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.11.patch
-    ./ssl-cert-file-1.9.patch
+    ./ssl-cert-file-1.12.1.patch
     ./remove-test-pie.patch
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
@@ -152,16 +151,12 @@ stdenv.mkDerivation rec {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
-      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc"
-    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${stdenv.cc.targetPrefix}cc"
+  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
     else
       null;
-  CXX_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
-      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++"
-    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${stdenv.cc.targetPrefix}c++"
+  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++"
     else
       null;
 

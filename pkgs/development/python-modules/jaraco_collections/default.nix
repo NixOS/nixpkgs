@@ -1,5 +1,6 @@
 { buildPythonPackage, fetchPypi, setuptools_scm
-, six, jaraco_classes }:
+, six, jaraco_classes, jaraco_text
+}:
 
 buildPythonPackage rec {
   pname = "jaraco.collections";
@@ -11,7 +12,7 @@ buildPythonPackage rec {
 
   doCheck = false;
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ six jaraco_classes ];
+  propagatedBuildInputs = [ six jaraco_classes jaraco_text ];
 
   # break dependency cycle
   patchPhase = ''

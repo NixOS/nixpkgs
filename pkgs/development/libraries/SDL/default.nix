@@ -1,8 +1,9 @@
 { stdenv, config, libGLSupported, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
 , openglSupport ? libGLSupported, libGL, libGLU
-, alsaSupport ? stdenv.isLinux, alsaLib
-, x11Support ? !stdenv.isCygwin, libXext, libICE, libXrandr
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, libXext, libICE, libXrandr
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 , cf-private
 }:
@@ -11,9 +12,6 @@
 # SDL2 expression too
 
 with stdenv.lib;
-
-assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
-assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null && libGLU != null);
 
 stdenv.mkDerivation rec {
   name    = "SDL-${version}";
@@ -30,18 +28,18 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ]
+    ++ optional stdenv.isLinux libcap;
 
   propagatedBuildInputs = [ libiconv ]
     ++ optionals x11Support [ libXext libICE libXrandr ]
-    ++ optional stdenv.isLinux libcap
     ++ optionals openglSupport [ libGL libGLU ]
     ++ optional alsaSupport alsaLib
     ++ optional pulseaudioSupport libpulseaudio
     ++ optional stdenv.isDarwin Cocoa;
 
   buildInputs = [ ]
-    ++ optional (!stdenv.hostPlatform.isMinGW) audiofile
+    ++ optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
     ++ optionals stdenv.isDarwin [
       AudioUnit CoreAudio CoreServices Kernel OpenGL
       # Needed for NSDefaultRunLoopMode symbols.

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
-, gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libfixposix, libssh2 }:
+, gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libssh2 }:
 
 
 let
@@ -11,18 +11,18 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "sequeler";
-  version = "0.6.8";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rx8h3bi86vk8j7c447pwm590z061js4w45nzrp66r41v0rnh5vk";
+    sha256 = "1x2ikagjsgnhhhwkj09ihln17mq4wjq3wwbnf02j2p3jpp4i8w1i";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig pantheon.vala gettext wrapGAppsHook python3 desktop-file-utils ];
 
-  buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libfixposix libssh2 ];
+  buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libssh2 ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/Alecaddd/sequeler;
     license = licenses.gpl3;
-    maintainers = [ maintainers.etu ];
+    maintainers = [ maintainers.etu ] ++ pantheon.maintainers;
     platforms = platforms.linux;
   };
 }

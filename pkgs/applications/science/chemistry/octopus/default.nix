@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "8.3";
+  version = "8.4";
   fftwAll = symlinkJoin { name ="ftw-dev-out"; paths = [ fftw.dev fftw.out ]; };
 
 in stdenv.mkDerivation {
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.tddft.org/programs/octopus/down.php?file=${version}/octopus-${version}.tar.gz";
-    sha256 = "0nr3qmyfhp6fy8qrp4p43pl5xxfqgqg5g1c2775hxhpsi29xr7zf";
+    sha256 = "1fx5ssnf65b9ld7xs9rvvg8i80pblxpyhqkir0a7xshkk1g60z55";
   };
 
   nativeBuildInputs = [ perl procps fftw.dev ];

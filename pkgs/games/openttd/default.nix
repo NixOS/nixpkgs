@@ -6,8 +6,8 @@
 
 let
   opengfx = fetchzip {
-    url = "http://binaries.openttd.org/extra/opengfx/0.5.2/opengfx-0.5.2-all.zip";
-    sha256 = "1sjzwl8wfdj0izlx2qdq15bqiy1vzq7gq7drydfwwryk173ig5sa";
+    url = "http://binaries.openttd.org/extra/opengfx/0.5.5/opengfx-0.5.5-all.zip";
+    sha256 = "065l0g5nawcd6fkfbsfgviwgq9610y7gxzkpmd19i423d0lrq6d8";
   };
 
   opensfx = fetchzip {
@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchurl {
-    url = "http://binaries.openttd.org/releases/${version}/${name}-source.tar.xz";
-    sha256 = "0zq8xdg0k92p3s4j9x76591zaqz7k9ra69q008m209vdfffjvly2";
+    url = "http://proxy.binaries.openttd.org/openttd-releases/${version}/${name}-source.tar.xz";
+    sha256 = "06blx844q6a248jwzqlgi82692vvkmvb00bfdx4jhcwp9mayvza5";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];

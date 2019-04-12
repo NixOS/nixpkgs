@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-sound-output-device-chooser";
-  version = "unstable-2018-12-30";
+  version = "unstable-2019-03-10";
 
   src = fetchFromGitHub {
     owner = "kgshank";
     repo = "gse-sound-output-device-chooser";
-    rev = "3ec8aded413034e7943eb36ee509405873ccc575";
-    sha256 = "1svc3d3pr2j7fr0660a0zj2n320vld8zkkddf5iphbdwivmkrh3n";
+    rev = "26c66da6795104802f3240bd9f5741f64367c8e7";
+    sha256 = "153cdd0pip4nbpc2a9y1v3y7qivafv3wk296zqdamcjrd0p94nqz";
   };
 
   dontBuild = true;

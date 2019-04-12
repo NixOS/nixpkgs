@@ -7,6 +7,7 @@ in
 runCommand "${name}" {
   script = substituteAll {
     src = ./service-wrapper.sh;
+    isExecutable = true;
     inherit (stdenv) shell;
     inherit coreutils;
   };

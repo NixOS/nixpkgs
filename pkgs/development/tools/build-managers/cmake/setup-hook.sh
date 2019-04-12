@@ -71,6 +71,11 @@ cmakeConfigurePhase() {
     cmakeFlags="-DCMAKE_INSTALL_LIBDIR=${!outputLib}/lib $cmakeFlags"
     cmakeFlags="-DCMAKE_INSTALL_INCLUDEDIR=${!outputDev}/include $cmakeFlags"
 
+    # Don’t build tests when doCheck = false
+    if [ -z "$doCheck" ]; then
+        cmakeFlags="-DBUILD_TESTING=OFF $cmakeFlags"
+    fi
+
     # Avoid cmake resetting the rpath of binaries, on make install
     # And build always Release, to ensure optimisation flags
     cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"

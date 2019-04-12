@@ -324,10 +324,11 @@ rec {
     pname = "re2";
     hash = "0bl65d0nmvr7k1mkkcc4aai86l5qzgn1xxwmszshpwhaz87cqghd";
     propagatedBuildInputs = [ core_kernel ];
-    meta = {
-      description = "OCaml bindings for RE2";
-      broken = stdenv.isDarwin;
-    };
+    prePatch = ''
+      substituteInPlace src/re2_c/jbuild --replace 'CXX=g++' 'CXX=c++'
+      substituteInPlace src/jbuild --replace '(cxx_flags ((:standard \ -pedantic) (-I re2_c/libre2)))' '(cxx_flags ((:standard \ -pedantic) (-I re2_c/libre2) (-x c++)))'
+    '';
+    meta.description = "OCaml bindings for RE2";
   };
 
   core_extended = janePackage {

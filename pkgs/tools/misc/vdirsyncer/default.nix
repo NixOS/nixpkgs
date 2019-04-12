@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, fetchpatch, glibcLocales, rustPlatform, pkgconfig, openssl, Security }:
+{ stdenv, python3Packages, fetchFromGitHub, fetchpatch, rustPlatform, pkgconfig, openssl, Security }:
 
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
@@ -32,9 +32,9 @@ python3Packages.buildPythonApplication rec {
     shippai
   ];
 
-  buildInputs = with python3Packages; [ setuptools_scm ];
+  nativeBuildInputs = with python3Packages; [ setuptools_scm ];
 
-  checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ] ++ [ glibcLocales ];
+  checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ];
 
   patches = [
     # Fixes for hypothesis: https://github.com/pimutils/vdirsyncer/pull/779
@@ -66,11 +66,8 @@ python3Packages.buildPythonApplication rec {
     ln -s ${native}/lib/libvdirsyncer_rustext* rust/target/release/
   '';
 
-  LC_ALL = "en_US.utf8";
-
   checkPhase = ''
     rm -rf vdirsyncer
-    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
     make DETERMINISTIC_TESTS=true test
   '';
 
@@ -78,7 +75,6 @@ python3Packages.buildPythonApplication rec {
     homepage = https://github.com/pimutils/vdirsyncer;
     description = "Synchronize calendars and contacts";
     maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.all;
     license = licenses.mit;
   };
 }

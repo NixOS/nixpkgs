@@ -4,13 +4,14 @@
 , makeWrapper
 , fetchzip
 , fetchurl
-, nodejs
+, nodejs-10_x
 , coreutils
 , which
 }:
 
 with stdenv.lib;
 let
+  nodejs = nodejs-10_x;
   inherit (builtins) elemAt;
   info = splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;
@@ -18,25 +19,13 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "0lip4bj3jazv83gydw99dnp03cb0fd1p4z3lvpjbisgmqffbbg5v";
-      "x86_64-darwin" = "0hjdnqagcwbjhpcfyr6w0zmy4sjnx4fyp79czb0vp7dig5arnwm3";
+      "x86_64-linux"  = "039ll00kvrp881cyybb04z90cw68j7p5cspgdxh0bky9lyi9qpwb";
+      "x86_64-darwin" = "0qrakrihcjwn9dic77b0k9ja3zf6nbz534v76xid9gv20md5dds3";
     }
     else {
-      "x86_64-linux"  = "1jybn4q7pz61iijzl85d948szlacfcbldn2nhhsb6063xwvf30sa";
-      "x86_64-darwin" = "1bl1h6hgp9l5cjq6pzj2x855wjaka8hbs0fn2c03lbzsc991dppr";
+      "x86_64-linux"  = "1v1fbmfkbnlx043z3yx02gaqqy63bj2ymvcby66n4qq0vlpahvwx";
+      "x86_64-darwin" = "1y4q7a2b9arln94d6sj547qkv3258jlgcz9b342fh6khlbpfjb8c";
     };
-
-  # For the correct phantomjs version see:
-  # https://github.com/elastic/kibana/blob/master/x-pack/plugins/reporting/server/browsers/phantom/paths.js
-  phantomjs = rec {
-    name = "phantomjs-${version}-linux-x86_64";
-    version = "2.1.1";
-    src = fetchzip {
-      inherit name;
-      url = "https://github.com/Medium/phantomjs/releases/download/v${version}/${name}.tar.bz2";
-      sha256 = "0g2dqjzr2daz6rkd6shj6rrlw55z4167vqh7bxadl8jl6jk7zbfv";
-    };
-  };
 
 in stdenv.mkDerivation rec {
   name = "kibana-${optionalString (!enableUnfree) "oss-"}${version}";
@@ -48,7 +37,7 @@ in stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Kibana specifies it specifically needs nodejs 8.11.4 but nodejs in nixpkgs is at 8.12.0.
+    # Kibana specifies it specifically needs nodejs 10.15.2 but nodejs in nixpkgs is at 10.15.3.
     # The <nixpkgs/nixos/tests/elk.nix> test succeeds with this newer version so lets just
     # disable the version check.
     ./disable-nodejs-version-check.patch
@@ -63,13 +52,6 @@ in stdenv.mkDerivation rec {
     makeWrapper $out/libexec/kibana/bin/kibana $out/bin/kibana \
       --prefix PATH : "${stdenv.lib.makeBinPath [ nodejs coreutils which ]}"
     sed -i 's@NODE=.*@NODE=${nodejs}/bin/node@' $out/libexec/kibana/bin/kibana
-  '' +
-  # phantomjs is needed in the unfree version. When phantomjs doesn't exist in
-  # $out/libexec/kibana/data kibana will try to download and unpack it during
-  # runtime which will fail because the nix store is read-only. So we make sure
-  # it already exist in the nix store.
-  optionalString enableUnfree ''
-    ln -s ${phantomjs.src} $out/libexec/kibana/data/${phantomjs.name}
   '';
 
   meta = {

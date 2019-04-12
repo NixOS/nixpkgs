@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gnome3, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gnome3, gtk3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-desktop-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnome3.dconf
-    gnome3.gtk
+    gtk3
   ];
 
   meta = with stdenv.lib; {

@@ -140,6 +140,7 @@ in
   android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt (linuxCommon // {
   });
 
+  msp430 = mapTestOnCross lib.systems.examples.msp430 embedded;
   avr = mapTestOnCross lib.systems.examples.avr embedded;
   arm-embedded = mapTestOnCross lib.systems.examples.arm-embedded embedded;
   powerpc-embedded = mapTestOnCross lib.systems.examples.ppc-embedded embedded;

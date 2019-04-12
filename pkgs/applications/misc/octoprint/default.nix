@@ -19,6 +19,9 @@ let
       (mkOverride "pylru"       "1.0.9"  "0b0pq0l7xv83dfsajsc49jcxzc99kb9jfx1a1dlx22hzcy962dvi")
       (mkOverride "sarge"       "0.1.4"  "08s8896973bz1gg0pkr592w6g4p6v47bkfvws5i91p9xf8b35yar")
       (mkOverride "tornado"     "4.5.3"  "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d")
+
+      # https://github.com/NixOS/nixpkgs/pull/58179#issuecomment-478605134
+      (mkOverride "werkzeug"    "0.14.1" "c3fd7a7d41976d9f44db327260e263132466836cef6f91512889ed60ad26557c")
     ]);
   };
 

@@ -13,7 +13,11 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake pyside qt4 pysideShiboken ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ qt4 ];
+
+  propagatedBuildInputs = [ pyside pysideShiboken ];
 
   meta = {
     description = "Tools for pyside, the LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";

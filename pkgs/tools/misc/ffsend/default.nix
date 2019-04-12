@@ -2,34 +2,39 @@
 , darwin
 
 , x11Support ? stdenv.isLinux
-, xclip ? null
+, xclip ? null, xsel ? null
+, preferXsel ? false # if true and xsel is non-null, use it instead of xclip
 }:
 
-assert x11Support -> xclip != null;
+assert (x11Support && stdenv.isLinux) -> xclip != null || xsel != null;
 
 with rustPlatform;
 
 buildRustPackage rec {
   name = "ffsend-${version}";
-  version = "0.2.38";
+  version = "0.2.42";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "1kxxcqyilbhzcsnddlf7ha3dd57qj82yvbb9jsssimnlcskx84hx";
+    sha256 = "0lsdn967rq6hf3fmkynznsvj8fcka5wi1mpcl3wfa7hf58r266yq";
   };
 
-  cargoSha256 = "1qxvm2pz01na6nijdn0hlv5hxshiz3pfy6km7n9hjyakwi684a0l";
+  cargoSha256 = "1f1npdr8v9vlv3xdraq1qang4l0j0w9slbws4da5ylw195nb4qx5";
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ openssl ]
   ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
   ;
 
-  preBuild = if x11Support then ''
-    export XCLIP_PATH="${xclip}/bin/xclip"
-  '' else null;
+  preBuild = stdenv.lib.optionalString (x11Support && stdenv.isLinux) (
+    if preferXsel && xsel != null then ''
+      export XSEL_PATH="${xsel}/bin/xsel"
+    '' else ''
+      export XCLIP_PATH="${xclip}/bin/xclip"
+    ''
+  );
 
   postInstall = ''
     install -Dm644 contrib/completions/_ffsend "$out/share/zsh/site-functions/_ffsend"

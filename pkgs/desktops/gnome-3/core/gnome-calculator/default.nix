@@ -1,14 +1,14 @@
 { stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkgconfig, libxml2
-, gtk3, glib, gtksourceview3, wrapGAppsHook, gobject-introspection, python3
+, gtk3, glib, gtksourceview4, wrapGAppsHook, gobject-introspection, python3
 , gnome3, mpfr, gmp, libsoup, libmpc }:
 
 stdenv.mkDerivation rec {
   name = "gnome-calculator-${version}";
-  version = "3.30.1";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0qkzcmj51cjmljxl1nc84h6jgq1a51xj4g6jwh3ymgm19m3sqypc";
+    sha256 = "0m4g7ml6ch9cc4wdchlyspakz3a9ak1rka26j08nvhhvllkdkqlw";
   };
 
   nativeBuildInputs = [
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3 glib libxml2 gtksourceview3 mpfr gmp
+    gtk3 glib libxml2 gtksourceview4 mpfr gmp
     gnome3.adwaita-icon-theme
     gnome3.gsettings-desktop-schemas libsoup libmpc
   ];

@@ -13,14 +13,14 @@ let
     sha256Hash = "0smh3d3v8n0isxg7fkls20622gp52f58i2b6wa4a0g8wnvmd6mw2";
   };
   betaVersion = {
-    version = "3.4.0.16"; # "Android Studio 3.4 RC 2"
-    build = "183.5370308";
-    sha256Hash = "0d7d6n7n1zzhxpdykbwwbrw139mqxkp20d4l0570pk7975p1s2q9";
+    version = "3.4.0.17"; # "Android Studio 3.4 RC 3"
+    build = "183.5400832";
+    sha256Hash = "1v4apc73jdhavhzj8j46mzh15rw08w1hd9y9ykarj3b5q7i2vyq1";
   };
   latestVersion = { # canary & dev
-    version = "3.5.0.6"; # "Android Studio 3.5 Canary 7"
-    build = "183.5346365";
-    sha256Hash = "0dfkhzsxabrv8cwgyv3gicpglgpccmi1ig5shlhp6a006awgfyj0";
+    version = "3.5.0.9"; # "Android Studio 3.5 Canary 10"
+    build = "191.5416148";
+    sha256Hash = "03d2x6bqasw417dxc7b8y65rral73xm2ci512gprmsvwy42k3mqi";
   };
 in rec {
   # Old alias (TODO @primeos: Remove after 19.03 is branched off):

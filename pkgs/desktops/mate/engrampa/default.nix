@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gnome3, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gnome3, gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "engrampa-${version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    gnome3.gtk
+    gtk3
     mate.caja
     hicolor-icon-theme
     mate.mate-desktop

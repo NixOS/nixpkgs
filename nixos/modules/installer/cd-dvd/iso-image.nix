@@ -88,7 +88,7 @@ let
   #     result in incorrect boot entries.
 
   baseIsolinuxCfg = ''
-    SERIAL 0 38400
+    SERIAL 0 115200
     TIMEOUT ${builtins.toString syslinuxTimeout}
     UI vesamenu.c32
     MENU TITLE NixOS

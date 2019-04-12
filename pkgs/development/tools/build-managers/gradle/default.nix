@@ -52,32 +52,32 @@ rec {
   };
 
   gradle_latest = gradleGen rec {
-    name = "gradle-5.0";
-    nativeVersion = "0.14";
+    name = "gradle-5.3.1";
+    nativeVersion = "0.17";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "19krxq9pid9dg6bhdbhhg7ykm5kcx7lv7cr58rj67g0h6jgsqmv1";
+      sha256 = "0dkl6f17zl9pc6y2xm8xqz23x53fck4p2648vpq8572f0mxa2n8w";
     };
   };
 
   gradle_4_10 = gradleGen rec {
-    name = "gradle-4.10.2";
+    name = "gradle-4.10.3";
     nativeVersion = "0.14";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0a9s2iisivgaapsz4vq1l8fa2w0wnlq0cj67yv5a0rybnahnv75l";
+      sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
     };
   };
 
   gradle_3_5 = gradleGen rec {
-    name = "gradle-3.5";
+    name = "gradle-3.5.1";
     nativeVersion = "0.14";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "046i268zkg89ps7c1sq8yx9lbn9kighh4gcskxmzf3qriiwm0x0b";
+      sha256 = "1y7fbhrdriclbs5ksxahi0aafsz760lalwyz8r4llysc5pskbkld";
     };
   };
 
@@ -91,6 +91,10 @@ rec {
     };
   };
 
+  # Nix pkgs that depend on this old version:
+  # pkgs/tools/security/jd-gui/default.nix
+  # pkgs/servers/mxisd/default.nix
+  # If these packages are updated, this old version can probably be removed
   gradle_2_5 = gradleGen rec {
     name = "gradle-2.5";
     nativeVersion = "0.10";

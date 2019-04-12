@@ -1,19 +1,27 @@
-{ buildPythonPackage, stdenv, fetchPypi, pandas, plotly, colorlover
+{ buildPythonPackage, stdenv, fetchPypi
+, numpy, pandas, plotly, six, colorlover
+, ipython, ipywidgets, nose
 }:
 
 buildPythonPackage rec {
   pname = "cufflinks";
-  version = "0.14.6";
+  version = "0.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4188324361cc584214150aadaeb28ed07e9d150adb714b53c5f09d5b3fcdd28a";
+    sha256 = "014098a4568199957198c0a7fe3dbeb3b4010b6de8d692a41fe3b3ac107b660e";
   };
 
-  propagatedBuildInputs = [ pandas plotly colorlover ];
+  propagatedBuildInputs = [
+    numpy pandas plotly six colorlover
+    ipython ipywidgets
+  ];
 
-  # tests not included in archive
-  doCheck = false;
+  checkInputs = [ nose ];
+
+  checkPhase = ''
+    nosetests -xv tests.py
+  '';
 
   meta = {
     homepage = https://github.com/santosjorge/cufflinks;

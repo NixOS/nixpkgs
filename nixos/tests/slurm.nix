@@ -108,6 +108,8 @@ in {
   # cluster in the database before slurmctld is restarted
   subtest "add_account", sub {
     $control->succeed("sacctmgr -i add cluster default");
+    # check for cluster entry
+    $control->succeed("sacctmgr list cluster | awk '{ print \$1 }' | grep default");
   };
 
   subtest "can_start_slurmctld", sub {
@@ -133,6 +135,7 @@ in {
 
   subtest "check_slurm_dbd", sub {
     # find the srun job from above in the database
+    sleep 2;
     $submit->succeed("sacct | grep hostname");
   };
   '';

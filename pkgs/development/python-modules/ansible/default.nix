@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "ansible";
-  version = "2.7.8";
+  version = "2.7.9";
 
   src = fetchurl {
     url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-    sha256 = "11yx7vd0mp5gkq428af141dwnrwf8f9cp3f65243qbs9icjxnrrx";
+    sha256 = "19vyf60zfmnv7frwm96bzqzvia69dysy9apk8bl84vr03ib9vrbf";
   };
 
   prePatch = ''

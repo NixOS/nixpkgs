@@ -67,32 +67,12 @@ qtModule {
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
     + optionalString stdenv.isDarwin (''
-      # Remove annoying xcode check
-      substituteInPlace mkspecs/features/platform.prf \
-        --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false \
-        --replace "/usr/bin/xcodebuild" "xcodebuild"
-
-      substituteInPlace src/3rdparty/chromium/build/mac_toolchain.py \
-        --replace "/usr/bin/xcode-select" "xcode-select"
-
       substituteInPlace src/core/config/mac_osx.pri \
-        --replace /usr ${stdenv.cc} \
-        --replace "isEmpty(QMAKE_MAC_SDK_VERSION)" false
-
+        --replace /usr ${stdenv.cc}
     ''
-    # TODO remove when new Apple SDK is in
-    + (if lib.versionOlder qtCompatVersion "5.11" then ''
-    substituteInPlace src/3rdparty/chromium/base/mac/foundation_util.mm \
-      --replace "NSArray<NSString*>*" "NSArray*"
-    substituteInPlace src/3rdparty/chromium/base/mac/sdk_forward_declarations.h \
-      --replace "NSDictionary<VNImageOption, id>*" "NSDictionary*" \
-      --replace "NSArray<VNRequest*>*" "NSArray*" \
-      --replace "typedef NSString* VNImageOption NS_STRING_ENUM" "typedef NSString* VNImageOption"
-    '' else ''
-    substituteInPlace src/3rdparty/chromium/third_party/webrtc/sdk/objc/Framework/Classes/Common/RTCFieldTrials.mm \
-      --replace "NSDictionary<NSString *, NSString *> *" "NSDictionary*"
-    substituteInPlace src/3rdparty/chromium/third_party/webrtc/sdk/objc/Framework/Headers/WebRTC/RTCFieldTrials.h \
-      --replace "NSDictionary<NSString *, NSString *> *" "NSDictionary*"
+    + (optionalString (lib.versionAtLeast qtCompatVersion "5.11") ''
+      substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
+        --replace '$sysroot/usr' "${darwin.xnu}"
     '')
     + ''
 
@@ -113,9 +93,6 @@ print('sdk_version="10.10"')
 print('sdk_platform_path=""')
 print('sdk_build="17B41"')
 EOF
-
-    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace '$sysroot/usr' "${darwin.xnu}"
 
     # Apple has some secret stuff they don't share with OpenBSM
     substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \

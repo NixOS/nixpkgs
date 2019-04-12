@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.0";
+  version = "1.0.5";
 
   format = "other";
   doCheck = false;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "00hjxpgmhzhyjjdpm92cbbxwnc17xdhhk8svk5ih3n18yk5655fs";
+    sha256 = "1p6glzvbbha3cvq462ymbn1q58skclfk469kk28cr1hlsf5x2pry";
   };
 
   nativeBuildInputs = [

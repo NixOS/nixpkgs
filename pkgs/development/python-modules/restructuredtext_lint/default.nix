@@ -9,14 +9,11 @@
 
 buildPythonPackage rec {
   pname = "restructuredtext_lint";
-  version = "1.2.2";
-
-  # https://github.com/twolfson/restructuredtext-lint/pull/47
-  disabled = isPy37;
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "82880a8de8a41bfc84f533744091b1ead8e2ab9ad6c0a3f60f4750ef6c802350";
+    sha256 = "97b3da356d5b3a8514d8f1f9098febd8b41463bed6a1d9f126cf0a048b6fd908";
   };
 
   checkInputs = [ nose testtools ];

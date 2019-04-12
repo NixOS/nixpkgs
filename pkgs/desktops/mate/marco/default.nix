@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, libcanberra-gtk3, libgtop, gnome2, gnome3, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, libcanberra-gtk3, libgtop, gnome2, gnome3, gtk3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "marco-${version}";
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     libgtop
     gnome2.startup_notification
-    gnome3.gtk
+    gtk3
     gnome3.zenity
   ];
-  
+
   meta = with stdenv.lib; {
     description = "MATE default window manager";
     homepage = https://github.com/mate-desktop/marco;

@@ -13,7 +13,12 @@
 , jackSupport ? false
 , fetchpatch
 , removeReferencesTo
+, chromecastSupport ? true, protobuf, libmicrodns
 }:
+
+# chromecastSupport requires TCP port 8010 to be open for it to work.
+# If your firewall is enabled, make sure to have something like:
+#   networking.firewall.allowedTCPPorts = [ 8010 ];
 
 with stdenv.lib;
 
@@ -42,7 +47,8 @@ stdenv.mkDerivation rec {
     fluidsynth wayland wayland-protocols
   ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
     ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
-    ++ optional jackSupport libjack2;
+    ++ optional jackSupport libjack2
+    ++ optionals chromecastSupport [ protobuf libmicrodns ];
 
   nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ];
 
@@ -76,7 +82,12 @@ stdenv.mkDerivation rec {
   # "--enable-foo" flags here
   configureFlags = [
     "--with-kde-solid=$out/share/apps/solid/actions"
-  ] ++ optional onlyLibVLC "--disable-vlc";
+  ] ++ optional onlyLibVLC "--disable-vlc"
+    ++ optionals chromecastSupport [
+    "--enable-sout"
+    "--enable-chromecast"
+    "--enable-microdns"
+  ];
 
   # Remove runtime dependencies on libraries
   postConfigure = ''

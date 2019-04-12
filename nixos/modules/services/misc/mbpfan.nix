@@ -101,7 +101,7 @@ in {
         Type = "simple";
         ExecStart = "${cfg.package}/bin/mbpfan -f${verbose}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        PIDFile = "/var/run/mbpfan.pid";
+        PIDFile = "/run/mbpfan.pid";
         Restart = "always";
       };
     };

@@ -10,8 +10,8 @@ let
   isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
 
   apcu = buildPecl {
-    name = "apcu-5.1.15";
-    sha256 = "0v91fxh3z3amwicqlmz7lvnh4zfl2d7kj2zc8pvlvj2lms8ql5zc";
+    name = "apcu-5.1.17";
+    sha256 = "14y7alvj5q17q1b544bxidavkn6i40cjbq2nv1m0k70ai5vv84bb";
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
     doCheck = true;
     checkTarget = "test";
@@ -21,8 +21,8 @@ let
   };
 
   apcu_bc = buildPecl {
-    name = "apcu_bc-1.0.4";
-    sha256 = "1raww7alwayg9nk0akly1mdrjypxlwg8safnmaczl773cwpw5cbw";
+    name = "apcu_bc-1.0.5";
+    sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
     buildInputs = [ apcu (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
@@ -253,23 +253,24 @@ let
   };
 
   composer = pkgs.stdenv.mkDerivation rec {
-    name = "composer-${version}";
-    version = "1.8.0";
+    pname = "composer";
+    version = "1.8.4";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "19pg9ip2mpyf5cyq34fld7qwl77mshqw3c4nif7sxmpnar6sh089";
+      sha256 = "12h5vqwhklxvwrplggzjl21n6kb972pwkj9ivmn2vbxyixn848hp";
     };
 
     unpackPhase = ":";
 
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
 
     installPhase = ''
       mkdir -p $out/bin
       install -D $src $out/libexec/composer/composer.phar
       makeWrapper ${php}/bin/php $out/bin/composer \
-        --add-flags "$out/libexec/composer/composer.phar"
+        --add-flags "$out/libexec/composer/composer.phar" \
+        --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
     '';
 
     meta = with pkgs.lib; {
@@ -368,12 +369,12 @@ let
   };
 
   phpcs = pkgs.stdenv.mkDerivation rec {
-    name = "phpcs-${version}";
-    version = "3.4.0";
+    pname = "phpcs";
+    version = "3.4.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "1d6zf0ab76r5ibb80q46silhy87hrwh50gfvhd0i25wzad7r09mw";
+      sha256 = "07zwj8msy0awnrwmv3gcilbsj9jyrvxw0q523yf16ydv55422pl0";
     };
 
     phases = [ "installPhase" ];
@@ -395,12 +396,12 @@ let
   };
 
   phpcbf = pkgs.stdenv.mkDerivation rec {
-    name = "phpcbf-${version}";
-    version = "3.4.0";
+    pname = "phpcbf";
+    version = "3.4.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-      sha256 = "0iscs4hg1msk8198pmkdmbxn1g53gbq3i5qgszs0bi6hz3ng9ag9";
+      sha256 = "052fsgzc39mfjy34mv1ip2qdghypsy218wfp8vh3a593pzkmzdcv";
     };
 
     phases = [ "installPhase" ];
@@ -422,12 +423,12 @@ let
   };
 
   phpstan = pkgs.stdenv.mkDerivation rec {
-    name = "phpstan-${version}";
-    version = "0.11.3";
+    pname = "phpstan";
+    version = "0.11.5";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "0wiyrjymnhh0bzf0di27k59j2dprczwxiq19spj9gyfkbfw8fgci";
+      sha256 = "13akllfr5dav0y61i4ym5ww8z32ynwj5lpvsfiwx6z52avmcrc29";
     };
 
     phases = [ "installPhase" ];

@@ -1,4 +1,4 @@
-{ stdenv, pkgs, buildEnv, fetchFromGitHub, nodejs-6_x, phantomjs2, which }:
+{ stdenv, pkgs, buildEnv, fetchFromGitHub, nodejs-8_x, phantomjs2, which }:
 
 let
   nodePackages = import ./node.nix {
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ nodejs-6_x phantomjs-prebuilt ] ++ (stdenv.lib.attrVals [
+  buildInputs = [ nodejs-8_x phantomjs-prebuilt ] ++ (stdenv.lib.attrVals [
     "blint-^1"
     "node-static-0.6.0"
     "rollup-^0.41.0"

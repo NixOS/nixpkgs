@@ -103,6 +103,24 @@ in
       };
 
       initialDatabases = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            name = mkOption {
+              type = types.str;
+              description = ''
+                The name of the database to create.
+              '';
+            };
+            schema = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              description = ''
+                The initial schema of the database; if null (the default),
+                an empty database is created.
+              '';
+            };
+          };
+        });
         default = [];
         description = ''
           List of database names and their initial schemas that should be used to create databases on the first startup
@@ -115,11 +133,13 @@ in
       };
 
       initialScript = mkOption {
+        type = types.nullOr types.lines;
         default = null;
         description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database";
       };
 
       ensureDatabases = mkOption {
+        type = types.listOf types.str;
         default = [];
         description = ''
           Ensures that the specified databases exist.
@@ -134,6 +154,38 @@ in
       };
 
       ensureUsers = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            name = mkOption {
+              type = types.str;
+              description = ''
+                Name of the user to ensure.
+              '';
+            };
+            ensurePermissions = mkOption {
+              type = types.attrsOf types.str;
+              default = {};
+              description = ''
+                Permissions to ensure for the user, specified as attribute set.
+                The attribute names specify the database and tables to grant the permissions for,
+                separated by a dot. You may use wildcards here.
+                The attribute values specfiy the permissions to grant.
+                You may specify one or multiple comma-separated SQL privileges here.
+
+                For more information on how to specify the target
+                and on which privileges exist, see the
+                <link xlink:href="https://mariadb.com/kb/en/library/grant/">GRANT syntax</link>.
+                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
+              '';
+              example = literalExample ''
+                {
+                  "database.*" = "ALL PRIVILEGES";
+                  "*.*" = "SELECT, LOCK TABLES";
+                }
+              '';
+            };
+          };
+        });
         default = [];
         description = ''
           Ensures that the specified users exist and have at least the ensured permissions.
@@ -143,20 +195,22 @@ in
           option is changed. This means that users created and permissions assigned once through this option or
           otherwise have to be removed manually.
         '';
-        example = literalExample ''[
-          {
-            name = "nextcloud";
-            ensurePermissions = {
-              "nextcloud.*" = "ALL PRIVILEGES";
-            };
-          }
-          {
-            name = "backup";
-            ensurePermissions = {
-              "*.*" = "SELECT, LOCK TABLES";
-            };
-          }
-        ]'';
+        example = literalExample ''
+          [
+            {
+              name = "nextcloud";
+              ensurePermissions = {
+                "nextcloud.*" = "ALL PRIVILEGES";
+              };
+            }
+            {
+              name = "backup";
+              ensurePermissions = {
+                "*.*" = "SELECT, LOCK TABLES";
+              };
+            }
+          ]
+        '';
       };
 
       # FIXME: remove this option; it's a really bad idea.

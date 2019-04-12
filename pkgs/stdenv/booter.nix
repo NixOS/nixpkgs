@@ -95,13 +95,25 @@ stageFuns: let
         __hatPackages = nextStage;
       };
     };
-  in
-    if args.__raw or false
-    then args'
-    else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
-      buildPackages = if args.selfBuild or true then null else prevStage;
-      targetPackages = if args.selfBuild or true then null else nextStage;
-    });
+    thisStage =
+      if args.__raw or false
+      then args'
+      else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
+        adjacentPackages = if args.selfBuild or true then null else rec {
+          pkgsBuildBuild = prevStage.buildPackages;
+          pkgsBuildHost = prevStage;
+          pkgsBuildTarget =
+            if args.stdenv.targetPlatform == args.stdenv.hostPlatform
+            then pkgsBuildHost
+            else assert args.stdenv.hostPlatform == args.stdenv.buildPlatform; thisStage;
+          pkgsHostHost =
+            if args.stdenv.hostPlatform == args.stdenv.targetPlatform
+            then thisStage
+            else assert args.stdenv.buildPlatform == args.stdenv.hostPlatform; pkgsBuildHost;
+          pkgsTargetTarget = nextStage;
+        };
+      });
+  in thisStage;
 
   # This is a hack for resolving cross-compiled compilers' run-time
   # deps. (That is, compilers that are themselves cross-compiled, as

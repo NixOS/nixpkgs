@@ -54,7 +54,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   gnome3 = self // { recurseForDerivations = false; };
-  vala = pkgs.vala_0_42;
+  vala = pkgs.vala_0_44;
   gegl_0_4 = pkgs.gegl_0_4.override { gtk = pkgs.gtk3; };
 
 # ISO installer
@@ -228,6 +228,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   ghex = callPackage ./apps/ghex { };
 
   glade = callPackage ./apps/glade { };
+
+  gnome-books = callPackage ./apps/gnome-books { };
 
   gnome-boxes = callPackage ./apps/gnome-boxes { };
 

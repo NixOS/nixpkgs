@@ -1,4 +1,4 @@
-#!/bin/sh
+#!@shell@
 
 rootdb="/etc/pki/nssdb"
 userdb="$HOME/.pki/nssdb"

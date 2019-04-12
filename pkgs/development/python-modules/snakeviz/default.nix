@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "snakeviz";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5fe23667708a4ed04047abfbf209675a8488ea6ea8c038d7de06d8a083fb3531";
+    sha256 = "0hvfc7c25cz6p3m3p3klm3njiysp7lkrs9sxm4p40spldl0jlfpa";
   };
 
   # Upstream doesn't run tests from setup.py

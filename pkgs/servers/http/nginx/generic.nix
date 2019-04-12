@@ -9,6 +9,17 @@
 
 with stdenv.lib;
 
+let
+
+  mapModules = attrPath: flip concatMap modules
+    (mod:
+      let supports = mod.supports or (_: true);
+      in
+        if supports version then mod.${attrPath} or []
+        else throw "Module at ${toString mod.src} does not support nginx version ${version}!");
+
+in
+
 stdenv.mkDerivation {
   name = "nginx-${version}";
 
@@ -18,7 +29,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip ]
-    ++ concatMap (mod: mod.inputs or []) modules;
+    ++ mapModules "inputs";
 
   configureFlags = [
     "--with-http_ssl_module"
@@ -77,7 +88,7 @@ stdenv.mkDerivation {
       url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/103-sys_nerr.patch";
       sha256 = "0s497x6mkz947aw29wdy073k8dyjq8j99lax1a1mzpikzr4rxlmd";
     })
-  ];
+  ] ++ mapModules "patches";
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 
