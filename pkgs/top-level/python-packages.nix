@@ -5143,6 +5143,8 @@ in {
 
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
 
+  tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
+
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
   tensorflow =
