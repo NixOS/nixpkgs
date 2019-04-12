@@ -738,6 +738,8 @@ in {
 
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
+  pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
+
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
