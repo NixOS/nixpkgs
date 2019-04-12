@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, gettext, zsh, pinentry, cryptsetup, gnupg, utillinux, e2fsprogs
+, gettext, zsh, pinentry, cryptsetup, gnupg, utillinux, e2fsprogs, sudo
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wk1aanzfln88min29p5av2j8gd8vj5afbs2gvarv7lvx1vi7kh1";
   };
 
-  buildInputs = [ zsh pinentry ];
+  buildInputs = [ sudo zsh pinentry ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-  installCheckPhase = "$out/bin/tomb -h 2>/dev/null";
+  installCheckPhase = "$out/bin/tomb -h";
 
   installPhase = ''
     install -Dm755 tomb       $out/bin/tomb
