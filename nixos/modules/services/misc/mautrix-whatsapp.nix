@@ -4,6 +4,15 @@ with lib;
 
 let
   cfg = config.services.mautrix-whatsapp;
+  configFile = pkgs.runCommand "config.yaml" {
+    buildInputs = [ pkgs.remarshal ];
+    preferLocalBuild = true;
+  } ''
+    remarshal -if json -of yaml \
+      < ${pkgs.writeText "config.json" (builtins.toJSON cfg.configOptions)} \
+      > $out
+  '';
+
 in
 {
   options.services.mautrix-whatsapp = {
@@ -17,7 +26,7 @@ in
      '';
     };
 
-    config = mkOption {
+    configOptions = mkOption {
       type = types.attrs;
       description = "This JSON will be transform in YAML configuration file for the bridge";
     };
@@ -32,7 +41,9 @@ in
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "mautrix-whatsapp";
-        ExecStart = "${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp -c ${pkgs.writeText "mwa-config.yaml" cfg.config}";
+        ExecStart = ''
+          ${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp -c "${configFile}"
+        '';
         Restart = "on-failure";
       };
     };
