@@ -6611,9 +6611,6 @@ in
 
   yarn = callPackage ../development/tools/yarn  { };
 
-  yarn2nix = throw "Use upstream https://github.com/moretea/yarn2nix";
-  mkYarnPackage = yarn2nix;
-
   yasr = callPackage ../applications/audio/yasr { };
 
   yank = callPackage ../tools/misc/yank { };
