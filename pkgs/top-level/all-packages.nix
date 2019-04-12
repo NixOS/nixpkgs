@@ -17903,6 +17903,8 @@ in
 
   howl = callPackage ../applications/editors/howl { };
 
+  hpl = callPackage ../tools/misc/hpl { mpi = openmpi; };
+
   ht = callPackage ../applications/editors/ht { };
 
   hubstaff = callPackage ../applications/misc/hubstaff { };
