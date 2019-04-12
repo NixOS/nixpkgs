@@ -884,6 +884,8 @@ in
 
   autojump = callPackage ../tools/misc/autojump { };
 
+  automysqlbackup = callPackage ../tools/backup/automysqlbackup { };
+
   autorandr = callPackage ../tools/misc/autorandr {};
 
   avahi = callPackage ../development/libraries/avahi (config.avahi or {});
