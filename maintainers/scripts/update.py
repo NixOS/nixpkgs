@@ -31,7 +31,7 @@ def main(max_workers, keep_going, packages):
         eprint()
         eprint('Running update for:')
 
-        with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             for package in packages:
                 updates[executor.submit(run_update_script, package)] = package
 
