@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
     cp ${Finduriparser_cmake} cmake_modules/Finduriparser.cmake
 
     patchShebangs build-support/
+
+    # Fix build for ARROW_USE_SIMD=OFF
+    # https://jira.apache.org/jira/browse/ARROW-5007
+    sed -i src/arrow/util/sse-util.h -e '1i#include "arrow/util/logging.h"'
+    sed -i src/arrow/util/neon-util.h -e '1i#include "arrow/util/logging.h"'
   '';
 
   cmakeFlags = [
@@ -52,7 +57,7 @@ stdenv.mkDerivation rec {
     "-DARROW_PARQUET=ON"
     "-DARROW_PYTHON=ON"
     "-Duriparser_SOURCE=SYSTEM"
-  ];
+  ] ++ stdenv.lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
   PARQUET_TEST_DATA = if doInstallCheck then "${parquet-testing}/data" else null;
