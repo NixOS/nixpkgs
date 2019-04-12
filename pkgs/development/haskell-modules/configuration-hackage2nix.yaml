@@ -3738,6 +3738,7 @@ broken-packages:
   - courier
   - court
   - coverage
+  - coya
   - cparsing
   - CPBrainfuck
   - cpio-conduit
@@ -4388,6 +4389,7 @@ broken-packages:
   - extract-dependencies
   - extractelf
   - ez-couch
+  - ez3
   - f-ree-hack-cheats-free-v-bucks-generator
   - Facebook-Password-Hacker-Online-Latest-Version
   - faceted
@@ -4442,6 +4444,7 @@ broken-packages:
   - fdo-trash
   - feature-flipper
   - feature-flipper-postgres
+  - fedora-img-dl
   - fedora-packages
   - feed-cli
   - feed-collect
@@ -4663,6 +4666,7 @@ broken-packages:
   - funion
   - funpat
   - funsat
+  - fused-effects-exceptions
   - fusion
   - futun
   - future
@@ -4786,6 +4790,8 @@ broken-packages:
   - ghci-lib
   - ghci-ng
   - ghcjs-base-stub
+  - ghcjs-dom
+  - ghcjs-dom-jsaddle
   - ghcjs-dom-jsffi
   - ghcjs-fetch
   - ghcjs-hplay
@@ -5503,6 +5509,7 @@ broken-packages:
   - hierarchy
   - hiernotify
   - Hieroglyph
+  - higgledy
   - HiggsSet
   - higherorder
   - highjson
@@ -5909,6 +5916,7 @@ broken-packages:
   - http-shed
   - http-wget
   - http2-client-grpc
+  - http2-grpc-types
   - https-everywhere-rules
   - https-everywhere-rules-raw
   - httpspec
@@ -6235,6 +6243,7 @@ broken-packages:
   - jonathanscard
   - jpeg
   - js-good-parts
+  - jsaddle-dom
   - jsaddle-hello
   - jsaddle-warp
   - jsaddle-wkwebview
@@ -8009,6 +8018,7 @@ broken-packages:
   - reflection-extras
   - reflex
   - reflex-animation
+  - reflex-backend-wai
   - reflex-basic-host
   - reflex-dom-core
   - reflex-gloss
@@ -8040,6 +8050,7 @@ broken-packages:
   - regions-monadstf
   - regions-mtl
   - register-machine-typelevel
+  - registry
   - regress
   - regular
   - regular-extras
@@ -8138,6 +8149,7 @@ broken-packages:
   - riemann
   - riff
   - ring-buffer
+  - ring-buffers
   - riot
   - risc386
   - riscv-isa
@@ -8712,6 +8724,7 @@ broken-packages:
   - spice
   - SpinCounter
   - spir-v
+  - spiros
   - splay
   - splaytree
   - splines
@@ -8884,6 +8897,7 @@ broken-packages:
   - SuffixStructures
   - suitable
   - summoner
+  - summoner-tui
   - sump
   - sunlight
   - sunroof-compiler
@@ -9609,6 +9623,7 @@ broken-packages:
   - waldo
   - wallpaper
   - warp-dynamic
+  - warp-grpc
   - warp-static
   - WashNGo
   - wasm
@@ -9652,6 +9667,7 @@ broken-packages:
   - webkit2gtk3-javascriptcore
   - Webrexp
   - webserver
+  - webshow
   - websockets-rpc
   - webwire
   - weighted
@@ -9717,6 +9733,7 @@ broken-packages:
   - writer-cps-monads-tf
   - writer-cps-morph
   - ws
+  - ws-chans
   - wsdl
   - wsedit
   - wss-client
