@@ -97,11 +97,13 @@ let
         targetLlvmLibraries.libcxx
         targetLlvmLibraries.libcxxabi
         targetLlvmLibraries.compiler-rt
+        targetLlvmLibraries.libunwind
       ];
       extraBuildCommands = ''
         echo "-target ${stdenv.targetPlatform.config}" >> $out/nix-support/cc-cflags
         echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
+        echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
     };
 
