@@ -11,6 +11,7 @@ die() {
 usage() {
     echo "Usage: $scriptName <attr> <version> [<new-source-hash>] [<new-source-url>]"
     echo "                              [--version-key=<version-key>] [--system=<system>] [--file=<file-to-update>]"
+    echo "                              [--ignore-same-hash]"
 }
 
 args=()
