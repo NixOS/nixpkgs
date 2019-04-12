@@ -4927,6 +4927,8 @@ in {
 
   snapperGUI = callPackage ../development/python-modules/snappergui { };
 
+  dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
+
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
   funcy = callPackage ../development/python-modules/funcy { };
