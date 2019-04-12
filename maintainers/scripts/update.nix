@@ -4,6 +4,7 @@
 , max-workers ? null
 , include-overlays ? false
 , keep-going ? null
+, commit ? null
 }:
 
 # TODO: add assert statements
@@ -132,19 +133,26 @@ let
         --argstr keep-going true
 
     to continue running when a single update fails.
+
+    You can also make the updater automatically commit on your behalf from updateScripts
+    that support it by adding
+
+        --argstr commit true
   '';
 
   packageData = package: {
     name = package.name;
     pname = lib.getName package;
-    updateScript = map builtins.toString (lib.toList package.updateScript);
+    updateScript = map builtins.toString (lib.toList (package.updateScript.command or package.updateScript));
+    supportedFeatures = package.updateScript.supportedFeatures or [];
   };
 
   packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
 
   optionalArgs =
     lib.optional (max-workers != null) "--max-workers=${max-workers}"
-    ++ lib.optional (keep-going == "true") "--keep-going";
+    ++ lib.optional (keep-going == "true") "--keep-going"
+    ++ lib.optional (commit == "true") "--commit";
 
   args = [ packagesJson ] ++ optionalArgs;
 
