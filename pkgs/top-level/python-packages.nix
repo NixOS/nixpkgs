@@ -4877,6 +4877,8 @@ in {
 
   graphite_beacon = callPackage ../development/python-modules/graphite_beacon { };
 
+  graph_nets = callPackage ../development/python-modules/graph_nets { };
+
   influxgraph = callPackage ../development/python-modules/influxgraph { };
 
   graphitepager = callPackage ../development/python-modules/graphitepager { };
@@ -4926,6 +4928,8 @@ in {
   toposort = callPackage ../development/python-modules/toposort { };
 
   snapperGUI = callPackage ../development/python-modules/snappergui { };
+
+  dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
@@ -5142,6 +5146,8 @@ in {
   zerobin = callPackage ../development/python-modules/zerobin { };
 
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
+
+  tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
