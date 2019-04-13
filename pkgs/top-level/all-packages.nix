@@ -3877,6 +3877,8 @@ in
 
   k6 = callPackage ../development/tools/k6 { };
 
+  lalezar-fonts = callPackage ../data/fonts/lalezar-fonts { };
+
   ldc = callPackage ../development/compilers/ldc { };
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
