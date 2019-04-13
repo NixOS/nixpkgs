@@ -1,16 +1,16 @@
-{ stdenv, fetchgit, mercurial, makeWrapper,
+{ stdenv, fetchFromGitHub, mercurial, makeWrapper,
   asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libxml2
 }:
 
 stdenv.mkDerivation rec {
-  rev = "e716a9e1a9e460a45663694ba4e9e8894a8452b2";
-  version = "0.2-${rev}";
-  name = "git-remote-hg-${version}";
+  version = "1.0.0";
+  pname = "git-remote-hg";
 
-  src = fetchgit {
-    inherit rev;
-    url = "git://github.com/fingolfin/git-remote-hg.git";
-    sha256 = "0cmlfdxfabrs3x10mfjfap8wz67s8xk2pjn2wlcj9k2v84gji60m";
+  src = fetchFromGitHub {
+    owner = "mnauw";
+    repo = "git-remote-hg";
+    rev = "v${version}";
+    sha256 = "0anl054zdi5rg5m4bm1n763kbdjkpdws3c89c8w8m5gq1ifsbd4d";
   };
 
   buildInputs = [ mercurial.python mercurial makeWrapper
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/felipec/git-remote-hg;
-    description = "Semi-official Mercurial bridge from Git project, once installed, it allows you to clone, fetch and push to and from Mercurial repositories as if they were Git ones";
+    homepage = https://github.com/mnauw/git-remote-hg;
+    description = "Git remote helper for Mercurial repositories";
     license = licenses.gpl2;
     maintainers = [ maintainers.garbas ];
     platforms = platforms.unix;
