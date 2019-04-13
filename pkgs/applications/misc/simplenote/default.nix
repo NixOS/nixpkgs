@@ -1,25 +1,26 @@
-{ fetchurl, stdenv, lib, zlib, glib, alsaLib, dbus, gtk2, atk, pango, freetype, fontconfig
-, libgnome-keyring3, gdk-pixbuf, cairo, cups, expat, libgpgerror, nspr
-, nss, xorg, libcap, systemd, libnotify ,libXScrnSaver, gnome2 }:
+{ fetchurl, stdenv, lib, zlib, glib, alsaLib, dbus, gtk3, atk, pango, freetype, fontconfig
+, libgnome-keyring3, gdk_pixbuf, cairo, cups, expat, libgpgerror, nspr
+, nss, xorg, libcap, systemd, at_spi2_atk, libnotify, libuuid, libXScrnSaver, gnome2 }:
+
+let version = "1.5.0"; in
 
 stdenv.mkDerivation rec {
 
-  name = "simplenote-${pkgver}";
-  pkgver = "1.1.3";
+  name = "simplenote-${version}";
 
   src = fetchurl {
-    url = "https://github.com/Automattic/simplenote-electron/releases/download/v${pkgver}/Simplenote-linux-${pkgver}.tar.gz";
-    sha256 = "1z92yyjmg3bgfqfdpnysf98h9hhhnqzdqqigwlmdmn3d7fy49kcf";
+    url = "https://github.com/Automattic/simplenote-electron/releases/download/v${version}/Simplenote-linux-${version}-x64.tar.gz";
+    sha256 = "9993cd9fd6c9a015aa85219abbaebe611d403bce4beb0dd94d0c7d3c2e1b9140";
   };
 
   buildCommand = let
 
     packages = [
-      stdenv.cc.cc zlib glib dbus gtk2 atk pango freetype libgnome-keyring3
-      fontconfig gdk-pixbuf cairo cups expat libgpgerror alsaLib nspr nss
+      stdenv.cc.cc zlib glib dbus gtk3 atk pango freetype libgnome-keyring3
+      fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr nss
       xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
       xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
-      xorg.libXcursor libcap systemd libnotify libXScrnSaver gnome2.GConf
+      xorg.libXcursor libcap systemd at_spi2_atk libnotify libuuid libXScrnSaver gnome2.GConf
       xorg.libxcb
     ];
 
@@ -31,8 +32,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/
     mkdir -p $out/bin
     tar xvzf $src -C $out/share/
-    mv $out/share/Simplenote-linux-x64 $out/share/simplenote
-    mv $out/share/simplenote/Simplenote $out/share/simplenote/simplenote
+    mv $out/share/Simplenote-linux-${version}-x64 $out/share/simplenote
     mkdir -p $out/share/applications
 
     cat > $out/share/applications/simplenote.desktop << EOF
