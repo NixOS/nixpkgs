@@ -4,7 +4,7 @@
 , isPyPy
 , flask
 , pyquery
-, pytest
+, pytest_3
 , pytestrunner
 , cairosvg
 , tinycss
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
     # Should be a check input, but upstream lists it under "setup_requires".
     # https://github.com/Kozea/pygal/issues/430
-    pytestrunner
+    (pytestrunner.overrideAttrs (oldAttrs: oldAttrs // { pytest = pytest_3; }))
   ];
 
   checkInputs = [
-    pytest
+    pytest_3
   ];
 
   preCheck = ''
