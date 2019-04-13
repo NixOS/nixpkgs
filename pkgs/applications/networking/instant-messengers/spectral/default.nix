@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     description = "A glossy client for Matrix, written in QtQuick Controls 2 and C++";
     homepage = https://gitlab.com/b0/spectral;
     license = licenses.gpl3;
-    platforms = with platforms; linux ++ darwin;
+    platforms = with platforms; linux;
     maintainers = with maintainers; [ dtzWill ];
   };
 }
