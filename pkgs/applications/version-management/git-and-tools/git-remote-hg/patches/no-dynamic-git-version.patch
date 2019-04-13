@@ -1,0 +1,21 @@
+diff --git a/setup.py b/setup.py
+index 26afd17..2410636 100644
+--- a/setup.py
++++ b/setup.py
+@@ -5,15 +5,7 @@ import subprocess
+ import sys
+ import os
+ 
+-# derive version from git repo
+-cmd = ["git", "describe", "--tags"]
+-commit = os.environ.get('REV', None)
+-if commit:
+-  cmd.append(commit)
+-process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+-version = process.communicate()[0].strip()
+-# strip leading v
+-version = version[1:]
++version = "1.0.0"
+ 
+ # check for released version
+ assert (len(version) > 0)
