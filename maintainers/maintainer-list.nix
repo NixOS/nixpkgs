@@ -4762,11 +4762,6 @@
     github = "snyh";
     name = "Xia Bin";
   };
-  softinio = {
-    email = "code@softinio.com";
-    github = "softinio";
-    name = "Salar Rahmanian";
-  };
   solson = {
     email = "scott@solson.me";
     github = "solson";

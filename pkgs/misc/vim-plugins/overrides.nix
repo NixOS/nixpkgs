@@ -4,12 +4,13 @@
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
-, ycmd, rake, curl
+, ycmd, rake
 , gobject-introspection, glib, wrapGAppsHook
 , substituteAll
 , languagetool
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
+, tabnine
 
 # vim-go denpencies
 , asmfmt, delve, errcheck, godef, golint
@@ -172,12 +173,11 @@ self: super: {
   });
 
   deoplete-tabnine = super.deoplete-tabnine.overrideAttrs(old: {
-    nativeBuildInputs = [ curl ];
-    buildPhase = ''
-      patchShebangs .
-      unset SSL_CERT_FILE
-      ./install.sh
+    postPatch = ''
+      substituteInPlace rplugin/python3/deoplete/sources/tabnine.py \
+        --replace "path = get_tabnine_path(binary_dir)" "path = ${lib.getBin tabnine}/bin/TabNine"
     '';
+    meta.maintainers = with stdenv.lib.maintainers; [ softinio ];
   });
 
   ensime-vim = super.ensime-vim.overrideAttrs(old: {
