@@ -166,14 +166,14 @@ let
   };
 
   sqlsrv = buildPecl rec {
-    name = "sqlsrv-5.6.0";
-    sha256 = "089iy2lz7p3x9c88zaxrg37m74gh3phxqsldr33nj16rpb5d67bc";
+    name = "sqlsrv-5.6.1";
+    sha256 = "0ial621zxn9zvjh7k1h755sm2lc9aafc389yxksqcxcmm7kqmd0a";
     buildInputs = [ pkgs.unixODBC ];
   };
 
   pdo_sqlsrv = buildPecl rec {
-    name = "pdo_sqlsrv-5.6.0";
-    sha256 = "11g07l6mn804hbcmwqwfd6a4yx5bz54bmk5j2dpm8nil1rq9qb7r";
+    name = "pdo_sqlsrv-5.6.1";
+    sha256 = "02ill1iqffa5fha9iz4y91823scml24ikfk8pn90jyycfwv07x6a";
     buildInputs = [ pkgs.unixODBC ];
   };
 
