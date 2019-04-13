@@ -84,10 +84,6 @@ stdenv.mkDerivation rec {
 
   installFlags = "prefix=$(out)";
 
-  # Workaround for https://github.com/NixOS/nixpkgs/issues/40397
-  # Remove after update to binutils 2.31
-  dontStrip = true;
-
   inherit atk cairo gdk_pixbuf librsvg pango;
   inherit (gnome3) glib gtk3 gtksourceview libgda libpeas;
   inherit (gst_all_1) gstreamer;

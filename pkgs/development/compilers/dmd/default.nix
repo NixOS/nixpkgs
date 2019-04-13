@@ -120,8 +120,6 @@ stdenv.mkDerivation rec {
     cd ..
   '';
 
-  dontStrip = true;
-
   installPhase = ''
       cd dmd
       mkdir $out
