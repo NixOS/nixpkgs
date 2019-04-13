@@ -1,6 +1,6 @@
 --- a/tests/scanner/test_shlibs.py
 +++ b/tests/scanner/test_shlibs.py
-@@ -10,6 +10,46 @@ from giscanner.shlibs import resolve_from_ldd_output
+@@ -7,6 +7,30 @@ from giscanner.shlibs import resolve_from_ldd_output, sanitize_shlib_path
  
  class TestLddParser(unittest.TestCase):
  
@@ -26,25 +26,18 @@
 +        self.assertEqual(
 +            ['@nixStoreDir@/gmrf09y7sfxrr0mcx90dba7w41jj2kzk-glib-2.58.1/lib/libglib-2.0.so.0',
 +             '@nixStoreDir@/gmrf09y7sfxrr0mcx90dba7w41jj2kzk-glib-2.58.1/lib/libgio-2.0.so.0'],
-+            resolve_from_ldd_output(libraries, output, basename=False))
-+
-+    def test_resolve_from_ldd_output_macos(self):
-+        output = '''\
-+            @rpath/libatk-1.0.0.dylib
-+            @rpath/libgstreamer-1.0.0.dylib (compatibility version 0.0.0, current version 0.0.0)
-+            /Volumes/USB_SSD/cerbero/build/dist/darwin_x86_64/lib/libglib-2.0.0.dylib (compatibility version 0.0.0, current version 0.0.0)
-+            /Volumes/USB_SSD/cerbero/build/dist/darwin_x86_64/lib/libintl.dylib (compatibility version 0.0.0, current version 0.0.0)
-+            /Volumes/USB_SSD/cerbero/build/dist/darwin_x86_64/lib/libgobject-2.0.0.dylib (compatibility version 0.0.0, current version 0.0.0)
-+            /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1252.50.4)
-+        '''
-+        libraries = ['atk-1.0']
-+        fallback_libpath = '@nixStoreDir@/1ynd5b01z87c1nw75k5iy7sq49hpkw53-atk-2.30.0/lib'
-+
-+        self.assertEqual(
-+            [ '%s/libatk-1.0.0.dylib' % fallback_libpath ],
-+            resolve_from_ldd_output(libraries, output, basename=False, fallback_libpath=fallback_libpath))
++            resolve_from_ldd_output(libraries, output))
 +
      def test_resolve_from_ldd_output(self):
          output = '''\
              libglib-2.0.so.0 => /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0 (0x00007fbe12d68000)
-
+@@ -40,7 +64,8 @@ class TestLddParser(unittest.TestCase):
+ 
+         self.assertEqual(
+             sanitize_shlib_path('/foo/bar'),
+-            '/foo/bar' if sys.platform == 'darwin' else 'bar')
++            # NixOS always want the absolute path
++            '/foo/bar')
+ 
+     def test_unresolved_library(self):
+         output = ''
