@@ -38,10 +38,15 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    searchHardCodedPaths
     patchShebangs generate_translations.sh
     fixPath ${deepin-turbo} /usr/bin/deepin-turbo-invoker src/dbusservice/com.deepin.Screenshot.service
-    fixPath $out/bin/deepin-screenshot /usr/bin/deepin-screenshot src/dbusservice/com.deepin.Screenshot.service
+    fixPath $out /usr/bin/deepin-screenshot src/dbusservice/com.deepin.Screenshot.service
     substituteInPlace src/mainwindow.cpp --replace '"xdg-open,%1"' '"${xdg_utils}/bin/xdg-open,%1"'
+  '';
+
+  postFixup = ''
+    searchHardCodedPaths $out
   '';
 
   passthru.updateScript = deepin.updateScript { inherit name; };
