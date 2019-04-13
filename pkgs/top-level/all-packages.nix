@@ -15131,6 +15131,8 @@ in
 
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
+    deepin-anything = callPackage ../os-specific/linux/deepin-anything { };
+
     dpdk = callPackage ../os-specific/linux/dpdk { };
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
