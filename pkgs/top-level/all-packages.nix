@@ -10,6 +10,7 @@ res: pkgs: super:
 
 with pkgs;
 
+
 let
   self =
     builtins.trace ''
@@ -3783,6 +3784,8 @@ in
 
   k6 = callPackage ../development/tools/k6 { };
 
+  lalezar-fonts = callPackage ../data/fonts/lalezar-fonts { };
+
   ldc = callPackage ../development/compilers/ldc { };
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
@@ -6552,9 +6555,6 @@ in
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
-  
-  yarn2nix = throw "Use upstream https://github.com/moretea/yarn2nix";
-  mkYarnPackage = yarn2nix;
 
   yasr = callPackage ../applications/audio/yasr { };
 
@@ -21658,7 +21658,7 @@ in
   igv = callPackage ../applications/science/biology/igv { };
 
   inormalize = callPackage ../applications/science/biology/inormalize { };
-  
+
   itsx = callPackage ../applications/science/biology/itsx { };
 
   iv = callPackage ../applications/science/biology/iv {
