@@ -8114,6 +8114,8 @@ in
 
   swiProlog = callPackage ../development/compilers/swi-prolog { };
 
+  tabnine = callPackage ../development/tools/tabnine { };
+
   tbb = callPackage ../development/libraries/tbb { };
 
   terra = callPackage ../development/compilers/terra {
