@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
-    license = stdenv.lib.licenses.epl10;
+  meta = with stdenv.lib; {
+    license = licenses.epl10;
     homepage = https://projects.coin-or.org/Clp;
     description = "An open-source linear programming solver written in C++";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    platforms = platforms.darwin ++ [ "x86_64-linux" ];
+    maintainers = [ maintainers.vbgl ];
   };
 }
