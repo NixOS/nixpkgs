@@ -12,14 +12,33 @@
 assert stdenv.lib.versionAtLeast perl.version "5.28.1";
 let
   inherit (stdenv.lib) maintainers;
-  self = _self // overrides;
+  self = _self // (overrides pkgs);
   _self = with self; {
 
   inherit perl;
 
   callPackage = pkgs.newScope self;
 
-  buildPerlPackage = callPackage ../development/perl-modules/generic { };
+  # Check whether a derivation provides a perl module.
+  hasPerlModule = drv: drv ? perlModule ;
+
+  requiredPerlModules = drvs: let
+    modules = stdenv.lib.filter hasPerlModule drvs;
+  in stdenv.lib.unique ([perl] ++ modules ++ stdenv.lib.concatLists (stdenv.lib.catAttrs "requiredPerlModules" modules));
+
+  # Convert derivation to a perl module.
+  toPerlModule = drv:
+    drv.overrideAttrs( oldAttrs: {
+      # Use passthru in order to prevent rebuilds when possible.
+      passthru = (oldAttrs.passthru or {}) // {
+        perlModule = perl;
+        requiredPerlModules = requiredPerlModules drv.propagatedBuildInputs;
+      };
+    });
+
+  buildPerlPackage = callPackage ../development/perl-modules/generic {
+    inherit toPerlModule;
+  };
 
   # Helper functions for packages that use Module::Build to build.
   buildPerlModule = { buildInputs ? [], ... } @ args:
@@ -5086,6 +5105,7 @@ let
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
       sha256 = "4b538b47459cf5747b7395ccc8c8c9b3b661cc016c50b8a67e10fe19590fea5e";
     };
+    postInstall = "rm $out/bin/{enc2xs,encguess,piconv} $out/share/man/man1/{enc2xs,encguess,piconv}.1"; # remove the files perl-5.28 already has
     meta = {
       description = "Character encodings in Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
