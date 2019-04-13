@@ -19529,6 +19529,10 @@ in
     bison = bison2;
   };
 
+  stretchly = callPackage ../applications/misc/stretchly {
+    inherit (gnome2) GConf;
+  };
+
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
   stumpwm = callPackage ../applications/window-managers/stumpwm {
