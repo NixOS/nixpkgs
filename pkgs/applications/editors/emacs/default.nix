@@ -31,12 +31,12 @@ let
 in
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
-  version = "26.1";
+  version = "26.2";
   versionModifier = "";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
-    sha256 = "0b6k1wq44rc8gkvxhi1bbjxbz3cwg29qbq8mklq2az6p1hjgrx0w";
+    sha256 = "13n5m60i47k96mpv5pp6km2ph9rv2m5lmbpzj929v02vpsfyc70m";
   };
 
   enableParallelBuilding = true;
@@ -44,13 +44,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./clean-env.patch
     ./tramp-detect-wrapped-gvfsd.patch
-
-    # should drop this at next package update
-    (fetchpatch {
-      name = "support-hunspell-1.7.0-in-ispell.el.patch";
-      url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=2925ce5a7ec1424cfaea9f2f86bd3cab27832584";
-      sha256 = "0w7cgw6zgr7phbivb98innps1rlqf5q2lhwkrwdmai8sbca5bd11";
-    })
   ];
 
   postPatch = lib.optionalString srcRepo ''
