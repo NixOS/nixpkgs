@@ -28,6 +28,7 @@ mkDerivation rec {
 
   patches = [
     ./pass-path.patch
+    ./pass-dbus.patch
   ];
 
   CXXFLAGS = [
