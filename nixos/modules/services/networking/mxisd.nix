@@ -103,20 +103,12 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      # mxisd / spring.boot needs the configuration to be named "application.yaml"
-      preStart = ''
-        config=${cfg.dataDir}/application.yaml
-        cp ${configFile} $config
-        chmod 444 $config
-      '';
-
       serviceConfig = {
         Type = "simple";
         User = "mxisd";
         Group = "mxisd";
-        ExecStart = "${cfg.package}/bin/mxisd --spring.config.location=${cfg.dataDir}/ --spring.profiles.active=systemd --java.security.egd=file:/dev/./urandom";
+        ExecStart = "${cfg.package}/bin/mxisd -c ${configFile}";
         WorkingDirectory = cfg.dataDir;
-        SuccessExitStatus = 143;
         Restart = "on-failure";
       };
     };
