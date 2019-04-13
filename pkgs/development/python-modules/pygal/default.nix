@@ -4,7 +4,7 @@
 , isPyPy
 , flask
 , pyquery
-, pytest
+, pytest_3
 , pytestrunner
 , cairosvg
 , tinycss
@@ -26,14 +26,11 @@ buildPythonPackage rec {
   buildInputs = [
     flask
     pyquery
-
-    # Should be a check input, but upstream lists it under "setup_requires".
-    # https://github.com/Kozea/pygal/issues/430
-    pytestrunner
+    (pytestrunner.override {pytest = pytest_3;})
   ];
 
   checkInputs = [
-    pytest
+    pytest_3
   ];
 
   preCheck = ''
