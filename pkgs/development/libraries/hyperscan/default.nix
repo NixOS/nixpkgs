@@ -1,4 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, ragel, python27
+, coreutils, gnused, utillinux
 , boost
 }:
 
@@ -8,21 +9,25 @@
 #         I not see any reason (for now) to backport 8.41.
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "hyperscan";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "hyperscan";
-    sha256 = "0r2c7s7alnq14yhbfhpkq6m28a3pyfqd427115k0754afxi82vbq";
+    sha256 = "11adkz5ln2d2jywwlmixfnwqp5wxskq1104hmmcpws590lhkjv6j";
     rev = "v${version}";
   };
 
   outputs = [ "out" "dev" ];
 
   buildInputs = [ boost ];
-  nativeBuildInputs = [ cmake ragel python27 ];
+  nativeBuildInputs = [
+    cmake ragel python27
+    # Consider simply using busybox for these
+    # Need at least: rev, sed, cut
+    coreutils gnused utillinux
+  ];
 
   cmakeFlags = [
     "-DFAT_RUNTIME=ON"
