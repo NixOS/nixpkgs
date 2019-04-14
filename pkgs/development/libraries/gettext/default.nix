@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libiconv, xz, bison, automake115x, autoconf }:
+{ stdenv, lib, fetchurl, libiconv, xz }:
 
 stdenv.mkDerivation rec {
   name = "gettext-${version}";
@@ -8,14 +8,7 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/gettext/${name}.tar.gz";
     sha256 = "0hsw28f9q9xaggjlsdp2qmbp2rbd1mp0njzan2ld9kiqwkq2m57z";
   };
-  patches = [
-    ./absolute-paths.diff
-    (fetchurl {
-      name = "CVE-2018-18751.patch";
-      url = "https://git.savannah.gnu.org/gitweb/?p=gettext.git;a=patch;h=dce3a16e5e9368245735e29bf498dcd5e3e474a4";
-      sha256 = "1lpjwwcjr1sb879faj0xyzw02kma0ivab6xwn3qciy13qy6fq5xn";
-    })
-  ];
+  patches = [ ./absolute-paths.diff ];
 
   outputs = [ "out" "man" "doc" "info" ];
 
@@ -47,7 +40,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
   '';
 
-  nativeBuildInputs = [ xz xz.bin bison automake115x autoconf];
+  nativeBuildInputs = [ xz xz.bin ];
   # HACK, see #10874 (and 14664)
   buildInputs = stdenv.lib.optional (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) libiconv;
 
