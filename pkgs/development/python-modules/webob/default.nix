@@ -14,7 +14,10 @@ buildPythonPackage rec {
     sha256 = "05aaab7975e0ee8af2026325d656e5ce14a71f1883c52276181821d6d5bf7086";
   };
 
-  propagatedBuildInputs = [ nose pytest ];
+  checkInputs = [ pytest ];
+  checkPhase = ''
+    pytest tests/
+  '';
 
   meta = with stdenv.lib; {
     description = "WSGI request and response object";
