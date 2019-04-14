@@ -1,13 +1,13 @@
 { stdenv, fetchurl }:
 
 let
-  version = "2.9.0";
+  version = "2.9.1";
 in stdenv.mkDerivation {
   name = "http-parser-${version}";
 
   src = fetchurl {
     url = "https://github.com/joyent/http-parser/archive/v${version}.tar.gz";
-    sha256 = "0gv1dhzwlv1anbzrba20l39gzzmz818yv8jbclbls268aj62c9pg";
+    sha256 = "08fypqh3jkwvlznvmwwwir53ffg2xcxy0v8bjz6wxjlb41qhf8ik";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
