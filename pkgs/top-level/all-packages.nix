@@ -4881,9 +4881,7 @@ in
 
   parcellite = callPackage ../tools/misc/parcellite { };
 
-  patchutils = patchutils_0_3_4;
-
-  patchutils_0_3_4 = callPackage ../tools/text/patchutils/0.3.4.nix { };
+  patchutils = callPackage ../tools/text/patchutils { };
 
   patchutils_0_3_3 = callPackage ../tools/text/patchutils/0.3.3.nix { };
 
