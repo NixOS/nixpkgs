@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , colorama
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ colorama docopt watchdog pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A zero-config CLI tool that runs pytest on file change";
     homepage    = https://github.com/joeyespo/pytest-watch;
     license     = licenses.mit;
