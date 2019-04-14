@@ -1,0 +1,11 @@
+--- a/src/libs/musicplayer/OpenALMusicPlayer.cpp	2019-04-15 00:11:33.924726111 +0200
++++ b/src/libs/musicplayer/OpenALMusicPlayer.cpp	2019-04-15 00:11:28.165715604 +0200
+@@ -161,7 +161,7 @@
+ {
+ 	char pcm[BUFFERSIZE];
+ 	int size = 0;
+-	const char* error = '\0';
++	const char* error = "";
+ 	
+ 	if (!stream->read(pcm, BUFFERSIZE, &size, &error)) {
+ 		GfError("OpenALMusicPlayer: Stream read error: %s\n", error);

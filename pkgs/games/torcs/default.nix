@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/games-team/torcs/raw/master/debian/patches/glibc-default-source.patch";
       sha256 = "0k4hgpddnhv68mdc9ics7ah8q54j60g394d7zmcmzg6l3bjd9pyp";
     })
+    ./musicplayer.patch
   ];
 
   postPatch = ''
