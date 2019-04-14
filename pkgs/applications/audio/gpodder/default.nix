@@ -15,6 +15,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0sx5z9qjl76fi0m8vmars0yasfaq6znq434d8zjwla22k5wflmwm";
   };
 
+  patches = [
+    ./disable-autoupdate.patch
+  ];
+
   postPatch = with stdenv.lib; ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
   '';
