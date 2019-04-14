@@ -954,6 +954,8 @@ in {
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
+  annexremote = callPackage ../development/python-modules/annexremote { };
+
   ansible = callPackage ../development/python-modules/ansible { };
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
