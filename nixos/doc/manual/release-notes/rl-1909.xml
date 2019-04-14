@@ -154,6 +154,21 @@
      Accelerated Video Playback</link> for better transcoding performance.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The following changes apply if the <literal>stateVersion</literal> is
+     changed to 19.09 or higher. For <literal>stateVersion = "19.03"</literal>
+     or lower the old behavior is preserved.
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <literal>solr.package</literal> defaults to
+       <literal>pkgs.solr_8</literal>.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
