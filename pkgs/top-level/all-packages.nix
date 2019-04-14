@@ -979,6 +979,8 @@ in
 
   bibtex2html = callPackage ../tools/misc/bibtex2html { };
 
+  bicon = callPackage ../applications/misc/bicon { };
+
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
   bitbucket-cli = python2Packages.bitbucket-cli;
