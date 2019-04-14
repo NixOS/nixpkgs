@@ -1,13 +1,13 @@
 { stdenv, pythonPackages, fetchurl }:
 pythonPackages.buildPythonApplication rec {
   name = "bleachbit-${version}";
-  version = "2.0";
+  version = "2.2";
 
   namePrefix = "";
 
   src = fetchurl {
     url = "mirror://sourceforge/bleachbit/${name}.tar.bz2";
-    sha256 = "0ps98zx4n13q92bq7ykqi6hj3i7brdqgm87i9gk6ibvljp1vxdz9";
+    sha256 = "1yj9bc3k6s1aib7znb79h5rybfv691zz4szxkwf9fm9nr0dws603";
   };
 
   buildInputs = [  pythonPackages.wrapPython ];
