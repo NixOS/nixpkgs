@@ -6,6 +6,7 @@
 , webob
 , coverage
 , webtest
+, nose
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ repoze_lru six webob ];
-  checkInputs = [ coverage webtest ];
+  checkInputs = [ nose coverage webtest ];
 
   meta = with stdenv.lib; {
     description = "A Python re-implementation of the Rails routes system for mapping URLs to application actions";
