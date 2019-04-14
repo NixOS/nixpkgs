@@ -19866,6 +19866,10 @@ in
     boost = boost166;
     llvmPackages = llvmPackages_7;
   };
+  rstudio-preview = libsForQt5.callPackage ../applications/editors/rstudio/preview.nix {
+    boost = boost166;
+    llvmPackages = llvmPackages_7;
+  };
 
   rsync = callPackage ../applications/networking/sync/rsync (config.rsync or {});
   rrsync = callPackage ../applications/networking/sync/rsync/rrsync.nix {};
