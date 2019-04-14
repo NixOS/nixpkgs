@@ -535,6 +535,8 @@ in {
 
   ewmh = callPackage ../development/python-modules/ewmh { };
 
+  ecos = callPackage ../development/python-modules/ecos { };
+
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
   dbus-python = callPackage ../development/python-modules/dbus {
