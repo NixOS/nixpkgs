@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Integrates polkit authentication for MATE desktop";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./caja-extension-dirs.patch
   ];
-  
+
   configureFlags = [ "--disable-update-mimedb" ];
-  
+
   meta = {
     description = "File manager for the MATE desktop";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = with stdenv.lib.licenses; [ gpl2 lgpl2 ];
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

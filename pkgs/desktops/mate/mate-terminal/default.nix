@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The MATE Terminal Emulator";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = licenses.gpl3;
     platforms = platforms.unix;
   };

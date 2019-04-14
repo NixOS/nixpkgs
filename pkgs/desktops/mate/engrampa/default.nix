@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Archive Manager for MATE";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

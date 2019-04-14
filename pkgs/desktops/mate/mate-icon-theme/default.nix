@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Icon themes from MATE";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.romildo ];

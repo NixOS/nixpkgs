@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Installing these utilities is recommended for netbooks and similar
       devices with low resolution displays.
     '';
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = with licenses; [ gpl3 lgpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

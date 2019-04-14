@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ bindings for libgda";
-    homepage = http://www.gnome-db.org/;
+    homepage = https://www.gnome-db.org/;
     license = licenses.lgpl21Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;
