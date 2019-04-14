@@ -1218,6 +1218,8 @@ in {
 
   sslib = callPackage ../development/python-modules/sslib { };
 
+  scs = callPackage ../development/python-modules/scs { };
+
   statistics = callPackage ../development/python-modules/statistics { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
