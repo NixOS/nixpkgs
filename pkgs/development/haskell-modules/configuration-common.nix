@@ -1267,4 +1267,16 @@ self: super: {
   # Haddock failure: https://github.com/haskell/haddock/issues/979
   esqueleto = dontHaddock (dontCheck super.esqueleto);
 
+  # Get hpack-convert to compile with the versions of its dependencies in nixpkgs.
+  # The tests are still broken
+  hpack-convert = dontCheck (overrideSrc super.hpack-convert {
+    version = "1.0.2";
+    src = pkgs.fetchFromGitHub {
+      owner = "yamadapc";
+      repo = "hpack-convert";
+      rev = "8695b5666c8ee66785c43074b9ae8b3a5d445192";
+      sha256 = "0aha6jspn7a6vfhkxsp2674valjlmmsssgkp5z7g143xmiq4h8pj";
+    };
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
