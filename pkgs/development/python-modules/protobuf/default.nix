@@ -41,9 +41,9 @@ buildPythonPackage rec {
 
   preBuild = ''
     # Workaround for https://github.com/google/protobuf/issues/2895
-    ${python}/bin/${python.executable} setup.py build
+    ${python.interpreter} setup.py build
   '' + optionalString (versionAtLeast protobuf.version "2.6.0") ''
-    ${python}/bin/${python.executable} setup.py build_ext --cpp_implementation
+    ${python.interpreter} setup.py build_ext --cpp_implementation
   '';
 
   installFlags = optional (versionAtLeast protobuf.version "2.6.0")
