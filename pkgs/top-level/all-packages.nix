@@ -2212,7 +2212,9 @@ in
 
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
-  dbeaver = callPackage ../applications/misc/dbeaver { };
+  dbeaver = callPackage ../applications/misc/dbeaver {
+    jdk = jdk11;
+  };
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
