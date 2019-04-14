@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "33ee8ceb63f1db61cce8b5c800c531e1a61023ac5488ccde2ba574a85be00a85";
   };
 
-  propagatedBuildInputs = [] ++ lib.optional (pythonOlder "3.3") monotonic;
+  propagatedBuildInputs = lib.optional (pythonOlder "3.3") monotonic;
 
   # humanfriendly tests depends on coloredlogs which itself depends on
   # humanfriendly. This lead to infinite recursion when trying to
