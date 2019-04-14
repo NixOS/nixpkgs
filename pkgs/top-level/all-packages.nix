@@ -4082,7 +4082,7 @@ in
 
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
-  mautrix-telegram = callPackage ../servers/mautrix-telegram { };
+  mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
 
