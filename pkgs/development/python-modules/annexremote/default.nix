@@ -1,7 +1,9 @@
 { lib
+, isPy3k
 , buildPythonPackage
 , fetchFromGitHub
 , future
+, mock
 , nose
 }:
 
@@ -20,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future ];
 
-  checkInputs = [ nose ];
+  checkInputs = [ nose ] ++ lib.optional (!isPy3k) mock;
   checkPhase = "nosetests -v";
 
   meta = with lib; {
