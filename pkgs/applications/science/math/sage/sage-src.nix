@@ -151,6 +151,13 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch/?id=e351bf2f2914e683d5e2028597c45ae8d1b7f855";
       sha256 = "00faa7fl0vaqcqbw0bidkhl78qa8l34d3a07zirbcl0vm74bdn1p";
     })
+
+    # https://trac.sagemath.org/ticket/27653
+    (fetchpatch {
+      name = "sympy-1.4.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=3277ba76d0ba7174608a31a0c6623e9210c63e3d";
+      sha256 = "09avaanwmdgqv14mmllbgw9z2scf4lc0y0kzdhlriiq8ss9j8iir";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
