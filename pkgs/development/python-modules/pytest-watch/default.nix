@@ -17,7 +17,8 @@ buildPythonPackage rec {
     sha256 = "1fflnd3varpqy8yzcs451n8h7wmjyx1408qdin5p2qdksl1ny4q6";
   };
 
-  propagatedBuildInputs = [ colorama docopt watchdog pytest ];
+  buildInputs = [ pytest ];
+  propagatedBuildInputs = [ colorama docopt watchdog ];
 
   meta = with lib; {
     description = "A zero-config CLI tool that runs pytest on file change";
