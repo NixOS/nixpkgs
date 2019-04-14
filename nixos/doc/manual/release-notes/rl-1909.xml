@@ -117,6 +117,17 @@
       The same applies to ModemManager where modem-manager.service is now called ModemManager.service again.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     If <xref linkend="opt-programs.less.configFile" /> is not <literal>null</literal>, and at
+     least one of <xref linkend="opt-programs.less.commands" />,
+     <xref linkend="opt-programs.less.clearDefaultCommands" />,
+     <xref linkend="opt-programs.less.lineEditingKeys" /> or
+     <xref linkend="opt-programs.less.envVariables" />
+     is set, an assertion error will be thrown. Previously
+     <xref linkend="opt-programs.less.configFile" /> took silently precedence over the four options.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
