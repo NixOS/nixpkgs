@@ -32,11 +32,11 @@ let
 
 in buildPythonPackage rec {
   pname = "poetry";
-  version = "0.12.10";
+  version = "0.12.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00npb0jlimnk4r01zkhfmns4843j1hfhd388s326da5pd8n0dq7l";
+    sha256 = "0baah5y2qxv1j8d93ii0ljngjzkv6qf3zb7b8n99s1lya7kj0r3j";
   };
 
   postPatch = ''
@@ -44,6 +44,8 @@ in buildPythonPackage rec {
       "requests-toolbelt>=0.8.0,<0.9.0" \
       "requests-toolbelt>=0.8.0,<0.10.0"
   '';
+
+  format = "pyproject";
 
   propagatedBuildInputs = [
     cleo6
