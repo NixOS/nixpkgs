@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DUDEVDIR=\${out}/lib/udev/rules.d"
+    "-DUDEVDIR=${placeholder "out"}/lib/udev/rules.d"
     "-DCMAKE_MODULE_PATH=${libgaminggear.dev}/lib/cmake"
     "-DWITH_LUA=${lua.luaversion}"
-    "-DLIBDIR=lib"
+    "-DLIBDIR=${placeholder "out"}/lib"
   ];
 
   meta = {
