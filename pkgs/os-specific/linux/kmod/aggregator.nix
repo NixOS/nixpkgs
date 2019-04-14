@@ -1,7 +1,7 @@
-{ stdenv, kmod, modules, buildEnv }:
+{ stdenv, kmod, modules, buildEnv, name ? "kernel-modules" }:
 
 buildEnv {
-  name = "kernel-modules";
+  inherit name;
 
   paths = modules;
 
