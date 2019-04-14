@@ -748,7 +748,11 @@ in {
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
+  pytest-click = callPackage ../development/python-modules/pytest-click { };
+
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
+
+  pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
