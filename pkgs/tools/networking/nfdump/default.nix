@@ -18,7 +18,8 @@ stdenv.mkDerivation {
   buildInputs = [ bzip2 libpcap ];
 
   preConfigure = ''
-    patchShebangs autogen.sh
+    # The script defaults to glibtoolize on darwin, so we pass the correct
+    # name explicitly.
     LIBTOOLIZE=libtoolize ./autogen.sh
   '';
 
