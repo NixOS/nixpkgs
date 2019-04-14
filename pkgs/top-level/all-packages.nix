@@ -14790,6 +14790,8 @@ in
 
   bt-fw-converter = callPackage ../os-specific/linux/firmware/bt-fw-converter { };
 
+  brillo = callPackage ../os-specific/linux/brillo { };
+
   broadcom-bt-firmware = callPackage ../os-specific/linux/firmware/broadcom-bt-firmware { };
 
   batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
