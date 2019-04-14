@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "3.32.0";
+  version = "3.32.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "04qxm5jgj5fzjb06ghwqx3c2qsc502arrfw0xl9f09wb58wjp6ny";
+    sha256 = "1079d26y8d2zaw9w50l9scqjhbrynpdd6kyaa32x4393f7nih8hw";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext vala gtk-doc docbook_xsl docbook_xml_dtd_43 gobject-introspection python3 ];
