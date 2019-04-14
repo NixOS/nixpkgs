@@ -1,23 +1,29 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , future
+, nose
 }:
 
 buildPythonPackage rec {
   pname = "annexremote";
   version = "1.3.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "058d39fd59db165f0014601da1ba9ecde7614de87eef3061e9ea0b1dd096a9cd";
+  src = fetchFromGitHub {
+    rev = "v${version}";
+    owner = "Lykos153";
+    repo = "AnnexRemote";
+    sha256 = "13ny7h41430pi9393dw3qgwxvzcxacapjsw0d3vjm7lc4h566alq";
   };
 
   propagatedBuildInputs = [ future ];
 
-  meta = with stdenv.lib; {
-    description = "git annex special remotes made easy";
-    homepage = https://pypi.org/project/annexremote/;
+  checkInputs = [ nose ];
+  checkPhase = "nosetests -v";
+
+  meta = with lib; {
+    description = "Helper module to easily develop git-annex remotes";
+    homepage = https://github.com/Lykos153/AnnexRemote;
     license = licenses.gpl3;
     maintainers = with maintainers; [ montag451 ];
   };
