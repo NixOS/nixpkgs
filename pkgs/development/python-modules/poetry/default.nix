@@ -29,6 +29,7 @@ let
   });
 
   jsonschema3 = callPackage ./jsonschema.nix { };
+  glob2 = callPackage ./glob2.nix { };
 
 in buildPythonPackage rec {
   pname = "poetry";
@@ -45,6 +46,8 @@ in buildPythonPackage rec {
       "requests-toolbelt>=0.8.0,<0.10.0"
   '';
 
+  format = "pyproject";
+
   propagatedBuildInputs = [
     cleo6
     requests
@@ -58,7 +61,7 @@ in buildPythonPackage rec {
     html5lib
     shellingham
     tomlkit
-  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 ]
+  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
     ++ lib.optionals isPy27 [ virtualenv functools32 ];
 
   postInstall = ''
