@@ -4031,6 +4031,11 @@
     github = "renatoGarcia";
     name = "Renato Garcia";
   };
+  rencire = {
+    email = "546296+rencire@users.noreply.github.com";
+    github = "rencire";
+    name = "Eric Ren";
+  };
   renzo = {
     email = "renzocarbonara@gmail.com";
     github = "k0001";
