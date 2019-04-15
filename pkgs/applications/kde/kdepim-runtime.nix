@@ -5,7 +5,8 @@
   akonadi, akonadi-calendar, akonadi-contacts, akonadi-mime, akonadi-notes,
   kalarmcal, kcalutils, kcontacts, kdav, kdelibs4support, kidentitymanagement,
   kimap, kmailtransport, kmbox, kmime, knotifications, knotifyconfig,
-  pimcommon, qtwebengine, libkgapi, qtspeech, qtxmlpatterns
+  pimcommon, qtwebengine, libkgapi, qtspeech, qtxmlpatterns,
+  qca-qt5, qtnetworkauth
 }:
 
 mkDerivation {
@@ -19,7 +20,7 @@ mkDerivation {
     akonadi akonadi-calendar akonadi-contacts akonadi-mime akonadi-notes
     kalarmcal kcalutils kcontacts kdav kdelibs4support kidentitymanagement kimap
     kmailtransport kmbox kmime knotifications knotifyconfig qtwebengine
-    pimcommon libkgapi qtspeech qtxmlpatterns
+    pimcommon libkgapi qtspeech qtxmlpatterns qca-qt5 qtnetworkauth
   ];
   # Attempts to build some files before dependencies have been generated
   enableParallelBuilding = false;
