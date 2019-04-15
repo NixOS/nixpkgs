@@ -24,4 +24,9 @@ mkDerivation {
   ];
   # Attempts to build some files before dependencies have been generated
   enableParallelBuilding = false;
+
+  # build failure, not worth fixing, rc anyway
+  postPatch = ''
+    sed -i resources/CMakeLists.txt -e '/facebook/d'
+  '';
 }
