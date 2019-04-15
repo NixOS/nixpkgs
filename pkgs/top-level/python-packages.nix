@@ -2244,6 +2244,8 @@ in {
 
   pylama = callPackage ../development/python-modules/pylama { };
 
+  pymbolic = callPackage ../development/python-modules/pymbolic { };
+
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
   pyphen = callPackage ../development/python-modules/pyphen {};
