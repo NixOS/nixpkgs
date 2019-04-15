@@ -633,8 +633,7 @@ rec {
     else
       let
         x = head list;
-        xs = unique (drop 1 list);
-      in [x] ++ remove x xs;
+      in [x] ++ unique (remove x list);
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 
