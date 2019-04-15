@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "klavaro-${version}";
-  version = "3.04";
+  version = "3.05";
 
   src = fetchurl {
     url = "mirror://sourceforge/klavaro/${name}.tar.bz2";
-    sha256 = "148vznikdn424938fmizgd281ky7311q51mw2zfzrallj87dzbqf";
+    sha256 = "046xc7is1jz5azkwrb7i9wdqkz8hdm68ga02g6whmi53130wd0py";
   };
 
   nativeBuildInputs = [ pkgconfig ];
