@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     [ "-DARCH=generic;ice40;ecp5"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
       "-DTRELLIS_ROOT=${trellisRoot}/trellis"
+      "-DUSE_OPENMP=ON"
     ] ++ (stdenv.lib.optional (!enableGui) "-DBUILD_GUI=OFF");
 
   # Fix the version number. This is a bit stupid (and fragile) in practice
