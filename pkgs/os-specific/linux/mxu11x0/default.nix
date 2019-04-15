@@ -1,13 +1,11 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ stdenv, pkgs, fetchurl, kernel }:
 
 stdenv.mkDerivation {
-  name = "mxu11x0-1.3.11+git2017-07-13-${kernel.version}";
+  name = "mxu11x0-1.4-${kernel.version}";
 
-  src = fetchFromGitHub {
-    owner = "ellysh";
-    repo = "mxu11x0";
-    rev = "cbbb5ec2045939209117cb5fcd6c7c23bcc109ef";
-    sha256 = "0wf44pnz5aclvg2k1f8ljnwws8hh6191i5h06nz95ijbxhwz63w4";
+  src = fetchurl {
+    url = "https://www.moxa.com/Moxa/media/PDIM/S100000385/moxa-uport-1000-series-linux-3.x-and-4.x-for-uport-11x0-series-driver-v1.4.tgz";
+    sha256 = "1hz9ygabbp8pv49k1j4qcsr0v3zw9xy0bh1akqgxp5v29gbdgxjl";
   };
 
   preBuild = ''
@@ -34,6 +32,5 @@ stdenv.mkDerivation {
     license = licenses.gpl1;
     maintainers = with maintainers; [ uralbash ];
     platforms = platforms.linux;
-    broken = versionOlder kernel.version "4.9" || !versionOlder kernel.version "4.13";
   };
 }
