@@ -10767,6 +10767,8 @@ in
 
   lcms2 = callPackage ../development/libraries/lcms2 { };
 
+  ldacbt = callPackage ../development/libraries/ldacbt { };
+
   ldb = callPackage ../development/libraries/ldb {
     python = python2;
   };
