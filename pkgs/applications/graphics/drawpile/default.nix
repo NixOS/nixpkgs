@@ -60,10 +60,12 @@ let
 in stdenv.mkDerivation rec {
   name = "drawpile-${version}";
   version = "2.1.6";
+
   src = fetchurl {
     url = "https://drawpile.net/files/src/drawpile-${version}.tar.gz";
     sha256 = "0vwsdvphigrq1daiazi411qflahlvgx8x8ssp581bng2lbq1vrbd";
   };
+
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
@@ -73,15 +75,13 @@ in stdenv.mkDerivation rec {
     optionals buildClient      clientDeps ++
     optionals buildServer      serverDeps ++
     optionals enableKisTablet  kisDeps    ;
-  configurePhase = ''
-    cmake . \
-      ${optionalString (!buildClient    )  "-DCLIENT=off"   } \
-      ${optionalString (!buildServer    )  "-DSERVER=off"   } \
-      ${optionalString (!buildServerGui )  "-DSERVERGUI=off"} \
-      ${optionalString ( buildExtraTools)  "-DTOOLS=on"     } \
-      ${optionalString ( enableKisTablet)  "-DKIS_TABLET=on"} \
-      -DCMAKE_INSTALL_PREFIX=$out
-  '';
+
+  cmakeFlags =
+    optional (!buildClient    )  "-DCLIENT=off" ++
+    optional (!buildServer    )  "-DSERVER=off" ++
+    optional (!buildServerGui )  "-DSERVERGUI=off" ++
+    optional ( buildExtraTools)  "-DTOOLS=on" ++
+    optional ( enableKisTablet)  "-DKIS_TABLET=on";
 
   meta = {
     description = "A collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
