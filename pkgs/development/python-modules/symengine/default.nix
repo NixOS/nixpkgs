@@ -1,19 +1,23 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , cython
 , cmake
 , symengine
-, nose
+, pytest
+, sympy
+, python
 }:
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.3.0";
+  version = "0.4.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e86d13aadc9f765f2c5462da32950edd36d1a0a52dbfc96e766be3689957c04d";
+  src = fetchFromGitHub {
+    owner = "symengine";
+    repo = "symengine.py";
+    rev = "v${version}";
+    sha256 = "07i9rwxphi4zgwc7y6f6qvq73iym2cx4k1bpd7rmd3wkpgrrfxqx";
   };
 
   postConfigure = ''
@@ -26,12 +30,17 @@ buildPythonPackage rec {
 
   buildInputs = [ cython cmake ];
 
-  setupPyBuildFlags = [ "--symengine-dir=${symengine}/" ];
+  checkInputs = [ pytest sympy ];
 
-  # tests fail due to trying to import local "symengine" directory
-  doCheck = false;
+  setupPyBuildFlags = [
+    "--symengine-dir=${symengine}/"
+    "--define=\"CYTHON_BIN=${cython}/bin/cython\""
+  ];
+
   checkPhase = ''
-    nosetests symengine/tests -v
+    mkdir empty
+    cd empty
+    ${python.interpreter} ../bin/test_python.py
   '';
 
   meta = with lib; {
