@@ -49,6 +49,11 @@
        </link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      There is a new <option>services.tox-node</option> module for running tox bootstrap nodes.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
