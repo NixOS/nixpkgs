@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ perl cdrkit syslinux xz openssl ];
 
   src = fetchgit {
-    url = git://git.ipxe.org/ipxe.git;
+    url = https://git.ipxe.org/ipxe.git;
     sha256 = "1s8sy75lpx8zq60wc0i35d8c1wwm1rq3scxpkq31623d097mch59";
     inherit rev;
   };
