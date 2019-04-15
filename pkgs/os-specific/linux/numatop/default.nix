@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
     homepage = https://01.org/numatop;
     license = licenses.bsd3;
     maintainers = with maintainers; [ dtzWill ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = [
+      { kernel.name = "linux"; cpu.family = "x86"; }
+      { kernel.name = "linux"; cpu.family = "power"; }
+    ];
   };
 }
