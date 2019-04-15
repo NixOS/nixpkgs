@@ -126,6 +126,7 @@ in
     services.gnome3.evolution-data-server.enable = true;
     services.gnome3.file-roller.enable = mkDefault true;
     # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
+    services.gnome3.glib-networking.enable = true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;
     services.gnome3.gnome-settings-daemon.package = pkgs.pantheon.elementary-settings-daemon;
@@ -153,7 +154,6 @@ in
 
     environment.variables.GIO_EXTRA_MODULES = [
       "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
-      "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"
       "${pkgs.gnome3.gvfs}/lib/gio/modules"
     ];
 
