@@ -4607,6 +4607,10 @@ in {
 
   python-vagrant = callPackage ../development/python-modules/python-vagrant { };
 
+  symengine = callPackage ../development/python-modules/symengine {
+    symengine = pkgs.symengine;
+  };
+
   sympy = callPackage ../development/python-modules/sympy { };
 
   pilkit = callPackage ../development/python-modules/pilkit { };
