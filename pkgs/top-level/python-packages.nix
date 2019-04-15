@@ -4007,6 +4007,8 @@ in {
 
   pyutil = callPackage ../development/python-modules/pyutil { };
 
+  pyutilib = callPackage ../development/python-modules/pyutilib { };
+
   pywal = callPackage ../development/python-modules/pywal { };
 
   pywebkitgtk = callPackage ../development/python-modules/pywebkitgtk { };
