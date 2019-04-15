@@ -21,6 +21,7 @@
 , lameSupport ? true, lame
 , pulseaudioSupport ? true, libpulseaudio
 , jackSupport ? true, libjack2
+, sndioSupport ? true, libsndio
 , gmeSupport ? true, game-music-emu
 , icuSupport ? true, icu
 , clientSupport ? true, mpd_clientlib
@@ -79,6 +80,7 @@ in stdenv.mkDerivation rec {
     ++ opt zipSupport zziplib
     ++ opt (!stdenv.isDarwin && pulseaudioSupport) libpulseaudio
     ++ opt (!stdenv.isDarwin && jackSupport) libjack2
+    ++ opt sndioSupport libsndio
     ++ opt gmeSupport game-music-emu
     ++ opt icuSupport icu
     ++ opt clientSupport mpd_clientlib
@@ -114,6 +116,7 @@ in stdenv.mkDerivation rec {
       (mkFlag lameSupport "lame-encoder")
       (mkFlag (!stdenv.isDarwin && pulseaudioSupport) "pulse")
       (mkFlag (!stdenv.isDarwin && jackSupport) "jack")
+      (mkFlag sndioSupport "sndio")
       (mkFlag stdenv.isDarwin "osx")
       (mkFlag icuSupport "icu")
       (mkFlag gmeSupport "gme")
