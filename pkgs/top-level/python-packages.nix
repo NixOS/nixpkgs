@@ -1983,6 +1983,8 @@ in {
 
   humanize = callPackage ../development/python-modules/humanize { };
 
+  humanfriendly = callPackage ../development/python-modules/humanfriendly { };
+
   hupper = callPackage ../development/python-modules/hupper {};
 
   hsaudiotag = callPackage ../development/python-modules/hsaudiotag { };
