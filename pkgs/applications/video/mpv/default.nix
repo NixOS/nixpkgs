@@ -44,6 +44,7 @@
 , xineramaSupport    ? stdenv.isLinux, libXinerama   ? null
 , xvSupport          ? stdenv.isLinux, libXv         ? null
 , youtubeSupport     ? true,           youtube-dl    ? null
+, sndioSupport       ? true,           libsndio      ? null
 , archiveSupport     ? false,          libarchive    ? null
 , jackaudioSupport   ? false,          libjack2      ? null
 , openalSupport      ? false,          openalSoft    ? null
@@ -68,6 +69,7 @@ assert dvdreadSupport     -> available libdvdread;
 assert jackaudioSupport   -> available libjack2;
 assert libpngSupport      -> available libpng;
 assert openalSupport      -> available openalSoft;
+assert sndioSupport       -> available libsndio;
 assert pulseSupport       -> available libpulseaudio;
 assert rubberbandSupport  -> available rubberband;
 assert screenSaverSupport -> available libXScrnSaver;
@@ -125,6 +127,7 @@ in stdenv.mkDerivation rec {
     (enableFeature dvdnavSupport   "dvdnav")
     (enableFeature dvdreadSupport  "dvdread")
     (enableFeature openalSupport   "openal")
+    (enableFeature sndioSupport    "sndio")
     (enableFeature vaapiSupport    "vaapi")
     (enableFeature waylandSupport  "wayland")
     (enableFeature stdenv.isLinux  "dvbin")
@@ -153,6 +156,7 @@ in stdenv.mkDerivation rec {
     ++ optional jackaudioSupport   libjack2
     ++ optional libpngSupport      libpng
     ++ optional openalSupport      openalSoft
+    ++ optional sndioSupport       libsndio
     ++ optional pulseSupport       libpulseaudio
     ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
