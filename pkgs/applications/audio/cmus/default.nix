@@ -9,11 +9,11 @@
 , ossSupport ? false, alsaOss ? null
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio ? null
 , mprisSupport ? stdenv.isLinux, systemd ? null
+, sndioSupport ? false, libsndio ? null
 
 # TODO: add these
 #, artsSupport
 #, roarSupport
-#, sndioSupport
 #, sunSupport
 #, waveoutSupport
 
@@ -62,10 +62,10 @@ let
     (mkFlag ossSupport        "CONFIG_OSS=y"        alsaOss)
     (mkFlag pulseaudioSupport "CONFIG_PULSE=y"      libpulseaudio)
     (mkFlag mprisSupport      "CONFIG_MPRIS=y"      systemd)
+    (mkFlag sndioSupport      "CONFIG_SNDIO=y"      libsndio)
 
     #(mkFlag artsSupport      "CONFIG_ARTS=y")
     #(mkFlag roarSupport      "CONFIG_ROAR=y")
-    #(mkFlag sndioSupport     "CONFIG_SNDIO=y")
     #(mkFlag sunSupport       "CONFIG_SUN=y")
     #(mkFlag waveoutSupport   "CONFIG_WAVEOUT=y")
 
