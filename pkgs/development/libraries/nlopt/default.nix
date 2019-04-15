@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "nlopt-${version}";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "https://github.com/stevengj/nlopt/archive/v${version}.tar.gz";
-    sha256 = "1bmlsdzkw8xbigiihffyb0kdaqbyfn7dr8s5pdgavy7z05bpmpf6";
+    sha256 = "1asiyilhmx8abshk0d2aia6ykgs4czhg22xcm9z15wgmyp6pfc51";
   };
 
   nativeBuildInputs = [ cmake ];
