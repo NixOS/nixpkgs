@@ -16990,6 +16990,10 @@ in
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
 
   drawpile = libsForQt5.callPackage ../applications/graphics/drawpile { };
+  drawpile-server-headless = libsForQt5.callPackage ../applications/graphics/drawpile {
+    buildClient = false;
+    buildServerGui = false;
+  };
 
   droopy = callPackage ../applications/networking/droopy {
     inherit (python3Packages) wrapPython;
