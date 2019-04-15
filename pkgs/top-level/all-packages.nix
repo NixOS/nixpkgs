@@ -2916,6 +2916,8 @@ in
 
   fsarchiver = callPackage ../tools/archivers/fsarchiver { };
 
+  fsfe-reuse = callPackage ../development/tools/fsfe-reuse { };
+
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
   fstl = qt5.callPackage ../applications/graphics/fstl { };
