@@ -5441,6 +5441,8 @@ in {
 
   gensim = callPackage  ../development/python-modules/gensim { };
 
+  genpy = callPackage ../development/python-modules/genpy { };
+
   cymem = callPackage ../development/python-modules/cymem { };
 
   ftfy = callPackage ../development/python-modules/ftfy { };
