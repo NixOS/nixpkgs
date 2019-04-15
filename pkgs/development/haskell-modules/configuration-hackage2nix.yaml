@@ -9980,7 +9980,7 @@ broken-packages:
   - zeromq3-haskell
   - zeromq4-clone-pattern
   - zeromq4-conduit
-  - zeromq4-haskell
+  - zeromq4-haskell == 0.7.*
   - zeromq4-patterns
   - zeromq4-simple
   - zeroth
