@@ -1233,6 +1233,8 @@ in {
 
   cement = callPackage ../development/python-modules/cement {};
 
+  cgen = callPackage ../development/python-modules/cgen { };
+
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils {};
 
   chainer = callPackage ../development/python-modules/chainer {
