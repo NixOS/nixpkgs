@@ -1783,6 +1783,8 @@ in {
 
   locket = callPackage ../development/python-modules/locket { };
 
+  loo-py = callPackage ../development/python-modules/loo-py { };
+
   tblib = callPackage ../development/python-modules/tblib { };
 
   s3fs = callPackage ../development/python-modules/s3fs { };
