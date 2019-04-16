@@ -23815,4 +23815,6 @@ in
     stdenv = crossLibcStdenv;
   };
 
+  wasmtime = callPackage ../development/interpreters/wasmtime {};
+
 }
