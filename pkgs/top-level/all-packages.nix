@@ -19755,6 +19755,8 @@ in
 
   peru = callPackage ../applications/version-management/peru {};
 
+  petrinizer = haskellPackages.callPackage ../applications/science/logic/petrinizer {};
+
   pmidi = callPackage ../applications/audio/pmidi { };
 
   printrun = callPackage ../applications/misc/printrun { };
