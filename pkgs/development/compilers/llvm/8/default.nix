@@ -106,6 +106,8 @@ let
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
       '' + stdenv.lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
+      '' + stdenv.lib.optionalString stdenv.targetPlatform.isWasm ''
+        echo "-fno-exceptions" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
     };
 
