@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, kernel }:
+{ stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation {
   name = "mxu11x0-1.4-${kernel.version}";
