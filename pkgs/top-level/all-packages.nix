@@ -21977,6 +21977,10 @@ in
 
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
+  amrex = callPackage ../development/libraries/science/math/amrex {
+    mpi = openmpi;
+  };
+
   blas = callPackage ../development/libraries/science/math/blas { };
 
   brial = callPackage ../development/libraries/science/math/brial { };
