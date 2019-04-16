@@ -1989,6 +1989,10 @@
     github = "Hodapp87";
     name = "Chris Hodapp";
   };
+  hochi = {
+    github = "h0chi";
+    name = "hochi";
+  };
   hrdinka = {
     email = "c.nix@hrdinka.at";
     github = "hrdinka";

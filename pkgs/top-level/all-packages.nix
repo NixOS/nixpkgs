@@ -16617,8 +16617,10 @@ in
   bluefish = callPackage ../applications/editors/bluefish {
     gtk = gtk3;
   };
-
+  
   bluejeans = callPackage ../applications/networking/browsers/mozilla-plugins/bluejeans { };
+
+  bluej-bin = callPackage ../applications/editors/bluej-bin { };
 
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans {
     gconf = pkgs.gnome2.GConf;
