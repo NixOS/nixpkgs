@@ -1,4 +1,6 @@
-{ stdenv, buildPythonApplication, fetchPypi, pytest, ply, six }:
+{ stdenv, pythonPackages }:
+
+with pythonPackages;
 
 buildPythonApplication rec {
   pname   = "lesscpy";
