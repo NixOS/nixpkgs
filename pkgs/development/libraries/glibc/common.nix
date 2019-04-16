@@ -58,8 +58,15 @@ stdenv.mkDerivation ({
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
 
-      /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
-      ./dont-use-system-ld-so-cache.patch
+      /* Don't use /etc/ld.so.cache or /etc/ld.so.conf, for non-NixOS systems.
+       * This is done to prevent the dynamic linker from picking up non-nix
+       * libraries at runtime. If that were the case, it could happen that some
+       * package works for one user on a non-nixos system, while it doesn't
+       * work for another. /etc/nix-ld.so.conf is checked instead of the regular
+       * /etc/ld.so.conf in order to provide an opt-in mechanism for users who
+       * do want to consider libraries outside the nix store for dynamic
+       * linking. */
+      ./dont-use-system-ld-so-cache-and-conf.patch
 
       /* Don't use /etc/ld.so.preload, but /etc/ld-nix.so.preload.  */
       ./dont-use-system-ld-so-preload.patch
