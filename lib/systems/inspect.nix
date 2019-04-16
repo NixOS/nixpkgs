@@ -46,7 +46,7 @@ rec {
     isWasi         = { kernel = kernels.wasi; };
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
-    isMusl         = (with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ]) ++ [{ kernel = kernels.wasi; }];
+    isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
     isEfi          = map (family: { cpu.family = family; })

@@ -15,6 +15,7 @@ stdenv.mkDerivation {
   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isWasm [
     "-DUNIX=ON"
     "-DLIBCXXABI_ENABLE_THREADS=OFF"
+    "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
   ] ++ stdenv.lib.optionals (!enableShared) [
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
