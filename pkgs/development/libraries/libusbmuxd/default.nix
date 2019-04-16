@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "libusbmuxd";
-  version = "2019-01-18";
+  version = "2019-03-23";
 
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "c75605d862cd1c312494f6c715246febc26b2e05";
-    sha256 = "0467a045k4znmaz61i7a2s7yywj67q830ja6zn7z39k5pqcl2z4p";
+    rev = "873252dc8b4e469c7dc692064ac616104fca5f65";
+    sha256 = "0qx3q0n1f2ajfm3vnairikayzln6iyb2y0i7sqfl8mj45ahl6wyj";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage    = https://github.com/libimobiledevice/libusbmuxd;
     license     = licenses.lgpl21Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ infinisil ];
   };
 }
