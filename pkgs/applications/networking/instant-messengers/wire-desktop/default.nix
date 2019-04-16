@@ -49,11 +49,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "wire-desktop";
-  version = "3.7.2891";
+  version = "3.9.2895";
 
   src = fetchurl {
     url = "https://wire-app.wire.com/linux/debian/pool/main/Wire-${version}_amd64.deb";
-    sha256 = "0x4nx1rpr9wai0h3n14h1r0f0lj5m29a3pkx1w6mfz5la74iczqc";
+    sha256 = "0wrn95m64j4b7ym44h9zawq13kg4m12aixlyyzp56bfyczmjq4a5";
   };
 
   desktopItem = makeDesktopItem {
