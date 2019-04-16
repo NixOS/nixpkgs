@@ -54,7 +54,7 @@ let
     rule_files = map (promtoolCheck "check-rules" "rules") (cfg.ruleFiles ++ [
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
     ]);
-    scrape_configs = cfg.scrapeConfigs;
+    scrape_configs = filterEmpty cfg.scrapeConfigs;
   };
 
   generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
@@ -81,7 +81,7 @@ let
     rule_files = map (prom2toolCheck "check rules" "rules") (cfg2.ruleFiles ++ [
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg2.rules))
     ]);
-    scrape_configs = cfg2.scrapeConfigs;
+    scrape_configs = filterEmpty cfg2.scrapeConfigs;
     alerting = optionalAttrs (cfg2.alertmanagerURL != []) {
       alertmanagers = [{
         static_configs = [{
@@ -107,6 +107,21 @@ let
     "--alertmanager.timeout=${toString cfg2.alertmanagerTimeout}s"
   ] ++
   optional (cfg2.webExternalUrl != null) "--web.external-url=${cfg2.webExternalUrl}";
+
+  filterEmpty = filterAttrsListRecursive (_n: v: !(v == null || v == [] || v == {}));
+  filterAttrsListRecursive = pred: x:
+    if isAttrs x then
+      listToAttrs (
+        concatMap (name:
+          let v = x.${name}; in
+          if pred name v then [
+            (nameValuePair name (filterAttrsListRecursive pred v))
+          ] else []
+        ) (attrNames x)
+      )
+    else if isList x then
+      map (filterAttrsListRecursive pred) x
+    else x;
 
   promTypes.globalConfig = types.submodule {
     options = {
