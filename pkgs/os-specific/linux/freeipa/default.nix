@@ -1,5 +1,5 @@
 { stdenv, fetchurl, writeText, pkgconfig, autoconf, automake, kerberos,
-  openldap, popt, sasl, curl, xmlrpc_c, ding-libs, p11_kit, gettext, nspr, nss,
+  openldap, popt, sasl, curl, xmlrpc_c, ding-libs, p11-kit, gettext, nspr, nss,
   dirsrv, svrcore, libuuid, talloc, tevent, samba, libunistring, libverto,
   systemd, python2, bind, pyhbac, jre, rhino, lesscpy }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    kerberos openldap popt sasl curl xmlrpc_c pkgconfig ding-libs p11_kit
+    kerberos openldap popt sasl curl xmlrpc_c pkgconfig ding-libs p11-kit
     python2 autoconf nspr nss dirsrv svrcore libuuid talloc tevent samba
     libunistring libverto systemd bind
   ] ++ pythonInputs;
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       --replace klist ${kerberos}/bin/klist
 
     substituteInPlace ipapython/p11helper.py \
-      --replace "ctypes.util.find_library('p11-kit')" \"${p11_kit}/lib/libp11-kit.so\"
+      --replace "ctypes.util.find_library('p11-kit')" \"${p11-kit}/lib/libp11-kit.so\"
 
     for file in daemons/ipa-slapi-plugins/*/Makefile.*; do
       substituteInPlace $file \
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       --subst-var-by kerberos ${kerberos}
   '';
 
-  PYTHON="${python2}/bin/python";
+  PYTHON="${python2.intepreter}";
 
   configurePhase = ''
     for dir in asn1 client daemons install; do
