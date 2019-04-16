@@ -23424,4 +23424,7 @@ in
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
   };
+
+  wasmtime = callPackage ../development/interpreters/wasmtime {};
+
 }
