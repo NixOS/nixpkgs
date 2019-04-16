@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, perl, pam, nspr, nss, openldap
-, db, cyrus_sasl, svrcore, icu, net_snmp, kerberos, pcre, perlPackages
+, db, cyrus_sasl, svrcore, icu, net_snmp, kerberos, pcre, perlPackages, openssl
 }:
 let
   version = "1.3.5.19";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     perl pam nspr nss openldap db cyrus_sasl svrcore icu
-    net_snmp kerberos pcre
+    net_snmp kerberos pcre openssl
   ] ++ (with perlPackages; [ MozillaLdap NetAddrIP DBFile ]);
 
   # TODO: Fix bin/ds-logpipe.py, bin/logconv, bin/cl-dump

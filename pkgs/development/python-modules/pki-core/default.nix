@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, sphinx, rpmextract, nss, requests2,
+{ stdenv, fetchurl, buildPythonPackage, sphinx, rpmextract, nss, requests,
   six }:
 
 buildPythonPackage rec {
@@ -22,14 +22,15 @@ buildPythonPackage rec {
 
   patchFlags = "-p1 -F 3";
 
-  buildInputs = [ sphinx rpmextract ];
-  propagatedBuildInputs = [ nss requests2 six ];
+  nativeBuildInputs = [ rpmextract ];
+  buildInputs = [ sphinx ];
+  propagatedBuildInputs = [ nss requests six ];
 
   unpackPhase = ''
     rpmextract $src
     tar -xf ${name}.tar.gz
     mv *.patch ${name}/
-    mkdir ${name}/specs 
+    mkdir ${name}/specs
     mv pki-core.spec ${name}/specs/
   '';
 

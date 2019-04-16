@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname   = "lesscpy";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dcql1bgh70a9avbx9b8mq9gzdp76v8bszlik96x3rf6xxbjfmaw";
+    sha256 = "1bbjag13kawnjdn7q4flfrkd0a21rgn9ycfqsgfdmg658jsx1ipk";
   };
 
   checkInputs = [ pytest ];

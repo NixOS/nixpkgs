@@ -281,6 +281,8 @@ in
         fetchurl = stdenv.fetchurlBoot;
         inherit pkgconfig perl openssl;
         keyutils = buildPackages.keyutils.override { fetchurl = stdenv.fetchurlBoot; };
+        # Prevent circular dependency
+        enableSystemVerto = false;
       };
       nghttp2 = buildPackages.nghttp2.override {
         fetchurl = stdenv.fetchurlBoot;
@@ -10166,31 +10168,14 @@ in
 
   freeimage = callPackage ../development/libraries/freeimage { };
 
-  freeipaKerberos = krb5Full.override { inherit libverto; };
-
-  freeipaKerberosLib = freeipaKerberos.override { type = "lib"; };
-
-  freeipaCurl = curl.override {
-    gssSupport = true;
-    gss = krb5Full;
-  };
-
-  freeipaBind = bind.override { kerberos = freeipaKerberosLib; };
-
-  freeipaSamba = samba4.override {
-    enableLDAP = true;
-    kerberos = freeipaKerberosLib;
-  };
-
   freeipa = callPackage ../os-specific/linux/freeipa {
-    kerberos = freeipaKerberos;
+    kerberos = krb5Full;
     sasl = cyrus_sasl;
-    # ipa-join requires curl with krb5 GSSAPI delegation
-    curl = freeipaCurl;
     pyhbac = sssd;
-    dirsrv = pkgs."389-ds-base";
-    samba = freeipaSamba;
-    bind = freeipaBind;
+    dirsrv = _389-ds-base;
+    samba = samba4.override {
+      enableLDAP = true;
+    };
   };
 
   freetts = callPackage ../development/libraries/freetts { };
@@ -10893,6 +10878,7 @@ in
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (buildPackages.darwin) bootstrap_cmds;
+    enableSystemVerto = true;
   };
   krb5Full = krb5;
   libkrb5 = krb5.override { type = "lib"; };

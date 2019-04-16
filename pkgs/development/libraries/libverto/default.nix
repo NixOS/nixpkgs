@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libev, libevent, tevent, talloc }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, libev, libevent, tevent, talloc }:
 
 let
   name = "libverto-${version}";
@@ -8,13 +8,16 @@ stdenv.mkDerivation {
   inherit name;
   inherit version;
 
-  src = fetchurl {
-    url = "https://fedorahosted.org/releases/l/i/libverto/${name}.tar.gz";
-    sha256 = "17hwr55ga0rkm5cnyfiipyrk9n372x892ph9wzi88j2zhnisdv0p";
+  src = fetchFromGitHub {
+    owner = "latchset";
+    repo = "libverto";
+    rev = version;
+    sha256 = "1wis97l2f265bq6ps1b4yjblll7pa2xsckq3kjblv1djg71brmbr";
   };
 
   patches = [ ./libverto-0.2.6-exec-prefix.patch ];
-  
+
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ pkgconfig glib libev libevent tevent talloc ];
 
   meta = with stdenv.lib; {
@@ -28,7 +31,7 @@ stdenv.mkDerivation {
       async api which allows the library to expose asynchronous interfaces and
       offload the choice of the main loop to the application.
     '';
-    homepage = https://fedorahosted.org/libverto/;
+    homepage = https://github.com/latchset/libverto/;
     license = licenses.mit;
     maintainers = [ maintainers.e-user ];
   };

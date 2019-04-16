@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     export PYTHONPATH=$(echo $(pwd)/build/lib.*):$PYTHONPATH
-    $PYTHON test/run_tests
+    python test/run_tests
   '';
 
   meta = with stdenv.lib; {

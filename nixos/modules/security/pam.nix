@@ -356,9 +356,12 @@ let
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
           # after it succeeds. Certain modules need to run after pam_unix
-          # prompts the user for password so we run it once with 'required' at an
+          # prompts the user for password so we run it once with 'optional' at an
           # earlier point and it will run again with 'sufficient' further down.
-          # We use try_first_pass the second time to avoid prompting password twice
+          # We use try_first_pass the second time to avoid prompting password twice.
+          # Alternative modules such as pam_sss may also terminate the auth
+          # process succesfully further down the line, using the first password
+          # passed in to pam_unix.
           (optionalString (cfg.unixAuth &&
           (config.security.pam.enableEcryptfs
             || cfg.pamMount
@@ -366,7 +369,7 @@ let
             || cfg.enableGnomeKeyring
             || cfg.googleAuthenticator.enable
             || cfg.duoSecurity.enable)) ''
-              auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
+              auth optional pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
               ${optionalString cfg.pamMount

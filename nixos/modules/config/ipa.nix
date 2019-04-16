@@ -20,9 +20,9 @@ let
   nssDb = pkgs.runCommand "ipa-nssdb" { buildInputs = [ pkgs.nss.tools ]; } ''
     set -x
     mkdir -p $out
-    < /dev/urandom tr -dc '[:print:]' | head -c 40 > $out/pwdfile.txt ||:
-    chmod 600 $out/pwdfile.txt
-    certutil -d $out -N -f $out/pwdfile.txt
+    < /dev/urandom tr -dc '[:print:]' | head -c 40 > $out/pwdfile ||:
+    chmod 600 $out/pwdfile
+    certutil -d $out -N -f $out/pwdfile
     chmod 644 $out/*.db
     certutil -d $out -A -f $out/pwdfile -n "${cfg.realm} IPA CA" -t CT,C,C -i ${cfg.certificate}
   '';
@@ -72,12 +72,6 @@ in {
         description = "Whether to store offline passwords when the server is down.";
       };
 
-      adminUser = mkOption {
-        type = types.str;
-        default = "admin";
-        description = "IPA user with host joining privileges.";
-      };
-
       dyndns = {
         enable = mkOption {
           type = types.bool;
@@ -121,7 +115,7 @@ in {
       }
     ];
 
-    environment.systemPackages = with pkgs; [ freeipa freeipaKerberos freeipaCurl freeipaBind.dnsutils openldap ];
+    environment.systemPackages = with pkgs; [ krb5Full freeipa ];
 
     environment.etc = mkMerge [{
       "ipa/default.conf".text = ''
@@ -182,11 +176,15 @@ in {
         cp ${cfg.certificate} /etc/ipa/ca.crt
       fi
 
-      # Perform ipa-join after all files in /etc are available
-      if [ ! -e /etc/krb5.keytab ]; then
-        echo "Joining IPA domain ${cfg.domain}"
-        ${pkgs.freeipaKerberos}/bin/kinit ${cfg.adminUser}@${cfg.realm} || exit 1
-        ${pkgs.freeipa}/bin/ipa-join || exit 1
+      if [ ! -f /etc/krb5.keytab ]; then
+        cat <<EOF
+
+In order to complete FreeIPA integration, please join the domain by completing the following steps:
+1. Authenticate as an IPA user authorized to join new hosts, e.g. kinit admin@${cfg.realm}
+2. Join the domain and obtain the keytab file: ipa-join
+3. Install the keytab file: sudo install -m 600 krb5.keytab /etc/
+
+EOF
       fi
     '';
 

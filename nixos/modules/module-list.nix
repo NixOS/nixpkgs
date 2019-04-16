@@ -17,9 +17,8 @@
   ./config/gnu.nix
   ./config/i18n.nix
   ./config/iproute2.nix
-  ./config/krb5/default.nix
   ./config/ipa.nix
-  ./config/krb5.nix
+  ./config/krb5/default.nix
   ./config/ldap.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
