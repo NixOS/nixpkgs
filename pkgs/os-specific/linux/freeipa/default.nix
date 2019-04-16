@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       --subst-var-by kerberos ${kerberos}
   '';
 
-  PYTHON="${python2.intepreter}";
+  PYTHON="${python2}/bin/python";
 
   configurePhase = ''
     for dir in asn1 client daemons install; do
