@@ -12,8 +12,8 @@ rec {
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
   cleanSourceFilter = name: type: let baseName = baseNameOf (toString name); in ! (
-    # Filter out Subversion and CVS directories.
-    (type == "directory" && (baseName == ".git" || baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
+    # Filter out version control software files/directories
+    (baseName == ".git" || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
     # Filter out editor backup / swap files.
     lib.hasSuffix "~" baseName ||
     builtins.match "^\\.sw[a-z]$" baseName != null ||

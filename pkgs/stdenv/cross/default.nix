@@ -55,7 +55,7 @@ in lib.init bootStages ++ [
            else if crossSystem.useAndroidPrebuilt or false
              then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".clang
            else if crossSystem.useLLVM or false
-             then buildPackages.llvmPackages_7.lldClang
+             then buildPackages.llvmPackages_8.lldClang
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs

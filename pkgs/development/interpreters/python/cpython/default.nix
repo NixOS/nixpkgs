@@ -104,6 +104,8 @@ in with passthru; stdenv.mkDerivation {
     (
       if isPy35 then
         ./3.5/python-3.x-distutils-C++.patch
+      else if isPy37 then
+        ./3.7/python-3.x-distutils-C++.patch
       else
         fetchpatch {
           url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";

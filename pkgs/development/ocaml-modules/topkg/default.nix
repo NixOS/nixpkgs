@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit run; };
 
   meta = {
-    homepage = http://erratique.ch/software/topkg;
+    homepage = https://erratique.ch/software/topkg;
     license = stdenv.lib.licenses.isc;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     description = "A packager for distributing OCaml software";

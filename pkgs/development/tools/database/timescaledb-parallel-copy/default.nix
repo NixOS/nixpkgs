@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Bulk, parallel insert of CSV records into PostgreSQL";
-    homepage    = http://github.com/timescale/timescaledb-parallel-copy;
+    homepage    = https://github.com/timescale/timescaledb-parallel-copy;
     license     = licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];

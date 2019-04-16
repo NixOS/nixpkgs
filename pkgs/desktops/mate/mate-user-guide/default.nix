@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "MATE User Guide";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = with licenses; [ gpl2Plus fdl12 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

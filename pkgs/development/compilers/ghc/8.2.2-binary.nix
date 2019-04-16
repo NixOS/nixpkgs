@@ -123,6 +123,7 @@ stdenv.mkDerivation rec {
   let
     gcc-clang-wrapper = substituteAll {
       inherit (stdenv) shell;
+      isExecutable = true;
       src = ./gcc-clang-wrapper.sh;
     };
   in

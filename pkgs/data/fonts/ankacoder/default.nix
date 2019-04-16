@@ -21,4 +21,3 @@ fetchzip rec {
     platforms = platforms.all;
   };
 }
-

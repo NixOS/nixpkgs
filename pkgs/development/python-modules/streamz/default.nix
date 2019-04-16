@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pipelines to manage continuous streams of data";
-    homepage = http://github.com/mrocklin/streamz/;
+    homepage = https://github.com/mrocklin/streamz/;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

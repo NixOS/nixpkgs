@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
+{ stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, python3, zlib, pkgconfig, ncurses
 , dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU_combined, freetype, pngcrush, advancecomp
 , tileMode ? false, enableSound ? tileMode
 }:
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.22.1";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    sha256 = "19yzl241glv2zazifgz59bw3jlh4hj59xx5w002hnh9rp1w15rnr";
+    sha256 = "1d6mip4rvp81839yf2xm63hf34aza5wg4g5z5hi5275j94szaacs";
   };
 
   # Patch hard-coded paths in the makefile
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
+                ++ (with python3.pkgs; [ pyyaml ])
                 ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ]
                 ++ lib.optional enableSound SDL2_mixer;
 

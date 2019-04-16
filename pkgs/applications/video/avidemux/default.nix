@@ -25,11 +25,11 @@ assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
   name = "avidemux-${version}";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "07fdz3y4iln7cizikdjj96dqvp2f8zzhs31ncxxwzdkngn5v8138";
+    sha256 = "17x2mnnr5h8pp764p55l1xcn2ljnzhbj8cykajlllvk4rc4qwxld";
   };
 
   patches = [

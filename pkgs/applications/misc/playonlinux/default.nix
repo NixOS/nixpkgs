@@ -102,5 +102,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = [ maintainers.a1russell ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    broken = true;
   };
 }

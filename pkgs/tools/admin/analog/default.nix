@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.c-amie.co.uk/software/analog/;
+    homepage = https://www.c-amie.co.uk/software/analog/;
     license = stdenv.lib.licenses.gpl2;
     description = "Powerful tool to generate web server statistics";
     maintainers = [ stdenv.lib.maintainers.peti ];

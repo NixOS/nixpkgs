@@ -129,6 +129,7 @@ in {
     services.gnome3.evince.enable = mkDefault true;
     services.gnome3.evolution-data-server.enable = true;
     services.gnome3.file-roller.enable = mkDefault true;
+    services.gnome3.glib-networking.enable = true;
     services.gnome3.gnome-disks.enable = mkDefault true;
     services.gnome3.gnome-documents.enable = mkDefault true;
     services.gnome3.gnome-keyring.enable = true;
@@ -205,7 +206,6 @@ in {
     services.xserver.updateDbusEnvironment = true;
 
     environment.variables.GIO_EXTRA_MODULES = [ "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
-                                                "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"
                                                 "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
       ++ (pkgs.gnome3.removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [

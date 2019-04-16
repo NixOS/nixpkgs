@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/xattr/xattr;
+    homepage = https://github.com/xattr/xattr;
     description = "Python wrapper for extended filesystem attributes";
     license = licenses.mit;
   };

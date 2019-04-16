@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, cmake, llvm, curl, tzdata
+{ stdenv, fetchurl, cmake, ninja, llvm, llvm_8, curl, tzdata
 , python, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, targetPackages
 , bootstrapVersion ? false
-, version ? "1.14.0"
-, ldcSha256 ? "147vlzzzjx2n6zyz9wj54gj046i1mw5p5wixwzi5wkllgxghyy9c"
+, version ? "1.15.0"
+, ldcSha256 ? "1qnfy2q8zkywvby7wa8jm20mlpghn28x6w357cpc8hi56g7y1q6p"
 }:
 
 let
@@ -37,6 +37,12 @@ stdenv.mkDerivation rec {
       patchShebangs .
   ''
 
+  + stdenv.lib.optionalString (!bootstrapVersion) ''
+      rm ldc-${version}-src/tests/d2/dmd-testsuite/fail_compilation/mixin_gc.d
+      rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/xtest46_gc.d
+      rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/testptrref_gc.d
+  ''
+
   + stdenv.lib.optionalString (!bootstrapVersion && stdenv.hostPlatform.isDarwin) ''
       # https://github.com/NixOS/nixpkgs/issues/34817
       rm -r ldc-${version}-src/tests/plugins/addFuncEntryCall
@@ -68,10 +74,20 @@ stdenv.mkDerivation rec {
       substituteInPlace dmd2/root/port.c --replace __inline_isnanl __inline_isnan
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper llvm unzip ]
+  nativeBuildInputs = [ cmake ninja makeWrapper unzip ]
 
   ++ stdenv.lib.optional (!bootstrapVersion) [
     bootstrapLdc python lit
+  ]
+
+  ++ stdenv.lib.optional (!bootstrapVersion && stdenv.hostPlatform.isDarwin) [
+    # https://github.com/NixOS/nixpkgs/issues/57120
+    # https://github.com/NixOS/nixpkgs/pull/59197#issuecomment-481972515
+    llvm
+  ]
+
+  ++ stdenv.lib.optional (!bootstrapVersion && !stdenv.hostPlatform.isDarwin) [
+    llvm_8
   ]
 
   ++ stdenv.lib.optional (!bootstrapVersion && !stdenv.hostPlatform.isDarwin) [
@@ -80,7 +96,7 @@ stdenv.mkDerivation rec {
   ]
 
   ++ stdenv.lib.optional (bootstrapVersion) [
-    libconfig
+    libconfig llvm
   ]
 
   ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -123,6 +139,7 @@ stdenv.mkDerivation rec {
     }
 
     fixDarwinDylibNames $(find "$(pwd)/lib" -name "*.dylib")
+    export DYLD_LIBRARY_PATH=$(pwd)/lib
   ''
   else
     "";
@@ -137,7 +154,7 @@ stdenv.mkDerivation rec {
 
   checkPhase = stdenv.lib.optionalString doCheck ''
     # Build default lib test runners
-    make -j$NIX_BUILD_CORES all-test-runners
+    ninja -j$NIX_BUILD_CORES all-test-runners
 
     ${fixNames}
 
