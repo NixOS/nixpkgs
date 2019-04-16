@@ -4,7 +4,12 @@
 
 let param =
 
-  if stdenv.lib.versionAtLeast coq.coq-version "8.6" then
+  if stdenv.lib.versionAtLeast coq.coq-version "8.7" then
+  {
+    version = "1.8.0";
+    sha256 = "07l40is389ih8bi525gpqs3qp4yb2kl11r9c8ynk1ifpjzpnabwp";
+  }
+  else if stdenv.lib.versionAtLeast coq.coq-version "8.6" then
   {
     version = "1.7.0";
     sha256 = "0wnhj9nqpx2bw6n1l4i8jgrw3pjajvckvj3lr4vzjb3my2lbxdd1";
