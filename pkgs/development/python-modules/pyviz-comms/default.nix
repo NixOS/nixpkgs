@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyviz_comms";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "045bjs8na3q0fy8zzq4pghyz05d9aid1lcv11992f62z2jrf6m2q";
+    sha256 = "c1722a496b08eb20ae3f2fedcc1ebcd207567b62e6453c7198a0b8f78ae96049";
   };
 
   propagatedBuildInputs = [ param ];
