@@ -22003,6 +22003,10 @@ in
 
   gurobi = callPackage ../applications/science/math/gurobi { };
 
+  hypre = callPackage ../development/libraries/science/math/hypre {
+    mpi = openmpi;
+  };
+
   jags = callPackage ../applications/science/math/jags { };
 
   libbraiding = callPackage ../development/libraries/science/math/libbraiding { };
