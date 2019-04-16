@@ -81,7 +81,7 @@ let
     propagatedBuildInputs = [ FileNext ];
     meta = with stdenv.lib; {
       description = "A grep-like tool tailored to working with large trees of source code";
-      homepage    = http://betterthangrep.com/;
+      homepage    = https://beyondgrep.com;
       license     = licenses.artistic2;
       maintainers = with maintainers; [ lovek323 ];
     };
@@ -11046,7 +11046,7 @@ let
       sha256 = "5f5f1142185a67b87406a3fb31f221564f61838a70ef4c07284a66c55e82ad05";
     };
     meta = {
-      homepage = http://wiki.github.com/toddr/Net-Ident/;
+      homepage = https://github.com/toddr/Net-Ident;
       description = "Lookup the username on the remote end of a TCP/IP connection";
       license = stdenv.lib.licenses.mit;
     };
@@ -13242,7 +13242,7 @@ let
       sha256 = "d6d3c711657a380f1cb24d8b54a1cd20f725f7f54665189e9e67bb0b877109a3";
     };
     meta = {
-      homepage = http://wiki.github.com/toddr/Regexp-Parser;
+      homepage = https://github.com/toddr/Regexp-Parser;
       description = "Base class for parsing regexes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };

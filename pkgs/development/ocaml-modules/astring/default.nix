@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) buildPhase installPhase;
 
   meta = {
-    homepage = http://erratique.ch/software/astring;
+    homepage = https://erratique.ch/software/astring;
     description = "Alternative String module for OCaml";
     longDescription = ''
       Astring exposes an alternative String module for OCaml. This module tries

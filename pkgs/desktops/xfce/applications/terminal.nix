@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool exo gtk vte libxfce4util ncurses dbus-glib libxfce4ui ];
 
   meta = {
-    homepage = http://www.xfce.org/projects/terminal;
+    homepage = https://www.xfce.org/projects/terminal;
     description = "A modern terminal emulator primarily for the Xfce desktop environment";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

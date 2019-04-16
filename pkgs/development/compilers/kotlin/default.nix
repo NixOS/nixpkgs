@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
       It is developed by a team at JetBrains although it is an OSS language
       and has external contributors.
     '';
-    homepage = http://kotlinlang.org/;
+    homepage = https://kotlinlang.org/;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers;
       [ nequissimus ];

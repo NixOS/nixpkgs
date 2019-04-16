@@ -25,7 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/DinoTools/python-ssdeep;
+    homepage = https://github.com/DinoTools/python-ssdeep;
     description = "Python wrapper for the ssdeep library";
     license = licenses.lgpl3;
   };

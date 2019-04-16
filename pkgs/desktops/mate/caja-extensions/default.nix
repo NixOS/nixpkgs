@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
       substituteInPlace $f --replace "/usr/bin/convert" "${imagemagick}/bin/convert"
     done
   '';
-  
+
   configureFlags = [ "--with-cajadir=$$out/lib/caja/extensions-2.0" ];
 
   meta = with stdenv.lib; {
     description = "Set of extensions for Caja file manager";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
