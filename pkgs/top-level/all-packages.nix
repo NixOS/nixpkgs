@@ -3918,7 +3918,7 @@ in
 
   lf = callPackage ../tools/misc/lf {};
 
-  lesscpy = pythonPackages.lesscpy;
+  lesscpy = callPackage ../development/compilers/lesscpy { };
 
   lhasa = callPackage ../tools/compression/lhasa {};
 

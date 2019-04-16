@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, ply, six }:
+{ stdenv, buildPythonApplication, fetchPypi, pytest, ply, six }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   pname   = "lesscpy";
   version = "0.13.0";
 

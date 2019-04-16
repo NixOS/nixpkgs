@@ -5528,8 +5528,6 @@ in {
 
   pki-core = callPackage ../development/python-modules/pki-core { };
 
-  lesscpy = callPackage ../development/python-modules/lesscpy { };
-
   yubico = callPackage ../development/python-modules/yubico { };
 
 });
