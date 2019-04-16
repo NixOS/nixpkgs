@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
-    homepage = http://erratique.ch/software/cmdliner;
+    homepage = https://erratique.ch/software/cmdliner;
     description = "An OCaml module for the declarative definition of command line interfaces";
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];

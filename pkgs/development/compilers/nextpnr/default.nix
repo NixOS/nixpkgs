@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper
-, boost, python3
+, boost, python3, eigen
 , icestorm, trellis
 
 # TODO(thoughtpolice) Currently the GUI build seems broken at runtime on my
@@ -27,18 +27,18 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nextpnr-${version}";
-  version = "2019.02.20";
+  version = "2019.04.02";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "nextpnr";
-    rev    = "e8d3aaaf34895a073e4023192d97fc936d090990";
-    sha256 = "0ijqpjnn7x16crd6cmd4nmgay320flizmjb7bbvg9hv464z3p4x7";
+    rev    = "6adf37e3c1d4301e087d89c9e9c37563fe8d78df";
+    sha256 = "0qqb2yd2s39hahh5qigvllgyzj7rp3r1k9jp2n9z2jrfpiaz68c6";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs
-     = [ boostPython python3 ]
+     = [ boostPython python3 eigen ]
     ++ (stdenv.lib.optional enableGui qtbase);
 
   enableParallelBuilding = true;
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     [ "-DARCH=generic;ice40;ecp5"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
       "-DTRELLIS_ROOT=${trellisRoot}/trellis"
+      "-DUSE_OPENMP=ON"
     ] ++ (stdenv.lib.optional (!enableGui) "-DBUILD_GUI=OFF");
 
   # Fix the version number. This is a bit stupid (and fragile) in practice
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
   postInstall = stdenv.lib.optionalString enableGui ''
     for x in generic ice40 ecp5; do
       wrapProgram $out/bin/nextpnr-$x \
-        --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtbase.qtCompatVersion}/plugins
+        --prefix QT_PLUGIN_PATH : "${qtbase}/${qtbase.qtPluginPrefix}"
     done
   '';
 

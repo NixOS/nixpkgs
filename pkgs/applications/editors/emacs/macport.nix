@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "0f2wzdw2a3ac581322b2y79rlj3c9f33ddrq9allj97r1si6v5xk";
   };
 
-  patches = [ ./clean-env.patch ];
+  patches = [ ./clean-env-macport.patch ];
 
   enableParallelBuilding = true;
 

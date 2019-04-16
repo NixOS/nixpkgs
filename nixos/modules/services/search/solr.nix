@@ -13,11 +13,19 @@ in
     services.solr = {
       enable = mkEnableOption "Enables the solr service.";
 
+      # default to the 8.x series not forcing major version upgrade of those on the 7.x series
       package = mkOption {
         type = types.package;
-        default = pkgs.solr;
+        default = if versionAtLeast config.system.stateVersion "19.09"
+          then pkgs.solr_8
+          else pkgs.solr_7
+        ;
         defaultText = "pkgs.solr";
-        description = "Which Solr package to use.";
+        description = ''
+          Which Solr package to use. This defaults to version 7.x if
+          <literal>system.stateVersion &lt; 19.09</literal> and version 8.x
+          otherwise.
+        '';
       };
 
       port = mkOption {

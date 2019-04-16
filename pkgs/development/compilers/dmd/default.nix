@@ -2,10 +2,10 @@
 , makeWrapper, unzip, which, writeTextFile
 , curl, tzdata, gdb, darwin, git
 , callPackage, targetPackages, ldc
-, version ? "2.084.1"
-, dmdSha256 ? "10ll5072rkv3ln7i5l88h2f9mzda567kw2jwh6466vm6ylzl4jms"
-, druntimeSha256 ? "0i0g2cnzh097pmvb86gvyj79canaxppw33hp7ylqnd11q4kqc8pb"
-, phobosSha256 ? "1hxpismj9gy5n1bc9kl9ykgd4lfmkq9i8xgrq09j0fybfwn9j1gc"
+, version ? "2.085.1"
+, dmdSha256 ? "0ccidfcawrcwdpfjwjiln5xwr4ffp8i2hwx52p8zn3xmc5yxm660"
+, druntimeSha256 ? "109f2glsqrlshk06761xlw4r5v22mivp873cq9g5gcax3g00k617"
+, phobosSha256 ? "0giispqqx8j8xg6c0hm7nx77bcahiwic8rvf12sws3sv5pizv8pr"
 }:
 
 let
@@ -49,14 +49,6 @@ stdenv.mkDerivation rec {
     sha256 = phobosSha256;
     name = "phobos";
   })
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "fix-loader-import.patch";
-      url = "https://github.com/dlang/dmd/commit/e7790436c4af1910b8c079dac9bb69627d7dea4b.patch";
-      sha256 = "0w69hajx8agywc7m2hph5m27g2yclz8ml0gjjyjk9k6ii3jv45kx";
-    })
   ];
 
   patchFlags = [ "--directory=dmd" "-p1" ];

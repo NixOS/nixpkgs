@@ -11,9 +11,11 @@ in
     name = "js-sequence-diagrams";
     packageName = "js-sequence-diagrams";
     version = "1000000.0.6";
-    src = pkgs.fetchurl {
-      url = "https://registry.npmjs.org/js-sequence-diagrams/-/js-sequence-diagrams-1000000.0.6.tgz";
-      sha1 = "e95db01420479c5ccbc12046af1da42fde649e5c";
+    src = pkgs.fetchFromGitHub {
+      owner = "Moeditor";
+      repo = "js-sequence-diagrams";
+      rev = "4d46bc6229a3f93c9bcad561cab4924034f5456d";
+      sha256 = "09ri5cx5yq87p3nla06gs0xb2gifmsy0xhs0s5524xr4ya6pnivv";
     };
     dependencies = [ ];
     dontNpmInstall = true;

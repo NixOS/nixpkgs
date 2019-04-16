@@ -582,4 +582,32 @@ in {
     shortDescription = "German (Switzerland)";
     dictFileName = "de_CH";
   };
+
+  /* UKRAINIAN */
+
+  uk-ua = mkDict rec {
+    name = "hunspell-dict-uk-ua-${version}";
+    version = "4.2.5";
+    _version = "4-2.5";
+
+    src = fetchurl {
+      url = "https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/${_version}/@@download/file/dict-uk_UA-${version}.oxt";
+      sha256 = "1s2i9cd569g97kafrswczvwmvg7m9aks8qsbxd1mi73zy2y1r7n4";
+    };
+
+    dictFileName = "uk_UA";
+    readmeFile = "README_uk_UA.txt";
+    nativeBuildInputs = [ unzip ];
+    unpackCmd = ''
+      unzip $src ${dictFileName}/{${dictFileName}.dic,${dictFileName}.aff,${readmeFile}}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Hunspell dictionary for Ukrainian (Ukraine) from LibreOffice";
+      homepage = https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/;
+      license = licenses.mpl20;
+      maintainers = with maintainers; [ dywedir ];
+      platforms = platforms.all;
+    };
+  };
 }

@@ -22,11 +22,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.xfce.org/projects/xfwm4;
+    homepage = https://www.xfce.org/projects/xfwm4;
     description = "Window manager for Xfce";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.eelco ];
   };
 }
-

@@ -82,8 +82,8 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "ucsd-progsys";
       repo = "liquidhaskell";
-      rev = "254e77da9cd36e95b72c526bfb9eec50d3447050";
-      sha256 = "089x41z51iw542ijz32j9ns6flcc4hsbjqx7rfznvmm7a4q78yza";
+      rev = "46f11e8faef006e70d39572d08419283b1280b88";
+      sha256 = "10z5r6g5acd43bsak762kwhy33ff262zmhs0wga545nbg29q1fyp";
     };
     version = "0.8.6.0-pre-release";
   };

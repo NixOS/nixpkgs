@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Applets for use with the MATE panel";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

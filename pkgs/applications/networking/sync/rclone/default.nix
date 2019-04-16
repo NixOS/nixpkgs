@@ -1,28 +1,21 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{ stdenv, buildGoModule, fetchFromGitHub, fetchpatch }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "rclone";
-  version = "1.46";
-
-  goPackagePath = "github.com/ncw/rclone";
-  subPackages = [ "." ];
+  version = "1.47.0";
 
   src = fetchFromGitHub {
     owner = "ncw";
-    repo = "rclone";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1fl52dl41n76r678nzkxa2kgk9khn1fxraxgk8jd3ayc787qs9ia";
+    sha256 = "1nxwjr9jly6wh1ixr6a7zhlg4b3298v940040fsm0n3lcljd37zx";
   };
 
-  outputs = [ "bin" "out" "man" ];
+  modSha256 = "02p5dd450bbfyq80nd0w8f9kpv25k1855mf0gcv0cy9zq3f3r7q7";
 
-  # https://github.com/ncw/rclone/issues/2964
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ncw/rclone/commit/1c1a8ef24bea9332c6c450379ed3c5d953e07508.patch";
-      sha256 = "0mq74z78lc3dhama303k712xkzz9q6p7zqlbwbl04bndqlkny03k";
-    })
-  ];
+  subPackages = [ "." ];
+
+  outputs = [ "out" "man" ];
 
   postInstall = ''
     install -D -m644 $src/rclone.1 $man/share/man/man1/rclone.1

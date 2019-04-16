@@ -730,6 +730,8 @@ in {
 
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
 
+  pyschedule = callPackage ../development/python-modules/pyschedule { };
+
   pyside = callPackage ../development/python-modules/pyside { };
 
   pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix {
@@ -748,7 +750,11 @@ in {
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
+  pytest-click = callPackage ../development/python-modules/pytest-click { };
+
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
+
+  pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
@@ -940,6 +946,8 @@ in {
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
+  aioresponses = callPackage ../development/python-modules/aioresponses { };
+
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
@@ -951,6 +959,8 @@ in {
   alembic = callPackage ../development/python-modules/alembic {};
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
+
+  annexremote = callPackage ../development/python-modules/annexremote { };
 
   ansible = callPackage ../development/python-modules/ansible { };
 
@@ -1972,6 +1982,8 @@ in {
   hglib = callPackage ../development/python-modules/hglib {};
 
   humanize = callPackage ../development/python-modules/humanize { };
+
+  humanfriendly = callPackage ../development/python-modules/humanfriendly { };
 
   hupper = callPackage ../development/python-modules/hupper {};
 
@@ -3371,6 +3383,8 @@ in {
   };
 
   nixpkgs = callPackage ../development/python-modules/nixpkgs { };
+
+  nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
 
   nodeenv = callPackage ../development/python-modules/nodeenv { };
 
@@ -4873,6 +4887,8 @@ in {
 
   graphite_beacon = callPackage ../development/python-modules/graphite_beacon { };
 
+  graph_nets = callPackage ../development/python-modules/graph_nets { };
+
   influxgraph = callPackage ../development/python-modules/influxgraph { };
 
   graphitepager = callPackage ../development/python-modules/graphitepager { };
@@ -4922,6 +4938,8 @@ in {
   toposort = callPackage ../development/python-modules/toposort { };
 
   snapperGUI = callPackage ../development/python-modules/snappergui { };
+
+  dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
@@ -5138,6 +5156,8 @@ in {
   zerobin = callPackage ../development/python-modules/zerobin { };
 
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
+
+  tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 

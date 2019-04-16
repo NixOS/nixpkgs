@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       inference with Variational inference (ADVI) and penalized maximum
       likelihood estimation with Optimization (L-BFGS).
     '';
-    homepage = http://mc-stan.org/interfaces/cmdstan.html;
+    homepage = https://mc-stan.org/interfaces/cmdstan.html;
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
   };
