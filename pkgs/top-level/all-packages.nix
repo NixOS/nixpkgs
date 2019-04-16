@@ -21991,6 +21991,10 @@ in
 
   cliquer = callPackage ../development/libraries/science/math/cliquer { };
 
+  dealii = callPackage ../development/libraries/science/math/dealii {
+    mpi = openmpi;
+  };
+
   ecos = callPackage ../development/libraries/science/math/ecos { };
 
   flintqs = callPackage ../development/libraries/science/math/flintqs { };
