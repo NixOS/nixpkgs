@@ -54,7 +54,7 @@ let
     rule_files = map (promtoolCheck "check-rules" "rules") (cfg.ruleFiles ++ [
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
     ]);
-    scrape_configs = cfg.scrapeConfigs;
+    scrape_configs = filterEmpty cfg.scrapeConfigs;
   };
 
   generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
@@ -81,7 +81,7 @@ let
     rule_files = map (prom2toolCheck "check rules" "rules") (cfg2.ruleFiles ++ [
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg2.rules))
     ]);
-    scrape_configs = cfg2.scrapeConfigs;
+    scrape_configs = filterEmpty cfg2.scrapeConfigs;
     alerting = optionalAttrs (cfg2.alertmanagerURL != []) {
       alertmanagers = [{
         static_configs = [{
@@ -107,6 +107,21 @@ let
     "--alertmanager.timeout=${toString cfg2.alertmanagerTimeout}s"
   ] ++
   optional (cfg2.webExternalUrl != null) "--web.external-url=${cfg2.webExternalUrl}";
+
+  filterEmpty = filterAttrsListRecursive (_n: v: !(v == null || v == [] || v == {}));
+  filterAttrsListRecursive = pred: x:
+    if isAttrs x then
+      listToAttrs (
+        concatMap (name:
+          let v = x.${name}; in
+          if pred name v then [
+            (nameValuePair name (filterAttrsListRecursive pred v))
+          ] else []
+        ) (attrNames x)
+      )
+    else if isList x then
+      map (filterAttrsListRecursive pred) x
+    else x;
 
   promTypes.globalConfig = types.submodule {
     options = {
@@ -277,6 +292,14 @@ let
           List of labeled target groups for this job.
         '';
       };
+      ec2_sd_configs = mkOption {
+        type = types.listOf promTypes.ec2_sd_config;
+        default = [];
+        apply = x: map _filter x;
+        description = ''
+          List of EC2 service discovery configurations.
+        '';
+      };
       relabel_configs = mkOption {
         type = types.listOf promTypes.relabel_config;
         default = [];
@@ -301,6 +324,96 @@ let
         default = {};
         description = ''
           Labels assigned to all metrics scraped from the targets.
+        '';
+      };
+    };
+  };
+
+  promTypes.ec2_sd_config = types.submodule {
+    options = {
+      region = mkOption {
+        type = types.str;
+        description = ''
+          The AWS Region.
+        '';
+      };
+      endpoint = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Custom endpoint to be used.
+        '';
+      };
+      access_key = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          The AWS API key id. If blank, the environment variable
+          <literal>AWS_ACCESS_KEY_ID</literal> is used.
+        '';
+      };
+      secret_key = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          The AWS API key secret. If blank, the environment variable
+           <literal>AWS_SECRET_ACCESS_KEY</literal> is used.
+        '';
+      };
+      profile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Named AWS profile used to connect to the API.
+        '';
+      };
+      role_arn = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          AWS Role ARN, an alternative to using AWS API keys.
+        '';
+      };
+      refresh_interval = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Refresh interval to re-read the instance list.
+        '';
+      };
+      port = mkOption {
+        type = types.int;
+        default = 80;
+        description = ''
+          The port to scrape metrics from. If using the public IP
+          address, this must instead be specified in the relabeling
+          rule.
+        '';
+      };
+      filters = mkOption {
+        type = types.nullOr (types.listOf promTypes.filter);
+        default = null;
+        description = ''
+          Filters can be used optionally to filter the instance list by other criteria.
+        '';
+      };
+    };
+  };
+
+  promTypes.filter = types.submodule {
+    options = {
+      name = mkOption {
+        type = types.str;
+        description = ''
+          See <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">this list</link>
+          for the available filters.
+        '';
+      };
+      value = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Value of the filter.
         '';
       };
     };
@@ -480,7 +593,6 @@ let
     };
   };
 
- 
 in {
   options = {
     services.prometheus = {
