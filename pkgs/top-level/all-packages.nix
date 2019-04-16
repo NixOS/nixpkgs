@@ -10878,7 +10878,7 @@ in
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (buildPackages.darwin) bootstrap_cmds;
-    enableSystemVerto = true;
+    enableSystemVerto = !stdenv.isDarwin; # Circular dependency
   };
   krb5Full = krb5;
   libkrb5 = krb5.override { type = "lib"; };
