@@ -67,8 +67,7 @@ let
           };
         };
       };
-      uri = uri.override {
-        legacy = true;
+      uri = uri_1_9.override {
         inherit (janeStreet_0_9_0) ppx_sexp_conv sexplib;
       };
     };
@@ -755,6 +754,10 @@ let
       if lib.versionAtLeast ocaml.version "4.3"
       then callPackage ../development/ocaml-modules/uri { }
       else callPackage ../development/ocaml-modules/uri/legacy.nix { };
+
+    uri_1_9 = callPackage ../development/ocaml-modules/uri {
+      legacy = true;
+    };
 
     uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
       legacyVersion = true;
