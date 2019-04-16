@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi, six }:
 buildPythonPackage rec {
   pname = "django-appconf";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qdjdx35g66xjsc50v0c5h3kg6njs8df33mbjx6j4k1vd3m9lkba";
+    sha256 = "35f13ca4d567f132b960e2cd4c832c2d03cb6543452d34e29b7ba10371ba80e3";
   };
 
   # No tests in archive
