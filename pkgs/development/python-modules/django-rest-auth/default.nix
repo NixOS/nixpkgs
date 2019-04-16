@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "django-rest-auth";
-  version = "0.9.3";
+  version = "0.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ad155a0ed1061b32e3e46c9b25686e397644fd6acfd35d5c03bc6b9d2fc6c82a";
+    sha256 = "f11e12175dafeed772f50d740d22caeab27e99a3caca24ec65e66a8d6de16571";
   };
 
   propagatedBuildInputs = [ django djangorestframework six ];
