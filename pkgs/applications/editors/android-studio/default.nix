@@ -23,16 +23,6 @@ let
     sha256Hash = "1g24a8fwnrfzdf093wdmqly3mzjddk5ndgi51qj98amn7kclsdpf";
   };
 in rec {
-  # Old alias (TODO @primeos: Remove after 19.03 is branched off):
-  preview = throw ''
-    The attributes "android-studio-preview" and "androidStudioPackages.preview"
-    are now deprecated and will be removed soon, please use
-    "androidStudioPackages.beta" instead. This attribute corresponds to the
-    beta channel, if you want the latest release you can use
-    "androidStudioPackages.dev" or "androidStudioPackages.canary" instead
-    (currently, there is no difference between both channels).
-  '';
-
   # Attributes are named by their corresponding release channels
 
   stable = mkStudio (stableVersion // {
