@@ -103,7 +103,10 @@ stdenv.mkDerivation {
 
   patchFlags = optionalString (stdenv.hostPlatform.libc == "msvcrt") "-p0";
   patches = patches
-    ++ optional stdenv.isDarwin ./darwin-no-system-python.patch
+    ++ optional stdenv.isDarwin (
+      if version == "1.55.0"
+      then ./darwin-1.55-no-system-python.patch
+      else ./darwin-no-system-python.patch)
     ++ optional (stdenv.hostPlatform.libc == "msvcrt") (fetchurl {
       url = "https://svn.boost.org/trac/boost/raw-attachment/tickaet/7262/"
           + "boost-mingw.patch";
