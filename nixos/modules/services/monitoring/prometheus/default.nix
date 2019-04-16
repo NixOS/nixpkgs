@@ -322,12 +322,19 @@ let
           The AWS Region.
         '';
       };
+      endpoint = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Custom endpoint to be used.
+        '';
+      };
       access_key = mkOption {
         type = types.nullOr types.str;
         default = null;
         description = ''
           The AWS API key id. If blank, the environment variable
-          `AWS_ACCESS_KEY_ID` is used.
+          <literal>AWS_ACCESS_KEY_ID</literal> is used.
         '';
       };
       secret_key = mkOption {
@@ -335,7 +342,7 @@ let
         default = null;
         description = ''
           The AWS API key secret. If blank, the environment variable
-          `AWS_SECRET_ACCESS_KEY` is used.
+           <literal>AWS_SECRET_ACCESS_KEY</literal> is used.
         '';
       };
       profile = mkOption {
@@ -366,6 +373,32 @@ let
           The port to scrape metrics from. If using the public IP
           address, this must instead be specified in the relabeling
           rule.
+        '';
+      };
+      filters = mkOption {
+        type = types.nullOr (types.listOf promTypes.filter);
+        default = null;
+        description = ''
+          Filters can be used optionally to filter the instance list by other criteria.
+        '';
+      };
+    };
+  };
+
+  promTypes.filter = types.submodule {
+    options = {
+      name = mkOption {
+        type = types.str;
+        description = ''
+          See <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">this list</link>
+          for the available filters.
+        '';
+      };
+      value = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Value of the filter.
         '';
       };
     };
@@ -545,7 +578,6 @@ let
     };
   };
 
- 
 in {
   options = {
     services.prometheus = {
