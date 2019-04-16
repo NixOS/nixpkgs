@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
     "localstatedir=${placeholder "out"}/var"
-    "runstatedir=${placeholder "out"}/var/run"
+    "runstatedir=${placeholder "out"}/run"
   ];
 
   postInstall = ''
