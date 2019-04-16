@@ -1,14 +1,22 @@
-{ fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
   name = "captive-browser";
-  version = "2019-04-14";
+  version = "2019-04-16";
   goPackagePath = name;
 
   src = fetchFromGitHub {
     owner  = "FiloSottile";
     repo   = "captive-browser";
-    rev    = "b96bd8a2aca14505cf8432935ee9add15ec39a57";
-    sha256 = "1k7r7rckb81m11hr6nzw3w8wx76hbl4740xg4818vdm5py1hv5ij";
+    rev    = "08450562e58bf9564ee98ad64ef7b2800e53338f";
+    sha256 = "17icgjg7h0xm8g4yy38qjhsvlz9pmlmj9kydz01y2nyl0v02i648";
+  };
+
+  meta = with lib; {
+    description = "Dedicated Chrome instance to log into captive portals without messing with DNS settings";
+    homepage = https://blog.filippo.io/captive-browser;
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ volth ];
   };
 }
