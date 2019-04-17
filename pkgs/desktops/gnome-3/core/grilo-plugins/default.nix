@@ -1,24 +1,61 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, sqlite, librest
-, gnome3, libxml2, gupnp, gssdp, lua5, liboauth, gupnp-av, libgdata, libmediaart
-, gmime, json-glib, avahi, tracker, dleyna-server, itstool, totem-pl-parser }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gettext
+, sqlite
+, librest
+, gnome3
+, libxml2
+, lua5
+, liboauth
+, libgdata
+, libmediaart
+, grilo
+, gnome-online-accounts
+, gmime
+, json-glib
+, avahi
+, tracker
+, dleyna-server
+, itstool
+, totem-pl-parser
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "grilo-plugins";
   version = "0.3.8";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0nync07gah3jkpb5ph5d3gwbygmabnih2m3hfz7lkvjl2l5pgpac";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    itstool
+  ];
+
   buildInputs = [
-    gnome3.grilo libxml2 gupnp gssdp libgdata
-    lua5 liboauth gupnp-av sqlite gnome3.gnome-online-accounts
-    totem-pl-parser librest gmime json-glib
-    avahi libmediaart tracker dleyna-server
+    grilo
+    libxml2
+    libgdata
+    lua5
+    liboauth
+    sqlite
+    gnome-online-accounts
+    totem-pl-parser
+    librest
+    gmime
+    json-glib
+    avahi
+    libmediaart
+    tracker
+    dleyna-server
   ];
 
   passthru = {
