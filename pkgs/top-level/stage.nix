@@ -225,6 +225,18 @@ let
         };
       };
     });
+
+    # Emscripten packages.
+    pkgsEmscripten = nixpkgsFun ({
+      overlays = [ (self': super': {
+        pkgsEmscripten = super';
+      })] ++ overlays;
+      crossOverlays = [ (import ./emscripten-packages.nix) ];
+      crossSystem = {
+        parsed = stdenv.hostPlatform.parsed;
+      };
+    });
+
   };
 
   # The complete chain of package set builders, applied from top to bottom.

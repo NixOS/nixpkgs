@@ -1,18 +1,14 @@
-{ pkgs, lib, emscripten, python }:
+{ lib, emscripten, python }:
 
-{ buildInputs ? [], nativeBuildInputs ? []
+stdenv: (stdenv // {
 
-, enableParallelBuilding ? true
+mkDerivation = args: stdenv.mkDerivation ( args // {
 
-, meta ? {}, ... } @ args:
+  name = "emscripten-${args.name or args.pname}";
 
-pkgs.stdenv.mkDerivation (
-  args // 
-  {
-
-  name = "emscripten-${args.name}";
-  buildInputs = [ emscripten python ] ++ buildInputs;
-  nativeBuildInputs = [ emscripten python ] ++ nativeBuildInputs;
+#   name = "emscripten-${args.name}";
+  buildInputs = (args.buildInputs or []) ++ [ emscripten python ];
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ emscripten python ];
 
   # fake conftest results with emscripten's python magic
   EMCONFIGURE_JS=2;
@@ -53,14 +49,18 @@ pkgs.stdenv.mkDerivation (
 
   enableParallelBuilding = args.enableParallelBuilding or true;
 
-  meta = {
+  meta = let
+    meta' = args.meta or {};
+  in {
     # Add default meta information
     platforms = lib.platforms.all;
     # Do not build this automatically
     hydraPlatforms = [];
-  } // meta // {
+  } // meta' // {
     # add an extra maintainer to every package
-    maintainers = (meta.maintainers or []) ++
+    maintainers = (meta'.maintainers or []) ++
                   [ lib.maintainers.qknight ];
   };
+});
+
 })

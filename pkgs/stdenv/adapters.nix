@@ -195,4 +195,6 @@ rec {
         allowSubstitutes = false;
       });
     };
+
+  emscriptenAdapter = import ./emscripten-adapter.nix { inherit (pkgs) lib emscripten python; };
 }

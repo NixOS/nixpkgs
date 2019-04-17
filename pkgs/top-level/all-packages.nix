@@ -2561,7 +2561,7 @@ in
 
   ### DEVELOPMENT / EMSCRIPTEN
 
-  buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
+#   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
 
   carp = callPackage ../development/compilers/carp { };
 
@@ -2575,9 +2575,9 @@ in
 
   emscriptenfastcomp = emscriptenfastcompPackages.emscriptenfastcomp;
 
-  emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
+#   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
 
-  emscriptenStdenv = stdenv // { mkDerivation = buildEmscriptenPackage; };
+#   emscriptenStdenv = stdenv // { mkDerivation = buildEmscriptenPackage; };
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
