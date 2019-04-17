@@ -13,7 +13,6 @@ stdenv.mkDerivation {
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isWasm [
-    "-DUNIX=ON"
     "-DLIBCXXABI_ENABLE_THREADS=OFF"
     "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
   ] ++ stdenv.lib.optionals (!enableShared) [
@@ -30,6 +29,8 @@ stdenv.mkDerivation {
     export TRIPLE=x86_64-apple-darwin
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -d $(ls -d libcxx-*) -i ${../libcxx-0001-musl-hacks.patch}
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isWasm ''
+    patch -p1 -d $(ls -d llvm-*) -i ${./libcxxabi-wasm.patch}
   '';
 
   installPhase = if stdenv.isDarwin
