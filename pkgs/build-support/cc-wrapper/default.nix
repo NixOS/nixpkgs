@@ -301,8 +301,6 @@ stdenv.mkDerivation {
 
     + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
-    '' + optionalString (targetPlatform.isWasm && libc != null) ''
-      echo "--allow-undefined-file=${libc}/share/wasm32-wasi/undefined-symbols.txt" >> $out/nix-support/cc-ldflags
     ''
 
     + optionalString (libc != null && targetPlatform.isAvr) ''
