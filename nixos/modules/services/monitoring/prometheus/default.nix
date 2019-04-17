@@ -22,9 +22,6 @@ let
   workingDir  = stateDirBase + stateDir;
   workingDir2 = stateDirBase + cfg2.stateDir;
 
-  # Get a submodule without any embedded metadata:
-  _filter = x: filterAttrs (k: v: k != "_module") x;
-
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file: pkgs.runCommand "${name}-${what}-checked"
     { buildInputs = [ cfg.package ]; } ''
@@ -50,11 +47,11 @@ let
 
   # This becomes the main config file for Prometheus 1
   promConfig = {
-    global = cfg.globalConfig;
+    global = filterValidPrometheus cfg.globalConfig;
     rule_files = map (promtoolCheck "check-rules" "rules") (cfg.ruleFiles ++ [
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
     ]);
-    scrape_configs = filterEmpty cfg.scrapeConfigs;
+    scrape_configs = filterValidPrometheus cfg.scrapeConfigs;
   };
 
   generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
@@ -77,11 +74,11 @@ let
 
   # This becomes the main config file for Prometheus 2
   promConfig2 = {
-    global = cfg2.globalConfig;
+    global = filterValidPrometheus cfg2.globalConfig;
     rule_files = map (prom2toolCheck "check rules" "rules") (cfg2.ruleFiles ++ [
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg2.rules))
     ]);
-    scrape_configs = filterEmpty cfg2.scrapeConfigs;
+    scrape_configs = filterValidPrometheus cfg2.scrapeConfigs;
     alerting = optionalAttrs (cfg2.alertmanagerURL != []) {
       alertmanagers = [{
         static_configs = [{
@@ -108,7 +105,7 @@ let
   ] ++
   optional (cfg2.webExternalUrl != null) "--web.external-url=${cfg2.webExternalUrl}";
 
-  filterEmpty = filterAttrsListRecursive (_n: v: !(v == null || v == [] || v == {}));
+  filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null || v == [] || v == {}));
   filterAttrsListRecursive = pred: x:
     if isAttrs x then
       listToAttrs (
@@ -247,7 +244,6 @@ let
           };
         });
         default = null;
-        apply = x: mapNullable _filter x;
         description = ''
           Optional http login credentials for metrics scraping.
         '';
@@ -255,7 +251,6 @@ let
       tls_config = mkOption {
         type = types.nullOr promTypes.tls_config;
         default = null;
-        apply = x: mapNullable _filter x;
         description = ''
           Configures the scrape request's TLS settings.
         '';
@@ -263,7 +258,6 @@ let
       dns_sd_configs = mkOption {
         type = types.listOf promTypes.dns_sd_config;
         default = [];
-        apply = x: map _filter x;
         description = ''
           List of DNS service discovery configurations.
         '';
@@ -271,7 +265,6 @@ let
       consul_sd_configs = mkOption {
         type = types.listOf promTypes.consul_sd_config;
         default = [];
-        apply = x: map _filter x;
         description = ''
           List of Consul service discovery configurations.
         '';
@@ -279,7 +272,6 @@ let
       file_sd_configs = mkOption {
         type = types.listOf promTypes.file_sd_config;
         default = [];
-        apply = x: map _filter x;
         description = ''
           List of file service discovery configurations.
         '';
@@ -287,7 +279,6 @@ let
       static_configs = mkOption {
         type = types.listOf promTypes.static_config;
         default = [];
-        apply = x: map _filter x;
         description = ''
           List of labeled target groups for this job.
         '';
@@ -295,7 +286,6 @@ let
       ec2_sd_configs = mkOption {
         type = types.listOf promTypes.ec2_sd_config;
         default = [];
-        apply = x: map _filter x;
         description = ''
           List of EC2 service discovery configurations.
         '';
@@ -303,7 +293,6 @@ let
       relabel_configs = mkOption {
         type = types.listOf promTypes.relabel_config;
         default = [];
-        apply = x: map _filter x;
         description = ''
           List of relabel configurations.
         '';
@@ -662,7 +651,6 @@ in {
       globalConfig = mkOption {
         type = promTypes.globalConfig;
         default = {};
-        apply = _filter;
         description = ''
           Parameters that are valid in all  configuration contexts. They
           also serve as defaults for other configuration sections
@@ -688,7 +676,6 @@ in {
       scrapeConfigs = mkOption {
         type = types.listOf promTypes.scrape_config;
         default = [];
-        apply = x: map _filter x;
         description = ''
           A list of scrape configurations.
         '';
@@ -786,7 +773,6 @@ in {
       globalConfig = mkOption {
         type = promTypes.globalConfig;
         default = {};
-        apply = _filter;
         description = ''
           Parameters that are valid in all  configuration contexts. They
           also serve as defaults for other configuration sections
@@ -812,7 +798,6 @@ in {
       scrapeConfigs = mkOption {
         type = types.listOf promTypes.scrape_config;
         default = [];
-        apply = x: map _filter x;
         description = ''
           A list of scrape configurations.
         '';
