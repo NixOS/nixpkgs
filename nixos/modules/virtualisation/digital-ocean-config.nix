@@ -53,7 +53,7 @@ with lib;
       };
       networking = {
         firewall.allowedTCPPorts = [ 22 ];
-        hostName = mkDefault ""; # use dhcp
+        hostName = mkDefault ""; # use Digital Ocean metadata server
         useNetworkd = true;
       };
 
