@@ -13,7 +13,7 @@ with lib;
       description = "Reconfigure the system from Digital Ocean uesrdata on startup";
       wantedBy = [ "multi-user.target" ];
       unitConfig = {
-        ConditionFileExists=!/etc/nixos/configuration.nix;
+        ConditionFileExists = "!/etc/nixos/configuration.nix";
         After = [ "network-online.target" ];
         Wants = [ "network-online.target" ];
       };
