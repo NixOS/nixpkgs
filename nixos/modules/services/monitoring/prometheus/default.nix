@@ -105,7 +105,7 @@ let
   ] ++
   optional (cfg2.webExternalUrl != null) "--web.external-url=${cfg2.webExternalUrl}";
 
-  filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null || v == [] || v == {}));
+  filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
   filterAttrsListRecursive = pred: x:
     if isAttrs x then
       listToAttrs (
@@ -123,37 +123,37 @@ let
   promTypes.globalConfig = types.submodule {
     options = {
       scrape_interval = mkOption {
-        type = types.str;
-        default = "1m";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           How frequently to scrape targets by default.
         '';
       };
 
       scrape_timeout = mkOption {
-        type = types.str;
-        default = "10s";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           How long until a scrape request times out.
         '';
       };
 
       evaluation_interval = mkOption {
-        type = types.str;
-        default = "1m";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           How frequently to evaluate rules by default.
         '';
       };
 
       external_labels = mkOption {
-        type = types.attrsOf types.str;
+        type = types.nullOr (types.attrsOf types.str);
         description = ''
           The labels to add to any time series or alerts when
           communicating with external systems (federation, remote
           storage, Alertmanager).
         '';
-        default = {};
+        default = null;
       };
     };
   };
@@ -183,15 +183,15 @@ let
         '';
       };
       metrics_path = mkOption {
-        type = types.str;
-        default = "/metrics";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           The HTTP resource path on which to fetch metrics from targets.
         '';
       };
       honor_labels = mkOption {
-        type = types.bool;
-        default = false;
+        type = types.nullOr types.bool;
+        default = null;
         description = ''
           Controls how Prometheus handles conflicts between labels
           that are already present in scraped data and labels that
@@ -213,15 +213,15 @@ let
         '';
       };
       scheme = mkOption {
-        type = types.enum ["http" "https"];
-        default = "http";
+        type = types.nullOr (types.enum ["http" "https"]);
+        default = null;
         description = ''
           The URL scheme with which to fetch metrics from targets.
         '';
       };
       params = mkOption {
-        type = types.attrsOf (types.listOf types.str);
-        default = {};
+        type = types.nullOr (types.attrsOf (types.listOf types.str));
+        default = null;
         description = ''
           Optional HTTP URL parameters.
         '';
@@ -256,43 +256,43 @@ let
         '';
       };
       dns_sd_configs = mkOption {
-        type = types.listOf promTypes.dns_sd_config;
-        default = [];
+        type = types.nullOr (types.listOf promTypes.dns_sd_config);
+        default = null;
         description = ''
           List of DNS service discovery configurations.
         '';
       };
       consul_sd_configs = mkOption {
-        type = types.listOf promTypes.consul_sd_config;
-        default = [];
+        type = types.nullOr (types.listOf promTypes.consul_sd_config);
+        default = null;
         description = ''
           List of Consul service discovery configurations.
         '';
       };
       file_sd_configs = mkOption {
-        type = types.listOf promTypes.file_sd_config;
-        default = [];
+        type = types.nullOr (types.listOf promTypes.file_sd_config);
+        default = null;
         description = ''
           List of file service discovery configurations.
         '';
       };
       static_configs = mkOption {
-        type = types.listOf promTypes.static_config;
-        default = [];
+        type = types.nullOr (types.listOf promTypes.static_config);
+        default = null;
         description = ''
           List of labeled target groups for this job.
         '';
       };
       ec2_sd_configs = mkOption {
-        type = types.listOf promTypes.ec2_sd_config;
-        default = [];
+        type = types.nullOr (types.listOf promTypes.ec2_sd_config);
+        default = null;
         description = ''
           List of EC2 service discovery configurations.
         '';
       };
       relabel_configs = mkOption {
-        type = types.listOf promTypes.relabel_config;
-        default = [];
+        type = types.nullOr (types.listOf promTypes.relabel_config);
+        default = null;
         description = ''
           List of relabel configurations.
         '';
@@ -371,8 +371,8 @@ let
         '';
       };
       port = mkOption {
-        type = types.int;
-        default = 80;
+        type = types.nullOr types.int;
+        default = null;
         description = ''
           The port to scrape metrics from. If using the public IP
           address, this must instead be specified in the relabeling
@@ -417,8 +417,8 @@ let
         '';
       };
       refresh_interval = mkOption {
-        type = types.str;
-        default = "30s";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           The time after which the provided names are refreshed.
         '';
@@ -429,7 +429,8 @@ let
   promTypes.consul_sd_config = types.submodule {
     options = {
       server = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
+        default = null;
         description = "Consul server to query.";
       };
       token = mkOption {
@@ -454,14 +455,15 @@ let
       };
 
       services = mkOption {
-        type = types.listOf types.str;
+        type = types.nullOr (types.listOf types.str);
+        default = null;
         description = ''
           A list of services for which targets are retrieved.
         '';
       };
       tag_separator = mkOption {
-        type = types.str;
-        default = ",";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           The string by which Consul tags are joined into the tag label.
         '';
@@ -477,12 +479,11 @@ let
           Patterns for files from which target groups are extracted. Refer
           to the Prometheus documentation for permitted filename patterns
           and formats.
-
         '';
       };
       refresh_interval = mkOption {
-        type = types.str;
-        default = "30s";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           Refresh interval to re-read the files.
         '';
@@ -493,7 +494,7 @@ let
   promTypes.relabel_config = types.submodule {
     options = {
       source_labels = mkOption {
-        type = with types; nullOr (listOf str);
+        type = types.nullOr (types.listOf str);
         default = null;
         description = ''
           The source labels select values from existing labels. Their content
@@ -502,8 +503,8 @@ let
         '';
       };
       separator = mkOption {
-        type = types.str;
-        default = ";";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           Separator placed between concatenated source label values.
         '';
@@ -517,23 +518,23 @@ let
         '';
       };
       regex = mkOption {
-        type = types.str;
-        default = "(.*)";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           Regular expression against which the extracted value is matched.
         '';
       };
       replacement = mkOption {
-        type = types.str;
-        default = "$1";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           Replacement value against which a regex replace is performed if the
           regular expression matches.
         '';
       };
       action = mkOption {
-        type = types.enum ["replace" "keep" "drop"];
-        default = "replace";
+        type = types.nullOr (types.enum ["replace" "keep" "drop"]);
+        default = null;
         description = ''
           Action to perform based on regex matching.
         '';
