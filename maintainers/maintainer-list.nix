@@ -365,6 +365,11 @@
     github = "ankhers";
     name = "Justin Wood";
   };
+  anton-dessiatov = {
+    email = "anton.dessiatov@gmail.com";
+    github = "anton-dessiatov";
+    name = "Anton Desyatov";
+  };
   Anton-Latukha = {
     email = "anton.latuka+nixpkgs@gmail.com";
     github = "Anton-Latukha";
