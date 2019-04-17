@@ -32,6 +32,7 @@
 , itstool
 , libgdata
 , libchamplain
+, gsettings-desktop-schemas
 , python3
 }:
 
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
     libgee
     libgudev
     gexiv2
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
     libraw
     json-glib
     glib

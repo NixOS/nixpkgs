@@ -1,6 +1,6 @@
 { stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkgconfig, libxml2
 , gtk3, glib, gtksourceview4, wrapGAppsHook, gobject-introspection, python3
-, gnome3, mpfr, gmp, libsoup, libmpc }:
+, gnome3, mpfr, gmp, libsoup, libmpc, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   name = "gnome-calculator-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 glib libxml2 gtksourceview4 mpfr gmp
     gnome3.adwaita-icon-theme
-    gnome3.gsettings-desktop-schemas libsoup libmpc
+    gsettings-desktop-schemas libsoup libmpc
   ];
 
   doCheck = true;
