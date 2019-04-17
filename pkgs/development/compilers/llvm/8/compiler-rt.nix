@@ -53,15 +53,13 @@ stdenv.mkDerivation rec {
   '';
 
   # Hack around weird upsream RPATH bug
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = stdenv.lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWasm) ''
     ln -s "$out/lib"/*/* "$out/lib"
   '' + stdenv.lib.optionalString (stdenv.hostPlatform.useLLVM or false) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isWasm ''
-    ln -s $out/lib/*/* $out/lib
   '';
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.hostPlatform.isWasm "--allow-undefined --no-entry";
