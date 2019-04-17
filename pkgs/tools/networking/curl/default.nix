@@ -94,6 +94,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
+
+    # Install completions
+    make -C scripts install
   '' + stdenv.lib.optionalString scpSupport ''
     sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
   '' + stdenv.lib.optionalString gnutlsSupport ''
