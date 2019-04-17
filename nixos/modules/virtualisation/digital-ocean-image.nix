@@ -4,10 +4,10 @@ with lib;
 let
   cfg = config.virtualisation.digitalOceanImage;
   defaultConfigFile = pkgs.writeText "configuration.nix" ''
-    { ... }:
+    { modulesPath, ... }:
     {
       imports = [
-        <nixpkgs/nixos/modules/virtualisation/digital-ocean-image.nix>
+        (modulesPath + "/virtualisation/digital-ocean-config.nix")
       ];
     }
   '';
@@ -32,7 +32,7 @@ in
         A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
         and be used when switching to a new configuration.
         If set to `null`, a default configuration is used, where the only import is
-        `<nixpkgs/nixos/modules/virtualisation/digital-ocean-image.nix>`.
+        `(modulesPath + "/virtualisation/digital-ocean-config.nix")`.
       '';
     };
   };
