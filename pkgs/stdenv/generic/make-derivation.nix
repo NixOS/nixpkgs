@@ -177,9 +177,9 @@ in rec {
            "__darwinAllowLocalNetworking"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
-        // (lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version)) {
+        // lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version) {
           name = "${attrs.pname}-${attrs.version}";
-        } // (lib.optionalAttrs (isCross && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version)))) {
+        } // lib.optionalAttrs (isCross && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version))) {
           # Fixed-output derivations like source tarballs shouldn't get a host
           # suffix. But we have some weird ones with run-time deps that are
           # just used for their side-affects. Those might as well since the
@@ -244,7 +244,7 @@ in rec {
           enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
-        } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
+        } // lib.optionalAttrs stdenv.buildPlatform.isDarwin {
           inherit __darwinAllowLocalNetworking;
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
