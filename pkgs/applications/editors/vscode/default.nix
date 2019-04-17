@@ -108,6 +108,10 @@ in
 
         mkdir -p $out/share/pixmaps
         cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
+
+        # Override the previously determined VSCODE_PATH with the one we know to be correct
+        sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" $out/bin/code
+        grep -q "VSCODE_PATH='$out/lib/vscode'" $out/bin/code # check if sed succeeded
       '';
 
     preFixup = lib.optionalString (system == "i686-linux" || system == "x86_64-linux") ''
@@ -129,7 +133,7 @@ in
       homepage = https://code.visualstudio.com/;
       downloadPage = https://code.visualstudio.com/Updates;
       license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu ];
+      maintainers = with maintainers; [ eadwu synthetica ];
       platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     };
   }
