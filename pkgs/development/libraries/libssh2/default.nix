@@ -1,11 +1,12 @@
 { stdenv, fetchurl, openssl, zlib, windows }:
 
 stdenv.mkDerivation rec {
-  name = "libssh2-1.8.0";
+  pname = "libssh2";
+  version = "1.8.1";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "1m3n8spv79qhjq4yi0wgly5s5rc8783jb1pyra9bkx1md0plxwrr";
+    url = "${meta.homepage}/download/${pname}-${version}.tar.gz";
+    sha256 = "0ngif3ynk6xqzy5nlfjs7bsmfm81g9f145av0z86kf0vbgrigda0";
   };
 
   outputs = [ "out" "dev" "devdoc" ];

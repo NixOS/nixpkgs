@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ peti jgeerds vrthra ];
+    maintainers = with maintainers; [ peti vrthra ];
   };
 }

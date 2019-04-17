@@ -3,15 +3,20 @@
 stdenv.mkDerivation {
   name = "libc++abi-${version}";
 
-  src = fetch "libcxxabi" "0hdg7xw8vazw85i675qld7i6wqx502srny84cp0w6wi6pk44xiqr";
+  src = fetch "libcxxabi" "1k875f977ybdkpdnr9105wa6hccy9qvpd9xd42n75h7p56bdxmn2";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
 
+  cmakeFlags = stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+    "-DLLVM_ENABLE_LIBCXX=ON"
+    "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
+  ];
+
   postUnpack = ''
     unpackFile ${libcxx.src}
     unpackFile ${llvm.src}
-    export cmakeFlags="-DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
+    cmakeFlags+=" -DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''

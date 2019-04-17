@@ -1,10 +1,11 @@
-{ stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, ... } @ args:
-
-buildLinux (rec {
-  mptcpVersion = "0.94.1";
-  modDirVersion = "4.14.70";
+{ stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, structuredExtraConfig ? {}, ... } @ args:
+let
+  mptcpVersion = "0.94.4";
+  modDirVersion = "4.14.110";
+in
+buildLinux ({
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
-  # autoModules= true;
+  inherit modDirVersion;
 
   extraMeta = {
     branch = "4.4";
@@ -15,32 +16,34 @@ buildLinux (rec {
     owner = "multipath-tcp";
     repo = "mptcp";
     rev = "v${mptcpVersion}";
-    sha256 = "13mi672jr1x463kzig1hi9cpdi8x6nqdfd4bqlrjn8zca48f4ln4";
+    sha256 = "1ng6p1djhm3m5g44yyq7gpqqbzsnhm9rimsafp5g4dx8cm27a70f";
   };
 
-  extraConfig = ''
-    IPV6 y
-    MPTCP y
-    IP_MULTIPLE_TABLES y
+  structuredExtraConfig = with import ../../../../lib/kernel.nix { inherit (stdenv) lib; version = null; };
+    stdenv.lib.mkMerge [ {
+    IPV6               = yes;
+    MPTCP              = yes;
+    IP_MULTIPLE_TABLES = yes;
 
     # Enable advanced path-managers...
-    MPTCP_PM_ADVANCED y
-    MPTCP_FULLMESH y
-    MPTCP_NDIFFPORTS y
+    MPTCP_PM_ADVANCED = yes;
+    MPTCP_FULLMESH = yes;
+    MPTCP_NDIFFPORTS = yes;
     # ... but use none by default.
     # The default is safer if source policy routing is not setup.
-    DEFAULT_DUMMY y
-    DEFAULT_MPTCP_PM default
+    DEFAULT_DUMMY = yes;
+    DEFAULT_MPTCP_PM.freeform = "default";
 
     # MPTCP scheduler selection.
-    MPTCP_SCHED_ADVANCED y
-    DEFAULT_MPTCP_SCHED default
+    MPTCP_SCHED_ADVANCED = yes;
+    DEFAULT_MPTCP_SCHED.freeform = "default";
 
     # Smarter TCP congestion controllers
-    TCP_CONG_LIA m
-    TCP_CONG_OLIA m
-    TCP_CONG_WVEGAS m
-    TCP_CONG_BALIA m
-
-  '' + (args.extraConfig or "");
+    TCP_CONG_LIA = module;
+    TCP_CONG_OLIA = module;
+    TCP_CONG_WVEGAS = module;
+    TCP_CONG_BALIA = module;
+  }
+  structuredExtraConfig
+  ];
 } // args)

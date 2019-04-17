@@ -15,6 +15,12 @@ buildPythonPackage rec {
     sha256 = "a881f0f3b82752d306ac0a7850ed0e31bad275a399f63097733b4890986084b2";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "bidict>=0.17,<0.18" "bidict" \
+      --replace "more-itertools>=4.0,<5.0" "more-itertools"
+  '';
+
   propagatedBuildInputs = [
     attrs
     bidict

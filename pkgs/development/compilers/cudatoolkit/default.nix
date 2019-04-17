@@ -147,7 +147,11 @@ let
         done < <(find $out $lib $doc -type f -print0)
       '';
 
-      doInstallCheck = true;
+      # cuda-gdb doesn't run correctly when not using sandboxing, so
+      # temporarily disabling the install check.  This should be set to true
+      # when we figure out how to get `cuda-gdb --version` to run correctly
+      # when not using sandboxing.
+      doInstallCheck = false;
       postInstallCheck = let
       in ''
         # Smoke test binaries

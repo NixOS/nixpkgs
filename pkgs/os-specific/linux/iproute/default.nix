@@ -1,12 +1,12 @@
 { fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf }:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-${version}";
-  version = "4.20.0";
+  pname = "iproute2";
+  version = "5.0.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "1a7xyvqjxfnm7rk21amm0xgxa38clg7q7cmc4dmlg27q81mambf8";
+    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1fi03lb8dqr8hq633gcqsf6228vsvysxms075j1yyl4nlc17616z";
   };
 
   preConfigure = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "SBINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man"
     "BASH_COMPDIR=$(out)/share/bash-completion/completions"
-    "DOCDIR=$(TMPDIR)/share/doc/${name}" # Don't install docs
+    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
   ];
 

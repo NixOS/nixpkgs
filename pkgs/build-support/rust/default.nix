@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, rustc, cargo-vendor, fetchcargo, python3 }:
+{ stdenv, cacert, git, cargo, rustc, cargo-vendor, fetchcargo, python3, buildPackages }:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
@@ -9,14 +9,17 @@
 , sourceRoot ? null
 , logLevel ? ""
 , buildInputs ? []
+, nativeBuildInputs ? []
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
+, buildType ? "release"
 
 , cargoVendorDir ? null
 , ... } @ args:
 
 assert cargoVendorDir == null -> cargoSha256 != "unset";
+assert buildType == "release" || buildType == "debug";
 
 let
   cargoDeps = if cargoVendorDir == null
@@ -37,20 +40,24 @@ let
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
 
+  ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
+  cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
+  ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+  cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
+  releaseDir = "target/${stdenv.hostPlatform.config}/${buildType}";
+
 in stdenv.mkDerivation (args // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  buildInputs = [ cacert git cargo rustc ] ++ buildInputs;
+  nativeBuildInputs = [ cargo rustc git cacert ] ++ nativeBuildInputs;
+  inherit buildInputs;
 
   patches = cargoPatches ++ patches;
 
-  configurePhase = args.configurePhase or ''
-    runHook preConfigure
-    # noop
-    runHook postConfigure
-  '';
+  PKG_CONFIG_ALLOW_CROSS =
+    if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
 
   postUnpack = ''
     eval "$cargoDepsHook"
@@ -63,17 +70,51 @@ in stdenv.mkDerivation (args // {
       config=${./fetchcargo-default-config.toml};
     fi;
     substitute $config .cargo/config \
-    --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
+      --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
     unset cargoDepsCopy
 
     export RUST_LOG=${logLevel}
   '' + (args.postUnpack or "");
 
+  configurePhase = args.configurePhase or ''
+    runHook preConfigure
+    mkdir -p .cargo
+    cat >> .cargo/config <<'EOF'
+    [target."${stdenv.buildPlatform.config}"]
+    "linker" = "${ccForBuild}"
+    ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
+    [target."${stdenv.hostPlatform.config}"]
+    "linker" = "${ccForHost}"
+    ''}
+    EOF
+    cat .cargo/config
+    runHook postConfigure
+  '';
+
   buildPhase = with builtins; args.buildPhase or ''
     runHook preBuild
-    echo "Running cargo build --release ${concatStringsSep " " cargoBuildFlags}"
-    cargo build --release --frozen ${concatStringsSep " " cargoBuildFlags}
+
+    (
+    set -x
+    env \
+      "CC_${stdenv.buildPlatform.config}"="${ccForBuild}" \
+      "CXX_${stdenv.buildPlatform.config}"="${cxxForBuild}" \
+      "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
+      "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
+      cargo build \
+        --${buildType} \
+        --target ${stdenv.hostPlatform.config} \
+        --frozen ${concatStringsSep " " cargoBuildFlags}
+    )
+
+    # rename the output dir to a architecture independent one
+    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
+    for target in "''${targets[@]}"; do
+      rm -rf "$target/../../${buildType}"
+      ln -srf "$target" "$target/../../"
+    done
+
     runHook postBuild
   '';
 
@@ -86,11 +127,21 @@ in stdenv.mkDerivation (args // {
 
   doCheck = args.doCheck or true;
 
+  inherit releaseDir;
+
   installPhase = args.installPhase or ''
     runHook preInstall
     mkdir -p $out/bin $out/lib
-    find target/release -maxdepth 1 -type f -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \) -print0 | xargs -r -0 cp -t $out/bin
-    find target/release -maxdepth 1 -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" -print0 | xargs -r -0 cp -t $out/lib
+
+    find $releaseDir \
+      -maxdepth 1 \
+      -type f \
+      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \) \
+      -print0 | xargs -r -0 cp -t $out/bin
+    find $releaseDir \
+      -maxdepth 1 \
+      -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
+      -print0 | xargs -r -0 cp -t $out/lib
     rmdir --ignore-fail-on-non-empty $out/lib $out/bin
     runHook postInstall
   '';

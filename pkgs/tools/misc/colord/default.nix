@@ -1,29 +1,93 @@
-{ stdenv, fetchurl, bash-completion
-, glib, polkit, pkgconfig, gettext, gusb, lcms2, sqlite, systemd, dbus
-, gobject-introspection, argyllcms, meson, ninja, libxml2, vala_0_40
-, libgudev, sane-backends, gnome3, makeWrapper }:
+{ stdenv
+, fetchurl
+, bash-completion
+, glib
+, polkit
+, pkgconfig
+, gettext
+, gusb
+, lcms2
+, sqlite
+, systemd
+, dbus
+, gobject-introspection
+, argyllcms
+, meson
+, ninja
+, libxml2
+, vala
+, libgudev
+, wrapGAppsHook
+, shared-mime-info
+, sane-backends
+, docbook_xsl
+, docbook_xsl_ns
+, docbook_xml_dtd_412
+, gtk-doc
+, libxslt
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
-  name = "colord-1.4.2";
+  pname = "colord";
+  version = "1.4.4";
+
+  outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
-    sha256 = "19zc9gldz469jshl16av7na459kwr5nhvs2pz98xm5lw582xaw2c";
+    url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
+    sha256 = "19f0938fr7nvvm3jr263dlknaq7md40zrac2npfyz25zc00yh3ws";
   };
 
-  mesonFlags = [
-    "-Denable-sane=true"
-    "-Denable-vala=true"
-    "--localstatedir=/var"
-    "-Denable-bash-completion=true"
-    # TODO: man page cannot be build with docbook2x
-    "-Denable-man=false"
-    "-Denable-docs=false"
+  patches = [
+    # Put installed tests into its own output
+    ./installed-tests-path.patch
   ];
 
-  nativeBuildInputs = [ meson pkgconfig vala_0_40 ninja gettext libxml2 gobject-introspection makeWrapper ];
+  postPatch = ''
+    for file in data/tests/meson.build lib/colord/cd-test-shared.c lib/colord/meson.build; do
+        substituteInPlace $file --subst-var-by installed_tests_dir "$installedTests"
+    done
+  '';
 
-  buildInputs = [ glib polkit gusb lcms2 sqlite systemd dbus bash-completion argyllcms libgudev sane-backends ];
+  mesonFlags = [
+    "--localstatedir=/var"
+    "-Dinstalled_tests=true"
+    "-Dlibcolordcompat=true"
+    "-Dsane=true"
+    "-Dvapi=true"
+    "-Ddaemon_user=colord"
+  ];
+
+  nativeBuildInputs = [
+    docbook_xml_dtd_412
+    docbook_xsl
+    docbook_xsl_ns
+    gettext
+    gobject-introspection
+    gtk-doc
+    libxslt
+    meson
+    ninja
+    pkgconfig
+    shared-mime-info
+    vala
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    argyllcms
+    bash-completion
+    dbus
+    glib
+    gusb
+    lcms2
+    libgudev
+    polkit
+    sane-backends
+    sqlite
+    systemd
+  ];
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
@@ -35,17 +99,11 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
-  postFixup = ''
-    wrapProgram "$out/libexec/colord-session" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share" \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = https://www.freedesktop.org/software/colord/;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl2Plus;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux;
   };
 }

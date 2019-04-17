@@ -32,3 +32,13 @@
 -fi
 -
 -
+diff --git a/util/meson.build b/util/meson.build
+index aa0e734..06d4378 100644
+--- a/util/meson.build
++++ b/util/meson.build
+@@ -1,4 +1,4 @@
+-fuseconf_path = join_paths(get_option('prefix'), get_option('sysconfdir'), 'fuse.conf')
++fuseconf_path = join_paths('/', get_option('sysconfdir'), 'fuse.conf')
+ 
+ executable('fusermount3', ['fusermount.c', '../lib/mount_util.c'],
+            include_directories: include_dirs,

@@ -1,31 +1,30 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k, fetchpatch
 , cairocffi, cssselect2, defusedxml, pillow, tinycss2
-, pytestrunner, pytestcov, pytest-flake8, pytest-isort }:
+, pytest, pytestrunner, pytestcov, pytest-flake8, pytest-isort }:
 
 buildPythonPackage rec {
   pname = "CairoSVG";
-  version = "2.2.1";
+  version = "2.3.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "93c5b3204478c4e20c4baeb33807db5311b4420c21db2f21034a6deda998cb14";
+    sha256 = "66f333ef5dc79fdfbd3bbe98adc791b1f854e0461067d202fa7b15de66d517ec";
   };
 
   patches = [
-    # Fix tests. Remove with the next release
+    # fix isort-check
     (fetchpatch {
-      url = https://github.com/Kozea/CairoSVG/commit/1f403ad229f0e2782d6427a79f0fbeb6b76148b6.patch;
-      sha256 = "1dxpj5zh8wmx9f8pj11hrixd5jlaqq5xlcdnbl462bh29zj18l26";
+      url = https://github.com/Kozea/CairoSVG/commit/b2534b0fc80b9f24a2bff2c938ac5da73ff1e478.patch;
+      excludes = [ "test_non_regression/__init__.py" ];
+      sha256 = "1bms75dd0fd978yhlr0k565zq45lzxf0vkihryb7gcwnd42bl6yf";
     })
   ];
 
-  LC_ALL="en_US.UTF-8";
-
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
 
-  checkInputs = [ pytestrunner pytestcov pytest-flake8 pytest-isort ];
+  checkInputs = [ pytest pytestrunner pytestcov pytest-flake8 pytest-isort ];
 
   meta = with stdenv.lib; {
     homepage = https://cairosvg.org;

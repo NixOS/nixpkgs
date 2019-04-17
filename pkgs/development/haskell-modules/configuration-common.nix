@@ -48,7 +48,6 @@ self: super: {
 
   # Break infinite recursions.
   attoparsec-varword = super.attoparsec-varword.override { bytestring-builder-varword = dontCheck self.bytestring-builder-varword; };
-  clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec-core = super.hspec-core.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
@@ -85,7 +84,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1v2v6cwy957y5rgclb66ia7bl5j5mx291s3lh2swa39q3420m6v0";
+      sha256 = "08gw3b5gbbxs2dr3b4zf9xsvhbvpqjj4ikmvzmcvs3fh1q65xbgl";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -165,8 +164,10 @@ self: super: {
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    # https://github.com/jaspervdj/hakyll/issues/491
-    else dontCheck super.hakyll;
+    else appendPatch super.hakyll (pkgs.fetchpatch {
+      url = "https://github.com/jaspervdj/hakyll/pull/691/commits/a44ad37cd15310812e78f7dab58d6d460451f20c.patch";
+      sha256 = "13xpznm19rjp51ds165ll9ahyps1r4131c77b8r7gpjd6i505832";
+    });
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
@@ -870,8 +871,38 @@ self: super: {
   # https://github.com/takano-akio/filelock/issues/5
   filelock = dontCheck super.filelock;
 
-  # cryptol-2.5.0 doesn't want happy 1.19.6+.
-  cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
+  # fix GHC 8.6 builds by using irrefutable patterns. jailbreak is also
+  # required due to a constraint failure for base-compat.
+  cryptol = doJailbreak (overrideCabal super.cryptol (drv: {
+
+    # the last patch fixes ghc 8.6 builds; the other two (small) patches fix a
+    # few bugs between them, but are also hard dependencies
+    patches = drv.patches or [] ++ [
+      (pkgs.fetchpatch {
+        url    = https://github.com/GaloisInc/cryptol/commit/634c5a03e757663bf86d1ffad1ce2c6086d4483f.patch;
+        sha256 = "16dvfihsl2c4jnyfndgrjarkm3z5pyn7rzg2svnidx0qipwrxzm7";
+      })
+      (pkgs.fetchpatch {
+        url    = https://github.com/GaloisInc/cryptol/commit/515642328aff6d958ff1b534b9effdd726901b60.patch;
+        sha256 = "1fml71b720igyh8s7mj1z1c2bbv1vk490iy7blvxp625nymzjij6";
+      })
+      (pkgs.fetchpatch {
+        url    = https://github.com/GaloisInc/cryptol/commit/a8eab11b319f6434f9b01b26d419b8305ff30bc2.patch;
+        sha256 = "1bbznp3kbj8l83q979gf4gr2khwbyqi85ykwsf2jnkhzda6pr0n8";
+      })
+    ];
+
+    buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
+
+    # make sure the binaries always start up. previously this was in
+    # all-packages.nix but it's almost certainly better to do it here (e.g. a
+    # haskell deps may use cryptol in the test suite or something, etc)
+    postInstall = drv.postInstall or "" + ''
+      for b in $out/bin/cryptol $out/bin/cryptol-html; do
+        wrapProgram $b --prefix 'PATH' ':' "${pkgs.lib.getBin pkgs.z3}/bin"
+      done
+    '';
+  }));
 
   # Tests try to invoke external process and process == 1.4
   grakn = dontCheck (doJailbreak super.grakn);
@@ -1025,6 +1056,11 @@ self: super: {
     testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
+  arbtt = overrideCabal super.arbtt (drv: {
+    preCheck = ''
+      for n in $PWD/dist/build/*; do PATH+=":$n"; done
+    '';
+  });
 
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
@@ -1036,6 +1072,8 @@ self: super: {
 
   # https://github.com/dmwit/encoding/pull/3
   encoding = appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch;
+
+  clock = dontCheck (appendPatch super.clock ./patches/clock-0.7.2.patch);
 
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
@@ -1152,10 +1190,6 @@ self: super: {
   # https://github.com/kcsongor/generic-lens/pull/65
   generic-lens = dontCheck super.generic-lens;
 
-  xmonad-extras = doJailbreak super.xmonad-extras;
-
-  arbtt = doJailbreak super.arbtt;
-
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
 
@@ -1168,9 +1202,6 @@ self: super: {
   #   testToolDepends = old.testToolDepends or [] ++ [ pkgs.nix ];
   # });
   libnix = dontCheck super.libnix;
-
-  # https://github.com/jmillikin/chell/issues/1
-  chell = super.chell.override { patience = self.patience_0_1_1; };
 
   # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
   xmobar = dontCheck super.xmobar;
@@ -1217,11 +1248,18 @@ self: super: {
     })];
   });
 
+  # Remove unecessary constraint:
+  # https://github.com/agrafix/superbuffer/pull/2
+  superbuffer = overrideCabal super.superbuffer (drv: {
+    postPatch = ''
+      sed -i 's#QuickCheck < 2.10#QuickCheck < 2.13#' superbuffer.cabal
+    '';
+  });
+
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  pandoc = doDistribute super.pandoc_2_7;
-  pandoc-citeproc = self.pandoc-citeproc_0_16_1_2;
-  texmath = self.texmath_0_11_2_2;
+  pandoc = doDistribute super.pandoc_2_7_2;
+  pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_1_3;
 
   # https://github.com/qfpl/tasty-hedgehog/issues/24
   tasty-hedgehog = dontCheck super.tasty-hedgehog;
@@ -1237,5 +1275,11 @@ self: super: {
         sha256 = "1wqhqajxni6h9rrj22xj6421d4m0gs8qk2glghpdp307ns5gr2j4";
       };
   }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck]));
+
+  # Fix build with attr-2.4.48 (see #53716)
+  xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
+
+  # Break out of pandoc >=2.0 && <2.7 (https://github.com/pbrisbin/yesod-markdown/pull/65)
+  yesod-markdown = doJailbreak super.yesod-markdown;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

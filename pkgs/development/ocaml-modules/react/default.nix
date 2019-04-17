@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
-    homepage = http://erratique.ch/software/react;
+    homepage = https://erratique.ch/software/react;
     description = "Applicative events and signals for OCaml";
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];

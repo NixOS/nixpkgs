@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional withGtk3 "--enable-gtk3";
 
   meta = {
-    homepage = http://www.xfce.org/;
+    homepage = https://www.xfce.org/;
     description = "GTK+ theme engine for Xfce";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

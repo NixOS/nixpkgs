@@ -16,7 +16,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/madzak/python-json-logger;
+    homepage = https://github.com/madzak/python-json-logger;
     description = "A python library adding a json log formatter";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];

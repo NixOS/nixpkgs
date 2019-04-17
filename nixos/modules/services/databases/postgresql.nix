@@ -238,6 +238,7 @@ in
             User = "postgres";
             Group = "postgres";
             PermissionsStartOnly = true;
+            RuntimeDirectory = "postgresql";
             Type = if lib.versionAtLeast cfg.package.version "9.6"
                    then "notify"
                    else "simple";

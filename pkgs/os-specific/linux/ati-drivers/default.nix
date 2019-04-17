@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
     description = "ATI Catalyst display drivers";
     homepage = http://support.amd.com/us/gpudownload/Pages/index.aspx;
     license = licenses.unfree;
-    maintainers = with maintainers; [ marcweber offline jgeerds jerith666 ];
+    maintainers = with maintainers; [ marcweber offline jerith666 ];
     platforms = platforms.linux;
     hydraPlatforms = [];
     # Copied from the nvidia default.nix to prevent a store collision.

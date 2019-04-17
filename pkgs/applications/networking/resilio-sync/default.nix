@@ -9,13 +9,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "resilio-sync-${version}";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "https://download-cdn.resilio.com/${version}/linux-${arch}/resilio-sync_${arch}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "0vq8jz4v740zz3pvgqfya8mhy35fh49wpn8d08xjrs5062hl1yc2";
-      "i686-linux"   = "1gvq29bkdqvbcgnnhl3018h564rswk3r88s33lx5iph1rpxc6v5h";
+      "x86_64-linux" = "114k7dsxn7lzv6mjq9alsqxypvkah4lmjn5w6brbvgd6m6pdwslz";
+      "i686-linux"   = "1dh0hxbd33bs51xib3qwxw58h9j30v0dc10b4x4rwkbgsj11nc83";
     }.${stdenv.hostPlatform.system};
   };
 

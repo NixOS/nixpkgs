@@ -431,8 +431,6 @@ in
 
     services.openssh.extraConfig = mkOrder 0
       ''
-        Protocol 2
-
         UsePAM yes
 
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}

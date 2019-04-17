@@ -21,18 +21,23 @@
   ## Other parameters
   ##
 
-, # The package set used at build-time. If null, `buildPackages` will
-  # be defined internally as the final produced package set itself. This allows
-  # us to avoid expensive splicing.
-  buildPackages
-
-, # The package set used in the next stage. If null, `targetPackages` will be
-  # defined internally as the final produced package set itself, just like with
-  # `buildPackages` and for the same reasons.
+, # Either null or an object in the form:
   #
-  # THIS IS A HACK for compilers that don't think critically about cross-
-  # compilation. Please do *not* use unless you really know what you are doing.
-  targetPackages
+  #   {
+  #     pkgsBuildBuild = ...;
+  #     pkgsBuildHost = ...;
+  #     pkgsBuildTarget = ...;
+  #     pkgsHostHost = ...;
+  #     # pkgsHostTarget skipped on purpose.
+  #     pkgsTargetTarget ...;
+  #   }
+  #
+  # These are references to adjacent bootstrapping stages. The more familiar
+  # `buildPackages` and `targetPackages` are defined in terms of them. If null,
+  # they are instead defined internally as the current stage. This allows us to
+  # avoid expensive splicing. `pkgsHostTarget` is skipped because it is always
+  # defined as the current stage.
+  adjacentPackages
 
 , # The standard environment to use for building packages.
   stdenv
@@ -70,11 +75,33 @@ let
       inherit (self) runtimeShell;
     };
 
-  stdenvBootstappingAndPlatforms = self: super: {
-    buildPackages = (if buildPackages == null then self else buildPackages)
+  stdenvBootstappingAndPlatforms = self: super: let
+    withFallback = thisPkgs:
+      (if adjacentPackages == null then self else thisPkgs)
       // { recurseForDerivations = false; };
-    targetPackages = (if targetPackages == null then self else targetPackages)
-      // { recurseForDerivations = false; };
+  in {
+    # Here are package sets of from related stages. They are all in the form
+    # `pkgs{theirHost}{theirTarget}`. For example, `pkgsBuildHost` means their
+    # host platform is our build platform, and their target platform is our host
+    # platform. We only care about their host/target platforms, not their build
+    # platform, because the the former two alone affect the interface of the
+    # final package; the build platform is just an implementation detail that
+    # should not leak.
+    pkgsBuildBuild = withFallback adjacentPackages.pkgsBuildBuild;
+    pkgsBuildHost = withFallback adjacentPackages.pkgsBuildHost;
+    pkgsBuildTarget = withFallback adjacentPackages.pkgsBuildTarget;
+    pkgsHostHost = withFallback adjacentPackages.pkgsHostHost;
+    pkgsHostTarget = self // { recurseForDerivations = false; }; # always `self`
+    pkgsTargetTarget = withFallback adjacentPackages.pkgsTargetTarget;
+
+    # Older names for package sets. Use these when only the host platform of the
+    # package set matter (i.e. use `buildPackages` where any of `pkgsBuild*`
+    # would do, and `targetPackages` when any of `pkgsTarget*` would do (if we
+    # had more than just `pkgsTargetTarget`).)
+    buildPackages = self.pkgsBuildHost;
+    pkgs = self.pkgsHostTarget;
+    targetPackages = self.pkgsTargetTarget;
+
     inherit stdenv;
   };
 
@@ -87,7 +114,7 @@ let
     inherit (hostPlatform) system;
   };
 
-  splice = self: super: import ./splice.nix lib self (buildPackages != null);
+  splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
 
   allPackages = self: super:
     let res = import ./all-packages.nix
@@ -135,6 +162,9 @@ let
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported.
     pkgsMusl = if stdenv.hostPlatform.isLinux then nixpkgsFun {
+      overlays = [ (self': super': {
+        pkgsMusl = super';
+      })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
@@ -151,6 +181,9 @@ let
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
+      overlays = [ (self': super': {
+        pkgsi686Linux = super';
+      })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
@@ -176,6 +209,9 @@ let
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
     pkgsStatic = nixpkgsFun ({
+      overlays = [ (self': super': {
+        pkgsStatic = super';
+      })] ++ overlays;
       crossOverlays = [ (import ./static.nix) ];
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {

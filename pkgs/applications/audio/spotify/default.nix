@@ -1,12 +1,15 @@
 { fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curl, zlib, gnome3
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
 , at-spi2-atk
 }:
 
 let
   # TO UPDATE: just execute the ./update.sh script (won't do anything if there is no update)
   # "rev" decides what is actually being downloaded
+  # If an update breaks things, one of those might have valuable info:
+  # https://aur.archlinux.org/packages/spotify/
+  # https://community.spotify.com/t5/Desktop-Linux
   version = "1.0.96.181.gf6bc1b6b-12";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
@@ -26,7 +29,7 @@ let
     curl
     dbus
     expat
-    ffmpeg
+    ffmpeg_3
     fontconfig
     freetype
     gdk_pixbuf
@@ -118,8 +121,8 @@ stdenv.mkDerivation {
       ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
       ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
-      ln -s ${ffmpeg.out}/lib/libavcodec.so.56 $libdir/libavcodec-ffmpeg.so.56
-      ln -s ${ffmpeg.out}/lib/libavformat.so.56 $libdir/libavformat-ffmpeg.so.56
+      ln -s ${ffmpeg_3.out}/lib/libavcodec.so* $libdir
+      ln -s ${ffmpeg_3.out}/lib/libavformat.so* $libdir
 
       rpath="$out/share/spotify:$libdir"
 
@@ -154,7 +157,7 @@ stdenv.mkDerivation {
     homepage = https://www.spotify.com/;
     description = "Play music from the Spotify music service";
     license = licenses.unfree;
-    maintainers = with maintainers; [ eelco ftrvxmtrx sheenobu mudri ];
+    maintainers = with maintainers; [ eelco ftrvxmtrx sheenobu mudri timokau ];
     platforms = [ "x86_64-linux" ];
   };
 }

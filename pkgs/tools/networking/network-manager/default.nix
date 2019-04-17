@@ -9,11 +9,11 @@ let
   pname = "NetworkManager";
 in stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "1.14.4";
+  version = "1.16.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "064cgj9za0kzarks0lrv0qw2ysdphb5l97iw0c964bfiqzjfv8rm";
+    sha256 = "0b2x9hrg41cd17psqi0vacwj733v99hxczn53gdfs0yanqrji5lf";
   };
 
   outputs = [ "out" "dev" ];
@@ -88,13 +88,15 @@ in stdenv.mkDerivation rec {
     # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
     substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
 
-    # rename to network-manager to be in style
-    mv $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service
-
     # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
     # aliases ourselves.
     ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-    ln -s $out/etc/systemd/system/network-manager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+    ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+
+    # Add the legacy service name from before #51382 to prevent NetworkManager
+    # from not starting back up:
+    # TODO: remove this once 19.10 is released
+    ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service
   '';
 
   passthru = {

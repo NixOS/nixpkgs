@@ -114,7 +114,7 @@ print <<'EOF';
     makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
       --argv0 "opam" \
       --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin \
-      --set OPAM_USER_PATH_RO /run/current-system/sw/bin:/nix/store
+      --set OPAM_USER_PATH_RO /run/current-system/sw/bin:/nix/
     $out/bin/opam-installer --prefix=$installer opam-installer.install
   '';
 

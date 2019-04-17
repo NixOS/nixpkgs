@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "pgcenter-${version}";
-  version = "0.5.0";
+  pname = "pgcenter";
+  version = "0.6.1";
 
   goPackagePath = "github.com/lesovsky/pgcenter";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "lesovsky";
     repo   = "pgcenter";
     rev    = "v${version}";
-    sha256 = "1bbpzli8hh5356gink6byk085zyfwxi8wigdy5cbadppx4qnk078";
+    sha256 = "12wyi6vc3i0dq76mrvv5r632ks90xppcra5g7rjf54vg4291kycy";
   };
 
   goDeps = ./deps.nix;

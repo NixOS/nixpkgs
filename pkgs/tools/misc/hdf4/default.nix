@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DBUILD_TESTING=ON"
     "-DHDF4_BUILD_TOOLS=ON"
     "-DHDF4_BUILD_UTILS=ON"
     "-DHDF4_BUILD_WITH_INSTALL_NAME=OFF"

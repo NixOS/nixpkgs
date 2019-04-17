@@ -324,10 +324,11 @@ rec {
     pname = "re2";
     hash = "0bl65d0nmvr7k1mkkcc4aai86l5qzgn1xxwmszshpwhaz87cqghd";
     propagatedBuildInputs = [ core_kernel ];
-    meta = {
-      description = "OCaml bindings for RE2";
-      broken = stdenv.isDarwin;
-    };
+    prePatch = ''
+      substituteInPlace src/re2_c/jbuild --replace 'CXX=g++' 'CXX=c++'
+      substituteInPlace src/jbuild --replace '(cxx_flags ((:standard \ -pedantic) (-I re2_c/libre2)))' '(cxx_flags ((:standard \ -pedantic) (-I re2_c/libre2) (-x c++)))'
+    '';
+    meta.description = "OCaml bindings for RE2";
   };
 
   core_extended = janePackage {
@@ -438,13 +439,6 @@ rec {
     hash = "13n6h7mimwkbsjdix96ghfrmxjd036m4h4zgl8qag00aacqclvpi";
     propagatedBuildInputs = [ async expect_test_helpers_kernel ];
     meta.description = "Async helpers for writing expectation tests";
-  };
-
-  bignum = janePackage {
-    pname = "bignum";
-    hash = "0hqd88fb90rsj1wjj4k79gigcf31c6a45msasw99zzifzppr3w3f";
-    propagatedBuildInputs = [ core_kernel zarith num ];
-    meta.description = "Core-flavoured wrapper around zarith's arbitrary-precision rationals";
   };
 
   cinaps = janePackage {

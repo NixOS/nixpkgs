@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An OCaml module for handling file system paths with POSIX and Windows conventions";
-    homepage = http://erratique.ch/software/fpath;
+    homepage = https://erratique.ch/software/fpath;
     license = stdenv.lib.licenses.isc;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;

@@ -119,7 +119,7 @@ let
   mkExporterConf = { name, conf, serviceOpts }:
     mkIf conf.enable {
       networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
-        "ip46tables -I nixos-fw ${conf.firewallFilter} "
+        "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{

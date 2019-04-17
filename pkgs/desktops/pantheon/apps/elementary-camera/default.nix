@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "camera";
-  version = "1.0.3";
+  version = "1.0.4";
 
   name = "elementary-${pname}-${version}";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "05rjymflhwbkw8yc57rgi9n7lrhf4dpvfvlifdnazyqn9iiaxc46";
+    sha256 = "1p532f961cjdg7szmxw7hw3av9v342hv5rx7in3bbhlc7adxflyc";
   };
 
   passthru = {

@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [
       edwtjo
-      jgeerds
     ];
     description = "A proofreading program for English, French German, Polish, and more";
   };

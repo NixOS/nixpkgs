@@ -311,6 +311,10 @@ packageOverrides = pkgs: {
   <title>Elm</title>
 
   <para>
+   To start a development environment do <command>nix-shell -p elmPackages.elm elmPackages.elm-format</command>
+  </para>
+
+  <para>
    To update Elm compiler, see
    <filename>nixpkgs/pkgs/development/compilers/elm/README.md</filename>.
   </para>
@@ -883,6 +887,33 @@ citrix_receiver.override {
     On NixOS it can be installed using the following expression:
 <programlisting>{ pkgs, ... }: {
   fonts.fonts = with pkgs; [ noto-fonts-emoji ];
+}</programlisting>
+   </para>
+  </section>
+ </section>
+ <section xml:id="dlib">
+  <title>DLib</title>
+
+  <para>
+    <link xlink:href="http://dlib.net/">DLib</link> is a modern, C++-based toolkit which
+    provides several machine learning algorithms.
+  </para>
+
+  <section xml:id="compiling-without-avx-support">
+   <title>Compiling without AVX support</title>
+
+   <para>
+     Especially older CPUs don't support
+     <link xlink:href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX</link>
+     (<abbrev>Advanced Vector Extensions</abbrev>) instructions that are used by DLib to
+     optimize their algorithms.
+   </para>
+
+   <para>
+    On the affected hardware errors like <literal>Illegal instruction</literal> will occur.
+    In those cases AVX support needs to be disabled:
+<programlisting>self: super: {
+  dlib = super.dlib.override { avxSupport = false; };
 }</programlisting>
    </para>
   </section>

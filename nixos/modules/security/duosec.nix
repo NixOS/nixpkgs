@@ -76,7 +76,7 @@ in
       };
 
       failmode = mkOption {
-        type = types.enum [ "safe" "enum" ];
+        type = types.enum [ "safe" "secure" ];
         default = "safe";
         description = ''
           On service or configuration errors that prevent Duo

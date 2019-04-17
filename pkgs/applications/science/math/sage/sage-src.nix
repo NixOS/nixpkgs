@@ -61,6 +61,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Since sage unfortunately does not release bugfix releases, packagers must
+  # fix those bugs themselves. This is for critical bugfixes, where "critical"
+  # == "causes (transient) doctest failures / somebody complained".
+  bugfixPatches = [
+    # Transient doctest failure in src/sage/modular/abvar/torsion_subgroup.py
+    # https://trac.sagemath.org/ticket/27477
+    (fetchpatch {
+      name = "sig_on_in_matrix_sparce.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id2=10407524b18659e14e184114b61c043fb816f3c2&id=c9b0cc9d0b8748ab85e568f8f57f316c5e8cbe54";
+      sha256 = "0wgp7yvn9sm1ynlhcr4l0hzmvr2n28llg4xc01p6k1zz4im64c17";
+    })
+  ];
+
   # Patches needed because of package updates. We could just pin the versions of
   # dependencies, but that would lead to rebuilds, confusion and the burdons of
   # maintaining multiple versions of dependencies. Instead we try to make sage
@@ -124,9 +137,30 @@ stdenv.mkDerivation rec {
 
     # https://trac.sagemath.org/ticket/27405
     ./patches/ignore-pip-deprecation.patch
+
+    # https://trac.sagemath.org/ticket/27360
+    (fetchpatch {
+      name = "eclib-20190226.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=f570e3a7fc2965764b84c04ce301a88ded2c42df";
+      sha256 = "0l5c4giixkn15v2a06sfzq5mkxila6l67zkjbacirwprrlpcnmmp";
+    })
+
+    # https://trac.sagemath.org/ticket/27420
+    (fetchpatch {
+      name = "cypari-2.1.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=e351bf2f2914e683d5e2028597c45ae8d1b7f855";
+      sha256 = "00faa7fl0vaqcqbw0bidkhl78qa8l34d3a07zirbcl0vm74bdn1p";
+    })
+
+    # https://trac.sagemath.org/ticket/27653
+    (fetchpatch {
+      name = "sympy-1.4.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=3277ba76d0ba7174608a31a0c6623e9210c63e3d";
+      sha256 = "09avaanwmdgqv14mmllbgw9z2scf4lc0y0kzdhlriiq8ss9j8iir";
+    })
   ];
 
-  patches = nixPatches ++ packageUpgradePatches;
+  patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
 
   postPatch = ''
     # make sure shebangs etc are fixed, but sage-python23 still works

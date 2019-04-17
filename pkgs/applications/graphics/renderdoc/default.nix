@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
 , qtbase, qtx11extras, qtsvg, makeWrapper
 , vulkan-loader, xorg
-, python36, bison, pcre, automake, autoconf
+, python3, bison, pcre, automake, autoconf
 }:
 let
   custom_swig = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python36
+    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python3
   ];
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig bison pcre automake autoconf ];

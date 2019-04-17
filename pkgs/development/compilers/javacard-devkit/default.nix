@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
           converter -applet [AppletAID] [MyApplet] [myPackage] [PackageAID] [Version]
       For more details, please refer to the documentation by Oracle
     '';
-    homepage = http://www.oracle.com/technetwork/java/embedded/javacard/overview/index.html;
+    homepage = https://www.oracle.com/technetwork/java/embedded/javacard/overview/index.html;
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.ekleog ];
     platforms = [ "i686-linux" "x86_64-linux" ];

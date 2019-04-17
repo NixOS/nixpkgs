@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.14";
+  version = "0.9.15";
   name = "smenu-${version}";
 
   src = fetchFromGitHub {
     owner  = "p-gen";
     repo   = "smenu";
     rev    = "v${version}";
-    sha256 = "1q2jvzia5ggkifkawm791p2nkmnpm6cmd5x3al7zf76gpdm6j87d";
+    sha256 = "0s9qhg6dln33x8r2g8igvgkyrv8g1z26wf8gcnqp3kbp6fw12izi";
   };
 
   buildInputs = [ ncurses ];

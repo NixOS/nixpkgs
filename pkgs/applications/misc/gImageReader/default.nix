@@ -7,7 +7,7 @@
 # Gtk deps
 # upstream gImagereader supports Qt too
 , gtk3, gobject-introspection, wrapGAppsHook
-, gnome3, gtkspell3, gtkspellmm, cairomm
+, gnome3, gtkmm3, gtksourceview3, gtksourceviewmm, gtkspell3, gtkspellmm, cairomm
 }:
 
 let
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     poppler
 
     # Gtk specific
-    gnome3.gtkmm
+    gtkmm3
     gtkspell3
     gtkspellmm
-    gnome3.gtksourceview
-    gnome3.gtksourceviewmm
+    gtksourceview3
+    gtksourceviewmm
     cairomm
     json-glib
   ];

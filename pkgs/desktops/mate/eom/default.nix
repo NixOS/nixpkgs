@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, dbus-glib, exempi, lcms2, libexif, libjpeg, librsvg, libxml2, shared-mime-info, gnome3, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, dbus-glib, exempi, lcms2, libexif, libjpeg, librsvg, libxml2, libpeas, shared-mime-info, gnome3, gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "eom-${version}";
@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
     librsvg
     libxml2
     shared-mime-info
-    gnome3.gtk
-    gnome3.libpeas
+    gtk3
+    libpeas
     mate.mate-desktop
     hicolor-icon-theme
   ];
 
   meta = {
     description = "An image viewing and cataloging program for the MATE desktop";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

@@ -4,31 +4,21 @@
 }:
 
 let
-  arch = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
-    else throw "Spideroak client for: ${stdenv.hostPlatform.system} not supported!";
-
-  interpreter = if stdenv.hostPlatform.system == "x86_64-linux" then "ld-linux-x86-64.so.2"
-    else if stdenv.hostPlatform.system == "i686-linux" then "ld-linux.so.2"
-    else throw "Spideroak client for: ${stdenv.hostPlatform.system} not supported!";
-
-  sha256 = if stdenv.hostPlatform.system == "x86_64-linux" then "a88e5a8fe4a565ac500668bd53cf5784752d7c9253304ddce39ee7b01d078533"
-    else if stdenv.hostPlatform.system == "i686-linux" then "668f3b83a974a3877d16c8743c233a427ea0a44ab84b7f9aec19a2995db66c16"
-    else throw "Spideroak client for: ${stdenv.hostPlatform.system} not supported!";
+  sha256 = "6d6ca2b383bcc81af1217c696eb77864a2b6db7428f4b5bde5b5913ce705eec5";
 
   ldpath = stdenv.lib.makeLibraryPath [
     fontconfig freetype glib libICE libSM
     libX11 libXext libXrender zlib
   ];
 
-  version = "7.1.0";
+  version = "7.5.0";
 
 in stdenv.mkDerivation {
   name = "spideroak-${version}";
 
   src = fetchurl {
-    name = "SpiderOakONE-${version}-slack_tar_${arch}.tgz";
-    url = "https://spideroak.com/release/spideroak/slack_tar_${arch}";
+    name = "SpiderOakONE-${version}-slack_tar_x64.tgz";
+    url = "https://spideroak.com/release/spideroak/slack_tar_x64";
     inherit sha256;
   };
 
@@ -46,7 +36,7 @@ in stdenv.mkDerivation {
 
     rm -f $out/opt/SpiderOakONE/lib/libz*
 
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} \
+    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2 \
       "$out/opt/SpiderOakONE/lib/SpiderOakONE"
 
     RPATH=$out/opt/SpiderOakONE/lib:${ldpath}

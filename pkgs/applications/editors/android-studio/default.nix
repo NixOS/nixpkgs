@@ -13,26 +13,16 @@ let
     sha256Hash = "0smh3d3v8n0isxg7fkls20622gp52f58i2b6wa4a0g8wnvmd6mw2";
   };
   betaVersion = {
-    version = "3.4.0.15"; # "Android Studio 3.4 RC 1"
-    build = "183.5341121";
-    sha256Hash = "0s7wadnzbrd031ls43b5nbh1nx0paj74bxy2yiczr4qb9n562zzy";
+    version = "3.4.0.17"; # "Android Studio 3.4 RC 3"
+    build = "183.5400832";
+    sha256Hash = "1v4apc73jdhavhzj8j46mzh15rw08w1hd9y9ykarj3b5q7i2vyq1";
   };
   latestVersion = { # canary & dev
-    version = "3.5.0.6"; # "Android Studio 3.5 Canary 7"
-    build = "183.5346365";
-    sha256Hash = "0dfkhzsxabrv8cwgyv3gicpglgpccmi1ig5shlhp6a006awgfyj0";
+    version = "3.5.0.10"; # "Android Studio 3.5 Canary 11"
+    build = "191.5455988";
+    sha256Hash = "1g24a8fwnrfzdf093wdmqly3mzjddk5ndgi51qj98amn7kclsdpf";
   };
 in rec {
-  # Old alias (TODO @primeos: Remove after 19.03 is branched off):
-  preview = throw ''
-    The attributes "android-studio-preview" and "androidStudioPackages.preview"
-    are now deprecated and will be removed soon, please use
-    "androidStudioPackages.beta" instead. This attribute corresponds to the
-    beta channel, if you want the latest release you can use
-    "androidStudioPackages.dev" or "androidStudioPackages.canary" instead
-    (currently, there is no difference between both channels).
-  '';
-
   # Attributes are named by their corresponding release channels
 
   stable = mkStudio (stableVersion // {

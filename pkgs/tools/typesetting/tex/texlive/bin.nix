@@ -175,7 +175,7 @@ core = stdenv.mkDerivation rec {
     description = "Basic binaries for TeX Live";
     homepage    = http://www.tug.org/texlive;
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = with maintainers; [ vcunat lovek323 raskin jwiegley ];
+    maintainers = with maintainers; [ vcunat veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
   };
 };

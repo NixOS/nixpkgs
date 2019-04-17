@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook
+{ config, stdenv, fetchurl, pkgconfig, autoreconfHook
 , librdf_raptor2, ladspaH, openssl, zlib
-, doCheck ? stdenv.config.doCheckByDefault or false, ladspaPlugins
+, doCheck ? config.doCheckByDefault or false, ladspaPlugins
 }:
 
 stdenv.mkDerivation rec {

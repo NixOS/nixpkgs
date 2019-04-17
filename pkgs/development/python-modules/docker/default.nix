@@ -28,7 +28,6 @@ buildPythonPackage rec {
     homepage = https://github.com/docker/docker-py;
     license = licenses.asl20;
     maintainers = with maintainers; [
-      jgeerds
     ];
   };
 }

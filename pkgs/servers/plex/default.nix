@@ -6,9 +6,9 @@
 let
   plexPass = throw "Plex pass has been removed at upstream's request; please unset nixpkgs.config.plex.pass";
   plexpkg = if enablePlexPass then plexPass else {
-    version = "1.14.1.5488";
-    vsnHash = "cc260c476";
-    sha256 = "8ee806f35ccedcecd0cab028bbe1f7e2ac7de24292b715978d3165c4712f5c40";
+    version = "1.15.3.876";
+    vsnHash = "ad6e39743";
+    sha256 = "01g7wccm01kg3nhf3qrmwcn20nkpv0bqz6zqv2gq5v03ps58h6g5";
   };
 
 in stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   sha256 = plexpkg.sha256;
 
   src = fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
+    url = "https://downloads.plex.tv/plex-media-server-new/${version}-${vsnHash}/redhat/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
     inherit sha256;
   };
 
@@ -45,14 +45,11 @@ in stdenv.mkDerivation rec {
                "Plex Transcoder"                \
                "Plex Tuner Service"             ; do
       patchelf --set-interpreter "${glibc.out}/lib/ld-linux-x86-64.so.2" "$out/usr/lib/plexmediaserver/$bin"
-      patchelf --set-rpath "$out/usr/lib/plexmediaserver" "$out/usr/lib/plexmediaserver/$bin"
+      patchelf --set-rpath "$out/usr/lib/plexmediaserver/lib" "$out/usr/lib/plexmediaserver/$bin"
     done
 
     find $out/usr/lib/plexmediaserver/Resources -type f -a -perm -0100 \
         -print -exec patchelf --set-interpreter "${glibc.out}/lib/ld-linux-x86-64.so.2" '{}' \;
-
-    # executables need libstdc++.so.6
-    ln -s "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}/libstdc++.so.6" "$out/usr/lib/plexmediaserver/libstdc++.so.6"
 
     # Our next problem is the "Resources" directory in /usr/lib/plexmediaserver.
     # This is ostensibly a skeleton directory, which contains files that Plex

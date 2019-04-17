@@ -36,8 +36,9 @@ let
         #! ${pkgs.runtimeShell} -e
 
         # Initialise the container side of the veth pair.
-        if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ] || [ -n "$HOST_BRIDGE" ]; then
-
+        if [ -n "$HOST_ADDRESS" ]   || [ -n "$HOST_ADDRESS6" ]  ||
+           [ -n "$LOCAL_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS6" ] ||
+           [ -n "$HOST_BRIDGE" ]; then
           ip link set host0 name eth0
           ip link set dev eth0 up
 
@@ -88,7 +89,8 @@ let
         extraFlags+=" --private-network"
       fi
 
-      if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
+      if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
+         [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
         extraFlags+=" --network-veth"
       fi
 
@@ -159,7 +161,8 @@ let
       # Clean up existing machined registration and interfaces.
       machinectl terminate "$INSTANCE" 2> /dev/null || true
 
-      if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
+      if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
+         [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
         ip link del dev "ve-$INSTANCE" 2> /dev/null || true
         ip link del dev "vb-$INSTANCE" 2> /dev/null || true
       fi
@@ -208,7 +211,8 @@ let
           '';
     in
       ''
-        if [ -n "$HOST_ADDRESS" ] || [ -n "$LOCAL_ADDRESS" ]; then
+        if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
+           [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
           if [ -z "$HOST_BRIDGE" ]; then
             ifaceHost=ve-$INSTANCE
             ip link set dev $ifaceHost up

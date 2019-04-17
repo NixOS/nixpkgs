@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, qtbase, makeWrapper, lib }:
+{ lib, fetchurl, python3Packages, qtbase, makeWrapper }:
 
 let
 
@@ -7,14 +7,14 @@ let
 in
 
 python3Packages.buildPythonApplication rec {
-  version = "3.3.2";
-  name = "electron-cash-${version}";
+  pname = "electron-cash";
+  version = "3.3.6";
 
   src = fetchurl {
-    url = "https://electroncash.org/downloads/${version}/win-linux/ElectronCash-${version}.tar.gz";
+    url = "https://electroncash.org/downloads/${version}/win-linux/Electron-Cash-${version}.tar.gz";
     # Verified using official SHA-1 and signature from
     # https://github.com/fyookball/keys-n-hashes
-    sha256 = "4538044cfaa4f87a847635849e0733f32b183ac79abbd2797689c86dc3cb0d53";
+    sha256 = "ac435f2bf98b9b50c4bdcc9e3fb2ff19d9c66f8cce5df852f3a4727306bb0a84";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication rec {
     qrcode
     requests
     tlslite-ng
+    qdarkstyle
 
     # plugins
     keepkey
@@ -40,25 +41,18 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
-    # Remove pyqt5 check
-    sed -i '/pyqt5/d' setup.py
-  '';
+    substituteInPlace contrib/requirements/requirements.txt \
+      --replace "qdarkstyle<2.6" "qdarkstyle<3"
 
-  preBuild = ''
-    pyrcc5 icons.qrc -o gui/qt/icons_rc.py
-    # Recording the creation timestamps introduces indeterminism to the build
-    sed -i '/Created: .*/d' gui/qt/icons_rc.py
+    substituteInPlace setup.py \
+      --replace "(share_dir" "(\"share\""
   '';
 
   doCheck = false;
 
   postInstall = ''
-    # These files are installed under $out/homeless-shelter ...
-    mv $out/${python.sitePackages}/homeless-shelter/.local/share $out
-    rm -rf $out/${python.sitePackages}/homeless-shelter
-
     substituteInPlace $out/share/applications/electron-cash.desktop \
-      --replace "Exec=electron-cash %u" "Exec=$out/bin/electron-cash %u"
+      --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
 
     # Please remove this when #44047 is fixed
     wrapProgram $out/bin/electron-cash \
@@ -70,17 +64,17 @@ python3Packages.buildPythonApplication rec {
     $out/bin/electron-cash help >/dev/null
   '';
 
-  meta = with stdenv.lib; {
-    description = "A lightweight Bitcoin wallet";
+  meta = with lib; {
+    description = "A Bitcoin Cash SPV Wallet";
     longDescription = ''
-      An easy-to-use Bitcoin client featuring wallets generated from
+      An easy-to-use Bitcoin Cash client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
     homepage = https://www.electroncash.org/;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lassulus ];
+    maintainers = with maintainers; [ lassulus nyanloutre ];
     license = licenses.mit;
   };
 }

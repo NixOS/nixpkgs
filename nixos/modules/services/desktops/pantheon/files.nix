@@ -6,6 +6,8 @@ with lib;
 
 {
 
+  meta.maintainers = pkgs.pantheon.maintainers;
+
   ###### interface
 
   options = {

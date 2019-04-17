@@ -31,6 +31,6 @@ buildPythonApplication rec {
     description = "Manage tmux workspaces from JSON and YAML";
     homepage = https://tmuxp.git-pull.com/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
   };
 }

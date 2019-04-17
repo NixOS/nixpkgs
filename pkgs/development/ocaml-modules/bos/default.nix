@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
 	meta = {
 		description = "Basic OS interaction for OCaml";
-		homepage = http://erratique.ch/software/bos;
+		homepage = https://erratique.ch/software/bos;
 		license = stdenv.lib.licenses.isc;
 		maintainers = [ stdenv.lib.maintainers.vbgl ];
 		inherit (ocaml.meta) platforms;

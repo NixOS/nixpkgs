@@ -3,15 +3,16 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.13.0";
+  version = "4.13.2";
   pname = "mt-940";
 
   # No tests in PyPI tarball
+  # See https://github.com/WoLpH/mt940/pull/72
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = "mt940";
     rev = "v${version}";
-    sha256 = "0p6z4ipj0drph3ryn8mnb3xn0vjfv54y1c5w5i9ixrxwz48h6bga";
+    sha256 = "1lvw3qyv7qhjabcvg55br8x4pnc7hv8xzzaf6wnr8cfjg0q7dzzg";
   };
 
   postPatch = ''
@@ -21,9 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional (!isPy3k) enum34;
 
-  LC_ALL="en_US.UTF-8";
-
-  checkInputs = [ pyyaml pytestpep8 pytest-flakes pytest glibcLocales ];
+  checkInputs = [ pyyaml pytestpep8 pytest-flakes pytest ];
 
   checkPhase = ''
     py.test

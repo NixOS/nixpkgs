@@ -25,12 +25,19 @@ buildPythonPackage rec {
       -k "not test_nightshade_image"
   '';
 
-  buildInputs = [ cython glibcLocales ];
-  LC_ALL = "en_US.UTF-8";
+  nativeBuildInputs = [
+    cython
+    geos # for geos-config
+    proj
+  ];
+
+  buildInputs = [
+    geos proj
+  ];
 
   propagatedBuildInputs = [
     # required
-    six pyshp shapely geos proj numpy
+    six pyshp shapely numpy
 
     # optional
     gdal pillow matplotlib pyepsg pykdtree scipy fiona owslib

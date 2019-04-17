@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "google-api-python-client";
   version = "1.7.8";
-  #disabled = !isPy3k; # TODO: Python 2.7 was deprecated but weboob still depends on it.
 
   src = fetchPypi {
     inherit pname version;

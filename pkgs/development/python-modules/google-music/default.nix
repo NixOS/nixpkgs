@@ -16,6 +16,11 @@ buildPythonPackage rec {
     sha256 = "13i9nd62wqfg0f5r7ykr15q83397vdpw0js50fy5nbgs33sbf6b7";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "audio-metadata>=0.3,<0.4" "audio-metadata"
+  '';
+
   propagatedBuildInputs = [
     appdirs
     audio-metadata

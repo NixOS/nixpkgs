@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) installPhase;
 
   meta = {
-    homepage = http://erratique.ch/software/ptime;
+    homepage = https://erratique.ch/software/ptime;
     description = "POSIX time for OCaml";
     longDescription = ''
       Ptime has platform independent POSIX time support in pure OCaml.

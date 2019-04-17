@@ -64,7 +64,11 @@ let
     qttools = [ ./qttools.patch ];
     qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
       ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
-      ++ optional stdenv.isDarwin ./qtwebengine-darwin-sdk-10.10.patch;
+      ++ optionals stdenv.isDarwin [
+        ./qtwebengine-darwin-no-platform-check.patch
+        ./qtwebengine-darwin-sdk-10.10.patch
+        ./qtwebengine-darwin-old-sdk.patch
+      ];
     qtwebkit = [ ./qtwebkit.patch ]
       ++ optionals stdenv.isDarwin [
         ./qtwebkit-darwin-no-readline.patch

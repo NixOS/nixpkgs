@@ -21,9 +21,9 @@ let params =
     };
     "8.8" = rec {
       preConfigure = "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
-      version = "1.0.2";
-      rev = "v${version}";
-      sha256 = "1mcbsp07ra3gdcmir36pf27ig3xv8nagyfp7w5pwqi4gj9w81ffn";
+      version = "20190311";
+      rev = "22af9e9a223d0038f05638654422e637e863b355";
+      sha256 = "00rnr19lg6lg0haq1sy4ld38p7imzand6fc52fvfq27gblxkp2aq";
       buildInputs = with coq.ocamlPackages; [ ocamlbuild num ];
       propagatedBuildInputs = [ coq-ext-lib simple-io ];
     };

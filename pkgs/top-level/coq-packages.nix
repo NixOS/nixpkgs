@@ -2,8 +2,9 @@
 
 let
   mkCoqPackages' = self: coq:
-    let callPackage = newScope self ; in rec {
-      inherit callPackage coq;
+    let newScope = self.newScope;
+        callPackage = self.callPackage; in {
+      inherit coq;
       coqPackages = self;
 
       contribs = recurseIntoAttrs
@@ -19,6 +20,7 @@ let
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-extensible-records = callPackage ../development/coq-modules/coq-extensible-records {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
+      coqhammer = callPackage ../development/coq-modules/coqhammer {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
       corn = callPackage ../development/coq-modules/corn {};
@@ -74,7 +76,7 @@ in rec {
    * a `dontFilter` attribute into the Coq derivation.
    */
   mkCoqPackages = coq:
-    let self = mkCoqPackages' self coq; in
+    let self = lib.makeScope newScope (lib.flip mkCoqPackages' coq); in
     if coq.dontFilter or false then self
     else filterCoqPackages coq self;
 

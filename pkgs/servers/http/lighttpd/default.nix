@@ -15,11 +15,11 @@ assert enableWebDAV -> libuuid != null;
 assert enableExtendedAttrs -> attr != null;
 
 stdenv.mkDerivation rec {
-  name = "lighttpd-1.4.52";
+  name = "lighttpd-1.4.53";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-1.4.x/${name}.tar.xz";
-    sha256 = "0r57zp7050qxlwg41xqnqnhw3lrl34cg5zvfbqrwddrhqn8hkg17";
+    sha256 = "0y6b3lvv0cmn7mlm832k7z31fmrc6hazn9lcd9ahlrg9ycfcxprv";
   };
 
   postPatch = ''

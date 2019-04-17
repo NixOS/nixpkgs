@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr }:
+{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr, buildPackages }:
 
 let
   version = "52.9.0";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   setOutputFlags = false; # Configure script only understands --includedir
 
   buildInputs = [ readline icu zlib nspr ];
-  nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
+  nativeBuildInputs = [ autoconf213 pkgconfig perl which buildPackages.python2 zip ];
 
   # Apparently this package fails to build correctly with modern compilers, which at least
   # on ARMv6 causes polkit testsuite to break with an assertion failure in spidermonkey.
@@ -31,10 +31,12 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+  configurePlatforms = [ "host" "target" ];
+
   preConfigure = ''
     export CXXFLAGS="-fpermissive"
     export LIBXUL_DIST=$out
-    export PYTHON="${python2.interpreter}"
+    export PYTHON="${buildPackages.python2.interpreter}"
     configureFlagsArray+=("--includedir=$dev/include")
 
     cd js/src
@@ -43,13 +45,19 @@ in stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-system-nspr"
+    "--with-nspr-prefix=${nspr}"
     "--with-system-zlib"
     "--with-system-icu"
     "--with-intl-api"
     "--enable-readline"
     "--enable-shared-js"
   ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-jemalloc";
+
+  makeFlags = [
+    "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
+  ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   enableParallelBuilding = true;
 

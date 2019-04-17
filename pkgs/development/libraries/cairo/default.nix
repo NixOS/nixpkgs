@@ -40,6 +40,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
+  ];
+
+  buildInputs = [
     libiconv
     libintl
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
