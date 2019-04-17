@@ -56,18 +56,35 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    systemd.services.kube-scheduler = {
+  config =  let
+
+    schedulerPaths = filter (a: a != null) [
+      cfg.kubeconfig.caFile
+      cfg.kubeconfig.certFile
+      cfg.kubeconfig.keyFile
+    ];
+
+  in mkIf cfg.enable {
+    systemd.services.kube-scheduler = rec {
       description = "Kubernetes Scheduler Service";
-      wantedBy = [ "kubernetes.target" ];
+      wantedBy = [ "kube-control-plane-online.target" ];
       after = [ "kube-apiserver.service" ];
+      before = [ "kube-control-plane-online.target" ];
+      environment.KUBECONFIG = top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig;
+      path = [ pkgs.kubectl ];
+      preStart = ''
+        until kubectl auth can-i get /api -q 2>/dev/null; do
+          echo kubectl auth can-i get /api: exit status $?
+          sleep 2
+        done
+      '';
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = ''${top.package}/bin/kube-scheduler \
           --address=${cfg.address} \
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
+          --kubeconfig=${environment.KUBECONFIG} \
           --leader-elect=${boolToString cfg.leaderElect} \
           --port=${toString cfg.port} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
@@ -78,6 +95,15 @@ in
         Group = "kubernetes";
         Restart = "on-failure";
         RestartSec = 5;
+      };
+      unitConfig.ConditionPathExists = schedulerPaths;
+    };
+
+    systemd.paths.kube-scheduler = {
+      wantedBy = [ "kube-scheduler.service" ];
+      pathConfig = {
+        PathExists = schedulerPaths;
+        PathChanged = schedulerPaths;
       };
     };
 

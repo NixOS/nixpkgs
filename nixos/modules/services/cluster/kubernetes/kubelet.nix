@@ -241,21 +241,28 @@ in
 
   ###### implementation
   config = mkMerge [
-    (mkIf cfg.enable {
+    (let
+
+      kubeletPaths = filter (a: a != null) [
+        cfg.kubeconfig.caFile
+        cfg.kubeconfig.certFile
+        cfg.kubeconfig.keyFile
+        cfg.clientCaFile
+        cfg.tlsCertFile
+        cfg.tlsKeyFile
+      ];
+
+    in mkIf cfg.enable {
       services.kubernetes.kubelet.seedDockerImages = [infraContainer];
 
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
-        wantedBy = [ "kubernetes.target" ];
-        after = [ "network.target" "docker.service" "kube-apiserver.service" ];
+        wantedBy = [ "kubelet.target" ];
+        after = [ "kube-control-plane-online.target" ];
+        before = [ "kubelet.target" ];
         path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
         preStart = ''
-          ${concatMapStrings (img: ''
-            echo "Seeding docker image: ${img}"
-            docker load <${img}
-          '') cfg.seedDockerImages}
-
-          rm /opt/cni/bin/* || true
+          rm -f /opt/cni/bin/* || true
           ${concatMapStrings (package: ''
             echo "Linking cni package: ${package}"
             ln -fs ${package}/bin/* /opt/cni/bin
@@ -308,6 +315,56 @@ in
           '';
           WorkingDirectory = top.dataDir;
         };
+        unitConfig.ConditionPathExists = kubeletPaths;
+      };
+
+      systemd.paths.kubelet = {
+        wantedBy =  [ "kubelet.service" ];
+        pathConfig = {
+          PathExists = kubeletPaths;
+          PathChanged = kubeletPaths;
+        };
+      };
+
+      systemd.services.docker.before = [ "kubelet.service" ];
+
+      systemd.services.docker-seed-images = {
+        wantedBy = [ "docker.service" ];
+        after = [ "docker.service" ];
+        before = [ "kubelet.service" ];
+        path = with pkgs; [ docker ];
+        preStart = ''
+          ${concatMapStrings (img: ''
+            echo "Seeding docker image: ${img}"
+            docker load <${img}
+          '') cfg.seedDockerImages}
+        '';
+        script = "echo Ok";
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+        serviceConfig.Slice = "kubernetes.slice";
+      };
+
+      systemd.services.kubelet-online = {
+        wantedBy = [ "kube-node-online.target" ];
+        after = [ "flannel.target" "kubelet.target" ];
+        before = [ "kube-node-online.target" ];
+        # it is complicated. flannel needs kubelet to run the pause container before
+        # it discusses the node CIDR with apiserver and afterwards configures and restarts
+        # dockerd. Until then prevent creating any pods because they have to be recreated anyway
+        # because the network of docker0 has been changed by flannel.
+        script = let
+          docker-env = "/run/flannel/docker";
+          flannel-date = "stat --print=%Y ${docker-env}";
+          docker-date = "systemctl show --property=ActiveEnterTimestamp --value docker";
+        in ''
+          until test -f ${docker-env} ; do sleep 1 ; done
+          while test `${flannel-date}` -gt `date +%s --date="$(${docker-date})"` ; do
+            sleep 1
+          done
+        '';
+        serviceConfig.Type = "oneshot";
+        serviceConfig.Slice = "kubernetes.slice";
       };
 
       # Allways include cni plugins
@@ -354,5 +411,16 @@ in
       };
     })
 
+    {
+      systemd.targets.kubelet = {
+        wantedBy = [ "kube-node-online.target" ];
+        before = [ "kube-node-online.target" ];
+      };
+
+      systemd.targets.kube-node-online = {
+        wantedBy = [ "kubernetes.target" ];
+        before = [ "kubernetes.target" ];
+      };
+    }
   ];
 }

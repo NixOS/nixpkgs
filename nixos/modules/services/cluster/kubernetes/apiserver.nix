@@ -272,11 +272,32 @@ in
   ###### implementation
   config = mkMerge [
 
-    (mkIf cfg.enable {
+    (let
+
+      apiserverPaths = filter (a: a != null) [
+        cfg.clientCaFile
+        cfg.etcd.caFile
+        cfg.etcd.certFile
+        cfg.etcd.keyFile
+        cfg.kubeletClientCaFile
+        cfg.kubeletClientCertFile
+        cfg.kubeletClientKeyFile
+        cfg.serviceAccountKeyFile
+        cfg.tlsCertFile
+        cfg.tlsKeyFile
+      ];
+      etcdPaths = filter (a: a != null) [
+        config.services.etcd.trustedCaFile
+        config.services.etcd.certFile
+        config.services.etcd.keyFile
+      ];
+
+    in mkIf cfg.enable {
         systemd.services.kube-apiserver = {
           description = "Kubernetes APIServer Service";
-          wantedBy = [ "kubernetes.target" ];
-          after = [ "network.target" ];
+          wantedBy = [ "kube-control-plane-online.target" ];
+          after = [ "certmgr.service" ];
+          before = [ "kube-control-plane-online.target" ];
           serviceConfig = {
             Slice = "kubernetes.slice";
             ExecStart = ''${top.package}/bin/kube-apiserver \
@@ -341,6 +362,15 @@ in
             Restart = "on-failure";
             RestartSec = 5;
           };
+          unitConfig.ConditionPathExists = apiserverPaths;
+        };
+
+        systemd.paths.kube-apiserver = mkIf top.apiserver.enable {
+          wantedBy = [ "kube-apiserver.service" ];
+          pathConfig = {
+            PathExists = apiserverPaths;
+            PathChanged = apiserverPaths;
+          };
         };
 
         services.etcd = {
@@ -352,6 +382,18 @@ in
           initialCluster = mkDefault ["${top.masterAddress}=https://${top.masterAddress}:2380"];
           name = mkDefault top.masterAddress;
           initialAdvertisePeerUrls = mkDefault ["https://${top.masterAddress}:2380"];
+        };
+
+        systemd.services.etcd = {
+          unitConfig.ConditionPathExists = etcdPaths;
+        };
+
+        systemd.paths.etcd = {
+          wantedBy = [ "etcd.service" ];
+          pathConfig = {
+            PathExists = etcdPaths;
+            PathChanged = etcdPaths;
+          };
         };
 
         services.kubernetes.addonManager.bootstrapAddons = mkIf isRBACEnabled {
