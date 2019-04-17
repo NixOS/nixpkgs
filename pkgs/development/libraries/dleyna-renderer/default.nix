@@ -26,11 +26,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     # fix build with gupnp 1.2
-    (fetchurl {
-      name = "gupnp-1.2.diff";
-      url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/gupnp-1.2.diff?h=packages/dleyna-renderer&id=30b426a1e0ca5857031ed6296bc192d11bd7c5db;
-      sha256 = "0x5vj5zfk95avyg6g3nf6gar250cfrgla2ixj2ifn8pcick2d9vq";
-    })
+    # comes from arch linux packaging https://git.archlinux.org/svntogit/packages.git/tree/trunk/gupnp-1.2.diff?h=packages/dleyna-renderer
+    ./gupnp-1.2.diff
   ];
 
   nativeBuildInputs = [
