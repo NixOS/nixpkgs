@@ -59,5 +59,5 @@ with lib;
         '';
     };
   };
-  meta.maintainers = with maintainers; [ eamsden ];
+  meta.maintainers = with maintainers; [ arianvp eamsden ];
 }

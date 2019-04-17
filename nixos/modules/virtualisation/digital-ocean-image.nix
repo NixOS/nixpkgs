@@ -53,6 +53,6 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ eamsden ];
+  meta.maintainers = with maintainers; [ arianvp eamsden ];
 
 }
