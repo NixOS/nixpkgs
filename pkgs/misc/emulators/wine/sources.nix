@@ -31,9 +31,9 @@ in rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "4.8.0";
+      version = "4.8.2";
       url = "http://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}.msi";
-      sha256 = "0y47mfjkb2viraqrvi8qpjn2935sra81h3l4bvaag737s7zmj0c9";
+      sha256 = "1hvwhqdb11j9yzhhw86fjhj9bawg76zrh0wnx658pn5xghhk2jhy";
     };
   };
 
