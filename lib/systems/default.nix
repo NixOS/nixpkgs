@@ -78,10 +78,9 @@ rec {
         else if final.isx86 then "i386"
         else {
           "powerpc" = "ppc";
+          "powerpcle" = "ppc";
           "powerpc64" = "ppc64";
-          "powerpc64le" = "ppc64";
-          "mips64" = "mips";
-          "mipsel64" = "mipsel";
+          "powerpc64le" = "ppc64le";
         }.${final.parsed.cpu.name} or final.parsed.cpu.name;
 
       emulator = pkgs: let
