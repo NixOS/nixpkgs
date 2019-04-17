@@ -4,11 +4,14 @@
 , ninja
 , pkgconfig
 , gettext
+, gperf
 , sqlite
 , librest
+, libarchive
+, libsoup
 , gnome3
 , libxml2
-, lua5
+, lua5_3
 , liboauth
 , libgdata
 , libmediaart
@@ -38,18 +41,21 @@ stdenv.mkDerivation rec {
     pkgconfig
     gettext
     itstool
+    gperf # for lua-factory
   ];
 
   buildInputs = [
     grilo
     libxml2
     libgdata
-    lua5
+    lua5_3
     liboauth
     sqlite
     gnome-online-accounts
     totem-pl-parser
     librest
+    libarchive
+    libsoup
     gmime
     json-glib
     avahi
