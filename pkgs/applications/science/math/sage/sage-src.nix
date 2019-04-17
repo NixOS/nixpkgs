@@ -72,6 +72,12 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch?id2=10407524b18659e14e184114b61c043fb816f3c2&id=c9b0cc9d0b8748ab85e568f8f57f316c5e8cbe54";
       sha256 = "0wgp7yvn9sm1ynlhcr4l0hzmvr2n28llg4xc01p6k1zz4im64c17";
     })
+    # https://trac.sagemath.org/ticket/27224
+    (fetchpatch {
+      name = "sig_on_in_matrix_misc.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=85d25bf2eb73f7d3c6de4ee6222b0c399be43b07";
+      sha256 = "1ciwhh57pnb9b4i8m3vb07wfsibsay5sg0jp5giq1pzc5zc79a4p";
+    })
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
