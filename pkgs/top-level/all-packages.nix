@@ -2200,6 +2200,8 @@ in
 
   cocoapods = callPackage ../development/mobile/cocoapods { };
 
+  cocoapods-beta = lowPrio (callPackage ../development/mobile/cocoapods { beta = true; });
+
   compass = callPackage ../development/tools/compass { };
 
   conda = callPackage ../tools/package-management/conda { };
