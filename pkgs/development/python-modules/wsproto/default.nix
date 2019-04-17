@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, h11, enum34, pytest }:
+{ lib, buildPythonPackage, fetchPypi, h11, enum34, pytest }:
 
 buildPythonPackage rec {
   pname = "wsproto";
@@ -17,4 +17,9 @@ buildPythonPackage rec {
     py.test
   '';
 
+  meta = with lib; {
+    description = "Pure Python, pure state-machine WebSocket implementation";
+    homepage = https://github.com/python-hyper/wsproto/;
+    license = licenses.mit;
+  };
 }
