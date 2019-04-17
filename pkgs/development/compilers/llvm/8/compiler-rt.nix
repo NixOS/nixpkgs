@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
+    #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
+    "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
@@ -61,8 +63,6 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '';
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.hostPlatform.isWasm "--allow-undefined --no-entry";
 
   enableParallelBuilding = true;
 }
