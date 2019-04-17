@@ -357,6 +357,8 @@ in
           kubeletClientCaFile = mkDefault caCert;
           kubeletClientCertFile = mkDefault cfg.certs.apiserverKubeletClient.cert;
           kubeletClientKeyFile = mkDefault cfg.certs.apiserverKubeletClient.key;
+          proxyClientCertFile = mkDefault cfg.certs.apiserverProxyClient.cert;
+          proxyClientKeyFile = mkDefault cfg.certs.apiserverProxyClient.key;
         });
         addonManager = mkIf top.addonManager.enable {
           kubeconfig = with cfg.certs.addonManager; {
