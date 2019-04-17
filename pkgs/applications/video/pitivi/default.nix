@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, pkgconfig, intltool, itstool, python3, wrapGAppsHook
 , python3Packages, gst_all_1, gtk3
 , gobject-introspection, librsvg, gnome3, libnotify, gsound
-, meson, ninja
+, meson, ninja, gsettings-desktop-schemas
 }:
 
 let
@@ -49,7 +49,7 @@ in python3Packages.buildPythonApplication rec {
   buildInputs = [
     gobject-introspection gtk3 librsvg gnome3.gnome-desktop gsound
     gnome3.adwaita-icon-theme
-    gnome3.gsettings-desktop-schemas libnotify
+    gsettings-desktop-schemas libnotify
     gst-transcoder
   ] ++ (with gst_all_1; [
     gstreamer gst-editing-services
