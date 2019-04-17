@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
+{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
 , fetchpatch
 , docbook_xml_dtd_42, readline
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
       ./4.x-fix-makeflags-parsing.patch
     ];
 
+  nativeBuildInputs = optional stdenv.isDarwin rpcgen;
+
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
       docbook_xml_dtd_45 */ readline popt iniparser jansson
@@ -60,6 +62,9 @@ stdenv.mkDerivation rec {
     sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
 
     patchShebangs ./buildtools/bin
+  '' + optionalString stdenv.isDarwin ''
+     substituteInPlace libcli/dns/wscript_build \
+       --replace "bld.SAMBA_BINARY('resolvconftest'" "True or bld.SAMBA_BINARY('resolvconftest'"
   '';
 
   configureFlags =
