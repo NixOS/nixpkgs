@@ -1,18 +1,18 @@
 { lib
-, python2Packages
+, pythonPackages
 , salt
 }:
 
-python2Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "salt-pepper";
   version = "0.7.5";
-  src = python2Packages.fetchPypi {
+  src = pythonPackages.fetchPypi {
     inherit pname version;
     sha256 = "1wh6yidwdk8jvjpr5g3azhqgsk24c5rlzmw6l86dmi0mpvmxm94w";
   };
 
-  buildInputs = with python2Packages; [ setuptools setuptools_scm salt ];
-  checkInputs = with python2Packages; [
+  buildInputs = with pythonPackages; [ setuptools setuptools_scm salt ];
+  checkInputs = with pythonPackages; [
     pytest mock pyzmq pytest-rerunfailures pytestcov cherrypy tornado_4
   ];
 
