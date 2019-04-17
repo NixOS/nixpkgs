@@ -113,15 +113,6 @@ in rec {
         else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
-    in if builtins.length erroneousHardeningFlags != 0
-    then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
-      inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
-    })
-    else let
-      doCheck = doCheck';
-      doInstallCheck = doInstallCheck';
-
-      outputs = outputs';
 
       references = nativeBuildInputs ++ buildInputs
                 ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
@@ -132,7 +123,7 @@ in rec {
           (map (drv: drv.nativeDrv or drv) nativeBuildInputs
              ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
              ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
-             ++ lib.optionals doCheck checkInputs
+             ++ lib.optionals doCheck' checkInputs
              ++ lib.optionals doInstallCheck' installCheckInputs)
           (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
         ]
@@ -235,9 +226,9 @@ in rec {
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
-          inherit doCheck doInstallCheck;
-
-          inherit outputs;
+          doCheck = doCheck';
+          doInstallCheck = doInstallCheck';
+          outputs = outputs';
         } // lib.optionalAttrs isCross {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
@@ -289,8 +280,8 @@ in rec {
           #   unless they are comfortable with this default.
           outputsToInstall =
             let
-              hasOutput = out: builtins.elem out outputs;
-            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )]
+              hasOutput = out: builtins.elem out outputs';
+            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs') )]
               ++ lib.optional (hasOutput "man") "man";
         }
         // attrs.meta or {}
