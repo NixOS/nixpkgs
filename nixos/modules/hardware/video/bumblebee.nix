@@ -63,6 +63,16 @@ in
         '';
       };
 
+      nvidiaDriver = mkOption {
+        default = "nvidia_x11";
+        example = "nvidia_x11_legacy390";
+        type = types.str;
+        description = ''
+          Set which nvidia driver to use. Change this if you have a legacy GPU.
+          Has no effect when using nouveau.
+        '';
+      };
+
       pmMethod = mkOption {
         default = "auto";
         type = types.enum [ "auto" "bbswitch" "switcheroo" "none" ];
@@ -77,7 +87,7 @@ in
   config = mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "nvidia-drm" "nvidia" "nouveau" ];
     boot.kernelModules = optional useBbswitch "bbswitch";
-    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11.bin;
+    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel."${cfg.nvidiaDriver}".bin;
 
     environment.systemPackages = [ bumblebee primus ];
 
