@@ -243,6 +243,11 @@ in {
 
   ansiconv = callPackage ../development/python-modules/ansiconv { };
 
+  avahi = toPythonModule (pkgs.avahi.override {
+    inherit python;
+    withPython = true;
+  });
+
   azure = callPackage ../development/python-modules/azure { };
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
