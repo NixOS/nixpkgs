@@ -19,7 +19,7 @@ index c57ec00c..b7992de2 100644
  
      clcf = ngx_http_get_module_loc_conf(r, ngx_http_core_module);
  
-@@ -1598,16 +1599,59 @@ ngx_http_set_etag(ngx_http_request_t *r)
+@@ -1598,16 +1599,61 @@ ngx_http_set_etag(ngx_http_request_t *r)
      etag->hash = 1;
      ngx_str_set(&etag->key, "ETag");
  
@@ -44,7 +44,7 @@ index c57ec00c..b7992de2 100644
 +        && real[NIX_STORE_LEN] == '/'
 +        && real[NIX_STORE_LEN + 1] != '\0')
 +    {
-+         ptr1 = real + NIX_STORE_LEN;
++        ptr1 = real + NIX_STORE_LEN;
 +        *ptr1 = '"';
 +
 +        ptr2 = (u_char *) ngx_strchr(ptr1, '-');
@@ -82,6 +82,8 @@ index c57ec00c..b7992de2 100644
 +                                      r->headers_out.content_length_n)
 +                          - etag->value.data;
 +    }
++
++    ngx_free(real);
  
      r->headers_out.etag = etag;
  
