@@ -3863,6 +3863,17 @@ let
     };
   };
 
+  vim-visual-multi = buildVimPluginFrom2Nix {
+    pname = "vim-visual-multi";
+    version = "2019-04-11";
+    src = fetchFromGitHub {
+      owner = "mg979";
+      repo = "vim-visual-multi";
+      rev = "7929d937049b61b574f9cbd23a8e02dcc7b3bbd5";
+      sha256 = "048j8iqyl5y1jcr0a661f43954infzlqv75x5fx9kcihzpjwirws";
+    };
+  };
+
   vim-visualstar = buildVimPluginFrom2Nix {
     pname = "vim-visualstar";
     version = "2015-08-27";

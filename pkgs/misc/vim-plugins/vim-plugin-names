@@ -380,3 +380,4 @@ zchee/deoplete-clang
 zchee/deoplete-go
 zchee/deoplete-jedi
 zig-lang/zig.vim
+mg979/vim-visual-multi
