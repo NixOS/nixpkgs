@@ -1,4 +1,4 @@
-{ stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11,
+{ stdenv, lib, substituteAll, makeWrapper, fetchFromRepoOrCz, ocaml, mupdf, libX11,
 libGLU_combined, freetype, xclip, inotify-tools, procps }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
@@ -7,11 +7,10 @@ stdenv.mkDerivation rec {
   name = "llpp-${version}";
   version = "30";
 
-  src = fetchgit {
-    url = "git://repo.or.cz/llpp.git";
+  src = fetchFromRepoOrCz {
+    repo = "llpp";
     rev = "v${version}";
     sha256 = "0iilpzf12hs0zky58j55l4y5dvzv7fc53nsrg324n9vka92mppvd";
-    fetchSubmodules = false;
   };
 
   patches = (substituteAll {

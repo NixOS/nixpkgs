@@ -1,13 +1,13 @@
-{ stdenv, fetchgit, fetchpatch, autoreconfHook }:
+{ stdenv, fetchFromRepoOrCz, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "1.2.20";
   name = "libtar-${version}";
 
   # Maintenance repo for libtar (Arch Linux uses this)
-  src = fetchgit {
-    url = "git://repo.or.cz/libtar.git";
-    rev = "refs/tags/v${version}";
+  src = fetchFromRepoOrCz {
+    repo = "libtar";
+    rev = "v${version}";
     sha256 = "1pjsqnqjaqgkzf1j8m6y5h76bwprffsjjj6gk8rh2fjsha14rqn9";
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, makeWrapper, pkgconfig, alsaLib, dbus, libjack2
+{ stdenv, fetchFromRepoOrCz, fetchpatch, makeWrapper, pkgconfig, alsaLib, dbus, libjack2
 , wafHook
 , python2Packages}:
 
@@ -8,9 +8,10 @@ in stdenv.mkDerivation rec {
   name = "a2jmidid-${version}";
   version = "8";
 
-  src = fetchurl {
-    url = "https://repo.or.cz/a2jmidid.git/snapshot/7383d268c4bfe85df9f10df6351677659211d1ca.tar.gz";
-    sha256 = "06dgf5655znbvrd7fhrv8msv6zw8vk0hjqglcqkh90960mnnmwz7";
+  src = fetchFromRepoOrCz {
+    repo = "a2jmidid";
+    rev = "7383d268c4bfe85df9f10df6351677659211d1ca";
+    sha256 = "0j22la0zjixcw55x8ccfpabnv1ljl487s0b9yaj4ykrv1731wr5y";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper wafHook ];
