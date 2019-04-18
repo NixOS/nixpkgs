@@ -177,7 +177,7 @@ rec {
     # Condition
     cond:
     # String to return if condition is true
-    string: if cond then string else "";
+    string: if cond then assert isString string; string else "";
 
   /* Determine whether a string has given prefix.
 
