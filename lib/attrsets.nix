@@ -328,7 +328,7 @@ rec {
        optionalAttrs (false) { my = "set"; }
        => { }
   */
-  optionalAttrs = cond: as: if cond then as else {};
+  optionalAttrs = cond: as: if cond then assert isAttrs as; as else {};
 
 
   /* Merge sets of attributes and use the function f to merge attributes
