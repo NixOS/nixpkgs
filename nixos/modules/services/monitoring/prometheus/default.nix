@@ -196,6 +196,17 @@ let
         be preserved.
       '';
 
+      honor_timestamps = mkDefOpt types.bool "true" ''
+        honor_timestamps controls whether Prometheus respects the timestamps present
+        in scraped data.
+
+        If honor_timestamps is set to <literal>true</literal>, the timestamps of the metrics exposed
+        by the target will be used.
+
+        If honor_timestamps is set to <literal>false</literal>, the timestamps of the metrics exposed
+        by the target will be ignored.
+      '';
+
       scheme = mkDefOpt (types.enum ["http" "https"]) "http" ''
         The URL scheme with which to fetch metrics from targets.
       '';
@@ -223,8 +234,28 @@ let
         Optional http login credentials for metrics scraping.
       '';
 
+      bearer_token = mkOpt types.str ''
+        Sets the `Authorization` header on every scrape request with
+        the configured bearer token. It is mutually exclusive with
+        <option>bearer_token_file</option>.
+      '';
+
+      bearer_token_file = mkOpt types.str ''
+        Sets the `Authorization` header on every scrape request with
+        the bearer token read from the configured file. It is mutually
+        exclusive with <option>bearer_token</option>.
+      '';
+
       tls_config = mkOpt promTypes.tls_config ''
         Configures the scrape request's TLS settings.
+      '';
+
+      proxy_url = mkOpt types.str ''
+        Optional proxy URL.
+      '';
+
+      ec2_sd_configs = mkOpt (types.listOf promTypes.ec2_sd_config) ''
+        List of EC2 service discovery configurations.
       '';
 
       dns_sd_configs = mkOpt (types.listOf promTypes.dns_sd_config) ''
@@ -243,12 +274,14 @@ let
         List of labeled target groups for this job.
       '';
 
-      ec2_sd_configs = mkOpt (types.listOf promTypes.ec2_sd_config) ''
-        List of EC2 service discovery configurations.
-      '';
-
       relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
         List of relabel configurations.
+      '';
+
+      sample_limit = mkDefOpt types.int "0" ''
+        Per-scrape limit on number of scraped samples that will be accepted.
+        If more than this number of samples are present after metric relabelling
+        the entire scrape will be treated as failed. 0 means no limit.
       '';
     };
   };
@@ -368,12 +401,39 @@ let
 
       password = mkOpt types.str "Consul password";
 
+      tls_config = mkOpt promTypes.tls_config ''
+        Configures the Consul request's TLS settings.
+      '';
+
       services = mkOpt (types.listOf types.str) ''
         A list of services for which targets are retrieved.
       '';
 
+      tags = mkOpt (types.listOf types.str) ''
+        An optional list of tags used to filter nodes for a given
+        service. Services must contain all tags in the list.
+      '';
+
+      node_meta = mkOpt (types.attrsOf types.str) ''
+        Node metadata used to filter nodes for a given service.
+      '';
+
       tag_separator = mkDefOpt types.str "," ''
         The string by which Consul tags are joined into the tag label.
+      '';
+
+      allow_stale = mkOpt types.bool ''
+        Allow stale Consul results
+        (see <link xlink:href="https://www.consul.io/api/index.html#consistency-modes"/>).
+
+        Will reduce load on Consul.
+      '';
+
+      refresh_interval = mkDefOpt types.str "30s" ''
+        The time after which the provided names are refreshed.
+
+        On large setup it might be a good idea to increase this value
+        because the catalog will change all the time.
       '';
     };
   };
@@ -414,6 +474,10 @@ let
 
       regex = mkDefOpt types.str "(.*)" ''
         Regular expression against which the extracted value is matched.
+      '';
+
+      modulus = mkOpt types.int ''
+        Modulus to take of the hash of the source label values.
       '';
 
       replacement = mkDefOpt types.str "$1" ''
