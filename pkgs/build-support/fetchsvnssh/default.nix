@@ -6,7 +6,7 @@ if md5 != "" then
   throw "fetchsvnssh does not support md5 anymore, please use sha256"
 else
 stdenvNoCC.mkDerivation {
-  name = "svn-export-ssh";
+  name = "svn-export-${baseNameOf url}";
   builder = ./builder.sh;
   nativeBuildInputs = [subversion expect];
 

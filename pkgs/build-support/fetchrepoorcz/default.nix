@@ -1,7 +1,7 @@
 { fetchzip }:
 
 # gitweb example, snapshot support is optional in gitweb
-{ repo, rev, name ? "source"
+{ repo, rev, name ? "${repo}-${builtins.substring 0 10 rev}"
 , ... # For hash agility
 }@args: fetchzip ({
   inherit name;

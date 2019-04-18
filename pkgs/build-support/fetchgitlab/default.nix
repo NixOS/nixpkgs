@@ -1,7 +1,7 @@
 { fetchzip, lib }:
 
 # gitlab example
-{ owner, repo, rev, domain ? "gitlab.com", name ? "source", group ? null
+{ owner, repo, rev, domain ? "gitlab.com", name ? "${repo}-${builtins.substring 0 10 rev}", group ? null
 , ... # For hash agility
 }@args: fetchzip ({
   inherit name;

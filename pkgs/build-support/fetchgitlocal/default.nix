@@ -26,7 +26,7 @@ let
 
   gitHash = builtins.readFile gitHashFile; # cache against git hash
 
-  nixPath = runCommand "put-in-nix" {
+  nixPath = runCommand "${baseNameOf srcStr}" {
       nativeBuildInputs = [ git ];
       preferLocalBuild = true;
     } ''

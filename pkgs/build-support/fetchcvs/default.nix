@@ -5,10 +5,11 @@
 
 {stdenvNoCC, cvs, openssh}:
 
-{cvsRoot, module, tag ? null, date ? null, sha256}:
+{cvsRoot, module, tag ? null, date ? null, sha256
+, name ? "${module}-${if tag != null then tag else if date != null then date else "NOW"}"
+}:
 
 stdenvNoCC.mkDerivation {
-  name = "cvs-export";
   builder = ./builder.sh;
   nativeBuildInputs = [cvs openssh];
 
@@ -16,5 +17,5 @@ stdenvNoCC.mkDerivation {
   outputHashMode = "recursive";
   outputHash = sha256;
 
-  inherit cvsRoot module sha256 tag date;
+  inherit cvsRoot module sha256 tag date name;
 }

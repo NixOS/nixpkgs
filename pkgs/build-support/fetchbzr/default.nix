@@ -1,9 +1,7 @@
 { stdenvNoCC, bazaar }:
-{ url, rev, sha256 }:
+{ url, rev, sha256, name ? "bzr-export" }:
 
 stdenvNoCC.mkDerivation {
-  name = "bzr-export";
-
   builder = ./builder.sh;
   nativeBuildInputs = [ bazaar ];
 
@@ -11,5 +9,5 @@ stdenvNoCC.mkDerivation {
   outputHashMode = "recursive";
   outputHash = sha256;
   
-  inherit url rev;
+  inherit url rev name;
 }

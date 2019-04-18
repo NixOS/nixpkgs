@@ -1,5 +1,5 @@
 runCommand: subversion: repository:
-  import (runCommand "head-revision"
+  import (runCommand "${baseNameOf repository}-head-revision"
     { buildInputs = [ subversion ];
       dummy = builtins.currentTime;
     }
