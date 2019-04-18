@@ -1,0 +1,13 @@
+diff --git a/src/tracker-store/tracker-store.desktop.in.in b/src/tracker-store/tracker-store.desktop.in.in
+index e0a3fefeb..0d8fcb024 100644
+--- a/src/tracker-store/tracker-store.desktop.in.in
++++ b/src/tracker-store/tracker-store.desktop.in.in
+@@ -1,7 +1,7 @@
+ [Desktop Entry]
+ _Name=Tracker Store
+ _Comment=Metadata database store and lookup manager
+-Exec=gdbus call -e -d org.freedesktop.DBus -o /org/freedesktop/DBus -m org.freedesktop.DBus.StartServiceByName org.freedesktop.Tracker1 0
++Exec=@gdbus@ call -e -d org.freedesktop.DBus -o /org/freedesktop/DBus -m org.freedesktop.DBus.StartServiceByName org.freedesktop.Tracker1 0
+ Terminal=false
+ Type=Application
+ Categories=Utility;
