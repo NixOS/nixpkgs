@@ -99,7 +99,6 @@ rec {
           (lib.optional (p ? cpu) "-mcpu=${p.cpu}")
           (lib.optional (p ? abi) "-mabi=${p.abi}")
           (lib.optional (p ? fpu) "-mfpu=${p.fpu}")
-          (lib.optional (p ? float) "-mfloat=${p.float}")
           (lib.optional (p ? float-abi) "-mfloat-abi=${p.float-abi}")
           (lib.optional (p ? mode) "-mmode=${p.mode}")
         ];

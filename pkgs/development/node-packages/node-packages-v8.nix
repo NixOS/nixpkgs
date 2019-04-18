@@ -4,13 +4,13 @@
 
 let
   sources = {
-    "@types/node-8.10.44" = {
+    "@types/node-8.10.45" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "8.10.44";
+      version = "8.10.45";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-8.10.44.tgz";
-        sha512 = "HY3SK7egERHGUfY8p6ztXIEQWcIPHouYhCGcLAPQin7gE2G/fALFz+epnMwcxKUS6aKqTVoAFdi+t1llQd3xcw==";
+        url = "https://registry.npmjs.org/@types/node/-/node-8.10.45.tgz";
+        sha512 = "tGVTbA+i3qfXsLbq9rEq/hezaHY55QxQLeXQL2ejNgFAxxrgu8eMmYIOsRcl7hN1uTLVsKOOYacV/rcJM3sfgQ==";
       };
     };
     "JSV-4.0.2" = {
@@ -1073,6 +1073,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/commander/-/commander-2.19.0.tgz";
         sha512 = "6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==";
+      };
+    };
+    "commander-2.20.0" = {
+      name = "commander";
+      packageName = "commander";
+      version = "2.20.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/commander/-/commander-2.20.0.tgz";
+        sha512 = "7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==";
       };
     };
     "component-emitter-1.2.1" = {
@@ -3613,6 +3622,15 @@ let
         sha512 = "RS9R6R35NYgQn++fkDWaOmqGoj4Ek9gGs+DPxNUZKuwE183xjJroKvyo1IzVFeXvUrvmALy6FWD5xrdJT25gMg==";
       };
     };
+    "semver-5.7.0" = {
+      name = "semver";
+      packageName = "semver";
+      version = "5.7.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/semver/-/semver-5.7.0.tgz";
+        sha512 = "Ya52jSX2u7QKghxeoFGpLwCtGlt7j0oY9DYb5apt9nPlJ42ID+ulTXESnt/qAQcoSERyZ5sl3LDIOw0nAn/5DA==";
+      };
+    };
     "set-blocking-2.0.0" = {
       name = "set-blocking";
       packageName = "set-blocking";
@@ -4518,7 +4536,7 @@ in
       sources."chalk-1.1.3"
       sources."chmodr-1.2.0"
       sources."colors-1.3.3"
-      sources."commander-2.19.0"
+      sources."commander-2.20.0"
       sources."concat-map-0.0.1"
       sources."convert-source-map-1.6.0"
       sources."core-js-2.6.5"
@@ -4623,7 +4641,7 @@ in
       sha512 = "MMiK5sFfIocNMWCc5PshUCAe6aY4P13/GCmSwudOziA/pFdQMHU8jhu+jU2SSWFug4K1ugeuCwtMXe43oL0PhQ==";
     };
     dependencies = [
-      sources."@types/node-8.10.44"
+      sources."@types/node-8.10.45"
       sources."JSV-4.0.2"
       sources."adal-node-0.1.28"
       sources."ajv-6.10.0"
@@ -4810,7 +4828,7 @@ in
       sources."har-schema-2.0.0"
       (sources."har-validator-2.0.6" // {
         dependencies = [
-          sources."commander-2.19.0"
+          sources."commander-2.20.0"
         ];
       })
       sources."has-ansi-2.0.0"
@@ -5521,7 +5539,7 @@ in
       sources."safe-buffer-5.1.2"
       sources."safer-buffer-2.1.2"
       sources."sax-1.2.4"
-      sources."semver-5.6.0"
+      sources."semver-5.7.0"
       sources."set-blocking-2.0.0"
       sources."signal-exit-3.0.2"
       sources."string-width-1.0.2"
@@ -5546,10 +5564,10 @@ in
   pnpm = nodeEnv.buildNodePackage {
     name = "pnpm";
     packageName = "pnpm";
-    version = "3.0.1";
+    version = "3.1.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-3.0.1.tgz";
-      sha512 = "hYWjRN7U96zHDvgQxGyYaMF469Uzx0iZo2ej1VMUSaOULUFI9ue7dDku29AOf/E0+5Zd9zFs0qE0Tuq5Zsrk0A==";
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-3.1.0.tgz";
+      sha512 = "+Ywkb2rg5uX6/CppRBFmefrQn8EiXK8H0ntRoWHuQAzLErrVXtbyuRKhWMUG5ewr9raQUOACou/uaThE9jzhwA==";
     };
     buildInputs = globalBuildInputs;
     meta = {

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-window-corner-preview";
-  version = "unstable-2019-02-27";
+  version = "unstable-2019-04-03";
 
   src = fetchFromGitHub {
     owner = "medenagan";
     repo = "window-corner-preview";
-    rev = "9c1e97c7f7ecd530abac572050f6ec89c1ac7571";
-    sha256 = "12yx3zfnqkpy9g8mhniw02q61axgb14aqiyj6pdfcdmd6hrgsmz6";
+    rev = "a95bb1389d94474efab7509aac592fb58fff6006";
+    sha256 = "03v18j9l0fb64xrg3swf1vcgl0kpgwjlp8ddn068bpvghrsvgfah";
   };
 
   dontBuild = true;

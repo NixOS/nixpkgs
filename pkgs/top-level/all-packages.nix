@@ -1607,6 +1607,8 @@ in
 
   long-shebang = callPackage ../misc/long-shebang {};
 
+  numatop = callPackage ../os-specific/linux/numatop { };
+
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
   ipvsadm = callPackage ../os-specific/linux/ipvsadm { };
@@ -2127,7 +2129,7 @@ in
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc rec {
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf3_6.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
@@ -2199,6 +2201,8 @@ in
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
   cocoapods = callPackage ../development/mobile/cocoapods { };
+
+  cocoapods-beta = lowPrio (callPackage ../development/mobile/cocoapods { beta = true; });
 
   compass = callPackage ../development/tools/compass { };
 
@@ -3715,6 +3719,8 @@ in
   go-jira = callPackage ../applications/misc/go-jira { };
 
   john = callPackage ../tools/security/john { };
+
+  joplin = nodePackages.joplin;
 
   joplin-desktop = callPackage ../applications/misc/joplin-desktop { };
 
@@ -6281,7 +6287,7 @@ in
   wal_e = callPackage ../tools/backup/wal-e { };
 
   watchexec = callPackage ../tools/misc/watchexec {
-    inherit (darwin.apple_sdk.frameworks) CoreServices CoreFoundation;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
   watchman = callPackage ../development/tools/watchman {
@@ -10453,6 +10459,8 @@ in
   glibmm = callPackage ../development/libraries/glibmm { };
 
   glib-networking = callPackage ../development/libraries/glib-networking {};
+
+  gom = callPackage ../development/libraries/gom { };
 
   ace = callPackage ../development/libraries/ace { };
 
@@ -15386,9 +15394,7 @@ in
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
-  go-langserver = callPackage ../development/tools/go-langserver {
-    buildGoPackage = buildGo110Package;
-  };
+  go-langserver = callPackage ../development/tools/go-langserver { };
 
   gotests = callPackage ../development/tools/gotests { };
 
@@ -16746,8 +16752,6 @@ in
   cgminer = callPackage ../applications/misc/cgminer {
     amdappsdk = amdappsdk28;
   };
-
-  chatzilla = callPackage ../applications/networking/irc/chatzilla { };
 
   chirp = callPackage ../applications/radio/chirp {
     inherit (pythonPackages) pyserial pygtk;
@@ -19837,6 +19841,10 @@ in
     bison = bison2;
   };
 
+  stretchly = callPackage ../applications/misc/stretchly {
+    inherit (gnome2) GConf;
+  };
+
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
   stumpwm = callPackage ../applications/window-managers/stumpwm {
@@ -22902,6 +22910,8 @@ in
     nixUnstable;
 
   nixops = callPackage ../tools/package-management/nixops { };
+
+  nixops_1_6_1 = callPackage ../tools/package-management/nixops/nixops-v1_6_1.nix {};
 
   nixopsUnstable = lowPrio (callPackage ../tools/package-management/nixops/unstable.nix { });
 

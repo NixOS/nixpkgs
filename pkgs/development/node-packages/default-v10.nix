@@ -94,4 +94,18 @@ nodePackages // {
   webtorrent-cli = nodePackages.webtorrent-cli.override {
     buildInputs = [ nodePackages.node-gyp-build ];
   };
+
+  joplin = nodePackages.joplin.override {
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [
+      # sharp, dep list:
+      # http://sharp.pixelplumbing.com/en/stable/install/
+      cairo expat fontconfig freetype fribidi gettext giflib
+      glib harfbuzz lcms libcroco libexif libffi libgsf
+      libjpeg_turbo libpng librsvg libtiff vips
+      libwebp libxml2 pango pixman zlib
+
+      nodePackages.node-pre-gyp
+    ];
+  };
 }
