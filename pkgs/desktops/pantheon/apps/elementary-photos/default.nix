@@ -66,6 +66,12 @@ stdenv.mkDerivation rec {
     "-Dplugins=false"
   ];
 
+  patches = [
+    # https://github.com/elementary/photos/pull/505
+    # Unrelated line got dropped in https://github.com/elementary/photos/pull/498
+    ./fix-missing-line.patch
+  ];
+
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
