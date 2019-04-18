@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "music";
-  version = "5.0.3";
+  version = "5.0.4";
 
   name = "elementary-${pname}-${version}";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0qbny4484kr7lihg54rbhfwah9k43iivk3rivfvn7i5w66vn5spl";
+    sha256 = "02qjsf9xnfh043xbls9mll2r1wcdvclw60x8wysv12rhbm90gwvp";
   };
 
   passthru = {
