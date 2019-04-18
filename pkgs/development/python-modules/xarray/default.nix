@@ -26,6 +26,8 @@ buildPythonPackage rec {
   # There always seem to be broken tests...
   doCheck = false;
 
+  disabled = !isPy3k;
+
   meta = {
     description = "N-D labeled arrays and datasets in Python";
     homepage = https://github.com/pydata/xarray;
