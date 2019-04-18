@@ -3,14 +3,14 @@
 let
   versions = {
     atom = {
-      version = "1.34.0";
-      sha256 = "16hrjymrc43izg7frcrk7cwjwwrclcxzcwb5iw2llzjc6iadzlkb";
+      version = "1.36.0";
+      sha256 = "1ljg39h5xjigk2njvxyinb1gd3sbja21v47c7va6vl9hjr5xb3fr";
     };
 
     atom-beta = {
-      version = "1.35.0";
+      version = "1.37.0";
       beta = 0;
-      sha256 = "0gm5k573dq1hhnyw3719f5k1c6rsz872mhzg8q53n89y0g2r5xmw";
+      sha256 = "0aq8r5vfgq7r31qajjgcg4n5a57a2m8fvq6fzy9vq5gawkvmaxxx";
     };
   };
 
