@@ -254,7 +254,7 @@ rec {
     # Condition
     cond:
     # List to return if condition is true
-    elems: if cond then elems else [];
+    elems: if cond then assert isList elems; elems else [];
 
 
   /* If argument is a list, return it; else, wrap it in a singleton
