@@ -114,33 +114,14 @@ let
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
-  memcached = if isPhp73 then memcached73 else memcached7;
-
-  memcached7 = assert !isPhp73; buildPecl rec {
-    name = "memcached-php7";
-
-    src = fetchgit {
-      url = "https://github.com/php-memcached-dev/php-memcached";
-      rev = "e573a6e8fc815f12153d2afd561fc84f74811e2f";
-      sha256 = "0asfi6rsspbwbxhwmkxxnapd8w01xvfmwr1n9qsr2pryfk0w6y07";
-    };
-
-    configureFlags = [
-      "--with-zlib-dir=${pkgs.zlib.dev}"
-      "--with-libmemcached-dir=${pkgs.libmemcached}"
-    ];
-
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = with pkgs; [ cyrus_sasl zlib ];
-  };
-
-  memcached73 = assert isPhp73; buildPecl rec {
-    name = "memcached-php73";
+  memcached = buildPecl rec {
+    version = "3.1.3";
+    name = "memcached-${version}";
 
     src = fetchgit {
       url = "https://github.com/php-memcached-dev/php-memcached";
-      rev = "6d8f5d524f35e72422b9e81319b96f23af02adcc";
-      sha256 = "1s1d5r3n2h9zys8sqvv52fld6jy21ki7cl0gbbvd9dixqc0lf1jh";
+      rev = "v${version}";
+      sha256 = "1w9g8k7bmq3nbzskskpsr5632gh9q75nqy7nkjdzgs17klq9khjk";
     };
 
     configureFlags = [
