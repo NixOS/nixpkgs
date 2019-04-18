@@ -858,6 +858,17 @@ let
     };
   };
 
+  jdaddy-vim = buildVimPluginFrom2Nix {
+    pname = "jdaddy-vim";
+    version = "2014-02-22";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "jdaddy.vim";
+      rev = "3e44c2e6d22e2d6fc94863379b5b4f5424537321";
+      sha256 = "1ch12bffrs3gqqzdj9vh0i2azhc5d06i5vwds4rqcx797lqh7pzb";
+    };
+  };
+
   jedi-vim = buildVimPluginFrom2Nix {
     pname = "jedi-vim";
     version = "2019-04-05";
@@ -2198,6 +2209,17 @@ let
       repo = "vim-bazel";
       rev = "9a555405baaccc3fa4cad2fc6c627eb43f3be939";
       sha256 = "15kzi9b30l6xhz71r376w3vgml7g4vpi046ff9fvl1i6vi4ny78f";
+    };
+  };
+
+  vim-beancount = buildVimPluginFrom2Nix {
+    pname = "vim-beancount";
+    version = "2017-10-28";
+    src = fetchFromGitHub {
+      owner = "nathangrigg";
+      repo = "vim-beancount";
+      rev = "8054352c43168ece62094dfc8ec510e347e19e3c";
+      sha256 = "0fd4fbdmhapdhjr3f9bhd4lqxzpdwwvpf64vyqwahkqn8hrrbc4m";
     };
   };
 
