@@ -177,21 +177,11 @@ let
     buildInputs = [ pkgs.unixODBC ];
   };
 
-  xdebug =  if isPhp73 then xdebug73 else xdebug7;
+  xdebug = buildPecl rec {
+    version = "2.7.1";
+    name = "xdebug-${version}";
 
-  xdebug7 = assert !isPhp73; buildPecl {
-    name = "xdebug-2.6.1";
-
-    sha256 = "0xxxy6n4lv7ghi9liqx133yskg07lw316vhcds43n1sjq3b93rns";
-
-    doCheck = true;
-    checkTarget = "test";
-  };
-
-  xdebug73 = assert isPhp73; buildPecl {
-    name = "xdebug-2.7.0beta1";
-
-    sha256 = "1ghh14z55l4jklinkgjkfhkw53lp2r7lgmyh7q8kdnf7jnpwx84h";
+    sha256 = "1hr4gy87a3gp682ggwp831xk1fxasil9wan8cxv23q3m752x3sdp";
 
     doCheck = true;
     checkTarget = "test";
