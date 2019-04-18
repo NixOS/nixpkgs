@@ -39,7 +39,7 @@ let
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
-    inherit pythonForBuild;
+    inherit hasDistutilsCxxPatch pythonForBuild;
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
