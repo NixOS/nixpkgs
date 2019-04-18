@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   # Only Darwin needs LANG, but we could set it in general.
   # It's done here conditionally to prevent mass-rebuilds.
-  checkPhase = lib.optionalString (isPy3k && stdenv.isDarwin) ''LANG="en_US.UTF-8" '' + (if isPy3k then ''
+  checkPhase = lib.optionalString (isPy3k && stdenv.isDarwin) ''LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" '' + (if isPy3k then ''
     ${python.interpreter} test3/alltests.py
   '' else ''
     ${python.interpreter} test/alltests.py

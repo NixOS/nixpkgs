@@ -13,6 +13,12 @@ buildPythonPackage rec {
     sha256 = "8403d6e48200c3f49cb6d6b3dcb5898aa5ab9d820831655bf9a2403e00cd4207";
   };
 
+  # https://github.com/emre/kaptan/pull/151
+  postPatch = ''
+    substituteInPlace requirements/base.txt \
+      --replace "PyYAML>=3.13,<4" "PyYAML>=3.13"
+  '';
+
   propagatedBuildInputs = [ pyyaml ];
 
   # No tests in archive

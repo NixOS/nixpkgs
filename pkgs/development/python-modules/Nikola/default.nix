@@ -19,7 +19,6 @@
 , PyRSS2Gen
 , Logbook
 , blinker
-, setuptools
 , natsort
 , requests
 , piexif
@@ -28,7 +27,6 @@
 , jinja2
 , Babel
 , freezegun
-, pyyaml
 , toml
 , notebook
 , ruamel_yaml
@@ -46,9 +44,11 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytestcov mock glibcLocales freezegun ];
 
   propagatedBuildInputs = [
-    pygments pillow dateutil docutils Mako unidecode lxml Yapsy PyRSS2Gen
-    Logbook blinker setuptools natsort requests piexif markdown phpserialize
-    jinja2 doit Babel pyyaml toml notebook ruamel_yaml
+    # requirements.txt
+    doit pygments pillow dateutil docutils Mako markdown unidecode
+    lxml Yapsy PyRSS2Gen Logbook blinker natsort requests piexif Babel
+    # requirements-extras.txt
+    phpserialize jinja2 toml notebook ruamel_yaml
   ];
 
   src = fetchPypi {
