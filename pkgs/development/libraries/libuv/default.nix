@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines
+      "get_passwd" # passed on NixOS but failed on other Linuxes
     ] ++ stdenv.lib.optionals stdenv.isDarwin [
         # Sometimes: timeout (no output), failed uv_listen. Someone
         # should report these failures to libuv team. There tests should
