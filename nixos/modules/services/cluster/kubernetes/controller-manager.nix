@@ -104,11 +104,31 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    systemd.services.kube-controller-manager = {
+  config = let
+
+    controllerManagerPaths = filter (a: a != null) [
+      cfg.kubeconfig.caFile
+      cfg.kubeconfig.certFile
+      cfg.kubeconfig.keyFile
+      cfg.rootCaFile
+      cfg.serviceAccountKeyFile
+      cfg.tlsCertFile
+      cfg.tlsKeyFile
+    ];
+
+  in mkIf cfg.enable {
+    systemd.services.kube-controller-manager = rec {
       description = "Kubernetes Controller Manager Service";
-      wantedBy = [ "kubernetes.target" ];
+      wantedBy = [ "kube-control-plane-online.target" ];
       after = [ "kube-apiserver.service" ];
+      before = [ "kube-control-plane-online.target" ];
+      environment.KUBECONFIG = top.lib.mkKubeConfig "kube-controller-manager" cfg.kubeconfig;
+      preStart = ''
+        until kubectl auth can-i get /api -q 2>/dev/null; do
+          echo kubectl auth can-i get /api: exit status $?
+          sleep 2
+        done
+      '';
       serviceConfig = {
         RestartSec = "30s";
         Restart = "on-failure";
@@ -120,7 +140,7 @@ in
             "--cluster-cidr=${cfg.clusterCidr}"} \
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-controller-manager" cfg.kubeconfig} \
+          --kubeconfig=${environment.KUBECONFIG} \
           --leader-elect=${boolToString cfg.leaderElect} \
           ${optionalString (cfg.rootCaFile!=null)
             "--root-ca-file=${cfg.rootCaFile}"} \
@@ -141,7 +161,16 @@ in
         User = "kubernetes";
         Group = "kubernetes";
       };
-      path = top.path;
+      path = top.path ++ [ pkgs.kubectl ];
+      unitConfig.ConditionPathExists = controllerManagerPaths;
+    };
+
+    systemd.paths.kube-controller-manager = {
+      wantedBy = [ "kube-controller-manager.service" ];
+      pathConfig = {
+        PathExists = controllerManagerPaths;
+        PathChanged = controllerManagerPaths;
+      };
     };
 
     services.kubernetes.pki.certs = with top.lib; {

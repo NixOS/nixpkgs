@@ -4,17 +4,17 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "ripgrep-${version}";
-  version = "11.0.0";
+  pname = "ripgrep";
+  version = "11.0.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = "ripgrep";
+    repo = pname;
     rev = version;
-    sha256 = "13yavwi2b4w1p5fmpfn1vnwarsanlib1vj4pn1z2hg3a3v0c10iv";
+    sha256 = "0vak82d4vyw0w8agswbyxa6g3zs2h9mxm2xjw0xs9qccvmi7whbb";
   };
 
-  cargoSha256 = "0zrn4qshk24wzhhx7s36m27q5430gq22vnksd8kw11s3058s6pwg";
+  cargoSha256 = "0i31d0m145dsjfix589p5pfp83qp3a5wvz1v9sp4bxn3rggmw734";
 
   cargoBuildFlags = stdenv.lib.optional withPCRE2 "--features pcre2";
 
