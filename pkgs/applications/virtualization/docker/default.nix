@@ -130,7 +130,7 @@ rec {
 
     outputs = ["out" "man"];
 
-    extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux ]);
+    extraPath = optionalString (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux ]);
 
     installPhase = optionalString (stdenv.isLinux) ''
       install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja perl python ];
 
-  postConfigure = stdenv.lib.optionals enableThreading ''
+  postConfigure = stdenv.lib.optionalString enableThreading ''
     perl scripts/config.pl set MBEDTLS_THREADING_C    # Threading abstraction layer
     perl scripts/config.pl set MBEDTLS_THREADING_PTHREAD    # POSIX thread wrapper layer for the threading layer.
   '';
