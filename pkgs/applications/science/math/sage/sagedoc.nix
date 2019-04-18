@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
     export HOME="$TMPDIR/sage_home"
     mkdir -p "$HOME"
 
+    # needed to link them in the sage docs using intersphinx
+    export PPLPY_DOCS=${python.pkgs.pplpy.doc}/share/doc/pplpy
+
     ${sage-with-env}/bin/sage -python -m sage_setup.docbuild \
       --mathjax \
       --no-pdf-links \

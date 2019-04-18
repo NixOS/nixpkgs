@@ -585,6 +585,8 @@ in {
 
   poetry = callPackage ../development/python-modules/poetry { };
 
+  pplpy = callPackage ../development/python-modules/pplpy { };
+
   pprintpp = callPackage ../development/python-modules/pprintpp { };
 
   progress = callPackage ../development/python-modules/progress { };
