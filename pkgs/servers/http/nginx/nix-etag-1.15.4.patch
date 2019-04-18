@@ -36,8 +36,8 @@ index c57ec00c..b7992de2 100644
 -                                  r->headers_out.last_modified_time,
 -                                  r->headers_out.content_length_n)
 -                      - etag->value.data;
-+    #define NIX_STORE_DIR "/nix/store"
-+    #define NIX_STORE_LEN ngx_strlen(NIX_STORE_DIR)
++    #define NIX_STORE_DIR "@nixStoreDir@"
++    #define NIX_STORE_LEN @nixStoreDirLen@
 +
 +    if (r->headers_out.last_modified_time == 1
 +        && !ngx_strncmp(real, NIX_STORE_DIR, NIX_STORE_LEN)
