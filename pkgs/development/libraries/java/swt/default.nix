@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchurl, unzip, jdk, pkg-config, gtk2
-, libXt, libXtst, libXi, libGLU, libGL, webkitgtk, libsoup, xorg
-, pango, gdk-pixbuf, glib
+{ lib, stdenv, fetchurl, canonicalize-jars-hook
+, gtk2, jdk, libGL, libGLU, libXi, libXt, libXtst, libsoup, webkitgtk
+, gdk-pixbuf, glib, pango, xorg
+, unzip, pkg-config
 }:
 
 let
@@ -35,11 +36,22 @@ in stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip pkg-config ];
-  buildInputs = [ jdk gtk2 libXt libXtst libXi libGLU libGL webkitgtk libsoup ];
+  nativeBuildInputs = [ canonicalize-jars-hook unzip pkg-config ];
+  buildInputs = [
+    gtk2
+    jdk
+    libGL
+    libGLU
+    libXi
+    libXt
+    libXtst
+    libsoup
+    webkitgtk
+  ];
 
-  NIX_LFLAGS = toString (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk-pixbuf glib ]) +
-    " -lX11 -lpango-1.0 -lgdk_pixbuf-2.0 -lglib-2.0";
+  NIX_LFLAGS = toString
+    ((map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk-pixbuf glib ]) ++
+      [ "-lX11" "-lpango-1.0" "-lgdk_pixbuf-2.0" "-lglib-2.0" ]);
 
   buildPhase = ''
     unzip src.zip -d src
