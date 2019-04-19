@@ -66,7 +66,7 @@ buildGoPackage rec {
   ];
 
   postPatch = ''
-    searchHardCodedPaths
+    searchHardCodedPaths  # debugging
     patchShebangs network/nm_generator/gen_nm_consts.py
 
     fixPath $out /usr/share/dde/data launcher/manager.go dock/dock_manager_init.go
@@ -78,12 +78,21 @@ buildGoPackage rec {
     fixPath ${deepin-wallpapers} /usr/share/wallpapers appearance/background/list.go accounts/user.go
 
     sed -i -e "s|{DESTDIR}/etc|{DESTDIR}$out/etc|" Makefile
-    sed -i -e "s|{DESTDIR}/var|{DESTDIR}$out/var|" Makefile
     sed -i -e "s|{DESTDIR}/lib|{DESTDIR}$out/lib|" Makefile
+    sed -i -e "s|{DESTDIR}/var|{DESTDIR}$out/var|" Makefile
 
     find -type f -exec sed -i -e "s,/usr/lib/deepin-daemon,$out/lib/deepin-daemon," {} +
 
-    searchHardCodedPaths
+    # This package wants to install polkit local authority files into
+    # /var/lib. Nix does not allow a package to install files into /var/lib
+    # because it is outside of the Nix store and should contain applications
+    # state information (persistent data modified by programs as they
+    # run). Polkit looks for them in both /etc/polkit-1 and
+    # /var/lib/polkit-1 (with /etc having priority over /var/lib). An
+    # work around is to install them to $out/etc and simlnk them to
+    # /etc in the deepin module.
+
+    sed -i -e "s,/var/lib/polkit-1,/etc/polkit-1," Makefile
   '';
 
   buildPhase = ''
@@ -104,6 +113,8 @@ buildGoPackage rec {
     for binary in $out/lib/deepin-daemon/*; do
       wrapProgram $binary "''${gappsWrapperArgs[@]}"
     done
+
+    searchHardCodedPaths $out  # debugging
   '';
 
   passthru.updateScript = deepin.updateScript { inherit name; };

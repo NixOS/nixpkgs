@@ -69,6 +69,12 @@
         isSystemUser = true;
       };
 
+      environment.etc = {
+        "polkit-1/localauthority/10-vendor.d/com.deepin.api.device.pkla".source = "${pkgs.deepin.dde-api}/etc/polkit-1/localauthority/10-vendor.d/com.deepin.api.device.pkla";
+        "polkit-1/localauthority/10-vendor.d/com.deepin.daemon.Accounts.pkla".source = "${pkgs.deepin.dde-daemon}/etc/polkit-1/localauthority/10-vendor.d/com.deepin.daemon.Accounts.pkla";
+        "polkit-1/localauthority/10-vendor.d/com.deepin.daemon.Grub2.pkla".source = "${pkgs.deepin.dde-daemon}/etc/polkit-1/localauthority/10-vendor.d/com.deepin.daemon.Grub2.pkla";
+      };
+
       services.deepin.deepin-menu.enable = true;
       services.deepin.deepin-turbo.enable = true;
     })
