@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = version;
-    sha256 = "0diihk7lcdxxbfqp79dpvj14008zfzmayamh4vj310i524lqnkb6";
+    sha256 = "130yjr82w0az4xsdcmcjdwkhd0sin5pm6q6s9dyn5yhrwfx1vf0p";
   };
 
   nativeBuildInputs = [ meson ninja nasm ];
