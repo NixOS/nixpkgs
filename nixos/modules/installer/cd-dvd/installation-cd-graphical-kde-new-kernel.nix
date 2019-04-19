@@ -1,7 +1,6 @@
-{ pkgs, ... }:
-
 {
-  imports = [ ./installation-cd-graphical-kde.nix ];
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  imports = [
+    ./installation-cd-graphical-kde.nix
+    ../../profiles/latest-kernel.nix
+  ];
 }
