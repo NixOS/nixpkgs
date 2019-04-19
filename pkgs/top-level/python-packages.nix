@@ -579,6 +579,8 @@ in {
 
   phonopy = callPackage ../development/python-modules/phonopy { };
 
+  pikepdf = callPackage ../development/python-modules/pikepdf { };
+
   pims = callPackage ../development/python-modules/pims { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
