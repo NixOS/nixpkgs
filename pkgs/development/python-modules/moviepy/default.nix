@@ -4,7 +4,10 @@
 , numpy
 , decorator
 , imageio
+, imageio-ffmpeg
 , isPy3k
+, proglog
+, requests
 , tqdm
 }:
 
@@ -19,7 +22,7 @@ buildPythonPackage rec {
 
   # No tests
   doCheck = false;
-  propagatedBuildInputs = [ numpy decorator imageio tqdm ];
+  propagatedBuildInputs = [ numpy decorator imageio imageio-ffmpeg tqdm requests proglog ];
 
   meta = with stdenv.lib; {
     description = "Video editing with Python";
