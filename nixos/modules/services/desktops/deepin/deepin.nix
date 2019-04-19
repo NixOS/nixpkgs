@@ -35,6 +35,7 @@
         pkgs.deepin.dde-calendar
         pkgs.deepin.dde-daemon
         pkgs.deepin.dde-session-ui
+        pkgs.deepin.deepin-image-viewer
       ];
 
       services.dbus.packages = [
@@ -42,6 +43,7 @@
         pkgs.deepin.dde-calendar
         pkgs.deepin.dde-daemon
         pkgs.deepin.dde-session-ui
+        pkgs.deepin.deepin-image-viewer
       ];
 
       systemd.packages = [
