@@ -21955,6 +21955,8 @@ in
 
   plink-ng = callPackage ../applications/science/biology/plink-ng { };
 
+  prodigal = callPackage ../applications/science/biology/prodigal { };
+
   raxml = callPackage ../applications/science/biology/raxml { };
 
   raxml-mpi = appendToName "mpi" (raxml.override {
