@@ -72,6 +72,13 @@ rec {
          release = null;
       };
 
+      kernelArch =
+        if final.isAarch32 then "arm"
+        else if final.isAarch64 then "arm64"
+        else if final.isx86_32 then "x86"
+        else if final.isx86_64 then "ia64"
+        else final.parsed.cpu.name;
+
       qemuArch =
         if final.isArm then "arm"
         else if final.isx86_64 then "x86_64"
