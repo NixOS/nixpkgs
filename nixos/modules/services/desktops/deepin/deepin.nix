@@ -17,6 +17,11 @@
       DBus service for unified menus in Deepin Desktop Environment.
     ";
 
+    services.deepin.deepin-turbo.enable = lib.mkEnableOption "
+      Turbo service for the Deepin Desktop Environment. It is a daemon
+      that helps to launch applications faster.
+    ";
+
   };
 
 
@@ -57,10 +62,16 @@
       };
 
       services.deepin.deepin-menu.enable = true;
+      services.deepin.deepin-turbo.enable = true;
     })
 
     (lib.mkIf config.services.deepin.deepin-menu.enable {
       services.dbus.packages = [ pkgs.deepin.deepin-menu ];
+    })
+
+    (lib.mkIf config.services.deepin.deepin-turbo.enable {
+      environment.systemPackages = [ pkgs.deepin.deepin-turbo ];
+      systemd.packages = [ pkgs.deepin.deepin-turbo ];
     })
 
   ];
