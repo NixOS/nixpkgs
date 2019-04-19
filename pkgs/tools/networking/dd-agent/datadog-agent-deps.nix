@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/DataDog/gohai";
-      rev =  "bc98f936c76570e79c1c7e739425ff22ab2ee4a3";
-      sha256 = "1r59b6qpjnv399hm6pqfklm47hapkjwy9cp92frb3mhfz0wf9djl";
+      rev =  "43b075bb9705588cd89c71363d6d72937e3020c7";
+      sha256 = "195z5g8gdxcx4cq51p2xqha3j8m7mk5d5lr6i3hbaxp948hgc8dh";
     };
   }
   {
@@ -50,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/DataDog/viper";
-      rev =  "23ced3bc6b3751855704445e48da2c53075ade86";
-      sha256 = "1zzf4mqpmk47p3395k2v8q6wi7lnqxr0l55vv4zk9gpqqyifbm9m";
+      rev =  "v1.5.0";
+      sha256 = "1sv0xvmfaif7zpfwk0j6qf11hxnfdsb2zfj63b9zx7l0zzhjzh06";
     };
   }
   {
@@ -397,15 +397,6 @@
     };
   }
   {
-    goPackagePath  = "github.com/geoffgarside/ber";
-    fetch = {
-      type = "git";
-      url = "https://github.com/geoffgarside/ber";
-      rev =  "0b763e6b6fb1cb7422c29cd9195a3abf625651fb";
-      sha256 = "04k9k6805mvgp6gxs53frvlpp45hvkvrpj1jl1hc27ldwv5gpjrk";
-    };
-  }
-  {
     goPackagePath  = "github.com/ghodss/yaml";
     fetch = {
       type = "git";
@@ -682,15 +673,6 @@
       url = "https://github.com/json-iterator/go";
       rev =  "1624edc4454b8682399def8740d46db5e4362ba4";
       sha256 = "11wn4hpmrs8bmpvd93wqk49jfbbgylakhi35f9k5qd7jd479ci4s";
-    };
-  }
-  {
-    goPackagePath  = "github.com/k-sone/snmpgo";
-    fetch = {
-      type = "git";
-      url = "https://github.com/k-sone/snmpgo";
-      rev =  "de09377ff34857b08afdc16ea8c7c2929eb1fc6e";
-      sha256 = "0fia82msxviawcp5w4j4ll9n7z3gfjjvigqcq0d94cshj9ras10j";
     };
   }
   {
@@ -1057,9 +1039,9 @@
     goPackagePath  = "github.com/spf13/cast";
     fetch = {
       type = "git";
-      url = "https://github.com/spf13/cast";
-      rev =  "8965335b8c7107321228e3e3702cab9832751bac";
-      sha256 = "177bk7lq40jbgv9p9r80aydpaccfk8ja3a7jjhfwiwk9r1pa4rr2";
+      url = "https://github.com/DataDog/cast";
+      rev =  "1ee8c8bd14a3d768a7ff681617ed56bc6c204940";
+      sha256 = "0sgqmhicy672250cxgqd8zlni3qlj57r8liyiaq15g9spyhflhl0";
     };
   }
   {
