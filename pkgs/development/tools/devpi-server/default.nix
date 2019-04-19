@@ -12,7 +12,16 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages;
     [ devpi-common execnet itsdangerous pluggy waitress pyramid passlib ];
-  checkInputs = with pythonPackages; [ nginx webtest pytest beautifulsoup4 pytest-timeout mock pyyaml ];
+
+  checkInputs = with pythonPackages; [
+    nginx
+    webtest
+    beautifulsoup4
+    mock
+    pyyaml
+    pytest_3
+    (pytest-timeout.overrideAttrs (oldAttrs: oldAttrs // { pytest = pytest_3; }))
+  ];
   preCheck = ''
     # These tests pass with pytest 3.3.2 but not with pytest 3.4.0.
     sed -i 's/test_basic/noop/' test_devpi_server/test_log.py
