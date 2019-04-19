@@ -13,6 +13,10 @@
       Deepin Desktop Environment.
     ";
 
+    services.deepin.deepin-menu.enable = lib.mkEnableOption "
+      DBus service for unified menus in Deepin Desktop Environment.
+    ";
+
   };
 
 
@@ -51,6 +55,12 @@
         group = "deepin-daemon";
         isSystemUser = true;
       };
+
+      services.deepin.deepin-menu.enable = true;
+    })
+
+    (lib.mkIf config.services.deepin.deepin-menu.enable {
+      services.dbus.packages = [ pkgs.deepin.deepin-menu ];
     })
 
   ];
