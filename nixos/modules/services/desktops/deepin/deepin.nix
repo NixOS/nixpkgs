@@ -34,12 +34,14 @@
         pkgs.deepin.dde-api
         pkgs.deepin.dde-calendar
         pkgs.deepin.dde-daemon
+        pkgs.deepin.dde-session-ui
       ];
 
       services.dbus.packages = [
         pkgs.deepin.dde-api
         pkgs.deepin.dde-calendar
         pkgs.deepin.dde-daemon
+        pkgs.deepin.dde-session-ui
       ];
 
       systemd.packages = [
