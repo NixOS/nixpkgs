@@ -44,11 +44,11 @@
         isSystemUser = true;
       };
 
-      users.groups.dde-daemon = { };
+      users.groups.deepin-daemon = { };
 
-      users.users.dde-daemon = {
+      users.users.deepin-daemon = {
         description = "Deepin daemon user";
-        group = "dde-daemon";
+        group = "deepin-daemon";
         isSystemUser = true;
       };
     })
