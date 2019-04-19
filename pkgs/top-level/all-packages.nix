@@ -153,6 +153,12 @@ with pkgs;
 
   appindicator-sharp = callPackage ../development/libraries/appindicator-sharp { };
 
+  canonicalize-jar = callPackage ../build-support/java/canonicalize-jar.nix { };
+  canonicalize-jars-hook = makeSetupHook {
+    name = "canonicalize-jars-hook";
+    substitutions = { canonicalize_jar = canonicalize-jar; };
+  } ../build-support/setup-hooks/canonicalize-jars.sh;
+
   ensureNewerSourcesHook = { year }: makeSetupHook {}
     (writeScript "ensure-newer-sources-hook.sh" ''
       postUnpackHooks+=(_ensureNewerSources)
