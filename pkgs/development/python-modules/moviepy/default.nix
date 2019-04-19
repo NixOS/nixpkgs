@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , numpy
 , decorator
 , imageio
@@ -14,6 +15,8 @@
 buildPythonPackage rec {
   pname = "moviepy";
   version = "1.0.0";
+
+  disabled = !(pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
