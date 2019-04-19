@@ -32,11 +32,13 @@
     (lib.mkIf config.services.deepin.core.enable {
       environment.systemPackages = [
         pkgs.deepin.dde-api
+        pkgs.deepin.dde-calendar
         pkgs.deepin.dde-daemon
       ];
 
       services.dbus.packages = [
         pkgs.deepin.dde-api
+        pkgs.deepin.dde-calendar
         pkgs.deepin.dde-daemon
       ];
 
