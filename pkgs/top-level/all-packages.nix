@@ -697,6 +697,8 @@ in
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
+  crumbs = callPackage ../applications/misc/crumbs { };
+
   deskew = callPackage ../applications/graphics/deskew { };
 
   detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
