@@ -35,12 +35,11 @@ def parse_args():
 	parser.add_argument("--repo", help="source repository", default=REPO)
 	return parser.parse_args()
 
-def download_file(file_base, file_name, file_url):
+def download_file(file_base, file_name, file_url, sha256):
 	file_shortname = file_base + ".deb"
-	sha256 = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--name", file_shortname, file_url])
 	out.write("    rec {\n")
 	out.write("      name = \"%s\";\n" % file_name)
-	out.write("      sha256 = \"%s\";\n" % sha256.strip())
+	out.write("      sha256 = \"%s\";\n" % sha256)
 	out.write("      url = \"%s\";\n" % file_url.replace(REPO, "mirror://steamrt", 1))
 	out.write("      source = fetchurl {\n")
 	out.write("        inherit url sha256;\n")
@@ -49,8 +48,20 @@ def download_file(file_base, file_name, file_url):
 	out.write("    }\n")
 
 
+def parse_dependencies (arch, binarylist):
+	packages_url = "%s/dists/%s/%s/binary-%s/Packages" % (REPO, DIST, COMPONENT, arch)
+	for stanza in deb822.Packages.iter_paragraphs(urllib.urlopen(packages_url)):
+		p = stanza['Package']
+		if p in binarylist:
+			for deps in stanza.relations['depends']:
+				for dep in deps:
+					binarylist.add(dep['name'])
+	return binarylist
+
 def install_binaries (arch, binarylist):
-	installset = binarylist.copy()
+	installset = parse_dependencies(arch, binarylist.copy())
+	# Steam doesn't start if we include their libc
+	installset.remove("libc6")
 
 	#
 	# Load the Packages file so we can find the location of each binary package
@@ -66,7 +77,7 @@ def install_binaries (arch, binarylist):
 			# Download the package and install it
 			#
 			file_url="%s/%s" % (REPO,stanza['Filename'])
-			download_file(p, os.path.splitext(os.path.basename(stanza['Filename']))[0], file_url)
+			download_file(p, os.path.splitext(os.path.basename(stanza['Filename']))[0], file_url, stanza["SHA256"])
 			installset.remove(p)
 
 	for p in installset:
@@ -108,22 +119,13 @@ if args.debug:
 	COMPONENT = "debug"
 
 # Process packages.txt to get the list of source and binary packages
-source_pkgs = set()
 binary_pkgs = set()
 
 print ("Creating runtime-generated.nix")
 
-pkgs_list = urllib.urlopen("https://raw.githubusercontent.com/ValveSoftware/steam-runtime/master/packages.txt").readlines()
-for line in pkgs_list:
-	if line[0] != '#':
-		toks = line.split()
-		if len(toks) > 1:
-			source_pkgs.add(toks[0])
-			binary_pkgs.update(toks[1:])
-
-# remove development packages for end-user runtime
-if not args.debug:
-	binary_pkgs -= {x for x in binary_pkgs if re.search('-dbg$|-dev$|-multidev$',x)}
+# https://github.com/ValveSoftware/steam-runtime/blob/173ef028fb6b84e804f4e1b0ef11c12ffd4f3a8e/build-runtime.py#L264
+binary_pkgs.add("steamrt-libs")
+binary_pkgs.add("steamrt-legacy")
 
 for arch in arches:
 	out.write("  %s = [\n" % arch)
