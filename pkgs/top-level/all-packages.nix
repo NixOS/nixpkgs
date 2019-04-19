@@ -163,6 +163,12 @@ in
 
   appindicator-sharp = callPackage ../development/libraries/appindicator-sharp { };
 
+  canonicalize-jar = callPackage ../build-support/java/canonicalize-jar.nix { };
+  canonicalize-jars-hook = makeSetupHook {
+    name = "canonicalize-jars-hook";
+    substitutions = { canonicalize_jar = canonicalize-jar; };
+  } ../build-support/setup-hooks/canonicalize-jars.sh;
+
   ensureNewerSourcesHook = { year }: makeSetupHook {}
     (writeScript "ensure-newer-sources-hook.sh" ''
       postUnpackHooks+=(_ensureNewerSources)
@@ -18712,10 +18718,6 @@ in
   jdom = callPackage ../development/libraries/java/jdom { };
 
   jflex = callPackage ../development/libraries/java/jflex { };
-
-  junit = callPackage ../development/libraries/java/junit { antBuild = releaseTools.antBuild; };
-
-  junixsocket = callPackage ../development/libraries/java/junixsocket { };
 
   lombok = callPackage ../development/libraries/java/lombok { };
 
