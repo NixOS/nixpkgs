@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  configurePlatforms = [ "host" "target" ];
+  configurePlatforms = [ ];
 
   preConfigure = ''
     export CXXFLAGS="-fpermissive"
@@ -51,7 +51,11 @@ in stdenv.mkDerivation rec {
     "--with-intl-api"
     "--enable-readline"
     "--enable-shared-js"
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-jemalloc";
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-jemalloc"
+    ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--host=${stdenv.buildPlatform.config}"
+    "--target=${stdenv.hostPlatform.config}"
+  ];
 
   makeFlags = [
     "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
