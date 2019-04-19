@@ -1150,6 +1150,11 @@
     github = "dzabraev";
     name = "Maksim Dzabraev";
   };
+  dxf = {
+    email = "dingxiangfei2009@gmail.com";
+    github = "dingxiangfei2009";
+    name = "Ding Xiang Fei";
+  };
   e-user = {
     email = "nixos@sodosopa.io";
     github = "e-user";
