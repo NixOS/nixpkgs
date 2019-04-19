@@ -20,6 +20,8 @@ in
 
   boot.consoleLogLevel = lib.mkDefault 7;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  # There is no zfs support (yet?) on armv7.
+  boot.supportedFilesystems = [ "btrfs" "reiserfs" "vfat" "f2fs" "xfs" "ntfs" "cifs" ];
   # The serial ports listed here are:
   # - ttyS0: for Tegra (Jetson TK1)
   # - ttymxc0: for i.MX6 (Wandboard)
