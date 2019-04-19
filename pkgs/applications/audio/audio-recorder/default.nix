@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, pkgconfig, intltool, glib
+, pkgconfig, intltool
 , glib, dbus, gtk3, libappindicator-gtk3, gst_all_1
 , librsvg, wrapGAppsHook
 , pulseaudioSupport ? true, libpulseaudio ? null }:
