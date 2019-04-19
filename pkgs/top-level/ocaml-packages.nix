@@ -560,10 +560,6 @@ let
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
-    ojquery = callPackage ../development/ocaml-modules/ojquery {
-      ocaml_lwt = lwt3;
-    };
-
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
