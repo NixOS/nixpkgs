@@ -151,7 +151,6 @@ in {
           RestartForceExitStatus="3 4";
           User = cfg.user;
           Group = cfg.group;
-          PermissionsStartOnly = true;
           ExecStart = ''
             ${cfg.package}/bin/syncthing \
               -no-browser \

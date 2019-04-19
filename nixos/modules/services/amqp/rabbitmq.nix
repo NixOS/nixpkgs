@@ -179,11 +179,11 @@ in {
       } //  optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
 
       serviceConfig = {
-        PermissionsStartOnly = true; # preStart must be run as root
         ExecStart = "${cfg.package}/sbin/rabbitmq-server";
         ExecStop = "${cfg.package}/sbin/rabbitmqctl shutdown";
         User = "rabbitmq";
         Group = "rabbitmq";
+        LogsDirectory = "rabbitmq";
         WorkingDirectory = cfg.dataDir;
         Type = "notify";
         NotifyAccess = "all";
@@ -197,11 +197,8 @@ in {
       preStart = ''
         ${optionalString (cfg.cookie != "") ''
             echo -n ${cfg.cookie} > ${cfg.dataDir}/.erlang.cookie
-            chown rabbitmq:rabbitmq ${cfg.dataDir}/.erlang.cookie
             chmod 600 ${cfg.dataDir}/.erlang.cookie
         ''}
-        mkdir -p /var/log/rabbitmq
-        chown rabbitmq:rabbitmq /var/log/rabbitmq
       '';
     };
 
