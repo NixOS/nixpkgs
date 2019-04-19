@@ -4,7 +4,6 @@
 , ninja
 , pkgconfig
 , gnome3
-, glib
 , desktop-file-utils
 , gettext
 , itstool
