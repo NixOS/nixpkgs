@@ -280,6 +280,15 @@ in
     };
   };
 
+  slowfs-cache = {
+    src = fetchFromGitHub {
+      owner  = "FRiCKLE";
+      repo   = "ngx_slowfs_cache";
+      rev    = "1.10";
+      sha256 = "1gyza02pcws3zqm1phv3ag50db5gnapxyjwy8skjmvawz7p5bmxr";
+    };
+  };
+
   statsd = {
     src = fetchFromGitHub {
       owner = "apcera";
