@@ -555,6 +555,11 @@ in {
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
 
+  ortools = (toPythonModule (pkgs.or-tools.override {
+    inherit (self) python;
+    pythonProtobuf = self.protobuf;
+  })).python;
+
   osmnx = callPackage ../development/python-modules/osmnx { };
 
   outcome = callPackage ../development/python-modules/outcome {};
@@ -585,9 +590,13 @@ in {
 
   poetry = callPackage ../development/python-modules/poetry { };
 
+  pplpy = callPackage ../development/python-modules/pplpy { };
+
   pprintpp = callPackage ../development/python-modules/pprintpp { };
 
   progress = callPackage ../development/python-modules/progress { };
+
+  proglog = callPackage ../development/python-modules/proglog { };
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 

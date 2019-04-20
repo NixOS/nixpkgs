@@ -31,12 +31,13 @@ buildPythonPackage rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  buildInputs = lib.optionals pariSupport [
-    pari
-  ];
-
   propagatedBuildInputs = [
     cython
+  ] ++ lib.optionals pariSupport [
+    # When cysignals is built with pari, including cysignals into the
+    # buildInputs of another python package will cause cython to link against
+    # pari.
+    pari
   ];
 
   enableParallelBuilding = true;

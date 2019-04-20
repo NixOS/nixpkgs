@@ -223,10 +223,10 @@ in {
   };
 
   ruby_2_6 = generic {
-    version = rubyVersion "2" "6" "2" "";
+    version = rubyVersion "2" "6" "3" "";
     sha256 = {
-      src = "1as97d2j0d21g8mldp8fmdjah96jakrxyw1v0crg7ln2y8mmsh50";
-      git = "0f4mnrd7733353kx1jjha770kvm0wlc59z7id9h23kmjdg6k76nl";
+      src = "1yw23hmllxsc4b7zqndn5l4d9503gdik6rsf3lfdkf12bxwx6zsp";
+      git = "1h4k2kw0vr4jh2ra9l89i8lnddfh2qfw67y9cknjylf7kw2m1pmh";
     };
   };
 }

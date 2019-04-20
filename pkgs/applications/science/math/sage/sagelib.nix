@@ -47,6 +47,8 @@
 , jupyter_core
 , libhomfly
 , libbraiding
+, gmpy2
+, pplpy
 }:
 
 # This is the core sage python package. Everything else is just wrappers gluing
@@ -115,6 +117,8 @@ buildPythonPackage rec {
     cysignals
     libhomfly
     libbraiding
+    gmpy2
+    pplpy
   ];
 
   buildPhase = ''

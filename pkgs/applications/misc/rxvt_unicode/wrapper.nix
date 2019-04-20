@@ -1,4 +1,4 @@
-{ symlinkJoin, rxvt_unicode, makeWrapper, plugins }:
+{ symlinkJoin, rxvt_unicode, makeWrapper, plugins, perlPackages, perlDeps ? []}:
 
 let
   rxvt_name = builtins.parseDrvName rxvt_unicode.name;
@@ -12,8 +12,10 @@ in symlinkJoin {
 
   postBuild = ''
     wrapProgram $out/bin/urxvt \
+      --set PERL5LIB : "${perlPackages.makePerlPath perlDeps}" \
       --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
     wrapProgram $out/bin/urxvtd \
+      --set PERL5LIB : "${perlPackages.makePerlPath perlDeps}" \
       --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
   '';
 

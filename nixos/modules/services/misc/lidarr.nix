@@ -17,20 +17,15 @@ in
       description = "Lidarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        [ ! -d /var/lib/lidarr ] && mkdir -p /var/lib/lidarr
-        chown -R lidarr:lidarr /var/lib/lidarr
-      '';
 
       serviceConfig = {
         Type = "simple";
         User = "lidarr";
         Group = "lidarr";
-        PermissionsStartOnly = "true";
         ExecStart = "${pkgs.lidarr}/bin/Lidarr";
         Restart = "on-failure";
 
-        StateDirectory = "/var/lib/lidarr/";
+        StateDirectory = "lidarr";
         StateDirectoryMode = "0770";
       };
     };

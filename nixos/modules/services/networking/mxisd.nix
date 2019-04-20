@@ -116,7 +116,6 @@ in {
         Group = "mxisd";
         ExecStart = "${cfg.package}/bin/mxisd --spring.config.location=${cfg.dataDir}/ --spring.profiles.active=systemd --java.security.egd=file:/dev/./urandom";
         WorkingDirectory = cfg.dataDir;
-        PermissionsStartOnly = true;
         SuccessExitStatus = 143;
         Restart = "on-failure";
       };

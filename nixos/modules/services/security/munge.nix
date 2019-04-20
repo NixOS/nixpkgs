@@ -49,21 +49,16 @@ in
 
       path = [ pkgs.munge pkgs.coreutils ];
 
-      preStart = ''
-        chmod 0400 ${cfg.password}
-        mkdir -p /var/lib/munge -m 0711
-        chown -R munge:munge /var/lib/munge
-        mkdir -p /run/munge -m 0755
-        chown -R munge:munge /run/munge
-      '';
-
       serviceConfig = {
+        ExecStartPre = "+${pkgs.coreutils}/bin/chmod 0400 ${cfg.password}";
         ExecStart = "${pkgs.munge}/bin/munged --syslog --key-file ${cfg.password}";
         PIDFile = "/run/munge/munged.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        PermissionsStartOnly = "true";
         User = "munge";
         Group = "munge";
+        StateDirectory = "munge";
+        StateDirectoryMode = "0711";
+        RuntimeDirectory = "munge";
       };
 
     };

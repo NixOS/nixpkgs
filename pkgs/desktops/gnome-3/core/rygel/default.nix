@@ -7,7 +7,6 @@
 , gettext
 , libxml2
 , gobject-introspection
-, gtk-doc
 , wrapGAppsHook
 , python3
 , glib
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
   version = "0.38.0";
 
   # TODO: split out lib
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -47,7 +46,6 @@ stdenv.mkDerivation rec {
     gettext
     libxml2
     gobject-introspection
-    gtk-doc
     wrapGAppsHook
     python3
   ];
@@ -76,11 +74,16 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dsystemd-user-units-dir=${placeholder "out"}/lib/systemd/user"
-    "-Dapi-docs=true"
+    "-Dapi-docs=false"
     "--sysconfdir=/etc"
+    "-Dsysconfdir_install=${placeholder "out"}/etc"
   ];
 
   doCheck = true;
+
+  patches = [
+    ./add-option-for-installation-sysconfdir.patch
+  ];
 
   postPatch = ''
     patchShebangs data/xml/process-xml.py
