@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, kernel }:
 
-assert stdenv.lib.versionOlder kernel.version "4.20";
-
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
 in
