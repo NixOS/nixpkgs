@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
       homepage = https://github.com/avih/dejsonlz4;
       license = licenses.bsd2;
       maintainers = with maintainers; [ mt-caret ];
-      platforms = platforms.all;
+      platforms = platforms.linux;
     };
   }
