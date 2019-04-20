@@ -33,10 +33,10 @@ let
   };
 
   ast = buildPecl rec {
-    version = "1.0.0";
+    version = "1.0.1";
     pname = "ast";
 
-    sha256 = "0abccvwif1pih222lbj2z4cf9ibciz48xj35lfixyry163vabkck";
+    sha256 = "0ja74k2lmxwhhvp9y9kc7khijd7s2dqma5x8ghbhx9ajkn0wg8iq";
   };
 
   box = pkgs.stdenv.mkDerivation rec {
