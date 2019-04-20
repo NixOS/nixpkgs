@@ -375,12 +375,12 @@ let
   };
 
   psysh = pkgs.stdenv.mkDerivation rec {
-    version = "0.9.8";
+    version = "0.9.9";
     pname = "psysh";
 
     src = pkgs.fetchurl {
       url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-      sha256 = "0xs9bl0hplkm2hajmm4qca65bm2x7wnx4vbmk0d2jxpvwrgqgnzd";
+      sha256 = "0knbib0afwq2z5fc639ns43x8pi3kmp85y13bkcl00dhvf46yinw";
     };
 
     phases = [ "installPhase" ];
@@ -389,6 +389,7 @@ let
     installPhase = ''
       mkdir -p $out/bin
       tar -xzf $src -C $out/bin
+      chmod +x $out/bin/psysh
       wrapProgram $out/bin/psysh
     '';
 
