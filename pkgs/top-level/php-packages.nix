@@ -137,10 +137,10 @@ let
   };
 
   igbinary = buildPecl rec {
-    version = "2.0.8";
+    version = "3.0.1";
     pname = "igbinary";
 
-    sha256 = "105nyn703k9p9c7wwy6npq7xd9mczmmlhyn0gn2v2wz0f88spjxs";
+    sha256 = "1w8jmf1qpggdvq0ndfi86n7i7cqgh1s8q6hys2lijvi37rzn0nar";
 
     configureFlags = [ "--enable-igbinary" ];
     makeFlags = [ "phpincludedir=$(dev)/include" ];
