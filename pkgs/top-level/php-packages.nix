@@ -283,6 +283,7 @@ let
     };
 
     configureFlags = [ "--with-excel" "--with-libxl-incdir=${pkgs.libxl}/include_c" "--with-libxl-libdir=${pkgs.libxl}/lib" ];
+    meta.broken = true;
   };
 
   phpcbf = pkgs.stdenv.mkDerivation rec {
