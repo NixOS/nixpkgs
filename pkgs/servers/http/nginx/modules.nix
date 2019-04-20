@@ -105,6 +105,15 @@ in
     inputs = [ pkgs.libbsd ];
   };
 
+  live ={
+    src = fetchFromGitHub {
+      owner = "arut";
+      repo = "nginx-live-module";
+      rev = "5e4a1e3a718e65e5206c24eba00d42b0d1c4b7dd";
+      sha256 = "1kpnhl4b50zim84z22ahqxyxfq4jv8ab85kzsy2n5ciqbyg491lz";
+    };
+  };
+
   lua = {
     src = fetchFromGitHub {
       owner = "openresty";
