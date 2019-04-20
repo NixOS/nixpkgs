@@ -127,22 +127,42 @@ rec {
     (b == i386 && isCompatible a i486)
     (b == i486 && isCompatible a i586)
     (b == i586 && isCompatible a i686)
-    # NOTE: Not true in some cases. Like in WSL mode.
+
+    # XXX: Not true in some cases. Like in WSL mode.
     (b == i686 && isCompatible a x86_64)
 
-    # ARM
+    # ARMv4
     (b == arm && isCompatible a armv5tel)
-    (b == armv5tel && isCompatible a armv6m)
-    (b == armv6m && isCompatible a armv6l)
-    (b == armv6l && isCompatible a armv7a)
-    (b == armv7a && isCompatible a armv7r)
-    (b == armv7r && isCompatible a armv7m)
-    (b == armv7m && isCompatible a armv7l)
-    (b == armv7l && isCompatible a armv8a)
-    (b == armv8a && isCompatible a armv8r)
-    (b == armv8r && isCompatible a armv8m)
-    # NOTE: not always true! Some arm64 cpus don’t support arm32 mode.
-    (b == armv8m && isCompatible a aarch64)
+
+    # ARMv5
+    (b == armv5tel && isCompatible a armv6l)
+
+    # ARMv6
+    (b == armv6l && isCompatible a armv6m)
+    (b == armv6m && isCompatible a armv7l)
+
+    # ARMv7
+    (b == armv7l && isCompatible a armv7a)
+    (b == armv7l && isCompatible a armv7r)
+    (b == armv7l && isCompatible a armv7m)
+    (b == armv7a && isCompatible a armv8a)
+    (b == armv7r && isCompatible a armv8a)
+    (b == armv7m && isCompatible a armv8a)
+    (b == armv7a && isCompatible a armv8r)
+    (b == armv7r && isCompatible a armv8r)
+    (b == armv7m && isCompatible a armv8r)
+    (b == armv7a && isCompatible a armv8m)
+    (b == armv7r && isCompatible a armv8m)
+    (b == armv7m && isCompatible a armv8m)
+
+    # ARMv8
+    (b == armv8r && isCompatible a armv8a)
+    (b == armv8m && isCompatible a armv8a)
+
+    # XXX: not always true! Some arm64 cpus don’t support arm32 mode.
+    (b == aarch64 && a == armv8a)
+    (b == armv8a && isCompatible a aarch64)
+
     (b == aarch64 && a == aarch64_be)
     (b == aarch64_be && isCompatible a aarch64)
 
