@@ -165,6 +165,15 @@ in
     };
   };
 
+  mpeg-ts ={
+    src = fetchFromGitHub {
+      owner = "arut";
+      repo = "nginx-ts-module";
+      rev = "v0.1.1";
+      sha256 = "12dxcyy6wna1fccl3a9lnsbymd6p4apnwz6c24w74v97qvpfdxqd";
+    };
+  };
+
   ngx_aws_auth = {
     src = fetchFromGitHub {
       owner = "anomalizer";
