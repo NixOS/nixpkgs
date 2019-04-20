@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
-    name = "${pname}-${version}";
     pname = "dejsonlz4";
     version = "1.1";
     src = fetchFromGitHub {
