@@ -75,7 +75,7 @@ in {
       debug = mkEnableOption "gnome-session debug messages";
 
       flashback = {
-        enableMetacity = mkEnableOption "Enable the standard GNOME Flashback session with Metacity.";
+        enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
 
         customSessions = mkOption {
           type = types.listOf (types.submodule {

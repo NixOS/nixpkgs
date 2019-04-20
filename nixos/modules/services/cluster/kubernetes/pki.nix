@@ -39,7 +39,7 @@ in
   ###### interface
   options.services.kubernetes.pki = with lib.types; {
 
-    enable = mkEnableOption "Whether to enable easyCert issuer service.";
+    enable = mkEnableOption "easyCert issuer service";
 
     certs = mkOption {
       description = "List of certificate specs to feed to cert generator.";

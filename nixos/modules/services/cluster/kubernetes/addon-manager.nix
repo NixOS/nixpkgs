@@ -62,7 +62,7 @@ in
       '';
     };
 
-    enable = mkEnableOption "Whether to enable Kubernetes addon manager.";
+    enable = mkEnableOption "Kubernetes addon manager";
 
     kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes addon manager";
     bootstrapAddonsKubeconfig = top.lib.mkKubeConfigOptions "Kubernetes addon manager bootstrap";
