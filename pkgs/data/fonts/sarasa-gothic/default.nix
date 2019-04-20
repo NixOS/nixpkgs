@@ -1,8 +1,8 @@
 { stdenv, fetchurl, p7zip }:
 
 let
-  version = "0.6.0";
-  sha256 = "08g3kzplp3v8kvni1vzl73fgh03xgfl8pwqyj7vwjihjdr1xfjyz";
+  version = "0.8.0";
+  sha256 = "0zafvzrh4180hmz351f1rvs29n8mfxf0qv6mdl7psf1f066dizs6";
 in fetchurl rec {
   inherit sha256;
 
