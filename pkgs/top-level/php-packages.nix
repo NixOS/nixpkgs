@@ -153,8 +153,8 @@ let
   };
 
   oci8 = buildPecl rec {
-    name = "oci8-2.1.8";
-    sha256 = "1bp6fss2f2qmd5bdk7x22j8vx5qivrdhz4x7csf29vjgj6gvchxy";
+    name = "oci8-2.2.0";
+    sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
     buildInputs = [ pkgs.re2c pkgs.oracle-instantclient ];
     configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient}/lib" ];
   };
