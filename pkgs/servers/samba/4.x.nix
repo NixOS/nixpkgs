@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
-, fetchpatch
+, fetchpatch, fixDarwinDylibNames
 , docbook_xml_dtd_42, readline
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
 , krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       ./4.x-fix-makeflags-parsing.patch
     ];
 
-  nativeBuildInputs = optional stdenv.isDarwin rpcgen;
+  nativeBuildInputs = optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ];
 
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
+      "--disable-rpath"
     ]
     ++ [(if enableDomainController
          then "--with-experimental-mit-ad-dc"
