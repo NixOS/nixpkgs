@@ -444,6 +444,7 @@ let
 
     buildInputs = [ pkgs.v8_6_x ];
     configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
+    meta.broken = true;
   };
 
   xdebug = buildPecl rec {
