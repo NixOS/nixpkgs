@@ -347,8 +347,8 @@ in
     src = fetchFromGitHub {
       owner = "yaoweibin";
       repo = "nginx_upstream_check_module";
-      rev = "9aecf15ec379fe98f62355c57b60c0bc83296f04";
-      sha256 = "1cjisxw1wykll683nw09k0i1nvzslp4dr59x58cvarpk43paim2y";
+      rev = "007f76f7adbcbd6abd9352502af1a4ae463def85";
+      sha256 = "1qcg7c9rcl70wr1qf188shnn9s2f7cxnlw05s6scbvlgnf6ik6in";
     };
   };
 
