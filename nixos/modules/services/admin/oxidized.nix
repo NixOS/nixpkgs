@@ -7,7 +7,7 @@ let
 in
 {
   options.services.oxidized = {
-    enable = mkEnableOption "the oxidized configuation backup service.";
+    enable = mkEnableOption "the oxidized configuration backup service";
 
     user = mkOption {
       type = types.str;

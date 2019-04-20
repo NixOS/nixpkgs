@@ -11,7 +11,7 @@ in
 {
   options = {
     services.solr = {
-      enable = mkEnableOption "Enables the solr service.";
+      enable = mkEnableOption "Solr";
 
       # default to the 8.x series not forcing major version upgrade of those on the 7.x series
       package = mkOption {
