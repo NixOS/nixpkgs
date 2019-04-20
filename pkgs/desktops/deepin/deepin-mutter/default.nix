@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     searchHardCodedPaths  # debugging
+    sed -i -e "s,Exec=deepin-mutter,Exec=$out/bin/deepin-mutter," data/mutter.desktop.in
   '';
 
   configureFlags = [
