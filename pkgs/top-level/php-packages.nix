@@ -41,7 +41,7 @@ let
 
   box = pkgs.stdenv.mkDerivation rec {
     version = "2.7.5";
-    pname = "box";
+    pname = "php-box";
 
     src = pkgs.fetchurl {
       url = "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
@@ -68,7 +68,7 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     version = "1.8.5";
-    pname = "composer";
+    pname = "php-composer";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
@@ -288,7 +288,7 @@ let
 
   phpcbf = pkgs.stdenv.mkDerivation rec {
     version = "3.4.2";
-    pname = "phpcbf";
+    pname = "php-phpcbf";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
@@ -315,7 +315,7 @@ let
 
   phpcs = pkgs.stdenv.mkDerivation rec {
     version = "3.4.2";
-    pname = "phpcs";
+    pname = "php-phpcs";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
