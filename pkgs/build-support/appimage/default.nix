@@ -180,6 +180,10 @@ rec {
       keyutils.lib
       libjack2
       fribidi
+
+      # libraries not on the upstream include list, but nevertheless expected
+      # by at least one appimage
+      libtool.lib # for Synfigstudio
     ];
   };
 }
