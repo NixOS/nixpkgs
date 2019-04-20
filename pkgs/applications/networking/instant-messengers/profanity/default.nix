@@ -20,7 +20,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "profanity-${version}";
-  version = "0.6.0.rc1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "boothj5";
