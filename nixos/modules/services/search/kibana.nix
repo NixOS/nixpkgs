@@ -31,7 +31,7 @@ let
 
 in {
   options.services.kibana = {
-    enable = mkEnableOption "enable kibana service";
+    enable = mkEnableOption "kibana service";
 
     listenAddress = mkOption {
       description = "Kibana listening host";

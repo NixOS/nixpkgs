@@ -7,7 +7,7 @@ let
 in {
 
   options.services.offlineimap = {
-    enable = mkEnableOption "Offlineimap, a software to dispose your mailbox(es) as a local Maildir(s).";
+    enable = mkEnableOption "OfflineIMAP, a software to dispose your mailbox(es) as a local Maildir(s)";
 
     install = mkOption {
       type = types.bool;

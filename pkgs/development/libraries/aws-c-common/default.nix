@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, libexecinfo }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = lib.optional stdenv.hostPlatform.isMusl libexecinfo;
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
     "-Wno-nullability-extension"

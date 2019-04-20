@@ -12,7 +12,7 @@ let
       inherit sha256;
     };
 
-    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or (throw "missing kernelArch");
+    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or stdenvNoCC.hostPlatform.kernelArch;
 
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.

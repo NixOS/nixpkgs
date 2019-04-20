@@ -75,6 +75,8 @@ rec {
       krb5
     ];
 
+    # list of libraries expected in an appimage environment:
+    # https://github.com/AppImage/pkg2appimage/blob/master/excludelist
     multiPkgs = pkgs: with pkgs; [
       desktop-file-utils
       xorg.libXcomposite
@@ -171,6 +173,17 @@ rec {
       xorg.libXft
       libvdpau
       alsaLib
+
+      harfbuzz
+      e2fsprogs
+      libgpgerror
+      keyutils.lib
+      libjack2
+      fribidi
+
+      # libraries not on the upstream include list, but nevertheless expected
+      # by at least one appimage
+      libtool.lib # for Synfigstudio
     ];
   };
 }

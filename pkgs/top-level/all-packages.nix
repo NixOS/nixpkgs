@@ -1328,6 +1328,8 @@ in
 
   deja-dup = callPackage ../applications/backup/deja-dup { };
 
+  dejsonlz4 = callPackage ../tools/compression/dejsonlz4 { };
+
   desync = callPackage ../applications/networking/sync/desync { };
 
   devmem2 = callPackage ../os-specific/linux/devmem2 { };
@@ -23350,6 +23352,8 @@ in
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape {};
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
+
+  tilt = callPackage ../applications/networking/cluster/tilt {};
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 

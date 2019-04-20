@@ -72,16 +72,22 @@ rec {
          release = null;
       };
 
+      kernelArch =
+        if final.isAarch32 then "arm"
+        else if final.isAarch64 then "arm64"
+        else if final.isx86_32 then "x86"
+        else if final.isx86_64 then "ia64"
+        else final.parsed.cpu.name;
+
       qemuArch =
         if final.isArm then "arm"
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
         else {
           "powerpc" = "ppc";
+          "powerpcle" = "ppc";
           "powerpc64" = "ppc64";
-          "powerpc64le" = "ppc64";
-          "mips64" = "mips";
-          "mipsel64" = "mipsel";
+          "powerpc64le" = "ppc64le";
         }.${final.parsed.cpu.name} or final.parsed.cpu.name;
 
       emulator = pkgs: let
@@ -103,7 +109,7 @@ rec {
       in
         if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
            pkgs.stdenv.hostPlatform.isCompatible final
-        then "${pkgs.runtimeShell} -c"
+        then "${pkgs.runtimeShell} -c '\"$@\"' --"
         else if final.isWindows
         then "${wine}/bin/${wine-name}"
         else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux

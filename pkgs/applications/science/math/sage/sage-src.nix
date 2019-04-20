@@ -127,6 +127,13 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch/?h=3277ba76d0ba7174608a31a0c6623e9210c63e3d";
       sha256 = "09avaanwmdgqv14mmllbgw9z2scf4lc0y0kzdhlriiq8ss9j8iir";
     })
+
+    # https://trac.sagemath.org/ticket/27094
+    (fetchpatch {
+      name = "gap-4.10.1.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=d3483110474591ea6cc8e3210cd884f3e0018b3e";
+      sha256 = "028i6h8l8npwzx5z0ax0rcywl85gc83qw1jf93zf523msdfcsk0n";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

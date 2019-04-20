@@ -17,7 +17,7 @@ in
       type = str;
     };
 
-    enable = mkEnableOption "Whether to enable Kubernetes proxy.";
+    enable = mkEnableOption "Kubernetes proxy";
 
     extraOpts = mkOption {
       description = "Kubernetes proxy extra command line options.";

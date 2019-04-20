@@ -346,6 +346,7 @@ vim-scripts/a.vim
 vim-scripts/bats.vim
 vim-scripts/changeColorScheme.vim
 vim-scripts/Colour-Sampler-Pack
+vim-scripts/emodeline
 vim-scripts/Improved-AnsiEsc
 vim-scripts/matchit.zip
 vim-scripts/mayansmoke
