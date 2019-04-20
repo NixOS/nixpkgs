@@ -32,6 +32,15 @@ in
     inputs = [ pkgs.brotli ];
   };
 
+  coolkit = {
+    src = fetchFromGitHub {
+      owner  = "FRiCKLE";
+      repo   = "ngx_coolkit";
+      rev    = "0.2";
+      sha256 = "1idj0cqmfsdqawjcqpr1fsq670fdki51ksqk2lslfpcs3yrfjpqh";
+    };
+  };
+
   dav = {
     src = fetchFromGitHub {
       owner = "arut";
