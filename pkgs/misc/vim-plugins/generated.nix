@@ -571,6 +571,17 @@ let
     };
   };
 
+  emodeline = buildVimPluginFrom2Nix {
+    pname = "emodeline";
+    version = "2010-10-18";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "emodeline";
+      rev = "19550795743876c2256021530209d83592f5924a";
+      sha256 = "0x9y7rzbk6g8cq6jkn37wi95wzhq0abban6w10652v4kdmjrxrr0";
+    };
+  };
+
   ensime-vim = buildVimPluginFrom2Nix {
     pname = "ensime-vim";
     version = "2018-10-10";
