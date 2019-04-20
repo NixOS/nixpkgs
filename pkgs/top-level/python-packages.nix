@@ -2995,6 +2995,8 @@ in {
 
   jsondiff = callPackage ../development/python-modules/jsondiff { };
 
+  jsonmerge = callPackage ../development/python-modules/jsonmerge { };
+
   jsonnet = buildPythonPackage {
     inherit (pkgs.jsonnet) name src;
   };
@@ -4335,6 +4337,8 @@ in {
   extras = callPackage ../development/python-modules/extras { };
 
   texttable = callPackage ../development/python-modules/texttable { };
+
+  tinyprog = callPackage ../development/python-modules/tinyprog {};
 
   tiros = callPackage ../development/python-modules/tiros { };
 
