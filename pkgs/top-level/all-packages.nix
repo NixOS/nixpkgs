@@ -684,8 +684,10 @@ in
 
   chezmoi = callPackage ../tools/misc/chezmoi { };
 
-  # Without kernel driver, should build and work on non-linux as well
-  chipsec = callPackage ../tools/security/chipsec { };
+  chipsec = callPackage ../tools/security/chipsec {
+    kernel = null;
+    withDriver = false;
+  };
 
   clair = callPackage ../tools/admin/clair { };
 
