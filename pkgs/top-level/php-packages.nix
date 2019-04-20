@@ -433,6 +433,7 @@ let
 
     buildInputs = [ pkgs.v8_6_x ];
     configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
+    meta.broken = true;
   };
 
   v8js = assert !isPhp73; buildPecl rec {
