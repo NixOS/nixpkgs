@@ -7,7 +7,7 @@ python27Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
-    rev = if (version == "1.3.7") then version else "v${version}";
+    rev = version;
     sha256 = "00hwhi5f24y429zazhm77l1pp31q7fmx7ks3sfm6d16v89zbcp9a";
   };
 
@@ -35,8 +35,6 @@ python27Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     homepage = https://github.com/chipsec/chipsec;
     maintainers = with maintainers; [ johnazoidberg ];
-    # This package description is currently only able to build the Linux driver.
-    # But the other functionality should work on all platforms.
-    platforms = platforms.all;
+    platforms = if withDriver then [ "x86_64-linux" ] else platforms.all;
   };
 }
