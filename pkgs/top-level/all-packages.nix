@@ -8072,24 +8072,10 @@ in
 
   wabt = callPackage ../development/tools/wabt { };
 
-  ### LUA MODULES
-  lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix {
-    self = lua5_1;
-  };
-  lua5_2 = callPackage ../development/interpreters/lua-5/5.2.nix {
-    self = lua5_2;
-  };
-  lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2.nix {
-    compat = true;
-    self = lua5_2_compat;
-  };
-  lua5_3 = callPackage ../development/interpreters/lua-5/5.3.nix {
-    self = lua5_3;
-  };
-  lua5_3_compat = callPackage ../development/interpreters/lua-5/5.3.nix {
-    compat = true;
-    self = lua5_3_compat;
-  };
+  ### LUA interpreters
+  luaInterpreters = callPackage ./../development/interpreters/lua-5 {};
+  inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat luajit_2_1 luajit_2_0;
+
   lua5 = lua5_2_compat;
   lua = lua5;
 
@@ -8099,17 +8085,6 @@ in
   luajitPackages = recurseIntoAttrs luajit.pkgs;
 
   luaPackages = lua52Packages;
-
-  # override instead ?
-  luajit_2_0 = import ../development/interpreters/luajit/2.0.nix {
-    self = luajit_2_0;
-    inherit (super) callPackage lib;
-  };
-
-  luajit_2_1 = import ../development/interpreters/luajit/2.1.nix {
-    self = luajit_2_1;
-    inherit (super) callPackage lib;
-  };
 
   luajit = luajit_2_1;
 
