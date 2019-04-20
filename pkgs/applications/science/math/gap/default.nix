@@ -170,6 +170,7 @@ stdenv.mkDerivation rec {
       timokau
     ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
     # keeping all packages increases the package size considerably, wchich
     # is why a local build is preferable in that situation. The timeframe
     # is reasonable and that way the binary cache doesn't get overloaded.
