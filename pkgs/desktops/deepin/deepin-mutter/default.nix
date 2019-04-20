@@ -44,8 +44,12 @@ stdenv.mkDerivation rec {
     xorg.libxkbfile
   ];
 
+  patches = [
+    ./deepin-mutter.plugins-dir.patch
+  ];
+
   postPatch = ''
-    searchHardCodedPaths
+    searchHardCodedPaths  # debugging
   '';
 
   configureFlags = [
@@ -55,6 +59,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh
+  '';
+
+  postFixup = ''
+    searchHardCodedPaths $out  # debugging
   '';
 
   enableParallelBuilding = true;
