@@ -23354,6 +23354,8 @@ in
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
+  tilt = callPackage ../applications/networking/cluster/tilt {};
+
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tetra-gtk-theme = callPackage ../misc/themes/tetra { };
