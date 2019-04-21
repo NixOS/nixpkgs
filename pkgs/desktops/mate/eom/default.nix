@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "093vbip848bp9y603yasbrg1bcp68m64hma7zhi5m37x2r103r6l";
   };
 

@@ -4,9 +4,6 @@ let
   callPackage = newScope self;
 
   self = rec {
-
-    getRelease = version:
-      pkgs.stdenv.lib.concatStringsSep "." (pkgs.stdenv.lib.take 2 (pkgs.stdenv.lib.splitString "." version));
   
     atril = callPackage ./atril { };
     caja = callPackage ./caja { };

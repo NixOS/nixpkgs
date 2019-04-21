@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, pkgconfig, intltool, glib, mate
+{ config, stdenv, fetchurl, pkgconfig, intltool, glib
 , alsaSupport ? stdenv.isLinux, alsaLib
 , pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
 , ossSupport ? false
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1v0gpr55gj4mj8hzxbhgzrmhaxvs2inxhsmirvjw39sc7iplvrh9";
   };
 

@@ -8,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${pname}-${version}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0pmkprby10ys1xas9w1xqdm48l3bl82cysyj39n7br9ddijwb7kz";
   };
 
