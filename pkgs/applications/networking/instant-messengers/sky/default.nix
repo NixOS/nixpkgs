@@ -16,7 +16,7 @@
   });
 in
 stdenv.mkDerivation rec {
-  version_major = "2.1.7295";
+  version_major = "2.1.7369";
   version_minor = "1";
   version = version_major + "." + version_minor;
   name = "sky-${version}";
