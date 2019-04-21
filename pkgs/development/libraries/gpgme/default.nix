@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ which ];
 
-  doCheck = true;
+  # times out on darwin
+  doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     homepage = https://gnupg.org/software/gpgme/index.html;
