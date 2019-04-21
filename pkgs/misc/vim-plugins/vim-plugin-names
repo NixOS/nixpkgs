@@ -41,6 +41,7 @@ christoomey/vim-tmux-navigator
 cocopon/iceberg.vim
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim
+dag/vim-fish
 dag/vim2hs
 dannyob/quickfixstatus
 davidhalter/jedi-vim
