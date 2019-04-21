@@ -193,8 +193,8 @@ in rec {
   # the latest Maint version
   perl528 = common {
     self = perl528;
-    version = "5.28.1";
-    sha256 = "0iy3as4hnbjfyws4in3j9d6zhhjxgl5m95i5n9jy2bnzcpz8bgry";
+    version = "5.28.2";
+    sha256 = "1iynpsxdym4h76kgndmn3ykvwxhqz444xvaz8z2irsxkvmnlb5da";
   };
 
   # the latest Devel version
