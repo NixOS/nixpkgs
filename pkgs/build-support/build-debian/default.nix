@@ -15,12 +15,20 @@ let
     name           = if pkg ? name then pkg.name else "noname-package";
     diskImage      = vm;
     extraDebs      =
-      pkgs.lib.flatten (builtins.map makeDebList (pkgs.lib.flatten pkg.buildInputs));
+      let
+        asDebPackage = extrapkg:
+        let
+          name = if extrapkg ? name then extrapkg.name else "noname-package";
+          filename = "${name}-0.0.0-1.amd64.deb";
+        in
+          "${(debPackageFor extrapkg "${name}").outPath}/debs/${filename}";
+      in
+      pkgs.lib.flatten (builtins.map asDebPackage (pkgs.lib.flatten pkg.buildInputs));
   };
 
   makeDebList = pkg:
   let
-    root = makeArgs pkg;
+    root     = makeArgs pkg;
     attrList = if pkg ? buildInputs then builtins.filter builtins.isAttrs pkg.buildInputs else [];
     mapf     =  p: makeDebList p;
 
@@ -37,8 +45,8 @@ let
     list = makeDebList pkg;
   in
     assert (builtins.all builtins.isAttrs list);
-    builtins.map builder list;
-
+    builtins.map builder (pkgs.lib.reverseList list);
+  
   debPackageFor = pkg: name: pkgs.buildEnv {
     inherit name;
     paths = makeDeb pkg;
