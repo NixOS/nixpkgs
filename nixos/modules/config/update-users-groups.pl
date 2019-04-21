@@ -213,8 +213,9 @@ foreach my $u (@{$spec->{users}}) {
 
     # Create a home directory.
     if ($u->{createHome}) {
-        make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
+        make_path($u->{home}) if ! -e $u->{home};
         chown $u->{uid}, $u->{gid}, $u->{home};
+        chmod oct($u->{homeMode}), $u->{home};
     }
 
     if (defined $u->{passwordFile}) {

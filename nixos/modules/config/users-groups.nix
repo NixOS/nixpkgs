@@ -171,6 +171,16 @@ let
         '';
       };
 
+      homeMode = mkOption {
+        type = types.string;
+        default = "0700";
+        description = ''
+          The permissions to use for the home directory. If the
+          <option>users.createHome</option> option is true, then any existing
+          permissions on the home directory will be overwritten.
+        '';
+      };
+
       useDefaultShell = mkOption {
         type = types.bool;
         default = false;
@@ -383,8 +393,8 @@ let
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home createHome isSystemUser
-          password passwordFile hashedPassword
+          name uid group description home createHome homeMode
+          isSystemUser password passwordFile hashedPassword
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
