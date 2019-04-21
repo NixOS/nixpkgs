@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, mate, pythonPackages }:
+{ stdenv, fetchurl, pkgconfig, gtk3, mate, python3Packages }:
 
 stdenv.mkDerivation rec {
   name = "caja-dropbox-${version}";
-  version = "1.20.0";
+  version = "1.22.0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0xjqcfi5n6hsfyw77blplkn30as0slkfzngxid1n6z7jz5yjq7vj";
+    sha256 = "1bnvqybsfrfxxvfchvpki77hg6r9vbpq0h80smc47rks5hzj6lyi";
   };
 
   nativeBuildInputs = [
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     mate.caja
-    pythonPackages.python
-    pythonPackages.pygtk
-    pythonPackages.docutils
+    python3Packages.python
+    python3Packages.pygtk
+    python3Packages.docutils
   ];
 
   configureFlags = [ "--with-caja-extension-dir=$$out/lib/caja/extensions-2.0" ];
