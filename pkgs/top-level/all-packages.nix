@@ -12793,6 +12793,8 @@ in
 
   selinux-sandbox = callPackage ../os-specific/linux/selinux-sandbox { };
 
+  seasocks = callPackage ../development/libraries/seasocks { };
+
   serd = callPackage ../development/libraries/serd {};
 
   serf = callPackage ../development/libraries/serf {};

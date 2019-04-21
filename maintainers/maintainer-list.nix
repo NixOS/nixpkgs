@@ -1687,6 +1687,11 @@
     github = "fps";
     name = "Florian Paul Schmidt";
   };
+  fredeb = {
+    email = "im@fredeb.dev";
+    github = "fredeeb";
+    name = "Frede Emil";
+  };
   freepotion = {
     email = "freepotion@protonmail.com";
     github = "freepotion";
