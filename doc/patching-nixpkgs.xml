@@ -1,0 +1,70 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-patching-nixpkgs">
+ <title>Patching nixpkgs</title>
+ <para>
+   Sometimes you want to track a specific branch of nixpkgs (like
+   <literal>nixpkgs-unstable</literal> or some release branch) but you would
+   like to apply some unmerged pull requests or some other patches to that
+   revision.
+ </para>
+ <para>
+   Note that overlays are not always sufficient in this case because they don't
+   work for NixOS modules and you're forced to duplicate code which already
+   exists in some commit.
+ </para>
+ <para>
+   In this case you could fork nixpkgs, create a branch based on your desired
+   upstream branch and cherry-pick the commits you need on top of that
+   branch. Then everytime you need to upgrade nixpkgs you rebase your branch on
+   the latest upstream branch that you're tracking. This process works but is a
+   bit involved and somewhat untransparent.
+ </para>
+ <para>
+   nixpkgs also supports a simpler and more transparent mechanism to apply some
+   patches to an existing revision. First you fetch your desired revision of
+   nixpkgs like for example:
+   <programlisting>
+     let
+       nixpkgs =
+         builtins.fetchTarball {
+           url = "https://github.com/NixOS/nixpkgs/archive/86d58407a6bb8ef2e1a58ab50318b149ffd4feda.tar.gz";
+           sha256 = "0a2lkvacn78nza9hlmdx9znp1my3c3jf3xyhk9ydw6lxa348b7sl";
+         };
+   </programlisting>
+   Then you import that revision and apply it to a list of patches, for example:
+   <programlisting>
+       patchedPkgs = import nixpkgs {
+         patches = pkgs : [
+           # https://github.com/NixOS/nixpkgs/pull/59950
+           (pkgs.fetchpatch {
+             url = https://github.com/NixOS/nixpkgs/commit/1f770d20550a413e508e081ddc08464e9d08ba3d.patch;
+             sha256 = "1nlzx171y3r3jbk0qhvnl711kmdk57jlq4na8f8bs8wz2pbffymr";
+           })
+         ];
+         overlays = [ ... ];
+         config = { ... };
+         localSystem = { ... };
+       };
+     in patchedPkgs...
+   </programlisting>
+ </para>
+ <para>
+   Note that <literal>patches</literal> should be a function from a nixpkgs set
+   <literal>pkgs</literal> to a list of patch files that can be applied to a
+   nixpkgs directory tree. The <literal>pkgs</literal> set should mainly be used
+   to get the <literal>fetchpatch</literal> or <literal>fetchurl</literal>
+   functions from. Note that <literal>pkgs</literal> is a nixpkgs set for the
+   specified <literal>localSystem</literal> and <literal>config</literal> but
+   without <literal>overlays</literal> and <literal>crossOverlays</literal> defined.
+ </para>
+ <para>
+   Overlays are applied after patching which means you can have overlays which
+   can depend on the patched content.
+ </para>
+ <para>
+   Note that the implementation uses <link
+   xlink:href="https://nixos.wiki/wiki/Import_From_Derivation">IFD (Import From
+   Derivation)</link>.
+  </para>
+</chapter>
