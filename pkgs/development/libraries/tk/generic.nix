@@ -27,8 +27,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ tcl libXft ];
-  buildInputs = lib.optional enableAqua (with darwin; with apple_sdk.frameworks; [
+  propagatedBuildInputs = [ tcl libXft ]
+    ++ lib.optional enableAqua (with darwin; with apple_sdk.frameworks; [
       Cocoa cf-private
     ]);
 
