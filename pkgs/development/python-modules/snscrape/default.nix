@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "snscrape";
-  version = "0.1.3";
+  version = "0.2.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mnhqqc7xfwg2wrzpj1pjbcisjjwxrgmy21f53p80xbx2iz8b9n1";
+    sha256 = "02mlpzkvpl2mv30cknq6ngw02y7gj2614qikq25ncrpg5vb903d9";
   };
 
   # There are no tests; make sure the executable works.
