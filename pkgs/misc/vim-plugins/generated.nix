@@ -435,6 +435,17 @@ let
     };
   };
 
+  deoplete-fish = buildVimPluginFrom2Nix {
+    pname = "deoplete-fish";
+    version = "2018-09-15";
+    src = fetchFromGitHub {
+      owner = "ponko2";
+      repo = "deoplete-fish";
+      rev = "9b9a686186e6484163b34eb6e620b83be355e82c";
+      sha256 = "1v7ay0isrgcz0hgyggdqvmrldz0in26prj7p9l8ygkyrjq2w6b8a";
+    };
+  };
+
   deoplete-go = buildVimPluginFrom2Nix {
     pname = "deoplete-go";
     version = "2019-03-02";
