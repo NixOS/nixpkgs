@@ -9869,6 +9869,8 @@ in
 
   curlcpp = callPackage ../development/libraries/curlcpp { };
 
+  curlpp = callPackage ../development/libraries/curlpp { };
+
   cutee = callPackage ../development/libraries/cutee { };
 
   cutelyst = libsForQt5.callPackage ../development/libraries/cutelyst { };
@@ -21365,6 +21367,8 @@ in
       withOgre = true;
     };
   };
+
+  riko4 = callPackage ../games/riko4 { };
 
   rili = callPackage ../games/rili { };
 
