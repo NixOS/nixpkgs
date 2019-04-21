@@ -25,11 +25,13 @@ let
 in writeScript "update-discourse" ''
   #!${runtimeShell}
   PATH=${binPath}
+c
+  touch o
 
-  tags=`curl --silent https://api.github.com/repos/discourse/discourse/git/refs/tags`
-  version=`echo $tags | jq -r '.[] | .ref' | sort --version-sort | tail -1 | grep -oP "^refs/tags/v\K.*"`
+  # tags=`curl --silent https://api.github.com/repos/discourse/discourse/git/refs/tags`
+  # version=`echo $tags | jq -r '.[] | .ref' | sort --version-sort | tail -1 | grep -oP "^refs/tags/v\K.*"`
 
-  hash=`nix-prefetch-url --unpack "https://github.com/discourse/discourse/archive/v''${version}.tar.gz"`
+  # hash=`nix-prefetch-url --unpack "https://github.com/discourse/discourse/archive/v''${version}.tar.gz"`
 
-  update-source-version discourse "''${version}" "''${hash}"
+  # update-source-version discourse "''${version}" "''${hash}"
 ''
