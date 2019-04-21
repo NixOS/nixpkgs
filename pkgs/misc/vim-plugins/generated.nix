@@ -1200,6 +1200,17 @@ let
     };
   };
 
+  NeoSolarized = buildVimPluginFrom2Nix {
+    pname = "NeoSolarized";
+    version = "2018-05-07";
+    src = fetchFromGitHub {
+      owner = "icymind";
+      repo = "NeoSolarized";
+      rev = "1af4bf6835f0fbf156c6391dc228cae6ea967053";
+      sha256 = "1l98yh3438anq33a094p5qrnhcm60nr28crs0v4nfah7lfdy5mc2";
+    };
+  };
+
   neoterm = buildVimPluginFrom2Nix {
     pname = "neoterm";
     version = "2019-03-11";
