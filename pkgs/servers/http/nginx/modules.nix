@@ -114,6 +114,15 @@ in
     inputs = [ pkgs.libbsd ];
   };
 
+  limit-speed = {
+    src = fetchFromGitHub {
+      owner = "yaoweibin";
+      repo = "nginx_limit_speed_module";
+      rev = "f77ad4a56fbb134878e75827b40cf801990ed936";
+      sha256 = "0kkrd08zpcwx938i2is07vq6pgjkvn97xzjab0g4zaz8bivgmjp8";
+    };
+  };
+
   live ={
     src = fetchFromGitHub {
       owner = "arut";
