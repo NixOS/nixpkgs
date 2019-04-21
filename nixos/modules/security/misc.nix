@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -52,6 +52,32 @@ with lib;
         versus malicious VM guests (SMT could "bring back" previously flushed
         data).
         </para>
+        <para>
+      '';
+    };
+
+    security.hardenMemoryAllocation = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to use a hardened memory allocator instead of the default
+        libc allocator system wide.  Only works for libcs that support runtime
+        replacements (e.g., glibc) and executables that respect the
+        <literal>LD_PRELOAD</literal> environment variable.  Changing this option
+        will not take effect for the current session.
+        </para>
+
+        <para>
+        The hardened allocator is designed to mitigate heap corruption
+        vulnerabilities, such as those caused by use-after-free bugs.
+        </para>
+
+        <para>
+        Enabling this option may require increasing the
+        <literal>vm.max_map_count</literal> sysctl to accommodate
+        the additional guard page mappings.
+        </para>
+
         <para>
       '';
     };
@@ -120,6 +146,10 @@ with lib;
 
     (mkIf (config.security.virtualization.flushL1DataCache != null) {
       boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualization.flushL1DataCache}" ];
+    })
+
+    (mkIf (config.security.hardenMemoryAllocation) {
+      environment.variables.LD_PRELOAD = "${pkgs.graphene-hardened-malloc}/lib/libhardened_malloc.so";
     })
   ];
 }
