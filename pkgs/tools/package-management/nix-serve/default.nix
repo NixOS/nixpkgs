@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub,
-  bzip2, nix, perl, perlPackages,
+  bzip2, nix, perl, perlPackages, makeWrapper
 }:
 
 with stdenv.lib;
