@@ -2410,6 +2410,10 @@ in
 
   diffutils = callPackage ../tools/text/diffutils { };
 
+  discourse = callPackage ../servers/web-apps/discourse {
+    inherit (nodePackages) svgo;
+  };
+
   dir2opus = callPackage ../tools/audio/dir2opus {
     inherit (pythonPackages) mutagen python wrapPython;
   };
