@@ -307,6 +307,15 @@ in
     };
   };
 
+  sorted-querystring = {
+    src = fetchFromGitHub {
+      owner = "wandenberg";
+      repo = "nginx-sorted-querystring-module";
+      rev = "0.3";
+      sha256 = "0p6b0hcws39n27fx4xp9k4hb3pcv7b6kah4qqaj0pzjy3nbp4gj7";
+    };
+  };
+
   statsd = {
     src = fetchFromGitHub {
       owner = "apcera";
