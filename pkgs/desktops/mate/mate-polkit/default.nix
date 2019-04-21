@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-polkit-${version}";
-  version = "1.20.2";
+  version = "1.22.0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0zajisavrxiynmp4qg7zamvkpnhy9nra01czwn21h6hm2yakbayr";
+    sha256 = "02r8n71xflhvw2hsf6g4svdahzyg3r4n6xamasyzqfhyn0mqmjy0";
   };
 
   nativeBuildInputs = [
