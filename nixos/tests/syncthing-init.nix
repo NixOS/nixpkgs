@@ -27,3 +27,4 @@ in {
     $machine->succeed("cat /var/lib/syncthing/config.xml") =~ /testFolder/ or die;
   '';
 })
+
