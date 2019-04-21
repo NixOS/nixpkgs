@@ -10,14 +10,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.8.beta2";
+  version = "8.8.beta3";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "1avrxhhcd1hy4hm9sgma430hvxg36f10kr9p3himj6kl4m9pyflv";
+    sha256 = "0cb95n1h5g9vaf4a6wczhwddj4xvx2a4ky8d7sp7cnxyd5a8618l";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
