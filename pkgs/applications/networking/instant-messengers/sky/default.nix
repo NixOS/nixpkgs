@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   name = "sky-${version}";
   unpackCmd = "ar x $curSrc; tar -xf data.tar.xz";
   src = fetchurl {
-    url = "https://tel.red/repos/ubuntu/pool/non-free/sky_${version_major + "-" + version_minor}ubuntu+artful_amd64.deb";
+    url = "https://tel.red/repos/ubuntu/pool/non-free/sky_${version_major + "-" + version_minor}ubuntu+xenial_amd64.deb";
     sha256 = "18s22jghrwckw0rqj8zc6w0v9mwvl6c7q4bcyrd6yz3wpszb7j7w";
   };
   buildInputs = [ 
