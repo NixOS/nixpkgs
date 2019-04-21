@@ -75,7 +75,6 @@ let
       mate-applets
       mate-backgrounds
       mate-calc
-      mate-icon-theme-faenza
       mate-indicator-applet
       mate-media
       mate-netbook
