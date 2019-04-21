@@ -3,13 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.7.2";
+  pname = "teeworlds";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "teeworlds";
     repo = "teeworlds";
-    rev = "0.7.2";
-    sha256 = "15l988qcsqgb6rjais0qd5sd2rjanm2708jmzvkariqzz0d6pb93";
+    rev = version;
+    sha256 = "1pg5js5f0mfi38zq9zrcw7gvz39b38sk8n2pccxbp8nmbw21zpwl";
   };
 
   postPatch = ''
