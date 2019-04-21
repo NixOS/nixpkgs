@@ -102,12 +102,13 @@ in {
           description = ''
             Peers/devices which syncthing should communicate with.
           '';
-          example = {
-            bigbox = {
+          example = [
+            {
+              name = "bigbox";
               id = "7CFNTQM-IMTJBHJ-3UWRDIU-ZGQJFR6-VCXZ3NB-XUH3KZO-N52ITXR-LAIYUAU";
               addresses = [ "tcp://192.168.0.10:51820" ];
-            };
-          };
+            }
+          ];
           type = types.attrsOf (types.submodule ({ config, ... }: {
             options = {
 
@@ -165,12 +166,6 @@ in {
           description = ''
             folders which should be shared by syncthing.
           '';
-          example = {
-            "/home/user/sync" = {
-              id = "syncme";
-              devices = [ "bigbox" ];
-            };
-          };
           type = types.attrsOf (types.submodule ({ config, ... }: {
             options = {
 
@@ -413,9 +408,7 @@ in {
           '';
         };
       };
-      syncthing-init = mkIf (
-        cfg.declarative.devices != {} || cfg.declarative.folders != {}
-      ) {
+      syncthing-init = {
         after = [ "syncthing.service" ];
         wantedBy = [ "multi-user.target" ];
 
