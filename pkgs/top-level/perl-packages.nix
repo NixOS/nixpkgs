@@ -8,8 +8,8 @@
 {config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides,
   buildPackages}:
 
-# cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.1 or above
-assert stdenv.lib.versionAtLeast perl.version "5.28.1";
+# cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.2 or above
+assert stdenv.lib.versionAtLeast perl.version "5.28.2";
 let
   inherit (stdenv.lib) maintainers;
   self = _self // (overrides pkgs);
@@ -9834,8 +9834,6 @@ let
     buildInputs = [ Filepushd ];
   };
 
-  ModuleCoreList = null; # part of Perl 5.28
-
   ModuleExtractUse = buildPerlModule rec {
      name = "Module-ExtractUse-0.343";
      src = fetchurl {
@@ -11797,7 +11795,7 @@ let
     };
     buildInputs = [ pkgs.zookeeper_mt ];
     # fix "error: format not a string literal and no format arguments [-Werror=format-security]"
-    hardeningDisable = stdenv.lib.optional (stdenv.lib.versionAtLeast perl.version "5.28") "format";
+    hardeningDisable = [ "format" ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.zookeeper_mt}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.zookeeper_mt.out}/lib -lzookeeper_mt";
     meta = {
@@ -17917,6 +17915,7 @@ let
   threads = null; # part of Perl 5.28
   TimeHiRes = null; # part of Perl 5.28
   UnicodeCollate = null; # part of Perl 5.28
+  ModuleCoreList = null; # part of Perl 5.28.2
 
   ArchiveZip_1_53 = self.ArchiveZip;
   Autobox = self.autobox;
