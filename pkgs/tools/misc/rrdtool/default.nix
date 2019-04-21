@@ -1,7 +1,7 @@
 { fetchurl, fetchpatch, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff
 , tcl-8_5, darwin }:
 
-stdenv.mkDerivation rec {
+perl.pkgs.toPerlModule(stdenv.mkDerivation rec {
   name = "rrdtool-1.7.1";
 
   src = fetchurl {
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };
-}
+})
