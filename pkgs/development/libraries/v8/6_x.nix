@@ -116,7 +116,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "v8-${version}";
-  version = "6.9.427.14";
+  version = "6.9.454";
 
   inherit doCheck;
 
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
     owner = "v8";
     repo = "v8";
     rev = version;
-    sha256 = "13d50iz87qh7v8l8kjky8wqs9rvz02pgw74q8crqi5ywnvvill1x";
+    sha256 = "16ij9jwg7i1kvzl2752lkr19wfb578049p0l913kk4hlnnbw6srr";
   };
 
   postUnpack = ''
@@ -164,6 +164,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gn ninja pkgconfig ];
   buildInputs = [ python glib ];
+
+  # Bypass a linker error (fixed in binutils 2.32)
+  NIX_LDFLAGS = "--no-fatal-warnings";
 
   buildPhase = ''
     ninja -C out.gn/${arch}.release/
