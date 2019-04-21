@@ -12,16 +12,17 @@ in
 
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv ];
-    # TODO: buildRustCrate seems to use incorrect default inference
-    crateBin = [ {  name = "cargo"; path = "src/bin/cargo.rs"; } ];
+      ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
   };
 
   cargo-vendor = attrs: {
-    buildInputs = [ openssl zlib curl ];
-    # TODO: this defaults to cargo_vendor; needs to be cargo-vendor to
-    # be considered a cargo subcommand.
-    crateBin = [ { name = "cargo-vendor"; path = "src/main.rs"; } ];
+    buildInputs = [ openssl zlib curl ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  };
+
+  libz-sys = attrs: {
+    buildInputs = [ pkgconfig zlib ];
+    extraLinkFlags = ["-L${zlib.out}/lib"];
   };
 
   curl-sys = attrs: {
