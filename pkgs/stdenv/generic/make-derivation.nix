@@ -253,6 +253,9 @@ in rec {
           enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
+        } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.platform.gcc.arch or stdenv.hostPlatform.parsed.cpu.arch or "x86-64" != "x86-64") {
+          requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch or stdenv.hostPlatform.parsed.cpu.arch}" ];
+          NIX_ENFORCE_NO_NATIVE = true;
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           inherit __darwinAllowLocalNetworking;
           # TODO: remove lib.unique once nix has a list canonicalization primitive
