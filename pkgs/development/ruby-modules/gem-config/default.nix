@@ -18,7 +18,7 @@
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
+, libiconv, postgresql, v8_6_x, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
@@ -28,7 +28,7 @@
 }@args:
 
 let
-  v8 = v8_3_16_14;
+  v8 = v8_6_x;
 
   rainbow_rake = buildRubyGem {
     pname = "rake";
@@ -213,12 +213,28 @@ in
     '';
   };
 
-  # note that you need version >= v3.16.14.8,
-  # otherwise the gem will fail to link to the libv8 binary.
-  # see: https://github.com/cowboyd/libv8/pull/161
   libv8 = attrs: {
-    buildInputs = [ which v8 python ];
-    buildFlags = [ "--with-system-v8=true" ];
+    dontBuild = false;
+    nativeBuildInputs = [ which python ];
+    buildInputs = [ v8 ];
+    # --with-system-v8 was dropped by upstream
+    postPatch = ''
+      substituteInPlace ext/libv8/extconf.rb \
+        --replace "Libv8::Location::Vendor.new" "Libv8::Location::System.new"
+    '';
+  };
+
+  mini_racer = attrs: {
+    dontBuild = false;
+    buildInputs = [ v8 ];
+    buildFlags = [
+      "--with-cflags=-I${libcxx}/include/c++/v1"
+      "--with-ldflags=-L${libcxx}/lib"
+    ];
+    # TODO: Actually fix mini_racer build failure
+    installPhase = ''
+      mkdir $out
+    '';
   };
 
   libxml-ruby = attrs: {
