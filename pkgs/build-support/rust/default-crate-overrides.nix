@@ -12,7 +12,7 @@ in
 
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv ];
+      ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
   };
 
   cargo-vendor = attrs: {
