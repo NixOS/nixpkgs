@@ -18,17 +18,11 @@ stdenv.mkDerivation rec {
   ];
 
 
-  configurePhase = let
-    marchflags =
-      if stdenv.isi686 then "-march=i686" else
-      if stdenv.isx86_64 then "-march=nocona -mtune=generic" else
-      "";
-    in
-    ''
+  configurePhase = ''
       sed -i GNUmakefile \
-        -e 's|-march=native|${marchflags} -fPIC|g' \
+        -e 's|-march=native|-fPIC|g' \
         -e '/^CXXFLAGS =/s|-g ||'
-    '';
+  '';
 
   enableParallelBuilding = true;
 

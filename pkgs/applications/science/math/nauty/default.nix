@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, optimize ? false # impure
 }:
 stdenv.mkDerivation rec {
   name = "nauty-${version}";
@@ -11,13 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "05z6mk7c31j70md83396cdjmvzzip1hqb88pfszzc6k4gy8h3m2y";
   };
   outputs = [ "out" "dev" ];
-  configureFlags = lib.optionals (!optimize) [
+  configureFlags = {
     # Prevent nauty from sniffing some cpu features. While those are very
     # widely available, it can lead to nasty bugs when they are not available:
     # https://groups.google.com/forum/#!topic/sage-packaging/Pe4SRDNYlhA
-    "--disable-popcnt"
-    "--disable-clz"
-  ];
+    "default"        = [ "--disable-clz" "--disable-popcnt" ];
+    "westmere"       = [ "--disable-clz" ];
+    "sandybridge"    = [ "--disable-clz" ];
+    "ivybridge"      = [ "--disable-clz" ];
+  }.${stdenv.hostPlatform.platform.gcc.arch or "default"} or [];
   buildInputs = [];
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/nauty} "$dev"/{lib,include/nauty}

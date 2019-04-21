@@ -19,10 +19,7 @@ stdenv.mkDerivation rec {
     CPPFLAGS = with stdenv; ""
       + (lib.optionalString (!isi686 && !isx86_64) "-DNOJIT ")
       + "-Dunix";
-    CXXFLAGS = with stdenv; ""
-      + (lib.optionalString isi686   "-march=i686   -mtune=generic ")
-      + (lib.optionalString isx86_64 "-march=nocona -mtune=generic ")
-      + "-O3 -DNDEBUG";
+    CXXFLAGS = "-O3 -DNDEBUG";
   in ''
     buildFlagsArray=( "CPPFLAGS=${CPPFLAGS}" "CXXFLAGS=${CXXFLAGS}" )
   '';

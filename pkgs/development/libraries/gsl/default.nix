@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1395y9hlhqadn5g9j8q22224fds5sd92jxi9czfavjj24myasq04";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-mno-fma" ]; # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
+
   patches = [
     # ToDo: there might be more impurities than FMA support check
     ./disable-fma.patch # https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html
