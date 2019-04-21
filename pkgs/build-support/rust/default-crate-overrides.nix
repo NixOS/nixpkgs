@@ -16,7 +16,8 @@ in
   };
 
   cargo-vendor = attrs: {
-    buildInputs = [ openssl zlib curl ];
+    buildInputs = [ openssl zlib curl ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
   };
 
   libz-sys = attrs: {
