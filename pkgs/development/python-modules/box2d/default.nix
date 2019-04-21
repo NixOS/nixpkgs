@@ -20,7 +20,8 @@ buildPythonPackage rec {
     sed -i "s/'Box2D.tests' : 'tests'//" setup.py
   '';
 
-  buildInputs = [ swig2 pkgs-box2d ];
+  nativeBuildInputs = [ swig2 ];
+  buildInputs = [ pkgs-box2d ];
 
   # tests not included with pypi release
   doCheck = false;
