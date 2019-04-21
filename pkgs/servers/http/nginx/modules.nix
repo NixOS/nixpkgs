@@ -192,6 +192,15 @@ in
     };
   };
 
+  naxsi ={
+    src = fetchFromGitHub {
+      owner = "nbs-system";
+      repo = "naxsi";
+      rev = "0.56";
+      sha256 = "12kn6wbl8xqc19fi05ffprqps4pplg4a6i1cf01xc0d6brx1fg8v";
+    } + "/naxsi_src";
+  };
+
   ngx_aws_auth = {
     src = fetchFromGitHub {
       owner = "anomalizer";
