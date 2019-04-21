@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-backgrounds-${version}";
-  version = "1.20.0";
+  version = "1.22.0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0pcnjcw00y8hf2bwfrb5sbk2511cbg4fr8vgvgqswcwjp9y15cjp";
+    sha256 = "1j9ch04qi2q4mdcvb92w667ra9hpfdf2bfpi1dpw0nbph7r6qvj9";
   };
 
   nativeBuildInputs = [ intltool ];
