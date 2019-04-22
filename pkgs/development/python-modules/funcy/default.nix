@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Collection of fancy functional tools focused on practicality";
-    homepage = "http://funcy.readthedocs.org/";
+    homepage = "https://funcy.readthedocs.org/";
     license = licenses.bsd3;
   };
 

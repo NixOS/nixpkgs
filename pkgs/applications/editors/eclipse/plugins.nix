@@ -320,18 +320,18 @@ rec {
     version_ = "1.0.0.201604221613";
 
     srcFeature = fetchurl {
-      url = "https://www2.in.tum.de/projects/cup/eclipse/features/CupEclipsePluginFeature_${version}.jar";
+      url = "http://www2.in.tum.de/projects/cup/eclipse/features/CupEclipsePluginFeature_${version}.jar";
       sha256 = "13nnsf0cqg02z3af6xg45rhcgiffsibxbx6h1zahjv7igvqgkyna";
     };
 
     srcPlugins = [
       (fetchurl {
-        url = "https://www2.in.tum.de/projects/cup/eclipse/plugins/CupReferencedLibraries_${version_}.jar";
+        url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/CupReferencedLibraries_${version_}.jar";
         sha256 = "0kif8kivrysprva1pxzajm88gi967qf7idhb6ga2xpvsdcris91j";
       })
 
       (fetchurl {
-        url = "https://www2.in.tum.de/projects/cup/eclipse/plugins/de.tum.in.www2.CupPlugin_${version}.jar";
+        url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/de.tum.in.www2.CupPlugin_${version}.jar";
         sha256 = "022phbrsny3gb8npb6sxyqqxacx138q5bd7dq3gqxh3kprx5chbl";
       })
     ];
@@ -339,7 +339,7 @@ rec {
     propagatedBuildInputs = [ zest ];
 
     meta = with stdenv.lib; {
-      homepage = https://www2.cs.tum.edu/projects/cup/eclipse.php;
+      homepage = http://www2.cs.tum.edu/projects/cup/eclipse.php;
       description = "IDE for developing CUP based parsers";
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];
