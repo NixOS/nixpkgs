@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "weechat-autosort-${version}";
-  version = "unstable-2018-01-11";
+  pname = "weechat-autosort";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "de-vri-es";
-    repo = "weechat-autosort";
-    rev = "35ccd6335afd78ae8a6e050ed971d54c8524e37e";
-    sha256 = "1rgws960xys65cd1m529csalcgny87h7fkiwjv1yj9rpqp088z26";
+    repo = pname;
+    rev = version;
+    sha256 = "1sbr6ga9krrfgqznvsxjd3hdxzkvslh41ls5xrj7l2p4ws4gwlkn";
   };
 
   passthru.scripts = [ "autosort.py" ];
