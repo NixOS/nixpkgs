@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   name = "kmymoney-${version}";
-  version = "5.0.1";
+  version = "5.0.4";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
-    sha256 = "1c9apnvc07y17pzy4vygry1dai5ass2z7j354lrcppa85b18yvnx";
+    sha256 = "06lbavhl9b8cybnss2mmy3g5w8qn2vl6zhipvbl11lsr3j9bsa8q";
   };
 
   # Fix build with Qt 5.11.
