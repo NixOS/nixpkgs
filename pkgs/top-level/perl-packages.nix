@@ -9686,10 +9686,10 @@ let
   };
 
   ModuleBuild = buildPerlPackage rec {
-    name = "Module-Build-0.4224";
+    name = "Module-Build-0.4229";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
-      sha256 = "10n7ggpmicwq1n503pg7kiwslda0bz48azzjvc7vb9s4hbbibjm6";
+      sha256 = "064c03wxia7jz0i578awj4srykj0nnigm4p5r0dv0559rnk93r0z";
     };
     meta = {
       description = "Build and install Perl modules";
