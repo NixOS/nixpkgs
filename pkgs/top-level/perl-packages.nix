@@ -8968,15 +8968,16 @@ let
   };
 
   LWPMediaTypes = buildPerlPackage {
-    name = "LWP-MediaTypes-6.02";
+    name = "LWP-MediaTypes-6.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/LWP-MediaTypes-6.02.tar.gz;
-      sha256 = "0xmnblp962qy02akah30sji8bxrqcyqlff2w95l199ghql60ny8q";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/LWP-MediaTypes-6.04.tar.gz;
+      sha256 = "1n8rg6csv3dsvymg06cmxipimr6cb1g9r903ghm1qsmiv89cl6wg";
     };
     meta = {
       description = "Guess media type for a file or a URL";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestFatal ];
   };
 
   LWPProtocolConnect = buildPerlPackage {
