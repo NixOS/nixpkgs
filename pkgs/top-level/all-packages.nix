@@ -11155,6 +11155,8 @@ in
 
   libiio = callPackage ../development/libraries/libiio { };
 
+  liburing = callPackage ../development/libraries/liburing { };
+
   libseccomp = callPackage ../development/libraries/libseccomp { };
 
   libsecret = callPackage ../development/libraries/libsecret { };
