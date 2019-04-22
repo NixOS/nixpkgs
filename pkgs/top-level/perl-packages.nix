@@ -16157,11 +16157,11 @@ let
   };
 
   TextBibTeX = buildPerlModule rec {
-    name = "Text-BibTeX-0.85";
+    name = "Text-BibTeX-0.87";
     buildInputs = [ CaptureTiny ConfigAutoConf ExtUtilsLibBuilder ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AM/AMBS/${name}.tar.gz";
-      sha256 = "036kxgbn1jf70pfm2lmjlzjwnhbkd888fp5lyvmkjpdd15gla18h";
+      sha256 = "1qhm0fin3j6nqpzlk0xy1lx6bzcrhb7fr82rjgkcq0wgmw91mqax";
     };
     perlPreHook = "export LD=$CC";
     perlPostHook = stdenv.lib.optionalString stdenv.isDarwin ''
