@@ -13479,10 +13479,10 @@ let
   };
 
   SerealDecoder = buildPerlPackage rec {
-    name = "Sereal-Decoder-4.005";
+    name = "Sereal-Decoder-4.007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YV/YVES/${name}.tar.gz";
-      sha256 = "17syqbq17qw6ajg3w88q9ljdm4c2b7zadq9pwshxxgyijg8dlfh4";
+      sha256 = "0jyczxlpn2axgmx5vyjwjvr0myvi0yxnjpp8g7hj4b388j1i2205";
     };
     buildInputs = [ TestDeep TestDifferences TestLongString TestWarn ];
     preBuild = ''ls'';
