@@ -11938,10 +11938,10 @@ let
   };
 
   Paranoid = buildPerlPackage rec {
-    name = "Paranoid-2.06";
+    name = "Paranoid-2.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/CORLISS/Paranoid/${name}.tar.gz";
-      sha256 = "48763ec19d0a4194ecf613bd63e46325510228da9100c2e796615dc778612d3c";
+      sha256 = "b55cfd8c6d5f181e218efd012f711a50cd14e4dbc8804650b95477178f43b7fc";
     };
     patches = [ ../development/perl-modules/Paranoid-blessed-path.patch ];
     preConfigure = ''
