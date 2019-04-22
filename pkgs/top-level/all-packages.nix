@@ -12932,6 +12932,8 @@ in
 
   rshell = python3.pkgs.callPackage ../development/tools/rshell { };
 
+  rttr = callPackage ../development/libraries/rttr { };
+
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
   };
