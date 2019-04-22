@@ -7276,17 +7276,18 @@ let
     };
   };
 
-  HTTPDaemon = buildPerlPackage {
-    name = "HTTP-Daemon-6.01";
+  HTTPDaemon = buildPerlModule {
+    name = "HTTP-Daemon-6.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/HTTP-Daemon-6.01.tar.gz;
-      sha256 = "1hmd2isrkilf0q0nkxms1q64kikjmcw9imbvrjgky6kh89vqdza3";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Daemon-6.04.tar.gz;
+      sha256 = "12m8iasnmp2dh28jrgmi7z10a3gcyz85khyff2j5h7jqbs6ks1fz";
     };
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
       description = "A simple http server class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ ModuleBuildTiny TestNeeds ];
   };
 
   HTTPDate = buildPerlPackage {
