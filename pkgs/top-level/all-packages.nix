@@ -9188,6 +9188,8 @@ in
 
   moby = callPackage ../development/tools/misc/moby { };
 
+  modd = callPackage ../development/tools/modd { };
+
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
   msgpuck = callPackage ../development/libraries/msgpuck { };
