@@ -14650,10 +14650,10 @@ let
   };
 
   TermEncoding = buildPerlPackage {
-    name = "Term-Encoding-0.02";
+    name = "Term-Encoding-0.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Term-Encoding-0.02.tar.gz;
-      sha256 = "f274e72346a0c0cfacfb53030ac1e38b57425512fc5bdc5cd9ef75ab0f26cfcc";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Term-Encoding-0.03.tar.gz;
+      sha256 = "95ba9687d735d25a3cbe64508d7894f009c7fa2a1726c3e786e9e21da2251d0b";
     };
     meta = {
       description = "Detect encoding of the current terminal";
