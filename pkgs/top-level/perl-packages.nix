@@ -70,10 +70,10 @@ let
 
 
   ack = buildPerlPackage rec {
-    name = "ack-2.24";
+    name = "ack-2.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/${name}.tar.gz";
-      sha256 = "002gwl2h3h1j8b2xfsi279ga5l264w7rch9cxgg15rwgml4l14vj";
+      sha256 = "16zgn96v1qkibpj5lic571zjl07y8x55v5xql3x7bvlsmgqcnvla";
     };
     outputs = ["out" "man"];
     # use gnused so that the preCheck command passes
