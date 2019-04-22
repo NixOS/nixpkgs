@@ -11161,10 +11161,10 @@ let
   };
 
   NetAmazonS3 = buildPerlPackage rec {
-    name = "Net-Amazon-S3-0.85";
+    name = "Net-Amazon-S3-0.86";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LL/LLAP/Net-Amazon-S3-0.85.tar.gz;
-      sha256 = "49b91233b9e994ce3536dd69c5106c968a03d199ff3968c8fc2f2b5be3d55430";
+      url = mirror://cpan/authors/id/L/LL/LLAP/Net-Amazon-S3-0.86.tar.gz;
+      sha256 = "6301e683a19b1302a234a1689d7c7f7e7102b3e86f4de428b8cc1cd975f0c38a";
     };
     buildInputs = [ TestDeep TestException TestLoadAllModules TestMockTime TestWarnings ];
     propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule LWPUserAgentDetermined MIMETypes MooseXRoleParameterized MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions RefUtil RegexpCommon SubOverride TermEncoding TermProgressBarSimple XMLLibXML ];
