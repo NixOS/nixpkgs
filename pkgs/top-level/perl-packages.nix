@@ -2455,10 +2455,10 @@ let
   };
 
   ConfigGrammar = buildPerlPackage rec {
-    name = "Config-Grammar-1.12";
+    name = "Config-Grammar-1.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DS/DSCHWEI/${name}.tar.gz";
-      sha256 = "7a52a3657d96e6f1f529caaa09ec3bf7dd6a245b47875382c323902f6d9590b0";
+      sha256 = "a8b3a3a2c9c8c43b92dc401bf2709d6514f15b467fd4f72c48d356335771d6e3";
     };
     meta = {
       homepage = https://github.com/schweikert/Config-Grammar;
