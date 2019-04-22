@@ -13495,10 +13495,10 @@ let
   };
 
   SerealEncoder = buildPerlPackage rec {
-    name = "Sereal-Encoder-4.005";
+    name = "Sereal-Encoder-4.007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YV/YVES/${name}.tar.gz";
-      sha256 = "02hbk5dwq7fpnyb3vp7xxhb41ra48xhghl13p9pjq9lzsqlb6l19";
+      sha256 = "1dpafqlsir79p9g1j85k7bbn9kckqdb1zdngmmw1r46cizfdsvxz";
     };
     buildInputs = [ SerealDecoder TestDeep TestDifferences TestLongString TestWarn ];
     meta = {
