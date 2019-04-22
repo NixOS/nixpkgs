@@ -9806,18 +9806,7 @@ let
     buildInputs = [ Filepushd ];
   };
 
-  ModuleCoreList = buildPerlPackage {
-    name = "Module-CoreList-5.20190220";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/Module-CoreList-5.20190220.tar.gz;
-      sha256 = "0v5yavg3ggal8aj00426wkjw38yrji449lkaaxs0ynwjqhnq01i7";
-    };
-    meta = {
-      homepage = http://dev.perl.org/;
-      description = "What modules shipped with versions of perl";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  ModuleCoreList = null; # part of Perl 5.28
 
   ModuleExtractUse = buildPerlModule rec {
      name = "Module-ExtractUse-0.343";
