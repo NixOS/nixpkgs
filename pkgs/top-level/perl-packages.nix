@@ -7337,10 +7337,10 @@ let
   };
 
   HTTPHeadersFast = buildPerlModule rec {
-    name = "HTTP-Headers-Fast-0.21";
+    name = "HTTP-Headers-Fast-0.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
-      sha256 = "5e68ed8e3e67531e1d43c6a2cdfd0ee2daddf2e5b94c1a2648f3a6500a6f12d5";
+      sha256 = "cc431db68496dd884db4bc0c0b7112c1f4a4f1dc68c4f5a3caa757a1e7481b48";
     };
     buildInputs = [ ModuleBuildTiny TestRequires ];
     propagatedBuildInputs = [ HTTPDate ];
