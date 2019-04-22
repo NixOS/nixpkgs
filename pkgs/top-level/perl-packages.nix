@@ -1687,10 +1687,10 @@ let
   };
 
   CGI = buildPerlPackage rec {
-    name = "CGI-4.40";
+    name = "CGI-4.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEEJO/${name}.tar.gz";
-      sha256 = "10efff3061b3c31a33b3cc59f955aef9c88d57d12dbac46389758cef92f24f56";
+      sha256 = "11d308e7dad2312d65747a7fdec5d0c22024c28df5e882e829ca1553482024e7";
     };
     buildInputs = [ TestDeep TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ HTMLParser ];
