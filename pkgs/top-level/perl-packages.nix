@@ -1773,7 +1773,7 @@ let
     propagatedBuildInputs = [ CGI ];
   };
 
-  CGIMinimal = buildPerlPackage rec {
+  CGIMinimal = buildPerlModule rec {
     name = "CGI-Minimal-1.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SN/SNOWHARE/${name}.tar.gz";
