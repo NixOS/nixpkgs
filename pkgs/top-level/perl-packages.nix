@@ -11175,10 +11175,10 @@ let
   };
 
   NetCIDR = buildPerlPackage {
-    name = "Net-CIDR-0.19";
+    name = "Net-CIDR-0.20";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MR/MRSAM/Net-CIDR-0.19.tar.gz;
-      sha256 = "855bf4662062de1a85aba3b0e4c82665d7107873a43836f3c03e7f260dd89f3e";
+      url = mirror://cpan/authors/id/M/MR/MRSAM/Net-CIDR-0.20.tar.gz;
+      sha256 = "c75edc6818bb360d71c139169fd64ad65c35fff6d2b9fac7b9f9e6c467f187b5";
     };
     meta = {
       description = "Manipulate IPv4/IPv6 netblocks in CIDR notation";
