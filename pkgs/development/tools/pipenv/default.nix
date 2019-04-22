@@ -18,6 +18,7 @@ buildPythonApplication rec {
     pew
     pip
     requests
+    virtualenv
   ];
 
   doCheck = false;
