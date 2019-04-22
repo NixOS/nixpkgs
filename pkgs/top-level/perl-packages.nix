@@ -5481,10 +5481,10 @@ let
   };
 
   ExtUtilsManifest = buildPerlPackage rec {
-    name = "ExtUtils-Manifest-1.71";
+    name = "ExtUtils-Manifest-1.72";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-Manifest-1.71.tar.gz;
-      sha256 = "1qa7jwhy78byvfzpjnn5k2jm30sb5m1z6k2m79iy6gg2xj41nrq0";
+      url = mirror://cpan/authors/id/E/ET/ETHER/ExtUtils-Manifest-1.72.tar.gz;
+      sha256 = "0pml5pfdk34nj9fa8m4f0qp1rh1yv0d54xagvxzjvvwq9w3q14kr";
     };
   };
 
