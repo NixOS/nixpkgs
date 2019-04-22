@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , swig2
-, pkgs-box2d
 , isPy3k
 }:
 
@@ -21,7 +20,6 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ swig2 ];
-  buildInputs = [ pkgs-box2d ];
 
   # tests not included with pypi release
   doCheck = false;
