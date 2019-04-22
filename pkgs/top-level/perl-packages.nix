@@ -12265,10 +12265,10 @@ let
   };
 
   perlldap = buildPerlPackage rec {
-    name = "perl-ldap-0.65";
+    name = "perl-ldap-0.66";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARSCHAP/${name}.tar.gz";
-      sha256 = "5f57dd261dc16ebf942a272ddafe69526598df71151a51916edc37a4f2f23834";
+      sha256 = "09263ce6166e80c98d689d41d09995b813389fd069b784601f6dc57f8e2b4102";
     };
     buildInputs = [ TextSoundex ];
     propagatedBuildInputs = [ ConvertASN1 ];
