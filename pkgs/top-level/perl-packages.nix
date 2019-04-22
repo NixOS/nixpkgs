@@ -12746,10 +12746,10 @@ let
   };
 
   ProtocolWebSocket = buildPerlModule rec {
-    name = "Protocol-WebSocket-0.24";
+    name = "Protocol-WebSocket-0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VT/VTI/${name}.tar.gz";
-      sha256 = "1w0l9j1bnmw82jfhrx5yfw4hbl0bpcwmrl5laa1gz06mkzkdpa6z";
+      sha256 = "08jmazvrmvp8jn15p2n3c1h3f2cbkr07xjzy197jb8x724vx0dsq";
     };
     buildInputs = [ ModuleBuildTiny ];
   };
