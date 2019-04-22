@@ -15501,10 +15501,10 @@ let
   };
 
   TestNeeds = buildPerlPackage rec {
-    name = "Test-Needs-0.002005";
+    name = "Test-Needs-0.002006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "5a4f33983586edacdbe00a3b429a9834190140190dab28d0f873c394eb7df399";
+      sha256 = "77f9fff0c96c5e09f34d0416b3533c3319f7cd0bb1f7fe8f8072ad59f433f0e5";
     };
     meta = {
       description = "Skip tests when modules not available";
