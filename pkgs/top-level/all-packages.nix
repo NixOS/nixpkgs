@@ -23566,6 +23566,8 @@ in
 
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
 
+  vokoscreen-beta = libsForQt5.callPackage ../applications/video/vokoscreen-beta { };
+
   vttest = callPackage ../tools/misc/vttest { };
 
   wasm-pack = callPackage ../development/tools/wasm-pack { };
