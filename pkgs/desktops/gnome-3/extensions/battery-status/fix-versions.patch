@@ -1,0 +1,14 @@
+diff --git a/battery_status@milliburn.github.com/metadata.json b/battery_status@milliburn.github.com/metadata.json
+index 6484e0a..6d95f87 100644
+--- a/battery_status@milliburn.github.com/metadata.json
++++ b/battery_status@milliburn.github.com/metadata.json
+@@ -1,7 +1,7 @@
+ {
+-  "version": 6,
++  "version": 8,
+   "shell-version": [
+-    "3.10", "3.12", "3.14"
++    "3.10", "3.12", "3.14", "3.16", "3.18", "3.20", "3.28", "3.30", "3.32"
+   ],
+   "settings-schema": "org.gnome.shell.extensions.battery_status",
+   "original-author": "roberth@winter-weht.net",
