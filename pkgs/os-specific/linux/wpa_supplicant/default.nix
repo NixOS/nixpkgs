@@ -81,14 +81,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  patches = [
-    (fetchpatch {
-      name = "build-fix.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-wireless/wpa_supplicant/files/wpa_supplicant-2.7-fix-undefined-remove-ie.patch?id=e0288112138a70a8acc3ae0196772fd7ccb677ce";
-      sha256 = "0ysazfcyn195mvkb1v10mgzzmpmqgv5kwqxwzfbsfhzq5bbaihld";
-    })
-  ];
-
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8
     cp -v "doc/docbook/"*.5 $out/share/man/man5/
