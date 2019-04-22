@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lz4, snappy, openmp ? null }:
+{ stdenv, fetchurl, lz4, snappy, openmp }:
 
 stdenv.mkDerivation rec {
   pname = "dedup";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     "CC:=$(CC)"
     "PREFIX=${placeholder "out"}"
     "MANPREFIX=${placeholder "out"}/share/man"
-  ] ++ stdenv.lib.optional (openmp != null) [
+    # These are likely wrong on some platforms, please report!
     "OPENMPCFLAGS=-fopenmp"
     "OPENMPLDLIBS=-lgomp"
   ];
