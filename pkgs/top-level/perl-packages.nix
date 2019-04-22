@@ -6955,10 +6955,10 @@ let
   };
 
   HTMLForm = buildPerlPackage {
-    name = "HTML-Form-6.03";
+    name = "HTML-Form-6.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/HTML-Form-6.03.tar.gz;
-      sha256 = "0dpwr7yz6hjc3bcqgcbdzjjk9l58ycdjmbam9nfcmm85y2a1vh38";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/HTML-Form-6.04.tar.gz;
+      sha256 = "100090bdsr5kapv8h0wxzwlzfbfqn57rq9gzrvg9i6hvnsl5gmcw";
     };
     propagatedBuildInputs = [ HTMLParser HTTPMessage ];
     meta = {
