@@ -13946,10 +13946,10 @@ let
   };
 
   strictures = buildPerlPackage rec {
-    name = "strictures-2.000005";
+    name = "strictures-2.000006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/strictures-2.000005.tar.gz;
-      sha256 = "16fxhsmn2v8a1fxd02243zl7vckmvwzwwys1pjp9rw68hagxn2wn";
+      url = mirror://cpan/authors/id/H/HA/HAARG/strictures-2.000006.tar.gz;
+      sha256 = "0mwd9xqz4n8qfpi5h5581lbm33qhf7agww18h063icnilrs7km89";
     };
     meta = {
       homepage = http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/strictures.git;
