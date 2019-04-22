@@ -1751,10 +1751,10 @@ let
   };
 
   CGIFast = buildPerlPackage {
-    name = "CGI-Fast-2.13";
+    name = "CGI-Fast-2.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEEJO/CGI-Fast-2.13.tar.gz;
-      sha256 = "792f21fc3b94380e37c99faa7901ecedf01d6855191000d1ffb2a7003813b1d4";
+      url = mirror://cpan/authors/id/L/LE/LEEJO/CGI-Fast-2.15.tar.gz;
+      sha256 = "e5342df3dc593edfb724c7afe850b1a0ee753f4d733f5193e037b04633dfeece";
     };
     propagatedBuildInputs = [ CGI FCGI ];
     doCheck = false;
