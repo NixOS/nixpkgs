@@ -2270,16 +2270,16 @@ let
   };
 
   Clipboard = buildPerlModule {
-    name = "Clipboard-0.19";
+    name = "Clipboard-0.20";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.19.tar.gz;
-      sha256 = "34b9dccac5d559b2b2769e5e315205c8292be2ff9f6e5333112a2377c69abbb3";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.20.tar.gz;
+      sha256 = "3f7d0a8eafec57072f9574dfd552e1cb8db26c09079c50dbef38f3c97ce25f60";
     };
     meta = {
       description = "Clipboard - Copy and Paste with any OS";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    propagatedBuildInputs = [ CGI URI ] ++ stdenv.lib.optional stdenv.isDarwin MacPasteboard;
+    propagatedBuildInputs = [ CGI URI ];
     # Disable test on darwin because MacPasteboard fails when not logged in interactively.
     # Mac OS error -4960 (coreFoundationUnknownErr): The unknown error at lib/Clipboard/MacPasteboard.pm line 3.
     # Mac-Pasteboard-0.009.readme: 'NOTE that Mac OS X appears to restrict pasteboard access to processes that are logged in interactively.
