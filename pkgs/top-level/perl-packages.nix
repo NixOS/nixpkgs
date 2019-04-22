@@ -14463,6 +14463,7 @@ let
       url = mirror://cpan/authors/id/L/LB/LBAXTER/Sys-SigAction-0.23.tar.gz;
       sha256 = "c4ef6c9345534031fcbbe2adc347fc7194d47afc945e7a44fac7e9563095d353";
     };
+    doCheck = !stdenv.isAarch64; # it hangs on Aarch64
     meta = {
       description = "Perl extension for Consistent Signal Handling";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
