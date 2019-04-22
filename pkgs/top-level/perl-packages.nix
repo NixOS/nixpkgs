@@ -16288,15 +16288,16 @@ let
   };
 
   TestInter = buildPerlPackage {
-    name = "Test-Inter-1.07";
+    name = "Test-Inter-1.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Test-Inter-1.07.tar.gz;
-      sha256 = "c3b1e2c753b88a893e08ec2dd3d0f0b3eb513cdce7afa52780cb0e02b6c576ee";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Test-Inter-1.09.tar.gz;
+      sha256 = "1e9f129cc1a001fb95449d385253b38afabf5b466e3b3bd33e4e430f216e177a";
     };
     meta = {
       description = "Framework for more readable interactive test scripts";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ FileFindRule TestPod TestPodCoverage ];
   };
 
   TestManifest = buildPerlPackage {
