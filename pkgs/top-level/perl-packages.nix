@@ -6064,10 +6064,10 @@ let
   };
 
   FileSlurp = buildPerlPackage {
-    name = "File-Slurp-9999.26";
+    name = "File-Slurp-9999.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CA/CAPOEIRAB/File-Slurp-9999.26.tar.gz;
-      sha256 = "0c09ivl50sg9j75si6cahfp1wgvhqawakb6h5j6hlca6vwjqs9qy";
+      url = mirror://cpan/authors/id/C/CA/CAPOEIRAB/File-Slurp-9999.27.tar.gz;
+      sha256 = "1x233kj1qifvii7j8d4wzarwhj5z11vnpxsqvdm98dsccr7qi79s";
     };
     meta = {
       description = "Simple and Efficient Reading/Writing/Modifying of Complete Files";
