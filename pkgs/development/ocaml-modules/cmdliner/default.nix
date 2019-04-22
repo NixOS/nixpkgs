@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   inherit (param) version;
 
   src = fetchurl {
-    url = "http://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
+    url = "https://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
     inherit (param) sha256;
   };
 

@@ -141,7 +141,7 @@ rec {
     name = "antlr-runtime-4.5.3";
 
     src = fetchurl {
-      url = "http://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "0lm78i2annlczlc2cg5xvby0g1dyl0sh1y5xc2pymjlmr67a1g4k";
     };
 
@@ -153,7 +153,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = http://www.antlr.org/;
+      homepage = https://www.antlr.org/;
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -164,7 +164,7 @@ rec {
     name = "antlr-runtime-4.7.1";
 
     src = fetchurl {
-      url = "http://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "07f91mjclacrvkl8a307w2abq5wcqp0gcsnh0jg90ddfpqcnsla3";
     };
 
@@ -176,7 +176,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = http://www.antlr.org/;
+      homepage = https://www.antlr.org/;
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -282,7 +282,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://eclipse-cs.sourceforge.net/;
+      homepage = https://eclipse-cs.sourceforge.net/;
       description = "Checkstyle integration into the Eclipse IDE";
       license = licenses.lgpl21;
       platforms = platforms.all;
@@ -320,18 +320,18 @@ rec {
     version_ = "1.0.0.201604221613";
 
     srcFeature = fetchurl {
-      url = "http://www2.in.tum.de/projects/cup/eclipse/features/CupEclipsePluginFeature_${version}.jar";
+      url = "https://www2.in.tum.de/projects/cup/eclipse/features/CupEclipsePluginFeature_${version}.jar";
       sha256 = "13nnsf0cqg02z3af6xg45rhcgiffsibxbx6h1zahjv7igvqgkyna";
     };
 
     srcPlugins = [
       (fetchurl {
-        url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/CupReferencedLibraries_${version_}.jar";
+        url = "https://www2.in.tum.de/projects/cup/eclipse/plugins/CupReferencedLibraries_${version_}.jar";
         sha256 = "0kif8kivrysprva1pxzajm88gi967qf7idhb6ga2xpvsdcris91j";
       })
 
       (fetchurl {
-        url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/de.tum.in.www2.CupPlugin_${version}.jar";
+        url = "https://www2.in.tum.de/projects/cup/eclipse/plugins/de.tum.in.www2.CupPlugin_${version}.jar";
         sha256 = "022phbrsny3gb8npb6sxyqqxacx138q5bd7dq3gqxh3kprx5chbl";
       })
     ];
@@ -339,7 +339,7 @@ rec {
     propagatedBuildInputs = [ zest ];
 
     meta = with stdenv.lib; {
-      homepage = http://www2.cs.tum.edu/projects/cup/eclipse.php;
+      homepage = https://www2.cs.tum.edu/projects/cup/eclipse.php;
       description = "IDE for developing CUP based parsers";
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];
@@ -384,7 +384,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://www.eclemma.org/;
+      homepage = https://www.eclemma.org/;
       description = "EclEmma is a free Java code coverage tool for Eclipse";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -614,7 +614,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://testng.org/;
+      homepage = https://testng.org/doc/;
       description = "Eclipse plugin for the TestNG testing framework";
       license = licenses.asl20;
       platforms = platforms.all;

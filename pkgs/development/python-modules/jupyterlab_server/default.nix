@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "JupyterLab Server";
-    homepage = http://jupyter.org;
+    homepage = https://jupyter.org;
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];
   };

@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
   name = "exiv2-0.26.2018.12.30";
 
-    #url = "http://www.exiv2.org/builds/${name}-trunk.tar.gz";
+    #url = "https://www.exiv2.org/builds/${name}-trunk.tar.gz";
   src = fetchFromGitHub rec {
     owner = "exiv2";
     repo  = "exiv2";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zlib expat ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.exiv2.org/;
+    homepage = https://www.exiv2.org/;
     description = "A library and command-line utility to manage image metadata";
     platforms = platforms.all;
     license = licenses.gpl2Plus;

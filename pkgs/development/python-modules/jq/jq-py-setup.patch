@@ -113,7 +113,7 @@ index 77933f2..2b71e25 100644
  
  setup(
 @@ -107,7 +30,6 @@ setup(
-     url='http://github.com/mwilliamson/jq.py',
+     url='https://github.com/mwilliamson/jq.py',
      license='BSD 2-Clause',
      ext_modules = [jq_extension],
 -    cmdclass={"build_ext": jq_build_ext},
