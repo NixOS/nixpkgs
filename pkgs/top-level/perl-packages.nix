@@ -15604,16 +15604,17 @@ let
     propagatedBuildInputs = [ MCE PerlCritic ];
   };
 
-  TestPerlTidy = buildPerlPackage rec {
-    name = "Test-PerlTidy-20130104";
+  TestPerlTidy = buildPerlModule rec {
+    name = "Test-PerlTidy-20190402";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LA/LARRYL/${name}.tar.gz";
-      sha256 = "3f15d9f3f4811e348594620312258d75095237925b491ada623fa73ac9d2b9c8";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-20190402.tar.gz;
+      sha256 = "e9cb9b23ed62e8c6a47a1e18b55328aa3bfa467e05cd93e7e12b2738dd1e025f";
     };
-    propagatedBuildInputs = [ FileFinder FileSlurp PerlTidy TextDiff ];
+    propagatedBuildInputs = [ PathTiny PerlTidy TextDiff ];
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestPerlCritic ];
   };
 
   TestPod = buildPerlPackage rec {
