@@ -51,13 +51,13 @@
 
 mkDerivation rec {
   name    = "digikam-${version}";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "digikam";
     rev    = "v${version}";
-    sha256 = "1ifvrn0bm7fp07d059rl4dy146qzdxafl36ipxg1fg00dkv95hh4";
+    sha256 = "0h0jqfgpanhxfi3r7cgip58ppypqx79z6c5jj7i7f19hp2zziip8";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
