@@ -16092,10 +16092,10 @@ let
   };
 
   TestWWWMechanizePSGI = buildPerlPackage {
-    name = "Test-WWW-Mechanize-PSGI-0.38";
+    name = "Test-WWW-Mechanize-PSGI-0.39";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/Test-WWW-Mechanize-PSGI-0.38.tar.gz;
-      sha256 = "0fsh2i05kf1kfavv2r9kmnjl7qlyqrd11ikc0qcqzzxsqzzjkg9r";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/Test-WWW-Mechanize-PSGI-0.39.tar.gz;
+      sha256 = "0n4rhyyags3cwqb0gb1pr6gccd2x3l190j8gd96lwlvxnjrklss7";
     };
     buildInputs = [ CGI TestLongString TestWWWMechanize ];
     propagatedBuildInputs = [ Plack ];
