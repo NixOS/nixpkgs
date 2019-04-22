@@ -168,6 +168,7 @@ let
       license = licenses.artistic1;
       maintainers = [ maintainers.eelco ];
       platforms = platforms.all;
+      priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
     crossVersion = "276849e62f472c1b241d9e7b38a28e4cc9f98563"; # Dez 02, 2018
