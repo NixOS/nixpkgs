@@ -8249,10 +8249,10 @@ let
   };
 
   librelative = buildPerlPackage rec {
-     name = "lib-relative-0.002";
+     name = "lib-relative-1.000";
      src = fetchurl {
-       url = mirror://cpan/authors/id/D/DB/DBOOK/lib-relative-0.002.tar.gz;
-       sha256 = "1i51qa22lgm1gpakn1vy4sf574fsmz141dx90i6pq84w9hc9xbry";
+       url = mirror://cpan/authors/id/D/DB/DBOOK/lib-relative-1.000.tar.gz;
+       sha256 = "1mvcdl87d3kyrdx4y6x79k3n5qdd1x5m1hp8lwjxvgfqbw0cgq6z";
      };
      meta = {
        description = "Add paths relative to the current file to @INC";
