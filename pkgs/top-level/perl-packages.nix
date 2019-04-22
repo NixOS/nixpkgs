@@ -7965,10 +7965,10 @@ let
   };
 
   Inline = buildPerlPackage rec {
-    name = "Inline-0.81";
+    name = "Inline-0.82";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TINITA/Inline-0.81.tar.gz;
-      sha256 = "1f973868dcca56a3a99b25d253fa18bf2d53670f8bbfa498261267647707b1e3";
+      url = mirror://cpan/authors/id/T/TI/TINITA/Inline-0.82.tar.gz;
+      sha256 = "1af94a8e95e4ba4545592341c47d8d1dc45b01822b877f7d3095a438566e874b";
     };
     buildInputs = [ TestWarn ];
     meta = {
