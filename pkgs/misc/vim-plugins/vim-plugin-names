@@ -41,6 +41,7 @@ christoomey/vim-tmux-navigator
 cocopon/iceberg.vim
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim
+dag/vim-fish
 dag/vim2hs
 dannyob/quickfixstatus
 davidhalter/jedi-vim
@@ -93,6 +94,7 @@ HerringtonDarkholme/yats.vim
 honza/vim-snippets
 hsanson/vim-android
 ianks/vim-tsx
+icymind/NeoSolarized
 idris-hackers/idris-vim
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
@@ -232,6 +234,7 @@ peder2tm/sved
 peterhoeg/vim-qml
 phanviet/vim-monokai-pro
 plasticboy/vim-markdown
+ponko2/deoplete-fish
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
@@ -286,6 +289,7 @@ sjl/splice.vim
 sk1418/last256
 slashmili/alchemist.vim
 sonph/onehalf
+t9md/vim-choosewin
 t9md/vim-smalls
 takac/vim-hardtime
 ternjs/tern_for_vim
