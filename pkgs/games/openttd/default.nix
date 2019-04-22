@@ -6,17 +6,17 @@
 
 let
   opengfx = fetchzip {
-    url = "http://binaries.openttd.org/extra/opengfx/0.5.5/opengfx-0.5.5-all.zip";
+    url = "https://binaries.openttd.org/extra/opengfx/0.5.5/opengfx-0.5.5-all.zip";
     sha256 = "065l0g5nawcd6fkfbsfgviwgq9610y7gxzkpmd19i423d0lrq6d8";
   };
 
   opensfx = fetchzip {
-    url = "http://binaries.openttd.org/extra/opensfx/0.2.3/opensfx-0.2.3-all.zip";
+    url = "https://binaries.openttd.org/extra/opensfx/0.2.3/opensfx-0.2.3-all.zip";
     sha256 = "1bb167kszdd6dqbcdjrxxwab6b7y7jilhzi3qijdhprpm5gf1lp3";
   };
 
   openmsx = fetchzip {
-    url = "http://binaries.openttd.org/extra/openmsx/0.3.1/openmsx-0.3.1-all.zip";
+    url = "https://binaries.openttd.org/extra/openmsx/0.3.1/openmsx-0.3.1-all.zip";
     sha256 = "0qnmfzz0v8vxrrvxnm7szphrlrlvhkwn3y92b4iy0b4b6yam0yd4";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   version = "1.9.1";
 
   src = fetchurl {
-    url = "http://proxy.binaries.openttd.org/openttd-releases/${version}/${name}-source.tar.xz";
+    url = "https://proxy.binaries.openttd.org/openttd-releases/${version}/${name}-source.tar.xz";
     sha256 = "1r8i6yzgww7aw8iibqagahg1gqgw7305g07agy0dpszzvp0mi0gz";
   };
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
         - play cooperatively controlling the same business
         - observe as spectators
     '';
-    homepage = http://www.openttd.org/;
+    homepage = https://www.openttd.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ jcumming the-kenny fpletz ];

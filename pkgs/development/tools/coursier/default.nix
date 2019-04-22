@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://get-coursier.io/;
+    homepage = https://get-coursier.io/;
     description = "A Scala library to fetch dependencies from Maven / Ivy repositories";
     license = licenses.asl20;
     maintainers = with maintainers; [ adelbertc nequissimus ];

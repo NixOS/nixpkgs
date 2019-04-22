@@ -5744,7 +5744,7 @@ let
     };
     propagatedBuildInputs = [ FileFindObject NumberCompare TextGlob ];
     meta = {
-      homepage = http://www.shlomifish.org/open-source/projects/File-Find-Object/;
+      homepage = https://www.shlomifish.org/open-source/projects/File-Find-Object/;
       description = "Alternative interface to File::Find::Object";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -14535,7 +14535,7 @@ let
     };
     buildInputs = [ TestRun TestRunCmdLine TestRunPluginAlternateInterpreters TestRunPluginBreakOnFailure TestRunPluginColorFileVerdicts TestRunPluginColorSummary TestRunPluginTrimDisplayedFilenames ];
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Specifications for installing all the Test::Run";
       license = stdenv.lib.licenses.mit;
     };
@@ -15719,7 +15719,7 @@ let
     buildInputs = [ TestTrap ];
     propagatedBuildInputs = [ IPCSystemSimple ListMoreUtils MooseXStrictConstructor TextSprintfNamed UNIVERSALrequire ];
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Base class to run standard TAP scripts";
       license = stdenv.lib.licenses.mit;
     };
@@ -15750,7 +15750,7 @@ let
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Define different interpreters for different test scripts with Test::Run";
       license = stdenv.lib.licenses.mit;
     };
@@ -15765,7 +15765,7 @@ let
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Stop processing the entire test suite";
       license = stdenv.lib.licenses.mit;
     };
@@ -15782,7 +15782,7 @@ let
     moreInputs = [ TestTrap ]; # Added because tests were failing without it
     doCheck=true;
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Make the file verdict ('ok', 'NOT OK')";
       license = stdenv.lib.licenses.mit;
     };
@@ -15798,7 +15798,7 @@ let
     moreInputs = [ TestTrap ]; # Added because tests were failing without it
     doCheck=true;
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "A Test::Run plugin that";
       license = stdenv.lib.licenses.mit;
     };
@@ -15813,7 +15813,7 @@ let
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Trim the first components";
       license = stdenv.lib.licenses.mit;
     };
@@ -16251,7 +16251,7 @@ let
       sha256 = "bb8a3b8ff515c85101baf553a769337f944a05cde81f111ae78aff416bf4ae2b";
     };
     meta = {
-      homepage = http://www.shlomifish.org/open-source/projects/Text-Format/;
+      homepage = https://www.shlomifish.org/open-source/projects/Text-Format/;
       description = "Format text";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ bcdarwin ];
@@ -16469,7 +16469,7 @@ let
     };
     propagatedBuildInputs = [ TextAligner ];
     meta = {
-      homepage = http://www.shlomifish.org/open-source/projects/docmake/;
+      homepage = https://www.shlomifish.org/open-source/projects/docmake/;
       description = "Organize Data in Tables";
       license = stdenv.lib.licenses.isc;
     };

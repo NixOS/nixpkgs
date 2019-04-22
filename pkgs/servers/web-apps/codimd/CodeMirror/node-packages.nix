@@ -1206,7 +1206,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "No-ceremony linter";
-      homepage = http://github.com/marijnh/blint;
+      homepage = https://github.com/marijnh/blint;
     };
     production = true;
     bypassCache = true;

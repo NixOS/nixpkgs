@@ -27,7 +27,7 @@ let
 
       meta = with stdenv.lib; {
         description = "C++ target for ANTLR 4";
-        homepage = http://www.antlr.org/;
+        homepage = https://www.antlr.org/;
         license = licenses.bsd3;
         platforms = platforms.unix;
       };

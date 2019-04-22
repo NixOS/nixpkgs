@@ -41,7 +41,7 @@ stdenv.mkDerivation rec
 
   meta = with stdenv.lib; {
     description = "An open framework for voxel";
-    homepage = "http://www.openvdb.org";
+    homepage = "https://www.openvdb.org";
     maintainers = [ maintainers.guibou ];
     platforms = platforms.linux;
     license = licenses.mpl20;

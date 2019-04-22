@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Jupyter lab environment notebook server extension.";
     license = with licenses; [ bsd3 ];
-    homepage = "http://jupyter.org/";
+    homepage = "https://jupyter.org/";
     maintainers = with maintainers; [ zimbatm costrouc ];
   };
 }
