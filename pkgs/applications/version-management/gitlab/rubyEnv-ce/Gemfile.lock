@@ -364,6 +364,9 @@ GEM
       hashie (>= 3.0)
     health_check (2.6.0)
       rails (>= 4.0)
+    hipchat (1.5.2)
+      httparty
+      mimemagic
     html-pipeline (2.8.4)
       activesupport (>= 2)
       nokogiri (>= 1.4)
@@ -1041,6 +1044,7 @@ DEPENDENCIES
   hangouts-chat (~> 0.0.5)
   hashie-forbidden_attributes
   health_check (~> 2.6.0)
+  hipchat (~> 1.5.0)
   html-pipeline (~> 2.8)
   html2text
   httparty (~> 0.13.3)
