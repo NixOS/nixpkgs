@@ -8499,7 +8499,7 @@ let
       url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
       sha256 = "6bb579d47644cb0ed35626ff77e909ae69063073c6ac09aa0614fef00fa37356";
     };
-    buildInputs = [ ModuleBuild TestException ];
+    buildInputs = [ TestException ];
     propagatedBuildInputs = [ SubExporter ];
     meta = {
       description = "Linux specific special filehandles";
