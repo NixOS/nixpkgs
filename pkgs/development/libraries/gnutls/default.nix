@@ -30,8 +30,9 @@ stdenv.mkDerivation {
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   outputInfo = "devdoc";
 
-  # Disable native add_system_trust.
-  patches = lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
+  patches = [ ./nix-ssl-cert-file.patch ]
+    # Disable native add_system_trust.
+    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
 
   # Skip some tests:
   #  - pkgconfig: building against the result won't work before installing (3.5.11)
