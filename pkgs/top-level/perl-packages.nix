@@ -11024,10 +11024,10 @@ let
   };
 
   MusicBrainz = buildPerlModule rec {
-    name = "WebService-MusicBrainz-1.0.4";
+    name = "WebService-MusicBrainz-1.0.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BF/BFAIST/${name}.tar.gz";
-      sha256 = "182z3xjajk6s7k5xm3kssjy3hqx2qbnq4f8864hma098ryy2ph3a";
+      sha256 = "16chs1l58cf000d5kalkyph3p31ci73p1rlyx98mfv10d2cq6fsj";
     };
     propagatedBuildInputs = [ Mojolicious ];
     doCheck = false; # Test performs network access.
