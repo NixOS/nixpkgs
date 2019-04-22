@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
+  makeFlags = [ "CC:=$(CC)" ];
+
   installPhase = ''
     runHook preInstall
 
