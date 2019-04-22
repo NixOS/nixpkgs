@@ -3899,10 +3899,10 @@ let
   };
 
   DateTimeTimeZone = buildPerlPackage rec {
-    name = "DateTime-TimeZone-2.23";
+    name = "DateTime-TimeZone-2.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "6ae40286031853a4319c5b34516f1c09e429d5caa5f782165cc27175c89fe54f";
+      sha256 = "dee1111c06f2aa705f803bc4f3d93b50df566d864a1a8bf31b55dfaf2b3de809";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassSingleton ParamsValidationCompiler Specio namespaceautoclean ];
