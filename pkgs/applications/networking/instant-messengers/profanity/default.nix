@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "0f5kfzy22wzyj7rnd2nbj93q96ga87b53wlg8lfg83qdphx1ymz9";
   };
 
-  patches = [ ./patches/undefined-macros.patch ];
+  patches = [ ./patches/packages-osx.patch ./patches/undefined-macros.patch ];
 
   enableParallelBuilding = true;
 
