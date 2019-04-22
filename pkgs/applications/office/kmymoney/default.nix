@@ -21,13 +21,6 @@ stdenv.mkDerivation rec {
     sha256 = "06lbavhl9b8cybnss2mmy3g5w8qn2vl6zhipvbl11lsr3j9bsa8q";
   };
 
-  # Fix build with Qt 5.11.
-  patches = lib.singleton (fetchpatch {
-    url = "https://cgit.kde.org/kmymoney.git/patch/?id="
-        + "e5198a902996b27bf9abde0ad24af82d55ab5dc1";
-    sha256 = "1h2f1xznf7343s26fh94x8n2ci0pijk5j86f24lvghawsw848316";
-  });
-
   # Hidden dependency that wasn't included in CMakeLists.txt:
   NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
