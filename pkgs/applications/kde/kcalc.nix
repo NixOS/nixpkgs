@@ -1,8 +1,8 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  gmp, kconfig, kconfigwidgets, kguiaddons, ki18n, kinit, knotifications,
-  kxmlgui,
+  gmp, kconfig, kconfigwidgets, kcrash, kguiaddons, ki18n, kinit,
+  knotifications, kxmlgui,
 }:
 
 mkDerivation {
@@ -13,6 +13,7 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    gmp kconfig kconfigwidgets kguiaddons ki18n kinit knotifications kxmlgui
+    gmp kconfig kconfigwidgets kcrash kguiaddons ki18n kinit knotifications
+    kxmlgui
   ];
 }
