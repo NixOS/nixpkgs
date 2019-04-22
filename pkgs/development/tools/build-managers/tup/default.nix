@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ fuse pcre ];
 
+  patches = [ ./tup_passthrough_nix_env.patch ];
+
   configurePhase = ''
     sed -i 's/`git describe`/v${version}/g' src/tup/link.sh
     sed -i 's/pcre-confg/pkg-config pcre/g' Tupfile Tuprules.tup

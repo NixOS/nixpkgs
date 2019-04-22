@@ -1,0 +1,58 @@
+diff --git a/src/tup/environ.c b/src/tup/environ.c
+index c68a3f19..5ed728c8 100644
+--- a/src/tup/environ.c
++++ b/src/tup/environ.c
+@@ -22,6 +22,9 @@
+ #include "entry.h"
+ #include "db.h"
+ 
++#include <stdio.h>
++#include <string.h>
++
+ static const char *default_env[] = {
+ /* NOTE: Please increment PARSER_VERSION if these are modified */
+ 	"PATH",
+@@ -44,15 +47,40 @@ static const char *default_env[] = {
+ /* NOTE: Please increment PARSER_VERSION if these are modified */
+ };
+ 
++extern char **environ;
++
++static int environ_add_var(struct tupid_entries *root, const char *var)
++{
++	struct tup_entry *tent;
++	if(tup_db_findenv(var, &tent) < 0)
++		return -1;
++	if(tupid_tree_add_dup(root, tent->tnode.tupid) < 0)
++		return -1;
++	return 0;
++}
++
+ int environ_add_defaults(struct tupid_entries *root)
+ {
+ 	unsigned int x;
+-	struct tup_entry *tent;
++	char **env;
++	char *prefix;
+ 	for(x=0; x<sizeof(default_env) / sizeof(default_env[0]); x++) {
+-		if(tup_db_findenv(default_env[x], &tent) < 0)
++		if(environ_add_var(root, default_env[x]) < 0)
+ 			return -1;
+-		if(tupid_tree_add_dup(root, tent->tnode.tupid) < 0)
++	}
++	for(env=environ; *env; ++env) {
++		if(strncmp("NIX_", *env, 4)) {
++			continue;
++		}
++
++		for (x=0; (*env)[x] && (*env)[x] != '='; ++x) {}
++		prefix = strndup(*env, x);
++
++		if(environ_add_var(root, prefix) < 0)  {
++			free(prefix);
+ 			return -1;
++		}
++		free(prefix);
+ 	}
+ 	return 0;
+ }
