@@ -12295,10 +12295,10 @@ let
   };
 
   PerlTidy = buildPerlPackage rec {
-    name = "Perl-Tidy-20180220";
+    name = "Perl-Tidy-20181120";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHANCOCK/${name}.tar.gz";
-      sha256 = "e9973ce28b7518108c1e68fa767c6566822480e739df275375a0dfcc9c2b3370";
+      sha256 = "7db0eeb76535a62cbb4e69b6558e0705162d476a654a7a5ec472aa846b8c4569";
     };
     meta = {
       description = "Indent and reformat perl scripts";
