@@ -29,13 +29,6 @@ mkDerivation rec {
 
   propagatedUserEnvPkgs = [ kproperty ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://phabricator.kde.org/file/data/6iwzltiifyqwjnzbvyo6/PHID-FILE-li4a7j35wkdkm2qdtnp4/D11503.diff";
-      sha256 = "0yj717m4x1zb4xjy1ayhz78xkxpawxgsvjgvf5iw81jnlr8absq9";
-    })
-  ];
-
   meta = with lib; {
     description = "A open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";
     longDescription = ''
