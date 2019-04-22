@@ -14293,10 +14293,10 @@ let
   };
 
   SubQuote = buildPerlPackage rec {
-    name = "Sub-Quote-2.005001";
+    name = "Sub-Quote-2.006003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "d6ab4f0775def015367a05e02024b403f991b2be11d774f3d235fe7e9bdbba07";
+      sha256 = "be1f3a6f773f351f203cdc8f614803ac492b77d15fd68d5b1f0cd3884be18176";
     };
     buildInputs = [ TestFatal ];
     meta = {
