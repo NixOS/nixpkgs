@@ -2919,10 +2919,10 @@ let
   };
 
   CryptJWT = buildPerlPackage rec {
-    name = "Crypt-JWT-0.023";
+    name = "Crypt-JWT-0.024";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "540594d0051028e00e586eb7827df09b01c091c648bb6b210de3124fe118524b";
+      sha256 = "4fcb81992fa61c0dbeb7c3582e887a92746aca76a42609091d986350e91892c5";
     };
     propagatedBuildInputs = [ CryptX JSONMaybeXS ];
     meta = {
