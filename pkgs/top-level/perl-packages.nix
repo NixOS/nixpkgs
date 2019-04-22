@@ -11230,10 +11230,10 @@ let
   };
 
   NetDNS = buildPerlPackage rec {
-    name = "Net-DNS-1.19";
+    name = "Net-DNS-1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NL/NLNETLABS/${name}.tar.gz";
-      sha256 = "206278bdd9a538bec3e45b50e80cc5a9d7dc6e70ebf0889ef78254f0f710ccd7";
+      sha256 = "7fd9692b687253baa8f2eb639f1dd7ff9c77fddd67167dc59b400bd25e4ce01b";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     makeMakerFlags = "--noonline-tests";
