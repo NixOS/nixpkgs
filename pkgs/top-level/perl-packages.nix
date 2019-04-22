@@ -8910,10 +8910,10 @@ let
   };
 
   LogDispatchouli = buildPerlPackage rec {
-    name = "Log-Dispatchouli-2.016";
+    name = "Log-Dispatchouli-2.017";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "7f2a1a1854fd1e4ed02883bc21f5395f4244a266b661276b438d1bdd50bdacf7";
+      sha256 = "99f8341c8d4f8f46a673b1ff1a6edc96165d75af96ddcb6d99fa227f9af4dfbf";
     };
     buildInputs = [ TestDeep TestFatal ];
     propagatedBuildInputs = [ LogDispatchArray StringFlogger SubExporterGlobExporter ];
