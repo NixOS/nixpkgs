@@ -14888,10 +14888,10 @@ let
   };
 
   Test2Suite = buildPerlPackage rec {
-    name = "Test2-Suite-0.000118";
+    name = "Test2-Suite-0.000119";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "e9225132b585d6730d3de6b0caa2648b9c67995732c0a081efcfcad37b8af227";
+      sha256 = "fd48764118acf1c30057f58f0af90696b194fbc5b637c77e08672e949c101e74";
     };
     propagatedBuildInputs = [ ModulePluggable ScopeGuard SubInfo TermTable TestSimple13 ];
     meta = {
