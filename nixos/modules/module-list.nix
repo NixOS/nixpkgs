@@ -188,6 +188,7 @@
   ./services/audio/snapserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
+  ./services/backup/automysqlbackup.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
   ./services/backup/duplicati.nix
