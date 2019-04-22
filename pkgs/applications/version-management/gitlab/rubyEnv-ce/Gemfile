@@ -204,6 +204,9 @@ gem 'connection_pool', '~> 2.0'
 # Discord integration
 gem 'discordrb-webhooks-blackst0ne', '~> 3.3', require: false
 
+# HipChat integration
+gem 'hipchat', '~> 1.5.0'
+
 # JIRA integration
 gem 'jira-ruby', '~> 1.4'
 
