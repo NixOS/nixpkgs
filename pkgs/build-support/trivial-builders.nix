@@ -344,4 +344,35 @@ rec {
   # Copy a list of paths to the Nix store.
   copyPathsToStore = builtins.map copyPathToStore;
 
+
+  /* Applies a list of patches to a source directory.
+   *
+   * Examples:
+   *
+   * # Patching nixpkgs:
+   * applyPatches {
+   *   name = "nixpkgs-patched";
+   *   src = pkgs.path;
+   *   patches = [
+   *     (pkgs.fetchpatch {
+   *       url = https://github.com/NixOS/nixpkgs/commit/1f770d20550a413e508e081ddc08464e9d08ba3d.patch;
+   *       sha256 = "1nlzx171y3r3jbk0qhvnl711kmdk57jlq4na8f8bs8wz2pbffymr";
+   *     })
+   *   ];
+   * }
+   */
+  applyPatches =
+      { src
+      , name
+      , patches   ? []
+      , postPatch ? ""
+      , ...
+      } @ args : stdenvNoCC.mkDerivation ({
+    inherit name src patches postPatch;
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    phases = "unpackPhase patchPhase installPhase";
+    installPhase = "cp -R ./ $out";
+  } // args);
+
 }
