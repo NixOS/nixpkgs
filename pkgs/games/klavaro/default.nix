@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "046xc7is1jz5azkwrb7i9wdqkz8hdm68ga02g6whmi53130wd0py";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper intltool curl gtk3 ];
+  nativeBuildInputs = [ intltool makeWrapper pkgconfig ];
+  buildInputs = [ curl gtk3 ];
 
   postInstall = ''
     wrapProgram $out/bin/klavaro \
