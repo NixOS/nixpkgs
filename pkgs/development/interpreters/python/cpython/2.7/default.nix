@@ -126,6 +126,10 @@ let
       substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
       substituteInPlace Lib/multiprocessing/__init__.py \
         --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
+    '' + optionalString (stdenv.isAarch32 && stdenv.hostPlatform == stdenv.buildPlatform) ''
+      # prevent taking architecture of the builder machine which could be "aarch64"
+      substituteInPlace config.guess                        --replace "uname -m" "echo '${stdenv.hostPlatform.parsed.cpu.name}'"
+      substituteInPlace Modules/_ctypes/libffi/config.guess --replace "uname -m" "echo '${stdenv.hostPlatform.parsed.cpu.name}'"
     '';
 
   configureFlags = [

@@ -3,7 +3,7 @@
 
 # libffi is used in darwin stdenv
 # we cannot run checks within it
-, doCheck ? !stdenv.isDarwin, dejagnu
+, doCheck ? !stdenv.isDarwin && !stdenv.isAarch32, dejagnu
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
     "--enable-pax_emutramp"
+  ] ++ stdenv.lib.optionals (stdenv.isAarch32 && stdenv.hostPlatform == stdenv.buildPlatform) [
+    # prevent taking architecture of the builder machine which could be "aarch64"
+    "--host=${stdenv.hostPlatform.config}"
   ];
 
   preCheck = ''

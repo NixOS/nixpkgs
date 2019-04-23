@@ -78,6 +78,11 @@ in with passthru; stdenv.mkDerivation {
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
+  ''
+  + optionalString (stdenv.isAarch32 && stdenv.hostPlatform == stdenv.buildPlatform) ''
+      # prevent taking architecture of the builder machine which could be "aarch64"
+      substituteInPlace config.guess                        --replace "uname -m" "echo '${stdenv.hostPlatform.parsed.cpu.name}'"
+      substituteInPlace Modules/_ctypes/libffi/config.guess --replace "uname -m" "echo '${stdenv.hostPlatform.parsed.cpu.name}'"
   '';
 
   patches = [

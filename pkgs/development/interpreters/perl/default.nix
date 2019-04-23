@@ -72,6 +72,13 @@ let
       (if crossCompiling
        then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" ]
        else [ "-de" "-Dcc=cc" ])
+
+      # prevent taking architecture of the builder machine which could be "aarch64"
+      # it should be safe to have always enabled, (stdenv.isAarch32 && stdenv.isLinux) here is to prefend mass-rebuild
+      ++ optionals (stdenv.isAarch32 && stdenv.isLinux && !crossCompiling) [
+        ("-Darchname=${stdenv.hostPlatform.parsed.cpu.name}-linux" + (if enableThreading then "-thread-multi" else ""))
+      ]
+
       ++ [
         "-Uinstallusrbinperl"
         "-Dinstallstyle=lib/perl5"
