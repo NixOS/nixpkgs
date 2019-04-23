@@ -1163,7 +1163,7 @@ let
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
       sha256 = "77d42b92732bcfc18a59d341e56ce476205b1c4d380eab3a07224f5745c23e45";
     };
-    propagatedBuildInputs = [ ClassTiny MenloLegacy ModuleCPANfile PathTiny TryTiny ];
+    propagatedBuildInputs = [ ClassTiny Menlo ModuleCPANfile PathTiny TryTiny ];
     meta = {
       homepage = https://github.com/perl-carton/carton;
       description = "Perl module dependency manager (aka Bundler for Perl)";
@@ -9523,6 +9523,20 @@ let
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "https://github.com/neilb/Memoize-ExpireLRU";
      };
+  };
+
+  Menlo = buildPerlPackage rec {
+    name = "Menlo-1.9019";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "3b573f68e7b3a36a87c860be258599330fac248b518854dfb5657ac483dca565";
+    };
+    propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo CPANMetaCheck CaptureTiny ClassTiny ExtUtilsConfig ExtUtilsHelpers ExtUtilsInstallPaths FileWhich Filepushd HTTPTinyish ModuleCPANfile ParsePMFile StringShellQuote URI Win32ShellQuote locallib ];
+    meta = {
+      homepage = https://github.com/miyagawa/cpanminus;
+      description = "A CPAN client";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   MetaBuilder = buildPerlModule {
