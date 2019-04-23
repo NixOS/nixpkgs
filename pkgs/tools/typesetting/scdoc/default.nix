@@ -2,14 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "scdoc-${version}";
-  version = "1.5.2";
+  version = "1.9.4";
 
   src = fetchurl {
     url = "https://git.sr.ht/~sircmpwn/scdoc/archive/${version}.tar.gz";
-    sha256 = "0a9sxifzsbj24kjnpc0525i91ni2vkwizhgvwx1m9shvfkiisnc6";
+    sha256 = "00zc3rzj97gscby31djlqyczvqpyhrl66i44czwzmmn7rc5j03m1";
   };
-
-  patches = [ ./use-source-date-epoch.patch ];
 
   postPatch = ''
     substituteInPlace Makefile \

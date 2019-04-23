@@ -2,14 +2,14 @@
   autoreconfHook, readline, libiconv, icu, curl, gnuplot, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "libqalculate-${version}";
-  version = "2.8.1";
+  pname = "libqalculate";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
-    sha256 = "1fakvv5vvx99pp5x72djp3313jxjwfhsl34gbyrpgkj5b4nnm7mz";
+    sha256 = "0i21c92r94mp03673cvngvqph268ir4j89d5s9qzxgq2zjw5pc8q";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace libqalculate/Calculator.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
-      --replace '"gnuplot -"' '"${gnuplot}/bin/gnuplot -"'
+      --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
   '' + stdenv.lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/qalc.cc \
       --replace 'printf(_("aborted"))' 'printf("%s", _("aborted"))'

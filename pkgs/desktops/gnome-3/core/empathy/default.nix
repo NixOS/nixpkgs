@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
-, file, librsvg, gnome3, gdk_pixbuf
-, telepathy-glib, telepathy-farstream
+, file, librsvg, gnome3, gdk_pixbuf, python3
+, telepathy-glib, telepathy-farstream, glibcLocales
 , clutter-gtk, clutter-gst, gst_all_1, cogl, gnome-online-accounts
 , gcr, libsecret, folks, libpulseaudio, telepathy-mission-control
 , telepathy-logger, libnotify, clutter, libsoup, gnutls
@@ -18,10 +18,6 @@ stdenv.mkDerivation rec {
     sha256 = "0sn10fcymc6lyrabk7vx8lpvlaxxkqnmcwj9zdkfa8qf3388k4nc";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "empathy"; };
-  };
-
   propagatedUserEnvPkgs = [
     gnome-online-accounts shared-mime-info
   ];
@@ -30,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     pkgconfig libtool intltool itstool file wrapGAppsHook
-    libxml2 libxslt yelp-xsl
+    libxml2 libxslt yelp-xsl python3 glibcLocales
   ];
   buildInputs = [
     gtk3 glib webkitgtk icu gnome-online-accounts
@@ -39,7 +35,7 @@ stdenv.mkDerivation rec {
     gcr libsecret libpulseaudio gdk_pixbuf
     libnotify clutter libsoup gnutls libgee p11-kit
     libcanberra-gtk3 telepathy-farstream farstream
-    gnome3.defaultIconTheme gnome3.gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
     librsvg
     # Spell-checking
     enchant isocodes
@@ -48,6 +44,15 @@ stdenv.mkDerivation rec {
     # Cheese webcam support, camera monitoring
     cheese libgudev
   ];
+
+  LC_ALL = "en_US.UTF-8";
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "empathy";
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Empathy;

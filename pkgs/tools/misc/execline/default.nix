@@ -1,15 +1,17 @@
-{ stdenv, skawarePackages }:
+{ stdenv, skawarePackages, makeWrapper }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "execline";
-  version = "2.5.0.1";
-  sha256 = "0j8hwdw8wn0rv8njdza8fbgmvyjg7hqp3qlbw00i7fwskr7d21wd";
+  version = "2.5.1.0";
+  sha256 = "0xr6yb50wm6amj1wc7jmxyv7hvlx2ypbnww1vc288j275625d9xi";
 
   description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
+
+  setupHooks = [ makeWrapper ];
 
   # TODO: nsss support
   configureFlags = [
@@ -30,6 +32,11 @@ buildPackage {
 
     mv doc $doc/share/doc/execline/html
     mv examples $doc/share/doc/execline/examples
+
+    # finally, add all tools to PATH so they are available
+    # from within execlineb scripts by default
+    wrapProgram $bin/bin/execlineb \
+      --suffix PATH : $bin/bin
   '';
 
 }

@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi
 , mock, unittest2, nose
 , twiggy, requests, offtrac, bugzilla, taskw, dateutil, pytz, keyring, six
-, jinja2, pycurl, dogpile_cache, lockfile, click, pyxdg, future15 }:
+, jinja2, pycurl, dogpile_cache, lockfile, click, pyxdg, future }:
 
 buildPythonPackage rec {
   pname = "bugwarrior";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   buildInputs = [ mock unittest2 nose /* jira megaplan */ ];
   propagatedBuildInputs = [
     twiggy requests offtrac bugzilla taskw dateutil pytz keyring six
-    jinja2 pycurl dogpile_cache lockfile click pyxdg future15
+    jinja2 pycurl dogpile_cache lockfile click pyxdg future
   ];
 
   # for the moment jira>=0.22 and megaplan>=1.4 are missing for running the test suite.

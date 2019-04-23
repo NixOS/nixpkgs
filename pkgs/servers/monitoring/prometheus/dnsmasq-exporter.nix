@@ -1,15 +1,16 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "dnsmasq_exporter-unstable-2018-05-05";
+  name = "dnsmasq_exporter-${version}";
+  version = "0.1.0";
 
   goPackagePath = "github.com/google/dnsmasq_exporter";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "dnsmasq_exporter";
-    sha256 = "1kzq4h7z28xadx425nbgxadk62yiz6279d300fyiyi83hwq0ay8c";
-    rev = "e1f281b435bbefbb2d17fc57c051ede0ab973c59";
+    sha256 = "0pl4jkp0kssplv32wbg8yk06x9c2hidilpix32hdvk287l3ys201";
+    rev = "v${version}";
   };
 
   goDeps = ./dnsmasq-exporter-deps.nix;

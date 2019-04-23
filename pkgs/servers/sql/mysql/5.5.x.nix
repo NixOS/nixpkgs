@@ -6,11 +6,11 @@
 let
 self = stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.5.60";
+  version = "5.5.62";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.5/${name}.tar.gz";
-    sha256 = "071xaamqkbscybqzm79gf2w3bkr9lqlzwafis3gzc8w8fkhi4hd3";
+    sha256 = "1mwrzwk9ap09s430fpdkyhvx5j2syd3xj2hyfzvanjphq4xqbrxi";
   };
 
   patches = if stdenv.isCygwin then [
@@ -78,5 +78,6 @@ self = stdenv.mkDerivation rec {
       artistic1 bsd0 bsd2 bsd3 bsdOriginal
       gpl2 lgpl2 lgpl21 mit publicDomain  licenses.zlib
     ];
+    broken = stdenv.isAarch64;
   };
 }; in self

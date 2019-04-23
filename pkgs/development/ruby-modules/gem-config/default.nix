@@ -22,14 +22,16 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
+, cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
+, file, libvirt, glib, vips, taglib, libopus
+, libselinux ? null, libsepol ? null
 }@args:
 
 let
   v8 = v8_3_16_14;
 
   rainbow_rake = buildRubyGem {
-    name = "rake";
+    pname = "rake";
     gemName = "rake";
     source.sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
     type = "gem";
@@ -91,6 +93,10 @@ in
       installPath=$(cat $out/nix-support/gem-meta/install-path)
       sed -i $installPath/lib/dep-selector-libgecode.rb -e 's@VENDORED_GECODE_DIR =.*@VENDORED_GECODE_DIR = "${gecode_3}"@'
     '';
+  };
+
+  digest-sha3 = attrs: {
+    hardeningDisable = [ "format" ];
   };
 
   ethon = attrs: {
@@ -156,7 +162,7 @@ in
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre gobjectIntrospection ];
+    buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -167,7 +173,7 @@ in
   };
 
   gtk2 = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
     buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
@@ -175,7 +181,7 @@ in
 
   gobject-introspection = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gobjectIntrospection gtk2 pcre ];
+    buildInputs = [ gobject-introspection gtk2 pcre ];
   };
 
   grpc = attrs: {
@@ -269,11 +275,17 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
-  oxidized = attrs: {
-    postInstall = ''
-      cd "$(cat "$out/nix-support/gem-meta/install-path")"
-      patch -p1 < ${../../../tools/admin/oxidized/temporary-x-series.patch}
+  opus-ruby = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace lib/opus-ruby.rb \
+        --replace "ffi_lib 'opus'" \
+                  "ffi_lib '${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
     '';
+  };
+
+  ovirt-engine-sdk = attrs: {
+    buildInputs = [ curl libxml2 ];
   };
 
   pango = attrs: {
@@ -303,13 +315,21 @@ in
     buildInputs = [ rainbow_rake ];
   };
 
-  rbnacl = spec: {
-    postInstall = ''
-    sed -i $(cat $out/nix-support/gem-meta/install-path)/lib/rbnacl.rb -e "2a \
-    RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium${stdenv.hostPlatform.extensions.sharedLibrary}'
-    "
-    '';
+  rbczmq = { ... }: {
+    buildInputs = [ zeromq czmq ];
+    buildFlags = [ "--with-system-libs" ];
   };
+
+  rbnacl = spec:
+    if lib.versionOlder spec.version "6.0.0" then {
+      postInstall = ''
+        sed -i $(cat $out/nix-support/gem-meta/install-path)/lib/rbnacl.rb -e "2a \
+        RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium${stdenv.hostPlatform.extensions.sharedLibrary}'
+        "
+      '';
+    } else {
+      buildInputs = [ libsodium ];
+    };
 
   re2 = attrs: {
     buildInputs = [ re2 ];
@@ -318,6 +338,14 @@ in
   rmagick = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ imagemagick which ];
+  };
+
+  ruby-libvirt = attrs: {
+    buildInputs = [ libvirt pkgconfig ];
+    buildFlags = [
+      "--with-libvirt-include=${libvirt}/include"
+      "--with-libvirt-lib=${libvirt}/lib"
+    ];
   };
 
   ruby-lxc = attrs: {
@@ -331,6 +359,22 @@ in
       "--with-ldflags=-L${ncurses.out}/lib"
     ];
   };
+
+  ruby-vips = attrs: {
+    postInstall = ''
+      cd "$(cat $out/nix-support/gem-meta/install-path)"
+
+      substituteInPlace lib/vips.rb \
+        --replace "glib-2.0" "${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
+
+      substituteInPlace lib/vips.rb \
+        --replace "gobject-2.0" "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
+
+      substituteInPlace lib/vips.rb \
+        --replace "vips_libname = 'vips'" "vips_libname = '${vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    '';
+  };
+
   rugged = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ cmake openssl libssh2 zlib ];
@@ -348,6 +392,10 @@ in
         sed -i -e "s/-arch i386//" Rakefile ext/scrypt/Rakefile
       '';
     } else {};
+
+  semian = attrs: {
+    buildInputs = [ openssl ];
+  };
 
   sequel_pg = attrs: {
     buildInputs = [ postgresql ];
@@ -384,6 +432,17 @@ in
     '';
   };
 
+  taglib-ruby = attrs: {
+    buildInputs = [ taglib ];
+  };
+
+  thrift = attrs: {
+    # See: https://stackoverflow.com/questions/36378190/cant-install-thrift-gem-on-os-x-el-capitan/36523125#36523125
+    # Note that thrift-0.8.0 is a dependency of fluent-plugin-scribe which is a dependency of fluentd.
+    buildFlags = lib.optional (stdenv.isDarwin && lib.versionOlder attrs.version "0.9.2.0")
+      "--with-cppflags=\"-D_FORTIFY_SOURCE=0 -Wno-macro-redefined -Wno-shift-negative-value\"";
+  };
+
   timfel-krb5-auth = attrs: {
     buildInputs = [ kerberos ];
   };
@@ -406,10 +465,16 @@ in
 
   tzinfo = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
     dontBuild = false;
-    postPatch = ''
-      substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
-        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-    '';
+    postPatch =
+      let
+        path = if lib.versionAtLeast attrs.version "2.0"
+               then "lib/tzinfo/data_sources/zoneinfo_data_source.rb"
+               else "lib/tzinfo/zoneinfo_data_source.rb";
+      in
+        ''
+          substituteInPlace ${path} \
+            --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+        '';
   };
 
   uuid4r = attrs: {

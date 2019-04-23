@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''stefil'';
-  version = ''20101107-darcs'';
+  version = ''20181210-git'';
 
   parasites = [ "stefil-test" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."alexandria" args."iterate" args."metabang-bind" args."swank" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/stefil/2010-11-07/stefil-20101107-darcs.tgz'';
-    sha256 = ''0d81js0p02plv7wy1640xmghb4s06gay76pqw2k3dnamkglcglz3'';
+    url = ''http://beta.quicklisp.org/archive/stefil/2018-12-10/stefil-20181210-git.tgz'';
+    sha256 = ''10dr8yjrjc2pyx55knds5llh9k716khlvbkmpxh0vn8rdmxmz96g'';
   };
 
   packageName = "stefil";
@@ -20,10 +20,10 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM stefil DESCRIPTION Stefil - Simple Test Framework In Lisp SHA256
-    0d81js0p02plv7wy1640xmghb4s06gay76pqw2k3dnamkglcglz3 URL
-    http://beta.quicklisp.org/archive/stefil/2010-11-07/stefil-20101107-darcs.tgz
-    MD5 8c56bc03e7679e4d42bb3bb3b101de80 NAME stefil FILENAME stefil DEPS
+    10dr8yjrjc2pyx55knds5llh9k716khlvbkmpxh0vn8rdmxmz96g URL
+    http://beta.quicklisp.org/archive/stefil/2018-12-10/stefil-20181210-git.tgz
+    MD5 3418bf358366748593f65e4b6e1bb8cf NAME stefil FILENAME stefil DEPS
     ((NAME alexandria FILENAME alexandria) (NAME iterate FILENAME iterate)
      (NAME metabang-bind FILENAME metabang-bind) (NAME swank FILENAME swank))
-    DEPENDENCIES (alexandria iterate metabang-bind swank) VERSION
-    20101107-darcs SIBLINGS NIL PARASITES (stefil-test)) */
+    DEPENDENCIES (alexandria iterate metabang-bind swank) VERSION 20181210-git
+    SIBLINGS NIL PARASITES (stefil-test)) */

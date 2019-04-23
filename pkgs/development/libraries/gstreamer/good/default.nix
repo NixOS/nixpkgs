@@ -6,6 +6,9 @@
 , libsoup, libpulseaudio, libintl
 , darwin, lame, mpg123, twolame
 , gtkSupport ? false, gtk3 ? null
+, libXdamage
+, libXext
+, libXfixes
 , ncurses
 }:
 
@@ -16,7 +19,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gst-plugins-good-${version}";
-  version = "1.14.2";
+  version = "1.14.4";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Good Plugins";
@@ -33,7 +36,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
-    sha256 = "1bfa4n6xhr4v4wga8pv1y00rm1aka498snw6kgszy2w624l5wmy0";
+    sha256 = "0y89qynb4b6fry3h43z1r99qslmi3m8xhlq0i5baq2nbc0r5b2sz";
   };
 
   outputs = [ "out" "dev" ];
@@ -49,6 +52,11 @@ stdenv.mkDerivation rec {
     libdv libvpx speex flac taglib
     cairo gdk_pixbuf aalib libcaca
     libsoup libshout lame mpg123 twolame libintl
+    # TODO: Remove the comments once https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/commit/e234932dc703e51a0e1aa3b9c408f12758b12335
+    # is merged and available in nixpkgs.
+    libXdamage # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
+    libXext # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
+    libXfixes # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
     ncurses
   ]
   ++ optional gtkSupport gtk3 # for gtksink

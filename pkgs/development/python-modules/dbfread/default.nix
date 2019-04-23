@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
     meta = with stdenv.lib; {
       description = "Read DBF Files with Python";
-      homepage    = http://dbfread.readthedocs.org/;
+      homepage    = https://dbfread.readthedocs.org/;
       license     = with licenses; [ mit ];
       maintainers = with maintainers; [ vrthra ];
     };

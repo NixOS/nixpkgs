@@ -140,13 +140,13 @@ in
   android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt (linuxCommon // {
   });
 
+  msp430 = mapTestOnCross lib.systems.examples.msp430 embedded;
   avr = mapTestOnCross lib.systems.examples.avr embedded;
   arm-embedded = mapTestOnCross lib.systems.examples.arm-embedded embedded;
   powerpc-embedded = mapTestOnCross lib.systems.examples.ppc-embedded embedded;
   aarch64-embedded = mapTestOnCross lib.systems.examples.aarch64-embedded embedded;
   i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
   x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
-  alpha-embedded = mapTestOnCross lib.systems.examples.alpha-embedded embedded;
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let

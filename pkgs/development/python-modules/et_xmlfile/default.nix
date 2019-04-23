@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256="0nrkhcb6jdrlb6pwkvd4rycw34y3s931hjf409ij9xkjsli9fkb1";
   };
 
-  buildInputs = [ lxml pytest ];
+  checkInputs = [ lxml pytest ];
   checkPhase = ''
     py.test $out
   '';

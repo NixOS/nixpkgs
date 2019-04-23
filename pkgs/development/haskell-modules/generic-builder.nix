@@ -19,6 +19,7 @@ in
 , buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? [], benchmarkToolDepends ? []
 , configureFlags ? []
 , buildFlags ? []
+, haddockFlags ? []
 , description ? ""
 , doCheck ? !isCross && stdenv.lib.versionOlder "7.4" ghc.version
 , doBenchmark ? false
@@ -72,8 +73,18 @@ in
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
 , hardeningDisable ? stdenv.lib.optional (ghc.isHaLVM or false) "all"
+, enableSeparateBinOutput ? false
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
+, # Don't fail at configure time if there are multiple versions of the
+  # same package in the (recursive) dependencies of the package being
+  # built. Will delay failures, if any, to compile time.
+  allowInconsistentDependencies ? false
+, maxBuildCores ? 4 # GHC usually suffers beyond -j4. https://ghc.haskell.org/trac/ghc/ticket/9221
+, # If set to true, this builds a pre-linked .o file for this Haskell library.
+  # This can make it slightly faster to load this library into GHCi, but takes
+  # extra disk space and compile time.
+  enableLibraryForGhci ? false
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -105,7 +116,9 @@ let
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
 
-  newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
+  binDir = if enableSeparateBinOutput then "$bin/bin" else "$out/bin";
+
+  newCabalFileUrl = "mirror://hackage/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
     url = newCabalFileUrl;
     sha256 = editedCabalFile;
@@ -137,7 +150,10 @@ let
   buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
 
   defaultConfigureFlags = [
-    "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$abi/\\$libname"
+    "--verbose"
+    "--prefix=$out"
+    "--libdir=\\$prefix/lib/\\$compiler"
+    "--libsubdir=\\$abi/\\$libname"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
     "--with-gcc=$CC" # Clang won't work without that extra information.
@@ -157,7 +173,7 @@ let
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
     (enableFeature doBenchmark "benchmarks")
     "--enable-library-vanilla"  # TODO: Should this be configurable?
-    "--enable-library-for-ghci" # TODO: Should this be configurable?
+    (enableFeature enableLibraryForGhci "library-for-ghci")
   ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" ghc.version)) [
      "--ghc-option=-split-sections"
   ] ++ optionals dontStrip [
@@ -167,7 +183,8 @@ let
     "--ghcjs"
   ] ++ optionals isCross ([
     "--configure-option=--host=${stdenv.hostPlatform.config}"
-  ] ++ crossCabalFlags);
+  ] ++ crossCabalFlags
+  ) ++ optionals enableSeparateBinOutput ["--bindir=${binDir}"];
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
@@ -206,7 +223,16 @@ let
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
   buildPkgDb = ghcName: packageConfDir: ''
-    if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
+    # If this dependency has a package database, then copy the contents of it,
+    # unless it is one of our GHCs. These can appear in our dependencies when
+    # we are doing native builds, and they have package databases in them, but
+    # we do not want to copy them over.
+    #
+    # We don't need to, since those packages will be provided by the GHC when
+    # we compile with it, and doing so can result in having multiple copies of
+    # e.g. Cabal in the database with the same name and version, which is
+    # ambiguous.
+    if [ -d "$p/lib/${ghcName}/package.conf.d" ] && [ "$p" != "${ghc}" ] && [ "$p" != "${nativeGhc}" ]; then
       cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
       continue
     fi
@@ -218,7 +244,10 @@ assert allPkgconfigDepends != [] -> pkgconfig != null;
 stdenv.mkDerivation ({
   name = "${pname}-${version}";
 
-  outputs = [ "out" ] ++ (optional enableSeparateDataOutput "data") ++ (optional enableSeparateDocOutput "doc");
+  outputs = [ "out" ]
+         ++ (optional enableSeparateDataOutput "data")
+         ++ (optional enableSeparateDocOutput "doc")
+         ++ (optional enableSeparateBinOutput "bin");
   setOutputFlags = false;
 
   pos = builtins.unsafeGetAttrPos "pname" args;
@@ -246,6 +275,7 @@ stdenv.mkDerivation ({
   '' + postPatch;
 
   setupCompilerEnvironmentPhase = ''
+    NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
@@ -336,11 +366,12 @@ stdenv.mkDerivation ({
 
     echo configureFlags: $configureFlags
     ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
-    if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
-      echo >&2 "*** abort because of serious configure-time warning from Cabal"
-      exit 1
-    fi
-
+    ${stdenv.lib.optionalString (!allowInconsistentDependencies) ''
+      if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
+        echo >&2 "*** abort because of serious configure-time warning from Cabal"
+        exit 1
+      fi
+    ''}
     export GHC_PACKAGE_PATH="$packageConfDir:"
 
     runHook postConfigure
@@ -365,11 +396,16 @@ stdenv.mkDerivation ({
     ${optionalString (doHaddock && isLibrary) ''
       ${setupCommand} haddock --html \
         ${optionalString doHoogle "--hoogle"} \
-        ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"}
+        ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
+        ${stdenv.lib.concatStringsSep " " haddockFlags}
     ''}
     runHook postHaddock
   '';
 
+  # The scary sed expression handles two cases in v2.5 Cabal's package configs:
+  # 1. 'id:    short-name-0.0.1-9yvw8HF06tiAXuxm5U8KjO'
+  # 2. 'id:\n
+  #         very-long-descriptive-useful-name-0.0.1-9yvw8HF06tiAXuxm5U8KjO'
   installPhase = ''
     runHook preInstall
 
@@ -384,7 +420,7 @@ stdenv.mkDerivation ({
         rmdir "$packageConfFile"
       fi
       for packageConfFile in "$packageConfDir/"*; do
-        local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
+        local pkgId=$( ${gnused}/bin/sed -n -e ':a' -e '/^id:$/N; s/id:\n[ ]*\([^\n]*\).*$/\1/p; s/id:[ ]*\([^\n]*\)$/\1/p; ta' $packageConfFile )
         mv $packageConfFile $packageConfDir/$pkgId.conf
       done
 
@@ -392,7 +428,7 @@ stdenv.mkDerivation ({
       find $packageConfDir -maxdepth 0 -empty -delete;
     ''}
     ${optionalString isGhcjs ''
-      for exeDir in "$out/bin/"*.jsexe; do
+      for exeDir in "${binDir}/"*.jsexe; do
         exe="''${exeDir%.jsexe}"
         printWords '#!${nodejs}/bin/node' > "$exe"
         echo >> "$exe"
@@ -402,7 +438,7 @@ stdenv.mkDerivation ({
     ''}
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
     ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
-      for exe in "$out/bin/"* ; do
+      for exe in "${binDir}/"* ; do
         install_name_tool -add_rpath "$out/lib/ghc-${ghc.version}/${pname}-${version}" "$exe"
       done
     ''}

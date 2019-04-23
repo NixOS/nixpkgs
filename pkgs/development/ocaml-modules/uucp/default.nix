@@ -3,7 +3,7 @@
 let
   pname = "uucp";
   version = "11.0.0";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.01";

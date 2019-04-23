@@ -25,7 +25,7 @@ let
   '';
 
   lessKey = pkgs.runCommand "lesskey"
-            { src = pkgs.writeText "lessconfig" configText; }
+            { src = pkgs.writeText "lessconfig" configText; preferLocalBuild = true; }
             "${pkgs.less}/bin/lesskey -o $out $src";
 
 in

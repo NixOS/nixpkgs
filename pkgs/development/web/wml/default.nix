@@ -22,7 +22,7 @@ perlPackages.buildPerlPackage rec {
     sed -i '/p2_mp4h\/doc/d' Makefile.in
   '';
 
-  buildInputs = with perlPackages; 
+  buildInputs = with perlPackages;
     [ perl TermReadKey GD BitVector ncurses lynx makeWrapper ImageSize ];
 
   patches = [ ./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch ];
@@ -45,7 +45,7 @@ perlPackages.buildPerlPackage rec {
 
   preFixup = ''
     wrapProgram $out/bin/wml \
-      --set PERL5LIB ${with perlPackages; stdenv.lib.makePerlPath [
+      --set PERL5LIB ${with perlPackages; makePerlPath [
         BitVector TermReadKey ImageSize
       ]}
   '';

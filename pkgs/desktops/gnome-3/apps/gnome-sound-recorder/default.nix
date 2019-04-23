@@ -1,18 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gobjectIntrospection, wrapGAppsHook, gjs, glib, gtk3, gdk_pixbuf, gst_all_1, gnome3 }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, gobject-introspection, wrapGAppsHook, gjs, glib, gtk3, gdk_pixbuf, gst_all_1, gnome3
+, meson, ninja, python3, hicolor-icon-theme, desktop-file-utils }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
-  version = "3.28.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0y0srj1hvr1waa35p6dj1r1mlgcsscc0i99jni50ijp4zb36fjqy";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0rchzap5mg9ach3jcf4sci5v2h5pgpdjafjfllfd09w9yg3brspp";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection wrapGAppsHook ];
+  nativeBuildInputs = [
+    pkgconfig gettext meson ninja gobject-introspection
+    wrapGAppsHook python3 hicolor-icon-theme desktop-file-utils
+  ];
   buildInputs = [ gjs glib gtk3 gdk_pixbuf ] ++ (with gst_all_1; [ gstreamer.dev gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]);
+
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   # TODO: fix this in gstreamer
   # TODO: make stdenv.lib.getBin respect outputBin

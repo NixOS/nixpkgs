@@ -5,7 +5,7 @@
 stdenv.mkDerivation rec {
   name = "openct-${version}";
   version = "0.6.20";
-  
+
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "openct";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's,$(DESTDIR),$(out),g' etc/Makefile.am
   '';
-  
+
   configureFlags = [
     "--enable-api-doc"
     "--enable-usb"
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/OpenSC/openct/;
     license = licenses.lgpl21;
     description = "Drivers for several smart card readers";
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

@@ -1,42 +1,46 @@
-{ stdenv, lib, fetchurl,
-  dpkg,
-  alsaLib,
-  at-spi2-atk,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  fontconfig,
-  freetype,
-  gdk_pixbuf,
-  glib,
-  gnome2,
-  gtk3,
-  libuuid,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
-  libXtst,
-  nspr,
-  nss,
-  pango,
-  udev,
-  xorg,
-  zlib,
-  xdg_utils
+{ stdenv, lib, fetchurl
+, dpkg
+, alsaLib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk_pixbuf
+, glib
+, gnome2
+, gnome3
+, gtk3
+, libuuid
+, libX11
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libXrandr
+, libXrender
+, libXScrnSaver
+, libXtst
+, nspr
+, nss
+, pango
+, udev
+, xorg
+, zlib
+, xdg_utils
+, wrapGAppsHook
 }:
 
 let rpath = lib.makeLibraryPath [
     alsaLib
     at-spi2-atk
+    at-spi2-core
     atk
     cairo
     cups
@@ -48,8 +52,8 @@ let rpath = lib.makeLibraryPath [
     glib
     gnome2.GConf
     gtk3
-    libuuid
     libX11
+    libXScrnSaver
     libXcomposite
     libXcursor
     libXdamage
@@ -58,39 +62,41 @@ let rpath = lib.makeLibraryPath [
     libXi
     libXrandr
     libXrender
-    libXScrnSaver
     libXtst
+    libuuid
     nspr
     nss
     pango
     udev
+    xdg_utils
     xorg.libxcb
     zlib
-    xdg_utils
 ];
 
 
 in stdenv.mkDerivation rec {
-    name = "brave";
-    version = "0.56.12";
+    pname = "brave";
+    version = "0.61.50";
 
     src = fetchurl {
         url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-        sha256 = "1pvablwchpsm1fdhfp9kr2912yv4812r8prv5fn799qpflzxvyai";
+        sha256 = "1lbajxnxqkd422rckfjm65pwwzl66v7anq4jrzxi29d5x7abl3c1";
     };
 
     dontConfigure = true;
     dontBuild = true;
     dontPatchELF = true;
 
-    nativeBuildInputs = [ dpkg ];
+    nativeBuildInputs = [ dpkg wrapGAppsHook ];
+
+    buildInputs = [ glib gnome3.gsettings_desktop_schemas gnome3.adwaita-icon-theme ];
 
     unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
     installPhase = ''
-        mkdir -p $out
+        mkdir -p $out $out/bin
 
-        cp -R usr/* $out
+        cp -R usr/share $out
         cp -R opt/ $out/opt
 
         export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser

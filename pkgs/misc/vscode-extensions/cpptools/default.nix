@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, vscode-utils, jq, mono, clang-tools, writeScript
+{ stdenv, fetchzip, vscode-utils, jq, mono, clang-tools, writeScript, runtimeShell
 , gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
@@ -34,8 +34,9 @@ let
     name = "cpptools-language-component-binaries";
 
     src = fetchzip {
-      url = "https://download.visualstudio.microsoft.com/download/pr/e8bc2ccc-bb10-4d40-8e29-edcd78986e9a/2e86fa29aefdbde2ea2cd1a6fceadeaa/bin_linux.zip";
-      sha256 = "1hvrbp3c4733aryslgyh3l5azmqkw398j2wbgr3w788fphg4v6cc";
+      # Follow https://go.microsoft.com/fwlink/?linkid=2037608
+      url = "https://download.visualstudio.microsoft.com/download/pr/97ed3eeb-b31e-421c-92dc-4f3a98af301e/069a1e6ab1b4b017853a7e9e08067744/bin_linux.zip";
+      sha256 = "19flm4vcrg89x0b20bd0g45apabzfqgvcpjddnmyk312jc242gmb";
     };
 
     patchPhase = ''
@@ -52,7 +53,7 @@ let
   };
 
   openDebugAD7Script = writeScript "OpenDebugAD7" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     BIN_DIR="$(cd "$(dirname "$0")" && pwd -P)"
     ${if gdbUseFixed
         then ''
@@ -67,8 +68,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "0.19.0";
-    sha256 = "1x97mz859bzr4gxy6cnqgd8qmvnrjn9zdxh457slsxsk4wqcfmgj";
+    version = "0.22.1";
+    sha256 = "1f79vbp19k1zm2y5djr4vim0h5y5rnm96rg8fx2h9zb8i559230k";
   };
 
   buildInputs = [

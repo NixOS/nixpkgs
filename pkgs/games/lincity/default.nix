@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libX11, libXext, xextproto, libICE, libSM, xproto, libpng12, zlib }:
+{ stdenv, fetchurl, fetchpatch, libX11, libXext, xorgproto, libICE, libSM, libpng12, zlib }:
 
 stdenv.mkDerivation rec {
   name = "lincity-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libICE libpng12 libSM libX11 libXext
-    xextproto zlib xproto
+    xorgproto zlib
   ];
 
   patches = [

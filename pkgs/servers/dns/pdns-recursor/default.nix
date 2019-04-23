@@ -8,11 +8,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "pdns-recursor-${version}";
-  version = "4.1.7";
+  version = "4.1.12";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${version}.tar.bz2";
-    sha256 = "0syvxlfxy3h2x1kvqkj7qqk8k85y42qjq30pcqqmy69v3pymq14s";
+    sha256 = "1j5hrpz4c9dqd30piqd8xyjmirdxp4dy71nx9rwq8l4i4nc0l774";
   };
 
   nativeBuildInputs = [ pkgconfig ];

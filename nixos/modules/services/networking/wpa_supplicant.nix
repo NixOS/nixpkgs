@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -6,7 +6,7 @@ let
   cfg = config.networking.wireless;
   configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
     ${optionalString cfg.userControlled.enable ''
-      ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=${cfg.userControlled.group}
+      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
     ${cfg.extraConfig}
     ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
@@ -86,7 +86,12 @@ in {
               '';
               description = ''
                 Use this option to configure advanced authentication methods like EAP.
-                See wpa_supplicant.conf(5) for example configurations.
+                See
+                <citerefentry>
+                  <refentrytitle>wpa_supplicant.conf</refentrytitle>
+                  <manvolnum>5</manvolnum>
+                </citerefentry>
+                for example configurations.
 
                 Mutually exclusive with <varname>psk</varname> and <varname>pskRaw</varname>.
               '';
@@ -122,7 +127,12 @@ in {
               '';
               description = ''
                 Extra configuration lines appended to the network block.
-                See wpa_supplicant.conf(5) for available options.
+                See
+                <citerefentry>
+                  <refentrytitle>wpa_supplicant.conf</refentrytitle>
+                  <manvolnum>5</manvolnum>
+                </citerefentry>
+                for available options.
               '';
             };
 
@@ -174,7 +184,12 @@ in {
         '';
         description = ''
           Extra lines appended to the configuration file.
-          See wpa_supplicant.conf(5) for available options.
+          See
+          <citerefentry>
+            <refentrytitle>wpa_supplicant.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for available options.
         '';
       };
     };
@@ -193,7 +208,7 @@ in {
     # FIXME: start a separate wpa_supplicant instance per interface.
     systemd.services.wpa_supplicant = let
       ifaces = cfg.interfaces;
-      deviceUnit = interface: [ "sys-subsystem-net-devices-${interface}.device" ];
+      deviceUnit = interface: [ "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device" ];
     in {
       description = "WPA Supplicant";
 

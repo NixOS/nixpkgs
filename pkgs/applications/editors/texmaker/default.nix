@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.xm1math.net/texmaker/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cfouche ];
+    maintainers = with maintainers; [ cfouche markuskowa ];
   };
 }

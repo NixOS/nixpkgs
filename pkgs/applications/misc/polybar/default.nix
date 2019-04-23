@@ -1,4 +1,4 @@
-{ cairo, cmake, fetchgit, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
+{ cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
 , python2, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
 
@@ -25,16 +25,19 @@ assert i3Support     -> ! i3GapsSupport && jsoncpp != null && i3      != null;
 assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
-    name = "polybar-${version}";
-    version = "3.2.1";
-    src = fetchgit {
-      url = "https://github.com/jaagr/polybar";
+    pname = "polybar";
+    version = "3.3.1";
+
+    src = fetchFromGitHub {
+      owner = "jaagr";
+      repo = pname;
       rev = version;
-      sha256 = "1z45swj2l0h8x8li7prl963cgl6zm3birsswpij8qwcmjaj5l8vz";
+      sha256 = "0qwi6q3qkrz2ip1jd4pxlnsrs2a9ywxyf8rgvbzyilr334rsiywh";
+      fetchSubmodules = true;
     };
 
     meta = with stdenv.lib; {
-      description = "A fast and easy-to-use tool for creatin status bars.";
+      description = "A fast and easy-to-use tool for creating status bars";
       longDescription = ''
         Polybar aims to help users build beautiful and highly customizable
         status bars for their desktop environment, without the need of

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost
-, zlib, openssl, R, qtbase, qtwebkit, qtwebchannel, libuuid, hunspellDicts
-, unzip, ant, jdk, gnumake, makeWrapper, pandoc
+, zlib, openssl, R, qtbase, qtwebkit, qtwebchannel, qtxmlpatterns, libuuid
+, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 }:
 
 let
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
 
-  buildInputs = [ boost zlib openssl R qtbase qtwebkit qtwebchannel libuuid ];
+  buildInputs = [ boost zlib openssl R qtbase qtwebkit qtwebchannel
+                  qtxmlpatterns libuuid ];
 
   src = fetchFromGitHub {
     owner = "rstudio";

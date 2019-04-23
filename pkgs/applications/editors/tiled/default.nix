@@ -2,14 +2,14 @@
 , python, qtbase, qttools }:
 
 stdenv.mkDerivation rec {
-  name = "tiled-${version}";
-  version = "1.2.0";
+  pname = "tiled";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "bjorn";
-    repo = "tiled";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "15apv81c5h17ljrxvm7hlyqg5bw58dzgik8gfhmh97wpwnbz1bl9";
+    sha256 = "1zsfhw539zwyf5qfnirzkkgy5bmrrs2cry4gimrhpky9fjlaa9h8";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];

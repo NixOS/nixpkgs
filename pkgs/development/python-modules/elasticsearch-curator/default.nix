@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname   = "elasticsearch-curator";
-  version = "5.5.4";
+  version = "5.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e75abeb7f7be939b1c64c071898760dc10ab5f08307c253fc074abf8a41a76f0";
+    sha256 = "0r4p229233ivprxnvp33hilkgczijmyvi33wivxhhj6q3kkywpyq";
   };
 
   # The test hangs so we disable it.
@@ -62,5 +62,8 @@ buildPythonPackage rec {
       * Perform various actions on the items which remain in the actionable list.
     '';
     maintainers = with maintainers; [ basvandijk ];
+
+    # https://github.com/elastic/curator/pull/1280
+    broken = versionAtLeast click.version "7.0";
   };
 }

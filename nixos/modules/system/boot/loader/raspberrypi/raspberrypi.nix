@@ -19,7 +19,7 @@ let
   blCfg = config.boot.loader;
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
-  isAarch64 = pkgs.stdenv.isAarch64;
+  isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
   optional = pkgs.stdenv.lib.optionalString;
 
   configTxt =
@@ -33,7 +33,7 @@ let
       avoid_warnings=1
     '' + optional isAarch64 ''
       # Boot in 64-bit mode.
-      arm_control=0x200
+      arm_64bit=1
     '' + (if cfg.uboot.enable then ''
       kernel=u-boot-rpi.bin
     '' else ''
@@ -97,7 +97,7 @@ in
 
   config = mkIf cfg.enable {
     assertions = singleton {
-      assertion = !pkgs.stdenv.isAarch64 || cfg.version == 3;
+      assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version == 3;
       message = "Only Raspberry Pi 3 supports aarch64.";
     };
 

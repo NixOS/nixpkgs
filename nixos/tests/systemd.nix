@@ -56,6 +56,11 @@ import ./make-test.nix {
       $machine->succeed('test -z $(ls -1 /var/log/journal)');
     };
 
+    # Regression test for https://github.com/NixOS/nixpkgs/issues/50273
+    subtest "DynamicUser actually allocates a user", sub {
+        $machine->succeed('systemd-run --pty --property=Type=oneshot --property=DynamicUser=yes --property=User=iamatest whoami | grep iamatest');
+    };
+
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35268
     subtest "file system with x-initrd.mount is not unmounted", sub {
       $machine->shutdown;

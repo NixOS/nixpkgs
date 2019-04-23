@@ -122,7 +122,7 @@ in {
 
     systemd.packages = [ pkgs.syncthing ];
 
-    users = mkIf (cfg.user == defaultUser) {
+    users = mkIf (cfg.systemService && cfg.user == defaultUser) {
       users."${defaultUser}" =
         { group = cfg.group;
           home  = cfg.dataDir;
@@ -151,7 +151,6 @@ in {
           RestartForceExitStatus="3 4";
           User = cfg.user;
           Group = cfg.group;
-          PermissionsStartOnly = true;
           ExecStart = ''
             ${cfg.package}/bin/syncthing \
               -no-browser \

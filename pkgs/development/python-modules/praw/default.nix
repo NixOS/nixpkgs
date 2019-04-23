@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
 , requests, decorator, flake8, mock, six, update_checker, pytestrunner, prawcore
-, pytest, betamax, betamax-serializers, betamax-matchers, requests_toolbelt
+, pytest_3, betamax, betamax-serializers, betamax-matchers, requests_toolbelt
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytest_3
     betamax
     betamax-serializers
     betamax-matchers
@@ -40,9 +40,9 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Reddit API wrapper";
-    homepage = http://praw.readthedocs.org/;
+    homepage = https://praw.readthedocs.org/;
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -136,14 +136,12 @@ index 7faab0a..8148b3d 100644
 +kerneldir = @prefix@/libexec/spl/include/vm
  kernel_HEADERS = $(KERNEL_H)
  endif
-diff --git a/module/Makefile.in b/module/Makefile.in
-index d4e62e1..73fa01c 100644
 --- a/module/Makefile.in
 +++ b/module/Makefile.in
-@@ -21,15 +21,15 @@ clean:
+@@ -21,22 +21,22 @@
  modules_install:
  	@# Install the kernel modules
- 	$(MAKE) -C @LINUX_OBJ@ SUBDIRS=`pwd` $@ \
+ 	$(MAKE) -C @LINUX_OBJ@ M=`pwd` $@ \
 -		INSTALL_MOD_PATH=$(DESTDIR)$(INSTALL_MOD_PATH) \
 +		INSTALL_MOD_PATH=@prefix@/$(INSTALL_MOD_PATH) \
  		INSTALL_MOD_DIR=$(INSTALL_MOD_DIR) \
@@ -160,3 +158,11 @@ index d4e62e1..73fa01c 100644
  	if [ -f $$sysmap ]; then \
  		depmod -ae -F $$sysmap @LINUX_VERSION@; \
  	fi
+ 
+ modules_uninstall:
+ 	@# Uninstall the kernel modules
+-	kmoddir=$(DESTDIR)$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@
++	kmoddir=@prefix@/$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@
+ 	list='$(subdir-m)'; for subdir in $$list; do \
+ 		$(RM) -R $$kmoddir/$(INSTALL_MOD_DIR)/$$subdir; \
+ 	done

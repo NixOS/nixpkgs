@@ -19,7 +19,7 @@ buildPythonPackage rec {
     description = "Tools for i3 users and developers";
     homepage =  "https://github.com/ziberna/i3-py";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, meson, ninja
-, pkgconfig, gettext, gobjectIntrospection
+, pkgconfig, gettext, gobject-introspection
 , bison, flex, python3, glib, makeWrapper
 , libcap,libunwind, darwin
 , lib
@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   name = "gstreamer-${version}";
-  version = "1.14.2";
+  version = "1.14.4";
 
   meta = with lib ;{
     description = "Open source multimedia framework";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer/${name}.tar.xz";
-    sha256 = "029fi3v0vrravysgfwhfkrb3ndg64sjmigbb0iwr7wpkk5r15mjb";
+    sha256 = "1izzhnlsy83rgr4zl3jcl1sryxqbbigrrqw3j4x3nnphqnb6ckzr";
   };
 
   patches = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext bison flex python3 makeWrapper gobjectIntrospection
+    meson ninja pkgconfig gettext bison flex python3 makeWrapper gobject-introspection
   ];
   buildInputs =
        lib.optionals stdenv.isLinux [ libcap libunwind ]
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for prog in "$dev/bin/"*; do
-        wrapProgram "$prog" --suffix GST_PLUGIN_SYSTEM_PATH : "\$(unset _tmp; for profile in \$NIX_PROFILES; do _tmp="\$profile/lib/gstreamer-1.0''$\{_tmp:+:\}\$_tmp"; done; printf "\$_tmp")"
+        # We can't use --suffix here due to quoting so we craft the export command by hand
+        wrapProgram "$prog" --run "export GST_PLUGIN_SYSTEM_PATH=\$GST_PLUGIN_SYSTEM_PATH"$\{GST_PLUGIN_SYSTEM_PATH:+:\}"\$(unset _tmp; for profile in \$NIX_PROFILES; do _tmp="\$profile/lib/gstreamer-1.0''$\{_tmp:+:\}\$_tmp"; done; printf "\$_tmp")"
     done
   '';
 

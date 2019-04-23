@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "django-picklefield";
-  version = "1.1.0";
+  version = "2.0";
 
   meta = {
     description = "A pickled object field for Django";
@@ -12,6 +12,6 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "174zlsajpjflrf3jgn0wp5svnxfyrjadk4s9jb45vzjqcmffwzyf";
+    sha256 = "f1733a8db1b6046c0d7d738e785f9875aa3c198215de11993463a9339aa4ea24";
   };
 }

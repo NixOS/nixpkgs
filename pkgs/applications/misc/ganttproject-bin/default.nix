@@ -1,12 +1,13 @@
-{ stdenv, fetchzip, makeDesktopItem, makeWrapper
-, jre }:
+{ stdenv, lib, fetchzip, makeDesktopItem, makeWrapper
+, jre
+}:
 
 stdenv.mkDerivation rec {
   name = "ganttproject-bin-${version}";
-  version = "2.7.2";
+  version = "2.8.10";
 
-  src = let build = "r1954"; in fetchzip {
-    sha256 = "0l655w6n88j7klz56af8xkpiv1pwlkfl5x1d33sqv9dnyisyw2hc";
+  src = let build = "r2364"; in fetchzip {
+    sha256 = "0cclgyqv4f9pjsdlh93cqvgbzrp8ajvrpc2xszs03sknqz2kdh7r";
     url = "https://dl.ganttproject.biz/ganttproject-${version}/"
         + "ganttproject-${version}-${build}.zip";
   };
@@ -28,18 +29,21 @@ stdenv.mkDerivation rec {
       categories = "Office;Application;";
     };
 
+    javaOptions = [
+      "-Dawt.useSystemAAFontSettings=on"
+    ];
+
   in ''
     mkdir -pv "$out/share/ganttproject"
     cp -rv *  "$out/share/ganttproject"
 
     mkdir -pv "$out/bin"
     wrapProgram "$out/share/ganttproject/ganttproject" \
-      --set JAVA_HOME "${jre}"
+      --set JAVA_HOME "${jre}" \
+      --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
+
     mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 
-    install -v -Dm644 \
-      plugins/net.sourceforge.ganttproject/data/resources/icons/ganttproject.png \
-      "$out/share/pixmaps/ganttproject.png"
     cp -rv "${desktopItem}/share/applications" "$out/share"
   '';
 
@@ -51,5 +55,6 @@ stdenv.mkDerivation rec {
     # ‘GPL3-compatible’. See ${downloadPage} for detailed information.
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    maintainers = [ maintainers.vidbina ];
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-icon-theme-${version}";
-  version = "1.21.0";
+  version = "1.20.3";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "170vir6h9sgsibd4kfq5qgz542qrw94q3qakqry77clls5wj6b62";
+    sha256 = "10l58mjc2a69pm7srxvlav2b8b7nbzyvwjrlrk79a3gr6dd1mbk4";
   };
 
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Icon themes from MATE";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.romildo ];

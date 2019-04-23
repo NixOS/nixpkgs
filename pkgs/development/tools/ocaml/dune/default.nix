@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, ocamlPackages, opaline }:
+{ stdenv, fetchurl, ocaml, findlib, opaline }:
 
 stdenv.mkDerivation rec {
   name = "dune-${version}";
-  version = "1.5.1";
+  version = "1.9.1";
   src = fetchurl {
     url = "https://github.com/ocaml/dune/releases/download/${version}/dune-${version}.tbz";
-    sha256 = "1dbf7wwhr7b41g3p24qb9v5r1vvgrk6i9w8f7y7k5k527xy9jk5w";
+    sha256 = "0z4jnj0a5vxjqlwksplhag9b3s3iqdcpcpjjzfazv5jdl5cf58f9";
   };
 
-  buildInputs = with ocamlPackages; [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ];
 
   buildFlags = "release";
 
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "A composable build system";
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     license = stdenv.lib.licenses.mit;
-    inherit (ocamlPackages.ocaml.meta) platforms;
+    inherit (ocaml.meta) platforms;
   };
 }

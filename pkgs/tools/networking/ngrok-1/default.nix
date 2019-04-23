@@ -28,4 +28,8 @@ buildGoPackage rec {
   '';
 
   buildFlags = [ "-tags release" ];
+
+  meta = {
+    homepage = https://ngrok.com/;
+  };
 }

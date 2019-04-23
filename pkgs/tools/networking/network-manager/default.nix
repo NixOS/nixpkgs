@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, substituteAll, intltool, pkgconfig, dbus-glib
+{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, dbus, dbus-glib
 , gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables
 , libgcrypt, dnsmasq, bluez5, readline
-, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
+, gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
 , python3Packages, docbook_xsl, openconnect, curl, autoreconfHook }:
 
@@ -9,11 +9,11 @@ let
   pname = "NetworkManager";
 in stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "1.12.2";
+  version = "1.16.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09hsh34m8hg4m402pw5n11f29vsfjw6lm3p5m56yxwq57bwnzq3b";
+    sha256 = "0b2x9hrg41cd17psqi0vacwj733v99hxczn53gdfs0yanqrji5lf";
   };
 
   outputs = [ "out" "dev" ];
@@ -25,16 +25,6 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
     substituteInPlace configure --replace /usr/bin/file ${file}/bin/file
-    substituteInPlace data/84-nm-drivers.rules \
-      --replace /bin/sh ${stdenv.shell}
-    substituteInPlace data/85-nm-unmanaged.rules \
-      --replace /bin/sh ${stdenv.shell} \
-      --replace /usr/sbin/ethtool ${ethtool}/sbin/ethtool \
-      --replace /bin/sed ${gnused}/bin/sed
-    substituteInPlace data/NetworkManager.service.in \
-      --replace /bin/kill ${coreutils}/bin/kill
-    # to enable link-local connections
-    configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
 
     # Fixes: error: po/Makefile.in.in was not created by intltoolize.
     intltoolize --automake --copy --force
@@ -50,10 +40,11 @@ in stdenv.mkDerivation rec {
     "--with-dhcpcd=no"
     "--with-pppd=${ppp}/bin/pppd"
     "--with-iptables=${iptables}/bin/iptables"
-    #"--with-udev-dir=$(out)/lib/udev"
+    # to enable link-local connections
+    "--with-udev-dir=${placeholder "out"}/lib/udev"
     "--with-resolvconf=${openresolv}/sbin/resolvconf"
     "--sysconfdir=/etc" "--localstatedir=/var"
-    "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
+    "--with-dbus-sys-dir=${placeholder "out"}/etc/dbus-1/system.d"
     "--with-crypto=gnutls" "--disable-more-warnings"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-kernel-firmware-dir=/run/current-system/firmware"
@@ -66,25 +57,17 @@ in stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # https://bugzilla.gnome.org/show_bug.cgi?id=796751
-    (fetchpatch {
-      url = https://bugzilla.gnome.org/attachment.cgi?id=372953;
-      sha256 = "0xg7bzs6dvkbv2qp67i7mi1c5yrmfd471xgmlkn15b33pqkzy3mc";
-    })
-    (fetchpatch {
-      url = https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/0a3755c1799d3a4dc1875d4c59c7c568a64c8456.patch;
-      sha256 = "0r7338q3za7mf419a244vi65b1q497rg84avijybmv6w4x6p1ksd";
-    })
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit inetutils kmod openconnect;
+      inherit inetutils kmod openconnect ethtool coreutils dbus;
+      inherit (stdenv) shell;
     })
 
   ];
 
   buildInputs = [
     systemd libuuid polkit ppp libndp curl
-    bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup jansson
+    bluez5 dnsmasq gobject-introspection modemmanager readline newt libsoup jansson
   ];
 
   propagatedBuildInputs = [ dbus-glib gnutls libgcrypt python3Packages.pygobject3 ];
@@ -93,9 +76,11 @@ in stdenv.mkDerivation rec {
 
   doCheck = false; # requires /sys, the net
 
-  preInstall = ''
-    installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" "runstatedir=$out/var/run" )
-  '';
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+    "localstatedir=${placeholder "out"}/var"
+    "runstatedir=${placeholder "out"}/run"
+  ];
 
   postInstall = ''
     mkdir -p $out/lib/NetworkManager
@@ -103,13 +88,15 @@ in stdenv.mkDerivation rec {
     # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
     substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
 
-    # rename to network-manager to be in style
-    mv $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service
-
     # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
     # aliases ourselves.
     ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-    ln -s $out/etc/systemd/system/network-manager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+    ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+
+    # Add the legacy service name from before #51382 to prevent NetworkManager
+    # from not starting back up:
+    # TODO: remove this once 19.10 is released
+    ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service
   '';
 
   passthru = {

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, texinfo, libXext, xextproto, libX11, xproto
+{ stdenv, fetchurl, texinfo, libXext, xorgproto, libX11
 , libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
-, libXxf86dga, libXxf86misc, xf86dgaproto, xf86miscproto
-, xf86vidmodeproto, libXxf86vm, openal, libGLU_combined }:
+, libXxf86dga, libXxf86misc
+, libXxf86vm, openal, libGLU_combined }:
 
 stdenv.mkDerivation rec {
   name = "allegro-${version}";
@@ -13,13 +13,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./allegro4-mesa-18.2.5.patch
     ./nix-unstable-sandbox-fix.patch
   ];
 
   buildInputs = [
-    texinfo libXext xextproto libX11 xproto libXpm libXt libXcursor
+    texinfo libXext xorgproto libX11 libXpm libXt libXcursor
     alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
-    xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal libGLU_combined
+    libXxf86vm openal libGLU_combined
   ];
 
   hardeningDisable = [ "format" ];

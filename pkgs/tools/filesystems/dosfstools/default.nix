@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Utilities for creating and checking FAT and VFAT file systems";
-    repositories.git = git://daniel-baumann.ch/git/software/dosfstools.git;
-    homepage = https://www.daniel-baumann.ch/software/dosfstools/;
+    homepage = https://github.com/dosfstools/dosfstools;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     license = stdenv.lib.licenses.gpl3;
   };

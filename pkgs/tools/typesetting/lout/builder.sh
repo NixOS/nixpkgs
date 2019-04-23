@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # Prepare a makefile specifying the appropriate output directories.
 #
 # Written by Ludovic Courtès <ludo@gnu.org>.

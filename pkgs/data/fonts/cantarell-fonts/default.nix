@@ -2,20 +2,26 @@
 
 let
   pname = "cantarell-fonts";
-  version = "0.100";
+  version = "0.111";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1286rx1z7mrmi6snx957fprpcmd5p00l6drdfpbgf6mqapl6kb81";
+    sha256 = "05hpnhihwm9sxlq1qn993g03pwkmpjbn0dvnba71r1gfjv0jp2w5";
   };
 
   nativeBuildInputs = [ meson ninja gettext appstream-glib ];
 
+  # ad-hoc fix for https://github.com/NixOS/nixpkgs/issues/50855
+  # until we fix gettext's envHook
+  preBuild = ''
+    export GETTEXTDATADIRS="$GETTEXTDATADIRS_FOR_BUILD"
+  '';
+
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "12ia41pr0rzjfay6y84asw3nxhyp1scq9zl0w4f6wkqj7vf1qfn1";
+  outputHash = "12ps2gjv1lmzbmkv16vgjmaahl3ayadpniyrx0z31sqn443r57hq";
 
   passthru = {
     updateScript = gnome3.updateScript {

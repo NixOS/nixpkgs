@@ -16,25 +16,41 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.30";
+  pname = "coreutils";
+  version = "8.31";
 
   src = fetchurl {
-    url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "0mxhw43d4wpqmvg0l4znk1vm10fy92biyh90lzdnqjcic2lb6cg8";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1zg9m79x1i2nifj4kb0waf9x3i5h6ydkypkjnbsb9rnwis8rqypz";
   };
 
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
 
-  # The test tends to fail on btrfs and maybe other unusual filesystems.
   postPatch = ''
-    sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
-    sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
-    sed '2i echo Skipping rm deep-2 test && exit 0' -i ./tests/rm/deep-2.sh
-    sed '2i echo Skipping du long-from-unreadable test && exit 0' -i ./tests/du/long-from-unreadable.sh
-    sed '2i echo Skipping chmod setgid test && exit 0' -i ./tests/chmod/setgid.sh
-    sed '2i print "Skipping env -S test";  exit 0;' -i ./tests/misc/env-S.pl
+    # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
+    sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh
+    sed '2i echo Skipping du threshold test && exit 77' -i ./tests/du/threshold.sh
+    sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
+    sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
+    sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
+
+    # sandbox does not allow setgid
+    sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
     substituteInPlace ./tests/install/install-C.sh \
       --replace 'mode3=2755' 'mode3=1755'
+
+    sed '2i print "Skipping env -S test";  exit 77;' -i ./tests/misc/env-S.pl
+
+    # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
+    for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
+      sed '2i echo Skipping chgrp && exit 77' -i "$f"
+    done
+    for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
+      echo "int main() { return 77; }" > "$f"
+    done
+  '' + optionalString (stdenv.hostPlatform.libc == "musl") ''
+    echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
+    echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
   '';
 
   outputs = [ "out" "info" ];
@@ -63,12 +79,12 @@ stdenv.mkDerivation rec {
     ++ optional (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc != "glibc") libiconv;
 
   # The tests are known broken on Cygwin
-  # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
-  # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
+  # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
+  # Darwin (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform
-    && stdenv.hostPlatform.libc == "glibc"
+    && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.isMusl)
     && builtins.storeDir == "/nix/store";
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
@@ -97,7 +113,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.gnu.org/software/coreutils/;
+    homepage = https://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
 
     longDescription = ''
@@ -109,7 +125,9 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
+
+    priority = 10;
 
     maintainers = [ maintainers.eelco ];
   };

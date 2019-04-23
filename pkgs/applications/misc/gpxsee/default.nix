@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "gpxsee-${version}";
-  version = "6.3";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "0kbnmcis04kjqkd0msfjd8rdmdf23c71dpzx9wcpf2yadc9rv4c9";
+    sha256 = "1dgag8j3566qwiz1pschfq2wqdp7y1pr4cm9na4zwrdjhn3ci6v5";
   };
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qttools ];
 
   preConfigure = ''
-    substituteInPlace src/config.h --replace /usr/share/gpxsee $out/share/gpxsee
+    substituteInPlace src/common/programpaths.cpp --replace /usr/share/ $out/share/
     lrelease lang/*.ts
   '';
 
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.gpxsee.org/;
+    homepage = https://www.gpxsee.org/;
     description = "GPX viewer and analyzer";
     longDescription = ''
       GPXSee is a Qt-based GPS log file viewer and analyzer that supports GPX,
-      TCX, KML, FIT, IGC and NMEA files.
+      TCX, KML, FIT, IGC, NMEA, SLF, LOC and OziExplorer files.
     '';
     license = licenses.gpl3;
     maintainers = [ maintainers.womfoo ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "mruby-${version}";
-  version = "1.4.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner   = "mruby";
     repo    = "mruby";
     rev     = version;
-    sha256  = "0pw72acbqgs4n1qa297nnja23v9hxz9g7190yfx9kwm7mgbllmww";
+    sha256  = "1r6w1asjshff43ymdwa6xmrkggza99mi2kw88k7ic6ag2j81hcj5";
   };
 
   patches = [

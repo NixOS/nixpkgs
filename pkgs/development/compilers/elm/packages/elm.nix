@@ -13,6 +13,7 @@ mkDerivation {
     url = "https://github.com/elm/compiler";
     sha256 = "13jks6c6i80z71mjjfg46ri570g5ini0k3xw3857v6z66zcl56x4";
     rev = "d5cbc41aac23da463236bbc250933d037da4055a";
+    fetchSubmodules = true;
   };
   isLibrary = false;
   isExecutable = true;
@@ -24,7 +25,7 @@ mkDerivation {
     snap-server template-haskell text time unordered-containers
     utf8-string vector zip-archive
   ];
-  homepage = "http://elm-lang.org";
+  homepage = "https://elm-lang.org";
   description = "The `elm` command line interface";
   license = stdenv.lib.licenses.bsd3;
 }

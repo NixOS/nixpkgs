@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
+  NIX_LDFLAGS =  [
+    "-lm"
+  ];
+
   meta = {
     description = "JACK audio recorder";
     homepage = http://plugin.org.uk/timemachine/;

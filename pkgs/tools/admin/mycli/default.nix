@@ -7,12 +7,14 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.17.0";
+  version = "1.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11d3ssjifms6bid77jk06zl5wl3srihijmv5kggxa0w2l59y8h9m";
+    sha256 = "0x5vzl4vvirqy03fnjwkamhzrqkknlajamwz1rmbnqh4bfmijh9m";
   };
+
+  patches = [ ./fix-tests.patch ];
 
   propagatedBuildInputs = [
     pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers

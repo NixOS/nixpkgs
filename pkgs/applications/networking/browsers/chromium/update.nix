@@ -97,13 +97,13 @@ in rec {
 
         builtins.tryEval (builtins.fetchurl url)
 
-      ... except that tryEval on fetchurl isn't working and doesn't catch errors
-      for fetchurl, so we go for a different approach.
+      ... except that tryEval on fetchurl isn't working and doesn't catch
+      errors for fetchurl, so we go for a different approach.
 
       We only have fixed-output derivations that can have networking access, so
-      we abuse MD5 and its weaknesses to forge a fixed-output derivation which
+      we abuse SHA1 and its weaknesses to forge a fixed-output derivation which
       is not so fixed, because it emits different contents that have the same
-      MD5 hash.
+      SHA1 hash.
 
       Using this method, we can distinguish whether the URL is available or
       whether it's not based on the actual content.
@@ -111,25 +111,50 @@ in rec {
       So let's use tryEval as soon as it's working with fetchurl in Nix.
     */
     tryFetch = url: let
-      mkBin = b: runCommand "binary-blurb" { inherit b; } ''
-        h="$(echo "$b" | sed -e ':r;N;$!br;s/[^ \n][^ \n]/\\x&/g;s/[ \n]//g')"
-        echo -ne "$h" > "$out"
-      '';
-
-      # Both MD5 hash collision examples are from:
-      # https://en.wikipedia.org/wiki/MD5#Collision_vulnerabilities
-      hashCollTrue = mkBin ''
-        d131dd02c5e6eec4 693d9a0698aff95c 2fcab58712467eab 4004583eb8fb7f89
-        55ad340609f4b302 83e488832571415a 085125e8f7cdc99f d91dbdf280373c5b
-        d8823e3156348f5b ae6dacd436c919c6 dd53e2b487da03fd 02396306d248cda0
-        e99f33420f577ee8 ce54b67080a80d1e c69821bcb6a88393 96f9652b6ff72a70
-      '';
-
-      hashCollFalse = mkBin ''
-        d131dd02c5e6eec4 693d9a0698aff95c 2fcab50712467eab 4004583eb8fb7f89
-        55ad340609f4b302 83e4888325f1415a 085125e8f7cdc99f d91dbd7280373c5b
-        d8823e3156348f5b ae6dacd436c919c6 dd53e23487da03fd 02396306d248cda0
-        e99f33420f577ee8 ce54b67080280d1e c69821bcb6a88393 96f965ab6ff72a70
+      # SHA1 hash collisions from https://shattered.io/static/shattered.pdf:
+      collisions = runCommand "sha1-collisions" {
+        outputs = [ "out" "good" "bad" ];
+        base64 = ''
+          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
+          NC/4ct6rQkPkQHMcV/8XckU4UJCy+VeTA==
+        '';
+      } ''
+        echo "$base64" | base64 -d | tar xj
+        mv good.pdf "$good"
+        mv bad.pdf "$bad"
+        touch "$out"
       '';
 
       cacheVal = let
@@ -137,31 +162,40 @@ in rec {
         timeSlice = builtins.currentTime / 600;
       in "${urlHash}-${toString timeSlice}";
 
-      successBin = stdenv.mkDerivation {
-        name = "tryfetch-${cacheVal}";
-        inherit url;
-
-        outputHash = "79054025255fb1a26e4bc422aef54eb4";
-        outputHashMode = "flat";
-        outputHashAlgo = "md5";
-
-        nativeBuildInputs = [ curl ];
-        preferLocalBuild = true;
-
-        buildCommand = ''
-          if SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt" \
-             curl -s -L -f -I "$url" > /dev/null; then
-            cat "${hashCollTrue}" > "$out"
-          else
-            cat "${hashCollFalse}" > "$out"
-          fi
-        '';
-
-        impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-      };
-
     in {
-      success = builtins.readFile successBin == builtins.readFile hashCollTrue;
+      success = import (runCommand "check-success" {
+        result = stdenv.mkDerivation {
+          name = "tryfetch-${cacheVal}";
+          inherit url;
+
+          outputHash = "d00bbe65d80f6d53d5c15da7c6b4f0a655c5a86a";
+          outputHashMode = "flat";
+          outputHashAlgo = "sha1";
+
+          nativeBuildInputs = [ curl ];
+          preferLocalBuild = true;
+
+          inherit (collisions) good bad;
+
+          buildCommand = ''
+            if SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt" \
+               curl -s -L -f -I "$url" > /dev/null; then
+              cp "$good" "$out"
+            else
+              cp "$bad" "$out"
+            fi
+          '';
+
+          impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+        };
+        inherit (collisions) good;
+      } ''
+        if cmp -s "$result" "$good"; then
+          echo true > "$out"
+        else
+          echo false > "$out"
+        fi
+      '');
       value = builtins.fetchurl url;
     };
 

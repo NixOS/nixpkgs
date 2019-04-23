@@ -1,12 +1,16 @@
-{ stdenv, config, libGLSupported, fetchurl, pkgconfig, pruneLibtoolFiles
+{ stdenv, config, libGLSupported, fetchurl, pkgconfig
 , openglSupport ? libGLSupported, libGL
-, alsaSupport ? stdenv.isLinux, alsaLib
-, x11Support ? !stdenv.isCygwin, libX11, xproto, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
-, waylandSupport ? stdenv.isLinux, wayland, wayland-protocols, libxkbcommon
-, dbusSupport ? stdenv.isLinux, dbus
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
+, libXinerama, libXext, libXxf86vm, libXrandr
+, waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, wayland, wayland-protocols, libxkbcommon
+, dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, dbus
 , udevSupport ? false, udev
 , ibusSupport ? false, ibus
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
 , audiofile, cf-private, libiconv
 }:
@@ -15,9 +19,6 @@
 # SDL expression too
 
 with stdenv.lib;
-
-assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
-assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null);
 
 stdenv.mkDerivation rec {
   name = "SDL2-${version}";
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./find-headers.patch ];
 
-  nativeBuildInputs = [ pkgconfig pruneLibtoolFiles ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 
@@ -41,17 +42,17 @@ stdenv.mkDerivation rec {
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
     ++ optional openglSupport libGL
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
-    ++ optionals x11Support [ libX11 xproto ];
+    ++ optionals x11Support [ libX11 xorgproto ];
 
   dlopenBuildInputs = [ ]
-    ++ optional  alsaSupport alsaLib
+    ++ optionals  alsaSupport [ alsaLib audiofile ]
     ++ optional  dbusSupport dbus
     ++ optional  pulseaudioSupport libpulseaudio
     ++ optional  udevSupport udev
     ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
     ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ];
 
-  buildInputs = [ audiofile libiconv ]
+  buildInputs = [ libiconv ]
     ++ dlopenBuildInputs
     ++ optional  ibusSupport ibus
     ++ optionals stdenv.isDarwin [
@@ -60,9 +61,7 @@ stdenv.mkDerivation rec {
       cf-private
     ];
 
-  # /build/SDL2-2.0.7/src/video/wayland/SDL_waylandevents.c:41:10: fatal error:
-  #   pointer-constraints-unstable-v1-client-protocol.h: No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--disable-oss"

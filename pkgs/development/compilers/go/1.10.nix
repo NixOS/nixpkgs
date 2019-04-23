@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation }:
+, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
+, fetchpatch
+}:
 
 let
 
@@ -22,13 +24,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.10.3";
+  version = "1.10.8";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "0i89298dgnmpmam3ifkm0ax266vvbq1yz7wfw8wwrcma0szrbrnb";
+    sha256 = "1yynv105wh8pwiq61v4yg5i50k13g3x634x60mhxhv4gj9cq06cx";
   };
 
   GOCACHE = "off";
@@ -122,6 +124,11 @@ stdenv.mkDerivation rec {
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
     ./go-1.9-skip-flaky-20072.patch
+    (fetchpatch {
+      name = "missing_cpuHog_in_pprof_output.diff";
+      url = "https://github.com/golang/go/commit/33110e2c.diff";
+      sha256 = "04vh9lflbpz9xjvymyzhd91gkxiiwwz4lhglzl3r8z0lk45p96qn";
+    })
   ];
 
   postPatch = optionalString stdenv.isDarwin ''
@@ -174,7 +181,7 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ go_bootstrap ];
 
   meta = with stdenv.lib; {
-    branch = "1.9";
+    branch = "1.10";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;

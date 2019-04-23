@@ -5,13 +5,16 @@
 
 stdenv.mkDerivation rec {
   name = "intel-vaapi-driver-${version}";
-  inherit (libva) version;
+  # TODO: go back to stable releases with the next stable release after 2.3.0.
+  #       see: https://github.com/NixOS/nixpkgs/issues/55975 (and the libva comment v)
+  rev = "329975c63123610fc750241654a3bd18add75beb"; # generally try to match libva version, but not required
+  version = "git-20190211";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "intel-vaapi-driver";
-    rev    = version;
-    sha256 = "15ag4al9h6b8f8sw1zpighyhsmr5qfqp1882q7r3gsh5g4cnj763";
+    rev    = rev;
+    sha256 = "10333wh2d0hvz5lxl3gjvqs71s7v9ajb0269b3bj5kbflj03v3n5";
   };
 
   patchPhase = ''

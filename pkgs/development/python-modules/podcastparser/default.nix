@@ -11,11 +11,11 @@ buildPythonPackage rec {
     sha256 = "10bk93fqsws360q1gkjvfzjda3351169zbr6v5lq9raa3mg1ln52";
   };
 
-  propagatedBuildInputs = [ ];
+  checkInputs = [ nose ];
 
-  buildInputs = [ nose ];
-
-  checkPhase = "nosetests test_*.py";
+  checkPhase = ''
+    nosetests test_*.py
+  '';
 
   meta = {
     description = "podcastparser is a simple, fast and efficient podcast parser written in Python.";

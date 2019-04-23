@@ -1,21 +1,21 @@
-{ stdenv, lib, fetchurl
+{ config, stdenv, lib, fetchurl
 , perl
 , libcap, libtool, libxml2, openssl
-, enablePython ? false, python3 ? null
+, enablePython ? config.bind.enablePython or false, python3 ? null
 , enableSeccomp ? false, libseccomp ? null, buildPackages
 }:
 
 assert enableSeccomp -> libseccomp != null;
 assert enablePython -> python3 != null;
 
-let version = "9.12.3"; in
+let version = "9.12.3-P4"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0f5rjs6zsq8sp6iv5r4q5y65xv05dk2sgvsj6lcir3i564k7d00f";
+    sha256 = "01pj47z5582rd538dmbzf1msw4jc8j4zr0zx4ciy88r6qr9l80fi";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtool libxml2 openssl ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
-    ++ lib.optional enablePython python3;
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # requires root and the net
 
   meta = {
-    homepage = http://www.isc.org/software/bind;
+    homepage = https://www.isc.org/downloads/bind/;
     description = "Domain name server";
     license = stdenv.lib.licenses.mpl20;
 

@@ -3,13 +3,13 @@
 buildGoPackage rec {
 
   name = "boohu-${version}";
-  version = "0.10.0";
+  version = "0.12.0";
 
   goPackagePath = "git.tuxfamily.org/boohu/boohu.git";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/boohu/downloads/boohu-${version}.tar.gz";
-    sha256 = "a4d1fc488cfeecbe0a5e9be1836d680951941014f926351692a8dbed9042eba6";
+    sha256 = "0nf3xj3lda8279cqvjv5c3vpsb7d2kynwwna5yrsy7gq8c9n4rh8";
   };
 
   buildFlags = "--tags ansi";

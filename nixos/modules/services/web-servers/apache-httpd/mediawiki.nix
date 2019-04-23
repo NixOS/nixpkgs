@@ -83,11 +83,11 @@ let
 
   # Unpack Mediawiki and put the config file in its root directory.
   mediawikiRoot = pkgs.stdenv.mkDerivation rec {
-    name= "mediawiki-1.29.1";
+    name= "mediawiki-1.31.1";
 
     src = pkgs.fetchurl {
-      url = "http://download.wikimedia.org/mediawiki/1.29/${name}.tar.gz";
-      sha256 = "03mpazbxvb011s2nmlw5p6dc43yjgl5yrsilmj1imyykm57bwb3m";
+      url = "https://releases.wikimedia.org/mediawiki/1.31/${name}.tar.gz";
+      sha256 = "13x48clij21cmysjkpnx68vggchrdasqp7b290j87xlfgjhdhnnf";
     };
 
     skins = config.skins;
@@ -111,14 +111,15 @@ let
         sed -i \
         -e 's|/bin/bash|${pkgs.bash}/bin/bash|g' \
         -e 's|/usr/bin/timeout|${pkgs.coreutils}/bin/timeout|g' \
-          $out/includes/limit.sh \
+          $out/includes/shell/limit.sh \
           $out/includes/GlobalFunctions.php
       '';
   };
 
-  mediawikiScripts = pkgs.runCommand "mediawiki-${config.id}-scripts"
-    { buildInputs = [ pkgs.makeWrapper ]; }
-    ''
+  mediawikiScripts = pkgs.runCommand "mediawiki-${config.id}-scripts" {
+      buildInputs = [ pkgs.makeWrapper ];
+      preferLocalBuild = true;
+    } ''
       mkdir -p $out/bin
       for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
         makeWrapper ${php}/bin/php $out/bin/mediawiki-${config.id}-$(basename $i .php) \
@@ -311,7 +312,7 @@ in
       description = ''
         Any additional text to be appended to MediaWiki's
         configuration file.  This is a PHP script.  For configuration
-        settings, see <link xlink:href='http://www.mediawiki.org/wiki/Manual:Configuration_settings'/>.
+        settings, see <link xlink:href='https://www.mediawiki.org/wiki/Manual:Configuration_settings'/>.
       '';
     };
 

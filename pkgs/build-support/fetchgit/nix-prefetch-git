@@ -152,7 +152,7 @@ checkout_ref(){
     if "$deepClone"; then
         # The caller explicitly asked for a deep clone.  Deep clones
         # allow "git describe" and similar tools to work.  See
-        # http://thread.gmane.org/gmane.linux.distributions.nixos/3569
+        # https://marc.info/?l=nix-dev&m=139641582514772
         # for a discussion.
         return 1
     fi

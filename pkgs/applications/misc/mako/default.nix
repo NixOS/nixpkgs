@@ -1,19 +1,24 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, scdoc, systemd, pango, cairo
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, scdoc
+, systemd, pango, cairo, gdk_pixbuf
 , wayland, wayland-protocols }:
 
 stdenv.mkDerivation rec {
-  name = "mako-${version}";
-  version = "1.1";
+  pname = "mako";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "emersion";
-    repo = "mako";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "18krsyp9g6f689024dn1mq8dyj4yg8c3kcy5s88q1gm8py6c4493";
+    sha256 = "17azdc37xsbmx13fkfp23vg9lznrv9fh6nhagn64wdq3nhsxm3b6";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
-  buildInputs = [ systemd pango cairo wayland wayland-protocols ];
+  nativeBuildInputs = [ meson ninja pkgconfig scdoc wayland-protocols ];
+  buildInputs = [ systemd pango cairo gdk_pixbuf wayland ];
+
+  mesonFlags = [
+    "-Dicons=enabled" "-Dman-pages=enabled" "-Dzsh-completions=true"
+  ];
 
   meta = with stdenv.lib; {
     description = "A lightweight Wayland notification daemon";

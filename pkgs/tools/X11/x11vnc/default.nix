@@ -4,23 +4,23 @@
 
 stdenv.mkDerivation rec {
   name = "x11vnc-${version}";
-  version = "0.9.15";
+  version = "0.9.16";
 
   src = fetchFromGitHub {
     owner = "LibVNC";
     repo = "x11vnc";
     rev = version;
-    sha256 = "1a1b65k1hsy4nhg2sx1yrpaz3vx6s7rmrx8nwygpaam8wpdlkh8p";
+    sha256 = "1g652mmi79pfq4p5p7spaswa164rpzjhc5rn2phy5pm71lm0vib1";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs =
-    [ xorg.libXfixes xorg.fixesproto openssl xorg.libXdamage
-      xorg.damageproto zlib xorg.libX11 xorg.xproto libjpeg
-      xorg.libXtst xorg.libXinerama xorg.xineramaproto xorg.libXrandr
-      xorg.randrproto xorg.libXext xorg.xextproto xorg.inputproto
-      xorg.recordproto xorg.libXi xorg.libXrender xorg.renderproto
+    [ xorg.libXfixes xorg.xorgproto openssl xorg.libXdamage
+      zlib xorg.libX11 libjpeg
+      xorg.libXtst xorg.libXinerama xorg.libXrandr
+      xorg.libXext
+      xorg.libXi xorg.libXrender
       libvncserver
     ];
 

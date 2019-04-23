@@ -7,13 +7,11 @@
 
 buildPythonPackage rec {
   pname = "gipc";
-  version = "0.6.0";
-  disabled = isPy3k;
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "0pd9by719qh882hqs6xpby61sn1x5h98hms5p2p8yqnycrf1s0h2";
+    sha256 = "1zg5bm30lqqd8x0jqbvr4yi8i4rzzk2hdnh280qnj2bwm5nqpghi";
   };
 
   propagatedBuildInputs = [ gevent ];

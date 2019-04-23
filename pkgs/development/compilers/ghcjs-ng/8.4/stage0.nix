@@ -107,7 +107,7 @@
         base binary bytestring containers ghc-prim ghci-ghcjs
         template-haskell-ghcjs
       ];
-      homepage = "http://github.com/ghcjs";
+      homepage = "https://github.com/ghcjs";
       license = stdenv.lib.licenses.mit;
     }) {};
 
@@ -156,6 +156,7 @@
         tree-diff
       ];
       testToolDepends = [ hspec-discover ];
+      doHaddock = false;
       homepage = "http://www.haskell.org/haddock/";
       description = "Library exposing some functionality of Haddock";
       license = stdenv.lib.licenses.bsd3;

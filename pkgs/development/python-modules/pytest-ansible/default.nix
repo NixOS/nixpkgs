@@ -8,13 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
   pname = "pytest-ansible";
-  disabled = isPy3k;
+  version = "2.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "553f2bc9e64f8c871ad29b7d5c100f6e549fe85db26bd1ff5dda8b769bb38a3e";
+    sha256 = "d69d89cbcf29e587cbe6ec4b229346edbf027d3c04944dd7bcbf3d7bba46348f";
   };
 
   patchPhase = ''
@@ -30,11 +29,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   checkPhase = ''
-    pytest tests
+    pytest
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/jlaska/pytest-ansible;
+    homepage = https://github.com/jlaska/pytest-ansible;
     description = "Plugin for py.test to simplify calling ansible modules from tests or fixtures";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

@@ -1,11 +1,14 @@
-{ stdenv, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
+{ config, stdenv, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
-, withJava ? false
-, withPrimus ? false
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraProfile ? "" # string to append to profile
 , nativeOnly ? false
 , runtimeOnly ? false
+, runtimeShell
+
+# DEPRECATED
+, withJava ? config.steam.java or false
+, withPrimus ? config.steam.primus or false
 }:
 
 let
@@ -32,8 +35,12 @@ let
   ldPath = map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
            ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
 
+  setupSh = writeScript "setup.sh" ''
+    #!${runtimeShell}
+  '';
+
   runSh = writeScript "run.sh" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     runtime_paths="${lib.concatStringsSep ":" ldPath}"
     if [ "$1" == "--print-steam-runtime-library-paths" ]; then
       echo "$runtime_paths"
@@ -165,6 +172,7 @@ in buildFHSUserEnv rec {
       ln -s ../lib32/steam-runtime steamrt/${steam-runtime-wrapped-i686.arch}
     ''}
     ln -s ${runSh} steamrt/run.sh
+    ln -s ${setupSh} steamrt/setup.sh
   '' else ''
     ln -s /usr/lib/libbz2.so usr/lib/libbz2.so.1.0
     ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
@@ -193,7 +201,7 @@ in buildFHSUserEnv rec {
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
       ${glxinfo-i686}/bin/glxinfo >/dev/null 2>&1
       # If there was an error running glxinfo, we know something is wrong with the configuration
@@ -202,7 +210,7 @@ in buildFHSUserEnv rec {
     **
     WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
     and then run \`sudo nixos-rebuild switch\`:
-    { 
+    {
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;
     }
@@ -224,7 +232,7 @@ in buildFHSUserEnv rec {
     inherit multiPkgs extraBuildCommands;
 
     runScript = writeScript "steam-run" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       run="$1"
       if [ "$run" = "" ]; then
         echo "Usage: steam-run command-to-run args..." >&2

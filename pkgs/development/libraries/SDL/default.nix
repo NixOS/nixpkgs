@@ -1,8 +1,9 @@
 { stdenv, config, libGLSupported, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
 , openglSupport ? libGLSupported, libGL, libGLU
-, alsaSupport ? stdenv.isLinux, alsaLib
-, x11Support ? !stdenv.isCygwin, libXext, libICE, libXrandr
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, libXext, libICE, libXrandr
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 , cf-private
 }:
@@ -11,9 +12,6 @@
 # SDL2 expression too
 
 with stdenv.lib;
-
-assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
-assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null && libGLU != null);
 
 stdenv.mkDerivation rec {
   name    = "SDL-${version}";
@@ -30,18 +28,18 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ]
+    ++ optional stdenv.isLinux libcap;
 
   propagatedBuildInputs = [ libiconv ]
     ++ optionals x11Support [ libXext libICE libXrandr ]
-    ++ optional stdenv.isLinux libcap
     ++ optionals openglSupport [ libGL libGLU ]
     ++ optional alsaSupport alsaLib
     ++ optional pulseaudioSupport libpulseaudio
     ++ optional stdenv.isDarwin Cocoa;
 
   buildInputs = [ ]
-    ++ optional (!stdenv.hostPlatform.isMinGW) audiofile
+    ++ optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
     ++ optionals stdenv.isDarwin [
       AudioUnit CoreAudio CoreServices Kernel OpenGL
       # Needed for NSDefaultRunLoopMode symbols.
@@ -91,7 +89,7 @@ stdenv.mkDerivation rec {
     # Ticket: https://bugs.freedesktop.org/show_bug.cgi?id=27222
     (fetchpatch {
       name = "SDL_SetGamma.patch";
-      url = "http://src.fedoraproject.org/cgit/rpms/SDL.git/plain/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch?id=04a3a7b1bd88c2d5502292fad27e0e02d084698d";
+      url = "https://src.fedoraproject.org/cgit/rpms/SDL.git/plain/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch?id=04a3a7b1bd88c2d5502292fad27e0e02d084698d";
       sha256 = "0x52s4328kilyq43i7psqkqg7chsfwh0aawr50j566nzd7j51dlv";
     })
     # Fix a build failure on OS X Mavericks

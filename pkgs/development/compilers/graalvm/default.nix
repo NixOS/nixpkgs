@@ -65,7 +65,7 @@ in rec {
 
   mx = stdenv.mkDerivation rec {
     version = "5.192.0";
-    name = "mx";
+    pname = "mx";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "mx";
@@ -262,6 +262,9 @@ in rec {
       ./helloworld
       ./helloworld | fgrep 'Hello World'
     '';
+
+    passthru.home = graalvm8;
+
     meta = with stdenv.lib; {
       homepage = https://github.com/oracle/graal;
       description = "High-Performance Polyglot VM";

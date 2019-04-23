@@ -6,7 +6,7 @@ let
 in {
   options = {
     services.sssd = {
-      enable = mkEnableOption "the System Security Services Daemon.";
+      enable = mkEnableOption "the System Security Services Daemon";
 
       config = mkOption {
         type = types.lines;
@@ -75,7 +75,6 @@ in {
       };
 
       system.nssModules = optional cfg.enable pkgs.sssd;
-      services.nscd.config = builtins.readFile ./nscd-sssd.conf;
       services.dbus.packages = [ pkgs.sssd ];
     })
 

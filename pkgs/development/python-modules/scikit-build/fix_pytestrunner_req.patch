@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index dd348fa..4de89c6 100755
+--- a/setup.py
++++ b/setup.py
+@@ -22,7 +22,7 @@ with open('requirements-dev.txt', 'r') as fp:
+     dev_requirements = list(filter(bool, (line.strip() for line in fp)))
+ 
+ # Require pytest-runner only when running tests
+-pytest_runner = (['pytest-runner>=2.0,<3dev']
++pytest_runner = (['pytest-runner>=2.0']
+                  if any(arg in sys.argv for arg in ('pytest', 'test'))
+                  else [])
+ 

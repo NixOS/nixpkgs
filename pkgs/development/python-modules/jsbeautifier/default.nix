@@ -1,17 +1,25 @@
-{ lib, fetchPypi, buildPythonApplication, EditorConfig, pytest, six }:
+{ lib, fetchPypi, buildPythonApplication, EditorConfig, fetchpatch, pytest, six }:
 
 buildPythonApplication rec {
   pname = "jsbeautifier";
-  version = "1.7.5";
+  version = "1.9.1";
 
-  propagatedBuildInputs = [ six ];
-
-  buildInputs = [ EditorConfig pytest ];
+  propagatedBuildInputs = [ six EditorConfig ];
+  checkInputs = [ pytest ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78eb1e5c8535484f0d0b588aca38da3fb5e0e34de2d1ab53c077e71c55757473";
+    sha256 = "0q8ld072dkccssagjxyvc9633fb6ynflvz70924phgp3zxmim960";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/beautify-web/js-beautify/commit/78e35a11cbb805fc044241d6465800ee2bd57ebc.patch";
+      sha256 = "1ah7nshk96yljy37i20v4fga834dix9cdbhkdc3flfm4904n4523";
+    })
+  ];
+
+  patchFlags = [ "-p2" ];
 
   meta = with lib; {
     homepage    = "http://jsbeautifier.org";

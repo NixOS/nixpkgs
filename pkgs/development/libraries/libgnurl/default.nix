@@ -2,13 +2,13 @@
   libidn2, libunistring, nghttp2 }:
 
 stdenv.mkDerivation rec {
-  version = "7.61.1";
+  version = "7.64.0";
 
   name = "libgnurl-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnurl-${version}.tar.gz";
-    sha256 = "0y56k15vp3m2r8q6mnc6ivflwq9lv6npdhbbvxxcf4r8vwjhv91q";
+    sha256 = "0pvmbi32lixcpk10prplmwrmi4wzp3bc1aiyhr552kx0wqdqmdk8";
   };
 
   nativeBuildInputs = [ libtool groff perl pkgconfig python2 ];

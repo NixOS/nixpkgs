@@ -129,6 +129,13 @@ rec {
   /* Returns the current nixpkgs release number as string. */
   release = lib.strings.fileContents ../.version;
 
+  /* Returns the current nixpkgs release code name.
+
+     On each release the first letter is bumped and a new animal is chosen
+     starting with that new letter.
+  */
+  codeName = "Loris";
+
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
     let suffixFile = ../.version-suffix;
@@ -252,9 +259,10 @@ rec {
   # TODO: figure out a clever way to integrate location information from
   # something like __unsafeGetAttrPos.
 
-  warn = msg: builtins.trace "WARNING: ${msg}";
+  warn = msg: builtins.trace "[1;31mwarning: ${msg}[0m";
   info = msg: builtins.trace "INFO: ${msg}";
 
+  showWarnings = warnings: res: lib.fold (w: x: warn w x) res warnings;
 
   ## Function annotations
 

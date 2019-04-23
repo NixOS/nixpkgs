@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, kernel }:
 
 
 # Upstream build for kernel 4.1 is broken, 3.12 and below seems to be working
@@ -27,12 +27,20 @@ stdenv.mkDerivation rec {
     install -m644 -b -D exfat.ko $out/lib/modules/${kernel.modDirVersion}/kernel/fs/exfat/exfat.ko
   '';
 
+  patches = [
+    # fix compile-errors in 4.18 and 4.20
+    # ref: https://github.com/dorimanx/exfat-nofuse/pull/137
+    (fetchpatch {
+      url = https://github.com/dorimanx/exfat-nofuse/compare/01c30ad52625a7261e1b0d874553b6ca7af25966...f93a47e6414d567a1e7f6ab7f34b015b20f9a050.patch ;
+      sha256 = "0w57pi9h6dwjxfgc3zpwy6sr4zw42hn1zj72f7wgfpqrx6d8xkh5";
+    } )
+  ];
+
   meta = {
     description = "exfat kernel module";
     homepage = https://github.com/dorimanx/exfat-nofuse;
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ makefu ];
     platforms = lib.platforms.linux;
-    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
   };
 }

@@ -3,7 +3,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "containers-imperative";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aristid aszlig eelco chaoflow kampfschlaefer ];
+    maintainers = [ aristid aszlig eelco kampfschlaefer ];
   };
 
   machine =

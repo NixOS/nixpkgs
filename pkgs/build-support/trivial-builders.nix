@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
 
 let
 
@@ -15,12 +15,12 @@ rec {
   /* Run the shell command `buildCommand' to produce a store path named
   * `name'.  The attributes in `env' are added to the environment
   * prior to running the command. By default `runCommand' runs using
-  * stdenv with no compiler environment. `runCommandCC` 
+  * stdenv with no compiler environment. `runCommandCC`
   *
   * Examples:
-  * runCommand "name" {envVariable = true;} ''echo hello''
-  * runCommandNoCC "name" {envVariable = true;} ''echo hello'' # equivalent to prior
-  * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out''; 
+  * runCommand "name" {envVariable = true;} ''echo hello > $out''
+  * runCommandNoCC "name" {envVariable = true;} ''echo hello > $out'' # equivalent to prior
+  * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
   */
   runCommand = runCommandNoCC;
   runCommandNoCC = runCommand' stdenvNoCC;
@@ -32,19 +32,23 @@ rec {
    *
    * Examples:
    * # Writes my-file to /nix/store/<store path>
-   * writeTextFile "my-file"
-   *   ''
-   *   Contents of File
+   * writeTextFile {
+   *   name = "my-file";
+   *   text = ''
+   *     Contents of File
    *   '';
+   * }
+   * # See also the `writeText` helper function below.
    *
    * # Writes executable my-file to /nix/store/<store path>/bin/my-file
-   * writeTextFile "my-file"
-   *   ''
-   *   Contents of File
-   *   ''
-   *   true
-   *   "/bin/my-file";
-   *   true
+   * writeTextFile {
+   *   name = "my-file";
+   *   text = ''
+   *     Contents of File
+   *   '';
+   *   executable = true;
+   *   destination = "/bin/my-file";
+   * }
    */
   writeTextFile =
     { name # the name of the derivation
@@ -145,7 +149,7 @@ rec {
       executable = true;
       destination = "/bin/${name}";
       text = ''
-        #!${stdenv.shell}
+        #!${runtimeShell}
         ${text}
         '';
       checkPhase = ''
@@ -215,7 +219,7 @@ rec {
    * myhellohook = makeSetupHook { deps = [ hello ]; } ./myscript.sh;
    *
    * # wrotes a setup hook where @bash@ myscript.sh is substituted for the
-   * # bash interpreter. 
+   * # bash interpreter.
    * myhellohookSub = makeSetupHook {
    *                 deps = [ hello ];
    *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
@@ -258,15 +262,17 @@ rec {
    * Example:
    *
    * # Symlinks hello path in store to current $out/hello
-   * linkFarm "hello" entries = [ { name = "hello"; path = pkgs.hello; } ];
+   * linkFarm "hello" [ { name = "hello"; path = pkgs.hello; } ];
    *
    */
-  linkFarm = name: entries: runCommand name { preferLocalBuild = true; }
-    ("mkdir -p $out; cd $out; \n" +
-      (lib.concatMapStrings (x: ''
-        mkdir -p "$(dirname '${x.name}')"
-        ln -s '${x.path}' '${x.name}'
-      '') entries));
+  linkFarm = name: entries: runCommand name { preferLocalBuild = true; allowSubstitutes = false; }
+    ''mkdir -p $out
+      cd $out
+      ${lib.concatMapStrings (x: ''
+          mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
+          ln -s ${lib.escapeShellArg x.path} ${lib.escapeShellArg x.name}
+      '') entries}
+    '';
 
 
   /* Print an error message if the file with the specified name and
@@ -276,7 +282,7 @@ rec {
    * packages that cannot be built automatically.
    *
    * Examples:
-   * 
+   *
    * requireFile {
    *   name = "my-file";
    *   url = "http://example.com/download/";

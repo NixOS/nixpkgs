@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitLab, pkgconfig, meson, ninja, vala, glib, gsignond, gobjectIntrospection }:
+{ stdenv, fetchFromGitLab, pkgconfig, meson, ninja, vala, glib, gsignond, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "gsignond-plugin-mail-${version}";
-  version = "2018-10-04";
+  pname = "gsignond-plugin-mail";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "accounts-sso";
     repo = "gsignond-plugin-mail";
-    rev = "fbc6f34b246fec4ad2b37c696f8de7fdb9bde346";
-    sha256 = "1wvwz7qiwvj8iixprip3qd8lplzfnwcjfrbg2vd8xfsvid2zbviw";
+    rev = version;
+    sha256 = "0x8jcl0ra9kacm80f1im5wpxp9r9wxayjwnk6dkv7fhjbl2p4nh0";
   };
 
   nativeBuildInputs = [
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_GSIGNOND_GPLUGINSDIR = "${placeholder "out"}/lib/gsignond/gplugins";
 
   meta = with stdenv.lib; {
-    description = "Plugin for the Accounts-SSO gSignOn daemon that handles the E-Mail credentials.";
+    description = "Plugin for the Accounts-SSO gSignOn daemon that handles E-Mail credentials";
     homepage = https://gitlab.com/accounts-sso/gsignond-plugin-mail;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ worldofpeace ];

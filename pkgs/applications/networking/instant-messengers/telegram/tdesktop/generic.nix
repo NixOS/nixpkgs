@@ -29,10 +29,7 @@ mkDerivation rec {
   };
 
   # TODO: libtgvoip.patch no-gtk2.patch
-  patches = [ "${archPatches}/tdesktop.patch" ]
-    # TODO: Only required to work around a compiler bug.
-    # This should be fixed in GCC 7.3.1 (or later?)
-    ++ [ ./fix-internal-compiler-error.patch ];
+  patches = [ "${archPatches}/tdesktop.patch" ];
 
   postPatch = ''
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp \
@@ -98,9 +95,9 @@ mkDerivation rec {
     sed -i Telegram/ThirdParty/libtgvoip/libtgvoip.gyp \
       -e "/-msse2/d"
 
-    gyp ${lib.optionalString (!stable) ''
-        -Dapi_id=17349 \
-        -Dapi_hash=344583e45741c457fe1862106095a5eb ''}\
+    gyp \
+      -Dapi_id=17349 \
+      -Dapi_hash=344583e45741c457fe1862106095a5eb \
       -Dbuild_defines=${GYP_DEFINES} \
       -Gconfig=Release \
       --depth=Telegram/gyp \

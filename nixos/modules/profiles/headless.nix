@@ -6,7 +6,6 @@
 with lib;
 
 {
-  sound.enable = false;
   boot.vesa = false;
 
   # Don't start a tty on the serial consoles.

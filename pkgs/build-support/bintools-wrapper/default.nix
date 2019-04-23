@@ -53,6 +53,7 @@ let
     /**/ if libc == null then null
     else if targetPlatform.libc == "musl"             then "${libc_lib}/lib/ld-musl-*"
     else if targetPlatform.libc == "bionic"           then "/system/bin/linker"
+    else if targetPlatform.libc == "nblibc"           then "${libc_lib}/libexec/ld.elf_so"
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
@@ -177,7 +178,7 @@ stdenv.mkDerivation {
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
       else if targetPlatform.isAarch32     then endianPrefix + "arm"
       else if targetPlatform.isx86_64  then "x86-64"
-      else if targetPlatform.isi686    then "i386"
+      else if targetPlatform.isx86_32  then "i386"
       else if targetPlatform.isMips    then {
           "mips"     = "btsmipn32"; # n32 variant
           "mipsel"   = "ltsmipn32"; # n32 variant
@@ -186,8 +187,10 @@ stdenv.mkDerivation {
         }.${targetPlatform.parsed.cpu.name}
       else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
       else if targetPlatform.isSparc then "sparc"
+      else if targetPlatform.isMsp430 then "msp430"
       else if targetPlatform.isAvr then "avr"
-      else throw "unknown emulation for platform: " + targetPlatform.config;
+      else if targetPlatform.isAlpha then "alpha"
+      else throw "unknown emulation for platform: ${targetPlatform.config}";
     in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
   strictDeps = true;
@@ -269,9 +272,8 @@ stdenv.mkDerivation {
       ## Man page and info support
       ##
 
-      mkdir -p $man/nix-support $info/nix-support
-      echo ${bintools.man or ""} >> $man/nix-support/propagated-user-env-packages
-      echo ${bintools.info or ""} >> $info/nix-support/propagated-user-env-packages
+      ln -s ${bintools.man} $man
+      ln -s ${bintools.info} $info
     ''
 
     + ''
@@ -327,6 +329,7 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
+      priority = 10;
   } // optionalAttrs useMacosReexportHack {
     platforms = stdenv.lib.platforms.darwin;
   };

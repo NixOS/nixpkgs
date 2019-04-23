@@ -1,24 +1,36 @@
 { stdenv, python3Packages, pew }:
-with python3Packages; buildPythonApplication rec {
-    name = "${pname}-${version}";
-    pname = "pipenv";
-    version = "2018.10.13";
+with python3Packages;
+buildPythonApplication rec {
+  pname = "pipenv";
+  version = "2018.11.26";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0qwflq00rwk3pnldndb30f3avnbi4hvv6c8mm6l5xxnxy9dj71d7";
-    };
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0ip8zsrwmhrankrix0shig9g8q2knmr7b63sh7lqa8a5x03fcwx6";
+  };
 
-    LC_ALL = "en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
-    propagatedBuildInputs = [ pew pip requests flake8 parver invoke ];
+  propagatedBuildInputs = [
+    flake8
+    invoke
+    parver
+    pew
+    pip
+    requests
+  ];
 
-    doCheck = false;
+  doCheck = false;
 
-    meta = with stdenv.lib; {
-      description = "Python Development Workflow for Humans";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ berdario ];
-    };
-  }
+  makeWrapperArgs = [
+    "--set PYTHONPATH \"$PYTHONPATH\""
+    "--set PIP_IGNORE_INSTALLED 1"
+  ];
+
+  meta = with stdenv.lib; {
+    description = "Python Development Workflow for Humans";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ berdario ];
+  };
+}

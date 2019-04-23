@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname   = "tldextract";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d5s8v6kpsgazyahflhji1cfdcf89rv7l7z55v774bhzvcjp2y99";
+    sha256 = "1lcywabjy7vpm6awl2cw4m6rk6h85qnbql0j33xcfryy2dhfyaxp";
   };
 
   propagatedBuildInputs = [ requests requests-file idna ];

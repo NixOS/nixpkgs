@@ -7,7 +7,7 @@ let
 in
 rec {
 
-  inherit (builtins) head tail length isList elemAt concatLists filter elem genList;
+  inherit (builtins) head tail length isList elemAt concatLists filter elem genList map;
 
   /*  Create a list consisting of a single element.  `singleton x` is
       sometimes more convenient with respect to indentation than `[x]`
@@ -633,8 +633,7 @@ rec {
     else
       let
         x = head list;
-        xs = unique (drop 1 list);
-      in [x] ++ remove x xs;
+      in [x] ++ unique (remove x list);
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 

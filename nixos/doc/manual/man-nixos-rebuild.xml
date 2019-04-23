@@ -39,6 +39,10 @@
    </arg>
     
    <arg choice='plain'>
+    <option>edit</option>
+   </arg>
+    
+   <arg choice='plain'>
     <option>build-vm</option>
    </arg>
     
@@ -65,6 +69,10 @@
     
    <arg>
     <option>--rollback</option>
+   </arg>
+    
+   <arg>
+    <option>--builders</option> <replaceable>builder-spec</replaceable>
    </arg>
    <sbr />
    <arg>
@@ -181,6 +189,16 @@ $ nix-build /path/to/nixpkgs/nixos -A system
        <command>nixos-rebuild test</command>). For instance, this command will
        print which systemd units would be restarted. The list of changes is not
        guaranteed to be complete.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <option>edit</option>
+     </term>
+     <listitem>
+      <para>
+       Opens <filename>configuration.nix</filename> in the default editor.
       </para>
      </listitem>
     </varlistentry>
@@ -312,6 +330,25 @@ $ ./result/bin/run-*-vm
       previous configuration. (The previous configuration is defined as the one
       before the “current” generation of the Nix profile
       <filename>/nix/var/nix/profiles/system</filename>.)
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--builders</option> <replaceable>builder-spec</replaceable>
+    </term>
+    <listitem>
+     <para>
+      Allow ad-hoc remote builders for building the new system. This requires
+      the user executing <command>nixos-rebuild</command> (usually root) to be
+      configured as a trusted user in the Nix daemon. This can be achieved by
+      using the <literal>nix.trustedUsers</literal> NixOS option. Examples
+      values for that option are described in the <literal>Remote builds
+      chapter</literal> in the Nix manual, (i.e. <command>--builders
+      "ssh://bigbrother x86_64-linux"</command>). By specifying an empty string
+      existing builders specified in <filename>/etc/nix/machines</filename> can
+      be ignored: <command>--builders ""</command> for example when they are
+      not reachable due to network connectivity.
      </para>
     </listitem>
    </varlistentry>

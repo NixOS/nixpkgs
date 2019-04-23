@@ -30,10 +30,6 @@ stdenv.mkDerivation rec {
 
   doCheck = ! shared;
 
-  checkPhase = "
-    ctest
-  ";
-
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {

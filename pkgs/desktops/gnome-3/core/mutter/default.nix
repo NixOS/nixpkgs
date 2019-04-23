@@ -1,40 +1,25 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
+{ fetchurl, substituteAll, stdenv, pkgconfig, gnome3, gettext, gobject-introspection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
-, libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
-, pipewire, libgudev, libwacom, xwayland, autoreconfHook, fetchpatch }:
+, ninja, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
+, gsettings-desktop-schemas, glib, gtk3, gnome-desktop
+, geocode-glib, pipewire, libgudev, libwacom, xwayland, meson
+, gnome-settings-daemon
+, xorgserver
+, python3
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "mutter-${version}";
-  version = "3.28.3";
+  pname = "mutter";
+  version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0vq3rmq20d6b1mi6sf67wkzqys6hw5j7n7fd4hndcp19d5i26149";
+    url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1q74lrb08vy0ynxbssqyxvbzf9252xgf9l6jxr9g4q0gmvpq402j";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "mutter"; attrPath = "gnome3.mutter"; };
-  };
-
-  patches = [
-    # https://gitlab.gnome.org/GNOME/mutter/merge_requests/172
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/mutter/commit/62660bbd.patch;
-      sha256 = "1qq8vxlqnyrqh94dc0dh1aj1dsbyw6bwv3x46q5vsscbbxbiv9wk";
-    })
-  ];
-
-  configureFlags = [
-    "--with-x"
-    "--disable-static"
-    # "--enable-remote-desktop"
-    "--enable-shape"
-    "--enable-sm"
-    "--enable-startup-notification"
-    "--enable-xsync"
-    "--enable-verbose-mode"
-    "--with-libcanberra"
-    "--with-xwayland-path=${xwayland}/bin/Xwayland"
+  mesonFlags = [
+    "-Dxwayland-path=${xwayland}/bin/Xwayland"
   ];
 
   propagatedBuildInputs = [
@@ -42,22 +27,49 @@ stdenv.mkDerivation rec {
     libXtst
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
-
-  buildInputs = with gnome3; [
-    glib gobjectIntrospection gtk gsettings-desktop-schemas upower
-    gnome-desktop cairo pango cogl clutter zenity libstartup_notification
-    gnome3.geocode-glib libinput libgudev libwacom
-    libcanberra-gtk3 zenity xkeyboard_config libxkbfile
-    libxkbcommon pipewire
+  nativeBuildInputs = [
+    meson
+    pkgconfig
+    gettext
+    ninja
+    python3
+    # for cvt command
+    xorgserver
+    wrapGAppsHook
   ];
 
-  preFixup = ''
-    wrapProgram "$out/bin/mutter" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  buildInputs = [
+    glib gobject-introspection gtk3 gsettings-desktop-schemas upower
+    gnome-desktop cairo pango cogl clutter zenity libstartup_notification
+    geocode-glib libinput libgudev libwacom
+    libcanberra-gtk3 zenity xkeyboard_config libxkbfile
+    libxkbcommon pipewire xwayland
+    gnome-settings-daemon
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit zenity;
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs src/backends/native/gen-default-modes.py
+  '';
+
+  postInstall = ''
+    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "mutter";
+      attrPath = "gnome3.mutter";
+    };
+  };
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

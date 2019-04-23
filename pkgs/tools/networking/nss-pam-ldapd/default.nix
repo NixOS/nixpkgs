@@ -1,16 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, openldap, python, pam, makeWrapper }:
+{ stdenv, fetchurl
+, pkgconfig, makeWrapper, autoreconfHook
+, openldap, python, pam
+}:
 
 stdenv.mkDerivation rec {
   name = "nss-pam-ldapd-${version}";
   version = "0.9.10";
-  
+
   src = fetchurl {
     url = "https://arthurdejong.org/nss-pam-ldapd/${name}.tar.gz";
     sha256 = "1cqamcr6qpgwxijlr6kg7jspjamjra8w0haan0qssn0yxn95d7c0";
   };
-  
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper python openldap pam ];
+
+  nativeBuildInputs = [ pkgconfig makeWrapper autoreconfHook ];
+  buildInputs = [ openldap pam python ];
 
   preConfigure = ''
     substituteInPlace Makefile.in --replace "install-data-local: " "# install-data-local: "
@@ -21,6 +24,7 @@ stdenv.mkDerivation rec {
     "--with-nslcd-socket=/run/nslcd/socket"
     "--with-nslcd-pidfile=/run/nslcd/nslcd.pid"
     "--with-pam-seclib-dir=$(out)/lib/security"
+    "--enable-kerberos=no"
   ];
 
   postInstall = ''

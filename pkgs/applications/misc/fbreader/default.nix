@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig
 , bzip2, curl, expat, fribidi, libunibreak, sqlite, zlib
 , uiTarget ? if !stdenv.isDarwin then "desktop" else "macosx"
 , uiType ? if !stdenv.isDarwin then "qt4" else "cocoa"
@@ -25,7 +25,14 @@ stdenv.mkDerivation {
     sha256 = "0lzafk02mv0cf2l2a61q5y4743zi913byik4bw1ix0gr1drnsa7y";
   };
 
-  patches = [ ./typecheck.patch ];
+  patches = [
+    ./typecheck.patch
+    (fetchpatch {
+      name = "curl-7_62.diff"; # see https://github.com/geometer/FBReader/pull/311
+      url = "https://github.com/geometer/FBReader/commit/b7c78e965d06f780.diff";
+      sha256 = "1dgnx9wps7hcf8fkidc7037vcf92fr3ccnjx7bgxm9x02j0hngjg";
+    })
+  ];
 
   postPatch = ''
     cat << EOF > makefiles/target.mk

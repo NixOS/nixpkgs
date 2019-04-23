@@ -280,10 +280,6 @@ if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
 BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
 
-# Dummy implementation of the paxmark function. On Linux, this is
-# overwritten by paxctl's setup hook.
-paxmark() { true; }
-
 
 # Execute the pre-hook.
 if [ -z "${shell:-}" ]; then export shell="$SHELL"; fi
@@ -562,6 +558,10 @@ _addToEnv() {
             (( "$depHostOffset" <= "$depTargetOffset" )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
             if [[ -z "${strictDeps-}" ]]; then
+
+                # Keep track of which packages we have visited before.
+                local visitedPkgs=""
+
                 # Apply environment hooks to all packages during native
                 # compilation to ease the transition.
                 #
@@ -574,7 +574,11 @@ _addToEnv() {
                     ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
                     ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
                 do
+                    if [[ "$visitedPkgs" = *"$pkg"* ]]; then
+                        continue
+                    fi
                     runHook "${!hookRef}" "$pkg"
+                    visitedPkgs+=" $pkg"
                 done
             else
                 local pkgsRef="${pkgsVar}[$depTargetOffset - $depHostOffset]"
@@ -653,7 +657,8 @@ fi
 
 substituteStream() {
     local var=$1
-    shift
+    local description=$2
+    shift 2
 
     while (( "$#" )); do
         case "$1" in
@@ -661,6 +666,14 @@ substituteStream() {
                 pattern="$2"
                 replacement="$3"
                 shift 3
+                local savedvar
+                savedvar="${!var}"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
+                if [ "$pattern" != "$replacement" ]; then
+                    if [ "${!var}" == "$savedvar" ]; then
+                        echo "substituteStream(): WARNING: pattern '$pattern' doesn't match anything in $description" >&2
+                    fi
+                fi
                 ;;
 
             --subst-var)
@@ -677,11 +690,13 @@ substituteStream() {
                 fi
                 pattern="@$varName@"
                 replacement="${!varName}"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 ;;
 
             --subst-var-by)
                 pattern="@$2@"
                 replacement="$3"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 shift 3
                 ;;
 
@@ -690,8 +705,6 @@ substituteStream() {
                 return 1
                 ;;
         esac
-
-        eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
     done
 
     printf "%s" "${!var}"
@@ -719,7 +732,7 @@ substitute() {
     consumeEntire content < "$input"
 
     if [ -e "$output" ]; then chmod +w "$output"; fi
-    substituteStream content "$@" > "$output"
+    substituteStream content "file '$input'" "$@" > "$output"
 }
 
 substituteInPlace() {
@@ -741,7 +754,7 @@ substituteAllStream() {
     local -a args=()
     _allFlags
 
-    substituteStream "$1" "${args[@]}"
+    substituteStream "$1" "$2" "${args[@]}"
 }
 
 # Substitute all environment variables that start with a lowercase character and
@@ -1007,13 +1020,11 @@ buildPhase() {
     else
         foundMakefile=1
 
-        # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
-        makeFlags="SHELL=$SHELL $makeFlags"
-
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
@@ -1052,6 +1063,7 @@ checkPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
             ${checkTarget}
@@ -1077,6 +1089,7 @@ installPhase() {
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
+        SHELL=$SHELL
         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
         $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
         ${installTargets:-install}
@@ -1152,7 +1165,7 @@ fixupPhase() {
         for hook in $setupHooks; do
             local content
             consumeEntire content < "$hook"
-            substituteAllStream content >> "${!outputDev}/nix-support/setup-hook"
+            substituteAllStream content "file '$hook'" >> "${!outputDev}/nix-support/setup-hook"
             unset -v content
         done
         unset -v hook
@@ -1184,6 +1197,7 @@ installCheckPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
             ${installCheckTarget:-installcheck}

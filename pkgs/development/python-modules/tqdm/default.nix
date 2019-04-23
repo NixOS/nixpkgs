@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.25.0";
+  version = "4.31.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a3364bd83ce4777320b862e3c8a93d7da91e20a95f06ef79bed7dd71c654cafa";
+    sha256 = "e22977e3ebe961f72362f6ddfb9197cc531c9737aaf5f607ef09740c849ecd05";
   };
 
   buildInputs = [ nose coverage glibcLocales flake8 ];
@@ -27,7 +27,9 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
-  doCheck = !stdenv.isDarwin;
+#   doCheck = !stdenv.isDarwin;
+  # Test suite is too big and slow.
+  doCheck = false;
 
   meta = {
     description = "A Fast, Extensible Progress Meter";

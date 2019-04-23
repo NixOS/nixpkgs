@@ -1,25 +1,23 @@
-{ stdenv, rustPlatform, fetchFromGitHub, CoreServices, CoreFoundation }:
+{ stdenv, rustPlatform, fetchFromGitHub, CoreServices, darwin }:
 
 rustPlatform.buildRustPackage rec {
   name = "watchexec-${version}";
-  version = "1.9.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "watchexec";
     repo = "watchexec";
     rev = version;
-    sha256 = "0zp5s2dy5zbar0virvy1izjpvvgwbz7rvjmcy6bph6rb5c4bhm70";
+    sha256 = "0azfnqx5v1shsd7jdxzn41awh9dbjykv8h1isrambc86ygr1c1cy";
   };
 
-  cargoSha256 = "1li84kq9myaw0zwx69y72f3lx01s7i9p8yays4rwvl1ymr614y1l";
+  cargoSha256 = "1xlcfr2q2pw47sav9iryjva7w9chv90g18hszq8s0q0w71sccv6j";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
-
-  # FIXME: Use impure version of CoreFoundation because of missing symbols.
-  #   Undefined symbols for architecture x86_64: "_CFURLResourceIsReachable"
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
-  '';
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+    CoreServices
+    # This is needed to avoid an undefined symbol error "_CFURLResourceIsReachable"
+    darwin.cf-private
+  ];
 
   meta = with stdenv.lib; {
     description = "Executes commands in response to file modifications";

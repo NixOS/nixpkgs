@@ -54,7 +54,7 @@
 
    <para>
     To manually configure the network on the graphical installer, first disable
-    network-manager with <command>systemctl stop network-manager</command>.
+    network-manager with <command>systemctl stop NetworkManager</command>.
    </para>
 
    <para>
@@ -376,6 +376,10 @@
      installing NixOS, the <xref linkend="opt-boot.loader.grub.useOSProber"/>
      option can be set to <literal>true</literal> to automatically add them to
      the grub menu.
+    </para>
+    <para>
+     If you need to configure networking for your machine the configuration
+     options are described in <xref linkend="sec-networking"/>.
     </para>
     <para>
      Another critical option is <option>fileSystems</option>, specifying the

@@ -6,20 +6,20 @@
 , libsecret, libsoup, spice-protocol, spice-gtk, epoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib
 # The themes here are soft dependencies; only icons are missing without them.
-, hicolor-icon-theme, adwaita-icon-theme
+, hicolor-icon-theme, gnome3
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "remmina-${version}";
-  version = "1.2.32";
+  pname = "remmina";
+  version = "1.3.4";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "15szv1xs6drxq6qyksmxcfdz516ja4zm52r4yf6hwij3fgl8qdpw";
+    sha256 = "18p6v2lalpiba0r318grlc2bvqh2qlpjw811i0934g33faviyfj1";
   };
 
   nativeBuildInputs = [ cmake ninja pkgconfig wrapGAppsHook ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     pcre libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
     libsecret libsoup spice-protocol spice-gtk epoxy at-spi2-core
-    openssl hicolor-icon-theme adwaita-icon-theme json-glib
+    openssl hicolor-icon-theme gnome3.adwaita-icon-theme json-glib
   ];
 
   cmakeFlags = [

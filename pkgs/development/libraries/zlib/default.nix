@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
-, static ? false
+, static ? true
+, shared ? true
 }:
 
 stdenv.mkDerivation (rec {
@@ -24,13 +25,15 @@ stdenv.mkDerivation (rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  outputs = [ "out" "dev" "static" ];
+  outputs = [ "out" "dev" ]
+    ++ stdenv.lib.optional (shared && static) "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  configureFlags = stdenv.lib.optional (!static) "--shared";
+  configureFlags = stdenv.lib.optional shared "--shared"
+                   ++ stdenv.lib.optional (static && !shared) "--static";
 
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString (shared && static) ''
     moveToOutput lib/libz.a "$static"
   ''
     # jww (2015-01-06): Sometimes this library install as a .so, even on
@@ -64,7 +67,7 @@ stdenv.mkDerivation (rec {
     "PREFIX=${stdenv.cc.targetPrefix}"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "-f" "win32/Makefile.gcc"
-  ] ++ stdenv.lib.optionals (!static) [
+  ] ++ stdenv.lib.optionals shared [
     "SHARED_MODE=1"
   ];
 

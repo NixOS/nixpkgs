@@ -14,7 +14,10 @@
 
 stdenv.mkDerivation rec {
   name = "csound-${version}";
-  version = "6.12.0";
+  # When updating, please check if https://github.com/csound/csound/issues/1078
+  # has been fixed in the new version so we can use the normal fluidsynth
+  # version and remove fluidsynth 1.x from nixpkgs again.
+  version = "6.12.2";
 
   enableParallelBuilding = true;
 
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "csound";
     repo = "csound";
     rev = version;
-    sha256 = "0pv4s54cayvavdp6y30n3r1l5x83x9whyyd2v24y0dh224v3hbxi";
+    sha256 = "01krxcf0alw9k7p5sv0s707600an4sl7lhw3bymbwgqrj0v2p9z2";
   };
 
   cmakeFlags = [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp

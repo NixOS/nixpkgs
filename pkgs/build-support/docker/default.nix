@@ -22,7 +22,9 @@
   referencesByPopularity,
   writeScript,
   writeText,
-  closureInfo
+  closureInfo,
+  substituteAll,
+  runtimeShell
 }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
@@ -43,13 +45,18 @@ rec {
     , sha256
     , os ? "linux"
     , arch ? "amd64"
+
+      # This is used to set name to the pulled image
+    , finalImageName ? imageName
       # This used to set a tag to the pulled image
     , finalImageTag ? "latest"
-    , name ? fixName "docker-image-${imageName}-${finalImageTag}.tar"
+
+    , name ? fixName "docker-image-${finalImageName}-${finalImageTag}.tar"
     }:
 
     runCommand name {
-      inherit imageName imageDigest;
+      inherit imageDigest;
+      imageName = finalImageName;
       imageTag = finalImageTag;
       impureEnvVars = pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
       outputHashMode = "flat";
@@ -60,7 +67,7 @@ rec {
       SSL_CERT_FILE = "${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt";
 
       sourceURL = "docker://${imageName}@${imageDigest}";
-      destNameTag = "${imageName}:${finalImageTag}";
+      destNameTag = "${finalImageName}:${finalImageTag}";
     } ''
       skopeo --override-os ${os} --override-arch ${arch} copy "$sourceURL" "docker-archive://$out:$destNameTag"
     '';
@@ -75,6 +82,7 @@ rec {
 
     cp ${./tarsum.go} tarsum.go
     export GOPATH=$(pwd)
+    export GOCACHE="$TMPDIR/go-cache"
     mkdir -p src/github.com/docker/docker/pkg
     ln -sT ${docker.src}/components/engine/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
     go build
@@ -118,7 +126,7 @@ rec {
     export PATH=${shadow}/bin:$PATH
     mkdir -p /etc/pam.d
     if [[ ! -f /etc/passwd ]]; then
-      echo "root:x:0:0::/root:${stdenv.shell}" > /etc/passwd
+      echo "root:x:0:0::/root:${runtimeShell}" > /etc/passwd
       echo "root:!x:::::::" > /etc/shadow
     fi
     if [[ ! -f /etc/group ]]; then
@@ -157,7 +165,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        buildInputs = [ utillinux e2fsprogs jshon rsync ];
+        buildInputs = [ utillinux e2fsprogs jshon rsync jq ];
       } ''
       rm -rf $out
 
@@ -188,22 +196,27 @@ rec {
         # Use the name and tag to get the parent ID field.
         parentID=$(jshon -e $fromImageName -e $fromImageTag -u \
                    < image/repositories)
+
+        cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+      else
+        touch layer-list
       fi
 
       # Unpack all of the parent layers into the image.
       lowerdir=""
-      while [[ -n "$parentID" ]]; do
-        echo "Unpacking layer $parentID"
-        mkdir -p image/$parentID/layer
-        tar -C image/$parentID/layer -xpf image/$parentID/layer.tar
-        rm image/$parentID/layer.tar
+      extractionID=0
+      for layerTar in $(tac layer-list); do
+        echo "Unpacking layer $layerTar"
+        extractionID=$((extractionID + 1))
 
-        find image/$parentID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
+        mkdir -p image/$extractionID/layer
+        tar -C image/$extractionID/layer -xpf image/$layerTar
+        rm image/$layerTar
+
+        find image/$extractionID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
 
         # Get the next lower directory and continue the loop.
-        lowerdir=$lowerdir''${lowerdir:+:}image/$parentID/layer
-        parentID=$(cat image/$parentID/json \
-                  | (jshon -e parent -u 2>/dev/null || true))
+        lowerdir=$lowerdir''${lowerdir:+:}image/$extractionID/layer
       done
 
       mkdir work
@@ -255,7 +268,7 @@ rec {
   # things like `ls` or `echo` will be missing.
   shellScript = name: text:
     writeScript name ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       set -e
       export PATH=${coreutils}/bin:/bin
       ${text}
@@ -274,6 +287,13 @@ rec {
     # of room for extension
     maxLayers ? 24
   }:
+    let
+      storePathToLayer = substituteAll
+      { shell = runtimeShell;
+        isExecutable = true;
+        src = ./store-path-to-layer.sh;
+      };
+    in
     runCommand "${name}-granular-docker-layers" {
       inherit maxLayers;
       paths = referencesByPopularity closure;
@@ -293,9 +313,9 @@ rec {
       # following head and tail call lines, double-check that your
       # code behaves properly when the number of layers equals:
       #      maxLayers-1, maxLayers, and maxLayers+1
-      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${./store-path-to-layer.sh}
+      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
       if [ $(cat $paths | wc -l) -ge $maxLayers ]; then
-        tail -n+$maxLayers $paths | xargs ${./store-path-to-layer.sh} $maxLayers
+        tail -n+$maxLayers $paths | xargs ${storePathToLayer} $maxLayers
       fi
 
       echo "Finished building layer '$name'"
@@ -311,18 +331,25 @@ rec {
     # Files to add to the layer.
     contents,
     baseJson,
+    extraCommands,
     uid ? 0, gid ? 0,
   }:
     runCommand "${name}-customisation-layer" {
       buildInputs = [ jshon rsync tarsum ];
+      inherit extraCommands;
     }
     ''
       cp -r ${contents}/ ./layer
 
+      if [[ -n $extraCommands ]]; then
+        chmod ug+w layer
+        (cd layer; eval "$extraCommands")
+      fi
+
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tar -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
+      tar --transform='s|^\./||' -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."
@@ -489,6 +516,8 @@ rec {
     # Time of creation of the image. Passing "now" will make the
     # created date be the time of building.
     created ? "1970-01-01T00:00:01Z",
+    # Optional bash script to run on the files prior to fixturizing the layer.
+    extraCommands ? "", uid ? 0, gid ? 0,
     # Docker's lowest maximum layer limit is 42-layers for an old
     # version of the AUFS graph driver. We pick 24 to ensure there is
     # plenty of room for extension. I believe the actual maximum is
@@ -496,8 +525,6 @@ rec {
     maxLayers ? 24
   }:
     let
-      uid = 0;
-      gid = 0;
       baseName = baseNameOf name;
       contentsEnv = symlinkJoin { name = "bulk-layers"; paths = (if builtins.isList contents then contents else [ contents ]); };
 
@@ -526,20 +553,25 @@ rec {
           name = baseName;
           contents = contentsEnv;
           baseJson = configJson;
-          inherit uid gid;
+          inherit uid gid extraCommands;
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
         buildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
-        imageTag = if tag == null then "" else lib.toLower tag;
         baseJson = configJson;
+        passthru.imageTag =
+          if tag == null
+          then lib.head (lib.splitString "-" (lib.last (lib.splitString "/" result)))
+          else lib.toLower tag;
       } ''
-        ${lib.optionalString (tag == null) ''
+        ${if (tag == null) then ''
           outName="$(basename "$out")"
           outHash=$(echo "$outName" | cut -d - -f 1)
 
           imageTag=$outHash
+        '' else ''
+          imageTag="${tag}"
         ''}
 
         find ${bulkLayers} -mindepth 1 -maxdepth 1 | sort -t/ -k5 -n > layer-list
@@ -673,6 +705,9 @@ rec {
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
+
+          cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+
           # Do not import the base image configuration and manifest
           chmod a+w image image/*.json
           rm -f image/*.json
@@ -690,6 +725,8 @@ rec {
           for l in image/*/layer.tar; do
             ls_tar $l >> baseFiles
           done
+        else
+          touch layer-list
         fi
 
         chmod -R ug+rw image
@@ -742,17 +779,23 @@ rec {
         # Use the temp folder we've been working on to create a new image.
         mv temp image/$layerID
 
+        # Add the new layer ID to the beginning of the layer list
+        (
+          # originally this used `sed -i "1i$layerID" layer-list`, but
+          # would fail if layer-list was completely empty.
+          echo "$layerID/layer.tar"
+          cat layer-list
+        ) | ${pkgs.moreutils}/bin/sponge layer-list
+
         # Create image json and image manifest
         imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
-        currentID=$layerID
-        while [[ -n "$currentID" ]]; do
-          layerChecksum=$(sha256sum image/$currentID/layer.tar | cut -d ' ' -f1)
+
+        for layerTar in $(tac ./layer-list); do
+          layerChecksum=$(sha256sum image/$layerTar | cut -d ' ' -f1)
           imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"$(jq -r .created ${baseJson})\"}] + .")
           imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
-          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$currentID/layer.tar\"] + .")
-
-          currentID=$(cat image/$currentID/json | (jshon -e parent -u 2>/dev/null || true))
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$layerTar\"] + .")
         done
 
         imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)

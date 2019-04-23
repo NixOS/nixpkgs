@@ -12,14 +12,14 @@
   That is to say, expected usage is to add them to the imports list of your
   <filename>/etc/configuration.nix</filename> as such:
  </para>
- <programlisting>
+<programlisting>
   imports = [
    &lt;nixpkgs/nixos/modules/profiles/profile-name.nix&gt;
   ];
  </programlisting>
  <para>
-  Even if some of these profiles seem only useful in the context of
-  install media, many are actually intended to be used in real installs.
+  Even if some of these profiles seem only useful in the context of install
+  media, many are actually intended to be used in real installs.
  </para>
  <para>
   What follows is a brief explanation on the purpose and use-case for each

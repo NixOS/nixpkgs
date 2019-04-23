@@ -1,0 +1,44 @@
+diff -Naur android-ndk-r18b/build/tools/make_standalone_toolchain.py android-ndk-r18b-new/build/tools/make_standalone_toolchain.py
+--- android-ndk-r18b/build/tools/make_standalone_toolchain.py	2018-10-11 12:49:38.000000000 +0200
++++ android-ndk-r18b-new/build/tools/make_standalone_toolchain.py	2018-11-20 21:55:52.689991420 +0100
+@@ -30,7 +30,7 @@
+ import sys
+ import tempfile
+ import textwrap
+-
++import subprocess
+ 
+ THIS_DIR = os.path.realpath(os.path.dirname(__file__))
+ NDK_DIR = os.path.realpath(os.path.join(THIS_DIR, '../..'))
+@@ -173,6 +173,7 @@
+                 logger().debug('Copying %s', src_file)
+                 shutil.copy2(src_file, dst_dir)
+ 
++    subprocess.check_call(["chmod", "-R", "+w", dst])
+ 
+ def make_clang_scripts(install_dir, triple, api, windows):
+     """Creates Clang wrapper scripts.
+@@ -365,6 +366,7 @@
+     install_headers = os.path.join(install_sysroot, 'usr/include')
+     os.makedirs(os.path.dirname(install_headers))
+     shutil.copytree(headers, install_headers)
++    subprocess.check_call(["chmod", "-R", "+w", install_path])
+ 
+     arch_headers = os.path.join(sysroot, 'usr/include', triple)
+     copy_directory_contents(arch_headers, os.path.join(install_headers))
+@@ -375,6 +377,7 @@
+             install_sysroot, 'usr/lib{}'.format(lib_suffix))
+         if os.path.exists(lib_path):
+             shutil.copytree(lib_path, lib_install)
++            subprocess.check_call(["chmod", "-R", "+w", install_path])
+ 
+     static_lib_path = os.path.join(sysroot, 'usr/lib', triple)
+     static_lib_install = os.path.join(install_sysroot, 'usr/lib')
+@@ -389,6 +392,7 @@
+         NDK_DIR, 'prebuilt', 'android-' + arch, 'gdbserver')
+     gdbserver_install = os.path.join(install_path, 'share', 'gdbserver')
+     shutil.copytree(gdbserver_path, gdbserver_install)
++    subprocess.check_call(["chmod", "-R", "+w", install_path])
+ 
+     toolchain_lib_dir = os.path.join(gcc_path, 'lib/gcc', triple)
+     dirs = os.listdir(toolchain_lib_dir)

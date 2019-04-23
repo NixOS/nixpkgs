@@ -1,26 +1,35 @@
-{ stdenv, fetchurl, recode }:
+{ stdenv, fetchurl, cmake, recode, perl }:
 
+let srcs = {
+      fortune = fetchurl {
+        url = "https://github.com/shlomif/fortune-mod/archive/fortune-mod-${version}.tar.gz";
+        sha256 = "89223bb649ea62b030527f181539182d6a17a1a43b0cc499a52732b839f7b691";
+      };
+      shlomifCommon = fetchurl {
+        url = https://bitbucket.org/shlomif/shlomif-cmake-modules/raw/default/shlomif-cmake-modules/Shlomif_Common.cmake;
+        sha256 = "62f188a9f1b7ab0e757eb0bc6540d9c0026d75edc7acc1c3cdf7438871d0a94f";
+      };
+    };
+    version = "2.6.2";
+in
 stdenv.mkDerivation {
-  name = "fortune-mod-1.99.1";
+  name = "fortune-mod-${version}";
 
-  src = fetchurl {
-    url = http://ftp.de.debian.org/debian/pool/main/f/fortune-mod/fortune-mod_1.99.1.orig.tar.gz;
-    sha256 = "1kpa2hgbglj5dbfasvl9wc1q3xpl91mqn3sfby46r4rwyzhswlgw";
-  };
+  src = srcs.fortune;
+
+  sourceRoot = "fortune-mod-fortune-mod-${version}/fortune-mod";
+
+  nativeBuildInputs = [ cmake perl ];
 
   buildInputs = [ recode ];
 
   preConfigure = ''
-    sed -i "s|/usr/|$out/|" Makefile
-  '';
-
-  preBuild = ''
-    makeFlagsArray=("CC=$CC" "REGEXDEFS=-DHAVE_REGEX_H -DPOSIX_REGEX" "LDFLAGS=")
+    cp ${srcs.shlomifCommon} cmake/Shlomif_Common.cmake
   '';
 
   postInstall = ''
     mv $out/games/fortune $out/bin/fortune
-    rmdir $out/games
+    rm -r $out/games
   '';
 
   meta = with stdenv.lib; {

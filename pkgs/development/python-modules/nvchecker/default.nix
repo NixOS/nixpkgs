@@ -1,16 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, pytest_xdist, flaky, tornado }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, pytest_xdist, flaky, tornado, pycurl }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.1";
+  version = "1.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nk9ff26s5r6v5v7w4l9110qi5kmhllvwk5kh20zyyhdvxv72m3i";
+    sha256 = "0v340wkq4sn9pvcpjh076l8mcqkn3nrn7if8p6iysk02bjxvknbv";
   };
 
-  # tornado is not present in the tarball setup.py but is required by the executable
-  propagatedBuildInputs = [ setuptools structlog tornado ];
+  propagatedBuildInputs = [ setuptools structlog tornado pycurl ];
   checkInputs = [ pytest pytest-asyncio pytest_xdist flaky ];
 
   # Disable tests for now, because our version of pytest seems to be too new

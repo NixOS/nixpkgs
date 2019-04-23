@@ -175,7 +175,7 @@
       dnsmasq = 141;
       uhub = 142;
       yandexdisk = 143;
-      #collectd = 144; #unused
+      mxisd = 144; # was once collectd
       consul = 145;
       mailpile = 146;
       redmine = 147;
@@ -272,7 +272,7 @@
       nzbget = 245;
       mosquitto = 246;
       toxvpn = 247;
-      squeezelite = 248;
+      # squeezelite = 248; # DynamicUser = true
       turnserver = 249;
       smokeping = 250;
       gocd-agent = 251;
@@ -290,7 +290,7 @@
       riak-cs = 263;
       infinoted = 264;
       sickbeard = 265;
-      # glance = 266; # unused, removed 2017-12-13
+      headphones = 266;
       couchpotato = 267;
       gogs = 268;
       pdns-recursor = 269;
@@ -306,7 +306,7 @@
       rslsync = 279;
       minio = 280;
       kanboard = 281;
-      pykms = 282;
+      # pykms = 282; # DynamicUser = true
       kodi = 283;
       restya-board = 284;
       mighttpd2 = 285;
@@ -336,6 +336,9 @@
       solr = 309;
       alerta = 310;
       minetest = 311;
+      rss2email = 312;
+      cockroachdb = 313;
+      zoneminder = 314;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -483,7 +486,7 @@
       #dnsmasq = 141; # unused
       uhub = 142;
       #yandexdisk = 143; # unused
-      #collectd = 144; # unused
+      mxisd = 144; # was once collectd
       #consul = 145; # unused
       mailpile = 146;
       redmine = 147;
@@ -587,7 +590,7 @@
       riak-cs = 263;
       infinoted = 264;
       sickbeard = 265;
-      # glance = 266; # unused, removed 2017-12-13
+      headphones = 266;
       couchpotato = 267;
       gogs = 268;
       kresd = 270;
@@ -602,7 +605,7 @@
       rslsync = 279;
       minio = 280;
       kanboard = 281;
-      pykms = 282;
+      # pykms = 282; # DynamicUser = true
       kodi = 283;
       restya-board = 284;
       mighttpd2 = 285;
@@ -632,6 +635,9 @@
       solr = 309;
       alerta = 310;
       minetest = 311;
+      rss2email = 312;
+      cockroachdb = 313;
+      zoneminder = 314;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

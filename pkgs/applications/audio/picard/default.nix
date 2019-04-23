@@ -1,17 +1,19 @@
-{ stdenv, python3Packages, fetchurl, gettext, chromaprint }:
+{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint }:
 
 let
   pythonPackages = python3Packages;
 in pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.0.4";
+  version = "2.1.3";
 
-  src = fetchurl {
-    url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";
-    sha256 = "0ds3ylpqn717fnzcjrfn05v5xram01bj6n3hwn9igmkd1jgf8vhc";
+  src = fetchFromGitHub {
+    owner = "metabrainz";
+    repo = pname;
+    rev = "release-${version}";
+    sha256 = "1armg8vpvnbpk7rrfk9q7nj5gm56rza00ni9qwdyqpxp1xaz6apj";
   };
 
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   propagatedBuildInputs = with pythonPackages; [
     pyqt5
@@ -28,8 +30,6 @@ in pythonPackages.buildPythonApplication rec {
     # Pesky unicode punctuation.
     substituteInPlace setup.cfg --replace "‘" "'"
   '';
-
-  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = http://musicbrainz.org/doc/MusicBrainz_Picard;

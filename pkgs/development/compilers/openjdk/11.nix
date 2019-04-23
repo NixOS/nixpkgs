@@ -18,17 +18,16 @@ let
     else "amd64";
 
   major = "11";
-  update = ".0.1";
-  build = "13";
-  repover = "jdk-${major}${update}+${build}";
-  paxflags = if stdenv.isi686 then "msp" else "m";
+  update = ".0.3";
+  build = "ga";
+  repover = "jdk-${major}${update}-${build}";
 
   openjdk = stdenv.mkDerivation {
-    name = "openjdk-${major}${update}-b${build}";
+    name = "openjdk-${major}${update}-${build}";
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/${repover}.tar.gz";
-      sha256 = "1ri3fv67rvs9xxhc3ynklbprhxbdsgpwafbw6wqj950xy5crgysm";
+      sha256 = "1v6pam38iidlhz46046h17hf5kki6n3kl302awjcyxzk7bmkvb8x";
     };
 
     nativeBuildInputs = [ pkgconfig ];
@@ -67,7 +66,8 @@ let
         # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
         "--with-extra-cflags=-Wno-error=deprecated-declarations -Wno-error=format-contains-nul -Wno-error=unused-result"
     ''
-    + lib.optionalString minimal "\"--enable-headless-only\""
+    + lib.optionalString (architecture == "amd64") " \"--with-jvm-features=zgc\""
+    + lib.optionalString minimal " \"--enable-headless-only\""
     + ");"
     # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
     # https://github.com/JetBrains/jdk8u/commit/eaa5e0711a43d64874111254d74893fa299d5716
@@ -104,14 +104,6 @@ let
       ${lib.optionalString minimal ''
         rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
       ''}
-
-      # Set PaX markings
-      exes=$(file $out/lib/openjdk/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-      echo "to mark: *$exes*"
-      for file in $exes; do
-        echo "marking *$file*"
-        paxmark ${paxflags} "$file"
-      done
 
       ln -s $out/lib/openjdk/bin $out/bin
     '';

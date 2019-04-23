@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "olm-${version}";
-  version = "2.3.0";
+  version = "3.0.0";
 
   meta = {
     description = "Implements double cryptographic ratchet and Megolm ratchet";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://matrix.org/git/olm/snapshot/${name}.tar.gz";
-    sha256 = "1y2yasq94zjw3nadn1915j85xwc5j3pic3brhp0h83l6hkxi8dsk";
+    sha256 = "1iivxjk458v9lhqgzp0c4k5azligsh9k3rk6irf9ssj29wzgjm2c";
   };
 
   doCheck = true;

@@ -49,7 +49,6 @@ in stdenv.mkDerivation rec {
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      jgeerds
       joachifm
     ];
     platforms = platforms.all;

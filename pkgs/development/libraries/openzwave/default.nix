@@ -3,7 +3,7 @@
 , systemd }:
 
 let
-  version = "2018-11-04";
+  version = "2018-11-13";
 
 in stdenv.mkDerivation rec {
   name = "openzwave-${version}";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "open-zwave";
-    rev = "2cc174ad5c935d2d17828634aca2db5a60c59237";
+    rev = "0679daef6aa5a39e2441a68f7b45cfe022c4d961";
     sha256 = "1d13maj93i6h792cbvqpx43ffss44dxmvbwj2777vzvvjib8m4n8";
   };
 

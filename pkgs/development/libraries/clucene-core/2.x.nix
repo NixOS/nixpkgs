@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
     "-DBUILD_CONTRIBS=ON"
     "-DBUILD_CONTRIBS_LIB=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_CL_HAVE_GCC_ATOMIC_FUNCTIONS=0"
+    "-D_CL_HAVE_NAMESPACES_EXITCODE=0"
+    "-D_CL_HAVE_NO_SNPRINTF_BUG_EXITCODE=0"
+    "-D_CL_HAVE_NO_SNWPRINTF_BUG_EXITCODE=0"
+    "-D_CL_HAVE_TRY_BLOCKS_EXITCODE=0"
+    "-D_CL_HAVE_PTHREAD_MUTEX_RECURSIVE=0"
+    "-DLUCENE_STATIC_CONSTANT_SYNTAX_EXITCODE=0"
   ];
 
   patches = # From debian

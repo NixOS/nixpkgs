@@ -46,6 +46,9 @@ let
     ROOT_PATH = ${cfg.log.rootPath}
     LEVEL = ${cfg.log.level}
 
+    [service]
+    DISABLE_REGISTRATION = ${boolToString cfg.disableRegistration}
+
     ${cfg.extraConfig}
   '';
 in
@@ -248,6 +251,18 @@ in
         description = "Upper level of template and static files path.";
       };
 
+      disableRegistration = mkEnableOption "the registration lock" // {
+        description = ''
+          By default any user can create an account on this <literal>gitea</literal> instance.
+          This can be disabled by using this option.
+
+          <emphasis>Note:</emphasis> please keep in mind that this should be added after the initial
+          deploy unless <link linkend="opt-services.gitea.useWizard">services.gitea.useWizard</link>
+          is <literal>true</literal> as the first registered user will be the administrator if
+          no install wizard is used.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.str;
         default = "";
@@ -263,7 +278,7 @@ in
       description = "gitea";
       after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
-      path = [ gitea.bin ];
+      path = [ gitea.bin pkgs.gitAndTools.git ];
 
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";

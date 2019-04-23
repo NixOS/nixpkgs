@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, polkit-qt }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lxqt-admin";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1nsf8sbgmfanvcxw67drhz1wrizkcd0p87jwr1za5rcgd50bi2yy";
+    sha256 = "121qj46app2bqdr24g5sz2mdjfd9w86wpgkwap46s0zgxm4li44i";
   };
 
   nativeBuildInputs = [
@@ -27,12 +26,15 @@ stdenv.mkDerivation rec {
     polkit-qt
   ];
 
-  patchPhase = ''
+  postPatch = ''
     sed "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" \
       -i lxqt-admin-user/CMakeLists.txt
-  '';
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+    for f in lxqt-admin-{user,time}/CMakeLists.txt; do
+      substituteInPlace $f \
+        --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "LXQt system administration tool";

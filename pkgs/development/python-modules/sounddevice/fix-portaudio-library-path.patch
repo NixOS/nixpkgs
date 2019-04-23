@@ -1,8 +1,8 @@
-diff --git a/sounddevice.py b/sounddevice.py
-index f03476c..5745b6e 100644
---- a/sounddevice.py
-+++ b/sounddevice.py
-@@ -58,28 +58,7 @@ from ctypes.util import find_library as _find_library
+diff --git i/sounddevice.py w/sounddevice.py
+index c7c1d62..aabcb12 100644
+--- i/sounddevice.py
++++ w/sounddevice.py
+@@ -58,29 +58,7 @@ from ctypes.util import find_library as _find_library
  from _sounddevice import ffi as _ffi
 
 
@@ -10,6 +10,7 @@ index f03476c..5745b6e 100644
 -    for _libname in (
 -            'portaudio',  # Default name on POSIX systems
 -            'bin\\libportaudio-2.dll',  # DLL from conda-forge
+-            'lib/libportaudio.dylib',  # dylib from anaconda
 -            ):
 -        _libname = _find_library(_libname)
 -        if _libname is not None:

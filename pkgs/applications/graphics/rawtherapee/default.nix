@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.4";
+  version = "5.5";
   name = "rawtherapee-" + version;
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
     rev = version;
-    sha256 = "1h2x5biqsb4kfwsffqkyk8ky22qv2a0cjs1s445x9farcr3kwk99";
+    sha256 = "13clnx7rwkfa7wxgsim1xdx2pd7gwmmdad1m8a3fvywr20ml8xzk";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook ];

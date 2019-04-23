@@ -8,7 +8,7 @@ assertExecutable() {
 }
 
 # construct an executable file that wraps the actual executable
-# makeWrapper EXECUTABLE ARGS
+# makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
 # --argv0       NAME    : set name of executed process to NAME
@@ -40,7 +40,7 @@ makeWrapper() {
 
     mkdir -p "$(dirname "$wrapper")"
 
-    echo "#! $SHELL -e" > "$wrapper"
+    echo "#! @shell@ -e" > "$wrapper"
 
     params=("$@")
     for ((n = 2; n < ${#params[*]}; n += 1)); do

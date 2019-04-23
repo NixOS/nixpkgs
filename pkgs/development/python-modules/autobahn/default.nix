@@ -1,18 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, isPy33,
-  six, txaio, twisted, zope_interface, cffi, asyncio, trollius, futures,
+{ lib, buildPythonPackage, fetchPypi, isPy3k,
+  six, txaio, twisted, zope_interface, cffi, trollius, futures,
   mock, pytest
 }:
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "18.8.2";
+  version = "19.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "448df2e241011ea2948799918930042d81e63d26b01912c472f5a9a37f42f319";
+    sha256 = "aebbadb700c13792a2967c79002855d1153b9ec8f2949d169e908388699596ff";
   };
 
   propagatedBuildInputs = [ six txaio twisted zope_interface cffi ] ++
-    (lib.optional isPy33 asyncio) ++
     (lib.optionals (!isPy3k) [ trollius futures ]);
 
   checkInputs = [ mock pytest ];

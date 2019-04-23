@@ -10,6 +10,7 @@
 
 , prePatch ? ""
 , patches ? []
+, broken ? false
 }:
 
 { stdenv, callPackage, pkgsi686Linux, fetchurl
@@ -85,12 +86,13 @@ let
     };
 
     meta = with stdenv.lib; {
-      homepage = http://www.nvidia.com/object/unix.html;
+      homepage = https://www.nvidia.com/object/unix.html;
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;
       platforms = [ "i686-linux" "x86_64-linux" ];
-      maintainers = [ maintainers.vcunat ];
+      maintainers = with maintainers; [ baracoder ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
+      inherit broken;
     };
   };
 

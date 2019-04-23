@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libosmium-${version}";
-  version = "2.14.2";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "libosmium";
     rev = "v${version}";
-    sha256 = "123ri1l0a2b9fljgpwsl7z2w4i3kmgxz79d4ns9z4mwbp8sw0250";
+    sha256 = "1v1m068lcjngxnwirpi0vqjhqnxn9gqvafjp3sy14vzmgl2sw2kr";
   };
 
   nativeBuildInputs = [ cmake ];

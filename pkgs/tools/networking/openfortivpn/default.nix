@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let repo = "openfortivpn";
-    version = "1.7.1";
+    version = "1.9.0";
 
 in stdenv.mkDerivation {
   name = "${repo}-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "adrienverge";
     inherit repo;
     rev = "v${version}";
-    sha256 = "01nsgmmh72qk0aq2zdjh8qqn256mmvz1w2gl0wi7g29d82y2hdfm";
+    sha256 = "1nf992wjx5n2883b31hgxrb6y0n3p5yz7h42bwripwrfpdjaaqcv";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -20,9 +20,7 @@ in stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
-  preConfigure = ''
-    substituteInPlace src/tunnel.c --replace "/usr/sbin/pppd" "${ppp}/bin/pppd"
-  '';
+  configureFlags = [ "--with-pppd=${ppp}/bin/pppd" ];
 
   enableParallelBuilding = true;
 

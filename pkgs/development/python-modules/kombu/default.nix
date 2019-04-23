@@ -1,19 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, case, pytz, amqp }:
+{ lib, buildPythonPackage, fetchPypi, pytest, case, pytz, Pyro4, amqp }:
 
 buildPythonPackage rec {
-    pname = "kombu";
-    version = "4.2.1";
+  pname = "kombu";
+  version = "4.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "86adec6c60f63124e2082ea8481bbe4ebe04fde8ebed32c177c7f0cd2c1c9082";
+    sha256 = "389ba09e03b15b55b1a7371a441c894fd8121d174f5583bbbca032b9ea8c9edd";
   };
 
   postPatch = ''
     substituteInPlace requirements/test.txt --replace "pytest-sugar" ""
   '';
 
-  checkInputs = [ pytest case pytz ];
+  checkInputs = [ pytest case pytz Pyro4 ];
 
   propagatedBuildInputs = [ amqp ];
 

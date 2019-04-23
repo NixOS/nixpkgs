@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
-, openssl, R, qtbase, qtdeclarative, qtsensors, qtwebengine, qtwebchannel
+, openssl, R, qtbase, qtxmlpatterns, qtsensors, qtwebengine, qtwebchannel
 , libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 , llvmPackages
 }:
 
 let
-  rev = "f33fb2b2f1";
+  rev = "f79330d4";
   ginVer = "2.1.2";
   gwtVer = "2.8.1";
 in
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
 
-  buildInputs = [ boost zlib openssl R qtbase qtdeclarative qtsensors
+  buildInputs = [ boost zlib openssl R qtbase qtxmlpatterns qtsensors
                   qtwebengine qtwebchannel libuuid ];
 
   src = fetchFromGitHub {

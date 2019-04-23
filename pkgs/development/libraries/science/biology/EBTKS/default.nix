@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
 
-  checkPhase = "ctest --output-on-failure";  # but cmake doesn't run the tests ...
-
   meta = with stdenv.lib; {
     homepage = "https://github.com/BIC-MNI/${pname}";
     description = "Library for working with MINC files";

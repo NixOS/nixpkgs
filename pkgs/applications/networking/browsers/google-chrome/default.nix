@@ -77,7 +77,7 @@ in stdenv.mkDerivation rec {
     gsettings-desktop-schemas glib gtk
 
     # needed for XDG_ICON_DIRS
-    gnome.defaultIconTheme
+    gnome.adwaita-icon-theme
   ];
 
   unpackPhase = ''

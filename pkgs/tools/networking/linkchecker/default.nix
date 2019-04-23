@@ -18,6 +18,7 @@ python2Packages.buildPythonApplication rec {
   pname = "LinkChecker";
   version = "9.3.1";
 
+  nativeBuildInputs = [ gettext ];
   propagatedBuildInputs = (with python2Packages; [ 
     requests
   ]) ++ [ gettext ];

@@ -1,11 +1,12 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo, perl }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "e2fsprogs-1.44.4";
+  pname = "e2fsprogs";
+  version = "1.45.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/e2fsprogs/${name}.tar.gz";
-    sha256 = "1cnwfmv9r7s73xhgghqspjq593pc4qghh80wjd0kjdgwy247cw6x";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1sgcjarfksa8bkx81q5cd6rzqvhzgs28a0ljwyr4ggqpfx7d18vk";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -18,8 +19,8 @@ stdenv.mkDerivation rec {
   patches = if stdenv.hostPlatform.libc == "glibc" then null
     else [
       (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/1f3b51493031cc0309009804475e3db572fc89ad/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
-      sha256 = "1q7y8nhsfwl9r1q7nhrlikazxxj97p93kgz5wh7723cshlji2vaa";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
+      sha256 = "1fyml1iwrs412xn2w36ra28am3sq4klrrj60lnf7rysyw069nxk3";
       extraPrefix = "";
       })
     ];
@@ -33,13 +34,12 @@ stdenv.mkDerivation rec {
       "--enable-libuuid --disable-e2initrd-helper"
     ];
 
-  checkInputs = [ perl ];
-  doCheck = false; # fails
+  checkInputs = [ buildPackages.perl ];
+  doCheck = true;
 
-  # hacky way to make it install *.pc
   postInstall = ''
-    make install-libs
-    rm "$out"/lib/*.a
+    # avoid cycle between outputs
+    mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
   '';
 
   enableParallelBuilding = true;
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = http://e2fsprogs.sourceforge.net/;
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.eelco ];
   };
 }

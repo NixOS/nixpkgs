@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnutar-${version}";
-  version = "1.30";
+  version = "1.32";
 
   src = fetchurl {
     url = "mirror://gnu/tar/tar-${version}.tar.xz";
-    sha256 = "1lyjyk8z8hdddsxw0ikchrsfg3i0x3fsh7l63a8jgaz1n7dr5gzi";
+    sha256 = "1n7xy657ii0sa42zx6944v2m4v9qrh6sqgmw17l3nch3y43sxlyh";
   };
 
   # avoid retaining reference to CF during stdenv bootstrap
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = false; # fails
 
   meta = {
-    homepage = http://www.gnu.org/software/tar/;
+    homepage = https://www.gnu.org/software/tar/;
     description = "GNU implementation of the `tar' archiver";
 
     longDescription = ''
@@ -62,5 +62,7 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
+
+    priority = 10;
   };
 }

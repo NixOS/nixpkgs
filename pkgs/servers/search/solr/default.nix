@@ -1,12 +1,12 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "solr-${version}";
-  version = "7.5.0";
+  pname = "solr";
+  version = "7.7.1";
 
   src = fetchurl {
     url = "mirror://apache/lucene/solr/${version}/solr-${version}.tgz";
-    sha256 = "1g6f58j2pzb73phj4hfri9mj7vmql72by7w3xrbq1pbnqgzxmhpa";
+    sha256 = "1i189xhlxrpdqx2gx3r8s4dcd7nm74vjynwkrgv2hnq4mw95zf2g";
   };
 
   nativeBuildInputs = [ makeWrapper ];

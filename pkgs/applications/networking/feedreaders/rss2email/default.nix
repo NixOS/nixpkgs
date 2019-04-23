@@ -1,11 +1,13 @@
-{ pythonPackages, fetchurl, lib }:
+{ pythonPackages, fetchurl, lib, nixosTests }:
 
 with pythonPackages;
 
 buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "rss2email";
-  version = "3.9";
+  version = "3.9"; # TODO: on next bump, the manpage will be updated.
+  # Update nixos/modules/services/mail/rss2email.nix to point to it instead of
+  # to the online r2e.1
 
   propagatedBuildInputs = [ feedparser beautifulsoup4 html2text ];
 
@@ -43,5 +45,8 @@ buildPythonApplication rec {
     homepage = https://pypi.python.org/pypi/rss2email;
     license = licenses.gpl2;
     maintainers = with maintainers; [ jb55 Profpatsch ];
+  };
+  passthru.tests = {
+    smoke-test = nixosTests.rss2email;
   };
 }

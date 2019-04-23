@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, zlib, patchelf }:
+{ stdenv, lib, fetchurl, zlib, patchelf, runtimeShell }:
 
 let
   bootstrap = fetchurl {
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     # otherwise it fails spectacularly.
     mkdir -p $out/bin
     cat << EOF > $out/bin/meteor
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     if [[ ! -f \$HOME/.meteor/package-metadata/v2.0.1/packages.data.db ]]; then
       mkdir -p \$HOME/.meteor/package-metadata/v2.0.1

@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, intltool, meson, ninja, pkgconfig, gobjectIntrospection, python2
+{ stdenv, fetchurl, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gobject-introspection, python3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
 , libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
-, gnome3, icu, libuuid, networkmanager, libsoup, json-glib }:
+, gnome3, icu, libuuid, networkmanager, libsoup, json-glib
+, substituteAll}:
 
 let
   pname = "tracker";
-  version = "2.1.4";
+  version = "2.2.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -13,13 +14,13 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0xf58zld6pnfa8k7k70rv8ya8g7zqgahz6q4sapwxs6k97d2fgsx";
+    sha256 = "1zx2mlnsv6clgh0j50f0b94b7cf1al1j7bkcz8cr31a0fkkgkkhc";
   };
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig intltool libxslt wrapGAppsHook gobjectIntrospection
+    meson ninja vala pkgconfig intltool libxslt wrapGAppsHook gobject-introspection
     gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_43 glibcLocales
-    python2 # for data-generators
+    python3 # for data-generators
   ];
 
   buildInputs = [
@@ -29,9 +30,18 @@ in stdenv.mkDerivation rec {
   LC_ALL = "en_US.UTF-8";
 
   mesonFlags = [
-    "-Ddbus_services=share/dbus-1/services"
+    "-Ddbus_services=${placeholder ''out''}/share/dbus-1/services"
+    "-Dsystemd_user_services=${placeholder ''out''}/lib/systemd/user"
     # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
     "-Dfunctional_tests=false"
+    "-Ddocs=true"
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      gdbus = "${glib.bin}/bin/gdbus";
+    })
   ];
 
   postPatch = ''

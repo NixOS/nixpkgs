@@ -1,22 +1,23 @@
-{ stdenv
+{ gcc8Stdenv
 , ctags
+, appstream-glib
 , desktop-file-utils
 , docbook_xsl
 , docbook_xml_dtd_43
-, fetchpatch
 , fetchurl
 , flatpak
-, glibcLocales
 , gnome3
-, gobjectIntrospection
+, libgit2-glib
+, gobject-introspection
 , gspell
 , gtk-doc
 , gtk3
-, gtksourceview3
+, gtksourceview4
 , hicolor-icon-theme
 , json-glib
 , jsonrpc-glib
 , libdazzle
+, libpeas
 , libxml2
 , meson
 , ninja
@@ -27,30 +28,36 @@
 , sysprof
 , template-glib
 , vala
+, vte
 , webkitgtk
 , wrapGAppsHook
+, dbus
+, xvfb_run
 }:
+
 let
-  version = "3.28.4";
+  # Does not build with GCC 7
+  # https://gitlab.gnome.org/GNOME/gnome-builder/issues/868
+  stdenv = gcc8Stdenv;
+in
+stdenv.mkDerivation rec {
   pname = "gnome-builder";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ibb74jlyrl5f6rj1b74196zfg2qaf870lxgi76qzpkgwq0iya05";
+    sha256 = "00l7sshpndk995aw98mjmsc3mxhxzynlp7il551iwwjjdbc70qp4";
   };
 
   nativeBuildInputs = [
-    #appstream-glib # tests fail if these tools are available
+    appstream-glib
     desktop-file-utils
     docbook_xsl
     docbook_xml_dtd_43
-    glibcLocales # for Meson's gtkdochelper
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     hicolor-icon-theme
-    meson
+    (meson.override ({ inherit stdenv; }))
     ninja
     pkgconfig
     python3
@@ -62,12 +69,13 @@ in stdenv.mkDerivation {
     ctags
     flatpak
     gnome3.devhelp
-    gnome3.libgit2-glib
-    gnome3.libpeas
-    gnome3.vte
+    gnome3.glade
+    libgit2-glib
+    libpeas
+    vte
     gspell
     gtk3
-    gtksourceview3
+    gtksourceview4
     json-glib
     jsonrpc-glib
     libdazzle
@@ -81,45 +89,38 @@ in stdenv.mkDerivation {
     webkitgtk
   ];
 
+  checkInputs = [
+    dbus
+    xvfb_run
+  ];
+
   outputs = [ "out" "devdoc" ];
 
   prePatch = ''
     patchShebangs build-aux/meson/post_install.py
   '';
 
-  patches = [
-    (fetchpatch {
-      name = "absolute-shared-library-path.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/1011cabc519fd7322e2d695c79bfce3e18ff6200.patch";
-      sha256 = "1g12zziidzrphp527aa8sklfaln4qpjprkz73f0c9w5ph6k252fw";
-    })
-    (fetchpatch {
-      name = "python-libprefix.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/43494ce83a347f369ed4cfb8dd71d3b93452736b.patch";
-      sha256 = "0kgi3n3g13n1j4xa61ln9xiahcfdc43bxi5mw4yva2d5px445msf";
-    })
-    (fetchpatch {
-      name = "ostree-dependency.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/8b11773b65c95f464a0de16b91318c1ca73deeae.patch";
-      sha256 = "18r4hd90id0w6r0lzqpw83bcj45nm9jhr46a0ffi1mcayb18mgbk";
-    })
-  ];
-
   mesonFlags = [
     "-Dpython_libprefix=${python3.libPrefix}"
-    "-Dwith_docs=true"
+    "-Ddocs=true"
 
     # Making the build system correctly detect clang header and library paths
     # is difficult. Somebody should look into fixing this.
-    "-Dwith_clang=false"
+    "-Dplugin_clang=false"
+
+    # Do not try to check if appstream images exist
+    "-Dnetwork_tests=false"
   ];
 
   # Some tests fail due to being unable to find the Vte typelib, and I don't
   # understand why. Somebody should look into fixing this.
-  doCheck = false;
+  doCheck = true;
 
-  preInstall = ''
-    export LC_ALL="en_US.utf-8"
+  checkPhase = ''
+    export NO_AT_BRIDGE=1
+    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test --print-errorlogs
   '';
 
   pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];

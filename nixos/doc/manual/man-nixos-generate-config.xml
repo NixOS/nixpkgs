@@ -167,7 +167,7 @@ $ nixos-generate-config --root /mnt
 
 {
   imports =
-    [ &lt;nixos/modules/installer/scan/not-detected.nix>
+    [ &lt;nixos/modules/installer/scan/not-detected.nix&gt;
     ];
 
   boot.initrd.availableKernelModules = [ "ehci_hcd" "ahci" ];

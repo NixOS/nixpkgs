@@ -27,7 +27,7 @@ in {
     version = "${elk6Version}";
     src = fetchurl {
       url = "https://github.com/vhyza/elasticsearch-analysis-lemmagen/releases/download/v${version}/${name}-plugin.zip";
-      sha256 = "1m4z05wixjrq4nlbdjyhvprkrwxjym8aba18scmzfn25fhbjgvkz";
+      sha256 = "0mf8lpf40bjpzfj9lkhrg7c3xinzvg7aby3vd6h92g9i676xs8ri";
     };
     meta = with stdenv.lib; {
       homepage = https://github.com/vhyza/elasticsearch-analysis-lemmagen;
@@ -42,7 +42,7 @@ in {
     version = "${elk6Version}";
     src = pkgs.fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/discovery-ec2/discovery-ec2-${elk6Version}.zip";
-      sha256 = "1i7ksy69132sr84h51lamgq967yz3a3dw0b54nckxpqwad9pcpj0";
+      sha256 = "05z4vmi29fzfqzid7fdh6h6pjwgd1dz1mhhjgjz9plpvpzymjiln";
     };
     meta = with stdenv.lib; {
       homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2;
@@ -54,10 +54,10 @@ in {
   search_guard = esPlugin rec {
     name = "elastic-search-guard-${version}";
     pluginName = "search-guard";
-    version = "${elk6Version}-22.3";
+    version = "${elk6Version}-24.3";
     src = fetchurl rec {
       url = "mirror://maven/com/floragunn/search-guard-6/${version}/search-guard-6-${version}.zip";
-      sha256 = "1r71h4h9bmxak1mq5gpm19xq5ji1gry1kp3sjmm8azy4ykdqdncx";
+      sha256 = "17gif45fbi4vj9qrzv075fkr7d2sp0naa5bjjj9gvfgqyl2flj7g";
     };
     meta = with stdenv.lib; {
       homepage = https://github.com/floragunncom/search-guard;

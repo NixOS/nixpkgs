@@ -50,13 +50,9 @@ let
 
     outputs = [ "out" "dev" ];
 
-    nativeBuildInputs = [
-      autoconf automake libtool_2
-    ] ++ stdenv.lib.optionals useOld [
-      autoreconfHook
-    ];
-    buildInputs = [ libuuid ] ++
-      stdenv.lib.optionals stdenv.isDarwin [ llvm libcxxabi libobjc ];
+    nativeBuildInputs = [ autoconf automake libtool_2 autoreconfHook ];
+    buildInputs = [ libuuid ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
 
     patches = [
       ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
@@ -76,7 +72,9 @@ let
     enableParallelBuilding = true;
 
     # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-    configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    configurePlatforms = [ "build" "host" ]
+      ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    configureFlags = [ "--disable-clang-as" ];
 
     postPatch = ''
       sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
@@ -118,13 +116,6 @@ let
       popd
     '';
 
-    postInstall = ''
-      cat >$out/bin/dsymutil << EOF
-      #!${stdenv.shell}
-      EOF
-      chmod +x $out/bin/dsymutil
-    '';
-
     passthru = {
       inherit targetPrefix;
     };
@@ -134,6 +125,7 @@ let
       homepage = http://www.opensource.apple.com/source/cctools/;
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
+      maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
     };
   };
 in stdenv.mkDerivation baseParams

@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!@shell@ -e
 
 if [ "$1" = "" ]; then
   echo "usage: rpmextract package_name..." 1>&2

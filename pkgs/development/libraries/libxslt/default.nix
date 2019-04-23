@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, findXMLCatalogs, python2
+{ stdenv, fetchurl, libxml2, findXMLCatalogs, python2, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
@@ -10,25 +10,19 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
-  version = "1.1.32";
+  version = "1.1.33";
   name = pname + "-" + version;
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
-    sha256 = "0q2l6m56iv3ysxgm2walhg4c9wp7q183jb328687i9zlp85csvjj";
+    sha256 = "1j1q1swnsy8jgi9x7mclvkrqhfgn09886gdlr9wzk7a08i8n0dlf";
   };
-
-  patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
-
-  # fixes: can't build x86_64-unknown-cygwin shared library unless -no-undefined is specified
-  postPatch = optionalString stdenv.hostPlatform.isCygwin ''
-    substituteInPlace tests/plugins/Makefile.in \
-      --replace 'la_LDFLAGS =' 'la_LDFLAGS = $(WIN32_EXTRA_LDFLAGS)'
-  '';
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
 
-  buildInputs = [ libxml2.dev ] ++ stdenv.lib.optionals pythonSupport [ libxml2.py python2 ];
+  buildInputs = [ libxml2.dev ]
+    ++ stdenv.lib.optionals pythonSupport [ libxml2.py python2 ]
+    ++ stdenv.lib.optionals cryptoSupport [ libgcrypt ];
 
   propagatedBuildInputs = [ findXMLCatalogs ];
 

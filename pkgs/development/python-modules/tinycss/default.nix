@@ -3,6 +3,7 @@
 , fetchPypi
 , pytest
 , python
+, cython
 , cssutils
 , isPyPy
 }:
@@ -18,6 +19,17 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ cssutils ];
+  nativeBuildInputs = [
+    cython
+  ];
+
+  preBuild = ''
+    # Force cython to re-generate this file. If it is present, cython will
+    # think it is "up to date" even though it was generated with an older,
+    # incompatible version of cython. See
+    # https://github.com/Kozea/tinycss/issues/17.
+    rm tinycss/speedups.c
+  '';
 
   checkPhase = ''
     py.test $out/${python.sitePackages}

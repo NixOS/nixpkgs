@@ -4,13 +4,13 @@
 
 let
   pname = "gnome-screenshot";
-  version = "3.26.0";
+  version = "3.32.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1bbc11595d3822f4b92319cdf9ba49dd00f5471b6046c590847dc424a874c8bb";
+    sha256 = "09ha7dizjm5ymqpjyrqd10ijfb3xlqc1mwg9ajkrbfry11q9yq4b";
   };
 
   doCheck = true;
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext appstream-glib libxml2 desktop-file-utils python3 wrapGAppsHook ];
   buildInputs = [
-    gtk3 glib libcanberra-gtk3 gnome3.defaultIconTheme
+    gtk3 glib libcanberra-gtk3 gnome3.adwaita-icon-theme
     gnome3.gsettings-desktop-schemas
   ];
 

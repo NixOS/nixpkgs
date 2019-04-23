@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.46";
+  name = "openldap-2.4.47";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
-    sha256 = "0bab1km8f2nan1x0zgwliknbxg0zlf2pafxrr867kblrdfwdr44s";
+    sha256 = "02sj0p1pq12hqq29b22m3f5zs2rykgvc0q3wlynxjcsjhrvmhk7m";
   };
 
   # TODO: separate "out" and "bin"
@@ -13,18 +13,27 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ openssl cyrus_sasl db groff libtool ];
+  nativeBuildInputs = [ groff ];
 
-  configureFlags =
-    [ "--enable-overlays"
-      "--disable-dependency-tracking"   # speeds up one-time build
-      "--enable-modules"
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-      "--enable-crypt"
-    ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
-      ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
-      ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+  buildInputs = [ openssl cyrus_sasl db libtool ];
+
+  # Disable install stripping as it breaks cross-compiling.
+  # We strip binaries anyway in fixupPhase.
+  makeFlags= [ "STRIP=" ];
+
+  configureFlags = [
+    "--enable-overlays"
+    "--disable-dependency-tracking"   # speeds up one-time build
+    "--enable-modules"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--enable-crypt"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-yielding_select=yes"
+    "ac_cv_func_memcmp_working=yes"
+  ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
+    ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
+    ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
   doCheck = false; # needs a running LDAP server
 

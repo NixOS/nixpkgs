@@ -1,8 +1,8 @@
-{ lib, stdenv, perl }:
+{ lib, stdenv, perl, buildPackages, toPerlModule }:
 
 { nativeBuildInputs ? [], name, ... } @ attrs:
 
-stdenv.mkDerivation (
+toPerlModule(stdenv.mkDerivation (
   (
   lib.recursiveUpdate
   {
@@ -28,6 +28,7 @@ stdenv.mkDerivation (
     PERL_USE_UNSAFE_INC = "1";
 
     meta.homepage = "https://metacpan.org/release/${(builtins.parseDrvName name).name}";
+    meta.platforms = perl.meta.platforms;
   }
   attrs
   )
@@ -36,6 +37,6 @@ stdenv.mkDerivation (
     name = "perl${perl.version}-${name}";
     builder = ./builder.sh;
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
-    inherit perl;
+    perl = buildPackages.perl;
   }
-)
+))

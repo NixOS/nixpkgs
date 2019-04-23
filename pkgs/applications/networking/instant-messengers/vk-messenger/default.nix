@@ -2,17 +2,17 @@
 , xorg, gtk2, gnome2, nss, alsaLib, udev, libnotify }:
 
 let
-  version = "3.9.0";
+  version = "4.0.1";
 in stdenv.mkDerivation {
   name = "vk-messenger-${version}";
   src = {
     i686-linux = fetchurl {
       url = "https://desktop.userapi.com/rpm/master/vk-${version}.i686.rpm";
-      sha256 = "150qjj6ccbdp3gxs99jbzp27in1y8qkngn7jgb9za61pm4j70va3";
+      sha256 = "0mgppa9qnhix64zp40dc05yc9klsc7qiwcgw7pwq2wm7m3fz3nm8";
     };
     x86_64-linux = fetchurl {
       url = "https://desktop.userapi.com/rpm/master/vk-${version}.x86_64.rpm";
-      sha256 = "04lavv614qhj17zccpdih4k6ghj21nd0s8qxbkxkqb1jb0z8dfz9";
+      sha256 = "0ra0y4dfx4gfa1r3lm6v42j7c9pf7a8vh12kxv3wkg3pvijwgdsm";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 

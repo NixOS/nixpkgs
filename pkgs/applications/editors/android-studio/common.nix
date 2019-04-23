@@ -43,7 +43,7 @@ let
     name = drvName;
 
     src = fetchurl {
-      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
+      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.tar.gz";
       sha256 = sha256Hash;
     };
 
@@ -141,6 +141,9 @@ in runCommand
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;
+    passthru = {
+      unwrapped = androidStudio;
+    };
     meta = with stdenv.lib; {
       description = "The Official IDE for Android (${channel} channel)";
       longDescription = ''
@@ -158,9 +161,9 @@ in runCommand
   ''
     mkdir -p $out/{bin,share/pixmaps}
 
-    # TODO: Rename preview -> beta (and add -stable suffix?):
     echo -n "$startScript" > $out/bin/${pname}
     chmod +x $out/bin/${pname}
+
     ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${drvName}.png
     ln -s ${desktopItem}/share/applications $out/share/applications
   ''

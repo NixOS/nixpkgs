@@ -2,24 +2,25 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, pillow
 , numpy
 , ffmpeg_4
-, git
 , libav
 , pkgconfig
 }:
 
 buildPythonPackage rec {
   pname = "av";
-  version = "0.5.3";
+  version = "6.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k5nbff8c2wxc8wnyn1qghndbd2rjck1y3552s63w41mccj1k1qr";
+    sha256 = "eebbb56eeae650b1fc551f94d51aee39b487bf4df73c39daea186c5d2950650f";
   };
 
-  buildInputs = [ nose pillow numpy ffmpeg_4 git pkgconfig ];
+  checkInputs = [ nose numpy ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ffmpeg_4 ];
 
   # Tests require downloading files from internet
   doCheck = false;

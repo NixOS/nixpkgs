@@ -5,28 +5,21 @@
 
 buildPythonPackage rec {
   pname = "pymediainfo";
-  version = "2.3.0";
+  version = "3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d0mxxycacimy46b08q44xyxkyji7rrs7viwc3wkpckhqs54q24x";
+    sha256 = "00awypv2nbn44cc38q7w747gx1xhj33cygzzl56jn5jd3hdlldn7";
   };
 
   postPatch = ''
     substituteInPlace pymediainfo/__init__.py \
-      --replace 'CDLL(library_file)' \
-                'CDLL("${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}")' \
-      --replace 'CDLL("libmediainfo.0.dylib")' \
-                'CDLL("${libmediainfo}/lib/libmediainfo.0${stdenv.hostPlatform.extensions.sharedLibrary}")' \
-      --replace 'CDLL("libmediainfo.dylib")' \
-                'CDLL("${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}")' \
-      --replace 'CDLL("libmediainfo.so.0")' \
-                'CDLL("${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}.0")'
-
-    # Fix test, remove after version 2.3.0
-    substituteInPlace tests/test_pymediainfo.py \
-      --replace 'codec, "AVC"'    'format, "AVC"' \
-      --replace 'codec, "AAC LC"' 'format, "AAC"'
+      --replace "libmediainfo.0.dylib" \
+                "${libmediainfo}/lib/libmediainfo.0${stdenv.hostPlatform.extensions.sharedLibrary}" \
+      --replace "libmediainfo.dylib" \
+                "${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}" \
+      --replace "libmediainfo.so.0" \
+                "${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}.0"
   '';
 
   nativeBuildInputs = [ setuptools_scm ];

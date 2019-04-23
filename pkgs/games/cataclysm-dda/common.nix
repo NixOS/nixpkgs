@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, gettext, lua, ncurses
 , tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
-, debug
+, debug, runtimeShell
 }:
 
 let
@@ -86,7 +86,7 @@ let
       mkdir $app/Contents/MacOS
       launcher=$app/Contents/MacOS/Cataclysm.sh
       cat << EOF > $launcher
-      #!${stdenv.shell}
+      #!${runtimeShell}
       $out/bin/cataclysm-tiles
       EOF
       chmod 555 $launcher

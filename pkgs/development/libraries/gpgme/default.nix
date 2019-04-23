@@ -1,8 +1,7 @@
 { stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
 , file, which, ncurses
-, autoreconfHook
-, git
 , texinfo
+, buildPackages
 , qtbase ? null
 , pythonSupport ? false, swig2 ? null, python ? null
 }:
@@ -14,11 +13,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "gpgme-${version}";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "1n4c1q2ls7sqx1vpr3p5n8vbjkw6kqp8jxqa28p0x9j36wf9bp5l";
+    sha256 = "0c6676g0yhfsmy32i1dgwh5cx0ja8vhcqf4k08zad177m53kxcnl";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -28,8 +27,10 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo ]
+  nativeBuildInputs = [ file pkgconfig gnupg texinfo ]
   ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   postPatch =''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
     "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
   ] ++ lib.optional pythonSupport "--enable-languages=python";
 
   NIX_CFLAGS_COMPILE =

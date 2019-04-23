@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, plib, freeglut, xproto, libX11, libXext, xextproto, libXi
-, inputproto, libICE, libSM, libXt, libXmu, libGLU_combined, boost, zlib, libjpeg, freealut
+{ stdenv, fetchurl, plib, freeglut, xorgproto, libX11, libXext, libXi
+, libICE, libSM, libXt, libXmu, libGLU_combined, boost, zlib, libjpeg, freealut
 , openscenegraph, openal, expat, cmake, apr
 , curl
 }:
 
 stdenv.mkDerivation rec {
   name = "simgear-${version}";
-  version = "2018.2.2";
-  shortVersion = "2018.2";
+  version = "2018.3.1";
+  shortVersion = "2018.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${name}.tar.bz2";
-    sha256 = "f61576bc36aae36f350154749df1cee396763604c06b8a71c4b50452d9151ce5";
+    sha256 = "0sm0v8v1sw5xzkzhf0gzh6fwx93hd62h5lm9s9hgci40x7480i99";
   };
 
-  buildInputs = [ plib freeglut xproto libX11 libXext xextproto libXi inputproto
+  buildInputs = [ plib freeglut xorgproto libX11 libXext libXi
                   libICE libSM libXt libXmu libGLU_combined boost zlib libjpeg freealut
                   openscenegraph openal expat cmake apr curl ];
 

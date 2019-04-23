@@ -1,22 +1,15 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, autoconf, automake, libtool, pkgconfig }:
+{ stdenv, lib, fetchpatch, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.23.1";
-  name = "libuv-${version}";
+  version = "1.27.0";
+  pname = "libuv";
 
   src = fetchFromGitHub {
-    owner = "libuv";
-    repo = "libuv";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "14h8dcyx81sbckbgmqhagncyz8s6z6qzpx0fy8p79whq5hb3f4jg";
+    sha256 = "1nhd3772qymlv0b251wg9rrqz279vki4hnd4s23yyll0kpmzkpac";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d.patch";
-      sha256 = "1s2692h4dvqnzwwicrkpj0zph1i2bhv39w31z5vh7ssgvykaradj";
-    })
-  ];
 
   postPatch = let
     toDisable = [
@@ -52,6 +45,7 @@ stdenv.mkDerivation rec {
     '';
 
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh

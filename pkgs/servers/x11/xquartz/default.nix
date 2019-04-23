@@ -123,6 +123,7 @@ in stdenv.mkDerivation {
 
     cp ${./startx} $out/bin/startx
     substituteInPlace $out/bin/startx \
+      --replace "@shell@"             "${stdenv.shell}" \
       --replace "@PATH@"              "$out/bin:${env}" \
       --replace "@XAUTH@"             "${xorg.xauth}/bin/xauth" \
       --replace "@FONT_CACHE@"        "$out/bin/font_cache" \
@@ -153,12 +154,14 @@ in stdenv.mkDerivation {
     mkdir -p $out/lib/X11/xinit/privileged_startx.d
     cp ${./privileged} $out/lib/X11/xinit/privileged_startx.d/privileged
     substituteInPlace $out/lib/X11/xinit/privileged_startx.d/privileged \
+      --replace "@shell@"           "${stdenv.shell}" \
       --replace "@PATH@"            "$out/bin:${env}" \
       --replace "@FONTCONFIG_FILE@" "$fontsConfPath" \
       --replace "@FONT_CACHE@"      "$out/bin/font_cache"
 
     cp ${./font_cache} $out/bin/font_cache
     substituteInPlace $out/bin/font_cache \
+      --replace "@shell@"           "${stdenv.shell}" \
       --replace "@PATH@"            "$out/bin:${env}" \
       --replace "@ENCODINGSDIR@"    "${xorg.encodings}/share/fonts/X11/encodings" \
       --replace "@MKFONTDIR@"       "${xorg.mkfontdir}/bin/mkfontdir" \
@@ -168,6 +171,7 @@ in stdenv.mkDerivation {
 
     cp ${./xinitrc} $out/etc/X11/xinit/xinitrc
     substituteInPlace $out/etc/X11/xinit/xinitrc \
+      --replace "@shell@"           "${stdenv.shell}" \
       --replace "@PATH@"            "$out/bin:${env}" \
       --replace "@XSET@"            "${xorg.xset}/bin/xset" \
       --replace "@XMODMAP@"         "${xorg.xmodmap}/bin/xmodmap" \
@@ -178,6 +182,7 @@ in stdenv.mkDerivation {
 
     cp ${./X11} $out/Applications/XQuartz.app/Contents/MacOS/X11
     substituteInPlace $out/Applications/XQuartz.app/Contents/MacOS/X11 \
+      --replace "@shell@"           "${stdenv.shell}" \
       --replace "@DEFAULT_SHELL@"   "${shell}" \
       --replace "@DEFAULT_STARTX@"  "$defaultStartX" \
       --replace "@DEFAULT_CLIENT@"  "${xterm}/bin/xterm" \

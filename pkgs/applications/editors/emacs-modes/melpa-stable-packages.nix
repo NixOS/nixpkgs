@@ -35,9 +35,6 @@ self:
     });
 
     overrides = {
-      # upstream issue: mismatched filename
-      ack-menu = markBroken super.ack-menu;
-
       # Expects bash to be at /bin/bash
       ac-rtags = markBroken super.ac-rtags;
 
@@ -102,9 +99,6 @@ self:
       # build timeout
       graphene = markBroken super.graphene;
 
-      # upstream issue: mismatched filename
-      helm-lobsters = markBroken super.helm-lobsters;
-
       # Expects bash to be at /bin/bash
       helm-rtags = markBroken super.helm-rtags;
 
@@ -133,9 +127,6 @@ self:
 
       # upstream issue: missing file header
       link = markBroken super.link;
-
-      # upstream issue: mismatched filename
-      link-hint = markBroken super.link-hint;
 
       # upstream issue: missing file header
       maxframe = markBroken super.maxframe;
@@ -184,9 +175,6 @@ self:
 
       # upstream issue: truncated file
       powershell = markBroken super.powershell;
-
-      # upstream issue: mismatched filename
-      processing-snippets = markBroken super.processing-snippets;
 
       # upstream issue: missing file header
       qiita = markBroken super.qiita;

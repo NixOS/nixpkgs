@@ -15,13 +15,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ itk vtk ];
 
-  cmakeFlags = [ "-DANTS_SUPERBUILD=FALSE" "-DUSE_VTK=TRUE"
-                 # as cmake otherwise tries to download test data:
-                 "-DBUILD_TESTING=FALSE" ];
+  cmakeFlags = [ "-DANTS_SUPERBUILD=FALSE" "-DUSE_VTK=TRUE" ];
 
   enableParallelBuilding = true;
-
-  checkPhase = "ctest";
 
   postInstall = ''
     for file in $out/bin/*; do

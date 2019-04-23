@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   # Only needed for tests
-  buildInputs = [ pkgs.openssl ];
+  checkInputs = [ pkgs.openssl ];
 
   meta = with stdenv.lib; {
     description = "ECDSA cryptographic signature library";

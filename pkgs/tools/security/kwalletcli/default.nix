@@ -7,14 +7,14 @@
 
 let
   pname = "kwalletcli";
-  version = "3.01";
+  version = "3.02";
 in
 mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://www.mirbsd.org/MirOS/dist/hosted/kwalletcli/${name}.tar.gz";
-    sha256 = "03jd7m868dc5dkmm7wbr6dj1h1kp4cb2x8ay8jwvlcbnf7srjzcs";
+    sha256 = "05njayi07996ljfl8a6frlk2s60grk5w27f0f445nmvd5n0bzgpn";
   };
 
   postPatch = ''

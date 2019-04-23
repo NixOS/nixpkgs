@@ -1,19 +1,15 @@
 { stdenv, fetchFromGitHub, sassc, autoreconfHook, pkgconfig, gtk3, gnome3
 , gtk-engine-murrine, optipng, inkscape }:
 
-let
-  pname = "arc-theme";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "20181022";
+  pname = "arc-theme";
+  version = "20190330";
 
   src = fetchFromGitHub {
     owner  = "NicoHood";
     repo   = pname;
     rev    = version;
-    sha256 = "08951dk1irfadwpr3p323a4fprmxg53rk2r2niwq3v62ryhi3663";
+    sha256 = "16n5svgkpa8azxgyy64zwjjc04r57wfzkdq9igqvbvwkbvx8aa89";
   };
 
   nativeBuildInputs = [
@@ -35,6 +31,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+    # TODO: remove this after update
+    ln -s 3.30 common/gnome-shell/3.32
   '';
 
   preBuild = ''

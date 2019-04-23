@@ -24,9 +24,9 @@
 
   <para>
    This function is analogous to the <command>docker build</command> command,
-   in that can used to build a Docker-compatible repository tarball containing
-   a single image with one or multiple layers. As such, the result is suitable
-   for being loaded in Docker with <command>docker load</command>.
+   in that it can be used to build a Docker-compatible repository tarball
+   containing a single image with one or multiple layers. As such, the result
+   is suitable for being loaded in Docker with <command>docker load</command>.
   </para>
 
   <para>
@@ -47,7 +47,7 @@ buildImage {
 
   contents = pkgs.redis; <co xml:id='ex-dockerTools-buildImage-6' />
   runAsRoot = '' <co xml:id='ex-dockerTools-buildImage-runAsRoot' />
-    #!${stdenv.shell}
+    #!${pkgs.runtimeShell}
     mkdir -p /data
   '';
 
@@ -190,11 +190,11 @@ buildImage {
     By default <function>buildImage</function> will use a static date of one
     second past the UNIX Epoch. This allows <function>buildImage</function> to
     produce binary reproducible images. When listing images with
-    <command>docker list images</command>, the newly created images will be
-    listed like this:
+    <command>docker images</command>, the newly created images will be listed
+    like this:
    </para>
 <screen><![CDATA[
-$ docker image list
+$ docker images
 REPOSITORY   TAG      IMAGE ID       CREATED        SIZE
 hello        latest   08c791c7846e   48 years ago   25.2MB
 ]]></screen>
@@ -217,7 +217,7 @@ pkgs.dockerTools.buildImage {
     and now the Docker CLI will display a reasonable date and sort the images
     as expected:
 <screen><![CDATA[
-$ docker image list
+$ docker images
 REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
 hello        latest   de2bf4786de6   About a minute ago   25.2MB
 ]]></screen>
@@ -402,9 +402,9 @@ pkgs.dockerTools.buildLayeredImage {
 
   <para>
    This function is analogous to the <command>docker pull</command> command, in
-   that can be used to pull a Docker image from a Docker registry. By default
-   <link xlink:href="https://hub.docker.com/">Docker Hub</link> is used to pull
-   images.
+   that it can be used to pull a Docker image from a Docker registry. By
+   default <link xlink:href="https://hub.docker.com/">Docker Hub</link> is used
+   to pull images.
   </para>
 
   <para>
@@ -417,10 +417,11 @@ pkgs.dockerTools.buildLayeredImage {
 pullImage {
   imageName = "nixos/nix"; <co xml:id='ex-dockerTools-pullImage-1' />
   imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b"; <co xml:id='ex-dockerTools-pullImage-2' />
-  finalImageTag = "1.11";  <co xml:id='ex-dockerTools-pullImage-3' />
-  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8"; <co xml:id='ex-dockerTools-pullImage-4' />
-  os = "linux"; <co xml:id='ex-dockerTools-pullImage-5' />
-  arch = "x86_64"; <co xml:id='ex-dockerTools-pullImage-6' />
+  finalImageName = "nix"; <co xml:id='ex-dockerTools-pullImage-3' />
+  finalImageTag = "1.11";  <co xml:id='ex-dockerTools-pullImage-4' />
+  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8"; <co xml:id='ex-dockerTools-pullImage-5' />
+  os = "linux"; <co xml:id='ex-dockerTools-pullImage-6' />
+  arch = "x86_64"; <co xml:id='ex-dockerTools-pullImage-7' />
 }
 </programlisting>
   </example>
@@ -436,21 +437,18 @@ pullImage {
    <callout arearefs='ex-dockerTools-pullImage-2'>
     <para>
      <varname>imageDigest</varname> specifies the digest of the image to be
-     downloaded. Skopeo can be used to get the digest of an image, with its
-     <varname>inspect</varname> subcommand. Since a given
-     <varname>imageName</varname> may transparently refer to a manifest list of
-     images which support multiple architectures and/or operating systems,
-     supply the `--override-os` and `--override-arch` arguments to specify
-     exactly which image you want. By default it will match the OS and
-     architecture of the host the command is run on.
-<programlisting>
-$ nix-shell --packages skopeo jq --command "skopeo --override-os linux --override-arch x86_64 inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'"
-sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
-</programlisting>
-     This argument is required.
+     downloaded. This argument is required.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-pullImage-3'>
+    <para>
+     <varname>finalImageName</varname>, if specified, this is the name of the
+     image to be created. Note it is never used to fetch the image since we
+     prefer to rely on the immutable digest ID. By default it's equal to
+     <varname>imageName</varname>.
+    </para>
+   </callout>
+   <callout arearefs='ex-dockerTools-pullImage-4'>
     <para>
      <varname>finalImageTag</varname>, if specified, this is the tag of the
      image to be created. Note it is never used to fetch the image since we
@@ -458,25 +456,53 @@ sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
      <literal>latest</literal>.
     </para>
    </callout>
-   <callout arearefs='ex-dockerTools-pullImage-4'>
+   <callout arearefs='ex-dockerTools-pullImage-5'>
     <para>
      <varname>sha256</varname> is the checksum of the whole fetched image. This
      argument is required.
     </para>
    </callout>
-   <callout arearefs='ex-dockerTools-pullImage-5'>
+   <callout arearefs='ex-dockerTools-pullImage-6'>
     <para>
      <varname>os</varname>, if specified, is the operating system of the
      fetched image. By default it's <literal>linux</literal>.
     </para>
    </callout>
-   <callout arearefs='ex-dockerTools-pullImage-6'>
+   <callout arearefs='ex-dockerTools-pullImage-7'>
     <para>
      <varname>arch</varname>, if specified, is the cpu architecture of the
      fetched image. By default it's <literal>x86_64</literal>.
     </para>
    </callout>
   </calloutlist>
+
+  <para>
+    <literal>nix-prefetch-docker</literal> command can be used to get required
+    image parameters:
+
+<programlisting>
+$ nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql --image-tag 5
+</programlisting>
+
+    Since a given <varname>imageName</varname> may transparently refer to a
+    manifest list of images which support multiple architectures and/or
+    operating systems, you can supply the <option>--os</option> and
+    <option>--arch</option> arguments to specify exactly which image you want.
+    By default it will match the OS and architecture of the host the command is
+    run on.
+
+<programlisting>
+$ nix-prefetch-docker --image-name mysql --image-tag 5 --arch x86_64 --os linux
+</programlisting>
+
+    Desired image name and tag can be set using
+    <option>--final-image-name</option> and <option>--final-image-tag</option>
+    arguments:
+
+<programlisting>
+$ nix-prefetch-docker --image-name mysql --image-tag 5 --final-image-name eu.gcr.io/my-project/mysql --final-image-tag prod
+</programlisting>
+  </para>
  </section>
 
  <section xml:id="ssec-pkgs-dockerTools-exportImage">
@@ -484,10 +510,10 @@ sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
 
   <para>
    This function is analogous to the <command>docker export</command> command,
-   in that can used to flatten a Docker image that contains multiple layers. It
-   is in fact the result of the merge of all the layers of the image. As such,
-   the result is suitable for being imported in Docker with <command>docker
-   import</command>.
+   in that it can be used to flatten a Docker image that contains multiple
+   layers. It is in fact the result of the merge of all the layers of the
+   image. As such, the result is suitable for being imported in Docker with
+   <command>docker import</command>.
   </para>
 
   <note>
@@ -544,7 +570,7 @@ buildImage {
   name = "shadow-basic";
 
   runAsRoot = ''
-    #!${stdenv.shell}
+    #!${pkgs.runtimeShell}
     ${shadowSetup}
     groupadd -r redis
     useradd -r -g redis redis
@@ -557,7 +583,7 @@ buildImage {
 
   <para>
    Creating base files like <literal>/etc/passwd</literal> or
-   <literal>/etc/login.defs</literal> are necessary for shadow-utils to
+   <literal>/etc/login.defs</literal> is necessary for shadow-utils to
    manipulate users and groups.
   </para>
  </section>

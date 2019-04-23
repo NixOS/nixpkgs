@@ -3,9 +3,6 @@
 , buildPythonPackage
 , arb
 , openblasCompat
-, openblas-blas-pc
-, openblas-cblas-pc
-, openblas-lapack-pc
 , brial
 , cliquer
 , cypari2
@@ -23,7 +20,7 @@
 , jinja2
 , lcalc
 , lrcalc
-, libgap
+, gap
 , linbox
 , m4ri
 , m4rie
@@ -33,6 +30,7 @@
 , numpy
 , pari
 , pkgconfig
+, pkg-config
 , planarity
 , ppl
 , pynac
@@ -49,27 +47,33 @@
 , jupyter_core
 , libhomfly
 , libbraiding
+, gmpy2
+, pplpy
 }:
+
+# This is the core sage python package. Everything else is just wrappers gluing
+# stuff together. It is not very useful on its own though, since it will not
+# find many of its dependencies without `sage-env`, will not be tested without
+# `sage-tests` and will not have html docs without `sagedoc`.
 
 buildPythonPackage rec {
   format = "other";
-  version = sage-src.version;
-  pname = "sagelib";
-
+  version = src.version;
+  name = "sagelib-${version}";
   src = sage-src;
 
   nativeBuildInputs = [
     iml
     perl
-    openblas-blas-pc
-    openblas-cblas-pc
-    openblas-lapack-pc
     jupyter_core
+    pkg-config
+    pip # needed to query installed packages
   ];
 
   buildInputs = [
     gd
     readline
+    iml
   ];
 
   propagatedBuildInputs = [
@@ -90,7 +94,7 @@ buildPythonPackage rec {
     glpk
     gsl
     lcalc
-    libgap
+    gap
     libmpc
     linbox
     lrcalc
@@ -113,6 +117,8 @@ buildPythonPackage rec {
     cysignals
     libhomfly
     libbraiding
+    gmpy2
+    pplpy
   ];
 
   buildPhase = ''

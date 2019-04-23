@@ -63,6 +63,12 @@ in {
             ensurePermissions = { "slurm_acct_db.*" = "ALL PRIVILEGES"; };
             name = "slurm";
           }];
+          extraOptions = ''
+            # recommendations from: https://slurm.schedmd.com/accounting.html#mysql-configuration
+            innodb_buffer_pool_size=1024M
+            innodb_log_file_size=64M
+            innodb_lock_wait_timeout=900
+          '';
         };
       };
 
@@ -95,12 +101,15 @@ in {
   subtest "can_start_slurmdbd", sub {
     $dbd->succeed("systemctl restart slurmdbd");
     $dbd->waitForUnit("slurmdbd.service");
+    $dbd->waitForOpenPort(6819);
   };
 
   # there needs to be an entry for the current
   # cluster in the database before slurmctld is restarted
   subtest "add_account", sub {
     $control->succeed("sacctmgr -i add cluster default");
+    # check for cluster entry
+    $control->succeed("sacctmgr list cluster | awk '{ print \$1 }' | grep default");
   };
 
   subtest "can_start_slurmctld", sub {
@@ -126,6 +135,7 @@ in {
 
   subtest "check_slurm_dbd", sub {
     # find the srun job from above in the database
+    sleep 2;
     $submit->succeed("sacct | grep hostname");
   };
   '';

@@ -2,7 +2,7 @@
 
 buildBazelPackage rec {
   name = "bazel-deps-${version}";
-  version = "2018-11-01";
+  version = "2019-02-01";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/johnynek/bazel-deps";
@@ -15,8 +15,8 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "johnynek";
     repo = "bazel-deps";
-    rev = "1af8921d52f053fad575f26762533a3823b4a847";
-    sha256 = "0srz0sbz4bq9n7cp4g1n3kd3j6rcjqfi25sq8aa64l27yqzbk53x";
+    rev = "6585033409e09028852403ec15ec0c77851234be";
+    sha256 = "0hypf7mcbpx2djqm92k82vn1k6pbnv564xbnazx8nw60f6ns0x87";
   };
 
   bazelTarget = "//src/scala/com/github/johnynek/bazel_deps:parseproject_deploy.jar";
@@ -66,7 +66,7 @@ buildBazelPackage rec {
       find . -type d -empty -delete
     '';
 
-    sha256 = "1gvl4a9z8p4ch2gmcj3lpp0imrkrvy8wng949p3wlkibi14hc6ww";
+    sha256 = "1yirrzhhrsmbgd27fg709plhrhyi8pzwqv84yg72sd3799kswh9m";
   };
 
   buildAttrs = {

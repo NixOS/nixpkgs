@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "bs1770gain-${version}";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/bs1770gain/${name}.tar.gz";
-    sha256 = "0r4fbajgfmnwgl63hcm56f1j8m5f135q6j5jkzdvrrhpcj39yx06";
+    sha256 = "1p6yz5q7czyf9ard65sp4kawdlkg40cfscr3b24znymmhs3p7rbk";
   };
 
   buildInputs = [ ffmpeg sox ];

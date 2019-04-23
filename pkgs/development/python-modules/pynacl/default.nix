@@ -1,20 +1,35 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytest, libsodium, cffi, six, hypothesis}:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, libsodium
+, cffi
+, six
+, hypothesis
+}:
 
 buildPythonPackage rec {
   pname = "pynacl";
   version = "1.3.0";
 
-  src = fetchFromGitHub {
-    owner = "pyca";
-    repo = pname;
-    rev = version;
-    sha256 = "0ac00d5bfdmz1x428h2scq5b34llp61yhxradl94qjwz7ikqv052";
+  src = fetchPypi {
+    inherit version;
+    pname = "PyNaCl";
+    sha256 = "0c6100edd16fefd1557da078c7a31e7b7d7a52ce39fdca2bec29d4f7b6e7600c";
   };
 
   checkInputs = [ pytest hypothesis ];
-  propagatedBuildInputs = [ libsodium cffi six ];
+  buildInputs = [ libsodium ];
+  propagatedBuildInputs = [ cffi six ];
 
   SODIUM_INSTALL = "system";
+
+  # fixed in next release 1.3.0+
+  # https://github.com/pyca/pynacl/pull/480
+  postPatch = ''
+    substituteInPlace tests/test_bindings.py \
+      --replace "average_size=128," ""
+  '';
 
   checkPhase = ''
     py.test

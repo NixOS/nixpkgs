@@ -22,13 +22,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib netcdf nifticlib hdf5 ];
 
   cmakeFlags = [
-    "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}"
     "-DLIBMINC_MINC1_SUPPORT=ON"
     "-DLIBMINC_BUILD_SHARED_LIBS=ON"
     "-DLIBMINC_USE_SYSTEM_NIFTI=ON"
   ];
 
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = true;
   checkPhase = ''
     export LD_LIBRARY_PATH="$(pwd)"  # see #22060
     ctest -E 'ezminc_rw_test|minc_conversion' --output-on-failure
