@@ -39,7 +39,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # avoid cycle between outputs
-    mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
+    if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
+      mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
+    fi
   '';
 
   enableParallelBuilding = true;
