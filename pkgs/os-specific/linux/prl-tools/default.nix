@@ -5,8 +5,7 @@
 }:
 
 assert (!libsOnly) -> kernel != null;
-# Disable for kernels 4.15 and above due to compatibility issues
-assert kernel != null -> stdenv.lib.versionOlder kernel.version "4.15";
+assert kernel != null -> stdenv.lib.versionOlder kernel.version "5.0";
 
 let xorgFullVer = (builtins.parseDrvName xorg.xorgserver.name).version;
     xorgVer = lib.concatStringsSep "." (lib.take 2 (lib.splitString "." xorgFullVer));
@@ -15,15 +14,15 @@ let xorgFullVer = (builtins.parseDrvName xorg.xorgserver.name).version;
           else throw "Parallels Tools for Linux only support {x86-64,i686}-linux targets";
 in
 stdenv.mkDerivation rec {
-  version = "${prl_major}.2.1-41615";
-  prl_major = "12";
+  version = "${prl_major}.1.3-45485";
+  prl_major = "14";
   name = "prl-tools-${version}";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
     url =  "https://download.parallels.com/desktop/v${prl_major}/${version}/ParallelsDesktop-${version}.dmg";
-    sha256 = "1jwzwif69qlhmfky9kigjaxpxfj0lyrl1iyrpqy4iwqvajdgbbym";
+    sha256 = "34c9c345642fa30f9d240a76062c5672e399349d5e5984db9c208d22e099f8b9";
   };
 
   hardeningDisable = [ "pic" "format" ];
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     undmg < "${src}"
 
-    export sourceRoot=prl-tools-build
+    export sourceRoot=$(pwd)/prl-tools-build
     7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso" -o$sourceRoot
     if test -z "$libsOnly"; then
       ( cd $sourceRoot/kmods; tar -xaf prl_mod.tar.gz )
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
         done
 
         mkdir -p $out/bin
-        install -Dm755 ../installer/prlfsmountd.sh $out/sbin/prlfsmountd
+        install -Dm755 ./prlfsmountd.sh $out/sbin/prlfsmountd
         wrapProgram $out/sbin/prlfsmountd \
           --prefix PATH ':' "$scriptPath"
 
@@ -144,6 +143,10 @@ stdenv.mkDerivation rec {
         cp $i $out/lib
       done
 
+      for i in xorg.${xorgVer}/usr/*; do
+        cp -r $i $out/
+      done
+
       cd $out
       find -name \*.so\* -type f -exec \
         patchelf --set-rpath "$out/lib:$libPath" {} \;
@@ -165,6 +168,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     # I was making this package blindly and requesting testing from the real user,
     # so I can't even test it by myself and won't provide future updates.
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar vonfry ];
   };
 }
