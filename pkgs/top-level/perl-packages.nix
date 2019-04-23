@@ -1157,6 +1157,20 @@ let
     };
   };
 
+  Carton = buildPerlPackage rec {
+    name = "Carton-v1.0.34";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "77d42b92732bcfc18a59d341e56ce476205b1c4d380eab3a07224f5745c23e45";
+    };
+    propagatedBuildInputs = [ ClassTiny MenloLegacy ModuleCPANfile PathTiny TryTiny ];
+    meta = {
+      homepage = https://github.com/perl-carton/carton;
+      description = "Perl module dependency manager (aka Bundler for Perl)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CatalystActionRenderView = buildPerlPackage rec {
     name = "Catalyst-Action-RenderView-0.16";
     src = fetchurl {
