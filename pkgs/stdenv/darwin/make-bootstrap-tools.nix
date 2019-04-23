@@ -80,9 +80,7 @@ in rec {
       cp -d ${libxml2.out}/lib/libxml2*.dylib $out/lib
 
       # Copy what we need of clang
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang $out/bin
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang++ $out/bin
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang-[0-9].[0-9] $out/bin
+      cp -d ${llvmPackages.clang-unwrapped}/bin/clang* $out/bin
 
       cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
