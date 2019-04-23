@@ -9,13 +9,7 @@ let
       inherit clusterName;
       listenAddress = ipAddress;
       rpcAddress = ipAddress;
-      extraConfig =
-        { start_native_transport = true;
-          seed_provider =
-            [{ class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
-               parameters = [ { seeds = "192.168.1.1"; } ];
-            }];
-        };
+      seedAddresses = [ "192.168.1.1" ];
       package = testPackage;
     };
   nodeCfg = ipAddress: extra: {pkgs, config, ...}:
