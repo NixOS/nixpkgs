@@ -5746,7 +5746,7 @@ in
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { samba = samba3; };
 
-  sl = callPackage ../tools/misc/sl { };
+  sl = callPackage ../tools/misc/sl { stdenv = gccStdenv; };
 
   socat = callPackage ../tools/networking/socat { };
 
@@ -7855,7 +7855,9 @@ in
 
   tinycc = callPackage ../development/compilers/tinycc { };
 
-  tinyscheme = callPackage ../development/interpreters/tinyscheme { };
+  tinyscheme = callPackage ../development/interpreters/tinyscheme {
+    stdenv = gccStdenv;
+  };
 
   inherit (ocaml-ng.ocamlPackages_4_02) trv;
 
@@ -19056,7 +19058,9 @@ in
 
   openbox = callPackage ../applications/window-managers/openbox { };
 
-  openbox-menu = callPackage ../applications/misc/openbox-menu { };
+  openbox-menu = callPackage ../applications/misc/openbox-menu {
+    stdenv = gccStdenv;
+  };
 
   openbrf = libsForQt5.callPackage ../applications/misc/openbrf { };
 
@@ -23208,7 +23212,9 @@ in
 
   fsuae = callPackage ../misc/emulators/fs-uae { };
 
-  putty = callPackage ../applications/networking/remote/putty { };
+  putty = callPackage ../applications/networking/remote/putty {
+    gtk2 = gtk2-x11;
+  };
 
   qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
 
