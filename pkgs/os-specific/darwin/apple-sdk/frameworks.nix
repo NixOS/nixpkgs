@@ -10,12 +10,12 @@ with frameworks; with libs; {
   AVKit                   = [];
   Accounts                = [];
   AddressBook             = [ Carbon CF ];
-  AppKit                  = [ AudioToolbox Foundation QuartzCore ];
+  AppKit                  = [ AudioToolbox AudioUnit Foundation QuartzCore ];
   AppKitScripting         = [];
   AppleScriptKit          = [];
   AppleScriptObjC         = [];
-  AudioToolbox            = [ AudioUnit CoreAudio CF CoreMIDI ];
-  AudioUnit               = [ Carbon CoreAudio CF ];
+  AudioToolbox            = [ CoreAudio CF CoreMIDI ];
+  AudioUnit               = [ AudioToolbox Carbon CoreAudio CF ];
   AudioVideoBridging      = [ Foundation ];
   Automator               = [];
   CFNetwork               = [ CF ];
@@ -33,7 +33,7 @@ with frameworks; with libs; {
   CoreLocation            = [];
   CoreMIDI                = [ CF ];
   CoreMIDIServer          = [];
-  CoreMedia               = [ ApplicationServices AudioToolbox CoreAudio CF CoreGraphics CoreVideo ];
+  CoreMedia               = [ ApplicationServices AudioToolbox AudioUnit CoreAudio CF CoreGraphics CoreVideo ];
   CoreMediaIO             = [ CF CoreMedia ];
   CoreText                = [ CF CoreGraphics ];
   CoreVideo               = [ ApplicationServices CF CoreGraphics IOSurface OpenGL ];
@@ -72,7 +72,7 @@ with frameworks; with libs; {
   LatentSemanticMapping   = [ Carbon CF ];
   MapKit                  = [];
   MediaAccessibility      = [ CF CoreGraphics CoreText QuartzCore ];
-  MediaToolbox            = [ AudioToolbox CF CoreMedia ];
+  MediaToolbox            = [ AudioToolbox AudioUnit CF CoreMedia ];
   Metal                   = [];
   NetFS                   = [ CF ];
   OSAKit                  = [ Carbon ];

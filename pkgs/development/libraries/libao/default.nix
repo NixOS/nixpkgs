@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ] ++
     lib.optional  usePulseAudio   libpulseaudio ++
     lib.optionals stdenv.isLinux  [ alsaLib libcap ] ++
-    lib.optionals stdenv.isDarwin [ CoreAudio CoreServices AudioUnit AudioToolbox ];
+    lib.optionals stdenv.isDarwin [ CoreAudio CoreServices AudioUnit ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
