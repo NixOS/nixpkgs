@@ -1420,6 +1420,8 @@ in
 
   elementary-xfce-icon-theme = callPackage ../data/icons/elementary-xfce-icon-theme { };
 
+  ell = callPackage ../os-specific/linux/ell { };
+
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
   emby = callPackage ../servers/emby { };
