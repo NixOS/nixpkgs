@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, ell, coreutils, readline80, python3Packages }:
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, ell, coreutils, readline, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ell
-    readline80
+    readline
     python3Packages.python
   ];
 
