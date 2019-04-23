@@ -1,6 +1,6 @@
 { stdenv, lib, buildPackages, makeWrapper, writeText, runCommand
 , CoreServices, ImageIO, CoreGraphics
-, runtimeShell
+, runtimeShell, callPackage
 , xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX"
 , xcodeVer ? stdenv.targetPlatform.xcodeVer or "9.4.1"
 , sdkVer ? stdenv.targetPlatform.sdkVer or "10.10" }:
@@ -14,20 +14,20 @@ let
   sdkBuildVersion = "17E189";
   xcodeSelectVersion = "2349";
 
-  xcbuild = buildPackages.callPackage ./default.nix {
-    inherit CoreServices ImageIO CoreGraphics;
+  xcbuild = callPackage ./default.nix {
+    inherit CoreServices ImageIO CoreGraphics stdenv;
   };
 
-  toolchains = buildPackages.callPackage ./toolchains.nix {
-    inherit toolchainName;
+  toolchains = callPackage ./toolchains.nix {
+    inherit toolchainName stdenv;
   };
 
-  sdks = buildPackages.callPackage ./sdks.nix {
+  sdks = callPackage ./sdks.nix {
     inherit toolchainName sdkName xcodePlatform;
     version = sdkVer;
   };
 
-  platforms = buildPackages.callPackage ./platforms.nix {
+  platforms = callPackage ./platforms.nix {
     inherit sdks xcodePlatform;
   };
 

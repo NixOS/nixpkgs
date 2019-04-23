@@ -1280,6 +1280,7 @@ in
   contacts = callPackage ../tools/misc/contacts {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
+    xcbuildHook = xcbuild6Hook;
   };
 
   compsize = callPackage ../os-specific/linux/compsize { };
@@ -5062,6 +5063,7 @@ in
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    xcbuildHook = xcbuild6Hook;
   };
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
@@ -9533,9 +9535,15 @@ in
   xcodebuild = callPackage ../development/tools/xcbuild/wrapper.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
   };
+  xcodebuild6 = xcodebuild.override { stdenv = llvmPackages_6.stdenv; };
   xcbuild = xcodebuild;
   xcbuildHook = makeSetupHook {
     deps = [ xcbuild ];
+  } ../development/tools/xcbuild/setup-hook.sh  ;
+
+  # xcbuild with llvm 6
+  xcbuild6Hook = makeSetupHook {
+    deps = [ xcodebuild6 ];
   } ../development/tools/xcbuild/setup-hook.sh  ;
 
   xcpretty = callPackage ../development/tools/xcpretty { };
