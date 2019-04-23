@@ -5,6 +5,7 @@
 , prompt_toolkit, pygments
 #, optional, dependencies
 , jinja2, whoosh, pytest
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,8 @@ buildPythonPackage rec {
     # optional dependencies
     jinja2 whoosh
   ];
+
+  doCheck = !stdenv.isDarwin;
 
   checkInputs = ([
     pytest
