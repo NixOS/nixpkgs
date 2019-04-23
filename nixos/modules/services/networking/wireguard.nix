@@ -284,6 +284,7 @@ in
 
     systemd.services = mapAttrs' generateUnit cfg.interfaces;
 
+    networking.firewall.allowedUDPPorts = filter (i: i != null) (mapAttrsToList (name: values: values.listenPort) cfg.interfaces);
   };
 
 }

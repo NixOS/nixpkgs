@@ -28,7 +28,6 @@ import ../make-test.nix ({ pkgs, ...} : {
         };
       };
 
-      networking.firewall.allowedUDPPorts = [ 23542 ];
       networking.wireguard.interfaces.wg0 = {
         ips = [ "10.23.42.1/32" "fc00::1/128" ];
         listenPort = 23542;
