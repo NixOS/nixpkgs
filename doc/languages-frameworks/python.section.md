@@ -510,7 +510,7 @@ Each interpreter has the following attributes:
 ### Building packages and applications
 
 Python libraries and applications that use `setuptools` or
-`distutils` are typically build with respectively the `buildPythonPackage` and
+`distutils` are typically built with respectively the `buildPythonPackage` and
 `buildPythonApplication` functions. These two functions also support installing a `wheel`.
 
 All Python packages reside in `pkgs/top-level/python-packages.nix` and all
