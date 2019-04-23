@@ -3375,7 +3375,9 @@ in
     hdf4 = null;
   };
 
-  haproxy = callPackage ../tools/networking/haproxy { };
+  haproxy = callPackage ../tools/networking/haproxy {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
 
   haveged = callPackage ../tools/security/haveged { };
 
@@ -6925,7 +6927,10 @@ in
 
   cryptol = haskell.lib.justStaticExecutables haskellPackages.cryptol;
 
-  inherit (callPackages ../development/compilers/crystal {})
+  inherit (callPackages ../development/compilers/crystal {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+    inherit (llvmPackages_6) clang llvm;
+  })
     crystal_0_25
     crystal_0_26
     crystal;
@@ -8100,7 +8105,9 @@ in
 
   lush2 = callPackage ../development/interpreters/lush {};
 
-  maude = callPackage ../development/interpreters/maude { };
+  maude = callPackage ../development/interpreters/maude {
+    stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
+  };
 
   me_cleaner = pythonPackages.callPackage ../tools/misc/me_cleaner { };
 
@@ -8179,11 +8186,13 @@ in
     php = php72-unit;
   });
 
-   php73Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
+  php73Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php73-unit;
   });
 
-  inherit (callPackages ../development/interpreters/php { })
+  inherit (callPackages ../development/interpreters/php {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  })
     php71
     php72
     php73;
@@ -9800,9 +9809,13 @@ in
 
   cln = callPackage ../development/libraries/cln { };
 
-  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
+  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
 
-  clucene_core_1 = callPackage ../development/libraries/clucene-core { };
+  clucene_core_1 = callPackage ../development/libraries/clucene-core {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
 
   clucene_core = clucene_core_1;
 
@@ -22543,11 +22556,13 @@ in
   root = callPackage ../applications/science/misc/root {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
+    stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   };
 
   root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
+    stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   });
 
   rink = callPackage ../applications/science/misc/rink { };
