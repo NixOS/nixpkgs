@@ -53,12 +53,6 @@ in stdenv.mkDerivation (rec {
   propagatedBuildInputs = [ ncurses zlib ];
 
   patches = [
-    # https://bugs.llvm.org/show_bug.cgi?id=39427
-    # https://github.com/NixOS/nixpkgs/issues/54370
-    (fetchpatch {
-      url = "https://github.com/llvm-mirror/llvm/commit/57567def148f387153a8149fb590bd39b1b006a1.patch";
-      sha256 = "1w1xg5pxpc6cals1nf5j5k4p6qi8lcrpvn0paxc86m415i79xmcg";
-    })
     # backport, fix building rust crates with lto
     (fetchpatch {
       url = "https://github.com/llvm-mirror/llvm/commit/da1fb72bb305d6bc1f3899d541414146934bf80f.patch";
