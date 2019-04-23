@@ -4,6 +4,14 @@ let
   testPackage = pkgs.cassandra;
   clusterName = "NixOS Automated-Test Cluster";
 
+  numMaxHeapSize = "400";
+  getHeapLimitCommand = ''
+    nodetool info | grep "^Heap Memory" | awk \'{print $NF}\'
+  '';
+  checkHeapLimitCommand = ''
+    [ 1 -eq "$(echo "$(${getHeapLimitCommand}) < ${numMaxHeapSize}" | ${pkgs.bc}/bin/bc)" ]
+  '';
+
   cassandraCfg = ipAddress:
     { enable = true;
       inherit clusterName;
@@ -11,6 +19,8 @@ let
       rpcAddress = ipAddress;
       seedAddresses = [ "192.168.1.1" ];
       package = testPackage;
+      maxHeapSize = "${numMaxHeapSize}M";
+      heapNewSize = "100M";
     };
   nodeCfg = ipAddress: extra: {pkgs, config, ...}:
     { environment.systemPackages = [ testPackage ];
@@ -54,6 +64,11 @@ in
       $cass0->waitForUnit("cassandra.service");
       $cass0->waitUntilSucceeds("nc -z localhost 7199");
       $cass0->waitUntilSucceeds("nodetool describecluster | grep 'Name: ${clusterName}'");
+    };
+    subtest "Heap limit set correctly", sub {
+      # Nodetool takes a while until it can display info
+      $cass0->waitUntilSucceeds('nodetool info');
+      $cass0->succeed('${checkHeapLimitCommand}');
     };
 
     # Check cluster interaction
