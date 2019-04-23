@@ -2,9 +2,11 @@ import ./make-test.nix ({ pkgs, ...}:
 let
   # Change this to test a different version of Cassandra:
   testPackage = pkgs.cassandra;
+  clusterName = "NixOS Automated-Test Cluster";
 
   cassandraCfg = ipAddress:
     { enable = true;
+      inherit clusterName;
       listenAddress = ipAddress;
       rpcAddress = ipAddress;
       extraConfig =
@@ -47,6 +49,11 @@ in
       $cass0->waitForUnit("cassandra.service");
       $cass0->waitUntilSucceeds("nc -z localhost 7199");
       $cass0->succeed("nodetool status --resolve-ip | egrep '^UN[[:space:]]+cass0'");
+    };
+    subtest "Cluster name was set", sub {
+      $cass0->waitForUnit("cassandra.service");
+      $cass0->waitUntilSucceeds("nc -z localhost 7199");
+      $cass0->waitUntilSucceeds("nodetool describecluster | grep 'Name: ${clusterName}'");
     };
 
     # Check cluster interaction
