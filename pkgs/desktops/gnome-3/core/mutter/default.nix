@@ -7,6 +7,7 @@
 , xorgserver
 , python3
 , wrapGAppsHook
+, egl-wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +21,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dxwayland-path=${xwayland}/bin/Xwayland"
+    "-Dwayland_eglstream=true"
+    "-Degl_device=true"
   ];
 
   propagatedBuildInputs = [
@@ -45,6 +48,7 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile
     libxkbcommon pipewire xwayland
     gnome-settings-daemon
+    egl-wayland
   ];
 
   patches = [
