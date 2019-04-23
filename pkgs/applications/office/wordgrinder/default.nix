@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "LUA_INCLUDE=${lua52Packages.lua}/include"
     "LUA_LIB=${lua52Packages.lua}/lib/liblua.so"
-  ] ++ stdenv.lib.optional stdenv.isLinux "XFT_PACKAGE=--libs=\{-lX11 -lXft\}";
+  ];
+
+  preBuild = stdenv.lib.optionalString stdenv.isLinux ''
+    makeFlagsArray+=('XFT_PACKAGE=--cflags={} --libs={-lX11 -lXft}')
+  '';
 
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
