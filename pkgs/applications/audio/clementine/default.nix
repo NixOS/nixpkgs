@@ -28,6 +28,11 @@ let
       url = "https://github.com/clementine-player/Clementine/pull/5630.patch";
       sha256 = "0px7xp1m4nvrncx8sga1qlxppk562wrk2qqk19iiry84nxg20mk4";
     })
+    (fetchpatch {
+      # Fixes compilation with newer chromaprint
+      url = "https://github.com/clementine-player/Clementine/pull/5553.patch";
+      sha256 = "1c27akly256zwcsp8qipwnlc15j2llly3x5cqsasbx4xb7gwkjac";
+    })
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
