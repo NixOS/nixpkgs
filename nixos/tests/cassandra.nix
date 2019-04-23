@@ -4,6 +4,11 @@ let
   testPackage = pkgs.cassandra;
   clusterName = "NixOS Automated-Test Cluster";
 
+  jmxRoles = [{ username = "me"; password = "password"; }];
+  jmxAuthArgs = "-u ${(builtins.elemAt jmxRoles 0).username} -pw ${(builtins.elemAt jmxRoles 0).password}";
+  clusterName = "NixOS Test Cluster";
+
+  # Would usually be assigned to 512M
   numMaxHeapSize = "400";
   getHeapLimitCommand = ''
     nodetool info | grep "^Heap Memory" | awk \'{print $NF}\'
@@ -40,7 +45,7 @@ in
 
   nodes = {
     cass0 = nodeCfg "192.168.1.1" {};
-    cass1 = nodeCfg "192.168.1.2" {};
+    cass1 = nodeCfg "192.168.1.2" { remoteJmx = true; inherit jmxRoles; };
     cass2 = nodeCfg "192.168.1.3" { jvmOpts = [ "-Dcassandra.replace_address=cass1" ]; };
   };
 
@@ -74,15 +79,25 @@ in
     # Check cluster interaction
     subtest "Bring up cluster", sub {
       $cass1->waitForUnit("cassandra.service");
-      $cass1->waitUntilSucceeds("nodetool status | egrep -c '^UN' | grep 2");
+      $cass1->waitUntilSucceeds("nodetool ${jmxAuthArgs} status | egrep -c '^UN' | grep 2");
       $cass0->succeed("nodetool status --resolve-ip | egrep '^UN[[:space:]]+cass1'");
+    };
+    subtest "Remote authenticated jmx", sub {
+      # Doesn't work if not enabled
+      $cass0->waitUntilSucceeds("nc -z localhost 7199");
+      $cass1->fail("nc -z 192.168.1.1 7199");
+      $cass1->fail("nodetool -h 192.168.1.1 status");
+
+      # Works if enabled
+      $cass1->waitUntilSucceeds("nc -z localhost 7199");
+      $cass0->succeed("nodetool -h 192.168.1.2 ${jmxAuthArgs} status");
     };
     subtest "Break and fix node", sub {
       $cass1->block;
       $cass0->waitUntilSucceeds("nodetool status --resolve-ip | egrep -c '^DN[[:space:]]+cass1'");
       $cass0->succeed("nodetool status | egrep -c '^UN'  | grep 1");
       $cass1->unblock;
-      $cass1->waitUntilSucceeds("nodetool status | egrep -c '^UN'  | grep 2");
+      $cass1->waitUntilSucceeds("nodetool ${jmxAuthArgs} status | egrep -c '^UN'  | grep 2");
       $cass0->succeed("nodetool status | egrep -c '^UN'  | grep 2");
     };
     subtest "Replace crashed node", sub {
