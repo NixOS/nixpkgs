@@ -14,7 +14,13 @@ let
     };
   nodeCfg = ipAddress: extra: {pkgs, config, ...}:
     { environment.systemPackages = [ testPackage ];
-      networking.firewall.enable = false;
+      networking = {
+        firewall.allowedTCPPorts = [ 7000 7199 9042 ];
+        useDHCP = false;
+        interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
+          { address = ipAddress; prefixLength = 24; }
+        ];
+      };
       services.cassandra = cassandraCfg ipAddress // extra;
       virtualisation.memorySize = 1024;
     };
