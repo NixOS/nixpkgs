@@ -5456,6 +5456,11 @@
     github = "minijackson";
     name = "Rémi Nicole";
   };
+  vonfry = {
+    email = "nixos@vonfry.name";
+    github = "Vonfry";
+    name = "Rouyu Feng";
+  };
   shazow = {
     email = "andrey.petrov@shazow.net";
     github = "shazow";
