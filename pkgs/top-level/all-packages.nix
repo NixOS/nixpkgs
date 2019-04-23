@@ -10018,6 +10018,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   };
 
+  egl-wayland = callPackage ../development/libraries/egl-wayland {};
+
   elastix = callPackage ../development/libraries/science/biology/elastix { };
 
   enchant = callPackage ../development/libraries/enchant { };
