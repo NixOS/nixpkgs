@@ -227,13 +227,11 @@ in
   mini_racer = attrs: {
     dontBuild = false;
     buildInputs = [ v8 ];
-    buildFlags = [
-      "--with-cflags=-I${libcxx}/include/c++/v1"
-      "--with-ldflags=-L${libcxx}/lib"
-    ];
-    # TODO: Actually fix mini_racer build failure
-    installPhase = ''
-      mkdir $out
+    # v8.h includes <memory> which is C++ syntax,
+    # but conftest.c is .c not .cc, hence -x c++ must be supplied to gcc.
+    patchPhase = ''
+      sed -i ./ext/mini_racer_extension/extconf.rb \
+          -e 's/^\$CPPFLAGS += " -std=c++0x"/$CPPFLAGS += " -x c++"\n\0/'
     '';
   };
 
