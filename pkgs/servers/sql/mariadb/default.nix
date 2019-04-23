@@ -221,13 +221,13 @@ connector-c = stdenv.mkDerivation rec {
 
 galera = stdenv.mkDerivation rec {
   name = "mariadb-galera-${version}";
-  version = "25.3.24";
+  version = "25.3.26";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
     rev = "release_${version}";
-    sha256 = "1yx3rqy7r4w2l3hnrri30hvsa296v8xidi18p5fdzcpmnhnlwjbi";
+    sha256 = "0fs0c1px9lknf1a5wwb12z1hj7j7b6hsfjddggikvkdkrnr2xs1f";
     fetchSubmodules = true;
   };
 
@@ -243,9 +243,9 @@ galera = stdenv.mkDerivation rec {
     export LIBPATH="${galeraLibs}/lib"
   '';
 
-  sconsFlags = "ssl=1 system_asio=1 strict_build_flags=0";
+  sconsFlags = "ssl=1 system_asio=0 strict_build_flags=0";
 
-  postInstall = ''
+  installPhase = ''
     # copied with modifications from scripts/packages/freebsd.sh
     GALERA_LICENSE_DIR="$share/licenses/${name}"
     install -d $out/{bin,lib/galera,share/doc/galera,$GALERA_LICENSE_DIR}
