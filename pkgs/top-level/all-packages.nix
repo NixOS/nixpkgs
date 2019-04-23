@@ -15979,6 +15979,8 @@ in
 
   go-font = callPackage ../data/fonts/go-font { };
 
+  go-packr = callPackage ../development/tools/go-packr { };
+
   greybird = callPackage ../data/themes/greybird { };
 
   gyre-fonts = callPackage ../data/fonts/gyre {};
