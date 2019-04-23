@@ -22422,6 +22422,8 @@ in
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
+  fped = callPackage ../applications/science/electronics/fped { };
+
   kicad = callPackage ../applications/science/electronics/kicad {
     wxGTK = wxGTK30;
     boost = boost160;
