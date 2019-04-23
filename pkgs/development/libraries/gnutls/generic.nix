@@ -36,8 +36,12 @@ stdenv.mkDerivation {
     "--disable-dependency-tracking"
     "--enable-fast-install"
     "--with-unbound-root-key-file=${dns-root-data}/root.key"
-  ] ++ lib.optional guileBindings
-    [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
+  ] ++ lib.optionals guileBindings [
+    "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site"
+  ] ++ lib.optionals (stdenv.isAarch32 && stdenv.hostPlatform == stdenv.buildPlatform) [
+    # prevent taking architecture of the builder machine which could be "aarch64"
+    "--host=${stdenv.hostPlatform.config}"
+  ];
 
   enableParallelBuilding = true;
 
