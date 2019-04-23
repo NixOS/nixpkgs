@@ -2,10 +2,11 @@ import ./make-test.nix ({ pkgs, ...}:
 let
   # Change this to test a different version of Cassandra:
   testPackage = pkgs.cassandra;
-  cassandraCfg = hostname:
+
+  cassandraCfg = ipAddress:
     { enable = true;
-      listenAddress = hostname;
-      rpcAddress = hostname;
+      listenAddress = ipAddress;
+      rpcAddress = ipAddress;
       extraConfig =
         { start_native_transport = true;
           seed_provider =
@@ -15,10 +16,10 @@ let
         };
       package = testPackage;
     };
-  nodeCfg = hostname: extra: {pkgs, config, ...}:
+  nodeCfg = ipAddress: extra: {pkgs, config, ...}:
     { environment.systemPackages = [ testPackage ];
       networking.firewall.enable = false;
-      services.cassandra = cassandraCfg hostname // extra;
+      services.cassandra = cassandraCfg ipAddress // extra;
       virtualisation.memorySize = 1024;
     };
 in
@@ -32,26 +33,29 @@ in
   };
 
   testScript = ''
-    subtest "timers exist", sub {
+    # Check configuration
+    subtest "Timers exist", sub {
       $cass0->succeed("systemctl list-timers | grep cassandra-full-repair.timer");
       $cass0->succeed("systemctl list-timers | grep cassandra-incremental-repair.timer");
     };
-    subtest "can connect via cqlsh", sub {
+    subtest "Can connect via cqlsh", sub {
       $cass0->waitForUnit("cassandra.service");
       $cass0->waitUntilSucceeds("nc -z cass0 9042");
       $cass0->succeed("echo 'show version;' | cqlsh cass0");
     };
-    subtest "nodetool is operational", sub {
+    subtest "Nodetool is operational", sub {
       $cass0->waitForUnit("cassandra.service");
       $cass0->waitUntilSucceeds("nc -z localhost 7199");
       $cass0->succeed("nodetool status --resolve-ip | egrep '^UN[[:space:]]+cass0'");
     };
-    subtest "bring up cluster", sub {
+
+    # Check cluster interaction
+    subtest "Bring up cluster", sub {
       $cass1->waitForUnit("cassandra.service");
       $cass1->waitUntilSucceeds("nodetool status | egrep -c '^UN' | grep 2");
       $cass0->succeed("nodetool status --resolve-ip | egrep '^UN[[:space:]]+cass1'");
     };
-    subtest "break and fix node", sub {
+    subtest "Break and fix node", sub {
       $cass1->block;
       $cass0->waitUntilSucceeds("nodetool status --resolve-ip | egrep -c '^DN[[:space:]]+cass1'");
       $cass0->succeed("nodetool status | egrep -c '^UN'  | grep 1");
@@ -59,7 +63,7 @@ in
       $cass1->waitUntilSucceeds("nodetool status | egrep -c '^UN'  | grep 2");
       $cass0->succeed("nodetool status | egrep -c '^UN'  | grep 2");
     };
-    subtest "replace crashed node", sub {
+    subtest "Replace crashed node", sub {
       $cass1->crash;
       $cass2->waitForUnit("cassandra.service");
       $cass0->waitUntilFails("nodetool status --resolve-ip | egrep '^UN[[:space:]]+cass1'");
