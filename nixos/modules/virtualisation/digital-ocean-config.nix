@@ -29,7 +29,7 @@ with lib;
     let
       cfg = config.virtualisation.digitalOcean;
       hostName = config.networking.hostName;
-    in {
+    in mkMerge [{
       fileSystems."/" = {
         device = "/dev/disk/by-label/nixos";
         autoResize = true;
@@ -147,7 +147,21 @@ with lib;
         };
       };
 
-    };
+    }
+    /* Give nice error messages if a user tries to turn off mutable users and enable
+     * root password or SSH key fetching from Digital Ocean
+     */
+    (mkIf (! config.users.mutableUsers)
+     { virtualisation.digitalOcean.setRootPassword = mkDefault false;
+       virtualisation.digitalOcean.setSshKeys = mkDefault false;
+       assertions =
+       [ { assertion = !cfg.setRootPassword;
+           message = "Cannot set root password from Digital Ocean if users.mutableUsers is disabled.";
+         }
+         { assertion = !cfg.setSshKeys;
+           message = "Cannot set root SSH keys from Digital Ocean if users.mutableUsers is disabled.";
+         }];})
+  ];
   meta.maintainers = with maintainers; [ arianvp eamsden ];
 }
 
