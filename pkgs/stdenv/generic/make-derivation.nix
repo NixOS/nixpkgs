@@ -86,6 +86,8 @@ in rec {
     , hardeningEnable ? []
     , hardeningDisable ? []
 
+    , patches ? []
+
     , ... } @ attrs:
 
     let
@@ -234,6 +236,8 @@ in rec {
             ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
+
+          inherit patches;
 
           inherit doCheck doInstallCheck;
 
