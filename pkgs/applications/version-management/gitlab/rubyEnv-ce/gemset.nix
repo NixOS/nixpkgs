@@ -1354,6 +1354,17 @@
     };
     version = "2.6.0";
   };
+  hipchat = {
+    dependencies = ["httparty" "mimemagic"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0hgy5jav479vbzzk53lazhpjj094dcsqw6w1d6zjn52p72bwq60k";
+      type = "gem";
+    };
+    version = "1.5.2";
+  };
   html-pipeline = {
     dependencies = ["activesupport" "nokogiri"];
     source = {
