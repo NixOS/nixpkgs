@@ -38,10 +38,10 @@ in let
               enableWideVine;
     };
 
-    browser = callPackage ./browser.nix { inherit channel; };
+    browser = callPackage ./browser.nix { inherit channel enableWideVine; };
 
     plugins = callPackage ./plugins.nix {
-      inherit enablePepperFlash enableWideVine;
+      inherit enablePepperFlash;
     };
   };
 
@@ -113,13 +113,7 @@ in stdenv.mkDerivation {
   '';
 
   inherit (chromium.browser) packageName;
-  meta = chromium.browser.meta // {
-    broken = if enableWideVine then
-          builtins.trace "WARNING: WideVine is not functional, please only use for testing"
-             true
-        else false;
-  };
-
+  meta = chromium.browser.meta;
   passthru = {
     inherit (chromium) upstream-info browser;
     mkDerivation = chromium.mkChromiumDerivation;

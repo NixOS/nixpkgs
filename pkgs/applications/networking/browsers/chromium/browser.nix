@@ -1,8 +1,47 @@
-{ stdenv, mkChromiumDerivation, channel }:
+{ stdenv, mkChromiumDerivation, channel, upstream-info, gcc, glib, nspr, nss, patchelfUnstable, enableWideVine }:
 
 with stdenv.lib;
 
-mkChromiumDerivation (base: rec {
+let
+  mkrpath = p: "${makeSearchPathOutput "lib" "lib64" p}:${makeLibraryPath p}";
+  widevine = stdenv.mkDerivation {
+    name = "chromium-binary-plugin-widevine";
+
+    src = upstream-info.binary;
+
+    nativeBuildInputs = [ patchelfUnstable ];
+
+    phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
+
+    unpackCmd = let
+      chan = if upstream-info.channel == "dev"    then "chrome-unstable"
+        else if upstream-info.channel == "stable" then "chrome"
+        else "chrome-${upstream-info.channel}";
+    in ''
+      mkdir -p plugins
+      ar p "$src" data.tar.xz | tar xJ -C plugins --strip-components=4 \
+        ./opt/google/${chan}/libwidevinecdm.so
+    '';
+
+    doCheck = true;
+    checkPhase = ''
+      ! find -iname '*.so' -exec ldd {} + | grep 'not found'
+    '';
+
+    PATCH_RPATH = mkrpath [ gcc.cc glib nspr nss ];
+
+    patchPhase = ''
+      patchelf --set-rpath "$PATCH_RPATH" libwidevinecdm.so
+    '';
+
+    installPhase = ''
+      install -vD libwidevinecdm.so \
+        "$out/lib/libwidevinecdm.so"
+    '';
+
+    meta.platforms = platforms.x86_64;
+  };
+in mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
   buildTargets = [ "mksnapshot" "chrome_sandbox" "chrome" ];
@@ -17,11 +56,6 @@ mkChromiumDerivation (base: rec {
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
-
-    if [ -e "$buildPath/libwidevinecdmadapter.so" ]; then
-      cp -v "$buildPath/libwidevinecdmadapter.so" \
-            "$libExecPath/libwidevinecdmadapter.so"
-    fi
 
     mkdir -p "$sandbox/bin"
     cp -v "$buildPath/chrome_sandbox" "$sandbox/bin/${sandboxExecutableName}"
@@ -57,6 +91,8 @@ mkChromiumDerivation (base: rec {
       -e '/\[Desktop Entry\]/a\' \
       -e 'StartupWMClass=chromium-browser' \
       $out/share/applications/chromium-browser.desktop
+
+    ${optionalString enableWideVine "ln -s ${widevine}/lib/libwidevinecdm.so \"$libExecPath/libwidevinecdm.so\""}
   '';
 
   passthru = { inherit sandboxExecutableName; };
