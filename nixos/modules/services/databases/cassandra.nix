@@ -44,10 +44,25 @@ let
         ln -s "$cassandraLogbackConfig" "$out/logback.xml"
 
         cp "$cassandraEnvPkg" "$out/cassandra-env.sh"
+
         # Delete default JMX Port, otherwise we can't set it using env variable
         sed -i '/JMX_PORT="7199"/d' "$out/cassandra-env.sh"
+
+        # Delete default password file
+        sed -i '/-Dcom.sun.management.jmxremote.password.file=\/etc\/cassandra\/jmxremote.password/d' "$out/cassandra-env.sh"
       '';
     };
+  jmxPasswordFile = builtins.foldl'
+     (left: right: left + right) ""
+     (map (role: "${role.username} ${role.password}") cfg.jmxRoles);
+  fullJvmOptions = cfg.jvmOpts
+    ++ lib.optionals (cfg.jmxRoles != []) [
+      "-Dcom.sun.management.jmxremote.authenticate=true"
+      "-Dcom.sun.management.jmxremote.password.file=${pkgs.writeText "jmxremote.password" jmxPasswordFile}"
+    ]
+    ++ lib.optionals cfg.remoteJmx [
+      "-Djava.rmi.server.hostname=${cfg.rpcAddress}"
+    ];
 in {
   options.services.cassandra = {
     enable = mkEnableOption ''
@@ -322,6 +337,24 @@ in {
         Firewall it if needed.
       '';
     };
+    jmxRoles = mkOption {
+      default = [];
+      description = ''
+        Roles that are allowed to access the JMX (e.g. nodetool)
+      '';
+      type = types.listOf (types.submodule {
+        options = {
+          username = mkOption {
+            type = types.string;
+            description = "Username for JMX";
+          };
+          password = mkOption {
+            type = types.string;
+            description = "Password for JMX";
+          };
+        };
+      });
+    };
   };
 
   config = mkIf cfg.enable {
@@ -334,6 +367,9 @@ in {
         }
         { assertion = (cfg.maxHeapSize == null) == (cfg.heapNewSize == null);
           message = "If you set either of maxHeapSize or heapNewSize you have to set both";
+        }
+        { assertion = cfg.remoteJmx -> (cfg.jmxRoles != {});
+          message = "If you want JMX available remotely you need to set a password.";
         }
       ];
     users = mkIf (cfg.user == defaultUser) {
@@ -352,7 +388,7 @@ in {
         after = [ "network.target" ];
         environment =
           { CASSANDRA_CONF = "${cassandraEtc}";
-            JVM_OPTS = builtins.concatStringsSep " " cfg.jvmOpts;
+            JVM_OPTS = builtins.concatStringsSep " " fullJvmOptions;
             MAX_HEAP_SIZE = toString cfg.maxHeapSize;
             HEAP_NEWSIZE = toString cfg.heapNewSize;
             MALLOC_ARENA_MAX = toString cfg.mallocArenaMax;
