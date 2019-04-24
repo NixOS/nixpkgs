@@ -28,8 +28,8 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "MOXA UPort 11x0 USB to Serial Hub driver";
-    homepage = https://github.com/ellysh/mxu11x0;
-    license = licenses.gpl1;
+    homepage = https://www.moxa.com/en/products/industrial-edge-connectivity/usb-to-serial-converters-usb-hubs/usb-to-serial-converters/uport-1000-series;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ uralbash ];
     platforms = platforms.linux;
   };
