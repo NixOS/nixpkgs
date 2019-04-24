@@ -54,6 +54,13 @@ let
     windows.mingw_w64_pthreads = nativePlatforms;
   };
 
+  wasiCommon = {
+    gmp = nativePlatforms;
+    boehmgc = nativePlatforms;
+    hello = nativePlatforms;
+    zlib = nativePlatforms;
+  };
+
   darwinCommon = {
     buildPackages.binutils = darwin;
   };
@@ -139,6 +146,8 @@ in
   /* Linux on Aarch64 */
   android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt (linuxCommon // {
   });
+
+  wasi32 = mapTestOnCross lib.systems.examples.wasi32 wasiCommon;
 
   msp430 = mapTestOnCross lib.systems.examples.msp430 embedded;
   avr = mapTestOnCross lib.systems.examples.avr embedded;

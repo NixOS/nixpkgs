@@ -30,6 +30,7 @@ rec {
       libc =
         /**/ if final.isDarwin              then "libSystem"
         else if final.isMinGW               then "msvcrt"
+        else if final.isWasi                then "wasilibc"
         else if final.isMusl                then "musl"
         else if final.isUClibc              then "uclibc"
         else if final.isAndroid             then "bionic"
@@ -62,7 +63,7 @@ rec {
           "netbsd" = "NetBSD";
           "freebsd" = "FreeBSD";
           "openbsd" = "OpenBSD";
-          "wasm" = "Wasm";
+          "wasi" = "Wasi";
         }.${final.parsed.kernel.name} or null;
 
          # uname -p
@@ -114,8 +115,8 @@ rec {
         then "${wine}/bin/${wine-name}"
         else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
         then "${qemu-user}/bin/qemu-${final.qemuArch}"
-        else if final.isWasm
-        then "${pkgs.v8}/bin/d8"
+        else if final.isWasi
+        then "${pkgs.wasmtime}/bin/wasmtime"
         else throw "Don't know how to run ${final.config} executables.";
 
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
