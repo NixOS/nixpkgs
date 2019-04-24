@@ -4370,8 +4370,6 @@ in {
 
   pyenchant = callPackage ../development/python-modules/pyenchant { };
 
-  pyev = callPackage ../development/python-modules/pyev { };
-
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
   pyext = callPackage ../development/python-modules/pyext { };
