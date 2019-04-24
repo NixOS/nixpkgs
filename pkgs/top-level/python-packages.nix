@@ -4235,8 +4235,6 @@ in {
 
   pysoundfile = self.soundfile;  # Alias added 23-06-2019
 
-  python3pika = callPackage ../development/python-modules/python3pika { };
-
   python-jenkins = callPackage ../development/python-modules/python-jenkins { };
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
