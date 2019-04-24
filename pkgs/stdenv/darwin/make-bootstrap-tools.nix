@@ -86,6 +86,8 @@ in rec {
 
       cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
       cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
+      cp -d ${libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
       cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
