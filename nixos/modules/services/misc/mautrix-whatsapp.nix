@@ -20,19 +20,15 @@ let
 in
 {
   options.services.mautrix-whatsapp = {
-    enable = mkEnableOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable mautrix-whatsapp, a puppeting bridge between Matrix and WhatsApp.
-
-        See <link xlink:href="https://github.com/tulir/mautrix-whatsapp/wiki/Bridge-setup">here</link> for documentation.
-     '';
-    };
+    enable = mkEnableOption "Mautrix-whatsapp, a puppeting bridge between Matrix and WhatsApp.";
 
     configOptions = mkOption {
       type = types.attrs;
-      description = "This options will be transform in YAML configuration file for the bridge";
+      description = ''
+        This options will be transform in YAML configuration file for the bridge
+
+        Look <link xlink:href="https://github.com/tulir/mautrix-whatsapp/wiki/Bridge-setup">here</link> for documentation.
+      '';
       example = ''
         configOptions = {
           homeserver = {
