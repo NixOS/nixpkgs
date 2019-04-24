@@ -76,6 +76,7 @@ in stdenv.mkDerivation rec {
     mv $out/share/insomnia/*.so $out/lib/
 
     ln -s $out/share/insomnia/insomnia $out/bin/insomnia
+    sed -i 's|\/opt\/Insomnia|'$out'/bin|g' $out/share/applications/insomnia.desktop
   '';
 
   preFixup = ''

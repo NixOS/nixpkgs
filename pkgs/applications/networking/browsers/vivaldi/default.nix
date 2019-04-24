@@ -7,21 +7,24 @@
 , glib, gtk3, pango, gdk_pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
 , nss, nspr
 , patchelf, makeWrapper
+, isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 }:
 
-stdenv.mkDerivation rec {
-  name = "${product}-${version}";
-  product = "vivaldi";
+let
+  branch = if isSnapshot then "snapshot" else "stable";
+  vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
+in stdenv.mkDerivation rec {
+  pname = "vivaldi";
   version = "2.4.1488.40-1";
 
   src = fetchurl {
-    url = "https://downloads.vivaldi.com/stable/${product}-stable_${version}_amd64.deb";
+    url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
     sha256 = "0w084mamy72v1kkfgg8nn2q3hmfj7v216kkvqb52f1nyycqqzb37";
   };
 
   unpackPhase = ''
-    ar vx ${src}
+    ar vx $src
     tar -xvf data.tar.xz
   '';
 
@@ -38,17 +41,17 @@ stdenv.mkDerivation rec {
   libPath = stdenv.lib.makeLibraryPath buildInputs
     + stdenv.lib.optionalString (stdenv.is64bit)
       (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs)
-    + ":$out/opt/vivaldi/lib";
+    + ":$out/opt/${vivaldiName}/lib";
 
   buildPhase = ''
     echo "Patching Vivaldi binaries"
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" \
-      opt/vivaldi/vivaldi-bin
+      opt/${vivaldiName}/vivaldi-bin
   '' + stdenv.lib.optionalString proprietaryCodecs ''
     sed -i '/^VIVALDI_FFMPEG_FOUND/ a \
-    checkffmpeg "${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so"' opt/vivaldi/vivaldi
+    checkffmpeg "${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so"' opt/${vivaldiName}/vivaldi
   '' + ''
     echo "Finished patching Vivaldi binaries"
   '';
@@ -60,16 +63,16 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r opt "$out"
     mkdir "$out/bin"
-    ln -s "$out/opt/vivaldi/vivaldi" "$out/bin/vivaldi"
+    ln -s "$out/opt/${vivaldiName}/${vivaldiName}" "$out/bin/vivaldi"
     mkdir -p "$out/share"
     cp -r usr/share/{applications,xfce4} "$out"/share
     substituteInPlace "$out"/share/applications/*.desktop \
-      --replace /usr/bin/vivaldi-stable "$out"/bin/vivaldi
+      --replace /usr/bin/${vivaldiName} "$out"/bin/vivaldi
     local d
     for d in 16 22 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
       ln -s \
-        "$out"/opt/vivaldi/product_logo_''${d}.png \
+        "$out"/opt/${vivaldiName}/product_logo_''${d}.png \
         "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
     done
     wrapProgram "$out/bin/vivaldi" \

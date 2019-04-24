@@ -1,19 +1,16 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, cmake, docbook_xsl, libxslt
 , openssl, libuuid, libwebsockets, c-ares, libuv
-, systemd ? null }:
+, systemd ? null, withSystemd ? stdenv.isLinux }:
 
-let
-  withSystemd = stdenv.isLinux;
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "mosquitto-${version}";
-  version = "1.5.8";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner  = "eclipse";
     repo   = "mosquitto";
     rev    = "v${version}";
-    sha256 = "1rf8g6fq7g1mhwsajsgvvlynasybgc51v0qg5j6ynsxfh8yi7s6r";
+    sha256 = "1yvn0yj9hb502lvk2yrshpvrnq2fddjyarnw37ip34mhxynnz5gb";
   };
 
   postPatch = ''
@@ -37,8 +34,6 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional withSystemd systemd;
 
   nativeBuildInputs = [ cmake docbook_xsl libxslt ];
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DWITH_THREADING=ON"
