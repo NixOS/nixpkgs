@@ -1,7 +1,23 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig
-, python3, gtk3, gst_all_1, libsecret, libsoup
-, appstream-glib, desktop-file-utils, totem-pl-parser
-, hicolor-icon-theme, gobject-introspection, wrapGAppsHook }:
+{ lib
+, fetchgit
+, meson
+, ninja
+, pkgconfig
+, python3
+, gtk3
+, gst_all_1
+, libsecret
+, libsoup
+, appstream-glib
+, desktop-file-utils
+, totem-pl-parser
+, hicolor-icon-theme
+, gobject-introspection
+, wrapGAppsHook
+, lastFMSupport ? true
+, wikipediaSupport ? true
+, youtubeSupport ? true, youtube-dl
+}:
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
@@ -37,10 +53,9 @@ python3.pkgs.buildPythonApplication rec  {
     gstreamer
     gtk3
     hicolor-icon-theme
-    libsecret
     libsoup
     totem-pl-parser
-  ];
+  ] ++ lib.optional lastFMSupport libsecret;
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
@@ -49,8 +64,11 @@ python3.pkgs.buildPythonApplication rec  {
     pycairo
     pydbus
     pygobject3
-    pylast
-  ];
+  ]
+  ++ lib.optional lastFMSupport pylast
+  ++ lib.optional wikipediaSupport wikipedia
+  ++ lib.optional youtubeSupport youtube-dl
+  ;
 
   postPatch = ''
     chmod +x meson_post_install.py
@@ -62,7 +80,7 @@ python3.pkgs.buildPythonApplication rec  {
     patchPythonScript "$out/libexec/lollypop-sp"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern music player for GNOME";
     homepage = https://wiki.gnome.org/Apps/Lollypop;
     license = licenses.gpl3Plus;
