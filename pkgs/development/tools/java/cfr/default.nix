@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "129ab79xavrk0bwkmpvl56f74hyl1phfgbgz86cbij8bpvhhljyz";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     jar=$out/share/java/cfr_${version}.jar
