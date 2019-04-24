@@ -2,35 +2,20 @@
 , openssl, readline, ncurses, zlib
 , dataDir ? "/var/lib/softether" }:
 
-let
-  os = if stdenv.isLinux then "1"
-       else if stdenv.isFreeBSD then "2"
-       else if stdenv.isSunOS then "3"
-       else if stdenv.isDarwin then "4"
-       else if stdenv.isOpenBSD then "5"
-       else "";
-  cpuBits = if stdenv.is64bit then "2" else "1";
-
-in
-
 stdenv.mkDerivation rec {
   name = "softether-${version}";
-  version = "4.18";
-  build = "9570";
-  compiledDate = "2015.07.26";
+  version = "4.29";
+  build = "9680";
 
   src = fetchurl {
-    url = "http://www.softether-download.com/files/softether/v${version}-${build}-rtm-${compiledDate}-tree/Source_Code/softether-src-v${version}-${build}-rtm.tar.gz";
-    sha256 = "585d61e524d3cad90806cbeb52ebe54b5144359e6c44676e8e7fb5683ffd4574";
+    url = "https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/releases/download/v${version}-${build}-rtm/softether-src-v${version}-${build}-rtm.tar.gz";
+    sha256 = "1r169s5dr31060r2mxkmm08riy6zrxgapmrc6kdrpxdav6kmy0z6";
   };
 
   buildInputs = [ openssl readline ncurses zlib ];
 
   preConfigure = ''
-      echo "${os}
-      ${cpuBits}
-      " | ./configure
-      rm configure
+      ./configure
   '';
 
   buildPhase = ''
@@ -46,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An Open-Source Free Cross-platform Multi-protocol VPN Program";
     homepage = https://www.softether.org/;
-    license = licenses.gpl2;
+    license = licenses.asl20;
     maintainers = [ maintainers.rick68 ];
     platforms = filter (p: p != "aarch64-linux") platforms.linux;
   };
