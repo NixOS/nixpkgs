@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Provides access to ZIP archives from Qt programs";
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://quazip.sourceforge.net/;
+    homepage = https://stachenov.github.io/quazip/; # Migrated from http://quazip.sourceforge.net/
     platforms = stdenv.lib.platforms.linux;
   };
 }
