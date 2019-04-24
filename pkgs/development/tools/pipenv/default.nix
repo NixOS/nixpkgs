@@ -24,7 +24,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   makeWrapperArgs = [
-    "--set PYTHONPATH \"$PYTHONPATH\""
+    "--set PYTHONPATH \".:$PYTHONPATH\""
     "--set PIP_IGNORE_INSTALLED 1"
   ];
 
