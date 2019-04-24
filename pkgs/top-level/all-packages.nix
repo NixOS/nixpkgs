@@ -19995,6 +19995,8 @@ in
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
+  taskopen = callPackage ../applications/misc/taskopen { };
+
   tdesktopPackages = dontRecurseIntoAttrs (callPackage ../applications/networking/instant-messengers/telegram/tdesktop { });
   tdesktop = tdesktopPackages.stable;
 
