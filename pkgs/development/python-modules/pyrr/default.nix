@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.10.2";
+  version = "0.10.3";
   pname = "pyrr";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q9i4qa6ygr8hlpnw55s58naynxzwm0sc1m54wyy1ghbf8m8d2f0";
+    sha256 = "3c0f7b20326e71f706a610d58f2190fff73af01eef60c19cb188b186f0ec7e1d";
   };
 
   buildInputs = [ setuptools ];
