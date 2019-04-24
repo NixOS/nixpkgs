@@ -35,7 +35,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "3.1.0";
+  version = "4.0.0";
   name = "qemu-"
     + stdenv.lib.optionalString xenSupport "xen-"
     + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "08frr1fdjx8qcfh3fafn10kibdwbvkqqvfl7hpqbm7i9dg4f1zlq";
+    sha256 = "085g6f75si8hbn94mnnjn1r7ysixn5bqj4bhqwvadj00fhzp2zvd";
   };
 
   nativeBuildInputs = [ python2 pkgconfig flex bison ];
