@@ -169,6 +169,8 @@ in
 
   demoit = callPackage ../servers/demoit { };
 
+  deviceTree = callPackage ../os-specific/linux/device-tree.nix {};
+
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
