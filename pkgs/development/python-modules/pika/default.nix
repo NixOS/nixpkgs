@@ -1,34 +1,34 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , nose
 , mock
-, pyyaml
-, unittest2
-, pyev
 , twisted
 , tornado
 }:
 
 buildPythonPackage rec {
   pname = "pika";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "119lpjzw8wd7c6ikn35c0pvr3zzfy20rklpxdkcmp12wnf9i597v";
+    sha256 = "5ba83d3daffccb92788d24facdab62a3db6aa03b8a6d709b03dc792d35c0dfe8";
   };
 
-  # Tests require twisted which is only availalble for python-2.x
-  doCheck = !isPy3k;
+  # No tests in PyPI tarball
+  doCheck = false;
 
-  buildInputs = [ nose mock pyyaml unittest2 pyev ]
-    ++ stdenv.lib.optionals (!isPy3k) [ twisted tornado ];
+  propagatedBuildInputs = [ twisted tornado ];
+  checkInputs = [ nose mock ];
+
+  checkPhase = ''
+    nosetests
+  '';
 
   meta = with stdenv.lib; {
     description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
-    homepage = https://pika.readthedocs.org;
+    homepage = https://pika.readthedocs.io/;
     license = licenses.bsd3;
   };
 
