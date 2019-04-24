@@ -59,7 +59,7 @@ let self = rec {
     extraRuntimeDependencies = [ ];
 
     installPhase = ''
-      ${if isNull sourceDir then "" else "cd $src/$sourceDir"}
+      ${if sourceDir == null then "" else "cd $src/$sourceDir"}
       d=$out${pluginDir}/${namespace}
       mkdir -p $d
       sauce="."

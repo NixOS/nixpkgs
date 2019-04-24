@@ -129,7 +129,7 @@ in {
 
           This defaults to the singleton list [ca] when the <option>ca</option> option is defined.
         '';
-        default = if isNull cfg.elasticsearch.ca then [] else [ca];
+        default = if cfg.elasticsearch.ca == null then [] else [ca];
         type = types.listOf types.path;
       };
 

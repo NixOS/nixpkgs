@@ -17,7 +17,7 @@ let
   defaultDir = "/var/lib/${user}";
   home = if useCustomDir then cfg.storageDir else defaultDir;
 
-  useCustomDir = !(builtins.isNull cfg.storageDir);
+  useCustomDir = cfg.storageDir != null;
 
   socket = "/run/phpfpm/${dirName}.sock";
 

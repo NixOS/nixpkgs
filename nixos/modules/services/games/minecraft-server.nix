@@ -215,8 +215,8 @@ in {
     networking.firewall = mkIf cfg.openFirewall (if cfg.declarative then {
       allowedUDPPorts = [ serverPort ];
       allowedTCPPorts = [ serverPort ]
-        ++ optional (! isNull queryPort) queryPort
-        ++ optional (! isNull rconPort) rconPort;
+        ++ optional (queryPort != null) queryPort
+        ++ optional (rconPort != null) rconPort;
     } else {
       allowedUDPPorts = [ defaultServerPort ];
       allowedTCPPorts = [ defaultServerPort ];

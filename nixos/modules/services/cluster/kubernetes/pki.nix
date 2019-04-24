@@ -285,7 +285,7 @@ in
         };
       };
 
-      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
+      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (cfg.etcClusterAdminKubeconfig != null)
         (top.lib.mkKubeConfig "cluster-admin" clusterAdminKubeconfig);
 
       environment.systemPackages = mkIf (top.kubelet.enable || top.proxy.enable) [

@@ -34,7 +34,7 @@ let
 
   bashAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
-      (filterAttrs (k: v: !isNull v) cfg.shellAliases)
+      (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
 in

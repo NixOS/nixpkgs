@@ -59,7 +59,7 @@ let
 
   # return the names of all dependencies in the transitive closure
   transitiveClosure = dep:
-  if isNull dep then
+  if dep == null then
     # propagatedBuildInputs might contain null
     # (although that might be considered a programming error in the derivation)
     []

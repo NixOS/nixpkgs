@@ -85,7 +85,7 @@ in
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
         RuntimeDirectoryMode = "0700";
-        EnvironmentFile = if isNull cfg.adminCredentialsFile
+        EnvironmentFile = if cfg.adminCredentialsFile == null
         then defaultCredentials
         else cfg.adminCredentialsFile;
       };

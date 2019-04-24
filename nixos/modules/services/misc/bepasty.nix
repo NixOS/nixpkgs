@@ -143,7 +143,7 @@ in
           serviceConfig = {
             Type = "simple";
             PrivateTmp = true;
-            ExecStartPre = assert !isNull server.secretKeyFile; pkgs.writeScript "bepasty-server.${name}-init" ''
+            ExecStartPre = assert server.secretKeyFile != null; pkgs.writeScript "bepasty-server.${name}-init" ''
               #!/bin/sh
               mkdir -p "${server.workDir}"
               mkdir -p "${server.dataDir}"

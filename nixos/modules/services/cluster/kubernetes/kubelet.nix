@@ -7,9 +7,9 @@ let
   cfg = top.kubelet;
 
   cniConfig =
-    if cfg.cni.config != [] && !(isNull cfg.cni.configDir) then
+    if cfg.cni.config != [] && cfg.cni.configDir != null then
       throw "Verbatim CNI-config and CNI configDir cannot both be set."
-    else if !(isNull cfg.cni.configDir) then
+    else if cfg.cni.configDir != null then
       cfg.cni.configDir
     else
       (pkgs.buildEnv {
@@ -373,7 +373,7 @@ in
       boot.kernelModules = ["br_netfilter"];
 
       services.kubernetes.kubelet.hostname = with config.networking;
-        mkDefault (hostName + optionalString (!isNull domain) ".${domain}");
+        mkDefault (hostName + optionalString (domain != null) ".${domain}");
 
       services.kubernetes.pki.certs = with top.lib; {
         kubelet = mkCert {

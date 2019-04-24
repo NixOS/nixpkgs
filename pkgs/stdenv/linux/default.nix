@@ -96,7 +96,7 @@ let
           inherit system;
         };
 
-        cc = if isNull prevStage.gcc-unwrapped
+        cc = if prevStage.gcc-unwrapped == null
              then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           name = "${name}-gcc-wrapper";
