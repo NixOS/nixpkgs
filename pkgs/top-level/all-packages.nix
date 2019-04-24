@@ -4458,7 +4458,9 @@ in
     docbook-xsl = docbook_xsl;
   };
 
-  mosh = callPackage ../tools/networking/mosh { };
+  mosh = callPackage ../tools/networking/mosh {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
 
   motuclient = callPackage ../applications/science/misc/motu-client { };
 
