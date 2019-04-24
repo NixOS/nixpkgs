@@ -13,6 +13,7 @@
 , libgnomekbd
 , lcms2
 , libpulseaudio
+, mousetweaks
 , alsaLib
 , libcanberra-gtk3
 , upower
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit tzdata;
+      inherit tzdata mousetweaks;
     })
   ];
 
