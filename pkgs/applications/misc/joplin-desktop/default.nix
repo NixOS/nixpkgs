@@ -1,8 +1,8 @@
 { stdenv, appimage-run, fetchurl, gsettings-desktop-schemas, gtk3, gobject-introspection, wrapGAppsHook }:
 
 let
-  version = "1.0.142";
-  sha256 = "0k7lnv3qqz17a2a2d431sic3ggi3373r5k0kwxm4017ama7d72m1";
+  version = "1.0.143";
+  sha256 = "1waglwxpr18a07m7ix9al6ac4hrdqzzqmy1qgp45b922nbkw9g10";
 in
   stdenv.mkDerivation rec {
   name = "joplin-${version}";

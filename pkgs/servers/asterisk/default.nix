@@ -72,19 +72,19 @@ let
 
     meta = with stdenv.lib; {
       description = "Software implementation of a telephone private branch exchange (PBX)";
-      homepage = http://www.asterisk.org/;
+      homepage = https://www.asterisk.org/;
       license = licenses.gpl2;
       maintainers = with maintainers; [ auntie DerTim1 yorickvp ];
     };
   };
 
   pjproject_2_7_1 = fetchurl {
-    url = http://www.pjsip.org/release/2.7.1/pjproject-2.7.1.tar.bz2;
+    url = https://www.pjsip.org/release/2.7.1/pjproject-2.7.1.tar.bz2;
     sha256 = "09ii5hgl5s7grx4fiimcl3s77i385h7b3kwpfa2q0arbl1ibryjr";
   };
 
   pjproject_2_8 = fetchurl {
-    url = http://www.pjsip.org/release/2.8/pjproject-2.8.tar.bz2;
+    url = https://www.pjsip.org/release/2.8/pjproject-2.8.tar.bz2;
     sha256 = "0ybg0113rp3fk49rm2v0pcgqb28h3dv1pdy9594w2ggiz7bhngah";
   };
 

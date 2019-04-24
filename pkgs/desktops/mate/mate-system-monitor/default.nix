@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtkmm3, libxml2, libgtop, libwnck3, librsvg, systemd, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtkmm3, libxml2, libgtop, libwnck3, librsvg, systemd, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-system-monitor-${version}";
-  version = "1.20.2";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0f6sh23axzmcmyv0d837gbc0dixf1afh8951zrzp1y53rdgpa9qn";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0rs0n5ivmvi355fp3ymcp1jj2sz9viw31475aw7zh7s1l7dn969x";
   };
 
   nativeBuildInputs = [

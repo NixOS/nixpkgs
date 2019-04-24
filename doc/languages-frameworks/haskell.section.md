@@ -366,7 +366,7 @@ automatically select the right version of GHC and other build tools to build,
 test and execute apps in an existing project downloaded from somewhere on the
 Internet. Pass the `--nix` flag to any `stack` command to do so, e.g.
 ```shell
-git clone --recursive http://github.com/yesodweb/wai
+git clone --recursive https://github.com/yesodweb/wai
 cd wai
 stack --nix build
 ```

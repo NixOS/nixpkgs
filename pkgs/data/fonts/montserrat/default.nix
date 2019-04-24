@@ -9,7 +9,7 @@ let
 in fetchzip {
   name = "montserrat-${version}";
 
-  url = "http://marvid.fr/~eeva/mirror/Montserrat.tar.gz";
+  url = "https://marvid.fr/~eeva/mirror/Montserrat.tar.gz";
 
   postFetch = ''
     tar -xzf $downloadedFile --strip-components=1
@@ -21,7 +21,7 @@ in fetchzip {
 
   meta = with stdenv.lib; {
     description = "A geometric sans serif font with extended latin support (Regular, Alternates, Subrayada)";
-    homepage    = "http://www.fontspace.com/julieta-ulanovsky/montserrat";
+    homepage    = "https://www.fontspace.com/julieta-ulanovsky/montserrat";
     license     = licenses.ofl;
     platforms   = platforms.all;
     maintainers = with maintainers; [ scolobb ];

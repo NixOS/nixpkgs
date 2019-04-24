@@ -666,6 +666,10 @@ in
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
+  bitwarden_rs = callPackage ../tools/security/bitwarden_rs { };
+
+  bitwarden_rs-vault = callPackage ../tools/security/bitwarden_rs/vault.nix { };
+
   bitwarden-cli = callPackage ../tools/security/bitwarden-cli { };
 
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
@@ -683,6 +687,11 @@ in
 
   chezmoi = callPackage ../tools/misc/chezmoi { };
 
+  chipsec = callPackage ../tools/security/chipsec {
+    kernel = null;
+    withDriver = false;
+  };
+
   clair = callPackage ../tools/admin/clair { };
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
@@ -696,6 +705,8 @@ in
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
+
+  crumbs = callPackage ../applications/misc/crumbs { };
 
   deskew = callPackage ../applications/graphics/deskew { };
 
@@ -877,6 +888,8 @@ in
 
   autojump = callPackage ../tools/misc/autojump { };
 
+  automysqlbackup = callPackage ../tools/backup/automysqlbackup { };
+
   autorandr = callPackage ../tools/misc/autorandr {};
 
   avahi = callPackage ../development/libraries/avahi (config.avahi or {});
@@ -914,6 +927,8 @@ in
   backblaze-b2 = python.pkgs.callPackage ../development/tools/backblaze-b2 { };
 
   bar = callPackage ../tools/system/bar {};
+
+  base16-shell-preview = callPackage ../misc/base16-shell-preview { };
 
   base16-builder = callPackage ../misc/base16-builder { };
 
@@ -1324,6 +1339,8 @@ in
 
   deja-dup = callPackage ../applications/backup/deja-dup { };
 
+  dejsonlz4 = callPackage ../tools/compression/dejsonlz4 { };
+
   desync = callPackage ../applications/networking/sync/desync { };
 
   devmem2 = callPackage ../os-specific/linux/devmem2 { };
@@ -1406,6 +1423,8 @@ in
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
   elementary-xfce-icon-theme = callPackage ../data/icons/elementary-xfce-icon-theme { };
+
+  ell = callPackage ../os-specific/linux/ell { };
 
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
@@ -2129,7 +2148,7 @@ in
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc rec {
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = pkgs.protobuf3_6.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
@@ -2557,6 +2576,8 @@ in
     inherit (pythonPackages) sphinx;
   };
 
+  wallutils = callPackage ../tools/graphics/wallutils { };
+
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
@@ -2571,7 +2592,7 @@ in
 
   cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
 
-  emscriptenVersion = "1.37.36";
+  emscriptenVersion = "1.38.28";
 
   emscripten = callPackage ../development/compilers/emscripten { };
 
@@ -2736,7 +2757,7 @@ in
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc rec {
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf3_6.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table-extra = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-extra { };
@@ -3855,6 +3876,8 @@ in
   kytea = callPackage ../tools/text/kytea { };
 
   k6 = callPackage ../development/tools/k6 { };
+
+  lalezar-fonts = callPackage ../data/fonts/lalezar-fonts { };
 
   ldc = callPackage ../development/compilers/ldc { };
 
@@ -6641,6 +6664,8 @@ in
 
   xurls = callPackage ../tools/text/xurls {};
 
+  xv = callPackage ../tools/misc/xv {};
+
   xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
   xvkbd = callPackage ../tools/X11/xvkbd {};
@@ -7747,6 +7772,7 @@ in
 
   cargo-download = callPackage ../tools/package-management/cargo-download { };
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+  cargo-outdated = callPackage ../tools/package-management/cargo-outdated {};
   cargo-release = callPackage ../tools/package-management/cargo-release {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7756,6 +7782,7 @@ in
   cargo-asm = callPackage ../development/tools/rust/cargo-asm {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
@@ -9010,6 +9037,8 @@ in
 
   grail = callPackage ../development/libraries/grail { };
 
+  graphene-hardened-malloc = callPackage ../development/libraries/graphene-hardened-malloc { };
+
   gtk-doc = callPackage ../development/tools/documentation/gtk-doc { };
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
@@ -9169,6 +9198,8 @@ in
   mkdocs = callPackage ../development/tools/documentation/mkdocs { };
 
   moby = callPackage ../development/tools/misc/moby { };
+
+  modd = callPackage ../development/tools/modd { };
 
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
@@ -9561,6 +9592,8 @@ in
 
   aalib = callPackage ../development/libraries/aalib { };
 
+  abseil-cpp = callPackage ../development/libraries/abseil-cpp { };
+
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
   acl = callPackage ../development/libraries/acl { };
@@ -9855,6 +9888,8 @@ in
   cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
 
   curlcpp = callPackage ../development/libraries/curlcpp { };
+
+  curlpp = callPackage ../development/libraries/curlpp { };
 
   cutee = callPackage ../development/libraries/cutee { };
 
@@ -11133,6 +11168,8 @@ in
 
   libiio = callPackage ../development/libraries/libiio { };
 
+  liburing = callPackage ../development/libraries/liburing { };
+
   libseccomp = callPackage ../development/libraries/libseccomp { };
 
   libsecret = callPackage ../development/libraries/libsecret { };
@@ -11226,6 +11263,8 @@ in
 
   libguestfs-appliance = callPackage ../development/libraries/libguestfs/appliance.nix {};
   libguestfs = callPackage ../development/libraries/libguestfs { };
+  libguestfs-with-appliance = libguestfs.override { appliance = libguestfs-appliance; };
+
 
   libhangul = callPackage ../development/libraries/libhangul { };
 
@@ -12778,6 +12817,8 @@ in
 
   selinux-sandbox = callPackage ../os-specific/linux/selinux-sandbox { };
 
+  seasocks = callPackage ../development/libraries/seasocks { };
+
   serd = callPackage ../development/libraries/serd {};
 
   serf = callPackage ../development/libraries/serf {};
@@ -14297,7 +14338,7 @@ in
     buildGoPackage = buildGo110Package;
   };
   prometheus-tor-exporter = callPackage ../servers/monitoring/prometheus/tor-exporter.nix { };
-  prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-bridge.nix { };
+  prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
@@ -14873,6 +14914,8 @@ in
 
   openisns = callPackage ../os-specific/linux/open-isns { };
 
+  osxfuse = callPackage ../os-specific/darwin/osxfuse { };
+
   powerstat = callPackage ../os-specific/linux/powerstat { };
 
   smemstat = callPackage ../os-specific/linux/smemstat { };
@@ -15023,6 +15066,11 @@ in
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
     blcr = callPackage ../os-specific/linux/blcr { };
+
+    chipsec = callPackage ../tools/security/chipsec {
+      inherit kernel;
+      withDriver = true;
+    };
 
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
@@ -18883,6 +18931,8 @@ in
 
   shogun = callPackage ../applications/science/machine-learning/shogun { };
 
+  sky = callPackage ../applications/networking/instant-messengers/sky {};
+
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
 
   smtube = libsForQt5.callPackage ../applications/video/smtube {};
@@ -19864,6 +19914,10 @@ in
   sublime3 = sublime3Packages.sublime3;
 
   sublime3-dev = sublime3Packages.sublime3-dev;
+
+  inherit (callPackage ../applications/version-management/sublime-merge {})
+    sublime-merge
+    sublime-merge-dev;
 
   inherit (callPackages ../applications/version-management/subversion { sasl = cyrus_sasl; })
     subversion18 subversion19 subversion_1_10 subversion_1_11;
@@ -21353,6 +21407,8 @@ in
     };
   };
 
+  riko4 = callPackage ../games/riko4 { };
+
   rili = callPackage ../games/rili { };
 
   rimshot = callPackage ../games/rimshot { love = love_0_7; };
@@ -21882,6 +21938,8 @@ in
 
   ezminc = callPackage ../applications/science/biology/EZminc { };
 
+  exonerate = callPackage ../applications/science/biology/exonerate { };
+
   hisat2 = callPackage ../applications/science/biology/hisat2 { };
 
   htslib = callPackage ../development/libraries/science/biology/htslib { };
@@ -21947,6 +22005,8 @@ in
   plink = callPackage ../applications/science/biology/plink { };
 
   plink-ng = callPackage ../applications/science/biology/plink-ng { };
+
+  prodigal = callPackage ../applications/science/biology/prodigal { };
 
   raxml = callPackage ../applications/science/biology/raxml { };
 
@@ -22066,7 +22126,9 @@ in
 
   nauty = callPackage ../applications/science/math/nauty {};
 
-  or-tools = callPackage ../development/libraries/science/math/or-tools {};
+  or-tools = callPackage ../development/libraries/science/math/or-tools {
+    pythonProtobuf = pythonPackages.protobuf;
+  };
 
   rubiks = callPackage ../development/libraries/science/math/rubiks { };
 
@@ -22157,6 +22219,8 @@ in
   ### SCIENCE/PROGRAMMING
 
   dafny = dotnetPackages.Dafny;
+
+  groove = callPackage ../applications/science/programming/groove { };
 
   plm = callPackage ../applications/science/programming/plm { };
 
@@ -22372,6 +22436,8 @@ in
   gerbv = callPackage ../applications/science/electronics/gerbv { };
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
+
+  fped = callPackage ../applications/science/electronics/fped { };
 
   kicad = callPackage ../applications/science/electronics/kicad {
     wxGTK = wxGTK30;
@@ -23334,6 +23400,8 @@ in
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape {};
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
+
+  tilt = callPackage ../applications/networking/cluster/tilt {};
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 

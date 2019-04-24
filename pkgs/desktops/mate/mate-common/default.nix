@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, mate }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "mate-common-${version}";
-  version = "1.20.0";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0h8s2qhc6f5flslx05cd3xxg243c67vv03spjiag14p8kqqrqvb1";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "11lwckndizawbq993ws8lqp59vsc873zri0m8s1i5zyc4qx9f69z";
   };
 
   meta = {

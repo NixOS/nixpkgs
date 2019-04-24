@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-astring-${version}";
 
   src = fetchurl {
-    url = "http://erratique.ch/software/astring/releases/astring-${version}.tbz";
+    url = "https://erratique.ch/software/astring/releases/astring-${version}.tbz";
     sha256 = "0ixjwc3plrljvj24za3l9gy0w30lsbggp8yh02lwrzw61ls4cri0";
   };
 

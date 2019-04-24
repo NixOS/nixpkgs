@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-fmt-0.8.5";
 
   src = fetchurl {
-    url = http://erratique.ch/software/fmt/releases/fmt-0.8.5.tbz;
+    url = https://erratique.ch/software/fmt/releases/fmt-0.8.5.tbz;
     sha256 = "1zj9azcxcn6skmb69ykgmi9z8c50yskwg03wqgh87lypgjdcz060";
   };
 

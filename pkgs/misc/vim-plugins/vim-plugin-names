@@ -41,6 +41,7 @@ christoomey/vim-tmux-navigator
 cocopon/iceberg.vim
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim
+dag/vim-fish
 dag/vim2hs
 dannyob/quickfixstatus
 davidhalter/jedi-vim
@@ -93,6 +94,7 @@ HerringtonDarkholme/yats.vim
 honza/vim-snippets
 hsanson/vim-android
 ianks/vim-tsx
+icymind/NeoSolarized
 idris-hackers/idris-vim
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
@@ -203,6 +205,7 @@ motus/pig.vim
 mpickering/hlint-refactor-vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
+nathangrigg/vim-beancount
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
 ncm2/ncm2
@@ -231,6 +234,7 @@ peder2tm/sved
 peterhoeg/vim-qml
 phanviet/vim-monokai-pro
 plasticboy/vim-markdown
+ponko2/deoplete-fish
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
@@ -285,6 +289,7 @@ sjl/splice.vim
 sk1418/last256
 slashmili/alchemist.vim
 sonph/onehalf
+t9md/vim-choosewin
 t9md/vim-smalls
 takac/vim-hardtime
 ternjs/tern_for_vim
@@ -345,6 +350,7 @@ vim-scripts/a.vim
 vim-scripts/bats.vim
 vim-scripts/changeColorScheme.vim
 vim-scripts/Colour-Sampler-Pack
+vim-scripts/emodeline
 vim-scripts/Improved-AnsiEsc
 vim-scripts/matchit.zip
 vim-scripts/mayansmoke
@@ -354,6 +360,7 @@ vim-scripts/Rename
 vim-scripts/ReplaceWithRegister
 vim-scripts/tabmerge
 vim-scripts/taglist.vim
+vim-scripts/jdaddy.vim
 vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
 vim-utils/vim-husk

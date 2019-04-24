@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = licenses.mit;
-    homepage = http://www.gecode.org;
+    homepage = https://www.gecode.org;
     description = "Toolkit for developing constraint-based systems";
     platforms = platforms.all;
     maintainers = [ ];

@@ -365,6 +365,11 @@
     github = "ankhers";
     name = "Justin Wood";
   };
+  anton-dessiatov = {
+    email = "anton.dessiatov@gmail.com";
+    github = "anton-dessiatov";
+    name = "Anton Desyatov";
+  };
   Anton-Latukha = {
     email = "anton.latuka+nixpkgs@gmail.com";
     github = "Anton-Latukha";
@@ -1313,6 +1318,11 @@
     github = "dtzWill";
     name = "Will Dietz";
   };
+  dxf = {
+    email = "dingxiangfei2009@gmail.com";
+    github = "dingxiangfei2009";
+    name = "Ding Xiang Fei";
+  };
   dysinger = {
     email = "tim@dysinger.net";
     github = "dysinger";
@@ -1681,6 +1691,11 @@
     email = "mista.tapas@gmx.net";
     github = "fps";
     name = "Florian Paul Schmidt";
+  };
+  fredeb = {
+    email = "im@fredeb.dev";
+    github = "fredeeb";
+    name = "Frede Emil";
   };
   freepotion = {
     email = "freepotion@protonmail.com";
@@ -2171,6 +2186,11 @@
     email = "jb@giraudeau.info";
     github = "jbgi";
     name = "Jean-Baptiste Giraudeau";
+  };
+  jchw = {
+    email = "johnwchadwick@gmail.com";
+    github = "jchv";
+    name = "John Chadwick";
   };
   jcumming = {
     email = "jack@mudshark.org";
@@ -4031,6 +4051,11 @@
     github = "renatoGarcia";
     name = "Renato Garcia";
   };
+  rencire = {
+    email = "546296+rencire@users.noreply.github.com";
+    github = "rencire";
+    name = "Eric Ren";
+  };
   renzo = {
     email = "renzocarbonara@gmail.com";
     github = "k0001";
@@ -4823,6 +4848,15 @@
     github = "the-kenny";
     name = "Moritz Ulrich";
   };
+  thesola10 = {
+    email = "thesola10@bobile.fr";
+    github = "thesola10";
+    keys = [{
+      longkeyid = "rsa4096/0x89245619BEBB95BA";
+      fingerprint = "1D05 13A6 1AC4 0D8D C6D6  5F2C 8924 5619 BEBB 95BA";
+    }];
+    name = "Karim Vergnes";
+  };
   theuni = {
     email = "ct@flyingcircus.io";
     github = "ctheune";
@@ -5420,6 +5454,11 @@
     email = "zohl@fmap.me";
     github = "zohl";
     name = "Al Zohali";
+  };
+  zookatron = {
+    email = "tim@zookatron.com";
+    github = "zookatron";
+    name = "Tim Zook";
   };
   zoomulator = {
     email = "zoomulator@gmail.com";

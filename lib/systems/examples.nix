@@ -131,11 +131,6 @@ rec {
     config = "powerpcle-none-eabi";
     libc = "newlib";
   };
-  
-  alpha-embedded = {
-    config = "alpha-elf";
-    libc = "newlib";
-  };
 
   i686-embedded = {
     config = "i686-elf";

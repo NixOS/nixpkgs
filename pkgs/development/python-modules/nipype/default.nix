@@ -97,7 +97,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://nipy.org/nipype/;
+    homepage = https://nipy.org/nipype/;
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];

@@ -7,7 +7,7 @@ assert lib.versionAtLeast ocaml.version "4.02.3";
 let
   srcs = {
     cmdliner = fetchurl {
-      url = "http://erratique.ch/software/cmdliner/releases/cmdliner-1.0.2.tbz";
+      url = "https://erratique.ch/software/cmdliner/releases/cmdliner-1.0.2.tbz";
       sha256 = "18jqphjiifljlh9jg8zpl6310p3iwyaqphdkmf89acyaix0s4kj1";
     };
     cppo = fetchurl {

@@ -108,6 +108,7 @@
 , "stackdriver-statsd-backend"
 , "svgo"
 , "swagger"
+, { "tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7" }
 , "tern"
 , "textlint"
 , "three"

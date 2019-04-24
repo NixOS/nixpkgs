@@ -100,6 +100,11 @@ in {
     boot.growPartition = true;
     boot.loader.grub.device = "/dev/sda";
 
+    swapDevices = [{
+      device = "/var/swap";
+      size = 2048;
+    }];
+
     virtualisation.virtualbox.guest.enable = true;
 
   };

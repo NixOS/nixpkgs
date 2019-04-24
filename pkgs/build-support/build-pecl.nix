@@ -1,18 +1,19 @@
 { stdenv, php, autoreconfHook, fetchurl }:
 
-{ name
+{ pname
+, version
 , buildInputs ? []
 , nativeBuildInputs ? []
 , makeFlags ? []
 , src ? fetchurl {
-    url = "http://pecl.php.net/get/${name}.tgz";
+    url = "http://pecl.php.net/get/${pname}-${version}.tgz";
     inherit (args) sha256;
   }
 , ...
 }@args:
 
 stdenv.mkDerivation (args // {
-  name = "php-${name}";
+  name = "php-${pname}-${version}";
 
   inherit src;
 

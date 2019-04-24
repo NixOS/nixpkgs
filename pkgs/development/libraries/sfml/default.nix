@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
                  "-DSFML_USE_SYSTEM_DEPS=yes" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.sfml-dev.org/;
+    homepage = https://www.sfml-dev.org/;
     description = "Simple and fast multimedia library";
     longDescription = ''
       SFML is a simple, fast, cross-platform and object-oriented multimedia API.

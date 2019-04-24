@@ -16,7 +16,7 @@ in
       type = str;
     };
 
-    enable = mkEnableOption "Whether to enable Kubernetes scheduler.";
+    enable = mkEnableOption "Kubernetes scheduler";
 
     extraOpts = mkOption {
       description = "Kubernetes scheduler extra command line options.";

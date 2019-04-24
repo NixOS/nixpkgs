@@ -30,6 +30,8 @@
 , toml
 , notebook
 , ruamel_yaml
+, aiohttp
+, watchdog
 }:
 
 buildPythonPackage rec {
@@ -48,7 +50,7 @@ buildPythonPackage rec {
     doit pygments pillow dateutil docutils Mako markdown unidecode
     lxml Yapsy PyRSS2Gen Logbook blinker natsort requests piexif Babel
     # requirements-extras.txt
-    phpserialize jinja2 toml notebook ruamel_yaml
+    phpserialize jinja2 toml notebook ruamel_yaml aiohttp watchdog
   ];
 
   src = fetchPypi {

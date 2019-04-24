@@ -33,7 +33,7 @@ in
         description = "Authentication to use when connecting to xpra";
       };
 
-      pulseaudio = mkEnableOption "pulseaudio audio streaming.";
+      pulseaudio = mkEnableOption "pulseaudio audio streaming";
 
       extraOptions = mkOption {
         description = "Extra xpra options";

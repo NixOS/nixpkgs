@@ -555,6 +555,11 @@ in {
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
 
+  ortools = (toPythonModule (pkgs.or-tools.override {
+    inherit (self) python;
+    pythonProtobuf = self.protobuf;
+  })).python;
+
   osmnx = callPackage ../development/python-modules/osmnx { };
 
   outcome = callPackage ../development/python-modules/outcome {};
@@ -585,9 +590,13 @@ in {
 
   poetry = callPackage ../development/python-modules/poetry { };
 
+  pplpy = callPackage ../development/python-modules/pplpy { };
+
   pprintpp = callPackage ../development/python-modules/pprintpp { };
 
   progress = callPackage ../development/python-modules/progress { };
+
+  proglog = callPackage ../development/python-modules/proglog { };
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 
@@ -3127,6 +3136,10 @@ in {
 
   Mako = callPackage ../development/python-modules/Mako { };
 
+  macfsevents = callPackage ../development/python-modules/macfsevents {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
+  };
+
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix {};
   marionette_driver = callPackage ../development/python-modules/marionette-harness/marionette_driver.nix {};
   mozcrash = callPackage ../development/python-modules/marionette-harness/mozcrash.nix {};
@@ -3823,6 +3836,8 @@ in {
   pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
            else callPackage ../development/python-modules/pylint/1.9.nix { };
 
+  pyomo = callPackage ../development/python-modules/pyomo { };
+
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
   pyotp = callPackage ../development/python-modules/pyotp { };
@@ -4010,6 +4025,8 @@ in {
   pytzdata = callPackage ../development/python-modules/pytzdata { };
 
   pyutil = callPackage ../development/python-modules/pyutil { };
+
+  pyutilib = callPackage ../development/python-modules/pyutilib { };
 
   pywal = callPackage ../development/python-modules/pywal { };
 

@@ -122,6 +122,14 @@
 /nixos/modules/services/databases/postgresql.nix @thoughtpolice
 /nixos/tests/postgresql.nix @thoughtpolice
 
+# Hardened profile & related modules
+/nixos/modules/profiles/hardened.nix @joachifm
+/nixos/modules/security/hidepid.nix @joachifm
+/nixos/modules/security/lock-kernel-modules.nix @joachifm
+/nixos/modules/security/misc.nix @joachifm
+/nixos/tests/hardened.nix @joachifm
+/pkgs/os-specific/linux/kernel/hardened-config.nix @joachifm
+
 # Dhall
 /pkgs/development/dhall-modules      @Gabriel439 @Profpatsch
 /pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch

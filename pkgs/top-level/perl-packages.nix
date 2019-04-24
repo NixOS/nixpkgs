@@ -5105,7 +5105,6 @@ let
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
       sha256 = "4b538b47459cf5747b7395ccc8c8c9b3b661cc016c50b8a67e10fe19590fea5e";
     };
-    postInstall = "rm $out/bin/{enc2xs,encguess,piconv} $out/share/man/man1/{enc2xs,encguess,piconv}.1"; # remove the files perl-5.28 already has
     meta = {
       description = "Character encodings in Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -5744,7 +5743,7 @@ let
     };
     propagatedBuildInputs = [ FileFindObject NumberCompare TextGlob ];
     meta = {
-      homepage = http://www.shlomifish.org/open-source/projects/File-Find-Object/;
+      homepage = https://www.shlomifish.org/open-source/projects/File-Find-Object/;
       description = "Alternative interface to File::Find::Object";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -8187,7 +8186,7 @@ let
     };
     outputs = [ "out" ];
     buildInputs = [ pkgs.apacheHttpd pkgs.apr pkgs.aprutil ApacheTest ExtUtilsXSBuilder ];
-    propagatedBuildInputs = [ mod_perl2 ];
+    propagatedBuildInputs = [ (pkgs.apacheHttpdPackages.mod_perl.override { inherit perl; }) ];
     makeMakerFlags = "--with-apache2-src=${pkgs.apacheHttpd.dev} --with-apache2-apxs=${pkgs.apacheHttpd.dev}/bin/apxs --with-apache2-httpd=${pkgs.apacheHttpd.out}/bin/httpd --with-apr-config=${pkgs.apr.dev}/bin/apr-1-config --with-apu-config=${pkgs.aprutil.dev}/bin/apu-1-config";
     preConfigure = ''
       # override broken prereq check
@@ -8198,11 +8197,30 @@ let
       '';
     installPhase = ''
       mkdir $out
+
+      # install the library
       make install DESTDIR=$out
       cp -r $out/${pkgs.apacheHttpd.dev}/. $out/.
       cp -r $out/$out/. $out/.
+
+      # install the perl module
+      pushd glue/perl
+      perl Makefile.PL
+      make install DESTDIR=$out
+      cp -r $out/${perl}/lib/perl5 $out/lib/
+      popd
+
+      # install the apache module
+      # https://computergod.typepad.com/home/2007/06/webgui_and_suse.html
+      # NOTE: if using the apache module you must use "apreq" as the module name, not "apreq2"
+      # services.httpd.extraModules = [ { name = "apreq"; path = "''${pkgs.perlPackages.libapreq2}/modules/mod_apreq2.so"; } ];
+      pushd module
+      make install DESTDIR=$out
+      cp -r $out/${pkgs.apacheHttpd.out}/modules $out/
+      popd
+
       rm -r $out/nix
-      '';
+    '';
     doCheck = false; # test would need to start apache httpd
     meta = {
       license = stdenv.lib.licenses.asl20;
@@ -8457,6 +8475,20 @@ let
     doCheck = false;
     meta = {
       description = "Perl extension to detect on which Linux distribution we are running";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  LinuxFD = buildPerlModule rec {
+    name = "Linux-FD-0.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
+      sha256 = "6bb579d47644cb0ed35626ff77e909ae69063073c6ac09aa0614fef00fa37356";
+    };
+    buildInputs = [ ModuleBuild TestException ];
+    propagatedBuildInputs = [ SubExporter ];
+    meta = {
+      description = "Linux specific special filehandles";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -14502,7 +14534,7 @@ let
     };
     buildInputs = [ TestRun TestRunCmdLine TestRunPluginAlternateInterpreters TestRunPluginBreakOnFailure TestRunPluginColorFileVerdicts TestRunPluginColorSummary TestRunPluginTrimDisplayedFilenames ];
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Specifications for installing all the Test::Run";
       license = stdenv.lib.licenses.mit;
     };
@@ -15686,7 +15718,7 @@ let
     buildInputs = [ TestTrap ];
     propagatedBuildInputs = [ IPCSystemSimple ListMoreUtils MooseXStrictConstructor TextSprintfNamed UNIVERSALrequire ];
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Base class to run standard TAP scripts";
       license = stdenv.lib.licenses.mit;
     };
@@ -15717,7 +15749,7 @@ let
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Define different interpreters for different test scripts with Test::Run";
       license = stdenv.lib.licenses.mit;
     };
@@ -15732,7 +15764,7 @@ let
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Stop processing the entire test suite";
       license = stdenv.lib.licenses.mit;
     };
@@ -15749,7 +15781,7 @@ let
     moreInputs = [ TestTrap ]; # Added because tests were failing without it
     doCheck=true;
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Make the file verdict ('ok', 'NOT OK')";
       license = stdenv.lib.licenses.mit;
     };
@@ -15765,7 +15797,7 @@ let
     moreInputs = [ TestTrap ]; # Added because tests were failing without it
     doCheck=true;
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "A Test::Run plugin that";
       license = stdenv.lib.licenses.mit;
     };
@@ -15780,7 +15812,7 @@ let
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
     meta = {
-      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      homepage = https://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Trim the first components";
       license = stdenv.lib.licenses.mit;
     };
@@ -16218,7 +16250,7 @@ let
       sha256 = "bb8a3b8ff515c85101baf553a769337f944a05cde81f111ae78aff416bf4ae2b";
     };
     meta = {
-      homepage = http://www.shlomifish.org/open-source/projects/Text-Format/;
+      homepage = https://www.shlomifish.org/open-source/projects/Text-Format/;
       description = "Format text";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ bcdarwin ];
@@ -16436,7 +16468,7 @@ let
     };
     propagatedBuildInputs = [ TextAligner ];
     meta = {
-      homepage = http://www.shlomifish.org/open-source/projects/docmake/;
+      homepage = https://www.shlomifish.org/open-source/projects/docmake/;
       description = "Organize Data in Tables";
       license = stdenv.lib.licenses.isc;
     };

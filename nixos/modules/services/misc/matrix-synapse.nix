@@ -554,7 +554,10 @@ in {
       };
       trusted_third_party_id_servers = mkOption {
         type = types.listOf types.str;
-        default = ["matrix.org"];
+        default = [
+          "matrix.org"
+          "vector.im"
+        ];
         description = ''
           The list of identity servers trusted to verify third party identifiers by this server.
         '';

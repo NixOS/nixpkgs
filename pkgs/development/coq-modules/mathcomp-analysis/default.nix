@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, coq, mathcomp-bigenough, mathcomp-finmap }:
 
 stdenv.mkDerivation rec {
-  version = "0.1.0";
+  version = "0.2.0";
   name = "coq${coq.coq-version}-mathcomp-analysis-${version}";
 
   src = fetchFromGitHub {
     owner = "math-comp";
     repo = "analysis";
     rev = version;
-    sha256 = "0hwkr2wzy710pcyh274fcarzdx8sv8myp16pv0vq5978nmih46al";
+    sha256 = "1186xjxgns4ns1szyi931964bjm0mp126qzlv10mkqqgfw07nhrd";
   };
 
   buildInputs = [ coq ];

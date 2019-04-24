@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "photos";
-  version = "2.6.2";
+  version = "2.6.3";
 
   name = "elementary-${pname}-${version}";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "166a1jb85n67z6ffm5i0xzap407rv0r511lzh0gidkap1qy6pnmi";
+    sha256 = "1s0ww5g26wj0gd1drj8gxs74gvg2c9fdj4ixpifj8jh8yafdmrvg";
   };
 
   passthru = {
@@ -67,11 +67,9 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Fix build against gexiv2 0.12
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/86df00ced674abb2ee430ea24422079cfabb314c.patch";
-      sha256 = "0836fzja93w36jf7ldqypsmnqn46mwsl93q41m104zn8qm0wrkmy";
-    })
+    # https://github.com/elementary/photos/pull/505
+    # Unrelated line got dropped in https://github.com/elementary/photos/pull/498
+    ./fix-missing-line.patch
   ];
 
   postPatch = ''

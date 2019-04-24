@@ -18,8 +18,8 @@ rec {
   * stdenv with no compiler environment. `runCommandCC`
   *
   * Examples:
-  * runCommand "name" {envVariable = true;} ''echo hello''
-  * runCommandNoCC "name" {envVariable = true;} ''echo hello'' # equivalent to prior
+  * runCommand "name" {envVariable = true;} ''echo hello > $out''
+  * runCommandNoCC "name" {envVariable = true;} ''echo hello > $out'' # equivalent to prior
   * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
   */
   runCommand = runCommandNoCC;
