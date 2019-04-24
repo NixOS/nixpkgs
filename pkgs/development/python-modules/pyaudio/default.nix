@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-pyaudio";
+  pname = "PyAudio";
   version = "0.2.9";
   disabled = isPyPy;
 
