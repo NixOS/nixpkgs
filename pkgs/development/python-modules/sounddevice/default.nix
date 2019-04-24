@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8d0571349f9a438a97f2c69da760f195cf5ddf2351072199cc1dfede4785a207";
+    sha256 = "01x2hm3xxzhxrjcj21si4ggmvkwmy5hag7f6yabqlhwskws721cd";
   };
 
   propagatedBuildInputs = [ cffi numpy portaudio ];

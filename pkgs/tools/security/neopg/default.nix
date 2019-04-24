@@ -3,7 +3,7 @@
 , cmake
 , sqlite
 , botan2
-, boost164
+, boost
 , curl
 , gettext
 , pkgconfig
@@ -12,26 +12,26 @@
 
 stdenv.mkDerivation rec {
   name = "neopg-${version}";
-  version = "0.0.4";
+  version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "das-labor";
     repo = "neopg";
     rev = "v${version}";
-    sha256 = "0hhkl326ff6f76k8pwggpzmivbm13fz497nlyy6ybn5bmi9xfblm";
+    sha256 = "15xp5w046ix59cfrhh8ka4camr0d8qqw643g184sqrcqwpk7nbrx";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ cmake sqlite botan2 boost164 curl gettext libusb gnutls ];
+  buildInputs = [ cmake sqlite botan2 boost curl gettext libusb gnutls ];
 
   doCheck = true;
   checkTarget = "test";
+  dontUseCmakeBuildDir = true;
 
-  postInstall = ''
-    mkdir -p $out/bin
-    cp src/neopg $out/bin/neopg
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/3rdparty/googletest/googletest:$(pwd)/neopg
   '';
 
   meta = with stdenv.lib; {

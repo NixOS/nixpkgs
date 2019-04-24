@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, python3
+{ lib, fetchFromGitHub, fetchpatch, python3, protobuf3_6
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? []
@@ -76,6 +76,13 @@ let
         };
         doCheck = false; # can be dropped for 2.0
       });
+    })
+
+    # required by aioesphomeapi
+    (self: super: {
+      protobuf = super.protobuf.override {
+        protobuf = protobuf3_6;
+      };
     })
 
     # hass-frontend does not exist in python3.pkgs

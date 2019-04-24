@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     xz
     xz.bin
-  ] ++ lib.optional allowBisonDependency [
-    # Only necessary for CVE-2018-18751.patch (unless CVE-2018-18751-bison.patch
-    # is also applied):
-    bison
-  ] ++ [
+  ]
+  # Only necessary for CVE-2018-18751.patch (unless CVE-2018-18751-bison.patch
+  # is also applied):
+  ++ lib.optional allowBisonDependency bison
+  ++ [
     # Only necessary for CVE-2018-18751.patch:
     automake115x
     autoconf

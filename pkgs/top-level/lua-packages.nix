@@ -177,6 +177,9 @@ with self; {
 
     preConfigure = ''export prefix=$out'';
 
+    # https://github.com/wahern/cqueues/issues/216
+    NIX_CFLAGS_COMPILE = [ "-DCQUEUES_VERSION=${version}" ];
+
     nativeBuildInputs = [ gnum4 ];
     buildInputs = [ openssl ];
 

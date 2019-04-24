@@ -61,6 +61,15 @@ let
 
   git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
 
+  git-annex-remote-dbx = callPackage ./git-annex-remote-dbx {
+    inherit (python3Packages)
+    buildPythonApplication
+    fetchPypi
+    dropbox
+    annexremote
+    humanfriendly;
+  };
+
   git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
 
   git-bug = callPackage ./git-bug { };

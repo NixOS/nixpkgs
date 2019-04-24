@@ -9,7 +9,7 @@ if isPyPy then throw "dbus-python not supported for interpreter ${python.executa
   outputs = [ "out" "dev" "doc" ];
 
   src = fetchurl {
-    url = "http://dbus.freedesktop.org/releases/dbus-python/${pname}-${version}.tar.gz";
+    url = "https://dbus.freedesktop.org/releases/dbus-python/${pname}-${version}.tar.gz";
     sha256 = "1k7rnaqrk7mdkg0k6n2jn3d1mxsl7s3i07g5a8va5yvl3y3xdwg2";
   };
 

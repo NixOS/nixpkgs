@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "0.9.6";
   name = "uuidm-${version}";
   src = fetchurl {
-    url = "http://erratique.ch/software/uuidm/releases/uuidm-${version}.tbz";
+    url = "https://erratique.ch/software/uuidm/releases/uuidm-${version}.tbz";
     sha256 = "0hz4fdx0x16k0pw9995vkz5d1hmzz6b16wck9li399rcbfnv5jlc";
   };
 

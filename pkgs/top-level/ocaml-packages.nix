@@ -67,7 +67,7 @@ let
           };
         };
       };
-      uri = uri.override {
+      uri = uri_1_9.override {
         inherit (janeStreet_0_9_0) ppx_sexp_conv sexplib;
       };
     };
@@ -152,9 +152,7 @@ let
 
     cohttp =
       if lib.versionOlder "4.03" ocaml.version
-      then callPackage ../development/ocaml-modules/cohttp {
-        base64 = base64_2;
-      }
+      then callPackage ../development/ocaml-modules/cohttp { }
       else cohttp_p4;
 
     cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
@@ -756,6 +754,10 @@ let
       if lib.versionAtLeast ocaml.version "4.3"
       then callPackage ../development/ocaml-modules/uri { }
       else callPackage ../development/ocaml-modules/uri/legacy.nix { };
+
+    uri_1_9 = callPackage ../development/ocaml-modules/uri {
+      legacy = true;
+    };
 
     uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
       legacyVersion = true;

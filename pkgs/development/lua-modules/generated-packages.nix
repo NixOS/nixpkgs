@@ -143,7 +143,7 @@ lgi = buildLuarocksPackage {
   buildType="make";
 
   meta = {
-    homepage = "http://github.com/pavouk/lgi";
+    homepage = "https://github.com/pavouk/lgi";
     description="Lua bindings to GObject libraries";
     license = {
       fullName = "MIT/X11";
@@ -203,7 +203,7 @@ lrexlib-gnu = buildLuarocksPackage {
   buildType="builtin";
 
   meta = {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description="Regular expression library binding (GNU flavour).";
     license = {
       fullName = "MIT/X11";
@@ -223,7 +223,7 @@ lrexlib-posix = buildLuarocksPackage {
   buildType="builtin";
 
   meta = {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description="Regular expression library binding (POSIX flavour).";
     license = {
       fullName = "MIT/X11";
@@ -273,7 +273,7 @@ lua-cmsgpack = buildLuarocksPackage {
   buildType="builtin";
 
   meta = {
-    homepage = "http://github.com/antirez/lua-cmsgpack";
+    homepage = "https://github.com/antirez/lua-cmsgpack";
     description="MessagePack C implementation and bindings for Lua 5.1/5.2/5.3";
     license = {
       fullName = "Two-clause BSD";

@@ -36,7 +36,7 @@ GEM
     mime-types-data (3.2019.0331)
     mini_portile2 (2.4.0)
     mustache (0.99.8)
-    nokogiri (1.10.2)
+    nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     posix-spawn (0.3.13)
     rack (1.6.11)
@@ -55,7 +55,7 @@ GEM
       unf (~> 0.1.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.5)
+    unf_ext (0.0.7.6)
     useragent (0.16.10)
 
 PLATFORMS

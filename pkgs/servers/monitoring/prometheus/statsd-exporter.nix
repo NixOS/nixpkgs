@@ -2,25 +2,23 @@
 
 buildGoPackage rec {
   name = "statsd_exporter-${version}";
-  version = "0.4.0";
+  version = "0.9.0";
   rev = version;
 
-  goPackagePath = "github.com/prometheus/statsd_bridge";
+  goPackagePath = "github.com/prometheus/statsd_exporter";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "statsd_exporter";
-    sha256 = "1w11n7g663g7d7mbf6jfzcqmcm9rhaxy52bg0rqnad9v0rs5qxr6";
+    sha256 = "0bgi00005j41p650rb6n1iz2w9m4p22d1w91f2hwlh5bqxf55al3";
   };
-
-  goDeps = ./statsd-bridge_deps.nix;
 
   meta = with stdenv.lib; {
     description = "Receives StatsD-style metrics and exports them to Prometheus";
-    homepage = https://github.com/prometheus/statsd_bridge;
+    homepage = https://github.com/prometheus/statsd_exporter;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [ benley ivan ];
     platforms = platforms.unix;
   };
 }

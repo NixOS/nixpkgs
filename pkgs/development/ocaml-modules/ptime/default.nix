@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ptime-${version}";
 
   src = fetchurl {
-    url = "http://erratique.ch/software/ptime/releases/ptime-${version}.tbz";
+    url = "https://erratique.ch/software/ptime/releases/ptime-${version}.tbz";
     sha256 = "0z2snhda8bg136xkw2msw6k2dz84vb49p8bgzrxfs8mawdlk0kkg";
   };
 

@@ -67,7 +67,7 @@ in
 
     meta = {
       description = "Wrapper to create jupyter notebook kernel definitions";
-      homepage = http://jupyter.org/;
+      homepage = https://jupyter.org/;
       maintainers = with maintainers; [ aborsu ];
     };
   };

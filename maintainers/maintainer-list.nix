@@ -1318,6 +1318,11 @@
     github = "dtzWill";
     name = "Will Dietz";
   };
+  dxf = {
+    email = "dingxiangfei2009@gmail.com";
+    github = "dingxiangfei2009";
+    name = "Ding Xiang Fei";
+  };
   dysinger = {
     email = "tim@dysinger.net";
     github = "dysinger";
@@ -1686,6 +1691,11 @@
     email = "mista.tapas@gmx.net";
     github = "fps";
     name = "Florian Paul Schmidt";
+  };
+  fredeb = {
+    email = "im@fredeb.dev";
+    github = "fredeeb";
+    name = "Frede Emil";
   };
   freepotion = {
     email = "freepotion@protonmail.com";
@@ -2176,6 +2186,11 @@
     email = "jb@giraudeau.info";
     github = "jbgi";
     name = "Jean-Baptiste Giraudeau";
+  };
+  jchw = {
+    email = "johnwchadwick@gmail.com";
+    github = "jchv";
+    name = "John Chadwick";
   };
   jcumming = {
     email = "jack@mudshark.org";

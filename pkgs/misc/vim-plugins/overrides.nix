@@ -140,6 +140,10 @@ self: super: {
     '';
   });
 
+  deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
+    dependencies = with super; [ deoplete-nvim vim-fish ];
+  });
+
   deoplete-go = super.deoplete-go.overrideAttrs(old: {
     buildInputs = [ python3 ];
     buildPhase = ''
