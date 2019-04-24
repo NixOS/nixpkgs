@@ -18,7 +18,7 @@ index 04a0d45050..5dc82d0eb7 100644
 -install: all $(if $(BUILD_DOCS),install-doc) install-datadir install-localstatedir
 +install: all $(if $(BUILD_DOCS),install-doc) install-datadir
  ifneq ($(TOOLS),)
-	$(call install-prog,$(subst qemu-ga,qemu-ga$(EXESUF),$(TOOLS)),$(DESTDIR)$(bindir))
+ 	$(call install-prog,$(subst qemu-ga,qemu-ga$(EXESUF),$(TOOLS)),$(DESTDIR)$(bindir))
  endif
 --
 2.21.GIT
