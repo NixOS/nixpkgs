@@ -144,6 +144,7 @@ in
   misc = handleTest ./misc.nix {};
   mongodb = handleTest ./mongodb.nix {};
   morty = handleTest ./morty.nix {};
+  mosquitto = handleTest ./mosquitto.nix {};
   mpd = handleTest ./mpd.nix {};
   mumble = handleTest ./mumble.nix {};
   munin = handleTest ./munin.nix {};
