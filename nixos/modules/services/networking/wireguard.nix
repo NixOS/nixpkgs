@@ -33,6 +33,15 @@ let
         '';
       };
 
+      generatePrivateKeyFile = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Automatically generate a private key with `wg genkey`,
+          at the privateKeyFile location.
+        '';
+      };
+
       privateKeyFile = mkOption {
         example = "/private/wireguard_key";
         type = with types; nullOr str;
@@ -182,9 +191,48 @@ let
 
   };
 
-  generateUnit = name: values:
+
+  generatePathUnit = name: values:
+    assert (values.privateKey == null);
+    assert (values.privateKeyFile != null);
+    nameValuePair "wireguard-${name}"
+      {
+        description = "WireGuard Tunnel - ${name} - Private Key";
+        requiredBy = [ "wireguard-${name}.service" ];
+        before = [ "wireguard-${name}.service" ];
+        pathConfig.PathExists = values.privateKeyFile;
+      };
+
+  generateKeyServiceUnit = name: values:
+    assert values.generatePrivateKeyFile;
+    nameValuePair "wireguard-${name}-key"
+      {
+        description = "WireGuard Tunnel - ${name} - Key Generator";
+        wantedBy = [ "wireguard-${name}.service" ];
+        requiredBy = [ "wireguard-${name}.service" ];
+        before = [ "wireguard-${name}.service" ];
+        path = with pkgs; [ wireguard ];
+
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+
+        script = ''
+          mkdir --mode 0644 -p "${dirOf values.privateKeyFile}"
+          if [ ! -f "${values.privateKeyFile}" ]; then
+            touch "${values.privateKeyFile}"
+            chmod 0600 "${values.privateKeyFile}"
+            wg genkey > "${values.privateKeyFile}"
+            chmod 0400 "${values.privateKeyFile}"
+          fi
+        '';
+      };
+
+
+  generateSetupServiceUnit = name: values:
     # exactly one way to specify the private key must be set
-    assert (values.privateKey != null) != (values.privateKeyFile != null);
+    #assert (values.privateKey != null) != (values.privateKeyFile != null);
     let privKey = if values.privateKeyFile != null then values.privateKeyFile else pkgs.writeText "wg-key" values.privateKey;
     in
     nameValuePair "wireguard-${name}"
@@ -279,10 +327,27 @@ in
 
   config = mkIf (cfg.interfaces != {}) {
 
+    assertions = (attrValues (
+        mapAttrs (name: value: {
+          assertion = (value.privateKey != null) != (value.privateKeyFile != null);
+          message = "Either networking.wireguard.interfaces.${name}.privateKey or networking.wireguard.interfaces.${name}.privateKeyFile must be set.";
+        }) cfg.interfaces))
+      ++ (attrValues (
+        mapAttrs (name: value: {
+          assertion = value.generatePrivateKeyFile -> (value.privateKey == null);
+          message = "networking.wireguard.interfaces.${name}.generatePrivateKey must not be set if networking.wireguard.interfaces.${name}.privateKey is set.";
+        }) cfg.interfaces));
+
+
     boot.extraModulePackages = [ kernel.wireguard ];
     environment.systemPackages = [ pkgs.wireguard-tools ];
 
-    systemd.services = mapAttrs' generateUnit cfg.interfaces;
+    systemd.services = (mapAttrs' generateSetupServiceUnit cfg.interfaces)
+      // (mapAttrs' generateKeyServiceUnit
+      (filterAttrs (name: value: value.generatePrivateKeyFile) cfg.interfaces));
+
+    systemd.paths = mapAttrs' generatePathUnit
+      (filterAttrs (name: value: value.privateKeyFile != null) cfg.interfaces);
 
   };
 
