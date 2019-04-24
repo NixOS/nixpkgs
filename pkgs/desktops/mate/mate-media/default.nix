@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-media-${version}";
-  version = "1.20.2";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "06fka82smrphzj4dz9dw1566kmdscxvxl0rchj9qxg7aidy0rmnv";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "13g1n2ddgr1yxgl4fsqj3sgb9344b756kam9v3sq6vh0bxlr4yf2";
   };
 
   buildInputs = [
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     gtk3
     mate.libmatemixer
+    mate.mate-panel
     mate.mate-desktop
   ];
 
