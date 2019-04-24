@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-setproctitle";
+  pname = "setproctitle";
   version = "1.1.9";
 
   src = fetchPypi {
