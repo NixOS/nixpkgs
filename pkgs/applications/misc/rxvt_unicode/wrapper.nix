@@ -12,10 +12,10 @@ in symlinkJoin {
 
   postBuild = ''
     wrapProgram $out/bin/urxvt \
-      --set PERL5LIB : "${perlPackages.makePerlPath perlDeps}" \
+      --prefix PERL5LIB : "${perlPackages.makePerlPath perlDeps}" \
       --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
     wrapProgram $out/bin/urxvtd \
-      --set PERL5LIB : "${perlPackages.makePerlPath perlDeps}" \
+      --prefix PERL5LIB : "${perlPackages.makePerlPath perlDeps}" \
       --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
   '';
 
