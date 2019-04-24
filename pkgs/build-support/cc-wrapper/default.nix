@@ -320,8 +320,8 @@ stdenv.mkDerivation {
     # -mfloat-abi only matters on arm32 but we set it here
     # unconditionally just in case. If the abi specifically sets hard
     # vs. soft floats we use it here.
-    + optionalString (targetPlatform ? platform.gcc.float-abi || targetPlatform.parsed.abi ? float) ''
-      echo "-mfloat-abi=${targetPlatform.platform.gcc.float-abi or targetPlatform.parsed.abi.float}" >> $out/nix-support/cc-cflags-before
+    + optionalString (targetPlatform ? platform.gcc.float-abi) ''
+      echo "-mfloat-abi=${targetPlatform.platform.gcc.float-abi}" >> $out/nix-support/cc-cflags-before
     ''
     + optionalString (targetPlatform ? platform.gcc.fpu) ''
       echo "-mfpu=${targetPlatform.platform.gcc.fpu}" >> $out/nix-support/cc-cflags-before
