@@ -1,6 +1,6 @@
 { fetchurl, stdenv, lib, zlib, glib, alsaLib, dbus, gtk3, atk, pango, freetype, fontconfig
-, libgnome-keyring3, gdk_pixbuf, cairo, cups, expat, libgpgerror, nspr
-, nss, xorg, libcap, systemd, at_spi2_atk, libnotify, libuuid, libXScrnSaver, gnome2 }:
+, libgnome-keyring3, gdk-pixbuf, cairo, cups, expat, libgpgerror, nspr
+, nss, xorg, libcap, systemd, at-spi2-atk, libnotify, libuuid, libXScrnSaver, gnome2 }:
 
 let version = "1.5.0"; in
 
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
     packages = [
       stdenv.cc.cc zlib glib dbus gtk3 atk pango freetype libgnome-keyring3
-      fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr nss
+      fontconfig gdk-pixbuf cairo cups expat libgpgerror alsaLib nspr nss
       xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
       xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
-      xorg.libXcursor libcap systemd at_spi2_atk libnotify libuuid libXScrnSaver gnome2.GConf
-      xorg.libxcb
+      xorg.libXcursor libcap systemd at-spi2-atk libnotify libuuid libXScrnSaver
+      gnome2.GConf xorg.libxcb
     ];
 
     libPathNative = lib.makeLibraryPath packages;
