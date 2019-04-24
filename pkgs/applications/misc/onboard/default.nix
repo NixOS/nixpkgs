@@ -1,5 +1,6 @@
 { fetchurl
 , stdenv
+, substituteAll
 , aspellWithDicts
 , at-spi2-core ? null
 , atspiSupport ? true
@@ -16,6 +17,7 @@
 , intltool
 , isocodes
 , libcanberra-gtk3
+, mousetweaks
 , udev
 , libxkbcommon
 , pkgconfig
@@ -38,6 +40,10 @@ in python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit mousetweaks;
+    })
     # Allow loading hunspell dictionaries installed in NixOS system path
     ./hunspell-use-xdg-datadirs.patch
   ];
@@ -79,6 +85,7 @@ in python3.pkgs.buildPythonApplication rec {
     hunspell
     isocodes
     libcanberra-gtk3
+    mousetweaks
     udev
     libxkbcommon
     wrapGAppsHook
