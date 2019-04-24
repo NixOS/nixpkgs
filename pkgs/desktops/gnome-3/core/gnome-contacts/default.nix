@@ -2,7 +2,7 @@
 , pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, python3, gtk3, glib, cheese
 , libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
 , wrapGAppsHook, folks, libxml2, gnome3, telepathy-glib
-, vala, meson, ninja, libhandy }:
+, vala, meson, ninja, libhandy, gsettings-desktop-schemas }:
 
 let
   version = "3.32";
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3 glib evolution-data-server gnome3.gsettings-desktop-schemas
+    gtk3 glib evolution-data-server gsettings-desktop-schemas
     folks gnome-desktop telepathy-glib libhandy
     libxml2 gnome-online-accounts cheese
     gnome3.adwaita-icon-theme libchamplain clutter-gtk geocode-glib

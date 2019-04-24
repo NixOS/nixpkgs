@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   name    = "zotero-${version}";
-  version = "5.0.60";
+  version = "5.0.66";
   
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "0753xk95shhxma4dvdxrj2q6y81z8lianxg7jnab9m17fb67jy2d";
+    sha256 = "1dpcwpag95a4r46z03a3gqklis0q7nzqgjg34qfxxxb2lr7s1lsm";
   };
   
   buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme gnome3.dconf ];

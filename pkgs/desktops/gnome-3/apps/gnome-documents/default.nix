@@ -4,7 +4,7 @@
 , gnome-desktop, libzapojit, libgepub
 , gnome3, gdk_pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
 , gobject-introspection, inkscape, poppler_utils
-, desktop-file-utils, wrapGAppsHook, python3 }:
+, desktop-file-utils, wrapGAppsHook, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   name = "gnome-documents-${version}";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     inkscape poppler_utils # building getting started
   ];
   buildInputs = [
-    gtk3 glib gnome3.gsettings-desktop-schemas
+    gtk3 glib gsettings-desktop-schemas
     gdk_pixbuf gnome3.adwaita-icon-theme evince
     libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata

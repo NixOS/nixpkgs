@@ -1,6 +1,6 @@
 { stdenv, gettext, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
 , meson, ninja, gtk3, glib, wrapGAppsHook, python3, libnotify
-, itstool, gnome3, libxml2
+, itstool, gnome3, libxml2, gsettings-desktop-schemas
 , libcanberra-gtk3, libxslt, docbook_xsl, libpwquality }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 glib libsecret libpwquality libnotify libdvdread libcanberra-gtk3
     udisks2 gnome3.adwaita-icon-theme
-    gnome3.gnome-settings-daemon gnome3.gsettings-desktop-schemas
+    gnome3.gnome-settings-daemon gsettings-desktop-schemas
   ];
 
   postPatch = ''

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "1.6.3";
+  version = "1.6.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xb68q4rdi0is22cwvrfk1xwg6yngdxcvmjpdlkgmbdxf3y1sy33";
+    sha256 = "ca887bedc9c6e0eab72fcb4c20eda8fff975d06b75993a85ee1dfc763ba38e86";
   };
 
   prePatch = ''
