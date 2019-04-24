@@ -18652,7 +18652,8 @@ in
 
   mm-common = callPackage ../development/libraries/mm-common { };
 
-  matrique = libsForQt5.callPackage ../applications/networking/instant-messengers/matrique { };
+  # Renamed
+  matrique = spectral;
 
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
