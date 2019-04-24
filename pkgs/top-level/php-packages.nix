@@ -342,7 +342,7 @@ let
 
   phpstan = pkgs.stdenv.mkDerivation rec {
     version = "0.11.5";
-    pname = "phpstan";
+    pname = "php-phpstan";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
@@ -376,7 +376,7 @@ let
 
   psysh = pkgs.stdenv.mkDerivation rec {
     version = "0.9.9";
-    pname = "psysh";
+    pname = "php-psysh";
 
     src = pkgs.fetchurl {
       url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
