@@ -27,7 +27,12 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
 
-  configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ];
+  configureFlags = [
+    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+  ] ++ stdenv.lib.optionals (stdenv.isAarch32 && stdenv.hostPlatform == stdenv.buildPlatform) [
+    # prevent taking architecture of the builder machine which could be "aarch64"
+    "--host=${stdenv.hostPlatform.config}"
+  ];
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
