@@ -33,15 +33,47 @@ in
     configOptions = mkOption {
       type = types.attrs;
       description = "This options will be transform in YAML configuration file for the bridge";
-    };
-
-    registrationPath = mkOption {
-      type = types.path;
-      default = "${configFile}/registration.yaml";
-      description = ''
-        This options will provide a path to the YAML registration file for matrix-synapse.
-        The registration.yaml file will be generated in the nix store, so you can refer to it with <literal>config.services.mautrix-whatsapp.registrationPath</literal>. This file must be added in the matrix-synapse service options <literal>services.matrix-synapse.app_service_config_files</literal>
-
+      example = ''
+        configOptions = {
+          homeserver = {
+            address = https://matrix.org;
+            domain = "matrix.org";
+          };
+          appservice = {
+            address = http://localhost:8080;
+            hostname = "0.0.0.0";
+            port = 8080;
+            database = {
+              type = "sqlite3";
+              uri = "/var/lib/mautrix-whatsapp/mautrix-whatsapp.db";
+            };
+            state_store_path = "/var/lib/mautrix-whatsapp/mx-state.json";
+            id = "whatsapp";
+            bot = {
+              username = "whatsappbot";
+              displayname = "WhatsApp bridge bot";
+              avatar = "mxc://maunium.net/NeXNQarUbrlYBiPCpprYsRqr";
+            };
+            as_token = "";
+            hs_token = "";
+          };
+          bridge = {
+            username_template = "whatsapp_{{.}}";
+            displayname_template = "{{if .Notify}}{{.Notify}}{{else}}{{.Jid}}{{end}} (WA)";
+            command_prefix = "!wa";
+            permissions = {
+              "@example:matrix.org" = 100;
+            };
+          };
+          logging = {
+            directory = "/var/lib/mautrix-whatsapp/logs";
+            file_name_format = "{{.Date}}-{{.Index}}.log";
+            file_date_format = "\"2006-01-02\"";
+            file_mode = 384;
+            timestamp_format = "Jan _2, 2006 15:04:05";
+            print_level = "debug";
+          };
+        };
       '';
     };
   };
@@ -61,5 +93,8 @@ in
         Restart = "on-failure";
       };
     };
+
+    services.matrix-synapse.app_service_config_files = [ "${configFile}/registration.yaml" ];
+
   };
 }
