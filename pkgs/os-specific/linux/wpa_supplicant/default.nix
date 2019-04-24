@@ -82,6 +82,70 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   patches = [
+    # SAE and EAP_PWD vulnerabilities
+    #
+    # CVE-2019-9494 https://w1.fi/security/2019-1
+    # CVE-2019-9495 https://w1.fi/security/2019-2
+    # CVE-2019-9496 https://w1.fi/security/2019-3
+    # CVE-2019-9497 https://w1.fi/security/2019-4
+    # CVE-2019-9498 https://w1.fi/security/2019-4
+    # CVE-2019-9499 https://w1.fi/security/2019-4
+    (fetchurl {
+      url = "https://w1.fi/security/2019-1/0001-OpenSSL-Use-constant-time-operations-for-private-big.patch";
+      sha256 = "0rqc7snk11cinvrik23ajv0dqdlsyv6qlgpqrf55gaf5y5ard5w6";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-1/0002-Add-helper-functions-for-constant-time-operations.patch";
+      sha256 = "0w8fx695nw4iq3v39f6b5h0ahixd66w5mjd8ps84qd6cbqbxlqsn";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-1/0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch";
+      sha256 = "0r3za7x96k7br8np4xg8ndcqm5b41bmrq8s0ax4x8lbkb2gvr9p5";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-2/0004-EAP-pwd-Use-constant-time-and-memory-access-for-find.patch";
+      sha256 = "0aircjl85s68njkgr2b9hq7hvzla0hykqrd3i7zpbwdsxcmp4nxa";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-1/0005-SAE-Minimize-timing-differences-in-PWE-derivation.patch";
+      sha256 = "08xlkpwysssm8hy3n65nk5g70gd07c5q4657lw1q7y0qn6pfxnds";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-1/0006-SAE-Avoid-branches-in-is_quadratic_residue_blind.patch";
+      sha256 = "0h2vw1k4lrwzkxgwz1c5frz6vjx63fv6m1b8v1xggxjjyr8f8yxf";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-1/0007-SAE-Mask-timing-of-MODP-groups-22-23-24.patch";
+      sha256 = "02abzhy5fl1cwyl6b10sz1msfb3f2fdpdyr03l0aqn6ahz3k3dw6";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-1/0008-SAE-Use-const_time-selection-for-PWE-in-FFC.patch";
+      sha256 = "1zpds6q9rpgbr7mba7xk39wdpcdikxmqhiz2v8c4i8qpa800awzz";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-1/0009-SAE-Use-constant-time-operations-in-sae_test_pwd_see.patch";
+      sha256 = "196al51k4hg9y67rr1sq96d2ig07wkdka8gqa0rpdzk01v65fw3h";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-3/0010-SAE-Fix-confirm-message-validation-in-error-cases.patch";
+      sha256 = "1ahbwz8lybp7kchrqn06b54dch2flziyyas1nny78dpymd7sxn42";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-4/0011-EAP-pwd-server-Verify-received-scalar-and-element.patch";
+      sha256 = "0fqf3i88w6ca99k3fkv5rnrsbsyj4ixgdniwwrxrh0abmn96v3gz";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-4/0012-EAP-pwd-server-Detect-reflection-attacks.patch";
+      sha256 = "1k32804nang2grlmizbhxac3j9s2qnaq29pr6p0a1s8hm3jz9sym";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-4/0013-EAP-pwd-client-Verify-received-scalar-and-element.patch";
+      sha256 = "1y1fzmpigd0kdnzdmwb1czkwiz592yfsa9lsnsh28fzhk1j6amki";
+    })
+    (fetchurl {
+      url = "https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch";
+      sha256 = "0rhw5jh37rpbcyjy6cnj01j5sk3n091g0y8g57ddly9axia6i4k9";
+    })
     (fetchpatch {
       name = "build-fix.patch";
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-wireless/wpa_supplicant/files/wpa_supplicant-2.7-fix-undefined-remove-ie.patch?id=e0288112138a70a8acc3ae0196772fd7ccb677ce";
