@@ -5,7 +5,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "mpd2";
+  pname = "python-mpd2";
   version = "0.5.5";
 
   src = fetchPypi {
