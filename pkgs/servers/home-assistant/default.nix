@@ -28,28 +28,20 @@ let
       "10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69")
     (mkOverride "bcrypt" "3.1.6"
       "44636759d222baa62806bbceb20e96f75a015a6381690d1bc2eda91c01ec02ea")
-    (self: super: {
-      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.4";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176";
-        };
-        doCheck = false; # https://github.com/jpadilla/pyjwt/issues/382
-      });
-    })
-    (mkOverride "cryptography" "2.5"
-      "00c4d7gvsymlaw0r13zrm32dcnarmpayjyrh65yymlmr6mrbcij9")
-    (mkOverride "cryptography_vectors" "2.5" # required by cryptography==2.5
-      "15qfl3pnw2f11r0z0zhwl56f6pb60ysav8fxmpnz5p80cfwljdik")
-    (mkOverride "python-slugify" "1.2.6"
-      "7723daf30996db26573176bddcdf5fcb98f66dc70df05c9cb29f2c79b8193245")
+    (mkOverride "pyjwt" "1.7.1"
+      "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96")
+    (mkOverride "cryptography" "2.6.1"
+      "26c821cbeb683facb966045e2064303029d572a87ee69ca5a1bf54bf55f93ca6")
+    (mkOverride "cryptography_vectors" "2.6.1" # required by cryptography==2.6.1
+      "03f38115dccb266dd96538f94067442a877932c2322661bdc5bf2502c76658af")
+    (mkOverride "python-slugify" "3.0.2"
+      "57163ffb345c7e26063435a27add1feae67fa821f1ef4b2f292c25847575d758")
     (mkOverride "pyyaml" "3.13"
       "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf")
     (mkOverride "requests" "2.21.0"
       "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e")
-    (mkOverride "ruamel_yaml" "0.15.89"
-      "86d034aa9e2ab3eacc5f75f5cd6a469a2af533b6d9e60ea92edbba540d21b9b7")
+    (mkOverride "ruamel_yaml" "0.15.91"
+      "692f03ed24c8c1d9fa9fd4c045f7ba1c26f1e96edb8bfb4d54854ba26bc02319")
     (mkOverride "voluptuous" "0.11.5"
       "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
     (mkOverride "voluptuous-serialize" "2.1.0"
@@ -67,14 +59,13 @@ let
     # required by home-assistant-frontend
     (self: super: {
       user-agents = super.user-agents.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.0";
+        version = "2.0.0";
         src = fetchFromGitHub {
           owner = "selwin";
           repo = "python-user-agents";
           rev = "v${version}";
-          sha256 = "14kxd780zhp8718xr1z63xffaj3bvxgr4pldh9sv943m4hvi0gw5";
+          sha256 = "0ix2yajqdnfj433j50dls90mkmqz8m4fiywxg097zwkkc95wm8s4";
         };
-        doCheck = false; # can be dropped for 2.0
       });
     })
 
@@ -118,7 +109,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.91.4";
+  hassVersion = "0.92.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -133,7 +124,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "195pif8lz0qxjsannpi39gxphfb6dkj9lkpah0vjw0pgx753sflv";
+    sha256 = "10kqfj7gi8w0d9jalb4i2w4ifla8jkllymjav74abc4b30y08vmw";
   };
 
   propagatedBuildInputs = [
@@ -145,16 +136,17 @@ in with py.pkgs; buildPythonApplication rec {
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
-    asynctest pytest pytest-aiohttp requests-mock pydispatcher
+    asynctest pytest pytest-aiohttp requests-mock pydispatcher aiohue
   ];
 
   checkPhase = ''
     # The components' dependencies are not included, so they cannot be tested
-    py.test --ignore tests/components
+    # test_webhook_create_cloudhook imports hass_nabucasa and is thus excluded
+    py.test --ignore tests/components -k "not test_webhook_create_cloudhook"
     # Some basic components should be tested however
     py.test \
       tests/components/{api,config,configurator,demo,discovery,frontend,group,history,history_graph} \
-      tests/components/{homeassistant,http,introduction,logger,script,shell_command,system_log,websocket_api}
+      tests/components/{homeassistant,http,logger,script,shell_command,system_log,websocket_api}
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
