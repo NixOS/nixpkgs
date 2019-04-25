@@ -435,6 +435,7 @@ stdenv.mkDerivation ({
       stdenv.lib.platforms.freebsd ++
       stdenv.lib.platforms.illumos ++
       stdenv.lib.platforms.darwin;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }
 

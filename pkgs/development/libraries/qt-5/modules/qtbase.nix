@@ -375,6 +375,7 @@ stdenv.mkDerivation {
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin && (compareVersion "5.9.0" < 0);
   };
 
 }

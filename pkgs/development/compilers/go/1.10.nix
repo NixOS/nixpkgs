@@ -145,8 +145,6 @@ stdenv.mkDerivation rec {
   # Hopefully avoids test timeouts on Hydra
   GO_TEST_TIMEOUT_SCALE = 3;
 
-  doCheck = !stdenv.isDarwin;
-
   # The go build actually checks for CC=*/clang and does something different, so we don't
   # just want the generic `cc` here.
   CC = if stdenv.isDarwin then "clang" else "cc";
@@ -184,5 +182,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ cstrahan orivej velovix mic92 ];
     platforms = platforms.linux ++ platforms.darwin;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }
