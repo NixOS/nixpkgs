@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , click
 , mock
 , pytest
@@ -19,8 +20,8 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    click mock pytest futures
-  ];
+    click mock pytest
+  ] ++ lib.optionals (!isPy3k) [ futures ];
 
   propagatedBuildInputs = [
     google_auth requests_oauthlib
