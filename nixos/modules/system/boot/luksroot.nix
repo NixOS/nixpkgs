@@ -87,6 +87,9 @@ let
     mkdir -p /crypt-ramfs
     mount -t ramfs none /crypt-ramfs
 
+    # Cryptsetup locking directory
+    mkdir -p /run/cryptsetup
+
     # For Yubikey salt storage
     mkdir -p /crypt-storage
 
