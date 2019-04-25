@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, gobject-introspection }:
+{ stdenv, fetchurl, pkgconfig, gettext, glib, gobject-introspection, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-menus";
@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext ];
   buildInputs = [ glib gobject-introspection ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
     homepage = https://www.gnome.org;

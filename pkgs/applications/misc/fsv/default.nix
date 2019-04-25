@@ -4,10 +4,10 @@
 
 let
   gtkglarea = stdenv.mkDerivation rec {
-    name    = "gtkglarea-${version}";
+    pname    = "gtkglarea";
     version = "2.1.0";
     src = fetchurl {
-      url    = "mirror://gnome/sources/gtkglarea/2.1/${name}.tar.xz";
+      url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
       sha256 = "1pl2vdj6l64j864ilhkq1bcggb3hrlxjwk5m029i7xfjfxc587lf";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -16,13 +16,13 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name    = "fsv-${version}";
+  pname   = "fsv";
   version = "0.9-1";
 
   src = fetchFromGitHub {
     owner  = "mcuelenaere"; 
     repo   = "fsv";
-    rev    = name;
+    rev    = "${pname}-${version}";
     sha256 = "0n09jd7yqj18mx6zqbg7kab4idg5llr15g6avafj74fpg1h7iimj";
   };
 

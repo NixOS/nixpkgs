@@ -1,12 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, glibmm, perl }:
+{ stdenv, fetchurl, pkgconfig, libxml2, glibmm, perl, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "libxml++-${maj_ver}.${min_ver}";
-  maj_ver = "2.40";
-  min_ver = "1";
+  pname = "libxml++";
+  version = "2.40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libxml++/${maj_ver}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1sb3akryklvh2v6m6dihdnbpf1lkx441v972q9hlz1sq6bfspm2a";
   };
 
@@ -15,6 +14,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig perl ];
 
   propagatedBuildInputs = [ libxml2 glibmm ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = http://libxmlplusplus.sourceforge.net/;

@@ -4,14 +4,12 @@
   libchamplain, librsvg, libwebp, json-glib, webkitgtk, lcms2, bison,
   flex, wrapGAppsHook, shared-mime-info }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gthumb";
   version = "3.6.2";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0rjb0bsjhn7nyl5jyjgrypvr6qdr9dc2g586j3lzan96a2vnpgy9";
   };
 

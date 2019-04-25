@@ -1,14 +1,14 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python3, libxml2Python, libxslt, which
-, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, gettext, itstool
+, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, gettext, itstool, gnome3
 , withDblatex ? false, dblatex
 }:
 
 stdenv.mkDerivation rec {
-  name = "gtk-doc-${version}";
+  pname = "gtk-doc";
   version = "1.30";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk-doc/${version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "17h6nwhis66z4dxjrc833wvfl6pqjp81yfx3fq6x7k1qp2749xm4";
   };
 
@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
   passthru = {
     # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch
     respect_xml_catalog_files_var_patch = ./respect-xml-catalog-files-var.patch;
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
   };
 
   meta = with stdenv.lib; {
