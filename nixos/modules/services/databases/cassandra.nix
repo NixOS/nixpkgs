@@ -229,11 +229,11 @@ in {
       example = literalExample "null";
       description = ''
           Set the interval how often full repairs are run, i.e.
-          `nodetool repair --full` is executed. See
+          <literal>nodetool repair --full</literal> is executed. See
           https://cassandra.apache.org/doc/latest/operating/repair.html
           for more information.
 
-          Set to `null` to disable full repairs.
+          Set to <literal>null</literal> to disable full repairs.
         '';
     };
     fullRepairOptions = mkOption {
@@ -250,11 +250,11 @@ in {
       example = literalExample "null";
       description = ''
           Set the interval how often incremental repairs are run, i.e.
-          `nodetool repair` is executed. See
+          <literal>nodetool repair<literal> is executed. See
           https://cassandra.apache.org/doc/latest/operating/repair.html
           for more information.
 
-          Set to `null` to disable incremental repairs.
+          Set to <literal>null</literal> to disable incremental repairs.
         '';
     };
     incrementalRepairOptions = mkOption {
@@ -342,6 +342,8 @@ in {
       description = ''
         Roles that are allowed to access the JMX (e.g. nodetool)
         BEWARE: The passwords will be stored world readable in the nix-store.
+                It's recommended to use your own protected file using
+                <literal>jmxRolesFile</literal>
 
         Doesn't work in versions older than 3.11 because they don't like that
         it's world readable.
@@ -388,7 +390,8 @@ in {
         { assertion = cfg.remoteJmx -> cfg.jmxRolesFile != null;
           message = ''
             If you want JMX available remotely you need to set a password using
-            `jmxRoles` or `jmxRolesFile` if using Cassandra older than v3.11.
+            <literal>jmxRoles</literal> or <literal>jmxRolesFile</literal> if
+            using Cassandra older than v3.11.
           '';
         }
       ];
