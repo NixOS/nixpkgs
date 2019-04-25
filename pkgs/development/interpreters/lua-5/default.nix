@@ -28,6 +28,12 @@ in rec {
       cat ${./lua-5.3-dso.make} >> src/Makefile
       sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile
     '';
+
+    postBuild = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+      set -x
+      ( cd src; make liblua.so $makeFlags "''${makeFlagsArray[@]}" )
+      set +x
+    '';
   });
 
   lua5_2 = callPackage ./interpreter.nix {
