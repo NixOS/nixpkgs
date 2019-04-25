@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, buildOcaml, fetchurl
 , ocaml, findlib, pkgconfig, perl
 , gmp
 }:
@@ -16,20 +16,25 @@ let source =
   };
 in
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-zarith-${version}";
+buildOcaml rec {
+  name = "zarith";
   inherit (source) version;
   src = fetchurl { inherit (source) url sha256; };
+
+  minimumSupportedOcamlVersion = "3.12.1";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ocaml findlib perl ];
   propagatedBuildInputs = [ gmp ];
 
+  # needed so setup-hook.sh sets CAML_LD_LIBRARY_PATH for dllzarith.so
+  hasSharedObjects = true;
+
   patchPhase = "patchShebangs ./z_pp.pl";
   configurePhase = ''
     ./configure -installdir $out/lib/ocaml/${ocaml.version}/site-lib
   '';
-  createFindlibDestdir = true;
+  preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib";
 
   meta = with stdenv.lib; {
     description = "Fast, arbitrary precision OCaml integers";
