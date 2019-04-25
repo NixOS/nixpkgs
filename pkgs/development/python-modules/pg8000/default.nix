@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , pytz
 , six
 }:
@@ -8,6 +9,8 @@
 buildPythonPackage rec {
   pname = "pg8000";
   version = "1.13.1";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
