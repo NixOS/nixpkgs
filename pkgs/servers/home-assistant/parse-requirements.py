@@ -1,28 +1,30 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp astral async-timeout attrs certifi jinja2 pyjwt cryptography pip pytz pyyaml requests ruamel_yaml voluptuous python-slugify ])"
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ attrs ])
 #
 # This script downloads Home Assistant's source tarball.
-# Inside the homeassistant/components directory, each component has an associated .py file,
-# specifying required packages and other components it depends on:
+# Inside the homeassistant/components directory, each integration has an associated manifest.json,
+# specifying required packages and other integrations it depends on:
 #
-# REQUIREMENTS = [ 'package==1.2.3' ]
-# DEPENDENCIES = [ 'component' ]
+#     {
+#       "requirements": [ "package==1.2.3" ],
+#       "dependencies": [ "component" ]
+#     }
 #
-# By parsing the files, a dictionary mapping component to requirements and dependencies is created.
+# By parsing the files, a dictionary mapping integrations to requirements and dependencies is created.
 # For all of these requirements and the dependencies' requirements,
-# Nixpkgs' python3Packages are searched for appropriate names.
-# Then, a Nix attribute set mapping component name to dependencies is created.
+# nixpkgs' python3Packages are searched for appropriate names.
+# Then, a Nix attribute set mapping integration name to dependencies is created.
 
-from urllib.request import urlopen
-import tempfile
 from io import BytesIO
-import tarfile
-import importlib
-import subprocess
-import os
-import sys
 import json
+import pathlib
+import os
 import re
+import subprocess
+import sys
+import tempfile
+import tarfile
+from urllib.request import urlopen
 
 COMPONENT_PREFIX = 'homeassistant.components'
 PKG_SET = 'python3Packages'
@@ -43,22 +45,17 @@ def get_version():
 def parse_components(version='master'):
     components = {}
     with tempfile.TemporaryDirectory() as tmp:
-        with urlopen('https://github.com/home-assistant/home-assistant/archive/{}.tar.gz'.format(version)) as response:
+        with urlopen(f'https://github.com/home-assistant/home-assistant/archive/{version}.tar.gz') as response:
             tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp)
         # Use part of a script from the Home Assistant codebase
-        sys.path.append(tmp + '/home-assistant-{}'.format(version))
-        from script.gen_requirements_all import explore_module
-        for package in explore_module(COMPONENT_PREFIX, True):
-            # Remove 'homeassistant.components.' prefix
-            component = package[len(COMPONENT_PREFIX + '.'):]
-            try:
-                module = importlib.import_module(package)
-                components[component] = {}
-                components[component]['requirements'] = getattr(module, 'REQUIREMENTS', [])
-                components[component]['dependencies'] = getattr(module, 'DEPENDENCIES', [])
-            # If there is an ImportError, the imported file is not the main file of the component
-            except ImportError:
-                continue
+        sys.path.append(os.path.join(tmp, f'home-assistant-{version}'))
+        from script.hassfest.model import Integration
+        integrations = Integration.load_dir(pathlib.Path(
+            os.path.join(tmp, f'home-assistant-{version}', 'homeassistant/components')
+        ))
+        for domain in sorted(integrations):
+            integration = integrations[domain]
+            components[domain] = integration.manifest
     return components
 
 # Recursively get the requirements of a component and its dependencies
