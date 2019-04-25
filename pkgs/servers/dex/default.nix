@@ -21,6 +21,11 @@ buildGoPackage rec {
     "-ldflags=-w -X ${goPackagePath}/version.Version=${src.rev}"
   ];
 
+  postInstall = ''
+    mkdir -p $out/share
+    cp -r go/src/${goPackagePath}/web $out/share/web
+  '';
+
   meta = {
     description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";
     license = lib.licenses.asl20;
