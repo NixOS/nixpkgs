@@ -2,7 +2,7 @@
 , gtk3, keybinder3, libnotify, libutempter, vte }:
 
 let
-  version = "3.4.0";
+  version = "3.5.0";
 in python3.pkgs.buildPythonApplication rec {
   name = "guake-${version}";
   format = "other";
@@ -11,7 +11,7 @@ in python3.pkgs.buildPythonApplication rec {
     owner = "Guake";
     repo = "guake";
     rev = version;
-    sha256 = "1j38z968ha8ij6wrgbwvr8ad930nvhybm9g7pf4s4zv6d3vln0vm";
+    sha256 = "0fz0gciw5fpxrp6yyji27l7q8c0r9ljsq6vw584mr70bcl1gzjqx";
   };
 
   # Strict deps breaks guake
@@ -28,12 +28,6 @@ in python3.pkgs.buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8"; # fixes weird encoding error, see https://github.com/NixOS/nixpkgs/pull/38642#issuecomment-379727699
 
   PBR_VERSION = version; # pbr needs either .git directory, sdist, or env var
-
-  postPatch = ''
-    # unnecessary /usr/bin/env in Makefile
-    # https://github.com/Guake/guake/pull/1285
-    substituteInPlace "Makefile" --replace "/usr/bin/env python3" "python3"
-  '';
 
   makeFlags = [
     "prefix=$(out)"
