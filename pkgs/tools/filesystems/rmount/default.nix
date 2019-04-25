@@ -1,12 +1,13 @@
 { stdenv, nmap, jq, cifs-utils, sshfs, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name    = "rmount-${version}";
-  version = "1.0.1";
-  rev = "v${version}";
 
-  src = fetchFromGitHub {
-    inherit rev;
+  pname   = "rmount";
+  version = "1.0.1";
+  name    = "rmount-${version}";
+
+  src = fetchFromGitHub rec {
+    rev = "v${version}";
     owner="Luis-Hebendanz";
     repo="rmount";
     sha256 = "1wjmfvbsq3126z51f2ivj85cjmkrzdm2acqsiyqs57qga2g6w5p9";
