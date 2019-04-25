@@ -69,5 +69,14 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };
+
+  passthru = {
+    updateInfo = {
+      downloadPage = "mirror://gnome/sources/ekiga";
+    };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 }
 

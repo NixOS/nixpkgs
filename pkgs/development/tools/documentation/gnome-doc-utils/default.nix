@@ -30,8 +30,8 @@ python2Packages.buildPythonApplication rec {
   };
 
   meta = with stdenv.lib; {
-    description = "Collection of documentation utilities for the GNOME project";
-    homepage = "https://gitlab.gnome.org/GNOME/gnome-doc-utils";
+    description = "Collection of documentation utilities for the Gnome project";
+    homepage = https://gitlab.gnome.org/GNOME/gnome-doc-utils;
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.all;
   };

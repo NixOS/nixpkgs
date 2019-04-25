@@ -15,11 +15,10 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = { 
     description = "Canvas widget for GTK+ based on the the Cairo 2D library";
     homepage = "https://wiki.gnome.org/Projects/GooCanvas";
     license = licenses.lgpl2;
