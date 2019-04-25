@@ -1,13 +1,10 @@
 { stdenv, fetchurl, polkit, gtk3, pkgconfig, intltool }:
-
-let
+stdenv.mkDerivation rec {
+  pname = "polkit-gnome";
   version = "0.105";
 
-in stdenv.mkDerivation rec {
-  name = "polkit-gnome-${version}";
-
   src = fetchurl {
-    url = "mirror://gnome/sources/polkit-gnome/${version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/polkit-gnome/${version}/${pname}-${version}.tar.xz";
     sha256 = "0sckmcbxyj6sbrnfc5p5lnw27ccghsid6v6wxq09mgxqcd4lk10p";
   };
 
@@ -20,7 +17,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/etc/xdg/autostart
     substituteAll ${./polkit-gnome-authentication-agent-1.desktop} $out/etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop
-    '';
+  '';
 
   meta = {
     homepage = https://hal.freedesktop.org/docs/PolicyKit/;
