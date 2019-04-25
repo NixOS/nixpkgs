@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, zip, gettext, perl
 , wxGTK31, libXext, libXi, libXt, libXtst, xercesc
-, libqrencode, libuuid, libyubikey, yubikey-personalization
+, qrencode, libuuid, libyubikey, yubikey-personalization
 , curl, openssl
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libXext libXi libXt libXtst wxGTK31
-    curl libqrencode libuuid openssl xercesc
+    curl qrencode libuuid openssl xercesc
     libyubikey yubikey-personalization
   ];
 
