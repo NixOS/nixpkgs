@@ -1626,6 +1626,11 @@ in
 
   long-shebang = callPackage ../misc/long-shebang {};
 
+  lorri = callPackage ../tools/misc/lorri {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   numatop = callPackage ../os-specific/linux/numatop { };
 
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
