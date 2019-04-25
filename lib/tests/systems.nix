@@ -12,7 +12,7 @@ let
     expected = lib.sort lib.lessThan y;
   };
 in with lib.systems.doubles; lib.runTests {
-  testall = mseteq all (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ windows);
+  testall = mseteq all (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ wasi ++ windows);
 
   testarm = mseteq arm [ "armv5tel-linux" "armv6l-linux" "armv7l-linux" ];
   testi686 = mseteq i686 [ "i686-linux" "i686-freebsd" "i686-netbsd" "i686-openbsd" "i686-cygwin" "i686-windows" ];
