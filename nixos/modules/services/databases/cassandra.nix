@@ -19,7 +19,7 @@ let
        data_file_directories = [ "${cfg.homeDir}/data" ];
        commitlog_directory = "${cfg.homeDir}/commitlog";
        saved_caches_directory = "${cfg.homeDir}/saved_caches";
-     } // (if builtins.compareVersions cfg.package.version "3" >= 0
+     } // (if lib.versionAtLeast cfg.package.version "3"
              then { hints_directory = "${cfg.homeDir}/hints"; }
              else {})
     );
@@ -52,13 +52,13 @@ let
         sed -i '/-Dcom.sun.management.jmxremote.password.file=\/etc\/cassandra\/jmxremote.password/d' "$out/cassandra-env.sh"
       '';
     };
-  jmxPasswordFile = builtins.foldl'
+  defaultJmxRolesFile = builtins.foldl'
      (left: right: left + right) ""
      (map (role: "${role.username} ${role.password}") cfg.jmxRoles);
   fullJvmOptions = cfg.jvmOpts
     ++ lib.optionals (cfg.jmxRoles != []) [
       "-Dcom.sun.management.jmxremote.authenticate=true"
-      "-Dcom.sun.management.jmxremote.password.file=${pkgs.writeText "jmxremote.password" jmxPasswordFile}"
+      "-Dcom.sun.management.jmxremote.password.file=${cfg.jmxRolesFile}"
     ]
     ++ lib.optionals cfg.remoteJmx [
       "-Djava.rmi.server.hostname=${cfg.rpcAddress}"
@@ -341,6 +341,10 @@ in {
       default = [];
       description = ''
         Roles that are allowed to access the JMX (e.g. nodetool)
+        BEWARE: The passwords will be stored world readable in the nix-store.
+
+        Doesn't work in versions older than 3.11 because they don't like that
+        it's world readable.
       '';
       type = types.listOf (types.submodule {
         options = {
@@ -355,6 +359,19 @@ in {
         };
       });
     };
+    jmxRolesFile = mkOption {
+      type = types.nullOr types.path;
+      default = if (lib.versionAtLeast cfg.package.version "3.11")
+                then pkgs.writeText "jmx-roles-file" defaultJmxRolesFile
+                else null;
+      example = "/var/lib/cassandra/jmx.password";
+      description = ''
+        Specify your own jmx roles file.
+
+        Make sure the permissions forbid "others" from reading the file if
+        you're using Cassandra below version 3.11.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -368,8 +385,11 @@ in {
         { assertion = (cfg.maxHeapSize == null) == (cfg.heapNewSize == null);
           message = "If you set either of maxHeapSize or heapNewSize you have to set both";
         }
-        { assertion = cfg.remoteJmx -> (cfg.jmxRoles != {});
-          message = "If you want JMX available remotely you need to set a password.";
+        { assertion = cfg.remoteJmx -> cfg.jmxRolesFile != null;
+          message = ''
+            If you want JMX available remotely you need to set a password using
+            `jmxRoles` or `jmxRolesFile` if using Cassandra older than v3.11.
+          '';
         }
       ];
     users = mkIf (cfg.user == defaultUser) {
