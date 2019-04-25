@@ -4,23 +4,25 @@ with lib;
 
 let
   cfg = config.services.nginx;
+  certs = config.security.acme.certs;
+  vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
+  acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME && vhostConfig.useACMEHost == null) vhostsConfigs;
   virtualHosts = mapAttrs (vhostName: vhostConfig:
     let
       serverName = if vhostConfig.serverName != null
         then vhostConfig.serverName
         else vhostName;
-      acmeDirectory = config.security.acme.directory;
     in
     vhostConfig // {
       inherit serverName;
     } // (optionalAttrs vhostConfig.enableACME {
-      sslCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
-      sslCertificateKey = "${acmeDirectory}/${serverName}/key.pem";
-      sslTrustedCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
+      sslCertificate = "${certs.${serverName}.directory}/fullchain.pem";
+      sslCertificateKey = "${certs.${serverName}.directory}/key.pem";
+      sslTrustedCertificate = "${certs.${serverName}.directory}/full.pem";
     }) // (optionalAttrs (vhostConfig.useACMEHost != null) {
-      sslCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
-      sslCertificateKey = "${acmeDirectory}/${vhostConfig.useACMEHost}/key.pem";
-      sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
+      sslCertificate = "${certs.${vhostConfig.useACMEHost}.directory}/fullchain.pem";
+      sslCertificateKey = "${certs.${vhostConfig.useACMEHost}.directory}/key.pem";
+      sslTrustedCertificate = "${certs.${vhostConfig.useACMEHost}.directory}/fullchain.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -646,8 +648,9 @@ in
 
     systemd.services.nginx = {
       description = "Nginx Web Server";
-      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      wants = concatLists (map (vhostConfig: ["acme-${vhostConfig.serverName}.service" "acme-selfsigned-${vhostConfig.serverName}.service"]) acmeEnabledVhosts);
+      after = [ "network.target" ] ++ map (vhostConfig: "acme-selfsigned-${vhostConfig.serverName}.service") acmeEnabledVhosts;
       stopIfChanged = false;
       preStart =
         ''
@@ -680,8 +683,6 @@ in
 
     security.acme.certs = filterAttrs (n: v: v != {}) (
       let
-        vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
-        acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME && vhostConfig.useACMEHost == null) vhostsConfigs;
         acmePairs = map (vhostConfig: { name = vhostConfig.serverName; value = {
             user = cfg.user;
             group = lib.mkDefault cfg.group;

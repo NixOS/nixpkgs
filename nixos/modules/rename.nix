@@ -256,6 +256,11 @@ with lib;
 
     # binfmt
     (mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
+    
+    # ACME
+    (mkRemovedOptionModule [ "security" "acme" "directory"] "ACME Directory is now hardcoded to /var/lib/acme and its permisisons are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
+    (mkRemovedOptionModule [ "security" "acme" "preDelay"] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
+    (mkRemovedOptionModule [ "security" "acme" "activationDelay"] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
 
     # KSM
     (mkRenamedOptionModule [ "hardware" "enableKSM" ] [ "hardware" "ksm" "enable" ])

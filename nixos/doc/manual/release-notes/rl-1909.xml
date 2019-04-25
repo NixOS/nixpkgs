@@ -318,7 +318,28 @@
       <listitem><para><link linkend="opt-services.strongswan-swanctl.enable"><literal>services.strongswan-swanctl</literal></link></para></listitem>
       <listitem><para><link linkend="opt-services.httpd.enable"><literal>services.httpd</literal></link></para></listitem>
      </itemizedlist>
-    </para>
+   </para>
+   <listitem>
+     <para>
+       The <option>security.acme.directory</option> option has been replaced by a read-only <option>security.acme.certs.&lt;cert&gt;.directory</option> option for each certificate you define. This will be
+       a subdirectory of <literal>/var/lib/acme</literal>. You can use this read-only option to figure out where the certificates are stored for a specific certificate. For example,
+       the <option>services.nginx.virtualhosts.&lt;name&gt;.enableACME</option>  option will use this directory option to find the certs for the virtual host.
+     </para>
+     <para>
+       <option>security.acme.preDelay</option> and <option>security.acme.activationDelay</option> options have been removed. To execute a service before certificates
+       are provisioned or renewed add a <literal>RequiredBy=acme-${cert}.service</literal> to any service.
+     </para>
+     <para>
+       Furthermore, the acme module will not automatically add a dependency on <literal>lighttpd.service</literal> anymore. If you are using certficates provided by letsencrypt
+       for lighttpd, then you should depend on the certificate service <literal>acme-${cert}.service></literal> manually.
+     </para>
+     <para>
+       For nginx, the dependencies are still automatically managed when <option>services.nginx.virtualhosts.&lt;name&gt;.enableACME</option>       is enabled just like before. What changed is that nginx now directly depends on the specific certificates that it needs,
+       instead of depending on the catch-all <literal>acme-certificates.target</literal>.  This target unit was also removed from the codebase.
+       This will mean nginx will no longer depend on certificates it isn't explicitly managing and fixes a bug with certificate renewal
+       ordering racing with nginx restarting which could lead to nginx getting in a broken state as described at 
+        <link xlink:href="https://github.com/NixOS/nixpkgs/issues/60180">NixOS/nixpkgs#60180</link>.
+     </para>
    </listitem>
   </itemizedlist>
  </section>
