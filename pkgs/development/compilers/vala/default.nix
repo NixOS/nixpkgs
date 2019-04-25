@@ -4,14 +4,12 @@
 
 let
   generic = lib.makeOverridable ({
-    major, minor, sha256,
+    version, sha256,
     extraNativeBuildInputs ? [],
     extraBuildInputs ? [],
     withGraphviz ? false
   }:
   let
-    atLeast = lib.versionAtLeast "${major}.${minor}";
-
     # Patches from the openembedded-core project to build vala without graphviz
     # support. We need to apply an additional patch to allow building when the
     # header file isn't available at all, but that patch (./gvc-compat.patch)
@@ -45,21 +43,21 @@ let
         #     0.42.4: https://github.com/openembedded/openembedded-core/raw/f2b4f9ec6f44dced7f88df849cca68961419eeb8/meta/recipes-devtools/vala/vala/disable-graphviz.patch
         "0.44" = ./disable-graphviz-0.44.1.patch;
 
-      }.${major} or (throw "no graphviz patch for this version of vala");
+      }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
-    disableGraphviz = atLeast "0.38" && !withGraphviz;
+    disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
 
   in stdenv.mkDerivation rec {
-    name = "vala-${version}";
-    version = "${major}.${minor}";
+    pname = "vala";
+    inherit version;
 
     setupHook = substituteAll {
       src = ./setup-hook.sh;
-      apiVersion = major;
+      apiVersion = lib.versions.majorMinor version;
     };
 
     src = fetchurl {
-      url = "mirror://gnome/sources/vala/${major}/${name}.tar.xz";
+      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
       inherit sha256;
     };
 
@@ -78,18 +76,26 @@ let
 
     nativeBuildInputs = [
       pkgconfig flex bison libxslt
-    ] ++ lib.optional (stdenv.isDarwin && (atLeast "0.38")) expat
+    ] ++ lib.optional (stdenv.isDarwin && (lib.versionAtLeast version "0.38")) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
       ++ extraNativeBuildInputs;
 
     buildInputs = [
       glib libiconv libintl
-    ] ++ lib.optional (atLeast "0.38" && withGraphviz) graphviz
+    ] ++ lib.optional (lib.versionAtLeast version "0.38" && withGraphviz) graphviz
       ++ extraBuildInputs;
 
     enableParallelBuilding = true;
 
     doCheck = false; # fails, requires dbus daemon
+
+    # Wait for PR #59372
+    #passthru = {
+    #  updateScript = gnome3.updateScript {
+    #    attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+    #    packageName = pname;
+    #  };
+    #};
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
@@ -102,33 +108,28 @@ let
 
 in rec {
   vala_0_36 = generic {
-    major = "0.36";
-    minor = "19";
+    version = "0.36.19";
     sha256 = "05si2f4zjvq0q3wqfh1wxdq20jy1xqxq2skqh8vfh2jyp355lwar";
   };
 
   vala_0_38 = generic {
-    major = "0.38";
-    minor = "10";
-    sha256 = "1rdwwqs973qv225v8b5izcgwvqn56jxgr4pa3wxxbliar3aww5sw";
+    version = "0.38.10";
+    sha256  = "1rdwwqs973qv225v8b5izcgwvqn56jxgr4pa3wxxbliar3aww5sw";
     extraNativeBuildInputs = [ autoconf ] ++ lib.optional stdenv.isDarwin libtool;
   };
 
   vala_0_40 = generic {
-    major = "0.40";
-    minor = "15";
+    version = "0.40.15";
     sha256 = "0mfayli159yyw6abjf6sgq41j54mr3nspg25b1kxhypcz0scjm19";
   };
 
   vala_0_42 = generic {
-    major = "0.42";
-    minor = "7";
+    version = "0.42.7";
     sha256 = "029ksbsdpl581wzy570kj4kkw8b4bizgh494c051zsvkwck55p83";
   };
 
   vala_0_44 = generic {
-    major = "0.44";
-    minor = "3";
+    version = "0.44.3";
     sha256 = "1sgas7z6y9r2mf4pxry3fx2awdnzn3vlg2sxd3hqpy2a90ib8lw5";
   };
 
