@@ -1,12 +1,13 @@
-import ./make-test.nix ({ pkgs, ...}:
+import ./make-test.nix ({ pkgs, lib, ... }:
 let
   # Change this to test a different version of Cassandra:
   testPackage = pkgs.cassandra;
   clusterName = "NixOS Automated-Test Cluster";
 
+  testRemoteAuth = lib.versionAtLeast testPackage.version "3.11";
   jmxRoles = [{ username = "me"; password = "password"; }];
+  jmxRolesFile = ./cassandra-jmx-roles;
   jmxAuthArgs = "-u ${(builtins.elemAt jmxRoles 0).username} -pw ${(builtins.elemAt jmxRoles 0).password}";
-  clusterName = "NixOS Test Cluster";
 
   # Would usually be assigned to 512M
   numMaxHeapSize = "400";
@@ -45,7 +46,7 @@ in
 
   nodes = {
     cass0 = nodeCfg "192.168.1.1" {};
-    cass1 = nodeCfg "192.168.1.2" { remoteJmx = true; inherit jmxRoles; };
+    cass1 = nodeCfg "192.168.1.2" (lib.optionalAttrs testRemoteAuth { inherit jmxRoles; remoteJmx = true; });
     cass2 = nodeCfg "192.168.1.3" { jvmOpts = [ "-Dcassandra.replace_address=cass1" ]; };
   };
 
@@ -82,6 +83,7 @@ in
       $cass1->waitUntilSucceeds("nodetool ${jmxAuthArgs} status | egrep -c '^UN' | grep 2");
       $cass0->succeed("nodetool status --resolve-ip | egrep '^UN[[:space:]]+cass1'");
     };
+  '' + lib.optionalString testRemoteAuth ''
     subtest "Remote authenticated jmx", sub {
       # Doesn't work if not enabled
       $cass0->waitUntilSucceeds("nc -z localhost 7199");
@@ -92,6 +94,7 @@ in
       $cass1->waitUntilSucceeds("nc -z localhost 7199");
       $cass0->succeed("nodetool -h 192.168.1.2 ${jmxAuthArgs} status");
     };
+  '' + ''
     subtest "Break and fix node", sub {
       $cass1->block;
       $cass0->waitUntilSucceeds("nodetool status --resolve-ip | egrep -c '^DN[[:space:]]+cass1'");
