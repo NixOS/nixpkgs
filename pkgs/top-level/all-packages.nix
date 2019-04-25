@@ -23280,6 +23280,8 @@ in
 
   ricty = callPackage ../data/fonts/ricty { };
 
+  rmount = callPackage ../tools/filesystems/rmount {};
+
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   run-scaled = callPackage ../tools/X11/run-scaled { };
