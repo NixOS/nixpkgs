@@ -1,10 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, characteristic
+, pythonOlder
+, cryptography
+, ipaddress
 , pyasn1
 , pyasn1-modules
-, pyopenssl
 , idna
 , attrs
 , pytest
@@ -12,18 +13,18 @@
 
 buildPythonPackage rec {
   pname = "service_identity";
-  version = "17.0.0";
+  version = "18.1.0";
 
   src = fetchFromGitHub {
     owner = "pyca";
     repo = pname;
     rev = version;
-    sha256 = "1fn332fci776m5a7jx8c1jgbm27160ip5qvv8p01c242ag6by5g0";
+    sha256 = "1aw475ksmd4vpl8cwfdcsw2v063nbhnnxpy633sb75iqp9aazhlx";
   };
 
   propagatedBuildInputs = [
-    characteristic pyasn1 pyasn1-modules pyopenssl idna attrs
-  ];
+    pyasn1 pyasn1-modules idna attrs cryptography
+  ] ++ lib.optionals (pythonOlder "3.3") [ ipaddress ];
 
   checkInputs = [ pytest ];
   checkPhase = "py.test";
