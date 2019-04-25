@@ -55,10 +55,11 @@ patchShebangs() {
                 # escape the escape chars so that sed doesn't interpret them
                 escapedInterpreterLine=$(echo "$newInterpreterLine" | sed 's|\\|\\\\|g')
                 # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
-                touch -r "$f" "$f.timestamp"
+                timestamp=$(mktemp)
+                touch -r "$f" "$timestamp"
                 sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
-                touch -r "$f.timestamp" "$f"
-                rm "$f.timestamp"
+                touch -r "$timestamp" "$f"
+                rm "$timestamp"
             fi
         fi
     done < <(find "$dir" -type f -perm -0100 -print0)
