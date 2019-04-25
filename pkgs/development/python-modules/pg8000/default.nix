@@ -2,8 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
-, pytz
-, six
+, passlib
 }:
 
 buildPythonPackage rec {
@@ -17,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "2208c7aaffe8d61f5c4ccbefeb74ba033003899e64aee37c0eb98aadae8b9c6b";
   };
 
-  propagatedBuildInputs = [ pytz six ];
+  propagatedBuildInputs = [ passlib ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/tlocke/pg8000;
