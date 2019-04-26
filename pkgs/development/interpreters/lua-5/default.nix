@@ -29,9 +29,10 @@ in rec {
       sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile
     '';
 
+    # a grep a
     postBuild = stdenv.lib.optionalString (!stdenv.isDarwin) ''
       set -x
-      ( cd src; make liblua.so $makeFlags "''${makeFlagsArray[@]}" )
+      ( cd src; make $makeFlags "''${makeFlagsArray[@]}" liblua.so )
       set +x
     '';
   });
