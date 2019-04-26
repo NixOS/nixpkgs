@@ -15,7 +15,6 @@ buildPythonApplication rec {
     flake8
     invoke
     parver
-    pew
     pip
     requests
     virtualenv
