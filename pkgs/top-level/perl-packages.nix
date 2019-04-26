@@ -3370,6 +3370,19 @@ let
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
   };
 
+  CryptECB = buildPerlPackage {
+    pname = "Crypt-ECB";
+    version = "2.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AP/APPEL/Crypt-ECB-2.21.tar.gz";
+      sha256 = "890f8b3040220ea705ee5ca4f9bd23435a1779bc3ffa75533736e6c9c21d1015";
+    };
+    meta = with stdenv.lib; {
+      description = "Use block ciphers using ECB mode";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CryptEksblowfish = buildPerlModule {
     pname = "Crypt-Eksblowfish";
     version = "0.009";
