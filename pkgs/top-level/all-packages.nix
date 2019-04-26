@@ -2560,6 +2560,8 @@ in
 
   eid-mw = callPackage ../tools/security/eid-mw { };
 
+  epubcheck = callPackage ../tools/text/epubcheck { };
+
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   s-tar = callPackage ../tools/archivers/s-tar {};
