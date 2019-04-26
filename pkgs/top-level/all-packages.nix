@@ -4401,6 +4401,8 @@ in
 
   mimetic = callPackage ../development/libraries/mimetic { };
 
+  minetime = callPackage ../applications/office/minetime { };
+
   minio-client = callPackage ../tools/networking/minio-client {
     buildGoPackage = buildGo110Package;
   };
