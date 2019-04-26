@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "geogebra-${version}";
-  version = "5-0-472-0";
+  version = "5-0-535-0";
 
   preferLocalBuild = true;
 
