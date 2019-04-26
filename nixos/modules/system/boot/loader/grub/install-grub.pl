@@ -371,7 +371,6 @@ sub addEntry {
     # FIXME: $confName
 
     my $kernelParams =
-        "systemConfig=" . Cwd::abs_path($path) . " " .
         "init=" . Cwd::abs_path("$path/init") . " " .
         readFile("$path/kernel-params");
     my $xenParams = $xen && -e "$path/xen-params" ? readFile("$path/xen-params") : "";

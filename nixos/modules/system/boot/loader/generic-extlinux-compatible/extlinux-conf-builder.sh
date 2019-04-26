@@ -99,7 +99,7 @@ addEntry() {
     if [ -d "$dtbDir" ]; then
         echo "  FDTDIR ../nixos/$(basename $dtbs)"
     fi
-    echo "  APPEND systemConfig=$path init=$path/init $extraParams"
+    echo "  APPEND init=$path/init $extraParams"
 }
 
 tmpFile="$target/extlinux/extlinux.conf.tmp.$$"
