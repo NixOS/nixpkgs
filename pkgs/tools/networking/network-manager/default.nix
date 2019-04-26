@@ -87,7 +87,6 @@ in stdenv.mkDerivation rec {
 
   doCheck = false; # requires /sys, the net
 
-  enableParallelBuilding = true;
 
   postPatch = ''
     patchShebangs ./tools
