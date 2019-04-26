@@ -205,7 +205,7 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
   };
-};
+}
 ```
 
 What happens here? The function `buildPythonPackage` is called and as argument

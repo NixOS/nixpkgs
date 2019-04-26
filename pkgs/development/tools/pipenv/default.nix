@@ -15,15 +15,15 @@ buildPythonApplication rec {
     flake8
     invoke
     parver
-    pew
     pip
     requests
+    virtualenv
   ];
 
   doCheck = false;
 
   makeWrapperArgs = [
-    "--set PYTHONPATH \"$PYTHONPATH\""
+    "--set PYTHONPATH \".:$PYTHONPATH\""
     "--set PIP_IGNORE_INSTALLED 1"
   ];
 

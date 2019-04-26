@@ -46,7 +46,7 @@ default-package-overrides:
   # Newer versions don't work in LTS-12.x
   - alsa-mixer < 0.3
   - cassava-megaparsec < 2
-  # LTS Haskell 13.17
+  # LTS Haskell 13.18
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -239,7 +239,7 @@ default-package-overrides:
   - avers ==0.0.17.1
   - avers-api ==0.1.0
   - avers-server ==0.1.0.1
-  - avro ==0.4.4.1
+  - avro ==0.4.4.2
   - avwx ==0.3.0.2
   - axel ==0.0.9
   - backprop ==0.2.6.2
@@ -382,6 +382,8 @@ default-package-overrides:
   - ChannelT ==0.0.0.7
   - charset ==0.3.7.1
   - charsetdetect-ae ==1.1.0.4
+  - Chart ==1.9.1
+  - Chart-diagrams ==1.9.2
   - chaselev-deque ==0.5.0.5
   - cheapskate ==0.1.1.1
   - cheapskate-highlight ==0.1.0.0
@@ -588,6 +590,7 @@ default-package-overrides:
   - diagrams-contrib ==1.4.3
   - diagrams-core ==1.4.1.1
   - diagrams-lib ==1.4.2.3
+  - diagrams-postscript ==1.4.1
   - diagrams-rasterific ==1.4.1.1
   - diagrams-solve ==0.1.1
   - diagrams-svg ==1.4.2
@@ -815,7 +818,7 @@ default-package-overrides:
   - getopt-generics ==0.13.0.3
   - ghc-core ==0.5.6
   - ghc-exactprint ==0.5.8.2
-  - ghcid ==0.7.2
+  - ghcid ==0.7.4
   - ghci-hexcalc ==0.1.0.2
   - ghcjs-codemirror ==0.0.0.2
   - ghc-paths ==0.1.0.9
@@ -1043,6 +1046,7 @@ default-package-overrides:
   - http-common ==0.8.2.0
   - http-conduit ==2.3.7
   - http-date ==0.0.8
+  - http-directory ==0.1.1
   - httpd-shed ==0.4.0.3
   - http-link-header ==1.0.3.1
   - http-media ==0.7.1.3
@@ -1116,7 +1120,7 @@ default-package-overrides:
   - insert-ordered-containers ==0.2.1.0
   - inspection-testing ==0.4.1.2
   - instance-control ==0.1.2.0
-  - integer-logarithms ==1.0.2.2
+  - integer-logarithms ==1.0.3
   - integration ==0.2.1
   - intern ==0.9.2
   - interpolate ==0.2.0
@@ -1196,7 +1200,7 @@ default-package-overrides:
   - language-haskell-extract ==0.2.4
   - language-java ==0.2.9
   - language-javascript ==0.6.0.11
-  - language-puppet ==1.4.3
+  - language-puppet ==1.4.4
   - lapack-ffi ==0.0.2
   - lapack-ffi-tools ==0.1.2
   - largeword ==1.2.5
@@ -1260,7 +1264,7 @@ default-package-overrides:
   - long-double ==0.1
   - loop ==0.3.0
   - lrucaching ==0.3.3
-  - lsp-test ==0.5.1.0
+  - lsp-test ==0.5.1.1
   - lucid ==2.9.11
   - lucid-extras ==0.1.0.1
   - lxd-client-config ==0.1.0.1
@@ -1422,7 +1426,7 @@ default-package-overrides:
   - network-messagepack-rpc ==0.1.1.0
   - network-multicast ==0.2.0
   - network-simple ==0.4.3
-  - network-simple-tls ==0.3.1
+  - network-simple-tls ==0.3.2
   - network-transport ==0.5.2
   - network-transport-composed ==0.2.1
   - network-uri ==2.6.1.0
@@ -1526,7 +1530,7 @@ default-package-overrides:
   - pem ==0.2.4
   - percent-format ==0.0.1
   - perfect-hash-generator ==0.2.0.6
-  - persist ==0.1.1.2
+  - persist ==0.1.1.3
   - persistable-record ==0.6.0.4
   - persistable-types-HDBC-pg ==0.0.3.5
   - persistent ==2.9.2
@@ -1621,7 +1625,7 @@ default-package-overrides:
   - protocol-radius ==0.0.1.1
   - protocol-radius-test ==0.0.1.0
   - proto-lens ==0.4.0.1
-  - proto-lens-arbitrary ==0.1.2.6
+  - proto-lens-arbitrary ==0.1.2.7
   - proto-lens-combinators ==0.4.0.1
   - proto-lens-optparse ==0.1.1.5
   - proto-lens-protobuf-types ==0.4.0.1
@@ -1702,7 +1706,7 @@ default-package-overrides:
   - regex-tdfa ==1.2.3.1
   - regex-tdfa-text ==1.0.0.3
   - regex-with-pcre ==1.0.2.0
-  - registry ==0.1.3.4
+  - registry ==0.1.3.5
   - reinterpret-cast ==0.1.0
   - relapse ==1.0.0.0
   - relational-query ==0.12.1.0
@@ -2054,7 +2058,7 @@ default-package-overrides:
   - th-strict-compat ==0.1.0.1
   - th-utilities ==0.2.1.0
   - thyme ==0.3.5.5
-  - tidal ==1.0.10
+  - tidal ==1.0.11
   - tile ==0.3.0.0
   - time-compat ==0.1.0.3
   - timeit ==2.0
@@ -2097,7 +2101,7 @@ default-package-overrides:
   - tuples-homogenous-h98 ==0.1.1.0
   - tuple-sop ==0.3.1.0
   - tuple-th ==0.2.5
-  - turtle ==1.5.13
+  - turtle ==1.5.14
   - typed-process ==0.2.4.0
   - type-fun ==0.1.1
   - type-hint ==0.1
@@ -2190,7 +2194,7 @@ default-package-overrides:
   - vector-split ==1.0.0.2
   - vector-th-unbox ==0.2.1.6
   - verbosity ==0.2.3.0
-  - versions ==3.5.0
+  - versions ==3.5.1
   - ViennaRNAParser ==1.3.3
   - vinyl ==0.10.0.1
   - vivid ==0.4.2.3
@@ -2237,7 +2241,7 @@ default-package-overrides:
   - websockets-snap ==0.10.3.0
   - weigh ==0.0.14
   - wide-word ==0.1.0.8
-  - wikicfp-scraper ==0.1.0.10
+  - wikicfp-scraper ==0.1.0.11
   - wild-bind ==0.1.2.3
   - wild-bind-x11 ==0.2.0.6
   - Win32-notify ==0.3.0.3
@@ -6888,6 +6892,7 @@ broken-packages:
   - minesweeper
   - miniforth
   - minilens
+  - minilight
   - minimung
   - minio-hs
   - minions
@@ -6895,6 +6900,7 @@ broken-packages:
   - miniplex
   - minirotate
   - ministg
+  - minitypeset-opengl
   - minst-idx
   - mios
   - mirror-tweet
@@ -7184,6 +7190,7 @@ broken-packages:
   - network-server
   - network-service
   - network-simple-sockaddr
+  - network-simple-wss
   - network-stream
   - network-topic-models
   - network-transport-amqp
@@ -7954,6 +7961,7 @@ broken-packages:
   - rascal
   - Rasenschach
   - rating-chgk-info
+  - rattle
   - rattletrap
   - raven-haskell-scotty
   - raw-feldspar
@@ -8223,6 +8231,7 @@ broken-packages:
   - safe-failure-cme
   - safe-freeze
   - safe-globals
+  - safe-json
   - safe-lazy-io
   - safe-length
   - safe-money
@@ -8478,6 +8487,8 @@ broken-packages:
   - shellish
   - shellmate
   - shellmate-extras
+  - shh
+  - shh-extras
   - shivers-cfg
   - shoap
   - shopify
@@ -8526,6 +8537,7 @@ broken-packages:
   - simple-tar
   - simple-templates
   - simple-ui
+  - simple-units
   - simple-vec3
   - simple-zipper
   - simpleargs
@@ -9834,6 +9846,7 @@ broken-packages:
   - yam
   - yam-datasource
   - yam-job
+  - yam-redis
   - yam-servant
   - yam-transaction-odbc
   - yam-web

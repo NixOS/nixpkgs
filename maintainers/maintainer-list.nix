@@ -3218,6 +3218,11 @@
     github = "mogria";
     name = "Mogria";
   };
+  monsieurp = {
+    email = "monsieurp@gentoo.org";
+    github = "monsieurp";
+    name = "Patrice Clement";
+  };
   montag451 = {
     email = "montag451@laposte.net";
     github = "montag451";

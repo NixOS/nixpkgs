@@ -23,7 +23,7 @@ rec {
     buildCommand = ''
       install $src ./appimage
       patchelf \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
         --replace-needed libz.so.1 ${zlib}/lib/libz.so.1 \
         ./appimage
 
@@ -33,7 +33,7 @@ rec {
     '';
   };
 
-  wrapAppImage = { name, src, extraPkgs }: buildFHSUserEnv (defaultFhsEnvArgs // {
+  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
     inherit name;
 
     targetPkgs = pkgs: defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
@@ -46,17 +46,15 @@ rec {
       cd $APPDIR
       exec ./AppRun "$@"
     '';
+  } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
+
+  wrapType1 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
+    src = extractType1 { inherit name src; };
   });
 
-  wrapType1 = args@{ name, src, extraPkgs ? pkgs: [] }: wrapAppImage {
-    inherit name extraPkgs;
-    src = extractType1 { inherit name src; };
-  };
-
-  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [] }: wrapAppImage {
-    inherit name extraPkgs;
+  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
     src = extractType2 { inherit name src; };
-  };
+  });
 
   defaultFhsEnvArgs = {
     name = "appimage-env";

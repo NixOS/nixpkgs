@@ -1,81 +1,102 @@
-{ config, stdenv, fetchurl, rpmextract, glibc
-, dataDir ? "/var/lib/plex" # Plex's data directory must be baked into the package due to symlinks.
-, enablePlexPass ? config.plex.enablePlexPass or false
+# The actual Plex package that we run is a FHS userenv of the "raw" package.
+{ stdenv
+, buildFHSUserEnv
+, writeScript
+, plexRaw
+
+# Old argument for overriding the Plex data directory; isn't necessary for this
+# version of Plex to function, but still around for backwards-compatibility.
+, dataDir ? "/var/lib/plex"
 }:
 
-let
-  plexPass = throw "Plex pass has been removed at upstream's request; please unset nixpkgs.config.plex.pass";
-  plexpkg = if enablePlexPass then plexPass else {
-    version = "1.15.3.876";
-    vsnHash = "ad6e39743";
-    sha256 = "01g7wccm01kg3nhf3qrmwcn20nkpv0bqz6zqv2gq5v03ps58h6g5";
-  };
+buildFHSUserEnv rec {
+  name = "plexmediaserver";
+  inherit (plexRaw) meta;
 
-in stdenv.mkDerivation rec {
-  name = "plex-${version}";
-  version = plexpkg.version;
-  vsnHash = plexpkg.vsnHash;
-  sha256 = plexpkg.sha256;
+  # This script is run when we start our Plex binary
+  runScript = writeScript "plex-run-script" ''
+    #!${stdenv.shell}
 
-  src = fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}-${vsnHash}/redhat/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
-    inherit sha256;
-  };
+    set -eu
 
-  buildInputs = [ rpmextract glibc ];
+    # The root path to our Plex installation
+    root=${plexRaw}/lib/plexmediaserver
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" "distPhase" ];
+    # Path to where we're storing our Plex data files. We default to storing
+    # them in the user's home directory under the XDG-compatible location, but
+    # allow overriding with an environment variable so the location can be
+    # configured in our NixOS module.
+    #
+    # NOTE: the old version of Plex used /var/lib/plex as the default location,
+    # but this package shouldn't assume that we're going to run Plex with the
+    # ability to write to /var/lib, so using a subdirectory of $HOME when none
+    # is specified feels less likely to have permission errors.
+    if [[ -z "''${PLEX_DATADIR:-}" ]]; then
+      PLEX_DATADIR="$HOME/.local/share/plex"
+    fi
+    if [[ ! -d "$PLEX_DATADIR" ]]; then
+      echo "Creating Plex data directory: $PLEX_DATADIR"
+      mkdir -p "$PLEX_DATADIR"
+    fi
 
-  unpackPhase = ''
-    rpmextract $src
+    # The database is stored under the given directory
+    db="$PLEX_DATADIR/.skeleton/com.plexapp.plugins.library.db"
+
+    # If we don't have a database in the expected path, then create one by
+    # copying our base database to that location.
+    if ! test -f "$db"; then
+      echo "Copying base database file to: $db"
+      mkdir -p "$(dirname "$db")"
+      cat "${plexRaw.basedb}" > "$db"
+    fi
+
+    # Set up symbolic link at '/db', which is linked to by our Plex package
+    # (see the 'plexRaw' package).
+    ln -s "$db" /db
+
+    # If we have a plugin list (set by our NixOS module), we create plugins in
+    # the data directory as expected. This is a colon-separated list of paths.
+    if [[ -n "''${PLEX_PLUGINS:-}" ]]; then
+      echo "Preparing plugin directory"
+
+      pluginDir="$PLEX_DATADIR/Plex Media Server/Plug-ins"
+      test -d "$pluginDir" || mkdir -p "$pluginDir"
+
+      # First, remove all of the symlinks in the plugins directory.
+      echo "Removing old symlinks"
+      for f in $(ls "$pluginDir/"); do
+        if [[ -L "$pluginDir/$f" ]]; then
+          echo "Removing plugin symlink: $pluginDir/$f"
+          rm "$pluginDir/$f"
+        fi
+      done
+
+      echo "Symlinking plugins"
+      IFS=':' read -ra pluginsArray <<< "$PLEX_PLUGINS"
+      for path in "''${pluginsArray[@]}"; do
+        dest="$pluginDir/$(basename "$path")"
+
+        if [[ ! -d "$path" ]]; then
+          echo "Error symlinking plugin from $path: no such directory"
+        elif [[ -d "$dest" || -L "$dest" ]]; then
+          echo "Error symlinking plugin from $path to $dest: file or directory already exists"
+        else
+          echo "Symlinking plugin at: $path"
+          ln -s "$path" "$dest"
+        fi
+      done
+    fi
+
+    # Tell Plex to use the data directory as the "Application Support"
+    # directory, otherwise it tries to write things into the user's home
+    # directory.
+    export PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="$PLEX_DATADIR"
+
+    # Tell Plex where the 'home' directory for itself is.
+    export PLEX_MEDIA_SERVER_HOME="${plexRaw}/lib/plexmediaserver"
+
+    # Actually run Plex, prepending LD_LIBRARY_PATH with the libraries from
+    # the Plex package.
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$root exec "$root/Plex Media Server"
   '';
-
-  installPhase = ''
-    install -d $out/usr/lib
-    cp -dr --no-preserve='ownership' usr/lib/plexmediaserver $out/usr/lib/
-
-    # Now we need to patch up the executables and libraries to work on Nix.
-    # Side note: PLEASE don't put spaces in your binary names. This is stupid.
-    for bin in "Plex Media Server"              \
-               "Plex Commercial Skipper"        \
-               "Plex DLNA Server"               \
-               "Plex Media Scanner"             \
-               "Plex Relay"                     \
-               "Plex Script Host"               \
-               "Plex Transcoder"                \
-               "Plex Tuner Service"             ; do
-      patchelf --set-interpreter "${glibc.out}/lib/ld-linux-x86-64.so.2" "$out/usr/lib/plexmediaserver/$bin"
-      patchelf --set-rpath "$out/usr/lib/plexmediaserver/lib" "$out/usr/lib/plexmediaserver/$bin"
-    done
-
-    find $out/usr/lib/plexmediaserver/Resources -type f -a -perm -0100 \
-        -print -exec patchelf --set-interpreter "${glibc.out}/lib/ld-linux-x86-64.so.2" '{}' \;
-
-    # Our next problem is the "Resources" directory in /usr/lib/plexmediaserver.
-    # This is ostensibly a skeleton directory, which contains files that Plex
-    # copies into its folder in /var. Unfortunately, there are some SQLite
-    # databases in the directory that are opened at startup. Since these
-    # database files are read-only, SQLite chokes and Plex fails to start. To
-    # solve this, we keep the resources directory in the Nix store, but we
-    # rename the database files and replace the originals with symlinks to
-    # /var/lib/plex. Then, in the systemd unit, the base database files are
-    # copied to /var/lib/plex before starting Plex.
-    RSC=$out/usr/lib/plexmediaserver/Resources
-    for db in "com.plexapp.plugins.library.db"; do
-        mv $RSC/$db $RSC/base_$db
-        ln -s "${dataDir}/.skeleton/$db" $RSC/$db
-    done
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://plex.tv/;
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ colemickens forkk thoughtpolice pjones lnl7 ];
-    description = "Media / DLNA server";
-    longDescription = ''
-      Plex is a media server which allows you to store your media and play it
-      back across many different devices.
-    '';
-  };
 }
