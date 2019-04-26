@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/troglobit/editline/commit/a4b67d226829a55bc8501f36708d5e104a52fbe4.patch";
       sha256 = "0dbgdqxa4x9wgr9kx89ql74np4qq6fzdbph9j9c65ns3gnaanjkw";
     })
+    # PR24
+    (fetchpatch {
+      name = "fix-narrow-term-crash.patch";
+      url = https://github.com/troglobit/editline/pull/24/commits/8660aef4b795fbd46a86dca804f067a81757c5df.patch;
+      sha256 = "0pcz1f141qv78xbq09yh0zfcjiqyavr66snz1hvxzvi8x0vixc4i";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
