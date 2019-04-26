@@ -12,10 +12,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl qtbase ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  # Without this patch cmake fails with a "No known features for CXX compiler"
-  # error on darwin
-  patches = stdenv.lib.optional stdenv.isDarwin ./move-project.patch ;
-
   # tells CMake to use this CA bundle file if it is accessible
   preConfigure = ''export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt'';
 
