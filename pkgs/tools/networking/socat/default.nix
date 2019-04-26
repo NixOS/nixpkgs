@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jnhjijyq74g3wa4ph0am83z6vq7qna7ac0xqjma8s4197z3zmhd";
   };
 
+  patches = stdenv.lib.optional stdenv.isDarwin ./speed-type-fix.patch;
+
   postPatch = ''
     patchShebangs test.sh
     substituteInPlace test.sh \
