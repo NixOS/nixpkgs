@@ -4661,6 +4661,8 @@ in
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
+  pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
+
   pasystray = callPackage ../tools/audio/pasystray { };
 
   phash = callPackage ../development/libraries/phash { };
