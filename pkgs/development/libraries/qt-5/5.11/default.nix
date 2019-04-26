@@ -20,7 +20,7 @@ top-level attribute to `top-level/all-packages.nix`.
   stdenv, fetchurl, fetchFromGitHub, makeSetupHook,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
-  cf-private,
+  cf-private, llvmPackages_5,
 
   # options
   developerBuild ? false,
@@ -65,8 +65,10 @@ let
   };
 
   mkDerivation =
-    import ../mkDerivation.nix
-    { inherit stdenv; inherit (stdenv) lib; }
+    import ../mkDerivation.nix {
+      inherit (stdenv) lib;
+      stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
+    }
     { inherit debug; };
 
   qtModule =
@@ -97,7 +99,7 @@ let
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
-      qtlocation = callPackage ../modules/qtlocation.nix {};
+      qtlocation = callPackage ../modules/qtlocation.nix { };
       qtmacextras = callPackage ../modules/qtmacextras.nix {
         inherit cf-private;
       };
