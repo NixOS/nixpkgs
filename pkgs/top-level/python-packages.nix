@@ -6525,6 +6525,8 @@ in {
 
   pysensors = callPackage ../development/python-modules/pysensors { };
 
+  python-toolbox = callPackage ../development/python-modules/python-toolbox { };
+
   sseclient = callPackage ../development/python-modules/sseclient { };
 
   warrant = callPackage ../development/python-modules/warrant { };
