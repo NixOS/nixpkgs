@@ -5,6 +5,8 @@
 , kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
 , kitemmodels, libical, libofx, qgpgme
 
+, sqlcipher
+
 # Needed for running tests:
 , qtbase, xvfb_run
 
@@ -34,6 +36,7 @@ stdenv.mkDerivation rec {
     akonadi alkimia aqbanking gmp gwenhywfar kactivities karchive kcmutils
     kcontacts kdewebkit kdiagram kholidays kidentitymanagement kitemmodels
     libical libofx qgpgme
+    sqlcipher
 
     # Put it into buildInputs so that CMake can find it, even though we patch
     # it into the interface later.
