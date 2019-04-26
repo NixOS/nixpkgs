@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "liblinear-${version}";
-  version = "2.21";
+  version = "2.30";
 
   src = fetchurl {
     url = "https://www.csie.ntu.edu.tw/~cjlin/liblinear/liblinear-${version}.tar.gz";
-    sha256 = "0jp0z3s32czf748i6dnlabs1psqx1dcn9w96c56m24xq5l789chs";
+    sha256 = "1b66jpg9fdwsq7r52fccr8z7nqcivrin5d8zg2f134ygqqwp0748";
   };
 
   buildPhase = ''
