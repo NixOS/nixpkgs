@@ -5,7 +5,68 @@ let
   # import-from-derivation to work properly. Currently it's rather ugly when we try to bootstrap
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
   # now it's staying here.
+  #
+  # https://gist.github.com/burke/2ca715c526ed36202e28b2a17ba46e92 may be useful to generate a list
+  # of versions for a new release, and was used for 10.14.1.
   versions = {
+    "macos-10.14.1" = {
+      CommonCrypto                         = "60118.220.1";  # 1hsv6pwx99b2bzacwrbkdm33rx4d5sga9aai1jhnl0dy9fd4hrvq
+      Csu                                  = "85";           # 0yh5mslyx28xzpv8qww14infkylvc1ssi57imhi471fs91sisagj
+      ICU                                  = "62108.0.1";    # 0hqsw6mnrm42p2w09r6kbkzxcyxgwkqxdp9djssi4jz1wbv71wrb
+      IOAudioFamily                        = "206.5";        # 1lx0577vxwxmr60ilq8sblmc42jk60r5wdqkpl9iw68j63qa2ks4
+      IOBDStorageFamily                    = "19";           # 0kd00rd37jcnx3j9q9qsx1b56hy6i1hnbjglgp1vqhg7cwq73s19
+      IOCDStorageFamily                    = "58";           # 1ws0yr9ycvhav78qc0gqchisv3598n4mb9k2898cqgy2ncbivxyz
+      IODVDStorageFamily                   = "42";           # 1xrj8v6bjcagnana58sq8amj1l87h5f9w5pi397wncyg7kbc8xwi
+      IOFWDVComponents                     = "208";          # 0jy5gh8v8x5pflwrc2zhbq2crfny9jx5r6y86iqk2jnjsbq40wzp
+      IOFireWireAVC                        = "426";          # 05iky2rdnfrvpgn9d78pmlf0fbxmaw3lkvpybv98hp8lg5948a18
+      IOFireWireFamily                     = "473";          # 0jqhqj98h1q5v78nsy3f4rvnxb6vjk4r2w2xpmx2xyzkadvvp445
+      IOFireWireSBP2                       = "428";          # 0iqmbh1rl4jl5j1pngynf1w37lnwlshwdrg6xvwfysccvdh7626x
+      IOFireWireSerialBusProtocolTransport = "252.200.1";    # 040draw04kiw9w2vxmsvk4ax4w30fwrl0n9wa4jpb0rap8m6jsjs
+      IOGraphics                           = "530.12";       # 1x2q2isx7v08d1m1ma496g9290qyl924axxh18jk80hzmxmdf05p
+      IOHIDFamily                          = "1090.220.12";  # 1ns8s5kilh11cavn17qg3kvnwa0lz69nhp8l4pza8iw8xppajvn4
+      IOKitUser                            = "1483.220.15";  # 1gjksrmg5iw7krpl4i1gk2fbfpq87z531yvf34rh52gakx41x1s5
+      IONetworkingFamily                   = "129.200.1";    # 10hh6gpqsj4wkdh006b13h3vn4imxn1q6bir1wwkyi57v8aalhhm
+      IOSerialFamily                       = "93.200.2";     # 0af2avsvy9sbp7czwbbw49sxxbggk5fbir2r9wmll62iqzh0wama
+      IOStorageFamily                      = "218.200.3";    # 1zv2ca9nkshpk32iw8avkzjfhaz9y91aapjh7qwhp7z6y6lav0rf
+      Libc                                 = "1272.200.26";  # 1c9gqhq36a1frpy7wxry2zbm9537r3pjn05fw6acznz3kb9krvml
+      Libinfo                              = "517.200.9";    # 1ih9ici8dc786xaaj5qi00vhc8i5ndmkdlg0a6pr4rrpdabirw3y
+      Libnotify                            = "172.200.21";   # 04s7rmdny624nv9vi5jha5wfhi6snp7yim2vlny83sbplz5g634y
+      Librpcsvc                            = "26";           # 1zwfwcl9irxl1dlnf2b4v30vdybp0p0r6n6g1pd14zbdci1jcg2k
+      Libsystem                            = "1252.200.5";   # 169v478dh8zk3l7yy8miim5is2984j615qlcb3ba0lra1drgcd0n
+      PowerManagement                      = "733.221.1";    # 09559gy2sq6272hh2j0v6cf8fyrz2yw3jm73h2spgvqa9927cmaa
+      Security                             = "58286.220.15"; # 1il04i7kq1gyls7rb2rvkdw181dpgf5pnx02z9pp5mf4g34n1sqb
+      adv_cmds                             = "172";          # 10w01vds4k70rm1v6cv31kxzjkqc0xycz78xvlhylgp184jnxgk8
+      architecture                         = "272.200.3";    # 0qglcmhnn96ibfhzk9l6yjminnvzcswrhfvhqjzw7b1vcmwgh3p4
+      basic_cmds                           = "55";           # 0hvab4b1v5q2x134hdkal0rmz5gsdqyki1vb0dbw4py1bqf0yaw9
+      configd                              = "963.200.27";   # 04mcj4vvfmqpwp756nb0lpmq5n963cw2xbx00wxabg4lhcn7v2sh
+      copyfile                             = "146.200.3";    # 0msmb8lqicn835x4rqa05gdhycsx1m0lmb34ghph0qhc4sh9a6qm
+      diskdev_cmds                         = "593.221.1";    # 01jh3pdc46sah5wrny708i00mi30xxz2k4cp6g1rf7cs43rc1cx9
+      dtrace                               = "284.200.15";   # 01qfg70w2s1qmywbrra7h2m2y6fig61x93a81jkpdsp9fjcc100r
+      dyld                                 = "635.2";        # 0dyx4xyl7rzavvizaym3jwxrfkwljkg6f6l8pjvp1d8cpxbg54g8
+      eap8021x                             = "264.200.8";    # 14hqawac3cvmgw6y3bgf4lhqvslf3fyi5fzvws70r77726v5z6p8
+      file_cmds                            = "272.220.1";    # 1n73pwmkqvh5waj2dwabal87b3xvipdy367j3yc7ci7ypxyg1mdx
+      libauto                              = "187";          # 1v0drlaflgsm9k7l2lpv2ksy3l7c7i25z7hirqmc1mywzp776r0f
+      libclosure                           = "73";           # 0fjbj2f0g1v078l3dmqvbi4csbjk4njkvr8wznbxr180ip2gki80
+      libdispatch                          = "1008.220.2";   # 1qshl1qmyqsjn4zm7mmaq5f922y4xqxg6hwmwxjxkd3v88gf78xw
+      libiconv                             = "51.200.6";     # 1kknbbfff9mrf5p5h94h0xk81k4b38mrkrmg82bz6iafznw359q8
+      libplatform                          = "177.200.16";   # 0dhxm8l1ha09sfcj2lav0lc733finr2cbhrdm45g38vhfl3nn7nx
+      libpthread                           = "330.220.2";    # 008h68rqfagfgm8vg0f9v92jdj7gp5g5i5jhv33a75zb5h696kw9
+      libresolv                            = "65.200.2";     # 04qbxkpsiv06ximsdjkm0rraa34l5g9x5cvkzrfsfv6vd3vma2mb
+      libunwind                            = "35.4";         # 0zadcp5gsjs8sxib9zy8k680zl1lbzf6vllwn5vb6gm3ayrgr82w
+      libutil                              = "51.200.4";     # 17bbaic7hpmdh653z5958qjaq2yrh0srrn5pha2n578ary4ghcwa
+      mDNSResponder                        = "878.200.35";   # 187mnglgdawass83jpp4nrx0c6g3xp8hl2c0rd91bszmvgbv8xz7
+      network_cmds                         = "543.200.16";   # 17v1yzlwj5pgk79kpzm2sa2xxcrzbx1r1l323nf4j7mghqlqnn90
+      objc4                                = "750.1";        # 0171cw7c011f8g2m1di2vjh59gy84x5dbpykax12svh7ji29r4yn
+      ppp                                  = "847.200.5";    # 00g0q0v7j10qqi0dzsicvbxk3ax9hy5j5x7kwqwrysx4kvvxs2i9
+      removefile                           = "45.200.2";     # 096rxlzp1wdprnwqcm4pblx3p9frmiqwp3aacvi9hcdb86fzjkms
+      security_systemkeychain              = "55207.50.1";   # 15i2dbr0qliixwwayn842wamzhjmpbgndsghhpffq181x40hykqf
+      shell_cmds                           = "203";          # 0yahpq873im8j5crh91ryya5glm675v17b4ykcz7wjyzz1d6a7lp
+      system_cmds                          = "805.220.1";    # 1g8asbf2hjg2izlab1xqj8h8gzy7n4ak3hzll12wyk484712dhcc
+      text_cmds                            = "99";           # 1f93m7dd0ghqb2hwh905mjhzblyfr7dwffw98xhgmv1mfdnigxg0
+      top                                  = "111.220.1";    # 07yc3gkazzbdmag0297qm1favsvzb8kwwnk9pr467a1xjpchbl1m
+      xnu                                  = "4903.221.2";   # 1szlwx53mk7w2ic7qzvi3cz25zcrhiwq6j7g2yr34i7xmimzd967
+    };
+
     "osx-10.11.6" = {
       PowerManagement = "572.50.1";
       SmartCardServices = "55111";
