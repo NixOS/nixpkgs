@@ -8,7 +8,7 @@
   # Not sure if jitterentropy is safe to use for cryptography
   # and thus a default entropy source
 , jitterentropy ? null, withJitterEntropy ? false
-, libp11 ? null, withPkcs11 ? true
+, libp11 ? null, opensc ? null, withPkcs11 ? true
 }:
 
 with stdenv.lib;
@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cp README.md README
+
+    ${optionalString withPkcs11 ''
+      substituteInPlace rngd.c \
+        --replace /usr/lib64/opensc-pkcs11.so ${opensc}/lib/opensc-pkcs11.so
+    ''}
   '';
 
   nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];
@@ -40,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ sysfsutils ]
     ++ optionals withGcrypt        [ libgcrypt ]
     ++ optionals withJitterEntropy [ jitterentropy ]
-    ++ optionals withNistBeacon    [ openssl curl libxml2 ]
+    ++ optionals withNistBeacon    [ curl libxml2 openssl ]
     ++ optionals withPkcs11        [ libp11 openssl ];
 
   # This shouldn't be necessary but is as of 6.7
