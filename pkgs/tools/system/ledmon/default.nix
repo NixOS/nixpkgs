@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, udev, sg3_utils }:
+{ stdenv, fetchFromGitHub, perl, udev, sg3_utils }:
 
 stdenv.mkDerivation rec {
   pname = "ledmon";
@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1lz59606vf2sws5xwijxyffm8kxcf8p9qbdpczsq1b5mm3dk6lvp";
   };
 
+  nativeBuildInputs = [
+    perl # for pod2man
+  ];
   buildInputs = [ udev sg3_utils ];
 
   installTargets = [ "install" "install-systemd" ];
