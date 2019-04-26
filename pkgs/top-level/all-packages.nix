@@ -411,6 +411,8 @@ in
   #package writers
   writers = callPackage ../build-support/writers {};
 
+  security-wrappers = callPackage ../build-support/security-wrappers {};
+
   ### TOOLS
 
   _0x0 = callPackage ../tools/misc/0x0 { };

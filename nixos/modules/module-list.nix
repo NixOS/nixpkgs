@@ -171,7 +171,7 @@
   ./security/prey.nix
   ./security/rngd.nix
   ./security/rtkit.nix
-  ./security/wrappers/default.nix
+  ./security/wrappers.nix
   ./security/sudo.nix
   ./security/systemd-confinement.nix
   ./services/admin/oxidized.nix
