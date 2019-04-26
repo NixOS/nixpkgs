@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, fetchFromGitHub, substituteAll, udev
-, pkgconfig, qtbase, cmake, zlib, kmod }:
+, pkgconfig, qtbase, cmake, zlib, kmod, gnused }:
 
 mkDerivation rec {
   version = "0.4.2";
@@ -38,6 +38,9 @@ mkDerivation rec {
       inherit kmod;
     })
   ];
+  postPatch = ''
+    sed -i 's:/usr/bin/env sed:${gnused}/bin/sed:g' linux/udev/99-ckb-next-daemon.rules
+  '';
 
   meta = with stdenv.lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";

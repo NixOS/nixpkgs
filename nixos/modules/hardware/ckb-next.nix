@@ -36,6 +36,7 @@ in
 
     config = mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];
+      services.udev.packages = [ cfg.package ];
 
       systemd.services.ckb-next = {
         description = "Corsair Keyboards and Mice Daemon";
