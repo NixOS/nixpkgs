@@ -19,6 +19,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper fcitx cmake isocodes gtk3
     gnome3.adwaita-icon-theme ];
 
+  # Point exec_prefix to installed location of fcitx-remote (in the fcitx
+  # package).
+  preConfigure = ''
+    sed -ie '/^set(exec_prefix /d' CMakeLists.txt
+    substituteInPlace config.h.in \
+      --subst-var-by exec_prefix ${fcitx}
+  '';
+
   preFixup = ''
     wrapProgram $out/bin/fcitx-config-gtk3 \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS";
