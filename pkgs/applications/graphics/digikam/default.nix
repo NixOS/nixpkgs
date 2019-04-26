@@ -8,6 +8,7 @@
 , qtsvg
 , qtwebengine
 
+, akonadi-contacts
 , kcalcore
 , kconfigwidgets
 , kcoreaddons
@@ -88,6 +89,7 @@ mkDerivation rec {
     qtsvg
     qtwebengine
 
+    akonadi-contacts
     kcalcore
     kconfigwidgets
     kcoreaddons
