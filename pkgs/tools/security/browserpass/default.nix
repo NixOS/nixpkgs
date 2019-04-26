@@ -1,12 +1,5 @@
-{ lib, callPackage, buildGoPackage, fetchFromGitHub, makeWrapper, gnupg }:
-let
-  # For backwards compatibility with v2 of the browser extension, we embed v2
-  # of the native host in v3. Because the extension will auto-update when it
-  # is released, this code can be removed from that point on.
-  # Don't forget to remove v2 references down below and the v2 files in this
-  # folder
-  v2 = callPackage ./2.nix {};
-in buildGoPackage rec {
+{ lib, callPackage, buildGoModule, fetchFromGitHub, makeWrapper, gnupg }:
+buildGoModule rec {
   pname = "browserpass";
   version = "3.0.6";
 
@@ -19,8 +12,7 @@ in buildGoPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  goPackagePath = "github.com/browserpass/browserpass-native";
-  goDeps = ./deps.nix;
+  modSha256 = "13yw7idgw8l48yvm4jjha0kbx6q22m2zp13y006mikavynqsr5kj";
 
   postPatch = ''
     # Because this Makefile will be installed to be used by the user, patch
@@ -31,10 +23,9 @@ in buildGoPackage rec {
     sed -i -e 's/INSTALL :=.*/INSTALL := install/' Makefile
   '';
 
-  DESTDIR = placeholder "bin";
+  DESTDIR = placeholder "out";
 
   postConfigure = ''
-    cd "go/src/$goPackagePath"
     make configure
   '';
 
@@ -45,16 +36,12 @@ in buildGoPackage rec {
   installPhase = ''
     make install
 
-    wrapProgram $bin/bin/browserpass \
+    wrapProgram $out/bin/browserpass \
       --suffix PATH : ${lib.makeBinPath [ gnupg ]}
 
     # This path is used by our firefox wrapper for finding native messaging hosts
-    mkdir -p $bin/lib/mozilla/native-messaging-hosts
-    ln -s $bin/lib/browserpass/hosts/firefox/*.json $bin/lib/mozilla/native-messaging-hosts
-
-    # These can be removed too, see comment up top
-    ln -s ${lib.getBin v2}/etc $bin/etc
-    ln -s ${lib.getBin v2}/lib/mozilla/native-messaging-hosts/* $bin/lib/mozilla/native-messaging-hosts
+    mkdir -p $out/lib/mozilla/native-messaging-hosts
+    ln -s $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts
   '';
 
   meta = with lib; {
