@@ -51,7 +51,7 @@
 }:
 
 mkDerivation rec {
-  name    = "digikam-${version}";
+  pname   = "digikam";
   version = "6.1.0";
 
   src = fetchFromGitHub {
@@ -114,6 +114,7 @@ mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
+    gappsWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
