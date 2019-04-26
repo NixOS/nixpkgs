@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
     libXinerama libXdamage libICE libXtst libXaw fontconfig pango cairo glib libxml2 atk gtk2
-    gdk_pixbuf libGL ncurses5
+    gdk_pixbuf libGL ncurses5 librsvg
   ];
 
   buildPhase = ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $maxx/etc/skel/Xsession.dt \
       --prefix GTK_PATH : "${gtk-engine-murrine}/lib/gtk-2.0:${gtk_engines}/lib/gtk-2.0" \
-      --prefix GDK_PIXBUF_MODULE_FILE : "$(echo ${librsvg.out}/lib/gdk-pixbuf-2.0/*/loaders.cache)"
+      --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}"
 
     while IFS= read -r -d ''$'\0' i; do
       if isExecutable "$i"; then

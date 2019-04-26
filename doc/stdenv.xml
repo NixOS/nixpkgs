@@ -2563,7 +2563,7 @@ addEnvHooks "$hostOffset" myBashFunction
      </term>
      <listitem>
       <para>
-       Exports <envar>GDK_PIXBUF_MODULE_FILE</envar> environment variable to
+       Exports <envar>GDK_PIXBUF_MODULE_FILE32/64</envar> environment variable to
        the builder. Add librsvg package to <varname>buildInputs</varname> to
        get svg support.
       </para>

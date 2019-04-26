@@ -14,8 +14,8 @@ wrapGAppsHook() {
   [ -z "$wrapGAppsHookHasRun" ] || return 0
   wrapGAppsHookHasRun=1
 
-  if [ -n "$GDK_PIXBUF_MODULE_FILE" ]; then
-    gappsWrapperArgs+=(--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE")
+  if [ -n "${!gdkPixbufModuleFileVar}" ]; then
+    gappsWrapperArgs+=(--set $gdkPixbufModuleFileVar "${!gdkPixbufModuleFileVar}")
   fi
 
   if [ -n "$XDG_ICON_DIRS" ]; then

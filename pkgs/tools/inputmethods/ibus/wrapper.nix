@@ -5,7 +5,7 @@
 let
   name = "ibus-with-plugins-" + (builtins.parseDrvName ibus.name).version;
   env = {
-    buildInputs = [ ibus ] ++ plugins;
+    buildInputs = [ ibus librsvg ] ++ plugins;
     nativeBuildInputs = [ lndir makeWrapper ];
     propagatedUserEnvPackages = [ hicolor-icon-theme ];
     paths = [ ibus ] ++ plugins;
@@ -23,7 +23,7 @@ let
 
     for prog in ibus; do
         wrapProgram "$out/bin/$prog" \
-          --set GDK_PIXBUF_MODULE_FILE ${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
+          --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}" \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
           --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
           --set IBUS_COMPONENT_PATH "$out/share/ibus/component/" \
@@ -42,7 +42,7 @@ let
 
     for prog in ibus-daemon; do
         wrapProgram "$out/bin/$prog" \
-          --set GDK_PIXBUF_MODULE_FILE ${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
+          --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}" \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
           --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
           --set IBUS_COMPONENT_PATH "$out/share/ibus/component/" \

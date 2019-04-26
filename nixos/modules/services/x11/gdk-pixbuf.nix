@@ -36,10 +36,10 @@ in
 
   # If there is any package configured in modulePackages, we generate the
   # loaders.cache based on that and set the environment variable
-  # GDK_PIXBUF_MODULE_FILE to point to it.
+  # GDK_PIXBUF_MODULE_FILE32/64 to point to it.
   config = mkIf (cfg.modulePackages != []) {
     environment.variables = {
-      GDK_PIXBUF_MODULE_FILE = "${loadersCache}";
+      "${pkgs.gdk_pixbuf.moduleFileVar}" = "${loadersCache}";
     };
   };
 }

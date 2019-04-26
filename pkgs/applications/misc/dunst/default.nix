@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     install -Dm755 dunstify $out/bin
   '' + ''
     wrapProgram $out/bin/dunst \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+      --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}"
   '';
 
   meta = with stdenv.lib; {

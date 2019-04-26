@@ -1,6 +1,6 @@
 { lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses5, expat, python27, zlib
 , gcc48, gcc49, gcc5, gcc6, gcc7
-, xorg, gtk2, gdk_pixbuf, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
+, xorg, gtk2, gdk_pixbuf, librsvg, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
 }:
 
 let
@@ -40,7 +40,7 @@ let
       outputs = [ "out" "lib" "doc" ];
 
       nativeBuildInputs = [ perl makeWrapper ];
-      buildInputs = [ gdk_pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
+      buildInputs = [ gdk_pixbuf librsvg ]; # To get $gdkPixbufModuleFileVar via setup-hook
       runtimeDependencies = [
         ncurses5 expat python zlib glibc
         xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
@@ -126,7 +126,7 @@ let
       postInstall = ''
         for b in nvvp nsight; do
           wrapProgram "$out/bin/$b" \
-            --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+            --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}"
         done
       '';
 
