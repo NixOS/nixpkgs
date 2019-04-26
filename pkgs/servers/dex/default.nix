@@ -1,17 +1,16 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
-let version = "2.4.1"; in
-
 buildGoPackage rec {
-  name = "dex-${version}";
+  pname = "dex";
+  version = "2.16.0";
 
-  goPackagePath = "github.com/coreos/dex";
+  goPackagePath = "github.com/dexidp/dex";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    owner = "coreos";
-    repo = "dex";
-    sha256 = "11qpn3wh74mq16xgl9l50n2v02ffqcd14xccf77j5il04xr764nx";
+    owner = "dexidp";
+    repo = pname;
+    sha256 = "0w8nl7inqp4grbaq320dgynmznbrln8vihd799dwb2cx86laxsi1";
   };
 
   subPackages = [
@@ -22,10 +21,15 @@ buildGoPackage rec {
     "-ldflags=-w -X ${goPackagePath}/version.Version=${src.rev}"
   ];
 
+  postInstall = ''
+    mkdir -p $out/share
+    cp -r go/src/${goPackagePath}/web $out/share/web
+  '';
+
   meta = {
     description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";
     license = lib.licenses.asl20;
-    homepage = https://github.com/coreos/dex;
+    homepage = https://github.com/dexidp/dex;
     maintainers = with lib.maintainers; [benley];
     platforms = lib.platforms.unix;
   };
