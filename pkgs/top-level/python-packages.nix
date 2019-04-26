@@ -6643,6 +6643,8 @@ in {
 
   python-toolbox = callPackage ../development/python-modules/python-toolbox { };
 
+  pysnooper = callPackage ../development/python-modules/pysnooper { };
+
   sseclient = callPackage ../development/python-modules/sseclient { };
 
   warrant = callPackage ../development/python-modules/warrant { };
