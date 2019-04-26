@@ -18311,7 +18311,7 @@ in
   inherit (kdeApplications)
     akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
     kaddressbook kate kcachegrind kcalc kcharselect kcolorchooser kcontacts kdenlive kdf kdialog
-    keditbookmarks kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole
+    keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
