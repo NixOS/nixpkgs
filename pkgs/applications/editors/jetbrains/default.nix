@@ -341,12 +341,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2019.1"; /* updated by script */
+    version = "2019.1.1"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0gjphdzdxgvflkzaakf3c1wnig86lxhxyx6xk6rg40yj6f2hzi47"; /* updated by script */
+      sha256 = "0hcij77j4zb1y1vls5nvxq3lmqrbppm3ml0p9nagbjipy2rmp838"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
