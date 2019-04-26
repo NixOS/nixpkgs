@@ -10,12 +10,12 @@ let
     [ qscintilla-qt5 gdal jinja2 numpy psycopg2
       chardet dateutil pyyaml pytz requests urllib3 pygments pyqt5 sip owslib six ];
 in stdenv.mkDerivation rec {
-  version = "3.4.6";
+  version = "3.4.7";
   name = "qgis-unwrapped-${version}";
 
   src = fetchurl {
     url = "http://qgis.org/downloads/qgis-${version}.tar.bz2";
-    sha256 = "1skdimcbcv41hi4ii7iq8ka29k2zizzqv04fwidzfbxqclz7300h";
+    sha256 = "15w2cb5ac0n3g3jbnbk6qyqs7kx3y64zbyvcsw09p0dn9rnw4hdr";
   };
 
   passthru = {
