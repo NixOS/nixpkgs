@@ -22,8 +22,8 @@
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
-  src = fetch "llvm" "16s196wqzdw4pmri15hadzqgdi926zln3an2viwyq0kini6zr3d3";
-  polly_src = fetch "polly" "0wgvayfilgb530bq51l7szxfb13l24nnrmyji2f6ncq95a24dw8v";
+  src = fetch "llvm" "0r1p5didv4rkgxyvbkyz671xddg6i3dxvbpsi1xxipkla0l9pk0v";
+  polly_src = fetch "polly" "16qkns4ab4x0azrvhy4j7cncbyb2rrbdrqj87zphvqxm5pvm8m1h";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
@@ -53,12 +53,6 @@ in stdenv.mkDerivation (rec {
   propagatedBuildInputs = [ ncurses zlib ];
 
   patches = [
-    # https://bugs.llvm.org/show_bug.cgi?id=39427
-    # https://github.com/NixOS/nixpkgs/issues/54370
-    (fetchpatch {
-      url = "https://github.com/llvm-mirror/llvm/commit/57567def148f387153a8149fb590bd39b1b006a1.patch";
-      sha256 = "1w1xg5pxpc6cals1nf5j5k4p6qi8lcrpvn0paxc86m415i79xmcg";
-    })
     # backport, fix building rust crates with lto
     (fetchpatch {
       url = "https://github.com/llvm-mirror/llvm/commit/da1fb72bb305d6bc1f3899d541414146934bf80f.patch";
