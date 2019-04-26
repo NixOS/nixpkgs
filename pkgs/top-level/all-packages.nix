@@ -15915,8 +15915,12 @@ in
   docbook_xml_ebnf_dtd = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook-ebnf { };
 
   inherit (callPackages ../data/sgml+xml/stylesheets/xslt/docbook-xsl { })
-    docbook_xsl
-    docbook_xsl_ns;
+    docbook-xsl-nons
+    docbook-xsl-ns;
+
+  # TODO: move this to aliases
+  docbook_xsl = docbook-xsl-nons;
+  docbook_xsl_ns = docbook-xsl-ns;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 
