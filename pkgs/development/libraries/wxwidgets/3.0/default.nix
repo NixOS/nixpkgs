@@ -3,7 +3,7 @@
 , xorgproto, gstreamer, gst-plugins-base, GConf, setfile
 , libGLSupported
 , withMesa ? libGLSupported, libGLU ? null, libGL ? null
-, compat24 ? false, compat26 ? true, unicode ? true
+, compat26 ? false, compat28 ? true, unicode ? true
 , withGtk2 ? true
 , withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk ? null
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags =
-    [ "--disable-precomp-headers" "--enable-mediactrl"
-      (if compat24 then "--enable-compat24" else "--disable-compat24")
-      (if compat26 then "--enable-compat26" else "--disable-compat26") ]
+    [ "--disable-precomp-headers" "--enable-mediactrl" ]
+    ++ optional compat26 "--enable-compat26"
+    ++ optional (!compat28) "--disable-compat28"
     ++ optional unicode "--enable-unicode"
     ++ optional withMesa "--with-opengl"
     ++ optionals stdenv.isDarwin
