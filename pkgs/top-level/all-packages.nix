@@ -21768,6 +21768,8 @@ in
 
   gogui = callPackage ../games/gogui {};
 
+  gorun = callPackage ../development/tools/gorun {};
+
   gscrabble = python3Packages.callPackage ../games/gscrabble {};
 
   gshogi = python3Packages.callPackage ../games/gshogi {};
