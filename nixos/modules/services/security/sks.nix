@@ -117,7 +117,7 @@ in {
             "ln -sfT \"${cfg.webroot}\" web"}
           mkdir -p dump
           # Check that both database configs are symlinks before overwriting them
-          if [ -e KDB/DB_CONFIG ] && [ ! -L KBD/DB_CONFIG ]; then
+          if [ -e KDB/DB_CONFIG ] && [ ! -L KDB/DB_CONFIG ]; then
             echo "KDB/DB_CONFIG exists but is not a symlink." >&2
             exit 1
           fi
