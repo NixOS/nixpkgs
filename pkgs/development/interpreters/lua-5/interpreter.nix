@@ -1,19 +1,22 @@
-{ stdenv, fetchurl, readline, compat ? false
+{ stdenv, fetchurl, readline
+, compat ? false
 , callPackage
-, self
 , packageOverrides ? (self: super: {})
+, sourceVersion
+, hash
+, patches ? []
 }:
 let
-  luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
-in
-stdenv.mkDerivation rec {
-  name = "lua-${version}";
-  luaversion = "5.3";
-  version = "${luaversion}.5";
+luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+
+self = stdenv.mkDerivation rec {
+  pname = "lua";
+  luaversion = with sourceVersion; "${major}.${minor}";
+  version = "${luaversion}.${sourceVersion.patch}";
 
   src = fetchurl {
-    url = "https://www.lua.org/ftp/${name}.tar.gz";
-    sha256 = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac";
+    url = "https://www.lua.org/ftp/${pname}-${luaversion}.tar.gz";
+    sha256 = hash;
   };
 
   LuaPathSearchPaths    = luaPackages.getLuaPathList luaversion;
@@ -22,22 +25,32 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline ];
 
-  patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [];
+  inherit patches;
 
-  configurePhase =
-    if stdenv.isDarwin
-    then ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version}  CC="$CC" )
-    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.${version}.dylib" INSTALL_DATA='cp -d' )
-  '' else ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version} CC="$CC" AR="$AR q" RANLIB="$RANLIB" )
-    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}" INSTALL_DATA='cp -d' )
-    cat ${./lua-5.3-dso.make} >> src/Makefile
-    sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile
-  '';
+  # see configurePhase for additional flags (with space)
+  makeFlags = [
+    "INSTALL_TOP=${placeholder "out"}"
+    "INSTALL_MAN=${placeholder "out"}/share/man/man1"
+    "R=${version}"
+    "LDFLAGS=-fPIC"
+    "V=${luaversion}"
+  ] ++ (if stdenv.isDarwin then [
+    "PLAT=macosx"
+  ] else [
+    "PLAT=linux"
+  ])
+  ;
 
-  postBuild = stdenv.lib.optionalString (! stdenv.isDarwin) ''
-    ( cd src; make liblua.so "''${makeFlagsArray[@]}" )
+  configurePhase = ''
+    runHook preConfigure
+
+    makeFlagsArray+=(CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" )
+    makeFlagsArray+=(${stdenv.lib.optionalString stdenv.isDarwin "CC=\"$CC\""})
+
+    installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
+      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
+
+    runHook postConfigure
   '';
 
   postInstall = ''
@@ -45,6 +58,7 @@ stdenv.mkDerivation rec {
     mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
     rmdir $out/{share,lib}/lua/${luaversion} $out/{share,lib}/lua
     mkdir -p "$out/lib/pkgconfig"
+
     cat >"$out/lib/pkgconfig/lua.pc" <<EOF
     prefix=$out
     libdir=$out/lib
@@ -88,4 +102,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
   };
-}
+};
+in self
