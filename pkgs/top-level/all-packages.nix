@@ -4953,6 +4953,8 @@ in
 
   paulstretch = callPackage ../applications/audio/paulstretch { };
 
+  pazi = callPackage ../tools/misc/pazi { };
+
   pell = callPackage ../applications/misc/pell { };
 
   pepper = callPackage ../tools/admin/salt/pepper { };
