@@ -83,6 +83,14 @@
       The same applies to ModemManager where modem-manager.service is now called ModemManager.service again.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <option>services.nzbget.configFile</option> and <option>services.nzbget.openFirewall</option>
+      options were removed as they are managed internally by the nzbget. The
+      <option>services.nzbget.dataDir</option> option hadn't actually been used by
+      the module for some time and so was removed as cleanup.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
