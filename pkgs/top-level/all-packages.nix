@@ -5758,6 +5758,8 @@ in
 
   sonata = callPackage ../applications/audio/sonata { };
 
+  soundkonverter = kdeApplications.callPackage ../applications/audio/soundkonverter {};
+
   souper = callPackage ../development/compilers/souper { };
 
   sparsehash = callPackage ../development/libraries/sparsehash { };
