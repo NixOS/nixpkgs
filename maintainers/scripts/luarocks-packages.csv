@@ -22,6 +22,8 @@ luaffi,,http://luarocks.org/dev,
 luuid,
 penlight,
 say,
+std__debug,std._debug,
+std_normalize,std.normalize,
 luv,
 luasystem,
 mediator_lua,,http://luarocks.org/manifests/teto
