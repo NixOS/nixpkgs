@@ -31,6 +31,7 @@ buildPythonPackage rec {
     description = "pyenchant: Python bindings for the Enchant spellchecker";
     homepage = https://pythonhosted.org/pyenchant/;
     license = licenses.lgpl21;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 
 }
