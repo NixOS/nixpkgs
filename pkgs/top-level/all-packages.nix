@@ -3522,6 +3522,8 @@ in
 
   httping = callPackage ../tools/networking/httping {};
 
+  httplz = callPackage ../tools/networking/httplz { };
+
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   httpstat = callPackage ../tools/networking/httpstat { };
