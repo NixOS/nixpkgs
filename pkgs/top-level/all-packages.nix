@@ -1689,6 +1689,8 @@ in
 
   nx-libs = callPackage ../tools/X11/nx-libs { };
 
+  httplz = callPackage ../tools/networking/httplz { };
+
   nyx = callPackage ../tools/networking/nyx { };
 
   onboard = callPackage ../applications/misc/onboard { };
