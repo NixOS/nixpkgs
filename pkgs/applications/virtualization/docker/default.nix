@@ -198,7 +198,7 @@ rec {
   # Get revisions from
   # https://github.com/docker/docker-ce/tree/v${version}/components/engine/hack/dockerfile/install/*
 
-  docker_18_09 = dockerGen rec {
+  docker_18_09 = makeOverridable dockerGen {
     version = "18.09.2";
     rev = "62479626f213818ba5b4565105a05277308587d5"; # git commit
     sha256 = "05kvpy1c4g661xfds6dfzb8r5q76ndblxjykfj06had18pv0xxd4";
