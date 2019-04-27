@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
     "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
     "-Ddhcpcd=no"
+    "-Ddhcpcanon=no"
     "-Dpppd=${ppp}/bin/pppd"
     "-Diptables=${iptables}/bin/iptables"
     # to enable link-local connections
