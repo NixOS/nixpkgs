@@ -50,6 +50,7 @@ in stdenv.mkDerivation rec {
     "-Dqt=false"
     # Allow using iwd when configured to do so
     "-Diwd=true"
+    "-Dlibaudit=yes-disabled-by-default"
   ];
 
   patches = [
