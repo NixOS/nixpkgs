@@ -197,6 +197,11 @@
     github = "aij";
     name = "Ivan Jager";
   };
+  ajs124 = {
+    email = "nix@ajs124.de";
+    github = "ajs124";
+    name = "Andreas Schrägle";
+  };
   ajgrf = {
     email = "a@ajgrf.com";
     github = "ajgrf";
