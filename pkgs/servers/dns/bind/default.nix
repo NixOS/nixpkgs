@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl
+{ config, stdenv, lib, fetchurl, fetchpatch
 , perl
 , libcap, libtool, libxml2, openssl
 , enablePython ? config.bind.enablePython or false, python3 ? null
@@ -21,6 +21,16 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
 
   patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ] ++
+    [
+      # Workaround for missing atomic operations on aarch64. Upstream added the
+      # below patch after the release. Can probably be dropped with the next
+      # version.
+      (fetchpatch {
+        name = "client-atomics-as-refcount.patch";
+        url = https://gitlab.isc.org/isc-projects/bind9/commit/d72f436b7d7c697b262968c48c2d7643069ab17f.diff;
+        sha256 = "0sidlab9wcv21751fbq3h9m4wy6hk7frag9ar2jndw8rn3axr2qy";
+      })
+    ] ++
     stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
 
   nativeBuildInputs = [ perl ];
