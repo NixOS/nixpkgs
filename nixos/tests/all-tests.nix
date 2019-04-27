@@ -98,6 +98,7 @@ in
   gocd-server = handleTest ./gocd-server.nix {};
   google-oslogin = handleTest ./google-oslogin {};
   graphene = handleTest ./graphene.nix {};
+  gorun = handleTest ./gorun.nix {};
   grafana = handleTest ./grafana.nix {};
   graphite = handleTest ./graphite.nix {};
   graylog = handleTest ./graylog.nix {};
