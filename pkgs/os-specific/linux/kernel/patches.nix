@@ -57,4 +57,8 @@ rec {
       sha256 = "1l8xq02rd7vakxg52xm9g4zng0ald866rpgm8kjlh88mwwyjkrwv";
     };
   };
+
+  # Fix kernel OOPS on boot: https://github.com/NixOS/nixpkgs/issues/60126
+  # Remove with the next release.
+  i2c-oops = { name = "i2c-oops"; patch = ./i2c-oops.patch; };
 }

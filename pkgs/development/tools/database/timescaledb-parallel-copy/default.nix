@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "timescaledb-parallel-copy-${version}";
-  version = "2018-05-14";
+  name = "timescaledb-parallel-copy";
+  version = "0.2.0";
 
   owner  = "timescale";
   repo   = "timescaledb-parallel-copy";
@@ -12,8 +12,8 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev    = "20d3e8f8219329f2f4b0a5aa985f280dd04d10bb";
-    sha256 = "0waaccw991cnxaxjdxh9ksb94kiiyx1r7gif6pkd5k58js0kfvdn";
+    rev    = version;
+    sha256 = "1z9vf29vrxqs8imbisv681d02p4cfk3hlsrin6hhibxf1h0br9gd";
   };
 
   meta = with stdenv.lib; {

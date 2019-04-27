@@ -1,31 +1,26 @@
-{ stdenv, appimage-run, fetchurl, gsettings-desktop-schemas, gtk3, gobject-introspection, wrapGAppsHook }:
+{ appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3 }:
 
 let
+  pname = "joplin-desktop";
   version = "1.0.143";
-  sha256 = "1waglwxpr18a07m7ix9al6ac4hrdqzzqmy1qgp45b922nbkw9g10";
-in
-  stdenv.mkDerivation rec {
-  name = "joplin-${version}";
-
+in appimageTools.wrapType2 rec {
+  name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}-x86_64.AppImage";
-    inherit sha256;
+    sha256 = "1waglwxpr18a07m7ix9al6ac4hrdqzzqmy1qgp45b922nbkw9g10";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs = [ appimage-run gtk3 gsettings-desktop-schemas gobject-introspection ];
 
-  unpackPhase = ":";
-
-  installPhase = ''
-    mkdir -p $out/{bin,share}
-    cp $src $out/share/joplin.AppImage
-    echo "#!/bin/sh" > $out/bin/joplin-desktop
-    echo "${appimage-run}/bin/appimage-run $out/share/joplin.AppImage" >> $out/bin/joplin-desktop
-    chmod +x $out/bin/joplin-desktop $out/share/joplin.AppImage
+  profile = ''
+    export LC_ALL=C.UTF-8
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
-  meta = with stdenv.lib; {
+  multiPkgs = null; # no 32bit needed
+  extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
+  extraInstallCommands = "mv $out/bin/{${name},${pname}}";
+
+  meta = with lib; {
     description = "An open source note taking and to-do application with synchronisation capabilities";
     longDescription = ''
       Joplin is a free, open source note taking and to-do application, which can
