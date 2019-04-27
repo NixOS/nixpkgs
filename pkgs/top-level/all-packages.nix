@@ -10199,9 +10199,10 @@ in
 
   elastix = callPackage ../development/libraries/science/biology/elastix { };
 
-  enchant = callPackage ../development/libraries/enchant { };
+  enchant1 = callPackage ../development/libraries/enchant/1.x.nix { };
 
   enchant2 = callPackage ../development/libraries/enchant/2.x.nix { };
+  enchant = enchant2;
 
   enet = callPackage ../development/libraries/enet { };
 

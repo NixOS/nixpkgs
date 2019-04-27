@@ -13,10 +13,10 @@ buildPythonPackage rec {
     sha256 = "fc31cda72ace001da8fe5d42f11c26e514a91fa8c70468739216ddd8de64e2a0";
   };
 
-  propagatedBuildInputs = [ pkgs.enchant ];
+  propagatedBuildInputs = [ pkgs.enchant1 ];
 
   patchPhase = let
-    path_hack_script = "s|LoadLibrary(e_path)|LoadLibrary('${pkgs.enchant}/lib/' + e_path)|";
+    path_hack_script = "s|LoadLibrary(e_path)|LoadLibrary('${pkgs.enchant1}/lib/' + e_path)|";
   in ''
     sed -i "${path_hack_script}" enchant/_enchant.py
 
