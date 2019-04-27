@@ -16,11 +16,7 @@ let
 in rec {
 
   lua5_3 = (callPackage ./interpreter.nix {
-    sourceVersion = {
-      major = "5";
-      minor = "3";
-      patch = "5";
-    };
+    sourceVersion = { major = "5"; minor = "3"; patch = "5"; };
     hash = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac";
     patches = lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ] ;
   }).overrideAttrs( oa: {
@@ -29,43 +25,33 @@ in rec {
       sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile
     '';
 
-    # a grep a
     postBuild = stdenv.lib.optionalString (!stdenv.isDarwin) ''
-      set -x
       ( cd src; make $makeFlags "''${makeFlagsArray[@]}" liblua.so )
-      set +x
     '';
   });
 
+  lua5_3_compat = lua5_3.override({
+    compat = true;
+  });
+
+
   lua5_2 = callPackage ./interpreter.nix {
-    sourceVersion = {
-      major = "5";
-      minor = "2";
-      patch = "4";
-    };
+    sourceVersion = { major = "5"; minor = "2"; patch = "4"; };
     hash = "0jwznq0l8qg9wh5grwg07b5cy3lzngvl5m2nl1ikp6vqssmf9qmr";
     patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [ dsoPatch52 ];
-  };
-
-  lua5_1 = callPackage ./interpreter.nix {
-    sourceVersion = {
-      major = "5";
-      minor = "1";
-      patch = "5";
-    };
-    hash = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
-
-    patches = (if stdenv.isDarwin then [ ./5.1.darwin.patch ] else [ dsoPatch51 ])
-      ++ [ ./5.1.0004-Fix-stack-overflow-in-vararg-functions.patch ];
   };
 
   lua5_2_compat = lua5_2.override({
     compat = true;
   });
 
-  lua5_3_compat = lua5_3.override({
-    compat = true;
-  });
+
+  lua5_1 = callPackage ./interpreter.nix {
+    sourceVersion = { major = "5"; minor = "1"; patch = "5"; };
+    hash = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
+    patches = (if stdenv.isDarwin then [ ./5.1.darwin.patch ] else [ dsoPatch51 ])
+      ++ [ ./5.1.0004-Fix-stack-overflow-in-vararg-functions.patch ];
+  };
 
   luajit_2_0 = import ../luajit/2.0.nix {
     self = luajit_2_0;

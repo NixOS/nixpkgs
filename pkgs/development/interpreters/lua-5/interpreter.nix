@@ -1,10 +1,8 @@
 { stdenv, fetchurl, readline
 , compat ? false
 , callPackage
-# TODO remove ?
 , packageOverrides ? (self: super: {})
 , sourceVersion
-# for now sha256, then use SRI https://github.com/NixOS/nixpkgs/pull/59215#discussion_r274783187
 , hash
 , patches ? []
 }:
@@ -29,11 +27,12 @@ self = stdenv.mkDerivation rec {
 
   inherit patches;
 
+  # see configurePhase for additionnal flags that contain space
   makeFlags = [
     "INSTALL_TOP=${placeholder "out"}"
     "INSTALL_MAN=${placeholder "out"}/share/man/man1"
     "R=${version}"
-    ''LDFLAGS="-fPIC"''
+    "LDFLAGS=-fPIC"
     "V=${luaversion}"
   ] ++ (if stdenv.isDarwin then [
     "PLAT=macosx"
