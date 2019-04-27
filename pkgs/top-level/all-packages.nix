@@ -8401,6 +8401,7 @@ in
   scala_2_13 = callPackage ../development/compilers/scala/2.13.nix { jre = jre8; };
   scala = scala_2_13;
 
+  metals = callPackage ../development/tools/metals { };
   scalafix = callPackage ../development/tools/scalafix { };
   scalafmt = callPackage ../development/tools/scalafmt { };
 
