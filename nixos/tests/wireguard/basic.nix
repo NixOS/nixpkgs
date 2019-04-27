@@ -49,8 +49,12 @@ import ../make-test-python.nix ({ pkgs, lib, ...} :
               endpoint = "192.168.0.1:23542";
               persistentKeepalive = 25;
 
-              inherit (wg-snakeoil-keys.peer0) publicKey;
+              publicKeyFile = "/tmp/peer0.key";
             };
+
+            preSetup = ''
+              echo ${wg-snakeoil-keys.peer0.publicKey} > /tmp/peer0.key
+            '';
 
             postSetup = let inherit (pkgs) iproute; in ''
               ${iproute}/bin/ip route replace 10.23.42.1/32 dev wg0
