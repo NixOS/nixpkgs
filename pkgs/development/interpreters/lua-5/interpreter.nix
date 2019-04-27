@@ -5,6 +5,8 @@
 , sourceVersion
 , hash
 , patches ? []
+, postConfigure ? null
+, postBuild ? null
 }:
 let
 luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
@@ -52,6 +54,9 @@ self = stdenv.mkDerivation rec {
 
     runHook postConfigure
   '';
+  inherit postConfigure;
+
+  inherit postBuild;
 
   postInstall = ''
     mkdir -p "$out/share/doc/lua" "$out/lib/pkgconfig"
