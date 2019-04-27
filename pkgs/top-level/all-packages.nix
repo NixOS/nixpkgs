@@ -1689,8 +1689,6 @@ in
 
   nx-libs = callPackage ../tools/X11/nx-libs { };
 
-  httplz = callPackage ../tools/networking/httplz { };
-
   nyx = callPackage ../tools/networking/nyx { };
 
   onboard = callPackage ../applications/misc/onboard { };
@@ -3523,6 +3521,8 @@ in
   httpie = callPackage ../tools/networking/httpie { };
 
   httping = callPackage ../tools/networking/httping {};
+
+  httplz = callPackage ../tools/networking/httplz { };
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
