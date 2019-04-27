@@ -3941,7 +3941,6 @@ in
   lolcat = callPackage ../tools/misc/lolcat { };
 
   lsd = callPackage ../tools/misc/lsd { };
-  pazi = callPackage ../tools/misc/pazi { };
 
   lsdvd = callPackage ../tools/cd-dvd/lsdvd {};
 
@@ -4951,6 +4950,8 @@ in
   parted = callPackage ../tools/misc/parted { };
 
   paulstretch = callPackage ../applications/audio/paulstretch { };
+
+  pazi = callPackage ../tools/misc/pazi { };
 
   pell = callPackage ../applications/misc/pell { };
 
