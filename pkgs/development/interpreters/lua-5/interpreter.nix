@@ -27,7 +27,7 @@ self = stdenv.mkDerivation rec {
 
   inherit patches;
 
-  # see configurePhase for additionnal flags that contain space
+  # see configurePhase for additional flags (with space)
   makeFlags = [
     "INSTALL_TOP=${placeholder "out"}"
     "INSTALL_MAN=${placeholder "out"}/share/man/man1"
@@ -36,7 +36,6 @@ self = stdenv.mkDerivation rec {
     "V=${luaversion}"
   ] ++ (if stdenv.isDarwin then [
     "PLAT=macosx"
-    ''CC="$CC"''
   ] else [
     "PLAT=linux"
   ])
@@ -46,6 +45,7 @@ self = stdenv.mkDerivation rec {
     runHook preConfigure
 
     makeFlagsArray+=(CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" )
+    makeFlagsArray+=(${stdenv.lib.optionalString stdenv.isDarwin "CC=\"$CC\""})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
       TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
