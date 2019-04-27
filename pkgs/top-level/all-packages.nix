@@ -3102,6 +3102,8 @@ in
 
   gitea = callPackage ../applications/version-management/gitea { };
 
+  glulxe = callPackage ../games/glulxe { };
+    
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
   glmark2 = callPackage ../tools/graphics/glmark2 { };
