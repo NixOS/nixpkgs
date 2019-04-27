@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, json-glib, libcroco, gettext, libsecret
-, python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
+, python3, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
 , libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
 , libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
 , libpulseaudio, libical, gobject-introspection, gstreamer, wrapGAppsHook, libxslt, gcr, caribou
@@ -10,7 +10,7 @@
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 
 let
-  pythonEnv = python3Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );
+  pythonEnv = python3.withPackages ( ps: with ps; [ pygobject3 ] );
 
 in stdenv.mkDerivation rec {
   name = "gnome-shell-${version}";
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales
-    sassc desktop-file-utils libxslt.bin
+    sassc desktop-file-utils libxslt.bin python3
   ];
   buildInputs = [
     systemd caribou

@@ -2561,6 +2561,8 @@ in
 
   eid-mw = callPackage ../tools/security/eid-mw { };
 
+  epubcheck = callPackage ../tools/text/epubcheck { };
+
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   s-tar = callPackage ../tools/archivers/s-tar {};
@@ -4129,6 +4131,8 @@ in
   leafpad = callPackage ../applications/editors/leafpad { };
 
   leatherman = callPackage ../development/libraries/leatherman { };
+
+  ledmon = callPackage ../tools/system/ledmon { };
 
   leela = callPackage ../tools/graphics/leela { };
 
@@ -7754,6 +7758,8 @@ in
   opam_1_2 = callPackage ../development/tools/ocaml/opam/1.2.2.nix {
     inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
   };
+
+  pforth = callPackage ../development/compilers/pforth {};
 
   picat = callPackage ../development/compilers/picat {
     stdenv = overrideCC stdenv gcc49;
