@@ -20,7 +20,7 @@ in rec {
     hash = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac";
     patches = lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ] ;
   }).overrideAttrs( oa: {
-    postConfigure = ''
+    postConfigure = lib.optionalString (!stdenv.isDarwin) ''
       cat ${./lua-5.3-dso.make} >> src/Makefile
       sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile
     '';

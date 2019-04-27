@@ -48,7 +48,7 @@ self = stdenv.mkDerivation rec {
     makeFlagsArray+=(CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" )
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
-      TO_LIB="${ if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
+      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
 
     runHook postConfigure
   '';
