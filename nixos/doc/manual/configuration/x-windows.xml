@@ -59,7 +59,15 @@
 <screen>
 # systemctl start display-manager.service
 </screen>
-  <simplesect xml:id="sec-x11-auto-login">
+ </para>
+ <para>
+  On 64-bit systems, if you want OpenGL for 32-bit programs such as in Wine,
+  you should also set the following:
+<programlisting>
+<xref linkend="opt-hardware.opengl.driSupport32Bit"/> = true;
+</programlisting>
+ </para>
+ <simplesect xml:id="sec-x11-auto-login">
   <title>Auto-login</title>
   <para>
   The x11 login screen can be skipped entirely, automatically logging you into
@@ -85,14 +93,6 @@
 </programlisting>
   </para>
  </simplesect>
- </para>
- <para>
-  On 64-bit systems, if you want OpenGL for 32-bit programs such as in Wine,
-  you should also set the following:
-<programlisting>
-<xref linkend="opt-hardware.opengl.driSupport32Bit"/> = true;
-</programlisting>
- </para>
  <simplesect xml:id="sec-x11-graphics-cards-nvidia">
   <title>Proprietary NVIDIA drivers</title>
   <para>
