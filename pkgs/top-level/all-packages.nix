@@ -3941,6 +3941,7 @@ in
   lolcat = callPackage ../tools/misc/lolcat { };
 
   lsd = callPackage ../tools/misc/lsd { };
+  pazi = callPackage ../tools/misc/pazi { };
 
   lsdvd = callPackage ../tools/cd-dvd/lsdvd {};
 
