@@ -44,14 +44,8 @@ stdenv.mkDerivation rec {
       substituteInPlace coregrind/Makefile.in \
          --replace /usr/include/mach ${xnu}/include/mach
 
-      echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
-      find -name "Makefile.in" | while read file; do
-         substituteInPlace "$file" \
-           --replace dsymutil ${llvm}/bin/llvm-dsymutil
-      done
-
       substituteInPlace coregrind/m_debuginfo/readmacho.c \
-         --replace /usr/bin/dsymutil ${llvm}/bin/llvm-dsymutil
+         --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
 
       echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
       substituteInPlace coregrind/link_tool_exe_darwin.in \

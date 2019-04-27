@@ -79,7 +79,7 @@ qtModule {
     cat <<EOF > src/3rdparty/chromium/build/mac/find_sdk.py
 #!/usr/bin/env python
 print("${darwin.apple_sdk.sdk}")
-print("10.10.0")
+print("10.12.0")
 EOF
 
     cat <<EOF > src/3rdparty/chromium/build/config/mac/sdk_info.py
@@ -101,22 +101,6 @@ EOF
     substituteInPlace src/3rdparty/chromium/sandbox/mac/BUILD.gn \
       --replace 'libs = [ "sandbox" ]' 'libs = [ "/usr/lib/libsandbox.1.dylib" ]'
     '');
-
-  NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.isDarwin [
-      "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
-      "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10"
-
-      #
-      # Prevent errors like
-      # /nix/store/xxx-apple-framework-CoreData/Library/Frameworks/CoreData.framework/Headers/NSEntityDescription.h:51:7:
-      # error: pointer to non-const type 'id' with no explicit ownership
-      #     id** _kvcPropertyAccessors;
-      #
-      # TODO remove when new Apple SDK is in
-      #
-      "-fno-objc-arc"
-    ];
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES

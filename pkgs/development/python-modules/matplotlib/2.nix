@@ -60,7 +60,7 @@ buildPythonPackage rec {
       url = "https://github.com/matplotlib/matplotlib/commit/2980184d092382a40ab21f95b79582ffae6e19d6.patch";
       sha256 = "1c0wj28zy8s5h6qiavx9zzbhlmhjwpzbc3fyyw9039mbnqk0spg2";
     })
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ ./darwin-stdenv-2.2.3.patch ];
+  ];
 
   # Matplotlib tries to find Tcl/Tk by opening a Tk window and asking the
   # corresponding interpreter object for its library paths. This fails if

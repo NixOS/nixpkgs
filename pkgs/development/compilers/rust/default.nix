@@ -2,6 +2,8 @@
 , buildPackages
 , newScope, callPackage
 , CoreFoundation, Security
+, llvmPackages_5
+, pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
 }: rec {
   makeRustPlatform = { rustc, cargo, ... }: {
     rust = {
@@ -48,10 +50,15 @@
       buildRustPackages = buildPackages.rust.packages.stable;
       # Analogous to stdenv
       rustPlatform = makeRustPlatform self.buildRustPackages;
-      rustc = self.callPackage ./rustc.nix {
+      rustc = self.callPackage ./rustc.nix ({
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
-      };
+      } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
+        stdenv = llvmPackages_5.stdenv;
+        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+      });
       cargo = self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;

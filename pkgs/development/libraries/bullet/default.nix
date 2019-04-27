@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=argument-outside-range";
+
   meta = with stdenv.lib; {
     description = "A professional free 3D Game Multiphysics Library";
     longDescription = ''

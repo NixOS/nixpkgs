@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ];
 
   # Upstream is aware of it; it may be in the next release.
-  patches = [ ./s_isdir.patch ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin stdenv.secure-format-patch;
+  patches = [ ./s_isdir.patch ]
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-secure-format.patch;
 
   meta = {
     homepage = https://www.gnu.org/software/m4/;
