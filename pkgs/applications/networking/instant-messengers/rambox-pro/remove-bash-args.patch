@@ -1,0 +1,35 @@
+--- a/resources/app.asar.unpacked/node_modules/ad-block/vendor/depot_tools/create-chromium-git-src
++++ b/resources/app.asar.unpacked/node_modules/ad-block/vendor/depot_tools/create-chromium-git-src
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env -S bash -e
++#!/usr/bin/env bash
+ #
+ # Copyright (c) 2009 The Chromium Authors. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+@@ -9,6 +9,8 @@
+ # Create and configure a local Chromium git repository.
+ #
+ 
++set -e
++
+ GITSERVER="${GITSERVER:-git.chromium.org}"
+ SVNSERVER="${SVNSERVER:-svn://svn.chromium.org/chrome}"
+ TMP=".create_chromium_git_src.$$"
+--- a/resources/app.asar.unpacked/node_modules/ad-block/node_modules/bloom-filter-cpp/vendor/depot_tools/create-chromium-git-src
++++ b/resources/app.asar.unpacked/node_modules/ad-block/node_modules/bloom-filter-cpp/vendor/depot_tools/create-chromium-git-src
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env -S bash -e
++#!/usr/bin/env bash
+ #
+ # Copyright (c) 2009 The Chromium Authors. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+@@ -9,6 +9,8 @@
+ # Create and configure a local Chromium git repository.
+ #
+ 
++set -e
++
+ GITSERVER="${GITSERVER:-git.chromium.org}"
+ SVNSERVER="${SVNSERVER:-svn://svn.chromium.org/chrome}"
+ TMP=".create_chromium_git_src.$$"
+ 
