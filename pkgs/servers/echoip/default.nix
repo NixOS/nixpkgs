@@ -1,10 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage {
+buildGoModule {
   pname = "echoip";
   version = "unstable-2018-11-20";
-
-  goPackagePath = "github.com/mpolden/echoip";
 
   src = fetchFromGitHub {
     owner = "mpolden";
@@ -13,9 +11,7 @@ buildGoPackage {
     sha256 = "0n5d9i8cc5lqgy5apqd3zhyl3h1xjacf612z8xpvbm75jnllcvxy";
   };
 
-  goDeps = ./deps.nix;
-
-  outputs = [ "bin" "out" ];
+  modSha256 = "025p891klwpid5fw4z39fimgfkwgkcwqpn5276hflzdp1hfv35ly";
 
   postInstall = ''
     mkdir -p $out
