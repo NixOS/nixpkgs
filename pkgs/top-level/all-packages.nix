@@ -1025,9 +1025,14 @@ in
     charles4
   ;
 
-  libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
+  inherit (libsForQt5.callPackage ../development/libraries/libqmatrixclient { })
+    libqmatrixclient_0_4
+    libqmatrixclient_0_5
+    libqmatrixclient;
 
-  quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
+  inherit (libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { })
+    quaternion
+    quaternion-git;
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
@@ -18809,7 +18814,8 @@ in
 
   mm-common = callPackage ../development/libraries/mm-common { };
 
-  matrique = libsForQt5.callPackage ../applications/networking/instant-messengers/matrique { };
+  # Renamed
+  matrique = spectral;
 
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
