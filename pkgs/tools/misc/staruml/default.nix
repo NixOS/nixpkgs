@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
       sha256 = "05gzrnlssjkhyh0wv019d4r7p40lxnsa1sghazll6f233yrqmxb0";
     };
 
-  buildInputs = [ dpkg ];
-
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper dpkg ];
 
   unpackPhase = ''
     mkdir pkg
