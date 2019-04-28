@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-system-monitor-${version}";
-  version = "1.22.0";
+  version = "1.22.1";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0rs0n5ivmvi355fp3ymcp1jj2sz9viw31475aw7zh7s1l7dn969x";
+    sha256 = "0yh1sh5snd7ivchh6l9rbn1s7ia4j5ihhzhqkyjnhr8ln59dvcbm";
   };
 
   nativeBuildInputs = [
