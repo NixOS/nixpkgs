@@ -38,10 +38,6 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
   ];
 
-  patches = [
-   ./correct-post-install.patch
-  ];
-
   mesonFlags = [
     "-Ddisable_pycompile=true"
   ];
