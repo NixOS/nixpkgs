@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
-    rev = "cc057f3e93f5b1033b04decee03cdb44177e48b3";
-    sha256 = "1xg80bi2465p5r8zfmb34iga9yqs3is1k4f13hw0ligvhb58gas0";
+    rev = version;
+    sha256 = "16hma8rrkam6ngn5vbdaryn31vdixvii6920g9z928gylz9xkd3g";
   };
 
   nativeBuildInputs = [
@@ -36,10 +36,6 @@ stdenv.mkDerivation rec {
     librsvg
     gtk3
     gnome3.adwaita-icon-theme
-  ];
-
-  patches = [
-   ./correct-post-install.patch
   ];
 
   mesonFlags = [
