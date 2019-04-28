@@ -42,17 +42,17 @@ with luaPackages; stdenv.mkDerivation rec {
   cmakeFlags = "-DOVERRIDE_VERSION=${version}";
 
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
+  # LUA_CPATH and LUA_PATH are used only for *building*, see the --search flags
+  # below for how awesome finds the libraries it needs at runtime.
   LUA_CPATH = "${lgi}/lib/lua/${lua.luaversion}/?.so";
-  LUA_PATH  = "?.lua;${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
+  LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;;";
 
   postInstall = ''
     wrapProgram $out/bin/awesome \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --add-flags '--search ${lgi}/lib/lua/${lua.luaversion}' \
       --add-flags '--search ${lgi}/share/lua/${lua.luaversion}' \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LUA_PATH ';'  "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua" \
-      --prefix LUA_CPATH ';' "${lgi}/lib/lua/${lua.luaversion}/?.so"
+      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
 
     wrapProgram $out/bin/awesome-client \
       --prefix PATH : "${which}/bin"
