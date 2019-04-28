@@ -33,7 +33,12 @@ in
        paths = concatMapStrings (s: " -I ${s}/etc/apparmor.d")
          ([ pkgs.apparmor-profiles ] ++ cfg.packages);
      in {
-       wantedBy = [ "local-fs.target" ];
+       after = [ "local-fs.target" ];
+       before = [ "sysinit.target" ];
+       wantedBy = [ "multi-user.target" ];
+       unitConfig = {
+         DefaultDependencies = "no";
+       };
        serviceConfig = {
          Type = "oneshot";
          RemainAfterExit = "yes";
