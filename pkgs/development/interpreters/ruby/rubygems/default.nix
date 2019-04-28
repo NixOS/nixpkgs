@@ -2,18 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "rubygems";
-  version = "2.7.7";
+  version = "3.0.3";
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
-    sha256 = "1jsmmd31j8j066b83lin4bbqz19jhrirarzb41f3sjhfdjiwkcjc";
+    sha256 = "0b6b9ads8522804xv8b8498gqwsv4qawv13f81kyc7g966y7lfmy";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/zimbatm/rubygems/compare/v2.6.6...v2.6.6-nix.patch";
-      sha256 = "0297rdb1m6v75q8665ry9id1s74p9305dv32l95ssf198liaihhd";
-    })
+    ./0001-add-post-extract-hook.patch
+    ./0002-binaries-with-env-shebang.patch
+    ./0003-gem-install-default-to-user.patch
   ];
 
   installPhase = ''
