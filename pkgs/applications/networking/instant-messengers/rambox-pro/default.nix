@@ -1,4 +1,4 @@
-{ autoPatchelfHook, fetchurl, makeWrapper, nodePackages.asar, nss, stdenv, xorg.libxkbfile }:
+{ autoPatchelfHook, fetchurl, makeWrapper, nodePackages, nss, stdenv, xorg }:
 
 rambox-pro = stdenv.mkDerivation rec {
   name = "rambox-pro-${version}";
@@ -8,7 +8,7 @@ rambox-pro = stdenv.mkDerivation rec {
   dontStrip = true;
 
   buildInputs = [ nss xorg.libxkbfile ];
-  nativeBuildInputs = [ autoPatchelfHook nodePackages.asar makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper nodePackages.asar ];
 
   src = fetchurl {
     url = "https://github.com/ramboxapp/download/releases/download/v${version}/RamboxPro-${version}-linux-x64.tar.gz";
