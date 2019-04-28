@@ -22,6 +22,7 @@
 , libxml2
 , libxslt
 , meson
+, mousetweaks
 , networkmanager
 , ninja
 , nss
@@ -30,12 +31,12 @@
 , pkgconfig
 , polkit
 , python3
+, stdenv
 , substituteAll
 , systemd
 , tzdata
 , upower
 , wrapGAppsHook
-, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
   patches = let patchPath = "${src2}/debian/patches"; in [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit tzdata;
+      inherit tzdata mousetweaks;
     })
     "${patchPath}/45_suppress-printer-may-not-be-connected-notification.patch"
     "${patchPath}/64_restore_terminal_keyboard_shortcut_schema.patch"

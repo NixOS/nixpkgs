@@ -1669,6 +1669,10 @@ in
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
+  mousetweaks = callPackage ../applications/accessibility/mousetweaks {
+    inherit (pkgs.xorg) libX11 libXtst libXfixes;
+  };
+
   mp3blaster = callPackage ../applications/audio/mp3blaster { };
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
