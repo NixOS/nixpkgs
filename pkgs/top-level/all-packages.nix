@@ -3934,6 +3934,8 @@ in
 
   mmv = callPackage ../tools/misc/mmv { };
 
+  monaco = callPackage ../data/fonts/monaco {};
+
   most = callPackage ../tools/misc/most { };
 
   motion = callPackage ../applications/video/motion { };
