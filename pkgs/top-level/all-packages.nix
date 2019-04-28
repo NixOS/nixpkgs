@@ -8031,6 +8031,8 @@ in
 
   duktape = callPackage ../development/interpreters/duktape { };
 
+  evcxr = callPackage ../development/interpreters/evcxr { };
+
   beam = callPackage ./beam-packages.nix { };
 
   inherit (beam.interpreters)
