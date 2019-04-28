@@ -50,7 +50,7 @@ let
     filesystem = callLibs ./filesystem.nix;
 
     # back-compat aliases
-    platforms = systems.forMeta;
+    platforms = systems.doubles;
 
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
