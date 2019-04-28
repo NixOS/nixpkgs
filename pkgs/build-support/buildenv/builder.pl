@@ -122,14 +122,12 @@ sub findFiles {
     }
 
     unless (-d $target && ($oldTarget eq "" || -d $oldTarget)) {
-        if ($ignoreCollisions) {
-            warn "collision between `$target' and `$oldTarget'\n" if $ignoreCollisions == 1;
-            return;
-        } elsif ($checkCollisionContents && checkCollision($oldTarget, $target)) {
-            return;
-        } else {
-            die "collision between `$target' and `$oldTarget'\n";
+        if (!$checkCollisionContents || !checkCollision($oldTarget, $target)) {
+            my $collisionMessage = "collision between `$target' and `$oldTarget'\n";
+            die $collisionMessage unless $ignoreCollisions;
+            warn $collisionMessage;
         }
+        return;
     }
 
     findFilesInDir($relName, $oldTarget, $ignoreCollisions, $checkCollisionContents, $oldPriority) unless $oldTarget eq "";

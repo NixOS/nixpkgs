@@ -14,11 +14,13 @@ lib.makeOverridable
 , # The paths to symlink.
   paths
 
-, # Whether to ignore collisions or abort.
+, # Whether to ignore (and just warn) or abort if there is a collision. Note
+  # that what is considered a collision is affected by checkCollisionContents.
   ignoreCollisions ? false
 
-, # If there is a collision, check whether the contents and permissions match
-  # and only if not, throw a collision error.
+, # Whether to check file contents and attributes to decide if something is
+  # a collision. If this is true, then when two packages have a colliding file
+  # with the same content and attributes, it is not considered a collision.
   checkCollisionContents ? true
 
 , # The paths (relative to each element of `paths') that we want to
