@@ -1,6 +1,6 @@
-{ autoPatchelfHook, fetchurl, makeWrapper, nodePackages, nss, stdenv, xorg }:
+{ autoPatchelfHook, electron, fetchurl, makeDesktopItem, makeWrapper, nodePackages, nss, stdenv, xdg_utils, xorg }:
 
-rambox-pro = stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "rambox-pro-${version}";
   version = "1.1.2";
 
@@ -24,9 +24,9 @@ rambox-pro = stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${pkgs.electron}/lib/electron/.electron-wrapped $out/bin/ramboxpro \
+    makeWrapper ${electron}/lib/electron/.electron-wrapped $out/bin/ramboxpro \
       --add-flags "$out/opt/RamboxPro/resources/app.asar.unpacked --without-update" \
-      --prefix PATH : ${pkgs.xdg_utils}/bin
+      --prefix PATH : ${xdg_utils}/bin
   '';
 
   desktopItem = makeDesktopItem {

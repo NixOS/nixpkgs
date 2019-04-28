@@ -5347,6 +5347,8 @@ in
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
 
+  rambox-pro = callPackage ../applications/networking/instant-messengers/rambox-pro { };
+
   ranger = callPackage ../applications/misc/ranger { };
 
   rarcrack = callPackage ../tools/security/rarcrack { };
