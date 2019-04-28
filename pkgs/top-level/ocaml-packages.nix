@@ -738,10 +738,6 @@ let
       then callPackage ../development/ocaml-modules/uri { }
       else callPackage ../development/ocaml-modules/uri/legacy.nix { };
 
-    uri_1_9 = callPackage ../development/ocaml-modules/uri {
-      legacy = true;
-    };
-
     uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
       legacyVersion = true;
     };
