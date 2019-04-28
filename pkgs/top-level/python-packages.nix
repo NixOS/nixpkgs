@@ -3998,6 +3998,8 @@ in {
 
   pyserial = callPackage ../development/python-modules/pyserial {};
 
+  pysonos = callPackage ../development/python-modules/pysonos { };
+
   pymongo = callPackage ../development/python-modules/pymongo {};
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };

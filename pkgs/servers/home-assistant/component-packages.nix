@@ -1632,8 +1632,8 @@
     "sonarr.sensor" = ps: with ps; [  ];
     "songpal" = ps: with ps; [  ];
     "songpal.media_player" = ps: with ps; [  ];
-    "sonos" = ps: with ps; [  ];
-    "sonos.media_player" = ps: with ps; [  ];
+    "sonos" = ps: with ps; [ pysonos ];
+    "sonos.media_player" = ps: with ps; [ pysonos ];
     "sony_projector" = ps: with ps; [  ];
     "sony_projector.switch" = ps: with ps; [  ];
     "soundtouch" = ps: with ps; [  ];
