@@ -48,6 +48,9 @@ in
          ExecStop = map (p:
            ''${pkgs.apparmor-parser}/bin/apparmor_parser -Rv "${p}"''
          ) cfg.profiles;
+         ExecReload = map (p:
+           ''${pkgs.apparmor-parser}/bin/apparmor_parser --reload ${paths} "${p}"''
+         ) cfg.profiles;
        };
      };
    };
