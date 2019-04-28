@@ -8593,9 +8593,12 @@ in
 
   awf = callPackage ../development/tools/misc/awf { };
 
-  electron = callPackage ../development/tools/electron { };
+  electron_5 = callPackage ../development/tools/electron/5.x.nix { };
+
+  electron_4 = callPackage ../development/tools/electron { };
 
   electron_3 = callPackage ../development/tools/electron/3.x.nix { };
+  electron = electron_4;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
