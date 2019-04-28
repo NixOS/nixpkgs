@@ -108,6 +108,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     hydraPlatforms = platforms.linux;
 
-    maintainers = [ maintainers.peti ];
+    maintainers = with maintainers; [ peti timokau ];
   };
 }
