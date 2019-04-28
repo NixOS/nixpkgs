@@ -5428,6 +5428,8 @@ in {
 
   aiohue = callPackage ../development/python-modules/aiohue { };
 
+  pymdown-extensions = callPackage ../development/python-modules/pymdown-extensions { };
+
   PyMVGLive = callPackage ../development/python-modules/pymvglive { };
 
   coinmarketcap = callPackage ../development/python-modules/coinmarketcap { };
