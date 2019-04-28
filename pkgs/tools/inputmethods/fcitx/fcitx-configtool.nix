@@ -21,11 +21,7 @@ stdenv.mkDerivation rec {
 
   # Point exec_prefix to installed location of fcitx-remote (in the fcitx
   # package).
-  preConfigure = ''
-    sed -ie '/^set(exec_prefix /d' CMakeLists.txt
-    substituteInPlace config.h.in \
-      --subst-var-by exec_prefix ${fcitx}
-  '';
+  patches = [ ./0001-Fix-exec_prefix.patch ];
 
   preFixup = ''
     wrapProgram $out/bin/fcitx-config-gtk3 \

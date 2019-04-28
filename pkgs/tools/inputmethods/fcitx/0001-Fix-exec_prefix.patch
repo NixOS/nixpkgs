@@ -1,0 +1,25 @@
+From 47c46f913add20e894165050fde9e0416bfa8661 Mon Sep 17 00:00:00 2001
+From: Robert Irelan <rirelan@gmail.com>
+Date: Sun, 28 Apr 2019 09:51:08 -0700
+Subject: [PATCH] Fix exec_prefix
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6f1b23d..45ef2fc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -41,7 +41,7 @@ string(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" FCITX4_PATCH_VERSION
+ 
+ set(datadir ${CMAKE_INSTALL_PREFIX}/share)
+ set(localedir ${CMAKE_INSTALL_PREFIX}/share/locale)
+-set(exec_prefix "${CMAKE_INSTALL_PREFIX}")
++set(exec_prefix "${FCITX4_PREFIX}")
+ set(liblocaledir ${CMAKE_INSTALL_PREFIX}/lib/locale)
+ 
+ configure_file(config.h.in config.h)
+-- 
+2.21.0
+
