@@ -165,6 +165,7 @@ let
     branch = str;
     homepage = either (listOf str) str;
     downloadPage = str;
+    changelog = either (listOf str) str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
     maintainers = listOf (attrsOf str);
     priority = int;
