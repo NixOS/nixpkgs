@@ -84,7 +84,7 @@ in
     by Hydra.
   '';
 
-  tests = callPackages ../test {};
+  tests = recurseIntoAttrs (callPackages ../test {});
 
   ### Nixpkgs maintainer tools
 
