@@ -414,6 +414,7 @@
   ./services/misc/ihaskell.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
+  ./services/misc/jellyfin.nix
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix

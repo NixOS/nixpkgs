@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "The Free Software Media System";
     homepage = https://jellyfin.github.io/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ nyanloutre ];
+    maintainers = with maintainers; [ nyanloutre minijackson ];
   };
 }
