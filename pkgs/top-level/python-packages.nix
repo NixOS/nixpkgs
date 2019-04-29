@@ -356,6 +356,8 @@ in {
 
   azure-mgmt-media = callPackage ../development/python-modules/azure-mgmt-media { };
 
+  azure-mgmt-monitor = callPackage ../development/python-modules/azure-mgmt-monitor { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
