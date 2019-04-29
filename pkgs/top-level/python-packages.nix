@@ -340,6 +340,8 @@ in {
 
   azure-mgmt-loganalytics = callPackage ../development/python-modules/azure-mgmt-loganalytics { };
 
+  azure-mgmt-logic = callPackage ../development/python-modules/azure-mgmt-logic { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
