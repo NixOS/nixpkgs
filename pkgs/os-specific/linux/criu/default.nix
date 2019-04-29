@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, protobuf, protobufc, asciidoc
+{ stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
 , xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
-, python }:
+, which, python, makeWrapper, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
   name    = "criu-${version}";
-  version = "3.9";
+  version = "3.11";
 
   src = fetchurl {
     url    = "https://download.openvz.org/criu/${name}.tar.bz2";
-    sha256 = "0l71lmklr42pc2bj37pkp7y8va8bx42n9f6i4q4idsx4wrdd75fx";
+    sha256 = "03nimyn3wy5mlw30gq7bvlzvvprqjv8f25240yj5arzlld8mhsw8";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig docbook_xsl ];
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python ];
+  nativeBuildInputs = [ pkgconfig docbook_xsl which makeWrapper docbook_xml_dtd_45 ];
+  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python iptables ];
 
   postPatch = ''
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
@@ -23,17 +23,22 @@ stdenv.mkDerivation rec {
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
-  buildPhase = "make PREFIX=$out";
+  makeFlags = [ "PREFIX=$(out)" "ASCIIDOC=${asciidoc}/bin/asciidoc" "XMLTO=${xmlto}/bin/xmlto" ];
 
-  makeFlags = "PREFIX=$(out)";
+  outputs = [ "out" "dev" "man" ];
+
+  preBuild = ''
+    # No idea why but configure scripts break otherwise.
+    export SHELL=""
+  '';
 
   hardeningDisable = [ "stackprotector" "fortify" ];
   # dropping fortify here as well as package uses it by default:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
 
-  installPhase = ''
-    mkdir -p $out/etc/logrotate.d
-    make install PREFIX=$out LIBDIR=$out/lib ASCIIDOC=${asciidoc}/bin/asciidoc XMLTO=${xmlto}/bin/xmlto
+  postFixup = ''
+    wrapProgram $out/bin/criu \
+      --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
 
   meta = with stdenv.lib; {
