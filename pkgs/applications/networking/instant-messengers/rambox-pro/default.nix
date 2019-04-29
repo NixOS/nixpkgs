@@ -1,7 +1,7 @@
 { autoPatchelfHook, electron, fetchurl, makeDesktopItem, makeWrapper, nodePackages, nss, stdenv, xdg_utils, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "rambox-pro-${version}";
+  pname = "rambox-pro-${version}";
   version = "1.1.2";
 
   dontBuild = true;
