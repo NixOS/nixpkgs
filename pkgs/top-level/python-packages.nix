@@ -400,6 +400,8 @@ in {
 
   azure-mgmt-trafficmanager = callPackage ../development/python-modules/azure-mgmt-trafficmanager { };
 
+  azure-mgmt-web = callPackage ../development/python-modules/azure-mgmt-web { };
+
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
