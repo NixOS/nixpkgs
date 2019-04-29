@@ -350,6 +350,8 @@ in {
 
   azure-mgmt-managementpartner = callPackage ../development/python-modules/azure-mgmt-managementpartner { };
 
+  azure-mgmt-maps = callPackage ../development/python-modules/azure-mgmt-maps { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
