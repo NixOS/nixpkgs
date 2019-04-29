@@ -2921,6 +2921,11 @@
     github = "marcweber";
     name = "Marc Weber";
   };
+	marenz = {
+		email = "marenz@arkom.men";
+		github = "marenz2569";
+		name = "Markus Schmidl";
+	};
   markus1189 = {
     email = "markus1189@gmail.com";
     github = "markus1189";
