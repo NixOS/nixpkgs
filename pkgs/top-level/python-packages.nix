@@ -368,6 +368,8 @@ in {
 
   azure-mgmt-powerbiembedded = callPackage ../development/python-modules/azure-mgmt-powerbiembedded { };
 
+  azure-mgmt-rdbms = callPackage ../development/python-modules/azure-mgmt-rdbms { };
+
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
 
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
