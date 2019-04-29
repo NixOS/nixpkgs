@@ -294,6 +294,8 @@ in {
 
   azure-mgmt-cognitiveservices = callPackage ../development/python-modules/azure-mgmt-cognitiveservices { };
 
+  azure-mgmt-commerce = callPackage ../development/python-modules/azure-mgmt-commerce { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
