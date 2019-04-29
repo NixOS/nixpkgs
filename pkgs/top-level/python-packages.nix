@@ -354,6 +354,8 @@ in {
 
   azure-mgmt-marketplaceordering = callPackage ../development/python-modules/azure-mgmt-marketplaceordering { };
 
+  azure-mgmt-media = callPackage ../development/python-modules/azure-mgmt-media { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
