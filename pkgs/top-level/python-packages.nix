@@ -258,6 +258,8 @@ in {
 
   azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
 
+  azure-loganalytics = callPackage ../development/python-modules/azure-loganalytics { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
