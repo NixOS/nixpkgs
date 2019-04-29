@@ -366,6 +366,8 @@ in {
 
   azure-mgmt-policyinsights = callPackage ../development/python-modules/azure-mgmt-policyinsights { };
 
+  azure-mgmt-powerbiembedded = callPackage ../development/python-modules/azure-mgmt-powerbiembedded { };
+
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
 
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
