@@ -1,14 +1,14 @@
 { stdenv, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
-  version = "2.1.11";
+  version = "2.1.15";
   name = "grab-site-${version}";
 
   src = fetchFromGitHub {
     rev = "${version}";
-    owner = "ludios";
+    owner = "ArchiveTeam";
     repo = "grab-site";
-    sha256 = "0w24ngr2b7nipqiwkxpql2467b5aq2vbknkb0sry6a457kb5ppsl";
+    sha256 = "1h3ajsj1c2wlxji1san97vmjd9d97dv0rh0jw1p77irkcvhzfpj8";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Crawler for web archiving with WARC output";
-    homepage = https://github.com/ludios/grab-site;
+    homepage = https://github.com/ArchiveTeam/grab-site;
     license = licenses.mit;
     maintainers = with maintainers; [ ivan ];
     platforms = platforms.all;
