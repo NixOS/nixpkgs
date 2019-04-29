@@ -66,59 +66,12 @@ let
       top                                  = "111.220.1";    # 07yc3gkazzbdmag0297qm1favsvzb8kwwnk9pr467a1xjpchbl1m
       xnu                                  = "4903.221.2";   # 1szlwx53mk7w2ic7qzvi3cz25zcrhiwq6j7g2yr34i7xmimzd967
     };
-
     "osx-10.11.6" = {
-      PowerManagement = "572.50.1";
+      # Latest release as of 2019-04-29, not listed in 10.12 - 10.14.1
       SmartCardServices = "55111";
-      dtrace        = "168";
-      xnu           = "3248.60.10";
-      libpthread    = "138.10.4";
-      libiconv      = "44";
-      Libnotify     = "150.40.1";
-      objc4         = "680";
-      eap8021x      = "222.40.1";
-      dyld          = "360.22";
-      architecture  = "268";
-      CommonCrypto  = "60075.50.1";
-      copyfile      = "127";
-      Csu           = "85";
-      ppp           = "809.50.2";
-      libclosure    = "65";
-      Libinfo       = "477.50.4";
-      Libsystem     = "1226.10.1";
-      removefile    = "41";
-      libresolv     = "60";
-
-      # Their release page is a bit of a mess here, so I'm going to lie a bit and say this version
-      # is the right one, even though it isn't. The version I have here doesn't appear to be linked
-      # to any OS releases, but Apple also doesn't mention mDNSResponder from 10.11 to 10.11.6, and
-      # neither of those versions are publicly available.
-      libplatform   = "125";
-      mDNSResponder = "625.41.2";
-
-      libutil       = "43";
-      libunwind     = "35.3";
-      Librpcsvc     = "26";
-      developer_cmds= "62";
-      network_cmds  = "481.20.1";
-      basic_cmds    = "55";
-      adv_cmds      = "163";
-      file_cmds     = "264.1.1";
-      shell_cmds    = "187";
-      system_cmds   = "550.6";
-      diskdev_cmds   = "593";
-      top           = "108";
-      text_cmds     = "99";
-    };
-    "osx-10.11.5" = {
-      Libc          = "1082.50.1"; # 10.11.6 still unreleased :/
     };
     "osx-10.10.5" = {
-      adv_cmds      = "158";
-      CF            = "1153.18";
       ICU           = "531.48";
-      libdispatch   = "442.1.4";
-      Security      = "57031.40.6";
       security_systemkeychain = "55202";
 
       IOAudioFamily                        = "203.3";
@@ -180,19 +133,20 @@ let
     "osx-10.7.4" = {
       Libm = "2026";
     };
-    "osx-10.6.2" = {
+    "osx-10.6.8" = {
+      # Latest release as of 2019-04-29, not listed in 10.7 - 10.14.1
       CarbonHeaders = "18.1";
     };
     "osx-10.5.8" = {
       adv_cmds = "119";
     };
-    "dev-tools-7.0" = {
-      bootstrap_cmds = "93";
-    };
-    "dev-tools-5.1" = {
-      bootstrap_cmds = "86";
-    };
-    "dev-tools-3.2.6" = {
+
+    "dev-tools-10.1" = {
+      developer_cmds = "66";
+      bootstrap_cmds = "96.20.2.200.4";
+    }
+    "dev-tools-4.2" = {
+      # Latest release as of 2019-04-29, not listed in 4.3 - 10.1
       bsdmake = "24";
     };
   };
@@ -261,24 +215,24 @@ let
     SmartCardServices = applePackage "SmartCardServices" "osx-10.11.6" "1qqjlbi6j37mw9p3qpfnwf14xh9ff8h5786bmvzwc4kblfglabkm" {};
 
     inherit (adv_cmds) ps locale;
-    architecture    = applePackage "architecture"      "osx-10.11.6"     "1pbpjcd7is69hn8y29i98ci0byik826if8gnp824ha92h90w0fq3" {};
-    bootstrap_cmds  = applePackage "bootstrap_cmds"    "dev-tools-7.0"   "1v5dv2q3af1xwj5kz0a5g54fd5dm6j4c9dd2g66n4kc44ixyrhp3" {};
+    architecture    = applePackage "architecture"      "macos-10.14.1"     "TODO" {};
+    bootstrap_cmds  = applePackage "bootstrap_cmds"    "dev-tools-10.1"   "1v5dv2q3af1xwj5kz0a5g54fd5dm6j4c9dd2g66n4kc44ixyrhp3" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
-    CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.2"      "1zam29847cxr6y9rnl76zqmkbac53nx0szmqm9w5p469a6wzjqar" {};
-    CommonCrypto    = applePackage "CommonCrypto"      "osx-10.11.6"     "0vllfpb8f4f97wj2vpdd7w5k9ibnsbr6ff1zslpp6q323h01n25y" {};
+    CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.8"      "1zam29847cxr6y9rnl76zqmkbac53nx0szmqm9w5p469a6wzjqar" {};
+    CommonCrypto    = applePackage "CommonCrypto"      "macos-10.14.1"     "TODO" {};
     configd         = applePackage "configd"           "osx-10.8.5"      "1gxakahk8gallf16xmhxhprdxkh3prrmzxnmxfvj0slr0939mmr2" {};
-    copyfile        = applePackage "copyfile"          "osx-10.11.6"     "1rkf3iaxmjz5ycgrmf0g971kh90jb2z1zqxg5vlqz001s4y457gs" {};
-    Csu             = applePackage "Csu"               "osx-10.11.6"     "0yh5mslyx28xzpv8qww14infkylvc1ssi57imhi471fs91sisagj" {};
-    dtrace          = applePackage "dtrace"            "osx-10.11.6"     "04mi0jy8gy0w59rk9i9dqznysv6fzz1v5mq779s41cp308yi0h1c" {};
-    dtrace-xcode    = applePackage "dtrace/xcode.nix"  "osx-10.11.6"     "04mi0jy8gy0w59rk9i9dqznysv6fzz1v5mq779s41cp308yi0h1c" {};
-    dyld            = applePackage "dyld"              "osx-10.11.6"     "0qkjmjazm2zpgvwqizhandybr9cm3gz9pckx8rmf0py03faafc08" {};
-    eap8021x        = applePackage "eap8021x"          "osx-10.11.6"     "0iw0qdib59hihyx2275rwq507bq2a06gaj8db4a8z1rkaj1frskh" {};
+    copyfile        = applePackage "copyfile"          "macos-10.14.1"     "TODO" {};
+    Csu             = applePackage "Csu"               "macos-10.14.1"     "TODO" {};
+    dtrace          = applePackage "dtrace"            "macos-10.14.1"     "TODO" {};
+    dtrace-xcode    = applePackage "dtrace/xcode.nix"  "macos-10.14.1"     "TODO" {};
+    dyld            = applePackage "dyld"              "macos-10.14.1"     "TODO" {};
+    eap8021x        = applePackage "eap8021x"          "macos-10.14.1"     "TODO" {};
 
     # Splicing is currently broken in Nixpkgs
     # cctools need to be specified manually here to handle this
     ICU             = applePackage "ICU"               "osx-10.10.5"     "1qihlp42n5g4dl0sn0f9pc0bkxy1452dxzf0vr6y5gqpshlzy03p" {};
 
-    IOKit           = applePackage "IOKit"             "osx-10.11.6"     "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x00" { inherit IOKitSrcs; };
+    IOKit           = applePackage "IOKit"             "macos-10.14.1"     "TODO" { inherit IOKitSrcs; };
     launchd         = applePackage "launchd"           "osx-10.9.5"      "0w30hvwqq8j5n90s3qyp0fccxflvrmmjnicjri4i1vd2g196jdgj" {};
     libauto         = applePackage "libauto"           "osx-10.9.5"      "17z27yq5d7zfkwr49r7f0vn9pxvj95884sd2k6lq6rfaz9gxqhy3" {};
     Libc            = applePackage "Libc"              "osx-10.11.5"     "1qv7r0dgz06jy9i5agbqzxgdibb0m8ylki6g5n5pary88lzrawfd" {
@@ -288,37 +242,37 @@ let
       };
     };
     Libc_old        = applePackage "Libc/825_40_1.nix" "osx-10.8.5"      "0xsx1im52gwlmcrv4lnhhhn9dyk5ci6g27k6yvibn9vj8fzjxwcf" {};
-    libclosure      = applePackage "libclosure"        "osx-10.11.6"     "1zqy1zvra46cmqv6vsf1mcsz3a76r9bky145phfwh4ab6y15vjpq" {};
+    libclosure      = applePackage "libclosure"        "macos-10.14.1"     "TODO" {};
     libdispatch     = applePackage "libdispatch"       "osx-10.10.5"     "0jsfbzp87lwk9snlby0hd4zvj7j894p5q3cw0wdx9ny1mcp3kdcj" {};
-    libiconv        = applePackage "libiconv"          "osx-10.11.6"     "11h6lfajydri4widis62q8scyz7z8l6msqyx40ly4ahsdlbl0981" {};
-    Libinfo         = applePackage "Libinfo"           "osx-10.11.6"     "0qjgkd4y8sjvwjzv5wwyzkb61pg8wwg95bkp721dgzv119dqhr8x" {};
+    libiconv        = applePackage "libiconv"          "macos-10.14.1"     "TODO" {};
+    Libinfo         = applePackage "Libinfo"           "macos-10.14.1"     "TODO" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "02sd82ig2jvvyyfschmb4gpz6psnizri8sh6i982v341x6y4ysl7" {};
-    Libnotify       = applePackage "Libnotify"         "osx-10.11.6"     "0zbcyxlcfhf91jxczhd5bq9qfgvg494gwwp3l7q5ayb2qdihzr8b" {};
-    libplatform     = applePackage "libplatform"       "osx-10.11.6"     "1v4ik6vlklwsi0xb1g5kmhy29j9xk5m2y8xb9zbi1k4ng8x39czk" {};
-    libpthread      = applePackage "libpthread"        "osx-10.11.6"     "1kbw738cmr9pa7pz1igmajs307clfq7gv2vm1sqdzhcnnjxbl28w" {};
-    libresolv       = applePackage "libresolv"         "osx-10.11.6"     "09flfdi3dlzq0yap32sxidacpc4nn4va7z12a6viip21ix2xb2gf" {};
-    Libsystem       = applePackage "Libsystem"         "osx-10.11.6"     "1nfkmbqml587v2s1d1y2s2v8nmr577jvk51y6vqrfvsrhdhc2w94" {};
-    libutil         = applePackage "libutil"           "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
-    libutil-new     = applePackage "libutil/new.nix"   "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
-    libunwind       = applePackage "libunwind"         "osx-10.11.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
-    mDNSResponder   = applePackage "mDNSResponder"     "osx-10.11.6"     "069incq28a78yh1bnr17h9cd5if5mwqpq8ahnkyxxx25fkaxgzcf" {};
-    objc4           = applePackage "objc4"             "osx-10.11.6"     "00b7vbgxni8frrqyi69b4njjihlwydzjd9zj9x4z5dbx8jabkvrj" {};
-    ppp             = applePackage "ppp"               "osx-10.11.6"     "1dql6r1v0vbcs04958nn2i6p31yfsxyy51jca63bm5mf0gxalk3f" {};
-    removefile      = applePackage "removefile"        "osx-10.11.6"     "1b6r74ry3k01kypvlaclf33fha15pcm0kzx9zrymlg66wg0s0i3r" {};
+    Libnotify       = applePackage "Libnotify"         "macos-10.14.1"     "TODO" {};
+    libplatform     = applePackage "libplatform"       "macos-10.14.1"     "TODO" {};
+    libpthread      = applePackage "libpthread"        "macos-10.14.1"     "TODO" {};
+    libresolv       = applePackage "libresolv"         "macos-10.14.1"     "TODO" {};
+    Libsystem       = applePackage "Libsystem"         "macos-10.14.1"     "TODO" {};
+    libutil         = applePackage "libutil"           "macos-10.14.1"     "TODO" {};
+    libutil-new     = applePackage "libutil/new.nix"   "macos-10.14.1"     "TODO" {};
+    libunwind       = applePackage "libunwind"         "macos-10.14.1"     "TODO" {};
+    mDNSResponder   = applePackage "mDNSResponder"     "macos-10.14.1"     "TODO" {};
+    objc4           = applePackage "objc4"             "macos-10.14.1"     "TODO" {};
+    ppp             = applePackage "ppp"               "macos-10.14.1"     "TODO" {};
+    removefile      = applePackage "removefile"        "macos-10.14.1"     "TODO" {};
     Security        = applePackage "Security"          "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
-    xnu             = applePackage "xnu"               "osx-10.11.6"     "0yhziq4dqqcbjpf6vyqn8xhwva2zb525gndkx8cp8alzwp76jnr9" {};
-    Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "1zwfwcl9irxl1dlnf2b4v30vdybp0p0r6n6g1pd14zbdci1jcg2k" {};
-    adv_cmds        = applePackage "adv_cmds/xcode.nix" "osx-10.11.6"    "12gbv35i09aij9g90p6b3x2f3ramw43qcb2gjrg8lzkzmwvcyw9q" {};
-    basic_cmds      = applePackage "basic_cmds"        "osx-10.11.6"     "0hvab4b1v5q2x134hdkal0rmz5gsdqyki1vb0dbw4py1bqf0yaw9" {};
-    developer_cmds  = applePackage "developer_cmds"    "osx-10.11.6"     "1r9c2b6dcl22diqf90x58psvz797d3lxh4r2wppr7lldgbgn24di" {};
-    diskdev_cmds    = applePackage "diskdev_cmds"      "osx-10.11.6"     "1ssdyiaq5m1zfy96yy38yyknp682ki6bvabdqd5z18fa0rv3m2ar" {};
-    network_cmds    = applePackage "network_cmds"      "osx-10.11.6"     "0lhi9wz84qr1r2ab3fb4nvmdg9gxn817n5ldg7zw9gnf3wwn42kw" {};
-    file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "1zfxbmasps529pnfdjvc13p7ws2cfx8pidkplypkswyff0nff4wp" {};
-    shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "0084k271v66h4jqp7q7rmjvv7w4mvhx3aq860qs8jbd30canm86n" {};
-    system_cmds     = applePackage "system_cmds"       "osx-10.11.6"     "1h46j2c5v02pkv5d9fyv6cpgyg0lczvwicrx6r9s210cl03l77jl" {};
-    text_cmds       = applePackage "text_cmds"         "osx-10.11.6"     "1f93m7dd0ghqb2hwh905mjhzblyfr7dwffw98xhgmv1mfdnigxg0" {};
-    top             = applePackage "top"               "osx-10.11.6"     "0i9120rfwapgwdvjbfg0ya143i29s1m8zbddsxh39pdc59xnsg5l" {};
-    PowerManagement = applePackage "PowerManagement"   "osx-10.11.6"     "1llimhvp0gjffd47322lnjq7cqwinx0c5z7ikli04ad5srpa68mh" {};
+    xnu             = applePackage "xnu"               "macos-10.14.1"     "TODO" {};
+    Librpcsvc       = applePackage "Librpcsvc"         "macos-10.14.1"     "TODO" {};
+    adv_cmds        = applePackage "adv_cmds/xcode.nix" "macos-10.14.1"    "TODO" {};
+    basic_cmds      = applePackage "basic_cmds"        "macos-10.14.1"     "TODO" {};
+    developer_cmds  = applePackage "developer_cmds"    "dev-tools-10.1"    "TODO" {};
+    diskdev_cmds    = applePackage "diskdev_cmds"      "macos-10.14.1"     "TODO" {};
+    network_cmds    = applePackage "network_cmds"      "macos-10.14.1"     "TODO" {};
+    file_cmds       = applePackage "file_cmds"         "macos-10.14.1"     "TODO" {};
+    shell_cmds      = applePackage "shell_cmds"        "macos-10.14.1"     "TODO" {};
+    system_cmds     = applePackage "system_cmds"       "macos-10.14.1"     "TODO" {};
+    text_cmds       = applePackage "text_cmds"         "macos-10.14.1"     "TODO" {};
+    top             = applePackage "top"               "macos-10.14.1"     "TODO" {};
+    PowerManagement = applePackage "PowerManagement"   "macos-10.14.1"     "TODO" {};
 
     security_systemkeychain = applePackage "security_systemkeychain" "osx-10.10.5" "0xviskdgxsail15npi0billyiysvljlmg38mmhnr7qi4ymnnjr90" {};
 
