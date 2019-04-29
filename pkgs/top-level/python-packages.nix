@@ -286,6 +286,8 @@ in {
 
   azure-mgmt-batch = callPackage ../development/python-modules/azure-mgmt-batch { };
 
+  azure-mgmt-batchai = callPackage ../development/python-modules/azure-mgmt-batchai { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
