@@ -2312,6 +2312,8 @@ in {
 
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server {};
 
+  scrapy-crawlera = callPackage ../development/python-modules/scrapy-crawlera { };
+
   stem = callPackage ../development/python-modules/stem { };
 
   svg-path = callPackage ../development/python-modules/svg-path { };
