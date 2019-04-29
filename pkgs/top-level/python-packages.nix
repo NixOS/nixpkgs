@@ -1403,6 +1403,8 @@ in {
   else
     callPackage ../development/python-modules/cherrypy/17.nix { };
 
+  cfscrape = callPackage ../development/python-modules/cfscrape { };
+
   cfgv = callPackage ../development/python-modules/cfgv { };
 
   cftime = callPackage ../development/python-modules/cftime {};
