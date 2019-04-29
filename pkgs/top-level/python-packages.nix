@@ -378,6 +378,8 @@ in {
 
   azure-mgmt-relay = callPackage ../development/python-modules/azure-mgmt-relay { };
 
+  azure-mgmt-reservations = callPackage ../development/python-modules/azure-mgmt-reservations { };
+
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
 
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
