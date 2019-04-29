@@ -382,6 +382,8 @@ in {
 
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
 
+  azure-mgmt-scheduler = callPackage ../development/python-modules/azure-mgmt-scheduler { };
+
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
