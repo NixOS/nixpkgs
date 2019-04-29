@@ -20899,8 +20899,6 @@ in
 
   inherit (callPackages ../games/minecraft-server { })
     minecraft-server_1_13_2
-    minecraft-server_1_13_1
-    minecraft-server_1_13_0
     minecraft-server_1_12_2;
 
   moon-buggy = callPackage ../games/moon-buggy {};

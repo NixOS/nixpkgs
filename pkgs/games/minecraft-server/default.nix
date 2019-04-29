@@ -42,18 +42,6 @@ in {
     sha256 = "13h8dxrrgqa1g6sd7aaw26779hcsqsyjm7xm0sknifn54lnamlzz";
   };
 
-  minecraft-server_1_13_1 = common {
-    version = "1.13.1";
-    url = "https://launcher.mojang.com/mc/game/1.13.1/server/fe123682e9cb30031eae351764f653500b7396c9/server.jar";
-    sha256 = "1lak29b7dm0w1cmzjn9gyix6qkszwg8xgb20hci2ki2ifrz099if";
-  };
-
-  minecraft-server_1_13_0 = common {
-    version = "1.13.0";
-    url = "https://launcher.mojang.com/mc/game/1.13/server/d0caafb8438ebd206f99930cfaecfa6c9a13dca0/server.jar";
-    sha256 = "1fahqnylxzbvc0fdsqk0x15z40mcc5b7shrckab1qcsdj0kkjvz7";
-  };
-
   minecraft-server_1_12_2 = common {
     version = "1.12.2";
     url = "https://s3.amazonaws.com/Minecraft.Download/versions/1.12.2/minecraft_server.1.12.2.jar";
