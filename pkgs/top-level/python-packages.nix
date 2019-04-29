@@ -316,6 +316,8 @@ in {
 
   azure-mgmt-datalake-store = callPackage ../development/python-modules/azure-mgmt-datalake-store { };
 
+  azure-mgmt-datamigration = callPackage ../development/python-modules/azure-mgmt-datamigration { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
