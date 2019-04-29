@@ -260,6 +260,8 @@ in {
 
   azure-loganalytics = callPackage ../development/python-modules/azure-loganalytics { };
 
+  azure-servicebus = callPackage ../development/python-modules/azure-servicebus { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
