@@ -244,6 +244,8 @@ in {
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
 
+  azure-batch = callPackage ../development/python-modules/azure-batch { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
