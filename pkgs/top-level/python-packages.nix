@@ -384,6 +384,8 @@ in {
 
   azure-mgmt-scheduler = callPackage ../development/python-modules/azure-mgmt-scheduler { };
 
+  azure-mgmt-search = callPackage ../development/python-modules/azure-mgmt-search { };
+
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
