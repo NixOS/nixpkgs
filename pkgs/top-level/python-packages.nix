@@ -396,6 +396,8 @@ in {
 
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
 
+  azure-mgmt-subscription = callPackage ../development/python-modules/azure-mgmt-subscription { };
+
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
