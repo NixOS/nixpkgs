@@ -398,6 +398,8 @@ in {
 
   azure-mgmt-subscription = callPackage ../development/python-modules/azure-mgmt-subscription { };
 
+  azure-mgmt-trafficmanager = callPackage ../development/python-modules/azure-mgmt-trafficmanager { };
+
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
