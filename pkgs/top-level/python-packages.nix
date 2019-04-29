@@ -386,6 +386,8 @@ in {
 
   azure-mgmt-search = callPackage ../development/python-modules/azure-mgmt-search { };
 
+  azure-mgmt-servicebus = callPackage ../development/python-modules/azure-mgmt-servicebus { };
+
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
