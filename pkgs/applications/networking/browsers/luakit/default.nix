@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     # build-utils/docgen/gen.lua:2: module 'lib.lousy.util' not found
     # TODO: why is not this the default?
-    LUA_PATH=?.lua
+    LUA_PATH=?.lua:$LUA_PATH
   '';
 
   makeFlags = [
