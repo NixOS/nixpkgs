@@ -58,7 +58,8 @@ qtModule {
     ++ optionals flashplayerFix
       [
         ''-DNIXPKGS_LIBGTK2="${getLib gtk2}/lib/libgtk-x11-2.0"''
-        ''-DNIXPKGS_LIBGDK2="${getLib gdk_pixbuf}/lib/libgdk-x11-2.0"''
+        # this file used to exist in gdk_pixbuf?
+        ''-DNIXPKGS_LIBGDK2="${getLib gtk2}/lib/libgdk-x11-2.0"''
       ]
     ++ optional (!stdenv.isDarwin) ''-DNIXPKGS_LIBUDEV="${getLib systemd}/lib/libudev"'';
 
