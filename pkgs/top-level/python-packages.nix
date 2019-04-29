@@ -1008,6 +1008,8 @@ in {
 
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
+  uamqp = callPackage ../development/python-modules/uamqp { };
+
   unifi = callPackage ../development/python-modules/unifi { };
 
   uvloop = callPackage ../development/python-modules/uvloop { };
