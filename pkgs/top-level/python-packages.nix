@@ -254,6 +254,8 @@ in {
 
   azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
 
+  azure-graphrbac = callPackage ../development/python-modules/azure-graphrbac { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
