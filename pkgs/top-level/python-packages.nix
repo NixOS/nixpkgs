@@ -338,6 +338,8 @@ in {
 
   azure-mgmt-keyvault = callPackage ../development/python-modules/azure-mgmt-keyvault { };
 
+  azure-mgmt-loganalytics = callPackage ../development/python-modules/azure-mgmt-loganalytics { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
