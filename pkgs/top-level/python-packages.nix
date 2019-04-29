@@ -376,6 +376,8 @@ in {
 
   azure-mgmt-redis = callPackage ../development/python-modules/azure-mgmt-redis { };
 
+  azure-mgmt-relay = callPackage ../development/python-modules/azure-mgmt-relay { };
+
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
 
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
