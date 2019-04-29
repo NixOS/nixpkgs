@@ -17633,6 +17633,8 @@ in
   wireshark-gtk = throw "Not supported anymore. Use wireshark-qt or wireshark-cli instead.";
   wireshark-cli = wireshark.override { withQt = false; };
 
+  termshark = callPackage ../tools/networking/termshark { };
+
   fbida = callPackage ../applications/graphics/fbida { };
 
   fdupes = callPackage ../tools/misc/fdupes { };
