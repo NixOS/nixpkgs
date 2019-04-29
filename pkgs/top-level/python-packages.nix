@@ -350,6 +350,8 @@ in {
 
   docrep = callPackage ../development/python-modules/docrep { };
 
+  docxtotxt = callPackage ../development/python-modules/docx2txt { };
+
   dominate = callPackage ../development/python-modules/dominate { };
 
   emcee = callPackage ../development/python-modules/emcee { };
