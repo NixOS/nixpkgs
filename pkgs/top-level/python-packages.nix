@@ -248,6 +248,8 @@ in {
 
   azure-cosmosdb-nspkg = callPackage ../development/python-modules/azure-cosmosdb-nspkg { };
 
+  azure-cosmosdb-table = callPackage ../development/python-modules/azure-cosmosdb-table { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
