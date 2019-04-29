@@ -8,6 +8,7 @@ let
   pg = config.services.postgresql;
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
+  useSqlite = cfg.database.type == "sqlite3";
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
@@ -15,11 +16,15 @@ let
 
     [database]
     DB_TYPE = ${cfg.database.type}
-    HOST = ${if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port}
-    NAME = ${cfg.database.name}
-    USER = ${cfg.database.user}
-    PASSWD = #dbpass#
-    PATH = ${cfg.database.path}
+    ${optionalString (usePostgresql || useMysql) ''
+      HOST = ${if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port}
+      NAME = ${cfg.database.name}
+      USER = ${cfg.database.user}
+      PASSWD = #dbpass#
+    ''}
+    ${optionalString useSqlite ''
+      PATH = ${cfg.database.path}
+    ''}
     ${optionalString usePostgresql ''
       SSL_MODE = disable
     ''}

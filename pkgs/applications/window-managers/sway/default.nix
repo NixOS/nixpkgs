@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
       sha256 = "0r583nmqvq43ib93yv6flw8pj833v32lbs0q0xld56s3rnzvvdcp";
     })
     ./sway-config-no-nix-store-references.patch
+    ./load-configuration-from-etc.patch
   ];
 
   nativeBuildInputs = [ pkgconfig meson ninja scdoc ];

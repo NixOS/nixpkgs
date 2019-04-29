@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
 
+  postInstall = ''
+    substituteInPlace "$out"/lib/cmake/Snappy/SnappyTargets.cmake \
+      --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES "'$dev'"'
+  '';
+
   checkTarget = "test";
 
   doCheck = true;

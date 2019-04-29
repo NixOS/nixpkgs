@@ -1,15 +1,15 @@
 diff --git a/meson_post_install.py b/meson_post_install.py
-index ba95055..17f7926 100644
+index 5cc2dc4..dd27ad5 100644
 --- a/meson_post_install.py
 +++ b/meson_post_install.py
 @@ -9,8 +9,8 @@ localstatedir = os.path.normpath(destdir + os.sep + sys.argv[1])
  # FIXME: meson will not track the creation of these directories
  #        https://github.com/mesonbuild/meson/blob/master/mesonbuild/scripts/uninstall.py#L39
  dst_dirs = [
--  os.path.join(localstatedir, 'lib', 'AccountsService', 'icons'),
--  os.path.join(localstatedir, 'lib', 'AccountsService', 'users'),
-+  #os.path.join(localstatedir, 'lib', 'AccountsService', 'icons'),
-+  #os.path.join(localstatedir, 'lib', 'AccountsService', 'users'),
+-  (os.path.join(localstatedir, 'lib', 'AccountsService', 'icons'), 0o775),
+-  (os.path.join(localstatedir, 'lib', 'AccountsService', 'users'), 0o700),
++#  (os.path.join(localstatedir, 'lib', 'AccountsService', 'icons'), 0o775),
++#  (os.path.join(localstatedir, 'lib', 'AccountsService', 'users'), 0o700),
  ]
  
- for dst_dir in dst_dirs:
+ for (dst_dir, dst_dir_mode) in dst_dirs:

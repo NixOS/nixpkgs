@@ -78,9 +78,9 @@ in {
     environment = {
       systemPackages = [ swayJoined ] ++ cfg.extraPackages;
       etc = {
-        "sway/config".source = "${swayPackage}/etc/sway/config";
-        #"sway/security.d".source = "${swayPackage}/etc/sway/security.d/";
-        #"sway/config.d".source = "${swayPackage}/etc/sway/config.d/";
+        "sway/config".source = mkOptionDefault "${swayPackage}/etc/sway/config";
+        #"sway/security.d".source = mkOptionDefault "${swayPackage}/etc/sway/security.d/";
+        #"sway/config.d".source = mkOptionDefault "${swayPackage}/etc/sway/config.d/";
       };
     };
     security.pam.services.swaylock = {};

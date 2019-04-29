@@ -1,11 +1,19 @@
-{ stdenv, ocaml, findlib, dune, js_of_ocaml-compiler
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune, js_of_ocaml-compiler
 , camlp4, ocsigen_deriving
 }:
 
 stdenv.mkDerivation rec {
+	version = "3.2.1";
 	name = "js_of_ocaml-camlp4-${version}"; 
 
-	inherit (js_of_ocaml-compiler) version src installPhase meta;
+	src = fetchFromGitHub {
+		owner = "ocsigen";
+		repo = "js_of_ocaml";
+		rev = version;
+		sha256 = "1v2hfq0ra9j07yz6pj6m03hrvgys4vmx0gclchv94yywpb2wc7ik";
+	};
+
+	inherit (js_of_ocaml-compiler) installPhase meta;
 
 	buildInputs = [ ocaml findlib dune camlp4 ocsigen_deriving ];
 

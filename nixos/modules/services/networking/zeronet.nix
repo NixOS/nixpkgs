@@ -5,13 +5,15 @@ let
 
   zConfFile = pkgs.writeTextFile {
     name = "zeronet.conf";
-    
+
     text = ''
       [global]
       data_dir = ${cfg.dataDir}
       log_dir = ${cfg.logDir}
     '' + lib.optionalString (cfg.port != null) ''
       ui_port = ${toString cfg.port}
+    '' + lib.optionalString (cfg.fileserverPort != null) ''
+      fileserver_port = ${toString cfg.fileserverPort}
     '' + lib.optionalString (cfg.torAlways) ''
       tor = always
     '' + cfg.extraConfig;
@@ -39,6 +41,15 @@ in with lib; {
       default = null;
       example = 43110;
       description = "Optional zeronet web UI port.";
+    };
+
+    fileserverPort = mkOption {
+      # Not optional: when absent zeronet tries to write one to the
+      # read-only config file and crashes
+      type = types.int;
+      default = 12261;
+      example = 12261;
+      description = "Zeronet fileserver port.";
     };
 
     tor = mkOption {
