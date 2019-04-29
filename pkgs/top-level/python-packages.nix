@@ -278,6 +278,8 @@ in {
 
   azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
 
+  azure-mgmt-advisor = callPackage ../development/python-modules/azure-mgmt-advisor { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
