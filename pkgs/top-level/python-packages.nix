@@ -362,6 +362,8 @@ in {
 
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
+  azure-mgmt-notificationhubs = callPackage ../development/python-modules/azure-mgmt-notificationhubs { };
+
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
 
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
