@@ -392,6 +392,8 @@ in {
 
   azure-mgmt-signalr = callPackage ../development/python-modules/azure-mgmt-signalr { };
 
+  azure-mgmt-sql = callPackage ../development/python-modules/azure-mgmt-sql { };
+
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
