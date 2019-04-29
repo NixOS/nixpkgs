@@ -252,6 +252,8 @@ in {
 
   azure-datalake-store = callPackage ../development/python-modules/azure-datalake-store { };
 
+  azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
