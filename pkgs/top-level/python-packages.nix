@@ -262,6 +262,22 @@ in {
 
   azure-servicebus = callPackage ../development/python-modules/azure-servicebus { };
 
+  azure-servicefabric = callPackage ../development/python-modules/azure-servicefabric { };
+
+  azure-servicemanagement-legacy = callPackage ../development/python-modules/azure-servicemanagement-legacy { };
+
+  azure-storage-nspkg = callPackage ../development/python-modules/azure-storage-nspkg { };
+
+  azure-storage-common = callPackage ../development/python-modules/azure-storage-common { };
+
+  azure-storage = callPackage ../development/python-modules/azure-storage { };
+
+  azure-storage-blob = callPackage ../development/python-modules/azure-storage-blob { };
+
+  azure-storage-file = callPackage ../development/python-modules/azure-storage-file { };
+
+  azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
@@ -273,20 +289,6 @@ in {
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
 
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
-
-  azure-storage = callPackage ../development/python-modules/azure-storage { };
-
-  azure-storage-nspkg = callPackage ../development/python-modules/azure-storage-nspkg { };
-
-  azure-storage-common = callPackage ../development/python-modules/azure-storage-common { };
-
-  azure-storage-blob = callPackage ../development/python-modules/azure-storage-blob { };
-
-  azure-storage-file = callPackage ../development/python-modules/azure-storage-file { };
-
-  azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
-
-  azure-servicemanagement-legacy = callPackage ../development/python-modules/azure-servicemanagement-legacy { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
