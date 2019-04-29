@@ -318,6 +318,8 @@ in {
 
   azure-mgmt-datamigration = callPackage ../development/python-modules/azure-mgmt-datamigration { };
 
+  azure-mgmt-devspaces = callPackage ../development/python-modules/azure-mgmt-devspaces { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
