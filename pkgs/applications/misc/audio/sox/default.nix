@@ -1,9 +1,10 @@
-{ config, lib, stdenv, fetchurl, CoreAudio
+{ config, lib, stdenv, fetchurl, pkgconfig, CoreAudio
 , enableAlsa ? true, alsaLib ? null
 , enableLibao ? true, libao ? null
 , enableLame ? config.sox.enableLame or false, lame ? null
 , enableLibmad ? true, libmad ? null
 , enableLibogg ? true, libogg ? null, libvorbis ? null
+, enableOpusfile ? true, opusfile ? null
 , enableFLAC ? true, flac ? null
 , enablePNG ? true, libpng ? null
 , enableLibsndfile ? true, libsndfile ? null
@@ -22,12 +23,16 @@ stdenv.mkDerivation rec {
     sha256 = "0v2znlxkxxcd3f48hf3dx9pq7i6fdhb62kgj7wv8xggz8f35jpxl";
   };
 
+  # configure.ac uses pkg-config only to locate libopusfile
+  nativeBuildInputs = optional enableOpusfile pkgconfig;
+
   buildInputs =
     optional (enableAlsa && stdenv.isLinux) alsaLib ++
     optional enableLibao libao ++
     optional enableLame lame ++
     optional enableLibmad libmad ++
     optionals enableLibogg [ libogg libvorbis ] ++
+    optional enableOpusfile opusfile ++
     optional enableFLAC flac ++
     optional enablePNG libpng ++
     optional enableLibsndfile libsndfile ++
