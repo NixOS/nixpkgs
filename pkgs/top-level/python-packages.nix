@@ -358,6 +358,8 @@ in {
 
   azure-mgmt-monitor = callPackage ../development/python-modules/azure-mgmt-monitor { };
 
+  azure-mgmt-msi = callPackage ../development/python-modules/azure-mgmt-msi { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
