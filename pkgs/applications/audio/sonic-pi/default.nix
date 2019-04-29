@@ -12,11 +12,33 @@
 , bash
 , makeWrapper
 , jack2Full
+, alsaLib
+, libX11
 }:
 
 let
   supercollider = libsForQt5.callPackage ../../../development/interpreters/supercollider {
     fftw = fftwSinglePrec;
+  };
+
+  # sonic-pi uses a specific version of osmid:
+  # https://github.com/samaaron/sonic-pi/blob/0fff19db99350ab143a3a5c3e353c73555ca3574/app/gui/qt/build-debian-app#L12
+  osmid = stdenv.mkDerivation rec {
+    name = "osmid";
+
+    src = fetchFromGitHub {
+      owner = "llloret";
+      repo = "osmid";
+      rev = "391f35f789f18126003d2edf32902eb714726802";
+      sha256 = "sha256:0v5pm5fpz7ckrvz7w2r74nkkvyhjdhl7k12p6vj5n67xf9wvq3ib";
+    };
+
+    buildInputs = [ cmake alsaLib libX11 ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      cp {m2o,o2m} $out/bin/
+    '';
   };
 
 in stdenv.mkDerivation rec {
@@ -57,6 +79,10 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     export SONIC_PI_HOME=$TMPDIR
     export AUBIO_LIB=${aubio}/lib/libaubio.so
+    export OSMID_DIR=app/server/native/osmid
+
+    mkdir -p $OSMID_DIR
+    cp ${osmid}/bin/{m2o,o2m} $OSMID_DIR
 
     pushd app/server/ruby/bin
       ./compile-extensions.rb
