@@ -324,6 +324,8 @@ in {
 
   azure-mgmt-dns = callPackage ../development/python-modules/azure-mgmt-dns { };
 
+  azure-mgmt-eventgrid = callPackage ../development/python-modules/azure-mgmt-eventgrid { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
