@@ -4546,6 +4546,8 @@ in {
 
   sqlite3dbm = callPackage ../development/python-modules/sqlite3dbm { };
 
+  sqlitedict = callPackage ../development/python-modules/sqlitedict { };
+
   sqlobject = callPackage ../development/python-modules/sqlobject { };
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
