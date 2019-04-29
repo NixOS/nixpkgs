@@ -2599,7 +2599,7 @@ dont-distribute-packages:
   - XML
 
 broken-packages:
-  # these packages don't compile
+  # These packages don't compile or depend on packages that don't compile.
   - 3dmodels
   - 4Blocks
   - a50
@@ -3278,6 +3278,7 @@ broken-packages:
   - c2hsc
   - cabal-audit
   - cabal-bundle-clib
+  - cabal-cache
   - cabal-cargs
   - cabal-constraints
   - cabal-db
@@ -6056,6 +6057,7 @@ broken-packages:
   - ihaskell-diagrams
   - ihaskell-display
   - ihaskell-gnuplot
+  - ihaskell-graphviz
   - ihaskell-hatex
   - ihaskell-hvega
   - ihaskell-inline-r
@@ -7661,6 +7663,7 @@ broken-packages:
   - polh-lexicon
   - polimorf
   - Pollutocracy
+  - poly
   - poly-control
   - polydata
   - polydata-core
@@ -9528,6 +9531,7 @@ broken-packages:
   - vector-bytestring
   - vector-clock
   - vector-conduit
+  - vector-endian
   - vector-extras
   - vector-functorlazy
   - vector-heterogenous
