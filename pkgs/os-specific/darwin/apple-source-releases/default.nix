@@ -9,6 +9,7 @@ let
   # https://gist.github.com/burke/2ca715c526ed36202e28b2a17ba46e92 may be useful to generate a list
   # of versions for a new release, and was used for 10.14.1.
   versions = {
+    # Released October 2018, latest as of 2019-04-29
     "macos-10.14.1" = {
       CommonCrypto                         = "60118.220.1";  # 1hsv6pwx99b2bzacwrbkdm33rx4d5sga9aai1jhnl0dy9fd4hrvq
       Csu                                  = "85";           # 0yh5mslyx28xzpv8qww14infkylvc1ssi57imhi471fs91sisagj
@@ -66,10 +67,12 @@ let
       top                                  = "111.220.1";    # 07yc3gkazzbdmag0297qm1favsvzb8kwwnk9pr467a1xjpchbl1m
       xnu                                  = "4903.221.2";   # 1szlwx53mk7w2ic7qzvi3cz25zcrhiwq6j7g2yr34i7xmimzd967
     };
+    # Released July 2016
     "osx-10.11.6" = {
       # Latest release as of 2019-04-29, not listed in 10.12 - 10.14.1
       SmartCardServices = "55111";
     };
+    # Released August 2015
     "osx-10.10.5" = {
       ICU           = "531.48";
       security_systemkeychain = "55202";
@@ -90,6 +93,7 @@ let
       IODVDStorageFamily                   = "35";
       IOKitUser                            = "1050.20.2";
     };
+    # Released September 2014
     "osx-10.9.5" = {
       launchd            = "842.92.1";
       libauto            = "185.5";
@@ -100,15 +104,19 @@ let
 
       IOStorageFamily = "172";
     };
+    # Released September 2013
     "osx-10.8.5" = {
       configd     = "453.19";
       Libc        = "825.40.1";
       IOUSBFamily = "630.4.5";
     };
+    # Released June 2013
     "osx-10.8.4" = {
       IOUSBFamily = "560.4.2";
     };
+    # Released September 2012
     "osx-10.7.5" = {
+      # Latest releases as of 2019-04-29, not listed in 10.8 - 10.14.1 (all libsecurity* listed here)
       libsecurity_apple_csp      = "55003";
       libsecurity_apple_cspdl    = "55000";
       libsecurity_apple_file_dl  = "55000";
@@ -130,21 +138,30 @@ let
       libsecurity_utilities      = "55030.3";
       libsecurityd               = "55004";
     };
+    # Released May 2012
     "osx-10.7.4" = {
+      # Latest release as of 2019-04-29, not listed in 10.7.5 - 10.14.1
       Libm = "2026";
     };
+    # Released June 2011
     "osx-10.6.8" = {
       # Latest release as of 2019-04-29, not listed in 10.7 - 10.14.1
       CarbonHeaders = "18.1";
     };
+    # Released August 2009
     "osx-10.5.8" = {
+      # See adv_cmds/default.nix for justification explaining why we're using
+      # this ancient version (I think? It actually seems to contradict itself
+      # and a newer version may actually work).
       adv_cmds = "119";
     };
 
+    # Released October 2018, latest as of 2019-04-29, corresponds to macOS 10.14.1.
     "dev-tools-10.1" = {
       developer_cmds = "66";
       bootstrap_cmds = "96.20.2.200.4";
     }
+    # Released October 2011, corresponds to OSX 10.7.2
     "dev-tools-4.2" = {
       # Latest release as of 2019-04-29, not listed in 4.3 - 10.1
       bsdmake = "24";
