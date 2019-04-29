@@ -300,6 +300,8 @@ in {
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
 
+  azure-mgmt-consumption = callPackage ../development/python-modules/azure-mgmt-consumption { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
