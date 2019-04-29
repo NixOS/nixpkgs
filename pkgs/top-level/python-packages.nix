@@ -352,6 +352,8 @@ in {
 
   azure-mgmt-maps = callPackage ../development/python-modules/azure-mgmt-maps { };
 
+  azure-mgmt-marketplaceordering = callPackage ../development/python-modules/azure-mgmt-marketplaceordering { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
