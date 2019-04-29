@@ -20398,6 +20398,8 @@ in
 
   vscode-extensions = recurseIntoAttrs (callPackage ../misc/vscode-extensions {});
 
+  vscodium = callPackage ../applications/editors/vscodium { };
+
   vue = callPackage ../applications/misc/vue { };
 
   vuze = callPackage ../applications/networking/p2p/vuze { };
