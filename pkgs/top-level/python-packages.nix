@@ -4520,6 +4520,8 @@ in {
 
   xattr = callPackage ../development/python-modules/xattr { };
 
+  scrapinghub = callPackage ../development/python-modules/scrapinghub { };
+
   scripttest = callPackage ../development/python-modules/scripttest { };
 
   setuptoolsDarcs = callPackage ../development/python-modules/setuptoolsdarcs { };
