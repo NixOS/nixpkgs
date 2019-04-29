@@ -242,6 +242,8 @@ in {
 
   azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
 
+  azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
