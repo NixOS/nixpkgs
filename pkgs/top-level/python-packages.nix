@@ -284,6 +284,8 @@ in {
 
   azure-mgmt-authorization = callPackage ../development/python-modules/azure-mgmt-authorization { };
 
+  azure-mgmt-batch = callPackage ../development/python-modules/azure-mgmt-batch { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
