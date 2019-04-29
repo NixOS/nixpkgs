@@ -1819,6 +1819,8 @@ in
 
   moosefs = callPackage ../tools/filesystems/moosefs { };
 
+  mosquitto-go-auth = callPackage ../misc/mosquitto-go-auth { };
+
   mozlz4a = callPackage ../tools/compression/mozlz4a { };
 
   msr-tools = callPackage ../os-specific/linux/msr-tools { };
