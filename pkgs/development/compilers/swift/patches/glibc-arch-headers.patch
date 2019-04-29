@@ -1,13 +1,13 @@
 The Nix glibc headers do not use include/x86_64-linux-gnu subdirectories.
 
---- swift/stdlib/public/Platform/CMakeLists.txt	2018-09-30 17:51:51.581766303 +0200
-+++ swift/stdlib/public/Platform/CMakeLists.txt	2018-09-30 18:40:04.118956708 +0200
-@@ -65,7 +65,7 @@
+--- swift/stdlib/public/Platform/CMakeLists.txt	2019-04-09 20:14:44.493801403 +0200
++++ swift/stdlib/public/Platform/CMakeLists.txt	2019-04-09 20:14:44.577800593 +0200
+@@ -68,7 +68,7 @@
      endif()
  
      set(GLIBC_INCLUDE_PATH "${GLIBC_SYSROOT_RELATIVE_INCLUDE_PATH}")
 -    set(GLIBC_ARCH_INCLUDE_PATH "${GLIBC_SYSROOT_RELATIVE_ARCH_INCLUDE_PATH}")
 +    set(GLIBC_ARCH_INCLUDE_PATH "${GLIBC_SYSROOT_RELATIVE_INCLUDE_PATH}")
  
-     if(NOT "${SWIFT_SDK_${sdk}_ARCH_${arch}_PATH}" STREQUAL "/")
+     if(NOT "${SWIFT_SDK_${sdk}_ARCH_${arch}_PATH}" STREQUAL "/" AND NOT "${sdk}" STREQUAL "ANDROID")
        set(GLIBC_INCLUDE_PATH "${SWIFT_SDK_${sdk}_ARCH_${arch}_PATH}${GLIBC_INCLUDE_PATH}")
