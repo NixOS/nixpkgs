@@ -14,10 +14,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0ba6n9l4kki56s2cszarps14zp2wlhw7nfawb8qwsxy3a57v4mw4";
+      sha256 = "17j5pf0b69bkn043wi4xd530ky53jbbnljr4bsjzlm4k8bzlknfn";
       type = "gem";
     };
-    version = "3.12.0";
+    version = "3.14.0";
   };
   charlock_holmes = {
     groups = ["default"];
@@ -96,10 +96,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0jglf8rxvlw6is5019r6kwsdhw38zm3z39jbghdbj449r6h7h77n";
+      sha256 = "101wd2px9lady54aqmkibvy4j62zk32w0rjz4vnigyg974fsga40";
       type = "gem";
     };
-    version = "5.1.0";
+    version = "5.2.0";
   };
   net-telnet = {
     groups = ["default"];
@@ -117,10 +117,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "130h99wijfvv443wgdllxvlq880m0m31rxvrszq5wdii7ad977s5";
+      sha256 = "07hpxmdjkfpkc00ln3hhh5qkj0lyhcmgbi0jza2c8cnjyy9sc73x";
       type = "gem";
     };
-    version = "0.26.2";
+    version = "0.26.3";
   };
   oxidized-script = {
     dependencies = ["oxidized" "slop"];
@@ -212,10 +212,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0crasx5dmbr9ws89137n53l8nap7rdncp8yg5alw1jb99lqslhmi";
+      sha256 = "1yiszpz6y13vvgh3fss1l0ipp0zgsbbc8c28vynnpdyx1sy6krp6";
       type = "gem";
     };
-    version = "0.28.0";
+    version = "0.28.1";
   };
   sass = {
     dependencies = ["sass-listen"];
@@ -223,10 +223,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0vll3bm1dllhqjxxj639nj3afsp12hlppgpysxrgcg24jb2xl2qn";
+      sha256 = "0p95lhs0jza5l7hqci1isflxakz83xkj97lkvxl919is0lwhv2w0";
       type = "gem";
     };
-    version = "3.7.3";
+    version = "3.7.4";
   };
   sass-listen = {
     dependencies = ["rb-fsevent" "rb-inotify"];
