@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   name = "aws-sdk-cpp-${version}";
-  version = "1.7.56";
+  version = "1.7.90";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "0vfw5bqlwm5r0ikziz3jx6yb5v24lwig0m62979zy3ndx36kpb9b";
+    sha256 = "0zpqi612qmm0n53crxiisv0vdif43ymg13kafy6vv43j2wmh66ga";
   };
 
   # FIXME: might be nice to put different APIs in different outputs
