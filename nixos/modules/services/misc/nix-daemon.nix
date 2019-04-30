@@ -363,7 +363,6 @@ in
 
       systemFeatures = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "kvm" "big-parallel" "gccarch-skylake" ];
         description = ''
           The supported features of a machine
@@ -488,11 +487,11 @@ in
           /nix/var/nix/gcroots/tmp
       '';
 
-    nix.systemFeatures = mkIf (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
-       # can build for arch
-      mkDefault (
-        [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++
-        { # can also run code for the following achritectures:
+    nix.systemFeatures = mkDefault (
+      [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
+      optionals (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
+        # a x86_64 builder can run code for `platform.gcc.arch` and minor architectures:
+        [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++ {
           "sandybridge"    = [ "gccarch-westmere" ];
           "ivybridge"      = [ "gccarch-westmere" "gccarch-sandybridge" ];
           "haswell"        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
