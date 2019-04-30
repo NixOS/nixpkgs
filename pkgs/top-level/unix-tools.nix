@@ -22,7 +22,7 @@ let
     in runCommand "${cmd}-${version}" {
       meta = {
         priority = 10;
-        platforms = map (n: { kernel.name = n; }) (attrNames providers);
+        platforms = lib.platforms.${stdenv.hostPlatform.parsed.kernel.name} or lib.platforms.all;
       };
       passthru = { inherit provider; };
       preferLocalBuild = true;
