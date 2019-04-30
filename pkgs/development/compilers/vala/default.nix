@@ -108,9 +108,9 @@ in rec {
   };
 
   vala_0_38 = generic {
-    major   = "0.38";
-    minor   = "10";
-    sha256  = "1rdwwqs973qv225v8b5izcgwvqn56jxgr4pa3wxxbliar3aww5sw";
+    major = "0.38";
+    minor = "10";
+    sha256 = "1rdwwqs973qv225v8b5izcgwvqn56jxgr4pa3wxxbliar3aww5sw";
     extraNativeBuildInputs = [ autoconf ] ++ lib.optional stdenv.isDarwin libtool;
   };
 
