@@ -218,7 +218,7 @@ let
     inherit (adv_cmds) ps locale;
     architecture   = applePackage "architecture"     "macos-10.14.1"   "0qglcmhnn96ibfhzk9l6yjminnvzcswrhfvhqjzw7b1vcmwgh3p4" {};
     bootstrap_cmds = applePackage "bootstrap_cmds"   "dev-tools-10.1"  "1v5dv2q3af1xwj5kz0a5g54fd5dm6j4c9dd2g66n4kc44ixyrhp3" {};
-    bsdmake        = applePackage "bsdmake"          "dev-tools-3.2.6" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
+    bsdmake        = applePackage "bsdmake"          "dev-tools-4.2"   "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
     CarbonHeaders  = applePackage "CarbonHeaders"    "osx-10.6.8"      "1zam29847cxr6y9rnl76zqmkbac53nx0szmqm9w5p469a6wzjqar" {};
     CommonCrypto   = applePackage "CommonCrypto"     "macos-10.14.1"   "1hsv6pwx99b2bzacwrbkdm33rx4d5sga9aai1jhnl0dy9fd4hrvq" {};
     configd        = applePackage "configd"          "macos-10.14.1"   "04mcj4vvfmqpwp756nb0lpmq5n963cw2xbx00wxabg4lhcn7v2sh" {};
@@ -234,13 +234,13 @@ let
     IOKit   = applePackage "IOKit"   "macos-10.14.1" "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x00" { inherit IOKitSrcs; };
     launchd = applePackage "launchd" "osx-10.9.5"    "0w30hvwqq8j5n90s3qyp0fccxflvrmmjnicjri4i1vd2g196jdgj" {};
     libauto = applePackage "libauto" "macos-10.14.1" "1v0drlaflgsm9k7l2lpv2ksy3l7c7i25z7hirqmc1mywzp776r0f" {};
-    # TODO(burke): What.
-    Libc            = applePackage "Libc"              "osx-10.11.5"     "1qv7r0dgz06jy9i5agbqzxgdibb0m8ylki6g5n5pary88lzrawfd" {
+    Libc    = applePackage "Libc"    "macos-10.14.1" "1c9gqhq36a1frpy7wxry2zbm9537r3pjn05fw6acznz3kb9krvml" {
       Libc_10-9 = fetchzip {
         url    = "http://www.opensource.apple.com/tarballs/Libc/Libc-997.90.3.tar.gz";
         sha256 = "1xchgxkxg5288r2b9yfrqji2gsgdap92k4wx2dbjwslixws12pq7";
       };
     };
+
     Libc_old        = applePackage "Libc/825_40_1.nix"  "osx-10.8.5"     "0xsx1im52gwlmcrv4lnhhhn9dyk5ci6g27k6yvibn9vj8fzjxwcf" {};
     libclosure      = applePackage "libclosure"         "macos-10.14.1"  "0fjbj2f0g1v078l3dmqvbi4csbjk4njkvr8wznbxr180ip2gki80" {};
     libdispatch     = applePackage "libdispatch"        "macos-10.14.1"  "1qshl1qmyqsjn4zm7mmaq5f922y4xqxg6hwmwxjxkd3v88gf78xw" {};

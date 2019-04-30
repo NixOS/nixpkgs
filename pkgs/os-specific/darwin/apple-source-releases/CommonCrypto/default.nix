@@ -3,7 +3,7 @@
 appleDerivation {
   installPhase = ''
     mkdir -p $out/include/CommonCrypto
-    cp include/* $out/include/CommonCrypto
+    cp -r include/* $out/include/CommonCrypto
   '';
 
   meta = with stdenv.lib; {
