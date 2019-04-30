@@ -1,17 +1,15 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerApp }:
 
-bundlerEnv rec {
-  name = "timetrap-${version}";
-
-  version = (import gemset).timetrap.version;
-  inherit ruby;
+bundlerApp {
+  pname = "timetrap";
   gemdir = ./.;
-  gemset = ./gemset.nix;
+  exes = [ "timetrap" ];
 
   meta = with lib; {
     description = "A simple command line time tracker written in ruby";
-    homepage = https://github.com/samg/timetrap;
-    license = licenses.mit;
-    maintainers = [ maintainers.jerith666 ];
+    homepage    = https://github.com/samg/timetrap;
+    license     = licenses.mit;
+    maintainers = with maintainers; [ jerith666 manveru ];
+    platforms   = platforms.unix;
   };
 }
