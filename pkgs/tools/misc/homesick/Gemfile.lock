@@ -3,7 +3,7 @@ GEM
   specs:
     homesick (1.1.6)
       thor (>= 0.14.0)
-    thor (0.20.0)
+    thor (0.20.3)
 
 PLATFORMS
   ruby
@@ -12,4 +12,4 @@ DEPENDENCIES
   homesick
 
 BUNDLED WITH
-   1.14.6
+   1.17.2

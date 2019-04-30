@@ -1,13 +1,12 @@
-{ lib, bundlerEnv, git}:
-bundlerEnv {
-  name = "homesick-1.1.6";
-
+{ lib, bundlerApp, git}:
+bundlerApp {
+  pname = "homesick";
   gemdir = ./.;
+  exes = [ "homesick" ];
 
   # Cannot use `wrapProgram` because the the help is aware of the file name.
-  postInstall = ''
-    rm $out/bin/thor
-    sed 1a'ENV["PATH"] = "${git}/bin:#{ENV["PATH"] ? ":#{ENV["PATH"]}" : "" }"' -i $out/bin/homesick
+  postBuild = ''
+    sed 1a'ENV["PATH"] = [*ENV["PATH"], "${git}/bin"].join(":")' -i $out/bin/homesick
   '';
 
   meta = with lib; {
@@ -20,7 +19,7 @@ bundlerEnv {
       '';
     homepage = https://github.com/technicalpickles/homesick;
     license = licenses.mit;
-    maintainers = with maintainers; [ aaronschif ];
+    maintainers = with maintainers; [ aaronschif manveru ];
     platforms = platforms.unix;
   };
 }

@@ -1,6 +1,8 @@
 {
   homesick = {
     dependencies = ["thor"];
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0lxvnp4ncbx0irlblfxbd1f8h4hl11hgmyiy35q79w137r3prxml";
@@ -9,11 +11,13 @@
     version = "1.1.6";
   };
   thor = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0nmqpyj642sk4g16nkbq6pj856adpv91lp4krwhqkh2iw63aszdl";
+      sha256 = "1yhrnp9x8qcy5vc7g438amd5j9sw83ih7c30dr6g6slgw9zj3g29";
       type = "gem";
     };
-    version = "0.20.0";
+    version = "0.20.3";
   };
 }
