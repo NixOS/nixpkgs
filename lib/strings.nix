@@ -90,7 +90,7 @@ rec {
   /* Same as `concatMapStringsSep`, but the mapping function
      additionally receives the position of its argument.
 
-     Type: concatMapStringsSep :: string -> (int -> string -> string) -> [string] -> string
+     Type: concatIMapStringsSep :: string -> (int -> string -> string) -> [string] -> string
 
      Example:
        concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]

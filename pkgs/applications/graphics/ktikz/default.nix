@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     # lrelease command:
     LRELEASECOMMAND = lrelease
     # qcollectiongenerator command:
-    #QCOLLECTIONGENERATORCOMMAND = qcollectiongenerator
+    QCOLLECTIONGENERATORCOMMAND = qhelpgenerator
 
     # TikZ documentation default file path:
     TIKZ_DOCUMENTATION_DEFAULT = @out@/share/doc/texmf/pgf/pgfmanual.pdf.gz

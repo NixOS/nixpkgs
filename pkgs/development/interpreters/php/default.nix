@@ -3,7 +3,8 @@
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pcre2, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2, libzip
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
+, libzip, re2c, valgrind
 }:
 
 with lib;
@@ -52,12 +53,16 @@ let
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
   , argon2Support ? (config.php.argon2 or true) && (versionAtLeast version "7.2")
-  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.3")
+  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.2")
   , phpdbgSupport ? config.php.phpdbg or true
   , cgiSupport ? config.php.cgi or true
   , cliSupport ? config.php.cli or true
   , pharSupport ? config.php.phar or true
   , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
+  , re2cSupport ? config.php.re2c or true
+  , cgotoSupport ? (config.php.cgoto or false) && (re2cSupport)
+  , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
+  , valgrindPcreSupport ? (config.php.valgrindPcreSupport or false) && (valgrindSupport) && (versionAtLeast version "7.2")
   }:
 
     let
@@ -102,7 +107,9 @@ let
         ++ optional sodiumSupport libsodium
         ++ optional tidySupport html-tidy
         ++ optional argon2Support libargon2
-        ++ optional libzipSupport libzip;
+        ++ optional libzipSupport libzip
+        ++ optional re2cSupport re2c
+        ++ optional valgrindSupport valgrind;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
 
@@ -183,7 +190,10 @@ let
       ++ optional (!cgiSupport) "--disable-cgi"
       ++ optional (!cliSupport) "--disable-cli"
       ++ optional (!pharSupport) "--disable-phar"
-      ++ optional xmlrpcSupport "--with-xmlrpc";
+      ++ optional xmlrpcSupport "--with-xmlrpc"
+      ++ optional cgotoSupport "--enable-re2c-cgoto"
+      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}"
+      ++ optional valgrindPcreSupport "--with-pcre-valgrind";
 
       hardeningDisable = [ "bindnow" ];
 
@@ -221,13 +231,13 @@ let
       '';
 
       src = fetchurl {
-        url = "http://www.php.net/distributions/php-${version}.tar.bz2";
+        url = "https://www.php.net/distributions/php-${version}.tar.bz2";
         inherit sha256;
       };
 
       meta = with stdenv.lib; {
         description = "An HTML-embedded scripting language";
-        homepage = http://www.php.net/;
+        homepage = https://www.php.net/;
         license = licenses.php301;
         maintainers = with maintainers; [ globin etu ];
         platforms = platforms.all;
@@ -248,24 +258,24 @@ let
 
 in {
   php71 = generic {
-    version = "7.1.26";
-    sha256 = "1riaaizyl0jv9p6b8sm8xxj8iqz4p4dddwdag03n1r67dfl1qdav";
+    version = "7.1.28";
+    sha256 = "1jal5kr3h9krgb4x46l7wg9czfiigax6vni6cagfdi8zzqrqg7kk";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
   };
 
   php72 = generic {
-    version = "7.2.15";
-    sha256 = "0m05dmad138qfxcb2z4czf9pfv1746g9yzlch48kjikajhb7cgn9";
+    version = "7.2.17";
+    sha256 = "0xag1735q92kj8p09gyydxknisgz7h56pksr44qwnykddymi3a4i";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.2";
-    sha256 = "1p8amf91i6lrrphd6ypfh3kic64bpqf04dxp7dj1xxnjrgd50vwl";
+    version = "7.3.4";
+    sha256 = "0y1bl4nwpr0z11wsdizrs3nvkx1xs3xzy7mn8gj4jdn82a13sb1f";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;

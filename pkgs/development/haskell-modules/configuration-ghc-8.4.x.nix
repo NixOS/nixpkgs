@@ -40,6 +40,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Restricts aeson to <1.4
+  # https://github.com/purescript/purescript/pull/3537
+  purescript = doJailbreak super.purescript;
+
   # https://github.com/jcristovao/enclosed-exceptions/issues/12
   enclosed-exceptions = dontCheck super.enclosed-exceptions;
 

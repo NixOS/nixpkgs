@@ -8,13 +8,13 @@ else
 
 stdenv.mkDerivation rec {
 	name = "js_of_ocaml-compiler-${version}";
-	version = "3.2.1";
+	version = "3.3.0";
 
 	src = fetchFromGitHub {
 		owner = "ocsigen";
 		repo = "js_of_ocaml";
 		rev = version;
-		sha256 = "1v2hfq0ra9j07yz6pj6m03hrvgys4vmx0gclchv94yywpb2wc7ik";
+		sha256 = "0bg8x2s3f24c8ia2g293ikd5yg0yjw3hkdgdql59c8k2amqin8f8";
 	};
 
 	buildInputs = [ ocaml findlib dune cmdliner cppo ];

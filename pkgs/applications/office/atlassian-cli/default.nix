@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "atlassian-cli-${version}";
-  version = "7.8.0";
+  version = "8.2.0";
   
   src = fetchzip {
     url  = "https://bobswift.atlassian.net/wiki/download/attachments/16285777/${name}-distribution.zip";
-    sha256  = "111s4d9m6vxq8jwh1d6ar1f4n5zmyjg7gi2vl3aq63kxbfld9vw7";
+    sha256  = "0lcyyay2fyywcn096y33d77r6fpvwggv5qdkky5qy16lh6rfx1lm";
     extraPostFetch = "chmod go-w $out";
   };
   

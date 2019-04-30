@@ -1,8 +1,8 @@
 { lib, stdenv
-, python, cmake, vim, ruby
+, python, cmake, meson, vim, ruby
 , which, fetchgit, fetchurl
 , llvmPackages, rustPlatform
-, xkb-switch, fzf, skim
+, xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
 , ycmd, rake
 , gobject-introspection, glib, wrapGAppsHook
@@ -16,6 +16,9 @@
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
+
+# vCoolor dep
+, gnome3
 }:
 
 self: super: {
@@ -62,7 +65,7 @@ self: super: {
     version = "0.1.140";
     src = LanguageClient-neovim-src;
 
-    propogatedBuildInputs = [ LanguageClient-neovim-bin ];
+    propagatedBuildInputs = [ LanguageClient-neovim-bin ];
 
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
@@ -137,6 +140,10 @@ self: super: {
     '';
   });
 
+  deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
+    dependencies = with super; [ deoplete-nvim vim-fish ];
+  });
+
   deoplete-go = super.deoplete-go.overrideAttrs(old: {
     buildInputs = [ python3 ];
     buildPhase = ''
@@ -159,6 +166,12 @@ self: super: {
   gist-vim = super.gist-vim.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
+
+  meson = buildVimPluginFrom2Nix {
+    inherit (meson) pname version src;
+    preInstall = "cd data/syntax-highlighting/vim";
+    meta.maintainers = with stdenv.lib.maintainers; [ vcunat ];
+  };
 
   ncm2 = super.ncm2.overrideAttrs(old: {
     dependencies = with super; [ nvim-yarp ];
@@ -399,4 +412,35 @@ self: super: {
     };
   });
 
+  vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
+    postPatch = old.postPatch or "" + ''
+      substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace \
+        'g:stylish_haskell_command = "stylish-haskell"' \
+        'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
+    '';
+  });
+
+  vCoolor-vim = super.vCoolor-vim.overrideAttrs(old: {
+    # on linux can use either Zenity or Yad.
+    propagatedBuildInputs = [ gnome3.zenity ];
+    meta = {
+      description = "Simple color selector/picker plugin";
+      license = stdenv.lib.licenses.publicDomain;
+    };
+  });
+
+  unicode-vim = let
+    unicode-data = fetchurl {
+      url = http://www.unicode.org/Public/UNIDATA/UnicodeData.txt;
+      sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
+    };
+  in super.unicode-vim.overrideAttrs(old: {
+
+      # redirect to /dev/null else changes terminal color
+      buildPhase = ''
+        cp "${unicode-data}" autoload/unicode/UnicodeData.txt
+        echo "Building unicode cache"
+        ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
+      '';
+  });
 }

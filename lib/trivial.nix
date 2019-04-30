@@ -259,9 +259,10 @@ rec {
   # TODO: figure out a clever way to integrate location information from
   # something like __unsafeGetAttrPos.
 
-  warn = msg: builtins.trace "WARNING: ${msg}";
+  warn = msg: builtins.trace "[1;31mwarning: ${msg}[0m";
   info = msg: builtins.trace "INFO: ${msg}";
 
+  showWarnings = warnings: res: lib.fold (w: x: warn w x) res warnings;
 
   ## Function annotations
 

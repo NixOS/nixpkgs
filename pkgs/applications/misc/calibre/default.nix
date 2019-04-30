@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.39.1";
+  version = "3.41.3";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "08c1wsdn0giv9zfb6bis9bbrw687rci8fs26qsal8ijmjk55dfsh";
+    sha256 = "167hhv4wimkjnyfgqkyqmaiixhicbxacy6190gps98jyj4csi8ra";
   };
 
   patches = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ] ++ (with python2Packages; [
     apsw cssselect css-parser dateutil dnspython html5-parser lxml mechanize netifaces pillow
     python pyqt5_with_qtwebkit sip
-    regex msgpack
+    regex msgpack beautifulsoup4
     # the following are distributed with calibre, but we use upstream instead
     odfpy
   ]);

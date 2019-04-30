@@ -8,13 +8,13 @@ in
     mktplcRef = {
       name = "vscode-wakatime";
       publisher = "WakaTime";
-      version = "1.2.7";
-      sha256 = "1z1l9jbx7y7y643qxp76bxkpik4kbcqkw1492s11mrflqlfasyfn";
+      version = "2.0.7";
+      sha256 = "049m57s8hcaa3q812331vgpaibkidf3x221hyxpglfk3sarxvqwv";
     };
 
     postPatch = ''
-      mkdir -p dist/wakatime-master
-      cp -rt dist/wakatime-master --no-preserve=all ${wakatime}/lib/python*/site-packages/wakatime
+      mkdir -p wakatime-master
+      cp -rt wakatime-master --no-preserve=all ${wakatime}/lib/python*/site-packages/wakatime
     '';
 
     meta = with stdenv.lib; {

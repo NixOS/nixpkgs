@@ -87,9 +87,9 @@
 
   <para>
    <emphasis>Please keep in mind that this is not compatible with
-   <literal>programs.zsh.ohMyZsh.custom</literal> as it requires an immutable store
-   path while <literal>custom</literal> shall remain mutable! An evaluation
-   failure will be thrown if both <literal>custom</literal> and
+   <literal>programs.zsh.ohMyZsh.custom</literal> as it requires an immutable
+   store path while <literal>custom</literal> shall remain mutable! An
+   evaluation failure will be thrown if both <literal>custom</literal> and
    <literal>customPkgs</literal> are set.</emphasis>
   </para>
  </section>

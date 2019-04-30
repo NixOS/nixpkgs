@@ -108,6 +108,7 @@ let
       kdf = callPackage ./kdf.nix {};
       kdialog = callPackage ./kdialog.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
+      kfind = callPackage ./kfind.nix {};
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
@@ -125,6 +126,7 @@ let
       kmime = callPackage ./kmime.nix {};
       kmix = callPackage ./kmix.nix {};
       kmplot = callPackage ./kmplot.nix {};
+      knotes = callPackage ./knotes.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};

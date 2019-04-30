@@ -45,13 +45,18 @@ rec {
     , sha256
     , os ? "linux"
     , arch ? "amd64"
+
+      # This is used to set name to the pulled image
+    , finalImageName ? imageName
       # This used to set a tag to the pulled image
     , finalImageTag ? "latest"
-    , name ? fixName "docker-image-${imageName}-${finalImageTag}.tar"
+
+    , name ? fixName "docker-image-${finalImageName}-${finalImageTag}.tar"
     }:
 
     runCommand name {
-      inherit imageName imageDigest;
+      inherit imageDigest;
+      imageName = finalImageName;
       imageTag = finalImageTag;
       impureEnvVars = pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
       outputHashMode = "flat";
@@ -62,7 +67,7 @@ rec {
       SSL_CERT_FILE = "${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt";
 
       sourceURL = "docker://${imageName}@${imageDigest}";
-      destNameTag = "${imageName}:${finalImageTag}";
+      destNameTag = "${finalImageName}:${finalImageTag}";
     } ''
       skopeo --override-os ${os} --override-arch ${arch} copy "$sourceURL" "docker-archive://$out:$destNameTag"
     '';
@@ -200,7 +205,7 @@ rec {
       # Unpack all of the parent layers into the image.
       lowerdir=""
       extractionID=0
-      for layerTar in $(cat layer-list); do
+      for layerTar in $(tac layer-list); do
         echo "Unpacking layer $layerTar"
         extractionID=$((extractionID + 1))
 
@@ -284,7 +289,7 @@ rec {
   }:
     let
       storePathToLayer = substituteAll
-      { inherit (stdenv) shell;
+      { shell = runtimeShell;
         isExecutable = true;
         src = ./store-path-to-layer.sh;
       };
@@ -344,7 +349,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tar -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
+      tar --transform='s|^\./||' -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."

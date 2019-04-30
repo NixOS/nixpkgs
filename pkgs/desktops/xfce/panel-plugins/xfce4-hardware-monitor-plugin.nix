@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, autoreconfHook, gnome2,
+{ stdenv, fetchurl, pkgconfig, intltool, autoreconfHook, gnome2, gtkmm2,
   libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm_sensors
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome2.gtkmm2
+    gtkmm2
     gnome2.libgnomecanvas
     gnome2.libgnomecanvasmm
     libgtop

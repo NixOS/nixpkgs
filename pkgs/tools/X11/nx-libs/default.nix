@@ -2,12 +2,12 @@
   libpng, libtool, libxml2, pkgconfig, which, xorg }:
 stdenv.mkDerivation rec {
   name = "nx-libs-${version}";
-  version = "3.5.99.18";
+  version = "3.5.99.19";
   src = fetchFromGitHub {
     owner = "ArcticaProject";
     repo = "nx-libs";
     rev = version;
-    sha256 = "07559zk9flzfnyr2ngcdr3nzccga4bl30wghalhrvpgpyljivdyv";
+    sha256 = "0vw333i59slz4rcmv32j4ydgiiihyqqy3fzgn1h6gj88qsbyfwqm";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig which

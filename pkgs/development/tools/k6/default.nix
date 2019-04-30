@@ -1,16 +1,16 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage  rec {
-  name = "k6-${version}";
-  version = "0.23.1";
+buildGoPackage rec {
+  pname = "k6";
+  version = "0.24.0";
 
   goPackagePath = "github.com/loadimpact/k6";
 
   src = fetchFromGitHub {
     owner = "loadimpact";
-    repo = "k6";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "03krrpbb67h9hmrg5m94936kha667yh2lqzp9s7fv0b6khskr9r7";
+    sha256 = "1riyyi4lxdaqilzzkxzzw3hzcrjjcylq2jh3p3656f99wiisvj28";
   };
 
   subPackages = [ "./" ];

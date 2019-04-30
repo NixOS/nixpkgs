@@ -14,7 +14,9 @@ let mkContrib = repo: revs: param:
 
     buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
 
-    installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+    installFlags =
+       stdenv.lib.optional (stdenv.lib.versionAtLeast coq.coq-version "8.9") "-f Makefile.coq"
+    ++ [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
     passthru = {
       compatibleCoqVersions = v: builtins.elem v revs;
@@ -196,7 +198,7 @@ let mkContrib = repo: revs: param:
     sha256 = "1ddwzg12pbzpnz3njin4zhpph92kscrbsn3bzds26yj8fp76zc33";
   };
 
-  containers = mkContrib "containers" [ "8.6" "8.7" "8.8" ] {
+  containers = mkContrib "containers" [ "8.6" "8.7" "8.8" "8.9" ] {
     "8.6" = {
       version = "8.6.0";
       rev = "fa1fec7";
@@ -211,6 +213,11 @@ let mkContrib = repo: revs: param:
       version = "20180330";
       rev = "52b86bed1671321b25fe4d7495558f9f221b12aa";
       sha256 = "0hbnrwdgryr52170cfrlbiymr88jsyxilnpr343vnprqq3zk1xz0";
+    };
+    "8.9" = {
+      version = "20190222";
+      rev = "aa33052c1edfc5a65885942a67c2773b5d96f8cc";
+      sha256 = "0mjgfdr9bzsch0dlk4vq1frkaig14dqh46r54cv0l15flxapg0iw";
     };
   }."${coq.coq-version}";
 
@@ -1024,10 +1031,10 @@ let mkContrib = repo: revs: param:
     sha256 = "0iwkpmc22nwasrk4g7ki4s5y05zjs7kmqk3j98giwp2wiavhgapn";
   };
 
-  zorns-lemma = mkContrib "zorns-lemma" [ "8.5" "8.6" "8.7" ] {
-    version = "v8.6.0";
-    rev = "5eba80109d6f4f688ac8dc2b6d505d6681801737";
-    sha256 = "19qvsk0s3hs31nmy4fk7qzw4clyj0gka3f526xjij54b8a9fz34f";
+  zorns-lemma = mkContrib "zorns-lemma" [ "8.6" "8.7" "8.8" "8.9" ] {
+    version = "v8.9.0";
+    rev = "6ac9bb914f6017cdd9a544ff4b0bef73fd33b44c";
+    sha256 = "1vdsl5gxpadkjjjw314s4fawzlssdmp4qkwrjz5qdmyl2dcpil4p";
   };
 
   zsearch-trees = mkContrib "zsearch-trees" [ "8.6" "8.7" ] {

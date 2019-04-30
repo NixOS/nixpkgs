@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, python, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k
 , django_environ, mock, django, six
-, pytest, pytestrunner, pytest-django, setuptools_scm
+, pytest, pytestrunner, pytest-django
 }:
 buildPythonPackage rec {
   pname = "django-guardian";
@@ -12,16 +12,12 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestrunner pytest-django django_environ mock ];
-  buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ django six ];
-
-  checkPhase = ''
-    ${python.interpreter} nix_run_setup test --addopts="--ignore build"
-  '';
+  propagatedBuildInputs = [ django ];
 
   meta = with stdenv.lib; {
     description = "Per object permissions for Django";
     homepage = https://github.com/django-guardian/django-guardian;
     license = [ licenses.mit licenses.bsd2 ];
+    broken = !isPy3k; # https://github.com/django-guardian/django-guardian/pull/605
   };
 }

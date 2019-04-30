@@ -246,7 +246,7 @@ in
         default = [ "ati" "cirrus" "vesa" "vmware" "modesetting" ];
         example = [
           "ati_unfree" "amdgpu" "amdgpu-pro"
-          "nv" "nvidia" "nvidiaLegacy340" "nvidiaLegacy304"
+          "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
         relatedPackages = concatLists
@@ -259,6 +259,11 @@ in
           The names of the video drivers the configuration
           supports. They will be tried in order until one that
           supports your card is found.
+          Don't combine those with "incompatible" OpenGL implementations,
+          e.g. free ones (mesa-based) with proprietary ones.
+
+          For unfree "nvidia*", the supported GPU lists are on
+          https://www.nvidia.com/object/unix.html
         '';
       };
 

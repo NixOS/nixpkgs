@@ -1,11 +1,11 @@
 { fetchurl, stdenv, meson, ninja, gettext, pkgconfig, pulseaudioFull, gtkmm3, dbus-glib, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "paprefs-1.0";
+  name = "paprefs-1.1";
 
   src = fetchurl {
     url = "https://freedesktop.org/software/pulseaudio/paprefs/${name}.tar.xz";
-    sha256 = "0y77i9gaaassvvjrpwb4xbgqcmr51zmj5rh4z8zm687i5izf84md";
+    sha256 = "189z5p20hk0xv9vwvym293503j4pwl03xqk9hl7cl6dwgv0l7wkf";
   };
 
   nativeBuildInputs = [ meson ninja gettext pkgconfig wrapGAppsHook ];

@@ -8,6 +8,7 @@
 , samplerateSupport ? jackSupport, libsamplerate ? null
 , ossSupport ? false, alsaOss ? null
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio ? null
+, mprisSupport ? stdenv.isLinux, systemd ? null
 
 # TODO: add these
 #, artsSupport
@@ -60,6 +61,7 @@ let
     (mkFlag samplerateSupport "CONFIG_SAMPLERATE=y" libsamplerate)
     (mkFlag ossSupport        "CONFIG_OSS=y"        alsaOss)
     (mkFlag pulseaudioSupport "CONFIG_PULSE=y"      libpulseaudio)
+    (mkFlag mprisSupport      "CONFIG_MPRIS=y"      systemd)
 
     #(mkFlag artsSupport      "CONFIG_ARTS=y")
     #(mkFlag roarSupport      "CONFIG_ROAR=y")

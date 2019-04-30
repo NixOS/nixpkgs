@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "4.46.0";
+  version = "4.47.0";
 in fetchzip rec {
   name = "terminus-font-ttf-${version}";
 
@@ -18,7 +18,7 @@ in fetchzip rec {
     install -Dm 644 COPYING "$out/share/doc/terminus-font-ttf/COPYING"
   '';
 
-  sha256 = "129rfmwnm2bhp99w4zl262l6sdx8pddc0gf1ispjqs6dz3m3mdkp";
+  sha256 = "1mnx3vlnl0r15yzsa4zb9qqab4hpi603gdwhlbw960wg03i3xn8z";
 
   meta = with stdenv.lib; {
     description = "A clean fixed width TTF font";

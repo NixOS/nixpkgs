@@ -12,20 +12,12 @@ let
 in
 stdenv.mkDerivation rec {
   name = "sssd-${version}";
-  version = "1.16.3";
+  version = "1.16.4";
 
   src = fetchurl {
     url = "https://fedorahosted.org/released/sssd/${name}.tar.gz";
-    sha256 = "1i2fq37w0k71xwqcq1i4l3nglmwybc4694xbrccrih33qsh1fpgf";
+    sha256 = "0ngr7cgimyjc6flqkm7psxagp1m4jlzpqkn28pliifbmdg6i5ckb";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "duplicate-case-value.diff";
-      url = "https://github.com/SSSD/sssd/commit/1ee12b05570fcfb8.diff";
-      sha256 = "01y8i8cfs2gydn84097cl5fynx0db8b0vr345gh57ypp84in3ixw";
-    })
-  ];
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";

@@ -228,6 +228,16 @@ in rec {
     dependencies = [ pkgs.urlview ];
   };
 
+  vim-tmux-navigator = mkDerivation {
+    pluginName = "vim-tmux-navigator";
+    rtpFilePath = "vim-tmux-navigator.tmux";
+    src = fetchgit {
+      url = "https://github.com/christoomey/vim-tmux-navigator";
+      rev = "4e1a877f51a17a961b8c2a285ee80aebf05ccf42";
+      sha256 = "1b8sgbzl4pcpaabqk254n97mjz767ganrmqbsr6rqzz3j9a3s1fv";
+    };
+  };
+
   yank = mkDerivation {
     pluginName = "yank";
     src = fetchgit {

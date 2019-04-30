@@ -50,7 +50,7 @@ let
     ZM_DB_TYPE=mysql
     ZM_DB_HOST=${cfg.database.host}
     ZM_DB_NAME=${cfg.database.name}
-    ZM_DB_USER=${cfg.database.username}
+    ZM_DB_USER=${if cfg.database.createLocally then user else cfg.database.username}
     ZM_DB_PASS=${cfg.database.password}
 
     # Web
@@ -205,12 +205,12 @@ in {
 
       mysql = lib.mkIf cfg.database.createLocally {
         ensureDatabases = [ cfg.database.name ];
+        initialDatabases = [{
+          inherit (cfg.database) name; schema = "${pkg}/share/zoneminder/db/zm_create.sql";
+        }];
         ensureUsers = [{
           name = cfg.database.username;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-          initialDatabases = [
-            { inherit (cfg.database) name; schema = "${pkg}/share/zoneminder/db/zm_create.sql"; }
-          ];
         }];
       };
 
@@ -275,14 +275,14 @@ in {
       };
 
       phpfpm = lib.mkIf useNginx {
-        phpOptions = ''
-          date.timezone = "${config.time.timeZone}"
-
-          ${lib.concatStringsSep "\n" (map (e:
-          "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
-        '';
         pools.zoneminder = {
           listen = socket;
+          phpOptions = ''
+            date.timezone = "${config.time.timeZone}"
+
+            ${lib.concatStringsSep "\n" (map (e:
+            "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
+          '';
           extraConfig = ''
             user = ${user}
             group = ${group}

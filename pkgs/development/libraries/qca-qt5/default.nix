@@ -1,11 +1,12 @@
 { stdenv, fetchurl, cmake, openssl, pkgconfig, qtbase }:
 
 stdenv.mkDerivation rec {
-  name = "qca-qt5-2.1.3";
+  pname = "qca-qt5";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/qca/2.1.3/src/qca-2.1.3.tar.xz";
-    sha256 = "0lz3n652z208daxypdcxiybl0a9fnn6ida0q7fh5f42269mdhgq0";
+    url = "http://download.kde.org/stable/qca/${version}/qca-${version}.tar.xz";
+    sha256 = "00kv1vsrc8fp556hm8s6yw3240vx3l4067q6vfxrb3gdwgcd45np";
   };
 
   buildInputs = [ openssl qtbase ];

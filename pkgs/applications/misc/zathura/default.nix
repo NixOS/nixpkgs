@@ -20,10 +20,13 @@ let
 
     zathura_ps = callPackage ./ps { };
 
+    zathura_cb = callPackage ./cb { };
+
     zathuraWrapper = callPackage ./wrapper.nix {
       plugins = [
         zathura_djvu
         zathura_ps
+        zathura_cb
         (if useMupdf then zathura_pdf_mupdf else zathura_pdf_poppler)
       ];
     };

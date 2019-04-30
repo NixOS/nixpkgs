@@ -38,6 +38,12 @@ in {
         firmwareLinuxNonfree
         intel2200BGFirmware
         rtl8192su-firmware
+        rt5677-firmware
+        rtl8723bs-firmware
+        rtlwifi_new-firmware
+        zd1211fw
+        alsa-firmware
+        openelec-dvb-firmware
       ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
@@ -54,6 +60,10 @@ in {
       }];
       hardware.firmware = with pkgs; [
         broadcom-bt-firmware
+        b43Firmware_5_1_138
+        b43Firmware_6_30_163_46
+        b43FirmwareCutter
+        facetimehd-firmware
       ];
     })
   ];

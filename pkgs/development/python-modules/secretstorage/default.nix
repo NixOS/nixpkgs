@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "secretstorage";
-  version = "3.1.0";
+  version = "3.1.1";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "SecretStorage";
     inherit version;
-    sha256 = "12vxzradibfmznssh7x2zd7qym2hl7wn34fn2yn58pnx6sykrai9";
+    sha256 = "14lznnn916ddn6yrd3w2nr2zq49zc8hw53yjz1k9yhd492p9gir0";
   };
 
   propagatedBuildInputs = [

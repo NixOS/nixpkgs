@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.5.2";
+  version = "60.6.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "3q7h9jbxz7p7dh2dskmcqikpgd8czbmxknij063w02bh9lyffv6rasszl8pwz21mcylb9zzqjn29xl99g51sjx81555bdr38l8mjg55";
+    sha512 = "2s8h6z3rkylrclng1cpmj5dvsbhqymrdwvjy3g2s8rq66xca13wkyswdhgh8671d0dw9bmminikk53d2xqg7lqvvd1rdsminwscln4z";
   };
 
   # from firefox, but without sound libraries
@@ -50,6 +50,14 @@ in stdenv.mkDerivation rec {
   patches = [
     # Remove buildconfig.html to prevent a dependency on clang etc.
     ./no-buildconfig.patch
+
+    # Needed on older branches since rustc: 1.32.0 -> 1.33.0
+    (fetchurl {
+      name = "missing-documentation.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/deny_missing_docs.patch"
+          + "?h=firefox-esr&id=03bdd01f9cf";
+      sha256 = "1i33n3fgwc8d0v7j4qn7lbdax0an6swar12gay3q2nwrhg3ic4fb";
+    })
   ];
 
   configureFlags =
@@ -66,7 +74,7 @@ in stdenv.mkDerivation rec {
       "--with-system-libevent"
       "--with-system-png" # needs APNG support
       "--with-system-icu"
-      "--enable-rust-simd"
+      #"--enable-rust-simd" # not supported since rustc 1.32.0 -> 1.33.0; TODO: probably OK since 68.0.0
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"

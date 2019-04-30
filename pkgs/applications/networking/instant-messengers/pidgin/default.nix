@@ -62,7 +62,7 @@ let unwrapped = stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/pidgin \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
   meta = with stdenv.lib; {

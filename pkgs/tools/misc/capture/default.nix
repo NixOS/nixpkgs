@@ -1,19 +1,17 @@
 { stdenv, pkgs, slop, ffmpeg, fetchFromGitHub, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "capture-${version}";
-  version = "1.0";
+  name = "capture-unstable-${version}";
+  version = "2019-03-10";
 
   src = fetchFromGitHub {
     owner = "buhman";
     repo = "capture";
-    rev  = "4be986f17462b8d520559429c74da6bf3a436259";
-    sha256 = "172y06vs993x5v78zwl81xma1gkvjq1ad9rvmf3a217fyxsz4nhh";
+    rev  = "80dd9e7195aad5c132badef610f19509f3935b24";
+    sha256 = "0zyyg4mvrny7cc2xgvfip97b6yc75ka5ni39rwls93971jbk83d6";
   };
 
   buildInputs = [ makeWrapper ];
-
-  patches = [ ./0001-eval-fix.patch ./0002-sane-defaults.patch ];
 
   installPhase = ''
     install -Dm755 src/capture.sh $out/bin/capture
@@ -27,5 +25,6 @@ stdenv.mkDerivation rec {
     description = "A no bullshit screen capture tool";
     homepage = "https://github.com/buhman/capture";
     maintainers = [ maintainers.ar1a ];
+    license = licenses.gpl3Plus;
   };
 }

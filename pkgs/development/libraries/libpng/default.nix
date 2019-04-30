@@ -3,31 +3,21 @@
 assert zlib != null;
 
 let
-  patchVersion = "1.6.36";
+  patchVersion = "1.6.37";
   patch_src = fetchurl {
     url = "mirror://sourceforge/libpng-apng/libpng-${patchVersion}-apng.patch.gz";
-    sha256 = "03ywdwaq1k3pfslvbs2b33z3pdmazz6yp8g56mzafacvfgd367wc";
+    sha256 = "1dh0250mw9b2hx7cdmnb2blk7ddl49n6vx8zz7jdmiwxy38v4fw2";
   };
   whenPatched = stdenv.lib.optionalString apngSupport;
 
 in stdenv.mkDerivation rec {
   name = "libpng" + whenPatched "-apng" + "-${version}";
-  version = "1.6.36";
+  version = "1.6.37";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${version}.tar.xz";
-    sha256 = "06d35a3xz2a0kph82r56hqm1fn8fbwrqs07xzmr93dx63x695szc";
+    sha256 = "1jl8in381z0128vgxnvn33nln6hzckl7l7j9nqvkaf1m9n1p0pjh";
   };
-  patches = [
-    (fetchurl { # https://github.com/glennrp/libpng/issues/266
-      url = "https://salsa.debian.org/debian/libpng1.6/raw/0e1348f3d/debian/patches/272.patch";
-      sha256 = "1d36khgryq2p27bdx10xrr4kcjr7cdfdj2zhdcjzznpnpns97s6n";
-    })
-    (fetchurl { # https://github.com/glennrp/libpng/issues/275
-      url = "https://salsa.debian.org/debian/libpng1.6/raw/853d1977/debian/patches/CVE-2019-7317.patch";
-      sha256 = "0c8qc176mqh08kcxlnx40rzdggchihkrlzqw6qg6lf0c9ygkf55k";
-    })
-  ];
   postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
 
   outputs = [ "out" "dev" "man" ];

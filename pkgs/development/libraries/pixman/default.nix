@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pixman-${version}";
-  version = "0.36.0";
+  version = "0.38.0";
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/${name}.tar.bz2";
-    sha256 = "1p40fygy9lcn6ypkzh14azksi570brcpr3979bjpff8qk76c14px";
+    sha256 = "1a1nnkjv0rqdj26847r0saly0kzckjfp4y3ly30bvpjxi7vy6s5p";
   };
 
   nativeBuildInputs = [ pkgconfig ];

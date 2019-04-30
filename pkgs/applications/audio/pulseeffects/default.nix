@@ -47,13 +47,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.4.7";
+  version = "4.5.9";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "14sxwy3mayzn9k5hy58mjzhxaj4wqxvs257xaj03mwvm48k7c7ia";
+    sha256 = "19pqi9wix359hdrslzmi9sz0dzz03pdwqvdyzw3i5rdny01skdfw";
   };
 
   nativeBuildInputs = [
@@ -74,8 +74,8 @@ in stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base # gst-fft
+    gst_all_1.gst-plugins-good # pulsesrc
     gst_all_1.gst-plugins-bad
     lilv lv2 serd sord sratom
     libbs2b

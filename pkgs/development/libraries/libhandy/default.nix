@@ -7,7 +7,7 @@
 
 let
   pname = "libhandy";
-  version = "0.0.8";
+  version = "0.0.9";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04jyllwdrapw24f34pjc2gbmfapjfin8iw0g3qfply7ciy08k1wj";
+    sha256 = "0smfnvfba6cnxbrcm1vh3zbr1hww43qcxhawka3hzn2hjr06rfzn";
   };
 
   nativeBuildInputs = [

@@ -18,8 +18,8 @@ rec {
   * stdenv with no compiler environment. `runCommandCC`
   *
   * Examples:
-  * runCommand "name" {envVariable = true;} ''echo hello''
-  * runCommandNoCC "name" {envVariable = true;} ''echo hello'' # equivalent to prior
+  * runCommand "name" {envVariable = true;} ''echo hello > $out''
+  * runCommandNoCC "name" {envVariable = true;} ''echo hello > $out'' # equivalent to prior
   * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
   */
   runCommand = runCommandNoCC;
@@ -32,19 +32,23 @@ rec {
    *
    * Examples:
    * # Writes my-file to /nix/store/<store path>
-   * writeTextFile "my-file"
-   *   ''
-   *   Contents of File
+   * writeTextFile {
+   *   name = "my-file";
+   *   text = ''
+   *     Contents of File
    *   '';
+   * }
+   * # See also the `writeText` helper function below.
    *
    * # Writes executable my-file to /nix/store/<store path>/bin/my-file
-   * writeTextFile "my-file"
-   *   ''
-   *   Contents of File
-   *   ''
-   *   true
-   *   "/bin/my-file";
-   *   true
+   * writeTextFile {
+   *   name = "my-file";
+   *   text = ''
+   *     Contents of File
+   *   '';
+   *   executable = true;
+   *   destination = "/bin/my-file";
+   * }
    */
   writeTextFile =
     { name # the name of the derivation
@@ -149,7 +153,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${runtimeShell} -n $out/bin/${name}
+        ${stdenv.shell} -n $out/bin/${name}
       '';
     };
 

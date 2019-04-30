@@ -20,18 +20,17 @@
 }:
 
 buildPythonPackage rec {
-  # also bump cryptography_vectors
   pname = "cryptography";
-  version = "2.5";
+  version = "2.6.1"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00c4d7gvsymlaw0r13zrm32dcnarmpayjyrh65yymlmr6mrbcij9";
+    sha256 = "19iwz5avym5zl6jrrrkym1rdaa9h61j20ph4cswsqgv8xg5j3j16";
   };
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ openssl cryptography_vectors ]
+  buildInputs = [ openssl ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
     asn1crypto
@@ -42,11 +41,12 @@ buildPythonPackage rec {
   ++ stdenv.lib.optional (!isPyPy) cffi;
 
   checkInputs = [
-    pytest
-    pretend
-    iso8601
-    pytz
+    cryptography_vectors
     hypothesis
+    iso8601
+    pretend
+    pytest
+    pytz
   ];
 
   checkPhase = ''

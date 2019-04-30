@@ -290,6 +290,7 @@ let
     pbdPROF = [ pkgs.openmpi ];
     pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
+    phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
     PopGenome = [ pkgs.zlib.dev ];
@@ -302,7 +303,6 @@ let
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
     readxl = [ pkgs.libiconv ];
-    rbamtools = [ pkgs.zlib.dev ];
     rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl_1 ];
@@ -424,7 +424,6 @@ let
     showtext = [ pkgs.pkgconfig ];
     spate = [ pkgs.pkgconfig ];
     stringi = [ pkgs.pkgconfig ];
-    sys = [ pkgs.libapparmor ];
     sysfonts = [ pkgs.pkgconfig ];
     tesseract = [ pkgs.pkgconfig ];
     Cairo = [ pkgs.pkgconfig ];
@@ -443,6 +442,11 @@ let
     Matrix = [ pkgs.libiconv ];
     mgcv = [ pkgs.libiconv ];
     igraph = [ pkgs.libiconv ];
+    ape = [ pkgs.libiconv ];
+    expm = [ pkgs.libiconv ];
+    mnormt = [ pkgs.libiconv ];
+    phangorn = [ pkgs.libiconv ];
+    quadprog = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
@@ -565,7 +569,6 @@ let
     "OligoSpecificitySystem"
     "onemap"
     "OpenRepGrid"
-    "palaeoSig"
     "paleoMAS"
     "pbatR"
     "PBSadmb"
@@ -629,7 +632,6 @@ let
     "rgl"
     "RHRV"
     "rich"
-    "rioja"
     "RNCEP"
     "RQDA"
     "RSDA"

@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, isPy33,
-  six, txaio, twisted, zope_interface, cffi, asyncio, trollius, futures,
+{ lib, buildPythonPackage, fetchPypi, isPy3k,
+  six, txaio, twisted, zope_interface, cffi, trollius, futures,
   mock, pytest
 }:
 buildPythonPackage rec {
@@ -12,7 +12,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six txaio twisted zope_interface cffi ] ++
-    (lib.optional isPy33 asyncio) ++
     (lib.optionals (!isPy3k) [ trollius futures ]);
 
   checkInputs = [ mock pytest ];

@@ -1,5 +1,6 @@
-{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libgpgerror
 , libiconv, npth, gettext, texinfo, pcsclite, sqlite
+, buildPackages
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
@@ -15,13 +16,14 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.2.13";
+  version = "2.2.15";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1n0igfn9nwdajzkcgdx7apwm9m5rpw0fg6vwskmf1rpranlqgivn";
+    sha256 = "0m6lyphbb20i84isdxzfhcbzyc682hdrdv4aqkzmhrdksycf536b";
   };
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext texinfo
@@ -36,7 +38,13 @@ stdenv.mkDerivation rec {
   ''; #" fix Emacs syntax highlighting :-(
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
-  configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
+  configureFlags = [
+    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libgcrypt-prefix=${libgcrypt.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
+    "--with-ksba-prefix=${libksba.dev}"
+    "--with-npth-prefix=${npth}"
+  ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
   postInstall = ''
     mkdir -p $out/lib/systemd/user

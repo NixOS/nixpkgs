@@ -1,11 +1,12 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , robotframework
 , moretools
 , pathpy
 , six
-, setuptools
+, zetup
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,14 @@ buildPythonPackage rec {
     sha256 = "04gkn1zpf3rsvbqdxrrjqqi8sa0md9gqwh6n5w2m03fdwjg4lc7q";
   };
 
-  propagatedBuildInputs = [ robotframework moretools pathpy six setuptools ];
+  nativeBuildInputs = [ zetup ];
+
+  propagatedBuildInputs = [ robotframework moretools pathpy six ];
 
   meta = with stdenv.lib; {
     description = "Python Tools for Robot Framework and Test Libraries";
     homepage = https://bitbucket.org/userzimmermann/robotframework-tools;
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    broken = isPy3k; # 2019-03-15, missing dependency robotframework-python3
   };
-
 }

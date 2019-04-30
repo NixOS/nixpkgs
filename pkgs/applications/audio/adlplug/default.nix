@@ -4,14 +4,14 @@
 , pname ? "ADLplug" }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "v1.0.0-beta.5";
+  inherit pname;
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "jpcima";
     repo = "ADLplug";
-    rev = version;
-    sha256 = "1f8v61nv33xwpzmmk38dkr3fvm2j2xf0a74agxnl9p1yvy3a9w3s";
+    rev = "v${version}";
+    sha256 = "1rpd7v1rx74cv7nhs70ah0bly314rjzj70cp30mvhns2hzk66s3c";
     fetchSubmodules = true;
   };
 

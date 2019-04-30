@@ -13,7 +13,6 @@
       "x86_64-linux" = import ./bootstrap-files/x86_64.nix;
       "armv5tel-linux" = import ./bootstrap-files/armv5tel.nix;
       "armv6l-linux" = import ./bootstrap-files/armv6l.nix;
-      "armv7a-linux" = import ./bootstrap-files/armv7l.nix;
       "armv7l-linux" = import ./bootstrap-files/armv7l.nix;
       "aarch64-linux" = import ./bootstrap-files/aarch64.nix;
       "mipsel-linux" = import ./bootstrap-files/loongson2f.nix;
@@ -26,10 +25,19 @@
       "powerpc64le-linux" = import ./bootstrap-files/ppc64le-musl.nix;
     };
   };
+
+  # Try to find an architecture compatible with our current system. We
+  # just try every bootstrap we’ve got and test to see if it is
+  # compatible with or current architecture.
+  getCompatibleTools = lib.foldl (v: system:
+    if v != null then v
+    else if localSystem.isCompatible (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
+    else null) null (lib.attrNames archLookupTable);
+
   archLookupTable = table.${localSystem.libc}
     or (abort "unsupported libc for the pure Linux stdenv");
-  files = archLookupTable.${localSystem.system}
-    or (abort "unsupported platform for the pure Linux stdenv");
+  files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
+    else (abort "unsupported platform for the pure Linux stdenv"));
   in files
 }:
 

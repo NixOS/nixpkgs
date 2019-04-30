@@ -57,6 +57,15 @@ in
         '';
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "nobody";
+        example = "root";
+        description = ''
+          User account under which <command>triggerhappy</command> runs.
+        '';
+      };
+
       bindings = mkOption {
         type = types.listOf (types.submodule bindingCfg);
         default = [];
@@ -96,7 +105,7 @@ in
       after = [ "local-fs.target" ];
       description = "Global hotkey daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.triggerhappy}/bin/thd --user nobody --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
+        ExecStart = "${pkgs.triggerhappy}/bin/thd ${optionalString (cfg.user != "root") "--user ${cfg.user}"} --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
       };
     };
 

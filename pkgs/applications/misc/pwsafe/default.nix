@@ -1,26 +1,29 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, zip, gettext, perl
-, wxGTK31, libXi, libXt, libXtst, xercesc, xorgproto
+, wxGTK31, libXext, libXi, libXt, libXtst, xercesc
 , qrencode, libuuid, libyubikey, yubikey-personalization
+, curl, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "pwsafe";
-  version = "1.06";
-  name = "${pname}-${version}";
+  version = "1.07";
 
   src = fetchFromGitHub {
     owner = "${pname}";
     repo = "${pname}";
     rev = "${version}BETA";
-    sha256 = "1q3xi7i4r3nmz3hc79lx8l15sr1nqhwbi3lrnfqr356nv6aaf03y";
+    sha256 = "0syxmliybgvm9j6d426l7j12ryrl42azy80m66jc56fv9nkqwaya";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig zip ];
+  nativeBuildInputs = [ 
+  	cmake gettext perl pkgconfig zip
+  ];
   buildInputs = [
-    gettext perl qrencode libuuid
-    libXi libXt libXtst wxGTK31 xercesc xorgproto
+    libXext libXi libXt libXtst wxGTK31
+    curl qrencode libuuid openssl xercesc
     libyubikey yubikey-personalization
   ];
+
   cmakeFlags = [
     "-DNO_GTEST=ON"
     "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"

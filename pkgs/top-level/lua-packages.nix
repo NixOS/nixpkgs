@@ -12,7 +12,6 @@
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
 , pkgs
 , fetchgit
-, overrides ? (self: super: {})
 , lib
 }:
 
@@ -60,7 +59,7 @@ let
 
   buildLuarocksPackage = with pkgs.lib; makeOverridable( callPackage ../development/interpreters/lua-5/build-lua-package.nix {
     inherit toLuaModule;
-    inherit lua writeText;
+    inherit lua;
   });
 in
 with self; {
@@ -87,7 +86,7 @@ with self; {
   inherit toLuaModule lua-setup-hook;
   inherit buildLuarocksPackage buildLuaApplication;
   inherit requiredLuaModules luaOlder luaAtLeast
-    isLua51 isLua52 isLuaJIT lua callPackage;
+    isLua51 isLua52 isLua53 isLuaJIT lua callPackage;
 
   # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
   wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
@@ -177,6 +176,9 @@ with self; {
     };
 
     preConfigure = ''export prefix=$out'';
+
+    # https://github.com/wahern/cqueues/issues/216
+    NIX_CFLAGS_COMPILE = [ "-DCQUEUES_VERSION=${version}" ];
 
     nativeBuildInputs = [ gnum4 ];
     buildInputs = [ openssl ];
@@ -384,7 +386,7 @@ with self; {
       sha256 = "0p5583vidsm7s97zihf47c34vscwgbl86axrnj44j328v45kxb2z";
     };
 
-    propagatedBuildInputs = [ std.normalize bit32 ];
+    propagatedBuildInputs = [ std_normalize bit32 ];
 
     buildPhase = ''
       ${lua}/bin/lua build-aux/luke \
@@ -780,64 +782,6 @@ with self; {
     };
   };
 
-  std._debug = buildLuaPackage rec {
-    name = "std._debug-${version}";
-    version = "1.0";
-
-    src = fetchFromGitHub {
-      owner = "lua-stdlib";
-      repo = "_debug";
-      rev = "v${version}";
-      sha256 = "01kfs6k9j9zy4bvk13jx18ssfsmhlciyrni1x32qmxxf4wxyi65n";
-    };
-
-    # No Makefile.
-    dontBuild = true;
-
-    installPhase = ''
-      mkdir -p $out/share/lua/${lua.luaversion}/std
-      cp -r lib/std/_debug $out/share/lua/${lua.luaversion}/std/
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Manage an overall debug state, and associated hint substates.";
-      homepage    = https://lua-stdlib.github.io/_debug;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lblasc ];
-      platforms   = platforms.unix;
-    };
-  };
-
-  std.normalize = buildLuaPackage rec {
-    name = "std.normalize-${version}";
-    version = "2.0.1";
-
-    src = fetchFromGitHub {
-      owner = "lua-stdlib";
-      repo = "normalize";
-      rev = "v${version}";
-      sha256 = "1yz96r28d2wcgky6by92a21755bf4wzpn65rdv2ps0fxywgw5rda";
-    };
-
-    propagatedBuildInputs = [ std._debug ];
-
-    # No Makefile.
-    dontBuild = true;
-
-    installPhase = ''
-      mkdir -p $out/share/lua/${lua.luaversion}/std
-      cp -r lib/std/normalize $out/share/lua/${lua.luaversion}/std/
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Normalized Lua Functions";
-      homepage    = https://lua-stdlib.github.io/normalize;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lblasc ];
-      platforms   = platforms.unix;
-    };
-  };
-
   vicious = toLuaModule(stdenv.mkDerivation rec {
     name = "vicious-${version}";
     version = "2.3.1";
@@ -867,4 +811,4 @@ with self; {
   });
 
 });
-in (lib.extends overrides packages)
+in packages

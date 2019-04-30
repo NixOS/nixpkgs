@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, desktop-file-utils
-, gtk3, glib, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2
+, gtk3, glib, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2, fetchpatch
 , granite, gst_all_1, libgudev, json-glib, libraw, librest, libsoup, sqlite, python3
 , scour, webkitgtk, libwebp, appstream, libunity, wrapGAppsHook, gobject-introspection, elementary-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "photos";
-  version = "2.6.2";
+  version = "2.6.3";
 
   name = "elementary-${pname}-${version}";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "166a1jb85n67z6ffm5i0xzap407rv0r511lzh0gidkap1qy6pnmi";
+    sha256 = "1s0ww5g26wj0gd1drj8gxs74gvg2c9fdj4ixpifj8jh8yafdmrvg";
   };
 
   passthru = {
@@ -64,6 +64,12 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dplugins=false"
+  ];
+
+  patches = [
+    # https://github.com/elementary/photos/pull/505
+    # Unrelated line got dropped in https://github.com/elementary/photos/pull/498
+    ./fix-missing-line.patch
   ];
 
   postPatch = ''

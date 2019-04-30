@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation rec {
   name = "visualboyadvance-m-${version}";
-  version = "2.1.0";
+  version = "2.1.2";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     rev = "v${version}";
-    sha256 = "1dppfvy24rgg3h84gv33l1y7zznkv3zxn2hf98w85pca6k1y2afz";
+    sha256 = "0bgb9r6qc4g1biymayknj1fccwrdmn772i4qnc9zs3f9jrs0b34g";
   };
 
   buildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python36, udev, coreutils }:
+{ stdenv, fetchgit, python3, udev, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "acpilight";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kykrl71fb146vaq8207c3qp03h2djkn8hn6psryykk8gdzkv3xd";
   };
 
-  pyenv = python36.withPackages (pythonPackages: with pythonPackages; [
+  pyenv = python3.withPackages (pythonPackages: with pythonPackages; [
     ConfigArgParse
   ]);
 

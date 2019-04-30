@@ -1,18 +1,18 @@
-{ stdenv, rustPlatform, fetchurl, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
+{ stdenv, rustPlatform, fetchurl, fetchpatch, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
 , asciidoc, docbook_xml_dtd_45, libxslt, docbook_xsl, libiconv, Security, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   name = "newsboat-${version}";
-  version = "2.14";
+  version = "2.15";
 
   src = fetchurl {
     url = "https://newsboat.org/releases/${version}/${name}.tar.xz";
-    sha256 = "13bdwnwxa66c69lqhb02basff0aa6q1jhl7fgahcxmdy7snbmg37";
+    sha256 = "1dqdcp34jmphqf3d8ik0xdhg0s66nd5rky0y8y591nidq29wws6s";
   };
 
-  cargoSha256 = "11s50qy1b833r2b5kr1wx9imi9h7s00c0hs36ricgbd0xw7n76hd";
+  cargoSha256 = "05pf020jp20ffmvin6d1g8zbwf1zk03bm1cb99b7iqkk4r54g6dn";
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""
     # Allow other ncurses versions on Darwin
     substituteInPlace config.sh \

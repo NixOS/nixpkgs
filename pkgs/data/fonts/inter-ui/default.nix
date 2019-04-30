@@ -1,7 +1,11 @@
 { stdenv, fetchzip }:
 
+# XXX: IMPORTANT:
+# For compat, keep this at the last version that used the name "Inter UI"
+# For newer versions, which are now simply named "Inter",
+# see the expression for `inter` (../inter/default.nix).
 let
-  version = "3.1";
+  version = "3.2";
 in fetchzip {
   name = "inter-ui-${version}";
 
@@ -12,7 +16,7 @@ in fetchzip {
     unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
 
-  sha256 = "0cdjpwylynwmab0x5z5lw43k39vis74xj1ciqg8nw12ccprbmj60";
+  sha256 = "01d2ql803jrhss6g60djvs08x9xl7z6b3snkn03vqnrajdgifcl4";
 
   meta = with stdenv.lib; {
     homepage = https://rsms.me/inter/;

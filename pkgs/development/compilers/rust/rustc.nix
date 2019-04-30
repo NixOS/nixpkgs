@@ -1,33 +1,28 @@
-{ stdenv, targetPackages, removeReferencesTo
+{ stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
 , fetchurl, fetchgit, fetchzip, file, python2, tzdata, ps
-, llvm, ncurses, darwin, rustPlatform, git, cmake, curl
+, llvm_7, ncurses, darwin, git, cmake, curl, rustPlatform
 , which, libffi, gdb
-, version
 , withBundledLLVM ? false
-, src
-, configureFlags ? []
-, patches
-, targets
-, targetPatches
-, targetToolchains
-, doCheck ? true
-, broken ? false
 }:
 
 let
   inherit (stdenv.lib) optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
-  llvmShared = llvm.override { enableSharedLibraries = true; };
+  llvmSharedForBuild = pkgsBuildBuild.llvm_7.override { enableSharedLibraries = true; };
+  llvmSharedForHost = pkgsBuildHost.llvm_7.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = pkgsBuildTarget.llvm_7.override { enableSharedLibraries = true; };
 
-  target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
-in
+  # For use at runtime
+  llvmShared = llvm_7.override { enableSharedLibraries = true; };
+in stdenv.mkDerivation rec {
+  pname = "rustc";
+  version = "1.34.0";
 
-stdenv.mkDerivation {
-  name = "rustc-${version}";
-  inherit version;
-
-  inherit src;
+  src = fetchurl {
+    url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
+    sha256 = "0n8z1wngkxab1rvixqg6w8b727hzpnm9wp9h8iy3mpbrzp7mmj3s";
+  };
 
   __darwinAllowLocalNetworking = true;
 
@@ -38,13 +33,17 @@ stdenv.mkDerivation {
   # .rlib files in "lib/".
   #
   # See https://github.com/NixOS/nixpkgs/pull/34227
-  stripDebugList = if stdenv.isDarwin then [ "bin" ] else null;
+  #
+  # Running `strip -S` when cross compiling can harm the cross rlibs.
+  # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
+  stripDebugList = [ "bin" ];
+
 
   NIX_LDFLAGS =
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
        optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++"
-    ++ optional stdenv.isDarwin "-rpath ${llvmShared}/lib";
+    ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib";
 
   # Enable nightly features in stable compiles (used for
   # bootstrapping, see https://github.com/rust-lang/rust/pull/37265).
@@ -57,26 +56,66 @@ stdenv.mkDerivation {
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
-  configureFlags = configureFlags
-                ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath"
-                     "--enable-vendor"
-                     "--default-linker=${targetPackages.stdenv.cc}/bin/cc" ]
-                ++ optional (!withBundledLLVM) [ "--enable-llvm-link-shared" "--llvm-root=${llvmShared}" ]
-                ++ optional (targets != []) "--target=${target}";
+  configureFlags = let
+    setBuild  = "--set=target.${stdenv.buildPlatform.config}";
+    setHost   = "--set=target.${stdenv.hostPlatform.config}";
+    setTarget = "--set=target.${stdenv.targetPlatform.config}";
+    ccForBuild  = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}cc";
+    cxxForBuild = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}c++";
+    ccForHost  = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}cc";
+    cxxForHost = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}c++";
+    ccForTarget  = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}cc";
+    cxxForTarget = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}c++";
+  in [
+    "--release-channel=stable"
+    "--set=build.rustc=${rustPlatform.rust.rustc}/bin/rustc"
+    "--set=build.cargo=${rustPlatform.rust.cargo}/bin/cargo"
+    "--enable-rpath"
+    "--enable-vendor"
+    "--build=${stdenv.buildPlatform.config}"
+    "--host=${stdenv.hostPlatform.config}"
+    "--target=${stdenv.targetPlatform.config}"
+
+    "${setBuild}.cc=${ccForBuild}"
+    "${setHost}.cc=${ccForHost}"
+    "${setTarget}.cc=${ccForTarget}"
+
+    "${setBuild}.linker=${ccForBuild}"
+    "${setHost}.linker=${ccForHost}"
+    "${setTarget}.linker=${ccForTarget}"
+
+    "${setBuild}.cxx=${cxxForBuild}"
+    "${setHost}.cxx=${cxxForHost}"
+    "${setTarget}.cxx=${cxxForTarget}"
+  ] ++ optional (!withBundledLLVM) [
+    "--enable-llvm-link-shared"
+    "${setBuild}.llvm-config=${llvmSharedForBuild}/bin/llvm-config"
+    "${setHost}.llvm-config=${llvmSharedForHost}/bin/llvm-config"
+    "${setTarget}.llvm-config=${llvmSharedForTarget}/bin/llvm-config"
+  ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
   # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
   # to the bootstrap builder.
   postConfigure = ''
-    substituteInPlace Makefile --replace 'BOOTSTRAP_ARGS :=' 'BOOTSTRAP_ARGS := --jobs $(NIX_BUILD_CORES)'
+    substituteInPlace Makefile \
+      --replace 'BOOTSTRAP_ARGS :=' 'BOOTSTRAP_ARGS := --jobs $(NIX_BUILD_CORES)'
   '';
 
-  patches = patches ++ targetPatches;
+  patches = [
+    ./patches/net-tcp-disable-tests.patch
+
+    # Re-evaluate if this we need to disable this one
+    #./patches/stdsimd-disable-doctest.patch
+
+    # Fails on hydra - not locally; the exact reason is unknown.
+    # Comments in the test suggest that some non-reproducible environment
+    # variables such $RANDOM can make it fail.
+    # ./patches/disable-test-inherit-env.patch
+  ];
 
   # the rust build system complains that nix alters the checksums
   dontFixLibtool = true;
-
-  passthru.target = target;
 
   postPatch = ''
     patchShebangs src/etc
@@ -115,20 +154,18 @@ stdenv.mkDerivation {
     rm -v src/test/ui/run-pass/threads-sendsync/sync-send-in-std.rs || true  # FIXME: ???
   '';
 
-  # rustc unfortunately need cmake for compiling llvm-rt but doesn't
+  # rustc unfortunately needs cmake to compile llvm-rt but doesn't
   # use it for the normal build. This disables cmake in Nix.
   dontUseCmakeConfigure = true;
 
   # ps is needed for one of the test cases
-  nativeBuildInputs =
-    [ file python2 ps rustPlatform.rust.rustc git cmake
-      which libffi removeReferencesTo
-    ]
-    # Only needed for the debuginfo tests
+  nativeBuildInputs = [
+    file python2 ps rustPlatform.rust.rustc git cmake
+    which libffi removeReferencesTo
+  ] # Only needed for the debuginfo tests
     ++ optional (!stdenv.isDarwin) gdb;
 
-  buildInputs = targetToolchains
-    ++ optional stdenv.isDarwin Security
+  buildInputs = optional stdenv.isDarwin Security
     ++ optional (!withBundledLLVM) llvmShared;
 
   outputs = [ "out" "man" "doc" ];
@@ -148,7 +185,14 @@ stdenv.mkDerivation {
     sed -i '28s/home_dir().is_some()/true/' ./src/test/run-pass/env-home-dir.rs
   '';
 
-  inherit doCheck;
+  # 1. Upstream is not running tests on aarch64:
+  # see https://github.com/rust-lang/rust/issues/49807#issuecomment-380860567
+  # So we do the same.
+  # 2. Tests run out of memory for i686
+  #doCheck = !stdenv.isAarch64 && !stdenv.isi686;
+
+  # Disabled for now; see https://github.com/NixOS/nixpkgs/pull/42348#issuecomment-402115598.
+  doCheck = false;
 
   # remove references to llvm-config in lib/rustlib/x86_64-unknown-linux-gnu/codegen-backends/librustc_codegen_llvm-llvm.so
   # and thus a transitive dependency on ncurses
@@ -170,6 +214,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
-    broken = broken;
   };
 }

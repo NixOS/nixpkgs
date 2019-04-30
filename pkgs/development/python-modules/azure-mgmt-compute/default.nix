@@ -15,12 +15,6 @@ buildPythonPackage rec {
     sha256 = "356219a354140ea26e6b4f4be4f855f1ffaf63af60de24cd2ca335b4ece9db00";
   };
 
-  preConfigure = ''
-    # Patch to make this package work on requests >= 2.11.x
-    # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-    sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/compute/computemanagement.py
-  '';
-
   postInstall = ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py

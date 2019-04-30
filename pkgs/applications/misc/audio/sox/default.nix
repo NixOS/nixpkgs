@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl
+{ config, lib, stdenv, fetchurl, CoreAudio
 , enableAlsa ? true, alsaLib ? null
 , enableLibao ? true, libao ? null
 , enableLame ? config.sox.enableLame or false, lame ? null
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     optional enablePNG libpng ++
     optional enableLibsndfile libsndfile ++
     optionals enableAMR [ amrnb amrwb ] ++
-    optional enableLibpulseaudio libpulseaudio;
+    optional enableLibpulseaudio libpulseaudio ++
+    optional (stdenv.isDarwin) CoreAudio;
 
   meta = {
     description = "Sample Rate Converter for audio";

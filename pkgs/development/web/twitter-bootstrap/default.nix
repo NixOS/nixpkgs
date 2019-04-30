@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Front-end framework for faster and easier web development";
-    homepage = http://getbootstrap.com/;
+    homepage = https://getbootstrap.com/;
     license = stdenv.lib.licenses.mit;
   };
 

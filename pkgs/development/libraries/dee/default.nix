@@ -1,27 +1,57 @@
-{ stdenv, fetchurl, python, pkgconfig
-, glib, icu, gobject-introspection }:
+{ stdenv
+, fetchgit
+, pkgconfig
+, glib
+, icu
+, gobject-introspection
+, dbus-glib
+, vala
+, python3
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "dee-${version}";
-  version = "1.2.7";
+  pname = "dee";
+  version = "unstable-2017-06-16";
 
-  src = fetchurl {
-    url = "https://launchpad.net/dee/1.0/${version}/+download/${name}.tar.gz";
-    sha256 = "12mzffk0lyd566y46x57jlvb9af152b4dqpasr40zal4wrn37w0v";
+  outputs = [ "out" "dev" "py" ];
+
+  src = fetchgit {
+    url = "https://git.launchpad.net/ubuntu/+source/dee";
+    rev = "import/1.2.7+17.10.20170616-4ubuntu1";
+    sha256 = "0q3d9d6ahcyibp6x23g1wvjfcppjh9v614s328yjmx47216z7394";
   };
 
-  buildInputs = [ glib gobject-introspection icu ];
-  nativeBuildInputs = [ python pkgconfig ];
+  patches = [
+    "${src}/debian/patches/gtkdocize.patch"
+    "${src}/debian/patches/strict-prototype.patch"
+    "${src}/debian/patches/icu-pkg-config.patch"
+  ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=misleading-indentation" ]; # gcc-6
+  nativeBuildInputs = [
+    pkgconfig
+    vala
+    autoreconfHook
+    gobject-introspection
+    python3
+  ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    glib
+    icu
+    dbus-glib
+  ];
+
+  configureFlags = [
+    "--disable-gtk-doc"
+    "--with-pygi-overrides-dir=${placeholder ''py''}/${python3.sitePackages}/gi/overrides"
+  ];
 
   meta = with stdenv.lib; {
     description = "A library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
     homepage = https://launchpad.net/dee;
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar worldofpeace ];
   };
 }

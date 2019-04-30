@@ -50,6 +50,7 @@
 , gnupg
 , ffmpeg
 , runtimeShell
+, systemLocale ? config.i18n.defaultLocale or "en-US"
 }:
 
 let
@@ -68,8 +69,6 @@ let
 
   sourceMatches = locale: source:
       (isPrefixOf source.locale locale) && source.arch == arch;
-
-  systemLocale = config.i18n.defaultLocale or "en-US";
 
   policies = {
     DisableAppUpdate = true;

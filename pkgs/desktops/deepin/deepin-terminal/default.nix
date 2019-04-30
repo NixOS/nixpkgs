@@ -1,19 +1,19 @@
 { stdenv, fetchurl, fetchFromGitHub, pkgconfig, cmake, ninja, vala,
-  gettext, gobject-introspection, at-spi2-core, dbus, epoxy, expect,
-  gtk3, json-glib, libXdmcp, libgee, libpthreadstubs, librsvg,
-  libsecret, libtasn1, libxcb, libxkbcommon, p11-kit, pcre, vte, wnck,
-  deepin-menu, deepin-shortcut-viewer, deepin }:
+  gettext, at-spi2-core, dbus, epoxy, expect, gtk3, json-glib,
+  libXdmcp, libgee, libpthreadstubs, librsvg, libsecret, libtasn1,
+  libxcb, libxkbcommon, p11-kit, pcre, vte, wnck, libselinux,
+  libsepol, utillinux, deepin-menu, deepin-shortcut-viewer, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-terminal";
-  version = "3.0.10.2";
+  version = "3.2.1.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-terminal";
     rev = version;
-    sha256 = "0ylhp8q9kfdq9l69drawjaf0q8vcqyflb2a3zfnwbnf06dlpvkz6";
+    sha256 = "0dj386csbiw0yqz9nj6ij0s4d0ak9lpq2bmsfs17bjkgdp0ayp90";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     ninja
     vala
     gettext
-    gobject-introspection # For setup hook
+    libselinux libsepol utillinux # required by gio
+    deepin.setupHook
   ];
 
   buildInputs = [
@@ -49,15 +50,19 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    searchHardCodedPaths
   '';
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    "-DTEST_BUILD=OFF"
+    "-DUSE_VENDOR_LIB=OFF"
+    "-DVERSION=${version}"
+  ];
 
   passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
-    description = "The default terminal emulation for Deepin";
+    description = "Default terminal emulator for Deepin";
     longDescription = ''
       Deepin terminal, it sharpens your focus in the world of command line!
       It is an advanced terminal emulator with workspace, multiple

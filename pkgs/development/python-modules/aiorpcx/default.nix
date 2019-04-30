@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "aiorpcx";
-  version = "0.10.4";
+  version = "0.10.5";
 
   src = fetchPypi {
     inherit version;
     pname = "aiorpcX";
-    sha256 = "15jhklvl0ncy3mb2h9zkahky9fzzr1amgjylm2k3mvlpyn2dbpz6";
+    sha256 = "0c4kan020s09ap5qai7p1syxjz2wk6g9ydhxj6fc35s4103x7b91";
   };
 
   propagatedBuildInputs = [ attrs ];

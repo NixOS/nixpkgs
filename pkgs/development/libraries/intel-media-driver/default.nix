@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "intel-media-driver-${version}";
-  version = "18.4.1";
+  version = "19.1.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "media-driver";
     rev    = "intel-media-${version}";
-    sha256 = "192rfv6dk9jagx0q92jq6n1slc1pllgcc7rm85fgachq9rjl7szh";
+    sha256 = "072ry87h1lds14fqb2sfz3n2sssvacamaxv2gj4nd8agnzbwizn7";
   };
 
   cmakeFlags = [

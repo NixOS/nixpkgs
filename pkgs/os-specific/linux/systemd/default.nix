@@ -34,10 +34,12 @@ in stdenv.mkDerivation rec {
       # Upstream's maintenance branches are still too intrusive:
       # https://github.com/systemd/systemd-stable/tree/v239-stable
       patches-deb = fetchurl {
-        # When the URL disappears, it typically means that Debian has new patches
-        # (probably security) and updating to new tarball will apply them as well.
+        # This URL should point to a stable location that does not easily
+        # disappear.  In the past we were using `mirror://debian` but that
+        # eventually causes the files to disappear.  While that was a good sign
+        # for us to update our patch collection it does break reproducibility.
         name = "systemd-debian-patches.tar.xz";
-        url = mirror://debian/pool/main/s/systemd/systemd_239-12~bpo9+1.debian.tar.xz;
+        url = http://snapshot.debian.org/archive/debian/20190301T035241Z/pool/main/s/systemd/systemd_239-12%7Ebpo9%2B1.debian.tar.xz;
         sha256 = "0v9f62gyfiw5icdrdlcvjcipsqrsm49w6n8bqp9nb8s2ih6rsfhg";
       };
       # Note that we skip debian-specific patches, i.e. ./debian/patches/debian/*
@@ -127,12 +129,12 @@ in stdenv.mkDerivation rec {
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
-        --replace /sbin/swapoff ${utillinux.bin}/sbin/swapoff \
-        --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
+        --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
+        --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
+        --replace /sbin/fsck ${lib.getBin utillinux}/sbin/fsck \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
+        --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done

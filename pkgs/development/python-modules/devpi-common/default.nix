@@ -1,16 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, requests, py, pytest }:
+{ lib, buildPythonPackage, fetchPypi, requests, py, pytest, pytest-flakes }:
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "30833581d03e07d7574b2ff698d213c984777dd44dd47c45c54d31858c694c94";
+    sha256 = "2c7a6471c0f5b07ac9257adec3b3c3a89193ee672fdeb0a6f29487dc9d675e0c";
   };
 
   propagatedBuildInputs = [ requests py ];
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest pytest-flakes ];
 
   checkPhase = ''
     py.test

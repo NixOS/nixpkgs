@@ -1,19 +1,14 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, coreutils, readline, python3Packages }:
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, ell, coreutils, readline, python3Packages }:
 
-let
-  ell = fetchgit {
-     url = https://git.kernel.org/pub/scm/libs/ell/ell.git;
-     rev = "0.17";
-     sha256 = "0yk1qmvpy61qp82bb0w55n062jqzlkzbz0b1v5k763j98czz9rvz";
-  };
-in stdenv.mkDerivation rec {
-  name = "iwd-${version}";
-  version = "0.14";
+stdenv.mkDerivation rec {
+  pname = "iwd";
+
+  version = "0.17";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
     rev = version;
-    sha256 = "08ijlnwvj1w354gbv3hdnm3l4iy24qzq4bq5a9z0wynysasw09lv";
+    sha256 = "1bqkzl03qvzfq5hqd9nsfc98k0iyz864nzcrnbf3fr0n9wnzqffz";
   };
 
   nativeBuildInputs = [
@@ -23,6 +18,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    ell
     readline
     python3Packages.python
   ];
@@ -36,12 +32,13 @@ in stdenv.mkDerivation rec {
     "--with-dbus-datadir=${placeholder "out"}/etc/"
     "--with-dbus-busdir=${placeholder "out"}/share/dbus-1/system-services/"
     "--with-systemd-unitdir=${placeholder "out"}/lib/systemd/system/"
+    "--with-systemd-modloaddir=${placeholder "out"}/etc/modules-load.d/" # maybe
     "--localstatedir=/var/"
     "--enable-wired"
+    "--enable-external-ell"
   ];
 
   postUnpack = ''
-    ln -s ${ell} ell
     patchShebangs .
   '';
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPackages
+{ config, lib, stdenv, fetchurl, buildPackages, callPackage
 , enableThreading ? stdenv ? glibc, makeWrapper
 }:
 
@@ -22,7 +22,8 @@ let
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
   crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
-  common = { version, sha256 }: stdenv.mkDerivation (rec {
+
+  common = { self, version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
 
     name = "perl-${version}";
@@ -104,7 +105,19 @@ let
 
     setupHook = ./setup-hook.sh;
 
-    passthru.libPrefix = "lib/perl5/site_perl";
+    passthru = rec {
+      interpreter = "${self}/bin/perl";
+      libPrefix = "lib/perl5/site_perl";
+      pkgs = callPackage ../../../top-level/perl-packages.nix {
+        perl = self;
+        overrides = config.perlPackageOverrides or (p: {}); # TODO: (self: super: {}) like in python
+      };
+      buildEnv = callPackage ./wrapper.nix {
+        perl = self;
+        inherit (pkgs) requiredPerlModules;
+      };
+      withPackages = f: buildEnv.override { extraLibs = f pkgs; };
+    };
 
     doCheck = false; # some tests fail, expensive
 
@@ -155,13 +168,14 @@ let
       license = licenses.artistic1;
       maintainers = [ maintainers.eelco ];
       platforms = platforms.all;
+      priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "276849e62f472c1b241d9e7b38a28e4cc9f98563"; # Dez 02, 2018
+    crossVersion = "9e4051cd28b7b3afb162776f5627c7abe4c7b9ea"; # Apr 21, 2019
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "1fpr1m9lgkwdp1vmdr0s6gvmcpd0m8q6jwn024bkczc2h37bdynd";
+      sha256 = "0dj99w2dicbp3c3wn0k32785pc4c68iqnlyxswnza6mhw6wvl9v7";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -179,13 +193,15 @@ let
 in rec {
   # the latest Maint version
   perl528 = common {
-    version = "5.28.1";
-    sha256 = "0iy3as4hnbjfyws4in3j9d6zhhjxgl5m95i5n9jy2bnzcpz8bgry";
+    self = perl528;
+    version = "5.28.2";
+    sha256 = "1iynpsxdym4h76kgndmn3ykvwxhqz444xvaz8z2irsxkvmnlb5da";
   };
 
   # the latest Devel version
   perldevel = common {
-    version = "5.29.6";
-    sha256 = "0wj2bia8s30788f69mf5s533l72zbhqpdr85kkk97yrh1c9sgcd6";
+    self = perldevel;
+    version = "5.29.9";
+    sha256 = "017x3nghyc5m8q1yqnrdma96b3d5rlfx87vv5mi64jq0r8k6zppm";
   };
 }

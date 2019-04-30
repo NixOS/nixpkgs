@@ -1,6 +1,7 @@
 { stdenv, darwin, fetchurl, makeWrapper, pkgconfig
 , harfbuzz, icu, lpeg, luaexpat, luazlib, luafilesystem, luasocket, luasec
 , fontconfig, lua, libiconv
+, makeFontsConf, gentium, gentium-book-basic, dejavu_fonts
 }:
 
 with stdenv.lib;
@@ -40,14 +41,36 @@ stdenv.mkDerivation rec {
   LUA_PATH = luaPath;
   LUA_CPATH = luaCPath;
 
+  FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [
+      gentium
+      gentium-book-basic
+      dejavu_fonts
+    ];
+  };
+
+  doCheck = stdenv.targetPlatform == stdenv.hostPlatform
+  && ! stdenv.isAarch64 # random seg. faults
+  && ! stdenv.isDarwin; # dy lib not found
+
+  enableParallelBuilding = true;
+
+  checkPhase = ''
+    make documentation/developers.pdf documentation/sile.pdf
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/sile \
       --set LUA_PATH "${luaPath};" \
       --set LUA_CPATH "${luaCPath};" \
+
+    install -D -t $out/share/doc/sile documentation/*.pdf
   '';
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+
+  outputs = [ "out" "doc" ];
 
   meta = {
     description = "A typesetting system";

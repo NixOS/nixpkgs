@@ -10,9 +10,9 @@ buildPythonPackage rec {
     sha256 = "1qf4dyxvjs7mxrxc0gr7gzyn4iflb2wgq01r5pzrxac8rnvy8fmw";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
   checkPhase = ''
-    py.test
+    pytest
   '';
 
   meta = with stdenv.lib; {

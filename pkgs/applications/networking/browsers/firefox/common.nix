@@ -8,10 +8,10 @@
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
-, hunspell, libevent, libstartup_notification, libvpx
+, hunspell, libXdamage, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, nodejs
+, rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
 
 ### optionals
@@ -30,11 +30,13 @@
 , privacySupport ? isTorBrowserLike || isIceCatLike
 
 # WARNING: NEVER set any of the options below to `true` by default.
-# Set to `privacySupport` or `false`.
+# Set to `!privacySupport` or `false`.
 
-# webrtcSupport breaks the aarch64 build on version >= 60.
+# webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
 # https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
-, webrtcSupport ? (if lib.versionAtLeast ffversion "60" && stdenv.isAarch64 then false else !privacySupport)
+, webrtcSupport ? !privacySupport && (!stdenv.isAarch64 || !(
+    lib.versionAtLeast ffversion "60" && lib.versionOlder ffversion "63"
+  ))
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
@@ -92,6 +94,15 @@ let
 
   browserPatches = [
     ./env_var_for_system_dir.patch
+  ] ++ lib.optionals (stdenv.isAarch64 && lib.versionAtLeast ffversion "66") [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/arm.patch";
+      sha256 = "1vbpih23imhv5r3g21m3m541z08n9n9j1nvmqax76bmyhn7mxp32";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
+      sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
+    })
   ] ++ patches;
 
 in
@@ -120,7 +131,14 @@ stdenv.mkDerivation rec {
     icu libpng jemalloc glib
   ]
   ++ lib.optionals (!isTorBrowserLike) [ nspr nss ]
+  ++ lib.optional (lib.versionOlder ffversion "53") libXdamage
   ++ lib.optional (lib.versionOlder ffversion "61") hunspell
+
+  # >= 66 requires nasm for the AV1 lib dav1d
+  # yasm can potentially be removed in future versions
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
+  # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
+  ++ lib.optional (lib.versionAtLeast ffversion "66") nasm
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
@@ -188,7 +206,13 @@ stdenv.mkDerivation rec {
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
     # please get your own set of keys.
     echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/ga
-    configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
+    # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
+    ${if (lib.versionAtLeast ffversion "60.6" && lib.versionOlder ffversion "61") || (lib.versionAtLeast ffversion "66") then ''
+      configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/ga")
+      configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/ga")
+    '' else ''
+      configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
+    ''}
   '' + lib.optionalString (lib.versionOlder ffversion "58") ''
     cd obj-*
   ''
@@ -239,8 +263,10 @@ stdenv.mkDerivation rec {
   # and wants these
   ++ lib.optionals isTorBrowserLike ([
     "--with-tor-browser-version=${tbversion}"
+    "--with-distribution-id=org.torproject"
     "--enable-signmar"
     "--enable-verify-mar"
+    "--enable-bundled-fonts"
   ])
 
   ++ flag alsaSupport "alsa"

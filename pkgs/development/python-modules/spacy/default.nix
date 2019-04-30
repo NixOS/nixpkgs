@@ -31,7 +31,8 @@ buildPythonPackage rec {
   prePatch = ''
     substituteInPlace setup.py \
       --replace "regex==" "regex>=" \
-      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
+      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6" \
+      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.32.0"
   '';
 
   propagatedBuildInputs = [

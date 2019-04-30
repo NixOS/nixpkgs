@@ -94,8 +94,8 @@ rec {
         ]}
         gcc \
             ${optionalString (libraries != [])
-              "$(pkgs.pkgconfig}/bin/pkg-config --cflags --libs ${
-                concatMapStringsSep " " (lib: escapeShellArg (builtins.parseDrvName lib.name).name) (libraries)
+              "$(pkg-config --cflags --libs ${
+                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgsconfig -name \*.pc -exec basename {} \;)") libraries
               })"
             } \
             -O \
@@ -177,6 +177,23 @@ rec {
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
   writeJSBin = name:
     writeJS "/bin/${name}";
+
+  awkFormatNginx = builtins.toFile "awkFormat-nginx.awk" ''
+    awk -f
+    {sub(/^[ \t]+/,"");idx=0}
+    /\{/{ctx++;idx=1}
+    /\}/{ctx--}
+    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
+   '';
+
+  writeNginxConfig = name: text: pkgs.runCommand name {
+    inherit text;
+    passAsFile = [ "text" ];
+  } /* sh */ ''
+    # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
+    ${pkgs.gawk}/bin/awk -f ${awkFormatNginx} "$textPath" | ${pkgs.gnused}/bin/sed '/^\s*$/d' > $out
+    ${pkgs.gixy}/bin/gixy $out
+  '';
 
   # writePerl takes a name an attributeset with libraries and some perl sourcecode and
   # returns an executable

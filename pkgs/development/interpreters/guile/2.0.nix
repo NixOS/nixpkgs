@@ -1,4 +1,4 @@
-{ stdenv, buildPackages
+{ stdenv, pkgsBuildBuild, buildPackages
 , fetchpatch, fetchurl, makeWrapper, gawk, pkgconfig
 , libffi, libtool, readline, gmp, boehmgc, libunistring
 , coverageAnalysis ? null
@@ -22,7 +22,7 @@
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-                           buildPackages.buildPackages.guile_2_0;
+                           pkgsBuildBuild.guile_2_0;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
 

@@ -38,7 +38,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = http://nipy.org/nibabel/;
+    homepage = https://nipy.org/nibabel/;
     description = "Access a multitude of neuroimaging data formats";
     license = licenses.mit;
     maintainers = with maintainers; [ ashgillman ];

@@ -43,7 +43,7 @@ let
     name = drvName;
 
     src = fetchurl {
-      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
+      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.tar.gz";
       sha256 = sha256Hash;
     };
 
@@ -141,6 +141,9 @@ in runCommand
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;
+    passthru = {
+      unwrapped = androidStudio;
+    };
     meta = with stdenv.lib; {
       description = "The Official IDE for Android (${channel} channel)";
       longDescription = ''

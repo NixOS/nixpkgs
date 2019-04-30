@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "nmon-${version}";
-  version = "16h";
+  version = "16j";
 
   src = fetchurl {
     url = "mirror://sourceforge/nmon/lmon${version}.c";
-    sha256 = "1snfi6wsnpwhpzi33yhqvrrmxmfw6ilcxjkgjx3jkk0453y2sfz2";
+    sha256 = "05a6yc1w421r30qg32a8j0wajjv2ff1mwwsrariv3fz3ng4phf5s";
   };
 
   buildInputs = [ ncurses ];

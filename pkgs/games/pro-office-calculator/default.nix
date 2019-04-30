@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Just an ordinary calculator. Nothing to see here...";
-    homepage = http://proofficecalculator.com/;
+    homepage = https://proofficecalculator.com/;
     maintainers = [ maintainers.pmiddend ];
     platforms = platforms.linux;
     license = licenses.gpl3;

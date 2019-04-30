@@ -13,18 +13,18 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-generate-config</command>
+   <command>nixos-generate-config</command> 
    <arg>
     <option>--force</option>
    </arg>
-
+    
    <arg>
     <arg choice='plain'>
      <option>--root</option>
     </arg>
      <replaceable>root</replaceable>
    </arg>
-
+    
    <arg>
     <arg choice='plain'>
      <option>--dir</option>

@@ -19,11 +19,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "at-spi2-core";
-  version = "2.30.0";
+  version = "2.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0azvgdmmivfz1fki25mz582gmwvfpajcnqhlq7s53nhr7lwzax81";
+    sha256 = "083j1v7kdjrpjsv1b9dl3d8xqj39jyp4cfn8i9gbbm7q2g93b923";
   };
 
   outputs = [ "out" "dev" ];

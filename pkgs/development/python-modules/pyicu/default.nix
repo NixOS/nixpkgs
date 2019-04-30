@@ -4,7 +4,7 @@
 , pytest
 , six
 , fetchpatch
-, pkgs
+, icu
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,9 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ pkgs.icu pytest ];
+  nativeBuildInputs = [ icu ]; # for icu-config
+  buildInputs = [ icu ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {

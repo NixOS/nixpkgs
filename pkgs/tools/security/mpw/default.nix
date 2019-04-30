@@ -1,38 +1,61 @@
-{ stdenv, cmake, fetchFromGitHub, ncurses, libsodium, json_c }:
+{ stdenv, cmake, fetchFromGitLab
+, json_c, libsodium, libxml2, ncurses }:
 
-stdenv.mkDerivation rec {
-  name = "mpw-2.6-f8043ae";
+let
+  rev = "22796663dcad81684ab24308d9db570f6781ba2c";
 
-  src = fetchFromGitHub {
-    owner = "Lyndir";
-    repo = "MasterPassword";
-    rev = "f8043ae16d73ddfb205aadd25c35cd9c5e95b228";
-    sha256 = "0hy02ri7y3sca85z3ff5i68crwav5cjd7rrdqj7jrnpp1bw4yapi";
+in stdenv.mkDerivation rec {
+  name = "mpw-${version}-${builtins.substring 0 8 rev}";
+  version = "2.6";
+
+  src = fetchFromGitLab {
+    owner  = "MasterPassword";
+    repo   = "MasterPassword";
+    sha256 = "1f2vqacgbyam1mazawrfim8zwp38gnwf5v3xkkficsfnv789g6fw";
+    inherit rev;
   };
 
-  postUnpack = ''
-    sourceRoot+=/platform-independent/cli-c
+  sourceRoot = "./source/platform-independent/c/cli";
+
+  postPatch = ''
+    rm build
+    substituteInPlace mpw-cli-tests \
+      --replace '/usr/bin/env bash' ${stdenv.shell} \
+      --replace ./mpw ./build/mpw
   '';
 
-  preConfigure = ''
-    substituteInPlace CMakeLists.txt --replace curses ncurses
-    echo ${name} > VERSION
-  '';
-
-  dontUseCmakeBuildDir = true;
+  cmakeFlags = [
+    "-Dmpw_version=${version}"
+    "-DBUILD_MPW_TESTS=ON"
+  ];
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ ncurses libsodium json_c ];
+  buildInputs = [ json_c libxml2 libsodium ncurses ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv mpw $out/bin/mpw
+    runHook preInstall
+
+    install -Dm755 mpw                    $out/bin/mpw
+    install -Dm644 ../mpw.completion.bash $out/share/bash-completion/completions/_mpw
+    install -Dm644 ../../../../README.md  $out/share/doc/mpw/README.md
+
+    runHook postInstall
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ../mpw-cli-tests
+
+    runHook postCheck
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://masterpasswordapp.com/;
     description = "A stateless password management solution";
+    homepage = https://masterpasswordapp.com/;
     license = licenses.gpl3;
     platforms = platforms.unix;
   };

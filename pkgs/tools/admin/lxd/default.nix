@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
+{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl, fetchpatch
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
 , squashfsTools, iproute, iptables, ebtables, libcap, dqlite
 , sqlite-replication
@@ -7,13 +7,14 @@
 }:
 
 buildGoPackage rec {
-  name = "lxd-3.10";
+  pname = "lxd";
+  version = "3.12";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://github.com/lxc/lxd/releases/download/${name}/${name}.tar.gz";
-    sha256 = "0vd0p3xf54s7f9vcjfiin29py6hxyyxnisvp6am67l5nwhg7rnnc";
+    url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "0m2cq41mz5209csr07gsnmslqvqdxk2p1l2saa23ddnaybqnjy16";
   };
 
   preBuild = ''

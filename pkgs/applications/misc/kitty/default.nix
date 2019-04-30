@@ -2,7 +2,20 @@
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  which, dbus
+  which, dbus,
+  Cocoa,
+  CoreGraphics,
+  Foundation,
+  IOKit,
+  Kernel,
+  OpenGL,
+  cf-private,
+  libicns,
+  libpng,
+  librsvg,
+  optipng,
+  python3,
+  zlib,
 }:
 
 with python3Packages;
@@ -19,12 +32,32 @@ buildPythonApplication rec {
   };
 
   buildInputs = [
-    fontconfig glfw ncurses libunistring harfbuzz libX11
+    ncurses harfbuzz
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    Cocoa
+    CoreGraphics
+    Foundation
+    IOKit
+    Kernel
+    OpenGL
+    cf-private
+    libpng
+    python3
+    zlib
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    fontconfig glfw libunistring libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
     wayland-protocols wayland dbus
   ];
 
-  nativeBuildInputs = [ pkgconfig which sphinx ncurses ];
+  nativeBuildInputs = [
+    pkgconfig which sphinx ncurses
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    imagemagick
+    libicns  # For the png2icns tool.
+    librsvg
+    optipng
+  ];
 
   outputs = [ "out" "terminfo" ];
 
@@ -33,16 +66,30 @@ buildPythonApplication rec {
       src = ./fix-paths.patch;
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
     })
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    ./macos-10.11.patch
+    ./no-lto.patch
+    ./no-werror.patch
+    ./png2icns.patch
   ];
 
-  buildPhase = ''
+  buildPhase = if stdenv.isDarwin then ''
+    make app
+  '' else ''
     ${python.interpreter} setup.py linux-package
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out
+    ${if stdenv.isDarwin then ''
+    mkdir "$out/bin"
+    ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
+    mkdir "$out/Applications"
+    cp -r kitty.app "$out/Applications/kitty.app"
+    '' else ''
     cp -r linux-package/{bin,share,lib} $out
+    ''}
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ]}"
     runHook postInstall
 
@@ -54,8 +101,13 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
+    terminfo_src=${if stdenv.isDarwin then
+      ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
+      else
+      "$out/share/terminfo"}
+
     mkdir -p $terminfo/share
-    mv $out/share/terminfo $terminfo/share/terminfo
+    mv "$terminfo_src" $terminfo/share/terminfo
 
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
@@ -65,7 +117,7 @@ buildPythonApplication rec {
     homepage = https://github.com/kovidgoyal/kitty;
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.darwin ++ platforms.linux;
     maintainers = with maintainers; [ tex rvolosatovs ];
   };
 }

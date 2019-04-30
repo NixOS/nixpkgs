@@ -23,7 +23,7 @@
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib
+, file, libvirt, glib, vips, taglib, libopus
 , libselinux ? null, libsepol ? null
 }@args:
 
@@ -275,6 +275,15 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
+  opus-ruby = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace lib/opus-ruby.rb \
+        --replace "ffi_lib 'opus'" \
+                  "ffi_lib '${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    '';
+  };
+
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
   };
@@ -425,6 +434,13 @@ in
 
   taglib-ruby = attrs: {
     buildInputs = [ taglib ];
+  };
+
+  thrift = attrs: {
+    # See: https://stackoverflow.com/questions/36378190/cant-install-thrift-gem-on-os-x-el-capitan/36523125#36523125
+    # Note that thrift-0.8.0 is a dependency of fluent-plugin-scribe which is a dependency of fluentd.
+    buildFlags = lib.optional (stdenv.isDarwin && lib.versionOlder attrs.version "0.9.2.0")
+      "--with-cppflags=\"-D_FORTIFY_SOURCE=0 -Wno-macro-redefined -Wno-shift-negative-value\"";
   };
 
   timfel-krb5-auth = attrs: {

@@ -1,28 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy37
 , docutils
 , nose
-, stdenv
-, flake8
-, pyyaml
 , testtools
 }:
 
 buildPythonPackage rec {
   pname = "restructuredtext_lint";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "82880a8de8a41bfc84f533744091b1ead8e2ab9ad6c0a3f60f4750ef6c802350";
+    sha256 = "97b3da356d5b3a8514d8f1f9098febd8b41463bed6a1d9f126cf0a048b6fd908";
   };
 
-  checkInputs = [ nose flake8 pyyaml testtools ];
+  checkInputs = [ nose testtools ];
   propagatedBuildInputs = [ docutils ];
 
   checkPhase = ''
-     ${stdenv.shell} test.sh
+    nosetests --nocapture
   '';
 
   meta = {

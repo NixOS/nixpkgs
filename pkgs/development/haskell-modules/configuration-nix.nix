@@ -94,6 +94,8 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
+  cachix = enableSeparateBinOutput super.cachix;
+
   hzk = overrideCabal super.hzk (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
     configureFlags =  "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper";
@@ -536,10 +538,7 @@ self: super: builtins.intersectAttrs super {
     let path = stdenv.lib.makeBinPath [ gcc ];
     in overrideCabal (addBuildTool super.futhark makeWrapper) (_drv: {
       postInstall = ''
-        wrapProgram $out/bin/futhark-c \
-          --prefix PATH : "${path}"
-
-        wrapProgram $out/bin/futhark-opencl \
+        wrapProgram $out/bin/futhark \
           --prefix PATH : "${path}" \
           --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
           --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \

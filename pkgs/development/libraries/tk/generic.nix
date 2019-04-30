@@ -1,4 +1,6 @@
-{ stdenv, src, pkgconfig, tcl, libXft, fontconfig, patches ? [], ... }:
+{ stdenv, lib, src, pkgconfig, tcl, libXft, fontconfig, patches ? []
+, enableAqua ? stdenv.isDarwin, darwin
+, ... }:
 
 stdenv.mkDerivation {
   name = "tk-${tcl.version}";
@@ -21,15 +23,14 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--with-tcl=${tcl}/lib"
-  ];
+  ] ++ stdenv.lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ]
-    ++ stdenv.lib.optional stdenv.isDarwin fontconfig;
 
   propagatedBuildInputs = [ tcl libXft ];
-
-  NIX_CFLAGS_LINK = if stdenv.isDarwin then "-lfontconfig" else null;
+  buildInputs = lib.optional enableAqua (with darwin; with apple_sdk.frameworks; [
+      Cocoa cf-private
+    ]);
 
   doCheck = false; # fails. can't find itself
 

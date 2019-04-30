@@ -87,6 +87,11 @@ stdenv.mkDerivation {
     # Patch maven central repository with our own local directory. This prevents the builder from downloading Maven artifacts
     sed -i -e 's|mavenCentral()|maven { url "${fakeMavenRepo}" }|' android/templates/build/proguard.gradle
 
+    # Patch the strip frameworks script in the iPhone build template to not let
+    # it skip the strip phase. This is caused by an assumption on the file
+    # permissions in which Nix deviates from the standard.
+    sed -i -e "s|-perm +111|-perm /111|" iphone/templates/build/strip-frameworks.sh
+
     # Patch some executables
 
     ${if stdenv.system == "i686-linux" then

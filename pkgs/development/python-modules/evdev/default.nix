@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Provides bindings to the generic input event interface in Linux";
-    homepage = http://pythonhosted.org/evdev;
+    homepage = https://pythonhosted.org/evdev;
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;

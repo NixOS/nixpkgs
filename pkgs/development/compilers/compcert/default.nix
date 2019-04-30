@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, makeWrapper
+{ stdenv, lib, fetchFromGitHub, fetchpatch, makeWrapper
 , coq, ocamlPackages, coq2html
 , tools ? stdenv.cc
 }:
@@ -12,11 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
-  version = "3.4";
+  version = "3.5";
 
-  src = fetchurl {
-    url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "12gchwvkzhd2bhrnwzfb4a06wc4hgv98z987k06vj7ga31ii763h";
+  src = fetchFromGitHub {
+    owner = "AbsInt";
+    repo = "CompCert";
+    rev = "v${version}";
+    sha256 = "1g8067a5x3vd0l47d04gjvy5yx49nghh55am5d1fbrjirfsnsz8j";
   };
 
   nativeBuildInputs = [ makeWrapper ];

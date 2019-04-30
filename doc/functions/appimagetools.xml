@@ -5,11 +5,11 @@
  <title>pkgs.appimageTools</title>
 
  <para>
-   <varname>pkgs.appimageTools</varname> is a set of functions for extracting and wrapping
-   <link xlink:href="https://appimage.org/">AppImage</link> files.
-
-   They are meant to be used if traditional packaging from source is infeasible, or it would take too long.
-   To quickly run an AppImage file, <literal>pkgs.appimage-run</literal> can be used as well.
+  <varname>pkgs.appimageTools</varname> is a set of functions for extracting
+  and wrapping <link xlink:href="https://appimage.org/">AppImage</link> files.
+  They are meant to be used if traditional packaging from source is infeasible,
+  or it would take too long. To quickly run an AppImage file,
+  <literal>pkgs.appimage-run</literal> can be used as well.
  </para>
 
  <warning>
@@ -19,13 +19,13 @@
   </para>
  </warning>
 
-
  <section xml:id="ssec-pkgs-appimageTools-formats">
   <title>AppImage formats</title>
 
   <para>
    There are different formats for AppImages, see
-   <link xlink:href="https://github.com/AppImage/AppImageSpec/blob/74ad9ca2f94bf864a4a0dac1f369dd4f00bd1c28/draft.md#image-format">the specification</link> for details.
+   <link xlink:href="https://github.com/AppImage/AppImageSpec/blob/74ad9ca2f94bf864a4a0dac1f369dd4f00bd1c28/draft.md#image-format">the
+   specification</link> for details.
   </para>
 
   <itemizedlist>
@@ -34,7 +34,6 @@
      Type 1 images are ISO 9660 files that are also ELF executables.
     </para>
    </listitem>
-
    <listitem>
     <para>
      Type 2 images are ELF executables with an appended filesystem.
@@ -46,7 +45,7 @@
    They can be told apart with <command>file -k</command>:
   </para>
 
-  <screen>
+<screen>
 <prompt>$ </prompt>file -k type1.AppImage
 type1.AppImage: ELF 64-bit LSB executable, x86-64, version 1 (SYSV) ISO 9660 CD-ROM filesystem data 'AppImage' (Lepton 3.x), scale 0-0,
 spot sensor temperature 0.000000, unit celsius, color scheme 0, calibration: offset 0.000000, slope 0.000000, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.18, BuildID[sha1]=d629f6099d2344ad82818172add1d38c5e11bc6d, stripped\012- data
@@ -56,7 +55,8 @@ type2.AppImage: ELF 64-bit LSB executable, x86-64, version 1 (SYSV) (Lepton 3.x)
   </screen>
 
   <para>
-   Note how the type 1 AppImage is described as an <literal>ISO 9660 CD-ROM filesystem</literal>, and the type 2 AppImage is not.
+   Note how the type 1 AppImage is described as an <literal>ISO 9660 CD-ROM
+   filesystem</literal>, and the type 2 AppImage is not.
   </para>
  </section>
 
@@ -64,12 +64,11 @@ type2.AppImage: ELF 64-bit LSB executable, x86-64, version 1 (SYSV) (Lepton 3.x)
   <title>Wrapping</title>
 
   <para>
-    Depending on the type of AppImage you're wrapping, you'll have to use
-    <varname>wrapType1</varname> or <varname>wrapType2</varname>.
+   Depending on the type of AppImage you're wrapping, you'll have to use
+   <varname>wrapType1</varname> or <varname>wrapType2</varname>.
   </para>
 
-
-  <programlisting>
+<programlisting>
 appimageTools.wrapType2 { # or wrapType1
   name = "patchwork"; <co xml:id='ex-appimageTools-wrapping-1' />
   src = fetchurl { <co xml:id='ex-appimageTools-wrapping-2' />
@@ -78,7 +77,6 @@ appimageTools.wrapType2 { # or wrapType1
   };
   extraPkgs = pkgs: with pkgs; [ ]; <co xml:id='ex-appimageTools-wrapping-3' />
 }</programlisting>
-
 
   <calloutlist>
    <callout arearefs='ex-appimageTools-wrapping-1'>
@@ -93,29 +91,28 @@ appimageTools.wrapType2 { # or wrapType1
    </callout>
    <callout arearefs='ex-appimageTools-wrapping-2'>
     <para>
-      <varname>extraPkgs</varname> allows you to pass a function to include additional packages
-      inside the FHS environment your AppImage is going to run in.
-
-      There are a few ways to learn which dependencies an application needs:
-
-      <itemizedlist>
-       <listitem>
-        <para>
-         Looking through the extracted AppImage files, reading its scripts and running <command>patchelf</command> and <command>ldd</command> on its executables.
-         This can also be done in <command>appimage-run</command>, by setting <command>APPIMAGE_DEBUG_EXEC=bash</command>.
-        </para>
-       </listitem>
-
-       <listitem>
-        <para>
-         Running <command>strace -vfefile</command> on the wrapped executable, looking for libraries that can't be found.
-        </para>
-       </listitem>
-      </itemizedlist>
-
+     <varname>extraPkgs</varname> allows you to pass a function to include
+     additional packages inside the FHS environment your AppImage is going to
+     run in. There are a few ways to learn which dependencies an application
+     needs:
+     <itemizedlist>
+      <listitem>
+       <para>
+        Looking through the extracted AppImage files, reading its scripts and
+        running <command>patchelf</command> and <command>ldd</command> on its
+        executables. This can also be done in <command>appimage-run</command>,
+        by setting <command>APPIMAGE_DEBUG_EXEC=bash</command>.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Running <command>strace -vfefile</command> on the wrapped executable,
+        looking for libraries that can't be found.
+       </para>
+      </listitem>
+     </itemizedlist>
     </para>
    </callout>
   </calloutlist>
-
  </section>
 </section>

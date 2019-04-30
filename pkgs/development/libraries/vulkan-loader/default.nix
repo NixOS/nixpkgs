@@ -2,7 +2,7 @@
 , xlibsWrapper, libxcb, libXrandr, libXext, wayland, libGL_driver }:
 
 let
-  version = "1.1.85";
+  version = "1.1.106";
 in
 
 assert version == vulkan-headers.version;
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Loader";
-    rev = "b02f64293680c484e1d7ff6ecb88f89277c0dc8c";
-    sha256 = "1n4vjyxlmi2ygx34srwbvalc5gz95gcsrmdw0k10353xja755gmj";
+    rev = "sdk-${version}";
+    sha256 = "0zhrwj1gi90x2w8gaaaw5h4b969a8gfy244kn0drrplhhb1nqz3b";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -27,10 +27,6 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "dev" ];
-
-  postInstall = ''
-    cp -r "${vulkan-headers}/include" "$dev"
-  '';
 
   meta = with stdenv.lib; {
     description = "LunarG Vulkan loader";

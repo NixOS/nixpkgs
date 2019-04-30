@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Berkeley YACC";
-    homepage = http://invisible-island.net/byacc/byacc.html;
+    homepage = https://invisible-island.net/byacc/byacc.html;
     license = licenses.publicDomain;
     platforms = platforms.unix;
   };

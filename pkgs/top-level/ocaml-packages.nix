@@ -53,6 +53,8 @@ let
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
+    base64_2 = callPackage ../development/ocaml-modules/base64/2.0.nix { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bap = callPackage ../development/ocaml-modules/bap {
@@ -65,7 +67,7 @@ let
           };
         };
       };
-      uri = uri.override {
+      uri = uri_1_9.override {
         inherit (janeStreet_0_9_0) ppx_sexp_conv sexplib;
       };
     };
@@ -144,6 +146,7 @@ let
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
     cohttp_p4 = callPackage ../development/ocaml-modules/cohttp/0.19.3.nix {
+      base64 = base64_2;
       lwt = lwt2;
     };
 
@@ -222,6 +225,8 @@ let
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
+
+    dune = callPackage ../development/tools/ocaml/dune { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
 
@@ -335,7 +340,10 @@ let
     then callPackage ../development/tools/ocaml/js_of_ocaml/3.0.nix { }
     else js_of_ocaml_2;
 
-    js_of_ocaml_2 = callPackage ../development/tools/ocaml/js_of_ocaml { lwt = lwt2; };
+    js_of_ocaml_2 = callPackage ../development/tools/ocaml/js_of_ocaml {
+      base64 = base64_2;
+      lwt = lwt2;
+    };
 
     js_of_ocaml-camlp4 = callPackage ../development/tools/ocaml/js_of_ocaml/camlp4.nix {};
 
@@ -355,9 +363,7 @@ let
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
-    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 {
-      cairo2 = cairo2.override { enableGtkSupport = false; };
-    };
+    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
 
     lablgtk3-gtkspell3 = callPackage ../development/ocaml-modules/lablgtk3/gtkspell3.nix { };
 
@@ -380,6 +386,8 @@ let
     };
 
     labltk = callPackage ../development/ocaml-modules/labltk { };
+
+    lacaml = callPackage ../development/ocaml-modules/lacaml { };
 
     lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { lwt = lwt2; };
     lambdaTerm =
@@ -522,6 +530,8 @@ let
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
 
+    syslog = callPackage ../development/ocaml-modules/syslog { };
+
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
     ocf = callPackage ../development/ocaml-modules/ocf { };
@@ -550,10 +560,6 @@ let
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
-    ojquery = callPackage ../development/ocaml-modules/ojquery {
-      ocaml_lwt = lwt3;
-    };
-
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
@@ -570,7 +576,10 @@ let
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
-    piqi = callPackage ../development/ocaml-modules/piqi { };
+    piqi = callPackage ../development/ocaml-modules/piqi {
+      base64 = base64_2;
+    };
+
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
@@ -741,6 +750,10 @@ let
       if lib.versionAtLeast ocaml.version "4.3"
       then callPackage ../development/ocaml-modules/uri { }
       else callPackage ../development/ocaml-modules/uri/legacy.nix { };
+
+    uri_1_9 = callPackage ../development/ocaml-modules/uri {
+      legacy = true;
+    };
 
     uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
       legacyVersion = true;
@@ -1055,9 +1068,7 @@ let
       enableX11 = config.unison.enableX11 or true;
     };
 
-    hol_light = callPackage ../applications/science/logic/hol_light {
-      camlp5 = callPackage ../development/tools/ocaml/camlp5 { legacy = true; };
-    };
+    hol_light = callPackage ../applications/science/logic/hol_light { };
 
   })).overrideScope' liftJaneStreet;
 

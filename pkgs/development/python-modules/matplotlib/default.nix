@@ -4,7 +4,8 @@
 , enableGhostscript ? true, ghostscript ? null, gtk3
 , enableGtk2 ? false, pygtk ? null, gobject-introspection
 , enableGtk3 ? false, cairo
-, enableTk ? false, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
+# darwin has its own "MacOSX" backend
+, enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
 , enableQt ? false, pyqt4
 , libcxx
 , Cocoa
@@ -21,14 +22,14 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt4 != null;
 
 buildPythonPackage rec {
-  version = "3.0.2";
+  version = "3.0.3";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c94b792af431f6adb6859eb218137acd9a35f4f7442cea57e4a59c54751c36af";
+    sha256 = "1dzpgpj34i6lv9wgacqdshai2d237m3vymqrgl52sj1gwf4kblz1";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";

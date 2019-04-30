@@ -226,7 +226,29 @@ in
       security.pam.services.slim.enableKwallet = true;
 
       # Update the start menu for each user that is currently logged in
-      system.userActivationScripts.plasmaSetup = "${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5";
+      system.userActivationScripts.plasmaSetup = ''
+        # The KDE icon cache is supposed to update itself
+        # automatically, but it uses the timestamp on the icon
+        # theme directory as a trigger.  Since in Nix the
+        # timestamp is always the same, this doesn't work.  So as
+        # a workaround, nuke the icon cache on login.  This isn't
+        # perfect, since it may require logging out after
+        # installing new applications to update the cache.
+        # See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
+        rm -fv $HOME/.cache/icon-cache.kcache
+
+        # xdg-desktop-settings generates this empty file but
+        # it makes kbuildsyscoca5 fail silently. To fix this
+        # remove that menu if it exists.
+        rm -fv $HOME/.config/menus/applications-merged/xdg-desktop-menu-dummy.menu
+
+        # Remove the kbuildsyscoca5 cache. It will be regenerated
+        # immediately after. This is necessary for kbuildsyscoca5 to
+        # recognize that software that has been removed.
+        rm -fv $HOME/.cache/ksycoca*
+
+        ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5
+      '';
     })
   ];
 

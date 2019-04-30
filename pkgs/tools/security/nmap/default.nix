@@ -5,6 +5,7 @@
 , withPython ? false # required for the `ndiff` binary
 , python2Packages ? null
 , makeWrapper ? null
+, withLua ? true
 }:
 
 assert withPython -> python2Packages != null;
@@ -35,7 +36,9 @@ in stdenv.mkDerivation rec {
         --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  configureFlags = [ "--with-liblua=${lua5_3}" ]
+  configureFlags = [
+    (if withLua then "--with-liblua=${lua5_3}" else "--without-liblua")
+  ]
     ++ optional (!pythonSupport) "--without-ndiff"
     ++ optional (!graphicalSupport) "--without-zenmap"
     ;

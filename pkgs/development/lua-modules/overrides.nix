@@ -55,4 +55,24 @@ with super;
       install -D completions/zsh/_busted $out/share/zsh/site-functions/_busted
     '';
   });
+
+  luuid = super.luuid.override({
+    buildInputs = [ pkgs.libuuid ];
+    extraConfig = ''
+      variables = {
+        LIBUUID_INCDIR="${pkgs.lib.getDev pkgs.libuuid}/include";
+        LIBUUID_LIBDIR="${pkgs.lib.getLib pkgs.libuuid}/lib";
+      }
+    '';
+    meta = {
+      platforms = pkgs.lib.platforms.linux;
+    };
+  });
+
+  rapidjson = super.rapidjson.overrideAttrs(oa: {
+    preBuild = ''
+      sed -i '/set(CMAKE_CXX_FLAGS/d' CMakeLists.txt
+      sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
+    '';
+  });
  }

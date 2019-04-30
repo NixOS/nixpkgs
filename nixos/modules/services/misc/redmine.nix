@@ -266,7 +266,7 @@ in
       environment.REDMINE_LANG = "en";
       environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
       path = with pkgs; [
-        imagemagickBig
+        imagemagick
         bazaar
         cvs
         darcs

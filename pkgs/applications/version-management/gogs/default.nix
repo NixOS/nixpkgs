@@ -1,6 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
-, git, bash, gzip, openssh
+, git, bash, gzip, openssh, pam
 , sqliteSupport ? true
+, pamSupport ? true
 }:
 
 with stdenv.lib;
@@ -23,9 +24,14 @@ buildGoPackage rec {
     substituteInPlace pkg/setting/setting.go --subst-var data
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optional pamSupport pam;
 
-  buildFlags = optionalString sqliteSupport "-tags sqlite";
+  buildFlags = "-tags";
+
+  buildFlagsArray =
+    (  optional sqliteSupport "sqlite"
+    ++ optional pamSupport "pam");
 
   outputs = [ "bin" "out" "data" ];
 

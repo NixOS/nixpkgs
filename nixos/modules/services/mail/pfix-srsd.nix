@@ -48,8 +48,8 @@ with lib;
       requiredBy = [ "postfix.service" ];
       serviceConfig = {
         Type = "forking";
-        PIDFile = "/var/run/pfix-srsd.pid";
-        ExecStart = "${pkgs.pfixtools}/bin/pfix-srsd -p /var/run/pfix-srsd.pid -I ${config.services.pfix-srsd.domain} ${config.services.pfix-srsd.secretsFile}";
+        PIDFile = "/run/pfix-srsd.pid";
+        ExecStart = "${pkgs.pfixtools}/bin/pfix-srsd -p /run/pfix-srsd.pid -I ${config.services.pfix-srsd.domain} ${config.services.pfix-srsd.secretsFile}";
       };
     };
   };

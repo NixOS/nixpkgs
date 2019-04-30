@@ -8,7 +8,16 @@
 , pycairo
 }:
 
-buildPythonPackage rec {
+let
+  boost = pkgs.boost.override {
+    enablePython = true;
+    inherit python;
+  };
+  mapnik = pkgs.mapnik.override {
+    inherit python boost;
+  };
+
+in buildPythonPackage rec {
   pname = "python-mapnik";
   version = "3.0.16";
 
@@ -28,30 +37,30 @@ buildPythonPackage rec {
     export BOOST_THREAD_LIB="boost_thread"
     export BOOST_SYSTEM_LIB="boost_system"
   '';
-  buildInputs = with pkgs; [
-      (boost.override {
-        enablePython = true;
-        inherit python;
-      })
-      (mapnik.override {
-        inherit python;
-        boost = (boost.override { enablePython = true; inherit python; });
-      })
-      cairo
-      harfbuzz
-      icu
-      libjpeg
-      libpng
-      libtiff
-      libwebp
-      proj
-      zlib
-    ];
+
+  nativeBuildInputs = [
+    mapnik # for mapnik_config
+  ];
+
+  buildInputs = [
+    mapnik
+    boost
+  ] ++ (with pkgs; [
+    cairo
+    harfbuzz
+    icu
+    libjpeg
+    libpng
+    libtiff
+    libwebp
+    proj
+    zlib
+  ]);
   propagatedBuildInputs = [ pillow pycairo ];
 
   meta = with stdenv.lib; {
     description = "Python bindings for Mapnik";
-    homepage = http://mapnik.org;
+    homepage = https://mapnik.org;
     license  = licenses.lgpl21;
   };
 

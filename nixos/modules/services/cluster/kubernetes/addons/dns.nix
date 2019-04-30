@@ -38,6 +38,18 @@ in {
       type = types.int;
     };
 
+    reconcileMode = mkOption {
+      description = ''
+        Controls the addon manager reconciliation mode for the DNS addon.
+
+        Setting reconcile mode to EnsureExists makes it possible to tailor DNS behavior by editing the coredns ConfigMap.
+
+        See: <link xlink:href="https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/addon-manager/README.md"/>.
+      '';
+      default = "Reconcile";
+      type = types.enum [ "Reconcile" "EnsureExists" ];
+    };
+
     coredns = mkOption {
       description = "Docker image to seed for the CoreDNS container.";
       type = types.attrs;
@@ -131,7 +143,7 @@ in {
         kind = "ConfigMap";
         metadata = {
           labels = {
-            "addonmanager.kubernetes.io/mode" = "Reconcile";
+            "addonmanager.kubernetes.io/mode" = cfg.reconcileMode;
             "k8s-app" = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
           };
@@ -162,7 +174,7 @@ in {
         kind = "Deployment";
         metadata = {
           labels = {
-            "addonmanager.kubernetes.io/mode" = "Reconcile";
+            "addonmanager.kubernetes.io/mode" = cfg.reconcileMode;
             "k8s-app" = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
             "kubernetes.io/name" = "CoreDNS";

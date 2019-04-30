@@ -9,12 +9,12 @@
 
 
 buildPythonPackage rec {
-  version = "0.30.1";
+  version = "0.32.0";
   pname = "M2Crypto";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a1b2751cdadc6afac3df8a5799676b7b7c67a6ad144bb62d38563062e7cd3fc6";
+    sha256 = "09d3zs2ivyxbi0fa42mnan0fcplc08q2qd70p1b43sxxdbxcdj99";
   };
 
   patches = [
@@ -25,6 +25,7 @@ buildPythonPackage rec {
   ];
   patchFlags = "-p0";
 
+  nativeBuildInputs = [ swig2 ];
   buildInputs = [ swig2 openssl ];
 
   propagatedBuildInputs = [ typing ];
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python crypto and SSL toolkit";
-    homepage = http://chandlerproject.org/Projects/MeTooCrypto;
+    homepage = https://gitlab.com/m2crypto/m2crypto;
     license = licenses.mit;
     maintainers = with maintainers; [ andrew-d ];
   };

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname   = "twitter.common.confluence";
-  version = "0.3.10";
+  version = "0.3.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8285cab3d31e4065a13575c1920101db4df0f36a59babcc225775e4fae91c0a1";
+    sha256 = "323dde2c519f85020569d7a343432f3aac16bce6ebe5e34774dbde557296697c";
   };
 
   propagatedBuildInputs = [ twitter-common-log ];

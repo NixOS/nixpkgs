@@ -7,12 +7,11 @@
 stdenv.mkDerivation rec {
 
     pname = "discord";
-    version = "0.0.8";
-    name = "${pname}-${version}";
+    version = "0.0.9";
 
     src = fetchurl {
         url = "https://cdn.discordapp.com/apps/linux/${version}/${pname}-${version}.tar.gz";
-        sha256 = "1p786ma54baljs0bw8nl9sr37ypbpjblcndxsw4djgyxkd9ii16r";
+        sha256 = "1i0f8id10rh2fx381hx151qckvvh8hbznfsfav8w0dfbd1bransf";
     };
 
     nativeBuildInputs = [ wrapGAppsHook ];

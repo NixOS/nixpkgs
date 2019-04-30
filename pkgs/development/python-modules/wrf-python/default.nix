@@ -16,13 +16,14 @@ buildPythonPackage rec {
     numpy
     xarray
   ];
-  buildInputs = [
+
+  nativeBuildInputs = [
     gfortran
-  ] ++ lib.optional (pythonOlder "3.3") mock;
-  
+  ];
+
   checkInputs = [
     netcdf4
-  ];
+  ] ++ lib.optional (pythonOlder "3.3") mock;
 
   doCheck = true;
   checkPhase = ''
