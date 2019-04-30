@@ -19,6 +19,8 @@ let
     "x86_64-windows" "i686-windows"
 
     "wasm64-wasi" "wasm32-wasi"
+
+    "riscv32-linux" "riscv64-linux"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -36,6 +38,7 @@ in rec {
   i686    = filterDoubles predicates.isi686;
   x86_64  = filterDoubles predicates.isx86_64;
   mips    = filterDoubles predicates.isMips;
+  riscv   = filterDoubles predicates.isRiscV;
 
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;
