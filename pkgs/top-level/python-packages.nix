@@ -1156,6 +1156,8 @@ in {
 
   bitstruct = callPackage ../development/python-modules/bitstruct { };
 
+  caldav = callPackage ../development/python-modules/caldav { };
+
   caldavclientlibrary-asynk = callPackage ../development/python-modules/caldavclientlibrary-asynk { };
 
   biopython = callPackage ../development/python-modules/biopython { };

@@ -7317,7 +7317,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc864.override {
+  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc865.override {
     overrides = haskell.packageOverrides;
   });
 
@@ -7671,6 +7671,8 @@ in
   });
 
   llvmPackages_latest = llvmPackages_8;
+
+  lorri = throw "lorri is not stable yet. Please go to https://github.com/target/lorri and follow the installation instructions there, for the time being.";
 
   manticore = callPackage ../development/compilers/manticore { };
 

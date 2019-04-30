@@ -320,6 +320,26 @@ lua-iconv = buildLuarocksPackage {
     };
   };
 };
+lua-messagepack = buildLuarocksPackage {
+  pname = "lua-messagepack";
+  version = "0.5.1-2";
+
+  src = fetchurl {
+      url    = https://luarocks.org/lua-messagepack-0.5.1-2.src.rock;
+      sha256 = "0bsdzdd24p9z3j4z1avw7qaqx87baa1pm58v275pw4h6n72z492g";
+  };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];  
+  buildType = "builtin";
+
+  meta = {
+    homepage = "http://fperrad.frama.io/lua-MessagePack/";
+    description="a pure Lua implementation of the MessagePack serialization format";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 lua-term = buildLuarocksPackage {
   pname = "lua-term";
   version = "0.7-1";
@@ -343,6 +363,26 @@ lua-term = buildLuarocksPackage {
     description="Terminal functions for Lua";
     license = {
       fullName = "MIT/X11";
+    };
+  };
+};
+lua-toml = buildLuarocksPackage {
+  pname = "lua-toml";
+  version = "2.0-1";
+
+  src = fetchurl {
+      url    = https://luarocks.org/lua-toml-2.0-1.src.rock;
+      sha256 = "0lyqlnydqbplq82brw9ipqy9gijin6hj1wc46plz994pg4i2c74m";
+  };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];  
+  buildType = "builtin";
+
+  meta = {
+    homepage = "https://github.com/jonstoler/lua-toml";
+    description="toml decoder/encoder for Lua";
+    license = {
+      fullName = "MIT";
     };
   };
 };
@@ -479,6 +519,26 @@ penlight = buildLuarocksPackage {
     description="Lua utility libraries loosely based on the Python standard libraries";
     license = {
       fullName = "MIT/X11";
+    };
+  };
+};
+rapidjson = buildLuarocksPackage {
+  pname = "rapidjson";
+  version = "0.5.1-1";
+
+  src = fetchurl {
+      url    = https://luarocks.org/rapidjson-0.5.1-1.src.rock;
+      sha256 = "0hnqsixnbz95cvm9q5dn0lr0qjvhqw4llw6l1sjswwk0am4yybay";
+  };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];  
+  buildType = "cmake";
+
+  meta = {
+    homepage = "https://github.com/xpol/lua-rapidjson";
+    description="Json module based on the very fast RapidJSON.";
+    license = {
+      fullName = "MIT";
     };
   };
 };

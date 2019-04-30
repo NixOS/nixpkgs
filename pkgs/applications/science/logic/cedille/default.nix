@@ -1,50 +1,70 @@
-{ stdenv, lib, fetchFromGitHub, alex, happy, Agda, agdaIowaStdlib,
-  buildPlatform, buildPackages, ghcWithPackages, fetchpatch }:
-let
-  options-patch =
-    fetchpatch {
-      url = https://github.com/cedille/cedille/commit/ee62b0fabde6c4f7299a3778868519255cc4a64f.patch;
-      name = "options.patch";
-      sha256 = "19xzn9sqpfnfqikqy1x9lb9mb6722kbgvrapl6cf8ckcw8cfj8cz";
-      };
-in
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, texinfo
+, alex
+, happy
+, Agda
+, buildPlatform
+, buildPackages
+, ghcWithPackages
+}:
+
 stdenv.mkDerivation rec {
-  version = "1.0.0";
-  name = "cedille-${version}";
+  version = "1.1.1";
+  pname = "cedille";
+
   src = fetchFromGitHub {
     owner = "cedille";
     repo = "cedille";
     rev = "v${version}";
-    sha256 = "08c2vgg8i6l3ws7hd5gsj89mki36lxm7x7s8hi1qa5gllq04a832";
+    sha256 = "17j7an5bharc8q1pj06615zmflipjdd0clf67cnfdhsmqwzf6l9r";
+    fetchSubmodules = true;
   };
-  buildInputs = [ alex happy Agda (ghcWithPackages (ps: [ps.ieee])) ];
 
-  patches = [options-patch];
+  nativeBuildInputs = [ texinfo alex happy ];
+  buildInputs = [ Agda (ghcWithPackages (ps: [ps.ieee])) ];
 
   LANG = "en_US.UTF-8";
   LOCALE_ARCHIVE =
     lib.optionalString (buildPlatform.libc == "glibc")
       "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
+  patches = [
+    # texinfo direntry fix. See: https://github.com/cedille/cedille/pull/86
+    (fetchpatch {
+      url = "https://github.com/cedille/cedille/commit/c058f42179a635c7b6179772c30f0eba4ac53724.patch";
+      sha256 = "02qd86k5bdrygjzh2k0j0q5qk4nk2vwnsz7nvlssvysbvsmiba7x";
+    })
+  ];
+
   postPatch = ''
     patchShebangs create-libraries.sh
-    cp -r ${agdaIowaStdlib.src} ial
-    chmod -R 755 ial
+    patchShebangs docs/src/compile-docs.sh
   '';
 
-  outputs = ["out" "lib"];
+  # We regenerate the info file in order to fix the direntry
+  preBuild = ''
+    rm -f docs/info/cedille-info-main.info
+  '';
+
+  buildFlags = [ "all" "cedille-docs" ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv cedille $out/bin/cedille
-    mv lib $lib
+    install -Dm755 -t $out/bin/ cedille
+    install -Dm755 -t $out/bin/ core/cedille-core
+    install -Dm644 -t $out/share/info docs/info/cedille-info-main.info
+
+    mkdir -p $out/lib/
+    cp -r lib/ $out/lib/cedille/
   '';
 
-  meta = {
-    description = "An interactive theorem-prover and dependently typed programming language, based on extrinsic (aka Curry-style) type theory.";
+  meta = with stdenv.lib; {
+    description = "An interactive theorem-prover and dependently typed programming language, based on extrinsic (aka Curry-style) type theory";
     homepage = https://cedille.github.io/;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.mpickering ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ marsam mpickering ];
+    platforms = platforms.unix;
   };
 }
