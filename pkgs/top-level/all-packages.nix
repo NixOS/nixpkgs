@@ -3950,6 +3950,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  nanum-gothic-coding = callPackage ../data/fonts/nanum-gothic-coding {  };
+
   nbench = callPackage ../tools/misc/nbench { };
 
   netdata = callPackage ../tools/system/netdata {
