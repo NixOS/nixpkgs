@@ -127,9 +127,9 @@ in rec {
   };
 
   vala_0_44 = generic {
-    major   = "0.44";
-    minor   = "1";
-    sha256 = "1qiglkgymws6a3m8xz1v8b3na165ywx2dbipp3bdg134bi0w3a4n";
+    major = "0.44";
+    minor = "3";
+    sha256 = "1sgas7z6y9r2mf4pxry3fx2awdnzn3vlg2sxd3hqpy2a90ib8lw5";
   };
 
   vala = vala_0_44;
