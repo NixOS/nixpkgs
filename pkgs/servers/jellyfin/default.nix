@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "jellyfin";
-  version = "10.3.0";
+  version = "10.3.1";
 
   # Impossible to build anything offline with dotnet
   src = fetchurl {
     url = "https://github.com/jellyfin/jellyfin/releases/download/v${version}/jellyfin_${version}_portable.tar.gz";
-    sha256 = "1q9rvyza5zi1kqg9301zrd0fnxzdwknyagpjc9r1cpqfx3yasnkc";
+    sha256 = "1j6jyrbc0ha348y63wk5jv9wjcjydma9cr3jxva1y85pjrmm7z90";
   };
 
   buildInputs = [
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "The Free Software Media System";
     homepage = https://jellyfin.github.io/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ nyanloutre ];
+    maintainers = with maintainers; [ nyanloutre minijackson ];
   };
 }

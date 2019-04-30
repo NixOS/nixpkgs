@@ -9,11 +9,11 @@
 
 python3Packages.buildPythonApplication rec {
   name = "zim-${version}";
-  version = "0.70";
+  version = "0.71.0";
 
   src = fetchurl {
     url = "http://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "1g1xj86iph1a2k4n9yykq0gipbd5jdd7fsh9qpv4v2h5lggadjdd";
+    sha256 = "0mr3911ls5zp3z776ysrdm3sg89zg29r3ip23msydcdbl8wymw30";
   };
 
   buildInputs = [ gtk3 gobject-introspection wrapGAppsHook ];

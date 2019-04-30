@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper
 , dpkg, patchelf
 , gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, systemd
-, libXdamage }:
+, libXdamage, expat }:
 
 let
   inherit (stdenv) lib;
   LD_LIBRARY_PATH = lib.makeLibraryPath
-    [ glib gtk2 gdk_pixbuf alsaLib nss nspr GConf cups libgcrypt dbus libXdamage ];
+    [ glib gtk2 gdk_pixbuf alsaLib nss nspr GConf cups libgcrypt dbus libXdamage expat ];
 in
 stdenv.mkDerivation rec {
   version = "2.8.1";
@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
       sha256 = "05gzrnlssjkhyh0wv019d4r7p40lxnsa1sghazll6f233yrqmxb0";
     };
 
-  buildInputs = [ dpkg ];
-
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper dpkg ];
 
   unpackPhase = ''
     mkdir pkg

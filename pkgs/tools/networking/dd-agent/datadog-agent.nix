@@ -6,14 +6,14 @@ let
 
 in buildGoPackage rec {
   name = "datadog-agent-${version}";
-  version = "6.10.1";
+  version = "6.11.0";
   owner   = "DataDog";
   repo    = "datadog-agent";
 
   src = fetchFromGitHub {
     inherit owner repo;
     rev    = "${version}";
-    sha256 = "1yxwlf0kwjhadq6f1p9z100d363x1s1xzni3rw42m08mzx9fr469";
+    sha256 = "1gvawsrm3qlrciahnqa9793hwm586jiccmnz1pp0z889508wbg07";
   };
 
   subPackages = [
@@ -23,7 +23,7 @@ in buildGoPackage rec {
     "cmd/py-launcher"
     "cmd/trace-agent"
   ];
-  goDeps = ./deps.nix;
+  goDeps = ./datadog-agent-deps.nix;
   goPackagePath = "github.com/${owner}/${repo}";
 
   # Explicitly set this here to allow it to be overridden.

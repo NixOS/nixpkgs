@@ -55,7 +55,7 @@ package `haskell-pandoc`, for example, installs both a library and an
 application. You can install and use Haskell executables just like any other
 program in Nixpkgs, but using Haskell libraries for development is a bit
 trickier and we'll address that subject in great detail in section [How to
-create a development environment].
+create a development environment](#how-to-create-a-development-environment).
 
 Attribute paths are deterministic inside of Nixpkgs, but the path necessary to
 reach Nixpkgs varies from system to system. We dodged that problem by giving
@@ -127,7 +127,7 @@ Also, the attributes `haskell.compiler.ghcXYC` and
 
 A simple development environment consists of a Haskell compiler and one or both
 of the tools `cabal-install` and `stack`. We saw in section
-[How to install Haskell packages] how you can install those programs into your
+[How to install Haskell packages](#how-to-install-haskell-packages) how you can install those programs into your
 user profile:
 ```shell
 nix-env -f "<nixpkgs>" -iA haskellPackages.ghc haskellPackages.cabal-install
@@ -162,7 +162,7 @@ nix-shell -p haskell.compiler.ghc784
 to bring GHC 7.8.4 into `$PATH`. Alternatively, you can use Stack instead of
 `nix-shell` directly to select compiler versions and other build tools
 per-project. It uses `nix-shell` under the hood when Nix support is turned on.
-See [How to build a Haskell project using Stack].
+See [How to build a Haskell project using Stack](#how-to-build-a-haskell-project-using-stack).
 
 If you're using `cabal-install`, re-running `cabal configure` inside the spawned
 shell switches your build to use that compiler instead. If you're working on

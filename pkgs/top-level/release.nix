@@ -71,6 +71,7 @@ let
               jobs.transmission-gtk.x86_64-darwin
 
               # Tests
+              /*
               jobs.tests.cc-wrapper.x86_64-darwin
               jobs.tests.cc-wrapper-clang.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx.x86_64-darwin
@@ -79,6 +80,7 @@ let
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
               jobs.tests.patch-shebangs.x86_64-darwin
+              */
             ];
         } else null;
 
@@ -104,6 +106,7 @@ let
               jobs.thunderbird.x86_64-linux
               jobs.unar.x86_64-linux
 
+              /*
               jobs.tests.cc-wrapper.x86_64-linux
               jobs.tests.cc-wrapper-gcc7.x86_64-linux
               jobs.tests.cc-wrapper-gcc8.x86_64-linux
@@ -124,6 +127,7 @@ let
               jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
               jobs.tests.patch-shebangs.x86_64-linux
+              */
             ]
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
             ++ lib.optionals supportDarwin [
@@ -138,6 +142,7 @@ let
               jobs.vim.x86_64-darwin
               jobs.inkscape.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
+              /*
               jobs.tests.cc-wrapper.x86_64-darwin
               jobs.tests.cc-wrapper-gcc7.x86_64-darwin
               # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
@@ -154,6 +159,7 @@ let
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
               jobs.tests.patch-shebangs.x86_64-darwin
+              */
             ];
         };
 
