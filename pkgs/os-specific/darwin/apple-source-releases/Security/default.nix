@@ -28,8 +28,6 @@ appleDerivation {
 
     set -x
 
-    ls
-
     cp OSX/libsecurity_asn1/lib/SecAsn1Coder.h     $dest
     cp OSX/libsecurity_asn1/lib/SecAsn1Templates.h $dest
     cp OSX/libsecurity_asn1/lib/SecAsn1Types.h     $dest
@@ -81,24 +79,24 @@ appleDerivation {
     cp OSX/libsecurity_keychain/lib/SecACL.h                $dest
     cp OSX/libsecurity_keychain/lib/SecAccess.h             $dest
     cp OSX/libsecurity_keychain/lib/SecBase64P.h            $dest
-    cp OSX/libsecurity_keychain/lib/SecCertificate.h        $dest
-    cp OSX/libsecurity_keychain/lib/SecCertificatePriv.h    $dest # Private
+    cp OSX/libsecurity_keychain/lib/Certificate.h        $dest
+    # cp OSX/libsecurity_keychain/lib/SecCertificatePriv.h    $dest # Private
     cp OSX/libsecurity_keychain/lib/SecCertificateOIDs.h    $dest
-    cp OSX/libsecurity_keychain/lib/SecIdentity.h           $dest
+    cp OSX/libsecurity_keychain/lib/Identity.h           $dest
     cp OSX/libsecurity_keychain/lib/SecIdentitySearch.h     $dest
-    cp OSX/libsecurity_keychain/lib/SecImportExport.h       $dest
-    cp OSX/libsecurity_keychain/lib/SecItem.h               $dest
-    cp OSX/libsecurity_keychain/lib/SecKey.h                $dest
+    # cp OSX/libsecurity_keychain/lib/SecImportExport.h       $dest
+    cp OSX/libsecurity_keychain/lib/Item.h               $dest
+    # cp OSX/libsecurity_keychain/lib/SecKey.h                $dest
     cp OSX/libsecurity_keychain/lib/SecKeychain.h           $dest
     cp OSX/libsecurity_keychain/lib/SecKeychainItem.h       $dest
     cp OSX/libsecurity_keychain/lib/SecKeychainSearch.h     $dest
-    cp OSX/libsecurity_keychain/lib/SecPolicy.h             $dest
+    # cp OSX/libsecurity_keychain/lib/SecPolicy.h             $dest
     cp OSX/libsecurity_keychain/lib/SecPolicySearch.h       $dest
-    cp OSX/libsecurity_keychain/lib/SecRandom.h             $dest
-    cp OSX/libsecurity_keychain/lib/SecTrust.h              $dest
-    cp OSX/libsecurity_keychain/lib/SecTrustSettings.h      $dest
+    # cp OSX/libsecurity_keychain/lib/SecRandom.h             $dest
+    # cp OSX/libsecurity_keychain/lib/SecTrust.h              $dest
+    # cp OSX/libsecurity_keychain/lib/SecTrustSettings.h      $dest
     cp OSX/libsecurity_keychain/lib/SecTrustedApplication.h $dest
-    cp OSX/libsecurity_keychain/lib/Security.h              $dest
+    # cp OSX/libsecurity_keychain/lib/Security.h              $dest
 
     cp OSX/libsecurity_manifest/lib/SecureDownload.h $dest
 
