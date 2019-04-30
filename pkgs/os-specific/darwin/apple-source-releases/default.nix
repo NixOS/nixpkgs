@@ -71,7 +71,7 @@ let
     "macos-10.12.6" = {
       # Latest releases as of 2019-04-29, not listed in 10.13 - 10.14.1
       security_dotmac_tp = "55107.1";
-    }
+    };
     # Released July 2016
     "osx-10.11.6" = {
       # Latest release as of 2019-04-29, not listed in 10.12 - 10.14.1
@@ -140,7 +140,7 @@ let
     "dev-tools-10.1" = {
       developer_cmds = "66";            # 0q08m4cxxwph7gxqravmx13l418p1i050bd46zwksn9j9zpw9mlr
       bootstrap_cmds = "96.20.2.200.4"; # 18arr8dkph9aa1pp0k90akm3f1f1qn7n7wcxm44na2x91l6lkcfb
-    }
+    };
     # Released October 2011, corresponds to OSX 10.7.2
     "dev-tools-4.2" = {
       # Latest release as of 2019-04-29, not listed in 4.3 - 10.1
@@ -228,7 +228,7 @@ let
     dtrace-xcode   = applePackage "dtrace/xcode.nix" "macos-10.14.1"   "01qfg70w2s1qmywbrra7h2m2y6fig61x93a81jkpdsp9fjcc100r" {};
     dyld           = applePackage "dyld"             "macos-10.14.1"   "0dyx4xyl7rzavvizaym3jwxrfkwljkg6f6l8pjvp1d8cpxbg54g8" {};
     eap8021x       = applePackage "eap8021x"         "macos-10.14.1"   "14hqawac3cvmgw6y3bgf4lhqvslf3fyi5fzvws70r77726v5z6p8" {};
-    ICU            = applePackage "ICU"              "osx-10.10.5"     "1qihlp42n5g4dl0sn0f9pc0bkxy1452dxzf0vr6y5gqpshlzy03p" {};
+    ICU            = applePackage "ICU"              "macos-10.14.1"   "0hqsw6mnrm42p2w09r6kbkzxcyxgwkqxdp9djssi4jz1wbv71wrb" {};
 
     # TODO(burke): sum will need update
     IOKit   = applePackage "IOKit"   "macos-10.14.1" "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x00" { inherit IOKitSrcs; };
