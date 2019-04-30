@@ -56,10 +56,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
     '';
 
-  preConfigure = ''
-    configureFlagsArray+=("--with-systemdsystemunitdir=$out/etc/systemd/system")
-  '';
-
   configureFlags =
     [ "--enable-swanctl"
       "--enable-cmd"
@@ -74,7 +70,7 @@ stdenv.mkDerivation rec {
       "--enable-curl" ]
     ++ optionals stdenv.isLinux [
       "--enable-farp" "--enable-dhcp"
-      "--enable-systemd"
+      "--enable-systemd" "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
       "--enable-xauth-pam"
       "--enable-forecast"
       "--enable-connmark"
