@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fontforge";
-  version = "20190317";
+  version = "20190413";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1ddqbpc32cgbccdnv0lfw0qhj59hcqzb7616ph5lkvm91pnas4dp";
+    sha256 = "05v640mnk4fy4jzmxb6c4n4qm800x7hy4sl5gcdgzmm3md2s0qk7";
   };
 
   patches = [ ./fontforge-20140813-use-system-uthash.patch ];
