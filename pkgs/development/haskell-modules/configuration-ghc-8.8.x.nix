@@ -45,6 +45,14 @@ self: super: {
   doctest = doJailbreak super.doctest;
 
   # These packages don't work and need patching and/or an update.
-  primitive = markBrokenVersion "0.6.4.0" super.primitive;
+  primitive = overrideSrc (doJailbreak super.primitive) {
+    version = "20180530-git";
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell";
+      repo = "primitive";
+      rev = "97964182881aa0419546e0bb188b2d17e4468324";
+      sha256 = "1p1pinca33vd10iy7hl20c1fc99vharcgcai6z3ngqbq50k2pd3q";
+    };
+  };
 
 }
