@@ -46,7 +46,14 @@
     })
     ./riscv.patch
   ] ++
-    (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
+    (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
+    ++ stdenv.lib.optionals stdenv.isDarwin [
+      (fetchpatch {
+        url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
+        sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
+      })
+      ./filter-mkostemp-darwin.patch
+    ];
 
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".

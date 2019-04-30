@@ -2,7 +2,7 @@
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes
-, cf-private, ps
+, ps
 , isBootstrap ? false
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
 , useNcurses ? false, ncurses
@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ setupHook pkgconfig ]
-    ++ optional stdenv.isDarwin cf-private  # needed for CFBundleCopyExecutableURL
     ++ optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4

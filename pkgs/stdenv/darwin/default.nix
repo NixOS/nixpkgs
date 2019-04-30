@@ -132,9 +132,6 @@ in rec {
         extraAttrs = {
           inherit platform;
           parent = last;
-
-          # This is used all over the place so I figured I'd just leave it here for now
-          secure-format-patch = ./darwin-secure-format.patch;
         };
         overrides  = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -158,7 +155,7 @@ in rec {
         dyld = bootstrapTools;
       };
 
-      llvmPackages_5 = {
+      llvmPackages_7 = {
         libcxx = stdenv.mkDerivation {
           name = "bootstrap-stage0-libcxx";
           phases = [ "installPhase" "fixupPhase" ];
@@ -200,7 +197,12 @@ in rec {
       python2 = self.python;
 
       ninja = super.ninja.override { buildDocs = false; };
-      darwin = super.darwin // { cctools = super.darwin.cctools.override { llvm = null; }; };
+      darwin = super.darwin // {
+        cctools = super.darwin.cctools.override {
+          llvm = null;
+          enableTapiSupport = false;
+        };
+      };
     };
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
@@ -260,9 +262,9 @@ in rec {
       # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
       libxml2 = super.libxml2.override { pythonSupport = false; };
 
-      llvmPackages_5 = super.llvmPackages_5 // (let
-        libraries = super.llvmPackages_5.libraries.extend (_: _: {
-          inherit (llvmPackages_5) libcxx libcxxabi;
+      llvmPackages_7 = super.llvmPackages_7 // (let
+        libraries = super.llvmPackages_7.libraries.extend (_: _: {
+          inherit (llvmPackages_7) libcxx libcxxabi;
         });
       in { inherit libraries; } // libraries);
 
@@ -278,8 +280,8 @@ in rec {
     # enables patchShebangs above. Unfortunately, patchShebangs ignores our $SHELL setting
     # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
-    extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
-    extraBuildInputs = [ pkgs.darwin.CF ];
+    extraNativeBuildInputs = with pkgs; [ xz ];
+    extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
     libcxx = pkgs.libcxx;
 
     extraPreHook = ''
@@ -314,18 +316,20 @@ in rec {
         ];
       });
 
-      llvmPackages_5 = super.llvmPackages_5 // (let
-        tools = super.llvmPackages_5.tools.extend (llvmSelf: _: {
-          inherit (llvmPackages_5) llvm clang-unwrapped;
+      llvmPackages_7 = super.llvmPackages_7 // (let
+        tools = super.llvmPackages_7.tools.extend (llvmSelf: _: {
+          clang-unwrapped = llvmPackages_7.clang-unwrapped.override { llvm = llvmSelf.llvm; };
+          llvm = llvmPackages_7.llvm.override { libxml2 = self.darwin.libxml2-nopython; };
         });
-        libraries = super.llvmPackages_5.libraries.extend (llvmSelf: _: {
-          inherit (llvmPackages_5) libcxx libcxxabi compiler-rt;
+        libraries = super.llvmPackages_7.libraries.extend (llvmSelf: _: {
+          inherit (llvmPackages_7) libcxx libcxxabi compiler-rt;
         });
       in { inherit tools libraries; } // tools // libraries);
 
       darwin = super.darwin // rec {
         inherit (darwin) dyld Libsystem libiconv locale;
 
+        cctools = super.darwin.cctools.override { enableTapiSupport = false; };
         libxml2-nopython = super.libxml2.override { pythonSupport = false; };
         CF = super.darwin.CF.override {
           libxml2 = libxml2-nopython;
@@ -335,8 +339,8 @@ in rec {
     };
   in with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
-    extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
-    extraBuildInputs = [ pkgs.darwin.CF ];
+    extraNativeBuildInputs = with pkgs; [ xz ];
+    extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
     libcxx = pkgs.libcxx;
 
     extraPreHook = ''
@@ -353,12 +357,12 @@ in rec {
         ncurses libffi zlib llvm gmp pcre gnugrep
         coreutils findutils diffutils patchutils;
 
-      llvmPackages_5 = super.llvmPackages_5 // (let
-        tools = super.llvmPackages_5.tools.extend (_: super: {
-          inherit (llvmPackages_5) llvm clang-unwrapped;
+      llvmPackages_7 = super.llvmPackages_7 // (let
+        tools = super.llvmPackages_7.tools.extend (_: super: {
+          inherit (llvmPackages_7) llvm clang-unwrapped;
         });
-        libraries = super.llvmPackages_5.libraries.extend (_: _: {
-          inherit (llvmPackages_5) compiler-rt libcxx libcxxabi;
+        libraries = super.llvmPackages_7.libraries.extend (_: _: {
+          inherit (llvmPackages_7) compiler-rt libcxx libcxxabi;
         });
       in { inherit tools libraries; } // tools // libraries);
 
@@ -414,9 +418,6 @@ in rec {
       inherit platform bootstrapTools;
       libc         = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
-
-      # This is used all over the place so I figured I'd just leave it here for now
-      secure-format-patch = ./darwin-secure-format.patch;
     };
 
     allowedRequisites = (with pkgs; [

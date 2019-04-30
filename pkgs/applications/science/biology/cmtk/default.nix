@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [cmake];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=c++11-narrowing";
+
   meta = with stdenv.lib; {
     description     = "Computational Morphometry Toolkit ";
     longDescription = ''A software toolkit for computational morphometry of

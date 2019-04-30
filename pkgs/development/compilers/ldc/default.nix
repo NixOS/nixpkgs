@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
   else
     "";
 
-  doCheck = !bootstrapVersion;
+  doCheck = !bootstrapVersion && !stdenv.isDarwin;
 
   checkPhase = stdenv.lib.optionalString doCheck ''
     # Build default lib test runners

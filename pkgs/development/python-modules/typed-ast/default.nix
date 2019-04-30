@@ -1,10 +1,10 @@
 { buildPythonPackage, fetchPypi, lib, pythonOlder }:
 buildPythonPackage rec {
   pname = "typed-ast";
-  version = "1.3.1";
+  version = "1.3.4";
   src = fetchPypi{
     inherit pname version;
-    sha256 = "606d8afa07eef77280c2bf84335e24390055b478392e1975f96286d99d0cb424";
+    sha256 = "68c362848d9fb71d3c3e5f43c09974a0ae319144634e7a47db62f0f2a54a7fa7";
   };
   # Only works with Python 3.3 and newer;
   disabled = pythonOlder "3.3";

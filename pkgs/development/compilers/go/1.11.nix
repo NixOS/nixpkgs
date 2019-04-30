@@ -136,11 +136,6 @@ stdenv.mkDerivation rec {
     ./skip-test-extra-files-on-386.patch
   ];
 
-  postPatch = optionalString stdenv.isDarwin ''
-    echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
-    substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
-  '';
-
   GOOS = stdenv.targetPlatform.parsed.kernel.name;
   GOARCH = goarch stdenv.targetPlatform;
   # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
@@ -188,7 +183,7 @@ stdenv.mkDerivation rec {
     (cd src && ./make.bash)
   '';
 
-  doCheck = stdenv.hostPlatform == stdenv.targetPlatform;
+  doCheck = stdenv.hostPlatform == stdenv.targetPlatform && !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck

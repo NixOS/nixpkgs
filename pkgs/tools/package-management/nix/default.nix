@@ -3,6 +3,7 @@
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
 , boehmgc
+, llvmPackages_6
 }:
 
 let
@@ -174,6 +175,8 @@ in rec {
     };
 
     inherit storeDir stateDir confDir boehmgc;
+
+    stdenv = llvmPackages_6.stdenv;
   };
 
   nixUnstable = lib.lowPrio (callPackage common rec {
@@ -188,6 +191,8 @@ in rec {
     fromGit = true;
 
     inherit storeDir stateDir confDir boehmgc;
+
+    stdenv = llvmPackages_6.stdenv;
   });
 
 }

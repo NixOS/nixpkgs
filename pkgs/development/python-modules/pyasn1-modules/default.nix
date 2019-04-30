@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyasn1-modules";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a52090e8c5841ebbf08ae455146792d9ef3e8445b21055d3a3b7ed9c712b7c7c";
+    sha256 = "ef721f68f7951fab9b0404d42590f479e30d9005daccb1699b0a51bb4177db96";
   };
 
   propagatedBuildInputs = [ pyasn1 ];

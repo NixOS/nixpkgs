@@ -2,7 +2,7 @@
 , gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
 , libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
 , gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
-, ethtool, gnused, coreutils, inetutils, kmod, jansson, gtk-doc, libxslt
+, ethtool, gnused, coreutils, iputils, kmod, jansson, gtk-doc, libxslt
 , docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43
 , openconnect, curl, meson, ninja, libpsl, libredirect }:
 
@@ -11,11 +11,11 @@ let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "1.16.0";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0b2x9hrg41cd17psqi0vacwj733v99hxczn53gdfs0yanqrji5lf";
+    sha256 = "19lb5afx4iq8dgfsy26x9j4194v8f64vwr3nq6dk1ix3wljxzs66";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -43,15 +43,18 @@ in stdenv.mkDerivation rec {
     "-Dmodem_manager=true"
     "-Dnmtui=true"
     "-Ddocs=true"
-    "-Dlibnm_glib=true" # legacy library, TODO: remove
+    # TODO: legacy library, will be *removed* in next release!
+    "-Dlibnm_glib=true"
     "-Dtests=no"
     "-Dqt=false"
+    # Allow using iwd when configured to do so
+    "-Diwd=true"
   ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit inetutils kmod openconnect ethtool coreutils dbus;
+      inherit iputils kmod openconnect ethtool coreutils dbus;
       inherit (stdenv) shell;
     })
 
@@ -83,6 +86,7 @@ in stdenv.mkDerivation rec {
   ];
 
   doCheck = false; # requires /sys, the net
+
 
   postPatch = ''
     patchShebangs ./tools

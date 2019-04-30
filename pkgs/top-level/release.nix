@@ -199,7 +199,6 @@ let
 
       darwin = packagePlatforms pkgs.darwin // {
         cf-private = {};
-        osx_private_sdk = {};
         xcode = {};
       };
     } ));

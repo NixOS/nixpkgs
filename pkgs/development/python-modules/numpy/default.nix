@@ -16,18 +16,18 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.16.2";
+  version = "1.16.3";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1c4inssky16p6ab63n1gass6dik1dzxrp3y7kmxbdq6xg4w2wsbc";
+    sha256 = "78a6f89da87eeb48014ec652a65c4ffde370c036d780a995edaeb121d3625621";
   };
 
   nativeBuildInputs = [ gfortran pytest ];
   buildInputs = [ blas ];
 
-  patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
+  patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
     # Patching of numpy.distutils is needed to prevent it from undoing the
     # patch to distutils.

@@ -42,7 +42,7 @@ let
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
-    inherit pythonForBuild;
+    inherit hasDistutilsCxxPatch pythonForBuild;
   } // {
     inherit ucsEncoding;
   };

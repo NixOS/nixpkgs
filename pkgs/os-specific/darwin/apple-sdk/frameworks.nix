@@ -10,12 +10,12 @@ with frameworks; with libs; {
   AVKit                   = [];
   Accounts                = [];
   AddressBook             = [ Carbon CF ];
-  AppKit                  = [ AudioToolbox Foundation QuartzCore ];
+  AppKit                  = [ AudioToolbox AudioUnit Foundation QuartzCore ];
   AppKitScripting         = [];
   AppleScriptKit          = [];
   AppleScriptObjC         = [];
-  AudioToolbox            = [ AudioUnit CoreAudio CF CoreMIDI ];
-  AudioUnit               = [ Carbon CoreAudio CF ];
+  AudioToolbox            = [ CoreAudio CF CoreMIDI ];
+  AudioUnit               = [ AudioToolbox Carbon CoreAudio CF ];
   AudioVideoBridging      = [ Foundation ];
   Automator               = [];
   CFNetwork               = [ CF ];
@@ -29,26 +29,25 @@ with frameworks; with libs; {
   CoreAudioKit            = [ AudioUnit ];
   CoreData                = [];
   CoreGraphics            = [ Accelerate CF IOKit IOSurface SystemConfiguration ];
+  CoreImage               = [ ];
   CoreLocation            = [];
   CoreMIDI                = [ CF ];
   CoreMIDIServer          = [];
-  CoreMedia               = [ ApplicationServices AudioToolbox CoreAudio CF CoreGraphics CoreVideo ];
+  CoreMedia               = [ ApplicationServices AudioToolbox AudioUnit CoreAudio CF CoreGraphics CoreVideo ];
   CoreMediaIO             = [ CF CoreMedia ];
   CoreText                = [ CF CoreGraphics ];
   CoreVideo               = [ ApplicationServices CF CoreGraphics IOSurface OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
-  DVComponentGlue         = [ CoreServices QuickTime ];
   DVDPlayback             = [];
   DirectoryService        = [ CF ];
   DiscRecording           = [ CF CoreServices IOKit ];
   DiscRecordingUI         = [];
   DiskArbitration         = [ CF IOKit ];
-  DrawSprocket            = [ Carbon ];
   EventKit                = [];
   ExceptionHandling       = [];
   FWAUserLib              = [];
   ForceFeedback           = [ CF IOKit ];
-  Foundation              = [ CF libobjc Security ApplicationServices SystemConfiguration ];
+  Foundation              = [ cf-private libobjc Security ApplicationServices SystemConfiguration ];
   GLKit                   = [ CF ];
   GLUT                    = [ OpenGL ];
   GSS                     = [];
@@ -73,7 +72,8 @@ with frameworks; with libs; {
   LatentSemanticMapping   = [ Carbon CF ];
   MapKit                  = [];
   MediaAccessibility      = [ CF CoreGraphics CoreText QuartzCore ];
-  MediaToolbox            = [ AudioToolbox CF CoreMedia ];
+  MediaToolbox            = [ AudioToolbox AudioUnit CF CoreMedia ];
+  Metal                   = [];
   NetFS                   = [ CF ];
   OSAKit                  = [ Carbon ];
   OpenAL                  = [];
@@ -84,7 +84,6 @@ with frameworks; with libs; {
   PubSub                  = [];
   QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
   QuickLook               = [ ApplicationServices CF ];
-  QuickTime               = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
   SceneKit                = [];
   ScreenSaver             = [];
   Scripting               = [];
@@ -114,7 +113,8 @@ with frameworks; with libs; {
   JavaVM              = [];
   OpenDirectory       = [];
   Quartz              = [ QuickLook QTKit ];
-  QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL ];
+  QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL CoreImage Metal ];
+  QuickTime           = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
 
   vmnet = [];
 }

@@ -182,10 +182,8 @@ addToSearchPathWithCustomDelimiter() {
     fi
 }
 
-PATH_DELIMITER=':'
-
 addToSearchPath() {
-    addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+    addToSearchPathWithCustomDelimiter ":" "$@"
 }
 
 # Add $1/lib* into rpaths.
@@ -508,7 +506,7 @@ activatePackage() {
     fi
 
     if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
-        addToSearchPath HOST_PATH "$pkg/bin"
+        addToSearchPath _HOST_PATH "$pkg/bin"
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
@@ -617,9 +615,14 @@ fi
 
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
+HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
+    echo "final host path: $HOST_PATH"
 fi
+
+unset _PATH
+unset _HOST_PATH
 
 
 # Make GNU Make produce nested output.
