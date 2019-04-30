@@ -6344,6 +6344,8 @@ in
 
   vtun = callPackage ../tools/networking/vtun { };
 
+  waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp { };
+
   wakatime = pythonPackages.callPackage ../tools/misc/wakatime { };
 
   weather = callPackage ../applications/misc/weather { };
