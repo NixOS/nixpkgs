@@ -59,11 +59,6 @@ in stdenv.mkDerivation rec {
     ln -s ${webClientTv} build/dependencies/web-client-tv-${webClientTvBuildId}.tar.xz
   '';
 
-  postInstall = ''
-    mkdir -p $out/share/{applications,pixmaps}
-    cp ${src}/resources/images/icon.png $out/share/pixmaps/plex-media-player.png
-  '';
-
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-DQTROOT=${qtbase}" ];
 
   meta = with stdenv.lib; {
