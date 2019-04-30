@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fetchFromGitHub, boost, cmake
+{ stdenv, fetchzip, fetchFromGitHub, boost, cmake, ncurses, python2
 , z3Support ? true, z3 ? null
 }:
 
@@ -6,14 +6,15 @@ assert z3Support -> z3 != null;
 assert z3Support -> stdenv.lib.versionAtLeast z3.version "4.6.0";
 
 let
-  version = "0.5.7";
-  rev = "6da8b019e4a155d1f70abe7a3acc0f9765480a9e";
-  sha256 = "0ii868r0ra6brjnn453kxqvw76p4bwjbvdyqfcn6v1bl2h4s60ir";
+  version = "0.5.8";
+  rev = "23d335f28e4055e67c3b22466ac7c4e41dc48344";
+  sha256 = "10fa4qwfr3gfvxkzzjfs0w2fyij67cczklpj2x5hghcg08amkq37";
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.8.4.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
     sha256 = "1z0gj7a6jypkijmpknis04qybs1hkd04d1arr3gy89lnxmp6qzlm";
   };
+  buildSharedLibs = stdenv.hostPlatform.isLinux;
 in
 stdenv.mkDerivation {
   name = "solc-${version}";
@@ -24,9 +25,7 @@ stdenv.mkDerivation {
     inherit rev sha256;
   };
 
-  patches = [
-    ./patches/shared-libs-install.patch
-  ];
+  patches = stdenv.lib.optionals buildSharedLibs [ ./patches/shared-libs-install.patch ];
 
   postPatch = ''
     touch prerelease.txt
@@ -37,18 +36,41 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DBoost_USE_STATIC_LIBS=OFF"
+  ] ++ stdenv.lib.optionals buildSharedLibs [
     "-DBUILD_SHARED_LIBS=ON"
   ] ++ stdenv.lib.optionals (!z3Support) [
     "-DUSE_Z3=OFF"
   ];
 
-  doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform;
-  checkPhase = "LD_LIBRARY_PATH=./libsolc:./libsolidity:./libevmasm:./libdevcore:./libyul:./liblangutil:./test/tools/yulInterpreter:$LD_LIBRARY_PATH " +
-               "./test/soltest -p true -- --no-ipc --no-smt --testpath ../test";
-
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost ]
-    ++ stdenv.lib.optionals z3Support [ z3 ];
+  buildInputs = [ boost ] ++ stdenv.lib.optionals z3Support [ z3 ];
+  checkInputs = [ ncurses python2 ];
+
+  # Test fails on darwin for unclear reason
+  doCheck = stdenv.hostPlatform.isLinux;
+
+  checkPhase = ''
+    while IFS= read -r -d ''' dir
+    do
+      LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/$dir
+      export LD_LIBRARY_PATH
+    done <   <(find . -type d -print0)
+
+    pushd ..
+    # IPC tests need aleth avaliable, so we disable it
+    sed -i "s/IPC_ENABLED=true/IPC_ENABLED=false\nIPC_FLAGS=\"--no-ipc\"/" ./scripts/tests.sh
+    for i in ./scripts/*.sh; do
+      patchShebangs "$i"
+    done
+    for i in ./scripts/*.py; do
+      patchShebangs "$i"
+    done
+    for i in ./test/*.sh; do
+      patchShebangs "$i"
+    done
+    TERM=xterm ./scripts/tests.sh
+    popd
+  '';
 
   outputs = [ "out" "dev" ];
 
@@ -57,7 +79,7 @@ stdenv.mkDerivation {
     homepage = https://github.com/ethereum/solidity;
     license = licenses.gpl3;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ dbrock akru lionello ];
+    maintainers = with maintainers; [ dbrock akru lionello sifmelcara ];
     inherit version;
   };
 }
