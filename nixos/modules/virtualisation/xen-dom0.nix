@@ -144,13 +144,11 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [ {
-      assertion = pkgs.stdenv.isx86_64;
-      message = "Xen currently not supported on ${pkgs.stdenv.hostPlatform.system}";
-    } {
-      assertion = config.boot.loader.grub.enable && (config.boot.loader.grub.efiSupport == false);
-      message = "Xen currently does not support EFI boot";
-    } ];
+    assertions = [
+      { assertion = pkgs.stdenv.isx86_64;
+        message = "Xen currently not supported on ${pkgs.stdenv.hostPlatform.system}";
+      }
+    ];
 
     virtualisation.xen.package = mkDefault pkgs.xen;
     virtualisation.xen.package-qemu = mkDefault pkgs.xen;
@@ -190,11 +188,25 @@ in
       optionals cfg.trace [ "loglvl=all" "guest_loglvl=all" ] ++
       optional (cfg.domain0MemorySize != 0) "dom0_mem=${toString cfg.domain0MemorySize}M";
 
-    system.extraSystemBuilderCmds =
-      ''
-        ln -s ${cfg.package}/boot/xen.gz $out/xen.gz
-        echo "${toString cfg.bootParams}" > $out/xen-params
-      '';
+    system.extraSystemBuilderCmds = let
+      efi = (config.boot.loader.grub.enable &&
+            config.boot.loader.grub.efiSupport == true) ||
+            config.boot.loader.systemd-boot.enable;
+    in optionalString efi ''
+      ln -s ${cfg.package}/boot/efi/nixos/xen*.efi $out/xen.efi
+      cat << EOF > $out/xen.cfg
+      [global]
+      default=xen
+
+      [xen]
+      options=${toString cfg.bootParams}
+      kernel=kernel systemConfig=$out init=$out/init $(cat $out/kernel-params)
+      ramdisk=initrd
+      EOF
+    '' + ''
+      ln -s ${cfg.package}/boot/xen.gz $out/xen.gz
+      echo "${toString cfg.bootParams}" > $out/xen-params
+    '';
 
     # Mount the /proc/xen pseudo-filesystem.
     system.activationScripts.xen =

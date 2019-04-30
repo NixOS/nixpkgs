@@ -1,24 +1,29 @@
 #! @python3@/bin/python3 -B
 import argparse
-import shutil
-import os
-import sys
-import errno
-import subprocess
-import glob
-import tempfile
-import errno
-import warnings
 import ctypes
-libc = ctypes.CDLL("libc.so.6")
-import re
 import datetime
+import errno
 import glob
+import os
 import os.path
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import warnings
+
+libc = ctypes.CDLL("libc.so.6")
+
+known_paths = []
 
 def copy_if_not_exists(source, dest):
     if not os.path.exists(dest):
         shutil.copyfile(source, dest)
+
+def mkdir_if_not_exists(dest):
+    if not os.path.exists(dest):
+        os.mkdir(dest)
 
 def system_dir(profile, generation):
     if profile:
@@ -42,6 +47,11 @@ MEMTEST_BOOT_ENTRY = """title MemTest86
 efi /efi/memtest86/BOOTX64.efi
 """
 
+XEN_BOOT_ENTRY = """title NixOS{profile}
+version Generation {generation} {description}
+efi {xen}
+"""
+
 def write_loader_conf(profile, generation):
     with open("@efiSysMountPoint@/loader/loader.conf.tmp", 'w') as f:
         if "@timeout@" != "":
@@ -56,16 +66,30 @@ def write_loader_conf(profile, generation):
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
 def profile_path(profile, generation, name):
-    return os.readlink("%s/%s" % (system_dir(profile, generation), name))
+    return os.readlink(raw_profile_path(profile, generation, name))
+
+def raw_profile_path(profile, generation, name):
+    return "%s/%s" % (system_dir(profile, generation), name)
+
+def exists_in_profile(profile, generation, name):
+    return os.path.exists("%s/%s" % (system_dir(profile, generation), name))
 
 def copy_from_profile(profile, generation, name, dry_run=False):
+    global known_paths
     store_file_path = profile_path(profile, generation, name)
     suffix = os.path.basename(store_file_path)
     store_dir = os.path.basename(os.path.dirname(store_file_path))
     efi_file_path = "/efi/nixos/%s-%s.efi" % (store_dir, suffix)
+    full_dst_path = "@efiSysMountPoint@%s" % (efi_file_path)
     if not dry_run:
-        copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
+        copy_if_not_exists(store_file_path, full_dst_path)
+    known_paths.append(full_dst_path)
     return efi_file_path
+
+def copy_from_profile_to_boot_subpath(profile, generation, name, boot_subpath):
+    store_file_path = profile_path(profile, generation, name)
+    copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (boot_subpath))
+    return boot_subpath
 
 def describe_generation(generation_dir):
     try:
@@ -88,25 +112,57 @@ def describe_generation(generation_dir):
     return description
 
 def write_entry(profile, generation, machine_id):
-    kernel = copy_from_profile(profile, generation, "kernel")
-    initrd = copy_from_profile(profile, generation, "initrd")
+    global known_paths
+    is_xen_efi = exists_in_profile(profile, generation, "xen.efi")
+    xen = ""
+    if is_xen_efi:
+        # Create containing directory for the Xen boot configuration
+        xen_cfg_path = raw_profile_path(profile, generation, "xen.cfg")
+        gen_store_path = os.readlink(os.path.dirname(xen_cfg_path))
+        gen_store_dir = os.path.basename(gen_store_path)
+        gen_hash = gen_store_dir.split('-', 1)[0]
+        xen_efi_dir_path = "/efi/nixos/%s-xenEfi" % (gen_hash,)
+        mkdir_if_not_exists("@efiSysMountPoint@%s" % (xen_efi_dir_path))
+
+        # Copy files into place with correct names
+        copy_from_profile_to_boot_subpath(profile, generation, "kernel", "%s/kernel" % (xen_efi_dir_path,))
+        initrd = copy_from_profile_to_boot_subpath(profile, generation, "initrd", "%s/initrd" % (xen_efi_dir_path,))
+        xen = copy_from_profile_to_boot_subpath(profile, generation, "xen.efi", "%s/xen.efi" % (xen_efi_dir_path,))
+        copy_if_not_exists(xen_cfg_path, "@efiSysMountPoint@%s/xen.cfg" % (xen_efi_dir_path,))
+
+        known_paths.append("@efiSysMountPoint@%s" % (xen_efi_dir_path,))
+    else:
+        kernel = copy_from_profile(profile, generation, "kernel")
+        initrd = copy_from_profile(profile, generation, "initrd")
+        known_paths.append("@efiSysMountPoint@%s" % (kernel,))
+        known_paths.append("@efiSysMountPoint@%s" % (initrd,))
+
     try:
         append_initrd_secrets = profile_path(profile, generation, "append-initrd-secrets")
         subprocess.check_call([append_initrd_secrets, "@efiSysMountPoint@%s" % (initrd)])
     except FileNotFoundError:
         pass
+
     if profile:
         entry_file = "@efiSysMountPoint@/loader/entries/nixos-%s-generation-%d.conf" % (profile, generation)
     else:
         entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
     generation_dir = os.readlink(system_dir(profile, generation))
     tmp_path = "%s.tmp" % (entry_file)
-    kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
 
-    with open("%s/kernel-params" % (generation_dir)) as params_file:
-        kernel_params = kernel_params + params_file.read()
+    if not is_xen_efi:
+        kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
+        with open("%s/kernel-params" % (generation_dir)) as params_file:
+            kernel_params = kernel_params + params_file.read()
+
     with open(tmp_path, 'w') as f:
-        f.write(BOOT_ENTRY.format(profile=" [" + profile + "]" if profile else "",
+        if is_xen_efi:
+            f.write(XEN_BOOT_ENTRY.format(profile=" [" + profile + "]" if profile else "",
+                    generation=generation,
+                    xen=xen,
+                    description=describe_generation(generation_dir)))
+        else:
+            f.write(BOOT_ENTRY.format(profile=" [" + profile + "]" if profile else "",
                     generation=generation,
                     kernel=kernel,
                     initrd=initrd,
@@ -138,26 +194,27 @@ def get_generations(profile=None):
     return [ (profile, int(line.split()[0])) for line in gen_lines ][-configurationLimit:]
 
 def remove_old_entries(gens):
+    global known_paths
     rex_profile = re.compile("^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
     rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-(.*)\.conf$")
-    known_paths = []
-    for gen in gens:
-        known_paths.append(copy_from_profile(*gen, "kernel", True))
-        known_paths.append(copy_from_profile(*gen, "initrd", True))
     for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
         try:
-            if rex_profile.match(path):
-                prof = rex_profile.sub(r"\1", path)
-            else:
-                prof = "system"
+            prof = rex_profile.sub(r"\1", path) if rex_profile.match(path) else None
             gen = int(rex_generation.sub(r"\1", path))
             if not (prof, gen) in gens:
+                print("Removing entry for %s - %s" % (prof, gen))
                 os.unlink(path)
         except ValueError:
             pass
     for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
-        if not path in known_paths and not os.path.isdir(path):
-            os.unlink(path)
+        if not path in known_paths and path != "@efiSysMountPoint@/efi/memtest86":
+        if path not in known_paths:
+            if os.path.isdir(path):
+                print("Removing obsolete folder %s" % (path,))
+                shutil.rmtree(path)
+            else:
+                print("Removing obsolete file %s" % (path,))
+                os.unlink(path)
 
 def get_profiles():
     if os.path.isdir("/nix/var/nix/profiles/system-profiles/"):
@@ -204,11 +261,11 @@ def main():
     gens = get_generations()
     for profile in get_profiles():
         gens += get_generations(profile)
-    remove_old_entries(gens)
     for gen in gens:
         write_entry(*gen, machine_id)
         if os.readlink(system_dir(*gen)) == args.default_config:
             write_loader_conf(*gen)
+    remove_old_entries(gens)
 
     memtest_entry_file = "@efiSysMountPoint@/loader/entries/memtest86.conf"
     if os.path.exists(memtest_entry_file):

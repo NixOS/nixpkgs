@@ -342,31 +342,50 @@ mkpath("$bootPath/kernels", 0, 0755) if $copyKernels;
 sub copyToKernelsDir {
     my ($path) = @_;
     return $grubStore->path . substr($path, length("/nix/store")) unless $copyKernels;
-    $path =~ /\/nix\/store\/(.*)/ or die;
-    my $name = $1; $name =~ s/\//-/g;
+    my $name = copyStoreFileToBootSubdir($path, "kernels");
     my $dst = "$bootPath/kernels/$name";
+    $copied{$dst} = 1;
+    return ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$name";
+}
+
+sub copyStoreFileToBootSubdir {
+    my ($storePath, $dstDir) = @_;
+    $storePath =~ /\/nix\/store\/(.*)/ or die;
+    my $dstName = $1; $dstName =~ s/\//-/g;
+    return copyStoreFileToBootLocation($storePath, $dstDir, $dstName);
+}
+sub copyStoreFileToBootLocation {
+    my ($storePath, $dstDir, $dstName) = @_;
+    $storePath =~ /\/nix\/store\/(.*)/ or die;
+    my $dst = "$bootPath/$dstDir/$dstName";
     # Don't copy the file if $dst already exists.  This means that we
     # have to create $dst atomically to prevent partially copied
     # kernels or initrd if this script is ever interrupted.
     if (! -e $dst) {
         my $tmp = "$dst.tmp";
-        copy $path, $tmp or die "cannot copy $path to $tmp\n";
+        copy $storePath, $tmp or die "cannot copy $storePath to $tmp\n";
         rename $tmp, $dst or die "cannot rename $tmp to $dst\n";
     }
-    $copied{$dst} = 1;
-    return ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$name";
+    return "$dstName";
 }
 
 sub addEntry {
     my ($name, $path) = @_;
     return unless -e "$path/kernel" && -e "$path/initrd";
 
+    my $xen = undef;
+    my $xenParams = -e "$path/xen-params" ? readFile("$path/xen-params") : "";
+    if (-e "$path/xen.efi" && -e "$path/xen.cfg" && $grubEfi ne "") {
+        return setupXenEfiEntry($name, $path);;
+    } elsif (-e "$path/xen.gz") {
+        $xen = copyToKernelsDir(Cwd::abs_path("$path/xen.gz"));
+    }
+
     my $kernel = copyToKernelsDir(Cwd::abs_path("$path/kernel"));
     my $initrd = copyToKernelsDir(Cwd::abs_path("$path/initrd"));
     if ($extraInitrd) {
         $initrd .= " " .$extraInitrdPath->path;
     }
-    my $xen = -e "$path/xen.gz" ? copyToKernelsDir(Cwd::abs_path("$path/xen.gz")) : undef;
 
     # FIXME: $confName
 
@@ -374,7 +393,6 @@ sub addEntry {
         "systemConfig=" . Cwd::abs_path($path) . " " .
         "init=" . Cwd::abs_path("$path/init") . " " .
         readFile("$path/kernel-params");
-    my $xenParams = $xen && -e "$path/xen-params" ? readFile("$path/xen-params") : "";
 
     if ($grubVersion == 1) {
         $conf .= "title $name\n";
@@ -397,6 +415,40 @@ sub addEntry {
         $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n";
         $conf .= "}\n\n";
     }
+}
+
+sub setupXenEfiEntry {
+    my ($name, $path) = @_;
+    if ($copyKernels == 0) {
+      die "config.boot.loader.grub.copyKernels currently must be true in order to make use of Xen under EFI"
+    }
+
+    # Determine directory name from xen.efi hash, and create the dir
+    my $systemPath = Cwd::abs_path($path); ($systemPath) = $systemPath =~ m/\/nix\/store\/(.*)/g; $systemPath =~ s/\//-/g;
+    my $systemHash = (split /-/, $systemPath)[0];
+    my $xenDirName = "kernels/$systemHash-xenEfi";
+    my $xenDir = "$bootPath/$xenDirName";
+    if (! -e $xenDir) {
+        mkdir $xenDir or die "cannot create Xen EFI directory $xenDir\n";
+    }
+    $copied{$xenDir} = 1;
+
+    # Copy xen.efi, xen.cfg, the kernel, and the initrd into place, with the correct names
+    my $xenEfi = copyStoreFileToBootLocation(Cwd::abs_path("$path/xen.efi"), $xenDirName, "xen.efi");
+    my $xenCfg = copyStoreFileToBootLocation(Cwd::abs_path("$path/xen.cfg"), $xenDirName, "xen.cfg");
+    my $kernel = copyStoreFileToBootLocation(Cwd::abs_path("$path/kernel"), $xenDirName, "kernel");
+    my $initrd = copyStoreFileToBootLocation(Cwd::abs_path("$path/initrd"), $xenDirName, "initrd");
+
+    # Setup grub menuentry
+    # my $xenEfiGrubLocation = ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/$xenDirName/xen.efi";
+    $conf .= "menuentry \"$name\" {\n";
+    $conf .= $grubBoot->search . "\n";
+    if ($extraInitrd) {
+        $conf .= $extraInitrdPath->search . "\n";
+    }
+    $conf .= "  $extraPerEntryConfig\n" if $extraPerEntryConfig;
+    $conf .= "  chainloader /$xenDirName/xen.efi\n";
+    $conf .= "}\n\n";
 }
 
 
@@ -528,8 +580,13 @@ rename $tmpFile, $confFile or die "cannot rename $tmpFile to $confFile\n";
 # Remove obsolete files from $bootPath/kernels.
 foreach my $fn (glob "$bootPath/kernels/*") {
     next if defined $copied{$fn};
-    print STDERR "removing obsolete file $fn\n";
-    unlink $fn;
+    if (-d $fn) {
+        print STDERR "removing obsolete folder $fn\n";
+        rmtree($fn);
+    } else {
+        print STDERR "removing obsolete file $fn\n";
+        unlink $fn;
+    }
 }
 
 
