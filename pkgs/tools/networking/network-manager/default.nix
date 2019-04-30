@@ -1,12 +1,14 @@
 { stdenv, fetchurl, substituteAll, intltool, pkgconfig, dbus, dbus-glib
-, gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables
-, libgcrypt, dnsmasq, bluez5, readline
+, gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
+, libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
 , gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
-, ethtool, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
-, python3Packages, docbook_xsl, openconnect, curl, autoreconfHook }:
+, ethtool, gnused, coreutils, inetutils, kmod, jansson, gtk-doc, libxslt
+, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43
+, openconnect, curl, meson, ninja, libpsl, libredirect }:
 
 let
   pname = "NetworkManager";
+  pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
   name = "network-manager-${version}";
   version = "1.16.0";
@@ -16,44 +18,34 @@ in stdenv.mkDerivation rec {
     sha256 = "0b2x9hrg41cd17psqi0vacwj733v99hxczn53gdfs0yanqrji5lf";
   };
 
-  outputs = [ "out" "dev" ];
-
-  postPatch = ''
-    patchShebangs ./tools
-  '';
-
-  preConfigure = ''
-    substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
-    substituteInPlace configure --replace /usr/bin/file ${file}/bin/file
-
-    # Fixes: error: po/Makefile.in.in was not created by intltoolize.
-    intltoolize --automake --copy --force
-  '';
+  outputs = [ "out" "dev" "devdoc" "man" "doc" ];
 
   # Right now we hardcode quite a few paths at build time. Probably we should
   # patch networkmanager to allow passing these path in config file. This will
   # remove unneeded build-time dependencies.
-  configureFlags = [
-    "--with-dhclient=${dhcp}/bin/dhclient"
-    "--with-dnsmasq=${dnsmasq}/bin/dnsmasq"
+  mesonFlags = [
+    "-Ddhclient=${dhcp}/bin/dhclient"
+    "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
-    "--with-dhcpcd=no"
-    "--with-pppd=${ppp}/bin/pppd"
-    "--with-iptables=${iptables}/bin/iptables"
+    "-Ddhcpcd=no"
+    "-Dpppd=${ppp}/bin/pppd"
+    "-Diptables=${iptables}/bin/iptables"
     # to enable link-local connections
-    "--with-udev-dir=${placeholder "out"}/lib/udev"
-    "--with-resolvconf=${openresolv}/sbin/resolvconf"
-    "--sysconfdir=/etc" "--localstatedir=/var"
-    "--with-dbus-sys-dir=${placeholder "out"}/etc/dbus-1/system.d"
-    "--with-crypto=gnutls" "--disable-more-warnings"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    "--with-kernel-firmware-dir=/run/current-system/firmware"
-    "--with-session-tracking=systemd"
-    "--with-modem-manager-1"
-    "--with-nmtui"
-    "--disable-gtk-doc"
-    "--with-libnm-glib" # legacy library, TODO: remove
-    "--disable-tests"
+    "-Dudev_dir=${placeholder "out"}/lib/udev"
+    "-Dresolvconf=${openresolv}/bin/resolvconf"
+    "-Ddbus_conf_dir=${placeholder "out"}/etc/dbus-1/system.d"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dkernel_firmware_dir=/run/current-system/firmware"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "-Dcrypto=gnutls"
+    "-Dsession_tracking=systemd"
+    "-Dmodem_manager=true"
+    "-Dnmtui=true"
+    "-Ddocs=true"
+    "-Dlibnm_glib=true" # legacy library, TODO: remove
+    "-Dtests=no"
+    "-Dqt=false"
   ];
 
   patches = [
@@ -63,31 +55,45 @@ in stdenv.mkDerivation rec {
       inherit (stdenv) shell;
     })
 
+    # Meson does not support using different directories during build and
+    # for installation like Autotools did with flags passed to make install.
+    ./fix-install-paths.patch
+
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When building docs, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are replacing the variables in postPatch since substituteAll does not support
+    # placeholders.
+    ./fix-docs-build.patch
   ];
 
   buildInputs = [
-    systemd libuuid polkit ppp libndp curl
+    systemd libselinux audit libpsl libuuid polkit ppp libndp curl
     bluez5 dnsmasq gobject-introspection modemmanager readline newt libsoup jansson
   ];
 
-  propagatedBuildInputs = [ dbus-glib gnutls libgcrypt python3Packages.pygobject3 ];
+  propagatedBuildInputs = [ dbus-glib gnutls libgcrypt ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig libxslt docbook_xsl ];
+  nativeBuildInputs = [
+    meson ninja intltool pkgconfig
+    vala gobject-introspection
+    dbus-glib # for dbus-binding-tool
+    # Docs
+    gtk-doc libxslt docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_42 docbook_xml_dtd_43 pythonForDocs
+  ];
 
   doCheck = false; # requires /sys, the net
 
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-    "localstatedir=${placeholder "out"}/var"
-    "runstatedir=${placeholder "out"}/run"
-  ];
+  postPatch = ''
+    patchShebangs ./tools
+    patchShebangs libnm/generate-setting-docs.py
+
+    substituteInPlace libnm/meson.build \
+      --subst-var-by DOCS_LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+      --subst-var-by DOCS_NIX_REDIRECTS "${placeholder "out"}/lib/libnm.so.0=$PWD/build/libnm/libnm.so.0"
+  '';
 
   postInstall = ''
-    mkdir -p $out/lib/NetworkManager
-
-    # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
-    substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
-
     # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
     # aliases ourselves.
     ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service

@@ -5422,9 +5422,7 @@ in
 
   remind = callPackage ../tools/misc/remind { };
 
-  remmina = callPackage ../applications/networking/remote/remmina {
-    gsettings-desktop-schemas = gnome3.gsettings-desktop-schemas;
-  };
+  remmina = callPackage ../applications/networking/remote/remmina { };
 
   rename = callPackage ../tools/misc/rename { };
 
@@ -9067,6 +9065,8 @@ in
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
 
+  gtranslator = callPackage ../tools/text/gtranslator { };
+
   guff = callPackage ../tools/graphics/guff { };
 
   guile-lint = callPackage ../development/tools/guile/guile-lint {
@@ -10338,9 +10338,14 @@ in
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
     else if name == "libSystem" then targetPackages.darwin.xcode
     else if name == "nblibc" then targetPackages.netbsdCross.libc
-    else throw "Unknown libc";
+    else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
+    else throw "Unknown libc ${name}";
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
+
+  wasilibc = callPackages ../development/libraries/wasilibc {
+    stdenv = crossLibcStdenv;
+  };
 
   # Only supported on Linux, using glibc
   glibcLocales = if stdenv.hostPlatform.libc == "glibc" then callPackage ../development/libraries/glibc/locales.nix { } else null;
@@ -11424,7 +11429,7 @@ in
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
   libiconv =
-    if (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
+    if lib.elem stdenv.hostPlatform.libc ["glibc" "musl" "wasilibc"]
       then glibcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
                        then libcCross
                        else stdenv.cc.libc)
@@ -16014,7 +16019,7 @@ in
 
   gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };
 
-  inherit (gnome3) gsettings-desktop-schemas;
+  gsettings-desktop-schemas = callPackage ../development/libraries/gsettings-desktop-schemas { };
 
   go-font = callPackage ../data/fonts/go-font { };
 
@@ -16852,7 +16857,6 @@ in
   cinelerra = callPackage ../applications/video/cinelerra { };
 
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
-    inherit (gnome3) gsettings-desktop-schemas;
     inherit (xorg) libSM;
   };
 
@@ -18508,7 +18512,7 @@ in
   libvmi = callPackage ../development/libraries/libvmi { };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea {
-    inherit (gnome3) gsettings-desktop-schemas dconf;
+    inherit (gnome3) dconf;
   };
 
   lightworks = callPackage ../applications/video/lightworks {
@@ -20824,9 +20828,7 @@ in
     openssl = null;
   };
 
-  roxterm = callPackage ../applications/misc/roxterm {
-    inherit (gnome3) gsettings-desktop-schemas;
-  };
+  roxterm = callPackage ../applications/misc/roxterm { };
 
   termonad-with-packages = callPackage ../applications/misc/termonad {
     inherit (haskellPackages) ghcWithPackages;
@@ -21872,8 +21874,8 @@ in
       mkPlasma5 = import ../desktops/plasma-5;
       attrs = {
         inherit libsForQt5 lib fetchurl;
-        inherit (gnome3) gsettings-desktop-schemas;
         gconf = gnome2.GConf;
+        inherit gsettings-desktop-schemas;
       };
     in
       recurseIntoAttrs (makeOverridable mkPlasma5 attrs);
@@ -23858,5 +23860,7 @@ in
     };
 
 	omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
+
+  wasmtime = callPackage ../development/interpreters/wasmtime {};
 
 }

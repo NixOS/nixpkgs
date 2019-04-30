@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, gtk3, intltool, glib
 , udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3, gobject-introspection
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43, python3 }:
+, gtk-doc, docbook_xsl, docbook_xml_dtd_43, python3, gsettings-desktop-schemas }:
 
 let
   pname = "gnome-bluetooth";
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib gtk3 udev libnotify libcanberra-gtk3
-    gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme gsettings-desktop-schemas
   ];
 
   mesonFlags = [

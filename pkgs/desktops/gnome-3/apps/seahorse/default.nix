@@ -2,7 +2,7 @@
 , pkgconfig, gtk3, glib, gobject-introspection
 , wrapGAppsHook, itstool, gnupg, libsoup
 , gnome3, gpgme, python3, openldap, gcr
-, libsecret, avahi, p11-kit, openssh }:
+, libsecret, avahi, p11-kit, openssh, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3 glib gcr
-    gnome3.gsettings-desktop-schemas gnupg
+    gsettings-desktop-schemas gnupg
     gnome3.adwaita-icon-theme gpgme
     libsecret avahi libsoup p11-kit
     openssh openldap libpwquality

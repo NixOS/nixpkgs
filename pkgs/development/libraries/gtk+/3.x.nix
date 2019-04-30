@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, makeWrapper, shared-mime-info, isocodes
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobject-introspection, fribidi
-, xorg, epoxy, json-glib, libxkbcommon, gmp, gnome3, autoreconfHook
+, xorg, epoxy, json-glib, libxkbcommon, gmp, gnome3, autoreconfHook, gsettings-desktop-schemas
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux, mesa_noglu, wayland, wayland-protocols
 , xineramaSupport ? stdenv.isLinux
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxkbcommon epoxy json-glib isocodes ]
     ++ optional stdenv.isDarwin AppKit;
   propagatedBuildInputs = with xorg; with stdenv.lib;
-    [ expat glib cairo pango gdk_pixbuf atk at-spi2-atk gnome3.gsettings-desktop-schemas fribidi
+    [ expat glib cairo pango gdk_pixbuf atk at-spi2-atk gsettings-desktop-schemas fribidi
       libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
     ++ optional stdenv.isDarwin Cocoa  # explicitly propagated, always needed
     ++ optionals waylandSupport [ mesa_noglu wayland wayland-protocols ]

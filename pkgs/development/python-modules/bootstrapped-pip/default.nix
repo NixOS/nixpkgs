@@ -9,9 +9,9 @@ let
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "40.8.0";
+    version = "41.0.0";
     format = "wheel";
-    sha256 = "e8496c0079f3ac30052ffe69b679bd876c5265686127a3159cfa415669b7f9ab";
+    sha256 = "e67486071cd5cdeba783bd0b64f5f30784ff855b35071c8670551fd7fc52d4a1";
   };
 
 in stdenv.mkDerivation rec {

@@ -2,7 +2,7 @@
 , desktop-file-utils, python3, wrapGAppsHook , gtk3, gnome3, gnome-autoar
 , glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
 , librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk_pixbuf
-, substituteAll, bubblewrap, gst_all_1
+, substituteAll, bubblewrap, gst_all_1, gsettings-desktop-schemas
 }:
 
 let
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     glib-networking shared-mime-info libexif gtk3 exempi libnotify libselinux
     tracker tracker-miners gexiv2 libseccomp bubblewrap gst_all_1.gst-plugins-base
-    gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme gsettings-desktop-schemas
   ];
 
   propagatedBuildInputs = [ gnome-autoar ];
