@@ -1223,15 +1223,10 @@ self: super: {
     sha256 = "1qwy8bj6vywhp0075dza8j90zrzsm3144qz3c703s9c4n6pg3gw4";
     });
 
-  # These patches contain fixes for 8.6 that should be safe for
-  # earlier versions, but we need the relaxed version bounds in GHC
-  # 8.4 builds. beam needs to release a round of updates that relax
-  # bounds and include the 8.6 fixes:
-  # https://github.com/tathougies/beam/issues/315
-  beam-core = appendPatch super.beam-core ./patches/beam-core-fix-ghc-8.6.x-build.patch;
-  beam-migrate = appendPatch super.beam-migrate ./patches/beam-migrate-fix-ghc-8.6.x-build.patch;
-  beam-postgres = appendPatch super.beam-postgres ./patches/beam-postgres-fix-ghc-8.6.x-build.patch;
-  beam-sqlite = appendPatch super.beam-sqlite ./patches/beam-sqlite-fix-ghc-8.6.x-build.patch;
+  # Requires pg_ctl command during tests
+  beam-postgres = overrideCabal super.beam-postgres (drv: {
+    testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
+    });
 
   # https://github.com/sighingnow/computations/pull/1
   primesieve = appendPatch super.primesieve (pkgs.fetchpatch {
