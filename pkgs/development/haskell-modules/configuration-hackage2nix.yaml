@@ -7178,7 +7178,6 @@ broken-packages:
   - netwire-vinylglfw-examples
   - network-address
   - network-anonymous-i2p
-  - network-bsd
   - network-builder
   - network-bytestring
   - network-connection
