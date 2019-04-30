@@ -23475,6 +23475,8 @@ in
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
 
+  ssh-audit = callPackage ../tools/security/ssh-audit { };
+
   thermald = callPackage ../tools/system/thermald { };
 
   thinkfan = callPackage ../tools/system/thinkfan { };
