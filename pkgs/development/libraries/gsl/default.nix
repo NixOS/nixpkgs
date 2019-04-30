@@ -10,11 +10,6 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-mno-fma" ]; # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
 
-  patches = [
-    # ToDo: there might be more impurities than FMA support check
-    ./disable-fma.patch # https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html
-  ];
-
   # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
   doCheck = stdenv.hostPlatform.system != "i686-linux" && stdenv.hostPlatform.system != "aarch64-linux";
 
