@@ -21201,6 +21201,8 @@ in
 
   gtypist = callPackage ../games/gtypist { };
 
+  gweled = callPackage ../games/gweled {};
+
   gzdoom = callPackage ../games/gzdoom { };
 
   hawkthorne = callPackage ../games/hawkthorne { love = love_0_9; };
