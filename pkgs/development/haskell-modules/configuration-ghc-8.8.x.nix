@@ -41,4 +41,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Ignore overly restrictive upper version bounds.
+  doctest = doJailbreak super.doctest;
+
+  # These packages don't work and need patching and/or an update.
+  primitive = markBrokenVersion "0.6.4.0" super.primitive;
+
 }
