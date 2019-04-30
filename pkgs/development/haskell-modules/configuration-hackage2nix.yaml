@@ -3175,6 +3175,7 @@ broken-packages:
   - blockhash
   - Blogdown
   - blogination
+  - BlogLiterately-diagrams
   - bloodhound
   - bloodhound-amazonka-auth
   - bloomfilter-redis
@@ -3230,6 +3231,9 @@ broken-packages:
   - brok
   - broker-haskell
   - bronyradiogermany-streaming
+  - brotli
+  - brotli-conduit
+  - brotli-streams
   - browscap
   - bson-generic
   - bson-generics
@@ -4023,9 +4027,11 @@ broken-packages:
   - dia-base
   - dia-functions
   - diagrams-boolean
+  - diagrams-builder
   - diagrams-canvas
   - diagrams-graphviz
   - diagrams-gtk
+  - diagrams-haddock
   - diagrams-hsqml
   - diagrams-html5
   - diagrams-pandoc
@@ -4603,6 +4609,7 @@ broken-packages:
   - frag
   - Frames-beam
   - Frames-dsv
+  - Frames-map-reduce
   - franchise
   - Frank
   - freddy
@@ -4734,6 +4741,7 @@ broken-packages:
   - generic-tree
   - generic-xml
   - generic-xmlpickler
+  - generics-eot
   - genericserialize
   - genesis
   - genesis-test
@@ -5235,6 +5243,7 @@ broken-packages:
   - haskell-src-exts-prisms
   - haskell-src-exts-qq
   - haskell-src-exts-sc
+  - haskell-src-exts-simple
   - haskell-src-meta-mwotton
   - haskell-stack-trace-plugin
   - haskell-token-utils
@@ -5570,6 +5579,7 @@ broken-packages:
   - HLearn-datastructures
   - HLearn-distributions
   - hledger-chart
+  - hledger-flow
   - hledger-irr
   - hledger-vty
   - hlibBladeRF
@@ -5720,6 +5730,7 @@ broken-packages:
   - HROOT-math
   - HROOT-tree
   - hs-blake2
+  - hs-brotli
   - hs-carbon-examples
   - hs-cdb
   - hs-conllu
@@ -6365,6 +6376,7 @@ broken-packages:
   - kmp-dfa
   - knead
   - knead-arithmetic
+  - knit-haskell
   - knots
   - koellner-phonetic
   - korfu
@@ -6531,6 +6543,7 @@ broken-packages:
   - libconfig
   - libcspm
   - libexpect
+  - libffi-dynamic
   - libGenI
   - libhbb
   - libinfluxdb
@@ -6771,6 +6784,7 @@ broken-packages:
   - manifolds
   - manifolds-core
   - map-exts
+  - map-reduce-folds
   - map-syntax
   - Mapping
   - mappy
@@ -7587,6 +7601,7 @@ broken-packages:
   - pipes-async
   - pipes-attoparsec-streaming
   - pipes-bgzf
+  - pipes-brotli
   - pipes-cacophony
   - pipes-cereal
   - pipes-cereal-plus
@@ -7801,6 +7816,7 @@ broken-packages:
   - proteome
   - proto-lens-combinators
   - proto-lens-descriptors
+  - proto3-suite
   - protobuf-native
   - protocol-buffers-descriptor-fork
   - protocol-buffers-fork
@@ -7837,6 +7853,7 @@ broken-packages:
   - purescript-iso
   - purescript-tsd-gen
   - push-notify
+  - push-notify-apn
   - push-notify-ccs
   - push-notify-general
   - pusher-haskell
@@ -8299,6 +8316,7 @@ broken-packages:
   - scenegraph
   - schedevr
   - schedule-planner
+  - scheduler
   - schedyield
   - schematic
   - scholdoc
@@ -8869,10 +8887,12 @@ broken-packages:
   - streamdeck
   - streamed
   - streaming-benchmarks
+  - streaming-brotli
   - streaming-cassava
   - streaming-concurrency
   - streaming-conduit
   - streaming-fft
+  - streaming-lzma
   - streaming-osm
   - streaming-pcap
   - streaming-png
@@ -9033,6 +9053,7 @@ broken-packages:
   - tasty-jenkins-xml
   - tasty-laws
   - tasty-lens
+  - tasty-quickcheck-laws
   - tasty-stats
   - tasty-tap
   - tasty-travis
@@ -9213,6 +9234,7 @@ broken-packages:
   - tkhs
   - tkyprof
   - tls-extra
+  - tmp-postgres
   - tn
   - to-haskell
   - to-string-class
@@ -9421,6 +9443,7 @@ broken-packages:
   - unity-testresult-parser
   - unitym-yesod
   - universe
+  - universe-dependent-sum
   - universe-instances-extended
   - universe-th
   - universum
