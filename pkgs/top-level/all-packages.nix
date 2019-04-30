@@ -6093,7 +6093,6 @@ in
   tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
     stdenv = stdenvNoCC;
     tor-browser-unwrapped = firefoxPackages.tor-browser;
-    inherit (python27Packages) obfsproxy;
   };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
