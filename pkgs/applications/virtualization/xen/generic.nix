@@ -20,6 +20,8 @@ config:
 # python2Packages.markdown
 , transfig, ghostscript, texinfo, pandoc
 
+, binutils-unwrapped
+
 , ...} @ args:
 
 with stdenv.lib;
@@ -42,6 +44,17 @@ let
     }
     ( __do )
   '');
+
+  # We don't want to use the wrapped version, because this version of ld is
+  # only used for linking the Xen EFI binary, and the build process really
+  # needs control over the LDFLAGS used
+  efiBinutils = binutils-unwrapped.overrideAttrs (oldAttrs: {
+    name = "efi-binutils";
+    configureFlags = oldAttrs.configureFlags ++ [
+      "--enable-targets=x86_64-pep"
+    ];
+    doInstallCheck = false; # We get a spurious failure otherwise, due to host/target mis-match
+  });
 in
 
 stdenv.mkDerivation (rec {
@@ -119,10 +132,12 @@ stdenv.mkDerivation (rec {
     '')}
   '';
 
-  patches = [ ./0000-fix-ipxe-src.patch
-              ./0000-fix-install-python.patch
-            ] ++ optional (versionOlder version "4.8.5") ./acpica-utils-20180427.patch
-            ++ (config.patches or []);
+  patches = [
+    ./0000-fix-ipxe-src.patch
+    ./0000-fix-install-python.patch
+    ./0004-makefile-use-efi-ld.patch
+    ./0005-makefile-fix-efi-mountdir-use.patch
+  ] ++ (config.patches or []);
 
   postPatch = ''
     ### Hacks
@@ -185,6 +200,9 @@ stdenv.mkDerivation (rec {
     substituteInPlace tools/hotplug/Linux/xendomains \
       --replace /bin/ls ls
   '';
+
+  EFI_LD = "${efiBinutils}/bin/ld";
+  EFI_VENDOR = "nixos";
 
   # TODO: Flask needs more testing before enabling it by default.
   #makeFlags = [ "XSM_ENABLE=y" "FLASK_ENABLE=y" "PREFIX=$(out)" "CONFIG_DIR=/etc" "XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files" ];
