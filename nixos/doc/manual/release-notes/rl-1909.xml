@@ -91,6 +91,34 @@
       the module for some time and so was removed as cleanup.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The nginx web server previously started its master process as root
+      privileged, then ran worker processes as a less privileged identity. This
+      was changed to start all of nginx as a less privileged user (defined by
+      <option>services.nginx.user</option> and
+      <option>services.nginx.group</option>). As a consequence, all files that
+      are needed for nginx to run (included configuration fragments, SSL
+      certificates and keys, etc.) must now be readable by this less privileged
+      identity.
+      Additionally, systemd sandboxing is now in place to prevent nginx from writing
+      to the filesystem.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The option <option>services.nginx.stateDiretory</option> was changed to
+      <option>services.nginx.stateDirectoryName</option> which means the
+      nginx state directory is always under <literal>/var/lib/</literal>.
+      This also means the old state directory needs to be moved from <literal>/var/spool/nginx</literal>,
+      for example using
+      <programlisting>
+        services.nginx.preStart = ''
+          cp -r /var/spool/nginx/* /var/lib/nginx/
+        '';
+      </programlisting>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

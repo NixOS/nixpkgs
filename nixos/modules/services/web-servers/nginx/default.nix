@@ -45,7 +45,7 @@ let
   ''));
 
   configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
-    user ${cfg.user} ${cfg.group};
+    pid /run/nginx/nginx.pid;
     error_log ${cfg.logError};
     daemon off;
 
@@ -361,12 +361,7 @@ in
 
       preStart =  mkOption {
         type = types.lines;
-        default = ''
-          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs
-          test `stat -c %a ${cfg.stateDir}` = "750" || chmod 750 ${cfg.stateDir}
-          test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
-          chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
-        '';
+        default = "";
         description = "
           Shell commands executed before the service's nginx is started.
         ";
@@ -442,10 +437,10 @@ in
         ";
       };
 
-      stateDir = mkOption {
-        default = "/var/spool/nginx";
+      stateDirName = mkOption {
+        default = "nginx";
         description = "
-          Directory holding all state for nginx to run.
+          Name of the directory under /var/lib holding nginx's state.
         ";
       };
 
@@ -640,14 +635,38 @@ in
       preStart =
         ''
         ${cfg.preStart}
-        ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
+        ${cfg.package}/bin/nginx -c '${configFile}' -p '/var/lib/${cfg.stateDirName}' -t
         '';
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        ExecStart = "${cfg.package}/bin/nginx -c '${configFile}' -p '/var/lib/${cfg.stateDirName}'";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "10s";
         StartLimitInterval = "1min";
+        # User and group
+        User = cfg.user;
+        Group = cfg.group;
+        # Filesystem access
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        StateDirectory = [ "${cfg.stateDirName} ${cfg.stateDirName}/logs" ];
+        StateDirectoryMode = 750;
+        RuntimeDirectory = "nginx";
+        RuntimeDirectoryMode = 750;
+        # Capabilities
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        NoNewPrivileges = true;
+        # Misc.
+        LockPersonality = true;
+        RestrictRealtime = true;
+        PrivateMounts = true;
+        MemoryDenyWriteExecute = true;
       };
     };
 
