@@ -1437,8 +1437,6 @@ in
 
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
-  emby = callPackage ../servers/emby { };
-
   enca = callPackage ../tools/text/enca { };
 
   ent = callPackage ../tools/misc/ent { };
