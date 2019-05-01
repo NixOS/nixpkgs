@@ -19,16 +19,16 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "spectral";
-  version = "2019-03-03";
+  version = "603";
 
   src = fetchgit {
     url = "https://gitlab.com/b0/spectral.git";
-    rev = "0473f25d38a064ee4e18203ec16eeae84fea4866";
-    sha256 = "1n09ginw6g0p42xj3zgxm52dvyyvj5psllv70vx21i50lvkbh9rw";
+    rev = "refs/tags/${version}";
+    sha256 = "06x2l0xsqb2xalvs57vnzkgxsmagv3zxganwnfnfsd7wx8nfxh4z";
     fetchSubmodules = true;
   };
 
-  qmakeFlags = [ "CONFIG+=qtquickcompiler" "BUNDLE_FONT=true" ];
+  qmakeFlags = [ "CONFIG+=qtquickcompiler" ];
 
   postInstall = ''
     wrapProgram $out/bin/spectral \
