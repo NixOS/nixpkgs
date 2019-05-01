@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   name = "gstreamer-${version}";
-  version = "1.15.1";
+  version = "1.16.0";
 
   meta = with lib ;{
     description = "Open source multimedia framework";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer/${name}.tar.xz";
-    sha256 = "05ri9y37qkgvkb2xjywf32c3k9479b0af0m6cjigx04pgwsf42kq";
+    sha256 = "003wy1p1in85p9sr5jsyhbnwqaiwz069flwkhyx7qhxy31qjz3hf";
   };
 
   patches = [
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # Enables all features, so that we know when new dependencies are necessary.
     "-Dauto_features=enabled"
+    "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
   ];
 
@@ -60,9 +61,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  preConfigure= ''
-    patchShebangs .
-  '';
+  preConfigure=
+    # These files are not executable upstream, so we need to
+    # make them executable for `patchShebangs` to pick them up.
+    # Can be removed when this is merged and available:
+    #     https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/141
+    ''
+      chmod +x gst/parse/get_flex_version.py
+    '' +
+    ''
+      patchShebangs .
+    '';
 
   preFixup = ''
     moveToOutput "share/bash-completion" "$dev"
