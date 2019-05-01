@@ -1,0 +1,8 @@
+Overriding
+----------
+For the moment, the API documentation is the tests.
+Documentation will be added in at most a few weeks.
+
+Tests
+-----
+Tests can be run with `nix-shell testname.nix`.
