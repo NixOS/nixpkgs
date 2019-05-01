@@ -1,14 +1,14 @@
 {
   "ce": {
-    "version": "11.9.8",
-    "repo_hash": "10xlabp7ziw1vpyy9dvhaiwf5l340d3yzvlh2aq6ly3xlqr5ip07",
-    "deb_hash": "0apw0w5grhpfxwl76w7as5xb6injr7ka8wwk2azllamrxrnn30dv",
-    "deb_url": "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_11.9.8-ce.0_amd64.deb/download.deb",
+    "version": "11.9.11",
+    "repo_hash": "08f824y6zla4076axdjwcn59hnybps2zvqjhrznfwnhwmak7zqr6",
+    "deb_hash": "17cp3vr8pq0l7pgrcmwrmlsygk7ggdvjhh71vjcdlmngaffmv5hm",
+    "deb_url": "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_11.9.11-ce.0_amd64.deb/download.deb",
     "owner": "gitlab-org",
     "repo": "gitlab-ce",
-    "rev": "v11.9.8",
+    "rev": "v11.9.11",
     "passthru": {
-      "GITALY_SERVER_VERSION": "1.27.1",
+      "GITALY_SERVER_VERSION": "1.27.2",
       "GITLAB_PAGES_VERSION": "1.5.0",
       "GITLAB_SHELL_VERSION": "8.7.1",
       "GITLAB_WORKHORSE_VERSION": "8.3.3"
