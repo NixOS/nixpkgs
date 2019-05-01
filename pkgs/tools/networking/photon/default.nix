@@ -1,32 +1,26 @@
-{ stdenv, pythonPackages, fetchurl, makeWrapper }:
+{ stdenv, python3Packages, fetchFromGitHub, makeWrapper }:
 
-with pythonPackages;
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "photon";
-  version = "1.0.7";
+  version = "1.3.0";
 
-  src = fetchurl {
-    url = "https://github.com/s0md3v/Photon/archive/v${version}.tar.gz";
-    sha256 = "0c5l1sbkkagfxmh8v7yvi6z58mhqbwjyr7fczb5qwxm7la42ah9y";
+  src = fetchFromGitHub {
+    owner = "s0md3v";
+    repo = "Photon";
+    rev = "v${version}";
+    sha256 = "02z1xj72bq35dilr4b6njry4kixz6j2a3ag02nla98q0fvgmgnvy";
   };
-
-  patches = [ ./destdir.patch ];
-  postPatch = ''
-       substituteInPlace photon.py --replace DESTDIR $out/share/photon 
-  '';
 
   dontBuild = true;
   doCheck = false;
-  propagatedBuildInputs = [
-    requests
-    urllib3
-  ];
+
+  propagatedBuildInputs = with python3Packages; [ requests urllib3 tld ];
 
   installPhase = ''
     mkdir -p "$out"/{bin,share/photon}
     cp -R photon.py core plugins $out/share/photon
  
-    makeWrapper ${python.interpreter} $out/bin/photon \
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/photon \
       --set PYTHONPATH "$PYTHONPATH:$out/share/photon" \
       --add-flags "-O $out/share/photon/photon.py"
   '';
