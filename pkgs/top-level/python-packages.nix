@@ -5396,6 +5396,8 @@ in {
 
   textacy = callPackage ../development/python-modules/textacy { };
 
+  tld = callPackage ../development/python-modules/tld { };
+
   tldextract = callPackage ../development/python-modules/tldextract { };
 
   pyemd  = callPackage ../development/python-modules/pyemd { };
