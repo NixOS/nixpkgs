@@ -16,9 +16,10 @@ in fetchzip {
   sha256 = "0z0fgrjzp0hqqnhfisivciqpxd2br2w2q9mvxkglj44np2q889w2";
 
   meta = with stdenv.lib; {
-    description = "Free kanji font containing 96,327 characters";
+    description = "Free CJK font containing 100K CJK glyphs";
     homepage = http://fonts.jp/hanazono/;
-
+    longDescription = ''CJK font from a Japanese foundry,
+    contains CJK Ext-A through EXT-F implemented in full'';
     # Dual-licensed under OFL and the following:
     # This font is a free software.
     # Unlimited permission is granted to use, copy, and distribute it, with
