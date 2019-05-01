@@ -1164,6 +1164,11 @@
     github = "davorb";
     name = "Davor Babic";
   };
+  dawidsowa = {
+    email = "dawid_sowa@posteo.net";
+    github = "dawidsowa";
+    name = "Dawid Sowa";
+  };
   dbohdan = {
     email = "dbohdan@dbohdan.com";
     github = "dbohdan";
