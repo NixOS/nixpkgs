@@ -2984,6 +2984,8 @@ in
 
   galen = callPackage ../development/tools/galen {};
 
+  gallery-dl = callPackage ../applications/misc/gallery-dl { };
+
   gandi-cli = callPackage ../tools/networking/gandi-cli { };
 
   gandom-fonts = callPackage ../data/fonts/gandom-fonts { };
