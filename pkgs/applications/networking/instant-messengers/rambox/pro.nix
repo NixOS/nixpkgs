@@ -1,7 +1,7 @@
 { autoPatchelfHook, electron, fetchurl, makeDesktopItem, makeWrapper, nodePackages, nss, stdenv, xdg_utils, xorg }:
 
 stdenv.mkDerivation rec {
-  pname = "rambox-pro";
+  pname = "rambox";
   version = "1.1.2";
 
   dontBuild = true;
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rrfpl371hp278b02b9b6745ax29yrdfmxrmkxv6d158jzlv0dlr";
   };
 
-  patches = [ ./remove-bash-args.patch ];
+  patches = [ ./fix-bash-args.patch ];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/RamboxPro $out/share/applications
