@@ -116,7 +116,14 @@ stdenv.mkDerivation rec {
   ] ++ optionals (!stdenv.isLinux || !enableJack) [
     "-Djack=disabled" # unclear whether Jack works on Darwin
   ] ++ optionals (!stdenv.isLinux) [
-    "-Dv4l2-gudev=disabled"
+    "-Ddv1394=disabled" # Linux only
+    "-Doss4=disabled" # Linux only
+    "-Doss=disabled" # Linux only
+    "-Dpulse=disabled" # TODO check if we can keep this enabled
+    "-Dv4l2-gudev=disabled" # Linux-only
+    "-Dv4l2=disabled" # Linux-only
+    "-Dximagesrc=disabled" # Linux-only
+    "-Dpulse=disabled" # TODO check if we can keep this enabled
   ];
 
 
