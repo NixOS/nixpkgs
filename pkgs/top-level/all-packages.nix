@@ -3432,6 +3432,8 @@ in
 
   halide = callPackage ../development/compilers/halide { };
 
+  ham = pkgs.perlPackages.ham;
+
   hardinfo = callPackage ../tools/system/hardinfo { };
 
   hdapsd = callPackage ../os-specific/linux/hdapsd { };
@@ -6354,6 +6356,8 @@ in
   };
 
   vtun = callPackage ../tools/networking/vtun { };
+
+  waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp { };
 
   wakatime = pythonPackages.callPackage ../tools/misc/wakatime { };
 
@@ -15997,6 +16001,8 @@ in
 
   cooper-hewitt = callPackage ../data/fonts/cooper-hewitt { };
 
+  d2coding = callPackage ../data/fonts/d2coding { };
+
   dosis = callPackage ../data/fonts/dosis { };
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
@@ -16216,6 +16222,8 @@ in
   myrica = callPackage ../data/fonts/myrica { };
 
   nafees = callPackage ../data/fonts/nafees { };
+
+  nanum-gothic-coding = callPackage ../data/fonts/nanum-gothic-coding {  };
 
   nordic = callPackage ../data/themes/nordic { };
 
@@ -19015,7 +19023,9 @@ in
   speedread = callPackage ../applications/misc/speedread { };
 
   sup = callPackage ../applications/networking/mailreaders/sup {
-    ruby = ruby_2_3.override { cursesSupport = true; };
+    bundlerApp = bundlerApp.override{
+      ruby = ruby.override { cursesSupport = true; };
+    };
   };
 
   synapse = callPackage ../applications/misc/synapse { };
@@ -21324,12 +21334,11 @@ in
 
   minecraft = callPackage ../games/minecraft { };
 
-  minecraft-server = minecraft-server_1_13_2;
+  minecraft-server = minecraft-server_1_14;
 
   inherit (callPackages ../games/minecraft-server { })
+    minecraft-server_1_14
     minecraft-server_1_13_2
-    minecraft-server_1_13_1
-    minecraft-server_1_13_0
     minecraft-server_1_12_2;
 
   moon-buggy = callPackage ../games/moon-buggy {};
@@ -22525,6 +22534,7 @@ in
     wxGTK = wxGTK30;
     boost = boost160;
   };
+  kicad-with-packages3d = kicad.overrideAttrs (old: { modules = old.modules ++ [ old.passthru.packages3d ]; });
 
   kicad-unstable = python.pkgs.callPackage ../applications/science/electronics/kicad/unstable.nix {
     wxGTK = wxGTK30;
@@ -23001,7 +23011,8 @@ in
 
   jack2 = callPackage ../misc/jackaudio {
     libopus = libopus.override { withCustomModes = true; };
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio CoreFoundation;
+    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio Accelerate;
+    inherit (darwin) cf-private libobjc;
   };
   libjack2 = jack2.override { prefix = "lib"; };
   jack2Full = jack2; # TODO: move to aliases.nix

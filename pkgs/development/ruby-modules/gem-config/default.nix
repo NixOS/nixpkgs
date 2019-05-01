@@ -415,6 +415,7 @@ in
   sup = attrs: {
     dontBuild = false;
     # prevent sup from trying to dynamically install `xapian-ruby`.
+    nativeBuildInputs = [ rake ];
     postPatch = ''
       cp ${./mkrf_conf_xapian.rb} ext/mkrf_conf_xapian.rb
 
@@ -484,7 +485,7 @@ in
   xapian-ruby = attrs: {
     # use the system xapian
     dontBuild = false;
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ rake pkgconfig ];
     buildInputs = [ xapian_1_2_22 zlib ];
     postPatch = ''
       cp ${./xapian-Rakefile} Rakefile

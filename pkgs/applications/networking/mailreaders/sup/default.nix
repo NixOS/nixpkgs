@@ -1,23 +1,30 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerApp, rake, which }:
 
-bundlerEnv {
-  name = "sup-0.22.1";
+# Updated with:
+# rm gemset.nix Gemfile.lock
+# nix-shell -p bundler bundix --run 'bundle lock && bundix'
 
-  inherit ruby;
-
-  # Updated with:
-  # nix-shell -p bundix -p bundler -p ncurses -p ruby -p which -p zlib -p libuuid
-  # bundle install --path ./vendor
-  # bundix
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+bundlerApp {
+  pname = "sup";
+  gemdir = ./.;
+  exes = [
+    "sup"
+    "sup-add"
+    "sup-config"
+    "sup-dump"
+    "sup-import-dump"
+    "sup-psych-ify-config-files"
+    "sup-recover-sources"
+    "sup-sync"
+    "sup-sync-back-maildir"
+    "sup-tweak-labels"
+  ];
 
   meta = with lib; {
     description = "A curses threads-with-tags style email client";
     homepage    = http://sup-heliotrope.github.io;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ cstrahan lovek323 ];
+    maintainers = with maintainers; [ cstrahan lovek323 manveru ];
     platforms   = platforms.unix;
   };
 }

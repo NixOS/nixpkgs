@@ -32,11 +32,11 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ glib libsndfile ]
-    ++ lib.optionals (!stdenv.isDarwin) [ alsaLib libpulseaudio libjack2 ]
+  buildInputs = [ glib libsndfile libpulseaudio libjack2 ]
+    ++ lib.optionals stdenv.isLinux [ alsaLib ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
 
-  cmakeFlags = lib.optional stdenv.isDarwin "-Denable-framework=off";
+  cmakeFlags = [ "-Denable-framework=off" ];
 
   meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";
@@ -44,6 +44,5 @@ stdenv.mkDerivation  rec {
     license     = licenses.lgpl21Plus;
     maintainers = with maintainers; [ goibhniu lovek323 ];
     platforms   = platforms.unix;
-    badPlatforms = [ "x86_64-darwin" ];
   };
 }

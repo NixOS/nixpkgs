@@ -1,16 +1,31 @@
-{ wxGTK, lib, stdenv, fetchurl, cmake, libGLU_combined, zlib
+{ wxGTK, lib, stdenv, fetchurl, fetchFromGitHub, cmake, libGLU_combined, zlib
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp
 , wrapGAppsHook
 , oceSupport ? true, opencascade
 , ngspiceSupport ? true, libngspice
 , swig, python, pythonPackages
+, lndir
 }:
 
 assert ngspiceSupport -> libngspice != null;
 
 with lib;
-stdenv.mkDerivation rec {
+let
+  mkLib = version: name: sha256: attrs: stdenv.mkDerivation ({
+    name = "kicad-${name}-${version}";
+    src = fetchFromGitHub {
+      owner = "KiCad";
+      repo = "kicad-${name}";
+      rev = "${version}";
+      inherit sha256 name;
+    };
+    nativeBuildInputs = [
+      cmake
+    ];
+  } // attrs);
+
+in stdenv.mkDerivation rec {
   name = "kicad-${version}";
   series = "5.0";
   version = "5.0.2";
@@ -41,12 +56,13 @@ stdenv.mkDerivation rec {
     pkgconfig
     wrapGAppsHook
     pythonPackages.wrapPython
+    lndir
   ];
   pythonPath = [ pythonPackages.wxPython ];
   propagatedBuildInputs = [ pythonPackages.wxPython ];
 
   buildInputs = [
-    libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
+    libGLU_combined zlib libX11 wxGTK pcre libXdmcp glew glm libpthreadstubs
     cairo curl openssl boost
     swig python
   ] ++ optional (oceSupport) opencascade
@@ -54,6 +70,37 @@ stdenv.mkDerivation rec {
 
   # this breaks other applications in kicad
   dontWrapGApps = true;
+
+  passthru = {
+    i18n = mkLib version "i18n" "1hkc240gymhmyv6r858mq5d2slz0vjqc47ah8wn82vvmb83fpnjy" {
+      buildInputs = [
+        gettext
+      ];
+      meta.license = licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
+    };
+    symbols = mkLib version "symbols" "1rjh2pjcrc3bhcgyyskj5pssm7vffrjk0ymwr70fb7sjpmk96yjk" {
+      meta.license = licenses.cc-by-sa-40;
+    };
+    footprints = mkLib version "footprints" "19khqyrbrqsdzxvm1b1vxfscxhss705fqky0ilrbvnbvf27fnx8w" {
+      meta.license = licenses.cc-by-sa-40;
+    };
+    templates = mkLib version "templates" "0rlzq1n09n0sf2kj5c9bvbnkvs6cpycjxmxwcswql0fbpcp0sql7" {
+      meta.license = licenses.cc-by-sa-40;
+    };
+    packages3d = mkLib version "packages3d" "135jyrljgknnv2y35skhnwcxg16yxxkfbcx07nad3vr4r76zk3am" {
+      hydraPlatforms = []; # this is a ~1 GiB download, occupies ~5 GiB in store
+      meta.license = licenses.cc-by-sa-40;
+    };
+  };
+
+  modules = with passthru; [ i18n symbols footprints templates ];
+
+  postInstall = ''
+    mkdir -p $out/share
+    for module in $modules; do
+      lndir $module/share $out/share
+    done
+  '';
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"
