@@ -30,6 +30,7 @@
 , openexr
 , openh264
 , pango
+, rtmpdump
 , sbc
 , soundtouch
 , spandsp
@@ -129,6 +130,7 @@ stdenv.mkDerivation rec {
     opencv3
     openexr
     openh264
+    rtmpdump
     pango
     sbc
     soundtouch
@@ -173,7 +175,6 @@ stdenv.mkDerivation rec {
     "-Dopenmpt=disabled" # `libopenmpt` not packaged in nixpkgs as of writing
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
-    "-Drtmp=disabled" # `librtmp` not packaged in nixpkgs as of writing
     "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
