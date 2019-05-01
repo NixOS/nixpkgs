@@ -75,26 +75,24 @@ unwrapped = stdenv.mkDerivation rec {
   };
 };
 
-wrapped-full = with luajitPackages; let
-    luaPkgs =  [
-      luasec luasocket # trust anchor bootstrap, prefill module
-      lfs # prefill module
-      # Almost all is for the 'http' module:
-      http cqueues fifo lpeg lpeg_patterns luaossl compat53 basexx
-    ];
-  in runCommand unwrapped.name
+wrapped-full = runCommand unwrapped.name
   {
     nativeBuildInputs = [ makeWrapper ];
+    buildInputs = with luajitPackages; [
+      luasec luasocket # trust anchor bootstrap, prefill module
+      lfs # prefill module
+      http # for http module; brings lots of deps; some are useful elsewhere
+    ];
     preferLocalBuild = true;
     allowSubstitutes = false;
   }
   ''
-    mkdir -p "$out/sbin" "$out/share"
-    makeWrapper '${unwrapped}/sbin/kresd' "$out"/sbin/kresd \
-      --set LUA_PATH  '${concatStringsSep ";" (map getLuaPath  luaPkgs)}' \
-      --set LUA_CPATH '${concatStringsSep ";" (map getLuaCPath luaPkgs)}'
+    mkdir -p "$out"/{bin,share}
+    makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
+      --set LUA_PATH  "$LUA_PATH" \
+      --set LUA_CPATH "$LUA_CPATH"
     ln -sr '${unwrapped}/share/man' "$out"/share/
-    ln -sr "$out"/{sbin,bin}
+    ln -sr "$out"/{bin,sbin}
   '';
 
 in result

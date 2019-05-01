@@ -5,6 +5,7 @@ basexx,
 binaryheap,
 dkjson
 fifo
+http
 inspect
 lgi
 lpeg_patterns

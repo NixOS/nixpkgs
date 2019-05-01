@@ -81,4 +81,21 @@ with super;
       maintainers = with pkgs.lib.maintainers; oa.meta.maintainers ++ [ vcunat ];
     };
   });
+
+  http = super.http.overrideAttrs(oa: {
+    patches = oa.patches or [] ++ [
+      (pkgs.fetchpatch {
+        name = "invalid-state-progression.patch";
+        url = "https://github.com/daurnimator/lua-http/commit/cb7b59474a.diff";
+        sha256 = "1vmx039n3nqfx50faqhs3wgiw28ws416rhw6vh6srmh9i826dac7";
+      })
+    ];
+    /* TODO: separate docs derivation? (pandoc is heavy)
+    nativeBuildInputs = [ pandoc ];
+    makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
+    */
+    meta = oa.meta // {
+      maintainers = with pkgs.lib.maintainers; oa.meta.maintainers ++ [ vcunat ];
+    };
+  });
 }

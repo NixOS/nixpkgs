@@ -130,6 +130,26 @@ fifo = buildLuarocksPackage {
     };
   };
 };
+http = buildLuarocksPackage {
+  pname = "http";
+  version = "0.3-0";
+
+  src = fetchurl {
+      url    = https://luarocks.org/http-0.3-0.src.rock;
+      sha256 = "0vvl687bh3cvjjwbyp9cphqqccm3slv4g7y3h03scp3vpq9q4ccq";
+  };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [ lua compat53 bit32 cqueues luaossl basexx lpeg lpeg_patterns binaryheap fifo ];  
+  buildType = "builtin";
+
+  meta = {
+    homepage = "https://github.com/daurnimator/lua-http";
+    description="HTTP library for Lua";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 inspect = buildLuarocksPackage {
   pname = "inspect";
   version = "3.1.1-0";
