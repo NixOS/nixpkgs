@@ -75,4 +75,10 @@ with super;
       sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
     '';
   });
- }
+
+  binaryheap = super.binaryheap.overrideAttrs(oa: {
+    meta = oa.meta // {
+      maintainers = with pkgs.lib.maintainers; oa.meta.maintainers ++ [ vcunat ];
+    };
+  });
+}

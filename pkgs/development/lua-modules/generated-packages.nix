@@ -70,6 +70,26 @@ basexx = buildLuarocksPackage {
     };
   };
 };
+binaryheap = buildLuarocksPackage {
+  pname = "binaryheap";
+  version = "0.4-1";
+
+  src = fetchurl {
+      url    = https://luarocks.org/binaryheap-0.4-1.src.rock;
+      sha256 = "11rd8r3bpinfla2965jgjdv1hilqdc1q6g1qla5978d7vzg19kpc";
+  };
+  disabled = ( luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];  
+  buildType = "builtin";
+
+  meta = {
+    homepage = "https://github.com/Tieske/binaryheap.lua";
+    description="Binary heap implementation in pure Lua";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 dkjson = buildLuarocksPackage {
   pname = "dkjson";
   version = "2.5-2";

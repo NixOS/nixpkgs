@@ -2,6 +2,7 @@
 ansicolors,
 argparse,
 basexx,
+binaryheap,
 dkjson
 fifo
 inspect
