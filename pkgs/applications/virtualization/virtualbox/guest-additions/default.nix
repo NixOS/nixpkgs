@@ -19,18 +19,13 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "0cwdmdgcd1jysyw7c9b3cdk1ngk5nq7slh1zkhxkvvq142cnm1v9";
+    sha256 = "832152b63630ceb2f89fb460eeb35b74a1218df903758157f785122392d32ceb";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
 
   patchFlags = [ "-p1" "-d" "install/src/vboxguest-${version}" ];
-
-  patches = [
-    ./fix_kerndir.patch
-    ./fix_kernincl.patch
-  ];
 
   hardeningDisable = [ "pic" ];
 

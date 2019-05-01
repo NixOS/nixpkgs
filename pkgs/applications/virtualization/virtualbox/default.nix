@@ -21,8 +21,8 @@ let
   buildType = "release";
   # Remember to change the extpackRev and version in extpack.nix and
   # guest-additions/default.nix as well.
-  main = "0jmrbyhs92lyarpvylxqn2ajxdg9b290w5nd4g0i4h83d28bwbw0";
-  version = "5.2.28";
+  main = "3419c49a90cef7f0a5781426259d47d7871457ab0fd201ec0fca83321441e552";
+  version = "6.0.6";
 in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 
@@ -76,11 +76,7 @@ in stdenv.mkDerivation {
      optional enableHardening ./hardened.patch
   ++ [
     ./qtx11extras.patch
-    (fetchpatch {
-      name = "010-qt-5.11.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/010-qt-5.11.patch?h=packages/virtualbox";
-      sha256 = "0hjx99pg40wqyggnrpylrp5zngva4xrnk7r90i0ynrqc7n84g9pn";
-    })
+    ./fix-kernel-module-include.patch
   ];
 
   postPatch = ''
@@ -192,6 +188,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl2;
     homepage = https://www.virtualbox.org/;
     maintainers = with maintainers; [ flokli sander ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

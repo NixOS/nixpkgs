@@ -1,8 +1,7 @@
-diff --git a/kBuild/units/qt5.kmk b/kBuild/units/qt5.kmk
-index 71b96a3..73391f0 100644
+diff -u -r a/kBuild/units/qt5.kmk b/kBuild/units/qt5.kmk
 --- a/kBuild/units/qt5.kmk
 +++ b/kBuild/units/qt5.kmk
-@@ -1019,9 +1019,10 @@ else
+@@ -1054,9 +1054,10 @@
     $(eval $(target)_LIBS   += $(PATH_SDK_QT5_LIB)/$(qt_prefix)qtmain$(qt_infix)$(SUFF_LIB) )
    endif
   else
@@ -14,18 +13,37 @@ index 71b96a3..73391f0 100644
 + $(eval $(target)_INCS     += $(addprefix $(PATH_SDK_QT5_INC)/Qt,$(qt_modules)) $(PATH_SDK_QT5_INC) $(PATH_QT5_X11_EXTRAS_INC)/QtX11Extras )
  endif
  $(eval $(target)_DEFS      += $(foreach module,$(toupper $(qt_modules)), QT_$(module)_LIB) )
-
-diff --git a/src/VBox/Frontends/VirtualBox/Makefile.kmk b/src/VBox/Frontends/VirtualBox/Makefile.kmk
-index 3295bfefe7..796370623c 100644
+ 
+diff -u -r a/src/VBox/Frontends/VirtualBox/Makefile.kmk b/src/VBox/Frontends/VirtualBox/Makefile.kmk
 --- a/src/VBox/Frontends/VirtualBox/Makefile.kmk
 +++ b/src/VBox/Frontends/VirtualBox/Makefile.kmk
-@@ -916,9 +916,6 @@ endif
- # The Qt modules we're using.
+@@ -1431,9 +1431,6 @@
  # (The include directory and lib/framework for each module will be added by the Qt unit.)
+ #
  VirtualBox_QT_MODULES = Core Gui Widgets PrintSupport
 -VirtualBox_QT_MODULES.linux   += X11Extras
 -VirtualBox_QT_MODULES.solaris += X11Extras
 -VirtualBox_QT_MODULES.freebsd += X11Extras
  VirtualBox_QT_MODULES.darwin  += MacExtras
  VirtualBox_QT_MODULES.win     += WinExtras
+ if defined(VBOX_WITH_VIDEOHWACCEL) || defined(VBOX_GUI_USE_QGL)
+@@ -1447,9 +1444,6 @@
+ # (The include directory and lib/framework for each module will be added by the Qt unit.)
+ #
+ VirtualBoxVM_QT_MODULES = Core Gui Widgets PrintSupport
+-VirtualBoxVM_QT_MODULES.linux   += X11Extras
+-VirtualBoxVM_QT_MODULES.solaris += X11Extras
+-VirtualBoxVM_QT_MODULES.freebsd += X11Extras
+ VirtualBoxVM_QT_MODULES.darwin  += MacExtras
+ VirtualBoxVM_QT_MODULES.win     += WinExtras
+ if defined(VBOX_WITH_VIDEOHWACCEL) || defined(VBOX_GUI_USE_QGL)
+@@ -1463,9 +1457,6 @@
+ # (The include directory and lib/framework for each module will be added by the Qt unit.)
+ #
+ VBoxGlobal_QT_MODULES = Core Gui Widgets
+-VBoxGlobal_QT_MODULES.linux   += X11Extras
+-VBoxGlobal_QT_MODULES.solaris += X11Extras
+-VBoxGlobal_QT_MODULES.freebsd += X11Extras
+ VBoxGlobal_QT_MODULES.darwin  += MacExtras
+ VBoxGlobal_QT_MODULES.win     += WinExtras
  if defined(VBOX_WITH_VIDEOHWACCEL) || defined(VBOX_GUI_USE_QGL)
