@@ -1919,6 +1919,8 @@ in {
 
   fastcache = callPackage ../development/python-modules/fastcache { };
 
+  fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
+
   functools32 = callPackage ../development/python-modules/functools32 { };
 
   future-fstrings = callPackage ../development/python-modules/future-fstrings { };
