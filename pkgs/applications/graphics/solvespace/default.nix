@@ -3,12 +3,13 @@
 , wrapGAppsHook
 }:
 stdenv.mkDerivation rec {
-  name = "solvespace-2.3-20180906";
-  rev = "258545a334098cf25c1c9f4cd59b778dfe0b0d29";
+  name = "solvespace-2.3-20190422";
+  rev = "fa6622903010eb82b07b16adf06d31d5ffcd6bb9";
+
   src = fetchgit {
     url = https://github.com/solvespace/solvespace;
     inherit rev;
-    sha256 = "1wimh6l0zpk0vywcsd2minijjf6g550z8i3l8lpmfnl5przymc2v";
+    sha256 = "144w5l8cc5cpzqm6hjdp98a5k08whska1hmvwnz0c7glfji4z4dk";
     fetchSubmodules = true;
   };
 
@@ -21,20 +22,6 @@ stdenv.mkDerivation rec {
     xorg.libpthreadstubs xorg.libXdmcp pcre
   ];
   enableParallelBuilding = true;
-
-  preConfigure = ''
-    patch CMakeLists.txt <<EOF
-    @@ -20,9 +20,9 @@
-     # NOTE TO PACKAGERS: The embedded git commit hash is critical for rapid bug triage when the builds
-     # can come from a variety of sources. If you are mirroring the sources or otherwise build when
-     # the .git directory is not present, please comment the following line:
-    -include(GetGitCommitHash)
-    +# include(GetGitCommitHash)
-     # and instead uncomment the following, adding the complete git hash of the checkout you are using:
-    -# set(GIT_COMMIT_HASH 0000000000000000000000000000000000000000)
-    +set(GIT_COMMIT_HASH $rev)
-    EOF
-  '';
 
   postInstall = ''
     substituteInPlace $out/share/applications/solvespace.desktop \
