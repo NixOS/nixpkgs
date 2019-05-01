@@ -4660,6 +4660,11 @@ in {
     inherit (pkgs) pkgconfig;
   };
 
+  wxPython_4_0 = callPackage ../development/python-modules/wxPython/4.0.nix {
+    inherit (pkgs) pkgconfig;
+    wxGTK = pkgs.wxGTK30.override { withGtk2 = false; withWebKit = true; };
+  };
+
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
 
   xmltodict = callPackage ../development/python-modules/xmltodict { };
