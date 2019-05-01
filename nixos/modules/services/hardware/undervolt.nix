@@ -6,21 +6,9 @@ let
   cfg = config.services.undervolt;
 in {
   options.services.undervolt = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to undervolt intel cpus.
-      '';
-    };
-
-    verbose = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable verbose logging.
-      '';
-    };
+    enable = mkEnableOption "undervolt intel cpus";
+    
+    verbose = mkEnableOption "verbose logging";
 
     package = mkOption {
       type = types.package;
@@ -32,58 +20,58 @@ in {
     };
 
     coreOffset = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.float;
       default = null;
       description = ''
-        The amount of voltage to offset the CPU cores by. Accepts a floating point number.
+        The amount of voltage to offset the CPU cores by.
       '';
     };
 
     gpuOffset = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.float;
       default = null;
       description = ''
-        The amount of voltage to offset the GPU by. Accepts a floating point number.
+        The amount of voltage to offset the GPU by.
       '';
     };
 
     uncoreOffset = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.float;
       default = null;
       description = ''
-        The amount of voltage to offset uncore by. Accepts a floating point number.
+        The amount of voltage to offset uncore by.
       '';
     };
 
     analogioOffset = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.float;
       default = null;
       description = ''
-        The amount of voltage to offset analogio by. Accepts a floating point number.
+        The amount of voltage to offset analogio by.
       '';
     };
 
     temp = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.float;
       default = null;
       description = ''
-        The temperature target. Accepts a floating point number.
+        The temperature target.
       '';
     };
 
     tempAc = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.float;
       default = null;
       description = ''
-        The temperature target on AC power. Accepts a floating point number.
+        The temperature target on AC power.
       '';
     };
 
     tempBat = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.float;
       default = null;
       description = ''
-        The temperature target on battery power. Accepts a floating point number.
+        The temperature target on battery power.
       '';
     };
   };
@@ -94,7 +82,7 @@ in {
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.undervolt = {
-      path = [ pkgs.undervolt ];
+      path = [ cfg.package ];
 
       description = "Intel Undervolting Service";
       serviceConfig = {
@@ -109,14 +97,14 @@ in {
         ExecStart = ''
           ${pkgs.undervolt}/bin/undervolt \
             ${optionalString cfg.verbose "--verbose"} \
-            ${optionalString (cfg.coreOffset != null) "--core ${cfg.coreOffset}"} \
-            ${optionalString (cfg.coreOffset != null) "--cache ${cfg.coreOffset}"} \
-            ${optionalString (cfg.gpuOffset != null) "--gpu ${cfg.gpuOffset}"} \
-            ${optionalString (cfg.uncoreOffset != null) "--uncore ${cfg.uncoreOffset}"} \
-            ${optionalString (cfg.analogioOffset != null) "--analogio ${cfg.analogioOffset}"} \
-            ${optionalString (cfg.temp != null) "--temp ${cfg.temp}"} \
-            ${optionalString (cfg.tempAc != null) "--temp-ac ${cfg.tempAc}"} \
-            ${optionalString (cfg.tempBat != null) "--temp-bat ${cfg.tempBat}"}
+            ${optionalString (cfg.coreOffset != null) "--core ${toString cfg.coreOffset}"} \
+            ${optionalString (cfg.coreOffset != null) "--cache ${toString cfg.coreOffset}"} \
+            ${optionalString (cfg.gpuOffset != null) "--gpu ${toString cfg.gpuOffset}"} \
+            ${optionalString (cfg.uncoreOffset != null) "--uncore ${toString cfg.uncoreOffset}"} \
+            ${optionalString (cfg.analogioOffset != null) "--analogio ${toString cfg.analogioOffset}"} \
+            ${optionalString (cfg.temp != null) "--temp ${toString cfg.temp}"} \
+            ${optionalString (cfg.tempAc != null) "--temp-ac ${toString cfg.tempAc}"} \
+            ${optionalString (cfg.tempBat != null) "--temp-bat ${toString cfg.tempBat}"}
         '';
       };
     };
