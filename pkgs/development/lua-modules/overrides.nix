@@ -56,7 +56,7 @@ with super;
     '';
   });
 
-  luuid = super.luuid.override({
+  luuid = super.luuid.override(oa: {
     buildInputs = [ pkgs.libuuid ];
     extraConfig = ''
       variables = {
@@ -64,7 +64,7 @@ with super;
         LIBUUID_LIBDIR="${pkgs.lib.getLib pkgs.libuuid}/lib";
       }
     '';
-    meta = {
+    meta = oa.meta // {
       platforms = pkgs.lib.platforms.linux;
     };
   });
