@@ -177,6 +177,8 @@ in
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
+  docui = callPackage ../tools/misc/docui { };
+
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   dotnetenv = callPackage ../build-support/dotnetenv {
