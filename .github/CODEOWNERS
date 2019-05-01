@@ -47,8 +47,8 @@
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
 
-# NixOS modules
-/nixos/modules @Infinisil
+# New NixOS modules
+/nixos/modules/module-list.nix @Infinisil
 
 # Python-related code and docs
 /maintainers/scripts/update-python-libraries	@FRidh
