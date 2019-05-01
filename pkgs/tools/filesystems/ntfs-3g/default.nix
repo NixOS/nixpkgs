@@ -16,13 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "1mb228p80hv97pgk3myyvgp975r9mxq56c6bdn1n24kngcfh4niy";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/n/ntfs-3g/1:2016.2.22AR.1+dfsg-1/debian/patches/0003-CVE-2017-0358.patch";
-      sha256 = "0hd05q9q06r18k8pmppvch1sslzqln5fvqj51d5r72g4mnpavpj3";
-    })
-  ];
-
   patchPhase = ''
     substituteInPlace src/Makefile.in --replace /sbin '@sbindir@'
     substituteInPlace ntfsprogs/Makefile.in --replace /sbin '@sbindir@'
