@@ -28,11 +28,11 @@ let
 in stdenv.mkDerivation rec {
   name = "kicad-${version}";
   series = "5.0";
-  version = "5.0.2";
+  version = "5.1.2";
 
   src = fetchurl {
     url = "https://launchpad.net/kicad/${series}/${version}/+download/kicad-${version}.tar.xz";
-    sha256 = "10605rr10x0353n6yk2z095ydnkd1i6j1ncbq64pfxdn5vkhcd1g";
+    sha256 = "12kp82ms2dwqkhilmh3mbhg5rsj5ykk99pnkhp4sx89nni86qdw4";
   };
 
   postPatch = ''
@@ -47,6 +47,7 @@ in stdenv.mkDerivation rec {
     # nix installs wxPython headers in wxPython package, not in wxwidget
     # as assumed. We explicitely set the header location.
     "-DCMAKE_CXX_FLAGS=-I${pythonPackages.wxPython}/include/wx-3.0"
+    "-DwxPYTHON_INCLUDE_DIRS=${pythonPackages.wxPython}/include/wx-3.0"
   ] ++ optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade}" ]
     ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON";
 
@@ -72,22 +73,22 @@ in stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   passthru = {
-    i18n = mkLib version "i18n" "1hkc240gymhmyv6r858mq5d2slz0vjqc47ah8wn82vvmb83fpnjy" {
+    i18n = mkLib version "i18n" "08a8lpz2j7bhwn155s0ii538qlynnnvq6fmdw1dxjfgmfy7y3r66" {
       buildInputs = [
         gettext
       ];
       meta.license = licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
     };
-    symbols = mkLib version "symbols" "1rjh2pjcrc3bhcgyyskj5pssm7vffrjk0ymwr70fb7sjpmk96yjk" {
+    symbols = mkLib version "symbols" "0l5r53wcv0518x2kl0fh1zi0d50cckc7z1739fp9z3k5a4ddk824" {
       meta.license = licenses.cc-by-sa-40;
     };
-    footprints = mkLib version "footprints" "19khqyrbrqsdzxvm1b1vxfscxhss705fqky0ilrbvnbvf27fnx8w" {
+    footprints = mkLib version "footprints" "0q7y7m10pav6917ri37pzjvyh71c8lf4lh9ch258pdpl3w481zk6" {
       meta.license = licenses.cc-by-sa-40;
     };
-    templates = mkLib version "templates" "0rlzq1n09n0sf2kj5c9bvbnkvs6cpycjxmxwcswql0fbpcp0sql7" {
+    templates = mkLib version "templates" "1nva4ckq0l2lrah0l05355cawlwd7qfxcagcv32m8hcrn781455q" {
       meta.license = licenses.cc-by-sa-40;
     };
-    packages3d = mkLib version "packages3d" "135jyrljgknnv2y35skhnwcxg16yxxkfbcx07nad3vr4r76zk3am" {
+    packages3d = mkLib version "packages3d" "0xla9k1rnrs00fink90y9qz766iks5lyqwnf1h2i508djqhqm5zi" {
       hydraPlatforms = []; # this is a ~1 GiB download, occupies ~5 GiB in store
       meta.license = licenses.cc-by-sa-40;
     };
