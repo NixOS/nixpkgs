@@ -4,6 +4,8 @@
 # /usr/bin/env gets special treatment so that ".../bin/env python" is
 # rewritten to /nix/store/<hash>/bin/python.  Interpreters that are
 # already in the store are left untouched.
+# A script file must be marked as executable, otherwise it will not be
+# considered.
 
 fixupOutputHooks+=(patchShebangsAuto)
 
