@@ -420,12 +420,13 @@ with self; {
       sha256 = "0wv8l7f7na7kw5xn8mjik2wpxbizl7zvvp5s7fcwvz9kl5jdpk5b";
     };
 
+    propagatedBuildInputs = [ luasocket ];
     buildInputs = [ openssl ];
 
     preBuild = ''
       makeFlagsArray=(
         ${platformString}
-        LUAPATH="$out/lib/lua/${lua.luaversion}"
+        LUAPATH="$out/share/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INC_PATH="-I${lua}/include"
         LIB_PATH="-L$out/lib");
