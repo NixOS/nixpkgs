@@ -122,7 +122,7 @@ in
               fi
             '';
 
-          restartTriggers = [ config.time.timeZone ];
+          restartTriggers = [ config.time.timeZone config.environment.etc.crontab.source ];
           serviceConfig.ExecStart = "${cronNixosPkg}/bin/cron -n";
         };
 
