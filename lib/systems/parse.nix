@@ -69,24 +69,24 @@ rec {
 
   cpuTypes = with significantBytes; setTypes types.openCpuType {
     arm      = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; version = "5"; };
-    armv6m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; };
-    armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; };
-    armv7a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
-    armv7r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
-    armv7m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
-    armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
-    armv8a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
-    armv8r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
-    armv8m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
-    aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; version = "8"; };
-    aarch64_be = { bits = 64; significantByte = bigEndian; family = "arm"; version = "8"; };
+    armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; version = "5"; arch = "armv5t"; };
+    armv6m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; arch = "armv6-m"; };
+    armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; arch = "armv6"; };
+    armv7a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7-a"; };
+    armv7r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7-r"; };
+    armv7m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7-m"; };
+    armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7"; };
+    armv8a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-a"; };
+    armv8r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-a"; };
+    armv8m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-m"; };
+    aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-a"; };
+    aarch64_be = { bits = 64; significantByte = bigEndian; family = "arm"; version = "8";  arch = "armv8-a"; };
 
-    i386     = { bits = 32; significantByte = littleEndian; family = "x86"; };
-    i486     = { bits = 32; significantByte = littleEndian; family = "x86"; };
-    i586     = { bits = 32; significantByte = littleEndian; family = "x86"; };
-    i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
-    x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
+    i386     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i386"; };
+    i486     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i486"; };
+    i586     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i586"; };
+    i686     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i686"; };
+    x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; arch = "x86-64"; };
 
     mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
     mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
@@ -226,6 +226,7 @@ rec {
     elf = {};
     macho = {};
     pe = {};
+    wasm = {};
 
     unknown = {};
   };
@@ -268,6 +269,7 @@ rec {
     none    = { execFormat = unknown; families = { }; };
     openbsd = { execFormat = elf;     families = { inherit bsd; }; };
     solaris = { execFormat = elf;     families = { }; };
+    wasi    = { execFormat = wasm;    families = { }; };
     windows = { execFormat = pe;      families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
@@ -376,6 +378,8 @@ rec {
         then { cpu = elemAt l 0;                      kernel = elemAt l 1; abi = elemAt l 2; }
       else if (elemAt l 2 == "mingw32") # autotools breaks on -gnu for window
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "windows";                    }
+      else if (elemAt l 2 == "wasi")
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "wasi";                       }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])

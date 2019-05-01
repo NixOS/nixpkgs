@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3ab58ee0d71069cb5b0e2f29a4e605d1d8417bd10af45b73ee3e817fe389fadc";
+    sha256 = "47d5af7398f16d609eebd02be2ecbd997b364032b5dc6d4927c810ea24f39080";
   };
 
   checkInputs = [ nose rednose ];

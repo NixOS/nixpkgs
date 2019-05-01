@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, libXft, cairo, harfbuzz
+{ stdenv, fetchurl, pkgconfig, cairo, harfbuzz
 , libintl, gobject-introspection, darwin, fribidi, gnome3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, makeFontsConf, freefont_ttf
 , meson, ninja, glib
+, x11Support? !stdenv.isDarwin, libXft
 }:
 
 with stdenv.lib;
@@ -32,7 +33,8 @@ in stdenv.mkDerivation rec {
     CoreGraphics
     CoreText
   ]);
-  propagatedBuildInputs = [ cairo glib libXft libintl ];
+  propagatedBuildInputs = [ cairo glib libintl ] ++
+    optional x11Support libXft;
 
   patches = [
     (fetchurl {

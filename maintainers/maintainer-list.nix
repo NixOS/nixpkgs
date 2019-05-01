@@ -514,6 +514,11 @@
     github = "avnik";
     name = "Alexander V. Nikolaev";
   };
+  aw = {
+    email = "aw-nixos@meterriblecrew.net";
+    github = "herrwiese";
+    name = "Andreas Wiese";
+  };
   aycanirican = {
     email = "iricanaycan@gmail.com";
     github = "aycanirican";
@@ -2921,6 +2926,11 @@
     github = "marcweber";
     name = "Marc Weber";
   };
+	marenz = {
+		email = "marenz@arkom.men";
+		github = "marenz2569";
+		name = "Markus Schmidl";
+	};
   markus1189 = {
     email = "markus1189@gmail.com";
     github = "markus1189";

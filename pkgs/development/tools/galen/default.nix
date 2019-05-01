@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "galen";
-  version = "2.3.7";
+  version = "2.4.4";
   name = "${pname}-${version}";
 
   inherit jre8;
 
   src = fetchurl {
     url = "https://github.com/galenframework/galen/releases/download/galen-${version}/galen-bin-${version}.zip";
-    sha256 = "045y1s4n8jd52jnk9kwd0k4x3yscvcfsf2rxzn0xngvn9nkw2g65";
+    sha256 = "13dq8cf0yy24vym6z7p8hb0mybgpcl4j5crsaq8a6pjfxz6d17mq";
   };
 
   buildInputs = [ unzip ];

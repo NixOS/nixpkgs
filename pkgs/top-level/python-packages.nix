@@ -782,6 +782,10 @@ in {
 
   python-mnist = callPackage ../development/python-modules/python-mnist { };
 
+  pythonocc-core = toPythonModule (callPackage ../development/python-modules/pythonocc-core {
+    inherit (pkgs.xorg) libX11;
+  });
+
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkgconfig = pkgs.pkgconfig;
     igraph = pkgs.igraph;
@@ -1156,6 +1160,8 @@ in {
 
   bitstruct = callPackage ../development/python-modules/bitstruct { };
 
+  caldav = callPackage ../development/python-modules/caldav { };
+
   caldavclientlibrary-asynk = callPackage ../development/python-modules/caldavclientlibrary-asynk { };
 
   biopython = callPackage ../development/python-modules/biopython { };
@@ -1488,7 +1494,7 @@ in {
 
   cryptography = callPackage ../development/python-modules/cryptography { };
 
-  cryptography_vectors = callPackage ../development/python-modules/cryptography_vectors { };
+  cryptography_vectors = callPackage ../development/python-modules/cryptography/vectors.nix { };
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
@@ -1912,6 +1918,8 @@ in {
   funcparserlib = callPackage ../development/python-modules/funcparserlib { };
 
   fastcache = callPackage ../development/python-modules/fastcache { };
+
+  fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
 
   functools32 = callPackage ../development/python-modules/functools32 { };
 

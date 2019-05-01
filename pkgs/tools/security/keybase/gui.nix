@@ -1,7 +1,7 @@
 { stdenv, fetchurl, alsaLib, atk, cairo, cups, udev, hicolor-icon-theme
 , dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, gtk3, gnome3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
-, runtimeShell }:
+, runtimeShell, gsettings-desktop-schemas }:
 
 let
   versionSuffix = "20190205202117.6394d03e6c";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     freetype
     gdk_pixbuf
     glib
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
     gtk3
     libnotify
     nspr

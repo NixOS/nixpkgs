@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeDesktopItem, pkgconfig, cmake, python3
+{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, cmake, python3
 , libX11, libXrandr, qtbase, qtwebchannel, qtwebengine, qtx11extras
 , libvdpau, SDL2, mpv, libGL }:
 let
@@ -50,16 +50,6 @@ in stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXrandr qtbase qtwebchannel qtwebengine qtx11extras
                   libvdpau SDL2 mpv libGL ];
 
-  desktopItem = makeDesktopItem {
-    name = "plex-media-player";
-    exec = "plexmediaplayer";
-    icon = "plex-media-player";
-    comment = "View your media";
-    desktopName = "Plex Media Player";
-    genericName = "Media Player";
-    categories = "AudioVideo;Video;Player;TV;";
-  };
-
   preConfigure = with depSrcs; ''
     mkdir -p build/dependencies
     ln -s ${webClient} build/dependencies/buildid-${webClientBuildId}.cmake
@@ -67,12 +57,6 @@ in stdenv.mkDerivation rec {
     ln -s ${webClientDesktop} build/dependencies/web-client-desktop-${webClientDesktopBuildId}.tar.xz
     ln -s ${webClientTvHash} build/dependencies/web-client-tv-${webClientTvBuildId}.tar.xz.sha1
     ln -s ${webClientTv} build/dependencies/web-client-tv-${webClientTvBuildId}.tar.xz
-  '';
-
-  postInstall = ''
-    mkdir -p $out/share/{applications,pixmaps}
-    cp ${src}/resources/images/icon.png $out/share/pixmaps/plex-media-player.png
-    cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-DQTROOT=${qtbase}" ];
