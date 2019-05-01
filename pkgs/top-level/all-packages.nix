@@ -4276,6 +4276,8 @@ in
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
 
+  libmoz2d = callPackage ../development/libraries/libmoz2d { };
+
   libmesode = callPackage ../development/libraries/libmesode { };
 
   libnabo = callPackage ../development/libraries/libnabo { };
