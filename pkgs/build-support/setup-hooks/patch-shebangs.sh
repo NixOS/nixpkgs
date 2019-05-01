@@ -9,8 +9,9 @@
 
 fixupOutputHooks+=(patchShebangsAuto)
 
-# Run patch shebangs on a directory.
-# patchShebangs [--build | --host] directory
+# Run patch shebangs on a directory or file.
+# Can take multiple paths as arguments.
+# patchShebangs [--build | --host] PATH...
 
 # Flags:
 # --build : Lookup commands available at build-time
@@ -31,9 +32,7 @@ patchShebangs() {
         shift
     fi
 
-    local dir="$1"
-
-    header "patching script interpreter paths in $dir"
+    header "patching script interpreter paths in $@"
     local f
     local oldPath
     local newPath
@@ -41,8 +40,6 @@ patchShebangs() {
     local args
     local oldInterpreterLine
     local newInterpreterLine
-
-    [ -e "$dir" ] || return 0
 
     local f
     while IFS= read -r -d $'\0' f; do
@@ -97,7 +94,7 @@ patchShebangs() {
                 rm "$timestamp"
             fi
         fi
-    done < <(find "$dir" -type f -perm -0100 -print0)
+    done < <(find "$@" -type f -perm -0100 -print0)
 
     stopNest
 }
