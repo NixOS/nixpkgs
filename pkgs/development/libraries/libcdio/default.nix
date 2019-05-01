@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libcddb, pkgconfig, ncurses, help2man, libiconv, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
-  name = "libcdio-2.0.0";
+  name = "libcdio-2.1.0";
 
   src = fetchurl {
     url = "mirror://gnu/libcdio/${name}.tar.bz2";
-    sha256 = "0jr8ppdm80c533nzmrpz3iffnpc6nhvsria1di9f4jg1l19a03fd";
+    sha256 = "0avi6apv5ydjy6b9c3z9a46rvp5i57qyr09vr7x4nndxkmcfjl45";
   };
 
   postPatch = ''
