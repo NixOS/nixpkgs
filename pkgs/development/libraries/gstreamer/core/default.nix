@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
     "-Dauto_features=enabled"
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    "-Dlibunwind=disabled"
+    "-Dlibdw=disabled"
   ];
 
   postInstall = ''

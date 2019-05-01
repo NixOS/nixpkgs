@@ -10,6 +10,7 @@
 , bluez
 , chromaprint
 , curl
+, darwin
 , directfb
 , fdk_aac
 , flite
@@ -102,29 +103,22 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base orc
     faad2 libass libkate libmms
-    libnice webrtc-audio-processing # webrtc
+    webrtc-audio-processing # webrtc
     libbs2b
-    ladspaH librdf # ladspa plug-in
-    lilv lv2 serd sord sratom # lv2 plug-in
+    ladspaH # ladspa plug-in
     libmodplug mpeg2dec
     openjpeg libopus librsvg
-    bluez
-    chromaprint
     curl.dev
-    directfb
     fdk_aac
-    flite
     gsm
     libaom
     libdc1394
     libde265
-    libdrm
     libdvdnav
     libdvdread
-    libgudev
-    libofa
     libsndfile
     libusb1
+    mjpegtools
     neon
     openal
     opencv3
@@ -132,9 +126,7 @@ stdenv.mkDerivation rec {
     openh264
     rtmpdump
     pango
-    sbc
     soundtouch
-    spandsp
     srtp
     zbar
     fluidsynth libvdpau
@@ -144,12 +136,39 @@ stdenv.mkDerivation rec {
     srt
   ]
     ++ optional faacSupport faac
+    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      # For unknown reasons the order is important, e.g. if
+      # VideoToolbox is last, we get:
+      #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
+      VideoToolbox
+      AudioToolbox
+      AVFoundation
+      CoreMedia
+      CoreVideo
+      Foundation
+      MediaToolbox
+    ])
+    # These currently do not evaluate on darwin
+    ++ optionals (!stdenv.isDarwin) [
+      bluez
+      chromaprint
+      directfb
+      flite
+      flite
+      libdrm
+      libgudev
+      libnice
+      libofa
+      librdf
+      lilv lv2 serd sord sratom # lv2 plug-in
+      sbc
+      spandsp
+    ]
     ++ optional stdenv.isLinux wayland
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
     ++ optional (!stdenv.isDarwin) wildmidi
-    # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
-    ++ optional (!stdenv.isDarwin) mjpegtools;
+    ;
 
   mesonFlags = [
     # Enables all features, so that we know when new dependencies are necessary.
@@ -189,7 +208,34 @@ stdenv.mkDerivation rec {
     # see https://github.com/NixOS/nixpkgs/issues/54395
     "-Dnvdec=disabled"
     "-Dnvenc=disabled"
-  ];
+  ]
+  ++ optionals stdenv.isDarwin [
+    "-Dbluez=disabled"
+    "-Dchromaprint=disabled"
+    "-Ddirectfb=disabled"
+    "-Dflite=disabled"
+    "-Dkms=disabled" # renders to libdrm output
+    "-Dofa=disabled"
+    "-Dlv2=disabled"
+    "-Dsbc=disabled"
+    "-Dspandsp=disabled"
+    "-Ddvb=disabled"
+    "-Dfbdev=disabled"
+    "-Duvch264=disabled" # requires gudev
+    "-Dladspa=disabled" # requires lrdf
+    "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
+    "-Dwildmidi=disabled" # see dependencies above
+  ]
+  ++ optional (!gst-plugins-base.glEnabled) "-Dgl=disabled"
+  ++ optional (!gst-plugins-base.waylandEnabled) "-Dwayland=disabled"
+  # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
+  # but its meson build system does not declare the dependency.
+  ++ optional (!gst-plugins-base.glEnabled) "-Dapplemedia=disabled"
+  ;
+
+  # This package has some `_("string literal")` string formats
+  # that trip up clang with format security enabled.
+  hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
 

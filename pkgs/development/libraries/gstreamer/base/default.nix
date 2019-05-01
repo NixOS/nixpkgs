@@ -4,13 +4,19 @@
 , libintl, libopus
 , isocodes
 , libjpeg
+, libpng
 , libvisual
 , tremor # provides 'virbisidec'
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412
 , enableX11 ? stdenv.isLinux, libXv
 , enableWayland ? stdenv.isLinux, wayland
 , enableAlsa ? stdenv.isLinux, alsaLib
-, enableCocoa ? false, darwin
+# Enabling Cocoa seems to currently not work, giving compile
+# errors. Suspected is that a newer version than clang
+# is needed than 5.0 but it is not clear.
+, enableCocoa ? false
+, darwin
+, enableGl ? (enableX11 || enableWayland || enableCocoa)
 , enableCdparanoia ? (!stdenv.isDarwin), cdparanoia }:
 
 stdenv.mkDerivation rec {
@@ -34,31 +40,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig python3 gettext gobject-introspection
+    meson
+    ninja
     gtk-doc
     # Without these, enabling the 'gtk_doc' gives us `FAILED: meson-install`
     docbook_xsl docbook_xml_dtd_412
-  ]
-  # Broken meson with Darwin. Should hopefully be fixed soon. Tracking
-  # in https://bugzilla.gnome.org/show_bug.cgi?id=781148.
-  ++ lib.optionals (!stdenv.isDarwin) [ meson ninja ];
+  ];
 
-  # On Darwin, we currently use autoconf, on all other systems Meson
-  # TODO Switch to Meson on Darwin as well
-
-  # TODO How to pass these to Meson?
-  configureFlags = lib.optionals stdenv.isDarwin [
-    "--enable-x11=${if enableX11 then "yes" else "no"}"
-    "--enable-wayland=${if enableWayland then "yes" else "no"}"
-    "--enable-cocoa=${if enableCocoa then "yes" else "no"}"
-  ]
-  # Introspection fails on my MacBook currently
-  ++ lib.optional stdenv.isDarwin "--disable-introspection";
-
-  mesonFlags = lib.optionals (!stdenv.isDarwin) [
+  mesonFlags = [
     # Enables all features, so that we know when new dependencies are necessary.
     "-Dauto_features=enabled"
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
+    "-Dgl_platform=[${lib.optionalString (enableX11 || enableWayland || enableCocoa) "auto"}]"
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=[${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}]"
     # We must currently disable gtk_doc API docs generation,
@@ -71,13 +65,24 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (!enableX11) "-Dx11=disabled"
   # TODO How to disable Wayland?
+  ++ lib.optional (!enableGl) "-Dgl=disabled"
   ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
+  ++ lib.optionals stdenv.isDarwin [
+    "-Dlibvisual=disabled"
+  ]
   ;
 
-  buildInputs = [ orc libtheora libintl libopus isocodes libjpeg libvisual tremor ]
+  buildInputs = [ orc libtheora libintl libopus isocodes libjpeg libpng tremor ]
     ++ lib.optional enableAlsa alsaLib
+    ++ lib.optionals (!stdenv.isDarwin) [
+      libvisual
+    ]
     ++ lib.optionals enableX11 [ libXv pango ]
+    ++ lib.optionals stdenv.isDarwin [
+      pango
+      darwin.apple_sdk.frameworks.OpenGL
+    ]
     ++ lib.optional enableWayland wayland
     ++ lib.optional enableCocoa darwin.apple_sdk.frameworks.Cocoa
     ++ lib.optional enableCdparanoia cdparanoia;
@@ -88,6 +93,10 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  # This package has some `_("string literal")` string formats
+  # that trip up clang with format security enabled.
+  hardeningDisable = [ "format" ];
+
   enableParallelBuilding = true;
 
   doCheck = false; # fails, wants DRI access for OpenGL
@@ -95,4 +104,21 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix_pkgconfig_includedir.patch
   ];
+
+  passthru = {
+    # Downstream `gst-*` packages depending on `gst-plugins-base`
+    # have meson build options like 'gl' etc. that depend
+    # on these features being built in `-base`.
+    # If they are not built here, then the downstream builds
+    # will fail, as they, too, use `-Dauto_features=enabled`
+    # which would enable these options unconditionally.
+    # That means we must communicate to these downstream packages
+    # if the `-base` enabled these options or not, so that
+    # the can enable/disable those features accordingly.
+    # The naming `*Enabled` vs `enable*` is intentional to
+    # distinguish inputs from outputs (what is to be built
+    # vs what was built) and to make them easier to search for.
+    glEnabled = enableGl;
+    waylandEnabled = enableWayland;
+  };
 }

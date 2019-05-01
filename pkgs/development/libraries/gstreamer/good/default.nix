@@ -6,6 +6,9 @@
 , libsoup, libpulseaudio, libintl
 , darwin, lame, mpg123, twolame
 , gtkSupport ? false, gtk3 ? null
+# As of writing, jack2 incurs a Qt dependency (big!) via `ffado`.
+# In the fuure we should probably split `ffado`.
+, enableJack ? false
 , libXdamage
 , libXext
 , libXfixes
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zdhif1mhf0ihkjpjyrh65g2iz2cawkjjb3h5w8h9ml06grxwjk5";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" ];
 
   patches = [ ./fix_pkgconfig_includedir.patch ];
 
@@ -65,8 +68,21 @@ stdenv.mkDerivation rec {
     wavpack
   ]
   ++ optional gtkSupport gtk3 # for gtksink
-  ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
-  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 libgudev jack2 ];
+  ++ optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+    # Needed for NSDefaultRunLoopMode symbols.
+    darwin.cf-private
+  ]
+  ++ optionals stdenv.isLinux [
+    libavc1394
+    libgudev
+    libiec61883
+    libpulseaudio
+    libv4l
+  ]
+  ++ optionals (stdenv.isLinux && enableJack) [
+    jack2
+  ];
 
   mesonFlags = [
     # Enables all features, so that we know when new dependencies are necessary.
@@ -76,10 +92,17 @@ stdenv.mkDerivation rec {
   ]
   ++ optional (!gtkSupport) "-Dgtk3=disabled"
   ++ optionals (!stdenv.isLinux) [
-    "-Djack=disabled" # unclear whether Jack works on Darwin
+    "-Ddv1394=disabled" # Linux only
+    "-Doss4=disabled" # Linux only
+    "-Doss=disabled" # Linux only
+    "-Dpulse=disabled" # TODO check if we can keep this enabled
+    "-Dv4l2-gudev=disabled" # Linux-only
+    "-Dv4l2=disabled" # Linux-only
+    "-Dximagesrc=disabled" # Linux-only
+    "-Dpulse=disabled" # TODO check if we can keep this enabled
   ]
-  ++ optionals (!stdenv.isLinux) [
-    "-Dv4l2-gudev=disabled"
+  ++ optionals (!stdenv.isLinux || !enableJack) [
+    "-Djack=disabled" # unclear whether Jack works on Darwin
   ];
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
