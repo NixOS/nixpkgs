@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-base-${version}";
-  version = "1.15.1";
+  version = "1.16.0";
 
   meta = with lib; {
     description = "Base plugins and helper libraries";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
-    sha256 = "0qvyx9gs7z2ryhdxxzynn9r1gphfk4xfkhd6dma02sbda9c5jckf";
+    sha256 = "1bmmdwbyy89ayb85xc48y217f6wdmpz96f30zm6v53z2a5xsm4s0";
   };
 
   outputs = [ "out" "dev" ];
@@ -61,6 +61,13 @@ stdenv.mkDerivation rec {
     "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=[${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}]"
+    # We must currently disable gtk_doc API docs generation,
+    # because it is not compatible with some features being disabled.
+    # See for example
+    #     https://gitlab.gnome.org/GNOME/gnome-build-meta/issues/38
+    # for it failing because some Wayland symbols are missing.
+    # This problem appeared between 1.15.1 and 1.16.0.
+    "-Dgtk_doc=disabled"
   ]
   ++ lib.optional (!enableX11) "-Dx11=disabled"
   # TODO How to disable Wayland?

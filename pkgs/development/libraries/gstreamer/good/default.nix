@@ -23,7 +23,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gst-plugins-good-${version}";
-  version = "1.15.1";
+  version = "1.16.0";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Good Plugins";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
-    sha256 = "15f6klr7wg6jlcyx0qspi13s8wmc9fij1bx1bbvy90a9a72v97rb";
+    sha256 = "1zdhif1mhf0ihkjpjyrh65g2iz2cawkjjb3h5w8h9ml06grxwjk5";
   };
 
   outputs = [ "out" "dev" ];
@@ -56,14 +56,12 @@ stdenv.mkDerivation rec {
     libdv libvpx speex flac taglib
     cairo gdk_pixbuf aalib libcaca
     libsoup libshout lame mpg123 twolame libintl
-    # TODO: Remove the comments once https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/commit/e234932dc703e51a0e1aa3b9c408f12758b12335
-    # is merged and available in nixpkgs.
-    libXdamage # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
-    libXext # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
-    libXfixes # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
+    libXdamage
+    libXext
+    libXfixes
     ncurses
-    xorg.libXfixes # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
-    xorg.libXdamage # present feature but undeclared in meson_options.txt, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/issues/553
+    xorg.libXfixes
+    xorg.libXdamage
     wavpack
   ]
   ++ optional gtkSupport gtk3 # for gtksink
