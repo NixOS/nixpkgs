@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     qtx11extras rubberband scons sqlite taglib upower vampSDK
   ];
 
+  enableParallelBuilding = true;
+
   sconsFlags = [
     "build=release"
     "qtdir=${qtbase}"
