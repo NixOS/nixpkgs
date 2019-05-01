@@ -1,7 +1,7 @@
 { autoPatchelfHook, electron, fetchurl, makeDesktopItem, makeWrapper, nodePackages, nss, stdenv, xdg_utils, xorg }:
 
 stdenv.mkDerivation rec {
-  pname = "rambox";
+  pname = "rambox-pro";
   version = "1.1.2";
 
   dontBuild = true;
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Messaging and emailing app that combines common web applications into one";
-    homepage = http://rambox.pro;
+    homepage = https://rambox.pro;
     license = licenses.unfree;
     maintainers = with maintainers; [ chrisaw ];
     platforms = [ "i686-linux" "x86_64-linux" ];
