@@ -555,17 +555,17 @@ in
                      message = "SSL is enabled for httpd, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
 
-    users.users = optionalAttrs (mainCfg.user == "wwwrun") (singleton
+    users.users = optional (mainCfg.user == "wwwrun")
       { name = "wwwrun";
         group = mainCfg.group;
         description = "Apache httpd user";
         uid = config.ids.uids.wwwrun;
-      });
+      };
 
-    users.groups = optionalAttrs (mainCfg.group == "wwwrun") (singleton
+    users.groups = optional (mainCfg.group == "wwwrun")
       { name = "wwwrun";
         gid = config.ids.gids.wwwrun;
-      });
+      };
 
     environment.systemPackages = [httpd];
 

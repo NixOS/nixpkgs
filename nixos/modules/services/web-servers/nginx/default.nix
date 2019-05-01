@@ -723,15 +723,15 @@ in
         listToAttrs acmePairs
     );
 
-    users.users = optionalAttrs (cfg.user == "nginx") (singleton
+    users.users = optional (cfg.user == "nginx")
       { name = "nginx";
         group = cfg.group;
         uid = config.ids.uids.nginx;
-      });
+      };
 
-    users.groups = optionalAttrs (cfg.group == "nginx") (singleton
+    users.groups = optional (cfg.group == "nginx")
       { name = "nginx";
         gid = config.ids.gids.nginx;
-      });
+      };
   };
 }
