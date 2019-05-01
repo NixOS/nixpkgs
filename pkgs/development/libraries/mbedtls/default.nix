@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   name = "mbedtls-${version}";
-  version = "2.16.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
     rev = name;
-    sha256 = "14gw3rga9qr6j8ssfjy7k4l8spz37gamqxh9qcwas7w48303897l";
+    sha256 = "1mk3xv61wvqqrzd6jnrz8csyfnwwwwpjzywj3fsfy99p51d7wqgw";
   };
 
   nativeBuildInputs = [ cmake ninja perl python ];
