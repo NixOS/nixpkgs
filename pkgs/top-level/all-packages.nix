@@ -2103,9 +2103,13 @@ in
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
 
+  ethash = callPackage ../development/libraries/ethash { };
+
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
+
+  ethminer = callPackage ../tools/misc/ethminer { };
 
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
@@ -8885,6 +8889,8 @@ in
   # special forks used for dsview
   libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };
   libsigrokdecode4dsl = callPackage ../applications/science/electronics/dsview/libsigrokdecode4dsl.nix { };
+
+  cli11 = callPackage ../development/tools/misc/cli11 { };
 
   dcadec = callPackage ../development/tools/dcadec { };
 
