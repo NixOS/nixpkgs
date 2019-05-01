@@ -13097,7 +13097,10 @@ in
 
   stfl = callPackage ../development/libraries/stfl { };
 
-  stlink = callPackage ../development/tools/misc/stlink { };
+  stlink = callPackage ../development/tools/misc/stlink {
+    # The Darwin build of stlink explicitly refers to static libusb.
+    libusb1 = if stdenv.isDarwin then libusb1.override { withStatic = true; } else libusb1;
+  };
 
   steghide = callPackage ../tools/security/steghide {};
 
