@@ -15,6 +15,13 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
+  buildFlagsArray = ''
+    -ldflags= 
+      -X ${goPackagePath}/commands.GitCommit=${rev}
+      -X ${goPackagePath}/commands.GitLastTag=${version}
+      -X ${goPackagePath}/commands.GitExactTag=${version}
+  '';
+
   postInstall = ''
     cd go/src/${goPackagePath}
     install -D -m 0644 misc/bash_completion/git-bug "$bin/etc/bash_completion.d/git-bug"
