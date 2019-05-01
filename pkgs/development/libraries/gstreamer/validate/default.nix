@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   name = "gst-validate-${version}";
-  version = "1.15.1";
+  version = "1.16.0";
 
   meta = {
     description = "Integration testing infrastructure for the GStreamer framework";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-validate/${name}.tar.xz";
-    sha256 = "195hwblagfsnq1xn858al3f32jn5nynr4j5x395dpg3vl3c4k5v4";
+    sha256 = "1jfnd0g9hmdbqfxsx96yc9vpf1w6m33hqwrr6lj4i83kl54awcck";
   };
 
   outputs = [ "out" "dev" ];
