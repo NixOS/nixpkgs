@@ -16394,6 +16394,8 @@ in
 
   termtekst = callPackage ../misc/emulators/termtekst { };
 
+  tetra-gtk-theme = callPackage ../data/themes/tetra { };
+
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
   tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
@@ -23458,8 +23460,6 @@ in
   tilt = callPackage ../applications/networking/cluster/tilt {};
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
-
-  tetra-gtk-theme = callPackage ../misc/themes/tetra { };
 
   tewi-font = callPackage ../data/fonts/tewi  {};
 
