@@ -4127,6 +4127,8 @@ in
 
   jumanpp = callPackage ../tools/text/jumanpp {};
 
+  jump = callPackage ../tools/system/jump {};
+
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
   latex2html = callPackage ../tools/misc/latex2html { };
