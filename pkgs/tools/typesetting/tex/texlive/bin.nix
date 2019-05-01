@@ -190,7 +190,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   hardeningDisable = [ "format" ];
 
   inherit (core) nativeBuildInputs;
-  buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 ];
+  buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 libX11 ];
 
   configureFlags = common.configureFlags
     ++ withSystemLibs [ "kpathsea" "ptexenc" "cairo" "harfbuzz" "icu" "graphite2" ]
