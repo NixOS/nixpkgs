@@ -184,6 +184,7 @@ let plugins = {
       '';
     passthru = {
       registrationCommand = "";
+      hw = "network";
     };
 
     meta = common_meta // { description = "iscan network plugin"; };
