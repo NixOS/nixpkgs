@@ -30,7 +30,7 @@ buildPythonPackage rec {
     export LC_ALL=en_US.UTF-8
     ${python.interpreter} -m pyfakefs.tests.all_tests
     ${python.interpreter} -m pyfakefs.tests.all_tests_without_extra_packages
-    ${python.interpreter} -m pytest pyfakefs/tests/pytest/pytest_plugin_test.py
+    ${python.interpreter} -m pytest pyfakefs/pytest_tests/pytest_plugin_test.py
   '';
 
   meta = with stdenv.lib; {
