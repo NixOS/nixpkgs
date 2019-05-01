@@ -5745,6 +5745,8 @@ in
 
   smenu = callPackage ../tools/misc/smenu { };
 
+  smesh = callPackage ../development/libraries/smesh {};
+
   smugline = python3Packages.smugline;
 
   snabb = callPackage ../tools/networking/snabb { } ;
