@@ -7,11 +7,11 @@ let
   pname = "cogl";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.22.2";
+  version = "1.22.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "03f0ha3qk7ca0nnkkcr1garrm1n1vvfqhkz9lwjm592fnv6ii9rr";
+    sha256 = "1q0drs82a8f6glg1v29bb6g2nf15fw0rvdx3d0rgcgfarfaby5sj";
   };
 
   patches = [

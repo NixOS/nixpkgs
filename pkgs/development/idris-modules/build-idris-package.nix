@@ -53,8 +53,20 @@ stdenv.mkDerivation ({
 
   installPhase = ''
     runHook preInstall
+
     idris --install ${ipkgName}.ipkg --ibcsubdir $out/libs
+
     IDRIS_DOC_PATH=$out/doc idris --installdoc ${ipkgName}.ipkg || true
+
+    # If the ipkg file defines an executable, install that
+    executable=$(grep -Po '^executable = \K.*' ${ipkgName}.ipkg || true)
+    # $executable intentionally not quoted because it must be quoted correctly
+    # in the ipkg file already
+    if [ ! -z "$executable" ] && [ -f $executable ]; then
+      mkdir -p $out/bin
+      mv $executable $out/bin/$executable
+    fi
+
     runHook postInstall
   '';
 
