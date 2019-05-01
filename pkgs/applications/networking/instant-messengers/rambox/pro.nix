@@ -15,7 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "0rrfpl371hp278b02b9b6745ax29yrdfmxrmkxv6d158jzlv0dlr";
   };
 
-  patches = [ ./fix-bash-args.patch ];
+  postPatch = ''
+    substituteInPlace resources/app.asar.unpacked/node_modules/ad-block/vendor/depot_tools/create-chromium-git-src \
+      --replace "/usr/bin/env -S bash -e" "${stdenv.shell}"
+    substituteInPlace resources/app.asar.unpacked/node_modules/ad-block/node_modules/bloom-filter-cpp/vendor/depot_tools/create-chromium-git-src \
+      --replace "/usr/bin/env -S bash -e" "${stdenv.shell}"
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/RamboxPro $out/share/applications
