@@ -6,10 +6,10 @@
 
 buildPythonPackage rec {
   pname = "imageio-ffmpeg";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchPypi {
-    sha256 = "191k77hd69lfmd8p4w02c2ajjdsall6zijn01gyhqi11n48wpsib";
+    sha256 = "1hnn00xz9jyksnx1g0r1icv6ynbdnxq4cfnmb58ikg6ymi20al18";
     inherit pname version;
   };
 
