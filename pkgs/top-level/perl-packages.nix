@@ -6396,6 +6396,33 @@ let
     };
   };
 
+  GitRepository = buildPerlPackage rec {
+    name = "Git-Repository-1.323";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOOK/${name}.tar.gz";
+      sha256 = "966575fcecc9f56ab8739ea451b3825e278bc9179d785a20a9ae52473f33683e";
+    };
+    buildInputs = [ TestRequiresGit ];
+    propagatedBuildInputs = [ GitVersionCompare SystemCommand namespaceclean ];
+    meta = {
+      description = "Perl interface to Git repositories";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  GitVersionCompare = buildPerlPackage rec {
+    name = "Git-Version-Compare-1.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOOK/${name}.tar.gz";
+      sha256 = "63e8264ed351cb2371b47852a72366214164b5f3fad9dbd68309c7fc63d06491";
+    };
+    buildInputs = [ TestNoWarnings ];
+    meta = {
+      description = "Functions to compare Git versions";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Glib = buildPerlPackage rec {
     name = "Glib-1.328";
     src = fetchurl {
@@ -6760,6 +6787,47 @@ let
       description = "Return difference between two hashes as a hash";
     };
     buildInputs = [ TestSimple13 ];
+  };
+
+  ham = buildPerlPackage rec {
+    name = "ham-unstable-${version}";
+    version = "2019-01-22";
+
+    src = fetchFromGitHub {
+      owner = "kernkonzept";
+      repo = "ham";
+      rev = "37c2e4e8b8bd779ba0f8c48a3c6ba34bad860b92";
+      sha256 = "0h5r5256niskypl4g1j2573wqi0nn0mai5p04zsa06xrgyjqcy2j";
+    };
+
+    outputs = [ "out" ];
+
+    buildInputs = [ pkgs.makeWrapper ];
+    propagatedBuildInputs = [ pkgs.openssh GitRepository URI XMLMini ];
+
+    preConfigure = ''
+      patchShebangs .
+      touch Makefile.PL
+      rm -f Makefile
+    '';
+
+    installPhase = ''
+      mkdir -p $out/lib $out/bin
+      cp -r . $out/lib/ham
+
+      makeWrapper $out/lib/ham/ham $out/bin/ham --argv0 ham \
+        --prefix PATH : ${pkgs.openssh}/bin
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "A tool to manage big projects consisting of multiple loosely-coupled git repositories";
+      homepage = https://github.com/kernkonzept/ham;
+      license = "unknown"; # should be gpl2, but not quite sure
+      maintainers = with stdenv.lib.maintainers; [ aw ];
+      platforms = stdenv.lib.platforms.unix;
+    };
   };
 
   HashFlatten = buildPerlPackage rec {
@@ -14385,6 +14453,19 @@ let
     };
   };
 
+  SystemCommand = buildPerlPackage rec {
+    name = "System-Command-1.119";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOOK/${name}.tar.gz";
+      sha256 = "c8c9fb1e527c52463cab1476500efea70396a0b62bea625d2d6faea994dc46e7";
+    };
+    propagatedBuildInputs = [ IPCRun ];
+    meta = {
+      description = "Object for running system commands";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   SysVirt = buildPerlModule rec {
     version = "4.10.0";
     name = "Sys-Virt-${version}";
@@ -15572,6 +15653,19 @@ let
     };
     meta = {
       description = "Checks to see if the module can be loaded";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestRequiresGit = buildPerlPackage rec {
+    name = "Test-Requires-Git-1.008";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOOK/${name}.tar.gz";
+      sha256 = "70916210970d84d7491451159ab8b67e15251c8c0dae7c3df6c8d88542ea42a6";
+    };
+    propagatedBuildInputs = [ GitVersionCompare ];
+    meta = {
+      description = "Check your test requirements against the available version of Git";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -17469,6 +17563,17 @@ let
     };
     buildInputs = [ pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [ XMLLibXML ];
+  };
+
+  XMLMini = buildPerlPackage rec {
+    name = "XML-Mini-1.38";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PD/PDEEGAN/${name}.tar.gz";
+      sha256 = "af803d38036a3184e124a682e5466f1bc107f48a89ef35b0c7647e11a073fe2d";
+    };
+    meta = {
+      license = "unknown";
+    };
   };
 
   XMLNamespaceSupport = buildPerlPackage {
