@@ -17,11 +17,11 @@ let
   llvmShared = llvm_7.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
-  version = "1.34.0";
+  version = "1.34.1";
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "0n8z1wngkxab1rvixqg6w8b727hzpnm9wp9h8iy3mpbrzp7mmj3s";
+    sha256 = "19s09k7y5j6g3y4d2rk6kg9pvq6ml94c49w6b72dmq8p9lk8bixh";
   };
 
   __darwinAllowLocalNetworking = true;
