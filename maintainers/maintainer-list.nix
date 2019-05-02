@@ -4783,6 +4783,11 @@
     github = "the-kenny";
     name = "Moritz Ulrich";
   };
+  thedavidmeister = {
+    email = "thedavidmeister@gmail.com";
+    github = "thedavidmeister";
+    name = "David Meister";
+  };
   theuni = {
     email = "ct@flyingcircus.io";
     github = "ctheune";

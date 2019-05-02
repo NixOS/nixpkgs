@@ -1,4 +1,4 @@
-{ stdenv, appimage-run, fetchurl, runtimeShell, gsettings-desktop-schemas, gtk3, gobject-introspection, wrapGAppsHook }:
+{ stdenv, appimage-run, fetchurl, runtimeShell, gsettings-desktop-schemas, gtk3, gobject-introspection, wrapGAppsHook, nodePackages }:
 
 let
   version = "3.11.6";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs = [ appimage-run gtk3 gsettings-desktop-schemas gobject-introspection ];
+  buildInputs = [ appimage-run gtk3 gsettings-desktop-schemas gobject-introspection nodePackages.git-ssb ];
 
   unpackPhase = ":";
 
