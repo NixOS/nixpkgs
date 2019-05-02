@@ -218,7 +218,7 @@
     "buienradar.sensor" = ps: with ps; [  ];
     "buienradar.weather" = ps: with ps; [  ];
     "caldav" = ps: with ps; [  ];
-    "caldav.calendar" = ps: with ps; [  ];
+    "caldav.calendar" = ps: with ps; [ caldav ];
     "calendar" = ps: with ps; [ aiohttp-cors ];
     "camera" = ps: with ps; [ aiohttp-cors ];
     "camera.const" = ps: with ps; [  ];
