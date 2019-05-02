@@ -1,6 +1,6 @@
 { stdenv, requireFile, unzip, xorg }:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.hostPlatform.system == "i686-linux";
 
 stdenv.mkDerivation rec {
   name = "sun-java-wtk-2.5.2_01";

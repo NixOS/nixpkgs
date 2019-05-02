@@ -3,7 +3,7 @@
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
-  version = "unstable-2018-04-11";
+  version = "unstable-2019-02-10";
   pname = "i3pystatus";
   disabled = !python3Packages.isPy3k;
 
@@ -11,8 +11,8 @@ python3Packages.buildPythonApplication rec {
   {
     owner = "enkore";
     repo = "i3pystatus";
-    rev = "3efbd56bb7a851f16173ec6f0eef472b6e96c7cc";
-    sha256 = "0r4mc23chxlaym7jcjnflw7mn5nbw3q8q4ix0nim7lh98yfndd3b";
+    rev = "bcd8f12b18d491029fdd5bd0f433b4500fcdc68e";
+    sha256 = "0gw6sla73cid6gwxn2n4zmsg2svq5flf9zxly6x2rfljizgf0720";
   };
 
   propagatedBuildInputs = with python3Packages; [ keyring colour netifaces praw psutil basiciw ] ++
@@ -44,4 +44,3 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ maintainers.igsha ];
   };
 }
-

@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.7.16";
+  version = "3.7.18";
   name = "afflib-${version}";
 
   src = fetchFromGitHub {
     owner = "sshock";
     repo = "AFFLIBv3";
     rev = "v${version}";
-    sha256 = "0piwkmg7jn64h57cjf5cybyvyqxj2k752g9vrf4ycds7nhvvbnb6";
+    sha256 = "0963gw316p4nyxa9zxmgif29p8i99k898av2g78g28dxafqj3w8c";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

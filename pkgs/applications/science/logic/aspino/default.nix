@@ -44,5 +44,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.asl20;
     homepage = http://alviano.net/software/maxino/;
+    # See pkgs/applications/science/logic/glucose/default.nix
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

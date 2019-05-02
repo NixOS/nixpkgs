@@ -49,8 +49,7 @@ in stdenv.mkDerivation {
   ++ kernel.moduleBuildDependencies;
 
    postInstall = ''
-    xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/media/dvb-core/dvb-core.ko
-    xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/media/v4l2-core/videodev.ko
+    find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;
   '';
 
   meta = with lib; {
@@ -59,5 +58,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ck3d ];
     priority = -1;
+    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
   };
 }

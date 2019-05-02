@@ -1,16 +1,14 @@
 { qtModule, stdenv, lib, fetchurl
-, qtbase, qtdeclarative, qtlocation, qtsensors, qtwebchannel
+, qtbase, qtdeclarative, qtlocation, qtmultimedia, qtsensors, qtwebchannel
 , fontconfig, gdk_pixbuf, gtk2, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
 , bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , darwin
 , flashplayerFix ? false
-, src ? null
-, version ? null
 }:
 
 let
-  inherit (lib) optional optionals getLib;
+  inherit (lib) optional optionals getDev getLib;
   hyphen = stdenv.mkDerivation rec {
     name = "hyphen-2.8.8";
     src = fetchurl {
@@ -22,29 +20,30 @@ let
     '';
     buildInputs = [ perl ];
   };
+  usingAnnulenWebkitFork = lib.versionAtLeast qtbase.version "5.11.0";
 in
 qtModule {
   name = "qtwebkit";
-  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ qtwebchannel ];
+  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ]
+    ++ optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
+    ++ optional usingAnnulenWebkitFork qtwebchannel;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
-    ++ optionals (stdenv.isDarwin) (with darwin.apple_sdk.frameworks; [ OpenGL ])
-    ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ hyphen ];
+    ++ optionals (stdenv.isDarwin) (with darwin; with apple_sdk.frameworks; [ cf-private ICU OpenGL ])
+    ++ optional usingAnnulenWebkitFork hyphen;
   nativeBuildInputs = [
     bison2 flex gdb gperf perl pkgconfig python2 ruby
-  ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ cmake ];
+  ] ++ optional usingAnnulenWebkitFork cmake;
 
-  cmakeFlags = optionals (lib.versionAtLeast qtbase.version "5.11.0") [ "-DPORT=Qt" ];
-
-  inherit src;
-  inherit version;
-
-  __impureHostDeps = optionals (stdenv.isDarwin) [
-    "/usr/lib/libicucore.dylib"
-  ];
+  cmakeFlags = optionals usingAnnulenWebkitFork ([ "-DPORT=Qt" ]
+    ++ optionals stdenv.isDarwin [
+      "-DQt5Multimedia_DIR=${getDev qtmultimedia}/lib/cmake/Qt5Multimedia"
+      "-DQt5MultimediaWidgets_DIR=${getDev qtmultimedia}/lib/cmake/Qt5MultimediaWidgets"
+      "-DMACOS_FORCE_SYSTEM_XML_LIBRARIES=OFF"
+    ]);
 
   # QtWebKit overrides qmake's default_pre and default_post features,
   # so its custom qmake files must be found first at the front of QMAKEPATH.
-  preConfigure = ''
+  preConfigure = stdenv.lib.optionalString (!usingAnnulenWebkitFork) ''
     QMAKEPATH="$PWD/Tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fixQtBuiltinPaths . '*.pr?'
     # Fix hydra's "Log limit exceeded"

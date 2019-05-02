@@ -1,0 +1,10 @@
+--- cargo-edit.org/tests/cargo-upgrade.rs	2018-09-11 20:59:04.609532299 +0100
++++ cargo-edit/tests/cargo-upgrade.rs	2018-09-11 20:59:50.829435331 +0100
+@@ -302,6 +302,7 @@
+ }
+ 
+ #[test]
++#[ignore] // requires network
+ fn upgrade_prints_messages() {
+     let (_tmpdir, manifest) = clone_out_test("tests/fixtures/upgrade/Cargo.toml.source");
+ 

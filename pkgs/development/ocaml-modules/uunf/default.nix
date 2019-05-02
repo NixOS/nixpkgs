@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner }:
 let
   pname = "uunf";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.01";
@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ocamlbuild topkg uutf cmdliner ];
 
   propagatedBuildInputs = [ uchar ];
-
-  unpackCmd = "tar xjf $src";
 
   inherit (topkg) buildPhase installPhase;
 

@@ -24,10 +24,11 @@ stdenv.mkDerivation rec {
     cp rkunpack rkcrc rkflashtool rkparameters rkparametersblock rkunsign rkmisc $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://sourceforge.net/projects/rkflashtool/;
     description = "Tools for flashing Rockchip devices";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.viric ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.viric ];
+    license = licenses.bsd2;
   };
 }

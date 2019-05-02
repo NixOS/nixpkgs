@@ -8,15 +8,15 @@ let
 
   version = "17.1";
 
-  sha256 = if stdenv.system == "x86_64-linux"  then "1kddisnvlk48jip6k59mw3wlkrl7rkck2lxpaghn0gfx02cvms5f"
-      else if stdenv.system == "i686-cygwin"   then "1izp42afrlh4yd322ax9w85ki388gnkqfqbw8dwnn4k3j7r5487z"
-      else throw "Unsupported system: ${stdenv.system}";
+  sha256 = if stdenv.hostPlatform.system == "x86_64-linux"  then "1kddisnvlk48jip6k59mw3wlkrl7rkck2lxpaghn0gfx02cvms5f"
+      else if stdenv.hostPlatform.system == "i686-cygwin"   then "1izp42afrlh4yd322ax9w85ki388gnkqfqbw8dwnn4k3j7r5487z"
+      else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   urlBase = "https://github.com/Kode/KodeStudio/releases/download/v${version}/KodeStudio-";
 
-  urlStr = if stdenv.system == "x86_64-linux"  then urlBase + "linux64.tar.gz"
-      else if stdenv.system == "i686-cygwin"   then urlBase + "win32.zip"
-      else throw "Unsupported system: ${stdenv.system}";
+  urlStr = if stdenv.hostPlatform.system == "x86_64-linux"  then urlBase + "linux64.tar.gz"
+      else if stdenv.hostPlatform.system == "i686-cygwin"   then urlBase + "win32.zip"
+      else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
 in
 
@@ -47,7 +47,7 @@ in
       cp -r ./* $out
     '';
 
-    postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
+    postFixup = lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux") ''
       # Patch Binaries
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \

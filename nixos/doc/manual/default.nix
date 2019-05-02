@@ -90,7 +90,9 @@ let
     fi
     ${buildPackages.libxslt.bin}/bin/xsltproc \
       --stringparam revision '${revision}' \
-      -o $out ${./options-to-docbook.xsl} $optionsXML
+      -o intermediate.xml ${./options-to-docbook.xsl} $optionsXML
+    ${buildPackages.libxslt.bin}/bin/xsltproc \
+      -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml
   '';
 
   sources = lib.sourceFilesBySuffices ./. [".xml"];
@@ -250,7 +252,7 @@ in rec {
     ''; # */
 
   # Generate the NixOS manual.
-  manual = runCommand "nixos-manual"
+  manualHTML = runCommand "nixos-manual-html"
     { inherit sources;
       nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual in HTML format";
@@ -263,9 +265,13 @@ in rec {
       xsltproc \
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
+        --stringparam id.warnings "1" \
         --nonet --output $dst/ \
         ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
-        ${manual-combined}/manual-combined.xml
+        ${manual-combined}/manual-combined.xml \
+        |& tee xsltproc.out
+      grep "^ID recommended on" xsltproc.out &>/dev/null && echo "error: some IDs are missing" && false
+      rm xsltproc.out
 
       mkdir -p $dst/images/callouts
       cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
@@ -279,6 +285,11 @@ in rec {
       echo "doc manual $dst" >> $out/nix-support/hydra-build-products
     ''; # */
 
+  # Alias for backward compatibility. TODO(@oxij): remove eventually.
+  manual = manualHTML;
+
+  # Index page of the NixOS manual.
+  manualHTMLIndex = "${manualHTML}/share/doc/nixos/index.html";
 
   manualEpub = runCommand "nixos-manual-epub"
     { inherit sources;
@@ -319,6 +330,7 @@ in rec {
       # Generate manpages.
       mkdir -p $out/share/man
       xsltproc --nonet \
+        --maxdepth 6000 \
         --param man.output.in.separate.dir 1 \
         --param man.output.base.dir "'$out/share/man/'" \
         --param man.endnotes.are.numbered 0 \

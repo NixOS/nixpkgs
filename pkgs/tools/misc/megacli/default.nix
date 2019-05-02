@@ -1,27 +1,34 @@
 { stdenv, rpmextract, ncurses5, patchelf, makeWrapper, requireFile, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "megacli-8.07.07";
+  name = "megacli-${version}";
+  version = "8.07.14";
 
   src =
     requireFile {
-      name = "8.07.07_MegaCLI.zip";
-      url = http://www.lsi.com/downloads/Public/MegaRAID%20Common%20Files/8.07.07_MegaCLI.zip;
-      sha256 = "11jzvh25mlygflazd37gi05xv67im4rgq7sbs5nwgw3gxdh4xfjj";
+      name = "${builtins.replaceStrings ["."] ["-"] version}_MegaCLI.zip";
+      url = https://docs.broadcom.com/docs/12351587;
+      sha256 = "1sdn58fbmd3fj4nzbajq3gcyw71ilgdh45r5p4sa6xmb7np55cfr";
     };
 
-  buildInputs = [rpmextract ncurses5 unzip makeWrapper];
+  buildInputs = [rpmextract ncurses5 unzip];
   libPath =
     stdenv.lib.makeLibraryPath
        [ stdenv.cc.cc stdenv.cc.libc ncurses5 ];
 
   buildCommand = ''
-    mkdir -p $out/bin
-    cd $out
     unzip ${src}
-    rpmextract linux/MegaCli-8.07.07-1.noarch.rpm
-    ${patchelf}/bin/patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath ${libPath}:$out/opt/lsi/3rdpartylibs/x86_64:$out/opt/lsi/3rdpartylibs:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib opt/MegaRAID/MegaCli/MegaCli64
-    wrapProgram $out/opt/MegaRAID/MegaCli/MegaCli64 --set LD_LIBRARY_PATH $out/opt/lsi/3rdpartylibs/x86_64
+    rpmextract Linux/MegaCli-${version}-1.noarch.rpm
+
+    mkdir -p $out/{bin,share/MegaRAID/MegaCli}
+    cp -r opt $out
+    cp ${version}_MegaCLI.txt $out/share/MegaRAID/MegaCli
+
+    ${patchelf}/bin/patchelf \
+      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib \
+      $out/opt/MegaRAID/MegaCli/MegaCli64
+
     ln -s $out/opt/MegaRAID/MegaCli/MegaCli64 $out/bin/MegaCli64
     eval fixupPhase
   '';

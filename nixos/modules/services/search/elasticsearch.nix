@@ -5,22 +5,14 @@ with lib;
 let
   cfg = config.services.elasticsearch;
 
-  es5 = builtins.compareVersions (builtins.parseDrvName cfg.package.name).version "5" >= 0;
-  es6 = builtins.compareVersions (builtins.parseDrvName cfg.package.name).version "6" >= 0;
+  es6 = builtins.compareVersions cfg.package.version "6" >= 0;
 
   esConfig = ''
     network.host: ${cfg.listenAddress}
     cluster.name: ${cfg.cluster_name}
 
-    ${if es5 then ''
-      http.port: ${toString cfg.port}
-      transport.tcp.port: ${toString cfg.tcp_port}
-    '' else ''
-      network.port: ${toString cfg.port}
-      network.tcp.port: ${toString cfg.tcp_port}
-      # TODO: find a way to enable security manager
-      security.manager.enabled: false
-    ''}
+    http.port: ${toString cfg.port}
+    transport.tcp.port: ${toString cfg.tcp_port}
 
     ${cfg.extraConf}
   '';
@@ -32,7 +24,7 @@ let
     text = esConfig;
   };
 
-  loggingConfigFilename = if es5 then "log4j2.properties" else "logging.yml";
+  loggingConfigFilename = "log4j2.properties";
   loggingConfigFile = pkgs.writeTextFile {
     name = loggingConfigFilename;
     text = cfg.logging;
@@ -41,8 +33,7 @@ let
   esPlugins = pkgs.buildEnv {
     name = "elasticsearch-plugins";
     paths = cfg.plugins;
-    # Elasticsearch 5.x won't start when the plugins directory does not exist
-    postBuild = if es5 then "${pkgs.coreutils}/bin/mkdir -p $out/plugins" else "";
+    postBuild = "${pkgs.coreutils}/bin/mkdir -p $out/plugins";
   };
 
 in {
@@ -58,8 +49,8 @@ in {
 
     package = mkOption {
       description = "Elasticsearch package to use.";
-      default = pkgs.elasticsearch2;
-      defaultText = "pkgs.elasticsearch2";
+      default = pkgs.elasticsearch;
+      defaultText = "pkgs.elasticsearch";
       type = types.package;
     };
 
@@ -100,30 +91,18 @@ in {
 
     logging = mkOption {
       description = "Elasticsearch logging configuration.";
-      default =
-        if es5 then ''
-          logger.action.name = org.elasticsearch.action
-          logger.action.level = info
+      default = ''
+        logger.action.name = org.elasticsearch.action
+        logger.action.level = info
 
-          appender.console.type = Console
-          appender.console.name = console
-          appender.console.layout.type = PatternLayout
-          appender.console.layout.pattern = [%d{ISO8601}][%-5p][%-25c{1.}] %marker%m%n
+        appender.console.type = Console
+        appender.console.name = console
+        appender.console.layout.type = PatternLayout
+        appender.console.layout.pattern = [%d{ISO8601}][%-5p][%-25c{1.}] %marker%m%n
 
-          rootLogger.level = info
-          rootLogger.appenderRef.console.ref = console
-        '' else ''
-          rootLogger: INFO, console
-          logger:
-            action: INFO
-            com.amazonaws: WARN
-          appender:
-            console:
-              type: console
-              layout:
-                type: consolePattern
-                conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
-        '';
+        rootLogger.level = info
+        rootLogger.appenderRef.console.ref = console
+      '';
       type = types.str;
     };
 
@@ -204,9 +183,9 @@ in {
 
         cp ${elasticsearchYml} ${configDir}/elasticsearch.yml
         # Make sure the logging configuration for old elasticsearch versions is removed:
-        rm -f ${if es5 then "${configDir}/logging.yml" else "${configDir}/log4j2.properties"}
+        rm -f "${configDir}/logging.yml"
         cp ${loggingConfigFile} ${configDir}/${loggingConfigFilename}
-        ${optionalString es5 "mkdir -p ${configDir}/scripts"}
+        mkdir -p ${configDir}/scripts
         ${optionalString es6 "cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options"}
 
         if [ "$(id -u)" = 0 ]; then chown -R elasticsearch:elasticsearch ${cfg.dataDir}; fi

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "latexcodec";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zdd1gf24i83ykadx0y30n3001j43scqr2saql3vckk5c39dj1wn";
+    sha256 = "0s4wdbg0w2l8pj3i0y4510i0s04p8nhxcsa2z41bjsv0k66npb81";
   };
 
   propagatedBuildInputs = [ six ];

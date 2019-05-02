@@ -1,34 +1,11 @@
 /* TeX Live user docs
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: http://nixos.org/nixpkgs/manual/#sec-language-texlive
-
-  Note on upgrading: The texlive package contains a few binaries, defined in
-  bin.nix and released once a year, and several thousand packages from CTAN,
-  defined in pkgs.nix.
-
-  The CTAN mirrors are continuously moving, with more than 100 updates per
-  month. Due to the size of the distribution, we snapshot it and generate nix
-  expressions for all packages in texlive at that point.
-
-  To upgrade this snapshot, run the following:
-  $ curl http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
-             | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix
-
-  This will regenerate all of the sha512 hashes for the current upstream
-  distribution. You may want to find a more stable mirror, put the distribution
-  on IPFS, or contact a maintainer to get the tarballs from that point in time
-  into a more stable location, so that nix users who are building from source
-  can reproduce your work.
-
-  Upgrading the bin: texlive itself is a large collection of binaries. In order
-  to reduce closure size for users who just need a few of them, we split it into
-  packages such as core, core-big, xvdi, etc. This requires making assumptions
-  about dependencies between the projects that may change between releases; if
-  you upgrade you may have to do some work here.
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
 , makeWrapper, python, ruby, perl
+, useFixedHashes ? true
 , recurseIntoAttrs
 }:
 let
@@ -41,9 +18,13 @@ let
     };
   };
 
+  # map: name -> fixed-output hash
+  # sha1 in base32 was chosen as a compromise between security and length
+  fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
+
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv fastUnique lib makeWrapper writeText
+    inherit bin combinePkgs buildEnv lib makeWrapper writeText
       stdenv python ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
@@ -116,23 +97,19 @@ let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
       tlName = urlName + "-${version}";
+      fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
               map (up: "${up}/${urlName}.tar.xz") urlPrefixes
             );
 
-      # Upstream refuses to distribute stable tarballs, so we host snapshots on IPFS.
+      # Upstream refuses to distribute stable tarballs,
+      # so we host snapshots on IPFS or on our own servers.
       # Common packages should get served from the binary cache anyway.
       # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
       urlPrefixes = args.urlPrefixes or [
-        # Should be stable for historic, archived releases
-        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2017/tlnet-final/archive
-
-        # TODO: Add IPFS and see if @veprbl is willing to add a texlive-2017-final mirror,
-        # or if we should just dump it and go to 2018.
-
-        # The canonical source moves quickly and will be broken almost immediately
-        # http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive
+        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
+        ftp://tug.org/texlive/historic/2018/tlnet-final/archive
       ];
 
       src = fetchurl { inherit urls sha512; };
@@ -146,11 +123,30 @@ let
           -C "$out" --anchored --exclude=tlpkg --keep-old-files
       '' + postUnpack;
 
-    in runCommand "texlive-${tlName}" {
-        # lots of derivations, not meant to be cached
-        preferLocalBuild = true; allowSubstitutes = false;
-        inherit passthru;
-      }
+    in if sha512 == "" then
+      # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
+      fetchurl {
+        inherit urls;
+        sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
+          else fixedHash;
+        name = tlName;
+        recursiveHash = true;
+        downloadToTemp = true;
+        postFetch = ''mkdir "$out";'' + unpackCmd "$downloadedFile";
+        # TODO: perhaps override preferHashedMirrors and allowSubstitutes
+     }
+        // passthru
+
+    else runCommand "texlive-${tlName}"
+      ( { # lots of derivations, not meant to be cached
+          preferLocalBuild = true; allowSubstitutes = false;
+          inherit passthru;
+        } // lib.optionalAttrs (fixedHash != null) {
+          outputHash = fixedHash;
+          outputHashAlgo = "sha1";
+          outputHashMode = "recursive";
+        }
+      )
       ( ''
           mkdir "$out"
         '' + unpackCmd "'${src}'"
@@ -159,12 +155,6 @@ let
   # combine a set of TL packages into a single TL meta-package
   combinePkgs = pkgSet: lib.concatLists # uniqueness is handled in `combine`
     (lib.mapAttrsToList (_n: a: a.pkgs) pkgSet);
-
-  # TODO: replace by buitin once it exists
-  fastUnique = comparator: list: with lib;
-    let un_adj = l: if length l < 2 then l
-      else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
-    in un_adj (lib.sort comparator list);
 
 in
   tl // {
@@ -180,7 +170,7 @@ in
             platforms = lib.platforms.all;
             hydraPlatforms = lib.optionals
               (lib.elem pname ["scheme-small" "scheme-basic"]) platforms;
-            maintainers = [ lib.maintainers.vcunat ];
+            maintainers = with lib.maintainers;  [ vcunat veprbl ];
           }
           (combine {
             ${pname} = attrs;

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libGLU_combined, libX11, libXext, libXfixes
-, libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib,
-gobjectIntrospection, gtk3, gnome3
+, libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib
+, gobject-introspection, gtk3, gnome3, libinput, libgudev, libxkbcommon
 }:
 
 let
@@ -11,15 +11,17 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0mif1qnrpkgxi43h7pimim6w6zwywa16ixcliw0yjm9hk0a368z7";
   };
+
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ gtk3 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
     [ libX11 libGLU_combined libXext libXfixes libXdamage libXcomposite libXi cogl pango
-      atk json-glib gobjectIntrospection libxcb
+      atk json-glib gobject-introspection libxcb libinput libgudev libxkbcommon
     ];
 
   configureFlags = [ "--enable-introspection" ]; # needed by muffin AFAIK

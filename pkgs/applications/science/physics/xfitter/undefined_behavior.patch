@@ -1,0 +1,454 @@
+diff --git a/DY/src/finterface.cc b/DY/src/finterface.cc
+--- a/DY/src/finterface.cc
++++ b/DY/src/finterface.cc
+@@ -14,17 +14,17 @@
+ using namespace std;
+ 
+ extern "C" {
+-  int dy_create_calc_(const int *ds_id, const int *chg_prod, 
++  void dy_create_calc_(const int *ds_id, const int *chg_prod, 
+       const double *beam_en, const char *boz,
+       const double *ranges, const char *var_name, 
+       const int *n_bins, const double *bin_edges);
+ 
+-  int dy_do_calc_();
++  void dy_do_calc_();
+ 
+-  int dy_get_res_(const int *ds_id, double *calc_res);
++  void dy_get_res_(const int *ds_id, double *calc_res);
+ 
+-  int dy_release_();
+-  int dy_set_ewpars_();
++  void dy_release_();
++  void dy_set_ewpars_();
+ }
+ 
+ typedef map <int, DYcalc* > DCmap;
+@@ -34,7 +34,7 @@ vector<BinMatrix*> gBinMatrices;
+ 
+ // initializes Drell-Yan LO calculations with info on
+ // beam, process, kinematic cuts, and bins.
+-int dy_create_calc_(const int *ds_id, const int *chg_prod, 
++void dy_create_calc_(const int *ds_id, const int *chg_prod, 
+     const double *beam_en, const char *boz,
+     const double *ranges, const char *var_name, 
+     const int *n_bins, const double *bin_edges)
+@@ -99,13 +99,11 @@ int dy_create_calc_(const int *ds_id, const int *chg_prod,
+   // create calculator and put to map
+   DYcalc * dc = new DYcalc(bm, pc, int_steps);
+   gCalcs.insert( pair<int,DYcalc*>( *ds_id,dc ) );
+-
+-  return 1;
+ }
+ 
+ 
+ // calculate Drell-Yan LO cross sections for all data sets
+-int dy_do_calc_()
++void dy_do_calc_()
+ {
+   // evolve convolutions
+   vector<PDFconv*>::iterator ipc = gPDFconvs.begin();
+@@ -118,28 +116,24 @@ int dy_do_calc_()
+     if ( true != idc->second->Integrate() ) {
+       cout << "Something is wrong with DY integration for " 
+            << idc->first << " data set." << endl;
+-      return 0;
++      return;
+     }
+   }
+-
+-  return 1;
+ }
+ 
+ 
+ // return DY calculations for data set ds_name
+-int dy_get_res_(const int *ds_id, double *calc_res)
++void dy_get_res_(const int *ds_id, double *calc_res)
+ {
+   DYcalc * dc = gCalcs.find(*ds_id)->second;
+   dc->getCalcRes(calc_res);
+-
+-  return 1;
+ }
+ 
+-int dy_set_ewpars_(){
++void dy_set_ewpars_(){
+   PhysPar::setPhysPar();
+ }
+ 
+-int dy_release_()
++void dy_release_()
+ {
+   vector<PDFconv*>::iterator ipc = gPDFconvs.begin();
+   for (; ipc!=gPDFconvs.end(); ipc++){
+@@ -155,6 +149,4 @@ int dy_release_()
+   for (; idc != gCalcs.end() ; idc++){
+     delete (idc->second);
+   }
+-
+-  return 1;
+ }
+diff --git a/DiffDIS/include/DataTable.h b/DiffDIS/include/DataTable.h
+--- a/DiffDIS/include/DataTable.h
++++ b/DiffDIS/include/DataTable.h
+@@ -307,6 +307,7 @@ class DataTable_t {
+       for(ic=0; ic < GetNcols(); ic++) {
+         for(ir=0; ir < npt; ir++) Data[ic][ir] = A.Data[ic][ir];
+       }
++      return *this;
+     }
+     
+     //@}
+diff --git a/FastNLO/src/FastNLOInterface.cc b/FastNLO/src/FastNLOInterface.cc
+--- a/FastNLO/src/FastNLOInterface.cc
++++ b/FastNLO/src/FastNLOInterface.cc
+@@ -39,14 +39,14 @@ void gauleg(double x1,double x2,double *x,double *w, int n);
+ 
+ 
+ extern "C" {
+-  int fastnloinit_(const char *s, const int *idataset, const char *thfile, int *I_FIT_ORDER, bool *PublicationUnits , double* murdef, double* murscale, double *mufdef, double* mufscale);
+-  int fastnlocalc_(const int *idataset, double *xsec);
+-  int fastnlocalctop_(const int *idataset, double *xsec, double *thbin, double *tot, int *Npt);
+-  int fastnlopointskip_(const int *idataset, int *point, int *npoints);
+-  int hf_errlog_(const int* ID, const char* TEXT, long length);
+-  int hf_stop_();
++  void fastnloinit_(const char *s, const int *idataset, const char *thfile, int *I_FIT_ORDER, bool *PublicationUnits , double* murdef, double* murscale, double *mufdef, double* mufscale);
++  void fastnlocalc_(const int *idataset, double *xsec);
++  void fastnlocalctop_(const int *idataset, double *xsec, double *thbin, double *tot, int *Npt);
++  void fastnlopointskip_(const int *idataset, int *point, int *npoints);
++  void hf_errlog_(const int* ID, const char* TEXT, long length);
++  void hf_stop_();
+   double interp_(double *A, double *xx1, double *x, int *NGrid1, double *res);
+-  int setfastnlotoppar_(const int *idataset);
++  void setfastnlotoppar_(const int *idataset);
+ }
+ 
+ 
+@@ -58,7 +58,7 @@ map<int, FastNLOxFitter*> gFastNLO_array;
+ map<int, BoolArray*>     gUsedPoints_array;
+ int CreateUsedPointsArray(int idataset, int npoints);
+ 
+-int fastnloinit_(const char *s, const int *idataset, const char *thfile, int *I_FIT_ORDER, bool *PublicationUnits , double* murdef, double* murscale, double *mufdef, double* mufscale) {
++void fastnloinit_(const char *s, const int *idataset, const char *thfile, int *I_FIT_ORDER, bool *PublicationUnits , double* murdef, double* murscale, double *mufdef, double* mufscale) {
+ 
+   
+    map<int, FastNLOxFitter*>::const_iterator FastNLOIterator = gFastNLO_array.find(*idataset);
+@@ -67,7 +67,7 @@ int fastnloinit_(const char *s, const int *idataset, const char *thfile, int *I_
+      const char* text = "I: Double initialization of the same fastnlo data set!";
+      hf_errlog_(&id, text, (long)strlen(text));
+      //hf_stop_();
+-     return 1;
++     return;
+    }
+    
+    FastNLOxFitter* fnloreader = new FastNLOxFitter( thfile );  
+@@ -112,10 +112,9 @@ int fastnloinit_(const char *s, const int *idataset, const char *thfile, int *I_
+    }
+    
+    gFastNLO_array.insert(pair<int, FastNLOxFitter*>(*idataset, fnloreader) );
+-   return 0;
+ }
+ 
+-int setfastnlotoppar_(const int *idataset) {
++void setfastnlotoppar_(const int *idataset) {
+    //!< Dedicated settings for difftop
+    map<int, FastNLOxFitter*>::const_iterator FastNLOIterator = gFastNLO_array.find(*idataset);
+    map<int, BoolArray*>::const_iterator UsedPointsIterator = gUsedPoints_array.find(*idataset);
+@@ -130,11 +129,9 @@ int setfastnlotoppar_(const int *idataset) {
+    fnloreader->SetExternalFuncForMuF( &Function_Mu );
+    fnloreader->SetExternalFuncForMuR( &Function_Mu);
+    //fnloreader->SetScaleFactorsMuRMuF(1.0,1.0); //Be reminded that muR and muF scales are hard coded (that's not true!)
+-
+-   return 0;
+ }
+ 
+-int fastnlocalc_(const int *idataset, double *xsec) {
++void fastnlocalc_(const int *idataset, double *xsec) {
+   
+    map<int, FastNLOxFitter*>::const_iterator FastNLOIterator = gFastNLO_array.find(*idataset);
+    map<int, BoolArray*>::const_iterator UsedPointsIterator = gUsedPoints_array.find(*idataset);
+@@ -176,13 +173,10 @@ int fastnlocalc_(const int *idataset, double *xsec) {
+        outputidx++;
+      }
+    }
+- 
+-
+-   return 0;
+ }
+ 
+ //MK14 New function for Difftop calculation: it is called in trunk/src/difftop_fastnlo.f
+-int fastnlocalctop_(const int *idataset, double *xsec, double *thbin, double *tot, int *Npt){
++void fastnlocalctop_(const int *idataset, double *xsec, double *thbin, double *tot, int *Npt){
+   
+    map<int, FastNLOxFitter*>::const_iterator FastNLOIterator = gFastNLO_array.find(*idataset);
+    map<int, BoolArray*>::const_iterator UsedPointsIterator = gUsedPoints_array.find(*idataset);
+@@ -262,10 +256,6 @@ int fastnlocalctop_(const int *idataset, double *xsec, double *thbin, double *to
+      Total += interpC(xsec,xg[k],thbin,Nthpoints)*wg[k];
+ 
+    *tot = Total;
+-
+-
+-
+-   return 0;
+ }
+ 
+ 
+@@ -277,7 +267,7 @@ int fastnlocalctop_(const int *idataset, double *xsec, double *thbin, double *to
+ 
+ 
+ 
+-int fastnlopointskip_(const int *idataset, int *point, int *npoints) {
++void fastnlopointskip_(const int *idataset, int *point, int *npoints) {
+   map<int, BoolArray*>::const_iterator UsedPointsIterator = gUsedPoints_array.find(*idataset);
+   if(UsedPointsIterator == gUsedPoints_array.end( )) 
+     CreateUsedPointsArray(*idataset, *npoints);
+@@ -292,8 +282,6 @@ int fastnlopointskip_(const int *idataset, int *point, int *npoints) {
+   
+   BoolArray*     usedpoints = UsedPointsIterator->second;
+   usedpoints->at(*point-1) = false;
+-
+-  return 0;
+ }
+ 
+ int CreateUsedPointsArray(int idataset, int npoints) {
+diff --git a/Hathor/src/HathorInterface.cc b/Hathor/src/HathorInterface.cc
+--- a/Hathor/src/HathorInterface.cc
++++ b/Hathor/src/HathorInterface.cc
+@@ -6,9 +6,9 @@
+ #include "../interface/xFitterPdf.h"
+ 
+ extern "C" {
+-  int hathorinit_(const int* idataset, const double& sqrtS, const bool& ppbar, const double& mt,
++  void hathorinit_(const int* idataset, const double& sqrtS, const bool& ppbar, const double& mt,
+ 		  const unsigned int& pertubOrder, const unsigned int& precisionLevel);
+-  int hathorcalc_(const int *idataset, double *xsec);
++  void hathorcalc_(const int *idataset, double *xsec);
+ }
+ 
+ extern "C" {
+@@ -19,7 +19,7 @@ extern "C" {
+ }
+ 
+ extern "C" {
+-  int hf_errlog_(const int* ID, const char* TEXT, long length);
++  void hf_errlog_(const int* ID, const char* TEXT, long length);
+ }
+ 
+ // FIXME: delete pointers at the end! (in some hathordestroy_ or so)
+@@ -28,7 +28,7 @@ xFitterPdf* pdf;
+ int* rndStore;
+ double mtop;
+ 
+-int hathorinit_(const int* idataset, const double& sqrtS, const bool& ppbar, const double& mt,
++void hathorinit_(const int* idataset, const double& sqrtS, const bool& ppbar, const double& mt,
+ 		const unsigned int& pertubOrder, const unsigned int& precisionLevel) {
+ 
+   if(hathor_array.size()==0) {
+@@ -69,7 +69,7 @@ int hathorinit_(const int* idataset, const double& sqrtS, const bool& ppbar, con
+   return 0;
+ }
+ 
+-int hathorcalc_(const int *idataset, double *xsec) {
++void hathorcalc_(const int *idataset, double *xsec) {
+   rlxd_reset(rndStore);
+ 
+   std::map<int, Hathor*>::const_iterator hathorIter = hathor_array.find(*idataset);
+diff --git a/src/TheorEval.cc b/src/TheorEval.cc
+--- a/src/TheorEval.cc
++++ b/src/TheorEval.cc
+@@ -62,6 +62,7 @@ TheorEval::initTheory()
+   list<tToken> sl;
+   this->assignTokens(sl);
+   this->convertToRPN(sl);
++  return 0;
+ }
+ 
+ int 
+@@ -167,6 +168,7 @@ TheorEval::assignTokens(list<tToken> &sl)
+       sl.push_back(t);
+     }
+   }
++  return 0;
+ }
+ 
+ int
+@@ -217,6 +219,7 @@ TheorEval::convertToRPN(list<tToken> &sl)
+   cout << endl;
+   */
+   
++  return 0;
+ }
+ 
+ int
+@@ -236,6 +239,7 @@ TheorEval::initTerm(int iterm, valarray<double> *val)
+     hf_errlog_(id, text, textlen);
+     return -1;
+   }
++  return 0;
+ }
+ 
+ int
+@@ -348,6 +352,7 @@ TheorEval::initGridTerm(int iterm, valarray<double> *val)
+ 
+   // associate grid and valarray pointers in token
+   _mapGridToken[g] = val;
++  return 0;
+ }
+ 
+ int
+@@ -430,6 +435,7 @@ TheorEval::initKfTerm(int iterm, valarray<double> *val)
+ 
+   // write k-factor array to the token valarray
+   *val = valarray<double>(vkf.data(), vkf.size());
++  return 0;
+ }  
+ 
+ int
+@@ -465,6 +471,7 @@ TheorEval::setCKM(const vector<double> &v_ckm)
+    int textlen = strlen(text);
+    hf_errlog_(id, text, textlen);
+ #endif
++   return 0;
+ }
+ 
+ int
+@@ -531,6 +538,7 @@ TheorEval::Evaluate(valarray<double> &vte )
+       }
+     //vte /= _units;
+   }
++  return 0;
+ }
+ 
+ int
+@@ -555,6 +563,7 @@ TheorEval::getGridValues()
+     
+     
+   }
++  return 0;
+ }
+ 
+ int
+diff --git a/src/ftheor_eval.cc b/src/ftheor_eval.cc
+--- a/src/ftheor_eval.cc
++++ b/src/ftheor_eval.cc
+@@ -19,15 +19,15 @@
+ using namespace std;
+ 
+ extern "C" {
+-  int set_theor_eval_(int *dsId);//, int *nTerms, char **TermName, char **TermType, 
++  void set_theor_eval_(int *dsId);//, int *nTerms, char **TermName, char **TermType, 
+ //    char **TermSource, char *TermExpr);
+-  int set_theor_bins_(int *dsId, int *nBinDimension, int *nPoints, int *binFlags, 
++  void set_theor_bins_(int *dsId, int *nBinDimension, int *nPoints, int *binFlags, 
+     double *allBins);
+ //  int set_theor_units_(int *dsId, double *units);
+-  int init_theor_eval_(int *dsId);
+-  int update_theor_ckm_();
+-  int get_theor_eval_(int *dsId, int* np, int* idx);
+-  int close_theor_eval_();
++  void init_theor_eval_(int *dsId);
++  void update_theor_ckm_();
++  void get_theor_eval_(int *dsId, int* np, int* idx);
++  void close_theor_eval_();
+ }
+ 
+ /// global dataset to theory evaluation pointer map
+@@ -59,7 +59,7 @@ extern struct ord_scales {
+  dataset ID.
+  write details on argumets
+  */
+-int set_theor_eval_(int *dsId)//, int *nTerms, char **TermName, char **TermType, 
++void set_theor_eval_(int *dsId)//, int *nTerms, char **TermName, char **TermType, 
+ //  char **TermSource, char *TermExpr)
+ {
+   // convert fortran strings to c++
+@@ -90,15 +90,13 @@ int set_theor_eval_(int *dsId)//, int *nTerms, char **TermName, char **TermType,
+     << " already exists." << endl;
+     exit(1); // make proper exit later
+   }
+-
+-  return 1;
+ }
+ 
+ /*!
+  Sets datasets bins in theory evaluations.
+  write details on argumets
+  */
+-int set_theor_bins_(int *dsId, int *nBinDimension, int *nPoints, int *binFlags, 
++void set_theor_bins_(int *dsId, int *nBinDimension, int *nPoints, int *binFlags, 
+   double *allBins)
+ {
+   tTEmap::iterator it = gTEmap.find(*dsId);
+@@ -110,7 +108,6 @@ int set_theor_bins_(int *dsId, int *nBinDimension, int *nPoints, int *binFlags,
+   
+   TheorEval *te = gTEmap.at(*dsId);
+   te->setBins(*nBinDimension, *nPoints, binFlags, allBins);
+-  return 1;
+ }
+ 
+ /*
+@@ -132,7 +129,7 @@ int set_theor_units_(int *dsId, double *units)
+ /*!
+  Initializes theory for requested dataset.
+  */
+-int init_theor_eval_(int *dsId)
++void init_theor_eval_(int *dsId)
+ {
+   tTEmap::iterator it = gTEmap.find(*dsId);
+   if (it == gTEmap.end() ) { 
+@@ -148,7 +145,7 @@ int init_theor_eval_(int *dsId)
+ /*!
+  Updates the CKM matrix to all the initialized appl grids
+  */
+-int update_theor_ckm_()
++void update_theor_ckm_()
+ {
+   double a_ckm[] = { ckm_matrix_.Vud, ckm_matrix_.Vus, ckm_matrix_.Vub,
+                                   ckm_matrix_.Vcd, ckm_matrix_.Vcs, ckm_matrix_.Vcb,
+@@ -164,7 +161,7 @@ int update_theor_ckm_()
+ /*!
+  Evaluates theory for requested dataset and writes it to the global THEO array.
+  */
+-int get_theor_eval_(int *dsId, int *np, int*idx)
++void get_theor_eval_(int *dsId, int *np, int*idx)
+ {
+ 
+   tTEmap::iterator it = gTEmap.find(*dsId);
+@@ -194,11 +191,11 @@ int get_theor_eval_(int *dsId, int *np, int*idx)
+   // write the predictions to THEO array
+   if( ip != *np ){
+     cout << "ERROR in get_theor_eval_: number of points mismatch" << endl;
+-    return -1;
++    return;
+   }
+ }
+ 
+-int close_theor_eval_()
++void close_theor_eval_()
+ {
+   tTEmap::iterator it = gTEmap.begin();
+   for (; it!= gTEmap.end(); it++){
+diff --git a/src/lhapdf6_output.c b/src/lhapdf6_output.c
+--- a/src/lhapdf6_output.c
++++ b/src/lhapdf6_output.c
+@@ -64,7 +64,7 @@ extern double bvalij_(int *,int *,int *,int *,int *);
+ extern double bvalxq_(int *,int *,double *,double *,int *);
+ extern double hf_get_alphas_(double *);
+ extern int getord_(int *);
+-extern int grpars_(int *, double *, double *, int *, double *, double *, int *);
++extern void grpars_(int *, double *, double *, int *, double *, double *, int *);
+ extern int getcbt_(int *, double *, double *, double *);
+ extern void getpdfunctype_heraf_(int *mc, int *asymh, int *symh, char *name, size_t size);
+ extern void hf_errlog_(int *, char *, size_t);
+diff --git a/tools/draw/include/FileOpener.h b/tools/draw/include/FileOpener.h
+--- a/tools/draw/include/FileOpener.h
++++ b/tools/draw/include/FileOpener.h
+@@ -61,7 +61,7 @@ class InFileOpener_t {
+   string GetPath() const {return ind < 0 ? "" : Flist[ind];}
+   
+   // ==================================
+-  int Add(const string& fname) {
++  void Add(const string& fname) {
+     Flist.push_back(fname);
+   }
+ 

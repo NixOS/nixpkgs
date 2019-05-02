@@ -34,15 +34,15 @@ let
     "armv7l-linux" = "arm32";
   };
 
-  hplipArch = hplipPlatforms."${stdenv.system}"
-    or (throw "HPLIP not supported on ${stdenv.system}");
+  hplipArch = hplipPlatforms."${stdenv.hostPlatform.system}"
+    or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
   pluginArches = [ "x86_32" "x86_64" "arm32" ];
 
 in
 
 assert withPlugin -> builtins.elem hplipArch pluginArches
-  || throw "HPLIP plugin not supported on ${stdenv.system}";
+  || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
 pythonPackages.buildPythonApplication {
   inherit name src;
@@ -187,6 +187,6 @@ pythonPackages.buildPythonApplication {
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
-    maintainers = with maintainers; [ jgeerds ttuegel ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

@@ -16,7 +16,7 @@
 
 let
   platform =
-    if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then
       "Linux"
     else
       throw "Mathematica requires i686-linux or x86_64 linux";
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ]);
 
   ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
+    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
       (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   phases = "unpackPhase installPhase fixupPhase";

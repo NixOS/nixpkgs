@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation  rec {
   name = "setbfree-${version}";
-  version = "0.8.7";
+  version = "0.8.8";
 
   src = fetchurl {
     url = "https://github.com/pantherb/setBfree/archive/v${version}.tar.gz";
-    sha256 = "07s320r67cz0cdjdsbcwn0fw3xs0wz7lgrybqpws2skvkbls228q";
+    sha256 = "1ldxwds99azingkjh246kz7x3j7307jhr0fls5rjjbcfchpg7v99";
   };
 
   patchPhase = ''

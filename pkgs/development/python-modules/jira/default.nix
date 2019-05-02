@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "1.0.15";
+  version = "2.0.0";
 
   PBR_VERSION = version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "20108a1d5b0dd058d5d4e0047f2d09ee06aaa413b22ca4d5c249e86167417fe8";
+    sha256 = "e2a94adff98e45b29ded030adc76103eab34fa7d4d57303f211f572bedba0e93";
   };
 
   buildInputs = [ glibcLocales pytest pytestcov pytestrunner pbr ];

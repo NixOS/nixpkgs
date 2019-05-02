@@ -74,7 +74,7 @@ let
   importLib = {zpoolCmd, awkCmd, cfgZfs}: ''
     poolReady() {
       pool="$1"
-      state="$("${zpoolCmd}" import | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
+      state="$("${zpoolCmd}" import 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
       if [[ "$state" = "ONLINE" ]]; then
         return 0
       else
@@ -535,6 +535,7 @@ in
 
       systemd.timers.zfs-scrub = {
         wantedBy = [ "timers.target" ];
+        after = [ "multi-user.target" ]; # Apparently scrubbing before boot is complete hangs the system? #53583
         timerConfig = {
           OnCalendar = cfgScrub.interval;
           Persistent = "yes";

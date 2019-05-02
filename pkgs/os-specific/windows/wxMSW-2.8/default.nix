@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, compat24 ? false, compat26 ? true, unicode ? true
-, hostPlatform
-}:
+{ stdenv, fetchurl, compat24 ? false, compat26 ? true, unicode ? true }:
 
 stdenv.mkDerivation {
   name = "wxMSW-2.8.11";

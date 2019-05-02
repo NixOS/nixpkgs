@@ -246,10 +246,7 @@ checkFS() {
     if [ "$fsType" = iso9660 -o "$fsType" = udf ]; then return 0; fi
 
     # Don't check resilient COWs as they validate the fs structures at mount time
-    if [ "$fsType" = btrfs -o "$fsType" = zfs ]; then return 0; fi
-
-    # Skip fsck for bcachefs - not implemented yet.
-    if [ "$fsType" = bcachefs ]; then return 0; fi
+    if [ "$fsType" = btrfs -o "$fsType" = zfs -o "$fsType" = bcachefs ]; then return 0; fi
 
     # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
     if [ "$fsType" = nilfs2 ]; then return 0; fi
@@ -260,6 +257,13 @@ checkFS() {
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
         echo 'cannot check filesystem with type "auto"!'
+        return 0
+    fi
+
+    # Device might be already mounted manually 
+    # e.g. NBD-device or the host filesystem of the file which contains encrypted root fs
+    if mount | grep -q "^$device on "; then
+        echo "skip checking already mounted $device"
         return 0
     fi
 
@@ -336,6 +340,10 @@ mountFS() {
                 echo "resizing $device..."
                 e2fsck -fp "$device"
                 resize2fs "$device"
+            elif [ "$fsType" = f2fs ]; then
+                echo "resizing $device..."
+                fsck.f2fs -fp "$device"
+                resize.f2fs "$device" 
             fi
             ;;
     esac
@@ -547,7 +555,7 @@ echo /sbin/modprobe > /proc/sys/kernel/modprobe
 # Start stage 2.  `switch_root' deletes all files in the ramfs on the
 # current root.  Note that $stage2Init might be an absolute symlink,
 # in which case "-e" won't work because we're not in the chroot yet.
-if ! test -e "$targetRoot/$stage2Init" -o ! -L "$targetRoot/$stage2Init"; then
+if [ ! -e "$targetRoot/$stage2Init" ] && [ ! -L "$targetRoot/$stage2Init" ] ; then
     echo "stage 2 init script ($targetRoot/$stage2Init) not found"
     fail
 fi

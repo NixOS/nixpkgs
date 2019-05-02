@@ -1,21 +1,23 @@
 { stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
-, file, which
-, autoreconfHook
-, git
-, texinfo5
+, file, which, ncurses
+, texinfo
+, buildPackages
 , qtbase ? null
-, withPython ? false, swig2 ? null, python ? null
+, pythonSupport ? false, swig2 ? null, python ? null
 }:
 
-let inherit (stdenv) lib system; in
+let
+  inherit (stdenv) lib;
+  inherit (stdenv.hostPlatform) system;
+in
 
 stdenv.mkDerivation rec {
   name = "gpgme-${version}";
-  version = "1.11.1";
+  version = "1.13.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "0vxx5xaag3rhp4g2arp5qm77gvz4kj0m3hnpvhkdvqyjfhbi26rd";
+    sha256 = "0c6676g0yhfsmy32i1dgwh5cx0ja8vhcqf4k08zad177m53kxcnl";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -25,8 +27,10 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo5 ]
-  ++ lib.optionals withPython [ python swig2 which ];
+  nativeBuildInputs = [ file pkgconfig gnupg texinfo ]
+  ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   postPatch =''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
@@ -35,7 +39,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
     "--with-libgpg-error-prefix=${libgpgerror.dev}"
-  ] ++ lib.optional withPython "--enable-languages=python";
+    "--with-libassuan-prefix=${libassuan.dev}"
+  ] ++ lib.optional pythonSupport "--enable-languages=python";
 
   NIX_CFLAGS_COMPILE =
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
@@ -46,7 +51,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ which ];
 
-  doCheck = false; # fails 8 out of 26 tests with "GPGME: Decryption failed". Spooky!
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://gnupg.org/software/gpgme/index.html;

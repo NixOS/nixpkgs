@@ -1,6 +1,6 @@
-{ stdenv, buildPerlPackage, fetchurl }:
+{ stdenv, perlPackages, fetchurl }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "Graph-Easy-${version}";
   version = "0.76";
   src = fetchurl {
@@ -11,7 +11,7 @@ buildPerlPackage rec {
   meta = with stdenv.lib; {
     description = "Render/convert graphs in/from various formats";
     license = licenses.gpl1;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.jensbin ];
   };
 }

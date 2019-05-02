@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "imgaug";
-  version = "0.2.6";
+  version = "0.2.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wy8ydkqq0jrwxwdv04q89n3gwsr9pjaspsbw26ipg5a5lnhb9c2";
+    sha256 = "03dcbb3d7485de372eacde4b890b676e0c7a992524ee4bc72bd05a9a1cc5f9a4";
   };
 
   propagatedBuildInputs = [

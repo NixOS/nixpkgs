@@ -1,5 +1,5 @@
 { stdenv, buildGoPackage, fetchFromGitHub, go-bindata, libvirt, qemu
-, gpgme, makeWrapper, hostPlatform, vmnet, python
+, gpgme, makeWrapper, vmnet, python
 , docker-machine-kvm, docker-machine-kvm2
 , extraDrivers ? []
 }:
@@ -14,7 +14,9 @@ let
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.28.1";
+  version = "1.0.0";
+
+  kubernetesVersion = "1.14.0";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -22,20 +24,22 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "0c36rzsdzxf9q6l4hl506bsd4qwmw033i0k1xhqszv9agg7qjlmm";
+    sha256 = "170iy0h27gkz2hg485rnawdw069gxwgkwsjmfj5yag2kkgl7gxa3";
   };
 
-  buildInputs = [ go-bindata makeWrapper gpgme ] ++ stdenv.lib.optional hostPlatform.isDarwin vmnet;
-  subPackages = [ "cmd/minikube" ] ++ stdenv.lib.optional hostPlatform.isDarwin "cmd/drivers/hyperkit";
+  buildInputs = [ go-bindata makeWrapper gpgme ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin vmnet;
+  subPackages = [ "cmd/minikube" ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin "cmd/drivers/hyperkit";
 
   preBuild = ''
     pushd go/src/${goPackagePath} >/dev/null
 
     go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets deploy/addons/...
 
-    ISO_VERSION=$(grep "^ISO_VERSION" Makefile | sed "s/^.*\s//")
+    VERSION_MAJOR=$(grep "^VERSION_MAJOR" Makefile | sed "s/^.*\s//")
+    VERSION_MINOR=$(grep "^VERSION_MINOR" Makefile | sed "s/^.*\s//")
+    ISO_VERSION=v$VERSION_MAJOR.$VERSION_MINOR.0
     ISO_BUCKET=$(grep "^ISO_BUCKET" Makefile | sed "s/^.*\s//")
-    KUBERNETES_VERSION=$(${python}/bin/python hack/get_k8s_version.py --k8s-version-only 2>&1) || true
+    KUBERNETES_VERSION=${kubernetesVersion}
 
     export buildFlagsArray="-ldflags=\
       -X k8s.io/minikube/pkg/version.version=v${version} \
@@ -56,7 +60,7 @@ in buildGoPackage rec {
 
   postFixup = ''
     wrapProgram $bin/bin/${pname} --prefix PATH : $bin/bin:${stdenv.lib.makeBinPath binPath}
-  '' + stdenv.lib.optionalString hostPlatform.isDarwin ''
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv $bin/bin/hyperkit $bin/bin/docker-machine-driver-hyperkit
   '';
 
@@ -64,7 +68,7 @@ in buildGoPackage rec {
     homepage    = https://github.com/kubernetes/minikube;
     description = "A tool that makes it easy to run Kubernetes locally";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ ebzzry copumpkin ];
+    maintainers = with maintainers; [ ebzzry copumpkin vdemeester ];
     platforms   = with platforms; unix;
   };
 }

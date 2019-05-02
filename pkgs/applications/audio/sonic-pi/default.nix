@@ -20,14 +20,14 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  version = "3.0.1";
+  version = "3.1.0";
   name = "sonic-pi-${version}";
 
   src = fetchFromGitHub {
     owner = "samaaron";
     repo = "sonic-pi";
     rev = "v${version}";
-    sha256 = "1l1892hijp1dj2h799sfjr699q6xp660n0siibab5kv238521a81";
+    sha256 = "0gi4a73szaa8iz5q1gxgpsnyvhhghcfqm6bfwwxbix4m5csbfgh9";
   };
 
   buildInputs = [
@@ -58,21 +58,21 @@ in stdenv.mkDerivation rec {
     export SONIC_PI_HOME=$TMPDIR
     export AUBIO_LIB=${aubio}/lib/libaubio.so
 
-    pushd app/server/bin
+    pushd app/server/ruby/bin
       ./compile-extensions.rb
       ./i18n-tool.rb -t
     popd
 
     pushd app/gui/qt
       cp -f ruby_help.tmpl ruby_help.h
-      ../../server/bin/qt-doc.rb -o ruby_help.h
+      ../../server/ruby/bin/qt-doc.rb -o ruby_help.h
 
       substituteInPlace SonicPi.pro \
         --replace "LIBS += -lrt -lqt5scintilla2" \
                   "LIBS += -lrt -lqscintilla2 -lqwt"
 
       lrelease SonicPi.pro
-      qmake SonicPi.pro 
+      qmake SonicPi.pro
 
       make
     popd

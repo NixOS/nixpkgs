@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
     mkdir .bin
     ln -s ${qt4}/bin/moc .bin/moc-qt4
     addToSearchPath PATH .bin
+    sed -i -e "s@LD=\$_cc@LD=\$_cxx@" configure
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "Autoclicker application, which enables you to automatically click the left mousebutton";
+    homepage = http://xautoclick.sourceforge.net;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

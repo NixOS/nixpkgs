@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, autoreconfHook, bison, flex, openssl, gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "charybdis-4.1";
+  name = "charybdis-4.1.1";
 
   src = fetchFromGitHub {
     owner = "charybdis-ircd";
     repo = "charybdis";
     rev = name;
-    sha256 = "1j0fjf4rdiyvakxqa97x272xra64rzjhbj8faciyb4b13pyrdsmw";
+    sha256 = "0wvssc8b1xq6svcqrwxrpc1ga8ip0sksv73wwbk8na0pmysdvpg0";
   };
 
   postPatch = ''

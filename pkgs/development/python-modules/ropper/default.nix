@@ -8,11 +8,11 @@
 
 buildPythonApplication rec {
   pname = "ropper";
-  version = "1.11.6";
+  version = "1.11.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "33777d0c3ddd9ca7bc48f53dbe2c4a222a567f1125c43b1c34fb1b360d0b19dc";
+    sha256 = "245c6a1c8b294209bed039cd6a389f1e298d3fe6783d48ad9c6b2df3a41f51ee";
   };
   # XXX tests rely on user-writeable /dev/shm to obtain process locks and return PermissionError otherwise
   # workaround: sudo chmod 777 /dev/shm

@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "CONFIG+=zim_support" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://goldendict.org/;
     description = "A feature-rich dictionary lookup program";
-
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ gebner astsmtl ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ gebner astsmtl ];
+    license = licenses.gpl3Plus;
   };
 }

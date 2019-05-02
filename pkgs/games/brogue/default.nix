@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, SDL, ncurses, libtcod }:
+{ stdenv, fetchurl, SDL, ncurses, libtcod, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   name = "brogue-${version}";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchurl {
     url = "https://sites.google.com/site/broguegame/brogue-${version}-linux-amd64.tbz2";
-    sha256 = "1lygf17hm7wqlp0jppaz8dn9a9ksmxz12vw7jyfavvqpwdgz79gb";
+    sha256 = "0i042zb3axjf0cpgpdh8hvfn66dbfizidyvw0iymjk2n760z2kx7";
   };
 
   prePatch = ''
@@ -19,8 +19,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL ncurses libtcod ];
 
+  desktopItem = makeDesktopItem {
+    name = "brogue";
+    desktopName = "Brogue";
+    genericName = "Roguelike";
+    comment = "Brave the Dungeons of Doom!";
+    icon = "brogue";
+    exec = "brogue";
+    categories = "Game;AdventureGame;";
+    terminal = "false";
+  };
+
   installPhase = ''
     install -m 555 -D bin/brogue $out/bin/brogue
+    install -m 444 -D ${desktopItem}/share/applications/brogue.desktop $out/share/applications/brogue.desktop
+    install -m 444 -D bin/brogue-icon.png $out/share/icons/hicolor/256x256/apps/brogue.png
     mkdir -p $out/share/brogue
     cp -r bin/fonts $out/share/brogue/
   '';

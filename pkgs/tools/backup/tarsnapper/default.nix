@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "03db49188f4v1946c8mqqj30ah10x68hbg3a58js0syai32v12pm";
   };
 
-  buildInputs = with python3Packages; [ nose pytest ];
+  checkInputs = with python3Packages; [ nose pytest ];
 
   checkPhase = ''
     py.test .

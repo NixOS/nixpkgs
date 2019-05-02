@@ -5,7 +5,7 @@ with lib;
 {
   options = {
     services.pptpd = {
-      enable = mkEnableOption "Whether pptpd should be run on startup.";
+      enable = mkEnableOption "pptpd, the Point-to-Point Tunneling Protocol daemon";
 
       serverIp = mkOption {
         type        = types.string;

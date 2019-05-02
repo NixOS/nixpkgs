@@ -1,12 +1,12 @@
 {
   lolcat = {
-    dependencies = ["manpages" "paint" "trollop"];
+    dependencies = ["manpages" "optimist" "paint"];
     source = {
       remotes = ["http://rubygems.org"];
-      sha256 = "1z0j354sj2qm2srgz3i28s347fwylvv1j614806cr33zcd1j4mwp";
+      sha256 = "0d1yh2ikyhyh7am4qznd6fzv2pyvk82xrnsrsbbyxzcqfz9x6aa9";
       type = "gem";
     };
-    version = "99.9.11";
+    version = "99.9.69";
   };
   manpages = {
     source = {
@@ -16,20 +16,20 @@
     };
     version = "0.6.1";
   };
+  optimist = {
+    source = {
+      remotes = ["http://rubygems.org"];
+      sha256 = "05jxrp3nbn5iilc1k7ir90mfnwc5abc9h78s5rpm3qafwqxvcj4j";
+      type = "gem";
+    };
+    version = "3.0.0";
+  };
   paint = {
     source = {
       remotes = ["http://rubygems.org"];
-      sha256 = "1gnh9cihc84w4xbw51pg15crjvhblbq6nkzljrp7kmn3434nsg0d";
+      sha256 = "0ldb269l3pzkihmsws19cr9h3l6naw8c2fqpav8ck3nllnyiv7r2";
       type = "gem";
     };
-    version = "2.0.1";
-  };
-  trollop = {
-    source = {
-      remotes = ["http://rubygems.org"];
-      sha256 = "0415y63df86sqj43c0l82and65ia5h64if7n0znkbrmi6y0jwhl8";
-      type = "gem";
-    };
-    version = "2.1.2";
+    version = "2.0.3";
   };
 }

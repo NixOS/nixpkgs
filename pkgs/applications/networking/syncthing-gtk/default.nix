@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
 , gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
 , gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3
-, bcrypt, gobjectIntrospection }:
+, bcrypt, gobject-introspection, gsettings-desktop-schemas }:
 
 buildPythonApplication rec {
   version = "0.9.4";
@@ -17,14 +17,14 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     wrapGAppsHook
     # For setup hook populating GI_TYPELIB_PATH
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   buildInputs = [
     gtk3 librsvg libappindicator-gtk3
     libnotify gnome3.adwaita-icon-theme
     # Schemas with proxy configuration
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
   ];
 
   propagatedBuildInputs = [

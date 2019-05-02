@@ -1,25 +1,25 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "1password-${version}";
-  version = "0.5.1";
+  pname = "1password";
+  version = "0.5.5";
   src =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       fetchzip {
         url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";
-        sha256 = "08kzjilxpkvlwqjyxnic1n6xiy6gkndijwxdksm59k7c56mdawsz";
+        sha256 = "1jwkvj6xxfgn08j6wzwcra3p1dp04vblzr2g5s1y3bj4r7gs4gax";
         stripRoot = false;
       }
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip {
         url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
-        sha256 = "1bsbzaqws0z991r6rkjrxay74fj4g5ld4d748ygr0950zwi1m3h7";
+        sha256 = "1svic2b2msbwzfx3qxfglxp0jjzy3p3v78273wab942zh822ld8b";
         stripRoot = false;
       }
-    else if stdenv.system == "x86_64-darwin" then
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then
       fetchzip {
         url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_darwin_amd64_v${version}.zip";
-        sha256 = "1dhr8m9icip27v802gxl1vhl9rf0jq5awirdm72lqmlypj86df0g";
+        sha256 = "03bnwn06066hvp0n30260mhvkjr60dl93nj9l7p6a0ndcv7w77r8";
         stripRoot = false;
       }
     else throw "Architecture not supported";

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "springlobby-${version}";
-  version = "0.264";
+  version = "0.267";
 
   src = fetchurl {
     url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "1i31anvvywhl2m8014m3vk74cj74l37j6a0idzfhd4ack8b9hg2x";
+    sha256 = "0yv7j9l763iqx7hdi2pcz5jkj0068yrffb8nrav7pwg0g3s0znak";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     boost libpng libX11 libnotify gtk2 doxygen makeWrapper glib minizip alure
   ];
 
-  patches = [ ./revert_58b423e.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed
+  patches = [ ./revert_58b423e.patch ./fix-certs.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed
 
   enableParallelBuilding = true;
 

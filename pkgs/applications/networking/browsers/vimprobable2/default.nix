@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, glib-networking, gtk2, libsoup, libX11, perl,
-  pkgconfig, webkit, gsettings-desktop-schemas }:
+  pkgconfig, webkitgtk, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper gtk2 libsoup libX11 perl webkit gsettings-desktop-schemas ];
+  buildInputs = [ makeWrapper gtk2 libsoup libX11 perl webkitgtk gsettings-desktop-schemas ];
 
   hardeningDisable = [ "format" ];
 

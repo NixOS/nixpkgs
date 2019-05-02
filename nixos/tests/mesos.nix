@@ -33,6 +33,7 @@ import ./make-test.nix ({ pkgs, ...} : rec {
 
   simpleDocker = pkgs.dockerTools.buildImage {
     name = "echo";
+    tag = "latest";
     contents = [ pkgs.stdenv.shellPackage pkgs.coreutils ];
     config = {
       Env = [

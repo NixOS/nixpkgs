@@ -2,26 +2,27 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, pillow
 , numpy
-, ffmpeg_2
-, git
+, ffmpeg_4
 , libav
 , pkgconfig
 }:
 
 buildPythonPackage rec {
   pname = "av";
-  version = "0.4.1";
+  version = "6.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bf9a8d113392c6a445f424e16f9e64ac53d1db1548731e6326763d555647c24f";
+    sha256 = "eebbb56eeae650b1fc551f94d51aee39b487bf4df73c39daea186c5d2950650f";
   };
 
-  buildInputs = [ nose pillow numpy ffmpeg_2 git libav pkgconfig ];
+  checkInputs = [ nose numpy ];
 
-  # Because of https://github.com/mikeboers/PyAV/issues/152
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ffmpeg_4 ];
+
+  # Tests require downloading files from internet
   doCheck = false;
 
   meta = {

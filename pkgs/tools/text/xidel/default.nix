@@ -11,17 +11,17 @@ stdenv.mkDerivation rec {
   #};
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "mirror://sourceforge/videlibri/Xidel/Xidel%20${version}/xidel_${version}-1_amd64.deb";
         sha256 = "0hskc74y7p4j1x33yx0w4fvr610p2yimas8pxhr6bs7mb9b300h7";
       }
-    else if stdenv.system == "i686-linux" then
+    else if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         url = "mirror://sourceforge/videlibri/Xidel/Xidel%20${version}/xidel_${version}-1_i386.deb";
         sha256 = "07yk5sk1p4jm0jmgjwdm2wq8d2wybi1wkn1qq5j5y03z1pdc3fi6";
       }
-    else throw "xidel is not supported on ${stdenv.system}";
+    else throw "xidel is not supported on ${stdenv.hostPlatform.system}";
 
   buildInputs = [ dpkg ];
 

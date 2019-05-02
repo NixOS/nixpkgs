@@ -43,12 +43,12 @@ let
     };
 in {
   wt3 = generic {
-    version = "3.3.10";
-    sha256 = "1y25mhghgbgjgycpny0x4z95xn98q0wraab1c5gkwnay097bgwdy";
+    version = "3.3.11";
+    sha256 = "1s1bwg3s7brnspr9ya1vg5mr29dbvhf05s606fiv409b7ladqvxq";
   };
 
   wt4 = generic {
-    version = "4.0.3";
-    sha256 = "01xch5dkpcanwhr515236wa9mdmnq2a2j13dn7smyhwzqgbpknsg";
+    version = "4.0.5";
+    sha256 = "1gn8f30mjmn9aaxdazk49wijz37nglfww15ydrjiyhl6v5xhsjdv";
   };
 }

@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.17.0";
+  version = "0.18.1";
 
 in mkDerivation rec {
   name = "sddm-${version}";
@@ -13,12 +13,11 @@ in mkDerivation rec {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "1m35ly6miwy8ivsln3j1bfv0nxbc4gyqnj7f847zzp53jsqrm3mq";
+    sha256 = "0an1zafz0yhxd9jgd3gzdwmaw5f9vs4c924q56lp2yxxddbmzjcq";
   };
 
   patches = [
     ./sddm-ignore-config-mtime.patch
-    ./qt511.patch
   ];
 
   postPatch =
@@ -42,11 +41,11 @@ in mkDerivation rec {
     # not supported anyway.
     "-DUID_MIN=1000"
     "-DUID_MAX=29999"
-  ];
 
-  preConfigure = ''
-    export cmakeFlags="$cmakeFlags -DQT_IMPORTS_DIR=$out/$qtQmlPrefix -DCMAKE_INSTALL_SYSCONFDIR=$out/etc -DSYSTEMD_SYSTEM_UNIT_DIR=$out/lib/systemd/system"
-  '';
+    "-DQT_IMPORTS_DIR=${placeholder "out"}/${qtbase.qtQmlPrefix}"
+    "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
+    "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
+  ];
 
   postInstall = ''
     # remove empty scripts

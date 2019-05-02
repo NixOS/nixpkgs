@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  patches = optional (version == "6.5") ./perl.patch;
+
   # We need a native compiler to build perl XS extensions
   # when cross-compiling.
   depsBuildBuild = [ buildPackages.stdenv.cc perl ];
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
     && !stdenv.isSunOS; # flaky
 
   meta = {
-    homepage = http://www.gnu.org/software/texinfo/;
+    homepage = https://www.gnu.org/software/texinfo/;
     description = "The GNU documentation system";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

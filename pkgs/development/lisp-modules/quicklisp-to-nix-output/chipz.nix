@@ -1,4 +1,4 @@
-{ fetchurl, ... }:
+args @ { fetchurl, ... }:
 rec {
   baseName = ''chipz'';
   version = ''20180328-git'';

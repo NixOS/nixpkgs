@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, perl, perlPackages, lib, runCommand, postfix }:
+{ stdenv, fetchurl, perlPackages, lib, runCommand, postfix }:
 
 let
-    mk-perl-flags = inputs: lib.concatStringsSep " " (map (dep: "-I ${dep}/lib/perl5/site_perl") inputs);
+    mk-perl-flags = inputs: lib.concatStringsSep " " (map (dep: "-I ${dep}/${perlPackages.perl.libPrefix}") inputs);
     postgrey-flags = mk-perl-flags (with perlPackages; [
       NetServer BerkeleyDB DigestSHA1 NetAddrIP IOMultiplex
     ]);
@@ -26,9 +26,9 @@ in runCommand name {
     cd $out
     tar -xzf $src --strip-components=1
     mv postgrey policy-test bin
-    sed -i -e "s,#!/usr/bin/perl -T,#!${perl}/bin/perl -T ${postgrey-flags}," \
+    sed -i -e "s,#!/usr/bin/perl -T,#!${perlPackages.perl}/bin/perl -T ${postgrey-flags}," \
            -e "s#/etc/postfix#$out#" \
         bin/postgrey
-    sed -i -e "s,#!/usr/bin/perl,#!${perl}/bin/perl ${policy-test-flags}," \
+    sed -i -e "s,#!/usr/bin/perl,#!${perlPackages.perl}/bin/perl ${policy-test-flags}," \
         bin/policy-test
 ''

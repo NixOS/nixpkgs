@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, autoreconfHook, coreutils, gawk
-
+, fetchpatch
 # Kernel dependencies
 , kernel
 }:
@@ -10,12 +10,13 @@ assert kernel != null;
 
 stdenv.mkDerivation rec {
   name = "spl-${version}-${kernel.version}";
+  version = "0.7.13";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "spl";
-    rev = "spl-0.7.9";
-    sha256 = "0540m1dv9jvrzk9kw61glg0h0cwj976mr9zb42y3nh17k47ywff0";
+    rev = "spl-${version}";
+    sha256 = "1rzqgiszy8ad2gx20577azp1y5jgad0907slfzl5y2zb05jgaipa";
   };
 
   patches = [ ./install_prefix.patch ];
@@ -50,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = http://zfsonlinux.org/;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
+    maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
   };
 }

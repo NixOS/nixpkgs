@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
-, coreutils, gnused, getopt, git, tree, gnupg, which, procps, qrencode
-, makeWrapper
+, coreutils, gnused, getopt, git, tree, gnupg, openssl, which, procps
+, qrencode , makeWrapper
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin
@@ -66,12 +66,16 @@ let
       which
       qrencode
       procps
-    ] ++ ifEnable x11Support [ dmenu xclip xdotool ]);
+    ] ++ optional stdenv.isDarwin openssl
+      ++ ifEnable x11Support [ dmenu xclip xdotool ]);
 
     postFixup = ''
       # Link extensions env
       rmdir $out/lib/password-store/extensions
       ln -s ${extensionsEnv}/lib/password-store/extensions $out/lib/password-store/.
+      for f in ${extensionsEnv}/share/man/man1/*.1.gz; do
+          ln -s $f $out/share/man/man1/
+      done
 
       # Fix program name in --help
       substituteInPlace $out/bin/pass \
@@ -97,6 +101,9 @@ let
              -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
              -e '/which gpg/ d' \
         tests/setup.sh
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      # 'pass edit' uses hdid, which is not available from the sandbox.
+      rm -f tests/t0200-edit-tests.sh
     '';
 
     doCheck = false;

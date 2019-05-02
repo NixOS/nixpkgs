@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace ./run-ldconfig true
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit version;
-    homepage = http://www.namesys.com/;
+    homepage = https://sourceforge.net/projects/reiser4/;
     description = "Reiser4 utilities";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

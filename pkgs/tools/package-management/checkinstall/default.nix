@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     ./set-buildroot.patch
   ]
 
-  ++ stdenv.lib.optional (stdenv.system == "x86_64-linux") 
+  ++ stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux") 
     # Force use of old memcpy so that installwatch works on Glibc <
     # 2.14.
     ./use-old-memcpy.patch;
@@ -69,5 +69,6 @@ stdenv.mkDerivation {
     description = "A tool for automatically generating Slackware, RPM or Debian packages when doing `make install'";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

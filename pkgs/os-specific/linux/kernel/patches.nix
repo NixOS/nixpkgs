@@ -28,16 +28,6 @@ rec {
     patch = ./tag-hardened.patch;
   };
 
-  copperhead_4_14 = rec {
-    name = "copperhead-4.14";
-    patch = ./copperhead-4-14.patch;
-  };
-
-  copperhead_4_16 = rec {
-    name = "copperhead-4.16";
-    patch = ./copperhead-4-16.patch;
-  };
-
   # https://bugzilla.kernel.org/show_bug.cgi?id=197591#c6
   iwlwifi_mvm_support_version_7_scan_req_umac_fw_command = rec {
     name = "iwlwifi_mvm_support_version_7_scan_req_umac_fw_command";
@@ -67,5 +57,4 @@ rec {
       sha256 = "1l8xq02rd7vakxg52xm9g4zng0ald866rpgm8kjlh88mwwyjkrwv";
     };
   };
-
 }

@@ -1,11 +1,11 @@
-{ lua, writeText }:
+{ lua, writeText, toLuaModule }:
 
 { buildInputs ? [], disabled ? false, ... } @ attrs:
 
 if disabled then
   throw "${attrs.name} not supported by interpreter lua-${lua.luaversion}"
 else
-  lua.stdenv.mkDerivation (
+  toLuaModule( lua.stdenv.mkDerivation (
     {
       makeFlags = [
         "PREFIX=$(out)"
@@ -51,4 +51,4 @@ else
         addEnvHooks "$hostOffset" addLuaLibCPath
       '';
     }
-  )
+  ) )

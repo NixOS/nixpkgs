@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "autojump-${version}";
-  version = "22.5.1";
+  version = "22.5.3";
 
   src = fetchFromGitHub {
     owner = "wting";
     repo = "autojump";
     rev = "release-v${version}";
-    sha256 = "1l1278g3k1qfrz41pkpjdhsabassb9si2d1bfbcmvbv5h3wmlqk9";
+    sha256 = "1rgpsh70manr2dydna9da4x7p8ahii7dgdgwir5fka340n1wrcws";
   };
 
   buildInputs = [ python bash ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
       Autojump supports tab-completion.
     '';
-    homepage = http://wiki.github.com/wting/autojump;
+    homepage = https://github.com/wting/autojump;
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ domenkozar yurrriq ];

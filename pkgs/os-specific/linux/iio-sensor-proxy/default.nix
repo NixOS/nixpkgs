@@ -3,19 +3,23 @@
 
 stdenv.mkDerivation rec {
   name = "iio-sensor-proxy-${version}";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner  = "hadess";
     repo   = "iio-sensor-proxy";
     rev    = version;
-    sha256 = "1c8izq73c00gvv0jc6zby5hcircs4cb16a1d3ivp1i1iflknj46n";
+    sha256 = "06x1vvslsa44bgw8s5rr17q9i2ssbw0x04l75zsy3rql9r3y2jzg";
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     ./autogen.sh --prefix=$out \
       --with-udevrulesdir=$out/lib/udev/rules.d \
       --with-systemdsystemunitdir=$out/lib/systemd/system
+
+    runHook postConfigure
   '';
 
   buildInputs = [

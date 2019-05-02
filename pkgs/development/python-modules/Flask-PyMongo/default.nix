@@ -2,32 +2,33 @@
 , fetchPypi
 , flask
 , pymongo
+, vcversioner
 , lib
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "Flask-PyMongo";
-  version = "2.0.1";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6a02add52ac245064720c2bb8b02074b9a5a0d9498279510ea2a537512fd3fa5";
+    sha256 = "112625c5d5b4e35aad301ef9e937b7275043d310d75bd76e2b2dd07147c8217a";
   };
 
   checkInputs = [ pytest ];
 
   checkPhase = ''
-    py.test tests
+    py.test
   '';
 
   # Tests seem to hang
   doCheck = false;
 
-  propagatedBuildInputs = [ flask pymongo ];
+  propagatedBuildInputs = [ flask pymongo vcversioner ];
 
   meta = {
-    homepage = "http://flask-pymongo.readthedocs.org/";
+    homepage = "https://flask-pymongo.readthedocs.org/";
     description = "PyMongo support for Flask applications";
     license = lib.licenses.bsd2;
   };

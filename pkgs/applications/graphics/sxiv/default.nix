@@ -3,14 +3,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "sxiv-${version}";
-  version = "24";
+  pname = "sxiv";
+  version = "25";
 
   src = fetchFromGitHub {
     owner = "muennich";
-    repo = "sxiv";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "020n1bdxbzqncprh8a4rnjzc4frp335yxbqh5w6dr970f7n5qm8d";
+    sha256 = "13s1lfar142hq1j7xld0ri616p4bqs57b17yr4d0b9a9w7liz4hp";
   };
 
   postUnpack = ''

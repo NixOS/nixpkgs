@@ -1,18 +1,18 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "wireless-regdb-${version}";
-  version = "2018.05.31";
+  pname = "wireless-regdb";
+  version = "2019.03.01";
 
   src = fetchurl {
-    url = "https://www.kernel.org/pub/software/network/wireless-regdb/${name}.tar.xz";
-    sha256 = "0yxydxkmcb6iryrbazdk8lqqibig102kq323gw3p64vpjwxvrpz1";
+    url = "https://www.kernel.org/pub/software/network/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0pwipig8bik1gca440hfv0xa23bi49jfiqc69xvcb6sr0rq6ykis";
   };
 
   dontBuild = true;
 
   makeFlags = [
-    "DESTDIR=$(out)"
+    "DESTDIR=${placeholder "out"}"
     "PREFIX="
   ];
 

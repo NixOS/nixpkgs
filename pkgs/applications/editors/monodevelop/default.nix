@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nunit2510 = fetchurl {
-    url = "http://launchpad.net/nunitv2/2.5/2.5.10/+download/NUnit-2.5.10.11092.zip";
+    url = "https://launchpad.net/nunitv2/2.5/2.5.10/+download/NUnit-2.5.10.11092.zip";
     sha256 = "0k5h5bz1p2v3d0w0hpkpbpvdkcszgp8sr9ik498r1bs72w5qlwnc";
   };
 
@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     maintainers = with maintainers; [ obadz ];
+    broken = true; # 2018-09-21, build has failed since 2018-03-08
   };
 }

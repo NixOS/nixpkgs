@@ -1,9 +1,8 @@
-{ fetchurl, stdenv, wrapGAppsHook, autoreconfHook
+{ config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
 , curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor-icon-theme
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk24x-gtk2
-, glib-networking, gsettings-desktop-schemas, libSM, libytnef
-
+, glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical 
 # Build options
 # TODO: A flag to build the manual.
 # TODO: Plugins that complain about their missing dependencies, even when
@@ -11,7 +10,7 @@
 #         gdata requires libgdata
 #         geolocation requires libchamplain
 , enableLdap ? false
-, enableNetworkManager ? false
+, enableNetworkManager ? config.networking.networkmanager.enable or false
 , enablePgp ? true
 , enablePluginArchive ? false
 , enablePluginFancy ? false
@@ -32,11 +31,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "claws-mail-${version}";
-  version = "3.16.0";
+  version = "3.17.3";
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "1awpr3s7n8bq8p3w10a4j6lg5bizjxyiqp4rqzc2j8cn7lyi64n2";
+    sha256 = "1wnj6c9cbmhphs2l6wfvndkk2g08rmxw0sl2c8k1k008dxd1ykjh";
   };
 
   outputs = [ "out" "dev" ];
@@ -70,7 +69,8 @@ stdenv.mkDerivation rec {
     ++ optional enableNetworkManager networkmanager
     ++ optional enableLdap openldap
     ++ optional enablePluginPdf poppler
-    ++ optional enablePluginFancy webkitgtk24x-gtk2;
+    ++ optional enablePluginFancy webkitgtk24x-gtk2
+    ++ optional enablePluginVcalendar libical;
 
   configureFlags =
     optional (!enableLdap) "--disable-ldap"

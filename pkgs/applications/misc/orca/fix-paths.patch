@@ -1,3 +1,32 @@
+--- a/src/orca/debug.py
++++ b/src/orca/debug.py
+@@ -474,7 +474,7 @@
+     return traceit
+ 
+ def getOpenFDCount(pid):
+-    procs = subprocess.check_output([ 'lsof', '-w', '-Ff', '-p', str(pid)])
++    procs = subprocess.check_output([ '@lsof@', '-w', '-Ff', '-p', str(pid)])
+     procs = procs.decode('UTF-8').split('\n')
+     files = list(filter(lambda s: s and s[0] == 'f' and s[1:].isdigit(), procs))
+ 
+@@ -482,7 +482,7 @@
+ 
+ def getCmdline(pid):
+     try:
+-        openFile = os.popen('cat /proc/%s/cmdline' % pid)
++        openFile = os.popen('@cat@ /proc/%s/cmdline' % pid)
+         cmdline = openFile.read()
+         openFile.close()
+     except:
+@@ -492,7 +492,7 @@
+     return cmdline
+ 
+ def pidOf(procName):
+-    openFile = subprocess.Popen('pgrep %s' % procName,
++    openFile = subprocess.Popen('@pgrep@ %s' % procName,
+                                 shell=True,
+                                 stdout=subprocess.PIPE).stdout
+     pids = openFile.read()
 --- a/src/orca/orca.py
 +++ b/src/orca/orca.py
 @@ -239,7 +239,7 @@
@@ -27,3 +56,23 @@
          stdin=subprocess.PIPE, stdout=None, stderr=None)
      p.communicate(_originalXmodmap)
  
+--- a/src/orca/orca_bin.py.in
++++ b/src/orca/orca_bin.py.in
+@@ -59,7 +59,7 @@
+                 name = "[DEAD]"
+ 
+             try:
+-                cmdline = subprocess.getoutput('cat /proc/%s/cmdline' % pid)
++                cmdline = subprocess.getoutput('@cat@ /proc/%s/cmdline' % pid)
+             except:
+                 cmdline = '(exception encountered)'
+             else:
+@@ -192,7 +192,7 @@
+ def otherOrcas():
+     """Returns the pid of any other instances of Orca owned by this user."""
+ 
+-    openFile = subprocess.Popen('pgrep -u %s orca' % os.getuid(),
++    openFile = subprocess.Popen('@pgrep@ -u %s orca' % os.getuid(),
+                                 shell=True,
+                                 stdout=subprocess.PIPE).stdout
+     pids = openFile.read()

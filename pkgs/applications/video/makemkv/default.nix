@@ -4,17 +4,24 @@
 
 stdenv.mkDerivation rec {
   name = "makemkv-${ver}";
-  ver = "1.12.3";
+  ver = "1.14.3";
   builder = ./builder.sh;
 
+  # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
-    url = "http://www.makemkv.com/download/makemkv-bin-${ver}.tar.gz";
-    sha256 = "0rggpzp7gp4y6gxnhl4saxpdwnaivwkildpwbjjh7zvmgka3749a";
+    urls = [
+      "http://www.makemkv.com/download/makemkv-bin-${ver}.tar.gz"
+      "http://www.makemkv.com/download/old/makemkv-bin-${ver}.tar.gz"
+    ];
+    sha256 = "1d1b7rppbxx2b9p1smf0nlgp47j8b1z8d7q0v82kwr4qxaa0xcg0";
   };
 
   src_oss = fetchurl {
-    url = "http://www.makemkv.com/download/makemkv-oss-${ver}.tar.gz";
-    sha256 = "1w0l2rq9gyzli5ilw82v27d8v7fmchc1wdzcq06q1bsm9wmnbx1r";
+    urls = [
+      "http://www.makemkv.com/download/makemkv-oss-${ver}.tar.gz"
+      "http://www.makemkv.com/download/old/makemkv-oss-${ver}.tar.gz"
+    ];
+    sha256 = "1jgyp6qs8r0z26258mvyg9dx7qqqdqrdsziw6m24ka77zpfg4b12";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -36,6 +43,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.unfree;
     homepage = http://makemkv.com;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.titanous ];
   };
 }

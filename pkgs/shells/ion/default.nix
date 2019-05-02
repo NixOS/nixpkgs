@@ -21,5 +21,6 @@ buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

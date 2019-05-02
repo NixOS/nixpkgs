@@ -1,17 +1,13 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnome3
-, iconnamingutils, gtk, gdk_pixbuf, librsvg, hicolor-icon-theme }:
+, iconnamingutils, gtk3, gdk_pixbuf, librsvg, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "adwaita-icon-theme-${version}";
-  version = "3.28.0";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/adwaita-icon-theme/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0l114ildlb3lz3xymfxxi0wpr2x21rd3cg8slb8jyxynzwfqrbks";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "adwaita-icon-theme"; attrPath = "gnome3.adwaita-icon-theme"; };
+    url = "mirror://gnome/sources/adwaita-icon-theme/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "11ij35na8nisvxx3qh527iz33h6z2q1a7iinqyp7p65v0zjbd3b9";
   };
 
   # For convenience, we can specify adwaita-icon-theme only in packages
@@ -19,10 +15,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gdk_pixbuf librsvg ];
 
-  nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk ];
+  nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk3 ];
 
   # remove a tree of dirs with no files within
   postInstall = '' rm -rf "$out/locale" '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "adwaita-icon-theme";
+      attrPath = "gnome3.adwaita-icon-theme";
+    };
+  };
 
   meta = with stdenv.lib; {
     platforms = with platforms; linux ++ darwin;

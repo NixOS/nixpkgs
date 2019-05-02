@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
       ./parallel-configure.patch
       ./clang-5-darwin.patch
       ./qt-4.8.7-unixmake-darwin.patch
+      ./kill-legacy-darwin-apis.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         cups = if cups != null then lib.getLib cups else null;
@@ -230,5 +231,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.lgpl21Plus; # or gpl3
     maintainers = with lib.maintainers; [ orivej lovek323 phreedom sander ];
     platforms   = lib.platforms.unix;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

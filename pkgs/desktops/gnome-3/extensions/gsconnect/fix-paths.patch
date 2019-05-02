@@ -1,0 +1,44 @@
+--- a/data/org.gnome.Shell.Extensions.GSConnect.desktop
++++ b/data/org.gnome.Shell.Extensions.GSConnect.desktop
+@@ -1,7 +1,7 @@
+ [Desktop Entry]
+ Type=Application
+ Name=GSConnect
+-Exec=gapplication launch org.gnome.Shell.Extensions.GSConnect %U
++Exec=@gapplication@ launch org.gnome.Shell.Extensions.GSConnect %U
+ Terminal=false
+ NoDisplay=true
+ Icon=org.gnome.Shell.Extensions.GSConnect
+--- a/src/extension.js
++++ b/src/extension.js
+@@ -1,5 +1,7 @@
+ 'use strict';
+ 
++'@typelibPath@'.split(':').forEach(path => imports.gi.GIRepository.Repository.prepend_search_path(path));
++
+ const Gio = imports.gi.Gio;
+ const GLib = imports.gi.GLib;
+ const Gtk = imports.gi.Gtk;
+--- a/src/prefs.js
++++ b/src/prefs.js
+@@ -1,5 +1,7 @@
+ 'use strict';
+ 
++'@typelibPath@'.split(':').forEach(path => imports.gi.GIRepository.Repository.prepend_search_path(path));
++
+ const Gio = imports.gi.Gio;
+ const GLib = imports.gi.GLib;
+ const Gtk = imports.gi.Gtk;
+--- a/src/service/__init__.js
++++ b/src/service/__init__.js
+@@ -600,7 +600,9 @@
+ /**
+  * Convenience functions for saving/restoring window geometry
+  */
+-const _mutter = new Gio.Settings({schema_id: 'org.gnome.mutter'});
++const _schema_source = Gio.SettingsSchemaSource.new_from_directory('@mutter_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
++const _schema = _schema_source.lookup('org.gnome.mutter', false);
++const _mutter = new Gio.Settings({settings_schema: _schema});
+ 
+ Gtk.Window.prototype.restore_geometry = function() {
+     let [width, height] = this.settings.get_value('window-size').deep_unpack();

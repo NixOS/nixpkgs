@@ -4,9 +4,10 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, jansson
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
+, enableCeph ? false, ceph
 }:
 
 with stdenv.lib;
@@ -16,26 +17,26 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "4.6.0";
+  version = "4.10.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${name}.tar.xz";
-        sha256 = "0rj0azi766g0xdxydvkq9nj95hhsiwqgclzzmyxvk2axhb8nrb5l";
+        sha256 = "0v17zzyyb25nn9l18v5244myg7590dp6ppwgi8xysipifc0q77bz";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "1lv1s93k056wylrlc7j4q45zir9z4qshzcl454spy2wb8cdn3h4s";
+        sha256 = "0dlpv3v6jpbmgvhpn29ryp0w2a1xny8ciqid8hnlf3klahz9kwz9";
         fetchSubmodules = true;
       };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap jansson
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
@@ -45,6 +46,8 @@ in stdenv.mkDerivation rec {
     xen
   ] ++ optionals enableIscsi [
     openiscsi
+  ] ++ optionals enableCeph [
+    ceph
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
@@ -60,9 +63,7 @@ in stdenv.mkDerivation rec {
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
 
     patchShebangs . # fixes /usr/bin/python references
-    substituteInPlace src/util/virjsoncompat.c --replace \
-        '"libjansson.so.4"' '"${jansson}/lib/libjansson${stdenv.targetPlatform.extensions.sharedLibrary}"'
-   '';
+  '';
 
   configureFlags = [
     "--localstatedir=/var"
@@ -87,6 +88,8 @@ in stdenv.mkDerivation rec {
     "--with-storage-zfs"
   ] ++ optionals enableIscsi [
     "--with-storage-iscsi"
+  ] ++ optionals enableCeph [
+    "--with-storage-rbd"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];

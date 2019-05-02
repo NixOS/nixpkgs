@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
   subVersion = "fec7941";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://edgehill.s3.amazonaws.com/${version}-${subVersion}/linux-deb/x64/NylasMail.deb";
         sha256 = "40060aa1dc3b5187b8ed4a07b9de3427e3c5a291df98c2c82395647fa2aa4ada";
       }
     else
-      throw "NylasMail is not supported on ${stdenv.system}";
+      throw "NylasMail is not supported on ${stdenv.hostPlatform.system}";
 
   propagatedBuildInputs = [
     alsaLib

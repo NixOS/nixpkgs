@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, lvm2, libuuid, gettext, readline, perl, python2
-, utillinux, check, enableStatic ? false, hurd ? null }:
+, utillinux, check, enableStatic ? false }:
 
 stdenv.mkDerivation rec {
   name = "parted-3.2";
@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid ]
     ++ stdenv.lib.optional (readline != null) readline
     ++ stdenv.lib.optional (gettext != null) gettext
-    ++ stdenv.lib.optional (lvm2 != null) lvm2
-    ++ stdenv.lib.optional (hurd != null) hurd;
+    ++ stdenv.lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
        (if (readline != null)
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
       which also serves as a sample implementation and script backend.
     '';
 
-    homepage = http://www.gnu.org/software/parted/;
+    homepage = https://www.gnu.org/software/parted/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [

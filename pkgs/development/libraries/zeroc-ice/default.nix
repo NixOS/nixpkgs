@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" "OPTIMIZE=yes" ];
 
-  enableParallelBuilding = true;
+  # cannot find -lIceXML (linking bin/transformdb)
+  #enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.zeroc.com/ice.html;

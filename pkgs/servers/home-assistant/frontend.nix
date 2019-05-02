@@ -2,14 +2,17 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-frontend";
-  version = "20180818.0";
+  version = "20190331.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b6101c342e49c943c59e3525d6741cd3a23af94b65549d59bdeee8cf3f07b294";
+    sha256 = "2d266a4d3d31af9a50debb99b0e9e9650044698f9157753bec785785057264cf";
   };
 
   propagatedBuildInputs = [ user-agents ];
+
+  # no Python tests implemented
+  doCheck = false;
 
   meta = with lib; {
     description = "Polymer frontend for Home Assistant";

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
 , openssl, libXrender, libXrandr, libXcursor, libX11, libXext, libXi
-, libxcb, cups, xkeyboardconfig
+, libxcb, cups, xkeyboardconfig, runtimeShell
 }:
 
 let
@@ -17,18 +17,18 @@ stdenv.mkDerivation rec {
   version = "7.7.0";
 
   src =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin32-${version}.run";
         sha256 = "16fa66p77xigc7zvzfm7737mllrcs6nrgk2p7wvkjw3p9lvbz7z1";
       }
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin64-${version}.run";
         sha256 = "18dcn6wqph1sqh0ah98qzfi05wip8a8ifbkaq79iskbrsi8iqnrg";
       }
     else
-      throw "Unsupported system: ${stdenv.system}";
+      throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
     name = "eagle";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     dynlinker="$(cat $NIX_CC/nix-support/dynamic-linker)"
     mkdir -p "$out"/bin
     cat > "$out"/bin/eagle << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:${libPath}"
     export LD_PRELOAD="$out/lib/eagle_fixer.so"
     export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"

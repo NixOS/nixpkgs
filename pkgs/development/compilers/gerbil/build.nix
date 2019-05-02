@@ -1,20 +1,20 @@
 { stdenv, makeStaticLibraries,
   coreutils, rsync, bash,
   openssl, zlib, sqlite, libxml2, libyaml, mysql, lmdb, leveldb, postgresql,
-  version, git-version, GAMBIT, SRC }:
+  version, git-version, gambit, src }:
 
 # TODO: distinct packages for gerbil-release and gerbil-devel
 # TODO: make static compilation work
 
 stdenv.mkDerivation rec {
   name    = "gerbil-${version}";
-  src     = SRC;
+  inherit src;
 
   # Use makeStaticLibraries to enable creation of statically linked binaries
   buildInputs_libraries = [ openssl zlib sqlite libxml2 libyaml mysql.connector-c lmdb leveldb postgresql ];
   buildInputs_staticLibraries = map makeStaticLibraries buildInputs_libraries;
 
-  buildInputs = [ GAMBIT coreutils rsync bash ]
+  buildInputs = [ gambit rsync bash ]
     ++ buildInputs_libraries ++ buildInputs_staticLibraries;
 
   NIX_CFLAGS_COMPILE = [ "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ];
@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    find . -type f -executable -print0 | while IFS= read -r -d ''$'\0' f; do
+    grep -Fl '#!/usr/bin/env' `find . -type f -executable` | while read f ; do
       substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env'
     done
+    grep -Fl '"gsc"' `find . -type f -name '*.s*'` | while read f ; do
+      substituteInPlace "$f" --replace '"gsc"' '"${gambit}/bin/gsc"'
+    done
+    substituteInPlace "etc/gerbil.el" --replace '"gxc"' "\"$out/bin/gxc\""
 
     cat > etc/gerbil_static_libraries.sh <<EOF
 #OPENSSL_LIBCRYPTO=${makeStaticLibraries openssl}/lib/libcrypto.a # MISSING!
@@ -66,9 +70,9 @@ EOF
 export GERBIL_HOME=$out
 case "\$1" in -:*) GSIOPTIONS=\$1 ; shift ;; esac
 if [[ \$# = 0 ]] ; then
-  exec ${GAMBIT}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init \$GERBIL_HOME/lib/gxi-interactive - ;
+  exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init \$GERBIL_HOME/lib/gxi-interactive - ;
 else
-  exec ${GAMBIT}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
+  exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
 fi
 EOF
     runHook postInstall

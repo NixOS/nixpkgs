@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, electron } :
+{ stdenv, fetchgit, electron, runtimeShell } :
 
 stdenv.mkDerivation rec {
   name = "nix-tour-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share
     cp -R * $out/share
     chmod 0755 $out/share/ -R
-    echo "#!${stdenv.shell}" > $out/bin/nix-tour
+    echo "#!${runtimeShell}" > $out/bin/nix-tour
     echo "cd $out/share/" >> $out/bin/nix-tour
     echo "${electron}/bin/electron $out/share/electron-main.js" >> $out/bin/nix-tour
     chmod 0755 $out/bin/nix-tour

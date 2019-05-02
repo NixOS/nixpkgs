@@ -4,13 +4,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "pirate-get";
-  version = "0.3.1";
+  version = "0.3.3";
 
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d7cc4b15dd8c6a82f9e03a666372e38613ccafdc846ad4c1226ba936beea68d";
+    sha256 = "1zwfgfiszkca44wlx5p2243hmf8594n7bnfva5if1f69dic6w7mi";
   };
 
   propagatedBuildInputs = [ colorama veryprettytable beautifulsoup4 pyperclip ];

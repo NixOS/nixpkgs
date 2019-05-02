@@ -1,19 +1,19 @@
 { stdenv, fetchurl, makeWrapper
 , freeglut, freealut, libGLU_combined, libICE, libjpeg, openal, openscenegraph, plib
-, libSM, libunwind, libX11, xproto, libXext, xextproto, libXi, inputproto
+, libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
 , makeDesktopItem, qtbase, qtdeclarative, glew
 }:
 
 let
-  version = "2017.3.1";
-  shortVersion = "2017.3";
+  version = "2018.3.1";
+  shortVersion = "2018.3";
   data = stdenv.mkDerivation rec {
     name = "flightgear-base-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "166q0fsbp17lx1l1n6i8cfk3d1i79pasz1liya09z6m2i1pb026z";
+      sha256 = "1h69ifj84l4k0f497ybk51xj3bprzw4xvwrwzzj708zhkjk78fmh";
     };
 
     phases = [ "installPhase" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${name}.tar.bz2";
-    sha256 = "1kccf91vmxnzyki6grx09s10dvr4j6qrz34ikj7jn81g5scisbkg";
+    sha256 = "0h56npn00b6fd38cf5cha82nnglxmhd12b7h2rn3gjymwhviyjix";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     makeWrapper
     freeglut freealut libGLU_combined libICE libjpeg openal openscenegraph plib
-    libSM libunwind libX11 xproto libXext xextproto libXi inputproto
+    libSM libunwind libX11 xorgproto libXext libXi
     libXmu libXt simgear zlib boost cmake libpng udev fltk13 apr qtbase
     glew qtdeclarative
   ];

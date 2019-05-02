@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, getopt, libcap }:
+{ stdenv, fetchurl, fetchpatch, getopt, libcap, gnused }:
 
 stdenv.mkDerivation rec {
-  version = "1.22";
+  version = "1.23";
   name = "fakeroot-${version}";
 
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${version}.orig.tar.bz2";
-    sha256 = "1zn67sp066q63vx95r671v0ki878i40a2wa57pmh64k43r56m05x";
+    url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${version}.orig.tar.xz";
+    sha256 = "1xpl0s2yjyjwlf832b6kbkaa5921liybaar13k7n45ckd9lxd700";
   };
 
   patches = stdenv.lib.optional stdenv.isLinux ./einval.patch
@@ -29,14 +29,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ getopt ]
+  buildInputs = [ getopt gnused ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) libcap
     ;
 
   postUnpack = ''
-    for prog in getopt; do
-      sed -i "s@getopt@$(type -p getopt)@g" ${name}/scripts/fakeroot.in
-    done
+    sed -i -e "s@getopt@$(type -p getopt)@g" -e "s@sed@$(type -p sed)@g" ${name}/scripts/fakeroot.in
   '';
 
   meta = {

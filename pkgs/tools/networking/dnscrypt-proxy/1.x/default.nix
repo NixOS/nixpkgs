@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A tool for securing communications between a client and a DNS resolver";
-    homepage = https://dnscrypt.org/;
+    homepage = https://dnscrypt.info/;
     license = licenses.isc;
-    maintainers = with maintainers; [ joachifm jgeerds ];
+    maintainers = with maintainers; [ joachifm ];
     # upstream claims OSX support, but Hydra fails
     platforms = platforms.linux; # Maybe other non-darwin Unix
   };

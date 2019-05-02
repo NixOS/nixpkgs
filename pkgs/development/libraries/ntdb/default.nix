@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
     description = "The not-so trivial database";
     homepage = https://tdb.samba.org/;
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

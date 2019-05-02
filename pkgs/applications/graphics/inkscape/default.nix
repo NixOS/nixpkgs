@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libXft
+{ stdenv, fetchurl, pkgconfig, perlPackages, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
@@ -6,15 +6,16 @@
 }:
 
 let
-  python2Env = python2.withPackages(ps: with ps; [ numpy lxml ]);
+  python2Env = python2.withPackages(ps: with ps;
+    [ numpy lxml scour ]);
 in
 
 stdenv.mkDerivation rec {
-  name = "inkscape-0.92.3";
+  name = "inkscape-0.92.4";
 
   src = fetchurl {
     url = "https://media.inkscape.org/dl/resources/file/${name}.tar.bz2";
-    sha256 = "1chng2yw8dsjxc9gf92aqv7plj11cav8ax321wmakmv5bb09cch6";
+    sha256 = "0pjinhjibfsz1aywdpgpj3k23xrsszpj4a1ya5562dkv2yl2vv2p";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -39,12 +40,15 @@ stdenv.mkDerivation rec {
       --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
   '';
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env perl perlXMLParser ];
+  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env ]
+    ++ (with perlPackages; [ perl XMLParser ]);
   buildInputs = [
     libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     gsl poppler imagemagick libwpg librevenge
     libvisio libcdr libexif potrace hicolor-icon-theme
+
+    python2Env perlPackages.perl
   ];
 
   enableParallelBuilding = true;

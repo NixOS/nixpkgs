@@ -20,6 +20,9 @@ import ./make-test.nix ({ pkgs, ...} : {
 
     $netdata->waitForUnit("netdata.service");
 
+    # wait for the service to listen before sending a request
+    $netdata->waitForOpenPort(19999);
+
     # check if the netdata main page loads.
     $netdata->succeed("curl --fail http://localhost:19999/");
 

@@ -41,11 +41,27 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.displayManager.slim = {
+    services.xserver.displayManager.lightdm = {
       enable = true;
-      autoLogin = true;
-      defaultUser = cfg.user;
+      autoLogin = {
+        enable = true;
+        user = cfg.user;
+      };
     };
+
+    # lightdm by default doesn't allow auto login for root, which is
+    # required by some nixos tests. Override it here.
+    security.pam.services.lightdm-autologin.text = lib.mkForce ''
+        auth     requisite pam_nologin.so
+        auth     required  pam_succeed_if.so quiet
+        auth     required  pam_permit.so
+
+        account  include   lightdm
+
+        password include   lightdm
+
+        session  include   lightdm
+    '';
 
   };
 

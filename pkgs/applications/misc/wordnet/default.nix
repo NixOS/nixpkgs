@@ -42,7 +42,10 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = https://wordnet.princeton.edu/;
-
+    license = {
+      fullName = "WordNet 3.0 license";
+      url = https://wordnet.princeton.edu/license-and-commercial-use;
+    };
     maintainers = [ ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };

@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.5.0";
+  version = "0.8.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "748944521146d85c6cd6230acf234e885864cd0f42fea3758d655488517e5e6e";
+    sha256 = "b7a1e907caac6ddaf0614555f58ba9af2ed65356ccc77f6ba6fc3df202d8f146";
   };
 
-  checkInputs = [ pytest numpy nbconvert pandas mock ];
-  propagatedBuildInputs = [ jinja2 branca six requests ];
+  checkInputs = [ pytest nbconvert pandas mock ];
+  propagatedBuildInputs = [ jinja2 branca six requests numpy ];
 
   # No tests in archive
   doCheck = false;

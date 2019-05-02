@@ -1,10 +1,10 @@
 { stdenv, autoconf, automake, pkgconfig, gettext, libtool, bison
 , flex, which, subversion, fetchsvn, makeWrapper, libftdi, libusb, readline
 , python3
-, svfSupport ? false
-, bsdlSupport ? false
-, staplSupport ? false
-, jedecSupport ? false
+, svfSupport ? true
+, bsdlSupport ? true
+, staplSupport ? true
+, jedecSupport ? true
 }:
 
 stdenv.mkDerivation rec {

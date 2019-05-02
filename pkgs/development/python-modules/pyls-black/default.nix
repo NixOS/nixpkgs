@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "pyls-black";
-  version = "0.2.1";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "rupert";
     repo = "pyls-black";
     rev = "v${version}";
-    sha256 = "0xa3iv8nhnj0lw0dh41qb0dqp55sb6rdxalbk60v8jll6qyc0si8";
+    sha256 = "1ynynay9g6yma39szbzf15ypq3c72fg1i0kjmq1dwxarj68i2gf9";
   };
 
   disabled = !isPy3k;

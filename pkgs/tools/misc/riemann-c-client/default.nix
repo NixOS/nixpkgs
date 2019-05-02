@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file , protobufc }:
 
 stdenv.mkDerivation rec {
-  name = "riemann-c-client-1.10.2";
+  name = "riemann-c-client-1.10.4";
 
   src = fetchFromGitHub {
     owner = "algernon";
     repo = "riemann-c-client";
     rev = "${name}";
-    sha256 = "185wn6fqgrs16f9c0lkzw14477wmkgandz86h4miw7cgi7ki4l5i";
+    sha256 = "01gzqxqm1xvki2vd78c7my2kgp4fyhkcf5j5fmy8z0l93lgj82rr";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

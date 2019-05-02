@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, libX11, libXft, libXi, inputproto, libSM, libICE
+{ stdenv, fetchurl, libX11, libXft, libXi, xorgproto, libSM, libICE
 , freetype, pkgconfig, which }:
 
 stdenv.mkDerivation {
   name = "mrxvt-0.5.4";
 
   buildInputs =
-    [ libX11 libXft libXi inputproto libSM libICE freetype pkgconfig which ];
+    [ libX11 libXft libXi xorgproto libSM libICE freetype pkgconfig which ];
 
   configureFlags = [
     "--with-x"

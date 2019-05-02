@@ -23,6 +23,22 @@ in
         '';
       };
 
+      certificateFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to the certificate used for SSL connections with clients.
+        '';
+      };
+
+      requireSSL = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Require SSL for connections from clients.
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.quasselDaemon;
@@ -71,6 +87,10 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = cfg.requireSSL -> cfg.certificateFile != null;
+        message = "Quassel needs a certificate file in order to require SSL";
+      }];
 
     users.users = mkIf (cfg.user == null) [
       { name = "quassel";
@@ -98,7 +118,13 @@ in
 
         serviceConfig =
         {
-          ExecStart = "${quassel}/bin/quasselcore --listen=${concatStringsSep '','' cfg.interfaces} --port=${toString cfg.portNumber} --configdir=${cfg.dataDir}";
+          ExecStart = concatStringsSep " " ([
+            "${quassel}/bin/quasselcore"
+            "--listen=${concatStringsSep "," cfg.interfaces}"
+            "--port=${toString cfg.portNumber}"
+            "--configdir=${cfg.dataDir}"
+          ] ++ optional cfg.requireSSL "--require-ssl"
+            ++ optional (cfg.certificateFile != null) "--ssl-cert=${cfg.certificateFile}");
           User = user;
           PermissionsStartOnly = true;
         };

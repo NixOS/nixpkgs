@@ -4,7 +4,7 @@
 # often change with updating of git or cgit.
 # stripLen acts as the -p parameter when applying a patch.
 
-{ lib, fetchurl, patchutils }:
+{ lib, fetchurl, buildPackages }:
 { stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
 
 fetchurl ({
@@ -14,10 +14,10 @@ fetchurl ({
       echo "error: Fetched patch file '$out' is empty!" 1>&2
       exit 1
     fi
-    "${patchutils}/bin/lsdiff" "$out" \
+    "${buildPackages.patchutils}/bin/lsdiff" "$out" \
       | sort -u | sed -e 's/[*?]/\\&/g' \
       | xargs -I{} \
-        "${patchutils}/bin/filterdiff" \
+        "${buildPackages.patchutils}/bin/filterdiff" \
         --include={} \
         --strip=${toString stripLen} \
         ${lib.optionalString (extraPrefix != null) ''
@@ -32,7 +32,7 @@ fetchurl ({
       cat "$out" 1>&2
       exit 1
     fi
-    ${patchutils}/bin/filterdiff \
+    ${buildPackages.patchutils}/bin/filterdiff \
       -p1 \
       ${builtins.toString (builtins.map (x: "-x ${lib.escapeShellArg x}") excludes)} \
       ${builtins.toString (builtins.map (x: "-i ${lib.escapeShellArg x}") includes)} \
@@ -46,7 +46,7 @@ fetchurl ({
       exit 1
     fi
   '' + lib.optionalString revert ''
-    ${patchutils}/bin/interdiff "$out" /dev/null > "$tmpfile"
+    ${buildPackages.patchutils}/bin/interdiff "$out" /dev/null > "$tmpfile"
     mv "$tmpfile" "$out"
   '' + (args.postFetch or "");
   meta.broken = excludes != [] && includes != [];

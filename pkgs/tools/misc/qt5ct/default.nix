@@ -3,12 +3,12 @@
 let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation rec {
-  name = "qt5ct-${version}";
-  version = "0.35";
+  pname = "qt5ct";
+  version = "0.38";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qt5ct/${name}.tar.bz2";
-    sha256 = "0xzgd12cvm4vyzl8qax6izdmaf46bf18h055z6k178s8pybm1sqw";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "0p0317z79h906qwaf0p8ga6lmr1dlabkx12gn31bv9lnp9f55jwg";
   };
 
   nativeBuildInputs = [ qmake qttools ];

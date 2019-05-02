@@ -1,6 +1,5 @@
 { stdenv, substituteAll, fetchurl
 , pkgconfig, freetype, expat, libxslt, gperf, dejavu_fonts
-, hostPlatform
 }:
 
 /** Font configuration scheme
@@ -36,17 +35,17 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   propagatedBuildInputs = [ freetype ];
-  nativeBuildInputs = [ pkgconfig gperf ];
+  nativeBuildInputs = [ pkgconfig gperf libxslt ];
   buildInputs = [ expat ];
 
   configureFlags = [
-    "--with-arch=${hostPlatform.parsed.cpu.name}"
+    "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
     "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
     "--disable-docs"
     # just <1MB; this is what you get when loading config fails for some reason
     "--with-default-fonts=${dejavu_fonts.minimal}"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--with-arch=${hostPlatform.parsed.cpu.name}"
+    "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
   ];
 
   enableParallelBuilding = true;
@@ -58,7 +57,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd "$out/etc/fonts"
-    "${libxslt.bin}/bin/xsltproc" --stringparam fontDirectories "${dejavu_fonts.minimal}" \
+    xsltproc --stringparam fontDirectories "${dejavu_fonts.minimal}" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
@@ -78,4 +77,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.vcunat ];
   };
 }
-

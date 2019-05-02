@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem
 , ghostscript, atk, gtk2, glib, fontconfig, freetype
 , libgnomecanvas, libgnomeprint, libgnomeprintui
-, pango, libX11, xproto, zlib, poppler
+, pango, libX11, xorgproto, zlib, poppler
 , autoconf, automake, libtool, pkgconfig}:
 
 let
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ghostscript atk gtk2 glib fontconfig freetype
     libgnomecanvas
-    pango libX11 xproto zlib poppler
+    pango libX11 xorgproto zlib poppler
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
     libgnomeprint libgnomeprintui
   ];

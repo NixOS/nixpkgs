@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
+{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, makeDesktopItem, jdk, jre, ant
 , gtk3, gsettings-desktop-schemas, p7zip, libXxf86vm }:
 
 let
@@ -55,7 +55,7 @@ let
 
       makeWrapper ${jre}/bin/java $out/bin/$exec \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
-        --add-flags "-jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar ${if stdenv.system == "x86_64-linux" then "-d64" else "-d32"}"
+        --add-flags "-jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
     '';
 
     dontStrip = true;
@@ -74,16 +74,15 @@ let
 in rec {
 
   application = mkSweetHome3D rec {
-    version = "5.4";
+    version = "6.1.2";
     module = "SweetHome3D";
     name = stdenv.lib.toLower module + "-application-" + version;
     description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
-    src = fetchcvs {
-      cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
-      sha256 = "09sk4svmaiw8dabcya3407iq5yjwxbss8pik1rzalrlds2428vyw";
-      module = module;
-      tag = "V_" + d2u version;
+    src = fetchsvn {
+      url = "https://svn.code.sf.net/p/sweethome3d/code/tags/V_" + d2u version + "/SweetHome3D/";
+      sha256 = "14svi112kml175dblzcdjzhlfwbp1cy6rki49mqb3632hwmif6ya";
+      rev = "6750";
     };
     desktopName = "Sweet Home 3D";
     icons = {

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "enyo-doom-${version}";
-  version = "1.05";
+  version = "1.06";
 
   src = fetchFromGitLab {
     owner = "sdcofer70";
     repo = "enyo-doom";
     rev = version;
-    sha256 = "1bmpgqwcp7640dbq1w8bkbk6mkn4nj5yxkvmjrl5wnlg0m1g0jr7";
+    sha256 = "17f9qq8gnim6glqlrg7189my4d5y40v76cbpaqgpvrhpyc7z9vf6";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   name = "hiawatha-${version}";
-  version = "10.8.1";
+  version = "10.9";
 
   src = fetchFromGitLab {
     owner = "hsleisink";
     repo = "hiawatha";
     rev = "v${version}";
-    sha256 = "1428byx0xpzzwyc0j157q70sjx18dykvg6fd5vp70kj85ank0xpa";
+    sha256 = "0mcg36bidy3p57nyk9nliqjipfb3r2irziavlbr2d5g3smfv52z2";
   };
 
   nativeBuildInputs = [ cmake ninja ];

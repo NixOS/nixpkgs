@@ -20,13 +20,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "dolphin-emu-${version}";
-  version = "2018-08-17";
+  version = "5.0-9976";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "12a5fd80bde3c1f5557ea647ebb127d37e74040d";
-    sha256 = "0sk3jn5sm9fabs5bvwy75zw2szrb19qqwns2ypzqpgd4d5zjrs4x";
+    rev = "63f30cc44da248b0226e1c8724b3e53ecf4c768f";
+    sha256 = "0lkf571kzmw26fybl1lqpvhc81jkbh4hcvi3766bb7mvvzapkybd";
   };
 
   enableParallelBuilding = true;
@@ -47,6 +47,9 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUSE_SHARED_ENET=ON"
     "-DENABLE_LTO=ON"
+    "-DDOLPHIN_WC_REVISION=${src.rev}"
+    "-DDOLPHIN_WC_DESCRIBE=${version}"
+    "-DDOLPHIN_WC_BRANCH=master"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
   ];
@@ -71,13 +74,14 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://dolphin-emu.org";
-    description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
-    license = licenses.gpl2;
+    homepage = "https://dolphin-emu.org";
+    description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MP2E ];
     branch = "master";
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.
+    broken = stdenv.isDarwin;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

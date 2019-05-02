@@ -25,7 +25,7 @@ in {
       systemd.services.qemu-guest-agent = {
         description = "Run the QEMU Guest Agent";
         serviceConfig = {
-          ExecStart = "${pkgs.kvm.ga}/bin/qemu-ga";
+          ExecStart = "${pkgs.qemu.ga}/bin/qemu-ga";
           Restart = "always";
           RestartSec = 0;
         };

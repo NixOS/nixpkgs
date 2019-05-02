@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, perl, textual-window-manager }:
+{ stdenv, fetchurl, python3, perl, textual-window-manager }:
 
 stdenv.mkDerivation rec {
   version = "5.127";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ python perl ];
+  buildInputs = [ python3 perl ];
   propagatedBuildInputs = [ textual-window-manager ];
 
   meta = {

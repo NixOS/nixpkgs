@@ -1,6 +1,11 @@
-{ system ? builtins.currentSystem, debug ? false }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; },
+  debug ? false,
+  enableUnfree ? false
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -374,8 +379,28 @@ let
     '';
 
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ aszlig wkennington cdepillabout ];
+      maintainers = [ aszlig cdepillabout ];
     };
+  };
+
+  unfreeTests = mapAttrs (mkVBoxTest true vboxVMsWithExtpack) {
+    enable-extension-pack = ''
+      createVM_testExtensionPack;
+      vbm("startvm testExtensionPack");
+      waitForStartup_testExtensionPack;
+      $machine->screenshot("cli_started");
+      waitForVMBoot_testExtensionPack;
+      $machine->screenshot("cli_booted");
+
+      $machine->nest("Checking for privilege escalation", sub {
+        $machine->fail("test -e '/root/VirtualBox VMs'");
+        $machine->fail("test -e '/root/.config/VirtualBox'");
+        $machine->succeed("test -e '/home/alice/VirtualBox VMs'");
+      });
+
+      shutdownVM_testExtensionPack;
+      destroyVM_testExtensionPack;
+    '';
   };
 
 in mapAttrs (mkVBoxTest false vboxVMs) {
@@ -484,22 +509,4 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
     destroyVM_test1;
     destroyVM_test2;
   '';
-} // mapAttrs (mkVBoxTest true vboxVMsWithExtpack) {
-  enable-extension-pack = ''
-    createVM_testExtensionPack;
-    vbm("startvm testExtensionPack");
-    waitForStartup_testExtensionPack;
-    $machine->screenshot("cli_started");
-    waitForVMBoot_testExtensionPack;
-    $machine->screenshot("cli_booted");
-
-    $machine->nest("Checking for privilege escalation", sub {
-      $machine->fail("test -e '/root/VirtualBox VMs'");
-      $machine->fail("test -e '/root/.config/VirtualBox'");
-      $machine->succeed("test -e '/home/alice/VirtualBox VMs'");
-    });
-
-    shutdownVM_testExtensionPack;
-    destroyVM_testExtensionPack;
-  '';
-}
+} // (if enableUnfree then unfreeTests else {})

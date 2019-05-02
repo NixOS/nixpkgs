@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
-, configparser, futures, future, jedi, pluggy
+, configparser, futures, future, jedi, pluggy, python-jsonrpc-server
 , pytest, mock, pytestcov, coverage
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
   providers ? ["*"]
@@ -10,6 +10,7 @@
 , pycodestyle ? null
 , pydocstyle ? null
 , pyflakes ? null
+, pylint ? null
 , rope ? null
 , yapf ? null
 }:
@@ -20,13 +21,13 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.19.0";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "0glnhnjmsnnh1vs73n9dglknfkhcgp03nkjbpz0phh1jlqrkrwm6";
+    sha256 = "003fy8bbvwibnsnyxw1qwg2rxnhbfylqs67ixr6fdnw6mmrzd6fg";
   };
 
   # The tests require all the providers, disable otherwise.
@@ -43,12 +44,13 @@ buildPythonPackage rec {
     HOME=$TEMPDIR pytest
   '';
 
-  propagatedBuildInputs = [ jedi pluggy future ]
+  propagatedBuildInputs = [ jedi pluggy future python-jsonrpc-server ]
     ++ stdenv.lib.optional (withProvider "autopep8") autopep8
     ++ stdenv.lib.optional (withProvider "mccabe") mccabe
     ++ stdenv.lib.optional (withProvider "pycodestyle") pycodestyle
     ++ stdenv.lib.optional (withProvider "pydocstyle") pydocstyle
     ++ stdenv.lib.optional (withProvider "pyflakes") pyflakes
+    ++ stdenv.lib.optional (withProvider "pylint") pylint
     ++ stdenv.lib.optional (withProvider "rope") rope
     ++ stdenv.lib.optional (withProvider "yapf") yapf
     ++ stdenv.lib.optional isPy27 configparser

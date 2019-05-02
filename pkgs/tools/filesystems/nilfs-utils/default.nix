@@ -35,7 +35,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ "--with-libmount" ];
+  configureFlags = [
+    "--with-libmount"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # AC_FUNC_MALLOC is broken on cross builds.
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   # FIXME: https://github.com/NixOS/patchelf/pull/98 is in, but stdenv
   # still doesn't use it
@@ -46,14 +52,11 @@ stdenv.mkDerivation rec {
     find . -name .libs | xargs rm -rf
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "NILFS utilities";
-    maintainers = with stdenv.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with stdenv.lib.platforms;
-      linux;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license =  with licenses; [ gpl2 lgpl21 ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
     updateWalker = true;
   };

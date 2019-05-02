@@ -1,5 +1,22 @@
 { fetchFromGitHub, lib, pkgs }:
 
+let
+
+  http_proxy_connect_module_generic = patchName: rec {
+    src = fetchFromGitHub {
+      owner = "chobits";
+      repo = "ngx_http_proxy_connect_module";
+      rev = "8201639082cba702211585b03d4cc7bc51c65167";
+      sha256 = "0z71x3xnlczrr2kq43w3drxj9g14fkk4jz66x921v0yb8r9mnn5a";
+    };
+
+    patches = [
+      "${src}/patch/${patchName}.patch"
+    ];
+  };
+
+in
+
 {
   brotli = {
     src = let gitsrc = pkgs.fetchFromGitHub {
@@ -131,6 +148,27 @@
     };
   };
 
+  ngx_aws_auth = {
+    src = fetchFromGitHub {
+      owner = "anomalizer";
+      repo = "ngx_aws_auth";
+      rev = "2.1.1";
+      sha256 = "10z67g40w7wpd13fwxyknkbg3p6hn61i4v8xw6lh27br29v1y6h9";
+    };
+  };
+
+  opentracing = {
+    src =
+      let src' = fetchFromGitHub {
+        owner = "opentracing-contrib";
+        repo = "nginx-opentracing";
+        rev = "v0.7.0";
+        sha256 = "16jzxhhsyfjaxb50jy5py9ppscidfx1shvc29ihldp0zs6d8khma";
+      };
+      in "${src'}/opentracing";
+    inputs = [ pkgs.opentracing-cpp ];
+  };
+
   pagespeed =
     let
       version = pkgs.psol.version;
@@ -214,7 +252,7 @@
       rev = "7778f0125974befbc83751d0e1cadb2dcea57601";
       sha256 = "1x5hm6r0dkm02ffny8kjd7mmq8przyd9amg2qvy5700x6lb63pbs";
     };
-  }; 
+  };
 
   statsd = {
     src = fetchFromGitHub {
@@ -240,6 +278,15 @@
       repo = "nginx-module-sts";
       rev = "v0.1.1";
       sha256 = "0nvb29641x1i7mdbydcny4qwlvdpws38xscxirajd2x7nnfdflrk";
+    };
+  };
+
+  subsFilter = {
+    src = fetchFromGitHub {
+      owner = "yaoweibin";
+      repo = "ngx_http_substitutions_filter_module";
+      rev = "v0.6.4";
+      sha256 = "0q86cv0mfffh43id5xanywyhpd7b0jijrmk8y311c13l9ajrd2rx";
     };
   };
 
@@ -287,5 +334,13 @@
       rev = "v0.1.18";
       sha256 = "1jq2s9k7hah3b317hfn9y3g1q4g4x58k209psrfsqs718a9sw8c7";
     };
+  };
+
+  http_proxy_connect_module_v15 = http_proxy_connect_module_generic "proxy_connect_rewrite_1015" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "15";
+  };
+
+  http_proxy_connect_module_v14 = http_proxy_connect_module_generic "proxy_connect_rewrite_1014" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "14";
   };
 }

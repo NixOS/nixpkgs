@@ -1,8 +1,9 @@
+{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
 let
-  pkgs = import ./.. { };
   lib = pkgs.lib;
-in
-pkgs.stdenv.mkDerivation {
+  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs; };
+  functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs; };
+in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
   buildInputs = with pkgs; [ pandoc libxml2 libxslt zip jing  xmlformat ];
@@ -29,6 +30,9 @@ pkgs.stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    rm -rf ./functions/library/locations.xml
+    ln -s ${locationsXml} ./functions/library/locations.xml
+    ln -s ${functionDocs} ./functions/library/generated
     echo ${lib.version} > .version
   '';
 

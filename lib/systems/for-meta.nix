@@ -20,7 +20,7 @@ in rec {
   cygwin  = [ patterns.isCygwin ];
   darwin  = [ patterns.isDarwin ];
   freebsd = [ patterns.isFreeBSD ];
-  # Should be better, but MinGW is unclear, and HURD is bit-rotted.
+  # Should be better, but MinGW is unclear.
   gnu     = [
     { kernel = parse.kernels.linux; abi = abis.gnu; }
     { kernel = parse.kernels.linux; abi = abis.gnueabi; }
@@ -32,6 +32,7 @@ in rec {
   openbsd = [ patterns.isOpenBSD ];
   unix    = patterns.isUnix; # Actually a list
   windows = [ patterns.isWindows ];
+  wasi    = [ patterns.isWasi ];
 
   inherit (lib.systems.doubles) mesaPlatforms;
 }

@@ -16,11 +16,6 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    # fixes cycle between $out and $bin
-    install_name_tool -delete_rpath $out/lib $bin/bin/pt
-  '';
-
   meta = with stdenv.lib; {
     homepage = https://github.com/monochromegane/the_platinum_searcher;
     description = "A code search tool similar to ack and the_silver_searcher(ag).";

@@ -16,7 +16,7 @@ with lib;
     ];
 
   # ISO naming.
-  isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-${pkgs.stdenv.system}.iso";
+  isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.iso";
 
   isoImage.volumeID = substring 0 11 "NIXOS_ISO";
 

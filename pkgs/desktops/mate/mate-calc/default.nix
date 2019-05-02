@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-calc-${version}";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "07mmc99wwgqbp15zrr6z7iz0frc388z19jwk28ymyzgn6bcc9cn6";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1njk6v7z3969ikvcrabr1lw5f5572vb14w064zm3mydj8cc5inlr";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Calculator for the MATE desktop";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = [ licenses.gpl2Plus ];
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

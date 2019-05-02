@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, iodine, intltool, pkgconfig, networkmanager, libsecret
+{ stdenv, fetchurl, substituteAll, iodine, intltool, pkgconfig, networkmanager, libsecret, gtk3
 , withGnome ? true, gnome3 }:
 
 let
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ iodine networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret gnome3.networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
@@ -28,8 +28,10 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   configureFlags = [
+    "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
+    "--enable-absolute-paths"
   ];
 
   passthru = {

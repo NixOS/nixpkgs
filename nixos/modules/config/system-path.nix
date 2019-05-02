@@ -7,19 +7,21 @@ with lib;
 
 let
 
-  requiredPackages =
+  requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
     [ config.nix.package
       pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
-      pkgs.coreutils
+      pkgs.coreutils-full
       pkgs.cpio
       pkgs.curl
       pkgs.diffutils
       pkgs.findutils
       pkgs.gawk
-      pkgs.glibc # for ldd, getent
+      pkgs.stdenv.cc.libc
+      pkgs.getent
+      pkgs.getconf
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
@@ -81,6 +83,12 @@ in
         description = "List of additional package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
       };
 
+      extraSetup = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell fragments to be run after the system environment has been created. This should only be used for things that need to modify the internals of the environment, e.g. generating MIME caches. The environment being built can be accessed at $out.";
+      };
+
     };
 
     system = {
@@ -107,12 +115,7 @@ in
         "/etc/gtk-3.0"
         "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
-        "/share/applications"
-        "/share/desktop-directories"
         "/share/emacs"
-        "/share/icons"
-        "/share/menus"
-        "/share/mime"
         "/share/nano"
         "/share/org"
         "/share/themes"
@@ -132,28 +135,11 @@ in
       # outputs TODO: note that the tools will often not be linked by default
       postBuild =
         ''
-          if [ -x $out/bin/update-mime-database -a -w $out/share/mime ]; then
-              XDG_DATA_DIRS=$out/share $out/bin/update-mime-database -V $out/share/mime > /dev/null
-          fi
-
-          if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then
-              $out/bin/gtk-update-icon-cache $out/share/icons/hicolor
-          fi
-
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi
 
-          if [ -x $out/bin/update-desktop-database -a -w $out/share/applications ]; then
-              $out/bin/update-desktop-database $out/share/applications
-          fi
-
-          if [ -x $out/bin/install-info -a -w $out/share/info ]; then
-            shopt -s nullglob
-            for i in $out/share/info/*.info $out/share/info/*.info.gz; do
-                $out/bin/install-info $i $out/share/info/dir
-            done
-          fi
+          ${config.environment.extraSetup}
         '';
     };
 

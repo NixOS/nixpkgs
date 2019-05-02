@@ -148,14 +148,6 @@ in
         }
       ));
 
-    networking.interfaces = flip mapAttrs' cfg.networks (network: data: nameValuePair
-      ("tinc.${network}")
-      ({
-        virtual = true;
-        virtualType = "${data.interfaceType}";
-      })
-    );
-
     systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
       ("tinc.${network}")
       ({

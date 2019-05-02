@@ -10,9 +10,9 @@ let
   badArch = throw "${name} requires i686-linux or x86_64-linux";
 
   architecture =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       "i686"
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       "x86_64"
     else
       badArch;
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://www.scilab.org/download/${ver}/scilab-${ver}.bin.linux-${architecture}.tar.gz";
     sha256 =
-      if stdenv.system == "i686-linux" then
+      if stdenv.hostPlatform.system == "i686-linux" then
         "0fgjc2ak3b2qi6yin3fy50qwk2bcj0zbz1h4lyyic9n1n1qcliib"
-      else if stdenv.system == "x86_64-linux" then
+      else if stdenv.hostPlatform.system == "x86_64-linux" then
         "1scswlznc14vyzg0gqa1q9gcpwx05kz1sbn563463mzkdp7nd35d"
       else
         badArch;
@@ -61,9 +61,40 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/opt/scilab-${ver}"
     cp -r . "$out/opt/scilab-${ver}/"
+
+    # Create bin/ dir
     mkdir "$out/bin"
-    ln -s "$out/opt/scilab-${ver}/bin/scilab" "$out/bin/scilab-${ver}"
-    ln -s "scilab-${ver}" "$out/bin/scilab-${majorVer}"
+
+    # Creating executable symlinks
+    ln -s "$out/opt/scilab-${ver}/bin/scilab" "$out/bin/scilab"
+    ln -s "$out/opt/scilab-${ver}/bin/scilab-cli" "$out/bin/scilab-cli"
+    ln -s "$out/opt/scilab-${ver}/bin/scilab-adv-cli" "$out/bin/scilab-adv-cli"
+
+    # Creating desktop config dir
+    mkdir -p "$out/share/applications"
+
+    # Moving desktop config files
+    mv $out/opt/scilab-${ver}/share/applications/*.desktop $out/share/applications
+
+    # Fixing Exec paths and launching each app with a terminal
+    sed -i -e "s|Exec=|Exec=$out/opt/scilab-${ver}/bin/|g" \
+           -e "s|Terminal=.*$|Terminal=true|g" $out/share/applications/*.desktop
+
+    # Moving icons to the appropriate locations
+    for path in $out/opt/scilab-${ver}/share/icons/hicolor/*/*/*
+    do
+      newpath=$(echo $path | sed 's|/opt/scilab-${ver}||g')
+      filename=$(echo $path | sed 's|.*/||g')
+      dir=$(echo $newpath | sed "s|$filename||g")
+      mkdir -p $dir
+      mv $path $newpath
+    done
+
+    # Removing emptied folders
+    rm -rf $out/opt/scilab-${ver}/share/{applications,icons}
+
+    # Moving other share/ folders
+    mv $out/opt/scilab-${ver}/share/{appdata,locale,mime} $out/share
   '';
 
   meta = {

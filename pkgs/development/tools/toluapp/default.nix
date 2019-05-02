@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scons, lua }:
+{ stdenv, fetchFromGitHub, sconsPackages, lua }:
 
 stdenv.mkDerivation rec {
   version = "1.0.93";
@@ -11,18 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0zd55bc8smmgk9j4cf0jpibb03lgsvl0knpwhplxbv93mcdnw7s0";
   };
 
-  buildInputs = [ lua scons ];
+  nativeBuildInputs = [ sconsPackages.scons_3_0_1 ];
+  buildInputs = [ lua ];
 
-  patches = [ ./environ-and-linux-is-kinda-posix.patch ];
+  patches = [ ./environ-and-linux-is-kinda-posix.patch ./headers.patch ];
 
   preConfigure = ''
     substituteInPlace config_posix.py \
       --replace /usr/local $out
   '';
-
-  buildPhase = ''scons'';
-
-  installPhase = ''scons install'';
 
   meta = with stdenv.lib; {
     description = "A tool to integrate C/Cpp code with Lua";

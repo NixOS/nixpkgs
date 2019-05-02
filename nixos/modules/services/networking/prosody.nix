@@ -228,6 +228,7 @@ let
 
   createSSLOptsStr = o: ''
     ssl = {
+      cafile = "/etc/ssl/certs/ca-bundle.crt";
       key = "${o.key}";
       certificate = "${o.cert}";
       ${concatStringsSep "\n" (mapAttrsToList (name: value: "${name} = ${toLua value};") o.extraOptions)}
@@ -512,6 +513,7 @@ in
         RuntimeDirectory = [ "prosody" ];
         PIDFile = "/run/prosody/prosody.pid";
         ExecStart = "${cfg.package}/bin/prosodyctl start";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
 

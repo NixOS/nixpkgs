@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  kmime, qtbase,
+  kmime, qtbase, kcodecs
 }:
 
 mkDerivation {
@@ -11,6 +11,6 @@ mkDerivation {
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ kmime qtbase ];
+  buildInputs = [ kmime qtbase kcodecs ];
   outputs = [ "out" "dev" ];
 }

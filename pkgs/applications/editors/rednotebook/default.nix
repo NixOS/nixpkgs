@@ -1,26 +1,26 @@
 { lib, buildPythonApplication, fetchFromGitHub
-, gdk_pixbuf, glib, gobjectIntrospection, gtk3, pango, webkitgtk
+, gdk_pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk
 , pygobject3, pyyaml
 }:
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.3";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
     rev = "v${version}";
-    sha256 = "0zkfid104hcsf20r6829v11wxdghqkd3j1zbgyvd1s7q4nxjn5lj";
+    sha256 = "0k75lw3p6jx30ngvn8iipk1763gazkbrsad3fpl3sqppaqaggryj";
   };
 
   # We have not packaged tests.
   doCheck = false;
 
-  nativeBuildInputs = [ gobjectIntrospection ];
+  nativeBuildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
-    gdk_pixbuf glib gtk3 pango webkitgtk
+    gdk_pixbuf glib gtk3 gtksourceview pango webkitgtk
     pygobject3 pyyaml
   ];
 

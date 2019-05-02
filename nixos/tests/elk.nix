@@ -1,13 +1,23 @@
-{ system ? builtins.currentSystem, enableUnfree ? false }:
-with import ../lib/testing.nix { inherit system; };
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; },
+  enableUnfree ? false
+  # To run the test on the unfree ELK use the folllowing command:
+  # NIXPKGS_ALLOW_UNFREE=1 nix-build nixos/tests/elk.nix -A ELK-6 --arg enableUnfree true
+}:
+
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
+
 let
   esUrl = "http://localhost:9200";
 
-  mkElkTest = name : elk : makeTest {
+  mkElkTest = name : elk :
+   let elasticsearchGe7 = builtins.compareVersions elk.elasticsearch.version "7" >= 0;
+   in makeTest {
     inherit name;
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ eelco chaoflow offline basvandijk ];
+      maintainers = [ eelco offline basvandijk ];
     };
     nodes = {
       one =
@@ -61,7 +71,34 @@ let
               kibana = {
                 enable = true;
                 package = elk.kibana;
-                elasticsearch.url = esUrl;
+              };
+
+              elasticsearch-curator = {
+                # The current version of curator (5.6) doesn't support elasticsearch >= 7.0.0.
+                enable = !elasticsearchGe7;
+                actionYAML = ''
+                ---
+                actions:
+                  1:
+                    action: delete_indices
+                    description: >-
+                      Delete indices older than 1 second (based on index name), for logstash-
+                      prefixed indices. Ignore the error if the filter does not result in an
+                      actionable list of indices (ignore_empty_list) and exit cleanly.
+                    options:
+                      ignore_empty_list: True
+                      disable_action: False
+                    filters:
+                    - filtertype: pattern
+                      kind: prefix
+                      value: logstash-
+                    - filtertype: age
+                      source: name
+                      direction: older
+                      timestring: '%Y.%m.%d'
+                      unit: seconds
+                      unit_count: 1
+                '';
               };
             };
           };
@@ -91,6 +128,11 @@ let
       # See if logstash messages arive in elasticsearch.
       $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' -d '{\"query\" : { \"match\" : { \"message\" : \"flowers\"}}}' | jq .hits.total | grep -v 0");
       $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' -d '{\"query\" : { \"match\" : { \"message\" : \"dragons\"}}}' | jq .hits.total | grep 0");
+    '' + optionalString (!elasticsearchGe7) ''
+      # Test elasticsearch-curator.
+      $one->systemctl("stop logstash");
+      $one->systemctl("start elasticsearch-curator");
+      $one->waitUntilSucceeds("! curl --silent --show-error '${esUrl}/_cat/indices' | grep logstash | grep -q ^$1");
     '';
   };
 in mapAttrs mkElkTest {
@@ -110,5 +152,17 @@ in mapAttrs mkElkTest {
       elasticsearch = pkgs.elasticsearch6-oss;
       logstash      = pkgs.logstash6-oss;
       kibana        = pkgs.kibana6-oss;
+    };
+  "ELK-7" =
+    if enableUnfree
+    then {
+      elasticsearch = pkgs.elasticsearch7;
+      logstash      = pkgs.logstash7;
+      kibana        = pkgs.kibana7;
+    }
+    else {
+      elasticsearch = pkgs.elasticsearch7-oss;
+      logstash      = pkgs.logstash7-oss;
+      kibana        = pkgs.kibana7-oss;
     };
 }

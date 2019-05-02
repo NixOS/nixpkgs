@@ -1,11 +1,12 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, libuuid, gettext, texinfo, perl }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "e2fsprogs-1.44.3";
+  pname = "e2fsprogs";
+  version = "1.45.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/e2fsprogs/${name}.tar.gz";
-    sha256 = "1gl34i2dy1n7aky9g0jgdybl3ar2zh8i8xnghrcbb5pvws66vbn2";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1sgcjarfksa8bkx81q5cd6rzqvhzgs28a0ljwyr4ggqpfx7d18vk";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -13,6 +14,16 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [ libuuid gettext ];
+
+  # Only use glibc's __GNUC_PREREQ(X,Y) (checks if compiler is gcc version >= X.Y) when using glibc
+  patches = if stdenv.hostPlatform.libc == "glibc" then null
+    else [
+      (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
+      sha256 = "1fyml1iwrs412xn2w36ra28am3sq4klrrj60lnf7rysyw069nxk3";
+      extraPrefix = "";
+      })
+    ];
 
   configureFlags =
     if stdenv.isLinux then [
@@ -23,13 +34,14 @@ stdenv.mkDerivation rec {
       "--enable-libuuid --disable-e2initrd-helper"
     ];
 
-  checkInputs = [ perl ];
-  doCheck = false; # fails
+  checkInputs = [ buildPackages.perl ];
+  doCheck = true;
 
-  # hacky way to make it install *.pc
   postInstall = ''
-    make install-libs
-    rm "$out"/lib/*.a
+    # avoid cycle between outputs
+    if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
+      mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
+    fi
   '';
 
   enableParallelBuilding = true;
@@ -38,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = http://e2fsprogs.sourceforge.net/;
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.eelco ];
   };
 }

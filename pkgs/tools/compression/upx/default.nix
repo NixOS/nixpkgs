@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "upx-${version}";
-  version = "3.94";
+  version = "3.95";
   src = fetchurl {
-    url = "https://github.com/upx/upx/releases/download/v3.94/upx-3.94-src.tar.xz";
-    sha256 = "08anybdliqsbsl6x835iwzljahnm9i7v26icdjkcv33xmk6p5vw1";
+    url = "https://github.com/upx/upx/releases/download/v${version}/${name}-src.tar.xz";
+    sha256 = "14jmgy7hvx4zqra20w8260wrcxmjf2h6ba2yrw7pcp18im35a3rv";
   };
 
   CXXFLAGS = "-Wno-unused-command-line-argument";

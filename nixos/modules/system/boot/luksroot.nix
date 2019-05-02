@@ -7,8 +7,19 @@ let
 
   commonFunctions = ''
     die() {
-      echo "$@" >&2
-      exit 1
+        echo "$@" >&2
+        exit 1
+    }
+
+    dev_exist() {
+        local target="$1"
+        if [ -e $target ]; then
+            return 0
+        else
+            local uuid=$(echo -n $target | sed -e 's,UUID=\(.*\),\1,g')
+            blkid --uuid $uuid >/dev/null
+            return $?
+        fi
     }
 
     wait_target() {
@@ -17,13 +28,13 @@ let
         local secs="''${3:-10}"
         local desc="''${4:-$name $target to appear}"
 
-        if [ ! -e $target ]; then
+        if ! dev_exist $target; then
             echo -n "Waiting $secs seconds for $desc..."
             local success=false;
             for try in $(seq $secs); do
                 echo -n "."
                 sleep 1
-                if [ -e $target ]; then
+                if dev_exist $target; then
                     success=true
                     break
                 fi
@@ -40,30 +51,30 @@ let
     }
 
     wait_yubikey() {
-      local secs="''${1:-10}"
+        local secs="''${1:-10}"
 
-      ykinfo -v 1>/dev/null 2>&1
-      if [ $? != 0 ]; then
-          echo -n "Waiting $secs seconds for Yubikey to appear..."
-          local success=false
-          for try in $(seq $secs); do
-              echo -n .
-              sleep 1
-              ykinfo -v 1>/dev/null 2>&1
-              if [ $? == 0 ]; then
-                  success=true
-                  break
-              fi
-          done
-          if [ $success == true ]; then
-              echo " - success";
-              return 0
-          else
-              echo " - failure";
-              return 1
-          fi
-      fi
-      return 0
+        ykinfo -v 1>/dev/null 2>&1
+        if [ $? != 0 ]; then
+            echo -n "Waiting $secs seconds for Yubikey to appear..."
+            local success=false
+            for try in $(seq $secs); do
+                echo -n .
+                sleep 1
+                ykinfo -v 1>/dev/null 2>&1
+                if [ $? == 0 ]; then
+                    success=true
+                    break
+                fi
+            done
+            if [ $success == true ]; then
+                echo " - success";
+                return 0
+            else
+                echo " - failure";
+                return 1
+            fi
+        fi
+        return 0
     }
   '';
 
@@ -75,6 +86,9 @@ let
     # Warning: Do NOT replace with tmpfs!
     mkdir -p /crypt-ramfs
     mount -t ramfs none /crypt-ramfs
+
+    # Cryptsetup locking directory
+    mkdir -p /run/cryptsetup
 
     # For Yubikey salt storage
     mkdir -p /crypt-storage
@@ -133,7 +147,7 @@ let
                     fi
                 fi
             done
-            echo -n "Verifiying passphrase for ${device}..."
+            echo -n "Verifying passphrase for ${device}..."
             echo -n "$passphrase" | ${csopen} --key-file=-
             if [ $? == 0 ]; then
                 echo " - success"
@@ -324,7 +338,7 @@ in
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
 
-          (if pkgs.stdenv.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
+          (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).

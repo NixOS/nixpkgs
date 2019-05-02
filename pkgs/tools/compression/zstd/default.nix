@@ -5,10 +5,10 @@
 
 stdenv.mkDerivation rec {
   name = "zstd-${version}";
-  version = "1.3.5";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
-    sha256 = "0fpv8k16s14g0r552mhbh0mkr716cqy41d2znyrvks6qfphkgir4";
+    sha256 = "1gfxi3ymgavjfxh84rhfjan7l4pymwfrn051nwc7n0s3mxp09m6v";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
@@ -21,8 +21,11 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [ file ];
-  doCheck = false; # fails with "zstd: --list does not support reading from standard input"
-                   # probably a bug
+  doCheck = true;
+  preCheck = ''
+    substituteInPlace tests/playTests.sh \
+      --replace 'MD5SUM="md5 -r"' 'MD5SUM="md5sum"'
+  '';
 
   installFlags = [
     "PREFIX=$(out)"
@@ -30,8 +33,8 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace programs/zstdgrep \
-      --replace "=grep" "=${gnugrep}/bin/grep" \
-      --replace "=zstdcat" "=$out/bin/zstdcat"
+      --replace ":-grep" ":-${gnugrep}/bin/grep" \
+      --replace ":-zstdcat" ":-$out/bin/zstdcat"
 
     substituteInPlace programs/zstdless \
       --replace "zstdcat" "$out/bin/zstdcat"

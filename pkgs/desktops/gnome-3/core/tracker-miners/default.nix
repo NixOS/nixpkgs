@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, substituteAll, intltool, itstool, libxslt, makeWrapper
+{ stdenv, fetchurl, substituteAll, intltool, itstool, libxslt, gexiv2, tracker
 , meson, ninja, pkgconfig, vala, wrapGAppsHook, bzip2, dbus, evolution-data-server
 , exempi, flac, giflib, glib, gnome3, gst_all_1, icu, json-glib, libcue, libexif
-, libgsf, libiptcdata, libjpeg, libpng, libseccomp, libsoup, libtiff, libuuid
-, libvorbis, libxml2, poppler, taglib, upower }:
+, libgrss, libgsf, libiptcdata, libjpeg, libpng, libseccomp, libsoup, libtiff, libuuid
+, libvorbis, libxml2, poppler, taglib, upower, totem-pl-parser }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+let
   pname = "tracker-miners";
-  version = "2.0.5";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "00k8nb8dbkjnqjk12gcs5n2cm6yny553qildsm5b2c8nfs1w16b4";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1xbjbd994jxhdan7227kzdnmiblfy0f1vnsws5l809ydgk58f0qr";
   };
 
   nativeBuildInputs = [
     intltool
     itstool
     libxslt
-    makeWrapper
     meson
     ninja
     pkgconfig
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  # TODO: add libgrss, libenca, libosinfo
+  # TODO: add libenca, libosinfo
   buildInputs = [
     bzip2
     dbus
@@ -35,15 +35,16 @@ stdenv.mkDerivation rec {
     flac
     giflib
     glib
-    gnome3.gexiv2
-    gnome3.totem-pl-parser
-    gnome3.tracker
+    gexiv2
+    totem-pl-parser
+    tracker
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     icu
     json-glib
     libcue
     libexif
+    libgrss
     libgsf
     libiptcdata
     libjpeg
@@ -60,7 +61,10 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dminer_rss=false" # needs libgrss
+    # TODO: tests do not like our sandbox
+    "-Dfunctional_tests=false"
+    "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
+    "-Dsystemd_user_services=${placeholder "out"}/lib/systemd/user"
   ];
 
   patches = [
@@ -75,27 +79,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postInstall = ''
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "gnome3.${pname}";
+      versionPolicy = "none";
     };
   };
-
-  # https://github.com/NixOS/nixpkgs/pull/39534#discussion_r184339131
-  # https://github.com/NixOS/nixpkgs/pull/37693
-  preConfigure = ''
-    mesonFlagsArray+=("-Ddbus_services=$out/share/dbus-1/services")
-  '';
-
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
-  '';
-
-  # https://bugzilla.gnome.org/show_bug.cgi?id=796145
-  postFixup = ''
-    rm $out/share/tracker/miners/org.freedesktop.Tracker1.Miner.RSS.service
-  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Tracker;

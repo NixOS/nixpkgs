@@ -7,7 +7,7 @@ let
     x86_64-linux = "1gj485qqr190idilacpxwgqyw21il03zph2rddizgj7fbd6pfyaz";
   };
 
-  arch = stdenv.lib.optionalString (stdenv.system == "x86_64-linux") "_64";
+  arch = stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
   tarballVersion = stdenv.lib.replaceStrings ["."] ["_"] version;
   tarball = "hybrid-v35${arch}-nodebug-pcoem-${tarballVersion}.tar.gz";
 in
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
-    sha256 = hashes.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+    sha256 = hashes.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   hardeningDisable = [ "pic" ];

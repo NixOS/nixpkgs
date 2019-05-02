@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, readline, libedit }:
+{ stdenv, fetchFromGitHub, readline, libedit, bc }:
 
 stdenv.mkDerivation rec {
   name = "j-${version}";
-  version = "808";
+  version = "807";
   jtype = "release";
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
     rev = "j${version}-${jtype}";
-    sha256 = "1sshm04p3yznlhfp6vyc7g8qxw95y67vhnh92cmz3lfy69n2q6bf";
+    sha256 = "1qciw2yg9x996zglvj2461qby038x89xcmfb3qyrh3myn8m1nq2n";
   };
 
-  buildInputs = [ readline libedit ];
+  buildInputs = [ readline libedit bc ];
   bits = if stdenv.is64bit then "64" else "32";
   platform =
-    /*if stdenv.isRaspberryPi then "raspberry" else*/
+    if (stdenv.isAarch32 || stdenv.isAarch64) then "raspberry" else
     if stdenv.isLinux then "linux" else
     if stdenv.isDarwin then "darwin" else
     "unknown";
@@ -24,18 +24,24 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     export SOURCE_DIR=$(pwd)
     export HOME=$TMPDIR
-    export JBIN=$HOME/j${bits}/bin
     export JLIB=$SOURCE_DIR/jlibrary
+
+    export jbld=$HOME/bld
+    export jplatform=${platform}
+    export jmake=$SOURCE_DIR/make
+    export jgit=$SOURCE_DIR
+    export JBIN=$jbld/j${bits}/bin
     mkdir -p $JBIN
+
+    echo $OUT_DIR
 
     cd make
 
     patchShebangs .
-    sed -i jvars.sh -e '
-      s@~/gitdev/jsource@$SOURCE_DIR@;
+    sed -i jvars.sh -e "
+      s@~/git/jsource@$SOURCE_DIR@;
       s@~/jbld@$HOME@;
-      s@linux@${platform}@;
-      '
+      "
 
     sed -i $JLIB/bin/profile.ijs -e "s@'/usr/share/j/.*'@'$out/share/j'@;"
 
@@ -48,7 +54,7 @@ stdenv.mkDerivation rec {
       #define jplatform  "${platform}"
       #define jtype      "${jtype}"         // release,beta,...
       #define jlicense   "GPL3"
-      #define jbuilder   "unknown"  // website or email
+      #define jbuilder   "nixpkgs"  // website or email
       ' > ../jsrc/jversion.h
 
     ./build_jconsole.sh j${bits}
@@ -60,16 +66,17 @@ stdenv.mkDerivation rec {
 
     # Now run the real tests
     cd $SOURCE_DIR/test
-    # for f in *.ijs
-    # do
-    #   echo $f
-    #   $JBIN/jconsole < $f
-    # done
+    for f in *.ijs
+    do
+      echo $f
+      $JBIN/jconsole < $f > /dev/null || echo FAIL && echo PASS
+    done
   '';
 
   installPhase = ''
     mkdir -p "$out"
     cp -r $JBIN "$out/bin"
+    rm $out/bin/*.txt # Remove logs from the bin folder
 
     mkdir -p "$out/share/j"
     cp -r $JLIB/{addons,system} "$out/share/j"
@@ -78,8 +85,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "J programming language, an ASCII-based APL successor";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin synthetica ];
+    platforms = with platforms; linux ++ darwin;
     license = licenses.gpl3Plus;
     homepage = http://jsoftware.com/;
   };

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     mkdir $TMPDIR/go
     export GOPATH=$TMPDIR/go
 
-    ${stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "export GOARM=5"}
+    ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "export GOARM=5"}
 
     GOSQLITE=$GOPATH/src/code.google.com/p/gosqlite
     mkdir -p $GOSQLITE

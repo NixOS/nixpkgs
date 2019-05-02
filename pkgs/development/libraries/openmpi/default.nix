@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, gfortran, perl, libnl, rdma-core, zlib
+{ stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
+, rdma-core, zlib, numactl, libevent, hwloc
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -8,23 +9,30 @@
 }:
 
 let
-  majorVersion = "3.1";
-  minorVersion = "0";
+  version = "4.0.0";
 
 in stdenv.mkDerivation rec {
-  name = "openmpi-${majorVersion}.${minorVersion}";
+  name = "openmpi-${version}";
 
-  src = fetchurl {
-    url = "http://www.open-mpi.org/software/ompi/v${majorVersion}/downloads/${name}.tar.bz2";
-    sha256 = "0v7hrmf1z5d1rmm0z5gi79l536j3z5s5b0kf9q5rr1fc4i0h8p5j";
+  src = with stdenv.lib.versions; fetchurl {
+    url = "http://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${name}.tar.bz2";
+    sha256 = "0srnjwzsmyhka9hhnmqm86qck4w3xwjm8g6sbns58wzbrwv8l2rg";
   };
+
+  patches = [ (fetchpatch {
+   # Fix a bug that ignores OMPI_MCA_rmaps_base_oversubscribe (upstream patch).
+   # This bug breaks the test from libs, such as scalapack,
+   # on machines with less than 4 cores.
+   url = https://github.com/open-mpi/ompi/commit/98c8492057e6222af6404b352430d0dd7553d253.patch;
+   sha256 = "1mpd8sxxprgfws96qqlzvqf58pn2vv2d0qa8g8cpv773sgw3b3gj";
+  }) ];
 
   postPatch = ''
     patchShebangs ./
   '';
 
   buildInputs = with stdenv; [ gfortran zlib ]
-    ++ lib.optional isLinux libnl
+    ++ lib.optionals isLinux [ libnl numactl libevent hwloc ]
     ++ lib.optional (isLinux || isFreeBSD) rdma-core;
 
   nativeBuildInputs = [ perl ];

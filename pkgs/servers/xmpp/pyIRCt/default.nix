@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages } :
+{ stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages, runtimeShell } :
 
 stdenv.mkDerivation rec {
   name = "pyIRCt-${version}";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sed -e '/configFiles/iimport os' -i config.py
     cp * $out/share/${name}
     cat > $out/bin/pyIRCt <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cd $out/share/${name}
       ./irc.py \"$@\"
     EOF
@@ -34,8 +34,9 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "IRC transport module for XMPP";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

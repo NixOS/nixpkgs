@@ -1,6 +1,5 @@
 { stdenv, fetchurl
 , ed, autoreconfHook
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -22,16 +21,18 @@ stdenv.mkDerivation rec {
       url = https://sources.debian.org/data/main/p/patch/2.7.6-2/debian/patches/Fix_arbitrary_command_execution_in_ed-style_patches.patch;
       sha256 = "1bpy16n3hm5nv9xkrn6c4wglzsdzj3ss1biq16w9kfv48p4hx2vg";
     })
+    # https://git.savannah.gnu.org/cgit/patch.git/commit/?id=9c986353e420ead6e706262bf204d6e03322c300
+    ./CVE-2018-6952.patch
   ];
 
-  buildInputs = stdenv.lib.optional doCheck ed;
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = stdenv.lib.optionals (hostPlatform != buildPlatform) [
+  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_strnlen_working=yes"
   ];
 
-  doCheck = hostPlatform.libc != "musl"; # not cross;
+  doCheck = stdenv.hostPlatform.libc != "musl"; # not cross;
+  checkInputs = [ed];
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
          more original files, producing patched versions.
       '';
 
-    homepage = http://savannah.gnu.org/projects/patch;
+    homepage = https://savannah.gnu.org/projects/patch;
 
     license = stdenv.lib.licenses.gpl3Plus;
 

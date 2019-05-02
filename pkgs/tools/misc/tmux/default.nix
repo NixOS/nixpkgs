@@ -12,16 +12,16 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "tmux-${version}";
-  version = "2.7";
+  pname = "tmux";
+  version = "2.9";
 
   outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
-    owner = "tmux";
-    repo = "tmux";
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "1yr4l8ckd67c3id4vrbpha91xxpdfpw0cpbr3v81lam0m7k4rgba";
+    sha256 = "191y986k9q17fdxlh3ldkr81s8fpxj4n2lc2lys6hzi4ybrhgdik";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

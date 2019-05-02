@@ -1,5 +1,4 @@
 { stdenv, fetchurl, m4, perl, help2man
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
 
   # Don't run the native `strip' when cross-compiling.  This breaks at least
   # with `.a' files for MinGW.
-  dontStrip = hostPlatform != buildPlatform;
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
     description = "GNU Libtool, a generic library support script";
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
       documentation for details.
     '';
 
-    homepage = http://www.gnu.org/software/libtool/;
+    homepage = https://www.gnu.org/software/libtool/;
 
     license = stdenv.lib.licenses.gpl2Plus;
 

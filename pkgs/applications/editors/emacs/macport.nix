@@ -1,24 +1,22 @@
 { stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake
-, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
+, cf-private, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
 stdenv.mkDerivation rec {
-  emacsVersion = "26.1";
+  emacsVersion = "26.2";
   emacsName = "emacs-${emacsVersion}";
-  macportVersion = "7.1";
+  macportVersion = "7.6";
   name = "emacs-mac-${emacsVersion}-${macportVersion}";
-
-  builder = ./builder.sh;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "0b6k1wq44rc8gkvxhi1bbjxbz3cwg29qbq8mklq2az6p1hjgrx0w";
+    sha256 = "13n5m60i47k96mpv5pp6km2ph9rv2m5lmbpzj929v02vpsfyc70m";
   };
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "0d2ny54f68v3hjc2g3pkj83xv3yzv0hrwvn2cmpyb0jxjbsb2frc";
+    sha256 = "00szqb74ds89m34sx5mq0gxhsrz64j691sxyvqncj10hw17d0y61";
   };
 
   hiresSrc = fetchurl {
@@ -35,6 +33,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses libxml2 gnutls texinfo gettext
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
     ImageCaptureCore GSS ImageIO   # may be optional
+    # Needed for CFNotificationCenterAddObserver symbols.
+    cf-private
   ];
 
   postUnpack = ''
@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
 
     # use newer emacs icon
     cp nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns mac/Emacs.app/Contents/Resources/Emacs.icns
+
+    # Fix sandbox impurities.
+    substituteInPlace Makefile.in --replace '/bin/pwd' 'pwd'
+    substituteInPlace lib-src/Makefile.in --replace '/bin/pwd' 'pwd'
   '';
 
   configureFlags = [
@@ -64,7 +68,7 @@ stdenv.mkDerivation rec {
     "--enable-mac-app=$$out/Applications"
   ];
 
-  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";
+  CFLAGS = "-O3";
   LDFLAGS = "-O3 -L${ncurses.out}/lib";
 
   postInstall = ''
@@ -76,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The extensible, customizable text editor";
-    homepage    = http://www.gnu.org/software/emacs/;
+    homepage    = https://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jwiegley matthewbauer ];
     platforms   = platforms.darwin;

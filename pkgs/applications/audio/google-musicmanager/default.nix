@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , flac, expat, libidn, qtbase, qtwebkit, libvorbis }:
-assert stdenv.system == "x86_64-linux";
+assert stdenv.hostPlatform.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   version = "beta_1.0.467.4929-r0"; # friendly to nix-env version sorting algo

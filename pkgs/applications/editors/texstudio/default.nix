@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "texstudio";
-  version = "2.12.10";
+  version = "2.12.14";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "${pname}-org";
     repo = pname;
     rev = version;
-    sha256 = "0mkx7fym41hwd7cdg31ji2hxlv3gxx0sa6bnap51ryxmq8sxdjhq";
+    sha256 = "08vfhkgzhh1227wcvr5wwpnw0072c80nf2crhmxwh3jgjfgi538f";
   };
 
   nativeBuildInputs = [ qt5.qmake pkgconfig ];

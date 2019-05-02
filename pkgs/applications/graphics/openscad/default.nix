@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "VERSION=${version}" ];
 
+  # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
+  enableParallelBuilding = false; # true by default due to qmake
+
   doCheck = false;
 
   meta = {

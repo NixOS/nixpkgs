@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "kmsxx";
-  version = "2017-10-10";
+  version = "2018-10-23";
   name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "tomba";
     repo = "kmsxx";
     fetchSubmodules = true;
-    rev = "f32b82c17cd357ae1c8ed2636266113955293feb";
-    sha256 = "14panqdqq83wh6wym5afdiyrr78mb12ga63pgrppj27kgv398yjj";
+    rev = "c0093c91f0fa2fd6a5b9d1b206a6f44dcd55bfb5";
+    sha256 = "03rv92r938nxb4k4gwcvxy76jnhxdx6x60b58jws83285hd9rgkf";
   };
 
   enableParallelBuilding = true;

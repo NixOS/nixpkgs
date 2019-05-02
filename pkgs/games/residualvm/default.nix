@@ -1,5 +1,6 @@
 { stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib
-, openglSupport ? false, libGLU_combined ? null
+, libGLSupported
+, openglSupport ? libGLSupported, libGLU_combined ? null
 }:
 
 assert openglSupport -> libGLU_combined != null;

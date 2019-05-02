@@ -19,11 +19,11 @@ assert withFonts -> freetype != null;
 
 stdenv.mkDerivation rec {
   name = "libbluray-${version}";
-  version  = "1.0.2";
+  version  = "1.1.1";
 
   src = fetchurl {
     url = "http://get.videolan.org/libbluray/${version}/${name}.tar.bz2";
-    sha256 = "1zxfnw1xbghcj7b3zz5djndv6gwssxda19cz1lrlqrkg8577r7kd";
+    sha256 = "0f138xlldzci8wic89i9vpka3mdsn8r78khpnk3wijlbgjhphr0h";
   };
 
   patches = optional withJava ./BDJ-JARFILE-path.patch;

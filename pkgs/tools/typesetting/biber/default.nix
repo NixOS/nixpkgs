@@ -1,18 +1,14 @@
-{ stdenv, fetchFromGitHub, perlPackages }:
+{ stdenv, fetchFromGitHub, perlPackages, texlive }:
 
-# builds but doesn't work with perl 5.24, see discussion in #40826
-# TODO: build with perl >=5.26 and try to enable tests
+let
+  biberSource = stdenv.lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
+in
 
 perlPackages.buildPerlModule rec {
   name = "biber-${version}";
-  version = "2.10";
+  inherit (biberSource) version;
 
-  src = fetchFromGitHub {
-    owner = "plk";
-    repo = "biber";
-    rev = "v${version}";
-    sha256 = "0f6bb1iprl92iamxqlr8fc99mxr9n3722frd1ak9pbzh3m6c2ny6";
-  };
+  src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
 
   buildInputs = with perlPackages; [
     autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
@@ -20,13 +16,14 @@ perlPackages.buildPerlModule rec {
     DateTime DateTimeFormatBuilder DateTimeCalendarJulian
     ExtUtilsLibBuilder FileSlurper FileWhich IPCRun3 LogLog4perl LWPProtocolHttps ListAllUtils
     ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
-    UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
+    UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
+    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit SortKey
     TestDifferences
   ];
 
-  # Tests depend on the precise Unicode-Collate version (expects 1.19, but we have 1.25)
-  doCheck = false;
+  checkInputs = with perlPackages; [
+    UnicodeCollate
+  ];
 
   meta = with stdenv.lib; {
     description = "Backend for BibLaTeX";

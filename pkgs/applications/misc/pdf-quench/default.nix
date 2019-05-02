@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook ];
   buildInputs = with pkgs; [
     gtk3
-    gobjectIntrospection
+    gobject-introspection
     goocanvas2
     poppler_gi
   ];
@@ -31,6 +31,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://github.com/linuxerwang/pdf-quench;
     description = "A visual tool for cropping pdf files";
     platforms = platforms.linux;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ flokli ];
   };
 }

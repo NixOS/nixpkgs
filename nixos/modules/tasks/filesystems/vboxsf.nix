@@ -6,7 +6,7 @@ let
 
   inInitrd = any (fs: fs == "vboxsf") config.boot.initrd.supportedFilesystems;
 
-  package = pkgs.runCommand "mount.vboxsf" {} ''
+  package = pkgs.runCommand "mount.vboxsf" { preferLocalBuild = true; } ''
     mkdir -p $out/bin
     cp ${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/mount.vboxsf $out/bin
   '';

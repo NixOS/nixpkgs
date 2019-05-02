@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurlBoot, buildPackages
+{ config, lib, stdenv, fetchurl, buildPackages, callPackage
 , enableThreading ? stdenv ? glibc, makeWrapper
 }:
 
@@ -22,12 +22,13 @@ let
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
   crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
-  common = { version, sha256 }: stdenv.mkDerivation (rec {
+
+  common = { self, version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
 
     name = "perl-${version}";
 
-    src = fetchurlBoot {
+    src = fetchurl {
       url = "mirror://cpan/src/5.0/${name}.tar.gz";
       inherit sha256;
     };
@@ -37,20 +38,21 @@ let
       stdenv.lib.optional crossCompiling "dev";
     setOutputFlags = false;
 
+    disallowedReferences = [ stdenv.cc ];
+
     patches =
-      [ ]
-      # Do not look in /usr etc. for dependencies.
-      ++ optional (versionOlder version "5.26") ./no-sys-dirs.patch
-      ++ optional (versionAtLeast version "5.26") ./no-sys-dirs-5.26.patch
-      ++ optional (versionAtLeast version "5.24") (
+      [
+        # Do not look in /usr etc. for dependencies.
+        (if (versionOlder version "5.29.6") then ./no-sys-dirs-5.26.patch else ./no-sys-dirs-5.29.patch)
+      ]
+      ++ optional (versionOlder version "5.29.6")
         # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
-        fetchurlBoot {
+        (fetchurl {
           url = "https://rt.perl.org/Public/Ticket/Attachment/1502646/807252/0001-Fix-missing-build-dependency-for-pods.patch";
           sha256 = "1bb4mldfp8kq1scv480wm64n2jdsqa3ar46cjp1mjpby8h5dr2r0";
         })
       ++ optional stdenv.isSunOS ./ld-shared.patch
-      ++ optional stdenv.isDarwin ./cpp-precomp.patch
-      ++ optional (stdenv.isDarwin && versionAtLeast version "5.24") ./sw_vers.patch
+      ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
       ++ optional crossCompiling ./MakeMaker-cross.patch;
 
     postPatch = ''
@@ -77,6 +79,7 @@ let
         "-Dlocincpth=${libcInc}/include"
         "-Dloclibpth=${libcLib}/lib"
       ]
+      ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
       ++ optional enableThreading "-Dusethreads";
 
@@ -86,7 +89,10 @@ let
 
     enableParallelBuilding = !crossCompiling;
 
-    preConfigure = optionalString (!crossCompiling) ''
+    preConfigure = ''
+        substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
+        substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
+      '' + optionalString (!crossCompiling) ''
         configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
       '' + optionalString (stdenv.isAarch32 || stdenv.isMips) ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
@@ -99,7 +105,19 @@ let
 
     setupHook = ./setup-hook.sh;
 
-    passthru.libPrefix = "lib/perl5/site_perl";
+    passthru = rec {
+      interpreter = "${self}/bin/perl";
+      libPrefix = "lib/perl5/site_perl";
+      pkgs = callPackage ../../../top-level/perl-packages.nix {
+        perl = self;
+        overrides = config.perlPackageOverrides or (p: {}); # TODO: (self: super: {}) like in python
+      };
+      buildEnv = callPackage ./wrapper.nix {
+        perl = self;
+        inherit (pkgs) requiredPerlModules;
+      };
+      withPackages = f: buildEnv.override { extraLibs = f pkgs; };
+    };
 
     doCheck = false; # some tests fail, expensive
 
@@ -118,6 +136,7 @@ let
           --replace "${
               if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
             }" /no-such-path \
+          --replace "${stdenv.cc}" /no-such-path \
           --replace "$man" /no-such-path
       '' + stdenv.lib.optionalString crossCompiling
       ''
@@ -149,13 +168,14 @@ let
       license = licenses.artistic1;
       maintainers = [ maintainers.eelco ];
       platforms = platforms.all;
+      priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "1.2";
+    crossVersion = "9e4051cd28b7b3afb162776f5627c7abe4c7b9ea"; # Apr 21, 2019
 
-    perl-cross-src = fetchurlBoot {
-      url = "https://github.com/arsv/perl-cross/releases/download/${crossVersion}/perl-cross-${crossVersion}.tar.gz";
-      sha256 = "02cic7lk91hgmsg8klkm2kv88m2a8y22m4m8gl4ydxbap2z7g42r";
+    perl-cross-src = fetchurl {
+      url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
+      sha256 = "0dj99w2dicbp3c3wn0k32785pc4c68iqnlyxswnza6mhw6wvl9v7";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -171,23 +191,17 @@ let
     setupHook = ./setup-hook-cross.sh;
   });
 in rec {
-  perl522 = common {
-    version = "5.22.4";
-    sha256 = "1yk1xn4wmnrf2ph02j28khqarpyr24qwysjzkjnjv7vh5dygb7ms";
-  };
-
-  perl524 = common {
-    version = "5.24.4";
-    sha256 = "0w0r6v5k5hw5q1k3p4c7krcxidkj2qzsj5dlrlrxhm01n7fksbxz";
-  };
-
-  perl526 = common {
-    version = "5.26.2";
-    sha256 = "03gpnxx1g6hvlh0v4aqx00580h787sfywp1vlvw64q2xcbm9qbsp";
-  };
-
+  # the latest Maint version
   perl528 = common {
-    version = "5.28.0";
-    sha256 = "1a3f822lcl8dr8v0hk80yyhpzqlljg49z9flb48rs3nbsij9z4ky";
+    self = perl528;
+    version = "5.28.2";
+    sha256 = "1iynpsxdym4h76kgndmn3ykvwxhqz444xvaz8z2irsxkvmnlb5da";
+  };
+
+  # the latest Devel version
+  perldevel = common {
+    self = perldevel;
+    version = "5.29.9";
+    sha256 = "017x3nghyc5m8q1yqnrdma96b3d5rlfx87vv5mi64jq0r8k6zppm";
   };
 }

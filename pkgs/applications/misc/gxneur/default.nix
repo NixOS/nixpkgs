@@ -8,14 +8,17 @@ stdenv.mkDerivation {
     sha256 = "0avmhdcj0hpr55fc0iih8fjykmdhn34c8mwdnqvl8jh4nhxxchxr";
   };
 
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [
     xorg.libX11 glib gtk2 xorg.libXpm xorg.libXt xorg.libXext xneur
     libglade GConf pcre libappindicator-gtk2
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GUI for XNEUR keyboard layout switcher";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 gpl3 ];
   };
 }

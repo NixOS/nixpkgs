@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi, six }:
 buildPythonPackage rec {
   pname = "websocket_client";
-  version = "0.48.0";
+  version = "0.54.0";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "18f1170e6a1b5463986739d9fd45c4308b0d025c1b2f9b88788d8f69e8a5eb4a";
+    sha256 = "e51562c91ddb8148e791f0155fdb01325d99bb52c4cdbb291aee7a3563fd0849";
   };
 
   prePatch = ''

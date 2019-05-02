@@ -3,7 +3,7 @@
 let
   pname = "uucp";
   version = "11.0.0";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.01";
@@ -20,8 +20,6 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ocamlbuild topkg uutf uunf ];
 
   propagatedBuildInputs = [ uchar ];
-
-  unpackCmd = "tar xjf $src";
 
   buildPhase = "${topkg.buildPhase} --with-cmdliner false";
 

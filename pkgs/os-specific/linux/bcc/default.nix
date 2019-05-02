@@ -4,14 +4,14 @@
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.6.1";
+  version = "0.8.0";
   name = "bcc-${version}";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bcc";
     rev    = "v${version}";
-    sha256 = "1rfqjbq8ah8zrsnpbx0h5irq3h2snncfvi4pvaxl7574kciprjxj";
+    sha256 = "15vvybllmh9hdj801v3psd671c0qq2a1xdv73kabb9r4fzgaknxk";
   };
 
   format = "other";
@@ -19,7 +19,7 @@ python.pkgs.buildPythonApplication rec {
   buildInputs = [
     llvmPackages.llvm llvmPackages.clang-unwrapped kernel
     elfutils luajit netperf iperf
-    systemtap.stapBuild
+    systemtap.stapBuild flex
   ];
 
   patches = [

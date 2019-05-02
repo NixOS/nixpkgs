@@ -21,7 +21,7 @@ in
           type = types.int;
 
           description = ''
-            Idle time to wait until xautolock locks the computer.
+            Idle time (in minutes) to wait until xautolock locks the computer.
           '';
         };
 

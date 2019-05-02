@@ -4,13 +4,13 @@ stdenv.mkDerivation rec {
   name = "xmind-${version}";
   version = "7.5-update1";
 
-  src = if stdenv.system == "i686-linux" then fetchurl {
+  src = if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
     url = "http://dl2.xmind.net/xmind-downloads/${name}-linux_i386.deb";
     sha256 = "04kr6pw0kwy715bp9wcnqnw1k5wl65xa87lhljrskm291p402jy1";
-  } else if stdenv.system == "x86_64-linux" then fetchurl {
+  } else if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
     url = "http://dl2.xmind.net/xmind-downloads/${name}-linux_amd64.deb";
     sha256 = "1j2ynhk7p3m3vd6c4mjwpnlzqgfj5c4q3zydab3nfwncwx6gaqj9";
-  } else throw "platform ${stdenv.system} not supported!";
+  } else throw "platform ${stdenv.hostPlatform.system} not supported!";
 
   nativeBuildInputs = [ dpkg makeWrapper ];
 

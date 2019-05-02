@@ -13,9 +13,6 @@ let
 
       # CJDNS output is incompatible with the XML log.
       systemd.services.cjdns.serviceConfig.StandardOutput = "null";
-      #networking.firewall.enable = true;
-      networking.firewall.allowPing = true;
-      #networking.firewall.rejectPackets = true;
     };
 
 in

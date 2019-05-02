@@ -2,11 +2,11 @@
 
 let
   arch =
-    if      stdenv.system == "x86_64-linux" then "bandwidth64"
-    else if stdenv.system == "i686-linux" then "bandwidth32"
-    else if stdenv.system == "x86_64-darwin" then "bandwidth-mac64"
-    else if stdenv.system == "i686-darwin" then "bandwidth-mac32"
-    else if stdenv.system == "i686-cygwin" then "bandwidth-win32"
+    if      stdenv.hostPlatform.system == "x86_64-linux" then "bandwidth64"
+    else if stdenv.hostPlatform.system == "i686-linux" then "bandwidth32"
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then "bandwidth-mac64"
+    else if stdenv.hostPlatform.system == "i686-darwin" then "bandwidth-mac32"
+    else if stdenv.hostPlatform.system == "i686-cygwin" then "bandwidth-win32"
     else throw "Unknown architecture";
 in
 stdenv.mkDerivation rec {
@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

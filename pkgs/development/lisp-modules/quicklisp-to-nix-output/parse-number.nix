@@ -1,4 +1,4 @@
-{ fetchurl, ... }:
+args @ { fetchurl, ... }:
 rec {
   baseName = ''parse-number'';
   version = ''v1.7'';

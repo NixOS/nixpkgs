@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub, perl, makeWrapper, file, systemd, iw, rfkill
 , hdparm, ethtool, inetutils , kmod, pciutils, smartmontools
 , x86_energy_perf_policy, gawk, gnugrep, coreutils, utillinux
+, checkbashisms, shellcheck
 , enableRDW ? false, networkmanager
 }:
 
@@ -14,34 +15,45 @@ let
 
 in stdenv.mkDerivation rec {
   name = "tlp-${version}";
-  version = "1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
-        owner = "linrunner";
-        repo = "TLP";
-        rev = "${version}";
-        sha256 = "01bhb9hdsck1g2s5jvafr3ywml9k2qz7x2cf42a3z8g5d23pdfpy";
-      };
+    owner = "linrunner";
+    repo = "TLP";
+    rev = version;
+    sha256 = "1msldl6y8fpvxa9p87lv3hvgxwk2vpiahqmapq485ihdjkshc558";
+  };
 
-  makeFlags = [ "DESTDIR=$(out)"
-                "TLP_SBIN=$(out)/bin"
-                "TLP_BIN=$(out)/bin"
-                "TLP_TLIB=$(out)/share/tlp-pm"
-                "TLP_PLIB=$(out)/lib/pm-utils"
-                "TLP_ULIB=$(out)/lib/udev"
-                "TLP_NMDSP=$(out)/etc/NetworkManager/dispatcher.d"
-                "TLP_SHCPL=$(out)/share/bash-completion/completions"
-                "TLP_MAN=$(out)/share/man"
+  outRef = placeholder "out";
 
-                "TLP_NO_INIT=1"
-                "TLP_NO_PMUTILS=1"
-              ];
+  makeFlags = [
+    "DESTDIR=${outRef}"
+    "TLP_SBIN=${outRef}/bin"
+    "TLP_BIN=${outRef}/bin"
+    "TLP_TLIB=${outRef}/share/tlp"
+    "TLP_FLIB=${outRef}/share/tlp/func.d"
+    "TLP_ULIB=${outRef}/lib/udev"
+    "TLP_NMDSP=${outRef}/etc/NetworkManager/dispatcher.d"
+    "TLP_SHCPL=${outRef}/share/bash-completion/completions"
+    "TLP_MAN=${outRef}/share/man"
+    "TLP_META=${outRef}/share/metainfo"
+
+    "TLP_NO_INIT=1"
+  ];
 
   nativeBuildInputs = [ makeWrapper file ];
 
   buildInputs = [ perl ];
 
   installTargets = [ "install-tlp" "install-man" ] ++ stdenv.lib.optional enableRDW "install-rdw";
+
+  checkInputs = [
+    checkbashisms
+    shellcheck
+  ];
+
+  doCheck = true;
+  checkTarget = [ "checkall" ];
 
   postInstall = ''
     cp -r $out/$out/* $out

@@ -1,12 +1,13 @@
 { stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
 , less, makeWrapper
-, x11Mode ? false, qtMode ? false, libXaw, libXext, mkfontdir, pkgconfig, qt5
+, buildPackages
+, x11Mode ? false, qtMode ? false, libXaw, libXext, bdftopcf, mkfontdir, pkgconfig, qt5
 }:
 
 let
   platform =
     if stdenv.hostPlatform.isUnix then "unix"
-    else throw "Unknown platform for NetHack: ${stdenv.system}";
+    else throw "Unknown platform for NetHack: ${stdenv.hostPlatform.system}";
   unixHint =
     if x11Mode then "linux-x11"
     else if qtMode then "linux-qt4"
@@ -33,10 +34,11 @@ in stdenv.mkDerivation rec {
                 ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
 
   nativeBuildInputs = [ flex bison ]
-                      ++ lib.optionals x11Mode [ mkfontdir ]
+                      ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
                       ++ lib.optionals qtMode [
                            pkgconfig mkfontdir qt5.qtbase.dev
                            qt5.qtmultimedia.dev makeWrapper
+                           bdftopcf
                          ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -64,12 +66,24 @@ in stdenv.mkDerivation rec {
       -e 's,^CFLAGS=-g,CFLAGS=,' \
       -i sys/unix/hints/macosx10.10
     sed -e '/define CHDIR/d' -i include/config.h
+    ${lib.optionalString qtMode ''
     sed \
       -e 's,^QTDIR *=.*,QTDIR=${qt5.qtbase.dev},' \
       -e 's,CFLAGS.*QtGui.*,CFLAGS += `pkg-config Qt5Gui --cflags`,' \
       -e 's,CFLAGS+=-DCOMPRESS.*,CFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
         -DCOMPRESS_EXTENSION=\\".gz\\",' \
       -i sys/unix/hints/linux-qt4
+    ''}
+    ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+    # If we're cross-compiling, replace the paths to the data generation tools
+    # with the ones from the build platform's nethack package, since we can't
+    # run the ones we've built here.
+    ''
+    ${buildPackages.perl}/bin/perl -p \
+      -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.nethack}/libexec/nethack/\1,g' \
+      -i sys/unix/Makefile.*
+    ''}
+    sed -i -e '/rm -f $(MAKEDEFS)/d' sys/unix/Makefile.src
   '';
 
   configurePhase = ''
@@ -79,6 +93,8 @@ in stdenv.mkDerivation rec {
     ''}
     popd
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/games/lib/nethackuserdir
@@ -116,6 +132,8 @@ in stdenv.mkDerivation rec {
     chmod +x $out/bin/nethack
     ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
     ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
+    install -Dm 555 util/{makedefs,dgn_comp,lev_comp} -t $out/libexec/nethack/
+    ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
   '';
 
   postFixup = lib.optionalString qtMode ''

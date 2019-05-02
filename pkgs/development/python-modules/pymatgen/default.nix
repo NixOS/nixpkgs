@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, numpy, pydispatcher, sympy, requests, monty, ruamel_yaml, six, scipy, tabulate, enum34, matplotlib, palettable, spglib, pandas }:
+{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, numpy, pydispatcher, sympy, requests, monty, ruamel_yaml, six, scipy, tabulate, enum34, matplotlib, palettable, spglib, pandas, networkx }:
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2018.6.27";
+  version = "2019.2.28";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8078af7fda4f9a07f1e389ffe08de3511213acdf9fb2ed9f9ffe89b9b12b8568";
+    sha256 = "fe4c9b8b16d618fa531a09073d69db6ab02c0c379e672862a41163e39ac91e85";
   };
 
   nativeBuildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ numpy pydispatcher sympy requests monty ruamel_yaml six scipy tabulate enum34 matplotlib palettable spglib pandas ];
-  
+  propagatedBuildInputs = [ numpy pydispatcher sympy requests monty ruamel_yaml six scipy tabulate enum34 matplotlib palettable spglib pandas networkx ];
+
   # No tests in pypi tarball.
   doCheck = false;
 
@@ -22,4 +22,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

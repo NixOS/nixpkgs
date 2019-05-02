@@ -1,19 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, pytestcache, pytest, isort }:
+{ lib, buildPythonPackage, fetchPypi, pytest, isort }:
 
 buildPythonPackage rec {
   pname = "pytest-isort";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d4d195ecfe33d81e258d251b2679b32216bad84131fb41984da22d9d0328a6fe";
+    sha256 = "4bfee60dad1870b51700d55a85f5ceda766bd9d3d2878c1bbabee80e61b1be1a";
   };
 
-  propagatedBuildInputs = [ pytestcache pytest isort ];
+  propagatedBuildInputs = [ isort ];
 
-  # no tests in PyPI tarball, no tags on GitHub
-  # https://github.com/moccu/pytest-isort/pull/8
-  doCheck = false;
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    py.test -vs --cache-clear
+  '';
 
   meta = with lib; {
     description = "Pytest plugin to perform isort checks (import ordering)";

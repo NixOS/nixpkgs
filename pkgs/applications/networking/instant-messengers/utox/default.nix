@@ -32,17 +32,12 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkInputs = [ check ];
-  checkPhase = ''
-    runHook preCheck
-    ctest -VV
-    runHook postCheck
-  '';
 
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";
     homepage = https://github.com/uTox/uTox;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ domenkozar jgeerds ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.all;
   };
 }

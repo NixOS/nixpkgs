@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     description = "Web-based conference planning and management system";
     homepage = https://github.com/frab/frab;
     license = licenses.mit;
+    broken = true; # 2018-09-08; no successful hydra build since 2018-02-14
   };
 }

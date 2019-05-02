@@ -32,14 +32,10 @@ in stdenv.mkDerivation rec {
     "-DBUILD_LIB_STATIC=OFF"
     "-DBUILD_PLUGIN=${if withGimpPlugin then "ON" else "OFF"}"
     "-DENABLE_DYNAMIC_LINKING=ON"
-  ];
+  ] ++ stdenv.lib.optional withGimpPlugin "-DPLUGIN_INSTALL_PREFIX=${placeholder "gimpPlugin"}/${gimp.targetPluginDir}";
 
   postPatch = ''
     cp ${CMakeLists} CMakeLists.txt
-  '';
-
-  preConfigure = stdenv.lib.optionalString withGimpPlugin ''
-    cmakeFlags="$cmakeFlags -DPLUGIN_INSTALL_PREFIX=$gimpPlugin/${gimp.targetPluginDir}"
   '';
 
   meta = with stdenv.lib; {

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll, vpnc, intltool, pkgconfig, networkmanager, libsecret
-, withGnome ? true, gnome3, kmod, file }:
+, gtk3, withGnome ? true, gnome3, kmod, file }:
 let
   pname = "NetworkManager-vpnc";
   version = "1.2.6";
@@ -19,12 +19,14 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ vpnc networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret gnome3.networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig file ];
 
   configureFlags = [
+    "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--enable-absolute-paths"
   ];
 
   passthru = {

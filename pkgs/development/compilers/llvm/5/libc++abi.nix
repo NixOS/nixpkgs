@@ -33,6 +33,7 @@ stdenv.mkDerivation {
     ''
     else ''
       install -d -m 755 $out/include $out/lib
+      install -m 644 lib/libc++abi.a $out/lib
       install -m 644 lib/libc++abi.so.1.0 $out/lib
       install -m 644 ../include/cxxabi.h $out/include
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so

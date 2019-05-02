@@ -16,7 +16,8 @@ rec {
     } :
   let
     docker-runc = runc.overrideAttrs (oldAttrs: rec {
-      name = "docker-runc";
+      name = "docker-runc-${version}";
+      inherit version;
       src = fetchFromGitHub {
         owner = "docker";
         repo = "runc";
@@ -27,8 +28,9 @@ rec {
       patches = [];
     });
 
-    docker-containerd = (containerd.override { inherit go; }).overrideAttrs (oldAttrs: rec {
-      name = "docker-containerd";
+    docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
+      name = "docker-containerd-${version}";
+      inherit version;
       src = fetchFromGitHub {
         owner = "docker";
         repo = "containerd";
@@ -37,12 +39,11 @@ rec {
       };
 
       hardeningDisable = [ "fortify" ];
-
-      buildInputs = [ removeReferencesTo go btrfs-progs ];
     });
 
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
-      name = "docker-init";
+      name = "docker-init-${version}";
+      inherit version;
       src = fetchFromGitHub {
         owner = "krallin";
         repo = "tini";
@@ -93,7 +94,9 @@ rec {
 
     dontStrip = true;
 
-    buildPhase = (optionalString (stdenv.isLinux) ''
+    buildPhase = ''
+      export GOCACHE="$TMPDIR/go-cache"
+    '' + (optionalString (stdenv.isLinux) ''
       # build engine
       cd ./components/engine
       export AUTO_GOPATH=1
@@ -136,9 +139,9 @@ rec {
         --prefix PATH : "$out/libexec/docker:$extraPath"
 
       # docker uses containerd now
-      ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/docker-containerd
-      ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/docker-containerd-shim
-      ln -s ${docker-runc}/bin/runc $out/libexec/docker/docker-runc
+      ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
+      ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
+      ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
       ln -s ${docker-proxy}/bin/docker-proxy $out/libexec/docker/docker-proxy
       ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
@@ -197,14 +200,14 @@ rec {
   # Get revisions from
   # https://github.com/docker/docker-ce/tree/v${version}/components/engine/hack/dockerfile/install/*
 
-  docker_18_06 = dockerGen rec {
-    version = "18.06.0-ce";
-    rev = "0ffa8257ec673ed6849b73b03fb01b0cac90fdb3"; # git commit
-    sha256 = "1w6jgqbc53pkgfkf2p6z5g316q1r5jvnw4lq11j4qdkw7vy8q5d9";
-    runcRev = "69663f0bd4b60df09991c08812a60108003fa340";
-    runcSha256 = "1l37r97l3ra4ph069w190d05r0a43s76nn9jvvlkbwrip1cp6gyq";
-    containerdRev = "d64c661f1d51c48782c9cec8fda7604785f93587";
-    containerdSha256 = "0pk1kii8bmlvziblrqwb88w5cd486pmb7vw8p7kcyn9lqsw32ria";
+  docker_18_09 = makeOverridable dockerGen {
+    version = "18.09.5";
+    rev = "e8ff056dbcfadaeca12a5f508b0cec281126c01d";
+    sha256 = "16nd9vg2286m6v47fjq2zicmfvi8vwiwn24yylxia8b9mk417kdb";
+    runcRev = "2b18fe1d885ee5083ef9f0838fee39b62d653e30";
+    runcSha256 = "0g0d9mh5fcvsjgddiyw98ph5zpz5ivlwy89m45jxwbzkxb21gy7w";
+    containerdRev = "bb71b10fd8f58240ca47fbb579b9d1028eea7c84";
+    containerdSha256 = "0npbzixf3c0jvzm159vygvkydrr8h36c9sq50yv0mdinrys2bvg0";
     tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };

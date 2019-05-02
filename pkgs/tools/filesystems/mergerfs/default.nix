@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "mergerfs-${version}";
-  version = "2.24.2";
+  version = "2.25.1";
 
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = "mergerfs";
     rev = version;
-    sha256 = "0i65v7900s7c9jkj3a4v44vf3r5mvjkbcic3df940nmk0clahhcs";
+    sha256 = "1xrd18spp3wj25dd8513bah856w44gw8hilk190v13g6yafx64n6";
   };
 
   nativeBuildInputs = [
@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" "XATTR_AVAILABLE=1" ];
+
+  postFixup = ''
+    ln -s $out/bin/mergerfs $out/bin/mount.fuse.mergerfs
+  '';
 
   meta = {
     description = "A FUSE based union filesystem";

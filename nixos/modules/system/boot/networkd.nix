@@ -30,10 +30,14 @@ let
     (assertValueOneOf "UDPSegmentationOffload" boolValues)
     (assertValueOneOf "GenericReceiveOffload" boolValues)
     (assertValueOneOf "LargeReceiveOffload" boolValues)
-    (range "RxChannels" 1 4294967295)
-    (range "TxChannels" 1 4294967295)
-    (range "OtherChannels" 1 4294967295)
-    (range "CombinedChannels" 1 4294967295)
+    (assertInt "RxChannels")
+    (assertMinimum "RxChannels" 1)
+    (assertInt "TxChannels")
+    (assertMinimum "TxChannels" 1)
+    (assertInt "OtherChannels")
+    (assertMinimum "OtherChannels" 1)
+    (assertInt "CombinedChannels")
+    (assertMinimum "CombinedChannels" 1)
   ];
 
   checkNetdev = checkUnitConfig "Netdev" [
@@ -204,7 +208,6 @@ let
       "InitialCongestionWindow" "InitialAdvertisedReceiveWindow" "QuickAck"
       "MTUBytes"
     ])
-    (assertHasField "Gateway")
   ];
 
   checkDhcp = checkUnitConfig "DHCP" [
@@ -226,7 +229,8 @@ let
     (assertValueOneOf "UseTimezone" boolValues)
     (assertValueOneOf "CriticalConnection" boolValues)
     (assertValueOneOf "RequestBroadcast" boolValues)
-    (assertRange "RouteTable" 0 4294967295)
+    (assertInt "RouteTable")
+    (assertMinimum "RouteTable" 0)
     (assertValueOneOf "RapidCommit" boolValues)
   ];
 
@@ -244,13 +248,14 @@ let
   # .network files have a [Link] section with different options than in .netlink files
   checkNetworkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "MACAddress" "MTUBytes" "ARP" "Unmanaged" "RequiredForOnline"
+      "MACAddress" "MTUBytes" "ARP" "Multicast" "Unmanaged" "RequiredForOnline"
     ])
     (assertMacAddress "MACAddress")
     (assertByteFormat "MTUBytes")
     (assertValueOneOf "ARP" boolValues)
+    (assertValueOneOf "Multicast" boolValues)
     (assertValueOneOf "Unmanaged" boolValues)
-    (assertValueOneOf "RquiredForOnline" boolValues)
+    (assertValueOneOf "RequiredForOnline" boolValues)
   ];
 
 

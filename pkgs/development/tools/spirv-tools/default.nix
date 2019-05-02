@@ -1,38 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake, python }:
-
+{ stdenv, fetchFromGitHub, cmake, python, spirv-headers }:
 let
-
-spirv_sources = {
-  # `glslang` requires a specific version of `spirv-tools` and `spirv-headers` as specified in `known-good.json`.
-  tools = fetchFromGitHub {
-    owner = "KhronosGroup";
-    repo = "SPIRV-Tools";
-    rev = "f2c93c6e124836797311facb8449f9a0b76fefc2";
-    sha256 = "03w5xk2hjijj1rfbx5dw3lhy7vb9zrssfcwvp09q47f77vkgl105";
-  };
-  headers = fetchFromGitHub {
-    owner = "KhronosGroup";
-    repo = "SPIRV-Headers";
-    rev = "12f8de9f04327336b699b1b80aa390ae7f9ddbf4";
-    sha256 = "0fswk5ndvkmy64har3dmhpkv09zmvb0p4knbqc4fdl4qiggz0fvf";
-  };
-};
-
+  # Update spirv-headers rev in lockstep according to DEPs file
+  version = "2019.1";
 in
 
+assert version == spirv-headers.version;
 stdenv.mkDerivation rec {
   name = "spirv-tools-${version}";
-  version = "2018-06-06";
+  inherit version;
 
-  src = spirv_sources.tools;
-  patchPhase = ''ln -sv ${spirv_sources.headers} external/spirv-headers'';
+  src = fetchFromGitHub {
+    owner = "KhronosGroup";
+    repo = "SPIRV-Tools";
+    rev = "v${version}";
+    sha256 = "0vddjzhkrhrm3l3i57nxmq2smv3r1s0ka5ff2kziaahr4hqb479r";
+  };
   enableParallelBuilding = true;
 
   buildInputs = [ cmake python ];
 
-  passthru = {
-    headers = spirv_sources.headers;
-  };
+  cmakeFlags = [ "-DSPIRV-Headers_SOURCE_DIR=${spirv-headers.src}" ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

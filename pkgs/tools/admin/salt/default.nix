@@ -8,11 +8,11 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "salt";
-  version = "2018.3.2";
+  version = "2019.2.0";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "d86eeea2e5387f4a64bbf0a11d103bfc8aac1122e19d39cc0945d33efdc797bd";
+    sha256 = "1kgn3lway0zwwysyzpphv05j4xgxk92dk4rv1vybr2527wmvp5an";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -23,7 +23,7 @@ pythonPackages.buildPythonApplication rec {
     pyyaml
     pyzmq
     requests
-    tornado
+    tornado_4
   ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) [
     futures
   ] ++ extraInputs;

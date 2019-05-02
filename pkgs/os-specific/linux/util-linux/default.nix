@@ -4,7 +4,7 @@
 let
   version = lib.concatStringsSep "." ([ majorVersion ]
     ++ lib.optional (patchVersion != "") patchVersion);
-  majorVersion = "2.32";
+  majorVersion = "2.33";
   patchVersion = "1";
 
 in stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
-    sha256 = "1ck7d8srw5szpjq7v0gpmjahnjs6wgqzm311ki4gazww6xx71rl6";
+    sha256 = "08ggvgrb59m5jbq29950xxirsgv4xj3nwsc7vf82nyg1nvrxjjy1";
   };
 
   patches = [
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     "--enable-last"
     "--enable-mesg"
     "--disable-use-tty-group"
-    "--enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin"
+    "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     (lib.withFeature (ncurses != null) "ncursesw")
     (lib.withFeature (systemd != null) "systemd")

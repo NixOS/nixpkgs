@@ -5,7 +5,7 @@
 let
   extlinux-conf-builder =
     import ../../system/boot/loader/generic-extlinux-compatible/extlinux-conf-builder.nix {
-      inherit pkgs;
+      pkgs = pkgs.buildPackages;
     };
 in
 {
@@ -14,12 +14,6 @@ in
     ../../profiles/installation-device.nix
     ./sd-image.nix
   ];
-
-  assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "armv6l-linux";
-    message = "sd-image-raspberrypi.nix can be only built natively on ARMv6; " +
-      "it cannot be cross compiled";
-  };
 
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;

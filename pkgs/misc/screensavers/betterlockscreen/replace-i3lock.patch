@@ -1,0 +1,12 @@
+--- a/betterlockscreen
++++ b/betterlockscreen
+@@ -76,7 +76,7 @@ prelock() {
+ lock() {
+ 	#$1 image path
+ 
+-	i3lock \
++	i3lock-color \
+ 		-t -i "$1" \
+ 		--timepos='x+110:h-70' \
+ 		--datepos='x+43:h-45' \
+

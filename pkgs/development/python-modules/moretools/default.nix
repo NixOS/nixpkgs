@@ -4,19 +4,20 @@
 
 buildPythonPackage rec {
   pname = "moretools";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03ni7k0kcgrm3y605c29gqlyp779fx1xc3r8xb742lzd6ni30kdg";
+    sha256 = "f531cc79b7cd0c4aab590d5d4d0291f7cf6f083398be1dd523224b3385b732f4";
   };
 
   checkPhase = ''
     py.test test
   '';
 
-  buildInputs = [ six pathpy pytest ];
-  propagatedBuildInputs = [ decorator zetup ];
+  nativeBuildInputs = [ zetup ];
+  checkInputs = [ six pathpy pytest ];
+  propagatedBuildInputs = [ decorator ];
 
   meta = with stdenv.lib; {
     description = ''
@@ -24,6 +25,6 @@ buildPythonPackage rec {
     '';
     homepage = https://bitbucket.org/userzimmermann/python-moretools;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
