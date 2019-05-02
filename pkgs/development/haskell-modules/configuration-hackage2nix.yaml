@@ -8044,6 +8044,7 @@ broken-packages:
   - reflex-backend-wai
   - reflex-basic-host
   - reflex-dom-core
+  - reflex-dom-svg
   - reflex-gloss
   - reflex-gloss-scene
   - reflex-orphans
@@ -9942,6 +9943,7 @@ broken-packages:
   - yesod-markdown
   - yesod-paginate
   - yesod-pagination
+  - yesod-paginator
   - yesod-paypal-rest
   - yesod-platform
   - yesod-pnotify
