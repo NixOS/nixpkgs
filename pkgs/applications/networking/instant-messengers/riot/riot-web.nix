@@ -1,5 +1,8 @@
 { lib, stdenv, fetchurl, writeText, conf ? null }:
 
+# Note for maintainers:
+# Versions of `riot-web` and `riot-desktop` should be kept in sync.
+
 let configFile = writeText "riot-config.json" conf; in
 stdenv.mkDerivation rec {
   name= "riot-web-${version}";
