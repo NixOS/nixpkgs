@@ -3495,7 +3495,6 @@ broken-packages:
   - ClassLaws
   - classy-miso
   - classy-parallel
-  - classy-prelude-yesod
   - ClassyPrelude
   - clay
   - clckwrks
