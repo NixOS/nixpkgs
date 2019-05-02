@@ -1263,4 +1263,8 @@ self: super: {
   lambdabot-reference-plugins = super.lambdabot-reference-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
   lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; socks = self.socks_0_6_0; connection = self.connection_0_3_0; haskell-src-exts = self.haskell-src-exts_1_21_0; });
 
+  # Some tests depend on a postgresql instance
+  # Haddock failure: https://github.com/haskell/haddock/issues/979
+  esqueleto = dontHaddock (dontCheck super.esqueleto);
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
