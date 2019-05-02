@@ -107,5 +107,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }
