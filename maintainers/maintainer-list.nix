@@ -157,6 +157,11 @@
     github = "aespinosa";
     name = "Allan Espinosa";
   };
+  aethelz = {
+    email = "aethelz@protonmail.com";
+    github = "aethelz";
+    name = "Eugene";
+  };
   aflatter = {
     email = "flatter@fastmail.fm";
     github = "aflatter";

@@ -6856,6 +6856,8 @@ in
 
   ion = callPackage ../shells/ion { };
 
+  jush = callPackage ../shells/jush { };
+
   ksh = callPackage ../shells/ksh { };
 
   mksh = callPackage ../shells/mksh { };
@@ -12783,9 +12785,8 @@ in
 
   lambda-mod-zsh-theme = callPackage ../shells/zsh/lambda-mod-zsh-theme { };
 
-  leksah = callPackage ../development/tools/haskell/leksah {
-    inherit (haskellPackages) ghcWithPackages;
-  };
+  leksah = throw ("To use leksah, refer to the instructions in " +
+    "https://github.com/leksah/leksah.");
 
   libgme = callPackage ../development/libraries/audio/libgme { };
 
@@ -14340,10 +14341,9 @@ in
 
   oracleXE = callPackage ../servers/sql/oracle-xe { };
 
-  softether_4_18 = callPackage ../servers/softether/4.18.nix { };
-  softether_4_20 = callPackage ../servers/softether/4.20.nix { };
   softether_4_25 = callPackage ../servers/softether/4.25.nix { };
-  softether = softether_4_25;
+  softether_4_29 = callPackage ../servers/softether/4.29.nix { };
+  softether = softether_4_29;
 
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
