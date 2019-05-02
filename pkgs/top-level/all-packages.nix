@@ -21258,8 +21258,7 @@ in
   };
 
   cataclysm-dda = callPackage ../games/cataclysm-dda {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-    ncurses = ncurses5;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
   };
 
   cataclysm-dda-git = callPackage ../games/cataclysm-dda/git.nix {
