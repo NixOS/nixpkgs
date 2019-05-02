@@ -15151,6 +15151,8 @@ in
 
   mailman-rss = callPackage ../development/python-modules/mailman-rss { };
 
+  mastodon = callPackage ../servers/mastodon { };
+
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge { };
