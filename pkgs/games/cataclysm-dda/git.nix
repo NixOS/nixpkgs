@@ -1,5 +1,5 @@
-{ stdenv, callPackage
-, tiles ? true, Cocoa, CoreFoundation
+{ stdenv, callPackage, CoreFoundation
+, tiles ? true, Cocoa
 , debug ? false
 }:
 
@@ -10,12 +10,12 @@ let
 in
 
 stdenv.mkDerivation (common // rec {
-  version = "2018-07-15";
+  version = "2019-05-03";
   name = "cataclysm-dda-git-${version}";
 
   src = fetchFromCleverRaven {
-    rev = "e1e5d81";
-    sha256 = "198wfj8l1p8xlwicj92cq237pzv2ha9pcf240y7ijhjpmlc9jkr1";
+    rev = "65a05026e7306b5d1228dc6ed885c43447f128b5";
+    sha256 = "18yn0h6b4j9lx67sq1d886la3l6l7bqsnwj6mw2khidssiy18y0n";
   };
 
   buildInputs = common.buildInputs
