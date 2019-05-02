@@ -1249,4 +1249,9 @@ self: super: {
   # Break out of pandoc >=2.0 && <2.7 (https://github.com/pbrisbin/yesod-markdown/pull/65)
   yesod-markdown = doJailbreak super.yesod-markdown;
 
+  # Some tests depend on a postgresql instance
+  # Haddock failure: https://github.com/haskell/haddock/issues/979
+  esqueleto = dontHaddock (dontCheck super.esqueleto);
+
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
