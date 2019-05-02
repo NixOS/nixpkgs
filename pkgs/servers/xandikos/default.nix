@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.0.11";
+  version = "0.1.0";
   name = "xandikos-${version}";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
     rev = "v${version}";
-    sha256 = "0qkgcsj702g6aniawv1lya3qddbq9x67c4577klfzw7jk9kybqyc";
+    sha256 = "12r8fciid2qpqf054584ywwh49yddyhhpkpcm6jihzyr5y2r4kn1";
   };
 
   doCheck = false;
