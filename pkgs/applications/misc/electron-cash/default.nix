@@ -48,7 +48,14 @@ python3Packages.buildPythonApplication rec {
       --replace "(share_dir" "(\"share\""
   '';
 
-  doCheck = false;
+  checkInputs = with python3Packages; [
+    pytest
+  ];
+
+  checkPhase = ''
+    unset HOME
+    pytest lib/tests
+  '';
 
   postInstall = ''
     substituteInPlace $out/share/applications/electron-cash.desktop \
