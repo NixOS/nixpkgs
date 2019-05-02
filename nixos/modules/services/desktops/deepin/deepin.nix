@@ -34,6 +34,7 @@
         pkgs.deepin.dde-api
         pkgs.deepin.dde-calendar
         pkgs.deepin.dde-daemon
+        pkgs.deepin.dde-dock
         pkgs.deepin.dde-session-ui
         pkgs.deepin.deepin-image-viewer
         pkgs.deepin.deepin-screenshot
@@ -43,6 +44,7 @@
         pkgs.deepin.dde-api
         pkgs.deepin.dde-calendar
         pkgs.deepin.dde-daemon
+        pkgs.deepin.dde-dock
         pkgs.deepin.dde-session-ui
         pkgs.deepin.deepin-image-viewer
         pkgs.deepin.deepin-screenshot
