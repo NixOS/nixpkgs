@@ -12,16 +12,17 @@ let
        cluster_name = cfg.clusterName;
        partitioner = "org.apache.cassandra.dht.Murmur3Partitioner";
        endpoint_snitch = "SimpleSnitch";
-       seed_provider =
-         [{ class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
-            parameters = [ { seeds = concatStringsSep "," cfg.seedAddresses; } ];
-         }];
        data_file_directories = [ "${cfg.homeDir}/data" ];
        commitlog_directory = "${cfg.homeDir}/commitlog";
        saved_caches_directory = "${cfg.homeDir}/saved_caches";
-     } // (if lib.versionAtLeast cfg.package.version "3"
-             then { hints_directory = "${cfg.homeDir}/hints"; }
-             else {})
+     } // (lib.optionalAttrs (cfg.seedAddresses != []) {
+       seed_provider = [{
+         class_name = "org.apache.cassandra.locator.SimpleSeedProvider";
+         parameters = [ { seeds = concatStringsSep "," cfg.seedAddresses; } ];
+       }];
+     }) // (lib.optionalAttrs (lib.versionAtLeast cfg.package.version "3") {
+       hints_directory = "${cfg.homeDir}/hints";
+     })
     );
   cassandraConfigWithAddresses = cassandraConfig //
     ( if cfg.listenAddress == null
