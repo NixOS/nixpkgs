@@ -54,6 +54,18 @@ self: super: {
       sha256 = "1p1pinca33vd10iy7hl20c1fc99vharcgcai6z3ngqbq50k2pd3q";
     };
   };
+  resolv = overrideCabal (overrideSrc super.resolv {
+    version = "20180411-git";
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell-hvr";
+      repo = "resolv";
+      rev = "a22f9dd900cb276b3dd70f4781fb436d617e2186";
+      sha256 = "1j2jyywmxjhyk46kxff625yvg5y37knv7q6y0qkwiqdwdsppccdk";
+    };
+  }) (drv: {
+    buildTools = with pkgs; [autoconf];
+    preConfigure = "autoreconf --install";
+  });
   colour = appendPatch super.colour (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/colour-2.3.4.patch";
     sha256 = "1h318dczml9qrmfvlz1d12iji86klaxvz63k9g9awibwz8lw2i79";
