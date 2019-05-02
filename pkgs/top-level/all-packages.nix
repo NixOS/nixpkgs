@@ -6841,6 +6841,8 @@ in
 
   ion = callPackage ../shells/ion { };
 
+  jush = callPackage ../shells/jush { };
+
   ksh = callPackage ../shells/ksh { };
 
   mksh = callPackage ../shells/mksh { };
