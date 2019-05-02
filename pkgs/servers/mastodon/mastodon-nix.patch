@@ -1,0 +1,50 @@
+From 1bbd6ae3628302fa0ab610bd3048ff8c7dacb0ea Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <me@pbb.lc>
+Date: Sun, 21 Apr 2019 22:49:37 +0200
+Subject: [PATCH] foo
+
+---
+ package.json | 3 ++-
+ yarn.lock    | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package.json b/package.json
+index 63cfa25b8..b6230db36 100644
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,7 @@
+ {
+   "name": "mastodon",
+   "license": "AGPL-3.0-or-later",
++  "version": "2.8.0",
+   "engines": {
+     "node": ">=8 <11"
+   },
+@@ -85,7 +86,7 @@
+     "cssnano": "^4.1.10",
+     "detect-passive-events": "^1.0.2",
+     "dotenv": "^6.2.0",
+-    "emoji-mart": "Gargron/emoji-mart#build",
++    "emoji-mart": "git+https://github.com/Gargron/emoji-mart#build",
+     "es6-symbol": "^3.1.1",
+     "escape-html": "^1.0.3",
+     "exif-js": "^2.3.0",
+diff --git a/yarn.lock b/yarn.lock
+index 9d7f0eccb..9dd358143 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -3173,9 +3173,9 @@ elliptic@^6.0.0:
+     minimalistic-assert "^1.0.0"
+     minimalistic-crypto-utils "^1.0.0"
+ 
+-emoji-mart@Gargron/emoji-mart#build:
++"emoji-mart@git+https://github.com/Gargron/emoji-mart#build":
+   version "2.6.2"
+-  resolved "https://codeload.github.com/Gargron/emoji-mart/tar.gz/ff00dc470b5b2d9f145a6d6e977a54de5df2b4c9"
++  resolved "git+https://github.com/Gargron/emoji-mart#ff00dc470b5b2d9f145a6d6e977a54de5df2b4c9"
+ 
+ emoji-regex@^6.5.1:
+   version "6.5.1"
+-- 
+2.19.2
+

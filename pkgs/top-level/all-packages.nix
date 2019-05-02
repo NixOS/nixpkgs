@@ -23864,4 +23864,6 @@ in
 
   wasmtime = callPackage ../development/interpreters/wasmtime {};
 
+  mastodon = callPackage ../servers/mastodon {};
+
 }
