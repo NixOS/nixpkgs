@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://www.minizinc.org/;
+    homepage = https://www.minizinc.org/;
     description = "MiniZinc is a medium-level constraint modelling language.";
 
     longDescription = ''
@@ -31,4 +31,3 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.sheenobu ];
   };
 }
-

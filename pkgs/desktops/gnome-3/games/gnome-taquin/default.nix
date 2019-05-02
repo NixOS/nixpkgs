@@ -1,23 +1,28 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libcanberra-gtk3, intltool, itstool, libxml2 }:
+, librsvg, libcanberra-gtk3, gettext, itstool, libxml2
+, meson, ninja, vala, python3, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
   name = "gnome-taquin-${version}";
-  version = "3.30.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-taquin/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0qijv7wyrjlj56m79la4k7m00712v2m1m994vfx43x3v4isxidgp";
+    sha256 = "1kyxh68gg7clxg22ls4sliisxb2sydwccbxqgfvxjg2fklr6r1lm";
   };
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "gnome-taquin"; attrPath = "gnome3.gnome-taquin"; };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig wrapGAppsHook meson ninja python3
+    gettext itstool libxml2 vala desktop-file-utils
+  ];
   buildInputs = [
-    gtk3 wrapGAppsHook librsvg libcanberra-gtk3
-    intltool itstool libxml2 gnome3.adwaita-icon-theme
+    gtk3 librsvg libcanberra-gtk3
+    gnome3.adwaita-icon-theme
   ];
 
   meta = with stdenv.lib; {

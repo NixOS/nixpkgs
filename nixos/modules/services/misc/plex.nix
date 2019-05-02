@@ -10,34 +10,37 @@ in
     services.plex = {
       enable = mkEnableOption "Plex Media Server";
 
-      # FIXME: In order for this config option to work, symlinks in the Plex
-      # package in the Nix store have to be changed to point to this directory.
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/plex";
-        description = "The directory where Plex stores its data files.";
+        description = ''
+          The directory where Plex stores its data files.
+        '';
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Open ports in the firewall for the media server
+          Open ports in the firewall for the media server.
         '';
       };
 
       user = mkOption {
         type = types.str;
         default = "plex";
-        description = "User account under which Plex runs.";
+        description = ''
+          User account under which Plex runs.
+        '';
       };
 
       group = mkOption {
         type = types.str;
         default = "plex";
-        description = "Group under which Plex runs.";
+        description = ''
+          Group under which Plex runs.
+        '';
       };
-
 
       managePlugins = mkOption {
         type = types.bool;
@@ -80,73 +83,48 @@ in
       description = "Plex Media Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        test -d "${cfg.dataDir}/Plex Media Server" || {
-          echo "Creating initial Plex data directory in \"${cfg.dataDir}\"."
-          mkdir -p "${cfg.dataDir}/Plex Media Server"
-          chown -R ${cfg.user}:${cfg.group} "${cfg.dataDir}"
-        }
 
-        # Copy the database skeleton files to /var/lib/plex/.skeleton
-        # See the the Nix expression for Plex's package for more information on
-        # why this is done.
-        install --owner ${cfg.user} --group ${cfg.group} -d "${cfg.dataDir}/.skeleton"
-        for db in "com.plexapp.plugins.library.db"; do
-            if [ ! -e  "${cfg.dataDir}/.skeleton/$db" ]; then
-              cp "${cfg.package}/usr/lib/plexmediaserver/Resources/base_$db" "${cfg.dataDir}/.skeleton/$db"
-            fi
-            chmod u+w "${cfg.dataDir}/.skeleton/$db"
-            chown ${cfg.user}:${cfg.group} "${cfg.dataDir}/.skeleton/$db"
-        done
-
-        # If managePlugins is enabled, setup symlinks for plugins.
-        ${optionalString cfg.managePlugins ''
-          echo "Preparing plugin directory."
-          PLUGINDIR="${cfg.dataDir}/Plex Media Server/Plug-ins"
-          test -d "$PLUGINDIR" || {
-            mkdir -p "$PLUGINDIR";
-            chown ${cfg.user}:${cfg.group} "$PLUGINDIR";
-          }
-
-          echo "Removing old symlinks."
-          # First, remove all of the symlinks in the directory.
-          for f in `ls "$PLUGINDIR/"`; do
-            if [[ -L "$PLUGINDIR/$f" ]]; then
-              echo "Removing plugin symlink $PLUGINDIR/$f."
-              rm "$PLUGINDIR/$f"
-            fi
-          done
-
-          echo "Symlinking plugins."
-          for path in ${toString cfg.extraPlugins}; do
-            dest="$PLUGINDIR/$(basename $path)"
-            if [[ ! -d "$path" ]]; then
-              echo "Error symlinking plugin from $path: no such directory."
-            elif [[ -d "$dest" || -L "$dest" ]]; then
-              echo "Error symlinking plugin from $path to $dest: file or directory already exists."
-            else
-              echo "Symlinking plugin at $path..."
-              ln -s "$path" "$dest"
-            fi
-          done
-        ''}
-     '';
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        PermissionsStartOnly = "true";
-        ExecStart = "\"${cfg.package}/usr/lib/plexmediaserver/Plex Media Server\"";
+
+        # Run the pre-start script with full permissions (the "!" prefix) so it
+        # can create the data directory if necessary.
+        ExecStartPre = let
+          preStartScript = pkgs.writeScript "plex-run-prestart" ''
+            #!${pkgs.bash}/bin/bash
+
+            # Create data directory if it doesn't exist
+            if ! test -d "$PLEX_DATADIR"; then
+              echo "Creating initial Plex data directory in: $PLEX_DATADIR"
+              install -d -m 0755 -o "${cfg.user}" -g "${cfg.group}" "$PLEX_DATADIR"
+            fi
+         '';
+        in
+          "!${preStartScript}";
+
+        ExecStart = "${cfg.package}/bin/plexmediaserver";
         KillSignal = "SIGQUIT";
         Restart = "on-failure";
       };
+
       environment = {
-        PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=cfg.dataDir;
-        PLEX_MEDIA_SERVER_HOME="${cfg.package}/usr/lib/plexmediaserver";
+        # Configuration for our FHS userenv script
+        PLEX_DATADIR=cfg.dataDir;
+        PLEX_PLUGINS=concatMapStringsSep ":" builtins.toString cfg.extraPlugins;
+
+        # The following variables should be set by the FHS userenv script:
+        #   PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
+        #   PLEX_MEDIA_SERVER_HOME
+
+        # Allow access to GPU acceleration; the Plex LD_LIBRARY_PATH is added
+        # by the FHS userenv script.
+        LD_LIBRARY_PATH="/run/opengl-driver/lib";
+
         PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6";
         PLEX_MEDIA_SERVER_TMPDIR="/tmp";
         PLEX_MEDIA_SERVER_USE_SYSLOG="true";
-        LD_LIBRARY_PATH="/run/opengl-driver/lib:${cfg.package}/usr/lib/plexmediaserver/lib";
         LC_ALL="en_US.UTF-8";
         LANG="en_US.UTF-8";
       };

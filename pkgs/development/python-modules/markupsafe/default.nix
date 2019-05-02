@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "MarkupSafe";
-  version = "1.1.0";
+  version = "1.1.1";
 
  src = fetchPypi {
     inherit pname version;
-    sha256 = "4e97332c9ce444b0c2c38dd22ddc61c743eb208d916e4265a2a3b575bdccb1d3";
+    sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
   };
 
   meta = with stdenv.lib; {

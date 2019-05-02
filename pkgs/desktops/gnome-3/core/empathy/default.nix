@@ -6,7 +6,7 @@
 , telepathy-logger, libnotify, clutter, libsoup, gnutls
 , evolution-data-server, yelp-xsl
 , libcanberra-gtk3, p11-kit, farstream, libtool, shared-mime-info
-, wrapGAppsHook, itstool, libxml2, libxslt, icu, libgee
+, wrapGAppsHook, itstool, libxml2, libxslt, icu, libgee, gsettings-desktop-schemas
 , isocodes, enchant, libchamplain, geoclue2, geocode-glib, cheese, libgudev }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gcr libsecret libpulseaudio gdk_pixbuf
     libnotify clutter libsoup gnutls libgee p11-kit
     libcanberra-gtk3 telepathy-farstream farstream
-    gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme gsettings-desktop-schemas
     librsvg
     # Spell-checking
     enchant isocodes

@@ -191,7 +191,8 @@ stdenv.mkDerivation {
       else if targetPlatform.isAvr then "avr"
       else if targetPlatform.isAlpha then "alpha"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
-    in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
+    in if targetPlatform.useLLVM or false then ""
+       else targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
   strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
@@ -329,6 +330,7 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
+      priority = 10;
   } // optionalAttrs useMacosReexportHack {
     platforms = stdenv.lib.platforms.darwin;
   };

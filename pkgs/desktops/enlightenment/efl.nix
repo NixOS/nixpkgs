@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.21.1";
+  version = "1.22.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "0a5907h896pvpix7a6idc2fspzy6d78xrzf84k8y9fyvnd14nxs4";
+    sha256 = "04mfjvaxi36b7r6kn4n0nq2gj97cbldk9iqnr5pf8jnm8plyblr0";
   };
 
   nativeBuildInputs = [ pkgconfig gtk3 ];
@@ -28,9 +28,6 @@ stdenv.mkDerivation rec {
     xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
     harfbuzz jbig2dec librsvg dbus alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
     libinput utillinux fribidi SDL2 ];
-
-  # as of 1.21.0 compilation will fail due to -Werror=format-security
-  hardeningDisable = [ "format" ];
 
   # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
   configureFlags = [
@@ -53,6 +50,10 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [ ./efl-elua.patch ];
+
+  postPatch = ''
+    patchShebangs src/lib/elementary/config_embed
+  '';
 
   # bin/edje_cc creates $HOME/.run, which would break build of reverse dependencies.
   setupHook = writeText "setupHook.sh" ''

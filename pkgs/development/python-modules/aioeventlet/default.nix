@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "aioeventlet implements the asyncio API (PEP 3156) on top of eventlet. It makes";
-    homepage = http://aioeventlet.readthedocs.org/;
+    homepage = https://aioeventlet.readthedocs.org/;
     license = licenses.asl20;
   };
 

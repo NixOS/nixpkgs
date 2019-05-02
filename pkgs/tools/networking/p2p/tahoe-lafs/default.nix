@@ -50,8 +50,6 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = with pythonPackages; [ sphinx texinfo ];
 
-  buildInputs = with pythonPackages; [ unzip numpy mock ];
-
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with pythonPackages; [
     twisted foolscap nevow simplejson zfec pycryptopp darcsver
@@ -59,7 +57,7 @@ pythonPackages.buildPythonApplication rec {
     service-identity pyyaml magic-wormhole treq
   ];
 
-  checkInputs = with pythonPackages; [ hypothesis twisted ];
+  checkInputs = with pythonPackages; [ mock hypothesis twisted ];
 
   # Install the documentation.
   postInstall = ''

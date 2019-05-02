@@ -2,7 +2,7 @@
 , glib, libgudev, libevdev, gnome3 }:
 
 let
-  version = "0.2.1";
+  version = "0.2.2";
   pname = "libmanette";
 in
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "14vqz30p4693yy3yxs0gj858x25sl2kawib1g9lj8g5frgl0hd82";
+    sha256 = "1lpprk2qz1lsqf9xj6kj2ciyc1zmjhj5lwd584qkh7jgz2x9y6wb";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig vala gobject-introspection ];

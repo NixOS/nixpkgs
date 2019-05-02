@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
 , fetchpatch
-, docbook_xml_dtd_42, readline, talloc
+, docbook_xml_dtd_42, readline
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
 , krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls, ncurses, libunwind, systemd
+, gnutls, ncurses, libunwind, systemd, jansson, lmdb, gpgme
 
 , enableLDAP ? false
 , enablePrinting ? false
@@ -20,11 +20,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "samba-${version}";
-  version = "4.7.12";
+  version = "4.10.2";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "0jmg39xigrh48j39r4f1390kmr1p3xbfxzfabln4b0r9qdmki70f";
+    sha256 = "112yizx9cpjhi8c7mh9znqg0c9dkj3383hwr8dhgpykl3g2zv347";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -33,30 +33,19 @@ stdenv.mkDerivation rec {
     [ ./4.x-no-persistent-install.patch
       ./patch-source3__libads__kerberos_keytab.c.patch
       ./4.x-no-persistent-install-dynconfig.patch
-
-      # conditionall disable MacOS incompatible tests
-      (fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/samba-team/samba/pull/107.patch";
-        sha256 = "0r6q34vjj0bdzmcbnrkad9rww58k4krbwicv4gs1g3dj49skpvd6";
-      })
-
-      (fetchpatch {
-        name = "CVE-2019-3824.patch";
-        url = "https://attachments.samba.org/attachment.cgi?id=14859";
-        sha256 = "02qf3zr55mzbimqdv01k3b22jjb084vfr5zabapyr5h1f588mw0q";
-      })
+      ./4.x-fix-makeflags-parsing.patch
     ];
 
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-      docbook_xml_dtd_45 */ readline talloc popt iniparser
+      docbook_xml_dtd_45 */ readline popt iniparser jansson
       libbsd libarchive zlib fam libiconv gettext libunwind krb5Full
     ]
     ++ optionals stdenv.isLinux [ libaio systemd ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
-    ++ optional enableDomainController gnutls
+    ++ optionals enableDomainController [ gnutls gpgme lmdb ]
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
     ++ optional (enableGlusterFS && stdenv.isLinux) glusterfs
@@ -69,6 +58,8 @@ stdenv.mkDerivation rec {
 
     # Fix the XML Catalog Paths
     sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
+
+    patchShebangs ./buildtools/bin
   '';
 
   configureFlags =
@@ -87,8 +78,9 @@ stdenv.mkDerivation rec {
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam";
 
-  # To build in parallel.
-  buildPhase = "python buildtools/bin/waf build -j $NIX_BUILD_CORES";
+  preBuild = ''
+      export MAKEFLAGS="-j $NIX_BUILD_CORES"
+  '';
 
   # Some libraries don't have /lib/samba in RPATH but need it.
   # Use find -type f -executable -exec echo {} \; -exec sh -c 'ldd {} | grep "not found"' \;
@@ -111,5 +103,6 @@ stdenv.mkDerivation rec {
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ aneeshusa ];
   };
 }

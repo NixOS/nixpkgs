@@ -10,7 +10,6 @@ let components = {
      hpmc = true;
      md = true;
      metal = true;
-     testing = false;
    };
    onOffBool = b: if b then "ON" else "OFF";
    withMPI = (mpi != null);
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
        "-DBUILD_HPMC=${onOffBool components.hpmc}"
        "-DBUILD_MD=${onOffBool components.md}"
        "-DBUILD_METAL=${onOffBool components.metal}"
-       "-DBUILD_TESTING=${onOffBool components.testing}"
   ];
 
   preConfigure = ''

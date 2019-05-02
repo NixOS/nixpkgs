@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "acpica-tools-${version}";
-  version = "20190215";
+  version = "20190405";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "0dqdkg7agzwb34p74dhvr79a6xqraxh1025mm5vg3qmjn6r3l4vi";
+    sha256 = "0d4hajb3d82laf74m2xa91kqkjwmym08r25jf0hly1jbbh7cl0fy";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";

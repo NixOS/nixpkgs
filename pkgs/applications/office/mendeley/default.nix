@@ -134,7 +134,7 @@ stdenv.mkDerivation {
   updateScript = import ./update.nix { inherit stdenv writeScript runtimeShell; };
 
   meta = with stdenv.lib; {
-    homepage = http://www.mendeley.com;
+    homepage = https://www.mendeley.com;
     description = "A reference manager and academic social network";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];

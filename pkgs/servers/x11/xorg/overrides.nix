@@ -49,10 +49,6 @@ self: super:
     meta = attrs.meta // { license = lib.licenses.unfreeRedistributable; };
   });
 
-  fontcursormisc = super.fontcursormisc.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.mkfontscale ];
-  });
-
   fontmiscmisc = super.fontmiscmisc.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -74,9 +70,7 @@ self: super:
     inherit tradcpp;
   });
 
-  mkfontdir = super.mkfontdir.overrideAttrs (attrs: {
-    preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${self.mkfontscale}/bin";
-  });
+  mkfontdir = self.mkfontscale;
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
@@ -288,10 +282,6 @@ self: super:
     meta = attrs.meta // { platforms = stdenv.lib.platforms.linux; };
   });
 
-  oclock = super.oclock.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.libxkbfile ];
-  });
-
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -337,7 +327,6 @@ self: super:
     outputs = [ "out" "dev" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
-    buildInputs = attrs.buildInputs ++ [ mtdev libevdev ];
   });
 
   xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
@@ -350,13 +339,11 @@ self: super:
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: rec {
     outputs = [ "out" "dev" ];
-    buildInputs = attrs.buildInputs ++ [ libinput ];
     installFlags = "sdkdir=\${dev}/include/xorg";
   });
 
   xf86inputsynaptics = super.xf86inputsynaptics.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ]; # *.pc pulls xorgserver.dev
-    buildInputs = attrs.buildInputs ++ [mtdev libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   });
 
@@ -421,7 +408,7 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [intltool];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [intltool];
 
     #TODO: resurrect patches for US_intl?
     patches = [ ./xkeyboard-config-eo.patch ];
@@ -693,7 +680,7 @@ self: super:
   });
 
   xwd = super.xwd.overrideAttrs (attrs: {
-    buildInputs = with self; attrs.buildInputs ++ [libXt libxkbfile];
+    buildInputs = with self; attrs.buildInputs ++ [libXt];
   });
 
   xrdb = super.xrdb.overrideAttrs (attrs: {

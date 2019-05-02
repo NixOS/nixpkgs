@@ -120,6 +120,13 @@ in rec {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootBananaPim64 = buildUBoot rec {
+    defconfig = "bananapi_m64_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootBeagleboneBlack = buildUBoot rec {
     defconfig = "am335x_boneblack_defconfig";
     extraMeta.platforms = ["armv7l-linux"];

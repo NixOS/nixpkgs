@@ -51,7 +51,7 @@ let
 
     AR = "${stdenv'.cc.targetPrefix or ""}ar";
     CC = "${stdenv'.cc.targetPrefix or ""}cc";
-    CPP = if (stdenv'.cc.isClang or false) then "clang-cpp" else "cpp";
+    CPP = "${stdenv'.cc.targetPrefix or ""}cpp";
     CXX = "${stdenv'.cc.targetPrefix or ""}c++";
     LD = "${stdenv'.cc.targetPrefix or ""}ld";
     STRIP = "${stdenv'.cc.targetPrefix or ""}strip";
@@ -65,6 +65,8 @@ let
       platforms = platforms.unix;
       license = licenses.bsd2;
     };
+  } // lib.optionalAttrs stdenv'.isDarwin {
+    MKRELRO = "no";
   } // lib.optionalAttrs (stdenv'.cc.isClang or false) {
     HAVE_LLVM = lib.head (lib.splitString "." (lib.getVersion stdenv'.cc.cc));
   } // lib.optionalAttrs (stdenv'.cc.isGNU or false) {

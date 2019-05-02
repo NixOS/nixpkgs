@@ -8,13 +8,13 @@
 }:
   stdenv.mkDerivation rec {
     name = "waybar-${version}";
-    version = "0.5.0";
+    version = "0.5.1";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "006pzx4crsqn9vk28g87306xh3jrfwk4ib9cmsxqrxy8v0kl2s4g";
+      sha256 = "1h3ifiklzcbrvqzzhs7rij8w45k96cir2d4kkyd2ap93akvcnsr9";
     };
 
     nativeBuildInputs = [

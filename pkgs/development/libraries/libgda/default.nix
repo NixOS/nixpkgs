@@ -36,7 +36,7 @@ assert postgresSupport -> postgresql != null;
 
   meta = with stdenv.lib; {
     description = "Database access library";
-    homepage = http://www.gnome-db.org/;
+    homepage = https://www.gnome-db.org/;
     license = [ licenses.lgpl2 licenses.gpl2 ];
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

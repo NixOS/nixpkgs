@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-mparser-1.2.3";
   src = fetchzip {
-    url = http://github.com/cakeplus/mparser/archive/1.2.3.tar.gz;
+    url = https://github.com/cakeplus/mparser/archive/1.2.3.tar.gz;
     sha256 = "1f8vpagmv0jdm50pxs2xwh2xcmvgaprx4kw871hlml9ahsflxgnw";
   };
 

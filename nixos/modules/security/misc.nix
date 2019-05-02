@@ -12,14 +12,24 @@ with lib;
       type = types.bool;
       default = true;
       description = ''
-        Whether to allow creation of user namespaces.  A recurring problem
-        with user namespaces is the presence of code paths where the kernel's
-        permission checking logic fails to account for namespacing, instead
-        permitting a namespaced process to act outside the namespace with the
-        same privileges as it would have inside it.  This is particularly
+        Whether to allow creation of user namespaces.
+        </para>
+
+        <para>
+        The motivation for disabling user namespaces is the potential
+        presence of code paths where the kernel's permission checking
+        logic fails to account for namespacing, instead permitting a
+        namespaced process to act outside the namespace with the same
+        privileges as it would have inside it.  This is particularly
         damaging in the common case of running as root within the namespace.
-        When user namespace creation is disallowed, attempting to create
-        a user namespace fails with "no space left on device" (ENOSPC).
+        </para>
+
+        <para>
+        When user namespace creation is disallowed, attempting to create a
+        user namespace fails with "no space left on device" (ENOSPC).
+        root may re-enable user namespace creation at runtime.
+        </para>
+        <para>
       '';
     };
 

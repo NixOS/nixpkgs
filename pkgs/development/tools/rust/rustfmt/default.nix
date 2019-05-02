@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "rustfmt-${version}";
-  version = "1.0.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustfmt";
-    rev = "${version}";
-    sha256 = "1l18ycbq3125sq8v3wgma630wd6kclarlf8f51cmi9blk322jg9p";
+    rev = "v${version}";
+    sha256 = "153pas7d5fchkmiw6mkbhn75lv3y69k85spzmm5i4lqnq7f0yqap";
   };
 
-  cargoSha256 = "1557783icdzlwn02c5zl4362yl85r5zj4nkjv80p6896yli9hk9h";
+  cargoSha256 = "08x6vy5v2vgrk3gsw3qcvv52a7hifsgcsnsg1phlk1ikaff21y4z";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     homepage = https://github.com/rust-lang-nursery/rustfmt;
     license = with licenses; [ mit asl20 ];
     maintainers = [ maintainers.globin ];
+    broken = stdenv.isDarwin;
     platforms = platforms.all;
   };
 }

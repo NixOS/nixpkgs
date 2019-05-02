@@ -7,7 +7,7 @@ with lib;
 
 let
 
-  requiredPackages = map lib.lowPrio
+  requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
     [ config.nix.package
       pkgs.acl
       pkgs.attr

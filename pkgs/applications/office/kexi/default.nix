@@ -9,12 +9,12 @@
 
 mkDerivation rec {
   pname = "kexi";
-  version = "3.1.0";
+  version = "3.2.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
-    sha256 = "1ysj44qq75wglw4d080l3gfw47695gapf29scxhb1g3py55csmbd";
+    sha256 = "1zy1q7q9rfdaws3rwf3my22ywkn6g747s3ixfcg9r80mm2g3z0bs";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -28,13 +28,6 @@ mkDerivation rec {
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://phabricator.kde.org/file/data/6iwzltiifyqwjnzbvyo6/PHID-FILE-li4a7j35wkdkm2qdtnp4/D11503.diff";
-      sha256 = "0yj717m4x1zb4xjy1ayhz78xkxpawxgsvjgvf5iw81jnlr8absq9";
-    })
-  ];
 
   meta = with lib; {
     description = "A open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";

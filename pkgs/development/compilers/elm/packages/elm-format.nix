@@ -8,7 +8,7 @@ mkDerivation {
   pname = "elm-format";
   version = "0.8.1";
   src = fetchgit {
-    url = "http://github.com/avh4/elm-format";
+    url = "https://github.com/avh4/elm-format";
     sha256 = "0p1dy1m6illsl7i04zsv5jqw7i4znv7pfpdfm53zy0k7mq0fk09j";
     rev = "89694e858664329e3cbdaeb71b15c4456fd739ff";
   };
@@ -30,7 +30,7 @@ mkDerivation {
     split tasty tasty-golden tasty-hunit tasty-quickcheck text
   ];
   doHaddock = false;
-  homepage = "http://elm-lang.org";
+  homepage = "https://elm-lang.org";
   description = "A source code formatter for Elm";
   license = stdenv.lib.licenses.bsd3;
 }

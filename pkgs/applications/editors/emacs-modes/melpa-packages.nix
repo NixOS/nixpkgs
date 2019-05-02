@@ -133,11 +133,7 @@ self:
       maxframe = markBroken super.maxframe;
 
       magit =
-        (super.magit.override {
-          # version of magit-popup needs to match magit
-          # https://github.com/magit/magit/issues/3286
-          inherit (self.melpaPackages) magit-popup;
-        }).overrideAttrs (attrs: {
+        super.magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];

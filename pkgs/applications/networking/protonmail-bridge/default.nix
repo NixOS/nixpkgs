@@ -2,7 +2,7 @@
   libsecret, libGL, libpulseaudio, glib, makeWrapper, makeDesktopItem }:
 
 let
-  version = "1.1.3-1";
+  version = "1.1.4-1";
 
   description = ''
     An application that runs on your computer in the background and seamlessly encrypts
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://protonmail.com/download/protonmail-bridge_${version}_amd64.deb";
-    sha256 = "15kyhyx1v4bb2sqzwq7bqrxxw7g733p5jnsgjqka2ygzg6dl2c5n";
+    sha256 = "16w3l81j10syl2pis08sl752yapbgjy531qs0n1ghmsx2d12n7kl";
   };
 
   nativeBuildInputs = [ makeWrapper ];

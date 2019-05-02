@@ -470,7 +470,7 @@ in
         '';
       };
 
-      trust.hidden = mkEnableOption "Router concealment.";
+      trust.hidden = mkEnableOption "Router concealment";
 
       websocket = mkEndpointOpt "websockets" "127.0.0.1" 7666;
 
@@ -478,7 +478,7 @@ in
       exploratory.outbound = i2cpOpts "exploratory";
 
       ntcp2.enable = mkEnableTrueOption "NTCP2.";
-      ntcp2.published = mkEnableOption "NTCP2 publication.";
+      ntcp2.published = mkEnableOption "NTCP2 publication";
       ntcp2.port = mkOption {
         type = types.int;
         default = 0;

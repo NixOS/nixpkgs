@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "shellingham";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "116r78nhw74rh857kv9l614xjr6k89919s6l8b14hlvy8fz8rg51";
+    sha256 = "1q7kws7w4x2hji3g7y0ni9ddk4sd676ylrb3db54gbpys6xj6nwq";
   };
 
   meta = with stdenv.lib; {

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     ln -s "$out/lib"/*/* "$out/lib"
   '' + stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/linux/crtbegin.o
-    ln -s $out/lib/*/cclang_rt.crtend-*.o $out/lib/linux/crtend.o
+    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/linux/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/linux/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/linux/crtendS.o
   '';

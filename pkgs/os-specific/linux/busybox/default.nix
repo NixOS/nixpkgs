@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./busybox-in-store.patch
-  ];
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.targetPlatform) ./clang-cross.patch;
 
   postPatch = "patchShebangs .";
 

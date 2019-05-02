@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   # Fix mono DLLMap so it can find libX11 to run winforms apps
   # libgdiplus is correctly handled by the --with-libgdiplus configure flag
   # Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
-  # http://www.mono-project.com/Config_DllMap
+  # https://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | xargs \
     sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g"
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   inherit enableParallelBuilding;
 
   meta = with stdenv.lib; {
-    homepage = http://mono-project.com/;
+    homepage = https://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ thoughtpolice obadz vrthra ];

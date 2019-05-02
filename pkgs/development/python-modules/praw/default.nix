@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Reddit API wrapper";
-    homepage = http://praw.readthedocs.org/;
+    homepage = https://praw.readthedocs.org/;
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ];

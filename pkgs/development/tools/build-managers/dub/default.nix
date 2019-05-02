@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "dub-${version}";
-  version = "1.13.0";
+  version = "1.14.0";
 
   enableParallelBuilding = true;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "dlang";
     repo = "dub";
     rev = "v${version}";
-    sha256 = "1wd5pdnbaafj33bbg188w0iz28ps4cyjangb12g2s9dyic29zjqv";
+    sha256 = "070kfkyrkr98y1hbhcf85842c0x7l95w1ambrkdgajpb6kcmpf84";
   };
 
   postUnpack = ''

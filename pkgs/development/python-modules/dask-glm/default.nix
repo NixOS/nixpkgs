@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/dask/dask-glm/;
+    homepage = https://github.com/dask/dask-glm/;
     description = "Generalized Linear Models with Dask";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

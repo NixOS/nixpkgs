@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, vala, meson, ninja
+{ stdenv, fetchurl, vala, meson, ninja, libpwquality
 , pkgconfig, gtk3, glib, gobject-introspection
 , wrapGAppsHook, itstool, gnupg, libsoup
 , gnome3, gpgme, python3, openldap, gcr
-, libsecret, avahi, p11-kit, openssh }:
+, libsecret, avahi, p11-kit, openssh, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "3.30.1.1";
+  version = "3.32";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12x7xmwh62yl0ax90v8nkx3jqzviaz9hz2g56yml78wzww20gawy";
+    sha256 = "1wxcxq6ahlwab8dr83gqml67y95mnk56hsgw19d4h0xjvyz2ym52";
   };
 
   doCheck = true;
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3 glib gcr
-    gnome3.gsettings-desktop-schemas gnupg
+    gsettings-desktop-schemas gnupg
     gnome3.adwaita-icon-theme gpgme
     libsecret avahi libsoup p11-kit
-    openssh openldap
+    openssh openldap libpwquality
   ];
 
   postPatch = ''

@@ -74,7 +74,7 @@ let
     ${concatMapStrings (addr: ''
       Listen ${addr}
     '') cfg.listenAddresses}
-    Listen /var/run/cups/cups.sock
+    Listen /run/cups/cups.sock
 
     SetEnv PATH /var/lib/cups/path/lib/cups/filter:/var/lib/cups/path/bin
 
