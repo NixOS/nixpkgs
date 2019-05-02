@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quilter";
-  version = "1.8.1";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "0i8rvvc5g74bgfjgsmmgpj42xmhjaz14jjzl9s5nzwpy1fn7vv0p";
+    sha256 = "14qbkkz1l4zj6kwds5d82swnh3ynj6diyvjl0pafgp5i1i27j4rh";
   };
 
   nativeBuildInputs = [
