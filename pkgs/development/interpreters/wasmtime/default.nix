@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "17k8n5xar4pvvi4prhm6c51vlim9xqwkkhysbnss299mm3fyh36h";
+  cargoSha256 = "0xy8vazb4nc4q1098ws92j1yfwp9w7q30z0yk2gindkn898603bc";
 
   cargoPatches = [ ./cargo-lock.patch ];
 

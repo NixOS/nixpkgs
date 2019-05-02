@@ -925,6 +925,8 @@ in {
 
   aafigure = callPackage ../development/python-modules/aafigure { };
 
+  addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
+
   altair = callPackage ../development/python-modules/altair { };
 
   vega = callPackage ../development/python-modules/vega { };

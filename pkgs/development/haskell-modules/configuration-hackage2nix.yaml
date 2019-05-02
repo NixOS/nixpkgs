@@ -3014,12 +3014,7 @@ broken-packages:
   - bdcs
   - bdcs-api
   - beam
-  - beam-core
-  - beam-migrate
-  - beam-mysql
   - beam-newtype-field
-  - beam-postgres
-  - beam-sqlite
   - beam-th
   - beamable
   - beautifHOL
@@ -8049,6 +8044,7 @@ broken-packages:
   - reflex-backend-wai
   - reflex-basic-host
   - reflex-dom-core
+  - reflex-dom-svg
   - reflex-gloss
   - reflex-gloss-scene
   - reflex-orphans
@@ -9947,6 +9943,7 @@ broken-packages:
   - yesod-markdown
   - yesod-paginate
   - yesod-pagination
+  - yesod-paginator
   - yesod-paypal-rest
   - yesod-platform
   - yesod-pnotify
