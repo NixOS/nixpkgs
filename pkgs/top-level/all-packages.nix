@@ -12749,9 +12749,8 @@ in
 
   lambda-mod-zsh-theme = callPackage ../shells/zsh/lambda-mod-zsh-theme { };
 
-  leksah = callPackage ../development/tools/haskell/leksah {
-    inherit (haskellPackages) ghcWithPackages;
-  };
+  leksah = throw ("To use leksah, refer to the instructions in " +
+    "https://github.com/leksah/leksah.");
 
   libgme = callPackage ../development/libraries/audio/libgme { };
 
