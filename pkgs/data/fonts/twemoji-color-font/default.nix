@@ -1,11 +1,12 @@
 { stdenv, fetchFromGitHub, inkscape, imagemagick, potrace, svgo, scfbuild }:
 
 stdenv.mkDerivation rec {
-  name = "twemoji-color-font-${meta.version}";
+  pname = "twemoji-color-font";
+  version = "12.0.1";
   src = fetchFromGitHub {
     owner = "eosrei";
     repo = "twemoji-color-font";
-    rev = "v${meta.version}";
+    rev = "v${version}";
     sha256 = "00pbgqpkq21wl8fs0q1xp49xb10m48b9sz8cdc58flkd2vqfssw2";
   };
 
@@ -21,7 +22,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    version = "12.0.1";
     description = "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
     longDescription = ''
       A color and B&W emoji SVGinOT font built from the Twitter Emoji for
