@@ -9940,7 +9940,6 @@ broken-packages:
   - yesod-links
   - yesod-lucid
   - yesod-mangopay
-  - yesod-markdown
   - yesod-paginate
   - yesod-pagination
   - yesod-paginator
