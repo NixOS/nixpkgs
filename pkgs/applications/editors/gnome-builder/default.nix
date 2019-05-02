@@ -1,11 +1,11 @@
-{ stdenv
+{ gcc8Stdenv
 , ctags
+, appstream-glib
 , desktop-file-utils
 , docbook_xsl
 , docbook_xml_dtd_43
 , fetchurl
 , flatpak
-, glibcLocales
 , gnome3
 , libgit2-glib
 , gobject-introspection
@@ -31,28 +31,33 @@
 , vte
 , webkitgtk
 , wrapGAppsHook
+, dbus
+, xvfb_run
 }:
+
 let
-  version = "3.30.3";
+  # Does not build with GCC 7
+  # https://gitlab.gnome.org/GNOME/gnome-builder/issues/868
+  stdenv = gcc8Stdenv;
+in
+stdenv.mkDerivation rec {
   pname = "gnome-builder";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11h6apjyah91djf77m8xkl5rvdz7mwpp3bjc4yzzs9lm3pag764r";
+    sha256 = "00l7sshpndk995aw98mjmsc3mxhxzynlp7il551iwwjjdbc70qp4";
   };
 
   nativeBuildInputs = [
-    #appstream-glib # tests fail if these tools are available
+    appstream-glib
     desktop-file-utils
     docbook_xsl
     docbook_xml_dtd_43
-    glibcLocales # for Meson's gtkdochelper
     gobject-introspection
     gtk-doc
     hicolor-icon-theme
-    meson
+    (meson.override ({ inherit stdenv; }))
     ninja
     pkgconfig
     python3
@@ -64,6 +69,7 @@ in stdenv.mkDerivation {
     ctags
     flatpak
     gnome3.devhelp
+    gnome3.glade
     libgit2-glib
     libpeas
     vte
@@ -83,6 +89,11 @@ in stdenv.mkDerivation {
     webkitgtk
   ];
 
+  checkInputs = [
+    dbus
+    xvfb_run
+  ];
+
   outputs = [ "out" "devdoc" ];
 
   prePatch = ''
@@ -91,19 +102,25 @@ in stdenv.mkDerivation {
 
   mesonFlags = [
     "-Dpython_libprefix=${python3.libPrefix}"
-    "-Dwith_docs=true"
+    "-Ddocs=true"
 
     # Making the build system correctly detect clang header and library paths
     # is difficult. Somebody should look into fixing this.
-    "-Dwith_clang=false"
+    "-Dplugin_clang=false"
+
+    # Do not try to check if appstream images exist
+    "-Dnetwork_tests=false"
   ];
 
   # Some tests fail due to being unable to find the Vte typelib, and I don't
   # understand why. Somebody should look into fixing this.
-  doCheck = false;
+  doCheck = true;
 
-  preInstall = ''
-    export LC_ALL="en_US.utf-8"
+  checkPhase = ''
+    export NO_AT_BRIDGE=1
+    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test --print-errorlogs
   '';
 
   pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];

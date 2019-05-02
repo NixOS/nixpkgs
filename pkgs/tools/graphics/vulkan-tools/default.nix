@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3, vulkan-loader,
+{ stdenv, fetchFromGitHub, cmake, python3, vulkan-loader, vulkan-headers,
   glslang, pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ python3 vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
+  buildInputs = [ python3 vulkan-headers vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
   enableParallelBuilding = true;
 
   cmakeFlags = [ "-DBUILD_ICD=OFF" "-DGLSLANG_INSTALL_DIR=${glslang}" ];

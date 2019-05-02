@@ -1,21 +1,47 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, vala, gettext
-, libxml2, desktop-file-utils, wrapGAppsHook
-, glib, gtk3, libgtop, gnome3 }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, vala
+, gettext
+, libxml2
+, desktop-file-utils
+, wrapGAppsHook
+, glib
+, gtk3
+, libgtop
+, libdazzle
+, gnome3
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-usage";
-  version = "3.30.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0f1vccw916az8hzsqmx6f57jvl68s3sbd3qk4rpwn42ks1v7nmsh";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0bgszckddfpd3czyb9fddx4pgv5yv44sxc45dfk2kgqyy169gjih";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gettext libxml2 desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    vala
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ glib gtk3 libgtop gnome3.adwaita-icon-theme ];
+  buildInputs = [
+    glib
+    gnome3.adwaita-icon-theme
+    gtk3
+    libdazzle
+    libgtop
+  ];
 
   postPatch = ''
     chmod +x build-aux/meson/postinstall.sh
@@ -29,7 +55,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "";
+    description = "A nice way to view information about use of system resources, like memory and disk space";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = gnome3.maintainers;

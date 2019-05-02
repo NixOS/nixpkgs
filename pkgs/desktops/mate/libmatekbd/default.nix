@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, mate, libxklavier }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gtk3, libxklavier }:
 
 stdenv.mkDerivation rec {
   name = "libmatekbd-${version}";
-  version = "1.20.2";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1l1zbphs4snswf4bkrwkk6gsmb44bdhymcfgaaspzbrcmw3y7hr1";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1dsr7618c92mhwabwhgxqsfp7gnf9zrz2z790jc5g085dxhg13y8";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

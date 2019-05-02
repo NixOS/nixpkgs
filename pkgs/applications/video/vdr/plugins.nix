@@ -1,7 +1,24 @@
 { stdenv, fetchurl, fetchgit, vdr, ffmpeg_2, alsaLib, fetchFromGitHub
 , libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
-, libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg }:
-{
+, libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg, ncurses }:
+let
+  mkPlugin = name: stdenv.mkDerivation {
+    name = "vdr-${vdr.version}-${name}";
+    inherit (vdr) src;
+    buildInputs = [ vdr ];
+    preConfigure = "cd PLUGINS/src/${name}";
+    installFlags = [ "DESTDIR=$(out)" ];
+  };
+in {
+
+  skincurses = (mkPlugin "skincurses").overrideAttrs(oldAttr: {
+    buildInputs = oldAttr.buildInputs ++ [ ncurses ];
+  });
+
+  inherit (stdenv.lib.genAttrs [
+    "epgtableid0" "hello" "osddemo" "pictures" "servicedemo" "status" "svdrpdemo"
+  ] mkPlugin);
+
   femon = stdenv.mkDerivation rec {
 
     name = "vdr-femon-2.4.0";

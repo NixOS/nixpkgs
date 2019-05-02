@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Find a website's favicon";
-    homepage = http://github.com/scottwernervt/favicon;
+    homepage = https://github.com/scottwernervt/favicon;
     license = licenses.mit;
     maintainers = with maintainers; [ elohmeier ];
   };

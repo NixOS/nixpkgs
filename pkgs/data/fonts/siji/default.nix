@@ -8,11 +8,13 @@ in fetchzip {
   url = https://github.com/stark/siji/archive/95369afac3e661cb6d3329ade5219992c88688c1.zip;
 
   postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.pcf -d $out/share/fonts/pcf
+    unzip -j $downloadedFile
+
+    install -D *.pcf -t $out/share/fonts/pcf
+    install -D *.bdf -t $out/share/fonts/bdf
   '';
 
-  sha256 = "1799hs7zd8w7qyja4mii9ggmrm786az7ldsqwx9mbi51b56ym640";
+  sha256 = "1ymcbirdbkqaf0xs2y00l0wachb4yxh1fgqm5avqwvccs0lsfj1d";
 
   meta = {
     homepage = https://github.com/stark/siji;

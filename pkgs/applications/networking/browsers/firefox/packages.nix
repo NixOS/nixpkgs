@@ -1,4 +1,4 @@
-{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3, overrideCC, gccStdenv, gcc6 }:
 
 let
 
@@ -17,10 +17,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "66.0.2";
+    ffversion = "66.0.3";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "1dzqzigrwb7q75zlyd74ncic3b39yvziccpgbzh7881lzshj7x6f2r6ssj8ssdkh8lm2ckhjzbn6pf44vlh8ciql9bxb8g8sjpg6ii2";
+      sha512 = "31pfzgys4dv4fskaasz47fviksjj9xp60r875q0i7z1n6kx25fzkpsg18a98fkqm3g8qmljccy93w68ysywnh1zzrv8djsaza7l0mz8";
     };
 
     patches = [
@@ -47,7 +47,7 @@ rec {
   # the web, there are many old useful plugins targeting offline
   # activities (e.g. ebook readers, syncronous translation, etc) that
   # will probably never be ported to WebExtensions API.
-  firefox-esr-52 = common rec {
+  firefox-esr-52 = (common rec {
     pname = "firefox-esr";
     ffversion = "52.9.0esr";
     src = fetchurl {
@@ -65,6 +65,9 @@ rec {
       description = "A web browser built from Firefox Extended Support Release source tree";
       knownVulnerabilities = [ "Support ended in August 2018." ];
     };
+  }).override {
+    stdenv = overrideCC gccStdenv gcc6; # gcc7 fails with "undefined reference to `__divmoddi4'"
+    gtk3Support = false;
   };
 
   firefox-esr-60 = common rec {

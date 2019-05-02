@@ -33,7 +33,12 @@ in
        paths = concatMapStrings (s: " -I ${s}/etc/apparmor.d")
          ([ pkgs.apparmor-profiles ] ++ cfg.packages);
      in {
-       wantedBy = [ "local-fs.target" ];
+       after = [ "local-fs.target" ];
+       before = [ "sysinit.target" ];
+       wantedBy = [ "multi-user.target" ];
+       unitConfig = {
+         DefaultDependencies = "no";
+       };
        serviceConfig = {
          Type = "oneshot";
          RemainAfterExit = "yes";
@@ -42,6 +47,9 @@ in
          ) cfg.profiles;
          ExecStop = map (p:
            ''${pkgs.apparmor-parser}/bin/apparmor_parser -Rv "${p}"''
+         ) cfg.profiles;
+         ExecReload = map (p:
+           ''${pkgs.apparmor-parser}/bin/apparmor_parser --reload ${paths} "${p}"''
          ) cfg.profiles;
        };
      };

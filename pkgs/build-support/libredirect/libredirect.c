@@ -91,6 +91,20 @@ int open64(const char * path, int flags, ...)
     return open64_real(rewrite(path, buf), flags, mode);
 }
 
+int openat(int dirfd, const char * path, int flags, ...)
+{
+    int (*openat_real) (int, const char *, int, mode_t) = dlsym(RTLD_NEXT, "openat");
+    mode_t mode = 0;
+    if (flags & O_CREAT) {
+        va_list ap;
+        va_start(ap, flags);
+        mode = va_arg(ap, mode_t);
+        va_end(ap);
+    }
+    char buf[PATH_MAX];
+    return openat_real(dirfd, rewrite(path, buf), flags, mode);
+}
+
 FILE * fopen(const char * path, const char * mode)
 {
     FILE * (*fopen_real) (const char *, const char *) = dlsym(RTLD_NEXT, "fopen");
@@ -151,4 +165,11 @@ int execv(const char *path, char *const argv[])
     int (*execv_real) (const char *path, char *const argv[]) = dlsym(RTLD_NEXT, "execv");
     char buf[PATH_MAX];
     return execv_real(rewrite(path, buf), argv);
+}
+
+void *dlopen(const char *filename, int flag)
+{
+    void * (*__dlopen_real) (const char *, int) = dlsym(RTLD_NEXT, "dlopen");
+    char buf[PATH_MAX];
+    return __dlopen_real(rewrite(filename, buf), flag);
 }

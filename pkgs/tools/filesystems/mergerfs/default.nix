@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "XATTR_AVAILABLE=1" ];
 
+  postFixup = ''
+    ln -s $out/bin/mergerfs $out/bin/mount.fuse.mergerfs
+  '';
+
   meta = {
     description = "A FUSE based union filesystem";
     homepage = https://github.com/trapexit/mergerfs;

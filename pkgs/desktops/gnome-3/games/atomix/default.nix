@@ -3,13 +3,13 @@
 
 let
   pname = "atomix";
-  version = "3.30.0.1";
+  version = "3.32.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0hvr36m8ixa172zblv29fga1cn9yb84zqbisb21msfkwia2pabw3";
+    sha256 = "19wpm7mn6r7x6jz1r0kkqg3xa69iycvgb7g7i8wi0d3cx0rsgjkl";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 ];

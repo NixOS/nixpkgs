@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghostscript, texinfo, imagemagick, texi2html, guile
-, python2, gettext, flex, perl, bison, pkgconfig, dblatex
+, python2, gettext, flex, perl, bison, pkgconfig, autoreconfHook, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
 , fetchsvn, makeWrapper, t1utils
 , texlive, tex ? texlive.combine {
@@ -23,17 +23,6 @@ stdenv.mkDerivation rec{
     sha256 = "01xs9x2wjj7w9appaaqdhk15r1xvvdbz9qwahzhppfmhclvp779j";
   };
 
-  preConfigure=''
-    sed -e "s@mem=mf2pt1@mem=$PWD/mf/mf2pt1@" -i scripts/build/mf2pt1.pl
-
-    # At some point our fontforge had path 2n…-fontforge-2015… and it
-    # confused the version detection…
-    sed -re 's%("[$]exe" --version .*)([|\\] *$)%\1 | sed -re "s@/nix/store/[a-z0-9]{32}-@@" \2%' \
-      -i configure
-
-    export HOME=$TMPDIR/home
-  '';
-
   postInstall = ''
     for f in "$out/bin/"*; do
         # Override default argv[0] setting so LilyPond can find
@@ -46,13 +35,22 @@ stdenv.mkDerivation rec{
 
   configureFlags = [ "--disable-documentation" "--with-ncsb-dir=${urwfonts}"];
 
+  preConfigure = ''
+    sed -e "s@mem=mf2pt1@mem=$PWD/mf/mf2pt1@" -i scripts/build/mf2pt1.pl
+    export HOME=$TMPDIR/home
+  '';
+
+  nativeBuildInputs = [ makeWrapper pkgconfig autoreconfHook ];
+
+  autoreconfPhase = "NOCONFIGURE=1 sh autogen.sh";
+
   buildInputs =
     [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm
-      python2 gettext flex perl bison pkgconfig fontconfig freetype pango
-      fontforge help2man groff makeWrapper t1utils
+      python2 gettext flex perl bison fontconfig freetype pango
+      fontforge help2man groff t1utils
     ];
 
-  #enableParallelBuilding = true; # fatal error: parser.hh: No such file or directory
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Music typesetting system";

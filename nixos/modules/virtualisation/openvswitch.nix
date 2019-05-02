@@ -49,7 +49,7 @@ in {
   config = mkIf cfg.enable (let
 
     # Where the communication sockets live
-    runDir = "/var/run/openvswitch";
+    runDir = "/run/openvswitch";
 
     # The path to the an initialized version of the database
     db = pkgs.stdenv.mkDerivation {
@@ -99,13 +99,13 @@ in {
             --certificate=db:Open_vSwitch,SSL,certificate \
             --bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert \
             --unixctl=ovsdb.ctl.sock \
-            --pidfile=/var/run/openvswitch/ovsdb.pid \
+            --pidfile=/run/openvswitch/ovsdb.pid \
             --detach \
             /var/db/openvswitch/conf.db
           '';
         Restart = "always";
         RestartSec = 3;
-        PIDFile = "/var/run/openvswitch/ovsdb.pid";
+        PIDFile = "/run/openvswitch/ovsdb.pid";
         # Use service type 'forking' to correctly determine when ovsdb-server is ready.
         Type = "forking";
       };
@@ -123,10 +123,10 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/ovs-vswitchd \
-          --pidfile=/var/run/openvswitch/ovs-vswitchd.pid \
+          --pidfile=/run/openvswitch/ovs-vswitchd.pid \
           --detach
         '';
-        PIDFile = "/var/run/openvswitch/ovs-vswitchd.pid";
+        PIDFile = "/run/openvswitch/ovs-vswitchd.pid";
         # Use service type 'forking' to correctly determine when vswitchd is ready.
         Type = "forking";
       };
@@ -152,11 +152,11 @@ in {
         ExecStart = ''
           ${cfg.package}/bin/ovs-monitor-ipsec \
             --root-prefix ${runDir}/ipsec \
-            --pidfile /var/run/openvswitch/ovs-monitor-ipsec.pid \
+            --pidfile /run/openvswitch/ovs-monitor-ipsec.pid \
             --monitor --detach \
-            unix:/var/run/openvswitch/db.sock
+            unix:/run/openvswitch/db.sock
         '';
-        PIDFile = "/var/run/openvswitch/ovs-monitor-ipsec.pid";
+        PIDFile = "/run/openvswitch/ovs-monitor-ipsec.pid";
         # Use service type 'forking' to correctly determine when ovs-monitor-ipsec is ready.
         Type = "forking";
       };
@@ -167,7 +167,7 @@ in {
         ln -fs ${pkgs.ipsecTools}/bin/setkey ${runDir}/ipsec/usr/sbin/setkey
         ln -fs ${pkgs.writeScript "racoon-restart" ''
         #!${pkgs.runtimeShell}
-        /var/run/current-system/sw/bin/systemctl $1 racoon
+        /run/current-system/sw/bin/systemctl $1 racoon
         ''} ${runDir}/ipsec/etc/init.d/racoon
       '';
     };

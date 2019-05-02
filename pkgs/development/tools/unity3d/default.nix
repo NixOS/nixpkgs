@@ -1,9 +1,10 @@
 { stdenv, lib, fetchurl, makeWrapper, file, getopt
-, gtk2, gdk_pixbuf, glib, libGL, libGLU, nss, nspr, udev, tbb
+, gtk2, gtk3, gdk_pixbuf, glib, libGL, libGLU, nss, nspr, udev, tbb
 , alsaLib, GConf, cups, libcap, fontconfig, freetype, pango
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
 , libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
 , libXcomposite, libXext, libXrandr, libXtst, libSM, libICE, libxcb, chromium
+, libpqxx
 }:
 
 let
@@ -13,20 +14,21 @@ let
     cairo dbus expat zlib libpng12 udev tbb
     libX11 libXcursor libXdamage libXfixes libXrender libXi
     libXcomposite libXext libXrandr libXtst libSM libICE libxcb
+    libpqxx gtk3 
   ];
   libPath32 = lib.makeLibraryPath [ gcc_32bit.cc ];
   binPath = lib.makeBinPath [ nodejs gnutar ];
 
-  ver = "2017.4.10";
-  build = "f1";
+  ver = "2018.3.0";
+  build = "f2";
 
 in stdenv.mkDerivation rec {
   name = "unity-editor-${version}";
   version = "${ver}x${build}";
 
   src = fetchurl {
-    url = "https://beta.unity3d.com/download/14396d76537e/LinuxEditorInstaller/Unity.tar.xz";
-    sha256 = "e1b4fe41c0ff793f7a9146c49a8eca8c71d30abdfa3e81922bd69699810b3f67";
+  	url = "https://beta.unity3d.com/download/6e9a27477296/LinuxEditorInstaller/Unity.tar.xz";
+    sha1 = "083imikkrgha5w9sihjvv1m74naxm5yv";
   };
 
   nosuidLib = ./unity-nosuid.c;
@@ -79,7 +81,8 @@ in stdenv.mkDerivation rec {
       fi
     }
 
-    upm_linux=$unitydir/Data/Resources/Upm/upm-linux
+    upm_linux=$unitydir/Data/Resources/PackageManager/Server/UnityPackageManager
+    
 
     orig_size=$(stat --printf=%s $upm_linux)
 
@@ -132,6 +135,6 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ jb55 tesq0 ];
   };
 }

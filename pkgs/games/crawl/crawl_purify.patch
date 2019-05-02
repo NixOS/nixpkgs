@@ -1,6 +1,6 @@
-diff -ru3 crawl-ref-0.20.1-src-old/crawl-ref/source/Makefile crawl-ref-0.20.1-src-new/crawl-ref/source/Makefile
---- crawl-ref-0.20.1-src-old/crawl-ref/source/Makefile	1970-01-01 03:00:01.000000000 +0300
-+++ crawl-ref-0.20.1-src-new/crawl-ref/source/Makefile	2017-07-27 14:45:34.611221571 +0300
+diff -ru3 crawl-ref-0.23.2-src-old/crawl-ref/source/Makefile crawl-ref-0.23.2-src-new/crawl-ref/source/Makefile
+--- crawl-ref-0.23.2-src-old/crawl-ref/source/Makefile	1970-01-01 03:00:01.000000000 +0300
++++ crawl-ref-0.23.2-src-new/crawl-ref/source/Makefile	2017-07-27 14:45:34.611221571 +0300
 @@ -286,13 +286,7 @@
  LIBZ := contrib/install/$(ARCH)/lib/libz.a
  
@@ -16,9 +16,9 @@ diff -ru3 crawl-ref-0.20.1-src-old/crawl-ref/source/Makefile crawl-ref-0.20.1-sr
  else
  	# This is totally wrong, works only with some old-style setups, and
  	# on some architectures of Debian/new FHS multiarch -- excluding, for
-diff -ru3 crawl-ref-0.20.1-src-old/crawl-ref/source/util/find_font crawl-ref-0.20.1-src-new/crawl-ref/source/util/find_font
---- crawl-ref-0.20.1-src-old/crawl-ref/source/util/find_font	1970-01-01 03:00:01.000000000 +0300
-+++ crawl-ref-0.20.1-src-new/crawl-ref/source/util/find_font	2017-07-27 14:44:29.784235540 +0300
+diff -ru3 crawl-ref-0.23.2-src-old/crawl-ref/source/util/find_font crawl-ref-0.23.2-src-new/crawl-ref/source/util/find_font
+--- crawl-ref-0.23.2-src-old/crawl-ref/source/util/find_font	1970-01-01 03:00:01.000000000 +0300
++++ crawl-ref-0.23.2-src-new/crawl-ref/source/util/find_font	2017-07-27 14:44:29.784235540 +0300
 @@ -1,6 +1,6 @@
  #! /bin/sh
  
@@ -35,3 +35,15 @@ diff -ru3 crawl-ref-0.20.1-src-old/crawl-ref/source/util/find_font crawl-ref-0.2
 +    } | xargs -I% find -L % \( -type f -o -type l \) -iname "$name" -print \
        | head -n1
  } 2>/dev/null
+diff --git a/crawl-ref/source/windowmanager-sdl.cc b/crawl-ref/source/windowmanager-sdl.cc
+--- a/crawl-ref/source/windowmanager-sdl.cc
++++ b/crawl-ref/source/windowmanager-sdl.cc
+@@ -20,7 +20,7 @@
+ # else
+ #  include <SDL2/SDL.h>
+ # endif
+-# include <SDL_image.h>
++# include <SDL2/SDL_image.h>
+ # if defined(USE_SOUND) && !defined(WINMM_PLAY_SOUNDS)
+ #  include <SDL2/SDL_mixer.h>
+ # endif

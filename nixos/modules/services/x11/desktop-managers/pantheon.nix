@@ -73,8 +73,14 @@ in
 
     # Ensure lightdm is used when Pantheon is enabled
     # Without it screen locking will be nonfunctional because of the use of lightlocker
+
+    warnings = optional (config.services.xserver.displayManager.lightdm.enable != true)
+      ''
+        Using Pantheon without LightDM as a displayManager will break screenlocking from the UI.
+      '';
+
     services.xserver.displayManager.lightdm.enable = mkDefault true;
-    services.xserver.displayManager.lightdm.greeters.pantheon.enable = mkDefault true;
+    services.xserver.displayManager.lightdm.greeters.gtk.enable = mkDefault true;
 
     # If not set manually Pantheon session cannot be started
     # Known issue of https://github.com/NixOS/nixpkgs/pull/43992
@@ -116,9 +122,11 @@ in
     # pantheon has pantheon-agent-geoclue2
     services.geoclue2.enableDemoAgent = false;
     services.gnome3.at-spi2-core.enable = true;
+    services.gnome3.evince.enable = mkDefault true;
     services.gnome3.evolution-data-server.enable = true;
     services.gnome3.file-roller.enable = mkDefault true;
     # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
+    services.gnome3.glib-networking.enable = true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;
     services.gnome3.gnome-settings-daemon.package = pkgs.pantheon.elementary-settings-daemon;
@@ -146,7 +154,6 @@ in
 
     environment.variables.GIO_EXTRA_MODULES = [
       "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
-      "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"
       "${pkgs.gnome3.gvfs}/lib/gio/modules"
     ];
 
@@ -162,7 +169,6 @@ in
         gnome3.geary
         gnome3.epiphany
         gnome3.gnome-font-viewer
-        evince
       ] ++ pantheon.apps) config.environment.pantheon.excludePackages)
       ++ (with pkgs;
       [

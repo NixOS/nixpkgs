@@ -13,7 +13,7 @@
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray
-, sqlite, mysql, nasm, gnutls, libva, libdrm, wayland
+, sqlite, mysql, nasm, gnutls, libva, libdrm
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
@@ -28,6 +28,8 @@
 , udevSupport ? true, udev ? null
 , usbSupport  ? false, libusb ? null
 , vdpauSupport ? true, libvdpau ? null
+, useWayland ? false, wayland ? null, wayland-protocols ? null
+, waylandpp ?  null, libxkbcommon ? null
 }:
 
 assert dbusSupport  -> dbus != null;
@@ -38,6 +40,7 @@ assert sambaSupport -> samba != null;
 assert udevSupport  -> udev != null;
 assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used if udev is avaliable
 assert vdpauSupport -> libvdpau != null;
+assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
 
 # TODO for Kodi 18.0
 # - check if dbus support PR has been merged and add dbus as a buildInput
@@ -110,7 +113,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-    name = "kodi-${kodiVersion}";
+    name = "kodi-${lib.optionalString useWayland "wayland-"}${kodiVersion}";
 
     src = kodi_src;
 
@@ -123,7 +126,7 @@ in stdenv.mkDerivation rec {
       libX11 xorgproto libXt libXmu libXext
       libXinerama libXrandr libXtst libXfixes
       alsaLib libGLU_combined glew fontconfig freetype ftgl
-      libjpeg jasper libpng libtiff wayland
+      libjpeg jasper libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
@@ -144,7 +147,12 @@ in stdenv.mkDerivation rec {
     ++ lib.optional  sambaSupport    samba
     ++ lib.optional  udevSupport     udev
     ++ lib.optional  usbSupport      libusb
-    ++ lib.optional  vdpauSupport    libvdpau;
+    ++ lib.optional  vdpauSupport    libvdpau
+    ++ lib.optional  useWayland [
+      wayland waylandpp
+      # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
+      libxkbcommon.dev
+    ];
 
     nativeBuildInputs = [
       cmake
@@ -153,7 +161,7 @@ in stdenv.mkDerivation rec {
       which
       pkgconfig gnumake
       autoconf automake libtool # still needed for some components. Check if that is the case with 18.0
-    ];
+    ] ++ lib.optional useWayland [ wayland-protocols ];
 
     cmakeFlags = [
       "-Dlibdvdcss_URL=${libdvdcss.src}"
@@ -164,6 +172,9 @@ in stdenv.mkDerivation rec {
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
       "-DENABLE_OPTICAL=ON"
       "-DLIRC_DEVICE=/run/lirc/lircd"
+    ] ++ lib.optional useWayland [
+      "-DCORE_PLATFORM_NAME=wayland"
+      "-DWAYLAND_RENDER_SYSTEM=gl"
     ];
 
     enableParallelBuilding = true;

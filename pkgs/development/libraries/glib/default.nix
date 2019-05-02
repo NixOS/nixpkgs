@@ -46,7 +46,7 @@ let
   '';
 
   binPrograms = optional (!stdenv.isDarwin) "gapplication" ++ [ "gdbus" "gio" "gsettings" ];
-  version = "2.58.3";
+  version = "2.60.0";
 in
 
 stdenv.mkDerivation rec {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "10blprf5djbwxq8dqmjvcsdc9vqz63rl0ammfbd2b2p8cwbw6hwg";
+    sha256 = "0ls3njqknb345ni5i8hn9nr1n70kn6s8bi0g6kcqj3c4js5mv1i0";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch
@@ -96,15 +96,15 @@ stdenv.mkDerivation rec {
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
     # Instead we just copy them over from the native output.
     "-Dgtk_doc=${if stdenv.hostPlatform == stdenv.buildPlatform then "true" else "false"}"
+    "-Dnls=enabled"
   ];
 
   LC_ALL = "en_US.UTF-8";
 
-  NIX_CFLAGS_COMPILE = optional stdenv.isSunOS "-DBSD_COMP";
+  NIX_CFLAGS_COMPILE = (optional stdenv.isSunOS "-DBSD_COMP")
+    ++ [ "-Wno-error=nonnull" ];
 
   postPatch = ''
-    substituteInPlace meson.build --replace "install_dir : 'bin'," "install_dir : glib_bindir,"
-
     # substitute fix-gio-launch-desktop-path.patch
     substituteInPlace gio/gdesktopappinfo.c --replace "@bindir@" "$out/bin"
 

@@ -38,8 +38,10 @@ buildPythonPackage rec {
   checkInputs = [ sphinx numpydoc pytest ];
   propagatedBuildInputs = [ python-lz4 ];
 
+  # test_disk_used is broken
+  # https://github.com/joblib/joblib/issues/57
   checkPhase = ''
-    py.test joblib
+    py.test joblib -k "not test_disk_used"
   '';
 
   meta = {

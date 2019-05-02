@@ -60,7 +60,7 @@ in buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python bindings for Mapnik";
-    homepage = http://mapnik.org;
+    homepage = https://mapnik.org;
     license  = licenses.lgpl21;
   };
 

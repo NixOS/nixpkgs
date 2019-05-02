@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/kerrickstaley/genanki;
+    homepage = https://github.com/kerrickstaley/genanki;
     description = "Generate Anki decks programmatically";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];

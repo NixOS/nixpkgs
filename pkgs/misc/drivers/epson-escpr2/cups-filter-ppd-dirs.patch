@@ -1,0 +1,55 @@
+diff --git a/configure.orig b/configure
+index e9d400f..dac1943 100755
+--- a/configure.orig
++++ b/configure
+@@ -12184,48 +12184,8 @@ esac
+ #	*)		ESCPR_LIB_NAME="escpr2_32" ;;
+ #esac
+ 
+-
+-
+-# Check whether --with-cupsfilterdir was given.
+-if test "${with_cupsfilterdir+set}" = set; then :
+-  withval=$with_cupsfilterdir;
+-else
+-  with_cupsfilterdir=no
+-fi
+-
+-if test "xno" = "x${with_cupsfilterdir}"; then
+-   if test "xyes" = "x$have_cups_config" ; then
+-            CUPS_FILTER_DIR="${cups_default_prefix}`cups-config --serverbin | sed -e 's,^/[^/][^/]*,,'`/filter"
+-   else
+-      CUPS_FILTER_DIR="${cups_default_prefix}/lib/cups/filter"
+-   fi
+-else
+-   CUPS_FILTER_DIR="${with_cupsfilterdir}"
+-fi
+-
+-
+-# Check whether --with-cupsppddir was given.
+-if test "${with_cupsppddir+set}" = set; then :
+-  withval=$with_cupsppddir;
+-else
+-  with_cupsppddir=no
+-fi
+-
+-if test "xno" = "x${with_cupsppddir}"; then
+-   if test -d "${cups_default_prefix}/share/ppd" ; then
+-      CUPS_PPD_DIR="${cups_default_prefix}/share/ppd"
+-   elif test "xyes" = "x$have_cups_config" ; then
+-            CUPS_PPD_DIR="${cups_default_prefix}`cups-config --datadir | sed -e 's,^/[^/][^/]*,,'`/model"
+-   else
+-      CUPS_PPD_DIR="${cups_default_prefix}/share/cups/model"
+-   fi
+-else
+-   CUPS_PPD_DIR="${with_cupsppddir}"
+-fi
+-
+-
+-
+-
++CUPS_FILTER_DIR="${prefix}/lib/cups/filter"
++CUPS_PPD_DIR="${prefix}/share/cups/model"
+ 
+ # Check whether --enable-lsb was given.
+ if test "${enable_lsb+set}" = set; then :

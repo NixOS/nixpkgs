@@ -226,18 +226,19 @@ in {
       ipfs.gid = config.ids.gids.ipfs;
     };
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+    ] ++ optionals cfg.autoMount [
+      "d '${cfg.ipfsMountDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.ipnsMountDir}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.ipfs-init = recursiveUpdate commonEnv {
       description = "IPFS Initializer";
 
       after = [ "local-fs.target" ];
       before = [ "ipfs.service" "ipfs-offline.service" "ipfs-norouting.service" ];
 
-      preStart = ''
-        install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
-      '' + optionalString cfg.autoMount ''
-        install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.ipfsMountDir}
-        install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.ipnsMountDir}
-      '';
       script = ''
         if [[ ! -f ${cfg.dataDir}/config ]]; then
           ipfs init ${optionalString cfg.emptyRepo "-e"} \
@@ -253,7 +254,6 @@ in {
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        PermissionsStartOnly = true;
       };
     };
 

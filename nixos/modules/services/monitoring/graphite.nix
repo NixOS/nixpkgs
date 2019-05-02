@@ -123,7 +123,7 @@ in {
           graphite carbon.
 
           For more information visit
-          <link xlink:href="http://graphite-api.readthedocs.org/en/latest/"/>
+          <link xlink:href="https://graphite-api.readthedocs.org/en/latest/"/>
         '';
         default = false;
         type = types.bool;

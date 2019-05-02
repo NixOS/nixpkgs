@@ -12,6 +12,7 @@
 , libXinerama
 , libXrandr
 , libXrender
+, libGL
 , openal}:
 
 let
@@ -47,6 +48,7 @@ in
       libXinerama
       libXrandr
       libXrender
+      libGL
       openal
     ];
 

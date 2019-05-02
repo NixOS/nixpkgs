@@ -21,6 +21,7 @@ bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bling/vim-bufferline
 bronson/vim-trailing-whitespace
+brooth/far.vim
 carlitux/deoplete-ternjs
 ccarpita/rtorrent-syntax-file
 cespare/vim-toml
@@ -30,8 +31,9 @@ Chiel92/vim-autoformat
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chrisbra/CheckAttach
-chrisbra/Recover.vim
 chrisbra/csv.vim
+chrisbra/Recover.vim
+chrisbra/unicode.vim
 chrisgeo/sparkup
 chriskempson/base16-vim
 christoomey/vim-sort-motion
@@ -40,6 +42,7 @@ cocopon/iceberg.vim
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim
 dag/vim2hs
+dag/vim-fish
 dannyob/quickfixstatus
 davidhalter/jedi-vim
 derekelkins/agda-vim
@@ -91,6 +94,7 @@ HerringtonDarkholme/yats.vim
 honza/vim-snippets
 hsanson/vim-android
 ianks/vim-tsx
+icymind/NeoSolarized
 idris-hackers/idris-vim
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
@@ -127,6 +131,8 @@ junegunn/vim-peekaboo
 junegunn/vim-plug
 justincampbell/vim-eighties
 justinmk/vim-dirvish
+justinmk/vim-sneak
+KabbAmine/vCoolor.vim
 KabbAmine/zeavim.vim
 kalbasit/vim-colemak
 kana/vim-niceblock
@@ -185,6 +191,7 @@ mbbill/undotree
 megaannum/forms
 megaannum/self
 mfukar/robotframework-vim
+mg979/vim-visual-multi
 mhinz/vim-grepper
 mhinz/vim-janah
 mhinz/vim-sayonara
@@ -199,6 +206,7 @@ motus/pig.vim
 mpickering/hlint-refactor-vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
+nathangrigg/vim-beancount
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
 ncm2/ncm2
@@ -227,6 +235,7 @@ peder2tm/sved
 peterhoeg/vim-qml
 phanviet/vim-monokai-pro
 plasticboy/vim-markdown
+ponko2/deoplete-fish
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
@@ -281,6 +290,7 @@ sjl/splice.vim
 sk1418/last256
 slashmili/alchemist.vim
 sonph/onehalf
+t9md/vim-choosewin
 t9md/vim-smalls
 takac/vim-hardtime
 ternjs/tern_for_vim
@@ -303,11 +313,13 @@ tpope/vim-eunuch
 tpope/vim-fireplace
 tpope/vim-flagship
 tpope/vim-fugitive
+tpope/vim-liquid
 tpope/vim-obsession
 tpope/vim-pathogen
 tpope/vim-projectionist
 tpope/vim-repeat
 tpope/vim-rhubarb
+tpope/vim-rsi
 tpope/vim-scriptease
 tpope/vim-sensible
 tpope/vim-sleuth
@@ -339,7 +351,9 @@ vim-scripts/a.vim
 vim-scripts/bats.vim
 vim-scripts/changeColorScheme.vim
 vim-scripts/Colour-Sampler-Pack
+vim-scripts/emodeline
 vim-scripts/Improved-AnsiEsc
+vim-scripts/jdaddy.vim
 vim-scripts/matchit.zip
 vim-scripts/mayansmoke
 vim-scripts/PreserveNoEOL

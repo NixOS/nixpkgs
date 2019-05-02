@@ -1,8 +1,20 @@
-{ stdenv, autoreconfHook, pkgconfig, fetchFromGitHub, dleyna-connector-dbus, dleyna-core, gssdp, gupnp, gupnp-av, gupnp-dlna, libsoup, makeWrapper }:
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, dleyna-connector-dbus
+, dleyna-core
+, gssdp
+, gupnp
+, gupnp-av
+, gupnp-dlna
+, libsoup
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "dleyna-renderer";
-  name = "${pname}-${version}";
   version = "0.6.0";
 
   src = fetchFromGitHub {
@@ -12,8 +24,27 @@ stdenv.mkDerivation rec {
     sha256 = "0jy54aq8hgrvzchrvfzqaj4pcn0cfhafl9bv8a9p6j82yjk4pvpp";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
-  buildInputs = [ dleyna-core dleyna-connector-dbus gssdp gupnp gupnp-av gupnp-dlna libsoup ];
+  patches = [
+    # fix build with gupnp 1.2
+    # comes from arch linux packaging https://git.archlinux.org/svntogit/packages.git/tree/trunk/gupnp-1.2.diff?h=packages/dleyna-renderer
+    ./gupnp-1.2.diff
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconfig
+    makeWrapper
+  ];
+
+  buildInputs = [
+    dleyna-core
+    dleyna-connector-dbus
+    gssdp
+    gupnp
+    gupnp-av
+    gupnp-dlna
+    libsoup
+  ];
 
   preFixup = ''
     wrapProgram "$out/libexec/dleyna-renderer-service" \

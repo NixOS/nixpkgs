@@ -116,20 +116,22 @@ in {
           ${lib.optionalString (cfg.webroot != null)
             "ln -sfT \"${cfg.webroot}\" web"}
           mkdir -p dump
-          # Check that both database configs are symlinks before overwriting them
-          if [ -e KDB/DB_CONFIG ] && [ ! -L KBD/DB_CONFIG ]; then
-            echo "KDB/DB_CONFIG exists but is not a symlink." >&2
-            exit 1
-          fi
-          if [ -e PTree/DB_CONFIG ] && [ ! -L PTree/DB_CONFIG ]; then
-            echo "PTree/DB_CONFIG exists but is not a symlink." >&2
-            exit 1
-          fi
-          ln -sf ${dbConfig} KDB/DB_CONFIG
-          ln -sf ${dbConfig} PTree/DB_CONFIG
           ${sksPkg}/bin/sks build dump/*.gpg -n 10 -cache 100 || true #*/
           ${sksPkg}/bin/sks cleandb || true
           ${sksPkg}/bin/sks pbuild -cache 20 -ptree_cache 70 || true
+          # Check that both database configs are symlinks before overwriting them
+          # TODO: The initial build will be without DB_CONFIG, but this will
+          # hopefully not cause any significant problems. It might be better to
+          # create both directories manually but we have to check that this does
+          # not affect the initial build of the DB.
+          for CONFIG_FILE in KDB/DB_CONFIG PTree/DB_CONFIG; do
+            if [ -e $CONFIG_FILE ] && [ ! -L $CONFIG_FILE ]; then
+              echo "$CONFIG_FILE exists but is not a symlink." >&2
+              echo "Please remove $PWD/$CONFIG_FILE manually to continue." >&2
+              exit 1
+            fi
+            ln -sf ${dbConfig} $CONFIG_FILE
+          done
         '';
         serviceConfig = {
           WorkingDirectory = "~";

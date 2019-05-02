@@ -23,6 +23,7 @@ in
 {
   acme = handleTestOn ["x86_64-linux"] ./acme.nix {};
   atd = handleTest ./atd.nix {};
+  automysqlbackup = handleTest ./automysqlbackup.nix {};
   avahi = handleTest ./avahi.nix {};
   bcachefs = handleTestOn ["x86_64-linux"] ./bcachefs.nix {}; # linux-4.18.2018.10.12 is unsupported on aarch64
   beanstalkd = handleTest ./beanstalkd.nix {};
@@ -65,11 +66,13 @@ in
   docker-registry = handleTest ./docker-registry.nix {};
   docker-tools = handleTestOn ["x86_64-linux"] ./docker-tools.nix {};
   docker-tools-overlay = handleTestOn ["x86_64-linux"] ./docker-tools-overlay.nix {};
+  documize = handleTest ./documize.nix {};
   dovecot = handleTest ./dovecot.nix {};
   # ec2-config doesn't work in a sandbox as the simulated ec2 instance needs network access
   #ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
   ecryptfs = handleTest ./ecryptfs.nix {};
+  ejabberd = handleTest ./ejabberd.nix {};
   elk = handleTestOn ["x86_64-linux"] ./elk.nix {};
   env = handleTest ./env.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
@@ -113,6 +116,7 @@ in
   installer = handleTest ./installer.nix {};
   ipv6 = handleTest ./ipv6.nix {};
   jackett = handleTest ./jackett.nix {};
+  jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
   kafka = handleTest ./kafka.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
@@ -137,10 +141,12 @@ in
   matrix-synapse = handleTest ./matrix-synapse.nix {};
   memcached = handleTest ./memcached.nix {};
   mesos = handleTest ./mesos.nix {};
+  miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
   misc = handleTest ./misc.nix {};
   mongodb = handleTest ./mongodb.nix {};
   morty = handleTest ./morty.nix {};
+  mosquitto = handleTest ./mosquitto.nix {};
   mpd = handleTest ./mpd.nix {};
   mumble = handleTest ./mumble.nix {};
   munin = handleTest ./munin.nix {};
@@ -168,6 +174,7 @@ in
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
   nsd = handleTest ./nsd.nix {};
+  nzbget = handleTest ./nzbget.nix {};
   openldap = handleTest ./openldap.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
   openssh = handleTest ./openssh.nix {};
@@ -178,6 +185,7 @@ in
   osrm-backend = handleTest ./osrm-backend.nix {};
   ostree = handleTest ./ostree.nix {};
   overlayfs = handleTest ./overlayfs.nix {};
+  packagekit = handleTest ./packagekit.nix {};
   pam-oath-login = handleTest ./pam-oath-login.nix {};
   pam-u2f = handleTest ./pam-u2f.nix {};
   pantheon = handleTest ./pantheon.nix {};
@@ -193,6 +201,7 @@ in
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
   printing = handleTest ./printing.nix {};
   prometheus = handleTest ./prometheus.nix {};
+  prometheus2 = handleTest ./prometheus-2.nix {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
   prosody = handleTest ./prosody.nix {};
   proxy = handleTest ./proxy.nix {};
@@ -234,6 +243,7 @@ in
   vault = handleTest ./vault.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   wireguard = handleTest ./wireguard {};
+  wireguard-generated = handleTest ./wireguard/generated.nix {};
   wordpress = handleTest ./wordpress.nix {};
   xautolock = handleTest ./xautolock.nix {};
   xdg-desktop-portal = handleTest ./xdg-desktop-portal.nix {};

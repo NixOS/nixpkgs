@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cln, pkgconfig, readline, gmp, python }:
 
 stdenv.mkDerivation rec {
-  name = "ginac-1.7.5";
+  name = "ginac-1.7.6";
 
   src = fetchurl {
     url    = "${meta.homepage}/${name}.tar.bz2";
-    sha256 = "11v8dpdfq8ybbbadyakp19xc7jgckplbbj6q2hh1c2hj5ps6njz7";
+    sha256 = "03cq93qjfgxgr7zxadrjfbn43lk5f0x2lmd90ggx10p6jq47157v";
   };
 
   propagatedBuildInputs = [ cln ];

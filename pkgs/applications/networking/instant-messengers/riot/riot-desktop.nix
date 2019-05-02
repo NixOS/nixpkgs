@@ -1,16 +1,18 @@
-{ stdenv, fetchFromGitHub, yarn2nix, makeWrapper, makeDesktopItem, electron, riot-web }:
+{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron, riot-web }:
+
+with (import ./yarn2nix.nix { inherit pkgs; });
 
 let
   executableName = "riot-desktop";
-  version = "1.0.4";
+  version = "1.0.7";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "152mi81miams5a7l9rd12bnf6wkd1r0lyicgr35r5fq0p6z7a4dk";
+    sha256 = "1sq6vnyas2ab3phaiyby4fkpp0nwvl67xwxnr2pzfm0dkjxl9r58";
   };
 
-in yarn2nix.mkYarnPackage rec {
+in mkYarnPackage rec {
   name = "riot-desktop-${version}";
   inherit version;
 
@@ -46,6 +48,12 @@ in yarn2nix.mkYarnPackage rec {
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --add-flags "$out/share/riot/electron"
+  '';
+
+  # Do not attempt generating a tarball for riot-web again.
+  # note: `doDist = false;` does not work.
+  distPhase = ''
+    true
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:

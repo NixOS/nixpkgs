@@ -1,22 +1,22 @@
 { stdenv, fetchurl, itstool, python3, intltool, wrapGAppsHook
 , libxml2, gobject-introspection, gtk3, gtksourceview, gnome3
-, dbus, xvfb_run
+, gsettings-desktop-schemas, dbus, xvfb_run
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meld";
-  version = "3.20.0";
+  version = "3.20.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11khi1sg02k3b9qdag3r939cwi27cql4kjim7jhxf9ckfhpzwh6b";
+    sha256 = "0jdj7kd6vj1mdc16gvrj1kar88b2j5875ajq18fx7cbc9ny46j55";
   };
 
   nativeBuildInputs = [
     intltool itstool libxml2 gobject-introspection wrapGAppsHook
   ];
   buildInputs = [
-    gtk3 gtksourceview gnome3.gsettings-desktop-schemas gnome3.adwaita-icon-theme
+    gtk3 gtksourceview gsettings-desktop-schemas gnome3.adwaita-icon-theme
     gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
   ];
   propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo ];

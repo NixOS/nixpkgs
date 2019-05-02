@@ -15,13 +15,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.13.5";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "06pf4h76zsqs3dsxr57y9sb9sw48nfyw1x2q1725zww61jfz2a6y";
+    sha256 = "1c04x474m5b7qqs9kddrx2mygwpv40hvylr3cq34qxdxgang3qc6";
   };
 
   buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
-    substituteInPlace "hack/generate-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
+    substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
     # hack/update-munge-docs.sh only performs some tests on the documentation.
     # They broke building k8s; disabled for now.
     echo "true" > "hack/update-munge-docs.sh"
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   WHAT="${concatStringsSep " " components}";
 
   postBuild = ''
-    ./hack/generate-docs.sh
+    ./hack/update-generated-docs.sh
     (cd build/pause && cc pause.c -o pause)
   '';
 

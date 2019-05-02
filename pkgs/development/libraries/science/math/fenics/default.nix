@@ -42,7 +42,7 @@ let
     '';
     meta = {
       description = "Distributed just-in-time shared library building";
-      homepage = http://fenicsproject.org/;
+      homepage = https://fenicsproject.org/;
       platforms = stdenv.lib.platforms.all;
       license = stdenv.lib.licenses.lgpl3;
     };
@@ -60,7 +60,7 @@ let
     '';
     meta = {
       description = "Automatic generation of finite element basis functions";
-      homepage = http://fenicsproject.org/;
+      homepage = https://fenicsproject.org/;
       platforms = stdenv.lib.platforms.all;
       license = stdenv.lib.licenses.lgpl3;
     };

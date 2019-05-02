@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Socket.IO server";
-    homepage = http://github.com/miguelgrinberg/python-socketio/;
+    homepage = https://github.com/miguelgrinberg/python-socketio/;
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

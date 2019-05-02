@@ -81,10 +81,10 @@ in
   # built. Will delay failures, if any, to compile time.
   allowInconsistentDependencies ? false
 , maxBuildCores ? 4 # GHC usually suffers beyond -j4. https://ghc.haskell.org/trac/ghc/ticket/9221
-, # Build a pre-linked .o file for this Haskell library.  This can make it
-  # slightly faster to load this library into GHCi, but takes extra disk space
-  # and compile time.
-  enableLibraryForGhci ? true
+, # If set to true, this builds a pre-linked .o file for this Haskell library.
+  # This can make it slightly faster to load this library into GHCi, but takes
+  # extra disk space and compile time.
+  enableLibraryForGhci ? false
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -118,7 +118,7 @@ let
 
   binDir = if enableSeparateBinOutput then "$bin/bin" else "$out/bin";
 
-  newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
+  newCabalFileUrl = "mirror://hackage/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
     url = newCabalFileUrl;
     sha256 = editedCabalFile;

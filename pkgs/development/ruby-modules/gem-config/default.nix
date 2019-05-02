@@ -23,7 +23,7 @@
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib
+, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf
 , libselinux ? null, libsepol ? null
 }@args:
 
@@ -77,6 +77,11 @@ in
 
   charlock_holmes = attrs: {
     buildInputs = [ which icu zlib ];
+  };
+
+  cld3 = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ protobuf ];
   };
 
   curb = attrs: {
@@ -201,6 +206,10 @@ in
     buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
+  idn-ruby = attrs: {
+    buildInputs = [ libidn ];
+  };
+
   # disable bundle install as it can't install anything in addition to what is
   # specified in pkgs/applications/misc/jekyll/Gemfile anyway. Also do chmod_R
   # to compensate for read-only files in site_template in nix store.
@@ -275,6 +284,15 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
+  opus-ruby = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace lib/opus-ruby.rb \
+        --replace "ffi_lib 'opus'" \
+                  "ffi_lib '${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    '';
+  };
+
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
   };
@@ -329,6 +347,10 @@ in
   rmagick = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ imagemagick which ];
+  };
+
+  rpam2 = attrs: {
+    buildInputs = [ linux-pam ];
   };
 
   ruby-libvirt = attrs: {
@@ -406,6 +428,7 @@ in
   sup = attrs: {
     dontBuild = false;
     # prevent sup from trying to dynamically install `xapian-ruby`.
+    nativeBuildInputs = [ rake ];
     postPatch = ''
       cp ${./mkrf_conf_xapian.rb} ext/mkrf_conf_xapian.rb
 
@@ -425,6 +448,13 @@ in
 
   taglib-ruby = attrs: {
     buildInputs = [ taglib ];
+  };
+
+  thrift = attrs: {
+    # See: https://stackoverflow.com/questions/36378190/cant-install-thrift-gem-on-os-x-el-capitan/36523125#36523125
+    # Note that thrift-0.8.0 is a dependency of fluent-plugin-scribe which is a dependency of fluentd.
+    buildFlags = lib.optional (stdenv.isDarwin && lib.versionOlder attrs.version "0.9.2.0")
+      "--with-cppflags=\"-D_FORTIFY_SOURCE=0 -Wno-macro-redefined -Wno-shift-negative-value\"";
   };
 
   timfel-krb5-auth = attrs: {
@@ -468,7 +498,7 @@ in
   xapian-ruby = attrs: {
     # use the system xapian
     dontBuild = false;
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ rake pkgconfig ];
     buildInputs = [ xapian_1_2_22 zlib ];
     postPatch = ''
       cp ${./xapian-Rakefile} Rakefile

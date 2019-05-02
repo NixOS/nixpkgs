@@ -5,16 +5,16 @@ let
   inherit (darwin.apple_sdk.frameworks) Security;
 in rustPlatform.buildRustPackage rec {
   name = "pyo3-pack-${version}";
-  version = "0.3.8";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "pyo3-pack";
     rev = "v${version}";
-    sha256 = "14343209w7wphkqh7pnw08pah09spjbwhk6l548g9ivra057gwaz";
+    sha256 = "0577v8nqjbb7l7fqvac706bg9zrcp8fbh9ca1mkj44db12v02kgb";
   };
 
-  cargoSha256 = "0n7z9p3v92ijqc2ix60wi74as5rql61k5qbqi8b1b02b71xmsp7j";
+  cargoSha256 = "1xrzz8c2pfb70i7ynv5lw0d89r284kvhkgjh8z8pgyk1j79ixv2v";
 
   nativeBuildInputs = [ pkgconfig ];
 

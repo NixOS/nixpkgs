@@ -17,20 +17,20 @@ let
         '';
 
 in stdenv.mkDerivation rec {
-  name = "purs-simple";
-  version = "v0.12.3";
+  pname = "purescript";
+  version = "0.12.5";
 
   src =
     if stdenv.isDarwin
     then
     fetchurl {
-      url = "https://github.com/purescript/purescript/releases/download/v0.12.3/macos.tar.gz";
-      sha256 = "1f916gv4fz571l4jvr15xjnsvjyy4nljv2ii9njwlm7k6yr5m0qn";
+      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
+      sha256 = "15j9lkrl15dicx37bmh0199b3qdixig7w24wvdzi20jqbacz8nkn";
     }
     else
     fetchurl {
-      url = "https://github.com/purescript/purescript/releases/download/v0.12.3/linux64.tar.gz";
-      sha256 = "1fad862a2sv4njxbbcfzibbi585m6is3ywb94nmjl8ax254baj3i";
+      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
+      sha256 = "07dva5gxq77g787krscv4dsz5088fzkvpmm9fwxw9a59jszzs7kq";
     };
 
 

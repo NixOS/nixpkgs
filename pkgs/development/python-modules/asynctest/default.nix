@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "asynctest";
-  version = "0.12.3";
+  version = "0.12.4";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bbeb45bb41344d2cbb814b4c89c04f2c568742352736cabf7af6fcbed06f66cc";
+    sha256 = "ade427a711d18016f35fb0c5d412f0ed63fb074a6084b67ff2dad48f50b0d6ca";
   };
 
   postPatch = ''

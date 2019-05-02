@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Polkadot Node Implementation";
-    homepage = http://polkadot.network;
+    homepage = https://polkadot.network;
     license = licenses.gpl3;
     maintainers = [ maintainers.akru ];
     platforms = platforms.linux;

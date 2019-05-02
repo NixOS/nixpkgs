@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libminc ];
   propagatedBuildInputs = with perlPackages; [ perl GetoptTabular MNI-Perllib ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DBUILD_TESTING=FALSE" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
   # testing broken: './minc_wrapper: Permission denied' from Testing/ellipse0.mnc
 
   postFixup = ''
@@ -33,4 +33,3 @@ stdenv.mkDerivation rec {
     license = licenses.free;
   };
 }
-

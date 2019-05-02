@@ -1,33 +1,35 @@
 { stdenv, fetchFromGitHub, makeWrapper, chromaprint, fetchpatch
 , fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
-, opusfile
-, pkgconfig, portaudio, portmidi, protobuf, qt4, rubberband, scons, sqlite
-, taglib, upower, vampSDK
+, libGLU, libxcb, lilv, lv2, opusfile
+, pkgconfig, portaudio, portmidi, protobuf, qtbase, qtscript, qtsvg
+, qtx11extras, rubberband, scons, sqlite, taglib, upower, vampSDK
 }:
 
 stdenv.mkDerivation rec {
   name = "mixxx-${version}";
-  version = "2.1.5";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = "release-${version}";
-    sha256 = "0h14pwglz03sdmgzviypv1qa1xfjclrnhyqaq5nd60j47h4z39dr";
+    sha256 = "1q6c2wfpprsx7s7nz1w0mhm2yhikj54jxcv61kwylxx3n5k2na9r";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout libsndfile
-    libusb1 libvorbis opusfile pkgconfig portaudio portmidi protobuf qt4
-    rubberband scons sqlite taglib upower vampSDK
+    libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkgconfig portaudio portmidi protobuf qtbase qtscript qtsvg
+    qtx11extras rubberband scons sqlite taglib upower vampSDK
   ];
+
+  enableParallelBuilding = true;
 
   sconsFlags = [
     "build=release"
-    "qtdir=${qt4}"
+    "qtdir=${qtbase}"
     "faad=1"
     "opus=1"
   ];

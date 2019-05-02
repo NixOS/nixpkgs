@@ -311,6 +311,10 @@ packageOverrides = pkgs: {
   <title>Elm</title>
 
   <para>
+   To start a development environment do <command>nix-shell -p elmPackages.elm elmPackages.elm-format</command>
+  </para>
+
+  <para>
    To update Elm compiler, see
    <filename>nixpkgs/pkgs/development/compilers/elm/README.md</filename>.
   </para>

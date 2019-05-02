@@ -14,17 +14,17 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ glib libgee sqlite ];
-  # dbus_daemon needed for tests
+
   buildInputs = [
-    dbus-glib telepathy-glib evolution-data-server dbus
+    dbus-glib telepathy-glib evolution-data-server
     libsecret libxml2 libsoup nspr nss db
   ];
+
+  checkInputs = [ dbus ];
+
   nativeBuildInputs = [ pkgconfig intltool vala gobject-introspection ];
 
   configureFlags = [ "--disable-fatal-warnings" ];
-
-  NIX_CFLAGS_COMPILE = ["-I${nss.dev}/include/nss"
-                        "-I${dbus-glib.dev}/include/dbus-1.0" "-I${dbus.dev}/include/dbus-1.0"];
 
   enableParallelBuilding = true;
 

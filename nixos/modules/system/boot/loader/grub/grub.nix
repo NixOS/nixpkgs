@@ -61,7 +61,7 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
         extraEntriesBeforeNixOS extraPrepareConfig extraInitrd configurationLimit copyKernels
-        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
+        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios;
       path = with pkgs; makeBinPath (
         [ coreutils gnused gnugrep findutils diffutils btrfs-progs utillinux mdadm ]
         ++ optional (cfg.efiSupport && (cfg.version == 2)) efibootmgr
@@ -390,6 +390,24 @@ in
         type = types.str;
         description = ''
           The gfxmode to pass to GRUB when loading a graphical boot interface under BIOS.
+        '';
+      };
+
+      gfxpayloadEfi = mkOption {
+        default = "keep";
+        example = "text";
+        type = types.str;
+        description = ''
+          The gfxpayload to pass to GRUB when loading a graphical boot interface under EFI. 
+        '';
+      };
+
+      gfxpayloadBios = mkOption {
+        default = "text";
+        example = "keep";
+        type = types.str;
+        description = ''
+          The gfxpayload to pass to GRUB when loading a graphical boot interface under BIOS. 
         '';
       };
 

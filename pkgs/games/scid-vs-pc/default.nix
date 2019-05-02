@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "scid-vs-pc-${version}";
-  version = "4.19";
+  version = "4.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/scidvspc/scid_vs_pc-${version}.tgz";
-    sha256 = "1k2cgs6bjyrmxy5x6x1chmrxfmm224p3r9r9mpc37kridk4hshqs";
+    sha256 = "1mpardcxp5hsmhyla1cjqf4aalacs3v6xkf1zyjz16g1m3gh05lm";
   };
 
   nativeBuildInputs = [ makeWrapper ];

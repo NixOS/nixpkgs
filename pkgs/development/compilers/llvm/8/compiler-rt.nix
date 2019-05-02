@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
+    #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
+    "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
@@ -53,11 +55,11 @@ stdenv.mkDerivation rec {
   '';
 
   # Hack around weird upsream RPATH bug
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = stdenv.lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWasm) ''
     ln -s "$out/lib"/*/* "$out/lib"
-  '' + stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  '' + stdenv.lib.optionalString (stdenv.hostPlatform.useLLVM or false) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
-    ln -s $out/lib/*/cclang_rt.crtend-*.o $out/lib/crtend.o
+    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '';
