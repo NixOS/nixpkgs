@@ -54,5 +54,13 @@ self: super: {
       sha256 = "1p1pinca33vd10iy7hl20c1fc99vharcgcai6z3ngqbq50k2pd3q";
     };
   };
+  colour = appendPatch super.colour (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/colour-2.3.4.patch";
+    sha256 = "1h318dczml9qrmfvlz1d12iji86klaxvz63k9g9awibwz8lw2i79";
+  });
+  dlist = appendPatch super.dlist (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/dlist-0.8.0.6.patch";
+    sha256 = "0lkhibfxfk6mi796mrjgmbb50hbyjgc7xdinci64dahj8325jlpc";
+  });
 
 }
