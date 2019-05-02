@@ -17446,6 +17446,8 @@ in
 
   exrtools = callPackage ../applications/graphics/exrtools { };
 
+  fasttext = callPackage ../applications/science/machine-learning/fasttext { };
+
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
   fbreader = callPackage ../applications/misc/fbreader {
