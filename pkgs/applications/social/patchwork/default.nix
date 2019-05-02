@@ -1,7 +1,9 @@
-{ stdenv, appimage-run, fetchurl, runtimeShell, gsettings-desktop-schemas, gtk3, gobject-introspection, wrapGAppsHook, nodePackages }:
+{ stdenv, appimage-run, fetchurl, runtimeShell, gsettings-desktop-schemas, gtk3, gobject-introspection, wrapGAppsHook }:
 
 let
-  version = "3.11.6";
+  # latest version that runs without errors
+  # https://github.com/ssbc/patchwork/issues/972
+  version = "3.11.4";
 in
 
 stdenv.mkDerivation rec {
@@ -9,11 +11,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ssbc/patchwork/releases/download/v${version}/Patchwork-${version}-linux-x86_64.AppImage";
-    sha256 = "1d2rq6l2mbi6bqv8321ps5bi9n8aqriwv7agc2zvgylm0cxyc4cq";
+    sha256 = "1blsprpkvm0ws9b96gb36f0rbf8f5jgmw4x6dsb1kswr4ysf591s";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs = [ appimage-run gtk3 gsettings-desktop-schemas gobject-introspection nodePackages.git-ssb ];
+  buildInputs = [ appimage-run gtk3 gsettings-desktop-schemas gobject-introspection ];
 
   unpackPhase = ":";
 
