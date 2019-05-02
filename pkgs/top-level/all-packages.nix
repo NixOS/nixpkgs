@@ -12776,7 +12776,7 @@ in
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
 
-  patchwork = callPackage ../applications/social/patchwork { };
+  patchwork = callPackage ../applications/networking/ssb/patchwork { };
 
   qradiolink = callPackage ../applications/radio/qradiolink { };
 
