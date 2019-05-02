@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "pystemd";
-  version = "0.5.0";
+  version = "0.6.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "000001hxv25vwcsvc0avg42v89c7qcjdpw6dr8419prmcb9186i5";
+    sha256 = "054a3ni71paqa1xa786840z3kjixcgyqdbscyq8nfxp3hwn0gz5i";
   };
 
   buildInputs = [ systemd ];
