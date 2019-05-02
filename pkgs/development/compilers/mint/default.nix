@@ -33,13 +33,13 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  version = "0.3.1";
+  version = "0.5.0";
   name = "mint-${version}";
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
     rev = version;
-    sha256 = "1f49ax045zdjj0ypc2j4ms9gx80rl63qcsfzm3r0k0lcavfp57zr";
+    sha256 = "0vxbx38c390rd2ysvbwgh89v2232sh5rbsp3nk9wzb70jybpslvl";
   };
 
   nativeBuildInputs = [ which crystal zlib openssl duktape libyaml ];

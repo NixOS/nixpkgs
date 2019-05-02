@@ -930,6 +930,11 @@
     github = "chris-martin";
     name = "Chris Martin";
   };
+  chrisaw = {
+    email = "home@chrisaw.com";
+    github = "cawilliamson";
+    name = "Christopher A. Williamson";
+  };
   chrisjefferson = {
     email = "chris@bubblescope.net";
     github = "chrisjefferson";
