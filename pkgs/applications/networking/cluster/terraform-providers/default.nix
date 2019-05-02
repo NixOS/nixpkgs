@@ -27,4 +27,5 @@ in
     gandi = callPackage ./gandi {};
     ibm = callPackage ./ibm {};
     libvirt = callPackage ./libvirt {};
+    lxd = callPackage ./lxd {};
   } // lib.mapAttrs (n: v: toDrv v) list
