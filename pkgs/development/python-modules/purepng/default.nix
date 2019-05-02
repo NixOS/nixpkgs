@@ -42,6 +42,7 @@ buildPythonPackage rec {
     description = "Pure Python library for PNG image encoding/decoding";
     homepage    = https://github.com/scondo/purepng;
     license     = licenses.mit;
+    maintainers = with maintainers; [ ris ];
   };
 
 }
