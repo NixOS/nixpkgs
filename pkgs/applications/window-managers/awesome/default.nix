@@ -46,7 +46,10 @@ with luaPackages; stdenv.mkDerivation rec {
   LUA_PATH  = "?.lua;${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
 
   postInstall = ''
-    wrapProgram $out/bin/awesome \
+    # Don't use wrapProgram or or the wrapper will duplicate the --search
+    # arguments every restart
+    mv "$out/bin/awesome" "$out/bin/.awesome-wrapped"
+    makeWrapper "$out/bin/.awesome-wrapped" "$out/bin/awesome" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --add-flags '--search ${lgi}/lib/lua/${lua.luaversion}' \
       --add-flags '--search ${lgi}/share/lua/${lua.luaversion}' \
