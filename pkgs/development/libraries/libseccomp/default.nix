@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/seccomp/libseccomp";
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
-    badPlatforms = platforms.riscv;
+    badPlatforms = [
+      "alpha-linux"
+      "riscv64-linux" "riscv32-linux"
+      "sparc-linux" "sparc64-linux"
+    ];
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }
