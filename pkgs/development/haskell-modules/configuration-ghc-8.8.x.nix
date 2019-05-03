@@ -48,6 +48,7 @@ self: super: {
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
   doctest = doJailbreak super.doctest;
   split = doJailbreak super.split;
+  test-framework = doJailbreak super.test-framework;
 
   # These packages don't work and need patching and/or an update.
   primitive = overrideSrc (doJailbreak super.primitive) {
@@ -96,9 +97,15 @@ self: super: {
   });
   regex-base = appendPatch super.regex-base (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-base-0.93.2.patch";
-    sha256 = "138yrp3x5cnvncimrnhnkawz6clyk7fj3sr3y93l5szfr11kcv1l";
+    sha256 = "01d1plrdx6hcspwn2h6y9pyi5366qk926vb5cl5qcl6x4m23l6y1";
   });
-
-
+  regex-posix = appendPatch super.regex-posix (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-posix-0.95.2.patch";
+    sha256 = "006yli58jpqp786zm1xlncjsilc38iv3a09r4pv94l587sdzasd2";
+  });
+  exceptions = appendPatch (doJailbreak super.exceptions) (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/exceptions-0.10.1.patch";
+    sha256 = "0427jg027dcckiy21zk29c49fzx4q866rqbabmh4wvqwwkz8yk37";
+  });
 
 }
