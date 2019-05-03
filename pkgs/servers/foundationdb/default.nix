@@ -1,12 +1,16 @@
-{ stdenv49
+{ stdenv, stdenv49, gcc9Stdenv, llvmPackages_8
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
-, which, findutils, m4, gawk
-, python, openjdk, mono, libressl
+, cmake, ninja, which, findutils, m4, gawk
+, python, python3, openjdk, mono, libressl, boost
 }@args:
 
 let
   vsmakeBuild = import ./vsmake.nix args;
+  cmakeBuild = import ./cmake.nix (args // {
+    gccStdenv    = gcc9Stdenv;
+    llvmPackages = llvmPackages_8;
+  });
 
   python3-six-patch = fetchpatch {
     name   = "update-python-six.patch";
@@ -21,6 +25,10 @@ let
   };
 
 in with builtins; {
+
+  # Older versions use the bespoke 'vsmake' build system
+  # ------------------------------------------------------
+
   foundationdb51 = vsmakeBuild rec {
     version = "5.1.7";
     branch  = "release-5.1";
@@ -56,4 +64,21 @@ in with builtins; {
       ./patches/ldflags-6.0.patch
     ];
   };
+
+  # 6.1 and later versions should always use CMake
+  # ------------------------------------------------------
+
+  foundationdb61 = cmakeBuild rec {
+    version = "6.1.6pre4898_${substring 0 7 rev}";
+    branch  = "release-6.1";
+    rev     = "26fbbbf798971b2b9ecb882a8af766fa36734f53";
+    sha256  = "1q1a1j8h0qlh67khcds0dg416myvjbp6gfm6s4sk8d60zfzny7wb";
+    officialRelease = false;
+
+    patches = [
+      ./patches/clang-libcxx.patch
+      ./patches/suppress-clang-warnings.patch
+    ];
+  };
+
 }
