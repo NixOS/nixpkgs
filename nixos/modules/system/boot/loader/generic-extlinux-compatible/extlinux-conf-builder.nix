@@ -1,8 +1,8 @@
-{ pkgs }:
+{ substituteAll, bash, coreutils, gnused, gnugrep }:
 
-pkgs.substituteAll {
+substituteAll {
   src = ./extlinux-conf-builder.sh;
   isExecutable = true;
-  path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
-  inherit (pkgs) bash;
+  path = [coreutils gnused gnugrep];
+  inherit bash;
 }
