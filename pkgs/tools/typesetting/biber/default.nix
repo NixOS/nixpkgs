@@ -19,10 +19,7 @@ perlPackages.buildPerlModule rec {
     UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
     ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit SortKey
     TestDifferences
-  ];
-
-  checkInputs = with perlPackages; [
-    UnicodeCollate
+    PerlIOutf8_strict
   ];
 
   meta = with stdenv.lib; {
