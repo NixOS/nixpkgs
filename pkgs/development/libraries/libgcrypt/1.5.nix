@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libgpgerror, enableCapabilities ? false, libcap }:
+{ lib, stdenv, fetchpatch, fetchurl, libgpgerror, enableCapabilities ? false, libcap }:
 
 assert enableCapabilities -> stdenv.isLinux;
 
@@ -9,6 +9,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
     sha256 = "0ydy7bgra5jbq9mxl5x031nif3m6y3balc6ndw2ngj11wnsjc61h";
   };
+
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      name = "fix-x86_64-apple-darwin.patch";
+      sha256 = "138sfwl1avpy19320dbd63mskspc1khlc93j1f1zmylxx3w19csi";
+      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=patch;h=71939faa7c54e7b4b28d115e748a85f134876a02";
+    })
+  ];
 
   buildInputs =
     [ libgpgerror ]
