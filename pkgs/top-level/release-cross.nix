@@ -24,6 +24,7 @@ let
     libcCross = nativePlatforms;
     nix = nativePlatforms;
     nixUnstable = nativePlatforms;
+    mesa = nativePlatforms;
   };
 
   gnuCommon = lib.recursiveUpdate common {
