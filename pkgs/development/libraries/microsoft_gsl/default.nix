@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, catch, cmake
+{ stdenv, fetchFromGitHub, catch, cmake
 }:
 
 let
@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
   name = "microsoft_gsl-${version}";
   version = "2.0.0";
 
-  src = fetchgit {
-    url = "https://github.com/Microsoft/GSL.git";
+  src = fetchFromGitHub {
+    owner = "Microsoft";
+    repo = "GSL";
     rev = "v${version}";
     sha256 = "1kxfca9ik934nkzyn34ingkyvwpc09li81cg1yc6vqcrdw51l4ri";
   };
