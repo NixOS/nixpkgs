@@ -4064,6 +4064,8 @@ in {
 
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
 
+  rauth = callPackage ../development/python-modules/rauth {};
+
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
   rbtools = callPackage ../development/python-modules/rbtools { };
