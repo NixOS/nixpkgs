@@ -56,13 +56,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libvpx";
     rev = "v${version}";
-    sha256 = "0vvh89hvp8qg9an9vcmwb7d9k3nixhxaz6zi65qdjnd0i56kkcz6";
+    sha256 = "0mm1dcfa268rwsrgzqpbbgq4lwrvdzgp90h9dxsnkhai70l7gipq";
   };
 
   patchPhase = ''patchShebangs .'';
@@ -160,6 +160,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ]
     ++ optionals unitTestsSupport [ coreutils curl ];
+
+  NIX_LDFLAGS = [
+    "-lpthread" # fixes linker errors
+  ];
 
   enableParallelBuilding = true;
 
