@@ -4787,6 +4787,8 @@ in
 
   obexd = callPackage ../tools/bluetooth/obexd { };
 
+  obfs4 = callPackage ../tools/networking/obfs4 { };
+
   oci-image-tool = callPackage ../tools/misc/oci-image-tool { };
 
   ocproxy = callPackage ../tools/networking/ocproxy { };
@@ -6097,7 +6099,6 @@ in
   tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
     stdenv = stdenvNoCC;
     tor-browser-unwrapped = firefoxPackages.tor-browser;
-    inherit (python27Packages) obfsproxy;
   };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
