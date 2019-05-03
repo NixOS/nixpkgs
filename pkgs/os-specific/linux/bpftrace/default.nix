@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
       "-DLIBBCC_INCLUDE_DIRS=${bcc}/include/bcc"
     ];
 
+  # nuke the example/reference output .txt files, for the included tools,
+  # stuffed inside $out. we don't need them at all.
+  postInstall = ''
+    rm -rf $out/share/bpftrace/tools/doc
+  '';
+
   outputs = [ "out" "man" ];
 
   meta = with stdenv.lib; {
