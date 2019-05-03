@@ -9,7 +9,7 @@ bundlerApp {
     description = "Tools and Ruby libraries for the CSS3 extension languages: Sass and SCSS";
     homepage    = https://sass-lang.com;
     license     = licenses.mit;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ romildo manveru ];
     platforms   = platforms.unix;
   };
 }
