@@ -1,4 +1,7 @@
 #include <assert.h>
+#ifdef REDIRECT_DLOPEN
+#include <dlfcn.h>
+#endif
 #include <fcntl.h>
 #include <spawn.h>
 #include <stdio.h>
@@ -26,6 +29,21 @@ void test_spawn(void) {
     assert(waitpid(pid, NULL, 0) != -1);
 }
 
+#ifdef REDIRECT_DLOPEN
+void test_dlopen(void) {
+    void *cairo = dlopen("/usr/lib/libcairo.so", RTLD_LAZY);
+    assert(dlerror() == NULL);
+
+    int (*cairo_version)(void);
+    *(void **) (&cairo_version) = dlsym(cairo, "cairo_version");
+    assert(dlerror() == NULL);
+
+    assert(cairo_version() > 0);
+
+    assert(dlclose(cairo) == 0);
+}
+#endif
+
 void test_execv(void) {
     char *argv[] = {"true", NULL};
     assert(execv(TESTPATH, argv) == 0);
@@ -50,6 +68,9 @@ int main(void)
     assert(stat(TESTPATH, &testsb) != -1);
 
     test_spawn();
+#ifdef REDIRECT_DLOPEN
+    test_dlopen();
+#endif
     test_execv();
 
     /* If all goes well, this is never reached because test_execv() replaces

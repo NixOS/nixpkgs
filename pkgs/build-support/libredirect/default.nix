@@ -1,4 +1,10 @@
-{ stdenv, lib, coreutils }:
+{ stdenv, lib, coreutils, cairo
+
+# Some programs cannot handle dlopen being overridden,
+# even when no libraries are rewritten, for some reason.
+# https://github.com/NixOS/nixpkgs/issues/60807
+, redirectDlopen ? false
+}:
 
 stdenv.mkDerivation {
   name = "libredirect-0";
@@ -13,13 +19,13 @@ stdenv.mkDerivation {
   outputs = ["out" "hook"];
 
   buildPhase = ''
-    $CC -Wall -std=c99 -O3 -fPIC -ldl -shared \
+    $CC -Wall -std=c99 -O3 -fPIC -ldl -shared${lib.optionalString redirectDlopen " -DREDIRECT_DLOPEN"} \
       ${lib.optionalString stdenv.isDarwin "-Wl,-install_name,$out/lib/$libName"} \
       -o "$libName" \
       libredirect.c
 
     if [ -n "$doInstallCheck" ]; then
-      $CC -Wall -std=c99 -O3 test.c -o test
+      $CC -Wall -std=c99 -O3${lib.optionalString redirectDlopen " -ldl -DREDIRECT_DLOPEN"} test.c -o test
     fi
   '';
 
@@ -42,7 +48,7 @@ stdenv.mkDerivation {
   installCheckPhase = ''
     (
       source "$hook/nix-support/setup-hook"
-      NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true" ./test
+      NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true${lib.optionalString redirectDlopen ":/usr/lib/libcairo.so=${cairo}/lib/libcairo.so"}" ./test
     )
   '';
 

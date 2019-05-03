@@ -89,7 +89,7 @@ in stdenv.mkDerivation rec {
     patchShebangs libnm/generate-setting-docs.py
 
     substituteInPlace libnm/meson.build \
-      --subst-var-by DOCS_LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+      --subst-var-by DOCS_LD_PRELOAD "${libredirect.override { redirectDlopen = true; }}/lib/libredirect.so" \
       --subst-var-by DOCS_NIX_REDIRECTS "${placeholder "out"}/lib/libnm.so.0=$PWD/build/libnm/libnm.so.0"
   '';
 
