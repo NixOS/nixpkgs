@@ -1,18 +1,20 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchurl, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
+{ stdenv, lib, fetchFromGitHub, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
 , librsvg, wrapGAppsHook
 , withGtk2 ? false, withGtk3 ? true
 }:
 
 let
-  src = fetchurl {
-    url = "https://download.nvidia.com/XFree86/nvidia-settings/nvidia-settings-${nvidia_x11.version}.tar.bz2";
+  src = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "nvidia-settings";
+    rev = nvidia_x11.version;
     inherit sha256;
   };
 
   libXNVCtrl = stdenv.mkDerivation {
-    name = "libXNVCtrl-${nvidia_x11.version}";
+    pname = "libXNVCtrl";
     inherit (nvidia_x11) version;
     inherit src;
 
@@ -35,7 +37,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "nvidia-settings-${nvidia_x11.version}";
+  pname = "nvidia-settings";
   inherit (nvidia_x11) version;
   inherit src;
 
