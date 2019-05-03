@@ -1440,8 +1440,6 @@ in
 
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
-  emby = callPackage ../servers/emby { };
-
   enca = callPackage ../tools/text/enca { };
 
   ent = callPackage ../tools/misc/ent { };
@@ -4801,6 +4799,8 @@ in
 
   obexd = callPackage ../tools/bluetooth/obexd { };
 
+  obfs4 = callPackage ../tools/networking/obfs4 { };
+
   oci-image-tool = callPackage ../tools/misc/oci-image-tool { };
 
   ocproxy = callPackage ../tools/networking/ocproxy { };
@@ -6114,7 +6114,6 @@ in
   tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
     stdenv = stdenvNoCC;
     tor-browser-unwrapped = firefoxPackages.tor-browser;
-    inherit (python27Packages) obfsproxy;
   };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
@@ -7871,7 +7870,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   rustup = callPackage ../development/tools/rust/rustup {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
@@ -14860,6 +14859,8 @@ in
   lightum = callPackage ../os-specific/linux/lightum { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
+
+  extrace = callPackage ../os-specific/linux/extrace { };
 
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
 
@@ -23572,6 +23573,8 @@ in
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
 
   vttest = callPackage ../tools/misc/vttest { };
+
+  wasm-pack = callPackage ../development/tools/wasm-pack { };
 
   wavegain = callPackage ../applications/audio/wavegain { };
 

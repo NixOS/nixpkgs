@@ -1,0 +1,22 @@
+commit b6172952c0150d84912fa6f09bab782dd0549f1e
+Author: Austin Seipp <aseipp@pobox.com>
+Date:   Fri May 3 00:47:12 2019 -0500
+
+    src: special case nix build directories for clang
+    
+    Signed-off-by: Austin Seipp <aseipp@pobox.com>
+
+diff --git a/src/clang_parser.cpp b/src/clang_parser.cpp
+index b1db8ff..0cfb01f 100644
+--- a/src/clang_parser.cpp
++++ b/src/clang_parser.cpp
+@@ -140,6 +140,9 @@ static bool is_dir(const std::string& path)
+ // Both ksrc and kobj are guaranteed to be != "", if at least some trace of kernel sources was found.
+ static std::tuple<std::string, std::string> get_kernel_dirs(const struct utsname& utsname)
+ {
++  // NB (aseipp): special case the kernel directory for nix
++  return { "@NIX_KERNEL_SRC@/source", "@NIX_KERNEL_SRC@/build" };
++
+ #ifdef KERNEL_HEADERS_DIR
+   return {KERNEL_HEADERS_DIR, KERNEL_HEADERS_DIR};
+ #endif

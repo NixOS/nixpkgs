@@ -23,7 +23,7 @@
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf
+, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , libselinux ? null, libsepol ? null
 }@args:
 
@@ -179,9 +179,17 @@ in
 
   gtk2 = attrs: {
     nativeBuildInputs = [ pkgconfig ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
-    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
+    buildInputs = [
+      fribidi
+      gobject-introspection
+      gtk2
+      harfbuzz
+      pcre
+      xorg.libpthreadstubs
+      xorg.libXdmcp
+    ];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
-    CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
+    # CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
   };
 
   gobject-introspection = attrs: {
@@ -299,7 +307,15 @@ in
 
   pango = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 xorg.libXdmcp pcre xorg.libpthreadstubs ];
+    buildInputs = [
+      fribidi
+      gobject-introspection
+      gtk2
+      harfbuzz
+      pcre
+      xorg.libpthreadstubs
+      xorg.libXdmcp
+    ];
   };
 
   patron = attrs: {

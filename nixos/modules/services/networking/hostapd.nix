@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 # TODO:
 #
@@ -11,6 +11,8 @@ with lib;
 let
 
   cfg = config.services.hostapd;
+
+  escapedInterface = utils.escapeSystemdPath cfg.interface;
 
   configFile = pkgs.writeText "hostapd.conf" ''
     interface=${cfg.interface}
@@ -157,8 +159,8 @@ in
       { description = "hostapd wireless AP";
 
         path = [ pkgs.hostapd ];
-        after = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
-        bindsTo = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
+        after = [ "sys-subsystem-net-devices-${escapedInterface}.device" ];
+        bindsTo = [ "sys-subsystem-net-devices-${escapedInterface}.device" ];
         requiredBy = [ "network-link-${cfg.interface}.service" ];
 
         serviceConfig =
