@@ -507,6 +507,13 @@ in
         '';
   };
 
+  vpim = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      sed 1i'# encoding: ISO-8859-1' -i lib/vpim/vcard.rb
+    '';
+  };
+
   uuid4r = attrs: {
     buildInputs = [ which libossp_uuid ];
   };
