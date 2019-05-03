@@ -284,6 +284,33 @@ dvipng = stdenv.mkDerivation {
 };
 
 
+latexindent = perlPackages.buildPerlPackage rec {
+  inherit (src) name version;
+
+  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs);
+
+  outputs = [ "out" ];
+
+  propagatedBuildInputs = with perlPackages; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ];
+
+  postPatch = ''
+    substituteInPlace scripts/latexindent/LatexIndent/GetYamlSettings.pm \
+      --replace '$FindBin::RealBin/defaultSettings.yaml' ${src}/scripts/latexindent/defaultSettings.yaml
+  '';
+
+  # Dirty hack to apply perlFlags, but do no build
+  preConfigure = ''
+    touch Makefile.PL
+  '';
+  buildPhase = ":";
+  installPhase = ''
+    install -D ./scripts/latexindent/latexindent.pl "$out"/bin/latexindent
+    mkdir -p "$out"/${perl.libPrefix}
+    cp -r ./scripts/latexindent/LatexIndent "$out"/${perl.libPrefix}/
+  '';
+};
+
+
 inherit biber;
 bibtexu = bibtex8;
 bibtex8 = stdenv.mkDerivation {
@@ -361,32 +388,6 @@ xindy = stdenv.mkDerivation {
     mkdir -p "$out/lib/xindy"
     mv "$out"/{bin/xindy.mem,lib/xindy/}
     ln -s ../../share/texmf-dist/xindy/modules "$out/lib/xindy/"
-  '';
-};
-
-latexindent = perlPackages.buildPerlPackage rec {
-  inherit (src) name version;
-
-  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs);
-
-  outputs = [ "out" ];
-
-  propagatedBuildInputs = with perlPackages; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ];
-
-  postPatch = ''
-    substituteInPlace scripts/latexindent/LatexIndent/GetYamlSettings.pm \
-      --replace '$FindBin::RealBin/defaultSettings.yaml' ${src}/scripts/latexindent/defaultSettings.yaml
-  '';
-
-  # Dirty hack to apply perlFlags, but do no build
-  preConfigure = ''
-    touch Makefile.PL
-  '';
-  buildPhase = ":";
-  installPhase = ''
-    install -D ./scripts/latexindent/latexindent.pl "$out"/bin/latexindent
-    mkdir -p "$out"/${perl.libPrefix}
-    cp -r ./scripts/latexindent/LatexIndent "$out"/${perl.libPrefix}/
   '';
 };
 
