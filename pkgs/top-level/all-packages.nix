@@ -177,6 +177,8 @@ in
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
+  docui = callPackage ../tools/misc/docui { };
+
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   dotnetenv = callPackage ../build-support/dotnetenv {
@@ -1438,8 +1440,6 @@ in
 
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
-  emby = callPackage ../servers/emby { };
-
   enca = callPackage ../tools/text/enca { };
 
   ent = callPackage ../tools/misc/ent { };
@@ -2102,9 +2102,13 @@ in
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
 
+  ethash = callPackage ../development/libraries/ethash { };
+
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
+
+  ethminer = callPackage ../tools/misc/ethminer { };
 
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
@@ -4795,6 +4799,8 @@ in
 
   obexd = callPackage ../tools/bluetooth/obexd { };
 
+  obfs4 = callPackage ../tools/networking/obfs4 { };
+
   oci-image-tool = callPackage ../tools/misc/oci-image-tool { };
 
   ocproxy = callPackage ../tools/networking/ocproxy { };
@@ -5368,6 +5374,8 @@ in
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
 
+  rambox-pro = callPackage ../applications/networking/instant-messengers/rambox/pro.nix { };
+
   ranger = callPackage ../applications/misc/ranger { };
 
   rarcrack = callPackage ../tools/security/rarcrack { };
@@ -5760,6 +5768,8 @@ in
 
   smenu = callPackage ../tools/misc/smenu { };
 
+  smesh = callPackage ../development/libraries/smesh {};
+
   smugline = python3Packages.smugline;
 
   snabb = callPackage ../tools/networking/snabb { } ;
@@ -6104,7 +6114,6 @@ in
   tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
     stdenv = stdenvNoCC;
     tor-browser-unwrapped = firefoxPackages.tor-browser;
-    inherit (python27Packages) obfsproxy;
   };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
@@ -6845,6 +6854,8 @@ in
   fish-foreign-env = callPackage ../shells/fish/fish-foreign-env { };
 
   ion = callPackage ../shells/ion { };
+
+  jush = callPackage ../shells/jush { };
 
   ksh = callPackage ../shells/ksh { };
 
@@ -7859,7 +7870,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   rustup = callPackage ../development/tools/rust/rustup {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
@@ -8900,6 +8911,8 @@ in
   # special forks used for dsview
   libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };
   libsigrokdecode4dsl = callPackage ../applications/science/electronics/dsview/libsigrokdecode4dsl.nix { };
+
+  cli11 = callPackage ../development/tools/misc/cli11 { };
 
   dcadec = callPackage ../development/tools/dcadec { };
 
@@ -12767,9 +12780,8 @@ in
 
   lambda-mod-zsh-theme = callPackage ../shells/zsh/lambda-mod-zsh-theme { };
 
-  leksah = callPackage ../development/tools/haskell/leksah {
-    inherit (haskellPackages) ghcWithPackages;
-  };
+  leksah = throw ("To use leksah, refer to the instructions in " +
+    "https://github.com/leksah/leksah.");
 
   libgme = callPackage ../development/libraries/audio/libgme { };
 
@@ -14324,10 +14336,9 @@ in
 
   oracleXE = callPackage ../servers/sql/oracle-xe { };
 
-  softether_4_18 = callPackage ../servers/softether/4.18.nix { };
-  softether_4_20 = callPackage ../servers/softether/4.20.nix { };
   softether_4_25 = callPackage ../servers/softether/4.25.nix { };
-  softether = softether_4_25;
+  softether_4_29 = callPackage ../servers/softether/4.29.nix { };
+  softether = softether_4_29;
 
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
@@ -14844,6 +14855,8 @@ in
   lightum = callPackage ../os-specific/linux/lightum { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
+
+  extrace = callPackage ../os-specific/linux/extrace { };
 
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
 
@@ -15764,35 +15777,9 @@ in
   # Non-upstream U-Boots:
   ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
 
-  inherit (let
-    dtc = buildPackages.dtc.overrideAttrs (old: rec {
-      version = "1.4.5";
-      src = fetchgit {
-        url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
-        rev = "refs/tags/v${version}";
-        sha256 = "10y5pbkcj5gkijcgnlvrh6q2prpnvsgihb9asz3zfp66mcjwzsy3";
-      };
-    });
-    # Newer dtc versions are incompatible with U-Boot 2017.09
-    inherit (callPackage ../misc/uboot {
-      inherit dtc;
-      buildPackages = buildPackages // {
-        python2 = buildPackages.python2.override (old: {
-          packageOverrides = pySelf: pySuper: {
-            libfdt = pySelf.toPythonModule dtc;
-          };
-        });
-      };
-    }) buildUBoot;
-  in {
-    ubootRock64 = callPackage ../misc/uboot/rock64.nix {
-      inherit buildUBoot;
-    };
+  ubootRock64 = callPackage ../misc/uboot/rock64.nix { };
 
-    ubootRockPro64 = callPackage ../misc/uboot/rockpro64.nix {
-      inherit buildUBoot;
-    };
-  }) ubootRock64 ubootRockPro64;
+  ubootRockPro64 = callPackage ../misc/uboot/rockpro64.nix { };
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
@@ -16425,6 +16412,8 @@ in
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 
   termtekst = callPackage ../misc/emulators/termtekst { };
+
+  tetra-gtk-theme = callPackage ../data/themes/tetra { };
 
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
@@ -23500,8 +23489,6 @@ in
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
-  tetra-gtk-theme = callPackage ../misc/themes/tetra { };
-
   tewi-font = callPackage ../data/fonts/tewi  {};
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
@@ -23513,6 +23500,8 @@ in
   ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
+
+  ssh-audit = callPackage ../tools/security/ssh-audit { };
 
   thermald = callPackage ../tools/system/thermald { };
 

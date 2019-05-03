@@ -157,6 +157,11 @@
     github = "aespinosa";
     name = "Allan Espinosa";
   };
+  aethelz = {
+    email = "aethelz@protonmail.com";
+    github = "aethelz";
+    name = "Eugene";
+  };
   aflatter = {
     email = "flatter@fastmail.fm";
     github = "aflatter";
@@ -929,6 +934,11 @@
     email = "ch.martin@gmail.com";
     github = "chris-martin";
     name = "Chris Martin";
+  };
+  chrisaw = {
+    email = "home@chrisaw.com";
+    github = "cawilliamson";
+    name = "Christopher A. Williamson";
   };
   chrisjefferson = {
     email = "chris@bubblescope.net";
@@ -2662,6 +2672,11 @@
     email = "league@contrapunctus.net";
     github = "league";
     name = "Christopher League";
+  };
+  leahneukirchen = {
+    email = "leah@vuxu.org";
+    github = "leahneukirchen";
+    name = "Leah Neukirchen";
   };
   lebastr = {
     email = "lebastr@gmail.com";

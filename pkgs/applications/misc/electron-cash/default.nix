@@ -8,13 +8,13 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "3.3.6";
+  version = "4.0.2";
 
   src = fetchurl {
     url = "https://electroncash.org/downloads/${version}/win-linux/Electron-Cash-${version}.tar.gz";
     # Verified using official SHA-1 and signature from
     # https://github.com/fyookball/keys-n-hashes
-    sha256 = "ac435f2bf98b9b50c4bdcc9e3fb2ff19d9c66f8cce5df852f3a4727306bb0a84";
+    sha256 = "6255cd0493442ec57c10ae70ca2e84c6a29497f90a1393e6ac5772afe7572acf";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -48,7 +48,14 @@ python3Packages.buildPythonApplication rec {
       --replace "(share_dir" "(\"share\""
   '';
 
-  doCheck = false;
+  checkInputs = with python3Packages; [
+    pytest
+  ];
+
+  checkPhase = ''
+    unset HOME
+    pytest lib/tests
+  '';
 
   postInstall = ''
     substituteInPlace $out/share/applications/electron-cash.desktop \

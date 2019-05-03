@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name = "liburing-${version}";
-  version = "1.0.0pre821_${builtins.substring 0 7 src.rev}";
+  version = "1.0.0pre92_${builtins.substring 0 7 src.rev}";
 
   src = fetchgit {
     url    = "http://git.kernel.dk/liburing";
-    rev    = "39e0ebd4fc66046bf733a47aaa899a556093ebc6";
-    sha256 = "00c72fizxmwxd2jzmlzi4l82cw7h75lfpkkwzwcjpw9zdg9w0ci7";
+    rev    = "7b989f34191302011b5b49bf5b26b36862d54056";
+    sha256 = "12kfqvwzxksmsm8667a1g4vxr6xsaq63cz9wrfhwq6hrsv3ynydc";
   };
 
   enableParallelBuilding = true;
@@ -19,13 +19,12 @@ stdenv.mkDerivation rec {
     [ "prefix=$(out)"
       "includedir=$(dev)/include"
       "libdir=$(lib)/lib"
+      "mandir=$(man)/share/man"
     ];
 
-  # Copy the examples into $out and man pages into $man. This should be handled
-  # by the build system in the future and submitted upstream.
+  # Copy the examples into $out.
   postInstall = ''
-    mkdir -p $out/bin $man/share/man/man2/
-    cp -R ./man/* $man/share/man/man2
+    mkdir -p $out/bin
     cp ./examples/io_uring-cp examples/io_uring-test $out/bin
   '';
 

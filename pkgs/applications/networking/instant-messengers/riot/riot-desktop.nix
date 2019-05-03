@@ -1,15 +1,18 @@
 { pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron, riot-web }:
 
+# Note for maintainers:
+# Versions of `riot-web` and `riot-desktop` should be kept in sync.
+
 with (import ./yarn2nix.nix { inherit pkgs; });
 
 let
   executableName = "riot-desktop";
-  version = "1.0.7";
+  version = "1.0.8";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "1sq6vnyas2ab3phaiyby4fkpp0nwvl67xwxnr2pzfm0dkjxl9r58";
+    sha256 = "1krp608wxff1siih8zknc425n0qb6qjzf854fnp7qyjp1cnfc9sb";
   };
 
 in mkYarnPackage rec {

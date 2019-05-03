@@ -782,6 +782,10 @@ in {
 
   python-mnist = callPackage ../development/python-modules/python-mnist { };
 
+  pythonocc-core = toPythonModule (callPackage ../development/python-modules/pythonocc-core {
+    inherit (pkgs.xorg) libX11;
+  });
+
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkgconfig = pkgs.pkgconfig;
     igraph = pkgs.igraph;
@@ -920,6 +924,8 @@ in {
   # packages defined here
 
   aafigure = callPackage ../development/python-modules/aafigure { };
+
+  addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
   altair = callPackage ../development/python-modules/altair { };
 
@@ -1916,6 +1922,8 @@ in {
   funcparserlib = callPackage ../development/python-modules/funcparserlib { };
 
   fastcache = callPackage ../development/python-modules/fastcache { };
+
+  fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
 
   functools32 = callPackage ../development/python-modules/functools32 { };
 

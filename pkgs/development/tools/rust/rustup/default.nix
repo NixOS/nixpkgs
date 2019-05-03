@@ -1,25 +1,25 @@
 { stdenv, lib, runCommand, patchelf
 , fetchFromGitHub, rustPlatform
-, pkgconfig, curl, Security }:
+, pkgconfig, curl, Security, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.18.1";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup.rs";
     rev = version;
-    sha256 = "0932n708ikxzjv7y78zcrnnnps3rgimsnpaximhm9vmjjnkdgm7x";
+    sha256 = "0lyn06vzp5406sjng7msifigkal2lafppqjbdnigx8yvgxqgd06f";
   };
 
-  cargoSha256 = "0kw8a9prqjf939g0h8ryyhlm1n84fwdycvl0nkykkwlfqd6hh9hb";
+  cargoSha256 = "0yxjy1kls80fcpwskklmihkqva16s6mawa8rdxc3zz8g588am03c";
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
     curl
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
