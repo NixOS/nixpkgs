@@ -9,15 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "0pji26fpd0dqrx1akyhqi6729s394irl73dacnyxk58ijqq4dhp0";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf cairo opencv ];
+  nativeBuildInputs = [ autoconf pkgconfig ];
+  buildInputs = [ cairo opencv ];
 
   meta = with stdenv.lib; {
     homepage = https://frei0r.dyne.org;
     description = "Minimalist, cross-platform, shared video plugins";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
 
   };
 }
