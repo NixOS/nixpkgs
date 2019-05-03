@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkgconfig
 , wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa_noglu
-, libpng, ffmpeg_4
+, libpng, ffmpeg_4, freerdp
 }:
 
 let
   pname = "wlroots";
-  version = "0.5.0";
+  version = "0.6.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "1phiidyddzgaxy4gbqwmykxn0y8za6y5mp66l9dpd9i6fml153yq";
+    sha256 = "1rdcmll5b8w242n6yfjpsaprq280ck2jmbz46dxndhignxgda7k4";
   };
 
   # $out for the library, $bin for rootston, and $examples for the example
@@ -26,12 +26,13 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     wayland libGL wayland-protocols libinput libxkbcommon pixman
     xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa_noglu
-    libpng ffmpeg_4
+    libpng ffmpeg_4 freerdp
   ];
 
   mesonFlags = [
-    "-Dlibcap=enabled" "-Dlogind=enabled" "-Dxwayland=enabled" "-Dx11-backend=enabled"
-    "-Dxcb-icccm=enabled" "-Dxcb-errors=enabled"
+    "-Dfreerdp=enabled" "-Dlibcap=enabled" "-Dlogind=enabled"
+    "-Dxcb-errors=enabled" "-Dxcb-icccm=enabled" "-Dxwayland=enabled"
+    "-Dx11-backend=enabled"
   ];
 
   postPatch = ''
