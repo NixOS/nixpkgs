@@ -8,7 +8,7 @@
 }:
 
 let # beware: updates often break cups-filters build
-  version = "0.76.0";
+  version = "0.76.1";
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0qqdqz7lq1zb2nqv8kkznr220zzdfb6kilwlqdpwgw5vwb7my3rp";
+    sha256 = "1c8pqqy4hjbhmkmk22y6ndkivazv77bq2axalv2fq7l57w2x8b76";
   };
 
   outputs = [ "out" "dev" ];
