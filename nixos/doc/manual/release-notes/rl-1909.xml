@@ -91,6 +91,17 @@
       the module for some time and so was removed as cleanup.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <option>services.emby.enable</option> module has been removed, see
+      <option>services.jellyfin.enable</option> instead for a free software fork of Emby.
+
+      See the Jellyfin documentation:
+      <link xlink:href="https://jellyfin.readthedocs.io/en/latest/administrator-docs/migrate-from-emby/">
+        Migrating from Emby to Jellyfin
+      </link>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
