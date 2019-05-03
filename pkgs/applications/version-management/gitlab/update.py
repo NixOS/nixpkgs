@@ -9,6 +9,7 @@ import logging
 import subprocess
 import json
 import pathlib
+from distutils.version import LooseVersion
 from typing import Iterable
 
 import requests
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class GitLabRepo:
+    version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?")
     def __init__(self, owner: str, repo: str):
         self.owner = owner
         self.repo = repo
@@ -31,8 +33,13 @@ class GitLabRepo:
         r = requests.get(self.url + "/tags?format=atom", stream=True)
 
         tree = ElementTree.fromstring(r.content)
-        return sorted((e.text for e in tree.findall(
-            '{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}title')), reverse=True)
+        versions = [e.text for e in tree.findall('{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}title')]
+        # filter out versions not matching version_regex
+        versions = filter(self.version_regex.match, versions)
+        
+        # sort, but ignore v and -ee for sorting comparisons
+        versions.sort(key=lambda x: LooseVersion(x.replace("v", "").replace("-ee", "")), reverse=True)
+        return versions
 
     def get_git_hash(self, rev: str):
         out = subprocess.check_output(['nix-prefetch-git', self.url, rev])
@@ -200,7 +207,6 @@ def update_gitaly():
     # _call_update_source_version('gitaly', gitaly_server_version)
     gitaly_hash = r.get_git_hash(f"v{gitaly_server_version}")
     click.echo(f"Please update gitaly/default.nix to version {gitaly_server_version} and hash {gitaly_hash}")
-
 
 
 @cli.command('update-gitlab-shell')
