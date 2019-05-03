@@ -1152,6 +1152,8 @@ in {
 
   betamax-serializers = callPackage ../development/python-modules/betamax-serializers { };
 
+  betterreads = callPackage ../development/python-modules/betterreads { };
+
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
   bidict = callPackage ../development/python-modules/bidict { };
