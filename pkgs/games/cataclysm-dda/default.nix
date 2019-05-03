@@ -1,4 +1,4 @@
-{ stdenv, callPackage, CoreFoundation
+{ stdenv, callPackage, lua, CoreFoundation
 , tiles ? true, Cocoa
 , debug ? false
 }:
@@ -17,11 +17,17 @@ stdenv.mkDerivation (common // rec {
     sha256 = "00zzhx1mh1qjq668cga5nbrxp2qk6b82j5ak65skhgnlr6ii4ysc";
   };
 
+  buildInputs = common.buildInputs ++ [ lua ];
+
   patches = [ ./patches/fix_locale_dir.patch ];
 
   postPatch = common.postPatch + ''
     substituteInPlace lua/autoexec.lua --replace "/usr/share" "$out/share"
   '';
+
+  makeFlags = common.makeFlags ++ [
+    "LUA=1"
+  ];
 
   meta = with stdenv.lib.maintainers; common.meta // {
     maintainers = common.meta.maintainers ++ [ skeidel ];
