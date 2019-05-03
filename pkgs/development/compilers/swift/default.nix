@@ -231,7 +231,9 @@ stdenv.mkDerivation rec {
       -e 's/^validation-test$/# \0/' \
       -e 's/^long-test$/# \0/' \
       -e 's/^stress-test$/# \0/' \
-      -e 's/^test-optimized$/# \0/'
+      -e 's/^test-optimized$/# \0/' \
+      \
+      -e 's/^swift-install-components=autolink.*$/\0;editor-integration/'
 
     # https://bugs.swift.org/browse/SR-10559
     patch -p1 -d swift-corelibs-libdispatch -i ${./patches/libdispatch-fortify-fix.patch}
