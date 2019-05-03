@@ -135,23 +135,25 @@ in
 stdenv.mkDerivation rec {
   name = "swift-${version_friendly}";
 
-  buildInputs = devInputs ++ [
+  nativeBuildInputs = [
     autoconf
     automake
     bash
-    clang
     cmake
     coreutils
+    findutils
+    gnumake
     libtool
+    makeWrapper
     ninja
     perl
     pkgconfig
     python
     rsync
     which
-    findutils
-    makeWrapper
-    gnumake
+  ];
+  buildInputs = devInputs ++ [
+    clang
   ];
 
   # TODO: Revisit what's propagated and how
