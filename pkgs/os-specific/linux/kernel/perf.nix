@@ -1,6 +1,6 @@
 { lib, stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto, makeWrapper
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig, libunwind, binutils
-, libiberty, audit, libbfd, openssl, systemtap, numactl
+, libiberty, audit, libbfd, libopcodes, openssl, systemtap, numactl
 , zlib, withGtk ? false, gtk2 ? null
 }:
 
@@ -40,6 +40,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
+    libopcodes
   ] ++ stdenv.lib.optional withGtk gtk2;
 
   # Note: we don't add elfutils to buildInputs, since it provides a
