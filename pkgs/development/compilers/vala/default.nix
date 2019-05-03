@@ -41,7 +41,7 @@ let
         # We've reverted the addition of the "--disable-valadoc" option
         # and then applied the following patch.
         #     0.42.4: https://github.com/openembedded/openembedded-core/raw/f2b4f9ec6f44dced7f88df849cca68961419eeb8/meta/recipes-devtools/vala/vala/disable-graphviz.patch
-        "0.44" = ./disable-graphviz-0.44.1.patch;
+        "0.44" = ./disable-graphviz-0.44.3.patch;
 
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
