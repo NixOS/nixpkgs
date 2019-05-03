@@ -1,4 +1,13 @@
-{ stdenv, appimage-run, fetchurl, runtimeShell, gsettings-desktop-schemas, gtk3, gobject-introspection, wrapGAppsHook }:
+{
+ stdenv,
+ appimage-run,
+ fetchurl,
+ runtimeShell,
+ gsettings-desktop-schemas,
+ gtk3,
+ gobject-introspection,
+ wrapGAppsHook,
+}:
 
 let
   # latest version that runs without errors
