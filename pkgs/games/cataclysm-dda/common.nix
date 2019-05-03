@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, lua, ncurses, CoreFoundation
+{ stdenv, fetchFromGitHub, pkgconfig, gettext, ncurses, CoreFoundation
 , tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
 , debug, runtimeShell
 }:
@@ -6,7 +6,7 @@
 let
   inherit (stdenv.lib) optionals optionalString;
 
-  cursesDeps = [ gettext lua ncurses ]
+  cursesDeps = [ gettext ncurses ]
     ++ optionals stdenv.isDarwin [ CoreFoundation ];
 
   tilesDeps = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf freetype ]
@@ -22,7 +22,7 @@ let
     '';
 
     makeFlags = [
-      "PREFIX=$(out)" "LUA=1" "USE_HOME_DIR=1" "LANGUAGES=all"
+      "PREFIX=$(out)" "USE_HOME_DIR=1" "LANGUAGES=all"
     ] ++ optionals (!debug) [
       "RELEASE=1"
     ] ++ optionals tiles [
