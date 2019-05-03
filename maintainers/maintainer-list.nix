@@ -2673,6 +2673,11 @@
     github = "league";
     name = "Christopher League";
   };
+  leahneukirchen = {
+    email = "leah@vuxu.org";
+    github = "leahneukirchen";
+    name = "Leah Neukirchen";
+  };
   lebastr = {
     email = "lebastr@gmail.com";
     github = "lebastr";
