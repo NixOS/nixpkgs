@@ -25,18 +25,19 @@ buildPythonPackage rec {
 
   preConfigure = ''
     sed \
-      -e "s/^origincdirs = .*/origincdirs = []/" \
-      -e "s/^origlibdirs = .*/origlibdirs = []/" \
+      -e "s/origincdirs = .*/origincdirs = []/" \
+      -e "s/origlibdirs = .*/origlibdirs = []/" \
+      -e "/'\/lib\/i386-linux-gnu', '\/lib\/x86_64-linux-gnu']/d" \
       -e "/\/include\/smpeg/d" \
-      -i config_unix.py
+      -i buildconfig/config_unix.py
     ${lib.concatMapStrings (dep: ''
       sed \
-        -e "/^origincdirs =/aorigincdirs += ['${lib.getDev dep}/include']" \
-        -e "/^origlibdirs =/aoriglibdirs += ['${lib.getLib dep}/lib']" \
-        -i config_unix.py
+        -e "/origincdirs =/a\        origincdirs += ['${lib.getDev dep}/include']" \
+        -e "/origlibdirs =/a\        origlibdirs += ['${lib.getLib dep}/lib']" \
+        -i buildconfig/config_unix.py
       '') buildInputs
     }
-    LOCALBASE=/ ${python.interpreter} config.py
+    LOCALBASE=/ ${python.interpreter} buildconfig/config.py
   '';
 
   meta = with lib; {
