@@ -23,7 +23,7 @@ let
   libcLib = lib.getLib libc;
   crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
 
-  common = { self, version, sha256 }: stdenv.mkDerivation (rec {
+  common = { self, buildPerl, version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
 
     name = "perl-${version}";
@@ -110,6 +110,7 @@ let
       libPrefix = "lib/perl5/site_perl";
       pkgs = callPackage ../../../top-level/perl-packages.nix {
         perl = self;
+        inherit buildPerl;
         overrides = config.perlPackageOverrides or (p: {}); # TODO: (self: super: {}) like in python
       };
       buildEnv = callPackage ./wrapper.nix {
@@ -194,6 +195,7 @@ in rec {
   # the latest Maint version
   perl528 = common {
     self = perl528;
+    buildPerl = buildPackages.perl528;
     version = "5.28.2";
     sha256 = "1iynpsxdym4h76kgndmn3ykvwxhqz444xvaz8z2irsxkvmnlb5da";
   };
@@ -201,6 +203,7 @@ in rec {
   # the latest Devel version
   perldevel = common {
     self = perldevel;
+    buildPerl = buildPackages.perldevel;
     version = "5.29.9";
     sha256 = "017x3nghyc5m8q1yqnrdma96b3d5rlfx87vv5mi64jq0r8k6zppm";
   };

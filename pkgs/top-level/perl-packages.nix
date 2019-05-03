@@ -6,7 +6,7 @@
    be almost as much code as the function itself. */
 
 {config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides,
-  buildPackages}:
+  buildPerl}:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.2 or above
 assert stdenv.lib.versionAtLeast perl.version "5.28.2";
@@ -37,7 +37,7 @@ let
     });
 
   buildPerlPackage = callPackage ../development/perl-modules/generic {
-    inherit toPerlModule;
+    inherit buildPerl;
   };
 
   # Helper functions for packages that use Module::Build to build.
@@ -14861,8 +14861,8 @@ let
 
     # use native libraries from the host when running build commands
     postConfigure = if cross then let
-      host_perl = buildPackages.perl;
-      host_self = buildPackages.perlPackages.TermReadKey;
+      host_perl = buildPerl;
+      host_self = buildPerl.pkgs.TermReadKey;
       perl_lib = "${host_perl}/lib/perl5/${host_perl.version}";
       self_lib = "${host_self}/lib/perl5/site_perl/${host_perl.version}";
     in ''
@@ -14871,7 +14871,7 @@ let
 
     # TermReadKey uses itself in the build process
     nativeBuildInputs = if cross then [
-      buildPackages.perlPackages.TermReadKey
+      buildPerl.pkgs.TermReadKey
     ] else [];
   };
 
