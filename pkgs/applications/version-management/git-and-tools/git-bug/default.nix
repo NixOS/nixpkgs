@@ -13,8 +13,6 @@ buildGoPackage rec {
     sha256 = "1l86m0y360lmpmpw2id0k7zc2nyq1irr26k2ik06lxhzvpbyajz6";
   };
 
-  goDeps = ./deps.nix;
-
   buildFlagsArray = ''
     -ldflags= 
       -X ${goPackagePath}/commands.GitCommit=${rev}
