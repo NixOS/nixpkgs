@@ -2348,6 +2348,8 @@ in {
 
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
+  retype = callPackage ../development/python-modules/retype { };
+
   roman = callPackage ../development/python-modules/roman { };
 
   librosa = callPackage ../development/python-modules/librosa { };
