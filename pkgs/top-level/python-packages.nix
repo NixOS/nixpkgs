@@ -3369,6 +3369,8 @@ in {
 
   pymysqlsa = callPackage ../development/python-modules/pymysqlsa { };
 
+  monkeytype = callPackage ../development/python-modules/monkeytype { };
+
   monosat = disabledIf (!isPy3k) (pkgs.monosat.python { inherit buildPythonPackage; inherit (self) cython; });
 
   monotonic = callPackage ../development/python-modules/monotonic { };
