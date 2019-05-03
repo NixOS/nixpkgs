@@ -4522,6 +4522,8 @@ in {
 
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
 
+  rules = callPackage ../development/python-modules/rules { };
+
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
