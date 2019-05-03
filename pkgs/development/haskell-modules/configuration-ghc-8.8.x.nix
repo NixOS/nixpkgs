@@ -107,5 +107,13 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/exceptions-0.10.1.patch";
     sha256 = "0427jg027dcckiy21zk29c49fzx4q866rqbabmh4wvqwwkz8yk37";
   });
+  th-abstraction = appendPatch (doJailbreak super.th-abstraction) (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/th-abstraction-0.2.11.0.patch";
+    sha256 = "0czqfszfblz6bvsybcd1z5jijj79f9czqq6dn992wp2gibsbrgj3";
+  });
+  logict = appendPatch (doJailbreak super.logict) (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/logict-0.6.0.2.patch";
+    sha256 = "0my2n0r9pb35994q0xka96fv5jdpjdfwqppi5lily3rgzkajsixn";
+  });
 
 }
