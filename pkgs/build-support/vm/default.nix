@@ -1021,22 +1021,22 @@ rec {
     };
 
     debian9i386 = {
-      name = "debian-9.4-stretch-i386";
-      fullName = "Debian 9.4 Stretch (i386)";
+      name = "debian-9.8-stretch-i386";
+      fullName = "Debian 9.8 Stretch (i386)";
       packagesList = fetchurl {
-        url = http://snapshot.debian.org/archive/debian/20180912T154744Z/dists/stretch/main/binary-i386/Packages.xz;
-        sha256 = "0flvn8zn7vk04p10ndf3aq0mdr8k2ic01g51aq4lsllkv8lmwzyh";
+        url = http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-i386/Packages.xz;
+        sha256 = "1dr3skl35iyj85qlc33lq4whippbqf327vnbcyfqqrv6h86k68mw";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian9x86_64 = {
-      name = "debian-9.4-stretch-amd64";
-      fullName = "Debian 9.4 Stretch (amd64)";
+      name = "debian-9.8-stretch-amd64";
+      fullName = "Debian 9.8 Stretch (amd64)";
       packagesList = fetchurl {
-        url = http://snapshot.debian.org/archive/debian/20180912T154744Z/dists/stretch/main/binary-amd64/Packages.xz;
-        sha256 = "11vnn9bba2jabixvabfbw9zparl326c88xn99di7pbr5xsnl15jm";
+        url = http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-amd64/Packages.xz;
+        sha256 = "01q00nl47p12n7wx0xclx59wf3zlkzrgj3zxpshyvb91xdnw5sh6";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
