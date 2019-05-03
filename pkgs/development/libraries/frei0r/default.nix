@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf pkgconfig ];
   buildInputs = [ cairo opencv ];
 
+  postInstall = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for f in $out/lib/frei0r-1/*.so* ; do
+      ln -s $f "${f%.*}.dylib"
+    done
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://frei0r.dyne.org;
     description = "Minimalist, cross-platform, shared video plugins";
