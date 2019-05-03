@@ -3702,6 +3702,8 @@ in {
 
   python-jenkins = callPackage ../development/python-modules/python-jenkins { };
 
+  python-datemath = callPackage ../development/python-modules/python-datemath { };
+
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
