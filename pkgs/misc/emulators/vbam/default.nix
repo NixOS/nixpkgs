@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
     sha256 = "0ibpn05jm6zvvrjyxbmh8qwm1qd26v0dzq45cp233ksvapw1h77h";
   };
 
+  nativeBuildInputs = [ cmake pkgconfig ];
+
   buildInputs = [
     cairo
-    cmake
     ffmpeg
     gettext
     libGLU_combined
     openal
-    pkgconfig
     SDL2
     sfml
     zip
