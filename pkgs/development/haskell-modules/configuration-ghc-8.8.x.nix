@@ -41,8 +41,13 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Use our native version of the Cabal library.
+  cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: { Cabal = null; });
+
   # Ignore overly restrictive upper version bounds.
+  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
   doctest = doJailbreak super.doctest;
+  split = doJailbreak super.split;
 
   # These packages don't work and need patching and/or an update.
   primitive = overrideSrc (doJailbreak super.primitive) {
@@ -54,6 +59,17 @@ self: super: {
       sha256 = "1p1pinca33vd10iy7hl20c1fc99vharcgcai6z3ngqbq50k2pd3q";
     };
   };
+  tar = overrideCabal (appendPatch super.tar (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/tar-0.5.1.0.patch";
+    sha256 = "1inbfpamfdpi3yfac59j5xpaq5fvh5g1ca8hlbpic1bizd3s03i0";
+  })) (drv: {
+    configureFlags = ["-f-old-time"];
+    preConfigure = ''
+      sha256sum tar.cabal
+      cp -v ${pkgs.fetchurl {url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/tar-0.5.1.0.cabal"; sha256 = "1lydbwsmccf2av0g61j07bx7r5mzbcfgwvmh0qwg3a91857x264x";}} tar.cabal
+      sha256sum tar.cabal
+    '';
+  });
   resolv = overrideCabal (overrideSrc super.resolv {
     version = "20180411-git";
     src = pkgs.fetchFromGitHub {
