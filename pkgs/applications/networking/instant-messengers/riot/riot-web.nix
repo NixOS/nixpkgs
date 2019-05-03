@@ -1,5 +1,8 @@
 { lib, stdenv, fetchurl, writeText, conf ? null }:
 
+# Note for maintainers:
+# Versions of `riot-web` and `riot-desktop` should be kept in sync.
+
 let configFile = writeText "riot-config.json" conf; in
 stdenv.mkDerivation rec {
   name= "riot-web-${version}";
@@ -19,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A glossy Matrix collaboration client for the web";
     homepage = http://riot.im/;
-    maintainers = with stdenv.lib.maintainers; [ bachp ];
+    maintainers = with stdenv.lib.maintainers; [ bachp pacien ];
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
     hydraPlatforms = [];
