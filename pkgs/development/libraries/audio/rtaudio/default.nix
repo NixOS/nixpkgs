@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2,  alsaLib, rtmidi }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.0";
+  version = "5.1.0";
   name = "rtaudio-${version}";
 
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtaudio";
     rev = "${version}";
-    sha256 = "0jkqnhc2pq31nmq4daxhmqdjgv2qi4ib27hwms2r5zhnmvvzlr67";
+    sha256 = "1pglnjz907ajlhnlnig3p0sx7hdkpggr8ss7b3wzf1lykzgv9l52";
   };
 
   enableParallelBuilding = true;
