@@ -143,6 +143,7 @@ self: super: {
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
+  classy-prelude-yesod = dontHaddock super.classy-prelude-yesod; # https://github.com/haskell/haddock/issues/979
 
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
@@ -1247,5 +1248,10 @@ self: super: {
 
   # Break out of pandoc >=2.0 && <2.7 (https://github.com/pbrisbin/yesod-markdown/pull/65)
   yesod-markdown = doJailbreak super.yesod-markdown;
+
+  # Some tests depend on a postgresql instance
+  # Haddock failure: https://github.com/haskell/haddock/issues/979
+  esqueleto = dontHaddock (dontCheck super.esqueleto);
+
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

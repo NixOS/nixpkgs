@@ -3479,7 +3479,6 @@ broken-packages:
   - ClassLaws
   - classy-miso
   - classy-parallel
-  - classy-prelude-yesod
   - ClassyPrelude
   - clay
   - clckwrks
@@ -4305,7 +4304,6 @@ broken-packages:
   - esotericbot
   - EsounD
   - espial
-  - esqueleto
   - ess
   - estimators
   - EstProgress
@@ -9862,7 +9860,6 @@ broken-packages:
   - yesod-links
   - yesod-lucid
   - yesod-mangopay
-  - yesod-markdown
   - yesod-paginate
   - yesod-pagination
   - yesod-paypal-rest
