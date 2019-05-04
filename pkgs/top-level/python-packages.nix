@@ -3802,6 +3802,8 @@ in {
 
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
 
+  pyatmo = callPackage ../development/python-modules/pyatmo { };
+
   pyaudio = callPackage ../development/python-modules/pyaudio { };
 
   pysam = callPackage ../development/python-modules/pysam { };
