@@ -13,7 +13,7 @@ buildRustPackage rec {
     homepage = https://github.com/nathan/pax;
     license = licenses.mit;
     maintainers = [ maintainers.klntsky ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 
   src =

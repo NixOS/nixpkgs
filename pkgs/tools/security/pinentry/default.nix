@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   patches = lib.optionals (gtk2 != null) [
     (fetchpatch {
-      url = https://sources.debian.org/data/main/p/pinentry/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
+      url = "https://salsa.debian.org/debian/pinentry/raw/debian/1.1.0-1/debian/patches/"
+          + "0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch";
       sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
     })
   ];

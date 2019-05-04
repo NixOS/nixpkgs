@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aesop";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "0gh1xwxlzyicw059g6h1icckinf5d9rqfnwml0cy85bbawm6w0xq";
+    sha256 = "191azshc2z9pzc61fhmzv5cxnihh5wh3nj803kvi3rnk6nl9mhzh";
   };
 
   nativeBuildInputs = [
