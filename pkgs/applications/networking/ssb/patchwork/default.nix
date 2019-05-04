@@ -9,14 +9,11 @@
  wrapGAppsHook,
 }:
 
-let
+stdenv.mkDerivation rec {
   # latest version that runs without errors
   # https://github.com/ssbc/patchwork/issues/972
   version = "3.11.4";
-in
-
-stdenv.mkDerivation rec {
-  name = "patchwork-${version}";
+  pname = "patchwork";
 
   src = fetchurl {
     url = "https://github.com/ssbc/patchwork/releases/download/v${version}/Patchwork-${version}-linux-x86_64.AppImage";
