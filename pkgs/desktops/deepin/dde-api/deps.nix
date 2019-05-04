@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/fogleman/gg";
-      rev = "0403632d5b905943a1c2a5b2763aaecd568467ec";
-      sha256 = "1nkldjghbqnzj2djfaxhiv35kk341xhcrj9m2dwq65v684iqkk8n";
+      rev = "72436a171bf31757dc87fb8fa9f7485307350307";
+      sha256 = "116ysxj7nv9zw5ff75p2mriwf6fx4qzdik9za8cy0l0vih78qvjq";
     };
   }
   {
@@ -59,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/linuxdeepin/go-x11-client";
-      rev = "48c75d615ef634d9b1c24f8e8a30f56201b4f561";
-      sha256 = "1x2i9wg6lyskls5qi3d2r84bdhyhgi8v1d8scxx9ysjaw9di9ldl";
+      rev = "b5b01565d224d5ccd5a4143d9099acceb23e182a";
+      sha256 = "1lnffjp8bqy6f8caw6drg1js6hny5w7432riqchcrcd4q85d94rs";
     };
   }
   {
@@ -77,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/image";
-      rev = "3fc05d484e9f77dd51816890e05f2602e4ca4d65";
-      sha256 = "0mcip8jpz2061j1z658rfskphc92wv6sapy81p95bnjdymi562k3";
+      rev = "6d32002ffd7577f23673706728e1c510698cecb1";
+      sha256 = "03jzn07kfgdzzm4785xngcksv9ix6q1lf12b8j91flc0v7swsd1b";
     };
   }
   {
@@ -86,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "74de082e2cca95839e88aa0aeee5aadf6ce7710f";
-      sha256 = "0a4y3y0q5bkif7wvdkyjkvgnzlbh2n4zk7wsy5j95raf0i3zlw4s";
+      rev = "f4e77d36d62c17c2336347bb2670ddbd02d092b7";
+      sha256 = "0avjnglqqg9ya0cbhp23m4namykii219kxjywxn4cd7pfcc5arha";
     };
   }
   {
