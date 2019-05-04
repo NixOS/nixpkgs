@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spice-up";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Spice-up";
     rev = version;
-    sha256 = "0jbqgf936pqss8ha27fcyjbhvkn4ij96b3d87c6gcx90glmq33zb";
+    sha256 = "0vgs2z6yr0d5vwb04wd2s22144pdrjhqik9xs69q4dxjxa84iw0h";
   };
 
   USER = "pbuilder";
