@@ -21837,6 +21837,8 @@ in
 
   racer = callPackage ../games/racer { };
 
+  redeclipse = callPackage ../games/redeclipse { };
+
   residualvm = callPackage ../games/residualvm { };
 
   rftg = callPackage ../games/rftg { };
