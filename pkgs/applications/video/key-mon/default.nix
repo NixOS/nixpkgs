@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   preFixup = ''
-      export makeWrapperArgs="--set GDK_PIXBUF_MODULE_FILE $GDK_PIXBUF_MODULE_FILE"
+      export makeWrapperArgs="--set $gdkPixbufModuleFileVar \"''${!gdkPixbufModuleFileVar}\""
   '';
 
   meta = with stdenv.lib; {

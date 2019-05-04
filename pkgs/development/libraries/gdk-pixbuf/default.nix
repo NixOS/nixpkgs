@@ -5,6 +5,15 @@
 let
   pname = "gdk-pixbuf";
   version = "2.38.1";
+
+  # The library checks for the GDK_PIXBUF_MODULE_FILE environment variable to find
+  # the cache file that specifies supported image formats and associated libraries.
+  # We patch the code to use a different variable name on 32-bit and 64-bit systems
+  # (GDK_PIXBUF_MODULE_FILE32/64) to prevent 32-bit programs from trying to load
+  # 64-bit plugins.
+  origModuleFileVar = "GDK_PIXBUF_MODULE_FILE";
+  moduleFileVar = origModuleFileVar + (if stdenv.is64bit then "64" else "32");
+
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -41,11 +50,16 @@ in stdenv.mkDerivation rec {
     "-Dgio_sniffing=false"
   ];
 
+  # For substitution in setup-hook.sh.
+  gdkPixbufModuleFileVar = moduleFileVar;
+
   postPatch = ''
     chmod +x build-aux/* # patchShebangs only applies to executables
     patchShebangs build-aux
 
     substituteInPlace tests/meson.build --subst-var-by installedtestsprefix "$installedTests"
+
+    find . -type f -print0 | xargs -0 sed -i 's/${origModuleFileVar}/${moduleFileVar}/g'
   '';
 
   postInstall =
@@ -88,6 +102,8 @@ in stdenv.mkDerivation rec {
 
     # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
     moduleDir = "lib/gdk-pixbuf-2.0/2.10.0/loaders";
+
+    inherit moduleFileVar;
   };
 
   meta = with stdenv.lib; {

@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs = [
     "--prefix GI_TYPELIB_PATH : \"$GI_TYPELIB_PATH\""
     "--suffix XDG_DATA_DIRS : \"$XDG_ICON_DIRS:$out/share\""
-    "--set GDK_PIXBUF_MODULE_FILE \"$GDK_PIXBUF_MODULE_FILE\""
+    "--set $gdkPixbufModuleFileVar \"\${!gdkPixbufModuleFileVar}\""
   ];
 
   postCheck = ''

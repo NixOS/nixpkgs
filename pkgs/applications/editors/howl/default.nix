@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # Required for the program to properly load its SVG assets
   postInstall = ''
     wrapProgram $out/bin/howl \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+      --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}"
   '';
 
   meta = {

@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/lib/gimp/${passthru.majorVersion}/plug-ins/
     wrapProgram $out/bin/gimp-${stdenv.lib.versions.majorMinor version} \
       --prefix PYTHONPATH : "$PYTHONPATH" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+      --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}"
   '';
 
   passthru = rec {

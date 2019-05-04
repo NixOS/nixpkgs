@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/pdfpc \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+      --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}"
   '';
 
   meta = with stdenv.lib; {

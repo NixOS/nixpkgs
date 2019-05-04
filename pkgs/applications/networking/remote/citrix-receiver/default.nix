@@ -13,6 +13,7 @@
 , gtk2
 , atk
 , gdk_pixbuf
+, librsvg
 , cairo
 , pango
 , gnome3
@@ -101,6 +102,7 @@ let
         file
         gtk2
         gdk_pixbuf
+        librsvg
       ];
 
       libPath = stdenv.lib.makeLibraryPath [
@@ -185,7 +187,7 @@ let
           --add-flags "-icaroot $ICAInstDir" \
           --set ICAROOT "$ICAInstDir" \
           --set GTK_PATH "${gtk2.out}/lib/gtk-2.0:${gnome3.gnome-themes-extra}/lib/gtk-2.0" \
-          --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+          --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
           --set LD_LIBRARY_PATH "$libPath" \
           --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"

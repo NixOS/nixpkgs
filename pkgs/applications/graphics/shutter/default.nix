@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       --set PERL5LIB "${perlPackages.makePerlPath perlModules}" \
       --prefix PATH : "${imagemagick.out}/bin" \
       --suffix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+      --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}"
   '';
 
   meta = with stdenv.lib; {

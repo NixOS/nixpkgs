@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
       set -x
       wrapProgram "$out/bin/solfege" \
           --prefix PYTHONPATH ':' "$PYTHONPATH" \
-          --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+           --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}"
   '';
 
   meta = with stdenv.lib; {

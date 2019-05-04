@@ -37,7 +37,7 @@ python2Packages.buildPythonApplication rec {
     goocanvas2
   ];
   makeWrapperArgs = [
-    ''--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"''
+    ''--set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}"''
     ''--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"''
     ''--suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"''
   ];

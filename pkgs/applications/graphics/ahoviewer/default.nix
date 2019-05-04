@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/ahoviewer \
     --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-    --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+    --set $gdkPixbufModuleFileVar "''${!gdkPixbufModuleFileVar}"
   '';
 
   meta = with stdenv.lib; {

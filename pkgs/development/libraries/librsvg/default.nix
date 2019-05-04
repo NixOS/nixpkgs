@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the
   # relevant loader.cache here.
-  # The loaders.cache can be used by setting GDK_PIXBUF_MODULE_FILE to
+  # The loaders.cache can be used by setting $gdkPixbufModuleFileVar to
   # point to this file in a wrapper.
   postConfigure = ''
     GDK_PIXBUF=$out/lib/gdk-pixbuf-2.0/2.10.0
