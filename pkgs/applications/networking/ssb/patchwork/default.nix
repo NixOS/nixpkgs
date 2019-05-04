@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/{bin,share}
-    cp $src $out/share/patchwork.AppImage
-    echo "#!${runtimeShell}" > $out/bin/patchwork
-    echo "${appimage-run}/bin/appimage-run $out/share/patchwork.AppImage" >> $out/bin/patchwork
-    chmod +x $out/bin/patchwork $out/share/patchwork.AppImage
+    cp $src $out/share/${pname}
+    echo "#!${runtimeShell}" > $out/bin/${pname}
+    echo "${appimage-run}/bin/appimage-run $out/share/${pname}" >> $out/bin/${pname}
+    chmod +x $out/bin/${pname} $out/share/${pname}
   '';
 
   meta = with stdenv.lib; {
