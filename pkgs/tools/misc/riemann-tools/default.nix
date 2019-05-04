@@ -1,14 +1,35 @@
-{ stdenv, bundlerEnv }:
+{ lib, bundlerApp }:
 
-bundlerEnv {
-  name = "riemann-tools-0.2.13";
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+bundlerApp {
+  pname = "riemann-tools";
+  gemdir = ./.;
+  exes = [
+    "riemann-apache-status"
+    "riemann-bench"
+    "riemann-cloudant"
+    "riemann-consul"
+    "riemann-dir-files-count"
+    "riemann-dir-space"
+    "riemann-diskstats"
+    "riemann-fd"
+    "riemann-freeswitch"
+    "riemann-haproxy"
+    "riemann-health"
+    "riemann-kvminstance"
+    "riemann-memcached"
+    "riemann-net"
+    "riemann-nginx-status"
+    "riemann-ntp"
+    "riemann-portcheck"
+    "riemann-proc"
+    "riemann-varnish"
+    "riemann-zookeeper"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Tools to submit data to Riemann";
     homepage = "https://riemann.io";
-    license = stdenv.lib.licenses.mit;
+    maintainers = with maintainers; [ manveru ];
+    license = licenses.mit;
   };
 }
