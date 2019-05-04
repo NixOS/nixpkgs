@@ -4,13 +4,13 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "2.7";
+  version = "2.8";
 
   name = "wpa_supplicant-${version}";
 
   src = fetchurl {
     url = "https://w1.fi/releases/${name}.tar.gz";
-    sha256 = "0x1hqyahq44jyla8jl6791nnwrgicrhidadikrnqxsm2nw36pskn";
+    sha256 = "15ixzm347n8w6gdvi3j3yks3i15qmp6by9ayvswm34d929m372d6";
   };
 
   # TODO: Patch epoll so that the dbus actually responds
@@ -80,14 +80,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl libnl dbus readline pcsclite ];
 
   nativeBuildInputs = [ pkgconfig ];
-
-  patches = [
-    (fetchpatch {
-      name = "build-fix.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-wireless/wpa_supplicant/files/wpa_supplicant-2.7-fix-undefined-remove-ie.patch?id=e0288112138a70a8acc3ae0196772fd7ccb677ce";
-      sha256 = "0ysazfcyn195mvkb1v10mgzzmpmqgv5kwqxwzfbsfhzq5bbaihld";
-    })
-  ];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8

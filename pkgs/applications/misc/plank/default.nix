@@ -1,36 +1,49 @@
 { stdenv, fetchurl, vala, atk, cairo, glib, gnome3, gtk3, libwnck3
 , libX11, libXfixes, libXi, pango, intltool, pkgconfig, libxml2
-, bamf, gdk_pixbuf, libdbusmenu-gtk3, file, gnome-menus
-, wrapGAppsHook, autoreconfHook, gobject-introspection }:
+, bamf, gdk_pixbuf, libdbusmenu-gtk3, file, gnome-menus, libgee
+, wrapGAppsHook, autoreconfHook, pantheon }:
 
 stdenv.mkDerivation rec {
   pname = "plank";
   version = "0.11.4";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/1.0/${version}/+download/${name}.tar.xz";
+    url = "https://launchpad.net/${pname}/1.0/${version}/+download/${pname}-${version}.tar.xz";
     sha256 = "1f41i45xpqhjxql9nl4a1sz30s0j46aqdhbwbvgrawz6himcvdc8";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    autoreconfHook
+    gnome3.gnome-common
     intltool
     libxml2 # xmllint
+    pkgconfig
+    vala
     wrapGAppsHook
-    gobject-introspection
-    autoreconfHook
   ];
 
-  buildInputs = [ vala atk cairo glib gnome-menus
-                  gtk3 gnome3.libgee libwnck3 libX11 libXfixes
-                  libXi pango gnome3.gnome-common bamf gdk_pixbuf
-                  libdbusmenu-gtk3 gnome3.dconf ];
+  buildInputs = [
+    atk
+    bamf
+    cairo
+    gdk_pixbuf
+    glib
+    gnome-menus
+    gnome3.dconf
+    gtk3
+    libX11
+    libXfixes
+    libXi
+    libdbusmenu-gtk3
+    libgee
+    libwnck3
+    pango
+  ];
 
   # fix paths
   makeFlags = [
-    "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"
-    "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
+    "INTROSPECTION_GIRDIR=${placeholder ''out''}/share/gir-1.0/"
+    "INTROSPECTION_TYPELIBDIR=${placeholder ''out''}/lib/girepository-1.0"
   ];
 
   # Make plank's application launcher hidden in Pantheon
@@ -46,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = https://launchpad.net/plank;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;
   };
 }

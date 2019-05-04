@@ -5,15 +5,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libplist";
-  version = "2018-07-25";
+  version = "2019-04-04";
 
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "db68a9d1070b363eee93147f072f46526064acbc";
-    sha256 = "0lxyb35jjg31m8dxhsv1jr2ccy5s19fsqzisy7lfjk46w7brs4h5";
+    rev = "42bb64ba966082b440cb68cbdadf317f44710017";
+    sha256 = "19yw80yblq29i2jx9yb7bx0lfychy9dncri3fk4as35kq5bf26i8";
   };
 
   outputs = ["bin" "dev" "out" "py"];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "A library to handle Apple Property List format in binary or XML";
     homepage = https://github.com/libimobiledevice/libplist;
     license = licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ infinisil ];
     platforms = platforms.linux;
   };
 }

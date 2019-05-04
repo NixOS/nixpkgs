@@ -23,10 +23,11 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
   ];
 
-  buildInputs =
-    [ libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
-      gsettings-desktop-schemas libosinfo gtk3
-    ] ++ optional spiceSupport spice-gtk;
+  buildInputs = [
+    libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
+    gsettings-desktop-schemas libosinfo gtk3
+    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
+  ] ++ optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python3Packages;
     [

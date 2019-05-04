@@ -2,6 +2,8 @@
 
 let
   packages = self: with self; {
+    setupHook = ./setup-hook.sh;
+
     updateScript = callPackage ./update.nix { };
 
     dbus-factory = callPackage ./dbus-factory { };
@@ -23,7 +25,6 @@ let
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-sound-theme = callPackage ./deepin-sound-theme { };
     deepin-terminal = callPackage ./deepin-terminal {
-      inherit (pkgs.gnome3) libgee;
       wnck = pkgs.libwnck3;
     };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };

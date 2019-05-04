@@ -31,33 +31,22 @@
     </para>
     <note>
      <para>
-      <varname>services.xserver.desktopManager.pantheon</varname> default
-      enables lightdm as a display manager and using Pantheon's greeter.
+      By default, <varname>services.xserver.desktopManager.pantheon</varname>
+      enables LightDM as a display manager, as pantheon's screen locking
+      implementation relies on it.
      </para>
      <para>
-      This is because of limitations with the screenlocking implementation,
-      whereas the screenlocker would be non-functional without it.
-     </para>
-     <para>
-      Because of that it is recommended to retain this precaution, however if
-      you'd like to change this set:
-     </para>
-     <itemizedlist>
-      <listitem>
-       <para>
-        <option>services.xserver.displayManager.lightdm.enable</option>
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        <option>services.xserver.displayManager.lightdm.greeters.pantheon.enable</option>
-       </para>
-      </listitem>
-     </itemizedlist>
-     <para>
-      to <literal>false</literal> and enable your preferred display manager.
+      Because of that it is recommended to leave LightDM enabled. If you'd like
+      to disable it anyway, set
+      <option>services.xserver.displayManager.lightdm.enable</option> to
+      <literal>false</literal> and enable your preferred display manager.
      </para>
     </note>
+    <para>
+     Also note that Pantheon's LightDM greeter is not enabled by default,
+     because it has numerous issues in NixOS and isn't optimal for use here
+     yet.
+    </para>
    </listitem>
    <listitem>
     <para>
@@ -68,6 +57,26 @@
      <xref linkend="sec-kubernetes"/> for details.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       There is now a set of <option>confinement</option> options for
+       <option>systemd.services</option>, which allows to restrict services
+       into a <citerefentry>
+        <refentrytitle>chroot</refentrytitle>
+        <manvolnum>2</manvolnum>
+      </citerefentry>ed environment that only contains the store paths from
+      the runtime closure of the service.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       A UEFI installer image for Aarch64 is now
+       <link xlink:href="https://hydra.nixos.org/job/nixos/release-19.03/nixos.iso_minimal.aarch64-linux/latest">
+         built by Hydra</link>.
+       It should work on all devices with a UEFI implementation
+       such as upstream u-boot.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -75,20 +84,15 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
-         xml:id="sec-release-19.03-new-services">
-  <title>New Services</title>
-
+         xml:id="sec-release-19.03-new-modules">
+  <title>New Modules</title>
   <para>
-   The following new services were added since the last release:
+   The following new modules were added since the last release:
   </para>
 
   <itemizedlist>
    <listitem>
-    <para>
-     <literal>./programs/nm-applet.nix</literal>
-    </para>
-   </listitem>
-   <listitem>
+    <para><filename>security/google_oslogin.nix</filename></para>
     <para>
      There is a new <varname>security.googleOsLogin</varname> module for using
      <link xlink:href="https://cloud.google.com/compute/docs/instances/managing-instance-access">OS
@@ -98,12 +102,9 @@
      <literal>nixos/modules/virtualisation/google-compute-config.nix</literal>.
     </para>
    </listitem>
+
    <listitem>
-    <para>
-     <literal>./services/misc/beanstalkd.nix</literal>
-    </para>
-   </listitem>
-   <listitem>
+    <para><filename>services/misc/beanstalkd.nix</filename></para>
     <para>
      There is a new <varname>services.cockroachdb</varname> module for running
      CockroachDB databases. NixOS now ships with CockroachDB 2.1.x as well,
@@ -111,15 +112,11 @@
      <literal>aarch64-linux</literal>.
     </para>
    </listitem>
-  </itemizedlist>
 
-  <itemizedlist>
    <listitem>
     <para>
-     <literal>./security/duosec.nix</literal>
+     <filename>security/duosec.nix</filename>
     </para>
-   </listitem>
-   <listitem>
     <para>
      The <link xlink:href="https://duo.com/docs/duounix">PAM module for Duo
      Security</link> has been enabled for use. One can configure it using the
@@ -128,6 +125,53 @@
      <option>security.pam.services.&lt;name?&gt;.duoSecurity.enable</option>.
     </para>
    </listitem>
+
+   <listitem>
+    <para>
+       Besides the existing <option>services.prometheus</option> module which
+       targets Prometheus-1 a new <option>services.prometheus2</option> module
+       has been added which targets Prometheus-2.
+    </para>
+    <para>
+       Both modules can be enabled at the same time. In fact
+       <link xlink:href="https://prometheus.io/docs/prometheus/latest/migration/#storage">
+       this is needed for upgrading existing Prometheus-1 data to Prometheus-2
+       </link>.
+    </para>
+   </listitem>
+   <listitem><para><filename>config/appstream.nix</filename></para></listitem>
+   <listitem><para><filename>config/xdg/sounds.nix</filename></para></listitem>
+   <listitem><para><filename>hardware/acpilight.nix</filename></para></listitem>
+   <listitem><para><filename>hardware/ledger.nix</filename></para></listitem>
+   <listitem><para><filename>programs/dmrconfig.nix</filename></para></listitem>
+   <listitem><para><filename>programs/iotop.nix</filename></para></listitem>
+   <listitem><para><filename>programs/mininet.nix</filename></para></listitem>
+   <listitem><para><filename>programs/nm-applet.nix</filename></para></listitem>
+   <listitem><para><filename>programs/wavemon.nix</filename></para></listitem>
+   <listitem><para><filename>security/google_oslogin.nix</filename></para></listitem>
+   <listitem><para><filename>security/misc.nix</filename></para></listitem>
+   <listitem><para><filename>services/desktops/gnome3/rygel.nix</filename></para></listitem>
+   <listitem><para><filename>services/desktops/gsignond.nix</filename></para></listitem>
+   <listitem><para><filename>services/hardware/bolt.nix</filename></para></listitem>
+   <listitem><para><filename>services/hardware/lirc.nix</filename></para></listitem>
+   <listitem><para><filename>services/hardware/ratbagd.nix</filename></para></listitem>
+   <listitem><para><filename>services/hardware/triggerhappy.nix</filename></para></listitem>
+   <listitem><para><filename>services/hardware/vdr.nix</filename></para></listitem>
+   <listitem><para><filename>services/mail/davmail.nix</filename></para></listitem>
+   <listitem><para><filename>services/mail/roundcube.nix</filename></para></listitem>
+   <listitem><para><filename>services/mail/rss2email.nix</filename></para></listitem>
+   <listitem><para><filename>services/misc/beanstalkd.nix</filename></para></listitem>
+   <listitem><para><filename>services/misc/bees.nix</filename></para></listitem>
+   <listitem><para><filename>services/misc/headphones.nix</filename></para></listitem>
+   <listitem><para><filename>services/misc/lidarr.nix</filename></para></listitem>
+   <listitem><para><filename>services/misc/sickbeard.nix</filename></para></listitem>
+   <listitem><para><filename>services/misc/weechat.nix</filename></para></listitem>
+   <listitem><para><filename>services/misc/zoneminder.nix</filename></para></listitem>
+   <listitem><para><filename>services/monitoring/alerta.nix</filename></para></listitem>
+   <listitem><para><filename>services/monitoring/kapacitor.nix</filename></para></listitem>
+   <listitem><para><filename>services/networking/iperf3.nix</filename></para></listitem>
+   <listitem><para><filename>services/networking/knot.nix</filename></para></listitem>
+
   </itemizedlist>
  </section>
 
@@ -284,7 +328,7 @@
    <listitem>
     <para>
      The versioned <varname>postgresql</varname> have been renamed to use
-     underscore number seperators. For example, <varname>postgresql96</varname>
+     underscore number separators. For example, <varname>postgresql96</varname>
      has been renamed to <varname>postgresql_9_6</varname>.
     </para>
    </listitem>
@@ -439,7 +483,7 @@
      account module verification was exited prematurely in case a nss module
      provided the account name to <literal>pam_unix</literal>. The LDAP and
      SSSD NixOS modules already add their NSS modules when enabled. In case
-     your setup breaks due to some later PAM account module previosuly
+     your setup breaks due to some later PAM account module previously
      shadowed, or failing NSS lookups, please file a bug. You can get back the
      old behaviour by manually setting <literal>
 <![CDATA[security.pam.services.<name?>.text]]>
@@ -514,6 +558,39 @@
      settings. See
      <link xlink:href="http://docs.graylog.org/en/3.0/pages/upgrade/graylog-3.0.html#simplified-http-interface-configuration">Upgrading
      Graylog</link> for details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The option <literal>users.ldap.bind.password</literal> was renamed to <literal>users.ldap.bind.passwordFile</literal>,
+      and needs to be readable by the <literal>nslcd</literal> user.
+      Same applies to the new <literal>users.ldap.daemon.rootpwmodpwFile</literal> option.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       <literal>nodejs-6_x</literal> is end-of-life.
+       <literal>nodejs-6_x</literal>, <literal>nodejs-slim-6_x</literal> and
+       <literal>nodePackages_6_x</literal> are removed.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+      The directory where Prometheus will store its metric data is now
+      managed by systemd's StateDirectory mechanism. It still defaults
+      to <literal>/var/lib/prometheus</literal>.
+    </para>
+    <para>
+      Its location can be specified by the new
+      <option>services.prometheus.stateDir</option> option which
+      defaults to <literal>prometheus</literal>. Note that this should
+      be a directory relative to <literal>/var/lib/</literal>.
+    </para>
+    <para>
+      The option <option>services.prometheus.dataDir</option> has been
+      deprecated. You can still set it but it's now required to have
+      <literal>/var/lib/</literal> as a prefix and you can't set
+      <option>services.prometheus.stateDir</option> at the same time.
     </para>
    </listitem>
   </itemizedlist>
@@ -685,7 +762,7 @@
    </listitem>
    <listitem>
     <para>
-     Note that the default value of
+     The default value of
      <varname>services.kubernetes.apiserver.bindAddress</varname> has changed
      from 127.0.0.1 to 0.0.0.0, allowing the apiserver to be accessible from
      outside the master node itself. If the apiserver insecurePort is enabled,
@@ -703,7 +780,7 @@
    </listitem>
    <listitem>
     <para>
-     The kubernetes module does no longer add the kubernetes package to
+     The kubernetes module no longer adds the kubernetes package to
      <varname>environment.systemPackages</varname> implicitly.
     </para>
    </listitem>
@@ -714,16 +791,17 @@
      drivers</link>. The <literal>modesetting</literal> driver should take over
      automatically, it is better maintained upstream and has less problems with
      advanced X11 features. This can lead to a change in the output names used
-     by <literal>xrandr</literal>. Some performance regressions on some GPU
+     by <command>xrandr</command>. Some performance regressions on some GPU
      models might happen. Some OpenCL and VA-API applications might also break
      (Beignet seems to provide OpenCL support with
      <literal>modesetting</literal> driver, too). Kernel mode setting API does
-     not support backlight control, so <literal>xbacklight</literal> tool will
+     not support backlight control, so <command>xbacklight</command> tool will
      not work; backlight level can be controlled directly via
-     <literal>/sys/</literal> or with <literal>brightnessctl</literal>. Users
+     <filename>/sys/</filename> or with <command>brightnessctl</command> or
+     <command>light</command>. Users
      who need this functionality more than multi-output XRandR are advised to
-     add `intel` to `videoDrivers` and report an issue (or provide additional
-     details in an existing one)
+     add <literal>intel</literal> to <varname>videoDrivers</varname> and report
+     an issue (or provide additional details in an existing one).
     </para>
    </listitem>
    <listitem>
@@ -733,6 +811,8 @@
      those symbols. An upgrade guide can be found
      <link xlink:href="https://www.open-mpi.org/faq/?category=mpi-removed">here</link>.
     </para>
+   </listitem>
+   <listitem>
     <para>
      The nginx package now relies on OpenSSL 1.1 and supports TLS 1.3 by
      default. You can set the protocols used by the nginx service using
@@ -743,6 +823,20 @@
     <para>
      A new subcommand <command>nixos-rebuild edit</command> was added.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <function>stdenv.mkDerivation</function> may now be passed
+       <varname>pname</varname> and <varname>version</varname> attributes
+       instead of <varname>name</varname>, and will now automatically
+       construct the package name by joining them with a dash.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The Sway tiling Wayland compositor has been updated to version 1.0, and the
+       corresponding NixOS module has been refined to fix some bugs.
+     </para>
    </listitem>
   </itemizedlist>
  </section>

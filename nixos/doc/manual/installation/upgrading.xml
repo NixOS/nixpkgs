@@ -14,11 +14,11 @@
     <para>
      <emphasis>Stable channels</emphasis>, such as
      <literal
-    xlink:href="https://nixos.org/channels/nixos-17.03">nixos-17.03</literal>.
+    xlink:href="https://nixos.org/channels/nixos-19.03">nixos-19.03</literal>.
      These only get conservative bug fixes and package upgrades. For instance,
      a channel update may cause the Linux kernel on your system to be upgraded
-     from 4.9.16 to 4.9.17 (a minor bug fix), but not from
-     4.9.<replaceable>x</replaceable> to 4.11.<replaceable>x</replaceable> (a
+     from 4.19.34 to 4.19.38 (a minor bug fix), but not from
+     4.19.<replaceable>x</replaceable> to 4.20.<replaceable>x</replaceable> (a
      major change that has the potential to break things). Stable channels are
      generally maintained until the next stable branch is created.
     </para>
@@ -38,7 +38,7 @@
     <para>
      <emphasis>Small channels</emphasis>, such as
      <literal
-    xlink:href="https://nixos.org/channels/nixos-17.03-small">nixos-17.03-small</literal>
+    xlink:href="https://nixos.org/channels/nixos-19.03-small">nixos-19.03-small</literal>
      or
      <literal
     xlink:href="https://nixos.org/channels/nixos-unstable-small">nixos-unstable-small</literal>.
@@ -63,8 +63,8 @@
  <para>
   When you first install NixOS, you’re automatically subscribed to the NixOS
   channel that corresponds to your installation source. For instance, if you
-  installed from a 17.03 ISO, you will be subscribed to the
-  <literal>nixos-17.03</literal> channel. To see which NixOS channel you’re
+  installed from a 19.03 ISO, you will be subscribed to the
+  <literal>nixos-19.03</literal> channel. To see which NixOS channel you’re
   subscribed to, run the following as root:
 <screen>
 # nix-channel --list | grep nixos
@@ -75,13 +75,13 @@ nixos https://nixos.org/channels/nixos-unstable
 # nix-channel --add https://nixos.org/channels/<replaceable>channel-name</replaceable> nixos
 </screen>
   (Be sure to include the <literal>nixos</literal> parameter at the end.) For
-  instance, to use the NixOS 17.03 stable channel:
+  instance, to use the NixOS 19.03 stable channel:
 <screen>
-# nix-channel --add https://nixos.org/channels/nixos-17.03 nixos
+# nix-channel --add https://nixos.org/channels/nixos-19.03 nixos
 </screen>
   If you have a server, you may want to use the “small” channel instead:
 <screen>
-# nix-channel --add https://nixos.org/channels/nixos-17.03-small nixos
+# nix-channel --add https://nixos.org/channels/nixos-19.03-small nixos
 </screen>
   And if you want to live on the bleeding edge:
 <screen>
@@ -127,7 +127,7 @@ nixos https://nixos.org/channels/nixos-unstable
    current channel. (To see when the service runs, see <command>systemctl
    list-timers</command>.) You can also specify a channel explicitly, e.g.
 <programlisting>
-<xref linkend="opt-system.autoUpgrade.channel"/> = https://nixos.org/channels/nixos-17.03;
+<xref linkend="opt-system.autoUpgrade.channel"/> = https://nixos.org/channels/nixos-19.03;
 </programlisting>
   </para>
  </section>

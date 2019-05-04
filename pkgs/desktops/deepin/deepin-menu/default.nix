@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     qmake
+    deepin.setupHook
   ];
 
   buildInputs = [
@@ -25,7 +26,11 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i deepin-menu.pro -e "s,/usr,$out,"
+    searchHardCodedPaths
+    fixPath $out /usr \
+      data/com.deepin.menu.service \
+      deepin-menu.desktop \
+      deepin-menu.pro
   '';
 
   enableParallelBuilding = true;

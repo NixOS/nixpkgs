@@ -1,8 +1,8 @@
-{ lib, stdenv, perl }:
+{ lib, stdenv, perl, toPerlModule }:
 
 { nativeBuildInputs ? [], name, ... } @ attrs:
 
-stdenv.mkDerivation (
+toPerlModule(stdenv.mkDerivation (
   (
   lib.recursiveUpdate
   {
@@ -39,4 +39,4 @@ stdenv.mkDerivation (
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
     inherit perl;
   }
-)
+))

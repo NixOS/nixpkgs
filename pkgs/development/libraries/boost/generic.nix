@@ -104,7 +104,10 @@ stdenv.mkDerivation {
   patchFlags = "";
 
   patches = patches
-    ++ optional stdenv.isDarwin ./darwin-no-system-python.patch;
+  ++ optional stdenv.isDarwin (
+    if version == "1.55.0"
+    then ./darwin-1.55-no-system-python.patch
+    else ./darwin-no-system-python.patch);
 
   meta = {
     homepage = http://boost.org/;

@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "photos";
-  version = "2.6.2";
+  version = "2.6.3";
 
   name = "elementary-${pname}-${version}";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "166a1jb85n67z6ffm5i0xzap407rv0r511lzh0gidkap1qy6pnmi";
+    sha256 = "1s0ww5g26wj0gd1drj8gxs74gvg2c9fdj4ixpifj8jh8yafdmrvg";
   };
 
   passthru = {
@@ -64,6 +64,12 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dplugins=false"
+  ];
+
+  patches = [
+    # https://github.com/elementary/photos/pull/505
+    # Unrelated line got dropped in https://github.com/elementary/photos/pull/498
+    ./fix-missing-line.patch
   ];
 
   postPatch = ''

@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "go-lib";
-  version = "1.3.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0g84v1adnnyqc1mv45n3wlvnivkm1fi8ywszzgwx8irl3iddfvxv";
+    sha256 = "090l33y79gdj2xy1bhk2ksl6hvmsfhmx0bhygm4y4d0iqckf2x2m";
   };
 
   buildInputs = [
@@ -21,10 +21,12 @@ stdenv.mkDerivation rec {
     mobile-broadband-provider-info
   ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "GOSITE_DIR=$(out)/share/go"
-  ];
+  installPhase = ''
+    mkdir -p $out/share/go/src/pkg.deepin.io/lib
+    cp -a * $out/share/go/src/pkg.deepin.io/lib
+
+    rm -r $out/share/go/src/pkg.deepin.io/lib/debian
+  '';
 
   passthru.updateScript = deepin.updateScript { inherit name; };
 

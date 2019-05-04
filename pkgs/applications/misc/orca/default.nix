@@ -38,6 +38,8 @@ buildPythonApplication rec {
     pygobject3 pyatspi dbus-python pyxdg brltty speechd gst-python setproctitle
   ];
 
+  strictDeps = false;
+
   buildInputs = [
     python gtk3 at-spi2-atk at-spi2-core dbus gsettings-desktop-schemas
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good

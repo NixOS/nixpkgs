@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
     url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
     sha256 =
       if enableUnfree
-      then "01mkb9fr63m3ilp4cbbjccid5m8yc7iqhnli12ynfabsf7302fdz"
-      else "0r60183yyywabinsv9pkd8sx0wq68h740xi3172fypjfdcqs0g9c";
+      then "18j2n6gnhfjmb6skhhrzs0d1zwa1aj9jv37rqvg4w3fimnm8p0sh"
+      else "181x8y6izrh587a6d1qipgj8wk71v4fggypkzjkns4my00nki42y";
   };
 
   dontBuild         = true;

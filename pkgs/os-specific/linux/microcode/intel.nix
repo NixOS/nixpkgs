@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, libarchive, iucode-tool }:
+{ stdenv, fetchFromGitHub, libarchive, iucode-tool }:
 
 stdenv.mkDerivation rec {
-  name = "microcode-intel-${version}";
-  version = "20180807a";
+  pname = "microcode-intel";
+  version = "20190312";
 
-  src = fetchurl {
-    url = "https://downloadmirror.intel.com/28087/eng/microcode-${version}.tgz";
-    sha256 = "0dw1akgzdqk95pwmc8gfdmv7kabw9pn4c67f076bcbn4krliias6";
+  src = fetchFromGitHub {
+    owner = "intel";
+    repo = "Intel-Linux-Processor-Microcode-Data-Files";
+    rev = "microcode-${version}";
+    sha256 = "0n381dai2mv9indsbbr4nfbmp4y4qhshgflr095fyvq5a8acw94m";
   };
 
   nativeBuildInputs = [ iucode-tool libarchive ];
-
-  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall

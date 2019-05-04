@@ -53,6 +53,7 @@ in {
     pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
     partitionTableType = if config.ec2.hvm then "legacy" else "none";
     diskSize = cfg.sizeMB;
+    fsType = "ext4";
     configFile = pkgs.writeText "configuration.nix"
       ''
         {

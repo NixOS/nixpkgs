@@ -8,7 +8,7 @@
 , fontconfig, sound-theme-freedesktop, grilo, python3
 , gtk3, glib, glib-networking, gsettings-desktop-schemas
 , gnome-desktop, gnome-settings-daemon, gnome-online-accounts
-, vino, gnome-bluetooth, tracker, adwaita-icon-theme }:
+, vino, gnome-bluetooth, tracker, adwaita-icon-theme, mutter }:
 
 let
   pname = "gnome-control-center";
@@ -59,6 +59,8 @@ in stdenv.mkDerivation rec {
       # Thumbnailers (for setting user profile pictures)
       --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
+      # WM keyboard shortcuts
+      --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
     for i in $out/share/applications/*; do
       substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"

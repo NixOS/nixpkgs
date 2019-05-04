@@ -2,31 +2,36 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.8.3";
+  version = "0.8.12";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner  = "scopatz";
     repo   = "xonsh";
     rev    = "refs/tags/${version}";
-    sha256 = "1qnghqswvqlwv9121r4maibmn2dvqmbr3fhsnngsj3q7plfp7yb2";
+    sha256 = "1p8slx8nk15vyyzwc9ic50py0amk9p9nggp1973wfas0fxsg1r4f";
   };
 
   LC_ALL = "en_US.UTF-8";
   postPatch = ''
     sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
-    sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' scripts/xon.sh
+    sed -ie "s|SHELL=xonsh|SHELL=$out/bin/xonsh|" tests/test_integrations.py
 
+    sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' tests/test_integrations.py
+    sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' scripts/xon.sh
+    find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
   '';
 
+  doCheck = !stdenv.isDarwin;
+
   checkPhase = ''
-    HOME=$TMPDIR \
-      pytest \
-        -k 'not test_man_completion and not test_indir and not test_xonsh_party and not test_foreign_bash_data and not test_script and not test_single_command_no_windows and not test_redirect_out_to_file and not test_sourcefile and not test_printname and not test_printfile'
+    HOME=$TMPDIR pytest -k 'not test_repath_backslash and not test_os and not test_man_completion and not test_builtins and not test_main and not test_ptk_highlight'
+    HOME=$TMPDIR pytest -k 'test_builtins or test_main' --reruns 5
+    HOME=$TMPDIR pytest -k 'test_ptk_highlight'
   '';
 
-  checkInputs = [ python3Packages.pytest glibcLocales git ];
+  checkInputs = [ python3Packages.pytest python3Packages.pytest-rerunfailures glibcLocales git ];
 
   propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit pygments ];
 
