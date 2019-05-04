@@ -14,7 +14,7 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "kupfer-${version}";
+  pname = "kupfer";
   version = "319";
 
   src = fetchurl {
