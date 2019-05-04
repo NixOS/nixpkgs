@@ -14,8 +14,7 @@ stdenv.mkDerivation rec{
     sha256 = "5e4e6890e07b620a93fdb24605dae2bb53e8435b2a93d37558e1db1913df405f";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ]
-                   ++ optionals doCheck [ python3 ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib zeromq
                   miniupnpc protobuf libevent]
                   ++ optionals stdenv.isLinux [ utillinux ]
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec{
                                             "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                           ];
 
-  checkInputs = [ rapidcheck ];
+  checkInputs = [ rapidcheck python3 ];
 
   doCheck = true;
 
