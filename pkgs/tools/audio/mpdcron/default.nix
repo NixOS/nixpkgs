@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, glib, libdaemon
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, glib, libdaemon
 , mpd_clientlib, curl, sqlite, ruby, bundlerEnv, libnotify, pandoc }:
 
 let
@@ -7,26 +7,27 @@ let
     gemdir = ./.;
   };
 in stdenv.mkDerivation rec {
-  version = "20130809";
+  version = "20161228";
   name    = "mpdcron-${version}";
 
-  src = fetchgit {
-    url    = https://github.com/alip/mpdcron.git;
-    rev    = "1dd16181c32f33e7754bbe21841c8e70b28f8ecd";
-    sha256 = "0ayr9a5f6i4z3wx486dp77ffzs61077b8w871pqr3yypwamcjg6b";
+  src = fetchFromGitHub {
+    owner = "alip";
+    repo = "mpdcron";
+    rev = "e49e6049b8693d31887c538ddc7b19f5e8ca476b";
+    sha256 = "0vdksf6lcgmizqr5mqp0bbci259k0dj7gpmhx32md41jlmw5skaw";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A cron like daemon for mpd";
     homepage    = http://alip.github.io/mpdcron/;
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = with stdenv.lib.platforms; unix;
-    maintainers = [ stdenv.lib.maintainers.lovek323 ];
+    license     = licenses.gpl2;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ lovek323 manveru ];
   };
 
   buildInputs =
     [ autoconf automake libtool pkgconfig glib libdaemon pandoc
-      mpd_clientlib curl sqlite ruby gemEnv libnotify ];
+      mpd_clientlib curl sqlite gemEnv.wrappedRuby libnotify ];
 
   preConfigure = ''
     ./autogen.sh
