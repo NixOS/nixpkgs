@@ -406,7 +406,7 @@ in
 
   rugged = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ cmake openssl libssh2 zlib ];
+    buildInputs = [ which cmake openssl libssh2 zlib ];
     dontUseCmakeConfigure = true;
   };
 

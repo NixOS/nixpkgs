@@ -8,7 +8,7 @@ let
   };
 in buildGoPackage rec {
   name = "ejson-${version}";
-  version = "1.2.0";
+  version = "1.2.1";
   rev = "v${version}";
 
   nativeBuildInputs = [ gems ];
@@ -22,7 +22,7 @@ in buildGoPackage rec {
     owner = "Shopify";
     repo = "ejson";
     inherit rev;
-    sha256 = "07ig24fryb9n0mfyqb0sgpj7di9y7wbvh2ppwfs2jqfpvpncd7yh";
+    sha256 = "09356kp059hbzmqpzlz4b3agg93yqqygh5l5ddbxcsaqx4qiwdr7";
   };
 
   # set HOME, otherwise bundler will insert stuff in the manpages
