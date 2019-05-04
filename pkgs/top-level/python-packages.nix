@@ -1029,6 +1029,8 @@ in {
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
+  aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
+
   ajpy = callPackage ../development/python-modules/ajpy { };
 
   alabaster = callPackage ../development/python-modules/alabaster {};
