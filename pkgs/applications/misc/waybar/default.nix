@@ -5,16 +5,17 @@
 , nlSupport    ? true,  libnl
 , udevSupport  ? true,  udev
 , swaySupport  ? true,  sway
+, mpdSupport   ? true,  mpd_clientlib
 }:
   stdenv.mkDerivation rec {
     name = "waybar-${version}";
-    version = "0.5.1";
+    version = "0.6.1";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "1h3ifiklzcbrvqzzhs7rij8w45k96cir2d4kkyd2ap93akvcnsr9";
+      sha256 = "1hzwqg22sjiirx6743512271p3jlakrw0155av1phrv5b7p3ws8a";
     };
 
     nativeBuildInputs = [
@@ -27,13 +28,15 @@
       ++ optional  pulseSupport libpulseaudio
       ++ optional  nlSupport    libnl
       ++ optional  udevSupport  udev
-      ++ optional  swaySupport  sway;
+      ++ optional  swaySupport  sway
+      ++ optional  mpdSupport   mpd_clientlib;
 
     mesonFlags = [
       "-Ddbusmenu-gtk=${ if traySupport then "enabled" else "disabled" }"
       "-Dpulseaudio=${ if pulseSupport then "enabled" else "disabled" }"
       "-Dlibnl=${ if nlSupport then "enabled" else "disabled" }"
       "-Dlibudev=${ if udevSupport then "enabled" else "disabled" }"
+      "-Dmpd=${ if mpdSupport then "enabled" else "disabled" }"
       "-Dout=${placeholder "out"}"
     ];
 
