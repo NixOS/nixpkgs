@@ -23,7 +23,7 @@ let
   }
   // a
   // {
-      name = "gimp-plugin-${a.name}";
+      name = "gimp-plugin-${a.name or "${a.pname}-${a.version}"}";
       buildInputs = [ gimp gimp.gtk glib ] ++ (a.buildInputs or []);
       nativeBuildInputs = [ pkgconfig intltool ] ++ (a.nativeBuildInputs or []);
     }
@@ -110,22 +110,23 @@ rec {
     ";
   };
 
-  resynthesizer2 = pluginDerivation {
+  resynthesizer2 = pluginDerivation rec {
     /* menu:
       Filters/Map/Resynthesize
       Filters/Enhance/Smart enlarge
       Filters/Enhance/Smart sharpen
       Filters/Enhance/Smart remove selection
     */
-    name = "resynthesizer-2.0.1";
+    pname = "resynthesizer";
+    version = "2.0.3";
     buildInputs = with pkgs; [ fftw ];
     nativeBuildInputs = with pkgs; [ autoreconfHook ];
-    makeFlags = "GIMP_LIBDIR=$out/lib/gimp/2.0/";
+    makeFlags = [ "GIMP_LIBDIR=${placeholder "out"}/lib/gimp/2.0" ];
     src = fetchFromGitHub {
       owner = "bootchk";
       repo = "resynthesizer";
-      rev = "2.0.1";
-      sha256 = "1d214s0jsqxz83l9dd8vhnz3siw9fyw7xdhhir25ra7jiwxc99hd";
+      rev = "v${version}";
+      sha256 = "1jwc8bhhm21xhrgw56nzbma6fwg59gc8anlmyns7jdiw83y0zx3j";
     };
   };
 
