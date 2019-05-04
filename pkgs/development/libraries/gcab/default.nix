@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     license = licenses.lgpl21;
+    homepage = "https://wiki.gnome.org/msitools";
     maintainers = [ maintainers.lethalman ];
   };
 }

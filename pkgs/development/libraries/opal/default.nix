@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     description = "VoIP library";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
+    homepage = "http://www.opalvoip.org/";
     license = with licenses; [ bsdOriginal mpl10 gpl2Plus lgpl21 ];
   };
 

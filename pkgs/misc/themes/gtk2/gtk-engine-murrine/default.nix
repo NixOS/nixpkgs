@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A very flexible theme engine";
+    homepage = "https://gitlab.gnome.org/Archive/murrine";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;
   };

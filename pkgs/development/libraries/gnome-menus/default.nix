@@ -20,12 +20,14 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
+      versionPolicy = "none";
     };
   };
 
-  meta = {
-    homepage = https://www.gnome.org;
+  meta = with stdenv.lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-menus";
     description = "Library that implements freedesktops's Desktop Menu Specification in GNOME";
-    platforms = stdenv.lib.platforms.linux;
+    license = with licenses; [ gpl2 lgpl2 ];
+    platforms = platforms.linux;
   };
 }

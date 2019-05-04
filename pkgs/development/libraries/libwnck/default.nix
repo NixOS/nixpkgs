@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for creating task lists and pagers";
+    homepage = "https://gitlab.gnome.org/GNOME/libwnck";
     license = stdenv.lib.licenses.lgpl21;
+    maintainers = with stdenv.lib.maintainers; [ johnazoidberg ];
   };
 }

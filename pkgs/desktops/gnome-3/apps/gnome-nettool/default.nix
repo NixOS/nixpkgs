@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://projects.gnome.org/gnome-network;
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-nettool";
     description = "A collection of networking tools";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

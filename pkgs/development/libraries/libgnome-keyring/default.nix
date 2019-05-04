@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit (glib.meta) platforms maintainers;
+    homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
     license = with stdenv.lib.licenses; [ gpl2 lgpl2 ];
   };
 }

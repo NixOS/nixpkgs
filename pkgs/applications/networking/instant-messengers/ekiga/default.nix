@@ -53,13 +53,6 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with stdenv.lib; {
-    description = "VOIP/Videoconferencing app with full SIP and H.323 support";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-  };
-
   passthru = {
     updateInfo = {
       downloadPage = "mirror://gnome/sources/ekiga";
@@ -67,6 +60,14 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
     };
+  };
+
+  meta = with stdenv.lib; {
+    description = "VOIP/Videoconferencing app with full SIP and H.323 support";
+    homepage = "https://www.ekiga.org/";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }
 
