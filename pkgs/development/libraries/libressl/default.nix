@@ -13,7 +13,7 @@ let
 
     nativeBuildInputs = [ cmake ];
 
-    cmakeFlags = [ "-DENABLE_NC=ON" ];
+    cmakeFlags = [ "-DENABLE_NC=ON" "-DBUILD_SHARED_LIBS=ON" ];
 
     # The autoconf build is broken as of 2.9.1, resulting in the following error:
     # libressl-2.9.1/tls/.libs/libtls.a', needed by 'handshake_table'.
