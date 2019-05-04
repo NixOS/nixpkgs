@@ -8,13 +8,13 @@ let
   v2 = callPackage ./2.nix {};
 in buildGoPackage rec {
   pname = "browserpass";
-  version = "3.0.1";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "browserpass";
     repo = "browserpass-native";
     rev = version;
-    sha256 = "1i3xxysiiapz9y2v0gp13inx7j0d7n0khpmcsy9k95pzn53526dx";
+    sha256 = "0q3bsla07zjl6i69nj1axbkg2ia89pvh0jg6nlqgbm2kpzzbn0pz";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,6 +27,8 @@ in buildGoPackage rec {
     # variables to be valid by default
     substituteInPlace Makefile \
       --replace "PREFIX ?= /usr" ""
+    sed -i -e 's/SED :=.*/SED := sed/' Makefile
+    sed -i -e 's/INSTALL :=.*/INSTALL := install/' Makefile
   '';
 
   DESTDIR = placeholder "bin";
