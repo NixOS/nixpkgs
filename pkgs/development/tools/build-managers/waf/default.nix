@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "waf-${version}";
-  version = "2.0.14";
+  version = "2.0.15";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "waf";
     rev = name;
-    sha256 = "006a4wb9i569pahs8ji86hrv58g2hm8xikgchnll3bdqgxllhnrs";
+    sha256 = "0i86dbn6l01n4h4rzyl4mvizqabbqn5w7fywh83z7fxpha13c3bz";
   };
 
   patches = [
