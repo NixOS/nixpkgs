@@ -9,7 +9,7 @@
 buildGoPackage rec {
   name = "${pname}-${version}";
   pname = "dde-daemon";
-  version = "3.24.1";
+  version = "3.27.1";
 
   goPackagePath = "pkg.deepin.io/dde/daemon";
 
@@ -17,7 +17,7 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1qxj0mqnl10qj8qidpc1sv8gm4gj5965i07d003yxlxcw9cqwx7y";
+    sha256 = "1rbv7fals2bwhalw1hh3swmrdzclqbhny782shnrwqv53235xda3";
   };
 
   patches = [
@@ -87,6 +87,7 @@ buildGoPackage rec {
   '';
 
   buildPhase = ''
+    export PAM_MODULE_DIR="$out/lib/security"
     # compilation of the nm module is failing
     #make -C go/src/${goPackagePath}/network/nm_generator gen-nm-code
     make -C go/src/${goPackagePath}
