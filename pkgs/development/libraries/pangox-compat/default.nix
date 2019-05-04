@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A compatibility library for pango>1.30.*";
-    homepage = https://www.pango.org/;
+    homepage = "https://gitlab.gnome.org/Archive/pangox-compat";
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };

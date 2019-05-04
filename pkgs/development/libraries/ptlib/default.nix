@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Portable Tools from OPAL VoIP";
     maintainers = [ maintainers.raskin ];
+    homepage = "http://www.opalvoip.org/";
     platforms = platforms.linux;
     license = with licenses; [ beerware bsdOriginal mpl10 ];
   };

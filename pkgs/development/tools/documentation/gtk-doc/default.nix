@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.gtk.org/gtk-doc;
     description = "Tools to extract documentation embedded in GTK+ and GNOME source code";
+    homepage = "https://www.gtk.org/gtk-doc";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
   };

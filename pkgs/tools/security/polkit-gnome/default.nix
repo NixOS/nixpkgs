@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://hal.freedesktop.org/docs/PolicyKit/;
+    homepage = "https://gitlab.gnome.org/Archive/policykit-gnome";
     description = "A dbus session bus service that is used to bring up authentication dialogs";
-    license = stdenv.lib.licenses.gpl2;
+    license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ phreedom ];
     platforms = stdenv.lib.platforms.linux;
   };
