@@ -15,6 +15,7 @@
 , enableIntro ? true
 , enableTruetype ? true
 , enableFPS ? false
+, enableTextMode ? false
 }:
 
 with lib;
@@ -31,7 +32,7 @@ buildEnv {
   paths = [
     (dwarf-fortress.override {
       inherit enableDFHack enableTWBT enableSoundSense enableStoneSense theme
-              enableIntro enableTruetype enableFPS;
+              enableIntro enableTruetype enableFPS enableTextMode;
     })]
     ++ lib.optional enableDwarfTherapist dwarf-therapist
     ++ lib.optional enableLegendsBrowser legends-browser;
