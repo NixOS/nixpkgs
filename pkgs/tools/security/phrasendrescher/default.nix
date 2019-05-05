@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "phrasendrescher";
-  version = "1.2.2b";
+  version = "1.2.2c";
 
   src = fetchurl {
     url = "http://leidecker.info/projects/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0anlnjjw8wmvcsbz53xhlq2fna9hfdglmmrvr7granf0ga0r784j";
+    sha256 = "18vg6h294219v14x5zqm8ddmq5amxlbz7pw81lcmpz8v678kwyph";
   };
 
   postPatch = ''
