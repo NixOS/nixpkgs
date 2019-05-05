@@ -50,7 +50,7 @@ in
         used outside the store (in particular in /etc/passwd).
       '';
       example = literalExample "pkgs.zsh";
-      type = types.either types.path types.shellPackage;
+      type = types.shell;
     };
 
   };

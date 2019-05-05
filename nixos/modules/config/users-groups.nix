@@ -119,7 +119,7 @@ let
       };
 
       shell = mkOption {
-        type = types.either types.shellPackage types.path;
+        type = types.shell;
         default = pkgs.shadow;
         defaultText = "pkgs.shadow";
         example = literalExample "pkgs.bashInteractive";

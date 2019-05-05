@@ -142,7 +142,7 @@ in
         No need to mention <literal>/bin/sh</literal>
         here, it is placed into this list implicitly.
       '';
-      type = types.listOf (types.either types.shellPackage types.path);
+      type = types.listOf types.shell;
     };
 
   };

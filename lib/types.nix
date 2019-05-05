@@ -239,6 +239,13 @@ rec {
       check = x: (package.check x) && (hasAttr "shellPath" x);
     };
 
+    shell = either path shellPackage // {
+      check = x: (path.check x || shellPackage.check) &&
+        builtins.substring 0 8 (toString x) != "/var/run" || throw ''
+          /var/run is deprecated. Please use ${builtins.substring 4 100 (toString x)} instead of ${x} for your shell.
+        '';
+    };
+
     path = mkOptionType {
       name = "path";
       # Hacky: there is no ‘isPath’ primop.
