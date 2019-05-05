@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ];
+  NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ] ++ lib.optional stdenv.isx86_64 "-mno-fma";
 
   patches = [
     ./xdg-open-brief.patch

@@ -103,7 +103,10 @@ EOF
     '');
 
   NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.isDarwin [
+  # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
+  # TODO: investigate and fix properly
+    lib.optionals (stdenv.hostPlatform.platform.gcc.arch or "" == "sandybridge") [ "-march=westmere" ] ++
+    lib.optionals stdenv.isDarwin [
       "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
       "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10"
 
