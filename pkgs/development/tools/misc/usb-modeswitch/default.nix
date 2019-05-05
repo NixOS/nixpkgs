@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, libusb1 }:
+{ stdenv, lib, fetchurl, pkgconfig, makeWrapper
+, libusb1, tcl, utillinux, coreutils, bash }:
 
 stdenv.mkDerivation rec {
   name = "usb-modeswitch-${version}";
@@ -9,19 +10,32 @@ stdenv.mkDerivation rec {
     sha256 = "19ifi80g9ns5dmspchjvfj4ykxssq9yrci8m227dgb3yr04srzxb";
   };
 
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX=$(out)"
-  ];
+  patches = [ ./configurable-usb-modeswitch.patch ];
 
-  # make clean: we always build from source. It should be necessary on x86_64 only
-  preConfigure = ''
-    find -type f | xargs sed 's@/bin/rm@rm@g' -i
-    make clean
+  # Remove attempts to write to /etc and /var/lib.
+  postPatch = ''
+    sed -i \
+      -e '/^\tinstall .* usb_modeswitch.conf/s,$(ETCDIR),$(out)/etc,' \
+      -e '\,^\tinstall -d .*/var/lib/usb_modeswitch,d' \
+      Makefile
   '';
 
-  buildInputs = [ libusb1 ];
-  nativeBuildInputs = [ pkgconfig ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "ETCDIR=/etc"
+    "USE_UPSTART=false"
+    "USE_SYSTEMD=true"
+    "SYSDIR=$(out)/lib/systemd/system"
+    "UDEVDIR=$(out)/lib/udev"
+  ];
+
+  postFixup = ''
+    wrapProgram $out/bin/usb_modeswitch_dispatcher \
+      --set PATH ${lib.makeBinPath [ utillinux coreutils bash ]}
+  '';
+
+  buildInputs = [ libusb1 tcl ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   meta = with stdenv.lib; {
     description = "A mode switching tool for controlling 'multi-mode' USB devices";

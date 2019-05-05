@@ -9,10 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "0b1wari3aza6qjggqd0hk2zsh93k1q8scgmwh6f8wr0flpr3whff";
   };
 
-  inherit (usb-modeswitch) makeFlags;
+  makeFlags = [
+    "PREFIX=$(out)"
+    "DESTDIR=$(out)"
+  ];
 
   prePatch = ''
-    sed -i 's@usb_modeswitch@${usb-modeswitch}/bin/usb_modeswitch@g' 40-usb_modeswitch.rules
+    sed -i 's@usb_modeswitch@${usb-modeswitch}/lib/udev/usb_modeswitch@g' 40-usb_modeswitch.rules
   '';
 
   # we add tcl here so we can patch in support for new devices by dropping config into
