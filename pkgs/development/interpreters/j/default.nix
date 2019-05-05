@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, readline, libedit, bc
-, avxSupport ? false
+, avxSupport ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [ "sandybridge" "ivybridge" "haswell" "broadwell" "skylake" "skylake-avx512" "btver2" "bdver1" "bdver2" "bdver3" "bdver4" "znver1"]
 }:
 
 stdenv.mkDerivation rec {

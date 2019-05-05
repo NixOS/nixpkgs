@@ -2,7 +2,7 @@
 , guiSupport ? false, libX11
 
   # see http://dlib.net/compile.html
-, avxSupport ? true
+, avxSupport ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [ "sandybridge" "ivybridge" "haswell" "broadwell" "skylake" "skylake-avx512" "btver2" "bdver1" "bdver2" "bdver3" "bdver4" "znver1"]
 , cudaSupport ? true
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     rm -rf dlib/external
   '';
 
-  cmakeFlags = [ 
+  cmakeFlags = [
     "-DUSE_DLIB_USE_CUDA=${if cudaSupport then "1" else "0"}"
     "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
 

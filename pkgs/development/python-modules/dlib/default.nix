@@ -1,4 +1,6 @@
-{ buildPythonPackage, dlib, python, pytest, more-itertools, avxSupport ? true, lib }:
+{ buildPythonPackage, lib, dlib, python, pytest, more-itertools,
+  avxSupport ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [ "sandybridge" "ivybridge" "haswell" "broadwell" "skylake" "skylake-avx512" "btver2" "bdver1" "bdver2" "bdver3" "bdver4" "znver1"]
+}:
 
 buildPythonPackage {
   inherit (dlib) name src nativeBuildInputs buildInputs meta;

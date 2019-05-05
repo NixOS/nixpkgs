@@ -64,18 +64,24 @@ let
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
   isGccArchSupported = arch:
     if isGNU then
-      { skylake        = versionAtLeast ccVersion "6.0";
+      { # Intel
+        skylake        = versionAtLeast ccVersion "6.0";
         skylake-avx512 = versionAtLeast ccVersion "6.0";
         cannonlake     = versionAtLeast ccVersion "8.0";
         icelake-client = versionAtLeast ccVersion "8.0";
         icelake-server = versionAtLeast ccVersion "8.0";
         knm            = versionAtLeast ccVersion "8.0";
+        # AMD
+        znver1         = versionAtLeast ccVersion "6.0";
       }.${arch} or true
     else if isClang then
-      { cannonlake     = versionAtLeast ccVersion "5.0";
+      { # Intel
+        cannonlake     = versionAtLeast ccVersion "5.0";
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
         knm            = versionAtLeast ccVersion "7.0";
+        # AMD
+        znver1         = versionAtLeast ccVersion "4.0";
       }.${arch} or true
     else
       false;
