@@ -1,7 +1,7 @@
 # NOTE: this is rakshava's version of libtorrent, used mainly by rtorrent
 # This is NOT libtorrent-rasterbar, used by Deluge, qbitttorent, and others
 { stdenv, fetchFromGitHub, pkgconfig
-, libtool, autoconf, automake, cppunit
+, autoreconfHook, cppunit
 , openssl, libsigcxx, zlib }:
 
 stdenv.mkDerivation rec {
@@ -15,10 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "027qanwcisxhx0bq8dn8cpg8563q0k2pm8ls278f04n7jqvvwkp0";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libtool autoconf automake cppunit openssl libsigcxx zlib ];
-
-  preConfigure = "./autogen.sh";
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ cppunit openssl libsigcxx zlib ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

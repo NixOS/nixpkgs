@@ -4222,6 +4222,7 @@ in
   libnids = callPackage ../tools/networking/libnids { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
+  libtorrent-ps = callPackage ../tools/networking/p2p/libtorrent/ps.nix { };
 
   libmpack = callPackage ../development/libraries/libmpack { };
 
@@ -5524,6 +5525,7 @@ in
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
+  rtorrent-ps = callPackage ../tools/networking/p2p/rtorrent/ps.nix { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
