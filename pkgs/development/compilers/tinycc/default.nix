@@ -32,6 +32,17 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--libpaths=${getLib stdenv.cc.libc}/lib")
   '';
 
+  postFixup = ''
+    cat >libtcc.pc <<EOF
+    Name: libtcc
+    Description: Tiny C compiler backend
+    Version: ${version}
+    Libs: -L$out/lib -Wl,--rpath $out/lib -ltcc -ldl
+    Cflags: -I$out/include
+    EOF
+    install -Dt $out/lib/pkgconfig libtcc.pc
+  '';
+
   doCheck = true;
   checkTarget = "test";
 
