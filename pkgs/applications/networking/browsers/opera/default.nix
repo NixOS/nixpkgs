@@ -34,6 +34,7 @@
 , stdenv
 , systemd
 , at-spi2-atk
+, at-spi2-core
 }:
 
 let
@@ -86,6 +87,7 @@ let
     libpulseaudio.out
 
     at-spi2-atk
+    at-spi2-core
   ];
 
 in stdenv.mkDerivation {
