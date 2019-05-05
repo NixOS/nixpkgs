@@ -1,32 +1,51 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, unzip, utillinux, libguestfs-with-appliance }:
 
-stdenv.mkDerivation {
-  name = "memtest86-4.3.6";
-  
+stdenv.mkDerivation rec {
+  name = "memtest86";
+  version = "8.0";
+
   src = fetchurl {
-    url = https://www.memtest86.com/downloads/memtest86-4.3.6-src.tar.gz;
-    sha256 = "0qbksyl2hmkm12n7zbmf2m2n3q811skhykxx6a9a7y6r7k8y5qmv";
+    # TODO: The latest version of memtest86 is actually 8.1, but apparently the
+    # company has stopped distributing versioned binaries of memtest86:
+    # https://www.passmark.com/forum/memtest86/44494-version-8-1-distribution-file-is-not-versioned?p=44505#post44505
+    # However, it does look like redistribution is okay, so if we had
+    # somewhere to host binaries that we make sure to version, then we could
+    # probably keep up with the latest versions released by the company.
+    url = "https://www.memtest86.com/downloads/memtest86-${version}-usb.zip";
+    sha256 = "147mnd7fnx2wvbzscw7pkg9ljiczhz05nb0cjpmww49a0ms4yknw";
   };
 
-  preBuild = ''
-    # Really dirty hack to get Memtest to build without needing a Glibc
-    # with 32-bit libraries and headers.
-    if test "$system" = x86_64-linux; then
-        mkdir gnu
-        touch gnu/stubs-32.h
-    fi
+  nativeBuildInputs = [ libguestfs-with-appliance unzip ];
+
+  unpackPhase = ''
+    unzip -q $src -d .
   '';
 
-  NIX_CFLAGS_COMPILE = "-I.";
-  
   installPhase = ''
     mkdir -p $out
-    cp memtest.bin $out/
+
+    # memtest86 is distributed as a bootable USB image.  It contains the actual
+    # memtest86 EFI app.
+    #
+    # The following command uses libguestfs to extract the actual EFI app from the
+    # usb image so that it can be installed directly on the hard drive.  This creates
+    # the ./BOOT/ directory with the memtest86 EFI app.
+    guestfish --ro --add ./memtest86-usb.img --mount /dev/sda1:/  copy-out /EFI/BOOT .
+
+    cp -r BOOT/* $out/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = http://memtest86.com/;
+    downloadPage = https://www.memtest86.com/download.htm;
     description = "A tool to detect memory errors, to be run from a bootloader";
-    broken = true;
+    # The Memtest86 License for the Free Edition states,
+    # "MemTest86 Free Edition is free to download with no restrictions on usage".
+    # However the source code for Memtest86 does not appear to be available.
+    #
+    # https://www.memtest86.com/license.htm
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ cdepillabout ];
+    platforms = platforms.linux;
   };
 }
