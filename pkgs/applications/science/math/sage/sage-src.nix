@@ -10,14 +10,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.8.beta3";
+  version = "8.8.beta4";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0cb95n1h5g9vaf4a6wczhwddj4xvx2a4ky8d7sp7cnxyd5a8618l";
+    sha256 = "01c1aj70kp4m20ga80mp09lks7p2pgp0g6ggs9nin0zvq5nhcpsx";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -45,19 +45,15 @@ stdenv.mkDerivation rec {
     # Fixes a potential race condition which can lead to transient doctest failures.
     ./patches/fix-ecl-race.patch
 
-    # Part of the build system. Should become unnecessary with sage 8.8.
-    # Upstream discussion here: https://trac.sagemath.org/ticket/27124#comment:33
-    ./patches/do-not-test-package-manifests.patch
-
     # Not necessary since library location is set explicitly
     # https://trac.sagemath.org/ticket/27660#ticket
     ./patches/do-not-test-find-library.patch
 
-    # https://trac.sagemath.org/ticket/27697#ticket
+    # https://trac.sagemath.org/ticket/27766
     (fetchpatch {
-      name = "pplpy-doc-location-configurable.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=c4d966e7cb0c7b87c55d52dc6f46518433a2a0a2";
-      sha256 = "0pqbbsx8mriwny422s9mp3z5d095cnam32sm62q4mxk8g8jb9vm9";
+      name = "more-optional-build-tags.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=a6deff761da469fad57eae498e639d6166fd78ed";
+      sha256 = "02qb9r3p0vgb9q5hhrp41mcgrk1gxrl02fmp486gnrym3cqnw5n1";
     })
 
     # https://trac.sagemath.org/ticket/28007
