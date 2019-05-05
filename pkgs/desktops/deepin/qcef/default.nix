@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/linuxdeepin/qcef;
     license = licenses.lgpl3;
     platforms = platforms.linux;
+    badPlatforms = [ "aarch64-linux" ];  # the cef-binary is not available
     maintainers = with maintainers; [ romildo ];
   };
 }
