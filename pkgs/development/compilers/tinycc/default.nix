@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ];
 
+  enableParallelBuilding = true;
+
   postPatch = ''
     substituteInPlace "texi2pod.pl" \
       --replace "/usr/bin/perl" "${perl}/bin/perl"
