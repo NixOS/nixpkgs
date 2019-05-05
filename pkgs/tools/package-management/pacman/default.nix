@@ -16,9 +16,12 @@ stdenv.mkDerivation rec {
     # trying to build docs fails with a2x errors, unable to fix through asciidoc
     "--disable-doc"
 
+    "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-scriptlet-shell=${runtimeShell}"
   ];
+
+  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ curl perl libarchive openssl zlib bzip2 lzma ];
