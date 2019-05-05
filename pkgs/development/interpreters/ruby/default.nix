@@ -38,7 +38,7 @@ let
       , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
       , ncurses, readline, cursesSupport ? true
-      , groff, docSupport ? false
+      , groff, docSupport ? true
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
       , autoreconfHook, bison, autoconf
