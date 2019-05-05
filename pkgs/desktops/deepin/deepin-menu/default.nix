@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-menu";
-  version = "3.4.1";
+  version = "3.4.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0aga4d4qwd7av6aa4cynhk0sidns7m7y6x0rq1swnkpr9ksr80gi";
+    sha256 = "1gxf3slqx1s15bjrds29sas7ah6kp8c4pjvzwipncyx6qfgczj2a";
   };
 
   nativeBuildInputs = [

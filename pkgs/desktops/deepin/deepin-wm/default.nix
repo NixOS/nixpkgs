@@ -6,13 +6,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-wm";
-  version = "1.9.37";
+  version = "1.9.38";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1xd2x0kyav2cxnk0bybl7lrmak1r2468slxz5a6anrdriw9l10gi";
+    sha256 = "1qhdnv4x78f0gkr94q0j8x029fk9ji4m9jdipgrdm83pnahib80g";
   };
 
   nativeBuildInputs = [

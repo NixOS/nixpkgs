@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-desktop-base";
-  version = "2019.03.29";
+  version = "2019.04.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1d016h95nsn5yay9f4c13hixfxj0q01hpxwj2x84i6qpx63dxdwq";
+    sha256 = "0mdfjkyjrccxlsg05mf80qcw8v5srlp80rvjkpnnbhfscq1fnpgn";
   };
 
   nativeBuildInputs = [ deepin.setupHook ];
