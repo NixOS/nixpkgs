@@ -498,7 +498,7 @@ in
           "broadwell"      = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
           "skylake"        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
           "skylake-avx512" = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
-        }.${pkgs.hostPlatform.platform.gcc.arch}
+        }.${pkgs.hostPlatform.platform.gcc.arch} or []
       )
     );
 
