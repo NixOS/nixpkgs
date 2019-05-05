@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = http://memtest86.com/;
-    downloadPage = https://www.memtest86.com/download.htm;
+    downloadPage = "https://www.memtest86.com/download.htm";
     description = "A tool to detect memory errors, to be run from a bootloader";
     # The Memtest86 License for the Free Edition states,
     # "MemTest86 Free Edition is free to download with no restrictions on usage".
