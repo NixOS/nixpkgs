@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isx86_64 {
     # disable SIMD instructions (which are enabled *when available* by default)
     default        = [ "--disable-sse3" "--disable-ssse3" "--disable-sse41" "--disable-sse42" "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
+    # Intel
     westmere       = [                                                                        "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
     sandybridge    = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
     ivybridge      = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
@@ -49,6 +50,14 @@ stdenv.mkDerivation rec {
     broadwell      = [                                                                                                                         "--disable-fma4" ];
     skylake        = [                                                                                                                         "--disable-fma4" ];
     skylake-avx512 = [                                                                                                                         "--disable-fma4" ];
+    # AMD
+    btver1         = [                                                                        "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
+    btver2         = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
+    bdver1         = [                                                                                        "--disable-avx2"                                  ];
+    bdver2         = [                                                                                        "--disable-avx2"                                  ];
+    bdver3         = [                                                                                        "--disable-avx2"                                  ];
+    bdver4         = [                                                                                                                                          ];
+    znver1         = [                                                                                                                         "--disable-fma4" ];
   }.${stdenv.hostPlatform.platform.gcc.arch or "default"}
   ++ stdenv.lib.optionals withSage [
     "--enable-sage"
