@@ -1,58 +1,66 @@
-{ stdenv, fetchurl, dpkg, bash, python27Packages }:
+{ lib, fetchgit, curaengineLulzbot, cmake, jq, python3Packages, qtbase, qtquickcontrols2 }:
 
 let
-  py = python27Packages;
+  # admittedly, we're using (printer firmware) blobs when we could compile them ourselves.
+  curaBinaryDataVersion = "3.6.18"; # Marlin v2.0.0.144. Keep this accurate wrt. the below.
+  curaBinaryData = fetchgit {
+    url = https://code.alephobjects.com/diffusion/CBD/cura-binary-data.git;
+    rev = "cdc046494bbfe1f65bfb34659a257eef9a0100a0";
+    sha256 = "0v0s036gxdjiglas2yzw95alv60sw3pq5k1zrrhmw9mxr4irrblb";
+  };
+  curaengine = curaengineLulzbot;
+  libarcus = python3Packages.libarcusLulzbot;
+  uranium = python3Packages.uraniumLulzbot;
+  libsavitar = python3Packages.libsavitarLulzbot;
 in
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   name = "cura-lulzbot-${version}";
-  version = "15.02.1-1.03-5064";
+  version = "3.6.18";
 
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://download.alephobjects.com/ao/aodeb/dists/jessie/main/binary-amd64/cura_${version}_amd64.deb";
-        sha256 = "1gsfidg3gim5pjbl82vkh0cw4ya253m4p7nirm8nr6yjrsirkzxg";
-      }
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "http://download.alephobjects.com/ao/aodeb/dists/jessie/main/binary-i386/cura_${version}_i386.deb";
-        sha256 = "0xd3df6bxq4rijgvsqvps454jkc1nzhxbdzzj6j2w317ppsbhyc1";
-      }
-    else throw "${name} is not supported on ${stdenv.hostPlatform.system}";
+  src = fetchgit {
+    url = https://code.alephobjects.com/source/cura-lulzbot.git;
+    rev = "71f1ac5a2b9f535175a3858a565930348358a9ca";
+    sha256 = "0by06fpxvdgy858lwhsccbmvkdq67j2s1cz8v6jnrnjrsxk7vzka";
+  };
 
-  python_deps = with py; [ pyopengl pyserial numpy wxPython30 power setuptools ];
-  pythonPath = python_deps;
-  propagatedBuildInputs = python_deps;
-  buildInputs = [ dpkg bash py.wrapPython ];
+  format = "other"; # using cmake to build
+  buildInputs = [ qtbase qtquickcontrols2 ];
+  # numpy-stl temporarily disabled due to https://code.alephobjects.com/T8415
+  propagatedBuildInputs = with python3Packages; [ pyserial requests zeroconf ] ++ [ libsavitar uranium libarcus ]; # numpy-stl
+  nativeBuildInputs = [ cmake python3Packages.wrapPython ];
 
-  phases = [ "unpackPhase" "installPhase" ];
-  unpackPhase = "dpkg-deb -x ${src} ./";
+  cmakeFlags = [
+    "-DURANIUM_DIR=${uranium.src}"
+    "-DCURA_VERSION=${version}"
+  ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -r usr/share $out/share
-    find $out/share -type f -exec sed -i 's|/usr/share/cura|$out/share/cura|g' "{}" \;
-
-    cat <<EOT > $out/bin/cura
-    #!${bash}/bin/bash
-    PYTHONPATH=$PYTHONPATH:$out/share/cura ${py.python}/bin/python $out/share/cura/cura.py "\$@"
-    EOT
-
-    chmod 555 $out/bin/cura
+  postPatch = ''
+    sed -i 's,/python''${PYTHON_VERSION_MAJOR}/dist-packages,/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages,g' CMakeLists.txt
+    sed -i 's, executable_name = .*, executable_name = "${curaengine}/bin/CuraEngine",' plugins/CuraEngineBackend/CuraEngineBackend.py
   '';
 
-  meta = with stdenv.lib; {
-    description = "3D printing host software for the Lulzbot";
+  preFixup = ''
+    substituteInPlace "$out/bin/cura-lulzbot" --replace 'import cura.CuraApplication' 'import Savitar; import cura.CuraApplication'
+    ln -sT "${curaBinaryData}/cura/resources/firmware" "$out/share/cura/resources/firmware"
+    ln -sT "${uranium}/share/uranium" "$out/share/uranium"
+    ${jq}/bin/jq --arg out "$out" '.build=$out' >"$out/version.json" <<'EOF'
+    ${builtins.toJSON {
+      cura = version;
+      cura_version = version;
+      binarydata = curaBinaryDataVersion;
+      engine = curaengine.version;
+      libarcus = libarcus.version;
+      libsavitar = libsavitar.version;
+      uranium = uranium.version;
+    }}
+    EOF
+  '';
 
-     longDescription = ''
-       Cura LulzBot Edition is a fork of the 3D printing/slicing
-       software from Ultimaker, with changes to support 3D printers
-       from Aleph Objects.
-     '';
-
-    homepage = https://www.lulzbot.com/cura/;
-    license = licenses.agpl3;
+  meta = with lib; {
+    description = "3D printer / slicing GUI built on top of the Uranium framework";
+    homepage = https://code.alephobjects.com/diffusion/CURA/;
+    license = licenses.agpl3;  # a partial relicense to LGPL has happened, but not certain that all AGPL bits are expunged
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pjones ];
+    maintainers = with maintainers; [ chaduffy ];
   };
 }
