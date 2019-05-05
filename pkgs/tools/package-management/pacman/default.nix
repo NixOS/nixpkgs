@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "108xp6dhvp02jnzskhgzjmp9jvrxhhkffvmpvs3rrif7vj47xd76";
   };
 
+  enableParallelBuilding = true;
+
   configureFlags = [
     # trying to build docs fails with a2x errors, unable to fix through asciidoc
     "--disable-doc"
