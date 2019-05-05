@@ -1,5 +1,5 @@
-{ stdenv, fetchFromRepoOrCz, perl, texinfo }:
-with stdenv.lib;
+{ stdenv, lib, fetchFromRepoOrCz, perl, texinfo }:
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "tcc";
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       generation.
     '';
 
-    homepage = http://www.tinycc.org/;
+    homepage = "http://www.tinycc.org/";
     license = licenses.mit;
 
     platforms = [ "x86_64-linux" ];
