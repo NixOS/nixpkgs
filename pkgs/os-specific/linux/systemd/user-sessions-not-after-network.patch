@@ -1,0 +1,13 @@
+diff --git a/units/systemd-user-sessions.service.in b/units/systemd-user-sessions.service.in
+index 6d585eb0a1..4c86ebc37e 100644
+--- a/units/systemd-user-sessions.service.in
++++ b/units/systemd-user-sessions.service.in
+@@ -10,7 +10,7 @@
+ [Unit]
+ Description=Permit User Sessions
+ Documentation=man:systemd-user-sessions.service(8)
+-After=remote-fs.target nss-user-lookup.target network.target
++After=remote-fs.target nss-user-lookup.target
+ 
+ [Service]
+ Type=oneshot

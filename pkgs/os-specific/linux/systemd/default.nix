@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ldyhfxdy4qlgygvpc92wp0qp6p1c9y3rnm77zwbkga48x60d9i8";
   };
 
+  patches = [ ./user-sessions-not-after-network.patch ];
+
   outputs = [ "out" "lib" "man" "dev" ];
 
   nativeBuildInputs =
