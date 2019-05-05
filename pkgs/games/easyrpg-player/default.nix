@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "easyrpg-player-${version}";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "Player";
     rev = version;
-    sha256 = "1k1b5ws48h1ylarbcfsxyvajl0fdzmi3db8y3m8iq4fg3f0yslg8";
+    sha256 = "0b0c4wwqldjf37sf7zldnbgvfmyqcvpjvhs949gb3r8i5cffzm58";
   };
 
   nativeBuildInputs = [ cmake doxygen pkgconfig ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "RPG Maker 2000/2003 and EasyRPG games interpreter";
-    homepage = https://easyrpg.org/;
+    homepage = "https://easyrpg.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ yegortimoshenko ];
     platforms = platforms.linux;
