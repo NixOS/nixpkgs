@@ -2648,6 +2648,11 @@
     github = "lasandell";
     name = "Luke Sandell";
   };
+  lambda-11235 = {
+    email = "taranlynn0@gmail.com";
+    github = "lambda-11235";
+    name = "Taran Lynn";
+  };
   lassulus = {
     email = "lassulus@gmail.com";
     github = "Lassulus";
