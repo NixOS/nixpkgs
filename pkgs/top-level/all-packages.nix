@@ -5822,6 +5822,8 @@ in
 
   spaceFM = callPackage ../applications/misc/spacefm { };
 
+  speech-denoiser = callPackage ../applications/audio/speech-denoiser {};
+
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
   squashfuse = callPackage ../tools/filesystems/squashfuse { };
