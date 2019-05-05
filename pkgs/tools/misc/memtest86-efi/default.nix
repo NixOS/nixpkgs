@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://www.memtest86.com/download.htm";
     description = "A tool to detect memory errors, to be run from a bootloader";
     longDescription = ''
-      An UEFI app that is able to detect errors in RAM.  It can be run from a
+      A UEFI app that is able to detect errors in RAM.  It can be run from a
       bootloader.  Released under a proprietary freeware license.
     '';
     # The Memtest86 License for the Free Edition states,
