@@ -61,6 +61,8 @@ let
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
         NROFF = if docSupport then "${groff}/bin/nroff" else null;
 
+        outputs = [ "out" ] ++ lib.optional docSupport "devdoc";
+
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
           ++ op (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.ruby;
@@ -115,6 +117,10 @@ let
           ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
              "--with-baseruby=${buildRuby}";
 
+        preConfigure = opString docSupport ''
+          configureFlagsArray+=("--with-ridir=$devdoc/share/ri")
+        '';
+
         # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
         # mostly TZ- and patch-related tests
         # TZ- failures are caused by nix sandboxing, I didn't investigate others
@@ -144,12 +150,26 @@ let
           addGemPath() {
             addToSearchPath GEM_PATH \$1/${passthru.gemPath}
           }
+          addRubyLibPath() {
+            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
+            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}
+            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.targetPlatform.system}
+          }
 
           addEnvHooks "$hostOffset" addGemPath
+          addEnvHooks "$hostOffset" addRubyLibPath
           EOF
-        '' + opString useRailsExpress ''
-          rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
 
+          rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
+        '' + opString docSupport ''
+          # Prevent the docs from being included in the closure
+          sed -i "s|\$(DESTDIR)$devdoc|\$(datarootdir)/\$(RI_BASE_NAME)|" $rbConfig
+          sed -i "s|'--with-ridir=$devdoc/share/ri'||" $rbConfig
+
+          # Add rbconfig shim so ri can find docs
+          mkdir -p $devdoc/lib/ruby/site_ruby
+          cp ${./rbconfig.rb} $devdoc/lib/ruby/site_ruby/rbconfig.rb
+        '' + opString useRailsExpress ''
           # Prevent the baseruby from being included in the closure.
           sed -i '/^  CONFIG\["BASERUBY"\]/d' $rbConfig
           sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
