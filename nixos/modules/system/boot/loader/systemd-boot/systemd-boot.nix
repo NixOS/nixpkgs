@@ -25,6 +25,8 @@ let
     inherit (cfg) consoleMode;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
+
+    memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
   };
 in {
 
@@ -85,6 +87,19 @@ in {
           </para></listitem>
         </itemizedlist>
       '';
+    };
+
+    memtest86 = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Make MemTest86 available from the systemd-boot menu. MemTest86 is a
+          program for testing memory.  MemTest86 is a non-open-source program, so
+          this requires <literal>allowUnfree</literal> to be set to
+          <literal>true</literal>.
+        '';
+      };
     };
   };
 
