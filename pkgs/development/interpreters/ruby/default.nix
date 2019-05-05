@@ -26,7 +26,10 @@ let
     ver = version;
     tag = ver.gitTag;
     atLeast25 = lib.versionAtLeast ver.majMin "2.5";
-    baseruby = self.override { useRailsExpress = false; };
+    baseruby = self.override {
+      useRailsExpress = false;
+      docSupport = false;
+    };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
