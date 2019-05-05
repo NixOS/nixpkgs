@@ -240,10 +240,11 @@ rec {
     };
 
     shell = either path shellPackage // {
-      check = x: (path.check x || shellPackage.check) &&
-        hasPrefix "/var/run/" (toString x) || throw ''
+      check = x: (path.check x || shellPackage.check x) &&
+        (!hasPrefix "/var/run/" (toString x)) || warn ''
           /var/run is deprecated. Please use ${removePrefix "/var" (toString x)} instead of ${x} for your shell.
-        '';
+        '' false;
+      description = "valid shell path or shell package";
     };
 
     path = mkOptionType {
