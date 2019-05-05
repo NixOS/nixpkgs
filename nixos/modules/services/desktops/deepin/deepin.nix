@@ -36,6 +36,7 @@
         pkgs.deepin.dde-daemon
         pkgs.deepin.dde-dock
         pkgs.deepin.dde-session-ui
+        pkgs.deepin.deepin-anything
         pkgs.deepin.deepin-image-viewer
         pkgs.deepin.deepin-screenshot
       ];
@@ -46,6 +47,7 @@
         pkgs.deepin.dde-daemon
         pkgs.deepin.dde-dock
         pkgs.deepin.dde-session-ui
+        pkgs.deepin.deepin-anything
         pkgs.deepin.deepin-image-viewer
         pkgs.deepin.deepin-screenshot
       ];
@@ -53,7 +55,12 @@
       systemd.packages = [
         pkgs.deepin.dde-api
         pkgs.deepin.dde-daemon
+        pkgs.deepin.deepin-anything
       ];
+
+      boot.extraModulePackages = [ config.boot.kernelPackages.deepin-anything ];
+
+      boot.kernelModules = [ "vfs_monitor" ];
 
       users.groups.deepin-sound-player = { };
 
@@ -70,6 +77,22 @@
         group = "deepin-daemon";
         isSystemUser = true;
       };
+
+      users.groups.deepin_anything_server = { };
+
+      users.users.deepin_anything_server = {
+        description = "Deepin Anything Server";
+        group = "deepin_anything_server";
+        isSystemUser = true;
+      };
+
+      security.pam.services.deepin-auth-keyboard.text = ''
+        # original at ${pkgs.deepin.dde-daemon}/etc/pam.d/deepin-auth-keyboard
+        auth	[success=2 default=ignore]	pam_lsass.so
+        auth	[success=1 default=ignore]	pam_unix.so nullok_secure try_first_pass
+        auth	requisite	pam_deny.so
+        auth	required	pam_permit.so
+      '';
 
       environment.etc = {
         "polkit-1/localauthority/10-vendor.d/com.deepin.api.device.pkla".source = "${pkgs.deepin.dde-api}/etc/polkit-1/localauthority/10-vendor.d/com.deepin.api.device.pkla";
