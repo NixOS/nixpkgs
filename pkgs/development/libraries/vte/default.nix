@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.56.1";
+  version = "0.56.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0z6w4vrz51bjnvk773j4pnrqfmkvaaa58yc6yi3jwcx90b68xyh2";
+    sha256 = "0dyj2dqbzap37dvjax6vy2kwfqsw9d1hrc4ji33lha3mk1q3b5bf";
   };
 
   passthru = {
