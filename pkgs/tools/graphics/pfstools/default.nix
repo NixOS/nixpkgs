@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig
+{ stdenv, fetchurl, cmake, pkgconfig, darwin
 , openexr, zlib, imagemagick, libGLU_combined, freeglut, fftwFloat
 , fftw, gsl, libexif, perl, opencv, qt5
 }:
@@ -21,11 +21,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
-    openexr zlib imagemagick libGLU_combined freeglut fftwFloat
+    openexr zlib imagemagick fftwFloat
     fftw gsl libexif perl opencv qt5.qtbase
-  ];
+  ] ++ (if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [
+    OpenGL GLUT
+  ]) else [
+    libGLU_combined freeglut
+  ]);
 
-  patches = [ ./threads.patch ./pfstools.patch ];
+  patches = [ ./threads.patch ./pfstools.patch ./pfsalign.patch ];
 
   meta = with stdenv.lib; {
     homepage = http://pfstools.sourceforge.net/;
