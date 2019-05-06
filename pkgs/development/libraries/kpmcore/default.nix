@@ -8,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "3.3.0";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "0s6v0jfrhjg31ri5p6h9n4w29jvasf5dj954j3vfpzl91lygmmmq";
+    sha256 = "0vfz9pr9n6p9hs3d9cm8yirp9mkw76nhnin55v3bwsb34p549w6p";
   };
 
   buildInputs = [
