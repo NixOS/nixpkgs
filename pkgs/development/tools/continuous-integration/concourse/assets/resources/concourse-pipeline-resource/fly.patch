@@ -1,0 +1,18 @@
+diff --git a/fly/fly.go b/fly/fly.go
+index 661696e..a50d74a 100644
+--- a/fly/fly.go
++++ b/fly/fly.go
+@@ -69,12 +69,7 @@ func (f command) Login(
+ 		return nil, err
+ 	}
+ 
+-	syncOut, err := f.run("sync")
+-	if err != nil {
+-		return nil, err
+-	}
+-
+-	return append(loginOut, syncOut...), nil
++	return loginOut, nil
+ }
+ 
+ func (f command) Pipelines() ([]string, error) {

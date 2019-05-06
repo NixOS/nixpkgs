@@ -151,6 +151,10 @@ in
 
   corgi = callPackage ../development/tools/corgi { };
 
+  inherit (callPackage ../development/tools/continuous-integration/concourse { }) concourse fly;
+
+  garden-runc = callPackage ../development/tools/continuous-integration/concourse/garden-runc { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
@@ -15480,6 +15484,8 @@ in
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
+
+  go-packr = callPackage ../development/tools/go-packr { };
 
   go-protobuf = callPackage ../development/tools/go-protobuf { };
 
