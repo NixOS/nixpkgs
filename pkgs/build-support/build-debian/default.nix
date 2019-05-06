@@ -50,6 +50,7 @@ let
   debPackageFor = pkg: name: pkgs.buildEnv {
     inherit name;
     paths = makeDeb pkg;
+    pathsToLink = [ "/bin" ];
   };
 in
 {
