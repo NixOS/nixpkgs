@@ -44,8 +44,8 @@ in rec {
   # https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions
 
   unifiLTS = generic {
-    version = "5.6.39";
-    sha256  = "025qq517j32r1pnabg2q8lhy65c6qsk17kzw3aijhrc2gpgj2pa7";
+    version = "5.6.42";
+    sha256  = "0wxkv774pw43c15jk0sg534l5za4j067nr85r5fw58iar3w2l84x";
   };
 
   unifiStable = generic {
