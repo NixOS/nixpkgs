@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, qt5, libsForQt5
 , bison, flex, eigen, boost, libGLU_combined, glew, opencsg, cgal
-, mpfr, gmp, glib, pkgconfig, harfbuzz, gettext
+, mpfr, gmp, glib, pkgconfig, harfbuzz, gettext, freetype, fontconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -18,11 +18,13 @@ stdenv.mkDerivation rec {
     sha256 = "1y63yqyd0v255liik4ff5ak6mj86d8d76w436x76hs5dk6jgpmfb";
   };
 
+  nativeBuildInputs = [ bison flex pkgconfig ];
+
   buildInputs = [
-    bison flex eigen boost libGLU_combined glew opencsg cgal mpfr gmp glib
-    pkgconfig harfbuzz gettext
-  ]
-    ++ (with qt5; [qtbase qmake])
+    eigen boost glew opencsg cgal mpfr gmp glib
+    harfbuzz gettext freetype fontconfig
+  ] ++ stdenv.lib.optional stdenv.isLinux libGLU_combined
+    ++ (with qt5; [qtbase qmake] ++ stdenv.lib.optional stdenv.isDarwin qtmacextras)
     ++ (with libsForQt5; [qscintilla])
   ;
 
@@ -32,6 +34,17 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false; # true by default due to qmake
 
   doCheck = false;
+
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir $out/Applications
+    mv $out/bin/*.app $out/Applications
+    rmdir $out/bin || true
+
+    mv --target-directory=$out/Applications/OpenSCAD.app/Contents/Resources \
+      $out/share/openscad/{examples,color-schemes,locale,libraries,fonts}
+
+    rmdir $out/share/openscad
+  '';
 
   meta = {
     description = "3D parametric model compiler";
@@ -48,7 +61,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://openscad.org/;
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers;
       [ bjornfor raskin the-kenny ];
   };
