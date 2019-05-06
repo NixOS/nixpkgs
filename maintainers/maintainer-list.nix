@@ -3600,6 +3600,11 @@
     github = "offlinehacker";
     name = "Jaka Hudoklin";
   };
+  ogle = {
+    email = "brandon@standard.ai";
+    github = "blogle";
+    name = "Brandon Ogle";
+  };
   oida = {
     email = "oida@posteo.de";
     github = "oida";
