@@ -1859,6 +1859,8 @@ in {
 
   elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
 
+  enolib = callPackage ../development/python-modules/enolib { };
+
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
   enzyme = callPackage ../development/python-modules/enzyme {};
