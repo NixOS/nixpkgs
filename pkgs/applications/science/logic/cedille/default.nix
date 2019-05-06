@@ -1,8 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
-, texinfo
 , alex
 , happy
 , Agda
@@ -19,11 +17,11 @@ stdenv.mkDerivation rec {
     owner = "cedille";
     repo = "cedille";
     rev = "v${version}";
-    sha256 = "17j7an5bharc8q1pj06615zmflipjdd0clf67cnfdhsmqwzf6l9r";
+    sha256 = "16pc72wz6kclq9yv2r8hx85mkp0s125h12snrhcjxkbl41xx2ynb";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ texinfo alex happy ];
+  nativeBuildInputs = [ alex happy ];
   buildInputs = [ Agda (ghcWithPackages (ps: [ps.ieee])) ];
 
   LANG = "en_US.UTF-8";
@@ -31,25 +29,9 @@ stdenv.mkDerivation rec {
     lib.optionalString (buildPlatform.libc == "glibc")
       "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
-  patches = [
-    # texinfo direntry fix. See: https://github.com/cedille/cedille/pull/86
-    (fetchpatch {
-      url = "https://github.com/cedille/cedille/commit/c058f42179a635c7b6179772c30f0eba4ac53724.patch";
-      sha256 = "02qd86k5bdrygjzh2k0j0q5qk4nk2vwnsz7nvlssvysbvsmiba7x";
-    })
-  ];
-
   postPatch = ''
     patchShebangs create-libraries.sh
-    patchShebangs docs/src/compile-docs.sh
   '';
-
-  # We regenerate the info file in order to fix the direntry
-  preBuild = ''
-    rm -f docs/info/cedille-info-main.info
-  '';
-
-  buildFlags = [ "all" "cedille-docs" ];
 
   installPhase = ''
     install -Dm755 -t $out/bin/ cedille
