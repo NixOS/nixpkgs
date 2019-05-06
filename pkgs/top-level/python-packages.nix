@@ -4240,6 +4240,8 @@ in {
 
   seaborn = callPackage ../development/python-modules/seaborn { };
 
+  seabreeze = callPackage ../development/python-modules/seabreeze { };
+
   selenium = callPackage ../development/python-modules/selenium { };
 
   serpy = callPackage ../development/python-modules/serpy { };
