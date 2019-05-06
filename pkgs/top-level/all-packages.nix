@@ -15070,6 +15070,13 @@ in
       ];
   };
 
+  linux_5_1 = callPackage ../os-specific/linux/kernel/linux-5.1.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.modinst_arg_list_too_long
+      ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -15262,7 +15269,7 @@ in
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_5_0;
+  linuxPackages_latest = linuxPackages_5_1;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -15273,6 +15280,8 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_0);
+  linuxPackages_5_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_1);
+
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
   # - Update the rev in ../os-specific/linux/kernel/linux-libre.nix to the latest one.
