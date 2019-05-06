@@ -7172,6 +7172,8 @@ broken-packages:
   - NestedFunctor
   - nestedmap
   - net-spider
+  - net-spider-pangraph
+  - net-spider-rpl
   - netclock
   - netcore
   - netease-fm
@@ -7219,6 +7221,7 @@ broken-packages:
   - neural-network-hmatrix
   - newhope
   - newports
+  - newsletter-mailgun
   - newt
   - newtype-deriving
   - newtype-th
