@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, unzip
 , qt4 ? null, qmake4Hook ? null
 , withQt5 ? false, qtbase ? null, qtmacextras ? null, qmake ? null
+, fixDarwinDylibNames
 }:
 
 # Fix Xcode 8 compilation problem
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ (if withQt5 then qtbase else qt4) ]
     ++ lib.optional (withQt5 && stdenv.isDarwin) qtmacextras;
   nativeBuildInputs = [ unzip ]
-    ++ (if withQt5 then [ qmake ] else [ qmake4Hook ]);
+    ++ (if withQt5 then [ qmake ] else [ qmake4Hook ])
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
 
   patches = lib.optional (stdenv.isDarwin && withQt5) [ xcodePatch ];
