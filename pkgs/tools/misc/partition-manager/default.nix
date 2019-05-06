@@ -8,11 +8,11 @@ let
   pname = "partitionmanager";
 in mkDerivation rec {
   name = "${pname}-${version}";
-  version = "3.3.1";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "0jhggb4xksb0k0mj752n6pz0xmccnbzlp984xydqbz3hkigra1si";
+    sha256 = "1q8kqi05qv932spln8bh7n739ivq6pra2pgz67zl2dmdknpysrvr";
   };
 
   enableParallelBuilding = true;
