@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url    = "https://github.com/skylot/jadx/archive/v${version}/jadx-${version}.zip";
+    url = "https://github.com/skylot/jadx/releases/download/v${version}/jadx-${version}.zip";
     sha256 = "00yi5gfnz0zxkc4v405w5b8sg0x4xb2q5cai0v1gz2yzd7q9vx6j";
   };
 
@@ -31,13 +31,12 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "unzip -d jadx-${version} $curSrc"; # This would otherwise create multiple directories
 
-
   installPhase = ''
     mkdir -p $out/bin $out/lib
     cp lib/*.jar $out/lib
     cp bin/jadx bin/jadx-gui $out/bin
     wrapProgram $out/bin/jadx-gui --set JAVA_HOME ${jre.home}
     wrapProgram $out/bin/jadx --set JAVA_HOME ${jre.home}
-    install -Dm644 "${desktopItem}/share/applications/"* -t "$out/share/applications/"
+    install -Dm644 "$desktopItem/share/applications/"* -t "$out/share/applications/"
   '';
 }
