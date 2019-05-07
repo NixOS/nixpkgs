@@ -161,7 +161,6 @@ in
 
           qtvirtualkeyboard
 
-          libsForQt56.phonon-backend-gstreamer
           libsForQt5.phonon-backend-gstreamer
 
           xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
