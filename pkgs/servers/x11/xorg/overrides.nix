@@ -198,6 +198,9 @@ self: super:
   libXi = super.libXi.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = [ self.libXfixes ];
+    configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "xorg_cv_malloc0_returns_null=no"
+    ];
   });
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
