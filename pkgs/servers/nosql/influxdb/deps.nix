@@ -28,15 +28,6 @@
     };
   }
   {
-    goPackagePath  = "github.com/RoaringBitmap/roaring";
-    fetch = {
-      type = "git";
-      url = "https://github.com/RoaringBitmap/roaring";
-      rev =  "3d677d3262197ee558b85029301eb69b8239f91a";
-      sha256 = "0v5jbqr7m4x7n8rxcyizhs21ndyinn8kil9hd6y2bifx9b9g6gv9";
-    };
-  }
-  {
     goPackagePath  = "github.com/alecthomas/kingpin";
     fetch = {
       type = "git";
@@ -221,8 +212,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/go-sql-driver/mysql";
-      rev =  "d523deb1b23d913de5bdada721a6071e71283618";
-      sha256 = "1jwz2j3vd5hlzmnkh20d4276yd8cxy7pac3x3dfi52jkm82ms99n";
+      rev =  "72cd26f257d44c1114970e19afddcd812016007e";
+      sha256 = "1fvsvwc1v2i0gqn01mynvi1shp5xm0xaym6xng09fcbqb56lbjx1";
     };
   }
   {
@@ -311,8 +302,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/influxdata/flux";
-      rev =  "8c9d0ad49204d3bbb171e96d872cf663ee7f1b4d";
-      sha256 = "0yamrzqjs6giwqq0ljf2dscarqw6851cw3iya8cya0x5plyd810c";
+      rev =  "bcfc535fb7443776501797df4ba596483c50c7fe";
+      sha256 = "0w87dqphaca49hb9wdrs35plvhcpgfmfwd5k00vbkwwmyil7majf";
     };
   }
   {
@@ -320,8 +311,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/influxdata/influxql";
-      rev =  "c661ab7db8ad858626cc7a2114e786f4e7463564";
-      sha256 = "1j73aj312laqmi20fbinx0aal82ncpqbj5dgs41br0j7fkvi6873";
+      rev =  "1cbfca8e56b6eaa120f5b5161e4f0d5edcc9e513";
+      sha256 = "0hfjr5yg6cbvlv96l4riw6bv5gdv7y1sfymm7awix1ab6xdmv3lm";
     };
   }
   {
@@ -329,17 +320,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/influxdata/line-protocol";
-      rev =  "32c6aa80de5eb09d190ad284a8214a531c6bce57";
-      sha256 = "0wvd6lplbvmz2lznvy4zz3fmxiqc43cgr4vppp1xi38j1iwq0349";
-    };
-  }
-  {
-    goPackagePath  = "github.com/influxdata/platform";
-    fetch = {
-      type = "git";
-      url = "https://github.com/influxdata/platform";
-      rev =  "0f79e4ea3248354c789cba274542e0a8e55971db";
-      sha256 = "16d9g7vgy30zahhj066kz7akahvpknq3ljk2fzvczjsm59ih8rjk";
+      rev =  "a3afd890113fb9f0337e05808bb06fb0ca4c685a";
+      sha256 = "1nspgpm8na2agkmzd4fhn7g8sqyn77mj6hzx1l27zbwf8ask266h";
     };
   }
   {
@@ -356,8 +338,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/influxdata/tdigest";
-      rev =  "a7d76c6f093a59b94a01c6c2b8429122d444a8cc";
-      sha256 = "02jxrb2d1n6zflwa7jhgid5344l6zj4gxg4kis20v7xa6iqrj1ni";
+      rev =  "bf2b5ad3c0a925c44a0d2842c5d8182113cd248e";
+      sha256 = "0cf0hcm4g052qzq4n67vxl5qh7lvp13x23hndzwmazxzdaar8gh1";
     };
   }
   {
@@ -394,15 +376,6 @@
       url = "https://github.com/jwilder/encoding";
       rev =  "b4e1701a28efcc637d9afcca7d38e495fe909a09";
       sha256 = "195js5njz86k096p3ggglgpc7rw3801mpqzdfwfr3miflhnp7nwg";
-    };
-  }
-  {
-    goPackagePath  = "github.com/kevinburke/go-bindata";
-    fetch = {
-      type = "git";
-      url = "https://github.com/kevinburke/go-bindata";
-      rev =  "06af60a4461b70d84a2b173d92f9f425d78baf55";
-      sha256 = "0k9bpx6vqsr53bzj7k78rjalybpwbs86zdks6v7jqkwsrx4j7a07";
     };
   }
   {
@@ -520,15 +493,6 @@
       url = "https://github.com/mitchellh/go-homedir";
       rev =  "ae18d6b8b3205b561c79e8e5f69bff09736185f4";
       sha256 = "0f0z0aa4wivk4z1y503dmnw0k0g0g403dly8i4q263gfshs82sbq";
-    };
-  }
-  {
-    goPackagePath  = "github.com/mna/pigeon";
-    fetch = {
-      type = "git";
-      url = "https://github.com/mna/pigeon";
-      rev =  "9df264905d4734c0133161d8c67828ff522b154a";
-      sha256 = "120m90lig5984wd2k7x2fclx5vb64lxmx4j3065pp0q1fqjif87z";
     };
   }
   {
@@ -653,8 +617,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/segmentio/kafka-go";
-      rev =  "c6db9435477f3cb658e2dd0fa93e02118c870251";
-      sha256 = "17zdj0i429a0wmwj8rm4j0hmxsv8kbql67s5iv78hac6rcys7bj2";
+      rev =  "0b3aacc527812d4040e51211146a43545e82d670";
+      sha256 = "05qz309l8chs9p2f1vqapgc4k459wflhhlc7p18ij5kz7qhx2mjl";
     };
   }
   {
