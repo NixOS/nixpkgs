@@ -511,6 +511,8 @@ in {
 
   logzero = callPackage ../development/python-modules/logzero { };
 
+  macropy = callPackage ../development/python-modules/macropy { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   manhole = callPackage ../development/python-modules/manhole { };
