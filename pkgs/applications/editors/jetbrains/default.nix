@@ -263,12 +263,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2019.1.1"; /* updated by script */
+    version = "2019.1.2"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "0w6hasb8vcbxdqmb0pngwr2jg0w14prqb4v7blraa5jf1xyyiayd"; /* updated by script */
+      sha256 = "0157ccc94pwk4a8r1pvvjzd0g4liqqns6b0cmimfjhxsh6bnarww"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
@@ -354,12 +354,12 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2018.3.4"; /* updated by script */
+    version = "2019.1.1"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "1klmg8wgj3shp4s0n2nn7n39zsk1mch6g9ifhwn5cgywpbzgam4p"; /* updated by script */
+      sha256 = "0441y92b3xqf7xh8k4vc0m7dfm91psnrwlv3mjzbsv09jrk1kbq7"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
     update-channel = "Rider RELEASE";
