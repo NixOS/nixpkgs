@@ -1011,9 +1011,9 @@ buildPhase() {
     runHook preBuild
 
     # set to empty if unset
-    : ${makeFlags=}
+    makeFlags=${makeFlags+"${makeFlags[@]}"}
 
-    if [[ -z "$makeFlags" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "${makeFlags[@]}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
         echo "no Makefile, doing nothing"
     else
         foundMakefile=1
@@ -1023,7 +1023,7 @@ buildPhase() {
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
 
