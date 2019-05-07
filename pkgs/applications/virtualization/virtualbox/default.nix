@@ -5,7 +5,7 @@
 , alsaLib, curl, libvpx, nettools, dbus
 , makeself, perl
 , javaBindings ? false, jdk ? null
-, pythonBindings ? false, python2 ? null
+, pythonBindings ? false, python3 ? null
 , extensionPack ? null, fakeroot ? null
 , pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , enableHardening ? false
@@ -17,7 +17,7 @@
 with stdenv.lib;
 
 let
-  python = python2;
+  python = python3;
   buildType = "release";
   # Remember to change the extpackRev and version in extpack.nix and
   # guest-additions/default.nix as well.
