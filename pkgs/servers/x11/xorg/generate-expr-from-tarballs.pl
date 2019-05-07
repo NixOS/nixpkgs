@@ -229,7 +229,8 @@ while (<>) {
 
     push @nativeRequires, "gettext" if $file =~ /USE_GETTEXT/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
-    push @requires, "gperf", "m4", "xorgproto" if $pkg =~ /xcbutil/;
+    push @nativeRequires, "m4" if $pkg =~ /xcbutil/;
+    push @requires, "gperf", "xorgproto" if $pkg =~ /xcbutil/;
 
     print "REQUIRES $pkg => @requires\n";
     print "NATIVE_REQUIRES $pkg => @nativeRequires\n";
