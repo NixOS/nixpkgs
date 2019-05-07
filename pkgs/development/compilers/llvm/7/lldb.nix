@@ -27,6 +27,9 @@ stdenv.mkDerivation {
       cmake/modules/LLDBStandalone.cmake
     sed -i 's,"$.LLVM_LIBRARY_DIR.",${llvm}/lib ${clang-unwrapped}/lib,' \
       cmake/modules/LLDBStandalone.cmake
+    sed -i -e 's,message(SEND_ERROR "Cannot find debugserver on system."),,' \
+           -e 's,string(STRIP ''${XCODE_DEV_DIR} XCODE_DEV_DIR),,' \
+           tools/debugserver/source/CMakeLists.txt
   '';
 
   nativeBuildInputs = [ cmake python which swig ];
@@ -36,8 +39,11 @@ stdenv.mkDerivation {
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-I${libxml2.dev}/include/libxml2";
+
   cmakeFlags = [
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+    "-DSKIP_DEBUGSERVER=ON"
   ];
 
   enableParallelBuilding = true;
