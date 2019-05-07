@@ -336,6 +336,8 @@ in {
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
+  datasette = callPackage ../development/python-modules/datasette { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };

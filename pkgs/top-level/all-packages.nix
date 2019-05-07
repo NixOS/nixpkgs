@@ -1337,6 +1337,8 @@ in
 
   datamash = callPackage ../tools/misc/datamash { };
 
+  datasette = with python3Packages; toPythonApplication datasette;
+
   datefudge = callPackage ../tools/system/datefudge { };
 
   dateutils = callPackage ../tools/misc/dateutils { };
