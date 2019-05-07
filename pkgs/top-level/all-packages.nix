@@ -6853,6 +6853,7 @@ in
 
   gcc7Stdenv = overrideCC gccStdenv gcc7;
   gcc8Stdenv = overrideCC gccStdenv gcc8;
+  gcc9Stdenv = overrideCC gccStdenv gcc9;
 
   wrapCCMulti = cc:
     if stdenv.targetPlatform.system == "x86_64-linux" then let
@@ -6993,6 +6994,17 @@ in
   }));
 
   gcc8 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/8 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+
+    isl = if !stdenv.isDarwin then isl_0_17 else null;
+  }));
+
+  gcc9 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/9 {
     inherit noSysDirs;
 
     # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
