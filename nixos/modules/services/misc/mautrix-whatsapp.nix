@@ -10,9 +10,8 @@ let
     preferLocalBuild = true;
   } ''
     mkdir -p $out
-    remarshal -if json -of yaml \
-      < ${pkgs.writeText "config.json" (builtins.toJSON cfg.configOptions)} \
-      > $out/config.yaml
+    ${pkgs.remarshal}/bin/json2yaml -i ${pkgs.writeText "config.json" (builtins.toJSON cfg.configOptions)} \
+      -o $out/config.yaml
 
     ${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp -c $out/config.yaml -g -r $out/registration.yaml
   '';
