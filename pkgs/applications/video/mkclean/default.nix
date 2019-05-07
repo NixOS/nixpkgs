@@ -1,4 +1,4 @@
-{fetchurl, stdenv }:
+{ dos2unix, fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "mkclean";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ dos2unix ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/matroska/${name}.tar.bz2";
+    url = "mirror://sourceforge/matroska/${pname}.tar.bz2";
     sha256 = "0zbpi4sm68zb20d53kbss93fv4aafhcmz7dsd0zdf01vj1r3wxwn";
   };
 
