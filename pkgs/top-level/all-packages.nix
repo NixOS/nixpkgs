@@ -16312,6 +16312,8 @@ in
 
   signwriting = callPackage ../data/fonts/signwriting { };
 
+  sierra-gtk-theme = callPackage ../data/themes/sierra { };
+
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
 
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
@@ -23425,8 +23427,6 @@ in
     libselinux = libselinux.override { python = python3; };
     libsemanage = libsemanage.override { python = python3; };
   };
-
-  sierra-gtk-theme = callPackage ../misc/themes/sierra { };
 
   slock = callPackage ../misc/screensavers/slock {
     conf = config.slock.conf or null;
