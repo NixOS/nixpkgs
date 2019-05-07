@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     make -C mkclean
-  '' 
+  '';
 
   installPhase = ''
     mkdir -p $out/{bin,lib}
