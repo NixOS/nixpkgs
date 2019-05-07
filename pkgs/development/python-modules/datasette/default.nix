@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "datasette";
-    rev = "0.27";
+    rev = version;
     sha256 = "02k1kk6bw034rs74w0viwzapxz684lqgjvw5q5j5xgr0i4kynylp";
   };
 
@@ -50,9 +50,9 @@ buildPythonPackage rec {
       --replace "click==6.7" "click" \
       --replace "click-default-group==1.2" "click-default-group" \
       --replace "Sanic==0.7.0" "Sanic" \
-      --replace "Jinja2==2.10" "Jinja2" \
       --replace "hupper==1.0" "hupper" \
-      --replace "pint==0.8.1" "pint"
+      --replace "pint==0.8.1" "pint" \
+      --replace "Jinja2==2.10" "Jinja2"
   '';
 
   # many tests require network access
