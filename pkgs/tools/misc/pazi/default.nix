@@ -15,6 +15,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./cargo-lock.patch ];
 
+  postInstall = ''
+    mkdir -p $out/share
+    $out/bin/pazi init bash > "$out/share/pazi.bash"
+    $out/bin/pazi init fish > "$out/share/pazi.fish"
+    $out/bin/pazi init zsh > "$out/share/pazi.zsh"
+  '';
+
   meta = with stdenv.lib; {
     description = "An autojump \"zap to directory\" helper";
     homepage = https://github.com/euank/pazi;

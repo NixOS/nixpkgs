@@ -4,11 +4,6 @@ with lib;
 
 let
   cfg = config.programs.pazi;
-  prg = config.programs;
-
-  initScript = shell: ''
-    eval $(${pkgs.pazi}/bin/pazi init ${shell})
-  '';
 in
 {
   options = {
@@ -28,10 +23,8 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.pazi ];
 
-    programs.bash.interactiveShellInit = initScript "bash";
-    programs.zsh.interactiveShellInit = mkIf prg.zsh.enable initScript "zsh";
-    programs.fish.interactiveShellInit = mkIf prg.fish.enable ''
-      ${pkgs.pazi}/bin/pazi init fish | source
-    '';
+    programs.bash.interactiveShellInit = "source ${pkgs.pazi}/share/pazi.bash";
+    programs.fish.interactiveShellInit = "source ${pkgs.pazi}/share/pazi.fish";
+    programs.zsh.interactiveShellInit = "source ${pkgs.pazi}/share/pazi.zsh";
   };
 }
