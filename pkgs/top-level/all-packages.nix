@@ -12300,6 +12300,8 @@ in
 
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
 
+  osmid = callPackage ../applications/audio/osmid { };
+
   osinfo-db = callPackage ../data/misc/osinfo-db { };
   osinfo-db-tools = callPackage ../tools/misc/osinfo-db-tools { };
 
