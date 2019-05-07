@@ -28,7 +28,7 @@ in
 
         Look <link xlink:href="https://github.com/tulir/mautrix-whatsapp/wiki/Bridge-setup">here</link> for documentation.
       '';
-      example = ''
+      example = {
         configOptions = {
           homeserver = {
             address = https://matrix.org;
@@ -69,7 +69,7 @@ in
             print_level = "debug";
           };
         };
-      '';
+      };
     };
   };
 
