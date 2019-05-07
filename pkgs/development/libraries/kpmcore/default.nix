@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, extra-cmake-modules
-, qtbase, kdeFrameworks
-, libatasmart, parted
+, qtbase, qca-qt5, kdeFrameworks
+, smartmontools, parted
 , utillinux }:
 
 let
@@ -16,8 +16,8 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase
-    libatasmart
+    qtbase qca-qt5
+    smartmontools
     parted # we only need the library
 
     kdeFrameworks.kio
