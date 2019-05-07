@@ -21317,7 +21317,10 @@ in
 
   nethack = callPackage ../games/nethack { };
 
-  nethack-qt = callPackage ../games/nethack { qtMode = true; };
+  nethack-qt = callPackage ../games/nethack {
+    qtMode = true;
+    stdenv = gccStdenv;
+  };
 
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
 
