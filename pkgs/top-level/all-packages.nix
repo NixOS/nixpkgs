@@ -1680,6 +1680,8 @@ in
 
   mp3blaster = callPackage ../applications/audio/mp3blaster { };
 
+  mp3cat = callPackage ../tools/audio/mp3cat {};
+
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
   mpdas = callPackage ../tools/audio/mpdas { };
