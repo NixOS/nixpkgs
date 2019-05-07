@@ -730,11 +730,14 @@ substituteInPlace() {
 }
 
 _allFlags() {
-    for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then
-            printf "@%s@ -> %q\n" "${varName}" "${!varName}"
+    local varNames="$(comm -3 <(declare | sort) <(declare -f | sort) | cut -d '=' -f 1)"
+    for varName in $varNames; do
+        if ! [ -z ${!varName+x} ] && [ $varName != _ ]; then
+            if (( "${NIX_DEBUG:-0}" >= 1 )); then
+                printf "@%s@ -> %q\n" "${varName}" "${!varName}" >&2
+            fi
+            args+=("--subst-var" "$varName")
         fi
-        args+=("--subst-var" "$varName")
     done
 }
 
