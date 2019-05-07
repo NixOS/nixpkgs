@@ -18,6 +18,7 @@ buildPythonApplication rec {
     pip
     requests
     virtualenv
+    virtualenv-clone
   ];
 
   doCheck = false;
