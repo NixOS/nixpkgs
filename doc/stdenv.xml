@@ -2643,9 +2643,7 @@ addEnvHooks "$hostOffset" myBashFunction
        At <filename>/var/lib/cntr</filename> the sandboxed filesystem is
        mounted. All commands and files of the system are still accessible
        within the shell. To execute commands from the sandbox use the cntr exec
-       subcommand. Note that <command>cntr</command> also needs to be executed
-       on the machine that is doing the build, which might not be the case when
-       remote builders are enabled. <command>cntr</command> is only supported
+       subcommand. <command>cntr</command> is only supported
        on Linux-based platforms. To use it first add <literal>cntr</literal> to
        your <literal>environment.systemPackages</literal> on NixOS or
        alternatively to the root user on non-NixOS systems. Then in the package
@@ -2657,6 +2655,16 @@ addEnvHooks "$hostOffset" myBashFunction
        When a build failure happens there will be an instruction printed that
        shows how to attach with <literal>cntr</literal> to the build sandbox.
       </para>
+      <note>
+       <title>Caution with remote builds</title>
+       <para>
+        This won't work with remote builds as the build environment is on
+        a different machine and can't be accessed by <command>cntr</command>.
+        Remote builds can be turned off by setting <literal>--option builders ''</literal>
+        for <command>nix-build</command> or <literal>--builders ''</literal> for
+        <command>nix build</command>.
+       </para>
+      </note>
      </listitem>
     </varlistentry>
     <varlistentry>
