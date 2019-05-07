@@ -16338,6 +16338,8 @@ in
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
+  public-sans  = callPackage ../data/fonts/public-sans { };
+
   qogir-theme = callPackage ../data/themes/qogir { };
 
   route159 = callPackage ../data/fonts/route159 { };
