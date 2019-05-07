@@ -31,8 +31,8 @@ Chiel92/vim-autoformat
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chrisbra/CheckAttach
-chrisbra/Recover.vim
 chrisbra/csv.vim
+chrisbra/Recover.vim
 chrisbra/unicode.vim
 chrisgeo/sparkup
 chriskempson/base16-vim
@@ -41,8 +41,8 @@ christoomey/vim-tmux-navigator
 cocopon/iceberg.vim
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim
-dag/vim-fish
 dag/vim2hs
+dag/vim-fish
 dannyob/quickfixstatus
 davidhalter/jedi-vim
 derekelkins/agda-vim
@@ -191,6 +191,7 @@ mbbill/undotree
 megaannum/forms
 megaannum/self
 mfukar/robotframework-vim
+mg979/vim-visual-multi
 mhinz/vim-grepper
 mhinz/vim-janah
 mhinz/vim-sayonara
@@ -352,6 +353,7 @@ vim-scripts/changeColorScheme.vim
 vim-scripts/Colour-Sampler-Pack
 vim-scripts/emodeline
 vim-scripts/Improved-AnsiEsc
+vim-scripts/jdaddy.vim
 vim-scripts/matchit.zip
 vim-scripts/mayansmoke
 vim-scripts/PreserveNoEOL
@@ -360,7 +362,6 @@ vim-scripts/Rename
 vim-scripts/ReplaceWithRegister
 vim-scripts/tabmerge
 vim-scripts/taglist.vim
-vim-scripts/jdaddy.vim
 vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
 vim-utils/vim-husk

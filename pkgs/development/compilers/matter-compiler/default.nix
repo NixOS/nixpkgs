@@ -1,11 +1,9 @@
+{ lib, bundlerApp }:
 
-{ lib, bundlerEnv, ruby }:
-
-bundlerEnv {
-  name = "matter_compiler-0.5.1";
-
-  inherit ruby;
+bundlerApp {
+  pname = "matter_compiler";
   gemdir = ./.;
+  exes = [ "matter_compiler" ];
 
   meta = with lib; {
     description = ''
@@ -14,7 +12,7 @@ bundlerEnv {
     '';
     homepage    = https://github.com/apiaryio/matter_compiler/;
     license     = licenses.mit;
-    maintainers = with maintainers; [ rvlander ];
+    maintainers = with maintainers; [ rvlander manveru ];
     platforms   = platforms.unix;
   };
 }

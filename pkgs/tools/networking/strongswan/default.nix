@@ -34,10 +34,7 @@ stdenv.mkDerivation rec {
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam iptables ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
-    ++ optionals enableNetworkManager [ networkmanager ]
-    # ad-hoc fix for https://github.com/NixOS/nixpkgs/pull/51787
-    # Remove when the above PR lands in master
-    ++ [ libpcap ];
+    ++ optionals enableNetworkManager [ networkmanager ];
 
   patches = [
     ./ext_auth-path.patch
@@ -56,10 +53,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
     '';
 
-  preConfigure = ''
-    configureFlagsArray+=("--with-systemdsystemunitdir=$out/etc/systemd/system")
-  '';
-
   configureFlags =
     [ "--enable-swanctl"
       "--enable-cmd"
@@ -74,7 +67,7 @@ stdenv.mkDerivation rec {
       "--enable-curl" ]
     ++ optionals stdenv.isLinux [
       "--enable-farp" "--enable-dhcp"
-      "--enable-systemd"
+      "--enable-systemd" "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
       "--enable-xauth-pam"
       "--enable-forecast"
       "--enable-connmark"

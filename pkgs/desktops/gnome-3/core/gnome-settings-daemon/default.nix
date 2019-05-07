@@ -13,6 +13,7 @@
 , libgnomekbd
 , lcms2
 , libpulseaudio
+, mousetweaks
 , alsaLib
 , libcanberra-gtk3
 , upower
@@ -48,8 +49,9 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit tzdata;
+      inherit tzdata mousetweaks;
     })
+    ./global-backlight-helper.patch
   ];
 
   nativeBuildInputs = [
@@ -92,6 +94,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
+
+  # So the polkit policy can reference /run/current-system/sw/bin/gnome-settings-daemon/gsd-backlight-helper
+  postFixup = ''
+    mkdir -p $out/bin/gnome-settings-daemon
+    ln -s $out/libexec/gsd-backlight-helper $out/bin/gnome-settings-daemon/gsd-backlight-helper
+  '';
 
   postPatch = ''
     for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do

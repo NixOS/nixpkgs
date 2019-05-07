@@ -32,6 +32,7 @@ in rec {
   openbsd = [ patterns.isOpenBSD ];
   unix    = patterns.isUnix; # Actually a list
   windows = [ patterns.isWindows ];
+  wasi    = [ patterns.isWasi ];
 
   inherit (lib.systems.doubles) mesaPlatforms;
 }

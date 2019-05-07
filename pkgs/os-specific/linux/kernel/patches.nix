@@ -58,7 +58,8 @@ rec {
     };
   };
 
-  # Fix kernel OOPS on boot: https://github.com/NixOS/nixpkgs/issues/60126
-  # Remove with the next release.
-  i2c-oops = { name = "i2c-oops"; patch = ./i2c-oops.patch; };
+  export_kernel_fpu_functions = rec {
+    name = "export_kernel_fpu_functions";
+    patch = ./export_kernel_fpu_functions.patch;
+  };
 }

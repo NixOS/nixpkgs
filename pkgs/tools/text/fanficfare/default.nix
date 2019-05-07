@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FanFicFare";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1ir3m8wknr8shdbmbpiaw73mdpa7mvidkl6pbs9ca23mgwivxa84";
+    sha256 = "1h4a1y9m65lf495r52gayprlbxpd43hpbhcbawadbkxf26gr1vkk";
   };
 
   propagatedBuildInputs = with python3Packages; [

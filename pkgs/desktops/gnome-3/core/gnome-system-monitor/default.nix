@@ -1,6 +1,6 @@
 { stdenv, gettext, fetchurl, pkgconfig, gtkmm3, libxml2, polkit
 , bash, gtk3, glib, wrapGAppsHook, meson, ninja, python3
-, itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
+, gsettings-desktop-schemas, itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
 
 stdenv.mkDerivation rec {
   name = "gnome-system-monitor-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     bash gtk3 glib libxml2 gtkmm3 libgtop gdk_pixbuf gnome3.adwaita-icon-theme librsvg
-    gnome3.gsettings-desktop-schemas systemd
+    gsettings-desktop-schemas systemd
   ];
 
   postPatch = ''

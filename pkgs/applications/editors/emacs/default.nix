@@ -75,7 +75,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = [ "--with-modules" ] ++
+  configureFlags = [
+    "--disable-build-details" # for a (more) reproducible build
+    "--with-modules"
+  ] ++
     (lib.optional stdenv.isDarwin
       (lib.withFeature withNS "ns")) ++
     (if withNS

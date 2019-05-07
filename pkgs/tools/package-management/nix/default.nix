@@ -3,6 +3,7 @@
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
 , boehmgc
+, stdenv, llvmPackages_6
 }:
 
 let
@@ -166,7 +167,7 @@ in rec {
     inherit storeDir stateDir confDir boehmgc;
   };
 
-  nixStable = callPackage common rec {
+  nixStable = callPackage common (rec {
     name = "nix-2.2.2";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
@@ -174,7 +175,9 @@ in rec {
     };
 
     inherit storeDir stateDir confDir boehmgc;
-  };
+  } // stdenv.lib.optionalAttrs stdenv.cc.isClang {
+    stdenv = llvmPackages_6.stdenv;
+  });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.3${suffix}";

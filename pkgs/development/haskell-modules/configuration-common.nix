@@ -142,6 +142,7 @@ self: super: {
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
+  classy-prelude-yesod = dontHaddock super.classy-prelude-yesod; # https://github.com/haskell/haddock/issues/979
 
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
@@ -871,38 +872,17 @@ self: super: {
   # https://github.com/takano-akio/filelock/issues/5
   filelock = dontCheck super.filelock;
 
-  # fix GHC 8.6 builds by using irrefutable patterns. jailbreak is also
-  # required due to a constraint failure for base-compat.
-  cryptol = doJailbreak (overrideCabal super.cryptol (drv: {
-
-    # the last patch fixes ghc 8.6 builds; the other two (small) patches fix a
-    # few bugs between them, but are also hard dependencies
-    patches = drv.patches or [] ++ [
-      (pkgs.fetchpatch {
-        url    = https://github.com/GaloisInc/cryptol/commit/634c5a03e757663bf86d1ffad1ce2c6086d4483f.patch;
-        sha256 = "16dvfihsl2c4jnyfndgrjarkm3z5pyn7rzg2svnidx0qipwrxzm7";
-      })
-      (pkgs.fetchpatch {
-        url    = https://github.com/GaloisInc/cryptol/commit/515642328aff6d958ff1b534b9effdd726901b60.patch;
-        sha256 = "1fml71b720igyh8s7mj1z1c2bbv1vk490iy7blvxp625nymzjij6";
-      })
-      (pkgs.fetchpatch {
-        url    = https://github.com/GaloisInc/cryptol/commit/a8eab11b319f6434f9b01b26d419b8305ff30bc2.patch;
-        sha256 = "1bbznp3kbj8l83q979gf4gr2khwbyqi85ykwsf2jnkhzda6pr0n8";
-      })
-    ];
-
+  # Wrap the generated binaries to include their run-time dependencies in
+  # $PATH. Also, cryptol needs a version of sbl that's newer than what we have
+  # in LTS-13.x.
+  cryptol = overrideCabal (super.cryptol.override { sbv = self.sbv_8_2; }) (drv: {
     buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
-
-    # make sure the binaries always start up. previously this was in
-    # all-packages.nix but it's almost certainly better to do it here (e.g. a
-    # haskell deps may use cryptol in the test suite or something, etc)
     postInstall = drv.postInstall or "" + ''
       for b in $out/bin/cryptol $out/bin/cryptol-html; do
         wrapProgram $b --prefix 'PATH' ':' "${pkgs.lib.getBin pkgs.z3}/bin"
       done
     '';
-  }));
+  });
 
   # Tests try to invoke external process and process == 1.4
   grakn = dontCheck (doJailbreak super.grakn);
@@ -1223,15 +1203,10 @@ self: super: {
     sha256 = "1qwy8bj6vywhp0075dza8j90zrzsm3144qz3c703s9c4n6pg3gw4";
     });
 
-  # These patches contain fixes for 8.6 that should be safe for
-  # earlier versions, but we need the relaxed version bounds in GHC
-  # 8.4 builds. beam needs to release a round of updates that relax
-  # bounds and include the 8.6 fixes:
-  # https://github.com/tathougies/beam/issues/315
-  beam-core = appendPatch super.beam-core ./patches/beam-core-fix-ghc-8.6.x-build.patch;
-  beam-migrate = appendPatch super.beam-migrate ./patches/beam-migrate-fix-ghc-8.6.x-build.patch;
-  beam-postgres = appendPatch super.beam-postgres ./patches/beam-postgres-fix-ghc-8.6.x-build.patch;
-  beam-sqlite = appendPatch super.beam-sqlite ./patches/beam-sqlite-fix-ghc-8.6.x-build.patch;
+  # Requires pg_ctl command during tests
+  beam-postgres = overrideCabal super.beam-postgres (drv: {
+    testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
+    });
 
   # https://github.com/sighingnow/computations/pull/1
   primesieve = appendPatch super.primesieve (pkgs.fetchpatch {
@@ -1281,5 +1256,15 @@ self: super: {
 
   # Break out of pandoc >=2.0 && <2.7 (https://github.com/pbrisbin/yesod-markdown/pull/65)
   yesod-markdown = doJailbreak super.yesod-markdown;
+
+  # These packages needs network 3.x, which is not in LTS-13.x.
+  network-bsd = super.network-bsd.override { network = self.network_3_0_1_1; };
+  lambdabot-core = super.lambdabot-core.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
+  lambdabot-reference-plugins = super.lambdabot-reference-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
+  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; socks = self.socks_0_6_0; connection = self.connection_0_3_0; haskell-src-exts = self.haskell-src-exts_1_21_0; });
+
+  # Some tests depend on a postgresql instance
+  # Haddock failure: https://github.com/haskell/haddock/issues/979
+  esqueleto = dontHaddock (dontCheck super.esqueleto);
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

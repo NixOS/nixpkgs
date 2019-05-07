@@ -266,7 +266,7 @@
       caddy = 239;
       taskd = 240;
       factorio = 241;
-      emby = 242;
+      # emby = 242; # unusued, removed 2019-05-01
       graylog = 243;
       sniproxy = 244;
       nzbget = 245;
@@ -567,7 +567,7 @@
       caddy = 239;
       taskd = 240;
       factorio = 241;
-      emby = 242;
+      # emby = 242; # unused, removed 2019-05-01
       sniproxy = 244;
       nzbget = 245;
       mosquitto = 246;

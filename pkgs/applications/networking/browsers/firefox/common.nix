@@ -153,15 +153,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!isTorBrowserLike) [
     "-I${nss.dev}/include/nss"
-  ]
-  ++ lib.optional stdenv.isDarwin [
-    "-isystem ${llvmPackages.libcxx}/include/c++/v1"
-    "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace js/src/jsmath.cpp --replace 'defined(HAVE___SINCOS)' 0
-  '' + lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
+  postPatch = lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
     substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
   '';
 

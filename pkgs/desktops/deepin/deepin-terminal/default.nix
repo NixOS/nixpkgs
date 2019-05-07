@@ -7,13 +7,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-terminal";
-  version = "3.2.1.2";
+  version = "3.2.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-terminal";
     rev = version;
-    sha256 = "0dj386csbiw0yqz9nj6ij0s4d0ak9lpq2bmsfs17bjkgdp0ayp90";
+    sha256 = "08bhdd9q4aqy5yjbpqy918j63c3b2rrdqdkxh3fk258n1fm72gmw";
   };
 
   nativeBuildInputs = [

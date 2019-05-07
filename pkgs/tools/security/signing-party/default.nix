@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, makeWrapper
+{ stdenv, fetchFromGitLab, autoconf, automake, makeWrapper
 , python3, perl, perlPackages
 , libmd, gnupg1, which, getopt, libpaper, nettools, qprint
 , sendmailPath ? "/run/wrappers/bin/sendmail" }:
@@ -13,12 +13,15 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "signing-party";
-  version = "2.9";
+  version = "2.10";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://debian/pool/main/s/${pname}/${pname}_${version}.orig.tar.gz";
-    sha256 = "14pgi45zqa0zd1ldfj9mnf9jgv5kfrhl78lr8iy7k88p9h6b9n7n";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "signing-party-team";
+    repo = "signing-party";
+    rev = "v${version}";
+    sha256 = "0lq8nmwjmysry0n4jg6vb7bh0lagbyb9pa11ii3s41p1mhzchf2r";
   };
 
   # TODO: Get this patch upstream...

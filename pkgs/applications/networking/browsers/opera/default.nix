@@ -34,12 +34,13 @@
 , stdenv
 , systemd
 , at-spi2-atk
+, at-spi2-core
 }:
 
 let
 
   mirror = https://get.geo.opera.com/pub/opera/desktop;
-  version = "56.0.3051.99";
+  version = "58.0.3135.127";
 
   rpath = stdenv.lib.makeLibraryPath [
 
@@ -86,6 +87,7 @@ let
     libpulseaudio.out
 
     at-spi2-atk
+    at-spi2-core
   ];
 
 in stdenv.mkDerivation {
@@ -94,7 +96,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/opera-stable_${version}_amd64.deb";
-    sha256 = "1mf4lpb66w63kafjni5caq9k3lmsqd85161q29z5lr1s2cx9qqm8";
+    sha256 = "1nk4zfmb2dv464r1q6n9b66zg7a8h5xfwypzqd791rhmsfjrxn51";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";

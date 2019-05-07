@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   name = "mixxx-${version}";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = "release-${version}";
-    sha256 = "1rp2nyhz2j695k5kk0m94x30akwrlr9jgs0n4pi4snnvjpwmbfp9";
+    sha256 = "1q6c2wfpprsx7s7nz1w0mhm2yhikj54jxcv61kwylxx3n5k2na9r";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkgconfig portaudio portmidi protobuf qtbase qtscript qtsvg
     qtx11extras rubberband scons sqlite taglib upower vampSDK
   ];
+
+  enableParallelBuilding = true;
 
   sconsFlags = [
     "build=release"

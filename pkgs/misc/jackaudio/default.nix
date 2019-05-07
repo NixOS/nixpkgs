@@ -1,8 +1,9 @@
 { stdenv, fetchFromGitHub, pkgconfig, python2Packages, makeWrapper
+, fetchpatch
 , bash, libsamplerate, libsndfile, readline, eigen, celt
-, wafHook
+, wafHook, aften
 # Darwin Dependencies
-, aften, AudioToolbox, CoreAudio, CoreFoundation
+, AudioUnit, CoreAudio, cf-private, libobjc, Accelerate
 
 # Optional Dependencies
 , dbus ? null, libffado ? null, alsaLib ? null
@@ -39,22 +40,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig python makeWrapper wafHook ];
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
-  ] ++ optionals stdenv.isDarwin [ aften AudioToolbox CoreAudio CoreFoundation ];
-
-  # CoreFoundation 10.10 doesn't include CFNotificationCenter.h yet.
-  patches = optionals stdenv.isDarwin [ ./darwin-cf.patch ];
+    aften
+  ] ++ optionals stdenv.isDarwin [
+    AudioUnit CoreAudio Accelerate cf-private libobjc
+  ];
 
   prePatch = ''
     substituteInPlace svnversion_regenerate.sh \
         --replace /bin/bash ${bash}/bin/bash
   '';
 
-  # It looks like one of the frameworks depends on <CoreFoundation/CFAttributedString.h>
-  # since frameworks are impure we also have to use the impure CoreFoundation here.
-  # FIXME: remove when CoreFoundation is updated to 10.11
-  preConfigure = optionalString stdenv.isDarwin ''
-    export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
-  '';
+  patches = [ (fetchpatch {
+    url = "https://github.com/jackaudio/jack2/commit/d851fada460d42508a6f82b19867f63853062583.patch";
+    sha256 = "1iwwxjzvgrj7dz3s8alzlhcgmcarjcbkrgvsmy6kafw21pyyw7hp";
+  }) ];
 
   wafConfigureFlags = [
     "--classic"

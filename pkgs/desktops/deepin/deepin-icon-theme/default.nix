@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-icon-theme";
-  version = "15.12.68";
+  version = "15.12.69";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "12jgz81s5qggmnkfg9m5f799r10p43qmh4zqxl1kjvlrqgvsc9rf";
+    sha256 = "1y6r2as3acqkq8z1d44c82jfplihscmqc9fgpq1j0anznwcdj73k";
   };
 
   nativeBuildInputs = [ gtk3 xcursorgen ];

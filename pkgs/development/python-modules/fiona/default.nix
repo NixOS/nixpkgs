@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
 , attrs, click, cligj, click-plugins, six, munch, enum34
-, pytest, boto3
+, pytest, boto3, mock
 , gdal
 }:
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     boto3
-  ];
+  ] ++ stdenv.lib.optional (pythonOlder "3.4") mock;
 
   checkPhase = ''
     rm -r fiona # prevent importing local fiona

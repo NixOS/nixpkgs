@@ -46,6 +46,16 @@ stdenv.mkDerivation rec {
       make check
   '';
 
+  # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
+  postFixup = ''
+    files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
+
+    for file in ''${files[*]}; do
+      substituteInPlace $file \
+        --replace "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
+    done
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gnome-keyring";

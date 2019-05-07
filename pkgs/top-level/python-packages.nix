@@ -782,6 +782,10 @@ in {
 
   python-mnist = callPackage ../development/python-modules/python-mnist { };
 
+  pythonocc-core = toPythonModule (callPackage ../development/python-modules/pythonocc-core {
+    inherit (pkgs.xorg) libX11;
+  });
+
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkgconfig = pkgs.pkgconfig;
     igraph = pkgs.igraph;
@@ -920,6 +924,8 @@ in {
   # packages defined here
 
   aafigure = callPackage ../development/python-modules/aafigure { };
+
+  addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
   altair = callPackage ../development/python-modules/altair { };
 
@@ -1156,6 +1162,8 @@ in {
 
   bitstruct = callPackage ../development/python-modules/bitstruct { };
 
+  caldav = callPackage ../development/python-modules/caldav { };
+
   caldavclientlibrary-asynk = callPackage ../development/python-modules/caldavclientlibrary-asynk { };
 
   biopython = callPackage ../development/python-modules/biopython { };
@@ -1314,7 +1322,7 @@ in {
 
   bottle = callPackage ../development/python-modules/bottle { };
 
-  box2d = callPackage ../development/python-modules/box2d { pkgs-box2d = pkgs.box2d; };
+  box2d = callPackage ../development/python-modules/box2d { };
 
   branca = callPackage ../development/python-modules/branca { };
 
@@ -1396,6 +1404,8 @@ in {
     callPackage ../development/python-modules/cherrypy/17.nix { };
 
   cfgv = callPackage ../development/python-modules/cfgv { };
+
+  cfn-lint = callPackage ../development/python-modules/cfn-lint { };
 
   cftime = callPackage ../development/python-modules/cftime {};
 
@@ -1488,7 +1498,7 @@ in {
 
   cryptography = callPackage ../development/python-modules/cryptography { };
 
-  cryptography_vectors = callPackage ../development/python-modules/cryptography_vectors { };
+  cryptography_vectors = callPackage ../development/python-modules/cryptography/vectors.nix { };
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
@@ -1913,6 +1923,8 @@ in {
 
   fastcache = callPackage ../development/python-modules/fastcache { };
 
+  fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
+
   functools32 = callPackage ../development/python-modules/functools32 { };
 
   future-fstrings = callPackage ../development/python-modules/future-fstrings { };
@@ -2018,7 +2030,9 @@ in {
 
   immutables = callPackage ../development/python-modules/immutables {};
 
-  imread = callPackage ../development/python-modules/imread { };
+  imread = callPackage ../development/python-modules/imread {
+    inherit (pkgs) pkgconfig libjpeg libpng libtiff libwebp;
+  };
 
   imaplib2 = callPackage ../development/python-modules/imaplib2 { };
 

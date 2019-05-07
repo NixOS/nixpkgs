@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "3.8.9";
+  version = "3.8.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q2dg3hnsmmpjcc7lzjf5nd041mpbwa2bq3dgr4p6wv65vncny9v";
+    sha256 = "b00f37296edf2a4fe7b67b5d861c342426d442666d241674fdfc333936bd59bf";
   };
 
   checkInputs = [ pytest ];

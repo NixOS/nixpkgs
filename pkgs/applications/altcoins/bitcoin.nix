@@ -1,21 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost, zeromq
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost, zeromq, rapidcheck
 , zlib, miniupnpc, qtbase ? null, qttools ? null, utillinux, protobuf, python3, qrencode, libevent
 , withGui }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec{
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = fetchurl {
     urls = [ "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
              "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
            ];
-    sha256 = "0am4pnaf2cisv172jqx6jdpzx770agm8777163lkjbw3ryslymiy";
+    sha256 = "5e4e6890e07b620a93fdb24605dae2bb53e8435b2a93d37558e1db1913df405f";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ]
-                   ++ optionals doCheck [ python3 ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib zeromq
                   miniupnpc protobuf libevent]
                   ++ optionals stdenv.isLinux [ utillinux ]
@@ -31,11 +30,14 @@ stdenv.mkDerivation rec{
                                             "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                           ];
 
+  checkInputs = [ rapidcheck python3 ];
+
   doCheck = true;
 
   # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
   # See also https://github.com/NixOS/nixpkgs/issues/24256
-  checkFlags = optionals withGui [ "QT_PLUGIN_PATH=${qtbase}/lib/qt-5.${versions.minor qtbase.version}/plugins" ];
+  checkFlags = optionals withGui [ "QT_PLUGIN_PATH=${qtbase}/lib/qt-5.${versions.minor qtbase.version}/plugins" ]
+    ++ [ "LC_ALL=C.UTF-8" ];
 
   enableParallelBuilding = true;
 

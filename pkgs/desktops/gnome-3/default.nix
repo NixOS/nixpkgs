@@ -84,7 +84,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gjs = callPackage ./core/gjs { };
 
   glib-networking = pkgs.glib-networking.override {
-    inherit gsettings-desktop-schemas;
+    inherit (pkgs) gsettings-desktop-schemas;
   };
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
@@ -144,8 +144,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   grilo = callPackage ./core/grilo { };
 
   grilo-plugins = callPackage ./core/grilo-plugins { };
-
-  gsettings-desktop-schemas = callPackage ./core/gsettings-desktop-schemas { };
 
   gucharmap = callPackage ./core/gucharmap { };
 
@@ -395,6 +393,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
       easytag meld orca rhythmbox shotwell gnome-usage
       clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus gdl;
+  inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
   defaultIconTheme = adwaita-icon-theme;
   gtk = gtk3;
   gtkmm = gtkmm3;

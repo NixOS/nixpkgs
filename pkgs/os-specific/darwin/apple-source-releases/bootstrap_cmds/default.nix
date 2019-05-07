@@ -32,6 +32,7 @@ appleDerivation {
     chmod +x mig.sh
     cp mig.sh   $out/bin/mig
     cp migcom   $out/libexec
+    ln -s $out/libexec/migcom $out/bin/migcom
     cp mig.1    $out/share/man/man1
     cp migcom.1 $out/share/man/man1
 

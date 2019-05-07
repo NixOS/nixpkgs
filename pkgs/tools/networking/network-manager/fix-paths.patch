@@ -35,12 +35,12 @@
  Restart=on-failure
 --- a/src/devices/nm-device.c
 +++ b/src/devices/nm-device.c
-@@ -12350,14 +12350,14 @@
+@@ -12451,14 +12451,14 @@ nm_device_start_ip_check (NMDevice *self)
  			gw = nm_ip4_config_best_default_route_get (priv->ip_config_4);
  			if (gw) {
  				nm_utils_inet4_ntop (NMP_OBJECT_CAST_IP4_ROUTE (gw)->gateway, buf);
 -				ping_binary = nm_utils_find_helper ("ping", "/usr/bin/ping", NULL);
-+				ping_binary = "@inetutils@/bin/ping";
++				ping_binary = "@iputils@/bin/ping";
  				log_domain = LOGD_IP4;
  			}
  		} else if (priv->ip_config_6 && priv->ip_state_6 == NM_DEVICE_IP_STATE_DONE) {
@@ -48,13 +48,15 @@
  			if (gw) {
  				nm_utils_inet6_ntop (&NMP_OBJECT_CAST_IP6_ROUTE (gw)->gateway, buf);
 -				ping_binary = nm_utils_find_helper ("ping6", "/usr/bin/ping6", NULL);
-+				ping_binary = "@inetutils@/bin/ping";
++				ping_binary = "@iputils@/bin/ping";
  				log_domain = LOGD_IP6;
  			}
  		}
+diff --git a/src/nm-core-utils.c b/src/nm-core-utils.c
+index 6f55e62a7..93721e7fb 100644
 --- a/src/nm-core-utils.c
 +++ b/src/nm-core-utils.c
-@@ -421,8 +421,8 @@
+@@ -442,7 +442,7 @@ nm_utils_modprobe (GError **error, gboolean suppress_error_logging, const char *
  
  	/* construct the argument list */
  	argv = g_ptr_array_sized_new (4);
@@ -63,4 +65,3 @@
  	g_ptr_array_add (argv, "--use-blacklist");
  	g_ptr_array_add (argv, (char *) arg1);
  
- 	va_start (ap, arg1);

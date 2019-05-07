@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "lidarr-${version}";
-  version = "0.6.0.815";
+  version = "0.6.1.830";
 
   src = fetchurl {
     url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.develop.${version}.linux.tar.gz";
-    sha256 = "08aa286y71pzn8wxjiag1bn5303i05jznqwmgrbqfb4jwz94pyjs";
+    sha256 = "1pchz3dq8nfx7kp3dalkpi5rpwzkhn3d0a1djdja6yz5xgaiprqb";
   };
 
   buildInputs = [

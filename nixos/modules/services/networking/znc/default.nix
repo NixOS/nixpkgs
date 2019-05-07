@@ -47,11 +47,11 @@ let
           #     Baz=baz
           #     Qux=qux
           #   </Foo>
-          set = concatMap (subname: [
+          set = concatMap (subname: optionals (value.${subname} != null) ([
               "<${name} ${subname}>"
             ] ++ map (line: "\t${line}") (toLines value.${subname}) ++ [
               "</${name}>"
-            ]) (filter (v: v != null) (attrNames value));
+            ])) (filter (v: v != null) (attrNames value));
 
         }.${builtins.typeOf value};
 

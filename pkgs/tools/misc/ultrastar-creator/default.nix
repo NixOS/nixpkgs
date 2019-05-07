@@ -1,15 +1,20 @@
 { stdenv, fetchFromGitHub
 , qmake, qtbase, pkgconfig, taglib, libbass, libbass_fx }:
 
+# TODO: get rid of (unfree) libbass
+# issue:https://github.com/UltraStar-Deluxe/UltraStar-Creator/issues/3
+# there’s a WIP branch here:
+# https://github.com/UltraStar-Deluxe/UltraStar-Creator/commits/BASS_removed
+
 stdenv.mkDerivation rec {
   name = "ultrastar-creator-${version}";
-  version = "2017-04-12";
+  version = "2019-04-23";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "UltraStar-Creator";
-    rev = "ac519a003f8283bfbe5e2d8e9cdff3a3faf97001";
-    sha256 = "00idr8a178gvmylq722n13bli59kpxlsy5d8hlplqn7fih48mnzi";
+    rev = "36583b4e482b68f6aa949e77ef2744776aa587b1";
+    sha256 = "1rzz04l7s7pxj74xam0cxlq569lfpgig35kpbsplq531d4007pc9";
   };
 
   postPatch = with stdenv.lib; ''

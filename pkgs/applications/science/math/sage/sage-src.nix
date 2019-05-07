@@ -134,6 +134,13 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch?id=d3483110474591ea6cc8e3210cd884f3e0018b3e";
       sha256 = "028i6h8l8npwzx5z0ax0rcywl85gc83qw1jf93zf523msdfcsk0n";
     })
+
+    # https://trac.sagemath.org/ticket/27738
+    (fetchpatch {
+      name = "R-3.6.0.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=8b7dbd0805d02d0e8674a272e161ceb24a637966";
+      sha256 = "1c81f13z1w62s06yvp43gz6vkp8mxcs289n6l4gj9xj10slimzff";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

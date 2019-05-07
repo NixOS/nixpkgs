@@ -24,6 +24,7 @@ let
     executable = "pypy${if isPy3k then "3" else ""}";
     pythonForBuild = self; # No cross-compiling for now.
     sitePackages = "site-packages";
+    hasDistutilsCxxPatch = false;
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";

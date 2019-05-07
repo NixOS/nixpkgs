@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5.4";
+  version = "1.5.5";
   pname = "pyftpdlib";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e5fca613978743d41c3bfc68e25a811d646a3b8a9eee9eb07021daca89646a0f";
+    sha256 = "1adf1c03d1508749e7c2f26dc9850ec0ef834318d725b7ae5ac91698f5c86752";
   };
 
   checkInputs = [ mock psutil ];

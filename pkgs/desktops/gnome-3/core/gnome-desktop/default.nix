@@ -1,6 +1,6 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, libxslt, ninja, libX11, gnome3, gtk3, glib
 , gettext, libxml2, xkeyboard_config, isocodes, meson, wayland, fetchpatch
-, libseccomp, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl }:
+, libseccomp, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   name = "gnome-desktop-${version}";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     gtk3 glib libseccomp
   ];
 
-  propagatedBuildInputs = [ gnome3.gsettings-desktop-schemas ];
+  propagatedBuildInputs = [ gsettings-desktop-schemas ];
 
   patches = [
     (substituteAll {

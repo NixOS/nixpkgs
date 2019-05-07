@@ -42,14 +42,14 @@ in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "qcef";
-  version = "1.1.4.6";
+  version = "1.1.6";
 
   srcs = [
     (fetchFromGitHub {
       owner = "linuxdeepin";
       repo = pname;
       rev = version;
-      sha256 = "06909sd0gf7n4hw6p4j96apjym219zabflgpwjafm7v00bgnwxxs";
+      sha256 = "1x0vb4nkfa1lq0nh6iqpxfvsqmb6qfn305pbc92bsqpgiqd7jvb1";
       name = pname;
     })
     (fetchFromGitHub {
@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/linuxdeepin/qcef;
     license = licenses.lgpl3;
     platforms = platforms.linux;
+    badPlatforms = [ "aarch64-linux" ];  # the cef-binary is not available
     maintainers = with maintainers; [ romildo ];
   };
 }

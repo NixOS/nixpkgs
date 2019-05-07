@@ -68,4 +68,11 @@ with super;
       platforms = pkgs.lib.platforms.linux;
     };
   });
+
+  rapidjson = super.rapidjson.overrideAttrs(oa: {
+    preBuild = ''
+      sed -i '/set(CMAKE_CXX_FLAGS/d' CMakeLists.txt
+      sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
+    '';
+  });
  }

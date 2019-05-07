@@ -20,8 +20,6 @@ buildPythonPackage rec {
   # Tests are not included in the PyPI package
   doCheck = false;
 
-  disabled = isPy3k;
-
   propagatedBuildInputs = [
     boto3
     enum34

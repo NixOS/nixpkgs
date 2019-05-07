@@ -1,0 +1,25 @@
+{ stdenv, fetchzip, unzip}:
+
+let
+  version = "VER2.5";
+  fullName = "NanumGothicCoding-2.5";
+
+in fetchzip rec {
+  name = "nanum-gothic-coding";
+  url = "https://github.com/naver/nanumfont/releases/download/${version}/${fullName}.zip";
+
+  postFetch = ''
+    mkdir -p $out/share/fonts/NanumGothicCoding
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/NanumGothicCoding
+  '';
+
+  sha256 = "0b3pkhd6xn6393zi0dhj3ah08w1y1ji9fl6584bi0c8lanamf2pc";
+
+  meta = with stdenv.lib; {
+    description = "A contemporary monospaced sans-serif typeface with a warm touch";
+    homepage = https://github.com/naver/nanumfont;
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ linarcx ];
+  };
+}

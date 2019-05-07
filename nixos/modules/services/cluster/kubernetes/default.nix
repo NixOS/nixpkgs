@@ -273,11 +273,10 @@ in {
         wantedBy = [ "kube-control-plane-online.target" ];
         after = [ "kube-scheduler.service" "kube-controller-manager.service" ];
         before = [ "kube-control-plane-online.target" ];
-        environment.KUBECONFIG = cfg.lib.mkKubeConfig "default" cfg.kubeconfig;
-        path = [ pkgs.kubectl ];
+        path = [ pkgs.curl ];
         preStart = ''
-          until kubectl get --raw=/healthz 2>/dev/null; do
-            echo kubectl get --raw=/healthz: exit status $?
+          until curl -Ssf ${cfg.apiserverAddress}/healthz do
+            echo curl -Ssf ${cfg.apiserverAddress}/healthz: exit status $?
             sleep 3
           done
         '';

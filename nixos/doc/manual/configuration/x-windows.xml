@@ -67,6 +67,32 @@
 <xref linkend="opt-hardware.opengl.driSupport32Bit"/> = true;
 </programlisting>
  </para>
+ <simplesect xml:id="sec-x11-auto-login">
+  <title>Auto-login</title>
+  <para>
+  The x11 login screen can be skipped entirely, automatically logging you into
+  your window manager and desktop environment when you boot your computer.
+  </para>
+  <para>
+  This is especially helpful if you have disk encryption enabled. Since you
+  already have to provide a password to decrypt your disk, entering a second
+  password to login can be redundant.
+  </para>
+  <para>
+  To enable auto-login, you need to define your default window manager and
+  desktop environment. If you wanted no desktop environment and i3 as your your
+  window manager, you'd define:
+<programlisting>
+<xref linkend="opt-services.xserver.desktopManager.default"/> = "none";
+<xref linkend="opt-services.xserver.windowManager.default"/> = "i3";
+</programlisting>
+  And, finally, to enable auto-login for a user <literal>johndoe</literal>:
+<programlisting>
+<xref linkend="opt-services.xserver.displayManager.auto.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.auto.user"/> = "johndoe";
+</programlisting>
+  </para>
+ </simplesect>
  <simplesect xml:id="sec-x11-graphics-cards-nvidia">
   <title>Proprietary NVIDIA drivers</title>
   <para>

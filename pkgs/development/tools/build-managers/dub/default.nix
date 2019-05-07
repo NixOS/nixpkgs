@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ./build.sh
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     export DUB=$NIX_BUILD_TOP/source/bin/dub

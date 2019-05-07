@@ -38,7 +38,7 @@ let
 
   git-fame = callPackage ./git-fame {};
 
-  gita = callPackage ./gita {};
+  gita = python3Packages.callPackage ./gita {};
 
   # The full-featured Git.
   gitFull = gitBase.override {

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Columnar storage for PostgreSQL";
     homepage    = https://www.citusdata.com/;
     maintainers = with maintainers; [ thoughtpolice ];
-    platforms   = platforms.linux;
+    platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;
   };
 }

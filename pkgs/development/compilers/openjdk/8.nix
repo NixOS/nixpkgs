@@ -95,6 +95,9 @@ let
       ./swing-use-gtk-jdk8.patch
     ];
 
+    # Hotspot cares about the host(!) version otherwise
+    DISABLE_HOTSPOT_OS_VERSION_CHECK = "ok";
+
     preConfigure = ''
       chmod +x configure
       substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"

@@ -38,7 +38,7 @@ in
       "${pkgs.gnome3.dconf.lib}/lib/gio/modules";
     # https://github.com/NixOS/nixpkgs/pull/31891
     #environment.variables.XDG_DATA_DIRS = optional cfg.enable
-    #  "$(echo ${pkgs.gnome3.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-*)";
+    #  "$(echo ${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-*)";
   };
 
 }

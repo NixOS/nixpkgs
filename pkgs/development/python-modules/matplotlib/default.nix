@@ -52,8 +52,7 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals enableQt [ pyqt4 ];
 
   patches =
-    [ ./basedirlist.patch ] ++
-    stdenv.lib.optionals stdenv.isDarwin [ ./darwin-stdenv.patch ];
+    [ ./basedirlist.patch ];
 
   # Matplotlib tries to find Tcl/Tk by opening a Tk window and asking the
   # corresponding interpreter object for its library paths. This fails if

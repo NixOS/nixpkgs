@@ -256,8 +256,7 @@
   ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
-  ./services/desktops/deepin/dde-daemon.nix
-  ./services/desktops/deepin/deepin-menu.nix
+  ./services/desktops/deepin/deepin.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
   ./services/desktops/pantheon/contractor.nix
@@ -392,9 +391,9 @@
   ./services/misc/dysnomia.nix
   ./services/misc/disnix.nix
   ./services/misc/docker-registry.nix
-  ./services/misc/emby.nix
   ./services/misc/errbot.nix
   ./services/misc/etcd.nix
+  ./services/misc/ethminer.nix
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
@@ -414,6 +413,7 @@
   ./services/misc/ihaskell.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
+  ./services/misc/jellyfin.nix
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix

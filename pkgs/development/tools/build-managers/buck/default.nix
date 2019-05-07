@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     ant
 
-    ./bin/buck build -c buck.release_version=${version} buck
+    PYTHONDONTWRITEBYTECODE=true ./bin/buck build -c buck.release_version=${version} buck
   '';
 
   installPhase = ''

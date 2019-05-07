@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "vega";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "097jlh1xarnqmcnym5jkfa6rg2f0i6b17v9pck2242axgyi692rm";
+    sha256 = "0lshwsvi242m0ybrqjvbag73x1mrb31w2jq3lnklqyzry153xfdb";
   };
 
   buildInputs = [ pytest ];

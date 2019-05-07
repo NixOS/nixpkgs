@@ -18,7 +18,11 @@ let
     database ${cfg.database}
     suffix ${cfg.suffix}
     rootdn ${cfg.rootdn}
-    rootpw ${cfg.rootpw}
+    ${if (cfg.rootpw != null) then ''
+      rootpw ${cfg.rootpw}
+    '' else ''
+      include ${cfg.rootpwFile}
+    ''}
     directory ${cfg.dataDir}
     ${cfg.extraDatabaseConfig}
   '');
@@ -106,10 +110,23 @@ in
       };
 
       rootpw = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           Password for the root user.
           This setting will be ignored if configDir is set.
+          Using this option will store the root password in plain text in the
+          world-readable nix store. To avoid this the <literal>rootpwFile</literal> can be used.
+        '';
+      };
+
+      rootpwFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Password file for the root user.
+          The file should contain the string <literal>rootpw</literal> followed by the password.
+          e.g.: <literal>rootpw mysecurepassword</literal>
         '';
       };
 
@@ -140,9 +157,9 @@ in
             include ${pkgs.openldap.out}/etc/schema/inetorgperson.schema
             include ${pkgs.openldap.out}/etc/schema/nis.schema
 
-            database bdb 
-            suffix dc=example,dc=org 
-            rootdn cn=admin,dc=example,dc=org 
+            database bdb
+            suffix dc=example,dc=org
+            rootdn cn=admin,dc=example,dc=org
             # NOTE: change after first start
             rootpw secret
             directory /var/db/openldap
@@ -218,6 +235,12 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.rootpwFile != null || cfg.rootpw != null;
+        message = "Either services.openldap.rootpw or services.openldap.rootpwFile must be set";
+      }
+    ];
 
     environment.systemPackages = [ openldap ];
 

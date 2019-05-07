@@ -90,26 +90,7 @@ rec {
       echo "-target ${stdenv.targetPlatform.config}" >> $out/nix-support/cc-cflags
       echo "-resource-dir=$(echo ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/lib*/clang/*)" >> $out/nix-support/cc-cflags
       echo "--gcc-toolchain=${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}" >> $out/nix-support/cc-cflags
-    ''
-    + lib.optionalString stdenv.targetPlatform.isAarch32 (let
-        p =  stdenv.targetPlatform.platform.gcc or {}
-          // stdenv.targetPlatform.parsed.abi;
-        flags = lib.concatLists [
-          (lib.optional (p ? arch) "-march=${p.arch}")
-          (lib.optional (p ? cpu) "-mcpu=${p.cpu}")
-          (lib.optional (p ? abi) "-mabi=${p.abi}")
-          (lib.optional (p ? fpu) "-mfpu=${p.fpu}")
-          (lib.optional (p ? float-abi) "-mfloat-abi=${p.float-abi}")
-          (lib.optional (p ? mode) "-mmode=${p.mode}")
-        ];
-      in ''
-        sed -E -i \
-          $out/bin/${stdenv.targetPlatform.config}-cc \
-          $out/bin/${stdenv.targetPlatform.config}-c++ \
-          $out/bin/${stdenv.targetPlatform.config}-clang \
-          $out/bin/${stdenv.targetPlatform.config}-clang++ \
-          -e 's|^(extraBefore=)\((.*)\)$|\1(\2 -Wl,--fix-cortex-a8 ${builtins.toString flags})|'
-      '');
+    '';
   };
 
   # Bionic lib C and other libraries.

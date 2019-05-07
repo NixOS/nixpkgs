@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   RUSTC_BOOTSTRAP = 1;
 
-  cargoSha256 = "0bzid5wrpcrghazv5652ghyv4amp298p5kfridswv175kmr9gg0x";
+  cargoSha256 = "02xrz7vq8nan70f07xyf335blfmdc6gaz9sbfjipsi1drgfccf09";
 
   meta = with lib; {
     description = "An unofficial lightweight implementation of the Bitwarden server API using Rust and SQLite";

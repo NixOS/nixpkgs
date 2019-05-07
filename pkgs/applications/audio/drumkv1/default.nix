@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "drumkv1-${version}";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumkv1/${name}.tar.gz";
-    sha256 = "0d0kskr9pzdckw7sz4djjkkkgz1fa83zrq5my6qlxn68wqdj6800";
+    sha256 = "1361dqdasrc98q9hcjdwsjx6agfimwnay430887fryi3pslkyd81";
   };
 
   buildInputs = [ libjack2 alsaLib libsndfile liblo lv2 qt5.qtbase qt5.qttools ];

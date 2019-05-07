@@ -22,6 +22,7 @@
 , libxml2
 , libxslt
 , meson
+, mousetweaks
 , networkmanager
 , ninja
 , nss
@@ -30,12 +31,12 @@
 , pkgconfig
 , polkit
 , python3
+, stdenv
 , substituteAll
 , systemd
 , tzdata
 , upower
 , wrapGAppsHook
-, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -63,8 +64,9 @@ stdenv.mkDerivation rec {
   patches = let patchPath = "${src2}/debian/patches"; in [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit tzdata;
+      inherit tzdata mousetweaks;
     })
+    ./global-backlight-helper.patch
     "${patchPath}/45_suppress-printer-may-not-be-connected-notification.patch"
     "${patchPath}/64_restore_terminal_keyboard_shortcut_schema.patch"
     "${patchPath}/correct_logout_action.patch"
@@ -97,6 +99,10 @@ stdenv.mkDerivation rec {
     # This breaks lightlocker https://github.com/elementary/session-settings/commit/b0e7a2867608c3a3916f9e4e21a68264a20e44f8
     # TODO: shouldn't be neeed for the 5.1 greeter (awaiting release)
     rm $out/etc/xdg/autostart/org.gnome.SettingsDaemon.ScreensaverProxy-pantheon.desktop
+
+    # So the polkit policy can reference /run/current-system/sw/bin/elementary-settings-daemon/gsd-backlight-helper
+    mkdir -p $out/bin/elementary-settings-daemon
+    ln -s $out/libexec/gsd-backlight-helper $out/bin/elementary-settings-daemon/gsd-backlight-helper
   '';
 
   nativeBuildInputs = [

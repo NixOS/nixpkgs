@@ -1,19 +1,19 @@
 { stdenv, fetchurl, alsaLib, atk, cairo, cups, udev, hicolor-icon-theme
 , dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, gtk3, gnome3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
-, runtimeShell }:
+, runtimeShell, gsettings-desktop-schemas }:
 
 let
-  versionSuffix = "20190205202117.6394d03e6c";
+  versionSuffix = "20190412141809.5262f90fd9";
 in
 
 stdenv.mkDerivation rec {
   name = "keybase-gui-${version}";
-  version = "3.0.0"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  version = "3.2.2"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
-    sha256 = "0nwz0v6sqx1gd7spha09pk2bjbb8lgaxbrh0r6j6p0xzgzz6birw";
+    sha256 = "20f0cbfae52a8afbc88c1130279b2c2ced21fd498eee7e43c88f5b88abd8f21b";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     freetype
     gdk_pixbuf
     glib
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
     gtk3
     libnotify
     nspr

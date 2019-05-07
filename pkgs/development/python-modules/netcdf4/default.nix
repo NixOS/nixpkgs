@@ -3,13 +3,13 @@
 }:
 buildPythonPackage rec {
   pname = "netCDF4";
-  version = "1.5.0";
+  version = "1.5.0.1";
 
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nf0cjja94zsfbp8dw83b36c4cmz9v4b0h51yh8g3q2z9w8d2n62";
+    sha256 = "db24f7ca724e791574774b2a1e323ce0dfb544957fc6fbdb5d4c368f382b2de9";
   };
 
   checkInputs = [ pytest ];

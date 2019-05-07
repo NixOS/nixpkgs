@@ -47,7 +47,7 @@ mkChromiumDerivation (base: rec {
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
-    maintainers = with maintainers; [ bendlas ];
+    maintainers = with maintainers; [ bendlas ivan ];
     license = licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];

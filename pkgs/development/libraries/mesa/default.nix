@@ -93,7 +93,7 @@ let self = stdenv.mkDerivation {
     ./symlink-drivers.patch
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ] ++ lib.optional stdenv.isDarwin ./darwin-clock-gettime.patch;
+  ];
 
   outputs = [ "out" "dev" "drivers" ]
             ++ lib.optional (elem "swrast" galliumDrivers) "osmesa";

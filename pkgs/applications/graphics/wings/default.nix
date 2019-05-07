@@ -1,10 +1,10 @@
 { fetchurl, stdenv, erlang, cl, libGL, libGLU, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "wings-2.2.3";
+  name = "wings-2.2.4";
   src = fetchurl {
     url = "mirror://sourceforge/wings/${name}.tar.bz2";
-    sha256 = "1b9xdmh0186xxs92i831vm9yq0il1hngi8bl9a1q7fs26wb8js1g";
+    sha256 = "1xcmifs4vq2810pqqvsjsm8z3lz24ys4c05xkh82nyppip2s89a3";
   };
 
   ERL_LIBS = "${cl}/lib/erlang/lib";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.wings3d.com/;
     description = "Subdivision modeler inspired by Nendo and Mirai from Izware";
-    license = "BSD";
+    license = stdenv.lib.licenses.tcltk;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

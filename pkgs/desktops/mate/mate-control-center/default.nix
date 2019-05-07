@@ -37,7 +37,21 @@ stdenv.mkDerivation rec {
     mate.mate-settings-daemon
   ];
 
+  patches = [
+    # look up keyboard shortcuts in system data dirs
+    ./mate-control-center.keybindings-dir.patch
+  ];
+
   configureFlags = [ "--disable-update-mimedb" ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # WM keyboard shortcuts
+      --prefix XDG_DATA_DIRS : "${mate.marco}/share"
+    )
+  '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Utilities to configure the MATE desktop";

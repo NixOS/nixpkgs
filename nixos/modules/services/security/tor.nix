@@ -81,7 +81,7 @@ let
 
     ${optionalString (elem cfg.relay.role ["bridge" "private-bridge"]) ''
       BridgeRelay 1
-      ServerTransportPlugin obfs2,obfs3 exec ${pkgs.pythonPackages.obfsproxy}/bin/obfsproxy managed
+      ServerTransportPlugin ${concatStringsSep "," cfg.relay.bridgeTransports} exec ${obfs4}/bin/obfs4proxy managed
       ExtORPort auto
       ${optionalString (cfg.relay.role == "private-bridge") ''
         ExtraInfoStatistics 0
@@ -355,7 +355,7 @@ in
                 <para>
                   Regular bridge. Works like a regular relay, but
                   doesn't list you in the public relay directory and
-                  hides your Tor node behind obfsproxy.
+                  hides your Tor node behind obfs4proxy.
                 </para>
 
                 <para>
@@ -422,6 +422,13 @@ in
             </varlistentry>
             </variablelist>
           '';
+        };
+
+        bridgeTransports = mkOption {
+          type = types.listOf types.str;
+          default = ["obfs4"];
+          example = ["obfs2" "obfs3" "obfs4" "scramblesuit"];
+          description = "List of pluggable transports";
         };
 
         nickname = mkOption {
