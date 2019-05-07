@@ -16007,6 +16007,8 @@ in
 
   documize-community = callPackage ../servers/documize-community { };
 
+  doge = callPackage ../misc/doge { };
+
   doulos-sil = callPackage ../data/fonts/doulos-sil { };
 
   cabin = callPackage ../data/fonts/cabin { };
