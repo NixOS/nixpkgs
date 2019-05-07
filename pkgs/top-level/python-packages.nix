@@ -468,6 +468,8 @@ in {
 
   httpsig = callPackage ../development/python-modules/httpsig { };
 
+  httptools = callPackage ../development/python-modules/httptools { };
+
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   imutils = callPackage ../development/python-modules/imutils { };
