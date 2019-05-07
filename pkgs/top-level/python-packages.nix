@@ -913,6 +913,8 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  uvloop = callPackage ../development/python-modules/uvloop { };
+
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
