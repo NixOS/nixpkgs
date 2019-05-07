@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook
-, openssl
+, openssl, lib
 , libcap, libpcap, libnfnetlink, libnetfilter_conntrack, libnetfilter_queue
 }:
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl ]
-    ++ optionals stdenv.isLinux [ libcap libpcap libnfnetlink libnetfilter_conntrack libnetfilter_queue ];
+  buildInputs = [ openssl libpcap ]
+    ++ optionals stdenv.isLinux [ libcap libnfnetlink libnetfilter_conntrack libnetfilter_queue ];
 
   enableParallelBuilding = true;
 

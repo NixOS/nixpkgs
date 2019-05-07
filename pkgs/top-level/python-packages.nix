@@ -1405,6 +1405,8 @@ in {
 
   cfgv = callPackage ../development/python-modules/cfgv { };
 
+  cfn-lint = callPackage ../development/python-modules/cfn-lint { };
+
   cftime = callPackage ../development/python-modules/cftime {};
 
   cjson = callPackage ../development/python-modules/cjson { };

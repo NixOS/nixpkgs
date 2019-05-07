@@ -34,8 +34,6 @@ stdenv.mkDerivation {
   buildInputs = [ SDL SDL_mixer SDL_sound gtk2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ cf-private smpeg libvorbis ];
 
-  patches = [ ./darwin.patch ];
-
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
   installPhase =

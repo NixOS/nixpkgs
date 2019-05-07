@@ -79,7 +79,7 @@ qtModule {
     cat <<EOF > src/3rdparty/chromium/build/mac/find_sdk.py
 #!/usr/bin/env python
 print("${darwin.apple_sdk.sdk}")
-print("10.10.0")
+print("10.12.0")
 EOF
 
     cat <<EOF > src/3rdparty/chromium/build/config/mac/sdk_info.py

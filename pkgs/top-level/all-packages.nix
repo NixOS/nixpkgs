@@ -1302,6 +1302,7 @@ in
   contacts = callPackage ../tools/misc/contacts {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
+    xcbuildHook = xcbuild6Hook;
   };
 
   compsize = callPackage ../os-specific/linux/compsize { };
@@ -3413,7 +3414,9 @@ in
     hdf4 = null;
   };
 
-  haproxy = callPackage ../tools/networking/haproxy { };
+  haproxy = callPackage ../tools/networking/haproxy {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
 
   haveged = callPackage ../tools/security/haveged { };
 
@@ -4108,6 +4111,13 @@ in
     enableNpm = false;
     openssl = openssl_1_1;
   };
+  nodejs-12_x = callPackage ../development/web/nodejs/v12.nix {
+    openssl = openssl_1_1;
+  };
+  nodejs-slim-12_x = callPackage ../development/web/nodejs/v12.nix {
+    enableNpm = false;
+    openssl = openssl_1_1;
+  };
 
   nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
     nodejs = pkgs.nodejs-10_x;
@@ -4507,7 +4517,9 @@ in
     docbook-xsl = docbook_xsl;
   };
 
-  mosh = callPackage ../tools/networking/mosh { };
+  mosh = callPackage ../tools/networking/mosh {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
 
   motuclient = callPackage ../applications/science/misc/motu-client { };
 
@@ -5124,6 +5136,7 @@ in
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    xcbuildHook = xcbuild6Hook;
   };
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
@@ -5297,7 +5310,9 @@ in
 
   remarshal = callPackage ../development/tools/remarshal { };
 
-  rig = callPackage ../tools/misc/rig { };
+  rig = callPackage ../tools/misc/rig {
+    stdenv = gccStdenv;
+  };
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
@@ -5818,7 +5833,7 @@ in
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { samba = samba3; };
 
-  sl = callPackage ../tools/misc/sl { };
+  sl = callPackage ../tools/misc/sl { stdenv = gccStdenv; };
 
   socat = callPackage ../tools/networking/socat { };
 
@@ -6950,7 +6965,9 @@ in
     inherit (buildPackages.darwin) bootstrap_cmds;
   };
 
-  cdb = callPackage ../development/tools/database/cdb { };
+  cdb = callPackage ../development/tools/database/cdb {
+    stdenv = gccStdenv;
+  };
 
   chez = callPackage ../development/compilers/chez {
     inherit (darwin) cctools;
@@ -6963,11 +6980,6 @@ in
     name = "clang-wrapper-with-reexport-hack";
     bintools = darwin.binutils.override {
       useMacosReexportHack = true;
-      bintools = darwin.binutils.bintools.override {
-        cctools = darwin.cctools.override {
-          enableDumpNormalizedLibArgs = true;
-        };
-      };
     };
   };
   llvm-polly = llvmPackages_latest.llvm-polly;
@@ -7013,7 +7025,10 @@ in
 
   cryptol = haskell.lib.justStaticExecutables haskellPackages.cryptol;
 
-  inherit (callPackages ../development/compilers/crystal {})
+  inherit (callPackages ../development/compilers/crystal {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+    inherit (llvmPackages_6) clang llvm;
+  })
     crystal_0_25
     crystal_0_26
     crystal;
@@ -7627,7 +7642,7 @@ in
   llvm_37 = llvmPackages_37.llvm;
   llvm_35 = llvmPackages_35.llvm;
 
-  llvmPackages = recurseIntoAttrs llvmPackages_5;
+  llvmPackages = recurseIntoAttrs llvmPackages_7;
 
   llvmPackages_35 = callPackage ../development/compilers/llvm/3.5 ({
     isl = isl_0_14;
@@ -7944,7 +7959,9 @@ in
 
   tinycc = callPackage ../development/compilers/tinycc { };
 
-  tinyscheme = callPackage ../development/interpreters/tinyscheme { };
+  tinyscheme = callPackage ../development/interpreters/tinyscheme {
+    stdenv = gccStdenv;
+  };
 
   inherit (ocaml-ng.ocamlPackages_4_02) trv;
 
@@ -8169,7 +8186,9 @@ in
 
   lush2 = callPackage ../development/interpreters/lush {};
 
-  maude = callPackage ../development/interpreters/maude { };
+  maude = callPackage ../development/interpreters/maude {
+    stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
+  };
 
   me_cleaner = pythonPackages.callPackage ../tools/misc/me_cleaner { };
 
@@ -8248,11 +8267,13 @@ in
     php = php72-unit;
   });
 
-   php73Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
+  php73Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php73-unit;
   });
 
-  inherit (callPackages ../development/interpreters/php { })
+  inherit (callPackages ../development/interpreters/php {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  })
     php71
     php72
     php73;
@@ -8830,9 +8851,7 @@ in
 
   cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
-  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
-    inherit (darwin) cf-private;
-  };
+  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
@@ -8861,8 +8880,10 @@ in
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
   cquery = callPackage ../development/tools/misc/cquery {
-    llvmPackages = llvmPackages_latest;
+    # 7 is the default, but only on Linux, so keep this for now
+    llvmPackages = llvmPackages_7;
   };
+
 
   ccls = callPackage ../development/tools/misc/ccls {
     llvmPackages = llvmPackages_7;
@@ -9602,9 +9623,15 @@ in
   xcodebuild = callPackage ../development/tools/xcbuild/wrapper.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
   };
+  xcodebuild6 = xcodebuild.override { stdenv = llvmPackages_6.stdenv; };
   xcbuild = xcodebuild;
   xcbuildHook = makeSetupHook {
     deps = [ xcbuild ];
+  } ../development/tools/xcbuild/setup-hook.sh  ;
+
+  # xcbuild with llvm 6
+  xcbuild6Hook = makeSetupHook {
+    deps = [ xcodebuild6 ];
   } ../development/tools/xcbuild/setup-hook.sh  ;
 
   xcpretty = callPackage ../development/tools/xcpretty { };
@@ -9882,9 +9909,13 @@ in
 
   cln = callPackage ../development/libraries/cln { };
 
-  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
+  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
 
-  clucene_core_1 = callPackage ../development/libraries/clucene-core { };
+  clucene_core_1 = callPackage ../development/libraries/clucene-core {
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
 
   clucene_core = clucene_core_1;
 
@@ -10934,7 +10965,7 @@ in
 
   libao = callPackage ../development/libraries/libao {
     usePulseAudio = config.pulseaudio or stdenv.isLinux;
-    inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit;
+    inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit AudioToolbox;
   };
 
   libaosd = callPackage ../development/libraries/libaosd { };
@@ -11010,7 +11041,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
   libcanberra-gtk3 = pkgs.libcanberra.override {
-    gtk = gtk3;
+    gtk = gtk3.override { x11Support = true; };
   };
   libcanberra-gtk2 = pkgs.libcanberra-gtk3.override {
     gtk = gtk2.override { gdktarget = "x11"; };
@@ -12040,6 +12071,7 @@ in
   libGLSupported = lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms;
 
   mesa_noglu = callPackage ../development/libraries/mesa {
+    # 7 is the default, but only on Linux, so keep this for now
     llvmPackages = llvmPackages_7;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
@@ -12563,6 +12595,7 @@ in
       inherit gtk3;
       inherit (gnome3) dconf;
       inherit (gst_all_1) gstreamer gst-plugins-base;
+      inherit llvmPackages_5;
     });
 
   libsForQt511 = recurseIntoAttrs (lib.makeScope qt511.newScope mkLibsForQt5);
@@ -12580,6 +12613,7 @@ in
       inherit gtk3;
       inherit (gnome3) dconf;
       inherit (gst_all_1) gstreamer gst-plugins-base;
+      inherit llvmPackages_5;
     });
 
   libsForQt512 = recurseIntoAttrs (lib.makeScope qt512.newScope mkLibsForQt5);
@@ -19160,7 +19194,9 @@ in
 
   openbox = callPackage ../applications/window-managers/openbox { };
 
-  openbox-menu = callPackage ../applications/misc/openbox-menu { };
+  openbox-menu = callPackage ../applications/misc/openbox-menu {
+    stdenv = gccStdenv;
+  };
 
   openbrf = libsForQt5.callPackage ../applications/misc/openbrf { };
 
@@ -21763,7 +21799,9 @@ in
 
   xtris = callPackage ../games/xtris { };
 
-  inherit (callPackage ../games/quake2/yquake2 { })
+  inherit (callPackage ../games/quake2/yquake2 {
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
+  })
     yquake2
     yquake2-ctf
     yquake2-ground-zero
@@ -22673,11 +22711,13 @@ in
   root = callPackage ../applications/science/misc/root {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
+    stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   };
 
   root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
+    stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   });
 
   rink = callPackage ../applications/science/misc/rink { };
@@ -22998,7 +23038,8 @@ in
 
   jack2 = callPackage ../misc/jackaudio {
     libopus = libopus.override { withCustomModes = true; };
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio CoreFoundation;
+    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio Accelerate;
+    inherit (darwin) cf-private libobjc;
   };
   libjack2 = jack2.override { prefix = "lib"; };
   jack2Full = jack2; # TODO: move to aliases.nix
@@ -23323,7 +23364,9 @@ in
 
   fsuae = callPackage ../misc/emulators/fs-uae { };
 
-  putty = callPackage ../applications/networking/remote/putty { };
+  putty = callPackage ../applications/networking/remote/putty {
+    gtk2 = gtk2-x11;
+  };
 
   qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
 

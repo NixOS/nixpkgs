@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, glib, expat, pam, perl
-, intltool, spidermonkey_52 , gobject-introspection, libxslt, docbook_xsl, dbus
+, intltool, spidermonkey_60 , gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
 , useSystemd ? stdenv.isLinux, systemd
 , withGnome ? true
@@ -14,27 +14,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "polkit-0.115";
+  pname = "polkit";
+  version = "0.116";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/polkit/releases/${name}.tar.gz";
-    sha256 = "0c91y61y4gy6p91cwbzg32dhavw4b7fflg370rimqhdxpzdfr1rg";
+    url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.gz";
+    sha256 = "1c9lbpndh5zis22f154vjrhnqw65z8s85nrgl42v738yf6g0q5w8";
   };
-
-  patches = [
-    # CVE-2019-6133 - See: https://bugs.chromium.org/p/project-zero/issues/detail?id=1692
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/polkit/polkit/commit/6cc6aafee135ba44ea748250d7d29b562ca190e3.patch";
-      name = "CVE-2019-6133.patch";
-      sha256 = "0jjlbjzqcz96xh6w3nv3ss9jl0hhrcd7jg4aa5advf08ibaj29r1";
-    })
-    # CVE-2018-19788 - high UID fixup
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/polkit/polkit/commit/5230646dc6876ef6e27f57926b1bad348f636147.patch";
-      name = "CVE-2018-19788.patch";
-      sha256 = "1y3az4mlxx8k1zcss5qm7k102s7k1kqgcfnf11j9678fh7p008vp";
-    })
-  ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i -e "s/-Wl,--as-needed//" configure.ac
@@ -46,7 +32,7 @@ stdenv.mkDerivation rec {
     [ glib gtk-doc pkgconfig intltool perl ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
-    [ glib expat pam spidermonkey_52 ]
+    [ glib expat pam spidermonkey_60 ]
     ++ stdenv.lib.optional useSystemd systemd
     ++ stdenv.lib.optional withGnome gobject-introspection;
 
@@ -72,15 +58,21 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--datadir=${system}/share"
     "--sysconfdir=/etc"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-polkitd-user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "--with-os-type=NixOS" # not recognized but prevents impurities on non-NixOS
     (if withGnome then "--enable-introspection" else "--disable-introspection")
   ] ++ stdenv.lib.optional (!doCheck) "--disable-test";
 
-  makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0 INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
+  makeFlags = [
+    "INTROSPECTION_GIRDIR=${placeholder "out"}/share/gir-1.0"
+    "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
+  ];
 
-  installFlags=["datadir=$(out)/share" "sysconfdir=$(out)/etc"];
+  installFlags = [
+    "datadir=${placeholder "out"}/share"
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   inherit doCheck;
   checkInputs = [dbus];

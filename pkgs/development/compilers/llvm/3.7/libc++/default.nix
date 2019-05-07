@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     description = "A new implementation of the C++ standard library, targeting C++11";
     license = with stdenv.lib.licenses; [ ncsa mit ];
     platforms = stdenv.lib.platforms.unix;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

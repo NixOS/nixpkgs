@@ -17,9 +17,6 @@ buildPythonPackage rec {
     pytest -v tests
   '';
 
-  # RecursionError: maximum recursion depth exceeded
-  doCheck = false;
-
   meta = with stdenv.lib; {
     homepage = http://jinja.pocoo.org/;
     description = "Stand-alone template engine";

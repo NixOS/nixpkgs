@@ -9,7 +9,7 @@
 
 let
   pname = "gobject-introspection";
-  version = "1.60.0";
+  version = "1.60.1";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0pgk9lcvz3i79m6g2ynlp00ghws7g0p0d5qyf0k72warrf841zly";
+    sha256 = "1cr4r3lh5alrks9q2ycs1kn2crnkhrhn2wrmibng6dndkr4x2i6q";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   patches = [
-    ./macos-shared-library.patch
     (substituteAll {
       src = ./test_shlibs.patch;
       inherit nixStoreDir;

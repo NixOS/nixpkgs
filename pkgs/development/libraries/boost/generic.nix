@@ -114,8 +114,9 @@ stdenv.mkDerivation {
     description = "Collection of C++ libraries";
     license = stdenv.lib.licenses.boost;
 
-    platforms = (platforms.unix ++ platforms.windows);
-    badPlatforms = stdenv.lib.optional (versionOlder version "1.59") "aarch64-linux";
+    platforms = platforms.unix ++ platforms.windows;
+    badPlatforms = stdenv.lib.optional (versionOlder version "1.59") "aarch64-linux"
+                 ++ stdenv.lib.optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
     maintainers = with maintainers; [ peti ];
   };
 

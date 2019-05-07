@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = true;
-  checkPhase = "make tests && LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib make test";
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$PWD/lib
+  '';
+  checkTarget = "tests test";
 
   meta = with stdenv.lib; {
     description = "High-level, multiplatform C++ network packet sniffing and crafting library";
