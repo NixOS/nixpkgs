@@ -145,6 +145,8 @@ stdenv.mkDerivation {
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
+
+      export shell coreutils_bin gnugrep_bin bintools infixSalt name wrapperName
     ''
 
     + (if nativeTools then ''

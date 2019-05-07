@@ -5,9 +5,6 @@ if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
 
-: ${outputs:=out}
-
-
 ######################################################################
 # Hook handling.
 
@@ -1156,7 +1153,7 @@ fixupPhase() {
     if [ -n "${setupHooks:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"
         local hook
-        for hook in $setupHooks; do
+        for hook in "${setupHooks[@]}"; do
             local content
             consumeEntire content < "$hook"
             substituteAllStream content "file '$hook'" >> "${!outputDev}/nix-support/setup-hook"
