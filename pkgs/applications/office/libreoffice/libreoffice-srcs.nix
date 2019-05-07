@@ -707,11 +707,11 @@
     md5name = "2f1e960d92ce3b3abd03d06dfec9637dfbd22febf107a536b44f7a47c60659f6-libpng-1.6.34.tar.xz";
   }
   {
-    name = "poppler-0.73.0.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/poppler-0.73.0.tar.xz";
-    sha256 = "e44b5543903128884ba4538c2a97d3bcc8889e97ffacc4636112101f0238db03";
+    name = "poppler-0.74.0.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/poppler-0.74.0.tar.xz";
+    sha256 = "92e09fd3302567fd36146b36bb707db43ce436e8841219025a82ea9fb0076b2f";
     md5 = "";
-    md5name = "e44b5543903128884ba4538c2a97d3bcc8889e97ffacc4636112101f0238db03-poppler-0.73.0.tar.xz";
+    md5name = "92e09fd3302567fd36146b36bb707db43ce436e8841219025a82ea9fb0076b2f-poppler-0.74.0.tar.xz";
   }
   {
     name = "postgresql-9.2.24.tar.bz2";
@@ -721,11 +721,11 @@
     md5name = "a754c02f7051c2f21e52f8669a421b50485afcde9a581674d6106326b189d126-postgresql-9.2.24.tar.bz2";
   }
   {
-    name = "Python-3.5.6.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/Python-3.5.6.tar.xz";
-    sha256 = "f55cde04f521f273c7cba08912921cc5642cfc15ca7b22d5829f0aff4371155f";
+    name = "Python-3.5.7.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/Python-3.5.7.tar.xz";
+    sha256 = "285892899bf4d5737fd08482aa6171c6b2564a45b9102dfacfb72826aebdc7dc";
     md5 = "";
-    md5name = "f55cde04f521f273c7cba08912921cc5642cfc15ca7b22d5829f0aff4371155f-Python-3.5.6.tar.xz";
+    md5name = "285892899bf4d5737fd08482aa6171c6b2564a45b9102dfacfb72826aebdc7dc-Python-3.5.7.tar.xz";
   }
   {
     name = "libqxp-0.0.2.tar.xz";

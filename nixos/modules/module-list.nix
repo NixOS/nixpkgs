@@ -256,8 +256,7 @@
   ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
-  ./services/desktops/deepin/dde-daemon.nix
-  ./services/desktops/deepin/deepin-menu.nix
+  ./services/desktops/deepin/deepin.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
   ./services/desktops/pantheon/contractor.nix

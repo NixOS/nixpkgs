@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron}/lib/electron/.electron-wrapped $out/bin/ramboxpro \
+    makeWrapper ${electron}/bin/electron $out/bin/ramboxpro \
       --add-flags "$out/opt/RamboxPro/resources/app.asar.unpacked --without-update" \
       --prefix PATH : ${xdg_utils}/bin
   '';

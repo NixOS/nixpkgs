@@ -518,6 +518,10 @@ in
 
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
 
+  amber = callPackage ../tools/text/amber {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   ammonite = callPackage ../development/tools/ammonite {};
 
   amtterm = callPackage ../tools/system/amtterm {};
@@ -4139,6 +4143,8 @@ in
 
   jumanpp = callPackage ../tools/text/jumanpp {};
 
+  jump = callPackage ../tools/system/jump {};
+
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
   latex2html = callPackage ../tools/misc/latex2html { };
@@ -4383,6 +4389,8 @@ in
   memtier-benchmark = callPackage ../tools/networking/memtier-benchmark { };
 
   memtest86 = callPackage ../tools/misc/memtest86 { };
+
+  memtest86-efi = callPackage ../tools/misc/memtest86-efi { };
 
   memtest86plus = callPackage ../tools/misc/memtest86+ { };
 
@@ -5837,6 +5845,8 @@ in
 
   spaceFM = callPackage ../applications/misc/spacefm { };
 
+  speech-denoiser = callPackage ../applications/audio/speech-denoiser {};
+
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
   squashfuse = callPackage ../tools/filesystems/squashfuse { };
@@ -6319,6 +6329,8 @@ in
   };
 
   vit = callPackage ../applications/misc/vit { };
+
+  viu = callPackage ../tools/graphics/viu { };
 
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
@@ -7915,7 +7927,7 @@ in
   squeak = callPackage ../development/compilers/squeak { };
 
   squirrel-sql = callPackage ../development/tools/database/squirrel-sql {
-    drivers = [ mysql_jdbc postgresql_jdbc ];
+    drivers = [ mssql_jdbc mysql_jdbc postgresql_jdbc ];
   };
 
   stalin = callPackage ../development/compilers/stalin { };
@@ -8386,7 +8398,7 @@ in
   svg2tikz = python27Packages.svg2tikz;
 
   pew = callPackage ../development/tools/pew {};
-  pipenv = callPackage ../development/tools/pipenv {};
+  pipenv = python3Packages.callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {};
 
@@ -8881,7 +8893,7 @@ in
   credstash = with python3Packages; toPythonApplication credstash;
 
   creduce = callPackage ../development/tools/misc/creduce {
-    inherit (llvmPackages_6) llvm clang-unwrapped;
+    inherit (llvmPackages_7) llvm clang-unwrapped;
   };
 
   cscope = callPackage ../development/tools/misc/cscope { };
@@ -9814,6 +9826,8 @@ in
   boost168 = callPackage ../development/libraries/boost/1.68.nix { };
   boost169 = callPackage ../development/libraries/boost/1.69.nix { };
   boost16x = boost167;
+  boost170 = callPackage ../development/libraries/boost/1.70.nix { };
+  boost17x = boost170;
   boost = boost16x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
@@ -10393,7 +10407,7 @@ in
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
 
-  wasilibc = callPackages ../development/libraries/wasilibc {
+  wasilibc = callPackage ../development/libraries/wasilibc {
     stdenv = crossLibcStdenv;
   };
 
@@ -10989,7 +11003,7 @@ in
   libb2 = callPackage ../development/libraries/libb2 { };
 
   libbap = callPackage ../development/libraries/libbap {
-    inherit (ocaml-ng.ocamlPackages_4_05) bap ocaml findlib ctypes;
+    inherit (ocamlPackages) bap ocaml findlib ctypes;
   };
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
@@ -13113,7 +13127,10 @@ in
 
   stfl = callPackage ../development/libraries/stfl { };
 
-  stlink = callPackage ../development/tools/misc/stlink { };
+  stlink = callPackage ../development/tools/misc/stlink {
+    # The Darwin build of stlink explicitly refers to static libusb.
+    libusb1 = if stdenv.isDarwin then libusb1.override { withStatic = true; } else libusb1;
+  };
 
   steghide = callPackage ../tools/security/steghide {};
 
@@ -14304,6 +14321,8 @@ in
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
+  mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
+
   miniflux = callPackage ../servers/miniflux { };
 
   nagios = callPackage ../servers/monitoring/nagios { };
@@ -15085,6 +15104,14 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.export_kernel_fpu_functions
+      ];
+  };
+
+  linux_5_1 = callPackage ../os-specific/linux/kernel/linux-5.1.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.modinst_arg_list_too_long
       ];
   };
 
@@ -15154,6 +15181,8 @@ in
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
     cpupower = callPackage ../os-specific/linux/cpupower { };
+
+    deepin-anything = callPackage ../os-specific/linux/deepin-anything { };
 
     dpdk = callPackage ../os-specific/linux/dpdk { };
 
@@ -15278,7 +15307,7 @@ in
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_5_0;
+  linuxPackages_latest = linuxPackages_5_1;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -15289,6 +15318,8 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_0);
+  linuxPackages_5_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_1);
+
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
   # - Update the rev in ../os-specific/linux/kernel/linux-libre.nix to the latest one.
@@ -16315,6 +16346,8 @@ in
   scheherazade = callPackage ../data/fonts/scheherazade { };
 
   signwriting = callPackage ../data/fonts/signwriting { };
+
+  sierra-gtk-theme = callPackage ../data/themes/sierra { };
 
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
 
@@ -17476,6 +17509,8 @@ in
 
   exrtools = callPackage ../applications/graphics/exrtools { };
 
+  fasttext = callPackage ../applications/science/machine-learning/fasttext { };
+
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
   fbreader = callPackage ../applications/misc/fbreader {
@@ -17671,6 +17706,8 @@ in
   # The GTK UI is deprecated by upstream. You probably want the QT version.
   wireshark-gtk = throw "Not supported anymore. Use wireshark-qt or wireshark-cli instead.";
   wireshark-cli = wireshark.override { withQt = false; };
+
+  termshark = callPackage ../tools/networking/termshark { };
 
   fbida = callPackage ../applications/graphics/fbida { };
 
@@ -18471,7 +18508,11 @@ in
 
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
 
-  kupfer = callPackage ../applications/misc/kupfer { };
+  kupfer = callPackage ../applications/misc/kupfer {
+    # using python36 as there appears to be a waf issue with python37
+    # see https://github.com/NixOS/nixpkgs/issues/60498
+    python3Packages = python36Packages;
+  };
 
   lame = callPackage ../development/libraries/lame { };
 
@@ -23432,8 +23473,6 @@ in
     libselinux = libselinux.override { python = python3; };
     libsemanage = libsemanage.override { python = python3; };
   };
-
-  sierra-gtk-theme = callPackage ../misc/themes/sierra { };
 
   slock = callPackage ../misc/screensavers/slock {
     conf = config.slock.conf or null;

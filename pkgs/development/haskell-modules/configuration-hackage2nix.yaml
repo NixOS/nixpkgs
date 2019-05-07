@@ -3495,7 +3495,6 @@ broken-packages:
   - ClassLaws
   - classy-miso
   - classy-parallel
-  - classy-prelude-yesod
   - ClassyPrelude
   - clay
   - clckwrks
@@ -4323,7 +4322,6 @@ broken-packages:
   - esotericbot
   - EsounD
   - espial
-  - esqueleto
   - ess
   - estimators
   - EstProgress
@@ -5614,7 +5612,6 @@ broken-packages:
   - Hmpf
   - hmt-diagrams
   - hmumps
-  - hnix
   - HNM
   - hnormalise
   - ho-rewriting
@@ -7172,6 +7169,8 @@ broken-packages:
   - NestedFunctor
   - nestedmap
   - net-spider
+  - net-spider-pangraph
+  - net-spider-rpl
   - netclock
   - netcore
   - netease-fm
@@ -7219,6 +7218,7 @@ broken-packages:
   - neural-network-hmatrix
   - newhope
   - newports
+  - newsletter-mailgun
   - newt
   - newtype-deriving
   - newtype-th
@@ -9940,7 +9940,6 @@ broken-packages:
   - yesod-links
   - yesod-lucid
   - yesod-mangopay
-  - yesod-markdown
   - yesod-paginate
   - yesod-pagination
   - yesod-paginator
