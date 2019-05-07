@@ -4641,6 +4641,8 @@ in {
 
   sandboxlib = callPackage ../development/python-modules/sandboxlib { };
 
+  sanic = callPackage ../development/python-modules/sanic { };
+
   scales = callPackage ../development/python-modules/scales { };
 
   secp256k1 = callPackage ../development/python-modules/secp256k1 {
