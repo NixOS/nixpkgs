@@ -1325,6 +1325,8 @@ in
 
   csvkit = callPackage ../tools/text/csvkit { };
 
+  csvs-to-sqlite = with python3Packages; toPythonApplication csvs-to-sqlite;
+
   cucumber = callPackage ../development/tools/cucumber {};
 
   daemontools = callPackage ../tools/admin/daemontools { };

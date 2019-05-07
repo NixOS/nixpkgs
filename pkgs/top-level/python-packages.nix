@@ -1230,6 +1230,8 @@ in {
 
   csscompressor = callPackage ../development/python-modules/csscompressor {};
 
+  csvs-to-sqlite = callPackage ../development/python-modules/csvs-to-sqlite { };
+
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
   cupy = callPackage ../development/python-modules/cupy {
