@@ -1654,6 +1654,8 @@ in {
 
   pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
 
+  pytest-sanic = callPackage ../development/python-modules/pytest-sanic { };
+
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
   pytest-flakes = callPackage ../development/python-modules/pytest-flakes { };
