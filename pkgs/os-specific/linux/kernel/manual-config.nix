@@ -198,6 +198,10 @@ let
         cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
         make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
 
+        # For reproducibility, removes accidental leftovers from a `cc1` call
+        # from a `try-run` call from the Makefile
+        rm -f $dev/lib/modules/${modDirVersion}/build/.[0-9]*.d
+
         # Keep some extra files on some arches (powerpc, aarch64)
         for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
           if [ -f "$buildRoot/$f" ]; then
