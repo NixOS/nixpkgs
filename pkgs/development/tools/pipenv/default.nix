@@ -1,5 +1,15 @@
-{ stdenv, python3Packages, pew }:
-with python3Packages;
+{ lib
+, buildPythonApplication
+, flake8
+, invoke
+, parver
+, pip
+, requests
+, virtualenv
+, fetchPypi
+, virtualenv-clone
+}:
+
 buildPythonApplication rec {
   pname = "pipenv";
   version = "2018.11.26";
@@ -18,6 +28,7 @@ buildPythonApplication rec {
     pip
     requests
     virtualenv
+    virtualenv-clone
   ];
 
   doCheck = false;
@@ -27,7 +38,7 @@ buildPythonApplication rec {
     "--set PIP_IGNORE_INSTALLED 1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Development Workflow for Humans";
     license = licenses.mit;
     platforms = platforms.all;

@@ -48,14 +48,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0i8pmgdm0i6klb06s3nwad9xz4whbvb5mjjqjqvl6fh0flk6zs1p";
+      sha256 = "0gnx596sr498n3frz1wgcnq9kqqaqksxfyjm145235pvrv2ymgvp";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "14hd6rnq9316p78zharqznps80mxxwz3n80zm15cpj3xg3dr57v1";
+      sha256 = "0chips6h2ymaqwvjlxzjn7jm64y6r4lcr7z7rppan436nqz95dn1";
     };
 
   };
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ];
+  NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ] ++ lib.optional stdenv.isx86_64 "-mno-fma";
 
   patches = [
     ./xdg-open-brief.patch
@@ -258,7 +258,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
 
-    for a in sbase scalc sdraw smath swriter simpress soffice; do
+    for a in sbase scalc sdraw smath swriter simpress soffice unopkg; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
     done
 
