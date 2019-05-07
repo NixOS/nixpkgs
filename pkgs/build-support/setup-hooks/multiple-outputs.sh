@@ -7,10 +7,10 @@ postFixupHooks+=(_multioutPropagateDev)
 # Assign the first string containing nonempty variable to the variable named $1
 _assignFirst() {
     local varName="$1"
-    local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
     while [ $# -ge 1 ]; do
-        if [ -n "${!1}" ]; then eval "${varName}"="$1"; return; fi
+        if [ "$1" = REMOVE ]; then eval "${varName}"=REMOVE; return; fi
+        if [ ${outputs[$1]+isset} ]; then eval "${varName}"="$1"; return; fi
         shift
     done
     echo "Error: _assignFirst found no valid variant!"
@@ -44,10 +44,14 @@ _overrideFirst outputMan "man" "$outputBin"
 _overrideFirst outputDevman "devman" "devdoc" "$outputMan"
 _overrideFirst outputInfo "info" "$outputBin"
 
+# Backwardscompatibility to ensure $out etc. exist
+for output in "${!outputs[@]}"; do
+  eval "export ${output}"="${outputs[$output]}"
+done
 
 # Add standard flags to put files into the desired outputs.
 _multioutConfig() {
-    if [ "$outputs" = "out" ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
+    if [ "${#outputs[@]}" -eq 1 ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
 
     # try to detect share/doc/${shareDocName}
     # Note: sadly, $configureScript detection comes later in configurePhase,
@@ -94,7 +98,7 @@ moveToOutput() {
     local patt="$1"
     local dstOut="$2"
     local output
-    for output in $outputs; do
+    for output in "${!outputs[@]}"; do
         if [ "${!output}" = "$dstOut" ]; then continue; fi
         local srcPath
         for srcPath in "${!output}"/$patt; do
@@ -149,7 +153,7 @@ _multioutDocs() {
 
 # Move development-only stuff to the desired outputs.
 _multioutDevs() {
-    if [ "$outputs" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
+    if [ "${#outputs[@]}" -eq 1 ] || [ -z "${moveToDev-1}" ]; then return; fi;
     moveToOutput include "${!outputInclude}"
     # these files are sometimes provided even without using the corresponding tool
     moveToOutput lib/pkgconfig "${!outputDev}"
@@ -166,7 +170,7 @@ _multioutDevs() {
 
 # Make the "dev" propagate other outputs needed for development.
 _multioutPropagateDev() {
-    if [ "$outputs" = "out" ]; then return; fi;
+    if [ ${#outputs[@]} -eq 1 ]; then return; fi;
 
     local outputFirst
     for outputFirst in $outputs; do

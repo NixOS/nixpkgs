@@ -124,6 +124,8 @@ stdenv.mkDerivation {
         set -u
         chmod +x "$out/bin/$dst"
       }
+
+      export wrapperName infixSalt name bintools_bin libc_bin coreutils_bin targetPrefix shell emulation
     ''
 
     + (if nativeTools then ''
