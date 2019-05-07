@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, libxml2, gdk_pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "sierra-gtk-theme-${version}";
-  version = "2018-10-12";
+  pname = "sierra-gtk-theme";
+  version = "2019-05-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = "sierra-gtk-theme";
+    repo = pname;
     rev = version;
-    sha256 = "0l8mhdy7x8nh5aqsvkk0maqg1cnfds7824g439f6cmifdiyksbgg";
+    sha256 = "0rm9lcwp89ljxqrya9bi882qcs339pc1l945cr1xq2rganqyk9cq";
   };
 
   nativeBuildInputs = [ libxml2 ];
