@@ -1,5 +1,5 @@
 { stdenv, file, lib, fetchFromGitHub, fetchpatch, autoreconfHook, bison, flex, pkgconfig
-, pythonSupport ? true, swig ? null, python}:
+, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform, swig ? null, python}:
 
 stdenv.mkDerivation rec {
   name = "libnl-${version}";
