@@ -1100,6 +1100,11 @@
     github = "cwoac";
     name = "Oliver Matthews";
   };
+  dalance = {
+    email = "dalance@gmail.com";
+    github = "dalance";
+    name = "Naoya Hatta";
+  };
   DamienCassou = {
     email = "damien@cassou.me";
     github = "DamienCassou";
