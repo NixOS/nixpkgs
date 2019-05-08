@@ -3550,6 +3550,7 @@ broken-packages:
   - cmt
   - cmv
   - cnc-spec-compiler
+  - co-log-polysemy
   - co-log-sys
   - Coadjute
   - coalpit
@@ -3560,6 +3561,7 @@ broken-packages:
   - codecov-haskell
   - codemonitor
   - codepad
+  - codeworld-api
   - codex
   - coin
   - coinbase-exchange
@@ -3653,6 +3655,7 @@ broken-packages:
   - conduit-tokenize-attoparsec
   - conduit-zstd
   - conf
+  - confcrypt
   - conffmt
   - confide
   - config-parser
@@ -5092,6 +5095,7 @@ broken-packages:
   - hakyll-ogmarkup
   - hakyll-R
   - hakyll-shortcode
+  - hakyll-shortcut-links
   - halberd
   - halfs
   - halipeto
@@ -5814,6 +5818,7 @@ broken-packages:
   - hslinks
   - hslogger-reader
   - hslogstash
+  - hslua-module-system
   - hsluv-haskell
   - hsmagick
   - HSmarty
@@ -6381,6 +6386,7 @@ broken-packages:
   - ktx
   - kure
   - kure-your-boilerplate
+  - kurita
   - KyotoCabinet
   - l-bfgs-b
   - L-seed
@@ -6843,6 +6849,7 @@ broken-packages:
   - median-stream
   - mediawiki
   - medium-sdk-haskell
+  - megaparsec-tests
   - mellon-core
   - mellon-gpio
   - mellon-web
@@ -7218,6 +7225,7 @@ broken-packages:
   - neural-network-hmatrix
   - newhope
   - newports
+  - newsletter
   - newsletter-mailgun
   - newt
   - newtype-deriving
@@ -7535,6 +7543,7 @@ broken-packages:
   - persistent-audit
   - persistent-cereal
   - persistent-database-url
+  - persistent-documentation
   - persistent-equivalence
   - persistent-hssqlppp
   - persistent-map
@@ -8814,6 +8823,7 @@ broken-packages:
   - stackage-cli
   - stackage-curator
   - stackage-metadata
+  - stackage-query
   - stackage-sandbox
   - stackage-setup
   - stackage-to-hackage
