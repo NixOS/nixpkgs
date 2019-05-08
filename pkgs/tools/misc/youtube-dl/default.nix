@@ -42,6 +42,10 @@ buildPythonPackage rec {
         ++ lib.optional phantomjsSupport phantomjs2;
     in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
+  setupPyBuildFlags = [
+    "build_lazy_extractors"
+  ];
+
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
     cp youtube-dl.zsh $out/share/zsh/site-functions/_youtube-dl
