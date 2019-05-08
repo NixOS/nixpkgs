@@ -44,7 +44,7 @@ _overrideFirst outputMan "man" "$outputBin"
 _overrideFirst outputDevman "devman" "devdoc" "$outputMan"
 _overrideFirst outputInfo "info" "$outputBin"
 
-# Backwardscompatibility to ensure $out etc. exist
+# Backwards compatibility to ensure $out etc. exist
 for output in "${!outputs[@]}"; do
   eval "export ${output}"="${outputs[$output]}"
 done
@@ -79,10 +79,10 @@ _multioutConfig() {
         "--localedir=${!outputLib}/share/locale"
         ${configureFlags[@]})
 
-    installFlags="\
-        pkgconfigdir=${!outputDev}/lib/pkgconfig \
-        m4datadir=${!outputDev}/share/aclocal aclocaldir=${!outputDev}/share/aclocal \
-        $installFlags"
+    installFlags=(
+        "pkgconfigdir=${!outputDev}/lib/pkgconfig"
+        "m4datadir=${!outputDev}/share/aclocal" "aclocaldir=${!outputDev}/share/aclocal"
+        ${installFlags[@]})
 }
 
 
