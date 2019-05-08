@@ -1,8 +1,16 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder,
   # Build inputs
-  dateutil, six, text-unidecode, ipaddress ? null,
+  dateutil, six, text-unidecode, ipaddress ? null
   # Test inputs
-  email_validator, mock, ukpostcodeparser, pytestrunner, pytest}:
+  , email_validator
+  , freezegun
+  , mock
+  , more-itertools
+  , pytest
+  , pytestrunner
+  , random2
+  , ukpostcodeparser
+}:
 
 assert pythonOlder "3.3" -> ipaddress != null;
 
@@ -18,9 +26,12 @@ buildPythonPackage rec {
   buildInputs = [ pytestrunner ];
   checkInputs = [
     email_validator
+    freezegun
     mock
-    ukpostcodeparser
+    more-itertools
     pytest
+    random2
+    ukpostcodeparser
   ];
 
   propagatedBuildInputs = [
@@ -30,8 +41,11 @@ buildPythonPackage rec {
   ] ++ lib.optional (pythonOlder "3.3") ipaddress;
 
   postPatch = ''
-    find tests -type d -name "__pycache__" | xargs rm -r
     substituteInPlace setup.py --replace "pytest>=3.8.0,<3.9" "pytest"
+
+    # see https://github.com/joke2k/faker/pull/911, fine since we pin correct
+    # versions for python2
+    substituteInPlace setup.py --replace "more-itertools<6.0.0" "more-itertools"
   '';
 
   meta = with lib; {
