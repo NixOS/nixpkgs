@@ -220,6 +220,7 @@ in stdenv.mkDerivation rec {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    priority = 10;
     maintainers = [ maintainers.eelco ];
   };
 }
