@@ -130,6 +130,9 @@ in {
 
   wrapPython = callPackage ../development/interpreters/python/wrap-python.nix {inherit python; inherit (pkgs) makeSetupHook makeWrapper; };
 
+  # Dont take pythonPackages from "global" pkgs scope to avoid mixing python versions
+  pythonPackages = self;
+
   # specials
 
   recursivePthLoader = callPackage ../development/python-modules/recursive-pth-loader { };
