@@ -4522,6 +4522,8 @@ in {
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
 
+  pyxl3 = callPackage ../development/python-modules/pyxl3 { };
+
   qpid-python = callPackage ../development/python-modules/qpid-python { };
 
   xattr = callPackage ../development/python-modules/xattr { };
