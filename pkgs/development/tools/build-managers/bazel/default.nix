@@ -193,7 +193,7 @@ stdenv.mkDerivation rec {
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/sh ${customBash}/bin/bash
+          --replace /bin/bash ${customBash}/bin/bash
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
