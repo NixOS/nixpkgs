@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     patchShebangs doc/ns3_html_theme/get_version.sh
   '';
 
-  configureFlags = with stdenv.lib; [
+  wafConfigureFlags = with stdenv.lib; [
       "--enable-modules=${stdenv.lib.concatStringsSep "," modules}"
       "--with-python=${pythonEnv.interpreter}"
   ]

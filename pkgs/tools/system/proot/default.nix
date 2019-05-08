@@ -11,6 +11,11 @@
     owner = "proot-me";
   };
 
+  postPatch = ''
+    # our cross machinery defines $CC and co just right
+    sed -i /CROSS_COMPILE/d src/GNUmakefile
+  '';
+
   buildInputs = [ talloc ];
   nativeBuildInputs = [ docutils ];
 

@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
   '';
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--classic"
     "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
   ] ++ optional (optDbus != null) "--dbus"

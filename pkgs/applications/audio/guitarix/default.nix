@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     zita-resampler curl
   ];
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--shared-lib"
     "--no-desktop-update"
     "--enable-nls"
