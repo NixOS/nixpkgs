@@ -3480,6 +3480,20 @@ let
     buildInputs = [ TestRequires ];
   };
 
+  DangaSocket = buildPerlPackage rec {
+    pname = "Danga-Socket";
+    version = "1.61";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BR/BRADFITZ/${pname}-${version}.tar.gz";
+      sha256 = "0nciapvxnc922ms304af0vavz1kgyr45ard8wc659k9srqar4hwf";
+    };
+    propagatedBuildInputs = [ SysSyscall ];
+    meta = {
+      description = "Event loop and event-driven async socket base class";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DataClone = buildPerlPackage {
     pname = "Data-Clone";
     version = "0.004";
