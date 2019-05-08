@@ -542,7 +542,9 @@ let
       TEST_ASYNC_DRIVER_PROBE  = option no;
       WW_MUTEX_SELFTEST        = option no;
       XZ_DEC_TEST              = option no;
-    } // optionalAttrs (features.criu or false) ({
+    };
+
+    criu = optionalAttrs (features.criu or false) ({
       EXPERT              = yes;
       CHECKPOINT_RESTORE  = yes;
     } // optionalAttrs (features.criu_revert_expert or true) {
