@@ -32467,6 +32467,8 @@ in
 
   tomb = callPackage ../os-specific/linux/tomb {};
 
+  egalaxtouch = callPackage ../os-specific/linux/egalaxtouch {};
+
   tomboy = callPackage ../applications/misc/tomboy { };
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
