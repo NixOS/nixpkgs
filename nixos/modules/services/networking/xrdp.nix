@@ -136,6 +136,9 @@ in
             mkdir -p /var/run/xrdp
             ${cfg.package}/bin/xrdp-keygen xrdp /var/run/xrdp/rsakeys.ini
           fi
+
+          chown xrdp:xrdp /var/run/xrdp/rsakeys.ini
+          chmod 600 /var/run/xrdp/rsakeys.ini
         '';
         serviceConfig = {
           User = "xrdp";
