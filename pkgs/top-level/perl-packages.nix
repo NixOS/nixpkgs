@@ -4753,6 +4753,15 @@ let
     };
   };
 
+  DevelLeak = buildPerlPackage rec {
+    pname = "Devel-Leak";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NI/NI-S/${pname}-${version}.tar.gz";
+      sha256 = "0lkj2xwc3lhxv7scl43r8kfmls4am0b98sqf5vmf7d72257w6hkg";
+    };
+  };
+
   DevelNYTProf = buildPerlPackage {
     pname = "Devel-NYTProf";
     version = "6.06";
