@@ -28,6 +28,15 @@
     };
   }
   {
+    goPackagePath  = "github.com/bettercap/recording";
+    fetch = {
+      type = "git";
+      url = "https://github.com/bettercap/recording";
+      rev =  "3ce1dcf032e391eb321311b34cdf31c6fc9523f5";
+      sha256 = "1arh12iz15anyrqr4q496lpd0gx5nf2cwyr5rv17rawqqz8ydg23";
+    };
+  }
+  {
     goPackagePath  = "github.com/chifflier/nfqueue-go";
     fetch = {
       type = "git";
@@ -142,6 +151,15 @@
       url = "https://github.com/jpillora/go-tld";
       rev =  "4bfc8d9a90b591e101a56265afc2239359fb0810";
       sha256 = "04pv1rwpfq3ip3vn0yfixxczcnv56w1l0z8bp4fjscw1bfqbb4pn";
+    };
+  }
+  {
+    goPackagePath  = "github.com/kr/binarydist";
+    fetch = {
+      type = "git";
+      url = "https://github.com/kr/binarydist";
+      rev =  "190e7de772656c6127fa8e55c6258ed1b7eabcee";
+      sha256 = "1mzzn3vaw4h990knz9wwr7gf8fwznv2claavslr7fhd5h0zyy9ga";
     };
   }
   {
