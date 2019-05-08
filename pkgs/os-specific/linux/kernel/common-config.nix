@@ -693,6 +693,9 @@ let
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      PREEMPT = no;
+      PREEMPT_VOLUNTARY = yes;
     };
   };
 in
