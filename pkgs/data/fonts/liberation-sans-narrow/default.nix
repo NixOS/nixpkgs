@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fontforge, pythonPackages, python }:
+{ stdenv, fetchFromGitHub, fontforge, python2Packages, python }:
 
 stdenv.mkDerivation rec {
   pname = "liberation-sans-narrow";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qw554jbdnqkg6pjjl4cqkgsalq3398kzvww2naw30vykcz752bm";
   };
 
-  buildInputs = [ fontforge pythonPackages.fonttools python ];
+  buildInputs = [ fontforge python2Packages.fonttools python ];
 
   installPhase = ''
     mkdir -p $out/share/fonts/truetype

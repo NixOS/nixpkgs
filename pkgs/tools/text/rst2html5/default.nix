@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonPackage rec {
+python2Packages.buildPythonPackage rec {
 
   name = "${pname}-${version}";
   pname = "rst2html5";
@@ -11,7 +11,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "d044589d30eeaf7336986078b7bd175510fd649a212b01a457d7806b279e6c73";
   };
 
-  propagatedBuildInputs = with pythonPackages;
+  propagatedBuildInputs = with python2Packages;
   [ docutils genshi pygments beautifulsoup4 ];
 
   meta = with stdenv.lib;{

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, jre, pythonPackages, coreutils, hadoop
+{ stdenv, fetchzip, makeWrapper, jre, python2Packages, coreutils, hadoop
 , RSupport? true, R
 , mesosSupport ? true, mesos
 , version
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     url    = "mirror://apache/spark/${name}/${name}-bin-without-hadoop.tgz";
   };
 
-  buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]
+  buildInputs = [ makeWrapper jre python2Packages.python python2Packages.numpy ]
     ++ optional RSupport R
     ++ optional mesosSupport mesos;
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     export JAVA_HOME="${jre}"
     export SPARK_HOME="$out/lib/${untarDir}"
     export SPARK_DIST_CLASSPATH=$(${hadoop}/bin/hadoop classpath)
-    export PYSPARK_PYTHON="${pythonPackages.python}/bin/${pythonPackages.python.executable}"
+    export PYSPARK_PYTHON="${python2Packages.python}/bin/${python2Packages.python.executable}"
     export PYTHONPATH="\$PYTHONPATH:$PYTHONPATH"
     ${optionalString RSupport
       ''export SPARKR_R_SHELL="${R}/bin/R"

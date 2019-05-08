@@ -1,6 +1,6 @@
-{ fetchFromGitHub, pythonPackages, stdenv }:
+{ fetchFromGitHub, python2Packages, stdenv }:
 
-with pythonPackages;
+with python2Packages;
 buildPythonApplication rec {
   pname = "MarkdownPP";
   version = "1.4";

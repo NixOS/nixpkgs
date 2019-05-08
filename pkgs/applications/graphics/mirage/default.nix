@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages, libX11, gettext }:
+{ stdenv, fetchurl, python2Packages, libX11, gettext }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
     name = "mirage-${version}";
     version = "0.9.5.2";
 
@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
       sed -i "s@/usr/local/share/locale@$out/share/locale@" mirage.py
     '';
 
-    propagatedBuildInputs = with pythonPackages; [ pygtk pillow ];
+    propagatedBuildInputs = with python2Packages; [ pygtk pillow ];
 
     meta = {
       description = "Simple image viewer written in PyGTK";

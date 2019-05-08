@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, mopidy, gobject-introspection }:
+{ stdenv, fetchFromGitHub, python2Packages, mopidy, gobject-introspection }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "mopidy-local-images";
   version = "1.0.0";
 
@@ -14,13 +14,13 @@ pythonPackages.buildPythonApplication rec {
   buildInputs = [ gobject-introspection ];
 
   checkInputs = [
-    pythonPackages.mock
+    python2Packages.mock
   ];
 
   propagatedBuildInputs = [
     mopidy
-    pythonPackages.pykka
-    pythonPackages.uritools
+    python2Packages.pykka
+    python2Packages.uritools
   ];
 
   meta = with stdenv.lib; {

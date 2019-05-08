@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pythonPackages, unbound, libreswan }:
+{ stdenv, fetchFromGitHub, python2Packages, unbound, libreswan }:
 
 let
-  inherit (pythonPackages) python;
+  inherit (python2Packages) python;
 in stdenv.mkDerivation rec {
   pname    = "hash-slinger";
   name    = "${pname}-${version}";
@@ -14,10 +14,10 @@ in stdenv.mkDerivation rec {
     sha256 = "05wn744ydclpnpyah6yfjqlfjlasrrhzj48lqmm5a91nyps5yqyn";
   };
 
-  pythonPath = with pythonPackages; [ dnspython m2crypto ipaddr python-gnupg
+  pythonPath = with python2Packages; [ dnspython m2crypto ipaddr python-gnupg
                                       pyunbound ];
 
-  buildInputs = [ pythonPackages.wrapPython ];
+  buildInputs = [ python2Packages.wrapPython ];
   propagatedBuildInputs = [ unbound libreswan ] ++ pythonPath;
   propagatedUserEnvPkgs = [ unbound libreswan ];
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace ipseckey \
       --replace "/usr/sbin/ipsec" "${libreswan}/sbin/ipsec"
     substituteInPlace tlsa \
-      --replace "/var/lib/unbound/root" "${pythonPackages.pyunbound}/etc/pyunbound/root"
+      --replace "/var/lib/unbound/root" "${python2Packages.pyunbound}/etc/pyunbound/root"
     patchShebangs *
     '';
 

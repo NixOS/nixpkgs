@@ -1,5 +1,5 @@
 { stdenv, pkgconfig, fetchFromGitHub, python2, bash, vala
-, dockbarx, gtk2, xfce, pythonPackages, wafHook }:
+, dockbarx, gtk2, xfce, python2Packages, wafHook }:
 
 stdenv.mkDerivation rec {
   ver = "0.5";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   pythonPath = [ dockbarx ];
 
   nativeBuildInputs = [ pkgconfig wafHook ];
-  buildInputs = [ python2 vala gtk2 pythonPackages.wrapPython ]
+  buildInputs = [ python2 vala gtk2 python2Packages.wrapPython ]
     ++ (with xfce; [ libxfce4util xfce4-panel xfconf xfce4-dev-tools ])
     ++ pythonPath;
 

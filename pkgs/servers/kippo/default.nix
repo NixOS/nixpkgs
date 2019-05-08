@@ -25,14 +25,14 @@
 #
 # Use this package at your own risk.
 
-{stdenv, fetchurl, pythonPackages }:
+{stdenv, fetchurl, python2Packages }:
 
 let
 
-  twisted_13 = pythonPackages.buildPythonPackage rec {
+  twisted_13 = python2Packages.buildPythonPackage rec {
     # NOTE: When updating please check if new versions still cause issues
     # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
-    disabled = pythonPackages.isPy3k;
+    disabled = python2Packages.isPy3k;
 
     name = "Twisted-13.2.0";
     src = fetchurl {
@@ -40,7 +40,7 @@ let
       sha256 = "1wrcqv5lvgwk2aq83qb2s2ng2vx14hbjjk2gc30cg6h1iiipal89";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ zope_interface ];
+    propagatedBuildInputs = with python2Packages; [ zope_interface ];
 
     # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
     # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
       url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/kippo/${name}.tar.gz";
       sha256 = "0rd2mk36d02qd24z8s4xyy64fy54rzpar4379iq4dcjwg7l7f63d";
     };
-    buildInputs = with pythonPackages; [ pycrypto pyasn1 twisted_13 ];
+    buildInputs = with python2Packages; [ pycrypto pyasn1 twisted_13 ];
     installPhase = ''
         substituteInPlace ./kippo.tac --replace "kippo.cfg" "$out/src/kippo.cfg"
         substituteInPlace ./kippo.cfg --replace "log_path = log" "log_path = /var/log/kippo" \

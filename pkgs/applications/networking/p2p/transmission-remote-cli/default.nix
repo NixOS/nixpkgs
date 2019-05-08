@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
 stdenv.mkDerivation rec {
   name = "transmission-remote-cli-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y0hkpcjf6jw9xig8yf484hbhy63nip0pkchx401yxj81m25l4z9";
   };
 
-  buildInputs = with pythonPackages; [ python wrapPython ];
+  buildInputs = with python2Packages; [ python wrapPython ];
 
   installPhase = ''
     install -D transmission-remote-cli $out/bin/transmission-remote-cli

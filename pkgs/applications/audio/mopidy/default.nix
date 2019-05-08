@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
+{ stdenv, fetchFromGitHub, python2Packages, wrapGAppsHook
 , gst_all_1, glib-networking, gobject-introspection
 }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "mopidy";
   version = "2.2.2";
 
@@ -20,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
     glib-networking gobject-introspection
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     gst-python pygobject3 pykka tornado_4 requests
   ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python;
 

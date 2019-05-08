@@ -1,8 +1,8 @@
-{ lib, pythonPackages, fetchurl, cloud-utils }:
+{ lib, python2Packages, fetchurl, cloud-utils }:
 
 let version = "0.7.9";
 
-in pythonPackages.buildPythonApplication rec {
+in python2Packages.buildPythonApplication rec {
   name = "cloud-init-${version}";
   namePrefix = "";
 
@@ -28,10 +28,10 @@ in pythonPackages.buildPythonApplication rec {
     sed -i s/argparse// requirements.txt
     '';
 
-  propagatedBuildInputs = with pythonPackages; [ cheetah jinja2 prettytable
+  propagatedBuildInputs = with python2Packages; [ cheetah jinja2 prettytable
     oauthlib pyserial configobj pyyaml requests jsonpatch ];
 
-  checkInputs = with pythonPackages; [ contextlib2 httpretty mock unittest2 ];
+  checkInputs = with python2Packages; [ contextlib2 httpretty mock unittest2 ];
 
   doCheck = false;
 

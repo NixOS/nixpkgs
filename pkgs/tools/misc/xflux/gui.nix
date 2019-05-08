@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pythonPackages
+{ stdenv, fetchFromGitHub, python2Packages
 , gnome_python
 , libappindicator-gtk2, xflux, librsvg, wrapGAppsHook
 }:
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "xflux-gui-${version}";
   version = "1.1.10";
 
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1k67qg9y4c0n9ih0syx81ixbdl2x89gd4arwh71316cshskn0rc8";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     pexpect
     pyGtkGlade
     pygobject2
@@ -33,7 +33,7 @@ pythonPackages.buildPythonApplication rec {
   postFixup = ''
     wrapGAppsHook
     wrapPythonPrograms
-    patchPythonScript $out/${pythonPackages.python.sitePackages}/fluxgui/fluxapp.py
+    patchPythonScript $out/${python2Packages.python.sitePackages}/fluxgui/fluxapp.py
   '';
 
   meta = {

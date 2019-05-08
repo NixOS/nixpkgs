@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python2Packages }:
 
 let
   pname = "yrd";
   version = "0.5.3";
   sha256 = "1yx1hr8z4cvlb3yi24dwafs0nxq41k4q477jc9q24w61a0g662ps";
 
-in pythonPackages.buildPythonApplication {
+in python2Packages.buildPythonApplication {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ in pythonPackages.buildPythonApplication {
     inherit sha256;
   };
 
-  propagatedBuildInputs = with pythonPackages; [ argh ];
+  propagatedBuildInputs = with python2Packages; [ argh ];
 
   meta = with stdenv.lib; {
     description = "Cjdns swiss army knife";

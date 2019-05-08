@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fetchFromGitHub, optipng, cairo, pythonPackages, pkgconfig, pngquant, which, imagemagick }:
+{ stdenv, fetchzip, fetchFromGitHub, optipng, cairo, python2Packages, pkgconfig, pngquant, which, imagemagick }:
 
 let
   mkNoto = { name, weights, sha256, }:
@@ -101,7 +101,7 @@ rec {
 
     buildInputs = [ cairo ];
     nativeBuildInputs = [ pngquant optipng which cairo pkgconfig imagemagick ]
-                     ++ (with pythonPackages; [ python fonttools nototools ]);
+                     ++ (with python2Packages; [ python fonttools nototools ]);
 
     postPatch = ''
       sed -i 's,^PNGQUANT :=.*,PNGQUANT := ${pngquant}/bin/pngquant,' Makefile

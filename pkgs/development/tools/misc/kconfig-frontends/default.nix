@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bison, flex, gperf, ncurses, pythonPackages }:
+{ stdenv, fetchurl, pkgconfig, bison, flex, gperf, ncurses, python2Packages }:
 
 stdenv.mkDerivation rec {
   basename = "kconfig-frontends";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ bison flex gperf ncurses pythonPackages.python pythonPackages.wrapPython ];
+  buildInputs = [ bison flex gperf ncurses python2Packages.python python2Packages.wrapPython ];
 
   configureFlags = [
     "--enable-frontends=conf,mconf,nconf"

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper }:
+{ stdenv, fetchFromGitHub, python2Packages, makeWrapper }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   version = "1.0";
   pname = "ipgrep";
 
@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
       --replace "'scripts': []" "'scripts': { '${pname}.py' }"
   '';
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     pycares
     urllib3
     requests

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper
 , shntool, cuetools
 , flac, faac, mp4v2, wavpack, mac
-, imagemagick, libiconv, enca, lame, pythonPackages, vorbis-tools
+, imagemagick, libiconv, enca, lame, python2Packages, vorbis-tools
 , aacgain, mp3gain, vorbisgain
 }:
 
@@ -12,7 +12,7 @@ let
       --prefix PATH : ${stdenv.lib.makeBinPath [
         shntool cuetools
         flac faac mp4v2 wavpack mac
-        imagemagick libiconv enca lame pythonPackages.mutagen vorbis-tools
+        imagemagick libiconv enca lame python2Packages.mutagen vorbis-tools
         aacgain mp3gain vorbisgain
       ]}
   '';

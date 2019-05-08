@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, pythonPackages
+{ fetchFromGitHub, stdenv, python2Packages
 , mp3Support ? true, lame ? null
 , opusSupport ? true, opusTools ? null
 , faacSupport ? false, faac ? null
@@ -14,7 +14,7 @@ assert flacSupport -> flac != null;
 assert soxSupport -> sox != null;
 assert vorbisSupport -> vorbisTools != null;
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "pulseaudio-dlna";
   version = "2017-11-01";
 
@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
   # pulseaudio-dlna has no tests
   doCheck = false;
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     dbus-python docopt requests setproctitle protobuf psutil futures
     chardet notify2 netifaces pyroute2 pygobject2 lxml zeroconf ]
     ++ stdenv.lib.optional mp3Support lame

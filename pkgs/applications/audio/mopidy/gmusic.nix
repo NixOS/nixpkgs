@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages, mopidy }:
+{ stdenv, fetchurl, python2Packages, mopidy }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "mopidy-gmusic";
   version = "3.0.0";
 
@@ -11,9 +11,9 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     mopidy
-    pythonPackages.requests
-    pythonPackages.gmusicapi
-    pythonPackages.cachetools
+    python2Packages.requests
+    python2Packages.gmusicapi
+    python2Packages.cachetools
   ];
 
   doCheck = false;

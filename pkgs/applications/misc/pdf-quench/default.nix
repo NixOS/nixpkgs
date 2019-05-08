@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgs, pythonPackages, wrapGAppsHook}:
+{ stdenv, fetchFromGitHub, pkgs, python2Packages, wrapGAppsHook}:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "pdf-quench-${version}";
   version = "1.0.5";
 
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
     goocanvas2
     poppler_gi
   ];
-  propagatedBuildInputs = with pythonPackages; [ pygobject3 pypdf2 ];
+  propagatedBuildInputs = with python2Packages; [ pygobject3 pypdf2 ];
 
   format = "other";
   doCheck = false;

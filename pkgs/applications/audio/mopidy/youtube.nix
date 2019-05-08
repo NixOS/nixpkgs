@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, mopidy }:
+{ stdenv, fetchFromGitHub, python2Packages, mopidy }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "mopidy-youtube";
   version = "2.0.2";
 
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "06r3ikyg2ch5n7fbn3sgj04hk6icpfpk1r856qch41995k3bbfg7";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ mopidy pafy ];
+  propagatedBuildInputs = with python2Packages; [ mopidy pafy ];
 
   doCheck = false;
 

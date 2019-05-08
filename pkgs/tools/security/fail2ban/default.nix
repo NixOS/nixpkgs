@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, python, pythonPackages, gamin }:
+{ stdenv, fetchFromGitHub, python, python2Packages, gamin }:
 
 let version = "0.10.4"; in
 
-pythonPackages.buildPythonApplication {
+python2Packages.buildPythonApplication {
   name = "fail2ban-${version}";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication {
   };
 
   propagatedBuildInputs = [ gamin ]
-    ++ (stdenv.lib.optional stdenv.isLinux pythonPackages.systemd);
+    ++ (stdenv.lib.optional stdenv.isLinux python2Packages.systemd);
 
   preConfigure = ''
     for i in config/action.d/sendmail*.conf; do

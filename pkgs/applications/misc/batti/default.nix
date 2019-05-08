@@ -1,10 +1,10 @@
 { stdenv, fetchurl
-, pkgconfig, gettext, pythonPackages
+, pkgconfig, gettext, python2Packages
 , gtk2, gdk_pixbuf, upower
 , makeWrapper }:
 
 let
-  inherit (pythonPackages) dbus-python pygtk python;
+  inherit (python2Packages) dbus-python pygtk python;
 in stdenv.mkDerivation rec {
 
   name = "batti-${version}";

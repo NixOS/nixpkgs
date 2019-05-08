@@ -1,9 +1,9 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ stdenv, python2Packages, fetchFromGitHub }:
 
 let
   version = "3.12";
   pname = "ps_mem";
-in pythonPackages.buildPythonApplication rec {
+in python2Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, pythonPackages
+, python2Packages
 , cmake
 , llvmPackages
 , withMan ? true
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cmake
     llvmPackages.clang-unwrapped
     llvmPackages.llvm
-  ] ++ stdenv.lib.optionals withMan [ pythonPackages.sphinx ];
+  ] ++ stdenv.lib.optionals withMan [ python2Packages.sphinx ];
 
   propagatedbuildInputs = [ llvmPackages.libclang ];
 

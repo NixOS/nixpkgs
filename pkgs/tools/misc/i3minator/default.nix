@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, glibcLocales }:
+{ stdenv, fetchFromGitHub, python2Packages, glibcLocales }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "i3minator-${version}";
   version = "0.0.4";
 
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ pythonPackages.pyyaml pythonPackages.i3-py ];
+  propagatedBuildInputs = [ python2Packages.pyyaml python2Packages.i3-py ];
 
   # No tests
   doCheck = false;

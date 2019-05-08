@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, httpie }:
+{ stdenv, fetchFromGitHub, python2Packages, httpie }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "http-prompt";
   version = "1.0.0";
   name = "${pname}-${version}";
@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0kngz2izcqjphbrdkg489p0xmf65xjc8ki1a2szcc8sgwc7z74xy";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     click
     httpie
     parsimonious

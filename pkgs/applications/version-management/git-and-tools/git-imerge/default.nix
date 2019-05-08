@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python2Packages }:
 
 stdenv.mkDerivation rec {
   name = "git-imerge-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vi1w3f0yk4gqhxj2hzqafqq28rihyhyfnp8x7xzib96j2si14a4";
   };
 
-  buildInputs = [ pythonPackages.python pythonPackages.wrapPython ];
+  buildInputs = [ python2Packages.python python2Packages.wrapPython ];
 
   makeFlags = "PREFIX= DESTDIR=$(out)" ; 
  

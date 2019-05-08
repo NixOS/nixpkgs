@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   version = "2.6";
   name = "volatility-${version}";
 
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ pythonPackages.pycrypto pythonPackages.distorm3 ];
+  propagatedBuildInputs = [ python2Packages.pycrypto python2Packages.distorm3 ];
 
   meta = with stdenv.lib; {
     homepage = https://www.volatilityfoundation.org/;

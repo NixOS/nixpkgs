@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, gettext }:
+{ stdenv, fetchurl, python2Packages, gettext }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1ns87xl2sgrf3nha4xkhp0xcxlycqszlp6xdrn95lg6vzm0fa8dg";
   };
 
-  buildInputs = with pythonPackages;
+  buildInputs = with python2Packages;
   [ python gettext wrapPython pygtk dbus-python pygtksourceview ];
 
-  pythonPath = with pythonPackages;
+  pythonPath = with python2Packages;
   [ pygtk dbus-python pygtksourceview ];
 
   patches = [ ./subprocess.patch ];

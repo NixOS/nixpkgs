@@ -1,8 +1,8 @@
-{ callPackage, luaPackages, pythonPackages }:
+{ callPackage, luaPackages, python2Packages }:
 
 {
   weechat-xmpp = callPackage ./weechat-xmpp {
-    inherit (pythonPackages) pydns;
+    inherit (python2Packages) pydns;
   };
 
   weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
@@ -10,7 +10,7 @@
   };
 
   wee-slack = callPackage ./wee-slack {
-    inherit pythonPackages;
+    inherit python2Packages;
   };
 
   weechat-autosort = callPackage ./weechat-autosort { };

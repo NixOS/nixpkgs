@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, python2Packages, fastJson
 , libkrb5 ? null, systemd ? null, jemalloc ? null, mysql ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc
+    fastJson libestr json_c zlib python2Packages.docutils libkrb5 jemalloc
     postgresql libdbi net_snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libgt libksi liblogging libnet hadoop rdkafka libmongo-client czmq
     rabbitmq-c hiredis mongoc

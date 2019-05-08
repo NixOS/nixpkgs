@@ -1,22 +1,22 @@
 { stdenv
-, pythonPackages
+, python2Packages
 , glibcLocales
 , devpi-server
 , git
 , mercurial
 } :
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "devpi-client";
   version = "4.1.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python2Packages.fetchPypi {
     inherit pname version;
     sha256 = "0f5jkvxx9fl8v5vwbwmplqhjsdfgiib7j3zvn0zxd8krvi2s38fq";
   };
 
-  checkInputs = with pythonPackages; [
+  checkInputs = with python2Packages; [
                     pytest pytest-flakes webtest mock
                     devpi-server tox
                     sphinx wheel git mercurial detox
@@ -34,8 +34,8 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = with pythonPackages; [ glibcLocales pkginfo check-manifest ];
-  propagatedBuildInputs = with pythonPackages; [ py devpi-common pluggy setuptools ];
+  buildInputs = with python2Packages; [ glibcLocales pkginfo check-manifest ];
+  propagatedBuildInputs = with python2Packages; [ py devpi-common pluggy setuptools ];
 
   meta = with stdenv.lib; {
     homepage = http://doc.devpi.net;

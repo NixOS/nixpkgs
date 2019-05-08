@@ -1,6 +1,6 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ stdenv, python2Packages, fetchFromGitHub }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "ntfy";
   version = "2.7.0";
 
@@ -11,11 +11,11 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "09f02cn4i1l2aksb3azwfb70axqhn7d0d0vl2r6640hqr74nc1cv";
   };
 
-  checkInputs = with pythonPackages; [
+  checkInputs = with python2Packages; [
     mock
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     requests ruamel_yaml appdirs
     sleekxmpp dns
     emoji
@@ -25,7 +25,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   checkPhase = ''
-    HOME=$(mktemp -d) ${pythonPackages.python.interpreter} setup.py test
+    HOME=$(mktemp -d) ${python2Packages.python.interpreter} setup.py test
   '';
 
   meta = with stdenv.lib; {

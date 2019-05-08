@@ -1,7 +1,7 @@
-{ stdenv, pythonPackages }:
+{ stdenv, python2Packages }:
 
 with stdenv.lib;
-with pythonPackages;
+with python2Packages;
 
 buildPythonApplication rec {
   pname = "pantsbuild.pants";

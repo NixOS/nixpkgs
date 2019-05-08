@@ -1,6 +1,6 @@
-{ pkgs, fetchurl, pythonPackages }:
+{ pkgs, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   version = "1.9.1";
   name = "gmvault-${version}";
 
@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = with pythonPackages; [ gdata IMAPClient Logbook chardet ];
+  propagatedBuildInputs = with python2Packages; [ gdata IMAPClient Logbook chardet ];
 
   startScript = ./gmvault.py;
 

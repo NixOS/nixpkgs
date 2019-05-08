@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl, pythonPackages
+{stdenv, lib, fetchurl, python2Packages
 , gnutar, unzip, lhasa, rpm, binutils, cpio, gzip, p7zip, cabextract, unrar, unshield
 , bzip2, xz, lzip
 # unzip is handled by p7zip
@@ -11,7 +11,7 @@ let
   ++ lib.optional (unrarSupport) unrar
   ++ [ bzip2 xz lzip ]);
 
-in pythonPackages.buildPythonApplication rec {
+in python2Packages.buildPythonApplication rec {
   name = "dtrx-${version}";
   version = "7.1";
 

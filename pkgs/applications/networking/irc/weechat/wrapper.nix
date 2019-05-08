@@ -1,5 +1,5 @@
 { stdenv, lib, runCommand, writeScriptBin, buildEnv
-, pythonPackages, perlPackages, runtimeShell
+, python2Packages, perlPackages, runtimeShell
 }:
 
 weechat:
@@ -18,7 +18,7 @@ let
           pluginFile = "${weechat.python}/lib/weechat/plugins/python.so";
           withPackages = pkgsFun: (python // {
             extraEnv = ''
-              export PYTHONHOME="${pythonPackages.python.withPackages pkgsFun}"
+              export PYTHONHOME="${python2Packages.python.withPackages pkgsFun}"
             '';
           });
         };

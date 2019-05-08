@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql57, libgeotiff, python, pythonPackages, proj, geos, openssl
+, postgresql, mysql57, libgeotiff, python, python2Packages, proj, geos, openssl
 , libpng }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hphxzvy23v3vqxx1y22hhhg4cypihrb8555y12nb4mrhzlw7zfl";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libpng python pythonPackages.numpy proj openssl ];
+  buildInputs = [ unzip libjpeg libtiff libpng python python2Packages.numpy proj openssl ];
 
   patches = [
     # This ensures that the python package is installed into gdal's prefix,

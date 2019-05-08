@@ -1,18 +1,18 @@
- { stdenv, pythonPackages, nginx }:
+ { stdenv, python2Packages, nginx }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "devpi-server";
   version = "4.4.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python2Packages.fetchPypi {
     inherit pname version;
     sha256 = "0y77kcnk26pfid8vsw07v2k61x9sdl6wbmxg5qxnz3vd7703xpkl";
   };
 
-  propagatedBuildInputs = with pythonPackages;
+  propagatedBuildInputs = with python2Packages;
     [ devpi-common execnet itsdangerous pluggy waitress pyramid passlib ];
-  checkInputs = with pythonPackages; [ nginx webtest pytest beautifulsoup4 pytest-timeout mock pyyaml ];
+  checkInputs = with python2Packages; [ nginx webtest pytest beautifulsoup4 pytest-timeout mock pyyaml ];
   preCheck = ''
     # These tests pass with pytest 3.3.2 but not with pytest 3.4.0.
     sed -i 's/test_basic/noop/' test_devpi_server/test_log.py

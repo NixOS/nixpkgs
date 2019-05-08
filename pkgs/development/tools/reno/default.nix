@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-with pythonPackages; buildPythonApplication rec {
+with python2Packages; buildPythonApplication rec {
   name = "reno-${version}";
   version = "2.3.2";
 

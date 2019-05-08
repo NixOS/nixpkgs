@@ -3,7 +3,7 @@
 , bundlerEnv, ruby
 , nodejs
 , nodePackages
-, pythonPackages
+, python2Packages
 , python3Packages
 }:
 with stdenv.lib;
@@ -41,7 +41,7 @@ let
   getDeps = attrname: map (plugin: plugin.${attrname} or (_:[]));
 
   pluginPythonPackages = getDeps "pythonDependencies" requiredPlugins;
-  pythonEnv = pythonPackages.python.withPackages(ps:
+  pythonEnv = python2Packages.python.withPackages(ps:
         [ ps.pynvim ]
         ++ (extraPythonPackagesFun ps)
         ++ (concatMap (f: f ps) pluginPythonPackages));

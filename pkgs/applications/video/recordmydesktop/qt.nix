@@ -1,5 +1,5 @@
 { stdenv, lib, fetchsvn, recordmydesktop, autoreconfHook, pkgconfig
-, glib, pythonPackages, qt4, jack2, xwininfo }:
+, glib, python2Packages, qt4, jack2, xwininfo }:
 
 let
   binPath = lib.makeBinPath [ recordmydesktop jack2 xwininfo ];
@@ -16,11 +16,11 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ glib qt4 ] ++ (with pythonPackages; [
+  buildInputs = [ glib qt4 ] ++ (with python2Packages; [
     python wrapPython pyqt4
   ]);
 
-  pythonPath = with pythonPackages; [ pyqt4 ];
+  pythonPath = with python2Packages; [ pyqt4 ];
 
   postInstall = ''
     makeWrapperArgs="--prefix PATH : ${binPath}"

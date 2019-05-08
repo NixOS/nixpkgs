@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub
 , gcc-arm-embedded, binutils-arm-embedded, libftdi
-, python, pythonPackages
+, python, python2Packages
 }:
 
 with lib;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libftdi
     python
-    pythonPackages.intelhex
+    python2Packages.intelhex
   ];
 
   postPatch = ''

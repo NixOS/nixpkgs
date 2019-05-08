@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "radicale-${version}";
   version = "1.1.6";
 
@@ -9,13 +9,13 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0ay90nj6fmr2aq8imi0mbjl4m2rzq7a83ikj8qs9gxsylj71j1y0";
   };
 
-  propagatedBuildInputs = stdenv.lib.optionals (!pythonPackages.isPy3k) [
-    pythonPackages.flup
-    pythonPackages.ldap
-    pythonPackages.sqlalchemy
+  propagatedBuildInputs = stdenv.lib.optionals (!python2Packages.isPy3k) [
+    python2Packages.flup
+    python2Packages.ldap
+    python2Packages.sqlalchemy
   ];
 
-  doCheck = !pythonPackages.isPy3k;
+  doCheck = !python2Packages.isPy3k;
 
   meta = with stdenv.lib; {
     homepage = http://www.radicale.org/;

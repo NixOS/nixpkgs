@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, mopidy, mopidy-spotify }:
+{ stdenv, fetchFromGitHub, python2Packages, mopidy, mopidy-spotify }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "mopidy-spotify-tunigo";
   version = "1.0.0";
 
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1jwk0b2iz4z09qynnhcr07w15lx6i1ra09s9lp48vslqcf2fp36x";
   };
 
-  propagatedBuildInputs = [ mopidy mopidy-spotify pythonPackages.tunigo ];
+  propagatedBuildInputs = [ mopidy mopidy-spotify python2Packages.tunigo ];
 
   doCheck = false;
 

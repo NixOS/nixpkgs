@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
+{ stdenv, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, python2Packages, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     qmake
-    pythonPackages.wrapPython
+    python2Packages.wrapPython
     deepin.setupHook
   ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper }:
+{ stdenv, fetchFromGitHub, python2Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "connman-notify-${version}";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    pythonPackages.python
-    pythonPackages.dbus-python
-    pythonPackages.pygobject2
-    pythonPackages.pygtk
-    pythonPackages.notify
+    python2Packages.python
+    python2Packages.dbus-python
+    python2Packages.pygobject2
+    python2Packages.pygtk
+    python2Packages.notify
   ];
 
   installPhase = ''

@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, libnice, pkgconfig, pythonPackages, gstreamer, gst-plugins-base
+{ stdenv, fetchurl, libnice, pkgconfig, python2Packages, gstreamer, gst-plugins-base
 , gst-python, gupnp-igd, gobject-introspection
 , gst-plugins-good, gst-plugins-bad, gst-libav
 }:
 
 let
-  inherit (pythonPackages) python pygobject2;
+  inherit (python2Packages) python pygobject2;
 in stdenv.mkDerivation rec {
   name = "farstream-0.2.8";
 

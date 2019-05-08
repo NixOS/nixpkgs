@@ -1,8 +1,8 @@
-{ stdenv, fetchsvn, pythonPackages, makeWrapper, fbida, which }:
+{ stdenv, fetchsvn, python2Packages, makeWrapper, fbida, which }:
 
 let
-  inherit (pythonPackages) python;
-in pythonPackages.buildPythonApplication rec {
+  inherit (python2Packages) python;
+in python2Packages.buildPythonApplication rec {
   name = "jbrout-${version}";
   version = "338";
 
@@ -31,7 +31,7 @@ in pythonPackages.buildPythonApplication rec {
   '';
 
   buildInputs = [ python makeWrapper which ];
-  propagatedBuildInputs = with pythonPackages; [ pillow lxml pyGtkGlade pyexiv2 fbida ];
+  propagatedBuildInputs = with python2Packages; [ pillow lxml pyGtkGlade pyexiv2 fbida ];
 
   meta = {
     homepage = https://manatlan.com/jbrout/;

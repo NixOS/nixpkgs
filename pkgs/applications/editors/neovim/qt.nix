@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, doxygen, makeWrapper
-, msgpack, neovim, pythonPackages, qtbase }:
+, msgpack, neovim, python2Packages, qtbase }:
 
 let
   unwrapped = stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ let
     buildInputs = [
       neovim.unwrapped # only used to generate help tags at build time
       qtbase
-    ] ++ (with pythonPackages; [
+    ] ++ (with python2Packages; [
       jinja2 python msgpack
     ]);
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, makeWrapper, imagemagick
+{ stdenv, fetchurl, python2Packages, makeWrapper, imagemagick
 , enablePlayer ? true, vlc ? null, qt5 }:
 
 stdenv.mkDerivation rec {
@@ -11,38 +11,38 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pythonPackages.python
-    pythonPackages.wrapPython
+    python2Packages.python
+    python2Packages.wrapPython
     makeWrapper
     imagemagick
   ];
 
-  pythonPath = [
-    pythonPackages.libtorrentRasterbar
-    pythonPackages.apsw
-    pythonPackages.twisted
-    pythonPackages.netifaces
-    pythonPackages.pycrypto
-    pythonPackages.pyasn1
-    pythonPackages.requests
-    pythonPackages.setuptools
-    pythonPackages.m2crypto
-    pythonPackages.pyqt5
-    pythonPackages.chardet
-    pythonPackages.cherrypy
-    pythonPackages.cryptography
-    pythonPackages.libnacl
-    pythonPackages.configobj
-    pythonPackages.matplotlib
-    pythonPackages.plyvel
-    pythonPackages.decorator
-    pythonPackages.feedparser
-    pythonPackages.service-identity
-    pythonPackages.psutil
-    pythonPackages.meliae
-    pythonPackages.sip
-    pythonPackages.pillow
-    pythonPackages.networkx
+  pythonPath = with python2Packages; [
+    libtorrentRasterbar
+    apsw
+    twisted
+    netifaces
+    pycrypto
+    pyasn1
+    requests
+    setuptools
+    m2crypto
+    pyqt5
+    chardet
+    cherrypy
+    cryptography
+    libnacl
+    configobj
+    matplotlib
+    plyvel
+    decorator
+    feedparser
+    service-identity
+    psutil
+    meliae
+    sip
+    pillow
+    networkx
   ];
 
   postPatch = ''
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
     wrapPythonPrograms
     cp -prvd ./* $out/
-    makeWrapper ${pythonPackages.python}/bin/python $out/bin/tribler \
+    makeWrapper ${python2Packages.python}/bin/python $out/bin/tribler \
         --set QT_QPA_PLATFORM_PLUGIN_PATH ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms \
         --set _TRIBLERPATH $out \
         --set PYTHONPATH $out:$program_PYTHONPATH \

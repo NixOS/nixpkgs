@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   version = "1.0.0";
   name = "zk-shell-" + version;
 
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0zisvvlclsf4sdh7dpqcl1149xbxw6pi1aqcwjbqblgf8m4nm0c7";
   };
 
-  propagatedBuildInputs = (with pythonPackages; [
+  propagatedBuildInputs = (with python2Packages; [
     ansi kazoo nose six tabulate twitter
   ]);
 

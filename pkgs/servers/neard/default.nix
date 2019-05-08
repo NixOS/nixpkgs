@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, systemd, glib, dbus, libnl, pythonPackages }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, systemd, glib, dbus, libnl, python2Packages }:
 
 stdenv.mkDerivation rec {
   name = "neard-0.16";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ systemd glib dbus libnl pythonPackages.python pythonPackages.wrapPython ];
-  pythonPath = [ pythonPackages.pygobject2 pythonPackages.dbus-python pythonPackages.pygtk ];
+  buildInputs = [ systemd glib dbus libnl python2Packages.python python2Packages.wrapPython ];
+  pythonPath = [ python2Packages.pygobject2 python2Packages.dbus-python python2Packages.pygtk ];
 
   configureFlags = [ "--disable-debug" "--enable-tools" "--enable-ese" "--with-systemdsystemunitdir=$out/lib/systemd/system" ];
 

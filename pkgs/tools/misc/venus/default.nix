@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pythonPackages, libxslt, libxml2, makeWrapper }:
+{ stdenv, fetchurl, python, python2Packages, libxslt, libxml2, makeWrapper }:
 
 let
   rev = "9de21094a8cf565bdfcf75688e121a5ad1f5397b";
@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
   checkPhase = "python runtests.py";
 
   buildInputs = [ python libxslt
-    libxml2 pythonPackages.genshi pythonPackages.lxml makeWrapper ];
+    libxml2 python2Packages.genshi python2Packages.lxml makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp -R ./* $out/
     ln -s $out/planet.py $out/bin/venus-planet
     wrapProgram $out/planet.py \
-        --prefix PYTHONPATH : $PYTHONPATH:${pythonPackages.lxml}/lib/${python.libPrefix}/site-packages:${pythonPackages.genshi}/lib/${python.libPrefix}/site-packages
+        --prefix PYTHONPATH : $PYTHONPATH:${python2Packages.lxml}/lib/${python.libPrefix}/site-packages:${python2Packages.genshi}/lib/${python.libPrefix}/site-packages
     python runtests.py
   '';
 

@@ -1,5 +1,5 @@
-{ stdenv, pythonPackages, fetchurl, gettext }:
-pythonPackages.buildPythonApplication rec {
+{ stdenv, python2Packages, fetchurl, gettext }:
+python2Packages.buildPythonApplication rec {
   pname = "bleachbit";
   version = "2.2";
 
@@ -22,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
 
   installFlags = [ "prefix=${placeholder "out"}" ];
 
-  propagatedBuildInputs = with pythonPackages; [ pygtk ];
+  propagatedBuildInputs = with python2Packages; [ pygtk ];
 
   meta = {
     homepage = http://bleachbit.sourceforge.net;

@@ -1,9 +1,9 @@
 { stdenv, fetchurl, file, which, intltool, gobject-introspection,
-  findutils, xdg_utils, gnome3, gtk3, pythonPackages, hicolor-icon-theme,
+  findutils, xdg_utils, gnome3, gtk3, python2Packages, hicolor-icon-theme,
   wrapGAppsHook
 }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   majorver = "1.4";
   minorver = "7";
   version = "${majorver}.${minorver}";
@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pythonPackages.distutils_extra
+    python2Packages.distutils_extra
     file
     which
     intltool
@@ -26,15 +26,15 @@ pythonPackages.buildPythonApplication rec {
   buildInputs = [
     gtk3
     gnome3.dconf
-    pythonPackages.pyxdg
-    pythonPackages.ptyprocess
-    pythonPackages.pycairo
+    python2Packages.pyxdg
+    python2Packages.ptyprocess
+    python2Packages.pycairo
     hicolor-icon-theme
   ];
 
   propagatedBuildInputs = [
-    pythonPackages.pygobject3
-    pythonPackages.pexpect
+    python2Packages.pygobject3
+    python2Packages.pexpect
     xdg_utils
     findutils
   ];

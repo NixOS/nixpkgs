@@ -1,7 +1,7 @@
 { stdenv, fetchurl, docbook_xsl, dbus, dbus-glib, expat
 , gsettings-desktop-schemas, gdk_pixbuf, gtk3, hicolor-icon-theme
 , imagemagick, itstool, librsvg, libtool, libxslt, makeWrapper
-, pkgconfig, python, pythonPackages, vte
+, pkgconfig, python, python2Packages, vte
 , wrapGAppsHook}:
 
 # TODO: Still getting following warning.
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ docbook_xsl expat imagemagick itstool librsvg libtool libxslt
-      makeWrapper python pythonPackages.lockfile dbus dbus-glib
+      makeWrapper python python2Packages.lockfile dbus dbus-glib
       gdk_pixbuf gsettings-desktop-schemas gtk3
       hicolor-icon-theme vte ];
 
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
   # Fix up python path so the lockfile library is on it.
   PYTHONPATH = stdenv.lib.makeSearchPathOutput "lib" python.sitePackages [
-    pythonPackages.lockfile
+    python2Packages.lockfile
   ];
 
   buildPhase = ''

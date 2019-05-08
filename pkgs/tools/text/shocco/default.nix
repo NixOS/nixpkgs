@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perlPackages, pythonPackages }:
+{ stdenv, fetchFromGitHub, perlPackages, python2Packages }:
 
 stdenv.mkDerivation rec {
   name = "shocco-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace PATH= NIRVANA=
   '';
 
-  buildInputs = [ perlPackages.TextMarkdown pythonPackages.pygments ];
+  buildInputs = [ perlPackages.TextMarkdown python2Packages.pygments ];
 
   meta = with stdenv.lib; {
     description = "A quick-and-dirty, literate-programming-style documentation generator for / in POSIX shell";

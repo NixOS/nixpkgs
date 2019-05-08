@@ -1,7 +1,7 @@
 { stable, version, sha256Hash, archPatchesRevision, archPatchesHash }:
 
 { mkDerivation, lib, fetchFromGitHub, fetchsvn
-, pkgconfig, pythonPackages, cmake, wrapGAppsHook
+, pkgconfig, python2Packages, cmake, wrapGAppsHook
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
@@ -38,7 +38,7 @@ mkDerivation rec {
       --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
   '';
 
-  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig python2Packages.gyp cmake wrapGAppsHook ];
 
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;

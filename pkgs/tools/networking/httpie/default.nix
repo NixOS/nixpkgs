@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "httpie-1.0.2";
 
   src = fetchurl {
@@ -8,7 +8,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1ax22jh5lpjywpj7lsl072wdhr1pxiqzmxhyph5diwxxzs2nqrzw";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pygments requests ];
+  propagatedBuildInputs = with python2Packages; [ pygments requests ];
 
   doCheck = false;
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "python2nix-20140927";
  
   src = fetchFromGitHub {
@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "022gr0gw6azfi3iq4ggb3fhkw2jljs6n5rncn45hb5liwakigj8i";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ requests pip setuptools ];
+  propagatedBuildInputs = with python2Packages; [ requests pip setuptools ];
 
   meta = with stdenv.lib; {
     maintainers = [ maintainers.domenkozar ];

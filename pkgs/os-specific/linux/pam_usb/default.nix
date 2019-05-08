@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkgconfig, pmount, pythonPackages, writeScript, runtimeShell }:
+{ stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkgconfig, pmount, python2Packages, writeScript, runtimeShell }:
 
 let
 
@@ -29,7 +29,7 @@ let
 
   pmountBin = useSetUID pmount "/bin/pmount";
   pumountBin = useSetUID pmount "/bin/pumount";
-  inherit (pythonPackages) python dbus-python;
+  inherit (python2Packages) python dbus-python;
 in
 
 stdenv.mkDerivation rec {

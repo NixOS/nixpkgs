@@ -1,11 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey }:
+{ stdenv, fetchFromGitHub, fetchpatch, python2Packages, gocr, unrar, rhino, spidermonkey }:
 
 let
-  beautifulsoup = pythonPackages.callPackage ./beautifulsoup.nix {
-    inherit pythonPackages;
-  };
+  beautifulsoup = python2Packages.callPackage ./beautifulsoup.nix { };
 
-in pythonPackages.buildPythonApplication rec {
+in python2Packages.buildPythonApplication rec {
   version = "0.4.9-next";
   name = "pyLoad-" + version;
 
@@ -30,10 +28,10 @@ in pythonPackages.buildPythonApplication rec {
     in [ configParserPatch setupPyPatch ];
 
   buildInputs = [
-    unrar rhino spidermonkey gocr pythonPackages.paver
+    unrar rhino spidermonkey gocr python2Packages.paver
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     pycurl jinja2 beaker thrift simplejson pycrypto feedparser tkinter
     beautifulsoup send2trash
   ];

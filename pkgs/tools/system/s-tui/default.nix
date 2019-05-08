@@ -1,16 +1,16 @@
-{ stdenv, pythonPackages }:
+{ stdenv, python2Packages }:
 
-pythonPackages.buildPythonPackage rec {
+python2Packages.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "s-tui";
   version = "0.8.3";
 
-  src = pythonPackages.fetchPypi {
+  src = python2Packages.fetchPypi {
     inherit pname version;
     sha256 = "00lsh2v4i8rwfyjyxx5lijd6rnk9smcfffhzg5sv94ijpcnh216m";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     urwid
     psutil
   ];

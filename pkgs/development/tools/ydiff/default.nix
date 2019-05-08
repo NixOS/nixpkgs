@@ -1,7 +1,7 @@
-{ stdenv, lib, pythonPackages, python3Packages, less, patchutils, git
+{ stdenv, lib, python2Packages, python3Packages, less, patchutils, git
 , subversion, coreutils, which }:
 
-with pythonPackages;
+with python2Packages;
 
 buildPythonApplication rec {
   pname = "ydiff";

@@ -9,7 +9,7 @@
 , gnuradio
 , orc
 , pkgconfig
-, pythonPackages
+, python2Packages
 , uhd
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gnuradio
     orc
     pkgconfig
-    pythonPackages.Mako
+    python2Packages.Mako
 
     # UHD support is optional, but gnuradio is built with it, so there's
     # nothing to be gained by leaving it out.

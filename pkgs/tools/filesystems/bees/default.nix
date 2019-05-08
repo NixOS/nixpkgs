@@ -1,4 +1,4 @@
-{ stdenv, runCommand, makeWrapper, fetchFromGitHub, bash, btrfs-progs, coreutils, pythonPackages, utillinux }:
+{ stdenv, runCommand, makeWrapper, fetchFromGitHub, bash, btrfs-progs, coreutils, python2Packages, utillinux }:
 
 let
 
@@ -22,7 +22,7 @@ let
     ];
 
     nativeBuildInputs = [
-      pythonPackages.markdown   # documentation build
+      python2Packages.markdown   # documentation build
     ];
 
     preBuild = ''

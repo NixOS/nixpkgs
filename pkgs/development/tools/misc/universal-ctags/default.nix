@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, python2Packages, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "universal-ctags-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1f67hy8c2yr9z4ydsqd7wg8iagzn01qjw2ccx6g8mngv3i3jz9mv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig pythonPackages.docutils ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig python2Packages.docutils ];
   buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
   # to generate makefile.in

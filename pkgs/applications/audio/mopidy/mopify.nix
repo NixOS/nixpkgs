@@ -1,15 +1,15 @@
-{ stdenv, pythonPackages, mopidy }:
+{ stdenv, python2Packages, mopidy }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "Mopidy-Mopify";
   version = "1.6.1";
 
-  src = pythonPackages.fetchPypi {
+  src = python2Packages.fetchPypi {
     inherit pname version;
     sha256 = "93ad2b3d38b1450c8f2698bb908b0b077a96b3f64cdd6486519e518132e23a5c";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ mopidy configobj ];
+  propagatedBuildInputs = with python2Packages; [ mopidy configobj ];
 
   # no tests implemented
   doCheck = false;

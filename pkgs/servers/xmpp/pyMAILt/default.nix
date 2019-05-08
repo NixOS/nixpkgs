@@ -1,4 +1,4 @@
-{ stdenv, python, xmpppy, pythonPackages, fetchcvs, runtimeShell } :
+{ stdenv, python, xmpppy, python2Packages, fetchcvs, runtimeShell } :
 
 stdenv.mkDerivation rec {
   name = "pyMAILt-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 	};
 
   pythonPath = [ xmpppy ];
-  buildInputs = [ pythonPackages.wrapPython ];
+  buildInputs = [ python2Packages.wrapPython ];
 
   /* doConfigure should be removed if not needed */
   installPhase = ''

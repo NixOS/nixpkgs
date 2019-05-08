@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, pythonPackages, makeWrapper, ffmpeg_3 }:
+{ stdenv, lib, fetchFromGitHub, python2Packages, makeWrapper, ffmpeg_3 }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
 
   name = "togglesg-download-git-${version}";
   version = "2017-12-07";

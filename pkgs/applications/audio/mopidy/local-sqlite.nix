@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, mopidy }:
+{ stdenv, fetchFromGitHub, python2Packages, mopidy }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "mopidy-local-sqlite";
   version = "1.0.0";
 
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     mopidy
-    pythonPackages.uritools
+    python2Packages.uritools
   ];
 
   meta = with stdenv.lib; {

@@ -1,6 +1,6 @@
-{ stdenv, pythonPackages, fetchurl, makeWrapper }:
+{ stdenv, python2Packages, fetchurl, makeWrapper }:
 
-with pythonPackages;
+with python2Packages;
 buildPythonApplication rec {
   pname = "photon";
   version = "1.0.7";

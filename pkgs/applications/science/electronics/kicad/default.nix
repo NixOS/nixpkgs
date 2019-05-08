@@ -4,7 +4,7 @@
 , wrapGAppsHook
 , oceSupport ? true, opencascade
 , ngspiceSupport ? true, libngspice
-, swig, python, pythonPackages
+, swig, python, python2Packages
 , lndir
 }:
 
@@ -46,8 +46,8 @@ in stdenv.mkDerivation rec {
     "-DKICAD_SCRIPTING_WXPYTHON=ON"
     # nix installs wxPython headers in wxPython package, not in wxwidget
     # as assumed. We explicitely set the header location.
-    "-DCMAKE_CXX_FLAGS=-I${pythonPackages.wxPython}/include/wx-3.0"
-    "-DwxPYTHON_INCLUDE_DIRS=${pythonPackages.wxPython}/include/wx-3.0"
+    "-DCMAKE_CXX_FLAGS=-I${python2Packages.wxPython}/include/wx-3.0"
+    "-DwxPYTHON_INCLUDE_DIRS=${python2Packages.wxPython}/include/wx-3.0"
   ] ++ optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade}" ]
     ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON";
 
@@ -56,11 +56,11 @@ in stdenv.mkDerivation rec {
     doxygen
     pkgconfig
     wrapGAppsHook
-    pythonPackages.wrapPython
+    python2Packages.wrapPython
     lndir
   ];
-  pythonPath = [ pythonPackages.wxPython ];
-  propagatedBuildInputs = [ pythonPackages.wxPython ];
+  pythonPath = [ python2Packages.wxPython ];
+  propagatedBuildInputs = [ python2Packages.wxPython ];
 
   buildInputs = [
     libGLU_combined zlib libX11 wxGTK pcre libXdmcp glew glm libpthreadstubs

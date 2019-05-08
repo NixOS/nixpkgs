@@ -1,6 +1,6 @@
-{ fetchFromGitHub, pythonPackages, stdenv }:
+{ fetchFromGitHub, python2Packages, stdenv }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   ver = "0.8.6";
   name = "gitless-${ver}";
 
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1q6y38f8ap6q1livvfy0pfnjr0l8b68hyhc9r5v87fmdyl7y7y8g";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ sh pygit2 clint ];
+  propagatedBuildInputs = with python2Packages; [ sh pygit2 clint ];
 
   doCheck = false;
 

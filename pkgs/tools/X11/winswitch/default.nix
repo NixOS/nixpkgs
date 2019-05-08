@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, pythonPackages
+{ stdenv, fetchurl, python2Packages
 , which, xpra, xmodmap }:
 
 let
-  base = pythonPackages.buildPythonApplication rec {
+  base = python2Packages.buildPythonApplication rec {
     name = "winswitch-${version}";
     namePrefix = "";
     version = "0.12.23";
@@ -12,7 +12,7 @@ let
       sha256 = "1m0akjcdlsgng426rwvzlcl76kjm993icj0pggvha40cizig1yd9";
     };
 
-    propagatedBuildInputs = with pythonPackages; [
+    propagatedBuildInputs = with python2Packages; [
       pygtk twisted pycrypto pyasn1 which xpra xmodmap
     ];
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, openssh, rsync }:
+{ stdenv, fetchFromGitHub, python2Packages, openssh, rsync }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "pssh-${version}";
   version = "2.3.1";
 

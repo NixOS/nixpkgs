@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python2Packages }:
 
 stdenv.mkDerivation rec {
   name= "yaml-merge-2016-02-16";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mwda2shk43i6f22l379fcdchmb07fm7nf4i2ii7fk3ihkhb8dgp";
   };
 
-  pythonPath = with pythonPackages; [ pyyaml ];
-  nativeBuildInputs = [ pythonPackages.wrapPython ];
+  pythonPath = with python2Packages; [ pyyaml ];
+  nativeBuildInputs = [ python2Packages.wrapPython ];
 
   installPhase = ''
     install -Dm755 yaml-merge.py $out/bin/yaml-merge

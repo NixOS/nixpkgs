@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python, pythonPackages, makeWrapper }:
+{ stdenv, fetchgit, python, python2Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [makeWrapper];
 
-  propagatedBuildInputs = with pythonPackages; [ requests vobject lxml ];
+  propagatedBuildInputs = with python2Packages; [ requests vobject lxml ];
 
   doCheck = false; # no test
 

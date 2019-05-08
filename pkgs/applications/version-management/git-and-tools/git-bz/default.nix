@@ -1,6 +1,6 @@
 { stdenv, fetchgit
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, makeWrapper, xmlto
-, pythonPackages }:
+, python2Packages }:
 
 stdenv.mkDerivation rec {
   name = "git-bz-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     asciidoc docbook_xml_dtd_45 docbook_xsl libxslt makeWrapper xmlto
   ];
   buildInputs = []
-    ++ (with pythonPackages; [ python pysqlite ]);
+    ++ (with python2Packages; [ python pysqlite ]);
 
   postPatch = ''
     patchShebangs configure
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/git-bz \
-      --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pycrypto}")" \
-      --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pysqlite}")"
+      --prefix PYTHONPATH : "$(toPythonPath "${python2Packages.pycrypto}")" \
+      --prefix PYTHONPATH : "$(toPythonPath "${python2Packages.pysqlite}")"
   '';
 
   meta = with stdenv.lib; {

@@ -1,11 +1,11 @@
-{ fetchurl, lib, unzip, nettools, pythonPackages, texinfo }:
+{ fetchurl, lib, unzip, nettools, python2Packages, texinfo }:
 
 # FAILURES: The "running build_ext" phase fails to compile Twisted
 # plugins, because it tries to write them into Twisted's (immutable)
 # store path. The problem appears to be non-fatal, but there's probably
 # some loss of functionality because of it.
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   version = "1.13.0";
   name = "tahoe-lafs-${version}";
   namePrefix = "";
@@ -48,16 +48,16 @@ pythonPackages.buildPythonApplication rec {
     )
   '';
 
-  nativeBuildInputs = with pythonPackages; [ sphinx texinfo ];
+  nativeBuildInputs = with python2Packages; [ sphinx texinfo ];
 
   # The `backup' command requires `sqlite3'.
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     twisted foolscap nevow simplejson zfec pycryptopp darcsver
     setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface
     service-identity pyyaml magic-wormhole treq
   ];
 
-  checkInputs = with pythonPackages; [ mock hypothesis twisted ];
+  checkInputs = with python2Packages; [ mock hypothesis twisted ];
 
   # Install the documentation.
   postInstall = ''

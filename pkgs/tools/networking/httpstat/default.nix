@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, curl, pythonPackages, glibcLocales }:
+{ stdenv, fetchFromGitHub, curl, python2Packages, glibcLocales }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
     name = "${pname}-${version}";
     pname = "httpstat";
     version = "1.2.1";

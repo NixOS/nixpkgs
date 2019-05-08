@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages, runtimeShell } :
+{ stdenv, fetchurl, xmpppy, pythonIRClib, python, python2Packages, runtimeShell } :
 
 stdenv.mkDerivation rec {
   name = "pyIRCt-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gbc0dvj1p3088b6x315yjrlwnc5vvzp0var36wlf9z60ghvk8yb";
   };
 
-  buildInputs = [ pythonPackages.wrapPython ];
+  buildInputs = [ python2Packages.wrapPython ];
 
   pythonPath = [
     xmpppy pythonIRClib

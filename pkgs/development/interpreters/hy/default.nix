@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, pythonPackages }:
+{ stdenv, fetchurl, fetchpatch, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "hy-${version}";
   version = "0.16.0";
 
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     appdirs
     astor
     clint

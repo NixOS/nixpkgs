@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, intltool, file, pythonPackages, cairo }:
+{ stdenv, fetchFromGitHub, intltool, file, python2Packages, cairo }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "oblogout-unstable-${version}";
   version = "2009-11-18";
 
@@ -11,16 +11,16 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0nj87q94idb5ki4wnb2xipfgc6k6clr3rmm4xxh46b58z4zhhbmj";
   };
 
-  nativeBuildInputs = [ intltool file pythonPackages.distutils_extra ];
+  nativeBuildInputs = [ intltool file python2Packages.distutils_extra ];
 
   buildInputs = [ cairo ];
 
-  propagatedBuildInputs = [ pythonPackages.pygtk pythonPackages.pillow pythonPackages.dbus-python ];
+  propagatedBuildInputs = [ python2Packages.pygtk python2Packages.pillow python2Packages.dbus-python ];
 
   patches = [ ./oblogout-0.3-fixes.patch ];
 
   postPatch = ''
-    substituteInPlace data/oblogout --replace sys.prefix \"$out/${pythonPackages.python.sitePackages}\"
+    substituteInPlace data/oblogout --replace sys.prefix \"$out/${python2Packages.python.sitePackages}\"
     substituteInPlace oblogout/__init__.py --replace sys.prefix \"$out\"
     mkdir -p $out/share/doc
     cp -a README $out/share/doc

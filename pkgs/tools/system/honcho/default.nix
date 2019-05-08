@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python2Packages }:
 
 let
-  inherit (pythonPackages) python;
+  inherit (python2Packages) python;
   pname = "honcho";
 
 in
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
   version = "1.0.1";
   namePrefix = "";
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "11bd87474qpif20xdcn0ra1idj5k16ka51i658wfpxwc6nzsn92b";
   };
 
-  checkInputs = with pythonPackages; [ jinja2 pytest mock coverage ];
+  checkInputs = with python2Packages; [ jinja2 pytest mock coverage ];
 
   buildPhase = ''
     ${python.interpreter} setup.py build

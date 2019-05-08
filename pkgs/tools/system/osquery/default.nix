@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake, pythonPackages
+{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake, python2Packages
 , udev, audit, aws-sdk-cpp, cryptsetup, lvm2, libgcrypt, libarchive
 , libgpgerror, libuuid, iptables, dpkg, lzma, bzip2, rpm
 , beecrypt, augeas, libxml2, sleuthkit, yara, lldpd, google-gflags
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   patches = [ ./misc.patch ];
 
   nativeBuildInputs = [
-    pkgconfig cmake pythonPackages.python pythonPackages.jinja2 doxygen fpm
+    pkgconfig cmake python2Packages.python python2Packages.jinja2 doxygen fpm
   ];
 
   NIX_LDFLAGS = [

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages, lzop, postgresql, pv }:
+{ stdenv, fetchurl, python2Packages, lzop, postgresql, pv }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "wal-e-${version}";
   version = "0.6.10";
 
@@ -15,8 +15,8 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    pythonPackages.boto
-    pythonPackages.gevent
+    python2Packages.boto
+    python2Packages.gevent
     postgresql
     lzop
     pv

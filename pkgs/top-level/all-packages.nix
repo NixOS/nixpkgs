@@ -621,7 +621,7 @@ in
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
 
-  aws_shell = pythonPackages.callPackage ../tools/admin/aws_shell { };
+  aws_shell = python2Packages.callPackage ../tools/admin/aws_shell { };
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
 
@@ -726,7 +726,7 @@ in
 
   dgsh = callPackage ../shells/dgsh { };
 
-  dkimpy = with pythonPackages; toPythonApplication dkimpy;
+  dkimpy = with python2Packages; toPythonApplication dkimpy;
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
 
@@ -876,7 +876,7 @@ in
 
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
-    inherit (pythonPackages) sphinx;
+    inherit (python2Packages) sphinx;
   };
   aria = aria2;
 
@@ -1622,7 +1622,7 @@ in
 
   kisslicer = callPackage ../tools/misc/kisslicer { };
 
-  klaus = with pythonPackages; toPythonApplication klaus;
+  klaus = with python2Packages; toPythonApplication klaus;
 
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
@@ -1654,7 +1654,7 @@ in
 
   lynis = callPackage ../tools/security/lynis { };
 
-  mathics = pythonPackages.mathics;
+  mathics = python2Packages.mathics;
 
   masscan = callPackage ../tools/security/masscan {
     stdenv = gccStdenv;
@@ -1951,7 +1951,7 @@ in
   };
 
   bud = callPackage ../tools/networking/bud {
-    inherit (pythonPackages) gyp;
+    inherit (python2Packages) gyp;
   };
 
   bup = callPackage ../tools/backup/bup { };
@@ -2153,7 +2153,7 @@ in
   skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
 
   libkkc-data = callPackage ../data/misc/libkkc-data {
-    inherit (pythonPackages) marisa;
+    inherit (python2Packages) marisa;
   };
 
   libkkc = callPackage ../tools/inputmethods/libkkc { };
@@ -2445,7 +2445,7 @@ in
   diffutils = callPackage ../tools/text/diffutils { };
 
   dir2opus = callPackage ../tools/audio/dir2opus {
-    inherit (pythonPackages) mutagen python wrapPython;
+    inherit (python2Packages) mutagen python wrapPython;
   };
 
   picotts = callPackage ../tools/audio/picotts { };
@@ -2605,7 +2605,7 @@ in
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
-    inherit (pythonPackages) sphinx;
+    inherit (python2Packages) sphinx;
   };
 
   wallutils = callPackage ../tools/graphics/wallutils { };
@@ -2710,7 +2710,7 @@ in
   epsxe = callPackage ../misc/emulators/epsxe { };
 
   escrotum = callPackage ../tools/graphics/escrotum {
-    inherit (pythonPackages) buildPythonApplication pygtk numpy;
+    inherit (python2Packages) buildPythonApplication pygtk numpy;
   };
 
   ethtool = callPackage ../tools/misc/ethtool { };
@@ -5086,7 +5086,7 @@ in
   jbig2enc = callPackage ../tools/graphics/jbig2enc { };
 
   pdfread = callPackage ../tools/graphics/pdfread {
-    inherit (pythonPackages) pillow;
+    inherit (python2Packages) pillow;
   };
 
   briss = callPackage ../tools/graphics/briss { };
@@ -5304,7 +5304,7 @@ in
 
   pwndbg = python3Packages.callPackage ../development/tools/misc/pwndbg { };
 
-  pycangjie = pythonPackages.pycangjie;
+  pycangjie = python2Packages.pycangjie;
 
   pydb = callPackage ../development/tools/pydb { };
 
@@ -5312,9 +5312,9 @@ in
 
   pygmentex = callPackage ../tools/typesetting/pygmentex { };
 
-  pythonIRClib = pythonPackages.pythonIRClib;
+  pythonIRClib = python2Packages.pythonIRClib;
 
-  pythonSexy = pythonPackages.libsexy;
+  pythonSexy = python2Packages.libsexy;
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
@@ -5392,7 +5392,7 @@ in
 
   radvd = callPackage ../tools/networking/radvd { };
 
-  rainbowstream = pythonPackages.rainbowstream;
+  rainbowstream = python2Packages.rainbowstream;
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
 
@@ -5509,7 +5509,7 @@ in
   rkrlv2 = callPackage ../applications/audio/rkrlv2 {};
 
   rmlint = callPackage ../tools/misc/rmlint {
-    inherit (pythonPackages) sphinx;
+    inherit (python2Packages) sphinx;
   };
 
   rng-tools = callPackage ../tools/security/rng-tools { };
@@ -6394,7 +6394,7 @@ in
 
   waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp { };
 
-  wakatime = pythonPackages.callPackage ../tools/misc/wakatime { };
+  wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
 
   weather = callPackage ../applications/misc/weather { };
 
@@ -6725,7 +6725,7 @@ in
     w3m = w3m-batch;
   };
 
-  xmpppy = pythonPackages.xmpppy;
+  xmpppy = python2Packages.xmpppy;
 
   xiccd = callPackage ../tools/misc/xiccd { };
 
@@ -8214,12 +8214,12 @@ in
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   };
 
-  me_cleaner = pythonPackages.callPackage ../tools/misc/me_cleaner { };
+  me_cleaner = python2Packages.callPackage ../tools/misc/me_cleaner { };
 
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
-    inherit (pythonPackages) python boto setuptools wrapPython;
-    pythonProtobuf = pythonPackages.protobuf;
+    inherit (python2Packages) python boto setuptools wrapPython;
+    pythonProtobuf = python2Packages.protobuf;
     perf = linuxPackages.perf;
   };
 
@@ -8859,7 +8859,7 @@ in
 
   conan = callPackage ../development/tools/build-managers/conan { };
 
-  cookiecutter = pythonPackages.cookiecutter;
+  cookiecutter = python2Packages.cookiecutter;
 
   corundum = callPackage ../development/tools/corundum { };
 
@@ -9006,7 +9006,7 @@ in
 
   doit = callPackage ../development/tools/build-managers/doit { };
 
-  dot2tex = pythonPackages.dot2tex;
+  dot2tex = python2Packages.dot2tex;
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
     qt4 = null;
@@ -9081,7 +9081,7 @@ in
 
   jdepend = callPackage ../development/tools/analysis/jdepend { };
 
-  fedpkg = pythonPackages.callPackage ../development/tools/fedpkg { };
+  fedpkg = python2Packages.callPackage ../development/tools/fedpkg { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
@@ -9207,7 +9207,7 @@ in
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
 
-  jenkins-job-builder = pythonPackages.jenkins-job-builder;
+  jenkins-job-builder = python2Packages.jenkins-job-builder;
 
   kafkacat = callPackage ../development/tools/kafkacat { };
 
@@ -9403,7 +9403,7 @@ in
 
   pprof = callPackage ../development/tools/profiling/pprof { };
 
-  pyprof2calltree = pythonPackages.callPackage ../development/tools/profiling/pyprof2calltree { };
+  pyprof2calltree = python2Packages.callPackage ../development/tools/profiling/pyprof2calltree { };
 
   prelink = callPackage ../development/tools/misc/prelink { };
 
@@ -10090,7 +10090,9 @@ in
 
   easyloggingpp = callPackage ../development/libraries/easyloggingpp {};
 
-  eccodes = callPackage ../development/libraries/eccodes { };
+  eccodes = callPackage ../development/libraries/eccodes {
+    pythonPackages = python2Packages;
+  };
 
   eclib = callPackage ../development/libraries/eclib {};
 
@@ -10140,7 +10142,7 @@ in
     inherit (gst_all_1)
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
       gst-libav;
-    inherit (pythonPackages) gst-python;
+    inherit (python2Packages) gst-python;
   };
 
   fcgi = callPackage ../development/libraries/fcgi { };
@@ -10344,7 +10346,9 @@ in
     libXpm = null;
   };
 
-  gdal = callPackage ../development/libraries/gdal { };
+  gdal = callPackage ../development/libraries/gdal {
+    pythonPackages = python2Packages;
+  };
 
   gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
 
@@ -10508,7 +10512,9 @@ in
 
   grab-site = callPackage ../tools/backup/grab-site { };
 
-  grib-api = callPackage ../development/libraries/grib-api { };
+  grib-api = callPackage ../development/libraries/grib-api {
+    pythonPackages = python2Packages;
+  };
 
   grpc = callPackage ../development/libraries/grpc { };
 
@@ -11373,7 +11379,7 @@ in
   libgpiod = callPackage ../development/libraries/libgpiod { };
 
   libgpod = callPackage ../development/libraries/libgpod {
-    inherit (pkgs.pythonPackages) mutagen;
+    inherit (pkgs.python2Packages) mutagen;
   };
 
   libgssglue = callPackage ../development/libraries/libgssglue { };
@@ -12172,7 +12178,7 @@ in
 
   muparser = callPackage ../development/libraries/muparser { };
 
-  mygpoclient = pythonPackages.mygpoclient;
+  mygpoclient = python2Packages.mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
     ogre = ogre1_9;
@@ -12316,11 +12322,13 @@ in
   opencv = callPackage ../development/libraries/opencv {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa QTKit;
+    pythonPackages = python2Packages;
   };
 
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
+    pythonPackages = python2Packages;
   };
 
   opencv3WithoutCuda = opencv3.override {
@@ -12330,6 +12338,7 @@ in
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
+    pythonPackages = python2Packages;
   };
 
   openexr = callPackage ../development/libraries/openexr { };
@@ -13095,7 +13104,7 @@ in
 
   spice = callPackage ../development/libraries/spice {
     celt = celt_0_5_1;
-    inherit (pythonPackages) pyparsing;
+    inherit (python2Packages) pyparsing;
   };
 
   spice-gtk = callPackage ../development/libraries/spice-gtk { };
@@ -13258,7 +13267,7 @@ in
   theft = callPackage ../development/libraries/theft { };
 
   thrift = callPackage ../development/libraries/thrift {
-    inherit (pythonPackages) twisted;
+    inherit (python2Packages) twisted;
   };
 
   tidyp = callPackage ../development/libraries/tidyp { };
@@ -14487,7 +14496,7 @@ in
 
   qpid-cpp = callPackage ../servers/amqp/qpid-cpp {
     boost = boost155;
-    inherit (pythonPackages) buildPythonPackage qpid-python;
+    inherit (python2Packages) buildPythonPackage qpid-python;
   };
 
   quagga = callPackage ../servers/quagga { };
@@ -16569,7 +16578,7 @@ in
   aacgain = callPackage ../applications/audio/aacgain { };
 
   abcde = callPackage ../applications/audio/abcde {
-    inherit (pythonPackages) eyeD3;
+    inherit (python2Packages) eyeD3;
   };
 
   abiword = callPackage ../applications/office/abiword { };
@@ -16936,7 +16945,7 @@ in
   };
 
   chirp = callPackage ../applications/radio/chirp {
-    inherit (pythonPackages) pyserial pygtk;
+    inherit (python2Packages) pyserial pygtk;
   };
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
@@ -17466,7 +17475,7 @@ in
 
     external = {
       inherit (haskellPackages) ghc-mod structured-haskell-mode Agda hindent;
-      inherit (pythonPackages) elpy;
+      inherit (python2Packages) elpy;
       inherit
         autoconf automake git libffi libpng pkgconfig poppler rtags w3m zlib
         substituteAll rustPlatform;
@@ -17707,7 +17716,7 @@ in
 
   gthumb = callPackage ../applications/graphics/gthumb { };
 
-  gtimelog = pythonPackages.gtimelog;
+  gtimelog = python2Packages.gtimelog;
 
   inherit (gnome3) gucharmap;
 
@@ -20162,7 +20171,7 @@ in
 
   telepathy-idle = callPackage ../applications/networking/instant-messengers/telepathy/idle {};
 
-  termdown = (newScope pythonPackages) ../applications/misc/termdown { };
+  termdown = (newScope python2Packages) ../applications/misc/termdown { };
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
 
@@ -20264,7 +20273,7 @@ in
   torch-repl = lib.setName "torch-repl" torchPackages.trepl;
 
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
-    inherit (pythonPackages) wrapPython wxPython;
+    inherit (python2Packages) wrapPython wxPython;
   };
 
   torrential = callPackage ../applications/networking/p2p/torrential { };
@@ -20322,7 +20331,7 @@ in
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
-  udocker = pythonPackages.callPackage ../tools/virtualization/udocker { };
+  udocker = python2Packages.callPackage ../tools/virtualization/udocker { };
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
@@ -21176,7 +21185,7 @@ in
     opencv3 = opencv3WithoutCuda;
   };
 
-  displaycal = (newScope pythonPackages) ../applications/graphics/displaycal {};
+  displaycal = (newScope python2Packages) ../applications/graphics/displaycal {};
 
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
@@ -21343,7 +21352,7 @@ in
   icbm3d = callPackage ../games/icbm3d { };
 
   ingen = callPackage ../applications/audio/ingen {
-    inherit (pythonPackages) rdflib;
+    inherit (python2Packages) rdflib;
   };
 
   instead = callPackage ../games/instead {
@@ -22276,7 +22285,7 @@ in
   nauty = callPackage ../applications/science/math/nauty {};
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
-    pythonProtobuf = pythonPackages.protobuf;
+    pythonProtobuf = python2Packages.protobuf;
   };
 
   rubiks = callPackage ../development/libraries/science/math/rubiks { };
@@ -23295,7 +23304,7 @@ in
 
   nix-script = callPackage ../tools/nix/nix-script {};
 
-  nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
+  nix-template-rpm = callPackage ../build-support/templaterpm { inherit (python2Packages) python toposort; };
 
   nix-top = callPackage ../tools/package-management/nix-top { };
 
@@ -23490,7 +23499,7 @@ in
 
   satysfi = callPackage ../tools/typesetting/satysfi { };
 
-  sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
+  sc-controller = python2Packages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
   };
 

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchsvn, recordmydesktop, autoreconfHook, pkgconfig
-, pythonPackages, jack2, xwininfo }:
+, python2Packages, jack2, xwininfo }:
 
 let
   binPath = lib.makeBinPath [ recordmydesktop jack2 xwininfo ];
@@ -16,11 +16,11 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = with pythonPackages; [
+  buildInputs = with python2Packages; [
     python pygtk wrapPython
   ];
 
-  pythonPath = with pythonPackages; [ pygtk ];
+  pythonPath = with python2Packages; [ pygtk ];
 
   postInstall = ''
     makeWrapperArgs="--prefix PATH : ${binPath}"

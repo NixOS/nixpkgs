@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages, makeDesktopItem }:
+{ stdenv, fetchurl, python2Packages, makeDesktopItem }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "winpdb-1.4.8";
   namePrefix = "";
 
@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0vkpd24r40j928vc04c721innv0168sbllg97v4zw10adm24d8fs";
   };
 
-  propagatedBuildInputs = [ pythonPackages.wxPython ];
+  propagatedBuildInputs = [ python2Packages.wxPython ];
 
   desktopItem = makeDesktopItem {
     name = "winpdb";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
 stdenv.mkDerivation rec {
     version = "2.3";
@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
         sha256 = "0inij30prqqcmzjwcmfzjjn0ya5klv18qmajgxipz1jr3lpqs546";
     };
 
-    nativeBuildInputs = [ pythonPackages.wrapPython ];
+    nativeBuildInputs = [ python2Packages.wrapPython ];
 
-    buildInputs = [ pythonPackages.python ];
+    buildInputs = [ python2Packages.python ];
 
     phases = [ "unpackPhase" "installPhase" ];
 
     installPhase = ''
-        site_packages=$out/${pythonPackages.python.sitePackages}
+        site_packages=$out/${python2Packages.python.sitePackages}
         mkdir -p $out/{share/{man,weather-util},bin,etc} $site_packages
         cp weather $out/bin/
         cp weather.py $site_packages/

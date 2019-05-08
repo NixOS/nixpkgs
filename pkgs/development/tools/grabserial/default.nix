@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, pythonPackages }:
+{ stdenv, fetchgit, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
 
   name = "grabserial-1.9.3";
   namePrefix = "";
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "043r2p5jw0ymx8ka1d39q1ap39i7sliq5f4w3yr1n53lzshjmc5g";
   };
 
-  propagatedBuildInputs = [ pythonPackages.pyserial ];
+  propagatedBuildInputs = [ python2Packages.pyserial ];
 
   meta = {
     description = "Python based serial dump and timing program";

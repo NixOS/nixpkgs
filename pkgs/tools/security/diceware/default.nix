@@ -1,8 +1,8 @@
 { lib
-, pythonPackages
+, python2Packages
 }:
 
-with pythonPackages;
+with python2Packages;
 
 buildPythonApplication rec {
   pname = "diceware";

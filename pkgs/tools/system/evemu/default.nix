@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, pythonPackages
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, python2Packages
 , libevdev
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
-  buildInputs = [ pythonPackages.python pythonPackages.evdev libevdev ];
+  buildInputs = [ python2Packages.python python2Packages.evdev libevdev ];
 
   meta = with stdenv.lib; {
     description = "Records and replays device descriptions and events to emulate input devices through the kernel's input system";
