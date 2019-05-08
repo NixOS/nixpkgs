@@ -15778,6 +15778,19 @@ let
     };
   };
 
+  SysSyscall = buildPerlPackage rec {
+    pname = "Sys-Syscall";
+    version = "0.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BR/BRADFITZ/${pname}-${version}.tar.gz";
+      sha256 = "1r8k4q04dhs191zgdfgiagvbra770hx0bm6x24jsykxn0c6ghi8y";
+    };
+    meta = {
+      description = "access system calls that Perl doesn't normally provide access to";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   SysSyslog = buildPerlPackage {
     pname = "Sys-Syslog";
     version = "0.35";
