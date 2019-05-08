@@ -19,8 +19,8 @@ in {
         base = mkOption {
           default = "${config.boot.kernelPackages.kernel}/dtbs";
           defaultText = "\${config.boot.kernelPackages.kernel}/dtbs";
-          example = literalExample "pkgs.deviceTree.raspberryPiDtbs";
-          type = types.nullOr types.path;
+          example = literalExample "pkgs.deviceTree_rpi";
+          type = types.path;
           description = ''
             The package containing the base device-tree (.dtb) to boot. Contains
             device trees bundled with the Linux kernel by default.
@@ -30,7 +30,7 @@ in {
         overlays = mkOption {
           default = [];
           example = literalExample
-            "[\"\${pkgs.deviceTree.raspberryPiOverlays}/w1-gpio.dtbo\"]";
+            "[\"\${pkgs.deviceTree_rpi.overlays}/w1-gpio.dtbo\"]";
           type = types.listOf types.path;
           description = ''
             A path containing device tree overlays (.dtbo) to be applied to all
@@ -41,9 +41,9 @@ in {
         package = mkOption {
           default = null;
           type = types.nullOr types.path;
+          internal = true;
           description = ''
-            A path containing device tree overlays (.dtbo) to be applied to all
-            base device-trees. Overrides `base` and `overlays`.
+            A path containing the result of applying `overlays` to `base`.
           '';
         };
       };

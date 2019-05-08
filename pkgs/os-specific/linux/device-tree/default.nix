@@ -1,4 +1,4 @@
-{ stdenvNoCC, dtc, findutils, raspberrypifw }:
+{ stdenvNoCC, dtc, findutils }:
 
 with stdenvNoCC.lib; {
   applyOverlays = (base: overlays: stdenvNoCC.mkDerivation {
@@ -14,15 +14,4 @@ with stdenvNoCC.lib; {
       done
     '';
   });
-
-  raspberryPiDtbs = stdenvNoCC.mkDerivation {
-    name = "raspberrypi-dtbs-${raspberrypifw.version}";
-    nativeBuildInputs = [ raspberrypifw ];
-    buildCommand = ''
-      mkdir -p $out/broadcom/
-      cp ${raspberrypifw}/share/raspberrypi/boot/bcm*.dtb $out/broadcom
-    '';
-  };
-
-  raspberryPiOverlays = "${raspberrypifw}/share/raspberrypi/boot/overlays";
 }
