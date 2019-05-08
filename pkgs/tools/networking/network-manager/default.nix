@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit iputils kmod openconnect ethtool coreutils dbus;
+      inherit iputils kmod openconnect ethtool gnused dbus;
       inherit (stdenv) shell;
     })
 
