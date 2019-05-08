@@ -38,10 +38,6 @@ let
 
     patches = [ ./apr-1.patch ];
 
-    # SVN build seems broken on gcc5:
-    # https://gcc.gnu.org/gcc-5/porting_to.html
-    CPPFLAGS = "-P";
-
     configureFlags = [
       (stdenv.lib.withFeature bdbSupport "berkeley-db")
       (stdenv.lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
@@ -110,14 +106,9 @@ let
   });
 
 in {
-  subversion18 = common {
-    version = "1.8.19";
-    sha256 = "1gp6426gkdza6ni2whgifjcmjb4nq34ljy07yxkrhlarvfq6ks2n";
-  };
-
   subversion19 = common {
-    version = "1.9.9";
-    sha256 = "1ll13ychbkp367c7zsrrpda5nygkryma5k18qfr8wbaq7dbvxzcd";
+    version = "1.9.10";
+    sha256 = "1mwwbjs8nqr8qyc0xzy7chnylh4q3saycvly8rzq32swadbcca5f";
   };
 
   subversion_1_10 = common {
@@ -126,9 +117,9 @@ in {
     extraBuildInputs = [ lz4 utf8proc ];
   };
 
-  subversion_1_11 = common {
-    version = "1.11.1";
-    sha256 = "1fv0psjxx5nxb4zmddyrma2bnv1bfff4p8ii6j8fqwjdr982gzcy";
+  subversion = common {
+    version = "1.12.0";
+    sha256 = "1prfbrd1jnndb5fcsvwnzvdi7c0bpirb6pmfq03w21x0v1rprbkz";
     extraBuildInputs = [ lz4 utf8proc ];
   };
 }
