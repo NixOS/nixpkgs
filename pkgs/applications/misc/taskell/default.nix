@@ -57,5 +57,9 @@ in (haskellPackages.mkDerivation {
     tasty-hunit
   ];
 
-  license = lib.licenses.bsd3;
+  description = "Command-line Kanban board/task manager with support for Trello boards and GitHub projects";
+  homepage    = "https://taskell.app";
+  license     = lib.licenses.bsd3;
+  maintainers = with lib.maintainers; [ matthiasbeyer ];
+  platforms   = with lib.platforms; unix ++ darwin;
 })
