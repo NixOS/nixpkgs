@@ -51,6 +51,7 @@ let
       "{connection_file}"
     ];
     language = "sagemath";
+    jsFile = null;
     # just one 16x16 logo is available
     logo32 = "${sage-src}/doc/common/themes/sage/static/sageicon.png";
     logo64 = "${sage-src}/doc/common/themes/sage/static/sageicon.png";

@@ -40,6 +40,15 @@ with lib;
       '';
     };
 
+    jsFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "{env.sitePackages}/ipykernel/resources/kernel.js";
+      description = ''
+        Path to the kernel's front end javascript file.
+      '';
+    };
+
     logo32 = mkOption {
       type = types.nullOr types.path;
       default = null;

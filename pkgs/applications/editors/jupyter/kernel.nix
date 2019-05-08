@@ -15,6 +15,7 @@ let
         "{connection_file}"
       ];
       language = "python";
+      jsFile = null;
       logo32 = "${env.sitePackages}/ipykernel/resources/logo-32x32.png";
       logo64 = "${env.sitePackages}/ipykernel/resources/logo-64x64.png";
     };
@@ -39,13 +40,17 @@ in
 
       ${concatStringsSep "\n" (mapAttrsToList (kernelName: unfilteredKernel:
         let
-          allowedKernelKeys = ["argv" "displayName" "language" "interruptMode" "env" "metadata" "logo32" "logo64"];
+          allowedKernelKeys = ["argv" "displayName" "language" "interruptMode" "env" "metadata" "logo32" "logo64" "jsFile"];
           kernel = filterAttrs (n: v: (any (x: x == n) allowedKernelKeys)) unfilteredKernel;
           config = builtins.toJSON (
             kernel
             // {display_name = if (kernel.displayName != "") then kernel.displayName else kernelName;}
             // (optionalAttrs (kernel ? interruptMode) { interrupt_mode = kernel.interruptMode; })
           );
+          jsFile =
+            if (kernel.jsFile != null)
+            then "ln -s ${kernel.jsFile} 'kernels/${kernelName}/kernel.js';"
+            else "";
           logo32 =
             if (kernel.logo32 != null)
             then "ln -s ${kernel.logo32} 'kernels/${kernelName}/logo-32x32.png';"
@@ -57,6 +62,7 @@ in
         in ''
           mkdir 'kernels/${kernelName}';
           echo '${config}' > 'kernels/${kernelName}/kernel.json';
+          ${jsFile}
           ${logo32}
           ${logo64}
         '') definitions)}
