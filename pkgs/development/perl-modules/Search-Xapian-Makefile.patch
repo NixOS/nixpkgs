@@ -1,0 +1,25 @@
+--- ./Makefile.PL
++++ ./Makefile.PL
+@@ -202,18 +202,21 @@
+ if ($xver !~ /^\Q$BASEVERSION\E(?:_(?:svn|git)[0-9]+)?$/) {
+     # We definitely need Xapian 1.2.x, 1.4.x, 1.5.x or 1.6.x.
+     my $no_chance = ($xver !~ /^1\.[2456]\./);
++    my $skip_automated;
+     my $msg;
+     if ($no_chance) {
+ 	$msg = "Xapian version $xver is incompatible with Search::Xapian $VERSION\n";
++        $skip_automated = 1;
+     } elsif ($BASEVERSION =~ /^1\.2\./ && $xver =~ /^1\.4\./) {
+ 	# Search::Xapian 1.2.x and xapian-core 1.4.y should work together
+ 	# (for x >= 24).
+     } else {
+ 	# We try to keep working with Xapian 1.5.x and up but no promises.
+ 	$msg = "Xapian version $xver may be incompatible with Search::Xapian $VERSION\n";
++        $skip_automated = 1;
+     }
+ 
+-    if ($ENV{AUTOMATED_TESTING}) {
++    if ($skip_automated and $ENV{AUTOMATED_TESTING}) {
+ 	# Don't let automated testers continue, as we don't want bogus failure
+ 	# reports due to builds with incompatible versions.
+ 	print $msg;
