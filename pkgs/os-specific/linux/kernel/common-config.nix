@@ -686,6 +686,9 @@ let
       # Enable AMD's ROCm GPU compute stack
       HSA_AMD = whenAtLeast "4.20" yes;
 
+      PREEMPT = no;
+      PREEMPT_VOLUNTARY = yes;
+
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable memory hotplug support
       # Allows you to dynamically add & remove memory to a VM client running NixOS without requiring a reboot
