@@ -339,6 +339,8 @@ in {
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
+  datasette = callPackage ../development/python-modules/datasette { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
@@ -470,6 +472,8 @@ in {
   hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
 
   httpsig = callPackage ../development/python-modules/httpsig { };
+
+  httptools = callPackage ../development/python-modules/httptools { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
@@ -658,6 +662,8 @@ in {
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
+
+  py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
@@ -921,6 +927,8 @@ in {
   tomlkit = callPackage ../development/python-modules/tomlkit { };
 
   unifi = callPackage ../development/python-modules/unifi { };
+
+  uvloop = callPackage ../development/python-modules/uvloop { };
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
@@ -1244,6 +1252,8 @@ in {
   cram = callPackage ../development/python-modules/cram { };
 
   csscompressor = callPackage ../development/python-modules/csscompressor {};
+
+  csvs-to-sqlite = callPackage ../development/python-modules/csvs-to-sqlite { };
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
@@ -1658,6 +1668,8 @@ in {
   pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
   pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
+
+  pytest-sanic = callPackage ../development/python-modules/pytest-sanic { };
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
@@ -4645,6 +4657,8 @@ in {
   semantic = callPackage ../development/python-modules/semantic { };
 
   sandboxlib = callPackage ../development/python-modules/sandboxlib { };
+
+  sanic = callPackage ../development/python-modules/sanic { };
 
   scales = callPackage ../development/python-modules/scales { };
 
