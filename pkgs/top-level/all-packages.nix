@@ -22770,6 +22770,8 @@ in
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
   });
 
+  caffeine-ng = callPackage ../tools/X11/caffeine-ng {};
+
   cntk = callPackage ../applications/science/math/cntk {
     inherit (linuxPackages) nvidia_x11;
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
