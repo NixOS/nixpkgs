@@ -12296,7 +12296,10 @@ in
 
   opencore-amr = callPackage ../development/libraries/opencore-amr { };
 
-  opencsg = callPackage ../development/libraries/opencsg { };
+  opencsg = callPackage ../development/libraries/opencsg {
+    inherit (qt5) qmake;
+    inherit (darwin.apple_sdk.frameworks) GLUT;
+  };
 
   openct = callPackage ../development/libraries/openct { };
 
