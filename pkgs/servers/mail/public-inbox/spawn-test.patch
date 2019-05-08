@@ -1,0 +1,14 @@
+--- ./t/spawn.t
++++ ./t/spawn.t
+@@ -41,9 +41,9 @@ use PublicInbox::Spawn qw(which spawn popen_rd);
+ {
+ 	my ($r, $w);
+ 	pipe $r, $w or die "pipe failed: $!";
+-	my $pid = spawn(['env'], {}, { -env => 1, 1 => fileno($w) });
++	my $pid = spawn(['env'], {}, { 1 => fileno($w) });
+ 	close $w or die "close pipe[1] failed: $!";
+-	ok(!defined(<$r>), 'read stdout of spawned from pipe');
++	ok(defined(<$r>), 'read stdout of spawned from pipe');
+ 	is(waitpid($pid, 0), $pid, 'waitpid succeeds on spawned process');
+ 	is($?, 0, 'env(1) exited successfully');
+ }

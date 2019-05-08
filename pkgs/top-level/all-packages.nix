@@ -14664,6 +14664,8 @@ in
 
   postsrsd = callPackage ../servers/mail/postsrsd { };
 
+  public-inbox = callPackage ../servers/mail/public-inbox { };
+
   rmilter = callPackage ../servers/mail/rmilter { };
 
   rspamd = callPackage ../servers/mail/rspamd { };

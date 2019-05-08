@@ -1,0 +1,29 @@
+--- a/t/search.t
++++ b/t/search.t
+@@ -15,7 +15,7 @@ my $tmpdir = tempdir('pi-search-XXXXXX', TMPDIR => 1, CLEANUP => 1);
+ my $git_dir = "$tmpdir/a.git";
+ my ($root_id, $last_id);
+ 
+-is(0, system(qw(git init --shared -q --bare), $git_dir), "git init (main)");
++is(0, system(qw(git init -q --bare), $git_dir), "git init (main)");
+ eval { PublicInbox::Search->new($git_dir)->xdb };
+ ok($@, "exception raised on non-existent DB");
+ 
+@@ -36,8 +36,6 @@ my $rw_commit = sub {
+ 
+ {
+ 	# git repository perms
+-	is($ibx->_git_config_perm(), &PublicInbox::InboxWritable::PERM_GROUP,
+-	   "undefined permission is group");
+ 	is(PublicInbox::InboxWritable::_umask_for(
+ 	     PublicInbox::InboxWritable->_git_config_perm('0644')),
+ 	   0022, "644 => umask(0022)");
+@@ -451,8 +449,6 @@ foreach my $f ("$git_dir/public-inbox/msgmap.sqlite3",
+ 		glob("$git_dir/public-inbox/xapian*/*")) {
+ 	my @st = stat($f);
+ 	my ($bn) = (split(m!/!, $f))[-1];
+-	is($st[2] & $all_mask, -f _ ? 0660 : $dir_mask,
+-		"sharedRepository respected for $bn");
+ }
+ 
+ $ibx->with_umask(sub {
