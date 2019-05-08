@@ -937,7 +937,7 @@ unpackPhase() {
 patchPhase() {
     runHook prePatch
 
-    for i in ${patches:-}; do
+    for i in ${patches+"${patches[@]}"}; do
         header "applying patch $i" 3
         local uncompress=cat
         case "$i" in
@@ -1039,7 +1039,7 @@ buildPhase() {
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
             ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
+            ${buildFlags+"${buildFlags[@]}"} ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
@@ -1077,7 +1077,7 @@ checkPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
             ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
             ${checkTarget}
         )
@@ -1103,8 +1103,8 @@ installPhase() {
     # shellcheck disable=SC2086
     local flagsArray=(
         SHELL=$SHELL
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
+        ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
+        ${installFlags+"${installFlags[@]}"} ${installFlagsArray+"${installFlagsArray[@]}"}
         ${installTargets:-install}
     )
 
@@ -1138,14 +1138,14 @@ fixupPhase() {
     # Propagate dependencies & setup hook into the development output.
     declare -ra flatVars=(
         # Build
-        depsBuildBuildPropagated
-        propagatedNativeBuildInputs
-        depsBuildTargetPropagated
+        ${depsBuildBuildPropagated[@]}
+        ${propagatedNativeBuildInputs[@]}
+        ${depsBuildTargetPropagated[@]}
         # Host
-        depsHostHostPropagated
-        propagatedBuildInputs
+        ${depsHostHostPropagated[@]}
+        ${propagatedBuildInputs[@]}
         # Target
-        depsTargetTargetPropagated
+        ${depsTargetTargetPropagated[@]}
     )
     declare -ra flatFiles=(
         "${propagatedBuildDepFiles[@]}"
@@ -1175,7 +1175,7 @@ fixupPhase() {
     if [ -n "${setupHooks:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"
         local hook
-        for hook in "${setupHooks[@]}"; do
+        for hook in ${setupHooks[@]}; do
             local content
             consumeEntire content < "$hook"
             substituteAllStream content "file '$hook'" >> "${!outputDev}/nix-support/setup-hook"
@@ -1189,7 +1189,7 @@ fixupPhase() {
     if [ -n "${propagatedUserEnvPkgs:-}" ]; then
         mkdir -p "${!outputBin}/nix-support"
         # shellcheck disable=SC2086
-        printWords $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
+        printWords ${propagatedUserEnvPkgs[@]} > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup
@@ -1211,7 +1211,7 @@ installCheckPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            ${makeFlags[@]} ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
             ${installCheckTarget:-installcheck}
         )
