@@ -146,5 +146,9 @@ self: super: {
     sha256 = "04xwznd3lfgracfz68ls6vfm19rhq8fb74r6ii0grpv6cx4rr21i";
   });
   easytest = self.easytest_0_3;
+  regex-tdfa = appendPatch super.regex-tdfa (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-tdfa-1.2.3.1.patch";
+    sha256 = "1lhas4s2ms666prb475gaw2bqw1v4y8cxi66sy20j727sx7ppjs7";
+  });
 
 }
