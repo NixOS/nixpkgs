@@ -7401,7 +7401,6 @@ in
   };
 
   clang = llvmPackages.clang;
-  clang-manpages = llvmPackages.clang-manpages;
 
   clang-sierraHack = clang.override {
     name = "clang-wrapper-with-reexport-hack";
@@ -8102,7 +8101,6 @@ in
   lldb_8 = llvmPackages_8.lldb;
 
   llvm = llvmPackages.llvm;
-  llvm-manpages = llvmPackages.llvm-manpages;
 
   llvm_8  = llvmPackages_8.llvm;
   llvm_7  = llvmPackages_7.llvm;

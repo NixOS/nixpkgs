@@ -11,8 +11,8 @@
 , release_version
 , zlib
 , debugVersion ? false
-, enableManpages ? false
-, enableSharedLibraries ? !enableManpages
+, enableManpages ? true
+, enableSharedLibraries ? true
 }:
 
 let
@@ -22,7 +22,7 @@ let
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   name = "llvm-${version}";
 
   src = fetch "llvm" "0g1bbj2n6xv4p1n6hh17vj3vpvg56wacipc81dgwga9mg2lys8nm";
@@ -148,22 +148,4 @@ stdenv.mkDerivation ({
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
-} // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
-
-  buildPhase = ''
-    make docs-llvm-man
-  '';
-
-  propagatedBuildInputs = [];
-
-  installPhase = ''
-    make -C docs install
-  '';
-
-  outputs = [ "out" ];
-
-  doCheck = false;
-
-  meta.description = "man pages for LLVM ${version}";
-})
+}

@@ -27,16 +27,6 @@ let
       inherit clang-tools-extra_src;
     };
 
-    llvm-manpages = lowPrio (tools.llvm.override {
-      enableManpages = true;
-      python = pkgs.python;  # don't use python-boot
-    });
-
-    clang-manpages = lowPrio (tools.clang-unwrapped.override {
-      enableManpages = true;
-      python = pkgs.python;  # don't use python-boot
-    });
-
     libclang = tools.clang-unwrapped.lib;
 
     clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;

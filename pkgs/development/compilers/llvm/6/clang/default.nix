@@ -1,11 +1,11 @@
 { stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
 , fixDarwinDylibNames
-, enableManpages ? false
+, enableManpages ? true
 }:
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
-  self = stdenv.mkDerivation ({
+  self = stdenv.mkDerivation {
     name = "clang-${version}";
 
     src = fetch "cfe" "0rxn4rh7rrnsqbdgp4gzc8ishbkryhpl1kd3mpnxzpxxhla3y93w";
@@ -86,23 +86,5 @@ let
       license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };
-  } // stdenv.lib.optionalAttrs enableManpages {
-    name = "clang-manpages-${version}";
-
-    buildPhase = ''
-      make docs-clang-man
-    '';
-
-    installPhase = ''
-      mkdir -p $out/share/man/man1
-      # Manually install clang manpage
-      cp docs/man/*.1 $out/share/man/man1/
-    '';
-
-    outputs = [ "out" ];
-
-    doCheck = false;
-
-    meta.description = "man page for Clang ${version}";
-  });
+  };
 in self

@@ -1,11 +1,11 @@
 { stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
 , fixDarwinDylibNames
-, enableManpages ? false
+, enableManpages ? true
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
 }:
 
 let
-  self = stdenv.mkDerivation ({
+  self = stdenv.mkDerivation {
     name = "clang-${version}";
 
     src = fetch "cfe" "0ihnbdl058gvl2wdy45p5am55bq8ifx8m9mhcsgj9ax8yxlzvvvh";
@@ -104,23 +104,5 @@ let
       license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };
-  } // stdenv.lib.optionalAttrs enableManpages {
-    name = "clang-manpages-${version}";
-
-    buildPhase = ''
-      make docs-clang-man
-    '';
-
-    installPhase = ''
-      mkdir -p $out/share/man/man1
-      # Manually install clang manpage
-      cp docs/man/*.1 $out/share/man/man1/
-    '';
-
-    outputs = [ "out" ];
-
-    doCheck = false;
-
-    meta.description = "man page for Clang ${version}";
-  });
+  };
 in self

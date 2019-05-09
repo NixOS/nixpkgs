@@ -262,10 +262,18 @@ in rec {
       libxml2 = super.libxml2.override { pythonSupport = false; };
 
       llvmPackages_7 = super.llvmPackages_7 // (let
+        tools = super.llvmPackages_7.tools.extend (llvmSelf: _: {
+          clang-unwrapped = llvmPackages_7.clang-unwrapped.override {
+            enableManpages = false;
+          };
+          llvm = llvmPackages_7.llvm.override {
+            enableManpages = false;
+          };
+        });
         libraries = super.llvmPackages_7.libraries.extend (_: _: {
           inherit (llvmPackages_7) libcxx libcxxabi;
         });
-      in { inherit libraries; } // libraries);
+      in { inherit tools libraries; } // tools // libraries);
 
       darwin = super.darwin // {
         inherit (darwin)
@@ -317,8 +325,14 @@ in rec {
 
       llvmPackages_7 = super.llvmPackages_7 // (let
         tools = super.llvmPackages_7.tools.extend (llvmSelf: _: {
-          clang-unwrapped = llvmPackages_7.clang-unwrapped.override { llvm = llvmSelf.llvm; };
-          llvm = llvmPackages_7.llvm.override { libxml2 = self.darwin.libxml2-nopython; };
+          clang-unwrapped = llvmPackages_7.clang-unwrapped.override {
+            llvm = llvmSelf.llvm;
+            enableManpages = false;
+          };
+          llvm = llvmPackages_7.llvm.override {
+            libxml2 = self.darwin.libxml2-nopython;
+            enableManpages = false;
+          };
         });
         libraries = super.llvmPackages_7.libraries.extend (llvmSelf: _: {
           inherit (llvmPackages_7) libcxx libcxxabi compiler-rt;

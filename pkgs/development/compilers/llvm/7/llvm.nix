@@ -11,9 +11,10 @@
 , version
 , release_version
 , zlib
+, libiconv
 , buildPackages
 , debugVersion ? false
-, enableManpages ? false
+, enableManpages ? true
 , enableSharedLibraries ? true
 , enablePFM ? !(stdenv.isDarwin
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
@@ -29,7 +30,7 @@ let
     let parts = splitString "." release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 
-in stdenv.mkDerivation ({
+in stdenv.mkDerivation {
   name = "llvm-${version}";
 
   src = fetch "llvm" "0r1p5didv4rkgxyvbkyz671xddg6i3dxvbpsi1xxipkla0l9pk0v";
@@ -50,7 +51,7 @@ in stdenv.mkDerivation ({
   nativeBuildInputs = [ cmake python ]
     ++ optional enableManpages python.pkgs.sphinx;
 
-  buildInputs = [ libxml2 libffi ]
+  buildInputs = [ libxml2 libffi libiconv ]
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
@@ -171,25 +172,4 @@ in stdenv.mkDerivation ({
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
-} // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
-
-  buildPhase = ''
-    make docs-llvm-man
-  '';
-
-  propagatedBuildInputs = [];
-
-  installPhase = ''
-    make -C docs install
-  '';
-
-  postPatch = null;
-  postInstall = null;
-
-  outputs = [ "out" ];
-
-  doCheck = false;
-
-  meta.description = "man pages for LLVM ${version}";
-})
+}
