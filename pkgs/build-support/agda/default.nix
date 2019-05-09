@@ -24,12 +24,6 @@ let
       self.buildDepends;
     buildDependsAgdaShareAgda = map (x: x + "/share/agda") self.buildDependsAgda;
 
-    # Not much choice here ;)
-    LANG = "en_US.UTF-8";
-    LOCALE_ARCHIVE = stdenv.lib.optionalString
-      stdenv.isLinux
-      "${glibcLocales}/lib/locale/locale-archive";
-
     everythingFile = "Everything.agda";
 
     propagatedBuildInputs = self.buildDependsAgda;

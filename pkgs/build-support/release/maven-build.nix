@@ -23,8 +23,6 @@ stdenv.mkDerivation ( rec {
     runHook preSetupPhase
 
     mkdir -p $out/nix-support
-    export LANG="en_US.UTF-8"
-    export LOCALE_ARCHIVE=$glibcLocales/lib/locale/locale-archive
     export M2_REPO=$TMPDIR/repository
 
     runHook postSetupPhase

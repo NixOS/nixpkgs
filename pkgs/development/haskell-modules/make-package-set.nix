@@ -128,8 +128,6 @@ let
       preferLocalBuild = true;
       allowSubstitutes = false;
       phases = ["installPhase"];
-      LANG = "en_US.UTF-8";
-      LOCALE_ARCHIVE = pkgs.lib.optionalString (buildPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
       installPhase = ''
         export HOME="$TMP"
         mkdir -p "$out"
@@ -311,8 +309,6 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         nativeBuildInputs = [ ghcEnv ] ++ nativeBuildInputs ++ mkDrvArgs.nativeBuildInputs or [];
         phases = ["installPhase"];
         installPhase = "echo $nativeBuildInputs $buildInputs > $out";
-        LANG = "en_US.UTF-8";
-        LOCALE_ARCHIVE = pkgs.lib.optionalString (stdenv.hostPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
         "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
         "NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
         # TODO: is this still valid?

@@ -22,9 +22,6 @@ in
 
     buildInputs = [ erlang rebar makeWrapper ];
 
-    LANG = "C.UTF-8";
-    LC_TYPE = "C.UTF-8";
-
     setupHook = ./setup-hook.sh;
 
     inherit debugInfo;
