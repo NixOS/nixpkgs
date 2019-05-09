@@ -14,6 +14,23 @@ let
       exec "$@"
     '';
 
+  # Solves problems like:
+  # https://wiki.archlinux.org/index.php/Talk:Bluetooth_headset#GDMs_pulseaudio_instance_captures_bluetooth_headset
+  # Instead of blacklisting plugins, we use Fedora's PulseAudio configuration for GDM:
+  # https://src.fedoraproject.org/rpms/gdm/blob/master/f/default.pa-for-gdm
+  pulseConfig = pkgs.writeText "default.pa" ''
+    load-module module-device-restore
+    load-module module-card-restore
+    load-module module-udev-detect
+    load-module module-native-protocol-unix
+    load-module module-default-device-restore
+    load-module module-rescue-streams
+    load-module module-always-sink
+    load-module module-intended-roles
+    load-module module-suspend-on-idle
+    load-module module-position-event-sounds
+  '';
+
 in
 
 {
@@ -126,6 +143,11 @@ in
           GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
         execCmd = "exec ${gdm}/bin/gdm";
+        preStart = optionalString config.hardware.pulseaudio.enable ''
+          mkdir -p /run/gdm/.config/pulse
+          ln -sf ${pulseConfig} /run/gdm/.config/pulse/default.pa
+          chown -R gdm:gdm /run/gdm/.config
+        '';
       };
 
     # Because sd_login_monitor_new requires /run/systemd/machines
