@@ -45,15 +45,16 @@ self: super: {
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: { Cabal = null; });
 
   # Ignore overly restrictive upper version bounds.
-  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
-  doctest = doJailbreak super.doctest;
-  split = doJailbreak super.split;
-  test-framework = doJailbreak super.test-framework;
-  hashable = doJailbreak super.hashable;
   async = doJailbreak super.async;
-  Diff = dontCheck super.Diff;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
+  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
+  Diff = dontCheck super.Diff;
+  doctest = doJailbreak super.doctest;
+  hashable = doJailbreak super.hashable;
+  split = doJailbreak super.split;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
+  test-framework = doJailbreak super.test-framework;
+  th-lift = doJailbreak super.th-lift_0_8;
 
   # These packages don't work and need patching and/or an update.
   primitive = overrideSrc (doJailbreak super.primitive) {
