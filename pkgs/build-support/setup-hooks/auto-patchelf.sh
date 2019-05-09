@@ -229,9 +229,9 @@ autoPatchelf() {
 # fixupOutput and the postFixup hook runs later.
 postFixupHooks+=('
     if [ -z "${dontAutoPatchelf-}" ]; then
-        autoPatchelf -- $(for output in $outputs; do
-            [ -e "${!output}" ] || continue
-            echo "${!output}"
+        autoPatchelf -- $(for output in "${outputs[@]}"; do
+            [ -e "${output}" ] || continue
+            echo "${output}"
         done)
     fi
 ')
