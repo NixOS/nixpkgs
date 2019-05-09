@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, python3Packages, zbar, secp256k1 }:
+{ stdenv, fetchurl, python3, python3Packages, zbar, secp256k1 }:
 
 let
   qdarkstyle = python3Packages.buildPythonPackage rec {
@@ -16,11 +16,9 @@ python3Packages.buildPythonApplication rec {
   pname = "electrum";
   version = "3.3.5";
 
-  src = fetchFromGitHub {
-    owner = "spesmilo";
-    repo = "electrum";
-    rev = version;
-    sha256 = "039y0z8v65ffzz6qm9wv9n29l3i2ik59xs6z6mg5pi4f5mjq05jj";
+  src = fetchurl {
+    url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
+    sha256 = "1csj0n96zlajnrs39wsazfj5lmy7v7n77cdz56lr8nkmchh6k9z1";
   };
 
   propagatedBuildInputs = with python3Packages; [
