@@ -37,6 +37,7 @@ in rec {
     export CMAKE_OSX_ARCHITECTURES=x86_64
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no
+    export LC_CTYPE=UTF-8
   '';
 
   bootstrapTools = derivation rec {
