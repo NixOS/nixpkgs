@@ -150,5 +150,6 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-tdfa-1.2.3.1.patch";
     sha256 = "1lhas4s2ms666prb475gaw2bqw1v4y8cxi66sy20j727sx7ppjs7";
   });
+  unordered-containers = self.unordered-containers_0_2_10_0;
 
 }
