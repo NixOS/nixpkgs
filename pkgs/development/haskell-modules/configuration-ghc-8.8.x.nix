@@ -51,6 +51,7 @@ self: super: {
   Diff = dontCheck super.Diff;
   doctest = doJailbreak super.doctest;
   hashable = doJailbreak super.hashable;
+  lucid = doJailbreak super.lucid;
   split = doJailbreak super.split;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
   test-framework = doJailbreak super.test-framework;
