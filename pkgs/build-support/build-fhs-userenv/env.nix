@@ -52,7 +52,7 @@ let
   etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
-    export LD_LIBRARY_PATH='/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32'
+    export LD_LIBRARY_PATH='/run/opengl-driver/lib:/run/opengl-driver-32/lib'
     export PATH='/run/wrappers/bin:/usr/bin:/usr/sbin'
     export TZDIR='/etc/zoneinfo'
 
@@ -184,6 +184,13 @@ let
         ln -s "$i"
       fi
     done
+
+    # Configure the dynamic linker to look at the default locations (which
+    # it normally doesn't do on nix).
+    cat > etc/nix-ld.so.conf << "EOF
+    /lib
+    /usr/lib
+    EOF
   '';
 
 in stdenv.mkDerivation {

@@ -6,7 +6,7 @@ diff -Naur glibc-2.27-orig/elf/ldconfig.c glibc-2.27/elf/ldconfig.c
  
  #ifndef LD_SO_CONF
 -# define LD_SO_CONF SYSCONFDIR "/ld.so.conf"
-+# define LD_SO_CONF PREFIX "/etc/ld.so.conf"
++# define LD_SO_CONF "/etc/nix-ld.so.conf"
  #endif
  
  /* Get libc version number.  */
