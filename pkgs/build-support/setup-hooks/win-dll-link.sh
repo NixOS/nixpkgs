@@ -15,8 +15,8 @@ _linkDLLs() {
     #   prefix $PATH by currently-built outputs
     local DLLPATH=""
     local outName
-    for outName in $outputs; do
-        addToSearchPath DLLPATH "${!outName}/bin"
+    for output in "${outputs[@]}"; do
+        addToSearchPath DLLPATH "${output}/bin"
     done
     DLLPATH="$DLLPATH:$PATH"
 
