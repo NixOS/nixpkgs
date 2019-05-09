@@ -107,7 +107,6 @@ in
     mapTestEqual = lib.mapAttrsRecursive testEqual;
 
   in mapTestEqual {
-    androidndk = nativePlatforms;
     boehmgc = nativePlatforms;
     libffi = nativePlatforms;
     libiconv = nativePlatforms;
