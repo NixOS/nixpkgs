@@ -2,7 +2,7 @@
 , pkgconfig, intltool, autoreconfHook
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, valgrind-light, python2, python2Packages
+, libelf, libvdpau, python2, python2Packages
 , libglvnd
 , enableRadv ? true
 , galliumDrivers ? null
@@ -10,6 +10,7 @@
 , vulkanDrivers ? null
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
 , OpenGL, Xplugin
+, withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
 }:
 
 /** Packaging design:
@@ -146,7 +147,8 @@ let self = stdenv.mkDerivation {
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ valgrind-light libomxil-bellagio libva-minimal ];
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
+    ++ lib.optional withValgrind valgrind-light;
 
   enableParallelBuilding = true;
   doCheck = false;
