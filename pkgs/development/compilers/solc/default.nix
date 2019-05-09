@@ -6,9 +6,9 @@ assert z3Support -> z3 != null;
 assert z3Support -> stdenv.lib.versionAtLeast z3.version "4.6.0";
 
 let
-  version = "0.5.7";
-  rev = "6da8b019e4a155d1f70abe7a3acc0f9765480a9e";
-  sha256 = "0ii868r0ra6brjnn453kxqvw76p4bwjbvdyqfcn6v1bl2h4s60ir";
+  version = "0.5.8";
+  rev = "23d335f28e4055e67c3b22466ac7c4e41dc48344";
+  sha256 = "10fa4qwfr3gfvxkzzjfs0w2fyij67cczklpj2x5hghcg08amkq37";
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.8.4.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
