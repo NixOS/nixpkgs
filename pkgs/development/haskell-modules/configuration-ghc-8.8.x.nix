@@ -117,10 +117,6 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/th-abstraction-0.2.11.0.patch";
     sha256 = "0czqfszfblz6bvsybcd1z5jijj79f9czqq6dn992wp2gibsbrgj3";
   });
-  logict = appendPatch (doJailbreak super.logict) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/logict-0.6.0.2.patch";
-    sha256 = "0my2n0r9pb35994q0xka96fv5jdpjdfwqppi5lily3rgzkajsixn";
-  });
   zlib = appendPatch super.zlib (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/zlib-0.6.2.patch";
     sha256 = "13fy730z9ihyc9kw3qkh642mi0bdbd7bz01dksj1zz845pr9jjif";
