@@ -97,6 +97,7 @@ in stdenv.mkDerivation (args // {
 
     (
     set -x
+    export CARGO_HOME=$(pwd)
     env \
       "CC_${stdenv.buildPlatform.config}"="${ccForBuild}" \
       "CXX_${stdenv.buildPlatform.config}"="${cxxForBuild}" \
@@ -121,6 +122,7 @@ in stdenv.mkDerivation (args // {
   checkPhase = args.checkPhase or ''
     runHook preCheck
     echo "Running cargo test"
+    export CARGO_HOME=$(pwd)
     cargo test
     runHook postCheck
   '';
