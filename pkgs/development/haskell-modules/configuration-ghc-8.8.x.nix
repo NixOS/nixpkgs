@@ -51,6 +51,8 @@ self: super: {
   test-framework = doJailbreak super.test-framework;
   hashable = doJailbreak super.hashable;
   async = doJailbreak super.async;
+  Diff = dontCheck super.Diff;
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
 
   # These packages don't work and need patching and/or an update.
   primitive = overrideSrc (doJailbreak super.primitive) {
