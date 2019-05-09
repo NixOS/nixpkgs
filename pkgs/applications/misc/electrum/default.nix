@@ -14,13 +14,13 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "electrum";
-  version = "3.3.4";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "0yxdpc602jnd14xz3px85ka0b6db98zwbgfi9a3vj8p1k3mmiwaj";
+    sha256 = "039y0z8v65ffzz6qm9wv9n29l3i2ik59xs6z6mg5pi4f5mjq05jj";
   };
 
   propagatedBuildInputs = with python3Packages; [
