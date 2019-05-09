@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "i3ipc";
-  version = "1.6.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner  = "acrisci";
     repo   = "i3ipc-python";
     rev    = "v${version}";
-    sha256 = "0sb525wvwcnikjaqzha94xr97r1gjys30csmaj17swlxgyczxvq5";
+    sha256 = "1p0zvbk7rjfldg5q50qnjl7837hi38gcpz75dbrwyf0xg2jhx2sh";
   };
 
   propagatedBuildInputs = [ enum-compat ];
