@@ -103,10 +103,6 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-posix-0.95.2.patch";
     sha256 = "006yli58jpqp786zm1xlncjsilc38iv3a09r4pv94l587sdzasd2";
   });
-  exceptions = appendPatch (doJailbreak super.exceptions) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/exceptions-0.10.1.patch";
-    sha256 = "0427jg027dcckiy21zk29c49fzx4q866rqbabmh4wvqwwkz8yk37";
-  });
   th-abstraction = appendPatch (doJailbreak super.th-abstraction) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/th-abstraction-0.2.11.0.patch";
     sha256 = "0czqfszfblz6bvsybcd1z5jijj79f9czqq6dn992wp2gibsbrgj3";
