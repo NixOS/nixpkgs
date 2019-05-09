@@ -18,8 +18,8 @@ in stdenv.mkDerivation rec {
   name = "mupdf-${version}";
 
   src = fetchurl {
-    url = "https://mupdf.com/downloads/archive/${name}-source.tar.gz";
-    sha256 = "0wflzx1v66lfdn0cvlw1mnlb3ghc2m8np25pg0c2s6fww0z7grlz";
+    url = "https://mupdf.com/downloads/archive/${name}-source.tar.xz";
+    sha256 = "0kmcz3ivxmqmks8vg50ri1zar18q5svk829z0g1kj08lgz7kcl2n";
   };
 
   patches =
