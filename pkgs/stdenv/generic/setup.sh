@@ -1123,14 +1123,14 @@ fixupPhase() {
     # Propagate dependencies & setup hook into the development output.
     declare -ra flatVars=(
         # Build
-        ${depsBuildBuildPropagated[@]}
-        ${propagatedNativeBuildInputs[@]}
-        ${depsBuildTargetPropagated[@]}
+        depsBuildBuildPropagated
+        propagatedNativeBuildInputs
+        depsBuildTargetPropagated
         # Host
-        ${depsHostHostPropagated[@]}
-        ${propagatedBuildInputs[@]}
+        depsHostHostPropagated
+        propagatedBuildInputs
         # Target
-        ${depsTargetTargetPropagated[@]}
+        depsTargetTargetPropagated
     )
     declare -ra flatFiles=(
         "${propagatedBuildDepFiles[@]}"
