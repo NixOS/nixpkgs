@@ -92,6 +92,11 @@ stdenv.mkDerivation ({
         url = "https://salsa.debian.org/glibc-team/glibc/raw/49767c9f7de4828220b691b29de0baf60d8a54ec/debian/patches/localedata/locale-C.diff";
         sha256 = "0irj60hs2i91ilwg5w7sqrxb695c93xg0ik7yhhq9irprd7fidn4";
       })
+      (fetchurl {
+        url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=874160;filename=0001-Default-to-C.UTF-8-on-setlocale-.-if-no-env-vars-are.patch;msg=5";
+        name = "0001-Default-to-C.UTF-8-on-setlocale-.-if-no-env-vars-are.patch";
+        sha256 = "05wnpib83ggqnr1c85ajrak00478hwalrb3q7pgnxlzs0axw2iyk";
+      })
     ]
     ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
