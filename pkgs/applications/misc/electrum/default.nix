@@ -62,7 +62,10 @@ python3Packages.buildPythonApplication rec {
     rm -rf $out/${python3.sitePackages}/nix
 
     substituteInPlace $out/share/applications/electrum.desktop \
-      --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
+      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
+                "Exec=$out/bin/electrum %u" \
+      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
+                "Exec=$out/bin/electrum --testnet %u"
   '';
 
   checkInputs = with python3Packages; [ pytest ];
