@@ -1107,16 +1107,16 @@ installPhase() {
 fixupPhase() {
     # Make sure everything is writable so "strip" et al. work.
     local output
-    for output in $outputs; do
-        if [ -e "${!output}" ]; then chmod -R u+w "${!output}"; fi
+    for output in ${outputs[@]}; do
+        if [ -e "${output}" ]; then chmod -R u+w "${output}"; fi
     done
 
     runHook preFixup
 
     # Apply fixup to each output.
     local output
-    for output in $outputs; do
-        prefix="${!output}" runHook fixupOutput
+    for output in ${outputs[@]}; do
+        prefix="${output}" runHook fixupOutput
     done
 
 
