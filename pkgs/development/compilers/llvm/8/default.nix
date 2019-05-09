@@ -2,6 +2,7 @@
 , libxml2, python, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
+, targetPackages
 }:
 
 let
@@ -23,8 +24,17 @@ let
       ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && tools.clang-unwrapped ? gcc && !(stdenv.targetPlatform.useLLVM or false)) ''
-      echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
+
+      echo "-target ${stdenv.targetPlatform.config}" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString (stdenv.hostPlatform.useLLVM or false) ''
+      echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
+      echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString ((stdenv.hostPlatform.useLLVM or false) && !stdenv.targetPlatform.isWasm) ''
+      echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString stdenv.targetPlatform.isWasm ''
+      echo "-fno-exceptions" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && targetPackages.stdenv.cc.isGNU && !(stdenv.targetPlatform.useLLVM or false)) ''
+      echo "--gcc-toolchain=${targetPackages.stdenv.cc.cc}" >> $out/nix-support/cc-cflags
     '';
   in {
 
@@ -63,16 +73,22 @@ let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    libcxxClang = wrapCCWith rec {
+    libcxxClang = wrapCCWith (rec {
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
         targetLlvmLibraries.libcxx
         targetLlvmLibraries.libcxxabi
         targetLlvmLibraries.compiler-rt
+      ] ++ stdenv.lib.optionals (stdenv.hostPlatform.useLLVM && !stdenv.targetPlatform.isWasm) [
+        targetLlvmLibraries.libunwind
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
-    };
+    } // stdenv.lib.optionalAttrs stdenv.hostPlatform.useLLVM {
+      bintools = wrapBintoolsWith {
+        inherit (tools) bintools;
+      };
+    });
 
     lld = callPackage ./lld.nix {};
 
@@ -86,26 +102,6 @@ let
     # file.
 
     bintools = callPackage ./bintools.nix {};
-
-    lldClang = wrapCCWith rec {
-      cc = tools.clang-unwrapped;
-      libcxx = targetLlvmLibraries.libcxx;
-      bintools = wrapBintoolsWith {
-        inherit (tools) bintools;
-      };
-      extraPackages = [
-        targetLlvmLibraries.libcxx
-        targetLlvmLibraries.libcxxabi
-        targetLlvmLibraries.compiler-rt
-        targetLlvmLibraries.libunwind
-      ];
-      extraBuildCommands = ''
-        echo "-target ${stdenv.targetPlatform.config}" >> $out/nix-support/cc-cflags
-        echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
-        echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
-        echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
-      '' + mkExtraBuildCommands cc;
-    };
 
     lldClangNoLibcxx = wrapCCWith rec {
       cc = tools.clang-unwrapped;
