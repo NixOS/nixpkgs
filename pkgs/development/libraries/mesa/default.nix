@@ -26,26 +26,26 @@
 with stdenv.lib;
 
 if ! elem stdenv.hostPlatform.system platforms.mesaPlatforms then
-  throw "unsupported platform for Mesa"
+  throw "${stdenv.system}: unsupported platform for Mesa"
 else
 
 let
-  defaultGalliumDrivers =
-    optionals (elem "drm" eglPlatforms)
-    (if stdenv.isAarch32
-    then ["virgl" "nouveau" "freedreno" "vc4" "etnaviv" "imx"]
-    else if stdenv.isAarch64
-    then ["virgl" "nouveau" "vc4" ]
-    else ["virgl" "svga" "i915" "r300" "r600" "radeonsi" "nouveau"]);
-  defaultDriDrivers =
-    optionals (elem "drm" eglPlatforms)
-    (if (stdenv.isAarch32 || stdenv.isAarch64)
-    then ["nouveau"]
-    else ["i915" "i965" "nouveau" "radeon" "r200"]);
-  defaultVulkanDrivers =
-    optionals stdenv.isLinux (if (stdenv.isAarch32 || stdenv.isAarch64)
-    then []
-    else ["intel"] ++ lib.optional enableRadv "radeon");
+  # platforms that have PCIe slots and thus can use most non-integrated GPUs
+  pciePlatform = !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64;
+  defaultGalliumDrivers = optionals (elem "drm" eglPlatforms) ([ "virgl" ]
+    ++ lib.optionals pciePlatform [ "r300" "r600" "radeonsi" ]
+    ++ lib.optionals (pciePlatform || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "nouveau" ]
+    ++ lib.optionals stdenv.hostPlatform.isx86 [ "i915" "svga" ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "vc4" ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "freedreno" "etnaviv" "imx" ]
+  );
+  defaultDriDrivers = optionals (elem "drm" eglPlatforms) ([ ]
+    ++ lib.optionals pciePlatform [ "radeon" "r200" ]
+    ++ lib.optionals (pciePlatform || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "nouveau" ]
+    ++ lib.optionals stdenv.hostPlatform.isx86 [ "i915" "i965" ]);
+  defaultVulkanDrivers = optionals stdenv.hostPlatform.isLinux ([ ]
+    ++ lib.optional stdenv.hostPlatform.isx86 "intel"
+    ++ lib.optional enableRadv "radeon");
 in
 
 let gallium_ = galliumDrivers; dri_ = driDrivers; vulkan_ = vulkanDrivers; in
