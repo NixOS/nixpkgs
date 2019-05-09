@@ -98,10 +98,10 @@ moveToOutput() {
     local patt="$1"
     local dstOut="$2"
     local output
-    for output in "${!outputs[@]}"; do
-        if [ "${!output}" = "$dstOut" ]; then continue; fi
+    for output in "${outputs[@]}"; do
+        if [ "${output}" = "$dstOut" ]; then continue; fi
         local srcPath
-        for srcPath in "${!output}"/$patt; do
+        for srcPath in "${output}"/$patt; do
             # apply to existing files/dirs, *including* broken symlinks
             if [ ! -e "$srcPath" ] && [ ! -L "$srcPath" ]; then continue; fi
 
@@ -109,7 +109,7 @@ moveToOutput() {
                 echo "Removing $srcPath"
                 rm -r "$srcPath"
             else
-                local dstPath="$dstOut${srcPath#${!output}}"
+                local dstPath="$dstOut${srcPath#${output}}"
                 echo "Moving $srcPath to $dstPath"
 
                 if [ -d "$dstPath" ] && [ -d "$srcPath" ]
@@ -173,7 +173,7 @@ _multioutPropagateDev() {
     if [ ${#outputs[@]} -eq 1 ]; then return; fi;
 
     local outputFirst
-    for outputFirst in $outputs; do
+    for outputFirst in ${!outputs[@]}; do
         break
     done
     local propagaterOutput="$outputDev"
@@ -182,22 +182,23 @@ _multioutPropagateDev() {
     fi
 
     # Default value: propagate binaries, includes and libraries
-    if [ -z "${propagatedBuildOutputs+1}" ]; then
+    if [ -z "${propagatedBuildOutputs[@]+1}" ]; then
         local po_dirty="$outputBin $outputInclude $outputLib"
         set +o pipefail
-        propagatedBuildOutputs=`echo "$po_dirty" \
+        # FIXME
+        propagatedBuildOutputs=$(echo "$po_dirty" \
             | tr -s ' ' '\n' | grep -v -F "$propagaterOutput" \
-            | sort -u | tr '\n' ' ' `
+            | sort -u | tr '\n' ' ')
         set -o pipefail
     fi
 
     # The variable was explicitly set to empty or we resolved it so
-    if [ -z "$propagatedBuildOutputs" ]; then
+    if [ -z "${propagatedBuildOutputs[@]}" ]; then
         return
     fi
 
     mkdir -p "${!propagaterOutput}"/nix-support
-    for output in $propagatedBuildOutputs; do
+    for output in "${propagatedBuildOutputs[@]}"; do
         echo -n " ${!output}" >> "${!propagaterOutput}"/nix-support/propagated-build-inputs
     done
 }
