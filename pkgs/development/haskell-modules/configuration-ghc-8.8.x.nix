@@ -92,6 +92,10 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/dlist-0.8.0.6.patch";
     sha256 = "0lkhibfxfk6mi796mrjgmbb50hbyjgc7xdinci64dahj8325jlpc";
   });
+  cabal-doctest = appendPatch  (doJailbreak super.cabal-doctest) (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/cabal-doctest-1.0.6.patch";
+    sha256 = "0735mkxhv557pgnfvdjakkw9r85l5gy28grdwg929m26ghbf9s8j";
+  });
   QuickCheck = appendPatch super.QuickCheck (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/QuickCheck-2.13.1.patch";
     sha256 = "138yrp3x5cnvncimrnhnkawz6clyk7fj3sr3y93l5szfr11kcvbl";
