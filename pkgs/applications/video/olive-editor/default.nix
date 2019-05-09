@@ -2,16 +2,15 @@
   qtbase, qtmultimedia, frei0r, opencolorio, hicolor-icon-theme, ffmpeg-full,
   CoreFoundation  }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "olive-editor";
-
-  version = "unstable-2019-03-18";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "olive-editor";
     repo = "olive";
-    rev = "d153e4d7471122987098087a203323003ae8a128";
-    sha256 = "1gxpz6jg6dqjmvqkk0m9g4pz30lklwx51d73gka404a3w1j5wna6";
+    rev = version;
+    sha256 = "191nk4c35gys4iypykcidn6h27c3sbjfy117q7h9h1qilz2wm94z";
   };
 
   nativeBuildInputs = [ 
@@ -22,13 +21,13 @@ stdenv.mkDerivation {
 
   buildInputs = [
     ffmpeg-full
+    frei0r
     opencolorio
     qtbase
     qtmultimedia
     qtmultimedia.dev
     hicolor-icon-theme
-  ] ++ stdenv.lib.optional stdenv.isDarwin CoreFoundation
-    ++ stdenv.lib.optional stdenv.isLinux frei0r;
+  ] ++ stdenv.lib.optional stdenv.isDarwin CoreFoundation;
 
   meta = with stdenv.lib; {
     description = "Professional open-source NLE video editor";
