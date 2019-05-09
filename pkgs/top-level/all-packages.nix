@@ -7922,6 +7922,15 @@ in
   scalafix = callPackage ../development/tools/scalafix { };
   scalafmt = callPackage ../development/tools/scalafmt { };
 
+  scopes = callPackage ../development/compilers/scopes {
+    inherit (llvmPackages_8) llvm stdenv clang-unwrapped clang;
+    libch =
+      let pkg = with llvmPackages_8.stdenv.cc;
+        if stdenv.isDarwin then libc else libc.dev;
+        in "${pkg}/include";
+    clangh = "${llvmPackages_8.clang-unwrapped}/lib/clang/8.0.0/include";
+  };
+
   sdcc = callPackage ../development/compilers/sdcc {
     gputils = null;
   };
@@ -9092,6 +9101,10 @@ in
     inherit (xorg) libX11 libXext libXi libXtst;
   };
 
+  genie = callPackage ../development/tools/misc/genie {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   github-release = callPackage ../development/tools/github/github-release { };
 
   global = callPackage ../development/tools/misc/global { };
@@ -9533,6 +9546,7 @@ in
 
   spin = callPackage ../development/tools/analysis/spin { };
 
+  spirv-cross = callPackage ../development/libraries/spirv-cross { };
   spirv-headers = callPackage ../development/libraries/spirv-headers { };
   spirv-tools = callPackage ../development/tools/spirv-tools { };
 
