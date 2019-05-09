@@ -141,5 +141,9 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/happy-1.19.9.patch";
     sha256 = "1zmcb7dgcwivq2mddcy1f20djw2kds1m7ahwsa4xpbbwnijc6zjx";
   });
+  hedgehog = appendPatch super.hedgehog (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hedgehog-0.6.1.patch";
+    sha256 = "04xwznd3lfgracfz68ls6vfm19rhq8fb74r6ii0grpv6cx4rr21i";
+  });
 
 }
