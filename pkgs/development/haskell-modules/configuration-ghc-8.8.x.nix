@@ -53,6 +53,7 @@ self: super: {
   async = doJailbreak super.async;
   Diff = dontCheck super.Diff;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
+  tasty-expected-failure = doJailbreak super.tasty-expected-failure;
 
   # These packages don't work and need patching and/or an update.
   primitive = overrideSrc (doJailbreak super.primitive) {
