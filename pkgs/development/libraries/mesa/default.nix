@@ -25,10 +25,6 @@
 
 with stdenv.lib;
 
-if ! elem stdenv.hostPlatform.system platforms.mesaPlatforms then
-  throw "unsupported platform for Mesa"
-else
-
 let
   defaultGalliumDrivers =
     optionals (elem "drm" eglPlatforms)
@@ -273,7 +269,7 @@ let self = stdenv.mkDerivation {
     description = "An open source implementation of OpenGL";
     homepage = https://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ vcunat ];
   };
 };
