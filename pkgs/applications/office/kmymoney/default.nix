@@ -5,6 +5,8 @@
 , kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
 , kitemmodels, libical, libofx, qgpgme
 
+, sqlcipher
+
 # Needed for running tests:
 , qtbase, xvfb_run
 
@@ -14,19 +16,12 @@
 
 stdenv.mkDerivation rec {
   name = "kmymoney-${version}";
-  version = "5.0.1";
+  version = "5.0.4";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
-    sha256 = "1c9apnvc07y17pzy4vygry1dai5ass2z7j354lrcppa85b18yvnx";
+    sha256 = "06lbavhl9b8cybnss2mmy3g5w8qn2vl6zhipvbl11lsr3j9bsa8q";
   };
-
-  # Fix build with Qt 5.11.
-  patches = lib.singleton (fetchpatch {
-    url = "https://cgit.kde.org/kmymoney.git/patch/?id="
-        + "e5198a902996b27bf9abde0ad24af82d55ab5dc1";
-    sha256 = "1h2f1xznf7343s26fh94x8n2ci0pijk5j86f24lvghawsw848316";
-  });
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
   NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
@@ -41,6 +36,7 @@ stdenv.mkDerivation rec {
     akonadi alkimia aqbanking gmp gwenhywfar kactivities karchive kcmutils
     kcontacts kdewebkit kdiagram kholidays kidentitymanagement kitemmodels
     libical libofx qgpgme
+    sqlcipher
 
     # Put it into buildInputs so that CMake can find it, even though we patch
     # it into the interface later.
