@@ -6845,6 +6845,8 @@ in
 
   zxing = callPackage ../tools/graphics/zxing {};
 
+  zmap = callPackage ../tools/security/zmap { };
+
 
   ### SHELLS
 
