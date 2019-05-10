@@ -23652,6 +23652,8 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
+  blast = callPackage ../applications/science/biology/blast { };
+
   cd-hit = callPackage ../applications/science/biology/cd-hit { };
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
