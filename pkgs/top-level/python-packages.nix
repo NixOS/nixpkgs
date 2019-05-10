@@ -1082,6 +1082,8 @@ in {
 
   asyncssh = callPackage ../development/python-modules/asyncssh { };
 
+  sshtunnel = callPackage ../development/python-modules/sshtunnel { };
+
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
