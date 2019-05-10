@@ -677,6 +677,8 @@ in {
 
   pyfttt = callPackage ../development/python-modules/pyfttt { };
 
+  pyftdi = callPackage ../development/python-modules/pyftdi { };
+
   pygame = callPackage ../development/python-modules/pygame { };
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
