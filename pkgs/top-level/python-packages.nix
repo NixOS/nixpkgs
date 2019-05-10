@@ -2663,6 +2663,8 @@ in {
 
   flask-babelex = callPackage ../development/python-modules/flask-babelex { };
 
+  flask-gravatar = callPackage ../development/python-modules/flask-gravatar { };
+
   flask-peewee = callPackage ../development/python-modules/flask-peewee { };
 
   flask-mongoengine = callPackage ../development/python-modules/flask-mongoengine { };
