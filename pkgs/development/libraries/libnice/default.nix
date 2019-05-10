@@ -1,13 +1,13 @@
 { stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, python3, gobject-introspection, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gupnp-igd, gst_all_1, gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "libnice-0.1.15";
+  name = "libnice-0.1.16";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://nice.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "1nl7fn07f4i513s9c1s1ic3rki8rm2d000wsf6f4157mb0zhya7p";
+    sha256 = "1pzgxq0qrqlrhd78qnvpfgp8bl5c4znqh599ljaybpcldw37idh6";
   };
 
   patches = [
