@@ -45,5 +45,8 @@ in {
       journal entries from Linuxes with systemd.
     '';
     buildInputs = [ systemd.dev ];
+    postFixup = let libPath = stdenv.lib.makeLibraryPath [ systemd.lib ]; in ''
+      patchelf --set-rpath ${libPath} "$bin/bin/journalbeat"
+    '';
   };
 }
