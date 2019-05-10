@@ -18,19 +18,6 @@ stdenv.mkDerivation rec {
       url = https://gitlab.freedesktop.org/libnice/libnice/commit/d470c4bf4f2449f7842df26ca1ce1efb63452bc6.patch;
       sha256 = "0z74vizf92flfw1m83p7yz824vfykmnm0xbnk748bnnyq186i6mg";
     })
-
-    # Fix test-different-number-streams
-    # https://gitlab.freedesktop.org/libnice/libnice/merge_requests/36
-    (fetchpatch {
-      url = https://gitlab.freedesktop.org/libnice/libnice/commit/a38c2adfc4bed2a69dc02568417f0926dd555b9a.patch;
-      sha256 = "1rh4z4iknrimmm3b3v8ln8vl3dsqi91g4vf0dl85348kvnf0sv6z";
-    })
-    # Fix test-gstreamer
-    # https://gitlab.freedesktop.org/libnice/libnice/merge_requests/35
-    (fetchpatch {
-      url = https://gitlab.freedesktop.org/libnice/libnice/commit/02de1fa1956105b09d9db4fd6331452b0ff0b8a2.patch;
-      sha256 = "12dymq1v20wj5n1cway4n3y8fkra1ffnpj5w7pbz38i612b82qw0";
-    })
   ];
 
   nativeBuildInputs = [ meson ninja pkgconfig python3 gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_412 ];
