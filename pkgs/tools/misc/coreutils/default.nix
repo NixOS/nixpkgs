@@ -57,9 +57,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
-  # Work around a bogus warning in conjunction with musl.
-  NIX_CFLAGS_COMPILE = optional stdenv.hostPlatform.isMusl "-Wno-error";
-
   nativeBuildInputs = [ perl xz.bin ]
     ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
     ++ optionals stdenv.hostPlatform.isMusl [ autoreconfHook bison ];   # due to patch
@@ -138,4 +135,7 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.eelco ];
   };
 
+} // optionalAttrs stdenv.hostPlatform.isMusl {
+  # Work around a bogus warning in conjunction with musl.
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 }
