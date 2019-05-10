@@ -96,7 +96,7 @@
 , libxcbshapeExtlib ? true # X11 grabbing shape rendering
 , libXv ? null # Xlib support
 , lzma ? null # xz-utils
-, nvenc ? false, nvidia-video-sdk ? null # NVIDIA NVENC support
+, nvenc ? false # NVIDIA NVENC support
 , callPackage # needed for NVENC to access external ffmpeg nvidia headers
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
@@ -228,7 +228,6 @@ assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
 assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
-assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
@@ -417,7 +416,7 @@ stdenv.mkDerivation rec {
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
-    ++ optionals nvenc [ nvidia-video-sdk nv-codec-headers ]
+    ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
                                    libiconv ];
