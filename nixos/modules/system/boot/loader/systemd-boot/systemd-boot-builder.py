@@ -154,7 +154,7 @@ def remove_old_entries(gens):
         except ValueError:
             pass
     for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
-        if not path in known_paths:
+        if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)
 
 def get_profiles():
