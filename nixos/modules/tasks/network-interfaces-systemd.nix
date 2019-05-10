@@ -12,7 +12,7 @@ let
     i.ipv4.addresses
     ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
-  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "none";
+  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "no";
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
