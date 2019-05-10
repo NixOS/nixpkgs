@@ -11,6 +11,8 @@ buildPythonPackage rec {
     sha256 = "1awlb4q1l9iv794qjjxxyhcv4i69j77kh7nsg17a6kb909mglml3";
   };
 
+  doCheck = false;
+
   checkInputs = optional isPy3k glibcLocales;
   propagatedBuildInputs = [ flask flask_sqlalchemy flask_script alembic ];
 
