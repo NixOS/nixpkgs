@@ -5,6 +5,10 @@
          that apply to specific packages and should
          answer some of the frequently asked questions
          related to Nixpkgs use.
+
+  Some useful information related to package use 
+  can be found in <link linkend="chap-package-notes">package-specific development notes</link>.
+
  </para>
  <section xml:id="opengl">
   <title>OpenGL</title>
