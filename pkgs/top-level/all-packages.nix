@@ -2519,7 +2519,7 @@ in
   evemu = callPackage ../tools/system/evemu { };
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
-  elk5Version = "5.6.9";
+  elk5Version = "5.6.16";
   elk6Version = "6.7.1";
   elk7Version = "7.0.1";
 
