@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, xrandr, python2Packages }:
+{ stdenv, fetchurl, gobject-introspection, gtk3, xrandr, python3Packages }:
 
 let
-  inherit (python2Packages) buildPythonApplication docutils pygtk;
+  inherit (python3Packages) buildPythonApplication docutils pygobject3;
 in buildPythonApplication rec {
-  name = "arandr-0.1.9";
+  name = "arandr-0.1.10";
 
   src = fetchurl {
     url = "https://christian.amsuess.com/tools/arandr/files/${name}.tar.gz";
-    sha256 = "1i3f1agixxbfy4kxikb2b241p7c2lg73cl9wqfvlwz3q6zf5faxv";
+    sha256 = "135q0llvm077jil2fr92ssw3p095m4r8jfj0lc5rr3m71n4srj6v";
   };
 
   patchPhase = ''
@@ -18,7 +18,12 @@ in buildPythonApplication rec {
   doCheck = false;
 
   buildInputs = [ docutils ];
-  propagatedBuildInputs = [ xrandr pygtk ];
+  nativeBuildInputs = [ gobject-introspection gtk3 ];
+  propagatedBuildInputs = [ xrandr pygobject3 ];
+
+  makeWrapperArgs = [
+    "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"
+  ];
 
   meta = {
     homepage = http://christian.amsuess.com/tools/arandr/;
