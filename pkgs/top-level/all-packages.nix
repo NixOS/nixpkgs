@@ -20586,6 +20586,8 @@ in
     xwayland = null;
   };
 
+  chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {};
+
   weston = callPackage ../applications/window-managers/weston {
     freerdp = freerdp_legacy;
   };
