@@ -4,13 +4,13 @@
 
 let
   sources = {
-    "@types/node-8.10.46" = {
+    "@types/node-8.10.48" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "8.10.46";
+      version = "8.10.48";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-8.10.46.tgz";
-        sha512 = "PfnRbk836fFs9T9QnZh0G1k9oC6YXCqIK3LX6vU/6oiXtEBSFCiJFj6UnLZtqIIHTsgMn8Dojq3yhmpwY7QWcw==";
+        url = "https://registry.npmjs.org/@types/node/-/node-8.10.48.tgz";
+        sha512 = "c35YEBTkL4rzXY2ucpSKy+UYHjUBIIkuJbWYbsGIrKLEWU5dgJMmLkkIb3qeC3O3Tpb1ZQCwecscvJTDjDjkRw==";
       };
     };
     "JSV-4.0.2" = {
@@ -830,15 +830,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/bl/-/bl-1.1.2.tgz";
         sha1 = "fdca871a99713aa00d19e3bbba41c44787a65398";
-      };
-    };
-    "block-stream-0.0.9" = {
-      name = "block-stream";
-      packageName = "block-stream";
-      version = "0.0.9";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/block-stream/-/block-stream-0.0.9.tgz";
-        sha1 = "13ebfe778a03205cfe03751481ebb4b3300c126a";
       };
     };
     "boom-2.10.1" = {
@@ -1687,15 +1678,6 @@ let
         sha1 = "1504ad2523158caa40db4a2787cb01411994ea4f";
       };
     };
-    "fstream-1.0.11" = {
-      name = "fstream";
-      packageName = "fstream";
-      version = "1.0.11";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/fstream/-/fstream-1.0.11.tgz";
-        sha1 = "5c1fb1f117477114f0632a0eb4b71b3cb0fd3171";
-      };
-    };
     "galaxy-0.1.12" = {
       name = "galaxy";
       packageName = "galaxy";
@@ -1759,13 +1741,13 @@ let
         sha1 = "1344e694f8d20ef9b29bcbfd1ca5eb4f7a287922";
       };
     };
-    "glob-7.1.3" = {
+    "glob-7.1.4" = {
       name = "glob";
       packageName = "glob";
-      version = "7.1.3";
+      version = "7.1.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/glob/-/glob-7.1.3.tgz";
-        sha512 = "vcfuiIxogLV4DlGBHIUOwI0IbrJ8HWPc4MU7HzviGeNho/UJDfi6B5p3sHeWIQ0KGIU0Jpxi5ZHxemQfLkkAwQ==";
+        url = "https://registry.npmjs.org/glob/-/glob-7.1.4.tgz";
+        sha512 = "hkLPepehmnKk41pUGm3sYxoFs/umurYfYJCerbXEyFIWcAzvpipAgVkBqqT9RBKMGjnq6kMuyYwha6csxbiM1A==";
       };
     };
     "global-modules-0.2.3" = {
@@ -2236,13 +2218,13 @@ let
         sha512 = "gmh/eWXROncUzRnIa1Ubrt5b8ep/MGSnfAUI3aRp+sqTCs1tv1Isl8d8F6JmkN3dXKc3ehZMrtiPN9eL03NuaQ==";
       };
     };
-    "is-my-json-valid-2.19.0" = {
+    "is-my-json-valid-2.20.0" = {
       name = "is-my-json-valid";
       packageName = "is-my-json-valid";
-      version = "2.19.0";
+      version = "2.20.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/is-my-json-valid/-/is-my-json-valid-2.19.0.tgz";
-        sha512 = "mG0f/unGX1HZ5ep4uhRaPOS8EkAY8/j6mDRMJrutq4CqhoJWYp7qAlonIPy3TV7p3ju4TK9fo/PbnoksWmsp5Q==";
+        url = "https://registry.npmjs.org/is-my-json-valid/-/is-my-json-valid-2.20.0.tgz";
+        sha512 = "XTHBZSIIxNsIsZXg7XB5l8z/OBFosl1Wao4tXLpeC7eKU4Vm/kdop2azkPqULwnfGQjmeDIyey9g7afMMtdWAA==";
       };
     };
     "is-number-3.0.0" = {
@@ -2911,13 +2893,13 @@ let
         sha1 = "abcc6cbd3ec2ed2a729ff6e7c1fa8f01784a8574";
       };
     };
-    "needle-2.3.0" = {
+    "needle-2.3.1" = {
       name = "needle";
       packageName = "needle";
-      version = "2.3.0";
+      version = "2.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/needle/-/needle-2.3.0.tgz";
-        sha512 = "QBZu7aAFR0522EyaXZM0FZ9GLpq6lvQ3uq8gteiDUp7wKdy0lSd2hPlgFwVuW1CBkfEs9PfDQsQzZghLs/psdg==";
+        url = "https://registry.npmjs.org/needle/-/needle-2.3.1.tgz";
+        sha512 = "CaLXV3W8Vnbps8ZANqDGz7j4x7Yj1LW4TWF/TQuDfj7Cfx4nAPTvw98qgTevtto1oHDrh3pQkaODbqupXlsWTg==";
       };
     };
     "node-appc-0.2.49" = {
@@ -3496,13 +3478,13 @@ let
         sha512 = "NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==";
       };
     };
-    "resolve-1.10.0" = {
+    "resolve-1.10.1" = {
       name = "resolve";
       packageName = "resolve";
-      version = "1.10.0";
+      version = "1.10.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/resolve/-/resolve-1.10.0.tgz";
-        sha512 = "3sUr9aq5OfSg2S9pNtPA9hL1FVEAjvfOC4leW0SNf/mpnaakz2a9femSd6LqAww2RaFctwyf1lCqnTHuF1rxDg==";
+        url = "https://registry.npmjs.org/resolve/-/resolve-1.10.1.tgz";
+        sha512 = "KuIe4mf++td/eFb6wkaPbMDnP6kObCaEtIDuHOUED6MNUo4K670KZUHuuvYPZDxNF0WVLw49n06M2m2dXphEzA==";
       };
     };
     "resolve-dir-1.0.1" = {
@@ -3973,15 +3955,6 @@ let
         sha1 = "8030046939b00096e625c0dd6b3905bc7b85709c";
       };
     };
-    "tar-2.2.1" = {
-      name = "tar";
-      packageName = "tar";
-      version = "2.2.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/tar/-/tar-2.2.1.tgz";
-        sha1 = "8e4d2a256c0e2185c6b18ad694aec968b83cb1d1";
-      };
-    };
     "tar-4.4.8" = {
       name = "tar";
       packageName = "tar";
@@ -4297,13 +4270,13 @@ let
         sha512 = "yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==";
       };
     };
-    "v8flags-3.1.2" = {
+    "v8flags-3.1.3" = {
       name = "v8flags";
       packageName = "v8flags";
-      version = "3.1.2";
+      version = "3.1.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/v8flags/-/v8flags-3.1.2.tgz";
-        sha512 = "MtivA7GF24yMPte9Rp/BWGCYQNaUj86zeYxV/x2RRJMKagImbbv3u8iJC57lNhWLPcGLJmHcHmFWkNsplbbLWw==";
+        url = "https://registry.npmjs.org/v8flags/-/v8flags-3.1.3.tgz";
+        sha512 = "amh9CCg3ZxkzQ48Mhcb8iX7xpAfYJgePHxWMQCBWECpOSqJUXgY26ncA61UTV0BkPqfhcy6mzwCIoP4ygxpW8w==";
       };
     };
     "validator-5.2.0" = {
@@ -4619,7 +4592,7 @@ in
       sources."private-0.1.8"
       sources."regenerator-runtime-0.11.1"
       sources."repeating-2.0.1"
-      sources."resolve-1.10.0"
+      sources."resolve-1.10.1"
       sources."safe-buffer-5.1.2"
       sources."sax-0.5.8"
       sources."slash-1.0.0"
@@ -4659,7 +4632,7 @@ in
       sha512 = "MMiK5sFfIocNMWCc5PshUCAe6aY4P13/GCmSwudOziA/pFdQMHU8jhu+jU2SSWFug4K1ugeuCwtMXe43oL0PhQ==";
     };
     dependencies = [
-      sources."@types/node-8.10.46"
+      sources."@types/node-8.10.48"
       sources."JSV-4.0.2"
       sources."adal-node-0.1.28"
       sources."ajv-6.10.0"
@@ -4842,7 +4815,7 @@ in
         ];
       })
       sources."github-0.1.6"
-      sources."glob-7.1.3"
+      sources."glob-7.1.4"
       sources."har-schema-2.0.0"
       (sources."har-validator-2.0.6" // {
         dependencies = [
@@ -4862,7 +4835,7 @@ in
       sources."inherits-2.0.3"
       sources."is-buffer-1.1.6"
       sources."is-my-ip-valid-1.0.0"
-      sources."is-my-json-valid-2.19.0"
+      sources."is-my-json-valid-2.20.0"
       sources."is-property-1.0.2"
       sources."is-stream-1.1.0"
       sources."is-typedarray-1.0.0"
@@ -5260,7 +5233,7 @@ in
       sources."regex-not-1.0.2"
       sources."repeat-element-1.1.3"
       sources."repeat-string-1.6.1"
-      sources."resolve-1.10.0"
+      sources."resolve-1.10.1"
       sources."resolve-dir-1.0.1"
       sources."resolve-url-0.2.1"
       sources."ret-0.1.15"
@@ -5345,7 +5318,7 @@ in
       })
       sources."urix-0.1.0"
       sources."use-3.1.1"
-      sources."v8flags-3.1.2"
+      sources."v8flags-3.1.3"
       sources."which-1.3.1"
     ];
     buildInputs = globalBuildInputs;
@@ -5360,10 +5333,10 @@ in
   node-gyp = nodeEnv.buildNodePackage {
     name = "node-gyp";
     packageName = "node-gyp";
-    version = "3.8.0";
+    version = "4.0.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/node-gyp/-/node-gyp-3.8.0.tgz";
-      sha512 = "3g8lYefrRRzvGeSowdJKAKyks8oUpLEd/DyPV4eMhVlhJ0aNaZqIrNUIPuEWWTAoPqyFkfGrM67MC69baqn6vA==";
+      url = "https://registry.npmjs.org/node-gyp/-/node-gyp-4.0.0.tgz";
+      sha512 = "2XiryJ8sICNo6ej8d0idXDEMKfVfFK7kekGCtJAuelGsYHQxhj13KTf95swTCN2dZ/4lTfZ84Fu31jqJEEgjWA==";
     };
     dependencies = [
       sources."abbrev-1.1.1"
@@ -5378,9 +5351,9 @@ in
       sources."aws4-1.8.0"
       sources."balanced-match-1.0.0"
       sources."bcrypt-pbkdf-1.0.2"
-      sources."block-stream-0.0.9"
       sources."brace-expansion-1.1.11"
       sources."caseless-0.12.0"
+      sources."chownr-1.1.1"
       sources."code-point-at-1.1.0"
       sources."combined-stream-1.0.7"
       sources."concat-map-0.0.1"
@@ -5396,11 +5369,11 @@ in
       sources."fast-json-stable-stringify-2.0.0"
       sources."forever-agent-0.6.1"
       sources."form-data-2.3.3"
+      sources."fs-minipass-1.2.5"
       sources."fs.realpath-1.0.0"
-      sources."fstream-1.0.11"
       sources."gauge-2.7.4"
       sources."getpass-0.1.7"
-      sources."glob-7.1.3"
+      sources."glob-7.1.4"
       sources."graceful-fs-4.1.15"
       sources."har-schema-2.0.0"
       sources."har-validator-5.1.3"
@@ -5422,6 +5395,8 @@ in
       sources."mime-types-2.1.24"
       sources."minimatch-3.0.4"
       sources."minimist-0.0.8"
+      sources."minipass-2.3.5"
+      sources."minizlib-1.2.1"
       sources."mkdirp-0.5.1"
       sources."nopt-3.0.6"
       sources."npmlog-4.1.2"
@@ -5450,7 +5425,7 @@ in
       sources."string-width-1.0.2"
       sources."string_decoder-1.1.1"
       sources."strip-ansi-3.0.1"
-      sources."tar-2.2.1"
+      sources."tar-4.4.8"
       (sources."tough-cookie-2.4.3" // {
         dependencies = [
           sources."punycode-1.4.1"
@@ -5465,6 +5440,7 @@ in
       sources."which-1.3.1"
       sources."wide-align-1.1.3"
       sources."wrappy-1.0.2"
+      sources."yallist-3.0.3"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -5478,15 +5454,15 @@ in
   node-gyp-build = nodeEnv.buildNodePackage {
     name = "node-gyp-build";
     packageName = "node-gyp-build";
-    version = "3.8.0";
+    version = "4.1.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-3.8.0.tgz";
-      sha512 = "bYbpIHyRqZ7sVWXxGpz8QIRug5JZc/hzZH4GbdT9HTZi6WmKCZ8GLvP8OZ9TTiIBvwPFKgtGrlWQSXDAvYdsPw==";
+      url = "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.1.0.tgz";
+      sha512 = "rGLv++nK20BG8gc0MzzcYe1Nl3p3mtwJ74Q2QD0HTEDKZ6NvOFSelY6s2QBPWIHRR8h7hpad0LiwajfClBJfNg==";
     };
     buildInputs = globalBuildInputs;
     meta = {
       description = "Build tool and bindings loader for node-gyp that supports prebuilds";
-      homepage = https://github.com/mafintosh/node-gyp-build;
+      homepage = https://github.com/prebuild/node-gyp-build;
       license = "MIT";
     };
     production = true;
@@ -5495,10 +5471,10 @@ in
   node-pre-gyp = nodeEnv.buildNodePackage {
     name = "node-pre-gyp";
     packageName = "node-pre-gyp";
-    version = "0.12.0";
+    version = "0.13.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/node-pre-gyp/-/node-pre-gyp-0.12.0.tgz";
-      sha512 = "4KghwV8vH5k+g2ylT+sLTjy5wmUOb9vPhnM8NHvRf9dHmnW/CndrFXy2aRPaPST6dugXSdHXfeaHQm77PIz/1A==";
+      url = "https://registry.npmjs.org/node-pre-gyp/-/node-pre-gyp-0.13.0.tgz";
+      sha512 = "Md1D3xnEne8b/HGVQkZZwV27WUi1ZRuZBij24TNaZwUPU3ZAFtvT6xxJGaUVillfmMKnn5oD1HoGsp2Ftik7SQ==";
     };
     dependencies = [
       sources."abbrev-1.1.1"
@@ -5519,7 +5495,7 @@ in
       sources."fs-minipass-1.2.5"
       sources."fs.realpath-1.0.0"
       sources."gauge-2.7.4"
-      sources."glob-7.1.3"
+      sources."glob-7.1.4"
       sources."has-unicode-2.0.1"
       sources."iconv-lite-0.4.24"
       sources."ignore-walk-3.0.1"
@@ -5534,7 +5510,7 @@ in
       sources."minizlib-1.2.1"
       sources."mkdirp-0.5.1"
       sources."ms-2.1.1"
-      sources."needle-2.3.0"
+      sources."needle-2.3.1"
       sources."nopt-4.0.1"
       sources."npm-bundled-1.0.6"
       sources."npm-packlist-1.4.1"
@@ -5582,10 +5558,10 @@ in
   pnpm = nodeEnv.buildNodePackage {
     name = "pnpm";
     packageName = "pnpm";
-    version = "3.1.1";
+    version = "3.2.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-3.1.1.tgz";
-      sha512 = "MqSWfZXft1cQ6rFgpGpl8JIY3O8w8TnTplvjuCPMl4zRxAUAz0Gzr7ARYH6czoiTxBIbbhu41GfbsBfgMSGTwA==";
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-3.2.0.tgz";
+      sha512 = "bujIqiZBgpusV0N/m+PNQ/FAUKc7ue9WqK+FqfN89on44iLEkERYGBWQEZt2a4OMWH4RHzme7muKOQY8ZegD3Q==";
     };
     buildInputs = globalBuildInputs;
     meta = {
@@ -5643,7 +5619,7 @@ in
       sources."fs-extra-7.0.1"
       sources."fs.realpath-1.0.0"
       sources."getpass-0.1.7"
-      sources."glob-7.1.3"
+      sources."glob-7.1.4"
       sources."graceful-fs-4.1.15"
       sources."har-schema-2.0.0"
       sources."har-validator-5.1.3"
