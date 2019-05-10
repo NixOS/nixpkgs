@@ -2661,6 +2661,8 @@ in {
 
   flask-babelex = callPackage ../development/python-modules/flask-babelex { };
 
+  flask-peewee = callPackage ../development/python-modules/flask-peewee { };
+
   pony = callPackage ../development/python-modules/pony { };
 
   mongoengine = callPackage ../development/python-modules/mongoengine { };
