@@ -24,7 +24,7 @@ in {
   elasticsearch_analysis_lemmagen = esPlugin rec {
     name = "elasticsearch-analysis-lemmagen-${version}";
     pluginName = "elasticsearch-analysis-lemmagen";
-    version = "${elk6Version}";
+    version = "6.7.1"; # elk6Version;
     src = fetchurl {
       url = "https://github.com/vhyza/elasticsearch-analysis-lemmagen/releases/download/v${version}/${name}-plugin.zip";
       sha256 = "0mf8lpf40bjpzfj9lkhrg7c3xinzvg7aby3vd6h92g9i676xs8ri";
@@ -33,6 +33,9 @@ in {
       homepage = https://github.com/vhyza/elasticsearch-analysis-lemmagen;
       description = "LemmaGen Analysis plugin provides jLemmaGen lemmatizer as Elasticsearch token filter";
       license = licenses.asl20;
+      # TODO: remove the following when there's a release compatible with elasticsearch-6.7.2.
+      # See: https://github.com/vhyza/elasticsearch-analysis-lemmagen/issues/14
+      broken = true;
     };
   };
 
@@ -42,7 +45,7 @@ in {
     version = "${elk6Version}";
     src = pkgs.fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/discovery-ec2/discovery-ec2-${elk6Version}.zip";
-      sha256 = "05z4vmi29fzfqzid7fdh6h6pjwgd1dz1mhhjgjz9plpvpzymjiln";
+      sha256 = "1p0cdz3lfksfd2kvlcj0syxhbx27mimsaw8q4kgjpjjjwqayg523";
     };
     meta = with stdenv.lib; {
       homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2;
@@ -54,10 +57,10 @@ in {
   search_guard = esPlugin rec {
     name = "elastic-search-guard-${version}";
     pluginName = "search-guard";
-    version = "${elk6Version}-24.3";
+    version = "${elk6Version}-25.1";
     src = fetchurl rec {
       url = "mirror://maven/com/floragunn/search-guard-6/${version}/search-guard-6-${version}.zip";
-      sha256 = "17gif45fbi4vj9qrzv075fkr7d2sp0naa5bjjj9gvfgqyl2flj7g";
+      sha256 = "119r1zibi0z40mfxrpkx0zzay0yz6c7syqmmw8i2681wmz4nksda";
     };
     meta = with stdenv.lib; {
       homepage = https://github.com/floragunncom/search-guard;
