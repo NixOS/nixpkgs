@@ -1,8 +1,10 @@
-<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="package-specific-notes">
- <title>Package-specific notes</title>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="package-specific-user-notes">
+ <title>Package-specific usage notes</title>
  <para>
-  This chapters includes some notes that apply to specific packages and should
-  answer some of the frequently asked questions.
+         This chapters includes some notes
+         that apply to specific packages and should
+         answer some of the frequently asked questions
+         related to Nixpkgs use.
  </para>
  <section xml:id="opengl">
   <title>OpenGL</title>
