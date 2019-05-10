@@ -804,6 +804,8 @@ in {
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
+  pytest-runner = callPackage ../development/python-modules/pytest-runner { };
+
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
