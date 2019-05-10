@@ -2687,6 +2687,8 @@ in {
 
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 
+  flask-paranoid = callPackage ../development/python-modules/flask-paranoid { };
+
   flask_principal = callPackage ../development/python-modules/flask-principal { };
 
   flask-pymongo = callPackage ../development/python-modules/Flask-PyMongo { };
