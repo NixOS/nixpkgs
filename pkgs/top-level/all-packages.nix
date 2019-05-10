@@ -976,6 +976,8 @@ in
     metricbeat5
     packetbeat5;
 
+  journalbeat5 = callPackage ../tools/system/journalbeat { };
+
   inherit (callPackages ../misc/logging/beats/6.x.nix {
     # XXX: this is failing with Go 1.12. Error is related to cgo, an
     # update to this package might fix it.
@@ -1002,6 +1004,7 @@ in
   heartbeat = heartbeat6;
   metricbeat = metricbeat6;
   packetbeat = packetbeat6;
+  journalbeat = journalbeat6;
 
   bfr = callPackage ../tools/misc/bfr { };
 
@@ -3786,8 +3789,6 @@ in
   joplin = nodePackages.joplin;
 
   joplin-desktop = callPackage ../applications/misc/joplin-desktop { };
-
-  journalbeat = callPackage ../tools/system/journalbeat { };
 
   journaldriver = callPackage ../tools/misc/journaldriver { };
 
