@@ -18,6 +18,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/syscall.h>
 
 int min(int a, int b) {
   return a > b ? b : a;
@@ -25,14 +26,23 @@ int min(int a, int b) {
 
 const gchar *bind_blacklist[] = {"bin", "etc", "host", "usr", "lib", "lib64", "lib32", "sbin", NULL};
 
+int pivot_root(const char *new_root, const char *put_old) {
+  return syscall(SYS_pivot_root, new_root, put_old);
+}
+
+void mount_tmpfs(const gchar *target) {
+  fail_if(mount("none", target, "tmpfs", 0, NULL));
+}
+
 void bind_mount(const gchar *source, const gchar *target) {
   fail_if(g_mkdir(target, 0755));
   fail_if(mount(source, target, "bind", MS_BIND | MS_REC, NULL));
 }
 
-void bind_mount_host(const gchar *host, const gchar *guest) {
+void pivot_host(const gchar *host, const gchar *guest) {
   g_autofree gchar *point = g_build_filename(guest, "host", NULL);
-  bind_mount(host, point);
+  fail_if(g_mkdir(point, 0755));
+  fail_if(pivot_root(guest, point));
 }
 
 void bind_mount_item(const gchar *host, const gchar *guest, const gchar *name) {
@@ -44,6 +54,8 @@ void bind_mount_item(const gchar *host, const gchar *guest, const gchar *name) {
 }
 
 void bind(const gchar *host, const gchar *guest) {
+  mount_tmpfs(guest);
+
   g_autoptr(GError) err = NULL;
   g_autoptr(GDir) dir = g_dir_open(host, 0, &err);
 
@@ -52,11 +64,11 @@ void bind(const gchar *host, const gchar *guest) {
 
   const gchar *item;
 
-  while (item = g_dir_read_name(dir))
+  while ((item = g_dir_read_name(dir)))
     if (!g_strv_contains(bind_blacklist, item))
       bind_mount_item(host, guest, item);
 
-  bind_mount_host(host, guest);
+  pivot_host(host, guest);
 }
 
 void spit(const char *path, char *fmt, ...) {
@@ -84,11 +96,6 @@ int main(gint argc, gchar **argv) {
     g_message("%s command [arguments...]", self);
     return 1;
   }
-
-  if (g_getenv("NIX_CHROOTENV"))
-    g_warning("chrootenv doesn't stack!");
-  else
-    g_setenv("NIX_CHROOTENV", "", TRUE);
 
   g_autofree gchar *prefix =
       g_build_filename(g_get_tmp_dir(), "chrootenvXXXXXX", NULL);
@@ -121,7 +128,6 @@ int main(gint argc, gchar **argv) {
 
     bind("/", prefix);
 
-    fail_if(chroot(prefix));
     fail_if(chdir("/"));
     fail_if(execvp(*argv, argv));
   }
