@@ -24,6 +24,10 @@ buildPythonPackage rec {
     blinker
   ];
 
+  propagatedBuildInputs = [
+    pymongo
+  ];
+
   doCheck = false;
 
   meta = with stdenv.lib; {
