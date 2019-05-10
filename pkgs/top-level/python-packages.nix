@@ -2663,6 +2663,8 @@ in {
 
   flask-peewee = callPackage ../development/python-modules/flask-peewee { };
 
+  flask-mongoengine = callPackage ../development/python-modules/flask-mongoengine { };
+
   pony = callPackage ../development/python-modules/pony { };
 
   mongoengine = callPackage ../development/python-modules/mongoengine { };
