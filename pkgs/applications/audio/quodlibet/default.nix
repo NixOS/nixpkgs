@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome3, gtk3, gdk_pixbuf,
+{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome3, hicolor-icon-theme, gtk3, gdk_pixbuf,
   tag ? "", xvfb_run, dbus, glibcLocales, glib, glib-networking, gobject-introspection,
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xineLib,
@@ -8,7 +8,7 @@
 
 let optionals = stdenv.lib.optionals; in
 python3.pkgs.buildPythonApplication rec {
-  pname = "quodlibet${tag}";
+  pname = "quodlibet";
   version = "4.2.1";
 
   src = fetchurl {
@@ -16,26 +16,70 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0b1rvr4hqs2bjmhayms7vxxkn3d92k9v7p1269rjhf11hpk122l7";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gettext ];
+  nativeBuildInputs = [
+    wrapGAppsHook
+    gettext
+   ];
 
-  checkInputs = with python3.pkgs; [ pytest pytest_xdist pyflakes pycodestyle polib xvfb_run dbus.daemon glibcLocales ];
+  checkInputs = with python3.pkgs; [
+    pytest
+    pytest_xdist
+    pyflakes
+    pycodestyle
+    polib
+    xvfb_run
+    dbus.daemon
+    glibcLocales
+  ];
 
-  buildInputs = [ gnome3.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk_pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
-    ++ (if xineBackend then [ xineLib ] else with gst_all_1;
-    [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
+  buildInputs = [
+    libsoup
+    glib
+    glib-networking
+    gtk3
+    webkitgtk
+    gdk_pixbuf
+    keybinder3
+    gtksourceview
+    libmodplug
+    libappindicator-gtk3
+    kakasi
+    gobject-introspection
+    gnome3.librsvg
+    #gnome3.adwaita-icon-theme
+    hicolor-icon-theme
+  ] ++ (
+    if xineBackend then
+      [ xineLib ]
+    else
+      with gst_all_1; [
+        gstreamer
+        gst-plugins-base
+      ] ++ optionals withGstPlugins [
+        gst-plugins-good
+        gst-plugins-ugly
+        gst-plugins-bad
+      ]
+  );
 
-  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo mutagen gst-python feedparser ]
-      ++ optionals withDbusPython [ dbus-python ]
-      ++ optionals withPyInotify [ pyinotify ]
+  propagatedBuildInputs = with python3.pkgs; [
+    pygobject3
+    pycairo
+    mutagen
+    gst-python
+    feedparser
+  ]
+      ++ optionals withDbusPython     [ dbus-python ]
+      ++ optionals withPyInotify      [ pyinotify ]
       ++ optionals withMusicBrainzNgs [ musicbrainzngs ]
-      ++ optionals stdenv.isDarwin [ pyobjc ]
-      ++ optionals withPahoMqtt [ paho-mqtt ];
+      ++ optionals stdenv.isDarwin    [ pyobjc ]
+      ++ optionals withPahoMqtt       [ paho-mqtt ];
 
   LC_ALL = "en_US.UTF-8";
 
   checkPhase = ''
     runHook preCheck
-    env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS" \
+    env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:${hicolor-icon-theme}/share:$XDG_DATA_DIRS" \
       HOME=$(mktemp -d) \
       xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
         --config-file=${dbus.daemon}/share/dbus-1/session.conf \
