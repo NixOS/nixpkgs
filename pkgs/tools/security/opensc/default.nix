@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zlib, readline, openssl
 , libiconv, pcsclite, libassuan, libXt
 , docbook_xsl, libxslt, docbook_xml_dtd_412
-, Carbon
+, Carbon, PCSC
+, withApplePCSC ? stdenv.isDarwin
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoreconfHook zlib readline openssl pcsclite libassuan
+    autoreconfHook zlib readline openssl libassuan
     libXt libxslt libiconv docbook_xml_dtd_412
-  ] ++ stdenv.lib.optional stdenv.isDarwin Carbon;
+  ]
+  ++ stdenv.lib.optional stdenv.isDarwin Carbon
+  ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -34,8 +37,16 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
-    "--with-pcsc-provider=${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so"
+    "--with-pcsc-provider=${
+      if withApplePCSC then
+        "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
+      else
+        "${stdenv.lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+      }"
   ];
+
+  PCSC_CFLAGS = stdenv.lib.optionalString withApplePCSC
+    "-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
 
   installFlags = [
     "sysconfdir=$(out)/etc"
