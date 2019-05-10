@@ -2717,6 +2717,8 @@ in {
 
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
+  wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
+
   wtforms = callPackage ../development/python-modules/wtforms { };
 
   graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix {
