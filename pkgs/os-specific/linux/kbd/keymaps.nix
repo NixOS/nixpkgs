@@ -23,8 +23,9 @@
     version = "2476";
 
     src = fetchurl {
-      name = "neo.map";
-      url = "https://svn.neo-layout.org/linux/console/neo.map?r=${version}";
+      pname = "neo.map";
+      url = "https://raw.githubusercontent.com/neo-layout/neo-layout/"
+          + "a0dee06fed824abfad658b7f10e6d907b270be0a/linux/console/neo.map";
       sha256 = "19mfrd31vzpsjiwc7pshxm0b0sz5dd17xrz6k079cy4im1vf0r4g";
     };
 
