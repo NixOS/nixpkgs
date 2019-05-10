@@ -4126,6 +4126,11 @@
     github = "retrry";
     name = "Tadas Barzdžius";
   };
+  rexim = {
+    email = "reximkut@gmail.com";
+    github = "rexim";
+    name = "Alexey Kutepov";
+  };
   rht = {
     email = "rhtbot@protonmail.com";
     github = "rht";
