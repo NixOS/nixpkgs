@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, perl
 , alsaLib, libevdev, libopus, udev, SDL2
 , ffmpeg, pkgconfig, xorg, libvdpau, libpulseaudio, libcec
-, curl, expat, avahi, enet, libuuid
+, curl, expat, avahi, enet, libuuid, libva
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsaLib libevdev libopus udev SDL2
     ffmpeg pkgconfig xorg.libxcb libvdpau libpulseaudio libcec
-    xorg.libpthreadstubs curl expat avahi enet libuuid
+    xorg.libpthreadstubs curl expat avahi enet libuuid libva
   ];
 
   meta = with stdenv.lib; {
