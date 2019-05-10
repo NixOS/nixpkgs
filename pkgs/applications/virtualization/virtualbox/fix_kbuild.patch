@@ -1,0 +1,12 @@
+diff -urN a/src/VBox/HostDrivers/VBoxNetAdp/linux/Makefile b/src/VBox/HostDrivers/VBoxNetAdp/linux/Makefile
+--- a/src/VBox/HostDrivers/VBoxNetAdp/linux/Makefile
++++ b/src/VBox/HostDrivers/VBoxNetAdp/linux/Makefile
+@@ -58,7 +58,7 @@
+ 	RT_WITH_VBOX \
+ 	VBOX_WITH_HARDENING \
+ 	VBOX_WITH_64_BITS_GUESTS # <-- must be consistent with Config.kmk!
+-VBOXMOD_CFLAGS = -include $(KBUILD_EXTMOD)/include/VBox/SUPDrvMangling.h -fno-pie -Wno-declaration-after-statement
++VBOXMOD_CFLAGS = -include $(VBOXNETADPT_DIR)include/VBox/SUPDrvMangling.h -fno-pie -Wno-declaration-after-statement
+ 
+ include $(obj)/Makefile-footer.gmk
+ 
