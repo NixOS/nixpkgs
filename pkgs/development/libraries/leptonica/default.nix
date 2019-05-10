@@ -4,32 +4,12 @@
 
 stdenv.mkDerivation rec {
   name = "leptonica-${version}";
-  version = "1.74.1";
+  version = "1.78.0";
 
   src = fetchurl {
     url = "http://www.leptonica.org/source/${name}.tar.gz";
-    sha256 = "0qpcidvv6igybrrhj0m6j47g642c8sk1qn4dpj82mgd38xx52skl";
+    sha256 = "122s9b8hi93va4lgwnwrbma50x5fp740npy0s92xybd2wy0jxvg2";
   };
-
-  patches = stdenv.lib.singleton (fetchpatch {
-    # configure: Support pkg-config
-    url = "https://github.com/DanBloomberg/leptonica/commit/"
-        + "4476d162cc191a0fefb2ce434153e12bbf188664.patch";
-    sha256 = "1razzp2g49shfaravfqpxm3ivcd1r92lvqysll6nnf6d1wp9865s";
-  });
-
-  postPatch = ''
-    # Remove the AC_SUBST() macros on *_LIBS, because the *_LIBS variables will
-    # be automatically set by PKG_CHECK_MODULES() since autotools 0.24 and
-    # using the ones that are set here in Leptonica's configure.ac do not
-    # include -L linker flags.
-    sed -i -e '/PKG_CHECK_MODULES/,/^ *\])/s/AC_SUBST([^)]*)//' configure.ac
-
-    # The giflib package doesn't ship a pkg-config file, so we need to inject
-    # the linker search path.
-    substituteInPlace configure.ac --replace -lgif \
-      ${stdenv.lib.escapeShellArg "'-L${giflib}/lib -lgif'"}
-  '';
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ giflib libjpeg libpng libtiff libwebp openjpeg zlib ];
