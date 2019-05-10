@@ -2486,6 +2486,11 @@
     github = "jtojnar";
     name = "Jan Tojnar";
   };
+  juaningan = {
+    email = "juaningan@gmail.com";
+    github = "juaningan";
+    name = "Juan Rodal";
+  };
   juliendehos = {
     email = "dehos@lisic.univ-littoral.fr";
     github = "juliendehos";
