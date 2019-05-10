@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, which, gnuplot
 , giflib, libjpeg, libpng, libtiff, libwebp, openjpeg, zlib
 }:
 
@@ -13,12 +13,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ giflib libjpeg libpng libtiff libwebp openjpeg zlib ];
+  enableParallelBuilding = true;
+
+  checkInputs = [ which gnuplot ];
+  doCheck = true;
 
   meta = {
     description = "Image processing and analysis library";
     homepage = http://www.leptonica.org/;
-    # Its own license: http://www.leptonica.org/about-the-license.html
-    license = stdenv.lib.licenses.free;
+    license = stdenv.lib.licenses.bsd2; # http://www.leptonica.org/about-the-license.html
     platforms = stdenv.lib.platforms.unix;
   };
 }
