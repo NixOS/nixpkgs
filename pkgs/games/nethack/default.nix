@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
 , less, makeWrapper
 , buildPackages
-, x11Mode ? false, qtMode ? false, libXaw, libXext, bdftopcf, mkfontdir, pkgconfig, qt5
+, x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkgconfig, qt5
 }:
 
 let
@@ -19,18 +19,18 @@ let
   binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation rec {
-  version = "3.6.1";
+  version = "3.6.2";
   name = if x11Mode then "nethack-x11-${version}"
          else if qtMode then "nethack-qt-${version}"
          else "nethack-${version}";
 
   src = fetchurl {
-    url = "https://nethack.org/download/3.6.1/nethack-361-src.tgz";
-    sha256 = "1dha0ijvxhx7c9hr0452h93x81iiqsll8bc9msdnp7xdqcfbz32b";
+    url = "https://nethack.org/download/3.6.2/nethack-362-src.tgz";
+    sha256 = "07fvkm3v11a4pjrq2f66vjslljsvk6raal53skn4gqsfdbd0ml7v";
   };
 
   buildInputs = [ ncurses ]
-                ++ lib.optionals x11Mode [ libXaw libXext ]
+                ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
                 ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
 
   nativeBuildInputs = [ flex bison ]
@@ -72,6 +72,7 @@ in stdenv.mkDerivation rec {
       -e 's,CFLAGS.*QtGui.*,CFLAGS += `pkg-config Qt5Gui --cflags`,' \
       -e 's,CFLAGS+=-DCOMPRESS.*,CFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
         -DCOMPRESS_EXTENSION=\\".gz\\",' \
+      -e 's,moc-qt4,moc,' \
       -i sys/unix/hints/linux-qt4
     ''}
     ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
