@@ -182,9 +182,9 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.0-rc4";
+    version = "0.8.0-rc5";
 
-    sha256 = "02cdxf62758smbqy723yqv8lkch1043alvcwhdnvya21ygcgycnw";
+    sha256 = "1944w36rk33mn44zfvc1qbn2sv9h90r25zxnanwvyhss0vgqw73v";
     isUnstable = true;
 
     extraPatches = [
