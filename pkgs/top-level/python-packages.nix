@@ -2663,6 +2663,8 @@ in {
 
   pony = callPackage ../development/python-modules/pony { };
 
+  mongoengine = callPackage ../development/python-modules/mongoengine { };
+
   flask-bootstrap = callPackage ../development/python-modules/flask-bootstrap { };
 
   flask-caching = callPackage ../development/python-modules/flask-caching { };
