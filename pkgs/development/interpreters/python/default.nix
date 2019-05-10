@@ -32,7 +32,11 @@ with pkgs;
         isPy3k = isPy3;
         isPyPy = interpreter == "pypy";
 
-        buildEnv = callPackage ./wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
+        buildEnv = callPackage ./wrapper.nix {
+          python = self;
+          inherit libPrefix;
+          inherit (pythonPackages) requiredPythonModules toPythonModule;
+        };
         withPackages = import ./with-packages.nix { inherit buildEnv pythonPackages;};
         pkgs = pythonPackages;
         interpreter = "${self}/bin/${executable}";

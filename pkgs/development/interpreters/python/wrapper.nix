@@ -1,17 +1,25 @@
-{ stdenv, python, buildEnv, makeWrapper
+{ stdenv, python, buildEnv, makeWrapper, runCommand
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
 , ignoreCollisions ? false
 , requiredPythonModules
+, toPythonModule
 # Wrap executables with the given argument.
 , makeWrapperArgs ? []
+, manylinux1 ? false
+, libPrefix
 , }:
 
 # Create a python executable that knows about additional packages.
 let
   env = let
-    paths = requiredPythonModules (extraLibs ++ [ python ] ) ;
+    disableManyLinuxModule = toPythonModule (runCommand "_manylinux.py" {} ''
+      mkdir -p $out/lib/${libPrefix}
+      echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+    '');
+    controlManyLinux = stdenv.lib.optionals (!manylinux1) [disableManyLinuxModule];
+    paths = requiredPythonModules (extraLibs ++ [ python ] ++ controlManyLinux ) ;
   in buildEnv {
     name = "${python.name}-env";
 
@@ -57,7 +65,7 @@ let
           echo >&2 ""
           exit 1
         '';
-    };
+      };
     };
   };
 in env
