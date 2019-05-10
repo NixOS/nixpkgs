@@ -59,7 +59,14 @@ in
           in {
             DHCP = override (dhcpStr cfg.useDHCP);
           } // optionalAttrs (gateway != [ ]) {
-            gateway = override gateway;
+            routes = override [
+              {
+                routeConfig = {
+                  Gateway = gateway;
+                  GatewayOnlink = false;
+                };
+              }
+            ];
           } // optionalAttrs (domains != [ ]) {
             domains = override domains;
           };
