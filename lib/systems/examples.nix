@@ -162,4 +162,27 @@ rec {
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
   };
+
+  #
+  # Ghcjs
+  #
+
+  ghcjs = {
+    config = "js-unknown-ghcjs";
+    platform = {};
+  };
+
+  #
+  # Asterius
+  #
+
+  asterius32 = {
+    config = "wasm32-unknown-asterius";
+    platform = {};
+  };
+
+  asterius64 = {
+    config = "wasm64-unknown-asterius";
+    platform = {};
+  };
 }

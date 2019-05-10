@@ -125,23 +125,23 @@ in {
     ghcjs = compiler.ghcjs84;
     # Use `import` because `callPackage inside`.
     ghcjs710 = import ../development/compilers/ghcjs/7.10 {
-      bootPkgs = packages.ghc7103;
+      bootPkgs = buildPackages.ghc7103;
       inherit (pkgs) cabal-install;
       inherit (buildPackages) fetchgit fetchFromGitHub;
     };
     # `import` on purpose; see above.
     ghcjs80 = import ../development/compilers/ghcjs/8.0 {
-      bootPkgs = packages.ghc802;
+      bootPkgs = buildPackages.ghc802;
       inherit (pkgs) cabal-install;
       inherit (buildPackages) fetchgit fetchFromGitHub;
     };
     ghcjs82 = callPackage ../development/compilers/ghcjs-ng {
-      bootPkgs = packages.ghc822;
+      bootPkgs = buildPackages.ghc822;
       ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.2/git.json;
       stage0 = ../development/compilers/ghcjs-ng/8.2/stage0.nix;
     };
     ghcjs84 = callPackage ../development/compilers/ghcjs-ng {
-      bootPkgs = packages.ghc843;
+      bootPkgs = buildPackages.ghc843;
       ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.4/git.json;
       stage0 = ../development/compilers/ghcjs-ng/8.4/stage0.nix;
       ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.4/dep-overrides.nix {};
@@ -156,7 +156,33 @@ in {
     in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
       integerSimpleGhcNames
       (name: compiler."${name}".override { enableIntegerSimple = true; }));
-  };
+  } //
+  ( if pkgs.stdenv.hostPlatform.isGhcjs
+    then {
+      ghc802 = compiler.ghcjs80;
+      ghc822 = compiler.ghcjs82;
+      ghc843 = compiler.ghcjs84;
+      ghc844 = compiler.ghcjs84;
+      ghc861 = compiler.ghcjs86;
+      ghc862 = compiler.ghcjs86;
+      ghc863 = compiler.ghcjs86;
+      ghc864 = compiler.ghcjs86;
+    }
+    else {}
+  ) //
+  ( if pkgs.stdenv.hostPlatform.isAsterius
+    then {
+      ghc802 = compiler.asterius;
+      ghc822 = compiler.asterius;
+      ghc843 = compiler.asterius;
+      ghc844 = compiler.asterius;
+      ghc861 = compiler.asterius;
+      ghc862 = compiler.asterius;
+      ghc863 = compiler.asterius;
+      ghc864 = compiler.asterius;
+    }
+    else {}
+  );
 
   # Default overrides that are applied to all package sets.
   packageOverrides = self : super : {};
