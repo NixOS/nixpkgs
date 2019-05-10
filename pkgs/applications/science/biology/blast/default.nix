@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/update_blastdb.pl
   '';
 
-
   enableParallelBuilding = true;
 
   doCheck = true;
