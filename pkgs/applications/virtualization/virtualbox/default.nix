@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2
+{ config, stdenv, fetchurl, fetchpatch, lib, iasl, dev86, pam, libxslt, libxml2
 , libX11, xorgproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
@@ -73,13 +73,19 @@ in stdenv.mkDerivation {
   '';
 
   patches =
-     optional enableHardening ./hardened.patch
+    optional enableHardening ./hardened.patch
   ++ [
     ./qtx11extras.patch
     # https://www.virtualbox.org/ticket/18620
-    ./fix_kbuild.patch
+    (fetchpatch {
+      url = https://www.virtualbox.org/raw-attachment/ticket/18620/fix_kbuild.patch;
+      sha256 = "0vq3slsd22rz3fq8di13q7dpjrmg43qr988nhjnsxm66s1428pba";
+    })
     # https://www.virtualbox.org/ticket/18621
-    ./fix_module_makefile_sed.patch
+    (fetchpatch {
+      url = https://www.virtualbox.org/raw-attachment/ticket/18621/fix_module_makefile_sed.patch;
+      sha256 = "11w0q4jyx6aa92cr402h08aigw16rff6gmr6lpfqdsqc1jhlca06";
+    })
     # https://forums.virtualbox.org/viewtopic.php?f=7&t=92815
     ./fix_printk_test.patch
   ];
