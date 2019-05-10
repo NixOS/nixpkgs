@@ -1,0 +1,53 @@
+diff -urN old/kernel/conftest.sh new/kernel/conftest.sh
+--- old/kernel/conftest.sh	2019-05-10 19:56:54.556379817 +0200
++++ new/kernel/conftest.sh	2019-05-10 20:35:07.945055354 +0200
+@@ -107,6 +107,7 @@
+     FILES="$FILES drm/drm_drv.h"
+     FILES="$FILES drm/drm_framebuffer.h"
+     FILES="$FILES drm/drm_connector.h"
++    FILES="$FILES drm/drm_probe_helper.h"
+     FILES="$FILES generated/autoconf.h"
+     FILES="$FILES generated/compile.h"
+     FILES="$FILES generated/utsrelease.h"
+diff -urN old/kernel/nvidia-drm/nvidia-drm-drv.c new/kernel/nvidia-drm/nvidia-drm-drv.c
+--- old/kernel/nvidia-drm/nvidia-drm-drv.c	2019-05-10 19:56:54.544379770 +0200
++++ new/kernel/nvidia-drm/nvidia-drm-drv.c	2019-05-10 20:35:48.760211841 +0200
+@@ -55,6 +55,10 @@
+ #include <drm/drm_atomic_helper.h>
+ #endif
+ 
++#if defined(NV_DRM_DRM_PROBE_HELPER_H_PRESENT)
++#include <drm/drm_probe_helper.h>
++#endif
++
+ static struct nv_drm_device *dev_list = NULL;
+ 
+ #if defined(NV_DRM_ATOMIC_MODESET_AVAILABLE)
+diff -urN old/kernel/nvidia-drm/nvidia-drm-encoder.c new/kernel/nvidia-drm/nvidia-drm-encoder.c
+--- old/kernel/nvidia-drm/nvidia-drm-encoder.c	2019-05-10 19:56:54.544379770 +0200
++++ new/kernel/nvidia-drm/nvidia-drm-encoder.c	2019-05-10 20:49:10.018182041 +0200
+@@ -36,6 +36,10 @@
+ #include <drm/drm_atomic.h>
+ #include <drm/drm_atomic_helper.h>
+ 
++#if defined(NV_DRM_DRM_PROBE_HELPER_H_PRESENT)
++#include <drm/drm_probe_helper.h>
++#endif
++
+ static void nv_drm_encoder_destroy(struct drm_encoder *encoder)
+ {
+     struct nv_drm_encoder *nv_encoder = to_nv_encoder(encoder);
+diff -urN old/kernel/nvidia-drm/nvidia-drm-connector.c new/kernel/nvidia-drm/nvidia-drm-connector.c
+--- old/kernel/nvidia-drm/nvidia-drm-connector.c	2019-05-10 19:56:54.544379770 +0200
++++ new/kernel/nvidia-drm/nvidia-drm-connector.c	2019-05-10 20:51:11.163839290 +0200
+@@ -35,6 +35,10 @@
+ #include <drm/drm_atomic.h>
+ #include <drm/drm_atomic_helper.h>
+ 
++#if defined(NV_DRM_DRM_PROBE_HELPER_H_PRESENT)
++#include <drm/drm_probe_helper.h>
++#endif
++
+ static void nv_drm_connector_destroy(struct drm_connector *connector)
+ {
+     struct nv_drm_connector *nv_connector = to_nv_connector(connector);

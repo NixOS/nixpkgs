@@ -1,0 +1,137 @@
+diff -urN old/kernel/common/inc/nv-mm.h new/kernel/common/inc/nv-mm.h
+--- old/kernel/common/inc/nv-mm.h	2019-05-10 19:56:54.543379766 +0200
++++ new/kernel/common/inc/nv-mm.h	2019-05-10 20:14:00.985871563 +0200
+@@ -209,4 +209,11 @@
+     }
+ #endif // NV_VM_FAULT_PRESENT
+ 
++#if defined(NV_VM_OPS_VM_FAULT_T_RET)
++#include <linux/mm.h>
++typedef vm_fault_t nv_vm_fault_t;
++#else
++typedef int nv_vm_fault_t;
++#endif
++
+ #endif // __NV_MM_H__
+diff -urN old/kernel/conftest.sh new/kernel/conftest.sh
+--- old/kernel/conftest.sh	2019-05-10 19:56:54.556379817 +0200
++++ new/kernel/conftest.sh	2019-05-10 20:23:39.998142596 +0200
+@@ -2647,6 +2647,17 @@
+             compile_check_conftest "$CODE" "NV_VM_OPS_FAULT_REMOVED_VMA_ARG" "" "types"
+         ;;
+ 
++        vm_ops_vm_fault_t_ret)
++            # Determine if the return type of vm_ops functions is vm_fault_t.
++            CODE="
++            #include <linux/mm.h>
++            void conftest_vm_ops_vm_fault_t_ret(void) {
++                vm_fault_t fault;
++            }"
++
++            compile_check_conftest "$CODE" "NV_VM_OPS_VM_FAULT_T_RET" "" "types"
++        ;;
++
+         pnv_npu2_init_context)
+             #
+             # Determine if the pnv_npu2_init_context() function is
+diff -urN old/kernel/nvidia-drm/nvidia-drm-gem-nvkms-memory.c new/kernel/nvidia-drm/nvidia-drm-gem-nvkms-memory.c
+--- old/kernel/nvidia-drm/nvidia-drm-gem-nvkms-memory.c	2019-05-10 19:56:54.544379770 +0200
++++ new/kernel/nvidia-drm/nvidia-drm-gem-nvkms-memory.c	2019-05-10 20:25:50.956755143 +0200
+@@ -330,7 +330,7 @@
+ 
+ /* XXX Move these vma operations to os layer */
+ 
+-static int __nv_drm_vma_fault(struct vm_area_struct *vma,
++static nv_vm_fault_t __nv_drm_vma_fault(struct vm_area_struct *vma,
+                               struct vm_fault *vmf)
+ {
+     unsigned long address = nv_page_fault_va(vmf);
+@@ -338,7 +338,7 @@
+     struct nv_drm_gem_nvkms_memory *nv_nvkms_memory = to_nv_nvkms_memory(
+         to_nv_gem_object(gem));
+     unsigned long page_offset, pfn;
+-    int ret = -EINVAL;
++    nv_vm_fault_t ret;
+ 
+     pfn = (unsigned long)(uintptr_t)nv_nvkms_memory->pPhysicalAddress;
+     pfn >>= PAGE_SHIFT;
+@@ -377,12 +377,12 @@
+  */
+ 
+ #if defined(NV_VM_OPS_FAULT_REMOVED_VMA_ARG)
+-static int nv_drm_vma_fault(struct vm_fault *vmf)
++static nv_vm_fault_t nv_drm_vma_fault(struct vm_fault *vmf)
+ {
+     return __nv_drm_vma_fault(vmf->vma, vmf);
+ }
+ #else
+-static int nv_drm_vma_fault(struct vm_area_struct *vma,
++static nv_vm_fault_t nv_drm_vma_fault(struct vm_area_struct *vma,
+                                 struct vm_fault *vmf)
+ {
+     return __nv_drm_vma_fault(vma, vmf);
+diff -urN old/kernel/nvidia-drm/nvidia-drm.Kbuild new/kernel/nvidia-drm/nvidia-drm.Kbuild
+--- old/kernel/nvidia-drm/nvidia-drm.Kbuild	2019-05-10 19:56:54.544379770 +0200
++++ new/kernel/nvidia-drm/nvidia-drm.Kbuild	2019-05-10 20:02:36.840632933 +0200
+@@ -81,6 +81,7 @@
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vm_fault_has_address
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vm_fault_present
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vm_ops_fault_removed_vma_arg
++NV_CONFTEST_TYPE_COMPILE_TESTS += vm_ops_vm_fault_t_ret
+ NV_CONFTEST_TYPE_COMPILE_TESTS += kref_has_refcount_of_type_refcount_t
+ NV_CONFTEST_TYPE_COMPILE_TESTS += drm_atomic_helper_crtc_destroy_state_has_crtc_arg
+ NV_CONFTEST_TYPE_COMPILE_TESTS += drm_crtc_helper_funcs_has_atomic_enable
+diff -urN old/kernel/nvidia-uvm/nvidia-uvm.Kbuild new/kernel/nvidia-uvm/nvidia-uvm.Kbuild
+--- old/kernel/nvidia-uvm/nvidia-uvm.Kbuild	2019-05-10 19:56:54.549379790 +0200
++++ new/kernel/nvidia-uvm/nvidia-uvm.Kbuild	2019-05-10 20:02:57.198703444 +0200
+@@ -112,4 +112,5 @@
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vm_fault_has_address
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vm_fault_present
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vm_ops_fault_removed_vma_arg
++NV_CONFTEST_TYPE_COMPILE_TESTS += vm_ops_vm_fault_t_ret
+ NV_CONFTEST_TYPE_COMPILE_TESTS += node_states_n_memory
+diff -urN old/kernel/nvidia-uvm/uvm8.c new/kernel/nvidia-uvm/uvm8.c
+--- old/kernel/nvidia-uvm/uvm8.c	2019-05-10 19:56:54.552379801 +0200
++++ new/kernel/nvidia-uvm/uvm8.c	2019-05-10 20:15:16.193233998 +0200
+@@ -36,6 +36,7 @@
+ #include "uvm_linux_ioctl.h"
+ #include "uvm8_hmm.h"
+ #include "uvm8_mem.h"
++#include "nv-mm.h"
+ 
+ static struct cdev g_uvm_cdev;
+ 
+@@ -166,13 +167,13 @@
+ // If a fault handler is not set, paths like handle_pte_fault in older kernels
+ // assume the memory is anonymous. That would make debugging this failure harder
+ // so we force it to fail instead.
+-static int uvm_vm_fault_sigbus(struct vm_area_struct *vma, struct vm_fault *vmf)
++static nv_vm_fault_t uvm_vm_fault_sigbus(struct vm_area_struct *vma, struct vm_fault *vmf)
+ {
+     UVM_DBG_PRINT_RL("Fault to address 0x%lx in disabled vma\n", nv_page_fault_va(vmf));
+     return VM_FAULT_SIGBUS;
+ }
+ 
+-static int uvm_vm_fault_sigbus_wrapper(struct vm_fault *vmf)
++static nv_vm_fault_t uvm_vm_fault_sigbus_wrapper(struct vm_fault *vmf)
+ {
+ #if defined(NV_VM_OPS_FAULT_REMOVED_VMA_ARG)
+     return uvm_vm_fault_sigbus(vmf->vma, vmf);
+@@ -390,7 +391,7 @@
+         uvm_record_unlock_mmap_sem_write(&current->mm->mmap_sem);
+ }
+ 
+-static int uvm_vm_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
++static nv_vm_fault_t uvm_vm_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
+ {
+     uvm_va_space_t *va_space = uvm_va_space_get(vma->vm_file);
+     uvm_va_block_t *va_block;
+@@ -507,7 +508,7 @@
+     }
+ }
+ 
+-static int uvm_vm_fault_wrapper(struct vm_fault *vmf)
++static nv_vm_fault_t uvm_vm_fault_wrapper(struct vm_fault *vmf)
+ {
+ #if defined(NV_VM_OPS_FAULT_REMOVED_VMA_ARG)
+     return uvm_vm_fault(vmf->vma, vmf);

@@ -31,6 +31,10 @@ rec {
     sha256_64bit = "1cg7927g5ml1rwgpydlrjzr55gza5dfkqkch29bbarpzd7dh0mf4";
     settingsSha256 = "150c64wbijwyq032ircl1b78q0gwdvfq35gxaqw00d3ac2hjwpsg";
     persistencedSha256 = "07wh6v8c2si0zwy9j60yzrdn1b1pm0vr9kfvql3jkyjqfn4np44z";
+
+    # https://github.com/NixOS/nixpkgs/issues/61165
+    patches = lib.optionals (stdenv.lib.versionAtLeast kernel.version "5.1")
+      [ ./vm_fault_t.patch ./drm_probe_helper.patch ];
   };
 
   # Last one supporting x86
