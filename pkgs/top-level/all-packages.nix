@@ -22848,7 +22848,7 @@ in
 
   ### SCIENCE/ROBOTICS
 
-  apmplanner2 = libsForQt59.callPackage ../applications/science/robotics/apmplanner2 { };
+  apmplanner2 = libsForQt511.callPackage ../applications/science/robotics/apmplanner2 { };
 
   ### MISC
 
