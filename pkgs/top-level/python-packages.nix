@@ -3097,6 +3097,8 @@ in {
 
   lektor = callPackage ../development/python-modules/lektor { };
 
+  leveldb = callPackage ../development/python-modules/leveldb { };
+
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
   python_openzwave = callPackage ../development/python-modules/python_openzwave {
