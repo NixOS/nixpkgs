@@ -9,14 +9,14 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  pname = "pivx";
-  version = "3.2.0";
+  name = "pivx-${version}";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "PIVX-Project";
     repo= "PIVX";
     rev = "v${version}";
-    sha256 = "1sym6254vhq8qqpxq9qhy10m5167v7x93kqaj1gixc1vwwbxyazy";
+    sha256 = "16bj8cix4p63fwz3v5sxbwgy33g7dg4wwarr4aa25vli2ajqy65j";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
