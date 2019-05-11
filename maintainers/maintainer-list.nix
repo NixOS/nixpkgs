@@ -2603,6 +2603,11 @@
     github = "knl";
     name = "Nikola Knežević";
   };
+  kolaente = {
+    email = "k@knt.li";
+    github = "kolaente";
+    name = "Konrad Langenberg";
+  };
   konimex = {
     email = "herdiansyah@netc.eu";
     github = "konimex";
