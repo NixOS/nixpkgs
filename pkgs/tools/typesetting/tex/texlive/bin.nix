@@ -211,7 +211,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   postConfigure = ''
     mkdir ./WorkDir && cd ./WorkDir
     # TODO add lua53 here when luatex53 is enabled again
-    for path in libs/{teckit,lua52} texk/web2c; do
+    for path in libs/{teckit,lua53} texk/web2c; do
       (
         if [[ "$path" =~ "libs/lua5" ]]; then
           extraConfig="--enable-static --disable-shared"
