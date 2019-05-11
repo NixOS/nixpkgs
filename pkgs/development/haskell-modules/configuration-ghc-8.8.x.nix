@@ -54,6 +54,7 @@ self: super: {
   hashable-time = doJailbreak super.hashable-time;
   integer-logarithms = doJailbreak super.integer-logarithms;
   lucid = doJailbreak super.lucid;
+  parallel = doJailbreak super.parallel;
   quickcheck-instances = doJailbreak super.quickcheck-instances;
   split = doJailbreak super.split;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
