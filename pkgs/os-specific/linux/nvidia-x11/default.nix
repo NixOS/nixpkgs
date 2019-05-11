@@ -16,16 +16,16 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_415 else legacy_390;
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_418 else legacy_390;
 
   # No active beta right now
   beta = stable;
 
-  stable_415 = generic {
-    version = "415.27";
-    sha256_64bit = "12ylf1h1wpgkd0g7r30c33hhhialn315k5sbxyzks0rm42k7cay8";
-    settingsSha256 = "0m8hfxb6fhanqlkkk4ayn1blgdsvnn0ipxdl19ifdl200ln6j053";
-    persistencedSha256 = "0i6ik6xv6rnwcd6vg5xrxcd9g7nzca3vkiy2srbv0simw86nwgdz";
+  stable_418 = generic {
+    version = "418.56";
+    sha256_64bit = "1cg7927g5ml1rwgpydlrjzr55gza5dfkqkch29bbarpzd7dh0mf4";
+    settingsSha256 = "1dai4dh6g3arkgicbjwhfr948i1xc13a7s0xcgalan0pn5zd56z6";
+    persistencedSha256 = "1r13jjpqg9ri5mw633k01dq2ivblc8nrbsnh7709v1xibaydwnhn";
   };
 
   # Last one supporting x86
