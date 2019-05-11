@@ -104,6 +104,16 @@
       </link>
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The option <option>systemd.network.networks.&lt;name&gt;.routes.*.routeConfig.GatewayOnlink</option>
+      was renamed to <option>systemd.network.networks.&lt;name&gt;.routes.*.routeConfig.GatewayOnLink</option>
+      (capital <literal>L</literal>). This follows
+      <link xlink:href="https://github.com/systemd/systemd/commit/9cb8c5593443d24c19e40bfd4fc06d672f8c554c">
+        upstreams renaming
+      </link> of the setting.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 

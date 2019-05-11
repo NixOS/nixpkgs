@@ -63,7 +63,7 @@ in
               {
                 routeConfig = {
                   Gateway = gateway;
-                  GatewayOnlink = false;
+                  GatewayOnLink = false;
                 };
               }
             ];
