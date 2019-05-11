@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.28.3";
+  version = "0.28.4"; # not really, git
   name = "notmuch-${version}";
 
   passthru = {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "1v0ff6qqwj42p3n6qw30czzqi52nvgf3dn05vd7a03g39a5js8af";
+    sha256 = "1jjnhs4xs4gksvg0a9qn68rxrj41im5bh58snka2pkj20nxwmcds";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
       --replace '-install_name $(libdir)' "-install_name $out/lib"
   '';
 
-  configureFlags = [ "--zshcompletiondir=$(out)/share/zsh/site-functions" ];
+  configureFlags = [ "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions" ];
 
   # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
   # friends
   setOutputFlags = false;
   enableParallelBuilding = true;
-  makeFlags = "V=1";
+  makeFlags = [ "V=1" ];
 
   preCheck = let
     test-database = fetchurl {
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     gdb man
   ];
 
-  installTargets = "install install-man";
+  installTargets = [ "install" "install-man" ];
 
   dontGzipMan = true; # already compressed
 

@@ -1,11 +1,11 @@
-{ config, stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
+{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2
 , libX11, xorgproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
 , alsaLib, curl, libvpx, nettools, dbus
 , makeself, perl
 , javaBindings ? false, jdk ? null
-, pythonBindings ? false, python2 ? null
+, pythonBindings ? false, python3 ? null
 , extensionPack ? null, fakeroot ? null
 , pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , enableHardening ? false
@@ -17,12 +17,12 @@
 with stdenv.lib;
 
 let
-  python = python2;
+  python = python3;
   buildType = "release";
   # Remember to change the extpackRev and version in extpack.nix and
   # guest-additions/default.nix as well.
-  main = "0jmrbyhs92lyarpvylxqn2ajxdg9b290w5nd4g0i4h83d28bwbw0";
-  version = "5.2.28";
+  main = "0lp584a350ya1zn03lhgmdbi91yp8yfja9hlg2jz1xyfj2dc869l";
+  version = "6.0.6";
 in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 
@@ -76,11 +76,12 @@ in stdenv.mkDerivation {
      optional enableHardening ./hardened.patch
   ++ [
     ./qtx11extras.patch
-    (fetchpatch {
-      name = "010-qt-5.11.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/010-qt-5.11.patch?h=packages/virtualbox";
-      sha256 = "0hjx99pg40wqyggnrpylrp5zngva4xrnk7r90i0ynrqc7n84g9pn";
-    })
+    # https://www.virtualbox.org/ticket/18620
+    ./fix_kbuild.patch
+    # https://www.virtualbox.org/ticket/18621
+    ./fix_module_makefile_sed.patch
+    # https://forums.virtualbox.org/viewtopic.php?f=7&t=92815
+    ./fix_printk_test.patch
   ];
 
   postPatch = ''
@@ -192,6 +193,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl2;
     homepage = https://www.virtualbox.org/;
     maintainers = with maintainers; [ flokli sander ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

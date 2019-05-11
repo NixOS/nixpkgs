@@ -19,12 +19,12 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "039ll00kvrp881cyybb04z90cw68j7p5cspgdxh0bky9lyi9qpwb";
-      "x86_64-darwin" = "0qrakrihcjwn9dic77b0k9ja3zf6nbz534v76xid9gv20md5dds3";
+      "x86_64-linux"  = "1i3zmzxihplwd8n994lfxhhgygdg3qxjqgrj1difa8w3vss0zbfn";
+      "x86_64-darwin" = "09a96ms9id77infxd9xxfs6r7j01mn0rz5yw3g9sl92j9ri7r52c";
     }
     else {
-      "x86_64-linux"  = "1v1fbmfkbnlx043z3yx02gaqqy63bj2ymvcby66n4qq0vlpahvwx";
-      "x86_64-darwin" = "1y4q7a2b9arln94d6sj547qkv3258jlgcz9b342fh6khlbpfjb8c";
+      "x86_64-linux"  = "166rhxr0qlv1yarj2mg1c3b8mxvhl70jhz53azq7ic6laj55q7fk";
+      "x86_64-darwin" = "0ngngkbl036p2mzwhp8qafi3aqzk398a218w12srfqny5n630vdk";
     };
 
 in stdenv.mkDerivation rec {

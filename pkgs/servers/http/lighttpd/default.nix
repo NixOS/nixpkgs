@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pcre, libxml2, zlib, bzip2, which, file
+{ stdenv, buildPackages, fetchurl, pkgconfig, pcre, libxml2, zlib, bzip2, which, file
 , openssl, enableMagnet ? false, lua5_1 ? null
 , enableMysql ? false, mysql ? null
 , enableLdap ? false, openldap ? null
@@ -28,8 +28,10 @@ stdenv.mkDerivation rec {
     sed -ire '/[$]self->{HOSTNAME} *=/i     if(length($name)==0) { $name = "127.0.0.1" }' tests/LightyTest.pm
   '';
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pcre libxml2 zlib bzip2 which file openssl ]
+  buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
              ++ stdenv.lib.optional enableMagnet lua5_1
              ++ stdenv.lib.optional enableMysql mysql.connector-c
              ++ stdenv.lib.optional enableLdap openldap
@@ -45,6 +47,7 @@ stdenv.mkDerivation rec {
                 ++ stdenv.lib.optional enableExtendedAttrs "--with-attr";
 
   preConfigure = ''
+    export PATH=$PATH:${pcre.dev}/bin
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
   '';
 

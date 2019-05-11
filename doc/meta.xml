@@ -152,6 +152,19 @@ hello-2.3  A program that produces a familiar, friendly greeting
    </varlistentry>
    <varlistentry>
     <term>
+     <varname>changelog</varname>
+    </term>
+    <listitem>
+     <para>
+      A link or a list of links to the location of Changelog for a package.
+     A link may use expansion to refer to the correct changelog version.
+             Example:
+      <literal>"https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${version}"</literal>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <varname>license</varname>
     </term>
     <listitem>

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "timescaledb-tune";
-  version = "0.5.0";
+  version = "0.6.0";
 
   goPackagePath = "github.com/timescale/timescaledb-tune";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "timescale";
     repo = name;
     rev = version;
-    sha256 = "1fs7ggpdik3qjvjmair1svni2sw9wz54716m2iwngv8x4s9b15nn";
+    sha256 = "0hjxmjgkqm9sbjbyhs3pzkk1d9vvlcbzwl7ghsigh4h7rw3a0mpk";
   };
 
   meta = with stdenv.lib; {

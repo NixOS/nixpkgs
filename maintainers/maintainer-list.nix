@@ -1100,6 +1100,11 @@
     github = "cwoac";
     name = "Oliver Matthews";
   };
+  dalance = {
+    email = "dalance@gmail.com";
+    github = "dalance";
+    name = "Naoya Hatta";
+  };
   DamienCassou = {
     email = "damien@cassou.me";
     github = "DamienCassou";
@@ -1163,6 +1168,11 @@
     email = "davor@davor.se";
     github = "davorb";
     name = "Davor Babic";
+  };
+  dawidsowa = {
+    email = "dawid_sowa@posteo.net";
+    github = "dawidsowa";
+    name = "Dawid Sowa";
   };
   dbohdan = {
     email = "dbohdan@dbohdan.com";
@@ -1530,6 +1540,11 @@
     email = "ruben@maher.fyi";
     github = "eqyiel";
     name = "Ruben Maher";
+  };
+  eraserhd = {
+    email = "jason.m.felice@gmail.com";
+    github = "eraserhd";
+    name = "Jason Felice";
   };
   ericbmerritt = {
     email = "eric@afiniate.com";
@@ -2587,6 +2602,11 @@
     email = "nikola@knezevic.co";
     github = "knl";
     name = "Nikola Knežević";
+  };
+  kolaente = {
+    email = "k@knt.li";
+    github = "kolaente";
+    name = "Konrad Langenberg";
   };
   konimex = {
     email = "herdiansyah@netc.eu";
@@ -4110,6 +4130,11 @@
     email = "retrry@gmail.com";
     github = "retrry";
     name = "Tadas Barzdžius";
+  };
+  rexim = {
+    email = "reximkut@gmail.com";
+    github = "rexim";
+    name = "Alexey Kutepov";
   };
   rht = {
     email = "rhtbot@protonmail.com";

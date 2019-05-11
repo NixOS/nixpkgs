@@ -524,8 +524,11 @@ in
     '';
   };
 
-   zookeeper = attrs: {
-     buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
-   };
+  zlib = attrs: {
+    buildInputs = [ zlib ];
+  };
 
+  zookeeper = attrs: {
+    buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
+  };
 }
