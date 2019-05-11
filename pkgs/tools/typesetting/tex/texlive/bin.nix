@@ -14,16 +14,17 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2018";
+  year = "2019";
+  snapshot = year + "0410";
   version = year; # keep names simple for now
 
   common = rec {
     src = fetchurl {
       urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0414-source.tar.xz"
-              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0414-source.tar.xz"
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${snapshot}-source.tar.xz"
+              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${snapshot}-source.tar.xz"
       ];
-      sha256 = "0khyi6h015r2zfqgg0a44a2j7vmr1cy42knw7jbss237yvakc07y";
+      sha256 = "1dfps39q6bdr1zsbp9p74mvalmy3bycihv19sb9c6kg30kprz8nj";
     };
 
     patches = [
