@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "buck";
-  version = "2019.01.10.01";
+  version = "2019.05.06.01";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0987s399v4ba2a3crca12vsg9001xcb5drhqi564ninpa5vxamr2";
+    sha256 = "0bcj1g8hmcpdgz3c2sxglxxq1jn1x0p9dk6hml8ajkn4h82kw12y";
   };
 
   patches = [ ./pex-mtime.patch ];
