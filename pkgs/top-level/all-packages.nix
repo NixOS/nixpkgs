@@ -23713,9 +23713,8 @@ in
   spdlog = spdlog_1;
 
   dart = callPackage ../development/interpreters/dart { };
-  dart_stable = dart.override { version = "2.2.0"; };
+  dart_stable = dart.override { version = "2.3.0"; };
   dart_old = dart.override { version = "1.24.3"; };
-  dart_dev = dart.override { version = "2.3.0-dev.0.3"; };
 
   httrack = callPackage ../tools/backup/httrack { };
 
