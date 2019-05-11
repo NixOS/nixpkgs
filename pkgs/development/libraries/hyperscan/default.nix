@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
     cmake ragel python3
     # Consider simply using busybox for these
     # Need at least: rev, sed, cut, nm
-    coreutils gnused
-  ] ++ stdenv.lib.optional stdenv.isLinux utillinux;
+    coreutils gnused utillinux
+  ];
 
   cmakeFlags = [
     "-DFAT_RUNTIME=ON"
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.hyperscan.io/";
     maintainers = with maintainers; [ avnik ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" ]; # can't find nm on darwin ; might build on aarch64 but untested
     license = licenses.bsd3;
   };
 }
