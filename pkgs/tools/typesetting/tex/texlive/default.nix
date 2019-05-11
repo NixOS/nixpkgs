@@ -108,8 +108,9 @@ let
       # Common packages should get served from the binary cache anyway.
       # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
       urlPrefixes = args.urlPrefixes or [
-        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
-        ftp://tug.org/texlive/historic/2018/tlnet-final/archive
+        #http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive
+        #ftp://tug.org/texlive/historic/2019/tlnet-final/archive
+        file:///home/will/tl2019pretest/archive
       ];
 
       src = fetchurl { inherit urls sha512; };
