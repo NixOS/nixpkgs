@@ -246,15 +246,16 @@ in {
     nix.extraOptions = lib.mkIf (cfg.emulatedSystems != []) ''
       extra-platforms = ${toString (cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux")}
     '';
-    # nix.sandboxPaths = lib.mkIf (cfg.emulatedSystems != []) ([ "/run/binfmt" ] ++ (map getEmulator cfg.emulatedSystems));
+    nix.sandboxPaths = lib.mkIf (cfg.emulatedSystems != [])
+      ([ "/run/binfmt" ] ++ (map (system: dirOf (dirOf (getEmulator system))) cfg.emulatedSystems));
 
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf"
-      (lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine cfg.registrations));
-    system.activationScripts.binfmt = lib.mkIf (cfg.registrations != {}) ''
+      (lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine config.boot.binfmt.registrations));
+    system.activationScripts.binfmt = ''
       mkdir -p -m 0755 /run/binfmt
-      ${lib.concatStringsSep "\n" (lib.mapAttrsToList activationSnippet cfg.registrations)}
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList activationSnippet config.boot.binfmt.registrations)}
     '';
-    systemd.additionalUpstreamSystemUnits = lib.mkIf (cfg.registrations != {})
+    systemd.additionalUpstreamSystemUnits = lib.mkIf (config.boot.binfmt.registrations != {})
       [ "proc-sys-fs-binfmt_misc.automount"
         "proc-sys-fs-binfmt_misc.mount"
       ];
