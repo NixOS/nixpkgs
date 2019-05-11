@@ -12,6 +12,11 @@ with pkgs.lib;
 let
   esUrl = "http://localhost:9200";
 
+  totalHits = message :
+    "curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' " +
+    ''-d '{\"query\" : { \"match\" : { \"message\" : \"${message}\"}}}' '' +
+    "| jq .hits.total";
+
   mkElkTest = name : elk :
    let elasticsearchGe7 = builtins.compareVersions elk.elasticsearch.version "7" >= 0;
    in makeTest {
@@ -21,7 +26,7 @@ let
     };
     nodes = {
       one =
-        { pkgs, ... }: {
+        { pkgs, lib, ... }: {
             # Not giving the machine at least 2060MB results in elasticsearch failing with the following error:
             #
             #   OpenJDK 64-Bit Server VM warning:
@@ -40,6 +45,26 @@ let
             environment.systemPackages = [ pkgs.jq ];
 
             services = {
+
+              journalbeat = let lt6 = builtins.compareVersions
+                                        elk.journalbeat.version "6" < 0; in {
+                enable = true;
+                package = elk.journalbeat;
+                extraConfig = mkOptionDefault (''
+                  logging:
+                    to_syslog: true
+                    level: warning
+                    metrics.enabled: false
+                  output.elasticsearch:
+                    hosts: [ "127.0.0.1:9200" ]
+                    ${optionalString lt6 "template.enabled: false"}
+                '' + optionalString (!lt6) ''
+                  journalbeat.inputs:
+                  - paths: []
+                    seek: cursor
+                '');
+              };
+
               logstash = {
                 enable = true;
                 package = elk.logstash;
@@ -107,14 +132,19 @@ let
     testScript = ''
       startAll;
 
+      # Wait until elasticsearch is listening for connections.
       $one->waitForUnit("elasticsearch.service");
+      $one->waitForOpenPort(9200);
 
       # Continue as long as the status is not "red". The status is probably
       # "yellow" instead of "green" because we are using a single elasticsearch
       # node which elasticsearch considers risky.
       #
-      # TODO: extend this test with multiple elasticsearch nodes and see if the status turns "green".
-      $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_cluster/health' | jq .status | grep -v red");
+      # TODO: extend this test with multiple elasticsearch nodes
+      #       and see if the status turns "green".
+      $one->waitUntilSucceeds(
+        "curl --silent --show-error '${esUrl}/_cluster/health' " .
+        "| jq .status | grep -v red");
 
       # Perform some simple logstash tests.
       $one->waitForUnit("logstash.service");
@@ -123,16 +153,28 @@ let
 
       # See if kibana is healthy.
       $one->waitForUnit("kibana.service");
-      $one->waitUntilSucceeds("curl --silent --show-error 'http://localhost:5601/api/status' | jq .status.overall.state | grep green");
+      $one->waitUntilSucceeds(
+        "curl --silent --show-error 'http://localhost:5601/api/status' " .
+        "| jq .status.overall.state | grep green");
 
       # See if logstash messages arive in elasticsearch.
-      $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' -d '{\"query\" : { \"match\" : { \"message\" : \"flowers\"}}}' | jq .hits.total | grep -v 0");
-      $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' -d '{\"query\" : { \"match\" : { \"message\" : \"dragons\"}}}' | jq .hits.total | grep 0");
+      $one->waitUntilSucceeds("${totalHits "flowers"} | grep -v 0");
+      $one->waitUntilSucceeds("${totalHits "dragons"} | grep 0");
+
+      # Test if a message logged to the journal
+      # is ingested by elasticsearch via journalbeat.
+      $one->waitForUnit("journalbeat.service");
+      $one->execute("echo 'Supercalifragilisticexpialidocious' | systemd-cat");
+      $one->waitUntilSucceeds(
+        "${totalHits "Supercalifragilisticexpialidocious"} | grep -v 0");
+
     '' + optionalString (!elasticsearchGe7) ''
       # Test elasticsearch-curator.
       $one->systemctl("stop logstash");
       $one->systemctl("start elasticsearch-curator");
-      $one->waitUntilSucceeds("! curl --silent --show-error '${esUrl}/_cat/indices' | grep logstash | grep -q ^$1");
+      $one->waitUntilSucceeds(
+        "! curl --silent --show-error '${esUrl}/_cat/indices' " .
+        "| grep logstash | grep -q ^$1");
     '';
   };
 in mapAttrs mkElkTest {
@@ -140,6 +182,7 @@ in mapAttrs mkElkTest {
     elasticsearch = pkgs.elasticsearch5;
     logstash      = pkgs.logstash5;
     kibana        = pkgs.kibana5;
+    journalbeat   = pkgs.journalbeat5;
   };
   "ELK-6" =
     if enableUnfree
@@ -147,11 +190,13 @@ in mapAttrs mkElkTest {
       elasticsearch = pkgs.elasticsearch6;
       logstash      = pkgs.logstash6;
       kibana        = pkgs.kibana6;
+      journalbeat   = pkgs.journalbeat6;
     }
     else {
       elasticsearch = pkgs.elasticsearch6-oss;
       logstash      = pkgs.logstash6-oss;
       kibana        = pkgs.kibana6-oss;
+      journalbeat   = pkgs.journalbeat6;
     };
   "ELK-7" =
     if enableUnfree
@@ -159,10 +204,12 @@ in mapAttrs mkElkTest {
       elasticsearch = pkgs.elasticsearch7;
       logstash      = pkgs.logstash7;
       kibana        = pkgs.kibana7;
+      journalbeat   = pkgs.journalbeat7;
     }
     else {
       elasticsearch = pkgs.elasticsearch7-oss;
       logstash      = pkgs.logstash7-oss;
       kibana        = pkgs.kibana7-oss;
+      journalbeat   = pkgs.journalbeat7;
     };
 }
