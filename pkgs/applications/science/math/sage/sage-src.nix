@@ -10,14 +10,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.8.beta4";
+  version = "8.8.beta5";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "01c1aj70kp4m20ga80mp09lks7p2pgp0g6ggs9nin0zvq5nhcpsx";
+    sha256 = "1c1ckabvi1mi0vaj9iahlgi1d5ss5ld442pzbg2n2vqbv7bfjfqd";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -49,12 +49,6 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/27660#ticket
     ./patches/do-not-test-find-library.patch
 
-    # https://trac.sagemath.org/ticket/27766
-    (fetchpatch {
-      name = "more-optional-build-tags.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=a6deff761da469fad57eae498e639d6166fd78ed";
-      sha256 = "02qb9r3p0vgb9q5hhrp41mcgrk1gxrl02fmp486gnrym3cqnw5n1";
-    })
 
     # https://trac.sagemath.org/ticket/28007
     ./patches/threejs-offline.patch
@@ -99,13 +93,6 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
 
-    # https://trac.sagemath.org/ticket/27653
-    (fetchpatch {
-      name = "sympy-1.4.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=3277ba76d0ba7174608a31a0c6623e9210c63e3d";
-      sha256 = "09avaanwmdgqv14mmllbgw9z2scf4lc0y0kzdhlriiq8ss9j8iir";
-    })
-
     # https://trac.sagemath.org/ticket/27738
     (fetchpatch {
       name = "R-3.6.0.patch";
@@ -119,13 +106,6 @@ stdenv.mkDerivation rec {
       base = "8.8.beta4";
       rev = "c11d9cfa23ff9f77681a8f12742f68143eed4504";
       sha256 = "0xzra7mbgqvahk9v45bjwir2mqz73hrhhy314jq5nxrb35ysdxyi";
-    })
-
-    # https://trac.sagemath.org/ticket/26718
-    (fetchpatch {
-      name = "threejs-r100.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=86c5bb000259e6de5d7c60afc608a4b0d010b690";
-      sha256 = "0sgqqd4df2bxsq19b6kfy7dvgyxprlpg7f3xx7g3fs8ij937m352";
     })
   ];
 
