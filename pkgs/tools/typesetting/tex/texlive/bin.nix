@@ -109,7 +109,7 @@ core = stdenv.mkDerivation rec {
 
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
-      libs/{mpfr,pixman,poppler,potrace,xpdf,zlib,zziplib}
+      libs/{mpfr,pixman,poppler,xpdf,zlib,zziplib}
     mkdir WorkDir
     cd WorkDir
   '';
