@@ -5431,6 +5431,8 @@ in {
 
   thinc = callPackage ../development/python-modules/thinc { };
 
+  wasabi = callPackage ../development/python-modules/wasabi { };
+
   yahooweather = callPackage ../development/python-modules/yahooweather { };
 
   spacy = callPackage ../development/python-modules/spacy { };
