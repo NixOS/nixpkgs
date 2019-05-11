@@ -8396,6 +8396,28 @@ in
     inherit (gnome2) libart_lgpl;
   });
 
+  gnat = gnat9;
+
+  gnat6 = wrapCC (gcc6.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    inherit gnatboot;
+  });
+
+  gnat9 = wrapCC (gcc9.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    gnatboot = gnat6;
+  });
+
+  gnatboot = wrapCC (callPackage ../development/compilers/gnatboot { });
+
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
   gccgo = gccgo6;
