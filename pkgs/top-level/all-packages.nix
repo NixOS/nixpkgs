@@ -964,7 +964,7 @@ in
   heartbeat = heartbeat6;
   metricbeat = metricbeat6;
   packetbeat = packetbeat6;
-  journalbeat = journalbeat6;
+  journalbeat = journalbeat5;
 
   bfr = callPackage ../tools/misc/bfr { };
 
