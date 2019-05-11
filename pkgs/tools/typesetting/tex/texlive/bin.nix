@@ -268,20 +268,15 @@ dvipng = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig perl ];
   buildInputs = [ core/*kpathsea*/ zlib libpng freetype gd ghostscript makeWrapper ];
 
-  preConfigure = "cd texk/dvipng";
+  preConfigure = "cd texk/dvipng; patchShebangs .";
 
   configureFlags = common.configureFlags
-    ++ [ "--with-system-kpathsea" "--with-gs=yes" "--disable-debug" ];
+    ++ [ "--with-system-kpathsea" "--with-system-libgs" "--disable-debug" ];
 
   enableParallelBuilding = true;
-
-  # I didn't manage to hardcode gs location by configureFlags
-  postInstall = ''
-    wrapProgram "$out/bin/dvipng" --prefix PATH : '${ghostscript}/bin'
-  '';
 };
 
 
