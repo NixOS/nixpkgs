@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.14";
+  version = "0.4.16";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "00crhngwi07f5b9x77kx5p7p4cl6l5g6glpz9rqv7pfqk62xa0ac";
+    sha256 = "0njydcr6qdmfzh4fxx544681qxdpf7y6b2f47jcypn810dlxy4h1";
   };
 
   patches = stdenv.lib.optionals stdenv.isDarwin [
