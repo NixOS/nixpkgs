@@ -274,9 +274,14 @@ dvipng = stdenv.mkDerivation {
   preConfigure = "cd texk/dvipng; patchShebangs .";
 
   configureFlags = common.configureFlags
-    ++ [ "--with-system-kpathsea" "--with-system-libgs" "--disable-debug" ];
+    ++ [ "--with-system-kpathsea" "--with-gs=yes" "--with-system-libgs" "--disable-debug" ];
 
   enableParallelBuilding = true;
+
+  # I didn't manage to hardcode gs location by configureFlags
+  postInstall = ''
+    wrapProgram "$out/bin/dvipng" --prefix PATH : '${ghostscript}/bin'
+  '';
 };
 
 
