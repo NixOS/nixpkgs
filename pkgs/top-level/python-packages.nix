@@ -5439,6 +5439,8 @@ in {
 
   backports_weakref = callPackage ../development/python-modules/backports_weakref { };
 
+  srsly = callPackage ../development/python-modules/srsly { };
+
   thinc = callPackage ../development/python-modules/thinc { };
 
   wasabi = callPackage ../development/python-modules/wasabi { };
