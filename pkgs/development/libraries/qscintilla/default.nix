@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "04678skipydx68zf52vznsfmll2v9aahr66g50lcqbr6xsmgr1yi";
   };
 
-  buildInputs = [ (if withQt5 then qtbase else qt4) ]
-    ++ lib.optional (withQt5 && stdenv.isDarwin) qtmacextras;
+  buildInputs = [ (if withQt5 then qtbase else qt4) ];
+
+  propagatedBuildInputs = lib.optional (withQt5 && stdenv.isDarwin) qtmacextras;
+
   nativeBuildInputs = [ unzip ]
     ++ (if withQt5 then [ qmake ] else [ qmake4Hook ])
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
