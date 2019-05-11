@@ -1,6 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ragel, python27
+{ stdenv, fetchFromGitHub, cmake, ragel, python3
 , coreutils, gnused, utillinux
 , boost
+, withStatic ? false # build only shared libs by default, build static+shared if true
 }:
 
 # NOTICE: pkgconfig, pcap and pcre intentionally omitted from build inputs
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "intel";
-    repo = "hyperscan";
+    repo = pname;
     sha256 = "11adkz5ln2d2jywwlmixfnwqp5wxskq1104hmmcpws590lhkjv6j";
     rev = "v${version}";
   };
@@ -23,35 +24,27 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost ];
   nativeBuildInputs = [
-    cmake ragel python27
+    cmake ragel python3
     # Consider simply using busybox for these
-    # Need at least: rev, sed, cut
-    coreutils gnused utillinux
-  ];
+    # Need at least: rev, sed, cut, nm
+    coreutils gnused
+  ] ++ stdenv.lib.optional stdenv.isLinux utillinux;
 
   cmakeFlags = [
     "-DFAT_RUNTIME=ON"
     "-DBUILD_AVX512=ON"
-    "-DBUILD_STATIC_AND_SHARED=ON"
-  ];
+  ]
+  ++ stdenv.lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
+  ++ stdenv.lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
 
-  prePatch = ''
+  postPatch = ''
     sed -i '/examples/d' CMakeLists.txt
+    substituteInPlace libhs.pc.in \
+      --replace "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
+      --replace "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
   '';
 
-  postInstall = ''
-    mkdir -p $dev/lib
-    mv $out/lib/*.a $dev/lib/
-    ln -sf $out/lib/libhs.so $dev/lib/
-    ln -sf $out/lib/libhs_runtime.so $dev/lib/
-  '';
-
-  postFixup = ''
-    sed -i "s,$out/include,$dev/include," $dev/lib/pkgconfig/libhs.pc
-    sed -i "s,$out/lib,$dev/lib," $dev/lib/pkgconfig/libhs.pc
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "High-performance multiple regex matching library";
     longDescription = ''
       Hyperscan is a high-performance multiple regex matching library.
@@ -66,9 +59,9 @@ stdenv.mkDerivation rec {
       Hyperscan is typically used in a DPI library stack.
     '';
 
-    homepage = https://www.hyperscan.io/;
-    maintainers = with lib.maintainers; [ avnik ];
+    homepage = "https://www.hyperscan.io/";
+    maintainers = with maintainers; [ avnik ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
   };
 }
