@@ -6243,7 +6243,8 @@ in
     libX11 = xorg.libX11;
   };
 
-  twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap {};
+  twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap/3.nix {};
+  twitterBootstrap4 = callPackage ../development/web/twitter-bootstrap {};
   twitterBootstrap = twitterBootstrap3;
 
   txr = callPackage ../tools/misc/txr { stdenv = clangStdenv; };
