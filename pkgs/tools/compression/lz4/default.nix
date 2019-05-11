@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, valgrind
+{ stdenv, fetchFromGitHub, fetchpatch, valgrind
 , enableStatic ? false, enableShared ? true
 }:
 
@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
     repo = "lz4";
     owner = "lz4";
   };
+
+  patches = stdenv.lib.optional stdenv.isDarwin (fetchpatch {
+    name = "fix-darwin-detection.patch";
+    url = "https://github.com/lz4/lz4/commit/024216ef7394b6411eeaa5b52d0cec9953a44249.patch";
+    sha256 = "0j0j2pr6pkplxf083hlwl5q4cfp86q3wd8mc64bcfcr7ysc5pzl3";
+  });
 
   outputs = [ "out" "dev" ];
 
