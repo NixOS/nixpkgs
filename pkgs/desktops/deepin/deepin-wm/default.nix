@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, vala, gnome3,
-  bamf, clutter-gtk, pantheon, libgee, libcanberra-gtk3, libwnck3,
-  deepin-menu, deepin-mutter, deepin-wallpapers,
+  dbus, bamf, clutter-gtk, pantheon, libgee, libcanberra-gtk3,
+  libwnck3, deepin-menu, deepin-mutter, deepin-wallpapers,
   deepin-desktop-schemas, wrapGAppsHook, deepin }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     clutter-gtk
+    dbus
     deepin-desktop-schemas
     deepin-menu
     deepin-mutter
@@ -40,16 +41,25 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    searchHardCodedPaths
-    fixPath ${deepin-wallpapers} /usr/share/backgrounds src/Background/BackgroundSource.vala
+    searchHardCodedPaths  # debugging
+
     # fix background path
+    fixPath ${deepin-wallpapers} /usr/share/backgrounds src/Background/BackgroundSource.vala
     sed -i 's|default_background.jpg|deepin/desktop.jpg|' src/Background/BackgroundSource.vala
+
+    # fix executable paths in desktop files
+    sed -i -e "s,Exec=dbus-send,Exec=${dbus}/bin/dbus-send," data/gala-multitaskingview.desktop.in
+    sed -i -e "s,Exec=deepin-wm,Exec=$out/bin/deepin-wm," data/gala.desktop
   '';
 
   NIX_CFLAGS_COMPILE = "-DWNCK_I_KNOW_THIS_IS_UNSTABLE";
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh
+  '';
+
+  postFixup = ''
+    searchHardCodedPaths $out  # debugging
   '';
 
   enableParallelBuilding = true;
