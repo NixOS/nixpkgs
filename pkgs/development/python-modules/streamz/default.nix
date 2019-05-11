@@ -14,18 +14,12 @@
 
 buildPythonPackage rec {
   pname = "streamz";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cfdd42aa62df299f550768de5002ec83112136a34b44441db9d633b2df802fb4";
+    sha256 = "80c9ded1d6e68d3b78339deb6e9baf93a633d84b4a8875221e337ac06890103f";
   };
-
-  # Pytest 4.x fails to collect streamz-dataframe tests.
-  # Removing them in v0.5.0. TODO: re-enable in a future release
-  postPatch = ''
-    rm -rf streamz/dataframe/tests/*.py
-  '';
 
   checkInputs = [ pytest networkx distributed confluent-kafka graphviz ];
   propagatedBuildInputs = [
@@ -35,8 +29,9 @@ buildPythonPackage rec {
     six
   ];
 
+  # Disable test_tcp_async because fails on sandbox build
   checkPhase = ''
-    pytest
+    pytest --deselect=streamz/tests/test_sources.py::test_tcp_async
   '';
 
   meta = with lib; {
