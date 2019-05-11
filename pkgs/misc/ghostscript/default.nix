@@ -10,8 +10,8 @@ assert cupsSupport -> cups != null;
 
 let
   version = "9.${ver_min}";
-  ver_min = "26";
-  sha512 = "0z2mvsh06qgnxl7p9isw7swg8jp8xcx3rnbqk727avw7ammvfh8785d2bn5i4fhz8y45ka3cpgp7b598m06yq5zawijhcnzkq187nrx";
+  ver_min = "27";
+  sha512 = "00m8pfvvg4dzvrzk66myr8kid76x44sgqk84m9562g4viv9zbw759l8q9qg64mgvbajzn78zpqfgdlgz9nwgcdb1vpwc08gm12ssrsy";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./urw-font-files.patch
     ./doc-no-ref.diff
-    (fetchpatch {
-      name = "CVE-2019-6116";
-      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=d3537a54740d78c5895ec83694a07b3e4f616f61";
-      sha256 = "1hr8bpi87bbg1kvv28kflmfh1dhzxw66p9q0ddvbrj72qd86p3kx";
-    })
+    #(fetchpatch {
+    #  name = "CVE-2019-6116";
+    #  url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=d3537a54740d78c5895ec83694a07b3e4f616f61";
+    #  sha256 = "1hr8bpi87bbg1kvv28kflmfh1dhzxw66p9q0ddvbrj72qd86p3kx";
+    #})
   ];
 
   outputs = [ "out" "man" "doc" ];
