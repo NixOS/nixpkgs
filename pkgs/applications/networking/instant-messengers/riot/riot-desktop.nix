@@ -7,12 +7,12 @@ with (import ./yarn2nix.nix { inherit pkgs; });
 
 let
   executableName = "riot-desktop";
-  version = "1.0.8";
+  version = "1.1.0";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "1krp608wxff1siih8zknc425n0qb6qjzf854fnp7qyjp1cnfc9sb";
+    sha256 = "0h1rr70jg64v824k31mvb93nfssr572xlyicc8yh91bl7hdh342x";
   };
 
 in mkYarnPackage rec {
