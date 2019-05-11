@@ -2261,6 +2261,8 @@ in
 
   convoy = callPackage ../tools/filesystems/convoy { };
 
+  cpcfs = callPackage ../tools/filesystems/cpcfs { };
+
   cool-retro-term = libsForQt5.callPackage ../applications/misc/cool-retro-term { };
 
   coreutils = callPackage ../tools/misc/coreutils { };
