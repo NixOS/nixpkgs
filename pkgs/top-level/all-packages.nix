@@ -2665,8 +2665,19 @@ in
   elasticsearch-oss = elasticsearch6-oss;
 
   elasticsearchPlugins = recurseIntoAttrs (
-    callPackage ../servers/search/elasticsearch/plugins.nix { }
+    callPackage ../servers/search/elasticsearch/plugins.nix {
+      elasticsearch = elasticsearch-oss;
+    }
   );
+  elasticsearch5Plugins = elasticsearchPlugins.override {
+    elasticsearch = elasticsearch5;
+  };
+  elasticsearch6Plugins = elasticsearchPlugins.override {
+    elasticsearch = elasticsearch6-oss;
+  };
+  elasticsearch7Plugins = elasticsearchPlugins.override {
+    elasticsearch = elasticsearch7-oss;
+  };
 
   elasticsearch-curator = with (python3.override {
     packageOverrides = self: super: {
