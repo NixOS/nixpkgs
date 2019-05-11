@@ -97,8 +97,7 @@
 , libXv ? null # Xlib support
 , libXext ? null # Xlib support
 , lzma ? null # xz-utils
-, nvenc ? false, nv-codec-headers ? null # NVIDIA NVENC support
-, callPackage # needed for NVENC to access external ffmpeg nvidia headers
+, nvenc ? true, nv-codec-headers ? null # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
