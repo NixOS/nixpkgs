@@ -1,10 +1,11 @@
 { stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "jbig2dec-0.14";
+  pname = "jbig2dec";
+  version = "0.14";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922/${name}.tar.gz";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922/${pname}-${version}.tar.gz";
     sha256 = "0k01hp0q4275fj4rbr1gy64svfraw5w7wvwl08yjhvsnpb1rid11";
   };
 
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkInputs = [ python ];
-  doCheck = false; # fails 1 of 4 tests
+  # doCheck = false; # fails 1 of 4 tests
 
   meta = {
     homepage = https://www.jbig2dec.com/;
