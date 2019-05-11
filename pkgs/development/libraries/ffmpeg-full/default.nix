@@ -421,8 +421,8 @@ stdenv.mkDerivation rec {
                                    MediaToolbox VideoDecodeAcceleration
                                    libiconv cf-private /* For _OBJC_EHTYPE_$_NSException */ ];
 
-  # Build qt-faststart executable
-  buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';
+  buildFlags = [ "all" ]
+    ++ optional qtFaststartProgram "tools/qt-faststart"; # Build qt-faststart executable
 
   # Hacky framework patching technique borrowed from the phantomjs2 package
   postInstall = optionalString qtFaststartProgram ''
