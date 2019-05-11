@@ -7,22 +7,16 @@
 #include <sched.h>
 #include <unistd.h>
 
-#define fail(s, err) g_error("%s: %s: %s", __func__, s, g_strerror(err))
-#define fail_if(expr)                                                          \
-  if (expr)                                                                    \
-    fail(#expr, errno);
-
-#include <ftw.h>
-
 #include <sys/mount.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/syscall.h>
 
-int min(int a, int b) {
-  return a > b ? b : a;
-}
+#define fail(s, err) g_error("%s: %s: %s", __func__, s, g_strerror(err))
+#define fail_if(expr)                                                          \
+  if (expr)                                                                    \
+    fail(#expr, errno);
 
 const gchar *bind_blacklist[] = {"bin", "etc", "host", "usr", "lib", "lib64", "lib32", "sbin", NULL};
 
@@ -36,10 +30,17 @@ void mount_tmpfs(const gchar *target) {
 
 void bind_mount(const gchar *source, const gchar *target) {
   fail_if(g_mkdir(target, 0755));
-  fail_if(mount(source, target, "bind", MS_BIND | MS_REC, NULL));
+  fail_if(mount(source, target, NULL, MS_BIND | MS_REC, NULL));
 }
 
-void pivot_host(const gchar *host, const gchar *guest) {
+const gchar *create_tmpdir() {
+  gchar *prefix =
+      g_build_filename(g_get_tmp_dir(), "chrootenvXXXXXX", NULL);
+  fail_if(!g_mkdtemp_full(prefix, 0755));
+  return prefix;
+}
+
+void pivot_host(const gchar *guest) {
   g_autofree gchar *point = g_build_filename(guest, "host", NULL);
   fail_if(g_mkdir(point, 0755));
   fail_if(pivot_root(guest, point));
@@ -68,7 +69,7 @@ void bind(const gchar *host, const gchar *guest) {
     if (!g_strv_contains(bind_blacklist, item))
       bind_mount_item(host, guest, item);
 
-  pivot_host(host, guest);
+  pivot_host(guest);
 }
 
 void spit(const char *path, char *fmt, ...) {
@@ -84,11 +85,6 @@ void spit(const char *path, char *fmt, ...) {
   fclose(f);
 }
 
-int nftw_remove(const char *path, const struct stat *sb, int type,
-                struct FTW *ftw) {
-  return remove(path);
-}
-
 int main(gint argc, gchar **argv) {
   const gchar *self = *argv++;
 
@@ -97,10 +93,7 @@ int main(gint argc, gchar **argv) {
     return 1;
   }
 
-  g_autofree gchar *prefix =
-      g_build_filename(g_get_tmp_dir(), "chrootenvXXXXXX", NULL);
-
-  fail_if(!g_mkdtemp_full(prefix, 0755));
+  g_autofree const gchar *prefix = create_tmpdir();
 
   pid_t cpid = fork();
 
@@ -136,10 +129,7 @@ int main(gint argc, gchar **argv) {
     int status;
 
     fail_if(waitpid(cpid, &status, 0) != cpid);
-    // glibc 2.27 (and possibly other versions) can't handle
-    // an nopenfd value larger than 2^19
-    fail_if(nftw(prefix, nftw_remove, min(getdtablesize(), 1<<19),
-                 FTW_DEPTH | FTW_MOUNT | FTW_PHYS));
+    fail_if(rmdir(prefix));
 
     if (WIFEXITED(status))
       return WEXITSTATUS(status);
