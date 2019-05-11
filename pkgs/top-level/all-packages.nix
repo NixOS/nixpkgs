@@ -157,6 +157,8 @@ in
 
   deadcode = callPackage ../development/tools/deadcode { };
 
+  proto-contrib = callPackage ../development/tools/proto-contrib {};
+
   demoit = callPackage ../servers/demoit { };
 
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
