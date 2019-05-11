@@ -2519,8 +2519,8 @@ in
   evemu = callPackage ../tools/system/evemu { };
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
-  elk5Version = "5.6.9";
-  elk6Version = "6.7.1";
+  elk5Version = "5.6.16";
+  elk6Version = "6.7.2";
   elk7Version = "7.0.1";
 
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
@@ -2536,8 +2536,19 @@ in
   elasticsearch-oss = elasticsearch6-oss;
 
   elasticsearchPlugins = recurseIntoAttrs (
-    callPackage ../servers/search/elasticsearch/plugins.nix { }
+    callPackage ../servers/search/elasticsearch/plugins.nix {
+      elasticsearch = elasticsearch-oss;
+    }
   );
+  elasticsearch5Plugins = elasticsearchPlugins.override {
+    elasticsearch = elasticsearch5;
+  };
+  elasticsearch6Plugins = elasticsearchPlugins.override {
+    elasticsearch = elasticsearch6-oss;
+  };
+  elasticsearch7Plugins = elasticsearchPlugins.override {
+    elasticsearch = elasticsearch7-oss;
+  };
 
   elasticsearch-curator = with (python3.override {
     packageOverrides = self: super: {
