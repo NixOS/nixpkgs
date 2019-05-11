@@ -1,5 +1,5 @@
 { config, pkgs
-, useMupdf ? config.zathura.useMupdf or true
+, useMupdf ? config.zathura.useMupdf or (!pkgs.stdenv.isDarwin)
 , synctexSupport ? true }:
 
 let
