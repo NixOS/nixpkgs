@@ -5401,6 +5401,11 @@
     github = "xaverdh";
     name = "Dominik Xaver Hörl";
   };
+  xbreak = {
+    email = "xbreak@alphaware.se";
+    github = "xbreak";
+    name = "Calle Rosenquist";
+  };
   xeji = {
     email = "xeji@cat3.de";
     github = "xeji";
