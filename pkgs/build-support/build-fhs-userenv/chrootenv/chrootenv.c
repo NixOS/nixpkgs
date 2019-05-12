@@ -18,7 +18,7 @@
   if (expr)                                                                    \
     fail(#expr, errno);
 
-const gchar *bind_blacklist[] = {"bin", "etc", "host", "usr", "lib", "lib64", "lib32", "sbin", NULL};
+const gchar *bind_blacklist[] = {"bin", "etc", "host", "real-host", "usr", "lib", "lib64", "lib32", "sbin", NULL};
 
 int pivot_root(const char *new_root, const char *put_old) {
   return syscall(SYS_pivot_root, new_root, put_old);
@@ -56,9 +56,12 @@ void bind_mount_item(const gchar *host, const gchar *guest, const gchar *name) {
 
 void bind(const gchar *host, const gchar *guest) {
   mount_tmpfs(guest);
+  pivot_host(guest);
+
+  g_autofree gchar *host_dir = g_build_filename("/host", host, NULL);
 
   g_autoptr(GError) err = NULL;
-  g_autoptr(GDir) dir = g_dir_open(host, 0, &err);
+  g_autoptr(GDir) dir = g_dir_open(host_dir, 0, &err);
 
   if (err != NULL)
     fail("g_dir_open", errno);
@@ -67,9 +70,7 @@ void bind(const gchar *host, const gchar *guest) {
 
   while ((item = g_dir_read_name(dir)))
     if (!g_strv_contains(bind_blacklist, item))
-      bind_mount_item(host, guest, item);
-
-  pivot_host(guest);
+      bind_mount_item(host_dir, "/", item);
 }
 
 void spit(const char *path, char *fmt, ...) {
@@ -119,7 +120,23 @@ int main(gint argc, gchar **argv) {
     spit("/proc/self/uid_map", "%d %d 1", uid, uid);
     spit("/proc/self/gid_map", "%d %d 1", gid, gid);
 
-    bind("/", prefix);
+    // If there is a /host directory, assume this is nested chrootenv and use it as host instead.
+    gboolean nested_host = g_file_test("/host", G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR);
+    g_autofree const gchar *host = nested_host ? "/host" : "/";
+
+    bind(host, prefix);
+
+    // Replace /host by an actual (inner) /host.
+    if (nested_host) {
+      fail_if(g_mkdir("/real-host", 0755));
+      fail_if(mount("/host/host", "/real-host", NULL, MS_BIND | MS_REC, NULL));
+      // For some reason umount("/host") returns EBUSY even immediately after
+      // pivot_root. We detach it at least to keep `/proc/mounts` from blowing
+      // up in nested cases.
+      fail_if(umount2("/host", MNT_DETACH));
+      fail_if(mount("/real-host", "/host", NULL, MS_MOVE, NULL));
+      fail_if(rmdir("/real-host"));
+    }
 
     fail_if(chdir("/"));
     fail_if(execvp(*argv, argv));
