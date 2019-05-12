@@ -19,12 +19,7 @@ rec {
   stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_418 else legacy_390;
 
   # No active beta right now
-  beta = generic {
-    version = "430.09";
-    sha256_64bit = "0k59ahljya286ararncf3mc7sfgsw82vnrszczqicpysn3qfar95";
-    settingsSha256 = "082v0xmz83sf4wdvcb2zawddy5vh3pbwjz0fda1rayc7fdadni05";
-    persistencedSha256 = "028vs23mnb345sxjxqqmln9pwq8n6cc6dhfzq4hj21ghc6l6fg54";
-  };
+  beta = stable;
 
   stable_418 = generic {
     version = "418.74";
