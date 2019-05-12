@@ -128,6 +128,26 @@ self: super: builtins.intersectAttrs super {
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = if pkgs.stdenv.isDarwin then dontCheck super.system-fileio else super.system-fileio;
 
+  # Prevents needing to add `security_tool` as a run-time dependency for
+  # everything using x509-system to give access to the `security` executable.
+  x509-system =
+    if pkgs.stdenv.hostPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
+    then
+      # darwin.security_tool is broken in Mojave (#45042)
+
+      # We will use the system provided security for now.
+      # Beware this WILL break in sandboxes!
+
+      # TODO(matthewbauer): If someone really needs this to work in sandboxes,
+      # I think we can add a propagatedImpureHost dep here, but I’m hoping to
+      # get a proper fix available soonish.
+      overrideCabal super.x509-system (drv: {
+        postPatch = (drv.postPatch or "") + ''
+          substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+        '';
+      })
+    else super.x509-system;
+
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
   gio = disableHardening (addPkgconfigDepend (addBuildTool super.gio self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
   glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
