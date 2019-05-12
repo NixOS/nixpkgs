@@ -1,18 +1,43 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "patchutils-0.3.3";
+  pname = "patchutils";
+  version = "0.3.4";
 
   src = fetchurl {
-    url = "http://cyberelk.net/tim/data/patchutils/stable/${name}.tar.xz";
-    sha256 = "0g5df00cj4nczrmr4k791l7la0sq2wnf8rn981fsrz1f3d2yix4i";
+    url = "http://cyberelk.net/tim/data/patchutils/stable/${pname}-${version}.tar.xz";
+    sha256 = "0xp8mcfyi5nmb5a2zi5ibmyshxkb1zv1dgmnyn413m7ahgdx8mfg";
   };
 
-  patches = [ ./drop-comments.patch ]; # we would get into a cycle when using fetchpatch on this one
+  buildInputs = [
+    # necessary for ./configure to generate the correct shebangs
+    perl
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  # The different tools depend on each other, for example `splitdiff` calls
+  # `lsdiff`.
+  postInstall = ''
+    for bin in $out/bin/*; do
+      wrapProgram "$bin" \
+        --prefix PATH : "$out/bin"
+    done
+  '';
 
   hardeningDisable = [ "format" ];
 
-  doCheck = false; # fails
+  doCheck = true;
+  preCheck = ''
+    find tests -type f -name 'run-test' \
+      -exec echo "Patching {}" \; \
+      -exec sed -i '{}' -e 's|/bin/echo|echo|g' \;
+
+    patchShebangs tests
+    chmod a+x scripts/*
+  '';
 
   meta = with stdenv.lib; {
     description = "Tools to manipulate patch files";
