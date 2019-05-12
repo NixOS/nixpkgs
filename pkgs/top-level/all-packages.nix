@@ -824,6 +824,10 @@ in
 
   kwakd = callPackage ../servers/kwakd { };
 
+  chunkwm = callPackage ../os-specific/darwin/chunkwm {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa ScriptingBridge;
+  };
+
   kwm = callPackage ../os-specific/darwin/kwm { };
 
   khd = callPackage ../os-specific/darwin/khd {
