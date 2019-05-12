@@ -4517,6 +4517,8 @@ in
     withMinimal = false;
   };
 
+  mkclean = callPackage ../applications/video/mkclean {};
+
   mkcue = callPackage ../tools/cd-dvd/mkcue { };
 
   mkp224o = callPackage ../tools/security/mkp224o { };
