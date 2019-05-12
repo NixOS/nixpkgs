@@ -56,6 +56,7 @@ self: super: {
   lucid = doJailbreak super.lucid;
   parallel = doJailbreak super.parallel;
   quickcheck-instances = doJailbreak super.quickcheck-instances;
+  setlocale = doJailbreak super.setlocale;
   split = doJailbreak super.split;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
   test-framework = doJailbreak super.test-framework;
