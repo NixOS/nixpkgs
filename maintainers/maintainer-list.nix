@@ -4684,6 +4684,11 @@
     github = "srghma";
     name = "Sergei Khoma";
   };
+  srgom = {
+    email = "srgom@users.noreply.github.com";
+    github = "srgom";
+    name = "SRGOM";
+  };
   srhb = {
     email = "sbrofeldt@gmail.com";
     github = "srhb";
