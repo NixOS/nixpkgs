@@ -5580,4 +5580,9 @@
     github = "tesq0";
     name = "Mikolaj Galkowski";
 	};
+  srgom = {
+    email = "srgom@users.noreply.github.com";
+    github = "srgom";
+    name = "SRGOM";
+  };
 }
