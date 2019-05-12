@@ -3,7 +3,7 @@
 # preferences -> Folders -> Plug-ins
 # same applies for the scripts
 
-{ pkgs, gimp }:
+{ config, pkgs, gimp }:
 let
   inherit (pkgs) stdenv fetchurl pkgconfig intltool glib fetchFromGitHub;
   inherit (gimp) targetPluginDir targetScriptDir;
@@ -91,7 +91,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     meta.broken = true;
   };
 
-  resynthesizer2 = pluginDerivation rec {
+  resynthesizer = pluginDerivation rec {
     /* menu:
       Filters/Map/Resynthesize
       Filters/Enhance/Smart enlarge
@@ -223,5 +223,9 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     };
   };
   */
+
+} // stdenv.lib.optionalAttrs (config.allowAliases or true) {
+
+  resynthesizer2 = resynthesizer;
 
 })
