@@ -1747,6 +1747,11 @@
     github = "freepotion";
     name = "Free Potion";
   };
+  freezeboy = {
+    email = "freezeboy@users.noreply.github.com";
+    github = "freezeboy";
+    name = "freezeboy";
+  };
   Fresheyeball = {
     email = "fresheyeball@gmail.com";
     github = "fresheyeball";
@@ -3208,6 +3213,11 @@
     github = "mimadrid";
     name = "Miguel Madrid";
   };
+  minijackson = {
+    email = "minijackson@riseup.net";
+    github = "minijackson";
+    name = "Rémi Nicole";
+  };
   mirdhyn = {
     email = "mirdhyn@gmail.com";
     github = "mirdhyn";
@@ -3337,6 +3347,11 @@
     email = "fr.st-amour@gmail.com";
     github = "fstamour";
     name = "Francis St-Amour";
+  };
+  mredaelli = {
+    email = "massimo@typish.io";
+    github = "mredaelli";
+    name = "Massimo Redaelli";
   };
   mrkkrp = {
     email = "markkarpov92@gmail.com";
@@ -4474,6 +4489,11 @@
     github = "shawndellysse";
     name = "Shawn Dellysse";
   };
+  shazow = {
+    email = "andrey.petrov@shazow.net";
+    github = "shazow";
+    name = "Andrey Petrov";
+  };
   sheenobu = {
     email = "sheena.artrip@gmail.com";
     github = "sheenobu";
@@ -4493,6 +4513,11 @@
     email = "shea@shealevy.com";
     github = "shlevy";
     name = "Shea Levy";
+  };
+  shmish111 = {
+    email = "shmish111@gmail.com";
+    github = "shmish111";
+    name = "David Smith";
   };
   shou = {
     email = "x+g@shou.io";
@@ -4882,6 +4907,11 @@
     email = "terlar@gmail.com";
     github = "terlar";
     name = "Terje Larsen";
+  };
+  tesq0 = {
+    email = "mikolaj.galkowski@gmail.com";
+    github = "tesq0";
+    name = "Mikolaj Galkowski";
   };
   teto = {
     email = "mcoudron@hotmail.com";
@@ -5550,34 +5580,4 @@
     github = "zzamboni";
     name = "Diego Zamboni";
   };
-  mredaelli = {
-    email = "massimo@typish.io";
-    github = "mredaelli";
-    name = "Massimo Redaelli";
-  };
-  shmish111 = {
-    email = "shmish111@gmail.com";
-    github = "shmish111";
-    name = "David Smith";
-  };
-  minijackson = {
-    email = "minijackson@riseup.net";
-    github = "minijackson";
-    name = "Rémi Nicole";
-  };
-  shazow = {
-    email = "andrey.petrov@shazow.net";
-    github = "shazow";
-    name = "Andrey Petrov";
-  };
-  freezeboy = {
-    email = "freezeboy@users.noreply.github.com";
-    github = "freezeboy";
-    name = "freezeboy";
-  };
-  tesq0 = {
-  	email = "mikolaj.galkowski@gmail.com";
-    github = "tesq0";
-    name = "Mikolaj Galkowski";
-	};
 }
