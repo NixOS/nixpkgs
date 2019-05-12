@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, crystal, shards, which
+{ stdenv, fetchFromGitHub, crystal, shards, which, makeWrapper
 , openssl, readline, libyaml }:
 
 stdenv.mkDerivation rec {
@@ -17,13 +17,16 @@ stdenv.mkDerivation rec {
       --replace /usr/local $out
   '';
 
-  buildInputs = [ openssl readline libyaml ];
+  buildInputs = [ crystal libyaml openssl readline ];
 
-  nativeBuildInputs = [ crystal shards which ];
+  nativeBuildInputs = [ makeWrapper shards which ];
 
   doCheck = true;
-
   checkTarget = "test";
+
+  postInstall = ''
+    wrapProgram $out/bin/icr --prefix PATH : "${stdenv.lib.makeBinPath [ crystal ]}"
+  '';
 
   meta = with stdenv.lib; {
     description = "Interactive console for the Crystal programming language";
