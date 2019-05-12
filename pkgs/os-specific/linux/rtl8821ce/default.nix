@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "ab6154e150bbc7d12b0525d4cc1298ae196e45de";
-    sha256 = "1my0hidqnv4s7hi5897m81pq0sjw05np0g27hlkg9fwb83b5kzsg";
+    rev = "66097bb98c8eb9e009865b9b6a610d56d3fd6f05";
+    sha256 = "10l6ja2s7p189ibhnyqlj41zv4323x21fa50k082ahg32fln92j9";
   };
 
   hardeningDisable = [ "pic" ];
