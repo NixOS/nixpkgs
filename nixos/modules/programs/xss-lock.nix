@@ -18,7 +18,7 @@ in
 
     extraOptions = mkOption {
       default = [ ];
-      example = literalExample [ "--ignore-sleep" ];
+      example = [ "--ignore-sleep" ];
       type = types.listOf types.str;
       description = ''
         Additional command-line arguments to pass to
@@ -35,7 +35,7 @@ in
       serviceConfig.ExecStart = with lib;
         strings.concatStringsSep " " ([
             "${pkgs.xss-lock}/bin/xss-lock"
-          ] ++ cfg.extraOptions ++ [
+          ] ++ (map escapeShellArg cfg.extraOptions) ++ [
             "--"
             cfg.lockerCommand
         ]);
