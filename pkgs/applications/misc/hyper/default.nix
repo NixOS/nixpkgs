@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/zeit/hyper/releases/download/${version}/hyper_${version}_amd64.deb";
     sha256 = "0fv4wv5f8nc739bna83qxmgrvvbyq4w9ch764q2f12wjygrz336p";
   };
-  buildInputs = [ dpkg ];
+  nativeBuildInputs = [ dpkg ];
   unpackPhase = ''
     mkdir pkg
     dpkg-deb -x $src pkg
