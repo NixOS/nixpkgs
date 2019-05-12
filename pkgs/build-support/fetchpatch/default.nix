@@ -6,6 +6,7 @@
 
 { lib, fetchurl, buildPackages }:
 let
+  # 0.3.4 would change hashes: https://github.com/NixOS/nixpkgs/issues/25154
   patchutils = buildPackages.patchutils_0_3_3;
 in
 { stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
