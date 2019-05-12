@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.17.0";
+  version = "3.17.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z49z6f9rj9kp1v03s1hs1rg8cj49rh0yk0fc2qi57w7slgy2hkd";
+    sha256 = "1y6pnm7vzg9ip1nbly3i8mmwqmcy8g38ix74vdzvvaxwxil9bmvi";
   };
 
   buildInputs = [

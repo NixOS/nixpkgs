@@ -270,7 +270,7 @@ in rec {
     '';
     dontFixup = true; # do not nuke path of ffmpeg etc
     dontStrip = true; # why? see in oraclejdk derivation
-    inherit (openjdk) meta;
+    meta = openjdk.meta // { inherit (graalvm8.meta) platforms; };
     inherit (openjdk) postFixup;
   };
 

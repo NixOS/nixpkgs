@@ -9,17 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "0vw2xi6a2lrhrb8n55zq9lv4mzxhby4xdf3hmi1vlfpyrpdwkjzd";
   };
 
-  buildInputs = [ ncurses gettext python3 ];
+  buildInputs = [ ncurses gettext python3 python3Packages.wrapPython ];
   nativeBuildInputs = [ makeWrapper ];
 
-  # Build Python environment with httplib2 for calcurse-caldav
-  pythonEnv = python3Packages.python.buildEnv.override {
-    extraLibs = [ python3Packages.httplib2 ];
-  };
-  propagatedBuildInputs = [ pythonEnv ];
-
   postInstall = ''
-    substituteInPlace $out/bin/calcurse-caldav --replace /usr/bin/python3 ${pythonEnv}/bin/python3
+    patchShebangs .
+    buildPythonPath ${python3Packages.httplib2}
+    patchPythonScript $out/bin/calcurse-caldav
   '';
 
   meta = with stdenv.lib; {

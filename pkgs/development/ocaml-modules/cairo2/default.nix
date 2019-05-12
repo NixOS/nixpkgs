@@ -4,11 +4,11 @@
 
 buildDunePackage rec {
   pname = "cairo2";
-  version = "0.6";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "https://github.com/Chris00/ocaml-cairo/releases/download/${version}/cairo2-${version}.tbz";
-    sha256 = "1k2q7ipmddqnd2clybj4qb5xwzzrnl2fxnd6kv60dlzgya18lchs";
+    sha256 = "1ik4qf4b9443sliq2z7x9acd40rmzvyzjh3bh98wvjklxbb84a9i";
   };
 
   nativeBuildInputs = [ pkgconfig ];

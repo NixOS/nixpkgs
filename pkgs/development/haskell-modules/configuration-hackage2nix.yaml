@@ -6849,7 +6849,6 @@ broken-packages:
   - median-stream
   - mediawiki
   - medium-sdk-haskell
-  - megaparsec-tests
   - mellon-core
   - mellon-gpio
   - mellon-web

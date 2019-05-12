@@ -2,12 +2,12 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "givaro";
-  version = "4.0.4";
+  version = "4.1.0";
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "199p8wyj5i63jbnk7j8qbdbfp5rm2lpmcxyk3mdjy9bz7ygx3hhy";
+    sha256 = "1l1172c964hni66mjdmhr7766l5k7y63zs3hgcpr10a8f1nx3iwp";
   };
 
   enableParallelBuilding = true;

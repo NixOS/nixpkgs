@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     polkit-qt
   ];
 
+  patches = [
+    ./dde-polkit-agent.plugins-dir.patch
+  ];
+
   postPatch = ''
     searchHardCodedPaths
     patchShebangs translate_generation.sh

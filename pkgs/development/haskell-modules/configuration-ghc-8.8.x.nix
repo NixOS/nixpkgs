@@ -54,11 +54,12 @@ self: super: {
   hashable-time = doJailbreak super.hashable-time;
   integer-logarithms = doJailbreak super.integer-logarithms;
   lucid = doJailbreak super.lucid;
+  parallel = doJailbreak super.parallel;
   quickcheck-instances = doJailbreak super.quickcheck-instances;
   split = doJailbreak super.split;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
   test-framework = doJailbreak super.test-framework;
-  th-lift = doJailbreak super.th-lift_0_8;
+  th-lift = self.th-lift_0_8_0_1;
 
   # These packages don't work and need patching and/or an update.
   primitive = overrideSrc (doJailbreak super.primitive) {
@@ -93,7 +94,7 @@ self: super: {
     buildTools = with pkgs; [autoconf];
     preConfigure = "autoreconf --install";
   });
-  dlist = appendPatch super.dlist (pkgs.fetchpatch {
+  dlist = appendPatch (doJailbreak super.dlist) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/dlist-0.8.0.6.patch";
     sha256 = "0lkhibfxfk6mi796mrjgmbb50hbyjgc7xdinci64dahj8325jlpc";
   });
@@ -129,7 +130,7 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/haskell-src-exts-1.21.0.patch";
     sha256 = "0alb28hcsp774c9s73dgrajcb44vgv1xqfg2n5a9y2bpyngqscs3";
   });
-  optparse-applicative = appendPatch super.optparse-applicative (pkgs.fetchpatch {
+  optparse-applicative = appendPatch (doJailbreak super.optparse-applicative) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/optparse-applicative-0.14.3.0.patch";
     sha256 = "068sjj98jqiq3h8h03mg4w2pa11q8lxkx2i4lmxivq77xyhlwq3y";
   });
@@ -158,6 +159,10 @@ self: super: {
   attoparsec = appendPatch super.attoparsec (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/attoparsec-0.13.2.2.patch";
     sha256 = "13i1p5g0xzxnv966nlyb77mfmxvg9jzbym1d36h1ajn045yf4igl";
+  });
+  aeson = appendPatch super.aeson (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/aeson-1.4.3.0.patch";
+    sha256 = "1z6wmsmc682qs3y768r0zx493dxardwbsp0wdc4dsx83c0m5x66f";
   });
 
 }
