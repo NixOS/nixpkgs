@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.epl10;
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    broken = stdenv.isAarch64; # Missing <immintrin.h> after 2.10.0
     description = "A mixed integer programming solver";
   };
 }
