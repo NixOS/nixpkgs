@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, zlib, bzip2 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cbc";
   version = "2.10.2";
 
