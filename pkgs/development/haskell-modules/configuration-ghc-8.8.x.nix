@@ -195,5 +195,9 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/shakespeare-2.0.20.patch";
     sha256 = "1dgx41ylahj4wk8r422aik0d7qdpawdga4gqz905nvlnhqjla58y";
   });
+  lens = appendPatch (doJailbreak super.lens) (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/lens-4.17.1.patch";
+    sha256 = "0w89ipi6dfkx5vlw4a64hh6fd0bm9hg33mwpghliyyxik5jmilv1";
+  });
 
 }
