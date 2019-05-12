@@ -1,6 +1,6 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   name = "up-${version}";
   version = "0.3.2";
 
@@ -11,8 +11,7 @@ buildGoPackage rec {
     sha256 = "1psixyymk98z52yy92lwb75yfins45dw6rif9cxwd7yiascwg2if";
   };
 
-  goPackagePath = "github.com/akavel/up";
-  goDeps = ./deps.nix;
+  modSha256 = "0nfs190rzabphhhyacypz3ic5c4ajlqpx9jiiincs0vxfkmfwnjd";
 
   meta = with lib; {
     description = "Ultimate Plumber is a tool for writing Linux pipes with instant live preview";
