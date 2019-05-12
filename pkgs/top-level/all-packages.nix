@@ -21368,6 +21368,8 @@ in
 
   icbm3d = callPackage ../games/icbm3d { };
 
+  infra-arcana = callPackage ../games/infra-arcana { };
+
   ingen = callPackage ../applications/audio/ingen {
     inherit (pythonPackages) rdflib;
   };
