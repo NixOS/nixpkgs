@@ -59,7 +59,12 @@ stdenv.mkDerivation {
         --subst-var-by gettext ${gettext}
   '';
 
-  nativeBuildInputs = [ gettext perlPackages.perl ]
+  nativeBuildInputs =
+    [
+      curl.dev # git uses the `curl-config` executable to determine flags
+      gettext
+      perlPackages.perl
+    ]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]
