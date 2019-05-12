@@ -2656,14 +2656,22 @@ in
   elk6Version = "6.7.2";
   elk7Version = "7.0.1";
 
-  elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
-  elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix { };
+  elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix {
+    utillinux = utillinuxMinimal;
+  };
+  elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
+    utillinux = utillinuxMinimal;
+  };
   elasticsearch6-oss = callPackage ../servers/search/elasticsearch/6.x.nix {
     enableUnfree = false;
+    utillinux = utillinuxMinimal;
   };
-  elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix { };
+  elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
+    utillinux = utillinuxMinimal;
+  };
   elasticsearch7-oss = callPackage ../servers/search/elasticsearch/7.x.nix {
     enableUnfree = false;
+    utillinux = utillinuxMinimal;
   };
   elasticsearch = elasticsearch6;
   elasticsearch-oss = elasticsearch6-oss;

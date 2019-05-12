@@ -4,7 +4,7 @@
 , fetchurl
 , makeWrapper
 , jre_headless
-, utillinux
+, utillinux, gnugrep, coreutils
 , autoPatchelfHook
 , zlib
 }:
@@ -56,7 +56,7 @@ stdenv.mkDerivation (rec {
     chmod +x $out/bin/*
 
     wrapProgram $out/bin/elasticsearch \
-      --prefix PATH : "${utillinux}/bin/" \
+      --prefix PATH : "${makeBinPath [ utillinux coreutils gnugrep ]}" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
