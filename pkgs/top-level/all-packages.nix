@@ -1762,6 +1762,8 @@ in
 
   shab = callPackage ../tools/text/shab { };
 
+  shell-hist = callPackage ../tools/misc/shell-hist { };
+
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
   snipes = callPackage ../games/snipes { };
