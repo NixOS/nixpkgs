@@ -3,6 +3,7 @@
 {
   inherit parinfer-rust;
 
+  kak-ansi = pkgs.callPackage ./kak-ansi.nix { };
   kak-auto-pairs = pkgs.callPackage ./kak-auto-pairs.nix { };
   kak-buffers = pkgs.callPackage ./kak-buffers.nix { };
   kak-fzf = pkgs.callPackage ./kak-fzf.nix { };
