@@ -5030,6 +5030,8 @@ in
 
   patchutils = callPackage ../tools/text/patchutils { };
 
+  patchutils_0_3_3 = callPackage ../tools/text/patchutils/0.3.3.nix { };
+
   parted = callPackage ../tools/misc/parted { };
 
   paulstretch = callPackage ../applications/audio/paulstretch { };
