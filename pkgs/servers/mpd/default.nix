@@ -22,7 +22,7 @@
 
 let
   major = "0.21";
-  minor = "6";
+  minor = "8";
 
   lib = stdenv.lib;
   mkDisable = f: "-D${f}=disabled";
@@ -103,7 +103,7 @@ let
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "14523la9jz16sf267m4a5n3hl3nx5a3ki42j17z7fz668bjw1v9s";
+        sha256 = "1wh2l94072k0n8n7lb4c844azkaw2d9xsxrznv04f0x7p8dldg8x";
       };
 
       buildInputs = [ glib boost ]
@@ -119,7 +119,7 @@ let
         ++ lib.optional (lib.any (x: x == "zeroconf") features_)
           "-Dzeroconf=avahi"
         ++ lib.optional stdenv.isLinux
-          "-Dsystemd_system_unit_dir=$(out)/etc/systemd/system";
+          "-Dsystemd_system_unit_dir=etc/systemd/system";
 
       meta = with stdenv.lib; {
         description = "A flexible, powerful daemon for playing music";
