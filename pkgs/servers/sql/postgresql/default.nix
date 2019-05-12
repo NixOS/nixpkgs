@@ -101,6 +101,10 @@ let
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
 
+    doCheck = true;
+    # autodetection doesn't seem to able to find this, but it's there.
+    checkTarget = "check";
+
     doInstallCheck = false; # needs a running daemon?
 
     disallowedReferences = [ stdenv.cc ];
