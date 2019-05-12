@@ -35,7 +35,8 @@ let
   };
 
 in
-rec {
+
+stdenv.lib.makeScope pkgs.newScope (self: with self; {
   gap = pluginDerivation {
     /* menu:
        Video
@@ -223,4 +224,4 @@ rec {
   };
   */
 
-}
+})
