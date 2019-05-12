@@ -90,26 +90,6 @@ rec {
     meta.broken = true;
   };
 
-  resynthesizer = pluginDerivation {
-    /* menu:
-      Filters/Map/Resynthesize
-      Filters/Enhance/Smart enlarge
-      Filters/Enhance/Smart sharpen
-      Filters/Enhance/Smart remove selection
-    */
-    name = "resynthesizer-0.16";
-    buildInputs = with pkgs; [ fftw ];
-    src = fetchurl {
-      url = http://www.logarithmic.net/pfh-files/resynthesizer/resynthesizer-0.16.tar.gz;
-      sha256 = "1k90a1jzswxmajn56rdxa4r60v9v34fmqsiwfdxqcvx3yf4yq96x";
-    };
-
-    installPhase = "
-      installPlugins resynth
-      installScripts smart-{enlarge,remove}.scm
-    ";
-  };
-
   resynthesizer2 = pluginDerivation rec {
     /* menu:
       Filters/Map/Resynthesize
