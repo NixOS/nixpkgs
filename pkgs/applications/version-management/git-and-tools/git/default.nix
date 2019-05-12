@@ -1,4 +1,5 @@
 { fetchurl, stdenv, buildPackages
+, symlinkJoin
 , curl, openssl, zlib, expat, perlPackages, python, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
@@ -76,6 +77,9 @@ stdenv.mkDerivation {
   configureFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_fread_reads_directories=yes"
     "ac_cv_snprintf_returns_bogus=no"
+    # Provide curl manually, do not rely on `curl-config`
+    # See also `CURL_LDFLAGS` below.
+    "--with-curl=${symlinkJoin { name = "curl-libs-and-headers"; paths = [ curl.out curl.dev ]; }}"
   ];
 
   preBuild = ''
@@ -86,6 +90,9 @@ stdenv.mkDerivation {
     "prefix=\${out}"
     "SHELL_PATH=${stdenv.shell}"
   ]
+  # Provide curl manually, do not rely on `curl-config` for cross compilation.
+  # See also `--with-curl` above.
+  ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) ["CURL_LDFLAGS=-lcurl"]
   ++ (if perlSupport then ["PERL_PATH=${perlPackages.perl}/bin/perl"] else ["NO_PERL=1"])
   ++ (if pythonSupport then ["PYTHON_PATH=${python}/bin/python"] else ["NO_PYTHON=1"])
   ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
