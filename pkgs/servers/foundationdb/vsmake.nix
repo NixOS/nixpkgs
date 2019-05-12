@@ -1,8 +1,7 @@
 # This builder is for FoundationDB's original, somewhat strange visual studio +
 # make build system. In FoundationDB 6.1 and later, there's a new CMake system
 # (which will eventually become the default version.)
-{ stdenv49
-, lib, fetchurl, fetchpatch, fetchFromGitHub
+{ stdenv49, lib, fetchurl, fetchFromGitHub
 
 , which, findutils, m4, gawk
 , python, openjdk, mono, libressl
@@ -43,6 +42,8 @@ let
 
     # if an release is unofficial/a prerelease, then make sure this is set
     , officialRelease ? true
+
+    , patches ? []
     }: stdenv.mkDerivation rec {
         name = "foundationdb-${version}";
         inherit version;
@@ -56,32 +57,7 @@ let
         nativeBuildInputs = [ python openjdk gawk which m4 findutils mono ];
         buildInputs = [ libressl boost ];
 
-        patches =
-          [ # For 5.2+, we need a slightly adjusted patch to fix all the ldflags
-            (if lib.versionAtLeast version "5.2"
-             then (if lib.versionAtLeast version "6.0"
-                   then ./ldflags-6.0.patch
-                   else ./ldflags-5.2.patch)
-             else ./ldflags-5.1.patch)
-          ]
-          # for 6.0+, we do NOT need to apply this version fix, since we can specify
-          # it ourselves. see configurePhase
-          ++ (lib.optional (!lib.versionAtLeast version "6.0") ./fix-scm-version.patch)
-          # Versions less than 6.0 have a busted Python 3 build due to an outdated
-          # use of 'print'. Also apply an update to the six module with many bugfixes,
-          # which is in 6.0+ as well
-          ++ (lib.optional (!lib.versionAtLeast version "6.0") (fetchpatch {
-            name   = "update-python-six.patch";
-            url    = "https://github.com/apple/foundationdb/commit/4bd9efc4fc74917bc04b07a84eb065070ea7edb2.patch";
-            sha256 = "030679lmc86f1wzqqyvxnwjyfrhh54pdql20ab3iifqpp9i5mi85";
-          }))
-          ++ (lib.optional (!lib.versionAtLeast version "6.0") (fetchpatch {
-            name   = "import-for-python-print.patch";
-            url    = "https://github.com/apple/foundationdb/commit/ded17c6cd667f39699cf663c0e87fe01e996c153.patch";
-            sha256 = "11y434w68cpk7shs2r22hyrpcrqi8vx02cw7v5x79qxvnmdxv2an";
-          }))
-          ;
-
+        inherit patches;
         postPatch = ''
           # note: this does not do anything for 6.0+
           substituteInPlace ./build/scver.mk \
