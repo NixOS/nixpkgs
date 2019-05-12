@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "3.7.2";
+  version = "3.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1la4y935sdah8ywa7krwy80hcl4n2k8cdx4ncy3dg3y2mdg3vq24";
+    sha256 = "0mp1hbj7ciwpair7z445zj1grfv8c75gby9lih01c3mvw4pff7v2";
   };
 
   propagatedBuildInputs = [ smart_open numpy six scipy ];
