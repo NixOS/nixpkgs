@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, zlib, bzip2 }:
 
 stdenv.mkDerivation {
-  name = "cbc-2.10.0";
+  pname = "cbc";
+  version = "2.10.2";
 
   src = fetchurl {
-    url = "https://www.coin-or.org/download/source/Cbc/Cbc-2.10.0.tgz";
-    sha256 = "1wx90dh1gi5wbw0f10hj9765y1qq3nq6f3jyq995z5lana4zy2ap";
+    url = "https://www.coin-or.org/download/source/Cbc/Cbc-${version}.tgz";
+    sha256 = "0frbxkh6nbh46kaxsx5bmzridgip3v7aq75l8yak5npiiq4jlwv3";
   };
 
   configureFlags = [ "-C" ];
