@@ -674,7 +674,9 @@ in
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
-  bitwarden_rs = callPackage ../tools/security/bitwarden_rs { };
+  bitwarden_rs = callPackage ../tools/security/bitwarden_rs {
+    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
+  };
 
   bitwarden_rs-vault = callPackage ../tools/security/bitwarden_rs/vault.nix { };
 

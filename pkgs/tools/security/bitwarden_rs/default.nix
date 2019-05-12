@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, pkgconfig, openssl }:
+{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, Security, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bitwarden_rs";
@@ -12,13 +12,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security CoreServices ];
 
   RUSTC_BOOTSTRAP = 1;
 
   cargoSha256 = "038l6alcdc0g4avpbzxgd2k09nr3wrsbry763bq2c77qqgwldj8r";
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "An unofficial lightweight implementation of the Bitwarden server API using Rust and SQLite";
     homepage = https://github.com/dani-garcia/bitwarden_rs;
     license = licenses.gpl3;
