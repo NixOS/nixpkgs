@@ -2,8 +2,10 @@
 ansicolors,
 argparse,
 basexx,
+binaryheap,
 dkjson
 fifo
+http
 inspect
 ldoc
 lgi

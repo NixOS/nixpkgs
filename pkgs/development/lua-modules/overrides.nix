@@ -56,7 +56,7 @@ with super;
     '';
   });
 
-  luuid = super.luuid.override({
+  luuid = super.luuid.override(oa: {
     buildInputs = [ pkgs.libuuid ];
     extraConfig = ''
       variables = {
@@ -64,7 +64,7 @@ with super;
         LIBUUID_LIBDIR="${pkgs.lib.getLib pkgs.libuuid}/lib";
       }
     '';
-    meta = {
+    meta = oa.meta // {
       platforms = pkgs.lib.platforms.linux;
     };
   });
@@ -75,4 +75,27 @@ with super;
       sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
     '';
   });
- }
+
+  binaryheap = super.binaryheap.overrideAttrs(oa: {
+    meta = oa.meta // {
+      maintainers = with pkgs.lib.maintainers; oa.meta.maintainers ++ [ vcunat ];
+    };
+  });
+
+  http = super.http.overrideAttrs(oa: {
+    patches = oa.patches or [] ++ [
+      (pkgs.fetchpatch {
+        name = "invalid-state-progression.patch";
+        url = "https://github.com/daurnimator/lua-http/commit/cb7b59474a.diff";
+        sha256 = "1vmx039n3nqfx50faqhs3wgiw28ws416rhw6vh6srmh9i826dac7";
+      })
+    ];
+    /* TODO: separate docs derivation? (pandoc is heavy)
+    nativeBuildInputs = [ pandoc ];
+    makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
+    */
+    meta = oa.meta // {
+      maintainers = with pkgs.lib.maintainers; oa.meta.maintainers ++ [ vcunat ];
+    };
+  });
+}
