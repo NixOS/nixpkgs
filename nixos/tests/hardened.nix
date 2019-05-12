@@ -27,6 +27,20 @@ import ./make-test.nix ({ pkgs, ...} : {
     };
 
   testScript =
+    let
+      hardened-malloc-tests = pkgs.stdenv.mkDerivation rec {
+        name = "hardened-malloc-tests-${pkgs.graphene-hardened-malloc.version}";
+        src = pkgs.graphene-hardened-malloc.src;
+        buildPhase = ''
+          cd test/simple-memory-corruption
+          make -j4
+        '';
+
+        installPhase = ''
+          find . -type f -executable -exec install -Dt $out/bin '{}' +
+        '';
+      };
+    in
     ''
       $machine->waitForUnit("multi-user.target");
 
@@ -92,6 +106,19 @@ import ./make-test.nix ({ pkgs, ...} : {
       subtest "kernelimage", sub {
         $machine->fail("systemctl hibernate");
         $machine->fail("systemctl kexec");
+      };
+
+      # Test hardened memory allocator
+      sub runMallocTestProg {
+          my ($progName, $errorText) = @_;
+          my $text = "fatal allocator error: " . $errorText;
+          $machine->fail("${hardened-malloc-tests}/bin/" . $progName) =~ $text;
+      };
+
+      subtest "hardenedmalloc", sub {
+        runMallocTestProg("double_free_large", "invalid free");
+        runMallocTestProg("unaligned_free_small", "invalid unaligned free");
+        runMallocTestProg("write_after_free_small", "detected write after free");
       };
     '';
 })

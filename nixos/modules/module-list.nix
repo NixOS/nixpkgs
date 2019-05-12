@@ -19,6 +19,7 @@
   ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
+  ./config/malloc.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
