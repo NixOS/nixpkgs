@@ -82,7 +82,7 @@ in py.pkgs.buildPythonApplication rec {
     pylru pyyaml sarge feedparser netifaces click websocket_client
     scandir chainmap future dateutil futures wrapt monotonic emoji
     frozendict
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ];
 
   checkInputs = with py.pkgs; [ nose mock ddt ];
 
@@ -95,7 +95,7 @@ in py.pkgs.buildPythonApplication rec {
   '';
 
   checkPhase = ''
-    HOME=$(mktemp -d) nosetests
+    HOME=$(mktemp -d) nosetests ${lib.optionalString stdenv.isDarwin "--exclude=test_set_external_modification"}
   '';
 
   meta = with stdenv.lib; {
