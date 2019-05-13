@@ -18070,9 +18070,6 @@ in
   };
   udev = systemd; # TODO: move to aliases.nix
 
-  # standalone cryptsetup generator for systemd
-  systemd-cryptsetup-generator = callPackage ../os-specific/linux/systemd/cryptsetup-generator.nix { };
-
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
 
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
