@@ -93,7 +93,6 @@
 "bibarts.source-2.2"="c4js97f9wx1ndh8isk3fgg6lp1rhrrmb";
 "biber.doc-2.12"="xhk5dcv962x8fwqa2f0x4m0acbdii0ad";
 "biber.source-2.12"="vwvc8i4gbqs74c5vg5879k2pld904yqi";
-/nix/store/agkd0ciym0slhy74brw3ydx9kq2cgbqr-perl5.28.2-biber-2.12="3c27779gznciswsdd65bkw4za7imlkjv";
 "bibexport-3.03"="gxzcd5xddarag47glbq02fmxgpn5ndw3";
 "bibexport.doc-3.03"="mvqlfzqzyhbnqw8xixa01qdfgrlm5xln";
 "bibexport.source-3.03"="q41ipwczv79cxnl2420cvcj5q9c6l57l";
@@ -517,7 +516,6 @@
 "latexfileversion.doc-0.3"="c6n7z8c3lzrhk2g1fn4v05l2y6299sr8";
 "latexindent-3.6"="l4klwwm1hcz2ag6cxwdwm7d4wxxlarkl";
 "latexindent.doc-3.6"="rc6x1fmmfnr07kn4d2628nhbzss731bh";
-/nix/store/ddgk0pgyw7dyb03yx5kj8g6v98jg2pv2-"latexindent-3.6"="gcq0q1dv9k2s6halapyv8gaz0s3hbciw";
 "latexmk-4.63b"="cwxncpi06wjgw90jnn9v1yvdpisf004j";
 "latexmk.doc-4.63b"="gmk54gdjhjvlnm31r719csi2y6j38wr9";
 "latexmk.source-4.63b"="m32pbzkr0my5gv38jw54bancbk66r15c";
