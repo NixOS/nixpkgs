@@ -54,10 +54,12 @@ stdenv.mkDerivation rec {
     for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
       echo "int main() { return 77; }" > "$f"
     done
-  '' + optionalString (stdenv.hostPlatform.libc == "musl") ''
-    echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
-    echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
-  '';
+  '' + optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
+    ''
+      echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
+      echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
+    ''
+  ]);
 
   outputs = [ "out" "info" ];
 
