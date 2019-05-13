@@ -110,8 +110,7 @@ let
       urlPrefixes = args.urlPrefixes or [
         #http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive
         #ftp://tug.org/texlive/historic/2019/tlnet-final/archive
-        #file:///home/will/tl2019pretest/archive
-        http://trypticon.cs.illinois.edu:6688/archive
+        https://wdtz.org/tlnet/
       ];
 
       src = fetchurl { inherit urls sha512; };
