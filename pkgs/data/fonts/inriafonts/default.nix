@@ -1,26 +1,22 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-
+let
   pname = "inriafonts";
   version = "1.200";
+in fetchFromGitHub rec {
   name = "${pname}-${version}";
-
-src = fetchFromGitHub {
   owner = "BlackFoundry";
   repo = "InriaFonts";
   rev = "v${version}";
-  sha256 = "06775y99lyh6hj5hzvrx56iybdck8a8xfqkipqd5c4cldg0a9hh8";
-};
 
-installPhase = ''
-  mkdir -p $out/share/fonts/truetype
-  cp fonts/*/TTF/*.ttf $out/share/fonts/truetype
-  mkdir -p $out/share/fonts/opentype
-  cp fonts/*/OTF/*.otf $out/share/fonts/opentype
-'';
+  postFetch = ''
+    tar xf $downloadedFile --strip=1
+    install -m444 -Dt $out/share/fonts/truetype fonts/*/TTF/*.ttf
+    install -m444 -Dt $out/share/fonts/opentype fonts/*/OTF/*.otf
+  '';
+  sha256 = "0wrwcyycyzvgvgnlmwi1ncdvwb8f6bbclynd1105rsyxgrz5dd70";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://black-foundry.com/work/inria;
     description = "Inria Sans and Inria Serif";
     longDescription = ''
@@ -32,7 +28,7 @@ installPhase = ''
       typeface with a unapologetically contemporary design as the
       Sans-serif part and a more rational axis and drawing for the
       serif. Both members comes in 3 weights with matching italics.
-      '';
+    '';
     license = licenses.ofl;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;

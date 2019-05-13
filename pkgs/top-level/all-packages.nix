@@ -16429,7 +16429,7 @@ in
   stix-two = callPackage ../data/fonts/stix-two { };
 
   inherit (callPackages ../data/fonts/gdouros { })
-    symbola aegyptus akkadian anatolian maya unidings musica analecta textfonts aegan abydos;
+    aegan aegyptus akkadian assyrian eemusic maya symbola textfonts unidings;
 
   iana-etc = callPackage ../data/misc/iana-etc { };
 
@@ -24016,7 +24016,7 @@ in
     stdenv = crossLibcStdenv;
     };
 
-	omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
+  omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
   wasmtime = callPackage ../development/interpreters/wasmtime {};
 

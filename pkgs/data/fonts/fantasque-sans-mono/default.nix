@@ -1,9 +1,7 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
-
   version = "1.7.2";
-
 in
 
 fetchzip rec {
@@ -19,7 +17,7 @@ fetchzip rec {
 
   sha256 = "1fwvbqfrgb539xybwdawvwa8cg4f215kw905rgl9a6p0iwa1nxqk";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/belluzj/fantasque-sans;
     description = "A font family with a great monospaced variant for programmers";
     license = licenses.ofl;

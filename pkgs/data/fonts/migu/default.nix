@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     description = "A high-quality Japanese font based on modified M+ fonts and IPA fonts";
     homepage = http://mix-mplus-ipa.osdn.jp/migu/;
     license = licenses.ipa;
-    platforms = platforms.unix;
     maintainers = [ maintainers.mikoim ];
   };
 }

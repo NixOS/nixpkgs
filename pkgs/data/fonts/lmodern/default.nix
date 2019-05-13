@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip {
   name = "lmodern-2.004.5";
@@ -21,7 +21,6 @@ fetchzip {
 
   meta = {
     description = "Latin Modern font";
-    platforms = stdenv.lib.platforms.unix;
   };
 }
 
