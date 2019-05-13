@@ -540,6 +540,8 @@ mapAliases ({
   surf-webkit2 = surf; # added 2017-04-02
   sup = throw "deprecated in 2019-09-10: abandoned by upstream";
   system_config_printer = system-config-printer;  # added 2016-01-03
+  systemd-cryptsetup-generator = throw "systemd-cryptsetup-generator is now included in the systemd package"; # added 2020-05-05
+  systemd_with_lvm2 = throw "please add lvm2 system generators by setting systemd.packages = [ pkgs.lvm2 ];"; # added 2019-04-30
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
   tangogps = foxtrotgps; # added 2020-01-26
