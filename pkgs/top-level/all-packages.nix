@@ -4841,6 +4841,8 @@ in
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
+  nyancat = callPackage ../tools/misc/nyancat { };
+
   nylon = callPackage ../tools/networking/nylon { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
