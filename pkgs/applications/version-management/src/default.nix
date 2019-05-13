@@ -9,13 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "0qd10w8fwbrgaj8sx49q6cfhqq3ylhwn7nl9v6kxi1yjlw2p098p";
   };
 
-  buildInputs = [ python rcs git makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python rcs git ];
 
   preConfigure = ''
     patchShebangs .
   '';
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/src \
@@ -32,8 +33,9 @@ stdenv.mkDerivation rec {
       will seem familiar to Subversion/Git/hg users, and no binary blobs
       anywhere.
     '';
-    homepage = http://www.catb.org/esr/src/;
-    license = licenses.bsd3;
+    homepage = "http://www.catb.org/esr/src/";
+    changelog = "https://gitlab.com/esr/src/raw/${version}/NEWS";
+    license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ calvertvl AndersonTorres ];
   };
