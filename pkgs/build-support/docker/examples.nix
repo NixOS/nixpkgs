@@ -187,4 +187,43 @@ rec {
     runAsRoot = "touch /example-file";
     fromImage = bash;
   };
+
+  # 13. example of 3 layers images This image is used to verify the
+  # order of layers is correct.
+  # It allows to validate
+  # - the layer of parent are below
+  # - the order of parent layer is preserved at image build time
+  #   (this is why there are 3 images)
+  layersOrder = let
+    l1 = pkgs.dockerTools.buildImage {
+      name = "l1";
+      tag = "latest";
+      extraCommands = ''
+        mkdir -p tmp
+        echo layer1 > tmp/layer1
+        echo layer1 > tmp/layer2
+        echo layer1 > tmp/layer3
+      '';
+    };
+    l2 = pkgs.dockerTools.buildImage {
+      name = "l2";
+      fromImage = l1;
+      tag = "latest";
+      extraCommands = ''
+        mkdir -p tmp
+        echo layer2 > tmp/layer2
+        echo layer2 > tmp/layer3
+      '';
+    };
+  in pkgs.dockerTools.buildImage {
+    name = "l3";
+    fromImage = l2;
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    extraCommands = ''
+      mkdir -p tmp
+      echo layer3 > tmp/layer3
+    '';
+  };
+
 }
