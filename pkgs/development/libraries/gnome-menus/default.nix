@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, gobject-introspection }:
+{ stdenv, fetchurl, pkgconfig, gettext, glib, gobject-introspection, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-menus";
@@ -17,9 +17,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig gettext ];
   buildInputs = [ glib gobject-introspection ];
 
-  meta = {
-    homepage = https://www.gnome.org;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
+
+  meta = with stdenv.lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-menus";
     description = "Library that implements freedesktops's Desktop Menu Specification in GNOME";
-    platforms = stdenv.lib.platforms.linux;
+    license = with licenses; [ gpl2 lgpl2 ];
+    platforms = platforms.linux;
   };
 }

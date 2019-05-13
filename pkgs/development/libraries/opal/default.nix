@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, ptlib, srtp, libtheora, speex
+{ stdenv, fetchurl, pkgconfig, ptlib, srtp, libtheora, speex, gnome3
 , ffmpeg, x264, cyrus_sasl, openldap, openssl, expat, unixODBC }:
 
 stdenv.mkDerivation rec {
-  name = "opal-3.10.10";
+  pname = "opal";
+  version = "3.10.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/opal/3.10/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "f208985003461b2743575eccac13ad890b3e5baac35b68ddef17162460aff864";
   };
 
@@ -26,12 +27,16 @@ stdenv.mkDerivation rec {
     description = "VoIP library";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
+    homepage = "http://www.opalvoip.org/";
     license = with licenses; [ bsdOriginal mpl10 gpl2Plus lgpl21 ];
   };
 
   passthru = {
     updateInfo = {
       downloadPage = "http://ftp.gnome.org/pub/GNOME/sources/opal";
+    };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
     };
   };
 }
