@@ -190,7 +190,7 @@ in
       ]);
 
     fonts.fonts = with pkgs; [
-      opensans-ttf
+      open-sans
       roboto-mono
       pantheon.elementary-redacted-script # needed by screenshot-tool
     ];
