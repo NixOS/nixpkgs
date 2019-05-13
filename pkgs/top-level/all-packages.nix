@@ -2032,6 +2032,8 @@ in
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
+  chit = callPackage ../development/tools/chit { };
+
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
   chrony = callPackage ../tools/networking/chrony { };
