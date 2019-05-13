@@ -497,7 +497,7 @@ in
     systemd.generator-packages = mkOption {
       default = [];
       type = types.listOf types.package;
-      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
+      example = literalExample "[ pkgs.lvm2 ]";
       description = "Packages providing systemd generators.";
     };
 

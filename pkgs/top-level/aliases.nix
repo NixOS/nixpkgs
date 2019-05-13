@@ -315,6 +315,7 @@ mapAliases ({
   suil-qt5 = suil; # added 2018-05-01
   surf-webkit2 = surf; # added 2017-04-02
   system_config_printer = system-config-printer;  # added 2016-01-03
+  systemd-cryptsetup-generator = throw "please add lvm2 system generators by setting systemd.system-generators = [ pkgs.lvm2 ];"; # added 2019-05-13
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
   telepathy_farstream = telepathy-farstream; # added 2018-02-25
