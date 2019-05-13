@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  enableParallelBuilding = true;
+  # arch.h generation
+  # enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig autoconf ];
   buildInputs =
