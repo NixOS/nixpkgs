@@ -19859,6 +19859,8 @@ in
 
   setbfree = callPackage ../applications/audio/setbfree { };
 
+  sfxr = callPackage ../applications/audio/sfxr { };
+
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
   shadowfox = callPackage ../tools/networking/shadowfox { };
