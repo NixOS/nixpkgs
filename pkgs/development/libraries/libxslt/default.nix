@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/libxslt/commit/e03553605b45c88f0b4b2980adfbbb8f6fca2fd6.patch";
       sha256 = "0pkpb4837km15zgg6h57bncp66d5lwrlvkr73h0lanywq7zrwhj8";
     })
+    (fetchpatch {
+      name = "0004-Make-generate-id-deterministic.patch";
+      url = "https://salsa.debian.org/xml-sgml-team/libxslt/raw/4318e384be3a4304e5b3c1a73abacaefa54fa3a3/debian/patches/0004-Make-generate-id-deterministic.patch";
+      sha256 = "1abzglnm95ldbpnycirhdb1fcb11wc5lkfvma2f31z4572h6438f";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
