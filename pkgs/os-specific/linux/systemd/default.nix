@@ -8,6 +8,7 @@
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
 , getent
+, cryptsetup, lvm2
 , buildPackages
 , perl
 , withSelinux ? false, libselinux
@@ -15,7 +16,11 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-stdenv.mkDerivation rec {
+let
+  # to avoid circular dependencies, build cryptsetup with a lvm2 without udev support
+  _cryptsetup = cryptsetup.override { lvm2 = lvm2.override { udev = null; }; };
+
+in stdenv.mkDerivation rec {
   version = "242";
   name = "systemd-${version}";
 
@@ -42,7 +47,7 @@ stdenv.mkDerivation rec {
     ];
   buildInputs =
     [ linuxHeaders libcap kmod xz pam acl
-      /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
+      _cryptsetup libuuid glib libgcrypt libgpgerror libidn2
       libmicrohttpd pcre2 ] ++
       stdenv.lib.optional withKexectools kexectools ++
       stdenv.lib.optional withLibseccomp libseccomp ++
