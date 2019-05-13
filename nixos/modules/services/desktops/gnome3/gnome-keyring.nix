@@ -35,6 +35,8 @@ with lib;
 
     services.dbus.packages = [ pkgs.gnome3.gnome-keyring pkgs.gcr ];
 
+    security.pam.services.login.enableGnomeKeyring = true;
+
   };
 
 }
