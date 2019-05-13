@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "spdk-${version}";
-  version = "18.04";
+  version = "19.04";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
     rev = "v${version}";
-    sha256 = "07i13jkf63h5ld9djksxl445v1mj6m5cbq4xydix9y5qcxwlss3n";
+    sha256 = "10mzal1hspnh26ws5d7sc54gyjfzkf6amr0gkd7b368ng2a9z8s6";
   };
 
   nativeBuildInputs = [ python ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Set of libraries for fast user-mode storage";
-    homepage = http://www.spdk.io;
+    homepage = "https://spdk.io/";
     license = licenses.bsd3;
     platforms =  [ "x86_64-linux" ];
     maintainers = with maintainers; [ orivej ];
