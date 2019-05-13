@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap
-, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, utillinux, libffi
+{ stdenv, lib, fetchFromGitHub, pkgconfig, intltool, gperf, libcap
+, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, e2fsprogs, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
@@ -178,12 +178,28 @@ in stdenv.mkDerivation {
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c units/systemd-logind.service.in units/systemd-nspawn@.service.in; do
+    for i in \
+      src/core/mount.c \
+      src/core/swap.c \
+      src/cryptsetup/cryptsetup-generator.c \
+      src/fsck/fsck.c \
+      src/journal/cat.c \
+      src/nspawn/nspawn.c \
+      src/remount-fs/remount-fs.c \
+      src/shared/generator.c \
+      src/shutdown/shutdown.c \
+      units/emergency.service.in \
+      units/rescue.service.in \
+      units/systemd-logind.service.in \
+      units/systemd-nspawn@.service.in; \
+    do
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
+        --replace /sbin/mkswap ${lib.getBin utillinux}/sbin/mkswap \
         --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
         --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
+        --replace /sbin/mke2fs ${lib.getBin e2fsprogs}/sbin/mke2fs \
         --replace /sbin/fsck ${lib.getBin utillinux}/sbin/fsck \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
