@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Python radix tree for IPv4 and IPv6 prefix matching";
     homepage = https://github.com/mjschultz/py-radix;
-    license = licenses.bsd;
+    license = with licenses; [ isc bsdOriginal ];
     maintainers = with maintainers; [ mkg ];
   };
 }
