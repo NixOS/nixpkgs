@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   name = "xautolock-${version}";
-  version = "2.2-6-ge68d0ed";
+  version = "2.2-7-ga23dd5c";
 
   # This repository contains xautolock-2.2 plus various useful patches that
   # were collected from Debian, etc.
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "peti";
     repo = "xautolock";
     rev = "v${version}";
-    sha256 = "1131ki6zwk94s8j6zqywf8r5kanx3nrjm692rxh8pcz4hv9qp1mz";
+    sha256 = "10j61rl0sx9sh84rjyfyddl73xb5i2cpb17fyrli8kwj39nw0v2g";
   };
 
   nativeBuildInputs = [ imake gccmakedep ];
