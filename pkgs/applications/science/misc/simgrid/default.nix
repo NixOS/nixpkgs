@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, perl, python3, boost, valgrind
+{ stdenv, fetchFromGitLab, cmake, perl, python3, boost, valgrind
 # Optional requirements
 # Lua 5.3 needed and not available now
 #, luaSupport ? false, lua5
@@ -17,13 +17,16 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "simgrid-${version}";
+  pname = "simgrid";
   version = "3.22.2";
+  name = "${pname}-${version}";
 
-  src = fetchgit {
-    url = "https://framagit.org/simgrid/simgrid.git";
+  src = fetchFromGitLab {
+    domain = "framagit.org";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "13gm9c66dvlnz3dnzv688h1063ngz96d3pflj102x38kz4akbhms";
+    sha256 = "02zzivp3k7n2yvlr79p9kapzxpxq9x4x7jf2vrkpkwnssv4f9b4p";
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]
