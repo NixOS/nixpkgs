@@ -444,6 +444,23 @@ let
     };
   };
 
+  protobuf = buildPecl rec {
+    version = "3.7.1";
+    pname = "protobuf";
+
+    sha256 = "0fbf29851dpgjfdgi6i1dgy047dfiazm6qh943w22zbj35l7g2yc";
+
+    buildInputs = with pkgs; [ (if isPhp73 then pcre2 else pcre) ];
+
+    meta = with pkgs.lib; {
+      description = ''
+        Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
+      '';
+      license = licenses.bsd3;
+      homepage = "https://developers.google.com/protocol-buffers/";
+    };
+  };
+
   psysh = mkDerivation rec {
     version = "0.9.9";
     pname = "psysh";
