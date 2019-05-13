@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "src-${version}";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/src/${name}.tar.gz";
-    sha256 = "0n9j2mywbm8c7mc5b3m7dvn6gff88wwwaygk4y1jivpg1f6s3k3l";
+    sha256 = "0qd10w8fwbrgaj8sx49q6cfhqq3ylhwn7nl9v6kxi1yjlw2p098p";
   };
 
   buildInputs = [ python rcs git makeWrapper ];
