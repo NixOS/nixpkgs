@@ -257,7 +257,9 @@ dvisvgm = stdenv.mkDerivation {
   preConfigure = "cd texk/dvisvgm";
 
   configureFlags = common.configureFlags
-    ++ [ "--with-system-kpathsea" "--with-system-libgs" ];
+    ++ [ "--with-system-kpathsea" /* "--enable-bundled-libs" "--enable-static=no"*/ /*"--with-gs=yes" "--with-system-libgs" "--disable-debug"*/ ];
+
+  NIX_CFLAGS_LINK = [ "-ldl" "-lgs" ];
 
   enableParallelBuilding = true;
 };
