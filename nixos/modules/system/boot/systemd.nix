@@ -821,6 +821,7 @@ in
         [Sleep]
       '';
 
+      "tmpfiles.d/lvm2.conf".source = "${pkgs.lvm2}/lib/tmpfiles.d/lvm2.conf";
       "tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
       "tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
 
