@@ -36,7 +36,7 @@ in
 
 
   config = mkMerge [
-    (mkIf (xcfg.enable && cfg.enable) {
+    (mkIf cfg.enable {
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
         bgSupport = true;
