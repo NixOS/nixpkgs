@@ -347,6 +347,7 @@ in
 
       xkbDir = mkOption {
         type = types.path;
+        default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
         description = ''
           Path used for -xkbdir xserver parameter.
         '';
@@ -707,8 +708,6 @@ in
       [ xorg.xorgserver.out
         xorg.xf86inputevdev.out
       ];
-
-    services.xserver.xkbDir = mkDefault "${pkgs.xkeyboard_config}/etc/X11/xkb";
 
     system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
