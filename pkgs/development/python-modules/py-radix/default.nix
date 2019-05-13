@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjschultz";
     repo = "py-radix";
-    rev = version;
+    rev = "v${version}";
     sha256 = "01xyn9lg6laavnzczf5bck1l1c2718ihxx0hvdkclnnxjqhbrqis";
   };
 
