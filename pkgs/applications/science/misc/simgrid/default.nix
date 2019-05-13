@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, perl, python3, boost, valgrind
+{ stdenv, fetchgit, cmake, perl, python3, boost, valgrind
 # Optional requirements
 # Lua 5.3 needed and not available now
 #, luaSupport ? false, lua5
@@ -18,13 +18,12 @@ in
 
 stdenv.mkDerivation rec {
   name = "simgrid-${version}";
-  version = "3.21";
+  version = "3.22.2";
 
-  src = fetchFromGitHub {
-    owner = "simgrid";
-    repo = "simgrid";
-    rev = "v${replaceChars ["."] ["_"] version}";
-    sha256 = "1v0dwlww2wl56ms8lvg5zwffzbmz3sjzpkqc73f714mrc9g02bxs";
+  src = fetchgit {
+    url = "https://framagit.org/simgrid/simgrid.git";
+    rev = "v${version}";
+    sha256 = "13gm9c66dvlnz3dnzv688h1063ngz96d3pflj102x38kz4akbhms";
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
   # - lua53:  for enable_lua
   #
   # For more information see:
-  # http://simgrid.gforge.inria.fr/simgrid/latest/doc/install.html#install_cmake_list
+  # https://simgrid.org/doc/3.22/Installing_SimGrid.html#simgrid-compilation-options)
   cmakeFlags= ''
     -Denable_documentation=${optionOnOff buildDocumentation}
     -Denable_java=${optionOnOff buildJavaBindings}
@@ -87,6 +86,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
+    make tests -j $NIX_BUILD_CORES
     ctest -j $NIX_BUILD_CORES --output-on-failure -E smpi-replay-multiple
 
     runHook postCheck
