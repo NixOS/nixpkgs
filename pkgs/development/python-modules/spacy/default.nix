@@ -25,11 +25,11 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01mmgfn7r288jklz6902xfb5dbih0h29s9p0na12gyj2c7gnvf5i";
+    sha256 = "03m4c59aaqpqr2x5yhv7y37z0vxhmmkfi6dv4cbp9nxsq9wv100d";
   };
 
   prePatch = ''
