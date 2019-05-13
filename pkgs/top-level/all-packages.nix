@@ -9002,6 +9002,8 @@ in
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
+  devd = callPackage ../development/tools/devd { };
+
   devtodo = callPackage ../development/tools/devtodo { };
 
   dfeet = callPackage ../development/tools/misc/d-feet { };
