@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, elk5Version, makeWrapper, jre_headless, utillinux }:
+{ stdenv, fetchurl, elk5Version, makeWrapper, jre_headless
+, utillinux, gnugrep, coreutils }:
 
 with stdenv.lib;
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/elasticsearch \
       --prefix ES_CLASSPATH : "$out/lib/*" \
-      --prefix PATH : "${utillinux}/bin" \
+      --prefix PATH : "${makeBinPath [ utillinux gnugrep coreutils ]}" \
       --set JAVA_HOME "${jre_headless}" \
       --set ES_JVM_OPTIONS "$out/config/jvm.options"
 
