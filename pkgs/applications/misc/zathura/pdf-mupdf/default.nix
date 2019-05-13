@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     zathura_core girara mupdf cairo
-  ] ++ stdenv.lib.optional stdenv.isDarwin [
-    gtk-mac-integration
-  ];
+  ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
 
