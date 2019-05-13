@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "v4l-utils-${version}";
-  version = "1.16.5";
+  version = "1.16.6";
 
   src = fetchurl {
     url = "https://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
-    sha256 = "06yz34ncrpxshs9w2nqz62xj4wm7hni1fvjnvjhifl1q20jj907d";
+    sha256 = "1bkqlrizx0j2rd6ybam2x17bjrpwzl4v4szmnzm3cmixis3w3npr";
   };
 
   outputs = [ "out" "dev" ];
