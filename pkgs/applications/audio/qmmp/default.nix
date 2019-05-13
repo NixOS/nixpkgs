@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     sha256 = "1rh063kcyg7gs9yj2r4v5irpnq4pjaxaxsgrw30mdr21xhhc15cz";
   };
 
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs =
     [ # basic requirements
-      cmake pkgconfig xlibsWrapper
-      qtbase qttools qtmultimedia qtx11extras
+      qtbase qttools qtmultimedia qtx11extras xlibsWrapper
       # transports
       curl libmms
       # input plugins
