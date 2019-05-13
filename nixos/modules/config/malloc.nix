@@ -54,9 +54,7 @@ in
       default = "libc";
       description = ''
         The system-wide memory allocator.
-        </para>
 
-        <para>
         Briefly, the system-wide memory allocator providers are:
         <itemizedlist>
         <listitem><para><literal>libc</literal>: the standard allocator provided by libc</para></listitem>
@@ -64,7 +62,6 @@ in
             (name: value: "<listitem><para><literal>${name}</literal>: ${value.description}</para></listitem>")
             providers)}
         </itemizedlist>
-        </para>
 
         <warning>
         <para>
@@ -79,8 +76,6 @@ in
         Changing this option does not affect the current session.
         </para>
         </note>
-
-        <para>
       '';
     };
   };
