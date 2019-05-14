@@ -411,7 +411,7 @@ in
 
       postStart = ''
         if [ -e "${cfg.dataDir}/.first_startup" ]; then
-          fdbcli --exec "configure new single memory"
+          fdbcli --exec "configure new single ssd"
           rm -f "${cfg.dataDir}/.first_startup";
         fi
       '';
