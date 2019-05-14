@@ -86,13 +86,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-
-    make tests -j $NIX_BUILD_CORES
-    ctest -j $NIX_BUILD_CORES --output-on-failure -E smpi-replay-multiple
-
-    runHook postCheck
+  # Prevent the execution of tests known to fail.
+  preCheck = ''
+    cat <<EOW >CTestCustom.cmake
+    SET(CTEST_CUSTOM_TESTS_IGNORE smpi-replay-multiple)
+    EOW
   '';
 
   enableParallelBuilding = true;
