@@ -27,7 +27,10 @@ let
    "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
    "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
   }."${version}";
-  coq-version = builtins.substring 0 3 version;
+  coq-version =
+    let inherit (builtins) concatStringsSep head map; in
+    let inherit (stdenv.lib) take splitString; in
+    concatStringsSep "." (take 2 (map head (map (splitString "pl") (splitString "." version))));
   ideFlags = if buildIde then "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
   csdpPatch = if csdp != null then ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
