@@ -67,5 +67,12 @@ import ./make-test.nix ({ pkgs, ... }: {
       # Ensure building an image on top of a layered Docker images work
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.layered-on-top}'");
       $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.layered-on-top.imageName}");
+
+      # Ensure order of layers is correct
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.layersOrder}'");
+      $docker->succeed("docker run --rm  ${pkgs.dockerTools.examples.layersOrder.imageName} cat /tmp/layer1 | grep -q layer1");
+      # This is to be sure the order of layers of the parent image is preserved
+      $docker->succeed("docker run --rm  ${pkgs.dockerTools.examples.layersOrder.imageName} cat /tmp/layer2 | grep -q layer2");
+      $docker->succeed("docker run --rm  ${pkgs.dockerTools.examples.layersOrder.imageName} cat /tmp/layer3 | grep -q layer3");
     '';
 })

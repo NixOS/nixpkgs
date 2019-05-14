@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./install_prefix.patch ];
 
+  # Backported fix for 0.7.13 to build with 5.1, please remove when updating to 0.7.14
+  postPatch = optionalString (versionAtLeast kernel.version "5.1") ''
+    sed -i 's/get_ds()/KERNEL_DS/g' module/spl/spl-vnode.c
+  '';
+
   nativeBuildInputs = [ autoreconfHook ] ++ kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "fortify" "stackprotector" "pic" ];

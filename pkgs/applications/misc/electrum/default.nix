@@ -1,6 +1,8 @@
-{ stdenv, fetchFromGitHub, python3, python3Packages, zbar, secp256k1 }:
+{ stdenv, fetchurl, fetchFromGitHub, python3, python3Packages, zbar, secp256k1 }:
 
 let
+  version = "3.3.5";
+
   qdarkstyle = python3Packages.buildPythonPackage rec {
     pname = "QDarkStyle";
     version = "2.5.4";
@@ -10,18 +12,34 @@ let
     };
     doCheck = false; # no tests
   };
+
+  # Not provided in official source releases, which are what upstream signs.
+  tests = fetchFromGitHub {
+    owner = "spesmilo";
+    repo = "electrum";
+    rev = version;
+    sha256 = "11rzzrv5xxqazcb7q1ig93d6cisqmd1x0jrgvfgzysbzvi51gg11";
+
+    extraPostFetch = ''
+      mv $out ./all
+      mv ./all/electrum/tests $out
+    '';
+  };
 in
 
 python3Packages.buildPythonApplication rec {
   pname = "electrum";
-  version = "3.3.4";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "spesmilo";
-    repo = "electrum";
-    rev = version;
-    sha256 = "0yxdpc602jnd14xz3px85ka0b6db98zwbgfi9a3vj8p1k3mmiwaj";
+  src = fetchurl {
+    url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
+    sha256 = "1csj0n96zlajnrs39wsazfj5lmy7v7n77cdz56lr8nkmchh6k9z1";
   };
+
+  postUnpack = ''
+    # can't symlink, tests get confused
+    cp -ar ${tests} $sourceRoot/electrum/tests
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     aiorpcx
@@ -64,7 +82,10 @@ python3Packages.buildPythonApplication rec {
     rm -rf $out/${python3.sitePackages}/nix
 
     substituteInPlace $out/share/applications/electrum.desktop \
-      --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
+      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
+                "Exec=$out/bin/electrum %u" \
+      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
+                "Exec=$out/bin/electrum --testnet %u"
   '';
 
   checkInputs = with python3Packages; [ pytest ];

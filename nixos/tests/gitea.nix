@@ -9,7 +9,7 @@ with pkgs.lib;
 {
   mysql = makeTest {
     name = "gitea-mysql";
-    meta.maintainers = [ maintainers.aanderse ];
+    meta.maintainers = with maintainers; [ aanderse kolaente ];
 
     machine =
       { config, pkgs, ... }:

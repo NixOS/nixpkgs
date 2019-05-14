@@ -10,10 +10,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "66.0.4";
+    ffversion = "66.0.5";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0mz2xrznma3hwb2b36hlv4qmnzbfcfhrxbxqhc8yyqxnc0fm4vxbbzh1pzvghp4182n98l1dignw95v11pfgi3gss7sz1zkiywz47sw";
+      sha512 = "18bcpbwzhc2fi6cqhxhh6jiw5akhzr7qqs6s8irjbvh7q8f3z2n046vrlvpblhbkc2kv1n0s14n49yzv432adqwa9qi8d57jnxyfqkf";
     };
 
     patches = [
@@ -67,10 +67,10 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.6.2esr";
+    ffversion = "60.6.3esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "2gk11kffwmyq3m8dsjc86f7zfagl15msb8byrb4db4w4ssn335wax2p8m221xi4qnzf20fl0p1b30g5z8ivrxx2n19yknnwalazcjzd";
+      sha512 = "3zg75djd7mbr9alhkp7zqrky7g41apyf6ka0acv500dmpnhvn5v5i0wy9ks8v6vh7kcgw7bngf6msb7vbbps6whwdcqv3v4dqbg6yr2";
     };
 
     patches = [
@@ -237,16 +237,16 @@ in rec {
   };
 
   tor-browser-8-0 = tbcommon rec {
-    ffversion = "60.5.1esr";
-    tbversion = "8.0.6";
+    ffversion = "60.6.1esr";
+    tbversion = "8.0.9";
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-60.5.1esr-8.0-1-slnos"
-      rev   = "89be91fc7cbc420b7c4a3bfc36d2b0d500dd3ccf";
-      sha256 = "022zjfwsdl0dkg6ck2kha4nf91xm3j9ag5n21zna98szg3x82dj1";
+      # branch "tor-browser-60.6.1esr-8.0-1-r2-slnos"
+      rev   = "d311540ce07f1f4f5e5789f9107f6e6ecc23988d";
+      sha256 = "0nz8vxv53vnqyk3ahakrr5xg6sgapvlmsb6s1pwwsb86fxk6pm5f";
     };
   };
 
