@@ -118,8 +118,8 @@ let
     rec { sha1 = "280c265b789e041c02e5c97815793dfc283fb1e6"; name = "LIBFFI_SOURCES_${sha1}/libffi-sources.tar.gz";                                    url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/libffi-3.2.1.tar.gz; }
     rec { sha1 = "8819cea8bfe22c9c63f55465e296b3855ea41786"; name = "TruffleJSON_${sha1}/trufflejson.jar";                                             url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/trufflejson-20180130.jar; }
     rec { sha1 = "9712a8124c40298015f04a74f61b3d81a51513af"; name = "CHECKSTYLE_8.8_${sha1}/checkstyle-8.8.jar";                                       url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/checkstyle-8.8-all.jar; }
-    rec { sha1 = "aee7dd2a9663701df57a96e501b9219a7c90cbc3"; name = "VISUALVM_COMMON_${sha1}/visualvm-common.tar.gz";                                  url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm-670.tar.gz; }
-    rec { sha1 = "e607a0c40716f4a232de3726ab101f5c54798cfa"; name = "VISUALVM_PLATFORM_SPECIFIC_${sha1}/visualvm-platform-specific.tar.gz";            url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm-670-linux-amd64.tar.gz; }
+    rec { sha1 = "d8fa9c04a7c3095b1a8013efd70d6b813fba51db"; name = "VISUALVM_COMMON_${sha1}/visualvm-common.tar.gz";                                  url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm/visualvm-19_0_0-8.tar.gz; }
+    rec { sha1 = "8510f966695ec4221f83e9ff3fc1e303172f8740"; name = "VISUALVM_PLATFORM_SPECIFIC_${sha1}/visualvm-platform-specific.tar.gz";            url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm/visualvm-19_0_0-8-linux-amd64.tar.gz; }
     rec { sha1 = "e6e60889b7211a80b21052a249bd7e0f88f79fee"; name = "Java-WebSocket_${sha1}/java-websocket.jar";                                       url = mirror://maven/org/java-websocket/Java-WebSocket/1.3.9/Java-WebSocket-1.3.9.jar; }
     rec { sha1 = "7a4d00d5ec5febd252a6182e8b6e87a0a9821f81"; name = "ICU4J_${sha1}/icu4j.jar";                                                         url = mirror://maven/com/ibm/icu/icu4j/62.1/icu4j-62.1.jar; }
    # This duplication of asm with underscore and minus is totally weird
@@ -149,14 +149,10 @@ let
   ];
 
   graal-mxcachegit = [
-    { sha256 = "0idc2jn69pyrj2xivisrc8p59zd49jbz67476j8z3rfaf0hqnr3z"; name = "graaljs";
-      url = "http://github.com/graalvm/graaljs.git"; rev = "fd578bf87e2bbf668482d4928603bdc63b9a0d97"; }
-    { sha256 = "1zyaaygzd8fc1a1684h75h21k8rs2rnhkr5y217wlazyd78j65nr"; name = "truffleruby";
-      url = "http://github.com/oracle/truffleruby.git"; rev = "vm-${version}"; }
-    { sha256 = "0kyzx5y2kag08m9vla5x117al9ijs10783qpnv8b7zr116fwi28h"; name = "fastr";
-      url = "http://github.com/oracle/fastr.git"; rev = "vm-${version}"; }
-    { sha256 = "1v4dqml2kwy1qiirw09vjsivp7mbmc5pmflskvc4x5m841dwgsgb"; name = "graalpython";
-      url = "https://github.com/graalvm/graalpython.git"; rev = "0c20d4d09329323f5b74137000c6e0a4645053ad"; }
+    { sha256 = "0vj37hxmklq9i3pz7l2sqcan6xhmb0rmbn2m41mw744x4qz8m8na"; name = "graaljs";     url = "https://github.com/graalvm/graaljs.git";     rev = "vm-${version}"; }
+    { sha256 = "1zyaaygzd8fc1a1684h75h21k8rs2rnhkr5y217wlazyd78j65nr"; name = "truffleruby"; url = "https://github.com/oracle/truffleruby.git";  rev = "vm-${version}"; }
+    { sha256 = "0kyzx5y2kag08m9vla5x117al9ijs10783qpnv8b7zr116fwi28h"; name = "fastr";       url = "https://github.com/oracle/fastr.git";        rev = "vm-${version}"; }
+    { sha256 = "1r3afr4176lvk3jyha0sbaaripizla12vcsjlflh7r06w7gxqz3m"; name = "graalpython"; url = "https://github.com/graalvm/graalpython.git"; rev = "vm-${version}"; }
   ];
 
   ninja-syntax = python27.pkgs.buildPythonPackage rec {
@@ -284,7 +280,7 @@ in rec {
       owner  = "oracle";
       repo   = "graal";
       rev    = "vm-${version}";
-      sha256 = "07gy4xvjhrnl74v0vnixgfvgjp0dba0l8l7qlh28pfrc97dkcm9r";
+      sha256 = "1yimynf1x1wdp8y7rrw3ygpzv6p92n186wg22vh0zyhczl8w6x4f";
     };
     patches = [ ./002_setjmp.c.patch ./003_mx_truffle.py.patch ];
     buildInputs = [ mx zlib mercurial jvmci8 git clang llvm
@@ -328,7 +324,7 @@ in rec {
       # Patch the native-image template, as it will be run during build
       chmod +x vm/mx.vm/launcher_template.sh && patchShebangs vm/mx.vm
       # Prevent random errors from too low maxRuntimecompilemethods
-      substituteInPlace truffle/mx.truffle/tools-truffle.properties \
+      substituteInPlace truffle/mx.truffle/macro-truffle.properties \
         --replace '-H:MaxRuntimeCompileMethods=1400' \
                   '-H:MaxRuntimeCompileMethods=28000'
     '';
@@ -369,7 +365,6 @@ in rec {
       cp ${zlib.static}/lib/libz.a $out/jre/lib/svm/clibraries/linux-amd64/libz.a
       # Organize the out dir
       mkdir -p $out/share && mv $out/man $out/share
-      rm $out/ASSEMBLY_EXCEPTION $out/release $out/LICENSE $out/THIRD_PARTY_README $out/*.txt $out/*.md
     '';
 
     dontFixup = true; # do not nuke path of ffmpeg etc
@@ -400,6 +395,7 @@ in rec {
       ./helloworld | fgrep 'Hello World'
     '';
 
+    enableParallelBuilding = true;
     passthru.home = graalvm8;
 
     meta = with stdenv.lib; {
