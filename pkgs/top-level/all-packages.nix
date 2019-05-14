@@ -712,6 +712,8 @@ in
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
+  ctrtool = callPackage ../tools/archivers/ctrtool { };
+
   crumbs = callPackage ../applications/misc/crumbs { };
 
   deskew = callPackage ../applications/graphics/deskew { };
