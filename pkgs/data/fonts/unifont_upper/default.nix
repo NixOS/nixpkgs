@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "12.1.01";
@@ -11,7 +11,7 @@ in fetchzip rec {
 
   sha256 = "11b14ka2w16vssxdhgq7k9bx7xx0sr36hfi2vzyimmaibasi1r74";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unicode font for glyphs above the Unicode Basic Multilingual Plane";
     homepage = http://unifoundry.com/unifont.html;
 

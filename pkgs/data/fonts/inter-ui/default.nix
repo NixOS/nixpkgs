@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 # XXX: IMPORTANT:
 # For compat, keep this at the last version that used the name "Inter UI"
@@ -18,7 +18,7 @@ in fetchzip {
 
   sha256 = "01d2ql803jrhss6g60djvs08x9xl7z6b3snkn03vqnrajdgifcl4";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://rsms.me/inter/;
     description = "A typeface specially designed for user interfaces";
     license = licenses.ofl;

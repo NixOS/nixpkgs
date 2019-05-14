@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, fetchurl }:
 
 let
   version = "2.04";
@@ -21,6 +21,5 @@ in fetchurl {
 
   meta = {
     description = "Font, metrically identical to Arial and Times New Roman";
-    platforms = stdenv.lib.platforms.unix;
   };
 }

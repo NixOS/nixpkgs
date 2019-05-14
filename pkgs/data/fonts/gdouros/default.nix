@@ -1,29 +1,16 @@
-{stdenv, fetchzip, lib}:
+{ fetchzip, lib }:
 
 let
   fonts = {
-    symbola = { version = "9.17"; file = "Symbola.zip"; sha256 = "13z18lxx0py54nns61ihgxacpf1lg9s7g2sbpbnxpllqw7j73iq2";
-                description = "Basic Latin, Greek, Cyrillic and many Symbol blocks of Unicode"; };
-    aegyptus = { version = "6.17"; file = "Aegyptus.zip"; sha256 = "19rkf89msqb076qjdfa75pqrx35c3slj64vxw08zqdvyavq7jc79";
-                 description = "Egyptian Hieroglyphs, Coptic, Meroitic"; };
-    akkadian = { version = "7.17"; file = "AkkadianAssyrian.zip"; sha256 = "1xw2flrwb5r89sk7jd195v3svsb21brf1li2i3pdjcfqxfp5m0g7";
-                 description = "Sumero-Akkadian Cuneiform"; };
-    anatolian = { version = "5.17"; file = "Anatolian.zip"; sha256 = "0dqcyjakc4fy076pjplm6psl8drpwxiwyq97xrf6a3qa098gc0qc";
-                  description = "Anatolian Hieroglyphs"; };
-    maya = { version = "4.17"; file = "Maya.zip"; sha256 = "17s5c23wpqrcq5h6pgssbmzxiv4jvhdh2ssr99j9q6j32a51h9gh";
-             description = "Maya Hieroglyphs"; };
-    unidings = { version = "9.17"; file = "Unidings.zip"; sha256 = "0nzw8mrhk0hbjnl2cgi31b00vmi785win86kiz9d2yzdfz1is6sk";
-                 description = "Glyphs and Icons for blocks of The Unicode Standard"; };
-    musica = { version = "3.17"; file = "Musica.zip"; sha256 = "0mnv61dxzs2npvxgs5l9q81q19xzzi1sn53x5qwpiirkmi6bg5y6";
-               description = "Musical Notation"; };
-    analecta = { version = "5.17"; file = "Analecta.zip"; sha256 = "13npnfscd9mz6vf89qxxbj383njf53a1smqjh0c1w2lvijgak3aj";
-                 description = "Coptic, Gothic, Deseret"; };
-    textfonts = { version = "7.17"; file = "TextfontsFonts.zip"; sha256 = "1ggflqnslp81v8pzmzx6iwi2sa38l9bpivjjci7nvx3y5xynm6wl";
-                 description = "Aroania, Anaktoria, Alexander, Avdira and Asea"; };
-    aegan = { version = "9.17"; file = "AegeanFonts.zip"; sha256 = "0dm2ck3p11bc9izrh7xz3blqfqg1mgsvy4jsgmz9rcs4m74xrhsf";
-              description = "Aegean"; };
-    abydos = { version = "1.23"; file = "AbydosFont.zip"; sha256 = "04r7ysnjjq0nrr3m8lbz8ssyx6xaikqybjqxzl3ziywl9h6nxdj8";
-               description = "AbydosFont"; };
+    aegan     = { version = "10.00"; file = "Aegean.zip";       sha256 = "0k47nhzw4vx771ch3xx8mf6xx5vx0hg0cif5jdlmdaz4h2c3rawz"; description = "Aegean"; };
+    aegyptus  = { version =  "8.00"; file = "Aegyptus.zip";     sha256 = "13h2pi641k9vxgqi9l11mjya10ym9ln54wrkwxx6gxq63zy7y5mj"; description = "Egyptian Hieroglyphs, Coptic, Meroitic"; };
+    akkadian  = { version =  "7.18"; file = "Akkadian.zip";     sha256 = "1bplcvszbdrk85kqipn9lzhr62647wjibz1p8crzjvsw6f9ymxy3"; description = "Sumero-Akkadian Cuneiform"; };
+    assyrian  = { version =  "2.00"; file = "AssyrianFont.zip"; sha256 = "0vdvb24vsnmwzd6bw14akqg0hbvsk8avgnbwk9fkybn1f801475k"; description = "Neo-Assyrian in Unicode with OpenType"; };
+    eemusic   = { version =  "2.00"; file = "EEMusic.zip";      sha256 = "1y9jf105a2b689m7hdjmhhr7z5j0qd2w6dmb3iic9bwaczlrjy7j"; description = "Byzantine Musical Notation in Unicode with OpenType"; };
+    maya      = { version =  "4.18"; file = "Maya.zip";         sha256 = "08z2ch0z2c43fjfg5m4yp3l1dp0cbk7lv5i7wzsr3cr9kr59wpi9"; description = "Maya Hieroglyphs"; };
+    symbola   = { version = "12.00"; file = "Symbola.zip";      sha256 = "1i3xra33xkj32vxs55xs2afrqyc822nk25669x78px5g5qd8gypm"; description = "Basic Latin, Greek, Cyrillic and many Symbol blocks of Unicode"; };
+    textfonts = { version =  "9.00"; file = "Textfonts.zip";    sha256 = "0wzxz4j4fgk81b88d58715n1wvq2mqmpjpk4g5hi3vk77y2zxc4d"; description = "Aroania, Anaktoria, Alexander, Avdira and Asea"; };
+    unidings  = { version =  "9.19"; file = "Unidings.zip";     sha256 = "1bybzgdqhmq75hb12n3pjrsdcpw1a6sgryx464s68jlq4zi44g78"; description = "Glyphs and Icons for blocks of The Unicode Standard"; };
   };
 
   mkpkg = name_: {version, file, sha256, description}: fetchzip rec {
@@ -42,9 +29,8 @@ let
       # In lieu of a license:
       # Fonts in this site are offered free for any use;
       # they may be installed, embedded, opened, edited, modified, regenerated, posted, packaged and redistributed.
-      license = stdenv.lib.licenses.free;
+      license = lib.licenses.free;
       homepage = http://users.teilar.gr/~g1951d/;
-      platforms = stdenv.lib.platforms.unix;
     };
   };
 in
