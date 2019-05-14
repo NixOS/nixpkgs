@@ -37,6 +37,7 @@ in
       ./system_rplugin_manifest.patch
     ];
 
+    dontFixCmake = true;
     enableParallelBuilding = true;
 
     buildInputs = [
@@ -76,7 +77,7 @@ in
     disallowedReferences = [ stdenv.cc ];
 
     cmakeFlags = [
-      "-DLUA_PRG=${neovimLuaEnv}/bin/lua"
+      "-DLUA_PRG=${neovimLuaEnv.interpreter}"
       "-DGPERF_PRG=${gperf}/bin/gperf"
     ]
     ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"
