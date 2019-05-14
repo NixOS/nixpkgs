@@ -21812,7 +21812,7 @@ in
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
+  vapoursynthPlugins = recurseIntoAttrs vapoursynth.plugins;
 
   vassal = callPackage ../games/vassal { };
 

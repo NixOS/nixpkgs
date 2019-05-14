@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, makeWrapper
+{ stdenv, pkgs, fetchFromGitHub, pkgconfig, autoreconfHook, makeWrapper
 , zimg, libass, python3, libiconv
 , ApplicationServices, nasm
 , ocrSupport ?  false, tesseract ? null
@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
     wrapProgram $python/bin/vspipe \
         --prefix PYTHONPATH : $(toPythonPath $python)
   '';
+
+  passthru = {
+    plugins = import ./plugins { inherit pkgs; };
+  };
 
   meta = with stdenv.lib; {
     description = "A video processing framework with the future in mind";
