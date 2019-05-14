@@ -389,7 +389,7 @@ in
           chown -R ${cfg.user}:${cfg.group} ${cfg.pidfile}
 
         for x in "${cfg.logDir}" "${cfg.dataDir}"; do
-          [ ! -d "$x" ] && mkdir -m 0700 -vp "$x";
+          [ ! -d "$x" ] && mkdir -m 0770 -vp "$x";
           chown -R ${cfg.user}:${cfg.group} "$x";
         done
 
