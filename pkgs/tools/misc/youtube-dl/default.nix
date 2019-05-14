@@ -19,11 +19,11 @@ buildPythonPackage rec {
   # The websites youtube-dl deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2019.04.30";
+  version = "2019.05.11";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1s43adnky8ayhjwmgmiqy6rmmygd4c23v36jhy2lzr2jpn8l53z1";
+    sha256 = "1y272jgdqwhf2njzqfln80zb2pmw83rvp6lxza6wghb7cld249j1";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -41,6 +41,10 @@ buildPythonPackage rec {
         ++ lib.optional rtmpSupport rtmpdump
         ++ lib.optional phantomjsSupport phantomjs2;
     in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
+
+  setupPyBuildFlags = [
+    "build_lazy_extractors"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions

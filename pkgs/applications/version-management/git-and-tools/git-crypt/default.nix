@@ -1,4 +1,4 @@
-{ fetchFromGitHub, git, gnupg1compat, makeWrapper, openssl, stdenv }:
+{ fetchFromGitHub, git, gnupg, makeWrapper, openssl, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "git-crypt-${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     make install PREFIX=$out
-    wrapProgram $out/bin/* --prefix PATH : $out/bin:${git}/bin:${gnupg1compat}/bin
+    wrapProgram $out/bin/* --prefix PATH : $out/bin:${git}/bin:${gnupg}/bin
   '';
 
   meta = with stdenv.lib; {

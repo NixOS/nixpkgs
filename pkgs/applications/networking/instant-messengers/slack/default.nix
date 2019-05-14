@@ -1,7 +1,7 @@
-{ darkMode ? false, stdenv, fetchurl, dpkg, makeWrapper
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gtk3, gdk_pixbuf, libnotify, libxcb, nspr, nss, pango
-, systemd, xorg, at-spi2-atk }:
+{ darkMode ? false, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
+cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk_pixbuf,
+libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
+at-spi2-atk }:
 
 let
 
@@ -25,6 +25,7 @@ let
     pango
     libnotify
     libxcb
+    libappindicator-gtk3
     nspr
     nss
     stdenv.cc.cc

@@ -9015,6 +9015,7 @@ let
     postPatch = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
       substituteInPlace Makefile.PL --replace 'if has_module' 'if 0; #'
     '';
+    doCheck = !stdenv.isDarwin;
     meta = with stdenv.lib; {
       description = "The World-Wide Web library for Perl";
       license = with licenses; [ artistic1 gpl1Plus ];

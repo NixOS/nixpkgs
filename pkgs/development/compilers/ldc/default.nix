@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ninja, llvm, llvm_8, curl, tzdata
+{ stdenv, fetchurl, cmake, ninja, llvm_5, llvm_8, curl, tzdata
 , python, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, targetPackages
 , bootstrapVersion ? false
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional (!bootstrapVersion && stdenv.hostPlatform.isDarwin) [
     # https://github.com/NixOS/nixpkgs/issues/57120
     # https://github.com/NixOS/nixpkgs/pull/59197#issuecomment-481972515
-    llvm
+    llvm_5
   ]
 
   ++ stdenv.lib.optional (!bootstrapVersion && !stdenv.hostPlatform.isDarwin) [
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   ]
 
   ++ stdenv.lib.optional (bootstrapVersion) [
-    libconfig llvm
+    libconfig llvm_5
   ]
 
   ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
   else
     "";
 
-  doCheck = !bootstrapVersion && !stdenv.isDarwin;
+  doCheck = !bootstrapVersion;
 
   checkPhase = stdenv.lib.optionalString doCheck ''
     # Build default lib test runners

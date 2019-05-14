@@ -2,30 +2,15 @@ diff --git a/kBuild/units/qt5.kmk b/kBuild/units/qt5.kmk
 index 71b96a3..73391f0 100644
 --- a/kBuild/units/qt5.kmk
 +++ b/kBuild/units/qt5.kmk
-@@ -1019,9 +1019,10 @@ else
+@@ -1054,9 +1054,9 @@ else
     $(eval $(target)_LIBS   += $(PATH_SDK_QT5_LIB)/$(qt_prefix)qtmain$(qt_infix)$(SUFF_LIB) )
    endif
   else
 -  $(eval $(target)_LIBS    += $(foreach module,$(qt_modules), $(PATH_SDK_QT5_LIB)/lib$(qt_prefix)Qt5$(module)$(qt_infix)$(SUFF_DLL)) )
-+  $(eval $(target)_LIBS    += $(foreach module,$(qt_modules), $(PATH_SDK_QT5_LIB)/lib$(qt_prefix)Qt5$(module)$(qt_infix)$(SUFF_DLL)) \
-+                              $(PATH_QT5_X11_EXTRAS_LIB)/lib$(qt_prefix)Qt5X11Extras$(qt_infix)$(SUFF_DLL))
++  $(eval $(target)_LIBS    += $(foreach module,$(qt_modules), $(if $(filter X11Extras,$(module)),$(PATH_QT5_X11_EXTRAS_LIB),$(PATH_SDK_QT5_LIB))/lib$(qt_prefix)Qt5$(module)$(qt_infix)$(SUFF_DLL)) )
   endif
 - $(eval $(target)_INCS     += $(addprefix $(PATH_SDK_QT5_INC)/Qt,$(qt_modules)) $(PATH_SDK_QT5_INC) )
 + $(eval $(target)_INCS     += $(addprefix $(PATH_SDK_QT5_INC)/Qt,$(qt_modules)) $(PATH_SDK_QT5_INC) $(PATH_QT5_X11_EXTRAS_INC)/QtX11Extras )
  endif
  $(eval $(target)_DEFS      += $(foreach module,$(toupper $(qt_modules)), QT_$(module)_LIB) )
 
-diff --git a/src/VBox/Frontends/VirtualBox/Makefile.kmk b/src/VBox/Frontends/VirtualBox/Makefile.kmk
-index 3295bfefe7..796370623c 100644
---- a/src/VBox/Frontends/VirtualBox/Makefile.kmk
-+++ b/src/VBox/Frontends/VirtualBox/Makefile.kmk
-@@ -916,9 +916,6 @@ endif
- # The Qt modules we're using.
- # (The include directory and lib/framework for each module will be added by the Qt unit.)
- VirtualBox_QT_MODULES = Core Gui Widgets PrintSupport
--VirtualBox_QT_MODULES.linux   += X11Extras
--VirtualBox_QT_MODULES.solaris += X11Extras
--VirtualBox_QT_MODULES.freebsd += X11Extras
- VirtualBox_QT_MODULES.darwin  += MacExtras
- VirtualBox_QT_MODULES.win     += WinExtras
- if defined(VBOX_WITH_VIDEOHWACCEL) || defined(VBOX_GUI_USE_QGL)

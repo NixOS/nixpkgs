@@ -10,14 +10,11 @@ fetchzip rec {
 
   postFetch = ''
     tar -xjf $downloadedFile --strip-components=1
-    fontDir=$out/share/fonts/truetype
-    mkdir -p $fontDir
-    cp *.ttf $fontDir
+    install -m444 -Dt $out/share/fonts/truetype *.ttf
   '';
 
   sha256 = "179hal4yi3367jg8rsvqx6h2w4s0kn9zzrv8c47sslyg28g39s4m";
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
   };
 }

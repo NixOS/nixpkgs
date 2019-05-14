@@ -2,7 +2,7 @@
 #
 # https://aur.archlinux.org/packages/ttf-montserrat/
 
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "1.0";
@@ -19,7 +19,7 @@ in fetchzip {
 
   sha256 = "11sdgvhaqg59mq71aqwqp2mb428984hjxy7hd1vasia9kgk8259w";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A geometric sans serif font with extended latin support (Regular, Alternates, Subrayada)";
     homepage    = "https://www.fontspace.com/julieta-ulanovsky/montserrat";
     license     = licenses.ofl;

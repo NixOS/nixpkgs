@@ -103,8 +103,7 @@ stdenv.mkDerivation rec {
 
   checkPhase = ''
     cd dmd
-    # https://github.com/NixOS/nixpkgs/pull/55998#issuecomment-465871846
-    #make -j$NIX_BUILD_CORES -C test -f Makefile PIC=1 CC=$CXX DMD=${pathToDmd} BUILD=release SHELL=$SHELL
+    make -j$NIX_BUILD_CORES -C test -f Makefile PIC=1 CC=$CXX DMD=${pathToDmd} BUILD=release SHELL=$SHELL
     cd ../druntime
     make -j$NIX_BUILD_CORES -f posix.mak unittest PIC=1 DMD=${pathToDmd} BUILD=release
     cd ../phobos

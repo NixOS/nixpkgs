@@ -255,6 +255,7 @@ mapAliases ({
   # end
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
   procps-ng = procps; # added 2018-06-08
+  pstree = psmisc; # added 2019-05-05
   pulseaudioLight = pulseaudio; # added 2018-04-25
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qt_gstreamer = qt-gstreamer;  # added 2017-02

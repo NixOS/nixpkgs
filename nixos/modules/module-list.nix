@@ -19,6 +19,7 @@
   ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
+  ./config/malloc.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
@@ -144,6 +145,7 @@
   ./programs/xonsh.nix
   ./programs/xss-lock.nix
   ./programs/yabar.nix
+  ./programs/zmap.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
   ./programs/zsh/zsh-autoenv.nix
@@ -435,6 +437,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/osrm.nix
   ./services/misc/packagekit.nix
+  ./services/misc/paperless.nix
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/plex.nix

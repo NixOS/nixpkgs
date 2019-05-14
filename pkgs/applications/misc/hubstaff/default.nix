@@ -5,7 +5,9 @@
 
 let
 
-  version = "1.3.1-ff75f26";
+  data = builtins.fromJSON (builtins.readFile ./revision.json);
+
+  inherit (data) version url sha256;
 
   rpath = stdenv.lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
@@ -17,10 +19,7 @@ in
 stdenv.mkDerivation {
   name = "hubstaff-${version}";
 
-  src = fetchurl {
-    url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/${version}/Hubstaff-${version}.sh";
-    sha256 = "0jm5l34r6lkfkg8vsdfqbr0axngxznhagwcl9y184lnyji91fmdl";
-  };
+  src = fetchurl { inherit sha256 url; };
 
   nativeBuildInputs = [ unzip makeWrapper ];
 

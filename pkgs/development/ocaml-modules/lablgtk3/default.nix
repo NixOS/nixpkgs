@@ -1,16 +1,14 @@
-{ lib, fetchFromGitHub, pkgconfig, buildDunePackage, gtk3, cairo2 }:
+{ lib, fetchurl, pkgconfig, buildDunePackage, gtk3, cairo2 }:
 
 buildDunePackage rec {
-  version = "3.0.beta5";
+  version = "3.0.beta6";
   pname = "lablgtk3";
 
   minimumOCamlVersion = "4.05";
 
-  src = fetchFromGitHub {
-    owner = "garrigue";
-    repo = "lablgtk";
-    rev = version;
-    sha256 = "05n3pjy4496gbgxwbypfm2462njv6dgmvkcv26az53ianpwa4vzz";
+  src = fetchurl {
+    url = "https://github.com/garrigue/lablgtk/releases/download/${version}/lablgtk3-${version}.tbz";
+    sha256 = "1jni5cbp54qs7y0dc5zkm28v2brpfwy5miighv7cy0nmmxrsq520";
   };
 
   nativeBuildInputs = [ pkgconfig ];

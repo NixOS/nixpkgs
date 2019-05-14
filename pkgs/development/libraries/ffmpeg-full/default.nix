@@ -97,8 +97,7 @@
 , libXv ? null # Xlib support
 , libXext ? null # Xlib support
 , lzma ? null # xz-utils
-, nvenc ? false, nvidia-video-sdk ? null, nv-codec-headers ? null # NVIDIA NVENC support
-, callPackage # needed for NVENC to access external ffmpeg nvidia headers
+, nvenc ? true, nv-codec-headers ? null # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
@@ -228,15 +227,14 @@ assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
 assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
-assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "4.1.2";
+  version = "4.1.3";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "0yrl6nij4b1pk1c4nbi80857dsd760gziiss2ls19awq8zj0lpxr";
+    sha256 = "0gdnprc7gk4b7ckq8wbxbrj7i00r76r9a5g9mj7iln40512j0c0c";
   };
 
   prePatch = ''
@@ -418,13 +416,13 @@ stdenv.mkDerivation rec {
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
     ++ optional (isLinux && libmfx != null) libmfx
-    ++ optionals nvenc [ nvidia-video-sdk nv-codec-headers ]
+    ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
                                    libiconv cf-private /* For _OBJC_EHTYPE_$_NSException */ ];
 
-  # Build qt-faststart executable
-  buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';
+  buildFlags = [ "all" ]
+    ++ optional qtFaststartProgram "tools/qt-faststart"; # Build qt-faststart executable
 
   # Hacky framework patching technique borrowed from the phantomjs2 package
   postInstall = optionalString qtFaststartProgram ''

@@ -79,7 +79,6 @@ rec {
         (test -n "$executable" && chmod +x "$n") || true
       '';
 
-
   /*
    * Writes a text file to nix store with no optional parameters available.
    *
@@ -92,6 +91,7 @@ rec {
    *
   */
   writeText = name: text: writeTextFile {inherit name text;};
+
   /*
    * Writes a text file to nix store in a specific directory with no
    * optional parameters available. Name passed is the destination.
@@ -105,6 +105,7 @@ rec {
    *
   */
   writeTextDir = name: text: writeTextFile {inherit name text; destination = "/${name}";};
+
   /*
    * Writes a text file to /nix/store/<store path> and marks the file as executable.
    *
@@ -117,13 +118,14 @@ rec {
    *
   */
   writeScript = name: text: writeTextFile {inherit name text; executable = true;};
+
   /*
    * Writes a text file to /nix/store/<store path>/bin/<name> and
    * marks the file as executable.
    *
    * Example:
    * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-   * writeScript "my-file"
+   * writeScriptBin "my-file"
    *   ''
    *   Contents of File
    *   '';
@@ -132,12 +134,38 @@ rec {
   writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
 
   /*
-   * Writes a Shell script and check its syntax. Automatically includes interpreter
-   * above the contents passed.
+   * Similar to writeScript. Writes a Shell script and checks its syntax.
+   * Automatically includes interpreter above the contents passed.
+   *
+   * Example:
+   * # Writes my-file to /nix/store/<store path>/my-file and makes executable.
+   * writeShellScript "my-file"
+   *   ''
+   *   Contents of File
+   *   '';
+   *
+  */
+  writeShellScript = name: text:
+    writeTextFile {
+      inherit name;
+      executable = true;
+      text = ''
+        #!${runtimeShell}
+        ${text}
+        '';
+      checkPhase = ''
+        ${stdenv.shell} -n $out
+      '';
+    };
+
+  /*
+   * Similar to writeShellScript and writeScriptBin.
+   * Writes an executable Shell script to /nix/store/<store path>/bin/<name> and checks its syntax.
+   * Automatically includes interpreter above the contents passed.
    *
    * Example:
    * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-   * writeScript "my-file"
+   * writeShellScriptBin "my-file"
    *   ''
    *   Contents of File
    *   '';

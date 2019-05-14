@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "063";
@@ -15,7 +15,7 @@ in fetchzip rec {
 
   sha256 = "0d485l2ihxfk039rrrnfviamlbj13cwky0c752m4ikwvgiqiq94y";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "M+ Outline Fonts";
     homepage = http://mplus-fonts.sourceforge.jp/mplus-outline-fonts/index-en.html;
     license = licenses.mit;

@@ -12,13 +12,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "linbox";
-  version = "1.5.2";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "1wfivlwp30mzdy1697w7rzb8caajim50mc8h27k82yipn2qc5n4i";
+    sha256 = "11mgj7pkppvzmhx5g6wfnzisk36z00gqzzq9p14hzh5dbdhk3693";
   };
 
   nativeBuildInputs = [
@@ -51,16 +51,6 @@ stdenv.mkDerivation rec {
     "--enable-sage"
   ];
 
-  patches = stdenv.lib.optionals withSage [
-    # https://trac.sagemath.org/ticket/24214#comment:39
-    # Will be resolved by
-    # https://github.com/linbox-team/linbox/issues/69
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/sagemath/sage/a843f48b7a4267e44895a3dfa892c89c85b85611/build/pkgs/linbox/patches/linbox_charpoly_fullCRA.patch";
-      sha256 = "16nxfzfknra3k2yk3xy0k8cq9rmnmsch3dnkb03kx15h0y0jmibk";
-    })
-  ];
-
   doCheck = true;
 
   enableParallelBuilding = true;
@@ -71,6 +61,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [stdenv.lib.maintainers.timokau];
     platforms = stdenv.lib.platforms.unix;
+    broken = stdenv.isDarwin || stdenv.isAarch64; # https://trac.sagemath.org/ticket/26932#comment:21
     homepage = http://linalg.org/;
   };
 }

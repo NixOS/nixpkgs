@@ -2,7 +2,7 @@
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  which, dbus,
+  which, dbus, fetchpatch,
   Cocoa,
   CoreGraphics,
   Foundation,
@@ -67,6 +67,17 @@ buildPythonApplication rec {
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
     })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      name = "macos-symlink-1";
+      url = https://github.com/kovidgoyal/kitty/commit/bdeec612667f6976109247fe1750b10dda9c24c0.patch;
+      sha256 = "1d18x260w059qag80kgb2cgi2h4rricvqhwpbrw79s8yxzs7jhxk";
+    })
+    (fetchpatch {
+      # fixup of previous patch
+      name = "macos-symlink-2";
+      url = https://github.com/kovidgoyal/kitty/commit/af2c9a49b1ad31e94242295d88598591623fbf11.patch;
+      sha256 = "0k3dmgbvmh66j8k3h8dw6la6ma6f20fng6jjypy982kxvracsnl5";
+    })
     ./macos-10.11.patch
     ./no-lto.patch
     ./no-werror.patch
@@ -84,7 +95,7 @@ buildPythonApplication rec {
     mkdir -p $out
     ${if stdenv.isDarwin then ''
     mkdir "$out/bin"
-    ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
+    ln -s ../Applications/kitty.app/Contents/MacOS/kitty-deref-symlink "$out/bin/kitty"
     mkdir "$out/Applications"
     cp -r kitty.app "$out/Applications/kitty.app"
     '' else ''

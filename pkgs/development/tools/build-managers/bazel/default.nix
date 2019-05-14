@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
       sed -i -e 's/<.*\*>//g' tools/osx/xcode_locator.m
 
       # don't use system installed Xcode to run clang, use Nix clang instead
-      sed -i -e "s;/usr/bin/xcrun clang;${clang}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
+      sed -i -e "s;/usr/bin/xcrun clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
         scripts/bootstrap/compile.sh \
         src/tools/xcode/realpath/BUILD \
         src/tools/xcode/stdredirect/BUILD \
@@ -256,7 +256,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     which
     customBash
-  ] ++ lib.optionals (stdenv.isDarwin) [ cctools clang libcxx CoreFoundation CoreServices Foundation ];
+  ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx CoreFoundation CoreServices Foundation ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
   # This causes problems with infinite symlinks if the build output is in the same location as the
