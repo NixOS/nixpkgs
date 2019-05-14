@@ -97,12 +97,16 @@ in rec {
   coq_8_9 = callPackage ../applications/science/logic/coq {
     version = "8.9.0";
   };
+  coq_8_10 = callPackage ../applications/science/logic/coq {
+    version = "8.10+beta1";
+  };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
   coqPackages_8_9 = mkCoqPackages coq_8_9;
+  coqPackages_8_10 = mkCoqPackages coq_8_10;
   coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
     coqPackages_8_8
   );
