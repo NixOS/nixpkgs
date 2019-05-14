@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "uncompyle6";
-  version = "3.2.6";
+  version = "3.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3a40f4f4b8b02a8687bd98c598980bed38a4770e3de253847eafed4b7167d07f";
+    sha256 = "096k1hipxxnsra5k86v6sm7bk1g0kb1f75yb44nvgf566kd6p119";
   };
 
   checkInputs = [ nose pytest hypothesis six ];
@@ -23,8 +23,9 @@ buildPythonPackage rec {
 
   # six import errors (yet it is supplied...)
   checkPhase = ''
-    pytest ./pytest --ignore=pytest/test_build_const_key_map.py \
-                    --ignore=pytest/test_grammar.py
+    runHook preCheck
+    pytest ./pytest --ignore=pytest/test_function_call.py
+    runHook postCheck
   '';
 
   meta = with stdenv.lib; {
