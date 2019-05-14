@@ -38,4 +38,6 @@ self: super: {
     tds_fdw = super.callPackage ./ext/tds_fdw.nix { };
 
     pgrouting = super.callPackage ./ext/pgrouting.nix { };
+
+    pg_partman = super.callPackage ./ext/pg_partman.nix { };
 }
