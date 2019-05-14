@@ -34,4 +34,6 @@ self: super: {
     timescaledb = super.callPackage ./ext/timescaledb.nix { };
 
     tsearch_extras = super.callPackage ./ext/tsearch_extras.nix { };
+
+    pg_partman = super.callPackage ./ext/pg_partman.nix { };
 }
