@@ -1,10 +1,10 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, fetchgit, mercurial, python27,
-  zlib, makeWrapper, openjdk, unzip, git, clang, llvm, which, icu, ruby, bzip2
+  zlib, makeWrapper, openjdk, unzip, git, clang, llvm, which, icu, ruby, bzip2, glibc
   # gfortran, readline, bzip2, lzma, pcre, curl, ed, tree ## WIP: fastr deps
 }:
 
 let
-  version = "1.0.0-rc15";
+  version = "19.0.0";
   truffleMake = ./truffle.make;
   R = fetchurl {
     url = "http://cran.rstudio.com/src/base/R-3/R-3.5.1.tar.gz";
@@ -36,7 +36,7 @@ let
     hg checkout ${lib.escapeShellArg "vm${version}"}
   '';
 
-  # pre-download some cache entries ('mx' will not be able to download under nixbld1)
+  # pre-download some cache entries ('mx' will not be able to download under nixbld)
   makeMxCache = list:
     stdenv.mkDerivation {
       name = "mx-cache";
@@ -118,8 +118,8 @@ let
     rec { sha1 = "280c265b789e041c02e5c97815793dfc283fb1e6"; name = "LIBFFI_SOURCES_${sha1}/libffi-sources.tar.gz";                                    url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/libffi-3.2.1.tar.gz; }
     rec { sha1 = "8819cea8bfe22c9c63f55465e296b3855ea41786"; name = "TruffleJSON_${sha1}/trufflejson.jar";                                             url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/trufflejson-20180130.jar; }
     rec { sha1 = "9712a8124c40298015f04a74f61b3d81a51513af"; name = "CHECKSTYLE_8.8_${sha1}/checkstyle-8.8.jar";                                       url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/checkstyle-8.8-all.jar; }
-    rec { sha1 = "5a5574f03b58465226166a638641a384b9f44445"; name = "VISUALVM_COMMON_${sha1}/visualvm-common.tar.gz";                                  url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm-655.tar.gz; }
-    rec { sha1 = "64f07398bac9897e9b8123edeaf5cf9ff19517b5"; name = "VISUALVM_PLATFORM_SPECIFIC_${sha1}/visualvm-platform-specific.tar.gz";            url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm-655-linux-amd64.tar.gz; }
+    rec { sha1 = "aee7dd2a9663701df57a96e501b9219a7c90cbc3"; name = "VISUALVM_COMMON_${sha1}/visualvm-common.tar.gz";                                  url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm-670.tar.gz; }
+    rec { sha1 = "e607a0c40716f4a232de3726ab101f5c54798cfa"; name = "VISUALVM_PLATFORM_SPECIFIC_${sha1}/visualvm-platform-specific.tar.gz";            url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm-670-linux-amd64.tar.gz; }
     rec { sha1 = "e6e60889b7211a80b21052a249bd7e0f88f79fee"; name = "Java-WebSocket_${sha1}/java-websocket.jar";                                       url = mirror://maven/org/java-websocket/Java-WebSocket/1.3.9/Java-WebSocket-1.3.9.jar; }
     rec { sha1 = "7a4d00d5ec5febd252a6182e8b6e87a0a9821f81"; name = "ICU4J_${sha1}/icu4j.jar";                                                         url = mirror://maven/com/ibm/icu/icu4j/62.1/icu4j-62.1.jar; }
    # This duplication of asm with underscore and minus is totally weird
@@ -149,14 +149,14 @@ let
   ];
 
   graal-mxcachegit = [
-    { sha256 = "0siryzvmj9h8zkyr0d3gy9fqgyxb9s5xs15rf7lnx9zh3ykq549y"; name = "graaljs";
-      url = "http://github.com/graalvm/graaljs.git"; rev = "vm-${version}"; }
-    { sha256 = "1ii3mwa0c2zk9vm51hyrymdz3whfihm6sccd2r5ja2v53jcdc1a3"; name = "truffleruby";
+    { sha256 = "0idc2jn69pyrj2xivisrc8p59zd49jbz67476j8z3rfaf0hqnr3z"; name = "graaljs";
+      url = "http://github.com/graalvm/graaljs.git"; rev = "fd578bf87e2bbf668482d4928603bdc63b9a0d97"; }
+    { sha256 = "1zyaaygzd8fc1a1684h75h21k8rs2rnhkr5y217wlazyd78j65nr"; name = "truffleruby";
       url = "http://github.com/oracle/truffleruby.git"; rev = "vm-${version}"; }
-    { sha256 = "1nz8yqg2k9shpmhj3jv7k2icfg72cm55baf354rsh1pqanay8qb7"; name = "fastr";
+    { sha256 = "0kyzx5y2kag08m9vla5x117al9ijs10783qpnv8b7zr116fwi28h"; name = "fastr";
       url = "http://github.com/oracle/fastr.git"; rev = "vm-${version}"; }
-    { sha256 = "1c8nnrl30fys22gk3y6dvxzq0fq1a5hjkqrw15p68cwpz9wma4gi"; name = "graalpython";
-      url = "https://github.com/graalvm/graalpython.git"; rev = "vm-${version}"; }
+    { sha256 = "1v4dqml2kwy1qiirw09vjsivp7mbmc5pmflskvc4x5m841dwgsgb"; name = "graalpython";
+      url = "https://github.com/graalvm/graalpython.git"; rev = "0c20d4d09329323f5b74137000c6e0a4645053ad"; }
   ];
 
   ninja-syntax = python27.pkgs.buildPythonPackage rec {
@@ -180,13 +180,13 @@ let
 in rec {
 
   mx = stdenv.mkDerivation rec {
-    version = "5.215.4";
+    version = "5.216.4";
     pname = "mx";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "mx";
       rev    = version;
-      sha256 = "0wrwfiwqjw6xp0bvp2g15jn6yrjb9w6jw1xnwvkyhkw1s6m0w0z1";
+      sha256 = "0m4yy3i64r7sc46y04cfbb5834lc9j3wzmmbbjgx3d53s9wqrvyr";
     };
     nativeBuildInputs = [ makeWrapper ];
     prePatch = ''
@@ -219,19 +219,19 @@ in rec {
     meta = with stdenv.lib; {
       homepage = https://github.com/graalvm/mx;
       description = "Command-line tool used for the development of Graal projects";
-      license = licenses.unfree;
+      license = licenses.gpl2;
       platforms = python27.meta.platforms;
     };
   };
 
   jvmci8 = stdenv.mkDerivation rec {
-    version = "0.58";
+    version = "19-b01";
     name = "jvmci-${version}";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
       rev    = "jvmci-${version}";
-      sha256 = "0p8icn3d99zggsh6pqb15dz1j186ck442sjpn2cv43n4nvdmmp1m";
+      sha256 = "1l75z3jjc4i0vc3qs9xba4mvy3y8ba860yf7kpywlfl0xh51jm10";
     };
     buildInputs = [ mx mercurial openjdk ];
     postUnpack = ''
@@ -249,6 +249,9 @@ in rec {
       # The hotspot version name regex fix
       substituteInPlace mx.jvmci/mx_jvmci.py \
         --replace "\\d+.\\d+-b\\d+" "\\d+.\\d+-bga"
+      substituteInPlace src/share/vm/jvmci/jvmciCompilerToVM.cpp \
+        --replace 'method->name_and_sig_as_C_string(), method->native_function(), entry' \
+                  'method->name_and_sig_as_C_string(), p2i(method->native_function()), p2i(entry)' || exit -1
     '';
     hardeningDisable = [ "fortify" ];
     NIX_CFLAGS_COMPILE = [
@@ -270,7 +273,7 @@ in rec {
     '';
     dontFixup = true; # do not nuke path of ffmpeg etc
     dontStrip = true; # why? see in oraclejdk derivation
-    meta = openjdk.meta // { inherit (graalvm8.meta) platforms; };
+    inherit (openjdk) meta;
     inherit (openjdk) postFixup;
   };
 
@@ -281,7 +284,7 @@ in rec {
       owner  = "oracle";
       repo   = "graal";
       rev    = "vm-${version}";
-      sha256 = "18fqah8x7gwz02ji40b4vyqav9x5dw703xwikjc117wlyymb1k56";
+      sha256 = "07gy4xvjhrnl74v0vnixgfvgjp0dba0l8l7qlh28pfrc97dkcm9r";
     };
     patches = [ ./002_setjmp.c.patch ./003_mx_truffle.py.patch ];
     buildInputs = [ mx zlib mercurial jvmci8 git clang llvm
@@ -324,6 +327,10 @@ in rec {
 
       # Patch the native-image template, as it will be run during build
       chmod +x vm/mx.vm/launcher_template.sh && patchShebangs vm/mx.vm
+      # Prevent random errors from too low maxRuntimecompilemethods
+      substituteInPlace truffle/mx.truffle/tools-truffle.properties \
+        --replace '-H:MaxRuntimeCompileMethods=1400' \
+                  '-H:MaxRuntimeCompileMethods=28000'
     '';
 
     buildPhase = ''
@@ -349,15 +356,20 @@ in rec {
 
     installPhase = ''
       mkdir -p $out
-      cp -rf $MX_ALT_OUTPUT_ROOT/vm/linux-amd64/GRAALVM_CMP_GU_GVM_INS_JS_LIBPOLY_NFI_NJS_POLY_POLYNATIVE_PRO_PYN_RGX_SLG_SVM_SVMAG_SVMCF_SVML_TFL_VVM/graalvm-unknown-${version}/* $out
+      rm -rf $MX_ALT_OUTPUT_ROOT/vm/linux-amd64/GRAALVM_*STAGE1*
+      cp -rf $MX_ALT_OUTPUT_ROOT/vm/linux-amd64/GRAALVM*/graalvm-unknown-${version}/* $out
 
       # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
       substituteInPlace $out/jre/lib/security/java.security \
         --replace file:/dev/random    file:/dev/./urandom \
         --replace NativePRNGBlocking  SHA1PRNG
+      # copy static and dynamic libraries needed for static compilation
+      cp -rf ${glibc}/lib/* $out/jre/lib/svm/clibraries/linux-amd64/
+      cp ${glibc.static}/lib/* $out/jre/lib/svm/clibraries/linux-amd64/
+      cp ${zlib.static}/lib/libz.a $out/jre/lib/svm/clibraries/linux-amd64/libz.a
       # Organize the out dir
       mkdir -p $out/share && mv $out/man $out/share
-      rm $out/ASSEMBLY_EXCEPTION $out/release $out/LICENSE $out/THIRD_PARTY_README
+      rm $out/ASSEMBLY_EXCEPTION $out/release $out/LICENSE $out/THIRD_PARTY_README $out/*.txt $out/*.md
     '';
 
     dontFixup = true; # do not nuke path of ffmpeg etc
@@ -379,6 +391,11 @@ in rec {
 
       # Ahead-Of-Time compilation
       $out/bin/native-image --no-server HelloWorld
+      ./helloworld
+      ./helloworld | fgrep 'Hello World'
+
+      # Ahead-Of-Time compilation with --static
+      $out/bin/native-image --no-server --static HelloWorld
       ./helloworld
       ./helloworld | fgrep 'Hello World'
     '';
