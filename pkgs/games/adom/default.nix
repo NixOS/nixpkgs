@@ -1,59 +1,34 @@
-{ stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, libGLU_combined, alsaLib, libpulseaudio
-, xorg }:
+{ stdenv, fetchurl, autoPatchelfHook
+, ncurses5
+}:
 
-let
-
-  inherit (xorg) libXext libX11;
-
-  lpath = "${stdenv.cc.cc.lib}/lib64:" + stdenv.lib.makeLibraryPath [
-      zlib libmad libpng12 libcaca libXext libX11 libGLU_combined alsaLib libpulseaudio];
-
-in
 stdenv.mkDerivation rec {
-  name = "adom-${version}-noteye";
-  version = "1.2.0_pre23";
+  name = "adom-${version}";
+  version = "3.3.3";
 
   src = fetchurl {
-    url = "http://ancardia.uk.to/download/adom_noteye_linux_ubuntu_64_${version}.tar.gz";
-    sha256 = "0sbn0csaqb9cqi0z5fdwvnymkf84g64csg0s9mm6fzh0sm2mi0hz";
+    url = "https://www.adom.de/home/download/current/adom_linux_ubuntu_64_${version}.tar.gz";
+    sha256 = "493ef76594c1f6a7f38dcf32a76cd107fb71dd12bf917c18fdeaebcac1a353b1";
   };
 
-  buildCommand = ''
-    . $stdenv/setup
+  nativeBuildInputs = [ autoPatchelfHook ];
 
-    unpackPhase
+  buildInputs = [ ncurses5 ];
 
-    mkdir -pv $out
-    cp -r -t $out adom/*
-
-    chmod u+w $out/lib
-    for l in $out/lib/*so* ; do
-      chmod u+w $l
-      ${patchelf}/bin/patchelf \
-        --set-rpath "$out/lib:${lpath}" \
-        $l
-    done
-
-    ${patchelf}/bin/patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$out/lib:${lpath}" \
-      $out/adom
-
-    mkdir $out/bin
-    cat >$out/bin/adom <<EOF
-    #! ${stdenv.shell}
-    (cd $out; exec $out/adom ; )
-    EOF
-    chmod +x $out/bin/adom
+  installPhase = ''
+    mkdir -p $out/bin $out/share
+    cp -a adom $out/bin
+    cp -a docs licenses $out/share
   '';
 
   meta = with stdenv.lib; {
     description = "A rogue-like game with nice graphical interface";
     homepage = http://adom.de/;
     license = licenses.unfreeRedistributable;
-    maintainers = [maintainers.smironov];
+    maintainers = [maintainers.Baughn];
 
-    # Please, notify me (smironov) if you need the x86 version
+    # Please, notify me (Baughn) if you need the x86 version
     platforms = ["x86_64-linux"];
   };
 }
+-------
