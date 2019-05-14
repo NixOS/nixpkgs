@@ -35,6 +35,7 @@ let
     ${optionalString (cfg.class != null) "class = ${cfg.class}"}
     memory         = ${cfg.memory}
     storage_memory = ${cfg.storageMemory}
+    trace_format   = ${cfg.traceFormat}
 
     ${optionalString (cfg.tls != null) ''
       tls_plugin           = ${pkg}/libexec/plugins/FDBLibTLS.so
@@ -316,6 +317,12 @@ in
       type        = types.path;
       default     = "/run/foundationdb.pid";
       description = "Path to pidfile for fdbmonitor.";
+    };
+
+    traceFormat = mkOption {
+      type = types.enum [ "xml" "json" ];
+      default = "xml";
+      description = "Trace logging format.";
     };
   };
 
