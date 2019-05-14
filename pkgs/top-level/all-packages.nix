@@ -4885,7 +4885,7 @@ in
 
   ola = callPackage ../applications/misc/ola { };
 
-  olive-editor = libsForQt5.callPackage ../applications/video/olive-editor { 
+  olive-editor = libsForQt5.callPackage ../applications/video/olive-editor {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
@@ -21813,6 +21813,8 @@ in
   };
 
   vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
+
+  vapoursynth-editor = libsForQt5.callPackage ../development/libraries/vapoursynth/editor.nix { };
 
   vassal = callPackage ../games/vassal { };
 
