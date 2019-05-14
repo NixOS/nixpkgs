@@ -41,8 +41,30 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Use our native version of the Cabal library.
-  cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: { Cabal = null; });
+  # Use the current git version of cabal-install.
+  cabal-install = overrideCabal (super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal-git; })) (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell";
+      repo = "cabal";
+      rev = "e98f6c26fa301b49921c2df67934bf9b0a4f3386";
+      sha256 = "15nrkvckq2rw31z7grgbsg5f0gxfc09afsrqdfi4n471k630xd2i";
+    };
+    version = "20190510-git";
+    editedCabalFile = null;
+    postUnpack = "sourceRoot+=/cabal-install";
+    jailbreak = true;
+  });
+  Cabal-git = overrideCabal super.Cabal_2_4_1_0 (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell";
+      repo = "cabal";
+      rev = "e98f6c26fa301b49921c2df67934bf9b0a4f3386";
+      sha256 = "15nrkvckq2rw31z7grgbsg5f0gxfc09afsrqdfi4n471k630xd2i";
+    };
+    version = "20190510-git";
+    editedCabalFile = null;
+    postUnpack = "sourceRoot+=/Cabal";
+  });
 
   # Ignore overly restrictive upper version bounds.
   async = doJailbreak super.async;
@@ -56,10 +78,12 @@ self: super: {
   lucid = doJailbreak super.lucid;
   parallel = doJailbreak super.parallel;
   quickcheck-instances = doJailbreak super.quickcheck-instances;
+  setlocale = doJailbreak super.setlocale;
   split = doJailbreak super.split;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
   test-framework = doJailbreak super.test-framework;
   th-lift = self.th-lift_0_8_0_1;
+  hledger-lib = doJailbreak super.hledger-lib;  # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
 
   # These packages don't work and need patching and/or an update.
   primitive = overrideSrc (doJailbreak super.primitive) {
@@ -160,9 +184,21 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/attoparsec-0.13.2.2.patch";
     sha256 = "13i1p5g0xzxnv966nlyb77mfmxvg9jzbym1d36h1ajn045yf4igl";
   });
-  aeson = appendPatch super.aeson (pkgs.fetchpatch {
+  aeson = appendPatch (dontCheck super.aeson) (pkgs.fetchpatch {   # the test suite breaks the compiler
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/aeson-1.4.3.0.patch";
     sha256 = "1z6wmsmc682qs3y768r0zx493dxardwbsp0wdc4dsx83c0m5x66f";
+  });
+  cassava = appendPatch super.cassava (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/cassava-0.5.1.0.patch";
+    sha256 = "11scwwjp94si90vb8v5yr291g9qwv5l223z8y0g0lc63932bp63g";
+  });
+  shakespeare = appendPatch super.shakespeare (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/shakespeare-2.0.20.patch";
+    sha256 = "1dgx41ylahj4wk8r422aik0d7qdpawdga4gqz905nvlnhqjla58y";
+  });
+  lens = appendPatch (doJailbreak super.lens) (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/lens-4.17.1.patch";
+    sha256 = "0w89ipi6dfkx5vlw4a64hh6fd0bm9hg33mwpghliyyxik5jmilv1";
   });
 
 }

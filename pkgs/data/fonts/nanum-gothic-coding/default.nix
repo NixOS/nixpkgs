@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, unzip}:
+{ lib, fetchzip }:
 
 let
   version = "VER2.5";
@@ -15,7 +15,7 @@ in fetchzip rec {
 
   sha256 = "0b3pkhd6xn6393zi0dhj3ah08w1y1ji9fl6584bi0c8lanamf2pc";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A contemporary monospaced sans-serif typeface with a warm touch";
     homepage = https://github.com/naver/nanumfont;
     license = licenses.ofl;

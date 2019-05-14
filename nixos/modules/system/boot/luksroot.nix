@@ -76,6 +76,33 @@ let
         fi
         return 0
     }
+
+    wait_gpgcard() {
+        local secs="''${1:-10}"
+
+        gpg --card-status > /dev/null 2> /dev/null
+        if [ $? != 0 ]; then
+            echo -n "Waiting $secs seconds for GPG Card to appear"
+            local success=false
+            for try in $(seq $secs); do
+                echo -n .
+                sleep 1
+                gpg --card-status > /dev/null 2> /dev/null
+                if [ $? == 0 ]; then
+                    success=true
+                    break
+                fi
+            done
+            if [ $success == true ]; then
+                echo " - success";
+                return 0
+            else
+                echo " - failure";
+                return 1
+            fi
+        fi
+        return 0
+    }
   '';
 
   preCommands = ''
@@ -93,6 +120,13 @@ let
     # For Yubikey salt storage
     mkdir -p /crypt-storage
 
+    ${optionalString luks.gpgSupport ''
+    export GPG_TTY=$(tty)
+    export GNUPGHOME=/crypt-ramfs/.gnupg
+
+    gpg-agent --daemon --scdaemon-program $out/bin/scdaemon > /dev/null 2> /dev/null
+    ''}
+        
     # Disable all input echo for the whole stage. We could use read -s
     # instead but that would ocasionally leak characters between read
     # invocations.
@@ -105,7 +139,7 @@ let
     umount /crypt-ramfs 2>/dev/null
   '';
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, fallbackToPassword, ... }: assert name' == name;
+  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, gpgCard, fallbackToPassword, ... }: assert name' == name;
   let
     csopen   = "cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} ${optionalString (header != null) "--header=${header}"}";
     cschange = "cryptsetup luksChangeKey ${device} ${optionalString (header != null) "--header=${header}"}";
@@ -182,7 +216,7 @@ let
         ''}
     }
 
-    ${if luks.yubikeySupport && (yubikey != null) then ''
+    ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
     # Yubikey
     rbtohex() {
         ( od -An -vtx1 | tr -d ' \n' )
@@ -278,7 +312,7 @@ let
         umount /crypt-storage
     }
 
-    open_yubikey() {
+    open_with_hardware() {
         if wait_yubikey ${toString yubikey.gracePeriod}; then
             do_open_yubikey
         else
@@ -286,8 +320,75 @@ let
             open_normally
         fi
     }
+    ''}
 
-    open_yubikey
+    ${optionalString (luks.gpgSupport && (gpgCard != null)) ''
+
+    do_open_gpg_card() {
+        # Make all of these local to this function
+        # to prevent their values being leaked
+        local pin
+        local opened
+
+        gpg --import /gpg-keys/${device}/pubkey.asc > /dev/null 2> /dev/null
+
+        gpg --card-status > /dev/null 2> /dev/null
+
+        for try in $(seq 3); do
+            echo -n "PIN for GPG Card associated with device ${device}: "
+            pin=
+            while true; do
+                if [ -e /crypt-ramfs/passphrase ]; then
+                    echo "reused"
+                    pin=$(cat /crypt-ramfs/passphrase)
+                    break
+                else
+                    # and try reading it from /dev/console with a timeout
+                    IFS= read -t 1 -r pin
+                    if [ -n "$pin" ]; then
+                       ${if luks.reusePassphrases then ''
+                         # remember it for the next device
+                         echo -n "$pin" > /crypt-ramfs/passphrase
+                       '' else ''
+                         # Don't save it to ramfs. We are very paranoid
+                       ''}
+                       echo
+                       break
+                    fi
+                fi
+            done
+            echo -n "Verifying passphrase for ${device}..."
+            echo -n "$pin" | gpg -q --batch --passphrase-fd 0 --pinentry-mode loopback -d /gpg-keys/${device}/cryptkey.gpg 2> /dev/null | ${csopen} --key-file=- > /dev/null 2> /dev/null
+            if [ $? == 0 ]; then
+                echo " - success"
+                ${if luks.reusePassphrases then ''
+                  # we don't rm here because we might reuse it for the next device
+                '' else ''
+                  rm -f /crypt-ramfs/passphrase
+                ''}
+                break
+            else
+                echo " - failure"
+                # ask for a different one
+                rm -f /crypt-ramfs/passphrase
+            fi
+        done
+
+        [ "$opened" == false ] && die "Maximum authentication errors reached"
+    }
+
+    open_with_hardware() {
+        if wait_gpgcard ${toString gpgCard.gracePeriod}; then
+            do_open_gpg_card
+        else
+            echo "No GPG Card found, falling back to normal open procedure"
+            open_normally
+        fi
+    }
+    ''}
+
+    ${if (luks.yubikeySupport && (yubikey != null)) || (luks.gpgSupport && (gpgCard != null)) then ''
+    open_with_hardware
     '' else ''
     open_normally
     ''}
@@ -473,6 +574,36 @@ in
             '';
           };
 
+          gpgCard = mkOption {
+            default = null;
+            description = ''
+              The option to use this LUKS device with a GPG encrypted luks password by the GPG Smartcard.
+              If null (the default), GPG-Smartcard will be disabled for this device.
+            '';
+
+            type = with types; nullOr (submodule {
+              options = {
+                gracePeriod = mkOption {
+                  default = 10;
+                  type = types.int;
+                  description = "Time in seconds to wait for the GPG Smartcard.";
+                };
+
+                encryptedPass = mkOption {
+                  default = "";
+                  type = types.path;
+                  description = "Path to the GPG encrypted passphrase.";
+                };
+
+                publicKey = mkOption {
+                  default = "";
+                  type = types.path;
+                  description = "Path to the Public Key.";
+                };
+              };
+            });
+          };
+
           yubikey = mkOption {
             default = null;
             description = ''
@@ -554,6 +685,14 @@ in
       }));
     };
 
+    boot.initrd.luks.gpgSupport = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Enables support for authenticating with a GPG encrypted password.
+      '';
+    };
+
     boot.initrd.luks.yubikeySupport = mkOption {
       default = false;
       type = types.bool;
@@ -566,6 +705,12 @@ in
   };
 
   config = mkIf (luks.devices != {} || luks.forceLuksSupportInInitrd) {
+
+    assertions =
+      [ { assertion = !(luks.gpgSupport && luks.yubikeySupport);
+          message = "Yubikey and GPG Card may not be used at the same time.";
+        }
+      ];
 
     # actually, sbp2 driver is the one enabling the DMA attack, but this needs to be tested
     boot.blacklistedKernelModules = optionals luks.mitigateDMAAttacks
@@ -603,6 +748,23 @@ in
         EOF
         chmod +x $out/bin/openssl-wrap
       ''}
+
+      ${optionalString luks.gpgSupport ''
+        copy_bin_and_libs ${pkgs.gnupg}/bin/gpg
+        copy_bin_and_libs ${pkgs.gnupg}/bin/gpg-agent
+        copy_bin_and_libs ${pkgs.gnupg}/libexec/scdaemon
+
+        ${concatMapStringsSep "\n" (x:
+          if x.gpgCard != null then
+            ''
+              mkdir -p $out/secrets/gpg-keys/${x.device}
+              cp -a ${x.gpgCard.encryptedPass} $out/secrets/gpg-keys/${x.device}/cryptkey.gpg
+              cp -a ${x.gpgCard.publicKey} $out/secrets/gpg-keys/${x.device}/pubkey.asc
+            ''
+          else ""
+          ) (attrValues luks.devices)
+        }
+      ''}
     '';
 
     boot.initrd.extraUtilsCommandsTest = ''
@@ -611,6 +773,11 @@ in
         $out/bin/ykchalresp -V
         $out/bin/ykinfo -V
         $out/bin/openssl-wrap version
+      ''}
+      ${optionalString luks.gpgSupport ''
+        $out/bin/gpg --version
+        $out/bin/gpg-agent --version
+        $out/bin/scdaemon --version
       ''}
     '';
 

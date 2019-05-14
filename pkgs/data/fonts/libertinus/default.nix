@@ -1,28 +1,22 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "libertinus-${version}";
+let
   version = "6.6";
+in fetchFromGitHub rec {
+  name = "libertinus-${version}";
 
-  src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "khaledhosny";
-    repo   = "libertinus";
-    sha256 = "0syagjmwy6q1ysncchl9bgyfrm7f6fghj1aipbr6md7l6gafz7ji";
-  };
+  owner  = "khaledhosny";
+  repo   = "libertinus";
+  rev    = "v${version}";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype/
-    mkdir -p $out/share/doc/${name}/
-    cp *.otf $out/share/fonts/opentype/
-    cp *.txt $out/share/doc/${name}/
+  postFetch = ''
+    tar xf $downloadedFile --strip=1
+    install -m444 -Dt $out/share/fonts/opentype *.otf
+    install -m444 -Dt $out/share/doc/${name}    *.txt
   '';
+  sha256 = "11pxb2zwvjlk06zbqrfv2pgwsl4awf68fak1ks4881i8xbl1910m";
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "11pxb2zwvjlk06zbqrfv2pgwsl4awf68fak1ks4881i8xbl1910m";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fork of the Linux Libertine and Linux Biolinum fonts";
     longDescription = ''
       Libertinus fonts is a fork of the Linux Libertine and Linux Biolinum fonts

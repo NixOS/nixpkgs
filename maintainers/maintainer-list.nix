@@ -4967,6 +4967,11 @@
     github = "ctheune";
     name = "Christian Theune";
   };
+  thiagokokada = {
+    email = "thiagokokada@gmail.com";
+    github = "thiagokokada";
+    name = "Thiago K. Okada";
+  };
   ThomasMader = {
     email = "thomas.mader@gmail.com";
     github = "ThomasMader";

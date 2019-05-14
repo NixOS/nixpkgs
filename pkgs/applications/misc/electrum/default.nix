@@ -3,16 +3,6 @@
 let
   version = "3.3.5";
 
-  qdarkstyle = python3Packages.buildPythonPackage rec {
-    pname = "QDarkStyle";
-    version = "2.5.4";
-    src = python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "1w715m1i5pycfqcpkrggpn0rs9cakx6cm5v8rggcxnf4p0i0kdiy";
-    };
-    doCheck = false; # no tests
-  };
-
   # Not provided in official source releases, which are what upstream signs.
   tests = fetchFromGitHub {
     owner = "spesmilo";
