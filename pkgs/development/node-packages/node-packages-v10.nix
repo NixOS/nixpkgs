@@ -6853,6 +6853,15 @@ let
         sha1 = "93f222229b4f5f5e2cd559236891407f9853663b";
       };
     };
+    "builtin-modules-1.1.1" = {
+      name = "builtin-modules";
+      packageName = "builtin-modules";
+      version = "1.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/builtin-modules/-/builtin-modules-1.1.1.tgz";
+        sha1 = "270f076c5a72c02f5b65a47df94c5fe3a278892f";
+      };
+    };
     "builtin-modules-2.0.0" = {
       name = "builtin-modules";
       packageName = "builtin-modules";
@@ -36429,6 +36438,15 @@ let
         sha1 = "7dc4a33af71581ab4337da91d85ca5427ebd9a97";
       };
     };
+    "tsutils-2.29.0" = {
+      name = "tsutils";
+      packageName = "tsutils";
+      version = "2.29.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/tsutils/-/tsutils-2.29.0.tgz";
+        sha512 = "g5JVHCIJwzfISaXpXE1qvNalca5Jwob6FjI4AoPlqMusJ6ftFE7IkkFoMhVLRgK+4Kx3gkzb8UZK5t5yTTvEmA==";
+      };
+    };
     "ttl-1.3.1" = {
       name = "ttl";
       packageName = "ttl";
@@ -63861,6 +63879,61 @@ in
       description = "Joyent Triton CLI and client (https://www.joyent.com/triton)";
       homepage = https://github.com/joyent/node-triton;
       license = "MPL-2.0";
+    };
+    production = true;
+    bypassCache = true;
+  };
+  tslint = nodeEnv.buildNodePackage {
+    name = "tslint";
+    packageName = "tslint";
+    version = "5.16.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/tslint/-/tslint-5.16.0.tgz";
+      sha512 = "UxG2yNxJ5pgGwmMzPMYh/CCnCnh0HfPgtlVRDs1ykZklufFBL1ZoTlWFRz2NQjcoEiDoRp+JyT0lhBbbH/obyA==";
+    };
+    dependencies = [
+      sources."@babel/code-frame-7.0.0"
+      sources."@babel/highlight-7.0.0"
+      sources."ansi-styles-3.2.1"
+      sources."argparse-1.0.10"
+      sources."balanced-match-1.0.0"
+      sources."brace-expansion-1.1.11"
+      sources."builtin-modules-1.1.1"
+      sources."chalk-2.4.2"
+      sources."color-convert-1.9.3"
+      sources."color-name-1.1.3"
+      sources."commander-2.20.0"
+      sources."concat-map-0.0.1"
+      sources."diff-3.5.0"
+      sources."escape-string-regexp-1.0.5"
+      sources."esprima-4.0.1"
+      sources."esutils-2.0.2"
+      sources."fs.realpath-1.0.0"
+      sources."glob-7.1.4"
+      sources."has-flag-3.0.0"
+      sources."inflight-1.0.6"
+      sources."inherits-2.0.3"
+      sources."js-tokens-4.0.0"
+      sources."js-yaml-3.13.1"
+      sources."minimatch-3.0.4"
+      sources."minimist-0.0.8"
+      sources."mkdirp-0.5.1"
+      sources."once-1.4.0"
+      sources."path-is-absolute-1.0.1"
+      sources."path-parse-1.0.6"
+      sources."resolve-1.10.1"
+      sources."semver-5.7.0"
+      sources."sprintf-js-1.0.3"
+      sources."supports-color-5.5.0"
+      sources."tslib-1.9.3"
+      sources."tsutils-2.29.0"
+      sources."wrappy-1.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "An extensible static analysis linter for the TypeScript language";
+      homepage = https://palantir.github.io/tslint;
+      license = "Apache-2.0";
     };
     production = true;
     bypassCache = true;

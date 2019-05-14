@@ -99,6 +99,12 @@ nodePackages // {
     '';
   };
 
+  tslint = nodePackages.tslint.override {
+    postInstall = ''
+      ln -svf ${nodePackages.typescript}/lib/node_modules/typescript $out/lib/node_modules/tslint/node_modules/typescript
+    '';
+  };
+
   webtorrent-cli = nodePackages.webtorrent-cli.override {
     buildInputs = [ nodePackages.node-gyp-build ];
   };
