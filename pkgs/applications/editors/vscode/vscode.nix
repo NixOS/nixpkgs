@@ -32,7 +32,7 @@ in
       inherit sha256;
     };
 
-  sourceRoot = "";
+    sourceRoot = "";
 
     meta = with stdenv.lib; {
       description = ''
