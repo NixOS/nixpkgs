@@ -1,4 +1,5 @@
 { stdenv, lib, callPackage, fetchurl, fetchpatch, ... } @ args:
+
 let
   inherit (stdenv.hostPlatform) system;
 
@@ -19,6 +20,7 @@ in
   callPackage ./generic.nix (args // rec {
 
     version = "1.33.1";
+    pname = "vscode";
 
     # Same here, I have trouble getting isInsiders, and I don't understand its purpose since it is not used anywhere else in the repo
     #executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -29,13 +31,13 @@ in
     longName = "Visual Studio Code";
     shortName = "Code";
 
-    name = "vscode-${version}";
-
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
       url = "https://vscode-update.azurewebsites.net/${version}/${plat}/stable";
       inherit sha256;
     };
+
+  sourceRoot = "";
 
     # I don't know how to split meta between the files. "platforms" should be shared
     meta = with stdenv.lib; {

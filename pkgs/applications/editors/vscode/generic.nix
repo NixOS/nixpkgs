@@ -5,25 +5,17 @@
 , isInsiders ? false
 
 # Attributes inherit from specific versions
-, version, src, sha256, meta, sourceRoot
-, executableName, longName, shortName, name
+, version, src, meta, sourceRoot
+, executableName, longName, shortName, pname
 , ...
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
-
-  # plat = {
-  #   "i686-linux" = "linux-ia32";
-  #   "x86_64-linux" = "linux-x64";
-  #   "x86_64-darwin" = "darwin";
-  # }.${system};
-
-  # archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 in
   stdenv.mkDerivation rec {
 
-    inherit name src sourceRoot;
+    inherit pname version src sourceRoot;
 
     passthru = {
       inherit executableName;
