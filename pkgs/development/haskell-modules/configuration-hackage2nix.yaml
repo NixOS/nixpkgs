@@ -6507,7 +6507,6 @@ broken-packages:
   - latex-formulae-image
   - latex-formulae-pandoc
   - LATS
-  - lattices
   - launchpad-control
   - lawless-concurrent-machines
   - layers
