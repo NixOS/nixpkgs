@@ -6585,6 +6585,8 @@ in
 
   xbanish = callPackage ../tools/X11/xbanish { };
 
+  xbill = callPackage ../games/xbill { };
+
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
   xkbvalidate = callPackage ../tools/X11/xkbvalidate { };
