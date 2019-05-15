@@ -3026,7 +3026,9 @@ in
   inherit (fdbPackages)
     foundationdb51
     foundationdb52
-    foundationdb60;
+    foundationdb60
+    foundationdb61
+  ;
 
   foundationdb = foundationdb60;
 
