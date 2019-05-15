@@ -59,10 +59,8 @@ python3.pkgs.buildPythonApplication rec  {
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
-    gst-python
     pillow
     pycairo
-    pydbus
     pygobject3
   ]
   ++ lib.optional lastFMSupport pylast
