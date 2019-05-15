@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, ... } @ args:
+{ stdenv, lib, callPackage, fetchurl, fetchpatch, isInsiders ? false, ... } @ args:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -22,14 +22,9 @@ in
     version = "1.33.1";
     pname = "vscode";
 
-    # Same here, I have trouble getting isInsiders, and I don't understand its purpose since it is not used anywhere else in the repo
-    #executableName = "code" + lib.optionalString isInsiders "-insiders";
-    #longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
-    #shortName = "Code" + lib.optionalString isInsiders " - Insiders";
-
-    executableName = "code";
-    longName = "Visual Studio Code";
-    shortName = "Code";
+    executableName = "code" + lib.optionalString isInsiders "-insiders";
+    longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
+    shortName = "Code" + lib.optionalString isInsiders " - Insiders";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
@@ -39,7 +34,6 @@ in
 
   sourceRoot = "";
 
-    # I don't know how to split meta between the files. "platforms" should be shared
     meta = with stdenv.lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,

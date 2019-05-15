@@ -27,14 +27,12 @@ in
     shortName = "Codium";
 
     src = fetchurl {
-      # name = "VSCodium_${version}_${plat}.${archive_fmt}";
       url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.${archive_fmt}";
       inherit sha256;
     };
 
     sourceRoot = ".";
 
-    # I don't know how to split meta between the files. "platforms" should be shared
     meta = with stdenv.lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
