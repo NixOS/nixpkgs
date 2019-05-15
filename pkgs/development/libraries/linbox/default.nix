@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [stdenv.lib.maintainers.timokau];
     platforms = stdenv.lib.platforms.unix;
-    broken = stdenv.isDarwin || stdenv.isAarch64; # https://trac.sagemath.org/ticket/26932#comment:21
     homepage = http://linalg.org/;
   };
 }
