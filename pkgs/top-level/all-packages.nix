@@ -20491,7 +20491,9 @@ in
 
   _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
 
-  adom = callPackage ../games/adom { };
+  adom = (callPackage ../games/adom { }).adom-graphical;
+
+  adom-ascii = (callPackage ../games/adom { }).adom-ascii;
 
   airstrike = callPackage ../games/airstrike { };
 
