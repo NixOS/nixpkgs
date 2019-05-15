@@ -30,8 +30,8 @@ callPackage ./generic.nix (args // rec {
   }.${system};
 
   src = fetchurl {
-    name = "VSCodium_${version}_${plat}.${archive_fmt}";
-    url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.tar.gz";
+    # name = "VSCodium_${version}_${plat}.${archive_fmt}";
+    url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.${archive_fmt}";
     inherit sha256;
   };
 
