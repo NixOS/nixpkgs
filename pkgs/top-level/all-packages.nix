@@ -20390,7 +20390,7 @@ in
 
   vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
-  vscode = callPackage ../applications/editors/vscode { };
+  vscode = callPackage ../applications/editors/vscode/vscode.nix { };
 
   vscode-with-extensions = callPackage ../applications/editors/vscode/with-extensions.nix {};
 
@@ -20398,7 +20398,7 @@ in
 
   vscode-extensions = recurseIntoAttrs (callPackage ../misc/vscode-extensions {});
 
-  vscodium = callPackage ../applications/editors/vscodium { };
+  vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
 
   vue = callPackage ../applications/misc/vue { };
 
