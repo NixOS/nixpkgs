@@ -19,7 +19,6 @@ in
 stdenv.mkDerivation rec {
   pname = "simgrid";
   version = "3.22.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
