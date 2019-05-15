@@ -172,6 +172,20 @@
       which is linked to <literal>fr-toutesvariantes.{aff,dic}</literal>.
     </para>
    </listitem>
-  </itemizedlist>
+   <listitem>
+    <para>
+      With the upgrade to systemd version 242 the <literal>systemd-timesyncd</literal>
+      service is no longer using <literal>DynamicUser=yes</literal>. In order for the
+      upgrade to work we rely on an activation script to move the state from the old
+      to the new directory. The older directory (prior <literal>19.09</literal>) was
+      <literal>/var/lib/private/systemd/timesync</literal>.
+    </para>
+    <para>
+      As long as the <literal>system.config.stateVersion</literal> is below
+      <literal>19.09</literal> the state folder will migrated to its proper location
+      (<literal>/var/lib/systemd/timesync</literal>), if required.
+    </para>
+  </listitem>
+ </itemizedlist>
  </section>
 </section>
