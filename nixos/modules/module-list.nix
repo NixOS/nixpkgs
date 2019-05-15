@@ -138,6 +138,7 @@
   ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
+  ./programs/tsm-client.nix
   ./programs/udevil.nix
   ./programs/venus.nix
   ./programs/vim.nix
