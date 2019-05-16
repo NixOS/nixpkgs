@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib qtbase ];
   nativeBuildInputs = [ qmake ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
-  qmakeFlags = [ "quazip/quazip.pro" ]
+  qmakeFlags = [ "quazip" ]
     ++ stdenv.lib.optional stdenv.isDarwin [ "LIBS=-lz" ];
 
   meta = with stdenv.lib; {
