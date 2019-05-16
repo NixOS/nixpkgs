@@ -1529,6 +1529,8 @@ in
 
   fzy = callPackage ../tools/misc/fzy { };
 
+  g2o = callPackage ../development/libraries/g2o { };
+
   gbsplay = callPackage ../applications/audio/gbsplay { };
 
   gdrivefs = python27Packages.gdrivefs;
