@@ -326,6 +326,8 @@ in
         '';
 
         serviceConfig = {
+          User = cfg.user;
+          Group = "mysql";
           Type = if hasNotify then "notify" else "simple";
           # /run/mysqld needs to be created in addition to pidDir, as they could point to different locations
           RuntimeDirectory = "mysqld";
