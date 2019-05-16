@@ -1,4 +1,4 @@
-{ newScope, stdenv, libstdcxxHook, isl, fetchurl, overrideCC, wrapCCWith, darwin
+{ newScope, stdenv, libstdcxxHook, isl, fetchurl, overrideCC, wrapCCWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
@@ -8,7 +8,7 @@ let
 
   fetch = fetch_v version;
   fetch_v = ver: name: sha256: fetchurl {
-    url = "http://llvm.org/releases/${ver}/${name}-${ver}.src.tar.xz";
+    url = "https://releases.llvm.org/${ver}/${name}-${ver}.src.tar.xz";
     inherit sha256;
   };
 

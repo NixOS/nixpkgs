@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pam ];
 
   preConfigure = ''
-    sed -i "s|libqrencode.so.4|${qrencode}/lib/libqrencode.so.4|" src/google-authenticator.c
+    sed -i "s|libqrencode.so.4|${qrencode.out}/lib/libqrencode.so.4|" src/google-authenticator.c
   '';
 
   installPhase = ''

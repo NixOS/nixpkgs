@@ -1,35 +1,37 @@
-{ stdenv, buildGoPackage, fetchgit, pkgconfig, ffmpeg-full, graphicsmagick, ghostscript, quicktemplate,
-  go-bindata, easyjson, nodePackages, cmake, emscripten }:
+{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, cmake, ffmpeg-full
+, ghostscript, graphicsmagick, quicktemplate, go-bindata, easyjson
+, nodePackages, emscripten, opencv, statik }:
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-05-26";
-  rev = "9f3d902fb899dbc874c1a91298d86fda7da59b1e";
+  version = "2019-03-12";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson emscripten ];
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/bakape/meguca";
-    sha256 = "0qblllf23pxcwi5fhaq8xc77iawll7v7xpk2mf9ngks3h8p7gddq";
+  src = fetchFromGitHub {
+    owner = "bakape";
+    repo = "meguca";
+    rev = "21b08de09b38918061c5cd0bbd0dc9bcc1280525";
+    sha256 = "1nb3bf1bscbdma83sp9fbgvmxxlxh21j9h80wakfn85sndcrws5i";
     fetchSubmodules = true;
   };
 
-  configurePhase = ''
-    export HOME=$PWD
-    export GOPATH=$GOPATH:$HOME/go
-    ln -sf ${nodePackages.meguca}/lib/node_modules/meguca/node_modules
-    sed -i "/npm install --progress false --depth 0/d" Makefile
-    make generate_clean
-    go generate meguca/...
-  '';
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ pkgconfig cmake ];
+
+  buildInputs = [
+    ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata
+    easyjson emscripten opencv statik
+  ];
 
   buildPhase = ''
-    go build -p $NIX_BUILD_CORES meguca
-    make -j $NIX_BUILD_CORES client wasm
+    export HOME=`pwd`
+    cd go/src/github.com/bakape/meguca
+    ln -sf ${nodePackages.meguca}/lib/node_modules/meguca/node_modules
+    sed -i "/npm install --progress false --depth 0/d" Makefile
+    make -j $NIX_BUILD_CORES generate all
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    make -j $NIX_BUILD_CORES wasm
   '';
 
   installPhase = ''
@@ -40,7 +42,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bakape/meguca";
-    description = "Anonymous realtime imageboard focused on high performance, free speech and transparent moderation";
+    description = "High performance anonymous realtime imageboard";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.all;

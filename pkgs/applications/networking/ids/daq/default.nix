@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex bison libpcap libdnet libnfnetlink libnetfilter_queue];
 
-  configureFlags = "--enable-nfq-module=yes --with-dnet-includes=${libdnet}/includes --with-dnet-libraries=${libdnet}/lib";
+  configureFlags = [
+    "--enable-nfq-module=yes"
+    "--with-dnet-includes=${libdnet}/includes"
+    "--with-dnet-libraries=${libdnet}/lib"
+  ];
 
   meta = {
     description = "Data AcQuisition library (DAQ), for packet I/O";

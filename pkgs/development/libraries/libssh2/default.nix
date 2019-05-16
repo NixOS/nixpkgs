@@ -1,24 +1,24 @@
-{ stdenv, fetchurlBoot, openssl, zlib, windows
-, hostPlatform
-}:
+{ stdenv, fetchurl, openssl, zlib, windows }:
 
 stdenv.mkDerivation rec {
-  name = "libssh2-1.8.0";
+  pname = "libssh2";
+  version = "1.8.2";
 
-  src = fetchurlBoot {
-    url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "1m3n8spv79qhjq4yi0wgly5s5rc8783jb1pyra9bkx1md0plxwrr";
+  src = fetchurl {
+    url = "${meta.homepage}/download/${pname}-${version}.tar.gz";
+    sha256 = "0rqd37pc80nm2pz4sa2m9pfc48axys7jwq1l7z0vii5nyvchg0q8";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   buildInputs = [ openssl zlib ]
-    ++ stdenv.lib.optional hostPlatform.isMinGW windows.mingw_w64;
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A client-side C library implementing the SSH2 protocol";
     homepage = https://www.libssh2.org;
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.bsd3;
     maintainers = [ ];
   };
 }

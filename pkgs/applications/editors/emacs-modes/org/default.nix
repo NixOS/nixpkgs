@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, emacs, texinfo, which, texlive }:
+{ fetchurl, stdenv, emacs, texinfo, texlive }:
 
 stdenv.mkDerivation rec {
   name = "org-8.3.3";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ chaoflow pSub ];
+    maintainers = with stdenv.lib.maintainers; [ pSub ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

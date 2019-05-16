@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, lib, makeWrapper, nodePackages }:
+{ stdenv, pkgs, fetchurl, makeWrapper, nodePackages }:
 
 let
 
@@ -6,11 +6,11 @@ uiEnv = pkgs.callPackage ./env.nix { };
 
 in stdenv.mkDerivation rec {
   name = "parity-ui-${version}";
-  version = "0.2.5";
+  version = "0.3.4";
 
   src = fetchurl {
     url = "https://github.com/parity-js/shell/releases/download/v${version}/parity-ui_${version}_amd64.deb";
-    sha256 = "1jk7ac6qqxs47hf16vhr94ix4wf51qzpm55q8h6wsx1lrgy1y3g6";
+    sha256 = "1xbd00r9ph8w2d6d2c5xg4b5l74ljzs50rpc6kahfznypmh4kr73";
     name = "${name}.deb";
   };
 
@@ -33,8 +33,6 @@ in stdenv.mkDerivation rec {
       $out/share/parity-ui/parity-ui
 
     find $out/share/parity-ui -name "*.node" -exec patchelf --set-rpath "${uiEnv.libPath}:$out/share/parity-ui" {} \;
-
-    paxmark m $out/share/parity-ui/parity-ui
 
     mkdir -p $out/bin
     ln -s $out/share/parity-ui/parity-ui $out/bin/parity-ui

@@ -1,0 +1,517 @@
+From 6737a6b34f4823deb7142f27b4074831a37ac1e1 Mon Sep 17 00:00:00 2001
+From: "H.J. Lu" <hjl.tools@gmail.com>
+Date: Fri, 20 Jul 2018 09:18:47 -0700
+Subject: [PATCH] x86: Add a GNU_PROPERTY_X86_ISA_1_USED note if needed
+
+When -z separate-code, which is enabled by default for Linux/x86, is
+used to create executable, ld won't place any data in the code-only
+PT_LOAD segment.  If there are no data sections placed before the
+code-only PT_LOAD segment, the program headers won't be mapped into
+any PT_LOAD segment.  When the executable tries to access it (based
+on the program header address passed in AT_PHDR), it will lead to
+segfault.  This patch inserts a GNU_PROPERTY_X86_ISA_1_USED note if
+there may be no data sections before the text section so that the
+first PT_LOAD segment won't be code-only and will contain the program
+header.
+
+Testcases are adjusted to either pass "-z noseparate-code" to ld or
+discard the .note.gnu.property section.  A Linux/x86 run-time test is
+added.
+
+bfd/
+
+	PR ld/23428
+	* elfxx-x86.c (_bfd_x86_elf_link_setup_gnu_properties): If the
+	separate code program header is needed, make sure that the first
+	read-only PT_LOAD segment has no code by adding a
+	GNU_PROPERTY_X86_ISA_1_USED note.
+
+ld/
+
+	PR ld/23428
+	* testsuite/ld-elf/linux-x86.S: New file.
+	* testsuite/ld-elf/linux-x86.exp: Likewise.
+	* testsuite/ld-elf/pr23428.c: Likewise.
+	* testsuite/ld-elf/sec64k.exp: Pass "-z noseparate-code" to ld
+	for Linux/x86 targets.
+	* testsuite/ld-i386/abs-iamcu.d: Likewise.
+	* testsuite/ld-i386/abs.d: Likewise.
+	* testsuite/ld-i386/pr12718.d: Likewise.
+	* testsuite/ld-i386/pr12921.d: Likewise.
+	* testsuite/ld-x86-64/abs-k1om.d: Likewise.
+	* testsuite/ld-x86-64/abs-l1om.d: Likewise.
+	* testsuite/ld-x86-64/abs.d: Likewise.
+	* testsuite/ld-x86-64/pr12718.d: Likewise.
+	* testsuite/ld-x86-64/pr12921.d: Likewise.
+	* testsuite/ld-linkonce/zeroeh.ld: Discard .note.gnu.property
+	section.
+	* testsuite/ld-scripts/print-memory-usage.t: Likewise.
+	* testsuite/ld-scripts/size-2.t: Likewise.
+	* testsuite/lib/ld-lib.exp (run_ld_link_exec_tests): Use ld
+	to create executable if language is "asm".
+
+(cherry picked from commit 241e64e3b42cd9eba514b8e0ad2ef39a337f10a5)
+---
+ bfd/elfxx-x86.c                              | 60 ++++++++++++++-----
+ ld/testsuite/ld-elf/linux-x86.S              | 63 ++++++++++++++++++++
+ ld/testsuite/ld-elf/linux-x86.exp            | 46 ++++++++++++++
+ ld/testsuite/ld-elf/pr23428.c                | 43 +++++++++++++
+ ld/testsuite/ld-elf/sec64k.exp               |  2 +
+ ld/testsuite/ld-i386/abs-iamcu.d             |  2 +-
+ ld/testsuite/ld-i386/abs.d                   |  2 +-
+ ld/testsuite/ld-i386/pr12718.d               |  2 +-
+ ld/testsuite/ld-i386/pr12921.d               |  2 +-
+ ld/testsuite/ld-linkonce/zeroeh.ld           |  1 +
+ ld/testsuite/ld-scripts/print-memory-usage.t |  2 +
+ ld/testsuite/ld-scripts/size-2.t             |  1 +
+ ld/testsuite/ld-x86-64/abs-k1om.d            |  2 +-
+ ld/testsuite/ld-x86-64/abs-l1om.d            |  2 +-
+ ld/testsuite/ld-x86-64/abs.d                 |  2 +-
+ ld/testsuite/ld-x86-64/pr12718.d             |  2 +-
+ ld/testsuite/ld-x86-64/pr12921.d             |  2 +-
+ ld/testsuite/lib/ld-lib.exp                  |  5 +-
+ 20 files changed, 248 insertions(+), 25 deletions(-)
+ create mode 100644 ld/testsuite/ld-elf/linux-x86.S
+ create mode 100644 ld/testsuite/ld-elf/linux-x86.exp
+ create mode 100644 ld/testsuite/ld-elf/pr23428.c
+
+diff --git a/bfd/elfxx-x86.c b/bfd/elfxx-x86.c
+index a2497aab86..2e4ff88f1f 100644
+--- a/bfd/elfxx-x86.c
++++ b/bfd/elfxx-x86.c
+@@ -2524,6 +2524,7 @@ _bfd_x86_elf_link_setup_gnu_properties
+   const struct elf_backend_data *bed;
+   unsigned int class_align = ABI_64_P (info->output_bfd) ? 3 : 2;
+   unsigned int got_align;
++  bfd_boolean has_text = FALSE;
+ 
+   features = 0;
+   if (info->ibt)
+@@ -2538,24 +2539,59 @@ _bfd_x86_elf_link_setup_gnu_properties
+     if (bfd_get_flavour (pbfd) == bfd_target_elf_flavour
+ 	&& bfd_count_sections (pbfd) != 0)
+       {
++	if (!has_text)
++	  {
++	    /* Check if there is no non-empty text section.  */
++	    sec = bfd_get_section_by_name (pbfd, ".text");
++	    if (sec != NULL && sec->size != 0)
++	      has_text = TRUE;
++	  }
++
+ 	ebfd = pbfd;
+ 
+ 	if (elf_properties (pbfd) != NULL)
+ 	  break;
+       }
+ 
+-  if (ebfd != NULL && features)
++  bed = get_elf_backend_data (info->output_bfd);
++
++  htab = elf_x86_hash_table (info, bed->target_id);
++  if (htab == NULL)
++    return pbfd;
++
++  if (ebfd != NULL)
+     {
+-      /* If features is set, add GNU_PROPERTY_X86_FEATURE_1_IBT and
+-	 GNU_PROPERTY_X86_FEATURE_1_SHSTK.  */
+-      prop = _bfd_elf_get_property (ebfd,
+-				    GNU_PROPERTY_X86_FEATURE_1_AND,
+-				    4);
+-      prop->u.number |= features;
+-      prop->pr_kind = property_number;
++      prop = NULL;
++      if (features)
++	{
++	  /* If features is set, add GNU_PROPERTY_X86_FEATURE_1_IBT and
++	     GNU_PROPERTY_X86_FEATURE_1_SHSTK.  */
++	  prop = _bfd_elf_get_property (ebfd,
++					GNU_PROPERTY_X86_FEATURE_1_AND,
++					4);
++	  prop->u.number |= features;
++	  prop->pr_kind = property_number;
++	}
++      else if (has_text
++	       && elf_properties (ebfd) == NULL
++	       && elf_tdata (info->output_bfd)->o->build_id.sec == NULL
++	       && !htab->elf.dynamic_sections_created
++	       && !info->traditional_format
++	       && (info->output_bfd->flags & D_PAGED) != 0
++	       && info->separate_code)
++	{
++	  /* If the separate code program header is needed, make sure
++	     that the first read-only PT_LOAD segment has no code by
++	     adding a GNU_PROPERTY_X86_ISA_1_USED note.  */
++	  prop = _bfd_elf_get_property (ebfd,
++					GNU_PROPERTY_X86_ISA_1_USED,
++					4);
++	  prop->u.number = GNU_PROPERTY_X86_ISA_1_486;
++	  prop->pr_kind = property_number;
++	}
+ 
+       /* Create the GNU property note section if needed.  */
+-      if (pbfd == NULL)
++      if (prop != NULL && pbfd == NULL)
+ 	{
+ 	  sec = bfd_make_section_with_flags (ebfd,
+ 					     NOTE_GNU_PROPERTY_SECTION_NAME,
+@@ -2581,12 +2617,6 @@ error_alignment:
+ 
+   pbfd = _bfd_elf_link_setup_gnu_properties (info);
+ 
+-  bed = get_elf_backend_data (info->output_bfd);
+-
+-  htab = elf_x86_hash_table (info, bed->target_id);
+-  if (htab == NULL)
+-    return pbfd;
+-
+   htab->r_info = init_table->r_info;
+   htab->r_sym = init_table->r_sym;
+ 
+diff --git a/ld/testsuite/ld-elf/linux-x86.S b/ld/testsuite/ld-elf/linux-x86.S
+new file mode 100644
+index 0000000000..bdf40c6e01
+--- /dev/null
++++ b/ld/testsuite/ld-elf/linux-x86.S
+@@ -0,0 +1,63 @@
++	.text
++	.globl _start
++	.type _start,@function
++	.p2align 4
++_start:
++	xorl %ebp, %ebp
++#ifdef __LP64__
++	popq %rdi
++	movq %rsp, %rsi
++	andq  $~15, %rsp
++#elif defined __x86_64__
++	mov (%rsp),%edi
++	addl $4,%esp
++	movl %esp, %esi
++	andl  $~15, %esp
++#else
++	popl %esi
++	movl %esp, %ecx
++	andl  $~15, %esp
++
++	subl $8,%esp
++	pushl %ecx
++	pushl %esi
++#endif
++
++	call main
++
++	hlt
++
++	.type syscall,  @function
++	.globl syscall
++	.p2align 4
++syscall:
++#ifdef __x86_64__
++	movq %rdi, %rax		/* Syscall number -> rax.  */
++	movq %rsi, %rdi		/* shift arg1 - arg5.  */
++	movq %rdx, %rsi
++	movq %rcx, %rdx
++	movq %r8, %r10
++	movq %r9, %r8
++	movq 8(%rsp),%r9	/* arg6 is on the stack.  */
++	syscall			/* Do the system call.  */
++#else
++	push %ebp
++	push %edi
++	push %esi
++	push %ebx
++	mov 0x2c(%esp),%ebp
++	mov 0x28(%esp),%edi
++	mov 0x24(%esp),%esi
++	mov 0x20(%esp),%edx
++	mov 0x1c(%esp),%ecx
++	mov 0x18(%esp),%ebx
++	mov 0x14(%esp),%eax
++	int $0x80
++	pop %ebx
++	pop %esi
++	pop %edi
++	pop %ebp
++#endif
++	ret			/* Return to caller.  */
++	.size syscall, .-syscall
++	.section .note.GNU-stack,"",@progbits
+diff --git a/ld/testsuite/ld-elf/linux-x86.exp b/ld/testsuite/ld-elf/linux-x86.exp
+new file mode 100644
+index 0000000000..36217c6fb4
+--- /dev/null
++++ b/ld/testsuite/ld-elf/linux-x86.exp
+@@ -0,0 +1,46 @@
++# Expect script for simple native Linux/x86 tests.
++#   Copyright (C) 2018 Free Software Foundation, Inc.
++#
++# This file is part of the GNU Binutils.
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 3 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston,
++# MA 02110-1301, USA.
++#
++
++# Test very simple native Linux/x86 programs with linux-x86.S.
++if { ![isnative] || [which $CC] == 0 \
++     || (![istarget "i?86-*-linux*"] \
++         && ![istarget "x86_64-*-linux*"] \
++         && ![istarget "amd64-*-linux*"]) } {
++    return
++}
++
++# Add $PLT_CFLAGS if PLT is expected.
++global PLT_CFLAGS
++# Add $NOPIE_CFLAGS and $NOPIE_LDFLAGS if non-PIE is required.
++global NOPIE_CFLAGS NOPIE_LDFLAGS
++
++run_ld_link_exec_tests [list \
++    [list \
++	"Run PR ld/23428 test" \
++	"--no-dynamic-linker -z separate-code" \
++	"" \
++	{ linux-x86.S pr23428.c } \
++	"pr23428" \
++	"pass.out" \
++	"$NOPIE_CFLAGS -fno-asynchronous-unwind-tables" \
++	"asm" \
++    ] \
++]
+diff --git a/ld/testsuite/ld-elf/pr23428.c b/ld/testsuite/ld-elf/pr23428.c
+new file mode 100644
+index 0000000000..3631ed7926
+--- /dev/null
++++ b/ld/testsuite/ld-elf/pr23428.c
+@@ -0,0 +1,43 @@
++#include <unistd.h>
++#include <link.h>
++#include <syscall.h>
++
++#define STRING_COMMA_LEN(STR) (STR), (sizeof (STR) - 1)
++
++int
++main (int argc, char **argv)
++{
++  char **ev = &argv[argc + 1];
++  char **evp = ev;
++  ElfW(auxv_t) *av;
++  const ElfW(Phdr) *phdr = NULL;
++  size_t phnum = 0;
++  size_t loadnum = 0;
++  int fd = STDOUT_FILENO;
++  size_t i;
++
++  while (*evp++ != NULL)
++    ;
++
++  av = (ElfW(auxv_t) *) evp;
++
++  for (; av->a_type != AT_NULL; ++av)
++    switch (av->a_type)
++      {
++      case AT_PHDR:
++	phdr = (const void *) av->a_un.a_val;
++	break;
++      case AT_PHNUM:
++	phnum = av->a_un.a_val;
++	break;
++      }
++
++  for (i = 0; i < phnum; i++, phdr++)
++    if (phdr->p_type == PT_LOAD)
++      loadnum++;
++
++  syscall (SYS_write, fd, STRING_COMMA_LEN ("PASS\n"));
++
++  syscall (SYS_exit, !loadnum);
++  return 0;
++}
+diff --git a/ld/testsuite/ld-elf/sec64k.exp b/ld/testsuite/ld-elf/sec64k.exp
+index b58139e9dd..3909c0eaa1 100644
+--- a/ld/testsuite/ld-elf/sec64k.exp
++++ b/ld/testsuite/ld-elf/sec64k.exp
+@@ -177,6 +177,8 @@ if { ![istarget "d10v-*-*"]
+     foreach sfile $sfiles { puts $ofd "#source: $sfile" }
+     if { [istarget spu*-*-*] } {
+ 	puts $ofd "#ld: --local-store 0:0"
++    } elseif { [istarget "i?86-*-linux*"] || [istarget "x86_64-*-linux*"] } {
++	puts $ofd "#ld: -z noseparate-code"
+     } else {
+ 	puts $ofd "#ld:"
+     }
+diff --git a/ld/testsuite/ld-i386/abs-iamcu.d b/ld/testsuite/ld-i386/abs-iamcu.d
+index ac9beff2e5..aba7d6b03f 100644
+--- a/ld/testsuite/ld-i386/abs-iamcu.d
++++ b/ld/testsuite/ld-i386/abs-iamcu.d
+@@ -2,7 +2,7 @@
+ #source: abs.s
+ #source: zero.s
+ #as: --32 -march=iamcu
+-#ld: -m elf_iamcu
++#ld: -m elf_iamcu -z noseparate-code
+ #objdump: -rs -j .text
+ 
+ .*:     file format .*
+diff --git a/ld/testsuite/ld-i386/abs.d b/ld/testsuite/ld-i386/abs.d
+index e660aca524..191ee4456a 100644
+--- a/ld/testsuite/ld-i386/abs.d
++++ b/ld/testsuite/ld-i386/abs.d
+@@ -2,7 +2,7 @@
+ #as: --32
+ #source: abs.s
+ #source: zero.s
+-#ld: -melf_i386
++#ld: -melf_i386 -z noseparate-code
+ #objdump: -rs
+ 
+ .*:     file format .*
+diff --git a/ld/testsuite/ld-i386/pr12718.d b/ld/testsuite/ld-i386/pr12718.d
+index ec51540a42..7eba52d95e 100644
+--- a/ld/testsuite/ld-i386/pr12718.d
++++ b/ld/testsuite/ld-i386/pr12718.d
+@@ -1,6 +1,6 @@
+ #name: PR ld/12718
+ #as: --32
+-#ld: -melf_i386
++#ld: -melf_i386 -z noseparate-code
+ #readelf: -S
+ 
+ There are 5 section headers, starting at offset 0x[0-9a-f]+:
+diff --git a/ld/testsuite/ld-i386/pr12921.d b/ld/testsuite/ld-i386/pr12921.d
+index e49079b3c8..ea2da3eb51 100644
+--- a/ld/testsuite/ld-i386/pr12921.d
++++ b/ld/testsuite/ld-i386/pr12921.d
+@@ -1,6 +1,6 @@
+ #name: PR ld/12921
+ #as: --32
+-#ld: -melf_i386
++#ld: -melf_i386 -z noseparate-code
+ #readelf: -S --wide
+ 
+ There are 7 section headers, starting at offset 0x[0-9a-f]+:
+diff --git a/ld/testsuite/ld-linkonce/zeroeh.ld b/ld/testsuite/ld-linkonce/zeroeh.ld
+index b22eaa12c9..f89855a08f 100644
+--- a/ld/testsuite/ld-linkonce/zeroeh.ld
++++ b/ld/testsuite/ld-linkonce/zeroeh.ld
+@@ -2,4 +2,5 @@ SECTIONS {
+  .text 0xa00 : { *(.text); *(.gnu.linkonce.t.*) }
+  .gcc_except_table 0x2000 : { *(.gcc_except_table) }
+  .eh_frame 0x4000 : { *(.eh_frame) }
++  /DISCARD/ : { *(.note.gnu.property) }
+ }
+diff --git a/ld/testsuite/ld-scripts/print-memory-usage.t b/ld/testsuite/ld-scripts/print-memory-usage.t
+index 5ff057a5e3..6eda1d2dc4 100644
+--- a/ld/testsuite/ld-scripts/print-memory-usage.t
++++ b/ld/testsuite/ld-scripts/print-memory-usage.t
+@@ -11,4 +11,6 @@ SECTIONS
+     *(.data)
+     *(.rw)
+   }
++
++  /DISCARD/ : { *(.note.gnu.property) }
+ }
+diff --git a/ld/testsuite/ld-scripts/size-2.t b/ld/testsuite/ld-scripts/size-2.t
+index 723863995e..c3c4eddab4 100644
+--- a/ld/testsuite/ld-scripts/size-2.t
++++ b/ld/testsuite/ld-scripts/size-2.t
+@@ -18,4 +18,5 @@ SECTIONS
+     LONG (SIZEOF (.tdata))
+     LONG (SIZEOF (.tbss))
+   } :image
++  /DISCARD/ : { *(.note.gnu.property) }
+ }
+diff --git a/ld/testsuite/ld-x86-64/abs-k1om.d b/ld/testsuite/ld-x86-64/abs-k1om.d
+index 2c26639fc0..6b0fde0eed 100644
+--- a/ld/testsuite/ld-x86-64/abs-k1om.d
++++ b/ld/testsuite/ld-x86-64/abs-k1om.d
+@@ -2,7 +2,7 @@
+ #source: ../ld-i386/abs.s
+ #source: ../ld-i386/zero.s
+ #as: --64 -march=k1om
+-#ld: -m elf_k1om
++#ld: -m elf_k1om -z noseparate-code
+ #objdump: -rs -j .text
+ 
+ .*:     file format .*
+diff --git a/ld/testsuite/ld-x86-64/abs-l1om.d b/ld/testsuite/ld-x86-64/abs-l1om.d
+index 1fb96d44b7..f87869f9d0 100644
+--- a/ld/testsuite/ld-x86-64/abs-l1om.d
++++ b/ld/testsuite/ld-x86-64/abs-l1om.d
+@@ -2,7 +2,7 @@
+ #source: ../ld-i386/abs.s
+ #source: ../ld-i386/zero.s
+ #as: --64 -march=l1om
+-#ld: -m elf_l1om
++#ld: -m elf_l1om -z noseparate-code
+ #objdump: -rs -j .text
+ #target: x86_64-*-linux*
+ 
+diff --git a/ld/testsuite/ld-x86-64/abs.d b/ld/testsuite/ld-x86-64/abs.d
+index b24b018639..d99ab4685d 100644
+--- a/ld/testsuite/ld-x86-64/abs.d
++++ b/ld/testsuite/ld-x86-64/abs.d
+@@ -1,7 +1,7 @@
+ #name: Absolute non-overflowing relocs
+ #source: ../ld-i386/abs.s
+ #source: ../ld-i386/zero.s
+-#ld:
++#ld: -z noseparate-code
+ #objdump: -rs
+ 
+ .*:     file format .*
+diff --git a/ld/testsuite/ld-x86-64/pr12718.d b/ld/testsuite/ld-x86-64/pr12718.d
+index 07d17325d0..2c503ffbaa 100644
+--- a/ld/testsuite/ld-x86-64/pr12718.d
++++ b/ld/testsuite/ld-x86-64/pr12718.d
+@@ -1,6 +1,6 @@
+ #name: PR ld/12718
+ #as: --64
+-#ld: -melf_x86_64
++#ld: -melf_x86_64 -z noseparate-code
+ #readelf: -S --wide
+ 
+ There are 5 section headers, starting at offset 0x[0-9a-f]+:
+diff --git a/ld/testsuite/ld-x86-64/pr12921.d b/ld/testsuite/ld-x86-64/pr12921.d
+index 6fe6abee09..1162d55818 100644
+--- a/ld/testsuite/ld-x86-64/pr12921.d
++++ b/ld/testsuite/ld-x86-64/pr12921.d
+@@ -1,6 +1,6 @@
+ #name: PR ld/12921
+ #as: --64
+-#ld: -melf_x86_64
++#ld: -melf_x86_64 -z noseparate-code
+ #readelf: -S --wide
+ 
+ There are 7 section headers, starting at offset 0x[0-9a-f]+:
+diff --git a/ld/testsuite/lib/ld-lib.exp b/ld/testsuite/lib/ld-lib.exp
+index cfbefe9028..1095091882 100644
+--- a/ld/testsuite/lib/ld-lib.exp
++++ b/ld/testsuite/lib/ld-lib.exp
+@@ -1482,7 +1482,10 @@ proc run_ld_link_exec_tests { ldtests args } {
+ 	    continue
+ 	}
+ 
+-	if { [ string match "c++" $lang ] } {
++	if { [ string match "asm" $lang ] } {
++	    set link_proc ld_link
++	    set link_cmd $ld
++	} elseif { [ string match "c++" $lang ] } {
+ 	    set link_proc ld_link
+ 	    set link_cmd $CXX
+ 	} else {
+-- 
+2.20.1
+

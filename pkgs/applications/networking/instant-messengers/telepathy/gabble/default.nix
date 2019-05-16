@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxslt, telepathy-glib, libxml2, dbus-glib, dbus_daemon
+{ stdenv, fetchurl, pkgconfig, libxslt, telepathy-glib, libxml2, dbus-glib, dbus
 , sqlite, libsoup, libnice, gnutls}:
 
 stdenv.mkDerivation rec {
@@ -10,10 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig libxslt ];
-  buildInputs = [ libxml2 dbus-glib sqlite libsoup libnice telepathy-glib gnutls telepathy-glib.python ]
-    ++ stdenv.lib.optional doCheck dbus_daemon;
+  buildInputs = [ libxml2 dbus-glib sqlite libsoup libnice telepathy-glib gnutls telepathy-glib.python ];
 
-  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
+  checkInputs = [ dbus.daemon ];
+
+  configureFlags = [ "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt" ];
 
   enableParallelBuilding = true;
   doCheck = true;

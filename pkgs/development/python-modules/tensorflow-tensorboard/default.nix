@@ -1,11 +1,11 @@
 { stdenv, lib, fetchPypi, buildPythonPackage, isPy3k
-, bleach_1_5_0
 , numpy
 , werkzeug
 , protobuf
 , grpcio
 , markdown
 , futures
+, absl-py
 }:
 
 # tensorflow/tensorboard is built from a downloaded wheel, because
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
-  version = "1.7.0";
+  version = "1.13.0";
   format = "wheel";
 
   src = fetchPypi ({
@@ -23,13 +23,19 @@ buildPythonPackage rec {
     format = "wheel";
   } // (if isPy3k then {
     python = "py3";
-    sha256 = "1aa42rl3fkpllqch09d311gk1j281qry6nn07ywgbs6j0kwr6isc";
+    sha256 = "19ixs811ndx8qh72dif0ywjss3rv7pf1khsgg6rvfjb9nw8wgjc2";
   } else {
     python = "py2";
-    sha256 = "1vcdkyvw22kpljmj4gxb8m1q54ry02iwvw54w8v8hmdigvc77a7k";
+    sha256 = "0qpv6jsf6jjvdl95qvarn006kfj5a99mq925d73xg4af50ssvkrf";
   }));
 
-  propagatedBuildInputs = [ bleach_1_5_0 numpy werkzeug protobuf markdown grpcio ] ++ lib.optional (!isPy3k) futures;
+  propagatedBuildInputs = [
+    numpy
+    werkzeug
+    protobuf
+    markdown
+    grpcio absl-py
+  ] ++ lib.optional (!isPy3k) futures;
 
   meta = with stdenv.lib; {
     description = "TensorFlow's Visualization Toolkit";

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "miraclecast-${version}";
-  version = "1.0-20170427";
+  version = "1.0-20190403";
 
   src = fetchFromGitHub {
     owner  = "albfan";
     repo   = "miraclecast";
-    rev    = "a395c3c7afc39a958ae8ab805dea0f5d22118f0c";
-    sha256 = "03kbjajv2x0i2g68c5aij0icf9waxnqkc9pp32z60nc8zxy9jk1y";
+    rev    = "960a785e10523cc525885380dd03aa2c5ba11bc7";
+    sha256 = "05afqi33rv7k6pbkkw4mynj6p97vkzhhh13y5nh0yxkyhcgf45pm";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];

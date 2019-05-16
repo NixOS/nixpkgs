@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zlib, openssl, libuuid, file, fuse, autoreconfHook, pkgconfig }:
+{ fetchurl, stdenv, zlib, openssl, libuuid, pkgconfig }:
 
 stdenv.mkDerivation rec {
   version = "20171104";

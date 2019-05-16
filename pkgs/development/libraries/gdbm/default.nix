@@ -1,11 +1,13 @@
-{ stdenv, lib, buildPlatform, fetchurl }:
+{ stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gdbm-1.14.1";
+  name = "gdbm-1.18.1";
+  # FIXME: remove on update to > 1.18.1
+  NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-Wno-error=return-type" else null;
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${name}.tar.gz";
-    sha256 = "0pxwz3jlwvglq2mrbxvrjgr8pa0aj73p3v9sxmdlj570zw0gzknd";
+    sha256 = "1p4ibds6z3ccy65lkmd6lm7js0kwifvl53r0fd759fjxgr917rl6";
   };
 
   doCheck = true; # not cross;
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
   # Disable dbmfetch03.at test because it depends on unlink()
   # failing on a link in a chmod -w directory, which cygwin
   # apparently allows.
-  postPatch = lib.optionalString buildPlatform.isCygwin ''
+  postPatch = lib.optionalString stdenv.buildPlatform.isCygwin ''
       substituteInPlace tests/Makefile.in --replace \
         '_LDADD = ../src/libgdbm.la ../compat/libgdbm_compat.la' \
         '_LDADD = ../compat/libgdbm_compat.la ../src/libgdbm.la'
@@ -58,7 +60,7 @@ stdenv.mkDerivation rec {
          package also provides traditional dbm and ndbm interfaces.
       '';
 
-    homepage = http://www.gnu.org/software/gdbm/;
+    homepage = https://www.gnu.org/software/gdbm/;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.vrthra ];

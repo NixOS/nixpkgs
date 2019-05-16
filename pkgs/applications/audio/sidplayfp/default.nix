@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libsidplayfp }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.3";
+  version = "1.4.4";
   name = "sidplayfp-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sidplay-residfp/sidplayfp/1.4/${name}.tar.gz";
-    sha256 = "04gqhxs4w0riabp1svgcs6gsxdmbfmrs4kaqr5lifvxjvv03vzsn";
+    sha256 = "0arsrg3f0fsinal22qjmj3r6500bcbgqnx26fsz049ldl716kz1m";
   };
 
   nativeBuildInputs = [ pkgconfig ];

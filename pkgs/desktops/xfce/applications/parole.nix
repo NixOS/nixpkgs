@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/applications/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/applications/${p_name}";
     description = "Modern simple media player";
     platforms = stdenv.lib.platforms.linux;
   };

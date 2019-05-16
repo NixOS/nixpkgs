@@ -182,10 +182,8 @@ addToSearchPathWithCustomDelimiter() {
     fi
 }
 
-PATH_DELIMITER=':'
-
 addToSearchPath() {
-    addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+    addToSearchPathWithCustomDelimiter ":" "$@"
 }
 
 # Add $1/lib* into rpaths.
@@ -211,7 +209,7 @@ isELF() {
     exec {fd}< "$fn"
     read -r -n 4 -u "$fd" magic
     exec {fd}<&-
-    if [[ "$magic" =~ ELF ]]; then return 0; else return 1; fi
+    if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
 
 # Return success if the specified file is a script (i.e. starts with
@@ -220,7 +218,6 @@ isScript() {
     local fn="$1"
     local fd
     local magic
-    if ! [ -x /bin/sh ]; then return 0; fi
     exec {fd}< "$fn"
     read -r -n 2 -u "$fd" magic
     exec {fd}<&-
@@ -258,9 +255,17 @@ shopt -s nullglob
 
 # Set up the initial path.
 PATH=
+HOST_PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH "$i/bin"
+
+    # For backward compatibility, we add initial path to HOST_PATH so
+    # it can be used in auto patch-shebangs. Unfortunately this will
+    # not work with cross compilation.
+    if [ -z "${strictDeps-}" ]; then
+        addToSearchPath HOST_PATH "$i/bin"
+    fi
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
@@ -272,11 +277,6 @@ fi
 if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
 BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
-
-
-# Dummy implementation of the paxmark function. On Linux, this is
-# overwritten by paxctl's setup hook.
-paxmark() { true; }
 
 
 # Execute the pre-hook.
@@ -505,6 +505,10 @@ activatePackage() {
         addToSearchPath _PATH "$pkg/bin"
     fi
 
+    if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
+        addToSearchPath _HOST_PATH "$pkg/bin"
+    fi
+
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
         local oldOpts="$(shopt -po nounset)"
         set +u
@@ -552,6 +556,10 @@ _addToEnv() {
             (( "$depHostOffset" <= "$depTargetOffset" )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
             if [[ -z "${strictDeps-}" ]]; then
+
+                # Keep track of which packages we have visited before.
+                local visitedPkgs=""
+
                 # Apply environment hooks to all packages during native
                 # compilation to ease the transition.
                 #
@@ -564,7 +572,11 @@ _addToEnv() {
                     ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
                     ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
                 do
+                    if [[ "$visitedPkgs" = *"$pkg"* ]]; then
+                        continue
+                    fi
                     runHook "${!hookRef}" "$pkg"
+                    visitedPkgs+=" $pkg"
                 done
             else
                 local pkgsRef="${pkgsVar}[$depTargetOffset - $depHostOffset]"
@@ -603,9 +615,14 @@ fi
 
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
+HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
+    echo "final host path: $HOST_PATH"
 fi
+
+unset _PATH
+unset _HOST_PATH
 
 
 # Make GNU Make produce nested output.
@@ -643,7 +660,8 @@ fi
 
 substituteStream() {
     local var=$1
-    shift
+    local description=$2
+    shift 2
 
     while (( "$#" )); do
         case "$1" in
@@ -651,6 +669,14 @@ substituteStream() {
                 pattern="$2"
                 replacement="$3"
                 shift 3
+                local savedvar
+                savedvar="${!var}"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
+                if [ "$pattern" != "$replacement" ]; then
+                    if [ "${!var}" == "$savedvar" ]; then
+                        echo "substituteStream(): WARNING: pattern '$pattern' doesn't match anything in $description" >&2
+                    fi
+                fi
                 ;;
 
             --subst-var)
@@ -661,13 +687,19 @@ substituteStream() {
                     echo "substituteStream(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
                     return 1
                 fi
+                if [ -z ${!varName+x} ]; then
+                    echo "substituteStream(): ERROR: variable \$$varName is unset" >&2
+                    return 1
+                fi
                 pattern="@$varName@"
                 replacement="${!varName}"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 ;;
 
             --subst-var-by)
                 pattern="@$2@"
                 replacement="$3"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 shift 3
                 ;;
 
@@ -676,8 +708,6 @@ substituteStream() {
                 return 1
                 ;;
         esac
-
-        eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
     done
 
     printf "%s" "${!var}"
@@ -705,7 +735,7 @@ substitute() {
     consumeEntire content < "$input"
 
     if [ -e "$output" ]; then chmod +w "$output"; fi
-    substituteStream content "$@" > "$output"
+    substituteStream content "file '$input'" "$@" > "$output"
 }
 
 substituteInPlace() {
@@ -727,7 +757,7 @@ substituteAllStream() {
     local -a args=()
     _allFlags
 
-    substituteStream "$1" "${args[@]}"
+    substituteStream "$1" "$2" "${args[@]}"
 }
 
 # Substitute all environment variables that start with a lowercase character and
@@ -794,11 +824,11 @@ _defaultUnpack() {
     else
 
         case "$fn" in
-            *.tar.xz | *.tar.lzma)
+            *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
                 xz -d < "$fn" | tar xf -
                 ;;
-            *.tar | *.tar.* | *.tgz | *.tbz2)
+            *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
                 tar xf "$fn"
@@ -993,13 +1023,11 @@ buildPhase() {
     else
         foundMakefile=1
 
-        # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
-        makeFlags="SHELL=$SHELL $makeFlags"
-
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
@@ -1037,7 +1065,8 @@ checkPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
             ${checkTarget}
@@ -1063,6 +1092,7 @@ installPhase() {
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
+        SHELL=$SHELL
         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
         $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
         ${installTargets:-install}
@@ -1138,7 +1168,7 @@ fixupPhase() {
         for hook in $setupHooks; do
             local content
             consumeEntire content < "$hook"
-            substituteAllStream content >> "${!outputDev}/nix-support/setup-hook"
+            substituteAllStream content "file '$hook'" >> "${!outputDev}/nix-support/setup-hook"
             unset -v content
         done
         unset -v hook
@@ -1169,7 +1199,8 @@ installCheckPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
             ${installCheckTarget:-installcheck}

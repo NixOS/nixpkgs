@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
       substituteInPlace src/main.c --replace \
         "/sbin:/bin:/usr/sbin:/usr/bin" \
-        "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/bin"
+        "${utillinux}/bin:${mdadm}/sbin:/run/current-system/sw/bin:/run/current-system/sw/bin"
     '';
 
   buildInputs =
@@ -33,11 +33,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags = "--localstatedir=/var --enable-lvm2";
+  configureFlags = [ "--localstatedir=/var" "--enable-lvm2" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/udisks;
     description = "A daemon and command-line utility for querying and manipulating storage devices";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 lgpl2Plus ];
   };
 }

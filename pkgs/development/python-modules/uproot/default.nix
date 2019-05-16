@@ -1,17 +1,33 @@
-{lib, fetchPypi, buildPythonPackage, numpy}:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, numpy
+, uproot-methods
+, awkward
+, cachetools
+, pythonOlder
+, pytestrunner
+, pytest
+, pkgconfig
+, lz4
+, mock
+, requests
+, backports_lzma
+}:
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "2.8.33";
+  version = "3.4.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42b6482d085b699a534f0a3ec352e96d4653e31c8839855c8a852618f54e27d8";
+    sha256 = "1df24d1f193b044cc4d6ef98e183a853655b568b7b15173d88b0d2a79e1226da";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  nativeBuildInputs = [ pytestrunner ];
+  checkInputs = [ pytest pkgconfig lz4 mock requests ]
+    ++ lib.optionals (pythonOlder "3.3") [ backports_lzma ];
+  propagatedBuildInputs = [ numpy cachetools uproot-methods awkward ];
 
   meta = with lib; {
     homepage = https://github.com/scikit-hep/uproot;

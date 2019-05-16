@@ -13,9 +13,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libGLU_combined ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://dri.freedesktop.org/wiki/S3TC;
     repositories.git = git://people.freedesktop.org/~mareko/libtxc_dxtn;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

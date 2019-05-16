@@ -3,8 +3,8 @@
 }:
 
 let
-  date = "20180220";
-  rev = "47849be3a900c546cf92066849be0806f4e611d9";
+  date = "20190318";
+  rev = "ebf2eaf515e46abd43bc798e7e4ba77bfe529218";
 in
 
 stdenv.mkDerivation {
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   buildInputs = [ perl cdrkit syslinux xz openssl ];
 
   src = fetchgit {
-    url = git://git.ipxe.org/ipxe.git;
-    sha256 = "1f4pi1dp2zqnrbfnggnzycfvrxv0bqgw73dxbyy3hfy4mhdj6z45";
+    url = https://git.ipxe.org/ipxe.git;
+    sha256 = "0if3m8h1nfxy4n37cwlfbc5kand52290v80m4zvjppc81im3nr5g";
     inherit rev;
   };
 

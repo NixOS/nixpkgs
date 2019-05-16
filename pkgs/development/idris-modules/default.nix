@@ -31,10 +31,9 @@
 
     # Idris wrapper with specified compiler and library paths, used to build packages
 
-    idris =
-        (pkgs.callPackage ./idris-wrapper.nix {})
-          idris-no-deps
-          { path = [ pkgs.gcc ]; lib = [pkgs.gmp]; };
+    idris = pkgs.callPackage ./idris-wrapper.nix {
+      inherit idris-no-deps;
+    };
 
     # Utilities for building packages
 
@@ -75,8 +74,6 @@
     containers = callPackage ./containers.nix {};
 
     cube = callPackage ./cube.nix {};
-
-    curses = callPackage ./curses.nix {};
 
     data = callPackage ./data.nix {};
 
@@ -153,6 +150,8 @@
     posix = callPackage ./posix.nix {};
 
     protobuf = callPackage ./protobuf.nix {};
+
+    quantities = callPackage ./quantities.nix {};
 
     rationals = callPackage ./rationals.nix {};
 

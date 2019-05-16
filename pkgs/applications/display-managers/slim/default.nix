@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, cmake, pkgconfig, xorg, libjpeg, libpng
-, fontconfig, freetype, pam, dbus_libs, makeWrapper }:
+, fontconfig, freetype, pam, dbus, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "slim-1.3.6";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ cmake pkgconfig libjpeg libpng fontconfig freetype
-      pam dbus_libs
+      pam dbus
       xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft makeWrapper
     ];
 
@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://sourceforge.net/projects/slim.berlios/; # berlios shut down; I found no replacement yet
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

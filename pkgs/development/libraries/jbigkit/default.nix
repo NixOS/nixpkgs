@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     description = "A software implementation of the JBIG1 data compression standard";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

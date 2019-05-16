@@ -17,13 +17,15 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  patches = optional (version == "6.5") ./perl.patch;
+
   # We need a native compiler to build perl XS extensions
   # when cross-compiling.
   depsBuildBuild = [ buildPackages.stdenv.cc perl ];
 
   buildInputs = [ xz.bin ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
-    ++ optionals interactive [ ncurses procps ];
+    ++ optional interactive ncurses;
 
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
     ++ stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
@@ -33,12 +35,14 @@ stdenv.mkDerivation rec {
     installTargets="install install-tex";
   '';
 
+  checkInputs = [ procps ];
+
   doCheck = interactive
     && !stdenv.isDarwin
     && !stdenv.isSunOS; # flaky
 
   meta = {
-    homepage = http://www.gnu.org/software/texinfo/;
+    homepage = https://www.gnu.org/software/texinfo/;
     description = "The GNU documentation system";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

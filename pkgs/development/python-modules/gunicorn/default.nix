@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "19.8.1";
+  version = "19.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc59005979efb6d2dd7d5ba72d99f8a8422862ad17ff3a16e900684630dd2a10";
+    sha256 = "fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3";
   };
 
   checkInputs = [ pytest mock pytestcov coverage ];

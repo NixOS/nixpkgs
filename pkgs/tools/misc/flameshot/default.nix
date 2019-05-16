@@ -1,31 +1,36 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, qttools }:
+{ stdenv, fetchFromGitHub, qtbase, qmake, qttools, qtsvg }:
 
+# To use `flameshot gui`, you will also need to put flameshot in `services.dbus.packages`
+# in configuration.nix so that the daemon gets launched properly:
+#
+#   services.dbus.packages = [ pkgs.flameshot ];
+#   environment.systemPackages = [ pkgs.flameshot ];
 stdenv.mkDerivation rec {
   name = "flameshot-${version}";
-  version = "0.5.1";
-
-  nativeBuildInputs = [ qmake qttools ];
-  buildInputs = [ qtbase ];
-
-  qmakeFlags = [
-    # flameshot.pro assumes qmake is being run in a git checkout and uses it
-    # to determine the version being built. Let's replace that.
-    "VERSION=${version}"
-    "PREFIX=/"
-  ];
-  patchPhase = ''
-    sed -i 's/VERSION =/#VERSION =/g' flameshot.pro
-    sed -i 's,USRPATH = /usr/local,USRPATH = /,g' flameshot.pro
-  '';
-
-  installFlags = [ "INSTALL_ROOT=$(out)" ];
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "lupoDharkael";
     repo = "flameshot";
     rev = "v${version}";
-    sha256 = "13h77np93r796jf289v4r687cmnpqkyqs34dm9gif4akaig74ky0";
+    sha256 = "193szslh55v44jzxzx5g9kxhl8p8di7vbcnxlid4acfidhnvgazm";
   };
+
+  nativeBuildInputs = [ qmake qttools qtsvg ];
+  buildInputs = [ qtbase ];
+
+  qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  preConfigure = ''
+    # flameshot.pro assumes qmake is being run in a git checkout.
+    git() { echo ${version}; }
+    export -f git
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/share/dbus-1/services/org.dharkael.Flameshot.service \
+      --replace "/usr/local" "$out"
+  '';
 
   enableParallelBuilding = true;
 

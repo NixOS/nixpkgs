@@ -1,30 +1,32 @@
 { stdenv, cmake, ninja, intltool, fetchurl, libxml2, webkitgtk, highlight
-, pkgconfig, gtk3, glib, libnotify, gtkspell3
+, pkgconfig, gtk3, glib, libnotify, gtkspell3, evolution-data-server
+, adwaita-icon-theme, gnome-desktop, libgdata
+, libgweather, glib-networking, gsettings-desktop-schemas
 , wrapGAppsHook, itstool, shared-mime-info, libical, db, gcr, sqlite
 , gnome3, librsvg, gdk_pixbuf, libsecret, nss, nspr, icu
 , libcanberra-gtk3, bogofilter, gst_all_1, procps, p11-kit, openldap }:
 
 let
-  version = "3.28.3";
+  version = "3.32.1";
 in stdenv.mkDerivation rec {
   name = "evolution-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1s1vlznc22q1f8fm8fhggi8xak52b6n952s562f3kpv6g0dm2x6k";
+    url = "mirror://gnome/sources/evolution/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0ns76w6vwv5k1nxpaqrizp1pnm89xzfgs60i6cwwfs35zqlmb7iq";
   };
 
-  propagatedUserEnvPkgs = [ gnome3.evolution-data-server ];
+  propagatedUserEnvPkgs = [ evolution-data-server ];
 
   buildInputs = [
-    gtk3 glib gdk_pixbuf gnome3.defaultIconTheme librsvg db icu
-    gnome3.evolution-data-server libsecret libical gcr
-    webkitgtk shared-mime-info gnome3.gnome-desktop gtkspell3
-    libcanberra-gtk3 bogofilter gnome3.libgdata sqlite
+    gtk3 glib gdk_pixbuf adwaita-icon-theme librsvg db icu
+    evolution-data-server libsecret libical gcr
+    webkitgtk shared-mime-info gnome-desktop gtkspell3
+    libcanberra-gtk3 bogofilter libgdata sqlite
     gst_all_1.gstreamer gst_all_1.gst-plugins-base p11-kit
-    nss nspr libnotify procps highlight gnome3.libgweather
-    gnome3.gsettings-desktop-schemas
-    gnome3.glib-networking openldap
+    nss nspr libnotify procps highlight libgweather
+    gsettings-desktop-schemas
+    glib-networking openldap
   ];
 
   nativeBuildInputs = [ cmake ninja intltool itstool libxml2 pkgconfig wrapGAppsHook ];
@@ -38,14 +40,14 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = "ctest";
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "evolution";
       attrPath = "gnome3.evolution";
     };
   };
+
+  PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
   requiredSystemFeatures = [ "big-parallel" ];
 

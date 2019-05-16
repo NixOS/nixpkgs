@@ -1,9 +1,9 @@
-{ stdenv, config, callPackage }:
+{ stdenv, config, callPackage, wineBuild }:
 
 rec {
   minimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
-    wineBuild = config.wine.build or "wine32";
+    inherit wineBuild;
   };
 
   base = minimal.override {
@@ -25,6 +25,7 @@ rec {
     udevSupport = true;
     xineramaSupport = true;
     xmlSupport = true;
+    sdlSupport = true;
   };
 
   full = base.override {

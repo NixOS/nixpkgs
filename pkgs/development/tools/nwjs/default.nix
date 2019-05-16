@@ -1,13 +1,15 @@
 { stdenv, fetchurl, buildEnv, makeWrapper
 
-, xorg, alsaLib, dbus, glib, gtk2, gtk3, atk, pango, freetype, fontconfig
-, gdk_pixbuf, cairo, zlib, nss, nssTools, nspr, gconf, expat, systemd, libcap
+, xorg, alsaLib, dbus, glib, gtk3, atk, pango, freetype, fontconfig
+, gdk_pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify
-, ffmpeg, libxcb, libXScrnSaver, cups
+, ffmpeg, libxcb, cups
 , sqlite, udev
+, libuuid
+, sdk ? false
 }:
 let
-  bits = if stdenv.system == "x86_64-linux" then "x64"
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
          else "ia32";
 
   nwEnv = buildEnv {
@@ -23,6 +25,7 @@ let
       ffmpeg libxcb
       # chromium runtime deps (dlopen’d)
       sqlite udev
+      libuuid
     ];
 
     extraOutputsToInstall = [ "lib" "out" ];
@@ -30,13 +33,18 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nwjs-${version}";
-  version = "0.23.6";
+  version = "0.33.4";
 
-  src = fetchurl {
+  src = if sdk then fetchurl {
+    url = "https://dl.nwjs.io/v${version}/nwjs-sdk-v${version}-linux-${bits}.tar.gz";
+    sha256 = if bits == "x64" then
+      "1hi6xispxvyb6krm5j11mv8509dwpw5ikpbkvq135gsk3gm29c9y" else
+      "00p4clbfinrj5gp2i84a263l3h00z8g7mnx61qwmr0z02kvswz9s";
+  } else fetchurl {
     url = "https://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "0ppyjspdvacarhdn4xd5i1pqgmf4z1bxnh1cry780489h25rcjgj" else
-      "0c0j73vnzhsry5rdx41d954a29jmjnvzli728cfbjybfr51zdybg";
+      "09zd6gja3l20xx03h2gawpmh9f8nxqjp8qdkds5nz9kbbckhkj52" else
+      "0nlpdz76k1p1pq4xygfr2an91m0d7p5fjyg2xhiggyy8b7sp4964";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

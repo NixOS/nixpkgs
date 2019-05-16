@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 # TODO:
 #
@@ -11,6 +11,8 @@ with lib;
 let
 
   cfg = config.services.hostapd;
+
+  escapedInterface = utils.escapeSystemdPath cfg.interface;
 
   configFile = pkgs.writeText "hostapd.conf" ''
     interface=${cfg.interface}
@@ -25,7 +27,7 @@ let
     logger_stdout=-1
     logger_stdout_level=2
 
-    ctrl_interface=/var/run/hostapd
+    ctrl_interface=/run/hostapd
     ctrl_interface_group=${cfg.group}
 
     ${if cfg.wpa then ''
@@ -157,9 +159,9 @@ in
       { description = "hostapd wireless AP";
 
         path = [ pkgs.hostapd ];
-        wantedBy = [ "network.target" ];
-
-        after = [ "${cfg.interface}-cfg.service" "nat.service" "bind.service" "dhcpd.service" "sys-subsystem-net-devices-${cfg.interface}.device" ];
+        after = [ "sys-subsystem-net-devices-${escapedInterface}.device" ];
+        bindsTo = [ "sys-subsystem-net-devices-${escapedInterface}.device" ];
+        requiredBy = [ "network-link-${cfg.interface}.service" ];
 
         serviceConfig =
           { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";

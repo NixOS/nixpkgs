@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, wrapGAppsHook
+{ stdenv, fetchurl, wrapGAppsHook, gsettings-desktop-schemas, gspell, gtksourceview4, libgee
 , tepl, amtk, gnome3, glib, pkgconfig, intltool, itstool, libxml2 }:
 let
-  version = "3.28.1";
+  version = "3.32.0";
   pname = "gnome-latex";
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1z481izrx057wraphnr82kxnpmmi8nvl7jswyylzm22kfs0mw402";
+    sha256 = "1jdca9yhm7mm1aijd1a5amphgn15142kngky3id2am379ixrq1hg";
   };
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
@@ -21,9 +21,9 @@ in stdenv.mkDerivation {
     intltool
   ];
 
-  buildInputs = with gnome3; [
+  buildInputs = [
     amtk
-    defaultIconTheme
+    gnome3.adwaita-icon-theme
     glib
     gsettings-desktop-schemas
     gspell

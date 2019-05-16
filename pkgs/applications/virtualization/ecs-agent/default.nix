@@ -19,7 +19,7 @@ buildGoPackage rec {
     description = "The agent that runs on AWS EC2 container instances and starts containers on behalf of Amazon ECS";
     homepage    = "https://github.com/aws/amazon-ecs-agent";
     license     = licenses.asl20;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ copumpkin ];
   };
 }

@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libmnl libnfnetlink ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.netfilter.org/projects/libnetfilter_queue/;
     description = "Userspace API to packets queued by the kernel packet filter";
-
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

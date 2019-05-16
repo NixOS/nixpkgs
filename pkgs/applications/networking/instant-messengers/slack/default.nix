@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, dpkg, makeWrapper
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome3, gtk3, gdk_pixbuf, libnotify, libxcb, nspr, nss, pango
-, systemd, wget, xorg }:
+{ darkMode ? false, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
+cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk_pixbuf,
+libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
+at-spi2-atk }:
 
 let
 
-  version = "3.2.1";
+  version = "3.4.0";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
+    at-spi2-atk
     atk
     cairo
     cups
@@ -18,12 +19,13 @@ let
     fontconfig
     freetype
     glib
-    gnome3.gconf
+    gnome2.GConf
     gdk_pixbuf
     gtk3
     pango
     libnotify
     libxcb
+    libappindicator-gtk3
     nspr
     nss
     stdenv.cc.cc
@@ -44,13 +46,13 @@ let
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "095dpkwvvnwlxsglyg6wi9126wpalzi736b6g6j3bd6d93z9afah";
+        sha256 = "0ld53gg0dbfpi79lz2sx5br29mlhwkfcypzf3iya4cm75a33hyw5";
       }
     else
-      throw "Slack is not supported on ${stdenv.system}";
+      throw "Slack is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
   name = "slack-${version}";
@@ -88,6 +90,21 @@ in stdenv.mkDerivation {
     substituteInPlace $out/share/applications/slack.desktop \
       --replace /usr/bin/ $out/bin/ \
       --replace /usr/share/ $out/share/
+  '' + stdenv.lib.optionalString darkMode ''
+    cat <<EOF >> $out/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js
+    document.addEventListener('DOMContentLoaded', function() {
+    let tt__customCss = ".menu ul li a:not(.inline_menu_link) {color: #fff !important;}"
+    $.ajax({
+        url: 'https://cdn.rawgit.com/laCour/slack-night-mode/master/css/raw/black.css',
+        success: function(css) {
+            \$("<style></style>").appendTo('head').html(css + tt__customCss);
+            \$("<style></style>").appendTo('head').html('#reply_container.upload_in_threads .inline_message_input_container {background: padding-box #545454}');
+            \$("<style></style>").appendTo('head').html('.p-channel_sidebar {background: #363636 !important}');
+            \$("<style></style>").appendTo('head').html('#client_body:not(.onboarding):not(.feature_global_nav_layout):before {background: inherit;}');
+        }
+      });
+    });
+    EOF
   '';
 
   meta = with stdenv.lib; {

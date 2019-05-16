@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, bash, perl }:
 
 stdenv.mkDerivation rec {
   name = "libfaketime-${version}";
@@ -13,9 +13,19 @@ stdenv.mkDerivation rec {
     ./no-date-in-gzip-man-page.patch
   ];
 
+  postPatch = ''
+    patchShebangs test src
+    for a in test/functests/test_exclude_mono.sh src/faketime.c ; do
+      substituteInPlace $a \
+        --replace /bin/bash ${stdenv.shell}
+    done
+  '';
+
   preBuild = ''
     makeFlagsArray+=(PREFIX="$out" LIBDIRNAME=/lib)
   '';
+
+  checkInputs = [ perl ];
 
   meta = with stdenv.lib; {
     description = "Report faked system time to programs without having to change the system-wide time";

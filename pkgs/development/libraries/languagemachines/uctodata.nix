@@ -1,7 +1,6 @@
 { stdenv, fetchurl
 , automake, autoconf, libtool, pkgconfig, autoconf-archive
-, libxml2, icu
-, languageMachines }:
+ }:
 
 let
   release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-uctodata.json);

@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "python-sql";
-  version = "0.9";
+  version = "1.0.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07b51cc1c977ef5480fe671cae5075ad4b68a6fc67f4569782e06f012456d35c";
+    sha256 = "05ni936y0ia9xmryl7mlhbj9i80nnvq1bi4zxhb96rv7yvpb3fqb";
   };
   meta = {
     homepage = http://python-sql.tryton.org/;

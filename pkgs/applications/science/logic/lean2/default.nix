@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gmp, mpfr, boost, python
+{ stdenv, fetchFromGitHub, cmake, gmp, mpfr, python
 , gperftools, ninja, makeWrapper }:
 
 stdenv.mkDerivation rec {

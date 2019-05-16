@@ -4,11 +4,11 @@
 }:
 buildPythonPackage rec {
   pname = "supervisor";
-  version = "3.3.4";
+  version = "3.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wp62z9xprvz2krg02xnbwcnq6pxfq3byd8cxx8c2d8xznih28i1";
+    sha256 = "1w3ahridzbc6rxfpbyx8lij6pjlcgf2ymzyg53llkjqxalp6sk8v";
   };
 
   checkInputs = [ mock ];

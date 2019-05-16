@@ -1,29 +1,54 @@
-{ stdenv, pkgs, fetchurl, lib, makeWrapper, gvfs, atomEnv}:
+{ stdenv, pkgs, fetchurl, makeWrapper, wrapGAppsHook, gvfs, gtk3, atomEnv }:
 
 let
-  common = pname: {version, sha256}: stdenv.mkDerivation rec {
-    name = "${pname}-${version}";
-    inherit version;
+  versions = {
+    atom = {
+      version = "1.36.1";
+      sha256 = "1m7q2r3zx463k7kpqb364piqrr69wrhs033ibzxdx9y7r4204qp4";
+    };
+
+    atom-beta = {
+      version = "1.37.0";
+      beta = 0;
+      sha256 = "0aq8r5vfgq7r31qajjgcg4n5a57a2m8fvq6fzy9vq5gawkvmaxxx";
+    };
+  };
+
+  common = pname: {version, sha256, beta ? null}:
+      let fullVersion = version + stdenv.lib.optionalString (beta != null) "-beta${toString beta}";
+      name = "${pname}-${fullVersion}";
+  in stdenv.mkDerivation {
+    inherit name;
+    version = fullVersion;
 
     src = fetchurl {
-      url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
+      url = "https://github.com/atom/atom/releases/download/v${fullVersion}/atom-amd64.deb";
       name = "${name}.deb";
       inherit sha256;
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [
+      wrapGAppsHook  # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+    ];
+
+    buildInputs = [
+      gtk3  # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
+    ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --prefix "PATH" : "${gvfs}/bin" \
+      )
+    '';
 
     buildCommand = ''
       mkdir -p $out/usr/
       ar p $src data.tar.xz | tar -C $out -xJ ./usr
-      substituteInPlace $out/usr/share/applications/${pname}.desktop \
-        --replace /usr/share/${pname} $out/bin
+      sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/usr/share/applications/${pname}.desktop
       mv $out/usr/* $out/
       rm -r $out/share/lintian
       rm -r $out/usr/
-      # sed -i "s/'${pname}'/'.${pname}-wrapped'/" $out/bin/${pname}
-      wrapProgram $out/bin/${pname} \
-        --prefix "PATH" : "${gvfs}/bin"
+      sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
 
       fixupPhase
 
@@ -45,27 +70,14 @@ let
       ln -s ${pkgs.git}/bin/git $dugite/git/libexec/git-core/git
 
       find $share -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$share" {} \;
-
-      paxmark m $share/atom
-      paxmark m $share/resources/app/apm/bin/node
     '';
 
     meta = with stdenv.lib; {
       description = "A hackable text editor for the 21st Century";
       homepage = https://atom.io/;
       license = licenses.mit;
-      maintainers = with maintainers; [ offline nequissimus synthetica ysndr ];
+      maintainers = with maintainers; [ offline nequissimus ysndr ];
       platforms = platforms.x86_64;
     };
   };
-in stdenv.lib.mapAttrs common {
-  atom = {
-    version = "1.28.0";
-    sha256 = "0k09316897qb9ypkqm6w78nz7sj5385xfdm9bm97m8pka7v61g7h";
-  };
-
-  atom-beta = {
-    version = "1.29.0-beta0";
-    sha256 = "05xk63wsjfssf8ckph2bgrxaf99fhz3gs8n8pira8cc9yjk7diz7";
-  };
-}
+in stdenv.lib.mapAttrs common versions

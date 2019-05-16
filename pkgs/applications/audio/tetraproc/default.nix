@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "tetraproc-${version}";
-  version = "0.8.2";
+  version = "0.8.6";
 
   src = fetchurl {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
-    sha256 = "17y3vbm5f6h5cmh3yfxjgqz4xhfwpkla3lqfspnbm4ndlzmfpykv";
+    sha256 = "02155ljfwgvfgq9z258fb4z7jrz7qx022d054fj5gr0v007cv0r7";
   };
 
   nativeBuildInputs = [ makeWrapper ];

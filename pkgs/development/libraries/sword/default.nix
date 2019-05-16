@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = "--without-conf --enable-tests=no CXXFLAGS=-Wno-unused-but-set-variable";
+  configureFlags = [ "--without-conf" "--enable-tests=no CXXFLAGS=-Wno-unused-but-set-variable" ];
 
   meta = with stdenv.lib; {
     description = "A software framework that allows research manipulation of Biblical texts";

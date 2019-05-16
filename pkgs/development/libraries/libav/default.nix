@@ -13,15 +13,14 @@
 , SDL # only for avplay in $bin, adds nontrivial closure to it
 , enableGPL ? true # ToDo: some additional default stuff may need GPL
 , enableUnfree ? faacSupport
-, hostPlatform
 }:
 
 assert faacSupport -> enableUnfree;
 
-let inherit (stdenv.lib) optional optionals hasPrefix enableFeature; in
+let inherit (stdenv.lib) optional hasPrefix enableFeature; in
 
 /* ToDo:
-    - more deps, inspiration: http://packages.ubuntu.com/raring/libav-tools
+    - more deps, inspiration: https://packages.ubuntu.com/raring/libav-tools
     - maybe do some more splitting into outputs
 */
 
@@ -53,8 +52,8 @@ let
 
     configurePlatforms = [];
     configureFlags = assert stdenv.lib.all (x: x!=null) buildInputs; [
-      "--arch=${hostPlatform.parsed.cpu.name}"
-      "--target_os=${hostPlatform.parsed.kernel.name}"
+      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+      "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
       #"--enable-postproc" # it's now a separate package in upstream
       "--disable-avserver" # upstream says it's in a bad state
       "--enable-avplay"

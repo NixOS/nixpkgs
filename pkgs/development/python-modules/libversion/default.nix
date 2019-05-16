@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, pkgconfig, libversion, pythonOlder }:
+{ stdenv, buildPythonPackage, fetchPypi, pkgconfig, libversion, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "libversion";
-  version = "1.0.0";
+  version = "1.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18hhn7b7458lybs8z8ckh0idm7a2g4c4b5v2p9rr0lb618rchvds";
+    sha256 = "1ax1bq5hrbs2pq2krya83yj1s5cm33pcpwalnc15cgj73kmhb5fn";
   };
 
   nativeBuildInputs = [ pkgconfig ];

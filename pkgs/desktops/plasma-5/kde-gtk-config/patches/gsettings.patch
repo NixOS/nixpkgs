@@ -1,11 +1,11 @@
-Index: kde-gtk-config-5.12.4/src/gtkconfigkcmodule.cpp
-===================================================================
---- kde-gtk-config-5.12.4.orig/src/gtkconfigkcmodule.cpp
-+++ kde-gtk-config-5.12.4/src/gtkconfigkcmodule.cpp
-@@ -78,6 +78,16 @@ GTKConfigKCModule::GTKConfigKCModule(QWi
-     m_iconsModel = new IconThemesModel(false, this);
-     ui->cb_icon->setModel(m_iconsModel);
-     ui->cb_icon_fallback->setModel(m_iconsModel);
+diff --git a/src/gtkconfigkcmodule.cpp b/src/gtkconfigkcmodule.cpp
+index 7b82d50..96831d8 100644
+--- a/src/gtkconfigkcmodule.cpp
++++ b/src/gtkconfigkcmodule.cpp
+@@ -91,6 +91,16 @@ GTKConfigKCModule::GTKConfigKCModule(QWidget* parent, const QVariantList& args )
+     iconsProxyModel->sort(0);
+     ui->cb_icon->setModel(iconsProxyModel);
+     ui->cb_icon_fallback->setModel(iconsProxyModel);
 +
 +    // Add GSETTINGS_SCHEMAS_PATH to the front of XDG_DATA_DIRS.
 +    // Normally this would be done by wrapGAppsHook, but this plugin

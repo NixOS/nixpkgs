@@ -3,7 +3,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     machine =
-      { config, pkgs, ... }:
+      { ... }:
       {
         imports = [ ../modules/profiles/minimal.nix ];
         services.memcached.enable = true;

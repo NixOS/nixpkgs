@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, libmsgpack
+{ stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, msgpack
 , libvpx, check, libconfig, pkgconfig }:
 
 let
@@ -20,7 +20,7 @@ let
     ];
 
     buildInputs = [
-      libsodium libmsgpack ncurses libconfig
+      libsodium msgpack ncurses libconfig
     ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
       libopus libvpx
     ];
@@ -30,10 +30,7 @@ let
     enableParallelBuilding = true;
 
     doCheck = false; # hangs, tries to access the net?
-
-    # for some reason the tests are not running - it says "No tests found!!"
     checkInputs = [ check ];
-    checkPhase = "ctest";
 
     meta = with stdenv.lib; {
       description = "P2P FOSS instant messaging application aimed to replace Skype";
@@ -51,7 +48,7 @@ in rec {
   };
 
   libtoxcore_0_2 = generic {
-    version = "0.2.2";
-    sha256 = "1463grbbv009pj2g6dbnyk4lr871vw41962m63v21mmp6dkrr7r5";
+    version = "0.2.9";
+    sha256 = "0aljr9hqybla6p61af6fdkv0x8gph7c2wacqqa9hq2z9w0p4fs5j";
   };
 }

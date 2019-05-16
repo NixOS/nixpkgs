@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ stdenv, fetchurl
 , libX11, glib, xorg, fontconfig, freetype
 , zlib, libpng12, libICE, libXrender, cups }:
 
 let
-  bits = if stdenv.system == "x86_64-linux" then "x86_64"
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64"
          else "x86";
 
   version = "10.1.0.5672";

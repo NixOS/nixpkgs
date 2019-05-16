@@ -7,7 +7,7 @@ let
 in
 {
   options.services.oxidized = {
-    enable = mkEnableOption "the oxidized configuation backup service.";
+    enable = mkEnableOption "the oxidized configuration backup service";
 
     user = mkOption {
       type = types.str;
@@ -83,8 +83,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups.${cfg.group} = { };
-    users.extraUsers.${cfg.user} = {
+    users.groups.${cfg.group} = { };
+    users.users.${cfg.user} = {
       description = "Oxidized service user";
       group = cfg.group;
       home = cfg.dataDir;

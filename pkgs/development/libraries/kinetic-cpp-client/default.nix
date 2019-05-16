@@ -4,7 +4,7 @@
 
 let
   protoTar = fetchurl {
-    url = "http://github.com/Seagate/kinetic-protocol/archive/3.0.0.tar.gz";
+    url = "https://github.com/Seagate/kinetic-protocol/archive/3.0.0.tar.gz";
     sha256 = "0406pp0sdf0rg6s5g18r2d8si2rin7p6qbzp7c6pma5hyzsygz48";
   };
 in
@@ -54,6 +54,5 @@ stdenv.mkDerivation rec {
     description = "Code for producing C and C++ kinetic clients";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

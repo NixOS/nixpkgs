@@ -1,16 +1,7 @@
 { mkDerivation, ansi-terminal, base, bytestring, Cabal, containers
 , deepseq, Diff, directory, filepath, ShellCheck, stdenv, tasty
-, tasty-golden, transformers, fetchFromGitHub, fetchpatch
+, tasty-golden, transformers, fetchFromGitHub
 }:
-
-let
-
-  newShellCheck = fetchpatch {
-    url = https://github.com/haskell-CI/haskell-ci/pull/159.patch;
-    sha256 = "17qn099lvfiii5z3hg24idmg4sk6ph7m2k940fsxzhqrad8fkjmw";
-  };
-
-in
 
 mkDerivation {
   pname = "haskell-ci";
@@ -18,10 +9,9 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "haskell-CI";
     repo = "haskell-ci";
-    rev = "b592d290cff68c7abcbd7f99f41aac998e7b7916";
-    sha256 = "0jwaifp9wx6lb27qj191hjm125kq3vndh5lf7ibd86x19h5zmy4c";
+    rev = "18a7f5edcde360cea0740ff143eff1113ecda7d2";
+    sha256 = "00gxpxb5n1a1v562fd4cg1j92vwmd2zp00c2j60piyl8ppxxa115";
   };
-  patches = [ newShellCheck ];
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [

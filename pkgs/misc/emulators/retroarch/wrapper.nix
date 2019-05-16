@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
     makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch \
       --suffix-each LD_LIBRARY_PATH ':' "$cores" \
-      --add-flags "-L $out/lib/ --menu" \
+      --add-flags "-L $out/lib/" \
   '';
 
   cores = map (x: x + x.libretroCore) cores;

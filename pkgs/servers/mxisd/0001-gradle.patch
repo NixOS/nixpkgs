@@ -1,0 +1,22 @@
+--- a/build.gradle	2018-11-16 15:15:29.021469758 +0100
++++ b/build.gradle	2018-11-16 15:16:50.982289782 +0100
+@@ -64,7 +64,7 @@
+ 
+ buildscript {
+     repositories {
+-        mavenCentral()
++    REPLACE
+     }
+ 
+     dependencies {
+@@ -73,9 +73,7 @@
+ }
+ 
+ repositories {
+-    mavenCentral()
+-    maven { url "https://kamax.io/maven/releases/" }
+-    maven { url "https://kamax.io/maven/snapshots/" }
++REPLACE
+ }
+ 
+ dependencies {

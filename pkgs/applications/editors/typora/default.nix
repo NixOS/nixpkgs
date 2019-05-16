@@ -1,99 +1,55 @@
-{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome3, gtk3, atk, cairo, pango
-, gdk_pixbuf, freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev, wrapGAppsHook }:
+{ stdenv, fetchurl, makeWrapper, electron_3, dpkg, gtk3, glib, gsettings-desktop-schemas, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "typora-${version}";
-  version = "0.9.53";
+  pname = "typora";
+  version = "0.9.70";
 
-  src =
-    if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-        sha256 = "02k6x30l4mbjragqbq5rn663xbw3h4bxzgppfxqf5lwydswldklb";
-      }
-    else
-      fetchurl {
-        url = "https://www.typora.io/linux/typora_${version}_i386.deb";
-        sha256 = "1wyq1ri0wwdy7slbd9dwyrdynsaa644x44c815jl787sg4nhas6y";
-      }
-    ;
+  src = fetchurl {
+    url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
+    sha256 = "08bgllbvgrpdkk9bryj4s16n274ps4igwrzdvsdbyw8wpp44vcy2";
+  };
 
-    rpath = stdenv.lib.makeLibraryPath [
-      alsaLib
-      gnome3.gconf
-      gdk_pixbuf
-      pango
-      gnome3.defaultIconTheme
-      expat
-      gtk3
-      atk
-      nspr
-      nss
-      stdenv.cc.cc
-      glib
-      cairo
-      cups
-      dbus
-      udev
-      fontconfig
-      freetype
-      xorg.libX11
-      xorg.libXi
-      xorg.libXext
-      xorg.libXtst
-      xorg.libXfixes
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXrender
-      xorg.libXrandr
-      xorg.libXcomposite
-      xorg.libxcb
-      xorg.libXScrnSaver
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    wrapGAppsHook
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [
+    glib
+    gsettings-desktop-schemas
+    gtk3
+  ];
+
+  unpackPhase = "dpkg-deb -x $src .";
 
   dontWrapGApps = true;
 
-  buildInputs = [ dpkg makeWrapper ];
-
-  unpackPhase = "true";
   installPhase = ''
-    mkdir -p $out
-    dpkg -x $src $out
-    mv $out/usr/bin $out
-    mv $out/usr/share $out
-    rm $out/bin/typora
-    rmdir $out/usr
+    runHook preInstall
 
-    # Otherwise it looks "suspicious"
-    chmod -R g-w $out
+    mkdir -p $out/bin $out/share
+    {
+      cd usr
+      mv share/typora/resources/app $out/share/typora
+      mv share/{applications,icons,doc} $out/share/
+    }
+
+    runHook postInstall
   '';
 
   postFixup = ''
-     patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$out/share/typora:${rpath}" "$out/share/typora/Typora"
-
-    makeWrapper $out/share/typora/Typora $out/bin/typora
-
-    wrapProgram $out/bin/typora \
+    makeWrapper ${electron_3}/bin/electron $out/bin/typora \
+      --add-flags $out/share/typora \
       "''${gappsWrapperArgs[@]}" \
-      --suffix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-      --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share"
-
-    # Fix the desktop link
-    substituteInPlace $out/share/applications/typora.desktop \
-      --replace /usr/bin/ $out/bin/ \
-      --replace /usr/share/ $out/share/
-
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}"
   '';
 
   meta = with stdenv.lib; {
     description = "A minimal Markdown reading & writing app";
     homepage = https://typora.io;
     license = licenses.unfree;
-    maintainers = with maintainers; [ jensbin ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ jensbin worldofpeace ];
+    inherit (electron_3.meta) platforms;
   };
 }

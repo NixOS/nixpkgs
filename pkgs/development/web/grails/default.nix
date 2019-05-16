@@ -11,11 +11,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "grails-${version}";
-  version = "3.3.6";
+  version = "3.3.9";
 
   src = fetchurl {
     url = "https://github.com/grails/grails-core/releases/download/v${version}/grails-${version}.zip";
-    sha256 = "0q3rbz47lp2zh2794aycf85vnic77dg3sclrqbizfpdijma87iy7";
+    sha256 = "0xnwi9m9l8rz4wdwjp2i3yfzsq1szz37z886nc6lbfxd5mj19hnn";
   };
 
   buildInputs = [ unzip ];

@@ -1,14 +1,14 @@
-{ symlinkJoin, makeWrapper, stdenv }: idris: { path, lib }:
+{ stdenv, lib, symlinkJoin, makeWrapper, idris-no-deps, gmp }:
 
 symlinkJoin {
-  name = idris.name;
-  src = idris.src;
-  paths = [ idris ];
+  inherit (idris-no-deps) name src meta;
+  paths = [ idris-no-deps ];
   buildInputs = [ makeWrapper ];
-  meta.platforms = idris.meta.platforms;
   postBuild = ''
     wrapProgram $out/bin/idris \
-      --suffix PATH : ${ stdenv.lib.makeBinPath path } \
-      --suffix LIBRARY_PATH : ${stdenv.lib.makeLibraryPath lib}
-      '';
-  }
+      --run 'export IDRIS_CC=''${IDRIS_CC:-${stdenv.cc}/bin/cc}' \
+      --set NIX_CC_WRAPPER_${stdenv.cc.infixSalt}_TARGET_HOST 1 \
+      --prefix NIX_CFLAGS_COMPILE " " "-I${lib.getDev gmp}/include" \
+      --prefix NIX_CFLAGS_LINK " " "-L${lib.getLib gmp}/lib"
+  '';
+}

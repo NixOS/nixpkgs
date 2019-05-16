@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl, python2
+{ stdenv, fetchurl, pkgconfig, udev, dbus, perl, python2
 , IOKit ? null }:
 
 stdenv.mkDerivation rec {
   name = "pcsclite-${version}";
-  version = "1.8.23";
+  version = "1.8.25";
+
+  outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    sha256 = "1jc9ws5ra6v3plwraqixin0w0wfxj64drahrbkyrrwzghqjjc9ss";
+    sha256 = "14l7irs1nsh8b036ag4cfy8wryyysch78scz5dw6xxqwqgnpjvfp";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
@@ -28,15 +30,19 @@ stdenv.mkDerivation rec {
     }' config.h
   '';
 
+  postInstall = ''
+    # pcsc-spy is a debugging utility and it drags python into the closure
+    moveToOutput bin/pcsc-spy "$dev"
+  '';
+
   nativeBuildInputs = [ pkgconfig perl python2 ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ udev dbus_libs ]
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
              ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = https://pcsclite.apdu.fr/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ viric wkennington ];
     platforms = with platforms; unix;
   };
 }

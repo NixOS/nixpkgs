@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     description = "A library that provides cross platforms access to statistics about the running system";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -1,7 +1,7 @@
 { fetchurl, stdenv, xorg, freetype, fontconfig, libGLU_combined, glibc, makeWrapper }:
 
 let
-  system = if stdenv.system == "x86_64-linux" then "linux64" else "linux32";
+  system = if stdenv.hostPlatform.system == "x86_64-linux" then "linux64" else "linux32";
 in
 stdenv.mkDerivation rec {
   name = "ocz-ssd-guru-${version}";

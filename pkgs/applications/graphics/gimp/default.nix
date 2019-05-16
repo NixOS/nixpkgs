@@ -1,30 +1,33 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
+{ stdenv, fetchurl, substituteAll, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
-, harfbuzz, mypaint-brushes, libwebp, libgudev, openexr
-, AppKit, Cocoa, gtk-mac-integration }:
+, harfbuzz, mypaint-brushes, libwebp, libheif, libgudev, openexr
+, AppKit, Cocoa, gtk-mac-integration-gtk2, cf-private }:
 
 let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
-  name = "gimp-${version}";
-  version = "2.10.2";
+  pname = "gimp";
+  version = "2.10.10";
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "1srkqd9cx1xmny7cyk3b6f14dknb3fd77whm38vlvr7grnpbmc0w";
+    url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "0xwck5nbpb945s1cyij3kfqw1pchbhx8i5vf5hgywyjw4r1z5l8j";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig intltool gettext wrapPython ];
+  nativeBuildInputs = [ pkgconfig intltool gettext wrapPython ];
   propagatedBuildInputs = [ gegl ]; # needed by gimp-2.0.pc
   buildInputs = [
     babl gegl gtk2 glib gdk_pixbuf pango cairo gexiv2 harfbuzz isocodes
     freetype fontconfig lcms libpng libjpeg poppler poppler_data libtiff openexr
-    libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp
+    libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp libheif
     python pygtk libexif xorg.libXpm glib-networking libmypaint mypaint-brushes
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    # cf-private is needed to get some things not in swift-corefoundation.
+    # For instance _OBJC_CLASS_$_NSArray is missing.
+    AppKit Cocoa gtk-mac-integration-gtk2 cf-private
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];
 
   pythonPath = [ pygtk ];
 
@@ -35,6 +38,15 @@ in stdenv.mkDerivation rec {
     # The check runs before glib-networking is registered
     export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
   '';
+
+  patches = [
+    # to remove compiler from the runtime closure, reference was retained via
+    # gimp --version --verbose output
+    (substituteAll {
+      src = ./remove-cc-reference.patch;
+      cc_version = stdenv.cc.cc.name;
+    })
+  ];
 
   postFixup = ''
     wrapPythonProgramsIn $out/lib/gimp/${passthru.majorVersion}/plug-ins/
@@ -57,10 +69,12 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--without-webkit" # old version is required
     "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-    "--with-icc-directory=/var/run/current-system/sw/share/color/icc"
+    "--with-icc-directory=/run/current-system/sw/share/color/icc"
   ];
 
-  doCheck = true;
+  # on Darwin,
+  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
+  doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
 

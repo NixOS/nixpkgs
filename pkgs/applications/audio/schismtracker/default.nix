@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     export ac_cv_prog_ac_ct_WINDRES=
   '';
 
-  configureFlags = "--enable-dependency-tracking";
+  configureFlags = [ "--enable-dependency-tracking" ];
 
   buildInputs = [ alsaLib python SDL ];
 

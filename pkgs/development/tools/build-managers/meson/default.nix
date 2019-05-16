@@ -1,13 +1,12 @@
-{ lib, python3Packages, stdenv, ninja, pkgconfig, targetPlatform, writeTextDir, substituteAll }: let
-  targetPrefix = lib.optionalString stdenv.isCross
-                   (targetPlatform.config + "-");
-in python3Packages.buildPythonApplication rec {
-  version = "0.46.1";
+{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
+
+python3Packages.buildPythonApplication rec {
+  version = "0.49.2";
   pname = "meson";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1jdxs2mkniy1hpdjc4b4jb95axsjp6j5fzphmm6d4gqmqyykjvqc";
+    sha256 = "0ckkzq0kbnnk4rwv20lggm9a4fb5054jbv99i9pwjhid23qy7059";
   };
 
   postFixup = ''
@@ -17,6 +16,9 @@ in python3Packages.buildPythonApplication rec {
       mv ".$i-wrapped" "$i"
     done
     popd
+
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
   '';
 
   patches = [
@@ -42,26 +44,33 @@ in python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # We use custom Clang, which makes Meson think *not Apple*, while still
+    # relying on system linker. When it detects standard Clang, Meson will
+    # pass it `-Wl,-O1` flag but optimizations are not recognized by
+    # Mac linker.
+    # https://github.com/mesonbuild/meson/issues/4784
+    ./fix-objc-linking.patch
   ];
 
   setupHook = ./setup-hook.sh;
 
   crossFile = writeTextDir "cross-file.conf" ''
     [binaries]
-    c = '${targetPrefix}cc'
-    cpp = '${targetPrefix}c++'
-    ar = '${targetPrefix}ar'
-    strip = '${targetPrefix}strip'
+    c = '${targetPackages.stdenv.cc.targetPrefix}cc'
+    cpp = '${targetPackages.stdenv.cc.targetPrefix}c++'
+    ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
+    strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
     pkgconfig = 'pkg-config'
 
     [properties]
     needs_exe_wrapper = true
 
     [host_machine]
-    system = '${targetPlatform.parsed.kernel.name}'
-    cpu_family = '${targetPlatform.parsed.cpu.family}'
-    cpu = '${targetPlatform.parsed.cpu.name}'
-    endian = ${if targetPlatform.isLittleEndian then "'little'" else "'big'"}
+    system = '${targetPackages.stdenv.targetPlatform.parsed.kernel.name}'
+    cpu_family = '${targetPackages.stdenv.targetPlatform.parsed.cpu.family}'
+    cpu = '${targetPackages.stdenv.targetPlatform.parsed.cpu.name}'
+    endian = ${if targetPackages.stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
   '';
 
   # 0.45 update enabled tests but they are failing
@@ -69,7 +78,9 @@ in python3Packages.buildPythonApplication rec {
   # checkInputs = [ ninja pkgconfig ];
   # checkPhase = "python ./run_project_tests.py";
 
-  inherit (stdenv) cc isCross;
+  inherit (stdenv) cc;
+
+  isCross = stdenv.targetPlatform != stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = http://mesonbuild.com;

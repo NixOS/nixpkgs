@@ -1,0 +1,56 @@
+diff --git a/src/starter/klips.c b/src/starter/klips.c
+index 2216546..d626677 100644
+--- a/src/starter/klips.c
++++ b/src/starter/klips.c
+@@ -30,7 +30,7 @@ bool starter_klips_init(void)
+ 		/* ipsec module makes the pf_key proc interface visible */
+ 		if (stat(PROC_MODULES, &stb) == 0)
+ 		{
+-			ignore_result(system("modprobe -qv ipsec"));
++			ignore_result(system("@kmod@/bin/modprobe -qv ipsec"));
+ 		}
+ 
+ 		/* now test again */
+@@ -42,9 +42,9 @@ bool starter_klips_init(void)
+ 	}
+ 
+ 	/* load crypto algorithm modules */
+-	ignore_result(system("modprobe -qv ipsec_aes"));
+-	ignore_result(system("modprobe -qv ipsec_blowfish"));
+-	ignore_result(system("modprobe -qv ipsec_sha2"));
++	ignore_result(system("@kmod@/bin/modprobe -qv ipsec_aes"));
++	ignore_result(system("@kmod@/bin/modprobe -qv ipsec_blowfish"));
++	ignore_result(system("@kmod@/bin/modprobe -qv ipsec_sha2"));
+ 
+ 	DBG2(DBG_APP, "found KLIPS IPsec stack");
+ 	return TRUE;
+diff --git a/src/starter/netkey.c b/src/starter/netkey.c
+index b150d3e..0a7c2ff 100644
+--- a/src/starter/netkey.c
++++ b/src/starter/netkey.c
+@@ -30,7 +30,7 @@ bool starter_netkey_init(void)
+ 		/* af_key module makes the netkey proc interface visible */
+ 		if (stat(PROC_MODULES, &stb) == 0)
+ 		{
+-			ignore_result(system("modprobe -qv af_key"));
++			ignore_result(system("@kmod@/bin/modprobe -qv af_key"));
+ 		}
+ 
+ 		/* now test again */
+@@ -44,11 +44,11 @@ bool starter_netkey_init(void)
+ 	/* make sure that all required IPsec modules are loaded */
+ 	if (stat(PROC_MODULES, &stb) == 0)
+ 	{
+-		ignore_result(system("modprobe -qv ah4"));
+-		ignore_result(system("modprobe -qv esp4"));
+-		ignore_result(system("modprobe -qv ipcomp"));
+-		ignore_result(system("modprobe -qv xfrm4_tunnel"));
+-		ignore_result(system("modprobe -qv xfrm_user"));
++		ignore_result(system("@kmod@/bin/modprobe -qv ah4"));
++		ignore_result(system("@kmod@/bin/modprobe -qv esp4"));
++		ignore_result(system("@kmod@/bin/modprobe -qv ipcomp"));
++		ignore_result(system("@kmod@/bin/modprobe -qv xfrm4_tunnel"));
++		ignore_result(system("@kmod@/bin/modprobe -qv xfrm_user"));
+ 	}
+ 
+ 	DBG2(DBG_APP, "found netkey IPsec stack");

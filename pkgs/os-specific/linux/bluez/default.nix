@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
-  pythonPackages, readline, udev, libical,
-  systemd, enableWiimote ? false, enableMidi ? false }:
+  python3, readline, udev, libical, systemd,
+  enableWiimote ? false, enableMidi ? false, enableSixaxis ? false }:
 
 stdenv.mkDerivation rec {
   name = "bluez-5.50";
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "048r91vx9gs5nwwbah2s0xig04nwk14c5s0vb7qmaqdvighsmz2z";
   };
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python3.pkgs; [
     dbus-python pygobject2 pygobject3 recursivePthLoader
   ];
 
   buildInputs = [
-    dbus glib alsaLib pythonPackages.python pythonPackages.wrapPython
+    dbus glib alsaLib python3 python3.pkgs.wrapPython
     readline udev libical
   ];
 
@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
     "--with-systemduserunitdir=$(out)/etc/systemd/user"
     "--with-udevdir=$(out)/lib/udev"
     ] ++ optional enableWiimote [ "--enable-wiimote" ]
-      ++ optional enableMidi    [ "--enable-midi" ]);
+      ++ optional enableMidi    [ "--enable-midi" ]
+      ++ optional enableSixaxis [ "--enable-sixaxis" ]);
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";

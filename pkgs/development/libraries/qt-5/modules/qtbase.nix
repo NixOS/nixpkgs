@@ -2,15 +2,15 @@
   stdenv, lib,
   src, patches, version, qtCompatVersion,
 
-  coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
-  ruby, which,
+  coreutils, bison, flex, gdb, gperf, lndir, perl, pkgconfig, python2,
+  which,
   # darwin support
-  darwin, libiconv, libcxx,
+  darwin, libiconv,
 
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
-  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xorg,
+  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm,
   zlib,
 
   # optional dependencies
@@ -18,7 +18,7 @@
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
-  libGLSupported ? (!stdenv.isDarwin),
+  libGLSupported ? !stdenv.isDarwin,
   libGL,
   buildExamples ? false,
   buildTests ? false,
@@ -53,6 +53,7 @@ stdenv.mkDerivation {
       if stdenv.isDarwin
       then with darwin.apple_sdk.frameworks;
         [
+          # TODO: move to buildInputs, this should not be propagated.
           AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL
           darwin.libobjc libiconv
@@ -77,14 +78,15 @@ stdenv.mkDerivation {
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
+       # Needed for OBJC_CLASS_$_NSDate symbols.
+    ++ lib.optional stdenv.isDarwin darwin.cf-private
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.connector-c
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig python2 which ]
-    ++ lib.optional (!stdenv.isDarwin) patchelf;
+    [ bison flex gperf lndir perl pkgconfig python2 which ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
@@ -195,26 +197,11 @@ stdenv.mkDerivation {
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ]
 
-    ++ (
-      if stdenv.isDarwin
-      then
-        [
-          "-Wno-missing-sysroot"
-          "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
-          "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
-          # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
-          # 10.9 which necessitates the above macro definition that mentions
-          # 10.10
-        ]
-      else
-        lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
-        ++ lib.optionals withGtk3
-          [
-            ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
-            ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
-          ]
-    )
-
+    ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
+    ++ lib.optionals withGtk3 [
+         ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+         ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+       ]
     ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC";
 
   prefixKey = "-prefix ";
@@ -262,15 +249,18 @@ stdenv.mkDerivation {
     ++ (
       if (!stdenv.hostPlatform.isx86_64)
       then [ "-no-sse2" ]
-      else lib.optional (compareVersion "5.9.0" >= 0) [ "-sse2" ]
+      else lib.optionals (compareVersion "5.9.0" >= 0) {
+        "default"        = [ "-sse2" "-no-sse3" "-no-ssse3" "-no-sse4.1" "-no-sse4.2" "-no-avx" "-no-avx2" ];
+        "westmere"       = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2" "-no-avx" "-no-avx2" ];
+        "sandybridge"    = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
+        "ivybridge"      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
+        "haswell"        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        "broadwell"      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        "skylake"        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        "skylake-avx512" = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+      }.${stdenv.hostPlatform.platform.gcc.arch or "default"}
     )
     ++ [
-      "-no-sse3"
-      "-no-ssse3"
-      "-no-sse4.1"
-      "-no-sse4.2"
-      "-no-avx"
-      "-no-avx2"
       "-no-mips_dsp"
       "-no-mips_dspr2"
     ]
@@ -297,7 +287,6 @@ stdenv.mkDerivation {
       then
         [
           "-platform macx-clang"
-          "-no-use-gold-linker"
           "-no-fontconfig"
           "-qt-freetype"
           "-qt-libpng"
@@ -325,9 +314,6 @@ stdenv.mkDerivation {
           "-glib"
           "-system-libjpeg"
           "-system-libpng"
-          # gold linker of binutils 2.28 generates duplicate symbols
-          # TODO: remove for newer version of binutils
-          "-no-use-gold-linker"
         ]
         ++ lib.optional withGtk3 "-gtk"
         ++ lib.optional (compareVersion "5.9.0" >= 0) "-inotify"
@@ -392,6 +378,7 @@ stdenv.mkDerivation {
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin && (compareVersion "5.9.0" < 0);
   };
 
 }

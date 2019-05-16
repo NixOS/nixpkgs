@@ -38,6 +38,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.zlib ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
+    badPlatforms = [ "aarch64-linux" ];
     downloadPage = "http://www.angelcode.com/angelscript/downloads.html";
     homepage="http://www.angelcode.com/angelscript/";
   };

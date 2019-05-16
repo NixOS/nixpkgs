@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "lightdm-mini-greeter-${version}";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "prikhi";
     repo = "lightdm-mini-greeter";
     rev = version;
-    sha256 = "1g3lrh034w38hiq96b0xmghmlf87hcycwdh06dwkdksr0hl08wxy";
+    sha256 = "1qi0bsqi8z2zv3303ww0kd7bciz6qx8na5bkvgrqlwyvq31czai5";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "A minimal, configurable, single-user GTK3 LightDM greeter";
     homepage = https://github.com/prikhi/lightdm-mini-greeter;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ mnacamura ];
+    maintainers = with maintainers; [ mnacamura prikhi ];
     platforms = platforms.linux;
   };
 }

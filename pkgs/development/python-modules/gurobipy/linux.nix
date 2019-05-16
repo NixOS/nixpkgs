@@ -1,10 +1,7 @@
 { fetchurl, python }:
 assert python.pkgs.isPy27;
-let utf =
-  if python.ucsEncoding == 2 then "16"
-  else if python.ucsEncoding == 4 then "32"
-  else throw "Unsupported python UCS encoding UCS${toString python.ucsEncoding}";
-in python.pkgs.buildPythonPackage
+
+python.pkgs.buildPythonPackage
   { pname = "gurobipy";
     version = "7.5.2";
     src = fetchurl

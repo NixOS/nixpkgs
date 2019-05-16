@@ -1,19 +1,18 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
-, librsvg, pango, gtk, bzip2, json-glib, intltool, autoreconfHook, libraw
-, libwebp, gnome3, libintl }:
+, librsvg, pango, gtk, bzip2, json-glib, gettext, autoreconfHook, libraw
+, gexiv2, libwebp, gnome3, libintl }:
 
-let
-  version = "0.4.2";
-in stdenv.mkDerivation rec {
-  name = "gegl-${version}";
+stdenv.mkDerivation rec {
+  pname = "gegl";
+  version = "0.4.16";
+
+  outputs = [ "out" "dev" "devdoc" ];
+  outputBin = "dev";
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "13bzl0k5l12pk8bkcq4ar7wscbnw7jswhp34mwfsrf10kp0qndba";
+    url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "0njydcr6qdmfzh4fxx544681qxdpf7y6b2f47jcypn810dlxy4h1";
   };
-
-  # needs fonts otherwise, don't know how to pass them
-  configureFlags = [ "--disable-docs" ];
 
   enableParallelBuilding = true;
 
@@ -21,12 +20,12 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng cairo libjpeg librsvg pango gtk bzip2
-    libraw libwebp gnome3.gexiv2
+    libraw libwebp gexiv2
   ];
 
   propagatedBuildInputs = [ glib json-glib babl ]; # for gegl-4.0.pc
 
-  nativeBuildInputs = [ pkgconfig intltool which autoreconfHook libintl ];
+  nativeBuildInputs = [ pkgconfig gettext which autoreconfHook libintl ];
 
   meta = with stdenv.lib; {
     description = "Graph-based image processing framework";

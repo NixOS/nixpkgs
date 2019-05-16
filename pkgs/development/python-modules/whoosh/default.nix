@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest_3 }:
 
 buildPythonPackage rec {
   pname = "Whoosh";
@@ -7,7 +7,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "10qsqdjpbc85fykc1vgcs8xwbgn4l2l52c8d83xf1q59pwyn79bw";
   };
-  buildInputs = [ pytest ];
+
+  checkInputs = [ pytest_3 ];
 
   # Wrong encoding
   postPatch = ''

@@ -1,23 +1,24 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, dbus_libs, dbus-glib, libxml2 }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool
+, pkgconfig, dbus, dbus-glib, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "thermald-${version}";
-  version = "1.7.2";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "1cs2pq8xvfnsvrhg2bxawk4kn3z1qmfrnpnhs178pvfbglzh15hc";
+    sha256 = "1g1l7k8yxj8bl1ysdx8v6anv1s7xk9j072y44gwki70dy48n7j92";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake libtool dbus_libs dbus-glib libxml2 ];
+  buildInputs = [ autoconf automake libtool dbus dbus-glib libxml2 ];
 
   patchPhase = ''sed -e 's/upstartconfdir = \/etc\/init/upstartconfdir = $(out)\/etc\/init/' -i data/Makefile.am'';
 
   preConfigure = ''
-    export PKG_CONFIG_PATH="${dbus_libs.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
+    export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
     ./autogen.sh
   '';
 

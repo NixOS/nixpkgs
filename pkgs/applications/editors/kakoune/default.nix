@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, ncurses, boost, asciidoc, docbook_xsl, libxslt, pkgconfig }:
+{ stdenv, fetchFromGitHub, ncurses, asciidoc, docbook_xsl, libxslt, pkgconfig }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "kakoune-unstable-${version}";
-  version = "2018-05-21";
+  name = "kakoune-${version}";
+  version = "2019.01.20";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = "878d2a4bdb674a5e7703a66e530520f48efba641";
-    sha256 = "0pwy6ilsb62s1792gjyvhvq8shj60l8lx26b58zvpfb54an4s6rk";
+    rev = "v${version}";
+    sha256 = "04ak1jm7b1i03sx10z3fxw08rn692y2fj482jn5kpzfzj91b2ila";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses asciidoc docbook_xsl libxslt ];
@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     export PREFIX=$out
     cd src
     sed -ie 's#--no-xmllint#--no-xmllint --xsltproc-opts="--nonet"#g' Makefile
+  '';
+
+  preConfigure = ''
+    export version="v${version}"
   '';
 
   meta = {

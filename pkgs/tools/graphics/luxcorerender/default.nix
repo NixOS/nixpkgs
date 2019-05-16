@@ -1,15 +1,16 @@
 { stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, python35
 , tbb, openimageio, libjpeg, libpng, zlib, libtiff, ilmbase
 , freetype, openexr, libXdmcp, libxkbcommon, epoxy, at-spi2-core
-, dbus, doxygen, qt5, c-blosc, mesa_glu, gnome3, pcre
+, dbus, doxygen, qt5, c-blosc, libGLU, gnome3, gtk3, pcre
 , bison, flex, libpthreadstubs, libX11
-, embree2, makeWrapper, gsettings_desktop_schemas, glib
+, embree2, makeWrapper, gsettings-desktop-schemas, glib
 , withOpenCL ? true , opencl-headers, ocl-icd, opencl-clhpp
 }:
 
 let boost_static = boost165.override {
       python = python35;
       enableStatic = true;
+      enablePython = true;
     };
 
 in stdenv.mkDerivation rec {
@@ -26,13 +27,13 @@ in stdenv.mkDerivation rec {
   buildInputs =
    [ embree2 pkgconfig cmake zlib boost_static libjpeg
      libtiff libpng ilmbase freetype openexr openimageio
-     tbb qt5.full c-blosc mesa_glu pcre bison
+     tbb qt5.full c-blosc libGLU pcre bison
      flex libX11 libpthreadstubs python35 libXdmcp libxkbcommon
      epoxy at-spi2-core dbus doxygen
      # needed for GSETTINGS_SCHEMAS_PATH
-     gsettings_desktop_schemas glib gnome3.gtk
+     gsettings-desktop-schemas glib gtk3
      # needed for XDG_ICON_DIRS
-     gnome3.defaultIconTheme
+     gnome3.adwaita-icon-theme
      makeWrapper
      (stdenv.lib.getLib gnome3.dconf)
    ] ++ stdenv.lib.optionals withOpenCL [opencl-headers ocl-icd opencl-clhpp];
@@ -64,7 +65,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/luxcoreui" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_DATA_DIRS : '${gnome3.defaultIconTheme}/share' \
+      --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share' \
       --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
   '';
 

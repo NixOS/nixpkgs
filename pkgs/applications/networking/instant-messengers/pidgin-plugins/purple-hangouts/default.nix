@@ -2,22 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "purple-hangouts-hg-${version}";
-  version = "2018-03-28";
+  version = "2018-12-02";
 
   src = fetchhg {
     url = "https://bitbucket.org/EionRobb/purple-hangouts/";
-    rev = "0e137e6bf9e95c5a0bd282f3ad4a5bd00a6968ab";
-    sha256 = "04vjgz6qyd9ilv1c6n08r45vc683vxs1rgfwhh65pag6q4rbzlb9";
+    rev = "cccf2f6";
+    sha256 = "1zd1rlzqvw1zkb0ydyz039n3xa1kv1f20a4l6rkm9a8sp6rpf3pi";
   };
 
   buildInputs = [ pidgin glib json-glib protobuf protobufc ];
 
-  installPhase = ''
-    install -Dm755 -t $out/lib/pidgin/ libhangouts.so
-    for size in 16 22 24 48; do
-      install -TDm644 hangouts$size.png $out/share/pixmaps/pidgin/protocols/$size/hangouts.png
-    done
-  '';
+  PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
+  PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
   meta = with stdenv.lib; {
     homepage = https://bitbucket.org/EionRobb/purple-hangouts;

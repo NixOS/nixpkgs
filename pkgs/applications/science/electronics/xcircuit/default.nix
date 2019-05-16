@@ -17,7 +17,11 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook automake pkgconfig ];
   hardeningDisable = [ "format" ];
 
-  configureFlags = "--with-tcl=${tcl}/lib --with-tk=${tk}/lib --with-ngspice=${getBin ngspice}/bin/ngspice";
+  configureFlags = [
+    "--with-tcl=${tcl}/lib"
+    "--with-tk=${tk}/lib"
+    "--with-ngspice=${getBin ngspice}/bin/ngspice"
+  ];
 
   buildInputs = with xorg; [ cairo ghostscript libSM libXt libICE libX11 libXpm tcl tk zlib ];
 

@@ -4,18 +4,25 @@
 
 buildPythonPackage rec {
   pname = "Werkzeug";
-  version = "0.14.1";
+  version = "0.15.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c3fd7a7d41976d9f44db327260e263132466836cef6f91512889ed60ad26557c";
+    sha256 = "0a73e8bb2ff2feecfc5d56e6f458f5b99290ef34f565ffb2665801ff7de6af7a";
   };
 
   propagatedBuildInputs = [ itsdangerous ];
-  checkInputs = [ pytest requests glibcLocales hypothesis ];
+  checkInputs = [ pytest requests hypothesis ];
+
+  # Hi! New version of Werkzeug? Please double-check that this commit is
+  # inclucded, and then remove the following patch.
+  # https://github.com/pallets/werkzeug/commit/1cfdcf9824cb20e362979e8f7734012926492165
+  patchPhase = ''
+    substituteInPlace "tests/test_serving.py" --replace "'python'" "sys.executable"
+  '';
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" py.test ${stdenv.lib.optionalString stdenv.isDarwin "-k 'not test_get_machine_id'"}
+    pytest ${stdenv.lib.optionalString stdenv.isDarwin "-k 'not test_get_machine_id'"}
   '';
 
   meta = with stdenv.lib; {

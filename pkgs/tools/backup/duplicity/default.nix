@@ -2,11 +2,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "duplicity-${version}";
-  version = "0.7.17";
+  version = "0.7.19";
 
   src = fetchurl {
-    url = "http://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${name}.tar.gz";
-    sha256 = "0jmh3h09680xyf33hzxxxl74bwz66zqhzvjlj7j89r9rz3qwa91p";
+    url = "https://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${name}.tar.gz";
+    sha256 = "0ag9dknslxlasslwfjhqgcqbkb1mvzzx93ry7lch2lfzcdd91am6";
   };
 
   buildInputs = [ librsync makeWrapper python2Packages.wrapPython ];
@@ -35,9 +35,9 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
-    homepage = http://www.nongnu.org/duplicity;
+    homepage = https://www.nongnu.org/duplicity;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric peti ];
+    maintainers = with maintainers; [ peti ];
     platforms = platforms.unix;
   };
 }

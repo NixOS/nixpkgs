@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, fetchpatch, makeWrapper, autoreconfHook
+{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
 , pkgconfig, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, python
 , gawk
-, perl
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) perl.meta.platforms, perl
+, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) python.meta.platforms, python
 , swig
 , ncurses
 , pam
+, libnotify
 , buildPackages
 }:
 
 let
-  apparmor-series = "2.12";
-  apparmor-patchver = "0";
+  apparmor-series = "2.13";
+  apparmor-patchver = "1";
   apparmor-version = apparmor-series + "." + apparmor-patchver;
 
   apparmor-meta = component: with stdenv.lib; {
@@ -25,8 +26,8 @@ let
   };
 
   apparmor-sources = fetchurl {
-    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-series}.tar.gz";
-    sha256 = "0mm0mcp0w18si9wl15drndysm7v27az2942p1xjd197shg80qawa";
+    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
+    sha256 = "7a060d94c275e59f96bacd1da150e6fee2c9152a85bf57800109d07d51ef8afb";
   };
 
   prePatchCommon = ''
@@ -37,11 +38,6 @@ let
   '';
 
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/testing/apparmor/0002-Provide-missing-secure_getenv-and-scandirat-function.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
-      name = "0002-Provide-missing-secure_getenv-and-scandirat-function.patch";
-      sha256 = "0pj1bzifghxwxlc39j8hyy17dkjr9fk64kkj94ayymyprz4i4nac";
-    })
     (fetchpatch {
       url = "https://git.alpinelinux.org/cgit/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
@@ -76,27 +72,31 @@ let
       perl
     ];
 
-    buildInputs = stdenv.lib.optionals (!stdenv.isCross) [
-      perl
-      python
-    ];
+    buildInputs = []
+      ++ stdenv.lib.optional withPerl perl
+      ++ stdenv.lib.optional withPython python;
 
     # required to build apparmor-parser
     dontDisableStatic = true;
 
     prePatch = prePatchCommon + ''
-      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${stdenv.cc.libc.dev}/include/netinet/in.h"
-      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${stdenv.cc.libc.dev}/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.am --replace install_vendor install_site
+      substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.in --replace install_vendor install_site
+      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${stdenv.lib.getDev stdenv.cc.libc}/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${stdenv.lib.getDev stdenv.cc.libc}/include/netinet/in.h"
     '';
     inherit patches;
 
     postPatch = "cd ./libraries/libapparmor";
     # https://gitlab.com/apparmor/apparmor/issues/1
-    configureFlags = stdenv.lib.optionalString (!stdenv.isCross) "--with-python --with-perl";
+    configureFlags = [
+      (stdenv.lib.withFeature withPerl "perl")
+      (stdenv.lib.withFeature withPython "python")
+    ];
 
-    outputs = if stdenv.isCross then [ "out" ] else [ "out" "python" ];
+    outputs = [ "out" ] ++ stdenv.lib.optional withPython "python";
 
-    postInstall = stdenv.lib.optionalString (!stdenv.isCross) ''
+    postInstall = stdenv.lib.optionalString withPython ''
       mkdir -p $python/lib
       mv $out/lib/python* $python/lib/
     '';
@@ -130,14 +130,17 @@ let
         wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
-      for prog in aa-notify ; do
-        wrapProgram $out/bin/$prog --prefix PERL5LIB : "${libapparmor}/lib/perl5:$PERL5LIB"
-      done
+      substituteInPlace $out/bin/aa-notify --replace /usr/bin/notify-send ${libnotify}/bin/notify-send
+      # aa-notify checks its name and does not work named ".aa-notify-wrapped"
+      mv $out/bin/aa-notify $out/bin/aa-notify-wrapped
+      makeWrapper ${perl}/bin/perl $out/bin/aa-notify --set PERL5LIB ${libapparmor}/${perl.libPrefix} --add-flags $out/bin/aa-notify-wrapped
     '';
 
     inherit doCheck;
 
-    meta = apparmor-meta "user-land utilities";
+    meta = apparmor-meta "user-land utilities" // {
+      broken = !(withPython && withPerl);
+    };
   };
 
   apparmor-bin-utils = stdenv.mkDerivation {

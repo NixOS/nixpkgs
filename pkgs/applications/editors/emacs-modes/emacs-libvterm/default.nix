@@ -17,21 +17,37 @@ let
 
   };
 
+  libvterm = libvterm-neovim.overrideAttrs(old: rec {
+    pname = "libvterm-neovim";
+    version = "2019-04-27";
+    name = pname + "-" + version;
+    src = fetchFromGitHub {
+      owner = "neovim";
+      repo = "libvterm";
+      rev = "89675ffdda615ffc3f29d1c47a933f4f44183364";
+      sha256 = "0l9ixbj516vl41v78fi302ws655xawl7s94gmx1kb3fmfgamqisy";
+    };
+  });
+
+
 in stdenv.mkDerivation rec {
   name = "emacs-libvterm-${version}";
-  version = "unstable-2017-11-24";
+  version = "unstable-2019-04-28";
 
   src = fetchFromGitHub {
     owner = "akermu";
     repo = "emacs-libvterm";
-    rev = "829ae86f60c3a54048804997edffa161c77a2f4b";
-    sha256 = "1xb24kpvypvskh4vr3b45nl2m2vsczcr9rnsr2sjzf32mnapyjnp";
+    rev = "6adcedf3e4aaadeeaff97437044fba17aeb466d4";
+    sha256 = "1j6qr5bmajig3idhwsaa3zm72w13q9zn77z2dlrhhx3p4bbds3f8";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ emacs libvterm-neovim ];
+  buildInputs = [ emacs libvterm ];
 
-  cmakeFlags = [ "-DEMACS_SOURCE=${emacsSources}" ];
+  cmakeFlags = [
+    "-DEMACS_SOURCE=${emacsSources}"
+    "-DUSE_SYSTEM_LIBVTERM=True"
+  ];
 
   installPhase = ''
     install -d $out/share/emacs/site-lisp

@@ -1,45 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, go-md2man
-, go, pkgconfig, libapparmor, apparmor-parser, libseccomp }:
+{ stdenv, lib, fetchFromGitHub, buildGoPackage, go-md2man
+, pkgconfig, libapparmor, apparmor-parser, libseccomp, which }:
 
 with lib;
 
-stdenv.mkDerivation rec {
+buildGoPackage rec {
   name = "runc-${version}";
-  version = "1.0.0-rc5";
+  version = "1.0.0-rc8";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "1ikqw39jn8dzb4snc4pcg3z85jb67ivskdhx028k17ss29bf4062";
+    sha256 = "05s4p12mgmdcy7gjralh41wlgds6m69zdgwbpdn1xjj2487dmhxf";
   };
 
-  outputs = [ "out" "man" ];
+  goPackagePath = "github.com/opencontainers/runc";
+  outputs = [ "bin" "out" "man" ];
 
   hardeningDisable = ["fortify"];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ removeReferencesTo go-md2man go libseccomp libapparmor apparmor-parser ];
+  buildInputs = [ go-md2man libseccomp libapparmor apparmor-parser which ];
 
   makeFlags = ''BUILDTAGS+=seccomp BUILDTAGS+=apparmor'';
 
-  preConfigure = ''
-    # Extract the source
-    cd "$NIX_BUILD_TOP"
-    mkdir -p "go/src/github.com/opencontainers"
-    mv "$sourceRoot" "go/src/github.com/opencontainers/runc"
-    export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
-  '';
-
-  preBuild = ''
-    cd go/src/github.com/opencontainers/runc
+  buildPhase = ''
+    cd go/src/${goPackagePath}
     patchShebangs .
     substituteInPlace libcontainer/apparmor/apparmor.go \
       --replace /sbin/apparmor_parser ${apparmor-parser}/bin/apparmor_parser
+    make ${makeFlags} runc
   '';
 
   installPhase = ''
-    install -Dm755 runc $out/bin/runc
+    install -Dm755 runc $bin/bin/runc
 
     # Include contributed man pages
     man/md2man-all.sh -q
@@ -55,15 +49,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  preFixup = ''
-    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
-  '';
-
   meta = {
     homepage = https://runc.io/;
     description = "A CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ offline vdemeester ];
     platforms = platforms.linux;
   };
 }

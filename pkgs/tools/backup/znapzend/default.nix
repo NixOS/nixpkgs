@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, zfs, mbuffer, perl, perlPackages, wget, autoconf, automake }:
+{ stdenv, fetchFromGitHub, fetchurl, perl, perlPackages, wget, autoconf, automake }:
 
 let
   # when upgrade znapzend, check versions of Perl libs here: https://github.com/oetiker/znapzend/blob/master/PERL_MODULES
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = checksum;
   };
 
-  buildInputs = [ wget perl perlPackages.TestHarness MojoIOLoopForkCall-0-17 perlPackages.TAPParserSourceHandlerpgTAP ];
+  buildInputs = [ wget perl MojoIOLoopForkCall-0-17 perlPackages.TAPParserSourceHandlerpgTAP ];
 
   nativeBuildInputs = [ autoconf automake ];
 
@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/bin/znapzend --replace "${perl}/bin/perl" \
       "${perl}/bin/perl \
-      -I${perlPackages.TestHarness}/${perl.libPrefix} \
       -I${Mojolicious-6-46}/${perl.libPrefix} \
       -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
       -I${MojoIOLoopForkCall-0-17}/${perl.libPrefix} \
@@ -60,7 +59,6 @@ stdenv.mkDerivation rec {
       "
     substituteInPlace $out/bin/znapzendzetup --replace "${perl}/bin/perl" \
       "${perl}/bin/perl \
-      -I${perlPackages.TestHarness}/${perl.libPrefix} \
       -I${Mojolicious-6-46}/${perl.libPrefix} \
       -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
       -I${MojoIOLoopForkCall-0-17}/${perl.libPrefix} \
@@ -68,7 +66,6 @@ stdenv.mkDerivation rec {
       "
     substituteInPlace $out/bin/znapzendztatz --replace "${perl}/bin/perl" \
       "${perl}/bin/perl \
-      -I${perlPackages.TestHarness}/${perl.libPrefix} \
       -I${Mojolicious-6-46}/${perl.libPrefix} \
       -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
       -I${MojoIOLoopForkCall-0-17}/${perl.libPrefix} \

@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, ed, unifdef }:
+{ appleDerivation, ed, unifdef }:
 
 appleDerivation {
   nativeBuildInputs = [ ed unifdef ];

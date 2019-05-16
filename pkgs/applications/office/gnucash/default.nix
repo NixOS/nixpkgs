@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, makeWrapper, cmake, gtest
 , boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
-, webkit, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
+, webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
 , libdbiDrivers, guile, perl, perlPackages
 }:
 
@@ -25,23 +25,27 @@ in
 
 stdenv.mkDerivation rec {
   name = "gnucash-${version}";
-  version = "3.1-1";
+  version = "3.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "0qfjpmr6hnr0v7l2fi00rilnlyan4kqiyygyidxlpdxqqg76dvx1";
+    sha256 = "0ibp7g6aknvnkwkin97kv04ipksy3l18dsz9qysjb7h2nr8hnvbp";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
 
   buildInputs = [
     boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
-    webkit dconf hicolor-icon-theme libofx aqbanking gwenhywfar libdbi
+    webkitgtk dconf hicolor-icon-theme libofx aqbanking gwenhywfar libdbi
     libdbiDrivers guile
     perlWrapper perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
 
   propagatedUserEnvPkgs = [ dconf ];
+
+  # glib-2.58 deprecrated g_type_class_add_private
+  # Should probably be removed next version bump
+  CXXFLAGS = [ "-Wno-deprecated-declarations" ];
 
   postPatch = ''
     patchShebangs .

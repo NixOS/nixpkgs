@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Command line option parsing library";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "trustme";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1215vr6l6c0fzsv5gyay82fxd4fidvq2rd94wvjrljs6h2wajazk";
+    sha256 = "8d12837c6242afe1660dee08d44d96f40c9a5074cc58caf39f8c8fdf4b526529";
   };
 
   checkInputs = [ pytest pyopenssl service-identity ];

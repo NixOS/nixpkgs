@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "zc.buildout";
-  version = "2.2.5";
+  version = "2.13.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fb08f24f9e51e647e29d714f6e9ad51a4ea28673dddeed831315617bb5a805d0";
+    sha256 = "3d14d07226963a517295dfad5879d2799e2e3b65b2c61c71b53cb80f5ab11484";
   };
 
   meta = with stdenv.lib; {

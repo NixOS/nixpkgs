@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, enchant, qt4, zlib, sox, libX11, xproto, libSM
-, libICE, qca2, pkgconfig, callPackage, which, glib
-, libXScrnSaver, scrnsaverproto
+{ stdenv, fetchurl, enchant, qt4, zlib, sox, libX11, xorgproto, libSM
+, libICE, qca2, pkgconfig, which, glib
+, libXScrnSaver
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ enchant qt4 zlib sox libX11 xproto libSM libICE
-      qca2 pkgconfig which glib scrnsaverproto libXScrnSaver
+    [ enchant qt4 zlib sox libX11 xorgproto libSM libICE
+      qca2 pkgconfig which glib libXScrnSaver
     ];
 
   NIX_CFLAGS_COMPILE="-I${qca2}/include/QtCrypto";
@@ -22,9 +22,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Psi, an XMPP (Jabber) client";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -15,6 +15,6 @@ stdenv.lib.appendToName "with-packages" (symlinkJoin {
   postBuild = ''
     wrapProgram $out/bin/idris \
       --set IDRIS_LIBRARY_PATH $out/libs
-      '';
+  '';
 
 })

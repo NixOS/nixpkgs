@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
-, libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash, avahi
+, libjpeg, libpng, perl, ijs, qpdf, dbus, avahi
 , makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which, ghostscript
 , mupdf
 }:
@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
-  version = "1.20.3";
+  version = "1.22.5";
 
   src = fetchurl {
     url = "https://openprinting.org/download/cups-filters/${name}.tar.xz";
-    sha256 = "1g18qkvl9zdxickiblgs2vvkip4b6p2jalw4d30zzz3hh8f1g6iv";
+    sha256 = "19h7yy92wjfs401jzwyr03f3lp2xwg7sw83728r302rg2ni57m1h";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
@@ -24,8 +24,12 @@ in stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    # TODO(Profpatsch): mupdf support
     "--with-pdftops=pdftops"
     "--with-pdftops-path=${poppler_utils}/bin/pdftops"
+    "--with-gs-path=${ghostscript}/bin/gs"
+    "--with-pdftocairo-path=${poppler_utils}/bin/pdftocairo"
+    "--with-ippfind-path=${cups}/bin/ippfind"
     "--enable-imagefilters"
     "--with-rcdir=no"
     "--with-shell=${stdenv.shell}"

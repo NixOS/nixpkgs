@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libamqpcpp-${version}";
-  version = "3.0.0";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "CopernicaMarketingSoftware";
     repo = "AMQP-CPP";
     rev = "v${version}";
-    sha256 = "0n93wy2v2hx9zalpyn8zxsxihh0xpgcd472qwvwsc253y97v8ngv";
+    sha256 = "0qk431ra7vcklc67fdaddrj5a7j50znjr79zrwvhkcfy82fd56zw";
   };
 
   buildInputs = [ openssl ];

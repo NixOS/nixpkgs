@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libX11, xextproto, libXtst, libXi, libXext
-, libXinerama, glib, cairo, xdotool }:
+{ stdenv, fetchFromGitHub, pkgconfig, libX11, xorgproto, libXtst, libXi, libXext
+, libXinerama, libXrandr, glib, cairo, xdotool }:
 
-let release = "20150730"; in
+let release = "20180821"; in
 stdenv.mkDerivation rec {
   name = "keynav-0.${release}.0";
 
   src = fetchFromGitHub {
     owner = "jordansissel";
     repo = "keynav";
-    rev = "4ae486db6697877e84b66583a0502afc7301ba16";
-    sha256 = "0v1m8w877fcrk918p6b6q3753dsz8i1f4mb9bi064cp11kh85nq5";
+    rev = "78f9e076a5618aba43b030fbb9344c415c30c1e5";
+    sha256 = "0hmc14fj612z5h7gjgk95zyqab3p35c4a99snnblzxfg0p3x2f1d";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libX11 xextproto libXtst libXi libXext libXinerama
+  buildInputs = [ libX11 xorgproto libXtst libXi libXext libXinerama libXrandr
                   glib cairo xdotool ];
 
   patchPhase = ''

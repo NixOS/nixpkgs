@@ -141,7 +141,7 @@ rec {
     name = "antlr-runtime-4.5.3";
 
     src = fetchurl {
-      url = "http://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "0lm78i2annlczlc2cg5xvby0g1dyl0sh1y5xc2pymjlmr67a1g4k";
     };
 
@@ -153,7 +153,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = http://www.antlr.org/;
+      homepage = https://www.antlr.org/;
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -164,7 +164,7 @@ rec {
     name = "antlr-runtime-4.7.1";
 
     src = fetchurl {
-      url = "http://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "07f91mjclacrvkl8a307w2abq5wcqp0gcsnh0jg90ddfpqcnsla3";
     };
 
@@ -176,7 +176,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = http://www.antlr.org/;
+      homepage = https://www.antlr.org/;
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -254,12 +254,12 @@ rec {
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
-    version = "9.0.1";
+    version = "9.6.0";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.0/${name}.zip";
-      sha256 = "0vdx0j9ci533wnk7y17qjvjyqx38hlrdw67z6pi05vfv3r6ys39x";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.6/${name}/${name}.zip";
+      sha256 = "08rk3b1va57jcy4s161fx0xmb8dn47akhhxd2f28hspq6i2jqicm";
     };
 
     meta = with stdenv.lib; {
@@ -282,7 +282,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://eclipse-cs.sourceforge.net/;
+      homepage = https://eclipse-cs.sourceforge.net/;
       description = "Checkstyle integration into the Eclipse IDE";
       license = licenses.lgpl21;
       platforms = platforms.all;
@@ -346,6 +346,33 @@ rec {
     };
   };
 
+  drools = buildEclipseUpdateSite rec {
+    name = "drools-${version}";
+    version = "7.17.0.Final";
+
+    src = fetchzip {
+      url = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
+      sha512 = "2qzc1iszqfrfnw8xip78n3kp6hlwrvrr708vlmdk7nv525xhs0ssjaxriqdhcr0s6jripmmazxivv3763rnk2bfkh31hmbnckpx4r3m";
+      extraPostFetch = ''
+        # work around https://github.com/NixOS/nixpkgs/issues/38649
+        chmod go-w $out;
+
+        # update site is a couple levels deep, alongside some other irrelevant stuff
+        cd $out;
+        find . -type f -not -path ./binaries/org.drools.updatesite/\* -exec rm {} \;
+        rmdir sources;
+        mv binaries/org.drools.updatesite/* .;
+        rmdir binaries/org.drools.updatesite binaries;
+      '';
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://www.drools.org/;
+      description = "Drools is a Business Rules Management System (BRMS) solution";
+      license = licenses.asl20;
+    };
+  };
+
   eclemma = buildEclipseUpdateSite rec {
     name = "eclemma-${version}";
     version = "2.3.2.201409141915";
@@ -357,7 +384,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://www.eclemma.org/;
+      homepage = https://www.eclemma.org/;
       description = "EclEmma is a free Java code coverage tool for Eclipse";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -470,17 +497,40 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.8";
+    version = "4.10";
 
     src = fetchzip {
       stripRoot = false;
-      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.8-201806110500/org.eclipse.jdt-4.8.zip;
-      sha256 = "1my0d1114mx5gzxmwqlx0rcny39ly97ixlwx53ljk6qcryhdnr88";
+      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.10-201812060815/org.eclipse.jdt-4.10.zip;
+      sha256 = "1h11w3zd6xy5w4sk6xnyb2a27wxwhp83qfx67ji7bzdrwbvljqkz";
     };
 
     meta = with stdenv.lib; {
       homepage = https://www.eclipse.org/jdt/;
       description = "Eclipse Java development tools";
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  jdt-codemining = buildEclipsePlugin rec {
+    name = "jdt-codemining-${version}";
+    version = "1.0.0.201806221018";
+
+    srcFeature = fetchurl {
+      url = "http://oss.opensagres.fr/jdt-codemining/snapshot/features/jdt-codemining-feature_${version}.jar";
+      sha256 = "1vy30rsb9xifn4r1r2n84d48g6riadzli1xvhfs1mf5pkm5ljwl6";
+    };
+
+    srcPlugin = fetchurl {
+      url = "http://oss.opensagres.fr/jdt-codemining/snapshot/plugins/org.eclipse.jdt.codemining_${version}.jar";
+      sha256 = "0qdzlqcjcm2i4mwhmcdml0am83z1dayrcmf37ji7vmw6iwdk1xmp";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/angelozerr/jdt-codemining;
+      description = "Provides JDT Java CodeMining";
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -532,12 +582,12 @@ rec {
 
   spotbugs = buildEclipseUpdateSite rec {
     name = "spotbugs-${version}";
-    version = "3.1.5";
+    version = "3.1.11";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/spotbugs/spotbugs/releases/download/${version}/eclipsePlugin.zip";
-      sha256 = "0fxdirz6ik9rqykm2lcr720apsaqgngr4c7q793rjb9b3bn30c85";
+      sha256 = "0aanqwx3gy1arpbkqd846381hiy6272lzwhfjl94x8jhfykpqqbj";
     };
 
     meta = with stdenv.lib; {
@@ -564,7 +614,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://testng.org/;
+      homepage = https://testng.org/doc/;
       description = "Eclipse plugin for the TestNG testing framework";
       license = licenses.asl20;
       platforms = platforms.all;

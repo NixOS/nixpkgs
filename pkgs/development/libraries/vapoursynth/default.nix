@@ -12,13 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "vapoursynth-${version}";
-  version = "R43";
+  version = "R45.1";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "01yzxggjxr6fz3wj81z6vgp9m4jqddyk73i22kz2x620cpdgb9j9";
+    sha256 = "09fj4k75cksx1imivqfyr945swlr8k392kkdgzldwc4404qv82s6";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook nasm ];
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     (optionalString (!ocrSupport)   "--disable-ocr")
     (optionalString (!imwriSupport) "--disable-imwri")
   ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A video processing framework with the future in mind";

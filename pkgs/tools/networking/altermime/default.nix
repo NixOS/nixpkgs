@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.3.11";
 
   src = fetchurl {
-    url = "http://www.pldaniels.com/${baseName}/${name}.tar.gz";
+    url = "https://pldaniels.com/${baseName}/${name}.tar.gz";
     sha256 = "15zxg6spcmd35r6xbidq2fgcg2nzyv1sbbqds08lzll70mqx4pj7";
   };
 
@@ -21,12 +21,11 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "MIME alteration tool";
-    maintainers = with stdenv.lib.maintainers; [
-      raskin
-    ];
-    platforms = with stdenv.lib.platforms; linux;
-    downloadPage = "http://www.pldaniels.com/altermime/";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license.fullName = "alterMIME LICENSE";
+    downloadPage = "https://pldaniels.com/altermime/";
   };
 }

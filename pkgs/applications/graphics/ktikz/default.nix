@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gettext, poppler_qt5, qt5 , pkgconfig }:
+{ stdenv, fetchFromGitHub, gettext, poppler, qt5 , pkgconfig }:
 
 # Warning: You will also need a working pdflatex installation containing
 # at least auctex and pgf.
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     # lrelease command:
     LRELEASECOMMAND = lrelease
     # qcollectiongenerator command:
-    #QCOLLECTIONGENERATORCOMMAND = qcollectiongenerator
+    QCOLLECTIONGENERATORCOMMAND = qhelpgenerator
 
     # TikZ documentation default file path:
     TIKZ_DOCUMENTATION_DEFAULT = @out@/share/doc/texmf/pgf/pgfmanual.pdf.gz
@@ -64,8 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gettext qt5.full poppler_qt5 ];
+  buildInputs = [ gettext qt5.full poppler ];
 
   enableParallelBuilding = true;
 }
-

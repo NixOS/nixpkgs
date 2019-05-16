@@ -2,25 +2,25 @@
 
 buildGoPackage rec {
   name = "ipget-${version}";
-  version = "0.2.5";
+  version = "0.3.2";
   rev = "v${version}";
 
   goPackagePath = "github.com/ipfs/ipget";
-  
+
   extraSrcPaths = [
     (fetchgx {
       inherit name src;
-      sha256 = "1d4w8zl5mcppn3d4bl7qdkiqlf8gi3z2a62nygx17bqpa3da8cf3";
+      sha256 = "07l9hpkhk5phr95zp1l5wd3ii38bw91hy4dlw2rsfbzcsc8bq4s8";
     })
   ];
- 
+
   goDeps = ../../../tools/package-management/gx/deps.nix;
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "ipget";
     inherit rev;
-    sha256 = "0a8yxqhl469ipiznrgkp3yi1xz3xzcbpx60wabqppq8hccrdiybk";
+    sha256 = "1ljf5ddvc1p5swmgn4m1ivfj74fykk56myk2r9c4grdjzksf4a15";
   };
 
   meta = with stdenv.lib; {

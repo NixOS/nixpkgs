@@ -1,0 +1,93 @@
+From 7bda7c75748f36b0a50f93e46144d5a4de4974ad Mon Sep 17 00:00:00 2001
+From: Amin Hassani <ahassani@google.com>
+Date: Thu, 15 Dec 2016 10:43:15 -0800
+Subject: [PATCH] mksquashfs 4K aligns the files inside the squashfs image
+
+Files inside a squashfs image are not necessarily 4k (4096)
+aligned. This patch starts each file in a 4k aligned address and pads
+zero to the end of the file until it reaches the next 4k aligned
+address. This will not change the size of the compressed
+blocks (especially the last one) and hence it will not change how the
+files are being loaded in kernel or unsquashfs. However on average this
+increases the size of the squashfs image which can be calculated by the
+following formula:
+
+increased_size = (number_of_unfragmented_files_in_image + number of fragments) * 2048
+
+The 4k alignment can be enabled by flag '-4k-align'
+---
+ squashfs-tools/mksquashfs.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
+index 8b1376f..683973d 100644
+--- a/squashfs-tools/mksquashfs.c
++++ b/squashfs-tools/mksquashfs.c
+@@ -99,6 +99,8 @@ int old_exclude = TRUE;
+ int use_regex = FALSE;
+ int nopad = FALSE;
+ int exit_on_error = FALSE;
+ static off_t squashfs_start_offset = 0;
++int do_4k_align = FALSE;
++#define ALIGN_UP(bytes, size) (bytes = (bytes + size - 1) & ~(size - 1))
+
+ long long global_uid = -1, global_gid = -1;
+
+@@ -1513,6 +1515,9 @@ void unlock_fragments()
+ 	 * queue at this time.
+ 	 */
+ 	while(!queue_empty(locked_fragment)) {
++		// 4k align the start of remaining queued fragments.
++		if(do_4k_align)
++			ALIGN_UP(bytes, 4096);
+ 		write_buffer = queue_get(locked_fragment);
+ 		frg = write_buffer->block;
+ 		size = SQUASHFS_COMPRESSED_SIZE_BLOCK(fragment_table[frg].size);
+@@ -2420,6 +2420,9 @@
+ 	compressed_size = SQUASHFS_COMPRESSED_SIZE_BLOCK(c_byte);
+ 	write_buffer->size = compressed_size;
+ 	if(fragments_locked == FALSE) {
++		// 4k align the start of each fragment.
++		if(do_4k_align)
++			ALIGN_UP(bytes, 4096);
+ 		fragment_table[file_buffer->block].size = c_byte;
+ 		fragment_table[file_buffer->block].start_block = bytes;
+ 		write_buffer->block = bytes;
+@@ -2761,6 +2769,10 @@ int write_file_blocks(squashfs_inode *inode, struct dir_ent *dir_ent,
+ 	long long sparse = 0;
+ 	struct file_buffer *fragment_buffer = NULL;
+
++	// 4k align the start of each file.
++	if(do_4k_align)
++		ALIGN_UP(bytes, 4096);
++
+ 	if(pre_duplicate(read_size))
+ 		return write_file_blocks_dup(inode, dir_ent, read_buffer, dup);
+
+@@ -4692,6 +4704,7 @@ void write_filesystem_tables(struct squashfs_super_block *sBlk, int nopad)
+ 		"compressed", no_fragments ? "no" : noF ? "uncompressed" :
+ 		"compressed", no_xattrs ? "no" : noX ? "uncompressed" :
+ 		"compressed", noI || noId ? "uncompressed" : "compressed");
++	printf("\t4k %saligned\n", do_4k_align ? "" : "un");
+ 	printf("\tduplicates are %sremoved\n", duplicate_checking ? "" :
+ 		"not ");
+ 	printf("Filesystem size %.2f Kbytes (%.2f Mbytes)\n", bytes / 1024.0,
+@@ -5346,6 +5359,8 @@ print_compressor_options:
+ 			root_name = argv[i];
+ 		} else if(strcmp(argv[i], "-version") == 0) {
+ 			VERSION();
++		} else if(strcmp(argv[i], "-4k-align") == 0) {
++			do_4k_align = TRUE;
+ 		} else {
+ 			ERROR("%s: invalid option\n\n", argv[0]);
+ printOptions:
+@@ -5387,6 +5402,7 @@ printOptions:
+ 			ERROR("\t\t\tdirectory containing that directory, "
+ 				"rather than the\n");
+ 			ERROR("\t\t\tcontents of the directory\n");
++			ERROR("-4k-align\t\tenables 4k alignment of all files\n");
+ 			ERROR("\nFilesystem filter options:\n");
+ 			ERROR("-p <pseudo-definition>\tAdd pseudo file "
+ 				"definition\n");
+--
+2.14.1.480.gb18f417b89-goog (previously; hand-patched by charles-dyfis-net)

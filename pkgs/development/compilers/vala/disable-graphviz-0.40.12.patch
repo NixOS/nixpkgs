@@ -1,0 +1,208 @@
+diff --git i/configure.ac w/configure.ac
+index 694ffd200..915062053 100644
+--- i/configure.ac
++++ w/configure.ac
+@@ -112,34 +112,38 @@ PKG_CHECK_MODULES(GMODULE, gmodule-2.0 >= $GLIB_REQUIRED)
+ AC_SUBST(GMODULE_CFLAGS)
+ AC_SUBST(GMODULE_LIBS)
+ 
+-PKG_CHECK_MODULES(LIBGVC, libgvc >= $LIBGVC_REQUIRED)
+-AC_MSG_CHECKING([for CGRAPH])
+-cgraph_tmp_LIBADD="$LIBADD"
+-cgraph_tmp_CFLAGS="$CFLAGS"
+-LIBADD="$LIBADD $LIBGVC_LIBS"
+-CFLAGS="$CFLAGS $LIBGVC_CFLAGS"
+-AC_RUN_IFELSE(
+-	[AC_LANG_SOURCE([
+-		#include <gvc.h>
+-
+-		int main(void) {
+-			#ifdef WITH_CGRAPH
+-				return 0;
+-			#else
+-				return -1;
+-			#endif
+-		}
+-	])], [
+-		AC_MSG_RESULT([yes])
+-		VALAFLAGS="$VALAFLAGS -D WITH_CGRAPH"
+-		have_cgraph=yes
+-	], [
+-		AC_MSG_RESULT([no])
+-		have_cgraph=no
+-	]
+-)
+-LIBADD="$cgraph_tmp_LIBADD"
+-CFLAGS="$cgraph_tmp_CFLAGS"
++AC_ARG_ENABLE(graphviz, AS_HELP_STRING([--disable-graphviz], [Disable graphviz usage for valadoc]), enable_graphviz=$enableval, enable_graphviz=yes)
++if test x$enable_graphviz = xyes; then
++	PKG_CHECK_MODULES(LIBGVC, libgvc >= $LIBGVC_REQUIRED)
++	AC_MSG_CHECKING([for CGRAPH])
++	VALAFLAGS="$VALAFLAGS -D HAVE_GRAPHVIZ"
++	cgraph_tmp_LIBADD="$LIBADD"
++	cgraph_tmp_CFLAGS="$CFLAGS"
++	LIBADD="$LIBADD $LIBGVC_LIBS"
++	CFLAGS="$CFLAGS $LIBGVC_CFLAGS"
++	AC_RUN_IFELSE(
++		[AC_LANG_SOURCE([
++			#include <gvc.h>
++			int main(void) {
++				#ifdef WITH_CGRAPH
++					return 0;
++				#else
++					return -1;
++				#endif
++			}
++		])], [
++			AC_MSG_RESULT([yes])
++			VALAFLAGS="$VALAFLAGS -D WITH_CGRAPH"
++			have_cgraph=yes
++		], [
++			AC_MSG_RESULT([no])
++			have_cgraph=no
++		]
++	)
++	LIBADD="$cgraph_tmp_LIBADD"
++	CFLAGS="$cgraph_tmp_CFLAGS"
++fi
++AM_CONDITIONAL(ENABLE_GRAPHVIZ, test x$enable_graphviz = xyes)
+ AM_CONDITIONAL(HAVE_CGRAPH, test "$have_cgraph" = "yes")
+ 
+ AC_PATH_PROG([XSLTPROC], [xsltproc], :)
+diff --git i/libvaladoc/Makefile.am w/libvaladoc/Makefile.am
+index f3f790e76..3c5dc4c80 100644
+--- i/libvaladoc/Makefile.am
++++ w/libvaladoc/Makefile.am
+@@ -128,10 +128,6 @@ libvaladoc_la_VALASOURCES = \
+ 	content/tablerow.vala \
+ 	content/taglet.vala \
+ 	content/text.vala \
+-	charts/chart.vala \
+-	charts/chartfactory.vala \
+-	charts/hierarchychart.vala \
+-	charts/simplechartfactory.vala \
+ 	parser/manyrule.vala \
+ 	parser/oneofrule.vala \
+ 	parser/optionalrule.vala \
+@@ -158,13 +154,24 @@ libvaladoc_la_VALASOURCES = \
+ 	highlighter/codetoken.vala \
+ 	highlighter/highlighter.vala \
+ 	html/basicdoclet.vala \
+-	html/htmlchartfactory.vala \
+ 	html/linkhelper.vala \
+ 	html/cssclassresolver.vala \
+ 	html/htmlmarkupwriter.vala \
+ 	html/htmlrenderer.vala \
+ 	$(NULL)
+ 
++if ENABLE_GRAPHVIZ
++libvaladoc_la_VALASOURCES += \
++	charts/chart.vala \
++	charts/chartfactory.vala \
++	charts/hierarchychart.vala \
++	charts/simplechartfactory.vala \
++	html/htmlchartfactory.vala \
++	$(NULL)
++
++LIBGVC_PKG = --vapidir $(top_srcdir)/vapi --pkg libgvc
++endif
++
+ libvaladoc@PACKAGE_SUFFIX@_la_SOURCES = \
+ 	libvaladoc.vala.stamp \
+ 	$(libvaladoc_la_VALASOURCES:.vala=.c) \
+@@ -184,11 +191,11 @@ libvaladoc.vala.stamp: $(libvaladoc_la_VALASOURCES)
+ 		--library valadoc \
+ 		--vapi valadoc@PACKAGE_SUFFIX@.vapi \
+ 		--vapidir $(top_srcdir)/vapi --pkg gmodule-2.0 \
+-		--vapidir $(top_srcdir)/vapi --pkg libgvc \
+ 		--vapidir $(top_srcdir)/gee --pkg gee \
+ 		--vapidir $(top_srcdir)/vala --pkg vala \
+ 		--vapidir $(top_srcdir)/ccode --pkg ccode \
+ 		--vapidir $(top_srcdir)/codegen --pkg codegen \
++		$(LIBGVC_PKG) \
+ 		--pkg config \
+ 		$(filter %.vala %.c,$^)
+ 	touch $@
+@@ -217,6 +224,9 @@ nodist_pkgconfig_DATA = valadoc@PACKAGE_SUFFIX@.pc
+ 
+ valadoc@PACKAGE_SUFFIX@.pc: valadoc.pc
+ 	cp $< $@
++if !ENABLE_GRAPHVIZ
++	sed -i "s/libgvc //g" $@
++endif
+ 
+ vapidir = $(datadir)/vala/vapi
+ dist_vapi_DATA = valadoc@PACKAGE_SUFFIX@.vapi
+@@ -224,6 +234,9 @@ nodist_vapi_DATA = valadoc@PACKAGE_SUFFIX@.deps
+ 
+ valadoc@PACKAGE_SUFFIX@.deps: valadoc.deps
+ 	cp $< $@
++if !ENABLE_GRAPHVIZ
++	sed -i "s/libgvc//g" $@
++endif
+ 
+ EXTRA_DIST = \
+ 	$(libvaladoc_la_VALASOURCES) \
+diff --git i/libvaladoc/html/basicdoclet.vala w/libvaladoc/html/basicdoclet.vala
+index 192e488cd..ec0960222 100644
+--- i/libvaladoc/html/basicdoclet.vala
++++ w/libvaladoc/html/basicdoclet.vala
+@@ -46,7 +46,11 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 	protected HtmlRenderer _renderer;
+ 	protected Html.MarkupWriter writer;
+ 	protected Html.CssClassResolver cssresolver;
++#if HAVE_GRAPHVIZ
+ 	protected Charts.Factory image_factory;
++#else
++	protected void* image_factory;
++#endif
+ 	protected ErrorReporter reporter;
+ 	protected string package_list_link = "../index.html";
+ 
+@@ -120,7 +124,9 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 		this.linker = new LinkHelper ();
+ 
+ 		_renderer = new HtmlRenderer (settings, this.linker, this.cssresolver);
++#if HAVE_GRAPHVIZ
+ 		this.image_factory = new SimpleChartFactory (settings, linker);
++#endif
+ 	}
+ 
+ 
+@@ -1026,6 +1032,7 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 	}
+ 
+ 	protected void write_image_block (Api.Node element) {
++#if HAVE_GRAPHVIZ
+ 		if (element is Class || element is Interface || element is Struct) {
+ 			unowned string format = (settings.use_svg_images ? "svg" : "png");
+ 			var chart = new Charts.Hierarchy (image_factory, element);
+@@ -1045,6 +1052,7 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 									   this.get_img_path_html (element, format)});
+ 			writer.add_usemap (chart);
+ 		}
++#endif
+ 	}
+ 
+ 	public void write_namespace_content (Namespace node, Api.Node? parent) {
+diff --git i/libvaladoc/html/htmlmarkupwriter.vala w/libvaladoc/html/htmlmarkupwriter.vala
+index dcc4dad76..cf9c860b8 100644
+--- i/libvaladoc/html/htmlmarkupwriter.vala
++++ w/libvaladoc/html/htmlmarkupwriter.vala
+@@ -51,12 +51,16 @@ public class Valadoc.Html.MarkupWriter : Valadoc.MarkupWriter {
+ 		}
+ 	}
+ 
++#if HAVE_GRAPHVIZ
+ 	public MarkupWriter add_usemap (Charts.Chart chart) {
+ 		string? buf = (string?) chart.write_buffer ("cmapx");
+ 		if (buf != null) {
+ 			raw_text ("\n");
+ 			raw_text ((!) buf);
+ 		}
++#else
++	public MarkupWriter add_usemap (void* chart) {
++#endif
+ 
+ 		return this;
+ 	}

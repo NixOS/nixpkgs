@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, libGLU_combined, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
+{ fetchurl, stdenv, libGLU_combined, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, openscenegraph, expat,
-libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkgconfig, libvorbis}:
+libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkgconfig, libvorbis, runtimeShell }:
 
 stdenv.mkDerivation rec {
   version = "2.2.1-r6404";
@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     tar -xf ${wip-cars-and-tracks}
   '';
 
+  prePatch = ''
+    # https://sourceforge.net/p/speed-dreams/mailman/message/35665539/
+    sed -i "s|lastSlash = '\\\0'|lastSlash = NULL|" src/libs/tgf/params.cpp
+    sed -i "s|const char\* error = '\\\0'|const char\* error = NULL|" src/libs/tgfclient/openalmusicplayer.cpp
+  '';
+
   preBuild = ''
     make -C src/libs/portability
     make -C src/libs/portability portability.o
@@ -46,7 +52,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir "$out/bin"
     for i in "$out"/games/*; do
-      echo '#!${stdenv.shell}' >> "$out/bin/$(basename "$i")"
+      echo '#!${runtimeShell}' >> "$out/bin/$(basename "$i")"
       echo "$i"' "$@"' >> "$out/bin/$(basename "$i")"
       chmod a+x "$out/bin/$(basename "$i")"
     done
@@ -54,7 +60,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ libpng libGLU_combined freeglut libX11 plib openal freealut libXrandr xproto
+  buildInputs = [ libpng libGLU_combined freeglut libX11 plib openal freealut libXrandr xorgproto
     libXext libSM libICE libXi libXt libXrender libXxf86vm zlib bash expat
     SDL2 enet libjpeg openscenegraph libvorbis ];
 
@@ -62,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "Car racing game - TORCS fork with more experimental approach";
     homepage = http://speed-dreams.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric raskin];
+    maintainers = with stdenv.lib.maintainers; [raskin];
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];
   };

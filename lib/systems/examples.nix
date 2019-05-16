@@ -2,12 +2,27 @@
 # `crossSystem`. They are put here for user convenience, but also used by cross
 # tests and linux cross stdenv building, so handle with care!
 { lib }:
-let platforms = import ./platforms.nix { inherit lib; }; in
+let
+  platforms = import ./platforms.nix { inherit lib; };
+
+  riscv = bits: {
+    config = "riscv${bits}-unknown-linux-gnu";
+    platform = platforms.riscv-multiplatform bits;
+  };
+in
 
 rec {
   #
   # Linux
   #
+  powernv = {
+    config = "powerpc64le-unknown-linux-gnu";
+    platform = platforms.powernv;
+  };
+  musl-power = {
+    config = "powerpc64le-unknown-linux-musl";
+    platform = platforms.powernv;
+  };
 
   sheevaplug = rec {
     config = "armv5tel-unknown-linux-gnueabi";
@@ -20,7 +35,7 @@ rec {
   };
 
   armv7l-hf-multiplatform = rec {
-    config = "armv7a-unknown-linux-gnueabihf";
+    config = "armv7l-unknown-linux-gnueabihf";
     platform = platforms.armv7l-hf-multiplatform;
   };
 
@@ -29,18 +44,10 @@ rec {
     platform = platforms.aarch64-multiplatform;
   };
 
-  armv5te-android-prebuilt = rec {
-    config = "armv5tel-unknown-linux-androideabi";
-    sdkVer = "21";
-    ndkVer = "10e";
-    platform = platforms.armv5te-android;
-    useAndroidPrebuilt = true;
-  };
-
   armv7a-android-prebuilt = rec {
     config = "armv7a-unknown-linux-androideabi";
     sdkVer = "24";
-    ndkVer = "17";
+    ndkVer = "18b";
     platform = platforms.armv7a-android;
     useAndroidPrebuilt = true;
   };
@@ -48,7 +55,7 @@ rec {
   aarch64-android-prebuilt = rec {
     config = "aarch64-unknown-linux-android";
     sdkVer = "24";
-    ndkVer = "17";
+    ndkVer = "18b";
     platform = platforms.aarch64-multiplatform;
     useAndroidPrebuilt = true;
   };
@@ -81,16 +88,62 @@ rec {
     config = "aarch64-unknown-linux-musl";
   };
 
+  gnu64 = { config = "x86_64-unknown-linux-gnu"; };
+  gnu32  = { config = "i686-unknown-linux-gnu"; };
+
   musl64 = { config = "x86_64-unknown-linux-musl"; };
   musl32  = { config = "i686-unknown-linux-musl"; };
 
-  riscv = bits: {
-    config = "riscv${bits}-unknown-linux-gnu";
-    platform = platforms.riscv-multiplatform bits;
-  };
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
+  msp430 = {
+    config = "msp430-elf";
+    libc = "newlib";
+  };
+
+  avr = {
+    config = "avr";
+  };
+
+  arm-embedded = {
+    config = "arm-none-eabi";
+    libc = "newlib";
+  };
+  armhf-embedded = {
+    config = "arm-none-eabihf";
+    libc = "newlib";
+  };
+
+  aarch64-embedded = {
+    config = "aarch64-none-elf";
+    libc = "newlib";
+  };
+
+  aarch64be-embedded = {
+    config = "aarch64_be-none-elf";
+    libc = "newlib";
+  };
+
+  ppc-embedded = {
+    config = "powerpc-none-eabi";
+    libc = "newlib";
+  };
+
+  ppcle-embedded = {
+    config = "powerpcle-none-eabi";
+    libc = "newlib";
+  };
+
+  i686-embedded = {
+    config = "i686-elf";
+    libc = "newlib";
+  };
+
+  x86_64-embedded = {
+    config = "x86_64-elf";
+    libc = "newlib";
+  };
 
   #
   # Darwin
@@ -154,4 +207,21 @@ rec {
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
   };
+
+  # BSDs
+
+  amd64-netbsd = {
+    config = "x86_64-unknown-netbsd";
+    libc = "nblibc";
+  };
+
+  #
+  # WASM
+  #
+
+  wasi32 = {
+    config = "wasm32-unknown-wasi";
+    useLLVM = true;
+  };
+
 }

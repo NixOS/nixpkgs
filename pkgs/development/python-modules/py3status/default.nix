@@ -1,9 +1,14 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , requests
 , pytz
 , tzlocal
+, i3ipc
+, pydbus
+, pygobject3
+, pyserial
 
 , file
 , acpi
@@ -18,13 +23,15 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.8";
+  version = "3.18";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1izjpf9q768m3j95y328vbdh7rycglqlslyd777b12c13i6zs6cb";
+    sha256 = "053znyl68sjmlp3r4br5jxhqqswjfbb1rb8k6f9qpzcym37439r0";
   };
+
   doCheck = false;
-  propagatedBuildInputs = [ pytz requests tzlocal ];
+  propagatedBuildInputs = [ pytz requests tzlocal i3ipc pydbus pygobject3 pyserial ];
   buildInputs = [ file ];
   prePatch = ''
     sed -i -e "s|'file|'${file}/bin/file|" py3status/parse_config.py

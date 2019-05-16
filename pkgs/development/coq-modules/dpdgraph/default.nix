@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, coq, ocamlPackages }:
+{ stdenv, fetchFromGitHub, autoreconfHook, coq }:
 
 let params = {
   "8.8" = {
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ coq coq.camlp5 ]
-  ++ (with ocamlPackages; [ ocaml findlib ocamlgraph ]);
+  buildInputs = [ coq ]
+  ++ (with coq.ocamlPackages; [ ocaml camlp5 findlib ocamlgraph ]);
 
   preInstall = ''
     mkdir -p $out/bin

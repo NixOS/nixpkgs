@@ -8,7 +8,7 @@ let
   conf = pkgs.writeText "smtpd.conf" cfg.serverConfiguration;
   args = concatStringsSep " " cfg.extraServerArgs;
 
-  sendmail = pkgs.runCommand "opensmtpd-sendmail" {} ''
+  sendmail = pkgs.runCommand "opensmtpd-sendmail" { preferLocalBuild = true; } ''
     mkdir -p $out/bin
     ln -s ${cfg.package}/sbin/smtpctl $out/bin/sendmail
   '';
@@ -83,12 +83,12 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    users.extraGroups = {
+    users.groups = {
       smtpd.gid = config.ids.gids.smtpd;
       smtpq.gid = config.ids.gids.smtpq;
     };
 
-    users.extraUsers = {
+    users.users = {
       smtpd = {
         description = "OpenSMTPD process user";
         uid = config.ids.uids.smtpd;

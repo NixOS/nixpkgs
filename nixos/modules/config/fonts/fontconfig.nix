@@ -190,7 +190,7 @@ let cfg = config.fonts.fontconfig;
     '';
 
     # fontconfig configuration package
-    confPkg = pkgs.runCommand "fontconfig-conf" {} ''
+    confPkg = pkgs.runCommand "fontconfig-conf" { preferLocalBuild = true; } ''
       support_folder=$out/etc/fonts
       latest_folder=$out/etc/fonts/${latestVersion}
 

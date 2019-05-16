@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, alsaLib, libpulseaudio, undmg }:
 
 let
-  bits = stdenv.lib.optionalString (stdenv.system == "x86_64-linux") "64";
+  bits = stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "64";
   libPath = lib.makeLibraryPath [ stdenv.cc.cc alsaLib libpulseaudio ];
 
 in

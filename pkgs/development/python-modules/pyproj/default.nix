@@ -1,21 +1,26 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 , nose2
+, cython
 , proj ? null
 }:
 
 buildPythonPackage (rec {
   pname = "pyproj";
-  version = "1.9.5.1";
+  version = "unstable-2018-11-13";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "53fa54c8fa8a1dfcd6af4bf09ce1aae5d4d949da63b90570ac5ec849efaf3ea8";
+  src = fetchFromGitHub {
+    owner = "jswhit";
+    repo = pname;
+    rev = "78540f5ff40da92160f80860416c91ee74b7643c";
+    sha256 = "1vq5smxmpdjxialxxglsfh48wx8kaq9sc5mqqxn4fgv1r5n1m3n9";
   };
 
-  buildInputs = [ nose2 ];
+  buildInputs = [ cython ];
+
+  checkInputs = [ nose2 ];
 
   checkPhase = ''
     runHook preCheck

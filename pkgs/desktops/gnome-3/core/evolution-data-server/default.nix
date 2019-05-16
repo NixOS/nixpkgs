@@ -1,17 +1,18 @@
-{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobjectIntrospection
-, intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata
-, p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking
-, vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
+{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobject-introspection
+, intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3, gcr
+, p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre
+, vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib
+, glib, gtk3, gnome-online-accounts, libgweather, libgdata }:
 
 stdenv.mkDerivation rec {
   name = "evolution-data-server-${version}";
-  version = "3.28.3";
+  version = "3.32.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-data-server/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "11sq795115vrcgxl9svscm6wg8isjj784c3d84qzb6z47zq92zj3";
+    url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1jdk3az797kznkg40nbxb3ddyx8s6favzxlc4vr840zxcl84k9vy";
   };
 
   patches = [
@@ -19,29 +20,33 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit tzdata;
     })
+    ./hardcode-gsettings.patch
   ];
 
   nativeBuildInputs = [
-    cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobjectIntrospection vala
+    cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobject-introspection vala
   ];
-  buildInputs = with gnome3; [
-    glib libsoup libxml2 gtk gnome-online-accounts
+  buildInputs = [
+    glib libsoup libxml2 gtk3 gnome-online-accounts
     gcr p11-kit libgweather libgdata libaccounts-glib json-glib
     icu sqlite kerberos openldap webkitgtk glib-networking
+    libcanberra-gtk3 pcre
   ];
 
-  propagatedBuildInputs = [ libsecret nss nspr libical db ];
+  propagatedBuildInputs = [ libsecret nss nspr libical db libsoup ];
 
   cmakeFlags = [
     "-DENABLE_UOA=OFF"
     "-DENABLE_VALA_BINDINGS=ON"
     "-DENABLE_INTROSPECTION=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
   ];
 
   postPatch = ''
-    cmakeFlags="-DINCLUDE_INSTALL_DIR=$dev/include $cmakeFlags"
+    substituteInPlace src/libedataserver/e-source-registry.c --subst-var-by ESD_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
   '';
+
 
   passthru = {
     updateScript = gnome3.updateScript {

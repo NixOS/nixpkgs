@@ -1,10 +1,10 @@
-{ stdenv, lib, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv }:
+{ stdenv, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv, libuuid, at-spi2-atk }:
 
 let
-  version = "1.8.2";
+  version = "4.1.5";
   name = "electron-${version}";
 
-  throwSystem = throw "Unsupported system: ${stdenv.system}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   meta = with stdenv.lib; {
     description = "Cross platform desktop application shell";
@@ -16,25 +16,24 @@ let
 
   linux = {
     inherit name version meta;
-
     src = {
       i686-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-ia32.zip";
-        sha256 = "12q5h6gh9zzhndg6yfka821rblq3l80d2qzqrq4nbq6rlsshjp9d";
+        sha256 = "0rqaydlg7wkccks7crwpylad0bsz8knm82mpb7hnj68p9njxpsbz";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-        sha256 = "07ggq9wgfz3z5z0lwzzgs6im0qs83pz0pcfwr0r42zgmwg7j78b8";
+        sha256 = "0xwvn41pvpsrx54waix8kmg3w1f1f9nmfn08hf9bkgnlgh251shy";
       };
       armv7l-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-armv7l.zip";
-        sha256 = "1b0p5x9zigyd6d8gz2hxc4scllrpnbx1dzzwlsvw6ilqbj1ypc7i";
+        sha256 = "172yq2m4i0pf72xr6w3xgkxfakkx2wrc54aah5j3nr6809bcnzji";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-arm64.zip";
-        sha256 = "0k4np2d4y15x1qfay8y9m8v9y223vdpbq5fdxa3ywbbyf8j361zd";
+        sha256 = "0gcgvgplg9c2sm53sa4nll4x486c4m190ma9a98xfx9mp9vy55vq";
       };
-    }.${stdenv.system} or throwSystem;
+    }.${stdenv.hostPlatform.system} or throwSystem;
 
     buildInputs = [ unzip makeWrapper ];
 
@@ -47,7 +46,7 @@ let
 
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:$out/lib/electron" \
+        --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [ libuuid at-spi2-atk ]}:$out/lib/electron" \
         $out/lib/electron/electron
 
       wrapProgram $out/lib/electron/electron \
@@ -60,7 +59,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-darwin-x64.zip";
-      sha256 = "0pq587vr1i87jdwcpbf6n136i9dp6i39dp5s95kihnm9qglxr42b";
+      sha256 = "1z43ga620rw84x1yxvnxf11pd782s5vgj5dgnn4k0nfgxlihy058";
     };
 
     buildInputs = [ unzip ];

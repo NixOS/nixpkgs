@@ -65,7 +65,7 @@ in
       };
 
       pidFile = mkOption {
-        default = "/var/run/mongodb.pid";
+        default = "/run/mongodb.pid";
         description = "Location of MongoDB pid file";
       };
 
@@ -93,7 +93,7 @@ in
 
   config = mkIf config.services.mongodb.enable {
 
-    users.extraUsers.mongodb = mkIf (cfg.user == "mongodb")
+    users.users.mongodb = mkIf (cfg.user == "mongodb")
       { name = "mongodb";
         uid = config.ids.uids.mongodb;
         description = "MongoDB server user";

@@ -1,12 +1,13 @@
 { stdenv, fetchurl, fetchgit
 , pkgconfig, makeWrapper, libtool, autoconf, automake
-, coreutils, libxml2, gnutls, devicemapper, perl, python2, attr
+, coreutils, libxml2, gnutls, perl, python2, attr
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
+, enableCeph ? false, ceph
 }:
 
 with stdenv.lib;
@@ -16,19 +17,19 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "4.4.0";
+  version = "4.10.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${name}.tar.xz";
-        sha256 = "1djaz3b5n4ksyw6z4n4qs82g5zyxdl2gm4rsb5181bv1rdiisqs6";
+        sha256 = "0v17zzyyb25nn9l18v5244myg7590dp6ppwgi8xysipifc0q77bz";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "0rhas7hbisfh0aib75nsh9wspxj8pvcqagds1mp2jgfls7hfna0r";
+        sha256 = "0dlpv3v6jpbmgvhpn29ryp0w2a1xny8ciqid8hnlf3klahz9kwz9";
         fetchSubmodules = true;
       };
 
@@ -39,12 +40,14 @@ in stdenv.mkDerivation rec {
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
-    libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
+    libpciaccess lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
   ] ++ optionals enableIscsi [
     openiscsi
+  ] ++ optionals enableCeph [
+    ceph
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
@@ -66,6 +69,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/var/lib"
     "--with-libpcap"
+    "--with-qemu"
     "--with-vmware"
     "--with-vbox"
     "--with-test"
@@ -84,6 +88,8 @@ in stdenv.mkDerivation rec {
     "--with-storage-zfs"
   ] ++ optionals enableIscsi [
     "--with-storage-iscsi"
+  ] ++ optionals enableCeph [
+    "--with-storage-rbd"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];

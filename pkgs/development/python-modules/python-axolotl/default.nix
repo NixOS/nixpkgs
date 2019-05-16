@@ -1,17 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, python-axolotl-curve25519, protobuf, pycrypto }:
+{ lib, buildPythonPackage, fetchPypi, cryptography, python-axolotl-curve25519, protobuf }:
 
 buildPythonPackage rec {
   pname = "python-axolotl";
-  version = "0.1.39";
+  version = "0.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09bf5gfip9x2wr0ij43p39ac6z2iqzn7kgpi2jjbwpnhs0vwkycs";
+    sha256 = "1had4dq4n26c3hp62rbmhvs1dj3j3z2jhcbddnbsmqmiky8dqs39";
   };
 
-  propagatedBuildInputs = [ python-axolotl-curve25519 protobuf pycrypto ];
-  # IV == 0 in tests is not supported by pycryptodome (our pycrypto drop-in)
-  doCheck = false;
+  propagatedBuildInputs = [ cryptography python-axolotl-curve25519 protobuf ];
 
   meta = with lib; {
     homepage = https://github.com/tgalal/python-axolotl;

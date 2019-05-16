@@ -4,8 +4,6 @@
 , ghcjsSrcJson ? null
 , ghcjsSrc ? fetchgit (builtins.fromJSON (builtins.readFile ghcjsSrcJson))
 , bootPkgs
-, alex
-, happy
 , stage0
 , haskellLib
 , cabal-install
@@ -18,13 +16,14 @@
 , lib
 , nodePackages
 , ghcjsDepOverrides ? (_:_:{})
+, haskell
 }:
 
 let
   passthru = {
     configuredSrc = callPackage ./configured-ghcjs-src.nix {
-      inherit ghcjsSrc alex happy;
-      inherit (bootPkgs) ghc;
+      inherit ghcjsSrc;
+      inherit (bootPkgs) ghc alex happy;
     };
     genStage0 = callPackage ./mk-stage0.nix { inherit (passthru) configuredSrc; };
     bootPkgs = bootPkgs.extend (lib.foldr lib.composeExtensions (_:_:{}) [
@@ -33,13 +32,17 @@ let
         inherit (self) callPackage;
       })
 
-      (callPackage ./common-overrides.nix { inherit haskellLib alex happy; })
+      (callPackage ./common-overrides.nix {
+        inherit haskellLib;
+        inherit (bootPkgs) alex happy;
+      })
       ghcjsDepOverrides
     ]);
 
     targetPrefix = "";
     inherit bootGhcjs;
     inherit (bootGhcjs) version;
+    ghcVersion = bootPkgs.ghc.version;
     isGhcjs = true;
 
     enableShared = true;
@@ -48,13 +51,17 @@ let
 
     # Relics of the old GHCJS build system
     stage1Packages = [];
-    mkStage2 = _: {};
+    mkStage2 = { callPackage }: {
+      # https://github.com/ghcjs/ghcjs-base/issues/110
+      # https://github.com/ghcjs/ghcjs-base/pull/111
+      ghcjs-base = haskell.lib.dontCheck (haskell.lib.doJailbreak (callPackage ./ghcjs-base.nix {}));
+    };
 
     haskellCompilerName = "ghcjs-${bootGhcjs.version}";
   };
 
   bootGhcjs = haskellLib.justStaticExecutables passthru.bootPkgs.ghcjs;
-  libexec = "${bootGhcjs}/libexec/${builtins.replaceStrings ["darwin" "i686"] ["osx" "i386"] stdenv.system}-${passthru.bootPkgs.ghc.name}/${bootGhcjs.name}";
+  libexec = "${bootGhcjs}/libexec/${builtins.replaceStrings ["darwin" "i686"] ["osx" "i386"] stdenv.buildPlatform.system}-${passthru.bootPkgs.ghc.name}/${bootGhcjs.name}";
 
 in stdenv.mkDerivation {
     name = bootGhcjs.name;
@@ -97,4 +104,6 @@ in stdenv.mkDerivation {
     inherit passthru;
 
     meta.platforms = passthru.bootPkgs.ghc.meta.platforms;
+    meta.maintainers = [lib.maintainers.elvishjerricco];
+    meta.hydraPlatforms = [];
   }

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     });
   in map mkStatic [ zlib bzip2 lzma libgcrypt ];
 
-  configureFlags = "--disable-shared";
+  configureFlags = [ "--disable-shared" ];
 
   dontDisableStatic = true;
 

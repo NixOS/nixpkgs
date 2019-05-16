@@ -1,4 +1,4 @@
-{stdenv, lib, fetchzip, cmake, bison, flex}:
+{stdenv, lib, fetchzip}:
 
 stdenv.mkDerivation rec {
   pname = "darling";
@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
     cp -rL src/sandbox/include/ $out/
     cp libsystem_sandbox.dylib $out/lib/
+
+    mkdir -p $out/include
+    cp src/libaks/include/* $out/include
   '';
 
   # buildInputs = [ cmake bison flex ];

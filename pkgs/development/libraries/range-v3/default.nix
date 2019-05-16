@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "range-v3-${version}";
-  version = "0.3.6";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ericniebler";
     repo = "range-v3";
     rev = version;
-    sha256 = "050h9pa57kd57l73njxpjb331snybddl29x2vpy5ycygvqiw8kcp";
+    sha256 = "0fzbpaa4vwlivi417zxm1d6v4lkp5c9f5bd706nn2fmw3zxjj815";
   };
 
   nativeBuildInputs = [ cmake ];

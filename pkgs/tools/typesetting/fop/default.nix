@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ant, jdk }:
+{ fetchurl, stdenv, ant, jdk, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "fop-${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     # There is a fop script in the source archive, but it has many impurities.
     # Instead of patching out 90 % of the script, we write our own.
     cat > "$out/bin/fop" <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     java_exec_args="-Djava.awt.headless=true"
     exec ${jdk.jre}/bin/java \$java_exec_args -classpath "$out/lib/*" org.apache.fop.cli.Main "\$@"
     EOF

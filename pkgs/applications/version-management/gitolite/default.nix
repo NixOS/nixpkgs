@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "gitolite-${version}";
-  version = "3.6.7";
+  version = "3.6.11";
 
   src = fetchFromGitHub {
     owner = "sitaramc";
     repo = "gitolite";
-    rev = "9123ae44b14b9df423a7bf1e693e05865ca320ac";
-    sha256 = "0rmyzr66lxh2ildf3h1nh3hh2ndwk21rjdin50r5vhwbdd7jg8vb";
+    rev = "v${version}";
+    sha256 = "1rkj7gknwjlc5ij9w39zf5mr647bm45la57yjczydmvrb8c56yrh";
   };
 
   buildInputs = [ git nettools perl ];
 
   dontBuild = true;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./install --replace " 2>/dev/null" ""
     substituteInPlace src/lib/Gitolite/Hooks/PostUpdate.pm \
       --replace /usr/bin/perl "${perl}/bin/perl"

@@ -24,7 +24,7 @@ let
       EOF
       chmod 755 $out/${name}
     '';
-  in pkgs.runCommand "buildkite-agent-hooks" {} ''
+  in pkgs.runCommand "buildkite-agent-hooks" { preferLocalBuild = true; } ''
     mkdir $out
     ${concatStringsSep "\n" (mapAttrsToList mkHookEntry (filterAttrs (n: v: v != null) cfg.hooks))}
   '';
@@ -185,7 +185,7 @@ in
   };
 
   config = mkIf config.services.buildkite-agent.enable {
-    users.extraUsers.buildkite-agent =
+    users.users.buildkite-agent =
       { name = "buildkite-agent";
         home = cfg.dataDir;
         createHome = true;

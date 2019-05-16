@@ -1,4 +1,4 @@
-{ stdenv, bash, cmake, fetchurl, pkgconfig, jansson, zlib }:
+{ stdenv, cmake, fetchurl, pkgconfig, jansson, zlib }:
 
 let
   version = "1.8.2";

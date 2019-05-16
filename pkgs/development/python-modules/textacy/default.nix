@@ -4,7 +4,6 @@
 , fetchPypi
 , cachetools
 , cld2-cffi
-, cython
 , cytoolz
 , ftfy
 , ijson
@@ -24,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "textacy";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "32ffb796f2abf0577af480d482608cca2baf85d366a4e2981ffd3e632ebeb76c";
+    sha256 = "50402545ac92b1a931c2365e341cb35c4ebe5575525f1dcc5265901ff3895a5f";
   };
 
   disabled = isPy27; # 2.7 requires backports.csv
@@ -52,6 +51,11 @@ buildPythonPackage rec {
     tqdm
     unidecode
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'ftfy>=4.2.0,<5.0.0'," "'ftfy>=5.0.0',"
+  '';
 
   doCheck = false;  # tests want to download data files
 

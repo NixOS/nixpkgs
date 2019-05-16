@@ -23,5 +23,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gebner ];
+    # Build uses _FPU_EXTENDED macro
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

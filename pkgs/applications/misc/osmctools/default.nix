@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
       https://wiki.openstreetmap.org/wiki/Osmfilter
     ];
     platforms = platforms.unix;
+    license = licenses.agpl3;
   };
 }

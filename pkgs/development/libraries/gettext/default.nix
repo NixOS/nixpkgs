@@ -1,5 +1,6 @@
-{ stdenv, lib, hostPlatform, fetchurl, libiconv, xz }:
+{ stdenv, lib, fetchurl, libiconv, xz, bison, automake115x, autoconf }:
 
+let allowBisonDependency = !stdenv.isDarwin; in
 stdenv.mkDerivation rec {
   name = "gettext-${version}";
   version = "0.19.8.1";
@@ -8,7 +9,17 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/gettext/${name}.tar.gz";
     sha256 = "0hsw28f9q9xaggjlsdp2qmbp2rbd1mp0njzan2ld9kiqwkq2m57z";
   };
-  patches = [ ./absolute-paths.diff ];
+  patches = [
+    ./absolute-paths.diff
+    (fetchurl {
+      name = "CVE-2018-18751.patch";
+      url = "https://git.savannah.gnu.org/gitweb/?p=gettext.git;a=patch;h=dce3a16e5e9368245735e29bf498dcd5e3e474a4";
+      sha256 = "1lpjwwcjr1sb879faj0xyzw02kma0ivab6xwn3qciy13qy6fq5xn";
+    })
+  ] ++ lib.optionals (!allowBisonDependency) [
+    # Only necessary for CVE-2018-18751.patch:
+    ./CVE-2018-18751-bison.patch
+  ];
 
   outputs = [ "out" "man" "doc" "info" ];
 
@@ -35,24 +46,36 @@ stdenv.mkDerivation rec {
    substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
-  '' + lib.optionalString hostPlatform.isCygwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
     sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
   '';
 
-  nativeBuildInputs = [ xz xz.bin ];
+  nativeBuildInputs = [
+    xz
+    xz.bin
+  ]
+  # Only necessary for CVE-2018-18751.patch (unless CVE-2018-18751-bison.patch
+  # is also applied):
+  ++ lib.optional allowBisonDependency bison
+  ++ [
+    # Only necessary for CVE-2018-18751.patch:
+    automake115x
+    autoconf
+  ];
   # HACK, see #10874 (and 14664)
-  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv;
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) libiconv;
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
     ./gettext-setup-hook.sh
   ];
-  gettextNeedsLdflags = hostPlatform.libc != "glibc" && !hostPlatform.isMusl;
+  gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
 
   enableParallelBuilding = true;
+  enableParallelChecking = false; # fails sometimes
 
-  meta = {
+  meta = with lib; {
     description = "Well integrated set of translation tools and documentation";
 
     longDescription = ''
@@ -74,10 +97,11 @@ stdenv.mkDerivation rec {
       GNU packages produce multi-lingual messages.
     '';
 
-    homepage = http://www.gnu.org/software/gettext/;
+    homepage = https://www.gnu.org/software/gettext/;
 
-    maintainers = with lib.maintainers; [ zimbatm vrthra ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ zimbatm vrthra ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
   };
 }
 

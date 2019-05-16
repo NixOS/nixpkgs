@@ -156,9 +156,6 @@ let
             --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
             --hybrid 2 \
             --recompute-chs /dev/vda
-          . /sys/class/block/vda2/uevent
-          mknod /dev/vda2 b $MAJOR $MINOR
-          . /sys/class/block/vda/uevent
           ${pkgs.dosfstools}/bin/mkfs.fat -F16 /dev/vda2
           export MTOOLS_SKIP_CHECK=1
           ${pkgs.mtools}/bin/mlabel -i /dev/vda2 ::boot
@@ -188,7 +185,10 @@ let
 in
 
 {
-  imports = [ ../profiles/qemu-guest.nix ];
+  imports = [
+    ../profiles/qemu-guest.nix
+   ./docker-preloader.nix
+  ];
 
   options = {
 

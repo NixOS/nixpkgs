@@ -1,5 +1,4 @@
 { stdenv, fetchurl, pkgconfig, freetype, expat
-, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -17,13 +16,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ expat ];
 
   configureFlags = [
-    "--with-arch=${hostPlatform.parsed.cpu.name}"
+    "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
     "--sysconfdir=/etc"
     "--with-cache-dir=/var/cache/fontconfig"
     "--disable-docs"
     "--with-default-fonts="
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--with-arch=${hostPlatform.parsed.cpu.name}"
+    "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
   ];
 
   enableParallelBuilding = true;

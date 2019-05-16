@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -124,22 +124,26 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = lib.singleton {
-      assertion = cfg.driSupport32Bit -> pkgs.stdenv.isx86_64;
-      message = "Option driSupport32Bit only makes sense on a 64-bit system.";
-    };
+    assertions = [
+      { assertion = cfg.driSupport32Bit -> pkgs.stdenv.isx86_64;
+        message = "Option driSupport32Bit only makes sense on a 64-bit system.";
+      }
+      { assertion = cfg.driSupport32Bit -> (config.boot.kernelPackages.kernel.features.ia32Emulation or false);
+        message = "Option driSupport32Bit requires a kernel that supports 32bit emulation";
+      }
+    ];
 
-    system.activationScripts.setup-opengl =
-      ''
-        ln -sfn ${package} /run/opengl-driver
-        ${if pkgs.stdenv.isi686 then ''
-          ln -sfn opengl-driver /run/opengl-driver-32
-        '' else if cfg.driSupport32Bit then ''
-          ln -sfn ${package32} /run/opengl-driver-32
-        '' else ''
-          rm -f /run/opengl-driver-32
-        ''}
-      '';
+    systemd.tmpfiles.rules = [
+      "L+ /run/opengl-driver - - - - ${package}"
+      (
+        if pkgs.stdenv.isi686 then
+          "L+ /run/opengl-driver-32 - - - - opengl-driver"
+        else if cfg.driSupport32Bit then
+          "L+ /run/opengl-driver-32 - - - - ${package32}"
+        else
+          "r /run/opengl-driver-32"
+      )
+    ];
 
     environment.sessionVariables.LD_LIBRARY_PATH =
       [ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib";
@@ -148,7 +152,7 @@ in
       [ "/run/opengl-driver/share" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/share";
 
     hardware.opengl.package = mkDefault (makePackage pkgs);
-    hardware.opengl.package32 = mkDefault (makePackage pkgs_i686);
+    hardware.opengl.package32 = mkDefault (makePackage pkgs.pkgsi686Linux);
 
     boot.extraModulePackages = optional (elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions;
   };

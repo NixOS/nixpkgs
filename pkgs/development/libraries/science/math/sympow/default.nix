@@ -34,13 +34,11 @@ stdenv.mkDerivation rec {
     makeWrapper "$out/share/sympow/sympow" "$out/bin/sympow" \
       --run 'export SYMPOW_LOCAL="$HOME/.local/share/sympow"' \
       --run 'if [ ! -d "$SYMPOW_LOCAL" ]; then
-        mkdir -p "$SYMPOW_LOCAL"
-        cp -r @out@/share/sympow/* "$SYMPOW_LOCAL"
+        mkdir -p "$SYMPOW_LOCAL" 
+        cp -r ${placeholder "out"}/share/sympow/* "$SYMPOW_LOCAL"
         chmod -R +xw "$SYMPOW_LOCAL"
     fi' \
       --run 'cd "$SYMPOW_LOCAL"'
-    substituteInPlace $out/bin/sympow --subst-var out
-
     runHook postInstall
   '';
 
@@ -73,7 +71,7 @@ stdenv.mkDerivation rec {
     })
     (fetchpatch {
       name = "fix_pointer_initialization2.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sympow-datafiles.patch?h=packages/sympow";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sympow-datafiles.patch?h=packages/sympow&id=5088e641a45b23d0385d8e63be65315129b4cf58";
       sha256 = "1m0vz048layb47r1jjf7fplw650ccc9x0w3l322iqmppzmv3022a";
     })
   ];

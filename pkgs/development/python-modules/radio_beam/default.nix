@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "radio_beam";
-  version = "0.2";
+  version = "0.3.1";
 
   doCheck = false; # the tests requires several pytest plugins that are not in nixpkgs
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gbnwnk89n8z0xwn41rc7wpr0fwrzkvxficyki3dyqbxq7y3qfrv";
+    sha256 = "1wgd9dyz3pcc9ighkclb6qfyshwbg35s57lz6k62jhcxpvp8r5zb";
   };
 
   propagatedBuildInputs = [ astropy ];

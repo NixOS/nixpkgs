@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libXt, libXpm, libXext, imake }:
+{ stdenv, fetchurl, libXt, libXpm, libXext, imake, gccmakedep }:
 
 stdenv.mkDerivation rec {
 
@@ -10,25 +10,17 @@ stdenv.mkDerivation rec {
     sha256 = "06jnbp88wc9i9dbmy7kggplw4hzlx2bhghxijmlhkjlizgqwimyh";
   };
 
+  nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [
-    libXt libXpm libXext imake
+    libXt libXpm libXext
   ];
 
-  buildPhase = ''
-    xmkmf
-    make
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1
-    cp xsnow $out/bin/
-    cp xsnow.1 $out/share/man/man1/
-  '';
+  makeFlags = [ "BINDIR=$(out)/bin" "MANPATH=$(out)/share/man" ];
 
   meta = {
     description = "An X-windows application that will let it snow on the root, in between and on windows";
     homepage = http://janswaal.home.xs4all.nl/Xsnow/;
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.robberer ];
-  }; 
+  };
 }

@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, file, which, intltool, gobjectIntrospection,
-  findutils, xdg_utils, gnome3, pythonPackages, hicolor-icon-theme,
+{ stdenv, fetchurl, file, which, intltool, gobject-introspection,
+  findutils, xdg_utils, gnome3, gtk3, pythonPackages, hicolor-icon-theme,
   wrapGAppsHook
 }:
 
 pythonPackages.buildPythonApplication rec {
   majorver = "1.4";
-  minorver = "4";
+  minorver = "7";
   version = "${majorver}.${minorver}";
   pname = "catfish";
 
   src = fetchurl {
-    url = "https://launchpad.net/catfish-search/${majorver}/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "1mw7py6si6y88jblmzm04hf049bpww7h87k2wypq07zm1dw55m52";
+    url = "https://archive.xfce.org/src/apps/${pname}/${majorver}/${pname}-${version}.tar.bz2";
+    sha256 = "1s97jb1r07ff40jnz8zianpn1f0c67hssn8ywdi2g7njfb4amjj8";
   };
 
   nativeBuildInputs = [
@@ -19,12 +19,12 @@ pythonPackages.buildPythonApplication rec {
     file
     which
     intltool
-    gobjectIntrospection
+    gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome3.gtk
+    gtk3
     gnome3.dconf
     pythonPackages.pyxdg
     pythonPackages.ptyprocess
@@ -52,7 +52,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://launchpad.net/catfish-search;
+    homepage = https://docs.xfce.org/apps/catfish/start;
     description = "A handy file search tool";
     longDescription = ''
       Catfish is a handy file searching tool. The interface is

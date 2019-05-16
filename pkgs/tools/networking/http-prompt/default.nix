@@ -2,14 +2,14 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "http-prompt";
-  version = "0.11.1";
+  version = "1.0.0";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     repo = "http-prompt";
     owner = "eliangcs";
-    sha256 = "0gi76wcn6lxkd74ljpbyhr7ylhq6sm8z7h66dnfmpsw4nhw49178";
+    sha256 = "0kngz2izcqjphbrdkg489p0xmf65xjc8ki1a2szcc8sgwc7z74xy";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -29,7 +29,7 @@ pythonPackages.buildPythonApplication rec {
     description = "An interactive command-line HTTP client featuring autocomplete and syntax highlighting";
     homepage = https://github.com/eliangcs/http-prompt;
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.linux; # can only test on linux
   };
 }

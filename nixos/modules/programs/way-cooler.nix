@@ -8,7 +8,7 @@ let
 
   wcWrapped = pkgs.writeShellScriptBin "way-cooler" ''
     ${cfg.extraSessionCommands}
-    exec ${pkgs.dbus.dbus-launch} --exit-with-session ${way-cooler}/bin/way-cooler
+    exec ${pkgs.dbus}/bin/dbus-run-session ${way-cooler}/bin/way-cooler
   '';
   wcJoined = pkgs.symlinkJoin {
     name = "way-cooler-wrapped";

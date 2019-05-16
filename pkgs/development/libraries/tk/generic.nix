@@ -1,4 +1,6 @@
-{ stdenv, src, pkgconfig, tcl, libXft, fontconfig, patches ? [], ... }:
+{ stdenv, lib, src, pkgconfig, tcl, libXft, fontconfig, patches ? []
+, enableAqua ? stdenv.isDarwin, darwin
+, ... }:
 
 stdenv.mkDerivation {
   name = "tk-${tcl.version}";
@@ -17,19 +19,21 @@ stdenv.mkDerivation {
   postInstall = ''
     ln -s $out/bin/wish* $out/bin/wish
     cp ../{unix,generic}/*.h $out/include
+    ln -s $out/lib/libtk${tcl.release}.so $out/lib/libtk.so
   '';
 
   configureFlags = [
+    "--enable-threads"
     "--with-tcl=${tcl}/lib"
-  ];
+  ] ++ stdenv.lib.optional stdenv.is64bit "--enable-64bit"
+    ++ stdenv.lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ]
-    ++ stdenv.lib.optional stdenv.isDarwin fontconfig;
 
-  propagatedBuildInputs = [ tcl libXft ];
-
-  NIX_CFLAGS_LINK = if stdenv.isDarwin then "-lfontconfig" else null;
+  propagatedBuildInputs = [ tcl libXft ]
+    ++ lib.optional enableAqua (with darwin; with apple_sdk.frameworks; [
+      Cocoa cf-private
+    ]);
 
   doCheck = false; # fails. can't find itself
 
@@ -43,9 +47,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
-    homepage = http://www.tcl.tk/;
+    homepage = https://www.tcl.tk/;
     license = licenses.tcltk;
     platforms = platforms.all;
-    maintainers = with maintainers; [ lovek323 vrthra wkennington ];
+    maintainers = with maintainers; [ lovek323 vrthra ];
   };
 }

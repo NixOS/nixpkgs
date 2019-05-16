@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, bc, dbus, gawk, gnused, libnotify, pulseaudioLight }:
+, bc, dbus, gawk, gnused, libnotify, pulseaudio }:
 
 let
-  path = stdenv.lib.makeBinPath [ bc dbus gawk gnused libnotify pulseaudioLight ];
+  path = stdenv.lib.makeBinPath [ bc dbus gawk gnused libnotify pulseaudio ];
   pname = "pulseaudio-ctl";
 
 in stdenv.mkDerivation rec {

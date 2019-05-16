@@ -1,6 +1,4 @@
-{ lib
-, stdenv
-, buildEnv
+{ buildEnv
 , libwebcam
 , makeWrapper
 , runCommand
@@ -31,6 +29,7 @@ runCommand "uvcdynctrl-udev-rules-${version}"
   ];
   dontPatchELF = true;
   dontStrip = true;
+  preferLocalBuild = true;
 }
 ''
   mkdir -p "$out/lib/udev"

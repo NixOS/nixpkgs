@@ -1,11 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchurl, gzip, ... }:
+{ stdenv, fetchFromGitHub, fetchurl, gzip }:
 
-let
-  serviceFile = fetchurl {
-    url = "https://raw.githubusercontent.com/DanielAdolfsson/ndppd/f37e8eb33dc68b3385ecba9b36a5efd92755580f/ndppd.service";
-    sha256 = "1zf54pzjfj9j9gr48075njqrgad4myd3dqmhvzxmjy4gjy9ixmyh";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "ndppd-${version}";
   version = "0.2.5";
 
@@ -27,11 +22,6 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/etc
     cp ndppd.conf-dist $out/etc/ndppd.conf
-
-    mkdir -p $out/lib/systemd/system
-    # service file needed for our module is not in release yet
-    substitute ${serviceFile} $out/lib/systemd/system/ndppd.service \
-      --replace /usr/sbin/ndppd $out/sbin/ndppd
   '';
 
   meta = {

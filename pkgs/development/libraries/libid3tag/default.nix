@@ -1,4 +1,4 @@
-{stdenv, fetchurl, writeText, zlib, gperf}:
+{stdenv, fetchurl, zlib, gperf}:
 
 stdenv.mkDerivation rec {
   name = "libid3tag-${version}";
@@ -14,7 +14,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib gperf ];
 
-  patches = [ ./debian-patches.patch ];
+  patches = [
+    ./debian-patches.patch
+    ./CVE-2017-11550-and-CVE-2017-11551.patch
+  ];
 
   preConfigure = ''
     configureFlagsArray+=(

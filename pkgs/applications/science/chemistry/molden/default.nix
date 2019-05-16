@@ -1,16 +1,18 @@
 { stdenv, fetchurl, which, gfortran, libGLU, xorg } :
 
 stdenv.mkDerivation rec {
-  version = "5.7";
+  version = "5.9.5";
   name = "molden-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden${version}.tar.gz";
-    sha256 = "0gaq11gm09ax25lvgfrvxv9dxvi76hps116fp6k7sqgvdd68vf0s";
+    sha256 = "0va5g03kvnzydx0b77y1p536iy7swzvnx6yknp87qgpw1bgrzdj9";
   };
 
   nativeBuildInputs = [ which ];
   buildInputs = [ gfortran libGLU xorg.libX11 xorg.libXmu ];
+
+  patches = [ ./dont_register_file_types.patch ];
 
   postPatch = ''
      substituteInPlace ./makefile --replace '-L/usr/X11R6/lib'  "" \

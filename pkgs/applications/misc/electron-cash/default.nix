@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, qtbase }:
+{ lib, fetchurl, python3Packages, qtbase, makeWrapper }:
 
 let
 
@@ -7,14 +7,14 @@ let
 in
 
 python3Packages.buildPythonApplication rec {
-  version = "3.1.6";
-  name = "electron-cash-${version}";
+  pname = "electron-cash";
+  version = "4.0.2";
 
   src = fetchurl {
-    url = "https://electroncash.org/downloads/${version}/win-linux/ElectronCash-${version}.tar.gz";
+    url = "https://electroncash.org/downloads/${version}/win-linux/Electron-Cash-${version}.tar.gz";
     # Verified using official SHA-1 and signature from
     # https://github.com/fyookball/keys-n-hashes
-    sha256 = "062k5iw0jcp10zxrffvgiyfg51c5xzs7gmm638icx01yy67d58dm";
+    sha256 = "6255cd0493442ec57c10ae70ca2e84c6a29497f90a1393e6ac5772afe7572acf";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -29,53 +29,59 @@ python3Packages.buildPythonApplication rec {
     pysocks
     qrcode
     requests
-    tlslite
+    tlslite-ng
+    qdarkstyle
 
     # plugins
     keepkey
     trezor
+    btchip
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   postPatch = ''
-    # Remove pyqt5 check
-    sed -i '/pyqt5/d' setup.py
+    substituteInPlace contrib/requirements/requirements.txt \
+      --replace "qdarkstyle<2.6" "qdarkstyle<3"
+
+    substituteInPlace setup.py \
+      --replace "(share_dir" "(\"share\""
   '';
 
-  preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    pyrcc5 icons.qrc -o gui/qt/icons_rc.py
-    # Recording the creation timestamps introduces indeterminism to the build
-    sed -i '/Created: .*/d' gui/qt/icons_rc.py
-  '';
+  checkInputs = with python3Packages; [
+    pytest
+  ];
 
-  doCheck = false;
+  checkPhase = ''
+    unset HOME
+    pytest lib/tests
+  '';
 
   postInstall = ''
-    # Despite setting usr_share above, these files are installed under
-    # $out/nix ...
-    mv $out/${python.sitePackages}/nix/store"/"*/share $out
-    rm -rf $out/${python.sitePackages}/nix
-
     substituteInPlace $out/share/applications/electron-cash.desktop \
-      --replace "Exec=electron-cash %u" "Exec=$out/bin/electron-cash %u"
+      --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
+
+    # Please remove this when #44047 is fixed
+    wrapProgram $out/bin/electron-cash \
+      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/electrum help >/dev/null
+    $out/bin/electron-cash help >/dev/null
   '';
 
-  meta = with stdenv.lib; {
-    description = "A lightweight Bitcoin wallet";
+  meta = with lib; {
+    description = "A Bitcoin Cash SPV Wallet";
     longDescription = ''
-      An easy-to-use Bitcoin client featuring wallets generated from
+      An easy-to-use Bitcoin Cash client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
     homepage = https://www.electroncash.org/;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lassulus ];
+    maintainers = with maintainers; [ lassulus nyanloutre ];
     license = licenses.mit;
   };
 }

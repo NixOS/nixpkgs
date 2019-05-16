@@ -31,7 +31,8 @@ mycurl -X POST -d '@data.json' $URL/login -c hydra-cookie.txt
 cat >data.json <<EOF
 {
   "displayname":"Trivial",
-  "enabled":"1"
+  "enabled":"1",
+  "visible":"1"
 }
 EOF
 mycurl --silent -X PUT $URL/project/$PROJECT_NAME -d @data.json -b hydra-cookie.txt

@@ -1,26 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, autoconf, automake, libtool, autoreconfHook, pkgconfig, libpng, glib /*just passthru*/ }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
   name = "pixman-${version}";
-  version = "0.34.0";
+  version = "0.38.0";
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/${name}.tar.bz2";
-    sha256 = "184lazwdpv67zrlxxswpxrdap85wminh1gmq1i5lcz6iycw39fir";
+    sha256 = "1a1nnkjv0rqdj26847r0saly0kzckjfp4y3ly30bvpjxi7vy6s5p";
   };
 
-  patches = stdenv.lib.optionals stdenv.cc.isClang [
-    (fetchpatch {
-      name = "builtin-shuffle.patch";
-      url = https://patchwork.freedesktop.org/patch/177506/raw;
-      sha256 = "0rvraq93769dy2im2m022rz99fcdxprgc2fbmasnddcwrqy1x3xr";
-    })
-  ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  nativeBuildInputs = [ pkgconfig ]
-    ++ stdenv.lib.optionals stdenv.cc.isClang [ autoconf automake libtool autoreconfHook ];
-
-  buildInputs = stdenv.lib.optional doCheck libpng;
+  buildInputs = [ libpng ];
 
   configureFlags = stdenv.lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
 

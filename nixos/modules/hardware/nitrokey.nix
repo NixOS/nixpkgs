@@ -36,6 +36,6 @@ in
         { inherit (cfg) group; }
       ))
     ];
-    users.extraGroups."${cfg.group}" = {};
+    users.groups."${cfg.group}" = {};
   };
 }

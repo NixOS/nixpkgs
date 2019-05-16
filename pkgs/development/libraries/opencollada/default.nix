@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "opencollada-${version}";
 
-  version = "1.6.62";
+  version = "1.6.67";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCOLLADA";
     rev = "v${version}";
-    sha256 = "0bqki6sdvxsp9drzj87ma6n7m98az9pr0vyxhgw8b8b9knk8c48r";
+    sha256 = "0x1h2ns0y05bdvn3i5s600jz6nb8qw8qqgg54njz7833bcy913mj";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patchPhase = lib.optionalString stdenv.isDarwin ''
+  patchPhase = ''
+    patch -p1 < ${./pcre.patch}
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
       --replace math.h cmath
   '';
@@ -31,5 +33,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/KhronosGroup/OpenCOLLADA/;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.mit;
   };
 }

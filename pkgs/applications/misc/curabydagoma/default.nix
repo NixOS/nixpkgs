@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, python, pythonPackages, unzip }:
+{ stdenv, runtimeShell, lib, fetchurl, python, pythonPackages, unzip }:
 
 # This package uses a precompiled "binary" distribution of CuraByDagoma,
 # distributed by the editor.
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     cat > $out/bin/curabydago <<EOF
-    #!/bin/sh
+    #!${runtimeShell}
     export PYTHONPATH=$PYTHONPATH
     ${python.out}/bin/python $out/curabydago/cura.py
     EOF

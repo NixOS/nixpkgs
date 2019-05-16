@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test.nix ({ pkgs, ... }:
 
 {
   name = "atd";
@@ -7,15 +7,16 @@ import ./make-test.nix ({ pkgs, lib, ... }:
   };
 
   machine =
-    { config, pkgs, ... }:
+    { ... }:
     { services.atd.enable = true;
-      users.extraUsers.alice = { isNormalUser = true; };
+      users.users.alice = { isNormalUser = true; };
     };
 
   # "at" has a resolution of 1 minute
   testScript = ''
     startAll;
 
+    $machine->waitForUnit('atd.service'); # wait for atd to start
     $machine->fail("test -f ~root/at-1");
     $machine->fail("test -f ~alice/at-1");
 

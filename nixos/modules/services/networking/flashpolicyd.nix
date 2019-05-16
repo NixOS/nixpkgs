@@ -11,7 +11,7 @@ let
 
     src = pkgs.fetchurl {
       name = "flashpolicyd_v0.6.zip";
-      url = "http://www.adobe.com/content/dotcom/en/devnet/flashplayer/articles/socket_policy_files/_jcr_content/articlePrerequistes/multiplefiles/node_1277808777771/file.res/flashpolicyd_v0.6%5B1%5D.zip";
+      url = "https://download.adobe.com/pub/adobe/devnet/flashplayer/articles/socket_policy_files/flashpolicyd_v0.6.zip";
       sha256 = "16zk237233npwfq1m4ksy4g5lzy1z9fp95w7pz0cdlpmv0fv9sm3";
     };
 
@@ -35,9 +35,9 @@ in
   ###### interface
 
   options = {
-  
+
     services.flashpolicyd = {
-    
+
       enable = mkOption {
         default = false;
         description =
@@ -47,13 +47,13 @@ in
             connections to your server.
           '';
       };
-      
+
       policy = mkOption {
         default =
           ''
             <?xml version="1.0"?>
             <!DOCTYPE cross-domain-policy SYSTEM "/xml/dtds/cross-domain-policy.dtd">
-            <cross-domain-policy> 
+            <cross-domain-policy>
               <site-control permitted-cross-domain-policies="master-only"/>
               <allow-access-from domain="*" to-ports="*" />
             </cross-domain-policy>

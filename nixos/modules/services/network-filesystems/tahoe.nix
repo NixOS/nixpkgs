@@ -255,7 +255,7 @@ in
               cp /etc/tahoe-lafs/introducer-"${node}".cfg ${lib.escapeShellArg nodedir}/tahoe.cfg
             '';
           });
-        users.extraUsers = flip mapAttrs' cfg.introducers (node: _:
+        users.users = flip mapAttrs' cfg.introducers (node: _:
           nameValuePair "tahoe.introducer-${node}" {
             description = "Tahoe node user for introducer ${node}";
             isSystemUser = true;
@@ -355,7 +355,7 @@ in
               cp /etc/tahoe-lafs/${lib.escapeShellArg node}.cfg ${lib.escapeShellArg nodedir}/tahoe.cfg
             '';
           });
-        users.extraUsers = flip mapAttrs' cfg.nodes (node: _:
+        users.users = flip mapAttrs' cfg.nodes (node: _:
           nameValuePair "tahoe.${node}" {
             description = "Tahoe node user for node ${node}";
             isSystemUser = true;

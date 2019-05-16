@@ -1,8 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
-, libtheora, libva, libvorbis, libvpx, lzma, libpulseaudio, soxr
-, x264, x265, xvidcore, zlib, libopus
-, hostPlatform
+, libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
+, x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers
 , openglSupport ? false, libGLU_combined ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
@@ -26,7 +25,7 @@
  * see `ffmpeg-full' for an ffmpeg build with all features included.
  *
  * Need fixes to support Darwin:
- *   libvpx pulseaudio
+ *   pulseaudio
  *
  * Known issues:
  * 0.6     - fails to compile (unresolved) (so far, only disabling a number of
@@ -42,7 +41,7 @@
  */
 
 let
-  inherit (stdenv) icCygwin isDarwin isFreeBSD isLinux isAarch32;
+  inherit (stdenv) isDarwin isFreeBSD isLinux isAarch32;
   inherit (stdenv.lib) optional optionals enableFeature;
 
   cmpVer = builtins.compareVersions;
@@ -58,6 +57,8 @@ let
   disDarwinOrArmFix = origArg: minVer: fixArg: if ((isDarwin || isAarch32) && reqMin minVer) then fixArg else origArg;
 
   vaapiSupport = reqMin "0.6" && ((isLinux || isFreeBSD) && !isAarch32);
+
+  vpxSupport = reqMin "0.6" && !isAarch32;
 in
 
 assert openglSupport -> libGLU_combined != null;
@@ -81,8 +82,8 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [];
   configureFlags = [
-      "--arch=${hostPlatform.parsed.cpu.name}"
-      "--target_os=${hostPlatform.parsed.kernel.name}"
+      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+      "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
     # License
       "--enable-gpl"
       "--enable-version3"
@@ -127,10 +128,12 @@ stdenv.mkDerivation rec {
       "--enable-libmp3lame"
       (ifMinVer "1.2" "--enable-iconv")
       "--enable-libtheora"
+      (ifMinVer "2.1" "--enable-libssh")
       (ifMinVer "0.6" (enableFeature vaapiSupport "vaapi"))
+      (ifMinVer "3.4" (enableFeature vaapiSupport "libdrm"))
       "--enable-vdpau"
       "--enable-libvorbis"
-      (disDarwinOrArmFix (ifMinVer "0.6" "--enable-libvpx") "0.6" "--disable-libvpx")
+      (ifMinVer "0.6" (enableFeature vpxSupport "libvpx"))
       (ifMinVer "2.4" "--enable-lzma")
       (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
       (disDarwinOrArmFix (ifMinVer "0.9" "--enable-libpulse") "0.9" "--disable-libpulse")
@@ -140,6 +143,7 @@ stdenv.mkDerivation rec {
       "--enable-libxvid"
       "--enable-zlib"
       (ifMinVer "2.8" "--enable-libopus")
+      "--enable-libspeex"
       (ifMinVer "2.8" "--enable-libx265")
     # Developer flags
       (enableFeature debugDeveloper "debug")
@@ -148,7 +152,7 @@ stdenv.mkDerivation rec {
       "--disable-stripping"
     # Disable mmx support for 0.6.90
       (verFix null "0.6.90" "--disable-mmx")
-  ] ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
   ] ++ optional stdenv.cc.isClang "--cc=clang";
@@ -156,11 +160,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
 
   buildInputs = [
-    bzip2 fontconfig freetype gnutls libiconv lame libass libogg libtheora
-    libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus
+    bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
+    libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
   ] ++ optional openglSupport libGLU_combined
-    ++ optionals (!isDarwin && !isAarch32) [ libvpx libpulseaudio ] # Need to be fixed on Darwin and ARM
+    ++ optional vpxSupport libvpx
+    ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
+    ++ optional ((isLinux || isFreeBSD) && !isAarch32) libdrm
     ++ optional isLinux alsaLib
     ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau
@@ -170,9 +176,15 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
+  # ffmpeg 3+ generates pkg-config (.pc) files that don't have the
+  # form automatically handled by the multiple-outputs hooks.
   postFixup = ''
     moveToOutput bin "$bin"
     moveToOutput share/ffmpeg/examples "$doc"
+    for pc in ''${!outputDev}/lib/pkgconfig/*.pc; do
+      substituteInPlace $pc \
+        --replace "includedir=$out" "includedir=''${!outputInclude}"
+    done
   '';
 
   installFlags = [ "install-man" ];
@@ -185,11 +197,11 @@ stdenv.mkDerivation rec {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = http://www.ffmpeg.org/;
     longDescription = ''
-      FFmpeg is the leading multimedia framework, able to decode, encode, transcode, 
-      mux, demux, stream, filter and play pretty much anything that humans and machines 
-      have created. It supports the most obscure ancient formats up to the cutting edge. 
-      No matter if they were designed by some standards committee, the community or 
-      a corporation. 
+      FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
+      mux, demux, stream, filter and play pretty much anything that humans and machines
+      have created. It supports the most obscure ancient formats up to the cutting edge.
+      No matter if they were designed by some standards committee, the community or
+      a corporation.
     '';
     license = licenses.gpl3;
     platforms = platforms.all;

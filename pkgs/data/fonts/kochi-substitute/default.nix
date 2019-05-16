@@ -43,6 +43,5 @@ stdenv.mkDerivation {
     homepage = http://sourceforge.jp/projects/efont/;
     license = stdenv.lib.licenses.wadalab;
     maintainers = [ stdenv.lib.maintainers.auntie ];
-    platforms = stdenv.lib.platforms.linux;
   };
 }

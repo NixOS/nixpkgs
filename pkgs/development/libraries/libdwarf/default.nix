@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libelf }:
+{ stdenv, fetchurl, libelf, zlib }:
 
 let
-  version = "20180129";
+  version = "20181024";
   src = fetchurl {
     url = "https://www.prevanders.net/libdwarf-${version}.tar.gz";
     # Upstream displays this hash broken into three parts:
@@ -12,6 +12,7 @@ let
   meta = {
     homepage = https://www.prevanders.net/dwarf.html;
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.lgpl21Plus;
   };
 
 in rec {
@@ -23,7 +24,7 @@ in rec {
     preConfigure = ''
       cd libdwarf
     '';
-    buildInputs = [ libelf ];
+    buildInputs = [ libelf zlib ];
 
     installPhase = ''
       mkdir -p $out/lib $out/include

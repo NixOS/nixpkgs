@@ -1,5 +1,5 @@
-{ stdenv, buildPackages
-, fetchurl, fetchpatch, gnu-config, autoreconfHook264, bison, binutils-unwrapped
+{ stdenv
+, fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped
 , libiberty, zlib
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   # We update these ourselves
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ autoreconfHook264 bison ];
+  nativeBuildInputs = [ autoreconfHook bison ];
   buildInputs = [ libiberty zlib ];
 
   configurePlatforms = [ "build" "host" ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       It is associated with GNU Binutils, and elsewhere often distributed with
       it.
     '';
-    homepage = http://www.gnu.org/software/binutils/;
+    homepage = https://www.gnu.org/software/binutils/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;

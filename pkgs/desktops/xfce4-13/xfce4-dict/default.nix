@@ -3,9 +3,9 @@
 mkXfceDerivation rec {
   category = "apps";
   pname = "xfce4-dict";
-  version = "0.8.0";
+  version = "0.8.1";
 
-  sha256 = "1r1k9cgl7zkn3q4mjf7qjql6vlxkb2m0spgj9p646mw7bnhbf9wr";
+  sha256 = "0kxirzqmpp7qlr8220i8kipz4bgzkam7h1lpx7yzld5xf7wdzvaf";
 
   patches = [ ./configure-gio.patch ];
 

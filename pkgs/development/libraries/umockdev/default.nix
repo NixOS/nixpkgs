@@ -1,15 +1,17 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtool
+{ stdenv, fetchFromGitHub, autoreconfHook, umockdev, gobject-introspection
 , pkgconfig, glib, systemd, libgudev, vala }:
 
 stdenv.mkDerivation rec {
   name = "umockdev-${version}";
-  version = "0.11.3";
+  version = "0.12.1";
+
+  outputs = [ "bin" "out" "dev" "doc" ];
 
   src = fetchFromGitHub {
     owner  = "martinpitt";
     repo   = "umockdev";
     rev    = version;
-    sha256 = "1z101yw7clxz39im3y435s3rj1gna3kp0fkj9wd62vxqvk68lhik";
+    sha256 = "0wnmz4jh04mvqzjnqvxrah969gg4x4v8d6ip61zc7jpbwnqb2fpg";
   };
 
   # autoreconfHook complains if we try to build the documentation
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib systemd libgudev ];
 
-  nativeBuildInputs = [ autoreconfHook libtool pkgconfig vala ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig vala gobject-introspection ];
 
   enableParallelBuilding = true;
 

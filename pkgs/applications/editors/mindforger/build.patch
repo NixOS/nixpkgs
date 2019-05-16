@@ -1,0 +1,91 @@
+diff --git a/app/app.pro b/app/app.pro
+index 4d47065..a39a320 100644
+--- a/app/app.pro
++++ b/app/app.pro
+@@ -18,6 +18,8 @@
+ TARGET = mindforger
+ TEMPLATE = app
+ 
++include(../config.pri)
++
+ QT += widgets
+ 
+ mfner {
+@@ -297,7 +299,7 @@ RESOURCES += \
+ # See http://doc.qt.io/qt-5/qmake-advanced-usage.html
+ 
+ binfile.files += mindforger
+-binfile.path = /usr/bin/
++binfile.path = $$PREFIX/bin/
+ INSTALLS += binfile
+ 
+ # ########################################
+diff --git a/config.pri b/config.pri
+new file mode 100644
+index 0000000..ce05df1
+--- /dev/null
++++ b/config.pri
+@@ -0,0 +1,3 @@
++isEmpty(PREFIX) {
++ PREFIX = /usr
++}
+diff --git a/deps/discount/discount.pro b/deps/discount/discount.pro
+index a8dfe35..ec16468 100644
+--- a/deps/discount/discount.pro
++++ b/deps/discount/discount.pro
+@@ -5,6 +5,8 @@
+ # Webpage: http://www.pell.portland.or.us/~orc/Code/discount/
+ #
+ 
++include(../../config.pri)
++
+ QT       -= core gui
+ 
+ TARGET = discount
+@@ -46,7 +48,7 @@ unix:!symbian {
+     maemo5 {
+         target.path = /opt/usr/lib
+     } else {
+-        target.path = /usr/lib
++        target.path = $$PREFIX/lib
+     }
+     INSTALLS += target
+ }
+diff --git a/mindforger.pro b/mindforger.pro
+index ae627f2..0953856 100644
+--- a/mindforger.pro
++++ b/mindforger.pro
+@@ -32,6 +32,8 @@ TEMPLATE = subdirs
+ 
+ SUBDIRS = deps lib app
+ 
++include(config.pri)
++
+ # build dependencies
+ lib.depends = deps
+ app.depends = lib
+@@ -44,20 +46,20 @@ app.depends = lib
+ #IMPORTANT: binfile MUST be specified in app/app.pro (project next to/that builds binary)
+ 
+ docfiles.files += doc/*
+-docfiles.path = /usr/share/doc/mindforger/
++docfiles.path = $$PREFIX/share/doc/mindforger/
+ INSTALLS += docfiles
+ 
+ manfiles.files += man/*
+-manfiles.path = /usr/share/man/man1/
++manfiles.path = $$PREFIX/share/man/man1/
+ INSTALLS += manfiles
+ 
+ iconfiles.files += app/resources/icons/*
+-iconfiles.path = /usr/share/icons/mindforger/
++iconfiles.path = $$PREFIX/share/icons/mindforger/
+ INSTALLS += iconfiles
+ 
+ # experiment w/ file
+ shortcutfiles.files += app/resources/gnome-shell/mindforger.desktop
+-shortcutfiles.path = /usr/share/applications/
++shortcutfiles.path = $$PREFIX/share/applications/
+ INSTALLS += shortcutfiles
+ 
+ # eof

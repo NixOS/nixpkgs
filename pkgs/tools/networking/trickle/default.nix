@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   LDFLAGS = "-levent";
 
-  configureFlags = "--with-libevent";
+  configureFlags = [ "--with-libevent" ];
 
   hardeningDisable = [ "format" ];
 

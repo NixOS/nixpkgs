@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = https://hexchat.github.io/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo jgeerds ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

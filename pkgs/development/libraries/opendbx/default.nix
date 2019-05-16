@@ -1,8 +1,5 @@
 { stdenv, fetchurl, readline, mysql, postgresql, sqlite }:
 
-let
-  inherit (stdenv.lib) getDev getLib;
-in
 stdenv.mkDerivation rec {
   name = "opendbx-1.4.6";
 
@@ -18,4 +15,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ readline mysql.connector-c postgresql sqlite ];
+
+  meta = with stdenv.lib; {
+    description = "Extremely lightweight but extensible database access library written in C";
+    license = licenses.lgpl21;
+    platforms = platforms.all;
+  };
 }

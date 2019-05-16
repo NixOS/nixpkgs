@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, libX11, xproto
-, libXi, inputproto, libXaw, libXmu, libXt }:
+{ stdenv, fetchurl, autoconf, automake, libtool, libX11, xorgproto
+, libXi, libXaw, libXmu, libXt }:
 
 let
   majorVersion = "1";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   patchFlags = "-p0";
 
   buildInputs = [
-    autoconf automake libtool libX11 xproto libXi inputproto libXaw
+    autoconf automake libtool libX11 xorgproto libXi libXaw
     libXmu libXt
   ];
 

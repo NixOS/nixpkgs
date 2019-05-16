@@ -126,7 +126,7 @@ fi
 
 if [[ "$isCpp" = 1 ]]; then
     if [[ "$cppInclude" = 1 ]]; then
-        NIX_@infixSalt@_CFLAGS_COMPILE+=" ${NIX_@infixSalt@_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
+        NIX_@infixSalt@_CFLAGS_COMPILE+=" ${NIX_@infixSalt@_CXXSTDLIB_COMPILE:-@default_cxx_stdlib_compile@}"
     fi
     NIX_@infixSalt@_CFLAGS_LINK+=" $NIX_@infixSalt@_CXXSTDLIB_LINK"
 fi
@@ -135,7 +135,7 @@ source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
 extraAfter=($NIX_@infixSalt@_CFLAGS_COMPILE)
-extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"})
+extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_@infixSalt@_CFLAGS_COMPILE_BEFORE)
 
 if [ "$dontLink" != 1 ]; then
 

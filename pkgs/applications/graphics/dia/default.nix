@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, gtk2, pkgconfig, perl,
-perlXMLParser, libxml2, gettext, python, libxml2Python, docbook5, docbook_xsl,
-libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui,
-gtk-mac-integration }:
+{ stdenv, fetchgit, autoconf, automake, libtool, gtk2, pkgconfig, perlPackages,
+libxml2, gettext, python, libxml2Python, docbook5, docbook_xsl,
+libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui, hicolor-icon-theme,
+gtk-mac-integration-gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "dia-${version}";
@@ -14,30 +14,26 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ gtk2 perlXMLParser libxml2 gettext python libxml2Python docbook5
-      libxslt docbook_xsl libart_lgpl ]
+    [ gtk2 libxml2 gettext python libxml2Python docbook5
+      libxslt docbook_xsl libart_lgpl hicolor-icon-theme ]
       ++ stdenv.lib.optional withGNOME libgnomeui
-      ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration;
+      ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration-gtk2;
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig intltool perl ];
+  nativeBuildInputs = [ autoconf automake libtool pkgconfig intltool ]
+    ++ (with perlPackages; [ perl XMLParser ]);
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh # autoreconfHook is not enough
   '';
-  configureFlags = stdenv.lib.optionalString withGNOME "--enable-gnome";
+  configureFlags = stdenv.lib.optional withGNOME "--enable-gnome";
 
   hardeningDisable = [ "format" ];
 
-  # This file should normally require a gtk-update-icon-cache -q /usr/share/icons/hicolor command
-  # It have no reasons to exist in a redistribuable package
-  postInstall = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Gnome Diagram drawing software";
     homepage = http://live.gnome.org/Dia;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

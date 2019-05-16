@@ -1,75 +1,109 @@
-{ lib, fetchFromGitHub, python3
+{ lib, fetchFromGitHub, fetchpatch, python3, protobuf3_6
+
+# Look up dependencies of specified components in component-packages.nix
 , extraComponents ? []
+
+# Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
+
+# Override Python packages using
+# self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
+# Applied after defaultOverrides
+, packageOverrides ? self: super: { }
+
+# Skip pip install of required packages on startup
 , skipPip ? true }:
 
 let
 
-  py = python3.override {
+  defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
-    packageOverrides = self: super: {
-      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "3.3.2";
+    (mkOverride "aiohttp" "3.5.4"
+      "9c4c83f4fa1938377da32bc2d59379025ceeee8e24b89f72fcbccd8ca22dc9bf")
+    (mkOverride "astral" "1.10.1"
+      "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
+    (mkOverride "async-timeout" "3.0.1"
+      "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f")
+    (mkOverride "attrs" "18.2.0"
+      "10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69")
+    (mkOverride "bcrypt" "3.1.6"
+      "44636759d222baa62806bbceb20e96f75a015a6381690d1bc2eda91c01ec02ea")
+    (self: super: {
+      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.4";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "f20deec7a3fbaec7b5eb7ad99878427ad2ee4cc16a46732b705e8121cbb3cc12";
+          sha256 = "4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176";
         };
+        doCheck = false; # https://github.com/jpadilla/pyjwt/issues/382
       });
-      requests = super.requests.overridePythonAttrs (oldAttrs: rec {
-        version = "2.18.4";
+    })
+    (mkOverride "cryptography" "2.5"
+      "00c4d7gvsymlaw0r13zrm32dcnarmpayjyrh65yymlmr6mrbcij9")
+    (mkOverride "cryptography_vectors" "2.5" # required by cryptography==2.5
+      "15qfl3pnw2f11r0z0zhwl56f6pb60ysav8fxmpnz5p80cfwljdik")
+    (mkOverride "python-slugify" "1.2.6"
+      "7723daf30996db26573176bddcdf5fcb98f66dc70df05c9cb29f2c79b8193245")
+    (mkOverride "pyyaml" "3.13"
+      "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf")
+    (mkOverride "requests" "2.21.0"
+      "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e")
+    (mkOverride "ruamel_yaml" "0.15.89"
+      "86d034aa9e2ab3eacc5f75f5cd6a469a2af533b6d9e60ea92edbba540d21b9b7")
+    (mkOverride "voluptuous" "0.11.5"
+      "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
+    (mkOverride "voluptuous-serialize" "2.1.0"
+      "d30fef4f1aba251414ec0b315df81a06da7bf35201dcfb1f6db5253d738a154f")
+
+    # used by auth.mfa_modules.totp
+    (mkOverride "pyotp" "2.2.6"
+      "dd9130dd91a0340d89a0f06f887dbd76dd07fb95a8886dc4bc401239f2eebd69")
+
+    # used by check_config script
+    # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
+    (mkOverride "colorlog" "4.0.2"
+      "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
+
+    # required by home-assistant-frontend
+    (self: super: {
+      user-agents = super.user-agents.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.0";
+        src = fetchFromGitHub {
+          owner = "selwin";
+          repo = "python-user-agents";
+          rev = "v${version}";
+          sha256 = "14kxd780zhp8718xr1z63xffaj3bvxgr4pldh9sv943m4hvi0gw5";
+        };
+        doCheck = false; # can be dropped for 2.0
+      });
+    })
+
+    # required by aioesphomeapi
+    (self: super: {
+      protobuf = super.protobuf.override {
+        protobuf = protobuf3_6;
+      };
+    })
+
+    # hass-frontend does not exist in python3.pkgs
+    (self: super: {
+      hass-frontend = self.callPackage ./frontend.nix { };
+    })
+  ];
+
+  mkOverride = attrname: version: sha256:
+    self: super: {
+      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+        inherit version;
         src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0zi3v9nsmv9j27d0c0m1dvqyvaxz53g8m0aa1h3qanxs4irkwi4w";
+          inherit version sha256;
         };
       });
-      # Required by requests==2.18.4
-      urllib3 = super.urllib3.overridePythonAttrs (oldAttrs: rec {
-        version = "1.22";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0kyvc9zdlxr5r96bng5rhm9a6sfqidrbvvkz64s76qs5267dli6c";
-        };
-      });
-      # Required by requests==2.18.4
-      idna = super.idna.overridePythonAttrs (oldAttrs: rec {
-        version = "2.6";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "13qaab6d0s15gknz8v3zbcfmbj6v86hn9pjxgkdf62ch13imssic";
-        };
-      });
-      voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
-        version = "0.11.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "af7315c9fa99e0bfd195a21106c82c81619b42f0bd9b6e287b797c6b6b6a9918";
-        };
-      });
-      attrs = super.attrs.overridePythonAttrs (oldAttrs: rec {
-        version = "18.1.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "e0d0eb91441a3b53dab4d9b743eafc1ac44476296a2053b6ca3af0b139faf87b";
-        };
-      });
-      astral = super.astral.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "ab0c08f2467d35fcaeb7bad15274743d3ac1ad18b5391f64a0058a9cd192d37d";
-        };
-      });
-      # used by check_config script
-      # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
-      colorlog = super.colorlog.overridePythonAttrs (oldAttrs: rec {
-        version = "3.1.4";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "418db638c9577f37f0fae4914074f395847a728158a011be2a193ac491b9779d";
-        };
-      });
-      hass-frontend = super.callPackage ./frontend.nix { };
     };
+    
+  py = python3.override {
+    # Put packageOverrides at the start so they are applied after defaultOverrides
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
 
   componentPackages = import ./component-packages.nix;
@@ -84,7 +118,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.72.1";
+  hassVersion = "0.91.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -99,18 +133,19 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "05r55hdai0qwgpj2f2qqngks7qmz4lqcfbh2c1symfyigv7m634r";
+    sha256 = "195pif8lz0qxjsannpi39gxphfb6dkj9lkpah0vjw0pgx753sflv";
   };
 
   propagatedBuildInputs = [
     # From setup.py
-    requests pyyaml pytz pip jinja2 voluptuous typing aiohttp async-timeout astral certifi attrs
-    # From http, frontend, recorder and config.config_entries components
-    sqlalchemy aiohttp-cors hass-frontend voluptuous-serialize
+    aiohttp astral async-timeout attrs bcrypt certifi jinja2 pyjwt cryptography pip
+    python-slugify pytz pyyaml requests ruamel_yaml voluptuous voluptuous-serialize
+    # From http, frontend and recorder components and auth.mfa_modules.totp
+    sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
-    pytest requests-mock pydispatcher pytest-aiohttp
+    asynctest pytest pytest-aiohttp requests-mock pydispatcher
   ];
 
   checkPhase = ''
@@ -118,8 +153,8 @@ in with py.pkgs; buildPythonApplication rec {
     py.test --ignore tests/components
     # Some basic components should be tested however
     py.test \
-      tests/components/{group,http,frontend} \
-      tests/components/test_{api,configurator,demo,discovery,init,introduction,logger,script,shell_command,system_log,websocket_api}.py
+      tests/components/{api,config,configurator,demo,discovery,frontend,group,history,history_graph} \
+      tests/components/{homeassistant,http,introduction,logger,script,shell_command,system_log,websocket_api}
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";

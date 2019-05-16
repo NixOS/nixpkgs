@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ncdc-${version}";
-  version = "1.20";
+  version = "1.21";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdc-${version}.tar.gz";
-    sha256 = "0ccn7dqbqpqsbglqyalz32c20rjvf1pw0zr88jyvd2b2vxbqi6ca";
+    sha256 = "10hrk7pcvfl9cj6d0kr4qf3l068ikqhccbg7lf25pr2kln9lz412";
   };
 
   nativeBuildInputs = [ pkgconfig ];

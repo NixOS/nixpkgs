@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, pkgconfig, lndir
+{ stdenv, lib, fetchurl, cmake, pkgconfig
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase
@@ -25,11 +25,11 @@ assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
   name = "avidemux-${version}";
-  version = "2.7.1";
+  version = "2.7.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "15g9h791qbnmycabbbl7s2b3n3xpvygm88qrfk35g2cw6957ik9w";
+    sha256 = "17x2mnnr5h8pp764p55l1xcn2ljnzhbj8cykajlllvk4rc4qwxld";
   };
 
   patches = [
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://fixounet.free.fr/avidemux/;
     description = "Free video editor designed for simple video editing tasks";
-    maintainers = with maintainers; [ viric abbradar ma27 ];
+    maintainers = with maintainers; [ abbradar ma27 ];
     # "CPU not supported" errors on AArch64
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;

@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
-, libX11, xproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
-, zlib, libpng, glib, lvm2, libXrandr, libXinerama
+{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2
+, libX11, xorgproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
+, libpng, glib, lvm2, libXrandr, libXinerama, libopus
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, gawk, nettools, dbus
-, xorriso, makeself, perl
+, alsaLib, curl, libvpx, nettools, dbus
+, makeself, perl
 , javaBindings ? false, jdk ? null
-, pythonBindings ? false, python2 ? null
-, enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
-, pulseSupport ? false, libpulseaudio ? null
+, pythonBindings ? false, python3 ? null
+, extensionPack ? null, fakeroot ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
@@ -17,32 +17,12 @@
 with stdenv.lib;
 
 let
-  python = python2;
+  python = python3;
   buildType = "release";
-  # Manually sha256sum the extensionPack file, must be hex!
-  # Do not forget to update the hash in ./guest-additions/default.nix!
-  extpack = "4c36d129f17dcab2bb37292022f1b1adfefa5f32a3161b0d5d40784bc8acf4d0";
-  extpackRev = "122591";
-  main = "0n1lip8lkz4qqq5ml47xldsx41919ncfh060i7yj51bhas604q6s";
-  version = "5.2.12";
-
-  # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extensionPack = requireFile rec {
-    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${toString extpackRev}.vbox-extpack";
-    sha256 = extpack;
-    message = ''
-      In order to use the extension pack, you need to comply with the VirtualBox Personal Use
-      and Evaluation License (PUEL) available at:
-
-      https://www.virtualbox.org/wiki/VirtualBox_PUEL
-
-      Once you have read and if you agree with the license, please use the
-      following command and re-run the installation:
-
-      nix-prefetch-url http://download.virtualbox.org/virtualbox/${version}/${name}
-    '';
-  };
-
+  # Remember to change the extpackRev and version in extpack.nix and
+  # guest-additions/default.nix as well.
+  main = "0lp584a350ya1zn03lhgmdbi91yp8yfja9hlg2jz1xyfj2dc869l";
+  version = "6.0.6";
 in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 
@@ -53,12 +33,12 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 ];
+  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ];
 
   buildInputs =
-    [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor libIDL
-      libcap glib lvm2 alsaLib curl libvpx pam xorriso makeself perl
-      libXmu libpng patchelfUnstable python ]
+    [ iasl dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
+      libcap glib lvm2 alsaLib curl libvpx pam makeself perl
+      libXmu libpng libopus python ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
@@ -96,11 +76,12 @@ in stdenv.mkDerivation {
      optional enableHardening ./hardened.patch
   ++ [
     ./qtx11extras.patch
-    (fetchpatch {
-      name = "010-qt-5.11.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/010-qt-5.11.patch?h=packages/virtualbox";
-      sha256 = "0hjx99pg40wqyggnrpylrp5zngva4xrnk7r90i0ynrqc7n84g9pn";
-    })
+    # https://www.virtualbox.org/ticket/18620
+    ./fix_kbuild.patch
+    # https://www.virtualbox.org/ticket/18621
+    ./fix_module_makefile_sed.patch
+    # https://forums.virtualbox.org/viewtopic.php?f=7&t=92815
+    ./fix_printk_test.patch
   ];
 
   postPatch = ''
@@ -143,7 +124,7 @@ in stdenv.mkDerivation {
       ${optionalString (!pulseSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
-      --disable-kmods --with-mkisofs=${xorriso}/bin/xorrisofs
+      --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
@@ -174,7 +155,7 @@ in stdenv.mkDerivation {
         ln -s "$libexec/$file" $out/bin/$file
     done
 
-    ${optionalString enableExtensionPack ''
+    ${optionalString (extensionPack != null) ''
       mkdir -p "$share"
       "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EXTHELPER
       "$libexec/VBoxExtPackHelperApp" install \
@@ -212,6 +193,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl2;
     homepage = https://www.virtualbox.org/;
     maintainers = with maintainers; [ flokli sander ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

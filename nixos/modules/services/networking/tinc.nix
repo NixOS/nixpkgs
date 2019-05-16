@@ -148,20 +148,11 @@ in
         }
       ));
 
-    networking.interfaces = flip mapAttrs' cfg.networks (network: data: nameValuePair
-      ("tinc.${network}")
-      ({
-        virtual = true;
-        virtualType = "${data.interfaceType}";
-      })
-    );
-
     systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
       ("tinc.${network}")
       ({
         description = "Tinc Daemon - ${network}";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
         path = [ data.package ];
         restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ];
         serviceConfig = {
@@ -209,7 +200,7 @@ in
       };
     in [ cli-wrappers ];
 
-    users.extraUsers = flip mapAttrs' cfg.networks (network: _:
+    users.users = flip mapAttrs' cfg.networks (network: _:
       nameValuePair ("tinc.${network}") ({
         description = "Tinc daemon user for ${network}";
         isSystemUser = true;

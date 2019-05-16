@@ -5,7 +5,7 @@
 
 # Options from inherited versions
 , version, sha256
-, patchSrc ? "src", extraPatches ? [ ]
+, extraPatches ? [ ]
 , license ? stdenv.lib.licenses.sleepycat
 , drvArgs ? {}
 }:
@@ -38,6 +38,8 @@ stdenv.mkDerivation (rec {
   postInstall = ''
     rm -rf $out/docs
   '';
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 

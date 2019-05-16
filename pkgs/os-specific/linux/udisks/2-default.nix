@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, substituteAll, libtool, pkgconfig, intltool, gnused
-, gnome3, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash
+{ stdenv, fetchFromGitHub, substituteAll, libtool, pkgconfig, gettext, gnused
+, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
-, gobjectIntrospection, docbook_xml_dtd_412, docbook_xml_dtd_43
-, libxfs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, udftools, ntfs3g
+, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
+, xfsprogs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
 }:
 
 let
-  version = "2.7.6";
+  version = "2.8.2";
 in stdenv.mkDerivation rec {
   name = "udisks-${version}";
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     owner = "storaged-project";
     repo = "udisks";
     rev = name;
-    sha256 = "16kf104vv2xbk8cdgaqygszcl69d7lz9gf3vmi7ggywn7nfbp2ks";
+    sha256 = "000xf99id1f6w8l20jxm3f2g32v9wx68rzv6q2bwrfz6vmy76xwy";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
@@ -33,12 +33,12 @@ in stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./force-path.patch;
-      path = stdenv.lib.makeBinPath [ btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils libxfs ntfs3g parted utillinux ];
+      path = stdenv.lib.makeBinPath [ btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils xfsprogs ntfs3g parted utillinux ];
     })
   ];
 
   nativeBuildInputs = [
-    pkgconfig gnome3.gnome-common libtool intltool gobjectIntrospection
+    autoconf automake pkgconfig libtool gettext which gobject-introspection
     gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 
@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
     expat libgudev libblockdev acl systemd glib libatasmart polkit
   ];
 
-  preConfigure = "./autogen.sh";
+  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
     "--enable-gtk-doc"

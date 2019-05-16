@@ -44,13 +44,13 @@ in
       };
     };
 
-    users.extraUsers.duplicati = {
+    users.users.duplicati = {
       uid = config.ids.uids.duplicati;
       home = "/var/lib/duplicati";
       createHome = true;
       group = "duplicati";
     };
-    users.extraGroups.duplicati.gid = config.ids.gids.duplicati;
+    users.groups.duplicati.gid = config.ids.gids.duplicati;
 
   };
 }

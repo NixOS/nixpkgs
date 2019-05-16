@@ -2,13 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "matomo-${version}";
-  version = "3.5.1";
+  version = "3.9.1";
 
   src = fetchurl {
-    # TODO: As soon as the tarballs are renamed as well on future releases, this should be enabled again
-    # url = "https://builds.matomo.org/${name}.tar.gz";
-    url = "https://builds.matomo.org/piwik-${version}.tar.gz";
-    sha256 = "0ifrgaw30h4d6hwwzrz8i9k036dxzkxgh71y9s0ds10lhr8vidym";
+    url = "https://builds.matomo.org/matomo-${version}.tar.gz";
+    sha256 = "1y406dnwn4jyrjr2d5qfsg3b4v7nfbh09v74dm1vlcy3mkbhv2bp";
   };
 
   nativeBuildInputs = [ makeWrapper ];

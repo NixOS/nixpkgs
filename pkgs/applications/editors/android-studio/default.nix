@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, makeFontsConf, gnome2 }:
+{ stdenv, callPackage, makeFontsConf, gnome2 }:
 
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
@@ -8,64 +8,36 @@ let
     inherit (gnome2) GConf gnome_vfs;
   };
   stableVersion = {
-    version = "3.1.3.0"; # "Android Studio 3.1.3"
-    build = "173.4819257";
-    sha256Hash = "196yaswbxh2nd83gimjxr8ggr5xkdxq7n3xlh6ax73v59pj4hryq";
+    version = "3.4.0.18"; # "Android Studio 3.4.0"
+    build = "183.5452501";
+    sha256Hash = "0i8wz9v6nxzr27a07cv2330i84v94pcl13gjwvpglp55hyzd8axd";
   };
-  latestVersion = {
-    version = "3.3.0.0"; # "Android Studio 3.3 Canary 1"
-    build = "181.4861037";
-    sha256Hash = "1abilixr386x65qzgp6pwdn41y1xi9h8yihgxhc1c97n90f5gab8";
+  betaVersion = latestVersion;
+  latestVersion = { # canary & dev
+    version = "3.5.0.13"; # "Android Studio 3.5 Beta 1"
+    build = "191.5529924";
+    sha256Hash = "0i710n2wr0a8lvxf1mg6a5pmdh1l72wa0hwyricyixi0mylwwc6l";
   };
 in rec {
-  # Old alias
-  preview = beta;
-
-  # Attributes are named by the corresponding release channels
+  # Attributes are named by their corresponding release channels
 
   stable = mkStudio (stableVersion // {
+    channel = "stable";
     pname = "android-studio";
-    #pname = "android-studio-stable"; # TODO: Rename and provide symlink
-
-    meta = with stdenv.lib; {
-      description = "The Official IDE for Android (stable channel)";
-      longDescription = ''
-        Android Studio is the official IDE for Android app development, based on
-        IntelliJ IDEA.
-      '';
-      homepage = https://developer.android.com/studio/index.html;
-      license = licenses.asl20;
-      platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ primeos ];
-    };
   });
 
-  beta = mkStudio (latestVersion // {
-    pname = "android-studio-preview";
-    #pname = "android-studio-beta"; # TODO: Rename and provide symlink
-    version = "3.2.0.19"; # "Android Studio 3.2 Beta 2"
-    build = "181.4860949";
-    sha256Hash = "1v1h42xp2fxj8366q9l9b0shk0y1vz9kny0rf7y48kyr5h9glnwr";
-
-    meta = stable.meta // {
-      description = "The Official IDE for Android (beta channel)";
-      homepage = https://developer.android.com/studio/preview/index.html;
-    };
+  beta = mkStudio (betaVersion // {
+    channel = "beta";
+    pname = "android-studio-beta";
   });
 
   dev = mkStudio (latestVersion // {
+    channel = "dev";
     pname = "android-studio-dev";
-
-    meta = beta.meta // {
-      description = "The Official IDE for Android (dev channel)";
-    };
   });
 
   canary = mkStudio (latestVersion // {
+    channel = "canary";
     pname = "android-studio-canary";
-
-    meta = beta.meta // {
-      description = "The Official IDE for Android (canary channel)";
-    };
   });
 }

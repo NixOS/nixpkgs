@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchhg, pidgin, glib, json-glib, mercurial, autoreconfHook } :
+{ stdenv, fetchFromGitHub, fetchhg, pidgin, glib, json-glib, autoreconfHook }:
 
 
 let
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     # we do all patching from update.sh in preAutoreconf
-    echo "#!/bin/sh" > update.sh
+    echo "#!${stdenv.shell}" > update.sh
   '';
 
   preAutoreconf = ''
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [pidgin glib json-glib mercurial];
+  buildInputs = [ pidgin glib json-glib ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

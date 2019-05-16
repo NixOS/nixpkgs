@@ -51,7 +51,7 @@ in {
       serviceConfig.User = "ngircd";
     };
 
-    users.extraUsers.ngircd = {
+    users.users.ngircd = {
       uid = config.ids.uids.ngircd;
       description = "ngircd user.";
     };

@@ -1,18 +1,18 @@
 { stdenv, buildPythonPackage, fetchPypi
-, fftw, fftwFloat, fftwLongDouble, numpy, scipy }:
+, fftw, fftwFloat, fftwLongDouble, numpy, scipy, cython, dask }:
 
 buildPythonPackage rec {
-  version = "0.10.4";
+  version = "0.11.1";
   pname = "pyFFTW";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "739b436b7c0aeddf99a48749380260364d2dc027cf1d5f63dafb5f50068ede1a";
+    sha256 = "05ea28dede4c3aaaf5c66f56eb0f71849d0d50f5bc0f53ca0ffa69534af14926";
   };
 
   buildInputs = [ fftw fftwFloat fftwLongDouble];
 
-  propagatedBuildInputs = [ numpy scipy ];
+  propagatedBuildInputs = [ numpy scipy cython dask ];
 
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;

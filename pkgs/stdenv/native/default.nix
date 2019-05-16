@@ -1,11 +1,11 @@
 { lib
-, localSystem, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays, crossOverlays ? []
 }:
 
-assert crossSystem == null;
+assert crossSystem == localSystem;
 
 let
-  inherit (localSystem) system platform;
+  inherit (localSystem) system;
 
   shell =
     if system == "i686-freebsd" || system == "x86_64-freebsd" then "/usr/local/bin/bash"

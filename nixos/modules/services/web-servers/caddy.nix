@@ -66,7 +66,7 @@ in {
       description = "Caddy web server";
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = mkIf (versionAtLeast config.system.nixos.stateVersion "17.09")
+      environment = mkIf (versionAtLeast config.system.stateVersion "17.09")
         { CADDYPATH = cfg.dataDir; };
       serviceConfig = {
         ExecStart = ''
@@ -93,13 +93,13 @@ in {
       };
     };
 
-    users.extraUsers.caddy = {
+    users.users.caddy = {
       group = "caddy";
       uid = config.ids.uids.caddy;
       home = cfg.dataDir;
       createHome = true;
     };
 
-    users.extraGroups.caddy.gid = config.ids.uids.caddy;
+    users.groups.caddy.gid = config.ids.uids.caddy;
   };
 }

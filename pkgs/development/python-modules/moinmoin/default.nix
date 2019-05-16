@@ -4,24 +4,24 @@
 
 buildPythonPackage rec {
   pname = "moinmoin";
-  version = "1.9.9";
+  version = "1.9.10";
 
   # SyntaxError in setup.py
   disabled = isPy3k;
 
   src = fetchurl {
     url = "http://static.moinmo.in/files/moin-${version}.tar.gz";
-    sha256 = "197ga41qghykmir80ik17f9hjpmixslv3zjgj7bj9qvs1dvdg5s3";
+    sha256 = "0g05lnl1s8v61phi3z1g3b6lfj4g98grj9kw8nyjl246x0c489ja";
   };
 
   patches = [
     # Recommended to install on their download page.
-    (fetchpatch {
-      url = "https://bitbucket.org/thomaswaldmann/moin-1.9/commits/561b7a9c2bd91b61d26cd8a5f39aa36bf5c6159e/raw";
-      sha256 = "1nscnl9nspnrwyf3n95ig0ihzndryinq9kkghliph6h55cncfc65";
-    })
     ./fix_tests.patch
   ];
+
+  prePatch = ''
+    sed -i "s/\xfc/ü/" setup.cfg
+  '';
 
   checkInputs = [ pytest werkzeug pygments ];
 

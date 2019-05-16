@@ -1,25 +1,24 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
-, zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
+{ stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, pkgconfig, intltool, gperf, libcap, kmod
+, xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , iptables, gnu-efi
-, autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
+, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
 , getent
-, hostPlatform
 , buildPackages
 , withSelinux ? false, libselinux
-, withLibseccomp ? libseccomp.meta.available, libseccomp
-, withKexectools ? kexectools.meta.available, kexectools
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
 let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
-  version = "238";
+  version = "239.20190219";
   name = "systemd-${version}";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -27,9 +26,27 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "02042d012c4d6c0a2854d8436dd6636d4327774f";
-    sha256 = "0iv6fygzac0z6dagbmw1nf8dx7rrr6d9cxp0fr304rn3ir58g5f0";
+    rev = "nixos-v${version}";
+    sha256 = "0aczg25ih2gfjq810x8rw6rnpr6sw1lz6z0lvlyw2qphyih68b4x";
   };
+
+  prePatch = let
+      # Upstream's maintenance branches are still too intrusive:
+      # https://github.com/systemd/systemd-stable/tree/v239-stable
+      patches-deb = fetchurl {
+        # This URL should point to a stable location that does not easily
+        # disappear.  In the past we were using `mirror://debian` but that
+        # eventually causes the files to disappear.  While that was a good sign
+        # for us to update our patch collection it does break reproducibility.
+        name = "systemd-debian-patches.tar.xz";
+        url = http://snapshot.debian.org/archive/debian/20190301T035241Z/pool/main/s/systemd/systemd_239-12%7Ebpo9%2B1.debian.tar.xz;
+        sha256 = "0v9f62gyfiw5icdrdlcvjcipsqrsm49w6n8bqp9nb8s2ih6rsfhg";
+      };
+      # Note that we skip debian-specific patches, i.e. ./debian/patches/debian/*
+    in ''
+      tar xf ${patches-deb}
+      patches="$patches $(cat debian/patches/series | grep -v '^debian/' | sed 's|^|debian/patches/|')"
+    '';
 
   outputs = [ "out" "lib" "man" "dev" ];
 
@@ -79,7 +96,7 @@ in stdenv.mkDerivation rec {
     "-Dsystem-gid-max=499"
     # "-Dtime-epoch=1"
 
-    (if stdenv.isAarch32 || stdenv.isAarch64 || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+    (if stdenv.isAarch32 || stdenv.isAarch64 || !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"
@@ -112,12 +129,12 @@ in stdenv.mkDerivation rec {
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
-        --replace /sbin/swapoff ${utillinux.bin}/sbin/swapoff \
-        --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
+        --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
+        --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
+        --replace /sbin/fsck ${lib.getBin utillinux}/sbin/fsck \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
+        --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
@@ -144,16 +161,6 @@ in stdenv.mkDerivation rec {
       --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
-
-  patches = [
-    # https://github.com/systemd/systemd/pull/8580
-    (fetchpatch {
-      url = https://github.com/systemd/systemd/pull/8580.patch;
-      sha256 = "1yp07hlpgqq0h2y0qc3kasswzkycz6p8d56d695ck1qa2f5bdfgn";
-    })
-  ];
-
-  hardeningDisable = [ "stackprotector" ];
 
   NIX_CFLAGS_COMPILE =
     [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
@@ -208,10 +215,12 @@ in stdenv.mkDerivation rec {
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    priority = 10;
+    maintainers = [ maintainers.eelco ];
   };
 }

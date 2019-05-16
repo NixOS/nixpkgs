@@ -11,7 +11,7 @@
 , freetype
 , gdk_pixbuf
 , glib
-, gnome3
+, gnome2
 , gtk3
 , libX11
 , libxcb
@@ -27,18 +27,20 @@
 , libXtst
 , libnotify
 , libpulseaudio
+, libuuid
 , nspr
 , nss
 , pango
 , stdenv
 , systemd
 , at-spi2-atk
+, at-spi2-core
 }:
 
 let
 
   mirror = https://get.geo.opera.com/pub/opera/desktop;
-  version = "53.0.2907.99";
+  version = "58.0.3135.127";
 
   rpath = stdenv.lib.makeLibraryPath [
 
@@ -55,7 +57,7 @@ let
     freetype.out
     gdk_pixbuf.out
     glib.out
-    gnome3.gconf
+    gnome2.GConf
     gtk3.out
     libX11.out
     libXScrnSaver.out
@@ -70,6 +72,7 @@ let
     libXtst.out
     libxcb.out
     libnotify.out
+    libuuid.out
     nspr.out
     nss.out
     pango.out
@@ -84,6 +87,7 @@ let
     libpulseaudio.out
 
     at-spi2-atk
+    at-spi2-core
   ];
 
 in stdenv.mkDerivation {
@@ -92,7 +96,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/opera-stable_${version}_amd64.deb";
-    sha256 = "0fih5047xv275rmbcr2drji81wxi6p0kyp172mmn328g3pzddmwx";
+    sha256 = "1nk4zfmb2dv464r1q6n9b66zg7a8h5xfwypzqd791rhmsfjrxn51";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
@@ -115,7 +119,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.opera.com;
+    homepage = https://www.opera.com;
     description = "Web browser";
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.unfree;

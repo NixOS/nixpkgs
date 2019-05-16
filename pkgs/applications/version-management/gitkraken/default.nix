@@ -1,8 +1,8 @@
-{ stdenv, lib, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk2, libXrender, pango, gnome2, cairo, freetype, fontconfig
+{ stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
+, libXfixes, atk, gtk3, libXrender, pango, gnome2, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem
+, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme
 }:
 
 with stdenv.lib;
@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "3.6.4";
+  version = "5.0.4";
 
   src = fetchurl {
-    url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "0n14lwmga0hhi4m4pwgpzpxmsmfy6an7b2pk59afsydhxjj88z4x";
+    url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
+    sha256 = "1fq0w8djkcx5jr2pw6izlq5rkwbq3r3f15xr3dmmbz6gjvi3nra0";
   };
 
   libPath = makeLibraryPath [
@@ -49,9 +49,10 @@ stdenv.mkDerivation rec {
     libXcomposite
     libXfixes
     libXrender
-    gtk2
+    gtk3
     gnome2.GConf
     libgnome-keyring
+    openssl
   ];
 
   desktopItem = makeDesktopItem {
@@ -64,8 +65,8 @@ stdenv.mkDerivation rec {
     comment = "Graphical Git client from Axosoft";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ dpkg ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
 
   unpackCmd = ''
     mkdir out
@@ -77,13 +78,12 @@ stdenv.mkDerivation rec {
     pushd usr
     pushd share
     substituteInPlace applications/gitkraken.desktop \
-      --replace /usr/share/gitkraken $out/bin \
-      --replace Icon=app Icon=gitkraken
-    mv pixmaps/app.png pixmaps/gitkraken.png
+      --replace /usr/share/gitkraken $out/bin
     popd
     rm -rf bin/gitkraken share/lintian
     cp -av share bin $out/
     popd
+
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
   '';
 

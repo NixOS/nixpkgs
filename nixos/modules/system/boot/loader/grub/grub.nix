@@ -8,13 +8,17 @@ let
 
   efi = config.boot.loader.efi;
 
-  realGrub = if cfg.version == 1 then pkgs.grub
-    else if cfg.zfsSupport then pkgs.grub2.override { zfsSupport = true; }
+  grubPkgs = 
+    # Package set of targeted architecture
+    if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
+
+  realGrub = if cfg.version == 1 then grubPkgs.grub
+    else if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
     else if cfg.trustedBoot.enable
          then if cfg.trustedBoot.isHPLaptop
-              then pkgs.trustedGrub-for-HP
-              else pkgs.trustedGrub
-         else pkgs.grub2;
+              then grubPkgs.trustedGrub-for-HP
+              else grubPkgs.trustedGrub
+         else grubPkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -38,6 +42,8 @@ let
     in
     pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f cfg.splashImage;
+      splashMode = f cfg.splashMode;
+      backgroundColor = f cfg.backgroundColor;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
@@ -55,15 +61,11 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
         extraEntriesBeforeNixOS extraPrepareConfig extraInitrd configurationLimit copyKernels
-        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
-      path = (makeBinPath ([
-        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
-        pkgs.utillinux ]
-        ++ (optional (cfg.efiSupport && (cfg.version == 2)) pkgs.efibootmgr)
-        ++ (optionals cfg.useOSProber [pkgs.busybox pkgs.os-prober])
-      )) + ":" + (makeSearchPathOutput "bin" "sbin" [
-        pkgs.mdadm pkgs.utillinux
-      ]);
+        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios;
+      path = with pkgs; makeBinPath (
+        [ coreutils gnused gnugrep findutils diffutils btrfs-progs utillinux mdadm ]
+        ++ optional (cfg.efiSupport && (cfg.version == 2)) efibootmgr
+        ++ optionals cfg.useOSProber [ busybox os-prober ]);
       font = if cfg.font == null then ""
         else (if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
@@ -80,6 +82,8 @@ let
                "--output" "$out"
              ] ++ (optional (cfg.fontSize!=null) "--size ${toString cfg.fontSize}")))
          );
+
+  defaultSplash = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bootloader.png";
 in
 
 {
@@ -328,6 +332,31 @@ in
         '';
       };
 
+      backgroundColor = mkOption {
+        type = types.nullOr types.string;
+        example = "#7EBAE4";
+        default = null;
+        description = ''
+          Background color to be used for GRUB to fill the areas the image isn't filling.
+
+          <note><para>
+          This options has no effect for GRUB 1.
+          </para></note>
+        '';
+      };
+
+      splashMode = mkOption {
+        type = types.enum [ "normal" "stretch" ];
+        default = "stretch";
+        description = ''
+          Whether to stretch the image or show the image in the top-left corner unstretched.
+
+          <note><para>
+          This options has no effect for GRUB 1.
+          </para></note>
+        '';
+      };
+
       font = mkOption {
         type = types.nullOr types.path;
         default = "${realGrub}/share/grub/unicode.pf2";
@@ -361,6 +390,24 @@ in
         type = types.str;
         description = ''
           The gfxmode to pass to GRUB when loading a graphical boot interface under BIOS.
+        '';
+      };
+
+      gfxpayloadEfi = mkOption {
+        default = "keep";
+        example = "text";
+        type = types.str;
+        description = ''
+          The gfxpayload to pass to GRUB when loading a graphical boot interface under EFI. 
+        '';
+      };
+
+      gfxpayloadBios = mkOption {
+        default = "text";
+        example = "keep";
+        type = types.str;
+        description = ''
+          The gfxpayload to pass to GRUB when loading a graphical boot interface under BIOS. 
         '';
       };
 
@@ -483,6 +530,15 @@ in
         '';
       };
 
+      forcei686 = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to force the use of a ia32 boot loader on x64 systems. Required 
+          to install and run NixOS on 64bit x86 systems with 32bit (U)EFI.
+        '';
+      };
+
       trustedBoot = {
 
         enable = mkOption {
@@ -531,8 +587,13 @@ in
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.
-        else "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png");
+        else defaultSplash);
     }
+
+    (mkIf (cfg.splashImage == defaultSplash) {
+      boot.loader.grub.backgroundColor = mkDefault "#2F302F";
+      boot.loader.grub.splashMode = mkDefault "normal";
+    })
 
     (mkIf cfg.enable {
 
@@ -552,7 +613,7 @@ in
         in pkgs.writeScript "install-grub.sh" (''
         #!${pkgs.runtimeShell}
         set -e
-        export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare ])}
+        export PERL5LIB=${with pkgs.perlPackages; makePerlPath [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare ]}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
         ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@

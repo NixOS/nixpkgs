@@ -15,7 +15,7 @@ stdenv.mkDerivation {
                             libnova libjpeg gsl ];
 
   meta = {
-    homepage = http://www.indilib.org/;
+    homepage = https://www.indilib.org/;
     license = stdenv.lib.licenses.lgpl2Plus;
     description = "Implementaion of the INDI protocol for POSIX operating systems";
     platforms = stdenv.lib.platforms.unix;

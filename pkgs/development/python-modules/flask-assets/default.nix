@@ -9,6 +9,10 @@ buildPythonPackage rec {
     sha256 = "0ivqsihk994rxw58vdgzrx4d77d7lpzjm4qxb38hjdgvi5xm4cb0";
   };
 
+  patchPhase = ''
+    substituteInPlace tests/test_integration.py --replace 'static_path=' 'static_url_path='
+  '';
+
   propagatedBuildInputs = [ flask webassets flask_script nose ];
 
   meta = with lib; {

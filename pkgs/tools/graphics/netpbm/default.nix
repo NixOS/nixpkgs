@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
-    rev = 3264;
+    rev = "3264";
     sha256 = "17fmyjbxp1l18rma7gb0m8wd9kx2iwhqs8dd6fpalsn2cr8mf8hf";
   };
 

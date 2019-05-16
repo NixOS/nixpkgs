@@ -1,4 +1,4 @@
-{ mkDerivation, lib, extra-cmake-modules, ki18n, kxmlgui, kcodecs, kio }:
+{ mkDerivation, extra-cmake-modules, ki18n, kxmlgui, kcodecs, kio }:
 
 mkDerivation {
   name = "libkomparediff2";

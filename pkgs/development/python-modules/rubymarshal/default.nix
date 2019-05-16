@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, hypothesis }:
+{ stdenv, buildPythonPackage, fetchPypi, hypothesis }:
 
 buildPythonPackage rec {
   pname = "rubymarshal";

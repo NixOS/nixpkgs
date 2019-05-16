@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, coreutils
-, python3, python3Packages, substituteAll }:
+, python3Packages, substituteAll }:
 
 python3Packages.buildPythonApplication rec {
   name = "trash-cli-${version}";
@@ -28,8 +28,10 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  buildInputs = with python3Packages; [ nose mock ];
-
+  checkInputs = with python3Packages; [
+    nose
+    mock
+  ];
   checkPhase = "nosetests";
 
   meta = with stdenv.lib; {

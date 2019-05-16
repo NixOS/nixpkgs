@@ -2,16 +2,21 @@
 
 stdenv.mkDerivation rec {
 
-  version = "2017-01-12";
+  version = "2018-08-15";
   name = "pbrt-v3-${version}";
 
   src = fetchFromGitHub {
-    rev = "35b6da3429526f2026fe5e5ebaf36d593e113028";
+    rev = "86b5821308088deea70b207bc8c22219d0103d65";
     owner  = "mmp";
     repo   = "pbrt-v3";
-    sha256 = "10lvbph13p6ilzqb8sgrvn9gg1zmi8wpy3hhjbqp8dnsa4x0mhj7";
+    sha256 = "0f7ivsczba6zfk5f0bba1js6dcwf6w6jrkiby147qp1sx5k35cv8";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # https://github.com/mmp/pbrt-v3/issues/196
+    ./openexr-cmake-3.12.patch
+  ];
 
   buildInputs = [ git flex bison cmake zlib ];
 

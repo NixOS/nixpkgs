@@ -12,17 +12,16 @@
 , pytest
 , nose
 , parameterized
-, matplotlib
 }:
 
 buildPythonPackage rec {
   pname = "pymc3";
-  version = "3.4.1";
+  version = "3.6";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b8fe2a1ca142674f1b5cbed05a0a54ce9dade5998370005ddcea349472e7fe2d";
+    sha256 = "c00c0778d2451a348a9508f8b956fe280a0f9affd3f85140ac3948bc2902f5e9";
   };
 
   # No need for coverage stats in Nix builds

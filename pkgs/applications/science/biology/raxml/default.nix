@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, zlib
 , pkgs
 , mpi ? false
 }:

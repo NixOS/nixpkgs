@@ -1,6 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkgconfig,
-  x11, libxcb, libXrandr, libXext, wayland, libGL_driver }:
-let version = "1.1.77.0"; in
+{ stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkgconfig
+, xlibsWrapper, libxcb, libXrandr, libXext, wayland, libGL_driver }:
+
+let
+  version = "1.1.106";
+in
+
 assert version == vulkan-headers.version;
 stdenv.mkDerivation rec {
   name = "vulkan-loader-${version}";
@@ -10,11 +14,11 @@ stdenv.mkDerivation rec {
     owner = "KhronosGroup";
     repo = "Vulkan-Loader";
     rev = "sdk-${version}";
-    sha256 = "1nzzkqh0i3j1d3h7kgmaxzi748l338m2p31lxkwxm4y81xp56a94";
+    sha256 = "0zhrwj1gi90x2w8gaaaw5h4b969a8gfy244kn0drrplhhb1nqz3b";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake python3 x11 libxcb libXrandr libXext wayland ];
+  buildInputs = [ cmake python3 xlibsWrapper libxcb libXrandr libXext wayland ];
   enableParallelBuilding = true;
 
   cmakeFlags = [
@@ -23,10 +27,6 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "dev" ];
-
-  postInstall = ''
-    cp -r "${vulkan-headers}/include" "$dev"
-  '';
 
   meta = with stdenv.lib; {
     description = "LunarG Vulkan loader";

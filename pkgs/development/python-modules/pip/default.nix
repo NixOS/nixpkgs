@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "10.0.1";
+  version = "19.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2bd08e0cd1b06e10218feaf6fef299f473ba706582eb3bd9d52203fdbd7ee68";
+    sha256 = "6e6f197a1abfb45118dbb878b5c859a0edbdd33fd250100bc015b67fded4b9f2";
   };
 
   # pip detects that we already have bootstrapped_pip "installed", so we need

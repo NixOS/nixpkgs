@@ -1,4 +1,3 @@
-# Has a cyclic dependency with sage (not expressed here) and is not useful outside of sage
 { stdenv
 , fetchpatch
 , python
@@ -13,15 +12,19 @@
 , flask-babel
 }:
 
+# Has a cyclic dependency with sage (not expressed here) and is not useful outside of sage.
+# Deprecated, hopefully soon to be removed. See
+# https://trac.sagemath.org/ticket/25837
+
 buildPythonPackage rec {
   pname = "sagenb";
-  version = "2018-06-26"; # not 1.0.1 because of new flask syntax
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sagenb";
-    rev = "b360a0172e15501fb0163d02dce713a561fee2af";
-    sha256 = "12anydw0v9w23rbc0a94bqmjhjdir9h820c5zdhipw9ccdcc2jlf";
+    rev = version;
+    sha256 = "0bxvhr03qh2nsjdfc4pyfiqrn9jhp3vf7irsc9gqx0185jlblbxs";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +47,7 @@ buildPythonPackage rec {
 
   # let sagenb use mathjax
   postInstall = ''
-    ln -s ${mathjax}/lib/node_modules/mathjax "$out/${python.sitePackages}/mathjax"
+    mkdir -p "$out/${python.sitePackages}/sagenb/data"
+    ln -s ${mathjax}/lib/node_modules/mathjax "$out/${python.sitePackages}/sagenb/data/mathjax"
   '';
 }

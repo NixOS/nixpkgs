@@ -1,9 +1,9 @@
 { stdenv, fetchurl, buildEnv, makeWrapper
 , xorg, alsaLib, dbus, glib, gtk2, atk, pango, freetype, fontconfig
-, gdk_pixbuf, cairo, zlib, nss, nssTools, nspr, gconf, expat, systemd, libcap
+, gdk_pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify}:
 let
-  bits = if stdenv.system == "x86_64-linux" then "x64"
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
          else "ia32";
 
   nwEnv = buildEnv {

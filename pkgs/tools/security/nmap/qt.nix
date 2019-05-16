@@ -1,33 +1,35 @@
-{ stdenv, fetchurl, cmake, pkgconfig, makeWrapper
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, makeWrapper
 , dnsutils, nmap
-, qtbase, qtscript, qtwebkit }:
+, qtbase, qtscript, qtwebengine }:
 
 stdenv.mkDerivation rec {
   name = "nmapsi4-${version}";
-  version = "0.5-alpha1";
+  version = "0.4.80-20180430";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/nmapsi/${name}.tar.xz";
-    sha256 = "18v9a3l2nmij3gb4flscigxr5c44nphkjfmk07qpyy73fy61mzrs";
+  src = fetchFromGitHub {
+    owner = "nmapsi4";
+    repo = "nmapsi4";
+    rev = "d7f18e4c1e38dcf9c29cb4496fe14f9ff172861a";
+    sha256 = "10wqyrjzmad1g7lqa65rymbkna028xbp4xcpj442skw8gyrs3994";
   };
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
 
-  buildInputs = [ qtbase qtscript qtwebkit ];
+  buildInputs = [ qtbase qtscript qtwebengine ];
 
   enableParallelBuilding = true;
 
   postPatch = ''
+    substituteInPlace src/platform/digmanager.cpp \
+      --replace '"dig"' '"${dnsutils}/bin/dig"'
+    substituteInPlace src/platform/discover.cpp \
+        --replace '"nping"' '"${nmap}/bin/nping"'
     for f in \
-      src/platform/digmanager.cpp \
-      src/platform/discover.cpp \
       src/platform/monitor/monitor.cpp \
       src/platform/nsemanager.cpp ; do
 
       substituteInPlace $f \
-        --replace '"dig"'   '"${dnsutils}/bin/dig"'\
-        --replace '"nmap"'  '"${nmap}/bin/nmap"' \
-        --replace '"nping"' '"${nmap}/bin/nping"'
+        --replace '"nmap"'  '"${nmap}/bin/nmap"'
     done
   '';
 
@@ -45,9 +47,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Qt frontend for nmap";
-    homepage    = https://www.nmapsi4.org/;
     license     = licenses.gpl2;
-    platforms   = platforms.all;
     maintainers = with maintainers; [ peterhoeg ];
+    inherit (src.meta) homepage;
   };
 }

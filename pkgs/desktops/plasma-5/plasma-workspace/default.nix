@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation, lib, fetchpatch,
 
   extra-cmake-modules, kdoctools,
 
@@ -66,7 +66,9 @@ mkDerivation {
   # Add upstream patches to the list below. For new patchs, particularly if not
   # submitted upstream, please make a pull request and add it to
   # ./plasma-workspace.patch.
-  patches = [ ./plasma-workspace.patch ];
+  patches = [
+    ./plasma-workspace.patch
+  ];
 
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_KDOSTARTUPCONFIG5=\"''${!outputBin}/bin/kdostartupconfig5\""

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, emacs, ocaml }:
+{ stdenv, emacs, ocaml }:
 
 # this package installs the emacs-mode which
 # resides in the ocaml compiler sources.

@@ -20,7 +20,13 @@ bintoolsWrapper_addLDVars () {
     fi
 
     if [[ -d "$1/lib" ]]; then
-        export NIX_${role_pre}LDFLAGS+=" -L$1/lib"
+        # Don't add the /lib directory if it actually doesn't contain any libraries. For instance,
+        # Python and Haskell packages often only have directories like $out/lib/ghc-8.4.3/ or
+        # $out/lib/python3.6/, so having them in LDFLAGS just makes the linker search unnecessary
+        # directories and bloats the size of the environment variable space.
+        if [[ -n "$(echo $1/lib/lib*)" ]]; then
+            export NIX_${role_pre}LDFLAGS+=" -L$1/lib"
+        fi
     fi
 }
 

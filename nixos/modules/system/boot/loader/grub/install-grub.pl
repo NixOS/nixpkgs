@@ -51,6 +51,8 @@ my $extraEntries = get("extraEntries");
 my $extraEntriesBeforeNixOS = get("extraEntriesBeforeNixOS") eq "true";
 my $extraInitrd = get("extraInitrd");
 my $splashImage = get("splashImage");
+my $splashMode = get("splashMode");
+my $backgroundColor = get("backgroundColor");
 my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
@@ -65,6 +67,8 @@ my $efiInstallAsRemovable = get("efiInstallAsRemovable");
 my $efiSysMountPoint = get("efiSysMountPoint");
 my $gfxmodeEfi = get("gfxmodeEfi");
 my $gfxmodeBios = get("gfxmodeBios");
+my $gfxpayloadEfi = get("gfxpayloadEfi");
+my $gfxpayloadBios = get("gfxpayloadBios");
 my $bootloaderId = get("bootloaderId");
 my $forceInstall = get("forceInstall");
 my $font = get("font");
@@ -246,7 +250,7 @@ if ($grubVersion == 1) {
     ";
     if ($splashImage) {
         copy $splashImage, "$bootPath/background.xpm.gz" or die "cannot copy $splashImage to $bootPath\n";
-        $conf .= "splashimage " . $grubBoot->path . "/background.xpm.gz\n";
+        $conf .= "splashimage " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/background.xpm.gz\n";
     }
 }
 
@@ -287,14 +291,14 @@ else {
         copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath\n";
         $conf .= "
             insmod font
-            if loadfont " . $grubBoot->path . "/converted-font.pf2; then
+            if loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/converted-font.pf2; then
               insmod gfxterm
               if [ \"\${grub_platform}\" = \"efi\" ]; then
                 set gfxmode=$gfxmodeEfi
-                set gfxpayload=keep
+                set gfxpayload=$gfxpayloadEfi
               else
                 set gfxmode=$gfxmodeBios
-                set gfxpayload=text
+                set gfxpayload=$gfxpayloadBios
               fi
               terminal_output gfxterm
             fi
@@ -307,10 +311,15 @@ else {
         if ($suffix eq ".jpg") {
             $suffix = ".jpeg";
         }
+		if ($backgroundColor) {
+			$conf .= "
+		    background_color '$backgroundColor'
+		    ";
+		}
         copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath\n";
         $conf .= "
             insmod " . substr($suffix, 1) . "
-            if background_image " . $grubBoot->path . "/background$suffix; then
+            if background_image --mode '$splashMode' " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/background$suffix; then
               set color_normal=white/black
               set color_highlight=black/white
             else
@@ -345,7 +354,7 @@ sub copyToKernelsDir {
         rename $tmp, $dst or die "cannot rename $tmp to $dst\n";
     }
     $copied{$dst} = 1;
-    return $grubBoot->path . "/kernels/$name";
+    return ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$name";
 }
 
 sub addEntry {

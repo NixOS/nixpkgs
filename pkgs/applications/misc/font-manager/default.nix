@@ -1,54 +1,53 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool,
-  pkgconfig, file, intltool, libxml2, json-glib , sqlite, itstool,
-  librsvg, vala_0_34, gnome3, wrapGAppsHook, gobjectIntrospection
+{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3, fetchpatch,
+  pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
+  vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
-  name = "font-manager-${version}";
-  version = "0.7.3";
+  pname = "font-manager";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
-    owner  = "FontManager";
-    repo   = "master";
-    rev    = version;
-    sha256 = "0qwi1mn2sc2q5cs28rga8i3cn34ylybs949vjnh97dl2rvlc0x06";
-    };
+    owner = "FontManager";
+    repo = "master";
+    rev = version;
+    sha256 = "16hma8rrkam6ngn5vbdaryn31vdixvii6920g9z928gylz9xkd3g";
+  };
 
   nativeBuildInputs = [
     pkgconfig
-    automake autoconf libtool
-    file
-    intltool
-    vala_0_34
+    meson
+    ninja
+    gettext
+    python3
+    itstool
+    desktop-file-utils
+    vala
     gnome3.yelp-tools
     wrapGAppsHook
-    # For setup hook
-    gobjectIntrospection
+    # For https://github.com/FontManager/master/blob/master/lib/unicode/meson.build
+    gobject-introspection
   ];
 
   buildInputs = [
     libxml2
     json-glib
     sqlite
-    itstool
     librsvg
-    gnome3.gtk
-    gnome3.gucharmap
-    gnome3.libgee
-    gnome3.file-roller
-    gnome3.defaultIconTheme
+    gtk3
+    gnome3.adwaita-icon-theme
   ];
 
-  enableParallelBuilding = true;
+  mesonFlags = [
+    "-Ddisable_pycompile=true"
+  ];
 
-  preConfigure = ''
-    NOCONFIGURE=true ./autogen.sh
-    substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
   '';
 
-  configureFlags = "--disable-pycompile";
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://fontmanager.github.io/;
     description = "Simple font management for GTK+ desktop environments";
     longDescription = ''
@@ -60,9 +59,9 @@ stdenv.mkDerivation rec {
 
       Font Manager is NOT a professional-grade font management solution.
     '';
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
     repositories.git = https://github.com/FontManager/master;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

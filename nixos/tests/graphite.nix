@@ -1,9 +1,9 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test.nix ({ pkgs, ... } :
 {
   name = "graphite";
   nodes = {
     one =
-      { config, pkgs, ... }: {
+      { ... }: {
         virtualisation.memorySize = 1024;
         time.timeZone = "UTC";
         services.graphite = {
@@ -11,10 +11,12 @@ import ./make-test.nix ({ pkgs, ...} :
           api = {
             enable = true;
             port = 8082;
+            finders = [ pkgs.python27Packages.influxgraph ];
           };
           carbon.enableCache = true;
           seyren.enable = true;
           pager.enable = true;
+          beacon.enable = true;
         };
       };
   };
@@ -25,6 +27,7 @@ import ./make-test.nix ({ pkgs, ...} :
     $one->waitForUnit("graphiteWeb.service");
     $one->waitForUnit("graphiteApi.service");
     $one->waitForUnit("graphitePager.service");
+    $one->waitForUnit("graphite-beacon.service");
     $one->waitForUnit("carbonCache.service");
     $one->waitForUnit("seyren.service");
     # The services above are of type "simple". systemd considers them active immediately

@@ -1,0 +1,21 @@
+From 88ee69b57f94efa2779595d1544109fed6a3211c Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Tue, 16 Apr 2019 16:12:47 +0200
+Subject: [PATCH] photos/PhotoMetadata: fix issue introduced with PR #498
+
+---
+ src/photos/PhotoMetadata.vala | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/photos/PhotoMetadata.vala b/src/photos/PhotoMetadata.vala
+index f0a4a73b..34dcbb55 100644
+--- a/src/photos/PhotoMetadata.vala
++++ b/src/photos/PhotoMetadata.vala
+@@ -197,6 +197,7 @@ public class PhotoMetadata : MediaMetadata {
+ #else
+         exiv2.from_app1_segment (buffer, length);
+ #endif
++        exif = Exif.Data.new_from_data (buffer, length);
+         source_name = "<app1 segment %d bytes>".printf (length);
+     }
+ 

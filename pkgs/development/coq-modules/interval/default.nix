@@ -1,12 +1,24 @@
 { stdenv, fetchurl, which, coq, coquelicot, flocq, mathcomp
 , bignums ? null }:
 
+let params =
+  if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {
+    version = "3.4.0";
+    uid = "37524";
+    sha256 = "023j9sd64brqvjdidqkn5m8d7a93zd9r86ggh573z9nkjm2m7vvg";
+  } else {
+    version = "3.3.0";
+    uid = "37077";
+    sha256 = "08fdcf3hbwqphglvwprvqzgkg0qbimpyhnqsgv3gac4y1ap0f903";
+  }
+; in
+
 stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-interval-3.3.0";
+  name = "coq${coq.coq-version}-interval-${params.version}";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/37077/interval-3.3.0.tar.gz";
-    sha256 = "08fdcf3hbwqphglvwprvqzgkg0qbimpyhnqsgv3gac4y1ap0f903";
+    url = "https://gforge.inria.fr/frs/download.php/file/${params.uid}/interval-${params.version}.tar.gz";
+    inherit (params) sha256;
   };
 
   nativeBuildInputs = [ which ];
@@ -26,7 +38,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" ];
   };
 
 

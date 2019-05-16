@@ -5,16 +5,18 @@ let
     localSystem = { inherit system; };
     inherit crossSystem;
   };
-
-in with (import ../../../lib).systems.examples; {
-  armv5tel   = make sheevaplug;
-  scaleway   = make scaleway-c1;
-  pogoplug4  = make pogoplug4;
-  armv6l     = make raspberryPi;
-  armv7l     = make armv7l-hf-multiplatform;
-  aarch64    = make aarch64-multiplatform;
-  x86_64-musl  = make musl64;
-  armv6l-musl  = make muslpi;
-  aarch64-musl = make aarch64-multiplatform-musl;
-  riscv64 = make riscv64;
-}
+  lib = import ../../../lib;
+in lib.mapAttrs (n: make) (with lib.systems.examples; {
+  armv5tel   = sheevaplug;
+  scaleway   = scaleway-c1;
+  pogoplug4  = pogoplug4;
+  armv6l     = raspberryPi;
+  armv7l     = armv7l-hf-multiplatform;
+  aarch64    = aarch64-multiplatform;
+  x86_64-musl  = musl64;
+  armv6l-musl  = muslpi;
+  aarch64-musl = aarch64-multiplatform-musl;
+  riscv64 = riscv64;
+  powerpc64le = powernv;
+  powerpc64le-musl = musl-power;
+})

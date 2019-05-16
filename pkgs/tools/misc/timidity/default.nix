@@ -1,11 +1,11 @@
 { stdenv, fetchurl, alsaLib, libjack2, ncurses, pkgconfig }:
 
 stdenv.mkDerivation {
-  name = "timidity-2.14.0";
+  name = "timidity-2.15.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/timidity/TiMidity++-2.14.0.tar.bz2;
-    sha256 = "0xk41w4qbk23z1fvqdyfblbz10mmxsllw0svxzjw5sa9y11vczzr";
+    url = mirror://sourceforge/timidity/TiMidity++-2.15.0.tar.bz2;
+    sha256 = "1xf8n6dqzvi6nr2asags12ijbj1lwk1hgl3s27vm2szib8ww07qn";
   };
 
   nativeBuildInputs = [ pkgconfig ];

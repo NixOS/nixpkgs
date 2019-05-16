@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, devicemapper }:
+{ stdenv, fetchurl, fetchpatch, lvm2 }:
 
 stdenv.mkDerivation rec {
   name = "dmraid-1.0.0.rc16";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "cd */";
 
-  buildInputs = [ devicemapper ];
+  buildInputs = [ lvm2 ];
 
   meta = {
     description = "Old-style RAID configuration utility";
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

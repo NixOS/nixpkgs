@@ -27,16 +27,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mutt-${version}";
-  version = "1.10.0";
+  version = "1.11.4";
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
-    sha256 = "0nskymwr2cdapxlfv0ysz3bjwhb4kcvl5a3c39237k7r1vwva582";
+    sha256 = "0098pr4anmq2a0id8wfi2vci3cgcfwf9k4q411w22xn8lrz3aldn";
   };
 
   patches = optional smimeSupport (fetchpatch {
-    url    = "https://sources.debian.net/src/mutt/1.7.2-1/debian/patches/misc/smime.rc.patch";
-    sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+    url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
+    sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });
 
   buildInputs =

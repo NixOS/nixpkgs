@@ -1,12 +1,17 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
+let
+  # Type for a valid systemd unit option. Needed for correctly passing "timerConfig" to "systemd.timers"
+  unitOption = (import ../../system/boot/systemd-unit-options.nix { inherit config lib; }).unitOption;
+in
 {
   options.services.restic.backups = mkOption {
     description = ''
       Periodic backups to create with Restic.
     '';
-    type = types.attrsOf (types.submodule ({ name, config, ... }: {
+    type = types.attrsOf (types.submodule ({ name, ... }: {
       options = {
         passwordFile = mkOption {
           type = types.str;
@@ -18,6 +23,7 @@ with lib;
 
         s3CredentialsFile = mkOption {
           type = with types; nullOr str;
+          default = null;
           description = ''
             file containing the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
             for an S3-hosted repository, in the format of an EnvironmentFile
@@ -46,7 +52,7 @@ with lib;
         };
 
         timerConfig = mkOption {
-          type = types.attrsOf types.str;
+          type = types.attrsOf unitOption;
           default = {
             OnCalendar = "daily";
           };
@@ -127,7 +133,6 @@ with lib;
       mapAttrs' (name: backup:
         let
           extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-          connectTo = elemAt (splitString ":" backup.repository) 1;
           resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
         in nameValuePair "restic-backups-${name}" ({
           environment = {

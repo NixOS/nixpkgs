@@ -1,10 +1,10 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonAtLeast,
-  ipaddress, websocket_client, urllib3, pyyaml, requests_oauthlib, python-dateutil, google_auth,
+  ipaddress, websocket_client, urllib3, pyyaml, requests_oauthlib, python-dateutil, google_auth, adal,
   isort, pytest, coverage, mock, sphinx, autopep8, pep8, codecov, recommonmark, nose }:
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "6.0.0";
+  version = "9.0.0";
 
   prePatch = ''
     sed -e 's/sphinx>=1.2.1,!=1.3b1,<1.4 # BSD/sphinx/' -i test-requirements.txt
@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b370ab4abd925309db69a14a4723487948e9a83de60ca92782ec14992b741c89";
+    sha256 = "1gz3sk4s0gx68xpxjwzp9n2shlxfa9d5j4h7cvmglim9bgasxc58";
   };
 
   checkInputs = [ isort coverage pytest mock sphinx autopep8 pep8 codecov recommonmark nose ];
-  propagatedBuildInputs = [ ipaddress websocket_client urllib3 pyyaml requests_oauthlib python-dateutil google_auth ];
+  propagatedBuildInputs = [ ipaddress websocket_client urllib3 pyyaml requests_oauthlib python-dateutil google_auth adal ];
 
   meta = with stdenv.lib; {
     description = "Kubernetes python client";

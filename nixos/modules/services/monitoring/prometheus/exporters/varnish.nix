@@ -69,6 +69,7 @@ in
     path = [ pkgs.varnish ];
     serviceConfig = {
       DynamicUser = true;
+      RestartSec = mkDefault 1;
       ExecStart = ''
         ${pkgs.prometheus-varnish-exporter}/bin/prometheus_varnish_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

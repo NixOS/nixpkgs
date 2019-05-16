@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, flex, bison, readline }:
+{ lib, stdenv, fetchurl, fetchpatch, flex, bison, readline }:
 
 with lib;
 
@@ -17,8 +17,17 @@ let
       buildInputs = [ readline ];
 
       patches = [
-        (./. + (builtins.toPath "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch"))
-      ];
+        (./. + "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch")
+      ]
+      ++ optional (lib.versionOlder version "2")
+        # https://github.com/BIRD/bird/pull/4
+        (fetchpatch {
+          url = "https://github.com/BIRD/bird/commit/fca9ab48e3823c734886f47156a92f6b804c16e9.patch";
+          sha256 = "1pnndc3n56lqqcy74ln0w5kn3i9rbzsm2dqiyp1qw7j33dpkln1b";
+        })
+        ;
+
+      CPP="${stdenv.cc.targetPrefix}cpp -E";
 
       configureFlags = [
         "--localstatedir=/var"
@@ -28,7 +37,7 @@ let
         description = "BIRD Internet Routing Daemon";
         homepage = http://bird.network.cz;
         license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ viric fpletz ];
+        maintainers = with maintainers; [ fpletz ];
         platforms = platforms.linux;
       };
     };
@@ -37,18 +46,18 @@ in
 
 {
   bird = generic {
-    version = "1.6.3";
-    sha256 = "0z3yrxqb0p7f8b7r2gk4mvrwfzk45zx7yr9aifbvba1vgksiri9r";
+    version = "1.6.6";
+    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
   };
 
   bird6 = generic {
-    version = "1.6.3";
-    sha256 = "0z3yrxqb0p7f8b7r2gk4mvrwfzk45zx7yr9aifbvba1vgksiri9r";
+    version = "1.6.6";
+    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
     enableIPv6 = true;
   };
 
   bird2 = generic {
-    version = "2.0.2";
-    sha256 = "03s8hcl761y3489j1krarm3r3iy5qid26508i91yvy38ypb92pq3";
+    version = "2.0.4";
+    sha256 = "1phl8ycasbzgla83d9zbzzy1ymjz30k1qh1pmywmjhbxa6vi0q37";
   };
 }

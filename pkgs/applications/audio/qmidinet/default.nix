@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, qt5, alsaLib, libjack2 }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.1";
+  version = "0.5.4";
   name = "qmidinet-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/qmidinet/${name}.tar.gz";
-    sha256 = "1cvz8y63vdqfpxh7lq5qadqjcyhahbyq0py0qz6xrmpk5sxvy7ml";
+    sha256 = "1il4b8v3azb33yg4fy78npi56xlkz4n60f17sgvckyxb2yj57jwq";
   };
 
   hardeningDisable = [ "format" ];

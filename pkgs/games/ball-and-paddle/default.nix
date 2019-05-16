@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/ballandpaddle/;
+    homepage = https://www.gnu.org/software/ballandpaddle/;
 
     maintainers = [ ];
 

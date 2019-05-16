@@ -11,7 +11,7 @@ let
 
   userOptions = {
 
-    openssh.authorizedKeys = {
+    options.openssh.authorizedKeys = {
       keys = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -49,7 +49,7 @@ let
         ${concatMapStrings (f: readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
       '';
     };
-    usersWithKeys = attrValues (flip filterAttrs config.users.extraUsers (n: u:
+    usersWithKeys = attrValues (flip filterAttrs config.users.users (n: u:
       length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
@@ -130,7 +130,7 @@ in
       };
 
       ports = mkOption {
-        type = types.listOf types.int;
+        type = types.listOf types.port;
         default = [22];
         description = ''
           Specifies on which ports the SSH daemon listens.
@@ -197,6 +197,10 @@ in
         default =
           [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
+          ];
+        example =
+          [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; rounds = 100; openSSHFormat = true; }
+            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; rounds = 100; comment = "key comment"; }
           ];
         description = ''
           NixOS can automatically generate SSH host keys.  This option
@@ -316,7 +320,7 @@ in
     };
 
     users.users = mkOption {
-      options = [ userOptions ];
+      type = with types; loaOf (submodule userOptions);
     };
 
   };
@@ -326,7 +330,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.sshd =
+    users.users.sshd =
       { isSystemUser = true;
         description = "SSH privilege separation user";
       };
@@ -348,6 +352,10 @@ in
             path = [ cfgc.package pkgs.gawk ];
             environment.LD_LIBRARY_PATH = nssModulesPath;
 
+            restartTriggers = optionals (!cfg.startWhenNeeded) [
+              config.environment.etc."ssh/sshd_config".source
+            ];
+
             preStart =
               ''
                 # Make sure we don't write to stdout, since in case of
@@ -358,7 +366,14 @@ in
 
                 ${flip concatMapStrings cfg.hostKeys (k: ''
                   if ! [ -f "${k.path}" ]; then
-                      ssh-keygen -t "${k.type}" ${if k ? bits then "-b ${toString k.bits}" else ""} -f "${k.path}" -N ""
+                      ssh-keygen \
+                        -t "${k.type}" \
+                        ${if k ? bits then "-b ${toString k.bits}" else ""} \
+                        ${if k ? rounds then "-a ${toString k.rounds}" else ""} \
+                        ${if k ? comment then "-C '${k.comment}'" else ""} \
+                        ${if k ? openSSHFormat && k.openSSHFormat then "-o" else ""} \
+                        -f "${k.path}" \
+                        -N ""
                   fi
                 '')}
               '';
@@ -376,6 +391,7 @@ in
                 Restart = "always";
                 Type = "simple";
               });
+
           };
       in
 
@@ -384,7 +400,10 @@ in
         sockets.sshd =
           { description = "SSH Socket";
             wantedBy = [ "sockets.target" ];
-            socketConfig.ListenStream = cfg.ports;
+            socketConfig.ListenStream = if cfg.listenAddresses != [] then
+              map (l: "${l.addr}:${toString (if l.port != null then l.port else 22)}") cfg.listenAddresses
+            else
+              cfg.ports;
             socketConfig.Accept = true;
           };
 
@@ -404,13 +423,14 @@ in
         unixAuth = cfg.passwordAuthentication;
       };
 
+    # These values are merged with the ones defined externally, see:
+    # https://github.com/NixOS/nixpkgs/pull/10155
+    # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
       [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
     services.openssh.extraConfig = mkOrder 0
       ''
-        Protocol 2
-
         UsePAM yes
 
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
@@ -465,7 +485,7 @@ in
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}]
-      ++ flip map cfg.listenAddresses ({ addr, port, ... }: {
+      ++ flip map cfg.listenAddresses ({ addr, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
       });

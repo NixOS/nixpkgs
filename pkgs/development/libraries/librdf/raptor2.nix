@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, libxslt, curl }:
+{ stdenv, fetchurl, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
   name = "raptor2-2.0.15";

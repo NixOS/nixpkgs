@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     homepage = http://nuttcp.net/;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

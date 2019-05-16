@@ -1,11 +1,20 @@
 [
   {
+    goPackagePath = "github.com/mattn/go-isatty";
+    fetch = {
+      type = "git";
+      url = "https://github.com/mattn/go-isatty";
+      rev = "v0.0.4";
+      sha256 = "0zs92j2cqaw9j8qx1sdxpv3ap0rgbs0vrvi72m40mg8aa36gd39w";
+    };
+  }
+  {
     goPackagePath = "github.com/mattn/go-runewidth";
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-runewidth";
-      rev = "d6bea18f789704b5f83375793155289da36a3c7f";
-      sha256 = "1hnigpn7rjbwd1ircxkyx9hvi0xmxr32b2jdy2jzw6b3jmcnz1fs";
+      rev = "v0.0.4";
+      sha256 = "00b3ssm7wiqln3k54z2wcnxr3k3c7m1ybyhb9h8ixzbzspld0qzs";
     };
   }
   {
@@ -13,8 +22,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-colorable";
-      rev = "3dac7b4f76f6e17fb39b768b89e3783d16e237fe";
-      sha256 = "08680mba8hh2rghymqbzd4m40r9k765w5kbzvrif9ngd6h85qnw6";
+      rev = "v0.0.9";
+      sha256 = "1nwjmsppsjicr7anq8na6md7b1z84l9ppnlr045hhxjvbkqwalvx";
     };
   }
   {
@@ -22,8 +31,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/schachmat/ingo";
-      rev = "fab41e4e62cbef5d92998746ec25f7e195100f38";
-      sha256 = "04yfnch7pdabjjqfl2qxjmsaknvp4m1rbjlv8qrpmnqwjkxzx0hb";
+      rev = "a4bdc0729a3fda62cc4069b6e490fc657fd54e33";
+      sha256 = "1gw0kddy7jh3467imsqni86cf9yq7k6vpfc0ywkbwj0zsjsdgd49";
     };
   }
 ]

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, protobuf, protobufc, asciidoc
-, xmlto, utillinux, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
+, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
 , python }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, sqlite }:
+{ stdenv, buildGoPackage, fetchFromGitHub, sqlite }:
 
 buildGoPackage rec {
   name = "textql-${version}";

@@ -1,40 +1,45 @@
-{ stdenv, lib, go, procps, removeReferencesTo, fetchFromGitHub }:
+{ buildGoPackage, fetchpatch, stdenv, lib, procps, fetchFromGitHub }:
 
 let
-  common = { stname, target, patches ? [], postInstall ? "" }:
-    stdenv.mkDerivation rec {
-      version = "0.14.48";
+  common = { stname, target, postInstall ? "" }:
+    buildGoPackage rec {
+      version = "1.1.3";
       name = "${stname}-${version}";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "10jls0z3y081fq097xarplzv5sz076ibhawzm65bq695f6s5sdzw";
+        sha256 = "00jshqa0nkwj06bfq16p359ss6nl6h49s31hag79wl9gwkca38va";
       };
 
-      inherit patches;
+      goPackagePath = "github.com/syncthing/syncthing";
 
-      buildInputs = [ go ];
-      nativeBuildInputs = [ removeReferencesTo ];
+      goDeps = ./deps.nix;
+
+      patches = [
+        ./add-stcli-target.patch
+      ];
+      BUILD_USER="nix";
+      BUILD_HOST="nix";
 
       buildPhase = ''
-        # Syncthing expects that it is checked out in $GOPATH, if that variable is
-        # set.  Since this isn't true when we're fetching source, we can explicitly
-        # unset it and force Syncthing to set up a temporary one for us.
-        env GOPATH= BUILD_USER=nix BUILD_HOST=nix go run build.go -no-upgrade -version v${version} build ${target}
+        runHook preBuild
+        pushd go/src/${goPackagePath}
+        go run build.go -no-upgrade -version v${version} build ${target}
+        popd
+        runHook postBuild
       '';
 
       installPhase = ''
-        install -Dm755 ${target} $out/bin/${target}
+        pushd go/src/${goPackagePath}
+        runHook preInstall
+        install -Dm755 ${target} $bin/bin/${target}
         runHook postInstall
+        popd
       '';
 
       inherit postInstall;
-
-      preFixup = ''
-        find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
-      '';
 
       meta = with lib; {
         homepage = https://www.syncthing.net/;
@@ -60,26 +65,25 @@ in {
       done
 
     '' + lib.optionalString (stdenv.isLinux) ''
-      mkdir -p $out/lib/systemd/{system,user}
+      mkdir -p $bin/lib/systemd/{system,user}
 
       substitute etc/linux-systemd/system/syncthing-resume.service \
-                 $out/lib/systemd/system/syncthing-resume.service \
+                 $bin/lib/systemd/system/syncthing-resume.service \
                  --replace /usr/bin/pkill ${procps}/bin/pkill
 
       substitute etc/linux-systemd/system/syncthing@.service \
-                 $out/lib/systemd/system/syncthing@.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 $bin/lib/systemd/system/syncthing@.service \
+                 --replace /usr/bin/syncthing $bin/bin/syncthing
 
       substitute etc/linux-systemd/user/syncthing.service \
-                 $out/lib/systemd/user/syncthing.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 $bin/lib/systemd/user/syncthing.service \
+                 --replace /usr/bin/syncthing $bin/bin/syncthing
     '';
   };
 
   syncthing-cli = common {
     stname = "syncthing-cli";
 
-    patches = [ ./add-stcli-target.patch ];
     target = "stcli";
   };
 
@@ -97,7 +101,7 @@ in {
 
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
                  $out/lib/systemd/system/strelaysrv.service \
-                 --replace /usr/bin/strelaysrv $out/bin/strelaysrv
+                 --replace /usr/bin/strelaysrv $bin/bin/strelaysrv
     '';
   };
 }

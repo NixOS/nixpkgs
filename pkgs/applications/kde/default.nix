@@ -26,8 +26,7 @@ still shows most of the available features is in `./gwenview.nix`.
 */
 
 {
-  stdenv, lib, libsForQt5, fetchurl, recurseIntoAttrs,
-  plasma5, attica, phonon,
+  lib, libsForQt5, fetchurl,
   okteta
 }:
 
@@ -78,6 +77,7 @@ let
       calendarsupport = callPackage ./calendarsupport.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
+      dragon = callPackage ./dragon.nix {};
       eventviews = callPackage ./eventviews.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
@@ -93,6 +93,7 @@ let
       kcalc = callPackage ./kcalc.nix {};
       kcalcore = callPackage ./kcalcore.nix {};
       kcalutils = callPackage ./kcalutils.nix {};
+      kcharselect = callPackage ./kcharselect.nix {};
       kcolorchooser = callPackage ./kcolorchooser.nix {};
       kcontacts = callPackage ./kcontacts.nix {};
       kdav = callPackage ./kdav.nix {};
@@ -107,12 +108,14 @@ let
       kdf = callPackage ./kdf.nix {};
       kdialog = callPackage ./kdialog.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
+      kfind = callPackage ./kfind.nix {};
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
       kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
       kimap = callPackage ./kimap.nix {};
+      kitinerary = callPackage ./kitinerary.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
@@ -122,21 +125,26 @@ let
       kmbox = callPackage ./kmbox.nix {};
       kmime = callPackage ./kmime.nix {};
       kmix = callPackage ./kmix.nix {};
+      kmplot = callPackage ./kmplot.nix {};
+      knotes = callPackage ./knotes.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};
       kontact = callPackage ./kontact.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
       konquest = callPackage ./konquest.nix {};
+      konqueror = callPackage ./konqueror.nix {};
       korganizer = callPackage ./korganizer.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
+      kpkpass = callPackage ./kpkpass.nix {};
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};
       ksystemlog = callPackage ./ksystemlog.nix {};
       ktnef = callPackage ./ktnef.nix {};
+      ktouch = callPackage ./ktouch.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       libgravatar = callPackage ./libgravatar.nix {};
       libkcddb = callPackage ./libkcddb.nix {};
@@ -162,7 +170,6 @@ let
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
-      syndication = callPackage ./syndication.nix {};
       # Okteta was removed from kde applications and will now be released independently
       # Lets keep an alias for compatibility reasons
       inherit okteta;

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, libtiff, libjpeg, proj, zlib}:
 
 stdenv.mkDerivation rec {
-  version = "1.4.2";
+  version = "1.4.3";
   name = "libgeotiff-${version}";
 
   src = fetchurl {
     url = "https://download.osgeo.org/geotiff/libgeotiff/${name}.tar.gz";
-    sha256 = "0vjy3bwfhljjx66p9w999i4mdhsf7vjshx29yc3pn5livf5091xd";
+    sha256 = "0rbjqixi4c8yz19larlzq6jda0px2gpmpp9c52cyhplbjsdhsldq";
   };
 
   configureFlags = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
-    homepage = https://www.remotesensing.org/geotiff/geotiff.html;
+    homepage = https://github.com/OSGeo/libgeotiff;
     license = stdenv.lib.licenses.mit;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

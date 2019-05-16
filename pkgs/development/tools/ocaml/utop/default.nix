@@ -1,26 +1,26 @@
-{ stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, jbuilder
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, dune
 , lambdaTerm, cppo, makeWrapper
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if !stdenv.lib.versionAtLeast ocaml.version "4.03"
 then throw "utop is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "2.1.0";
+  version = "2.3.0";
   name = "utop-${version}";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "0lpfyhnm4v3xmcpac76g1px3x7na4p29w6xj2q8chqxhcw131n2y";
+    sha256 = "1g1xf19fhzwsikp33pv1wf6wb2qdc5y7dzqi46h8c4l850cwscjh";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml findlib ocamlbuild cppo jbuilder ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo dune ];
 
   propagatedBuildInputs = [ lambdaTerm ];
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   postFixup =
    let

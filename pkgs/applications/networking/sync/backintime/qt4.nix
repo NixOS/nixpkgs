@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, gettext, pkgconfig, libtool, backintime-common, python3, python3Packages }:
+{stdenv, makeWrapper, gettext, backintime-common, python3, python3Packages }:
 
 stdenv.mkDerivation rec {
   inherit (backintime-common) version src installFlags;

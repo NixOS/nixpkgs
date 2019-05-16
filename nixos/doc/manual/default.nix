@@ -90,7 +90,9 @@ let
     fi
     ${buildPackages.libxslt.bin}/bin/xsltproc \
       --stringparam revision '${revision}' \
-      -o $out ${./options-to-docbook.xsl} $optionsXML
+      -o intermediate.xml ${./options-to-docbook.xsl} $optionsXML
+    ${buildPackages.libxslt.bin}/bin/xsltproc \
+      -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml
   '';
 
   sources = lib.sourceFilesBySuffices ./. [".xml"];
@@ -209,13 +211,13 @@ let
         --stringparam collect.xref.targets only \
         --stringparam targets.filename "$out/manual.db" \
         --nonet \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunktoc.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
         ${manual-combined}/manual-combined.xml
 
       cat > "$out/olinkdb.xml" <<EOF
       <?xml version="1.0" encoding="utf-8"?>
       <!DOCTYPE targetset SYSTEM
-        "file://${docbook5_xsl}/xml/xsl/docbook/common/targetdatabase.dtd" [
+        "file://${docbook_xsl_ns}/xml/xsl/docbook/common/targetdatabase.dtd" [
         <!ENTITY manualtargets SYSTEM "file://$out/manual.db">
       ]>
       <targetset>
@@ -250,7 +252,7 @@ in rec {
     ''; # */
 
   # Generate the NixOS manual.
-  manual = runCommand "nixos-manual"
+  manualHTML = runCommand "nixos-manual-html"
     { inherit sources;
       nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual in HTML format";
@@ -263,12 +265,16 @@ in rec {
       xsltproc \
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
+        --stringparam id.warnings "1" \
         --nonet --output $dst/ \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunktoc.xsl \
-        ${manual-combined}/manual-combined.xml
+        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
+        ${manual-combined}/manual-combined.xml \
+        |& tee xsltproc.out
+      grep "^ID recommended on" xsltproc.out &>/dev/null && echo "error: some IDs are missing" && false
+      rm xsltproc.out
 
       mkdir -p $dst/images/callouts
-      cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
+      cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
 
       cp ${../../../doc/style.css} $dst/style.css
       cp ${../../../doc/overrides.css} $dst/overrides.css
@@ -279,6 +285,11 @@ in rec {
       echo "doc manual $dst" >> $out/nix-support/hydra-build-products
     ''; # */
 
+  # Alias for backward compatibility. TODO(@oxij): remove eventually.
+  manual = manualHTML;
+
+  # Index page of the NixOS manual.
+  manualHTMLIndex = "${manualHTML}/share/doc/nixos/index.html";
 
   manualEpub = runCommand "nixos-manual-epub"
     { inherit sources;
@@ -292,11 +303,11 @@ in rec {
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --nonet --xinclude --output $dst/epub/ \
-        ${docbook5_xsl}/xml/xsl/docbook/epub/docbook.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/epub/OEBPS/images/callouts
-      cp -r ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.svg $dst/epub/OEBPS/images/callouts # */
+      cp -r ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/epub/OEBPS/images/callouts # */
       echo "application/epub+zip" > mimetype
       manual="$dst/nixos-manual.epub"
       zip -0Xq "$manual" mimetype
@@ -319,12 +330,13 @@ in rec {
       # Generate manpages.
       mkdir -p $out/share/man
       xsltproc --nonet \
+        --maxdepth 6000 \
         --param man.output.in.separate.dir 1 \
         --param man.output.base.dir "'$out/share/man/'" \
         --param man.endnotes.are.numbered 0 \
         --param man.break.after.slash 1 \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
-        ${docbook5_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl \
         ${manual-combined}/man-pages-combined.xml
     '';
 

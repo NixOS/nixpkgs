@@ -197,7 +197,7 @@ in
   config = mkIf (cfg4.enable || cfg6.enable) {
 
     users = {
-      extraUsers.dhcpd = {
+      users.dhcpd = {
         uid = config.ids.uids.dhcpd;
         description = "DHCP daemon user";
       };

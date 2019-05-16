@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
       GNU Hello is a program that prints "Hello, world!" when you run it.
       It is fully customizable.
     '';
-    homepage = http://www.gnu.org/software/hello/manual/;
+    homepage = https://www.gnu.org/software/hello/manual/;
+    changelog = "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${version}";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;

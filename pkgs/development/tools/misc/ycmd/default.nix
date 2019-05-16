@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   name = "ycmd-${version}";
-  version = "2018-06-14";
+  version = "2018-09-20";
 
   src = fetchgit {
     url = "https://github.com/Valloric/ycmd.git";
-    rev = "29e36f74f749d10b8d6ce285c1453fac26f15a41";
-    sha256 = "0s62nf18jmgjihyba7lk7si8xrxsg60whdr430nlb5gjikag8zr5";
+    rev = "bf658fd78722c517674c0aaf2381e199bca8f163";
+    sha256 = "1lwa8xr76vapfpncvp81cn3m9219yw14fl7fzk5gnly60zkphbbl";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/lib/ycmd/third_party/{gocode,godef,racerd/target/release}
 
-    for p in jedi waitress frozendict bottle python-future requests; do
+    for p in jedi waitress frozendict bottle parso python-future requests; do
       cp -r third_party/$p $out/lib/ycmd/third_party
     done
 

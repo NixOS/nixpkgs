@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, dbus-glib, libnotify, libxml2, libcanberra-gtk3, mod_dnssd, apacheHttpd, hicolor-icon-theme, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libnotify, libxml2, libcanberra-gtk3, mod_dnssd, apacheHttpd, hicolor-icon-theme, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-user-share-${version}";
-  version = "1.20.0";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0lv5ndjk2br4w7cw8gsgj7aa2iadxv7m4wii4c49pajmd950iff2";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "14bhr6fv6gj3ka3sf13q64ck4svx8f4x8kzbppxv0jygpjp48w7h";
   };
 
   nativeBuildInputs = [
@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    dbus-glib
     libnotify
     libcanberra-gtk3
     libxml2

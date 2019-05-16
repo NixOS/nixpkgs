@@ -1,0 +1,11 @@
+--- a/libnm/meson.build
++++ b/libnm/meson.build
+@@ -262,6 +262,8 @@
+     'env', '-i',
+     'GI_TYPELIB_PATH=' + gi_typelib_path,
+     'LD_LIBRARY_PATH=' + ld_library_path,
++    'LD_PRELOAD=' + '@DOCS_LD_PRELOAD@',
++    'NIX_REDIRECTS=' + '@DOCS_NIX_REDIRECTS@',
+   ]
+ 
+   name = 'nm-property-docs.xml'

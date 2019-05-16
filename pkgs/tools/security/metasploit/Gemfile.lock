@@ -187,7 +187,7 @@ GEM
       arel (>= 4.0.1)
       pg_array_parser (~> 0.0.9)
     public_suffix (2.0.5)
-    rack (1.6.8)
+    rack (1.6.11)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails-deprecated_sanitizer (1.0.3)
@@ -292,4 +292,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   1.15.0
+   1.16.4

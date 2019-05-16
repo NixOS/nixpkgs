@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     make -C libplot xmi.h
   '';
 
-  configureFlags = "--enable-libplotter"; # required for pstoedit
+  configureFlags = [ "--enable-libplotter" ]; # required for pstoedit
 
   hardeningDisable = [ "format" ];
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
          graphics.
       '';
 
-    homepage = http://www.gnu.org/software/plotutils/;
+    homepage = https://www.gnu.org/software/plotutils/;
 
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.marcweber ];

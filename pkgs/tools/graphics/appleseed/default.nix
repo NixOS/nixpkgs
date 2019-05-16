@@ -1,36 +1,37 @@
 { stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, guile,
-eigen3_3, libpng, python, mesa_glu, qt4, openexr, openimageio,
-opencolorio, xercesc, ilmbase, osl, seexpr
+eigen, libpng, python, libGLU, qt4, openexr, openimageio,
+opencolorio, xercesc, ilmbase, osl, seexpr, makeWrapper
 }:
 
-let boost_static = boost165.override { enableStatic = true; };
+let boost_static = boost165.override {
+  enableStatic = true;
+  enablePython = true;
+};
 in stdenv.mkDerivation rec {
 
   name = "appleseed-${version}";
-  version = "1.9.0-beta";
+  version = "2.0.5-beta";
 
   src = fetchFromGitHub {
     owner  = "appleseedhq";
     repo   = "appleseed";
-    rev    = "1.9.0-beta";
-    sha256 = "0m7zvfkdjfn48zzaxh2wa1bsaj4l876a05bzgmjlfq5dz3202anr";
+    rev    = version;
+    sha256 = "1sq9s0rzjksdn8ayp1g17gdqhp7fqks8v1ddd3i5rsl96b04fqx5";
   };
   buildInputs = [
-    cmake pkgconfig boost_static guile eigen3_3 libpng python
-    mesa_glu qt4 openexr openimageio opencolorio xercesc
-    osl seexpr
+    cmake pkgconfig boost_static guile eigen libpng python
+    libGLU qt4 openexr openimageio opencolorio xercesc
+    osl seexpr makeWrapper
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${openexr.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR -I${openimageio.dev}/include/OpenImageIO";
+  NIX_CFLAGS_COMPILE = "-I${openexr.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR -I${openimageio.dev}/include/OpenImageIO -Wno-unused-but-set-variable";
 
   cmakeFlags = [
       "-DUSE_EXTERNAL_XERCES=ON" "-DUSE_EXTERNAL_OCIO=ON" "-DUSE_EXTERNAL_OIIO=ON"
       "-DUSE_EXTERNAL_OSL=ON" "-DWITH_CLI=ON" "-DWITH_STUDIO=ON" "-DWITH_TOOLS=ON"
       "-DUSE_EXTERNAL_PNG=ON" "-DUSE_EXTERNAL_ZLIB=ON"
       "-DUSE_EXTERNAL_EXR=ON" "-DUSE_EXTERNAL_SEEXPR=ON"
-      "-DWITH_PYTHON2_BINDINGS=ON"
-      # TODO: Look further into this if someone needs Python 3.x:
-      # "-DWITH_PYTHON3_BINDINGS=ON"
+      "-DWITH_PYTHON=ON"
       "-DWITH_DISNEY_MATERIAL=ON"
       "-DUSE_SSE=ON"
       "-DUSE_SSE42=ON"
@@ -44,6 +45,12 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
   };
+
+  # Work around a bug in the CMake build:
+  postInstall = ''
+    chmod a+x $out/bin/*
+    wrapProgram $out/bin/appleseed.studio --set PYTHONHOME ${python}
+  '';
 }
 
 # TODO: Is the below problematic?

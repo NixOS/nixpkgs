@@ -1,7 +1,9 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  akonadi, akonadi-mime, cyrus_sasl, kcmutils, ki18n, kio, kmime, kwallet, ksmtp
+  akonadi, akonadi-mime, cyrus_sasl, kcmutils,
+  ki18n, kio, kmime, kwallet, ksmtp, libkgapi,
+  kcalcore, kcontacts
 }:
 
 mkDerivation {
@@ -11,7 +13,7 @@ mkDerivation {
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ akonadi kcmutils ki18n kio ksmtp ];
+  buildInputs = [ akonadi kcmutils ki18n kio ksmtp libkgapi kcalcore kcontacts ];
   propagatedBuildInputs = [ akonadi-mime cyrus_sasl kmime kwallet ];
   outputs = [ "out" "dev" ];
 }

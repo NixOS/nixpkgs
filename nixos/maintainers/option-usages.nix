@@ -149,7 +149,7 @@ let
          else testOptions;
        checkAll = checkList == [];
      in
-       flip filter graph ({option, usedBy}:
+       flip filter graph ({option, ...}:
          (checkAll || elem option checkList)
          && !(elem option excludedTestOptions)
        );
@@ -165,7 +165,7 @@ let
   '';
 
   graphToText = graph:
-    concatMapStrings ({option, usedBy}:
+    concatMapStrings ({usedBy, ...}:
         concatMapStrings (user: ''
           ${user}
         '') usedBy

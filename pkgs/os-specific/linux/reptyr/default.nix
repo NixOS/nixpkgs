@@ -1,26 +1,35 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchFromGitHub, python2 }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.2";
+  version = "0.7.0";
   name = "reptyr-${version}";
-  src = fetchurl {
-    url = "https://github.com/nelhage/reptyr/archive/reptyr-${version}.tar.gz";
-    sha256 = "07pfl0rkgm8m3f3jy8r9l2yvnhf8lgllpsk3mh57mhzdxq8fagf7";
+
+  src = fetchFromGitHub {
+    owner = "nelhage";
+    repo = "reptyr";
+    rev = "reptyr-${version}";
+    sha256 = "1hnijfz1ab34j2h2cxc3f43rmbclyihgn9x9wxa7jqqgb2xm71hj";
   };
 
-  # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
-  postPatch = ''
-    sed 1i'#include <sys/sysmacros.h>' -i platform/linux/linux.c
-  '';
+  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
 
-  # Needed with GCC 7
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+  checkInputs = [ (python2.withPackages (p: [ p.pexpect ])) ];
+  doCheck = true;
 
-  makeFlags = ["PREFIX=$(out)"];
   meta = {
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    license = stdenv.lib.licenses.mit;
-    description = ''A Linux tool to change controlling pty of a process'';
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "i686-freebsd"
+      "x86_64-freebsd"
+      "armv5tel-linux"
+      "armv6l-linux"
+      "armv7l-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with lib.maintainers; [raskin];
+    license = lib.licenses.mit;
+    description = "Reparent a running program to a new terminal";
+    homepage = https://github.com/nelhage/reptyr;
   };
 }

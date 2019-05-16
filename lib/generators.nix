@@ -19,8 +19,6 @@ let
   libStr = lib.strings;
   libAttr = lib.attrsets;
 
-  flipMapAttrs = flip libAttr.mapAttrs;
-
   inherit (lib) isFunction;
 in
 
@@ -145,6 +143,7 @@ rec {
   }@args: v: with builtins;
     let     isPath   = v: typeOf v == "path";
     in if   isInt      v then toString v
+    else if isFloat    v then "~${toString v}"
     else if isString   v then ''"${libStr.escape [''"''] v}"''
     else if true  ==   v then "true"
     else if false ==   v then "false"
@@ -177,13 +176,15 @@ rec {
 
   # PLIST handling
   toPlist = {}: v: let
-    expr = ind: x: with builtins;
-      if isNull x then "" else
-      if isBool x then bool ind x else
-      if isInt x then int ind x else
+    isFloat = builtins.isFloat or (x: false);
+    expr = ind: x:  with builtins;
+      if isNull x   then "" else
+      if isBool x   then bool ind x else
+      if isInt x    then int ind x else
       if isString x then str ind x else
-      if isList x then list ind x else
-      if isAttrs x then attrs ind x else
+      if isList x   then list ind x else
+      if isAttrs x  then attrs ind x else
+      if isFloat x  then float ind x else
       abort "generators.toPlist: should never happen (v = ${v})";
 
     literal = ind: x: ind + x;
@@ -192,6 +193,7 @@ rec {
     int = ind: x: literal ind "<integer>${toString x}</integer>";
     str = ind: x: literal ind "<string>${x}</string>";
     key = ind: x: literal ind "<key>${x}</key>";
+    float = ind: x: literal ind "<real>${toString x}</real>";
 
     indent = ind: expr "\t${ind}";
 

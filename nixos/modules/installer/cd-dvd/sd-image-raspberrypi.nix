@@ -5,7 +5,7 @@
 let
   extlinux-conf-builder =
     import ../../system/boot/loader/generic-extlinux-compatible/extlinux-conf-builder.nix {
-      inherit pkgs;
+      pkgs = pkgs.buildPackages;
     };
 in
 {
@@ -15,20 +15,11 @@ in
     ./sd-image.nix
   ];
 
-  assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "armv6l-linux";
-    message = "sd-image-raspberrypi.nix can be only built natively on ARMv6; " +
-      "it cannot be cross compiled";
-  };
-
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.consoleLogLevel = lib.mkDefault 7;
   boot.kernelPackages = pkgs.linuxPackages_rpi;
-
-  # FIXME: this probably should be in installation-device.nix
-  users.extraUsers.root.initialHashedPassword = "";
 
   sdImage = {
     populateBootCommands = let

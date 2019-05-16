@@ -9,7 +9,7 @@ import ./make-test.nix ({ pkgs, ... }:
   nodes =
     { mortyProxyWithKey =
 
-      { config, pkgs, ... }:
+      { ... }:
       { services.morty = {
         enable = true;
 	key = "78a9cd0cfee20c672f78427efb2a2a96036027f0";
@@ -20,7 +20,7 @@ import ./make-test.nix ({ pkgs, ... }:
     };
 
   testScript =
-    { nodes , ... }:
+    { ... }:
     ''
       $mortyProxyWithKey->waitForUnit("default.target");
 

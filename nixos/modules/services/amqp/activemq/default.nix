@@ -93,13 +93,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.activemq = {
+    users.users.activemq = {
       description = "ActiveMQ server user";
       group = "activemq";
       uid = config.ids.uids.activemq;
     };
 
-    users.extraGroups.activemq.gid = config.ids.gids.activemq;
+    users.groups.activemq.gid = config.ids.gids.activemq;
 
     systemd.services.activemq_init = {
       wantedBy = [ "activemq.service" ];

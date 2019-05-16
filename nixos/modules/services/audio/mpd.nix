@@ -55,11 +55,11 @@ in {
       };
 
       musicDirectory = mkOption {
-        type = types.path;
+        type = with types; either path (strMatching "(http|https|nfs|smb)://.+");
         default = "${cfg.dataDir}/music";
         defaultText = ''''${dataDir}/music'';
         description = ''
-          The directory where mpd reads music from.
+          The directory or NFS/SMB network share where mpd reads music from.
         '';
       };
 
@@ -158,18 +158,18 @@ in {
       };
     };
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.playlistDirectory}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.mpd = {
       after = [ "network.target" "sound.target" ];
       description = "Music Player Daemon";
       wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
 
-      preStart = ''
-        mkdir -p "${cfg.dataDir}" && chown -R ${cfg.user}:${cfg.group} "${cfg.dataDir}"
-        mkdir -p "${cfg.playlistDirectory}" && chown -R ${cfg.user}:${cfg.group} "${cfg.playlistDirectory}"
-      '';
       serviceConfig = {
         User = "${cfg.user}";
-        PermissionsStartOnly = true;
         ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
         Type = "notify";
         LimitRTPRIO = 50;
@@ -184,7 +184,7 @@ in {
       };
     };
 
-    users.extraUsers = optionalAttrs (cfg.user == name) (singleton {
+    users.users = optionalAttrs (cfg.user == name) (singleton {
       inherit uid;
       inherit name;
       group = cfg.group;
@@ -193,7 +193,7 @@ in {
       home = "${cfg.dataDir}";
     });
 
-    users.extraGroups = optionalAttrs (cfg.group == name) (singleton {
+    users.groups = optionalAttrs (cfg.group == name) (singleton {
       inherit name;
       gid = gid;
     });

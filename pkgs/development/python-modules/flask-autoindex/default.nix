@@ -1,6 +1,6 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , flask
 , flask-silk
 , future
@@ -8,16 +8,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-AutoIndex";
-  version = "2018-06-28";
+  version = "0.6.2";
 
-  # master fixes various issues (binary generation, flask syntax) and has no
-  # major changes
-  # new release requested: https://github.com/sublee/flask-autoindex/issues/38
-  src = fetchFromGitHub {
-    owner = "sublee";
-    repo = "flask-autoindex";
-    rev = "e3d449a89d56bf4c171c7c8d90af028e579782cf";
-    sha256 = "0bwq2nid4h8vrxspggk064vra4wd804cl2ryyx4j2d1dyywmgjgy";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "af2cdb34eefe6edbf43ce19200880829e8c2df3598000e75dc63c9b7e3478706";
   };
 
   propagatedBuildInputs = [

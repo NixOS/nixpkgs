@@ -1,33 +1,37 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, glibcLocales, vega, pandas, ipython, traitlets }:
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+, pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
+, entrypoints, jsonschema, numpy, pandas, six, toolz, typing
+, pythonOlder, recommonmark }:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e8b222588dde98ec614e6808357fde7fa321118db44cc909df2bf30158d931c0";
+    sha256 = "0x4zm1xia6sln8dhwd803jlcii2a62fx3rlnj5vsa8g3anfc2v24";
   };
 
   postPatch = ''
-    sed -i "s/vega==/vega>=/g" setup.py
+    # Tests require network
+    rm altair/examples/boxplot_max_min.py altair/examples/line_percent.py
   '';
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales recommonmark ];
+
+  propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz ]
+    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkPhase = ''
     export LANG=en_US.UTF-8
     py.test altair --doctest-modules
   '';
 
-  propagatedBuildInputs = [ vega pandas ipython traitlets ];
-
   meta = with stdenv.lib; {
     description = "A declarative statistical visualization library for Python.";
     homepage = https://github.com/altair-viz/altair;
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

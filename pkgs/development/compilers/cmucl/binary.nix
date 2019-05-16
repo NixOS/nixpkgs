@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 let
-  inherit (stdenv) system;
+  inherit (stdenv.hostPlatform) system;
   version = "21b";
   downloadUrl = arch:
     "http://common-lisp.net/project/cmucl/downloads/release/" +

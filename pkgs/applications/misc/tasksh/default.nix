@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libuuid, gnutls, readline }:
+{ stdenv, fetchurl, cmake, readline }:
 
 stdenv.mkDerivation rec {
   name = "tasksh-${version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "REPL for taskwarrior";
     homepage = http://tasktools.org;
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.linux;
   };
 }

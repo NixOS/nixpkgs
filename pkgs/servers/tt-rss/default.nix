@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "tt-rss-${version}";
-  version = "2018-04-05";
-  rev = "963c22646b3e1bd544bd957bf34175b996bd6e53";
+  version = "2019-01-29";
+  rev = "c7c9c5fb0ab6b3d4ea3078865670d6c1dfe2ecac";
 
   src = fetchurl {
     url = "https://git.tt-rss.org/git/tt-rss/archive/${rev}.tar.gz";
-    sha256 = "02vjw5cag5x0rpiqalfrqf7iz21rp8ml5wnfd8pdkxbr8182bw3h";
+    sha256 = "0k184zqrfscv17gnl106q4yzhqmxb0g1dn1wkdkrclc3qcrviyp6";
   };
 
   installPhase = ''

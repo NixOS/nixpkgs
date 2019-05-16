@@ -1,28 +1,31 @@
-{ stdenv, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
+{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
 , xdg_utils, yasm, minizip, libwebp
-, libusb1, pciutils, nss, re2, zlib, libvpx
+, libusb1, pciutils, nss, re2, zlib
 
 , python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk2, gtk3, dbus-glib
+, glib, gtk3, dbus-glib
+, glibc
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
+, ffmpeg, libxslt, libxml2, at-spi2-core
+, jdk
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
-, libexif ? null # only needed for Chromium before version 51
+, libva ? null # useVaapi
 
 # package customization
 , enableNaCl ? false
 , enableWideVine ? false
+, useVaapi ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -43,10 +46,6 @@ let
   # source tree.
   extraAttrs = buildFun base;
 
-  gentooPatch = name: sha256: fetchpatch {
-    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/${name}";
-    inherit sha256;
-  };
   githubPatch = commit: sha256: fetchpatch {
     url = "https://github.com/chromium/chromium/commit/${commit}.patch";
     inherit sha256;
@@ -87,8 +86,8 @@ let
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
     ffmpeg libxslt libxml2
-    # harfbuzz-icu # in versions over 63 harfbuzz and freetype are being built together
-                   # so we can't build with one from system and other from source
+    # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
+               # so we can't build with one from system and other from source
   ];
 
   # build paths and release info
@@ -96,11 +95,6 @@ let
   buildType = "Release";
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
-
-  freetype_source = fetchurl {
-    url = http://anduin.linuxfromscratch.org/BLFS/other/chromium-freetype.tar.xz;
-    sha256 = "1vhslc4xg0d6wzlsi99zpah2xzjziglccrxn55k7qna634wyxg77";
-  };
 
   versionRange = min-version: upto-version:
     let inherit (upstream-info) version;
@@ -112,7 +106,7 @@ let
        else result;
 
   base = rec {
-    name = "${packageName}-${version}";
+    name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -128,28 +122,48 @@ let
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 gtk3 dbus-glib
+      glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libGLU_combined
-      pciutils protobuf speechd libXdamage
+      pciutils protobuf speechd libXdamage at-spi2-core
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional useVaapi libva
+      ++ optional pulseSupport libpulseaudio
+      ++ optional (versionAtLeast version "72") jdk.jre;
 
-    patches = [
-      # As major versions are added, you can trawl the gentoo and arch repos at
-      # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
-      # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
-      # for updated patches and hints about build flags
-    # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-      ./patches/fix-openh264.patch
-      ./patches/fix-freetype.patch
-    ]  ++ optionals (versionRange "66" "68") [
-      ./patches/nix_plugin_paths_52.patch
-    ]  ++ optionals (versionAtLeast version "68") [
+    patches = optional enableWideVine ./patches/widevine.patch ++ [
       ./patches/nix_plugin_paths_68.patch
-      (githubPatch "56cb5f7da1025f6db869e840ed34d3b98b9ab899" "04mp5r1yvdvdx6m12g3lw3z51bzh7m3gr73mhblkn4wxdbvi3dcs")
-    ] ++ optional enableWideVine ./patches/widevine.patch;
+      ./patches/remove-webp-include-69.patch
+      ./patches/jumbo-sorted.patch
+      ./patches/no-build-timestamps.patch
+
+      # Unfortunately, chromium regularly breaks on major updates and
+      # then needs various patches backported in order to be compiled with GCC.
+      # Good sources for such patches and other hints:
+      # - https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
+      # - https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
+      # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
+      #
+      # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
+    ] ++ optionals (useVaapi) [
+      # source: https://aur.archlinux.org/cgit/aur.git/plain/chromium-vaapi.patch?h=chromium-vaapi
+      ./patches/chromium-vaapi.patch
+    ] ++ optionals (!stdenv.cc.isClang && (versionRange "71" "72")) [
+      ( githubPatch "65be571f6ac2f7942b4df9e50b24da517f829eec" "1sqv0aba0mpdi4x4f21zdkxz2cf8ji55ffgbfcr88c5gcg0qn2jh" )
+    ] ++ optional stdenv.isAarch64
+           (if (versionOlder version "71") then
+              fetchpatch {
+                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
+                sha256    = "0dkchqair8cy2f5a5p5vi24r9b4d28pgn2bfvm1568lypbjw6iab";
+              }
+            else
+              fetchpatch {
+                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
+                postFetch = "substituteInPlace $out --replace __aarch64__ SK_CPU_ARM64";
+                sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
+              }
+            );
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -157,6 +171,17 @@ let
         --replace \
           'return sandbox_binary;' \
           'return base::FilePath(GetDevelSandboxPath());'
+
+      substituteInPlace services/audio/audio_sandbox_hook_linux.cc \
+        --replace \
+          '/usr/share/alsa/' \
+          '${alsaLib}/share/alsa/' \
+        --replace \
+          '/usr/lib/x86_64-linux-gnu/gconv/' \
+          '${glibc}/lib/gconv/' \
+        --replace \
+          '/usr/share/locale/' \
+          '${glibc}/share/locale/'
 
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
@@ -183,11 +208,6 @@ let
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
 
-      # use patched freetype
-      # FIXME https://bugs.chromium.org/p/pdfium/issues/detail?id=733
-      # FIXME http://savannah.nongnu.org/bugs/?51156
-      tar -xJf ${freetype_source}
-
       # remove unused third-party
       # in third_party/crashpad third_party/zlib contains just a header-adapter
       for lib in ${toString gnSystemLibraries}; do
@@ -203,13 +223,21 @@ let
     '' + optionalString stdenv.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+    '' + optionalString stdenv.cc.isClang ''
+      mkdir -p third_party/llvm-build/Release+Asserts/bin
+      ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
+      ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
+      ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
     '';
 
     gnFlags = mkGnFlags ({
       linux_use_bundled_binutils = false;
+      use_lld = false;
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
+      # at least 2X compilation speedup
+      use_jumbo_build = true;
 
       proprietary_codecs = false;
       use_sysroot = false;
@@ -220,10 +248,9 @@ let
       use_cups = cupsSupport;
 
       treat_warnings_as_errors = false;
-      is_clang = false;
+      is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       remove_webcore_debug_symbols = true;
-      use_gtk3 = true;
       enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
@@ -239,6 +266,8 @@ let
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
       ffmpeg_branding = "Chrome";
+    } // optionalAttrs useVaapi {
+      use_vaapi = true;
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
@@ -247,15 +276,11 @@ let
     configurePhase = ''
       runHook preConfigure
 
-      # Build gn
-      python tools/gn/bootstrap/bootstrap.py -v -s --no-clean
-      PATH="$PWD/out/Release:$PATH"
-
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gn_files.py \
         --system-libraries ${toString gnSystemLibraries}
-      gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      ${gn}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1
@@ -279,8 +304,6 @@ let
           MENUNAME="Chromium"
           process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
         )
-      '' + optionalString (target == "mksnapshot" || target == "chrome") ''
-        paxmark m "${buildPath}/${target}"
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;

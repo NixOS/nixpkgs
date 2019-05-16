@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk3, fribidi
 , libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg, perl
-, boost, libxslt, goffice, wrapGAppsHook, iconTheme
+, boost, libxslt, goffice, wrapGAppsHook, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3 librsvg bzip2 fribidi libpng popt
-    libgsf enchant wv libjpeg perl boost libxslt goffice iconTheme
+    libgsf enchant wv libjpeg perl boost libxslt goffice gnome3.adwaita-icon-theme
   ];
 
   meta = with stdenv.lib; {

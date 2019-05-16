@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, openssl, perl, dns-root-data }:
+{ stdenv, fetchurl, fetchpatch, openssl, perl, which, dns-root-data }:
 
 stdenv.mkDerivation rec {
   pname = "ldns";
@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
+  checkInputs = [ which ];
+  doCheck = false; # fails. missing some files
+
   postInstall = ''
     moveToOutput "bin/ldns-config" "$dev"
 
@@ -62,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "Library with the aim of simplifying DNS programming in C";
     license = licenses.bsd3;
     homepage = http://www.nlnetlabs.nl/projects/ldns/;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
   };
 }

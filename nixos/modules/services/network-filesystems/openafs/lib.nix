@@ -1,7 +1,7 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, ...}:
 
 let
-  inherit (lib) concatStringsSep getBin mkOption types;
+  inherit (lib) concatStringsSep mkOption types;
 
 in rec {
 

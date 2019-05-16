@@ -1,24 +1,24 @@
-{ stdenv, fetchgit, cmake
-, hostPlatform, buildPlatform
+{ stdenv, fetchFromGitHub, catch, cmake
 }:
 
 let
-  nativeBuild = hostPlatform == buildPlatform;
+  nativeBuild = stdenv.hostPlatform == stdenv.buildPlatform;
 in
 stdenv.mkDerivation rec {
   name = "microsoft_gsl-${version}";
-  version = "2017-02-13";
+  version = "2.0.0";
 
-  src = fetchgit {
-    url = "https://github.com/Microsoft/GSL.git";
-    rev = "3819df6e378ffccf0e29465afe99c3b324c2aa70";
-    sha256 = "03d17mnx6n175aakin313308q14wzvaa9pd0m1yfk6ckhha4qf35";
+  src = fetchFromGitHub {
+    owner = "Microsoft";
+    repo = "GSL";
+    rev = "v${version}";
+    sha256 = "1kxfca9ik934nkzyn34ingkyvwpc09li81cg1yc6vqcrdw51l4ri";
   };
 
 
   # build phase just runs the unit tests, so skip it if
   # we're doing a cross build
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ catch cmake ];
   buildPhase = if nativeBuild then "make" else "true";
 
   installPhase = ''

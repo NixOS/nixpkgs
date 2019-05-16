@@ -25,8 +25,8 @@ edk2 = stdenv.mkDerivation {
   patches = [
     (fetchpatch {
       name = "short-circuit-the-transfer-of-an-empty-S3_CONTEXT.patch";
-      url = "https://github.com/tianocore/edk2/commit/9e2a8e928995c3b1bb664b73fd59785055c6b5f6";
-      sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+      url = "https://github.com/tianocore/edk2/commit/9e2a8e928995c3b1bb664b73fd59785055c6b5f6.diff";
+      sha256 = "0x24npijhgpjpsn3n74wayf8qcbaj97vi4z2iyf4almavqq8qaz4";
     })
   ];
 

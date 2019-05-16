@@ -10,21 +10,25 @@ assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   name = "libarchive-${version}";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${name}.tar.gz";
-    sha256 = "1km0mzfl6in7l5vz9kl09a88ajx562rw93ng9h2jqavrailvsbgd";
+    sha256 = "0bhfncid058p7n1n8v29l6wxm3mhdqfassscihbsxfwz3iwb2zms";
   };
 
   patches = [
-    ./CVE-2017-14166.patch
-    ./CVE-2017-14502.patch
-
-    # LibreSSL patch; this is from upstream, and can be removed when the next release is made.
     (fetchpatch {
-      url = "https://github.com/libarchive/libarchive/commit/5da00ad75b09e262774ec3675bbe4d5a4502a852.patch";
-      sha256 = "0np1i9r6mfxmbksj7mmf5abpnmlmg63704p9z3ihjh2rnq596c1v";
+      # details: https://github.com/libarchive/libarchive/pull/1105
+      name = "cve-2018-1000877.diff"; # CVE-2018-1000877..80
+      url = "https://github.com/libarchive/libarchive/pull/1105.diff";
+      sha256 = "0mxcawfdy9m40mykzwhkl39a6vnh4ypgy0ipcz74qm4bi72x0gyf";
+    })
+    (fetchpatch {
+      # details: https://github.com/libarchive/libarchive/pull/1120
+      name = "cve-2019-1000019_cve-2019-1000020.diff";
+      url = "https://github.com/libarchive/libarchive/pull/1120.diff";
+      sha256 = "1mgx92v8hm7hw9j34nbfriqfkxshh3cy25rhavr7kl7lz4x5a6g4";
     })
   ];
 

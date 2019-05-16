@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     description = "Brother BrGenML1 LPR driver";
     homepage = http://www.brother.com;
     platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = stdenv.lib.licenses.unfreeRedistributable;
     maintainers = with stdenv.lib.maintainers; [ jraygauthier ];
   };
 }

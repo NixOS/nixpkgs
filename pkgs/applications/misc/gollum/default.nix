@@ -4,6 +4,7 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "gollum";
+  # nix-shell -p bundix icu zlib
   version = (import ./gemset.nix).gollum.version;
 
   nativeBuildInputs = [ makeWrapper ];

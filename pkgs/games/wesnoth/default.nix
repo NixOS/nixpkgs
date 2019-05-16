@@ -1,18 +1,18 @@
 { stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
-, pango, gettext, boost, freetype, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
+, pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
 , Cocoa, Foundation
 , enableTools ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.14.3";
+  version = "1.14.7";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "06648041nr77sgzr7jpmcn37cma3hp41qynp50xzddx28l17zwg9";
+    sha256 = "0j2yvkcggj5k0r2cqk8ndnj77m37a00srfd9qg7pdpqffbinqpj7";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

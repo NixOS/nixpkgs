@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, xproto}:
+{stdenv, fetchurl, pkgconfig, xorgproto}:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "rgb";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [pkgconfig];
-  buildInputs = [xproto];
+  buildInputs = [xorgproto];
   meta = {
     inherit version;
     description = "X11 colorname to RGB mapping database";

@@ -2,7 +2,7 @@
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp
 
-, oceSupport ? true, opencascade_oce
+, oceSupport ? true, opencascade
 , ngspiceSupport ? true, libngspice
 , scriptingSupport ? true, swig, python, wxPython
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags =
-    optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade_oce}" ]
+    optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade}" ]
     ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON"
     ++ optionals (scriptingSupport) [
       "-DKICAD_SCRIPTING=ON"
@@ -38,12 +38,11 @@ stdenv.mkDerivation rec {
       "-DCMAKE_CXX_FLAGS=-I${wxPython}/include/wx-3.0"
     ];
 
-  # https://www.mail-archive.com/kicad-developers@lists.launchpad.net/msg29840.html
-  nativeBuildInputs = [ (cmake.override {majorVersion = "3.10";}) doxygen  pkgconfig ];
+  nativeBuildInputs = [ cmake doxygen pkgconfig ];
   buildInputs = [
     libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
     cairo curl openssl boost
-  ] ++ optional (oceSupport) opencascade_oce
+  ] ++ optional (oceSupport) opencascade
     ++ optional (ngspiceSupport) libngspice
     ++ optionals (scriptingSupport) [ swig python wxPython ];
 

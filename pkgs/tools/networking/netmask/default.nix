@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "netmask-${version}";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "tlby";
     repo = "netmask";
     rev = "v${version}";
-    sha256 = "1n6b9f60j7hfdbpbppgkhz3lr7pg963bxnfrq95i1d49xmx41f87";
+    sha256 = "1269bmdvl534wr0bamd7cqbnr76pnb14yn8ly4qsfg29kh7hrds6";
   };
 
   buildInputs = [ texinfo ];

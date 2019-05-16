@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, mediastreamer, openh264
+{ stdenv, autoreconfHook, pkgconfig, mediastreamer, openh264
 , fetchgit, cmake
 }:
 

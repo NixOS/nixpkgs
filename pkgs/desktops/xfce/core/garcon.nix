@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool glib libxfce4util gtk libxfce4ui ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.xfce.org/;
+    homepage = https://www.xfce.org/;
     description = "Xfce menu support library";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

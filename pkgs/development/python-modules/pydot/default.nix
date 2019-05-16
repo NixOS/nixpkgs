@@ -1,23 +1,44 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, substituteAll
+, graphviz
+, python
 , chardet
 , pyparsing
-, graphviz
 }:
 
 buildPythonPackage rec {
   pname = "pydot";
-  version = "1.2.4";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "92d2e2d15531d00710f2d6fb5540d2acabc5399d464f2f20d5d21073af241eb6";
+    sha256 = "d49c9d4dd1913beec2a997f831543c8cbd53e535b1a739e921642fe416235f01";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./hardcode-graphviz-path.patch;
+      inherit graphviz;
+    })
+  ];
+
+  postPatch = ''
+    # test_graphviz_regression_tests also fails upstream: https://github.com/pydot/pydot/pull/198
+    substituteInPlace test/pydot_unittest.py \
+      --replace "test_graphviz_regression_tests" "no_test_graphviz_regression_tests"
+  '';
+
+  propagatedBuildInputs = [ pyparsing ];
+
   checkInputs = [ chardet ];
-  # No tests in archive
-  doCheck = false;
-  propagatedBuildInputs = [pyparsing graphviz];
+
+  checkPhase = ''
+    cd test
+    ${python.interpreter} pydot_unittest.py
+  '';
+
   meta = {
     homepage = https://github.com/erocarrera/pydot;
     description = "Allows to easily create both directed and non directed graphs from Python";

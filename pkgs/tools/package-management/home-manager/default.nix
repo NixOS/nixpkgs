@@ -1,18 +1,18 @@
 #Adapted from
-#https://github.com/rycee/home-manager/blob/9c1b3735b402346533449efc741f191d6ef578dd/home-manager/default.nix
+#https://github.com/rycee/home-manager/blob/2c07829be2bcae55e04997b19719ff902a44016d/home-manager/default.nix
 
-{ bash, coreutils, less, stdenv, makeWrapper, fetchFromGitHub }:
+{ bash, coreutils, findutils, gnused, less, stdenv, makeWrapper, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
 
   name = "home-manager-${version}";
-  version = "2018-06-14";
+  version = "2019-04-23";
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "rycee";
     repo = "home-manager";
-    rev = "5641ee3f942e700de35b28fc879b0d8a10a7a1fe";
-    sha256 = "0bqzwczbr5c2y3ms7m7ly0as9zsnqwljq61ci2y2gbqzw3md1x2j";
+    rev = "ba0375bf06e0e0c3b2377edf913b7fddfd5a0b40";
+    sha256 = "1ksr8fw5p5ai2a02whppc0kz9b3m5363hvfjghkzkd623kfh9073";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/home-manager \
       --subst-var-by bash "${bash}" \
       --subst-var-by coreutils "${coreutils}" \
+      --subst-var-by findutils "${findutils}" \
+      --subst-var-by gnused "${gnused}" \
       --subst-var-by less "${less}" \
       --subst-var-by HOME_MANAGER_PATH '${src}'
   '';

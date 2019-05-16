@@ -1,14 +1,5 @@
 [
   {
-    goPackagePath = "github.com/dustin/go-humanize";
-    fetch = {
-      type = "git";
-      url = https://github.com/dustin/go-humanize;
-      rev = "79e699ccd02f240a1f1fbbdcee7e64c1c12e41aa";
-      sha256 = "0awfqszgjw8qrdw31v74jnvj1jbp7czhd8aq59j57yyj4hy50fzj";
-    };
-  }
-  {
     goPackagePath = "github.com/jbenet/goprocess";
     fetch = {
       type = "git";
@@ -40,8 +31,8 @@
     fetch = {
       type = "git";
       url = https://github.com/hashicorp/golang-lru;
-      rev = "0a025b7e63adc15a622f29b0b2c4c3848243bbf6";
-      sha256 = "1iq7lbpsz7ks052mpznmkf8s4k43p51z4dik2n9ivrxk666q2wxi";
+      rev = "20f1fb78b0740ba8c3cb143a61e86ba5c8669768";
+      sha256 = "12k2cp2k615fjvfa5hyb9k2alian77wivds8s65diwshwv41939f";
     };
   }
   {
@@ -49,8 +40,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "71a035914f99bb58fe82eac0f1289f10963d876c";
-      sha256 = "06m16c9vkwc8m2mcxcxa7p8mb26ikc810lgzd5m8k1r6lp3hc8wm";
+      rev = "26e67e76b6c3f6ce91f7c52def5af501b4e0f3a2";
+      sha256 = "17bqkd64zksi1578lb10ls4qf5lbqs7shfjcc6bi97y1qz5k31c4";
     };
   }
 ]

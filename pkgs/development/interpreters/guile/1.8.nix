@@ -1,5 +1,4 @@
-{ stdenv, buildPackages
-, buildPlatform, hostPlatform
+{ stdenv, pkgsBuildBuild, buildPackages
 , fetchurl, makeWrapper, gawk, pkgconfig
 , libtool, readline, gmp
 }:
@@ -23,8 +22,8 @@ stdenv.mkDerivation rec {
                           "--with-threads=no";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
-    ++ stdenv.lib.optional (hostPlatform != buildPlatform)
-                           buildPackages.buildPackages.guile_1_8;
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+                           pkgsBuildBuild.guile_1_8;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool ];
 
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
   # One test fails.
   # ERROR: file: "libtest-asmobs", message: "file not found"
   # This is fixed here:
-  # <http://git.savannah.gnu.org/cgit/guile.git/commit/?h=branch_release-1-8&id=a0aa1e5b69d6ef0311aeea8e4b9a94eae18a1aaf>.
+  # <https://git.savannah.gnu.org/cgit/guile.git/commit/?h=branch_release-1-8&id=a0aa1e5b69d6ef0311aeea8e4b9a94eae18a1aaf>.
   doCheck = false;
   doInstallCheck = doCheck;
 
@@ -67,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Embeddable Scheme implementation";
-    homepage    = http://www.gnu.org/software/guile/;
+    homepage    = https://www.gnu.org/software/guile/;
     license     = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms   = stdenv.lib.platforms.unix;

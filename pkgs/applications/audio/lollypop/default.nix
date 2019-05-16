@@ -1,58 +1,89 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig, wrapGAppsHook
-, appstream-glib, desktop-file-utils, gobjectIntrospection
-, python36Packages, gnome3, glib, gst_all_1 }:
+{ lib
+, fetchgit
+, meson
+, ninja
+, pkgconfig
+, python3
+, gtk3
+, gst_all_1
+, libsecret
+, libsoup
+, appstream-glib
+, desktop-file-utils
+, totem-pl-parser
+, hicolor-icon-theme
+, gobject-introspection
+, wrapGAppsHook
+, lastFMSupport ? true
+, wikipediaSupport ? true
+, youtubeSupport ? true, youtube-dl
+}:
 
-stdenv.mkDerivation rec  {  
-  version = "0.9.516";
-  name = "lollypop-${version}";
+python3.pkgs.buildPythonApplication rec  {
+  pname = "lollypop";
+  version = "1.0.10";
+
+  format = "other";
+  doCheck = false;
 
   src = fetchgit {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "0ln77cmcl5wi4xis9kmzg0knbykzwsd1n78rr7ff5y35m9p2zgrf";
+    sha256 = "118z1qhvpv7x5n63lpm4mf81pmv7gd450sa55i68mnjvry93h9h5";
   };
 
-  nativeBuildInputs = with python36Packages; [
+  nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig
     wrapGAppsHook
-    wrapPython
   ];
 
-  buildInputs = [ glib ] ++ (with gnome3; [
-    easytag gsettings_desktop_schemas gtk3 libsecret libsoup totem-pl-parser
-  ]) ++ (with gst_all_1; [
-    gst-libav gst-plugins-bad gst-plugins-base gst-plugins-good gst-plugins-ugly
+  buildInputs = with gst_all_1; [
+    gobject-introspection
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
     gstreamer
-  ]);
+    gtk3
+    hicolor-icon-theme
+    libsoup
+    totem-pl-parser
+  ] ++ lib.optional lastFMSupport libsecret;
 
-  pythonPath = with python36Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
-    gst-python
     pillow
     pycairo
-    pydbus
     pygobject3
-    pylast
-  ];
-
-  postFixup = "wrapPythonPrograms";
+  ]
+  ++ lib.optional lastFMSupport pylast
+  ++ lib.optional wikipediaSupport wikipedia
+  ++ lib.optional youtubeSupport youtube-dl
+  ;
 
   postPatch = ''
-    chmod +x ./meson_post_install.py
-    patchShebangs ./meson_post_install.py
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  preFixup = ''
+    buildPythonPath "$out $propagatedBuildInputs"
+    patchPythonScript "$out/libexec/lollypop-sp"
+  '';
+
+  meta = with lib; {
     description = "A modern music player for GNOME";
-    homepage    = https://wiki.gnome.org/Apps/Lollypop;
-    license     = licenses.gpl3Plus;
+    homepage = https://wiki.gnome.org/Apps/Lollypop;
+    license = licenses.gpl3Plus;
+    changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
     maintainers = with maintainers; [ worldofpeace ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

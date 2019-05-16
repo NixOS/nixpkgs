@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ startFPC gawk ];
 
   preConfigure =
-    if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then ''
+    if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
       sed -e "s@'/lib/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
       sed -e "s@'/lib64/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
     '' else "";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   makeFlags = "NOGDB=1 FPC=${startFPC}/bin/fpc";
 
   installFlags = "INSTALL_PREFIX=\${out}";
-  
+
   postInstall = ''
     for i in $out/lib/fpc/*/ppc*; do
       ln -fs $i $out/bin/$(basename $i)
@@ -35,10 +35,12 @@ stdenv.mkDerivation rec {
     bootstrap = startFPC;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Free Pascal Compiler from a source distribution";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://www.freepascal.org;
+    maintainers = [ maintainers.raskin ];
+    license = with licenses; [ gpl2 lgpl2 ];
+    platforms = platforms.linux;
     inherit version;
   };
 }

@@ -7,21 +7,23 @@
 , automat
 , constantly
 , hyperlink
+, pyhamcrest
+, attrs
 , pyopenssl
 , service-identity
 , idna
 }:
 buildPythonPackage rec {
   pname = "Twisted";
-  version = "18.4.0";
+  version = "18.9.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.bz2";
-    sha256 = "a4cc164a781859c74de47f17f0e85f4bce8a3321a9d0892c015c8f80c4158ad9";
+    sha256 = "294be2c6bf84ae776df2fc98e7af7d6537e1c5e60a46d33c3ce2a197677da395";
   };
 
-  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink ];
+  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs ];
 
   passthru.extras.tls = [ pyopenssl service-identity idna ];
 

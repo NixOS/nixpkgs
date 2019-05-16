@@ -44,6 +44,7 @@ lib.makeOverridable (
 # git checkout).
 # If you need to apply patches, make sure to set `dontBuild = false`;
 , dontBuild ? true
+, dontInstallManpages ? false
 , propagatedBuildInputs ? []
 , propagatedUserEnvPkgs ? []
 , buildFlags ? []
@@ -62,7 +63,6 @@ let
     else if type == "git" then
       fetchgit {
         inherit (attrs.source) url rev sha256 fetchSubmodules;
-        leaveDotGit = true;
       }
     else if type == "url" then
       fetchurl attrs.source
@@ -93,6 +93,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   name = attrs.name or "${namePrefix}${gemName}-${version}";
 
   inherit src;
+
 
   unpackPhase = attrs.unpackPhase or ''
     runHook preUnpack
@@ -141,6 +142,12 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       gempkg=$(echo "$output" | grep -oP 'File: \K(.*)')
 
       echo "gem package built: $gempkg"
+    elif [[ "$type" == "git" ]]; then
+      git init
+      # remove variations to improve the likelihood of a bit-reproducible output
+      rm -rf .git/logs/ .git/hooks/ .git/index .git/FETCH_HEAD .git/ORIG_HEAD .git/refs/remotes/origin/HEAD .git/config
+      # support `git ls-files`
+      git add .
     fi
 
     runHook postBuild
@@ -172,7 +179,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       '${version}' \
       '${lib.escapeShellArgs buildFlags}' \
       '${attrs.source.url}' \
-      '${src}' \
+      '.' \
       '${attrs.source.rev}'
     ''}
 
@@ -204,6 +211,14 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     # write out metadata and binstubs
     spec=$(echo $out/${ruby.gemPath}/specifications/*.gemspec)
     ruby ${./gem-post-build.rb} "$spec"
+    ''}
+
+    ${lib.optionalString (!dontInstallManpages) ''
+    for section in {1..9}; do
+      mandir="$out/share/man/man$section"
+      find $out/lib \( -wholename "*/man/*.$section" -o -wholename "*/man/man$section/*.$section" \) \
+        -execdir mkdir -p $mandir \; -execdir cp '{}' $mandir \;
+    done
     ''}
 
     runHook postInstall

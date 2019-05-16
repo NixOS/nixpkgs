@@ -1,23 +1,15 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "1.3";
+  version = "1.4";
   name = "wikicurses-${version}";
 
-  src = fetchurl {
-    url = "http://github.com/ids1024/wikicurses/archive/v${version}.tar.gz";
-    sha256 = "1yxgafk1sczg1xi2p6nhrvr3hchp7ydw98n48lp3qzwnryn1kxv8";
+  src = fetchFromGitHub {
+    owner = "ids1024";
+    repo = "wikicurses";
+    rev = "v${version}";
+    sha256 = "0f14s4qx3q5pr5vn460c34b5mbz2xs62d8ljs3kic8gmdn8x2knm";
   };
-
-  patches = [
-    # This is necessary to build without a config file.
-    # It can be safely removed after updating to wikicurses to 1.4
-    # or when commit 4b944ac339312b642c6dc5d6b5a2f7be7503218f is included
-    (fetchurl {
-      url = "https://github.com/ids1024/wikicurses/commit/4b944ac339312b642c6dc5d6b5a2f7be7503218f.patch";
-      sha256 = "0ii4b0c4hb1zdhcpp4ij908mfy5b8khpm1l7xr7lp314lfhsg9as";
-    })
-  ];
 
   propagatedBuildInputs = with pythonPackages; [ urwid beautifulsoup4 lxml ];
 
@@ -26,6 +18,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://github.com/ids1024/wikicurses/;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ pSub ];
   };
 
 }

@@ -1,15 +1,40 @@
-{ stdenv, fetchurl, python3, python3Packages, zbar, fetchpatch }:
+{ stdenv, fetchurl, fetchFromGitHub, python3, python3Packages, zbar, secp256k1 }:
+
+let
+  version = "3.3.5";
+
+  # Not provided in official source releases, which are what upstream signs.
+  tests = fetchFromGitHub {
+    owner = "spesmilo";
+    repo = "electrum";
+    rev = version;
+    sha256 = "11rzzrv5xxqazcb7q1ig93d6cisqmd1x0jrgvfgzysbzvi51gg11";
+
+    extraPostFetch = ''
+      mv $out ./all
+      mv ./all/electrum/tests $out
+    '';
+  };
+in
 
 python3Packages.buildPythonApplication rec {
-  name = "electrum-${version}";
-  version = "3.1.3";
+  pname = "electrum";
+  inherit version;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "05m28yd3zr9awjhaqikf4rg08j5i4ygm750ip1z27wl446sysniy";
+    sha256 = "1csj0n96zlajnrs39wsazfj5lmy7v7n77cdz56lr8nkmchh6k9z1";
   };
 
+  postUnpack = ''
+    # can't symlink, tests get confused
+    cp -ar ${tests} $sourceRoot/electrum/tests
+  '';
+
   propagatedBuildInputs = with python3Packages; [
+    aiorpcx
+    aiohttp
+    aiohttp-socks
     dnspython
     ecdsa
     jsonrpclib-pelix
@@ -17,28 +42,27 @@ python3Packages.buildPythonApplication rec {
     pbkdf2
     protobuf
     pyaes
-    pycrypto
+    pycryptodomex
     pyqt5
     pysocks
+    qdarkstyle
     qrcode
     requests
-    tlslite
+    tlslite-ng
 
     # plugins
     keepkey
     trezor
+    btchip
 
     # TODO plugins
     # amodem
-    # btchip
   ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    pyrcc5 icons.qrc -o gui/qt/icons_rc.py
-    # Recording the creation timestamps introduces indeterminism to the build
-    sed -i '/Created: .*/d' gui/qt/icons_rc.py
-    sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" lib/qrscanner.py
+    sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" electrum/qrscanner.py
+    substituteInPlace ./electrum/ecc_fast.py --replace libsecp256k1.so.0 ${secp256k1}/lib/libsecp256k1.so.0
   '';
 
   postInstall = ''
@@ -48,13 +72,16 @@ python3Packages.buildPythonApplication rec {
     rm -rf $out/${python3.sitePackages}/nix
 
     substituteInPlace $out/share/applications/electrum.desktop \
-      --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
+      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
+                "Exec=$out/bin/electrum %u" \
+      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
+                "Exec=$out/bin/electrum --testnet %u"
   '';
 
-  doCheck = false;
+  checkInputs = with python3Packages; [ pytest ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
+  checkPhase = ''
+    py.test electrum/tests
     $out/bin/electrum help >/dev/null
   '';
 

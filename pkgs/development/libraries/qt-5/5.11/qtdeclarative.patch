@@ -1,8 +1,8 @@
 diff --git a/src/qml/qml/qqmlimport.cpp b/src/qml/qml/qqmlimport.cpp
-index a7cafa1a9..e17ffd35b 100644
+index 005db4248..685c5b1b2 100644
 --- a/src/qml/qml/qqmlimport.cpp
 +++ b/src/qml/qml/qqmlimport.cpp
-@@ -1737,6 +1737,15 @@ QQmlImportDatabase::QQmlImportDatabase(QQmlEngine *e)
+@@ -1760,6 +1760,15 @@ QQmlImportDatabase::QQmlImportDatabase(QQmlEngine *e)
      QString installImportsPath =  QLibraryInfo::location(QLibraryInfo::Qml2ImportsPath);
      addImportPath(installImportsPath);
  
@@ -18,11 +18,24 @@ index a7cafa1a9..e17ffd35b 100644
      // env import paths
      if (Q_UNLIKELY(!qEnvironmentVariableIsEmpty("QML2_IMPORT_PATH"))) {
          const QString envImportPath = qEnvironmentVariable("QML2_IMPORT_PATH");
+diff --git a/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake b/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake
+index 56cb3fb55..74509d601 100644
+--- a/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake
++++ b/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake
+@@ -17,7 +17,7 @@ function(QTQUICK_COMPILER_ADD_RESOURCES outfiles)
+ 
+     find_package(Qt5 COMPONENTS Qml Core)
+ 
+-    set(compiler_path "${_qt5Core_install_prefix}/bin/qmlcachegen")
++    set(compiler_path "qmlcachegen")
+ 
+     get_target_property(rcc_path ${Qt5Core_RCC_EXECUTABLE} IMPORTED_LOCATION)
+ 
 diff --git a/tools/qmlcachegen/qmlcache.prf b/tools/qmlcachegen/qmlcache.prf
-index 330da358b..cdf570205 100644
+index 537eaf62e..e21de58f6 100644
 --- a/tools/qmlcachegen/qmlcache.prf
 +++ b/tools/qmlcachegen/qmlcache.prf
-@@ -44,7 +44,7 @@ defineReplace(qmlCacheOutputFileName) {
+@@ -26,7 +26,7 @@ defineReplace(qmlCacheOutputFileName) {
  }
  
  qmlcacheinst.base = $$QMLCACHE_DESTDIR

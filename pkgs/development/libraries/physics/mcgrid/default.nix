@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fastnlo, rivet, pkgconfig, sherpa }:
+{ stdenv, fetchurl, fastnlo, rivet, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "mcgrid-${version}";

@@ -1,10 +1,8 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p bash ruby bundler bundix
+#! nix-shell -i bash -p bash bundler bundix
 
-rm Gemfile.lock
-bundler install
+set -e
+
+rm -f Gemfile.lock
+bundler lock
 bundix
-
-if [ "clean" == "$1" ]; then
-  rm -rf ~/.gem
-fi
