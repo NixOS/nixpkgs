@@ -47,6 +47,15 @@ with super;
     buildInputs = [ pkgs.libiconv ];
   });
   luv = super.luv.overrideAttrs(oa: {
+    # Use system libuv instead of building local and statically linking
+    # This is a hacky way to specify -DWITH_SHARED_LIBUV=ON which
+    # should be possible but I'm unable to make work.
+    # While at it, remove bundled libuv source entirely to be sure.
+    # We may wish to drop bundled lua submodules too...
+    preBuild = ''
+     sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
+     rm -rf deps/libuv
+    '';
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
   });
 
