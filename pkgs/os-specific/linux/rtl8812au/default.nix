@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zebulon2";
     repo = "rtl8812au-driver-5.2.20";
-    rev = "2dad788f5d71d50df4f692b67a4428967ba3d42c";
-    sha256 = "17pn73j2xqya0g8f86hn1jyf9x9wp52md05yrg1md58ixsbh1kz3";
+    rev = "ac063a4b1a87855e10f6cd1f358aaccbeee9b9c1";
+    sha256 = "1cmsv22q4k6p2wzm73k60kxbjhcgx4hqr0x3djvqrlv4rzz75l92";
   };
 
   nativeBuildInputs = [ bc ];
