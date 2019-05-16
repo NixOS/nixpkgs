@@ -49,6 +49,7 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/share/adom $out/bin
       cp -a * $out/share/adom
 
