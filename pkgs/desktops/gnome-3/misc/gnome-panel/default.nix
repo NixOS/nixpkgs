@@ -1,7 +1,6 @@
 { stdenv
 , fetchurl
 , autoreconfHook
-, fetchpatch
 , dconf
 , evolution-data-server
 , gdm
