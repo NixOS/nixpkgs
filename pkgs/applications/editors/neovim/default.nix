@@ -80,6 +80,7 @@ in
       "-DGPERF_PRG=${gperf}/bin/gperf"
     ]
     ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"
+    ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;
 
     # triggers on buffer overflow bug while running tests
@@ -122,8 +123,5 @@ in
       license = with licenses; [ asl20 vim ];
       maintainers = with maintainers; [ manveru garbas rvolosatovs ];
       platforms   = platforms.unix;
-      # `lua: bad light userdata pointer`
-      # https://nix-cache.s3.amazonaws.com/log/9ahcb52905d9d417zsskjpc331iailpq-neovim-unwrapped-0.2.2.drv
-      broken = stdenv.isAarch64;
     };
   }
