@@ -181,6 +181,10 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  anytree = callPackage ../development/python-modules/anytree {
+    inherit (pkgs) graphviz;
+  };
+
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
