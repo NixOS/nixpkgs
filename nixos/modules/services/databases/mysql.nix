@@ -318,14 +318,12 @@ in
           pkgs.nettools
         ];
 
-        preStart =
-          ''
-            if ! test -e ${cfg.dataDir}/mysql; then
-                ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${installOptions}
-                touch /tmp/mysql_init
-            fi
-
-          '';
+        preStart = ''
+          if ! test -e ${cfg.dataDir}/mysql; then
+            ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${installOptions}
+            touch /tmp/mysql_init
+          fi
+        '';
 
         serviceConfig = {
           Type = if hasNotify then "notify" else "simple";
@@ -336,50 +334,52 @@ in
           ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
         };
 
-        postStart = ''
-          ${lib.optionalString (!hasNotify) ''
-            # Wait until the MySQL server is available for use
-            count=0
-            while [ ! -e /run/mysqld/mysqld.sock ]
-            do
-                if [ $count -eq 30 ]
-                then
-                    echo "Tried 30 times, giving up..."
-                    exit 1
-                fi
+        postStart =
+          let
+            cmdWatchForMysqlSocket = ''
+              # Wait until the MySQL server is available for use
+              count=0
+              while [ ! -e /run/mysqld/mysqld.sock ]
+              do
+                  if [ $count -eq 30 ]
+                  then
+                      echo "Tried 30 times, giving up..."
+                      exit 1
+                  fi
 
-                echo "MySQL daemon not yet started. Waiting for 1 second..."
-                count=$((count++))
-                sleep 1
-            done
-          ''}
+                  echo "MySQL daemon not yet started. Waiting for 1 second..."
+                  count=$((count++))
+                  sleep 1
+              done
+            '';
+            cmdInitialDatabases = concatMapStrings (database: ''
+              # Create initial databases
+              if ! test -e "${cfg.dataDir}/${database.name}"; then
+                  echo "Creating initial database: ${database.name}"
+                  ( echo 'create database `${database.name}`;'
 
+                    ${optionalString (database.schema != null) ''
+                    echo 'use `${database.name}`;'
+
+                    # TODO: this silently falls through if database.schema does not exist,
+                    # we should catch this somehow and exit, but can't do it here because we're in a subshell.
+                    if [ -f "${database.schema}" ]
+                    then
+                        cat ${database.schema}
+                    elif [ -d "${database.schema}" ]
+                    then
+                        cat ${database.schema}/mysql-databases/*.sql
+                    fi
+                    ''}
+                  ) | ${mysql}/bin/mysql -u root -N
+              fi
+            '') cfg.initialDatabases;
+          in
+
+          lib.optionalString (!hasNotify) cmdWatchForMysqlSocket + ''
             if [ -f /tmp/mysql_init ]
             then
-                ${concatMapStrings (database:
-                  ''
-                    # Create initial databases
-                    if ! test -e "${cfg.dataDir}/${database.name}"; then
-                        echo "Creating initial database: ${database.name}"
-                        ( echo 'create database `${database.name}`;'
-
-                          ${optionalString (database.schema != null) ''
-                          echo 'use `${database.name}`;'
-
-                          # TODO: this silently falls through if database.schema does not exist,
-                          # we should catch this somehow and exit, but can't do it here because we're in a subshell.
-                          if [ -f "${database.schema}" ]
-                          then
-                              cat ${database.schema}
-                          elif [ -d "${database.schema}" ]
-                          then
-                              cat ${database.schema}/mysql-databases/*.sql
-                          fi
-                          ''}
-                        ) | ${mysql}/bin/mysql -u root -N
-                    fi
-                  '') cfg.initialDatabases}
-
+                ${cmdInitialDatabases}
                 ${optionalString (cfg.replication.role == "master")
                   ''
                     # Set up the replication master
