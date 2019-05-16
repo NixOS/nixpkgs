@@ -3977,6 +3977,8 @@ in
 
   libcpuid = callPackage ../tools/misc/libcpuid { };
 
+  libcsptr = callPackage ../development/libraries/libcsptr { };
+
   libscrypt = callPackage ../development/libraries/libscrypt { };
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
