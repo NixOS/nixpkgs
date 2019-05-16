@@ -65,6 +65,7 @@ let
       cd $out/share/adom; exec adom
       EOF
       chmod +x $out/bin/adom
+      runHook postInstall
     '';
 
     meta = with stdenv.lib; {
