@@ -75,8 +75,8 @@
     <note>
      <para>
       At this moment there is no similar configurability for packages installed
-      by <command>nix-env</command>. You can still use approach from
-      <xref linkend="sec-modify-via-packageOverrides" /> to override
+      by <command>nix-env</command>. You can still use overlays
+      (see <xref linkend="chap-overlays" />) to override
       <varname>meta.outputsToInstall</varname> attributes, but that's a rather
       inconvenient way.
      </para>
