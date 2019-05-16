@@ -34,6 +34,8 @@ stdenv.mkDerivation {
     # source: https://aur.archlinux.org/cgit/aur.git/tree/linux412.patch?h=broadcom-wl
     ./linux-4.12.patch
     ./linux-4.15.patch
+    # source: https://bugs.archlinux.org/task/62604
+    ./linux-5.1.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];

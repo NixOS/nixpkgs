@@ -1,0 +1,22 @@
+--- a/src/wl/sys/wl_cfg80211_hybrid.c	2015-09-19 00:47:30.000000000 +0200
++++ b/src/wl/sys/wl_cfg80211_hybrid.c	2019-05-11 11:02:12.988391025 +0200
+@@ -450,7 +450,7 @@
+ 	ifr.ifr_data = (caddr_t)&ioc;
+ 
+ 	fs = get_fs();
+-	set_fs(get_ds());
++	set_fs(KERNEL_DS);
+ #if defined(WL_USE_NETDEV_OPS)
+ 	err = dev->netdev_ops->ndo_do_ioctl(dev, &ifr, SIOCDEVPRIVATE);
+ #else
+--- a/src/wl/sys/wl_iw.c	2015-09-19 00:47:30.000000000 +0200
++++ b/src/wl/sys/wl_iw.c	2019-05-11 11:02:50.743413053 +0200
+@@ -117,7 +117,7 @@
+ 	ifr.ifr_data = (caddr_t) &ioc;
+ 
+ 	fs = get_fs();
+-	set_fs(get_ds());
++	set_fs(KERNEL_DS);
+ #if defined(WL_USE_NETDEV_OPS)
+ 	ret = dev->netdev_ops->ndo_do_ioctl(dev, &ifr, SIOCDEVPRIVATE);
+ #else
