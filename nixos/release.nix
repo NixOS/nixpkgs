@@ -228,6 +228,12 @@ in rec {
     inherit system;
   });
 
+  # Wrapper around container tarball based on the above.
+  lxdContainer = forAllSystems (system: makeSystemTarball {
+    module = ./modules/virtualisation/lxd-container.nix;
+    inherit system;
+  });
+
   /*
   system_tarball_fuloong2f =
     assert builtins.currentSystem == "mips64-linux";
