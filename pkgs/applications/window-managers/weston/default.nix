@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     #"--enable-clients"
     #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
     "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
-  ] ++ stdenv.lib.optionals (xwayland != null) [
+  ] ++ optionals (xwayland != null) [
     "-Dxwayland=true"
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];
