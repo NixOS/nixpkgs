@@ -9,7 +9,7 @@ let
     else {
       arch = "i386";
       gcclib = "${stdenv.cc.cc.lib}/lib";
-      sha256 = "09h71i3k9d24ki81jdwhnav63fqbc44glbx228s9g3cr4ap41jcx";
+      sha256 = "1s829q8gy9xgz0jm7w70aljqs2h49x402blqfr9zvn806aprmrm5";
     };
 in
 stdenv.mkDerivation rec {
