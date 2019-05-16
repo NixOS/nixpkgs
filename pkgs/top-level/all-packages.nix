@@ -9694,6 +9694,10 @@ in
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
+  whatstyle = callPackage ../development/tools/misc/whatstyle {
+    inherit (llvmPackages) clang-unwrapped;
+  };
+
   watson-ruby = callPackage ../development/tools/misc/watson-ruby {};
 
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
