@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   mesonFlags= [
     "-Dbackend-rdp=${boolToString (freerdp != null)}"
     "-Dremoting=false" # TODO
-    "-Dsimple-dmabuf-drm=auto"
+    "-Dsimple-dmabuf-drm=" # Disables all drivers
     "-Dtest-junit-xml=false"
     #"--enable-clients"
     #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
