@@ -6,8 +6,8 @@ let
     src = fetchFromGitHub {
       owner = "chobits";
       repo = "ngx_http_proxy_connect_module";
-      rev = "18e2520b361ffebde6c08c8119ecfba113a3b53c";
-      sha256 = "1nyil5n2a97nqsqarvnp4bazw4vnxifqizzw5aank4vi9xlq90b2";
+      rev = "002f8f9ef15562dc3691b977134518ad216d7a90";
+      sha256 = "163wg0xb7w5mwh6wrfarzcgaf6c7gb5qydgpi2wk35k551f7286s";
     };
 
     patches = [
@@ -96,12 +96,8 @@ in
     };
   };
 
-  http_proxy_connect_module_v15 = http_proxy_connect_module_generic "proxy_connect_rewrite_1015" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "15";
-  };
-
-  http_proxy_connect_module_v14 = http_proxy_connect_module_generic "proxy_connect_rewrite_1014" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "14";
+  http_proxy_connect_module_v16 = http_proxy_connect_module_generic "proxy_connect_rewrite_101504" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "16";
   };
 
   ipscrub = {
@@ -136,8 +132,8 @@ in
     src = fetchFromGitHub {
       owner = "openresty";
       repo = "lua-nginx-module";
-      rev = "v0.10.14";
-      sha256 = "1vg6pp9n8z42p6f3jqk15gvdyy7mfvs5ssfbiy83bydjx42fq7g0";
+      rev = "v0.10.15";
+      sha256 = "1j216isp0546hycklbr5wi8mlga5hq170hk7f2sm16sfavlkh5gz";
     };
     inputs = [ pkgs.luajit ];
     preConfigure = ''

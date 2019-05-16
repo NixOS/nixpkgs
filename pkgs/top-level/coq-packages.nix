@@ -34,17 +34,27 @@ let
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
       iris = callPackage ../development/coq-modules/iris {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
-      mathcomp = callPackage ../development/coq-modules/mathcomp { };
-      mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis { };
-      mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough { };
-      mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap { };
+      inherit (callPackage ../development/coq-modules/mathcomp { })
+        mathcompGen mathcompGenSingle mathcompCorePkgs_1_7 mathcompCorePkgs_1_8 mathcompCorePkgs
+        mathcomp mathcomp_1_7 mathcomp_1_8 ssreflect
+        mathcomp-ssreflect mathcomp-ssreflect_1_7 mathcomp-ssreflect_1_8
+        mathcomp-fingroup mathcomp-fingroup_1_7 mathcomp-fingroup_1_8
+        mathcomp-algebra mathcomp-algebra_1_7 mathcomp-algebra_1_8
+        mathcomp-solvable mathcomp-solvable_1_7 mathcomp-solvable_1_8
+        mathcomp-field mathcomp-field_1_7 mathcomp-field_1_8
+        mathcomp-character mathcomp-character_1_7 mathcomp-character_1_8;
+      inherit (callPackage ../development/coq-modules/mathcomp/extra.nix { })
+        mathcompExtraGen
+        mathcomp-finmap mathcomp-bigenough mathcomp-analysis mathcomp-multinomials
+        mathcomp_1_7-finmap mathcomp_1_7-bigenough mathcomp_1_7-analysis mathcomp_1_7-multinomials
+        mathcomp_1_7-finmap_1_0
+        mathcomp_1_8-finmap mathcomp_1_8-bigenough mathcomp_1_8-analysis mathcomp_1_8-multinomials
+        multinomials;
       metalib = callPackage ../development/coq-modules/metalib { };
-      multinomials = callPackage ../development/coq-modules/multinomials {};
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
-      ssreflect = callPackage ../development/coq-modules/ssreflect { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
@@ -97,12 +107,16 @@ in rec {
   coq_8_9 = callPackage ../applications/science/logic/coq {
     version = "8.9.0";
   };
+  coq_8_10 = callPackage ../applications/science/logic/coq {
+    version = "8.10+beta1";
+  };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
   coqPackages_8_9 = mkCoqPackages coq_8_9;
+  coqPackages_8_10 = mkCoqPackages coq_8_10;
   coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
     coqPackages_8_8
   );
