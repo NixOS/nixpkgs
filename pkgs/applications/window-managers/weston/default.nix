@@ -25,14 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags= [
-    "-Dbackend-x11=true"
-    "-Dbackend-drm=true"
-    "-Dbackend-wayland=true"
-    "-Dbackend-headless=true"
-    "-Dbackend-fbdev=true"
     "-Dbackend-rdp=${boolToString (freerdp != null)}"
-    "-Dscreenshare=true"
-    "-Dweston-launch=true"
     "-Dremoting=false" # TODO
     "-Dsimple-dmabuf-drm=auto"
     "-Dtest-junit-xml=false"
