@@ -296,6 +296,11 @@ in
       ${cfg.extraOptions}
     '';
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 ${cfg.user} mysql -"
+      "d '${cfg.pidDir}' 0755 ${cfg.user} mysql -"
+    ];
+
     systemd.services.mysql = let
       hasNotify = (cfg.package == pkgs.mariadb);
     in {
@@ -316,19 +321,17 @@ in
         preStart =
           ''
             if ! test -e ${cfg.dataDir}/mysql; then
-                mkdir -m 0700 -p ${cfg.dataDir}
-                chown -R ${cfg.user} ${cfg.dataDir}
                 ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${installOptions}
                 touch /tmp/mysql_init
             fi
 
-            mkdir -m 0755 -p ${cfg.pidDir}
-            chown -R ${cfg.user} ${cfg.pidDir}
           '';
 
         serviceConfig = {
           Type = if hasNotify then "notify" else "simple";
+          # /run/mysqld needs to be created in addition to pidDir, as they could point to different locations
           RuntimeDirectory = "mysqld";
+          RuntimeDirectoryMode = "0755";
           # The last two environment variables are used for starting Galera clusters
           ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
         };
