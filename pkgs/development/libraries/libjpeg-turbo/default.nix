@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross;
   checkTarget = "test";
   preCheck = ''
-    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${name}:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${name}/build:$LD_LIBRARY_PATH"
   '';
 
   meta = with stdenv.lib; {
