@@ -11,14 +11,7 @@ let
   opString = lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygemsSrc = import ./rubygems-src.nix { inherit fetchurl; };
-  rubygemsPatch = fetchpatch {
-    url = "https://github.com/zimbatm/rubygems/compare/v2.6.6...v2.6.6-nix.patch";
-    sha256 = "0297rdb1m6v75q8665ry9id1s74p9305dv32l95ssf198liaihhd";
-  };
-  unpackdir = obj:
-    lib.removeSuffix ".tgz"
-      (lib.removeSuffix ".tar.gz" obj.name);
+  rubygems = import ./rubygems { inherit stdenv lib fetchurl fetchpatch; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -49,8 +42,10 @@ let
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
       }:
-      let rubySrc =
-        if useRailsExpress then fetchFromGitHub {
+      stdenv.mkDerivation rec {
+        name = "ruby-${version}";
+
+        src = if useRailsExpress then fetchFromGitHub {
           owner  = "ruby";
           repo   = "ruby";
           rev    = tag;
@@ -59,16 +54,6 @@ let
           url = "https://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
           sha256 = sha256.src;
         };
-      in
-      stdenv.mkDerivation rec {
-        name = "ruby-${version}";
-
-        srcs = [ rubySrc rubygemsSrc ];
-        sourceRoot =
-          if useRailsExpress then
-            rubySrc.name
-          else
-            unpackdir rubySrc;
 
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
         NROFF = if docSupport then "${groff}/bin/nroff" else null;
@@ -100,10 +85,7 @@ let
           })."${ver.majMinTiny}";
 
         postUnpack = ''
-          cp -r ${unpackdir rubygemsSrc} ${sourceRoot}/rubygems
-          pushd ${sourceRoot}/rubygems
-          patch -p1 < ${rubygemsPatch}
-          popd
+          cp -r ${rubygems} $sourceRoot/rubygems
         '';
 
         postPatch = if atLeast25 then ''
@@ -146,6 +128,7 @@ let
         postInstall = ''
           # Update rubygems
           pushd rubygems
+          chmod +w bundler/bundler.gemspec
           ${buildRuby} setup.rb --destdir $GEM_HOME
           popd
 

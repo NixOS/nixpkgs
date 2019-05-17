@@ -1,66 +1,77 @@
-{ lib, stdenv, fetchurl, fetchpatch, findXMLCatalogs, writeScriptBin, ruby, bash }:
+{ lib, stdenv, substituteAll, fetchurl, fetchpatch, findXMLCatalogs, writeScriptBin, ruby, bash }:
 
 let
 
-  common = { pname, sha256, patches ? [] }: let self = stdenv.mkDerivation rec {
-    name = "${pname}-1.79.1";
+  common = { pname, sha256, suffix ? "" }: let
+    legacySuffix = if suffix == "-nons" then "" else "-ns";
+    self = stdenv.mkDerivation rec {
+      inherit pname;
+      version = "1.79.2";
 
-    src = fetchurl {
-      url = "mirror://sourceforge/docbook/${name}.tar.bz2";
-      inherit sha256;
-    };
+      src = fetchurl {
+        url = "https://github.com/docbook/xslt10-stylesheets/releases/download/release%2F${version}/docbook-xsl${suffix}-${version}.tar.bz2";
+        inherit sha256;
+      };
 
-    inherit patches;
+      patches = [
+        # Prevent a potential stack overflow
+        # https://github.com/docbook/xslt10-stylesheets/pull/37
+        (fetchpatch {
+          url = https://src.fedoraproject.org/rpms/docbook-style-xsl/raw/e3ae7a97ed1d185594dd35954e1a02196afb205a/f/docbook-style-xsl-non-recursive-string-subst.patch;
+          sha256 = "0lrjjg5kpwwmbhkxzz6i5zmimb6lsvrrdhzc2qgjmb3r6jnsmii3";
+          stripLen = "1";
+        })
 
-    propagatedBuildInputs = [ findXMLCatalogs ];
+        # Add legacy sourceforge.net URIs to the catalog
+        (substituteAll {
+          src = ./catalog-legacy-uris.patch;
+          inherit legacySuffix suffix version;
+        })
+      ];
 
-    dontBuild = true;
+      propagatedBuildInputs = [ findXMLCatalogs ];
 
-    installPhase = ''
-      dst=$out/share/xml/${pname}
-      mkdir -p $dst
-      rm -rf RELEASE* README* INSTALL TODO NEWS* BUGS install.sh svn* tools log Makefile tests extensions webhelp
-      mv * $dst/
+      dontBuild = true;
 
-      # Backwards compatibility. Will remove eventually.
-      mkdir -p $out/xml/xsl
-      ln -s $dst $out/xml/xsl/docbook
-    '';
+      installPhase = ''
+        dst=$out/share/xml/${pname}
+        mkdir -p $dst
+        rm -rf RELEASE* README* INSTALL TODO NEWS* BUGS install.sh tools Makefile tests extensions webhelp
+        mv * $dst/
 
-    passthru.dbtoepub = writeScriptBin "dbtoepub"
-      ''
-        #!${bash}/bin/bash
-        exec -a dbtoepub ${ruby}/bin/ruby ${self}/share/xml/${pname}/epub/bin/dbtoepub "$@"
+        # Backwards compatibility. Will remove eventually.
+        mkdir -p $out/xml/xsl
+        ln -s $dst $out/xml/xsl/docbook
+
+        # More backwards compatibility
+        ln -s $dst $out/share/xml/docbook-xsl${legacySuffix}
       '';
 
-    meta = {
-      homepage = http://wiki.docbook.org/topic/DocBookXslStylesheets;
-      description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
-      maintainers = [ lib.maintainers.eelco ];
-      platforms = lib.platforms.all;
+      passthru.dbtoepub = writeScriptBin "dbtoepub"
+        ''
+          #!${bash}/bin/bash
+          exec -a dbtoepub ${ruby}/bin/ruby ${self}/share/xml/${pname}/epub/bin/dbtoepub "$@"
+        '';
+
+      meta = {
+        homepage = http://wiki.docbook.org/topic/DocBookXslStylesheets;
+        description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
+        maintainers = [ lib.maintainers.eelco ];
+        platforms = lib.platforms.all;
+      };
     };
-  }; in self;
+  in self;
 
 in {
 
-  docbook_xsl = common {
-    pname = "docbook-xsl";
-    sha256 = "0s59lihif2fr7rznckxr2kfyrvkirv76r1zvidp9b5mj28p4apvj";
-
-    patches = [(fetchpatch {
-      name = "potential-infinite-template-recursion.patch";
-      url = "https://src.fedoraproject.org/cgit/rpms/docbook-style-xsl.git/"
-          + "plain/docbook-style-xsl-non-recursive-string-subst.patch?id=bf9e5d16fd";
-      sha256 = "1pfb468bsj3j879ip0950waih0r1s6rzfbm2p70glbz0g3903p7h";
-      stripLen = "1";
-    })];
-
+  docbook-xsl-nons = common {
+    pname = "docbook-xsl-nons";
+    suffix = "-nons";
+    sha256 = "00i1hdyxim8jymv2dz68ix3wbs5w6isxm8ijb03qk3vs1g59x2zf";
   };
 
-  docbook_xsl_ns = common {
+  docbook-xsl-ns = common {
     pname = "docbook-xsl-ns";
-    sha256 = "170ggf5dgjar65kkn5n33kvjr3pdinpj66nnxfx8b2avw0k91jin";
-
-    patches = [ ./docbook-xsl-ns-infinite.patch ];
+    sha256 = "0wd33z41kdsybyx3ay21w6bdlmgpd9kyn3mr5y520lsf8km28r9i";
   };
 }

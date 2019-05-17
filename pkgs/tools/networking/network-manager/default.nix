@@ -61,13 +61,6 @@ in stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
-
-    # Our gobject-introspection patches make the shared library paths absolute
-    # in the GIR files. When building docs, the library is not yet installed,
-    # though, so we need to replace the absolute path with a local one during build.
-    # We are replacing the variables in postPatch since substituteAll does not support
-    # placeholders.
-    ./fix-docs-build.patch
   ];
 
   buildInputs = [
@@ -91,10 +84,15 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs ./tools
     patchShebangs libnm/generate-setting-docs.py
+  '';
 
-    substituteInPlace libnm/meson.build \
-      --subst-var-by DOCS_LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-      --subst-var-by DOCS_NIX_REDIRECTS "${placeholder "out"}/lib/libnm.so.0=$PWD/build/libnm/libnm.so.0"
+  preBuild = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When building docs, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overridden during installation.
+    mkdir -p ${placeholder "out"}/lib
+    ln -s $PWD/libnm/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
   '';
 
   postInstall = ''

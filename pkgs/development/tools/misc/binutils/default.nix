@@ -1,5 +1,5 @@
 { stdenv, lib, buildPackages
-, fetchurl, zlib, autoreconfHook
+, fetchurl, zlib, autoreconfHook, gettext
 # Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
 , enableShared ? true
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.targetPlatform.isiOS [
     autoreconfHook
   ];
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib gettext ];
 
   inherit noSysDirs;
 
