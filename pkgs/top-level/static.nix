@@ -104,6 +104,7 @@ in {
   optipng = super.optipng.override {
     static = true;
   };
+  openblas = super.openblas.override { enableStatic = true; };
   openssl = super.openssl.override {
     static = true;
 
