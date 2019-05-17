@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
     else [
       (fetchpatch {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
-      sha256 = "1fyml1iwrs412xn2w36ra28am3sq4klrrj60lnf7rysyw069nxk3";
+      sha256 = "1gfcsr0i3q8q2f0lqza8na0iy4l4p3cbii51ds6zmj0y4hz2dwhb";
+      excludes = [ "lib/ext2fs/hashmap.h" ];
       extraPrefix = "";
       })
     ];
