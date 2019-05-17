@@ -1,4 +1,17 @@
-{ stdenv, fetchurl, fetchFromGitHub, python3, python3Packages, zbar, secp256k1 }:
+{ stdenv, fetchurl, fetchFromGitHub, python3, python3Packages, zbar, secp256k1
+
+
+# for updater.nix
+, writeScript
+, common-updater-scripts
+, bash
+, coreutils
+, curl
+, gnugrep
+, gnupg
+, gnused
+, nix
+}:
 
 let
   version = "3.3.6";
@@ -84,6 +97,21 @@ python3Packages.buildPythonApplication rec {
     py.test electrum/tests
     $out/bin/electrum help >/dev/null
   '';
+
+  passthru.updateScript = import ./update.nix {
+    inherit (stdenv) lib;
+    inherit
+      writeScript
+      common-updater-scripts
+      bash
+      coreutils
+      curl
+      gnupg
+      gnugrep
+      gnused
+      nix
+    ;
+  };
 
   meta = with stdenv.lib; {
     description = "A lightweight Bitcoin wallet";
