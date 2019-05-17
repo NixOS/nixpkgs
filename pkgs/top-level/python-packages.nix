@@ -506,6 +506,8 @@ in {
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
+  bravado-core = callPackage ../development/python-modules/bravado-core { };
+
   breathe = callPackage ../development/python-modules/breathe { };
 
   brotli = callPackage ../development/python-modules/brotli { };
