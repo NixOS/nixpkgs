@@ -9202,6 +9202,8 @@ in
 
   graphene-hardened-malloc = callPackage ../development/libraries/graphene-hardened-malloc { };
 
+  graphene = callPackage ../development/libraries/graphene { };
+
   gtk-doc = callPackage ../development/tools/documentation/gtk-doc { };
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
