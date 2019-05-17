@@ -18,16 +18,12 @@ let
     in (pName mysql == pName pkgs.mysql57)
        && ((builtins.compareVersions mysql.version "5.7") >= 0);
 
-  pidFile = "${cfg.pidDir}/mysqld.pid";
-
-  mysqldAndInstallOptions =
-    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
   mysqldOptions =
-    "${mysqldAndInstallOptions} --pid-file=${pidFile}";
+    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
   # For MySQL 5.7+, --insecure creates the root user without password
   # (earlier versions and MariaDB do this by default).
   installOptions =
-    "${mysqldAndInstallOptions} ${lib.optionalString isMysqlAtLeast57 "--insecure"}";
+    "${mysqldOptions} ${lib.optionalString isMysqlAtLeast57 "--insecure"}";
 
 in
 
@@ -78,11 +74,6 @@ in
         type = types.path;
         example = "/var/lib/mysql";
         description = "Location where MySQL stores its table files";
-      };
-
-      pidDir = mkOption {
-        default = "/run/mysqld";
-        description = "Location of the file which stores the PID of the MySQL server";
       };
 
       extraOptions = mkOption {
@@ -298,7 +289,6 @@ in
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0700 ${cfg.user} mysql -"
-      "d '${cfg.pidDir}' 0755 ${cfg.user} mysql -"
     ];
 
     systemd.services.mysql = let
@@ -329,7 +319,6 @@ in
           User = cfg.user;
           Group = "mysql";
           Type = if hasNotify then "notify" else "simple";
-          # /run/mysqld needs to be created in addition to pidDir, as they could point to different locations
           RuntimeDirectory = "mysqld";
           RuntimeDirectoryMode = "0755";
           # The last two environment variables are used for starting Galera clusters
