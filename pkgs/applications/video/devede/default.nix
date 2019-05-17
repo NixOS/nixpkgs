@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, python3Packages, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor
-, gtk3, gettext, wrapGAppsHook, gdk_pixbuf }:
+, gtk3, gettext, wrapGAppsHook, gdk_pixbuf, gobject-introspection }:
 
 let
   inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3;
@@ -15,8 +15,18 @@ in buildPythonApplication rec {
     sha256 = "0ncb8nykchrjlllbzfjpvirmfvfaps9qhilc56kvcw3nzqrnkx8q";
   };
 
+  # Temporary fix
+  # See https://github.com/NixOS/nixpkgs/issues/61578
+  # and https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+
   nativeBuildInputs = [
     gettext wrapGAppsHook
+
+    # Temporary fix
+    # See https://github.com/NixOS/nixpkgs/issues/61578
+    # and https://github.com/NixOS/nixpkgs/issues/56943
+    gobject-introspection
   ];
 
   buildInputs = [
