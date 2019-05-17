@@ -2899,6 +2899,7 @@ broken-packages:
   - atomic-primops-vector
   - atomo
   - ats-format
+  - ats-pkg
   - ats-setup
   - ats-storable
   - attic-schedule
@@ -2968,6 +2969,7 @@ broken-packages:
   - azure-service-api
   - azure-servicebus
   - azurify
+  - b9
   - babylon
   - backdropper
   - backtracking-exceptions
@@ -3054,6 +3056,7 @@ broken-packages:
   - binary-ext
   - binary-file
   - binary-indexed-tree
+  - binary-instances
   - binary-protocol
   - binary-protocol-zmq
   - binary-streams
@@ -3321,6 +3324,7 @@ broken-packages:
   - cabin
   - cabocha
   - cached
+  - cacophony
   - caffegraph
   - cairo-core
   - cake
@@ -3696,6 +3700,7 @@ broken-packages:
   - context-free-grammar
   - context-stack
   - ContextAlgebra
+  - contiguous-checked
   - contiguous-fft
   - continue
   - continuum
@@ -4006,6 +4011,7 @@ broken-packages:
   - derp-lib
   - descript-lang
   - deterministic-game-engine
+  - detour-via-sci
   - detour-via-uom
   - deunicode
   - devil
@@ -4197,6 +4203,7 @@ broken-packages:
   - Dust-crypto
   - Dust-tools
   - Dust-tools-pcap
+  - dvault
   - dvda
   - dvdread
   - dvi-processing
@@ -4542,6 +4549,7 @@ broken-packages:
   - flexiwrap
   - flexiwrap-smallcheck
   - flickr
+  - flight-kml
   - Flippi
   - flite
   - float-binstring
@@ -4821,6 +4829,7 @@ broken-packages:
   - gi-wnck
   - giak
   - Gifcurry
+  - ginger
   - ginsu
   - gipeda
   - gist
@@ -5429,6 +5438,7 @@ broken-packages:
   - heckle
   - hedgehog-checkers
   - hedgehog-checkers-lens
+  - hedgehog-fn
   - hedgehog-gen-json
   - Hedi
   - hedis-config
@@ -5520,6 +5530,7 @@ broken-packages:
   - hgrib
   - hharp
   - HHDL
+  - hhp
   - hi3status
   - hiccup
   - hichi
@@ -6519,6 +6530,7 @@ broken-packages:
   - ldif
   - leaf
   - leaky
+  - lean
   - leanpub-wreq
   - leapseconds
   - learn
@@ -6720,6 +6732,7 @@ broken-packages:
   - LslPlus
   - lsp-test
   - lsystem
+  - ltext
   - ltk
   - lua-bc
   - luachunk
@@ -7276,6 +7289,7 @@ broken-packages:
   - Nomyx-Web
   - non-empty-zipper
   - NonEmpty
+  - nonempty-containers
   - NonEmptyList
   - normalization-insensitive
   - NoSlow
@@ -7785,6 +7799,7 @@ broken-packages:
   - primitive-indexed
   - primitive-maybe
   - primitive-simd
+  - primitive-sort
   - primula-board
   - primula-bot
   - pringletons
@@ -8097,6 +8112,7 @@ broken-packages:
   - regions-mtl
   - register-machine-typelevel
   - registry
+  - registry-hedgehog
   - regress
   - regular
   - regular-extras
@@ -8109,6 +8125,7 @@ broken-packages:
   - relacion
   - relation
   - relational-postgresql8
+  - relational-record-examples
   - relative-date
   - reload
   - remark
@@ -9074,6 +9091,7 @@ broken-packages:
   - tasty-jenkins-xml
   - tasty-laws
   - tasty-lens
+  - tasty-lua
   - tasty-quickcheck-laws
   - tasty-stats
   - tasty-tap
