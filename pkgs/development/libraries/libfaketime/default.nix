@@ -21,9 +21,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  preBuild = ''
-    makeFlagsArray+=(PREFIX="$out" LIBDIRNAME=/lib)
-  '';
+  PREFIX = placeholder "out";
+  LIBDIRNAME = "/lib";
 
   checkInputs = [ perl ];
 
