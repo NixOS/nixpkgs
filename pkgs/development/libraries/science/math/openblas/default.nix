@@ -7,6 +7,7 @@
 # Select a specific optimization target (other than the default)
 # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
+, enableStatic ? false
 }:
 
 with stdenv.lib;
@@ -124,7 +125,7 @@ stdenv.mkDerivation rec {
     PREFIX = placeholder "out";
     NUM_THREADS = 64;
     INTERFACE64 = blas64;
-    NO_STATIC = true;
+    NO_STATIC = !enableStatic;
     CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
     HOSTCC = "cc";
     # Makefile.system only checks defined status
