@@ -2734,6 +2734,13 @@ in
           sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
         };
       });
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "3.12";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1aqjl8dk9amd4zr99n8v2qxzgmr2hdvqfma4zh7a41rj6336c9sr";
+        };
+      });
     };
   }).pkgs; toPythonApplication elasticsearch-curator;
 
