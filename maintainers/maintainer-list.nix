@@ -4491,6 +4491,11 @@
     github = "sfrijters";
     name = "Stefan Frijters";
   };
+  sgraf = {
+    email = "sgraf1337@gmail.com";
+    github = "sgraf812";
+    name = "Sebastian Graf";
+  };
   shanemikel = {
     email = "shanemikel1@gmail.com";
     github = "shanemikel";
