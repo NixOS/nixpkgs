@@ -28,6 +28,7 @@ let
       dtrace        = "209.50.12";
       libpthread    = "218.60.3";
       hfs           = "366.70.1";
+      libdispatch   = "703.50.37";
     };
     "osx-10.11.6" = {
       PowerManagement = "572.50.1";
@@ -219,7 +220,7 @@ let
       Libc_old        = applePackage "Libc/825_40_1.nix" "osx-10.8.5"      "0xsx1im52gwlmcrv4lnhhhn9dyk5ci6g27k6yvibn9vj8fzjxwcf" {};
     };
     libclosure      = applePackage "libclosure"        "osx-10.11.6"     "1zqy1zvra46cmqv6vsf1mcsz3a76r9bky145phfwh4ab6y15vjpq" {};
-    libdispatch     = applePackage "libdispatch"       "osx-10.10.5"     "0jsfbzp87lwk9snlby0hd4zvj7j894p5q3cw0wdx9ny1mcp3kdcj" {};
+    libdispatch     = applePackage "libdispatch"       "osx-10.12.6"     "0h7cl6m167qvklfx5h8c3vzmp9k2dpkgh4i6h7wdmgr37wrkibvv" {};
     libiconv        = applePackage "libiconv"          "osx-10.12.6"     "1gg5h6z8sk851bhv87vyxzs54jmqz6lh57ny8j4s51j7srja0nly" {};
     Libinfo         = applePackage "Libinfo"           "osx-10.11.6"     "0qjgkd4y8sjvwjzv5wwyzkb61pg8wwg95bkp721dgzv119dqhr8x" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "02sd82ig2jvvyyfschmb4gpz6psnizri8sh6i982v341x6y4ysl7" {};
