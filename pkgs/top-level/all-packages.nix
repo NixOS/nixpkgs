@@ -15636,7 +15636,7 @@ in
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    blcr = if builtins.compareVersions "3.18" kernel.version == 1 then callPackage ../os-specific/linux/blcr { } else null;
+    blcr = if stdenv.lib.versionOlder "3.18" kernel.version then callPackage ../os-specific/linux/blcr { } else null;
 
     chipsec = callPackage ../tools/security/chipsec {
       inherit kernel;
