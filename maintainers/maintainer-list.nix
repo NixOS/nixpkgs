@@ -3379,6 +3379,10 @@
     email = "matthew@wellquite.org";
     name = "Matthew Sackman";
   };
+  mschneider = {
+    email = "markus.schneider.sic+nix@gmail.com";
+    name = "Markus Schneider";
+  };
   mschristiansen = {
     email = "mikkel@rheosystems.com";
     github = "mschristiansen";
