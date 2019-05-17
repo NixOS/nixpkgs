@@ -95,6 +95,14 @@
    </listitem>
    <listitem>
     <para>
+      The <option>services.mysql.pidDir</option> option was removed, as it was only used by the wordpress
+      apache-httpd service to wait for mysql to have started up.
+      This can be accomplished by either describing a dependency on mysql.service (preferred)
+      or waiting for the (hardcoded) <filename>/run/mysqld/mysql.sock</filename> file to appear.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The <option>services.emby.enable</option> module has been removed, see
       <option>services.jellyfin.enable</option> instead for a free software fork of Emby.
 
