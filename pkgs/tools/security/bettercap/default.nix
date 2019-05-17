@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, libpcap, libnfnetlink, libnetfilter_queue, libusb }:
+{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, libpcap, libnfnetlink, libnetfilter_queue, libusb1 }:
 
 buildGoPackage rec {
   pname = "bettercap";
@@ -14,7 +14,7 @@ buildGoPackage rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libpcap libnfnetlink libnetfilter_queue libusb ];
+  buildInputs = [ libpcap libnfnetlink libnetfilter_queue libusb1 ];
 
   goDeps = ./deps.nix;
 
