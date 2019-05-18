@@ -119,7 +119,7 @@ let
         example = "container";
         description = ''
           Advanced: move the created wireguard interface into a network namespace,
-          as described in the first part of https://www.wireguard.com/netns/ .
+          as described in the first part of https://www.wireguard.com/netns/.
           This allows you to use <command>ip netns exec $namespace COMMAND</command> to execute
           COMMAND in a network namespace with only this interface available, routing
           all traffic over the wireguard tunnel.
@@ -270,7 +270,7 @@ let
           ${values.preSetup}
 
           ip link add dev ${name} type wireguard
-          ${lib.optionalString (!isNull values.namespace) ''
+          ${lib.optionalString !(isNull values.namespace) ''
             ip netns add "${values.namespace}"
             ip link set ${name} netns "${values.namespace}"
           ''}
