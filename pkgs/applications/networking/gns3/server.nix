@@ -47,6 +47,8 @@ in python.pkgs.buildPythonPackage {
   postPatch = ''
     # "typing" is only required for Python 3.4 and breaks Python 3.7:
     sed -iE "s/.*typing.*//" requirements.txt
+    # Only 2.x is problematic:
+    sed -iE "s/prompt-toolkit==1.0.15/prompt-toolkit<2.0.0/" requirements.txt
   '';
 
   propagatedBuildInputs = with python.pkgs; [

@@ -762,6 +762,11 @@
     github = "brian-dawn";
     name = "Brian Dawn";
   };
+  brianhicks = {
+    email = "brian@brianthicks.com";
+    github = "BrianHicks";
+    name = "Brian Hicks";
+  };
   bricewge = {
     email = "bricewge@gmail.com";
     github = "bricewge";
@@ -1737,6 +1742,13 @@
     github = "fps";
     name = "Florian Paul Schmidt";
   };
+  
+  fragamus = {
+    email = "innovative.engineer@gmail.com";
+    github = "fragamus";
+    name = "Michael Gough";
+  };
+  
   fredeb = {
     email = "im@fredeb.dev";
     github = "fredeeb";
@@ -4478,6 +4490,11 @@
     email = "sfrijters@gmail.com";
     github = "sfrijters";
     name = "Stefan Frijters";
+  };
+  sgraf = {
+    email = "sgraf1337@gmail.com";
+    github = "sgraf812";
+    name = "Sebastian Graf";
   };
   shanemikel = {
     email = "shanemikel1@gmail.com";

@@ -181,6 +181,10 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  anytree = callPackage ../development/python-modules/anytree {
+    inherit (pkgs) graphviz;
+  };
+
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
@@ -398,6 +402,8 @@ in {
   fastparquet = callPackage ../development/python-modules/fastparquet { };
 
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 {  };
+
+  fasttext = callPackage ../development/python-modules/fasttext {  };
 
   favicon = callPackage ../development/python-modules/favicon {  };
 

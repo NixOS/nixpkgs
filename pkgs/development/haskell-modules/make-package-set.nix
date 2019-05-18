@@ -118,6 +118,7 @@ let
     inherit packages;
   };
 
+  # Use cabal2nix to create a default.nix for the package sources found at 'src'.
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
       sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
@@ -174,8 +175,14 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
 
     inherit (haskellLib) packageSourceOverrides;
 
+    # callHackage :: Text -> Text -> AttrSet -> HaskellPackage
+    #
+    # e.g., while overriding a package set:
+    #    '... foo = self.callHackage "foo" "1.5.3" {}; ...'
     callHackage = name: version: callPackageKeepDeriver (self.hackage2nix name version);
 
+    # callHackageDirect :: Text -> Text -> AttrSet -> HaskellPackage
+    #
     # This function does not depend on all-cabal-hashes and therefore will work
     # for any version that has been released on hackage as opposed to only
     # versions released before whatever version of all-cabal-hashes you happen

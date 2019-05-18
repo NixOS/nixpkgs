@@ -26,13 +26,13 @@ assert stdenv.hostPlatform.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
-  version = "1.2.28";
+  version = "1.2.18";
   name = "${pname}-${version}";
 
   src = fetchurl {
     name = "saleae-logic-${version}-64bit.zip";
     url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
-    sha256 = "0apq8hmn39k0ads4xy8iyy9rp8bvia60mh7a944rk1gjpqv227g5";
+    sha256 = "0lhair2vsg8sjvzicvfcjfmvy30q7i01xj4z02iqh7pgzpb025h8";
   };
 
   desktopItem = makeDesktopItem {

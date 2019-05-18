@@ -34,7 +34,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  NOSE_EXCLUDE = stdenv.lib.optionalString (stdenv.isAarch64) "tests.functional.test_httplib2.test_callback_response";
+  # Those flaky tests are failing intermittently on all platforms
+  NOSE_EXCLUDE = stdenv.lib.concatStringsSep "," [
+    "tests.functional.test_httplib2.test_callback_response"
+    "tests.functional.test_requests.test_streaming_responses"
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://httpretty.readthedocs.org/";

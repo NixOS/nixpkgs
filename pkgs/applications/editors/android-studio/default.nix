@@ -8,9 +8,9 @@ let
     inherit (gnome2) GConf gnome_vfs;
   };
   stableVersion = {
-    version = "3.4.0.18"; # "Android Studio 3.4.0"
-    build = "183.5452501";
-    sha256Hash = "0i8wz9v6nxzr27a07cv2330i84v94pcl13gjwvpglp55hyzd8axd";
+    version = "3.4.1.0"; # "Android Studio 3.4.1"
+    build = "183.5522156";
+    sha256Hash = "0y4l9d1yrvv1csx6vl4jnqgqy96y44rl6p8hcxrnbvrg61iqnj30";
   };
   betaVersion = latestVersion;
   latestVersion = { # canary & dev

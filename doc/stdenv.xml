@@ -1580,7 +1580,7 @@ installTargets = "install-bin install-doc";</programlisting>
      </term>
      <listitem>
       <para>
-       Like <varname>dontStripHost</varname>, but only affects the
+       Like <varname>dontStrip</varname>, but only affects the
        <command>strip</command> command targetting the package's host platform.
        Useful when supporting cross compilation, but otherwise feel free to
        ignore.
@@ -1593,7 +1593,7 @@ installTargets = "install-bin install-doc";</programlisting>
      </term>
      <listitem>
       <para>
-       Like <varname>dontStripHost</varname>, but only affects the
+       Like <varname>dontStrip</varname>, but only affects the
        <command>strip</command> command targetting the packages' target
        platform. Useful when supporting cross compilation, but otherwise feel
        free to ignore.
