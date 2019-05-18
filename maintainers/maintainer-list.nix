@@ -4001,6 +4001,11 @@
     github = "Ptival";
     name = "Valentin Robert";
   };
+  ptrhlm = {
+    email = "ptrhlm0@gmail.com";
+    github = "ptrhlm";
+    name = "Piotr Halama";
+  };
   puffnfresh = {
     email = "brian@brianmckenna.org";
     github = "puffnfresh";
