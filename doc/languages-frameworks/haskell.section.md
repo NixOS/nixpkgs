@@ -953,7 +953,7 @@ is essentially a "free software" license (BSD3), according to
 paragraph 2 of the LGPL, GHC must be distributed under the terms of the LGPL!
 
 To work around these problems GHC can be build with a slower but LGPL-free
-alternative implemention for Integer called
+alternative implementation for Integer called
 [integer-simple](http://hackage.haskell.org/package/integer-simple).
 
 To get a GHC compiler build with `integer-simple` instead of `integer-gmp` use
