@@ -31,7 +31,7 @@ let
   # use latest when no version is passed
   makeCacheConf = { version ? null }:
     let
-      fcPackage = if builtins.isNull version
+      fcPackage = if version == null
                   then "fontconfig"
                   else "fontconfig_${version}";
       makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };

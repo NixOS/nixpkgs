@@ -174,13 +174,13 @@ let
         "--rm"
         "--name=%n"
         "--log-driver=${container.log-driver}"
-      ] ++ optional (! isNull container.entrypoint)
+      ] ++ optional (container.entrypoint != null)
         "--entrypoint=${escapeShellArg container.entrypoint}"
         ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
         ++ map (p: "-p ${escapeShellArg p}") container.ports
-        ++ optional (! isNull container.user) "-u ${escapeShellArg container.user}"
+        ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
         ++ map (v: "-v ${escapeShellArg v}") container.volumes
-        ++ optional (! isNull container.workdir) "-w ${escapeShellArg container.workdir}"
+        ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
         ++ map escapeShellArg container.extraDockerOptions
         ++ [container.image]
         ++ map escapeShellArg container.cmd

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = let
     gflags' = google-gflags.overrideAttrs (old: {
-      cmakeFlags = stdenv.lib.filter (f: isNull (builtins.match ".*STATIC.*" f)) old.cmakeFlags;
+      cmakeFlags = stdenv.lib.filter (f: (builtins.match ".*STATIC.*" f) == null) old.cmakeFlags;
     });
 
     # use older `lvm2` source for osquery, the 2.03 sourcetree

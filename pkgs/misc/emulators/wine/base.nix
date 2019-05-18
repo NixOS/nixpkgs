@@ -7,7 +7,7 @@
 
 with import ./util.nix { inherit lib; };
 
-stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
+stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   builder = buildScript;
 }) // rec {
   inherit name src configureFlags;

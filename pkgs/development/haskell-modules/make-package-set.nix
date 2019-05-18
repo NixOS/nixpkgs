@@ -121,7 +121,7 @@ let
   # Use cabal2nix to create a default.nix for the package sources found at 'src'.
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
-      sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
+      sha256Arg = if sha256 == null then "--sha256=" else ''--sha256="${sha256}"'';
     in pkgs.buildPackages.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
       nativeBuildInputs = [ pkgs.buildPackages.cabal2nix ];
