@@ -88,6 +88,7 @@
 , { "npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0" }
 , "npm-check-updates"
 , "ocaml-language-server"
+, "onecolor"
 , "peerflix"
 , "peerflix-server"
 , "pnpm"
