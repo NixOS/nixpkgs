@@ -16223,6 +16223,8 @@ in
 
   junicode = callPackage ../data/fonts/junicode { };
 
+  kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
+
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
 
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
