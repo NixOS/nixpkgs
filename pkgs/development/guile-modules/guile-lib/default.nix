@@ -16,11 +16,6 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ guile texinfo ];
 
-  # One test doesn't seem to be compatible with guile_2_2.
-  patchPhase = ''
-    sed -i -e '/sxml.ssax.scm/d' unit-tests/Makefile*
-  '';
-
   doCheck = true;
 
   preCheck = ''
