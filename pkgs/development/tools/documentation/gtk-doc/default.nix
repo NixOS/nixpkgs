@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     passthru.respect_xml_catalog_files_var_patch
+    # https://gitlab.gnome.org/GNOME/gtk-doc/issues/84
+    ./0001-highlight-fix-permission-on-file-style.patch
   ];
 
   outputDevdoc = "out";
