@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
-  version = "1.14.45";
+  version = "1.14.46";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1yk91ccf7z9b8d8ac6vip3gc5c0pkwgabqy6l0pj0kf43l7jrg2w";
+    sha256 = "0bddmlzg719sjhlbzqlhb7chwk93qc7g68m2r9r8xz112jdradpa";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];
