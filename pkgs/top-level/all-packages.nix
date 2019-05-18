@@ -8977,6 +8977,11 @@ in
 
   ruby = ruby_2_5;
 
+  rubyPackages_2_3 = recurseIntoAttrs ruby_2_3.gems;
+  rubyPackages_2_4 = recurseIntoAttrs ruby_2_4.gems;
+  rubyPackages_2_5 = recurseIntoAttrs ruby_2_5.gems;
+  rubyPackages_2_6 = recurseIntoAttrs ruby_2_6.gems;
+
   mruby = callPackage ../development/compilers/mruby { };
 
   scsh = callPackage ../development/interpreters/scsh { };
