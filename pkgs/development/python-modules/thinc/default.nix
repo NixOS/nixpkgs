@@ -21,15 +21,18 @@
 , mock
 , wrapt
 , dill
+, blis
+, srsly
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "6.12.1";
+  version = "7.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kkp8b3xcs3yn3ia5sxrh086c9xv27s2khdxd17abdypxxa99ich";
+    sha256 = "14v8ygjrkj63dwd4pi490ld6i2d8n8wzcf15hnacjjfwij93pa1q";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -37,6 +40,7 @@ buildPythonPackage rec {
   ]);
 
   propagatedBuildInputs = [
+   blis
    cython
    cymem
    msgpack-numpy
@@ -48,8 +52,10 @@ buildPythonPackage rec {
    cytoolz
    plac
    six
+   srsly
    wrapt
    dill
+   wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
 
@@ -61,12 +67,7 @@ buildPythonPackage rec {
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "pathlib==1.0.1" "pathlib>=1.0.0,<2.0.0" \
-      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6" \
-      --replace "msgpack-numpy<0.4.4" "msgpack-numpy" \
-      --replace "wheel>=0.32.0,<0.33.0" "wheel" \
-      --replace "wrapt>=1.10.0,<1.11.0" "wrapt" \
-      --replace "msgpack>=0.5.6,<0.6.0" "msgpack"
+      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6"
   '';
 
   # Cannot find cython modules.
