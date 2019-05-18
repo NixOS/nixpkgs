@@ -1,7 +1,7 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
-  version = "1.002";
+  version = "1.003";
 in fetchzip rec {
   name = "public-sans-${version}";
 
@@ -12,9 +12,9 @@ in fetchzip rec {
     unzip $downloadedFile fonts/{otf,variable}/\*.\[ot\]tf -d $out/share/
   '';
 
-  sha256 = "1j792i6350sp63l04jww5rpnsfz9zkj97rd378yxnpnwf2a8nv4k";
+  sha256 = "02ranwr1bw4n9n1ljw234nzhj2a0hgradniib37nh10maark5wg3";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A strong, neutral, principles-driven, open source typeface for text or display";
     homepage = https://public-sans.digital.gov/;
     license = licenses.ofl;

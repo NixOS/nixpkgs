@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
 , numpy
 , ffmpeg_4
 , libav
@@ -10,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "6.1.2";
+  version = "6.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eebbb56eeae650b1fc551f94d51aee39b487bf4df73c39daea186c5d2950650f";
+    sha256 = "1wm33qajxcpl9rn7zfb2pwwqn87idb7ic7h5zwy2hgbpjnh3vc2g";
   };
 
-  checkInputs = [ nose numpy ];
+  checkInputs = [ numpy ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ffmpeg_4 ];

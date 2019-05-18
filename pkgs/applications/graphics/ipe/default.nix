@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ipe-7.2.11";
+  name = "ipe-7.2.12";
 
   src = fetchurl {
     url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${name}-src.tar.gz";
-    sha256 = "09d71fdpiz359mcnb57460w2mcfizvlnidd6g1k4c3v6rglwlbd2";
+    sha256 = "1qw1cmwzi3wxk4x916i9y4prhi9brnwl14i9a1cbw23x1sr7i6kw";
   };
 
   sourceRoot = "${name}/src";

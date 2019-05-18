@@ -166,10 +166,3 @@ int execv(const char *path, char *const argv[])
     char buf[PATH_MAX];
     return execv_real(rewrite(path, buf), argv);
 }
-
-void *dlopen(const char *filename, int flag)
-{
-    void * (*__dlopen_real) (const char *, int) = dlsym(RTLD_NEXT, "dlopen");
-    char buf[PATH_MAX];
-    return __dlopen_real(rewrite(filename, buf), flag);
-}

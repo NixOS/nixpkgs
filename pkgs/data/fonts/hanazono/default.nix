@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "20141012";
@@ -15,7 +15,7 @@ in fetchzip {
 
   sha256 = "0z0fgrjzp0hqqnhfisivciqpxd2br2w2q9mvxkglj44np2q889w2";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free kanji font containing 96,327 characters";
     homepage = http://fonts.jp/hanazono/;
 

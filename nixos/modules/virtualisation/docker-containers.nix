@@ -65,10 +65,9 @@ let
           default = [];
           description = ''
             Network ports to publish from the container to the outer host.
-            </para>
-            <para>
+
             Valid formats:
-            </para>
+
             <itemizedlist>
               <listitem>
                 <para>
@@ -91,21 +90,19 @@ let
                 </para>
               </listitem>
             </itemizedlist>
-            <para>
+
             Both <literal>hostPort</literal> and
             <literal>containerPort</literal> can be specified as a range of
             ports.  When specifying ranges for both, the number of container
             ports in the range must match the number of host ports in the
             range.  Example: <literal>1234-1236:1234-1236/tcp</literal>
-            </para>
-            <para>
+
             When specifying a range for <literal>hostPort</literal> only, the
             <literal>containerPort</literal> must <emphasis>not</emphasis> be a
             range.  In this case, the container port is published somewhere
             within the specified <literal>hostPort</literal> range.  Example:
             <literal>1234-1236:1234/tcp</literal>
-            </para>
-            <para>
+
             Refer to the
             <link xlink:href="https://docs.docker.com/engine/reference/run/#expose-incoming-ports">
             Docker engine documentation</link> for full details.

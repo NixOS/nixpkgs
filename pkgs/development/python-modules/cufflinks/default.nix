@@ -1,4 +1,4 @@
-{ buildPythonPackage, stdenv, fetchPypi
+{ buildPythonPackage, stdenv, fetchPypi, fetchpatch
 , numpy, pandas, plotly, six, colorlover
 , ipython, ipywidgets, nose
 }:
@@ -15,6 +15,14 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy pandas plotly six colorlover
     ipython ipywidgets
+  ];
+
+  patches = [
+    # Plotly 3.8 compatibility. Remove with the next release. See https://github.com/santosjorge/cufflinks/pull/178
+    (fetchpatch {
+      url = "https://github.com/santosjorge/cufflinks/commit/cc4c23c2b45b870f6801d1cb0312948e1f73f424.patch";
+      sha256 = "1psl2h7vscpzvb4idr6s175v8znl2mfhkcyhb1926p4saswmghw1";
+    })
   ];
 
   checkInputs = [ nose ];

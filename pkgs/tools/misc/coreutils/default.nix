@@ -1,5 +1,5 @@
 { stdenv, lib, buildPackages
-, autoreconfHook, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
+, autoreconfHook, bison, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
 , aclSupport ? stdenv.isLinux, acl ? null
 , attrSupport ? stdenv.isLinux, attr ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
     sha256 = "1zg9m79x1i2nifj4kb0waf9x3i5h6ydkypkjnbsb9rnwis8rqypz";
   };
 
-  patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
+  patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+         # Fix compilation in musl-cross environments. To be removed in coreutils-8.32.
+         ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch;
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -55,7 +57,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ perl xz.bin ];
+  nativeBuildInputs = [ perl xz.bin ]
+    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
+    ++ optionals stdenv.hostPlatform.isMusl [ autoreconfHook bison ];   # due to patch
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
@@ -73,7 +77,6 @@ stdenv.mkDerivation rec {
     ++ optional aclSupport acl
     ++ optional attrSupport attr
     ++ optional withOpenssl openssl
-    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
     ++ optionals selinuxSupport [ libselinux libsepol ]
        # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc != "glibc") libiconv;
@@ -132,4 +135,7 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.eelco ];
   };
 
+} // optionalAttrs stdenv.hostPlatform.isMusl {
+  # Work around a bogus warning in conjunction with musl.
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 }

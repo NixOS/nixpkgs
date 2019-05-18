@@ -8,6 +8,7 @@
 , qtsvg
 , qtwebengine
 
+, akonadi-contacts
 , kcalcore
 , kconfigwidgets
 , kcoreaddons
@@ -50,14 +51,14 @@
 }:
 
 mkDerivation rec {
-  name    = "digikam-${version}";
-  version = "6.0.0";
+  pname   = "digikam";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "digikam";
     rev    = "v${version}";
-    sha256 = "1ifvrn0bm7fp07d059rl4dy146qzdxafl36ipxg1fg00dkv95hh4";
+    sha256 = "0h0jqfgpanhxfi3r7cgip58ppypqx79z6c5jj7i7f19hp2zziip8";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -88,6 +89,7 @@ mkDerivation rec {
     qtsvg
     qtwebengine
 
+    akonadi-contacts
     kcalcore
     kconfigwidgets
     kcoreaddons
@@ -112,6 +114,7 @@ mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
+    gappsWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"

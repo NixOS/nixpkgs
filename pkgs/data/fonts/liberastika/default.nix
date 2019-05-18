@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   version = "1.1.5";
@@ -15,7 +15,7 @@ in fetchzip rec {
 
   sha256 = "1a9dvl1pzch2vh8sqyyn1d1wz4n624ffazl6hzlc3s5k5lzrb6jp";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Liberation Sans fork with improved cyrillic support";
     homepage = https://sourceforge.net/projects/lib-ka/;
 

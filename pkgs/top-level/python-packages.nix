@@ -665,6 +665,8 @@ in {
 
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
 
+  py-radix = callPackage ../development/python-modules/py-radix { };
+
   pydbus = callPackage ../development/python-modules/pydbus { };
 
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
@@ -3097,6 +3099,8 @@ in {
 
   lektor = callPackage ../development/python-modules/lektor { };
 
+  leveldb = callPackage ../development/python-modules/leveldb { };
+
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
   python_openzwave = callPackage ../development/python-modules/python_openzwave {
@@ -4272,6 +4276,8 @@ in {
   scp = callPackage ../development/python-modules/scp {};
 
   seaborn = callPackage ../development/python-modules/seaborn { };
+
+  seabreeze = callPackage ../development/python-modules/seabreeze { };
 
   selenium = callPackage ../development/python-modules/selenium { };
 

@@ -4,7 +4,7 @@
 , fetchurl
 , makeWrapper
 , jre_headless
-, utillinux
+, utillinux, gnugrep, coreutils
 , autoPatchelfHook
 , zlib
 }:
@@ -19,8 +19,8 @@ stdenv.mkDerivation (rec {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
     sha256 =
       if enableUnfree
-      then "1qh6iz3qhw8zcvxfss5w3h89zarwvk6dp5bbbag7c30kh94gkqvv"
-      else "13v8qpslanfn5w81qvbg0aqh510yfbl3x59kisvdkz9ifhjbcavi";
+      then "1a88yyl0x4bsx92m3wjsz1fgm76gbfdzcd4bzp2x652rha667vfh"
+      else "04fa0fk25d5yxcjdj0bwqvdrswgwj31fwjvbq4gpg66c6bqwzcn6";
   };
 
   patches = [ ./es-home-6.x.patch ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation (rec {
     chmod -x $out/bin/*.*
 
     wrapProgram $out/bin/elasticsearch \
-      --prefix PATH : "${utillinux}/bin/" \
+      --prefix PATH : "${makeBinPath [ utillinux gnugrep coreutils ]}" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"

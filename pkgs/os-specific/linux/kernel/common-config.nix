@@ -184,6 +184,7 @@ let
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
       DRM_GMA600             = yes;
       DRM_GMA3600            = yes;
+      DRM_VMWGFX_FBCON       = yes;
       # necessary for amdgpu polaris support
       DRM_AMD_POWERPLAY = whenBetween "4.5" "4.9" yes;
       # (experimental) amdgpu support for verde and newer chipsets
@@ -425,6 +426,12 @@ let
       HIGHMEM64G = { optional = true; tristate = mkIf (!stdenv.is64bit) "y";};
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
+
+      # VirtualBox guest drivers in the kernel conflict with the ones in the
+      # official additions package and prevent the vboxsf module from loading,
+      # so disable them for now.
+      VBOXGUEST = option no;
+      DRM_VBOXVIDEO = option no;
 
     } // optionalAttrs (stdenv.isx86_64 || stdenv.isi686) ({
       XEN = option yes;

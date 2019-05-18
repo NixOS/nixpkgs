@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip rec {
   name = "encode-sans-1.002";
@@ -13,7 +13,7 @@ fetchzip rec {
 
   sha256 = "16mx894zqlwrhnp4rflgayxhxppmsj6k7haxdngajhb30rlwf08p";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A versatile sans serif font family";
     longDescription = ''
       The Encode Sans family is a versatile workhorse. Featuring a huge range of

@@ -88,6 +88,9 @@ rec {
     config = "aarch64-unknown-linux-musl";
   };
 
+  gnu64 = { config = "x86_64-unknown-linux-gnu"; };
+  gnu32  = { config = "i686-unknown-linux-gnu"; };
+
   musl64 = { config = "x86_64-unknown-linux-musl"; };
   musl32  = { config = "i686-unknown-linux-musl"; };
 

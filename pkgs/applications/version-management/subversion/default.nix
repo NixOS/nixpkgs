@@ -38,6 +38,11 @@ let
 
     patches = [ ./apr-1.patch ];
 
+    # We are hitting the following issue even with APR 1.6.x
+    # -> https://issues.apache.org/jira/browse/SVN-4813
+    # "-P" CPPFLAG is needed to build Python bindings and subversionClient
+    CPPFLAGS = [ "-P" ];
+
     configureFlags = [
       (stdenv.lib.withFeature bdbSupport "berkeley-db")
       (stdenv.lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")

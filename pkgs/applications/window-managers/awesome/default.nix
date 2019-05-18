@@ -5,7 +5,12 @@
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
 , libxkbcommon, xcbutilxrm, hicolor-icon-theme
 , asciidoctor
+, fontsConf
+, gtk3Support ? false, gtk3 ? null
 }:
+
+# needed for beautiful.gtk to work
+assert gtk3Support -> gtk3 != null;
 
 with luaPackages; stdenv.mkDerivation rec {
   name = "awesome-${version}";
@@ -27,7 +32,12 @@ with luaPackages; stdenv.mkDerivation rec {
     xmlto docbook_xml_dtd_45
     docbook_xsl findXMLCatalogs
     asciidoctor
+    ldoc
   ];
+
+  outputs = [ "out" "doc" ];
+
+  FONTCONFIG_FILE = toString fontsConf;
 
   propagatedUserEnvPkgs = [ hicolor-icon-theme ];
   buildInputs = [ cairo librsvg dbus gdk_pixbuf gobject-introspection
@@ -36,7 +46,8 @@ with luaPackages; stdenv.mkDerivation rec {
                   xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence
                   xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
-                  xcbutilxrm ];
+                  xcbutilxrm ]
+                  ++ stdenv.lib.optional gtk3Support gtk3;
 
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
   cmakeFlags = "-DOVERRIDE_VERSION=${version}";
@@ -48,7 +59,7 @@ with luaPackages; stdenv.mkDerivation rec {
   LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;;";
 
   postInstall = ''
-    # Don't use wrapProgram or or the wrapper will duplicate the --search
+    # Don't use wrapProgram or the wrapper will duplicate the --search
     # arguments every restart
     mv "$out/bin/awesome" "$out/bin/.awesome-wrapped"
     makeWrapper "$out/bin/.awesome-wrapped" "$out/bin/awesome" \

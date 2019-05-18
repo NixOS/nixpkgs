@@ -2,9 +2,12 @@
 ansicolors,
 argparse,
 basexx,
+binaryheap,
 dkjson
 fifo
+http
 inspect
+ldoc
 lgi
 lpeg_patterns
 lpty
@@ -22,6 +25,7 @@ luaevent,
 luacheck
 luaffi,,http://luarocks.org/dev,
 luuid,
+markdown,
 penlight,
 rapidjson,
 say,

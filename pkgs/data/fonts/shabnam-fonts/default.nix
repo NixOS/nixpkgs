@@ -1,22 +1,22 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "shabnam-fonts";
+let
+  pname = "shabnam-fonts";
   version = "4.0.0";
+in fetchFromGitHub rec {
+  name = "${pname}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "rastikerdar";
-    repo = "shabnam-font";
-    rev = "v${version}";
-    sha256 = "1y4w16if2y12028b9vyc5l5c5bvcglhxacv380ixb8fcc4hfakmb";
-  };
+  owner = "rastikerdar";
+  repo = "shabnam-font";
+  rev = "v${version}";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/shabnam-fonts
-    cp -v $( find . -name '*.ttf') $out/share/fonts/shabnam-fonts
+  postFetch = ''
+    tar xf $downloadedFile --strip=1
+    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/shabnam-fonts {} \;
   '';
+  sha256 = "0wfyaaj2pq2knz12l7rsc4wc703cbz0r8gkcya5x69p0aixch8ba";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/rastikerdar/shabnam-font;
     description = "A Persian (Farsi) Font - فونت (قلم) فارسی شبنم";
     license = licenses.ofl;

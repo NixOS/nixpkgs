@@ -2,10 +2,11 @@
 , libgtop, intltool, itstool, libxml2, nmap, inetutils }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-nettool-3.8.1";
+  pname = "gnome-nettool";
+  version = "3.8.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-nettool/3.8/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1c9cvzvyqgfwa5zzyvp7118pkclji62fkbb33g4y9sp5kw6m397h";
   };
 
@@ -17,8 +18,16 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ nmap inetutils ];
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnom3.gnome-nettool";
+      versionPolicy = "none";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage = http://projects.gnome.org/gnome-network;
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-nettool";
     description = "A collection of networking tools";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;
