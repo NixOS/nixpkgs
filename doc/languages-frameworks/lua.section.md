@@ -72,7 +72,7 @@ For the sake of completeness, here's another example how to install the environm
 }
 ```
 
-### How to override a Python package using overlays?
+### How to override a Lua package using overlays?
 
 Use the following overlay template:
 
@@ -165,7 +165,7 @@ The Nix expressions for the interpreters can be found in `pkgs/development/inter
 Each interpreter has the following attributes:
 
 - `interpreter`. Alias for `${lua}/bin/lua`.
-- `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See section *python.buildEnv function* for usage and documentation.
+- `buildEnv`. Function to build lua interpreter environments with extra packages bundled together. See section *lua.buildEnv function* for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`.
 - `pkgs`. Set of Lua packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
@@ -223,10 +223,8 @@ Because with an application we're not interested in multiple version the prefix 
 
 #### lua.withPackages function
 
-The `lua.withPackages` function provides a simpler interface to the `python.buildEnv` functionality.
-It takes a function as an argument that is passed the set of python packages and returns the list
-of the packages to be included in the environment. Using the `withPackages` function, the previous
-example for the luafilesystem environment can be written like this:
+The `lua.withPackages` takes a function as an argument that is passed the set of lua packages and returns the list of packages to be included in the environment.
+Using the `withPackages` function, the previous example for the luafilesystem environment can be written like this:
 ```nix
 with import <nixpkgs> {};
 
