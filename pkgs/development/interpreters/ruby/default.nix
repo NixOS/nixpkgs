@@ -3,6 +3,7 @@
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
+, makeWrapper, buildRubyGem, defaultGemConfig
 } @ args:
 
 let
@@ -44,6 +45,7 @@ let
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
+      , makeWrapper, buildRubyGem, defaultGemConfig
       }:
       stdenv.mkDerivation rec {
         pname = "ruby";
@@ -194,6 +196,12 @@ let
             inherit buildEnv bundler bundix;
             ruby = self;
           };
+
+          inherit (import ../../ruby-modules/with-packages {
+            inherit lib stdenv makeWrapper buildRubyGem buildEnv;
+            gemConfig = defaultGemConfig;
+            ruby = self;
+          }) withPackages gems;
 
           # deprecated 2016-09-21
           majorVersion = ver.major;
