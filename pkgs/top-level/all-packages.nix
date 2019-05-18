@@ -15957,6 +15957,7 @@ in
     ubootOrangePiZeroPlus2H5
     ubootPcduino3Nano
     ubootPine64
+    ubootPine64LTS
     ubootQemuAarch64
     ubootQemuArm
     ubootRaspberryPi
