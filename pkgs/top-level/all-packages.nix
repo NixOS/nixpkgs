@@ -15882,6 +15882,7 @@ in
     ubootPcduino3Nano
     ubootPine64
     ubootPine64LTS
+    ubootPinebook
     ubootQemuAarch64
     ubootQemuArm
     ubootRaspberryPi
