@@ -57,15 +57,7 @@ in rec {
   inherit buildArmTrustedFirmware;
 
   armTrustedFirmwareAllwinner = buildArmTrustedFirmware rec {
-    version = "1.0";
-    src = fetchFromGitHub {
-      owner = "apritzel";
-      repo = "arm-trusted-firmware";
-      # Branch: `allwinner`
-      rev = "91f2402d941036a0db092d5375d0535c270b9121";
-      sha256 = "0lbipkxb01w97r6ah8wdbwxir3013rp249fcqhlzh2gjwhp5l1ys";
-    };
-    platform = "sun50iw1p1";
+    platform = "sun50i_a64";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };
