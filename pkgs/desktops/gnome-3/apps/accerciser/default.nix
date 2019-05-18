@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "accerciser-${version}";
-  version = "3.32.1";
+  version = "3.32.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/accerciser/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0afzhbig5yw87zyfmid61368jj8l6i7k8gs29x0hv65fz4yiv4h4";
+    sha256 = "05ssj8whzhf98lpcaca7m45h03g0wx0i8jlsrh3yn943mshzidy8";
   };
 
   nativeBuildInputs = [
