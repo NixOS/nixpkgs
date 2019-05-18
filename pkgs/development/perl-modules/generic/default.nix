@@ -1,6 +1,6 @@
 { lib, stdenv, perl, buildPerl, toPerlModule }:
 
-{ nativeBuildInputs ? [], name, ... } @ attrs:
+{ buildInputs ? [], name, ... } @ attrs:
 
 toPerlModule(stdenv.mkDerivation (
   (
@@ -36,7 +36,7 @@ toPerlModule(stdenv.mkDerivation (
   {
     name = "perl${perl.version}-${name}";
     builder = ./builder.sh;
-    nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
+    buildInputs = buildInputs ++ [ (perl.dev or perl) ];
     fullperl = buildPerl;
   }
 ))
