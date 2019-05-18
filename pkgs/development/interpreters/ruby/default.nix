@@ -29,11 +29,13 @@ let
     baseruby = self.override {
       useRailsExpress = false;
       docSupport = false;
+      rubygemsSupport = false;
     };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
+      , rubygemsSupport ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
@@ -89,7 +91,7 @@ let
             patchLevel = ver.patchLevel;
           })."${ver.majMinTiny}";
 
-        postUnpack = ''
+        postUnpack = opString rubygemsSupport ''
           cp -r ${rubygems} $sourceRoot/rubygems
         '';
 
@@ -135,12 +137,6 @@ let
         installFlags = stdenv.lib.optionalString docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
-          # Update rubygems
-          pushd rubygems
-          chmod +w bundler/bundler.gemspec
-          ${buildRuby} setup.rb --destdir $GEM_HOME
-          popd
-
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
 
@@ -161,6 +157,12 @@ let
           EOF
 
           rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
+        '' + opString rubygemsSupport ''
+          # Update rubygems
+          pushd rubygems
+          chmod +w bundler/bundler.gemspec
+          ${buildRuby} setup.rb
+          popd
         '' + opString docSupport ''
           # Prevent the docs from being included in the closure
           sed -i "s|\$(DESTDIR)$devdoc|\$(datarootdir)/\$(RI_BASE_NAME)|" $rbConfig
