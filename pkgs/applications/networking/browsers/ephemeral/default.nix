@@ -13,7 +13,9 @@
 , pkgconfig
 , python3
 , webkitgtk
-, wrapGAppsHook }:
+, wrapGAppsHook
+, glib-networking
+}:
 
 stdenv.mkDerivation rec {
   pname = "ephemeral";
@@ -39,6 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    glib-networking
     gtk3
     hicolor-icon-theme
     libdazzle
