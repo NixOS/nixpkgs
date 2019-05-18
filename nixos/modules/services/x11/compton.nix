@@ -37,7 +37,12 @@ let
       # opacity
       active-opacity   = ${cfg.activeOpacity};
       inactive-opacity = ${cfg.inactiveOpacity};
-      menu-opacity     = ${cfg.menuOpacity};
+
+      wintypes:
+      {
+        popup_menu = { opacity = ${cfg.menuOpacity}; }
+        dropdown_menu = { opacity = ${cfg.menuOpacity}; }
+      };
 
       opacity-rule = [
         ${opacityRules}
@@ -45,7 +50,7 @@ let
 
       # other options
       backend = ${toJSON cfg.backend};
-      vsync = ${toJSON cfg.vSync};
+      vsync = ${lib.boolToString cfg.vSync};
       refresh-rate = ${toString cfg.refreshRate};
     '' + cfg.extraOptions);
 
@@ -189,15 +194,11 @@ in {
     };
 
     vSync = mkOption {
-      type = types.enum [
-        "none" "drm" "opengl"
-        "opengl-oml" "opengl-swc" "opengl-mswc"
-      ];
-      default = "none";
-      example = "opengl-swc";
+      type = types.bool;
+      default = false;
       description = ''
-        Enable vertical synchronization using the specified method.
-        See <literal>compton(1)</literal> man page an explanation.
+        Enable vertical synchronization. Chooses the best method
+        (drm, opengl, opengl-oml, opengl-swc, opengl-mswc) automatically.
       '';
     };
 
