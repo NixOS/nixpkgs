@@ -11426,6 +11426,18 @@ let
     };
   };
 
+  NetNetmask = buildPerlPackage rec {
+    name = "Net-Netmask-1.9104";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMASLAK/${name}.tar.gz";
+      sha256 = "17li2svymz49az35xl6galp4b9qcnb985gzklhikkvkn9da6rz3y";
+    };
+    buildInputs = [ Test2Suite TestUseAllModules ];
+    meta = {
+      description = "Parse, manipulate and lookup IP network blocks";
+    };
+  };
+
   NetOAuth = buildPerlModule {
     name = "Net-OAuth-0.28";
     src = fetchurl {
