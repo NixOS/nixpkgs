@@ -16545,6 +16545,8 @@ in
 
   spleen = callPackage ../data/fonts/spleen { };
 
+  stilo-themes = callPackage ../data/themes/stilo { };
+
   sudo-font = callPackage ../data/fonts/sudo { };
 
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
