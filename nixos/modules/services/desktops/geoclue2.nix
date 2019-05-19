@@ -188,6 +188,19 @@ in
 
     systemd.packages = [ package ];
 
+    users.users.geoclue = {
+      isSystemUser = true;
+      home = "/var/lib/geoclue";
+      group = "geoclue";
+      description = "Geoinformation service";
+    };
+
+    users.groups.geoclue = {};
+
+    systemd.tmpfiles.rules = [
+      "d /var/lib/geoclue 0755 geoclue geoclue"
+    ];
+
     # restart geoclue service when the configuration changes
     systemd.services."geoclue".restartTriggers = [
       config.environment.etc."geoclue/geoclue.conf".source

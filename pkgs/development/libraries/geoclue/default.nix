@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     "-Ddemo-agent=${if withDemoAgent then "true" else "false"}"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+    "-Ddbus-srv-user=geoclue"
   ] ++ optionals stdenv.isDarwin [
     "-D3g-source=false"
     "-Dcdma-source=false"
