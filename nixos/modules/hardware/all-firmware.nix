@@ -3,6 +3,11 @@
 with lib;
 
 let
+  # copy pasted from check-meta.nix
+  checkPlatform = attrs: let
+    anyMatch = lib.any (lib.meta.platformMatch pkgs.stdenv.hostPlatform);
+  in anyMatch (attrs.meta.platforms or lib.platforms.all) &&
+    ! anyMatch (attrs.meta.badPlatforms or []);
   cfg = config.hardware;
 in {
 
@@ -34,7 +39,7 @@ in {
 
   config = mkMerge [
     (mkIf (cfg.enableAllFirmware || cfg.enableRedistributableFirmware) {
-      hardware.firmware = with pkgs; [
+      hardware.firmware = lib.filter checkPlatform (with pkgs; [
         firmwareLinuxNonfree
         intel2200BGFirmware
         rtl8192su-firmware
@@ -44,10 +49,10 @@ in {
         zd1211fw
         alsa-firmware
         openelec-dvb-firmware
-      ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
-        ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
+        raspberrypiWirelessFirmware
+      ] ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
-      ];
+      ]);
     })
     (mkIf cfg.enableAllFirmware {
       assertions = [{
@@ -58,13 +63,13 @@ in {
             An alternative is to use the hardware.enableRedistributableFirmware option.
         '';
       }];
-      hardware.firmware = with pkgs; [
+      hardware.firmware = lib.filter checkPlatform (with pkgs; [
         broadcom-bt-firmware
         b43Firmware_5_1_138
         b43Firmware_6_30_163_46
         b43FirmwareCutter
         facetimehd-firmware
-      ];
+      ]);
     })
   ];
 }
