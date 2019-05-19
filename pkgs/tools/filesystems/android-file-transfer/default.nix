@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     rev = "v${version}";
-    sha256 = "0a388pqc0azgn0wy85wb1mjk3b5zb6vcr58l4warwfzhca400zn0";
+    sha256 = "0sym33a0ccdka2cpzv003n2xniid70z0gkjxx93gd2bajkgs9ggc";
   };
 
   nativeBuildInputs = [ cmake readline pkgconfig ];
