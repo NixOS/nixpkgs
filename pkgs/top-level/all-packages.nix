@@ -2881,6 +2881,8 @@ in
 
   fltrdr = callPackage ../tools/misc/fltrdr { stdenv = gcc8Stdenv; };
 
+  fierce = callPackage ../tools/security/fierce { };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file {
