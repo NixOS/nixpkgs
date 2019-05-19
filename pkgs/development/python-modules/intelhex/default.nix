@@ -1,22 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , fetchurl
 }:
 
 buildPythonPackage rec {
   pname = "intelhex";
-  version = "2.1";
+  version = "2.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k5l1mn3gv1vb0jd24ygxksx8xqr57y1ivgyj37jsrwpzrp167kw";
+    sha256 = "0ckqjbxd8gwcg98gfzpn4vq1qxzfvq3rdbrr1hikj1nmw08qb780";
   };
 
   patches = [
-    (fetchurl {
-      url = https://github.com/bialix/intelhex/commit/f251aef214daa2116e15ff7f7dcec1639eb12d5b.patch;
-      sha256 = "02i15qjmcz7mwbwvyj3agl5y7098rag2iwypdilkaadhbslsl9b9";
+    # patch the tests to check for the correct version string (2.2.1)
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/bialix/intelhex/pull/26.patch";
+      sha256 = "1f3f2cyf9ipb9zdifmjs8rqhg028dhy91vabxxn3l7br657s8r2l";
     })
   ];
 
