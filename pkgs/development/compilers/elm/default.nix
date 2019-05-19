@@ -19,6 +19,14 @@ let
                   url = "https://github.com/elm/compiler/pull/1886/commits/39d86a735e28da514be185d4c3256142c37c2a8a.patch";
                   sha256 = "0nni5qx1523rjz1ja42z6z9pijxvi3fgbw1dhq5qi11mh1nb9ay7";
                 })
+                (fetchpatch {
+                  url = "https://github.com/elm/compiler/pull/1850/commits/e3512d887df41a8162c3e361171c04beca08415b.patch";
+                  sha256 = "118smw4bzzj0bv124h2dd7vfh5jhddpivw51x572wjcdl165zym7";
+                })
+                (fetchpatch {
+                  url = "https://github.com/elm/compiler/pull/1850/commits/533a1991e26215b9bebb369457cff06842c13a49.patch";
+                  sha256 = "09brmdmfqig7qxaa3mdp8qsxwz6jwbn0yszx2rs63nmacbyrwjlr";
+                })
               ];
               buildTools = drv.buildTools or [] ++ [ makeWrapper ];
               jailbreak = true;
