@@ -3447,6 +3447,8 @@ in
 
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
+  pgloader = callPackage ../development/tools/pgloader { };
+
   pigz = callPackage ../tools/compression/pigz { };
 
   pixz = callPackage ../tools/compression/pixz { };
