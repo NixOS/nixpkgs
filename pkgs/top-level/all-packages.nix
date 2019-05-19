@@ -2443,6 +2443,8 @@ in
 
   dnsperf = callPackage ../tools/networking/dnsperf { };
 
+  dnsrecon = callPackage ../tools/security/dnsrecon { };
+
   dnstop = callPackage ../tools/networking/dnstop { };
 
   dhcp = callPackage ../tools/networking/dhcp { };
