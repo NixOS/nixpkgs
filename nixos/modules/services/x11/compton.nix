@@ -194,11 +194,22 @@ in {
     };
 
     vSync = mkOption {
-      type = types.bool;
+      type = with types; either bool
+        (enum [ "none" "drm" "opengl" "opengl-oml" "opengl-swc" "opengl-mswc" ]);
       default = false;
+      apply = x:
+        let
+          res = x != "none";
+          msg = "The type of services.compton.vSync has changed to bool:"
+                + " interpreting ${x} as ${lib.boolToString res}";
+        in
+          if isBool x then x
+          else warn msg res;
+
       description = ''
         Enable vertical synchronization. Chooses the best method
         (drm, opengl, opengl-oml, opengl-swc, opengl-mswc) automatically.
+        The bool value should be used, the others are just for backwards compatibility.
       '';
     };
 
