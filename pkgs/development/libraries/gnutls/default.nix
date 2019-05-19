@@ -1,6 +1,6 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , perl, gmp, autoconf, autogen, automake, libidn, p11-kit, libiconv
-, unbound, dns-root-data, gettext
+, unbound, dns-root-data, gettext, cacert
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withSecurity ? false, Security  # darwin Security.framework
@@ -72,6 +72,9 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ nettle ];
 
   inherit doCheck;
+  # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` broke tests with:
+  #   Error setting the x509 trust file: Error while reading file.
+  checkInputs = [ cacert ];
 
   # Fixup broken libtool and pkgconfig files
   preFixup = lib.optionalString (!isDarwin) ''
