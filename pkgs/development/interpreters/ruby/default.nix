@@ -92,7 +92,9 @@ let
           })."${ver.majMinTiny}";
 
         postUnpack = opString rubygemsSupport ''
-          cp -r ${rubygems} $sourceRoot/rubygems
+          rm -rf $sourceRoot/{lib,test}/rubygems*
+          cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
+          cp -r ${rubygems}/test/rubygems $sourceRoot/test
         '';
 
         postPatch = if atLeast25 then ''
@@ -157,12 +159,6 @@ let
           EOF
 
           rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
-        '' + opString rubygemsSupport ''
-          # Update rubygems
-          pushd rubygems
-          chmod +w bundler/bundler.gemspec
-          ${buildRuby} setup.rb
-          popd
         '' + opString docSupport ''
           # Prevent the docs from being included in the closure
           sed -i "s|\$(DESTDIR)$devdoc|\$(datarootdir)/\$(RI_BASE_NAME)|" $rbConfig
