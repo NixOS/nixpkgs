@@ -9397,6 +9397,8 @@ in
   noweb = callPackage ../development/tools/literate-programming/noweb { };
   nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-small; };
 
+  nrfutil = callPackage ../development/tools/misc/nrfutil { };
+
   obelisk = callPackage ../development/tools/ocaml/obelisk { };
 
   obuild = callPackage ../development/tools/ocaml/obuild { };
