@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   src = fetchFromBitbucket {
     owner = "duangle";
     repo = "scopes";
-    rev = "3c5fd78";
-    sha256 = "1im9lm0j4j4d797mwn97zfsfh91rls1arw52filzdi3wlq4zgxfi";
+    rev = "6f44049";
+    sha256 = "1dhvfyj2clkqj1mw83dfzwiqmarfsaj20znrrq6rl15882xw3y2r";
   };
 
   nativeBuildInputs = [ genie spirv-tools spirv-cross ];
@@ -27,14 +27,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ llvm clang-unwrapped ];
 
   patches = [
-    (fetchpatch {
-      url = https://bitbucket.org/jacereda/scopes/commits/8fc13cdd237565fccc0a6c73edbefbf634ffd555/raw;
-      sha256 = "0g3qsgjcilcr41x0rliccrbimric2pffax85vc46acs4sz4k51ci";
-    })
-    (fetchpatch {
-      url = https://bitbucket.org/jacereda/scopes/commits/8b05b40e2f2fbf0a670eb40028f71d47da720fe2/raw;
-      sha256 = "0x2chlw3z5i0mrd85qbmbbhclh9j7xhy55a0igrzvhmcyx2yaqd8";
-    })
     (substituteAll {
       name = "nixpkgs-patches.patch";
       src = fetchpatch {
