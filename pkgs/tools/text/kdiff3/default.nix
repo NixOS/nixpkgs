@@ -6,11 +6,11 @@
 
 mkDerivation rec {
   pname = "kdiff3";
-  version = "1.8";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "083pz5c1w7l9h4sb8zz8a763yph5sk3mxnhpdykz1rrggy9f8p54";
+    sha256 = "0vj3rw5w0kry2c1y8gv6hniam417w7k3ydb1dkf5xwr4iprw0xvq";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
