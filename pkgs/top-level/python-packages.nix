@@ -595,6 +595,8 @@ in {
 
   pathlib = callPackage ../development/python-modules/pathlib { };
 
+  pc-ble-driver-py = toPythonModule (callPackage ../development/python-modules/pc-ble-driver-py { });
+
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
