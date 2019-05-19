@@ -50,8 +50,8 @@ common = rec { # attributes common to both builds
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
     "-DMANUFACTURER=NixOS.org"
-    "-DDEFAULT_CHARSET=utf8"
-    "-DDEFAULT_COLLATION=utf8_general_ci"
+    "-DDEFAULT_CHARSET=utf8mb4"
+    "-DDEFAULT_COLLATION=utf8mb4_unicode_ci"
     "-DSECURITY_HARDENED=ON"
 
     "-DINSTALL_UNIX_ADDRDIR=/run/mysqld/mysqld.sock"
