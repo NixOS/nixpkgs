@@ -96,28 +96,24 @@ common = rec { # attributes common to both builds
 client = stdenv.mkDerivation (common // {
   name = "mariadb-client-${common.version}";
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "out" "dev" "man" ];
 
   propagatedBuildInputs = [ openssl zlib ]; # required from mariadb.pc
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DWITHOUT_SERVER=ON"
+    "-DWITH_WSREP=OFF"
   ];
 
-  preConfigure = common.preConfigure + ''
-    cmakeFlags="$cmakeFlags \
-      -DINSTALL_BINDIR=$bin/bin \
-      -DINSTALL_SCRIPTDIR=$bin/bin \
-      -DINSTALL_SUPPORTFILESDIR=$bin/share/mysql \
-      -DINSTALL_DOCDIR=$bin/share/doc/mysql \
-      -DINSTALL_DOCREADMEDIR=$bin/share/doc/mysql \
-      "
-  '';
-
-  # prevent cycle; it needs to reference $dev
-  postInstall = common.postInstall + ''
-    moveToOutput bin/mysql_config "$dev"
-    moveToOutput bin/mariadb_config "$dev"
+  postInstall = ''
+    rm -r "$out"/share/mysql
+    rm -r "$out"/share/doc
+    rm "$out"/bin/{msql2mysql,mysql_plugin,mytop,wsrep_sst_rsync_wan,mysql_config,mariadb_config}
+    rm "$out"/lib/plugin/{daemon_example.ini,dialog.so,mysql_clear_password.so,sha256_password.so}
+    rm "$out"/lib/{libmariadb.so,libmysqlclient.so,libmysqlclient_r.so}
+    mv "$out"/lib/libmariadb.so.3 "$out"/lib/libmysqlclient.so
+    ln -sv libmysqlclient.so "$out"/lib/libmysqlclient_r.so
+    mkdir -p "$dev"/lib && mv "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a} "$dev"/lib
   '';
 
   enableParallelBuilding = true; # the client should be OK
