@@ -142,6 +142,26 @@ let
     ];
   };
 
+  event = buildPecl rec {
+    version = "2.5.0";
+    pname = "event";
+
+    sha256 = "1igbxla4s784z7lw1jar6pjyfn596040a52kfmawwclqf9qcvx0v";
+
+    configureFlags = [ "--with-event-libevent-dir=${pkgs.libevent.dev}" ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [ openssl libevent ];
+
+    meta = with pkgs.lib; {
+      description = ''
+        This is an extension to efficiently schedule I/O, time and signal based
+        events using the best I/O notification mechanism available for specific platform.
+      '';
+      license = licenses.php301;
+      homepage = "https://bitbucket.org/osmanov/pecl-event/";
+    };
+  };
+
   igbinary = buildPecl rec {
     version = "3.0.1";
     pname = "igbinary";
@@ -377,6 +397,67 @@ let
       license = licenses.mit;
       homepage = https://github.com/phpstan/phpstan;
       maintainers = with maintainers; [ etu ];
+    };
+  };
+
+  pinba = if isPhp73 then pinba73 else pinba7;
+
+  pinba7 = assert !isPhp73; buildPecl rec {
+    version = "1.1.1";
+    pname = "pinba";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "tony2001";
+      repo = "pinba_extension";
+      rev = "RELEASE_1_1_1";
+      sha256 = "1kdp7vav0y315695vhm3xifgsh6h6y6pny70xw3iai461n58khj5";
+    };
+
+    meta = with pkgs.lib; {
+      description = "PHP extension for Pinba";
+      longDescription = ''
+        Pinba is a MySQL storage engine that acts as a realtime monitoring and
+        statistics server for PHP using MySQL as a read-only interface.
+      '';
+      homepage = "http://pinba.org/";
+    };
+  };
+
+  pinba73 = assert isPhp73; buildPecl rec {
+    version = "1.1.2-dev";
+    pname = "pinba";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "tony2001";
+      repo = "pinba_extension";
+      rev = "edbc313f1b4fb8407bf7d5acf63fbb0359c7fb2e";
+      sha256 = "02sljqm6griw8ccqavl23f7w1hp2zflcv24lpf00k6pyrn9cwx80";
+    };
+
+    meta = with pkgs.lib; {
+      description = "PHP extension for Pinba";
+      longDescription = ''
+        Pinba is a MySQL storage engine that acts as a realtime monitoring and
+        statistics server for PHP using MySQL as a read-only interface.
+      '';
+      homepage = "http://pinba.org/";
+    };
+  };
+
+  protobuf = buildPecl rec {
+    version = "3.7.1";
+    pname = "protobuf";
+
+    sha256 = "0fbf29851dpgjfdgi6i1dgy047dfiazm6qh943w22zbj35l7g2yc";
+
+    buildInputs = with pkgs; [ (if isPhp73 then pcre2 else pcre) ];
+
+    meta = with pkgs.lib; {
+      description = ''
+        Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
+      '';
+      license = licenses.bsd3;
+      homepage = "https://developers.google.com/protocol-buffers/";
     };
   };
 
