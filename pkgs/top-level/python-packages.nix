@@ -780,6 +780,8 @@ in {
     slurm = pkgs.slurm;
   };
 
+  pyspinel = callPackage ../development/python-modules/pyspinel {};
+
   pyssim = callPackage ../development/python-modules/pyssim { };
 
   pystache = callPackage ../development/python-modules/pystache { };
