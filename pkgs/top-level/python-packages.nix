@@ -607,6 +607,8 @@ in {
 
   phonopy = callPackage ../development/python-modules/phonopy { };
 
+  piccata = callPackage ../development/python-modules/piccata {};
+
   pims = callPackage ../development/python-modules/pims { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
