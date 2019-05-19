@@ -5,7 +5,6 @@
 , ninja
 , pkgconfig
 , pixman
-, celt_0_5_1
 , alsaLib
 , openssl
 , libXrandr
@@ -21,6 +20,9 @@
 , cyrus_sasl
 , libcacard
 , lz4
+, libopus
+, gst_all_1
+, orc
 }:
 
 stdenv.mkDerivation rec {
@@ -54,9 +56,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib
-    celt_0_5_1
     cyrus_sasl
     glib
+    gst_all_1.gst-plugins-base
     libXext
     libXfixes
     libXinerama
@@ -64,8 +66,10 @@ stdenv.mkDerivation rec {
     libXrender
     libcacard
     libjpeg
+    libopus
     lz4
     openssl
+    orc
     pixman
     python3.pkgs.pyparsing
     zlib
@@ -75,8 +79,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dauto_features=enabled"
-    "-Dopus=disabled"
-    "-Dgstreamer=no"
+    "-Dgstreamer=1.0"
+    "-Dcelt051=disabled"
   ];
 
   postInstall = ''
