@@ -22,14 +22,14 @@ galeraLibs = buildEnv {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.17";
+  version = "10.3.15";
 
   src = fetchurl {
     urls = [
       "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
       "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
     ];
-    sha256 = "09xy6mgnz22mz8zgqlnddn8nzgs9xlz8lai4a7aa8x78in7hgcz7";
+    sha256 = "0s399nxk2z8fgdr527p64y74zwjc3gpv7psf1n2r6ksl9njr3wr7";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -44,7 +44,7 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
-  patches = [ ./cmake-includedir.patch ./include-dirs-path.patch ]
+  patches = [ ./cmake-includedir.patch ]
     ++ stdenv.lib.optional stdenv.cc.isClang ./clang-isfinite.patch;
 
   cmakeFlags = [
@@ -99,6 +99,8 @@ client = stdenv.mkDerivation (common // {
   outputs = [ "out" "dev" "man" ];
 
   propagatedBuildInputs = [ openssl zlib ]; # required from mariadb.pc
+
+  patches = [ ./cmake-plugin-includedir.patch ];
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DWITHOUT_SERVER=ON"
