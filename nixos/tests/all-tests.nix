@@ -151,6 +151,7 @@ in
   mumble = handleTest ./mumble.nix {};
   munin = handleTest ./munin.nix {};
   mutableUsers = handleTest ./mutable-users.nix {};
+  mxisd = handleTest ./mxisd.nix {};
   mysql = handleTest ./mysql.nix {};
   mysqlBackup = handleTest ./mysql-backup.nix {};
   mysqlReplication = handleTest ./mysql-replication.nix {};
