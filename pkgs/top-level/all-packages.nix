@@ -23230,6 +23230,8 @@ in
 
   igraph = callPackage ../development/libraries/igraph { };
 
+  igprof = callPackage ../development/tools/misc/igprof { };
+
   illum = callPackage ../tools/system/illum { };
 
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
