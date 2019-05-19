@@ -2867,6 +2867,8 @@ in
 
   flannel = callPackage ../tools/networking/flannel { };
 
+  flare = callPackage ../games/flare { };
+
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
   flatpak = callPackage ../development/libraries/flatpak { };
