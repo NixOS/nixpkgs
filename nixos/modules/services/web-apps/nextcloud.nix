@@ -257,6 +257,23 @@ in {
         '';
       };
     };
+    autoUpdateApps = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Run a auto update of all installed apps from the nextcloud repository.
+        '';
+      };
+      startAt = mkOption {
+        type = with types; either str (listOf str);
+        default = "05:00:00";
+        example = "Sun 14:00:00";
+        description = ''
+          When to run the update. See `systemd.services.&lt;name&gt;.startAt`.
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -361,6 +378,11 @@ in {
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
           serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${pkgs.nextcloud}/cron.php";
+        };
+        "nextcloud-update-plugins" = mkIf cfg.autoUpdateApps.enable {
+          serviceConfig.Type = "oneshot";
+          serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+          startAt = cfg.autoUpdateApps.startAt;
         };
       };
 
