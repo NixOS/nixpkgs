@@ -4388,6 +4388,8 @@ in {
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
+  stravalib = callPackage ../development/python-modules/stravalib { };
+
   streamz = callPackage ../development/python-modules/streamz { };
 
   structlog = callPackage ../development/python-modules/structlog { };
@@ -4815,6 +4817,8 @@ in {
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
   unidiff = callPackage ../development/python-modules/unidiff { };
+
+  units = callPackage ../development/python-modules/units { };
 
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
