@@ -14753,10 +14753,11 @@ let
   };
 
   TemplateToolkit = buildPerlPackage rec {
-    name = "Template-Toolkit-2.28";
+    pname = "Template-Toolkit";
+    version = "2.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-2.28.tar.gz;
-      sha256 = "1msxg3j1hx5wsc7vr81x5gs9gdbn4y0x6cvyj3pq4dgi1603dbvi";
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-2.29.tar.gz;
+      sha256 = "0ya7c49q2rd2gdjf28y60iq8wsr2afphsy1labyhbf0zyhfdgp9b";
     };
     propagatedBuildInputs = [ AppConfig ];
     doCheck = !stdenv.isDarwin;
