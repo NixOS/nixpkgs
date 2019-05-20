@@ -609,6 +609,8 @@ in {
 
   perf = callPackage ../development/python-modules/perf { };
 
+  perfplot = callPackage ../development/python-modules/perfplot { };
+
   phonopy = callPackage ../development/python-modules/phonopy { };
 
   piccata = callPackage ../development/python-modules/piccata {};
