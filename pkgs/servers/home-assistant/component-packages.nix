@@ -209,7 +209,7 @@
     "filesize" = ps: with ps; [  ];
     "filter" = ps: with ps; [  ];
     "fints" = ps: with ps; [ fints ];
-    "fitbit" = ps: with ps; [ aiohttp-cors ];
+    "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [  ];
     "flexit" = ps: with ps; [  ];
     "flic" = ps: with ps; [  ];
@@ -455,8 +455,8 @@
     "nello" = ps: with ps; [  ];
     "ness_alarm" = ps: with ps; [  ];
     "nest" = ps: with ps; [  ];
-    "netatmo" = ps: with ps; [ aiohttp-cors ];
-    "netatmo_public" = ps: with ps; [ aiohttp-cors ];
+    "netatmo" = ps: with ps; [ aiohttp-cors pyatmo ];
+    "netatmo_public" = ps: with ps; [ aiohttp-cors pyatmo ];
     "netdata" = ps: with ps; [  ];
     "netgear" = ps: with ps; [  ];
     "netgear_lte" = ps: with ps; [  ];
@@ -637,7 +637,7 @@
     "somfy_mylink" = ps: with ps; [  ];
     "sonarr" = ps: with ps; [  ];
     "songpal" = ps: with ps; [  ];
-    "sonos" = ps: with ps; [  ];
+    "sonos" = ps: with ps; [ pysonos ];
     "sony_projector" = ps: with ps; [  ];
     "soundtouch" = ps: with ps; [ libsoundtouch ];
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
