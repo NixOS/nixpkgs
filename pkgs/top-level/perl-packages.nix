@@ -17938,10 +17938,11 @@ let
   };
 
   YAML = buildPerlPackage rec {
-    name = "YAML-1.27";
+    pname = "YAML";
+    version = "1.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-1.27.tar.gz;
-      sha256 = "1yc2yqjyrcdlhp209f3a63f9xx6v5klisli25fv221yy43la34n9";
+      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-1.29.tar.gz;
+      sha256 = "0gl5ssvrdajlbc85cy6z873n9cwlssk5q8z97a31vyiikhw5fp4w";
     };
 
     buildInputs = [ TestBase TestDeep TestYAML ];
