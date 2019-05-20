@@ -764,10 +764,11 @@ let
   };
 
   BC = buildPerlPackage rec {
-    name = "B-C-1.55";
+    pname = "B-C";
+    version = "1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
-      sha256 = "001bc3mxv1zkg1ynqpv3fbn1v3h3bqihg0pp19z4gfvrsrkns8q9";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/B-C-1.57.tar.gz;
+      sha256 = "1zs9a4gl63icja055kncgyny6xk1nsk6payfbzczkba3sc8sclh4";
     };
     propagatedBuildInputs = [ BFlags IPCRun Opcodes ];
     meta = {
