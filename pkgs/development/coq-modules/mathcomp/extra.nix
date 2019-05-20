@@ -75,11 +75,9 @@ packageGen = {
   mathcomp ? current-mathcomp,
   license ? mathcomp.meta.license,
   # mandatory
-  package, version, version-sha256, description
+  package, version ? "broken", version-sha256, description
   }:
-  if version == "" then {}
-  else { "${package}" =
-  let from = src; in
+  { "${package}" = let from = src; in
 
   stdenv.mkDerivation rec {
     inherit version;
@@ -102,19 +100,20 @@ packageGen = {
       inherit (src.meta) homepage;
       inherit (mathcomp.meta) platforms;
       maintainers = [ stdenv.lib.maintainers.vbgl ];
+      broken = (version == "broken");
     };
 
     passthru = {
       inherit version-sha256;
-      compatibleCoqVersions = v: builtins.elem v coq-versions;
+      compatibleCoqVersions = if meta.broken then _: false else
+                              v: builtins.elem v coq-versions;
     };
-  };};
+  };
+  };
 
-current-versions = versions."${current-mathcomp.version}"
-  or (throw "no mathcomp extra packages found for mathcomp ${current-mathcomp.version}");
+current-versions = versions."${current-mathcomp.version}" or {};
 
-select = x: mapAttrs (n: pkg: {package = n;} // pkg)
-              (recursiveUpdate (overrideExisting x param) x);
+select = x: mapAttrs (n: pkg: {package = n;} // pkg) (recursiveUpdate param x);
 
 all = (mapAttrs' (n: pkg:
         {name = "mathcomp_1_7-${n}";
