@@ -17,7 +17,7 @@ let
     "x86_64-darwin" = "e393be5dd82ea1900e3a0597b6cb2e4c924b6acda4297d9d3eff5abcc857f32c";
   }.${system};
 in
-  callPackage ./generic.nix (args // rec {
+  callPackage ./generic.nix rec {
 
     version = "1.33.1";
     pname = "vscodium";
