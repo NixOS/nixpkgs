@@ -9414,10 +9414,11 @@ let
   };
 
   MathClipper = buildPerlModule rec {
-    name = "Math-Clipper-1.27";
+    pname = "Math-Clipper";
+    version = "1.28";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHELDRAKE/Math-Clipper-1.27.tar.gz;
-      sha256 = "0di8frcxa8laa5s0x4vkr2mp9abv2a099c3x4gsdpnbijj10j6dn";
+      url = mirror://cpan/authors/id/S/SH/SHELDRAKE/Math-Clipper-1.28.tar.gz;
+      sha256 = "19rlv7s00r7rkcri01f71jbdfpdq8rlhhgb3f948pjljb0jqcxvn";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     buildInputs = [ ExtUtilsCppGuess ExtUtilsTypemapsDefault ExtUtilsXSpp ModuleBuildWithXSpp TestDeep ];
