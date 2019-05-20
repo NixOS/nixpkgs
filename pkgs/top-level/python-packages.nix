@@ -968,6 +968,8 @@ in {
 
   vega = callPackage ../development/python-modules/vega { };
 
+  accupy = callPackage ../development/python-modules/accupy { };
+
   acme = callPackage ../development/python-modules/acme { };
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
