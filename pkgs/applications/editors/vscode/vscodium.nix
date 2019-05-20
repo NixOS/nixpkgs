@@ -51,4 +51,4 @@ in
       maintainers = with maintainers; [];
       platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     };
-  })
+  }
