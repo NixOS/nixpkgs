@@ -16320,10 +16320,11 @@ let
   };
 
   TextCSV = buildPerlPackage rec {
-    name = "Text-CSV-1.99";
+    pname = "Text-CSV";
+    version = "2.00";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Text-CSV-1.99.tar.gz;
-      sha256 = "e74ec039b12cc51d346bf1d814af7db8a05cb0a98340e7547a21646da8668cd2";
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Text-CSV-2.00.tar.gz;
+      sha256 = "8ccbd9195805222d995844114d0e595bb24ce188f85284dbf256080311cbb2c2";
     };
     meta = {
       description = "Comma-separated values manipulator (using XS or PurePerl)";
