@@ -16934,10 +16934,11 @@ let
   };
 
   TimeDurationParse = buildPerlPackage rec {
-    name = "Time-Duration-Parse-0.14";
+    pname = "Time-Duration-Parse";
+    version = "0.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
-      sha256 = "17nh73r50mqqpgxdf3zpgdiqrizmjy0vdk0zd6xi9zcsdijrdhnc";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Time-Duration-Parse-0.15.tar.gz;
+      sha256 = "10g39bbrxkabbsfq4rv7f5b5x7h3jba08j4pg8gwr0b9iqx19n31";
     };
     buildInputs = [ TimeDuration ];
     propagatedBuildInputs = [ ExporterLite ];
