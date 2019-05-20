@@ -494,10 +494,11 @@ let
   };
 
   ArrayDiff = buildPerlPackage rec {
-     name = "Array-Diff-0.07";
+     pname = "Array-Diff";
+     version = "0.09";
      src = fetchurl {
-       url = mirror://cpan/authors/id/T/TY/TYPESTER/Array-Diff-0.07.tar.gz;
-       sha256 = "0il3izx45wkh71fli2hvaq32jyin95k8x3qrnwby2x2c6yix7rvq";
+       url = mirror://cpan/authors/id/N/NE/NEILB/Array-Diff-0.09.tar.gz;
+       sha256 = "0xsh8k312spzl90xds075qprcaz4r0b93g1bgi9l3rv1k0p3j1l0";
      };
      propagatedBuildInputs = [ AlgorithmDiff ClassAccessor ];
      meta = {
