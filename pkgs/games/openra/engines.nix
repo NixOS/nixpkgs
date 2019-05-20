@@ -36,6 +36,6 @@ in {
   bleed = buildUpstreamOpenRAEngine {
     version = "8ee1102";
     rev = "8ee11028d72cde7556b31d45f556b40be65b4b70";
-    sha256 = "19fjzwgmfdf832c6b1x885kaiyck03kpiba0qpsxvps04i7b3vj4";
+    sha256 = "0f1fpf37ms8d7fhlh3rjzsxsk9w23iyi3phs2i7g561292d5rk3l";
   };
 }
