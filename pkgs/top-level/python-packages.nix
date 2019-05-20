@@ -3706,6 +3706,8 @@ in {
     glibcLocales = pkgs.glibcLocales;
   };
 
+  pipdate = callPackage ../development/python-modules/pipdate { };
+
   pika = callPackage ../development/python-modules/pika { };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
