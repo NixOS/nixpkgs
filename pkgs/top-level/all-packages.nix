@@ -14162,6 +14162,8 @@ in
 
   elasticmq = callPackage ../servers/elasticmq { };
 
+  elasticmq-server-bin = callPackage ../servers/elasticmq-server-bin { };
+
   eventstore = callPackage ../servers/nosql/eventstore {
     Nuget = dotnetPackages.Nuget;
   };
