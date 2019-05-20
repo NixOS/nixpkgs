@@ -8371,10 +8371,11 @@ let
   };
 
   LinguaENInflect = buildPerlPackage rec {
-    name = "Lingua-EN-Inflect-1.903";
+    pname = "Lingua-EN-Inflect";
+    version = "1.904";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCONWAY/${name}.tar.gz";
-      sha256 = "fcef4b67b04cc39e427b2d70e7c5b24195edd0ed88dd705a08ecd5cd830b0d49";
+      url = mirror://cpan/authors/id/D/DC/DCONWAY/Lingua-EN-Inflect-1.904.tar.gz;
+      sha256 = "54d344884ba9b585680975bbd4049ddbf27bf654446fb00c7e1fc538e08c3173";
     };
     meta = {
       description = "Convert singular to plural. Select 'a' or 'an'";
