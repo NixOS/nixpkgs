@@ -14993,12 +14993,13 @@ let
   };
 
   Test2PluginNoWarnings = buildPerlPackage rec {
-     name = "Test2-Plugin-NoWarnings-0.06";
+     pname = "Test2-Plugin-NoWarnings";
+     version = "0.07";
      src = fetchurl {
-       url = mirror://cpan/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-0.06.tar.gz;
-       sha256 = "002qk6qsm0l6r2kaxywvc38w0yf0mlavgywq8li076pn6kcw3242";
+       url = mirror://cpan/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-0.07.tar.gz;
+       sha256 = "1sxqcbklmpxpkysq3wbivs77n3c8mvasvfa38dzmyqz04ifaf7gz";
      };
-     buildInputs = [ IPCRun3 Test2Suite ];
+     buildInputs = [ CaptureTiny IPCRun3 Test2Suite ];
      meta = {
        description = "Fail if tests warn";
        license = with stdenv.lib.licenses; [ artistic2 ];
