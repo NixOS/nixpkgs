@@ -1295,10 +1295,11 @@ let
   };
 
   CatalystManual = buildPerlPackage rec {
-    name = "Catalyst-Manual-5.9009";
+    pname = "Catalyst-Manual";
+    version = "5.9010";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "1z6l0vdjxzisqgb5w447m3m73sfvkhwm7qw2l1dpcdng3zaypllh";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Manual-5.9010.tar.gz;
+      sha256 = "1xg2m6d76xl0a76vq0v4yv25458d6df00k5xq1ab2z8mzvwbm4ah";
     };
     meta = {
       description = "The Catalyst developer's manual";
