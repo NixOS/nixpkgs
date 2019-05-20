@@ -16,9 +16,10 @@ let
     "1.6.1" = flip elem ["8.5"];
   };
   # computes the default version of mathcomp given a version of Coq
-  min-mathcomp-version = head (naturalSort (attrNames mathcomp-coq-versions));
-  default-mathcomp-version = last (naturalSort ([min-mathcomp-version]
+  max-mathcomp-version = last (naturalSort (attrNames mathcomp-coq-versions));
+  default-mathcomp-version = let v = last (naturalSort (["0.0.0"]
      ++ (attrNames (filterAttrs (_: vs: vs coq.coq-version) mathcomp-coq-versions))));
+     in if v == "0.0.0" then max-mathcomp-version else v;
 
   # list of core mathcomp packages sorted by dependency order
   mathcomp-packages =
