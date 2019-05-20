@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, intltool
-, libfprint, glib, dbus-glib, polkit, nss, pam, systemd }:
+{ thinkpad ? false
+, stdenv, fetchurl, pkgconfig, intltool, libfprint-thinkpad ? null
+, libfprint ? null, glib, dbus-glib, polkit, nss, pam, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "fprintd-${version}";
+  pname = "fprintd" + stdenv.lib.optionalString thinkpad "-thinkpad";
   version = "0.8.1";
 
   src = fetchurl {
@@ -10,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "124s0g9syvglgsmqnavp2a8c0zcq8cyaph8p8iyvbla11vfizs9l";
   };
 
-  buildInputs = [ libfprint glib dbus-glib polkit nss pam systemd ];
+  buildInputs = [ glib dbus-glib polkit nss pam systemd ]
+    ++ stdenv.lib.optional thinkpad libfprint-thinkpad
+    ++ stdenv.lib.optional (!thinkpad) libfprint;
+
   nativeBuildInputs = [ pkgconfig intltool ];
 
   configureFlags = [ "--with-systemdsystemunitdir=$(out)/lib/systemd/system" "--localstatedir=/var" ];

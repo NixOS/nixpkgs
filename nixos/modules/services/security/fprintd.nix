@@ -25,6 +25,16 @@ in
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.fprintd;
+        defaultText = "pkgs.fprintd";
+        example = "pkgs.fprintd-thinkpad";
+        description = ''
+          fprintd package to use.
+        '';
+      };
+
     };
 
   };
@@ -38,7 +48,7 @@ in
 
     environment.systemPackages = [ pkgs.fprintd ];
 
-    systemd.packages = [ pkgs.fprintd ];
+    systemd.packages = [ cfg.package ];
 
   };
 
