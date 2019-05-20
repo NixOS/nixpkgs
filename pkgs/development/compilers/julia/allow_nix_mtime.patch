@@ -1,0 +1,25 @@
+From f79775378a9eeec5b99f18cc95735b12d172aba3 Mon Sep 17 00:00:00 2001
+From: Tom McLaughlin <pyro777@gmail.com>
+Date: Wed, 12 Dec 2018 13:01:32 -0800
+Subject: [PATCH] Patch to make work better with nix
+
+---
+ base/loading.jl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/base/loading.jl b/base/loading.jl
+index 51201b98b6..b40c0690f6 100644
+--- a/base/loading.jl
++++ b/base/loading.jl
+@@ -1384,7 +1384,7 @@ function stale_cachefile(modpath::String, cachefile::String)
+                 # Issue #13606: compensate for Docker images rounding mtimes
+                 # Issue #20837: compensate for GlusterFS truncating mtimes to microseconds
+                 ftime = mtime(f)
+-                if ftime != ftime_req && ftime != floor(ftime_req) && ftime != trunc(ftime_req, digits=6)
++                if ftime != ftime_req && ftime != floor(ftime_req) && ftime != trunc(ftime_req, digits=6) && ftime != 1.0
+                     @debug "Rejecting stale cache file $cachefile (mtime $ftime_req) because file $f (mtime $ftime) has changed"
+                     return true
+                 end
+-- 
+2.17.1
+

@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.navit-project.org;
+    homepage = https://www.navit-project.org;
     description = "Car navigation system with routing engine using OSM maps";
     license = licenses.gpl2;
     maintainers = [ maintainers.genesis ];

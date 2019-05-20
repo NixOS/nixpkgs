@@ -6,6 +6,7 @@
 , completeDeps
 , crateAuthors
 , crateDescription
+, crateHomepage
 , crateFeatures
 , crateName
 , crateVersion
@@ -91,12 +92,11 @@ in ''
   export CARGO_PKG_VERSION_MAJOR=${builtins.elemAt version 0}
   export CARGO_PKG_VERSION_MINOR=${builtins.elemAt version 1}
   export CARGO_PKG_VERSION_PATCH=${builtins.elemAt version 2}
+  export CARGO_PKG_VERSION_PRE="${versionPre}"
+  export CARGO_PKG_HOMEPAGE="${crateHomepage}"
   export NUM_JOBS=1
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
-  if [[ -n "${versionPre}" ]]; then
-    export CARGO_PKG_VERSION_PRE="${versionPre}"
-  fi
 
   BUILD=""
   if [[ ! -z "${build}" ]] ; then

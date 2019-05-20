@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   name = "python-efl-${version}";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
-    sha256 = "08x2cv8hnf004c3711250wrax21ffj5y8951pvk77h98als4pq47";
+    sha256 = "1qhy63c3fs2bxkx2np5z14hyxbr12ii030crsjnhpbyw3mic0s63";
   };
 
   nativeBuildInputs = [ pkgconfig ];

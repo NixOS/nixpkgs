@@ -1,21 +1,28 @@
-{ stdenv, symlinkJoin, fetchurl, fetchFromGitHub, autoconf, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, which, zlib, zstd }:
+{ stdenv, fetchurl, fetchFromGitHub, autoconf, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, uriparser, which, zlib, zstd }:
 
 let
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "46ae2605c2de306f5740587107dcf333a527f2d1";
-    sha256 = "07ps745gas2zcfmg56m3vwl63yyzmalnxwb5dc40vd004cx5hdik";
+    rev = "8991d0b58d5a59925c87dd2a0bdb59a5a4a16bd4";
+    sha256 = "00js5d1s98y3ianrvh1ggrd157yfmia4g55jx9xmfcz4a8mcbawx";
+  };
+
+  # Enable non-bundled uriparser
+  # Introduced in https://github.com/apache/arrow/pull/4092
+  Finduriparser_cmake = fetchurl {
+    url = https://raw.githubusercontent.com/apache/arrow/af4f52961209a5f1b43a19483536285c957e3bed/cpp/cmake_modules/Finduriparser.cmake;
+    sha256 = "1cylrw00n2nkc2c49xk9j3rrza351rpravxgpw047vimcw0sk93s";
   };
 in
 
 stdenv.mkDerivation rec {
   name = "arrow-cpp-${version}";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "163s4i2cywq95jgrxbaq48qwmww0ibkq61k1aad4w9z9vpjfgnil";
+    sha256 = "06irh5zx6lc7jjf6hpz1vzk0pvbdx08lcirc8cp8ksb8j7fpfamc";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
@@ -26,36 +33,31 @@ stdenv.mkDerivation rec {
     ];
 
   nativeBuildInputs = [ cmake autoconf /* for vendored jemalloc */ ];
-  buildInputs = [ boost double-conversion glog python.pkgs.python python.pkgs.numpy ];
+  buildInputs = [
+    boost brotli double-conversion flatbuffers gflags glog gtest lz4 rapidjson
+    snappy thrift uriparser zlib zstd python.pkgs.python python.pkgs.numpy
+  ];
 
   preConfigure = ''
-    substituteInPlace cmake_modules/FindThrift.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
-    substituteInPlace cmake_modules/FindBrotli.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
-    substituteInPlace cmake_modules/FindGLOG.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
     substituteInPlace cmake_modules/FindLz4.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
-    substituteInPlace cmake_modules/FindSnappy.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
+
+    cp ${Finduriparser_cmake} cmake_modules/Finduriparser.cmake
 
     patchShebangs build-support/
-  '';
 
-  BROTLI_HOME = symlinkJoin { name="brotli-wrap"; paths = [ brotli.lib brotli.dev ]; };
-  DOUBLE_CONVERSION_HOME = double-conversion;
-  FLATBUFFERS_HOME = flatbuffers;
-  GFLAGS_HOME = gflags;
-  GLOG_HOME = glog;
-  GTEST_HOME = symlinkJoin { name="gtest-wrap"; paths = [ gtest gtest.dev ]; };
-  LZ4_HOME = symlinkJoin { name="lz4-wrap"; paths = [ lz4 lz4.dev ]; };
-  RAPIDJSON_HOME = rapidjson;
-  SNAPPY_HOME = symlinkJoin { name="snappy-wrap"; paths = [ snappy snappy.dev ]; };
-  THRIFT_HOME = thrift;
-  ZLIB_HOME = symlinkJoin { name="zlib-wrap"; paths = [ zlib zlib.dev ]; };
-  ZSTD_HOME = zstd;
+    # Fix build for ARROW_USE_SIMD=OFF
+    # https://jira.apache.org/jira/browse/ARROW-5007
+    sed -i src/arrow/util/sse-util.h -e '1i#include "arrow/util/logging.h"'
+    sed -i src/arrow/util/neon-util.h -e '1i#include "arrow/util/logging.h"'
+  '';
 
   cmakeFlags = [
     "-DARROW_BUILD_TESTS=ON"
-    "-DARROW_PYTHON=ON"
+    "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
     "-DARROW_PARQUET=ON"
-  ];
+    "-DARROW_PYTHON=ON"
+    "-Duriparser_SOURCE=SYSTEM"
+  ] ++ stdenv.lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
   PARQUET_TEST_DATA = if doInstallCheck then "${parquet-testing}/data" else null;

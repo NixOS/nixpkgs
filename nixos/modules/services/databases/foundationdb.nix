@@ -36,6 +36,10 @@ let
     memory         = ${cfg.memory}
     storage_memory = ${cfg.storageMemory}
 
+    ${optionalString (lib.versionAtLeast cfg.package.version "6.1") ''
+    trace_format   = ${cfg.traceFormat}
+    ''}
+
     ${optionalString (cfg.tls != null) ''
       tls_plugin           = ${pkg}/libexec/plugins/FDBLibTLS.so
       tls_certificate_file = ${cfg.tls.certificate}
@@ -317,9 +321,24 @@ in
       default     = "/run/foundationdb.pid";
       description = "Path to pidfile for fdbmonitor.";
     };
+
+    traceFormat = mkOption {
+      type = types.enum [ "xml" "json" ];
+      default = "xml";
+      description = "Trace logging format.";
+    };
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = lib.versionOlder cfg.package.version "6.1" -> cfg.traceFormat == "xml";
+        message = ''
+          Versions of FoundationDB before 6.1 do not support configurable trace formats (only XML is supported).
+          This option has no effect for version '' + cfg.package.version + '', and enabling it is an error.
+        '';
+      }
+    ];
+
     environment.systemPackages = [ pkg ];
 
     users.users = optionalAttrs (cfg.user == "foundationdb") (singleton
@@ -382,7 +401,7 @@ in
           chown -R ${cfg.user}:${cfg.group} ${cfg.pidfile}
 
         for x in "${cfg.logDir}" "${cfg.dataDir}"; do
-          [ ! -d "$x" ] && mkdir -m 0700 -vp "$x";
+          [ ! -d "$x" ] && mkdir -m 0770 -vp "$x";
           chown -R ${cfg.user}:${cfg.group} "$x";
         done
 
@@ -404,7 +423,7 @@ in
 
       postStart = ''
         if [ -e "${cfg.dataDir}/.first_startup" ]; then
-          fdbcli --exec "configure new single memory"
+          fdbcli --exec "configure new single ssd"
           rm -f "${cfg.dataDir}/.first_startup";
         fi
       '';

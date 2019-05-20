@@ -34,6 +34,7 @@ let
     executable = "pypy${if isPy3k then "3" else ""}";
     pythonForBuild = self; # Not possible to cross-compile with.
     sitePackages = "site-packages";
+    hasDistutilsCxxPatch = false;
   };
   pname = "${passthru.executable}_prebuilt";
   version = with sourceVersion; "${major}.${minor}.${patch}";

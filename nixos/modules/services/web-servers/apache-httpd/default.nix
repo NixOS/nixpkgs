@@ -690,7 +690,7 @@ in
 
         ; Don't advertise PHP
         expose_php = off
-      '' + optionalString (!isNull config.time.timeZone) ''
+      '' + optionalString (config.time.timeZone != null) ''
 
         ; Apparently PHP doesn't use $TZ.
         date.timezone = "${config.time.timeZone}"

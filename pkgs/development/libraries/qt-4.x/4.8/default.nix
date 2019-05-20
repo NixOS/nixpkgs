@@ -100,7 +100,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
         gtk = gtk2.out;
-        gdk_pixbuf = gdk_pixbuf.out;
       })
     ++ lib.optional stdenv.isAarch64 (fetchpatch {
         url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
@@ -231,5 +230,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.lgpl21Plus; # or gpl3
     maintainers = with lib.maintainers; [ orivej lovek323 phreedom sander ];
     platforms   = lib.platforms.unix;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

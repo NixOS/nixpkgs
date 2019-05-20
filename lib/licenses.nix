@@ -145,6 +145,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     free = false;
   };
 
+  cc-by-nc-30 = spdx {
+    spdxId = "CC-BY-NC-3.0";
+    fullName = "Creative Commons Attribution Non Commercial 3.0 Unported";
+    free = false;
+  };
+
   cc-by-nc-40 = spdx {
     spdxId = "CC-BY-NC-4.0";
     fullName = "Creative Commons Attribution Non Commercial 4.0 International";

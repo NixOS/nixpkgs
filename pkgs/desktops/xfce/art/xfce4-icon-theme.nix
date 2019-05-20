@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool gtk2 ];
 
   meta = {
-    homepage = http://www.xfce.org/;
+    homepage = https://www.xfce.org/;
     description = "Icons for Xfce";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];

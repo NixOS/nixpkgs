@@ -24,7 +24,7 @@ stdenv.mkDerivation {
        is tightly integrated in the RDBMS in the sense that it defines operators so instead of the traditional
        operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
     '';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = postgresql.meta.platforms;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ danbst ];
   };

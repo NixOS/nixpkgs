@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "documize-community";
-  version = "2.2.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "documize";
     repo = "community";
     rev = "v${version}";
-    sha256 = "09s5js0zb3mh3g5qz8f3l2cqjn01kjb35kinfv932nf2rfyrmyqz";
+    sha256 = "14v66jwxg6akllbz8lsqplxalr73jff5453nigcnb4vzwwkz2wq3";
   };
 
   goPackagePath = "github.com/documize/community";
@@ -37,7 +37,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Open source Confluence alternative for internal & external docs built with Golang + EmberJS";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ma27 elseym ];
     homepage = https://www.documize.com/;
   };
 }

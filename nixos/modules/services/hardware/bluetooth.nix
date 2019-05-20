@@ -13,7 +13,7 @@ in {
   options = {
 
     hardware.bluetooth = {
-      enable = mkEnableOption "support for Bluetooth.";
+      enable = mkEnableOption "support for Bluetooth";
 
       powerOnBoot = mkOption {
         type    = types.bool;

@@ -19,7 +19,9 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     End of support is planned for end of April 2020, handing over to 20.03.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -35,21 +37,6 @@
    The following new services were added since the last release:
   </para>
 
-  <itemizedlist>
-   <listitem>
-    <para>
-       Besides the existing <option>services.prometheus</option> module which
-       targets Prometheus-1 a new <option>services.prometheus2</option> module
-       has been added which targets Prometheus-2.
-    </para>
-    <para>
-       Both modules can be enabled at the same time. In fact
-       <link xlink:href="https://prometheus.io/docs/prometheus/latest/migration/#storage">
-       this is needed for upgrading existing Prometheus-1 data to Prometheus-2
-       </link>.
-    </para>
-   </listitem>
-  </itemizedlist>
  </section>
 
  <section xmlns="http://docbook.org/ns/docbook"
@@ -84,25 +71,6 @@
    </listitem>
    <listitem>
     <para>
-      The directory where Prometheus will store its metric data is now
-      managed by systemd's StateDirectory mechanism. It still defaults
-      to <literal>/var/lib/prometheus</literal>.
-    </para>
-    <para>
-      Its location can be specified by the new
-      <option>services.prometheus.stateDir</option> option which
-      defaults to <literal>prometheus</literal>. Note that this should
-      be a directory relative to <literal>/var/lib/</literal>.
-    </para>
-    <para>
-      The option <option>services.prometheus.dataDir</option> has been
-      deprecated. You can still set it but it's now required to have
-      <literal>/var/lib/</literal> as a prefix and you can't set
-      <option>services.prometheus.stateDir</option> at the same time.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
       The options <option>services.prometheus.alertmanager.user</option> and
       <option>services.prometheus.alertmanager.group</option> have been removed
       because the alertmanager service is now using systemd's <link
@@ -115,6 +83,25 @@
       The NetworkManager systemd unit was renamed back from network-manager.service to
       NetworkManager.service for better compatibility with other applications expecting this name.
       The same applies to ModemManager where modem-manager.service is now called ModemManager.service again.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <option>services.nzbget.configFile</option> and <option>services.nzbget.openFirewall</option>
+      options were removed as they are managed internally by the nzbget. The
+      <option>services.nzbget.dataDir</option> option hadn't actually been used by
+      the module for some time and so was removed as cleanup.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <option>services.emby.enable</option> module has been removed, see
+      <option>services.jellyfin.enable</option> instead for a free software fork of Emby.
+
+      See the Jellyfin documentation:
+      <link xlink:href="https://jellyfin.readthedocs.io/en/latest/administrator-docs/migrate-from-emby/">
+        Migrating from Emby to Jellyfin
+      </link>
     </para>
    </listitem>
   </itemizedlist>

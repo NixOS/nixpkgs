@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "A PostgreSQL foreign data wrapper to connect to TDS databases (Sybase and Microsoft SQL Server)";
     homepage    = https://github.com/tds-fdw/tds_fdw;
     maintainers = [ maintainers.steve-chavez ];
-    platforms   = platforms.linux;
+    platforms   = postgresql.meta.platforms;
     license     = licenses.postgresql;
   };
 }

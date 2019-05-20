@@ -11,7 +11,7 @@
 , doxygen
 }:
 
-let version = "7.3.0p2";
+let version = "7.3.0p3";
     commit = "V${builtins.replaceStrings ["."] ["_"] version}";
 
 in stdenv.mkDerivation {
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
   src = fetchurl {
     name = "occt-${commit}.tar.gz";
     url = "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=${commit};sf=tgz";
-    sha256 = "0nc9k1nqpj0n99pr7qkva79irmqhh007dffwghiyzs031zhd7i6w";
+    sha256 = "0k9c3ypcnjcilq1dhsf6xxbd52gyq4h5rchvp30k3c8ph4ris5pz";
   };
 
   nativeBuildInputs = [ cmake ];

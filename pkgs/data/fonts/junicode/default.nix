@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip {
   name = "junicode-0.7.8";
@@ -15,7 +15,6 @@ fetchzip {
   meta = {
     homepage = http://junicode.sourceforge.net/;
     description = "A Unicode font for medievalists";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

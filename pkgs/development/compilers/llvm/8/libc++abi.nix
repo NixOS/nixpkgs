@@ -1,4 +1,5 @@
-{ stdenv, cmake, fetch, libcxx, libunwind, llvm, version }:
+{ stdenv, cmake, fetch, libcxx, libunwind, llvm, version
+, enableShared ? true }:
 
 stdenv.mkDerivation {
   name = "libc++abi-${version}";
@@ -6,12 +7,19 @@ stdenv.mkDerivation {
   src = fetch "libcxxabi" "1k875f977ybdkpdnr9105wa6hccy9qvpd9xd42n75h7p56bdxmn2";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
+  buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
 
   cmakeFlags = stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isWasm [
+    "-DLIBCXXABI_ENABLE_THREADS=OFF"
+    "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
+  ] ++ stdenv.lib.optionals (!enableShared) [
+    "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
+
+  patches = [ ./libcxxabi-no-threads.patch ];
 
   postUnpack = ''
     unpackFile ${libcxx.src}
@@ -21,6 +29,8 @@ stdenv.mkDerivation {
     export TRIPLE=x86_64-apple-darwin
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -d $(ls -d libcxx-*) -i ${../libcxx-0001-musl-hacks.patch}
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isWasm ''
+    patch -p1 -d $(ls -d llvm-*) -i ${./libcxxabi-wasm.patch}
   '';
 
   installPhase = if stdenv.isDarwin
@@ -39,8 +49,9 @@ stdenv.mkDerivation {
     else ''
       install -d -m 755 $out/include $out/lib
       install -m 644 lib/libc++abi.a $out/lib
-      install -m 644 lib/libc++abi.so.1.0 $out/lib
       install -m 644 ../include/cxxabi.h $out/include
+    '' + stdenv.lib.optionalString enableShared ''
+      install -m 644 lib/libc++abi.so.1.0 $out/lib
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
     '';
@@ -50,6 +61,6 @@ stdenv.mkDerivation {
     description = "A new implementation of low level support for a standard C++ library";
     license = with stdenv.lib.licenses; [ ncsa mit ];
     maintainers = with stdenv.lib.maintainers; [ vlstill ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.all;
   };
 }

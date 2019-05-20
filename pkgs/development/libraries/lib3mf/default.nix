@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     rmdir UnitTests/googletest
     ln -s ${gtest.src} UnitTests/googletest
+
+    # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+    sed -i 's,=''${\(exec_\)\?prefix}/,=,' lib3MF.pc.in
   '';
 
   meta = with stdenv.lib; {

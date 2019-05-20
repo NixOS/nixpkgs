@@ -158,27 +158,21 @@ in {
     services.couchdb.configFile = mkDefault
       (if useVersion2 then "/var/lib/couchdb/local.ini" else "/var/lib/couchdb/couchdb.ini");
 
+    systemd.tmpfiles.rules = [
+      "d '${dirOf cfg.uriFile}' - ${cfg.user} ${cfg.group} - -"
+      "d '${dirOf cfg.logFile}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.databaseDir}' -  ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.viewIndexDir}' -  ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.couchdb = {
       description = "CouchDB Server";
       wantedBy = [ "multi-user.target" ];
 
       preStart =
         ''
-        mkdir -p `dirname ${cfg.uriFile}`;
-        mkdir -p `dirname ${cfg.logFile}`;
-        mkdir -p ${cfg.databaseDir};
-        mkdir -p ${cfg.viewIndexDir};
         touch ${cfg.configFile}
         touch -a ${cfg.logFile}
-
-        if [ "$(id -u)" = 0 ]; then
-          chown ${cfg.user}:${cfg.group} `dirname ${cfg.uriFile}`;
-          (test -f ${cfg.uriFile} && chown ${cfg.user}:${cfg.group} ${cfg.uriFile}) || true
-          chown ${cfg.user}:${cfg.group} ${cfg.databaseDir}
-          chown ${cfg.user}:${cfg.group} ${cfg.viewIndexDir}
-          chown ${cfg.user}:${cfg.group} ${cfg.configFile}
-          chown ${cfg.user}:${cfg.group} ${cfg.logFile}
-        fi
         '';
 
       environment = mkIf useVersion2 {
@@ -191,7 +185,6 @@ in {
       };
 
       serviceConfig = {
-        PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
         ExecStart = executable;

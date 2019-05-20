@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
-  name = "shadowfox-${version}";
-  version = "1.5.2";
+buildGoModule rec {
+  pname = "shadowfox";
+  version = "1.7.20";
 
   src = fetchFromGitHub {
     owner = "SrKomodo";
     repo = "shadowfox-updater";
     rev = "v${version}";
-    sha256 = "07695hba72q722d18q75pwa45azg9jibj6vqnhwb7mnwz2i7hkkc";
+    sha256 = "14crips12l4n050b8hrqkfqbxl0l8s3y4y9lm8n0bjpxdpjbpr7q";
   };
 
   goPackagePath = "github.com/SrKomodo/shadowfox-updater";
-  goDeps = ./deps.nix;
+
+  modSha256 = "143ky1fj7xglhjyzh78qzgh1m4j53kqps25c9vnq9q4vdyzm93sr";
 
   buildFlags = "--tags release";
 

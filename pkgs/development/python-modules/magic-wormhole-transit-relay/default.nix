@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkInputs = [ mock ];
 
   checkPhase = ''
-    python -m twisted.trial wormhole_transit_relay
+    ${twisted}/bin/trial wormhole_transit_relay
   '';
 
   meta = with lib; {

@@ -10,7 +10,15 @@ in buildFHSUserEnv (fhsArgs // {
 
   runScript = writeScript "appimage-exec" ''
     #!${runtimeShell}
+    if [ $# -eq 0 ]; then 
+      echo "Usage: $0 FILE [OPTION...]"
+      echo
+      echo 'Options are passed on to the appimage.'
+      echo "If you want to execute a custom command in the appimage's environment, set the APPIMAGE_DEBUG_EXEC environment variable."
+      exit 1
+    fi
     APPIMAGE="$(realpath "$1")"
+    shift
 
     if [ ! -x "$APPIMAGE" ]; then
       echo "fatal: $APPIMAGE is not executable"
@@ -43,6 +51,6 @@ in buildFHSUserEnv (fhsArgs // {
       exec "$APPIMAGE_DEBUG_EXEC"
     fi
 
-    exec ./AppRun
+    exec ./AppRun "$@"
   '';
 })

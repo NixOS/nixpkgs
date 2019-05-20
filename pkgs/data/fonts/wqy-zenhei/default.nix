@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "0.9.45";
@@ -18,8 +18,8 @@ in fetchzip rec {
   meta = {
     description = "A (mainly) Chinese Unicode font";
     homepage = http://wenq.org;
-    license = stdenv.lib.licenses.gpl2; # with font embedding exceptions
-    maintainers = [ stdenv.lib.maintainers.pkmx ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl2; # with font embedding exceptions
+    maintainers = [ lib.maintainers.pkmx ];
+    platforms = lib.platforms.all;
   };
 }

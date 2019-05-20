@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.lesbonscomptes.com/pxattr/index.html;
+    homepage = https://www.lesbonscomptes.com/pxattr/index.html;
     description = "Provides a single interface to extended file attributes";
     maintainers = [ stdenv.lib.maintainers.vrthra ];
     license = [ stdenv.lib.licenses.mit ];

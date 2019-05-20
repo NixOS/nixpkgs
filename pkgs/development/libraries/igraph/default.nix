@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The network analysis package";
-    homepage = http://igraph.org/;
+    homepage = https://igraph.org/;
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.MostAwesomeDude ];
   };

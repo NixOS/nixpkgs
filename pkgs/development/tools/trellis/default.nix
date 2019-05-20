@@ -8,14 +8,14 @@ let
 in
 stdenv.mkDerivation rec {
   name = "trellis-${version}";
-  version = "2019.02.21";
+  version = "2019.04.22";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "symbiflow";
        repo   = "prjtrellis";
-       rev    = "90910577671cdd950e56df6cb29d848dadea9467";
-       sha256 = "0j5gnkqfkp8k01wmzsplg713dmw1zvg04hsy33bzbyxaqviybdip";
+       rev    = "5eb0ad870f30422b95d090ac9a476343809c62b9";
+       sha256 = "10jkjfhqdr2bff41mh3w8a7kszf2whqqgk5s1z5z07mlh6zfdjlg";
        name   = "trellis";
      })
     (fetchFromGitHub {

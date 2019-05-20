@@ -17,7 +17,7 @@ bundlerEnv rec {
       in a TaskPaper-formatted text file. It allows for multiple
       sections/categories and flexible output formatting.
     '';
-    homepage    = http://brettterpstra.com/projects/doing/;
+    homepage    = https://brettterpstra.com/projects/doing/;
     license     = licenses.mit;
     maintainers = with maintainers; [ ktf ];
     platforms   = platforms.unix;

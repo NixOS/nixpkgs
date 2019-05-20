@@ -24,6 +24,7 @@ let
     executable = "pypy${if isPy3k then "3" else ""}";
     pythonForBuild = self; # No cross-compiling for now.
     sitePackages = "site-packages";
+    hasDistutilsCxxPatch = false;
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
@@ -108,6 +109,9 @@ in with passthru; stdenv.mkDerivation rec {
       "test_pathlib"
       # disable tarfile because it assumes gid 0 exists
       "test_tarfile"
+      # disable __all__ because of spurious imp/importlib warning and
+      # warning-to-error test policy
+      "test___all__"
     ];
   in ''
     export TERMINFO="${ncurses.out}/share/terminfo/";

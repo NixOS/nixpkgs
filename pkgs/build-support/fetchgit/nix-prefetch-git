@@ -68,7 +68,7 @@ for arg; do
             --leave-dotGit) leaveDotGit=true;;
             --fetch-submodules) fetchSubmodules=true;;
             --builder) builder=true;;
-            --help) usage; exit;;
+            -h|--help) usage; exit;;
             *)
                 : $((++argi))
                 case $argi in

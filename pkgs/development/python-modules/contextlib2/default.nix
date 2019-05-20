@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Backports and enhancements for the contextlib module";
-    homepage = http://contextlib2.readthedocs.org/;
+    homepage = https://contextlib2.readthedocs.org/;
     license = lib.licenses.psfl;
   };
 }

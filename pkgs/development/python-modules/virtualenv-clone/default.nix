@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "virtualenv-clone";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "217bd3f0880c9f85672c0bcc9ad9e0354ab7dfa89c2f117e63aa878b4279f5bf";
+    sha256 = "c88ae171a11b087ea2513f260cdac9232461d8e9369bcd1dc143fc399d220557";
   };
 
   buildInputs = [ pytest ];

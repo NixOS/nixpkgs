@@ -17,7 +17,7 @@
 stdenv.mkDerivation {
   name = "lldb-${version}";
 
-  src = fetch "lldb" "10k9lyk3i72j9hca523r9pz79qp7d8q7jqnjy0i3saj1bgknpd3n";
+  src = fetch "lldb" "0klsscg1sczc4nw2l53xggi969k361cng2sjjrfp3bv4g5x14s4v";
 
   postPatch = ''
     # Fix up various paths that assume llvm and clang are installed in the same place
@@ -27,6 +27,9 @@ stdenv.mkDerivation {
       cmake/modules/LLDBStandalone.cmake
     sed -i 's,"$.LLVM_LIBRARY_DIR.",${llvm}/lib ${clang-unwrapped}/lib,' \
       cmake/modules/LLDBStandalone.cmake
+    sed -i -e 's,message(SEND_ERROR "Cannot find debugserver on system."),,' \
+           -e 's,string(STRIP ''${XCODE_DEV_DIR} XCODE_DEV_DIR),,' \
+           tools/debugserver/source/CMakeLists.txt
   '';
 
   nativeBuildInputs = [ cmake python which swig ];
@@ -36,8 +39,11 @@ stdenv.mkDerivation {
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-I${libxml2.dev}/include/libxml2";
+
   cmakeFlags = [
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+    "-DSKIP_DEBUGSERVER=ON"
   ];
 
   enableParallelBuilding = true;

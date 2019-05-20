@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/zopefoundation/zope.proxy;
+    homepage = https://github.com/zopefoundation/zope.proxy;
     description = "Generic Transparent Proxies";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free software for distributed and grid computing";
-    homepage = http://boinc.berkeley.edu/;
+    homepage = https://boinc.berkeley.edu/;
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.linux;  # arbitrary choice
   };

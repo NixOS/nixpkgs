@@ -12,10 +12,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C++ implementation of the OpenTracing API";
-    homepage = http://opentracing.io;
+    homepage = https://opentracing.io;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ rob ];
   };
 
 }
-

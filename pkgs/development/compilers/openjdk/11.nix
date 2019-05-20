@@ -18,16 +18,16 @@ let
     else "amd64";
 
   major = "11";
-  update = ".0.2";
-  build = "9";
-  repover = "jdk-${major}${update}+${build}";
+  update = ".0.3";
+  build = "ga";
+  repover = "jdk-${major}${update}-${build}";
 
   openjdk = stdenv.mkDerivation {
-    name = "openjdk-${major}${update}-b${build}";
+    name = "openjdk-${major}${update}-${build}";
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/${repover}.tar.gz";
-      sha256 = "0xc7nksvj72cgw8zrmvlcwaasinpij1j1959398a4nqvzpvpxg30";
+      sha256 = "1v6pam38iidlhz46046h17hf5kki6n3kl302awjcyxzk7bmkvb8x";
     };
 
     nativeBuildInputs = [ pkgconfig ];

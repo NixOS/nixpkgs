@@ -28,12 +28,19 @@ let
       iana-etc
       # Steam Play / Proton
       python3
+      # Steam VR
+      procps
+      usbutils
     ] ++ lib.optional withJava jdk
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
 
   ldPath = map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
            ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
+
+  setupSh = writeScript "setup.sh" ''
+    #!${runtimeShell}
+  '';
 
   runSh = writeScript "run.sh" ''
     #!${runtimeShell}
@@ -168,6 +175,7 @@ in buildFHSUserEnv rec {
       ln -s ../lib32/steam-runtime steamrt/${steam-runtime-wrapped-i686.arch}
     ''}
     ln -s ${runSh} steamrt/run.sh
+    ln -s ${setupSh} steamrt/setup.sh
   '' else ''
     ln -s /usr/lib/libbz2.so usr/lib/libbz2.so.1.0
     ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''

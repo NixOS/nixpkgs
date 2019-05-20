@@ -97,7 +97,7 @@ if [ -z "$oldUrl" ]; then
 fi
 
 drvName=$(nix-instantiate $systemArg --eval -E "with import ./. {}; (builtins.parseDrvName $attr.name).name" | tr -d '"')
-oldVersion=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.${versionKey} or (builtins.parseDrvName $attr.name).${versionKey}" | tr -d '"')
+oldVersion=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
 
 if [ -z "$drvName" -o -z "$oldVersion" ]; then
     die "Couldn't evaluate name and version from '$attr.name'!"
@@ -161,7 +161,7 @@ if [ -z "$newHash" ]; then
     die "Couldn't figure out new hash of '$attr.src'!"
 fi
 
-if [ -z "${ignoreSameHash}"] && [ "$oldVersion" != "$newVersion" ] && [ "$oldHash" = "$newHash" ]; then
+if [ -z "${ignoreSameHash}" ] && [ "$oldVersion" != "$newVersion" ] && [ "$oldHash" = "$newHash" ]; then
     mv "$nixFile.bak" "$nixFile"
     die "Both the old and new source hashes of '$attr.src' were equivalent. Please fix the package's source URL to be dependent on '\${version}'!"
 fi

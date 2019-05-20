@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libxml2, xdg-desktop-portal, gtk3, glib, wrapGAppsHook, gnome3 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libxml2, xdg-desktop-portal, gtk3, glib, wrapGAppsHook, gnome3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gtk";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libxml2 xdg-desktop-portal wrapGAppsHook ];
-  buildInputs = [ glib gtk3 gnome3.gsettings-desktop-schemas ];
+  buildInputs = [ glib gtk3 gsettings-desktop-schemas ];
 
   meta = with stdenv.lib; {
     description = "Desktop integration portals for sandboxed apps";

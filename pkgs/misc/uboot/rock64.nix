@@ -15,6 +15,8 @@ in buildUBoot rec {
     sha256 = "0gclcd034qfhfbabrdqmky08i0hlwmn63n0zg6mndplms5qpcx75";
   };
 
+  patches = [ ./rock64-fdt-dtc-compatibility.patch ];
+
   extraMakeFlags = [ "BL31=${armTrustedFirmwareRK3328}/bl31.elf" "u-boot.itb" "all" ];
 
   # Close to being blob free, but the U-Boot TPL causes the kernel to hang after a few minutes

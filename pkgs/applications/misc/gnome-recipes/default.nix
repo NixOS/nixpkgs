@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
 
   # https://github.com/NixOS/nixpkgs/issues/36468
   # https://gitlab.gnome.org/GNOME/recipes/issues/76
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   postPatch = ''
     chmod +x src/list_to_c.py

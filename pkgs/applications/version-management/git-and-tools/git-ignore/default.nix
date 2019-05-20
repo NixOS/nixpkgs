@@ -3,23 +3,29 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "git-ignore-${version}";
-  version = "0.2.0";
-
-  cargoSha256 = "1fqfy8lnvpn5sd3l73x2p359zq4303vsrdgw3aphvy6580yjb84d";
+  pname = "git-ignore";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "sondr3";
-    repo = "git-ignore";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1nihh5inh46r8jg9z7d6g9gqfyhrznmkn15nmzpbnzf0653dl629";
+    sha256 = "0krz50pw9bkyzl78bvppk6skbpjp8ga7bd34jya4ha1xfmd8p89c";
   };
+
+  cargoSha256 = "0r6whz8vghhjyc5vrr0n172nghmi61zj96lk26qm0bgxqyzll1kj";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ]
   ++ stdenv.lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
+
+  outputs = [ "out" "man" ];
+  preFixup = ''
+    mkdir -p "$man/man/man1"
+    cp target/release/build/git-ignore-*/out/git-ignore.1 "$man/man/man1/"
+  '';
 
   meta = with stdenv.lib; {
     description = "Quickly and easily fetch .gitignore templates from gitignore.io";

@@ -11,7 +11,7 @@ diff --git a/utils/build-presets.ini b/utils/build-presets.ini
 index 1739e91dc2..0608fed9c1 100644
 --- a/utils/build-presets.ini
 +++ b/utils/build-presets.ini
-@@ -740,6 +740,8 @@ install-destdir=%(install_destdir)s
+@@ -743,6 +743,8 @@ install-destdir=%(install_destdir)s
  # Path to the .tar.gz package we would create.
  installable-package=%(installable_package)s
  

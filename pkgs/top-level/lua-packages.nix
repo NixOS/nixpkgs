@@ -151,10 +151,11 @@ with self; {
       cc lutf8lib.c $CFLAGS -o utf8.so
     '';
 
-    # There's no need to separate *.lua and *.so, I guess?  TODO: conventions?
+    # The hook in ../development/lua-modules/generic/default.nix
+    # is strict about share vs. lib for _PATH and _CPATH.
     installPhase = ''
-      install -Dt "$out/lib/lua/${lua.luaversion}/compat53" \
-        compat53/*.lua *.so
+      install -Dt "$out/share/lua/${lua.luaversion}/compat53" compat53/*.lua
+      install -Dt "$out/lib/lua/${lua.luaversion}/compat53" *.so
     '';
 
     meta = with stdenv.lib; {
@@ -177,6 +178,9 @@ with self; {
 
     preConfigure = ''export prefix=$out'';
 
+    # https://github.com/wahern/cqueues/issues/216
+    NIX_CFLAGS_COMPILE = [ "-DCQUEUES_VERSION=${version}" ];
+
     nativeBuildInputs = [ gnum4 ];
     buildInputs = [ openssl ];
 
@@ -186,38 +190,6 @@ with self; {
       license = licenses.mit;
       maintainers = with maintainers; [ vcunat ];
       platforms = platforms.unix;
-    };
-  };
-
-  http = buildLuaPackage rec {
-    version = "0.2";
-    name = "http-${version}";
-
-    src = fetchFromGitHub {
-      owner = "daurnimator";
-      repo = "lua-http";
-      rev = "v${version}";
-      sha256 = "0a8vsj49alaf1fkhv51n5mgpjq8izfff3shcjs8xk7p2bc46vd7i";
-    };
-
-    /* TODO: separate docs derivation? (pandoc is heavy)
-    nativeBuildInputs = [ pandoc ];
-    makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
-    */
-
-    buildPhase = ":";
-    installPhase = ''
-      install -Dt "$out/lib/lua/${lua.luaversion}/http" \
-        http/*.lua
-      install -Dt "$out/lib/lua/${lua.luaversion}/http/compat" \
-        http/compat/*.lua
-    '';
-
-    meta = with stdenv.lib; {
-      description = "HTTP library for lua";
-      homepage = "https://daurnimator.github.io/lua-http/${version}/";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vcunat ];
     };
   };
 
@@ -383,7 +355,7 @@ with self; {
       sha256 = "0p5583vidsm7s97zihf47c34vscwgbl86axrnj44j328v45kxb2z";
     };
 
-    propagatedBuildInputs = [ std.normalize bit32 ];
+    propagatedBuildInputs = [ std_normalize bit32 ];
 
     buildPhase = ''
       ${lua}/bin/lua build-aux/luke \
@@ -416,12 +388,13 @@ with self; {
       sha256 = "0wv8l7f7na7kw5xn8mjik2wpxbizl7zvvp5s7fcwvz9kl5jdpk5b";
     };
 
+    propagatedBuildInputs = [ luasocket ];
     buildInputs = [ openssl ];
 
     preBuild = ''
       makeFlagsArray=(
         ${platformString}
-        LUAPATH="$out/lib/lua/${lua.luaversion}"
+        LUAPATH="$out/share/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INC_PATH="-I${lua}/include"
         LIB_PATH="-L$out/lib");
@@ -776,64 +749,6 @@ with self; {
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = with platforms; linux ++ darwin;
-    };
-  };
-
-  std._debug = buildLuaPackage rec {
-    name = "std._debug-${version}";
-    version = "1.0";
-
-    src = fetchFromGitHub {
-      owner = "lua-stdlib";
-      repo = "_debug";
-      rev = "v${version}";
-      sha256 = "01kfs6k9j9zy4bvk13jx18ssfsmhlciyrni1x32qmxxf4wxyi65n";
-    };
-
-    # No Makefile.
-    dontBuild = true;
-
-    installPhase = ''
-      mkdir -p $out/share/lua/${lua.luaversion}/std
-      cp -r lib/std/_debug $out/share/lua/${lua.luaversion}/std/
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Manage an overall debug state, and associated hint substates.";
-      homepage    = https://lua-stdlib.github.io/_debug;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lblasc ];
-      platforms   = platforms.unix;
-    };
-  };
-
-  std.normalize = buildLuaPackage rec {
-    name = "std.normalize-${version}";
-    version = "2.0.1";
-
-    src = fetchFromGitHub {
-      owner = "lua-stdlib";
-      repo = "normalize";
-      rev = "v${version}";
-      sha256 = "1yz96r28d2wcgky6by92a21755bf4wzpn65rdv2ps0fxywgw5rda";
-    };
-
-    propagatedBuildInputs = [ std._debug ];
-
-    # No Makefile.
-    dontBuild = true;
-
-    installPhase = ''
-      mkdir -p $out/share/lua/${lua.luaversion}/std
-      cp -r lib/std/normalize $out/share/lua/${lua.luaversion}/std/
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Normalized Lua Functions";
-      homepage    = https://lua-stdlib.github.io/normalize;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lblasc ];
-      platforms   = platforms.unix;
     };
   };
 

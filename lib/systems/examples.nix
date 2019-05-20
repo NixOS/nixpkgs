@@ -88,6 +88,9 @@ rec {
     config = "aarch64-unknown-linux-musl";
   };
 
+  gnu64 = { config = "x86_64-unknown-linux-gnu"; };
+  gnu32  = { config = "i686-unknown-linux-gnu"; };
+
   musl64 = { config = "x86_64-unknown-linux-musl"; };
   musl32  = { config = "i686-unknown-linux-musl"; };
 
@@ -116,7 +119,7 @@ rec {
     config = "aarch64-none-elf";
     libc = "newlib";
   };
-  
+
   aarch64be-embedded = {
     config = "aarch64_be-none-elf";
     libc = "newlib";
@@ -126,14 +129,9 @@ rec {
     config = "powerpc-none-eabi";
     libc = "newlib";
   };
-  
+
   ppcle-embedded = {
     config = "powerpcle-none-eabi";
-    libc = "newlib";
-  };
-  
-  alpha-embedded = {
-    config = "alpha-elf";
     libc = "newlib";
   };
 
@@ -216,4 +214,14 @@ rec {
     config = "x86_64-unknown-netbsd";
     libc = "nblibc";
   };
+
+  #
+  # WASM
+  #
+
+  wasi32 = {
+    config = "wasm32-unknown-wasi";
+    useLLVM = true;
+  };
+
 }

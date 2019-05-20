@@ -11,7 +11,7 @@ in
   options = {
 
     services.mailcatcher = {
-      enable = mkEnableOption "Enable MailCatcher.";
+      enable = mkEnableOption "MailCatcher";
 
       http.ip = mkOption {
         type = types.str;

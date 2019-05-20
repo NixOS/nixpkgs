@@ -47,9 +47,10 @@ stdenv.mkDerivation rec {
     sha256 = "08frr1fdjx8qcfh3fafn10kibdwbvkqqvfl7hpqbm7i9dg4f1zlq";
   };
 
+  nativeBuildInputs = [ python2 pkgconfig flex bison ];
   buildInputs =
-    [ python2 zlib pkgconfig glib ncurses perl pixman
-      vde2 texinfo flex bison makeWrapper lzo snappy
+    [ zlib glib ncurses perl pixman
+      vde2 texinfo makeWrapper lzo snappy
       gnutls nettle curl
     ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]

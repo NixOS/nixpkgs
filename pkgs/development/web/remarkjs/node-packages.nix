@@ -4938,7 +4938,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Portable Unix shell commands for Node.js";
-      homepage = http://github.com/shelljs/shelljs;
+      homepage = https://github.com/shelljs/shelljs;
       license = "BSD-3-Clause";
     };
     production = true;

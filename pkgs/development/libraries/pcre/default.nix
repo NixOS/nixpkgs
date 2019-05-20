@@ -8,7 +8,7 @@ with stdenv.lib;
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
 let
-  version = "8.42";
+  version = "8.43";
   pname = if (variant == null) then "pcre"
     else  if (variant == "cpp") then "pcre-cpp"
     else  variant;
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ftp.pcre.org/pub/pcre/pcre-${version}.tar.bz2";
-    sha256 = "00ckpzlgyr16bnqx8fawa3afjgqxw5yxgs2l081vw23qi1y4pl1c";
+    sha256 = "0sxg1wlknq05ryq63h21cchjmcjkin9lmnqsmhs3h08301965rwi";
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];

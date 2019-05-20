@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--without-webkit" # old version is required
     "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-    "--with-icc-directory=/var/run/current-system/sw/share/color/icc"
+    "--with-icc-directory=/run/current-system/sw/share/color/icc"
   ];
 
   # on Darwin,

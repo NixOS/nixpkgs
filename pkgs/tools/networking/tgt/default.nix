@@ -2,7 +2,7 @@
 , docbook_xsl }:
 
 let
-  version = "1.0.75";
+  version = "1.0.77";
 in stdenv.mkDerivation rec {
   name = "tgt-${version}";
 
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
     owner = "fujita";
     repo = "tgt";
     rev = "v${version}";
-    sha256 = "008x7xz49fnqi91hw4nim4f25gp5qyjgzxfikmj7gz81mh4hhamj";
+    sha256 = "1qhck8v5057wn9nb1nsq6dzhvqzz51x8i3n0p1x36zbsmdjy2ajw";
   };
 
   buildInputs = [ libxslt systemd libaio docbook_xsl ];

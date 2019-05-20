@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   version = "1.1";
@@ -18,7 +18,7 @@ in fetchzip rec {
 
   sha256 = "0dz0y7w6mq4hcmmxv6fn4mp6jkln9mzr4s96vsg68wrl5b7k9yff";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://loudifier.com/comic-relief/;
     description = "A font metric-compatible with Microsoft Comic Sans";
     longDescription = ''

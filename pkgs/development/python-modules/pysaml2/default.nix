@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "4.6.5";
+  version = "4.7.0";
 
   # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0xlbr52vzx1j9sg65jhqv01vp4a49afjy03lc2zb0ggx0xxzngvb";
+    sha256 = "1bpfvy2xd3aqf79ihglmxlxnv7406184p99h5mn5h9ifs54vvhhl";
   };
 
   patches = [

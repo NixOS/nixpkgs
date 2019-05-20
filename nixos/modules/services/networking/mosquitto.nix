@@ -44,7 +44,7 @@ in
 
   options = {
     services.mosquitto = {
-      enable = mkEnableOption "Enable the MQTT Mosquitto broker.";
+      enable = mkEnableOption "the MQTT Mosquitto broker";
 
       host = mkOption {
         default = "127.0.0.1";
@@ -65,7 +65,7 @@ in
       };
 
       ssl = {
-        enable = mkEnableOption "Enable SSL listener.";
+        enable = mkEnableOption "SSL listener";
 
         cafile = mkOption {
           type = types.nullOr types.path;

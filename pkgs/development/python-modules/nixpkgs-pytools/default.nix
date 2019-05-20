@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "nixpkgs-pytools";
-  version = "1.0.0";
+  version = "1.0.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6aaf1e990be639a0d01afb454756606f3111dd8c596b6e848d4a0cec019168d0";
+    sha256 = "0796c6e95daeb3d7e61c9c53126d95ba6a48f84b995b12b60f45619caf28a574";
   };
 
   propagatedBuildInputs = [

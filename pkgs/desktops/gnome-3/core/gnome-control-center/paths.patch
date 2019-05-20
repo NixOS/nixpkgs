@@ -54,6 +54,19 @@ index 96b25140c..1ad704d4a 100644
  
  typedef struct _TzDB TzDB;
  typedef struct _TzLocation TzLocation;
+diff --git a/panels/info/cc-info-overview-panel.c b/panels/info/cc-info-overview-panel.c
+index 4541986db..da7826bfe 100644
+--- a/panels/info/cc-info-overview-panel.c
++++ b/panels/info/cc-info-overview-panel.c
+@@ -187,7 +187,7 @@ load_gnome_version (char **version,
+   gsize length;
+   g_autoptr(VersionData) data = NULL;
+ 
+-  if (!g_file_get_contents (DATADIR "/gnome/gnome-version.xml",
++  if (!g_file_get_contents ("@gnome_desktop@/share/gnome/gnome-version.xml",
+                             &contents,
+                             &length,
+                             &error))
 diff --git a/panels/network/connection-editor/net-connection-editor.c b/panels/network/connection-editor/net-connection-editor.c
 index 9390a3308..d30b4a68e 100644
 --- a/panels/network/connection-editor/net-connection-editor.c

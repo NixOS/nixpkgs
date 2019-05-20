@@ -5,6 +5,7 @@
 , prompt_toolkit, pygments
 #, optional, dependencies
 , jinja2, whoosh, pytest
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,8 @@ buildPythonPackage rec {
     jinja2 whoosh
   ];
 
+  doCheck = !stdenv.isDarwin;
+
   checkInputs = ([
     pytest
   ]) ++ [
@@ -35,9 +38,11 @@ buildPythonPackage rec {
   ];
 
   # most of the downloader tests and 4 other tests require a network connection
+  # test_export_yaml and test_citations check for the exact output produced by pyyaml 3.x and
+  # fail with 5.x
   checkPhase = ''
     HOME=$(mktemp -d) pytest papis tests --ignore tests/downloaders \
-      -k "not test_get_data and not test_doi_to_data and not test_general and not get_document_url"
+      -k "not test_get_data and not test_doi_to_data and not test_general and not get_document_url and not test_export_yaml and not test_citations"
   '';
 
   meta = {

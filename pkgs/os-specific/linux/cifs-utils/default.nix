@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "cifs-utils-${version}";
-  version = "6.8";
+  version = "6.9";
 
   src = fetchurl {
     url = "mirror://samba/pub/linux-cifs/cifs-utils/${name}.tar.bz2";
-    sha256 = "0ygz3pagjpaj5ky11hzh4byyymb7fpmqiqkprn11zwj31h2zdlg7";
+    sha256 = "175cp509wn1zv8p8mv37hkf6sxiskrsxdnq22mhlsg61jazz3n0q";
   };
 
   nativeBuildInputs = [ autoreconfHook docutils pkgconfig ];

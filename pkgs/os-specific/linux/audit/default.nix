@@ -6,11 +6,11 @@
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "audit-2.8.4";
+  name = "audit-2.8.5";
 
   src = fetchurl {
     url = "https://people.redhat.com/sgrubb/audit/${name}.tar.gz";
-    sha256 = "0f4ci6ffznnmgblwgv7ich9mjfk3p6y5l6m6h3chhmzw156nj454";
+    sha256 = "1dzcwb2q78q7x41shcachn7f4aksxbxd470yk38zh03fch1l2p8f";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     # and pulls in an extra openldap dependency otherwise
     "--disable-zos-remote"
     (if enablePython then "--with-python" else "--without-python")
+    "--with-arm"
+    "--with-aarch64"
   ];
 
   enableParallelBuilding = true;

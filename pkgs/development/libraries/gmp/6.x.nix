@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, m4, cxx ? !stdenv.hostPlatform.useAndroidPrebuilt
+{ stdenv, fetchurl, m4
+, cxx ? !stdenv.hostPlatform.useAndroidPrebuilt && !stdenv.hostPlatform.isWasm
 , buildPackages
 , withStatic ? false }:
 

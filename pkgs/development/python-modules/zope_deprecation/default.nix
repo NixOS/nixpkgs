@@ -16,7 +16,7 @@ buildPythonPackage rec {
   buildInputs = [ zope_testing ];
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/zopefoundation/zope.deprecation;
+    homepage = https://github.com/zopefoundation/zope.deprecation;
     description = "Zope Deprecation Infrastructure";
     license = licenses.zpl20;
     maintainers = with maintainers; [ garbas domenkozar ];

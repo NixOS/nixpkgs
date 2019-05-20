@@ -1,25 +1,23 @@
-{ buildGoPackage
+{ buildGoModule
 , fetchFromGitHub
 , fetchpatch
 , lib
 }:
 
-buildGoPackage rec {
-  name = "amass-${version}";
-  version = "2.9.1";
-
-  goPackagePath = "github.com/OWASP/Amass";
+buildGoModule rec {
+  pname = "amass";
+  version = "2.9.11";
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
     rev = version;
-    sha256 = "07vs741vmhi735ba26wscldwdx0i2yamr2g8bq7jr3sjik8ncd29";
+    sha256 = "1mbxxj7cjypxdn80svgmq9yvzaj2x0y1lcbglzzmlqj3r0j265mr";
   };
 
-  outputs = [ "bin" "out" "wordlists" ];
+  modSha256 = "028ln760xaxlsk074x1i5fqi1334rw2bpz7fg520q6m13d9w86hw";
 
-  goDeps = ./deps.nix;
+  outputs = [ "out" "wordlists" ];
 
   postInstall = ''
     mkdir -p $wordlists

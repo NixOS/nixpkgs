@@ -29,6 +29,7 @@ in {
     environment.etc."tmpfiles.d/colord.conf".source = "${pkgs.colord}/lib/tmpfiles.d/colord.conf";
 
     users.users.colord = {
+      isSystemUser = true;
       home = "/var/lib/colord";
       group = "colord";
     };

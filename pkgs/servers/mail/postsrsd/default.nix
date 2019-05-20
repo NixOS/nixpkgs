@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "postsrsd-${version}";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "roehling";
     repo = "postsrsd";
     rev = version;
-    sha256 = "170pbjicpfac8qca2vkp6bpbw42xrcm14b3p1dhnp877glrzlih8";
+    sha256 = "1dza22f0zlzsvr2dpnmsg8m8mj9rgdk0pzm1wvxrcfwyi8899ggm";
   };
 
   cmakeFlags = [ "-DGENERATE_SRS_SECRET=OFF" "-DINIT_FLAVOR=systemd" ];

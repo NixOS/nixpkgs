@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.97";
+  name = "libdrm-2.4.98";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "08yimlp6jir1rs5ajgdx74xa5qdzcqahpdzdk0rmkmhh7vdcrl3p";
+    sha256 = "150qdzsm2nx6dfacc75rx53anzsc6m31nhxidf5xxax3mk6fvq4b";
   };
 
   outputs = [ "out" "dev" "bin" ];
@@ -14,16 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpthreadstubs libpciaccess valgrind-light ];
     # libdrm as of 2.4.70 does not actually do anything with udev.
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
-
   postPatch = ''
     for a in */*-symbol-check ; do
       patchShebangs $a
     done
   '';
-
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin
-    "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
   configureFlags = [ "--enable-install-test-programs" ]
     ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)

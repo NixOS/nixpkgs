@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
-, gd, geoip
+, substituteAll, gd, geoip
 , withDebug ? false
 , withStream ? true
 , withMail ? false
@@ -75,7 +75,12 @@ stdenv.mkDerivation {
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
-  patches = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  patches = stdenv.lib.singleton (substituteAll {
+    src = ./nix-etag-1.15.4.patch;
+    preInstall = ''
+      export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
+    '';
+  }) ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/102-sizeof_test_fix.patch";
       sha256 = "0i2k30ac8d7inj9l6bl0684kjglam2f68z8lf3xggcc2i5wzhh8a";

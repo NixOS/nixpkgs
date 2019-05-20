@@ -16,7 +16,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   meta = with stdenv.lib; {
-    homepage = http://builtoncement.com/;
+    homepage = https://builtoncement.com/;
     description = "A CLI Application Framework for Python.";
     maintainers = with maintainers; [ eqyiel ];
     license = licenses.bsd3;

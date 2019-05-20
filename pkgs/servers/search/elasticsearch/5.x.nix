@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, elk5Version, makeWrapper, jre_headless, utillinux }:
+{ stdenv, fetchurl, elk5Version, makeWrapper, jre_headless
+, utillinux, gnugrep, coreutils }:
 
 with stdenv.lib;
 
@@ -8,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
-    sha256 = "0sm99m4m4mmigj6ll22kyaw7zkp1s2i0mhzx15fzidnybdnlifb4";
+    sha256 = "0zy7awb2cm2fk3c7zc7v8b8pl0jw49awqwpa1jvilmvx6dcml0vb";
   };
 
   patches = [ ./es-home-5.x.patch ./es-classpath-5.x.patch ];
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/elasticsearch \
       --prefix ES_CLASSPATH : "$out/lib/*" \
-      --prefix PATH : "${utillinux}/bin" \
+      --prefix PATH : "${makeBinPath [ utillinux gnugrep coreutils ]}" \
       --set JAVA_HOME "${jre_headless}" \
       --set ES_JVM_OPTIONS "$out/config/jvm.options"
 

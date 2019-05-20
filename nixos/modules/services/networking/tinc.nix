@@ -153,7 +153,6 @@ in
       ({
         description = "Tinc Daemon - ${network}";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
         path = [ data.package ];
         restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ];
         serviceConfig = {

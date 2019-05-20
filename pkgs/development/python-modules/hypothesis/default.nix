@@ -3,7 +3,7 @@
 , doCheck ? true, pytest, pytest_xdist, flaky, mock
 }:
 buildPythonPackage rec {
-  # http://hypothesis.readthedocs.org/en/latest/packaging.html
+  # https://hypothesis.readthedocs.org/en/latest/packaging.html
 
   # Hypothesis has optional dependencies on the following libraries
   # pytz fake_factory django numpy pytest

@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.4.1";
+  version = "0.4.4";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f47e53aa764eeadf6adcc667b9817b1ad32496477476da0b982d4fc0744b40ef";
+    sha256 = "3fc1b7c2949c9b4200ecbbfdff17da126981a1d8d95ccb7b7bcca3e3dd849d5e";
   };
 
   checkInputs = [ pytest ];
@@ -47,8 +47,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    # single test assumes python for executable name
-    PATH=$out/bin:$PATH HOME=$(mktemp -d) pytest --ignore=intake/catalog/tests/test_default.py
+    # test_filtered_compressed_cache requires calvert_uk_filter.tar.gz, which is not included in tarball
+    # test_which assumes python for executable name
+    PATH=$out/bin:$PATH HOME=$(mktemp -d) pytest -k "not test_filtered_compressed_cache and not test_which"
   '';
 
   meta = with lib; {

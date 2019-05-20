@@ -46,7 +46,7 @@ let
   '';
 
   binPrograms = optional (!stdenv.isDarwin) "gapplication" ++ [ "gdbus" "gio" "gsettings" ];
-  version = "2.60.0";
+  version = "2.60.1";
 in
 
 stdenv.mkDerivation rec {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0ls3njqknb345ni5i8hn9nr1n70kn6s8bi0g6kcqj3c4js5mv1i0";
+    sha256 = "0q2mkdvp20v6dvrhik8k5j875kj29hcfz346xi0624n6spsq9y49";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch

@@ -2,7 +2,7 @@
 , topkg, result, lwt, cmdliner, fmt }:
 let
   pname = "logs";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";

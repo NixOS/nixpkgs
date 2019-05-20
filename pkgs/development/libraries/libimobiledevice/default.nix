@@ -3,15 +3,15 @@
 
 stdenv.mkDerivation rec {
   pname = "libimobiledevice";
-  version = "2018-07-24";
+  version = "2019-04-04";
 
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "d7a2e04d2e7880c56116fd35489a7f98755501b7";
-    sha256 = "0cj0j10lmfr28c7nh79n2mcmy31xx50g93h0bqs0l7y76ph4dqkc";
+    rev = "eea4f1be9107c8ab621fd71460e47d0d38e55d71";
+    sha256 = "0wh6z5f5znlqs0grh7c8jj1s411azgyy45klmql5kj3p8qqybqrs";
   };
 
   outputs = [ "out" "dev" ];
@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ infinisil ];
   };
 }

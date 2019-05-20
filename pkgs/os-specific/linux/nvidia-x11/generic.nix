@@ -86,7 +86,7 @@ let
     };
 
     meta = with stdenv.lib; {
-      homepage = http://www.nvidia.com/object/unix.html;
+      homepage = https://www.nvidia.com/object/unix.html;
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;
       platforms = [ "i686-linux" "x86_64-linux" ];

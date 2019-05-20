@@ -2,7 +2,7 @@
 , wrapGAppsHook, itstool, desktop-file-utils, python3
 , glib, gtk3, evolution-data-server
 , libuuid, webkitgtk, zeitgeist
-, gnome3, libxml2 }:
+, gnome3, libxml2, gsettings-desktop-schemas }:
 
 let
   version = "3.32.1";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     glib gtk3 libuuid webkitgtk gnome3.tracker
     gnome3.gnome-online-accounts zeitgeist
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
     evolution-data-server
     gnome3.adwaita-icon-theme
   ];

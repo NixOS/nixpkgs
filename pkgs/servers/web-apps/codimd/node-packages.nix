@@ -12988,7 +12988,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Extract text from bundle into a file.";
-      homepage = http://github.com/webpack/extract-text-webpack-plugin;
+      homepage = https://github.com/webpack/extract-text-webpack-plugin;
       license = "MIT";
     };
     production = true;
@@ -13386,7 +13386,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "A Webpack plugin to optimize \\ minimize CSS assets.";
-      homepage = http://github.com/NMFR/optimize-css-assets-webpack-plugin;
+      homepage = https://github.com/NMFR/optimize-css-assets-webpack-plugin;
       license = "MIT";
     };
     production = true;
@@ -14398,7 +14398,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Microsoft Azure Storage Client Library for Node.js";
-      homepage = http://github.com/Azure/azure-storage-node;
+      homepage = https://github.com/Azure/azure-storage-node;
       license = "Apache-2.0";
     };
     production = true;
@@ -15516,7 +15516,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "lightweight translation module with dynamic json storage";
-      homepage = http://github.com/mashpie/i18n-node;
+      homepage = https://github.com/mashpie/i18n-node;
       license = "MIT";
     };
     production = true;
@@ -15925,7 +15925,7 @@ in
       description = "A JavaScript implementation of the W3C DOM, forked from jsdom, remove dependencies to contextify and node-gyp";
       license = {
         type = "MIT";
-        url = "http://github.com/tmpvar/jsdom/blob/master/LICENSE.txt";
+        url = "https://github.com/tmpvar/jsdom/blob/master/LICENSE.txt";
       };
     };
     production = true;
@@ -17054,7 +17054,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "PostgreSQL client - pure javascript & libpq with the same API";
-      homepage = http://github.com/brianc/node-postgres;
+      homepage = https://github.com/brianc/node-postgres;
       license = "MIT";
     };
     production = true;
@@ -18237,7 +18237,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Asynchronous, non-blocking SQLite3 bindings";
-      homepage = http://github.com/mapbox/node-sqlite3;
+      homepage = https://github.com/mapbox/node-sqlite3;
       license = "BSD-3-Clause";
     };
     production = true;

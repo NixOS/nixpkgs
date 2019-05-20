@@ -79,6 +79,14 @@ in
       '';
     };
 
+    hardware.nvidia.optimus_prime.allowExternalGpu = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Configure X to allow external NVIDIA GPUs when using optimus.
+      '';
+    };
+
     hardware.nvidia.optimus_prime.nvidiaBusId = lib.mkOption {
       type = lib.types.string;
       default = "";
@@ -134,6 +142,7 @@ in
       deviceSection = optionalString optimusCfg.enable
         ''
           BusID "${optimusCfg.nvidiaBusId}"
+          ${optionalString optimusCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
         '';
       screenSection =
         ''

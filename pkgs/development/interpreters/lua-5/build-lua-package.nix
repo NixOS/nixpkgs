@@ -150,6 +150,9 @@ builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
   installPhase = attrs.installPhase or ''
     runHook preInstall
 
+    # work around failing luarocks test for Write access
+    mkdir -p $out
+
     # luarocks make assumes sources are available in cwd
     # After the build is complete, it also installs the rock.
     # If no argument is given, it looks for a rockspec in the current directory

@@ -2,14 +2,18 @@
 , ppx_tools_versioned, ppx_deriving, re
 }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "elpi is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-elpi-${version}";
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchFromGitHub {
     owner = "LPCIC";
     repo = "elpi";
     rev = "v${version}";
-    sha256 = "1fd4mqggdcnbhqwrg8r0ikb1j2lv0fc9hv9xfbyjzbzxbjggf5zc";
+    sha256 = "1n4jpidx0vk4y66bhd704ajn8n6f1fd5wsi1shj6wijfmjl14h7s";
   };
 
   buildInputs = [ ocaml findlib ppx_tools_versioned ];

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "Chameleon";
-  version = "3.6";
+  version = "3.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0141kfwx553q73wzfl624pppmbhh7fpzvaj5pbj21pqlk2rhfx75";
+    sha256 = "850f74f756bcb99423dd2658b99f448b09f09ccc2c60c0a2d6dec52294d7f9ed";
   };
 
   meta = with stdenv.lib; {

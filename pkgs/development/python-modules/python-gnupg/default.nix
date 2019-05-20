@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, gnupg1 }:
+{ stdenv, buildPythonPackage, fetchPypi, gnupg }:
 
 buildPythonPackage rec {
   pname   = "python-gnupg";
@@ -12,9 +12,9 @@ buildPythonPackage rec {
   # Let's make the library default to our gpg binary
   patchPhase = ''
     substituteInPlace gnupg.py \
-    --replace "gpgbinary='gpg'" "gpgbinary='${gnupg1}/bin/gpg'"
+    --replace "gpgbinary='gpg'" "gpgbinary='${gnupg}/bin/gpg'"
     substituteInPlace test_gnupg.py \
-    --replace "gpgbinary=GPGBINARY" "gpgbinary='${gnupg1}/bin/gpg'" \
+    --replace "gpgbinary=GPGBINARY" "gpgbinary='${gnupg}/bin/gpg'" \
     --replace "test_search_keys" "disabled__test_search_keys"
   '';
 

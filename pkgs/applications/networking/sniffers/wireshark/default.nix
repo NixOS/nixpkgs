@@ -14,7 +14,8 @@ let
   variant = if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
-  name = "wireshark-${variant}-${version}";
+  pname = "wireshark-${variant}";
+  inherit version;
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
@@ -24,7 +25,6 @@ in stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
-    "-DENABLE_QT5=${if withQt then "ON" else "OFF"}"
     "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
   ];
 
@@ -94,6 +94,8 @@ in stdenv.mkDerivation {
   '');
 
   enableParallelBuilding = true;
+
+  dontFixCmake = true;
 
   shellHook = ''
     # to be able to run the resulting binary

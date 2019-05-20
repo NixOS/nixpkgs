@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "nameparser";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w1m8qva2d7xfqrdxsnh1cncr3ank2205i5rz44hawjh2frzmik2";
+    sha256 = "c01ec7d0bc093420a45d8b5ea8261a84ba12bff0cabf47cb15b716c5ea8f3d23";
   };
 
   LC_ALL="en_US.UTF-8";

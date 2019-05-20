@@ -86,6 +86,8 @@ in rec {
     , hardeningEnable ? []
     , hardeningDisable ? []
 
+    , patches ? []
+
     , ... } @ attrs:
 
     let
@@ -229,6 +231,8 @@ in rec {
           doCheck = doCheck';
           doInstallCheck = doInstallCheck';
           outputs = outputs';
+
+          inherit patches;
         } // lib.optionalAttrs isCross {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
@@ -244,6 +248,8 @@ in rec {
           enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
+        } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? platform.gcc.arch) {
+          requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch}" ];
         } // lib.optionalAttrs stdenv.buildPlatform.isDarwin {
           inherit __darwinAllowLocalNetworking;
           # TODO: remove lib.unique once nix has a list canonicalization primitive

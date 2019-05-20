@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     xfce.xfce4-panel ];
 
   meta = {
-    homepage = http://www.xfce.org/projects/;
+    homepage = https://www.xfce.org/projects/;
     description = "A simple calendar application with reminders";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

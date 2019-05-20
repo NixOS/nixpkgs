@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.4.8";
   
   src = fetchurl {
-    url = "http://github.com/yui/yuicompressor/releases/download/v${version}/${name}.jar";
+    url = "https://github.com/yui/yuicompressor/releases/download/v${version}/${name}.jar";
     sha256 = "1qjxlak9hbl9zd3dl5ks0w4zx5z64wjsbk7ic73r1r45fasisdrh";
   };
 

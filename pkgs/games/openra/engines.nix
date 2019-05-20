@@ -22,20 +22,20 @@ let
 
 in {
   release = name: (buildUpstreamOpenRAEngine rec {
-    version = "20181215";
+    version = "20190314";
     rev = "${name}-${version}";
-    sha256 = "0p0izykjnz7pz02g2khp7msqa00jhjsrzk9y0g29dirmdv75qa4r";
+    sha256 = "15pvn5cx3g0nzbrgpsfz8dngad5wkzp5dz25ydzn8bmxafiijvcr";
   } name);
 
   playtest = name: (buildUpstreamOpenRAEngine rec {
-    version = "20190106";
+    version = "20190302";
     rev = "${name}-${version}";
-    sha256 = "0ps9x379plrrj1hnj4fpr26lc46mzgxknv5imxi0bmrh5y4781ql";
+    sha256 = "1vqvfk2p2lpk3m0d3rpvj34i8cmk3mfc7w4cn4llqd9zp4kk9pya";
   } name);
 
   bleed = buildUpstreamOpenRAEngine {
-    version = "9c9cad1";
-    rev = "9c9cad1a15c3a34dc2a61b305e4a9a735381a5f8";
-    sha256 = "0100p7wrnnlvkmy581m0gbyg3cvi4i1w3lzx2gq91ndz1sbm8nd2";
+    version = "8ee1102";
+    rev = "8ee11028d72cde7556b31d45f556b40be65b4b70";
+    sha256 = "0f1fpf37ms8d7fhlh3rjzsxsk9w23iyi3phs2i7g561292d5rk3l";
   };
 }

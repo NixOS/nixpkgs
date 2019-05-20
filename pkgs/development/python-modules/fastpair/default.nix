@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytestrunner, pytest, scipy }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, pytestrunner, pytest_3, scipy }:
 
 buildPythonPackage {
   pname = "fastpair";
@@ -11,16 +11,16 @@ buildPythonPackage {
     sha256 = "1pv9sxycxdk567s5gs947rhlqngrb9nn9yh4dhdvg1ix1i8dca71";
   };
 
-  buildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ (pytestrunner.override { pytest = pytest_3; }) ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest_3 ];
 
   propagatedBuildInputs = [
     scipy
   ];
 
   checkPhase = ''
-    py.test fastpair
+    pytest fastpair
   '';
 
   meta = with stdenv.lib; {

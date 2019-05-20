@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "chessx-${version}";
-  version = "1.4.6";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/chessx/chessx-${version}.tgz";
-    sha256 = "1vb838byzmnyglm9mq3khh3kddb9g4g111cybxjzalxxlc81k5dd";
+    sha256 = "09rqyra28w3z9ldw8sx07k5ap3sjlli848p737maj7c240rasc6i";
   };
 
   buildInputs = [

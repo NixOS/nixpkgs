@@ -4,7 +4,7 @@
 , grilo, gnome-online-accounts
 , desktop-file-utils, wrapGAppsHook
 , gnome3, gdk_pixbuf, gexiv2, geocode-glib
-, dleyna-renderer, dbus, meson, ninja, python3 }:
+, dleyna-renderer, dbus, meson, ninja, python3, gsettings-desktop-schemas }:
 
 let
   pname = "gnome-photos";
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3 glib gegl babl libgdata libdazzle
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
     gdk_pixbuf gnome3.adwaita-icon-theme
     gfbgraph grilo-plugins grilo
     gnome-online-accounts tracker

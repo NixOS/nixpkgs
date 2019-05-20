@@ -285,12 +285,12 @@ in
       uid = config.ids.uids.smokeping;
       description = "smokeping daemon user";
       home = smokepingHome;
+      createHome = true;
     };
     systemd.services.smokeping = {
       wantedBy = [ "multi-user.target"];
       serviceConfig = {
         User = cfg.user;
-        PermissionsStartOnly = true;
         Restart = "on-failure";
       };
       preStart = ''
@@ -300,7 +300,6 @@ in
         cp ${cgiHome} ${smokepingHome}/smokeping.fcgi
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
-        chown -R ${cfg.user} ${smokepingHome}
       '';
       script = ''${cfg.package}/bin/smokeping --config=${configPath} --nodaemon'';
     };

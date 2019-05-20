@@ -1,11 +1,10 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p bash ruby bundler bundix
+#! nix-shell -i bash -p bash bundix bundler
 
-BUNDIX_CACHE="$(mktemp -d)"
+set -e
 
-rm -f Gemfile.lock
-bundler package --path "$BUNDIX_CACHE"
-bundix --bundle-pack-path="$BUNDIX_CACHE"
-
-rm -rf "$BUNDIX_CACHE"
-rm -rf .bundle
+rm -f Gemfile.lock Gemfile-beta.lock
+bundler lock
+BUNDLE_GEMFILE=Gemfile-beta bundler lock --lockfile=Gemfile-beta.lock
+bundix --gemfile=Gemfile --lockfile=Gemfile.lock --gemset=gemset.nix
+bundix --gemfile=Gemfile-beta --lockfile=Gemfile-beta.lock --gemset=gemset-beta.nix

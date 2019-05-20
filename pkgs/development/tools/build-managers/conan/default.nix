@@ -37,6 +37,13 @@ let newPython = python3.override {
         sha256 = "c0abe3218b86533cca287e7057a37481883c07acef7814b70583406938214cc8";
       };
     });
+    pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+      version = "3.13";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
+      };
+    });
   };
 };
 

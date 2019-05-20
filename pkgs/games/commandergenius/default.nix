@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "commandergenius-${version}";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitLab {
     owner = "Dringgstein";
     repo = "Commander-Genius";
     rev = "v${version}";
-    sha256 = "1a8as56ycbq8csnssd5wqv2jand5c9yskld6prh3dn9gy96jbvgj";
+    sha256 = "04nb23wwvc3yywz3cr6gvn02fa7psfs22ssg4wk12s08z1azvz3h";
   };
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer libGL boost libvorbis zlib curl python3 ];

@@ -57,20 +57,7 @@ let
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
-    bap = callPackage ../development/ocaml-modules/bap {
-      inherit (janeStreet_0_9_0) core_kernel ppx_jane parsexp;
-      ezjsonm = ezjsonm.override {
-        inherit (janeStreet_0_9_0) sexplib;
-        hex = hex.override {
-          cstruct = cstruct.override {
-            inherit (janeStreet_0_9_0) sexplib;
-          };
-        };
-      };
-      uri = uri.override {
-        inherit (janeStreet_0_9_0) ppx_sexp_conv sexplib;
-      };
-    };
+    bap = callPackage ../development/ocaml-modules/bap { };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
@@ -152,9 +139,7 @@ let
 
     cohttp =
       if lib.versionOlder "4.03" ocaml.version
-      then callPackage ../development/ocaml-modules/cohttp {
-        base64 = base64_2;
-      }
+      then callPackage ../development/ocaml-modules/cohttp { }
       else cohttp_p4;
 
     cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
@@ -561,10 +546,6 @@ let
     octavius = callPackage ../development/ocaml-modules/octavius { };
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
-
-    ojquery = callPackage ../development/ocaml-modules/ojquery {
-      ocaml_lwt = lwt3;
-    };
 
     omd = callPackage ../development/ocaml-modules/omd { };
 

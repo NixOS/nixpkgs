@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ postgresql ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/markdrago/pgsanity";
+    homepage = "https://github.com/markdrago/pgsanity";
     description = "Checks the syntax of Postgresql SQL files";
     longDescription = ''
       PgSanity checks the syntax of Postgresql SQL files by

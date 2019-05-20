@@ -67,6 +67,7 @@ runCommand "Toolchains" {} (''
   done
 
   ln -s ${buildPackages.darwin.bootstrap_cmds}/bin/mig $toolchain/bin
+  mkdir -p $toolchain/libexec
   ln -s ${buildPackages.darwin.bootstrap_cmds}/libexec/migcom $toolchain/libexec
   ln -s ${mkdep-darwin-src} $toolchain/bin/mkdep
 '')
