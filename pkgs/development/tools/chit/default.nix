@@ -6,13 +6,13 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "chit";
-  version = "0.1.13";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "peterheesterman";
     repo = pname;
     rev = version;
-    sha256 = "1qp5ad83lvfz9l4ihz1l500p8bgf7q0z1k4f3i13nd5n7i3ksdjc";
+    sha256 = "1rzy15xwlf87c8kpy9pwvir6s9z3qc8d9iz4pk0gfdj2il3vmjwv";
   };
 
   cargoSha256 = "1jqnnf4jgjpm1i310hda15423nxfw9frgpmc2kbrs66qcsj7avaw";
