@@ -16422,6 +16422,8 @@ in
 
   qogir-theme = callPackage ../data/themes/qogir { };
 
+  redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
+
   route159 = callPackage ../data/fonts/route159 { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
