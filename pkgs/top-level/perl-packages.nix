@@ -14025,10 +14025,11 @@ let
   };
 
   Storable = buildPerlPackage {
-    name = "Storable-3.11";
+    pname = "Storable";
+    version = "3.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XS/XSAWYERX/Storable-3.11.tar.gz;
-      sha256 = "b2dac116d2f5adaf289e9a8a9bbac35cc2c24a9d2221fea9b6578a33b8ec7d28";
+      url = mirror://cpan/authors/id/X/XS/XSAWYERX/Storable-3.15.tar.gz;
+      sha256 = "fc3dad06cb2e6fc86a2f2abc5b5491d9da328ca3e6b6306559c224521db174da";
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
