@@ -12914,10 +12914,11 @@ let
   };
 
   PerlPrereqScannerNotQuiteLite = buildPerlPackage {
-    name = "Perl-PrereqScanner-NotQuiteLite-0.9904";
+    pname = "Perl-PrereqScanner-NotQuiteLite";
+    version = "0.9905";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Perl-PrereqScanner-NotQuiteLite-0.9904.tar.gz;
-      sha256 = "1qf6x49sjswazh7bicpm7wnwpdnx245ws02s53dvbxcbw2c66hsn";
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Perl-PrereqScanner-NotQuiteLite-0.9905.tar.gz;
+      sha256 = "076hhmrir07c3yzrmwdjlkgsnhfmbsfdylrxi63sikym545r1sv3";
     };
     propagatedBuildInputs = [ DataDump ModuleCPANfile ModuleFind RegexpTrie ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings TestUseAllModules ];
