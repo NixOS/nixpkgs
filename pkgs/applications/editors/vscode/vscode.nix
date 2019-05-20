@@ -17,7 +17,7 @@ let
     "x86_64-darwin" = "00fg106rggsbng90k1jjp1c6nmnwni5s0fgmbz6k45shfa3iqamc";
   }.${system};
 in
-  callPackage ./generic.nix (args // rec {
+  callPackage ./generic.nix rec {
 
     version = "1.33.1";
     pname = "vscode";
