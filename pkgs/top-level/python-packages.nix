@@ -4800,6 +4800,8 @@ in {
 
   unidiff = callPackage ../development/python-modules/unidiff { };
 
+  units = callPackage ../development/python-modules/units { };
+
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
