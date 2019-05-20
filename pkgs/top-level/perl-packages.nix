@@ -1602,12 +1602,12 @@ let
   };
 
   CatalystViewJSON = buildPerlPackage rec {
-    name = "Catalyst-View-JSON-0.36";
+    pname = "Catalyst-View-JSON";
+    version = "0.37";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-View-JSON-0.36.tar.gz;
-      sha256 = "0x943j1n2r0zqanyzdrs1xsnn8ayn2wqskn7h144xcqa6v6gcisl";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Catalyst-View-JSON-0.37.tar.gz;
+      sha256 = "1v4xkzazs743sc7cd1kxkbi99cf00a4dadyyancckcbpi9p3znn5";
     };
-    buildInputs = [ YAML ];
     propagatedBuildInputs = [ CatalystRuntime ];
     meta = {
       description = "JSON view for your data";
