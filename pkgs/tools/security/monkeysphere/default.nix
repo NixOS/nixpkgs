@@ -2,7 +2,7 @@
 , perl, libassuan, libgcrypt
 , perlPackages, lockfileProgs, gnupg, coreutils
 # For the tests:
-, bash, openssh, which, socat, cpio, hexdump, openssl
+, bash, openssh, which, socat, cpio, hexdump, procps, openssl
 }:
 
 let
@@ -14,14 +14,14 @@ let
   });
 in stdenv.mkDerivation rec {
   name = "monkeysphere-${version}";
-  version = "0.43";
+  version = "0.44";
 
   # The patched OpenSSH binary MUST NOT be used (except in the check phase):
   disallowedRequisites = [ opensshUnsafe ];
 
   src = fetchurl {
     url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_${version}.orig.tar.gz";
-    sha256 = "18i7qpvp5qb7mmd0z5rqai550rya9l3nbsq2hamwkl3smqsjdqc0";
+    sha256 = "1ah7hy8r9gj96pni8azzjb85454qky5l17m3pqn37854l6grgika";
   };
 
   patches = [ ./monkeysphere.patch ];
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl libassuan libgcrypt ]
     ++ stdenv.lib.optional doCheck
-      ([ gnupg opensshUnsafe which socat cpio hexdump lockfileProgs ] ++
+      ([ gnupg opensshUnsafe which socat cpio hexdump procps lockfileProgs ] ++
       (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
 
   makeFlags = ''
@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
   postFixup =
     let wrapperArgs = runtimeDeps:
           "--prefix PERL5LIB : "
-          + (with perlPackages; makePerlPath [
+          + (with perlPackages; makePerlPath [ # Optional (only required for keytrans)
               CryptOpenSSLRSA
               CryptOpenSSLBignum
             ])
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
           (wrapMonkeysphere runtimeDeps)
           programs;
     in wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
-      + wrapPrograms [ lockfileProgs ] [ "monkeysphere" ]
+      + wrapPrograms [ gnupg lockfileProgs ] [ "monkeysphere" ]
       + ''
         # These 4 programs depend on the program name ($0):
         for program in openpgp2pem openpgp2spki openpgp2ssh pem2openpgp; do
