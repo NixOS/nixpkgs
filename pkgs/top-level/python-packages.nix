@@ -1233,6 +1233,8 @@ in {
 
   cement = callPackage ../development/python-modules/cement {};
 
+  cgen = callPackage ../development/python-modules/cgen { };
+
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils {};
 
   chainer = callPackage ../development/python-modules/chainer {
@@ -1781,6 +1783,8 @@ in {
 
   locket = callPackage ../development/python-modules/locket { };
 
+  loo-py = callPackage ../development/python-modules/loo-py { };
+
   tblib = callPackage ../development/python-modules/tblib { };
 
   s3fs = callPackage ../development/python-modules/s3fs { };
@@ -2081,6 +2085,8 @@ in {
 
   isbnlib = callPackage ../development/python-modules/isbnlib { };
 
+  islpy = callPackage ../development/python-modules/islpy { };
+
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
   iniparse = callPackage ../development/python-modules/iniparse { };
@@ -2282,6 +2288,8 @@ in {
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
 
   pylama = callPackage ../development/python-modules/pylama { };
+
+  pymbolic = callPackage ../development/python-modules/pymbolic { };
 
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
@@ -4664,6 +4672,10 @@ in {
 
   python-vagrant = callPackage ../development/python-modules/python-vagrant { };
 
+  symengine = callPackage ../development/python-modules/symengine {
+    symengine = pkgs.symengine;
+  };
+
   sympy = callPackage ../development/python-modules/sympy { };
 
   pilkit = callPackage ../development/python-modules/pilkit { };
@@ -5438,6 +5450,8 @@ in {
   smart_open =  callPackage ../development/python-modules/smart_open { };
 
   gensim = callPackage  ../development/python-modules/gensim { };
+
+  genpy = callPackage ../development/python-modules/genpy { };
 
   cymem = callPackage ../development/python-modules/cymem { };
 
