@@ -7,13 +7,11 @@ import errno
 import subprocess
 import glob
 import tempfile
-import errno
 import warnings
 import ctypes
 libc = ctypes.CDLL("libc.so.6")
 import re
 import datetime
-import glob
 import os.path
 
 def copy_if_not_exists(source, dest):
@@ -25,6 +23,11 @@ def system_dir(profile, generation):
         return "/nix/var/nix/profiles/system-profiles/%s-%d-link" % (profile, generation)
     else:
         return "/nix/var/nix/profiles/system-%d-link" % (generation)
+
+SECURE_BOOT_ENTRY = """title NixOS{profile}
+version Generation {generation} {description} (Secure Boot)
+efi {efi}
+"""
 
 BOOT_ENTRY = """title NixOS{profile}
 version Generation {generation} {description}
@@ -41,7 +44,7 @@ def write_loader_conf(profile, generation):
             f.write("default nixos-%s-generation-%d\n" % (profile, generation))
         else:
             f.write("default nixos-generation-%d\n" % (generation))
-        if not @editor@:
+        if "@editor@" != "1":
             f.write("editor 0\n");
         f.write("console-mode @consoleMode@\n");
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
@@ -107,6 +110,105 @@ def write_entry(profile, generation, machine_id):
             f.write("machine-id %s\n" % machine_id)
     os.rename(tmp_path, entry_file)
 
+def sb_efi_file_name_relative(profile, generation):
+    if profile:
+        return "efi/nixos/nixos-%s-generation-%d.efi" % (profile, generation)
+    else:
+        return "efi/nixos/nixos-generation-%d.efi" % (generation)
+
+def make_signed_efi(profile, generation, efi_file):
+    with tempfile.TemporaryDirectory() as tmpdir:
+        append_initrd_secrets = profile_path(profile, generation, "append-initrd-secrets")
+        if os.path.exists(append_initrd_secrets):
+            initrd = f"{tmpdir}/initrd"
+            shutil.copyfile(
+                profile_path(profile, generation, "initrd"),
+                initrd
+            )
+
+            subprocess.check_call([append_initrd_secrets, "@efiSysMountPoint@%s" % (initrd)])
+        else:
+            initrd = profile_path(profile, generation, "initrd"),
+
+        generation_dir = os.readlink(system_dir(profile, generation))
+        tmp_path = "%s/efistub" % (tmpdir)
+
+        kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
+        with open("%s/kernel-params" % (generation_dir)) as params_file:
+            kernel_params = kernel_params + params_file.read()
+        kernel_param_file = "%s/kernel_params" % tmpdir
+        with open(kernel_param_file, 'w') as f:
+            f.write(kernel_params)
+
+        subprocess.check_call([
+            "@binutils@/bin/objcopy",
+            "--add-section", ".osrel={}/etc/os-release".format(generation_dir), "--change-section-vma", ".osrel=0x20000",
+            "--add-section", ".cmdline={}".format(kernel_param_file),           "--change-section-vma", ".cmdline=0x30000",
+            "--add-section", ".linux={}/kernel".format(generation_dir),         "--change-section-vma", ".linux=0x40000",
+            "--add-section", ".initrd={}".format(initrd),                       "--change-section-vma", ".initrd=0x3000000",
+            "{}/sw/lib/systemd/boot/efi/linuxx64.efi.stub".format(generation_dir),
+            tmp_path
+        ])
+        sign_path(tmp_path, efi_file)
+
+
+def write_secureboot_entry(profile, generation, machine_id):
+    if profile:
+        entry_file = "@efiSysMountPoint@/loader/entries/nixos-%s-generation-%d.conf" % (profile, generation)
+    else:
+        entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
+    efi_file_relative = sb_efi_file_name_relative(profile, generation)
+    efi_file = "@efiSysMountPoint@/%s" % (efi_file_relative)
+
+    try:
+        sbverify(efi_file)
+    except:
+        make_signed_efi(profile, generation, efi_file)
+
+    generation_dir = os.readlink(system_dir(profile, generation))
+
+    entry_tmp = entry_file + ".tmp";
+    with open(entry_tmp, 'w') as fp:
+        fp.write(SECURE_BOOT_ENTRY.format(
+            profile=" [" + profile + "]" if profile else "",
+            generation=generation,
+            efi=efi_file_relative,
+            description=describe_generation(generation_dir)
+        ))
+        if machine_id is not None:
+            fp.write("machine-id %s\n" % machine_id)
+
+    os.rename(entry_tmp, entry_file)
+
+def sign_path(src, output):
+    with tempfile.TemporaryDirectory() as tmpdir:
+        print(f"Signing {output}")
+        subprocess.check_call([
+            "@sbsigntool@/bin/sbsign",
+            "--key", "@signingKey@",
+            "--cert", "@signingCertificate@",
+            "--output", f"{tmpdir}/signed",
+            src
+        ])
+
+        # Very likely to move across filesystems, so use
+        # shutil.move over os.rename.
+        shutil.move(f"{tmpdir}/signed", f"{output}.tmp")
+        try:
+            sbverify(f"{output}.tmp")
+            os.rename(f"{output}.tmp", output)
+        except:
+            os.unlink(f"{output}.tmp")
+            raise
+
+def sbverify(filename):
+    subprocess.check_call([
+        "@sbsigntool@/bin/sbverify",
+        "--cert", "@signingCertificate@",
+        filename,
+    ])
+
+
 def mkdir_p(path):
     try:
         os.makedirs(path)
@@ -133,6 +235,8 @@ def remove_old_entries(gens):
     for gen in gens:
         known_paths.append(copy_from_profile(*gen, "kernel", True))
         known_paths.append(copy_from_profile(*gen, "initrd", True))
+        known_paths.append("@efiSysMountPoint@/%s" % sb_efi_file_name_relative(*gen))
+
     for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
         try:
             if rex_profile.match(path):
@@ -190,12 +294,19 @@ def main():
     mkdir_p("@efiSysMountPoint@/efi/nixos")
     mkdir_p("@efiSysMountPoint@/loader/entries")
 
+    if "@signed@" == "1":
+        sign_path("@efiSysMountPoint@/EFI/BOOT/BOOTX64.EFI", "@efiSysMountPoint@/EFI/BOOT/BOOTX64.EFI")
+        sign_path("@efiSysMountPoint@/EFI/systemd/systemd-bootx64.efi", "@efiSysMountPoint@/EFI/systemd/systemd-bootx64.efi")
+
     gens = get_generations()
     for profile in get_profiles():
         gens += get_generations(profile)
     remove_old_entries(gens)
     for gen in gens:
-        write_entry(*gen, machine_id)
+        if "@signed@"== "1":
+            write_secureboot_entry(*gen, machine_id)
+        else:
+            write_entry(*gen, machine_id)
         if os.readlink(system_dir(*gen)) == args.default_config:
             write_loader_conf(*gen)
 
