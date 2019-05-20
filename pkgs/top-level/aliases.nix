@@ -59,6 +59,7 @@ mapAliases ({
   clawsMail = claws-mail; # added 2016-04-29
   clutter_gtk = clutter-gtk; # added 2018-02-25
   conkerorWrapper = conkeror; # added 2015-01
+  compton-git = compton; # added 2019-05-20
   conntrack_tools = conntrack-tools; # added 2018-05
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
