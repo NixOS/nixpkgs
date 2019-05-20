@@ -8080,10 +8080,11 @@ let
   };
 
   InlineC = buildPerlPackage rec {
-    name = "Inline-C-0.80";
+    pname = "Inline-C";
+    version = "0.81";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/${name}.tar.gz";
-      sha256 = "35f5ff188f56b9c8a5ec342e2ff3a2d248ddbc91eead80d9361697914d5adbe3";
+      url = mirror://cpan/authors/id/T/TI/TINITA/Inline-C-0.81.tar.gz;
+      sha256 = "f185258d9050d7f79b4f00f12625cc469c2f700ff62d3e831cb18d80d2c87aac";
     };
     buildInputs = [ FileCopyRecursive FileShareDirInstall TestWarn YAMLLibYAML ];
     propagatedBuildInputs = [ Inline ParseRecDescent Pegex ];
