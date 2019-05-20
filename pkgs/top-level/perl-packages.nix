@@ -3907,10 +3907,11 @@ let
   };
 
   DateTimeTimeZone = buildPerlPackage rec {
-    name = "DateTime-TimeZone-2.34";
+    pname = "DateTime-TimeZone";
+    version = "2.35";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "dee1111c06f2aa705f803bc4f3d93b50df566d864a1a8bf31b55dfaf2b3de809";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.35.tar.gz;
+      sha256 = "79fadc0f24b6b23ffb560524544d9d200902578bf9e0943b9aa8fc5077ca8b02";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassSingleton ParamsValidationCompiler Specio namespaceautoclean ];
