@@ -4534,6 +4534,20 @@ let
     };
   };
 
+  DirManifest = buildPerlModule {
+    pname = "Dir-Manifest";
+    version = "0.0.5";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Dir-Manifest-0.0.5.tar.gz;
+      sha256 = "07c52qgn2ih16gwwk7hvpkhkzq69387bcrjamba3m0008vy2bp0i";
+    };
+    propagatedBuildInputs = [ Moo PathTiny ];
+    meta = {
+      description = "treat a directory and a manifest file as a hash/dictionary of keys to texts or blobs";
+      license = with stdenv.lib.licenses; [ mit ];
+    };
+  };
+
   DistCheckConflicts = buildPerlPackage rec {
     name = "Dist-CheckConflicts-0.11";
     src = fetchurl {
@@ -6300,13 +6314,14 @@ let
   };
 
   GamesSolitaireVerify = buildPerlModule {
-    name = "Games-Solitaire-Verify-0.2000";
+    pname = "Games-Solitaire-Verify";
+    version = "0.2100";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.2000.tar.gz;
-      sha256 = "dc87a348a2cacfadfb8205ff3fdbc138f475126bef175bc806ec9454285c2165";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.2100.tar.gz;
+      sha256 = "123ba559cfc6898f91d4c397f525f77339756f17eb26469a75fcfaf3b4fbeca8";
     };
-    buildInputs = [ PathTiny TestDifferences ];
-    propagatedBuildInputs = [ ClassXSAccessor ExceptionClass ListMoreUtils ];
+    buildInputs = [ DirManifest TestDifferences ];
+    propagatedBuildInputs = [ ClassXSAccessor ExceptionClass ListMoreUtils PathTiny ];
     meta = {
       description = "Verify solutions for solitaire games";
       license = stdenv.lib.licenses.mit;
