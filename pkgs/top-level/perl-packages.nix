@@ -16919,10 +16919,11 @@ let
   };
 
   TimeDuration = buildPerlPackage rec {
-    name = "Time-Duration-1.20";
+    pname = "Time-Duration";
+    version = "1.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
-      sha256 = "1f5vkid4pl5iq3hal01hk1zjbbzrqpx4m1djawbp93l152shb0j5";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Time-Duration-1.21.tar.gz;
+      sha256 = "1f59z2svfydxgd1gzrb5k3hl6d432kzmskk7jhv2dyb5hyx0wd7y";
     };
     meta = {
       description = "Rounded or exact English expression of durations";
