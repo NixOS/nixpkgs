@@ -29,10 +29,7 @@ let
    "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
    "8.10+beta1" = "19wf39i0ap2vakglgdlqxpjd3l1h5w7dp460w8y7nc1y06b2153h";
   }."${version}";
-  coq-version =
-    let inherit (builtins) concatStringsSep head map; in
-    let inherit (stdenv.lib) take splitString; in
-    concatStringsSep "." (take 2 (map head (map (splitString "pl") (splitString "." version))));
+  coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
   ideFlags = stdenv.lib.optionalString (buildIde && !versionAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
