@@ -4029,10 +4029,11 @@ let
   };
 
   DevelPPPort = buildPerlPackage rec {
-    name = "Devel-PPPort-3.45";
+    pname = "Devel-PPPort";
+    version = "3.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.45.tar.gz;
-      sha256 = "171dcfb3abd964081986634b79c53108f0825c47f95f915eb7cdb3309f7d04f0";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Devel-PPPort-3.51.tar.gz;
+      sha256 = "4502fb60827286663a931f26f497be0ac2a9f36cfaa73d7632c7525a9dfb53bc";
     };
     meta = {
       description = "Perl/Pollution/Portability";
