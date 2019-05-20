@@ -97,7 +97,6 @@ let
     NIX_CFLAGS_COMPILE = [ "-fno-strict-aliasing" ];
 
     mesonFlags = [
-      "-Dnew_backends=true"
       "-Dbuild_docs=true"
     ];
 
