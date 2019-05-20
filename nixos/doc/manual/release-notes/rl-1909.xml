@@ -113,6 +113,19 @@
     </para>
    </listitem>
    <listitem>
+     <para>
+     IPv6 Privacy Extensions are now enabled by default for undeclared
+     interfaces. The previous behaviour was quite misleading — even though
+     the default value for
+     <option>networking.interfaces.*.preferTempAddress</option> was
+     <literal>true</literal>, undeclared interfaces would not prefer temporary
+     addresses. Now, interfaces not mentioned in the config will prefer
+     temporary addresses. EUI64 addresses can still be set as preferred by
+     explicitly setting the option to <literal>false</literal> for the
+     interface in question.
+    </para>
+   </listitem>
+   <listitem>
     <para>
      Since Bittorrent Sync was superseded by Resilio Sync in 2016, the
      <literal>bittorrentSync</literal>, <literal>bittorrentSync14</literal>,
