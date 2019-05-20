@@ -9330,10 +9330,11 @@ let
   };
 
   MailTransport = buildPerlPackage rec {
-     name = "Mail-Transport-3.003";
+     pname = "Mail-Transport";
+     version = "3.004";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/MA/MARKOV/Mail-Transport-3.003.tar.gz;
-       sha256 = "0lb1awpk2wcnn5wg663982jl45x9fdn8ikxscayscxa16rim116p";
+       url = mirror://cpan/authors/id/M/MA/MARKOV/Mail-Transport-3.004.tar.gz;
+       sha256 = "049xsjxfn00v5znmrg7vgyafy5wzxxa901hq2g083s0pyq4mlcfg";
      };
      propagatedBuildInputs = [ MailMessage ];
      meta = {
