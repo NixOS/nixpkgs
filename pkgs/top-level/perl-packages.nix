@@ -1078,10 +1078,11 @@ let
   };
 
   CanaryStability = buildPerlPackage rec {
-    name = "Canary-Stability-2012";
+    pname = "Canary-Stability";
+    version = "2013";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
-      sha256 = "fd240b111d834dbae9630c59b42fae2145ca35addc1965ea311edf0d07817107";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/Canary-Stability-2013.tar.gz;
+      sha256 = "a5c91c62cf95fcb868f60eab5c832908f6905221013fea2bce3ff57046d7b6ea";
     };
     meta = {
       license = stdenv.lib.licenses.gpl1Plus;
