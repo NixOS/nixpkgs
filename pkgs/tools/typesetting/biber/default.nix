@@ -22,6 +22,8 @@ perlPackages.buildPerlModule rec {
     PerlIOutf8_strict
   ];
 
+  postPatch = "patchShebangs bin";
+
   meta = with stdenv.lib; {
     description = "Backend for BibLaTeX";
     license = with licenses; [ artistic1 gpl1Plus ];
