@@ -3379,11 +3379,12 @@ let
     };
   };
 
-  DataPage = buildPerlModule {
-    name = "Data-Page-2.02";
+  DataPage = buildPerlPackage {
+    pname = "Data-Page";
+    version = "2.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LB/LBROCARD/Data-Page-2.02.tar.gz;
-      sha256 = "1hvi92c4h2angryc6pngw7gbm3ysc2jfmyxk2wh9ia4vdwpbs554";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Data-Page-2.03.tar.gz;
+      sha256 = "12rxrr2b11qjk0c437cisw2kfqkafw1awcng09cv6yhzglb55yif";
     };
     propagatedBuildInputs = [ ClassAccessorChained ];
     buildInputs = [ TestException ];
