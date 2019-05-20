@@ -2805,10 +2805,11 @@ let
   };
 
   CPANPerlReleases = buildPerlPackage rec {
-    name = "CPAN-Perl-Releases-3.94";
+    pname = "CPAN-Perl-Releases";
+    version = "4.00";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "12g3mdl8lziz218a5rlflhbd295paqfqq5f9ylkdr00pnss5jfnp";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/CPAN-Perl-Releases-4.00.tar.gz;
+      sha256 = "0p640z97p1pswqaidla8s2fd7yw4l5i0wp181sd6bg0ai4hz5a2m";
     };
     meta = {
       homepage = https://github.com/bingos/cpan-perl-releases;
