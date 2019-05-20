@@ -13340,10 +13340,11 @@ let
   };
 
   RegexpGrammars = buildPerlModule rec {
-    name = "Regexp-Grammars-1.049";
+    pname = "Regexp-Grammars";
+    version = "1.050";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCONWAY/${name}.tar.gz";
-      sha256 = "2e642a7051b9ea5dccd05d53e49684ca28e99c43b811bbec37d160d3f81edf68";
+      url = mirror://cpan/authors/id/D/DC/DCONWAY/Regexp-Grammars-1.050.tar.gz;
+      sha256 = "a35e8ddacce25cb66a8816905183b93cae066bbe3977f8c68765da46a4368b86";
     };
     meta = {
       description = "Add grammatical parsing features to Perl 5.10 regexes";
