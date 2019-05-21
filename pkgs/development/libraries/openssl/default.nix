@@ -136,6 +136,11 @@ in {
     sha256 = "0jza8cmznnyiia43056dij1jdmz62dx17wsn0zxksh9h6817nmaw";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
+      (fetchurl {
+        name = "long-chacha-nonce.patch";
+        url = "https://git.openssl.org/gitweb/?p=openssl.git;a=commitdiff_plain;h=f426625b6ae9a7831010750490a5f0ad689c5ba3";
+        sha256= "02ghqg3vzmzx3s1dwwwbm1p1l4asaiampyg4k9vfrjwficvgpdgp";
+      })
 
       (if stdenv.hostPlatform.isDarwin
        then ./1.1/use-etc-ssl-certs-darwin.patch
