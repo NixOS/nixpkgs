@@ -21279,6 +21279,8 @@ in
 
   crispyDoom = callPackage ../games/crispy-doom { };
 
+  cri-o = callPackage ../applications/virtualization/cri-o {};
+
   ckan = callPackage ../games/ckan { };
 
   cockatrice = libsForQt5.callPackage ../games/cockatrice {  };
