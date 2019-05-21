@@ -1,20 +1,21 @@
 { stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
-  qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle,
-  spyder-kernels }:
+  qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
+  spyder-kernels, qtpy, pyzmq, chardet }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "3.3.3";
+  version = "3.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef31de03cf6f149077e64ed5736b8797dbd278e3c925e43f0bfc31bb55f6e5ba";
+    sha256 = "1fa5yhw0sjk5qydydp76scyxd8lvyciknq0vajnq0mxhhvfig3ra";
   };
 
   propagatedBuildInputs = [
     jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
+    pygments qtpy pyzmq chardet
   ];
 
   # There is no test for spyder
@@ -29,6 +30,12 @@ buildPythonPackage rec {
     genericName = "Python IDE";
     categories = "Application;Development;Editor;IDE;";
   };
+
+  postPatch = ''
+    # remove dependency on pyqtwebengine
+    # this is still part of the pyqt 5.11 version we have in nixpkgs
+    sed -i /pyqtwebengine/d setup.py
+  '';
 
   # Create desktop item
   postInstall = ''
