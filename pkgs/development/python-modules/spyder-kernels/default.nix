@@ -1,18 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, cloudpickle, ipykernel, wurlitzer }:
+{ stdenv, buildPythonPackage, fetchPypi, cloudpickle, ipykernel, wurlitzer,
+  jupyter_client, pyzmq }:
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a13cefb569ef9f63814cb5fcf3d0db66e09d2d7e6cc68c703d5118b2d7ba062b";
+    sha256 = "0g3754s71cnh7kygps6gbzrhs5gb47p3pblr7hcvxk1mzl3xw94r";
   };
 
   propagatedBuildInputs = [
     cloudpickle
     ipykernel
     wurlitzer
+    jupyter_client
+    pyzmq
   ];
 
   # No tests
