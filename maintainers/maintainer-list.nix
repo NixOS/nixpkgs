@@ -2451,6 +2451,11 @@
     github = "joncojonathan";
     name = "Jonathan Haddock";
   };
+  jonringer = {
+    name = "Jon Ringer";
+    email = "jonringer117@gmail.com";
+    github = "jonringer";
+  };
   jorsn = {
     name = "Johannes Rosenberger";
     email = "johannes@jorsn.eu";
