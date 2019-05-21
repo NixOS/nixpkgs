@@ -324,15 +324,16 @@ with self; {
 
   luaossl = buildLuaPackage rec {
     name = "luaossl-${version}";
-    version = "20170903";
+    version = "20181207";
 
     src = fetchurl {
-      url = "https://www.25thandclement.com/~william/projects/releases/${name}.tgz";
-      sha256 = "10392bvd0lzyibipblgiss09zlqh3a5zgqg1b9lgbybpqb9cv2k3";
+      url = "https://github.com/wahern/luaossl/releases/download/rel-${version}/luaossl-rel-${version}.zip";
+      sha256 = "194r6db80ksh4zh8d2k35q6vci9zbrfvkanjl280y6ij2xyhkvj7";
     };
 
     preConfigure = ''export prefix=$out'';
 
+    nativeBuildInputs = [ unzip ];
     buildInputs = [ openssl ];
 
     meta = with stdenv.lib; {
