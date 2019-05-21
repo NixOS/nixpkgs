@@ -1,6 +1,6 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
-, which, fetchgit, fetchurl
+, which, fetchgit, fetchurl, fetchzip
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
@@ -107,6 +107,22 @@ self: super: {
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
         -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
     '';
+  });
+
+
+  coc-nvim = let
+    version = "0.0.67";
+    index_js = fetchzip {
+        url = "https://github.com/neoclide/coc.nvim/releases/download/v${version}/coc.tar.gz";
+        sha256 = "0cqgrfyaq9nck1y6mb63gmwgdrxqzgdgns5gjshpp1xzfq6asrqj";
+      };
+  in super.coc-nvim.overrideAttrs(old: {
+    # you still need to enable the node js provider in your nvim config
+    postInstall = ''
+      mkdir -p $out/share/vim-plugins/coc-nvim/build
+      cp ${index_js}/index.js $out/share/vim-plugins/coc-nvim/build/
+    '';
+
   });
 
   command-t = super.command-t.overrideAttrs(old: {
