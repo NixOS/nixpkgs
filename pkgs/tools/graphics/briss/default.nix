@@ -1,6 +1,6 @@
 # The releases of this project are apparently precompiled to .jar files.
 
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ stdenv, fetchurl, jre, makeWrapper }:
 
 let
 
@@ -14,13 +14,13 @@ in stdenv.mkDerivation {
     inherit sha256;
   };
 
+  nativeBuildInputs = [makeWrapper];
+
   installPhase = ''
     mkdir -p "$out/bin";
     mkdir -p "$out/share";
     install -D -m444 -t "$out/share" *.jar
-    echo "#!${runtimeShell}" > "$out/bin/briss"
-    echo "${jre}/bin/java -Xms128m -Xmx1024m -cp \"$out/share/\" -jar \"$out/share/briss-${version}.jar\"" >> "$out/bin/briss"
-    chmod +x "$out/bin/briss"
+    makeWrapper "${jre}/bin/java" "$out/bin/briss" --add-flags "-Xms128m -Xmx1024m -cp \"$out/share/\" -jar \"$out/share/briss-${version}.jar\""
   '';
 
   meta = {
