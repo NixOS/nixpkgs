@@ -426,6 +426,12 @@ let
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
 
+      # VirtualBox guest drivers in the kernel conflict with the ones in the
+      # official additions package and prevent the vboxsf module from loading,
+      # so disable them for now.
+      VBOXGUEST = option no;
+      DRM_VBOXVIDEO = option no;
+
     } // optionalAttrs (stdenv.isx86_64 || stdenv.isi686) ({
       XEN = option yes;
 
@@ -693,6 +699,9 @@ let
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      PREEMPT = no;
+      PREEMPT_VOLUNTARY = yes;
     };
   };
 in
