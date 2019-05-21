@@ -2727,6 +2727,8 @@ in
 
   enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
+  endlessh = callPackage ../servers/endlessh { };
+
   cryfs = callPackage ../tools/filesystems/cryfs {
     spdlog = spdlog_0;
   };
