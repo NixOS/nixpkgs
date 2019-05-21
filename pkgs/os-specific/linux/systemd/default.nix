@@ -9,6 +9,7 @@
 , patchelf
 , getent
 , buildPackages
+, perl
 , withSelinux ? false, libselinux
 , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
       coreutils # meson calls date, stat etc.
       glibcLocales
       patchelf getent m4
+      perl # to patch the libsystemd.so and remove dependencies on aarch64
 
       (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
     ];
@@ -180,6 +182,30 @@ stdenv.mkDerivation rec {
   ''; # */
 
   enableParallelBuilding = true;
+
+  # On aarch64 we "leak" a reference to $out/lib/systemd/catalog in the lib
+  # output. The result of that is a dependency cycle between $out and $lib.
+  # Thus nix (rightfully) marks the build as failed. That reference originates
+  # from an array of strings (catalog_file_dirs) in systemd
+  # (src/src/journal/catalog.{c,h}).  The only consumer (as of v242) of the
+  # symbol is the main function of journalctl.  Still libsystemd.so contains
+  # the VALUE but not the symbol.  Systemd seems to be properly using function
+  # & data sections together with the linker flags to garbage collect unused
+  # sections (-Wl,--gc-sections).  For unknown reasons those flags do not
+  # eliminate the unused string constants, in this case on aarch64-linux. The
+  # hacky way is to just remove the reference after we finished compiling.
+  # Since it can not be used (there is no symbol to actually refer to it) there
+  # should not be any harm.  It is a bit odd and I really do not like starting
+  # these kind of hacks but there doesn't seem to be a straight forward way at
+  # this point in time.
+  # The reference will be replaced by the same reference the usual nukeRefs
+  # tooling uses.  The standard tooling can not / should not be uesd since it
+  # is a bit too excessive and could potentially do us some (more) harm.
+  postFixup = ''
+    nukedRef=$(echo $out | sed -e "s,$NIX_STORE/[^-]*-\(.*\),$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-\1,")
+    cat $lib/lib/libsystemd.so | perl -pe "s|$out/lib/systemd/catalog|$nukedRef/lib/systemd/catalog|" > $lib/lib/libsystemd.so.tmp
+    mv $lib/lib/libsystemd.so.tmp $(readlink -f $lib/lib/libsystemd.so)
+  '';
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
