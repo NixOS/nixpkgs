@@ -11146,6 +11146,8 @@ in
     then pkgs.libcanberra
     else pkgs.libcanberra-gtk2;
 
+  libcbor = callPackage ../development/libraries/libcbor { };
+
   libcec = callPackage ../development/libraries/libcec { };
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
@@ -11309,6 +11311,8 @@ in
   libfaketime = callPackage ../development/libraries/libfaketime { };
 
   libfakekey = callPackage ../development/libraries/libfakekey { };
+
+  libfido2 = callPackage ../development/libraries/libfido2 { };
 
   libfilezilla = callPackage ../development/libraries/libfilezilla { };
 
