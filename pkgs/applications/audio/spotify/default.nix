@@ -1,7 +1,7 @@
 { fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
-, at-spi2-atk
+, at-spi2-atk, at-spi2-core
 }:
 
 let
@@ -55,6 +55,7 @@ let
     xorg.libXtst
     xorg.libxcb
     zlib
+    at-spi2-core
   ];
 
 in
