@@ -8,11 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "12xvcd16cwilzglv9h7sgh4h1qqjd1h8s48ji2dla58m4706hzg7";
   };
 
+  patches = [ ./darwin.patch ];
+
   buildInputs = [ texinfo ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i 's|#include <malloc.h>|#include <malloc/malloc.h>|' ./man/texinfo2man.c
-  '';
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+    "-Wno-implicit-function-declaration";
 
   hardeningDisable = [ "format" ];
 
