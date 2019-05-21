@@ -15174,6 +15174,7 @@ in
   meteor = callPackage ../servers/meteor { };
 
   micronaut = callPackage ../development/tools/micronaut {};
+  microwindows = callPackage ../servers/microwindows { };
 
   minio = callPackage ../servers/minio { };
 
