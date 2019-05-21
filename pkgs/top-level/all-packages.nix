@@ -2437,9 +2437,13 @@ in
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
+  dnsenum = callPackage ../tools/security/dnsenum { };
+
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
   dnsperf = callPackage ../tools/networking/dnsperf { };
+
+  dnsrecon = callPackage ../tools/security/dnsrecon { };
 
   dnstop = callPackage ../tools/networking/dnstop { };
 
@@ -2876,6 +2880,8 @@ in
   flatpak-builder = callPackage ../development/tools/flatpak-builder { };
 
   fltrdr = callPackage ../tools/misc/fltrdr { stdenv = gcc8Stdenv; };
+
+  fierce = callPackage ../tools/security/fierce { };
 
   figlet = callPackage ../tools/misc/figlet { };
 

@@ -11426,6 +11426,18 @@ let
     };
   };
 
+  NetNetmask = buildPerlPackage rec {
+    name = "Net-Netmask-1.9104";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMASLAK/${name}.tar.gz";
+      sha256 = "17li2svymz49az35xl6galp4b9qcnb985gzklhikkvkn9da6rz3y";
+    };
+    buildInputs = [ Test2Suite TestUseAllModules ];
+    meta = {
+      description = "Parse, manipulate and lookup IP network blocks";
+    };
+  };
+
   NetOAuth = buildPerlModule {
     name = "Net-OAuth-0.28";
     src = fetchurl {
@@ -11656,6 +11668,22 @@ let
       description = "A perl interface to the Twitter API";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  NetWhoisIP = buildPerlPackage rec {
+    name = "Net-Whois-IP-1.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BS/BSCHMITZ/${name}.tar.gz";
+      sha256 = "08kj2h9qiyfvv3jfz619xl796j93cslg7d96919mnrnjy6hdz6zh";
+    };
+
+    propagatedBuildInputs = [ RegexpIPv6 LWPProtocolhttps ];
+    doCheck = false;
+
+    # https://rt.cpan.org/Public/Bug/Display.html?id=99377
+    postPatch = ''
+      substituteInPlace IP.pm --replace " AutoLoader" ""
+    '';
   };
 
   NetWorks = buildPerlPackage {
@@ -14138,6 +14166,14 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CG/CGRAU/String-MkPasswd-0.05.tar.gz;
       sha256 = "15lvcc8c9hp6mg3jx02wd3b85aphn8yl5db62q3pam04c0sgh42k";
+    };
+  };
+
+  StringRandom = buildPerlModule rec {
+    name = "String-Random-0.30";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "06xdpyjc53al0a4ib2lw1m388v41z97hzqbdkd00w3nmjsdrn4w1";
     };
   };
 
