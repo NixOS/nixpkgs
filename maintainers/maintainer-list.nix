@@ -881,6 +881,11 @@
     github = "ceedubs";
     name = "Cody Allen";
   };
+  cf6b88f = {
+    email = "elmo.todurov@eesti.ee";
+    github = "cf6b88f";
+    name = "Elmo Todurov";
+  };
   cfouche = {
     email = "chaddai.fouche@gmail.com";
     github = "Chaddai";
