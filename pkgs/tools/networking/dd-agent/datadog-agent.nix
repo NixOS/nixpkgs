@@ -6,14 +6,14 @@ let
 
 in buildGoPackage rec {
   name = "datadog-agent-${version}";
-  version = "6.11.0";
+  version = "6.11.2";
   owner   = "DataDog";
   repo    = "datadog-agent";
 
   src = fetchFromGitHub {
     inherit owner repo;
     rev    = "${version}";
-    sha256 = "1gvawsrm3qlrciahnqa9793hwm586jiccmnz1pp0z889508wbg07";
+    sha256 = "194ml6sh4i3gszcy1rcffcaw0419imlgbnzvgihydlh7pwc3sl83";
   };
 
   subPackages = [
