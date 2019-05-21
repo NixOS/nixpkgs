@@ -380,13 +380,13 @@ with self; {
   };
 
   luasec = buildLuaPackage rec {
-    name = "sec-0.6";
+    name = "sec-0.8";
 
     src = fetchFromGitHub {
       owner = "brunoos";
       repo = "luasec";
       rev = "lua${name}";
-      sha256 = "0wv8l7f7na7kw5xn8mjik2wpxbizl7zvvp5s7fcwvz9kl5jdpk5b";
+      sha256 = "1cgb7ihnrrfr59a2da4d3chr7lqpid98xpglmzhv3hrpg4x5sksz";
     };
 
     propagatedBuildInputs = [ luasocket ];
