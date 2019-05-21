@@ -595,6 +595,8 @@ in {
 
   pathlib = callPackage ../development/python-modules/pathlib { };
 
+  pc-ble-driver-py = toPythonModule (callPackage ../development/python-modules/pc-ble-driver-py { });
+
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
@@ -606,6 +608,8 @@ in {
   perf = callPackage ../development/python-modules/perf { };
 
   phonopy = callPackage ../development/python-modules/phonopy { };
+
+  piccata = callPackage ../development/python-modules/piccata {};
 
   pims = callPackage ../development/python-modules/pims { };
 
@@ -781,6 +785,8 @@ in {
   pyslurm = callPackage ../development/python-modules/pyslurm {
     slurm = pkgs.slurm;
   };
+
+  pyspinel = callPackage ../development/python-modules/pyspinel {};
 
   pyssim = callPackage ../development/python-modules/pyssim { };
 
