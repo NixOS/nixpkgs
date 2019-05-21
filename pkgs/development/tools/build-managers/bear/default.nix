@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/rizsotto/Bear;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat maintainers.babariviere ];
+    maintainers = [ maintainers.babariviere ];
   };
 }
