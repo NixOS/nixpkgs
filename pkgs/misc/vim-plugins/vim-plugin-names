@@ -306,6 +306,7 @@ thinca/vim-themis
 thinca/vim-visualstar
 tomasr/molokai
 tomlion/vim-solidity
+tommcdo/vim-lion
 tomtom/tlib_vim
 tpope/vim-abolish
 tpope/vim-commentary
