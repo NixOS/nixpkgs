@@ -94,7 +94,7 @@ in {
         type = types.bool;
         description = ''
           Make MemTest86 available from the systemd-boot menu. MemTest86 is a
-          program for testing memory.  MemTest86 is a non-open-source program, so
+          program for testing memory.  MemTest86 is an unfree program, so
           this requires <literal>allowUnfree</literal> to be set to
           <literal>true</literal>.
         '';
