@@ -18,7 +18,10 @@ let
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
     ignorePerms = folder.ignorePerms;
-  }) cfg.declarative.folders;
+  }) (filterAttrs (
+    _: folder:
+    folder.enable
+  ) cfg.declarative.folders);
 
   # get the api key by parsing the config.xml
   getApiKey = pkgs.writers.writeDash "getAPIKey" ''
@@ -168,6 +171,16 @@ in {
           '';
           type = types.attrsOf (types.submodule ({ config, ... }: {
             options = {
+
+              enable = mkOption {
+                type = types.bool;
+                default = true;
+                description = ''
+                  share this folder.
+                  This option is useful when you want to define all folders
+                  in one place, but not every machine should share all folders.
+                '';
+              };
 
               path = mkOption {
                 type = types.str;
