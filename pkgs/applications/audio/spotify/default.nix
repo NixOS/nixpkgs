@@ -22,8 +22,9 @@ let
 
   deps = [
     alsaLib
-    atk
     at-spi2-atk
+    at-spi2-core
+    atk
     cairo
     cups
     curl
@@ -43,6 +44,7 @@ let
     stdenv.cc.cc
     systemd
     xorg.libX11
+    xorg.libxcb
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage
@@ -53,9 +55,7 @@ let
     xorg.libXrender
     xorg.libXScrnSaver
     xorg.libXtst
-    xorg.libxcb
     zlib
-    at-spi2-core
   ];
 
 in
