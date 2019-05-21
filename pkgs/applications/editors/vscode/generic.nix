@@ -6,7 +6,6 @@
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
 , executableName, longName, shortName, pname
-, ...
 }:
 
 let
