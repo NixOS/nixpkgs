@@ -55,7 +55,7 @@ let
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-        --set PATH "${stdenv.lib.makeBinPath [
+        --prefix PATH : "${stdenv.lib.makeBinPath [
 
           # Checked in studio.sh
           coreutils
