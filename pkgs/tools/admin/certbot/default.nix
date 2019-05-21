@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkInputs = with python3Packages; [ pytest pyyaml ];
-  doCheck = false /* integration tests want 'docker', not sure how to disable */ && !stdenv.isDarwin; # On Hydra Darwin tests fail with "Too many open files".
+  doCheck = false /* integration tests want 'docker', not sure how to disable */;
 
   meta = with stdenv.lib; {
     homepage = src.meta.homepage;
