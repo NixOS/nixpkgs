@@ -12,15 +12,6 @@ buildLinux (args // rec {
 
   extraConfig = "BCACHEFS_FS m";
 
-  kernelPatches = [
-    { name = "export-bio_iov_iter_get_pages";
-      patch = fetchpatch {
-        name = "export-bio_iov_iter_get_pages.patch";
-        url = "https://evilpiepirate.org/git/bcachefs.git/patch/?id=bd8be01aa04eb9cc33fcdce89ac6e0fac0ae0fcf";
-        sha256 = "0h5z98krx8077wwhiqp3bwc1h4nwnifxsn8mpxr2lcxnqmky3hz0";
-      }; }
-  ];
-
   extraMeta = {
     branch = "master";
     hydraPlatforms = []; # Should the testing kernels ever be built on Hydra?
