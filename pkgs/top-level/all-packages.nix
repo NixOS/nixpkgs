@@ -13175,10 +13175,7 @@ in
 
   sphinxsearch = callPackage ../servers/search/sphinxsearch { };
 
-  spice = callPackage ../development/libraries/spice {
-    celt = celt_0_5_1;
-    inherit (pythonPackages) pyparsing;
-  };
+  spice = callPackage ../development/libraries/spice { };
 
   spice-gtk = callPackage ../development/libraries/spice-gtk { };
 

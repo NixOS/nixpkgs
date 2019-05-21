@@ -1,38 +1,93 @@
-{ stdenv, fetchurl, pkgconfig, pixman, celt, alsaLib
-, openssl, libXrandr, libXfixes, libXext, libXrender, libXinerama
-, libjpeg, zlib, spice-protocol, python, pyparsing, glib, cyrus_sasl
-, libcacard, lz4 }:
-
-with stdenv.lib;
+{ stdenv
+, substituteAll
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, pixman
+, alsaLib
+, openssl
+, libXrandr
+, libXfixes
+, libXext
+, libXrender
+, libXinerama
+, libjpeg
+, zlib
+, spice-protocol
+, python3
+, glib
+, cyrus_sasl
+, libcacard
+, lz4
+, libopus
+, gst_all_1
+, orc
+}:
 
 stdenv.mkDerivation rec {
-  name = "spice-0.14.0";
+  pname = "spice";
+  version = "0.14.2";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/releases/${name}.tar.bz2";
-    sha256 = "0j5q7cp5p95jk8fp48gz76rz96lifimdsx1wnpmfal0nnnar9nrs";
+    url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.bz2";
+    sha256 = "19r999py9v9c7md2bb8ysj809ag1hh6djl1ik8jcgx065s4b60xj";
   };
 
-  buildInputs = [ pixman celt alsaLib openssl libjpeg zlib
-                  libXrandr libXfixes libXrender libXext libXinerama
-                  python pyparsing glib cyrus_sasl libcacard lz4 ];
+  patches = [
+    # submitted https://gitlab.freedesktop.org/spice/spice/merge_requests/4
+    ./correct-meson.patch
+  ];
 
-  nativeBuildInputs = [ pkgconfig spice-protocol ];
+  postPatch = ''
+    patchShebangs build-aux
+  '';
+
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    spice-protocol
+    python3
+    python3.pkgs.six
+    python3.pkgs.pyparsing
+  ];
+
+  buildInputs = [
+    alsaLib
+    cyrus_sasl
+    glib
+    gst_all_1.gst-plugins-base
+    libXext
+    libXfixes
+    libXinerama
+    libXrandr
+    libXrender
+    libcacard
+    libjpeg
+    libopus
+    lz4
+    openssl
+    orc
+    pixman
+    python3.pkgs.pyparsing
+    zlib
+  ];
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  configureFlags = [
-    "--with-sasl"
-    "--enable-smartcard"
-    "--enable-client"
-    "--enable-lz4"
+  mesonFlags = [
+    "-Dauto_features=enabled"
+    "-Dgstreamer=1.0"
+    "-Dcelt051=disabled"
   ];
 
   postInstall = ''
     ln -s spice-server $out/include/spice
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Complete open source solution for interaction with virtualized desktop devices";
     longDescription = ''
       The Spice project aims to provide a complete open source solution for interaction
