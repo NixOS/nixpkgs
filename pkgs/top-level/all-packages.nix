@@ -17073,9 +17073,7 @@ in
     inherit (python3Packages) python wrapPython pygments markdown;
   };
 
-  cgminer = callPackage ../applications/misc/cgminer {
-    amdappsdk = amdappsdk28;
-  };
+  cgminer = callPackage ../applications/misc/cgminer { };
 
   chirp = callPackage ../applications/radio/chirp {
     inherit (pythonPackages) pyserial pygtk;
