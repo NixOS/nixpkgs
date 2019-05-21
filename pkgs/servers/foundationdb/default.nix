@@ -69,10 +69,10 @@ in with builtins; {
   # ------------------------------------------------------
 
   foundationdb61 = cmakeBuild rec {
-    version = "6.1.6pre4898_${substring 0 7 rev}";
+    version = "6.1.7pre4928_${substring 0 7 rev}";
     branch  = "release-6.1";
-    rev     = "26fbbbf798971b2b9ecb882a8af766fa36734f53";
-    sha256  = "1q1a1j8h0qlh67khcds0dg416myvjbp6gfm6s4sk8d60zfzny7wb";
+    rev     = "a990458e81612632159bbf75167a36f64ef228d1";
+    sha256  = "1b8ij78xjy30q93hvnrw8llw16q5zlmlq3l6dvnnf8w6ws88y1k0";
     officialRelease = false;
 
     patches = [
