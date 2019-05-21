@@ -187,6 +187,8 @@ in {
 
   aplpy = callPackage ../development/python-modules/aplpy { };
 
+  applicationinsights = callPackage ../development/python-modules/applicationinsights { };
+
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
   asana = callPackage ../development/python-modules/asana { };
