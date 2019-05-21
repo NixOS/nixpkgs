@@ -4382,6 +4382,11 @@
     github = "samdroid-apps";
     name = "Sam Parkinson";
   };
+  samrose = {
+   email = "samuel.rose@gmail.com";
+   github = "samrose";
+   name = "Sam Rose";
+  };
   samueldr = {
     email = "samuel@dionne-riel.com";
     github = "samueldr";
