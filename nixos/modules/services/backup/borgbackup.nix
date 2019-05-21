@@ -32,7 +32,7 @@ let
 
     archiveName="${cfg.archiveBaseName}-$(date ${cfg.dateFormat})"
     archiveSuffix="${optionalString cfg.appendFailedSuffix ".failed"}"
-    ${cfg.preHook}
+
   '' + optionalString cfg.doInit ''
     # Run borg init if the repo doesn't exist yet
     if ! borg list $extraArgs > /dev/null; then
@@ -42,6 +42,24 @@ let
       ${cfg.postInit}
     fi
   '' + ''
+    # Check if the backup is old enough.
+    now=$(date +%s)
+    last_backup_time="$(
+      borg list $extraArgs -P ${cfg.archiveBaseName}- --last 1 --json \
+        | ${pkgs.jq}/bin/jq -r ".archives[0].start" \
+        | date -f - +%s)"
+    last_backup_time=''${last_backup_time:-0}
+    last_backup_age=$(( now - last_backup_time ))
+    if (( last_backup_age <= ${toString cfg.minAge} )); then
+      echo "Backup ${cfg.archiveBaseName} is more recent (''${last_backup_age}s)" \
+        " than configured minimum age ${toString cfg.minAge}s."
+      exit 0
+    fi
+
+    ${cfg.preHook}
+
+    # Create the new backup.
+    echo "Creating new backup $archiveName"
     borg create $extraArgs \
       --compression ${cfg.compression} \
       --exclude-from ${mkExcludeFile cfg} \
@@ -290,6 +308,22 @@ in {
               It will generate a systemd service borgbackup-job-NAME.
               You may trigger it manually via systemctl restart borgbackup-job-NAME.
             '';
+          };
+
+          minAge = mkOption {
+            type = types.int;
+            default = 0;
+            description = ''
+              How old the backup should be before another one is created, in
+              seconds. If the backup script runs but the most recent backup
+              isn't at least this old, it will exit without calling "borg create".
+              This is useful for backing up things that are only intermittently
+              available, like laptops or removable storage; you want to check
+              comparatively frequently to see if they're available (using
+              <literal>startAt</literal>), but don't want to back them up every
+              single time you check.
+            '';
+            example = literalExample "60 * 60 * 23";
           };
 
           user = mkOption {
