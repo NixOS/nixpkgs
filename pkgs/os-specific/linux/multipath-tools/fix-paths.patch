@@ -1,13 +1,67 @@
 diff --git a/Makefile.inc b/Makefile.inc
-index 3e8635ff..73e278d4 100644
+index 56c3eda0..2530a150 100644
 --- a/Makefile.inc
 +++ b/Makefile.inc
-@@ -63,7 +63,7 @@ INSTALL_PROGRAM = install
- OPTFLAGS     = -Wunused -Wstrict-prototypes -O2 -g -pipe -Wformat-security -Wall \
- 		-Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4
+@@ -98,7 +98,7 @@ OPTFLAGS	= -O2 -g -pipe -Wall -Wextra -Wformat=2 -Werror=implicit-int \
+ 		  -Wp,-D_FORTIFY_SOURCE=2 $(STACKPROT) \
+ 		  --param=ssp-buffer-size=4
  
--CFLAGS	     = $(OPTFLAGS) -fPIC -DLIB_STRING=\"${LIB}\" -DRUN_DIR=\"${RUN}\"
-+CFLAGS	     = $(OPTFLAGS) -fPIC -DLIB_STRING=\"${syslibdir}\" -DRUN_DIR=\"${RUN}\"
- SHARED_FLAGS = -shared
+-CFLAGS		:= $(OPTFLAGS) -DBIN_DIR=\"$(bindir)\" -DLIB_STRING=\"${LIB}\" -DRUN_DIR=\"${RUN}\" \
++CFLAGS		:= $(OPTFLAGS) -DBIN_DIR=\"$(bindir)\" -DLIB_STRING=\"${syslibdir}\" -DRUN_DIR=\"${RUN}\" \
+ 		   -MMD -MP $(CFLAGS)
+ BIN_CFLAGS	= -fPIE -DPIE
+ LIB_CFLAGS	= -fPIC
+diff --git a/kpartx/Makefile b/kpartx/Makefile
+index 7eb467ee..bfec5d3b 100644
+--- a/kpartx/Makefile
++++ b/kpartx/Makefile
+@@ -8,7 +8,7 @@ LDFLAGS += $(BIN_LDFLAGS)
  
- %.o:	%.c
+ LIBDEPS += -ldevmapper
+ 
+-ifneq ($(call check_func,dm_task_set_cookie,/usr/include/libdevmapper.h),0)
++ifneq ($(call check_func,dm_task_set_cookie,@lvm2@/include/libdevmapper.h),0)
+ 	CFLAGS += -DLIBDM_API_COOKIE
+ endif
+ 
+diff --git a/libmultipath/Makefile b/libmultipath/Makefile
+index a2be42ea..00d82dd4 100644
+--- a/libmultipath/Makefile
++++ b/libmultipath/Makefile
+@@ -20,19 +20,19 @@ ifdef SYSTEMD
+ 	endif
+ endif
+ 
+-ifneq ($(call check_func,dm_task_no_flush,/usr/include/libdevmapper.h),0)
++ifneq ($(call check_func,dm_task_no_flush,@lvm2@/include/libdevmapper.h),0)
+ 	CFLAGS += -DLIBDM_API_FLUSH -D_GNU_SOURCE
+ endif
+ 
+-ifneq ($(call check_func,dm_task_set_cookie,/usr/include/libdevmapper.h),0)
++ifneq ($(call check_func,dm_task_set_cookie,@lvm2@/include/libdevmapper.h),0)
+ 	CFLAGS += -DLIBDM_API_COOKIE
+ endif
+ 
+-ifneq ($(call check_func,udev_monitor_set_receive_buffer_size,/usr/include/libudev.h),0)
++ifneq ($(call check_func,udev_monitor_set_receive_buffer_size,@systemd@/include/libudev.h),0)
+ 	CFLAGS += -DLIBUDEV_API_RECVBUF
+ endif
+ 
+-ifneq ($(call check_func,dm_task_deferred_remove,/usr/include/libdevmapper.h),0)
++ifneq ($(call check_func,dm_task_deferred_remove,@lvm2@/include/libdevmapper.h),0)
+ 	CFLAGS += -DLIBDM_API_DEFERRED
+ endif
+ 
+diff --git a/libmultipath/prioritizers/Makefile b/libmultipath/prioritizers/Makefile
+index 9d0fe03c..3851837b 100644
+--- a/libmultipath/prioritizers/Makefile
++++ b/libmultipath/prioritizers/Makefile
+@@ -21,7 +21,7 @@ LIBS = \
+ 	libpriopath_latency.so \
+ 	libpriosysfs.so
+ 
+-ifneq ($(call check_file,/usr/include/linux/nvme_ioctl.h),0)
++ifneq ($(call check_file,@linuxHeaders@/include/linux/nvme_ioctl.h),0)
+ 	LIBS += libprioana.so
+ 	CFLAGS += -I../nvme
+ endif
