@@ -10,15 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "159hxvbk9kh1qay9x04w0gsqzg0hkl5yghfc1wi9kv2n5pcwbkpm";
   };
 
-  postPatch = ''
-    sed -i -re '
-      s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
-    ' libmultipath/defaults.h
-    sed -i -e 's,\$(DESTDIR)/\(usr/\)\?,$(prefix)/,g' \
-      kpartx/Makefile libmpathpersist/Makefile
-    sed -i -e "s,GZIP = .*, GZIP = gzip -9n -c," \
-      Makefile.inc
-  '';
+  patches = [
+    ./fix-paths.patch
+  ];
 
   nativeBuildInputs = [ gzip ];
   buildInputs = [ systemd lvm2 libaio readline liburcu ];

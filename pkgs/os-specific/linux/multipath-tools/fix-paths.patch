@@ -1,0 +1,13 @@
+diff --git a/Makefile.inc b/Makefile.inc
+index 3e8635ff..73e278d4 100644
+--- a/Makefile.inc
++++ b/Makefile.inc
+@@ -63,7 +63,7 @@ INSTALL_PROGRAM = install
+ OPTFLAGS     = -Wunused -Wstrict-prototypes -O2 -g -pipe -Wformat-security -Wall \
+ 		-Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4
+ 
+-CFLAGS	     = $(OPTFLAGS) -fPIC -DLIB_STRING=\"${LIB}\" -DRUN_DIR=\"${RUN}\"
++CFLAGS	     = $(OPTFLAGS) -fPIC -DLIB_STRING=\"${syslibdir}\" -DRUN_DIR=\"${RUN}\"
+ SHARED_FLAGS = -shared
+ 
+ %.o:	%.c
