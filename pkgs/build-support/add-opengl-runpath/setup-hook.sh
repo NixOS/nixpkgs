@@ -21,8 +21,8 @@ addOpenGLRunpath() {
     done
 
     for file in "$@"; do
-        if ! isELF "$file"; then continue; fi
         local origRpath="$(patchelf --print-rpath "$file")"
         patchelf --set-rpath "@driverLink@/lib:$origRpath" ${forceRpath:+--force-rpath} "$file"
     done
 }
+
