@@ -16,23 +16,23 @@ assert pythonOlder "3.3" -> ipaddress != null;
 
 buildPythonPackage rec {
   pname = "Faker";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3f2f4570df28df2eb8f39b00520eb610081d6552975e926c6a2cbc64fd89c4c1";
+    sha256 = "1jins8jlqyxjwx6i2h2jknwwfpi0bpz1qggvw6xnbxl0g9spyiv0";
   };
 
   buildInputs = [ pytestrunner ];
   checkInputs = [
     email_validator
     freezegun
-    mock
-    more-itertools
     pytest
     random2
     ukpostcodeparser
-  ];
+  ]
+  ++ lib.optionals (pythonOlder "3.3") [ mock ]
+  ++ lib.optionals (pythonOlder "3.0") [ more-itertools ];
 
   propagatedBuildInputs = [
     dateutil
