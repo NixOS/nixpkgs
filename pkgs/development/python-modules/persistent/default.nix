@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "persistent";
-  version = "4.4.3";
+  version = "4.5.0";
 
   nativeBuildInputs = [ sphinx manuel ];
   propagatedBuildInputs = [ zope_interface ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05hi8yfvxl5ns7y7xhbgbqp78ydaxabjp5b64r4nmrfdfsqylrb7";
+    sha256 = "0slbvq1m3rilgyhj6i522rsyv592xv9pmvm61mrmgkgf40kfnz69";
   };
 
   meta = {
