@@ -106,7 +106,7 @@ in rec {
     version = "8.8.2";
   };
   coq_8_9 = callPackage ../applications/science/logic/coq {
-    version = "8.9.0";
+    version = "8.9.1";
   };
   coq_8_10 = callPackage ../applications/science/logic/coq {
     version = "8.10+beta1";
