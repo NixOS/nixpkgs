@@ -262,7 +262,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Run a auto update of all installed apps from the nextcloud repository.
+          Run regular auto update of all apps installed from the nextcloud app store.
         '';
       };
       startAt = mkOption {
