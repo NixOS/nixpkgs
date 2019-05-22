@@ -60,6 +60,7 @@
 , "json-server"
 , "js-yaml"
 , "karma"
+, "katex"
 , "lcov-result-merger"
 , "leetcode-cli"
 , "lerna"
