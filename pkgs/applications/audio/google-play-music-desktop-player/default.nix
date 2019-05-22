@@ -1,5 +1,5 @@
 { stdenv, alsaLib, atk, cairo, cups, dbus, dpkg, expat, fontconfig, freetype
-, fetchurl, GConf, gdk_pixbuf, glib, gtk2, gtk3, libpulseaudio, makeWrapper, nspr
+, fetchurl, GConf, gdk-pixbuf, glib, gtk2, gtk3, libpulseaudio, makeWrapper, nspr
 , nss, pango, udev, xorg
 }:
 
@@ -16,7 +16,7 @@ let
     fontconfig
     freetype
     GConf
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk2
     gtk3

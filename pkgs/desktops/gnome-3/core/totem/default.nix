@@ -3,7 +3,7 @@
 , pkgconfig, gtk3, glib, gobject-introspection, totem-pl-parser
 , wrapGAppsHook, itstool, libxml2, vala, gnome3, grilo, grilo-plugins
 , libpeas, adwaita-icon-theme, gnome-desktop, gsettings-desktop-schemas
-, gdk_pixbuf, tracker, nautilus, xvfb_run }:
+, gdk-pixbuf, tracker, nautilus, xvfb_run }:
 
 stdenv.mkDerivation rec {
   name = "totem-${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     gtk3 glib grilo clutter-gtk clutter-gst totem-pl-parser grilo-plugins
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly gst_all_1.gst-libav libpeas shared-mime-info
-    gdk_pixbuf libxml2 adwaita-icon-theme gnome-desktop
+    gdk-pixbuf libxml2 adwaita-icon-theme gnome-desktop
     gsettings-desktop-schemas tracker nautilus
     python3Packages.pygobject3 python3Packages.dbus-python # for plug-ins
   ];

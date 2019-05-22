@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, substituteAll, pkgconfig, gettext, gtk3, glib
 , gtk-doc, libarchive, gobject-introspection, libxslt, pngquant
 , sqlite, libsoup, attr, acl, docbook_xsl, docbook_xml_dtd_42
-, libuuid, json-glib, meson, gperf, ninja, gdk_pixbuf
+, libuuid, json-glib, meson, gperf, ninja, gdk-pixbuf
 }:
 stdenv.mkDerivation rec {
   name = "appstream-glib-0.7.15";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib gettext sqlite libsoup
     attr acl libuuid json-glib
-    libarchive gperf gdk_pixbuf
+    libarchive gperf gdk-pixbuf
   ];
   propagatedBuildInputs = [ gtk3 ];
 

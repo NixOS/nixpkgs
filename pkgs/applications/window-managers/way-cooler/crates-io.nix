@@ -546,76 +546,76 @@ rec {
 # end
 # gdk-pixbuf-0.2.0
 
-  crates.gdk_pixbuf."0.2.0" = deps: { features?(features_.gdk_pixbuf."0.2.0" deps {}) }: buildRustCrate {
+  crates.gdk-pixbuf."0.2.0" = deps: { features?(features_.gdk-pixbuf."0.2.0" deps {}) }: buildRustCrate {
     crateName = "gdk-pixbuf";
     version = "0.2.0";
     authors = [ "The Gtk-rs Project Developers" ];
     sha256 = "082z1s30haa59ax35wsv06mj8z8bhhq0fac36g01qa77kpiphj5y";
-    libName = "gdk_pixbuf";
+    libName = "gdk-pixbuf";
     build = "build.rs";
     dependencies = mapFeatures features ([
-      (crates."gdk_pixbuf_sys"."${deps."gdk_pixbuf"."0.2.0"."gdk_pixbuf_sys"}" deps)
-      (crates."glib"."${deps."gdk_pixbuf"."0.2.0"."glib"}" deps)
-      (crates."glib_sys"."${deps."gdk_pixbuf"."0.2.0"."glib_sys"}" deps)
-      (crates."gobject_sys"."${deps."gdk_pixbuf"."0.2.0"."gobject_sys"}" deps)
-      (crates."libc"."${deps."gdk_pixbuf"."0.2.0"."libc"}" deps)
+      (crates."gdk_pixbuf_sys"."${deps."gdk-pixbuf"."0.2.0"."gdk_pixbuf_sys"}" deps)
+      (crates."glib"."${deps."gdk-pixbuf"."0.2.0"."glib"}" deps)
+      (crates."glib_sys"."${deps."gdk-pixbuf"."0.2.0"."glib_sys"}" deps)
+      (crates."gobject_sys"."${deps."gdk-pixbuf"."0.2.0"."gobject_sys"}" deps)
+      (crates."libc"."${deps."gdk-pixbuf"."0.2.0"."libc"}" deps)
     ]);
 
     buildDependencies = mapFeatures features ([
 ]);
-    features = mkFeatures (features."gdk_pixbuf"."0.2.0" or {});
+    features = mkFeatures (features."gdk-pixbuf"."0.2.0" or {});
   };
-  features_.gdk_pixbuf."0.2.0" = deps: f: updateFeatures f (rec {
-    gdk_pixbuf = fold recursiveUpdate {} [
-      { "0.2.0".default = (f.gdk_pixbuf."0.2.0".default or true); }
+  features_.gdk-pixbuf."0.2.0" = deps: f: updateFeatures f (rec {
+    gdk-pixbuf = fold recursiveUpdate {} [
+      { "0.2.0".default = (f.gdk-pixbuf."0.2.0".default or true); }
       { "0.2.0".gtk-rs-lgpl-docs =
-        (f.gdk_pixbuf."0.2.0".gtk-rs-lgpl-docs or false) ||
-        (f.gdk_pixbuf."0.2.0".embed-lgpl-docs or false) ||
-        (gdk_pixbuf."0.2.0"."embed-lgpl-docs" or false) ||
-        (f.gdk_pixbuf."0.2.0".purge-lgpl-docs or false) ||
-        (gdk_pixbuf."0.2.0"."purge-lgpl-docs" or false); }
+        (f.gdk-pixbuf."0.2.0".gtk-rs-lgpl-docs or false) ||
+        (f.gdk-pixbuf."0.2.0".embed-lgpl-docs or false) ||
+        (gdk-pixbuf."0.2.0"."embed-lgpl-docs" or false) ||
+        (f.gdk-pixbuf."0.2.0".purge-lgpl-docs or false) ||
+        (gdk-pixbuf."0.2.0"."purge-lgpl-docs" or false); }
       { "0.2.0".v2_28 =
-        (f.gdk_pixbuf."0.2.0".v2_28 or false) ||
-        (f.gdk_pixbuf."0.2.0".v2_30 or false) ||
-        (gdk_pixbuf."0.2.0"."v2_30" or false); }
+        (f.gdk-pixbuf."0.2.0".v2_28 or false) ||
+        (f.gdk-pixbuf."0.2.0".v2_30 or false) ||
+        (gdk-pixbuf."0.2.0"."v2_30" or false); }
       { "0.2.0".v2_30 =
-        (f.gdk_pixbuf."0.2.0".v2_30 or false) ||
-        (f.gdk_pixbuf."0.2.0".v2_32 or false) ||
-        (gdk_pixbuf."0.2.0"."v2_32" or false); }
+        (f.gdk-pixbuf."0.2.0".v2_30 or false) ||
+        (f.gdk-pixbuf."0.2.0".v2_32 or false) ||
+        (gdk-pixbuf."0.2.0"."v2_32" or false); }
       { "0.2.0".v2_32 =
-        (f.gdk_pixbuf."0.2.0".v2_32 or false) ||
-        (f.gdk_pixbuf."0.2.0".v2_36 or false) ||
-        (gdk_pixbuf."0.2.0"."v2_36" or false); }
+        (f.gdk-pixbuf."0.2.0".v2_32 or false) ||
+        (f.gdk-pixbuf."0.2.0".v2_36 or false) ||
+        (gdk-pixbuf."0.2.0"."v2_36" or false); }
     ];
     gdk_pixbuf_sys = fold recursiveUpdate {} [
-      { "${deps.gdk_pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_28" =
-        (f.gdk_pixbuf_sys."${deps.gdk_pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_28" or false) ||
-        (gdk_pixbuf."0.2.0"."v2_28" or false) ||
-        (f."gdk_pixbuf"."0.2.0"."v2_28" or false); }
-      { "${deps.gdk_pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_30" =
-        (f.gdk_pixbuf_sys."${deps.gdk_pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_30" or false) ||
-        (gdk_pixbuf."0.2.0"."v2_30" or false) ||
-        (f."gdk_pixbuf"."0.2.0"."v2_30" or false); }
-      { "${deps.gdk_pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_32" =
-        (f.gdk_pixbuf_sys."${deps.gdk_pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_32" or false) ||
-        (gdk_pixbuf."0.2.0"."v2_32" or false) ||
-        (f."gdk_pixbuf"."0.2.0"."v2_32" or false); }
-      { "${deps.gdk_pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_36" =
-        (f.gdk_pixbuf_sys."${deps.gdk_pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_36" or false) ||
-        (gdk_pixbuf."0.2.0"."v2_36" or false) ||
-        (f."gdk_pixbuf"."0.2.0"."v2_36" or false); }
-      { "${deps.gdk_pixbuf."0.2.0".gdk_pixbuf_sys}".default = true; }
+      { "${deps.gdk-pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_28" =
+        (f.gdk_pixbuf_sys."${deps.gdk-pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_28" or false) ||
+        (gdk-pixbuf."0.2.0"."v2_28" or false) ||
+        (f."gdk-pixbuf"."0.2.0"."v2_28" or false); }
+      { "${deps.gdk-pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_30" =
+        (f.gdk_pixbuf_sys."${deps.gdk-pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_30" or false) ||
+        (gdk-pixbuf."0.2.0"."v2_30" or false) ||
+        (f."gdk-pixbuf"."0.2.0"."v2_30" or false); }
+      { "${deps.gdk-pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_32" =
+        (f.gdk_pixbuf_sys."${deps.gdk-pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_32" or false) ||
+        (gdk-pixbuf."0.2.0"."v2_32" or false) ||
+        (f."gdk-pixbuf"."0.2.0"."v2_32" or false); }
+      { "${deps.gdk-pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_36" =
+        (f.gdk_pixbuf_sys."${deps.gdk-pixbuf."0.2.0".gdk_pixbuf_sys}"."v2_36" or false) ||
+        (gdk-pixbuf."0.2.0"."v2_36" or false) ||
+        (f."gdk-pixbuf"."0.2.0"."v2_36" or false); }
+      { "${deps.gdk-pixbuf."0.2.0".gdk_pixbuf_sys}".default = true; }
     ];
-    glib."${deps.gdk_pixbuf."0.2.0".glib}".default = true;
-    glib_sys."${deps.gdk_pixbuf."0.2.0".glib_sys}".default = true;
-    gobject_sys."${deps.gdk_pixbuf."0.2.0".gobject_sys}".default = true;
-    libc."${deps.gdk_pixbuf."0.2.0".libc}".default = true;
+    glib."${deps.gdk-pixbuf."0.2.0".glib}".default = true;
+    glib_sys."${deps.gdk-pixbuf."0.2.0".glib_sys}".default = true;
+    gobject_sys."${deps.gdk-pixbuf."0.2.0".gobject_sys}".default = true;
+    libc."${deps.gdk-pixbuf."0.2.0".libc}".default = true;
   }) [
-    (features_.gdk_pixbuf_sys."${deps."gdk_pixbuf"."0.2.0"."gdk_pixbuf_sys"}" deps)
-    (features_.glib."${deps."gdk_pixbuf"."0.2.0"."glib"}" deps)
-    (features_.glib_sys."${deps."gdk_pixbuf"."0.2.0"."glib_sys"}" deps)
-    (features_.gobject_sys."${deps."gdk_pixbuf"."0.2.0"."gobject_sys"}" deps)
-    (features_.libc."${deps."gdk_pixbuf"."0.2.0"."libc"}" deps)
+    (features_.gdk_pixbuf_sys."${deps."gdk-pixbuf"."0.2.0"."gdk_pixbuf_sys"}" deps)
+    (features_.glib."${deps."gdk-pixbuf"."0.2.0"."glib"}" deps)
+    (features_.glib_sys."${deps."gdk-pixbuf"."0.2.0"."glib_sys"}" deps)
+    (features_.gobject_sys."${deps."gdk-pixbuf"."0.2.0"."gobject_sys"}" deps)
+    (features_.libc."${deps."gdk-pixbuf"."0.2.0"."libc"}" deps)
   ];
 
 
@@ -2357,7 +2357,7 @@ rec {
       (crates."dbus"."${deps."way_cooler"."0.8.1"."dbus"}" deps)
       (crates."dbus_macros"."${deps."way_cooler"."0.8.1"."dbus_macros"}" deps)
       (crates."env_logger"."${deps."way_cooler"."0.8.1"."env_logger"}" deps)
-      (crates."gdk_pixbuf"."${deps."way_cooler"."0.8.1"."gdk_pixbuf"}" deps)
+      (crates."gdk-pixbuf"."${deps."way_cooler"."0.8.1"."gdk-pixbuf"}" deps)
       (crates."getopts"."${deps."way_cooler"."0.8.1"."getopts"}" deps)
       (crates."glib"."${deps."way_cooler"."0.8.1"."glib"}" deps)
       (crates."json_macro"."${deps."way_cooler"."0.8.1"."json_macro"}" deps)
@@ -2386,7 +2386,7 @@ rec {
     dbus."${deps.way_cooler."0.8.1".dbus}".default = true;
     dbus_macros."${deps.way_cooler."0.8.1".dbus_macros}".default = true;
     env_logger."${deps.way_cooler."0.8.1".env_logger}".default = true;
-    gdk_pixbuf."${deps.way_cooler."0.8.1".gdk_pixbuf}".default = true;
+    gdk-pixbuf."${deps.way_cooler."0.8.1".gdk-pixbuf}".default = true;
     getopts."${deps.way_cooler."0.8.1".getopts}".default = true;
     glib."${deps.way_cooler."0.8.1".glib}".default = true;
     json_macro."${deps.way_cooler."0.8.1".json_macro}".default = true;
@@ -2434,7 +2434,7 @@ rec {
     (features_.dbus."${deps."way_cooler"."0.8.1"."dbus"}" deps)
     (features_.dbus_macros."${deps."way_cooler"."0.8.1"."dbus_macros"}" deps)
     (features_.env_logger."${deps."way_cooler"."0.8.1"."env_logger"}" deps)
-    (features_.gdk_pixbuf."${deps."way_cooler"."0.8.1"."gdk_pixbuf"}" deps)
+    (features_.gdk-pixbuf."${deps."way_cooler"."0.8.1"."gdk-pixbuf"}" deps)
     (features_.getopts."${deps."way_cooler"."0.8.1"."getopts"}" deps)
     (features_.glib."${deps."way_cooler"."0.8.1"."glib"}" deps)
     (features_.json_macro."${deps."way_cooler"."0.8.1"."json_macro"}" deps)

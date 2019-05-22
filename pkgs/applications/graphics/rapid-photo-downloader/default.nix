@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python3Packages
 , file, intltool, gobject-introspection, libgudev
 , udisks, gexiv2, gst_all_1, libnotify
-, exiftool, gdk_pixbuf, libmediainfo, vmtouch
+, exiftool, gdk-pixbuf, libmediainfo, vmtouch
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   # NOTE: Without gobject-introspection in buildInputs, launching fails with
   #       "Namespace [Notify / GExiv2 / GUdev] not available"
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     gexiv2
     gobject-introspection
     gst_all_1.gst-libav

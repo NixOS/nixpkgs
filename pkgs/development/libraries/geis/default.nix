@@ -6,7 +6,7 @@
 , dbus
 , evemu
 , frame
-, gdk_pixbuf
+, gdk-pixbuf
 , gobject-introspection
 , grail
 , gtk3
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     [ pygobject3  ];
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook python3Packages.wrapPython];
-  buildInputs = [ atk dbus evemu frame gdk_pixbuf gobject-introspection grail
+  buildInputs = [ atk dbus evemu frame gdk-pixbuf gobject-introspection grail
     gtk3 libX11 libXext libXi libXtst pango python3Packages.python xorgserver
   ];
 

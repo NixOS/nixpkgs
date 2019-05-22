@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, cairo, xorg, gdk_pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
+{ stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
 , freetype, dbus, nss, nspr, alsaLib, cups, expat, udev, makeDesktopItem
 }:
 
@@ -6,7 +6,7 @@ let
   rpath = stdenv.lib.makeLibraryPath [
     cairo
     stdenv.cc.cc
-    gdk_pixbuf
+    gdk-pixbuf
     fontconfig
     pango
     atk

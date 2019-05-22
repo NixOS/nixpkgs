@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
+{ stdenv, fetchurl, substituteAll, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk-pixbuf, isocodes
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool gettext wrapPython ];
   propagatedBuildInputs = [ gegl ]; # needed by gimp-2.0.pc
   buildInputs = [
-    babl gegl gtk2 glib gdk_pixbuf pango cairo gexiv2 harfbuzz isocodes
+    babl gegl gtk2 glib gdk-pixbuf pango cairo gexiv2 harfbuzz isocodes
     freetype fontconfig lcms libpng libjpeg poppler poppler_data libtiff openexr
     libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp libheif
     python pygtk libexif xorg.libXpm glib-networking libmypaint mypaint-brushes
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
   pythonPath = [ pygtk ];
 
   # Check if librsvg was built with --disable-pixbuf-loader.
-  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk_pixbuf.moduleDir}";
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
 
   preConfigure = ''
     # The check runs before glib-networking is registered

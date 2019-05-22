@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       pkgs.cups
       pkgs.dbus.daemon.lib
       pkgs.expat
-      pkgs.gdk_pixbuf
+      pkgs.gdk-pixbuf
       pkgs.glib
       pkgs.gtk2-x11
       pkgs.freetype

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, sassc, gdk_pixbuf, librsvg, gtk_engines, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, meson, ninja, sassc, gdk-pixbuf, librsvg, gtk_engines, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "stilo-themes";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja sassc ];
 
-  buildInputs = [ gdk_pixbuf librsvg gtk_engines ];
+  buildInputs = [ gdk-pixbuf librsvg gtk_engines ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
