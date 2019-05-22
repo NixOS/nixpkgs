@@ -1,7 +1,7 @@
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="package-specific-user-notes">
  <title>Package-specific usage notes</title>
  <para>
-         This chapters includes some notes
+         These chapters includes some notes
          that apply to specific packages and should
          answer some of the frequently asked questions
          related to Nixpkgs use.
@@ -239,7 +239,8 @@ overrides = self: super: rec {
   <para>
    All users of Nixpkgs are free software users, and many users (and
    developers) of Nixpkgs want to limit and tightly control their exposure to
-   unfree software. At the same many users need (or want) to run some specific
+   unfree software. At the same time, many users need (or want)
+   to run some specific
    pieces of proprietary software. Nixpkgs includes some expressions for unfree
    software packages. By default unfree software cannot be installed and
    doesn’t show up in searches. To allow installing unfree software in a
@@ -265,7 +266,7 @@ overrides = self: super: rec {
    <para>
     Steam is distributed as a <filename>.deb</filename> file, for now only as
     an i686 package (the amd64 package only has documentation). When unpacked,
-    it has a script called <filename>steam</filename> that in ubuntu (their
+    it has a script called <filename>steam</filename> that in Ubuntu (their
     target distro) would go to <filename>/usr/bin </filename>. When run for the
     first time, this script copies some files to the user's home, which include
     another script that is the ultimate responsible for launching the steam
@@ -421,7 +422,7 @@ overrides = self: super: rec {
    <title>Basic usage</title>
 
    <para>
-    The tarball archive needs to be downloaded manually as the licenses
+    The tarball archive needs to be downloaded manually as the license
     agreements of the vendor need to be accepted first. This is available at
     the
     <link xlink:href="https://www.citrix.com/downloads/citrix-receiver/">download
