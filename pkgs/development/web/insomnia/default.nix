@@ -1,6 +1,7 @@
 { stdenv, makeWrapper, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk_pixbuf, glib, gnome2, nspr, nss, gtk3, gtk2, at-spi2-atk 
+, gdk_pixbuf, glib, gnome2, nspr, nss, gtk3, gtk2, at-spi2-atk
+, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
 , libudev0-shim, glibc, curl, openssl, autoPatchelfHook
@@ -28,6 +29,7 @@ in stdenv.mkDerivation rec {
     autoPatchelfHook
     dpkg
     makeWrapper
+    gobject-introspection wrapGAppsHook
   ];
   
   buildInputs = [
@@ -46,6 +48,7 @@ in stdenv.mkDerivation rec {
     gnome2.pango
     gtk2
     gtk3
+    gsettings-desktop-schemas
     libX11
     libXScrnSaver
     libXcomposite
