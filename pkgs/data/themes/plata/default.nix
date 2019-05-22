@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel
+{ stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel, zip
 , sassc, inkscape, libxml2, gnome2, gdk_pixbuf, librsvg, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
-, mateSupport ? true
 , openboxSupport ? true
 , xfceSupport ? true
 , gtkNextSupport ? false
@@ -17,14 +16,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "plata-theme-${version}";
-  version = "0.7.6";
+  pname = "plata-theme";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "1jllsl2h3zdvlp3k2dy3h4jyccrzzymwbqz43jhnm6mxxabxzijg";
+    sha256 = "0nq1c12ldaz9750dcb1vz0ff10s4171pjsd21sih1sz89z64q2hy";
   };
 
   preferLocalBuild = true;
@@ -37,7 +36,8 @@ stdenv.mkDerivation rec {
     inkscape
     libxml2
     gnome2.glib.dev
-  ];
+  ]
+  ++ (stdenv.lib.optional (telegramSupport != null) zip);
 
   buildInputs = [
     gdk_pixbuf
@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
       (enableFeature cinnamonSupport "cinnamon")
       (enableFeature gnomeFlashbackSupport "flashback")
       (enableFeature gnomeShellSupport "gnome")
-      (enableFeature mateSupport "mate")
       (enableFeature openboxSupport "openbox")
       (enableFeature xfceSupport "xfce")
       (enableFeature gtkNextSupport "gtk_next")
