@@ -4185,6 +4185,9 @@ in
     openssl = openssl_1_1;
   };
 
+  # Update this when adding the newest nodejs major version!
+  nodejs_latest = nodejs-12_x;
+
   nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
     nodejs = pkgs.nodejs-10_x;
   });
