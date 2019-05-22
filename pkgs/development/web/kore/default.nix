@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "kore-${version}";
-  version = "2.0.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "jorisvink";
     repo = "kore";
     rev = "${version}-release";
-    sha256 = "1jjhx9gfjzpsrs7b9rgb46k6v03azrxz9fq7vkn9zyz6zvnjj614";
+    sha256 = "19jd1jkyrylvqbrxdz7i3xvymwi1dzx97iq6fcp76fw7nm7gxgk4";
   };
 
   buildInputs = [ openssl ];
