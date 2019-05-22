@@ -5,20 +5,15 @@ let
   gunicorn = pkgs.python3Packages.gunicorn;
   bepasty = pkgs.bepasty;
   gevent = pkgs.python3Packages.gevent;
-  python = pkgs.python3Packages.python;
+  python = pkgs.python3;
   cfg = config.services.bepasty;
-  user = "bepasty";
-  group = "bepasty";
-  default_home = "/var/lib/bepasty";
 in
 {
   options.services.bepasty = {
-    enable = mkEnableOption "Bepasty servers";
-
     servers = mkOption {
       default = {};
       description = ''
-        configure a number of bepasty servers which will be started with
+        Configure a number of bepasty servers which will be started with
         gunicorn.
         '';
       type = with types ; attrsOf (submodule ({ config, ... } : {
@@ -34,18 +29,10 @@ in
             default = "127.0.0.1:8000";
           };
 
-          dataDir = mkOption {
-            type = types.str;
-            description = ''
-              Path to the directory where the pastes will be saved to
-              '';
-            default = default_home+"/data";
-          };
-
           defaultPermissions = mkOption {
             type = types.str;
             description = ''
-              default permissions for all unauthenticated accesses.
+              Default permissions for all unauthenticated accesses.
               '';
             example = "read,create,delete";
             default = "read";
@@ -68,17 +55,27 @@ in
               '';
           };
 
-          secretKey = mkOption {
-            type = types.str;
+          extraConfigFile = mkOption {
+            type = types.nullOr types.str;
             description = ''
-              server secret for safe session cookies, must be set.
+              File that is appended to the default configuration.
+              May help you to keep your permissions out of your nix store.
+              '';
+            default = null;
+            example = "/var/lib/secrets/bepasty/permissions.conf";
+          };
+
+          secretKey = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Server secret for safe session cookies, must be set.
 
               Warning: this secret is stored in the WORLD-READABLE Nix store!
 
               It's recommended to use <option>secretKeyFile</option>
               which takes precedence over <option>secretKey</option>.
               '';
-            default = "";
           };
 
           secretKeyFile = mkOption {
@@ -93,20 +90,10 @@ in
               defaults to a file in the WORLD-READABLE Nix store containing that secret.
               '';
           };
-
-          workDir = mkOption {
-            type = types.str;
-            description = ''
-              Path to the working directory (used for config and pidfile).
-              Defaults to the users home directory.
-              '';
-            default = default_home;
-          };
-
         };
         config = {
           secretKeyFile = mkDefault (
-            if config.secretKey != ""
+            if config.secretKey != null
             then toString (pkgs.writeTextFile {
               name = "bepasty-secret-key";
               text = config.secretKey;
@@ -118,9 +105,14 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.servers != {}) {
 
     environment.systemPackages = [ bepasty ];
+
+    assertions = mapAttrsToList (name: config: {
+      assertion = config.secretKey != null || config.secretKeyFile != null;
+      message = "The ${name} bepasty server has neither a secret key nor a secret key file.";
+    }) cfg.servers;
 
     # creates gunicorn systemd service for each configured server
     systemd.services = mapAttrs' (name: server:
@@ -136,48 +128,50 @@ in
               extraLibs = [ bepasty gevent ];
             };
           in {
-            BEPASTY_CONFIG = "${server.workDir}/bepasty-${name}.conf";
+            BEPASTY_CONFIG = "/tmp/bepasty.conf";
             PYTHONPATH= "${penv}/${python.sitePackages}/";
           };
 
           serviceConfig = {
             Type = "simple";
-            PrivateTmp = true;
-            ExecStartPre = assert server.secretKeyFile != null; pkgs.writeScript "bepasty-server.${name}-init" ''
-              #!/bin/sh
-              mkdir -p "${server.workDir}"
-              mkdir -p "${server.dataDir}"
-              chown ${user}:${group} "${server.workDir}" "${server.dataDir}"
-              cat > ${server.workDir}/bepasty-${name}.conf <<EOF
+            ProtectSystem = "strict";
+            PrivateHome = true;
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            CapabilityBoundingSet = "";
+            NoNewPrivileges = true;
+            LockPersonality = true;
+            RestrictRealtime = true;
+            PrivateMounts = true;
+            PrivateUsers = true;
+            DynamicUser = true;
+            StateDirectory = "bepasty-${name}";
+            RuntimeDirectory = "bepasty-${name}";
+
+            ExecStartPre = "+" + pkgs.writeShellScriptBin "bepasty-${name}-prestart" ''
+              cat > /tmp/bepasty.conf <<EOF
               SITENAME="${name}"
-              STORAGE_FILESYSTEM_DIRECTORY="${server.dataDir}"
+              STORAGE_FILESYSTEM_DIRECTORY="/var/lib/bepasty-${name}"
               SECRET_KEY="$(cat "${server.secretKeyFile}")"
               DEFAULT_PERMISSIONS="${server.defaultPermissions}"
               ${server.extraConfig}
+              ${optionalString (server.extraConfigFile != null) ''$(cat "${server.extraConfigFile}")''}
               EOF
-            '';
+
+              # This will allow the dynamic user to access the file (we don't know the username yet).
+              # It's not too insecure as we have a private /tmp directory that is only root-accessible.
+              chmod 444 /tmp/bepasty.conf
+            '' + "/bin/bepasty-${name}-prestart";
+
             ExecStart = ''${gunicorn}/bin/gunicorn bepasty.wsgi --name ${name} \
-              -u ${user} \
-              -g ${group} \
               --workers 3 --log-level=info \
               --bind=${server.bind} \
-              --pid ${server.workDir}/gunicorn-${name}.pid \
+              --pid /run/bepasty-${name}/gunicorn.pid \
               -k gevent
             '';
           };
         })
     ) cfg.servers;
-
-    users.users = [{
-      uid = config.ids.uids.bepasty;
-      name = user;
-      group = group;
-      home = default_home;
-    }];
-
-    users.groups = [{
-      name = group;
-      gid = config.ids.gids.bepasty;
-    }];
   };
 }

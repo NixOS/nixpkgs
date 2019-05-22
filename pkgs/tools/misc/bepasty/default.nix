@@ -1,4 +1,5 @@
 { python3Packages
+, fetchpatch
 , lib
 }:
 
@@ -10,6 +11,15 @@ with python3Packages;
 buildPythonPackage rec {
   pname = "bepasty";
   version = "0.5.0";
+
+  patches = [
+    # Fix for bytes under Python 3
+    # See https://github.com/bepasty/bepasty-server/issues/200
+    (fetchpatch {
+      url = "https://github.com/bepasty/bepasty-server/commit/4678896d71ae9e217e34e25600494ce5b740d922.patch";
+      sha256 = "031j17l07qg2k31x3dpjjasmampj54izndvd1xlfianbg4v67wcq";
+    })
+  ];
 
   propagatedBuildInputs = [
     flask

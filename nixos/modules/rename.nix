@@ -238,6 +238,11 @@ with lib;
     # binfmt
     (mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
 
+    # bepasty
+    (mkRemovedOptionModule [ "services" "bepasty" "enable" ] "bepasty will now be enabled when creating a server")
+    (mkRemovedOptionModule [ "services" "bepasty" "dataDir" ] "bepasty dataDir is now hardcoded to /var/lib/bepasty-$name and permissions are managed by systemd.")
+    (mkRemovedOptionModule [ "services" "bepasty" "workDir" ] "bepasty workDir is now hardcoded to /run/bepasty-$name and permissions are managed by systemd.")
+
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]

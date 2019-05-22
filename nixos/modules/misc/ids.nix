@@ -240,7 +240,7 @@
       xtreemfs = 212;
       calibre-server = 213;
       heapster = 214;
-      bepasty = 215;
+      # bepasty = 215; # unused
       # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
       mathics = 218;
@@ -548,7 +548,7 @@
       #kibana = 211;
       xtreemfs = 212;
       calibre-server = 213;
-      bepasty = 215;
+      # bepasty = 215; # unused
       # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
       mathics = 218;
