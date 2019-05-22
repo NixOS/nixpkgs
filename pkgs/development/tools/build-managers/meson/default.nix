@@ -1,5 +1,15 @@
 { lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
 
+let
+  # See https://mesonbuild.com/Reference-tables.html#cpu-families
+  cpuFamilies = {
+    "aarch64" = "aarch64";
+    "armv6l"  = "arm";
+    "armv7l"  = "arm";
+    "i686"    = "x86";
+    "x86_64"  = "x86_64";
+  };
+in
 python3Packages.buildPythonApplication rec {
   version = "0.49.2";
   pname = "meson";
@@ -68,7 +78,7 @@ python3Packages.buildPythonApplication rec {
 
     [host_machine]
     system = '${targetPackages.stdenv.targetPlatform.parsed.kernel.name}'
-    cpu_family = '${targetPackages.stdenv.targetPlatform.parsed.cpu.family}'
+    cpu_family = '${cpuFamilies.${targetPackages.stdenv.targetPlatform.parsed.cpu.name}}'
     cpu = '${targetPackages.stdenv.targetPlatform.parsed.cpu.name}'
     endian = ${if targetPackages.stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
   '';
