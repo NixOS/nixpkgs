@@ -25,4 +25,3 @@ addOpenGLRunpath() {
         patchelf --set-rpath "@driverLink@/lib:$origRpath" ${forceRpath:+--force-rpath} "$file"
     done
 }
-
