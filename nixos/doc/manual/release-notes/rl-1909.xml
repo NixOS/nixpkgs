@@ -154,6 +154,18 @@
      </listitem>
     </itemizedlist>
    </listitem>
+   <listitem>
+    <para>
+     The package <literal>avahi</literal> is now built using the well-known
+     location <literal>/etc/avahi/services</literal> for looking up service
+     definitions. Additionally the module <option>avahi</option> now supports
+     custom service definitions via
+     <option>services.avahi.extraServiceFiles</option>, wich are then placed
+     in the aforementioned directory. See <citerefentry>
+     <refentrytitle>avahi.service</refentrytitle><manvolnum>5</manvolnum>
+     </citerefentry> for more information on custom service definitions.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
