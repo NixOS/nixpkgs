@@ -65,6 +65,7 @@ in
         default = false;
         description = "Enable client authentication. Creates a default superuser with username root!";
       };
+      
       initialRootPassword = mkOption {
         type = types.nullOr types.string;
         default = null;
