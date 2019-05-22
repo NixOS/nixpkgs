@@ -27,6 +27,7 @@ let
    "8.8.1" = "1hlf58gwazywbmfa48219amid38vqdl94yz21i11b4map6jfwhbk";
    "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
    "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
+   "8.9.1" = "1xrq6mkhpq994bncmnijf8jwmwn961kkpl4mwwlv7j3dgnysrcv2";
    "8.10+beta1" = "19wf39i0ap2vakglgdlqxpjd3l1h5w7dp460w8y7nc1y06b2153h";
   }."${version}";
   coq-version = stdenv.lib.versions.majorMinor version;
