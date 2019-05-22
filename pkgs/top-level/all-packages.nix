@@ -4187,6 +4187,7 @@ in
 
   # Update this when adding the newest nodejs major version!
   nodejs_latest = nodejs-12_x;
+  nodejs-slim_latest = nodejs-slim-12_x;
 
   nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
     nodejs = pkgs.nodejs-10_x;
