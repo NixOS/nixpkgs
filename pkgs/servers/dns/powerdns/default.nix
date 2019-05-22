@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig
 , boost, libyamlcpp, libsodium, sqlite, protobuf, botan2, openssl
 , mysql57, postgresql, lua, openldap, geoip, curl, opendbx, unixODBC
+, systemd, withSystemd ? stdenv.isLinux
 }:
 
 stdenv.mkDerivation rec {
@@ -16,14 +17,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
     libyamlcpp libsodium curl opendbx unixODBC botan2 openssl
-  ];
+  ] ++ stdenv.lib.optional withSystemd systemd;
 
   # nix destroy with-modules arguments, when using configureFlags
   preConfigure = ''
     configureFlagsArray=(
       "--with-modules=bind gmysql geoip godbc gpgsql gsqlite3 ldap lua mydns opendbx pipe random remote"
       --with-sqlite3
-      --with-socketdir=/var/lib/powerdns
+      --with-socketdir=/run/pdns
       --with-libcrypto=${openssl.dev}
       --enable-libsodium
       --enable-botan

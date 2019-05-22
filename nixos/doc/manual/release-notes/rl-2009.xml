@@ -495,6 +495,11 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      In the <literal>resilio</literal> module, <xref linkend="opt-services.resilio.httpListenAddr"/> has been changed to listen to <literal>[::1]</literal> instead of <literal>0.0.0.0</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     powerdns no longer runs in a chrooted environment. Make sure file paths used in <link>opt-services.powerdns.extraConfig</link> are updated.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
