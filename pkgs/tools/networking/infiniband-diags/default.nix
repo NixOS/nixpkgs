@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, rdma-core,
-  glib, opensm, perl, makeWrapper }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, rdma-core
+, opensm, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "infiniband-diags-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig makeWrapper ];
 
-  buildInputs = [ rdma-core glib opensm perl ];
+  buildInputs = [ rdma-core opensm perl ];
 
   preConfigure = ''
     export CFLAGS="-I${opensm}/include/infiniband"
