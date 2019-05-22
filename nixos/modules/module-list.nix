@@ -536,6 +536,7 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/babeld.nix
   ./services/networking/bind.nix
+  ./services/networking/bitcoind.nix
   ./services/networking/autossh.nix
   ./services/networking/bird.nix
   ./services/networking/bitlbee.nix
