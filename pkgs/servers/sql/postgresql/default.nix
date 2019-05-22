@@ -157,41 +157,41 @@ let
 in self: {
 
   postgresql_9_4 = self.callPackage generic {
-    version = "9.4.21";
+    version = "9.4.22";
     psqlSchema = "9.4";
-    sha256 = "01k0s3a7qy8639zsjp1bjbfnnymyl0rgyylrjbkm81m0779b8j80";
+    sha256 = "0sy66cl2nkqr1al66f3qy7zsyd3vjpjv0icqbda7bqq4j8mlrann";
     this = self.postgresql_9_4;
     inherit self;
   };
 
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.16";
+    version = "9.5.17";
     psqlSchema = "9.5";
-    sha256 = "0cg10ri0475vg1c8k1sb5qi4i64hiv9k7crmg15qvvnwsjanqmx4";
+    sha256 = "01gp4d3ngl2809dl652md2n1q4nk27cdbl6i892gvwk901xf7yc8";
     this = self.postgresql_9_5;
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.12";
+    version = "9.6.13";
     psqlSchema = "9.6";
-    sha256 = "114xay230xia2fagisxahs5fc2mza8hmmkr6ibd7nxllp938931f";
+    sha256 = "197964wb5pc5fx81a6mh9hlcrr9sgr3nqlpmljv6asi9aq0d5gpc";
     this = self.postgresql_9_6;
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.7";
+    version = "10.8";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "1piyfcrcqscjhnnwn91kdvr764s7d0qz4lgygf9bl6qc71ji1vdz";
+    sha256 = "0pfdmy4w95b49w9rkn8dwvzmi2brpqfvbxd04y0k0s0xvymc565i";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.2";
+    version = "11.3";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "01clq2lw0v83zh5dc89xdr3mmap0jr37kdkh401ph6f2177bjxi6";
+    sha256 = "0baj61ym7jnl195qcq4hq6225kfz6879j8zx3n148n92zj1f119a";
     this = self.postgresql_11;
     inherit self;
   };
