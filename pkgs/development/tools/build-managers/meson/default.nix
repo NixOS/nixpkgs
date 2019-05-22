@@ -72,6 +72,8 @@ python3Packages.buildPythonApplication rec {
     ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
     strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
     pkgconfig = 'pkg-config'
+    ld = '${targetPackages.stdenv.cc.targetPrefix}ld'
+    objcopy = '${targetPackages.stdenv.cc.targetPrefix}objcopy'
 
     [properties]
     needs_exe_wrapper = true
