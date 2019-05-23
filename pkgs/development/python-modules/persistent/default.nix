@@ -1,6 +1,7 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, zope_interface
+, zope_interface, cffi
 , sphinx, manuel
 }:
 
@@ -9,7 +10,7 @@ buildPythonPackage rec {
   version = "4.5.0";
 
   nativeBuildInputs = [ sphinx manuel ];
-  propagatedBuildInputs = [ zope_interface ];
+  propagatedBuildInputs = [ zope_interface cffi ];
 
   src = fetchPypi {
     inherit pname version;
@@ -18,6 +19,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Automatic persistence for Python objects";
-    homepage = http://www.zope.org/Products/ZODB;
+    homepage = "http://www.zodb.org/";
+    license = lib.licenses.zpl21;
   };
 }
