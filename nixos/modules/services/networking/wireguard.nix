@@ -245,7 +245,9 @@ let
         path = with pkgs; [ kmod iproute wireguard-tools ];
 
         serviceConfig = {
-          Type = "oneshot";
+          Type = "simple";
+          Restart = "on-failure";
+          RestartSec = "5s";
           RemainAfterExit = true;
         };
 
