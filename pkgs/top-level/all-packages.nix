@@ -17011,6 +17011,8 @@ in
 
   carddav-util = callPackage ../tools/networking/carddav-util { };
 
+  carla = qt5.callPackage ../applications/audio/carla { };
+
   catfish = callPackage ../applications/search/catfish { };
 
   catimg = callPackage ../tools/misc/catimg { };
