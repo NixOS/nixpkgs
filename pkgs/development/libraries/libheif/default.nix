@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hk8mzig2kp5f94j4jwqxzjrm7ffk16ffvxl92rf0afsh6vgnz7w";
   };
 
+  patches = [ ./1.3.2-CVE-2019-11471.patch ];
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libde265 x265 libpng libjpeg ];
 
