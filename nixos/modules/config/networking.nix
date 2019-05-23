@@ -309,8 +309,11 @@ in
           ln -s /run/systemd/resolve/resolv.conf /run/resolvconf/interfaces/systemd
         ''}
 
-        # Make sure resolv.conf is up to date if not managed manually or by systemd
-        ${optionalString (!config.environment.etc?"resolv.conf") ''
+        # Make sure resolv.conf is up to date if not managed manually, by systemd or
+        # by NetworkManager
+        ${optionalString (!config.environment.etc?"resolv.conf" &&
+                          (cfg.networkmanager.enable ->
+                            cfg.networkmanager.rc-manager == "resolvconf")) ''
           ${pkgs.openresolv}/bin/resolvconf -u
         ''}
       '';
