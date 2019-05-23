@@ -156,6 +156,12 @@
      </listitem>
     </itemizedlist>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>hunspellDicts.fr-any</literal> dictionary now ships with <literal>fr_FR.{aff,dic}</literal>
+      which is linked to <literal>fr-toutesvariantes.{aff,dic}</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
