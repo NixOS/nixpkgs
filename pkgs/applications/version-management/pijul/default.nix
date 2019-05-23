@@ -1,8 +1,6 @@
 { stdenv, fetchurl, rustPlatform, darwin, openssl, libsodium, nettle, clang, libclang, pkgconfig }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   name = "pijul-${version}";
   version = "0.12.0";
 
@@ -23,7 +21,7 @@ buildRustPackage rec {
   LIBCLANG_PATH = libclang + "/lib";
 
   buildInputs = [ openssl libsodium nettle libclang ] ++ stdenv.lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ Security ]);
+    (with darwin.apple_sdk.frameworks; [ CoreServices Security ]);
 
   doCheck = false;
 
