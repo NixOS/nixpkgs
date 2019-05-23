@@ -305,7 +305,15 @@ in
     };
 
     systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' - ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/conf' - ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/custom/conf' - ${cfg.user} gitea - -"
+      "d '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
       "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
+
+      # If we have a folder or symlink with gitea locales, remove it
+      # And symlink the current gitea locales in place
+      "L+ '${cfg.stateDir}/conf/locale' - - - - ${gitea.out}/locale"
     ];
 
     systemd.services.gitea = {
@@ -318,12 +326,8 @@ in
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
         secretKey = "${cfg.stateDir}/custom/conf/secret_key";
       in ''
-        # Make sure that the stateDir exists, as well as the conf dir in there
-        mkdir -p ${cfg.stateDir}/conf
-
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
-          mkdir -p ${cfg.stateDir}/custom/conf
           cp -f ${configFile} ${runConfig}
 
           if [ ! -e ${secretKey} ]; then
@@ -338,7 +342,6 @@ in
           chmod 640 ${runConfig} ${secretKey}
         ''}
 
-        mkdir -p ${cfg.repositoryRoot}
         # update all hooks' binary paths
         HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
         if [ "$HOOKS" ]
@@ -348,20 +351,12 @@ in
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
         fi
-        # If we have a folder or symlink with gitea locales, remove it
-        if [ -e ${cfg.stateDir}/conf/locale ]
-        then
-          rm -r ${cfg.stateDir}/conf/locale
-        fi
-        # And symlink the current gitea locales in place
-        ln -s ${gitea.out}/locale ${cfg.stateDir}/conf/locale
+
         # update command option in authorized_keys
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
         fi
-      '' + ''
-        chown ${cfg.user} -R ${cfg.stateDir}
       '';
 
       serviceConfig = {
@@ -369,7 +364,6 @@ in
         User = cfg.user;
         Group = "gitea";
         WorkingDirectory = cfg.stateDir;
-        PermissionsStartOnly = true;
         ExecStart = "${gitea.bin}/bin/gitea web";
         Restart = "always";
       };
@@ -385,7 +379,6 @@ in
       gitea = {
         description = "Gitea Service";
         home = cfg.stateDir;
-        createHome = true;
         useDefaultShell = true;
         group = "gitea";
       };
