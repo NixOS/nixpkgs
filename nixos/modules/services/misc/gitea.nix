@@ -304,6 +304,10 @@ in
       ];
     };
 
+    systemd.tmpfiles.rules = [
+      "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
+    ];
+
     systemd.services.gitea = {
       description = "gitea";
       after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
@@ -363,6 +367,7 @@ in
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
+        Group = "gitea";
         WorkingDirectory = cfg.stateDir;
         PermissionsStartOnly = true;
         ExecStart = "${gitea.bin}/bin/gitea web";
@@ -376,14 +381,17 @@ in
       };
     };
 
-    users = mkIf (cfg.user == "gitea") {
-      users.gitea = {
+    users.users = mkIf (cfg.user == "gitea") {
+      gitea = {
         description = "Gitea Service";
         home = cfg.stateDir;
         createHome = true;
         useDefaultShell = true;
+        group = "gitea";
       };
     };
+
+    users.groups.gitea = {};
 
     warnings = optional (cfg.database.password != "")
       ''config.services.gitea.database.password will be stored as plaintext
