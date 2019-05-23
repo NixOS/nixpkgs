@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchFromGitHub
+{ buildPythonPackage, lib, fetchFromGitHub, isPy3k
 , cython
 , numpy, affine, attrs, cligj, click-plugins, snuggs, gdal
 , pytest, pytestcov, packaging, hypothesis, boto3, mock
