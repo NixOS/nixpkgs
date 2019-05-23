@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "rpmfluff";
-  version = "0.5.6";
+  version = "0.5.7.1";
 
   src = fetchurl {
   url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0bhh8mv2kddhv3fiswg3zdl91d7vh93b33jlh1dmyz63z94rm88l";
+    sha256 = "19vnlzma8b0aghdiixk0q3wc10y6306hsnic0qvswaaiki94fss1";
   };
 
   LC_ALL="en_US.utf-8";
