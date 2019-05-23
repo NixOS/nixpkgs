@@ -23756,6 +23756,8 @@ in
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
 
+  vnote = libsForQt5.callPackage ../applications/office/vnote { };
+
   ssh-audit = callPackage ../tools/security/ssh-audit { };
 
   thermald = callPackage ../tools/system/thermald { };
