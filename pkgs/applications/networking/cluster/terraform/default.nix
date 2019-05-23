@@ -88,8 +88,8 @@ let
   plugins = removeAttrs terraform-providers ["override" "overrideDerivation" "recurseForDerivations"];
 in rec {
   terraform_0_11 = pluggable (generic {
-    version = "0.11.13";
-    sha256 = "014d2ibmbp5yc1802ckdcpwqbm5v70xmjdyh5nadn02dfynaylna";
+    version = "0.11.14";
+    sha256 = "1bzz5wy13gh8j47mxxp6ij6yh20xmxd9n5lidaln3mf1bil19dmc";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
@@ -97,8 +97,8 @@ in rec {
   terraform_0_11-full = terraform_0_11.full;
 
   terraform_0_12 = pluggable (generic {
-    version = "0.12.0-alpha4";
-    sha256 = "16cwqxxb19m91d7rx7awri1awz7d8cfnrv0rbql9rbg5qjyqxcp9";
+    version = "0.12.0";
+    sha256 = "1lycy789wzh1fcg7qcl540546bgw4b9kjlbh2j4hnm0bs9696b2a";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
