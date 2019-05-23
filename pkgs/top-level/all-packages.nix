@@ -18284,6 +18284,8 @@ in
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
+  leftwm = callPackage ../applications/window-managers/leftwm { };
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
   slack-dark = pkgs.slack.override { darkMode = true; };
 
