@@ -19839,9 +19839,6 @@ in
 
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
     boost = boost166;
-  };
-  rstudio-preview = libsForQt5.callPackage ../applications/editors/rstudio/preview.nix {
-    boost = boost166;
     llvmPackages = llvmPackages_7;
   };
 
