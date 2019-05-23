@@ -36,6 +36,18 @@ rec {
     };
   };
 
+  formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "auto-close-tag";
+      publisher = "formulahendry";
+      version = "0.5.6";
+      sha256 = "058jgmllqb0j6gg5anghdp35nkykii28igfcwqgh4bp10pyvspg0";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   justusadam.language-haskell = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "language-haskell";
