@@ -1,0 +1,17 @@
+diff --git a/pixman/pixman-private.h b/pixman/pixman-private.h
+index 73108a0..73a5414 100644
+--- a/pixman/pixman-private.h
++++ b/pixman/pixman-private.h
+@@ -1,5 +1,3 @@
+-#include <float.h>
+-
+ #ifndef PIXMAN_PRIVATE_H
+ #define PIXMAN_PRIVATE_H
+ 
+@@ -30,6 +28,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <stddef.h>
++#include <float.h>
+ 
+ #include "pixman-compiler.h"
