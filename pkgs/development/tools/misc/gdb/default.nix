@@ -2,13 +2,13 @@
 
 # Build time
 , fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs
+, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python ? null
 , guile ? null
-
 }:
 
 let
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./debug-info-from-env.patch ]
     ++ stdenv.lib.optional stdenv.isDarwin ./darwin-target-match.patch;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ];
 

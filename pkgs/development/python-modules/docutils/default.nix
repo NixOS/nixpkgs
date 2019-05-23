@@ -20,6 +20,11 @@ buildPythonPackage rec {
     ${python.interpreter} test/alltests.py
   '';
 
+  preFixup = ''
+    mkdir -p $out/bin/__pycache__
+    set +x
+  '';
+
   # Create symlinks lacking a ".py" suffix, many programs depend on these names
   postFixup = ''
     (cd $out/bin && for f in *.py; do

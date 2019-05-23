@@ -38,7 +38,7 @@ in buildPythonPackage rec {
   checkInputs = [
     numpy ncurses
   ];
-  buildInputs = [ glibcLocales gdb ];
+  buildInputs = [ glibcLocales ]; # gdb ];
   LC_ALL = "en_US.UTF-8";
 
   checkPhase = ''

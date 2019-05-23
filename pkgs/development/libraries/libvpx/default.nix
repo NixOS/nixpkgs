@@ -40,7 +40,9 @@
 
 let
   inherit (stdenv) is64bit isMips isDarwin isCygwin;
-  inherit (stdenv.lib) enableFeature optional optionals;
+  inherit (stdenv.lib) enableFeature optional optionals optionalString;
+
+  isMusl = stdenv.hostPlatform.libc == "musl";
 in
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
@@ -111,7 +113,7 @@ stdenv.mkDerivation rec {
     (enableFeature ontheflyBitpackingSupport "onthefly-bitpacking")
     (enableFeature errorConcealmentSupport "error-concealment")
     # Shared libraries are only supported on ELF platforms
-    (if isDarwin || isCygwin then
+    (if isDarwin || isCygwin || isMusl then
        "--enable-static --disable-shared"
      else
        "--disable-static --enable-shared")
@@ -163,7 +165,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = ''moveToOutput bin "$bin" '';
+  postInstall = if examplesSupport
+                then ''moveToOutput bin "$bin" ''
+                else ''
+                  mkdir -p "$bin"
+                  mkdir -p "$out"
+                  touch "$bin"/.keep
+                  touch "$out"/.keep
+                '';
 
   meta = with stdenv.lib; {
     description = "WebM VP8/VP9 codec SDK";
