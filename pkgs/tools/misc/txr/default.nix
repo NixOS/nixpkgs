@@ -20,7 +20,17 @@ stdenv.mkDerivation rec {
   # Remove failing test-- mentions 'usr/bin' so probably related :)
   preCheck = "rm -rf tests/017";
 
-  # TODO: install 'tl.vim', make avail when txr is installed or via plugin
+  postInstall = ''
+    d=$out/share/vim-plugins/txr
+    mkdir -p $d/{syntax,ftdetect}
+
+    cp {tl,txr}.vim $d/syntax/
+
+    cat > $d/ftdetect/txr.vim <<EOF
+      au BufRead,BufNewFile *.txr set filetype=txr | set lisp
+      au BufRead,BufNewFile *.tl,*.tlo set filetype=tl | set lisp
+    EOF
+  '';
 
   meta = with stdenv.lib; {
     description = "Programming language for convenient data munging";
