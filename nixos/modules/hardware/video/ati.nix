@@ -21,10 +21,11 @@ in
     nixpkgs.config.xorg.abiCompat = "1.17";
 
     services.xserver.drivers = singleton
-      { name = "fglrx"; modules = [ ati_x11 ]; libPath = [ "${ati_x11}/lib" ]; };
+      { name = "fglrx"; modules = [ ati_x11 ]; };
 
     hardware.opengl.package = ati_x11;
     hardware.opengl.package32 = pkgs.pkgsi686Linux.linuxPackages.ati_drivers_x11.override { libsOnly = true; kernel = null; };
+    hardware.opengl.setLdLibraryPath = true;
 
     environment.systemPackages = [ ati_x11 ];
 
