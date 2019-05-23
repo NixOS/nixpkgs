@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
       url = https://patchwork.freedesktop.org/patch/177506/raw;
       sha256 = "0rvraq93769dy2im2m022rz99fcdxprgc2fbmasnddcwrqy1x3xr";
     })
-  ];
+  ] ++
+  stdenv.lib.optionals (stdenv.hostPlatform.libc == "musl") [ ./pixman-musl.patch ];
 
   nativeBuildInputs = [ pkgconfig ]
     ++ stdenv.lib.optionals stdenv.cc.isClang [ autoconf automake libtool autoreconfHook ];
