@@ -1265,4 +1265,21 @@ self: super: {
   # Haddock failure: https://github.com/haskell/haddock/issues/979
   esqueleto = dontHaddock (dontCheck super.esqueleto);
 
+  # Requires API keys to run tests
+  algolia = dontCheck super.algolia;
+
+  # antiope-s3's latest stackage version has a hspec < 2.6 requirement, but
+  # hspec which isn't in stackage is already past that
+  antiope-s3 = doJailbreak super.antiope-s3;
+
+  # Has tasty < 1.2 requirement, but works just fine with 1.2
+  temporary-resourcet = doJailbreak super.temporary-resourcet;
+
+  # Tests require internet
+  dhall_1_23_0 = dontCheck super.dhall_1_23_0;
+
+  # Requires dhall >= 1.23.0
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_23_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_23_0; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

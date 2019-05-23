@@ -2625,11 +2625,9 @@ broken-packages:
   - AC-VanillaArray
   - AC-Vector
   - AC-Vector-Fancy
-  - accelerate
   - accelerate-arithmetic
   - accelerate-fftw
   - accelerate-fourier
-  - accelerate-io
   - accelerate-llvm
   - accelerate-llvm-native
   - accelerate-random
@@ -2693,7 +2691,6 @@ broken-packages:
   - aeson-applicative
   - aeson-decode
   - aeson-diff-generic
-  - aeson-extra
   - aeson-flowtyped
   - aeson-injector
   - aeson-native
@@ -2721,9 +2718,6 @@ broken-packages:
   - airship
   - airtable-api
   - aivika-distributed
-  - aivika-experiment-cairo
-  - aivika-experiment-chart
-  - aivika-experiment-diagrams
   - ajhc
   - AlanDeniseEricLauren
   - alerta
@@ -2736,7 +2730,6 @@ broken-packages:
   - algebraic
   - algebraic-prelude
   - algo-s
-  - algolia
   - AlgoRhythm
   - AlgorithmW
   - align-text
@@ -2757,7 +2750,6 @@ broken-packages:
   - amazon-emailer
   - amazon-emailer-client-snap
   - amazon-products
-  - amazonka-s3-streaming
   - amby
   - AMI
   - ampersand
@@ -2789,10 +2781,6 @@ broken-packages:
   - anticiv
   - antigate
   - antimirov
-  - antiope-contract
-  - antiope-messages
-  - antiope-s3
-  - antiope-sqs
   - antisplice
   - antlr-haskell
   - antlrc
@@ -2892,14 +2880,12 @@ broken-packages:
   - atlassian-connect-core
   - atmos-dimensional-tf
   - atndapi
-  - atom-conduit
   - atom-msp430
   - atomic-modify
   - atomic-primops-foreign
   - atomic-primops-vector
   - atomo
   - ats-format
-  - ats-pkg
   - ats-setup
   - ats-storable
   - attic-schedule
@@ -4024,7 +4010,6 @@ broken-packages:
   - dgs
   - dhall-check
   - dhall-nix
-  - dhall-to-cabal
   - dhcp-lease-parser
   - di
   - di-df1
@@ -9124,7 +9109,6 @@ broken-packages:
   - templatepg
   - tempodb
   - temporal-csound
-  - temporary-resourcet
   - tempus
   - tensor
   - tensorflow
