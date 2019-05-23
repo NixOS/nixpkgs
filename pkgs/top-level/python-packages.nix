@@ -335,6 +335,8 @@ in {
 
   cozy = callPackage ../development/python-modules/cozy { };
 
+  curio = callPackage ../development/python-modules/curio { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
