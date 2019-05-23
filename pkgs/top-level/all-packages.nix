@@ -10742,6 +10742,7 @@ in
   };
 
   gtk2-x11 = gtk2.override {
+    cairo = cairo.override { x11Support = true; };
     gdktarget = "x11";
   };
 
@@ -10751,6 +10752,7 @@ in
 
   # On darwin gtk uses cocoa by default instead of x11.
   gtk3-x11 = gtk3.override {
+    cairo = cairo.override { x11Support = true; };
     x11Support = true;
   };
 
