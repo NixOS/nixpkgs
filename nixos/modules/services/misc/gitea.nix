@@ -159,7 +159,8 @@ in
 
         socket = mkOption {
           type = types.nullOr types.path;
-          default = null;
+          default = if (cfg.database.createDatabase && usePostgresql) then "/run/postgresql" else if (cfg.database.createDatabase && useMysql) then "/run/mysqld/mysqld.sock" else null;
+          defaultText = "null";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
@@ -173,10 +174,7 @@ in
         createDatabase = mkOption {
           type = types.bool;
           default = true;
-          description = ''
-            Whether to create a local postgresql database automatically.
-            This only applies if database type "postgres" is selected.
-          '';
+          description = "Whether to create a local database automatically.";
         };
       };
 
@@ -277,7 +275,34 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.postgresql.enable = mkIf usePostgresql (mkDefault true);
+    assertions = [
+      { assertion = cfg.database.createDatabase -> cfg.database.user == cfg.user;
+        message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
+      }
+    ];
+
+    services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
+      enable = mkDefault true;
+
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        { name = cfg.database.user;
+          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+        }
+      ];
+    };
+
+    services.mysql = optionalAttrs (useMysql && cfg.database.createDatabase) {
+      enable = mkDefault true;
+      package = mkDefault pkgs.mariadb;
+
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        { name = cfg.database.user;
+          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+        }
+      ];
+    };
 
     systemd.services.gitea = {
       description = "gitea";
@@ -330,22 +355,6 @@ in
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
-        fi
-      '' + optionalString (usePostgresql && cfg.database.createDatabase) ''
-        if ! test -e "${cfg.stateDir}/db-created"; then
-          echo "CREATE ROLE ${cfg.database.user}
-                  WITH ENCRYPTED PASSWORD '$(head -n1 ${cfg.database.passwordFile})'
-                  NOCREATEDB NOCREATEROLE LOGIN"   |
-            ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.package}/bin/psql
-          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
-            ${pg.package}/bin/createdb             \
-            --owner=${cfg.database.user}           \
-            --encoding=UTF8                        \
-            --lc-collate=C                         \
-            --lc-ctype=C                           \
-            --template=template0                   \
-            ${cfg.database.name}
-          touch "${cfg.stateDir}/db-created"
         fi
       '' + ''
         chown ${cfg.user} -R ${cfg.stateDir}
