@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, scons, pkgconfig, SDL, lua, fftwFloat, zlib, bzip2 }:
+{ stdenv, fetchFromGitHub, scons, pkgconfig, SDL2, lua, fftwFloat, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   name = "the-powder-toy-${version}";
-  version = "93.3";
+  version = "94.1";
 
   src = fetchFromGitHub {
     owner = "ThePowderToy";
     repo = "The-Powder-Toy";
     rev = "v${version}";
-    sha256 = "1bg1y13kpqxx4mpncxvmg8w02dyqyd9hl43rwnys3sqrjdm9k02j";
+    sha256 = "0w3i4zjkw52qbv3s9cgcwxrdbb1npy0ka7wygyb76xcb17bj0l0b";
   };
 
   nativeBuildInputs = [ scons pkgconfig ];
 
-  buildInputs = [ SDL lua fftwFloat zlib bzip2 ];
+  buildInputs = [ SDL2 lua fftwFloat zlib bzip2 ];
 
   sconsFlags = "--tool=";
 
