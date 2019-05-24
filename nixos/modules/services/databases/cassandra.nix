@@ -22,11 +22,11 @@ let
              else {})
     );
   cassandraConfigWithAddresses = cassandraConfig //
-    ( if isNull cfg.listenAddress
+    ( if cfg.listenAddress == null
         then { listen_interface = cfg.listenInterface; }
         else { listen_address = cfg.listenAddress; }
     ) // (
-      if isNull cfg.rpcAddress
+      if cfg.rpcAddress == null
         then { rpc_interface = cfg.rpcInterface; }
         else { rpc_address = cfg.rpcAddress; }
     );
@@ -219,19 +219,13 @@ in {
   config = mkIf cfg.enable {
     assertions =
       [ { assertion =
-            ((isNull cfg.listenAddress)
-             || (isNull cfg.listenInterface)
-            ) && !((isNull cfg.listenAddress)
-                   && (isNull cfg.listenInterface)
-                  );
+          (cfg.listenAddress == null || cfg.listenInterface == null)
+          && !(cfg.listenAddress == null && cfg.listenInterface == null);
           message = "You have to set either listenAddress or listenInterface";
         }
         { assertion =
-            ((isNull cfg.rpcAddress)
-             || (isNull cfg.rpcInterface)
-            ) && !((isNull cfg.rpcAddress)
-                   && (isNull cfg.rpcInterface)
-                  );
+          (cfg.rpcAddress == null || cfg.rpcInterface == null)
+          && !(cfg.rpcAddress == null && cfg.rpcInterface == null);
           message = "You have to set either rpcAddress or rpcInterface";
         }
       ];
@@ -276,7 +270,7 @@ in {
           };
       };
     systemd.timers.cassandra-full-repair =
-      mkIf (!isNull cfg.fullRepairInterval) {
+      mkIf (cfg.fullRepairInterval != null) {
         description = "Schedule full repairs on Cassandra";
         wantedBy = [ "timers.target" ];
         timerConfig =
@@ -300,7 +294,7 @@ in {
           };
       };
     systemd.timers.cassandra-incremental-repair =
-      mkIf (!isNull cfg.incrementalRepairInterval) {
+      mkIf (cfg.incrementalRepairInterval != null) {
         description = "Schedule incremental repairs on Cassandra";
         wantedBy = [ "timers.target" ];
         timerConfig =

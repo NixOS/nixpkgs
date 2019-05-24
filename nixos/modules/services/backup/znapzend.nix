@@ -248,7 +248,7 @@ let
   cfg = config.services.znapzend;
 
   onOff = b: if b then "on" else "off";
-  nullOff = b: if isNull b then "off" else toString b;
+  nullOff = b: if b == null then "off" else toString b;
   stripSlashes = replaceStrings [ "/" ] [ "." ];
 
   attrsToFile = config: concatStringsSep "\n" (builtins.attrValues (
@@ -256,7 +256,7 @@ let
 
   mkDestAttrs = dst: with dst;
     mapAttrs' (n: v: nameValuePair "dst_${label}${n}" v) ({
-      "" = optionalString (! isNull host) "${host}:" + dataset;
+      "" = optionalString (host != null) "${host}:" + dataset;
       _plan = plan;
     } // optionalAttrs (presend != null) {
       _precmd = presend;

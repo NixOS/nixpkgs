@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, zlib, qtbase, qmake }:
+{ fetchFromGitHub, stdenv, zlib, qtbase, qmake, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "quazip";
@@ -12,12 +12,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib qtbase ];
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  qmakeFlags = [ "quazip" ]
+    ++ stdenv.lib.optional stdenv.isDarwin [ "LIBS=-lz" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Provides access to ZIP archives from Qt programs";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.lgpl21Plus;
     homepage = https://stachenov.github.io/quazip/; # Migrated from http://quazip.sourceforge.net/
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

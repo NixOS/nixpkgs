@@ -145,7 +145,7 @@ let
   displayOptionsGraph =
      let
        checkList =
-         if !(isNull testOption) then [ testOption ]
+         if testOption != null then [ testOption ]
          else testOptions;
        checkAll = checkList == [];
      in

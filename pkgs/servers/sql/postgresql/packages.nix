@@ -31,6 +31,8 @@ self: super: {
 
     pgtap = super.callPackage ./ext/pgtap.nix { };
 
+    pipelinedb = super.callPackage ./ext/pipelinedb.nix { };
+
     timescaledb = super.callPackage ./ext/timescaledb.nix { };
 
     tsearch_extras = super.callPackage ./ext/tsearch_extras.nix { };

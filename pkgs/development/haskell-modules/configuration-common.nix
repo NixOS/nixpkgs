@@ -1236,8 +1236,9 @@ self: super: {
   pandoc = doDistribute super.pandoc_2_7_2;
   pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_2;
 
-  # https://github.com/qfpl/tasty-hedgehog/issues/24
-  tasty-hedgehog = dontCheck super.tasty-hedgehog;
+  # Current versions of tasty-hedgehog need hedgehog 1.x, which
+  # we don't have in LTS-13.x.
+  tasty-hedgehog = super.tasty-hedgehog.override { hedgehog = self.hedgehog_1_0; };
 
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"

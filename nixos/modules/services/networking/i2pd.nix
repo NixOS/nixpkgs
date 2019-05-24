@@ -12,9 +12,9 @@ let
   boolOpt = k: v: k + " = " + boolToString v;
   intOpt = k: v: k + " = " + toString v;
   lstOpt = k: xs: k + " = " + concatStringsSep "," xs;
-  optionalNullString = o: s: optional (! isNull s) (strOpt o s);
-  optionalNullBool = o: b: optional (! isNull b) (boolOpt o b);
-  optionalNullInt = o: i: optional (! isNull i) (intOpt o i);
+  optionalNullString = o: s: optional (s != null) (strOpt o s);
+  optionalNullBool = o: b: optional (b != null) (boolOpt o b);
+  optionalNullInt = o: i: optional (i != null) (intOpt o i);
   optionalEmptyList = o: l: optional ([] != l) (lstOpt o l);
 
   mkEnableTrueOption = name: mkEnableOption name // { default = true; };
@@ -225,7 +225,7 @@ let
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
     exec ${pkgs.i2pd}/bin/i2pd \
-      ${if isNull cfg.address then "" else "--host="+cfg.address} \
+      ${if cfg.address == null then "" else "--host="+cfg.address} \
       --service \
       --conf=${i2pdConf} \
       --tunconf=${tunnelConf}
