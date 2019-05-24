@@ -850,6 +850,8 @@ in {
 
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
 
+  python-redis-lock = callPackage ../development/python-modules/python-redis-lock { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-snappy = callPackage ../development/python-modules/python-snappy {
