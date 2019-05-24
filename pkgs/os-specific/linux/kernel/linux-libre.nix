@@ -4,8 +4,8 @@
 
     # Update this if linux_latest-libre fails to build.
     # $ curl https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/tags/ | grep -Eo 'Revision [0-9]+'
-    rev = "16063";
-    sha256 = "0y4icpkysnf15bpkj71g8samhj516913mx6ng5fb2hdxc4009bx2";
+    rev = "16330";
+    sha256 = "1d7rsq2m6lp1784cgdg95aspgrnzxm6q9dxqalxja5cac8n6p11y";
   }
 , ...
 }:
