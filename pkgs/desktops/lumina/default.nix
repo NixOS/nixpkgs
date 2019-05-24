@@ -4,6 +4,7 @@ let
   packages = self: with self; {
 
     lumina = callPackage ./lumina { };
+    lumina-calculator = callPackage ./lumina-calculator { };
 
     preRequisitePackages = [
       pkgs.fluxbox
@@ -15,6 +16,7 @@ let
 
     corePackages = [
       lumina
+      lumina-calculator
     ];
 
   };
