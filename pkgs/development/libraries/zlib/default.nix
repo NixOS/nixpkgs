@@ -63,6 +63,9 @@ stdenv.mkDerivation (rec {
     "LIBRARY_PATH=$(out)/lib"
   ];
 
+  enableParallelBuilding = true;
+  doCheck = true;
+
   makeFlags = [
     "PREFIX=${stdenv.cc.targetPrefix}"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
@@ -80,6 +83,7 @@ stdenv.mkDerivation (rec {
     description = "Lossless data-compression library";
     license = licenses.zlib;
     platforms = platforms.all;
+    maintainers = [ ];
   };
 } // stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preConfigure = ''
