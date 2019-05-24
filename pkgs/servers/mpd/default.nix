@@ -22,7 +22,7 @@
 
 let
   major = "0.21";
-  minor = "8";
+  minor = "9";
 
   lib = stdenv.lib;
   mkDisable = f: "-D${f}=disabled";
@@ -103,7 +103,7 @@ let
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "1wh2l94072k0n8n7lb4c844azkaw2d9xsxrznv04f0x7p8dldg8x";
+        sha256 = "1qiigs62pima7pxb6fa7jm0xbgvb7897v89qcl8y2g3gm7sim7g2";
       };
 
       buildInputs = [ glib boost ]
