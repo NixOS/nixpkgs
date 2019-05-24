@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-oss" ];
 
   patchFlags = "-p0";
-  patches = stdenv.lib.optional stdenv.isDarwin
+  patches = [
+    # patch from http://git.0pointer.net/libcanberra.git/commit/?id=c0620e432650e81062c1967cc669829dbd29b310
+    # stripped prefixes manually, because patchFlags can not be set per-patch
+    ./gtk_dont_assume_x11.patch
+  ] ++ stdenv.lib.optional stdenv.isDarwin
     (fetchpatch {
       url = "https://raw.githubusercontent.com/macports/macports-ports/master/audio/libcanberra/files/patch-configure.diff";
       sha256 = "1f7h7ifpqvbfhqygn1b7klvwi80zmpv3538vbmq7ql7bkf1q8h31";
