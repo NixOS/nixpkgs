@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vocal";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "needle-and-thread";
     repo = pname;
     rev = version;
-    sha256 = "09g9692rckdwh1i5krqgfwdx4p67b1q5834cnxahxzpq4p08rf5w";
+    sha256 = "0jz72nmc6qmadsvcpk339x1fm4wg6yx9r1bagr7mcgnz3x5papnr";
   };
 
   nativeBuildInputs = [
