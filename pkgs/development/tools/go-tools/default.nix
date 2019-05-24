@@ -5,16 +5,16 @@
 
 buildGoPackage rec {
   name = "go-tools-${version}";
-  version = "2017.2.2";
+  version = "2019.1.1";
 
   goPackagePath = "honnef.co/go/tools";
-  excludedPackages = ''\(simple\|ssa\|ssa/ssautil\|lint\|staticcheck\|unused\)/testdata'';
+  excludedPackages = ''\(simple\|ssa\|ssa/ssautil\|lint\|staticcheck\|stylecheck\|unused\)/testdata'';
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "go-tools";
     rev = "${version}";
-    sha256 = "1khl6szjj0skkfqp234p9rf3icik7fw2pk2x0wbj3wa9q3f84hb7";
+    sha256 = "1zwh64x3i32p6f6808q609n63xda3bq888n43wl4alpx1b08spha";
   };
 
   goDeps = ./deps.nix;
@@ -23,7 +23,7 @@ buildGoPackage rec {
     description = "A collection of tools and libraries for working with Go code, including linters and static analysis.";
     homepage = https://staticcheck.io;
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [ rvolosatovs kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
