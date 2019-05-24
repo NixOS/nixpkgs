@@ -17,6 +17,12 @@ buildGoModule rec {
 
   buildFlags = "--tags release";
 
+  postInstall = ''
+    # Contains compiler package only used by projects CI, and buildGoModule
+    # installs all binaries by default. So we remove this again.
+    rm $out/bin/compiler
+  '';
+
   meta = with stdenv.lib; {
     description = ''
       This project aims at creating a universal dark theme for Firefox while
