@@ -4,13 +4,10 @@
 }:
 
 let
-  common = { version, sha256, patches ? [] }: stdenvNoCC.mkDerivation {
-    name = "linux-headers-${version}";
+  makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
+    inherit src;
 
-    src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-      inherit sha256;
-    };
+    name = "linux-headers-${version}";
 
     ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or stdenvNoCC.hostPlatform.kernelArch;
 
@@ -73,13 +70,18 @@ let
     };
   };
 in {
+  inherit makeLinuxHeaders;
 
-  linuxHeaders = common {
-    version = "4.19.16";
-    sha256 = "1pqvn6dsh0xhdpawz4ag27vkw1abvb6sn3869i4fbrz33ww8i86q";
-    patches = [
-       ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
-       ./no-dynamic-cc-version-check.patch # so we can use `stdenvNoCC`, see `makeFlags` above
-    ];
-  };
+  linuxHeaders = let version = "4.19.16"; in
+    makeLinuxHeaders {
+      inherit version;
+      src = fetchurl {
+        url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
+        sha256 = "1pqvn6dsh0xhdpawz4ag27vkw1abvb6sn3869i4fbrz33ww8i86q";
+      };
+      patches = [
+         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+         ./no-dynamic-cc-version-check.patch # so we can use `stdenvNoCC`, see `makeFlags` above
+      ];
+    };
 }
