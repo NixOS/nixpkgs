@@ -14,6 +14,12 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ncurses ];
   propagatedBuildInputs = [ camlpdf ];
 
+  makeFlags = with stdenv.lib;
+  optionals (versionAtLeast ocaml.version "4.06") [
+    "OCAMLBCFLAGS+=-unsafe-string"
+    "OCAMLNCFLAGS+=-unsafe-string"
+  ];
+
   createFindlibDestdir = true;
 
   postInstall = ''
