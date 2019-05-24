@@ -2,25 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "hackertyper";
-  version = "20190226";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner  = "Hurricane996";
     repo   = "Hackertyper";
-    rev    = "dc017270777f12086271bb5a1162d0f3613903c4";
-    sha256 = "0szkkkxspmfq1z2n4nldj2c9jn6jgiqik085rx1wkks0zgcdcgy1";
+    rev    = "8d08e3200c65817bd8c5bd0baa5032919315853b";
+    sha256 = "0shri0srihw9fk027k61qkxr9ikwkn28aaamrhps6lg0vpbqpx2w";
   };
-
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildInputs = [ ncurses ];
-
-  preInstall = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man1
-  '';
-
-
 
   doInstallCheck = true;
   installCheckPhase = ''
