@@ -1,7 +1,7 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
 { source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
-, writeText, config, glib, gtk2, gtk3, lua, python, perl, tcl, ruby
+, writeText, config, glib, gtk2-x11, gtk3-x11, lua, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 , vimPlugins
@@ -130,8 +130,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
     libXmu glib libICE ]
-    ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2
-    ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3
+    ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2-x11
+    ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3-x11
     ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc cf-private ]
     ++ stdenv.lib.optional luaSupport lua
     ++ stdenv.lib.optional pythonSupport python
