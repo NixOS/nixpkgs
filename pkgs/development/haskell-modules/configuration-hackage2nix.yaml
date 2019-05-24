@@ -2691,6 +2691,7 @@ broken-packages:
   - aeson-applicative
   - aeson-decode
   - aeson-diff-generic
+  - aeson-extra
   - aeson-flowtyped
   - aeson-injector
   - aeson-native
@@ -2718,6 +2719,9 @@ broken-packages:
   - airship
   - airtable-api
   - aivika-distributed
+  - aivika-experiment-cairo
+  - aivika-experiment-chart
+  - aivika-experiment-diagrams
   - ajhc
   - AlanDeniseEricLauren
   - alerta
@@ -2750,6 +2754,8 @@ broken-packages:
   - amazon-emailer
   - amazon-emailer-client-snap
   - amazon-products
+  - amazonka-cognito-identity
+  - amazonka-ecs
   - amby
   - AMI
   - ampersand
@@ -2880,6 +2886,7 @@ broken-packages:
   - atlassian-connect-core
   - atmos-dimensional-tf
   - atndapi
+  - atom-conduit
   - atom-msp430
   - atomic-modify
   - atomic-primops-foreign
@@ -2950,6 +2957,7 @@ broken-packages:
   - aws-sign4
   - aws-simple
   - aws-sns
+  - axel
   - axiom
   - azubi
   - azure-service-api
@@ -2998,6 +3006,7 @@ broken-packages:
   - battleship-combinatorics
   - battleships
   - bayes-stack
+  - bbi
   - BCMtools
   - bdcs
   - bdcs-api
@@ -3540,6 +3549,7 @@ broken-packages:
   - cmt
   - cmv
   - cnc-spec-compiler
+  - co-log
   - co-log-polysemy
   - co-log-sys
   - Coadjute
@@ -3581,6 +3591,7 @@ broken-packages:
   - combinatorial-problems
   - Combinatorrent
   - combobuffer
+  - comfort-array
   - comic
   - Command
   - commander
@@ -3686,6 +3697,7 @@ broken-packages:
   - context-free-grammar
   - context-stack
   - ContextAlgebra
+  - contiguous
   - contiguous-checked
   - contiguous-fft
   - continue
@@ -4304,6 +4316,7 @@ broken-packages:
   - eros
   - eros-client
   - eros-http
+  - error-codes
   - error-context
   - error-continuations
   - error-list
@@ -4827,6 +4840,7 @@ broken-packages:
   - git-jump
   - git-monitor
   - git-object
+  - git-remote-ipfs
   - git-repair
   - git-sanity
   - git-vogue
@@ -5180,6 +5194,7 @@ broken-packages:
   - harvest-api
   - has
   - has-th
+  - HasBigDecimal
   - HasCacBDD
   - hascas
   - Haschoo
@@ -5424,6 +5439,7 @@ broken-packages:
   - hedgehog-checkers-lens
   - hedgehog-fn
   - hedgehog-gen-json
+  - hedgehog-quickcheck
   - Hedi
   - hedis-config
   - hedis-pile
@@ -5898,6 +5914,7 @@ broken-packages:
   - hsx-jmacro
   - hsx-xhtml
   - hsXenCtrl
+  - HsYAML-aeson
   - hsyscall
   - hsyslog-tcp
   - hsyslog-udp
@@ -5990,6 +6007,7 @@ broken-packages:
   - hw-simd
   - hw-streams
   - hw-succinct
+  - hw-uri
   - hw-vector
   - hw-xml
   - hwall-auth-iitk
@@ -6039,6 +6057,7 @@ broken-packages:
   - hypher
   - hzulip
   - i18n
+  - i3blocks-hs-contrib
   - i3ipc
   - iap-verifier
   - ib-api
@@ -6169,6 +6188,7 @@ broken-packages:
   - ip2proxy
   - ipatch
   - ipc
+  - ipld-cid
   - ipopt-hs
   - iptables-helpers
   - iptadmin
@@ -6359,6 +6379,7 @@ broken-packages:
   - keera-hails-reactive-yampa
   - keera-hails-reactivelenses
   - keera-hails-reactivevalues
+  - kerry
   - Ketchup
   - keter
   - kevin
@@ -6485,6 +6506,7 @@ broken-packages:
   - language-vhdl
   - language-webidl
   - lapack
+  - lapack-comfort-array
   - Lastik
   - lat
   - latest-npm-version
@@ -7084,9 +7106,11 @@ broken-packages:
   - multi-cabal
   - multiaddr
   - multiarg
+  - multibase
   - multifile
   - multifocal
   - multihash
+  - multihash-serialise
   - multilinear
   - multilinear-io
   - multipass
@@ -7189,6 +7213,7 @@ broken-packages:
   - netclock
   - netcore
   - netease-fm
+  - netlib-comfort-array
   - netlines
   - netrium
   - NetSNMP
@@ -7299,9 +7324,11 @@ broken-packages:
   - numerical
   - numhask
   - numhask-array
+  - numhask-hedgehog
   - numhask-histogram
   - numhask-prelude
   - numhask-range
+  - numhask-space
   - numhask-test
   - Nussinov78
   - Nutri
@@ -7778,11 +7805,14 @@ broken-packages:
   - prim-array
   - prim-instances
   - primes-type
+  - primitive-addr
+  - primitive-atomic
   - primitive-containers
   - primitive-indexed
   - primitive-maybe
   - primitive-simd
   - primitive-sort
+  - primitive-unlifted
   - primula-board
   - primula-bot
   - pringletons
@@ -8217,11 +8247,13 @@ broken-packages:
   - RNAlien
   - RNAwolf
   - rncryptor
+  - rng-utils
   - rob
   - robin
   - robots-txt
   - roc-cluster
   - roc-cluster-demo
+  - rocksdb-query
   - roku-api
   - rollbar-hs
   - roller
@@ -9070,6 +9102,7 @@ broken-packages:
   - tasty-auto
   - tasty-fail-fast
   - tasty-groundhog-converters
+  - tasty-hedgehog-coverage
   - tasty-integrate
   - tasty-jenkins-xml
   - tasty-laws
@@ -9426,6 +9459,7 @@ broken-packages:
   - typelevel-tensor
   - TypeNat
   - typeparams
+  - typerep-map
   - types-compat
   - typesafe-precure
   - typescript-docs
@@ -9595,6 +9629,7 @@ broken-packages:
   - verilog
   - versioning
   - versioning-servant
+  - vflow-types
   - vfr-waypoints
   - vgrep
   - vhd
