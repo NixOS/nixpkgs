@@ -15,7 +15,6 @@ arcticicestudio/nord-vim
 artur-shaik/vim-javacomplete2
 bazelbuild/vim-bazel
 bbchung/clighter8
-benekastah/neomake
 benmills/vimux
 bhurlow/vim-parinfer
 bitc/vim-hdevtools
@@ -217,8 +216,9 @@ ncm2/ncm2-tmux
 ncm2/ncm2-ultisnips
 neoclide/coc.nvim
 neoclide/vim-easygit
-neovimhaskell/nvim-hs.vim
+neomake/neomake
 neovimhaskell/haskell-vim
+neovimhaskell/nvim-hs.vim
 neovim/nvimdev.nvim
 neutaaaaan/iosvkem
 nixprime/cpsm
