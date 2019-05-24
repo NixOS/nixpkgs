@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "Peltoche";
     repo = pname;
     rev = version;
-    sha256 = "0wh68dxdzkmyrz9dsd3rdr5yrvny3y11xgm2pxb3z83ajngp1hcv";
+    sha256 = "1m8jcmdp66n0vgyzfgknmg4rwc41y9fd4vjgapaggg6lc9cc68gp";
   };
 
   cargoSha256 = "095jf63jyd485fk8pl7grvycn7pkwnxdm5lwkmfl9p46m8q1qqr2";
