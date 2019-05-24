@@ -1,17 +1,28 @@
-{ stdenv, fetchFromGitHub, fluxbox, xscreensaver, desktop-file-utils,
-  numlockx, xorg, qtbase, qtsvg, qtmultimedia, qtx11extras, qmake,
-  qttools, poppler, wrapGAppsHook
+{ stdenv,
+  fetchFromGitHub,
+  desktop-file-utils,
+  fluxbox,
+  numlockx,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  xorg,
+  xscreensaver,
+  wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "lumina-${version}";
-  version = "1.4.0-p1";
+  pname = "lumina";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
-    owner = "trueos";
-    repo = "lumina";
+    owner = "lumina-desktop";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0jin0a2s6pjbpw7w1bz67dgqp0xlpw1a7nh8zv0qwdf954zczanp";
+    sha256 = "0rj2gzifr98db7i82cg3hg7l5yfik810pjpawg6n54qbzq987z25";
   };
 
   nativeBuildInputs = [
@@ -22,6 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     xorg.libxcb
+    xorg.libXcursor
     xorg.libXdamage
     xorg.xcbutilwm
     xorg.xcbutilimage
@@ -29,7 +41,6 @@ stdenv.mkDerivation rec {
     qtsvg
     qtmultimedia
     qtx11extras
-    poppler
     fluxbox
     xscreensaver
     desktop-file-utils
@@ -48,10 +59,6 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    # Fix location of poppler-qt5.h
-    substituteInPlace src-qt5/desktop-utils/lumina-pdf/mainUI.h \
-      --replace '#include <poppler-qt5.h>' '#include <poppler/qt5/poppler-qt5.h>'
-
     # Fix plugin dir
     substituteInPlace src-qt5/core/lumina-theme-engine/lthemeengine.pri \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
@@ -66,8 +73,6 @@ stdenv.mkDerivation rec {
     "CONFIG+=WITH_I18N"
     "LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
   ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A lightweight, portable desktop environment";
