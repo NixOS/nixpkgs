@@ -41,11 +41,13 @@ stdenv.mkDerivation rec {
     ./LuminaOS-NixOS.cpp.patch
   ];
 
-  prePatch = ''
-    # Copy Gentoo setup as NixOS setup and then patch it
-    # TODO: write a complete NixOS setup?
-    cp -a src-qt5/core/libLumina/LuminaOS-Gentoo.cpp src-qt5/core/libLumina/LuminaOS-NixOS.cpp
-  '';
+    preRequisitePackages = [
+      pkgs.fluxbox
+      pkgs.libsForQt5.kwindowsystem
+      pkgs.numlockx
+      pkgs.qt5.qtsvg
+      pkgs.xscreensaver
+    ];
 
   postPatch = ''
     # Fix location of poppler-qt5.h
@@ -81,4 +83,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };
-}
+
+in pkgs.lib.makeScope libsForQt5.newScope packages
