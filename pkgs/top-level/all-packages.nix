@@ -22060,7 +22060,7 @@ in
 
   kakasi = callPackage ../tools/text/kakasi { };
 
-  lumina = libsForQt5.callPackage ../desktops/lumina/lumina { };
+  lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
     inherit pkgs libsForQt5;
