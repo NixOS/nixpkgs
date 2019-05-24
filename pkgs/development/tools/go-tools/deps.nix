@@ -1,4 +1,13 @@
 [
+ {
+    goPackagePath = "github.com/BurntSushi/toml";
+    fetch = {
+      type = "git";
+      url = "https://github.com/BurntSushi/toml";
+      rev = "3012a1dbe2e4bd1391d42b32f0577cb7bbc7f005";
+      sha256 = "1fjdwwfzyzllgiwydknf1pwjvy49qxfsczqx5gz3y0izs7as99j6";
+    };
+  }
   {
     goPackagePath = "github.com/kisielk/gotool";
     fetch = {
@@ -13,8 +22,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/tools";
-      rev = "96e9e165b75e735822645eff82850b08c377be36";
-      sha256 = "1zj9ck5sg9b0pphxybmvxf64hhcap7v7j37fx3v5aknf18crjjdg";
+      rev = "2c0ae70061356820330c96810d9483beb9a6da8e";
+      sha256 = "1lsi2ssxajclj3bciz2a41v1vjv768ja3v6wnbyhxy8xphwkp4fk";
     };
   }
 ]
