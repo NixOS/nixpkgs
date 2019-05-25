@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
       sha256 = "1ddgdlg9s0l2ph6l8lx1m1lx6k50gyxqi3qiwr44ppq1rxs80ny5";
     })
     ./cups-clean-dirty.patch
+    (fetchpatch {
+      name = "CVE-2018-4700.patch";
+      url = "https://github.com/apple/cups/commit/"
+          + "feb4c62b211bfbd78dc10d737d873439ccdfa58c.patch";
+      sha256 = "1g1626sl4vdwbj9jdzpxmxl8gwyykmxr6i4vr2ba3vn140wnv088";
+      includes = [ "cgi-bin/var.c" ];
+    })
   ];
 
   postPatch = ''
