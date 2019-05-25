@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
       cp ${cargo-lock} $out/Cargo.lock
     '';
 
-  cargoSha256 = "0ajm8qp8hi7kn7199ywv26cmjv13phxv72lz8kcq97hxg17x0dkk";
+  cargoSha256 = "19kldw2sx0jd89q5q9cwmdcaan148s45fxlb2m0vdxwb69crb7yp";
 
   meta = with stdenv.lib; {
     description = "Command line helpers for fuzzing";
