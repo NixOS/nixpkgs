@@ -149,7 +149,6 @@ in
       description = "Nagios user ";
       uid         = config.ids.uids.nagios;
       home        = nagiosState;
-      createHome  = true;
       group       = "nagios";
     };
 
@@ -175,13 +174,9 @@ in
         Group = "nagios";
         Restart = "always";
         RestartSec = 2;
-        PermissionsStartOnly = true;
+        LogsDirectory = "nagios";
+        StateDirectory = "nagios";
       };
-
-      preStart = ''
-        mkdir -m 0755 -p ${nagiosState} ${nagiosLogDir}
-        chown -R nagios:nagios ${nagiosState} ${nagiosLogDir}
-      '';
 
       script = ''
         for i in ${toString cfg.plugins}; do
