@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, libev, python }:
+{ stdenv, buildPythonPackage, fetchPypi, libev, python, isPy3k }:
 
 buildPythonPackage rec {
   pname = "bjoern";
@@ -13,7 +13,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     ${python.interpreter} tests/keep-alive-behaviour.py 2>/dev/null
-    ${python.interpreter} tests/test_wsgi_compliance.py
+  '' + stdenv.lib.optionalString isPy3k ''
+    ${python.interpreter} tests/test_wsgi_compliance.py | (! grep -i "fail")
   '';
 
   meta = with stdenv.lib; {
