@@ -41,8 +41,7 @@ stdenv.mkDerivation {
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
     '';
 
-  # gcc: error: ../../device_mapper/libdevice-mapper.a: No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
