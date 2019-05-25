@@ -34,11 +34,11 @@ stdenv.mkDerivation {
 
   preConfigure =
     ''
-      substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/bin/udevadm ${systemd}/bin/udevadm
-
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
+    '' + stdenv.lib.optionalString (systemd != null) ''
+      substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
+        --replace /usr/bin/udevadm ${systemd}/bin/udevadm
     '';
 
   enableParallelBuilding = true;
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     ''
       substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
         --replace $out/sbin/blkid ${utillinux}/sbin/blkid
-
+    '' + stdenv.lib.optionalString (systemd != null) ''
       # Systemd stuff
       mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators
       cp scripts/blk_availability_systemd_red_hat.service $out/etc/systemd/system
