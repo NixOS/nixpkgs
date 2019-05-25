@@ -32,7 +32,7 @@ patchShebangs() {
         shift
     fi
 
-    header "patching script interpreter paths in $@"
+    echo "patching script interpreter paths in $@"
     local f
     local oldPath
     local newPath
@@ -40,6 +40,11 @@ patchShebangs() {
     local args
     local oldInterpreterLine
     local newInterpreterLine
+
+    if [ $# -eq 0 ]; then
+        echo "No arguments supplied to patchShebangs" >0
+        return 0
+    fi
 
     local f
     while IFS= read -r -d $'\0' f; do
@@ -61,7 +66,7 @@ patchShebangs() {
             # - options: something starting with a '-'
             # - environment variables: foo=bar
             if $(echo "$arg0" | grep -q -- "^-.*\|.*=.*"); then
-                echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
+                echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)" >0
                 exit 1
             fi
 
