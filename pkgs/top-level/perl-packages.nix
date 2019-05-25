@@ -12638,32 +12638,36 @@ let
   };
 
   Po4a = buildPerlPackage rec {
-    name = "po4a-0.47";
+    name = "po4a-${version}";
+    version = "0.55";
     src = fetchurl {
-      url = "https://alioth.debian.org/frs/download.php/file/4142/po4a-0.47.tar.gz";
-      sha256 = "5010e1b7df1115cbd475f46587fc05fefc97301f9bba0c2f15106005ca017507";
+      url = "https://github.com/mquinson/po4a/releases/download/v${version}/po4a-${version}.tar.gz";
+      sha256 = "1qss4q5df3nsydsbggb7gg50bn0kdxq5wn8riqm9zwkiq6a4bifg";
     };
-    nativeBuildInputs = [ pkgs.docbook_xsl pkgs.docbook_xsl pkgs.docbook_xsl_ns ];
-    propagatedBuildInputs = [ TextWrapI18N LocaleGettext TermReadKey SGMLSpm ModuleBuild UnicodeLineBreak ModuleBuild ];
-    buildInputs = [ pkgs.gettext pkgs.libxslt pkgs.glibcLocales pkgs.docbook_xml_dtd_412 pkgs.docbook_sgml_dtd_41 pkgs.texlive.combined.scheme-basic pkgs.jade ];
-    LC_ALL="en_US.UTF-8";
+    nativeBuildInputs = [ pkgs.docbook_xsl pkgs.docbook_xsl_ns ModuleBuild ];
+    propagatedBuildInputs = [ TextWrapI18N LocaleGettext TermReadKey SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
+    buildInputs = [ pkgs.gettext pkgs.libxslt pkgs.glibcLocales pkgs.docbook_xml_dtd_412 pkgs.docbook_sgml_dtd_41 pkgs.texlive.combined.scheme-basic pkgs.opensp ];
+    LC_ALL = "en_US.UTF-8";
     SGML_CATALOG_FILES = "${pkgs.docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml";
     preConfigure = ''
       touch Makefile.PL
       export PERL_MB_OPT="--install_base=$out --prefix=$out"
-      substituteInPlace Po4aBuilder.pm --replace "\$self->install_sets(\$self->installdirs)->{'bindoc'}" "'$out/share/man/man1'"
     '';
-
     buildPhase = "perl Build.PL --install_base=$out --install_path=\"lib=$out/${perl.libPrefix}\"; ./Build build";
-    installPhase = "./Build install";
     checkPhase = ''
       export SGML_CATALOG_FILES=${pkgs.docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat
       ./Build test
     '';
+    installPhase = ''
+      ./Build install
+      for f in $out/bin/*; do
+        substituteInPlace $f --replace "#! /usr/bin/env perl" "#!${perl}/bin/perl"
+      done
+    '';
     meta = {
-      homepage = https://po4a.alioth.debian.org/;
-      description = "tools for helping translation of documentation";
-      license = with stdenv.lib.licenses; [ gpl2 ];
+      homepage = "https://po4a.org/";
+      description = "Tools for helping translation of documentation";
+      license = stdenv.lib.licenses.gpl2;
     };
   };
 
