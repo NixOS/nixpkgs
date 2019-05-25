@@ -13987,9 +13987,10 @@ in
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = callPackages ../development/interpreters/perl {};
-  inherit (perlInterpreters) perl528 perldevel;
+  inherit (perlInterpreters) perl528 perl530 perldevel;
 
   perl528Packages = recurseIntoAttrs perl528.pkgs;
+  perl530Packages = recurseIntoAttrs perl530.pkgs;
   perldevelPackages = perldevel.pkgs;
 
   perl = perl528;
