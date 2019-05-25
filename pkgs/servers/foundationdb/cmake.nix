@@ -41,9 +41,10 @@ let
 
         cmakeFlags =
           [ "-DCMAKE_BUILD_TYPE=Release"
-            "-DLIBRESSL_USE_STATIC_LIBS=FALSE"
+            (lib.optionalString officialRelease "FDB_RELEASE=1")
 
-            # CMake can't find these easily for some reason?
+            # FIXME: why can't libressl be found automatically?
+            "-DLIBRESSL_USE_STATIC_LIBS=FALSE"
             "-DLIBRESSL_INCLUDE_DIR=${libressl.dev}"
             "-DLIBRESSL_CRYPTO_LIBRARY=${libressl.out}/lib/libcrypto.so"
             "-DLIBRESSL_SSL_LIBRARY=${libressl.out}/lib/libssl.so"
@@ -51,8 +52,6 @@ let
 
             # LTO brings up overall build time, but results in much smaller
             # binaries for all users and the cache.
-            #
-            # TODO FIXME: bugs :(
             (lib.optionalString (!useClang) "-DUSE_LTO=ON")
 
             # Gold helps alleviate the link time, especially when LTO is
@@ -60,10 +59,12 @@ let
             # Same with LLD when Clang is available.
             (lib.optionalString useClang    "-DUSE_LD=LLD")
             (lib.optionalString (!useClang) "-DUSE_LD=GOLD")
-          ]
-          ++ lib.optional officialRelease [ "FDB_RELEASE=1" ];
+          ];
 
         inherit patches;
+
+        # fix up the use of the very weird and custom 'fdb_install' command by just
+        # replacing it with cmake's ordinary version.
         postPatch = ''
           for x in bindings/c/CMakeLists.txt fdbserver/CMakeLists.txt fdbmonitor/CMakeLists.txt fdbbackup/CMakeLists.txt fdbcli/CMakeLists.txt; do 
             substituteInPlace $x --replace 'fdb_install' 'install'

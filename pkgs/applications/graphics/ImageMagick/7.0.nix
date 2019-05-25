@@ -13,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.8-34";
-    sha256 = "0szkzwy0jzmwx4kqli21jq8pk3s53v37q0nsaqzascs3mpkbza2s";
+    version = "7.0.8-46";
+    sha256 = "1si3rv3b9jgjkwyny5ja76s8c0z9vyic28fm63j1jrqdd2jyq3pk";
     patches = [];
   };
 in
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     inherit (cfg) sha256;
   };
 
-  patches = [ ./imagetragick.patch ] ++ cfg.patches;
+  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny

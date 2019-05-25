@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkgconfig
-, xlibsWrapper, libxcb, libXrandr, libXext, wayland, libGL_driver }:
+, xlibsWrapper, libxcb, libXrandr, libXext, wayland, addOpenGLRunpath }:
 
 let
   version = "1.1.106";
@@ -17,16 +17,22 @@ stdenv.mkDerivation rec {
     sha256 = "0zhrwj1gi90x2w8gaaaw5h4b969a8gfy244kn0drrplhhb1nqz3b";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig addOpenGLRunpath ];
   buildInputs = [ cmake python3 xlibsWrapper libxcb libXrandr libXext wayland ];
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DFALLBACK_DATA_DIRS=${libGL_driver.driverLink}/share:/usr/local/share:/usr/share"
+    "-DFALLBACK_DATA_DIRS=${addOpenGLRunpath.driverLink}/share:/usr/local/share:/usr/share"
     "-DVULKAN_HEADERS_INSTALL_DIR=${vulkan-headers}"
   ];
 
   outputs = [ "out" "dev" ];
+
+  # Set RUNPATH so that driver libraries in /run/opengl-driver(-32)/lib can be found.
+  # See the explanation in addOpenGLRunpath.
+  postFixup = ''
+    addOpenGLRunpath $out/lib/libvulkan.so
+  '';
 
   meta = with stdenv.lib; {
     description = "LunarG Vulkan loader";

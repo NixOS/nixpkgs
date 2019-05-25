@@ -54,6 +54,7 @@ let
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
+      mkdir -p "''${GOPATH}/pkg/mod/cache/download"
 
       runHook postConfigure
     '';

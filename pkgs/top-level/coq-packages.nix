@@ -33,6 +33,7 @@ let
       interval = callPackage ../development/coq-modules/interval {};
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
       iris = callPackage ../development/coq-modules/iris {};
+      ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
       inherit (callPackage ../development/coq-modules/mathcomp { })
         mathcompGen mathcompGenSingle mathcompCorePkgs_1_7 mathcompCorePkgs_1_8 mathcompCorePkgs

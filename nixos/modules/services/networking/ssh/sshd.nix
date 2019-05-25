@@ -4,6 +4,15 @@ with lib;
 
 let
 
+  sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ cfgc.package ]; } ''
+    cat >$out <<EOL
+    ${cfg.extraConfig}
+    EOL
+
+    ssh-keygen -f mock-hostkey -N ""
+    sshd -t -f $out -h mock-hostkey
+  '';
+
   cfg  = config.services.openssh;
   cfgc = config.programs.ssh;
 
@@ -339,7 +348,7 @@ in
 
     environment.etc = authKeysFiles //
       { "ssh/moduli".source = cfg.moduliFile;
-        "ssh/sshd_config".text = cfg.extraConfig;
+        "ssh/sshd_config".source = sshconf;
       };
 
     systemd =

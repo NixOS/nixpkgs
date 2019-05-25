@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-}:
+{ lib, buildPythonPackage, fetchFromGitHub
+, pytest_3 }:
 
 buildPythonPackage rec {
   pname = "zxcvbn-python";
-  version = "4.4.24";
+  version = "4.4.27";
 
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "900b28cc5e96be4091d8778f19f222832890264e338765a1c1c09fca2db64b2d";
+  src = fetchFromGitHub {
+    owner = "dwolfhub";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0w0sx9ssjks8da973cdv5xi87yjsf038jqxmzj2y26xvpyjsg2v2";
   };
 
-  # No tests in archive
-  doCheck = false;
+  checkInputs = [
+    pytest_3
+  ];
 
   meta = {
     description = "Python implementation of Dropbox's realistic password strength estimator, zxcvbn";

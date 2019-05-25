@@ -1,20 +1,23 @@
-{ stdenv, lib, dpkg, fetchurl, gtk2, jre, libXtst, makeWrapper }:
+{ stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "xmind-${version}";
-  version = "7.5-update1";
+  version = "8-update8";
 
-  src = if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
-    url = "http://dl2.xmind.net/xmind-downloads/${name}-linux_i386.deb";
-    sha256 = "04kr6pw0kwy715bp9wcnqnw1k5wl65xa87lhljrskm291p402jy1";
-  } else if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
-    url = "http://dl2.xmind.net/xmind-downloads/${name}-linux_amd64.deb";
-    sha256 = "1j2ynhk7p3m3vd6c4mjwpnlzqgfj5c4q3zydab3nfwncwx6gaqj9";
-  } else throw "platform ${stdenv.hostPlatform.system} not supported!";
+  src = fetchzip {
+    url = "https://xmind.net/xmind/downloads/${name}-linux.zip";
+    stripRoot = false;
+    sha256 = "1p68z0b4brgiyybz190alqv716ncql49vsksm41y90mcjd8s4jhn";
+  };
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  srcIcon = fetchurl {
+    url = "https://aur.archlinux.org/cgit/aur.git/plain/xmind.png?h=xmind";
+    sha256 = "0jxq2fiq69q9ly0m6hx2qfybqad22sl42ciw636071khpqgc885f";
+  };
 
-  unpackCmd = "mkdir root ; dpkg-deb -x $curSrc root";
+  patches = [ ./java-env-config-fixes.patch ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
   dontPatchELF = true;
@@ -22,12 +25,27 @@ stdenv.mkDerivation rec {
 
   libPath = lib.makeLibraryPath [ gtk2 libXtst ];
 
-  installPhase = ''
-    mkdir -p $out
-    cp -r usr/lib/xmind $out/libexec
-    cp -r usr/bin usr/share $out
-    rm $out/libexec/XMind.ini
-    mv etc/XMind.ini $out/libexec
+  desktopItem = makeDesktopItem {
+    name = "XMind";
+    exec = "XMind";
+    icon = "xmind";
+    desktopName = "XMind";
+    comment = meta.description;
+    categories = "Office;";
+    mimeType = "application/xmind;xscheme-handler/xmind";
+  };
+
+  installPhase = let
+    targetDir = if stdenv.hostPlatform.system == "i686-linux"
+      then "XMind_i386"
+      else "XMind_amd64";
+  in ''
+    mkdir -p $out/{bin,libexec/configuration/,share/{applications/,fonts/,icons/hicolor/scalable/apps/}}
+    cp -r ${targetDir}/{configuration,p2,XMind{,.ini}} $out/libexec
+    cp -r {plugins,features} $out/libexec/
+    cp -r fonts $out/share/fonts/
+    cp "${desktopItem}/share/applications/XMind.desktop" $out/share/applications/XMind.desktop
+    cp ${srcIcon} $out/share/icons/hicolor/scalable/apps/xmind.png
 
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       $out/libexec/XMind
@@ -35,8 +53,17 @@ stdenv.mkDerivation rec {
     wrapProgram $out/libexec/XMind \
       --prefix LD_LIBRARY_PATH : "${libPath}"
 
-    substituteInPlace "$out/bin/XMind" \
-       --replace '/usr/lib/xmind' "$out/libexec"
+    # Inspired by https://aur.archlinux.org/cgit/aur.git/tree/?h=xmind
+    cat >$out/bin/XMind <<EOF
+      #! ${runtimeShell}
+      if [ ! -d "\$HOME/.xmind" ]; then
+        mkdir -p "\$HOME/.xmind/configuration-cathy/"
+        cp -r $out/libexec/configuration/ \$HOME/.xmind/configuration-cathy/
+      fi
+
+      exec "$out/libexec/XMind" "$@"
+    EOF
+    chmod +x $out/bin/XMind
 
     ln -s ${jre} $out/libexec/jre
   '';
@@ -55,9 +82,9 @@ stdenv.mkDerivation rec {
       GTD. Meanwhile, XMind can read FreeMind and MindManager files,
       and save to Evernote.
     '';
-    homepage = http://www.xmind.net/;
+    homepage = https://www.xmind.net/;
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ michalrus ];
+    maintainers = with maintainers; [ michalrus ma27 ];
   };
 }

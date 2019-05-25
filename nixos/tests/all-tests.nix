@@ -89,11 +89,12 @@ in
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
   gjs = handleTest ./gjs.nix {};
-  google-oslogin = handleTest ./google-oslogin {};
   gnome3 = handleTestOn ["x86_64-linux"] ./gnome3.nix {}; # libsmbios is unsupported on aarch64
   gnome3-gdm = handleTestOn ["x86_64-linux"] ./gnome3-gdm.nix {}; # libsmbios is unsupported on aarch64
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
+  google-oslogin = handleTest ./google-oslogin {};
+  graphene = handleTest ./graphene.nix {};
   grafana = handleTest ./grafana.nix {};
   graphite = handleTest ./graphite.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
@@ -151,6 +152,7 @@ in
   mumble = handleTest ./mumble.nix {};
   munin = handleTest ./munin.nix {};
   mutableUsers = handleTest ./mutable-users.nix {};
+  mxisd = handleTest ./mxisd.nix {};
   mysql = handleTest ./mysql.nix {};
   mysqlBackup = handleTest ./mysql-backup.nix {};
   mysqlReplication = handleTest ./mysql-replication.nix {};
@@ -220,6 +222,7 @@ in
   rxe = handleTest ./rxe.nix {};
   samba = handleTest ./samba.nix {};
   sddm = handleTest ./sddm.nix {};
+  signal-desktop = handleTest ./signal-desktop.nix {};
   simple = handleTest ./simple.nix {};
   slim = handleTest ./slim.nix {};
   slurm = handleTest ./slurm.nix {};
@@ -230,6 +233,7 @@ in
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
+  syncthing-init = handleTest ./syncthing-init.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};

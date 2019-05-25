@@ -127,6 +127,7 @@ let
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
+            --set SNAP_NAME "firefox" \
             ${lib.optionalString gdkWayland ''
               --set GDK_BACKEND "wayland" \
             ''}${lib.optionalString (browser ? gtk3)

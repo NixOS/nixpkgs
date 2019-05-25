@@ -1,16 +1,24 @@
-{ stdenv, lib, fetchgit, perl, cdrkit, syslinux, xz, openssl
+{ stdenv, lib, fetchgit, perl, cdrkit, syslinux, xz, openssl, gnu-efi
 , embedScript ? null
 }:
 
 let
   date = "20190318";
   rev = "ebf2eaf515e46abd43bc798e7e4ba77bfe529218";
+  targets = [
+    "bin-x86_64-efi/ipxe.efi"
+    "bin/ipxe.dsk"
+    "bin/ipxe.usb"
+    "bin/ipxe.iso"
+    "bin/ipxe.lkrn"
+    "bin/undionly.kpxe"
+  ];
 in
 
 stdenv.mkDerivation {
   name = "ipxe-${date}-${builtins.substring 0 7 rev}";
 
-  buildInputs = [ perl cdrkit syslinux xz openssl ];
+  buildInputs = [ perl cdrkit syslinux xz openssl gnu-efi ];
 
   src = fetchgit {
     url = https://git.ipxe.org/ipxe.git;
@@ -36,14 +44,17 @@ stdenv.mkDerivation {
     runHook preConfigure
     for opt in $enabledOptions; do echo "#define $opt" >> src/config/general.h; done
     sed -i '/cp \''${ISOLINUX_BIN}/s/$/ --no-preserve=mode/' src/util/geniso
+    substituteInPlace src/Makefile.housekeeping --replace '/bin/echo' echo
     runHook postConfigure
   '';
 
   preBuild = "cd src";
 
+  buildFlags = targets;
+
   installPhase = ''
     mkdir -p $out
-    cp bin/ipxe.dsk bin/ipxe.usb bin/ipxe.iso bin/ipxe.lkrn bin/undionly.kpxe $out
+    cp ${lib.concatStringsSep " " targets} $out
 
     # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
     # let's provide it as a symlink to be compatible in this case.

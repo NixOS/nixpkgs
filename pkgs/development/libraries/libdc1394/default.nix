@@ -3,11 +3,11 @@ libusb1, CoreServices }:
 
 stdenv.mkDerivation rec {
   name = "libdc1394-${version}";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/libdc1394/${name}.tar.gz";
-    sha256 = "0drk4sqvaym9glaraia25mj60rmwqbhy4j9h3x7gqpzfib8ch31m";
+    sha256 = "1v8gq54n1pg8izn7s15yylwjf8r1l1dmzbm2yvf6pv2fmb4mz41b";
   };
 
   buildInputs = [ libusb1 ]
