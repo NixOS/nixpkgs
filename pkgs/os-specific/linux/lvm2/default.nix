@@ -44,7 +44,6 @@ stdenv.mkDerivation {
   # gcc: error: ../../device_mapper/libdevice-mapper.a: No such file or directory
   enableParallelBuilding = false;
 
-  #patches = [ ./purity.patch ];
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       name = "fix-stdio-usage.patch";
