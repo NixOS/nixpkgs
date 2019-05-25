@@ -58,9 +58,7 @@ let
 
       <Directory "${pkgs.nagios}/sbin">
         Options ExecCGI
-        AllowOverride None
-        Order allow,deny
-        Allow from all
+        Require all granted
         SetEnv NAGIOS_CGI_CONFIG ${cfg.cgiConfigFile}
       </Directory>
 
@@ -68,9 +66,7 @@ let
 
       <Directory "${pkgs.nagios}/share">
         Options None
-        AllowOverride None
-        Order allow,deny
-        Allow from all
+        Require all granted
       </Directory>
     '';
 
