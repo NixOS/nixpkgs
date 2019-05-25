@@ -5278,6 +5278,8 @@ in {
 
   clize = callPackage ../development/python-modules/clize { };
 
+  rl-coach = callPackage ../development/python-modules/rl-coach { };
+
   zerobin = callPackage ../development/python-modules/zerobin { };
 
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
