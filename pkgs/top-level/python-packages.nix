@@ -5274,6 +5274,8 @@ in {
 
   sigtools = callPackage ../development/python-modules/sigtools { };
 
+  annoy = callPackage ../development/python-modules/annoy { };
+
   clize = callPackage ../development/python-modules/clize { };
 
   zerobin = callPackage ../development/python-modules/zerobin { };
