@@ -12,13 +12,14 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "linbox";
-  version = "1.6.1";
+  version = "1.6.2";
+
 
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "11mgj7pkppvzmhx5g6wfnzisk36z00gqzzq9p14hzh5dbdhk3693";
+    sha256 = "038br15hhc8dc1hq0pkv6vb1qx9hjr7hjv3w9fq9qwkd870h2v1q";
   };
 
   nativeBuildInputs = [
@@ -61,7 +62,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [stdenv.lib.maintainers.timokau];
     platforms = stdenv.lib.platforms.unix;
-    broken = stdenv.isDarwin || stdenv.isAarch64; # https://trac.sagemath.org/ticket/26932#comment:21
     homepage = http://linalg.org/;
   };
 }
