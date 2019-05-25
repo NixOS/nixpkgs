@@ -18664,6 +18664,8 @@ in
     python3Packages = python36Packages;
   };
 
+  kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
+
   lame = callPackage ../development/libraries/lame { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
