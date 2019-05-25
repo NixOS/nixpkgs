@@ -84,6 +84,39 @@ in {
         type = types.bool;
         description = "Cadvisor storage driver, enable secure communication.";
       };
+
+      globalHousekeepingInterval = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Interval between global housekeepings.
+
+          The value is parsed with <link xlink:href='https://golang.org/pkg/time/#ParseDuration'>time.ParseDuration</link>.
+        '';
+        example = "1m0s";
+      };
+
+      housekeepingInterval = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Interval between container housekeepings.
+
+          The value is parsed with <link xlink:href='https://golang.org/pkg/time/#ParseDuration'>time.ParseDuration</link>.
+        '';
+        example = "1s";
+      };
+
+      maxHousekeepingInterval = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Largest interval to allow between container housekeepings.
+
+          The value is parsed with <link xlink:href='https://golang.org/pkg/time/#ParseDuration'>time.ParseDuration</link>.
+        '';
+        example = "1m0s";
+      };
     };
   };
 
@@ -112,6 +145,12 @@ in {
             -logtostderr=true \
             -listen_ip="${cfg.listenAddress}" \
             -port="${toString cfg.port}" \
+            ${optionalString (cfg.globalHousekeepingInterval != null)
+              "--global_housekeeping_interval=${cfg.globalHousekeepingInterval}"} \
+            ${optionalString (cfg.housekeepingInterval != null)
+              "--housekeeping_interval=${cfg.housekeepingInterval}"} \
+            ${optionalString (cfg.maxHousekeepingInterval != null)
+              "--max_housekeeping_interval=${cfg.maxHousekeepingInterval}"} \
             ${optionalString (cfg.storageDriver != null) ''
               -storage_driver "${cfg.storageDriver}" \
               -storage_driver_user "${cfg.storageDriverHost}" \
