@@ -20,11 +20,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
   majorVersion = "1.1";
-  version = "${majorVersion}.2";
+  version = "${majorVersion}.3";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${majorVersion}/gajim-${version}.tar.bz2";
-    sha256 = "1lx03cgi58z54xb7mhs6bc715lc00w5mpysf9n3q8zgn759fm0rj";
+    sha256 = "0bzxwcpdd4ydh6d6mzpr0gxwhcb0x9ympk55fpvm1hcw9d28a716";
   };
 
   postPatch = ''
