@@ -1,9 +1,9 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2
+, atomicwrites, mock, writeText, pathlib2, wcwidth
 }:
 buildPythonPackage rec {
-  version = "4.2.1";
+  version = "4.5.0";
   pname = "pytest";
 
   preCheck = ''
@@ -13,12 +13,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c2396a15726218a2dfef480861c4ba37bd3952ebaaa5b0fede3fc23fddcd7f8c";
+    sha256 = "1a8aa4fa958f8f451ac5441f3ac130d9fc86ea38780dd2715e6d5c5882700b24";
   };
 
   checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites]
+  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth ]
     ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
     ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
