@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "0sbj41kypn637z1w115w2h5v6bxz3y6w5ikgpx3ihsh89lkc19d2";
   };
 
-  cargoSha256 = "05asqp5312a1g26pvf5hgqhc4kj3iw2hdvml2ycvga33sxb7zm7r";
+  cargoSha256 = "1179a17lfr3001vp1a2adbkhdm9677n56af2c0zvkr18jas6b2w7";
 
   patches = [ ./fix_cargo_lock_version.patch ];
 

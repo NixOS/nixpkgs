@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1dqdcp34jmphqf3d8ik0xdhg0s66nd5rky0y8y591nidq29wws6s";
   };
 
-  cargoSha256 = "05pf020jp20ffmvin6d1g8zbwf1zk03bm1cb99b7iqkk4r54g6dn";
+  cargoSha256 = "06r682vvr8m7gl443qx9ncmq8dpmdxcls68f29d0mmf7llddy5sa";
 
   postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""

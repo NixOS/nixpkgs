@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "1khknf1bjs80cc2n4jnpilf8cc15crykhhyvvff6q4ay40353gr6";
+  cargoSha256 = "1r2wczfkdpvjc7iylwajkminraaz1ix6n724in0dvv5klfcdxlxb";
 
   postInstall = lib.optionalString (bins != [])  ''
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${stdenv.lib.makeBinPath bins}"
