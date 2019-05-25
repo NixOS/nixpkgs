@@ -21455,6 +21455,8 @@ in
 
   gzdoom = callPackage ../games/gzdoom { };
 
+  harmonist = callPackage ../games/harmonist { };
+
   hawkthorne = callPackage ../games/hawkthorne { love = love_0_9; };
 
   hedgewars = callPackage ../games/hedgewars {
