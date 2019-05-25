@@ -36,7 +36,7 @@ let
 
       # Uid/gid that the daemon runs under.
       nagios_user=nagios
-      nagios_group=nogroup
+      nagios_group=nagios
 
       # Misc. options.
       illegal_macro_output_chars=`~$&|'"<>
@@ -150,7 +150,10 @@ in
       uid         = config.ids.uids.nagios;
       home        = nagiosState;
       createHome  = true;
+      group       = "nagios";
     };
+
+    users.groups.nagios = { };
 
     # This isn't needed, it's just so that the user can type "nagiostats
     # -c /etc/nagios.cfg".
@@ -169,6 +172,7 @@ in
 
       serviceConfig = {
         User = "nagios";
+        Group = "nagios";
         Restart = "always";
         RestartSec = 2;
         PermissionsStartOnly = true;
@@ -176,7 +180,7 @@ in
 
       preStart = ''
         mkdir -m 0755 -p ${nagiosState} ${nagiosLogDir}
-        chown nagios ${nagiosState} ${nagiosLogDir}
+        chown -R nagios:nagios ${nagiosState} ${nagiosLogDir}
       '';
 
       script = ''
