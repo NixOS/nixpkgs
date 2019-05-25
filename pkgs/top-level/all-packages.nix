@@ -16513,6 +16513,8 @@ in
 
   public-sans  = callPackage ../data/fonts/public-sans { };
 
+  publicsuffix-list = callPackage ../data/misc/publicsuffix-list { };
+
   qogir-theme = callPackage ../data/themes/qogir { };
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
