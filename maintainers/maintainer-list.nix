@@ -1769,7 +1769,7 @@
     name = "Frede Emil";
   };
   freepotion = {
-    email = "freepotion@protonmail.com";
+    email = "free.potion@yandex.ru";
     github = "freepotion";
     name = "Free Potion";
   };
