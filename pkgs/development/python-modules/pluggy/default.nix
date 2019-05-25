@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "0.8.1";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ddc32f03971bfdf900a81961a48ccf2fb677cf7715108f85295c67405798616";
+    sha256 = "25a1bc1d148c9a640211872b4ff859878d422bccb59c9965e04eed468a0aa180";
   };
 
   checkPhase = ''
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Plugin and hook calling mechanisms for Python";
-    homepage = "https://pypi.python.org/pypi/pluggy";
+    homepage = "https://github.com/pytest-dev/pluggy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];
   };
