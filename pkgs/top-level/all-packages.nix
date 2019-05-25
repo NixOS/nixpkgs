@@ -16360,6 +16360,8 @@ in
 
   medio = callPackage ../data/fonts/medio { };
 
+  mno16 = callPackage ../data/fonts/mno16 { };
+
   mnist = callPackage ../data/machine-learning/mnist { };
 
   mobile-broadband-provider-info = callPackage ../data/misc/mobile-broadband-provider-info { };
