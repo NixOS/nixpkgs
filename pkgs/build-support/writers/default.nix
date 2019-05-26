@@ -24,6 +24,9 @@ rec {
     }) ''
       echo "#! $interpreter" > $out
       cat "$contentPath" >> $out
+      ${optionalString (check != "") ''
+        ${check} $out
+      ''}
       chmod +x $out
       ${optionalString (types.path.check nameOrPath) ''
         mv $out tmp
