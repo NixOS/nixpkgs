@@ -1,8 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, spice-protocol, gettext, celt_0_5_1
-, openssl, libpulseaudio, pixman, gobject-introspection, libjpeg_turbo, zlib
-, cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
-, withPolkit ? true, polkit, acl, usbutils
-, vala, gtk3, epoxy, libdrm, gst_all_1, phodav, opusfile }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, fetchpatch
+, meson
+, ninja
+, python3
+, spice-protocol
+, gettext
+, openssl
+, libpulseaudio
+, pixman
+, gobject-introspection
+, libjpeg_turbo
+, zlib
+, cyrus_sasl
+, usbredir
+, libsoup
+, polkit
+, acl
+, usbutils
+, vala
+, gtk3
+, epoxy
+, libdrm
+, gst_all_1
+, phodav
+, libopus
+, gtk-doc
+, json-glib
+, lz4
+, libcacard
+, perl
+, docbook_xsl
+, withPolkit ? true
+}:
 
 # If this package is built with polkit support (withPolkit=true),
 # usb redirection reqires spice-client-glib-usb-acl-helper to run setuid root.
@@ -25,18 +56,15 @@
 #    KERNEL=="*", SUBSYSTEMS=="usb", MODE="0664", GROUP="usb"
 #  '';
 
-with stdenv.lib;
+stdenv.mkDerivation rec {
+  pname = "spice-gtk";
+  version = "0.37";
 
-let
-  inherit (python2Packages) python pygtk;
-in stdenv.mkDerivation rec {
-  name = "spice-gtk-0.35";
-
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/gtk/${name}.tar.bz2";
-    sha256 = "11lymg467gvj5ys8k22ihnfbxjn4x34ygyzirpg2nphjwlyhgrml";
+    url = "https://www.spice-space.org/download/gtk/${pname}-${version}.tar.bz2";
+    sha256 = "1drvj8y35gnxbnrxsipwi15yh0vs9ixzv4wslz6r3lra8w3bfa0z";
   };
 
   postPatch = ''
@@ -45,27 +73,50 @@ in stdenv.mkDerivation rec {
       --replace 'ACL_HELPER_PATH"/' '"'
   '';
 
-  buildInputs = [
-    spice-protocol celt_0_5_1 openssl libpulseaudio gst_all_1.gst-plugins-base pixman
-    libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy libdrm phodav opusfile
-  ] ++ optionals withPolkit [ polkit acl usbutils ] ;
+  nativeBuildInputs = [
+    docbook_xsl
+    gettext
+    gobject-introspection
+    gtk-doc
+    libsoup
+    meson
+    ninja
+    perl
+    pkgconfig
+    python3
+    python3.pkgs.pyparsing
+    python3.pkgs.six
+    vala
+  ];
 
-  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobject-introspection ];
+  buildInputs = [
+    cyrus_sasl
+    epoxy
+    gst_all_1.gst-plugins-base
+    gtk3
+    json-glib
+    libcacard
+    libdrm
+    libjpeg_turbo
+    lz4
+    openssl
+    libopus
+    phodav
+    pixman
+    spice-protocol
+    usbredir
+    zlib
+  ] ++ stdenv.lib.optionals withPolkit [ polkit acl usbutils ] ;
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
-  configureFlags = [
-    "--with-gtk3"
-    "--enable-introspection"
-    "--enable-vala"
-    "--enable-celt051"
+  mesonFlags = [
+    "-Dauto_features=enabled"
+    "-Dcelt051=disabled"
+    "-Dpulse=disabled" # is deprecated upstream
   ];
 
-  dontDisableStatic = true; # Needed by the coroutine test
-
-  enableParallelBuilding = true;
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A GTK+3 SPICE widget";
     longDescription = ''
       spice-gtk is a GTK+3 SPICE widget. It features glib-based

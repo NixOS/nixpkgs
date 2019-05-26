@@ -21,6 +21,12 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+  makeFlags = with stdenv.lib;
+  optionals (versionAtLeast ocaml.version "4.06") [
+    "OCAMLBCFLAGS+=-unsafe-string"
+    "OCAMLNCFLAGS+=-unsafe-string"
+  ];
+
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {

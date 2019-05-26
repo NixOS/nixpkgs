@@ -19,7 +19,9 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     End of support is planned for end of April 2020, handing over to 20.03.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -153,6 +155,12 @@
       </para>
      </listitem>
     </itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>hunspellDicts.fr-any</literal> dictionary now ships with <literal>fr_FR.{aff,dic}</literal>
+      which is linked to <literal>fr-toutesvariantes.{aff,dic}</literal>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

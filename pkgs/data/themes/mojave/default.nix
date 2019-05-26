@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mojave-gtk-theme";
-  version = "2019-01-02";
+  version = "2019-05-21";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = version;
-    sha256 = "053bfc5pslwpqhn05dzznh236g1z4cnn2dzwvb914f6m855fbxfg";
+    rev = "f6167740b308715b38567ec660aa5241d964af1b";
+    sha256 = "1k57f5vimdrciskjgxqz7k0xybc7b8pwcsii0p6kc8klmyrjrr9c";
   };
 
   buildInputs = [ gtk_engines ];

@@ -1,5 +1,5 @@
 { buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf
+, libelf, cpio
 , utillinux
 , writeTextFile
 }:
@@ -284,10 +284,11 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
-      ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
-      ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
-      ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
+      ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
+      ++ optional  (stdenv.lib.versionAtLeast version "4.14") libelf
+      ++ optional  (stdenv.lib.versionAtLeast version "4.15") utillinux
       ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
+      ++ optional  (stdenv.lib.versionAtLeast version "5.2")  cpio
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];

@@ -2,16 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bloat";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jpwaw8ryfvfw5ypjvli18wwv6l1r6dyz1msipdpy7nvw1qdw54h";
+    sha256 = "041n4kj8kym9hcjc32m4b7nxfqnmzlyy5gfzjblx4nbg151hy945";
   };
 
-  cargoPatches = [ ./cargo-lock.patch ];
   cargoSha256 = "1275jfzkpkzbwv927hdkv4zplmynwrm7sbirq18dwfss55cm7r7z";
 
   meta = with stdenv.lib; {

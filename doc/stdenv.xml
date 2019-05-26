@@ -747,7 +747,8 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
    latter is convenient from a build script. However, typically one only wants
    to <emphasis>add</emphasis> some commands to a phase, e.g. by defining
    <literal>postInstall</literal> or <literal>preFixup</literal>, as skipping
-   some of the default actions may have unexpected consequences.
+   some of the default actions may have unexpected consequences. The default
+   script for each phase is defined in the file <filename>pkgs/stdenv/generic/setup.sh</filename>.
   </para>
 
   <section xml:id="ssec-controlling-phases">
@@ -1579,7 +1580,7 @@ installTargets = "install-bin install-doc";</programlisting>
      </term>
      <listitem>
       <para>
-       Like <varname>dontStripHost</varname>, but only affects the
+       Like <varname>dontStrip</varname>, but only affects the
        <command>strip</command> command targetting the package's host platform.
        Useful when supporting cross compilation, but otherwise feel free to
        ignore.
@@ -1592,7 +1593,7 @@ installTargets = "install-bin install-doc";</programlisting>
      </term>
      <listitem>
       <para>
-       Like <varname>dontStripHost</varname>, but only affects the
+       Like <varname>dontStrip</varname>, but only affects the
        <command>strip</command> command targetting the packages' target
        platform. Useful when supporting cross compilation, but otherwise feel
        free to ignore.

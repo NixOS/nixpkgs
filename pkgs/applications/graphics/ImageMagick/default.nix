@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     inherit (cfg) sha256;
   };
 
-  patches = [ ./imagetragick.patch ] ++ cfg.patches;
+  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny

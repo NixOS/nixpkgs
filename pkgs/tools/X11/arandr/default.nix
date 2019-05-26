@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, gobject-introspection, gtk3, xrandr, python3Packages }:
+{ stdenv, fetchurl, python3Packages
+, gobject-introspection, gsettings-desktop-schemas, gtk3
+, wrapGAppsHook, xrandr
+}:
 
 let
   inherit (python3Packages) buildPythonApplication docutils pygobject3;
@@ -17,13 +20,13 @@ in buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  buildInputs = [ docutils ];
-  nativeBuildInputs = [ gobject-introspection gtk3 ];
-  propagatedBuildInputs = [ xrandr pygobject3 ];
+  # hook for gobject-introspection doesn't like strictDeps
+  # https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
-  makeWrapperArgs = [
-    "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"
-  ];
+  buildInputs = [ docutils gsettings-desktop-schemas gtk3 ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  propagatedBuildInputs = [ xrandr pygobject3 ];
 
   meta = {
     homepage = http://christian.amsuess.com/tools/arandr/;

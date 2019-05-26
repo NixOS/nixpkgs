@@ -31,7 +31,7 @@ in
 import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
 
   ename =
-    if isNull(ename)
+    if ename == null
     then pname
     else ename;
 

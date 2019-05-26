@@ -6,13 +6,13 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "chit";
-  version = "0.1.12";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "peterheesterman";
     repo = pname;
     rev = version;
-    sha256 = "17g2p07zhf4n4pjmws0ssfy2mrn0v933ih0vnlr1z2cv9mx8srsl";
+    sha256 = "1rzy15xwlf87c8kpy9pwvir6s9z3qc8d9iz4pk0gfdj2il3vmjwv";
   };
 
   cargoSha256 = "1jqnnf4jgjpm1i310hda15423nxfw9frgpmc2kbrs66qcsj7avaw";
@@ -22,9 +22,6 @@ buildRustPackage rec {
   ++ stdenv.lib.optionals stdenv.isLinux [ openssl ]
   ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security ])
   ;
-
-  # Tests require network access
-  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Crate help in terminal: A tool for looking up details about rust crates without going to crates.io";

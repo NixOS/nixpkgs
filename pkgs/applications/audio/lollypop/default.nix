@@ -21,7 +21,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.0.7";
+  version = "1.0.10";
 
   format = "other";
   doCheck = false;
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "0gdds4qssn32axsa5janqny5i4426azj5wyj6bzn026zs3z38svn";
+    sha256 = "118z1qhvpv7x5n63lpm4mf81pmv7gd450sa55i68mnjvry93h9h5";
   };
 
   nativeBuildInputs = [
@@ -59,10 +59,8 @@ python3.pkgs.buildPythonApplication rec  {
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
-    gst-python
     pillow
     pycairo
-    pydbus
     pygobject3
   ]
   ++ lib.optional lastFMSupport pylast
@@ -84,6 +82,7 @@ python3.pkgs.buildPythonApplication rec  {
     description = "A modern music player for GNOME";
     homepage = https://wiki.gnome.org/Apps/Lollypop;
     license = licenses.gpl3Plus;
+    changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;
   };

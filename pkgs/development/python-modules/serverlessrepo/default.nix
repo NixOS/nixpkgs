@@ -1,12 +1,23 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, boto3
-, six
-, pyyaml
-, mock
+, python
 }:
+
+let
+  py = python.override {
+    packageOverrides = self: super: {
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "3.12";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "592766c6303207a20efc445587778322d7f73b161bd994f227adaa341ba212ab";
+        };
+      });
+    };
+  };
+
+in
+
+with py.pkgs;
 
 buildPythonPackage rec {
   pname = "serverlessrepo";

@@ -181,6 +181,7 @@ mapAliases ({
   m3d-linux = m33-linux; # added 2016-08-13
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
+  memtest86 = memtest86plus; # added 2019-05-08
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
@@ -255,7 +256,6 @@ mapAliases ({
   # end
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
   procps-ng = procps; # added 2018-06-08
-  pstree = psmisc; # added 2019-05-05
   pulseaudioLight = pulseaudio; # added 2018-04-25
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qt_gstreamer = qt-gstreamer;  # added 2017-02

@@ -20,10 +20,10 @@ rec {
 
   # No active beta right now
   beta = generic {
-    version = "430.09";
-    sha256_64bit = "0k59ahljya286ararncf3mc7sfgsw82vnrszczqicpysn3qfar95";
-    settingsSha256 = "082v0xmz83sf4wdvcb2zawddy5vh3pbwjz0fda1rayc7fdadni05";
-    persistencedSha256 = "028vs23mnb345sxjxqqmln9pwq8n6cc6dhfzq4hj21ghc6l6fg54";
+    version = "430.14";
+    sha256_64bit = "05qgakc0sqv9zr6j4i49iqrd271nris8pmnv3l431r71ygx6zm00";
+    settingsSha256 = "1hh07258a6z0g8dl6mxrizdxqcgswv58r4rbamfhhwh9i42fpdgg";
+    persistencedSha256 = "1wmwmg9ma9rfx03s2qa249f0p7yf0lxdpiadab0raajk1lzlrrc8";
   };
 
   stable_418 = generic {

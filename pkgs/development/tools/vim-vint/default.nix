@@ -4,13 +4,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   name = "vim-vint-${version}";
-  version = "0.3.19";
+  version = "0.3.20";
 
   src = fetchFromGitHub {
     owner = "kuniwak";
     repo = "vint";
     rev = "v${version}";
-    sha256 = "0fb0vkmn5fv4mwk6riw08hb3vsh1pivvrfwm90b95yhksq4pfi12";
+    sha256 = "0ij9br4z9h8qay6l41sicr4lbjc38hxsn3lgjrj9zpn2b3585syx";
   };
 
   # For python 3.5 > version > 2.7 , a nested dependency (pythonPackages.hypothesis) fails.

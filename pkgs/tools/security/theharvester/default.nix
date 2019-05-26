@@ -1,21 +1,20 @@
-{ stdenv, makeWrapper, python2Packages, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, makeWrapper, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "theHarvester";
-  version = "2.7.1";
-  name = "${pname}-${version}";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "laramies";
-    repo = "${pname}";
-    rev = "25553762d2d93a39083593adb08a34d5f5142c60";
-    sha256 = "0gnm598y6paz0knwvdv1cx0w6ngdbbpzkdark3q5vs66yajv24w4";
+    repo = pname;
+    rev = version;
+    sha256 = "0f33a7sfb5ih21yp1wspb03fxsls1m14yizgrw0srfirm2a6aa0c";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   # add dependencies
-  propagatedBuildInputs = [ python2Packages.requests ];
+  propagatedBuildInputs = with python3Packages; [ requests beautifulsoup4 plotly ];
 
   installPhase = ''
     # create dirs

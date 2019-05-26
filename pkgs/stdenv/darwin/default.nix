@@ -81,7 +81,7 @@ in rec {
         bintools     = { name = "${name}-binutils"; outPath = bootstrapTools; };
       };
 
-      cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
+      cc = if last == null then "/dev/null" else import ../../build-support/cc-wrapper {
         inherit shell;
         inherit (last) stdenvNoCC;
 

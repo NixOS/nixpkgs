@@ -536,6 +536,7 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/babeld.nix
   ./services/networking/bind.nix
+  ./services/networking/bitcoind.nix
   ./services/networking/autossh.nix
   ./services/networking/bird.nix
   ./services/networking/bitlbee.nix
@@ -793,7 +794,6 @@
   ./services/web-servers/traefik.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix
-  ./services/web-servers/winstone.nix
   ./services/web-servers/zope2.nix
   ./services/x11/colord.nix
   ./services/x11/compton.nix

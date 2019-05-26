@@ -184,7 +184,7 @@ in
         phpOptions = ''
           date.timezone = "CET"
 
-          ${optionalString (!isNull cfg.email.server) ''
+          ${optionalString (cfg.email.server != null) ''
             SMTP = ${cfg.email.server}
             smtp_port = ${toString cfg.email.port}
             auth_username = ${cfg.email.login}
@@ -282,7 +282,7 @@ in
 
         sed -i "s@^php@${config.services.phpfpm.phpPackage}/bin/php@" "${runDir}/server/php/shell/"*.sh
 
-        ${if (isNull cfg.database.host) then ''
+        ${if (cfg.database.host == null) then ''
           sed -i "s/^.*'R_DB_HOST'.*$/define('R_DB_HOST', 'localhost');/g" "${runDir}/server/php/config.inc.php"
           sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', 'restya');/g" "${runDir}/server/php/config.inc.php"
         '' else ''
@@ -311,7 +311,7 @@ in
         chown -R "${cfg.user}"."${cfg.group}" "${cfg.dataDir}/media"
         chown -R "${cfg.user}"."${cfg.group}" "${cfg.dataDir}/client/img"
 
-        ${optionalString (isNull cfg.database.host) ''
+        ${optionalString (cfg.database.host == null) ''
           if ! [ -e "${cfg.dataDir}/.db-initialized" ]; then
             ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
               ${config.services.postgresql.package}/bin/psql -U ${config.services.postgresql.superUser} \
@@ -367,14 +367,14 @@ in
     };
     users.groups.restya-board = {};
 
-    services.postgresql.enable = mkIf (isNull cfg.database.host) true;
+    services.postgresql.enable = mkIf (cfg.database.host == null) true;
 
-    services.postgresql.identMap = optionalString (isNull cfg.database.host)
+    services.postgresql.identMap = optionalString (cfg.database.host == null)
       ''
         restya-board-users restya-board restya_board
       '';
 
-    services.postgresql.authentication = optionalString (isNull cfg.database.host)
+    services.postgresql.authentication = optionalString (cfg.database.host == null)
       ''
         local restya_board all ident map=restya-board-users
       '';

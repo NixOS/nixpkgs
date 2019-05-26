@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "solr";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchurl {
-    url = "mirror://apache/lucene/solr/${version}/solr-${version}.tgz";
-    sha256 = "04hxj7nfmbh5wfqkq1p5q2ncxszwm80l218vfdy93aw0p79r4qqf";
+    url = "mirror://apache/lucene/${pname}/${version}/${pname}-${version}.tgz";
+    sha256 = "1w8hc2694c3acs4hqk0rkl3lmv4sbnji9n5mzw1piq90azlmnb1a";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Open source enterprise search platform from the Apache Lucene project";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.rickynils maintainers.domenkozar maintainers.aanderse ];
+    maintainers = with maintainers; [ rickynils domenkozar aanderse ];
   };
 
 }

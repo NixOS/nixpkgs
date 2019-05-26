@@ -1,6 +1,7 @@
 { stdenv, fetchurl, fetchpatch, cmake, nasm }:
 
 stdenv.mkDerivation rec {
+
   pname = "libjpeg-turbo";
   version = "2.0.2";
 
