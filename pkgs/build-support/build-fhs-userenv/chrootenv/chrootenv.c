@@ -19,6 +19,10 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+int min(int a, int b) {
+  return a > b ? b : a;
+}
+
 const gchar *bind_blacklist[] = {"bin", "etc", "host", "usr", "lib", "lib64", "lib32", "sbin", NULL};
 
 void bind_mount(const gchar *source, const gchar *target) {
@@ -126,7 +130,9 @@ int main(gint argc, gchar **argv) {
     int status;
 
     fail_if(waitpid(cpid, &status, 0) != cpid);
-    fail_if(nftw(prefix, nftw_remove, getdtablesize(),
+    // glibc 2.27 (and possibly other versions) can't handle
+    // an nopenfd value larger than 2^19
+    fail_if(nftw(prefix, nftw_remove, min(getdtablesize(), 1<<19),
                  FTW_DEPTH | FTW_MOUNT | FTW_PHYS));
 
     if (WIFEXITED(status))
