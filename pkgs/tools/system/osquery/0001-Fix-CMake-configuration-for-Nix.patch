@@ -29,13 +29,12 @@ index 470bdf1d..caa6ab6f 100644
 +++ b/osquery/tables/CMakeLists.txt
 @@ -68,7 +68,7 @@ if(LINUX)
    set(TABLE_PLATFORM "linux")
- 
+
    ADD_OSQUERY_LINK_ADDITIONAL("libresolv.so")
 -  ADD_OSQUERY_LINK_ADDITIONAL("cryptsetup devmapper lvm2app lvm-internal daemonclient")
 +  ADD_OSQUERY_LINK_ADDITIONAL("cryptsetup devmapper lvm2app")
    ADD_OSQUERY_LINK_ADDITIONAL("gcrypt gpg-error")
    ADD_OSQUERY_LINK_ADDITIONAL("blkid")
    ADD_OSQUERY_LINK_ADDITIONAL("ip4tc")
--- 
+--
 2.19.2
-
