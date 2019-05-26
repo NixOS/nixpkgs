@@ -21121,6 +21121,8 @@ in
 
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
+  ytcc = callPackage ../tools/networking/ytcc { };
+
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zanshin = libsForQt5.callPackage ../applications/office/zanshin {
