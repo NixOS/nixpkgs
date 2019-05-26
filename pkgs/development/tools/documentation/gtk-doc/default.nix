@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-doc";
-  version = "1.30";
+  version = "1.29";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "17h6nwhis66z4dxjrc833wvfl6pqjp81yfx3fq6x7k1qp2749xm4";
+    sha256 = "1cc6yl8l275qn3zpjl6f0s4fwmkczngjr9hhsdv74mln4h08wmql";
   };
 
   patches = [
