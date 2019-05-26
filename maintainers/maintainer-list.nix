@@ -2609,6 +2609,15 @@
     github = "kisonecat";
     name = "Jim Fowler";
   };
+  kiwi = {
+    email = "envy1988@gmail.com";
+    github = "Kiwi";
+    name = "Robert Djubek";
+    keys = [{
+      longkeyid = "rsa4096/0x156C88A5B0A04B2A";
+      fingerprint = "8992 44FC D291 5CA2 0A97  802C 156C 88A5 B0A0 4B2A";
+    }];
+  };
   kjuvi = {
     email = "quentin.vaucher@pm.me";
     github = "kjuvi";
