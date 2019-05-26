@@ -97,6 +97,26 @@ in rec {
     };
   };
 
+  ignore = zncDerivation rec {
+    name = "znc-ignore-${version}";
+    version = "git-2017-04-28";
+    module_name = "ignore";
+
+    src = fetchFromGitHub {
+      owner = "kylef";
+      repo = "znc-contrib";
+      rev = "f6724a4a3b16b050088adde0cbeed74f189e5044";
+      sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
+    };
+
+    meta = with stdenv.lib; {
+      description = "ZNC ignore module";
+      homepage = https://github.com/kylef/znc-contrib;
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ kiwi ];
+    };
+  };
+
   playback = zncDerivation rec {
     name = "znc-playback-${version}";
     version = "git-2015-08-04";
