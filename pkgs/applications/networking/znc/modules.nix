@@ -57,6 +57,26 @@ in rec {
     };
   };
 
+  clientaway = zncDerivation rec {
+    name = "znc-clientaway-${version}";
+    version = "git-2017-04-28";
+    module_name = "clientaway";
+
+    src = fetchFromGitHub {
+      owner = "kylef";
+      repo = "znc-contrib";
+      rev = "f6724a4a3b16b050088adde0cbeed74f189e5044";
+      sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
+    };
+
+    meta = with stdenv.lib; {
+      description = "ZNC clientaway module";
+      homepage = https://github.com/kylef/znc-contrib;
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ kiwi ];
+    };
+  };
+
   fish = zncDerivation rec {
     name = "znc-fish-${version}";
     version = "git-2014-10-10";
