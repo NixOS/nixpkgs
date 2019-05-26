@@ -1,59 +1,30 @@
-{ stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkgconfig
-, python3
-, libxml2Python
-, docbook_xml_dtd_43
-, docbook_xsl
-, libxslt
-, gettext
-, gnome3
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python3, libxml2Python, libxslt, which
+, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, gettext, itstool, gnome3
 , withDblatex ? false, dblatex
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-doc";
-  version = "1.30";
+  version = "1.29";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = pname;
-    rev = "GTK_DOC_${stdenv.lib.replaceStrings ["."] ["_"] version }";
-    sha256 = "05lr6apj3pd3s59a7k6p45k9ywwrp577ra4pvkhxvb5p7v90c2fi";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1cc6yl8l275qn3zpjl6f0s4fwmkczngjr9hhsdv74mln4h08wmql";
   };
 
   patches = [
     passthru.respect_xml_catalog_files_var_patch
-    # https://gitlab.gnome.org/GNOME/gtk-doc/issues/84
-    ./0001-highlight-fix-permission-on-file-style.patch
   ];
 
   outputDevdoc = "out";
 
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs =
+    [ pkgconfig perl python3 libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
+      gnome-doc-utils gettext which itstool
+    ] ++ stdenv.lib.optional withDblatex dblatex;
 
-  buildInputs = [
-    docbook_xml_dtd_43
-    docbook_xsl
-    libxslt
-    pkgconfig
-    python3
-    libxml2Python
-  ]
-  ++ stdenv.lib.optional withDblatex dblatex
-  ;
-
-  mesonFlags = [
-    "-Dtests=false"
-    "-Dyelp_manual=false"
-  ];
+  configureFlags = [ "--disable-scrollkeeper" ];
 
   # Make pygments available for binaries, python.withPackages creates a wrapper
   # but scripts are not allowed in shebangs so we link it into sys.path.
