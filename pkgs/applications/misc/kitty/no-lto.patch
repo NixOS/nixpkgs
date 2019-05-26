@@ -1,6 +1,6 @@
 --- a/setup.py
 +++ b/setup.py
-@@ -223,9 +223,6 @@ def init_env(
+@@ -233,9 +233,6 @@ def init_env(
      cppflags += shlex.split(os.environ.get('CPPFLAGS', ''))
      cflags += shlex.split(os.environ.get('CFLAGS', ''))
      ldflags += shlex.split(os.environ.get('LDFLAGS', ''))
