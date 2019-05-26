@@ -3503,6 +3503,8 @@ in
 
   hashcat = callPackage ../tools/security/hashcat { };
 
+  hashcat-utils = callPackage ../tools/security/hashcat-utils { };
+
   hash_extender = callPackage ../tools/security/hash_extender { };
 
   hash-slinger = callPackage ../tools/security/hash-slinger { };
