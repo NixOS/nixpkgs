@@ -9714,6 +9714,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
+  uefi-firmware-parser = callPackage ../development/tools/analysis/uefi-firmware-parser { };
+
   uhd = callPackage ../applications/radio/uhd { };
 
   uisp = callPackage ../development/tools/misc/uisp { };
