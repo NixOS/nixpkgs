@@ -117,6 +117,26 @@ in rec {
     };
   };
 
+  palaver = zncDerivation rec {
+    name = "znc-palaver-${version}";
+    version = "2018-09-18";
+    module_name = "palaver";
+
+    src = fetchFromGitHub {
+      owner = "cocodelabs";
+      repo = "znc-palaver";
+      rev = "c70e8112686f917d39197d582db36c3ea37a4cb6";
+      sha256 = "1gjr8yqgpkpcc18rf0zfgil3rcd1ihqk0q9f8rwbfvs5381h3c58";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Palaver ZNC module";
+      homepage = "https://github.com/cocodelabs/znc-palaver";
+      license = licenses.mit;
+      maintainers = with maintainers; [ kiwi ];
+    };
+  };
+
   playback = zncDerivation rec {
     name = "znc-playback-${version}";
     version = "git-2015-08-04";
