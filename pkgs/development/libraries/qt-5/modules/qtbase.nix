@@ -231,6 +231,8 @@ stdenv.mkDerivation {
       "-widgets"
       "-opengl desktop"
       "-icu"
+      "-L" "${icu.out}/lib"
+      "-I" "${icu.dev}/include"
       "-pch"
     ]
     ++ lib.optionals (compareVersion "5.11.0" < 0)
@@ -267,10 +269,18 @@ stdenv.mkDerivation {
 
     ++ [
       "-system-zlib"
+      "-L" "${zlib.out}/lib"
+      "-I" "${zlib.dev}/include"
       "-system-libjpeg"
+      "-L" "${libjpeg.out}/lib"
+      "-I" "${libjpeg.dev}/include"
       "-system-harfbuzz"
+      "-L" "${harfbuzz.out}/lib"
+      "-I" "${harfbuzz.dev}/include"
       "-system-pcre"
       "-openssl-linked"
+      "-L" "${openssl.out}/lib"
+      "-I" "${openssl.dev}/include"
       "-system-sqlite"
       ''-${if mysql != null then "plugin" else "no"}-sql-mysql''
       ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
@@ -299,10 +309,14 @@ stdenv.mkDerivation {
           "-system-xcb"
           "-xcb"
           "-qpa xcb"
+          "-L" "${libX11.out}/lib"
+          "-I" "${libX11.out}/include"
+          "-L" "${libXext.out}/lib"
+          "-I" "${libXext.out}/include"
+          "-L" "${libXrender.out}/lib"
+          "-I" "${libXrender.out}/include"
 
-          "-system-xkbcommon"
           "-libinput"
-          "-xkbcommon-evdev"
 
           "-no-eglfs"
           "-no-gbm"
@@ -322,6 +336,19 @@ stdenv.mkDerivation {
           # https://github.com/NixOS/nixpkgs/issues/38832
           "-no-feature-renameat2"
           "-no-feature-getentropy"
+        ]
+        ++ lib.optionals (compareVersion "5.12.1" < 0) [
+          # use -xkbcommon and -xkbcommon-evdev for versions before 5.12.1
+          "-system-xkbcommon"
+          "-xkbcommon-evdev"
+        ]
+        ++ lib.optionals (cups != null) [
+          "-L" "${cups.lib}/lib"
+          "-I" "${cups.dev}/include"
+        ]
+        ++ lib.optionals (mysql != null) [
+          "-L" "${mysql.out}/lib"
+          "-I" "${mysql.out}/include"
         ]
     );
 

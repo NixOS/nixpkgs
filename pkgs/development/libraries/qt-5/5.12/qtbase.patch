@@ -2,7 +2,7 @@ diff --git a/mkspecs/common/mac.conf b/mkspecs/common/mac.conf
 index 61bea952b2..9909dae726 100644
 --- a/mkspecs/common/mac.conf
 +++ b/mkspecs/common/mac.conf
-@@ -23,7 +23,7 @@ QMAKE_INCDIR_OPENGL     = \
+@@ -24,7 +24,7 @@ QMAKE_INCDIR_OPENGL     = \
  
  QMAKE_FIX_RPATH         = install_name_tool -id
  
@@ -90,7 +90,7 @@ index 2ed708e085..05e60ff45f 100644
      INSTALLS += cmake_qt5_plugin_file
  
      return()
-@@ -316,7 +291,7 @@ exists($$cmake_macros_file.input) {
+@@ -318,7 +293,7 @@ exists($$cmake_macros_file.input) {
      cmake_qt5_module_files.files += $$cmake_macros_file.output
  }
  
@@ -263,15 +263,14 @@ diff --git a/mkspecs/features/mac/default_post.prf b/mkspecs/features/mac/defaul
 index 99f68b78f5..dde69cb7c2 100644
 --- a/mkspecs/features/mac/default_post.prf
 +++ b/mkspecs/features/mac/default_post.prf
-@@ -63,199 +63,3 @@ qt {
-         }
+@@ -64,202 +64,6 @@
      }
  }
--
+ 
 -# Add the same default rpaths as Xcode does for new projects.
 -# This is especially important for iOS/tvOS/watchOS where no other option is possible.
 -!no_default_rpath {
--    QMAKE_RPATHDIR += @executable_path/Frameworks
+-    QMAKE_RPATHDIR += @executable_path/../Frameworks
 -    equals(TEMPLATE, lib):!plugin:lib_bundle: QMAKE_RPATHDIR += @loader_path/Frameworks
 -}
 -
@@ -463,6 +462,10 @@ index 99f68b78f5..dde69cb7c2 100644
 -    xcode_product_bundle_target = ${PRODUCT_NAME:rfc1034identifier}
 -xcode_product_bundle_identifier_setting.value = "$${xcode_product_bundle_identifier_setting.value}.$${xcode_product_bundle_target}"
 -QMAKE_MAC_XCODE_SETTINGS += xcode_product_bundle_identifier_setting
+-
+ !macx-xcode {
+     generate_xcode_project.commands = @$(QMAKE) -spec macx-xcode $(EXPORT__PRO_FILE_)
+     generate_xcode_project.target = xcodeproj
 diff --git a/mkspecs/features/mac/default_pre.prf b/mkspecs/features/mac/default_pre.prf
 index e3534561a5..3b01424e67 100644
 --- a/mkspecs/features/mac/default_pre.prf
@@ -532,7 +535,7 @@ diff --git a/mkspecs/features/mac/sdk.prf b/mkspecs/features/mac/sdk.prf
 index 8360dd8b38..8b13789179 100644
 --- a/mkspecs/features/mac/sdk.prf
 +++ b/mkspecs/features/mac/sdk.prf
-@@ -1,58 +1 @@
+@@ -1,54 +1 @@
  
 -isEmpty(QMAKE_MAC_SDK): \
 -    error("QMAKE_MAC_SDK must be set when using CONFIG += sdk.")
@@ -568,10 +571,6 @@ index 8360dd8b38..8b13789179 100644
 -QMAKE_MAC_SDK_PLATFORM_PATH = $$xcodeSDKInfo(PlatformPath)
 -QMAKE_MAC_SDK_VERSION = $$xcodeSDKInfo(SDKVersion)
 -
--sysrootified =
--for(val, QMAKE_INCDIR_OPENGL): sysrootified += $${QMAKE_MAC_SDK_PATH}$$val
--QMAKE_INCDIR_OPENGL = $$sysrootified
--
 -QMAKESPEC_NAME = $$basename(QMAKESPEC)
 -
 -# Resolve SDK version of various tools
@@ -595,24 +594,24 @@ diff --git a/mkspecs/features/qml_module.prf b/mkspecs/features/qml_module.prf
 index 65212b2abf..accd4c07f0 100644
 --- a/mkspecs/features/qml_module.prf
 +++ b/mkspecs/features/qml_module.prf
-@@ -52,7 +52,7 @@ qmldir.base = $$_PRO_FILE_PWD_
- # Tools need qmldir and plugins.qmltypes always installed on the file system
- qmldir.files = $$qmldir_file $$fq_aux_qml_files
+@@ -54,7 +54,7 @@
+ 
+ qmldir.files = $$qmldir_file
  install_qml_files: qmldir.files += $$fq_qml_files
--qmldir.path = $$instbase/$$TARGETPATH
+-qmldir.path = $$[QT_INSTALL_QML]/$$TARGETPATH
 +qmldir.path = $$NIX_OUTPUT_QML/$$TARGETPATH
  INSTALLS += qmldir
  
- !debug_and_release|!build_all|CONFIG(release, debug|release) {
+ qmlfiles.base = $$_PRO_FILE_PWD_
 diff --git a/mkspecs/features/qml_plugin.prf b/mkspecs/features/qml_plugin.prf
 index cd6377dcc6..e98bf98151 100644
 --- a/mkspecs/features/qml_plugin.prf
 +++ b/mkspecs/features/qml_plugin.prf
-@@ -56,7 +56,7 @@ qml1_target {
-     instbase = $$[QT_INSTALL_QML]
- }
+@@ -50,7 +50,7 @@
  
--target.path = $$instbase/$$TARGETPATH
+ DESTDIR = $$MODULE_BASE_OUTDIR/qml/$$TARGETPATH
+ 
+-target.path = $$[QT_INSTALL_QML]/$$TARGETPATH
 +target.path = $$NIX_OUTPUT_QML/$$TARGETPATH
  INSTALLS += target
  
@@ -746,7 +745,7 @@ index 8f98987b99..21b3bb8b32 100644
      !static: target.CONFIG = no_dll
      INSTALLS += target
  }
-@@ -29,33 +23,33 @@
+@@ -29,35 +23,35 @@
  #headers
  qt_install_headers {
      gen_headers.files = $$SYNCQT.GENERATED_HEADER_FILES
@@ -762,6 +761,8 @@ index 8f98987b99..21b3bb8b32 100644
      private_headers.files = $$SYNCQT.PRIVATE_HEADER_FILES $$SYNCQT.INJECTED_PRIVATE_HEADER_FILES
 -    private_headers.path = $$[QT_INSTALL_HEADERS]/$$MODULE_INCNAME/$$VERSION/$$MODULE_INCNAME/private
 +    private_headers.path = $$NIX_OUTPUT_DEV/include/$$MODULE_INCNAME/$$VERSION/$$MODULE_INCNAME/private
+     generated_privates: \
+         private_headers.CONFIG += no_check_exist
      INSTALLS += private_headers
  
      qpa_headers.files = $$SYNCQT.QPA_HEADER_FILES
@@ -876,7 +877,7 @@ diff --git a/src/corelib/kernel/qcoreapplication.cpp b/src/corelib/kernel/qcorea
 index 463e30e1c3..0e1ab669e4 100644
 --- a/src/corelib/kernel/qcoreapplication.cpp
 +++ b/src/corelib/kernel/qcoreapplication.cpp
-@@ -2665,6 +2665,15 @@ QStringList QCoreApplication::libraryPaths()
+@@ -2668,6 +2668,15 @@
          QStringList *app_libpaths = new QStringList;
          coreappdata()->app_libpaths.reset(app_libpaths);
  
@@ -889,9 +890,9 @@ index 463e30e1c3..0e1ab669e4 100644
 +            }
 +        }
 +
-         const QByteArray libPathEnv = qgetenv("QT_PLUGIN_PATH");
+         QString libPathEnv = qEnvironmentVariable("QT_PLUGIN_PATH");
          if (!libPathEnv.isEmpty()) {
-             QStringList paths = QFile::decodeName(libPathEnv).split(QDir::listSeparator(), QString::SkipEmptyParts);
+             QStringList paths = libPathEnv.split(QDir::listSeparator(), QString::SkipEmptyParts);
 diff --git a/src/corelib/tools/qtimezoneprivate_tz.cpp b/src/corelib/tools/qtimezoneprivate_tz.cpp
 index bed62a02bd..73158993f7 100644
 --- a/src/corelib/tools/qtimezoneprivate_tz.cpp
