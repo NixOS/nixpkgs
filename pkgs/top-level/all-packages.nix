@@ -808,9 +808,7 @@ in
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
 
-  gopass = callPackage ../tools/security/gopass {
-    buildGoPackage = buildGo110Package;
-  };
+  gopass = callPackage ../tools/security/gopass { };
 
   browserpass = callPackage ../tools/security/browserpass { };
 
