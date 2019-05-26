@@ -67,7 +67,6 @@ buildPythonApplication rec {
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
     })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    ./macos-10.11.patch
     ./no-lto.patch
     ./no-werror.patch
     ./png2icns.patch
