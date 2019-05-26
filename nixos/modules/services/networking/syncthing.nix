@@ -105,13 +105,12 @@ in {
           description = ''
             Peers/devices which syncthing should communicate with.
           '';
-          example = [
-            {
-              name = "bigbox";
+          example = {
+            bigbox = {
               id = "7CFNTQM-IMTJBHJ-3UWRDIU-ZGQJFR6-VCXZ3NB-XUH3KZO-N52ITXR-LAIYUAU";
               addresses = [ "tcp://192.168.0.10:51820" ];
-            }
-          ];
+            };
+          };
           type = types.attrsOf (types.submodule ({ config, ... }: {
             options = {
 
@@ -169,6 +168,12 @@ in {
           description = ''
             folders which should be shared by syncthing.
           '';
+          example = {
+            "/home/user/sync" = {
+              id = "syncme";
+              devices = [ "bigbox" ];
+            };
+          };
           type = types.attrsOf (types.submodule ({ config, ... }: {
             options = {
 
