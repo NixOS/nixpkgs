@@ -23829,6 +23829,8 @@ in
 
   thermald = callPackage ../tools/system/thermald { };
 
+  throttled = callPackage ../tools/system/throttled { };
+
   thinkfan = callPackage ../tools/system/thinkfan { };
 
   tup = callPackage ../development/tools/build-managers/tup { };
