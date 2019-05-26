@@ -154,13 +154,13 @@ in
       # there are some additional settings which should be reviewed
     '';
 
-    users.extraUsers.firebird = {
+    users.users.firebird = {
       description = "Firebird server user";
       group = "firebird";
       uid = config.ids.uids.firebird;
     };
 
-    users.extraGroups.firebird.gid = config.ids.gids.firebird;
+    users.groups.firebird.gid = config.ids.gids.firebird;
 
   };
 }

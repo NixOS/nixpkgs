@@ -1,59 +1,67 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, gobjectIntrospection
-, libgsystem, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse
-, libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk-doc, gobject-introspection, gnome3
+, glib, systemd, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse, utillinuxMinimal, libselinux
+, libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42, python3
 }:
 
-let
-  libglnx-src = fetchFromGitHub {
-    owner  = "GNOME";
-    repo   = "libglnx";
-    rev    = "0c82203cd459a35cc3f471e3205355e9fb79160f";
-    sha256 = "0xbrv7q6b2ygrbr0yr7p01zpryw45643qfwnlw0z2yv515qs7isc";
+stdenv.mkDerivation rec {
+  pname = "ostree";
+  version = "2019.1";
+
+  outputs = [ "out" "dev" "man" "installedTests" ];
+
+  src = fetchurl {
+    url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
+    sha256 = "08y7nsxl305dnlfak4kyj88lld848y4kg6bvjqngcxaqqvkk9xqm";
   };
 
-  bsdiff-src = fetchFromGitHub {
-    owner  = "mendsley";
-    repo   = "bsdiff";
-    rev    = "1edf9f656850c0c64dae260960fabd8249ea9c60";
-    sha256 = "1h71d2h2d3anp4msvpaff445rnzdxii3id2yglqk7af9i43kdsn1";
-  };
-
-  version = "2018.4";
-in stdenv.mkDerivation {
-  name = "ostree-${version}";
-
-  src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "ostreedev";
-    repo   = "ostree";
-    sha256 = "00jgj6vcjpz1akfbmf82q1bcs3njrmvdgy4c2gnn24vkmh9yr0lr";
-  };
+  patches = [
+    # Workarounds for https://github.com/ostreedev/ostree/issues/1592
+    ./fix-1592.patch
+    # Disable test-gpg-verify-result.test,
+    # https://github.com/ostreedev/ostree/issues/1634
+    ./disable-test-gpg-verify-result.patch
+    # Tests access the helper using relative path
+    # https://github.com/ostreedev/ostree/issues/1593
+    (fetchpatch {
+      url = https://github.com/ostreedev/ostree/pull/1633.patch;
+      sha256 = "07xiw1dr7j4yw3w92qhw37f9crlglibflcqj2kf0v5gfrl9i6g4j";
+    })
+  ];
 
   nativeBuildInputs = [
-    autoconf automake libtool pkgconfig gtk-doc gobjectIntrospection which yacc
+    autoconf automake libtool pkgconfig gtk-doc gobject-introspection which yacc
     libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
-  buildInputs = [ libgsystem xz e2fsprogs libsoup gpgme fuse libarchive libcap bzip2 ];
-
-  prePatch = ''
-    rmdir libglnx bsdiff
-    cp --no-preserve=mode -r ${libglnx-src} libglnx
-    cp --no-preserve=mode -r ${bsdiff-src} bsdiff
-  '';
+  buildInputs = [
+    glib systemd e2fsprogs libsoup gpgme fuse libselinux libcap
+    libarchive bzip2 xz
+    utillinuxMinimal # for libmount
+    (python3.withPackages (p: with p; [ pyyaml ])) gnome3.gjs # for tests
+  ];
 
   preConfigure = ''
     env NOCONFIGURE=1 ./autogen.sh
-
-    configureFlags+="--with-systemdsystemunitdir=$out/lib/systemd/system"
   '';
+
+  enableParallelBuilding = true;
+
+  configureFlags = [
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
+    "--enable-installed-tests"
+  ];
+
+  makeFlags = [
+    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"
+    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
+  ];
 
   meta = with stdenv.lib; {
     description = "Git for operating system binaries";
-    homepage    = https://ostree.readthedocs.io/en/latest/;
-    license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    homepage = https://ostree.readthedocs.io/en/latest/;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];
   };
 }
-

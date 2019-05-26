@@ -6,11 +6,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "opentsdb-${version}";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0nip40rh3vl5azfc27yha4ngnm9sw47hf110c90hg0warzz85sch";
+    sha256 = "1lf1gynr11silla4bsrkwqv023dxirsb88ncs2qmc2ng35593fjd";
   };
 
   buildInputs = [ autoconf automake curl jdk makeWrapper nettools python git ];

@@ -1,15 +1,13 @@
-{ stdenv, fetchPypi, buildPythonPackage, gssapi, pyasn1 }:
+{ stdenv, fetchPypi, fetchFromGitHub, buildPythonPackage, pyasn1 }:
 
 buildPythonPackage rec {
-  version = "2.4.1";
   pname = "ldap3";
+  version = "2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a66pc00az0nx9kvhzidbg099pvk52ngycf891bp5jyfm1ahvzp8";
+    sha256 = "1f0v82584b7gkzrnnnl4fc88w4i73x7cxqbzy0r0bknm33yfwcq5";
   };
-
-  buildInputs = [ gssapi ];
 
   propagatedBuildInputs = [ pyasn1 ];
 

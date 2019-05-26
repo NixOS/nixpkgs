@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
+{ stdenv, fetchurl, cmake, pcre, pkgconfig, python2
 , libX11, libXpm, libXft, libXext, libGLU_combined, zlib, libxml2, lz4, lzma, gsl, xxHash
-, Cocoa, OpenGL, noSplash ? false }:
+, Cocoa, OpenGL, cf-private, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake pcre python2 zlib libxml2 lz4 lzma gsl xxHash ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU_combined ]
-    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
+    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL cf-private ]
     ;
 
   patches = [
@@ -67,10 +67,11 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://root.cern.ch/;
     description = "A data analysis framework";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.veprbl ];
+    license = licenses.lgpl21;
   };
 }

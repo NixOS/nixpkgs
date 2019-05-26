@@ -1,8 +1,7 @@
-{ stdenv, buildPackages
-, buildPlatform, hostPlatform
+{ stdenv, pkgsBuildBuild, buildPackages
 , fetchpatch, fetchurl, makeWrapper, gawk, pkgconfig
 , libffi, libtool, readline, gmp, boehmgc, libunistring
-, coverageAnalysis ? null, gnu ? null
+, coverageAnalysis ? null
 }:
 
 # Do either a coverage analysis build or a standard build.
@@ -22,8 +21,8 @@
   setOutputFlags = false; # $dev gets into the library otherwise
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
-    ++ stdenv.lib.optional (hostPlatform != buildPlatform)
-                           buildPackages.buildPackages.guile_2_0;
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+                           pkgsBuildBuild.guile_2_0;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
 
@@ -42,12 +41,19 @@
   patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch
     (fetchpatch {
       # Fixes stability issues with 00-repl-server.test
-      url = "http://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
+      url = "https://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
       sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
     })
     ./riscv.patch
   ] ++
-    (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
+    (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
+    ++ stdenv.lib.optionals stdenv.isDarwin [
+      (fetchpatch {
+        url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
+        sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
+      })
+      ./filter-mkostemp-darwin.patch
+    ];
 
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
@@ -89,21 +95,13 @@
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
+  doInstallCheck = doCheck;
 
   setupHook = ./setup-hook-2.0.sh;
 
-  crossAttrs.preConfigure =
-    stdenv.lib.optionalString (hostPlatform.isHurd)
-       # On GNU, libgc depends on libpthread, but the cross linker doesn't
-       # know where to find libpthread, which leads to erroneous test failures
-       # in `configure', where `-pthread' and `-lpthread' aren't explicitly
-       # passed.  So it needs some help (XXX).
-       "export LDFLAGS=-Wl,-rpath-link=${gnu.libpthreadCross}/lib";
-
-
   meta = {
     description = "Embeddable Scheme implementation";
-    homepage    = http://www.gnu.org/software/guile/;
+    homepage    = https://www.gnu.org/software/guile/;
     license     = stdenv.lib.licenses.lgpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ ludo lovek323 ];
     platforms   = stdenv.lib.platforms.all;
@@ -123,7 +121,7 @@
 //
 
 (stdenv.lib.optionalAttrs (!stdenv.isLinux) {
-  # Work around <http://bugs.gnu.org/14201>.
-  SHELL = "/bin/sh";
-  CONFIG_SHELL = "/bin/sh";
+  # Work around <https://bugs.gnu.org/14201>.
+  SHELL = "${stdenv.shell}";
+  CONFIG_SHELL = "${stdenv.shell}";
 })

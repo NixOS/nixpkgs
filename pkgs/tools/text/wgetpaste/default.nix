@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wget, bash, coreutils }:
+{ stdenv, fetchurl, wget, bash }:
 
 stdenv.mkDerivation rec {
   version = "2.28";

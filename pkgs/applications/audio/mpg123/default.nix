@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl, alsaLib
-, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
-  configureFlags =
-    stdenv.lib.optional (hostPlatform ? mpg123) "--with-cpu=${hostPlatform.mpg123.cpu}";
+  configureFlags = stdenv.lib.optional
+    (stdenv.hostPlatform ? mpg123)
+    "--with-cpu=${stdenv.hostPlatform.mpg123.cpu}";
 
   meta = {
     description = "Fast console MPEG Audio Player and decoder library";

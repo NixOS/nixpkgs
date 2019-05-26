@@ -13,6 +13,8 @@ let
     };
   };
 
+  boostPython = boost.override { enablePython = true; };
+
 in stdenv.mkDerivation rec {
   name = "twister-${version}";
   version = "0.9.34";
@@ -29,13 +31,13 @@ in stdenv.mkDerivation rec {
     "--disable-deprecated-functions"
     "--enable-tests"
     "--enable-python-binding"
-    "--with-boost-libdir=${boost.out}/lib"
+    "--with-boost-libdir=${boostPython.out}/lib"
   ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     autoconf automake libtool python2
-    boost db openssl geoip miniupnpc libiconv
+    boostPython db openssl geoip miniupnpc libiconv
   ];
 
   patches = stdenv.lib.singleton (fetchpatch {

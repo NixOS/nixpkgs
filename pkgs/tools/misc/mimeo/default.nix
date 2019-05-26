@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   name = "mimeo-${version}";
-  version = "2017.6.6";
+  version = "2019.3";
 
   src = fetchurl {
-    url = "http://xyne.archlinux.ca/projects/mimeo/src/${name}.tar.xz";
-    sha256 = "126g3frks6zn6yc1r005qpmxg1pvvvf06ivpyvd9xribn2mwki2z";
+    url = "https://xyne.archlinux.ca/projects/mimeo/src/${name}.tar.xz";
+    sha256 = "1ry9f08584vngznbja76z53as12q2i06ncfnf52dxyidfgw5mx65";
   };
 
   buildInputs = [ file desktop-file-utils ];

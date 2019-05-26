@@ -3,17 +3,16 @@
 
 buildPythonPackage rec {
   pname = "rfc3986";
-  version = "1.1.0";
-  name = "${pname}-${version}";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8458571c4c57e1cf23593ad860bb601b6a604df6217f829c2bc70dc4b5af941b";
+    sha256 = "1jprl2zm3pw2rfbda9rhg3v5bm8q36b8c9i4k8znimlf1mv8bcic";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
   checkPhase = ''
-    py.test
+    pytest
   '';
 
   meta = with stdenv.lib; {

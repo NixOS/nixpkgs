@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "python-uinput";
   version = "0.11.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

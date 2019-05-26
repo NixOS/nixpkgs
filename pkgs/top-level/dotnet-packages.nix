@@ -6,7 +6,6 @@
 , fetchNuGet
 , pkgconfig
 , mono
-, monodevelop
 , fsharp
 , unzip
 , overrides ? {}
@@ -107,6 +106,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     version = "7.0.4";
     sha256 = "01zpdb0pybdf0by02rwd7pb1g0cmnn8jxm2pibzxjxw6f4l43ywi";
     outputFiles = [ "*" ];
+  };
+
+  FsLexYaccRuntime = fetchNuGet {
+    baseName = "FsLexYacc.Runtime";
+    version = "6.1.0";
+    sha256 = "18vrx4lxsn4hkfishg4abv0d4q21dsph0bm4mdq5z8afaypp5cr7";
+    outputFiles = [ "lib/net40/*" ];
   };
 
   FsPickler = fetchNuGet {
@@ -211,8 +217,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   SharpFont = fetchNuGet {
     baseName = "SharpFont";
-    version = "3.1.0";
-    sha256 = "137y514i4zi0i0qsx7nv4ibl4kifbr8xr23rqdkwf7yxf88jjmh2";
+    version = "4.0.1";
+    sha256 = "1yd3cm4ww0hw2k3aymf792hp6skyg8qn491m2a3fhkzvsl8z7vs8";
     outputFiles = [ "lib/*" "config/*" ];
   };
 
@@ -299,17 +305,27 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Boogie = buildDotnetPackage rec {
     baseName = "Boogie";
-    version = "2017-01-03";
+    version = "2018-05-28";
     name = "${baseName}-unstable-${version}";
 
     src = fetchFromGitHub {
       owner = "boogie-org";
       repo = "boogie";
-      rev = "5e42f0dd2891b2b85a9198052e55592a2943b7ef";
-      sha256 = "1mjnf96hbn9abgzyvmrfxlhnm213290xb9wca7rnnl12i4fa4ahl";
+      rev = "fc97aac639505f46cda7904dae95c9557716d037";
+      sha256 = "1hjksc5sapw1shxjwg0swja5afman8i15wnv5b6rzkqd4mg8y6nz";
     };
 
-    buildInputs = [ dotnetPackages.NUnitRunners ];
+    # emulate `nuget restore Source/Boogie.sln`
+    # which installs in $srcdir/Source/packages
+    preBuild = ''
+      mkdir -p Source/packages/NUnit.2.6.3
+      ln -sn ${dotnetPackages.NUnit}/lib/dotnet/NUnit Source/packages/NUnit.2.6.3/lib
+    '';
+
+    buildInputs = [
+      dotnetPackages.NUnit
+      dotnetPackages.NUnitRunners
+    ];
 
     xBuildFiles = [ "Source/Boogie.sln" ];
 
@@ -318,11 +334,23 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     postInstall = ''
         mkdir -pv "$out/lib/dotnet/${baseName}"
         ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${baseName}/z3.exe"
+
+        # so that this derivation can be used as a vim plugin to install syntax highlighting
+        vimdir=$out/share/vim-plugins/boogie
+        install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+        mkdir $vimdir/ftdetect
+        echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
     '';
 
     meta = with stdenv.lib; {
       description = "An intermediate verification language";
       homepage = "https://github.com/boogie-org/boogie";
+      longDescription = ''
+        Boogie is an intermediate verification language (IVL), intended as a
+        layer on which to build program verifiers for other languages.
+
+        This derivation may be used as a vim plugin to provide syntax highlighting.
+      '';
       license = licenses.mspl;
       maintainers = [ maintainers.taktoa ];
       platforms = with platforms; (linux ++ darwin);
@@ -374,57 +402,18 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = with stdenv.lib; {
       description = "A programming language with built-in specification constructs";
-      homepage = "http://research.microsoft.com/dafny";
+      homepage = "https://research.microsoft.com/dafny";
       maintainers = with maintainers; [ layus ];
       license = licenses.mit;
       platforms = with platforms; (linux ++ darwin);
     };
   };
 
-  Deedle = buildDotnetPackage rec {
+  Deedle = fetchNuGet rec {
     baseName = "Deedle";
-    version = "1.2.0";
-
-    src = fetchFromGitHub {
-      owner = "BlueMountainCapital";
-      repo = baseName;
-      rev = "v${version}";
-      sha256 = "115zzh3q57w8wr02cl2v8wijnj1rg01j1mk9zbzixbb4aird72n5";
-    };
-
-    # Enough files from this repo are needed that it will be quicker to just get the entire repo
-    fsharpDataSrc = fetchFromGitHub {
-      owner = "fsharp";
-      repo = "FSharp.Data";
-      rev = "2.2.3";
-      sha256 = "1h3v9rc8k0khp61cv5n01larqbxd3xcx3q52sw5zf9l0661vw7qr";
-    };
-
-    buildInputs = [
-      fsharp
-      dotnetPackages.FsCheck
-      dotnetPackages.FSharpCompilerService
-      dotnetPackages.FSharpData
-      dotnetPackages.FSharpFormatting
-      dotnetPackages.MathNetNumerics
-      dotnetPackages.NUnit
-    ];
-
-    preConfigure = ''
-      mkdir -vp paket-files/fsharp
-      ln -sv ${fsharpDataSrc} paket-files/fsharp/FSharp.Data
-    '';
-
-    xBuildFiles = [ "Deedle.Core.sln" ];  # Come back later to get RProvider as well
-    outputFiles = [ "bin/*" "LICENSE.md" ];
-
-    meta = {
-      description = "Deedle is an easy to use library for data and time series manipulation and for scientific programming";
-      homepage = "http://bluemountaincapital.github.io/Deedle/";
-      license = stdenv.lib.licenses.free;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
-    };
+    version = "1.2.5";
+    sha256 = "0g19ll6bp97ixprcnpwwvshr1n9jxxf9xjhkxp0r63mg46z48jnw";
+    outputFiles = [ "*" ];
   };
 
   ExcelDna = buildDotnetPackage rec {
@@ -574,7 +563,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "The F# compiler services package is a component derived from the F# compiler source code that exposes additional functionality for implementing F# language bindings";
-      homepage = "http://fsharp.github.io/FSharp.Compiler.Service/";
+      homepage = "https://fsharp.github.io/FSharp.Compiler.Service/";
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -618,7 +607,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "F# Data: Library for Data Access";
-      homepage = "http://fsharp.github.io/FSharp.Data/";
+      homepage = "https://fsharp.github.io/FSharp.Data/";
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -650,7 +639,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #
   #   meta = {
   #     description = "FSharpx.Extras is a collection of libraries and tools for use with F#";
-  #     homepage = "http://fsprojects.github.io/FSharpx.Extras/";
+  #     homepage = "https://fsprojects.github.io/FSharpx.Extras/";
   #     license = stdenv.lib.licenses.asl20;
   #     maintainers = with stdenv.lib.maintainers; [ obadz ];
   #     platforms = with stdenv.lib.platforms; linux;
@@ -752,7 +741,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A generic framework for creating extensible applications";
-      homepage = http://www.mono-project.com/Mono.Addins;
+      homepage = https://www.mono-project.com/Mono.Addins;
       longDescription = ''
         A generic framework for creating extensible applications,
         and for creating libraries which extend those applications.
@@ -850,40 +839,11 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  NewtonsoftJson = buildDotnetPackage rec {
+  NewtonsoftJson = fetchNuGet {
     baseName = "Newtonsoft.Json";
-    version = "6.0.8";
-
-    src = fetchurl {
-      name = "${baseName}-${version}.tar.gz";
-      url = "https://github.com/JamesNK/Newtonsoft.Json/archive/${version}.tar.gz";
-      sha256 = "14znf5mycka578bxjnlnz6a3f9nfkc682hgmgg42gdzksnarvhlm";
-    };
-
-    buildInputs = [
-      fsharp
-      dotnetPackages.NUnit
-      dotnetPackages.SystemCollectionsImmutable
-      dotnetPackages.Autofac
-    ];
-
-    patches = [ ../development/dotnet-modules/patches/newtonsoft-json.references.patch ];
-
-    postConfigure = ''
-       # Just to make sure there's no attempt to call these executables
-       rm -rvf Tools
-    '';
-
-    xBuildFiles = [ "Src/Newtonsoft.Json.sln" ];
-    outputFiles = [ "Src/Newtonsoft.Json/bin/Release/Net45/*" ];
-
-    meta = {
-      description = "Popular high-performance JSON framework for .NET";
-      homepage = "https://www.newtonsoft.com/json";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
-    };
+    version = "11.0.2";
+    sha256 = "07na27n4mlw77f3hg5jpayzxll7f4gyna6x7k9cybmxpbs6l77k7";
+    outputFiles = [ "*" ];
   };
 
   Nuget = buildDotnetPackage {
@@ -906,66 +866,11 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     exeFiles = [ "nuget.exe" ];
   };
 
-  Paket = buildDotnetPackage rec {
+  Paket = fetchNuGet {
     baseName = "Paket";
-    version = "1.18.2";
-
-    src = fetchFromGitHub {
-      owner = "fsprojects";
-      repo = "Paket";
-      rev = version;
-      sha256 = "04iwy3mggz7xn36lhzyrwqzlw451a16jblwx131qjm6fnac6rq1m";
-    };
-
-    buildInputs = [
-      fsharp
-      dotnetPackages.NewtonsoftJson
-      dotnetPackages.UnionArgParser
-      dotnetPackages.NUnit
-    ];
-
-    fileFsUnit = fetchurl {
-      name = "FsUnit.fs";
-      url = https://raw.githubusercontent.com/forki/FsUnit/81d27fd09575a32c4ed52eadb2eeac5f365b8348/FsUnit.fs;
-      sha256 = "1zxigqgb2s2v755622jbbzibvf91990x2dijhbdgg646vsybkpdp";
-    };
-
-    fileGlobbing = fetchurl {
-      name = "Globbing.fs";
-      url = https://raw.githubusercontent.com/fsharp/FAKE/8e65e2fc1406f326b44f3f87ec9ca9b3127a6e78/src/app/FakeLib/Globbing/Globbing.fs;
-      sha256 = "1v7d7666a61j6f8ksh0q40hfsc5b03448viq17xa91xgb7skhyx7";
-    };
-
-    fileErrorHandling = fetchurl {
-      name = "ErrorHandling.fs";
-      url = https://raw.githubusercontent.com/fsprojects/Chessie/3017092260b4a59a3b4b25bf8fca6be6eb7487eb/src/Chessie/ErrorHandling.fs;
-      sha256 = "0ka9ilfbl4izxc1wqd5vlfjnp7n2xcckfhp13gzhqbdx7464van9";
-    };
-
-    postConfigure = ''
-       # Copy said single-files-in-git-repos
-       mkdir -p "paket-files/forki/FsUnit"
-       cp -v "${fileFsUnit}" "paket-files/forki/FsUnit/FsUnit.fs"
-
-       mkdir -p "paket-files/fsharp/FAKE/src/app/FakeLib/Globbing"
-       cp -v "${fileGlobbing}" "paket-files/fsharp/FAKE/src/app/FakeLib/Globbing/Globbing.fs"
-
-       mkdir -p "paket-files/fsprojects/Chessie/src/Chessie"
-       cp -v "${fileErrorHandling}" "paket-files/fsprojects/Chessie/src/Chessie/ErrorHandling.fs"
-    '';
-
-    xBuildFiles = [ "Paket.sln" ];
-
-    outputFiles = [ "bin/*" ];
-    exeFiles = [ "paket.exe" ];
-
-    meta = {
-      description = "A dependency manager for .NET and Mono projects";
-      homepage = "http://fsprojects.github.io/Paket/";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
-    };
+    version = "5.179.1";
+    sha256 = "11rzna03i145qj08hwrynya548fwk8xzxmg65swyaf19jd7gzg82";
+    outputFiles = [ "*" ];
   };
 
   Projekt = buildDotnetPackage rec {
@@ -1022,7 +927,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A declarative CLI argument/XML configuration parser for F# applications";
-      homepage = http://nessos.github.io/UnionArgParser/;
+      homepage = https://nessos.github.io/UnionArgParser/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;

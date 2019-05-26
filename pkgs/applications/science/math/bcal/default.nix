@@ -1,19 +1,21 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchFromGitHub, python3Packages, readline }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "bcal-${version}";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "bcal";
     rev = "v${version}";
-    sha256 = "0jdn46wzwq7yn3x6p1xyqarp52pcr0ghnfhkm7nyxv734g1abw7r";
+    sha256 = "0h6qi5rvzl6c6fsfdpdb3l4jcgip03l18i0b1x08z1y89i56y8mm";
   };
 
   nativeBuildInputs = [ python3Packages.pytest ];
+
+  buildInputs = [ readline ];
 
   doCheck = true;
   checkPhase = ''

@@ -1,6 +1,6 @@
 --- a/src/libtracker-miners-common/tracker-domain-ontology.c
 +++ b/src/libtracker-miners-common/tracker-domain-ontology.c
-@@ -313,7 +313,7 @@
+@@ -323,7 +323,7 @@
  			goto end;
  		}
  	} else {
@@ -9,7 +9,7 @@
  		                         DEFAULT_RULE, NULL);
  
  		if (!g_file_test (path, G_FILE_TEST_IS_REGULAR)) {
-@@ -372,7 +372,7 @@
+@@ -388,7 +388,7 @@
  	if (!priv->ontology_location) {
  		gchar *ontology_path;
  

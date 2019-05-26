@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "fn";
-  name = "${pname}-${version}";
   version = "0.4.3";
 
   meta = {

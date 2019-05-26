@@ -1,17 +1,16 @@
 { callPackage, stdenv }:
 
 let
-  stableVersion = "2.1.5";
-  # Currently there is no preview version.
-  previewVersion = stableVersion;
+  stableVersion = "2.1.18";
+  previewVersion = "2.2.0b1";
   addVersion = args:
     let version = if args.stable then stableVersion else previewVersion;
         branch = if args.stable then "stable" else "preview";
     in args // { inherit version branch; };
   mkGui = args: callPackage (import ./gui.nix (addVersion args)) { };
   mkServer = args: callPackage (import ./server.nix (addVersion args)) { };
-  guiSrcHash = "1d7pwm36bqjm0d021z5qnx49v8zf4yi9jn5hn6zlbiqbz53l1x7l";
-  serverSrcHash = "002pqm4jcm5qbbw1vnhjdrgysh7d6xmdl66605wz1vbp7xn5s961";
+  guiSrcHash = "00hcri32vakz17ywbqd9lycxdai490ds0g1v8znm75ddvszfbv7i";
+  serverSrcHash = "0f28f5f4dsr8h4q592dh9i1z0gp836gdgm8clwrkb7i01df0rrlf";
 in {
   guiStable = mkGui {
     stable = true;
@@ -19,7 +18,7 @@ in {
   };
   guiPreview = mkGui {
     stable = false;
-    sha256Hash = guiSrcHash;
+    sha256Hash = "0kx68r8kgnsb7710a1a5y64blmw2jl1gv37bzbbivi15dzgmykfh";
   };
 
   serverStable = mkServer {
@@ -28,6 +27,6 @@ in {
   };
   serverPreview = mkServer {
     stable = false;
-    sha256Hash = serverSrcHash;
+    sha256Hash = "1jxkba7hc7271hjw3839r0yfzs87dzv1nqx62adhk9qrrcfqhg58";
   };
 }

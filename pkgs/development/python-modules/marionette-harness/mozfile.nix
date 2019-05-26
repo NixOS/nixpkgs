@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -7,7 +6,6 @@
 buildPythonPackage rec {
   pname = "mozfile";
   version = "1.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

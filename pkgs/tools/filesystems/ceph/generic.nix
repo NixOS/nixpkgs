@@ -2,14 +2,14 @@
 , which, git
 , boost, python2Packages
 , libxml2, zlib
-, openldap, lttngUst
+, openldap, lttng-ust
 , babeltrace, gperf
 , cunit, snappy
 , rocksdb, makeWrapper
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
-, curl ? null, fuse ? null, libibverbs ? null, librdmacm ? null
+, curl ? null, fuse ? null
 , libedit ? null, libatomic_ops ? null, kinetic-cpp-client ? null
 , libs3 ? null
 
@@ -25,7 +25,7 @@
 , zfs ? null
 
 # Version specific arguments
-, version, src, patches ? [], buildInputs ? []
+, version, src ? [], buildInputs ? []
 , ...
 }:
 
@@ -37,15 +37,14 @@ with stdenv.lib;
 let
 
   shouldUsePkg = pkg_: let pkg = (builtins.tryEval pkg_).value;
-    in if pkg.meta.available or false then pkg else null;
+    in if lib.any (lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms
+      then pkg else null;
 
   optYasm = shouldUsePkg yasm;
   optFcgi = shouldUsePkg fcgi;
   optExpat = shouldUsePkg expat;
   optCurl = shouldUsePkg curl;
   optFuse = shouldUsePkg fuse;
-  optLibibverbs = shouldUsePkg libibverbs;
-  optLibrdmacm = shouldUsePkg librdmacm;
   optLibedit = shouldUsePkg libedit;
   optLibatomic_ops = shouldUsePkg libatomic_ops;
   optKinetic-cpp-client = shouldUsePkg kinetic-cpp-client;
@@ -62,9 +61,6 @@ let
   optLibxfs = shouldUsePkg libxfs;
   optZfs = shouldUsePkg zfs;
 
-  hasMon = true;
-  hasMds = true;
-  hasOsd = true;
   hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
 
 
@@ -84,11 +80,10 @@ let
     none = [ ];
   };
 
-  ceph-python-env = python2Packages.python.withPackages (ps: [ 
+  ceph-python-env = python2Packages.python.withPackages (ps: [
     ps.sphinx
     ps.flask
-    ps.argparse
-    ps.cython 
+    ps.cython
     ps.setuptools
     ps.pip
     # Libraries needed by the python tools
@@ -97,7 +92,7 @@ let
     ps.prettytable
     ps.webob
     ps.cherrypy
-	]);
+  ]);
 
 in
 stdenv.mkDerivation {
@@ -105,9 +100,9 @@ stdenv.mkDerivation {
 
   inherit src;
 
-  patches = [ 
- #	 ./ceph-patch-cmake-path.patch
-    ./0001-kv-RocksDBStore-API-break-additional.patch   
+  patches = [
+ #   ./ceph-patch-cmake-path.patch
+    ./0001-kv-RocksDBStore-API-break-additional.patch
   ] ++ optionals stdenv.isLinux [
     ./0002-fix-absolute-include-path.patch
   ];
@@ -117,10 +112,10 @@ stdenv.mkDerivation {
     pkgconfig which git python2Packages.wrapPython makeWrapper
     (ensureNewerSourcesHook { year = "1980"; })
   ];
-  
+
   buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
-    boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3 
-    malloc zlib openldap lttngUst babeltrace gperf cunit
+    boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
+    malloc zlib openldap lttng-ust babeltrace gperf cunit
     snappy rocksdb
   ] ++ optionals stdenv.isLinux [
     linuxHeaders libuuid udev keyutils optLibaio optLibxfs optZfs
@@ -130,28 +125,28 @@ stdenv.mkDerivation {
     optKinetic-cpp-client
   ];
 
-  
+
   preConfigure =''
     # rip off submodule that interfer with system libs
 	rm -rf src/boost
 	rm -rf src/rocksdb
-	
+
 	# require LD_LIBRARY_PATH for cython to find internal dep
 	export LD_LIBRARY_PATH="$PWD/build/lib:$LD_LIBRARY_PATH"
-	
+
 	# requires setuptools due to embedded in-cmake setup.py usage
 	export PYTHONPATH="${python2Packages.setuptools}/lib/python2.7/site-packages/:$PYTHONPATH"
   '';
 
-  cmakeFlags = [ 
+  cmakeFlags = [
     "-DENABLE_GIT_VERSION=OFF"
     "-DWITH_SYSTEM_BOOST=ON"
     "-DWITH_SYSTEM_ROCKSDB=ON"
     "-DWITH_LEVELDB=OFF"
-    
+
     # enforce shared lib
     "-DBUILD_SHARED_LIBS=ON"
-    
+
     # disable cephfs, cmake build broken for now
     "-DWITH_CEPHFS=OFF"
     "-DWITH_LIBCEPHFS=OFF"
@@ -163,14 +158,14 @@ stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
-  
+
   outputs = [ "dev" "lib" "out" "doc" ];
 
   meta = {
     homepage = https://ceph.com/;
     description = "Distributed storage system";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ adev ak wkennington ];
+    maintainers = with maintainers; [ adev ak ];
     platforms = platforms.unix;
   };
 

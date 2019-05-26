@@ -93,8 +93,8 @@ in
       '';
 
       serviceConfig = {
-        User = config.users.extraUsers.gollum.name;
-        Group = config.users.extraGroups.gollum.name;
+        User = config.users.users.gollum.name;
+        Group = config.users.groups.gollum.name;
         PermissionsStartOnly = true;
         ExecStart = ''
           ${pkgs.gollum}/bin/gollum \

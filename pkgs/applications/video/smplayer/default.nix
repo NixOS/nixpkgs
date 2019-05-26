@@ -1,11 +1,11 @@
 { stdenv, fetchurl, qmake, qtscript }:
 
 stdenv.mkDerivation rec {
-  name = "smplayer-18.4.0";
+  name = "smplayer-19.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/smplayer/${name}.tar.bz2";
-    sha256 = "0q2fbg41djyxsy6jinlnidpcqxvs9bi91ga3fwlgnfh6kxsw2ldd";
+    sha256 = "1xda9pbrc3dfbs71n5l8yszlcywz9456mwkv52vmn8lszhvjpjxm";
   };
 
   buildInputs = [ qtscript ];

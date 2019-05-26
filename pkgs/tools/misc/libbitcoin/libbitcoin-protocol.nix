@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, autoreconfHook
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
 , boost, libbitcoin, secp256k1, zeromq }:
 
 let

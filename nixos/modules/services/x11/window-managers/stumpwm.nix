@@ -15,10 +15,10 @@ in
     services.xserver.windowManager.session = singleton {
       name = "stumpwm";
       start = ''
-        ${pkgs.stumpwm}/bin/stumpwm &
+        ${pkgs.lispPackages.stumpwm}/bin/stumpwm &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.stumpwm ];
+    environment.systemPackages = [ pkgs.lispPackages.stumpwm ];
   };
 }

@@ -8,7 +8,7 @@ with lib.trivial;
 with lib.strings;
 let
 
-  inherit (lib.modules) mergeDefinitions filterOverrides;
+  inherit (lib.modules) mergeDefinitions;
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -119,7 +119,9 @@ rec {
       let
         betweenDesc = lowest: highest:
           "${toString lowest} and ${toString highest} (both inclusive)";
-        between = lowest: highest: assert lowest <= highest;
+        between = lowest: highest:
+          assert lib.assertMsg (lowest <= highest)
+            "ints.between: lowest must be smaller than highest";
           addCheck int (x: x >= lowest && x <= highest) // {
             name = "intBetween";
             description = "integer between ${betweenDesc lowest highest}";
@@ -167,6 +169,16 @@ rec {
         # s32 = sign 32 4294967296;
       };
 
+    # Alias of u16 for a port number
+    port = ints.u16;
+
+    float = mkOptionType rec {
+        name = "float";
+        description = "floating point number";
+        check = isFloat;
+        merge = mergeOneOption;
+    };
+
     str = mkOptionType {
       name = "str";
       description = "string";
@@ -185,7 +197,10 @@ rec {
     # separator between the values).
     separatedString = sep: mkOptionType rec {
       name = "separatedString";
-      description = "string";
+      description = if sep == ""
+        then "Concatenated string" # for types.string.
+        else "strings concatenated with ${builtins.toJSON sep}"
+      ;
       check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
       functor = (defaultFunctor name) // {
@@ -269,8 +284,7 @@ rec {
             (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
           )
           # Push down position info.
-          (map (def: listToAttrs (mapAttrsToList (n: def':
-            { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs)));
+          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsOf (elemType.substSubModules m);
@@ -302,7 +316,6 @@ rec {
               }
           else
             def;
-        listOnly = listOf elemType;
         attrOnly = attrsOf elemType;
       in mkOptionType rec {
         name = "loaOf";
@@ -372,7 +385,13 @@ rec {
             # This is mandatory as some option declaration might use the
             # "name" attribute given as argument of the submodule and use it
             # as the default of option declarations.
-            args.name = "&lt;name&gt;";
+            #
+            # Using lookalike unicode single angle quotation marks because
+            # of the docbook transformation the options receive. In all uses
+            # &gt; and &lt; wouldn't be encoded correctly so the encoded values
+            # would be used, and use of `<` and `>` would break the XML document.
+            # It shouldn't cause an issue since this is cosmetic for the manual.
+            args.name = "‹name›";
           }).options;
         getSubModules = opts';
         substSubModules = m: submodule m;
@@ -427,7 +446,9 @@ rec {
     # Either value of type `finalType` or `coercedType`, the latter is
     # converted to `finalType` using `coerceFunc`.
     coercedTo = coercedType: coerceFunc: finalType:
-      assert coercedType.getSubModules == null;
+      assert lib.assertMsg (coercedType.getSubModules == null)
+        "coercedTo: coercedType must not have submodules (it’s a ${
+          coercedType.description})";
       mkOptionType rec {
         name = "coercedTo";
         description = "${finalType.description} or ${coercedType.description} convertible to it";
@@ -452,7 +473,6 @@ rec {
       name = builtins.trace "types.optionSet is deprecated; use types.submodule instead" "optionSet";
       description = "option set";
     };
-
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 

@@ -5,27 +5,29 @@
 , numpy
 , pandas
 , python
-, fetchurl
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "0.10.2";
+  version = "0.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd5af05cc9ddd5713016ec1a7f0d481daf2f0bb4d4e0bd66790503f6412bbc59";
+    sha256 = "ac09a819e791be208ae33fa7ecee19d0fe7b5479906f927d358a61957ce27e10";
   };
 
   checkInputs = [ pytest ];
   propagatedBuildInputs = [numpy pandas];
 
   checkPhase = ''
-    py.test $out/${python.sitePackages}
+    pytest $out/${python.sitePackages}
   '';
 
   # There always seem to be broken tests...
   doCheck = false;
+
+  disabled = !isPy3k;
 
   meta = {
     description = "N-D labeled arrays and datasets in Python";

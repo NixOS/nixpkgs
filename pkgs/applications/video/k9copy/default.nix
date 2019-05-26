@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, cmake, automoc4
+, cmake
 , dvdauthor, xineLib, libmpeg2, libav, libdvdread, libdvdnav, dvdplusrwtools
 , phonon, qtx11extras
 , extra-cmake-modules, kio, kiconthemes, ki18n, kdesu, kdoctools, solid

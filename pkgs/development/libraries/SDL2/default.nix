@@ -1,40 +1,33 @@
-{ stdenv, lib, fetchurl, pkgconfig, audiofile
-, openglSupport ? false, libGL
-, alsaSupport ? true, alsaLib
-, x11Support ? true, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
-, waylandSupport ? true, wayland, wayland-protocols, libxkbcommon
-, dbusSupport ? false, dbus
+{ stdenv, config, libGLSupported, fetchurl, pkgconfig
+, openglSupport ? libGLSupported, libGL
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
+, libXinerama, libXext, libXxf86vm, libXrandr
+, waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, wayland, wayland-protocols, libxkbcommon
+, dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, dbus
 , udevSupport ? false, udev
 , ibusSupport ? false, ibus
-, pulseaudioSupport ? true, libpulseaudio
+, fcitxSupport ? false, fcitx
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, libiconv
+, audiofile, cf-private, libiconv
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 
-with lib;
-
-assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
-assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null);
-
-let
-
-  configureFlagsFun = attrs: [
-    "--disable-oss"
-  ] ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib";
-
-in
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "SDL2-${version}";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "1v4js1gkr75hzbxzhwzzif0sf9g07234sd23x1vdaqc661bprizd";
+    url = "https://www.libsdl.org/release/${name}.tar.gz";
+    sha256 = "1c94ndagzkdfqaa838yqg589p1nnqln8mv0hpwfhrkbfczf8cl95";
   };
 
   outputs = [ "out" "dev" ];
@@ -44,28 +37,39 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ libiconv ]
+  propagatedBuildInputs = dlopenPropagatedBuildInputs;
+
+  dlopenPropagatedBuildInputs = [ ]
+    # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
+    ++ optional openglSupport libGL
+    # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
+    ++ optionals x11Support [ libX11 xorgproto ];
+
+  dlopenBuildInputs = [ ]
+    ++ optionals  alsaSupport [ alsaLib audiofile ]
     ++ optional  dbusSupport dbus
+    ++ optional  pulseaudioSupport libpulseaudio
     ++ optional  udevSupport udev
-    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
     ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
-    ++ optional  alsaSupport alsaLib
-    ++ optional  pulseaudioSupport libpulseaudio;
+    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ];
 
-  buildInputs = [ audiofile ]
-    ++ optional  openglSupport libGL
+  buildInputs = [ libiconv ]
+    ++ dlopenBuildInputs
     ++ optional  ibusSupport ibus
-    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
+    ++ optional  fcitxSupport fcitx
+    ++ optionals stdenv.isDarwin [
+      AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL
+      # Needed for NSDefaultRunLoopMode symbols.
+      cf-private
+    ];
 
-  # /build/SDL2-2.0.7/src/video/wayland/SDL_waylandevents.c:41:10: fatal error:
-  #   pointer-constraints-unstable-v1-client-protocol.h: No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
-  configureFlags = configureFlagsFun { inherit alsaLib; };
-
-  crossAttrs = {
-    configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
-  };
+  configureFlags = [
+    "--disable-oss"
+  ] ++ optional (!x11Support) "--without-x"
+    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
+    ++ optional stdenv.isDarwin "--disable-sdltest";
 
   postInstall = ''
     moveToOutput lib/libSDL2main.a "$dev"
@@ -85,12 +89,13 @@ stdenv.mkDerivation rec {
   # SDL API that requires said libraries will fail to start.
   #
   # You can grep SDL sources with `grep -rE 'SDL_(NAME|.*_SYM)'` to
-  # confirm that they actually use most of the `propagatedBuildInputs`
-  # from above in this way. This is pretty weird.
-  postFixup = ''
+  # list the symbols used in this way.
+  postFixup = let
+    rpath = makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
+  in optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
     for lib in $out/lib/*.so* ; do
-      if [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
+      if ! [[ -L "$lib" ]]; then
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
       fi
     done
   '';

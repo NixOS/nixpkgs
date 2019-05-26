@@ -1,7 +1,7 @@
 { stdenv, stdenv_32bit, pkgsi686Linux, fetchFromGitHub, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "red-v${version}";
+  name = "red-${version}";
   version = "0.6.3";
   src = fetchFromGitHub {
     rev = "6a43c767fa2e85d668b83f749158a18e62c30f70";
@@ -87,6 +87,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ uralbash ];
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.bsd3;
-    homepage = http://www.red-lang.org/;
+    homepage = https://www.red-lang.org/;
   };
 }

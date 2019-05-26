@@ -1,18 +1,18 @@
-{lib, buildPythonPackage, fetchPypi, fetchpatch, pytest, flake8}:
+{lib, buildPythonPackage, fetchPypi, pytest, flake8}:
 
 buildPythonPackage rec {
   pname = "pytest-flake8";
-  version = "1.0.1";
+  version = "1.0.4";
 
   # although pytest is a runtime dependency, do not add it as
   # propagatedBuildInputs in order to allow packages depend on another version
   # of pytest more easily
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ flake8 ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s5fdivrmhjf6ybr6m2qb1h8hndv2jh2ir29qv36lhy9b7sc9kg5";
+    sha256 = "4d225c13e787471502ff94409dcf6f7927049b2ec251c63b764a4b17447b60c0";
   };
 
   checkPhase = ''

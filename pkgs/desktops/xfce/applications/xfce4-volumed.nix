@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.xfce.org/projects/xfce4-volumed; # referenced but inactive
+    homepage = https://www.xfce.org/projects/xfce4-volumed; # referenced but inactive
     description = "A volume keys control daemon for the Xfce desktop environment";
     license = licenses.gpl3;
     platforms = platforms.linux;

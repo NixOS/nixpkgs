@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "tboot-${version}";
-  version = "1.9.6";
+  version = "1.9.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/tboot/${name}.tar.gz";
-    sha256 = "0f9afz260xhycpd0x5zz6jn8ha14i8j98rck0fhb55l1rbbfwm8v";
+    sha256 = "06f0ggl6vrb5ghklblvh2ixgmmjv31rkp1vfj9qm497iqwq9ac00";
   };
 
   patches = [ ./tboot-add-well-known-secret-option-to-lcp_writepol.patch ];

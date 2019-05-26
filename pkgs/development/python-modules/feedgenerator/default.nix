@@ -1,12 +1,11 @@
-{ stdenv, buildPythonPackage, glibcLocales, fetchurl, six, pytz }:
+{ stdenv, buildPythonPackage, glibcLocales, fetchPypi, six, pytz }:
 
 buildPythonPackage rec {
   pname = "feedgenerator";
   version = "1.9";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/f/feedgenerator/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "01mirwkm7xfx539hmvj7g9da1j51gw5lsx74dr0glizskjm5vq2s";
   };
 

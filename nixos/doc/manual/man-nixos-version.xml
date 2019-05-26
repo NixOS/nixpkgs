@@ -11,10 +11,14 @@
   </refname><refpurpose>show the NixOS version</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
-  <cmdsynopsis><command>nixos-version</command>
-   <arg><option>--hash</option>
+  <cmdsynopsis>
+   <command>nixos-version</command> 
+   <arg>
+    <option>--hash</option>
    </arg>
-   <arg><option>--revision</option>
+    
+   <arg>
+    <option>--revision</option>
    </arg>
   </cmdsynopsis>
  </refsynopsisdiv>
@@ -29,7 +33,8 @@
    The version consists of the following elements:
    <variablelist>
     <varlistentry>
-     <term><literal>16.03</literal>
+     <term>
+      <literal>16.03</literal>
      </term>
      <listitem>
       <para>
@@ -39,7 +44,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><literal>1011</literal>
+     <term>
+      <literal>1011</literal>
      </term>
      <listitem>
       <para>
@@ -53,7 +59,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><literal>6317da4</literal>
+     <term>
+      <literal>6317da4</literal>
      </term>
      <listitem>
       <para>
@@ -63,7 +70,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><literal>Emu</literal>
+     <term>
+      <literal>Emu</literal>
      </term>
      <listitem>
       <para>
@@ -83,9 +91,11 @@
   </para>
   <variablelist>
    <varlistentry>
-    <term><option>--hash</option>
+    <term>
+     <option>--hash</option>
     </term>
-    <term><option>--revision</option>
+    <term>
+     <option>--revision</option>
     </term>
     <listitem>
      <para>

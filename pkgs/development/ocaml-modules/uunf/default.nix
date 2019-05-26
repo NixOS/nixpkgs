@@ -1,25 +1,23 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner }:
 let
   pname = "uunf";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.01";
 
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";
-  version = "10.0.0";
+  version = "11.0.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "0c5lwica5668ybsffllk6x4p921nw4pljimgqikhf17k5hvyjsbr";
+    sha256 = "1j0v3dg19sq13fmbx4kzy3n1hjiv7hkm1ysxyrdva430jvqw23df";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg uutf cmdliner ];
 
   propagatedBuildInputs = [ uchar ];
-
-  unpackCmd = "tar xjf $src";
 
   inherit (topkg) buildPhase installPhase;
 
@@ -29,5 +27,6 @@ stdenv.mkDerivation rec {
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
+    broken = stdenv.isAarch64;
   };
 }

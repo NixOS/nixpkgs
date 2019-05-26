@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "couchdb-${version}";
-  version = "2.1.1";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${name}.tar.gz";
-    sha256 = "1k3v9v05417087b6fcj5yv03wl6i61xqrrhp0prl9b3ir2mmbwnm";
+    sha256 = "0lpk64n6fip85j1jz59kq20jdliwv6mh8j2h5zyxjn5i8b86hf0b";
   };
 
   nativeBuildInputs = [ makeWrapper ];

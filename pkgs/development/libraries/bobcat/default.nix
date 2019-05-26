@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   name = "bobcat-${version}";
-  version = "4.07.00";
+  version = "4.08.03";
 
   src = fetchFromGitHub {
-    sha256 = "0ja6rgdw4ng10acp2c0cv9k72i5sgng03i3xi2yshlm2811lgxcs";
+    sha256 = "163mdl8hxids7123bjxmqhcaqyc1dv7hv8k33s713ac6lzawarq2";
     rev = version;
     repo = "bobcat";
     owner = "fbb-git";

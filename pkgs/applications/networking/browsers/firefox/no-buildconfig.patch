@@ -1,7 +1,7 @@
 diff -ru -x '*~' firefox-55.0.3-orig/docshell/base/nsAboutRedirector.cpp firefox-55.0.3/docshell/base/nsAboutRedirector.cpp
 --- firefox-55.0.3-orig/docshell/base/nsAboutRedirector.cpp	2017-07-31 18:20:51.000000000 +0200
 +++ firefox-55.0.3/docshell/base/nsAboutRedirector.cpp	2017-09-26 22:02:00.814151731 +0200
-@@ -40,10 +40,6 @@
+@@ -36,10 +36,6 @@
      nsIAboutModule::ALLOW_SCRIPT
    },
    {
@@ -20,6 +20,6 @@ diff -ru -x '*~' firefox-55.0.3-orig/toolkit/content/jar.mn firefox-55.0.3/toolk
     content/global/browser-child.js
     content/global/browser-content.js
 -*   content/global/buildconfig.html
+    content/global/buildconfig.css
     content/global/contentAreaUtils.js
- #ifndef MOZ_FENNEC
-    content/global/customizeToolbar.css
+    content/global/datepicker.xhtml

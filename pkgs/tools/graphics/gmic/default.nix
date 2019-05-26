@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, ninja, pkgconfig
+{ stdenv, fetchurl, cmake, ninja, pkgconfig
 , opencv, openexr, graphicsmagick, fftw, zlib, libjpeg, libtiff, libpng
 , withGimpPlugin ? true, gimp ? null}:
 
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "man" ] ++ stdenv.lib.optional withGimpPlugin "gimpPlugin";
 
   src = fetchurl {
-    url = "http://gmic.eu/files/source/gmic_${version}.tar.gz";
+    url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
     sha256 = "0zqfj2ym5nn3ff93xh2wf9ayxqlznabbdi00xw4lm7vw3iwkzqnc";
   };
 
@@ -32,14 +32,10 @@ in stdenv.mkDerivation rec {
     "-DBUILD_LIB_STATIC=OFF"
     "-DBUILD_PLUGIN=${if withGimpPlugin then "ON" else "OFF"}"
     "-DENABLE_DYNAMIC_LINKING=ON"
-  ];
+  ] ++ stdenv.lib.optional withGimpPlugin "-DPLUGIN_INSTALL_PREFIX=${placeholder "gimpPlugin"}/${gimp.targetPluginDir}";
 
   postPatch = ''
     cp ${CMakeLists} CMakeLists.txt
-  '';
-
-  preConfigure = stdenv.lib.optionalString withGimpPlugin ''
-    cmakeFlags="$cmakeFlags -DPLUGIN_INSTALL_PREFIX=$gimpPlugin/${gimp.targetPluginDir}"
   '';
 
   meta = with stdenv.lib; {

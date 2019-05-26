@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, openssl, pcsclite, check }:
 
 stdenv.mkDerivation rec {
-  name = "yubico-piv-tool-1.5.0";
+  name = "yubico-piv-tool-1.7.0";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubico-piv-tool/Releases/${name}.tar.gz";
-    sha256 = "1axa0lnky5gsc8yack6mpfbjh49z0czr1cv52gbgjnx2kcbpb0y1";
+    sha256 = "0zzxh8p9p097zkh9b3prbnigxsc2wy1pj1r8f5ikli9i81z54a5l";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
       certificates, and create certificate requests, and other operations.
       A shared library and a command-line tool is included.
     '';
-    maintainers = with maintainers; [ wkennington ];
     license = licenses.bsd2;
     platforms = platforms.all;
   };

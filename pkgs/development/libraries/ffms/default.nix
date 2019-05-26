@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ffms-${version}";
-  version = "2.22";
+  version = "2.23";
 
   src = fetchFromGitHub {
     owner = "FFMS";
     repo = "ffms2";
     rev = version;
-    sha256 = "1ywcx1f3q533qfrbck5qhik3l617qhm062l8zixv02gnla7w6rkm";
+    sha256 = "0dkz5b3gxq5p4xz0qqg6l2sigszrlsinz3skyf0ln4wf3zrvf8m5";
   };
 
   NIX_CFLAGS_COMPILE = "-fPIC";

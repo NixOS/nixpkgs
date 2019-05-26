@@ -8,29 +8,27 @@
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , zlib
 , compiler-rt_src
-, libcxxabi
 , debugVersion ? false
-, enableSharedLibraries ? (buildPlatform == hostPlatform)
-, darwin
+, enableSharedLibraries ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , buildPackages
-, buildPlatform
-, hostPlatform
 }:
 
-assert (hostPlatform != buildPlatform) -> !enableSharedLibraries;
+assert (stdenv.hostPlatform != stdenv.buildPlatform) -> !enableSharedLibraries;
 
 let
   src = fetch "llvm" "1vi9sf7rx1q04wj479rsvxayb6z740iaz3qniwp266fgp5a07n8z";
 
-  # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = with stdenv.lib;
-    concatStringsSep "." (take 2 (splitString "." version));
-in stdenv.mkDerivation rec {
+  # Used when creating a versioned symlinks of libLLVM.dylib
+  versionSuffixes = with stdenv.lib;
+    let parts = splitString "." version; in
+    imap (i: _: concatStringsSep "." (take i parts)) parts;
+in
+
+stdenv.mkDerivation {
   name = "llvm-${version}";
 
   unpackPhase = ''
@@ -53,7 +51,7 @@ in stdenv.mkDerivation rec {
     groff
     libxml2
     libffi
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+  ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -63,7 +61,10 @@ in stdenv.mkDerivation rec {
       url = https://github.com/llvm-mirror/llvm/commit/5340b5b3d970069aebf3dde49d8964583742e01a.patch;
       sha256 = "095f8knplwqbc2p7rad1kq8633i34qynni9jna93an7kyc80wdxl";
    })
-  ];
+   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+     ../TLI-musl.patch
+     ../dynamiclibrary-musl.patch
+   ];
 
   postPatch = ""
   + ''
@@ -92,7 +93,7 @@ in stdenv.mkDerivation rec {
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
   ''
-  + stdenv.lib.optionalString (stdenv ? glibc) ''
+  + ''
     (
       cd projects/compiler-rt
       patch -p1 < ${
@@ -120,6 +121,10 @@ in stdenv.mkDerivation rec {
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
     "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
+
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
   ] ++ stdenv.lib.optional enableSharedLibraries [
     "-DLLVM_LINK_LLVM_DYLIB=ON"
   ] ++ stdenv.lib.optional (!isDarwin)
@@ -127,15 +132,18 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ stdenv.lib.optionals (buildPlatform != hostPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildPackages.llvmPackages_39.llvm}/bin/llvm-tblgen"
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    # Not yet supported
+    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+    "-DCOMPILER_RT_BUILD_XRAY=OFF"
+
   ];
 
   postBuild = ''
     rm -fR $out
-
-    paxmark m bin/{lli,llvm-rtdyld}
   '';
 
   postInstall = ""
@@ -148,8 +156,9 @@ in stdenv.mkDerivation rec {
   + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-release.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${version}.dylib
+    ${stdenv.lib.concatMapStringsSep "\n" (v: ''
+      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
+    '') versionSuffixes}
   '';
 
   enableParallelBuilding = true;
@@ -160,7 +169,7 @@ in stdenv.mkDerivation rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

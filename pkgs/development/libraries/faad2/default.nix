@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An open source MPEG-4 and MPEG-2 AAC decoder";
-    homepage    = http://www.audiocoding.com/faad2.html;
+    homepage    = https://www.audiocoding.com/faad2.html;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

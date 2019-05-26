@@ -1,6 +1,6 @@
 { stdenv, requireFile, unzip, rlwrap, bash }:
 
-assert (stdenv.system == "i686-linux");
+assert (stdenv.hostPlatform.system == "i686-linux");
 
 let
   libPath = stdenv.lib.makeLibraryPath

@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, go, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "linuxkit-${version}";

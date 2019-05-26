@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "4.9h";
+  version = "4.9i";
   name = "paml-${version}";
   src = fetchurl {
     url = "http://abacus.gene.ucl.ac.uk/software/paml${version}.tgz";
-    sha256 = "1czdfb3naadq0d3y42isrbyja33c3p28k8dv9mxlx2h19b7zcfv2";
+    sha256 = "1k5lcyls6c33ppp5fxl8ply2fy7i2k0gcqaifsl7gnc81d8ay4dw";
   };
 
   preBuild = ''

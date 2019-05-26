@@ -1,24 +1,20 @@
 { stdenv, buildPythonPackage, fetchPypi
-, setuptools-git, pytest, six }:
+, setuptools-git, pytest_3 }:
 
 buildPythonPackage rec {
   pname = "pytest-fixture-config";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1717cd7d2233943cae9af419c6e31dca5e40d5de01ef0bcfd5cd06f37548db08";
+    sha256 = "839d70343c87d6dda5bca88e3ab06e7b2027998dc1ec452c14d50be5725180a3";
   };
 
   nativeBuildInputs = [ setuptools-git ];
 
-  buildInputs = [ pytest ];
+  buildInputs = [ pytest_3 ];
 
-  checkInputs = [ six ];
-
-  checkPhase = ''
-    py.test
-  '';
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Simple configuration objects for Py.test fixtures. Allows you to skip tests when their required config variables aren’t set.";

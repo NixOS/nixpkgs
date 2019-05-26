@@ -1,15 +1,13 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , lib
-, idris
 }:
 build-idris-package  {
   name = "data";
   version = "2018-03-19";
 
-  idrisDeps = [ prelude contrib ];
+  idrisDeps = [ contrib ];
 
   src = fetchFromGitHub {
     owner = "jdevuyst";
@@ -23,6 +21,5 @@ build-idris-package  {
     homepage = https://github.com/jdevuyst/idris-data;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

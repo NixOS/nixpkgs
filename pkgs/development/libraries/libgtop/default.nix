@@ -1,18 +1,34 @@
-{ stdenv, fetchurl, glib, pkgconfig, perl, gettext, gobjectIntrospection, libintl, gnome3 }:
-let
-  pname = "libgtop";
-  version = "2.38.0";
-in
+{ stdenv
+, fetchurl
+, glib
+, pkgconfig
+, perl
+, gettext
+, gobject-introspection
+, gnome3
+, gtk-doc
+}:
+
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "libgtop";
+  version = "2.40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "04mnxgzyb26wqk6qij4iw8cxwl82r8pcsna5dg8vz2j3pdi0wv2g";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1m6jbqk8maa52gxrf223442fr5bvvxgb7ham6v039i3r1i62gwvq";
   };
 
-  propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig perl gettext gobjectIntrospection ];
+  nativeBuildInputs = [
+    pkgconfig
+    gtk-doc
+    perl
+    gettext
+    gobject-introspection
+  ];
+
+  propagatedBuildInputs = [
+    glib
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -24,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "A library that reads information about processes and the running system";
     license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
   };
 }

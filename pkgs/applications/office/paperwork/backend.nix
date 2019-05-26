@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchFromGitHub
+{ buildPythonPackage, lib, fetchFromGitLab
 
 , isPy3k, isPyPy
 
@@ -10,17 +10,25 @@
 
 buildPythonPackage rec {
   pname = "paperwork-backend";
-  version = "1.2.2";
+  version = "1.2.4";
 
-  src = fetchFromGitHub {
-    owner = "openpaperwork";
-    repo = "paperwork-backend";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    repo = "paperwork";
+    group = "World";
+    owner = "OpenPaperwork";
     rev = version;
-    sha256 = "1rvf06vphm32601ja1bfkfkfpgjxiv0lh4yxjy31jll0bfnsf7pf";
+    sha256 = "0wjjiw99aswmppnhzq3jir0p5p78r3m8hjinhdirkgm6h7skq5p4";
   };
+
+  sourceRoot = "source/paperwork-backend";
 
   # Python 2.x is not supported.
   disabled = !isPy3k && !isPyPy;
+
+  patchPhase = ''
+    echo 'version = "${version}"' > paperwork_backend/_version.py
+  '';
 
   preCheck = "\"$out/bin/paperwork-shell\" chkdeps paperwork_backend";
 

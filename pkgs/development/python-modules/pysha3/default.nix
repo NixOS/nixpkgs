@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pysha3";
   version = "1.0.2";
-  name = "${pname}-${version}";
   disabled = pythonOlder "2.7";
 
   src = fetchPypi {

@@ -19,16 +19,17 @@ let
 
       makeFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
 
-      meta = {
+      meta = with stdenv.lib; {
         homepage = http://miniupnp.free.fr/;
         description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
-        platforms = with stdenv.lib.platforms; linux ++ freebsd ++ darwin;
+        platforms = with platforms; linux ++ freebsd ++ darwin;
+        license = licenses.bsd3;
       };
     };
 in {
   miniupnpc_2 = generic {
-    version = "2.0.20171212";
-    sha256 = "0za7pr6hrr3ajkifirhhxfn3hlhl06f622g8hnj5h8y18sp3bwff";
+    version = "2.1.20190408";
+    sha256 = "1v0l2m8j7r6jiy871d6v11ls243xqn6s3856iwd3bmk5c37npi50";
   };
   miniupnpc_1 = generic {
     version = "1.9.20160209";

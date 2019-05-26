@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1zi16pl7sqn1aa8b7zqm9qnd9vjqyfywqm8s6iap4clf86l7kss2";
   };
 
+  patches = [
+    ./glibc-2.27-glob.patch
+  ];
+
   buildInputs = [ readline ];
 
   meta = {

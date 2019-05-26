@@ -1,7 +1,8 @@
-diff -Naur ndiswrapper-1.59-orig/driver/Makefile ndiswrapper-1.59/driver/Makefile
---- ndiswrapper-1.59-orig/driver/Makefile	2013-11-28 14:42:35.000000000 -0500
-+++ ndiswrapper-1.59/driver/Makefile	2014-01-04 18:31:43.242377375 -0500
-@@ -191,7 +191,7 @@
+diff --git a/ndiswrapper/driver/Makefile b/ndiswrapper/driver/Makefile
+index bf42f7bc..ad23aa2d 100644
+--- a/ndiswrapper/driver/Makefile
++++ b/ndiswrapper/driver/Makefile
+@@ -191,7 +191,7 @@ clean:
  	rm -rf .tmp_versions
  
  install: config_check $(MODULE)

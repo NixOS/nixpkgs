@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, makeDesktopItem, unzip
+{ stdenv, fetchurl, pkgconfig, makeDesktopItem
 , qtbase, qttools, qtmultimedia, qtquick1, qtquickcontrols
 , openssl, protobuf, qmake
 }:

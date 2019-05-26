@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     mkdir -p $out/{bin,man/man1}
-    makeFlags="PREFIX=$out"
+    makeFlags="PREFIX=$out CC=$CXX"
   '';
 
   meta = {

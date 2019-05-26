@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchurl, extra-cmake-modules, pkgconfig
+{ stdenv, lib, fetchurl, extra-cmake-modules
 , qtbase, kdeFrameworks
-, eject, libatasmart, parted }:
+, libatasmart, parted
+, utillinux }:
 
 let
   pname = "kpmcore";
@@ -16,11 +17,12 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     qtbase
-    eject # this is to get libblkid
     libatasmart
     parted # we only need the library
 
     kdeFrameworks.kio
+
+    utillinux # needs blkid (note that this is not provided by utillinux-compat)
   ];
   nativeBuildInputs = [ extra-cmake-modules ];
   enableParallelBuilding = true;

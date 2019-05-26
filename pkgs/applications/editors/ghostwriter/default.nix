@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, qmake, pkgconfig, qtwebkit, hunspell }:
+{ stdenv, fetchFromGitHub, qmake, pkgconfig, qttools, qtwebengine, hunspell }:
 
 stdenv.mkDerivation rec {
   pname = "ghostwriter";
-  version = "1.6.2";
+  version = "1.8.0";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "wereturtle";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0251563zy0q69fzfacvalpx43y15cshb0bhshyd4w37061gh1c12";
+    sha256 = "13yn82m1l2pq93wbl569a2lzpc3sn8a8g30hsgdch1l9xlmhwran";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkgconfig qttools ];
 
-  buildInputs = [ qtwebkit hunspell ];
+  buildInputs = [ qtwebengine hunspell ];
 
   meta = with stdenv.lib; {
     description = "A cross-platform, aesthetic, distraction-free Markdown editor";

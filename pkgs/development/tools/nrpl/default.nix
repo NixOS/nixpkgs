@@ -25,7 +25,10 @@ stdenv.mkDerivation rec {
     "-lpcre"
   ];
 
-  buildPhase = "nim c -d:release nrpl.nim";
+  buildPhase = ''
+    HOME=$TMPDIR
+    nim c -d:release nrpl.nim
+  '';
 
   installPhase = "install -Dt $out/bin nrpl";
 

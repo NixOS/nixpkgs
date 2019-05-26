@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gnu-efi }:
+{ stdenv, fetchurl, gnu-efi }:
 
 let
   archids = {
@@ -7,18 +7,18 @@ let
   };
 
   inherit
-    (archids.${stdenv.system} or (throw "unsupported system: ${stdenv.system}"))
+    (archids.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}"))
     hostarch efiPlatform;
 in
 
 stdenv.mkDerivation rec {
   name = "refind-${version}";
-  version = "0.11.2";
+  version = "0.11.4";
   srcName = "refind-src-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "1k0xpm4y0gk1rxqdyprqyqpg5j16xw3l2gm3d9zpi5n9id43jkzn";
+    sha256 = "1bjd0dl77bc5k6g3kc7s8m57vpbg2zscph9qh84xll9rc10g3fir";
   };
 
   buildInputs = [ gnu-efi ];
@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
     homepage = http://refind.sourceforge.net/;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.gpl3Plus;
   };
 
 }

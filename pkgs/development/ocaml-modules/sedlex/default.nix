@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.99.4";
 
   src = fetchzip {
-    url = "http://github.com/alainfrisch/sedlex/archive/v${version}.tar.gz";
+    url = "https://github.com/alainfrisch/sedlex/archive/v${version}.tar.gz";
     sha256 = "1b7nqxyfcz8i7m4b8zil2rn6ygh2czy26f9v64xnxn8r0hy9sh1m";
   };
 

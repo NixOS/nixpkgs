@@ -1,8 +1,8 @@
 import ./generic.nix {
   major_version = "4";
   minor_version = "07";
-  patch_version = "0+beta2";
-  sha256 = "0rrvl47kq982z2ns7cnasmlbj60mpmza2zyhl1kh45c5a3n7692n";
+  patch_version = "1";
+  sha256 = "1f07hgj5k45cylj1q3k5mk8yi02cwzx849b1fwnwia8xlcfqpr6z";
 
   # If the executable is stripped it does not work
   dontStrip = true;

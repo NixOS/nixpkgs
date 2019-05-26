@@ -1,6 +1,7 @@
 { stdenv, lib, config, fetchFromGitHub, autoconf, automake, pcre,
   libtool, pkgconfig, openssl,
-  confFile ? config.watchman.confFile or null
+  confFile ? config.watchman.confFile or null,
+  withApple ? stdenv.isDarwin, CoreServices, CoreFoundation
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0fdaj5pmicm6j17d5q7px800m5rmam1a400x3hv1iiifnmhgnkal";
   };
 
-  buildInputs = [ pcre openssl ];
+  buildInputs = [ pcre openssl ]
+               ++ lib.optionals withApple [ CoreFoundation CoreServices ];
   nativeBuildInputs = [ autoconf automake pkgconfig libtool ];
 
   configureFlags = [

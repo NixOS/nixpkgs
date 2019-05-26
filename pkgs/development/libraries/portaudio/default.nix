@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-mac-universal --enable-cxx" ];
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays";
+
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''

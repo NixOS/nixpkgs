@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, fetchNodeModules, nodejs-8_x, ruby, sencha
-, auth0ClientID, auth0Domain, disableTooltips }:
+, auth0ClientID, auth0Domain }:
 
 stdenv.mkDerivation rec {
   name = "rambox-bare-${version}";
-  version = "0.5.13";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
-    owner = "saenzramiro";
-    repo = "rambox";
+    owner = "ramboxapp";
+    repo = "community-edition";
     rev = version;
-    sha256 = "0c770a9z017y6gcrpyri7s1gifm8zi5f29bq5nvh3zzg4wgqh326";
+    sha256 = "1fsp4jxiypl6zkh5wgf9amyiyx9dqv6h8rsjn5xjp9bna27s0d3b";
   };
 
   nativeBuildInputs = [ nodejs-8_x ruby sencha ];
@@ -18,11 +18,10 @@ stdenv.mkDerivation rec {
     inherit src;
 
     nodejs = nodejs-8_x;
-    sha256 = "1y3q8ggyvfywxqi5hn9mvr1sjfylspis43iyf4b7snyr1a1br3r4";
+    sha256 = "0qsgr8cq81yismal5sqr02skakqpynwwzk5s98dr5bg91y361fgy";
   };
 
-  patches = [ ./hide-check-for-updates.patch ./isDev.patch ]
-    ++ stdenv.lib.optionals disableTooltips [ ./disable-tooltips.patch ];
+  patches = [ ./isDev.patch ];
 
   configurePhase = ''
     echo 'var auth0Cfg = { clientID: "${auth0ClientID}", domain: "${auth0Domain}" };' > env.js

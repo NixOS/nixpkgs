@@ -12,26 +12,22 @@ let
     let
       pName = _p: (builtins.parseDrvName (_p.name)).name;
     in pName mysql == pName pkgs.mariadb;
+  isMysqlAtLeast57 =
+    let
+      pName = _p: (builtins.parseDrvName (_p.name)).name;
+    in (pName mysql == pName pkgs.mysql57)
+       && ((builtins.compareVersions mysql.version "5.7") >= 0);
 
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
+  mysqldAndInstallOptions =
+    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
   mysqldOptions =
-    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql} " +
-    "--pid-file=${pidFile}";
-
-  myCnf = pkgs.writeText "my.cnf"
-  ''
-    [mysqld]
-    port = ${toString cfg.port}
-    ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
-    ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
-    ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
-    ${optionalString (cfg.ensureUsers != [])
-    ''
-      plugin-load-add = auth_socket.so
-    ''}
-    ${cfg.extraOptions}
-  '';
+    "${mysqldAndInstallOptions} --pid-file=${pidFile}";
+  # For MySQL 5.7+, --insecure creates the root user without password
+  # (earlier versions and MariaDB do this by default).
+  installOptions =
+    "${mysqldAndInstallOptions} ${lib.optionalString isMysqlAtLeast57 "--insecure"}";
 
 in
 
@@ -107,6 +103,24 @@ in
       };
 
       initialDatabases = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            name = mkOption {
+              type = types.str;
+              description = ''
+                The name of the database to create.
+              '';
+            };
+            schema = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              description = ''
+                The initial schema of the database; if null (the default),
+                an empty database is created.
+              '';
+            };
+          };
+        });
         default = [];
         description = ''
           List of database names and their initial schemas that should be used to create databases on the first startup
@@ -119,11 +133,13 @@ in
       };
 
       initialScript = mkOption {
+        type = types.nullOr types.path;
         default = null;
         description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database";
       };
 
       ensureDatabases = mkOption {
+        type = types.listOf types.str;
         default = [];
         description = ''
           Ensures that the specified databases exist.
@@ -138,6 +154,38 @@ in
       };
 
       ensureUsers = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            name = mkOption {
+              type = types.str;
+              description = ''
+                Name of the user to ensure.
+              '';
+            };
+            ensurePermissions = mkOption {
+              type = types.attrsOf types.str;
+              default = {};
+              description = ''
+                Permissions to ensure for the user, specified as attribute set.
+                The attribute names specify the database and tables to grant the permissions for,
+                separated by a dot. You may use wildcards here.
+                The attribute values specfiy the permissions to grant.
+                You may specify one or multiple comma-separated SQL privileges here.
+
+                For more information on how to specify the target
+                and on which privileges exist, see the
+                <link xlink:href="https://mariadb.com/kb/en/library/grant/">GRANT syntax</link>.
+                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
+              '';
+              example = literalExample ''
+                {
+                  "database.*" = "ALL PRIVILEGES";
+                  "*.*" = "SELECT, LOCK TABLES";
+                }
+              '';
+            };
+          };
+        });
         default = [];
         description = ''
           Ensures that the specified users exist and have at least the ensured permissions.
@@ -147,20 +195,22 @@ in
           option is changed. This means that users created and permissions assigned once through this option or
           otherwise have to be removed manually.
         '';
-        example = [
-          {
-            name = "nextcloud";
-            ensurePermissions = {
-              "nextcloud.*" = "ALL PRIVILEGES";
-            };
-          }
-          {
-            name = "backup";
-            ensurePermissions = {
-              "*.*" = "SELECT, LOCK TABLES";
-            };
-          }
-        ];
+        example = literalExample ''
+          [
+            {
+              name = "nextcloud";
+              ensurePermissions = {
+                "nextcloud.*" = "ALL PRIVILEGES";
+              };
+            }
+            {
+              name = "backup";
+              ensurePermissions = {
+                "*.*" = "SELECT, LOCK TABLES";
+              };
+            }
+          ]
+        '';
       };
 
       # FIXME: remove this option; it's a really bad idea.
@@ -221,21 +271,39 @@ in
       mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql"
                  else "/var/mysql");
 
-    users.extraUsers.mysql = {
+    users.users.mysql = {
       description = "MySQL server user";
       group = "mysql";
       uid = config.ids.uids.mysql;
     };
 
-    users.extraGroups.mysql.gid = config.ids.gids.mysql;
+    users.groups.mysql.gid = config.ids.gids.mysql;
 
     environment.systemPackages = [mysql];
 
-    systemd.services.mysql =
-      { description = "MySQL Server";
+    environment.etc."my.cnf".text =
+    ''
+      [mysqld]
+      port = ${toString cfg.port}
+      datadir = ${cfg.dataDir}
+      ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
+      ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
+      ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
+      ${optionalString (cfg.ensureUsers != [])
+      ''
+        plugin-load-add = auth_socket.so
+      ''}
+      ${cfg.extraOptions}
+    '';
+
+    systemd.services.mysql = let
+      hasNotify = (cfg.package == pkgs.mariadb);
+    in {
+        description = "MySQL Server";
 
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        restartTriggers = [ config.environment.etc."my.cnf".source ];
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
 
@@ -250,23 +318,23 @@ in
             if ! test -e ${cfg.dataDir}/mysql; then
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R ${cfg.user} ${cfg.dataDir}
-                ${mysql}/bin/mysql_install_db ${mysqldOptions}
+                ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${installOptions}
                 touch /tmp/mysql_init
             fi
 
             mkdir -m 0755 -p ${cfg.pidDir}
             chown -R ${cfg.user} ${cfg.pidDir}
-
-            # Make the socket directory
-            mkdir -p /run/mysqld
-            chmod 0755 /run/mysqld
-            chown -R ${cfg.user} /run/mysqld
           '';
 
-        serviceConfig.ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+        serviceConfig = {
+          Type = if hasNotify then "notify" else "simple";
+          RuntimeDirectory = "mysqld";
+          # The last two environment variables are used for starting Galera clusters
+          ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
+        };
 
-        postStart =
-          ''
+        postStart = ''
+          ${lib.optionalString (!hasNotify) ''
             # Wait until the MySQL server is available for use
             count=0
             while [ ! -e /run/mysqld/mysqld.sock ]
@@ -281,6 +349,7 @@ in
                 count=$((count++))
                 sleep 1
             done
+          ''}
 
             if [ -f /tmp/mysql_init ]
             then
@@ -291,9 +360,11 @@ in
                         echo "Creating initial database: ${database.name}"
                         ( echo 'create database `${database.name}`;'
 
-                          ${optionalString (database ? "schema") ''
+                          ${optionalString (database.schema != null) ''
                           echo 'use `${database.name}`;'
 
+                          # TODO: this silently falls through if database.schema does not exist,
+                          # we should catch this somehow and exit, but can't do it here because we're in a subshell.
                           if [ -f "${database.schema}" ]
                           then
                               cat ${database.schema}
@@ -330,7 +401,9 @@ in
                 ${optionalString (cfg.initialScript != null)
                   ''
                     # Execute initial script
-                    cat ${cfg.initialScript} | ${mysql}/bin/mysql -u root -N
+                    # using toString to avoid copying the file to nix store if given as path instead of string,
+                    # as it might contain credentials
+                    cat ${toString cfg.initialScript} | ${mysql}/bin/mysql -u root -N
                   ''}
 
                 ${optionalString (cfg.rootPassword != null)
@@ -349,7 +422,7 @@ in
             ${optionalString (cfg.ensureDatabases != []) ''
               (
               ${concatMapStrings (database: ''
-                echo "CREATE DATABASE IF NOT EXISTS ${database};"
+                echo "CREATE DATABASE IF NOT EXISTS \`${database}\`;"
               '') cfg.ensureDatabases}
               ) | ${mysql}/bin/mysql -u root -N
             ''}

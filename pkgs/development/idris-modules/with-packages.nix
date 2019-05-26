@@ -4,9 +4,9 @@
 
 let paths = stdenv.lib.closePropagation packages;
 in
-symlinkJoin {
+stdenv.lib.appendToName "with-packages" (symlinkJoin {
 
-  name = idris.name + "-with-packages";
+  inherit (idris) name;
 
   paths = paths ++ [idris] ;
 
@@ -15,6 +15,6 @@ symlinkJoin {
   postBuild = ''
     wrapProgram $out/bin/idris \
       --set IDRIS_LIBRARY_PATH $out/libs
-      '';
+  '';
 
-}
+})

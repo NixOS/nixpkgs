@@ -48,7 +48,7 @@ let
     '';
 in
   buildFHSUserEnv {
-    name = "conda-shell";
+    name = "conda-shell-${version}";
     targetPkgs = pkgs: (builtins.concatLists [ [ conda ] condaDeps extraPkgs]);
     profile = ''
       # Add conda to PATH

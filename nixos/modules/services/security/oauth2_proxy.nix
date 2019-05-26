@@ -58,11 +58,11 @@ let
       httponly = cookie.httpOnly;
     };
     set-xauthrequest = setXauthrequest;
-  } // lib.optionalAttrs (!isNull cfg.email.addresses) {
+  } // lib.optionalAttrs (cfg.email.addresses != null) {
     authenticated-emails-file = authenticatedEmailsFile;
   } // lib.optionalAttrs (cfg.passBasicAuth) {
     basic-auth-password = cfg.basicAuthPassword;
-  } // lib.optionalAttrs (!isNull cfg.htpasswd.file) {
+  } // lib.optionalAttrs (cfg.htpasswd.file != null) {
     display-htpasswd-file = cfg.htpasswd.displayForm;
   } // lib.optionalAttrs tls.enable {
     tls-cert = tls.certificate;
@@ -71,7 +71,8 @@ let
   } // (getProviderOptions cfg cfg.provider) // cfg.extraConfig;
 
   mapConfig = key: attr:
-  if (!isNull attr && attr != []) then (
+  if attr != null && attr != [] then (
+    if isDerivation attr then mapConfig key (toString attr) else
     if (builtins.typeOf attr) == "set" then concatStringsSep " "
       (mapAttrsToList (name: value: mapConfig (key + "-" + name) value) attr) else
     if (builtins.typeOf attr) == "list" then concatMapStringsSep " " (mapConfig key) attr else
@@ -537,13 +538,13 @@ in
 
   config = mkIf cfg.enable {
 
-    services.oauth2_proxy = mkIf (!isNull cfg.keyFile) {
+    services.oauth2_proxy = mkIf (cfg.keyFile != null) {
       clientID = mkDefault null;
       clientSecret = mkDefault null;
       cookie.secret = mkDefault null;
     };
 
-    users.extraUsers.oauth2_proxy = {
+    users.users.oauth2_proxy = {
       description = "OAuth2 Proxy";
     };
 

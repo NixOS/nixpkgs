@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.2.12";
 
   src = fetchurl {
-    url    = "http://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
+    url    = "https://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
     sha256 = "16an9slbb8ci7d89wakkmyfvp7c0cval8xw4hkg0842nhhlp540b";
   };
 
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://www.libsdl.org/projects/SDL_image/";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
+    license     = licenses.zlib;
   };
 }

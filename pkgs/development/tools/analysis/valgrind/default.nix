@@ -1,22 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, perl, gdb, llvm, cctools, xnu, bootstrap_cmds }:
+{ stdenv, fetchurl, perl, gdb, llvm, cctools, xnu, bootstrap_cmds }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.13.0";
+  name = "valgrind-3.15.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
-    sha256 = "0fqc3684grrbxwsic1rc5ryxzxmigzjx9p5vf3lxa37h0gpq0rnp";
+    sha256 = "1ccawxrni8brcvwhygy12iprkvz409hbr9xkk1bd03gnm2fplz21";
   };
+
+  # Perl is needed for `cg_annotate'.
+  nativeBuildInputs = [ perl ];
 
   outputs = [ "out" "dev" "man" "doc" ];
 
   hardeningDisable = [ "stackprotector" ];
 
-  # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildInputs = [ perl gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs = [ gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   enableParallelBuilding = true;
+  separateDebugInfo = stdenv.isLinux;
 
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
@@ -25,12 +28,8 @@ stdenv.mkDerivation rec {
     in ''
       echo "Don't derive our xnu version using uname -r."
       substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
-    ''
-  );
 
-  postPatch = stdenv.lib.optionalString (stdenv.isDarwin)
-    # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
-    ''
+      # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
       echo "getting rid of the \`-arch' GCC option..."
       find -name Makefile\* -exec \
         sed -i {} -e's/DARWIN\(.*\)-arch [^ ]\+/DARWIN\1/g' \;
@@ -42,22 +41,21 @@ stdenv.mkDerivation rec {
       substituteInPlace coregrind/Makefile.in \
          --replace /usr/include/mach ${xnu}/include/mach
 
-      echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
-      find -name "Makefile.in" | while read file; do
-         substituteInPlace "$file" \
-           --replace dsymutil ${llvm}/bin/llvm-dsymutil
-      done
-
       substituteInPlace coregrind/m_debuginfo/readmacho.c \
-         --replace /usr/bin/dsymutil ${llvm}/bin/llvm-dsymutil
+         --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
 
       echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
       substituteInPlace coregrind/link_tool_exe_darwin.in \
         --replace /usr/bin/ld ${cctools}/bin/ld
-    '';
+    '');
+
+  # To prevent rebuild on linux when moving darwin's postPatch fixes to preConfigure
+  postPatch = "";
 
   configureFlags =
-    stdenv.lib.optional (stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin") "--enable-only64bit";
+    stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit";
+
+  doCheck = false; # fails
 
   postInstall = ''
     for i in $out/lib/valgrind/*.supp; do
@@ -66,8 +64,6 @@ stdenv.mkDerivation rec {
         --replace 'obj:/usr/X11R6/lib' 'obj:*/lib' \
         --replace 'obj:/usr/lib' 'obj:*/lib'
     done
-
-    paxmark m $out/lib/valgrind/*-*-linux
   '';
 
   meta = {
@@ -86,5 +82,11 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.unix;
+    badPlatforms = [
+      "armv5tel-linux" "armv6l-linux" "armv6m-linux"
+      "sparc-linux" "sparc64-linux"
+      "riscv32-linux" "riscv64-linux"
+      "alpha-linux"
+    ];
   };
 }

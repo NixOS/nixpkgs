@@ -1,17 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , pytest
 , unicodecsv
 }:
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "0.5.6";
+  version = "0.7.1";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "887a9a49d0caee913a883c3e7eb185f6260ebe2137562365be422d1316bd39c9";
+    sha256 = "1hd1xzw22g1cp2dpf5bbpg8a7iac2v9hw0xrj5n5j83inh5n99br";
   };
 
   checkInputs = [ pytest unicodecsv ];

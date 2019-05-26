@@ -127,7 +127,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = mkIf (cfg.user == "graylog") {
+    users.users = mkIf (cfg.user == "graylog") {
       graylog = {
         uid = config.ids.uids.graylog;
         description = "Graylog server daemon user";

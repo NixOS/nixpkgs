@@ -1,92 +1,23 @@
-diff -rupN monkeysphere-0.37/Makefile monkeysphere-0.37-patched/Makefile
---- monkeysphere-0.37/Makefile	2014-08-06 19:27:38.000000000 +0200
-+++ monkeysphere-0.37-patched/Makefile	2015-07-31 19:51:57.539373097 +0200
-@@ -42,11 +42,11 @@ install: all installman
- 	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/monkeysphere
- 	printf "Monkeysphere %s\n" $(MONKEYSPHERE_VERSION) > $(DESTDIR)$(PREFIX)/share/monkeysphere/VERSION
- 	install src/monkeysphere $(DESTDIR)$(PREFIX)/bin
--	sed -i 's:__SYSSHAREDIR_PREFIX__:$(PREFIX):' $(DESTDIR)$(PREFIX)/bin/monkeysphere
-+	sed -i 's:__SYSSHAREDIR_PREFIX__:$(DESTDIR):' $(DESTDIR)$(PREFIX)/bin/monkeysphere
- 	install src/monkeysphere-host $(DESTDIR)$(PREFIX)/sbin
--	sed -i 's:__SYSSHAREDIR_PREFIX__:$(PREFIX):' $(DESTDIR)$(PREFIX)/sbin/monkeysphere-host
-+	sed -i 's:__SYSSHAREDIR_PREFIX__:$(DESTDIR):' $(DESTDIR)$(PREFIX)/sbin/monkeysphere-host
- 	install src/monkeysphere-authentication $(DESTDIR)$(PREFIX)/sbin
--	sed -i 's:__SYSSHAREDIR_PREFIX__:$(PREFIX):' $(DESTDIR)$(PREFIX)/sbin/monkeysphere-authentication
-+	sed -i 's:__SYSSHAREDIR_PREFIX__:$(DESTDIR):' $(DESTDIR)$(PREFIX)/sbin/monkeysphere-authentication
- 	install src/monkeysphere-authentication-keys-for-user $(DESTDIR)$(PREFIX)/share/monkeysphere
- 	install -m 0755 src/share/common $(DESTDIR)$(PREFIX)/share/monkeysphere
- 	install -m 0644 src/share/defaultenv $(DESTDIR)$(PREFIX)/share/monkeysphere
-@@ -59,8 +59,8 @@ install: all installman
- 	ln -sf ../share/monkeysphere/keytrans $(DESTDIR)$(PREFIX)/bin/openpgp2pem
- 	ln -sf ../share/monkeysphere/keytrans $(DESTDIR)$(PREFIX)/bin/openpgp2spki
- 	install -m 0744 src/transitions/* $(DESTDIR)$(PREFIX)/share/monkeysphere/transitions
--	sed -i 's:__SYSSHAREDIR_PREFIX__:$(PREFIX):' $(DESTDIR)$(PREFIX)/share/monkeysphere/transitions/0.23
--	sed -i 's:__SYSSHAREDIR_PREFIX__:$(PREFIX):' $(DESTDIR)$(PREFIX)/share/monkeysphere/transitions/0.28
-+	sed -i 's:__SYSSHAREDIR_PREFIX__:$(DESTDIR):' $(DESTDIR)$(PREFIX)/share/monkeysphere/transitions/0.23
-+	sed -i 's:__SYSSHAREDIR_PREFIX__:$(DESTDIR):' $(DESTDIR)$(PREFIX)/share/monkeysphere/transitions/0.28
- 	install -m 0644 src/transitions/README.txt $(DESTDIR)$(PREFIX)/share/monkeysphere/transitions
- 	install -m 0644 src/share/m/* $(DESTDIR)$(PREFIX)/share/monkeysphere/m
- 	install -m 0644 src/share/mh/* $(DESTDIR)$(PREFIX)/share/monkeysphere/mh
-diff -rupN monkeysphere-0.37/src/share/checkperms monkeysphere-0.37-patched/src/share/checkperms
---- monkeysphere-0.37/src/share/checkperms	2014-08-06 19:27:38.000000000 +0200
-+++ monkeysphere-0.37-patched/src/share/checkperms	2015-07-31 19:52:18.170675985 +0200
-@@ -1,4 +1,4 @@
--#!/usr/bin/perl -T
-+#!/usr/bin/perl
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -52,7 +52,7 @@ clean:
+ replaced/%: %
+ 	mkdir -p $(dir $@)
+ 	sed < $< > $@ \
+-	-e 's:__SYSSHAREDIR_PREFIX__:$(PREFIX):' \
++	-e 's:__SYSSHAREDIR_PREFIX__:$(DESTDIR):' \
+ 	-e 's:__SYSCONFDIR_PREFIX__:$(ETCPREFIX):' \
+ 	-e 's:__SYSDATADIR_PREFIX__:$(LOCALSTATEDIR):'
  
- # checkperms: ensure as best we can that a given file can only be
- # modified by the given user (or the superuser, naturally).  This
-diff -rupN monkeysphere-0.37/src/share/keytrans monkeysphere-0.37-patched/src/share/keytrans
---- monkeysphere-0.37/src/share/keytrans	2014-08-06 19:27:38.000000000 +0200
-+++ monkeysphere-0.37-patched/src/share/keytrans	2015-07-31 20:13:36.664514290 +0200
+diff --git a/src/share/keytrans b/src/share/keytrans
+--- a/src/share/keytrans
++++ b/src/share/keytrans
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl -T
 +#!/usr/bin/perl
  
  # keytrans: this is an RSA key translation utility; it is capable of
  # transforming RSA keys (both public keys and secret keys) between
-@@ -1069,7 +1069,7 @@ sub packetwalk {
- 
- 
- for (basename($0)) {
--  if (/^pem2openpgp$/) {
-+  if (/pem2openpgp/) {
-     my $rsa;
-     my $stdin;
- 
-@@ -1107,7 +1107,7 @@ for (basename($0)) {
- 		      }
- 		     );
-   }
--  elsif (/^openpgp2ssh$/) {
-+  elsif (/openpgp2ssh/) {
-       my $fpr = shift;
-       my $instream;
-       open($instream,'-');
-@@ -1123,7 +1123,7 @@ for (basename($0)) {
- 	die "No matching key found.\n";
-       }
-   }
--  elsif (/^openpgp2pem$/) {
-+  elsif (/openpgp2pem/) {
-       my $fpr = shift;
-       my $instream;
-       open($instream,'-');
-@@ -1139,7 +1139,7 @@ for (basename($0)) {
- 	die "No matching key found.\n";
-       }
-   }
--  elsif (/^openpgp2spki$/) {
-+  elsif (/openpgp2spki/) {
-       my $fpr = shift;
-       my $instream;
-       open($instream,'-');
-@@ -1151,7 +1151,7 @@ for (basename($0)) {
- 	die "No matching key found.\n";
-       }
-   }
--  elsif (/^keytrans$/) {
-+  elsif (/keytrans/) {
-     # subcommands when keytrans is invoked directly are UNSUPPORTED,
-     # UNDOCUMENTED, and WILL NOT BE MAINTAINED.
-     my $subcommand = shift;
+-- 
+2.16.3

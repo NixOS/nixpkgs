@@ -9,7 +9,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "timblserver";
+  name = "timblserver-${release.version}";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "timblserver-${release.version}.tar.gz"; };

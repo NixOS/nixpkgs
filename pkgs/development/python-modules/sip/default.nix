@@ -1,21 +1,25 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy }:
+{ lib, fetchurl, buildPythonPackage, python, isPyPy, sip-module ? "sip" }:
 
-if isPyPy then throw "sip not supported for interpreter ${python.executable}" else buildPythonPackage rec {
-  pname = "sip";
-  version = "4.19.6";
-  name = "${pname}-${version}";
+buildPythonPackage rec {
+  pname = sip-module;
+  version = "4.19.13";
   format = "other";
 
+  disabled = isPyPy;
+
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/sip/${name}/${name}.tar.gz";
-    sha256 = "0nlj0zbvmzliyhhspqwf2bjvcnpq4agx4s47php7ishv32p2gnlx";
+    url = "mirror://sourceforge/pyqt/sip/sip-${version}/sip-${version}.tar.gz";
+    sha256 = "0pniq03jk1n5bs90yjihw3s3rsmjd8m89y9zbnymzgwrcl2sflz3";
   };
 
   configurePhase = ''
     ${python.executable} ./configure.py \
+      --sip-module ${sip-module} \
       -d $out/lib/${python.libPrefix}/site-packages \
       -b $out/bin -e $out/include
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";

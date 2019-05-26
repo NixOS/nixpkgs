@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg_utils, dbus, qtbase, qtwebkit, qtx11extras, qtquickcontrols, glibc, libXrandr, libX11 }:
+{ stdenv, fetchurl, autoPatchelfHook, makeWrapper, xdg_utils, dbus, qtbase, qtwebkit, qtx11extras, qtquickcontrols, glibc, libXrandr, libX11 }:
 
 
 stdenv.mkDerivation rec {
   name = "teamviewer-${version}";
-  version = "13.1.3026";
+  version = "14.2.8352";
 
   src = fetchurl {
-    url = "https://dl.tvcdn.de/download/linux/version_13x/teamviewer_${version}_amd64.deb";
-    sha256 = "14zaa1xjdfmgbbq40is5mllqcd9zan03sblkzajswd5gps7crsik";
+    url = "https://dl.tvcdn.de/download/linux/version_14x/teamviewer_${version}_amd64.deb";
+    sha256 = "132fh3lg6g4b0yfkhvbm9zg8s3lcljmbk6gfaavi4b1h8ndq92ay";
   };
 
   unpackPhase = ''

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, check, cmake, pkgconfig
 , libtoxcore, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
-, libXrender, fontconfig, libXext, libXft, utillinux, libsodium, libopus }:
+, libXrender, fontconfig, libXext, libXft, libsodium, libopus }:
 
 stdenv.mkDerivation rec {
   name = "utox-${version}";
@@ -22,26 +22,22 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    check cmake pkgconfig
+    cmake pkgconfig
   ];
 
   cmakeFlags = [
     "-DENABLE_AUTOUPDATE=OFF"
-  ] ++ lib.optional (doCheck) "-DENABLE_TESTS=ON";
+    "-DENABLE_TESTS=${if doCheck then "ON" else "OFF"}"
+  ];
 
-  doCheck = stdenv.isLinux;
-
-  checkPhase = ''
-    runHook preCheck
-    ctest -VV
-    runHook postCheck
-  '';
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  checkInputs = [ check ];
 
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";
     homepage = https://github.com/uTox/uTox;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ domenkozar jgeerds ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.all;
   };
 }

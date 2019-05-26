@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, glib, gstreamer, gst-plugins-base
-, libmad, libdvdread, libmpeg2, libcdio, a52dec, x264, orc, lame, libintl }:
+, libmad, libdvdread, a52dec, x264, orc, lame, libintl }:
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-ugly-0.10.19";

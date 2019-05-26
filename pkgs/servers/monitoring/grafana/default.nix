@@ -1,23 +1,31 @@
 { lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomjs2 }:
 
 buildGoPackage rec {
-  version = "5.1.1";
+  version = "6.2.0";
   name = "grafana-${version}";
   goPackagePath = "github.com/grafana/grafana";
+
+  excludedPackages = [ "release_publisher" ];
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "0b8i293bfxyblfqwxpb1dkgva95f0bljpvp27j4l4hmjm2g8bpd9";
+    sha256 = "18zig7r3kq1a3src0yb8fbajnm2hqzpzpmpjarslnp4xv90xqi87";
   };
 
   srcStatic = fetchurl {
-    url = "https://grafana-releases.s3.amazonaws.com/release/grafana-${version}.linux-x64.tar.gz";
-    sha256 = "0kyfyxcj2yy9v1in6h6kh6sl5p7m03g643qpjriplwwa93bdmk8k";
+    url = "https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${version}.linux-amd64.tar.gz";
+    sha256 = "1cy3d04jjr5h8pzfzqb710rlynh9n125imkisrg05dwz5gl99bd7";
   };
 
+  postPatch = ''
+    substituteInPlace pkg/cmd/grafana-server/main.go \
+      --replace 'var version = "5.0.0"'  'var version = "${version}"'
+  '';
+
   preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+
   postInstall = ''
     tar -xvf $srcStatic
     mkdir -p $bin/share/grafana

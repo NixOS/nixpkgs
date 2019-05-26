@@ -49,7 +49,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = optional (cfg.user == "mjpg-streamer") {
+    users.users = optional (cfg.user == "mjpg-streamer") {
       name = "mjpg-streamer";
       uid = config.ids.uids.mjpg-streamer;
       group = cfg.group;

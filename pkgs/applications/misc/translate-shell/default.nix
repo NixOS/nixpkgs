@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "translate-shell";
-  version = "0.9.6.7";
+  version = "0.9.6.10";
 
   src = fetchFromGitHub {
     owner = "soimort";
     repo = "translate-shell";
     rev = "v${version}";
-    sha256 = "0krcidjh32xwybr1v4nykgf0jjnffjqx125bvn3jh2a44cikyq3n";
+    sha256 = "1dmh3flldfhnqfay3a6c5hanqcjwrmbly1bq8mlk022qfi1fv33y";
   };
 
   buildInputs = [ makeWrapper ];

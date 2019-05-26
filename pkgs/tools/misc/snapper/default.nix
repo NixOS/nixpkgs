@@ -1,33 +1,25 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
-, acl, attr, boost, btrfs-progs, dbus_libs, diffutils, e2fsprogs, libxml2
+, acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
 , lvm2, pam, python, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "snapper-${version}";
-  version = "0.5.0";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "14hrv23film4iihyclcvc2r2dgxl8w3as50r81xjjc85iyp6yxkm";
+    sha256 = "0f3nsqk8820jh08qdh23n01vxbigsfcn9s5qvgqz6jf4pwin6j0x";
   };
-
-  patches = [
-    # Fix build with new Boost
-    (fetchpatch {
-      url = "https://github.com/openSUSE/snapper/commit/2e3812d2c1d1f54861fb79f5c2b0197de96a00a3.patch";
-      sha256 = "0yrzss1v7lmcvkajmchz917yqsvlsdfz871szzw790v6pql1322s";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook pkgconfig
     docbook_xsl libxslt docbook_xml_dtd_45
   ];
   buildInputs = [
-    acl attr boost btrfs-progs dbus_libs diffutils e2fsprogs libxml2
+    acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
     lvm2 pam python utillinux
   ];
 
@@ -70,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = http://snapper.io;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ tstrobel markuskowa ];
   };
 }

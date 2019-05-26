@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchgit, fetchFromGitHub, zip, unzip, firefox, bash}:
+{stdenv, fetchFromGitHub, zip, unzip, firefox, bash}:
 let
   s = # Generated upstream information
   rec {

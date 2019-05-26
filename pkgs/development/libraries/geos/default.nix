@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, python }:
+{ stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "geos-3.6.2";
+  name = "geos-3.7.2";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/geos/${name}.tar.bz2";
-    sha256 = "0ak5szby29l9l0vy43dm5z2g92xzdky20q1gc1kah1fnhkgi6nh4";
+    url = "https://download.osgeo.org/geos/${name}.tar.bz2";
+    sha256 = "01vpkncvq1i1191agq03yg1h7d0igj10gv5z2mqk24nnwrdycri1";
   };
 
   enableParallelBuilding = true;

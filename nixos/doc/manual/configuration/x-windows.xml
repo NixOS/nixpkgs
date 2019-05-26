@@ -26,6 +26,7 @@
 <xref linkend="opt-services.xserver.desktopManager.plasma5.enable"/> = true;
 <xref linkend="opt-services.xserver.desktopManager.xfce.enable"/> = true;
 <xref linkend="opt-services.xserver.desktopManager.gnome3.enable"/> = true;
+<xref linkend="opt-services.xserver.desktopManager.mate.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.xmonad.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.twm.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.icewm.enable"/> = true;
@@ -34,11 +35,11 @@
  </para>
  <para>
   NixOS’s default <emphasis>display manager</emphasis> (the program that
-  provides a graphical login prompt and manages the X server) is SLiM. You can
-  select an alternative one by picking one of the following lines:
+  provides a graphical login prompt and manages the X server) is LightDM. You
+  can select an alternative one by picking one of the following lines:
 <programlisting>
 <xref linkend="opt-services.xserver.displayManager.sddm.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.lightdm.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.slim.enable"/> = true;
 </programlisting>
  </para>
  <para>
@@ -59,8 +60,41 @@
 # systemctl start display-manager.service
 </screen>
  </para>
- <simplesect>
-  <title>NVIDIA Graphics Cards</title>
+ <para>
+  On 64-bit systems, if you want OpenGL for 32-bit programs such as in Wine,
+  you should also set the following:
+<programlisting>
+<xref linkend="opt-hardware.opengl.driSupport32Bit"/> = true;
+</programlisting>
+ </para>
+ <simplesect xml:id="sec-x11-auto-login">
+  <title>Auto-login</title>
+  <para>
+  The x11 login screen can be skipped entirely, automatically logging you into
+  your window manager and desktop environment when you boot your computer.
+  </para>
+  <para>
+  This is especially helpful if you have disk encryption enabled. Since you
+  already have to provide a password to decrypt your disk, entering a second
+  password to login can be redundant.
+  </para>
+  <para>
+  To enable auto-login, you need to define your default window manager and
+  desktop environment. If you wanted no desktop environment and i3 as your your
+  window manager, you'd define:
+<programlisting>
+<xref linkend="opt-services.xserver.desktopManager.default"/> = "none";
+<xref linkend="opt-services.xserver.windowManager.default"/> = "i3";
+</programlisting>
+  And, finally, to enable auto-login for a user <literal>johndoe</literal>:
+<programlisting>
+<xref linkend="opt-services.xserver.displayManager.auto.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.auto.user"/> = "johndoe";
+</programlisting>
+  </para>
+ </simplesect>
+ <simplesect xml:id="sec-x11-graphics-cards-nvidia">
+  <title>Proprietary NVIDIA drivers</title>
   <para>
    NVIDIA provides a proprietary driver for its graphics cards that has better
    3D performance than the X.org drivers. It is not enabled by default because
@@ -70,6 +104,7 @@
 </programlisting>
    Or if you have an older card, you may have to use one of the legacy drivers:
 <programlisting>
+<xref linkend="opt-services.xserver.videoDrivers"/> = [ "nvidiaLegacy390" ];
 <xref linkend="opt-services.xserver.videoDrivers"/> = [ "nvidiaLegacy340" ];
 <xref linkend="opt-services.xserver.videoDrivers"/> = [ "nvidiaLegacy304" ];
 <xref linkend="opt-services.xserver.videoDrivers"/> = [ "nvidiaLegacy173" ];
@@ -77,16 +112,9 @@
    You may need to reboot after enabling this driver to prevent a clash with
    other kernel modules.
   </para>
-  <para>
-   On 64-bit systems, if you want full acceleration for 32-bit programs such as
-   Wine, you should also set the following:
-<programlisting>
-<xref linkend="opt-hardware.opengl.driSupport32Bit"/> = true;
-</programlisting>
-  </para>
  </simplesect>
- <simplesect>
-  <title>AMD Graphics Cards</title>
+ <simplesect xml:id="sec-x11--graphics-cards-amd">
+  <title>Proprietary AMD drivers</title>
   <para>
    AMD provides a proprietary driver for its graphics cards that has better 3D
    performance than the X.org drivers. It is not enabled by default because
@@ -98,14 +126,11 @@
    other kernel modules.
   </para>
   <para>
-   On 64-bit systems, if you want full acceleration for 32-bit programs such as
-   Wine, you should also set the following:
-<programlisting>
-<xref linkend="opt-hardware.opengl.driSupport32Bit"/> = true;
-</programlisting>
+   Note: for recent AMD GPUs you most likely want to keep either the defaults
+   or <literal>"amdgpu"</literal> (both free).
   </para>
  </simplesect>
- <simplesect>
+ <simplesect xml:id="sec-x11-touchpads">
   <title>Touchpads</title>
   <para>
    Support for Synaptics touchpads (found in many laptops such as the Dell
@@ -122,7 +147,7 @@
    since NixOS 17.09.
   </para>
  </simplesect>
- <simplesect>
+ <simplesect xml:id="sec-x11-gtk-and-qt-themes">
   <title>GTK/Qt themes</title>
   <para>
    GTK themes can be installed either to user profile or system-wide (via

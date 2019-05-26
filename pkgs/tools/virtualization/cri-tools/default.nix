@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchurl }:
+{ buildGoPackage, fetchurl, lib }:
 
 buildGoPackage
   { name = "cri-tools-1.0.0-alpha.0";
@@ -9,6 +9,10 @@ buildGoPackage
 
     goPackagePath = "github.com/kubernetes-incubator/cri-tools";
     subPackages = [ "cmd/crictl" "cmd/critest" ];
+
+    meta = {
+      license = lib.licenses.asl20;
+    };
 
     goDeps = ./deps.nix;
   }

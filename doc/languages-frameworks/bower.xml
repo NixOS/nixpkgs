@@ -205,8 +205,8 @@ pkgs.stdenv.mkDerivation {
 
   <variablelist>
    <varlistentry>
-    <term><literal>ENOCACHE</literal> errors from
-    <varname>buildBowerComponents</varname>
+    <term>
+     <literal>ENOCACHE</literal> errors from <varname>buildBowerComponents</varname>
     </term>
     <listitem>
      <para>

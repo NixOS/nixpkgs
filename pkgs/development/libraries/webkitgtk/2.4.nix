@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, perl, python, ruby, bison, gperf, flex
-, pkgconfig, which, gettext, gobjectIntrospection
+, pkgconfig, which, gettext, gobject-introspection
 , gtk2, gtk3, wayland, libwebp, enchant, sqlite
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, xorg
 , gst-plugins-base, libobjc
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://webkitgtk.org/releases/${name}.tar.xz";
+    url = "https://webkitgtk.org/releases/${name}.tar.xz";
     sha256 = "1xsvnvyvlywwyf6m9ainpsg87jkxjmd37q6zgz9cxb7v3c2ym2jq";
   };
 
@@ -77,19 +77,22 @@ stdenv.mkDerivation rec {
     "--disable-credential-storage"
   ];
 
-  NIX_CFLAGS_COMPILE = "-DU_NOEXCEPT=";
+  NIX_CFLAGS_COMPILE = [
+    "-DU_NOEXCEPT="
+    "-Wno-expansion-to-defined"
+  ];
 
   dontAddDisableDepTrack = true;
 
   nativeBuildInputs = [
     perl python ruby bison gperf flex
-    pkgconfig which gettext gobjectIntrospection
+    pkgconfig which gettext gobject-introspection
   ];
 
   buildInputs = [
     gtk2 libwebp enchant
     libxml2 libxslt
-    gst-plugins-base sqlite xorg.libXt
+    gst-plugins-base sqlite xorg.libXt xorg.libXdamage
   ] ++ optionals enableCredentialStorage [
     libsecret
   ] ++ (if stdenv.isDarwin then [

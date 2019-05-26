@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, lib
-, pkgconfig, meson, ninja, gettext, gobjectIntrospection
-, python, gstreamer, orc, pango, libtheora, libvisual
-, libintl
+, pkgconfig, meson, ninja, gettext, gobject-introspection
+, python3, gstreamer, orc, pango, libtheora
+, libintl, libopus
 , enableX11 ? stdenv.isLinux, libXv
 , enableWayland ? stdenv.isLinux, wayland
 , enableAlsa ? stdenv.isLinux, alsaLib
@@ -9,7 +9,8 @@
 , enableCdparanoia ? (!stdenv.isDarwin), cdparanoia }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-base-1.14.0";
+  name = "gst-plugins-base-${version}";
+  version = "1.14.4";
 
   meta = with lib; {
     description = "Base plugins and helper libraries";
@@ -21,12 +22,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
-    sha256 = "0h39bcp7fcd9kgb189lxr8l0hm0almvzpzgpdh1jpq2nzxh4d43y";
+    sha256 = "0qbllw4kphchwhy4p7ivdysigx69i97gyw6q0rvkx1j81r4kjqfa";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig python gettext gobjectIntrospection ]
+  nativeBuildInputs = [ pkgconfig python3 gettext gobject-introspection ]
 
   # Broken meson with Darwin. Should hopefully be fixed soon. Tracking
   # in https://bugzilla.gnome.org/show_bug.cgi?id=781148.
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   # Introspection fails on my MacBook currently
   ++ lib.optional stdenv.isDarwin "--disable-introspection";
 
-  buildInputs = [ orc libtheora libintl ]
+  buildInputs = [ orc libtheora libintl libopus ]
     ++ lib.optional enableAlsa alsaLib
     ++ lib.optionals enableX11 [ libXv pango ]
     ++ lib.optional enableWayland wayland
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  doCheck = false; # fails, wants DRI access for OpenGL
 
   patches = [
     (fetchpatch {

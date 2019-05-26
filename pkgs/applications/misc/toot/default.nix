@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.17.1";
+  version = "0.21.0";
   name    = "toot-${version}";
 
   src = fetchFromGitHub {
     owner  = "ihabunek";
     repo   = "toot";
     rev    = "${version}";
-    sha256 = "05fzsakm089bn03z8gip6yp4xfmwa054v40x2f3gqpl04r504gis";
+    sha256 = "03s81i9rz7dn33r13p7j2c7yw874hkm64x7myddiqw9lc21fyzql";
   };
 
   checkInputs = with python3Packages; [ pytest ];
 
   propagatedBuildInputs = with python3Packages;
-    [ requests beautifulsoup4 future ];
+    [ requests beautifulsoup4 future wcwidth ];
 
   checkPhase = ''
     py.test
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     description = "Mastodon CLI interface";
     homepage    = "https://github.com/ihabunek/toot";
     license     = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 
 }

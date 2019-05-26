@@ -1,16 +1,17 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, zlib, expat, openssl, autoconf
-, libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
-, libiconv, ijs
-, x11Support ? false, xlibsWrapper ? null
-, cupsSupport ? false, cups ? null
+{ config, stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
+, libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
+, libiconv, ijs, lcms2, fetchpatch
+, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
+, x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
 }:
 
 assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
+
 let
   version = "9.${ver_min}";
-  ver_min = "22";
-  sha256 = "1fyi4yvdj39bjgs10klr31cda1fbx1ar7a7b7yz7v68gykk65y61";
+  ver_min = "26";
+  sha512 = "0z2mvsh06qgnxl7p9isw7swg8jp8xcx3rnbqk727avw7ammvfh8785d2bn5i4fhz8y45ka3cpgp7b598m06yq5zawijhcnzkq187nrx";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -39,8 +40,28 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${name}.tar.xz";
-    inherit sha256;
+    inherit sha512;
   };
+
+  patches = [
+    ./urw-font-files.patch
+    ./doc-no-ref.diff
+    (fetchpatch {
+      name = "CVE-2019-6116";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=d3537a54740d78c5895ec83694a07b3e4f616f61";
+      sha256 = "1hr8bpi87bbg1kvv28kflmfh1dhzxw66p9q0ddvbrj72qd86p3kx";
+    })
+    (fetchpatch {
+      name = "CVE-2019-3839-part-1";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=4ec9ca74bed49f2a82acb4bf430eae0d8b3b75c9";
+      sha256 = "0gn1n9fq5msrxxzspidcnmykp1iv3yvx5485fddmgrslr52ngcf9";
+    })
+    (fetchpatch {
+      name = "CVE-2019-3839-part-2";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=db24f253409d5d085c2760c814c3e1d3fa2dac59";
+      sha256 = "1h6kpwc6ryr6jlxjr6bfnvmmf8x0kqmyjlx3hggqjs23n0wsr9p9";
+    })
+  ];
 
   outputs = [ "out" "man" "doc" ];
 
@@ -49,20 +70,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf ];
   buildInputs =
     [ zlib expat openssl
-      libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
-      libiconv ijs
+      libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
+      libiconv ijs lcms2
     ]
     ++ lib.optional x11Support xlibsWrapper
     ++ lib.optional cupsSupport cups
     ;
 
-  patches = [
-    ./urw-font-files.patch
-  ];
-
   preConfigure = ''
     # requires in-tree (heavily patched) openjpeg
-    rm -rf jpeg libpng zlib jasper expat tiff lcms{,2} jbig2dec freetype cups/libs ijs
+    rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs
 
     sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@; s@INCLUDE=/usr/include@INCLUDE=/no-such-path@" -i base/unix-aux.mak
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
@@ -89,8 +106,8 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    mkdir -p "$doc/share/ghostscript/${version}"
-    mv "$out/share/ghostscript/${version}"/{doc,examples} "$doc/share/ghostscript/${version}/"
+    mkdir -p "$doc/share/doc/ghostscript"
+    mv "$doc/share/doc/${version}" "$doc/share/doc/ghostscript/"
 
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''

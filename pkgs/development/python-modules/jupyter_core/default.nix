@@ -1,5 +1,4 @@
 { lib
-, python
 , buildPythonPackage
 , fetchPypi
 , ipython
@@ -12,7 +11,6 @@
 buildPythonPackage rec {
   pname = "jupyter_core";
   version = "4.4.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter core package. A base package on which Jupyter projects rely";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh globin ];
   };

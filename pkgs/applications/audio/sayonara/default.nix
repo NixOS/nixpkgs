@@ -1,14 +1,14 @@
 { stdenv, fetchurl, cmake, qt5, zlib, taglib, pkgconfig, pcre, gst_all_1 }:
 
 let
-  version = "1.0.0-git5-20180115";
+  version = "1.1.1-git1-20180828";
 in
 stdenv.mkDerivation {
   name = "sayonara-player-${version}";
 
   src = fetchurl {
     url = "https://sayonara-player.com/sw/sayonara-player-${version}.tar.gz";
-    sha256 = "1fl7zplnrrvbv1xm4g348bpd46jj39jvbm808hyjjq92i64wqg37";
+    sha256 = "0rvy47qvavrp03zjdrw025dmq9fq5aaii3q1qq8b94byarl0c5kn";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     { description = "Sayonara music player";
       homepage = https://sayonara-player.com/;
       license = licenses.gpl3;
-      platforms = qt5.qtbase.meta.platforms;
+      platforms = platforms.linux;
       maintainers = [ maintainers.deepfire ];
     };
 }

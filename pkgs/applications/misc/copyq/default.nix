@@ -1,22 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qtscript, qtwebkit, libXfixes, libXtst, git
+{ stdenv, fetchFromGitHub, cmake, qtbase, qtscript, qtwebkit, libXfixes, libXtst
+, qtx11extras, git
 , webkitSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   name = "CopyQ-${version}";
-  version = "3.3.1";
+  version = "3.8.0";
 
   src  = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    sha256 = "1jjb979dwdnkjca95yxzapbjpd6hr97hxz7sn614whvdv4vvpnyc";
+    sha256 = "0kbhgg0j6iqfrpixvwl1mk3m0bz5s8bd6npk5xqcgzp1giywdc4i";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    git qtbase qtscript libXfixes libXtst
+    git qtbase qtscript libXfixes libXtst qtx11extras
   ] ++ stdenv.lib.optional webkitSupport qtwebkit;
 
   meta = with stdenv.lib; {

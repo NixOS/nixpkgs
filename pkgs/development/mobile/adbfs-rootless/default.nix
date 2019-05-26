@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # very ugly way of replacing the adb calls
-    sed -e 's|"adb |"${stdenv.lib.getBin adb}/bin/adb |g' \
+    sed -e 's|"adb |"${adb}/bin/adb |g' \
         -i adbfs.cpp
   '';
 

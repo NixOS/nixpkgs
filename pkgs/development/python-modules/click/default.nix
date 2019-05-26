@@ -1,13 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, substituteAll, locale, pytest }:
 
 buildPythonPackage rec {
   pname = "click";
-  version = "6.7";
+  version = "7.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "02qkfpykbq35id8glfgwc38yc430427yd05z1wc5cnld8zgicmgi";
+    pname = "Click";
+    inherit version;
+    sha256 = "5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7";
   };
+
+  postPatch = ''
+    substituteInPlace click/_unicodefun.py \
+      --replace "'locale'" "'${locale}/bin/locale'"
+  '';
 
   buildInputs = [ pytest ];
 
@@ -18,7 +24,7 @@ buildPythonPackage rec {
   # https://github.com/pallets/click/issues/823
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://click.pocoo.org/;
     description = "Create beautiful command line interfaces in Python";
     longDescription = ''

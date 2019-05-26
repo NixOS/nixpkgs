@@ -37,29 +37,18 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
-    runHook preBuild
+  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
-    scons prefix=$out
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    scons prefix=$out install
+  postInstall = ''
     install -Dm644 ${music} $out/share/games/dxx-rebirth/d2xr-sc55-music.dxa
     install -Dm644 -t $out/share/doc/dxx-rebirth *.txt
-
-    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     description = "Source Port of the Descent 1 and 2 engines";
     homepage = https://www.dxx-rebirth.com/;
     license = licenses.free;
-    maintainers = with maintainers; [ viric peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = with platforms; linux;
   };
 }

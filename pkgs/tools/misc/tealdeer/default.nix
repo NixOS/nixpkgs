@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "tealdeer-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "tealdeer";
     rev = "v${version}";
-    sha256 = "0mkcja9agkbj2i93hx01r77w66ca805v4wvivcnrqmzid001717v";
+    sha256 = "055pjxgiy31j69spq66w80ig469yi075dk8ad38z6rlvjmf74k71";
   };
 
-  cargoSha256 = "1qrvic7b6g3f3gjzx7x97ipp7ppa79c0aawn0lsav0c9xxzl44jq";
+  cargoSha256 = "1jxwz2b6p82byvfjx77ba265j6sjr7bjqi2yik8x2i7lrz8v8z1g";
 
   buildInputs = [ openssl cacert curl ];
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    description = "An implementation of tldr in Rust";
+    description = "A very fast implementation of tldr in Rust";
     homepage = "https://github.com/dbrgn/tealdeer";
     maintainers = with maintainers; [ davidak ];
     license = with licenses; [ asl20 mit ];

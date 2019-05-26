@@ -1,16 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, doxygen, alsaLib
-, libX11, libXft, libXrandr, libXinerama, libXext, libXcursor }:
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, doxygen, alsaLib , libX11, libXft, libXrandr, libXinerama, libXext, libXcursor }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libopenshot-audio-${version}";
-  version = "0.1.5";
+  pname = "libopenshot-audio";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot-audio";
     rev = "v${version}";
-    sha256 = "0rn87jxyfq1yip1lb2255l5ilkakkqg9rn0lr0h6dn2xrmlbmg8l";
+    sha256 = "1fvp6nmf30xzkmcznakh8dv5vn9d7nq051pqcqv638hsfppkmcrl";
   };
 
   nativeBuildInputs =

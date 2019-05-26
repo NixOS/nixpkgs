@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchurl, stdenv, isPy27
+{ buildPythonPackage, fetchurl, fetchPypi, stdenv, isPy27
 , nose, pillow, prettytable, pyyaml, dateutil, gdata
 , requests, mechanize, feedparser, lxml, gnupg, pyqt5
 , libyaml, simplejson, cssselect, futures, pdfminer
@@ -33,10 +33,12 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
+  nativeBuildInputs = [ pyqt5 ];
+
   propagatedBuildInputs = [ pillow prettytable pyyaml dateutil
     gdata requests mechanize feedparser lxml gnupg pyqt5 libyaml
-    simplejson cssselect futures pdfminer termcolor google_api_python_client
-    html2text unidecode ];
+    simplejson cssselect futures pdfminer termcolor
+    google_api_python_client html2text unidecode ];
 
   checkPhase = ''
     nosetests

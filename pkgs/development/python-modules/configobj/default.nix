@@ -1,18 +1,29 @@
-{ stdenv, buildPythonPackage, fetchPypi, six }:
+{ stdenv, buildPythonPackage
+, fetchFromGitHub
+, six
+, mock, pytest
+}:
 
 buildPythonPackage rec {
   pname = "configobj";
   version = "5.0.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "00h9rcmws03xvdlfni11yb60bz3kxfvsj6dg6nrpzj71f03nbxd2";
+  # Pypi archives don't contain the tests
+  src = fetchFromGitHub {
+    owner = "DiffSK";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0x97794nk3dfn0i3si9fv7y19jnpnarb34bkdwlz7ii7ag6xihhw";
   };
 
-  # error: invalid command 'test'
-  doCheck = false;
 
   propagatedBuildInputs = [ six ];
+
+  checkPhase = ''
+    pytest --deselect=tests/test_configobj.py::test_options_deprecation
+  '';
+
+  checkInputs = [ mock pytest ];
 
   meta = with stdenv.lib; {
     description = "Config file reading, writing and validation";

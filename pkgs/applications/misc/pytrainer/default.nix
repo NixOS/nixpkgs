@@ -14,13 +14,13 @@ in
 
 python.pkgs.buildPythonApplication rec {
   name = "pytrainer-${version}";
-  version = "1.12.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
     rev = "v${version}";
-    sha256 = "09pfddjaqdpy3r27h21xvsvh04sb8hppinskxlahdqb3vjzkr581";
+    sha256 = "0rzf8kks96qzlknh6g3b9pjq04j7qk6rmz58scp7sck8xz9rjbwx";
   };
 
   namePrefix = "";

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, gperf, bison, groff
-, pkgconfig, libXft, fontconfig, pcre
-, libtomcrypt, libtommath, lz4, zlib }:
+, pkgconfig, libXft, pcre
+, libtomcrypt, libtommath, lz4 }:
 
 stdenv.mkDerivation rec {
   name = "bitkeeper-${version}";

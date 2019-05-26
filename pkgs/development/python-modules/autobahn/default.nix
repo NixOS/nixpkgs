@@ -1,35 +1,30 @@
-{ stdenv, buildPythonPackage, fetchurl, isPy3k, isPy33,
-  unittest2, mock, pytest, trollius, asyncio,
-  pytest-asyncio, futures,
-  six, twisted, txaio, zope_interface
+{ lib, buildPythonPackage, fetchPypi, isPy3k,
+  six, txaio, twisted, zope_interface, cffi, trollius, futures,
+  mock, pytest
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "autobahn";
-  version = "18.3.1";
+  version = "19.1.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-    sha256 = "fc1d38227bb44a453b54cffa48de8b2e6ce48ddc5e97fb5950b0faa27576f385";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "aebbadb700c13792a2967c79002855d1153b9ec8f2949d169e908388699596ff";
   };
 
-  # Upstream claim python2 support, but tests require pytest-asyncio which
-  # is pythn3 only. Therefore, tests are skipped for python2.
-  doCheck = isPy3k;
-  buildInputs = stdenv.lib.optionals isPy3k [ unittest2 mock pytest pytest-asyncio ];
-  propagatedBuildInputs = [ six twisted zope_interface txaio ] ++
-    (stdenv.lib.optional isPy33 asyncio) ++
-    (stdenv.lib.optionals (!isPy3k) [ trollius futures ]);
+  propagatedBuildInputs = [ six txaio twisted zope_interface cffi ] ++
+    (lib.optionals (!isPy3k) [ trollius futures ]);
 
+  checkInputs = [ mock pytest ];
   checkPhase = ''
-    py.test $out
+    runHook preCheck
+    USE_TWISTED=true py.test $out
+    runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WebSocket and WAMP in Python for Twisted and asyncio.";
     homepage    = "https://crossbar.io/autobahn";
     license     = licenses.mit;
     maintainers = with maintainers; [ nand0p ];
-    platforms   = platforms.all;
   };
 }

@@ -20,7 +20,7 @@ in pythonPackages.buildPythonPackage rec {
     raven psutil jsonschema # tox for check
     # Runtime dependencies
     sip (pyqt5.override { withWebSockets = true; })
-  ];
+  ] ++ stdenv.lib.optional (!stable) pythonPackages.distro;
 
   doCheck = false; # Failing
 

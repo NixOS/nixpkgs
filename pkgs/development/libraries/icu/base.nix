@@ -1,7 +1,7 @@
 { version, sha256, patches ? [], patchFlags ? "" }:
-{ stdenv, fetchurl, fetchpatch, fixDarwinDylibNames
+{ stdenv, lib, fetchurl, fixDarwinDylibNames
   # Cross-compiled icu4c requires a build-root of a native compile
-, buildRootOnly ? false, nativeBuildRoot, buildPlatform, hostPlatform
+, buildRootOnly ? false, nativeBuildRoot
 }:
 
 let
@@ -20,7 +20,7 @@ let
     '';
 
     # https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
-    postPatch = if (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
+    postPatch = if (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl") && lib.versionOlder version "62.1"
       then "substituteInPlace i18n/digitlst.cpp --replace '<xlocale.h>' '<locale.h>'"
       else null; # won't find locale_t on darwin
 
@@ -36,9 +36,9 @@ let
       sed -e 's/LDFLAGSICUDT=-nodefaultlibs -nostdlib/LDFLAGSICUDT=/' -i config/mh-linux
     '';
 
-    configureFlags = "--disable-debug" +
-      stdenv.lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) " --enable-rpath" +
-      stdenv.lib.optionalString (buildPlatform != hostPlatform) " --with-cross-build=${nativeBuildRoot}";
+    configureFlags = [ "--disable-debug" ]
+      ++ stdenv.lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) "--enable-rpath"
+      ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--with-cross-build=${nativeBuildRoot}";
 
     enableParallelBuilding = true;
 

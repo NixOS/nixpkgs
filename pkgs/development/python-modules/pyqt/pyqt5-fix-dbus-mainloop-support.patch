@@ -1,0 +1,70 @@
+From 944d5467e1655aac20a14325631df6daccaf5804 Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Sun, 3 Mar 2019 01:13:46 +0100
+Subject: [PATCH] Fix building on Nix
+
+./configure.py tries to find dbus-python header in dbus-1 includedir
+obtained from pkg-config or from --dbus flag. Unfortunately, when supplied,
+it also uses the flag for locating dbus-1 headers. This fails on Nix,
+since every package is installed into its own immutable tree so we cannot
+use a single directory for both dbus-python and dbus-1. We can fix this by
+using pkg-config for finding dbus-python headers too.
+
+Additionally, the build system also tries to install the dbus support module
+to dbus-python tree. Often, it is possible to handle this in pkgconfig as well [1]
+but unfortunately, dbus-python does not export the moduledir in its pc file
+so I have decided to solve this with an extra configure flag.
+
+[1]: https://www.bassi.io/articles/2018/03/15/pkg-config-and-paths/
+---
+ configure.py | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/configure.py b/configure.py
+index a3450ca3..440d90a2 100644
+--- a/configure.py
++++ b/configure.py
+@@ -905,6 +905,9 @@ class TargetConfiguration:
+         if opts.pydbusincdir is not None:
+             self.pydbus_inc_dir = opts.pydbusincdir
+ 
++        if opts.pydbusmoduledir is not None:
++            self.pydbus_module_dir = opts.pydbusmoduledir
++
+         if opts.pyuicinterpreter is not None:
+             self.pyuic_interpreter = opts.pyuicinterpreter
+ 
+@@ -1184,6 +1187,11 @@ def create_optparser(target_config):
+             metavar="DIR",
+             help="the directory containing the dbus/dbus-python.h header is "
+             "DIR [default: supplied by pkg-config]")
++    g.add_option("--dbus-moduledir", dest='pydbusmoduledir', type='string',
++            default=None, action='callback', callback=store_abspath,
++            metavar="DIR",
++            help="the directory where dbus support module will be installed to"
++            "DIR [default: obtained from dbus.mainloop python module]")
+     p.add_option_group(g)
+ 
+     # Installation.
+@@ -2149,7 +2157,7 @@ def check_dbus(target_config, verbose):
+ 
+     inform("Checking to see if the dbus support module should be built...")
+ 
+-    cmd = 'pkg-config --cflags-only-I --libs dbus-1'
++    cmd = 'pkg-config --cflags-only-I --libs dbus-1 dbus-python'
+ 
+     if verbose:
+         sys.stdout.write(cmd + "\n")
+@@ -2178,7 +2186,8 @@ def check_dbus(target_config, verbose):
+         inform("The Python dbus module doesn't seem to be installed.")
+         return
+ 
+-    target_config.pydbus_module_dir = dbus.mainloop.__path__[0]
++    if target_config.pydbus_module_dir == '':
++        target_config.pydbus_module_dir = dbus.mainloop.__path__[0]
+ 
+     # Try and find dbus-python.h.  We don't use pkg-config because it is broken
+     # for dbus-python (at least for versions up to and including v0.81.0).
+-- 
+2.18.0
+

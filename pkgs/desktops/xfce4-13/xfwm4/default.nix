@@ -1,6 +1,6 @@
-{ mkXfceDerivation, exo, dbus_glib, epoxy ? null, gtk2, libICE, libSM
-, libstartup_notification ? null, libxfce4ui, libxfce4util, libwnck
-, libXpresent ? null, xfconf }:
+{ mkXfceDerivation, exo, dbus-glib, epoxy, gtk2, libXdamage
+, libstartup_notification, libxfce4ui, libxfce4util, libwnck
+, libXpresent, xfconf }:
 
 mkXfceDerivation rec {
   category = "xfce";
@@ -12,11 +12,10 @@ mkXfceDerivation rec {
   nativeBuildInputs = [ exo ];
 
   buildInputs = [
-    dbus_glib
+    dbus-glib
     epoxy
     gtk2
-    libICE
-    libSM
+    libXdamage
     libstartup_notification
     libxfce4ui
     libxfce4util

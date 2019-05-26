@@ -1,7 +1,7 @@
 { stdenv, appleDerivation }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/include

@@ -1,0 +1,34 @@
+Patch provided by Lauren Foutz. See:
+https://community.oracle.com/thread/4093422
+
+--- dbxml-6.1.4-orig/dbxml/src/dbxml/query/ParentOfChildJoinQP.cpp
++++ dbxml-6.1.4/dbxml/src/dbxml/query/ParentOfChildJoinQP.cpp
+@@ -139,28 +139,16 @@ bool ParentOfChildIterator::doJoin(Dynam
+ 
+ 	// Invarient 4: When ancestorStack_ is empty we can output the
+ 	// buffered results_, since any more results will come after them in
+ 	// document order.
+ 
+ 	while(true) {
+ 		context->testInterrupt();
+ 
+-		/* 
+-		 * If current parent's node level already be larger than
+-		 * childen's, abandon current parent and move to next one.
+-		 */
+-		if (parents_ != NULL && 
+-		    parents_->getNodeLevel() > children_->getNodeLevel()) {
+-			if(!parents_->next(context)) {
+-				delete parents_;
+-				parents_ = 0;
+-			}
+-		}
+-
+ 		int cmp = parents_ == 0 ? -1 : isDescendantOf(children_, parents_, /*orSelf*/false);
+ 		if(cmp < 0) {
+ 			if(!ancestorStack_.empty()) {
+ 				// We've found the closest ancestor - is it a parent?
+ 				if(ancestorStack_.back()->getNodeLevel() == (children_->getNodeLevel() - 1)) {
+ 					// Maintain invarient 3
+ 					if(results_.empty() || NodeInfo::compare(results_.back(), ancestorStack_.back()) < 0)
+ 						results_.push_back(ancestorStack_.back());

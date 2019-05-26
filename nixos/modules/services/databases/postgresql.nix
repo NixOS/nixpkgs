@@ -24,14 +24,13 @@ let
 
   postgresql = postgresqlAndPlugins cfg.package;
 
-  flags = optional cfg.enableTCPIP "-i";
-
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeText "postgresql.conf"
     ''
       hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
       log_destination = 'stderr'
+      listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
       port = ${toString cfg.port}
       ${cfg.extraConfig}
     '';
@@ -56,7 +55,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.postgresql96";
+        example = literalExample "pkgs.postgresql_9_6";
         description = ''
           PostgreSQL package to use.
         '';
@@ -106,6 +105,80 @@ in
         '';
       };
 
+      ensureDatabases = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Ensures that the specified databases exist.
+          This option will never delete existing databases, especially not when the value of this
+          option is changed. This means that databases created once through this option or
+          otherwise have to be removed manually.
+        '';
+        example = [
+          "gitea"
+          "nextcloud"
+        ];
+      };
+
+      ensureUsers = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            name = mkOption {
+              type = types.str;
+              description = ''
+                Name of the user to ensure.
+              '';
+            };
+            ensurePermissions = mkOption {
+              type = types.attrsOf types.str;
+              default = {};
+              description = ''
+                Permissions to ensure for the user, specified as an attribute set.
+                The attribute names specify the database and tables to grant the permissions for.
+                The attribute values specify the permissions to grant. You may specify one or
+                multiple comma-separated SQL privileges here.
+
+                For more information on how to specify the target
+                and on which privileges exist, see the
+                <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
+                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
+              '';
+              example = literalExample ''
+                {
+                  "DATABASE nextcloud" = "ALL PRIVILEGES";
+                  "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
+                }
+              '';
+            };
+          };
+        });
+        default = [];
+        description = ''
+          Ensures that the specified users exist and have at least the ensured permissions.
+          The PostgreSQL users will be identified using peer authentication. This authenticates the Unix user with the
+          same name only, and that without the need for a password.
+          This option will never delete existing users or remove permissions, especially not when the value of this
+          option is changed. This means that users created and permissions assigned once through this option or
+          otherwise have to be removed manually.
+        '';
+        example = literalExample ''
+          [
+            {
+              name = "nextcloud";
+              ensurePermissions = {
+                "DATABASE nextcloud" = "ALL PRIVILEGES";
+              };
+            }
+            {
+              name = "superuser";
+              ensurePermissions = {
+                "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
+              };
+            }
+          ]
+        '';
+      };
+
       enableTCPIP = mkOption {
         type = types.bool;
         default = false;
@@ -119,7 +192,7 @@ in
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ (pkgs.postgis.override { postgresql = pkgs.postgresql94; }) ]";
+        example = literalExample "[ (pkgs.postgis.override { postgresql = pkgs.postgresql_9_4; }) ]";
         description = ''
           When this list contains elements a new store path is created.
           PostgreSQL and the elements are symlinked into it. Then pg_config,
@@ -168,9 +241,9 @@ in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql96
-            else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql95
-            else pkgs.postgresql94);
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
+            else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
+            else pkgs.postgresql_9_4);
 
     services.postgresql.dataDir =
       mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}"
@@ -184,14 +257,16 @@ in
         host  all all ::1/128      md5
       '';
 
-    users.extraUsers.postgres =
+    users.users.postgres =
       { name = "postgres";
         uid = config.ids.uids.postgres;
         group = "postgres";
         description = "PostgreSQL server user";
+        home = "${cfg.dataDir}";
+        useDefaultShell = true;
       };
 
-    users.extraGroups.postgres.gid = config.ids.gids.postgres;
+    users.groups.postgres.gid = config.ids.gids.postgres;
 
     environment.systemPackages = [ postgresql ];
 
@@ -229,7 +304,7 @@ in
                 "${cfg.dataDir}/recovery.conf"
             ''}
 
-             exec postgres ${toString flags}
+             exec postgres
           '';
 
         serviceConfig =
@@ -237,6 +312,10 @@ in
             User = "postgres";
             Group = "postgres";
             PermissionsStartOnly = true;
+            RuntimeDirectory = "postgresql";
+            Type = if lib.versionAtLeast cfg.package.version "9.6"
+                   then "notify"
+                   else "simple";
 
             # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
             # http://www.postgresql.org/docs/current/static/server-shutdown.html
@@ -251,17 +330,30 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            while ! ${pkgs.sudo}/bin/sudo -u ${cfg.superUser} psql --port=${toString cfg.port} -d postgres -c "" 2> /dev/null; do
+            PSQL="${pkgs.sudo}/bin/sudo -u ${cfg.superUser} psql --port=${toString cfg.port}"
+
+            while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
                 sleep 0.1
             done
 
             if test -e "${cfg.dataDir}/.first_startup"; then
               ${optionalString (cfg.initialScript != null) ''
-                ${pkgs.sudo}/bin/sudo -u ${cfg.superUser} psql -f "${cfg.initialScript}" --port=${toString cfg.port} -d postgres
+                $PSQL -f "${cfg.initialScript}" -d postgres
               ''}
               rm -f "${cfg.dataDir}/.first_startup"
             fi
+          '' + optionalString (cfg.ensureDatabases != []) ''
+            ${concatMapStrings (database: ''
+              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc "CREATE DATABASE ${database}"
+            '') cfg.ensureDatabases}
+          '' + ''
+            ${concatMapStrings (user: ''
+              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc "CREATE USER ${user.name}"
+              ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
+                $PSQL -tAc "GRANT ${permission} ON ${database} TO ${user.name}"
+              '') user.ensurePermissions)}
+            '') cfg.ensureUsers}
           '';
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
@@ -270,5 +362,5 @@ in
   };
 
   meta.doc = ./postgresql.xml;
-
+  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 }

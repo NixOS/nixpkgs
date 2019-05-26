@@ -110,7 +110,7 @@ in
   config = mkIf cfg.enable (
   let
     manageGitoliteRc = cfg.extraGitoliteRc != "";
-    rcDir = pkgs.runCommand "gitolite-rc" { } rcDirScript;
+    rcDir = pkgs.runCommand "gitolite-rc" { preferLocalBuild = true; } rcDirScript;
     rcDirScript =
       ''
         mkdir "$out"
@@ -140,7 +140,7 @@ in
       push( @{$RC{ENABLE}}, 'git-annex-shell ua');
     '';
 
-    users.extraUsers.${cfg.user} = {
+    users.users.${cfg.user} = {
       description     = "Gitolite user";
       home            = cfg.dataDir;
       createHome      = true;
@@ -148,7 +148,7 @@ in
       group           = cfg.group;
       useDefaultShell = true;
     };
-    users.extraGroups."${cfg.group}".gid = config.ids.gids.gitolite;
+    users.groups."${cfg.group}".gid = config.ids.gids.gitolite;
 
     systemd.services."gitolite-init" = {
       description = "Gitolite initialization";

@@ -6,15 +6,17 @@ with import ./systemd-lib.nix { inherit config lib pkgs; };
 
 let
   cfg = config.systemd.nspawn;
-  assertions = [
-    # boot = true -> processtwo != true
-  ];
 
   checkExec = checkUnitConfig "Exec" [
     (assertOnlyFields [
       "Boot" "ProcessTwo" "Parameters" "Environment" "User" "WorkingDirectory"
-      "Capability" "DropCapability" "KillSignal" "Personality" "MachineId"
-      "PrivateUsers" "NotifyReady"
+      "PivotRoot" "Capability" "DropCapability" "NoNewPrivileges" "KillSignal"
+      "Personality" "MachineId" "PrivateUsers" "NotifyReady" "SystemCallFilter"
+      "LimitCPU" "LimitFSIZE" "LimitDATA" "LimitSTACK" "LimitCORE" "LimitRSS"
+      "LimitNOFILE" "LimitAS" "LimitNPROC" "LimitMEMLOCK" "LimitLOCKS"
+      "LimitSIGPENDING" "LimitMSGQUEUE" "LimitNICE" "LimitRTPRIO" "LimitRTTIME"
+      "OOMScoreAdjust" "CPUAffinity" "Hostname" "ResolvConf" "Timezone"
+      "LinkJournal"
     ])
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
@@ -23,8 +25,8 @@ let
 
   checkFiles = checkUnitConfig "Files" [
     (assertOnlyFields [
-      "ReadOnly" "Volatile" "Bind" "BindReadOnly" "TemporaryFileSystems"
-      "PrivateUsersChown"
+      "ReadOnly" "Volatile" "Bind" "BindReadOnly" "TemporaryFileSystem"
+      "Overlay" "OverlayReadOnly" "PrivateUsersChown"
     ])
     (assertValueOneOf "ReadOnly" boolValues)
     (assertValueOneOf "Volatile" (boolValues ++ [ "state" ]))
@@ -115,9 +117,7 @@ in {
 
       environment.etc."systemd/nspawn".source = generateUnits "nspawn" units [] [];
 
-      systemd.services."systemd-nspawn@" = {
-        wantedBy = [ "machine.target" ];
-      };
+      systemd.targets."multi-user".wants = [ "machines.target" ];
   };
 
 }

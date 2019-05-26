@@ -1,17 +1,32 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, netifaces, six, enum-compat }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, ifaddr
+, typing
+, isPy27
+, pythonOlder
+, python
+}:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.20.0";
-  name = "${pname}-${version}";
+  version = "0.22.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6e3f1e7b5871e3d1410ac29b9fb85aafc1e2d661ed596b07a6f84559a475efcb";
+    sha256 = "09dqfbj37l7vnj0fj4a82dqgq9mwm6fnsnsmljg25k1ygcn5hrpy";
   };
 
-  propagatedBuildInputs = [ netifaces six enum-compat ];
+  propagatedBuildInputs = [ ifaddr ]
+    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+
+  # tests not included with pypi release
+  doCheck = false;
+
+  checkPhase = ''
+    ${python.interpreter} test_zeroconf.py
+  '';
 
   meta = with stdenv.lib; {
     description = "A pure python implementation of multicast DNS service discovery";

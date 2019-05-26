@@ -3,7 +3,7 @@ stdenv.mkDerivation rec {
   version = "5.6.4";
   name = "liquidwar5-${version}";
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/liquidwar/liquidwar-${version}.tar.gz";
+    url = "https://download.savannah.gnu.org/releases/liquidwar/liquidwar-${version}.tar.gz";
     sha256 = "18wkbfzp07yckg05b5gjy67rw06z9lxp0hzg0zwj7rz8i12jxi9j";
   };
 

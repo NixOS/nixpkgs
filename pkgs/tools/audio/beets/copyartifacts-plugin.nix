@@ -6,8 +6,8 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     repo = "beets-copyartifacts";
     owner = "sbarakat";
-    rev = "4a5d347c858d25641c8a0eb7d8cb1a2cac10252a";
-    sha256 = "0bn6fci480ilghrdhpsjxxq29dxgni22sv1qalz770xy130g1zk3";
+    rev = "d0bb75c8fc8fe125e8191d73de7ade6212aec0fd";
+    sha256 = "19b4lqq1p45n348ssmql60jylw2fw7vfj9j22nly5qj5qx51j3g5";
   };
 
   postPatch = ''

@@ -2,14 +2,14 @@
 , openssl, nss, makeWrapper }:
 
 let
-  version = "1.2.25";
+  version = "1.2.28";
 in
 stdenv.mkDerivation rec {
   name = "xmlsec-${version}";
 
   src = fetchurl {
-    url = "http://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "1lpwj8dxwhha54sby0v5axjk79h56jnhjjiwiasbbk15vwzahz4n";
+    url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
+    sha256 = "1m12caglhyx08g8lh2sl3nkldlpryzdx2d572q73y3m33s0w9vhk";
   };
 
   outputs = [ "out" "dev" ];

@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, pugixml, boost, PlistCpp }:
+{ stdenv, fetchFromGitHub, pugixml, boost, PlistCpp }:
 
 stdenv.mkDerivation {
   name = "xib2nib-730e177";

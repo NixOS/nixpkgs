@@ -93,13 +93,13 @@ in {
       };
     };
 
-    users.extraUsers.caddy = {
+    users.users.caddy = {
       group = "caddy";
       uid = config.ids.uids.caddy;
       home = cfg.dataDir;
       createHome = true;
     };
 
-    users.extraGroups.caddy.gid = config.ids.uids.caddy;
+    users.groups.caddy.gid = config.ids.uids.caddy;
   };
 }

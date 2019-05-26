@@ -236,7 +236,7 @@ in
         }
       ];
 
-    users.extraUsers.rslsync = {
+    users.users.rslsync = {
       description     = "Resilio Sync Service user";
       home            = cfg.storagePath;
       createHome      = true;
@@ -244,7 +244,7 @@ in
       group           = "rslsync";
     };
 
-    users.extraGroups = [ { name = "rslsync"; } ];
+    users.groups = [ { name = "rslsync"; } ];
 
     systemd.services.resilio = with pkgs; {
       description = "Resilio Sync Service";

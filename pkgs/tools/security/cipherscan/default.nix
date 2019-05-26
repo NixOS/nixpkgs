@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, openssl, makeWrapper, python, coreutils }:
+{ stdenv, lib, fetchFromGitHub, openssl, makeWrapper, python, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "cipherscan-${version}";

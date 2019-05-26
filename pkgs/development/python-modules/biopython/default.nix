@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "biopython";
-  version = "1.71";
+  version = "1.73";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4f1770a29a5b18fcaca759bbc888083cdde2b301f073439ff640570d4a93e033";
+    sha256 = "1q55jhf76z3k6is3psis0ckbki7df26x7dikpcc3vhk1vhkwribh";
   };
 
   propagatedBuildInputs = [ numpy ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
       applications which address the needs of current and future work in
       bioinformatics.
     '';
-    homepage = http://biopython.org/wiki/Documentation;
+    homepage = https://biopython.org/wiki/Documentation;
     maintainers = with lib.maintainers; [ luispedro ];
     license = lib.licenses.bsd3;
   };

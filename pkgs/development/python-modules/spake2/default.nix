@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "SPAKE2 password-authenticated key exchange library";
-    homepage = "http://github.com/warner/python-spake2";
+    homepage = https://github.com/warner/python-spake2;
     license = licenses.mit;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, llvmPackages, irony }:
+{ stdenv, cmake, llvmPackages, irony }:
 
 stdenv.mkDerivation rec {
   name = "irony-server-${version}";

@@ -1,22 +1,25 @@
-{ stdenv, fetchurl, meson, ninja, vala, gobjectIntrospection, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, gettext, itstool, libxml2, libgames-support, libgee }:
+{ stdenv, fetchurl, meson, ninja, vala, gobject-introspection, pkgconfig, gnome3, gtk3, wrapGAppsHook
+, librsvg, gettext, itstool, python3, libxml2, libgnome-games-support, libgee, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   name = "gnome-mines-${version}";
-  version = "3.28.0";
+  version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mines/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "16w55hqaxipcv870n9gpn6qiywbqbyg7bjshaa02r75ias8dfxvf";
+    url = "mirror://gnome/sources/gnome-mines/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1nv966wkp2rqxzcdb76bwlbzpjqadcaqzrnkxpzwnvjjr167yx8g";
   };
 
-  # gobjectIntrospection for finding vapi files
-  nativeBuildInputs = [ meson ninja vala gobjectIntrospection pkgconfig gettext itstool libxml2 wrapGAppsHook ];
-  buildInputs = [ gtk3 librsvg gnome3.defaultIconTheme libgames-support libgee ];
+  # gobject-introspection for finding vapi files
+  nativeBuildInputs = [
+    meson ninja vala gobject-introspection pkgconfig gettext itstool python3
+    libxml2 wrapGAppsHook desktop-file-utils
+  ];
+  buildInputs = [ gtk3 librsvg gnome3.adwaita-icon-theme libgnome-games-support libgee ];
 
   postPatch = ''
-    chmod +x data/meson_compile_gschema.py # patchShebangs requires executable file
-    patchShebangs data/meson_compile_gschema.py
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
   '';
 
   passthru = {

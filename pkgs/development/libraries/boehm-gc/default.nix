@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops, enableLargeConfig ? false
-, buildPlatform, hostPlatform
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops
+, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
 }:
 
 stdenv.mkDerivation rec {
   name = "boehm-gc-${version}";
-  version = "7.6.4";
+  version = "8.0.4";
 
   src = fetchurl {
     urls = [
-      "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
       "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
+      "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
     ];
-    sha256 = "076dzsqqyxd3nlzs0z277vvhqjp8nv5dqi763s0m90zr6ljiyk5r";
+    sha256 = "1798rp3mcfkgs38ynkbg2p47bq59pisrc6mn0l20pb5iczf0ssj3";
   };
 
   buildInputs = [ libatomic_ops ];
@@ -21,25 +21,27 @@ stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    export NIX_CFLAGS_COMPILE+="-D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
+    export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
   '';
 
-  patches = [ (fetchpatch {
-    url = "https://raw.githubusercontent.com/gentoo/musl/85b6a600996bdd71162b357e9ba93d8559342432/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch";
-    sha256 = "1gydwlklvci30f5dpp5ccw2p2qpph5y41r55wx9idamjlq66fbb3";
-  }) ] ++
+  patches =
     # https://github.com/ivmai/bdwgc/pull/208
-    lib.optional hostPlatform.isRiscV ./riscv.patch;
+    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
 
   configureFlags =
     [ "--enable-cplusplus" ]
     ++ lib.optional enableLargeConfig "--enable-large-config"
-    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static";
+    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static"
+    # Configure script can't detect whether C11 atomic intrinsics are available
+    # when cross-compiling, so it links to libatomic_ops, which has to be
+    # propagated to all dependencies. To avoid this, assume that the intrinsics
+    # are available.
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-libatomic-ops=none";
 
   doCheck = true; # not cross;
 
   # Don't run the native `strip' when cross-compiling.
-  dontStrip = hostPlatform != buildPlatform;
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   enableParallelBuilding = true;
 

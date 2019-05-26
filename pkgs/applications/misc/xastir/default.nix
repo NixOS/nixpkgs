@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xastir-${version}";
-  version = "208";
+  pname = "xastir";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
-    owner = "Xastir";
-    repo = "Xastir";
-    rev = "707f3aa8c7ca3e3fecd32d5a4af3f742437e5dce";
-    sha256 = "1mm22vn3hws7dmg9wpaj4s0zkzb77i3aqa2ay3q6kqjkdhv25brl";
+    owner = pname;
+    repo = pname;
+    rev = "Release-${version}";
+    sha256 = "16zsgy3589snawr8f1fa22ymvpnjy6njvxmsck7q8p2xmmz2ry7r";
   };
 
   buildInputs = [

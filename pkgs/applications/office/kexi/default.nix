@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools,
+  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools,
   boost, qttools, qtwebkit,
   breeze-icons, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kcrash, kguiaddons, ki18n, kiconthemes, kitemviews, kio, ktexteditor, ktextwidgets,
@@ -9,12 +9,12 @@
 
 mkDerivation rec {
   pname = "kexi";
-  version = "3.1.0";
+  version = "3.2.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
-    sha256 = "1ysj44qq75wglw4d080l3gfw47695gapf29scxhb1g3py55csmbd";
+    sha256 = "1zy1q7q9rfdaws3rwf3my22ywkn6g747s3ixfcg9r80mm2g3z0bs";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

@@ -1,11 +1,12 @@
-{ mkXfceDerivation, exo, gtk3, libsoup, libxfce4ui, libxfce4util, xfce4-panel }:
+{ mkXfceDerivation, exo, gtk3, libsoup, libxfce4ui, libxfce4util, xfce4-panel, wrapGAppsHook, glib-networking }:
 
 mkXfceDerivation rec {
   category = "apps";
   pname = "xfce4-screenshooter";
-  version = "1.9.1";
+  version = "1.9.2";
 
-  sha256 = "1q13hvaz3ykrbgbbqb1186mhri8r9hkmpaayjwhnkvjm7jfyhbin";
+  sha256 = "1zl16xcmgrb1s6rsrn37mpl5w522i1i9s7x167xf2d092x333yx2";
 
-  buildInputs = [ exo gtk3 libsoup libxfce4ui libxfce4util xfce4-panel ];
+  nativeBuildInputs = [ wrapGAppsHook ]; # fix "No GSettings schemas are installed on the system"
+  buildInputs = [ exo gtk3 libsoup libxfce4ui libxfce4util xfce4-panel glib-networking ];
 }

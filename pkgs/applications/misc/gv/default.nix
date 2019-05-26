@@ -19,8 +19,8 @@ stdenv.mkDerivation {
     Xaw3d
     ghostscriptX
     perl
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
     pkgconfig
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
     libiconv
   ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    homepage = http://www.gnu.org/software/gv/;
+    homepage = https://www.gnu.org/software/gv/;
     description = "PostScript/PDF document viewer";
 
     longDescription = ''

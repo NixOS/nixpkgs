@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     homepage = http://expect.sourceforge.net/;
     license = "Expect";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

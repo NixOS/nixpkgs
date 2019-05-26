@@ -1,11 +1,11 @@
 { stdenv, fetchurl, opensp, pkgconfig, libxml2, curl }:
         
 stdenv.mkDerivation rec {
-  name = "libofx-0.9.13";
+  name = "libofx-0.9.14";
 
   src = fetchurl {
     url = "mirror://sourceforge/libofx/${name}.tar.gz";
-    sha256 = "1r60pj1jn269mk4s4025qxllkzgvnbw5r3vby8j2ry5svmygksjp";
+    sha256 = "02i9zxkp66yxjpjay5dscfh53bz5vxy03zcxncpw09svl6zmf9xq";
   };
 
   configureFlags = [ "--with-opensp-includes=${opensp}/include/OpenSP" ];

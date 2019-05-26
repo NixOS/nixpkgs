@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "stunnel-${version}";
-  version = "5.44";
+  version = "5.54";
 
   src = fetchurl {
     url    = "https://www.stunnel.org/downloads/${name}.tar.gz";
-    sha256 = "990a325dbb47d77d88772dd02fbbd27d91b1fea3ece76c9ff4461eca93f12299";
+    sha256 = "00krr0h3vsyi93mqhrbgfgn8v47l4l3hzdg1ccfnpd3lqak8i1ay";
     # please use the contents of "https://www.stunnel.org/downloads/${name}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
   };
@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ];
+
+  postInstall = ''
+    # remove legacy compatibility-wrapper that would require perl
+    rm $out/bin/stunnel3
+  '';
 
   installFlags = [
     "sysconfdir=\${out}/etc"

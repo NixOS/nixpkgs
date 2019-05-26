@@ -60,7 +60,7 @@ let
     config.Entrypoint = "/bin/tail";
   };
 
-  extraConfiguration = { config, pkgs, lib, nodes, ... }: {
+  extraConfiguration = { config, pkgs, ... }: {
     environment.systemPackages = [ pkgs.bind.host ];
     # virtualisation.docker.extraOptions = "--dns=${config.services.kubernetes.addons.dns.clusterIp}";
     services.dnsmasq.enable = true;
@@ -71,23 +71,24 @@ let
 
   base = {
     name = "dns";
-    inherit domain certs extraConfiguration;
+    inherit domain extraConfiguration;
   };
 
   singleNodeTest = {
     test = ''
       # prepare machine1 for test
+      $machine1->waitForUnit("kubernetes.target");
       $machine1->waitUntilSucceeds("kubectl get node machine1.${domain} | grep -w Ready");
-      $machine1->execute("docker load < ${redisImage}");
+      $machine1->waitUntilSucceeds("docker load < ${redisImage}");
       $machine1->waitUntilSucceeds("kubectl create -f ${redisPod}");
       $machine1->waitUntilSucceeds("kubectl create -f ${redisService}");
-      $machine1->execute("docker load < ${probeImage}");
+      $machine1->waitUntilSucceeds("docker load < ${probeImage}");
       $machine1->waitUntilSucceeds("kubectl create -f ${probePod}");
 
       # check if pods are running
       $machine1->waitUntilSucceeds("kubectl get pod redis | grep Running");
       $machine1->waitUntilSucceeds("kubectl get pod probe | grep Running");
-      $machine1->waitUntilSucceeds("kubectl get pods -n kube-system | grep 'kube-dns.*3/3'");
+      $machine1->waitUntilSucceeds("kubectl get pods -n kube-system | grep 'coredns.*1/1'");
 
       # check dns on host (dnsmasq)
       $machine1->succeed("host redis.default.svc.cluster.local");
@@ -99,19 +100,24 @@ let
 
   multiNodeTest = {
     test = ''
+      # Node token exchange
+      $machine1->waitUntilSucceeds("cp -f /var/lib/cfssl/apitoken.secret /tmp/shared/apitoken.secret");
+      $machine2->waitUntilSucceeds("cat /tmp/shared/apitoken.secret | nixos-kubernetes-node-join");
+      $machine1->waitForUnit("kubernetes.target");
+      $machine2->waitForUnit("kubernetes.target");
+
       # prepare machines for test
-      $machine1->waitUntilSucceeds("kubectl get node machine1.${domain} | grep -w Ready");
       $machine1->waitUntilSucceeds("kubectl get node machine2.${domain} | grep -w Ready");
-      $machine2->execute("docker load < ${redisImage}");
+      $machine2->waitUntilSucceeds("docker load < ${redisImage}");
       $machine1->waitUntilSucceeds("kubectl create -f ${redisPod}");
       $machine1->waitUntilSucceeds("kubectl create -f ${redisService}");
-      $machine2->execute("docker load < ${probeImage}");
+      $machine2->waitUntilSucceeds("docker load < ${probeImage}");
       $machine1->waitUntilSucceeds("kubectl create -f ${probePod}");
 
       # check if pods are running
       $machine1->waitUntilSucceeds("kubectl get pod redis | grep Running");
       $machine1->waitUntilSucceeds("kubectl get pod probe | grep Running");
-      $machine1->waitUntilSucceeds("kubectl get pods -n kube-system | grep 'kube-dns.*3/3'");
+      $machine1->waitUntilSucceeds("kubectl get pods -n kube-system | grep 'coredns.*1/1'");
 
       # check dns on hosts (dnsmasq)
       $machine1->succeed("host redis.default.svc.cluster.local");

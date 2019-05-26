@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "jetty-${version}";
-  version = "9.4.8.v20171121";
+  version = "9.4.16.v20190411";
   src = fetchurl {
-    url = "http://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/${version}/jetty-distribution-${version}.tar.gz";
+    url = "https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/${version}/jetty-distribution-${version}.tar.gz";
     name = "jetty-distribution-${version}.tar.gz";
-    sha256 = "0bvwi70vdk468yqgvgq99lwrpy2y5znrl0b1cr8j6ygmsgnvvmjh";
+    sha256 = "0vkcm68cp7z45pgfg5maxcxfjwy4xj30f2d0c7cfnw9d38wf5lpq";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

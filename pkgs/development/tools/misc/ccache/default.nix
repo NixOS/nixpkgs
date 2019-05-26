@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, runCommand, perl, zlib, makeWrapper }:
+{ stdenv, fetchurl, perl, zlib, makeWrapper }:
 
 let ccache = stdenv.mkDerivation rec {
   name = "ccache-${version}";

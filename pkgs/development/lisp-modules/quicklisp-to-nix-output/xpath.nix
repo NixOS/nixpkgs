@@ -1,15 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''xpath'';
-  version = ''plexippus-20120909-darcs'';
+  version = ''plexippus-20181210-git'';
 
-  description = '''';
+  parasites = [ "xpath/test" ];
 
-  deps = [ args."alexandria" args."babel" args."cl-ppcre" args."closure-common" args."cxml" args."cxml-dom" args."cxml-klacks" args."cxml-test" args."cxml-xml" args."parse-number" args."puri" args."trivial-features" args."trivial-gray-streams" args."yacc" ];
+  description = ''An implementation of the XML Path Language (XPath) Version 1.0'';
+
+  deps = [ args."alexandria" args."babel" args."cl-ppcre" args."closure-common" args."cxml" args."parse-number" args."puri" args."trivial-features" args."trivial-gray-streams" args."yacc" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/plexippus-xpath/2012-09-09/plexippus-xpath-20120909-darcs.tgz'';
-    sha256 = ''1zlkr7ck60gr5rxfiq22prnbblih14ywr0s5g2kss2a842zvkxn6'';
+    url = ''http://beta.quicklisp.org/archive/plexippus-xpath/2018-12-10/plexippus-xpath-20181210-git.tgz'';
+    sha256 = ''1acg17ckl65h0xr1vv2ljkmli7jgln7qhl4zs8lwl9jcayi6fynn'';
   };
 
   packageName = "xpath";
@@ -17,21 +19,19 @@ rec {
   asdFilesToKeep = ["xpath.asd"];
   overrides = x: x;
 }
-/* (SYSTEM xpath DESCRIPTION NIL SHA256
-    1zlkr7ck60gr5rxfiq22prnbblih14ywr0s5g2kss2a842zvkxn6 URL
-    http://beta.quicklisp.org/archive/plexippus-xpath/2012-09-09/plexippus-xpath-20120909-darcs.tgz
-    MD5 1d7457bffe7c4f6e1631c59bc00723d4 NAME xpath FILENAME xpath DEPS
+/* (SYSTEM xpath DESCRIPTION
+    An implementation of the XML Path Language (XPath) Version 1.0 SHA256
+    1acg17ckl65h0xr1vv2ljkmli7jgln7qhl4zs8lwl9jcayi6fynn URL
+    http://beta.quicklisp.org/archive/plexippus-xpath/2018-12-10/plexippus-xpath-20181210-git.tgz
+    MD5 106060a6e90dd35c80385ad5a1e8554d NAME xpath FILENAME xpath DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cl-ppcre FILENAME cl-ppcre)
      (NAME closure-common FILENAME closure-common) (NAME cxml FILENAME cxml)
-     (NAME cxml-dom FILENAME cxml-dom) (NAME cxml-klacks FILENAME cxml-klacks)
-     (NAME cxml-test FILENAME cxml-test) (NAME cxml-xml FILENAME cxml-xml)
      (NAME parse-number FILENAME parse-number) (NAME puri FILENAME puri)
      (NAME trivial-features FILENAME trivial-features)
      (NAME trivial-gray-streams FILENAME trivial-gray-streams)
      (NAME yacc FILENAME yacc))
     DEPENDENCIES
-    (alexandria babel cl-ppcre closure-common cxml cxml-dom cxml-klacks
-     cxml-test cxml-xml parse-number puri trivial-features trivial-gray-streams
-     yacc)
-    VERSION plexippus-20120909-darcs SIBLINGS NIL PARASITES NIL) */
+    (alexandria babel cl-ppcre closure-common cxml parse-number puri
+     trivial-features trivial-gray-streams yacc)
+    VERSION plexippus-20181210-git SIBLINGS NIL PARASITES (xpath/test)) */

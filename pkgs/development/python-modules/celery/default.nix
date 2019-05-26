@@ -1,15 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, iana-etc, libredirect,
-  pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
+{ stdenv, buildPythonPackage, fetchPypi, isPy37, fetchpatch, iana-etc, libredirect
+, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.1.0";
+  version = "4.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dcb0s6kdcd3vc9pwvazngppkdbhwpmpjmghq6rifsld34q3gzvp";
+    sha256 = "4c4532aa683f170f40bd76f928b70bc06ff171a959e06e71bf35f2f9d6031ef9";
   };
+
+  postPatch = ''
+    substituteInPlace requirements/test.txt \
+      --replace "moto==1.3.7" moto \
+      --replace "pytest>=4.3.1,<4.4.0" pytest
+  '';
 
   # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
   preCheck = stdenv.lib.optionalString stdenv.isLinux ''
@@ -20,7 +26,7 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  buildInputs = [ pytest case ];
+  checkInputs = [ case pytest boto3 moto ];
   propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
 
   meta = with stdenv.lib; {

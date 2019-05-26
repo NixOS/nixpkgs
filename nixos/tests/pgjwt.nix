@@ -14,7 +14,7 @@ with pkgs; {
   };
 
   nodes = {
-    master = { pkgs, config, ... }:
+    master = { ... }:
     {
       services.postgresql = {
         enable = true;

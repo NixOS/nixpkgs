@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, dpkg, makeWrapper, patchelf, buildFHSUserEnv
-, gtk3, gnome3, gdk_pixbuf, cairo, libjpeg_original, glib, gnome2, libGLU
+{ stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
+, gnome3, gtk3, gdk_pixbuf, cairo, libjpeg_original, glib, gnome2, libGLU
 , nvidia_cg_toolkit, zlib, openssl, portaudio
 }:
 let
   fullPath = stdenv.lib.makeLibraryPath [
     stdenv.cc.cc
-    gnome3.gtk
+    gtk3
     gdk_pixbuf
     cairo
     libjpeg_original
@@ -21,14 +21,14 @@ let
   lightworks = stdenv.mkDerivation rec {
     version = "14.0.0";
     name = "lightworks-${version}";
-    
+
     src =
-      if stdenv.system == "x86_64-linux" then
+      if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "http://downloads.lwks.com/v14/lwks-14.0.0-amd64.deb";
           sha256 = "66eb9f9678d979db76199f1c99a71df0ddc017bb47dfda976b508849ab305033";
         }
-      else throw "${name} is not supported on ${stdenv.system}";
+      else throw "${name} is not supported on ${stdenv.hostPlatform.system}";
 
     buildInputs = [ dpkg makeWrapper ];
 
@@ -77,7 +77,7 @@ let
 
 # Lightworks expects some files in /usr/share/lightworks
 in buildFHSUserEnv rec {
-  name = "lightworks";
+  name = lightworks.name;
 
   targetPkgs = pkgs: [
       lightworks

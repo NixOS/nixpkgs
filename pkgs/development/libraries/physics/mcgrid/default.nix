@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fastnlo, rivet, pkgconfig, sherpa }:
+{ stdenv, fetchurl, fastnlo, rivet, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "mcgrid-${version}";
   version = "2.0.2";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/mcgrid/${name}.tar.gz";
+    url = "https://www.hepforge.org/archive/mcgrid/${name}.tar.gz";
     sha256 = "1mw82x7zqbdchnd6shj3dirsav5i2cndp2hjwb8a8xdh4xh9zvfy";
   };
 

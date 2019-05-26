@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "chunkfs-${version}";
 
   src = fetchurl {
-    url = "http://chunkfs.florz.de/chunkfs_${version}.tar.gz";
+    url = "https://chunkfs.florz.de/chunkfs_${version}.tar.gz";
     sha256 = "4c168fc2b265a6ba34afc565707ea738f34375325763c0596f2cfa1c9b8d40f1";
   };
 

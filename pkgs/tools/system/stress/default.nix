@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "stress-1.0.4";
  
   src = fetchurl {
-    url = "http://people.seas.harvard.edu/~apw/stress/${name}.tar.gz";
+    url = "https://people.seas.harvard.edu/~apw/stress/${name}.tar.gz";
     sha256 = "0nw210jajk38m3y7h8s130ps2qsbz7j75wab07hi2r3hlz14yzh5";
   };
 

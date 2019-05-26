@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''esrap'';
-  version = ''20180131-git'';
+  version = ''20190107-git'';
 
   parasites = [ "esrap/tests" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."alexandria" args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/esrap/2018-01-31/esrap-20180131-git.tgz'';
-    sha256 = ''1kgr77w1ya125c04h6szxhzkxnq578rdf8f399wadqkav6x9dpkc'';
+    url = ''http://beta.quicklisp.org/archive/esrap/2019-01-07/esrap-20190107-git.tgz'';
+    sha256 = ''0kb4szcd7v4qj56p0yg1abvk79is6p5myri3gakzm87l2nmg15xs'';
   };
 
   packageName = "esrap";
@@ -21,9 +21,9 @@ rec {
 }
 /* (SYSTEM esrap DESCRIPTION
     A Packrat / Parsing Grammar / TDPL parser for Common Lisp. SHA256
-    1kgr77w1ya125c04h6szxhzkxnq578rdf8f399wadqkav6x9dpkc URL
-    http://beta.quicklisp.org/archive/esrap/2018-01-31/esrap-20180131-git.tgz
-    MD5 89b22e10575198b9f680e0c4e90bec2c NAME esrap FILENAME esrap DEPS
+    0kb4szcd7v4qj56p0yg1abvk79is6p5myri3gakzm87l2nmg15xs URL
+    http://beta.quicklisp.org/archive/esrap/2019-01-07/esrap-20190107-git.tgz
+    MD5 b8c98e84e3c63e4e3ce2f6c8b4d4bab7 NAME esrap FILENAME esrap DEPS
     ((NAME alexandria FILENAME alexandria) (NAME fiveam FILENAME fiveam))
-    DEPENDENCIES (alexandria fiveam) VERSION 20180131-git SIBLINGS NIL
+    DEPENDENCIES (alexandria fiveam) VERSION 20190107-git SIBLINGS NIL
     PARASITES (esrap/tests)) */

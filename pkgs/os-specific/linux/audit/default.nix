@@ -6,11 +6,11 @@
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "audit-2.8.3";
+  name = "audit-2.8.5";
 
   src = fetchurl {
-    url = "http://people.redhat.com/sgrubb/audit/${name}.tar.gz";
-    sha256 = "06lacv9zjn0sf076dydwmvjhdmik3xzhdjvyrkq75917xv54ajbl";
+    url = "https://people.redhat.com/sgrubb/audit/${name}.tar.gz";
+    sha256 = "1dzcwb2q78q7x41shcachn7f4aksxbxd470yk38zh03fch1l2p8f";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     # and pulls in an extra openldap dependency otherwise
     "--disable-zos-remote"
     (if enablePython then "--with-python" else "--without-python")
+    "--with-arm"
+    "--with-aarch64"
   ];
 
   enableParallelBuilding = true;
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "Audit Library";
-    homepage = http://people.redhat.com/sgrubb/audit/;
+    homepage = https://people.redhat.com/sgrubb/audit/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];

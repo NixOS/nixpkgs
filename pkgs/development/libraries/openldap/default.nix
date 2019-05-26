@@ -1,38 +1,41 @@
 { stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.45";
+  name = "openldap-2.4.47";
 
   src = fetchurl {
-    url = "http://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
-    sha256 = "091qvwk5dkcpp17ziabcnh3rg3m7qwzw2pihfcd1d5fdxgywzmnd";
+    url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
+    sha256 = "02sj0p1pq12hqq29b22m3f5zs2rykgvc0q3wlynxjcsjhrvmhk7m";
   };
-
-  patches = [
-    (fetchurl {
-      url = "https://bz-attachments.freebsd.org/attachment.cgi?id=183223";
-      sha256 = "1fiy457hrxmydybjlvn8ypzlavz22cz31q2rga07n32dh4x759r3";
-    })
-  ];
-  patchFlags = [ "-p0" ];
 
   # TODO: separate "out" and "bin"
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   enableParallelBuilding = true;
 
-  buildInputs = [ openssl cyrus_sasl db groff libtool ];
+  nativeBuildInputs = [ groff ];
 
-  configureFlags =
-    [ "--enable-overlays"
-      "--disable-dependency-tracking"   # speeds up one-time build
-      "--enable-modules"
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-      "--enable-crypt"
-    ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
-      ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
-      ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+  buildInputs = [ openssl cyrus_sasl db libtool ];
+
+  # Disable install stripping as it breaks cross-compiling.
+  # We strip binaries anyway in fixupPhase.
+  makeFlags= [ "STRIP=" ];
+
+  configureFlags = [
+    "--enable-overlays"
+    "--disable-dependency-tracking"   # speeds up one-time build
+    "--enable-modules"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--enable-crypt"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-yielding_select=yes"
+    "ac_cv_func_memcmp_working=yes"
+  ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
+    ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
+    ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+
+  doCheck = false; # needs a running LDAP server
 
   installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(out)/var" ];
 
@@ -57,6 +60,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage    = http://www.openldap.org/;
     description = "An open source implementation of the Lightweight Directory Access Protocol";
+    license = licenses.openldap;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
   };

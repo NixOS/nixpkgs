@@ -16,12 +16,11 @@
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "6.1.1";
-  name = "${pname}-${version}";
+  version = "6.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f1e03ebb8d17f67f03bafa5d85f220883462f7bd7a97fe904c7d56ffba8534a3";
+    sha256 = "0rf0dbpxf5z82bw8lsjj45r3wdd4wc74anz4wiiaf2rbjqlb1ivn";
   };
 
   buildInputs = [ nose ];

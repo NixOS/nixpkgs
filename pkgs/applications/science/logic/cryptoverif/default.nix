@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cryptoverif-${version}";
-  version = "1.28";
+  version = "2.00";
 
   src = fetchurl {
     url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${version}.tar.gz";
-    sha256 = "0vssz751g1nn8wclkiwgghpm475jl00xkivc164vgbr9acxsr7n7";
+    sha256 = "0g8pkj58b48zk4c0sgpln0qhbj82v75mz3w6cl3w5bvmxsbkwvy1";
   };
 
   buildInputs = [ ocaml ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cryptographic protocol verifier in the computational model";
-    homepage    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/";
+    homepage    = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/";
     license     = stdenv.lib.licenses.cecill-b;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

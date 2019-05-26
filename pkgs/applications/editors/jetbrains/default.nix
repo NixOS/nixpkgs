@@ -1,6 +1,6 @@
-{ lib, stdenv, callPackage, fetchurl, makeDesktopItem, makeWrapper, patchelf
-, coreutils, gnugrep, which, git, python, unzip, p7zip
-, androidsdk, jdk, cmake, libxml2, zlib, python3, ncurses
+{ lib, stdenv, callPackage, fetchurl
+, python
+, jdk, cmake, libxml2, zlib, python3, ncurses
 }:
 
 with stdenv.lib;
@@ -10,7 +10,7 @@ let
 
   # Sorted alphabetically
 
-  buildClion = { name, version, src, license, description, wmClass, update-channel }:
+  buildClion = { name, version, src, license, description, wmClass, ... }:
     lib.overrideDerivation (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "CLion";
@@ -29,36 +29,48 @@ let
         (
           cd $out/clion-${version}
           # bundled cmake does not find libc
-          rm -rf bin/cmake
-          ln -s ${cmake} bin/cmake
+          rm -rf bin/cmake/linux
+          ln -s ${cmake} bin/cmake/linux
 
-          lldbLibPath=$out/clion-${version}/bin/lldb/lib
+          lldbLibPath=$out/clion-${version}/bin/lldb/linux/lib
           interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
           ln -s ${ncurses.out}/lib/libncurses.so $lldbLibPath/libtinfo.so.5
 
           patchelf --set-interpreter $interp \
             --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/bin/lldb-server
+            bin/lldb/linux/bin/lldb-server
 
           for i in LLDBFrontend lldb lldb-argdumper; do
             patchelf --set-interpreter $interp \
               --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-              "bin/lldb/bin/$i"
+              "bin/lldb/linux/bin/$i"
           done
 
           patchelf \
             --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
+            bin/lldb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
 
           patchelf \
             --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python3 ]}:$lldbLibPath" \
-            bin/lldb/lib/liblldb.so
+            bin/lldb/linux/lib/liblldb.so
 
-          patchelf --set-interpreter $interp bin/gdb/bin/gdb
-          patchelf --set-interpreter $interp bin/gdb/bin/gdbserver
+          gdbLibPath=$out/clion-${version}/bin/gdb/linux/lib
+          patchelf \
+            --set-rpath "$gdbLibPath" \
+            bin/gdb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
           patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$lldbLibPath" \
-            bin/clang/clang-tidy
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$gdbLibPath" \
+            bin/gdb/linux/bin/gdb
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$gdbLibPath" \
+            bin/gdb/linux/bin/gdbserver
+
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
+            bin/clang/linux/clangd
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
+            bin/clang/linux/clang-tidy
 
           wrapProgram $out/bin/clion \
             --set CL_JDK "${jdk}"
@@ -66,7 +78,7 @@ let
       '';
     });
 
-  buildDataGrip = { name, version, src, license, description, wmClass, update-channel }:
+  buildDataGrip = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "DataGrip";
@@ -83,7 +95,7 @@ let
       };
     });
 
-  buildGoland = { name, version, src, license, description, wmClass, update-channel }:
+  buildGoland = { name, version, src, license, description, wmClass, ... }:
     lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Goland";
@@ -108,7 +120,7 @@ let
       '';
     });
 
-  buildIdea = { name, version, src, license, description, wmClass, update-channel }:
+  buildIdea = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "IDEA";
@@ -118,14 +130,15 @@ let
         longDescription = ''
           IDE for Java SE, Groovy & Scala development Powerful
           environment for building Google Android apps Integration
-          with JUnit, TestNG, popular SCMs, Ant & Maven.
+          with JUnit, TestNG, popular SCMs, Ant & Maven. Also known
+          as IntelliJ.
         '';
         maintainers = with maintainers; [ edwtjo ];
         platforms = platforms.linux;
       };
     });
 
-  buildPhpStorm = { name, version, src, license, description, wmClass, update-channel }:
+  buildPhpStorm = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "PhpStorm";
@@ -142,7 +155,7 @@ let
       };
     });
 
-  buildPycharm = { name, version, src, license, description, wmClass, update-channel }:
+  buildPycharm = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "PyCharm";
@@ -162,14 +175,14 @@ let
           providing you almost everything you need for your comfortable
           and productive development!
         '';
-        maintainers = with maintainers; [ jgeerds ];
+        maintainers = with maintainers; [ ];
         platforms = platforms.linux;
       };
     }).override {
       propagatedUserEnvPkgs = [ python ];
     };
 
-  buildRider = { name, version, src, license, description, wmClass, update-channel }:
+  buildRider = { name, version, src, license, description, wmClass, ... }:
     lib.overrideDerivation (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "Rider";
@@ -195,7 +208,7 @@ let
       '';
     });
 
-  buildRubyMine = { name, version, src, license, description, wmClass, update-channel }:
+  buildRubyMine = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "RubyMine";
@@ -208,7 +221,7 @@ let
       };
     });
 
-  buildWebStorm = { name, version, src, license, description, wmClass, update-channel }:
+  buildWebStorm = { name, version, src, license, description, wmClass, ... }:
     lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "WebStorm";
@@ -237,145 +250,145 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2018.1.2"; /* updated by script */
+    version = "2019.1.3"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "158ydbr0bbzm1nqi4xhrcp6bwk7kmiw78v959h7bxg3y7z55hbwa"; /* updated by script */
+      sha256 = "04ykwylg2h5l28h7wb7v41nslb82fvcm6p4d6f9k8aw3zhkaalv4"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
-    update-channel = "CLion_Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
+    update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
   };
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2018.1.2"; /* updated by script */
+    version = "2019.1.3"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "12rihb1ppl4i1i0j3yj4ih4qx3xf30kfx022pbvng1rjy0bpikp7"; /* updated by script */
+      sha256 = "0syp0y4j40j72gql67g6r02n6kndsrz4nmh55ac5g9xs7s4rd5vq"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
-    update-channel = "datagrip_2018_1";
+    update-channel = "DataGrip RELEASE";
   };
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2018.1.2"; /* updated by script */
+    version = "2019.1.2"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "1qhhxarvw6mzavyzackzkbq52yfr5437gljxdvlbr6rpi99hgfzb"; /* updated by script */
+      sha256 = "162mkjmbznxwn7z1zv3x4kik8wx0fvavcdfdmnn9pads5zg2s4b3"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
-    update-channel = "goland_release";
+    update-channel = "GoLand RELEASE";
   };
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2018.1.2"; /* updated by script */
+    version = "2019.1.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0s5vbdg8ajaac1jqh8ypy20fp061aqjhiyi20kdcsb0856nw5frg"; /* updated by script */
+      sha256 = "01mlnjs7ak7xv9zk3v9r99chrcnw10qkv49gsydsm6a0wqac29xg"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
-    update-channel = "IDEA_Release";
+    update-channel = "IntelliJ IDEA RELEASE";
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2018.1.2"; /* updated by script */
+    version = "2019.1.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jdk.tar.gz";
-      sha256 = "1rrqc9sj0ibkkj627hzwdh7l5z8zm6cmaz0yzx6xhyi989ivfy2r"; /* updated by script */
+      url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
+      sha256 = "09c8135rm45k7yyqadnf715i8k2jllqc1p5jdh6cnb29fwmyk5m5"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
-    update-channel = "IDEA_Release";
+    update-channel = "IntelliJ IDEA RELEASE";
   };
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2018.1.2"; /* updated by script */
+    version = "2019.1.2"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "13si8g7n1qvjm5ivbrazsbqlvwwlg65nia78k74nkaqp704z92cs"; /* updated by script */
+      sha256 = "1mc7xma1ybp0h1654p10vgp84fnsgvwsvprm86pnmfgks8307860"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
-    update-channel = "PS2018.1";
+    update-channel = "PhpStorm RELEASE";
   };
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2018.1.2"; /* updated by script */
+    version = "2019.1.2"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1phxzsz2qnyk0b0kkccsgjkxx4ak7rbm68k1lpgr59rwyxqnazy3"; /* updated by script */
+      sha256 = "05axjd2b2648sxs93d84va90373i8nma541c619xvb967kx1gzdh"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
-    update-channel = "PyCharm_Release";
+    update-channel = "PyCharm RELEASE";
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2018.1.2"; /* updated by script */
+    version = "2019.1.2"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "08cfmrrmxs67dc61cvjc0ynzng0hnr2i78fv3m888k4x63cy6mv5"; /* updated by script */
+      sha256 = "1s9llgjxdg99fql62kx6skpd545xqmrxwpbg19mjrjlz6pm71z3r"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
-    update-channel = "PyCharm_Release";
+    update-channel = "PyCharm RELEASE";
   };
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2017.3.1"; /* updated by script */
+    version = "2019.1.1"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/resharper/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "0k9yc00lmk826pylfs9jyxqnlczk9vhq7bs61b8nyfam1dqbgikv"; /* updated by script */
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
+      sha256 = "0441y92b3xqf7xh8k4vc0m7dfm91psnrwlv3mjzbsv09jrk1kbq7"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
-    update-channel = "rider_2017_3";
+    update-channel = "Rider RELEASE";
   };
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2018.1.1"; /* updated by script */
+    version = "2019.1.2"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "1nh2m10ikwl85n66aspkmgxmbk98amhlgj2xl2sasjfwn5pn1wmf"; /* updated by script */
+      sha256 = "1zhci8nkywv66bwc6hbyh4h3x61qhv2fbmfb5gkw9znkk1qa0q6v"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
-    update-channel = "rm2018.1";
+    update-channel = "RubyMine RELEASE";
   };
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2018.1.2"; /* updated by script */
+    version = "2019.1.2"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "14fmny9i0cgkplna0li5q2c5wiqk71k6c5h480ia85jaqi2vm8jh"; /* updated by script */
+      sha256 = "198rbvhqjaix6qw36rlfafbv5aj0i6zr93adzgkilrn2l9v1jf07"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
-    update-channel = "WS_Release";
+    update-channel = "WebStorm RELEASE";
   };
 
 }

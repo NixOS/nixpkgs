@@ -9,7 +9,6 @@
 
 buildPythonPackage rec {
   pname = "cycler";
-  name = "${pname}-${version}";
   version = "0.10.0";
 
   src = fetchPypi {

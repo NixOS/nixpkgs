@@ -12,22 +12,21 @@
 , jedi
 , decorator
 , pickleshare
-, simplegeneric
 , traitlets
 , prompt_toolkit
 , pexpect
 , appnope
-, typing
 , backcall
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "6.3.1";
+  version = "7.2.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a6ac981381b3f5f604b37a293369963485200e3639fb0404fa76092383c10c41";
+    sha256 = "6a9496209b76463f1dec126ab928919aaf1f55b38beb9219af3fe202f6bbdd12";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -42,13 +41,12 @@ buildPythonPackage rec {
     jedi
     decorator
     pickleshare
-    simplegeneric
     traitlets
     prompt_toolkit
+    pygments
     pexpect
     backcall
-  ] ++ lib.optionals stdenv.isDarwin [appnope]
-    ++ lib.optionals (pythonOlder "3.5") [ typing ];
+  ] ++ lib.optionals stdenv.isDarwin [appnope];
 
   LC_ALL="en_US.UTF-8";
 
@@ -58,15 +56,10 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  # IPython 6.0.0 and above does not support Python < 3.3.
-  # The last IPython version to support older Python versions
-  # is 5.3.x.
-  disabled = pythonOlder "3.3";
-
   meta = {
     description = "IPython: Productive Interactive Computing";
     homepage = http://ipython.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor jgeerds fridh ];
+    maintainers = with lib.maintainers; [ bjornfor fridh ];
   };
 }

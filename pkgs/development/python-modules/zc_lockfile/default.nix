@@ -7,12 +7,11 @@
 
 buildPythonPackage rec {
   pname = "zc.lockfile";
-  version = "1.2.1";
-  name = "${pname}-${version}";
+  version = "1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11db91ada7f22fe8aae268d4bfdeae012c4fe655f66bbb315b00822ec00d043e";
+    sha256 = "0lrj2zdr06sff7i151710jbbnnhx4phdc0qpns8jkarpd62f7a4m";
   };
 
   buildInputs = [ mock ];
@@ -20,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Inter-process locks";
-    homepage =  http://www.python.org/pypi/zc.lockfile;
+    homepage =  https://www.python.org/pypi/zc.lockfile;
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
   };

@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, zip, unzip, makeWrapper
+{ stdenv, lib, fetchurl, zip, unzip
 , jzmq, jdk, python
-, logsDir ? "", confFile ? "", extraLibraryPaths ? [], extraJars ? [] }:
+, confFile ? "", extraLibraryPaths ? [], extraJars ? [] }:
 
 stdenv.mkDerivation rec {
   name = "apache-storm-" + version;

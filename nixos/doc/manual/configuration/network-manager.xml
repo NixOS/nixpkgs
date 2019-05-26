@@ -19,7 +19,7 @@
   All users that should have permission to change network settings must belong
   to the <code>networkmanager</code> group:
 <programlisting>
-<link linkend="opt-users.users._name__.extraGroups">users.extraUsers.youruser.extraGroups</link> = [ "networkmanager" ];
+<link linkend="opt-users.users._name__.extraGroups">users.users.alice.extraGroups</link> = [ "networkmanager" ];
 </programlisting>
  </para>
 

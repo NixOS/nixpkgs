@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.openfabrics.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
     broken = true; # 2018-04-11
   };
 }

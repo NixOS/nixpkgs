@@ -1,24 +1,30 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2, desktop-file-utils, wrapGAppsHook
-, gtk, gnome3, gnome-autoar, glib, dbus-glib, shared-mime-info, libnotify, libexif
-, exempi, librsvg, tracker, tracker-miners, gnome-desktop, gexiv2, libselinux, gdk_pixbuf }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2
+, desktop-file-utils, python3, wrapGAppsHook , gtk3, gnome3, gnome-autoar
+, glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
+, librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk_pixbuf
+, substituteAll, bubblewrap, gst_all_1, gsettings-desktop-schemas
+}:
 
 let
   pname = "nautilus";
-  version = "3.28.1";
+  version = "3.32.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "19dhpa2ylrg8d5274lahy7xqr2p9z3jnq1h4qmsh95czkpy7is4w";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0vmrvimv4183l3ij4kv0ir2c9rfzk7gh3xc2pa4wkqq9kn7h6m7s";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig libxml2 gettext wrapGAppsHook desktop-file-utils ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig libxml2 gettext python3 wrapGAppsHook
+    desktop-file-utils
+  ];
 
   buildInputs = [
-    dbus-glib shared-mime-info libexif gtk exempi libnotify libselinux
-    tracker tracker-miners gnome-desktop gexiv2
-    gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
+    glib-networking shared-mime-info libexif gtk3 exempi libnotify libselinux
+    tracker tracker-miners gexiv2 libseccomp bubblewrap gst_all_1.gst-plugins-base
+    gnome3.adwaita-icon-theme gsettings-desktop-schemas
   ];
 
   propagatedBuildInputs = [ gnome-autoar ];
@@ -36,7 +42,16 @@ in stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  patches = [ ./extension_dir.patch ];
+  patches = [
+    ./extension_dir.patch
+    # 3.30 now generates it's own thummbnails,
+    # and no longer depends on `gnome-desktop`
+    (substituteAll {
+      src = ./bubblewrap-paths.patch;
+      bubblewrap_bin = "${bubblewrap}/bin/bwrap";
+      inherit (builtins) storeDir;
+    })
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {

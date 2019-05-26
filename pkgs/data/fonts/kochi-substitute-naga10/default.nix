@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let version = "20030809";
 in
@@ -26,7 +26,7 @@ fetchzip {
       Debian version.
     '';
     homepage = http://sourceforge.jp/projects/efont/;
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = [ stdenv.lib.maintainers.auntie ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = [ lib.maintainers.auntie ];
   };
 }

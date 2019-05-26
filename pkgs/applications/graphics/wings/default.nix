@@ -1,34 +1,35 @@
-{ fetchurl, stdenv, erlang, esdl, cl }:
+{ fetchurl, stdenv, erlang, cl, libGL, libGLU, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "wings-1.5.4";
+  name = "wings-2.2.4";
   src = fetchurl {
     url = "mirror://sourceforge/wings/${name}.tar.bz2";
-    sha256 = "0qz6rmmkqgk3p0d3v2ikkf22n511bq0m7xp3kkradwrp28fcl15x";
+    sha256 = "1xcmifs4vq2810pqqvsjsm8z3lz24ys4c05xkh82nyppip2s89a3";
   };
 
-  ERL_LIBS = "${esdl}/lib/erlang/lib:${cl}/lib/erlang/lib";
+  ERL_LIBS = "${cl}/lib/erlang/lib";
 
   patchPhase = ''
-    sed -i 's,include("sdl_keyboard.hrl"),include_lib("esdl/include/sdl_keyboard.hrl"),' \
-      src/wings_body.erl plugins_src/commands/wpc_constraints.erl
-
-    # Fix reference
-    sed -i 's,wings/e3d/,,' plugins_src/import_export/wpc_lwo.erl
+    sed -i 's,-Werror ,,' e3d/Makefile
+    sed -i 's,../../wings/,../,' icons/Makefile
+    find plugins_src -mindepth 2 -type f -name "*.[eh]rl" -exec sed -i 's,wings/src/,../../src/,' {} \;
+    find plugins_src -mindepth 2 -type f -name "*.[eh]rl" -exec sed -i 's,wings/e3d/,../../e3d/,' {} \;
+    find plugins_src -mindepth 2 -type f -name "*.[eh]rl" -exec sed -i 's,wings/intl_tools/,../../intl_tools/,' {} \;
+    find . -type f -name "*.[eh]rl" -exec sed -i 's,wings/src/,../src/,' {} \;
+    find . -type f -name "*.[eh]rl" -exec sed -i 's,wings/e3d/,../e3d/,' {} \;
+    find . -type f -name "*.[eh]rl" -exec sed -i 's,wings/intl_tools/,../intl_tools/,' {} \;
   '';
 
-  buildInputs = [ erlang esdl cl ];
+  buildInputs = [ erlang cl libGL libGLU ];
 
   # I did not test the *cl* part. I added the -pa just by imitation.
   installPhase = ''
     mkdir -p $out/bin $out/lib/${name}/ebin
     cp ebin/* $out/lib/${name}/ebin
-    cp -R fonts textures shaders plugins $out/lib/$name
+    cp -R textures shaders plugins $out/lib/$name
     cat << EOF > $out/bin/wings
-    #!/bin/sh
-    ${erlang}/bin/erl -smp disable \
-      -pa ${esdl}/lib/erlang/lib/${cl.name}/ebin \
-      -pa ${esdl}/lib/erlang/lib/${esdl.name}/ebin \
+    #!${runtimeShell}
+    ${erlang}/bin/erl \
       -pa $out/lib/${name}/ebin -run wings_start start_halt "$@"
     EOF
     chmod +x $out/bin/wings
@@ -37,9 +38,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.wings3d.com/;
     description = "Subdivision modeler inspired by Nendo and Mirai from Izware";
-    license = "BSD";
+    license = stdenv.lib.licenses.tcltk;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };
 }
-

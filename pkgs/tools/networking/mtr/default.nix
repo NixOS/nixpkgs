@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.in --replace ' install-exec-hook' ""
   '';
 
-  configureFlags = stdenv.lib.optionalString (!withGtk) "--without-gtk";
+  configureFlags = stdenv.lib.optional (!withGtk) "--without-gtk";
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 

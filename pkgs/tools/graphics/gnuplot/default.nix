@@ -2,7 +2,6 @@
 , cairo, gd, libcerf, pango, readline, zlib
 , withTeXLive ? false, texlive
 , withLua ? false, lua
-, emacs ? null
 , libX11 ? null
 , libXt ? null
 , libXpm ? null
@@ -20,11 +19,11 @@ let
   withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
 in
 stdenv.mkDerivation rec {
-  name = "gnuplot-5.2.3";
+  name = "gnuplot-5.2.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${name}.tar.gz";
-    sha256 = "0977vgjszjpqhz2jahq07zmcmi0k9d6v7wq70ph2klfrb29qrdgy";
+    sha256 = "1vllgap08nhvdmc03idmkdnk9cfl2bp81hps50q1pqrr640qzp9m";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig texinfo ] ++ lib.optional withQt qttools;
@@ -62,6 +61,15 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnuplot.info/;
     description = "A portable command-line driven graphing utility for many platforms";
     platforms = platforms.linux ++ platforms.darwin;
+    license = {
+      # Essentially a BSD license with one modifaction:
+      # Permission to modify the software is granted, but not the right to
+      # distribute the complete modified source code.  Modifications are to
+      # be distributed as patches to the released version.  Permission to
+      # distribute binaries produced by compiling modified sources is granted,
+      # provided you: ...
+      url = https://sourceforge.net/p/gnuplot/gnuplot-main/ci/master/tree/Copyright;
+    };
     maintainers = with maintainers; [ lovek323 ];
   };
 }

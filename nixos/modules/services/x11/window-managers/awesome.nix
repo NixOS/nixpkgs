@@ -37,6 +37,11 @@ in
         apply = pkg: if pkg == null then pkgs.awesome else pkg;
       };
 
+      noArgb = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Disable client transparency support, which can be greatly detrimental to performance in some setups";
+      };
     };
 
   };
@@ -50,7 +55,7 @@ in
       { name = "awesome";
         start =
           ''
-            ${awesome}/bin/awesome ${makeSearchPath cfg.luaModules} &
+            ${awesome}/bin/awesome ${lib.optionalString cfg.noArgb "--no-argb"} ${makeSearchPath cfg.luaModules} &
             waitPID=$!
           '';
       };

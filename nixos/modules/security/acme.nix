@@ -209,7 +209,6 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
-                domain = if data.domain != null then data.domain else cert;
                 cpath = lpath + optionalString (data.activationDelay != null) ".staging";
                 lpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
@@ -303,15 +302,15 @@ in
                       workdir="$(mktemp -d)"
 
                       # Create CA
-                      openssl genrsa -des3 -passout pass:x -out $workdir/ca.pass.key 2048
-                      openssl rsa -passin pass:x -in $workdir/ca.pass.key -out $workdir/ca.key
+                      openssl genrsa -des3 -passout pass:xxxx -out $workdir/ca.pass.key 2048
+                      openssl rsa -passin pass:xxxx -in $workdir/ca.pass.key -out $workdir/ca.key
                       openssl req -new -key $workdir/ca.key -out $workdir/ca.csr \
                         -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=Security Department/CN=example.com"
                       openssl x509 -req -days 1 -in $workdir/ca.csr -signkey $workdir/ca.key -out $workdir/ca.crt
 
                       # Create key
-                      openssl genrsa -des3 -passout pass:x -out $workdir/server.pass.key 2048
-                      openssl rsa -passin pass:x -in $workdir/server.pass.key -out $workdir/server.key
+                      openssl genrsa -des3 -passout pass:xxxx -out $workdir/server.pass.key 2048
+                      openssl rsa -passin pass:xxxx -in $workdir/server.pass.key -out $workdir/server.key
                       openssl req -new -key $workdir/server.key -out $workdir/server.csr \
                         -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=IT Department/CN=example.com"
                       openssl x509 -req -days 1 -in $workdir/server.csr -CA $workdir/ca.crt \

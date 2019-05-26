@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, pkgs, lib, glibc, augeas, dnsutils, c-ares, curl,
-  cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, libnfsidmap, doxygen,
+{ stdenv, fetchurl, fetchpatch, glibc, augeas, dnsutils, c-ares, curl,
+  cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
   python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
-  pcre, kerberos, cifs_utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
-  libuuid, docbook_xml_xslt, ldap, systemd, nspr, check, cmocka, uid_wrapper,
-  nss_wrapper, docbook_xml_dtd_44, ncurses, Po4a, http-parser, jansson
-  , withSudo ? false }:
+  pcre, kerberos, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
+  libuuid, ldap, systemd, nspr, check, cmocka, uid_wrapper,
+  nss_wrapper, ncurses, Po4a, http-parser, jansson,
+  docbook_xsl, docbook_xml_dtd_44,
+  withSudo ? false }:
 
 let
-  docbookFiles = "${pkgs.docbook_xml_xslt}/share/xml/docbook-xsl/catalog.xml:${pkgs.docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
+  docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
 in
 stdenv.mkDerivation rec {
   name = "sssd-${version}";
-  version = "1.16.1";
+  version = "1.16.4";
 
   src = fetchurl {
     url = "https://fedorahosted.org/released/sssd/${name}.tar.gz";
-    sha256 = "0vjh1c5960wh86zjsamdjhljls7bb5fz5jpcazgzrpmga5w6ggrd";
+    sha256 = "0ngr7cgimyjc6flqkm7psxagp1m4jlzpqkn28pliifbmdg6i5ckb";
   };
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
     export PYTHONPATH=${ldap}/lib/python2.7/site-packages
-    export PATH=$PATH:${pkgs.openldap}/libexec
+    export PATH=$PATH:${openldap}/libexec
 
     configureFlagsArray=(
       --prefix=$out
@@ -48,9 +49,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
-                  samba libnfsidmap doxygen python python3 popt
+                  samba nfs-utils doxygen python python3 popt
                   talloc tdb tevent pkgconfig ldb pam openldap pcre kerberos
-                  cifs_utils glib keyutils dbus fakeroot libxslt libxml2
+                  cifs-utils glib keyutils dbus fakeroot libxslt libxml2
                   libuuid ldap systemd nspr check cmocka uid_wrapper
                   nss_wrapper ncurses Po4a http-parser jansson ];
 

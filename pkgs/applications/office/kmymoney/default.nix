@@ -1,8 +1,11 @@
 { stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
+, fetchpatch
 
 , akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
 , kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
 , kitemmodels, libical, libofx, qgpgme
+
+, sqlcipher
 
 # Needed for running tests:
 , qtbase, xvfb_run
@@ -13,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   name = "kmymoney-${version}";
-  version = "5.0.1";
+  version = "5.0.4";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
-    sha256 = "1c9apnvc07y17pzy4vygry1dai5ass2z7j354lrcppa85b18yvnx";
+    sha256 = "06lbavhl9b8cybnss2mmy3g5w8qn2vl6zhipvbl11lsr3j9bsa8q";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
@@ -33,6 +36,7 @@ stdenv.mkDerivation rec {
     akonadi alkimia aqbanking gmp gwenhywfar kactivities karchive kcmutils
     kcontacts kdewebkit kdiagram kholidays kidentitymanagement kitemmodels
     libical libofx qgpgme
+    sqlcipher
 
     # Put it into buildInputs so that CMake can find it, even though we patch
     # it into the interface later.
@@ -53,11 +57,12 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  installCheckInputs = [ xvfb_run ];
   installCheckPhase = let
     pluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}";
   in lib.optionalString doInstallCheck ''
-    QT_PLUGIN_PATH=${lib.escapeShellArg pluginPath} CTEST_OUTPUT_ON_FAILURE=1 \
-      ${xvfb_run}/bin/xvfb-run -s '-screen 0 1024x768x24' make test \
+    QT_PLUGIN_PATH=${lib.escapeShellArg pluginPath} \
+      xvfb-run -s '-screen 0 1024x768x24' make test \
       ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
   '';
 

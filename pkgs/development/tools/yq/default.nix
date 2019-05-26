@@ -1,8 +1,8 @@
-{ stdenv, lib, buildPythonApplication, fetchPypi, pyyaml, xmltodict, jq }:
+{ lib, buildPythonApplication, fetchPypi, pyyaml, xmltodict, jq }:
 
 buildPythonApplication rec {
   pname = "yq";
-  version = "2.5.0";
+  version = "2.7.2";
 
   propagatedBuildInputs = [ pyyaml xmltodict jq ];
 
@@ -11,7 +11,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e9fd2aa32defcd051058e3b6f665873282aa4eed19e11b1db94fe70847535d4c";
+    sha256 = "1fwvwy75n4rqzh6sxyp2jmjqc7939s0xmrhxw7zhdy6iacggvnpp";
   };
 
   meta = with lib; {

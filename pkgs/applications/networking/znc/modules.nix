@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, znc }:
+{ stdenv, fetchFromGitHub, znc }:
 
 let
   zncDerivation = a@{
@@ -8,6 +8,8 @@ let
   } : stdenv.mkDerivation (a // {
     inherit buildPhase;
     inherit installPhase;
+
+    buildInputs = znc.buildInputs;
 
     meta = a.meta // { platforms = stdenv.lib.platforms.unix; };
     passthru.module_name = module_name;

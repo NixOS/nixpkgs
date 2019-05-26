@@ -1,15 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, isPy3k
 , transitions, websockets, passlib, docopt, pyyaml, nose }:
 
 buildPythonPackage rec {
   pname = "hbmqtt";
-  version = "0.9.2";
+  version = "0.9.5";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f61e05007648a4f33e300fafcf42776ca95508ba1141799f94169427ce5018c";
+    sha256 = "9886b1c8321d16e971376dc609b902e0c84118846642b5e09f08a4ca876a7f2a";
   };
 
   propagatedBuildInputs = [ transitions websockets passlib docopt pyyaml ];

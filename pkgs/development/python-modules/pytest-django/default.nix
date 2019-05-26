@@ -1,34 +1,32 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, django, setuptools_scm
-, fetchpatch
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, django
+, setuptools_scm
+, django-configurations
+, pytest_xdist
+, six
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
-  name = "${pname}-${version}";
-  version = "3.1.2";
+  version = "3.4.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02932m2sr8x22m4az8syr8g835g4ak77varrnw71n6xakmdcr303";
+    sha256 = "1vj2xfb6jl570zmmwlhvfpj7af5q554z72z51ril07gyfkkq6cjd";
   };
 
-  buildInputs = [ pytest setuptools_scm ];
+  nativeBuildInputs = [ pytest setuptools_scm ];
+  checkInputs = [ pytest django-configurations pytest_xdist six ];
   propagatedBuildInputs = [ django ];
-
-  patches = [
-    # Unpin setuptools-scm
-    (fetchpatch {
-      url = "https://github.com/pytest-dev/pytest-django/commit/25cbc3b395dcdeb92bdc9414e296680c2b9d602e.patch";
-      sha256 = "0mz3rcsv44pfzlxy3pv8mx87glmv34gy0d5aknvbzgb2a9niryws";
-    })
-  ];
 
   # Complicated. Requires Django setup.
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "py.test plugin for testing of Django applications";
-    homepage = http://pytest-django.readthedocs.org/en/latest/;
+    homepage = https://pytest-django.readthedocs.org/en/latest/;
     license = licenses.bsd3;
   };
 }

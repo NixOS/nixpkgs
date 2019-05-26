@@ -34,7 +34,7 @@ in
   config = mkIf cfg.enable (mkMerge [{
     assertions = [{
       assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
-      message = "Virtualbox not currently supported on ${pkgs.stdenv.system}";
+      message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     }];
 
     environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
@@ -44,7 +44,7 @@ in
     boot.supportedFilesystems = [ "vboxsf" ];
     boot.initrd.supportedFilesystems = [ "vboxsf" ];
 
-    users.extraGroups.vboxsf.gid = config.ids.gids.vboxsf;
+    users.groups.vboxsf.gid = config.ids.gids.vboxsf;
 
     systemd.services.virtualbox =
       { description = "VirtualBox Guest Services";

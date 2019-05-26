@@ -1,27 +1,22 @@
-{ stdenv, fetchurl, python2Packages }:
+{ stdenv, fetchurl, python3Packages }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "syncplay-${version}";
-  version = "1.5.3";
+  version = "1.6.3";
 
   format = "other";
 
   src = fetchurl {
-    url = https://github.com/Syncplay/syncplay/archive/v1.5.3.tar.gz;
-    sha256 = "1yk0aajskhk6czpjshf9a9pzp3rafh5cgdcyyz8pwpk4ca9zyzfv";
+    url = https://github.com/Syncplay/syncplay/archive/v1.6.3.tar.gz;
+    sha256 = "151p1njlp3dp3pfr3l3m6ia5829zvjyjh4p45j6rgnicbh8sqrgs";
   };
 
-  propagatedBuildInputs = with python2Packages; [ pyside twisted ];
+  propagatedBuildInputs = with python3Packages; [ pyside twisted ];
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
-
-  postInstall = ''
-    mkdir -p $out/lib/python2.7/site-packages
-    mv $out/lib/syncplay/syncplay $out/lib/python2.7/site-packages/
-  '';
+  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://syncplay.pl/;
+    homepage = https://syncplay.pl/;
     description = "Free software that synchronises media players";
     license = licenses.asl20;
     platforms = platforms.linux;

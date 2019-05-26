@@ -1,19 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, glib, itstool, libxml2, xorg, dbus
-, intltool, accountsservice, libX11, gnome3, systemd, autoreconfHook
-, gtk, libcanberra-gtk3, pam, libtool, gobjectIntrospection, plymouth
-, librsvg, coreutils }:
+{ stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
+, accountsservice, libX11, gnome3, systemd, autoreconfHook
+, gtk3, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
+, librsvg, coreutils, xwayland, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "gdm-${version}";
-  version = "3.28.1";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1yxjjyrp0ywrc25cp81bsdhp79zn0c0jag48hlp00b5wfnkqy1kp";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gdm"; attrPath = "gnome3.gdm"; };
+    url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "12ypdz9i24hwbl1d1wnnxb8zlvfa4f49n9ac5cl9d6h8qp4b0gb4";
   };
 
   # Only needed to make it build
@@ -21,41 +17,66 @@ stdenv.mkDerivation rec {
     substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver.out}/bin/X"
   '';
 
-  postPatch = ''
-    substituteInPlace daemon/gdm-manager.c --replace "/bin/plymouth" "${plymouth}/bin/plymouth"
-    substituteInPlace data/gdm.service.in  --replace "/bin/kill" "${coreutils}/bin/kill"
-  '';
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--with-plymouth=yes"
+    "--enable-gdm-xsession"
+    "--with-initial-vt=7"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--with-udevdir=$(out)/lib/udev"
+  ];
 
-  configureFlags = [ "--sysconfdir=/etc"
-                     "--localstatedir=/var"
-                     "--with-plymouth=yes"
-                     "--with-initial-vt=7"
-                     "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
-
-  nativeBuildInputs = [ pkgconfig libxml2 itstool intltool autoreconfHook libtool gnome3.dconf ];
-  buildInputs = [ glib accountsservice systemd
-                  gobjectIntrospection libX11 gtk
-                  libcanberra-gtk3 pam plymouth librsvg ];
+  nativeBuildInputs = [ pkgconfig libxml2 itstool autoreconfHook libtool gnome3.dconf ];
+  buildInputs = [
+    glib accountsservice systemd
+    gobject-introspection libX11 gtk3
+    libcanberra-gtk3 pam plymouth librsvg
+  ];
 
   enableParallelBuilding = true;
 
-  # Disable Access Control because our X does not support FamilyServerInterpreted yet
-  patches = [ ./sessions_dir.patch
-              ./gdm-x-session_extra_args.patch
-              ./gdm-session-worker_xserver-path.patch
-             ];
+  patches = [
+    # Change hardcoded paths to nix store paths.
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit coreutils plymouth xwayland;
+    })
 
-  postInstall = ''
-    # Prevent “Could not parse desktop file orca-autostart.desktop or it references a not found TryExec binary”
-    rm $out/share/gdm/greeter/autostart/orca-autostart.desktop
-  '';
+    # The following patches implement certain environment variables in GDM which are set by
+    # the gdm configuration module (nixos/modules/services/x11/display-managers/gdm.nix).
 
-  installFlags = [ "sysconfdir=$(out)/etc" "dbusconfdir=$(out)/etc/dbus-1/system.d" ];
+    ./gdm-x-session_extra_args.patch
+
+    # Allow specifying a wrapper for running the session command.
+    ./gdm-x-session_session-wrapper.patch
+
+    # Forwards certain environment variables to the gdm-x-session child process
+    # to ensure that the above two patches actually work.
+    ./gdm-session-worker_forward-vars.patch
+
+    # Set up the environment properly when launching sessions
+    # https://github.com/NixOS/nixpkgs/issues/48255
+    ./reset-environment.patch
+  ];
+
+  installFlags = [
+    "sysconfdir=$(out)/etc"
+    "dbusconfdir=$(out)/etc/dbus-1/system.d"
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gdm";
+      attrPath = "gnome3.gdm";
+    };
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/GDM;
     description = "A program that manages graphical display servers and handles graphical user logins";
-    platforms = platforms.linux;
+    homepage = https://wiki.gnome.org/Projects/GDM;
+    license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
   };
 }

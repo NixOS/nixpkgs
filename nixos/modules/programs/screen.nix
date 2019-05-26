@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (lib) mkOption mkIf types;
@@ -25,6 +25,8 @@ in
 
   config = mkIf (cfg.screenrc != "") {
     environment.etc."screenrc".text = cfg.screenrc;
+
+    environment.systemPackages = [ pkgs.screen ];
   };
 
 }

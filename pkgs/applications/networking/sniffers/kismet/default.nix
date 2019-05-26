@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2016-07-R1";
 
   src = fetchurl {
-    url = "http://www.kismetwireless.net/code/${name}.tar.xz";
+    url = "https://www.kismetwireless.net/code/${name}.tar.xz";
     sha256 = "0dz28y4ay4lskhl0lawqy2dkcrhgfkbg06v22qxzzw8i6caizcmx";
   };
 

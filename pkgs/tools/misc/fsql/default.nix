@@ -18,7 +18,7 @@ buildGoPackage rec {
     homepage = https://github.com/kshvmdn/fsql;
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     inherit version;
   };
 

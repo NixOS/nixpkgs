@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name= "nextcloud-${version}";
-  version = "13.0.2";
+  name = "nextcloud-${version}";
+  version = "15.0.8";
 
   src = fetchurl {
     url = "https://download.nextcloud.com/server/releases/${name}.tar.bz2";
-    sha256 = "0zf4z4cn4wwsybxirvzyk7l6xjw9gkc60lzm8jqz9aak3a5gk5kk";
+    sha256 = "1w7jwni3iv8ixh92v6iaw9nwshjd9wvvdkwkdpcyq6crlfgmk0mp";
   };
 
   installPhase = ''
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Sharing solution for files, calendars, contacts and more";
     homepage = https://nextcloud.com;
-    maintainers = with stdenv.lib.maintainers; [ schneefux bachp ];
+    maintainers = with stdenv.lib.maintainers; [ schneefux bachp globin fpletz ];
     license = stdenv.lib.licenses.agpl3Plus;
     platforms = with stdenv.lib.platforms; unix;
   };

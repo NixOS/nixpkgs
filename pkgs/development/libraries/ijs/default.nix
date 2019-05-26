@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, ghostscript }:
+{ stdenv, autoreconfHook, ghostscript }:
 
 stdenv.mkDerivation {
   name = "ijs-${ghostscript.version}";

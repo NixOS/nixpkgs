@@ -30,7 +30,7 @@ with lib;
 
     boot.initrd.postDeviceCommands = ''
       rootDevice="${config.fileSystems."/".device}"
-      if [ -e "$rootDevice" ]; then
+      if waitDevice "$rootDevice"; then
         rootDevice="$(readlink -f "$rootDevice")"
         parentDevice="$rootDevice"
         while [ "''${parentDevice%[0-9]}" != "''${parentDevice}" ]; do

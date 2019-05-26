@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
     repositories.git = git://git.code.sf.net/p/otr/libotr;
     license = licenses.lgpl21;
     description = "Library for Off-The-Record Messaging";
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.unix;
   };
 }

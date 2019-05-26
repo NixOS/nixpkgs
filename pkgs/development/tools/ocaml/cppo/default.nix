@@ -1,30 +1,43 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, dune }:
 let
   pname = "cppo";
-  version = "1.5.0";
   webpage = "http://mjambon.com/${pname}.html";
 in
 assert stdenv.lib.versionAtLeast ocaml.version "3.12";
-stdenv.mkDerivation rec {
 
-  name = "${pname}-${version}";
+let param =
+  if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
+    version = "1.6.5";
+    sha256 = "03c0amszy28shinvz61hm340jz446zz5763a1pdqlza36kwcj0p0";
+    buildInputs = [ dune ];
+    extra = {
+      inherit (dune) installPhase;
+    };
+  } else {
+    version = "1.5.0";
+    sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
+    extra = {
+      createFindlibDestdir = true;
+      makeFlags = "PREFIX=$(out)";
+      preBuild = ''
+        mkdir $out/bin
+      '';
+    };
+  }
+; in
+
+stdenv.mkDerivation (rec {
+
+  name = "${pname}-${param.version}";
 
   src = fetchFromGitHub {
     owner = "mjambon";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
+    rev = "v${param.version}";
+    inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
-
-  createFindlibDestdir = true;
-
-  makeFlags = "PREFIX=$(out)";
-
-  preBuild = ''
-    mkdir $out/bin
-  '';
+  buildInputs = [ ocaml findlib ocamlbuild ] ++ (param.buildInputs or []);
 
   meta = with stdenv.lib; {
     description = "The C preprocessor for OCaml";
@@ -35,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;
   };
-}
+} // param.extra)

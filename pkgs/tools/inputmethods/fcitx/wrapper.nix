@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, fcitx, fcitx-configtool, makeWrapper, plugins, libsForQt5 }:
+{ symlinkJoin, fcitx, fcitx-configtool, makeWrapper, plugins, libsForQt5 }:
 
 symlinkJoin {
   name = "fcitx-with-plugins-${fcitx.version}";

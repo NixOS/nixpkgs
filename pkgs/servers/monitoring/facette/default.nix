@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name = "facette-${version}";
-  version = "0.4.0";
+  version = "0.4.1";
   src = fetchFromGitHub {
     owner = "facette";
     repo = "facette";
     rev = "${version}";
-    sha256 = "1m7krq439qlf7b4l4bfjw0xfvjgj67w59mh8rf7c398rky04p257";
+    sha256 = "0p28s2vn18cqg8p7bzhb38wky0m98d5xv3wvf1nmg1kmwhwim6mi";
   };
   nativeBuildInputs = [ go pkgconfig nodejs nodePackages.npm pandoc ];
   buildInputs = [ rrdtool ];
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage = https://facette.io/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];
+    broken = true; # not really broken, it just requires an internet connection to build. see #45382
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "google-gflags-${version}";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "gflags";
     repo = "gflags";
     rev = "v${version}";
-    sha256 = "12wkihc4f07qmhyqk3cjylj8v5xz2bjrq75p7aq1vvvj60fbp58k";
+    sha256 = "147i3md3nxkjlrccqg4mq1kyzc7yrhvqv5902iibc7znkvzdvlp0";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_STATIC_LIBS=ON"
-    "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}"
   ];
 
   doCheck = false;

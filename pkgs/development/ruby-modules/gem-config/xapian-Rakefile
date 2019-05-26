@@ -4,35 +4,30 @@ require 'rbconfig'
 
 c = RbConfig::CONFIG
 
-def system!(cmd)
-  puts cmd
-  system(cmd) or raise
-end
-
 source_dir = 'xapian_source'
 bindings = Dir["#{source_dir}/xapian-bindings-*"].first
 bindings = File.basename(bindings, ".tar.xz")
 
 task :default do
-  system! "tar -xJf #{source_dir}/#{bindings}.tar.xz"
+  sh "tar -xJf #{source_dir}/#{bindings}.tar.xz"
 
   prefix = Dir.pwd
   ENV['LDFLAGS'] = "-L#{prefix}/lib"
 
-  system! "mkdir -p lib"
+  sh "mkdir -p lib"
 
   Dir.chdir bindings do
     ENV['RUBY'] ||= "#{c['bindir']}/#{c['RUBY_INSTALL_NAME']}"
-    system! "./configure --prefix=#{prefix} --exec-prefix=#{prefix} --with-ruby"
-    system! "make clean all"
+    sh "./configure --prefix=#{prefix} --exec-prefix=#{prefix} --with-ruby"
+    sh "make clean all"
   end
 
-  system! "cp -r #{bindings}/ruby/.libs/_xapian.* lib"
-  system! "cp #{bindings}/ruby/xapian.rb lib"
+  sh "cp -r #{bindings}/ruby/.libs/_xapian.* lib"
+  sh "cp #{bindings}/ruby/xapian.rb lib"
 
-  system! "rm lib/*.la"
-  system! "rm lib/*.lai"
+  sh "rm lib/*.la"
+  sh "rm lib/*.lai"
 
-  system! "rm -R #{bindings}"
-  system! "rm -R #{source_dir}"
+  sh "rm -R #{bindings}"
+  sh "rm -R #{source_dir}"
 end

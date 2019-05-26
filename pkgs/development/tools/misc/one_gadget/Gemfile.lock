@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bindata (2.4.4)
+    elftools (1.0.2)
+      bindata (~> 2)
+    one_gadget (1.6.2)
+      elftools (~> 1.0.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  one_gadget
+
+BUNDLED WITH
+   1.17.2

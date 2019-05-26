@@ -37,7 +37,7 @@ with lib;
       wantedBy = [ "multi-user.target" ];
     };
 
-    users.extraUsers.rpc = {
+    users.users.rpc = {
       group = "nogroup";
       uid = config.ids.uids.rpc;
     };

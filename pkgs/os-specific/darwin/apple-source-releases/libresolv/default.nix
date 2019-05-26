@@ -1,8 +1,6 @@
-{ stdenv, appleDerivation, Libinfo, configd, mDNSResponder }:
+{ appleDerivation, Libinfo, configd, mDNSResponder }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
   buildInputs = [ Libinfo configd mDNSResponder ];
 
   buildPhase = ''

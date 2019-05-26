@@ -1,17 +1,18 @@
-{ stdenv, buildPerlPackage, fetchurl
-, perl, perlPackages }:
+{ stdenv, fetchurl, fetchpatch, makeWrapper
+, perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "slimserver-${version}";
-  version = "7.9.0";
+  version = "7.9.1";
 
   src = fetchurl {
     url = "https://github.com/Logitech/slimserver/archive/${version}.tar.gz";
-    sha256 = "07rhqipg7m28x0nqdd83nyzi88dp9cf8rr2pamdyrfcwyp1h1b44";
+    sha256 = "0szp5zkmx2b5lncsijf97asjnl73fyijkbgbwkl1i7p8qnqrb4mp";
   };
 
   buildInputs = [
-    perl
+    makeWrapper
+    perlPackages.perl
     perlPackages.AnyEvent
     perlPackages.AudioScan
     perlPackages.CarpClan
@@ -39,8 +40,8 @@ buildPerlPackage rec {
     perlPackages.IOSocketSSL
     perlPackages.IOString
     perlPackages.JSONXSVersionOneAndTwo
-    perlPackages.Log4Perl
-    perlPackages.LWPUserAgent
+    perlPackages.LogLog4perl
+    perlPackages.LWP
     perlPackages.NetHTTP
     perlPackages.ProcBackground
     perlPackages.SubName
@@ -66,21 +67,27 @@ buildPerlPackage rec {
     rm -rf CPAN
     rm -rf Bin
     touch Makefile.PL
+
+    # relax audio scan version constraints
+    substituteInPlace lib/Audio/Scan.pm --replace "0.93" "1.01"
+    substituteInPlace modules.conf --replace "Audio::Scan 0.93 0.95" "Audio::Scan 0.93"
     '';
 
   preConfigurePhase = "";
 
-  buildPhase = "
+  buildPhase = ''
     mv lib tmp
-    mkdir -p lib/perl5/site_perl
-    mv CPAN_used/* lib/perl5/site_perl
-    cp -rf tmp/* lib/perl5/site_perl
-  ";
+    mkdir -p ${perlPackages.perl.libPrefix}
+    mv CPAN_used/* ${perlPackages.perl.libPrefix}
+    cp -rf tmp/* ${perlPackages.perl.libPrefix}
+  '';
 
   doCheck = false;
 
   installPhase = ''
     cp -r . $out
+    wrapProgram $out/slimserver.pl \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ lame flac faad2 sox monkeysAudio wavpack ]}"
   '';
 
   outputs = [ "out" ];
@@ -92,6 +99,6 @@ buildPerlPackage rec {
     # https://github.com/Logitech/slimserver/blob/public/7.9/License.txt
     license = licenses.unfree;
     maintainers = [ maintainers.phile314 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

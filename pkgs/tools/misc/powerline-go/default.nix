@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "powerline-go";
-  version = "1.10.0";
+  version = "1.12.1";
   name = "${pname}-${version}";
   rev = "v${version}";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "justjanne";
     repo = pname;
     inherit rev;
-    sha256 = "1bmgim61cx6i4m24a474nm3w4zqjflm0wnw3y24299n9dj14izs3";
+    sha256 = "0r2n3hjgr7c7nwwcph7i2lv3709z9cyc8gmsinlzjwny998akyf4";
   };
 
   goDeps = ./deps.nix;

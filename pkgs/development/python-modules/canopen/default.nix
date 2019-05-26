@@ -1,7 +1,5 @@
 { lib
-, stdenv
 , buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
 , nose
 , can

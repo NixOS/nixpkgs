@@ -46,5 +46,8 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
     platforms   = stdenv.lib.platforms.linux;
+    # See pkgs/applications/science/logic/glucose/default.nix
+    # (The error is different due to glucose-fenv.patch, but the same)
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

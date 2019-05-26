@@ -1,19 +1,17 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub }:
+{ stdenv, buildPythonPackage, isPy3k, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pyhomematic";
-  version = "0.1.42";
+  version = "0.1.58";
 
   disabled = !isPy3k;
 
-  # PyPI tarball does not include tests/ directory
-  src = fetchFromGitHub {
-    owner = "danielperna84";
-    repo = pname;
-    rev = version;
-    sha256 = "0h7bq66q22kzj1xwhxmr7knibsmb4csjwq3jr19fyl9sxxmgqwqy";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "b390400169a4d57b3ddc3bf2123d71f2c9ef9042a50906e13253aa67311f5183";
   };
 
+  # PyPI tarball does not include tests/ directory
   # Unreliable timing: https://github.com/danielperna84/pyhomematic/issues/126
   doCheck = false;
 

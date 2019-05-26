@@ -3,12 +3,11 @@
 
 buildPythonPackage rec {
   pname = "onkyo-eiscp";
-  version = "1.2.4";
-  name = "${pname}-${version}";
+  version = "1.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qb5w2g2cnckq7psh92g1w3gf76437x1vwfhwnd247wshs5h7hxj";
+    sha256 = "cfcca6bc6c36992095f5aa4a15870a3ef89b9a26d991da2333891c2675d4ef1b";
   };
 
   propagatedBuildInputs = [ docopt netifaces ];

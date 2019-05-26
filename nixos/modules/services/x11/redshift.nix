@@ -116,6 +116,9 @@ in {
       }
     ];
 
+    # needed so that .desktop files are installed, which geoclue cares about
+    environment.systemPackages = [ cfg.package ];
+
     services.geoclue2.enable = mkIf (cfg.provider == "geoclue2") true;
 
     systemd.user.services.redshift = 

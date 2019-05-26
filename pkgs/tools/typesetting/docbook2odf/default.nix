@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, makeWrapper, zip, libxslt, PerlMagick }:
+{ stdenv, fetchurl, perlPackages, makeWrapper, zip, libxslt }:
 
 stdenv.mkDerivation rec {
   name = "docbook2odf-0.244";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "10k44g0qqa37k30pfj8vz95j6zdzz0nmnqjq1lyahfs2h4glzgwb";
   };
 
-  buildInputs = [ perl makeWrapper ];
+  buildInputs = [ perlPackages.perl makeWrapper ];
 
   installPhase = ''
     mkdir -p "$out/bin/"
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram "$out/bin/docbook2odf" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ zip libxslt ]}" \
-      --prefix PERL5PATH : "${stdenv.lib.makePerlPath [PerlMagick]}"
+      --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.PerlMagick ]}"
   '';
 
   meta = with stdenv.lib; {

@@ -1,21 +1,19 @@
 { buildPythonPackage
-, fetchurl
-, fetchpatch
+, fetchPypi
 , nose
 , lib
 }:
 
 buildPythonPackage rec {
   pname = "xlwt";
-  name = "${pname}-${version}";
   version = "1.3.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "c59912717a9b28f1a3c2a98fd60741014b06b043936dcecbc113eaaada156c88";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ nose ];
   checkPhase = ''
     nosetests -v
   '';

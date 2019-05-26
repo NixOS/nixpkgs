@@ -91,6 +91,20 @@ int open64(const char * path, int flags, ...)
     return open64_real(rewrite(path, buf), flags, mode);
 }
 
+int openat(int dirfd, const char * path, int flags, ...)
+{
+    int (*openat_real) (int, const char *, int, mode_t) = dlsym(RTLD_NEXT, "openat");
+    mode_t mode = 0;
+    if (flags & O_CREAT) {
+        va_list ap;
+        va_start(ap, flags);
+        mode = va_arg(ap, mode_t);
+        va_end(ap);
+    }
+    char buf[PATH_MAX];
+    return openat_real(dirfd, rewrite(path, buf), flags, mode);
+}
+
 FILE * fopen(const char * path, const char * mode)
 {
     FILE * (*fopen_real) (const char *, const char *) = dlsym(RTLD_NEXT, "fopen");
@@ -117,6 +131,13 @@ int __xstat64(int ver, const char * path, struct stat64 * st)
     int (*__xstat64_real) (int ver, const char *, struct stat64 *) = dlsym(RTLD_NEXT, "__xstat64");
     char buf[PATH_MAX];
     return __xstat64_real(ver, rewrite(path, buf), st);
+}
+
+int stat(const char * path, struct stat * st)
+{
+    int (*__stat_real) (const char *, struct stat *) = dlsym(RTLD_NEXT, "stat");
+    char buf[PATH_MAX];
+    return __stat_real(rewrite(path, buf), st);
 }
 
 int * access(const char * path, int mode)

@@ -1,19 +1,26 @@
 { stdenv, fetchurl, vala, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
-, gettext, itstool, clutter, clutter-gtk, libxml2, appstream-glib }:
+, gettext, itstool, clutter, clutter-gtk, libxml2, appstream-glib
+, meson, ninja, python3 }:
 
 stdenv.mkDerivation rec {
   name = "lightsoff-${version}";
-  version = "3.28.0";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/lightsoff/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0rwh9kz6aphglp79cyrfjab6vy02vclq68f646zjgb9xgg6ar73g";
+    url = "mirror://gnome/sources/lightsoff/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0vc3ibjs9ynnm0gxlhhin7jpnsx22vnn4ygaybxwmv9w2q49cs9f";
   };
 
-  nativeBuildInputs = [ vala pkgconfig wrapGAppsHook itstool gettext appstream-glib libxml2];
-  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg clutter clutter-gtk ];
+  nativeBuildInputs = [
+    vala pkgconfig wrapGAppsHook itstool gettext appstream-glib libxml2
+    meson ninja python3
+  ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk_pixbuf librsvg clutter clutter-gtk ];
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

@@ -12,7 +12,7 @@ stdenv.mkDerivation  rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     alsaLib libjack2 libpulseaudio xorg.libX11 xorg.libXext
-    xorg.xproto
+    xorg.xorgproto
   ];
 
   patchPhase = "sed -i '41,43d' libbristolaudio/audioEngineJack.c"; # disable alsa/iatomic

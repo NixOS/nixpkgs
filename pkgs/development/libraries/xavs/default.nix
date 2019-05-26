@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0drw16wm95dqszpl7j33y4gckz0w0107lnz6wkzb66f0dlbv48cf";
   };
 
+  enableParallelBuilding = true;
+
   patchPhase = ''
     patchShebangs configure
     patchShebangs config.sub
@@ -18,7 +20,16 @@ stdenv.mkDerivation rec {
     patchShebangs tools/patcheck
     patchShebangs tools/regression-test.pl
     patchShebangs tools/xavs-format
-  '';
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace config.guess --replace 'uname -p' 'uname -m'
+    substituteInPlace configure \
+      --replace '-O4' '-O3' \
+      --replace ' -s ' ' ' \
+      --replace 'LDFLAGS -s' 'LDFLAGS' \
+      --replace '-dynamiclib' ' ' \
+      --replace '-falign-loops=16' ' '
+    substituteInPlace Makefile --replace '-Wl,-soname,' ' '
+    '';
 
   configureFlags = [
     "--enable-pic"
@@ -31,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "AVS encoder and decoder";
     homepage    = http://xavs.sourceforge.net/;
     license     = licenses.lgpl2;
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ codyopel ];
   };
 }

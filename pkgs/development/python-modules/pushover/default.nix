@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "python-pushover";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xlghiqd9rsgn7jdhc8v1xh3xspssihrw1vyy85gvjzxa1ah19sk";
+    sha256 = "dee1b1344fb8a5874365fc9f886d9cbc7775536629999be54dfa60177cf80810";
   };
 
   propagatedBuildInputs = [ requests ];

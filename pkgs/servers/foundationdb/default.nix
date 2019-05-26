@@ -1,129 +1,84 @@
-{ stdenv, fetchurl, fetchFromGitHub
-, which, findutils, m4, gawk
-, python, openjdk, mono58, libressl_2_6
-, boost16x
-}:
+{ stdenv, stdenv49, gcc9Stdenv, llvmPackages_8
+, lib, fetchurl, fetchpatch, fetchFromGitHub
+
+, cmake, ninja, which, findutils, m4, gawk
+, python, python3, openjdk, mono, libressl, boost
+}@args:
 
 let
-  makeFdb =
-    { version
-    , branch
-    , rev, sha256
+  vsmakeBuild = import ./vsmake.nix args;
+  cmakeBuild = import ./cmake.nix (args // {
+    gccStdenv    = gcc9Stdenv;
+    llvmPackages = llvmPackages_8;
+  });
 
-    # fdb 6.0+ support boost 1.6x+, so default to it
-    , boost ? boost16x
-    }: stdenv.mkDerivation rec {
-        name = "foundationdb-${version}";
-        inherit version;
+  python3-six-patch = fetchpatch {
+    name   = "update-python-six.patch";
+    url    = "https://github.com/apple/foundationdb/commit/4bd9efc4fc74917bc04b07a84eb065070ea7edb2.patch";
+    sha256 = "030679lmc86f1wzqqyvxnwjyfrhh54pdql20ab3iifqpp9i5mi85";
+  };
 
-        src = fetchFromGitHub {
-          owner = "apple";
-          repo  = "foundationdb";
-          inherit rev sha256;
-        };
-
-        nativeBuildInputs = [ gawk which m4 findutils mono58 ];
-        buildInputs = [ python openjdk libressl_2_6 boost ];
-
-        patches =
-          [ ./fix-scm-version.patch
-            ./ldflags.patch
-          ];
-
-        postPatch = ''
-          substituteInPlace ./build/scver.mk \
-            --subst-var-by NIXOS_FDB_VERSION_ID "${rev}" \
-            --subst-var-by NIXOS_FDB_SCBRANCH   "${branch}"
-
-          substituteInPlace ./Makefile \
-            --replace 'shell which ccache' 'shell true' \
-            --replace -Werror ""
-
-          substituteInPlace ./Makefile \
-            --replace libstdc++_pic libstdc++
-
-          substituteInPlace ./build/link-validate.sh \
-            --replace 'exit 1' '#exit 1'
-
-          patchShebangs .
-        '';
-
-        enableParallelBuilding = true;
-        makeFlags = [ "all" "fdb_c" "fdb_java" "KVRELEASE=1" ];
-
-        configurePhase = ":";
-        installPhase = ''
-          mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
-
-          cp -v ./lib/libfdb_c.so     $lib/lib
-          cp -v ./lib/libFDBLibTLS.so $out/libexec/plugins/FDBLibTLS.so
-
-          cp -v ./bindings/c/foundationdb/fdb_c.h           $dev/include/foundationdb
-          cp -v ./bindings/c/foundationdb/fdb_c_options.g.h $dev/include/foundationdb
-
-          cp -v ./bindings/java/foundationdb-client.jar     $lib/share/java/fdb-java.jar
-
-          for x in fdbbackup fdbcli fdbserver fdbmonitor; do
-            cp -v "./bin/$x" $out/bin;
-          done
-
-          ln -sfv $out/bin/fdbbackup $out/bin/dr_agent
-          ln -sfv $out/bin/fdbbackup $out/bin/fdbrestore
-          ln -sfv $out/bin/fdbbackup $out/bin/fdbdr
-
-          ln -sfv $out/bin/fdbbackup $out/libexec/backup_agent
-        '';
-
-        outputs = [ "out" "lib" "dev" ];
-
-        meta = with stdenv.lib; {
-          description = "Open source, distributed, transactional key-value store";
-          homepage    = https://www.foundationdb.org;
-          license     = licenses.asl20;
-          platforms   = platforms.linux;
-          maintainers = with maintainers; [ thoughtpolice ];
-       };
-    };
-
-  # hysterical raisins dictate a version of boost this old. however,
-  # we luckily do not need to build anything, we just need the header
-  # files.
-  boost152 = stdenv.mkDerivation rec {
-    name = "boost-headers-1.52.0";
-
-    src = fetchurl {
-      url = "mirror://sourceforge/boost/boost_1_52_0.tar.bz2";
-      sha256 = "14mc7gsnnahdjaxbbslzk79rc0d12h1i681cd3srdwr3fzynlar2";
-    };
-
-    configurePhase = ":";
-    buildPhase = ":";
-    installPhase = "mkdir -p $out/include && cp -R boost $out/include/";
+  python3-print-patch = fetchpatch {
+    name   = "import-for-python-print.patch";
+    url    = "https://github.com/apple/foundationdb/commit/ded17c6cd667f39699cf663c0e87fe01e996c153.patch";
+    sha256 = "11y434w68cpk7shs2r22hyrpcrqi8vx02cw7v5x79qxvnmdxv2an";
   };
 
 in with builtins; {
 
-  foundationdb51 = makeFdb {
+  # Older versions use the bespoke 'vsmake' build system
+  # ------------------------------------------------------
+
+  foundationdb51 = vsmakeBuild rec {
     version = "5.1.7";
     branch  = "release-5.1";
-    rev     = "9ad8d02386d4a6a5efecf898df80f2747695c627";
     sha256  = "1rc472ih24f9s5g3xmnlp3v62w206ny0pvvw02bzpix2sdrpbp06";
-    boost   = boost152;
+
+    patches = [
+      ./patches/ldflags-5.1.patch
+      ./patches/fix-scm-version.patch
+      python3-six-patch
+      python3-print-patch
+    ];
   };
 
-  foundationdb52 = makeFdb rec {
-    version = "5.2.0pre1488_${substring 0 8 rev}";
-    branch  = "master";
-    rev     = "18f345487ed8d90a5c170d813349fa625cf05b4e";
-    sha256  = "0mz30fxj6q99cvjzg39s5zm992i6h2l2cb70lc58bdhsz92dz3vc";
-    boost   = boost152;
+  foundationdb52 = vsmakeBuild rec {
+    version = "5.2.8";
+    branch  = "release-5.2";
+    sha256  = "1kbmmhk2m9486r4kyjlc7bb3wd50204i0p6dxcmvl6pbp1bs0wlb";
+
+    patches = [
+      ./patches/ldflags-5.2.patch
+      ./patches/fix-scm-version.patch
+      python3-six-patch
+      python3-print-patch
+    ];
   };
 
-  foundationdb60 = makeFdb rec {
-    version = "6.0.0pre1636_${substring 0 8 rev}";
-    branch  = "master";
-    rev     = "1265a7b6d5e632dd562b3012e70f0727979806bd";
-    sha256  = "0z1i5bkbszsbn8cc48rlhr29m54n2s0gq3dln0n7f97gf58mi5yf";
+  foundationdb60 = vsmakeBuild rec {
+    version = "6.0.18";
+    branch  = "release-6.0";
+    sha256  = "0q1mscailad0z7zf1nypv4g7gx3damfp45nf8nzyq47nsw5gz69p";
+
+    patches = [
+      ./patches/ldflags-6.0.patch
+    ];
+  };
+
+  # 6.1 and later versions should always use CMake
+  # ------------------------------------------------------
+
+  foundationdb61 = cmakeBuild rec {
+    version = "6.1.7pre4928_${substring 0 7 rev}";
+    branch  = "release-6.1";
+    rev     = "a990458e81612632159bbf75167a36f64ef228d1";
+    sha256  = "1b8ij78xjy30q93hvnrw8llw16q5zlmlq3l6dvnnf8w6ws88y1k0";
+    officialRelease = false;
+
+    patches = [
+      ./patches/clang-libcxx.patch
+      ./patches/suppress-clang-warnings.patch
+    ];
   };
 
 }

@@ -2,8 +2,8 @@
 
 let
   goPackagePath = "github.com/prometheus/prometheus";
-
-  generic = { version, sha256, ... }@attrs:
+in rec {
+  buildPrometheus = { version, sha256, doCheck ? true, ... }@attrs:
     let attrs' = builtins.removeAttrs attrs ["version" "sha256"]; in
       buildGoPackage ({
         name = "prometheus-${version}";
@@ -17,9 +17,7 @@ let
           inherit sha256;
         };
 
-        doCheck = true;
-
-        buildFlagsArray = let t = "${goPackagePath}/version"; in ''
+        buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''
           -ldflags=
              -X ${t}.Version=${version}
              -X ${t}.Revision=unknown
@@ -43,14 +41,14 @@ let
           platforms = platforms.unix;
         };
     } // attrs');
-in rec {
-  prometheus_1 = generic {
-    version = "1.8.1";
-    sha256 = "07xvpjhhxc0r73qfmkvf94zhv19zv76privw6blg35k5nxcnj7j4";
+
+  prometheus_1 = buildPrometheus {
+    version = "1.8.2";
+    sha256 = "088flpg3qgnj9afl9vbaa19v2s1d21yxy38nrlv5m7cxwy2pi5pv";
   };
 
-  prometheus_2 = generic {
-    version = "2.2.1";
-    sha256 = "1zwxjmj8jh02i4y3i3zrkz7ml66zyhg3ad1npjzf3319mglsp7ch";
+  prometheus_2 = buildPrometheus {
+    version = "2.9.2";
+    sha256 = "1nbvw9ia15ls3l2pydc9hdfs057kjlg0cm8h4w9sjjnsssbikl26";
   };
 }
