@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-builtin"
     "--disable-static"
-#    "--enable-gtk-doc"
+    "--enable-gtk-doc"
     "--enable-man"
   ];
 
