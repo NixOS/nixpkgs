@@ -14081,7 +14081,8 @@ in
   clamsmtp = callPackage ../servers/mail/clamsmtp { };
 
   clickhouse = callPackage ../servers/clickhouse {
-    inherit (llvmPackages_latest) clang-unwrapped lld llvm;
+    # clickhouse doesn't build on llvm8.
+    inherit (llvmPackages_7) clang-unwrapped lld llvm;
   };
 
   couchdb = callPackage ../servers/http/couchdb {
