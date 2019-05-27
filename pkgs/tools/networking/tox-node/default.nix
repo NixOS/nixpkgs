@@ -7,13 +7,13 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "tox-node-${version}";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "tox-rs";
     repo = "tox-node";
     rev = "v${version}";
-    sha256 = "0p1k4glqm3xasck66fywkyg42lbccad9rc6biyvi24rn76qip4jm";
+    sha256 = "0vnjbhz74d4s6701xsd46ygx0kq8wd8xwpajvkhdivc042mw9078";
   };
 
   buildInputs = [ libsodium openssl ];
@@ -31,7 +31,7 @@ buildRustPackage rec {
 
   doCheck = false;
 
-  cargoSha256 = "18w1ycvj2q4q8lj81wn5lfljh5wa7b230ahqdz30w20pv1cazsv2";
+  cargoSha256 = "1nv0630yb8k857n7km4bbgf41j747xdxv7xnc6a9746qpggmdbkh";
 
   meta = with stdenv.lib; {
     description = "A server application to run tox node written in pure Rust";
