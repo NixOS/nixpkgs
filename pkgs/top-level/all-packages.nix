@@ -8696,6 +8696,8 @@ in
   pharo-spur64 = assert stdenv.is64bit; pharo-vms.spur64;
   pharo-launcher = callPackage ../development/pharo/launcher { };
 
+  srandrd = callPackage ../tools/X11/srandrd { };
+
   srecord = callPackage ../development/tools/misc/srecord { };
 
   srelay = callPackage ../tools/networking/srelay { };
