@@ -1,0 +1,34 @@
+#!/usr/bin/env nix-shell
+#!nix-shell update-hackage-shell.nix -i sh
+
+set -eu -o pipefail
+
+exit_trap()
+{
+  local lc="$BASH_COMMAND" rc=$?
+  test $rc -eq 0 || echo "*** error $rc: $lc"
+}
+
+trap exit_trap EXIT
+
+
+if [ $# -ne 1 ]; then
+	echo "Usage: $0 <HACKAGE_REPO>"
+	echo "You can clone the hackage repository via:"
+	echo "git clone git@github.com:commercialhaskell/all-cabal-hashes.git --branch hackage"
+	exit 1
+fi
+
+HACKAGE_REPO="${1}"
+
+cd  "$HACKAGE_REPO"
+rm -f preferred-versions
+for n in */preferred-versions; do
+  cat >>preferred-versions "$n"
+  echo >>preferred-versions
+done
+cd -
+
+hackage2nix --nixpkgs="$NIXPKGS_ROOT" +RTS -M4G -RTS \
+	--config="pkgs/development/haskell-modules/configuration-hackage2nix.yaml" \
+	--hackage "$HACKAGE_REPO" --preferred-versions "$HACKAGE_REPO/preferred-versions"
