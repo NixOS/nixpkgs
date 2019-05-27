@@ -18830,6 +18830,8 @@ in
 
   luppp = callPackage ../applications/audio/luppp { };
 
+  lutris = callPackage ../applications/misc/lutris { };
+
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
@@ -23102,6 +23104,8 @@ in
 
   ekiga = callPackage ../applications/networking/instant-messengers/ekiga { };
 
+  dumb = callPackage ../misc/dumb { };
+
   emulationstation = callPackage ../misc/emulators/emulationstation {
     stdenv = overrideCC stdenv gcc5;
   };
@@ -23506,6 +23510,8 @@ in
   rucksack = callPackage ../development/tools/rucksack { };
 
   sam-ba = callPackage ../tools/misc/sam-ba { };
+
+  sndio = callPackage ../misc/sndio { };
 
   opkg = callPackage ../tools/package-management/opkg { };
 
