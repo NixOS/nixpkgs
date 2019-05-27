@@ -13,6 +13,12 @@ buildPythonPackage rec {
     inherit mpi;
   };
 
+  patches = [ ( fetchpatch {
+    # Upstream patch to ensure compatibility with openmpi-4.0.1
+    url = "https://github.com/mpi4py/mpi4py/commit/42f5e35a6a90454516c11131549a08cd766edbb0.patch";
+    sha256 = "1dm0i3amwj1cddzz1m9ssd7qp655c8rv1wzjs9ww3kzd90fm4w72";
+  })];
+
   postPatch = ''
     substituteInPlace test/test_spawn.py --replace \
                       "unittest.skipMPI('openmpi(<3.0.0)')" \
