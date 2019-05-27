@@ -96,6 +96,6 @@ stdenv.mkDerivation rec {
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar schneefux ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
