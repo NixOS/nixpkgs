@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage
-, fetchPypi, isPy3k, linuxPackages, gcc5
+, fetchPypi, isPy3k, linuxPackages
 , fastrlock, numpy, six, wheel, pytest, mock
 , cudatoolkit, cudnn, nccl
 }:
@@ -16,10 +16,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     mock
-  ];
-
-  nativeBuildInputs = [
-    gcc5
   ];
 
   propagatedBuildInputs = [
