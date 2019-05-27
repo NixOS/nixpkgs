@@ -5733,6 +5733,8 @@ in
 
   pygmentex = callPackage ../tools/typesetting/pygmentex { };
 
+  pympress = callPackage ../applications/office/pympress { };
+
   pythonIRClib = pythonPackages.pythonIRClib;
 
   pythonSexy = pythonPackages.libsexy;
