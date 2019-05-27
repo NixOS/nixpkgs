@@ -20366,6 +20366,8 @@ in
     inherit (linuxPackages) x86_energy_perf_policy;
   };
 
+  tmatrix = callPackage ../applications/misc/tmatrix { };
+
   tnef = callPackage ../applications/misc/tnef { };
 
   todiff = callPackage ../applications/misc/todiff { };
