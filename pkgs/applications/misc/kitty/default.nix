@@ -21,14 +21,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.13.3";
+  version = "0.14.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "1y0vd75j8g61jdj8miml79w5ri3pqli5rv9iq6zdrxvzfa4b2rmb";
+    sha256 = "122573l7xirs9dsi5p8gra47qpgxb3vahqp2r0c043pgz4i22v5z";
   };
 
   buildInputs = [
@@ -67,18 +67,6 @@ buildPythonApplication rec {
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
     })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      name = "macos-symlink-1";
-      url = https://github.com/kovidgoyal/kitty/commit/bdeec612667f6976109247fe1750b10dda9c24c0.patch;
-      sha256 = "1d18x260w059qag80kgb2cgi2h4rricvqhwpbrw79s8yxzs7jhxk";
-    })
-    (fetchpatch {
-      # fixup of previous patch
-      name = "macos-symlink-2";
-      url = https://github.com/kovidgoyal/kitty/commit/af2c9a49b1ad31e94242295d88598591623fbf11.patch;
-      sha256 = "0k3dmgbvmh66j8k3h8dw6la6ma6f20fng6jjypy982kxvracsnl5";
-    })
-    ./macos-10.11.patch
     ./no-lto.patch
     ./no-werror.patch
     ./png2icns.patch
