@@ -5139,6 +5139,8 @@ in {
 
   vsts = callPackage ../development/python-modules/vsts { };
 
+  python-vlc = callPackage ../development/python-modules/python-vlc { };
+
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
   webassets = callPackage ../development/python-modules/webassets { };
