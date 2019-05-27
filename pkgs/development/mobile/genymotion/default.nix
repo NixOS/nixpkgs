@@ -10,7 +10,8 @@ let
   libPath = "${stdenv.lib.makeLibraryPath packages}";
 in
 stdenv.mkDerivation rec {
-  name = "genymotion-${version}";
+  name = "${pname}-${version}";
+  pname = "genymotion";
   version = "2.8.0";
   src = requireFile {
     url = https://www.genymotion.com/download/;
@@ -24,12 +25,12 @@ stdenv.mkDerivation rec {
     mkdir -p phony-home $out/share/applications
     export HOME=$TMP/phony-home
 
-    mkdir ${name}
-    echo "y" | sh $src -d ${name}
-    sourceRoot=${name}
+    mkdir ${pname}
+    echo "y" | sh $src -d ${pname}
+    sourceRoot=${pname}
 
     substitute phony-home/.local/share/applications/genymobile-genymotion.desktop \
-      $out/share/applications/genymobile-genymotion.desktop --replace "$TMP/${name}" "$out/libexec"
+      $out/share/applications/genymobile-genymotion.desktop --replace "$TMP/${pname}" "$out/libexec"
   '';
 
   installPhase = ''
