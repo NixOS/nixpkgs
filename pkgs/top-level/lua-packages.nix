@@ -258,13 +258,13 @@ with self; {
 
   luadbi = buildLuaPackage rec {
     name = "luadbi-${version}";
-    version = "0.7.1";
+    version = "0.7.2";
 
     src = fetchFromGitHub {
       owner = "mwild1";
       repo = "luadbi";
       rev = "v${version}";
-      sha256 = "01i8018zb7w2bhaqglm7cnvbiirgd95b9d07irgz3sci91p08cwp";
+      sha256 = "167ivwmczhp98bxzpz3wdxcfj6vi0a10gpi7rdfjs2rbfwkzqvjh";
     };
 
     MYSQL_INC="-I${mysql.connector-c}/include/mysql";
