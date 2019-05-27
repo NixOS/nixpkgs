@@ -24181,4 +24181,6 @@ in
 
   dapper = callPackage ../development/tools/dapper { };
 
+  pixiecore = callPackage ../tools/networking/pixiecore {}; 
+
 }
