@@ -10,11 +10,11 @@ let
   libPath = "${stdenv.lib.makeLibraryPath packages}";
 in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "genymotion";
   version = "2.8.0";
+  name = "${pname}-${version}";
   src = requireFile {
-    url = https://www.genymotion.com/download/;
+    url = "https://dl.genymotion.com/release/genymotion-${version}/genymotion-${version}-linux_x64.bin";
     name = "genymotion-${version}-linux_x64.bin";
     sha256 = "0lvfdlpmmsyq2i9gs4mf6a8fxkfimdr4rhyihqnfhjij3fzxz4lk";
   };
