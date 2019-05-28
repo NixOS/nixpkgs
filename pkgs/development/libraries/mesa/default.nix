@@ -72,7 +72,7 @@ let
 in
 
 let self = stdenv.mkDerivation {
-  name = "mesa-noglu-${version}";
+  name = "mesa-${version}";
 
   src =  fetchurl {
     urls = [
