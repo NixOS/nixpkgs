@@ -2,17 +2,17 @@
 , pyperclip, six, pyparsing, vim
 , contextlib2 ? null, subprocess32 ? null
 , pytest, mock, which, fetchFromGitHub, glibcLocales
-, runtimeShell
+, runtimeShell, wcwidth, enum34
 }:
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "0.8.0";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "python-cmd2";
     repo = "cmd2";
     rev = version;
-    sha256 = "0nw2b7n7zg51bc3glxw0l9fn91mwjnjshklhmxhyvjbsg7khf64z";
+    sha256 = "1zil4z4qgvs8pxmz09g4352mxxir5j17k86r1qmwwv7fv93a80f9";
   };
 
   LC_ALL="en_US.UTF-8";
@@ -27,16 +27,15 @@ buildPythonPackage rec {
   '';
 
   checkInputs= [ pytest mock which vim glibcLocales ];
-  checkPhase = ''
-    # test_path_completion_user_expansion might be fixed in the next release
-    py.test -k 'not test_path_completion_user_expansion'
-  '';
+  checkPhase = "py.test";
   doCheck = !stdenv.isDarwin;
 
   propagatedBuildInputs = [
     pyperclip
     six
     pyparsing
+    wcwidth
+    enum34
   ]
   ++ stdenv.lib.optional (pythonOlder "3.5") contextlib2
   ++ stdenv.lib.optional (pythonOlder "3.0") subprocess32
