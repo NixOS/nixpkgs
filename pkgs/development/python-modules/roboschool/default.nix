@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, isPy3k
 , python
 , fetchFromGitHub
 , fetchpatch
@@ -22,6 +23,9 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "1s7rp5bbiglnrfm33wf7x7kqj0ks3b21bqyz18c5g6vx39rxbrmh";
   };
+
+  # fails to find boost_python for some reason
+  disabled = !isPy3k;
 
   propagatedBuildInputs = [
     gym
