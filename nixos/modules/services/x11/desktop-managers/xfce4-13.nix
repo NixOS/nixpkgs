@@ -86,7 +86,7 @@ in
     # thunar-volman # TODO: drop
     ] ++ (if config.hardware.pulseaudio.enable
           then [ xfce4-pulseaudio-plugin xfce4-volumed-pulse ]
-          else [ xfce4-mixer xfce4-volumed ])
+          else [ xfce4-mixer ])
       # TODO: NetworkManager doesn't belong here
       ++ optionals config.networking.networkmanager.enable [ networkmanagerapplet ]
       ++ optionals config.powerManagement.enable [ xfce4-power-manager ]
