@@ -22,10 +22,10 @@ let
         doCheck = false;
       });
       aiohttp-cors = super.aiohttp-cors.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.3";
+        version = "0.6.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
+          sha256 = "1r0mb4dw0dc1lpi54dk5vxqs06nyhvagp76lyrvk7rd94z5mjkd4";
         };
         propagatedBuildInputs = with self; [ aiohttp ]
           ++ stdenv.lib.optional (pythonOlder "3.5") typing;
@@ -45,8 +45,6 @@ in python.pkgs.buildPythonPackage {
   };
 
   postPatch = ''
-    # "typing" is only required for Python 3.4 and breaks Python 3.7:
-    sed -iE "s/.*typing.*//" requirements.txt
     # Only 2.x is problematic:
     sed -iE "s/prompt-toolkit==1.0.15/prompt-toolkit<2.0.0/" requirements.txt
   '';
