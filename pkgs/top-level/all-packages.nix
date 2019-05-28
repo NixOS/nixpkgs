@@ -4766,6 +4766,8 @@ in
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
+  ndstool = callPackage ../tools/archivers/ndstool { };
+
   ngrep = callPackage ../tools/networking/ngrep { };
 
   ngrok = ngrok-2;
