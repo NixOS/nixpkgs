@@ -1068,6 +1068,8 @@ in {
 
   application = callPackage ../development/python-modules/application { };
 
+  applicationinsights = callPackage ../development/python-modules/applicationinsights { };
+
   appnope = callPackage ../development/python-modules/appnope { };
 
   approvaltests = callPackage ../development/python-modules/approvaltests { };
