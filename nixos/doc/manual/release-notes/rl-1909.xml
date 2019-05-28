@@ -114,6 +114,30 @@
       </link> of the setting.
      </para>
    </listitem>
+   <listitem>
+    <para>
+      As of this release the NixOps feature <literal>autoLuks</literal> is deprecated. It no longer works
+      with our systemd version without manual intervention.
+    </para>
+    <para>
+      Whenever the usage of the module is detected the evaluation will fail with a message
+      explaining why and how to deal with the situation.
+    </para>
+    <para>
+      A new knob named <literal>nixops.enableDeprecatedAutoLuks</literal>
+      has been introduced to disable the eval failure and to acknowledge the notice was received and read.
+      If you plan on using the feature please note that it might break with subsequent updates.
+    </para>
+    <para>
+      Make sure you set the <literal>_netdev</literal> option for each of the file systems referring to block
+      devices provided by the autoLuks module. Not doing this might render the system in a
+      state where it doesn't boot anymore.
+    </para>
+    <para>
+      If you are actively using the <literal>autoLuks</literal> module please let us know in
+      <link xlink:href="https://github.com/NixOS/nixpkgs/issues/62211">issue #62211</link>.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 
