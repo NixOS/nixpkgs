@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python2, pkgconfig, libX11, libXext, xorgproto, addOpenGLRunpath }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python2, pkgconfig, libX11, libXext, xorgproto
+, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
   name = "libglvnd-${version}";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a126lzhd2f04zr3rvdl6814lfl0j077spi5dsf2alghgykn5iif";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python2 addOpenGLRunpath ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig python2 ];
   buildInputs = [ libX11 libXext xorgproto ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -36,18 +37,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/NVIDIA/libglvnd/commit/0177ade40262e31a80608a8e8e52d3da7163dccf.patch";
       sha256 = "1rnz5jw2gvx4i1lcp0k85jz9xgr3dgzsd583m2dlxkaf2a09j89d";
     })
+
+    # Fallback to mesa when no other drivers are found.
+    ./mesa-fallback.patch
   ] ++ stdenv.lib.optional stdenv.isDarwin
     (fetchpatch {
       url = "https://github.com/NVIDIA/libglvnd/commit/294ccb2f49107432567e116e13efac586580a4cc.patch";
       sha256 = "01339wg27cypv93221rhk3885vxbsg8kvbfyia77jmjdcnwrdwm2";
     });
   outputs = [ "out" "dev" ];
-
-  # Set RUNPATH so that driver libraries in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
-  postFixup = ''
-    addOpenGLRunpath $out/lib/libGLX.so $out/lib/libEGL.so
-  '';
 
   passthru = { inherit (addOpenGLRunpath) driverLink; };
 
