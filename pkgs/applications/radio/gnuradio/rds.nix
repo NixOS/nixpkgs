@@ -5,7 +5,7 @@
 assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
-  name = "gnuradio-rds-${version}";
+  name = "gr-rds-${version}";
   version = "1.1.0";
 
   src = fetchFromGitHub {

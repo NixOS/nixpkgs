@@ -17760,21 +17760,21 @@ in
 
   gnuradio-with-packages = callPackage ../applications/radio/gnuradio/wrapper.nix {
     inherit (python2Packages) python;
-    extraPackages = [ gnuradio-nacl gnuradio-osmosdr gnuradio-ais gnuradio-rds ]
-      ++ lib.optionals stdenv.isLinux [ gnuradio-gsm gnuradio-limesdr ];
+    extraPackages = [ gr-nacl gr-osmosdr gr-ais gr-rds ]
+      ++ lib.optionals stdenv.isLinux [ gr-gsm gr-limesdr ];
   };
 
-  gnuradio-nacl = callPackage ../applications/radio/gnuradio/nacl.nix { };
+  gr-nacl = callPackage ../applications/radio/gnuradio/nacl.nix { };
 
-  gnuradio-gsm = callPackage ../applications/radio/gnuradio/gsm.nix { };
+  gr-gsm = callPackage ../applications/radio/gnuradio/gsm.nix { };
 
-  gnuradio-ais = callPackage ../applications/radio/gnuradio/ais.nix { };
+  gr-ais = callPackage ../applications/radio/gnuradio/ais.nix { };
 
-  gnuradio-limesdr = callPackage ../applications/radio/gnuradio/limesdr.nix { };
+  gr-limesdr = callPackage ../applications/radio/gnuradio/limesdr.nix { };
 
-  gnuradio-rds = callPackage ../applications/radio/gnuradio/rds.nix { };
+  gr-rds = callPackage ../applications/radio/gnuradio/rds.nix { };
 
-  gnuradio-osmosdr = callPackage ../applications/radio/gnuradio/osmosdr.nix { };
+  gr-osmosdr = callPackage ../applications/radio/gnuradio/osmosdr.nix { };
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
 
