@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  configureFlags = [ "--with-systemdsystemunitdir=$(out)/lib/systemd/system" "--localstatedir=/var" ];
+  configureFlags = [ 
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system" 
+    "--localstatedir=/var" 
+    "--sysconfdir=${placeholder "out"}/etc" 
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://fprint.freedesktop.org/;

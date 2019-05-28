@@ -1285,9 +1285,9 @@ in {
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
   cupy = callPackage ../development/python-modules/cupy {
-    cudatoolkit = pkgs.cudatoolkit_8;
-    cudnn = pkgs.cudnn6_cudatoolkit_8;
-    nccl = pkgs.nccl;
+    cudatoolkit = pkgs.cudatoolkit_10_0;
+    cudnn = pkgs.cudnn_cudatoolkit_10_0;
+    nccl = pkgs.nccl_cudatoolkit_10;
   };
 
   cx_Freeze = callPackage ../development/python-modules/cx_freeze {};
@@ -5196,6 +5196,8 @@ in {
     xgboost = pkgs.xgboost;
   };
 
+  xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf { };
+
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
 
   xlsx2csv = callPackage ../development/python-modules/xlsx2csv { };
@@ -5274,7 +5276,11 @@ in {
 
   sigtools = callPackage ../development/python-modules/sigtools { };
 
+  annoy = callPackage ../development/python-modules/annoy { };
+
   clize = callPackage ../development/python-modules/clize { };
+
+  rl-coach = callPackage ../development/python-modules/rl-coach { };
 
   zerobin = callPackage ../development/python-modules/zerobin { };
 

@@ -245,7 +245,9 @@ let
         path = with pkgs; [ kmod iproute wireguard-tools ];
 
         serviceConfig = {
-          Type = "oneshot";
+          Type = "simple";
+          Restart = "on-failure";
+          RestartSec = "5s";
           RemainAfterExit = true;
         };
 
@@ -301,8 +303,16 @@ in
 
     networking.wireguard = {
 
+      enable = mkOption {
+        description = "Whether to enable WireGuard.";
+        type = types.bool;
+        # 2019-05-25: Backwards compatibility.
+        default = cfg.interfaces != {};
+        example = true;
+      };
+
       interfaces = mkOption {
-        description = "Wireguard interfaces.";
+        description = "WireGuard interfaces.";
         default = {};
         example = {
           wg0 = {
@@ -325,7 +335,7 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.interfaces != {}) {
+  config = mkIf cfg.enable {
 
     assertions = (attrValues (
         mapAttrs (name: value: {

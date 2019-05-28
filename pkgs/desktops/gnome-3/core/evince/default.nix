@@ -1,5 +1,6 @@
 { fetchFromGitLab
 , stdenv
+, fetchpatch
 , meson
 , ninja
 , pkgconfig
@@ -49,6 +50,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1klq8j70q8r8hyqv1wi6jcx8g76yh46bh8614y82zzggn4cx6y3r";
   };
+
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-11459.patch";
+      url = "https://gitlab.gnome.org/GNOME/evince/commit/3e38d5ad724a042eebadcba8c2d57b0f48b7a8c7.patch";
+      sha256 = "1ds6iwr2r9i86nwrly8cx7p1kbvf1gljjplcffa67znxqmwx4n74";
+    })
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py

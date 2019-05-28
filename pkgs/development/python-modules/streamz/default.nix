@@ -31,7 +31,8 @@ buildPythonPackage rec {
 
   # Disable test_tcp_async because fails on sandbox build
   checkPhase = ''
-    pytest --deselect=streamz/tests/test_sources.py::test_tcp_async
+    pytest --deselect=streamz/tests/test_sources.py::test_tcp_async \
+      --deselect=streamz/tests/test_sources.py::test_tcp
   '';
 
   meta = with lib; {

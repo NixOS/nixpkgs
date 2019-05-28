@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "45";
+  version = "47";
   disabled = !isPy3k;
 
   # ignore failing pytest
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "WeasyPrint";
-    sha256 = "04bf2p2x619g4q4scg8v6v57c24vwn7qckvz81rckj8clzifyr82";
+    sha256 = "0hd1zwrkfnj7g0jaaf6jvarlj6l5imar6ar78zxdgv17a3s3k3dg";
   };
 
   meta = with stdenv.lib; {

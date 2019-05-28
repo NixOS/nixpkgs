@@ -1,50 +1,33 @@
-{ stdenv, callPackage, ncurses
-, tiles ? true, Cocoa, libicns
+{ stdenv, callPackage, lua, CoreFoundation
+, tiles ? true, Cocoa
 , debug ? false
 }:
 
 let
-  inherit (stdenv.lib) optionals optionalString;
-  inherit (callPackage ./common.nix { inherit tiles Cocoa debug; }) common utils;
-  inherit (utils) fetchFromCleverRaven installMacOSAppLauncher;
+  inherit (callPackage ./common.nix { inherit tiles CoreFoundation Cocoa debug; }) common utils;
+  inherit (utils) fetchFromCleverRaven;
 in
 
 stdenv.mkDerivation (common // rec {
-  version = "0.C";
+  version = "0.D";
   name = "cataclysm-dda-${version}";
 
   src = fetchFromCleverRaven {
     rev = "${version}";
-    sha256 = "03sdzsk4qdq99qckq0axbsvg1apn6xizscd8pwp5w6kq2fyj5xkv";
+    sha256 = "00zzhx1mh1qjq668cga5nbrxp2qk6b82j5ak65skhgnlr6ii4ysc";
   };
 
-  nativeBuildInputs = common.nativeBuildInputs
-    ++ optionals (tiles && stdenv.isDarwin) [ libicns ];
+  buildInputs = common.buildInputs ++ [ lua ];
 
   patches = [ ./patches/fix_locale_dir.patch ];
 
-  makeFlags = common.makeFlags
-    ++ optionals stdenv.isDarwin [
-    "OSX_MIN=10.6"  # SDL for macOS only supports deploying on 10.6 and above
-  ] ++ optionals stdenv.cc.isGNU [
-    "WARNINGS+=-Wno-deprecated-declarations"
-    "WARNINGS+=-Wno-ignored-attributes"
-  ] ++ optionals stdenv.cc.isClang [
-    "WARNINGS+=-Wno-inconsistent-missing-override"
-  ];
-
-  NIX_CFLAGS_COMPILE = optionalString stdenv.cc.isClang "-Wno-user-defined-warnings";
-
-  postBuild = optionalString (tiles && stdenv.isDarwin) ''
-    # iconutil on macOS is not available in nixpkgs
-    png2icns data/osx/AppIcon.icns data/osx/AppIcon.iconset/*
+  postPatch = common.postPatch + ''
+    substituteInPlace lua/autoexec.lua --replace "/usr/share" "$out/share"
   '';
 
-  postInstall = optionalString (tiles && stdenv.isDarwin)
-    installMacOSAppLauncher;
-
-  # Disable, possible problems with hydra
-  #enableParallelBuilding = true;
+  makeFlags = common.makeFlags ++ [
+    "LUA=1"
+  ];
 
   meta = with stdenv.lib.maintainers; common.meta // {
     maintainers = common.meta.maintainers ++ [ skeidel ];

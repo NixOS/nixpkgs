@@ -1,12 +1,13 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, lua, ncurses
+{ stdenv, fetchFromGitHub, pkgconfig, gettext, ncurses, CoreFoundation
 , tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
 , debug, runtimeShell
 }:
 
 let
-  inherit (stdenv.lib) optionals;
+  inherit (stdenv.lib) optionals optionalString;
 
-  cursesDeps = [ gettext lua ncurses ];
+  cursesDeps = [ gettext ncurses ]
+    ++ optionals stdenv.isDarwin [ CoreFoundation ];
 
   tilesDeps = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf freetype ]
     ++ optionals stdenv.isDarwin [ Cocoa ];
@@ -21,7 +22,7 @@ let
     '';
 
     makeFlags = [
-      "PREFIX=$(out)" "LUA=1" "USE_HOME_DIR=1" "LANGUAGES=all"
+      "PREFIX=$(out)" "USE_HOME_DIR=1" "LANGUAGES=all"
     ] ++ optionals (!debug) [
       "RELEASE=1"
     ] ++ optionals tiles [
@@ -30,7 +31,18 @@ let
       "NATIVE=osx" "CLANG=1"
     ];
 
+    postInstall = optionalString tiles
+    ( if !stdenv.isDarwin
+      then utils.installXDGAppLauncher
+      else utils.installMacOSAppLauncher
+    );
+
     dontStrip = debug;
+
+    # https://hydra.nixos.org/build/65193254
+    # src/weather_data.cpp:203:1: fatal error: opening dependency file obj/tiles/weather_data.d: No such file or directory
+    # make: *** [Makefile:687: obj/tiles/weather_data.o] Error 1
+    enableParallelBuilding = false;
 
     meta = with stdenv.lib; {
       description = "A free, post apocalyptic, zombie infested rogue-like";

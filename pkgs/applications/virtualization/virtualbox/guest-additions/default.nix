@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "1srcsf9264l5yxbq2x83z66j38blbfrywq5lkzwb5kih6sv548c3";
+    sha256 = "1njgxb18r8a1m8fk2b32mmnbwciip3wcxwyhza5k73bx4q2sifac";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -107,11 +107,17 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/VBoxClient-all \
             --prefix PATH : "${which}/bin"
 
-    # Install OpenGL libraries
-    mkdir -p $out/lib
-    cp -v lib/VBoxOGL*.so $out/lib
-    mkdir -p $out/lib/dri
-    ln -s $out/lib/VBoxOGL.so $out/lib/dri/vboxvideo_dri.so
+    # Don't install VBoxOGL for now
+    # It seems to be broken upstream too, and fixing it is far down the priority list:
+    # https://www.virtualbox.org/pipermail/vbox-dev/2017-June/014561.html
+    # Additionally, 3d support seems to rely on VBoxOGL.so being symlinked from
+    # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
+    # either. (#18457)
+    ## Install OpenGL libraries
+    #mkdir -p $out/lib
+    #cp -v lib/VBoxOGL*.so $out/lib
+    #mkdir -p $out/lib/dri
+    #ln -s $out/lib/VBoxOGL.so $out/lib/dri/vboxvideo_dri.so
 
     # Install desktop file
     mkdir -p $out/share/autostart

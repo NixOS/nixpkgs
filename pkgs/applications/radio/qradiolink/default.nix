@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, alsaLib, boost
 , qt4, libpulseaudio, codec2, libconfig
-, gnuradio, gnuradio-osmosdr, gsm
+, gnuradio, gr-osmosdr, gsm
 , libopus, libjpeg, protobuf, qwt, speex
 } :
 
@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
     libconfig
     gsm
     gnuradio
-    gnuradio-osmosdr
+    gr-osmosdr
     libopus
     libjpeg
     protobuf
