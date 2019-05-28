@@ -42,6 +42,9 @@ in
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "mautrix-telegram";
+        preStart = ''
+          ${pkgs.mautrix-telegram.alembic}/bin/alembic -x config=${configFile}/config.yaml upgrade head
+        '';
         ExecStart = ''
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram -c "${configFile}/config.yaml"
         '';
