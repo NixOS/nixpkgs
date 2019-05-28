@@ -69,11 +69,9 @@ in with builtins; {
   # ------------------------------------------------------
 
   foundationdb61 = cmakeBuild rec {
-    version = "6.1.7pre4928_${substring 0 7 rev}";
+    version = "6.1.8";
     branch  = "release-6.1";
-    rev     = "a990458e81612632159bbf75167a36f64ef228d1";
-    sha256  = "1b8ij78xjy30q93hvnrw8llw16q5zlmlq3l6dvnnf8w6ws88y1k0";
-    officialRelease = false;
+    sha256  = "1qd9yf3a7a99nfx7vky0jy8r74yrxjwp9imc6792awn66256pxiv";
 
     patches = [
       ./patches/clang-libcxx.patch
