@@ -20959,7 +20959,7 @@ in
 
   inherit (xorg) xcompmgr;
 
-  inherit (callPackage ../applications/window-managers/compton {}) compton compton-git;
+  compton = callPackage ../applications/window-managers/compton {};
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
 
