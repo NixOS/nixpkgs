@@ -30,7 +30,8 @@ buildPythonPackage rec {
   # Python 3 works but has a broken import test that I couldn't
   # figure out.
   doCheck = !isPy3k;
-  buildInputs = [ pkgs.cmake pkgs.libdynd.dev cython ];
+  nativeBuildInputs = [ pkgs.cmake ];
+  buildInputs = [ pkgs.libdynd.dev cython ];
   propagatedBuildInputs = [ numpy pkgs.libdynd ];
 
   meta = with stdenv.lib; {
