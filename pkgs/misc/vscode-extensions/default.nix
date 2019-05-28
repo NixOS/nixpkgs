@@ -16,8 +16,8 @@ rec {
     mktplcRef = {
       name = "vscode-hie-server";
       publisher = "alanz";
-      version = "0.0.25"; # see the note above
-      sha256 = "0m21w03v94qxm0i54ki5slh6rg7610zfxinfpngr0hfpgw2nnxvc";
+      version = "0.0.27"; # see the note above
+      sha256 = "1mz0h5zd295i73hbji9ivla8hx02i4yhqcv6l4r23w3f07ql3i8h";
     };
     meta = {
       license = stdenv.lib.licenses.mit;
@@ -52,8 +52,8 @@ rec {
     mktplcRef = {
       name = "language-haskell";
       publisher = "justusadam";
-      version = "2.5.0"; # see the note above
-      sha256 = "10jqj8qw5x6da9l8zhjbra3xcbrwb4cpwc3ygsy29mam5pd8g6b3";
+      version = "2.6.0"; # see the note above
+      sha256 = "1891pg4x5qkh151pylvn93c4plqw6vgasa4g40jbma5xzq8pygr4";
     };
     meta = {
       license = stdenv.lib.licenses.bsd3;
