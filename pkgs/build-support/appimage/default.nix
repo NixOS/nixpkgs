@@ -144,7 +144,7 @@ rec {
       libidn
       tbb
       wayland
-      mesa_noglu
+      mesa
       libxkbcommon
 
       flac

@@ -54,7 +54,7 @@ let
     # Higan // TODO: "higan is not available for the x86_64 architecture"
 
     # Libretro
-    fluidsynth hidapi mesa_noglu libdrm
+    fluidsynth hidapi mesa libdrm
 
     # MAME
     qt48 fontconfig SDL2_ttf

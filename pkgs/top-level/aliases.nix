@@ -174,6 +174,7 @@ mapAliases ({
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
+  libGL_driver = mesa.drivers;
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   liblapackWithoutAtlas = liblapack; # added 2018-11-05
@@ -193,6 +194,12 @@ mapAliases ({
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
   memtest86 = memtest86plus; # added 2019-05-08
+  mesa_noglu = mesa; # added 2019-05-28
+  # NOTE: 2018-07-12: legacy alias:
+  # gcsecurity bussiness is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
+  # floating point textures patents are expired,
+  # so package reduced to alias
+  mesa_drivers = mesa.drivers;
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
