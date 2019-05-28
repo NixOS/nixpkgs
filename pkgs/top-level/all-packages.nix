@@ -2637,6 +2637,8 @@ in
 
   teamocil = callPackage ../tools/misc/teamocil { };
 
+  tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
+
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
