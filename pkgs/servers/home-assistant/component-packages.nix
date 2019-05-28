@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.92.2";
+  version = "0.93.2";
   components = {
     "abode" = ps: with ps; [  ];
     "acer_projector" = ps: with ps; [ pyserial ];
@@ -19,6 +19,7 @@
     "alexa" = ps: with ps; [ aiohttp-cors ];
     "alpha_vantage" = ps: with ps; [  ];
     "amazon_polly" = ps: with ps; [ boto3 ];
+    "ambiclimate" = ps: with ps; [  ];
     "ambient_station" = ps: with ps; [  ];
     "amcrest" = ps: with ps; [ ha-ffmpeg ];
     "ampio" = ps: with ps; [  ];
@@ -56,6 +57,7 @@
     "bh1750" = ps: with ps; [  ];
     "binary_sensor" = ps: with ps; [  ];
     "bitcoin" = ps: with ps; [  ];
+    "bizkaibus" = ps: with ps; [  ];
     "blackbird" = ps: with ps; [  ];
     "blink" = ps: with ps; [  ];
     "blinksticklight" = ps: with ps; [ BlinkStick ];
@@ -188,6 +190,7 @@
     "epsonworkforce" = ps: with ps; [  ];
     "eq3btsmart" = ps: with ps; [ construct ];
     "esphome" = ps: with ps; [ aioesphomeapi ];
+    "essent" = ps: with ps; [  ];
     "etherscan" = ps: with ps; [  ];
     "eufy" = ps: with ps; [  ];
     "everlights" = ps: with ps; [  ];
@@ -319,6 +322,7 @@
     "image_processing" = ps: with ps; [ aiohttp-cors ];
     "imap" = ps: with ps; [  ];
     "imap_email_content" = ps: with ps; [  ];
+    "incomfort" = ps: with ps; [  ];
     "influxdb" = ps: with ps; [ influxdb ];
     "input_boolean" = ps: with ps; [  ];
     "input_datetime" = ps: with ps; [  ];
@@ -332,6 +336,7 @@
     "iota" = ps: with ps; [  ];
     "iperf3" = ps: with ps; [  ];
     "ipma" = ps: with ps; [  ];
+    "iqvia" = ps: with ps; [ numpy ];
     "irish_rail_transport" = ps: with ps; [  ];
     "islamic_prayer_times" = ps: with ps; [  ];
     "iss" = ps: with ps; [  ];
@@ -411,6 +416,7 @@
     "message_bird" = ps: with ps; [  ];
     "met" = ps: with ps; [  ];
     "meteo_france" = ps: with ps; [  ];
+    "meteoalarm" = ps: with ps; [  ];
     "metoffice" = ps: with ps; [  ];
     "mfi" = ps: with ps; [  ];
     "mhz19" = ps: with ps; [  ];
@@ -456,12 +462,12 @@
     "ness_alarm" = ps: with ps; [  ];
     "nest" = ps: with ps; [  ];
     "netatmo" = ps: with ps; [ aiohttp-cors pyatmo ];
-    "netatmo_public" = ps: with ps; [ aiohttp-cors pyatmo ];
     "netdata" = ps: with ps; [  ];
     "netgear" = ps: with ps; [  ];
     "netgear_lte" = ps: with ps; [  ];
     "netio" = ps: with ps; [ aiohttp-cors ];
     "neurio_energy" = ps: with ps; [  ];
+    "nextbus" = ps: with ps; [  ];
     "nfandroidtv" = ps: with ps; [  ];
     "niko_home_control" = ps: with ps; [  ];
     "nilu" = ps: with ps; [  ];
@@ -502,6 +508,7 @@
     "openuv" = ps: with ps; [  ];
     "openweathermap" = ps: with ps; [ pyowm ];
     "opple" = ps: with ps; [  ];
+    "orangepi_gpio" = ps: with ps; [  ];
     "orvibo" = ps: with ps; [  ];
     "osramlightify" = ps: with ps; [  ];
     "otp" = ps: with ps; [ pyotp ];
@@ -528,7 +535,6 @@
     "plum_lightpad" = ps: with ps; [  ];
     "pocketcasts" = ps: with ps; [  ];
     "point" = ps: with ps; [ aiohttp-cors ];
-    "pollen" = ps: with ps; [ numpy ];
     "postnl" = ps: with ps; [  ];
     "prezzibenzina" = ps: with ps; [  ];
     "proliphix" = ps: with ps; [  ];
@@ -537,6 +543,7 @@
     "proximity" = ps: with ps; [  ];
     "proxy" = ps: with ps; [ pillow ];
     "ps4" = ps: with ps; [  ];
+    "ptvsd" = ps: with ps; [  ];
     "pulseaudio_loopback" = ps: with ps; [  ];
     "push" = ps: with ps; [ aiohttp-cors ];
     "pushbullet" = ps: with ps; [ pushbullet ];
@@ -666,6 +673,7 @@
     "swisscom" = ps: with ps; [  ];
     "switch" = ps: with ps; [  ];
     "switchbot" = ps: with ps; [  ];
+    "switcher_kis" = ps: with ps; [  ];
     "switchmate" = ps: with ps; [  ];
     "syncthru" = ps: with ps; [  ];
     "synology" = ps: with ps; [  ];

@@ -1769,7 +1769,7 @@
     name = "Frede Emil";
   };
   freepotion = {
-    email = "freepotion@protonmail.com";
+    email = "free.potion@yandex.ru";
     github = "freepotion";
     name = "Free Potion";
   };
@@ -2609,6 +2609,15 @@
     github = "kisonecat";
     name = "Jim Fowler";
   };
+  kiwi = {
+    email = "envy1988@gmail.com";
+    github = "Kiwi";
+    name = "Robert Djubek";
+    keys = [{
+      longkeyid = "rsa4096/0x156C88A5B0A04B2A";
+      fingerprint = "8992 44FC D291 5CA2 0A97  802C 156C 88A5 B0A0 4B2A";
+    }];
+  };
   kjuvi = {
     email = "quentin.vaucher@pm.me";
     github = "kjuvi";
@@ -3041,6 +3050,15 @@
     github = "martingms";
     name = "Martin Gammelsæter";
   };
+  marzipankaiser = {
+    email = "nixos@gaisseml.de";
+    github = "marzipankaiser";
+    name = "Marcial Gaißert";
+    keys = [{
+      longkeyid = "rsa2048/0xB629036BE399EEE9";
+      fingerprint = "B573 5118 0375 A872 FBBF  7770 B629 036B E399 EEE9";
+    }];
+  };
   matejc = {
     email = "cotman.matej@gmail.com";
     github = "matejc";
@@ -3397,6 +3415,10 @@
   msackman = {
     email = "matthew@wellquite.org";
     name = "Matthew Sackman";
+  };
+  mschneider = {
+    email = "markus.schneider.sic+nix@gmail.com";
+    name = "Markus Schneider";
   };
   mschristiansen = {
     email = "mikkel@rheosystems.com";
@@ -5003,6 +5025,11 @@
     email = "moritz@tarn-vedra.de";
     github = "the-kenny";
     name = "Moritz Ulrich";
+  };
+  thedavidmeister = {
+    email = "thedavidmeister@gmail.com";
+    github = "thedavidmeister";
+    name = "David Meister";
   };
   thesola10 = {
     email = "thesola10@bobile.fr";

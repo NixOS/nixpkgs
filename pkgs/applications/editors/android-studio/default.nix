@@ -12,11 +12,15 @@ let
     build = "183.5522156";
     sha256Hash = "0y4l9d1yrvv1csx6vl4jnqgqy96y44rl6p8hcxrnbvrg61iqnj30";
   };
-  betaVersion = latestVersion;
-  latestVersion = { # canary & dev
+  betaVersion = {
     version = "3.5.0.14"; # "Android Studio 3.5 Beta 2"
     build = "191.5549111";
     sha256Hash = "1zy2x0m1nsx3yy64cp1jvgb9aqkribwm64mv50g9355sdz7qjhcf";
+  };
+  latestVersion = { # canary & dev
+    version = "3.6.0.1"; # "Android Studio 3.6 Canary 1"
+    build = "191.5595896";
+    sha256Hash = "1nd0xmq1aplznxbsnmzgszbblj6vdyhir708mks5ss6achn21xxc";
   };
 in rec {
   # Attributes are named by their corresponding release channels

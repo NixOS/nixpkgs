@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "colm-${version}";
-  version = "0.13.0.6";
+  version = "0.13.0.7";
 
   src = fetchurl {
     url = "https://www.colm.net/files/colm/${name}.tar.gz";
-    sha256 = "0jd3qmqdm8yszy0yysbp3syk7pcbxvwzv9mibdwz7v9bv1nrai26";
+    sha256 = "0f76iri173l2wja2v7qrwmf958cqwh5g9x4bhj2z8wknmlla6gz4";
   };
 
   nativeBuildInputs = [ makeWrapper asciidoc ];

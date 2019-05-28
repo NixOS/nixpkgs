@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   name = "ogre-${version}";
-  version = "1.11.5";
+  version = "1.12.0";
 
   src = fetchurl {
      url = "https://github.com/OGRECave/ogre/archive/v${version}.zip";
-     sha256 = "0hs7b81nr7i4wgsb603kkqw33m6cafjrj2zw4yhibwn8k7zzwddp";
+     sha256 = "1hkkg5prixppiq1p5jz7wz1npm5s7kwm1s86079280waccvr2v6x";
   };
 
   cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]

@@ -1,11 +1,12 @@
 { stdenv, fetchurl, lvm2, libaio, gzip, readline, systemd, liburcu }:
 
 stdenv.mkDerivation rec {
-  name = "multipath-tools-0.6.2";
+  name = "multipath-tools-${version}";
+  version = "0.6.2";
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "https://git.opensvc.com/";
+    url = "https://git.opensvc.com/?p=multipath-tools/.git;a=snapshot;h=${version};sf=tgz";
     sha256 = "159hxvbk9kh1qay9x04w0gsqzg0hkl5yghfc1wi9kv2n5pcwbkpm";
   };
 

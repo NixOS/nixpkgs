@@ -24,8 +24,8 @@ let
       "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
     (mkOverride "async-timeout" "3.0.1"
       "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f")
-    (mkOverride "attrs" "18.2.0"
-      "10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69")
+    (mkOverride "attrs" "19.1.0"
+      "f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399")
     (mkOverride "bcrypt" "3.1.6"
       "44636759d222baa62806bbceb20e96f75a015a6381690d1bc2eda91c01ec02ea")
     (mkOverride "pyjwt" "1.7.1"
@@ -40,34 +40,21 @@ let
       "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf")
     (mkOverride "requests" "2.21.0"
       "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e")
-    (mkOverride "ruamel_yaml" "0.15.91"
-      "692f03ed24c8c1d9fa9fd4c045f7ba1c26f1e96edb8bfb4d54854ba26bc02319")
+    (mkOverride "ruamel_yaml" "0.15.94"
+      "0939bcb399ad037ef903d74ccf2f8a074f06683bc89133ad19305067d34487c8")
     (mkOverride "voluptuous" "0.11.5"
       "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
     (mkOverride "voluptuous-serialize" "2.1.0"
       "d30fef4f1aba251414ec0b315df81a06da7bf35201dcfb1f6db5253d738a154f")
 
     # used by auth.mfa_modules.totp
-    (mkOverride "pyotp" "2.2.6"
-      "dd9130dd91a0340d89a0f06f887dbd76dd07fb95a8886dc4bc401239f2eebd69")
+    (mkOverride "pyotp" "2.2.7"
+      "be0ffeabddaa5ee53e7204e7740da842d070cf69168247a3d0c08541b84de602")
 
     # used by check_config script
     # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
     (mkOverride "colorlog" "4.0.2"
       "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
-
-    # required by home-assistant-frontend
-    (self: super: {
-      user-agents = super.user-agents.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0";
-        src = fetchFromGitHub {
-          owner = "selwin";
-          repo = "python-user-agents";
-          rev = "v${version}";
-          sha256 = "0ix2yajqdnfj433j50dls90mkmqz8m4fiywxg097zwkkc95wm8s4";
-        };
-      });
-    })
 
     # required by aioesphomeapi
     (self: super: {
@@ -109,7 +96,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.92.2";
+  hassVersion = "0.93.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -124,7 +111,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "10kqfj7gi8w0d9jalb4i2w4ifla8jkllymjav74abc4b30y08vmw";
+    sha256 = "01zdg6yfj6qal8jpr9bskmq25crrvz7w3vifrfxmlqws6hv35gc8";
   };
 
   propagatedBuildInputs = [

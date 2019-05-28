@@ -41,7 +41,7 @@ let
 
         cmakeFlags =
           [ "-DCMAKE_BUILD_TYPE=Release"
-            (lib.optionalString officialRelease "FDB_RELEASE=1")
+            (lib.optionalString officialRelease "-DFDB_RELEASE=TRUE")
 
             # FIXME: why can't libressl be found automatically?
             "-DLIBRESSL_USE_STATIC_LIBS=FALSE"

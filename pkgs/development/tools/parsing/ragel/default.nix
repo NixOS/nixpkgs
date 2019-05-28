@@ -43,8 +43,8 @@ in
   };
 
   ragelDev = generic {
-    version = "7.0.0.11";
-    sha256 = "0h2k9bfz9i7x9mvr9rbsrzz8fk17756zwwrkf3fppvm9ivzwdfh8";
+    version = "7.0.0.12";
+    sha256 = "0x3si355lv6q051lgpg8bpclpiq5brpri5lv3p8kk2qhzfbyz69r";
     license = stdenv.lib.licenses.mit;
   };
 }
