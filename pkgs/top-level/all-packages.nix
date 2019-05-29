@@ -5342,7 +5342,6 @@ in
   podiff = callPackage ../tools/text/podiff { };
 
   podman = callPackage ../applications/virtualization/podman { };
-  conmon = callPackage ../applications/virtualization/podman/conmon.nix { };
 
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
@@ -21363,6 +21362,8 @@ in
   commandergenius = callPackage ../games/commandergenius { };
 
   confd = callPackage ../tools/system/confd { };
+
+  conmon = callPackage ../applications/virtualization/conmon { };
 
   construoBase = lowPrio (callPackage ../games/construo {
     libGL = null;
