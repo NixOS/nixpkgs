@@ -37,6 +37,7 @@ let
   };
 
 in rec {
-  quaternion     = generic "0.0.9.4"     "12mkwiqqbi4774kwl7gha72jyf0jf547acy6rw8ry249zl4lja54" "" libqmatrixclient_0_5;
+  quaternion     = generic "0.0.9.4c"     "12mkwiqqbi4774kwl7gha72jyf0jf547acy6rw8ry249zl4lja54" "" libqmatrixclient_0_5;
+
   quaternion-git = quaternion;
 }
