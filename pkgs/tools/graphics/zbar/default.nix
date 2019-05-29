@@ -1,34 +1,41 @@
 { stdenv, fetchFromGitHub, imagemagickBig, pkgconfig, python2Packages, perl
-, libX11, libv4l, qt5, lzma, gtk2, xmlto, docbook_xsl, autoreconfHook
-, enableVideo ? stdenv.isLinux
+, libX11, libv4l, qt5, lzma, gtk2, xmlto, docbook_xsl, autoreconfHook, dbus
+, enableVideo ? stdenv.isLinux, enableDbus ? stdenv.isLinux
 }:
 
+with stdenv.lib;
 let
   inherit (python2Packages) pygtk python;
 in stdenv.mkDerivation rec {
   pname = "zbar";
-  version = "0.22";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "0pz0vq6a97vnc3lcjw9k12dk2awgmws46cjfh16zin0jiz18d1xq";
+    sha256 = "0hlxakpyjg4q9hp7yp3har1n78341b4knwyll28hn48vykg28pza";
   };
 
   nativeBuildInputs = [ pkgconfig xmlto autoreconfHook docbook_xsl ];
 
   buildInputs = [
     imagemagickBig python pygtk perl libX11
-  ] ++ stdenv.lib.optionals enableVideo [
+  ] ++ optional enableDbus dbus
+  ++ optionals enableVideo [
     libv4l gtk2 qt5.qtbase qt5.qtx11extras
   ];
 
-  configureFlags = [
+  configureFlags = (if enableDbus then [
     "--with-dbusconfdir=$out/etc/dbus-1/system.d"
-  ] ++ stdenv.lib.optionals (!enableVideo) [
+  ] else [ "--without-dbus" ])
+  ++ optionals (!enableVideo) [
     "--disable-video" "--without-gtk" "--without-qt"
   ];
+
+  postInstall = optionalString enableDbus ''
+    install -Dm644 dbus/org.linuxtv.Zbar.conf $out/etc/dbus-1/system.d/org.linuxtv.Zbar.conf
+  '';
 
   meta = with stdenv.lib; {
     description = "Bar code reader";
