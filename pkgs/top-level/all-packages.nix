@@ -8618,26 +8618,6 @@ in
 
   ### DEVELOPMENT / MISC
 
-  amdadlsdk = callPackage ../development/misc/amdadl-sdk { };
-
-  amdappsdk26 = amdappsdk.override {
-    version = "2.6";
-  };
-
-  amdappsdk27 = amdappsdk.override {
-    version = "2.7";
-  };
-
-  amdappsdk28 = amdappsdk.override {
-    version = "2.8";
-  };
-
-  amdappsdk = callPackage ../development/misc/amdapp-sdk { };
-
-  amdappsdkFull = amdappsdk.override {
-    samples = true;
-  };
-
   amtk = callPackage ../development/libraries/amtk { };
 
   avrlibc      = callPackage ../development/misc/avr/libc {};
@@ -17071,9 +17051,7 @@ in
     inherit (python3Packages) python wrapPython pygments markdown;
   };
 
-  cgminer = callPackage ../applications/misc/cgminer {
-    amdappsdk = amdappsdk28;
-  };
+  cgminer = callPackage ../applications/misc/cgminer { };
 
   chirp = callPackage ../applications/radio/chirp {
     inherit (pythonPackages) pyserial pygtk;
