@@ -3,24 +3,25 @@
 
 stdenv.mkDerivation rec {
   name = "liburing-${version}";
-  version = "1.0.0pre118_${builtins.substring 0 7 src.rev}";
+  version = "1.0.0pre131_${builtins.substring 0 7 src.rev}";
 
   src = fetchgit {
     url    = "http://git.kernel.dk/liburing";
-    rev    = "2e719820d47cdb48308265f95547d2c9458bbfe7";
-    sha256 = "0sm2k5f15ad9b9wh928kmbb399f5f7frfh96bi865pklavpcckf5";
+    rev    = "b422aa11cc58e9786fa1e343aa2bfa6d7a394445";
+    sha256 = "0afm0kfhi025m5r0bri8if59m85rwg6kxlkx075lbwg9pw1n75w0";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  installFlags =
-    [ "prefix=$(out)"
-      "includedir=$(dev)/include"
-      "libdir=$(lib)/lib"
-      "mandir=$(man)/share/man"
-    ];
+  configurePhase = ''
+    ./configure \
+      --prefix=$out \
+      --includedir=$dev/include \
+      --libdir=$lib/lib \
+      --mandir=$man/share/man \
+  '';
 
   # Copy the examples into $out.
   postInstall = ''
