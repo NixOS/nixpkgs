@@ -12,6 +12,10 @@
         nixosSystem = import ./nixos/lib/eval-config.nix;
       };
 
+      checks.tarball = (import ./pkgs/top-level/release.nix {
+        nixpkgs = flakes.self;
+      }).tarball;
+
       builders = {
         inherit (pkgs) stdenv fetchurl;
       };
