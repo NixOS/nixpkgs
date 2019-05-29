@@ -2340,6 +2340,8 @@ in {
 
   pyspf = callPackage ../development/python-modules/pyspf { };
 
+  pysptk = callPackage ../development/python-modules/pysptk { };
+
   pysrim = callPackage ../development/python-modules/pysrim { };
 
   pysrt = callPackage ../development/python-modules/pysrt { };
