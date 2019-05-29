@@ -21188,6 +21188,8 @@ in
 
   _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
 
+  abbaye-des-morts = callPackage ../games/abbaye-des-morts { };
+
   adom = callPackage ../games/adom { };
 
   airstrike = callPackage ../games/airstrike { };
