@@ -24,16 +24,16 @@ stdenv.mkDerivation rec {
     ./CVE-2016-3189.patch
   ];
 
-
   postPatch = ''
     sed -i -e '/<sys\\stat\.h>/s|\\|/|' bzip2.c
   '';
-
 
   outputs = [ "bin" "dev" "out" "man" ];
 
   configureFlags =
     stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "High-quality data compression program";

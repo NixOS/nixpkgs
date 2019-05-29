@@ -49,6 +49,9 @@
 # Skip wrapping of python programs altogether
 , dontWrapPythonPrograms ? false
 
+# Skip setting the PYTHONNOUSERSITE environment variable in wrapped programs
+, permitUserSite ? false
+
 # Remove bytecode from bin folder.
 # When a Python script has the extension `.py`, bytecode is generated
 # Typically, executables in bin have no extension, so no bytecode is generated.

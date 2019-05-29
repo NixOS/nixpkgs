@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl, buildPackages, callPackage
+{ config, lib, stdenv, fetchurl, pkgs, buildPackages, callPackage
 , enableThreading ? stdenv ? glibc, makeWrapper
 }:
 
@@ -23,7 +23,7 @@ let
   libcLib = lib.getLib libc;
   crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
 
-  common = { self, version, sha256 }: stdenv.mkDerivation (rec {
+  common = { perl, buildPerl, version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
 
     name = "perl-${version}";
@@ -106,14 +106,14 @@ let
     setupHook = ./setup-hook.sh;
 
     passthru = rec {
-      interpreter = "${self}/bin/perl";
+      interpreter = "${perl}/bin/perl";
       libPrefix = "lib/perl5/site_perl";
       pkgs = callPackage ../../../top-level/perl-packages.nix {
-        perl = self;
+        inherit perl buildPerl;
         overrides = config.perlPackageOverrides or (p: {}); # TODO: (self: super: {}) like in python
       };
       buildEnv = callPackage ./wrapper.nix {
-        perl = self;
+        inherit perl;
         inherit (pkgs) requiredPerlModules;
       };
       withPackages = f: buildEnv.override { extraLibs = f pkgs; };
@@ -190,17 +190,19 @@ let
     # TODO merge setup hooks
     setupHook = ./setup-hook-cross.sh;
   });
-in rec {
+in {
   # the latest Maint version
   perl528 = common {
-    self = perl528;
+    perl = pkgs.perl528;
+    buildPerl = buildPackages.perl528;
     version = "5.28.2";
     sha256 = "1iynpsxdym4h76kgndmn3ykvwxhqz444xvaz8z2irsxkvmnlb5da";
   };
 
   # the latest Devel version
   perldevel = common {
-    self = perldevel;
+    perl = pkgs.perldevel;
+    buildPerl = buildPackages.perldevel;
     version = "5.29.9";
     sha256 = "017x3nghyc5m8q1yqnrdma96b3d5rlfx87vv5mi64jq0r8k6zppm";
   };

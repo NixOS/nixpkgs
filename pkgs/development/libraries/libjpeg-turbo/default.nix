@@ -1,11 +1,12 @@
 { stdenv, fetchurl, fetchpatch, cmake, nasm }:
 
 stdenv.mkDerivation rec {
-  name = "libjpeg-turbo-${version}";
+
+  pname = "libjpeg-turbo";
   version = "2.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libjpeg-turbo/${name}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1v9gx1gdzgxf51nd55ncq7rghmj4x9x91rby50ag36irwngmkf5c";
   };
 
@@ -17,18 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake nasm ];
 
-  preConfigure = ''
-    cmakeFlagsArray+=(
-      "-DCMAKE_INSTALL_BINDIR=$bin/bin"
-      "-DENABLE_STATIC=0"
-    )
-  '';
+  cmakeFlags = [ "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin" "-DENABLE_STATIC=0" ];
 
-  doCheck = true; # not cross;
-  checkTarget = "test";
-  preCheck = ''
-    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${name}:$LD_LIBRARY_PATH"
-  '';
+  doInstallCheck = true;
+  installCheckTarget = "test";
 
   meta = with stdenv.lib; {
     homepage = http://libjpeg-turbo.virtualgl.org/;
