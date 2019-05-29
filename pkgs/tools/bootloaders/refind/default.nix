@@ -1,4 +1,14 @@
-{ stdenv, fetchurl, gnu-efi }:
+{ stdenv, fetchurl, gnu-efi
+, dmraid ? null, glibc ? null, efibootmgr ? null, imagemagick ? null
+, openssl ? null, sbsigntool ? null
+, enableBloat ? false
+}:
+
+assert enableBloat -> dmraid != null;
+assert enableBloat -> glibc != null;
+assert enableBloat -> imagemagick != null;
+assert enableBloat -> openssl != null;
+assert enableBloat -> sbsigntool != null;
 
 let
   archids = {
@@ -43,64 +53,96 @@ stdenv.mkDerivation rec {
   buildFlags = [ "gnuefi" "fs_gnuefi" ];
 
   installPhase = ''
-    install -d $out/bin/
-    install -d $out/share/refind/drivers_${efiPlatform}/
-    install -d $out/share/refind/tools_${efiPlatform}/
-    install -d $out/share/refind/docs/html/
-    install -d $out/share/refind/docs/Styles/
-    install -d $out/share/refind/fonts/
-    install -d $out/share/refind/icons/
-    install -d $out/share/refind/images/
-    install -d $out/share/refind/keys/
+    install -d ''${!outputBin}/bin/
+    install -d ''${!outputBin}/share/refind/drivers_${efiPlatform}/
+    install -d ''${!outputBin}/share/refind/tools_${efiPlatform}/
+    install -d ''${!outputBin}/share/refind/docs/html/
+    install -d ''${!outputBin}/share/refind/docs/Styles/
+    install -d ''${!outputBin}/share/refind/fonts/
+    install -d ''${!outputBin}/share/refind/icons/
+    install -d ''${!outputBin}/share/refind/images/
+    install -d ''${!outputBin}/share/refind/keys/
 
-    # refind uefi app
-    install -D -m0644 refind/refind_${efiPlatform}.efi $out/share/refind/refind_${efiPlatform}.efi
+    # rEFInd UEFI app
+    install -D -m0644 refind/refind_${efiPlatform}.efi ''${!outputBin}/share/refind/refind_${efiPlatform}.efi
 
-    # uefi drivers
-    install -D -m0644 drivers_${efiPlatform}/*.efi $out/share/refind/drivers_${efiPlatform}/
+    # UEFI drivers
+    install -D -m0644 drivers_${efiPlatform}/*.efi ''${!outputBin}/share/refind/drivers_${efiPlatform}/
 
-    # uefi apps
-    install -D -m0644 gptsync/gptsync_${efiPlatform}.efi $out/share/refind/tools_${efiPlatform}/gptsync_${efiPlatform}.efi
+    # UEFI apps
+    install -D -m0644 gptsync/gptsync_${efiPlatform}.efi ''${!outputBin}/share/refind/tools_${efiPlatform}/gptsync_${efiPlatform}.efi
 
     # helper scripts
-    install -D -m0755 refind-install $out/bin/refind-install
-    install -D -m0755 mkrlconf $out/bin/refind-mkrlconf
-    install -D -m0755 mvrefind $out/bin/refind-mvrefind
-    install -D -m0755 fonts/mkfont.sh $out/bin/refind-mkfont
+    install -D -m0755 refind-install ''${!outputBin}/bin/refind-install
+    install -D -m0755 mkrlconf ''${!outputBin}/bin/refind-mkrlconf
+    install -D -m0755 mvrefind ''${!outputBin}/bin/refind-mvrefind
+    install -D -m0755 fonts/mkfont.sh ''${!outputBin}/bin/refind-mkfont
 
     # sample config files
-    install -D -m0644 refind.conf-sample $out/share/refind/refind.conf-sample
+    install -D -m0644 refind.conf-sample ''${!outputBin}/share/refind/refind.conf-sample
 
     # docs
-    install -D -m0644 docs/refind/* $out/share/refind/docs/html/
-    install -D -m0644 docs/Styles/* $out/share/refind/docs/Styles/
-    install -D -m0644 README.txt $out/share/refind/docs/README.txt
-    install -D -m0644 NEWS.txt $out/share/refind/docs/NEWS.txt
-    install -D -m0644 BUILDING.txt $out/share/refind/docs/BUILDING.txt
-    install -D -m0644 CREDITS.txt $out/share/refind/docs/CREDITS.txt
+    install -D -m0644 docs/refind/* ''${!outputDoc}/share/refind/docs/html/
+    install -D -m0644 docs/Styles/* ''${!outputDoc}/share/refind/docs/Styles/
+    install -D -m0644 README.txt ''${!outputDoc}/share/refind/docs/README.txt
+    install -D -m0644 NEWS.txt ''${!outputDoc}/share/refind/docs/NEWS.txt
+    install -D -m0644 BUILDING.txt ''${!outputDoc}/share/refind/docs/BUILDING.txt
+    install -D -m0644 CREDITS.txt ''${!outputDoc}/share/refind/docs/CREDITS.txt
 
     # fonts
-    install -D -m0644 fonts/* $out/share/refind/fonts/
-    rm -f $out/share/refind/fonts/mkfont.sh
+    install -D -m0644 fonts/* ''${!outputBin}/share/refind/fonts/
+    rm -f ''${!outputBin}/share/refind/fonts/mkfont.sh
 
     # icons
-    install -D -m0644 icons/*.png $out/share/refind/icons/
+    install -D -m0644 icons/*.png ''${!outputBin}/share/refind/icons/
 
     # images
-    install -D -m0644 images/*.{png,bmp} $out/share/refind/images/
+    install -D -m0644 images/*.{png,bmp} ''${!outputBin}/share/refind/images/
 
     # keys
-    install -D -m0644 keys/* $out/share/refind/keys/
+    install -D -m0644 keys/* ''${!outputBin}/share/refind/keys/
 
     # Fix variable definition of 'RefindDir' which is used to locate ressource files.
-    sed -i "s,\bRefindDir=.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
+    sed -i "s,\bRefindDir=.*,RefindDir=''${!outputBin}/share/refind,g" ''${!outputBin}/bin/refind-install
 
-    # Patch uses of `which`.  We could patch in calls to efibootmgr,
-    # openssl, convert, and openssl, but that would greatly enlarge
-    # refind's closure (from ca 28MB to over 400MB).
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
+    ${let
+      inherit (stdenv) lib;
+      inherit (lib) elemAt escapeShellArg getBin;
+      pinBin = args: let
+        var = elemAt args 0; bin = elemAt args 1; path = elemAt args 2;
+        match = "${var}=`which ${bin} 2> /dev/null`";
+        rep = "${var}=${escapeShellArg path}";
+      in "  --replace ${escapeShellArg match} \\\n    ${escapeShellArg rep}";
+      pinBinsIn = path: pins:
+        lib.concatStringsSep " \\\n" ([
+          ''substituteInPlace ${path}''
+        ] ++ builtins.map pinBin pins);
+      efibootmgrPin =
+        [ "Efibootmgr" "efibootmgr" "${getBin efibootmgr}/bin/efibootmgr" ];
+      iconvPin = [ "IConv" "iconv" "${getBin glibc}/bin/iconv" ];
+    in if enableBloat then ''
+      # Patch uses of `which` to direct paths.
+      ${pinBinsIn "\${!outputBin}/bin/refind-install" [
+        [ "Dmraid" "dmraid" "${getBin dmraid}/bin/dmraid" ]
+        efibootmgrPin
+        iconvPin
+        [ "OpenSSL" "openssl" "${getBin openssl}/bin/openssl" ]
+        [ "SBSign" "sbsign" "${getBin sbsigntool}/bin/sbsign" ]
+      ]}
+      ${pinBinsIn "\${!outputBin}/bin/refind-mvrefind" [
+        efibootmgrPin
+        iconvPin
+      ]}
+      ${pinBinsIn "\${!outputBin}/bin/refind-mkfont" [
+        [ "Convert" "convert" "${getBin imagemagick}/bin/convert" ]
+      ]}'' else ''
+      # Patch uses of `which`.  We could patch in calls to efibootmgr,
+      # openssl, convert, and openssl, but that would greatly enlarge
+      # rEFInd's closure (from ~35MB to ~250MB).
+      sed -i 's,`which \(.*\)`,`type -p \1`,g' ''${!outputBin}/bin/refind-install
+      sed -i 's,`which \(.*\)`,`type -p \1`,g' ''${!outputBin}/bin/refind-mvrefind
+      sed -i 's,`which \(.*\)`,`type -p \1`,g' ''${!outputBin}/bin/refind-mkfont''
+    }
   '';
 
   meta = with stdenv.lib; {
@@ -120,8 +162,9 @@ stdenv.mkDerivation rec {
       runtime makes it very easy to use, particularly when paired with
       Linux kernels that provide EFI stub support.
     '';
-    homepage = http://refind.sourceforge.net/;
-    maintainers = [ maintainers.AndersonTorres ];
+    homepage = https://www.rodsbooks.com/refind/;
+    downloadPage = "https://sourceforge.net/projects/refind/files/${version}/";
+    maintainers = [ maintainers.AndersonTorres maintainers.bb010g ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     license = licenses.gpl3Plus;
   };

@@ -24409,6 +24409,10 @@ in
 
   refind = callPackage ../tools/bootloaders/refind { };
 
+  refind-full = callPackage ../tools/bootloaders/refind {
+    enableBloat = true;
+  };
+
   spectrojack = callPackage ../applications/audio/spectrojack { };
 
   sift = callPackage ../tools/text/sift { };
