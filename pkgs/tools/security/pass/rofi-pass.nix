@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gnugrep
     gnused
     libnotify
-    pass
+    (pass.withExtensions (ext: [ ext.pass-otp ]))
     pwgen
     rofi
     utillinux
