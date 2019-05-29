@@ -21,6 +21,15 @@ let
         and scalable concurrency support.
       '';
     };
+
+    "scudo" = {
+      libPath = "${pkgs.llvmPackages.compiler-rt}/lib/linux/libclang_rt.scudo-x86_64.so";
+      description = ''
+        A user-mode allocator based on LLVM Sanitizer’s CombinedAllocator,
+        which aims at providing additional mitigations against heap based
+        vulnerabilities, while maintaining good performance.
+      '';
+    };
   };
 
   providerConf = providers."${cfg.provider}";
