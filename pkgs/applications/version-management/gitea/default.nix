@@ -17,7 +17,7 @@ buildGoPackage rec {
     sha256 = "1gsismjhcgz7zk8zvyva4cgnq4wsh4cs7mdabpas9djz34sa1nr1";
     # Required to generate the same checksum on MacOS due to unicode encoding differences
     # More information: https://github.com/NixOS/nixpkgs/pull/48128
-    extraPostFetch = ''
+    postFetch = ''
       rm -rf $out/integrations
       rm -rf $out/vendor/github.com/Unknown/cae/tz/testdata
       rm -rf $out/vendor/github.com/Unknown/cae/zip/testdata
