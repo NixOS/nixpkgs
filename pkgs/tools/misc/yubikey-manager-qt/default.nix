@@ -46,12 +46,11 @@ in stdenv.mkDerivation rec {
 
   pythonPath = [ yubikey-manager ];
 
-  # Need LD_PRELOAD for libykpers as the Nix cpython disables ctypes.cdll.LoadLibrary
-  # support that the yubicommon library uses to load libykpers
   postInstall = ''
     buildPythonPath "$pythonPath"
 
     wrapProgram $out/bin/ykman-gui \
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
       --set QML2_IMPORT_PATH "${qml2ImportPath}" \
       --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms \
