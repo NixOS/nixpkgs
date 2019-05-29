@@ -18661,6 +18661,7 @@ in
 
   krita = libsForQt5.callPackage ../applications/graphics/krita {
     openjpeg = openjpeg_1;
+    inherit (libsForQt5) quazip;
   };
 
   krusader = libsForQt5.callPackage ../applications/misc/krusader { };
