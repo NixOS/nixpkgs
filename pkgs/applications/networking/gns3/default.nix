@@ -1,7 +1,7 @@
 { callPackage, stdenv }:
 
 let
-  stableVersion = "2.1.19";
+  stableVersion = "2.1.20";
   previewVersion = "2.2.0b1";
   addVersion = args:
     let version = if args.stable then stableVersion else previewVersion;
@@ -9,8 +9,8 @@ let
     in args // { inherit version branch; };
   mkGui = args: callPackage (import ./gui.nix (addVersion args)) { };
   mkServer = args: callPackage (import ./server.nix (addVersion args)) { };
-  guiSrcHash = "0bn0qry0djw17zwa16cc69273crnfzppik07f9w20hhr8kjiyvnx";
-  serverSrcHash = "1af6pnmr24syx23pqvwchgwy74263k3ccrv7barxi71wsskjlw5a";
+  guiSrcHash = "0hs4qxas8xfwpn8c0w1l89aypqj3dy5wskyis8dq08p6h3kjis1g";
+  serverSrcHash = "06q5283mdafijbczd14whw8fqwhmkvvaa9r7q16m18d96mr1z8m5";
 in {
   guiStable = mkGui {
     stable = true;
