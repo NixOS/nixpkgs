@@ -14,25 +14,21 @@ in
 
     services.pixiecore = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to run pixiecore netboot server.";
-      };
+      enable = mkEnableOption "Pixiecore";
 
-     debug = mkOption {
+      debug = mkOption {
         type = types.bool;
         default = false;
         description = "Log more things that aren't directly related to booting a recognized client";
       };
 
-     logTimestamps = mkOption {
+      logTimestamps = mkOption {
         type = types.bool;
         default = true;
         description = "Add a timestamp to each log line";
       };
 
-     dhcpNoBind = mkOption {
+      dhcpNoBind = mkOption {
         type = types.bool;
         default = false;
         description = "Handle DHCP traffic without binding to the DHCP server port";
@@ -62,19 +58,19 @@ in
         description = "Kernel commandline arguments";
       };
 
-     listen = mkOption {
+      listen = mkOption {
         type = types.string;
         default = "0.0.0.0";
         description = "IPv4 address to listen on";
       };
 
-     port = mkOption {
+      port = mkOption {
         type = types.int;
         default = 80;
         description = "Port to listen on for HTTP";
       };
 
-     statusPort = mkOption {
+      statusPort = mkOption {
         type = types.int;
         default = 80;
         description = "HTTP port for status information (can be the same as --port)";
@@ -85,27 +81,26 @@ in
   };
 
   config = mkIf cfg.enable {
-#    users.users.pixiecore = {
-#      isSystemUser = true;
-#      group = "pixiecore";
-#      home = "/var/cache/pixiecore";
-#      createHome = true;
-#    };
+    users.users.pixiecore = {
+      isSystemUser = true;
+      group = "pixiecore";
+      home = "/var/cache/pixiecore";
+      createHome = true;
+    };
 
-#    users.groups.pixiecore = {};
+    users.groups.pixiecore = {};
 
     systemd.services.pixiecore = {
       description = "Netboot server";
       after = [ "network.target"];
       wants = [ "network.target"];
       wantedBy = [ "multi-user.target"];
-      preStart = ''
-      '';
       serviceConfig = {
         Type="simple";
         PIDFile="/run/pixiecore.pid";
-        PermissionsStartOnly = true;
         ExecStart  = "${pkgs.pixiecore}/bin/pixiecore boot ${cfg.kernel} ${cfg.initrd} ${optionalString (cfg.cmdLine != "") "--cmdline=\\\'${cfg.cmdLine}\\\'"} ${optionalString cfg.debug "--debug"} ${optionalString cfg.logTimestamps "--log-timestamps"} ${optionalString cfg.dhcpNoBind "--dhcp-no-bind"} ${optionalString (cfg.listen != "") "--listen-addr ${cfg.listen}"} ${optionalString (cfg.port != 0) "--port ${toString cfg.port}"} ${optionalString (cfg.statusPort!= 0) "--status-port ${toString cfg.statusPort}"}";
+        User = "pixiecore";
+        Group = "pixiecore";
       };
     };
 
