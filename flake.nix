@@ -5,7 +5,7 @@
 
   description = "A collection of packages for the Nix package manager";
 
-  provides = flakes:
+  outputs = inputs:
     let pkgs = import ./. { system = "x86_64-linux"; }; in
     {
       lib = (import ./lib) // {
@@ -13,7 +13,7 @@
       };
 
       checks.tarball = (import ./pkgs/top-level/release.nix {
-        nixpkgs = flakes.self;
+        nixpkgs = inputs.self;
       }).tarball;
 
       builders = {
