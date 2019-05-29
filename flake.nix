@@ -17,9 +17,9 @@
       };
 
       packages = {
-        inherit (pkgs) hello nix fuse nlohmann_json boost;
+        inherit (pkgs) hello nix fuse nlohmann_json boost firefox;
       };
 
-      legacyPkgs = pkgs;
+      legacyPackages = pkgs;
     };
 }
