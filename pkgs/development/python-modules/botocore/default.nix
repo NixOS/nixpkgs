@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.12.150"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.12.152"; # N.B: if you change this, change boto3 and awscli to a matching version
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xrbl9dfb65wpz7rq5n4j2qvb591z1ny5d1s6rn813ws96pl8bpq";
+    sha256 = "1pj9k3x82f9cgr0flg0m5n6fh8rkxy3c0z1qgx5nqvyidswn793r";
   };
 
   propagatedBuildInputs = [

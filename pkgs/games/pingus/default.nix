@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
       sha256 = "0nqyhznnnvpgfa6rfv8rapjfpw99b67n97jfqp9r3hpib1b3ja6p";
     })
   ];
-  makeFlags = '' PREFIX="$(out)" '';
+  makeFlags = "PREFIX=${placeholder "out"}";
+  dontUseSconsInstall = true;
   meta = {
     inherit (s) version;
     description = ''A puzzle game with mechanics similar to Lemmings'';
