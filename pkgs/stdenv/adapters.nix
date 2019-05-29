@@ -60,6 +60,7 @@ rec {
           "--enable-static"
           "--disable-shared"
         ];
+        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
     };
 
