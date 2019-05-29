@@ -3067,7 +3067,7 @@ in
     foundationdb61
   ;
 
-  foundationdb = foundationdb60;
+  foundationdb = foundationdb61;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
