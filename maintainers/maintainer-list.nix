@@ -5707,4 +5707,9 @@
     github = "zzamboni";
     name = "Diego Zamboni";
   };
+  raunovv = {
+    email = "rauno@oyenetwork.com";
+    github = "raunovv";
+    name = "Rauno Väli";
+  };
 }

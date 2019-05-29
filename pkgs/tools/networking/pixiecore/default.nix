@@ -1,7 +1,8 @@
 { stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
 
 buildGoPackage rec {
-  name = "netboot-unstable-${version}";
+  name = "${pname}-${version}";
+  pname = "netboot";
   version = "2019-02-14";
   rev = "01f30467ac8e8f4e3a3c6b6a8642d62a04e97631";
 
@@ -15,12 +16,11 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  # TODO: add metadata https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes
   meta = {
     description = "A tool to manage network booting of machines";
     homepage = "https://github.com/danderson/netboot/tree/master/pixiecore";
     license =  stdenv.lib.licenses.asl20;
-    maintainers = [ "Rauno Väli rauno@oyenetwork.com" ];
+    maintainers = with stdenv.lib.maintainers; [ raunovv ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
