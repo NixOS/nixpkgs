@@ -41,15 +41,10 @@ buildGoPackage rec {
   buildPhase = ''
     pushd go/src/${goPackagePath}
 
-    # Build conmon and pause
+    # Build pause
     go build -tags ${makeFlags} -o bin/crio-config -buildmode=pie \
       -ldflags '-s -w ${ldflags}' ${goPackagePath}/cmd/crio-config
 
-    pushd conmon
-    ../bin/crio-config
-    popd
-
-    make -C conmon
     make -C pause
 
     # Build the crio binary
@@ -60,7 +55,6 @@ buildGoPackage rec {
     install -Dm755 bin/crio $bin/bin/crio${flavor}
 
     mkdir -p $bin/libexec/crio
-    install -Dm755 bin/conmon $bin/libexec/crio/conmon${flavor}
     install -Dm755 bin/pause $bin/libexec/crio/pause${flavor}
   '';
 
