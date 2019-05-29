@@ -5,13 +5,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "sysdig-${version}";
-  version = "0.25";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "1591jz4fmgk5r3q410h771nzhv6wfqpnr7pn34kpc5rl0vhky37m";
+    sha256 = "0mvm14s5lyxddf6fcfwrv7vd8r8vfw9z4447jl5mcvji2rnyywqz";
   };
 
   nativeBuildInputs = [ cmake perl ];
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
+    cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl")
+
     export INSTALL_MOD_PATH="$out"
   '' + optionalString (kernel != null) ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

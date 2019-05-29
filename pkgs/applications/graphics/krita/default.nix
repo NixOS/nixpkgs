@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, cmake, extra-cmake-modules
+{ mkDerivation, lib, stdenv, makeWrapper, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash
@@ -25,7 +25,7 @@ mkDerivation rec {
     sha256 = "0h2rplc76r82b8smk61zci1ijj9xkjmf20pdqa8fc2lz4zicjxh4";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip ];
+  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
@@ -43,6 +43,12 @@ mkDerivation rec {
     "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/share/sip/PyQt5"
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   ];
+
+  postInstall = ''
+    for i in $out/bin/*; do
+      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
+    done
+  '';
 
   meta = with lib; {
     description = "A free and open source painting application";
