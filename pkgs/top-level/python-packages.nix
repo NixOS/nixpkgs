@@ -860,6 +860,8 @@ in {
 
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
+  pyworld = callPackage ../development/python-modules/pyworld { };
+
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
 
   pyvcd = callPackage ../development/python-modules/pyvcd { };
