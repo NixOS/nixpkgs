@@ -81,14 +81,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users.pixiecore = {
-      isSystemUser = true;
-      group = "pixiecore";
-      home = "/var/cache/pixiecore";
-      createHome = true;
-    };
-
-    users.groups.pixiecore = {};
 
     systemd.services.pixiecore = {
       description = "Netboot server";
@@ -98,9 +90,10 @@ in
       serviceConfig = {
         Type="simple";
         PIDFile="/run/pixiecore.pid";
+        DynamicUser="yes";
+        AmbientCapabilities = "cap_net_bind_service";
         ExecStart  = "${pkgs.pixiecore}/bin/pixiecore boot ${cfg.kernel} ${cfg.initrd} ${optionalString (cfg.cmdLine != "") "--cmdline=\\\'${cfg.cmdLine}\\\'"} ${optionalString cfg.debug "--debug"} ${optionalString cfg.logTimestamps "--log-timestamps"} ${optionalString cfg.dhcpNoBind "--dhcp-no-bind"} ${optionalString (cfg.listen != "") "--listen-addr ${cfg.listen}"} ${optionalString (cfg.port != 0) "--port ${toString cfg.port}"} ${optionalString (cfg.statusPort!= 0) "--status-port ${toString cfg.statusPort}"}";
-        User = "pixiecore";
-        Group = "pixiecore";
+
       };
     };
 
