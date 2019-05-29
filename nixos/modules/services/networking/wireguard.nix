@@ -278,11 +278,17 @@ let
 
           ip link set up dev ${name}
 
-          ${optionalString (values.allowedIPsAsRoutes != false) (concatStringsSep "\n" (concatMap (peer:
-              (map (allowedIP:
-                "ip route replace ${allowedIP} dev ${name} table ${values.table}"
-              ) peer.allowedIPs)
-            ) values.peers))}
+          ${optionalString (values.allowedIPsAsRoutes != false) ''
+            ip route show dev ${name} | while read ROUTE ; do
+              ip route del $ROUTE
+            done
+            ${concatStringsSep "\n" (concatMap (peer:
+                (map (allowedIP:
+                  "ip route add ${allowedIP} dev ${name} table ${values.table} metric 10000"
+                ) peer.allowedIPs)
+              ) values.peers)
+            }
+          ''}
 
           ${values.postSetup}
         '';
