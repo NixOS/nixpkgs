@@ -1320,6 +1320,8 @@ in
     xcbuildHook = xcbuild6Hook;
   };
 
+  colorls = callPackage ../tools/system/colorls { };
+
   compsize = callPackage ../os-specific/linux/compsize { };
 
   coturn = callPackage ../servers/coturn { };
