@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = with stdenv.lib; {
-    description = "data deduplication program";
+    description = "Data deduplication program";
     homepage = https://git.2f30.org/dedup/file/README.html;
     license = with licenses; [ bsd0 isc ];
     maintainers = with maintainers; [ dtzWill ];
