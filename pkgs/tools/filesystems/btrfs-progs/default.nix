@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
-  postConfigure = ''
+  # The i686 case is a quick hack; I don't know what's wrong.
+  postConfigure = stdenv.lib.optionalString (!stdenv.isi686) ''
     export LDSHARED="$LD -shared"
   '';
 
