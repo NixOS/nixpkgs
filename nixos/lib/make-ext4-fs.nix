@@ -23,6 +23,8 @@ pkgs.stdenv.mkDerivation {
 
   buildCommand =
     ''
+      export EXT2FS_NO_MTAB_OK=yes
+
       # Add the closures of the top-level store objects.
       storePaths=$(cat ${sdClosureInfo}/store-paths)
 
@@ -67,7 +69,7 @@ pkgs.stdenv.mkDerivation {
         size=$(( blocks - ''${free##*:} + fudge ))
 
         echo "Resizing from $blocks blocks to $size blocks. (~ $((size*blocksize/1024/1024))MiB)"
-        EXT2FS_NO_MTAB_OK=yes resize2fs $out -f $size
+        resize2fs $out -f $size
       )
 
       # And a final fsck, because of the previous truncating.
