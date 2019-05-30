@@ -16,12 +16,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam openssl perl ];
 
+  configureFlags = [ "--with-mantype=man" ];
+
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://pamsshagentauth.sourceforge.net/;
     description = "PAM module for authentication through the SSH agent";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ eelco ];
+    license = licenses.openssl;
+    platforms = platforms.linux;
   };
 }
