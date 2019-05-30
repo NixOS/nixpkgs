@@ -3533,6 +3533,8 @@ in
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
+  hcxtools = callPackage ../tools/security/hcxtools { };
+
   hdapsd = callPackage ../os-specific/linux/hdapsd { };
 
   hdaps-gl = callPackage ../tools/misc/hdaps-gl { };
