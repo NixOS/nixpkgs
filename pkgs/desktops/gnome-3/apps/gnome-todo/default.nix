@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix parallel building: missing dependency from src/gtd-application.c
+  # Probably remove for 3.30+ https://gitlab.gnome.org/GNOME/gnome-todo/issues/170
   preBuild = "ninja src/gtd-vcs-identifier.h";
 
   passthru = {
