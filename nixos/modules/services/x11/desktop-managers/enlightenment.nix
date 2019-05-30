@@ -25,7 +25,7 @@ in
 
   };
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [
       e.efl e.enlightenment
@@ -38,10 +38,10 @@ in
       pkgs.xorg.xcursorthemes
     ];
 
-    environment.pathsToLink = [ 
-      "/etc/enlightenment" 
-      "/share/enlightenment" 
-      "/share/elementary" 
+    environment.pathsToLink = [
+      "/etc/enlightenment"
+      "/share/enlightenment"
+      "/share/elementary"
       "/share/locale"
     ];
 
