@@ -19377,6 +19377,8 @@ in
     stdenv = overrideCC stdenv gcc6;
   };
 
+  openimageio2 = callPackage ../applications/graphics/openimageio/2.x.nix { };
+
   openjump = callPackage ../applications/misc/openjump { };
 
   openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
