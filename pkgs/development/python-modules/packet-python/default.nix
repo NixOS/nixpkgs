@@ -5,7 +5,9 @@
 , python
 
 # For tests/setup.py
+, pytest
 , pytestrunner
+, requests-mock
 }:
 
 buildPythonPackage rec {
@@ -17,13 +19,15 @@ buildPythonPackage rec {
   };
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ requests ];
+  checkInputs = [
+    pytest
+    pytestrunner
+    requests-mock
+  ];
 
   checkPhase = ''
-    ${python.interpreter} -m unittest discover -s test
+    ${python.interpreter} setup.py test
   '';
-
-  # Not all test files are included in archive
-  doCheck = false;
 
   meta = {
     description = "A Python client for the Packet API.";
