@@ -91,5 +91,7 @@ in
 
   config = mkIf (cfg.provider != "libc") {
     environment.variables.LD_PRELOAD = providerLibPath;
+    systemd.extraConfig = "DefaultEnvironment=\"LD_PRELOAD=${providerLibPath}\"";
+    systemd.user.extraConfig = "DefaultEnvironment=\"LD_PRELOAD=${providerLibPath}\"";
   };
 }
