@@ -34,6 +34,10 @@ buildPythonApplication rec {
   postPatch = ''
     # remove dependency constraints
     sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
+
+    # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
+    # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
+    substituteInPlace requirements.txt --replace "zxcvbn-python" "zxcvbn"
   '';
 
   # ~400 failures
@@ -50,7 +54,7 @@ buildPythonApplication rec {
     cherrypy flask flask-restful
     flask-restplus flask-compress
     flask_login flask-cors
-    pyparsing zxcvbn-python future
+    pyparsing zxcvbn future
     progressbar
     # Optional requirements
     deluge-client
