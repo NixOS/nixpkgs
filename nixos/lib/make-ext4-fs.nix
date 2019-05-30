@@ -59,14 +59,15 @@ pkgs.stdenv.mkDerivation {
       (
         # Resizes **snugly** to its actual limits (or closer to)
         free=$(dumpe2fs $out | grep '^Free blocks:')
+        free=$((''${free##*:})) # format the number
         blocksize=$(dumpe2fs $out | grep '^Block size:')
+        blocksize=$((''${blocksize##*:})) # format the number
         blocks=$(dumpe2fs $out | grep '^Block count:')
-        blocks=$((''${blocks##*:})) # format the number.
-        blocksize=$((''${blocksize##*:})) # format the number.
         # System can't boot with 0 blocks free.
         # Add 16MiB of free space
         fudge=$(( 16 * 1024 * 1024 / blocksize ))
-        size=$(( blocks - ''${free##*:} + fudge ))
+        blocks=$((''${blocks##*:})) # format the number
+        size=$(( blocks - free + fudge ))
 
         echo "Resizing from $blocks blocks to $size blocks. (~ $((size*blocksize/1024/1024))MiB)"
         resize2fs $out -f $size
