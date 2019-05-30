@@ -182,9 +182,10 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.0-rc5";
+    # This is now "stable". Move to zfsStable after it's tested more.
+    version = "0.8.0";
 
-    sha256 = "1944w36rk33mn44zfvc1qbn2sv9h90r25zxnanwvyhss0vgqw73v";
+    sha256 = "1lqb9q2im5bbm4l8kfb31cb6rvy37h5ni6rnqlki127ynilymkj8";
     isUnstable = true;
 
     extraPatches = [
