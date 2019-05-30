@@ -7,7 +7,7 @@ let
   cfg = config.services.octoprint;
 
   baseConfig = {
-    plugins.cura.cura_engine = "${pkgs.curaengine_stable}/bin/CuraEngine";
+    plugins.curalegacy.cura_engine = "${pkgs.curaengine_stable}/bin/CuraEngine";
     server.host = cfg.host;
     server.port = cfg.port;
     webcam.ffmpeg = "${pkgs.ffmpeg.bin}/bin/ffmpeg";
