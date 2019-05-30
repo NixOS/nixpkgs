@@ -5468,8 +5468,6 @@ in {
     inherit (pkgs) zstd pkgconfig;
   };
 
-  zxcvbn-python = callPackage ../development/python-modules/zxcvbn-python { };
-
   incremental = callPackage ../development/python-modules/incremental { };
 
   treq = callPackage ../development/python-modules/treq { };
