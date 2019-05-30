@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "openimageio-${version}";
+  pname = "openimageio";
   version = "1.8.16";
 
   src = fetchFromGitHub {
@@ -15,28 +15,25 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake unzip ];
   buildInputs = [
     boost ilmbase libjpeg libpng
     libtiff opencolorio openexr
-    unzip
   ];
 
   cmakeFlags = [
     "-DUSE_PYTHON=OFF"
+    # GNUInstallDirs
+    "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin"
   ];
 
-  preBuild = ''
-    makeFlags="ILMBASE_HOME=${ilmbase.dev} OPENEXR_HOME=${openexr.dev} USE_PYTHON=0
-      INSTALLDIR=$out dist_dir="
-  '';
-
-  postInstall = ''
-    mkdir -p $bin
-    mv $out/bin $bin/
-  '';
-
-  enableParallelBuilding = true;
+  makeFlags = [
+    "ILMBASE_HOME=${ilmbase.dev}"
+    "OPENEXR_HOME=${openexr.dev}"
+    "USE_PYTHON=0"
+    "INSTALLDIR=${placeholder "out"}"
+    "dist_dir="
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://www.openimageio.org;
