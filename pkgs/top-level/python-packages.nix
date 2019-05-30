@@ -319,6 +319,8 @@ in {
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
+  cachelib = callPackage ../development/python-modules/cachelib { };
+
   cachy = callPackage ../development/python-modules/cachy { };
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
