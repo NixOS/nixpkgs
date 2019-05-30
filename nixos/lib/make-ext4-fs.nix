@@ -63,14 +63,12 @@ pkgs.stdenv.mkDerivation {
         blocksize=$(dumpe2fs $out | grep '^Block size:')
         blocksize=$((''${blocksize##*:})) # format the number
         blocks=$(dumpe2fs $out | grep '^Block count:')
-        # System can't boot with 0 blocks free.
-        # Add 16MiB of free space
-        fudge=$(( 16 * 1024 * 1024 / blocksize ))
         blocks=$((''${blocks##*:})) # format the number
+        # System can't boot with 0 blocks free. Also, Aarch64 build of resize2fs
+        # will sometimes complain about "No space left on device" unless there
+        # is some fudge factor (likely an upstream bug). Add 128 MiB of free space.
+        fudge=$(( 128 * 1024 * 1024 / blocksize ))
         size=$(( blocks - free + fudge ))
-
-        echo "Resizing from $blocks blocks to $size blocks. (~ $((size*blocksize/1024/1024))MiB)"
-        resize2fs $out -f $size
       )
 
       # And a final fsck, because of the previous truncating.
