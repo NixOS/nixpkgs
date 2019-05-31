@@ -42,7 +42,7 @@ in {
 
     format = mkOption {
       type = types.enum [ "raw" "qcow2" "vpc" ];
-      default = "qcow2";
+      default = "vpc";
       description = "The image format to output";
     };
   };
