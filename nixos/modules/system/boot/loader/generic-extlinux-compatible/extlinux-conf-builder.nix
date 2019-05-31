@@ -1,8 +1,10 @@
 { pkgs }:
 
-pkgs.substituteAll {
+let
+  builderPkgs = if (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform) then pkgs else pkgs.buildPackages;
+in pkgs.substituteAll {
   src = ./extlinux-conf-builder.sh;
   isExecutable = true;
-  path = [pkgs.buildPackages.coreutils pkgs.buildPackages.gnused pkgs.buildPackages.gnugrep];
-  inherit (pkgs.buildPackages) bash;
+  path = [builderPkgs.coreutils builderPkgs.gnused builderPkgs.gnugrep];
+  inherit (builderPkgs) bash;
 }
