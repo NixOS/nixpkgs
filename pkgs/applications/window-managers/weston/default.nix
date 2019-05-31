@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   mesonFlags= [
     "-Dbackend-rdp=${boolToString (freerdp != null)}"
     "-Dremoting=false" # TODO
+    "-Dimage-webp=${boolToString (libwebp != null)}"
     "-Dsimple-dmabuf-drm=" # Disables all drivers
     "-Dtest-junit-xml=false"
     "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
