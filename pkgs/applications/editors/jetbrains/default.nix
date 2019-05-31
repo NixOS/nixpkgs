@@ -328,12 +328,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2019.1.2"; /* updated by script */
+    version = "2019.1.3"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "05axjd2b2648sxs93d84va90373i8nma541c619xvb967kx1gzdh"; /* updated by script */
+      sha256 = "0acwfxp0ky3014zcvmlsig1732h87jvmf2wwjankamrk6ynmlvgh"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -341,12 +341,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2019.1.2"; /* updated by script */
+    version = "2019.1.3"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1s9llgjxdg99fql62kx6skpd545xqmrxwpbg19mjrjlz6pm71z3r"; /* updated by script */
+      sha256 = "0948jlpfz5d4k12mn2xrl8z5kc44a3986kl5znvzr5b8h65xw8l3"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
