@@ -60,6 +60,6 @@ stdenv.mkDerivation {
     homepage = https://hubstaff.com/;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.michalrus ];
+    maintainers = with maintainers; [ michalrus srghma ];
   };
 }
