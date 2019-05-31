@@ -17,7 +17,7 @@ in {
     name = mkOption {
       type = types.str;
       description = "The name of the generated derivation";
-      default = "nixos-disk-image";
+      default = "nixos-amazon-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
     };
 
     contents = mkOption {
@@ -68,5 +68,14 @@ in {
           ''}
         }
       '';
+    postVM = ''
+      extension=''${diskImage##*.}
+      friendlyName=$out/${cfg.name}.$extension
+      mv "$diskImage" "$friendlyName"
+      diskImage=$friendlyName
+
+      mkdir -p $out/nix-support
+      echo "file ${cfg.format} $diskImage" >> $out/nix-support/hydra-build-products
+    '';
   };
 }
