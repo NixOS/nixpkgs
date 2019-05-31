@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "simp_le-client";
-  version = "0.9.0";
+  version = "0.14.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1yxfznd78zkg2f657v520zj5w4dvq5n594d0kpm4lra8xnpg4zcv";
+    sha256 = "0kqdgbdb835b74l8y79n2nvwgvbz07ij5k7f3q3hj7w4y49ribr3";
   };
 
   postPatch = ''
