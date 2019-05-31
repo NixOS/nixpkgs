@@ -19375,6 +19375,8 @@ in
     stdenv = overrideCC stdenv gcc6;
   };
 
+  openimageio2 = callPackage ../applications/graphics/openimageio/2.x.nix { };
+
   openjump = callPackage ../applications/misc/openjump { };
 
   openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
@@ -23508,6 +23510,8 @@ in
   });
 
   redis-desktop-manager = libsForQt5.callPackage ../applications/misc/redis-desktop-manager { };
+
+  robin-map = callPackage ../development/libraries/robin-map { };
 
   robo3t = callPackage ../applications/misc/robo3t { };
 
