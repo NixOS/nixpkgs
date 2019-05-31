@@ -6,17 +6,17 @@
 with stdenv.lib;
 
 let
-  baseVersion = "4.6";
-  revision = "2";
+  baseVersion = "4.9";
+  revision = "1";
 in
 
 stdenv.mkDerivation rec {
-  name = "qtcreator-${version}";
+  pname = "qtcreator";
   version = "${baseVersion}.${revision}";
 
   src = fetchurl {
-    url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "1k23i1qsw6d06sy7g0vd699rbvwv6vbw211fy0nn0705a5zndbxv";
+    url = "http://download.qt-project.org/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    sha256 = "10ddp1365rf0z4bs7yzc9hajisp3j6mzjshyd0vpi4ki126j5f3r";
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ];
