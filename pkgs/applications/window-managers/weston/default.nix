@@ -29,10 +29,13 @@ stdenv.mkDerivation rec {
     "-Dremoting=false" # TODO
     "-Dsimple-dmabuf-drm=" # Disables all drivers
     "-Dtest-junit-xml=false"
-    #"--enable-clients"
-    #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
     "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
     "-Dxwayland=${boolToString (xwayland != null)}" # Default is true!
+    "-Ddemo-clients=false"
+    "-Dsimple-clients="
+    # TODO:
+    #"--enable-clients"
+    #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
   ] ++ optionals (xwayland != null) [
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];
