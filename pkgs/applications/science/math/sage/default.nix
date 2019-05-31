@@ -130,7 +130,7 @@ let
   singular = pkgs.singular.override { inherit flint; };
 
   # https://trac.sagemath.org/ticket/26625
-  maxima-ecl = pkgs.maxima-ecl-5_41;
+  maxima-ecl = pkgs.maxima-ecl;
 
   # *not* to confuse with the python package "pynac"
   pynac = pkgs.pynac.override { inherit singular flint; };

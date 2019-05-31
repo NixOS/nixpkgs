@@ -10,14 +10,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.8.beta6";
+  version = "8.8.beta7";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0n0mpsxnl5kg02k0jlpd34vgk5f162pd3hd5jn821rphffsbzk5j";
+    sha256 = "08ss24xswnfcyncagqx3g7lvx536nk2qddq7nbpyvbgnc3z3i3r3";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -61,7 +61,14 @@ stdenv.mkDerivation rec {
   # Since sage unfortunately does not release bugfix releases, packagers must
   # fix those bugs themselves. This is for critical bugfixes, where "critical"
   # == "causes (transient) doctest failures / somebody complained".
-  bugfixPatches = [ ];
+  bugfixPatches = [
+    # https://trac.sagemath.org/ticket/28036
+    (fetchpatch {
+      name = "fix-infinite-loop.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=4d1cf508f9fc19f73e2ec3c82258400009e27dcf";
+      sha256 = "0pdnzsmr3c38x2i4b2pj81lmqrw5bmd24n2gkmg7bpq5jmf7kpb4";
+    })
+  ];
 
   # Patches needed because of package updates. We could just pin the versions of
   # dependencies, but that would lead to rebuilds, confusion and the burdons of
