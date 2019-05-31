@@ -1,49 +1,59 @@
-{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy, zlib,
-  libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security, python27, libtool, curl
-}:
+{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy, zlib
+, libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security, python27, libtool
+, curl }:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
 
 with stdenv.lib;
 
-let version = "4.0.4";
-    python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
-    system-libraries = [
-      "pcre"
-      #"asio" -- XXX use package?
-      #"wiredtiger"
-      "boost"
-      "snappy"
-      "zlib"
-      #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
-      #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
-      "yaml"
-    ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
-    inherit (stdenv.lib) systems subtractLists;
+{ version, sha256, patches ? [ ] }@args:
 
-in stdenv.mkDerivation {
-  pname = "mongodb";
+let
+  python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+  system-libraries = [
+    "pcre"
+    #"asio" -- XXX use package?
+    #"wiredtiger"
+    "boost"
+    "snappy"
+    "zlib"
+    #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
+    #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
+    "yaml"
+  ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+  inherit (stdenv.lib) systems subtractLists;
+
+in stdenv.mkDerivation rec {
   inherit version;
+  name = "mongodb-${version}";
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "1qycwr9f99b5cy4nf54yv2y724xis3lwd2h6iv2pfp36qnhsvfh2";
+    inherit sha256;
   };
 
   nativeBuildInputs = [ scons ];
   buildInputs = [
-    sasl boost gperftools pcre-cpp snappy
-    zlib libyamlcpp sasl openssl.dev openssl.out libpcap python curl
+    sasl
+    boost
+    gperftools
+    pcre-cpp
+    snappy
+    zlib
+    libyamlcpp
+    sasl
+    openssl.dev
+    openssl.out
+    libpcap
+    python
+    curl
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security libtool ];
 
-  patches =
-    [
-      # MongoDB keeps track of its build parameters, which tricks nix into
-      # keeping dependencies to build inputs in the final output.
-      # We remove the build flags from buildInfo data.
-      ./forget-build-dependencies.patch
-    ];
+  # MongoDB keeps track of its build parameters, which tricks nix into
+  # keeping dependencies to build inputs in the final output.
+  # We remove the build flags from buildInfo data.
+  inherit patches;
 
   postPatch = ''
     # fix environment variable reading
@@ -63,7 +73,8 @@ in stdenv.mkDerivation {
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+    "-Wno-unused-command-line-argument";
 
   sconsFlags = [
     "--release"
@@ -84,11 +95,11 @@ in stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    mkdir -p $out/lib
+    mkdir -p "$out/lib"
   '';
 
   postInstall = ''
-    rm $out/bin/install_compass
+    rm -f "$out/bin/install_compass" || true
   '';
 
   prefixKey = "--prefix=";
@@ -99,9 +110,9 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A scalable, high-performance, open source NoSQL database";
-    homepage = http://www.mongodb.org;
+    homepage = "http://www.mongodb.org";
     license = licenses.sspl;
-    broken = stdenv.hostPlatform.isAarch64; #g++ has internal compiler errors
+    broken = stdenv.hostPlatform.isAarch64; # g++ has internal compiler errors
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
