@@ -16,23 +16,15 @@ let
           chmod u-w $PURS
         '';
 
+  revisions = builtins.fromJSON (builtins.readFile ./revision.json);
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.12.5";
 
-  src =
-    if stdenv.isDarwin
-    then
-    fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "15j9lkrl15dicx37bmh0199b3qdixig7w24wvdzi20jqbacz8nkn";
-    }
-    else
-    fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "07dva5gxq77g787krscv4dsz5088fzkvpmm9fwxw9a59jszzs7kq";
-    };
+  version = revisions.version;
 
+  src = if stdenv.isDarwin
+    then fetchurl { inherit (revisions.mac) url sha256; }
+    else fetchurl { inherit (revisions.linux) url sha256; };
 
   buildInputs = [ zlib
                   gmp
