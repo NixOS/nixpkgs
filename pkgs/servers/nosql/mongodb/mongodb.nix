@@ -7,8 +7,9 @@
 
 with stdenv.lib;
 
-let version = "4.0.4";
-    python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+{ version, sha256, patches ? [] } @args:
+
+let python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
     system-libraries = [
       "pcre"
       #"asio" -- XXX use package?
@@ -28,7 +29,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "1qycwr9f99b5cy4nf54yv2y724xis3lwd2h6iv2pfp36qnhsvfh2";
+    inherit sha256;
   };
 
   nativeBuildInputs = [ scons ];
@@ -37,13 +38,10 @@ in stdenv.mkDerivation {
     zlib libyamlcpp sasl openssl.dev openssl.out libpcap python curl
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security libtool ];
 
-  patches =
-    [
-      # MongoDB keeps track of its build parameters, which tricks nix into
-      # keeping dependencies to build inputs in the final output.
-      # We remove the build flags from buildInfo data.
-      ./forget-build-dependencies.patch
-    ];
+  # MongoDB keeps track of its build parameters, which tricks nix into
+  # keeping dependencies to build inputs in the final output.
+  # We remove the build flags from buildInfo data.
+  inherit patches;
 
   postPatch = ''
     # fix environment variable reading
@@ -84,7 +82,7 @@ in stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    mkdir -p $out/lib
+    mkdir -p "$out/lib"
   '';
 
   postInstall = ''
