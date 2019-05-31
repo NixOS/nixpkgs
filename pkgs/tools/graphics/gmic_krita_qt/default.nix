@@ -4,7 +4,7 @@
 , fetchgit }:
 
 let
-  version = "2.3.6";
+  version = "2.6.4";
 
 in stdenv.mkDerivation rec {
   name = "gmic_krita_qt-${version}";
@@ -12,35 +12,35 @@ in stdenv.mkDerivation rec {
   gmic-community = fetchFromGitHub {
     owner = "dtschump";
     repo = "gmic-community";
-    rev = "3fd528f20a2a7d651e96078c205ff21efb9cdd1a";
-    sha256 = "08d37b49qgh5d4rds7hvr5wjj4p1y8cnbidz1cyqsibq0555pwq2";
+    rev = "011f7ec229c279d820f332eb1f64b913e152aff2";
+    sha256 = "0gya9kk36jrbs99s5qhrwziifhkvwv31zr8x9gzfmahbb753bj9r";
   };
 
   CImg = fetchgit {
     url = "https://framagit.org/dtschump/CImg";
-    rev = "90f5657d8eab7b549ef945103ef680e747385805";
-    sha256 = "1af3dwqq18dkw0lz2gvnlw8y0kc1cw01hnc72rf3pg2wyjcp0pvc";
+    rev = "v.${version}";
+    sha256 = "100lh85l3rh0w3dmy2qmfwlmx85h18xzr11znnx571nqf2zdmbmk";
   };
 
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
-    # Version should e in sync with gmic. Basically the version string without dots
-    url = "http://gmic.eu/gmic_stdlib236.h";
-    sha256 = "0q5g87dsn9byd2qqsa9xrsggfb9qv055s3l2gc0jrcvpx2qbza4q";
+    # Version should be in sync with gmic. Basically the version string without dots
+    url = "http://gmic.eu/gmic_stdlib${builtins.replaceStrings [ "." ] [ "" ] version}.h";
+    sha256 = "1i2jm4bih0mvvah7rj6a0rk6hdw0cmdmdzkbvj67qbplyin5k2kf";
   };
 
   gmic = fetchFromGitHub {
     owner = "dtschump";
     repo = "gmic";
     rev = "v.${version}";
-    sha256 = "1yg9ri3n07drv8gz4x0mn39ryi801ibl26jaza47m19ma893m8fi";
+    sha256 = "0rcg9h1wig02263yh5gp77gdp97fr4hvf8nd71x43yzwnq47zma9";
   };
 
   gmic_qt = fetchFromGitHub {
     owner = "c-koi";
     repo = "gmic-qt";
     rev = "v.${version}";
-    sha256= "0j9wqlq67dwzir36yg58xy5lbblwizvgcvlmzcv9d6l901d5ayf3";
+    sha256= "1lffypx1d77vylgh6r0v6wf5d9jmfx0szbzd510i44fzkdismpdl";
   };
 
   unpackPhase = ''
@@ -62,11 +62,16 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    qtbase qttools fftw zlib libjpeg libtiff libpng
+    qtbase qttools fftw fftw.dev zlib libjpeg libtiff libpng
     opencv openexr graphicsmagick curl krita
   ];
 
-  cmakeFlags = [ "-DGMIC_QT_HOST=krita" ];
+  NIX_CFLAGS = [ "-L${fftw}/lib" ];
+
+  cmakeFlags = [
+    "-DGMIC_QT_HOST=krita"
+    "-DFFTW3_INCLUDE_DIR=${fftw.dev}/include"
+    ];
 
   installPhase = ''
     mkdir -p $out/bin;
