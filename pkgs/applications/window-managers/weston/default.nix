@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     homepage = https://wayland.freedesktop.org/;
     license = licenses.mit;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ primeos ];
   };
 }
