@@ -62,16 +62,11 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    qtbase qttools fftw fftw.dev zlib libjpeg libtiff libpng
+    qtbase qttools fftw zlib libjpeg libtiff libpng
     opencv openexr graphicsmagick curl krita
   ];
 
-  NIX_CFLAGS = [ "-L${fftw}/lib" ];
-
-  cmakeFlags = [
-    "-DGMIC_QT_HOST=krita"
-    "-DFFTW3_INCLUDE_DIR=${fftw.dev}/include"
-    ];
+  cmakeFlags = [ "-DGMIC_QT_HOST=krita" ];
 
   installPhase = ''
     mkdir -p $out/bin;
