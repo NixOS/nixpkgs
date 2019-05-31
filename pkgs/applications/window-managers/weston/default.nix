@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags= [
+    "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
     "-Dbackend-rdp=${boolToString (freerdp != null)}"
+    "-Dxwayland=${boolToString (xwayland != null)}" # Default is true!
     "-Dremoting=false" # TODO
     "-Dimage-webp=${boolToString (libwebp != null)}"
     "-Dsimple-dmabuf-drm=" # Disables all drivers
-    "-Dtest-junit-xml=false"
-    "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
-    "-Dxwayland=${boolToString (xwayland != null)}" # Default is true!
     "-Ddemo-clients=false"
     "-Dsimple-clients="
+    "-Dtest-junit-xml=false"
     # TODO:
     #"--enable-clients"
     #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
