@@ -2651,6 +2651,12 @@
     github = "Kmeakin";
   };
 
+  kmein = {
+    email = "kieran.meinhardt@gmail.com";
+    name = "Kierán Meinhardt";
+    github = "kmein";
+  };
+
   knedlsepp = {
     email = "josef.kemetmueller@gmail.com";
     github = "knedlsepp";
