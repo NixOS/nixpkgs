@@ -17994,12 +17994,6 @@ in
 
   freerdpUnstable = freerdp;
 
-  # This must go when weston v2 is released
-  freerdp_legacy = callPackage ../applications/networking/remote/freerdp/legacy.nix {
-    cmake = cmake_2_8;
-    ffmpeg = ffmpeg_2;
-  };
-
   fte = callPackage ../applications/editors/fte { };
 
   game-music-emu = callPackage ../applications/audio/game-music-emu { };
@@ -20725,9 +20719,7 @@ in
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {};
 
-  weston = callPackage ../applications/window-managers/weston {
-    freerdp = freerdp_legacy;
-  };
+  weston = callPackage ../applications/window-managers/weston { };
 
   whitebox-tools = callPackage ../applications/gis/whitebox-tools {
     inherit (darwin.apple_sdk.frameworks) Security;
