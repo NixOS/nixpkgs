@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile  --replace "SED_INPLACE=sed -i '''" "SED_INPLACE=sed -i"
   '';
 
+  preCheck = "patchShebangs runtests";
+  doCheck = true;
+  checkTarget = "test";
+
+  doInstallCheck = true;
+  installCheckTarget = "testinstall";
+
   meta = {
     homepage = https://github.com/google/re2;
     description = "An efficient, principled regular expression library";
