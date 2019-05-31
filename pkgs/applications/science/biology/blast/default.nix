@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
             --replace /bin/echo ${coreutils}/bin/echo
     done
     for mk in src/build-system/Makefile.meta_p \
-        src/build-system/Makefile.rules_with_autodep.in; do
+        src/build-system/Makefile.rules_with_autodep.in \
+        src/build-system/Makefile.protobuf.in ; do
 
         substituteInPlace $mk \
             --replace /bin/mv ${coreutils}/bin/mv
