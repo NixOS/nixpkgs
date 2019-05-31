@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "lab";
-  version = "0.15.3";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "00c0ljyvcqrzzcsdb3r37lxd4z2wvwp80ggs8jvp7y32p1b61bsg";
+    sha256 = "0f1gi4mlcxjvz2sgh0hzzsqxg5gfvq2ay7xjd0y1kz3pp8kxja7i";
   };
 
   subPackages = [ "." ];
