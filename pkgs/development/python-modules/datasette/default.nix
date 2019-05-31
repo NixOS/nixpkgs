@@ -11,19 +11,20 @@
 , pytest
 , pytestrunner
 , pytest-asyncio
+, black
 , aiohttp
 , beautifulsoup4
 }:
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.27";
+  version = "0.28";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "datasette";
     rev = version;
-    sha256 = "02k1kk6bw034rs74w0viwzapxz684lqgjvw5q5j5xgr0i4kynylp";
+    sha256 = "1m2s03gyq0ghjc3s0b5snpinisddywpgii2f0zqa3v4ljmzanx7h";
   };
 
   buildInputs = [ pytestrunner ];
@@ -43,24 +44,23 @@ buildPythonPackage rec {
     pytest-asyncio
     aiohttp
     beautifulsoup4
+    black
   ];
 
   postConfigure = ''
     substituteInPlace setup.py \
-      --replace "click==6.7" "click" \
       --replace "click-default-group==1.2" "click-default-group" \
       --replace "Sanic==0.7.0" "Sanic" \
       --replace "hupper==1.0" "hupper" \
       --replace "pint==0.8.1" "pint" \
-      --replace "Jinja2==2.10" "Jinja2"
+      --replace "Jinja2==2.10.1" "Jinja2"
   '';
 
   # many tests require network access
   checkPhase = ''
     pytest --ignore tests/test_api.py \
            --ignore tests/test_csv.py \
-           --ignore tests/test_html.py \
-           --ignore tests/test_publish_heroku.py
+           --ignore tests/test_html.py
   '';
 
   meta = with lib; {
