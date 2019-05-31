@@ -246,6 +246,7 @@ let
         after = [ "wireguard-${interfaceName}.service" ];
         wantedBy = [ "multi-user.target" ];
         environment.DEVICE = interfaceName;
+        environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
         path = with pkgs; [ iproute wireguard-tools ];
 
         serviceConfig = {
