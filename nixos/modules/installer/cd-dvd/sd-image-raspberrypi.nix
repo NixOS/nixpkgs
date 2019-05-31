@@ -5,7 +5,7 @@
 let
   extlinux-conf-builder =
     import ../../system/boot/loader/generic-extlinux-compatible/extlinux-conf-builder.nix {
-      pkgs = pkgs.buildPackages;
+      inherit pkgs;
     };
 in
 {
