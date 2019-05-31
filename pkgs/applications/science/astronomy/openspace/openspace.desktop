@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Exec=OpenSpace
+Name=OpenSpace
+Comment=Open source astrovisualization project
+Icon=openspace
+Categories=Science;
+StartupWMClass=SGCT
+Terminal=false
+
+Actions=Optirun;
+[Desktop Action Optirun]
+Exec=optirun OpenSpace
+Name=Launch with optirun (Nvidia Optimus)

@@ -1,0 +1,36 @@
+diff --git a/apps/OpenSpace/ext/sgct/include/sgct/ogl_headers.h b/apps/OpenSpace/ext/sgct/include/sgct/ogl_headers.h
+index 3c89705..8bcb80b 100644
+--- a/apps/OpenSpace/ext/sgct/include/sgct/ogl_headers.h
++++ b/apps/OpenSpace/ext/sgct/include/sgct/ogl_headers.h
+@@ -51,7 +51,6 @@ For conditions of distribution and use, see copyright notice in sgct.h
+         */
+         //#include <GL/glxew.h>
+     #else  //linux
+-        #include <GL/glext.h>
+         #include <GL/glxew.h>
+     #endif
+ 
+diff --git a/apps/OpenSpace/ext/sgct/src/deps/glfw/include/GLFW/glfw3.h b/apps/OpenSpace/ext/sgct/src/deps/glfw/include/GLFW/glfw3.h
+index 4117ac7..e32f54f 100644
+--- a/apps/OpenSpace/ext/sgct/src/deps/glfw/include/GLFW/glfw3.h
++++ b/apps/OpenSpace/ext/sgct/src/deps/glfw/include/GLFW/glfw3.h
+@@ -201,7 +201,6 @@ extern "C" {
+ 
+   #include <GL/gl.h>
+   #if defined(GLFW_INCLUDE_GLEXT)
+-   #include <GL/glext.h>
+   #endif
+   #if defined(GLFW_INCLUDE_GLU)
+    #include <GL/glu.h>
+diff --git a/apps/OpenSpace/ext/sgct/src/sgct/Statistics.cpp b/apps/OpenSpace/ext/sgct/src/sgct/Statistics.cpp
+index 7d43eb6..a8c66e2 100644
+--- a/apps/OpenSpace/ext/sgct/src/sgct/Statistics.cpp
++++ b/apps/OpenSpace/ext/sgct/src/sgct/Statistics.cpp
+@@ -9,7 +9,6 @@ For conditions of distribution and use, see copyright notice in sgct.h
+ #if __WIN32__
+ #include <GL/wglew.h>
+ #elif __LINUX__
+-#include <GL/glext.h>
+ #else
+ #include <OpenGL/glext.h>
+ #endif
