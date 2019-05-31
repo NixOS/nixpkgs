@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "1l4blqgaqfrnydk05q6pwdqdhcly2f8nwzrv0749cqmfiinh8ygc";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  buildInputs = [ unzip gsettings-desktop-schemas gtk3 ];
 
   installPhase = ''
     mkdir -p $out/bin \
