@@ -57,8 +57,8 @@ let
 
 in rec {
   charles4 = (generic {
-    version = "4.2.7";
-    sha256 = "1nycw3wpbfwj4ijjaq5k0f4xipj8j605fs0yjzgl66gmv7r583rd";
+    version = "4.2.8";
+    sha256 = "1jzjdhzxgrq7pdfryfkg0hsjpyni14ma4x8jbdk1rqll78ccr080";
   });
   charles3 = (generic {
     version = "3.12.3";

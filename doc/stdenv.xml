@@ -747,7 +747,8 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
    latter is convenient from a build script. However, typically one only wants
    to <emphasis>add</emphasis> some commands to a phase, e.g. by defining
    <literal>postInstall</literal> or <literal>preFixup</literal>, as skipping
-   some of the default actions may have unexpected consequences.
+   some of the default actions may have unexpected consequences. The default
+   script for each phase is defined in the file <filename>pkgs/stdenv/generic/setup.sh</filename>.
   </para>
 
   <section xml:id="ssec-controlling-phases">
@@ -1579,7 +1580,7 @@ installTargets = "install-bin install-doc";</programlisting>
      </term>
      <listitem>
       <para>
-       Like <varname>dontStripHost</varname>, but only affects the
+       Like <varname>dontStrip</varname>, but only affects the
        <command>strip</command> command targetting the package's host platform.
        Useful when supporting cross compilation, but otherwise feel free to
        ignore.
@@ -1592,7 +1593,7 @@ installTargets = "install-bin install-doc";</programlisting>
      </term>
      <listitem>
       <para>
-       Like <varname>dontStripHost</varname>, but only affects the
+       Like <varname>dontStrip</varname>, but only affects the
        <command>strip</command> command targetting the packages' target
        platform. Useful when supporting cross compilation, but otherwise feel
        free to ignore.
@@ -2643,9 +2644,7 @@ addEnvHooks "$hostOffset" myBashFunction
        At <filename>/var/lib/cntr</filename> the sandboxed filesystem is
        mounted. All commands and files of the system are still accessible
        within the shell. To execute commands from the sandbox use the cntr exec
-       subcommand. Note that <command>cntr</command> also needs to be executed
-       on the machine that is doing the build, which might not be the case when
-       remote builders are enabled. <command>cntr</command> is only supported
+       subcommand. <command>cntr</command> is only supported
        on Linux-based platforms. To use it first add <literal>cntr</literal> to
        your <literal>environment.systemPackages</literal> on NixOS or
        alternatively to the root user on non-NixOS systems. Then in the package
@@ -2657,6 +2656,16 @@ addEnvHooks "$hostOffset" myBashFunction
        When a build failure happens there will be an instruction printed that
        shows how to attach with <literal>cntr</literal> to the build sandbox.
       </para>
+      <note>
+       <title>Caution with remote builds</title>
+       <para>
+        This won't work with remote builds as the build environment is on
+        a different machine and can't be accessed by <command>cntr</command>.
+        Remote builds can be turned off by setting <literal>--option builders ''</literal>
+        for <command>nix-build</command> or <literal>--builders ''</literal> for
+        <command>nix build</command>.
+       </para>
+      </note>
      </listitem>
     </varlistentry>
     <varlistentry>
@@ -2754,9 +2763,9 @@ addEnvHooks "$hostOffset" myBashFunction
      <listitem>
       <para>
        Overrides the configure, build, and install phases. This will run the
-       "waf" script used by many projects. If waf doesn’t exist, it will copy
-       the version of waf available in Nixpkgs wafFlags can be used to pass
-       flags to the waf script.
+       "waf" script used by many projects. If wafPath (default ./waf) doesn’t
+       exist, it will copy the version of waf available in Nixpkgs. wafFlags can
+       be used to pass flags to the waf script.
       </para>
      </listitem>
     </varlistentry>

@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   version = "2016-06-23";
@@ -15,7 +15,7 @@ in fetchzip {
 
   sha256 = "1vl8z5rknh2hpr2f0v4b2qgs5kclx5pzyk8al7243k5db82a2cyi";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://opendyslexic.org/;
     description = "Font created to increase readability for readers with dyslexia";
     license = "Bitstream Vera License (https://www.gnome.org/fonts/#Final_Bitstream_Vera_Fonts)";

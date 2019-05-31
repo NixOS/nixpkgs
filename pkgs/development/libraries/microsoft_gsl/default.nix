@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake
+{ stdenv, fetchFromGitHub, catch, cmake
 }:
 
 let
@@ -6,18 +6,18 @@ let
 in
 stdenv.mkDerivation rec {
   name = "microsoft_gsl-${version}";
-  version = "2017-02-13";
+  version = "2.0.0";
 
-  src = fetchgit {
-    url = "https://github.com/Microsoft/GSL.git";
-    rev = "3819df6e378ffccf0e29465afe99c3b324c2aa70";
-    sha256 = "03d17mnx6n175aakin313308q14wzvaa9pd0m1yfk6ckhha4qf35";
+  src = fetchFromGitHub {
+    owner = "Microsoft";
+    repo = "GSL";
+    rev = "v${version}";
+    sha256 = "1kxfca9ik934nkzyn34ingkyvwpc09li81cg1yc6vqcrdw51l4ri";
   };
-
 
   # build phase just runs the unit tests, so skip it if
   # we're doing a cross build
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ catch cmake ];
   buildPhase = if nativeBuild then "make" else "true";
 
   installPhase = ''
@@ -26,10 +26,15 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Functions and types that are suggested for use by the C++ Core Guidelines";
-    homepage    = https://github.com/Microsoft/GSL;
+    description = "C++ Core Guideline support library";
+    longDescription = ''
+     The Guideline Support Library (GSL) contains functions and types that are suggested for
+     use by the C++ Core Guidelines maintained by the Standard C++ Foundation.
+     This package contains Microsoft's implementation of GSL.
+    '';
+    homepage    = "https://github.com/Microsoft/GSL";
     license     = licenses.mit;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice xwvvvvwx ];
+    maintainers = with maintainers; [ thoughtpolice xwvvvvwx yuriaisaka ];
   };
 }

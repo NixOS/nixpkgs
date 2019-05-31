@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "0m83c33rzxvs0w214njql2c7q3fg06wnyijch3l2s88i7frl121f";
   };
 
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
   meta = with stdenv.lib; {
     description = "It's like cat, but for images";
     homepage = https://github.com/eddieantonio/imgcat;

@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "libltc-1.3.0";
+  name = "libltc-1.3.1";
 
   src = fetchurl {
-    url = https://github.com/x42/libltc/releases/download/v1.3.0/libltc-1.3.0.tar.gz;
-    sha256 = "0p7fgp44i9d1lrgbk5zj3sm5yzavx428zn36xb3bl7y65c2xxcda";
+    url = https://github.com/x42/libltc/releases/download/v1.3.1/libltc-1.3.1.tar.gz;
+    sha256 = "173h9dgmain3nyrwk6q2d7yl4fnh4vacag4s2p01n5b7nyrkxrjh";
   };
 
   meta = with stdenv.lib; {

@@ -25,7 +25,7 @@
 # package customization
 , enableNaCl ? false
 , enableWideVine ? false
-, useVaapi ? true
+, useVaapi ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true

@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Helper to test WSGI applications";
-    homepage = http://webtest.readthedocs.org/en/latest/;
+    homepage = https://webtest.readthedocs.org/en/latest/;
     license = licenses.mit;
   };
 

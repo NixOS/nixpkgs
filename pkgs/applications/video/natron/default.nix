@@ -120,7 +120,7 @@ stdenv.mkDerivation {
       Node-graph based, open-source compositing software. Similar in
       functionalities to Adobe After Effects and Nuke by The Foundry.
     '';
-    homepage = https://natron.inria.fr/;
+    homepage = https://natron.fr/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;

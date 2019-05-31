@@ -42,6 +42,7 @@ let
     qps = callPackage ./qps { };
     screengrab = callPackage ./screengrab { };
     qlipper = callPackage ./qlipper { };
+    lxqt-archiver = callPackage ./lxqt-archiver { };
 
     preRequisitePackages = [
       pkgs.gvfs # virtual file systems support for PCManFM-QT
@@ -89,6 +90,7 @@ let
       compton-conf
       obconf-qt
       lximage-qt
+      lxqt-archiver
 
       ### QtDesktop project
       qps

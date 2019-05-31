@@ -23,7 +23,7 @@ rec {
     buildCommand = ''
       install $src ./appimage
       patchelf \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
         --replace-needed libz.so.1 ${zlib}/lib/libz.so.1 \
         ./appimage
 
@@ -33,7 +33,7 @@ rec {
     '';
   };
 
-  wrapAppImage = { name, src, extraPkgs }: buildFHSUserEnv (defaultFhsEnvArgs // {
+  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
     inherit name;
 
     targetPkgs = pkgs: defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
@@ -46,17 +46,17 @@ rec {
       cd $APPDIR
       exec ./AppRun "$@"
     '';
-  });
+  } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
-  wrapType1 = args@{ name, src, extraPkgs ? pkgs: [] }: wrapAppImage {
+  wrapType1 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
     inherit name extraPkgs;
     src = extractType1 { inherit name src; };
-  };
+  });
 
-  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [] }: wrapAppImage {
+  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
     inherit name extraPkgs;
     src = extractType2 { inherit name src; };
-  };
+  });
 
   defaultFhsEnvArgs = {
     name = "appimage-env";
@@ -75,6 +75,8 @@ rec {
       krb5
     ];
 
+    # list of libraries expected in an appimage environment:
+    # https://github.com/AppImage/pkg2appimage/blob/master/excludelist
     multiPkgs = pkgs: with pkgs; [
       desktop-file-utils
       xorg.libXcomposite
@@ -171,6 +173,17 @@ rec {
       xorg.libXft
       libvdpau
       alsaLib
+
+      harfbuzz
+      e2fsprogs
+      libgpgerror
+      keyutils.lib
+      libjack2
+      fribidi
+
+      # libraries not on the upstream include list, but nevertheless expected
+      # by at least one appimage
+      libtool.lib # for Synfigstudio
     ];
   };
 }

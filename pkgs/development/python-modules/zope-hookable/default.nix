@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Supports the efficient creation of “hookable” objects";
-    homepage = http://github.com/zopefoundation/zope.hookable;
+    homepage = https://github.com/zopefoundation/zope.hookable;
     license = licenses.zpl21;
   };
 }

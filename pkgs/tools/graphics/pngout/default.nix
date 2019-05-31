@@ -6,11 +6,11 @@ let
   else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation {
-  name = "pngout-20130221";
+  name = "pngout-20150319";
 
   src = fetchurl {
-    url = http://static.jonof.id.au/dl/kenutils/pngout-20130221-linux.tar.gz;
-    sha256 = "1qdzmgx7si9zr7wjdj8fgf5dqmmqw4zg19ypg0pdz7521ns5xbvi";
+    url = http://static.jonof.id.au/dl/kenutils/pngout-20150319-linux.tar.gz;
+    sha256 = "0iwv941hgs2g7ljpx48fxs24a70m2whrwarkrb77jkfcd309x2h7";
   };
 
   installPhase = ''

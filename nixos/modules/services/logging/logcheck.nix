@@ -227,7 +227,7 @@ in
     '';
 
     services.cron.systemCronJobs =
-        let withTime = name: {timeArgs, ...}: ! (builtins.isNull timeArgs);
+        let withTime = name: {timeArgs, ...}: timeArgs != null;
             mkCron = name: {user, cmdline, timeArgs, ...}: ''
               ${timeArgs} ${user} ${cmdline}
             '';

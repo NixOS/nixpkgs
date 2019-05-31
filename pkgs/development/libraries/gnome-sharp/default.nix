@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.mono-project.com/docs/gui/gtksharp/;
+    homepage = https://www.mono-project.com/docs/gui/gtksharp/;
     description = "A .NET language binding for assorted GNOME libraries";
     license = licenses.lgpl21;
     platforms = platforms.linux;

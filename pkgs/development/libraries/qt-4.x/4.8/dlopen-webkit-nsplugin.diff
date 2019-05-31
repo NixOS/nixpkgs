@@ -20,7 +20,7 @@ index 2fe69d1..b658e4a 100644
      // The code below has the same effect as this one:
      // Display *gdkDisplay = gdk_x11_display_get_xdisplay(gdk_display_get_default());
 -    QLibrary library(QLatin1String("libgdk-x11-2.0"), 0);
-+    QLibrary library(QLatin1String("@gdk_pixbuf@/lib/libgdk-x11-2.0"), 0);
++    QLibrary library(QLatin1String("@gtk@/lib/libgdk-x11-2.0"), 0);
      if (!library.load())
          return 0;
  
@@ -46,7 +46,7 @@ index b8c8f2a..e7f4dc5 100644
      // Display *gdkDisplay = gdk_x11_display_get_xdisplay(gdk_display_get_default());
  
 -    QLibrary library(QLatin1String("libgdk-x11-2.0"), 0);
-+    QLibrary library(QLatin1String("@gdk_pixbuf@/lib/libgdk-x11-2.0"), 0);
++    QLibrary library(QLatin1String("@gtk@/lib/libgdk-x11-2.0"), 0);
      if (!library.load())
          return 0;
  

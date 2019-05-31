@@ -8,5 +8,6 @@
 , "node-gyp-build"
 , "node-pre-gyp"
 , "pnpm"
+, "stf"
 , "titanium"
 ]

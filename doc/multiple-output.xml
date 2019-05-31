@@ -101,6 +101,13 @@
    contain <varname>$outputBin</varname> and <varname>$outputLib</varname> are
    also added. (See <xref linkend="multiple-output-file-type-groups" />.)
   </para>
+
+  <para>
+   In some cases it may be desirable to combine different outputs under a
+   single store path. A function <literal>symlinkJoin</literal> can be used to
+   do this. (Note that it may negate some closure size benefits of using a
+   multiple-output package.)
+  </para>
  </section>
  <section xml:id="sec-multiple-outputs-">
   <title>Writing a split derivation</title>

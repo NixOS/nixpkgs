@@ -4,7 +4,7 @@ let
   rec {
     version = "3.3f";
     name = "otter";
-    url = "http://www.cs.unm.edu/~mccune/otter/otter-${version}.tar.gz";
+    url = "https://www.cs.unm.edu/~mccune/otter/otter-${version}.tar.gz";
     sha256 = "16mc1npl7sk9cmqhrf3ghfmvx29inijw76f1b1lsykllaxjqqb1r";
   };
   buildInputs = [

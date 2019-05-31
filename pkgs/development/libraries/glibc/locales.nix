@@ -26,6 +26,8 @@ callPackage ./common.nix { inherit stdenv; } {
     ''
       mkdir -p $TMPDIR/"${buildPackages.stdenv.cc.libc.out}/lib/locale"
 
+      echo 'C.UTF-8/UTF-8 \' >> ../glibc-2*/localedata/SUPPORTED
+
       # Hack to allow building of the locales (needed since glibc-2.12)
       sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef --prefix='$TMPDIR',' ../glibc-2*/localedata/Makefile
     ''

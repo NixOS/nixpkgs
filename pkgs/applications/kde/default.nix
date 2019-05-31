@@ -102,7 +102,7 @@ let
       kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
       kdenlive = callPackage ./kdenlive.nix {};
-      kdepim-runtime = callPackage ./kdepim-runtime.nix {};
+      kdepim-runtime = callPackage ./kdepim-runtime {};
       kdepim-addons = callPackage ./kdepim-addons.nix {};
       kdepim-apps-libs = callPackage ./kdepim-apps-libs {};
       kdf = callPackage ./kdf.nix {};
@@ -126,6 +126,7 @@ let
       kmime = callPackage ./kmime.nix {};
       kmix = callPackage ./kmix.nix {};
       kmplot = callPackage ./kmplot.nix {};
+      knotes = callPackage ./knotes.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};

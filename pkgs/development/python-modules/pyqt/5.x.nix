@@ -27,24 +27,26 @@ in buildPythonPackage rec {
 
   buildInputs = [ dbus sip ];
 
-  propagatedBuildInputs = [ qtbase qtsvg qtwebengine ]
+  propagatedBuildInputs = [ qtbase qtsvg qtwebengine dbus-python ]
     ++ lib.optional (!isPy3k) enum34
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets;
 
+  patches = [
+    # Fix some wrong assumptions by ./configure.py
+    # TODO: figure out how to send this upstream
+    ./pyqt5-fix-dbus-mainloop-support.patch
+  ];
+
   configurePhase = ''
     runHook preConfigure
-
-    mkdir -p $out
-    lndir ${dbus-python} $out
-    rm -rf "$out/nix-support"
 
     export PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages}
 
     ${python.executable} configure.py  -w \
       --confirm-license \
-      --dbus=${dbus.dev}/include/dbus-1.0 \
+      --dbus-moduledir=$out/${python.sitePackages}/dbus/mainloop \
       --no-qml-plugin \
       --bindir=$out/bin \
       --destdir=$out/${python.sitePackages} \

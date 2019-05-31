@@ -1,9 +1,26 @@
 { stdenv, pkgs, buildEnv, fetchFromGitHub, makeWrapper
-, fetchpatch, nodejs-6_x, phantomjs2, runtimeShell }:
+, fetchpatch, nodejs-8_x, phantomjs2, runtimeShell }:
 let
-  nodePackages = import ./node.nix {
-    inherit pkgs;
-    system = stdenv.system;
+  nodePackages = let
+    # Some packages fail to install with ENOTCACHED due to a mistakenly added
+    # package-lock.json that bundles optional dependencies not resolved with `node2nix.
+    # See also https://github.com/svanderburg/node2nix/issues/134
+    dontInstall = n: v:
+      if builtins.match ".*babel.*" n == null
+      then v
+      else v.override { dontNpmInstall = true; };
+
+    packages = stdenv.lib.mapAttrs (dontInstall) (
+      import ./node.nix {
+        inherit pkgs;
+        system = stdenv.system;
+      }
+    );
+  in packages // {
+    "js-url-^2.3.0" = packages."js-url-^2.3.0".overrideAttrs (_: {
+      # Don't download chromium (this isn't needed anyway for our case).
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "1";
+    });
   };
 
   addPhantomjs = (pkgs:
@@ -14,12 +31,17 @@ let
   drvName = drv: (builtins.parseDrvName drv).name;
 
   linkNodeDeps = ({ pkg, deps, name ? "" }:
-    nodePackages.${pkg}.override (oldAttrs: {
-      postInstall = stdenv.lib.concatStringsSep "\n" (map (dep: ''
-        ln -s ${nodePackages.${dep}}/lib/node_modules/${drvName dep} \
-          $out/lib/node_modules/${if name != "" then name else drvName pkg}/node_modules
-      '') deps
-      );
+    let
+      targetModule = if name != "" then name else drvName pkg;
+    in nodePackages.${pkg}.override (oldAttrs: {
+      postInstall = ''
+        mkdir -p $out/lib/node_modules/${targetModule}/node_modules
+        ${stdenv.lib.concatStringsSep "\n" (map (dep: ''
+          ln -s ${nodePackages.${dep}}/lib/node_modules/${drvName dep} \
+            $out/lib/node_modules/${targetModule}/node_modules/${drvName dep}
+        '') deps
+        )}
+      '';
     })
   );
 
@@ -43,8 +65,6 @@ let
     linkNodeDeps args ) [
     { pkg = "select2-^3.5.2-browserify";
       deps = [ "url-loader-^0.5.7" ]; }
-    { pkg = "js-sequence-diagrams-^1000000.0.6";
-      deps = [ "lodash-^4.17.4" ]; }
     { pkg = "ionicons-~2.0.1";
       deps = [ "url-loader-^0.5.7" "file-loader-^0.9.0" ]; }
     { pkg = "font-awesome-^4.7.0";
@@ -66,18 +86,34 @@ let
     name = "codimd-env";
     paths = pkgsWithPhantomjs ++ pkgsWithExtraDeps ++ [
       codemirror
+
+      # `js-sequence-diagrams` has been removed from the registry
+      # and replaced by a security holding package (the tarballs weren't published by
+      # upstream as upstream only supports bower,
+      # see https://github.com/bramp/js-sequence-diagrams/issues/212).
+      #
+      # As the tarballs are still there, we build this manually for now until codimd's upstream
+      # has resolved the issue.
+      (import ./js-sequence-diagrams {
+        inherit pkgs;
+        nodejs = nodejs-8_x;
+        extraNodePackages = {
+          lodash = nodePackages."lodash-^4.17.4";
+          eve = nodePackages."eve-^0.5.4";
+        };
+      })
    ] ++ filterNodePackagesToList [
      "bootstrap"
      "codemirror-git+https://github.com/hackmdio/CodeMirror.git"
      "font-awesome"
      "ionicons"
-     "js-sequence-diagrams"
      "js-url"
      "markdown-it"
      "markdown-pdf"
-"node-uuid"
+     "node-uuid"
      "raphael-git+https://github.com/dmitrybaranovskiy/raphael"
      "select2-browserify"
+     "url-loader"
    ] nodePackages;
   };
 
@@ -107,7 +143,7 @@ stdenv.mkDerivation rec {
   inherit name version src;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ nodejs-6_x ];
+  buildInputs = [ nodejs-8_x ];
 
   NODE_PATH = "${nodeEnv}/lib/node_modules";
 
@@ -118,6 +154,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # due to the `dontNpmInstall` workaround, `node_modules/.bin` isn't created anymore.
+    substituteInPlace package.json \
+      --replace "webpack --config" "${nodejs-8_x}/bin/node ./node_modules/webpack/bin/webpack.js --config"
+  '';
+
   buildPhase = ''
     ln -s ${nodeEnv}/lib/node_modules node_modules
     npm run build
@@ -127,7 +169,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cat > $out/bin/codimd <<EOF
       #!${runtimeShell}
-      ${nodejs-6_x}/bin/node $out/app.js
+      ${nodejs-8_x}/bin/node $out/app.js
     EOF
     cp -R {app.js,bin,lib,locales,package.json,public} $out/
   '';
@@ -150,7 +192,7 @@ stdenv.mkDerivation rec {
     description = "Realtime collaborative markdown notes on all platforms";
     license = licenses.agpl3;
     homepage = https://github.com/hackmdio/codimd;
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = with maintainers; [ willibutz ma27 ];
     platforms = platforms.linux;
   };
 }

@@ -1,8 +1,8 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
-, which, fetchgit, fetchurl
+, which, fetchgit, fetchurl, fetchzip
 , llvmPackages, rustPlatform
-, xkb-switch, fzf, skim
+, xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
 , ycmd, rake
 , gobject-introspection, glib, wrapGAppsHook
@@ -16,6 +16,9 @@
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
+
+# vCoolor dep
+, gnome3
 }:
 
 self: super: {
@@ -40,15 +43,16 @@ self: super: {
   };
 
   LanguageClient-neovim = let
+    version = "0.1.146";
     LanguageClient-neovim-src = fetchurl {
-      url = "https://github.com/autozimu/LanguageClient-neovim/archive/0.1.140.tar.gz";
-      sha256 = "0cixwm9wnn6vlam6mp57j436n92c4bvj5rs6j2qcv7qip8d2ggyw";
+      url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
+      sha256 = "1xm98pyzf2dlh04ijjf3nkh37lyqspbbjddkjny1g06xxb4kfxnk";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0f591zv4f7spks2hx22nkq78sj42259gi7flnnpr1nfs40d7n13n";
+      cargoSha256 = "0dixvmwq611wg2g3rp1n1gqali46904fnhb90gcpl9a1diqb34sh";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -59,7 +63,7 @@ self: super: {
     };
   in buildVimPluginFrom2Nix {
     pname = "LanguageClient-neovim";
-    version = "0.1.140";
+    inherit version;
     src = LanguageClient-neovim-src;
 
     propagatedBuildInputs = [ LanguageClient-neovim-bin ];
@@ -105,6 +109,22 @@ self: super: {
     '';
   });
 
+
+  coc-nvim = let
+    version = "0.0.67";
+    index_js = fetchzip {
+        url = "https://github.com/neoclide/coc.nvim/releases/download/v${version}/coc.tar.gz";
+        sha256 = "0cqgrfyaq9nck1y6mb63gmwgdrxqzgdgns5gjshpp1xzfq6asrqj";
+      };
+  in super.coc-nvim.overrideAttrs(old: {
+    # you still need to enable the node js provider in your nvim config
+    postInstall = ''
+      mkdir -p $out/share/vim-plugins/coc-nvim/build
+      cp ${index_js}/index.js $out/share/vim-plugins/coc-nvim/build/
+    '';
+
+  });
+
   command-t = super.command-t.overrideAttrs(old: {
     buildInputs = [ ruby rake ];
     buildPhase = ''
@@ -135,6 +155,10 @@ self: super: {
       patchShebangs .
       ./install.sh
     '';
+  });
+
+  deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
+    dependencies = with super; [ deoplete-nvim vim-fish ];
   });
 
   deoplete-go = super.deoplete-go.overrideAttrs(old: {
@@ -405,4 +429,35 @@ self: super: {
     };
   });
 
+  vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
+    postPatch = old.postPatch or "" + ''
+      substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace \
+        'g:stylish_haskell_command = "stylish-haskell"' \
+        'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
+    '';
+  });
+
+  vCoolor-vim = super.vCoolor-vim.overrideAttrs(old: {
+    # on linux can use either Zenity or Yad.
+    propagatedBuildInputs = [ gnome3.zenity ];
+    meta = {
+      description = "Simple color selector/picker plugin";
+      license = stdenv.lib.licenses.publicDomain;
+    };
+  });
+
+  unicode-vim = let
+    unicode-data = fetchurl {
+      url = http://www.unicode.org/Public/UNIDATA/UnicodeData.txt;
+      sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
+    };
+  in super.unicode-vim.overrideAttrs(old: {
+
+      # redirect to /dev/null else changes terminal color
+      buildPhase = ''
+        cp "${unicode-data}" autoload/unicode/UnicodeData.txt
+        echo "Building unicode cache"
+        ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
+      '';
+  });
 }

@@ -5,16 +5,16 @@
 assert pythonSupport -> python != null && swig != null;
 
 let
-  version = "1.0.0-RC";
+  version = "2.0.0";
 
 in stdenv.mkDerivation rec {
-  name = "gnuradio-limesdr-${version}";
+  name = "gr-limesdr-${version}";
 
   src = fetchFromGitHub {
     owner = "myriadrf";
     repo = "gr-limesdr";
     rev = "v${version}";
-    sha256 = "0b34mg9nfar2gcir98004ixrxmxi8p3p2hrvvi1razd869x2a0lf";
+    sha256 = "0ldqvfwl0gil89l9s31fjf9d7ki0dk572i8vna336igfaz348ypq";
   };
 
   nativeBuildInputs = [

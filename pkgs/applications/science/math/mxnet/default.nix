@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     (if cudaSupport then [
+      "-DUSE_OLDCMAKECUDA=ON"  # see https://github.com/apache/incubator-mxnet/issues/10743
       "-DCUDA_ARCH_NAME=All"
       "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     ] else [ "-DUSE_CUDA=OFF" ])

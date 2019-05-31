@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libtool, autoconf, automake, pkgconfig
+{ stdenv, fetchFromGitHub, libtool, autoreconfHook, pkgconfig
 , sysfsutils
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
   # https://www.nist.gov/programs-projects/nist-randomness-beacon
@@ -8,32 +8,48 @@
   # Not sure if jitterentropy is safe to use for cryptography
   # and thus a default entropy source
 , jitterentropy ? null, withJitterEntropy ? false
+, libp11 ? null, opensc ? null, withPkcs11 ? true
 }:
+
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "rng-tools-${version}";
-  version = "6.6";
+  pname = "rng-tools";
+  version = "6.7";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = "rng-tools";
     rev = "v${version}";
-    sha256 = "0c32sxfvngdjzfmxn5ngc5yxwi8ij3yl216nhzyz9r31qi3m14v7";
+    sha256 = "19f75m6mzg8h7b4snzg7d6ypvkz6nq32lrpi9ja95gqz4wsd18a5";
   };
 
-  nativeBuildInputs = [ libtool autoconf automake pkgconfig ];
+  postPatch = ''
+    cp README.md README
 
-  preConfigure = "./autogen.sh";
+    ${optionalString withPkcs11 ''
+      substituteInPlace rngd.c \
+        --replace /usr/lib64/opensc-pkcs11.so ${opensc}/lib/opensc-pkcs11.so
+    ''}
+  '';
 
-  configureFlags =
-       optional (!withJitterEntropy) "--disable-jitterentropy"
-    ++ optional (!withNistBeacon) "--without-nistbeacon"
-    ++ optional (!withGcrypt) "--without-libgcrypt";
+  nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];
+
+  configureFlags = [
+    (withFeature   withGcrypt        "libgcrypt")
+    (enableFeature withJitterEntropy "jitterentropy")
+    (withFeature   withNistBeacon    "nistbeacon")
+    (withFeature   withPkcs11        "pkcs11")
+  ];
 
   buildInputs = [ sysfsutils ]
-    ++ optional withJitterEntropy [ jitterentropy ]
-    ++ optional withGcrypt [ libgcrypt.dev ]
-    ++ optional withNistBeacon [ openssl.dev curl.dev libxml2.dev ];
+    ++ optionals withGcrypt        [ libgcrypt ]
+    ++ optionals withJitterEntropy [ jitterentropy ]
+    ++ optionals withNistBeacon    [ curl libxml2 openssl ]
+    ++ optionals withPkcs11        [ libp11 openssl ];
+
+  # This shouldn't be necessary but is as of 6.7
+  NIX_LDFLAGS = optionalString withPkcs11 "-lcrypto";
 
   enableParallelBuilding = true;
 
@@ -43,8 +59,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A random number generator daemon";
     homepage = https://github.com/nhorman/rng-tools;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ johnazoidberg ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ johnazoidberg ];
   };
 }

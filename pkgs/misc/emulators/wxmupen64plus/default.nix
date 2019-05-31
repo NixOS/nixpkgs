@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     export CXXFLAGS="-I${libX11.dev}/include/X11 -DLIBDIR=\\\"${mupen64plus}/lib/\\\""
     export LDFLAGS="-lwx_gtk2u_adv-2.9"
 
-    configureFlagsArray+=("--mupenapi=$APIDIR" "--wxconfig=`type -P wx-config`")
+    wafConfigureFlagsArray+=("--mupenapi=$APIDIR" "--wxconfig=`type -P wx-config`")
   '';
 
   NIX_CFLAGS_COMPILE = "-fpermissive";

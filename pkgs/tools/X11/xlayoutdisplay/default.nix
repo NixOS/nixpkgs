@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, xorg, boost, cmake, gtest }:
 
 stdenv.mkDerivation rec {
-  name = "xlayoutdisplay-${version}";
-  version = "1.0.2";
+  pname = "xlayoutdisplay";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
-    repo = "xlayoutdisplay";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1cqn98lpx9rkfhavbqalaaljw351hvqsrszgqnwvcyq05vq26dwx";
+    sha256 = "0wm6a48ym0wn2w0872mfq40ghajfrg1bccj1g342w899qh5x3bc4";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
       --replace 'fprintf(lidStateFile, contents);' \
                 'fputs(contents, lidStateFile);'
 
+    substituteInPlace CMakeLists.txt --replace "set(Boost_USE_STATIC_LIBS ON)" ""
   '';
 
   meta = with stdenv.lib; {
@@ -30,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/alex-courtis/xlayoutdisplay;
     maintainers = with maintainers; [ dtzWill ];
     license = licenses.asl20;
+    platforms = platforms.linux;
   };
 }

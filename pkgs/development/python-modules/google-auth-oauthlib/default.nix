@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , click
 , mock
 , pytest
@@ -11,22 +12,23 @@
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "226d1d0960f86ba5d9efd426a70b291eaba96f47d071657e0254ea969025728a";
+    sha256 = "03rq2rjac0zh16vsw0q914sp62l9f8fp033wn3191pqd2cchqix0";
   };
 
   checkInputs = [
-    click mock pytest futures
-  ];
+    click mock pytest
+  ] ++ lib.optionals (!isPy3k) [ futures ];
 
   propagatedBuildInputs = [
     google_auth requests_oauthlib
   ];
 
   checkPhase = ''
+    rm -fr tests/__pycache__/
     py.test
   '';
 

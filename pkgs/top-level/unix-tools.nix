@@ -20,7 +20,10 @@ let
       bin = "${getBin provider}/bin/${cmd}";
       manpage = "${getOutput "man" provider}/share/man/man1/${cmd}.1.gz";
     in runCommand "${cmd}-${version}" {
-      meta.platforms = map (n: { kernel.name = n; }) (attrNames providers);
+      meta = {
+        priority = 10;
+        platforms = map (n: { kernel.name = n; }) (attrNames providers);
+      };
       passthru = { inherit provider; };
       preferLocalBuild = true;
     } ''

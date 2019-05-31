@@ -5,7 +5,7 @@ diff -rupN asterisk-14.1.2/build_tools/make_defaults_h asterisk-14.1.2-patched/b
  #!/bin/sh
 +
 +ASTLOGDIR=/var/log/asterisk
-+ASTVARRUNDIR=/var/run/asterisk
++ASTVARRUNDIR=/run/asterisk
 +ASTVARLIBDIR=/var/lib/asterisk
 +ASTDBDIR=${ASTVARLIBDIR}
 +ASTDATADIR=${ASTVARLIBDIR}

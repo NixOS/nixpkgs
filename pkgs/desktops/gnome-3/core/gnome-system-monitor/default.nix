@@ -1,14 +1,14 @@
 { stdenv, gettext, fetchurl, pkgconfig, gtkmm3, libxml2, polkit
 , bash, gtk3, glib, wrapGAppsHook, meson, ninja, python3
-, itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
+, gsettings-desktop-schemas, itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
 
 stdenv.mkDerivation rec {
   name = "gnome-system-monitor-${version}";
-  version = "3.30.0";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0g0y565bjs6bdszrnxsz1f7hcm1x59i3mfvplysirh7nz3hpz888";
+    sha256 = "1wd43qdgjav6xamq5z5cy8fri5zr01jga3plc9w95gcia0rk3ha8";
   };
 
   doCheck = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     bash gtk3 glib libxml2 gtkmm3 libgtop gdk_pixbuf gnome3.adwaita-icon-theme librsvg
-    gnome3.gsettings-desktop-schemas systemd
+    gsettings-desktop-schemas systemd
   ];
 
   postPatch = ''

@@ -1,20 +1,22 @@
 { stdenv
 , fetchFromGitHub
 , cmake
+, icu
 }:
 
 stdenv.mkDerivation rec {
   name = "fltrdr-${version}";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     repo   = "fltrdr";
     owner  = "octobanana";
     rev    = "${version}";
-    sha256 = "1gglv7hwszk09ywjq6s169cdzr77sjklj89k5p24if24v93yffpf";
+    sha256 = "0hj7pwb93l4ahykmmr0665nq50jvwdq0aiaciz82225aw1cq939w";
   };
 
   nativeBuildInputs = [ cmake ];
+  buildInputs       = [ icu ];
 
   enableParallelBuilding = true;
 

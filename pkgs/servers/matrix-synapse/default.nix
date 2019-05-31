@@ -1,5 +1,5 @@
 { lib, stdenv, python3
-, enableSystemd ? true
+, enableSystemd ? stdenv.isLinux
 }:
 
 with python3.pkgs;
@@ -23,11 +23,11 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "0.99.2";
+  version = "0.99.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y6vic0fjx9k8178vsns0ab4ngqx8qhiyampqnil0b1biqcd68bw";
+    sha256 = "17iyy6hq6m0mcb5r8zwzw90qqfn6w4b9l87snlfrry8gzwjjwncz";
   };
 
   patches = [

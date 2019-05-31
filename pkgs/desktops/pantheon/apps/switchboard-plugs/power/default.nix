@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/MainView.vala --subst-var-by GSD_GSETTINGS_PATH ${elementary-settings-daemon}/share/gsettings-schemas/${elementary-settings-daemon.name}/glib-2.0/schemas
   '';
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "lib/switchboard";
-  PKG_CONFIG_DBUS_1_SYSTEM_BUS_SERVICES_DIR = "share/dbus-1/system-services";
-  PKG_CONFIG_DBUS_1_SYSCONFDIR = "etc";
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "share/polkit-1/actions";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
+  PKG_CONFIG_DBUS_1_SYSTEM_BUS_SERVICES_DIR = "${placeholder ''out''}/share/dbus-1/system-services";
+  PKG_CONFIG_DBUS_1_SYSCONFDIR = "${placeholder ''out''}/etc";
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder ''out''}/share/polkit-1/actions";
 
   meta = with stdenv.lib; {
     description = "Switchboard Power Plug";

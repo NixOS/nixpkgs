@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake qttools flex bison ];
   buildInputs = [ qtbase libsForQt5.poppler ];
 
-  enableParallelBuilding = true;
+  # src/data/tikzlexer.l:29:10: fatal error: tikzparser.parser.hpp: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     description = "A graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";

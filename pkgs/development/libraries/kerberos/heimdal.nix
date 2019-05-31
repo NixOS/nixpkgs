@@ -7,13 +7,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "heimdal-${version}";
-  version = "7.5.0";
+  version = "7.6.0";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
     rev = "heimdal-${version}";
-    sha256 = "1j38wjj4k0q8vx168k3d3k0fwa8j1q5q8f2688nnx1b9qgjd6w1d";
+    sha256 = "1i70xas6wddkw2840lk0ah9w6ddx0dzrslby1ggxlwfmcax8rcgp";
   };
 
   outputs = [ "out" "dev" "man" "info" ];

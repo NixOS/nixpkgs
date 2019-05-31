@@ -11,7 +11,7 @@
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
-, useVaapi ? true
+, useVaapi ? false # test video on radeon, before enabling this
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
@@ -43,31 +43,6 @@ in let
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash enableWideVine;
     };
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "chromium-browser";
-    exec = "chromium %U";
-    icon = "chromium";
-    comment = "An open source web browser from Google";
-    desktopName = "Chromium";
-    genericName = "Web browser";
-    mimeType = stdenv.lib.concatStringsSep ";" [
-      "text/html"
-      "text/xml"
-      "application/xhtml+xml"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-      "x-scheme-handler/ftp"
-      "x-scheme-handler/mailto"
-      "x-scheme-handler/webcal"
-      "x-scheme-handler/about"
-      "x-scheme-handler/unknown"
-    ];
-    categories = "Network;WebBrowser";
-    extraEntries = ''
-      StartupWMClass=chromium-browser
-    '';
   };
 
   suffix = if channel != "stable" then "-" + channel else "";
@@ -131,11 +106,10 @@ in stdenv.mkDerivation {
 
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
 
-    mkdir -p "$out/share/applications"
+    mkdir -p "$out/share"
     for f in '${chromium.browser}'/share/*; do # hello emacs */
       ln -s -t "$out/share/" "$f"
     done
-    cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
   inherit (chromium.browser) packageName;

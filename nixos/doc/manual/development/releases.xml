@@ -177,6 +177,12 @@
     </listitem>
     <listitem>
      <para>
+      Update "Chapter 4. Upgrading NixOS" section of the manual to match 
+      new stable release version.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
       Update http://nixos.org/nixos/download.html and
       http://nixos.org/nixos/manual in
       https://github.com/NixOS/nixos-org-configurations

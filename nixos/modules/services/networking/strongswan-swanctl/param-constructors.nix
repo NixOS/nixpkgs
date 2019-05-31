@@ -56,7 +56,7 @@ rec {
   };
 
   documentDefault = description : strongswanDefault :
-    if isNull strongswanDefault
+    if strongswanDefault == null
     then description
     else description + ''
       </para><para>

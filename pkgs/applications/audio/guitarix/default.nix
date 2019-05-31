@@ -12,11 +12,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "guitarix-${version}";
-  version = "0.37.3";
+  version = "0.38.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "1wfm8wrwrnqpb4ihy75n7l9i6vml536jlq9pdx2pblbc4ba3paac";
+    sha256 = "0bw7xnrx062nwb1bfj9x660h7069ncmz77szcs8icpqxrvhs7z80";
   };
 
   nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python2 wafHook ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     zita-resampler curl
   ];
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--shared-lib"
     "--no-desktop-update"
     "--enable-nls"

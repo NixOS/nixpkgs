@@ -45,6 +45,7 @@ self:
       stream = markBroken super.stream; # requires emacs-25
       cl-lib = null; # builtin
       tle = null; # builtin
+      advice = null; # builtin
     };
 
     elpaPackages = super // overrides;

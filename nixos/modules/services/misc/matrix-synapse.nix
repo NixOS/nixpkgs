@@ -30,7 +30,7 @@ ${optionalString (cfg.bind_host != null) ''
 bind_host: "${cfg.bind_host}"
 ''}
 server_name: "${cfg.server_name}"
-pid_file: "/var/run/matrix-synapse.pid"
+pid_file: "/run/matrix-synapse.pid"
 web_client: ${boolToString cfg.web_client}
 ${optionalString (cfg.public_baseurl != null) ''
 public_baseurl: "${cfg.public_baseurl}"
@@ -554,7 +554,10 @@ in {
       };
       trusted_third_party_id_servers = mkOption {
         type = types.listOf types.str;
-        default = ["matrix.org"];
+        default = [
+          "matrix.org"
+          "vector.im"
+        ];
         description = ''
           The list of identity servers trusted to verify third party identifiers by this server.
         '';

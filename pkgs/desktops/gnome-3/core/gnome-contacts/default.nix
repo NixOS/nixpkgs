@@ -2,16 +2,16 @@
 , pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, python3, gtk3, glib, cheese
 , libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
 , wrapGAppsHook, folks, libxml2, gnome3, telepathy-glib
-, vala, meson, ninja }:
+, vala, meson, ninja, libhandy, gsettings-desktop-schemas }:
 
 let
-  version = "3.30.2";
+  version = "3.32.1";
 in stdenv.mkDerivation rec {
   name = "gnome-contacts-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1b0pkdwz9yqcv82zzdf76rs2w3wa5zli8pka09wnahikx1ykk43h";
+    sha256 = "17g1gh8yj58cfpdx69h2szivlbjgvv982kmhnkkh0i5bwj0zs2yy";
   };
 
   propagatedUserEnvPkgs = [ evolution-data-server ];
@@ -21,15 +21,19 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3 glib evolution-data-server gnome3.gsettings-desktop-schemas
-    folks gnome-desktop telepathy-glib
+    gtk3 glib evolution-data-server gsettings-desktop-schemas
+    folks gnome-desktop telepathy-glib libhandy
     libxml2 gnome-online-accounts cheese
     gnome3.adwaita-icon-theme libchamplain clutter-gtk geocode-glib
   ];
 
+  mesonFlags = [
+    "-Dtelepathy=true"
+  ];
+
   postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
   '';
 
   # In file included from src/gnome-contacts@exe/contacts-avatar-selector.c:30:0:

@@ -54,7 +54,7 @@
 
    <para>
     To manually configure the network on the graphical installer, first disable
-    network-manager with <command>systemctl stop network-manager</command>.
+    network-manager with <command>systemctl stop NetworkManager</command>.
    </para>
 
    <para>

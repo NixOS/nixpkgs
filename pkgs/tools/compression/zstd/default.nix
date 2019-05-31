@@ -5,10 +5,10 @@
 
 stdenv.mkDerivation rec {
   name = "zstd-${version}";
-  version = "1.3.8";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
-    sha256 = "03jfbjzgqy5gvpym28r2phphdn536zvwfc6cw58ffk5ssm6blnqd";
+    sha256 = "1gfxi3ymgavjfxh84rhfjan7l4pymwfrn051nwc7n0s3mxp09m6v";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace programs/zstdgrep \
-      --replace "=grep" "=${gnugrep}/bin/grep" \
-      --replace "=zstdcat" "=$out/bin/zstdcat"
+      --replace ":-grep" ":-${gnugrep}/bin/grep" \
+      --replace ":-zstdcat" ":-$out/bin/zstdcat"
 
     substituteInPlace programs/zstdless \
       --replace "zstdcat" "$out/bin/zstdcat"

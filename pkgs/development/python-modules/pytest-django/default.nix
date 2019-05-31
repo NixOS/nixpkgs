@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "py.test plugin for testing of Django applications";
-    homepage = http://pytest-django.readthedocs.org/en/latest/;
+    homepage = https://pytest-django.readthedocs.org/en/latest/;
     license = licenses.bsd3;
   };
 }

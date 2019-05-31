@@ -1,16 +1,16 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "sops-${version}";
-  version = "3.2.0";
+  pname = "sops";
+  version = "3.3.0";
 
   goPackagePath = "go.mozilla.org/sops";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "mozilla";
-    repo = "sops";
-    sha256 = "0lzwql3f4n70gmw1d0vnsg7hd0ma6ys0a4x54g3jk10nrn2f7wxl";
+    repo = pname;
+    sha256 = "0h02iy1dfn4874gyj3k07gbw8byb7rngvsi9kjglnad2pkf0pq2d";
   };
 
   meta = with stdenv.lib; {

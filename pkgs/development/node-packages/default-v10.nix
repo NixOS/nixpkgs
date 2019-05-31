@@ -91,7 +91,29 @@ nodePackages // {
     buildInputs = [ pkgs.automake pkgs.autoconf nodePackages.node-gyp-build ];
   };
 
+  tedicross = nodePackages."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
+        --add-flags "$out/lib/node_modules/tedicross/main.js"
+    '';
+  };
+
   webtorrent-cli = nodePackages.webtorrent-cli.override {
     buildInputs = [ nodePackages.node-gyp-build ];
+  };
+
+  joplin = nodePackages.joplin.override {
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [
+      # sharp, dep list:
+      # http://sharp.pixelplumbing.com/en/stable/install/
+      cairo expat fontconfig freetype fribidi gettext giflib
+      glib harfbuzz lcms libcroco libexif libffi libgsf
+      libjpeg_turbo libpng librsvg libtiff vips
+      libwebp libxml2 pango pixman zlib
+
+      nodePackages.node-pre-gyp
+    ];
   };
 }

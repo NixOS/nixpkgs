@@ -1,17 +1,23 @@
-{ fetchurl, stdenv, gettext, pth, libgpgerror }:
+{ fetchurl, stdenv, gettext, npth, libgpgerror, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "libassuan-2.5.2";
+  pname = "libassuan";
+  version = "2.5.3";
 
   src = fetchurl {
-    url = "mirror://gnupg/libassuan/${name}.tar.bz2";
-    sha256 = "1rw8nw6fx6ppxga6m4cqcp898lnlzf7vn3s5c2lzfxg3fzr1nswq";
+    url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "00p7cpvzf0q3qwcgg51r9d0vbab4qga2xi8wpk2fgd36710b1g4i";
   };
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # libassuan-config
 
-  buildInputs = [ libgpgerror pth gettext];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  buildInputs = [ npth gettext ];
+
+  configureFlags = [
+    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+  ];
 
   doCheck = true;
 
@@ -31,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = http://gnupg.org;
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
+    maintainers = [ maintainers.erictapen ];
   };
 }

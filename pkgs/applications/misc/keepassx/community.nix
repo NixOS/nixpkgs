@@ -1,24 +1,29 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper, qttools
 
 , curl
+, glibcLocales
+, libXi
+, libXtst
 , libargon2
 , libgcrypt
-, libsodium
-, zlib
-, libmicrohttpd
-, libXtst
-, qtbase
 , libgpgerror
-, glibcLocales
+, libmicrohttpd
+, libsodium
 , libyubikey
-, yubikey-personalization
-, libXi
-, qtx11extras
+, pkg-config
+, qrencode
+, qtbase
 , qtmacextras
+, qtsvg
+, qtx11extras
+, quazip
+, yubikey-personalization
+, zlib
 
 , withKeePassBrowser ? true
+, withKeePassKeeShare ? true
+, withKeePassKeeShareSecure ? true
 , withKeePassSSHAgent ? true
-, withKeePassHTTP ? false
 , withKeePassNetworking ? false
 }:
 
@@ -26,13 +31,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "keepassxc-${version}";
-  version = "2.3.4";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = "${version}";
-    sha256 = "1gja402dsbws4z8ybnhqbw7rc9svgqnshqjgf7158d6x0ni386m3";
+    sha256 = "1cbfsfdvb4qw6yb0zl6mymdbphnb7lxbfrc5a8cjmn9w8b09kv6m";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
@@ -50,23 +55,27 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch
-    ./qt511.patch
+    ./quazip5.patch
   ];
 
   cmakeFlags = [
     "-DKEEPASSXC_BUILD_TYPE=Release"
     "-DWITH_GUI_TESTS=ON"
     "-DWITH_XC_AUTOTYPE=ON"
+    "-DWITH_XC_UPDATECHECK=OFF"
     "-DWITH_XC_YUBIKEY=ON"
   ]
   ++ (optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
-  ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON")
+  ++ (optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
+  ++ (optional withKeePassKeeShareSecure "-DWITH_XC_KEESHARE_SECURE=ON")
   ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
   ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
   doCheck = true;
   checkPhase = ''
     export LC_ALL="en_US.UTF-8"
+    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM=offscreen
     make test ARGS+="-E testgui --output-on-failure"
   '';
 
@@ -83,11 +92,16 @@ stdenv.mkDerivation rec {
     libmicrohttpd
     libsodium
     libyubikey
+    pkg-config
+    qrencode
     qtbase
+    qtsvg
     qtx11extras
     yubikey-personalization
     zlib
-  ] ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
+  ]
+  ++ stdenv.lib.optional withKeePassKeeShareSecure quazip
+  ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
 
   postInstall = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.
@@ -97,7 +111,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Password manager to store your passwords safely and auto-type them into your everyday websites and applications";
-    longDescription = "A community fork of KeePassX, which is itself a port of KeePass Password Safe. The goal is to extend and improve KeePassX with new features and bugfixes to provide a feature-rich, fully cross-platform and modern open-source password manager. Accessible via native cross-platform GUI and via CLI. Includes optional http-interface to allow browser-integration with plugins like PassIFox (https://github.com/pfn/passifox).";
+    longDescription = "A community fork of KeePassX, which is itself a port of KeePass Password Safe. The goal is to extend and improve KeePassX with new features and bugfixes to provide a feature-rich, fully cross-platform and modern open-source password manager. Accessible via native cross-platform GUI, CLI, and browser integration with the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser).";
     homepage = https://keepassxc.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ s1lvester jonafato ];

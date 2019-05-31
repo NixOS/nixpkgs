@@ -5,7 +5,8 @@ callPackage ./generic.nix (args // rec {
   src = fetchFromGitHub {
     owner = "protobuf-c";
     repo = "protobuf-c";
-    rev = "v${version}";
-    sha256 = "1dmvs0bhyx94ipaq3c7jmwcz4hwjmznn7310kqkqx7ly0w5vxxxr";
+    #rev = "v${version}";
+    rev = "9412830d0680150d429d2aa170b8d7218ab49397";
+    sha256 = "175cmaj5231iqzhf5a9sxw2y3i165chk3681m1b5mp8di927q5ai";
   };
 })

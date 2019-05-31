@@ -1,25 +1,26 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, gtk3, libgtop, bamf,
-  json-glib, libcanberra-gtk3, libxkbcommon, libstartup_notification,
-  deepin-wallpapers, deepin-desktop-schemas, deepin }:
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, glib,
+  gtk3, libgtop, bamf, json-glib, libcanberra-gtk3, libxkbcommon,
+  libstartup_notification, deepin-wallpapers, deepin-desktop-schemas,
+  deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-metacity";
-  version = "3.22.22";
+  version = "3.22.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0gr10dv8vphla6z7zqiyyg3n3ag4rrlz43c4kr7fd5xwx2bfvp3d";
+    sha256 = "1im0wz1zlxiag4kpp5d4hv0aa0ybr4bizarr3903hrqv0lp46hyx";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
     libtool
+    glib.dev
     gnome3.gnome-common
-    gnome3.glib.dev
   ];
 
   buildInputs = [
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
       -e 's;/usr/share/backgrounds/default_background.jpg;${deepin-wallpapers}/share/backgrounds/deepin/desktop.jpg;'
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   configureFlags = [ "--disable-themes-documentation" ];
 

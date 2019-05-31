@@ -1,4 +1,4 @@
-{ CF, apple_sdk, osx_private_sdk }:
+{ CF, apple_sdk }:
 
 # cf-private is a bit weird, but boils down to CF with a weird setup-hook that
 # makes a build link against the system CoreFoundation rather than our pure one.
@@ -38,10 +38,7 @@ CF.overrideAttrs (orig: {
   # this is watchman, who can almost certainly switch to the pure CF once the header
   # and functionality is merged in.
   installPhase = orig.installPhase + ''
-    # Copy or overwrite private headers, some of these might already
-    # exist in CF but the private versions have more information.
     basepath="Library/Frameworks/CoreFoundation.framework/Headers"
-    cp -Lfv --no-preserve mode ${osx_private_sdk}/include/CoreFoundationPrivateHeaders/* "$out/$basepath"
 
     # Append the include at top level or nobody will notice the header we're about to add
     sed -i '/CFNotificationCenter.h/a #include <CoreFoundation/CFFileDescriptor.h>' \

@@ -47,8 +47,8 @@
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
 
-# NixOS modules
-/nixos/modules @Infinisil
+# New NixOS modules
+/nixos/modules/module-list.nix @Infinisil
 
 # Python-related code and docs
 /maintainers/scripts/update-python-libraries	@FRidh
@@ -58,11 +58,11 @@
 /doc/languages-frameworks/python.section.md     @FRidh
 
 # Haskell
-/pkgs/development/compilers/ghc                       @peti @basvandijk
-/pkgs/development/haskell-modules                     @peti @basvandijk
-/pkgs/development/haskell-modules/default.nix         @peti @basvandijk
-/pkgs/development/haskell-modules/generic-builder.nix @peti @basvandijk
-/pkgs/development/haskell-modules/hoogle.nix          @peti @basvandijk
+/pkgs/development/compilers/ghc                       @basvandijk
+/pkgs/development/haskell-modules                     @basvandijk
+/pkgs/development/haskell-modules/default.nix         @basvandijk
+/pkgs/development/haskell-modules/generic-builder.nix @basvandijk
+/pkgs/development/haskell-modules/hoogle.nix          @basvandijk
 
 # Perl
 /pkgs/development/interpreters/perl @volth
@@ -121,6 +121,14 @@
 /nixos/modules/services/databases/postgresql.xml @thoughtpolice
 /nixos/modules/services/databases/postgresql.nix @thoughtpolice
 /nixos/tests/postgresql.nix @thoughtpolice
+
+# Hardened profile & related modules
+/nixos/modules/profiles/hardened.nix @joachifm
+/nixos/modules/security/hidepid.nix @joachifm
+/nixos/modules/security/lock-kernel-modules.nix @joachifm
+/nixos/modules/security/misc.nix @joachifm
+/nixos/tests/hardened.nix @joachifm
+/pkgs/os-specific/linux/kernel/hardened-config.nix @joachifm
 
 # Dhall
 /pkgs/development/dhall-modules      @Gabriel439 @Profpatsch

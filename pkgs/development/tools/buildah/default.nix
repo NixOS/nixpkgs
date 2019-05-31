@@ -3,14 +3,15 @@
 , go-md2man }:
 
 let
-  version = "1.7.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
-    owner = "containers";
-    repo = "buildah";
-    sha256 = "083s0bcajks2qnxq6cn9lax5aiyvicf60rf3ifgqksl9skr748qb";
+    rev    = "v${version}";
+    owner  = "containers";
+    repo   = "buildah";
+    sha256 = "1r91ndnc3ysrfdjybsnlnbkw26n25mfwc9i8ys5y3c26fq8ic3zd";
   };
+
   goPackagePath = "github.com/containers/buildah";
 
 in buildGoPackage rec {
@@ -46,7 +47,7 @@ in buildGoPackage rec {
   meta = {
     description = "A tool which facilitates building OCI images";
     homepage = https://github.com/containers/buildah;
-    maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
+    maintainers = with stdenv.lib.maintainers; [ Profpatsch vdemeester ];
     license = stdenv.lib.licenses.asl20;
   };
 }

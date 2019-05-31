@@ -9,7 +9,7 @@ stdenv.mkDerivation rec{
   version = "4.18.0";
 
   src = fetchurl {
-    url = "http://fc-solve.shlomifish.org/downloads/fc-solve/${name}.tar.xz";
+    url = "https://fc-solve.shlomifish.org/downloads/fc-solve/${name}.tar.xz";
     sha256 = "1cmaib69pijmcpvgjvrdry8j4xys8l906l80b8z21vvyhdwrfdnn";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec{
       Off, Forecell, and Seahaven Towers, as well as Simple Simon
       boards.
     '';
-    homepage = http://fc-solve.shlomifish.org/;
+    homepage = https://fc-solve.shlomifish.org/;
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

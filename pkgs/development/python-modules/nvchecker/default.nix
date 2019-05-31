@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.3";
+  version = "1.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lgcc05c515d7692zvcmf36n2qpyn0bi018i1z3jy73abm04230j";
+    sha256 = "0v340wkq4sn9pvcpjh076l8mcqkn3nrn7if8p6iysk02bjxvknbv";
   };
 
   propagatedBuildInputs = [ setuptools structlog tornado pycurl ];

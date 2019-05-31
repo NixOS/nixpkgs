@@ -11,7 +11,7 @@
     rustcOpts =
       lib.lists.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
-        (["-C codegen-units=1"] ++ extraRustcOpts);
+        (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
     rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
 
     # Some platforms have different names for rustc.

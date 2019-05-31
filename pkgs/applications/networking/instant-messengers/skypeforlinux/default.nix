@@ -1,16 +1,18 @@
 { stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, glibc, gnome2, gnome3
-, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg }:
+, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
+, at-spi2-atk }:
 
 let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.34.0.78";
+  version = "8.44.0.40";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     atk
+    at-spi2-atk
     cairo
     cups
     curl
@@ -56,7 +58,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
-        sha256 = "1986nvdw1cpj06rq76hjsif0j4z5g2k01v73r4c4n43q7dgzl5z0";
+        sha256 = "08b5nfx1c8czx5nga3zlg60rxnyg2iy627vnaq8cf9dv620vbrw8";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
@@ -97,8 +99,7 @@ in stdenv.mkDerivation {
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/skypeforlinux.desktop \
-      --replace /usr/bin/ $out/bin/ \
-      --replace /usr/share/ $out/share/
+      --replace /usr/bin/ $out/bin/
   '';
 
   meta = with stdenv.lib; {

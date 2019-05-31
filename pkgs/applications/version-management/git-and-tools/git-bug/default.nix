@@ -2,18 +2,23 @@
 
 buildGoPackage rec {
   name = "git-bug-${version}";
-  version = "0.4.0";
-  rev = "2ab2412771d58a1b1f3bfeb5a6e9da2e683b0e12";
+  version = "0.5.0";
+  rev = "8d7a2c076a38c89085fd3191a2998efb659650c2";
   goPackagePath = "github.com/MichaelMure/git-bug";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "MichaelMure";
     repo = "git-bug";
-    sha256 = "1zyvyg0p5h71wvyxrzkr1bwddxm3x8p44n6wh9ccfdxp8d2k6k25";
+    sha256 = "1l86m0y360lmpmpw2id0k7zc2nyq1irr26k2ik06lxhzvpbyajz6";
   };
 
-  goDeps = ./deps.nix;
+  buildFlagsArray = ''
+    -ldflags= 
+      -X ${goPackagePath}/commands.GitCommit=${rev}
+      -X ${goPackagePath}/commands.GitLastTag=${version}
+      -X ${goPackagePath}/commands.GitExactTag=${version}
+  '';
 
   postInstall = ''
     cd go/src/${goPackagePath}

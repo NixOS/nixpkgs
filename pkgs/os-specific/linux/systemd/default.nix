@@ -129,12 +129,12 @@ in stdenv.mkDerivation rec {
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
-        --replace /sbin/swapoff ${utillinux.bin}/sbin/swapoff \
-        --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
+        --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
+        --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
+        --replace /sbin/fsck ${lib.getBin utillinux}/sbin/fsck \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
+        --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
@@ -220,6 +220,7 @@ in stdenv.mkDerivation rec {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    priority = 10;
     maintainers = [ maintainers.eelco ];
   };
 }

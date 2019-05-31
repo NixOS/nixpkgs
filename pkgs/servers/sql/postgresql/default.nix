@@ -101,6 +101,10 @@ let
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
 
+    doCheck = true;
+    # autodetection doesn't seem to able to find this, but it's there.
+    checkTarget = "check";
+
     doInstallCheck = false; # needs a running daemon?
 
     disallowedReferences = [ stdenv.cc ];
@@ -157,41 +161,41 @@ let
 in self: {
 
   postgresql_9_4 = self.callPackage generic {
-    version = "9.4.20";
+    version = "9.4.22";
     psqlSchema = "9.4";
-    sha256 = "0zzqjz5jrn624hzh04drpj6axh30a9k6bgawid6rwk45nbfxicgf";
+    sha256 = "0sy66cl2nkqr1al66f3qy7zsyd3vjpjv0icqbda7bqq4j8mlrann";
     this = self.postgresql_9_4;
     inherit self;
   };
 
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.15";
+    version = "9.5.17";
     psqlSchema = "9.5";
-    sha256 = "0i2lylgmsmy2g1ixlvl112fryp7jmrd0i2brk8sxb7vzzpg3znnv";
+    sha256 = "01gp4d3ngl2809dl652md2n1q4nk27cdbl6i892gvwk901xf7yc8";
     this = self.postgresql_9_5;
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.11";
+    version = "9.6.13";
     psqlSchema = "9.6";
-    sha256 = "0c55akrkzqd6p6a8hr0338wk246hl76r9j16p4zn3s51d7f0l99q";
+    sha256 = "197964wb5pc5fx81a6mh9hlcrr9sgr3nqlpmljv6asi9aq0d5gpc";
     this = self.postgresql_9_6;
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.6";
+    version = "10.8";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "0jv26y3f10svrjxzsgqxg956c86b664azyk2wppzpa5x11pjga38";
+    sha256 = "0pfdmy4w95b49w9rkn8dwvzmi2brpqfvbxd04y0k0s0xvymc565i";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.2";
+    version = "11.3";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "01clq2lw0v83zh5dc89xdr3mmap0jr37kdkh401ph6f2177bjxi6";
+    sha256 = "0baj61ym7jnl195qcq4hq6225kfz6879j8zx3n148n92zj1f119a";
     this = self.postgresql_11;
     inherit self;
   };

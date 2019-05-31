@@ -1,17 +1,40 @@
-{ lib, python3, fetchpatch, platformio, esptool, git }:
+{ lib, python3, fetchpatch, platformio, esptool, git, protobuf3_7 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "436bc774ecf7c103814098159fbb84c2715d25980175292c648f2da143909f95";
+        };
+      });
+      tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409";
+        };
+      });
+      protobuf = super.protobuf.override {
+        protobuf = protobuf3_7;
+      };
+    };
+  };
+
+in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.11.2";
+  version = "1.12.2";
 
-  src = python3.pkgs.fetchPypi {
+  src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0kg8fqv3mv8i852jr42p4mipa9wjlzjwj60j1r2zpgzgr8p8wfs8";
+    sha256 = "935fc3d0f05b2f5911c29f60c9b5538bed584a31455b492944007d8b1524462c";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     voluptuous pyyaml paho-mqtt colorlog
     tornado protobuf tzlocal pyserial ifaddr
   ];
@@ -23,11 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
-
-  checkPhase = ''
-    $out/bin/esphomeyaml tests/test1.yaml compile
-    $out/bin/esphomeyaml tests/test2.yaml compile
-  '';
 
   # Platformio will try to access the network
   doCheck = false;

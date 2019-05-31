@@ -34,13 +34,15 @@ stdenv.mkDerivation {
   buildInputs = [ SDL SDL_mixer SDL_sound gtk2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ cf-private smpeg libvorbis ];
 
-  patches = [ ./darwin.patch ];
-
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
   installPhase =
   if stdenv.isDarwin then
-    (substituteAll { inherit (stdenv) shell; src = ./darwin.sh; })
+  (substituteAll {
+    inherit (stdenv) shell;
+    isExecutable = true;
+    src = ./darwin.sh;
+  })
   else jamenv + ''
     jam -j$NIX_BUILD_CORES install
     mkdir -p "$out/bin"

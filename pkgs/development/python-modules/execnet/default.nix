@@ -1,5 +1,7 @@
 { stdenv
+, lib
 , buildPythonPackage
+, isPyPy
 , fetchPypi
 , pytest_3
 , setuptools_scm
@@ -15,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a";
   };
 
-  checkInputs = [ pytest_3  ];
+  checkInputs = [ pytest_3 ];
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ apipkg ];
 
@@ -25,6 +27,7 @@ buildPythonPackage rec {
     rm -v testing/test_channel.py
     rm -v testing/test_xspec.py
     rm -v testing/test_gateway.py
+    ${lib.optionalString isPyPy "rm -v testing/test_multi.py"}
   '';
 
   checkPhase = ''

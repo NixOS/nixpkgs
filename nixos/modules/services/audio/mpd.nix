@@ -158,18 +158,18 @@ in {
       };
     };
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.playlistDirectory}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.mpd = {
       after = [ "network.target" "sound.target" ];
       description = "Music Player Daemon";
       wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
 
-      preStart = ''
-        mkdir -p "${cfg.dataDir}" && chown -R ${cfg.user}:${cfg.group} "${cfg.dataDir}"
-        mkdir -p "${cfg.playlistDirectory}" && chown -R ${cfg.user}:${cfg.group} "${cfg.playlistDirectory}"
-      '';
       serviceConfig = {
         User = "${cfg.user}";
-        PermissionsStartOnly = true;
         ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
         Type = "notify";
         LimitRTPRIO = 50;

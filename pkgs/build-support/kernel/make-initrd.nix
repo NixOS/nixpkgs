@@ -12,11 +12,14 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{ stdenv, perl, cpio, contents, compressor, prepend, ubootTools
+{ stdenv, perl, cpio, contents, ubootTools
+, name ? "initrd"
+, compressor ? "gzip -9n"
+, prepend ? []
 }:
 
 stdenv.mkDerivation rec {
-  name = "initrd";
+  inherit name;
   builder = ./make-initrd.sh;
 
   makeUInitrd = stdenv.hostPlatform.platform.kernelTarget == "uImage";

@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Monitor database for DDCcontrol";
-    homepage = http://github.com/ddccontrol/ddccontrol-db;
+    homepage = https://github.com/ddccontrol/ddccontrol-db;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ stdenv.lib.maintainers.pakhfn ];

@@ -7,14 +7,14 @@
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "gitea-${version}";
-  version = "1.7.3";
+  pname = "gitea";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${version}";
-    sha256 = "0q33xn2l2ii8vd3hxr0f6ipk8mv2ahb3p8fzdzylhgg9w15snvsr";
+    sha256 = "1fs3cbs3zd1cj076w4nfn3dbgx529z0h4c0mghxcg2flxr3jm71a";
     # Required to generate the same checksum on MacOS due to unicode encoding differences
     # More information: https://github.com/NixOS/nixpkgs/pull/48128
     extraPostFetch = ''
@@ -35,12 +35,15 @@ buildGoPackage rec {
   nativeBuildInputs = [ makeWrapper ]
     ++ optional pamSupport pam;
 
-  buildFlags = optional sqliteSupport "-tags sqlite"
-    ++ optional pamSupport "-tags pam";
-  buildFlagsArray = ''
-    -ldflags=
-      -X=main.Version=${version}
-      ${optionalString sqliteSupport "-X=main.Tags=sqlite"}
+  preBuild = let
+    tags = optional pamSupport "pam"
+        ++ optional sqliteSupport "sqlite";
+    tagsString = concatStringsSep " " tags;
+  in ''
+    export buildFlagsArray=(
+      -tags="${tagsString}"
+      -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
+    )
   '';
 
   outputs = [ "bin" "out" "data" ];
@@ -61,6 +64,6 @@ buildGoPackage rec {
     description = "Git with a cup of tea";
     homepage = https://gitea.io;
     license = licenses.mit;
-    maintainers = [ maintainers.disassembler ];
+    maintainers = with maintainers; [ disassembler kolaente ];
   };
 }

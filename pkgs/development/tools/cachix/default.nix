@@ -1,3 +1,3 @@
 { haskellPackages, haskell }:
 
-haskell.lib.justStaticExecutables haskellPackages.cachix
+(haskell.lib.doDistribute haskellPackages.cachix).bin

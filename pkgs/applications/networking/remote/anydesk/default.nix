@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit description;
-    homepage = http://www.anydesk.com;
+    homepage = https://www.anydesk.com;
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ peterhoeg ];

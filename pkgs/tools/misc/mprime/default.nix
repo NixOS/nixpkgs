@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       client. It is identical to Prime95 in functionality, except it lacks a
       graphical user interface.
     '';
-    homepage = "http://www.mersenne.org/";
+    homepage = "https://www.mersenne.org/";
     # Unfree, because of a license requirement to share prize money if you find
     # a suitable prime. http://www.mersenne.org/legal/#EULA
     license = stdenv.lib.licenses.unfree;

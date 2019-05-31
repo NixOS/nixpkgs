@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.eclipse.org/aspectj/;
     description = "A seamless aspect-oriented extension to the Java programming language";
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.epl10;
   };
 }

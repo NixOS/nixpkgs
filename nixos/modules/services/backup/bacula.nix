@@ -15,7 +15,7 @@ let
         Name = "${fd_cfg.name}";
         FDPort = ${toString fd_cfg.port};
         WorkingDirectory = "${libDir}";
-        Pid Directory = "/var/run";
+        Pid Directory = "/run";
         ${fd_cfg.extraClientConfig}
       }
      
@@ -41,7 +41,7 @@ let
         Name = "${sd_cfg.name}";
         SDPort = ${toString sd_cfg.port};
         WorkingDirectory = "${libDir}";
-        Pid Directory = "/var/run";
+        Pid Directory = "/run";
         ${sd_cfg.extraStorageConfig}
       }
  
@@ -77,7 +77,7 @@ let
       Password = "${dir_cfg.password}";
       DirPort = ${toString dir_cfg.port};
       Working Directory = "${libDir}";
-      Pid Directory = "/var/run/";
+      Pid Directory = "/run/";
       QueryFile = "${pkgs.bacula}/etc/query.sql";
       ${dir_cfg.extraDirectorConfig}
     }

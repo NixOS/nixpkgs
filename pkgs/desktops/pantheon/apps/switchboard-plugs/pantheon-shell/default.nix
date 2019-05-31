@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0yy821hl26jfd9hyigqi7nmaf30iww0lhg9qzcwlfzsvvfwnxagi";
+    sha256 = "1vrnzxqzl84k8gbrais4j1jyap10kvil4cr769jpr3q3bkbblwrw";
   };
 
   passthru = {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "lib/switchboard";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Desktop Plug";

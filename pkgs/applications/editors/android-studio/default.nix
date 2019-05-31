@@ -8,31 +8,21 @@ let
     inherit (gnome2) GConf gnome_vfs;
   };
   stableVersion = {
-    version = "3.3.2.0"; # "Android Studio 3.3.2"
-    build = "182.5314842";
-    sha256Hash = "0smh3d3v8n0isxg7fkls20622gp52f58i2b6wa4a0g8wnvmd6mw2";
+    version = "3.4.1.0"; # "Android Studio 3.4.1"
+    build = "183.5522156";
+    sha256Hash = "0y4l9d1yrvv1csx6vl4jnqgqy96y44rl6p8hcxrnbvrg61iqnj30";
   };
   betaVersion = {
-    version = "3.4.0.16"; # "Android Studio 3.4 RC 2"
-    build = "183.5370308";
-    sha256Hash = "0d7d6n7n1zzhxpdykbwwbrw139mqxkp20d4l0570pk7975p1s2q9";
+    version = "3.5.0.15"; # "Android Studio 3.5 Beta 3"
+    build = "191.5585527";
+    sha256Hash = "0b9yj3rf3nk8y9qfmf5kjh8rwn73v7ghym1bhz864r079h7lwr53";
   };
   latestVersion = { # canary & dev
-    version = "3.5.0.8"; # "Android Studio 3.5 Canary 9"
-    build = "191.5409101";
-    sha256Hash = "06fc5l40nxm0hyn8c34wsckxxyh1i2q5a53zd4nbhwxi8wsrda7i";
+    version = "3.6.0.2"; # "Android Studio 3.6 Canary 2"
+    build = "191.5599242";
+    sha256Hash = "0aivw3lz09v7sq28ply9nczaxkwdlkb5byr8yym5qydkcv35x9gl";
   };
 in rec {
-  # Old alias (TODO @primeos: Remove after 19.03 is branched off):
-  preview = throw ''
-    The attributes "android-studio-preview" and "androidStudioPackages.preview"
-    are now deprecated and will be removed soon, please use
-    "androidStudioPackages.beta" instead. This attribute corresponds to the
-    beta channel, if you want the latest release you can use
-    "androidStudioPackages.dev" or "androidStudioPackages.canary" instead
-    (currently, there is no difference between both channels).
-  '';
-
   # Attributes are named by their corresponding release channels
 
   stable = mkStudio (stableVersion // {

@@ -8,23 +8,14 @@
 
 buildGoPackage rec {
   pname = "lxd";
-  version = "3.11";
+  version = "3.13";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0xxzrwhyzzp23arj57vjs1yh91gy3r4wpd5qy9ksifzd390clf2x";
+    sha256 = "1kasnzd8hw9biyx8avbjmpfax1pdbp9g543g8hs6xpksmk93hl82";
   };
-
-  patches = [
-    (fetchpatch {
-      url = https://github.com/CanonicalLtd/go-dqlite/commit/88a96df66e3e3bdc290fd4a0d41615d284d2c92c.patch;
-      sha256 = "0z6r4shh1rlf0in9xk1gi6ms2kcvplc3878106d2zzzfz7ad83a4";
-      extraPrefix = "dist/src/github.com/CanonicalLtd/go-dqlite/";
-      stripLen = 1;
-    })
-  ];
 
   preBuild = ''
     # unpack vendor

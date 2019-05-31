@@ -3,9 +3,9 @@
 let
   options = rec {
     x86_64-darwin = rec {
-      version = "1.1.8";
+      version = "1.2.11";
       system = "x86-64-darwin";
-      sha256 = "006pr88053wclvbjfjdypnbiw8wymbzdzi7a6kbkpdfn4zf5943j";
+      sha256 = "0lh4gpvi8hl6g6b9321g5pwh8sk3218i7h4lx7p3vd9z0cf3lz85";
     };
     x86_64-linux = rec {
       version = "1.3.16";

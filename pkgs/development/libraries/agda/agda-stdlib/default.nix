@@ -1,14 +1,14 @@
 { stdenv, agda, fetchFromGitHub, ghcWithPackages }:
 
 agda.mkDerivation (self: rec {
-  version = "0.17";
+  version = "1.0";
   name = "agda-stdlib-${version}";
 
   src = fetchFromGitHub {
     repo = "agda-stdlib";
     owner = "agda";
     rev = "v${version}";
-    sha256 = "05c5zgj9fcaqz7z2l70jh48b3g4811vm7bccj0vd9r82wi02g3p1";
+    sha256 = "19qrdfi0vig3msqg76k1zf5j3vav0jz44cvj6i4dyfbscdwf2l9c";
   };
 
   nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];

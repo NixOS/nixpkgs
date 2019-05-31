@@ -1,7 +1,6 @@
 { stdenv
 , autoreconfHook
 , fetchurl
-, fetchpatch
 , gettext
 , glib
 , gnome-bluetooth
@@ -29,24 +28,15 @@
 
 let
   pname = "gnome-flashback";
-  version = "3.30.0";
+  version = "3.32.0";
   requiredComponents = wmName: "RequiredComponents=${wmName};gnome-flashback-init;gnome-flashback;gnome-panel;org.gnome.SettingsDaemon.A11ySettings;org.gnome.SettingsDaemon.Clipboard;org.gnome.SettingsDaemon.Color;org.gnome.SettingsDaemon.Datetime;org.gnome.SettingsDaemon.Housekeeping;org.gnome.SettingsDaemon.Keyboard;org.gnome.SettingsDaemon.MediaKeys;org.gnome.SettingsDaemon.Mouse;org.gnome.SettingsDaemon.Power;org.gnome.SettingsDaemon.PrintNotifications;org.gnome.SettingsDaemon.Rfkill;org.gnome.SettingsDaemon.ScreensaverProxy;org.gnome.SettingsDaemon.Sharing;org.gnome.SettingsDaemon.Smartcard;org.gnome.SettingsDaemon.Sound;org.gnome.SettingsDaemon.Wacom;org.gnome.SettingsDaemon.XSettings;";
   gnome-flashback = stdenv.mkDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-      sha256 = "18rwql2pi78155l9zp1i50xfi5z8xz2l08m9d81x6qqbfr1nyy57";
+      sha256 = "0jfzr7vdmnxpxqqa38ni1p3c508xhlnxqpmmqshk3rvrf0afqn62";
     };
-
-    patches =[
-      # overrides do not respect gsettingsschemasdir
-      # https://gitlab.gnome.org/GNOME/gnome-flashback/issues/9
-      (fetchpatch {
-       url = https://gitlab.gnome.org/GNOME/gnome-flashback/commit/a55530f58ccd600414a5420b287868ab7d219705.patch;
-       sha256 = "1la94lhhb9zlw7bnbpl6hl26zv3kxbsvgx996mhph720wxg426mh";
-      })
-    ];
 
     # make .desktop Execs absolute
     postPatch = ''

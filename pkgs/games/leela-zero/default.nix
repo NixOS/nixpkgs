@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "leela-zero-${version}";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "gcp";
     repo = "leela-zero";
     rev = "v${version}";
-    sha256 = "1px7wqvlv414gklzgrmppp8wzc2mkskinm1p75j4snbqr8qpbn5s";
+    sha256 = "1k04ld1ysabxb8ivci3ji5by9vb3yvnflkf2fscs1x0bp7d6j101";
     fetchSubmodules = true;
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Go engine modeled after AlphaGo Zero";
     homepage    = https://github.com/gcp/leela-zero;
     license     = licenses.gpl3;
-    maintainers = [ maintainers.averelld ];
+    maintainers = [ maintainers.averelld maintainers.omnipotententity ];
     platforms   = platforms.linux;
   };
 }

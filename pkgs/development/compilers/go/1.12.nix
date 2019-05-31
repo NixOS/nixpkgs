@@ -30,11 +30,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.12";
+  version = "1.12.1";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1wl8kq21fbzmv4plnaza5acz8dhbaaq6smjzk3r6cf3l6qrkvi09";
+    sha256 = "12l12mmgqvy3nbscy7sz83qj4m6iz5a322aq9sk45f7l9ml2gq8b";
   };
 
   # perl is used for testing go vet
@@ -128,6 +128,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.11.patch
+    ./ssl-cert-file-1.12.1.patch
     ./remove-test-pie.patch
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
@@ -140,9 +141,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     find . -name '*.orig' -exec rm {} ';'
-  '' + optionalString stdenv.isDarwin ''
-    echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
-    substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
   '';
 
   GOOS = stdenv.targetPlatform.parsed.kernel.name;
@@ -192,7 +190,7 @@ stdenv.mkDerivation rec {
     (cd src && ./make.bash)
   '';
 
-  doCheck = stdenv.hostPlatform == stdenv.targetPlatform;
+  doCheck = stdenv.hostPlatform == stdenv.targetPlatform && !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck

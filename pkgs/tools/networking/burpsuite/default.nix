@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jre, runtimeShell }:
 
 let
-  version = "1.7.23";
+  version = "1.7.36";
   jar = fetchurl {
     name = "burpsuite.jar";
     url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
-    sha256 = "1y83qisn9pkn88vphpli7h8nacv8jv3sq0h04zbri25nfkgvl4an";
+    sha256 = "12m4fn04yd89r6x4m4yd668p5v0bs9b1h6p239bjj11ykyi3g51a";
   };
   launcher = ''
     #!${runtimeShell}

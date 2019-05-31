@@ -1,8 +1,9 @@
 { buildPythonPackage, lib, fetchPypi
 , pytest, filelock, mock, pep8
-, cython, isPy37, glibcLocales
+, cython, isPy27, isPy37, glibcLocales
 , six, pyshp, shapely, geos, proj, numpy
 , gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
+, xvfb_run
 }:
 
 buildPythonPackage rec {
@@ -17,10 +18,14 @@ buildPythonPackage rec {
 
   checkInputs = [ filelock mock pytest pep8 ];
 
-  # several tests require network connectivity: we disable them
-  checkPhase = ''
+  # several tests require network connectivity: we disable them.
+  # also py2.7's tk is over-eager in trying to open an x display,
+  # so give it xvfb
+  checkPhase = let
+    maybeXvfbRun = lib.optionalString isPy27 "${xvfb_run}/bin/xvfb-run";
+  in ''
     export HOME=$(mktemp -d)
-    pytest --pyargs cartopy \
+    ${maybeXvfbRun} pytest --pyargs cartopy \
       -m "not network and not natural_earth" \
       -k "not test_nightshade_image"
   '';

@@ -133,7 +133,7 @@ in
       };
 
       initialScript = mkOption {
-        type = types.nullOr types.lines;
+        type = types.nullOr types.path;
         default = null;
         description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database";
       };
@@ -360,9 +360,11 @@ in
                         echo "Creating initial database: ${database.name}"
                         ( echo 'create database `${database.name}`;'
 
-                          ${optionalString (database ? "schema") ''
+                          ${optionalString (database.schema != null) ''
                           echo 'use `${database.name}`;'
 
+                          # TODO: this silently falls through if database.schema does not exist,
+                          # we should catch this somehow and exit, but can't do it here because we're in a subshell.
                           if [ -f "${database.schema}" ]
                           then
                               cat ${database.schema}
@@ -399,7 +401,9 @@ in
                 ${optionalString (cfg.initialScript != null)
                   ''
                     # Execute initial script
-                    cat ${cfg.initialScript} | ${mysql}/bin/mysql -u root -N
+                    # using toString to avoid copying the file to nix store if given as path instead of string,
+                    # as it might contain credentials
+                    cat ${toString cfg.initialScript} | ${mysql}/bin/mysql -u root -N
                   ''}
 
                 ${optionalString (cfg.rootPassword != null)

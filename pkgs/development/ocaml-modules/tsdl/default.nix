@@ -7,7 +7,7 @@ else
 let
   pname = "tsdl";
   version = "0.9.4";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 stdenv.mkDerivation {

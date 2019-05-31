@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-nohotcorner-${version}";
-  version = "18.0";
+  version = "19.0";
 
   src = fetchFromGitHub {
     owner = "HROMANO";
     repo = "nohotcorner";
     rev = "v${version}";
-    sha256 = "0vajiys93gs7fs9v6brgf8fplkmh28j103in3wq04l34cx5sqkks";
+    sha256 = "059n4gyz7d686hknaifyjax8gygrda1xab5m15a09p98jdrdfdhi";
   };
 
   # Taken from the extension download link at

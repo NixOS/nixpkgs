@@ -3,14 +3,14 @@
 
 let
   pname = "glib-networking";
-  version = "2.58.0";
+  version = "2.60.2";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0s006gs9nsq6mg31spqha1jffzmp6qjh10y27h0fxf1iw1ah5ymx";
+    sha256 = "0cl74q7hvq4xqqc88vlzmfw1sh5n9hdh1yvn2v1vg9am1z8z68n0";
   };
 
   outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     python3 # install_script
   ];
   propagatedBuildInputs = [ glib gnutls p11-kit libproxy gsettings-desktop-schemas ];
+
+  mesonFlags = [
+    # Default auto detection doesn't work
+    "-Dgnutls=enabled"
+  ];
 
   doCheck = false; # tests need to access the certificates (among other things)
 

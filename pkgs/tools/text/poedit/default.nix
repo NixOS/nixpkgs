@@ -1,20 +1,46 @@
-{ stdenv, fetchurl, wxGTK29, boost }:
+{ stdenv, fetchurl, autoconf, automake, libtool, gettext, pkgconfig, wxGTK30,
+  boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk2, gtkspell2, pugixml,
+  nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "poedit-1.5.7";
+  name = "poedit-${version}";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/poedit/${name}.tar.gz";
-    sha256 = "0y0gbkb1jvp61qhh8sh7ar8849mwirizc42pk57zpxy84an5qlr4";
+    url = "https://github.com/vslavik/poedit/archive/v${version}-oss.tar.gz";
+    sha256 = "0brj6ysisxng2xn8l9ii2rngsj5b4rk27hzfjbp3zwb2caagd3vq";
   };
 
-  buildInputs = [ wxGTK29 boost ];
+  nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook 
+    libxslt xmlto boost libtool pkgconfig ];
+
+  buildInputs = [ lucenepp nlohmann_json wxGTK30 icu pugixml gtk2 gtkspell2 hicolor-icon-theme ];
+
+  propagatedBuildInputs = [ gettext ];
+  
+  preConfigure = "
+    patchShebangs bootstrap
+    ./bootstrap
+  ";
+
+  configureFlags = [
+    "--without-cld2"
+    "--without-cpprest"
+    "--with-boost-libdir=${boost.out}/lib"
+    "CPPFLAGS=-I${nlohmann_json}/include/nlohmann/"
+  ];
+ 
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ gettext ]}")
+  '';
+ 
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Cross-platform gettext catalogs (.po files) editor";
-    homepage = http://www.poedit.net/;
+    homepage = https://www.poedit.net/;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ domenkozar genesis ];
   };
 }

@@ -17,7 +17,7 @@ let
     chmod +x $out/startwm.sh
 
     substituteInPlace $out/xrdp.ini \
-      --replace "#rsakeys_ini=" "rsakeys_ini=/var/run/xrdp/rsakeys.ini" \
+      --replace "#rsakeys_ini=" "rsakeys_ini=/run/xrdp/rsakeys.ini" \
       --replace "certificate=" "certificate=${cfg.sslCert}" \
       --replace "key_file=" "key_file=${cfg.sslKey}" \
       --replace LogFile=xrdp.log LogFile=/dev/null \
@@ -132,9 +132,9 @@ in
             chown root:xrdp ${cfg.sslKey} ${cfg.sslCert}
             chmod 440 ${cfg.sslKey} ${cfg.sslCert}
           fi
-          if [ ! -s /var/run/xrdp/rsakeys.ini ]; then
-            mkdir -p /var/run/xrdp
-            ${cfg.package}/bin/xrdp-keygen xrdp /var/run/xrdp/rsakeys.ini
+          if [ ! -s /run/xrdp/rsakeys.ini ]; then
+            mkdir -p /run/xrdp
+            ${cfg.package}/bin/xrdp-keygen xrdp /run/xrdp/rsakeys.ini
           fi
         '';
         serviceConfig = {

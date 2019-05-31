@@ -29,6 +29,12 @@ mkDerivation rec {
       variables.pri
   '';
 
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    ln -sf $out/lib/*/libqlcplus* $out/lib
+  '';
+
   meta = with stdenv.lib; {
     description = "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc.";
     maintainers = [ maintainers.globin ];

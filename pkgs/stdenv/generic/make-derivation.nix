@@ -1,6 +1,13 @@
 { lib, config, stdenv }:
 
-rec {
+let
+  checkMeta = import ./check-meta.nix {
+    inherit lib config;
+    # Nix itself uses the `system` field of a derivation to decide where
+    # to build it. This is a bit confusing for cross compilation.
+    inherit (stdenv) hostPlatform;
+  };
+in rec {
   # `mkDerivation` wraps the builtin `derivation` function to
   # produce derivations that use this stdenv and its shell.
   #
@@ -78,6 +85,8 @@ rec {
 
     , hardeningEnable ? []
     , hardeningDisable ? []
+
+    , patches ? []
 
     , ... } @ attrs:
 
@@ -228,6 +237,8 @@ rec {
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
+          inherit patches;
+
           inherit doCheck doInstallCheck;
 
           inherit outputs;
@@ -246,6 +257,8 @@ rec {
           enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
+        } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? platform.gcc.arch) {
+          requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch}" ];
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           inherit __darwinAllowLocalNetworking;
           # TODO: remove lib.unique once nix has a list canonicalization primitive
@@ -263,12 +276,7 @@ rec {
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
         };
 
-      validity = import ./check-meta.nix {
-        inherit lib config meta;
-        # Nix itself uses the `system` field of a derivation to decide where
-        # to build it. This is a bit confusing for cross compilation.
-        inherit (stdenv) hostPlatform;
-      } attrs;
+      validity = checkMeta { inherit meta attrs; };
 
       # The meta attribute is passed in the resulting attribute set,
       # but it's not part of the actual derivation, i.e., it's not

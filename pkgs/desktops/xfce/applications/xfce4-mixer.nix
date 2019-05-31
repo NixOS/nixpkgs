@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit gst_plugins; };
 
   meta = {
-    homepage = http://www.xfce.org/projects/xfce4-mixer; # referenced but inactive
+    homepage = https://www.xfce.org/projects/xfce4-mixer; # referenced but inactive
     description = "A volume control application for the Xfce desktop environment";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

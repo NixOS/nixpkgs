@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, bison, flex, unixODBC
+{ stdenv, fetchurl, fetchpatch, pkgconfig, bison, flex, unixODBC, gnome3
 , openssl, openldap, cyrus_sasl, kerberos, expat, SDL, libdv, libv4l, alsaLib }:
 
 stdenv.mkDerivation rec {
-  name = "ptlib-2.10.11";
+  pname = "ptlib";
+  version = "2.10.11";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/ptlib/2.10/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1jf27mjz8vqnclhrhrpn7niz4c177kcjbd1hc7vn65ihcqfz05rs";
   };
 
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Portable Tools from OPAL VoIP";
     maintainers = [ maintainers.raskin ];
+    homepage = "http://www.opalvoip.org/";
     platforms = platforms.linux;
     license = with licenses; [ beerware bsdOriginal mpl10 ];
   };
@@ -44,6 +46,9 @@ stdenv.mkDerivation rec {
   passthru = {
     updateInfo = {
       downloadPage = "http://ftp.gnome.org/sources/ptlib/";
+    };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
     };
   };
 }

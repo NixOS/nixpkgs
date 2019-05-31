@@ -32,7 +32,7 @@ let
     cd ${pkgs.nextcloud}
     exec /run/wrappers/bin/sudo -u nextcloud \
       NEXTCLOUD_CONFIG_DIR="${cfg.home}/config" \
-      ${config.services.phpfpm.phpPackage}/bin/php \
+      ${phpPackage}/bin/php \
       -c ${pkgs.writeText "php.ini" phpOptionsStr}\
       occ $*
   '';
@@ -257,6 +257,23 @@ in {
         '';
       };
     };
+    autoUpdateApps = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Run regular auto update of all apps installed from the nextcloud app store.
+        '';
+      };
+      startAt = mkOption {
+        type = with types; either str (listOf str);
+        default = "05:00:00";
+        example = "Sun 14:00:00";
+        description = ''
+          When to run the update. See `systemd.services.&lt;name&gt;.startAt`.
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -360,7 +377,12 @@ in {
           environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${pkgs.php}/bin/php -f ${pkgs.nextcloud}/cron.php";
+          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${pkgs.nextcloud}/cron.php";
+        };
+        "nextcloud-update-plugins" = mkIf cfg.autoUpdateApps.enable {
+          serviceConfig.Type = "oneshot";
+          serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+          startAt = cfg.autoUpdateApps.startAt;
         };
       };
 

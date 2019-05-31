@@ -15,6 +15,8 @@ in buildUBoot rec {
     sha256 = "0gclcd034qfhfbabrdqmky08i0hlwmn63n0zg6mndplms5qpcx75";
   };
 
+  patches = [ ./rock64-fdt-dtc-compatibility.patch ];
+
   # Upstream ATF hangs in SPL
   extraMakeFlags = [ "BL31=${rkbin}/rk33/rk3399_bl31_v1.17.elf" "u-boot.itb" "all" ];
 

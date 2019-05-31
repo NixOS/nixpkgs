@@ -59,10 +59,10 @@ in rec {
   cudnn_cudatoolkit_9 = cudnn_cudatoolkit_9_2;
 
   cudnn_cudatoolkit_10_0 = generic rec {
-    version = "7.3.1";
+    version = "7.4.2";
     cudatoolkit = cudatoolkit_10_0;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.3.1.20.tgz";
-    sha256 = "1yp35mng4ym40g5rqp63dcpa6jg4q1pnjkspnhlakzzdy8is65af";
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.4.2.24.tgz";
+    sha256 = "18ys0apiz9afid2s6lvy9qbyi8g66aimb2a7ikl1f3dm09mciprf";
   };
 
   cudnn_cudatoolkit_10 = cudnn_cudatoolkit_10_0;

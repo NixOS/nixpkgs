@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.10.10";
+  version = "0.12.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1qbcwq89g4r67k1dj4laqj441pj4195c8hzhxn8vc6mmg8adg6kx";
+    sha256 = "0slj5yj8c90l9pp5i3z74x5r3r4da0xfmbzkfq5k0dkg72q3kxaq";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_43 ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ exiv2 ];
 
   mesonFlags = [
-    "-Denable-gtk-doc=true" # TODO: change to gtk_doc in a next release
+    "-Dgtk_doc=true"
   ];
 
   doCheck = true;

@@ -26,8 +26,7 @@ stdenv.mkDerivation rec {
   unpackPhase = ":";
 
   installPhase = ''
-    mkdir -p $out/share/fonts/truetype/migmix
-    find $srcs -name '*.ttf' | xargs install -m644 --target $out/share/fonts/truetype/migmix
+    find $srcs -name '*.ttf' -exec install -m644 -Dt $out/share/fonts/truetype/migmix {} \;
   '';
 
   outputHashAlgo = "sha256";
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     description = "A high-quality Japanese font based on M+ fonts and IPA fonts";
     homepage = http://mix-mplus-ipa.osdn.jp/migmix;
     license = licenses.ipa;
-    platforms = platforms.unix;
     maintainers = [ maintainers.mikoim ];
   };
 }

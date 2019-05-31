@@ -1,18 +1,15 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerApp }:
 
-bundlerEnv {
-  name = "drake-0.9.2.0.3.1";
+bundlerApp {
+  pname = "drake";
+  gemdir = ./.;
+  exes = [ "drake" ];
 
-  inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
-  
   meta = with lib; {
     description = "A branch of Rake supporting automatic parallelizing of tasks";
     homepage = http://quix.github.io/rake/;
+    maintainers = with maintainers; [ romildo manveru ];
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ romildo ];
   };
 }

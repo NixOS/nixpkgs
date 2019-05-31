@@ -690,7 +690,7 @@ in
 
         ; Don't advertise PHP
         expose_php = off
-      '' + optionalString (!isNull config.time.timeZone) ''
+      '' + optionalString (config.time.timeZone != null) ''
 
         ; Apparently PHP doesn't use $TZ.
         date.timezone = "${config.time.timeZone}"
@@ -705,10 +705,7 @@ in
 
         path =
           [ httpd pkgs.coreutils pkgs.gnugrep ]
-          ++ # Needed for PHP's mail() function.  !!! Probably the
-             # ssmtp module should export the path to sendmail in
-             # some way.
-             optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp
+          ++ optional enablePHP pkgs.system-sendmail # Needed for PHP's mail() function.
           ++ concatMap (svc: svc.extraServerPath) allSubservices;
 
         environment =

@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w35ypl960pczg5kp6km3dyr000m1hf0vpwwlh72jjkjza36c1v8";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libgpgerror libassuan libcap libsecret gtk2 gcr ncurses qt ];
 
   prePatch = ''
@@ -19,7 +20,8 @@ stdenv.mkDerivation rec {
 
   patches = lib.optionals (gtk2 != null) [
     (fetchpatch {
-      url = https://sources.debian.org/data/main/p/pinentry/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
+      url = "https://salsa.debian.org/debian/pinentry/raw/debian/1.1.0-1/debian/patches/"
+          + "0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch";
       sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
     })
   ];
@@ -33,9 +35,10 @@ stdenv.mkDerivation rec {
     (stdenv.lib.enableFeature (gtk2 != null)      "pinentry-gtk2")
     (stdenv.lib.enableFeature (gcr != null)       "pinentry-gnome3")
     (stdenv.lib.enableFeature (qt != null)        "pinentry-qt")
-  ];
 
-  nativeBuildInputs = [ pkgconfig ];
+    "--with-libassuan-prefix=${libassuan.dev}"
+    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://gnupg.org/aegypten2/;

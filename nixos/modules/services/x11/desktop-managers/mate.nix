@@ -42,7 +42,7 @@ in
 
   };
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf cfg.enable {
 
     services.xserver.desktopManager.session = singleton {
       name = "mate";

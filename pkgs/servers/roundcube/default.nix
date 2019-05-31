@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchzip, buildEnv, roundcube, roundcubePlugins }:
-let
-  version = "1.3.8";
-in
-fetchzip rec {
-  name= "roundcube-${version}";
+{ lib, fetchurl, stdenv, buildEnv, roundcube, roundcubePlugins }:
 
-  url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
-  sha256 = "1lhwr13bglm8rqgamnb480b07wpqhw9bskjj2xxb0x8kdjly29ks";
+stdenv.mkDerivation rec {
+  pname = "roundcube";
+  version = "1.3.9";
 
-  extraPostFetch = ''
+  src = fetchurl {
+    url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
+    sha256 = "1b91amcpzb7935hpm67iqw92bl5r1a0rkfrc8gfm8w9sngzv8vbj";
+  };
+
+  patches = [ ./0001-Don-t-resolve-symlinks-when-trying-to-find-INSTALL_P.patch ];
+
+  dontBuild = true;
+
+  installPhase = ''
+    mkdir $out
+    cp -r * $out/
     ln -sf /etc/roundcube/config.inc.php $out/config/config.inc.php
     rm -rf $out/installer
   '';

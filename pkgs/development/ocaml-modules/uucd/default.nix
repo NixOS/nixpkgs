@@ -2,7 +2,7 @@
 
 let
   pname = "uucd";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, patchelfUnstable }:
 
 with stdenv.lib;
 
@@ -24,13 +24,18 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
+  nativeBuildInputs = [ patchelfUnstable ];
+
   unpackPhase = "cp $src ngrok";
 
   buildPhase = "chmod a+x ngrok";
 
   installPhase = ''
     install -D ngrok $out/bin/ngrok
-  '';
+
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+              $out/bin/ngrok
+    '';
 
   passthru.updateScript = ./update.sh;
 

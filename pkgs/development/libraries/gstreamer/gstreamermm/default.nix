@@ -1,14 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, file, glibmm, gst_all_1 }:
-
-let
-  ver_maj = "1.10";
-  ver_min = "0";
-in
+{ stdenv, fetchurl, pkgconfig, file, glibmm, gst_all_1, gnome3 }:
 stdenv.mkDerivation rec {
-  name = "gstreamermm-${ver_maj}.${ver_min}";
+  pname = "gstreamermm";
+  version = "1.10.0";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/gstreamermm/${ver_maj}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0q4dx9sncqbwgpzma0zvj6zssc279yl80pn8irb95qypyyggwn5y";
   };
 
@@ -20,9 +16,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none"; # Unpredictable version stability
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "C++ interface for GStreamer";
-    homepage = https://gstreamer.freedesktop.org/bindings/cplusplus.html;
+    homepage = "https://gstreamer.freedesktop.org/bindings/cplusplus.html";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

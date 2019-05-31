@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "700d1781c999af25d11bfd1f3e158ebb660f72ebccb2040ecafe5069d0b2c0b6";
+    sha256 = "d15e7238015095a12c19379565a66285e989fdcb3807ec360b27338cd8bdaf05";
   };
 
   nativeBuildInputs = [
@@ -25,18 +25,19 @@ buildPythonPackage rec {
 
   preConfigure = ''
     sed \
-      -e "s/^origincdirs = .*/origincdirs = []/" \
-      -e "s/^origlibdirs = .*/origlibdirs = []/" \
+      -e "s/origincdirs = .*/origincdirs = []/" \
+      -e "s/origlibdirs = .*/origlibdirs = []/" \
+      -e "/'\/lib\/i386-linux-gnu', '\/lib\/x86_64-linux-gnu']/d" \
       -e "/\/include\/smpeg/d" \
-      -i config_unix.py
+      -i buildconfig/config_unix.py
     ${lib.concatMapStrings (dep: ''
       sed \
-        -e "/^origincdirs =/aorigincdirs += ['${lib.getDev dep}/include']" \
-        -e "/^origlibdirs =/aoriglibdirs += ['${lib.getLib dep}/lib']" \
-        -i config_unix.py
+        -e "/origincdirs =/a\        origincdirs += ['${lib.getDev dep}/include']" \
+        -e "/origlibdirs =/a\        origlibdirs += ['${lib.getLib dep}/lib']" \
+        -i buildconfig/config_unix.py
       '') buildInputs
     }
-    LOCALBASE=/ ${python.interpreter} config.py
+    LOCALBASE=/ ${python.interpreter} buildconfig/config.py
   '';
 
   meta = with lib; {

@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, libexecinfo }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
-  version = "0.3.2";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "169ha105qgcvj93hf1bhlya2nlwh8g5fvypd6whfjs9k0hqddi0c";
+    sha256 = "04wrmrw83vypqzsq88b2q8kp5sfbv0qsci3bcxw0c2mfxqk8358n";
   };
 
   nativeBuildInputs = [ cmake ];

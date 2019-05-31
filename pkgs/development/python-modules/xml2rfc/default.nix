@@ -1,5 +1,6 @@
 { lib, fetchPypi, buildPythonPackage, intervaltree, pyflakes, requests, lxml, google-i18n-address
 , pycountry, html5lib, six
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,8 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";

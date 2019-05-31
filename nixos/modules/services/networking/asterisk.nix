@@ -45,7 +45,7 @@ let
       astdatadir => /var/lib/asterisk
       astagidir => /var/lib/asterisk/agi-bin
       astspooldir => /var/spool/asterisk
-      astrundir => /var/run/asterisk
+      astrundir => /run/asterisk
       astlogdir => /var/log/asterisk
       astsbindir => ${cfg.package}/sbin
     '';
@@ -257,7 +257,7 @@ in
         ExecReload = ''${cfg.package}/bin/asterisk -x "core reload"
           '';
         Type = "forking";
-        PIDFile = "/var/run/asterisk/asterisk.pid";
+        PIDFile = "/run/asterisk/asterisk.pid";
       };
     };
   };

@@ -1,19 +1,19 @@
 { lib, stdenv, fetchurl, pkgconfig, libftdi, pciutils }:
 
-let version = "1.0"; in
 stdenv.mkDerivation rec {
   name = "flashrom-${version}";
+  version = "1.0.1";
 
   src = fetchurl {
-    url = "https://download.flashrom.org/releases/${name}.tar.bz2";
-    sha256 = "0i9wg1lyfg99bld7d00zqjm9f0lk6m0q3h3n9c195c9yysq5ccfb";
+    url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
+    sha256 = "0i6yrrl69hrqmwd7azj7x3j46m0qpvzmk3b5basym7mnlpfzhyfm";
   };
 
   # Newer versions of libusb deprecate some API flashrom uses.
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "-Werror" "-Werror -Wno-error=deprecated-declarations -Wno-error=unused-const-variable="
-  '';
+  #postPatch = ''
+  #  substituteInPlace Makefile \
+  #    --replace "-Werror" "-Werror -Wno-error=deprecated-declarations -Wno-error=unused-const-variable="
+  #'';
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libftdi pciutils ];

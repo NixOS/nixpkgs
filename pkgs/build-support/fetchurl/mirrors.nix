@@ -308,6 +308,8 @@ rec {
   hackage = [
     http://hackage.haskell.org/package/
     http://hdiff.luite.com/packages/archive/package/
+    http://hackage.fpcomplete.com/package/
+    http://objects-us-east-1.dream.io/hackage-mirror/package/
   ];
 
   # Roy marples mirrors

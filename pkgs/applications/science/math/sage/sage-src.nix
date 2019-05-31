@@ -10,14 +10,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.6";
-  name = "sage-src-${version}";
+  version = "8.7";
+  pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "1vs3pbgbqpg0qnwr018bqsdmm7crgjp310cx8zwh7za3mv1cw5j3";
+    sha256 = "05vvrd6syh0hlmrk6kzjrwd0hpmvxp8vr8p3mkjb0jh5p2kjdd27";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -37,12 +37,6 @@ stdenv.mkDerivation rec {
     # https://github.com/python/cpython/pull/7476
     ./patches/python-5755-hotpatch.patch
 
-    # Revert the commit that made the sphinx build fork even in the single thread
-    # case. For some yet unknown reason, that breaks the docbuild on nix and archlinux.
-    # See https://groups.google.com/forum/#!msg/sage-packaging/VU4h8IWGFLA/mrmCMocYBwAJ.
-    # https://trac.sagemath.org/ticket/26608
-    ./patches/revert-sphinx-always-fork.patch
-
     # Make sure py2/py3 tests are only run when their expected context (all "sage"
     # tests) are also run. That is necessary to test dochtml individually. See
     # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
@@ -58,6 +52,21 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/science-team/sagemath/raw/8a215b17e6f791ddfae6df8ce6d01dfb89acb434/debian/patches/df-subprocess-sphinx.patch";
       sha256 = "07p9i0fwjgapmfvmi436yn6v60p8pvmxqjc93wsssqgh5kd8qw3n";
       stripLen = 1;
+    })
+
+    # Part of the build system. Should become unnecessary with sage 8.8.
+    # Upstream discussion here: https://trac.sagemath.org/ticket/27124#comment:33
+    ./patches/do-not-test-package-manifests.patch
+
+    # Not necessary since library location is set explicitly
+    # https://trac.sagemath.org/ticket/27660#ticket
+    ./patches/do-not-test-find-library.patch
+
+    # https://trac.sagemath.org/ticket/27697#ticket
+    (fetchpatch {
+      name = "pplpy-doc-location-configurable.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=c4d966e7cb0c7b87c55d52dc6f46518433a2a0a2";
+      sha256 = "0pqbbsx8mriwny422s9mp3z5d095cnam32sm62q4mxk8g8jb9vm9";
     })
   ];
 
@@ -104,39 +113,42 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
 
-    # https://trac.sagemath.org/ticket/26315
-    ./patches/giac-1.5.0.patch
-
-    # https://trac.sagemath.org/ticket/26442
-    (fetchSageDiff {
-      name = "cypari2-2.0.3.patch";
-      base = "8.6.rc1";
-      rev = "cd62d45bcef93fb4f7ed62609a46135e6de07051";
-      sha256 = "08l2b9w0rn1zrha6188j72f7737xs126gkgmydjd31baa6367np2";
-    })
-
-    # https://trac.sagemath.org/ticket/26949
-    (fetchpatch {
-      name = "sphinx-1.8.3-dependency.patch";
-      url = "https://git.sagemath.org/sage.git/patch?id=d305eda0fedc73fdbe0447b5d6d2b520b8d112c4";
-      sha256 = "1x3q5j8lq35vlj893gj5gq9fhzs60szm9r9rx6ri79yiy9apabph";
-    })
     # https://trac.sagemath.org/ticket/26451
-    (fetchpatch {
-      name = "sphinx-1.8.3.patch";
-      url = "https://git.sagemath.org/sage.git/patch?id2=0cb494282d7b4cea50aba7f4d100e7932a4c00b1&id=62b989d5ee1d9646db85ea56053cd22e9ffde5ab";
-      sha256 = "1n5c61mvhalcr2wbp66wzsynwwk59aakvx3xqa5zw9nlkx3rd0h1";
+    (fetchSageDiff {
+      name = "sphinx-1.8.patch";
+      base = "8.7";
+      rev = "737afd8f314bd1e16feaec562bb4b5efa2effa8b";
+      sha256 = "0n56ss88ds662bp49j23z5c2i6hsn3jynxw13wv76hyl0h7l1hjh";
     })
 
-    # https://trac.sagemath.org/ticket/27061
+    # https://trac.sagemath.org/ticket/27653
     (fetchpatch {
-      name = "numpy-1.16-inline-fortran.patch";
-      url = "https://git.sagemath.org/sage.git/patch?id=a05b6b038e1571ab15464e98f76d1927c0c3fd12";
-      sha256 = "05yq97pq84xi60wb1p9skrad5h5x770gq98ll4frr7hvvmlwsf58";
+      name = "sympy-1.4.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=3277ba76d0ba7174608a31a0c6623e9210c63e3d";
+      sha256 = "09avaanwmdgqv14mmllbgw9z2scf4lc0y0kzdhlriiq8ss9j8iir";
     })
 
-    # https://trac.sagemath.org/ticket/27405
-    ./patches/ignore-pip-deprecation.patch
+    # https://trac.sagemath.org/ticket/27094
+    (fetchpatch {
+      name = "gap-4.10.1.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=d3483110474591ea6cc8e3210cd884f3e0018b3e";
+      sha256 = "028i6h8l8npwzx5z0ax0rcywl85gc83qw1jf93zf523msdfcsk0n";
+    })
+
+    # https://trac.sagemath.org/ticket/27738
+    (fetchpatch {
+      name = "R-3.6.0.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=8b7dbd0805d02d0e8674a272e161ceb24a637966";
+      sha256 = "1c81f13z1w62s06yvp43gz6vkp8mxcs289n6l4gj9xj10slimzff";
+    })
+
+    # https://trac.sagemath.org/ticket/26932
+    (fetchSageDiff {
+      name = "givaro-4.1.0_fflas-ffpack-2.4.0_linbox-1.6.0.patch";
+      base = "8.8.beta4";
+      rev = "c11d9cfa23ff9f77681a8f12742f68143eed4504";
+      sha256 = "0xzra7mbgqvahk9v45bjwir2mqz73hrhhy314jq5nxrb35ysdxyi";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
@@ -149,6 +161,12 @@ stdenv.mkDerivation rec {
 
     echo '#!${runtimeShell}
     python "$@"' > build/bin/sage-python23
+
+    # Make sure sage can at least be imported without setting any environment
+    # variables. It won't be close to feature complete though.
+    sed -i \
+      "s|var('SAGE_LOCAL',.*|var('SAGE_LOCAL', '$out/src')|" \
+      src/sage/env.py
 
     # Do not use sage-env-config (generated by ./configure).
     # Instead variables are set manually.

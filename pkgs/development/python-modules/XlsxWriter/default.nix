@@ -3,7 +3,7 @@
 buildPythonPackage rec {
 
   pname = "XlsxWriter";
-  version = "1.1.5";
+  version = "1.1.7";
 
   # PyPI release tarball doesn't contain tests so let's use GitHub. See:
   # https://github.com/jmcnamara/XlsxWriter/issues/327
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "jmcnamara";
     repo = pname;
     rev = "RELEASE_${version}";
-    sha256 = "13250y53mr0pki93sqscy2bx01fxh6b6wvvj6m95ky0wqrrbmg39";
+    sha256 = "1zv5222bymfr7046ps5512x1kk7ipcx46jjxylaap1p6llqj7zlj";
   };
 
   meta = {

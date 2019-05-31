@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sed -i '/target[ ]*= "ttl2c"/ ilib=["boost_system"],' tools/wscript_build
   '';
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
   ];

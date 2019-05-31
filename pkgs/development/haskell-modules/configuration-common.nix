@@ -84,7 +84,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "08gw3b5gbbxs2dr3b4zf9xsvhbvpqjj4ikmvzmcvs3fh1q65xbgl";
+      sha256 = "0arripb1w3dcabjipdjrdq46q2z0l4b7jp0vl5iyhq7j0blg13xh";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -142,6 +142,7 @@ self: super: {
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
+  classy-prelude-yesod = dontHaddock super.classy-prelude-yesod; # https://github.com/haskell/haddock/issues/979
 
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
@@ -164,10 +165,7 @@ self: super: {
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else appendPatch super.hakyll (pkgs.fetchpatch {
-      url = "https://github.com/jaspervdj/hakyll/pull/691/commits/a44ad37cd15310812e78f7dab58d6d460451f20c.patch";
-      sha256 = "13xpznm19rjp51ds165ll9ahyps1r4131c77b8r7gpjd6i505832";
-    });
+    else super.hakyll;
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
@@ -764,7 +762,7 @@ self: super: {
       };
     in overrideCabal super.servant (old: {
       postInstall = old.postInstall or "" + ''
-        ln -s ${docs} $doc/share/doc/servant
+        ln -s ${docs} ''${!outputDoc}/share/doc/servant
       '';
     });
 
@@ -871,8 +869,17 @@ self: super: {
   # https://github.com/takano-akio/filelock/issues/5
   filelock = dontCheck super.filelock;
 
-  # cryptol-2.5.0 doesn't want happy 1.19.6+.
-  cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
+  # Wrap the generated binaries to include their run-time dependencies in
+  # $PATH. Also, cryptol needs a version of sbl that's newer than what we have
+  # in LTS-13.x.
+  cryptol = overrideCabal (super.cryptol.override { sbv = self.sbv_8_2; }) (drv: {
+    buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
+    postInstall = drv.postInstall or "" + ''
+      for b in $out/bin/cryptol $out/bin/cryptol-html; do
+        wrapProgram $b --prefix 'PATH' ':' "${pkgs.lib.getBin pkgs.z3}/bin"
+      done
+    '';
+  });
 
   # Tests try to invoke external process and process == 1.4
   grakn = dontCheck (doJailbreak super.grakn);
@@ -1193,15 +1200,10 @@ self: super: {
     sha256 = "1qwy8bj6vywhp0075dza8j90zrzsm3144qz3c703s9c4n6pg3gw4";
     });
 
-  # These patches contain fixes for 8.6 that should be safe for
-  # earlier versions, but we need the relaxed version bounds in GHC
-  # 8.4 builds. beam needs to release a round of updates that relax
-  # bounds and include the 8.6 fixes:
-  # https://github.com/tathougies/beam/issues/315
-  beam-core = appendPatch super.beam-core ./patches/beam-core-fix-ghc-8.6.x-build.patch;
-  beam-migrate = appendPatch super.beam-migrate ./patches/beam-migrate-fix-ghc-8.6.x-build.patch;
-  beam-postgres = appendPatch super.beam-postgres ./patches/beam-postgres-fix-ghc-8.6.x-build.patch;
-  beam-sqlite = appendPatch super.beam-sqlite ./patches/beam-sqlite-fix-ghc-8.6.x-build.patch;
+  # Requires pg_ctl command during tests
+  beam-postgres = overrideCabal super.beam-postgres (drv: {
+    testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
+    });
 
   # https://github.com/sighingnow/computations/pull/1
   primesieve = appendPatch super.primesieve (pkgs.fetchpatch {
@@ -1228,11 +1230,12 @@ self: super: {
 
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  pandoc = doDistribute super.pandoc_2_7_1;
-  pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_1_3;
+  pandoc = doDistribute super.pandoc_2_7_2;
+  pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_2;
 
-  # https://github.com/qfpl/tasty-hedgehog/issues/24
-  tasty-hedgehog = dontCheck super.tasty-hedgehog;
+  # Current versions of tasty-hedgehog need hedgehog 1.x, which
+  # we don't have in LTS-13.x.
+  tasty-hedgehog = super.tasty-hedgehog.override { hedgehog = self.hedgehog_1_0; };
 
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
@@ -1248,5 +1251,35 @@ self: super: {
 
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
+
+  # Break out of pandoc >=2.0 && <2.7 (https://github.com/pbrisbin/yesod-markdown/pull/65)
+  yesod-markdown = doJailbreak super.yesod-markdown;
+
+  # These packages needs network 3.x, which is not in LTS-13.x.
+  network-bsd = super.network-bsd.override { network = self.network_3_0_1_1; };
+  lambdabot-core = super.lambdabot-core.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
+  lambdabot-reference-plugins = super.lambdabot-reference-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
+  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; socks = self.socks_0_6_0; connection = self.connection_0_3_0; haskell-src-exts = self.haskell-src-exts_1_21_0; });
+
+  # Some tests depend on a postgresql instance
+  # Haddock failure: https://github.com/haskell/haddock/issues/979
+  esqueleto = dontHaddock (dontCheck super.esqueleto);
+
+  # Requires API keys to run tests
+  algolia = dontCheck super.algolia;
+
+  # antiope-s3's latest stackage version has a hspec < 2.6 requirement, but
+  # hspec which isn't in stackage is already past that
+  antiope-s3 = doJailbreak super.antiope-s3;
+
+  # Has tasty < 1.2 requirement, but works just fine with 1.2
+  temporary-resourcet = doJailbreak super.temporary-resourcet;
+
+  # Tests require internet
+  dhall_1_23_0 = dontCheck super.dhall_1_23_0;
+
+  # Requires dhall >= 1.23.0
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_23_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_23_0; };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     qmake
     qttools
     deepin-gettext-tools
+    deepin.setupHook
   ];
 
   buildInputs = [
@@ -27,11 +28,14 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    searchHardCodedPaths
+    patchShebangs translate_generation.sh
+    patchShebangs translate_desktop.sh
+
+    fixPath $out /usr com.deepin.Calendar.service
+
     sed -i translate_desktop.sh \
       -e "s,/usr/bin/deepin-desktop-ts-convert,deepin-desktop-ts-convert,"
-    sed -i com.deepin.Calendar.service \
-      -e "s,/usr,$out,"
   '';
 
   passthru.updateScript = deepin.updateScript { inherit name; };

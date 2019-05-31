@@ -5,16 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4";
+  version = "1.5";
   pname = "progress";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e2f9da88ed8236a76fffbee3ceefd259589cf42dfbc2cec2877102189fae58a";
+    sha256 = "0wj3wvdgfmqj44n32wag3mzpp5fjqkkd321x67v1prxvs78yvv39";
   };
-
-  # tests not packaged with pypi release
-  doCheck = false;
 
   checkPhase = ''
     ${python.interpreter} test_progress.py

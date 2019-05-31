@@ -4,7 +4,7 @@
 , dbus, gtk2, gtk3, qt4, extra-cmake-modules
 , xkeyboard_config, pcre, libuuid
 , withPinyin ? true
-, fetchFromGitHub
+, fetchFromGitLab
 }:
 
 let
@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "fcitx-${version}";
-  version = "4.2.9.5";
+  version = "4.2.9.6";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "fcitx";
     repo = "fcitx";
     rev = version;
-    sha256 = "0rv69bacdvblka85dakz4ldpznrgwj59nqcccp5mkkn1rab4zh1r";
+    sha256 = "0j5vaf930lb21gx4h7z6mksh1fazqw32gajjjkyir94wbmml9n3s";
   };
 
   # put data at the correct locations else cmake tries to fetch them,

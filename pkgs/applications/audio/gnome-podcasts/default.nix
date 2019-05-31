@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitLab, meson, ninja, gettext, cargo, rustc, python3, rustPlatform, pkgconfig, gnome3
+{ stdenv, fetchurl, fetchpatch, fetchFromGitLab, meson, ninja, gettext, cargo, rustc, python3, rustPlatform, pkgconfig, gnome3
 , glib, libhandy, gtk3, dbus, openssl, sqlite, gst_all_1, wrapGAppsHook }:
 
 # TODO: build from git for easier updates
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
     url = https://gitlab.gnome.org/World/podcasts/uploads/e59ac5d618d7daf4c7f33ba72957c466/gnome-podcasts-0.4.6.tar.xz;
     sha256 = "0g2rk3w251fp5jwbxs5ya1adv8nsgdqjy1vmfg8qqab6qyndhbrc";
   };
+
+  patches = [
+    # podcasts-data would fail to build because it errors on warnings
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/podcasts/commit/7dc1b25ee7fc59a188312d31b1fa00c3110ae63e.patch";
+      sha256 = "03ibbh1snk1391vnni529agqs14lzg5g0axjgpf3gn8dwwh1yvd5";
+    })
+  ];
 
   # src = fetchFromGitLab {
   #   domain = "gitlab.gnome.org";

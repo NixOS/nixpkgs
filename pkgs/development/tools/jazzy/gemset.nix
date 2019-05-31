@@ -5,10 +5,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0pqr25wmhvvlg8av7bi5p5c7r5464clhhhhv45j63bh7xw4ad6n4";
+      sha256 = "1vbq7a805bfvyik2q3kl9s3r418f5qzvysqbz2cwy4hr7m2q4ir6";
       type = "gem";
     };
-    version = "4.2.11";
+    version = "4.2.11.1";
   };
   atomos = {
     groups = ["default"];
@@ -65,10 +65,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0m3hi4va9cr7anxkjf44as14j1hsrvw00bzvz7c906hyb8qcm4fp";
+      sha256 = "0bf524f1za92i6rlr4cr6jm3c4vfjszsdc9lsr6wk5125c76ipzn";
       type = "gem";
     };
-    version = "1.0.3";
+    version = "1.0.4";
   };
   cocoapods-downloader = {
     groups = ["default"];
@@ -139,10 +139,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1ixcx9pfissxrga53jbdpza85qd5f6b5nq1sfqa9rnfq82qnlbp1";
+      sha256 = "1x07r23s7836cpp5z9yrlbpljcxpax14yw4fy4bnp6crhr6x24an";
       type = "gem";
     };
-    version = "1.1.4";
+    version = "1.1.5";
   };
   escape = {
     source = {
@@ -205,10 +205,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "13gn4zihfnf3k5ilki3jx7gzin5wdiqvca5q01qq9x7m87j924j6";
+      sha256 = "09df1mkf8fhzj0hmgdifnyvd8lhgxr1ps8yjyxfk8n2jkkbiyj7i";
       type = "gem";
     };
-    version = "0.9.5";
+    version = "0.9.6";
   };
   liferaft = {
     source = {
@@ -393,9 +393,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "13z3109lwq632vhazndqjlccpwadljg58sflbyl0m57j9d4blv2y";
+      sha256 = "0ji3wmpr6xm4172vxh9y6731vm2xrvv7ccwk4ijd5n4if1dakm03";
       type = "gem";
     };
-    version = "1.8.1";
+    version = "1.8.2";
   };
 }

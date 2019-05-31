@@ -92,7 +92,7 @@ in {
         Needed when running with Kubernetes as backend as this cannot be auto-detected";
       '';
       type = types.nullOr types.str;
-      default = with config.networking; (hostName + optionalString (!isNull domain) ".${domain}");
+      default = with config.networking; (hostName + optionalString (domain != null) ".${domain}");
       example = "node1.example.com";
     };
 

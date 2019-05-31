@@ -5,6 +5,6 @@ let
 in
   buildNodejs {
     inherit enableNpm;
-    version = "8.15.1";
-    sha256 = "1ldd4p7cf7bjl4yg9d91khzd9662g3wda7g1yr0ljqjjyjiqcr3b";
+    version = "8.16.0";
+    sha256 = "0h3k5y51fyysqnqb8n5v5zxga937pipag49xzx6xr9b82phfh59m";
   }

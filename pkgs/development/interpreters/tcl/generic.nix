@@ -33,11 +33,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     make install-private-headers
     ln -s $out/bin/tclsh${release} $out/bin/tclsh
+    ln -s $out/lib/libtcl${release}.so $out/lib/libtcl.so
   '';
 
   meta = with stdenv.lib; {
-    description = "The Tcl scription language";
-    homepage = http://www.tcl.tk/;
+    description = "The Tcl scripting language";
+    homepage = https://www.tcl.tk/;
     license = licenses.tcltk;
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra ];

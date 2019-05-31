@@ -1,21 +1,29 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3, python3Packages
+, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
 }:
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
-  version = "4.20.2";
+  version = "5.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "0z0fm3j4ajzsf445381ra8r3zzciyyvfh8vvbjmbyarg2rz8n3w9";
+    sha256 = "0dgh56pamav8wb9nmabjwdlpcazvqc9pgzwablxn77mqh0qrhkaq";
   };
 
   nativeBuildInputs = [
-    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt python3 python3Packages.setuptools
+    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+    python3 python3.pkgs.setuptools
   ];
 
-  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd ];
+  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd python3 ];
+
+  # for python cross-compiling
+  _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
+  # The i686 case is a quick hack; I don't know what's wrong.
+  postConfigure = stdenv.lib.optionalString (!stdenv.isi686) ''
+    export LDSHARED="$LD -shared"
+  '';
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally

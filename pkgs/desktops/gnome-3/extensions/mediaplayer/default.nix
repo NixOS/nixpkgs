@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extensions-mediaplayer-${version}";
-  version = "3.5";
+  version = "unstable-2019-03-21";
 
   src = fetchFromGitHub {
     owner = "JasonLG1979";
     repo = "gnome-shell-extensions-mediaplayer";
-    rev = version;
-    sha256 = "0b8smid9vdybgs0601q9chlbgfm1rzrj3vmd3i6p2a5d1n4fyvsc";
+    rev = "b382c98481fa421501684e2ff3eafc53971ef22b";
+    sha256 = "01z2dml8dvl5sljw62g7x19mz02dz1g4gkmyp0h5bx49djcw1nnh";
   };
 
   nativeBuildInputs = [

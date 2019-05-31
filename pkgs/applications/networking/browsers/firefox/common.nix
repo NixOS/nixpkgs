@@ -8,10 +8,10 @@
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
-, hunspell, libevent, libstartup_notification, libvpx
+, hunspell, libXdamage, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, nodejs, nasm
+, rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
 
 ### optionals
@@ -30,11 +30,13 @@
 , privacySupport ? isTorBrowserLike || isIceCatLike
 
 # WARNING: NEVER set any of the options below to `true` by default.
-# Set to `privacySupport` or `false`.
+# Set to `!privacySupport` or `false`.
 
-# webrtcSupport breaks the aarch64 build on version >= 60.
+# webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
 # https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
-, webrtcSupport ? (if lib.versionAtLeast ffversion "60" && stdenv.isAarch64 then false else !privacySupport)
+, webrtcSupport ? !privacySupport && (!stdenv.isAarch64 || !(
+    lib.versionAtLeast ffversion "60" && lib.versionOlder ffversion "63"
+  ))
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
@@ -92,6 +94,15 @@ let
 
   browserPatches = [
     ./env_var_for_system_dir.patch
+  ] ++ lib.optionals (stdenv.isAarch64 && lib.versionAtLeast ffversion "66" && lib.versionOlder ffversion "67") [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/arm.patch";
+      sha256 = "1vbpih23imhv5r3g21m3m541z08n9n9j1nvmqax76bmyhn7mxp32";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
+      sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
+    })
   ] ++ patches;
 
 in
@@ -120,6 +131,7 @@ stdenv.mkDerivation rec {
     icu libpng jemalloc glib
   ]
   ++ lib.optionals (!isTorBrowserLike) [ nspr nss ]
+  ++ lib.optional (lib.versionOlder ffversion "53") libXdamage
   ++ lib.optional (lib.versionOlder ffversion "61") hunspell
 
   # >= 66 requires nasm for the AV1 lib dav1d
@@ -141,15 +153,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!isTorBrowserLike) [
     "-I${nss.dev}/include/nss"
-  ]
-  ++ lib.optional stdenv.isDarwin [
-    "-isystem ${llvmPackages.libcxx}/include/c++/v1"
-    "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace js/src/jsmath.cpp --replace 'defined(HAVE___SINCOS)' 0
-  '' + lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
+  postPatch = lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
     substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
   '';
 
@@ -158,6 +164,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
     ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ rust-cbindgen nodejs ]
+    ++ lib.optionals (lib.versionAtLeast ffversion "67.0") [ llvmPackages.llvm ] # llvm-objdump is required in version >=67.0
     ++ extraNativeBuildInputs;
 
   preConfigure = ''

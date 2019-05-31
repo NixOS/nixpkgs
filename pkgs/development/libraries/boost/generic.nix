@@ -104,15 +104,19 @@ stdenv.mkDerivation {
   patchFlags = "";
 
   patches = patches
-    ++ optional stdenv.isDarwin ./darwin-no-system-python.patch;
+  ++ optional stdenv.isDarwin (
+    if version == "1.55.0"
+    then ./darwin-1.55-no-system-python.patch
+    else ./darwin-no-system-python.patch);
 
   meta = {
     homepage = http://boost.org/;
     description = "Collection of C++ libraries";
     license = stdenv.lib.licenses.boost;
 
-    platforms = (platforms.unix ++ platforms.windows);
-    badPlatforms = stdenv.lib.optional (versionOlder version "1.59") "aarch64-linux";
+    platforms = platforms.unix ++ platforms.windows;
+    badPlatforms = stdenv.lib.optional (versionOlder version "1.59") "aarch64-linux"
+                 ++ stdenv.lib.optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
     maintainers = with maintainers; [ peti ];
   };
 

@@ -57,7 +57,28 @@ stdenv.mkDerivation rec {
       prePatch = ''
         cp ${src}/leptonica_mod/{allheaders.h,dewarp2.c,leptwin.c} src/
       '';
-      patches = [];
+      patches = [
+        # stripped down copy of upstream commit b88c821f8d347bce0aea86d606c710303919f3d2
+        ./leptonica-CVE-2018-3836.patch
+        (fetchpatch {
+          # CVE-2018-7186
+          url = "https://github.com/DanBloomberg/leptonica/commit/"
+              + "ee301cb2029db8a6289c5295daa42bba7715e99a.patch";
+          sha256 = "0cgb7mvz2px1rg5i80wk1wxxjvzjga617d8q6j7qygkp7jm6495d";
+        })
+        (fetchpatch {
+          # CVE-2018-7247
+          url = "https://github.com/DanBloomberg/leptonica/commit/"
+              + "c1079bb8e77cdd426759e466729917ca37a3ed9f.patch";
+          sha256 = "1z4iac5gwqggh7aa8cvyp6nl9fwd1v7wif26caxc9y5qr3jj34qf";
+        })
+        (fetchpatch {
+          # CVE-2018-7440
+          url = "https://github.com/DanBloomberg/leptonica/commit/"
+              + "49ecb6c2dfd6ed5078c62f4a8eeff03e3beced3b.patch";
+          sha256 = "1hjmva98iaw9xj7prg7aimykyayikcwnk4hk0380007hqb35lqmy";
+        })
+      ];
     });
     tesseract_modded = tesseract4.override {
       tesseractBase = tesseract4.tesseractBase.overrideAttrs (_: {

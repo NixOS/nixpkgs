@@ -14,19 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ fontforge ];
 
   installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp -v $(find . -name '*.ttf') $out/share/fonts/truetype
-
-    mkdir -p $out/share/fonts/opentype
-    cp -v $(find . -name '*.otf') $out/share/fonts/opentype
-
-    mkdir -p "$out/doc/${name}"
-    cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${name}" || true
+    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
+    find . -name '*.otf' -exec install -m444 -Dt $out/share/fonts/opentype {} \;
+    install -m444 -Dt $out/share/doc/${name} LICENSE README
   '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "18brmw0h4hjq1m2l0abwc3zmib4rnfalpywdk68djm711zldxr76";
 
   meta = with stdenv.lib; {
     description = "Fork of Inconsolata font, with proper support of Cyrillic and Greek";
@@ -57,6 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.ofl;
     homepage = https://github.com/MihailJP/Inconsolata-LGC;
     maintainers = with maintainers; [ avnik rht ];
-    platforms = platforms.linux;
   };
 }

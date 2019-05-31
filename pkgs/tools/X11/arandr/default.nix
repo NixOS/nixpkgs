@@ -1,13 +1,16 @@
-{ stdenv, fetchurl, xrandr, python2Packages }:
+{ stdenv, fetchurl, python3Packages
+, gobject-introspection, gsettings-desktop-schemas, gtk3
+, wrapGAppsHook, xrandr
+}:
 
 let
-  inherit (python2Packages) buildPythonApplication docutils pygtk;
+  inherit (python3Packages) buildPythonApplication docutils pygobject3;
 in buildPythonApplication rec {
-  name = "arandr-0.1.9";
+  name = "arandr-0.1.10";
 
   src = fetchurl {
     url = "https://christian.amsuess.com/tools/arandr/files/${name}.tar.gz";
-    sha256 = "1i3f1agixxbfy4kxikb2b241p7c2lg73cl9wqfvlwz3q6zf5faxv";
+    sha256 = "135q0llvm077jil2fr92ssw3p095m4r8jfj0lc5rr3m71n4srj6v";
   };
 
   patchPhase = ''
@@ -17,8 +20,13 @@ in buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  buildInputs = [ docutils ];
-  propagatedBuildInputs = [ xrandr pygtk ];
+  # hook for gobject-introspection doesn't like strictDeps
+  # https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+
+  buildInputs = [ docutils gsettings-desktop-schemas gtk3 ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  propagatedBuildInputs = [ xrandr pygobject3 ];
 
   meta = {
     homepage = http://christian.amsuess.com/tools/arandr/;

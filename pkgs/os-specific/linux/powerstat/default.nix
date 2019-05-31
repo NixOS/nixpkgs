@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "powerstat-${version}";
   version = "0.02.18";
   src = fetchurl {
-    url = "http://kernel.ubuntu.com/~cking/tarballs/powerstat/powerstat-${version}.tar.gz";
+    url = "https://kernel.ubuntu.com/~cking/tarballs/powerstat/powerstat-${version}.tar.gz";
     sha256 = "1glryfmq9h7h8hsasg5ffl9vrcbjkkq3xqdxmbdhxmn137w7vgm5";
   };
   installFlags = [ "DESTDIR=$(out)" ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Laptop power measuring tool";
-    homepage = http://kernel.ubuntu.com/~cking/powerstat/;
+    homepage = https://kernel.ubuntu.com/~cking/powerstat/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ womfoo ];

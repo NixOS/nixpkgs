@@ -1,10 +1,10 @@
 { stdenv, fetchurl, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, gconf
-, cups, libgcrypt_1_5, systemd, dbus }:
+, cups, libgcrypt_1_5, systemd, dbus, libXdamage, expat }:
 with stdenv.lib;
 
 let
   bracketsLibs = makeLibraryPath [
-    gtk2 glib gdk_pixbuf stdenv.cc.cc.lib alsaLib nss nspr gconf cups libgcrypt_1_5 dbus systemd
+    gtk2 glib gdk_pixbuf stdenv.cc.cc.lib alsaLib nss nspr gconf cups libgcrypt_1_5 dbus systemd libXdamage expat
   ];
 in
 stdenv.mkDerivation rec {

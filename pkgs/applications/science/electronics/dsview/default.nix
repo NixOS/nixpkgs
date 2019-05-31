@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
-    homepage = http://www.dreamsourcelab.com/;
+    homepage = https://www.dreamsourcelab.com/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bachp ];

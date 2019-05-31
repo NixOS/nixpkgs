@@ -10,8 +10,14 @@ in {
     enable = mkEnableOption "MaXX desktop environment";
   };
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.maxx ];
+
+    # there is hardcoded path in binaries
+    system.activationScripts.setup-maxx = ''
+      mkdir -p /opt
+      ln -sfn ${pkgs.maxx}/opt/MaXX /opt
+    '';
 
     services.xserver.desktopManager.session = [
     { name = "MaXX";

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "2.010";
@@ -16,7 +16,7 @@ in fetchzip {
 
   sha256 = "1a3lmqk7hyxpfkb30s9z73lhs823dmq6xr5llp9w23g6bh332x2h";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://adobe-fonts.github.io/source-serif-pro/;
     description = "A set of OpenType fonts to complement Source Sans Pro";
     license = licenses.ofl;

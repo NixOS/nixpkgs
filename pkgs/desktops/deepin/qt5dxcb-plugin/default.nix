@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "qt5dxcb-plugin";
-  version = "1.1.13";
+  version = "1.1.27";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "12lvh3agw3qdviqf32brmzba5kscnj5al5jhc08lq69a9kmip05x";
+    sha256 = "1hs7r17qsqn3hgfjd0scagpj1dqys7i1507vxadfac4h1ahyxaz7";
   };
 
   nativeBuildInputs = [

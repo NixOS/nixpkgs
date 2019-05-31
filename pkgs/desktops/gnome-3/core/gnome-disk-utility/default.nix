@@ -1,15 +1,15 @@
 { stdenv, gettext, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
 , meson, ninja, gtk3, glib, wrapGAppsHook, python3, libnotify
-, itstool, gnome3, libxml2
+, itstool, gnome3, libxml2, gsettings-desktop-schemas
 , libcanberra-gtk3, libxslt, docbook_xsl, libpwquality }:
 
 stdenv.mkDerivation rec {
   name = "gnome-disk-utility-${version}";
-  version = "3.30.2";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-disk-utility/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1365fabz3q7n3bl775z82m1nzg18birxxyd7l2ssbbkqrx3h7wgi";
+    sha256 = "08vwbji9m1nhjjdiyhhaqi8cncys7i89b4bpy095f8475v8y05bg";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 glib libsecret libpwquality libnotify libdvdread libcanberra-gtk3
     udisks2 gnome3.adwaita-icon-theme
-    gnome3.gnome-settings-daemon gnome3.gsettings-desktop-schemas
+    gnome3.gnome-settings-daemon gsettings-desktop-schemas
   ];
 
   postPatch = ''

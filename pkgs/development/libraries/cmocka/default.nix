@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   pname = "cmocka";
   majorVersion = "1.1";
-  version = "${majorVersion}.3";
+  version = "${majorVersion}.5";
 
   src = fetchurl {
     url = "https://cmocka.org/files/${majorVersion}/cmocka-${version}.tar.xz";
-    sha256 = "1bxzzafjlwzgldcb07hjnlnqvh88wh21r2kw7z8f704w5bvvrsj3";
+    sha256 = "1dm8pdvkyfa8dsbz9bpq7wwgixjij4sii9bbn5sgvqjm5ljdik7h";
   };
 
   nativeBuildInputs = [ cmake ];
