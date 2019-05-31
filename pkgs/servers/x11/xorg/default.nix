@@ -2679,11 +2679,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xorgserver = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
-    name = "xorg-server-1.20.4";
+    name = "xorg-server-1.20.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.20.4.tar.bz2;
-      sha256 = "1vk6j7hmigfill9x8m7a6vvgb3s50ji2yf6yprbgqfz9xf9x83zy";
+      url = mirror://xorg/individual/xserver/xorg-server-1.20.5.tar.bz2;
+      sha256 = "17dc3g8cc55nbkx3np64dsz04n621dnzjmcc9wys0xbyyd1q47d8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
