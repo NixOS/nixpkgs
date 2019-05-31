@@ -166,6 +166,7 @@ let
       cd sqlite
       make
     '';
+    stripDebugList = [ "share" ];
     packageRequires = [ emacs emacsql ];
     meta = {
       homepage = "https://melpa.org/#/emacsql-sqlite";
