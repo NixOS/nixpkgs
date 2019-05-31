@@ -95,6 +95,14 @@
    </listitem>
    <listitem>
     <para>
+      The <option>services.mysql.pidDir</option> option was removed, as it was only used by the wordpress
+      apache-httpd service to wait for mysql to have started up.
+      This can be accomplished by either describing a dependency on mysql.service (preferred)
+      or waiting for the (hardcoded) <filename>/run/mysqld/mysql.sock</filename> file to appear.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The <option>services.emby.enable</option> module has been removed, see
       <option>services.jellyfin.enable</option> instead for a free software fork of Emby.
 
@@ -160,6 +168,17 @@
     <para>
       The <literal>hunspellDicts.fr-any</literal> dictionary now ships with <literal>fr_FR.{aff,dic}</literal>
       which is linked to <literal>fr-toutesvariantes.{aff,dic}</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>mysql</literal> service now runs as <literal>mysql</literal>
+      user. Previously, systemd did execute it as root, and mysql dropped privileges
+      itself.
+      This includes <literal>ExecStartPre=</literal> and
+      <literal>ExecStartPost=</literal> phases.
+      To accomplish that, runtime and data directory setup was delegated to
+      RuntimeDirectory and tmpfiles.
     </para>
    </listitem>
   </itemizedlist>

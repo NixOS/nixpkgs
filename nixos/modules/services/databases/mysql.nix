@@ -18,16 +18,12 @@ let
     in (pName mysql == pName pkgs.mysql57)
        && ((builtins.compareVersions mysql.version "5.7") >= 0);
 
-  pidFile = "${cfg.pidDir}/mysqld.pid";
-
-  mysqldAndInstallOptions =
-    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
   mysqldOptions =
-    "${mysqldAndInstallOptions} --pid-file=${pidFile}";
+    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
   # For MySQL 5.7+, --insecure creates the root user without password
   # (earlier versions and MariaDB do this by default).
   installOptions =
-    "${mysqldAndInstallOptions} ${lib.optionalString isMysqlAtLeast57 "--insecure"}";
+    "${mysqldOptions} ${lib.optionalString isMysqlAtLeast57 "--insecure"}";
 
 in
 
@@ -78,11 +74,6 @@ in
         type = types.path;
         example = "/var/lib/mysql";
         description = "Location where MySQL stores its table files";
-      };
-
-      pidDir = mkOption {
-        default = "/run/mysqld";
-        description = "Location of the file which stores the PID of the MySQL server";
       };
 
       extraOptions = mkOption {
@@ -296,6 +287,10 @@ in
       ${cfg.extraOptions}
     '';
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 ${cfg.user} mysql -"
+    ];
+
     systemd.services.mysql = let
       hasNotify = (cfg.package == pkgs.mariadb);
     in {
@@ -313,70 +308,69 @@ in
           pkgs.nettools
         ];
 
-        preStart =
-          ''
-            if ! test -e ${cfg.dataDir}/mysql; then
-                mkdir -m 0700 -p ${cfg.dataDir}
-                chown -R ${cfg.user} ${cfg.dataDir}
-                ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${installOptions}
-                touch /tmp/mysql_init
-            fi
-
-            mkdir -m 0755 -p ${cfg.pidDir}
-            chown -R ${cfg.user} ${cfg.pidDir}
-          '';
+        preStart = ''
+          if ! test -e ${cfg.dataDir}/mysql; then
+            ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${installOptions}
+            touch /tmp/mysql_init
+          fi
+        '';
 
         serviceConfig = {
+          User = cfg.user;
+          Group = "mysql";
           Type = if hasNotify then "notify" else "simple";
           RuntimeDirectory = "mysqld";
+          RuntimeDirectoryMode = "0755";
           # The last two environment variables are used for starting Galera clusters
           ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
         };
 
-        postStart = ''
-          ${lib.optionalString (!hasNotify) ''
-            # Wait until the MySQL server is available for use
-            count=0
-            while [ ! -e /run/mysqld/mysqld.sock ]
-            do
-                if [ $count -eq 30 ]
-                then
-                    echo "Tried 30 times, giving up..."
-                    exit 1
-                fi
+        postStart =
+          let
+            cmdWatchForMysqlSocket = ''
+              # Wait until the MySQL server is available for use
+              count=0
+              while [ ! -e /run/mysqld/mysqld.sock ]
+              do
+                  if [ $count -eq 30 ]
+                  then
+                      echo "Tried 30 times, giving up..."
+                      exit 1
+                  fi
 
-                echo "MySQL daemon not yet started. Waiting for 1 second..."
-                count=$((count++))
-                sleep 1
-            done
-          ''}
+                  echo "MySQL daemon not yet started. Waiting for 1 second..."
+                  count=$((count++))
+                  sleep 1
+              done
+            '';
+            cmdInitialDatabases = concatMapStrings (database: ''
+              # Create initial databases
+              if ! test -e "${cfg.dataDir}/${database.name}"; then
+                  echo "Creating initial database: ${database.name}"
+                  ( echo 'create database `${database.name}`;'
 
+                    ${optionalString (database.schema != null) ''
+                    echo 'use `${database.name}`;'
+
+                    # TODO: this silently falls through if database.schema does not exist,
+                    # we should catch this somehow and exit, but can't do it here because we're in a subshell.
+                    if [ -f "${database.schema}" ]
+                    then
+                        cat ${database.schema}
+                    elif [ -d "${database.schema}" ]
+                    then
+                        cat ${database.schema}/mysql-databases/*.sql
+                    fi
+                    ''}
+                  ) | ${mysql}/bin/mysql -u root -N
+              fi
+            '') cfg.initialDatabases;
+          in
+
+          lib.optionalString (!hasNotify) cmdWatchForMysqlSocket + ''
             if [ -f /tmp/mysql_init ]
             then
-                ${concatMapStrings (database:
-                  ''
-                    # Create initial databases
-                    if ! test -e "${cfg.dataDir}/${database.name}"; then
-                        echo "Creating initial database: ${database.name}"
-                        ( echo 'create database `${database.name}`;'
-
-                          ${optionalString (database.schema != null) ''
-                          echo 'use `${database.name}`;'
-
-                          # TODO: this silently falls through if database.schema does not exist,
-                          # we should catch this somehow and exit, but can't do it here because we're in a subshell.
-                          if [ -f "${database.schema}" ]
-                          then
-                              cat ${database.schema}
-                          elif [ -d "${database.schema}" ]
-                          then
-                              cat ${database.schema}/mysql-databases/*.sql
-                          fi
-                          ''}
-                        ) | ${mysql}/bin/mysql -u root -N
-                    fi
-                  '') cfg.initialDatabases}
-
+                ${cmdInitialDatabases}
                 ${optionalString (cfg.replication.role == "master")
                   ''
                     # Set up the replication master
