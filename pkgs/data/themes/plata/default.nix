@@ -21,13 +21,13 @@ assert tweetdeckSupport -> zip != null;
 
 stdenv.mkDerivation rec {
   name = "plata-theme-${version}";
-  version = "0.8.0";
+  version = "0.8.3";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "10xvfrc945zqlgzlx8zjyg0gnkwmq9vfjk0yqjy3gg62i65s8sch";
+    sha256 = "0ibgymdrw91lnng76lb0x55zg6nm9f2vap19wk7qsq3bcw6ny2zi";
   };
 
   preferLocalBuild = true;
