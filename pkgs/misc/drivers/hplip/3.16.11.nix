@@ -28,16 +28,17 @@ let
   };
 
   hplipPlatforms = {
-    "i686-linux"   = "x86_32";
-    "x86_64-linux" = "x86_64";
-    "armv6l-linux" = "arm32";
-    "armv7l-linux" = "arm32";
+    "i686-linux"    = "x86_32";
+    "x86_64-linux"  = "x86_64";
+    "armv6l-linux"  = "arm32";
+    "armv7l-linux"  = "arm32";
+    "aarch64-linux" = "arm64";
   };
 
   hplipArch = hplipPlatforms."${stdenv.hostPlatform.system}"
     or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
-  pluginArches = [ "x86_32" "x86_64" "arm32" ];
+  pluginArches = [ "x86_32" "x86_64" "arm32" "arm64" ];
 
 in
 
@@ -186,7 +187,7 @@ pythonPackages.buildPythonApplication {
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ ttuegel ];
   };
 }
