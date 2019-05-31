@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, runtimeShell, makeDesktopItem, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
+{stdenv, fetchurl, unzip, runtimeShell, makeDesktopItem, makeWrapper, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
 
 let
   strippedName = "betaflight-configurator";
@@ -32,12 +32,7 @@ stdenv.mkDerivation rec {
     cp icon/*_icon_128.png $out/share/icons/${strippedName}-icon.png
     cp -r ${desktopItem}/share/applications $out/share/
 
-    cat >$out/bin/${strippedName}<<EOL
-    #!${runtimeShell}
-
-    ${nwjs}/bin/nw $out/opt/${strippedName}
-    EOL
-    chmod +x $out/bin/${strippedName}
+    makeWrapper ${nwjs}/bin/nw $out/bin/${strippedName} --add-flags $out/opt/${strippedName}
   '';
 
   meta = with stdenv.lib; {
