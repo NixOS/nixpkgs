@@ -86,12 +86,12 @@ let
   makeFullPerlPath = deps: makePerlPath (stdenv.lib.misc.closePropagation deps);
 
 
-  ack = buildPerlPackage {
+  ack = buildPerlPackage rec {
     pname = "ack";
-    version = "2.28";
+    version = "3.0.0";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PETDANCE/ack-2.28.tar.gz;
-      sha256 = "16zgn96v1qkibpj5lic571zjl07y8x55v5xql3x7bvlsmgqcnvla";
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/${pname}-v${version}.tar.gz";
+      sha256 = "1vadghcvkghrwjjbgph0scd6a7nkpx5cxfca5x9wvcr6a8idpbcd";
     };
     outputs = ["out" "man"];
     # use gnused so that the preCheck command passes
