@@ -340,8 +340,8 @@ let
               "auth required pam_wheel.so use_uid"}
           ${optionalString cfg.logFailures
               "auth required pam_tally.so"}
-          ${optionalString (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth)
-              "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
+          ${optionalString (config.security.pam.sshAgentAuth.enable && cfg.sshAgentAuth)
+              "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=${concatStringsSep ":" config.security.pam.sshAgentAuth.authorizedKeysFiles}"}
           ${optionalString cfg.fprintAuth
               "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
           ${let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth
@@ -544,11 +544,38 @@ in
       default = false;
       description =
         ''
+          Deprecated option, see release note for 19.09.
+
           Enable sudo logins if the user's SSH agent provides a key
           present in <filename>~/.ssh/authorized_keys</filename>.
           This allows machines to exclusively use SSH keys instead of
           passwords.
         '';
+    };
+
+    security.pam.sshAgentAuth = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enable sudo logins if the user's SSH agent provides a key
+          present in <option>security.pam.sshAgentAuth</option>.
+          This allows machines to exclusively use SSH keys instead of
+          passwords.
+        '';
+      };
+
+      authorizedKeysFiles = mkOption {
+        type = types.listOf types.str;
+        default = [ "/etc/ssh/authorized_keys.d/%u" ];
+        description = ''
+          Files from which authorized keys are read, supporting some <link
+          xlink:href="https://github.com/jbeverly/pam_ssh_agent_auth/blob/6d4b682d3f37e494f7431f61b806ca4c587eb13d/pam_ssh_agent_auth.pod#expansions">expansions</link>.
+          Note that setting it to a user writable file with <literal>~</literal>
+          or <literal>%h</literal> may lead to a privilege escalation for any
+          program running as a user.
+        '';
+      };
     };
 
     security.pam.enableOTPW = mkOption {
@@ -719,6 +746,14 @@ in
 
   config = {
 
+    assertions = [
+      { assertion = !config.security.pam.enableSSHAgentAuth;
+        message = ''
+          This option has been deprecated due to a security vunerability. Read
+          the 19.09 release notes for more informations and the replacing options.
+        ''; }
+    ];
+
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
@@ -727,7 +762,8 @@ in
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
-      ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
+      ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ]
+      ++ optionals config.security.pam.sshAgentAuth.enable [ pkgs.pam_ssh_agent_auth ];
 
     boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
 

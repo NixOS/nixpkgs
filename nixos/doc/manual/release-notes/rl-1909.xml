@@ -119,6 +119,19 @@
       and <option>services.limesurvey.virtualHost</option> options.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The <option>security.pam.enableSSHAgentAuth</option> module has been
+       removed because it allowed a privilege escalation from any program running as the user.
+       The options replacing it don't have the same default and may lock you out of your
+       system, be extremly careful when migrating!
+       <option>security.pam.sshAgentAuth.enable</option> and
+       <option>security.pam.sshAgentAuth.authorizedKeys</option> are replacing it but the
+       default authorized key files is now <literal>/etc/ssh/authorized_keys.d/%u</literal>
+       instead of
+       <literal>/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u</literal>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
