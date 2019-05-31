@@ -609,6 +609,8 @@ in {
 
   perf = callPackage ../development/python-modules/perf { };
 
+  perfplot = callPackage ../development/python-modules/perfplot { };
+
   phonopy = callPackage ../development/python-modules/phonopy { };
 
   piccata = callPackage ../development/python-modules/piccata {};
@@ -978,6 +980,8 @@ in {
   altair = callPackage ../development/python-modules/altair { };
 
   vega = callPackage ../development/python-modules/vega { };
+
+  accupy = callPackage ../development/python-modules/accupy { };
 
   acme = callPackage ../development/python-modules/acme { };
 
@@ -3729,6 +3733,8 @@ in {
     glibcLocales = pkgs.glibcLocales;
   };
 
+  pipdate = callPackage ../development/python-modules/pipdate { };
+
   pika = callPackage ../development/python-modules/pika { };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
@@ -3896,6 +3902,8 @@ in {
   pyext = callPackage ../development/python-modules/pyext { };
 
   pyfantom = callPackage ../development/python-modules/pyfantom { };
+
+  pyfma = callPackage ../development/python-modules/pyfma { };
 
   pyfftw = callPackage ../development/python-modules/pyfftw { };
 
