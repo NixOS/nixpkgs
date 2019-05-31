@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, runtimeShell, makeDesktopItem, nwjs }:
+{stdenv, fetchurl, unzip, runtimeShell, makeDesktopItem, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
 
 let
   strippedName = "betaflight-configurator";
