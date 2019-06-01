@@ -27,7 +27,7 @@ in
   boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
 
   sdImage = {
-    populateBootCommands = let
+    populateFirmwareCommands = let
       configTxt = pkgs.writeText "config.txt" ''
         kernel=u-boot-rpi3.bin
 
@@ -43,10 +43,10 @@ in
         avoid_warnings=1
       '';
       in ''
-        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/boot/)
-        cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin boot/u-boot-rpi3.bin
-        cp ${configTxt} boot/config.txt
-        ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./boot
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+        cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
+        cp ${configTxt} firmware/config.txt
+        ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./firmware
       '';
   };
 }

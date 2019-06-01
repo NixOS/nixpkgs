@@ -43,12 +43,12 @@ in
       '';
     };
 
-    bootPartitionID = mkOption {
+    firmwarePartitionID = mkOption {
       type = types.string;
       default = "0x2178694e";
       description = ''
-        Volume ID for the /boot partition on the SD card. This value must be a
-        32-bit hexadecimal number.
+        Volume ID for the /boot/firmware partition on the SD card. This value
+        must be a 32-bit hexadecimal number.
       '';
     };
 
@@ -61,29 +61,30 @@ in
       '';
     };
 
-    bootSize = mkOption {
+    firmwareSize = mkOption {
       type = types.int;
       default = 120;
       description = ''
-        Size of the /boot partition, in megabytes.
+        Size of the /boot/firmware partition, in megabytes.
       '';
     };
 
-    populateBootCommands = mkOption {
-      example = literalExample "'' cp \${pkgs.myBootLoader}/u-boot.bin boot/ ''";
+    populateFirmwareCommands = mkOption {
+      example = literalExample "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
       description = ''
-        Shell commands to populate the ./boot directory.
+        Shell commands to populate the ./firmware directory.
         All files in that directory are copied to the
-        /boot partition on the SD image.
+        /boot/firmware partition on the SD image.
       '';
     };
   };
 
   config = {
     fileSystems = {
-      "/boot" = {
-        device = "/dev/disk/by-label/NIXOS_BOOT";
+      "/boot/firmware" = {
+        device = "/dev/disk/by-label/FIRMWARE";
         fsType = "vfat";
+        options = [ "nofail" "noauto" ];
       };
       "/" = {
         device = "/dev/disk/by-label/NIXOS_SD";
@@ -105,39 +106,39 @@ in
         echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
         echo "file sd-image $img" >> $out/nix-support/hydra-build-products
 
-        # Create the image file sized to fit /boot and /, plus 20M of slack
+        # Create the image file sized to fit /boot/firmware and /, plus 20M of slack
         rootSizeBlocks=$(du -B 512 --apparent-size ${rootfsImage} | awk '{ print $1 }')
-        bootSizeBlocks=$((${toString config.sdImage.bootSize} * 1024 * 1024 / 512))
-        imageSize=$((rootSizeBlocks * 512 + bootSizeBlocks * 512 + 20 * 1024 * 1024))
+        firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
+        imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + 20 * 1024 * 1024))
         truncate -s $imageSize $img
 
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
         sfdisk $img <<EOF
             label: dos
-            label-id: ${config.sdImage.bootPartitionID}
+            label-id: ${config.sdImage.firmwarePartitionID}
 
-            start=8M, size=$bootSizeBlocks, type=b, bootable
-            start=${toString (8 + config.sdImage.bootSize)}M, type=83
+            start=8M, size=$firmwareSizeBlocks, type=b, bootable
+            start=${toString (8 + config.sdImage.firmwareSize)}M, type=83
         EOF
 
         # Copy the rootfs into the SD image
         eval $(partx $img -o START,SECTORS --nr 2 --pairs)
         dd conv=notrunc if=${rootfsImage} of=$img seek=$START count=$SECTORS
 
-        # Create a FAT32 /boot partition of suitable size into bootpart.img
+        # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
         eval $(partx $img -o START,SECTORS --nr 1 --pairs)
-        truncate -s $((SECTORS * 512)) bootpart.img
-        faketime "1970-01-01 00:00:00" mkfs.vfat -i ${config.sdImage.bootPartitionID} -n NIXOS_BOOT bootpart.img
+        truncate -s $((SECTORS * 512)) firmware_part.img
+        faketime "1970-01-01 00:00:00" mkfs.vfat -i ${config.sdImage.firmwarePartitionID} -n FIRMWARE firmware_part.img
 
-        # Populate the files intended for /boot
-        mkdir boot
-        ${config.sdImage.populateBootCommands}
+        # Populate the files intended for /boot/firmware
+        mkdir firmware
+        ${config.sdImage.populateFirmwareCommands}
 
-        # Copy the populated /boot into the SD image
-        (cd boot; mcopy -psvm -i ../bootpart.img ./* ::)
+        # Copy the populated /boot/firmware into the SD image
+        (cd firmware; mcopy -psvm -i ../firmware_part.img ./* ::)
         # Verify the FAT partition before copying it.
-        fsck.vfat -vn bootpart.img
-        dd conv=notrunc if=bootpart.img of=$img seek=$START count=$SECTORS
+        fsck.vfat -vn firmware_part.img
+        dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
       '';
     }) {};
 
