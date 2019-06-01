@@ -1,14 +1,14 @@
 { stdenv, python3, fetchFromGitHub, fetchpatch }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "4.2";
+  version = "4.2.2";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1ipvhd9wa4iq0763b9h4f3xa6x31bssi6m0595w97mdhh9n6bgxg";
+    sha256 = "1wy5i1av1s98yr56ybiq66kv0vg48zci3fp91zfgj04nh2966w1w";
   };
 
   checkInputs = [
