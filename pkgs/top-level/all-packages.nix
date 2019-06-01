@@ -12471,7 +12471,6 @@ in
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_2_7
     libressl_2_8
     libressl_2_9;
 
