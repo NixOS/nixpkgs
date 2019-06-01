@@ -1,5 +1,19 @@
 --- a/configure.ac
 +++ b/configure.ac
+@@ -429,11 +429,11 @@
+ if test "x$enable_pygobject" = "xyes"; then
+     PKG_CHECK_MODULES(PYTHON, [pygobject-3.0 >= $PYGOBJECT_REQUIRED])
+ 
+-    pyoverridesdir=`$PYTHON -c "import gi; print(gi._overridesdir)"`
++    pyoverridesdir="$prefix/@pythonSitePackages@/gi/overrides"
+     AC_SUBST(pyoverridesdir)
+ 
+     if test x"$enable_python2" = x"yes"; then
+-        py2overridesdir=`$PYTHON2 -c "import gi; print(gi._overridesdir)"`
++        py2overridesdir="$prefix/@pythonSitePackages@/gi/overrides"
+         AC_SUBST(py2overridesdir)
+     fi
+ fi
 @@ -462,7 +462,7 @@
      PYTHON2_VERSION=`$PYTHON2 -c "import sys; sys.stdout.write(sys.version[[:3]])"`
      PYTHON2_LIBDIR="$PYTHON2_PREFIX/lib/python$PYTHON2_VERSION"
