@@ -2905,7 +2905,6 @@ broken-packages:
   - attoparsec-time
   - attoparsec-trans
   - attoparsec-uri
-  - attoparsec-varword
   - attosplit
   - Attrac
   - atuin
@@ -10126,7 +10125,6 @@ broken-packages:
   - zoom-refs
   - zre
   - zsh-battery
-  - zstd
   - zsyntax
   - ztar
   - zuramaru
