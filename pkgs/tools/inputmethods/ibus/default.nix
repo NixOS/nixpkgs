@@ -135,6 +135,7 @@ stdenv.mkDerivation rec {
     dconf
     gdk_pixbuf
     gobject-introspection
+    python3.pkgs.pygobject3 # for pygobject overrides
     gtk2
     gtk3
     isocodes
