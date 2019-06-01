@@ -15609,7 +15609,7 @@ in
   };
   mysql = mariadb; # TODO: move to aliases.nix
 
-  mongodb = mongodb-3_4;
+  mongodb = hiPrio mongodb-3_4;
   
   mongodb-3_4 = callPackage ../servers/nosql/mongodb/v3_4.nix {
     sasl = cyrus_sasl;
