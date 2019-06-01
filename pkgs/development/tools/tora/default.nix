@@ -6,13 +6,13 @@ let
 
 in mkDerivation rec {
   name = "tora-${version}";
-  version = "3.1";
+  version = "unstable-2019-04-10";
 
   src = fetchFromGitHub {
     owner  = "tora-tool";
     repo   = "tora";
-    rev    = "v${version}";
-    sha256 = "0wninl10bcgiljf6wnhn2rv8kmzryw78x5qvbw8s2zfjlnxjsbn7";
+    rev    = "e907709e14104ec486b51520c8195267bcc5050e";
+    sha256 = "14c5lshphixz64kgkxcgp33pg49a8nvdbz03z8l8lldwpkn8ayiq";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules makeWrapper ];
