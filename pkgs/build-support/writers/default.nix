@@ -184,6 +184,21 @@ rec {
   writeJSBin = name:
     writeJS "/bin/${name}";
 
+  awkFormatHttpd = builtins.toFile "awkFormat-httpd.awk" ''
+    awk -f
+    {sub(/^[ \t]+/,"");idx=0}
+    /<[^\/]/{ctx++;idx=1}
+    /<\//{ctx--}
+    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
+  '';
+
+  writeHttpdConfig = name: text: pkgs.runCommand name {
+    inherit text;
+    passAsFile = [ "text" ];
+  } /* sh */ ''
+    ${pkgs.gawk}/bin/awk -f ${awkFormatHttpd} "$textPath" | ${pkgs.gnused}/bin/sed '/^\s*$/d' > $out
+  '';
+
   awkFormatNginx = builtins.toFile "awkFormat-nginx.awk" ''
     awk -f
     {sub(/^[ \t]+/,"");idx=0}
