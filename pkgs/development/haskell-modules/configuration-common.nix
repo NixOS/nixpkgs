@@ -38,26 +38,17 @@ self: super: {
   # The test suite depends on old versions of tasty and QuickCheck.
   hackage-security = dontCheck super.hackage-security;
 
-  # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
-
   # enable using a local hoogle with extra packagages in the database
   # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
   # $ hoogle server
   hoogleLocal = { packages ? [] }: self.callPackage ./hoogle.nix { inherit packages; };
 
-  # Break infinite recursions.
-  attoparsec-varword = super.attoparsec-varword.override { bytestring-builder-varword = dontCheck self.bytestring-builder-varword; };
-  Dust-crypto = dontCheck super.Dust-crypto;
-  hasql-postgres = dontCheck super.hasql-postgres;
-  hspec-core = super.hspec-core.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
-  hspec-expectations = dontCheck super.hspec-expectations;
-  HTTP = dontCheck super.HTTP;
-  http-streams = dontCheck super.http-streams;
-  nanospec = dontCheck super.nanospec;
-  options = dontCheck super.options;
+  # Needs older QuickCheck version
+  attoparsec-varword = dontCheck super.attoparsec-varword;
+
+  # Tests are failing
+  # https://github.com/bos/statistics/issues/123
   statistics = dontCheck super.statistics;
-  vector-builder = dontCheck super.vector-builder;
 
   # These packages (and their reverse deps) cannot be built with profiling enabled.
   ghc-heap-view = disableLibraryProfiling super.ghc-heap-view;
@@ -66,16 +57,13 @@ self: super: {
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
-  # Use the default version of mysql to build this package (which is actually mariadb).
-  # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.connector-c; });
-
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
   mysql-haskell = dontCheck super.mysql-haskell;
 
-  # Link the proper version.
-  zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
+  # Tests failing, fixed once 0.8.0 is in stackage
+  # https://gitlab.com/twittner/zeromq-haskell/issues/63
+  zeromq4-haskell = dontCheck super.zeromq4-haskell;
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
@@ -104,7 +92,7 @@ self: super: {
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
-  # Test suite doesn't terminate
+  # Tests require older tasty
   hzk = dontCheck super.hzk;
 
   # Tests require a Kafka broker running locally
@@ -1274,9 +1262,6 @@ self: super: {
 
   # Has tasty < 1.2 requirement, but works just fine with 1.2
   temporary-resourcet = doJailbreak super.temporary-resourcet;
-
-  # Tests require internet
-  dhall_1_23_0 = dontCheck super.dhall_1_23_0;
 
   # Requires dhall >= 1.23.0
   ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_23_0; };
