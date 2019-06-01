@@ -8,13 +8,13 @@ let
 in
 buildGoModule rec {
   pname = "thanos";
-  version = "0.4.0";
+  version = "0.5.0-rc.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "improbable-eng";
     repo = "thanos";
-    sha256 = "0md9m7swmxh0sg6vf169iw3p6jc1hxzgylirh6vs1q0frz21y47j";
+    sha256 = "1m7jj5g7s4c7nhbyc6vwn08ripp4d3ciim48siillwhm90gbphrw";
   };
 
   overrideModAttrs = oldAttrs : {
@@ -23,7 +23,7 @@ buildGoModule rec {
     ];
   };
 
-  modSha256 = "0sr9g95qab7x46m3mpahpb2xgzdbpy6p0kn6gq1s5phg2xxj2w00";
+  modSha256 = "1236cg00h8077fmvyddwjsnw85r69ac18b2chcpgzd85xdcaxavk";
 
   subPackages = "cmd/thanos";
 

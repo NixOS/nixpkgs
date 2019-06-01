@@ -122,8 +122,7 @@ let
       grpc-address = mkParamDef types.str "0.0.0.0:10901" ''
         Listen <literal>ip:port</literal> address for gRPC endpoints (StoreAPI).
 
-        Make sure this address is routable from other components if you use gossip,
-        <option>grpc-advertise-address</option> is empty and you require cross-node connection.
+        Make sure this address is routable from other components.
       '';
 
       grpc-server-tls-cert = mkParam types.str ''
@@ -248,14 +247,6 @@ let
     };
 
     query = params.common // {
-
-      http-advertise-address = mkParam types.str ''
-        Explicit (external) <literal>host:port</literal> address to advertise
-        for HTTP QueryAPI in gossip cluster.
-
-        If <literal>null</literal>, the option <option>http-address</option>
-        will be used.
-      '';
 
       grpc-client-tls-secure = mkFlagParam ''
         Use TLS when talking to the gRPC server
