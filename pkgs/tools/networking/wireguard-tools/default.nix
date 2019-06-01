@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with stdenv.lib; {
     description = "Tools for the WireGuard secure network tunnel";
     downloadPage = https://git.zx2c4.com/WireGuard/refs/;
