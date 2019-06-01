@@ -1,22 +1,22 @@
 { stdenv, lib, fetchFromGitHub, go, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
-  name = "cni-plugins-${version}";
-  version = "0.7.5";
+  pname = "cni-plugins";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    sha256 = "1kfi0iz2hs4rq3cdkw12j8d47ac4f5vrpzcwcrs2yzmh2j4n5sz5";
+    sha256 = "1jmdjfwjgh6368wwdpfpjm708b0kl38cyc87wqp2f0y9mvvws8ni";
   };
 
   buildInputs = [ removeReferencesTo go ];
 
   buildPhase = ''
-    patchShebangs build.sh
+    patchShebangs build_linux.sh
     export "GOCACHE=$TMPDIR/go-cache"
-    ./build.sh
+    ./build_linux.sh
   '';
 
   installPhase = ''
