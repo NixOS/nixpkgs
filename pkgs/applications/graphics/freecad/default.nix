@@ -38,6 +38,10 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/FreeCAD --prefix PYTHONPATH : $PYTHONPATH \
       --set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1
   '';
+
+  postFixup = ''
+    mv $out/share/doc $out
+  '';
     
   meta = with stdenv.lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
