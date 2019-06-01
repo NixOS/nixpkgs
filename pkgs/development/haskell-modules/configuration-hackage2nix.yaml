@@ -5430,7 +5430,6 @@ broken-packages:
   - hdr-histogram
   - HDRUtils
   - headergen
-  - heap
   - heartbeat-streams
   - heatitup
   - heatitup-complete
