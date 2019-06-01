@@ -2,7 +2,6 @@
 
 let
   cfg = config.services.hydron;
-  postgres = config.services.postgresql;
 in with lib; {
   options.services.hydron = {
     enable = mkEnableOption "hydron";
@@ -81,40 +80,40 @@ in with lib; {
   };
 
   config = mkIf cfg.enable {
-    security.sudo.enable = cfg.enable;
-    services.postgresql.enable = cfg.enable;
     services.hydron.passwordFile = mkDefault (pkgs.writeText "hydron-password-file" cfg.password);
     services.hydron.postgresArgsFile = mkDefault (pkgs.writeText "hydron-postgres-args" cfg.postgresArgs);
     services.hydron.postgresArgs = mkDefault ''
       {
         "driver": "postgres",
-        "connection": "user=hydron password=${cfg.password} dbname=hydron sslmode=disable"
+        "connection": "user=hydron password=${cfg.password} host=/run/postgresql dbname=hydron sslmode=disable"
       }
     '';
+
+    services.postgresql = {
+      enable = true;
+      ensureDatabases = [ "hydron" ];
+      ensureUsers = [
+        { name = "hydron";
+          ensurePermissions = { "DATABASE hydron" = "ALL PRIVILEGES"; };
+        }
+      ];
+    };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0750 hydron hydron - -"
+      "d '${cfg.dataDir}/.hydron' - hydron hydron - -"
+      "d '${cfg.dataDir}/images' - hydron hydron - -"
+      "Z '${cfg.dataDir}' - hydron hydron - -"
+
+      "L+ '${cfg.dataDir}/.hydron/db_conf.json' - - - - ${cfg.postgresArgsFile}"
+    ];
 
     systemd.services.hydron = {
       description = "hydron";
       after = [ "network.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        # Ensure folder exists or create it and permissions are correct
-        mkdir -p ${escapeShellArg cfg.dataDir}/{.hydron,images}
-        ln -sf ${escapeShellArg cfg.postgresArgsFile} ${escapeShellArg cfg.dataDir}/.hydron/db_conf.json
-        chmod 750 ${escapeShellArg cfg.dataDir}
-        chown -R hydron:hydron ${escapeShellArg cfg.dataDir}
-
-        # Ensure the database is correct or create it
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createuser \
-          -SDR hydron || true
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createdb \
-          -T template0 -E UTF8 -O hydron hydron || true
-        ${pkgs.sudo}/bin/sudo -u hydron ${postgres.package}/bin/psql \
-          -c "ALTER ROLE hydron WITH PASSWORD '$(cat ${escapeShellArg cfg.passwordFile})';" || true
-      '';
-
       serviceConfig = {
-        PermissionsStartOnly = true;
         User = "hydron";
         Group = "hydron";
         ExecStart = "${pkgs.hydron}/bin/hydron serve"
@@ -139,7 +138,7 @@ in with lib; {
       description = "Automatically import paths into hydron and possibly fetch tags";
       after = [ "network.target" "hydron.service" ];
       wantedBy = [ "timers.target" ];
-      
+
       timerConfig = {
         Persistent = true;
         OnCalendar = cfg.interval;
@@ -148,11 +147,10 @@ in with lib; {
 
     users = {
       groups.hydron.gid = config.ids.gids.hydron;
-      
+
       users.hydron = {
         description = "hydron server service user";
         home = cfg.dataDir;
-        createHome = true;
         group = "hydron";
         uid = config.ids.uids.hydron;
       };
