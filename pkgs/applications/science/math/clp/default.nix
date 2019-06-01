@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = licenses.epl10;
-    homepage = https://projects.coin-or.org/Clp;
+    homepage = "https://github.com/coin-or/Clp";
     description = "An open-source linear programming solver written in C++";
     platforms = platforms.darwin ++ [ "x86_64-linux" ];
     maintainers = [ maintainers.vbgl ];
