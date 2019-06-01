@@ -12476,7 +12476,7 @@ in
     libressl_2_8
     libressl_2_9;
 
-  libressl = libressl_2_8;
+  libressl = libressl_2_9;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
