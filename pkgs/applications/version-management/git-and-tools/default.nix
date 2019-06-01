@@ -113,6 +113,8 @@ let
 
   git-secrets = callPackage ./git-secrets { };
 
+  git-standup = callPackage ./git-standup { };
+
   git-stree = callPackage ./git-stree { };
 
   git-sync = callPackage ./git-sync { };
