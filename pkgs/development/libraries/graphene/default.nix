@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "graphene";
-  version = "1.8.6";
+  version = "1.9.2";
 
   outputs = [ "out" "devdoc" "installedTests" ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "ebassi";
     repo = pname;
     rev = version;
-    sha256 = "1hdbdzcz86jrvsq5h954ph9q62m8jr2a5s5acklxhdkfqn5bkbv8";
+    sha256 = "00rajaxj6642pcn34is2wrb4sxs8axw1iqw2dngglp1k7wns8x92";
   };
 
   patches = [
