@@ -42,6 +42,11 @@ buildPythonPackage rec {
   postPatch= ''
     substituteInPlace pelican/tests/test_pelican.py \
       --replace "'git'" "'${git}/bin/git'"
+
+    # Markdown-3.1 changed footnote separator to colon
+    # https://github.com/getpelican/pelican/issues/2493#issuecomment-491723744
+    sed -i '/test_article_with_footnote/i\
+        @unittest.skip("")' pelican/tests/test_readers.py
   '';
 
   LC_ALL="en_US.UTF-8";
