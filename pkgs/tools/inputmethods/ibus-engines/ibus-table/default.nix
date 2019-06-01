@@ -30,7 +30,14 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    dconf gtk3 gobject-introspection ibus (python3.withPackages (pypkgs: with pypkgs; [ pygobject3 ]))
+    dconf
+    gtk3
+    gobject-introspection
+    ibus
+    (python3.withPackages (pypkgs: with pypkgs; [
+      pygobject3
+      (toPythonModule ibus)
+    ]))
   ];
 
   nativeBuildInputs = [
@@ -44,12 +51,6 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     substituteInPlace $sourceRoot/engine/Makefile.am \
       --replace "docbook2man" "docbook2man --sgml"
-  '';
-
-  postFixup = ''
-    wrapPythonPrograms
-    sed -e 's/LookupTable/LookupTable.new/' \
-        -i "$out/share/ibus-table/engine/table.py"
   '';
 
   meta = with stdenv.lib; {
