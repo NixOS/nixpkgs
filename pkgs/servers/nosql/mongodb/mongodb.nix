@@ -86,7 +86,7 @@ in stdenv.mkDerivation {
   '';
 
   postInstall = ''
-    rm $out/bin/install_compass
+    rm -f "$out/bin/install_compass" || true
   '';
 
   prefixKey = "--prefix=";
