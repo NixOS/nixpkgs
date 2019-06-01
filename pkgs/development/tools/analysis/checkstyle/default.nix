@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = http://checkstyle.sourceforge.net/;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    platforms = jre.meta.platforms;
   };
 }
