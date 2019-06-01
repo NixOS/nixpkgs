@@ -4,14 +4,14 @@ with lib;
 with builtins;
 
 stdenv.mkDerivation rec {
-  name = "conmon-${version}";
-  version = "0.0.1pre52_${substring 0 7 src.rev}";
+  pname = "conmon";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner  = "containers";
-    repo   = "conmon";
-    rev    = "6905a4dc47830fbd1110e937228057c0b073ebe1";
-    sha256 = "1igny1hr2q1zrhsaxcx7l8xkdr5ragl8pj18qbr1lpa2v5v2f6hs";
+    repo   = pname;
+    rev    = "v${version}";
+    sha256 = "08fgkbv7hq62lcq39za9pm2s2j92ismgrkvfm7acwbvajqh9syjb";
   };
 
   nativeBuildInputs = [ pkgconfig ];
