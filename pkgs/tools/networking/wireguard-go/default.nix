@@ -13,6 +13,8 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
+  passthru.updateScript = ./update.sh;
+
   meta = with stdenv.lib; {
     description = "Userspace Go implementation of WireGuard";
     homepage = https://git.zx2c4.com/wireguard-go/about/;
