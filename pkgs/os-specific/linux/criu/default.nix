@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name    = "criu-${version}";
-  version = "3.11";
+  version = "3.12";
 
   src = fetchurl {
     url    = "https://download.openvz.org/criu/${name}.tar.bz2";
-    sha256 = "03nimyn3wy5mlw30gq7bvlzvvprqjv8f25240yj5arzlld8mhsw8";
+    sha256 = "1z0fpym8fi2jqx99himqs8pm5l4mzrswjqxcyfwjmbabzb77dwhf";
   };
 
   enableParallelBuilding = true;
