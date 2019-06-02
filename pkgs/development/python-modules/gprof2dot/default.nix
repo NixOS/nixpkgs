@@ -17,7 +17,6 @@ buildPythonApplication {
     homepage = https://github.com/jrfonseca/gprof2dot;
     description = "Python script to convert the output from many profilers into a dot graph";
     license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
     maintainers = [ maintainers.pmiddend ];
   };
 }
