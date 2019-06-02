@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pmd-${version}";
-  version = "6.14.0";
+  version = "6.15.0";
 
   buildInputs = [ unzip ];
 
   src = fetchurl {
     url = "mirror://sourceforge/pmd/pmd-bin-${version}.zip";
-    sha256 = "0k40l93fxakms9vm641d4vlb68gfhkblrm24sb7slzvhq2v832dj";
+    sha256 = "0im64lg18bv764i14g3p42dzd7kqq9j5an8dkz1vanypb1jf5j3s";
   };
 
   installPhase = ''
