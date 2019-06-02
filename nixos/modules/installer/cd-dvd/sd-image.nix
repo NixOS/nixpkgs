@@ -64,7 +64,8 @@ in
 
     firmwareSize = mkOption {
       type = types.int;
-      default = 120;
+      # As of 2019-05-31 the Raspberry pi firmware + u-bot takes ~13MiB
+      default = 20;
       description = ''
         Size of the /boot/firmware partition, in megabytes.
       '';
