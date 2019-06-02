@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "0.8.6";
+  version = "1.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1m35m9z4vy480d2200nd4lk9n5s4z3zcnq0d9rdlh4yv5264mrgf";
+    sha256 = "1klcx333kpgb5gbaasmz07brqjxvls3l5dpj0kv9cfsd76cq17yh";
   };
 
   propagatedBuildInputs = [
