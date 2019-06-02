@@ -130,6 +130,14 @@ let
     updateScript = map builtins.toString (pkgs.lib.toList package.updateScript);
   };
 
+  packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
+
+  optionalArgs =
+    pkgs.lib.optional (max-workers != null) "--max-workers=${max-workers}"
+    ++ pkgs.lib.optional (keep-going == "true") "--keep-going";
+
+  args = [ packagesJson ] ++ optionalArgs;
+
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-script";
   buildCommand = ''
@@ -144,6 +152,6 @@ in pkgs.stdenv.mkDerivation {
   '';
   shellHook = ''
     unset shellHook # do not contaminate nested shells
-    exec ${pkgs.python3.interpreter} ${./update.py} ${pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages))}${pkgs.lib.optionalString (max-workers != null) " --max-workers=${max-workers}"}${pkgs.lib.optionalString (keep-going == "true") " --keep-going"}
+    exec ${pkgs.python3.interpreter} ${./update.py} ${builtins.concatStringsSep " " args}
   '';
 }
