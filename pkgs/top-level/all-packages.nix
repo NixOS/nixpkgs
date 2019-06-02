@@ -1748,6 +1748,8 @@ in
 
   pev = callPackage ../development/tools/analysis/pev { };
 
+  phoronix-test-suite = callPackage ../tools/misc/phoronix-test-suite { };
+
   photon = callPackage ../tools/networking/photon { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
