@@ -69,9 +69,12 @@ let
     let
       attrSet = pkgs.lib.attrByPath (pkgs.lib.splitString "." path) null pkgs;
     in
-      packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg)
-                     (name: pkg: pkg)
-                     attrSet;
+      if attrSet == null then
+        builtins.throw "Attribute path `${path}` does not exists."
+      else
+        packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg)
+                       (name: pkg: pkg)
+                       attrSet;
 
   packageByName = name:
     let
