@@ -2577,6 +2577,8 @@ in
 
   duply = callPackage ../tools/backup/duply { };
 
+  dvc = callPackage ../applications/version-management/dvc { };
+
   dvd-vr = callPackage ../tools/cd-dvd/dvd-vr { };
 
   dvdisaster = callPackage ../tools/cd-dvd/dvdisaster { };

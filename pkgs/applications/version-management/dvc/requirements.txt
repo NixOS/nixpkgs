@@ -1,0 +1,3 @@
+dvc
+setuptools-scm
+pytest-runner
