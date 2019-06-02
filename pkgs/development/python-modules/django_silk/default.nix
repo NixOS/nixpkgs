@@ -12,6 +12,7 @@
 , pytz
 , pillow
 , mock
+, gprof2dot
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ django pygments simplejson dateutil requests sqlparse jinja2 autopep8 pytz pillow ];
+  propagatedBuildInputs = [
+    django pygments simplejson dateutil requests
+    sqlparse jinja2 autopep8 pytz pillow gprof2dot
+  ];
+
 
   meta = with stdenv.lib; {
     description = "Silky smooth profiling for the Django Framework";
