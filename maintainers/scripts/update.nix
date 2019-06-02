@@ -122,7 +122,7 @@ let
   packageData = package: {
     name = package.name;
     pname = (builtins.parseDrvName package.name).name;
-    updateScript = pkgs.lib.toList package.updateScript;
+    updateScript = map builtins.toString (pkgs.lib.toList package.updateScript);
   };
 
 in pkgs.stdenv.mkDerivation {
