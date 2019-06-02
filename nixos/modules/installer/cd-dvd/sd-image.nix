@@ -1,8 +1,12 @@
 # This module creates a bootable SD card image containing the given NixOS
-# configuration. The generated image is MBR partitioned, with a FAT /boot
-# partition, and ext4 root partition. The generated image is sized to fit
-# its contents, and a boot script automatically resizes the root partition
-# to fit the device on the first boot.
+# configuration. The generated image is MBR partitioned, with a FAT
+# /boot/firmware partition, and ext4 root partition. The generated image
+# is sized to fit its contents, and a boot script automatically resizes
+# the root partition to fit the device on the first boot.
+#
+# The firmware partition is built with expectation to hold the Raspberry
+# Pi firmware and bootloader, and be removed and replaced with a firmware
+# build for the target SoC for other board families.
 #
 # The derivation for the SD image will be placed in
 # config.system.build.sdImage
@@ -96,6 +100,9 @@ in
       "/boot/firmware" = {
         device = "/dev/disk/by-label/FIRMWARE";
         fsType = "vfat";
+        # Alternatively, this could be removed from the configuration.
+        # The filesystem is not needed at runtime, it could be treated
+        # as an opaque blob instead of a discrete FAT32 filesystem.
         options = [ "nofail" "noauto" ];
       };
       "/" = {
@@ -125,6 +132,8 @@ in
         truncate -s $imageSize $img
 
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
+        # The "bootable" partition is where u-boot will look file for the bootloader
+        # information (dtbs, extlinux.conf file).
         sfdisk $img <<EOF
             label: dos
             label-id: ${config.sdImage.firmwarePartitionID}
