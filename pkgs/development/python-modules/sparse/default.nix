@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , numpy
 , scipy
 , numba
@@ -10,6 +11,8 @@
 buildPythonPackage rec {
   pname = "sparse";
   version = "0.7.0";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
