@@ -5,7 +5,7 @@
         "hotspot": {
           "aarch64": {
             "build": "7",
-            "sha256": "ac367f3261fb53508c07f7eeb767b11ab53681b7613b81b6b7030c4db00b1aa8",
+            "sha256": "894a846600ddb0df474350037a2fb43e3343dc3606809a20c65e750580d8f2b9",
             "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.3%2B7/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.3_7.tar.gz",
             "version": "11.0.3"
           },
@@ -33,7 +33,7 @@
         "hotspot": {
           "aarch64": {
             "build": "7",
-            "sha256": "4af5b7d6678d03f2207029a7c610d81b1f016462c1dfcd8153a227b1df973a42",
+            "sha256": "de31fab70640c6d5099de5fc8fa8b4d6b484a7352fa48a9fafbdc088ca708564",
             "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.3%2B7/OpenJDK11U-jre_aarch64_linux_hotspot_11.0.3_7.tar.gz",
             "version": "11.0.3"
           },
