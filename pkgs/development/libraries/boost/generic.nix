@@ -1,6 +1,7 @@
 { stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , which
 , buildPackages
+, darwin
 , toolset ? /**/ if stdenv.cc.isClang  then "clang"
             else null
 , enableRelease ? true
@@ -140,7 +141,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ which ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ]
+    ++ optional (stdenv.isDarwin && buildPackages.stdenv.cc.isGNU) darwin.cctools;
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
     ++ optional stdenv.isDarwin fixDarwinDylibNames
