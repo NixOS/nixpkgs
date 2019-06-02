@@ -315,6 +315,29 @@ let
         succeed("curl -sSf http://localhost:9131/metrics | grep -q 'varnish_up 1'");
       '';
     };
+
+    wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in {
+      exporterConfig.enable = true;
+      metricProvider = {
+        networking.wireguard.interfaces.wg0 = {
+          ips = [ "10.23.42.1/32" "fc00::1/128" ];
+          listenPort = 23542;
+
+          inherit (snakeoil.peer0) privateKey;
+
+          peers = singleton {
+            allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
+
+            inherit (snakeoil.peer1) publicKey;
+          };
+        };
+      };
+      exporterTest = ''
+        waitForUnit("prometheus-wireguard-exporter.service");
+        waitForOpenPort(9586);
+        succeed("curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'");
+      '';
+    };
   };
 in
 mapAttrs (exporter: testConfig: (makeTest {
