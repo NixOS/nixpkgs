@@ -2,23 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "xits-math-${version}";
-  version = "1.108";
+  version = "1.200";
 
   src = fetchFromGitHub {
-    owner = "khaledhosny";
-    repo = "xits-math";
+    owner = "alif-type";
+    repo = "xits";
     rev = "v${version}";
-    sha256 = "08nn676c41a7gmmhrzi8mm0g74z8aiaafjk48pqcwxvjj9av7xjg";
+    sha256 = "0s1qqqg3zv9k4wqn1vkx0z895fjccg96n58syc1d5f2wba9kyfcm";
   };
 
   nativeBuildInputs = [ fontforge ] ++ (with python2Packages; [ python fonttools ]);
 
   postPatch = ''
     rm *.otf
-
-    substituteInPlace tools/postprocess.py --replace \
-      'font = ttLib.TTFont(sys.argv[1])' \
-      'font = ttLib.TTFont(sys.argv[1], recalcTimestamp=False)'
   '';
 
   installPhase = ''
