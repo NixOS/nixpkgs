@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonApplication }:
+{ lib, fetchFromGitHub, buildPythonApplication, python, graphviz }:
 
 buildPythonApplication {
   name = "gprof2dot-2017-09-19";
@@ -9,6 +9,9 @@ buildPythonApplication {
     rev = "2017.09.19";
     sha256 = "1b5wvjv5ykbhz7aix7l3y7mg1hxi0vgak4a49gr92sdlz8blj51v";
   };
+
+  checkInputs = [ graphviz ];
+  checkPhase = "${python.interpreter} tests/test.py";
 
   meta = with lib; {
     homepage = https://github.com/jrfonseca/gprof2dot;
