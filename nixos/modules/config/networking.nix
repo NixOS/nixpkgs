@@ -8,6 +8,12 @@ let
 
   cfg = config.networking;
 
+  upstreamNetworkUnits = [
+    "network.target"
+    "network-pre.target"
+    "network-online.target"
+  ];
+
   localhostMapped4 = cfg.hosts ? "127.0.0.1" && elem "localhost" cfg.hosts."127.0.0.1";
   localhostMapped6 = cfg.hosts ? "::1"       && elem "localhost" cfg.hosts."::1";
 
@@ -213,6 +219,10 @@ in
 
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;
+
+    systemd.additionalUpstreamSystemUnits = upstreamNetworkUnits;
+
+    systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
 
   };
 
