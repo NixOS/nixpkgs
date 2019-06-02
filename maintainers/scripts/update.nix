@@ -20,7 +20,9 @@ let
       in
         [x] ++ nubOn f xs;
 
-  pkgs = import ./../../default.nix { };
+  pkgs = import ./../../default.nix {
+    overlays = [];
+  };
 
   packagesWith = cond: return: set:
     nubOn (pkg: pkg.updateScript)
