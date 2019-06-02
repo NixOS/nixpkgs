@@ -14,6 +14,7 @@ with lib;
 let
   rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix ({
     inherit (config.sdImage) storePaths;
+    populateImageCommands = config.sdImage.populateRootCommands;
     volumeLabel = "NIXOS_SD";
   } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
     uuid = config.sdImage.rootPartitionUUID;
@@ -77,6 +78,16 @@ in
         /boot/firmware partition on the SD image.
       '';
     };
+
+    populateRootCommands = mkOption {
+      example = literalExample "''\${extlinux-conf-builder} -t 3 -c \${config.system.build.toplevel} -d ./files/boot''";
+      description = ''
+        Shell commands to populate the ./files directory.
+        All files in that directory are copied to the
+        root (/) partition on the SD image. Use this to
+        populate the ./files/boot (/boot) directory.
+      '';
+    };
   };
 
   config = {
@@ -117,8 +128,8 @@ in
             label: dos
             label-id: ${config.sdImage.firmwarePartitionID}
 
-            start=8M, size=$firmwareSizeBlocks, type=b, bootable
-            start=${toString (8 + config.sdImage.firmwareSize)}M, type=83
+            start=8M, size=$firmwareSizeBlocks, type=b
+            start=${toString (8 + config.sdImage.firmwareSize)}M, type=83, bootable
         EOF
 
         # Copy the rootfs into the SD image

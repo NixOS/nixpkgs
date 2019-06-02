@@ -39,7 +39,10 @@ in
         cp ${pkgs.ubootRaspberryPiZero}/u-boot.bin firmware/u-boot-rpi0.bin
         cp ${pkgs.ubootRaspberryPi}/u-boot.bin firmware/u-boot-rpi1.bin
         cp ${configTxt} firmware/config.txt
-        ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./firmware
       '';
+    populateRootCommands = ''
+      mkdir -p ./files/boot
+      ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./files/boot
+    '';
   };
 }

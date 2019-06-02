@@ -46,7 +46,10 @@ in
         (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
         cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
         cp ${configTxt} firmware/config.txt
-        ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./firmware
       '';
+    populateRootCommands = ''
+      mkdir -p ./files/boot
+      ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./files/boot
+    '';
   };
 }
