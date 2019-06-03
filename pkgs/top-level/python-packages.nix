@@ -345,6 +345,8 @@ in {
 
   btchip = callPackage ../development/python-modules/btchip { };
 
+  datatable = callPackage ../development/python-modules/datatable { };
+
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   datasette = callPackage ../development/python-modules/datasette { };
