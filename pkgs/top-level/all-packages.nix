@@ -17432,6 +17432,7 @@ in
     inherit (darwin.apple_sdk.frameworks)
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
       ImageCaptureCore GSS ImageIO;
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   };
 
   emacsPackagesFor = emacs: self: let callPackage = newScope self; in rec {
