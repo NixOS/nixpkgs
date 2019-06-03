@@ -14949,11 +14949,7 @@ in
 
   cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
-  cockroachdb = callPackage ../servers/sql/cockroachdb {
-    # XXX: this is failing with Go 1.12. Error is related to cgo, an
-    # update to this package might fix it.
-    buildGoPackage = buildGo111Package;
-  };
+  cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_3_compat;
