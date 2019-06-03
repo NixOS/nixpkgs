@@ -1,7 +1,7 @@
 {
   name = "nixpkgs";
 
-  epoch = 2019;
+  epoch = 201906;
 
   description = "A collection of packages for the Nix package manager";
 
