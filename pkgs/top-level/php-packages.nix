@@ -102,7 +102,7 @@ let
   };
 
   couchbase = buildPecl rec {
-    version = "2.6.0";
+    version = "2.6.1";
     pname = "couchbase";
 
     buildInputs = [ pkgs.libcouchbase pkgs.zlib igbinary pcs ];
@@ -111,7 +111,7 @@ let
       owner = "couchbase";
       repo = "php-couchbase";
       rev = "v${version}";
-      sha256 = "0lhcvgd4a0wvxniinxajj48p5krbp44h8932021qq14rv94r4k0b";
+      sha256 = "0jdzgcvab1vpxai23brmmvizjjq2d2dik9aklz6bzspfb512qjd6";
     };
 
     configureFlags = [ "--with-couchbase" ];
