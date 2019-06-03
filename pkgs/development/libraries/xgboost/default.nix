@@ -8,13 +8,13 @@ assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   name = "xgboost-${version}";
-  version = "0.72";
+  version = "0.90";
 
   # needs submodules
   src = fetchgit {
     url = "https://github.com/dmlc/xgboost";
     rev = "refs/tags/v${version}";
-    sha256 = "1d4kw2jm7d12g8qwi7p9r3429y7sjks9xp9yhvfpx5jh7qakkxj6";
+    sha256 = "1zs15k9crkiq7bnr4gqq53mkn3w8z9dq4nwlavmfcr5xr5gw2pw4";
   };
 
   enableParallelBuilding = true;
