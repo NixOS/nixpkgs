@@ -360,6 +360,7 @@ in
       font = mkOption {
         type = types.nullOr types.path;
         default = "${realGrub}/share/grub/unicode.pf2";
+        defaultText = ''"''${pkgs.grub2}/share/grub/unicode.pf2"'';
         description = ''
           Path to a TrueType, OpenType, or pf2 font to be used by Grub.
         '';
