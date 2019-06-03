@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name = "sourcetrail-${version}";
-  version = "2019.1.11";
+  version = "2019.2.25";
 
   src = fetchurl {
     name = "sourtrail.tar.gz";
     url = "https://www.sourcetrail.com/downloads/${version}/linux/64bit";
-    sha256 = "09f3qdgdqg6dlai43050qh4iv1d4j43isk81q68swalpnvjn72w0";
+    sha256 = "1xj7666igicsrps3g37bafm851l33xymgfrn02gal4x2givfhj74";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
