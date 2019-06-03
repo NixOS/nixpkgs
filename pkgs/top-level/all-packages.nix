@@ -24155,4 +24155,5 @@ in
 
   bemenu = callPackage ../applications/misc/bemenu { };
 
+  rusty-tags = callPackage ../development/tools/misc/rusty-tags { };
 }

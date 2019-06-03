@@ -1,5 +1,4 @@
-/* { lib, rustPlatform, fetchFromGitHub }: */
-with import <nixpkgs> {};
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   name = "rusty-tags-${version}";
