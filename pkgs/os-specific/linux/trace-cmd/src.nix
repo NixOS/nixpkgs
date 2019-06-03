@@ -1,5 +1,5 @@
 {
   url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
-  rev    = "c8d9e1a82e75ae0d35d8ca2800ef6c65be3ac4e5";
-  sha256 = "0ask7sdmlpffcfbzg3g68bqx8gy7qbk2h0faw8ksbw7p8cf5mnhd";
+  rev    = "0c957d2d85787350083ac990b35428e665f392a5";
+  sha256 = "1b1d8k5qazm7x6vcprvl9hwsw3kk44pv8wcbgny53rniv7vv22ia";
 }

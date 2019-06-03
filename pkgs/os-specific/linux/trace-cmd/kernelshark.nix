@@ -10,9 +10,6 @@ in mkDerivation rec {
 
   sourceRoot = "trace-cmd-${shortRev}/kernel-shark";
 
-  patches = [ ./fix-kernel-shark-CMakeLists.txt.patch ];
-  patchFlags = [ "-p2" ];
-
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ qtbase json_c mesa_glu freeglut ];
