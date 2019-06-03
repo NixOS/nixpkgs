@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     description = "Create ctags/etags for a cargo project and all of its dependencies";
     homepage = https://github.com/dan-t/rusty-tags;
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ dan-t ];
+    maintainers = with maintainers; [ danielakhterov ];
     platforms = platforms.all;
   };
 }
