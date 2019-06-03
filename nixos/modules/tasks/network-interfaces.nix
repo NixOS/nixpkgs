@@ -963,11 +963,14 @@ in
       optionalString hasBonds "options bonding max_bonds=0";
 
     boot.kernel.sysctl = {
+      "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
     } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
-        (i: flip map [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${i.name}.proxy_arp" true)))
+        (i: flip map [ "4" "6" ] (v: if v == "4" 
+                                       then nameValuePair "net.ipv${v}.conf.${i.name}.proxy_arp" true
+                                       else nameValuePair "net.ipv${v}.conf.${i.name}.proxy_ndp" true)))
       // listToAttrs (flip map (filter (i: i.preferTempAddress) interfaces)
         (i: nameValuePair "net.ipv6.conf.${i.name}.use_tempaddr" 2));
 
