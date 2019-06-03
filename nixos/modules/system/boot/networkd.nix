@@ -203,7 +203,7 @@ let
 
   checkRoute = checkUnitConfig "Route" [
     (assertOnlyFields [
-      "Gateway" "GatewayOnlink" "Destination" "Source" "Metric"
+      "Gateway" "GatewayOnLink" "Destination" "Source" "Metric"
       "IPv6Preference" "Scope" "PreferredSource" "Table" "Protocol" "Type"
       "InitialCongestionWindow" "InitialAdvertisedReceiveWindow" "QuickAck"
       "MTUBytes"

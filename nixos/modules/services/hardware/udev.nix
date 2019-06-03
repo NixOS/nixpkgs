@@ -116,10 +116,6 @@ let
         exit 1
       fi
 
-      ${optionalString config.networking.usePredictableInterfaceNames ''
-        cp ${./80-net-setup-link.rules} $out/80-net-setup-link.rules
-      ''}
-
       # If auto-configuration is disabled, then remove
       # udev's 80-drivers.rules file, which contains rules for
       # automatically calling modprobe.
@@ -281,6 +277,8 @@ in
     services.udev.packages = [ extraUdevRules extraHwdbFile ];
 
     services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux udev ];
+
+    boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
     environment.etc =
       [ { source = udevRules;
