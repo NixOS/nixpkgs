@@ -7968,6 +7968,7 @@ in
 
   cargo-web = callPackage ../development/tools/cargo-web {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+    inherit (darwin) cf-private;
   };
 
   carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix { };
