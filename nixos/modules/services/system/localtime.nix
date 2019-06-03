@@ -20,7 +20,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.geoclue2.enable = true;
+    services.geoclue2 = {
+      enable = true;
+      appConfig."localtime" = {
+        isAllowed = true;
+        isSystem = true;
+      };
+    };
 
     # so polkit will pick up the rules
     environment.systemPackages = [ pkgs.localtime ];
