@@ -2437,8 +2437,6 @@ package-maintainers:
     - hsyslog
     - jailbreak-cabal
     - json-autotype
-    - lambdabot-core
-    - lambdabot-irc-plugins
     - language-nix
     - liquid-fixpoint
     - liquidhaskell
@@ -2794,6 +2792,7 @@ broken-packages:
   - anydbm
   - aosd
   - apart
+  - apecs-stm
   - apelsin
   - api-builder
   - api-tools
@@ -2860,6 +2859,7 @@ broken-packages:
   - artery
   - artifact
   - ascii-flatten
+  - ascii-string
   - ascii-vector-avc
   - ascii85-conduit
   - asic
@@ -4775,6 +4775,7 @@ broken-packages:
   - getflag
   - GGg
   - ggtsTC
+  - gh-labeler
   - ghc-core-smallstep
   - ghc-datasize
   - ghc-dump-core
@@ -4846,6 +4847,7 @@ broken-packages:
   - git-sanity
   - git-vogue
   - gitdo
+  - github
   - github-backup
   - github-data
   - github-tools
@@ -5341,6 +5343,10 @@ broken-packages:
   - hasktorch-signatures-partial
   - hasktorch-signatures-support
   - hasktorch-zoo
+  - haskus-binary
+  - haskus-system-build
+  - haskus-utils
+  - haskus-utils-compat
   - haskus-web
   - haslo
   - hasloGUI
@@ -5348,7 +5354,9 @@ broken-packages:
   - hasql-backend
   - hasql-class
   - hasql-cursor-query
+  - hasql-dynamic-statements
   - hasql-generic
+  - hasql-implicits
   - hasql-migration
   - hasql-optparse-applicative
   - hasql-pool
@@ -7279,6 +7287,7 @@ broken-packages:
   - nitro
   - nix-eval
   - nixfromnpm
+  - nixpkgs-update
   - nkjp
   - nlp-scores
   - nlp-scores-scripts
@@ -7303,6 +7312,7 @@ broken-packages:
   - NoSlow
   - not-gloss-examples
   - notcpp
+  - notifications-tray-icon
   - notmuch-haskell
   - notmuch-web
   - NoTrace
@@ -7808,6 +7818,7 @@ broken-packages:
   - primitive-addr
   - primitive-atomic
   - primitive-containers
+  - primitive-extras
   - primitive-indexed
   - primitive-maybe
   - primitive-simd
@@ -8362,6 +8373,7 @@ broken-packages:
   - scalendar
   - SCalendar
   - scalp-webhooks
+  - scan-metadata
   - scan-vector-machine
   - scc
   - scenegraph
@@ -8376,6 +8388,8 @@ broken-packages:
   - scholdoc-types
   - SciBaseTypes
   - science-constants-dimensional
+  - SciFlow
+  - SciFlow-drmaa
   - scion
   - scion-browser
   - scons2dot
@@ -8474,6 +8488,7 @@ broken-packages:
   - servant-generate
   - servant-generic
   - servant-github
+  - servant-github-webhook
   - servant-haxl-client
   - servant-hmac-auth
   - servant-http-streams
@@ -8650,6 +8665,7 @@ broken-packages:
   - skylark-client
   - skype4hs
   - slack
+  - slave-thread
   - slidemews
   - Slides
   - slim
@@ -8913,7 +8929,9 @@ broken-packages:
   - stgi
   - STL
   - stm-chunked-queues
+  - stm-containers
   - stm-firehose
+  - stm-hamt
   - stm-io-hooks
   - stm-lifted
   - stm-promise
@@ -9071,6 +9089,7 @@ broken-packages:
   - Tablify
   - tabloid
   - tabs
+  - taffybar
   - tag-bits
   - tag-stream
   - tagged-exception-core
@@ -9218,6 +9237,7 @@ broken-packages:
   - th-traced
   - th-typegraph
   - thank-you-stars
+  - theatre
   - themoviedb
   - thentos-cookie-session
   - Theora
