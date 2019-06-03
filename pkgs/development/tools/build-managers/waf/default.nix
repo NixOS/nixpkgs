@@ -8,13 +8,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "waf";
-  version = "2.0.15";
+  version = "2.0.18";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "waf";
     rev = "${pname}-${version}";
-    sha256 = "0i86dbn6l01n4h4rzyl4mvizqabbqn5w7fywh83z7fxpha13c3bz";
+    sha256 = "1ifcanm2x2i8qwgfkwgdxwaqcdwsx5jg8bd1d6sqjps3pz7s5qxx";
   };
 
   patches = [
