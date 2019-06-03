@@ -4306,6 +4306,8 @@ in {
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 
+  typesentry = callPackage ../development/python-modules/typesentry { };
+
   s3transfer = callPackage ../development/python-modules/s3transfer { };
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
