@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages, librsync, ncftp, gnupg
+{ stdenv, fetchpatch, fetchurl, python2Packages, librsync, ncftp, gnupg
 , gnutar
 , par2cmdline
 , utillinux
@@ -15,6 +15,26 @@ python2Packages.buildPythonApplication rec {
   patches = [
     ./gnutar-in-test.patch
     ./use-installed-scripts-in-test.patch
+
+    # The following patches improve the performance of installCheckPhase:
+    # Ensure all duplicity output is captured in tests
+    (fetchpatch {
+      extraPrefix = "";
+      sha256 = "07ay3mmnw8p2j3v8yvcpjsx0rf2jqly9ablwjpmry23dz9f0mxsd";
+      url = "https://bazaar.launchpad.net/~duplicity-team/duplicity/0.8-series/diff/1359.2.1";
+    })
+    # Minimize time spent sleeping between backups
+    (fetchpatch {
+      extraPrefix = "";
+      sha256 = "0v99q6mvikb8sf68gh3s0zg12pq8fijs87fv1qrvdnc8zvs4pmfs";
+      url = "https://bazaar.launchpad.net/~duplicity-team/duplicity/0.8-series/diff/1359.2.2";
+    })
+    # Remove unnecessary sleeping after running backups in tests
+    (fetchpatch {
+      extraPrefix = "";
+      sha256 = "1bmgp4ilq2gwz2k73fxrqplf866hj57lbyabaqpkvwxhr0ch1jiq";
+      url = "https://bazaar.launchpad.net/~duplicity-team/duplicity/0.8-series/diff/1359.2.3";
+    })
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     ./linux-disable-timezone-test.patch
   ];
