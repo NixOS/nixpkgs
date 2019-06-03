@@ -46,7 +46,7 @@ default-package-overrides:
   # Newer versions don't work in LTS-12.x
   - alsa-mixer < 0.3
   - cassava-megaparsec < 2
-  # LTS Haskell 13.22
+  # LTS Haskell 13.23
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -425,7 +425,7 @@ default-package-overrides:
   - coercible-utils ==0.0.0
   - co-log ==0.2.0
   - co-log-core ==0.1.1
-  - colonnade ==1.2.0.1
+  - colonnade ==1.2.0.2
   - colorful-monoids ==0.2.1.2
   - colorize-haskell ==1.0.1
   - colour ==2.3.5
@@ -527,6 +527,7 @@ default-package-overrides:
   - currency ==0.2.0.0
   - cusparse ==0.2.0.0
   - cutter ==0.0
+  - cyclotomic ==1.0
   - czipwith ==1.0.1.1
   - data-accessor ==0.2.2.8
   - data-accessor-mtl ==0.2.0.4
@@ -542,7 +543,7 @@ default-package-overrides:
   - data-default-instances-old-locale ==0.0.1
   - data-diverse ==4.6.0.0
   - data-diverse-lens ==4.3.0.0
-  - datadog ==0.2.3.0
+  - datadog ==0.2.4.0
   - data-dword ==0.3.1.2
   - data-endian ==0.1.1
   - data-fix ==0.2.0
@@ -571,7 +572,7 @@ default-package-overrides:
   - Decimal ==0.5.1
   - declarative ==0.5.2
   - deepseq-generics ==0.2.0.0
-  - deferred-folds ==0.9.10
+  - deferred-folds ==0.9.10.1
   - dejafu ==1.11.0.5
   - dense-linear-algebra ==0.1.0.0
   - dependent-map ==0.2.4.0
@@ -673,7 +674,7 @@ default-package-overrides:
   - errors ==2.3.0
   - errors-ext ==0.4.2
   - error-util ==0.0.1.2
-  - ersatz ==0.4.5
+  - ersatz ==0.4.6
   - esqueleto ==2.6.0
   - etc ==0.4.1.0
   - eventful-core ==0.2.0
@@ -695,7 +696,7 @@ default-package-overrides:
   - exit-codes ==1.0.0
   - exomizer ==1.0.0
   - expiring-cache-map ==0.0.6.1
-  - explicit-exception ==0.1.9.2
+  - explicit-exception ==0.1.10
   - exp-pairs ==0.2.0.0
   - extensible-exceptions ==0.1.1.4
   - extra ==1.6.15
@@ -901,7 +902,7 @@ default-package-overrides:
   - hashable-time ==0.2.0.2
   - hashids ==1.0.2.4
   - hashmap ==1.3.3
-  - hashtables ==1.2.3.1
+  - hashtables ==1.2.3.2
   - haskeline ==0.7.5.0
   - haskell-gi ==0.21.5
   - haskell-gi-base ==0.21.5
@@ -918,7 +919,7 @@ default-package-overrides:
   - haskell-src-meta ==0.8.2
   - haskey-btree ==0.3.0.1
   - haskoin-core ==0.8.4
-  - hasql ==1.3.0.5
+  - hasql ==1.3.0.6
   - hasql-optparse-applicative ==0.3.0.3
   - hasql-pool ==0.5.0.2
   - hasql-transaction ==0.7.1
@@ -1059,14 +1060,14 @@ default-package-overrides:
   - hunit-dejafu ==1.2.1.0
   - hvect ==0.4.0.0
   - hvega ==0.1.0.3
-  - hw-balancedparens ==0.2.0.2
+  - hw-balancedparens ==0.2.0.3
   - hw-bits ==0.7.0.6
   - hw-conduit ==0.2.0.5
   - hw-conduit-merges ==0.2.0.0
   - hw-diagnostics ==0.0.0.7
   - hweblib ==0.6.3
   - hw-eliasfano ==0.1.0.1
-  - hw-excess ==0.2.0.2
+  - hw-excess ==0.2.0.3
   - hw-fingertree-strict ==0.1.1.1
   - hw-hspec-hedgehog ==0.1.0.4
   - hw-int ==0.0.0.3
@@ -1075,7 +1076,7 @@ default-package-overrides:
   - hw-mquery ==0.1.0.3
   - hw-packed-vector ==0.0.0.1
   - hw-parser ==0.1.0.0
-  - hw-prim ==0.6.2.23
+  - hw-prim ==0.6.2.24
   - hw-rankselect ==0.12.0.4
   - hw-rankselect-base ==0.3.2.1
   - hw-streams ==0.0.0.10
@@ -1115,7 +1116,7 @@ default-package-overrides:
   - influxdb ==1.6.1.3
   - ini ==0.3.6
   - inline-c ==0.7.0.1
-  - inline-c-cpp ==0.3.0.1
+  - inline-c-cpp ==0.3.0.2
   - inliterate ==0.1.0
   - insert-ordered-containers ==0.2.1.0
   - inspection-testing ==0.4.1.2
@@ -1438,7 +1439,7 @@ default-package-overrides:
   - NoHoed ==0.1.1
   - nonce ==1.0.7
   - nondeterminism ==1.4
-  - non-empty ==0.3.1
+  - non-empty ==0.3.2
   - nonempty-containers ==0.1.1.0
   - nonemptymap ==0.0.6.0
   - non-empty-sequence ==0.2.0.2
@@ -1520,7 +1521,7 @@ default-package-overrides:
   - pattern-arrows ==0.0.2
   - pcf-font ==0.2.2.0
   - pcf-font-embed ==0.1.2.0
-  - pcg-random ==0.1.3.5
+  - pcg-random ==0.1.3.6
   - pcre-heavy ==1.0.0.2
   - pcre-light ==0.4.0.4
   - pcre-utils ==0.1.8.1.1
@@ -1589,7 +1590,7 @@ default-package-overrides:
   - pptable ==0.3.0.0
   - pqueue ==1.4.1.2
   - prefix-units ==0.2.0
-  - prelude-compat ==0.0.0.1
+  - prelude-compat ==0.0.0.2
   - prelude-safeenum ==0.1.1.2
   - present ==4.1.0
   - prettyclass ==1.0.0.0
@@ -1640,7 +1641,7 @@ default-package-overrides:
   - purescript-bridge ==0.13.0.0
   - pure-zlib ==0.6.4
   - pushbullet-types ==0.4.1.0
-  - pusher-http-haskell ==1.5.1.8
+  - pusher-http-haskell ==1.5.1.9
   - qchas ==1.1.0.1
   - qm-interpolated-string ==0.3.0.0
   - qnap-decrypt ==0.3.4
@@ -1707,7 +1708,7 @@ default-package-overrides:
   - regex-tdfa ==1.2.3.2
   - regex-tdfa-text ==1.0.0.3
   - regex-with-pcre ==1.0.2.0
-  - registry ==0.1.5.1
+  - registry ==0.1.5.2
   - reinterpret-cast ==0.1.0
   - relapse ==1.0.0.0
   - relational-query ==0.12.2.1
@@ -1850,7 +1851,7 @@ default-package-overrides:
   - signal ==0.1.0.4
   - silently ==1.2.5
   - simple-cmd ==0.1.4
-  - simple-cmd-args ==0.1.1
+  - simple-cmd-args ==0.1.2
   - simple-log ==0.9.11
   - simple-reflect ==0.3.3
   - simple-sendfile ==0.2.28
@@ -1922,7 +1923,7 @@ default-package-overrides:
   - storable-record ==0.0.4
   - storable-tuple ==0.0.3.3
   - storablevector ==0.2.13
-  - store ==0.5.1.0
+  - store ==0.5.1.1
   - store-core ==0.4.4
   - Strafunski-StrategyLib ==5.0.1.0
   - stratosphere ==0.29.1
@@ -2190,7 +2191,7 @@ default-package-overrides:
   - vector-bytes-instances ==0.1.1
   - vector-instances ==3.4
   - vector-mmap ==0.0.3
-  - vector-sized ==1.2.0.0
+  - vector-sized ==1.2.0.1
   - vector-space ==0.15
   - vector-split ==1.0.0.2
   - vector-th-unbox ==0.2.1.6
@@ -2349,7 +2350,7 @@ default-package-overrides:
   - zlib-bindings ==0.1.1.5
   - zlib-lens ==0.1.2.1
   - zot ==0.0.3
-  - zstd ==0.1.0.0
+  - zstd ==0.1.1.2
   - ztail ==1.2.0.2
 
 extra-packages:

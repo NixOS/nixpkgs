@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoBuildFlags = lib.optionals (!stdenv.isLinux) ["--no-default-features" "--features" "pulse"];
-  cargoSha256 = "148p7r9xmc0nc0d4qyxhh29xqcb5axwqwcxcrkgd41f32c3g44dc";
+  cargoSha256 = "0xnz2s8vh5njqs4a1qm98ydh8pywxvnnpym0z94fsifyfdjlsfm4";
 
   buildInputs = [ xlibsWrapper xorg.libXScrnSaver libpulseaudio ] ++ lib.optional stdenv.isDarwin Security;
   nativeBuildInputs = [ pkgconfig patchelf ];

@@ -2,7 +2,7 @@
 
 let
   pname = "agave";
-  version = "009";
+  version = "10";
 in fetchurl {
   name = "${pname}-${version}";
   url = "https://github.com/agarick/agave/releases/download/v${version}/agave-r.ttf";
@@ -13,7 +13,7 @@ in fetchurl {
     install -D $downloadedFile $out/share/fonts/truetype/agave-r.ttf
   '';
 
-  sha256 = "16qvz3zpwiq2nw0gxygva5pssswcia5xp0q6ir5jfkackvqf3fql";
+  sha256 = "1mfj6a9sp00mjz7420yyrbbs5bqks3fz2slwgcppklxnz0890r9f";
 
   meta = with lib; {
     description = "truetype monospaced typeface designed for X environments";

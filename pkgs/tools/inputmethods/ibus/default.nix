@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, runCommand, fetchFromGitHub, autoreconfHook, gettext, makeWrapper, pkgconfig
+{ stdenv, substituteAll, fetchurl, runCommand, fetchFromGitHub, autoreconfHook, gettext, makeWrapper, pkgconfig
 , vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobject-introspection, gtk2
-, gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePythonLibrary ? true
+, gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePython2Library ? false
 , enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null
 , buildPackages, runtimeShell }:
 
@@ -90,10 +90,15 @@ stdenv.mkDerivation rec {
     sha256 = "1npavb896qrp6qbqayb0va4mpsi68wybcnlbjknzgssqyw2ylh9r";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      pythonInterpreter = python3Runtime.interpreter;
+      pythonSitePackages = python3.sitePackages;
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace setup/ibus-setup.in --subst-var-by PYTHON ${python3Runtime.interpreter}
-    substituteInPlace data/dconf/Makefile.am --replace "dconf update" true
-    substituteInPlace configure.ac --replace '$python2dir/ibus' $out/${python3.sitePackages}/ibus
     echo \#!${runtimeShell} > data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
   '';
@@ -105,7 +110,8 @@ stdenv.mkDerivation rec {
     (enableFeature (dconf != null) "dconf")
     (enableFeature (libnotify != null) "libnotify")
     (enableFeature withWayland "wayland")
-    (enableFeature enablePythonLibrary "python-library")
+    (enableFeature enablePython2Library "python-library")
+    (enableFeature enablePython2Library "python2") # XXX: python2 library does not work anyway
     (enableFeature enableUI "ui")
     "--with-unicode-emoji-dir=${emojiData}"
     "--with-emoji-annotation-dir=${cldrEmojiAnnotation}/share/unicode/cldr/common/annotations"
@@ -130,6 +136,7 @@ stdenv.mkDerivation rec {
     dconf
     gdk_pixbuf
     gobject-introspection
+    python3.pkgs.pygobject3 # for pygobject overrides
     gtk2
     gtk3
     isocodes

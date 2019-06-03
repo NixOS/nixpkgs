@@ -135,6 +135,7 @@ in
   leaps = handleTest ./leaps.nix {};
   lidarr = handleTest ./lidarr.nix {};
   #lightdm = handleTest ./lightdm.nix {};
+  limesurvey = handleTest ./limesurvey.nix {};
   login = handleTest ./login.nix {};
   #logstash = handleTest ./logstash.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
@@ -161,6 +162,7 @@ in
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
   ndppd = handleTest ./ndppd.nix {};
   neo4j = handleTest ./neo4j.nix {};
+  nesting = handleTest ./nesting.nix {};
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };
   networking.scripted = handleTest ./networking.nix { networkd = false; };

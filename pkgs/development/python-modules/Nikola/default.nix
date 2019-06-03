@@ -58,6 +58,12 @@ buildPythonPackage rec {
     sha256 = "1a5y1qriy76hl4yxvbf365b1ggsxybm06mi1pwb5jkgbkwk2gkrf";
   };
 
+  patchPhase = ''
+    # upstream added bound so that requires.io doesn't send mails about update
+    # nikola should work with markdown 3.0: https://github.com/getnikola/nikola/pull/3175#issue-220147596
+    sed -i 's/Markdown>.*/Markdown/' requirements.txt
+  '';
+
   checkPhase = ''
     LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" py.test .
   '';

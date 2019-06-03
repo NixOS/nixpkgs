@@ -20,4 +20,8 @@ nodePackages // {
       done
     '';
   };
+
+  stf = nodePackages.stf.override {
+    nativeBuildInputs = with pkgs; [ yasm czmq protobufc ];
+  };
 }

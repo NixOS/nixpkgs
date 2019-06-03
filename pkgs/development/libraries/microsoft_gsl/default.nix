@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
     sha256 = "1kxfca9ik934nkzyn34ingkyvwpc09li81cg1yc6vqcrdw51l4ri";
   };
 
-
   # build phase just runs the unit tests, so skip it if
   # we're doing a cross build
   nativeBuildInputs = [ catch cmake ];
@@ -27,10 +26,15 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Functions and types that are suggested for use by the C++ Core Guidelines";
-    homepage    = https://github.com/Microsoft/GSL;
+    description = "C++ Core Guideline support library";
+    longDescription = ''
+     The Guideline Support Library (GSL) contains functions and types that are suggested for
+     use by the C++ Core Guidelines maintained by the Standard C++ Foundation.
+     This package contains Microsoft's implementation of GSL.
+    '';
+    homepage    = "https://github.com/Microsoft/GSL";
     license     = licenses.mit;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice xwvvvvwx ];
+    maintainers = with maintainers; [ thoughtpolice xwvvvvwx yuriaisaka ];
   };
 }

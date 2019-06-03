@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1pwbz4ac2zb40g6q6ykzhzfbn0jr5xarkvgw9wxv455mbi67rd6y";
   };
 
-  cargoSha256 = "0cq78im3hg7wns260gwvajikj80l7kjbg3zycy3nvdx34llgv0n5";
+  cargoSha256 = "0yph5mwxn6arfbxbvri5qa7wzwj1q0s675j6vblia9akn02fyqd9";
 
   meta = with stdenv.lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";

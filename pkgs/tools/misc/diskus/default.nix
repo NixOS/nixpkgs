@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "1syrmm5qpz7d1h17xpw1wa3d2snaz9n7d1avsjp7xz8s2qcx1wdc";
+  cargoSha256 = "13d4h6f3idwj2bxafqrjihgwwr8v3k158r7b569jp7q2v1msqqx1";
 
   meta = with stdenv.lib; {
     description = "A minimal, fast alternative to 'du -sh'";

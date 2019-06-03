@@ -1320,6 +1320,8 @@ in
     xcbuildHook = xcbuild6Hook;
   };
 
+  colorls = callPackage ../tools/system/colorls { };
+
   compsize = callPackage ../os-specific/linux/compsize { };
 
   coturn = callPackage ../servers/coturn { };
@@ -1362,9 +1364,7 @@ in
 
   ddate = callPackage ../tools/misc/ddate { };
 
-  dedup = callPackage ../tools/backup/dedup {
-    inherit (llvmPackages) openmp;
-  };
+  dedup = callPackage ../tools/backup/dedup { };
 
   dehydrated = callPackage ../tools/admin/dehydrated { };
 
@@ -3534,11 +3534,13 @@ in
 
   halibut = callPackage ../tools/typesetting/halibut { };
 
-  halide = callPackage ../development/compilers/halide { };
+  halide = callPackage ../development/compilers/halide { llvmPackages=llvmPackages_6; };
 
   ham = pkgs.perlPackages.ham;
 
   hardinfo = callPackage ../tools/system/hardinfo { };
+
+  hcxtools = callPackage ../tools/security/hcxtools { };
 
   hdapsd = callPackage ../os-specific/linux/hdapsd { };
 
@@ -4026,6 +4028,8 @@ in
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
 
+  libcoap = callPackage ../applications/networking/libcoap {};
+
   libcroco = callPackage ../development/libraries/libcroco { };
 
   libcryptui = callPackage ../development/libraries/libcryptui { };
@@ -4089,7 +4093,7 @@ in
 
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
-  mautrix-telegram = callPackage ../servers/mautrix-telegram { };
+  mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
 
@@ -5740,7 +5744,7 @@ in
   screenkey = python2Packages.callPackage ../applications/video/screenkey { };
 
   quazip_qt4 = libsForQt5.quazip.override {
-    qtbase = qt4; qmake = qmake4Hook;
+    qtbase = qt4;
   };
 
   scfbuild = python2.pkgs.callPackage ../tools/misc/scfbuild { };
@@ -7137,8 +7141,6 @@ in
   cmucl_binary = pkgsi686Linux.callPackage ../development/compilers/cmucl/binary.nix { };
 
   compcert = callPackage ../development/compilers/compcert { };
-
-  cpp-gsl = callPackage ../development/libraries/cpp-gsl { };
 
   cryptol = haskell.lib.justStaticExecutables haskellPackages.cryptol;
 
@@ -8625,26 +8627,6 @@ in
 
   ### DEVELOPMENT / MISC
 
-  amdadlsdk = callPackage ../development/misc/amdadl-sdk { };
-
-  amdappsdk26 = amdappsdk.override {
-    version = "2.6";
-  };
-
-  amdappsdk27 = amdappsdk.override {
-    version = "2.7";
-  };
-
-  amdappsdk28 = amdappsdk.override {
-    version = "2.8";
-  };
-
-  amdappsdk = callPackage ../development/misc/amdapp-sdk { };
-
-  amdappsdkFull = amdappsdk.override {
-    samples = true;
-  };
-
   amtk = callPackage ../development/libraries/amtk { };
 
   avrlibc      = callPackage ../development/misc/avr/libc {};
@@ -9717,6 +9699,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
+  uefi-firmware-parser = callPackage ../development/tools/analysis/uefi-firmware-parser { };
+
   uhd = callPackage ../applications/radio/uhd { };
 
   uisp = callPackage ../development/tools/misc/uisp { };
@@ -10405,6 +10389,8 @@ in
   ganv = callPackage ../development/libraries/ganv { };
 
   gcab = callPackage ../development/libraries/gcab { };
+
+  gcovr = with python3Packages; toPythonApplication gcovr;
 
   gcr = callPackage ../development/libraries/gcr { };
 
@@ -12495,11 +12481,10 @@ in
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_2_7
     libressl_2_8
     libressl_2_9;
 
-  libressl = libressl_2_8;
+  libressl = libressl_2_9;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
@@ -16389,6 +16374,8 @@ in
 
   medio = callPackage ../data/fonts/medio { };
 
+  mno16 = callPackage ../data/fonts/mno16 { };
+
   mnist = callPackage ../data/machine-learning/mnist { };
 
   mobile-broadband-provider-info = callPackage ../data/misc/mobile-broadband-provider-info { };
@@ -17084,9 +17071,7 @@ in
     inherit (python3Packages) python wrapPython pygments markdown;
   };
 
-  cgminer = callPackage ../applications/misc/cgminer {
-    amdappsdk = amdappsdk28;
-  };
+  cgminer = callPackage ../applications/misc/cgminer { };
 
   chirp = callPackage ../applications/radio/chirp {
     inherit (pythonPackages) pyserial pygtk;
@@ -17115,6 +17100,8 @@ in
   };
 
   clfswm = callPackage ../applications/window-managers/clfswm { };
+
+  clickshare-csc1 = callPackage ../applications/video/clickshare-csc1 { };
 
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
 
@@ -18024,12 +18011,6 @@ in
   };
 
   freerdpUnstable = freerdp;
-
-  # This must go when weston v2 is released
-  freerdp_legacy = callPackage ../applications/networking/remote/freerdp/legacy.nix {
-    cmake = cmake_2_8;
-    ffmpeg = ffmpeg_2;
-  };
 
   fte = callPackage ../applications/editors/fte { };
 
@@ -19260,7 +19241,7 @@ in
   synapse = callPackage ../applications/misc/synapse { };
 
   synapse-bt = callPackage ../applications/networking/p2p/synapse-bt {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio {
@@ -19407,6 +19388,8 @@ in
   openimageio = callPackage ../applications/graphics/openimageio {
     stdenv = overrideCC stdenv gcc6;
   };
+
+  openimageio2 = callPackage ../applications/graphics/openimageio/2.x.nix { };
 
   openjump = callPackage ../applications/misc/openjump { };
 
@@ -20488,6 +20471,8 @@ in
 
   testssl = callPackage ../applications/networking/testssl { };
 
+  ulauncher = callPackage ../applications/misc/ulauncher { };
+
   umurmur = callPackage ../applications/networking/umurmur { };
 
   udocker = pythonPackages.callPackage ../tools/virtualization/udocker { };
@@ -20754,9 +20739,7 @@ in
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {};
 
-  weston = callPackage ../applications/window-managers/weston {
-    freerdp = freerdp_legacy;
-  };
+  weston = callPackage ../applications/window-managers/weston { };
 
   whitebox-tools = callPackage ../applications/gis/whitebox-tools {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -21218,6 +21201,8 @@ in
   _20kly = callPackage ../games/20kly { };
 
   _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
+
+  abbaye-des-morts = callPackage ../games/abbaye-des-morts { };
 
   adom = callPackage ../games/adom { };
 
@@ -23253,6 +23238,8 @@ in
 
   igraph = callPackage ../development/libraries/igraph { };
 
+  igprof = callPackage ../development/tools/misc/igprof { };
+
   illum = callPackage ../tools/system/illum { };
 
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
@@ -23542,6 +23529,8 @@ in
 
   redis-desktop-manager = libsForQt5.callPackage ../applications/misc/redis-desktop-manager { };
 
+  robin-map = callPackage ../development/libraries/robin-map { };
+
   robo3t = callPackage ../applications/misc/robo3t { };
 
   rucksack = callPackage ../development/tools/rucksack { };
@@ -23766,6 +23755,8 @@ in
   ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
+
+  vnote = libsForQt5.callPackage ../applications/office/vnote { };
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
 

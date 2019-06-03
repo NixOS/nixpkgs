@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
       sha256 = "08ldgyxv9216dgr8y9asqd7j2y82y9yqnqhkqaxc9i8a67yz1gzy";
     })
   ];
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   nativeBuildInputs = [
     meson
@@ -64,10 +68,9 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
+  # Fix parallel building: missing dependency from src/gtd-application.c
+  # Probably remove for 3.30+ https://gitlab.gnome.org/GNOME/gnome-todo/issues/170
+  preBuild = "ninja src/gtd-vcs-identifier.h";
 
   passthru = {
     updateScript = gnome3.updateScript {

@@ -426,7 +426,9 @@ in {
           '';
         };
       };
-      syncthing-init = {
+      syncthing-init = mkIf (
+        cfg.declarative.devices != {} || cfg.declarative.folders != {}
+      ) {
         after = [ "syncthing.service" ];
         wantedBy = [ "multi-user.target" ];
 

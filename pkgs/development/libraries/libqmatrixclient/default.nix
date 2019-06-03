@@ -12,6 +12,10 @@ let
       inherit sha256;
     };
 
+    postPatch = ''
+      sed -i -e '/example/Id' CMakeLists.txt
+    '';
+
     buildInputs = [ qtbase qtmultimedia ];
 
     nativeBuildInputs = [ cmake ];
@@ -27,6 +31,7 @@ let
 
 in rec {
   libqmatrixclient_0_4 = generic "0.4.2.1" "056hvp2m74wx72yd8vai18siddj9l8bhrvrkc4ia4cwjsqw02kid" "v";
-  libqmatrixclient_0_5 = generic "0.5.1.2" "0vvpm1vlqfvhgfvavifrj4998g8v33hp5xjf0n8zfsmg4lxlnfg1" "";
+  libqmatrixclient_0_5 = generic "0.5.2"   "1bhlqfs7251fss4icx794ka614npr6zyrpp4qwc4q5408ykfm7lr" "";
+
   libqmatrixclient = libqmatrixclient_0_4;
 }

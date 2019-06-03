@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.gnu.org/software/pth;
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
+    broken = stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isAarch64;
   };
 }

@@ -13,12 +13,6 @@ if lib.versions.major nix.version == "1"
 else
 
 let
-  isGreaterNix20 = with lib.versions;
-    let
-      inherit (nix) version;
-      inherit (lib) toInt;
-    in major version == "2" && toInt (minor version) >= 1 || toInt (major version) > 2;
-
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
     paths = with perlPackages;
@@ -74,16 +68,16 @@ let
       ];
   };
 in releaseTools.nixBuild rec {
-  name = "hydra-${version}";
-  version = "2019-03-18";
+  pname = "hydra";
+  version = "2019-05-06";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
-    repo = "hydra";
-    rev = "0721f6623ffb5a4b6a77b499af4eee7d6e4dd6a7";
-    sha256 = "0b2g2bnbaqpwxx8p81i4gpl4y16i57z5pnjm90fpd0jxnkij3pcg";
+    repo = pname;
+    rev = "ff64583d07f046e378a6be596ec0ce7a9e2b7472";
+    sha256 = "0w88q0saz7si22z3ryim6vdrv9qkwn6l25xfmiapvh5qrnrrdcb9";
   };
 
   buildInputs =
@@ -93,7 +87,8 @@ in releaseTools.nixBuild rec {
       perlDeps perl nix
       postgresql # for running the tests
       nlohmann_json
-    ] ++ lib.optionals isGreaterNix20 [ boost ];
+      boost
+    ];
 
   hydraPath = lib.makeBinPath (
     [ sqlite subversion openssh nix coreutils findutils pixz
@@ -102,15 +97,7 @@ in releaseTools.nixBuild rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  # adds a patch which ensures compatibility with the API of Nix 2.0.
-  # it has been reverted in https://github.com/NixOS/hydra/commit/162d671c48a418bd10a8a171ca36787ef3695a44,
-  # for Nix 2.1/unstable compatibility. Reapplying helps if Nix 2.0 is used to keep the build functional.
-  patches = lib.optionals (!isGreaterNix20) [
-    (fetchpatch {
-      url = "https://github.com/NixOS/hydra/commit/08de434bdd0b0a22abc2081be6064a6c846d3920.patch";
-      sha256 = "0kz77njp5ynn9l81g3q8zrryvnsr06nk3iw0a60187wxqzf5fmf8";
-    })
-  ] ++ [
+  patches = [
     (fetchpatch {
       url = "https://github.com/NixOS/hydra/pull/648/commits/4171ab4c4fd576c516dc03ba64d1c7945f769af0.patch";
       sha256 = "1fxa2459kdws6qc419dv4084c1ssmys7kqg4ic7n643kybamsgrx";

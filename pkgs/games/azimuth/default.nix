@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "azimuth";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner  = "mdsteele";
     repo   = "azimuth";
     rev    = "v${version}";
-    sha256 = "0yh52i3vfmj5zd7fs1r2xpjy2mknycr5xz6kyixj2qncb25xsm7z";
+    sha256 = "1znfvpmqiixd977jv748glk5zc4cmhw5813zp81waj07r9b0828r";
   };
 
   preConfigure = ''

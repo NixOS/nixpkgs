@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "vim" ];
 
-  cargoSha256 = "0vxyi7f5p9blv1isngvad8jrgpwmmv3dkr39qsb2i217jx3mzj2i";
+  cargoSha256 = "1rwb0yvqpxp1pikdw6345n035krx0qcx4f5di89841fhr123zv0w";
 
   patchPhase = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
