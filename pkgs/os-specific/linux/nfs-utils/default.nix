@@ -9,11 +9,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "nfs-utils-${version}";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchurl {
     url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${name}.tar.xz";
-    sha256 = "08k36d7l8yqylscnln3p85lcfwi7r7g6n3bnslgmzc1i71wk92zn";
+    sha256 = "1kcn11glc3rma1gvykbk1s542mgz36ipi7yqxlk9jyh8hsiqncpq";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
         --replace '$dir/include/gssapi' ${lib.getDev kerberos}/include/gssapi \
         --replace '$dir/bin/krb5-config' ${lib.getDev kerberos}/bin/krb5-config
     '';
-
-  #configureScript = "bash -x configure";
 
   configureFlags =
     [ "--enable-gss"
@@ -100,7 +98,9 @@ stdenv.mkDerivation rec {
     '';
 
   # One test fails on mips.
-  doCheck = !stdenv.isMips;
+  # doCheck = !stdenv.isMips;
+  # https://bugzilla.kernel.org/show_bug.cgi?id=203793
+  doCheck = false;
 
   disallowedReferences = [ (lib.getDev kerberos) ];
 
