@@ -2,13 +2,13 @@
 
 with stdenv.lib; stdenv.mkDerivation rec {
   name = "tbb-${version}";
-  version = "2019_U6";
+  version = "2019_U7";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "tbb";
     rev = version;
-    sha256 = "1zbf06l659vq6s5wp3ln96ycwcd42caffan5vilqvqyxqvjljyic";
+    sha256 = "0hf8vkb1g2dqihqw7fzhc90i1p7yvp45gbamj0mnnhffz2ablz1b";
   };
 
   makeFlags = concatStringsSep " " (
