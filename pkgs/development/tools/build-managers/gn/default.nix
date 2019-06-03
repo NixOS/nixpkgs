@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     install -vD out/gn "$out/bin/gn"
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     description = "A meta-build system that generates NinjaBuild files";
     homepage = https://gn.googlesource.com/gn;
