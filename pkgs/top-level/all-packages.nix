@@ -6714,7 +6714,7 @@ in
     deps = [ python ];
     substitutions = {
       inherit waf;
-      crossFlags = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform)
+      crossFlags = lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system)
         ''--cross-compile "--cross-execute=${stdenv.targetPlatform.emulator pkgs}"'';
     };
   } ../development/tools/build-managers/waf/setup-hook.sh;
