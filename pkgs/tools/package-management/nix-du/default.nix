@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "1x6qpivxbn94034jfdxb97xi97fhcdv2z7llq2ccfc80mgd0gz8l";
   };
-  cargoSha256 = "0sva4lnhccm6ly7pa6m99s3fqkmh1dzv7r2727nsg2f55prd4kxc";
+  cargoSha256 = "071gbhxbvnwi7n3zpy7bmlprzir0sl0f0pb191xg2ynw678prd7v";
 
   doCheck = true;
   checkInputs = [ graphviz ];

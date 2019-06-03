@@ -2,14 +2,14 @@
 
 let
   name = "mxisd-${version}";
-  version = "1.4.3";
-  rev = "cd890d114a46e4a3792c57cc7a35b95b2c466a16";
+  version = "1.4.4";
+  rev = "92f10347d1c8495b7409360c927ccc0ce3586064";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "kamax-matrix";
     repo = "mxisd";
-    sha256 = "05plcf6bq19fmx528fgnib4bw9gz36irwlnfsykys1bpmi60wj69";
+    sha256 = "06j4wh4vx5gziiifyaaijz2nlaa2yah8gzvf7ykfcm72m878rrkl";
   };
 
 

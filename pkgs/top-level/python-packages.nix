@@ -319,6 +319,8 @@ in {
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
+  cachelib = callPackage ../development/python-modules/cachelib { };
+
   cachy = callPackage ../development/python-modules/cachy { };
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
@@ -609,6 +611,8 @@ in {
 
   perf = callPackage ../development/python-modules/perf { };
 
+  perfplot = callPackage ../development/python-modules/perfplot { };
+
   phonopy = callPackage ../development/python-modules/phonopy { };
 
   piccata = callPackage ../development/python-modules/piccata {};
@@ -888,6 +892,8 @@ in {
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
 
+  sentry-sdk = callPackage ../development/python-modules/sentry-sdk {};
+
   sepaxml = callPackage ../development/python-modules/sepaxml { };
 
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
@@ -979,6 +985,8 @@ in {
 
   vega = callPackage ../development/python-modules/vega { };
 
+  accupy = callPackage ../development/python-modules/accupy { };
+
   acme = callPackage ../development/python-modules/acme { };
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
@@ -1067,6 +1075,8 @@ in {
     }));
 
   application = callPackage ../development/python-modules/application { };
+
+  applicationinsights = callPackage ../development/python-modules/applicationinsights { };
 
   appnope = callPackage ../development/python-modules/appnope { };
 
@@ -1610,6 +1620,8 @@ in {
   mxnet = callPackage ../development/python-modules/mxnet { };
 
   parsy = callPackage ../development/python-modules/parsy { };
+
+  portalocker = callPackage ../development/python-modules/portalocker { };
 
   portpicker = callPackage ../development/python-modules/portpicker { };
 
@@ -2335,6 +2347,8 @@ in {
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
   pyspf = callPackage ../development/python-modules/pyspf { };
+
+  pysptk = callPackage ../development/python-modules/pysptk { };
 
   pysrim = callPackage ../development/python-modules/pysrim { };
 
@@ -3729,6 +3743,8 @@ in {
     glibcLocales = pkgs.glibcLocales;
   };
 
+  pipdate = callPackage ../development/python-modules/pipdate { };
+
   pika = callPackage ../development/python-modules/pika { };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
@@ -3896,6 +3912,8 @@ in {
   pyext = callPackage ../development/python-modules/pyext { };
 
   pyfantom = callPackage ../development/python-modules/pyfantom { };
+
+  pyfma = callPackage ../development/python-modules/pyfma { };
 
   pyfftw = callPackage ../development/python-modules/pyfftw { };
 
@@ -5454,7 +5472,7 @@ in {
     inherit (pkgs) zstd pkgconfig;
   };
 
-  zxcvbn-python = callPackage ../development/python-modules/zxcvbn-python { };
+  zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 
   incremental = callPackage ../development/python-modules/incremental { };
 

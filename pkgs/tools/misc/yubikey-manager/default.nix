@@ -31,8 +31,15 @@ python3Packages.buildPythonPackage rec {
   ];
 
   postInstall = ''
+    mkdir -p "$out/man/man1"
+    cp man/ykman.1 "$out/man/man1"
+
     mkdir -p $out/share/bash-completion/completions
     _YKMAN_COMPLETE=source $out/bin/ykman > $out/share/bash-completion/completions/ykman || :
+    mkdir -p $out/share/zsh/site-functions/
+    _YKMAN_COMPLETE=source_zsh "$out/bin/ykman" > "$out/share/zsh/site-functions/_ykman" || :
+    substituteInPlace "$out/share/zsh/site-functions/_ykman" \
+      --replace 'compdef _ykman_completion ykman;' '_ykman_completion "$@"'
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/29169

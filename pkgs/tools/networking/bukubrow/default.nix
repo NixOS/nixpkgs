@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
   sourceRoot = "source/binary";
 
-  cargoSha256 = "19d1pgk8nm5jsfd696bqayi5s8ivv9gi6jdb00d10ddjxz234gs7";
+  cargoSha256 = "0553awiba24a3a8xwjhlwf8yzbs44lnirjvcxnvsgah7dc44r0gj";
 
   buildInputs = [ sqlite ];
 

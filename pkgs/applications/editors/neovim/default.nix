@@ -21,13 +21,13 @@ let
 in
   stdenv.mkDerivation rec {
     name = "neovim-unwrapped-${version}";
-    version = "0.3.5";
+    version = "0.3.7";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "113lrr9gwimvvzlkwlishm4cjqcf30xq9jfxn7vh41ckgnbiwf3w";
+      sha256 = "1j6w5jvq5v7kf7diad91qs1acr427nidnk9s24yyrz0hwdd1c2lh";
     };
 
     patches = [
@@ -37,6 +37,7 @@ in
       ./system_rplugin_manifest.patch
     ];
 
+    dontFixCmake = true;
     enableParallelBuilding = true;
 
     buildInputs = [
@@ -76,7 +77,7 @@ in
     disallowedReferences = [ stdenv.cc ];
 
     cmakeFlags = [
-      "-DLUA_PRG=${neovimLuaEnv}/bin/lua"
+      "-DLUA_PRG=${neovimLuaEnv.interpreter}"
       "-DGPERF_PRG=${gperf}/bin/gperf"
     ]
     ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"

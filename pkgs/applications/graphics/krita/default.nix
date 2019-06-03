@@ -4,14 +4,14 @@
 , kio, kcrash
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
 , openjpeg, opencolorio, vc, poppler, curl, ilmbase
-, qtmultimedia, qtx11extras
+, qtmultimedia, qtx11extras, quazip
 , python3Packages
 }:
 
 let
 
-major = "4.1";
-minor = "8";
+major = "4.2";
+minor = "0";
 patch = null;
 
 in
@@ -22,7 +22,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.kde.org/stable/krita/${major}.${minor}/${name}.tar.gz";
-    sha256 = "0h2rplc76r82b8smk61zci1ijj9xkjmf20pdqa8fc2lz4zicjxh4";
+    sha256 = "1l5bhk4b2f3qdzg9jk2sxz2bq8cqs10nm3wgkrkbqs6vig75rsym";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
@@ -32,7 +32,7 @@ mkDerivation rec {
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash
     boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
     openjpeg opencolorio poppler curl ilmbase
-    qtmultimedia qtx11extras
+    qtmultimedia qtx11extras quazip
     python3Packages.pyqt5
   ] ++ lib.optional (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) vc;
 

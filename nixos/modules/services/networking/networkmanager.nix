@@ -477,6 +477,10 @@ in {
       '';
     };
 
+    systemd.services.NetworkManager-wait-online = {
+      wantedBy = [ "network-online.target" ];
+    };
+
     systemd.services.nm-setup-hostsdirs = mkIf dynamicHostsEnabled {
       wantedBy = [ "NetworkManager.service" ];
       before = [ "NetworkManager.service" ];

@@ -113,6 +113,8 @@ let
 
   git-secrets = callPackage ./git-secrets { };
 
+  git-standup = callPackage ./git-standup { };
+
   git-stree = callPackage ./git-stree { };
 
   git-sync = callPackage ./git-sync { };
@@ -126,6 +128,8 @@ let
   gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
 
   gitflow = callPackage ./gitflow { };
+
+  gitstatus = callPackage ./gitstatus { };
 
   grv = callPackage ./grv { };
 

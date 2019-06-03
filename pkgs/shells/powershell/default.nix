@@ -4,8 +4,8 @@
 let platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if stdenv.isDarwin then "1jcrrgybcyq9kwyqxshsfm5fy3sa77h3795xx3rvrs8k434nl1yb"
-                     else if stdenv.isLinux then "1hlis827wmnjcy4h8va50093pmnqdhkbnbimmkymzmcvmkbmi9nx"
+    platformSha = if stdenv.isDarwin then "0w4dvkbi9jbybq7kvcgdccv8byp4ahlah45w2z8fwq961h3qnhg1"
+                     else if stdenv.isLinux then "19dagxqvw0fpsjm6vbimqbax3bkmdm6wwifkfaq3ylrk0a9wwsrm"
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
@@ -15,7 +15,7 @@ let platformString = if stdenv.isDarwin then "osx"
 in
 stdenv.mkDerivation rec {
   name = "powershell-${version}";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchzip {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-x64.tar.gz";

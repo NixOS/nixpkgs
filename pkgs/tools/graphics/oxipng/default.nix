@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1r195x3wdkshjwy23fpqsyyrw7iaj7yb39nhcnx9d4nhgq8w0pcl";
   };
 
-  cargoSha256 = "08mw937s61r4fj9bqrg492ss13zkik9557n9yk90r97a81972zbn";
+  cargoSha256 = "1mjqkjrnh5gw39qjni574qh7k4p891xbb4ip2q69cm177ffbghiz";
 
   # https://crates.io/crates/cloudflare-zlib#arm-vs-nightly-rust
   cargoBuildFlags = [ "--features=cloudflare-zlib/arm-always" ];

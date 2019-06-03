@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage
 
   buildInputs = [ pkgconfig udev ];
 
-  cargoSha256 = "sha256:0lf1zfmq9ypxk86ma0n4nczbklmjs631wdzfx4wd3cvhghyr8nkq";
+  cargoSha256 = "0pvkrdjrg9y38vsrqkrvsknzp78sknpmq14rskvij450a9mpihii";
 
   meta = {
     description = "Dynamic display configuration tool";
