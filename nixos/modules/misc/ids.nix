@@ -145,7 +145,7 @@
       #notbit = 111; # unused
       aerospike = 111;
       ngircd = 112;
-      btsync = 113;
+      #btsync = 113; # unused
       minecraft = 114;
       vault = 115;
       rippled = 116;
@@ -457,7 +457,7 @@
       #notbit = 111; # unused
       aerospike = 111;
       #ngircd = 112; # unused
-      btsync = 113;
+      #btsync = 113; # unused
       #minecraft = 114; # unused
       vault = 115;
       #ripped = 116; # unused
