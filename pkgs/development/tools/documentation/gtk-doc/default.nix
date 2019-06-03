@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python3, libxml2Python, libxslt, which
-, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, gettext, itstool, gnome3
+{ stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkgconfig
+, python3
+, libxml2Python
+, docbook_xml_dtd_43
+, docbook_xsl
+, libxslt
+, gettext
+, gnome3
 , withDblatex ? false, dblatex
 }:
 
@@ -7,9 +17,12 @@ stdenv.mkDerivation rec {
   pname = "gtk-doc";
   version = "1.30";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "17h6nwhis66z4dxjrc833wvfl6pqjp81yfx3fq6x7k1qp2749xm4";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = "GTK_DOC_${stdenv.lib.replaceStrings ["."] ["_"] version }";
+    sha256 = "05lr6apj3pd3s59a7k6p45k9ywwrp577ra4pvkhxvb5p7v90c2fi";
   };
 
   patches = [
@@ -18,13 +31,27 @@ stdenv.mkDerivation rec {
 
   outputDevdoc = "out";
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs =
-    [ pkgconfig perl python3 libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
-      gnome-doc-utils gettext which itstool
-    ] ++ stdenv.lib.optional withDblatex dblatex;
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+  ];
 
-  configureFlags = [ "--disable-scrollkeeper" ];
+  buildInputs = [
+    docbook_xml_dtd_43
+    docbook_xsl
+    libxslt
+    pkgconfig
+    python3
+    libxml2Python
+  ]
+  ++ stdenv.lib.optional withDblatex dblatex
+  ;
+
+  mesonFlags = [
+    "-Dtests=false"
+    "-Dyelp_manual=false"
+  ];
 
   # Make pygments available for binaries, python.withPackages creates a wrapper
   # but scripts are not allowed in shebangs so we link it into sys.path.
