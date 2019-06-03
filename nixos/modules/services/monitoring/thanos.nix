@@ -70,13 +70,29 @@ let
   } ''json2yaml -i $json -o $out'';
 
   thanos = cmd : "${cfg.package}/bin/thanos ${cmd}" +
-    (let args = concatLists (collect isList
-           (flip mapParamsRecursive params."${cmd}" (path : param :
-             let opt = concatStringsSep "." path;
-                 v = getAttrFromPath path cfg."${cmd}";
-             in param.toArgs opt v)));
+    (let args = cfg."${cmd}".arguments;
      in optionalString (length args != 0) (" \\\n  " +
          concatStringsSep " \\\n  " args));
+
+  argumentsOf = cmd : concatLists (collect isList
+    (flip mapParamsRecursive params."${cmd}" (path : param :
+      let opt = concatStringsSep "." path;
+          v = getAttrFromPath path cfg."${cmd}";
+      in param.toArgs opt v)));
+
+  mkArgumentsOption = cmd : mkOption {
+    type = types.listOf types.str;
+    default = argumentsOf cmd;
+    description = ''
+      Arguments to the <literal>thanos ${cmd}</literal> command.
+
+      Defaults to a list of arguments formed by converting the structured
+      options of <option>services.thanos.${cmd}</option> to a list of arguments.
+
+      Overriding this option will cause none of the structured options to have
+      any effect. So only set this if you know what you're doing!
+    '';
+  };
 
   mapParamsRecursive =
     let noParam = attr : !(attr ? "toArgs" && attr ? "option");
@@ -599,39 +615,46 @@ in {
     sidecar = paramsToOptions params.sidecar // {
       enable = mkEnableOption
         "the Thanos sidecar for Prometheus server";
+      arguments = mkArgumentsOption "sidecar";
     };
 
     store = paramsToOptions params.store // {
       enable = mkEnableOption
         "the Thanos store node giving access to blocks in a bucket provider.";
+      arguments = mkArgumentsOption "store";
     };
 
     query = paramsToOptions params.query // {
       enable = mkEnableOption
         ("the Thanos query node exposing PromQL enabled Query API " +
          "with data retrieved from multiple store nodes");
+      arguments = mkArgumentsOption "query";
     };
 
     rule = paramsToOptions params.rule // {
       enable = mkEnableOption
         ("the Thanos ruler service which evaluates Prometheus rules against" +
         " given Query nodes, exposing Store API and storing old blocks in bucket");
+      arguments = mkArgumentsOption "rule";
     };
 
     compact = paramsToOptions params.compact // {
       enable = mkEnableOption
         "the Thanos compactor which continuously compacts blocks in an object store bucket";
+      arguments = mkArgumentsOption "compact";
     };
 
     downsample = paramsToOptions params.downsample // {
       enable = mkEnableOption
         "the Thanos downsampler which continuously downsamples blocks in an object store bucket";
+      arguments = mkArgumentsOption "downsample";
     };
 
     receive = paramsToOptions params.receive // {
       enable = mkEnableOption
         ("the Thanos receiver which accept Prometheus remote write API requests " +
          "and write to local tsdb (EXPERIMENTAL, this may change drastically without notice)");
+      arguments = mkArgumentsOption "receive";
     };
   };
 
