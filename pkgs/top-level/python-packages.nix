@@ -4446,6 +4446,8 @@ in {
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
+  strategies = callPackage ../development/python-modules/strategies { };
+
   stravalib = callPackage ../development/python-modules/stravalib { };
 
   streamz = callPackage ../development/python-modules/streamz { };
