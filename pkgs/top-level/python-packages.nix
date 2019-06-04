@@ -2951,6 +2951,8 @@ in {
 
   gspread = callPackage ../development/python-modules/gspread { };
 
+  gtts-token = callPackage ../development/python-modules/gtts-token { };
+
   gym = callPackage ../development/python-modules/gym { };
 
   gyp = callPackage ../development/python-modules/gyp { };
