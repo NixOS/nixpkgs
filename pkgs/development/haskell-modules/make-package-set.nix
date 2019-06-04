@@ -360,10 +360,39 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     # environment.  However, callStack2nix should not be used if you want to
     # hack on the PureScript compiler itself.
     #
-    # TODO: Currently this doesn't work for stack.yaml files that have extra-deps
-    # that come from places other than Hackage.  This is due to an unfortunate
-    # interaction between stack2nix and cabal2nix.  In theory, this should be able
-    # to be fixed.
+    # WARNING: Currently this doesn't work for stack.yaml files that have
+    # extra-deps that are specified as git repos, HTTP(S) URLs, etc.
+    #
+    # An example non-working stack.yaml file would look like the following:
+    #
+    #   resolver: lts-13.17
+    #   packages:
+    #     - .
+    #   extra-deps:
+    #     - git: 'https://github.com/ekmett/lens.git'
+    #       commit: '867f1ff48d2576b4d7cf50d1f971ce5496650a47'
+    #     - http://hackage.haskell.org/package/conduit-1.3.1.1/conduit-1.3.1.1.tar.gz
+    #
+    # This stack.yaml will not work with callStack2nix because the lens and
+    # conduit extra-deps are specified as a git repo and HTTP URL.
+    #
+    # The following is a similar stack.yaml file that will work with
+    # callStack2nix:
+    #
+    #   resolver: lts-13.17
+    #   packages:
+    #     - .
+    #   extra-deps:
+    #     - lens-4.17.1
+    #     - conduit-1.3.1.1
+    #
+    # This stack.yaml will work, because all the extra-deps are specified as
+    # packages on Hackage.
+    #
+    # This is due to an unfortunate interaction between stack2nix and
+    # cabal2nix.  See
+    # https://github.com/NixOS/nixpkgs/pull/61067#discussion_r282447134
+    # for the technical details.
     callStack2nix =
       { # The source for the Haskell package that contains a stack.yaml file.
         src
