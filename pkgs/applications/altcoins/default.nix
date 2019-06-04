@@ -84,9 +84,7 @@ rec {
 
   sumokoin = callPackage ./sumokoin.nix { boost = boost165; };
 
-  wownero = callPackage ./wownero.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
-  };
+  wownero = callPackage ./wownero.nix {};
 
   zcash = callPackage ./zcash {
     withGui = false;
