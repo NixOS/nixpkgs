@@ -4,16 +4,16 @@
 
 buildGoModule rec {
   name = "wallutils-${version}";
-  version = "5.7.2";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     rev = version;
-    sha256 = "1q4487s83iwwgd40hkihpns84ya8mg54zp63ag519cdjizz38xyi";
+    sha256 = "1s9k2fwckpm1zpdxywckwbql38h0sp6y9ji88rxss7yjc2g12zaf";
   };
 
-  modSha256 = "0kj9s9ymd99a5w9r1d997qysnzlgpnmh5dnki33h1jlwz47nwkld";
+  modSha256 = "0rfmqmm0jld7zrv192dqv7khwb2xm9i77sa1wgr7q6afdhbkrm21";
 
   patches = [ ./lscollection-Add-NixOS-paths-to-DefaultWallpaperDirectories.patch ];
 
