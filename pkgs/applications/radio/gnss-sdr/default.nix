@@ -4,6 +4,9 @@
 , cmake
 , glog
 , gmock
+, log4cpp
+, matio
+, pugixml
 , openssl
 , google-gflags
 , gnuradio
@@ -30,6 +33,9 @@ stdenv.mkDerivation rec {
     cmake
     glog
     gmock
+    log4cpp
+    matio
+    pugixml
     openssl.dev
     google-gflags
     gnuradio
