@@ -3,6 +3,7 @@ ansicolors,,,,
 argparse,,,,
 basexx,,,,
 binaryheap,,,,
+digestif,,http://luarocks.org/dev,,lua5_3
 dkjson,,,,
 fifo,,,,
 http,,,,
