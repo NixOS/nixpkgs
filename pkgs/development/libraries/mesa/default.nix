@@ -2,7 +2,7 @@
 , pkgconfig, intltool, autoreconfHook
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, valgrind-light, python2, python2Packages
+, libelf, libvdpau, python2, python2Packages
 , libglvnd
 , enableRadv ? true
 , galliumDrivers ? null
@@ -10,6 +10,7 @@
 , vulkanDrivers ? null
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
 , OpenGL, Xplugin
+, withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
 }:
 
 /** Packaging design:
@@ -24,10 +25,6 @@
 */
 
 with stdenv.lib;
-
-if ! elem stdenv.hostPlatform.system platforms.mesaPlatforms then
-  throw "${stdenv.system}: unsupported platform for Mesa"
-else
 
 let
   # platforms that have PCIe slots and thus can use most non-integrated GPUs
@@ -150,7 +147,8 @@ let self = stdenv.mkDerivation {
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ valgrind-light libomxil-bellagio libva-minimal ];
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
+    ++ lib.optional withValgrind valgrind-light;
 
   enableParallelBuilding = true;
   doCheck = false;
@@ -273,7 +271,7 @@ let self = stdenv.mkDerivation {
     description = "An open source implementation of OpenGL";
     homepage = https://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ vcunat ];
   };
 };

@@ -26,7 +26,7 @@ let
   # Determine the Android os identifier from Nix's system identifier
   os = if stdenv.system == "x86_64-linux" then "linux"
     else if stdenv.system == "x86_64-darwin" then "macosx"
-    else throw "No tarballs found for system architecture: ${stdenv.system}";
+    else throw "No Android SDK tarballs are available for system architecture: ${stdenv.system}";
 
   # Generated Nix packages
   packages = import ./generated/packages.nix {
