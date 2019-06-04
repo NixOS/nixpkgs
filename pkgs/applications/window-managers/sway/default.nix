@@ -1,35 +1,28 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub, makeWrapper
 , meson, ninja
 , pkgconfig, scdoc
 , wayland, libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk_pixbuf
-, wlroots, wayland-protocols
+, wlroots, wayland-protocols, swaybg
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "sway";
-  version = "1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "09cndc2nl39d3l7g5634xp0pxcz60pvc5277mfw89r22mh0j78rx";
+    sha256 = "0yhn9zdg9mzfhn97c440lk3pw6122nrhx0is5sqmvgr6p814f776";
   };
 
   patches = [
-    # Fix for a compiler warning that causes a build failure
-    # (see https://github.com/swaywm/sway/issues/3862):
-    (fetchpatch {
-      url = "https://github.com/swaywm/sway/commit/bcde298a719f60b9913133dbd2a169dedbc8dd7d.patch";
-      sha256 = "0r583nmqvq43ib93yv6flw8pj833v32lbs0q0xld56s3rnzvvdcp";
-    })
     ./sway-config-no-nix-store-references.patch
     ./load-configuration-from-etc.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja scdoc ];
+  nativeBuildInputs = [ pkgconfig meson ninja scdoc makeWrapper ];
 
   buildInputs = [
     wayland libxkbcommon pcre json_c dbus libevdev
@@ -43,6 +36,14 @@ stdenv.mkDerivation rec {
     "-Ddefault-wallpaper=false" "-Dxwayland=enabled" "-Dgdk-pixbuf=enabled"
     "-Dtray=enabled" "-Dman-pages=enabled"
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/sway --prefix PATH : "${swaybg}/bin"
+  '';
+
+  postPatch = ''
+    sed -i "s/version: '1.0'/version: '${version}'/" meson.build
+  '';
 
   meta = with stdenv.lib; {
     description = "i3-compatible tiling Wayland compositor";
