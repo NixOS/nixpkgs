@@ -78,6 +78,7 @@ function convert_pkg () {
     lua_pkg_name="$2"
     server="${3:+--server=$3}"
     version="${4:-}"
+    server="${3:+--only-server=$3}"
 
     echo "looking at $lua_pkg_name (version $version) from server [$server]" >&2
     cmd="luarocks nix $server $lua_pkg_name $version"
