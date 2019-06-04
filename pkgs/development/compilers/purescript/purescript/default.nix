@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, gmp, ncurses5, lib }:
+{ stdenv, pkgs, fetchurl, zlib, gmp, ncurses5, lib }:
 
 # from justinwoo/easy-purescript-nix
 # https://github.com/justinwoo/easy-purescript-nix/blob/d383972c82620a712ead4033db14110497bc2c9c/purs.nix
@@ -50,6 +50,11 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/etc/bash_completion.d/
     $PURS --bash-completion-script $PURS > $out/etc/bash_completion.d/purs-completion.bash
   '';
+
+  passthru.tests = {
+    minimal-module = pkgs.callPackage ./test-minimal-module {};
+  };
+
   meta = with stdenv.lib; {
     description = "A strongly-typed functional programming language that compiles to JavaScript";
     homepage = http://www.purescript.org/;
