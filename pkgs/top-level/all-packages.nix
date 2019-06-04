@@ -6503,6 +6503,8 @@ in
 
   wal_e = callPackage ../tools/backup/wal-e { };
 
+  wasabiwallet = callPackage ../applications/altcoins/wasabiwallet { };
+
   watchexec = callPackage ../tools/misc/watchexec {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
