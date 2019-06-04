@@ -31,12 +31,16 @@
       ++ optional  swaySupport  sway
       ++ optional  mpdSupport   mpd_clientlib;
 
-    mesonFlags = [
-      "-Ddbusmenu-gtk=${ if traySupport then "enabled" else "disabled" }"
-      "-Dpulseaudio=${ if pulseSupport then "enabled" else "disabled" }"
-      "-Dlibnl=${ if nlSupport then "enabled" else "disabled" }"
-      "-Dlibudev=${ if udevSupport then "enabled" else "disabled" }"
-      "-Dmpd=${ if mpdSupport then "enabled" else "disabled" }"
+    mesonFlags = (stdenv.lib.mapAttrsToList
+      (option: enable: "-D${option}=${if enable then "enabled" else "disabled"}")
+      {
+        dbusmenu-gtk = traySupport;
+        pulseaudio = pulseSupport;
+        libnl = nlSupport;
+        libudev = udevSupport;
+        mpd = mpdSupport;
+      }
+    ) ++ [
       "-Dout=${placeholder "out"}"
     ];
 
