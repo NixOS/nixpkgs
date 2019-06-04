@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "2.3.3";
+  version = "2.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b6366634c65b04464e62f3a9a8df1faa172f780ed7f1af1c6818b3dc2f1202c3";
+    sha256 = "f165ff1cb4464902d6594eb2694e2cfb6f8b9fe233b856c976c3cff623ee0e17";
   };
 
   propagatedBuildInputs = [
