@@ -595,6 +595,25 @@ luabitop = buildLuarocksPackage {
     };
   };
 };
+luadbi = buildLuarocksPackage {
+  pname = "luadbi";
+  version = "0.7.2-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/luadbi-0.7.2-1.src.rock;
+    sha256 = "0mj9ggyb05l03gs38ds508620mqaw4fkrzz9861n4j0zxbsbmfwy";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/mwild1/luadbi";
+    description = "Database abstraction layer";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 luaevent = buildLuarocksPackage {
   pname = "luaevent";
   version = "0.4.6-1";

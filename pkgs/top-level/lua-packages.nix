@@ -256,42 +256,6 @@ with self; {
     };
   };
 
-  luadbi = buildLuaPackage rec {
-    name = "luadbi-${version}";
-    version = "0.7.1";
-
-    src = fetchFromGitHub {
-      owner = "mwild1";
-      repo = "luadbi";
-      rev = "v${version}";
-      sha256 = "01i8018zb7w2bhaqglm7cnvbiirgd95b9d07irgz3sci91p08cwp";
-    };
-
-    MYSQL_INC="-I${mysql.connector-c}/include/mysql";
-
-    buildInputs = [ mysql.client mysql.connector-c postgresql sqlite ];
-
-    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace Makefile \
-        --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
-    '';
-
-    installFlags = [
-      "LUA_CDIR=$(out)/lib/lua/${lua.luaversion}"
-      "LUA_LDIR=$(out)/share/lua/${lua.luaversion}"
-    ];
-
-    installTargets = [
-      "install_lua" "install_mysql" "install_psql" "install_sqlite3"
-    ];
-
-    meta = with stdenv.lib; {
-      homepage = https://github.com/mwild1/luadbi;
-      license = licenses.mit;
-      platforms = stdenv.lib.platforms.unix;
-    };
-  };
-
   luafilesystem = buildLuaPackage rec {
     version = "1.7.0";
     name = "filesystem-${version}";

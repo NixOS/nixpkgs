@@ -29,6 +29,7 @@ lua-zlib,,,,,koral
 luabitop,,,,,
 luaevent,,,,,
 luacheck,,,,,
+luadbi,,,,
 luaffi,,http://luarocks.org/dev,,,
 luaposix,,,,,vyp lblasc
 luazip,,,,,
