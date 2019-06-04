@@ -257,6 +257,25 @@ lpeg_patterns = buildLuarocksPackage {
     };
   };
 };
+lpeglabel = buildLuarocksPackage {
+  pname = "lpeglabel";
+  version = "1.5.0-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/lpeglabel-1.5.0-1.src.rock;
+    sha256 = "068mwvwwn5n69pdm04qnk354391w9mk34jsczxql0xi5qgmz6w8j";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/sqmedeiros/lpeglabel/";
+    description = "Parsing Expression Grammars For Lua with Labeled Failures";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 lpty = buildLuarocksPackage {
   pname = "lpty";
   version = "1.2.2-1";
