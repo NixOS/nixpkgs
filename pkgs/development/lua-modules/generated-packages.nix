@@ -395,16 +395,16 @@ lua-messagepack = buildLuarocksPackage {
   version = "0.5.1-2";
 
   src = fetchurl {
-      url    = https://luarocks.org/lua-messagepack-0.5.1-2.src.rock;
-      sha256 = "0bsdzdd24p9z3j4z1avw7qaqx87baa1pm58v275pw4h6n72z492g";
+    url    = https://luarocks.org/lua-messagepack-0.5.1-2.src.rock;
+    sha256 = "0bsdzdd24p9z3j4z1avw7qaqx87baa1pm58v275pw4h6n72z492g";
   };
-  disabled = ( luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];  
+  disabled = ( luaOlder "5.1" );
+  propagatedBuildInputs = [ lua ];
   buildType = "builtin";
 
   meta = {
     homepage = "http://fperrad.frama.io/lua-MessagePack/";
-    description="a pure Lua implementation of the MessagePack serialization format";
+    description = "a pure Lua implementation of the MessagePack serialization format";
     license = {
       fullName = "MIT/X11";
     };
@@ -439,16 +439,16 @@ lua-toml = buildLuarocksPackage {
   version = "2.0-1";
 
   src = fetchurl {
-      url    = https://luarocks.org/lua-toml-2.0-1.src.rock;
-      sha256 = "0lyqlnydqbplq82brw9ipqy9gijin6hj1wc46plz994pg4i2c74m";
+    url    = https://luarocks.org/lua-toml-2.0-1.src.rock;
+    sha256 = "0lyqlnydqbplq82brw9ipqy9gijin6hj1wc46plz994pg4i2c74m";
   };
-  disabled = ( luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];  
+  disabled = ( luaOlder "5.1" );
+  propagatedBuildInputs = [ lua ];
   buildType = "builtin";
 
   meta = {
     homepage = "https://github.com/jonstoler/lua-toml";
-    description="toml decoder/encoder for Lua";
+    description = "toml decoder/encoder for Lua";
     license = {
       fullName = "MIT";
     };
@@ -613,16 +613,16 @@ rapidjson = buildLuarocksPackage {
   version = "0.5.1-1";
 
   src = fetchurl {
-      url    = https://luarocks.org/rapidjson-0.5.1-1.src.rock;
-      sha256 = "0hnqsixnbz95cvm9q5dn0lr0qjvhqw4llw6l1sjswwk0am4yybay";
+    url    = https://luarocks.org/rapidjson-0.5.1-1.src.rock;
+    sha256 = "0hnqsixnbz95cvm9q5dn0lr0qjvhqw4llw6l1sjswwk0am4yybay";
   };
-  disabled = ( luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];  
+  disabled = ( luaOlder "5.1" );
+  propagatedBuildInputs = [ lua ];
   buildType = "cmake";
 
   meta = {
     homepage = "https://github.com/xpol/lua-rapidjson";
-    description="Json module based on the very fast RapidJSON.";
+    description = "Json module based on the very fast RapidJSON.";
     license = {
       fullName = "MIT";
     };
@@ -696,11 +696,11 @@ std_normalize = buildLuarocksPackage {
 };
 luv = buildLuarocksPackage {
   pname = "luv";
-  version = "1.27.0-0";
+  version = "1.28.0-1";
 
   src = fetchurl {
-    url    = https://luarocks.org/luv-1.27.0-0.src.rock;
-    sha256 = "16csnnypi2m71ncr8qwc9drqbrb40l5li1nk7zpsxnslg5fiax6x";
+    url    = https://luarocks.org/luv-1.28.0-1.src.rock;
+    sha256 = "15m946p982bk4apig7yf07jm25ck26v2qxcvnrfh60vrbaw6gihw";
   };
   disabled = ( luaOlder "5.1" );
   propagatedBuildInputs = [ lua ];
