@@ -43,9 +43,6 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # Newer versions don't work in LTS-12.x
-  - alsa-mixer < 0.3
-  - cassava-megaparsec < 2
   # LTS Haskell 13.24
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
