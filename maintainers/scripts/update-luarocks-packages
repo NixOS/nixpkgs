@@ -12,11 +12,6 @@
 # stop the script upon C-C
 set -eu -o pipefail
 
-if [ $# -lt 1 ]; then
-	print_help
-    exit 1
-fi
-
 CSV_FILE="maintainers/scripts/luarocks-packages.csv"
 TMP_FILE="$(mktemp)"
 
@@ -25,16 +20,21 @@ exit_trap()
   local lc="$BASH_COMMAND" rc=$?
   test $rc -eq 0 || echo -e "*** error $rc: $lc.\nGenerated temporary file in $TMP_FILE" >&2
 }
-trap exit_trap EXIT
 
 print_help() {
     echo "Usage: $0 <GENERATED_FILE>"
     echo "(most likely pkgs/development/lua-modules/generated-packages.nix)"
-	echo ""
-	echo " -c <CSV_FILE> to set the list of luarocks package to generate"
-	exit 1
+    echo ""
+    echo " -c <CSV_FILE> to set the list of luarocks package to generate"
+    exit 1
 }
 
+if [ $# -lt 1 ]; then
+    print_help
+    exit 1
+fi
+
+trap exit_trap EXIT
 
 while getopts ":hc:" opt; do
   case $opt in
