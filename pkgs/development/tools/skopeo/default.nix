@@ -44,7 +44,7 @@ buildGoPackage rec {
   postBuild = ''
     # depends on buildGoPackage not changing …
     pushd ./go/src/${goPackagePath}
-    make install-docs MANINSTALLDIR="$man"
+    make install-docs MANINSTALLDIR="$man/share/man"
     popd
   '';
 
