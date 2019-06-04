@@ -54,17 +54,17 @@ let
         mathcomp-ssreflect_1_9 mathcomp-fingroup_1_9 mathcomp-algebra_1_9
         mathcomp-solvable_1_9 mathcomp-field_1_9 mathcomp-character_1_9;
       inherit (callPackage ../development/coq-modules/mathcomp/extra.nix { })
-        mathcompExtraGen multinomials
+        mathcompExtraGen multinomials coqeal
 
         mathcomp-finmap mathcomp-bigenough mathcomp-analysis
-        mathcomp-multinomials mathcomp-real-closed
+        mathcomp-multinomials mathcomp-real-closed mathcomp-coqeal
 
         mathcomp_1_7-finmap mathcomp_1_7-bigenough mathcomp_1_7-analysis
         mathcomp_1_7-multinomials mathcomp_1_7-real-closed
         mathcomp_1_7-finmap_1_0
 
         mathcomp_1_8-finmap mathcomp_1_8-bigenough mathcomp_1_8-analysis
-        mathcomp_1_8-multinomials mathcomp_1_8-real-closed
+        mathcomp_1_8-multinomials mathcomp_1_8-real-closed mathcomp_1_8-coqeal
 
         mathcomp_1_9-finmap mathcomp_1_9-bigenough mathcomp_1_9-analysis
         mathcomp_1_9-multinomials mathcomp_1_9-real-closed;
