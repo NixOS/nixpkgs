@@ -4627,6 +4627,8 @@ in
 
   mpw = callPackage ../tools/security/mpw { };
 
+  mpssh = callPackage ../tools/networking/mpssh { };
+
   mr = callPackage ../applications/version-management/mr { };
 
   mrtg = callPackage ../tools/misc/mrtg { };
