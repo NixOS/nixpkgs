@@ -20,7 +20,11 @@ let
 
     "wasm64-wasi" "wasm32-wasi"
 
+    "powerpc64le-linux"
+
     "riscv32-linux" "riscv64-linux"
+
+    "aarch64-none" "avr-none" "arm-none" "i686-none" "x86_64-none" "ppc-none" "msp430-none"
   ];
 
   allParsed = map parse.mkSystemFromString all;
