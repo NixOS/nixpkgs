@@ -33,6 +33,9 @@ qtModule {
 
   enableParallelBuilding = true;
 
+  # Don’t use the gn setup hook
+  dontUseGnConfigure = true;
+
   # ninja builds some components with -Wno-format,
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
