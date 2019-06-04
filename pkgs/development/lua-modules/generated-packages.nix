@@ -419,6 +419,35 @@ lua-iconv = buildLuarocksPackage {
     };
   };
 };
+lua-lsp = buildLuarocksPackage {
+  pname = "lua-lsp";
+  version = "scm-2";
+
+  knownRockspec = (fetchurl {
+    url    = http://luarocks.org/dev/lua-lsp-scm-2.rockspec;
+    sha256 = "0qk3i6j0km4d1fs61fxhkmnbxmgpq24nygr8wknl6hbj2kya25rb";
+  }).outPath;
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "git://github.com/Alloyed/lua-lsp",
+  "rev": "0de511803ed616214333210a2d003cf05a64dc18",
+  "date": "2018-09-08T10:11:54-04:00",
+  "sha256": "15dnsyh5664vi7qn73y2r114rhs5l9lfi84pwqkq5cafkiiy49qa",
+  "fetchSubmodules": true
+}
+ '') ["date"]) ;
+
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua dkjson lpeglabel inspect ];
+
+  meta = {
+    homepage = "https://github.com/Alloyed/lua-lsp";
+    description = "No summary";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 lua-messagepack = buildLuarocksPackage {
   pname = "lua-messagepack";
   version = "0.5.1-2";
