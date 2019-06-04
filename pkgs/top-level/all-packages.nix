@@ -10093,6 +10093,8 @@ in
 
   cre2 = callPackage ../development/libraries/cre2 { };
 
+  croaring = callPackage ../development/libraries/croaring { };
+
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
   cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
