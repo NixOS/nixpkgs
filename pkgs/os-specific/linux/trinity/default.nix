@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "trinity-${version}";
+  pname = "trinity";
   version = "1.9";
 
   src = fetchFromGitHub {
@@ -11,16 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0z1a7x727xacam74jccd223k303sllgwpq30lnq9b6xxy8b659bv";
   };
 
-  # Fails on 32-bit otherwise
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=int-to-pointer-cast"
-    "-Wno-error=pointer-to-int-cast"
-    "-Wno-error=incompatible-pointer-types"
-  ];
-
   postPatch = ''
-    patchShebangs ./configure
-    patchShebangs ./scripts/
+    patchShebangs configure
+    patchShebangs scripts
   '';
 
   enableParallelBuilding = true;
