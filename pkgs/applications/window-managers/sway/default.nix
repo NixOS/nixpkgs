@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/sway --prefix PATH : "${swaybg}/bin"
   '';
 
+  postPatch = ''
+    sed -i "s/version: '1.0'/version: '${version}'/" meson.build
+  '';
+
   meta = with stdenv.lib; {
     description = "i3-compatible tiling Wayland compositor";
     homepage    = https://swaywm.org;
