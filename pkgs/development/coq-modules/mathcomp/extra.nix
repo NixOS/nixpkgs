@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, coq, mathcomp, coqPackages,
+{ stdenv, fetchFromGitHub, coq, ssreflect, coqPackages,
   recurseIntoAttrs }:
 with builtins // stdenv.lib;
-let current-mathcomp = mathcomp; in
+let current-ssreflect = ssreflect; in
 let
 # configuring packages
 param = {
@@ -20,6 +20,7 @@ param = {
   };
   multinomials = {
     version-sha256 = {
+      "1.3" = "0l3vi5n094nx3qmy66hsv867fnqm196r8v605kpk24gl0aa57wh4";
       "1.2" = "1mh1w339dslgv4f810xr1b8v2w7rpx6fgk9pz96q0fyq49fw2xcq";
       "1.1" = "1q8alsm89wkc0lhcvxlyn0pd8rbl2nnxg81zyrabpz610qqjqc3s";
       "1.0" = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
@@ -42,6 +43,13 @@ param = {
     };
     description = "Mathematical Components Library on real closed fields";
   };
+  coqeal = {
+    version-sha256 = {
+      "1.0.0" = "1had6f1n85lmh9x31avbmgl3m0rsiw9f8ma95qzk5b57fjg5k1ii";
+    };
+    description = "CoqEAL - The Coq Effective Algebra Library";
+    owner = "CoqEAL";
+  };
 };
 versions = {
   "1.9.0" = {
@@ -49,14 +57,23 @@ versions = {
     bigenough.version = "1.0.0";
     analysis = {
       version = "0.2.2";
-      core-deps = with coqPackages; [ mathcomp_1_9-field ];
+      core-deps = with coqPackages; [ mathcomp-field_1_9 ];
       extra-deps = with coqPackages; [ mathcomp_1_9-finmap mathcomp_1_9-bigenough ];
     };
-    multinomials = {};
+    multinomials = {
+      version = "1.3";
+      core-deps = with coqPackages; [ mathcomp-algebra_1_9 ];
+      extra-deps = with coqPackages; [ mathcomp_1_9-finmap mathcomp_1_9-bigenough ];
+    };
     real-closed = {
       version = "1.0.3";
-      core-deps = with coqPackages; [ mathcomp_1_9-field ];
+      core-deps = with coqPackages; [ mathcomp-field_1_9 ];
       extra-deps = with coqPackages; [ mathcomp_1_9-bigenough ];
+    };
+    coqeal = {
+      version = "1.0.0";
+      core-deps = with coqPackages; [ mathcomp-algebra_1_9 ];
+      extra-deps = with coqPackages; [ bignums paramcoq mathcomp_1_9-multinomials ];
     };
   }; 
   "1.8.0" = {
@@ -64,18 +81,23 @@ versions = {
     bigenough.version = "1.0.0";
     analysis = {
       version = "0.2.2";
-      core-deps = with coqPackages; [ mathcomp_1_8-field ];
+      core-deps = with coqPackages; [ mathcomp-field_1_8 ];
       extra-deps = with coqPackages; [ mathcomp_1_8-finmap mathcomp_1_8-bigenough ];
     };
     multinomials = {
-      version = "1.2";
-      core-deps = with coqPackages; [ mathcomp_1_8-algebra ];
+      version = "1.3";
+      core-deps = with coqPackages; [ mathcomp-algebra_1_8 ];
       extra-deps = with coqPackages; [ mathcomp_1_8-finmap mathcomp_1_8-bigenough ];
     };
     real-closed = {
       version = "1.0.3";
-      core-deps = with coqPackages; [ mathcomp_1_8-field ];
+      core-deps = with coqPackages; [ mathcomp-field_1_8 ];
       extra-deps = with coqPackages; [ mathcomp_1_8-bigenough ];
+    };
+    coqeal = {
+      version = "1.0.0";
+      core-deps = with coqPackages; [ mathcomp-algebra_1_8 ];
+      extra-deps = with coqPackages; [ bignums paramcoq mathcomp_1_8-multinomials ];
     };
   };
   "1.7.0" = {
@@ -83,18 +105,25 @@ versions = {
     bigenough.version = "1.0.0";
     analysis = {
       version = "0.1.0";
-      core-deps = with coqPackages; [ mathcomp_1_7-field ];
+      core-deps = with coqPackages; [ mathcomp-field_1_7 ];
       extra-deps = with coqPackages; [ mathcomp_1_7-finmap mathcomp_1_7-bigenough ];
+      license = stdenv.lib.licenses.cecill-c;
     };
     multinomials = {
       version = "1.1";
-      core-deps = with coqPackages; [ mathcomp_1_7-algebra ];
+      core-deps = with coqPackages; [ mathcomp-algebra_1_7 ];
       extra-deps = with coqPackages; [ mathcomp_1_7-finmap_1_0 mathcomp_1_7-bigenough ];
     };
     real-closed = {
       version = "1.0.1";
-      core-deps = with coqPackages; [ mathcomp_1_8-field ];
-      extra-deps = with coqPackages; [ mathcomp_1_8-bigenough ];
+      core-deps = with coqPackages; [ mathcomp-field_1_7 ];
+      extra-deps = with coqPackages; [ mathcomp_1_7-bigenough ];
+    };
+    coqeal = {
+      version = "1.0.0";
+      core-deps = with coqPackages; [ mathcomp-algebra_1_7 ];
+      extra-deps = with coqPackages; [ bignums paramcoq mathcomp_1_7-multinomials ];
+      license = stdenv.lib.licenses.mit;
     };
   };
 };
@@ -104,24 +133,25 @@ packageGen = {
   # optional arguments
   src ? "",
   owner ? "math-comp",
-  core-deps ? [ coqPackages.mathcomp-ssreflect ],
   extra-deps ? [],
-  mathcomp ? current-mathcomp,
+  ssreflect ? current-ssreflect,
+  core-deps ? null,
   compatibleCoqVersions ? null,
-  license ? mathcomp.meta.license,
+  license ? ssreflect.meta.license,
   # mandatory
   package, version ? "broken", version-sha256, description
   }:
   let
     theCompatibleCoqVersions = if compatibleCoqVersions == null
-                               then mathcomp.compatibleCoqVersions
+                               then ssreflect.compatibleCoqVersions
                                else compatibleCoqVersions;
+    mc-core-deps = if builtins.isNull core-deps then [ssreflect] else core-deps;
   in
   { "${package}" = let from = src; in
 
   stdenv.mkDerivation rec {
     inherit version;
-    name = "coq${coq.coq-version}-mathcomp-${mathcomp.version}-${package}-${version}";
+    name = "coq${coq.coq-version}-mathcomp${ssreflect.version}-${package}-${version}";
 
     src = if from == "" then fetchFromGitHub {
       owner = owner;
@@ -130,7 +160,7 @@ packageGen = {
       sha256 = version-sha256."${version}";
     } else from;
 
-    propagatedBuildInputs = [ coq mathcomp ] ++ extra-deps;
+    propagatedBuildInputs = [ coq ] ++ mc-core-deps ++ extra-deps;
 
     installFlags = "-f Makefile.coq COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
@@ -138,7 +168,7 @@ packageGen = {
       inherit description;
       inherit license;
       inherit (src.meta) homepage;
-      inherit (mathcomp.meta) platforms;
+      inherit (ssreflect.meta) platforms;
       maintainers = [ stdenv.lib.maintainers.vbgl ];
       broken = (version == "broken");
     };
@@ -151,14 +181,14 @@ packageGen = {
   };
   };
 
-current-versions = versions."${current-mathcomp.version}" or {};
+current-versions = versions."${current-ssreflect.version}" or {};
 
 select = x: mapAttrs (n: pkg: {package = n;} // pkg) (recursiveUpdate param x);
 
 for-version = v: suffix: (mapAttrs' (n: pkg:
         {name = "mathcomp_${suffix}-${n}";
          value = (packageGen ({
-             mathcomp = coqPackages."mathcomp_${suffix}";
+             ssreflect = coqPackages."mathcomp-ssreflect_${suffix}";
            } // pkg))."${n}";})
         (select versions."${v}"));
 
@@ -173,7 +203,8 @@ in
 mathcompExtraGen = packageGen;
 mathcomp_1_7-finmap_1_0 =
   (packageGen (select {finmap = {version = "1.0.0";
-                                 mathcomp = coqPackages.mathcomp_1_7;};
+                                 ssreflect = coqPackages.mathcomp-ssreflect_1_7;};
                       }).finmap).finmap;
 multinomials = all.mathcomp-multinomials;
+coqeal = all.mathcomp-coqeal;
 } // all
