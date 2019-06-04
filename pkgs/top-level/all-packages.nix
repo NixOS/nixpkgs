@@ -14196,6 +14196,8 @@ in
 
   grafana = callPackage ../servers/monitoring/grafana { };
 
+  grafana-loki = callPackage ../servers/monitoring/loki { };
+
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
   h2o = callPackage ../servers/http/h2o { };
