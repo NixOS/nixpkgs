@@ -11,12 +11,13 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "wownero-${version}";
 
-  version = "0.5.0.2";
+  version = "0.6.0.0";
   src = fetchFromGitHub {
     owner = "wownero";
     repo = "wownero";
     rev    = "v${version}";
-    sha256 = "120cfkl2q8qgl3ajxfkkri9bxlnvmr1mhb1wvcigch1lqyflff1w";
+    sha256 = "1vy80cyz79mlr2msq6fx44rij0qp04bgxl6gzr6b1skiag4hnrqb";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkgconfig git ];
