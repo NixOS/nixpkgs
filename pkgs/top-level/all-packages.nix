@@ -770,6 +770,8 @@ in
 
   git-fire = callPackage ../tools/misc/git-fire { };
 
+  git-repo-updater = python3Packages.callPackage ../development/tools/git-repo-updater { };
+
   git-town = callPackage ../tools/misc/git-town { };
 
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
