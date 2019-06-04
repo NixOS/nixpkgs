@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , requests
 , pytz
 , tzlocal
@@ -10,15 +9,11 @@
 , pygobject3
 , pyserial
 , makeWrapper
-
 , file
 , acpi
 , coreutils
 , alsaUtils
-, i3
-, procps
 , lm_sensors
-, libnotify
 , xorg
 }:
 let
