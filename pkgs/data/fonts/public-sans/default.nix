@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "1.003";
+  version = "1.004";
 in fetchzip rec {
   name = "public-sans-${version}";
 
@@ -12,7 +12,7 @@ in fetchzip rec {
     unzip $downloadedFile fonts/{otf,variable}/\*.\[ot\]tf -d $out/share/
   '';
 
-  sha256 = "02ranwr1bw4n9n1ljw234nzhj2a0hgradniib37nh10maark5wg3";
+  sha256 = "1d9ll6gvvlmlykv868lq7xmwldlfjp94k0rjqifipg3q1qv051lg";
 
   meta = with lib; {
     description = "A strong, neutral, principles-driven, open source typeface for text or display";
