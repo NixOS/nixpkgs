@@ -76,6 +76,14 @@ in {
 
       mkdir -p $out/nix-support
       echo "file ${cfg.format} $diskImage" >> $out/nix-support/hydra-build-products
+
+      ${pkgs.jq}/bin/jq -n \
+        --arg label ${lib.escapeShellArg config.system.nixos.label} \
+        --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
+        --arg logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$diskImage" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+        --arg file "$diskImage" \
+        '$ARGS.named' \
+        > $out/nix-support/image-info.json
     '';
   };
 }
