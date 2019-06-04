@@ -1,21 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  diskSize = 2048;
-in
 {
-  system.build.azureImage = import ../../lib/make-disk-image.nix {
-    name = "azure-image";
-    postVM = ''
-      ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/disk.vhd
-    '';
-    configFile = ./azure-config-user.nix;
-    format = "raw";
-    inherit diskSize;
-    inherit config lib pkgs;
-  };
-
   imports = [ ./azure-common.nix ];
 
   # Azure metadata is available as a CD-ROM drive.

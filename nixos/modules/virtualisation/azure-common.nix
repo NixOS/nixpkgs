@@ -19,12 +19,18 @@ with lib;
   # way to select them anyway.
   boot.loader.grub.configurationLimit = 0;
 
-  fileSystems."/".device = "/dev/disk/by-label/nixos";
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    autoResize = true;
+    fsType = "ext4";
+  };
+  boot.growPartition = true;
+  services.udisks2.enable = false;
 
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time, ping client connections to avoid timeouts
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "prohibit-password";
+  services.openssh.permitRootLogin = lib.mkDefault "prohibit-password";
   services.openssh.extraConfig = ''
     ClientAliveInterval 180
   '';
@@ -58,7 +64,5 @@ with lib;
     ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:13", ATTR{removable}=="0", SYMLINK+="disk/by-lun/13"
     ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:14", ATTR{removable}=="0", SYMLINK+="disk/by-lun/14"
     ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:15", ATTR{removable}=="0", SYMLINK+="disk/by-lun/15"
-
   '';
-
 }
