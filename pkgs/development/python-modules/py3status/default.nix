@@ -9,6 +9,7 @@
 , pydbus
 , pygobject3
 , pyserial
+, makeWrapper
 
 , file
 , acpi
@@ -20,7 +21,9 @@
 , libnotify
 , xorg
 }:
-
+let
+  moduleDeps = [ file acpi alsaUtils coreutils lm_sensors xorg.setxkbmap xorg.xset ];
+in
 buildPythonPackage rec {
   pname = "py3status";
   version = "3.18";
@@ -32,18 +35,11 @@ buildPythonPackage rec {
 
   doCheck = false;
   propagatedBuildInputs = [ pytz requests tzlocal i3ipc pydbus pygobject3 pyserial ];
-  buildInputs = [ file ];
-  prePatch = ''
-    sed -i -e "s|\"file|\"${file}/bin/file|" py3status/parse_config.py
-    sed -i -e "s|\[\"acpi\"|\[\"${acpi}/bin/acpi\"|" py3status/modules/battery_level.py
-    sed -i -e "s|notify-send|${libnotify}/bin/notify-send|" py3status/modules/battery_level.py
-    sed -i -e "s|/usr/bin/whoami|${coreutils}/bin/whoami|" py3status/modules/external_script.py
-    sed -i -e "s|\"amixer|\"${alsaUtils}/bin/amixer|" py3status/modules/volume_status.py
-    sed -i -e "s|'i3-nagbar|'${i3}/bin/i3-nagbar|" py3status/modules/pomodoro.py
-    sed -i -e "s|\"free|\"${procps}/bin/free|" py3status/modules/sysdata.py
-    sed -i -e "s|\"sensors|\"${lm_sensors}/bin/sensors|" py3status/modules/sysdata.py
-    sed -i -e "s|\"setxkbmap|\"${xorg.setxkbmap}/bin/setxkbmap|" py3status/modules/keyboard_layout.py
-    sed -i -e "s|\"xset|\"${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/py3status --prefix PATH : "${stdenv.lib.makeBinPath moduleDeps}"
+    wrapProgram $out/bin/py3-cmd --prefix PATH : "${stdenv.lib.makeBinPath moduleDeps}"
   '';
 
   meta = with stdenv.lib; {
