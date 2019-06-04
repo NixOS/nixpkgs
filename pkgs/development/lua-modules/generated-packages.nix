@@ -92,6 +92,35 @@ binaryheap = buildLuarocksPackage {
     };
   };
 };
+digestif = buildLuarocksPackage {
+  pname = "digestif";
+  version = "scm-1";
+
+  knownRockspec = (fetchurl {
+    url    = http://luarocks.org/dev/digestif-scm-1.rockspec;
+    sha256 = "18rixbni4hmrmh3qj3vpjbsphzdvchswajphc9ysm52ccpyzh687";
+  }).outPath;
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "git://github.com/astoff/digestif",
+  "rev": "19442554ae18607707f09e6663d65bb8bb4ebb58",
+  "date": "2019-06-01T15:41:36+02:00",
+  "sha256": "1sglkgx2s1xc725h9b97jhfbi3scs32si83xss5m3n0xidwmlbzb",
+  "fetchSubmodules": true
+}
+ '') ["date"]) ;
+
+  disabled = (luaOlder "5.3");
+  propagatedBuildInputs = [ lua lpeg dkjson ];
+
+  meta = {
+    homepage = "https://github.com/astoff/digestif/";
+    description = "Code analyzer for TeX.";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 dkjson = buildLuarocksPackage {
   pname = "dkjson";
   version = "2.5-2";
