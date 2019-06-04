@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     homepage = http://nongnu.org/txr;
     maintainers = with stdenv.lib.maintainers; [ dtzWill ];
+    platforms = platforms.linux; # Darwin fails although it should work AFAIK
   };
 }
