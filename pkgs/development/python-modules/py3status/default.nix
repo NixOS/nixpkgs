@@ -34,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pytz requests tzlocal i3ipc pydbus pygobject3 pyserial ];
   buildInputs = [ file ];
   prePatch = ''
-    sed -i -e "s|'file|'${file}/bin/file|" py3status/parse_config.py
+    sed -i -e "s|\"file|\"${file}/bin/file|" py3status/parse_config.py
     sed -i -e "s|\[\"acpi\"|\[\"${acpi}/bin/acpi\"|" py3status/modules/battery_level.py
     sed -i -e "s|notify-send|${libnotify}/bin/notify-send|" py3status/modules/battery_level.py
     sed -i -e "s|/usr/bin/whoami|${coreutils}/bin/whoami|" py3status/modules/external_script.py
