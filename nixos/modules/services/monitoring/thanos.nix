@@ -661,6 +661,21 @@ in {
   config = mkMerge [
 
     (mkIf cfg.sidecar.enable {
+      assertions = [
+        {
+          assertion = config.services.prometheus2.enable;
+          message =
+            "Please enable services.prometheus2 when enabling services.thanos.sidecar.";
+        }
+        {
+          assertion = !(config.services.prometheus2.globalConfig.external_labels == null ||
+                        config.services.prometheus2.globalConfig.external_labels == {});
+          message =
+            "services.thanos.sidecar requires uniquely identifying external labels " +
+            "to be configured in the Prometheus server. " +
+            "Please set services.prometheus2.globalConfig.external_labels.";
+        }
+      ];
       systemd.services.thanos-sidecar = {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" "prometheus2.service" ];
