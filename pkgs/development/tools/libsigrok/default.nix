@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Core library of the sigrok signal analysis software suite";
     homepage = https://sigrok.org/;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }
