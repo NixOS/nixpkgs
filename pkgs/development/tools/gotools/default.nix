@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   name = "gotools-unstable-${version}";
-  version = "2019-05-24";
-  rev = "2c0ae70061356820330c96810d9483beb9a6da8e";
+  version = "2019-06-03";
+  rev = "8aaa1484dc108aa23dcf2d4a09371c0c9e280f6b";
 
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/tools";
-    sha256 = "1lsi2ssxajclj3bciz2a41v1vjv768ja3v6wnbyhxy8xphwkp4fk";
+    sha256 = "0sa41fi38b6pvz7jjr6vqrd152qjvmbcagm1qdxw41vqcdw3ljx3";
   };
 
   modSha256 = "0cm7fwb1k5hvbhh86kagzsw5vwgkr6dr7glhbjxg5xaahlhx2w5w";
