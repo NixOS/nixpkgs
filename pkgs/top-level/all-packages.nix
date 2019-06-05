@@ -8712,6 +8712,8 @@ in
 
   adtool = callPackage ../tools/admin/adtool { };
 
+  adrdox = callPackage ../development/tools/documentation/adrdox { };
+
   inherit (callPackage ../development/tools/alloy { })
     alloy4
     alloy5

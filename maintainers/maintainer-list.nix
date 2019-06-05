@@ -948,6 +948,11 @@
     github = "chiiruno";
     name = "Okina Matara";
   };
+  chloekek = {
+    email = "rightfold+ck@gmail.com";
+    github = "chloekek";
+    name = "Chloé Kekoa";
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
