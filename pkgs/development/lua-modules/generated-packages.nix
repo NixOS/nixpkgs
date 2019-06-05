@@ -239,6 +239,25 @@ lgi = buildLuarocksPackage {
     };
   };
 };
+lpeg = buildLuarocksPackage {
+  pname = "lpeg";
+  version = "1.0.2-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/lpeg-1.0.2-1.src.rock;
+    sha256 = "1g5zmfh0x7drc6mg2n0vvlga2hdc08cyp3hnb22mh1kzi63xdl70";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "http://www.inf.puc-rio.br/~roberto/lpeg.html";
+    description = "Parsing Expression Grammars For Lua";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 lpeg_patterns = buildLuarocksPackage {
   pname = "lpeg_patterns";
   version = "0.5-0";
