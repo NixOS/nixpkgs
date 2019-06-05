@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, makeWrapper, pkgconfig
+{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig
 , appstream-glib, desktop-file-utils, python3
 , gtk, girara, gettext, libxml2
 , sqlite, glib, texlive, libintl, libseccomp
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig desktop-file-utils python3.pkgs.sphinx
-    gettext makeWrapper libxml2
+    gettext wrapGAppsHook libxml2
   ] ++ optional stdenv.isLinux appstream-glib;
 
   buildInputs = [
