@@ -556,35 +556,6 @@ with self; {
     };
   };
 
-  lpeg = buildLuaPackage rec {
-    name = "lpeg-${version}";
-    version = "1.0.1";
-
-    src = fetchurl {
-      url = "http://www.inf.puc-rio.br/~roberto/lpeg/${name}.tar.gz";
-      sha256 = "62d9f7a9ea3c1f215c77e0cadd8534c6ad9af0fb711c3f89188a8891c72f026b";
-    };
-
-    preBuild = ''
-      makeFlagsArray=(CC=$CC);
-    '';
-
-    buildFlags = platformString;
-
-    installPhase = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}
-      install -p lpeg.so $out/lib/lua/${lua.luaversion}
-      install -p re.lua $out/lib/lua/${lua.luaversion}
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Parsing Expression Grammars For Lua";
-      homepage = "http://www.inf.puc-rio.br/~roberto/lpeg/";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = platforms.all;
-    };
-  };
 
   vicious = toLuaModule(stdenv.mkDerivation rec {
     name = "vicious-${version}";
