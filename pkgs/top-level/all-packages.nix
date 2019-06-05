@@ -7491,9 +7491,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc865.override {
-    overrides = haskell.packageOverrides;
-  });
+  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc865;
 
   inherit (haskellPackages) ghc;
 
