@@ -1,0 +1,31 @@
+From 53575521406739cf20bbe4e384d88e7dca11f040 Mon Sep 17 00:00:00 2001
+From: Bram Moolenaar <Bram@vim.org>
+Date: Wed, 22 May 2019 22:38:25 +0200
+Subject: [PATCH] patch 8.1.1365: source command doesn't check for the sandbox
+
+Problem:    Source command doesn't check for the sandbox. (Armin Razmjou)
+Solution:   Check for the sandbox when sourcing a file.
+---
+ src/getchar.c               | 6 ++++++
+ src/testdir/test_source.vim | 9 +++++++++
+ src/version.c               | 2 ++
+ 3 files changed, 17 insertions(+)
+
+diff --git a/src/getchar.c b/src/getchar.c
+index 9379a6a8d4..debad7efd2 100644
+--- a/src/getchar.c
++++ b/src/getchar.c
+@@ -1407,6 +1407,12 @@ openscript(
+ 	emsg(_(e_nesting));
+ 	return;
+     }
++
++    // Disallow sourcing a file in the sandbox, the commands would be executed
++    // later, possibly outside of the sandbox.
++    if (check_secure())
++	return;
++
+ #ifdef FEAT_EVAL
+     if (ignore_script)
+ 	/* Not reading from script, also don't open one.  Warning message? */
+diff --git a/src/testdir/test_source.vim b/src/testdir/test_source.vim

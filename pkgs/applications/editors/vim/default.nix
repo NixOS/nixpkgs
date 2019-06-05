@@ -21,6 +21,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ]
     ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 
+  patches = [
+    # Arbitrary code execution fix
+    # https://github.com/numirias/security/blob/cf4f74e0c6c6e4bbd6b59823aa1b85fa913e26eb/doc/2019-06-04_ace-vim-neovim.md
+    ./0001-source-command-doesnt-check-for-the-sandbox-5357552.patch
+  ];
+
   configureFlags = [
     "--enable-multibyte"
     "--enable-nls"
