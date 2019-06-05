@@ -169,7 +169,7 @@ let
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
     maintainers = listOf (attrsOf str);
     priority = int;
-    platforms = listOf (either str lib.systems.parsedPlatform.types.system);
+    platforms = listOf str;
     hydraPlatforms = listOf str;
     broken = bool;
     # TODO: refactor once something like Profpatsch's types-simple will land
@@ -210,11 +210,6 @@ let
     else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
   checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 
-  checkPlatform = attrs: let
-      anyMatch = lib.any (lib.meta.platformMatch hostPlatform);
-    in  anyMatch (attrs.meta.platforms or lib.platforms.all) &&
-      ! anyMatch (attrs.meta.badPlatforms or []);
-
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];
       actualOutputs = attrs.outputs or [ "out" ];
@@ -236,8 +231,10 @@ let
       { valid = false; reason = "blacklisted"; errormsg = "has a blacklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
       { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
-    else if !allowUnsupportedSystem && !(checkPlatform attrs) then
-      { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.config}’"; }
+    else if !allowUnsupportedSystem &&
+            (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
+              lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or [])) then
+      { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
     else if checkOutputsToInstall attrs then

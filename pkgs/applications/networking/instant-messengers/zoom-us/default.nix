@@ -4,7 +4,7 @@
 , qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
 , qttools, qtwayland, qtwebchannel, qtwebengine
 # Runtime
-, coreutils, libjpeg_turbo, pciutils, procps, utillinux
+, coreutils, libjpeg_turbo, pciutils, procps, utillinux, libv4l
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
@@ -72,6 +72,7 @@ in stdenv.mkDerivation {
 
       makeWrapper $packagePath/zoom $out/bin/zoom-us \
         --prefix PATH : "${makeBinPath [ coreutils glib.dev pciutils procps qttools.dev utillinux ]}" \
+        --prefix LD_PRELOAD : "${libv4l}/lib/libv4l/v4l2convert.so" \
         --run "cd $packagePath"
 
       runHook postInstall

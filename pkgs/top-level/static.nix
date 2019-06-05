@@ -82,9 +82,6 @@ in {
   busybox = super.busybox.override {
     enableStatic = true;
   };
-  v8 = super.v8.override {
-    static = true;
-  };
   libiberty = super.libiberty.override {
     staticBuild = true;
   };
@@ -160,5 +157,7 @@ in {
       };
     };
   };
+
+  python27 = super.python27.override { static = true; };
 
 }

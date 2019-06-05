@@ -31,7 +31,7 @@ let
     graphite2 gtk2 gtk3 udev ncurses wayland libglvnd vulkan-loader
 
     # Lutris
-    gobjectIntrospection gdk_pixbuf pango openssl sqlite xterm libnotify procps
+    gobject-introspection gdk_pixbuf hicolor-icon-theme pango openssl sqlite xterm libnotify procps
 
     # Adventure Game Studio
     allegro dumb
@@ -47,7 +47,7 @@ let
 
     # DOSBox
     SDL_net SDL_sound
- 
+
     # GOG
     glib-networking
 

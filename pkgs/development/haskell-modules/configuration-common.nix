@@ -1282,4 +1282,8 @@ self: super: {
   ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_23_0; };
   dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_23_0; };
 
+  # Test suite doesn't work with current QuickCheck
+  # https://github.com/pruvisto/heap/issues/11
+  heap = dontCheck super.heap;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -347,7 +347,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
 
-  gtkhtml = callPackage ./misc/gtkhtml { };
+  gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant1; };
 
   pomodoro = callPackage ./misc/pomodoro { };
 

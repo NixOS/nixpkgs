@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, gtk2, lua, perl, python2
 , libtool, pciutils, dbus-glib, libcanberra-gtk2, libproxy
-, libsexy, enchant, libnotify, openssl, intltool
+, libsexy, enchant1, libnotify, openssl, intltool
 , desktop-file-utils, hicolor-icon-theme
 , autoconf, automake, autoconf-archive
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   #hexchat and heachat-text loads enchant spell checking library at run time and so it needs to have route to the path
   patchPhase = ''
-    sed -i "s,libenchant.so.1,${enchant}/lib/libenchant.so.1,g" src/fe-gtk/sexy-spell-entry.c
+    sed -i "s,libenchant.so.1,${enchant1}/lib/libenchant.so.1,g" src/fe-gtk/sexy-spell-entry.c
   '';
 
   preConfigure = ''

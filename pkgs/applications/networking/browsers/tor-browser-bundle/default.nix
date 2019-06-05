@@ -280,7 +280,7 @@ stdenv.mkDerivation rec {
       TZ=":" \
       \
       DISPLAY="\$DISPLAY" \
-      XAUTHORITY="\$XAUTHORITY" \
+      XAUTHORITY="\''${XAUTHORITY:-}" \
       DBUS_SESSION_BUS_ADDRESS="\$DBUS_SESSION_BUS_ADDRESS" \
       \
       HOME="\$HOME" \

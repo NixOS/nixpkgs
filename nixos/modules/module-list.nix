@@ -183,6 +183,7 @@
   ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
+  ./services/audio/jack.nix
   ./services/audio/icecast.nix
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
@@ -541,7 +542,6 @@
   ./services/networking/autossh.nix
   ./services/networking/bird.nix
   ./services/networking/bitlbee.nix
-  ./services/networking/btsync.nix
   ./services/networking/charybdis.nix
   ./services/networking/chrony.nix
   ./services/networking/cjdns.nix

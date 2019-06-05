@@ -7,10 +7,19 @@ let
 
   cfg = config.services.compton;
 
+  literalAttrs = v:
+    if isString v then toString v
+    else if isAttrs v then "{\n"
+      + concatStringsSep "\n" (mapAttrsToList
+        (name: value: "${literalAttrs name} = ${literalAttrs value};")
+        v)
+      + "\n}"
+    else generators.toPretty {} v;
+
   floatBetween = a: b: with lib; with types;
     addCheck str (x: versionAtLeast x a && versionOlder x b);
 
-  pairOf = x: with types; addCheck (listOf x) (y: lib.length y == 2);
+  pairOf = x: with types; addCheck (listOf x) (y: length y == 2);
 
   opacityRules = optionalString (length cfg.opacityRules != 0)
     (concatMapStringsSep ",\n" (rule: ''"${rule}"'') cfg.opacityRules);
@@ -23,8 +32,7 @@ let
       fade-in-step  = ${elemAt cfg.fadeSteps 0};
       fade-out-step = ${elemAt cfg.fadeSteps 1};
       fade-exclude  = ${toJSON cfg.fadeExclude};
-    '' + 
-    optionalString cfg.shadow ''
+    '' + optionalString cfg.shadow ''
 
       # shadows
       shadow = true;
@@ -39,10 +47,7 @@ let
       inactive-opacity = ${cfg.inactiveOpacity};
 
       wintypes:
-      {
-        popup_menu = { opacity = ${cfg.menuOpacity}; }
-        dropdown_menu = { opacity = ${cfg.menuOpacity}; }
-      };
+      ${literalAttrs cfg.wintypes};
 
       opacity-rule = [
         ${opacityRules}
@@ -50,7 +55,7 @@ let
 
       # other options
       backend = ${toJSON cfg.backend};
-      vsync = ${lib.boolToString cfg.vSync};
+      vsync = ${boolToString cfg.vSync};
       refresh-rate = ${toString cfg.refreshRate};
     '' + cfg.extraOptions);
 
@@ -98,7 +103,7 @@ in {
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
-        "focused = 1" 
+        "focused = 1"
       ];
       description = ''
         List of conditions of windows that should not be faded.
@@ -138,7 +143,7 @@ in {
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
-        "focused = 1" 
+        "focused = 1"
       ];
       description = ''
         List of conditions of windows that should have no shadow.
@@ -173,6 +178,15 @@ in {
       '';
     };
 
+    wintypes = mkOption {
+      type = types.attrs;
+      default = { popup_menu = { opacity = cfg.menuOpacity; }; dropdown_menu = { opacity = cfg.menuOpacity; }; };
+      example = {};
+      description = ''
+        Rules for specific window types.
+      '';
+    };
+
     opacityRules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -201,7 +215,7 @@ in {
         let
           res = x != "none";
           msg = "The type of services.compton.vSync has changed to bool:"
-                + " interpreting ${x} as ${lib.boolToString res}";
+                + " interpreting ${x} as ${boolToString res}";
         in
           if isBool x then x
           else warn msg res;

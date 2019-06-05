@@ -19,6 +19,12 @@ let
     "x86_64-windows" "i686-windows"
 
     "wasm64-wasi" "wasm32-wasi"
+
+    "powerpc64le-linux"
+
+    "riscv32-linux" "riscv64-linux"
+
+    "aarch64-none" "avr-none" "arm-none" "i686-none" "x86_64-none" "powerpc-none" "msp430-none"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -36,6 +42,7 @@ in rec {
   i686    = filterDoubles predicates.isi686;
   x86_64  = filterDoubles predicates.isx86_64;
   mips    = filterDoubles predicates.isMips;
+  riscv   = filterDoubles predicates.isRiscV;
 
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;
@@ -49,6 +56,8 @@ in rec {
   unix    = filterDoubles predicates.isUnix;
   wasi    = filterDoubles predicates.isWasi;
   windows = filterDoubles predicates.isWindows;
+
+  embedded = filterDoubles predicates.isNone;
 
   mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "armv7a-linux" "aarch64-linux" "powerpc64le-linux"];
 }

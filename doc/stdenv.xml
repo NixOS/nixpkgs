@@ -709,19 +709,16 @@ passthru.updateScript = writeScript "update-zoom-us" ''
 <programlisting>
 passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
 </programlisting>
-      Note that the update scripts will be run in parallel by default; you
-      should avoid running <command>git commit</command> or any other commands
-      that cannot handle that.
+     </para>
+     <para>
+      The script will be usually run from the root of the Nixpkgs repository
+      but you should not rely on that. Also note that the update scripts will
+      be run in parallel by default; you should avoid running <command>git
+      commit</command> or any other commands that cannot handle that.
      </para>
      <para>
       For information about how to run the updates, execute
-      <cmdsynopsis>
-       <command>nix-shell</command> 
-       <arg>
-        maintainers/scripts/update.nix
-       </arg>
-      </cmdsynopsis>
-      .
+      <command>nix-shell maintainers/scripts/update.nix</command>.
      </para>
     </listitem>
    </varlistentry>

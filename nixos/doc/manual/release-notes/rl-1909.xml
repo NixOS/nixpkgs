@@ -114,6 +114,18 @@
    </listitem>
    <listitem>
     <para>
+     Since Bittorrent Sync was superseded by Resilio Sync in 2016, the
+     <literal>bittorrentSync</literal>, <literal>bittorrentSync14</literal>,
+     and <literal>bittorrentSync16</literal> packages have been removed in
+     favor of <literal>resilio-sync</literal>.
+    </para>
+    <para>
+     The corresponding module, <option>services.btsync</option> has been
+     replaced by the <option>services.resilio</option> module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The limesurvey apache subservice was replaced with a full NixOS module.
       One can configure it using the <option>services.limesurvey.enable</option>
       and <option>services.limesurvey.virtualHost</option> options.
