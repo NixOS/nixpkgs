@@ -24171,4 +24171,6 @@ in
 
   bemenu = callPackage ../applications/misc/bemenu { };
 
+  dapper = callPackage ../development/tools/dapper { };
+
 }
