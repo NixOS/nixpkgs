@@ -250,6 +250,11 @@
     github = "akru";
     name = "Alexander Krupenkin ";
   };
+  alex3rd = {
+    email = "aaermolov@gmail.com";
+    github = "wiedzmin";
+    name = "Alex Ermolov";
+  };
   alexchapman = {
     email = "alex@farfromthere.net";
     github = "AJChapman";

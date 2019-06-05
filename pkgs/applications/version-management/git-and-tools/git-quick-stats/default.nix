@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     meta = with stdenv.lib; {
         description = "Simple and efficient tool to access various statistics in git repository";
         homepage = "https://github.com/arzzen/git-quick-stats";
+        maintainers = [ maintainers.alex3rd ];
         license = licenses.mit;
         platforms = platforms.unix;
     };
