@@ -99,6 +99,8 @@ let
 
   git-open = callPackage ./git-open { };
 
+  git-quick-stats = callPackage ./git-quick-stats { };
+
   git-radar = callPackage ./git-radar { };
 
   git-recent = callPackage ./git-recent {
