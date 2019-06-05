@@ -62,4 +62,9 @@ rec {
     name = "export_kernel_fpu_functions";
     patch = ./export_kernel_fpu_functions.patch;
   };
+
+  bug-null-pointer-dereference = {
+    name = "bug-null-pointer-dereference";
+    patch = ./bug-null-pointer-dereference.patch;
+  };
 }
