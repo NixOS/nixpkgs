@@ -1,9 +1,15 @@
 { stdenv
 , buildPythonPackage
+, pytest
 , nose
 , scipy
+, scikitlearn
 , xgboost
 , substituteAll
+, pandas
+, matplotlib
+, graphviz
+, datatable
 }:
 
 buildPythonPackage rec {
@@ -21,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ scipy ];
   buildInputs = [ xgboost ];
-  checkInputs = [ nose ];
+  checkInputs = [ nose pytest scikitlearn pandas matplotlib graphviz datatable ];
 
   checkPhase = ''
     ln -sf ../demo .

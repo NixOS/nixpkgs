@@ -3,7 +3,7 @@
 bundlerApp {
   pname = "timetrap";
   gemdir = ./.;
-  exes = [ "timetrap" ];
+  exes = [ "t" "timetrap" ];
 
   meta = with lib; {
     description = "A simple command line time tracker written in ruby";

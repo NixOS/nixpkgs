@@ -1,14 +1,16 @@
-{ stdenv, fetchzip, buildDunePackage, yojson }:
+{ stdenv, fetchFromGitHub, buildDunePackage, yojson }:
 
 buildDunePackage rec {
   pname = "merlin";
-  version = "3.2.2";
+  version = "3.3.0";
 
-  minimumOCamlVersion = "4.02";
+  minimumOCamlVersion = "4.02.1";
 
-  src = fetchzip {
-    url = "https://github.com/ocaml/merlin/archive/v${version}.tar.gz";
-    sha256 = "15ssgmwdxylbwhld9p1cq8x6kadxyhll5bfyf11dddj6cldna3hb";
+  src = fetchFromGitHub {
+    owner = "ocaml";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1s4y7jz581hj4gqv4pkk3980khw4lm0qzcj416b4ckji40q7nf9d";
   };
 
   buildInputs = [ yojson ];

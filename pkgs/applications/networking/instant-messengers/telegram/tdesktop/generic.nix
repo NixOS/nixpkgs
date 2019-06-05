@@ -1,7 +1,7 @@
 { stable, version, sha256Hash, archPatchesRevision, archPatchesHash }:
 
 { mkDerivation, lib, fetchFromGitHub, fetchsvn
-, pkgconfig, pythonPackages, cmake, wrapGAppsHook
+, pkgconfig, pythonPackages, cmake, wrapGAppsHook, gcc8
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
@@ -29,7 +29,8 @@ mkDerivation rec {
   };
 
   # TODO: libtgvoip.patch no-gtk2.patch
-  patches = [ "${archPatches}/tdesktop.patch" ];
+  # TODO: Avoid tdesktop_lottie_animation_qtdebug.patch and tdesktop_qtlottie_qtdebug.patch
+  patches = [ "${archPatches}/tdesktop.patch" "${archPatches}/tdesktop_lottie_animation_qtdebug.patch" ];
 
   postPatch = ''
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp \
@@ -38,7 +39,7 @@ mkDerivation rec {
       --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
   '';
 
-  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook gcc8 ];
 
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;
@@ -76,6 +77,9 @@ mkDerivation rec {
   preConfigure = ''
     pushd "Telegram/ThirdParty/libtgvoip"
     patch -Np1 -i "${archPatches}/libtgvoip.patch"
+    popd
+    pushd "Telegram/ThirdParty/qtlottie"
+    patch -Np1 -i "${archPatches}/tdesktop_qtlottie_qtdebug.patch"
     popd
 
     sed -i Telegram/gyp/telegram_linux.gypi \
