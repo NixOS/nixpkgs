@@ -5,29 +5,29 @@ with lib;
 let
   cfg = config.services.thanos;
 
-  nullOpt = type : description : mkOption {
+  nullOpt = type: description: mkOption {
     type = types.nullOr type;
     default = null;
     inherit description;
   };
 
-  optionToArgs = opt : v   : optional (v != null)  ''--${opt}="${toString v}"'';
-  flagToArgs   = opt : v   : optional v            ''--${opt}'';
-  listToArgs   = opt : vs  : map               (v: ''--${opt}="${v}"'') vs;
-  attrsToArgs  = opt : kvs : mapAttrsToList (k: v: ''--${opt}=${k}=\"${v}\"'') kvs;
+  optionToArgs = opt: v  : optional (v != null)  ''--${opt}="${toString v}"'';
+  flagToArgs   = opt: v  : optional v            ''--${opt}'';
+  listToArgs   = opt: vs : map               (v: ''--${opt}="${v}"'') vs;
+  attrsToArgs  = opt: kvs: mapAttrsToList (k: v: ''--${opt}=${k}=\"${v}\"'') kvs;
 
-  mkParamDef = type : default : description : mkParam type (description + ''
+  mkParamDef = type: default: description: mkParam type (description + ''
 
     Defaults to <literal>${toString default}</literal> in Thanos
     when set to <literal>null</literal>.
   '');
 
-  mkParam = type : description : {
+  mkParam = type: description: {
     toArgs = optionToArgs;
     option = nullOpt type description;
   };
 
-  mkFlagParam = description : {
+  mkFlagParam = description: {
     toArgs = flagToArgs;
     option = mkOption {
       type = types.bool;
@@ -36,8 +36,8 @@ let
     };
   };
 
-  mkListParam = opt : description : {
-    toArgs = _opt : listToArgs opt;
+  mkListParam = opt: description: {
+    toArgs = _opt: listToArgs opt;
     option = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -45,8 +45,8 @@ let
     };
   };
 
-  mkAttrsParam = opt : description : {
-    toArgs = _opt : attrsToArgs opt;
+  mkAttrsParam = opt: description: {
+    toArgs = _opt: attrsToArgs opt;
     option = mkOption {
       type = types.attrsOf types.str;
       default = {};
@@ -54,8 +54,8 @@ let
     };
   };
 
-  mkStateDirParam = opt : default : description : {
-    toArgs = _opt : stateDir : optionToArgs opt "/var/lib/${stateDir}";
+  mkStateDirParam = opt: default: description: {
+    toArgs = _opt: stateDir: optionToArgs opt "/var/lib/${stateDir}";
     option = mkOption {
       type = types.str;
       inherit default;
@@ -63,24 +63,24 @@ let
     };
   };
 
-  toYAML = name : attrs : pkgs.runCommandNoCC name {
+  toYAML = name: attrs: pkgs.runCommandNoCC name {
     preferLocalBuild = true;
     json = builtins.toFile "${name}.json" (builtins.toJSON attrs);
     nativeBuildInputs = [ pkgs.remarshal ];
   } ''json2yaml -i $json -o $out'';
 
-  thanos = cmd : "${cfg.package}/bin/thanos ${cmd}" +
+  thanos = cmd: "${cfg.package}/bin/thanos ${cmd}" +
     (let args = cfg."${cmd}".arguments;
      in optionalString (length args != 0) (" \\\n  " +
          concatStringsSep " \\\n  " args));
 
-  argumentsOf = cmd : concatLists (collect isList
-    (flip mapParamsRecursive params."${cmd}" (path : param :
+  argumentsOf = cmd: concatLists (collect isList
+    (flip mapParamsRecursive params."${cmd}" (path: param:
       let opt = concatStringsSep "." path;
           v = getAttrFromPath path cfg."${cmd}";
       in param.toArgs opt v)));
 
-  mkArgumentsOption = cmd : mkOption {
+  mkArgumentsOption = cmd: mkOption {
     type = types.listOf types.str;
     default = argumentsOf cmd;
     description = ''
@@ -95,10 +95,10 @@ let
   };
 
   mapParamsRecursive =
-    let noParam = attr : !(attr ? "toArgs" && attr ? "option");
+    let noParam = attr: !(attr ? "toArgs" && attr ? "option");
     in mapAttrsRecursiveCond noParam;
 
-  paramsToOptions = mapParamsRecursive (_path : param : param.option);
+  paramsToOptions = mapParamsRecursive (_path: param: param.option);
 
   params = {
 
@@ -157,10 +157,10 @@ let
       '';
     };
 
-    objstore = cfg : {
+    objstore = cfg: {
 
       objstore.config-file = {
-        toArgs = _opt : path : optionToArgs "objstore.config-file" path;
+        toArgs = _opt: path: optionToArgs "objstore.config-file" path;
         option = mkOption {
           type = with types; nullOr str;
           default = if cfg.objstore.config == null then null
@@ -177,7 +177,7 @@ let
 
       objstore.config =
         {
-          toArgs = _opt : _attrs : [];
+          toArgs = _opt: _attrs: [];
           option = nullOpt types.attrs ''
             Object store configuration.
 
@@ -533,7 +533,7 @@ let
       '';
 
       startAt = {
-        toArgs = _opt : startAt : flagToArgs "wait" (startAt == null);
+        toArgs = _opt: startAt: flagToArgs "wait" (startAt == null);
         option = nullOpt types.str ''
           When this option is set to a <literal>systemd.time</literal>
           specification the Thanos compactor will run at the specified period.
@@ -588,7 +588,7 @@ let
 
   };
 
-  assertRelativeStateDir = cmd : {
+  assertRelativeStateDir = cmd: {
     assertions = [
       {
         assertion = !hasPrefix "/" cfg."${cmd}".stateDir;
