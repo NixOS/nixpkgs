@@ -38,7 +38,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "Highly available Prometheus setup with long term storage capabilities";
-    homepage = https://github.com/improbable-eng/thanos;
+    homepage = "https://github.com/improbable-eng/thanos";
     license = licenses.asl20;
     maintainers = with maintainers; [ basvandijk ];
     platforms = platforms.unix;
