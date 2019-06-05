@@ -482,33 +482,6 @@ with self; {
     };
   };
 
-  luazip = buildLuaPackage rec {
-    name = "zip-${version}";
-    version = "2007-10-30";
-
-    src = fetchFromGitHub {
-      owner = "luaforge";
-      repo = "luazip";
-      rev = "0b8f5c958e170b1b49f05bc267bc0351ad4dfc44";
-      sha256 = "0zrrwhmzny5zbpx91bjbl77gzkvvdi3qhhviliggp0aj8w3faxsr";
-    };
-
-    buildInputs = [ zziplib ];
-
-    patches = [ ../development/lua-modules/zip.patch ];
-
-    # Does not currently work under Lua 5.2 or LuaJIT.
-    disabled = isLua52 || isLua53 || isLuaJIT;
-
-    meta = with stdenv.lib; {
-      description = "Lua library to read files stored inside zip files";
-      homepage = "https://github.com/luaforge/luazip";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = platforms.linux;
-    };
-  };
-
   luazlib = buildLuaPackage rec {
     name = "zlib-${version}";
     version = "1.1";
