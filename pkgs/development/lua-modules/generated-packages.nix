@@ -92,6 +92,35 @@ binaryheap = buildLuarocksPackage {
     };
   };
 };
+digestif = buildLuarocksPackage {
+  pname = "digestif";
+  version = "scm-1";
+
+  knownRockspec = (fetchurl {
+    url    = http://luarocks.org/dev/digestif-scm-1.rockspec;
+    sha256 = "18rixbni4hmrmh3qj3vpjbsphzdvchswajphc9ysm52ccpyzh687";
+  }).outPath;
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "git://github.com/astoff/digestif",
+  "rev": "19442554ae18607707f09e6663d65bb8bb4ebb58",
+  "date": "2019-06-01T15:41:36+02:00",
+  "sha256": "1sglkgx2s1xc725h9b97jhfbi3scs32si83xss5m3n0xidwmlbzb",
+  "fetchSubmodules": true
+}
+ '') ["date"]) ;
+
+  disabled = (luaOlder "5.3");
+  propagatedBuildInputs = [ lua lpeg dkjson ];
+
+  meta = {
+    homepage = "https://github.com/astoff/digestif/";
+    description = "Code analyzer for TeX.";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 dkjson = buildLuarocksPackage {
   pname = "dkjson";
   version = "2.5-2";
@@ -225,6 +254,25 @@ lpeg_patterns = buildLuarocksPackage {
     description = "a collection of LPEG patterns";
     license = {
       fullName = "MIT";
+    };
+  };
+};
+lpeglabel = buildLuarocksPackage {
+  pname = "lpeglabel";
+  version = "1.5.0-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/lpeglabel-1.5.0-1.src.rock;
+    sha256 = "068mwvwwn5n69pdm04qnk354391w9mk34jsczxql0xi5qgmz6w8j";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/sqmedeiros/lpeglabel/";
+    description = "Parsing Expression Grammars For Lua with Labeled Failures";
+    license = {
+      fullName = "MIT/X11";
     };
   };
 };
@@ -368,6 +416,35 @@ lua-iconv = buildLuarocksPackage {
     description = "Lua binding to the iconv";
     license = {
       fullName = "MIT/X11";
+    };
+  };
+};
+lua-lsp = buildLuarocksPackage {
+  pname = "lua-lsp";
+  version = "scm-2";
+
+  knownRockspec = (fetchurl {
+    url    = http://luarocks.org/dev/lua-lsp-scm-2.rockspec;
+    sha256 = "0qk3i6j0km4d1fs61fxhkmnbxmgpq24nygr8wknl6hbj2kya25rb";
+  }).outPath;
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "git://github.com/Alloyed/lua-lsp",
+  "rev": "0de511803ed616214333210a2d003cf05a64dc18",
+  "date": "2018-09-08T10:11:54-04:00",
+  "sha256": "15dnsyh5664vi7qn73y2r114rhs5l9lfi84pwqkq5cafkiiy49qa",
+  "fetchSubmodules": true
+}
+ '') ["date"]) ;
+
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua dkjson lpeglabel inspect ];
+
+  meta = {
+    homepage = "https://github.com/Alloyed/lua-lsp";
+    description = "No summary";
+    license = {
+      fullName = "MIT";
     };
   };
 };
