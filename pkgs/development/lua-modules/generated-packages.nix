@@ -352,6 +352,25 @@ ltermbox = buildLuarocksPackage {
     };
   };
 };
+cjson = buildLuarocksPackage {
+  pname = "lua-cjson";
+  version = "2.1.0.6-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/lua-cjson-2.1.0.6-1.src.rock;
+    sha256 = "0dqqkn0aygc780kiq2lbydb255r8is7raf7md0gxdjcagp8afps5";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "http://www.kyne.com.au/~mark/software/lua-cjson.php";
+    description = "A fast JSON encoding/parsing module";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 lua-cmsgpack = buildLuarocksPackage {
   pname = "lua-cmsgpack";
   version = "0.4.0-0";

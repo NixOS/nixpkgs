@@ -684,37 +684,6 @@ with self; {
     };
   };
 
-  cjson = buildLuaPackage rec {
-    name = "cjson-${version}";
-    version = "2.1.0";
-
-    src = fetchurl {
-      url = "http://www.kyne.com.au/~mark/software/download/lua-${name}.tar.gz";
-      sha256 = "0y67yqlsivbhshg8ma535llz90r4zag9xqza5jx0q7lkap6nkg2i";
-    };
-
-    preBuild = ''
-      sed -i "s|/usr/local|$out|" Makefile
-    '';
-
-    makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
-
-    postInstall = ''
-      rm -rf $out/share/lua/${lua.luaversion}/cjson/tests
-    '';
-
-    installTargets = "install install-extra";
-
-    disabled = isLuaJIT;
-
-    meta = with stdenv.lib; {
-      description = "Lua C extension module for JSON support";
-      homepage = "https://www.kyne.com.au/~mark/software/lua-cjson.php";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-    };
-  };
-
   mpack = buildLuaPackage rec {
     name = "mpack-${version}";
     version = "1.0.7";
