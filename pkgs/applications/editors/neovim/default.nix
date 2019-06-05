@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, gettext, msgpack, libtermkey, libiconv
 , libuv, lua, ncurses, pkgconfig
 , unibilium, xsel, gperf
 , libvterm-neovim
@@ -35,6 +35,13 @@ in
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
+
+      # Arbitrary code execution fix
+      # https://github.com/numirias/security/blob/cf4f74e0c6c6e4bbd6b59823aa1b85fa913e26eb/doc/2019-06-04_ace-vim-neovim.md
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/pull/10082.patch";
+        sha256 = "0g4knlpaabbq6acqgqm765b1knqv981nk2gf84fmknqnv4sgbsq2";
+      })
     ];
 
     enableParallelBuilding = true;
