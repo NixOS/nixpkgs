@@ -46,6 +46,9 @@ with super;
   lua-iconv = super.lua-iconv.override({
     buildInputs = [ pkgs.libiconv ];
   });
+  luazip = super.luazip.override({
+    buildInputs = [ pkgs.zziplib ];
+  });
   luv = super.luv.overrideAttrs(oa: {
     # Use system libuv instead of building local and statically linking
     # This is a hacky way to specify -DWITH_SHARED_LIBUV=ON which
