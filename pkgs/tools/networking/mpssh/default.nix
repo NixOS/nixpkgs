@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "0iibzb9qrwf9wsmp2b8j76qw66ql8fw5jx02x82a22fsaznb5dng";
-    rev = "${version}";
+    rev = version;
     repo = pname;
     owner = "ndenev";
   };
