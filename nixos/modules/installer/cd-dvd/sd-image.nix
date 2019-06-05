@@ -125,10 +125,13 @@ in
         echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
         echo "file sd-image $img" >> $out/nix-support/hydra-build-products
 
-        # Create the image file sized to fit /boot/firmware and /, plus 20M of slack
+        # Gap in front of the first partition, in MiB
+        gap=8
+
+        # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
         rootSizeBlocks=$(du -B 512 --apparent-size ${rootfsImage} | awk '{ print $1 }')
         firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
-        imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + 20 * 1024 * 1024))
+        imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + gap * 1024 * 1024))
         truncate -s $imageSize $img
 
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
@@ -138,8 +141,8 @@ in
             label: dos
             label-id: ${config.sdImage.firmwarePartitionID}
 
-            start=8M, size=$firmwareSizeBlocks, type=b
-            start=${toString (8 + config.sdImage.firmwareSize)}M, type=83, bootable
+            start=''${gap}M, size=$firmwareSizeBlocks, type=b
+            start=$((gap + ${toString config.sdImage.firmwareSize}))M, type=83, bootable
         EOF
 
         # Copy the rootfs into the SD image
