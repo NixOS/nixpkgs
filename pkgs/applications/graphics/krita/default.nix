@@ -11,7 +11,7 @@
 let
 
 major = "4.2";
-minor = "0";
+minor = "1";
 patch = null;
 
 in
@@ -22,7 +22,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.kde.org/stable/krita/${major}.${minor}/${name}.tar.gz";
-    sha256 = "1l5bhk4b2f3qdzg9jk2sxz2bq8cqs10nm3wgkrkbqs6vig75rsym";
+    sha256 = "1jm9kj9cq2nhaqg3kvyb193hhkd6al1gh23fkl54dj88x3fpldim";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
