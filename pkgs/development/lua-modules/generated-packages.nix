@@ -633,6 +633,25 @@ luaffi = buildLuarocksPackage {
     };
   };
 };
+luaposix = buildLuarocksPackage {
+  pname = "luaposix";
+  version = "34.0.4-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/luaposix-34.0.4-1.src.rock;
+    sha256 = "0yrm5cn2iyd0zjd4liyj27srphvy0gjrjx572swar6zqr4dwjqp2";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ bit32 lua std_normalize ];
+
+  meta = {
+    homepage = "http://github.com/luaposix/luaposix/";
+    description = "Lua bindings for POSIX";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 luazip = buildLuarocksPackage {
   pname = "luazip";
   version = "1.2.7-1";
