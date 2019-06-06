@@ -9,6 +9,8 @@ with stdenv.lib;
 
 let # in mariadb # spans the whole file
 
+libExt = stdenv.hostPlatform.extensions.sharedLibrary;
+
 mariadb = everything // {
   inherit client; # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
   server = everything; # a full single-output build, including everything in `client` again
@@ -45,7 +47,11 @@ common = rec { # attributes common to both builds
   '';
 
   patches = [ ./cmake-includedir.patch ]
-    ++ stdenv.lib.optional stdenv.cc.isClang ./clang-isfinite.patch;
+    ++ optionals stdenv.isDarwin [
+      # Derived from "Fixed c++11 narrowing error"
+      # https://github.com/MariaDB/server/commit/a0dfefb0f8a47145e599a5f1b0dc576fa7634b92
+      ./fix-c++11-narrowing-error.patch
+    ];
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
@@ -112,9 +118,10 @@ client = stdenv.mkDerivation (common // {
     rm -r "$out"/share/doc
     rm "$out"/bin/{msql2mysql,mysql_plugin,mytop,wsrep_sst_rsync_wan,mysql_config,mariadb_config}
     rm "$out"/lib/plugin/{daemon_example.ini,dialog.so,mysql_clear_password.so,sha256_password.so}
-    rm "$out"/lib/{libmariadb.so,libmysqlclient.so,libmysqlclient_r.so}
-    mv "$out"/lib/libmariadb.so.3 "$out"/lib/libmysqlclient.so
-    ln -sv libmysqlclient.so "$out"/lib/libmysqlclient_r.so
+    libmysqlclient_path=$(readlink -f $out/lib/libmysqlclient${libExt})
+    rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
+    mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
+    ln -sv libmysqlclient${libExt} "$out"/lib/libmysqlclient_r${libExt}
     mkdir -p "$dev"/lib && mv "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a} "$dev"/lib
   '';
 
@@ -161,16 +168,20 @@ everything = stdenv.mkDerivation (common // {
     rm -r "$out"/data # Don't need testing data
     rm "$out"/bin/{mysql_find_rows,mysql_waitpid,mysqlaccess,mysqladmin,mysqlbinlog,mysqlcheck}
     rm "$out"/bin/{mysqldump,mysqlhotcopy,mysqlimport,mysqlshow,mysqlslap,mysqltest}
-    rm "$out"/lib/mysql/plugin/{auth_gssapi_client.so,client_ed25519.so,daemon_example.ini}
-    rm "$out"/lib/{libmysqlclient.so,libmysqlclient_r.so}
+    ${ # We don't build with GSSAPI on Darwin
+      optionalString (! stdenv.isDarwin) ''
+        rm "$out"/lib/mysql/plugin/auth_gssapi_client.so
+      ''
+    }
+    rm "$out"/lib/mysql/plugin/{client_ed25519.so,daemon_example.ini}
+    rm "$out"/lib/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
     mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
     mkdir -p "$dev"/lib && mv "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a} "$dev"/lib
   '' + optionalString (! stdenv.isDarwin) ''
     sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
   '';
 
-  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive"
-    + optionalString stdenv.isDarwin " -std=c++11";
+  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
 });
 
 connector-c = stdenv.mkDerivation rec {
