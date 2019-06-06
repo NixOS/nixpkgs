@@ -1,21 +1,19 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, mpd_clientlib }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, mpd_clientlib, sphinx }:
 
 stdenv.mkDerivation rec {
   pname = "mpc";
-  version = "0.28";
+  version = "0.31";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "mpc";
     rev    = "v${version}";
-    sha256 = "1g8i4q5xsqdhidyjpvj6hzbhxacv27cb47ndv9k68whd80c5f9n9";
+    sha256 = "06wn5f24bgkqmhh2p8rbizmqibzqr4x1q7c6zl0pfq7mdy49g5ds";
   };
 
   buildInputs = [ mpd_clientlib ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ meson ninja pkgconfig sphinx ];
 
   meta = with stdenv.lib; {
     description = "A minimalist command line interface to MPD";
