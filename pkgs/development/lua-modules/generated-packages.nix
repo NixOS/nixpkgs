@@ -614,6 +614,25 @@ luaffi = buildLuarocksPackage {
     };
   };
 };
+luazip = buildLuarocksPackage {
+  pname = "luazip";
+  version = "1.2.7-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/luazip-1.2.7-1.src.rock;
+    sha256 = "1yprlr1ap6bhshhy88qfphmmyg9zp1py2hj2158iw6vsva0fk03l";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/mpeterv/luazip";
+    description = "Library for reading files inside zip files";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 luuid = buildLuarocksPackage {
   pname = "luuid";
   version = "20120509-2";
