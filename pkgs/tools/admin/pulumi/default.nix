@@ -14,7 +14,7 @@ let
     };
     "x86_64-darwin" = {
       url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-darwin-x64.tar.gz";
-      sha256 = "0fxs5bmssbhb9q7adsr8ybkbykazzv2q5dn0zdl8xi90mhpd1lgv";
+      sha256 = "0cgc41l8jf7raqqkdpn3yapvllmr43v17wly0rxqk47csh8905hd";
     };
   };
 
