@@ -20574,6 +20574,8 @@ in
 
   neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
 
+  glrnvim = libsForQt5.callPackage ../applications/editors/neovim/glrnvim { };
+
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { pythonPackages = python3Packages; };
 
   vis = callPackage ../applications/editors/vis {
