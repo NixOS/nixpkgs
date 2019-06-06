@@ -31,7 +31,7 @@
 , enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, cf-private, AVFoundation, Cocoa, QTKit, VideoDecodeAcceleration, bzip2
+, cf-private, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
 }:
 
 let
@@ -200,7 +200,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
     ++ lib.optional enableCuda cudatoolkit
-    ++ lib.optionals stdenv.isDarwin [ cf-private AVFoundation Cocoa QTKit VideoDecodeAcceleration bzip2 ]
+    ++ lib.optionals stdenv.isDarwin [ cf-private AVFoundation Cocoa VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -237,6 +237,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
+    "-DBUILD_opencv_videoio=OFF"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
   ];
