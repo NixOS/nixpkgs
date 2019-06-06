@@ -633,6 +633,25 @@ luaffi = buildLuarocksPackage {
     };
   };
 };
+luaposix = buildLuarocksPackage {
+  pname = "luaposix";
+  version = "34.0.4-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/luaposix-34.0.4-1.src.rock;
+    sha256 = "0yrm5cn2iyd0zjd4liyj27srphvy0gjrjx572swar6zqr4dwjqp2";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ bit32 lua std_normalize ];
+
+  meta = {
+    homepage = "http://github.com/luaposix/luaposix/";
+    description = "Lua bindings for POSIX";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 luazip = buildLuarocksPackage {
   pname = "luazip";
   version = "1.2.7-1";
@@ -857,10 +876,16 @@ mpack = buildLuarocksPackage {
   pname = "mpack";
   version = "1.0.7-0";
 
+  knownRockspec = (fetchurl {
+    url    = https://luarocks.org/mpack-1.0.7-0.rockspec;
+    sha256 = "1sdw8qsni3g3fx9jnc5g64nxfw6v3n1rrw1xa3bkwc9wk815lqnz";
+  }).outPath;
+
   src = fetchurl {
-    url    = http://luarocks.org/manifests/teto/mpack-1.0.7-0.src.rock;
-    sha256 = "0nq4ixaminkc7fwfpivysyv0al3j5dffsvgdrnwnqdg3w7jgfbw7";
+    url    = https://github.com/libmpack/libmpack-lua/releases/download/1.0.7/libmpack-lua-1.0.7.tar.gz;
+    sha256 = "1s4712ig3l4ds65pmlyg3r5zids2snn1rv8vsmmk27a4lf258mk8";
   };
+
 
   meta = {
     homepage = "https://github.com/libmpack/libmpack-lua/releases/download/1.0.7/libmpack-lua-1.0.7.tar.gz";

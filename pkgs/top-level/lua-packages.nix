@@ -345,40 +345,6 @@ with self; {
     };
   };
 
-  luaposix = buildLuaPackage rec {
-    name = "posix-${version}";
-    version = "34.0.4";
-
-    src = fetchFromGitHub {
-      owner = "luaposix";
-      repo = "luaposix";
-      rev = "release-v${version}";
-      sha256 = "0p5583vidsm7s97zihf47c34vscwgbl86axrnj44j328v45kxb2z";
-    };
-
-    propagatedBuildInputs = [ std_normalize bit32 ];
-
-    buildPhase = ''
-      ${lua}/bin/lua build-aux/luke \
-        package="luaposix" \
-        version="${version}"
-    '';
-
-    installPhase = ''
-      ${lua}/bin/lua build-aux/luke install --quiet \
-        INST_LIBDIR="$out/lib/lua/${lua.luaversion}" \
-        INST_LUADIR="$out/share/lua/${lua.luaversion}"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Lua bindings for POSIX API";
-      homepage = "https://github.com/luaposix/luaposix";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp lblasc ];
-      platforms = platforms.unix;
-    };
-  };
-
   luasec = buildLuaPackage rec {
     name = "sec-0.8";
 
@@ -617,44 +583,6 @@ with self; {
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = platforms.all;
-    };
-  };
-
-  mpack = buildLuaPackage rec {
-    name = "mpack-${version}";
-    version = "1.0.7";
-
-    src = fetchFromGitHub {
-      owner = "libmpack";
-      repo = "libmpack-lua";
-      rev = version;
-      sha256 = "0l4k7qmwaa0zpxrlp27yp4pbbyiz3zgxywkm543q6wkzn6wmq8l8";
-    };
-
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libmpack ];
-    dontBuild = true;
-
-    postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace Makefile \
-        --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
-    '';
-
-    installFlags = [
-      "USE_SYSTEM_LUA=yes"
-      "USE_SYSTEM_MPACK=yes"
-      "MPACK_LUA_VERSION=${lua.version}"
-      "LUA_CMOD_INSTALLDIR=$(out)/lib/lua/${lua.luaversion}"
-    ];
-
-    hardeningDisable = [ "fortify" ];
-
-    meta = with stdenv.lib; {
-      description = "Lua bindings for libmpack";
-      homepage = "https://github.com/libmpack/libmpack-lua";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
-      platforms = with platforms; linux ++ darwin;
     };
   };
 
