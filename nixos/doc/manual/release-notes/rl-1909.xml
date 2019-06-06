@@ -236,6 +236,13 @@
       so you'll need to set <option>hardware.pulseaudio.daemon.config.resample-method</option> back to <literal>speex-float-1</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The default resample-method for PulseAudio has been changed from the upstream default <literal>speex-float-1</literal>
+      to <literal>speex-float-5</literal>. Be aware that low-powered ARM-based and MIPS-based boards will struggle with this
+      so you'll need to set <option>hardware.pulseaudio.daemon.config.resample-method</option> back to <literal>speex-float-1</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
