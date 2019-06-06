@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.layus ];
-    long_description = ''
+    longDescription = ''
       You will also need a working *tex installation in your PATH, containing at least `preview` and `pgf`.
     '';
   };
