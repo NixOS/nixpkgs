@@ -29,6 +29,7 @@ luabitop,,,,,
 luaevent,,,,,
 luacheck,,,,,
 luaffi,,http://luarocks.org/dev,,,
+luaposix,,,,,vyp lblasc
 luazip,,,,,
 luuid,,,,,
 markdown,,,,,
