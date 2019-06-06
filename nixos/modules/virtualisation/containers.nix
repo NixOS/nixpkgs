@@ -710,8 +710,11 @@ in
               wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
               after = [ "network.target" ];
-              restartTriggers = [ containerConfig.path ];
-              reloadIfChanged = true;
+              restartTriggers = [
+                containerConfig.path
+                config.environment.etc."containers/${name}.conf".source
+              ];
+              restartIfChanged = true;
             }
           else {})
       )) config.containers)
