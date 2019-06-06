@@ -1,8 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchurl
+{ stdenv, fetchFromGitHub, fetchpatch
 , pkgconfig, makeWrapper
 , poppler, qt5, gnuplot
 }:
-
 
 # This package only builds ktikz without KDE integration because KDE4 is
 # deprecated and upstream does not (yet ?) support KDE5.
@@ -30,10 +29,12 @@ stdenv.mkDerivation rec {
     sha256 = "1s83x8r2yi64wc6ah2iz09dj3qahy0fkxx6cfgpkavjw9x0j0582";
   };
 
-  patches = [ (fetchurl {
-    url = "https://github.com/fhackenberger/ktikz/commit/972685a406517bb85eb561f2c8e26f029eacd7db.patch";
-    sha256 = "16jwsl18marfw5m888vwxdd1h7cqa37rkfqgirzdliacb1cr4f58";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/fhackenberger/ktikz/commit/972685a406517bb85eb561f2c8e26f029eacd7db.patch";
+      sha256 = "16jwsl18marfw5m888vwxdd1h7cqa37rkfqgirzdliacb1cr4f58";
+    })
+  ];
 
   QT_PLUGIN_PATH = "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}";
 
