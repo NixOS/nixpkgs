@@ -1,10 +1,10 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
-{ lib, stdenv, fetchurl, flex, bison, autoconf
+{ lib, stdenv, fetchurl, autoconf, bison, libtool, pkgconfig, re2c
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pcre, pcre2, pkgconfig, sqlite, config, libjpeg, libpng, freetype
+, openssl, pcre, pcre2, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
-, libzip, re2c, valgrind
+, libzip, valgrind
 }:
 
 with lib;
@@ -61,7 +61,6 @@ let
   , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
   , cgotoSupport ? config.php.cgoto or false
   , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
-  , valgrindPcreSupport ? (config.php.valgrindPcreSupport or false) && (valgrindSupport) && (versionAtLeast version "7.2")
   }:
 
     let
@@ -75,8 +74,8 @@ let
 
       enableParallelBuilding = true;
 
-      nativeBuildInputs = [ pkgconfig autoconf re2c ];
-      buildInputs = [ flex bison ]
+      nativeBuildInputs = [ autoconf bison libtool pkgconfig re2c ];
+      buildInputs = [ ]
         ++ optional (versionOlder version "7.3") pcre
         ++ optional (versionAtLeast version "7.3") pcre2
         ++ optional withSystemd systemd
@@ -190,8 +189,7 @@ let
       ++ optional (!pharSupport) "--disable-phar"
       ++ optional xmlrpcSupport "--with-xmlrpc"
       ++ optional cgotoSupport "--enable-re2c-cgoto"
-      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}"
-      ++ optional valgrindPcreSupport "--with-pcre-valgrind";
+      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}";
 
       hardeningDisable = [ "bindnow" ];
 
