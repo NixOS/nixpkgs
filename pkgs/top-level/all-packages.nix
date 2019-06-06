@@ -11034,7 +11034,9 @@ in
   libkrb5 = krb5.override { type = "lib"; };
   kerberos = libkrb5; # TODO: move to aliases.nix
 
-  l-smash = callPackage ../development/libraries/l-smash { };
+  l-smash = callPackage ../development/libraries/l-smash {
+    stdenv = gccStdenv;
+  };
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
 
