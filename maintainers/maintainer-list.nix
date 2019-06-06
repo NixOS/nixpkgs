@@ -3668,6 +3668,11 @@
     github = "nphilou";
     name = "Philippe Nguyen";
   };
+  nshalman = {
+    email = "nahamu@gmail.com";
+    github = "nshalman";
+    name = "Nahum Shalman";
+  };
   nslqqq = {
     email = "nslqqq@gmail.com";
     name = "Nikita Mikhailov";
