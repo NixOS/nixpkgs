@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "PyICU";
-  version = "2.0.3";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pzss3l0b0vcsyr7wlqdd6pkcqldspajfgd9k2iijf6r152d2ln4";
+    sha256 = "ddb2b453853b4c25db382bc5e8c4cde09b3f4696ef1e1494f8294e174f459cf4";
   };
 
   patches = [
