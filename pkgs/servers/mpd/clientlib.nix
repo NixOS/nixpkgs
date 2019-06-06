@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, meson, ninja, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
+  pname = "libmpdclient";
   version = "2.16";
-  name = "libmpdclient-${version}";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
