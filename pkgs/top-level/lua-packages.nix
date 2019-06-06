@@ -482,43 +482,6 @@ with self; {
     };
   };
 
-  luazlib = buildLuaPackage rec {
-    name = "zlib-${version}";
-    version = "1.1";
-
-    src = fetchFromGitHub {
-      owner = "brimworks";
-      repo = "lua-zlib";
-      rev = "v${version}";
-      sha256 = "1520lk4xpf094xn2zallqgqhs0zb4w61l49knv9y8pmhkdkxzzgy";
-    };
-
-    buildInputs = [ zlib ];
-
-    preConfigure = ''
-      substituteInPlace Makefile --replace gcc cc --replace "-llua" ""
-    '';
-
-    preBuild = ''
-      makeFlagsArray=(
-        ${platformString}
-        LUAPATH="$out/share/lua/${lua.luaversion}"
-        LUACPATH="$out/lib/lua/${lua.luaversion}"
-        INCDIR="-I${lua}/include"
-        LIBDIR="-L${lua}/lib");
-    '';
-
-    preInstall = "mkdir -p $out/lib/lua/${lua.luaversion}";
-
-    meta = with stdenv.lib; {
-      description = "Simple streaming interface to zlib for Lua";
-      homepage = https://github.com/brimworks/lua-zlib;
-      license = licenses.mit;
-      maintainers = with maintainers; [ koral ];
-      platforms = platforms.unix;
-    };
-  };
-
 
   luastdlib = buildLuaPackage rec {
     name = "stdlib-${version}";
