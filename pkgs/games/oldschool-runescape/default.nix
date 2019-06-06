@@ -53,6 +53,7 @@ in stdenv.mkDerivation rec {
 
     exec ${jre}/bin/java -Dsun.java2d.uiScale=2.5 -Djava.class.path=$out/share/java/jagexappletviewer.jar \
                          -Dcom.jagex.config=http://oldschool.runescape.com/jav\_config.ws \
+                         -Xmx512m -Xss2m -XX:CompileThreshold=1500 -XX:+UseConcMarkSweepGC \
                          -Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2 \
                          jagexappletviewer \$USER/.jagexclient/images
     EOF
