@@ -143,12 +143,17 @@ let
   };
 
   event = buildPecl rec {
-    version = "2.5.1";
+    version = "2.5.2";
     pname = "event";
 
-    sha256 = "0hnvmlbl994fjliqc3c65gv6f6syh9zmlfcbizqs3k67bbmkhiad";
+    sha256 = "0b9zbwyyfcrzs1gcpqn2dkjq6jliw89g2m981f8ildbp84snkpcf";
 
-    configureFlags = [ "--with-event-libevent-dir=${pkgs.libevent.dev}" ];
+    configureFlags = [
+      "--with-event-libevent-dir=${pkgs.libevent.dev}"
+      "--with-event-core"
+      "--with-event-extra"
+      "--with-event-pthreads"
+    ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [ openssl libevent ];
 
