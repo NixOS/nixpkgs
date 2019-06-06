@@ -1,136 +1,116 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, systemd, boost, darwin
-, alsaSupport ? true, alsaLib
-, avahiSupport ? true, avahi, dbus
-, flacSupport ? true, flac
-, vorbisSupport ? true, libvorbis
-, madSupport ? true, libmad
-, id3tagSupport ? true, libid3tag
-, mikmodSupport ? true, libmikmod
-, shoutSupport ? true, libshout
-, sqliteSupport ? true, sqlite
-, curlSupport ? true, curl
-, audiofileSupport ? true, audiofile
-, bzip2Support ? true, bzip2
-, ffmpegSupport ? true, ffmpeg
-, fluidsynthSupport ? true, fluidsynth
-, zipSupport ? true, zziplib
-, samplerateSupport ? true, libsamplerate
-, mmsSupport ? true, libmms
-, mpg123Support ? true, mpg123
+{ stdenv, lib, fetchFromGitHub, meson, ninja, pkgconfig, python3Packages
+, boost17x, glib, pcre, zlib
+, darwin ? null
+, systemd ? null
 , aacSupport ? true, faad2
-, lameSupport ? true, lame
-, pulseaudioSupport ? true, libpulseaudio
-, jackSupport ? true, libjack2
+, alsaSupport ? true, alsaLib
+, audiofileSupport ? true, audiofile
+, avahiSupport ? true, avahi, dbus
+, bzip2Support ? true, bzip2
+, clientSupport ? true, mpd_clientlib
+, curlSupport ? true, curl
+, ffmpegSupport ? true, ffmpeg
+, flacSupport ? true, flac
+, fluidsynthSupport ? true, fluidsynth
 , gmeSupport ? true, game-music-emu
 , icuSupport ? true, icu
-, clientSupport ? true, mpd_clientlib
-, opusSupport ? true, libopus
-, soundcloudSupport ? true, yajl
+, id3tagSupport ? true, libid3tag
+, jackSupport ? true, libjack2
+, lameSupport ? true, lame
+, madSupport ? true, libmad
+, mikmodSupport ? true, libmikmod
+, mmsSupport ? true, libmms
+, mpg123Support ? true, mpg123
 , nfsSupport ? true, libnfs
+, opusSupport ? true, libopus
+, pulseaudioSupport ? true, libpulseaudio
+, samplerateSupport ? true, libsamplerate
+, shoutSupport ? true, libshout
 , smbSupport ? true, samba
+, soundcloudSupport ? true, yajl
+, sqliteSupport ? true, sqlite
+, vorbisSupport ? true, libvorbis
+, zipSupport ? true, zziplib
 }:
 
 assert avahiSupport -> avahi != null && dbus != null;
 
 let
-  opt = stdenv.lib.optional;
-  mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
-  major = "0.20";
-  minor = "23";
+  major = "0.21";
+  minor = "10";
+  mkFlag = c: f: "-D${f}=${if c then "enabled" else "disabled"}";
 
 in stdenv.mkDerivation rec {
-  name = "mpd-${version}";
-  version = "${major}${if minor == "" then "" else "." + minor}";
+  pname = "mpd";
+  version = "${major}${lib.optionalString (minor != "") "." + minor}";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "MPD";
     rev    = "v${version}";
-    sha256 = "1z1pdgiddimnmck0ardrpxkvgk1wn9zxri5wfv5ppasbb7kfm350";
+    sha256 = "1syh4qa4x7w7syh49qjz0m7gaiwnpjwkglbb21191csqh6jdk2nk";
   };
 
-  patches = [ ./x86.patch ];
+  buildInputs = [
+    # boost 1.6.x is broken with mpd
+    boost17x
 
-  buildInputs = [ glib boost ]
-    ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
-    ++ opt stdenv.isLinux systemd
-    ++ opt (stdenv.isLinux && alsaSupport) alsaLib
-    ++ opt avahiSupport avahi
-    ++ opt avahiSupport dbus
-    ++ opt flacSupport flac
-    ++ opt vorbisSupport libvorbis
-    # using libmad to decode mp3 files on darwin is causing a segfault -- there
-    # is probably a solution, but I'm disabling it for now
-    ++ opt (!stdenv.isDarwin && madSupport) libmad
-    ++ opt id3tagSupport libid3tag
-    ++ opt mikmodSupport libmikmod
-    ++ opt shoutSupport libshout
-    ++ opt sqliteSupport sqlite
-    ++ opt curlSupport curl
-    ++ opt bzip2Support bzip2
-    ++ opt audiofileSupport audiofile
-    ++ opt ffmpegSupport ffmpeg
-    ++ opt fluidsynthSupport fluidsynth
-    ++ opt samplerateSupport libsamplerate
-    ++ opt mmsSupport libmms
-    ++ opt mpg123Support mpg123
-    ++ opt aacSupport faad2
-    ++ opt lameSupport lame
-    ++ opt zipSupport zziplib
-    ++ opt (!stdenv.isDarwin && pulseaudioSupport) libpulseaudio
-    ++ opt (!stdenv.isDarwin && jackSupport) libjack2
-    ++ opt gmeSupport game-music-emu
-    ++ opt icuSupport icu
-    ++ opt clientSupport mpd_clientlib
-    ++ opt opusSupport libopus
-    ++ opt soundcloudSupport yajl
-    ++ opt (!stdenv.isDarwin && nfsSupport) libnfs
-    ++ opt (!stdenv.isDarwin && smbSupport) samba;
+    audiofile avahi bzip2 curl dbus faad2 ffmpeg flac fluidsynth
+    game-music-emu glib icu lame libid3tag libmikmod libmms libopus
+    libsamplerate libshout libvorbis mpd_clientlib mpg123 pcre sqlite
+    yajl zlib zziplib
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreAudioKit
+  ] ++ lib.optionals stdenv.isLinux [
+    alsaLib libjack2 libnfs libpulseaudio samba systemd
+    # using libmad to decode mp3 files on darwin is causing a segfault
+    libmad
+  ];
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ meson ninja pkgconfig python3Packages.sphinx ];
 
-  configureFlags =
-    [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
-      (mkFlag flacSupport "flac")
-      (mkFlag vorbisSupport "vorbis")
-      (mkFlag vorbisSupport "vorbis-encoder")
-      (mkFlag (!stdenv.isDarwin && madSupport) "mad")
-      (mkFlag mikmodSupport "mikmod")
-      (mkFlag id3tagSupport "id3")
-      (mkFlag shoutSupport "shout")
-      (mkFlag sqliteSupport "sqlite")
-      (mkFlag curlSupport "curl")
-      (mkFlag audiofileSupport "audiofile")
-      (mkFlag bzip2Support "bzip2")
-      (mkFlag ffmpegSupport "ffmpeg")
-      (mkFlag fluidsynthSupport "fluidsynth")
-      (mkFlag zipSupport "zzip")
-      (mkFlag samplerateSupport "lsr")
-      (mkFlag mmsSupport "mms")
-      (mkFlag mpg123Support "mpg123")
-      (mkFlag aacSupport "aac")
-      (mkFlag lameSupport "lame-encoder")
-      (mkFlag (!stdenv.isDarwin && pulseaudioSupport) "pulse")
-      (mkFlag (!stdenv.isDarwin && jackSupport) "jack")
-      (mkFlag stdenv.isDarwin "osx")
-      (mkFlag icuSupport "icu")
-      (mkFlag gmeSupport "gme")
-      (mkFlag clientSupport "libmpdclient")
-      (mkFlag opusSupport "opus")
-      (mkFlag soundcloudSupport "soundcloud")
-      (mkFlag (!stdenv.isDarwin && nfsSupport) "libnfs")
-      (mkFlag (!stdenv.isDarwin && smbSupport) "smbclient")
-      "--enable-debug"
-      "--with-zeroconf=avahi"
-    ]
-    ++ opt stdenv.isLinux
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system";
-
-  NIX_LDFLAGS = ''
-    ${if shoutSupport then "-lshout" else ""}
-  '';
+  mesonFlags = [
+    "-Ddocumentation=true"
+    "-Dzeroconf=avahi"
+    (mkFlag true "pcre")
+    (mkFlag true "zlib")
+    (mkFlag aacSupport "faad")
+    (mkFlag audiofileSupport "audiofile")
+    (mkFlag bzip2Support "bzip2")
+    (mkFlag clientSupport "libmpdclient")
+    (mkFlag curlSupport "curl")
+    (mkFlag ffmpegSupport "ffmpeg")
+    (mkFlag flacSupport "flac")
+    (mkFlag fluidsynthSupport "fluidsynth")
+    (mkFlag gmeSupport "gme")
+    (mkFlag icuSupport "icu")
+    (mkFlag id3tagSupport "id3tag")
+    (mkFlag lameSupport "lame")
+    (mkFlag mikmodSupport "mikmod")
+    (mkFlag mmsSupport "mms")
+    (mkFlag mpg123Support "mpg123")
+    (mkFlag opusSupport "opus")
+    (mkFlag samplerateSupport "libsamplerate")
+    (mkFlag shoutSupport "shout")
+    (mkFlag soundcloudSupport "soundcloud")
+    (mkFlag soundcloudSupport "yajl")
+    (mkFlag sqliteSupport "sqlite")
+    (mkFlag vorbisSupport "vorbis")
+    (mkFlag vorbisSupport "vorbisenc")
+    (mkFlag zipSupport "zzip")
+  ] ++ lib.optionals stdenv.isLinux [
+    (mkFlag true "dbus")
+    (mkFlag true "systemd")
+    (mkFlag alsaSupport "alsa")
+    (mkFlag jackSupport "jack")
+    (mkFlag madSupport "mad")
+    (mkFlag nfsSupport "nfs")
+    (mkFlag pulseaudioSupport "pulse")
+    (mkFlag smbSupport "smbclient")
+    "-Dsystemd_system_unit_dir=${placeholder "out"}/etc/systemd/system"
+    "-Dsystemd_user_unit_dir=${placeholder "out"}/etc/systemd/user"
+  ];
 
   meta = with stdenv.lib; {
     description = "A flexible, powerful daemon for playing music";
