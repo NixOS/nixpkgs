@@ -857,10 +857,16 @@ mpack = buildLuarocksPackage {
   pname = "mpack";
   version = "1.0.7-0";
 
+  knownRockspec = (fetchurl {
+    url    = https://luarocks.org/mpack-1.0.7-0.rockspec;
+    sha256 = "1sdw8qsni3g3fx9jnc5g64nxfw6v3n1rrw1xa3bkwc9wk815lqnz";
+  }).outPath;
+
   src = fetchurl {
-    url    = http://luarocks.org/manifests/teto/mpack-1.0.7-0.src.rock;
-    sha256 = "0nq4ixaminkc7fwfpivysyv0al3j5dffsvgdrnwnqdg3w7jgfbw7";
+    url    = https://github.com/libmpack/libmpack-lua/releases/download/1.0.7/libmpack-lua-1.0.7.tar.gz;
+    sha256 = "1s4712ig3l4ds65pmlyg3r5zids2snn1rv8vsmmk27a4lf258mk8";
   };
+
 
   meta = {
     homepage = "https://github.com/libmpack/libmpack-lua/releases/download/1.0.7/libmpack-lua-1.0.7.tar.gz";
