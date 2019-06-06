@@ -2094,6 +2094,8 @@ in {
 
   ijson = callPackage ../development/python-modules/ijson {};
 
+  imagecodecs-lite = disabledIf (!isPy3k) (callPackage ../development/python-modules/imagecodecs-lite { });
+
   imagesize = callPackage ../development/python-modules/imagesize { };
 
   image-match = callPackage ../development/python-modules/image-match { };
