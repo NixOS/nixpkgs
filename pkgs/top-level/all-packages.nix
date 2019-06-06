@@ -11047,7 +11047,9 @@ in
   libkrb5 = krb5.override { type = "lib"; };
   kerberos = libkrb5; # TODO: move to aliases.nix
 
-  l-smash = callPackage ../development/libraries/l-smash { };
+  l-smash = callPackage ../development/libraries/l-smash {
+    stdenv = gccStdenv;
+  };
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
 
@@ -12440,7 +12442,7 @@ in
 
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
     inherit (darwin) cf-private;
-    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration;
   };
 
   opencv3WithoutCuda = opencv3.override {
@@ -12449,7 +12451,7 @@ in
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     inherit (darwin) cf-private;
-    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration;
   };
 
   openexr = callPackage ../development/libraries/openexr { };
