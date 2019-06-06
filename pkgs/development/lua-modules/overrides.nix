@@ -32,6 +32,10 @@ with super;
   lrexlib-gnu = super.lrexlib-gnu.override({
     buildInputs = [ pkgs.gnulib ];
   });
+  lua-zlib = super.lua-zlib.override({
+    buildInputs = [ pkgs.zlib.dev ];
+    disabled=luaOlder "5.1" || luaAtLeast "5.4";
+  });
   luaevent = super.luaevent.override({
     buildInputs = with pkgs; [ libevent.dev libevent ];
     propagatedBuildInputs = [ luasocket ];
