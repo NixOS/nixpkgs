@@ -59,8 +59,7 @@ let
   , cliSupport ? config.php.cli or true
   , pharSupport ? config.php.phar or true
   , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
-  , re2cSupport ? config.php.re2c or true
-  , cgotoSupport ? (config.php.cgoto or false) && (re2cSupport)
+  , cgotoSupport ? config.php.cgoto or false
   , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
   , valgrindPcreSupport ? (config.php.valgrindPcreSupport or false) && (valgrindSupport) && (versionAtLeast version "7.2")
   }:
@@ -76,7 +75,7 @@ let
 
       enableParallelBuilding = true;
 
-      nativeBuildInputs = [ pkgconfig autoconf ];
+      nativeBuildInputs = [ pkgconfig autoconf re2c ];
       buildInputs = [ flex bison ]
         ++ optional (versionOlder version "7.3") pcre
         ++ optional (versionAtLeast version "7.3") pcre2
@@ -108,7 +107,6 @@ let
         ++ optional tidySupport html-tidy
         ++ optional argon2Support libargon2
         ++ optional libzipSupport libzip
-        ++ optional re2cSupport re2c
         ++ optional valgrindSupport valgrind;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
