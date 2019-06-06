@@ -689,7 +689,7 @@ in
       [{ name = "container@"; value = unit; }]
       # declarative containers
       ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (let
-          config = cfg // (
+          containerConfig = cfg // (
           if cfg.enableTun then
             {
               allowedDevices = cfg.allowedDevices
@@ -700,17 +700,17 @@ in
           else {});
         in
           unit // {
-            preStart = preStartScript config;
-            script = startScript config;
-            postStart = postStartScript config;
-            serviceConfig = serviceDirectives config;
+            preStart = preStartScript containerConfig;
+            script = startScript containerConfig;
+            postStart = postStartScript containerConfig;
+            serviceConfig = serviceDirectives containerConfig;
           } // (
-          if config.autoStart then
+          if containerConfig.autoStart then
             {
               wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
               after = [ "network.target" ];
-              restartTriggers = [ config.path ];
+              restartTriggers = [ containerConfig.path ];
               reloadIfChanged = true;
             }
           else {})
