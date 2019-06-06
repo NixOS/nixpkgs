@@ -54,6 +54,14 @@ in {
         '';
       };
 
+      startSystemWide = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to run mpd as a system user (appliance mode).
+        '';
+      };
+
       musicDirectory = mkOption {
         type = with types; either path (strMatching "(http|https|nfs|smb)://.+");
         default = "${cfg.dataDir}/music";
@@ -136,6 +144,14 @@ in {
           parameter is omitted from the configuration.
         '';
       };
+
+      addBinariesToGlobalEnvironment = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to add the client and server binaries to the global environment.
+        '';
+      };
     };
 
   };
@@ -143,60 +159,58 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (let
+    description = "Music Player Daemon Socket";
+    listenStreams = [
+      "" # we need an empty string to reset the list instead of just adding
+      "%t/mpd/socket"
+      "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}"
+    ];
+    wantedBy = [ "sockets.target" ];
+  in {
+    environment.systemPackages = lib.mkIf cfg.addBinariesToGlobalEnvironment (with pkgs; [ mpc_cli mpd ]);
 
-    systemd.sockets.mpd = mkIf cfg.startWhenNeeded {
-      description = "Music Player Daemon Socket";
-      wantedBy = [ "sockets.target" ];
-      listenStreams = [
-        "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}"
-      ];
-      socketConfig = {
-        Backlog = 5;
-        KeepAlive = true;
-        PassCredentials = true;
-      };
+    systemd.packages = with pkgs; [ mpd ];
+
+    systemd.sockets.mpd = mkIf cfg.startSystemWide {
+      inherit description listenStreams wantedBy;
     };
 
-    systemd.tmpfiles.rules = [
+    systemd.user.sockets.mpd = mkIf (!cfg.startSystemWide) {
+      inherit description listenStreams wantedBy;
+    };
+
+    systemd.tmpfiles.rules = lib.mkIf cfg.startSystemWide [
       "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.playlistDirectory}' - ${cfg.user} ${cfg.group} - -"
     ];
 
-    systemd.services.mpd = {
-      after = [ "network.target" "sound.target" ];
-      description = "Music Player Daemon";
+    systemd.services.mpd = lib.mkIf cfg.startSystemWide {
       wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
 
       serviceConfig = {
-        User = "${cfg.user}";
-        ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
-        Type = "notify";
-        LimitRTPRIO = 50;
-        LimitRTTIME = "infinity";
-        ProtectSystem = true;
-        NoNewPrivileges = true;
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        ProtectKernelModules = true;
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
-        RestrictNamespaces = true;
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = [
+          ""
+          "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}"
+        ];
       };
     };
 
-    users.users = optionalAttrs (cfg.user == name) (singleton {
+    users.users = lib.mkIf cfg.startSystemWide (optionalAttrs (cfg.user == name) (singleton {
       inherit uid;
       inherit name;
       group = cfg.group;
       extraGroups = [ "audio" ];
       description = "Music Player Daemon user";
       home = "${cfg.dataDir}";
-    });
+    }));
 
-    users.groups = optionalAttrs (cfg.group == name) (singleton {
+    users.groups = lib.mkIf cfg.startSystemWide (optionalAttrs (cfg.group == name) (singleton {
       inherit name;
       gid = gid;
-    });
-  };
+    }));
+  });
 
 }
