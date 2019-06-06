@@ -4,7 +4,7 @@ let
   self = with self; {
     buildPecl = import ../build-support/build-pecl.nix {
       inherit php;
-      inherit (pkgs) stdenv autoreconfHook fetchurl;
+      inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
     };
 
     # Wrap mkDerivation to prepend pname with "php-" to make names consistent
@@ -216,7 +216,7 @@ let
 
     sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
 
-    buildInputs = [ pkgs.re2c pkgs.oracle-instantclient ];
+    buildInputs = [ pkgs.oracle-instantclient ];
     configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient}/lib" ];
   };
 
