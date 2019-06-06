@@ -78,6 +78,6 @@ self = stdenv.mkDerivation rec {
       artistic1 bsd0 bsd2 bsd3 bsdOriginal
       gpl2 lgpl2 lgpl21 mit publicDomain  licenses.zlib
     ];
-    broken = stdenv.isAarch64;
+    broken = stdenv.isAarch64 && stdenv.isDarwin;
   };
 }; in self
