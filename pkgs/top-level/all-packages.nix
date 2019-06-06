@@ -19294,6 +19294,8 @@ in
 
   mupdf = callPackage ../applications/misc/mupdf { };
 
+  mystem = callPackage ../applications/misc/mystem { };
+
   diffpdf = libsForQt5.callPackage ../applications/misc/diffpdf { };
 
   diff-pdf = callPackage ../applications/misc/diff-pdf { wxGTK = wxGTK31; };
