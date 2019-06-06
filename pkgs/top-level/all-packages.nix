@@ -12220,7 +12220,9 @@ in
   };
   mesa = mesa_noglu;
 
-  mesa_glu =  callPackage ../development/libraries/mesa-glu { };
+  mesa_glu =  callPackage ../development/libraries/mesa-glu {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   # NOTE: 2018-07-12: legacy alias:
   # gcsecurity bussiness is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
