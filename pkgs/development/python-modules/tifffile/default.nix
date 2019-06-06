@@ -1,6 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27
+{ lib, fetchPypi, buildPythonPackage, isPy27, isPy3k
 , numpy, enum34, futures, pathlib
 , pytest
+, imagecodecs-lite
 }:
 
 buildPythonPackage rec {
@@ -23,11 +24,12 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ numpy ]
-    ++ lib.optional isPy27 [ futures enum34 pathlib ];
+    ++ lib.optional isPy27 [ futures enum34 pathlib ]
+    ++ lib.optional isPy3k [ imagecodecs-lite ];
 
   meta = with lib; {
     description = "Read and write image data from and to TIFF files.";
-    homepage = https://www.lfd.uci.edu/~gohlke/;
+    homepage = "https://www.lfd.uci.edu/~gohlke/";
     maintainers = [ maintainers.lebastr ];
     license = licenses.bsd3;
   };
