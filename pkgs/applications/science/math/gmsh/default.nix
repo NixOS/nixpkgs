@@ -11,12 +11,12 @@ stdenv.mkDerivation {
     sha256 = "0ab4p2dilk4rfw1qc817rmy56qkhxaajpnqdnvahbhcbf3skd8jl";
   };
 
-  buildInputs = [ cmake openblasCompat gmm fltk libjpeg zlib libGLU_combined
+  buildInputs = [ openblasCompat gmm fltk libjpeg zlib libGLU_combined
     libGLU xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
     xorg.libXft xorg.libXinerama xorg.libX11 xorg.libSM xorg.libICE
   ];
 
-  nativeBuildInputs = [ gfortran ];
+  nativeBuildInputs = [ cmake gfortran ];
 
   enableParallelBuilding = true;
 
