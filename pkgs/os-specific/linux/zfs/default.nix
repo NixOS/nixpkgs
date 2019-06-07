@@ -9,7 +9,7 @@
 , gawk, gnugrep, gnused, systemd
 
 # Kernel dependencies
-, kernel ? null, spl ? null
+, kernel ? null
 }:
 
 with stdenv.lib;
@@ -20,10 +20,8 @@ let
   common = { version
     , sha256
     , extraPatches
-    , spl
     , rev ? "zfs-${version}"
     , isUnstable ? false
-    , isLegacyCrypto ? false
     , incompatibleKernelVersion ? null }:
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
@@ -52,10 +50,8 @@ let
 
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
         ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
-      buildInputs =
-           optionals buildKernel [ spl ]
-        ++ optionals buildUser [ zlib libuuid python3 attr ]
-        ++ optionals (buildUser && (isUnstable || isLegacyCrypto)) [ openssl ]
+      buildInputs = optionals buildUser [ zlib libuuid python3 attr ]
+        ++ optionals (buildUser) [ openssl ]
         ++ optional stdenv.hostPlatform.isMusl [ libtirpc ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
@@ -107,8 +103,6 @@ let
       ] ++ optionals buildKernel [
         "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
         "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-      ] ++ optionals (buildKernel && spl != null) [
-        "--with-spl=${spl}/libexec/spl"
       ];
 
       enableParallelBuilding = true;
@@ -162,19 +156,13 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.7.13";
+    version = "0.8.0";
 
-    sha256 = "1l77bq7pvc54vl15pnrjd0njgpf00qjzy0x85dpfh5jxng84x1fb";
+    sha256 = "1lqb9q2im5bbm4l8kfb31cb6rvy37h5ni6rnqlki127ynilymkj8";
 
     extraPatches = [
-      # in case this gets out of date, just send Mic92 a pull request!
-      (fetchpatch {
-        url = "https://github.com/Mic92/zfs/commit/cf23c1d38bfc698a8a729fc0c5f9ca41591f4d95.patch";
-        sha256 = "14v3x9ipvg2qd1vyf70nv909jd5zdxlsw5y8k60pfyvwm7g80wr5";
-      })
+      ./build-fixes-unstable.patch
     ];
-
-    inherit spl;
   };
 
   zfsUnstable = common rec {
@@ -189,10 +177,7 @@ in {
     isUnstable = true;
 
     extraPatches = [
-      # in case this gets out of date, just send Mic92 a pull request!
       ./build-fixes-unstable.patch
     ];
-
-    spl = null;
   };
 }
