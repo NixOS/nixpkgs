@@ -877,6 +877,8 @@ in {
 
   pytricia =  callPackage ../development/python-modules/pytricia { };
 
+  py-vapid = callPackage ../development/python-modules/py-vapid { };
+
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
