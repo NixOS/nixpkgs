@@ -6425,6 +6425,8 @@ in
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
 
+  video2midi = callPackage ../tools/audio/video2midi { };
+
   vifm = callPackage ../applications/misc/vifm { };
 
   viking = callPackage ../applications/misc/viking {
