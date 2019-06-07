@@ -3943,7 +3943,10 @@ in
 
   kalibrate-hackrf = callPackage ../applications/radio/kalibrate-hackrf { };
 
-  kakoune = callPackage ../applications/editors/kakoune { };
+  wrapKakoune = callPackage ../applications/editors/kakoune/wrapper.nix { };
+  kakounePlugins = callPackage ../applications/editors/kakoune/plugins.nix { };
+  kakoune-unwrapped = callPackage ../applications/editors/kakoune { };
+  kakoune = wrapKakoune kakoune-unwrapped { };
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
