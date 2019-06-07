@@ -1651,6 +1651,17 @@ let
     };
   };
 
+  SpaceCamp = buildVimPluginFrom2Nix {
+    pname = "SpaceCamp";
+    version = "2019-06-05";
+    src = fetchFromGitHub {
+      owner = "jaredgorski";
+      repo = "SpaceCamp";
+      rev = "de431dc161f8f839a47c6f1cb277e7318ddba6f5";
+      sha256 = "032i1isc558rz2hmh3dfxnwgbqn7wdlhzz1c05v6bd7yyv0k5g23";
+    };
+  };
+
   Spacegray-vim = buildVimPluginFrom2Nix {
     pname = "Spacegray-vim";
     version = "2019-02-23";
