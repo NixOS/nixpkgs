@@ -1264,8 +1264,8 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_23_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_23_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_24_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_24_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
