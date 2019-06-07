@@ -138,12 +138,12 @@ let
 
   base16-vim = buildVimPluginFrom2Nix {
     pname = "base16-vim";
-    version = "2018-11-30";
+    version = "2019-06-07";
     src = fetchFromGitHub {
       owner = "chriskempson";
       repo = "base16-vim";
-      rev = "2073e2dd9fa0172ccdba92b3f0df25642a69f7db";
-      sha256 = "1d6d2aca73rvhz7gpi2d1g2il9qy45pfw1kbrrqgvmik016i6l1y";
+      rev = "6191622d5806d4448fa2285047936bdcee57a098";
+      sha256 = "1qz21jizcy533mqk9wff1wqchhixkcfkysqcqs0x35wwpbri6nz8";
     };
   };
 
@@ -237,12 +237,12 @@ let
 
   coc-nvim = buildVimPluginFrom2Nix {
     pname = "coc-nvim";
-    version = "2019-06-05";
+    version = "2019-06-07";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "eb507baaa314598ad9c08c9182e13b8ddee09b39";
-      sha256 = "0rci7g4xrv7v9bjdawy85pr2xx9kpfxv9j2bl7sqjcx3n77993zp";
+      rev = "cbb5c031274f81a503ea0c0976252938de479980";
+      sha256 = "07i7fb12ai2xzknn624lvbl5qjazqx3mix390ymbscdskb726kaz";
     };
   };
 
@@ -414,12 +414,12 @@ let
 
   denite-nvim = buildVimPluginFrom2Nix {
     pname = "denite-nvim";
-    version = "2019-06-05";
+    version = "2019-06-07";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "denite.nvim";
-      rev = "6937f1d9186a4d464b158368a3f38d9a7c5c14eb";
-      sha256 = "1sg9xk5gydv8ypy42n0h43nld92srdr3acy7mrcwjbl7y5y79xm3";
+      rev = "bfc010bfeed56681929b67e70662f8bb11977da7";
+      sha256 = "0gppzj0l83ldwxb3z41fvjlvyxalcnw90bfw4vvm6aghx0clxpkx";
     };
   };
 
@@ -583,12 +583,12 @@ let
 
   emmet-vim = buildVimPluginFrom2Nix {
     pname = "emmet-vim";
-    version = "2019-05-23";
+    version = "2019-06-07";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "emmet-vim";
-      rev = "0414b53a23c1da180370bf1228b8553fc5022e3f";
-      sha256 = "0hhkzdhrszifbylv9kc23ygg82pvp0m0lyk9lagv305wy7p3dff2";
+      rev = "24fbb0aef7004e183e377c6c244a5dd8845ef07c";
+      sha256 = "0hgp7aip5wc98rh43w9di8f6f19r03f4l7j6lzpks5gpsm4hwfz3";
       fetchSubmodules = true;
     };
   };
@@ -1048,12 +1048,12 @@ let
 
   ncm2-jedi = buildVimPluginFrom2Nix {
     pname = "ncm2-jedi";
-    version = "2019-05-16";
+    version = "2019-06-07";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-jedi";
-      rev = "10f7d917c5fbc99c0029cf4aa6befb91e4b90364";
-      sha256 = "0hap4plkqs21908h1l1y54i77da9nh26ii636ymw8948d7gyb0wc";
+      rev = "86744a7641ce11e22d01778c310e5015f85ef412";
+      sha256 = "16h17cqy76iwd9b3wsmmzjg6j465mjd5kjybmk6dilxmq07q24c9";
     };
   };
 
@@ -1609,12 +1609,12 @@ let
 
   rust-vim = buildVimPluginFrom2Nix {
     pname = "rust-vim";
-    version = "2019-05-19";
+    version = "2019-06-06";
     src = fetchFromGitHub {
       owner = "rust-lang";
       repo = "rust.vim";
-      rev = "53f40ec6c628099e353f25cabd54e5047c28d81d";
-      sha256 = "162aa8l4wkssxdw5k3nvbzmqacjkdiy882hhi6mr5596a8wg58js";
+      rev = "6d6c410d5997bda6b9de065049636be4ad3682f4";
+      sha256 = "1aq66v5j8fckq1bszs793z43fgkrss4w1p44k0x98zx7prx5z5lw";
     };
   };
 
@@ -1972,12 +1972,12 @@ let
 
   verilog_systemverilog-vim = buildVimPluginFrom2Nix {
     pname = "verilog_systemverilog-vim";
-    version = "2019-03-20";
+    version = "2019-06-06";
     src = fetchFromGitHub {
       owner = "vhda";
       repo = "verilog_systemverilog.vim";
-      rev = "f11dfab88b459087cd113cd9a0a0d77c06db565e";
-      sha256 = "0wghhiwyc8rvzfdm3i5dq8s09sdmkr32kb3s8scvxvcc8b3h7wll";
+      rev = "ae5bf6d199ecf1d76159157973f03f91c57667b8";
+      sha256 = "0dsda4x8ygbyvkcwjr5hb5ah0i4jfmq38ng6bf5f71rzl223s5yq";
     };
   };
 
@@ -2236,12 +2236,12 @@ let
 
   vim-android = buildVimPluginFrom2Nix {
     pname = "vim-android";
-    version = "2019-06-05";
+    version = "2019-06-07";
     src = fetchFromGitHub {
       owner = "hsanson";
       repo = "vim-android";
-      rev = "4502497a1f3a218df3949d47a9a281444c91e37e";
-      sha256 = "0sdc5j2rrdqriyigczvl7rcpzdqm8gx323kv0djs7ahr9cd68dfp";
+      rev = "d7b0ce2416cdea3cefa8ab16ba9c2339bf3da2fb";
+      sha256 = "0jxgagsv60nzjpy563m7bgpv8vn2lj743z5j7078qhclpql7cxk9";
     };
   };
 
@@ -2511,12 +2511,12 @@ let
 
   vim-dispatch = buildVimPluginFrom2Nix {
     pname = "vim-dispatch";
-    version = "2019-06-05";
+    version = "2019-06-06";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-dispatch";
-      rev = "21a36d131b7e10cc030b90b2a19f98b0698a66e4";
-      sha256 = "1bjxiz92jjyrmvglrcjqfjxp4ys1dg4lc9262m607d716awbsj18";
+      rev = "eac3a56511119e3c2ca2eec2ba6e6bad72bc09a8";
+      sha256 = "1z3nh5v0kgbj3irmyx6b4l9zw8qsfzq8nvyly5v2xzbjsfyykwms";
     };
   };
 
@@ -3447,11 +3447,11 @@ let
 
   vim-projectionist = buildVimPluginFrom2Nix {
     pname = "vim-projectionist";
-    version = "2019-05-06";
+    version = "2019-06-06";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-projectionist";
-      rev = "917d2aef5bc789982ea52bb654ef5784a1ceae7e";
+      rev = "acf7361d0dc9a4a259c466f00fb2c15bcea6a4db";
       sha256 = "1k0f931i1qgfak0qgk5i5gfq4ld49z0x2siahm1yq3wil7x54zrp";
     };
   };
@@ -4085,12 +4085,12 @@ let
 
   vimtex = buildVimPluginFrom2Nix {
     pname = "vimtex";
-    version = "2019-06-03";
+    version = "2019-06-05";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
-      rev = "fc6b9bf750467ac25fb7b7b394d255ba32729686";
-      sha256 = "1dmi378aba0z0k7r4p9b5ka6b2z46ayafd968r7waizjhdd13vb6";
+      rev = "c725bf60cced15ed5b15d0162c9a56f651b3a992";
+      sha256 = "18wb76vhqy3a6yp4rzd2v9rrwqafhs1jgh67ir8sy5ga5xfwig81";
     };
   };
 
@@ -4217,12 +4217,12 @@ let
 
   yats-vim = buildVimPluginFrom2Nix {
     pname = "yats-vim";
-    version = "2019-05-05";
+    version = "2019-06-07";
     src = fetchFromGitHub {
       owner = "HerringtonDarkholme";
       repo = "yats.vim";
-      rev = "80ae726dfdc87ef25df3225c35d8ba3fd10a36c0";
-      sha256 = "0ds96zhiihkjhsfbxmrh149a656y5xw6fl7v5hih72lzvnplzi5z";
+      rev = "15792ab97b69df7cf24fd160cc7eff1aac145e33";
+      sha256 = "1hsr2pcswp3nx2a8x7nnkzd966kjhy3ac0xpnh6arjsigvckw1ij";
       fetchSubmodules = true;
     };
   };
