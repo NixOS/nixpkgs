@@ -302,7 +302,7 @@
     "hook" = ps: with ps; [  ];
     "horizon" = ps: with ps; [  ];
     "hp_ilo" = ps: with ps; [  ];
-    "html5" = ps: with ps; [ aiohttp-cors ];
+    "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
     "htu21d" = ps: with ps; [  ];
     "huawei_lte" = ps: with ps; [  ];
