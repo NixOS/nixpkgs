@@ -236,6 +236,26 @@ rec {
     in lenContent >= lenSuffix &&
        substring (lenContent - lenSuffix) lenContent content == suffix;
 
+  /* Determine whether a string contains the given infix
+
+    Type: hasInfix :: string -> string -> bool
+
+    Example:
+      hasInfix "bc" "abcd"
+      => true
+      hasInfix "ab" "abcd"
+      => true
+      hasInfix "cd" "abcd"
+      => true
+      hasInfix "foo" "abcd"
+      => false
+  */
+  hasInfix = infix: content:
+    let
+      drop = x: substring 1 (stringLength x) x;
+    in hasPrefix infix content
+      || content != "" && hasInfix infix (drop content);
+
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,
      note that this will likely be horribly inefficient; Nix is not a
