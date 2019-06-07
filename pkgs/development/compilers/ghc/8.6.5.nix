@@ -1,4 +1,4 @@
-{ stdenv, pkgsBuildTarget, targetPackages
+{ stdenv, targetPackages
 
 # build-tools
 , bootPkgs
@@ -76,9 +76,11 @@ let
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
-  toolsForTarget = [
-    pkgsBuildTarget.targetPackages.stdenv.cc
-  ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
+  toolsForTarget =
+    if hostPlatform == buildPlatform then
+      [ targetPackages.stdenv.cc ] ++ stdenv.lib.optional useLLVM llvmPackages.llvm
+    else assert targetPlatform == hostPlatform; # build != host == target
+      [ stdenv.cc ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
 
