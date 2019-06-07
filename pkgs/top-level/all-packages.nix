@@ -2734,6 +2734,13 @@ in
           sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
         };
       });
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "3.12";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1aqjl8dk9amd4zr99n8v2qxzgmr2hdvqfma4zh7a41rj6336c9sr";
+        };
+      });
     };
   }).pkgs; toPythonApplication elasticsearch-curator;
 
@@ -10920,8 +10927,13 @@ in
   } // (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
       stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
     }));
+  icu64 = callPackage ../development/libraries/icu/64.nix ({
+    nativeBuildRoot = buildPackages.icu64.override { buildRootOnly = true; };
+  } // (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+      stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
 
-  icu = icu59;
+  icu = icu64;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -13973,9 +13985,10 @@ in
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = callPackages ../development/interpreters/perl {};
-  inherit (perlInterpreters) perl528 perldevel;
+  inherit (perlInterpreters) perl528 perl530 perldevel;
 
   perl528Packages = recurseIntoAttrs perl528.pkgs;
+  perl530Packages = recurseIntoAttrs perl530.pkgs;
   perldevelPackages = perldevel.pkgs;
 
   perl = perl528;
@@ -16503,6 +16516,8 @@ in
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
   public-sans  = callPackage ../data/fonts/public-sans { };
+
+  publicsuffix-list = callPackage ../data/misc/publicsuffix-list { };
 
   qogir-theme = callPackage ../data/themes/qogir { };
 

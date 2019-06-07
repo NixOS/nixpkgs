@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.45.0";
+  version = "1.45.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1sgcjarfksa8bkx81q5cd6rzqvhzgs28a0ljwyr4ggqpfx7d18vk";
+    sha256 = "0zi8jz28hs66vhjvrfxmkmr1via19aygcbzpnw3lp0crhizaasgf";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -20,16 +20,23 @@ stdenv.mkDerivation rec {
     else [
       (fetchpatch {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
-      sha256 = "1fyml1iwrs412xn2w36ra28am3sq4klrrj60lnf7rysyw069nxk3";
+      sha256 = "1gfcsr0i3q8q2f0lqza8na0iy4l4p3cbii51ds6zmj0y4hz2dwhb";
+      excludes = [ "lib/ext2fs/hashmap.h" ];
       extraPrefix = "";
       })
     ];
 
   configureFlags =
     if stdenv.isLinux then [
-      "--enable-elf-shlibs" "--enable-symlink-install" "--enable-relative-symlinks"
-      # libuuid, libblkid, uuidd and fsck are in util-linux-ng (the "libuuid" dependency).
-      "--disable-libuuid" "--disable-uuidd" "--disable-libblkid" "--disable-fsck"
+      "--enable-elf-shlibs"
+      "--enable-symlink-install"
+      "--enable-relative-symlinks"
+      "--with-crond-dir=no"
+      # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
+      "--disable-fsck"
+      "--disable-libblkid"
+      "--disable-libuuid"
+      "--disable-uuidd"
     ] else [
       "--enable-libuuid --disable-e2initrd-helper"
     ];
