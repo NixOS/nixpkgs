@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   enableParallelBuilding = true;
-  hardeningDisable = stdenv.lib.optional (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isi686) "stackprotector";
+  hardeningDisable = stdenv.lib.optional (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isx86_32) "stackprotector";
 
   # FIXME: the hardeingDisable attr above does not seems effective, so
   # the need to disable stackprotector via configureFlags
-  configureFlags = stdenv.lib.optional (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isi686) "--disable-ssp";
+  configureFlags = stdenv.lib.optional (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isx86_32) "--disable-ssp";
 
   doCheck = true;
 
