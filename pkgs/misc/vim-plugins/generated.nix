@@ -2410,6 +2410,17 @@ let
     };
   };
 
+  vim-csharp = buildVimPluginFrom2Nix {
+    pname = "vim-csharp";
+    version = "2017-03-29";
+    src = fetchFromGitHub {
+      owner = "OrangeT";
+      repo = "vim-csharp";
+      rev = "b5982fc69bba7d507638a308d6875b031054280d";
+      sha256 = "16sf3yqvd36b4rkrh6w7jskvlkrgymwa13xcvh586lmlc7g6ilcx";
+    };
+  };
+
   vim-css-color = buildVimPluginFrom2Nix {
     pname = "vim-css-color";
     version = "2019-05-14";
