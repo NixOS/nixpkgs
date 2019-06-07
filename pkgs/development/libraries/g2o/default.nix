@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   # Removes a reference to gcc that is only used in a debug message
   patches = [ ./remove-compiler-reference.patch ];
 
+  separateDebugInfo = true;
+
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ eigen suitesparse libGLU qt5.qtbase libsForQt5.libqglviewer ];
 
