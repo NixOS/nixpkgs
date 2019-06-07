@@ -1629,6 +1629,17 @@ let
     };
   };
 
+  semshi = buildVimPluginFrom2Nix {
+    pname = "semshi";
+    version = "2018-12-05";
+    src = fetchFromGitHub {
+      owner = "numirias";
+      repo = "semshi";
+      rev = "e387702ccb89e7b41ba438413182fd0ee0f669da";
+      sha256 = "1ysr3y336zy8clh4fds21figh861qxbwxvn7841kxhpab2my8r3p";
+    };
+  };
+
   shabadou-vim = buildVimPluginFrom2Nix {
     pname = "shabadou-vim";
     version = "2016-07-19";
