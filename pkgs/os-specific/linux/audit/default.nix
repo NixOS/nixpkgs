@@ -1,7 +1,7 @@
 {
   stdenv, buildPackages, fetchurl, fetchpatch,
   runCommand,
-  autoconf, automake, libtool,
+  autoreconfHook,
   enablePython ? false, python ? null,
 }:
 
@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = stdenv.lib.optionals stdenv.hostPlatform.isMusl
-    [ autoconf automake libtool ];
+  nativeBuildInputs = stdenv.lib.optionals stdenv.hostPlatform.isMusl [ autoreconfHook ];
   buildInputs = stdenv.lib.optional enablePython python;
 
   configureFlags = [
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
           cp ${patch} $out
           substituteInPlace $out --replace \
               '-* Copyright (c) 2007-09,2011-16,2018 Red Hat Inc., Durham, North Carolina.' \
-              '-* Copyright (c) 2007-09,2011-16 Red Hat Inc., Durham, North Carolina.'
+              '-* Copyright (c) 2007-09,2012-19 Red Hat Inc., Durham, North Carolina.'
         ''
     )
   ];
