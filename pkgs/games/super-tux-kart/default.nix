@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage = https://supertuxkart.net/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ c0dehero fuuzetsu peterhoeg ];
+    maintainers = with maintainers; [ pyrolagus fuuzetsu peterhoeg ];
     platforms = with platforms; linux;
   };
 }
