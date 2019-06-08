@@ -194,8 +194,6 @@ in
         HISTSIZE=${toString cfg.histSize}
         HISTFILE=${cfg.histFile}
 
-        ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
-
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
 
         # Tell zsh how to find installed completions
@@ -208,6 +206,8 @@ in
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
+
+        ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
 
         ${zshAliases}
 
