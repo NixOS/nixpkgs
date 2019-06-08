@@ -58,14 +58,16 @@ installPhase() {
         mkdir $i/lib/vdpau
         mv $i/lib/libvdpau* $i/lib/vdpau
 
-        # Install ICDs.
-        install -Dm644 nvidia.icd $i/etc/OpenCL/vendors/nvidia.icd
+        # Install ICDs, make absolute paths.
+        sed -E "s#(libnvidia-opencl)#$i/lib/\\1#" nvidia.icd > nvidia.icd.fixed
+        install -Dm644 nvidia.icd.fixed $i/etc/OpenCL/vendors/nvidia.icd
         if [ -e nvidia_icd.json.template ]; then
-            sed "s#__NV_VK_ICD__#libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
+            sed "s#__NV_VK_ICD__#$i/lib/libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
             install -Dm644 nvidia_icd.json $i/share/vulkan/icd.d/nvidia.json
         fi
         if [ "$useGLVND" = "1" ]; then
-            install -Dm644 10_nvidia.json $i/share/glvnd/egl_vendor.d/nvidia.json
+            sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
+            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
         fi
 
     done
