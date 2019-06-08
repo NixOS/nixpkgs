@@ -4100,6 +4100,8 @@ in
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  matrix-appservice-irc = callPackage ../servers/matrix-appservice-irc { };
+
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
