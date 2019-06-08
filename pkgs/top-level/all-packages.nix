@@ -23107,6 +23107,8 @@ in
 
   click = callPackage ../applications/networking/cluster/click { };
 
+  clinfo = callPackage ../tools/system/clinfo { };
+
   cups = callPackage ../misc/cups {
     libusb = libusb1;
   };
