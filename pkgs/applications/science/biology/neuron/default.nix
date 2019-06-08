@@ -80,7 +80,8 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd3;
     homepage    = http://www.neuron.yale.edu/neuron;
     maintainers = [ maintainers.adev ];
-    platforms   = platforms.all;
+    # source claims it's only tested for x86 and powerpc
+    platforms   = platforms.x86_64 ++ platforms.i686;
   };
 }
 
