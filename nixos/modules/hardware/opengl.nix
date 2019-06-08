@@ -148,9 +148,6 @@ in
     environment.sessionVariables.LD_LIBRARY_PATH =
       [ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib";
 
-    environment.variables.XDG_DATA_DIRS =
-      [ "/run/opengl-driver/share" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/share";
-
     hardware.opengl.package = mkDefault (makePackage pkgs);
     hardware.opengl.package32 = mkDefault (makePackage pkgs.pkgsi686Linux);
 
