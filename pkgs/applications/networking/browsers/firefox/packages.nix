@@ -246,7 +246,7 @@ in rec {
 
   tor-browser-8-5 = tbcommon rec {
     ffversion = "60.7.0esr";
-    tbversion = "8.5.0";
+    tbversion = "8.5.0"; # TODO: update to match binary bundle (8.5.1 currently)
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
