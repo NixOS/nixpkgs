@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zhrwj1gi90x2w8gaaaw5h4b969a8gfy244kn0drrplhhb1nqz3b";
   };
 
-  nativeBuildInputs = [ pkgconfig addOpenGLRunpath ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake python3 xlibsWrapper libxcb libXrandr libXext wayland ];
   enableParallelBuilding = true;
 
@@ -29,12 +29,6 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "dev" ];
-
-  # Set RUNPATH so that driver libraries in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
-  postFixup = ''
-    addOpenGLRunpath $out/lib/libvulkan.so
-  '';
 
   meta = with stdenv.lib; {
     description = "LunarG Vulkan loader";
