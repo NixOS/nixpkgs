@@ -33,6 +33,12 @@ stdenv.mkDerivation rec {
       --replace 'float abs(float arg);' "" \
       --replace 'short abs(short arg);' "" \
       --replace 'long abs(long arg);' ""
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # we are darwin, but we don't have all the quirks the source wants to compensate for
+    substituteInPlace src/nrnpython/setup.py.in --replace 'readline="edit"' 'readline="readline"'
+    for f in src/nrnpython/*.[ch] ; do
+      substituteInPlace $f --replace "<Python/Python.h>" "<Python.h>"
+    done
   '';
 
   enableParallelBuilding = true;
