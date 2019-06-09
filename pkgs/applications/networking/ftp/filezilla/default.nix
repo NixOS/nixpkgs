@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     dbus gnutls wxGTK30 libidn tinyxml gettext xdg_utils gtk2 sqlite
     pugixml libfilezilla nettle makeWrapper ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     wrapProgram $out/bin/filezilla --set FZ_DATADIR $out
   '';
