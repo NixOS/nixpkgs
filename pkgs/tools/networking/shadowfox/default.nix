@@ -2,26 +2,20 @@
 
 buildGoModule rec {
   pname = "shadowfox";
-  version = "2.0.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "SrKomodo";
     repo = "shadowfox-updater";
     rev = "v${version}";
-    sha256 = "0j8ljnx281a5nwd3zpw7b25ndsxc26b52glk2hqhm5fh08f9w0d8";
+    sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 
   goPackagePath = "github.com/SrKomodo/shadowfox-updater";
 
-  modSha256 = "0anxrff09r5aw3a11iph0gigmcbmpfczm8him6ly57ywfzc5c850";
+  modSha256 = "0hcc87mzacqwbw10l49kx0sxl4mivdr88c40wh6hdfvrbam2w86r";
 
   buildFlags = "--tags release";
-
-  postInstall = ''
-    # Contains compiler package only used by projects CI, and buildGoModule
-    # installs all binaries by default. So we remove this again.
-    rm $out/bin/compiler
-  '';
 
   meta = with stdenv.lib; {
     description = ''
