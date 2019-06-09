@@ -1,7 +1,5 @@
 { stdenv, fetchurl, dbus, gnutls, wxGTK30, libidn, tinyxml, gettext
-, pkgconfig, xdg_utils, gtk2, sqlite, pugixml, libfilezilla, nettle
-, makeWrapper
-}:
+, pkgconfig, xdg_utils, gtk2, sqlite, pugixml, libfilezilla, nettle }:
 
 let version = "3.42.1"; in
 stdenv.mkDerivation {
@@ -20,13 +18,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     dbus gnutls wxGTK30 libidn tinyxml gettext xdg_utils gtk2 sqlite
-    pugixml libfilezilla nettle makeWrapper ];
+    pugixml libfilezilla nettle ];
 
   enableParallelBuilding = true;
-
-  postInstall = ''
-    wrapProgram $out/bin/filezilla --set FZ_DATADIR $out
-  '';
 
   meta = with stdenv.lib; {
     homepage = https://filezilla-project.org/;
