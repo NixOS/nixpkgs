@@ -17,7 +17,7 @@ in fetchzip rec {
 
   meta = with lib; {
     description = "M+ Outline Fonts";
-    homepage = http://mplus-fonts.sourceforge.jp/mplus-outline-fonts/index-en.html;
+    homepage = "https://mplus-fonts.osdn.jp/about-en.html";
     license = licenses.mit;
     maintainers = with maintainers; [ henrytill ];
     platforms = platforms.all;
