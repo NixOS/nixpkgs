@@ -34,7 +34,7 @@ let
     '';
   };
 
-  # options to add the disk to the test vim
+  # options to add the disk to the test vm
   QEMU_OPTS = "-drive index=2,file=${debianImage}/disk-image.qcow2,read-only,if=virtio";
 
   # a part of the configuration of the test vm
