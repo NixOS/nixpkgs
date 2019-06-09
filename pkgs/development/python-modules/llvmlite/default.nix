@@ -28,6 +28,11 @@ buildPythonPackage rec {
     substituteInPlace ffi/Makefile.linux --replace "-static-libstdc++" ""
 
     substituteInPlace llvmlite/tests/test_binding.py --replace "test_linux" "nope"
+
+    # llvm 7.1 is not officially supported but works fine.
+    # Remove when going to 0.29.0 / llvm 8
+    substituteInPlace ffi/build.py --replace "7.0." "7."
+    substituteInPlace llvmlite/tests/test_binding.py --replace "test_version" "dont_test_version"
   '';
   # Set directory containing llvm-config binary
   preConfigure = ''
