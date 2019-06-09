@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gtk3, sassc }:
 
 stdenv.mkDerivation rec {
-  pname = "tetra-gtk-theme";
-  version = "201905";
+  pname = "adementary-theme";
+  version = "201905r1";
 
   src = fetchFromGitHub {
     owner  = "hrdwrrsk";
     repo   = pname;
     rev    = version;
-    sha256 = "1j2w8na564f5yjm5am7843hq5qk28h1rq8rcbak4xsygdc3lbsfi";
+    sha256 = "14y5s18g9r2c1ciw1skfksn09gvqgy8vjvwbr0z8gacf0jc2apqk";
   };
 
   preBuild = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Adwaita-based gtk+ theme with design influence from elementary OS and Vertex gtk+ theme";
-    homepage    = https://github.com/hrdwrrsk/tetra-gtk-theme;
+    homepage    = https://github.com/hrdwrrsk/adementary-theme;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
     platforms   = platforms.linux;
