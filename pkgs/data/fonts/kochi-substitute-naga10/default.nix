@@ -5,7 +5,7 @@ in
 fetchzip {
   name = "kochi-substitute-naga10-${version}";
 
-  url = "mirror://sourceforgejp/efont/5411/kochi-substitute-${version}.tar.bz2";
+  url = "mirror://osdn/efont/5411/kochi-substitute-${version}.tar.bz2";
 
   postFetch = ''
     tar -xjf $downloadedFile --strip-components=1

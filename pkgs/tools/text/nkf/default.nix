@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.1.4";
 
   src = fetchurl {
-    url = "mirror://sourceforgejp/nkf/64158/${name}.tar.gz";
+    url = "mirror://osdn/nkf/64158/${name}.tar.gz";
     sha256 = "b4175070825deb3e98577186502a8408c05921b0c8ff52e772219f9d2ece89cb";
   };
 
