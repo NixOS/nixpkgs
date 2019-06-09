@@ -229,6 +229,8 @@ in {
               location / {
                 try_files $uri $uri/ /index.php?$args =404;
 
+                rewrite ^/skins/.*/css/fonts/(.*)$ /fonts/$1 permanent;
+
                 location ~ /api/(css|img|ico) {
                   rewrite ^/api(.+)$ /api/app/webroot/$1 break;
                   try_files $uri $uri/ =404;

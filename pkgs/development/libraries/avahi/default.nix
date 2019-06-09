@@ -3,7 +3,9 @@
 , gtk3Support ? false, gtk3 ? null
 , qt4 ? null
 , qt4Support ? false
-, withLibdnssdCompat ? false }:
+, withLibdnssdCompat ? false
+, python ? null
+, withPython ? false }:
 
 assert qt4Support -> qt4 != null;
 
@@ -30,6 +32,9 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional gtk3Support gtk3)
     ++ (stdenv.lib.optional qt4Support qt4);
 
+  propagatedBuildInputs =
+    stdenv.lib.optionals withPython (with python.pkgs; [ python pygobject3 dbus-python ]);
+
   nativeBuildInputs = [ pkgconfig gettext intltool glib ];
 
   configureFlags =
@@ -37,7 +42,8 @@ stdenv.mkDerivation rec {
       "--disable-gtk"
       (stdenv.lib.enableFeature gtk3Support "gtk3")
       "--${if qt4Support then "enable" else "disable"}-qt4"
-      "--disable-python" "--localstatedir=/var" "--with-distro=none"
+      (stdenv.lib.enableFeature withPython "python")
+      "--localstatedir=/var" "--with-distro=none"
       # A systemd unit is provided by the avahi-daemon NixOS module
       "--with-systemdsystemunitdir=no" ]
     ++ stdenv.lib.optional withLibdnssdCompat "--enable-compat-libdns_sd"

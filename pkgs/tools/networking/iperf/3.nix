@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
+  outputs = [ "out" "man" ];
+
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/main/iperf3/remove-pg-flags.patch?id=99ec9e1c84e338629cf1b27b0fdc808bde4d8564";
@@ -19,7 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    ln -s iperf3 $out/bin/iperf
+    ln -s $out/bin/iperf3 $out/bin/iperf
+    ln -s $man/share/man/man1/iperf3.1 $man/share/man/man1/iperf.1
   '';
 
   meta = with stdenv.lib; {

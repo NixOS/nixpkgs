@@ -239,6 +239,25 @@ lgi = buildLuarocksPackage {
     };
   };
 };
+lpeg = buildLuarocksPackage {
+  pname = "lpeg";
+  version = "1.0.2-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/lpeg-1.0.2-1.src.rock;
+    sha256 = "1g5zmfh0x7drc6mg2n0vvlga2hdc08cyp3hnb22mh1kzi63xdl70";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "http://www.inf.puc-rio.br/~roberto/lpeg.html";
+    description = "Parsing Expression Grammars For Lua";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 lpeg_patterns = buildLuarocksPackage {
   pname = "lpeg_patterns";
   version = "0.5-0";
@@ -349,6 +368,25 @@ ltermbox = buildLuarocksPackage {
     description = "A termbox library package";
     license = {
       fullName = "New BSD License";
+    };
+  };
+};
+cjson = buildLuarocksPackage {
+  pname = "lua-cjson";
+  version = "2.1.0.6-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/lua-cjson-2.1.0.6-1.src.rock;
+    sha256 = "0dqqkn0aygc780kiq2lbydb255r8is7raf7md0gxdjcagp8afps5";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "http://www.kyne.com.au/~mark/software/lua-cjson.php";
+    description = "A fast JSON encoding/parsing module";
+    license = {
+      fullName = "MIT";
     };
   };
 };
@@ -509,6 +547,25 @@ lua-toml = buildLuarocksPackage {
     };
   };
 };
+lua-zlib = buildLuarocksPackage {
+  pname = "lua-zlib";
+  version = "1.2-0";
+
+  src = fetchurl {
+    url    = https://luarocks.org/lua-zlib-1.2-0.src.rock;
+    sha256 = "0qa0vnx45nxdj6fqag6fr627zsnd2bmrr9bdbm8jv6lcnyi6nhs2";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/brimworks/lua-zlib";
+    description = "Simple streaming interface to zlib for Lua.";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 luabitop = buildLuarocksPackage {
   pname = "luabitop";
   version = "1.0.2-3";
@@ -592,6 +649,44 @@ luaffi = buildLuarocksPackage {
     description = "FFI library for calling C functions from lua";
     license = {
       fullName = "BSD";
+    };
+  };
+};
+luaposix = buildLuarocksPackage {
+  pname = "luaposix";
+  version = "34.0.4-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/luaposix-34.0.4-1.src.rock;
+    sha256 = "0yrm5cn2iyd0zjd4liyj27srphvy0gjrjx572swar6zqr4dwjqp2";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ bit32 lua std_normalize ];
+
+  meta = {
+    homepage = "http://github.com/luaposix/luaposix/";
+    description = "Lua bindings for POSIX";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
+luazip = buildLuarocksPackage {
+  pname = "luazip";
+  version = "1.2.7-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/luazip-1.2.7-1.src.rock;
+    sha256 = "1yprlr1ap6bhshhy88qfphmmyg9zp1py2hj2158iw6vsva0fk03l";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/mpeterv/luazip";
+    description = "Library for reading files inside zip files";
+    license = {
+      fullName = "MIT";
     };
   };
 };
@@ -800,10 +895,16 @@ mpack = buildLuarocksPackage {
   pname = "mpack";
   version = "1.0.7-0";
 
+  knownRockspec = (fetchurl {
+    url    = https://luarocks.org/mpack-1.0.7-0.rockspec;
+    sha256 = "1sdw8qsni3g3fx9jnc5g64nxfw6v3n1rrw1xa3bkwc9wk815lqnz";
+  }).outPath;
+
   src = fetchurl {
-    url    = http://luarocks.org/manifests/teto/mpack-1.0.7-0.src.rock;
-    sha256 = "0nq4ixaminkc7fwfpivysyv0al3j5dffsvgdrnwnqdg3w7jgfbw7";
+    url    = https://github.com/libmpack/libmpack-lua/releases/download/1.0.7/libmpack-lua-1.0.7.tar.gz;
+    sha256 = "1s4712ig3l4ds65pmlyg3r5zids2snn1rv8vsmmk27a4lf258mk8";
   };
+
 
   meta = {
     homepage = "https://github.com/libmpack/libmpack-lua/releases/download/1.0.7/libmpack-lua-1.0.7.tar.gz";

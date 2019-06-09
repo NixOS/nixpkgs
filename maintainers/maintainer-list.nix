@@ -820,10 +820,6 @@
     github = "c0deaddict";
     name = "Jos van Bakel";
   };
-  c0dehero = {
-    email = "codehero@nerdpol.ch";
-    name = "CodeHero";
-  };
   calbrecht = {
     email = "christian.albrecht@mayflower.de";
     github = "calbrecht";
@@ -3668,6 +3664,11 @@
     github = "nphilou";
     name = "Philippe Nguyen";
   };
+  nshalman = {
+    email = "nahamu@gmail.com";
+    github = "nshalman";
+    name = "Nahum Shalman";
+  };
   nslqqq = {
     email = "nslqqq@gmail.com";
     name = "Nikita Mikhailov";
@@ -4089,6 +4090,11 @@
   pxc = {
     email = "patrick.callahan@latitudeengineering.com";
     name = "Patrick Callahan";
+  };
+  pyrolagus = {
+    email = "pyrolagus@gmail.com";
+    github = "PyroLagus";
+    name = "Danny Bautista";
   };
   q3k = {
     email = "q3k@q3k.org";

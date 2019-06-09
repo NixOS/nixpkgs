@@ -12,7 +12,7 @@ let
 
     isExecutable = true;
 
-    inherit (pkgs.buildPackages) python3;
+    inherit (pkgs) python3;
 
     systemd = config.systemd.package;
 

@@ -32,6 +32,10 @@ with super;
   lrexlib-gnu = super.lrexlib-gnu.override({
     buildInputs = [ pkgs.gnulib ];
   });
+  lua-zlib = super.lua-zlib.override({
+    buildInputs = [ pkgs.zlib.dev ];
+    disabled=luaOlder "5.1" || luaAtLeast "5.4";
+  });
   luaevent = super.luaevent.override({
     buildInputs = with pkgs; [ libevent.dev libevent ];
     propagatedBuildInputs = [ luasocket ];
@@ -45,6 +49,9 @@ with super;
   });
   lua-iconv = super.lua-iconv.override({
     buildInputs = [ pkgs.libiconv ];
+  });
+  luazip = super.luazip.override({
+    buildInputs = [ pkgs.zziplib ];
   });
   luv = super.luv.overrideAttrs(oa: {
     # Use system libuv instead of building local and statically linking

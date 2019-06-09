@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, libxslt, docbook_xsl
-, docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted, libyaml
+{ stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkgconfig, gtk-doc, libxslt, docbook_xsl
+, docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted, gptfdisk, libyaml
 , cryptsetup, lvm2, dmraid, utillinux, libbytesize, libndctl, nss, volume_key
 }:
 
@@ -17,6 +17,13 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devdoc" ];
 
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      sgdisk = "${gptfdisk}/bin/sgdisk";
+    })
+  ];
+
   postPatch = ''
     patchShebangs scripts
   '';
@@ -26,7 +33,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib udev kmod parted cryptsetup lvm2 dmraid utillinux libbytesize libndctl nss volume_key libyaml
+    glib udev kmod parted gptfdisk cryptsetup lvm2 dmraid utillinux libbytesize libndctl nss volume_key libyaml
   ];
 
   meta = with stdenv.lib; {

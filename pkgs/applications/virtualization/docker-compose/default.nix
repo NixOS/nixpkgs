@@ -3,15 +3,15 @@
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
 , dockerpty, docker, ipaddress, jsonschema, requests
 , six, texttable, websocket_client, cached-property
-, enum34, functools32,
+, enum34, functools32, paramiko
 }:
 buildPythonApplication rec {
-  version = "1.23.2";
+  version = "1.24.0";
   pname = "docker-compose";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1x2jlh7z2znvyz2pqcpn0gigfiqnx8s59pc7xlvy9ryd76g9w1zz";
+    sha256 = "0sd3bwmz80a2rffviq9vvyxic41ya08yj41k8x1m4vv74wcab0jm";
   };
 
   # lots of networking and other fails
@@ -20,7 +20,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     pyyaml backports_ssl_match_hostname colorama dockerpty docker
     ipaddress jsonschema requests six texttable websocket_client
-    docopt cached-property
+    docopt cached-property paramiko
   ] ++
     stdenv.lib.optional (pythonOlder "3.4") enum34 ++
     stdenv.lib.optional (pythonOlder "3.2") functools32;
