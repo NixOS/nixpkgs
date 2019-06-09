@@ -18099,6 +18099,8 @@ in
     python = python27;
   };
 
+  git-quick-stats = callPackage ../development/tools/git-quick-stats {};
+
   git-review = callPackage ../applications/version-management/git-review { };
 
   gitolite = callPackage ../applications/version-management/gitolite { };
