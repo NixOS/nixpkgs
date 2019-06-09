@@ -5,6 +5,7 @@
 , six
 , mock
 , nose
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ dateutil six ];
-  checkInputs = [ mock nose ];
+  checkInputs = [ mock nose pytest ];
 
   meta = with stdenv.lib; {
     description = "FreezeGun: Let your Python tests travel through time";
