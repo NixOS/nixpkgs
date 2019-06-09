@@ -5737,4 +5737,9 @@
     github = "zzamboni";
     name = "Diego Zamboni";
   };
+  turbomack = {
+    email = "marek.faj@gmail.com";
+    github = "turboMaCk";
+    name = "Marek Fajkus";
+  };
 }
