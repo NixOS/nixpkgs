@@ -65,7 +65,7 @@ let
           [ ./hardware-configuration.nix
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
-    }// (builtins.fromJSON (builtins.readFile ${
+    } // (builtins.fromJSON (builtins.readFile ${
       pkgs.writeText "simpleConfig.json" 
       (builtins.toJSON simpleConfig)
     })))
