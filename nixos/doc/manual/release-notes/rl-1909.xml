@@ -23,6 +23,11 @@
      End of support is planned for end of April 2020, handing over to 20.03.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     PHP now defaults to PHP 7.3, updated from 7.2.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
