@@ -1181,7 +1181,6 @@ self: super: {
   # Jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
   tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
   these = doJailbreak super.these; # until these >= 0.7.6
-  insert-ordered-containers = appendPatch super.insert-ordered-containers ./patches/insert-ordered-containers-fix-test.patch;
 
   uri-bytestring = appendPatch super.uri-bytestring (pkgs.fetchpatch {
     url = "https://github.com/Soostone/uri-bytestring/commit/e5c5602a97160a6a6304a24947e33e47c9155460.patch";
