@@ -25,7 +25,7 @@ fetchzip {
       this font may not be sold commercially. See kochi-substitute for the free
       Debian version.
     '';
-    homepage = http://sourceforge.jp/projects/efont/;
+    homepage = "https://osdn.net/projects/efont/";
     license = lib.licenses.unfreeRedistributable;
     maintainers = [ lib.maintainers.auntie ];
   };
