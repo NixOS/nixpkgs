@@ -4,7 +4,6 @@
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , speexdsp, systemd, webrtc-audio-processing
-, fetchpatch
 
 , x11Support ? false
 
