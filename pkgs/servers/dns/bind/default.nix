@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./dont-keep-configure-flags.patch
     ./remove-mkdir-var.patch
-  ] ++ stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
+  ];
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ libtool libxml2 openssl ]
