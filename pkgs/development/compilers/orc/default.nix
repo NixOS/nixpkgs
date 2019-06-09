@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
     sed "/^toolsdir=/ctoolsdir=$dev/bin" -i "$dev"/lib/pkgconfig/orc*.pc
   '';
 
-  # https://bugzilla.gnome.org/show_bug.cgi?id=728129#c15
-  doCheck = stdenv.hostPlatform.system != "i686-linux"; # not sure about cross-compiling
+  # i686   https://gitlab.freedesktop.org/gstreamer/orc/issues/18
+  # armv7l https://gitlab.freedesktop.org/gstreamer/orc/issues/9
+  doCheck = (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isAarch32);
 
   meta = with stdenv.lib; {
     description = "The Oil Runtime Compiler";
