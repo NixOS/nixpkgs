@@ -1,5 +1,5 @@
 { config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2
-, libX11, xorgproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
+, libX11, xorgproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
 , alsaLib, curl, libvpx, nettools, dbus
@@ -42,7 +42,7 @@ in stdenv.mkDerivation {
     ++ optional javaBindings jdk
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
-    ++ optionals (headless) [ libXrandr ]
+    ++ optionals (headless) [ libXrandr libGL ]
     ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
