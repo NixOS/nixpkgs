@@ -51,11 +51,10 @@ let
       options = [ "ro" ];
     };
     nix.binaryCaches = lib.mkForce [ ];
-    nix.extraOptions =
-      ''
+    nix.extraOptions = ''
       hashed-mirrors =
       connect-timeout = 1
-      '';
+    '';
     services.udisks2.enable = lib.mkForce false;
   };
   # /etc/nixos/configuration.nix for the vm
@@ -66,16 +65,15 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
     } // (builtins.fromJSON (builtins.readFile ${
-      pkgs.writeText "simpleConfig.json" 
-      (builtins.toJSON simpleConfig)
+      pkgs.writeText "simpleConfig.json" (builtins.toJSON simpleConfig)
     })))
   '';
 in {
   name = "os-prober";
 
   machine = { config, pkgs, ... }: (simpleConfig // {
-    imports = [ ../modules/profiles/installation-device.nix
-                ../modules/profiles/base.nix ];
+      imports = [ ../modules/profiles/installation-device.nix
+                  ../modules/profiles/base.nix ];
       virtualisation.memorySize = 1024;
       # The test cannot access the network, so any packages
       # nixos-rebuild needs must be included in the VM.
