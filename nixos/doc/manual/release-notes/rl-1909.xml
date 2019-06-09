@@ -131,6 +131,40 @@
       and <option>services.limesurvey.virtualHost</option> options.
     </para>
    </listitem>
+   <listitem>
+     <para>
+      The option <option>systemd.network.networks.&lt;name&gt;.routes.*.routeConfig.GatewayOnlink</option>
+      was renamed to <option>systemd.network.networks.&lt;name&gt;.routes.*.routeConfig.GatewayOnLink</option>
+      (capital <literal>L</literal>). This follows
+      <link xlink:href="https://github.com/systemd/systemd/commit/9cb8c5593443d24c19e40bfd4fc06d672f8c554c">
+        upstreams renaming
+      </link> of the setting.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+      As of this release the NixOps feature <literal>autoLuks</literal> is deprecated. It no longer works
+      with our systemd version without manual intervention.
+    </para>
+    <para>
+      Whenever the usage of the module is detected the evaluation will fail with a message
+      explaining why and how to deal with the situation.
+    </para>
+    <para>
+      A new knob named <literal>nixops.enableDeprecatedAutoLuks</literal>
+      has been introduced to disable the eval failure and to acknowledge the notice was received and read.
+      If you plan on using the feature please note that it might break with subsequent updates.
+    </para>
+    <para>
+      Make sure you set the <literal>_netdev</literal> option for each of the file systems referring to block
+      devices provided by the autoLuks module. Not doing this might render the system in a
+      state where it doesn't boot anymore.
+    </para>
+    <para>
+      If you are actively using the <literal>autoLuks</literal> module please let us know in
+      <link xlink:href="https://github.com/NixOS/nixpkgs/issues/62211">issue #62211</link>.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 
@@ -200,6 +234,20 @@
       RuntimeDirectory and tmpfiles.
     </para>
    </listitem>
-  </itemizedlist>
+   <listitem>
+    <para>
+      With the upgrade to systemd version 242 the <literal>systemd-timesyncd</literal>
+      service is no longer using <literal>DynamicUser=yes</literal>. In order for the
+      upgrade to work we rely on an activation script to move the state from the old
+      to the new directory. The older directory (prior <literal>19.09</literal>) was
+      <literal>/var/lib/private/systemd/timesync</literal>.
+    </para>
+    <para>
+      As long as the <literal>system.config.stateVersion</literal> is below
+      <literal>19.09</literal> the state folder will migrated to its proper location
+      (<literal>/var/lib/systemd/timesync</literal>), if required.
+    </para>
+  </listitem>
+ </itemizedlist>
  </section>
 </section>
