@@ -14326,6 +14326,8 @@ in
 
   mpdscribble = callPackage ../tools/misc/mpdscribble { };
 
+  mtprotoproxy = python3.pkgs.callPackage ../servers/mtprotoproxy { };
+
   micro-httpd = callPackage ../servers/http/micro-httpd { };
 
   miniHttpd = callPackage ../servers/http/mini-httpd {};
