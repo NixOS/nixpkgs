@@ -19,8 +19,8 @@ rec {
     https://kent.dl.sourceforge.net/sourceforge/
   ];
 
-  # SourceForge.jp.
-  sourceforgejp = [
+  # OSDN (formerly SourceForge.jp).
+  osdn = [
     https://osdn.dl.sourceforge.jp/
     https://jaist.dl.sourceforge.jp/
   ];

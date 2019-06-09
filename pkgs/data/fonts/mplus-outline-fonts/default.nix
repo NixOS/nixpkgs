@@ -5,7 +5,7 @@ let
 in fetchzip rec {
   name = "mplus-${version}";
 
-  url = "mirror://sourceforgejp/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";
+  url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";
 
   postFetch = ''
     tar -xJf $downloadedFile --strip-components=1
