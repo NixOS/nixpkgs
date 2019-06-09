@@ -108,7 +108,7 @@ let self = stdenv.mkDerivation {
     "--enable-texture-float"
     (enableFeature stdenv.isLinux "dri3")
     (enableFeature stdenv.isLinux "nine") # Direct3D in Wine
-    "--enable-libglvnd"
+    (enableFeature stdenv.isLinux "libglvnd")
     "--enable-dri"
     "--enable-driglx-direct"
     "--enable-gles1"
@@ -231,12 +231,51 @@ let self = stdenv.mkDerivation {
     inherit libdrm version;
     inherit (libglvnd) driverLink;
 
+    # Use stub libraries from libglvnd and headers from Mesa.
     stubs = stdenv.mkDerivation {
       name = "libGL-${libglvnd.version}";
       outputs = [ "out" "dev" ];
 
-      # Use stub libraries from libglvnd and headers from Mesa.
-      buildCommand = ''
+      # On macOS, libglvnd is not supported, so we just use what mesa
+      # build. We need to also include OpenGL.framework, and some
+      # extra tricks to go along with. We add mesa’s libGLX to support
+      # the X extensions to OpenGL.
+      buildCommand = if stdenv.hostPlatform.isDarwin then ''
+        mkdir -p $out/nix-support $dev
+        echo ${OpenGL} >> $out/nix-support/propagated-build-inputs
+        ln -s ${self.out}/lib $out/lib
+
+        mkdir -p $dev/lib/pkgconfig $dev/nix-support
+        echo "$out" > $dev/nix-support/propagated-build-inputs
+        ln -s ${self.dev}/include $dev/include
+
+        cat <<EOF >$dev/lib/pkgconfig/gl.pc
+      Name: gl
+      Description: gl library
+      Version: ${self.version}
+      Libs: -L${self.out}/lib -lGL
+      Cflags: -I${self.dev}/include
+      EOF
+
+        cat <<EOF >$dev/lib/pkgconfig/glesv1_cm.pc
+      Name: glesv1_cm
+      Description: glesv1_cm library
+      Version: ${self.version}
+      Libs: -L${self.out}/lib -lGLESv1_CM
+      Cflags: -I${self.dev}/include
+      EOF
+
+        cat <<EOF >$dev/lib/pkgconfig/glesv2.pc
+      Name: glesv2
+      Description: glesv2 library
+      Version: ${self.version}
+      Libs: -L${self.out}/lib -lGLESv2
+      Cflags: -I${self.dev}/include
+      EOF
+      ''
+
+      # Otherwise, setup gl stubs to use libglvnd.
+      else ''
         mkdir -p $out/nix-support
         ln -s ${libglvnd.out}/lib $out/lib
 
@@ -261,8 +300,6 @@ let self = stdenv.mkDerivation {
         genPkgConfig egl EGL
         genPkgConfig glesv1_cm GLESv1_CM
         genPkgConfig glesv2 GLESv2
-      '' + lib.optionalString stdenv.isDarwin ''
-        echo ${OpenGL} > $out/nix-support/propagated-build-inputs
       '';
     };
   };

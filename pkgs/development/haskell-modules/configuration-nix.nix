@@ -569,4 +569,16 @@ self: super: builtins.intersectAttrs super {
   # Avoid infitite recursion with tonatona.
   tonaparser = dontCheck super.tonaparser;
 
+  # Needs internet to run tests
+  HTTP = dontCheck super.HTTP;
+
+  # Break infinite recursions.
+  Dust-crypto = dontCheck super.Dust-crypto;
+  nanospec = dontCheck super.nanospec;
+  options = dontCheck super.options;
+  snap-server = dontCheck super.snap-server;
+
+  # Tests require internet
+  dhall_1_24_0 = dontCheck super.dhall_1_24_0;
+
 }

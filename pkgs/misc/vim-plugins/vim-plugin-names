@@ -15,7 +15,6 @@ arcticicestudio/nord-vim
 artur-shaik/vim-javacomplete2
 bazelbuild/vim-bazel
 bbchung/clighter8
-benekastah/neomake
 benmills/vimux
 bhurlow/vim-parinfer
 bitc/vim-hdevtools
@@ -106,6 +105,7 @@ itchyny/vim-gitbranch
 ivanov/vim-ipython
 jacoborus/tender.vim
 janko-m/vim-test
+jaredgorski/SpaceCamp
 JazzCore/ctrlp-cmatcher
 jceb/vim-hier
 jceb/vim-orgmode
@@ -217,15 +217,18 @@ ncm2/ncm2-tmux
 ncm2/ncm2-ultisnips
 neoclide/coc.nvim
 neoclide/vim-easygit
-neovimhaskell/nvim-hs.vim
+neomake/neomake
 neovimhaskell/haskell-vim
+neovimhaskell/nvim-hs.vim
 neovim/nvimdev.nvim
 neutaaaaan/iosvkem
 nixprime/cpsm
 NLKNguyen/papercolor-theme
 noc7c9/vim-iced-coffee-script
 ntpeters/vim-better-whitespace
+numirias/semshi
 nvie/vim-flake8
+OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
 osyo-manga/vim-textobj-multiblock

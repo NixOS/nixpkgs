@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libnotify, libxml2, libcanberra-gtk3, mod_dnssd, apacheHttpd, hicolor-icon-theme, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, dbus-glib, libnotify, libxml2, libcanberra-gtk3, mod_dnssd, apacheHttpd, hicolor-icon-theme, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-user-share-${version}";
@@ -13,14 +13,15 @@ stdenv.mkDerivation rec {
     pkgconfig
     intltool
     itstool
+    libxml2
     wrapGAppsHook
   ];
 
   buildInputs = [
     gtk3
+    dbus-glib
     libnotify
     libcanberra-gtk3
-    libxml2
     mate.caja
     hicolor-icon-theme
     # Should mod_dnssd and apacheHttpd be runtime dependencies?

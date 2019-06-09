@@ -135,8 +135,8 @@ in {
 
   subtest "check_slurm_dbd", sub {
     # find the srun job from above in the database
-    sleep 2;
-    $submit->succeed("sacct | grep hostname");
+    sleep 5;
+    $control->succeed("sacct | grep hostname");
   };
   '';
 })

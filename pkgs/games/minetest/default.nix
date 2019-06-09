@@ -61,7 +61,7 @@ let
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ c0dehero fpletz ];
+      maintainers = with maintainers; [ pyrolagus fpletz ];
     };
   };
 

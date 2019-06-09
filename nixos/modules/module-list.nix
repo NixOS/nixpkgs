@@ -611,6 +611,7 @@
   ./services/networking/morty.nix
   ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
+  ./services/networking/mtprotoproxy.nix
   ./services/networking/murmur.nix
   ./services/networking/mxisd.nix
   ./services/networking/namecoind.nix
@@ -759,6 +760,7 @@
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/codimd.nix
+  ./services/web-apps/cryptpad.nix
   ./services/web-apps/documize.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix

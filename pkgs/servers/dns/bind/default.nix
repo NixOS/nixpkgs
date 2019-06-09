@@ -23,7 +23,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./dont-keep-configure-flags.patch
     ./remove-mkdir-var.patch
-  ] ++ stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
+    # Fix build on armv6l
+    (fetchpatch {
+      url = "https://gitlab.isc.org/isc-projects/bind9/commit/f546769b8b1077a0ebfe270b8a283469ea3158d0.patch";
+      sha256 = "060f35lj6rr2qg7sy9pwy3946q2bsps4m9knmw15x6n6nmzvxrcv";
+      excludes = [ "CHANGES" ];
+    })
+  ];
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ libtool libxml2 openssl ]

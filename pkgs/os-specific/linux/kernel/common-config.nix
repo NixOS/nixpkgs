@@ -100,6 +100,7 @@ let
       IP_VS_PROTO_UDP    = yes;
       IP_VS_PROTO_ESP    = yes;
       IP_VS_PROTO_AH     = yes;
+      IP_VS_IPV6         = yes;
       IP_DCCP_CCID3      = no; # experimental
       CLS_U32_PERF       = yes;
       CLS_U32_MARK       = yes;

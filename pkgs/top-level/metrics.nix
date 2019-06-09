@@ -19,7 +19,16 @@ runCommand "nixpkgs-metrics"
       shift
 
       echo "running $@"
-      NIX_SHOW_STATS=1 time -o stats-time "$@" 2>stats-nix
+
+      case "$name" in
+        # Redirect stdout to /dev/null to avoid hitting "Output Limit
+        # Exceeded" on Hydra.
+        nix-env.qaDrv|nix-env.qaDrvAggressive)
+          NIX_SHOW_STATS=1 time -o stats-time "$@" 2>stats-nix >/dev/null ;;
+        *)
+          NIX_SHOW_STATS=1 time -o stats-time "$@" 2>stats-nix ;;
+      esac
+
       sed '/^warning:/d' -i stats-nix
 
       cat stats-nix; echo; cat stats-time; echo

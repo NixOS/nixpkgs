@@ -434,12 +434,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   lgpl21 = spdx {
     spdxId = "LGPL-2.1-only";
-    fullName = "GNU Library General Public License v2.1 only";
+    fullName = "GNU Lesser General Public License v2.1 only";
   };
 
   lgpl21Plus = spdx {
     spdxId = "LGPL-2.1-or-later";
-    fullName = "GNU Library General Public License v2.1 or later";
+    fullName = "GNU Lesser General Public License v2.1 or later";
   };
 
   lgpl3 = spdx {

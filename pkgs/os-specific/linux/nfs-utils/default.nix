@@ -47,7 +47,14 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc.bin}/bin/rpcgen";
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    # Fixes build on i686.
+    (fetchpatch {
+      name = "sqlite.c-Use-PRIx64-macro-to-print-64-bit-integers.patch";
+      url = "http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff_plain;h=a8133e1fd174267536cd459e19cfe0a1cbbe037c;hp=a709f25c1da4a2fb44a1f3fd060298fbbd88aa3c";
+      sha256 = "03azkw13xhp8f49777p08xziy0d7crz65qrisjbkzjnx1wczdqy5";
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/cb880042d48d77af412d4688f24b8310ae44f55f/main/nfs-utils/0011-exportfs-only-do-glibc-specific-hackery-on-glibc.patch";
       sha256 = "0rrddrykz8prk0dcgfvmnz0vxn09dbgq8cb098yjjg19zz6d7vid";

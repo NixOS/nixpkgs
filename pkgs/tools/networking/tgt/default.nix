@@ -1,16 +1,15 @@
 { stdenv, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
 , docbook_xsl }:
 
-let
-  version = "1.0.77";
-in stdenv.mkDerivation rec {
-  name = "tgt-${version}";
+stdenv.mkDerivation rec {
+  pname = "tgt";
+  version = "1.0.78";
 
   src = fetchFromGitHub {
     owner = "fujita";
-    repo = "tgt";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1qhck8v5057wn9nb1nsq6dzhvqzz51x8i3n0p1x36zbsmdjy2ajw";
+    sha256 = "0778silfwvbpqljxdid96nn0vkdii3fszqp6w6w2bn9hdyxhqrjp";
   };
 
   buildInputs = [ libxslt systemd libaio docbook_xsl ];

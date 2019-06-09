@@ -466,6 +466,8 @@ in
     wxGTK = wxGTK30;
   } // (config.aegisub or {}));
 
+  aerc = callPackage ../applications/networking/mailreaders/aerc { };
+
   aerospike = callPackage ../servers/nosql/aerospike { };
 
   aespipe = callPackage ../tools/security/aespipe { };
@@ -821,6 +823,10 @@ in
   goku = callPackage ../os-specific/darwin/goku { };
 
   kwakd = callPackage ../servers/kwakd { };
+
+  chunkwm = callPackage ../os-specific/darwin/chunkwm {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa ScriptingBridge;
+  };
 
   kwm = callPackage ../os-specific/darwin/kwm { };
 
@@ -1750,6 +1756,8 @@ in
 
   pev = callPackage ../development/tools/analysis/pev { };
 
+  phoronix-test-suite = callPackage ../tools/misc/phoronix-test-suite { };
+
   photon = callPackage ../tools/networking/photon { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
@@ -2145,11 +2153,13 @@ in
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
 
-  ethash = callPackage ../development/libraries/ethash { };
-
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
+
+  cryptpad = callPackage ../servers/web-apps/cryptpad { };
+
+  ethash = callPackage ../development/libraries/ethash { };
 
   ethminer = callPackage ../tools/misc/ethminer { };
 
@@ -2906,7 +2916,10 @@ in
 
   flatpak-builder = callPackage ../development/tools/flatpak-builder { };
 
-  fltrdr = callPackage ../tools/misc/fltrdr { stdenv = gcc8Stdenv; };
+  fltrdr = callPackage ../tools/misc/fltrdr {
+    stdenv = gcc8Stdenv;
+    icu = icu63;
+  };
 
   fluent-bit = callPackage ../tools/misc/fluent-bit {
     stdenv = gccStdenv;
@@ -4225,6 +4238,10 @@ in
   # Update this when adding the newest nodejs major version!
   nodejs_latest = nodejs-12_x;
   nodejs-slim_latest = nodejs-slim-12_x;
+
+  nodePackages_12_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v12.nix {
+    nodejs = pkgs.nodejs-12_x;
+  });
 
   nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
     nodejs = pkgs.nodejs-10_x;
@@ -5839,7 +5856,7 @@ in
   silc_server = callPackage ../servers/silc-server { };
 
   sile = callPackage ../tools/typesetting/sile {
-  inherit (lua52Packages) lua luaexpat luazlib luafilesystem lpeg luasocket luasec;
+  inherit (lua52Packages) lua luaexpat lua-zlib luafilesystem lpeg luasocket luasec;
   };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
@@ -8726,7 +8743,6 @@ in
 
   inherit (callPackage ../tools/admin/ansible { })
     ansible
-    ansible_2_5
     ansible_2_6
     ansible_2_7;
 
@@ -11013,6 +11029,8 @@ in
 
   jsonnet = callPackage ../development/compilers/jsonnet { };
 
+  go-jsonnet = callPackage ../development/compilers/go-jsonnet { };
+
   jsonrpc-glib = callPackage ../development/libraries/jsonrpc-glib { };
 
   jxrlib = callPackage ../development/libraries/jxrlib { };
@@ -11051,7 +11069,9 @@ in
   libkrb5 = krb5.override { type = "lib"; };
   kerberos = libkrb5; # TODO: move to aliases.nix
 
-  l-smash = callPackage ../development/libraries/l-smash { };
+  l-smash = callPackage ../development/libraries/l-smash {
+    stdenv = gccStdenv;
+  };
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
 
@@ -12226,7 +12246,9 @@ in
   };
   mesa = mesa_noglu;
 
-  mesa_glu =  callPackage ../development/libraries/mesa-glu { };
+  mesa_glu =  callPackage ../development/libraries/mesa-glu {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   # NOTE: 2018-07-12: legacy alias:
   # gcsecurity bussiness is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
@@ -12442,7 +12464,7 @@ in
 
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
     inherit (darwin) cf-private;
-    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration;
   };
 
   opencv3WithoutCuda = opencv3.override {
@@ -12451,7 +12473,7 @@ in
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     inherit (darwin) cf-private;
-    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration;
   };
 
   openexr = callPackage ../development/libraries/openexr { };
@@ -14302,6 +14324,8 @@ in
 
   mpdscribble = callPackage ../tools/misc/mpdscribble { };
 
+  mtprotoproxy = python3.pkgs.callPackage ../servers/mtprotoproxy { };
+
   micro-httpd = callPackage ../servers/http/micro-httpd { };
 
   miniHttpd = callPackage ../servers/http/mini-httpd {};
@@ -14606,6 +14630,9 @@ in
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
+  prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
 
@@ -15429,8 +15456,6 @@ in
 
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
-    spl = callPackage ../os-specific/linux/spl { };
-
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };
@@ -15459,7 +15484,7 @@ in
 
     inherit (callPackage ../os-specific/linux/zfs {
       configFile = "kernel";
-      inherit kernel spl;
+      inherit kernel;
      }) zfsStable zfsUnstable;
 
      zfs = zfsStable;
@@ -15987,7 +16012,7 @@ in
     stdenv = crossLibcStdenv;
   };
 
-  eudev = callPackage ../os-specific/linux/eudev {};
+  eudev = callPackage ../os-specific/linux/eudev { utillinux = utillinuxMinimal; };
 
   libudev0-shim = callPackage ../os-specific/linux/libudev0-shim { };
 
@@ -19296,6 +19321,8 @@ in
   pdfdiff = callPackage ../applications/misc/pdfdiff { };
 
   mupdf = callPackage ../applications/misc/mupdf { };
+
+  mystem = callPackage ../applications/misc/mystem { };
 
   diffpdf = libsForQt5.callPackage ../applications/misc/diffpdf { };
 
@@ -23013,6 +23040,8 @@ in
 
   apmplanner2 = libsForQt511.callPackage ../applications/science/robotics/apmplanner2 { };
 
+  betaflight-configurator = callPackage ../applications/science/robotics/betaflight-configurator { };
+
   ### MISC
 
   acpilight = callPackage ../misc/acpilight { };
@@ -24183,5 +24212,7 @@ in
   wasmtime = callPackage ../development/interpreters/wasmtime {};
 
   bemenu = callPackage ../applications/misc/bemenu { };
+
+  dapper = callPackage ../development/tools/dapper { };
 
 }

@@ -1,5 +1,5 @@
 { stdenv, darwin, fetchurl, makeWrapper, pkgconfig
-, harfbuzz, icu, lpeg, luaexpat, luazlib, luafilesystem, luasocket, luasec
+, harfbuzz, icu, lpeg, luaexpat, lua-zlib, luafilesystem, luasocket, luasec
 , fontconfig, lua, libiconv
 , makeFontsConf, gentium, gentium-book-basic, dejavu_fonts
 }:
@@ -8,7 +8,7 @@ with stdenv.lib;
 
 let
 
-  libs          = [ lpeg luaexpat luazlib luafilesystem luasocket luasec ];
+  libs          = [ lpeg luaexpat lua-zlib luafilesystem luasocket luasec ];
   getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
   getLuaPath    = lib : getPath lib "lua";
   getLuaCPath   = lib : getPath lib "so";

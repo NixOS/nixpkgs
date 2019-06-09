@@ -165,6 +165,12 @@
       <link xlink:href="https://github.com/NixOS/nixpkgs/issues/62211">issue #62211</link>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The setopt declarations will be evaluated at the end of <literal>/etc/zshrc</literal>, so any code in <xref linkend="opt-programs.zsh.interactiveShellInit" />,
+      <xref linkend="opt-programs.zsh.loginShellInit" /> and <xref linkend="opt-programs.zsh.promptInit" /> may break if it relies on those options being set.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
