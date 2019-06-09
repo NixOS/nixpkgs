@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc autoconf automake libtool ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = stdenv.lib.optionals stdenv.hostPlatform.isMusl
+    [ autoconf automake libtool ];
   buildInputs = stdenv.lib.optional enablePython python;
 
   configureFlags = [
