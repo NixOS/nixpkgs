@@ -28,6 +28,11 @@
      PHP now defaults to PHP 7.3, updated from 7.2.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     PHP 7.1 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 19.09 release.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
