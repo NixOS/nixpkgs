@@ -8,9 +8,7 @@ stdenv.mkDerivation rec {
     rev = "${version}";
     sha256 = "1px1sk7b6mjnbclsr1jn33m9k4wd8wqyw4d6w1rgj0ii29lhzmqi";
   };
-  installPhase = ''
-    PREFIX=$out make install
-  '';
+  PREFIX = builtins.placeholder "out";
   meta = with stdenv.lib; {
     homepage = "https://github.com/arzzen/git-quick-stats";
     description = "A simple and efficient way to access various statistics in git repository";
