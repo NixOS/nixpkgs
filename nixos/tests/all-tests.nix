@@ -183,6 +183,7 @@ in
   # openstack-image-userdata doesn't work in a sandbox as the simulated openstack instance needs network access
   #openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
+  os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
   osquery = handleTest ./osquery.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
   ostree = handleTest ./ostree.nix {};

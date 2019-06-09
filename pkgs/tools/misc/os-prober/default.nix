@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, makeWrapper,
+{ stdenv, fetchFromGitLab, makeWrapper, nixosTests,
 # optional dependencies, the command(s) they provide
 coreutils,  # mktemp
 grub2,      # grub-mount and grub-probe
@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
     done;
   '';
 
+  passthru.tests = {
+    os-prober = nixosTests.os-prober;
+  };
   meta = with stdenv.lib; {
     description = "Utility to detect other OSs on a set of drives";
     homepage = http://packages.debian.org/source/sid/os-prober;
