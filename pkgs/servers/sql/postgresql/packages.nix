@@ -44,4 +44,6 @@ self: super: {
     pgrouting = super.callPackage ./ext/pgrouting.nix { };
 
     pg_partman = super.callPackage ./ext/pg_partman.nix { };
+
+    pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
 }
