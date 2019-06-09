@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper,
+{ stdenv, fetchFromGitLab, makeWrapper,
 # optional dependencies, the command(s) they provide
 coreutils,  # mktemp
 grub2,      # grub-mount and grub-probe
@@ -9,11 +9,14 @@ ntfs3g      # ntfs3g
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.76";
-  name = "os-prober-${version}";
-  src = fetchurl {
-    url = "https://salsa.debian.org/philh/os-prober/-/archive/${version}/os-prober-${version}.tar.bz2";
-    sha256 = "07rw3092pckh21vx6y4hzqcn3wn4cqmwxaaiq100lncnhmszg11g";
+  version = "1.77";
+  pname = "os-prober";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "installer-team";
+    repo = pname;
+    rev = version;
+    sha256 = "05sji756xdl67pp2sf7rk0ih9h6f6kgk9nvxlyv1bzbmcizlh2d2";
   };
 
   buildInputs = [ makeWrapper ];
