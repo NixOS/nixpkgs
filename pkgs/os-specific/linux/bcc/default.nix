@@ -4,7 +4,7 @@
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.9.0";
+  version = "0.10.0";
   name = "bcc-${version}";
 
   srcs = [
@@ -12,7 +12,7 @@ python.pkgs.buildPythonApplication rec {
       owner  = "iovisor";
       repo   = "bcc";
       rev    = "v${version}";
-      sha256 = "0gi12bsjaw1d77rx11wkdg4szcydwy55z6mkx558nfvdym0qj7yw";
+      sha256 = "0qbqygj7ia494fbira9ajavvnxlpffx1jlzbb1vsf1wa8h3y4xn1";
       name   = "bcc";
     })
 
@@ -21,8 +21,8 @@ python.pkgs.buildPythonApplication rec {
     (fetchFromGitHub {
       owner  = "libbpf";
       repo   = "libbpf";
-      rev    = "5beb8a2ebffd1045e3edb9b522d6ff5bb477c541";
-      sha256 = "19n6baqj0mbaphzxkpn09m5a7cbij7fxap8ckk488nxqdz7nbsal";
+      rev    = "0e37e0d03ac99987401e4496d3d76d44237b9963";
+      sha256 = "0wjf9dhvqkwiwnygzikamrgmpxgq77h2pxx6mi4pnbw0lxlppivr";
       name   = "libbpf";
     })
   ];
