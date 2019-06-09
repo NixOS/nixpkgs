@@ -719,7 +719,7 @@ rec {
     { name, fullName, size ? 4096, urlPrefix
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? [], postInstall ? ""
-    , extraDebs ? []
+    , extraDebs ? [], createRootFS ? defaultCreateRootFS
     , QEMU_OPTS ? "", memSize ? 512 }:
 
     let
@@ -729,7 +729,7 @@ rec {
       };
     in
       (fillDiskWithDebs {
-        inherit name fullName size postInstall QEMU_OPTS memSize;
+        inherit name fullName size postInstall createRootFS QEMU_OPTS memSize;
         debs = import expr {inherit fetchurl;} ++ extraDebs;
       }) // {inherit expr;};
 
