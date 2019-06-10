@@ -2,17 +2,14 @@
 , thin-provisioning-tools, libaio
 , enable_dmeventd ? false }:
 
-let
-  version = "2.03.01";
-in
-
-stdenv.mkDerivation {
-  name = "lvm2-${version}";
+stdenv.mkDerivation rec {
+  pname = "lvm2";
+  version = "2.03.03";
 
   src = fetchgit {
     url = "git://sourceware.org/git/lvm2.git";
     rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "0jlaswf1srdxiqpgpp97j950ddjds8z0kr4pbwmal2za2blrgvbl";
+    sha256 = "1ly8axih5yn76j787mhfg6hinxfsjgy40c20lm506c215612jgbs";
   };
 
   configureFlags = [
