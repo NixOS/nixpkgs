@@ -4385,6 +4385,8 @@ in
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
+  ledger-live-desktop = callPackage ../applications/altcoins/ledger-live-desktop { };
+
   ledmon = callPackage ../tools/system/ledmon { };
 
   leela = callPackage ../tools/graphics/leela { };
