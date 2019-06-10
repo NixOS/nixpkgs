@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with pkgs;
 with lib;
 
 let
@@ -12,7 +11,7 @@ let
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
-  configFile = writeText "NetworkManager.conf" ''
+  configFile = pkgs.writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
     dhcp=${cfg.dhcp}
@@ -139,7 +138,8 @@ in {
       # Ugly hack for using the correct gnome3 packageSet
       basePackages = mkOption {
         type = types.attrsOf types.package;
-        default = { inherit networkmanager modemmanager wpa_supplicant
+        default = { inherit (pkgs)
+                            networkmanager modemmanager wpa_supplicant
                             networkmanager-openvpn networkmanager-vpnc
                             networkmanager-openconnect networkmanager-fortisslvpn
                             networkmanager-l2tp networkmanager-iodine; };
