@@ -454,7 +454,9 @@ in {
 
   grandalf = callPackage ../development/python-modules/grandalf { };
 
-  gprof2dot = callPackage ../development/python-modules/gprof2dot { };
+  gprof2dot = callPackage ../development/python-modules/gprof2dot {
+    inherit (pkgs) graphviz;
+  };
 
   gsd = callPackage ../development/python-modules/gsd { };
 
@@ -856,6 +858,8 @@ in {
   python-prctl = callPackage ../development/python-modules/python-prctl { };
 
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
+
+  python-redis-lock = callPackage ../development/python-modules/python-redis-lock { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
@@ -4441,6 +4445,8 @@ in {
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
+
+  strategies = callPackage ../development/python-modules/strategies { };
 
   stravalib = callPackage ../development/python-modules/stravalib { };
 

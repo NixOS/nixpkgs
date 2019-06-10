@@ -669,7 +669,7 @@ let
     };
   };
 
-  commonMatchText = def: ''
+  commonMatchText = def: optionalString (def.matchConfig != {}) ''
     [Match]
     ${attrsToSection def.matchConfig}
   '';
