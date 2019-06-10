@@ -5,11 +5,11 @@
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchurl {
     url = "https://git.sr.ht/~sircmpwn/aerc/archive/${version}.tar.gz";
-    sha256 = "0wx9l097s51ih4khk231f9fs3vw55an8l2jx3q13v7y20522wgnk";
+    sha256 = "0rpwjjnaq8mj619ajzyl3kad7sysbz87qz2ds0jyy7kvyzv6r7zb";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildGoModule rec {
       ${stdenv.lib.makeBinPath [ w3m dante ]}
   '';
 
-  modSha256 = "1h0vr01s2y0k3jjigz0h8ngjv1mhk6kw8mdisp5pr017jbhijfsi";
+  modSha256 = "0p8lp6xwg6jacrnxzw3q73mqxy9wzj5vs0k1saa48ardqd2f7b00";
 
   meta = with stdenv.lib; {
     description = "aerc is an email client for your terminal";
