@@ -319,10 +319,22 @@ my @swapDevices;
 if (@swaps) {
     shift @swaps;
     foreach my $swap (@swaps) {
-        $swap =~ /^(\S+)\s/;
-        next unless -e $1;
-        my $dev = findStableDevPath $1;
-        push @swapDevices, "{ device = \"$dev\"; }";
+        my @fields = split ' ', $swap;
+        my $swapFilename = $fields[0];
+        my $swapType = $fields[1];
+        # +4(KiB) to compensate for difference between the size
+        # reported by stat and /proc/swaps (size of swapfile
+        # header?).
+        my $swapSizeMiB = ($fields[2] + 4) / 1024;
+        next unless -e $swapFilename;
+        my $dev = findStableDevPath $swapFilename;
+        if ($swapType =~ "partition") {
+            push @swapDevices, "{ device = \"$dev\"; }";
+        } elsif ($swapType =~ "file") {
+            push @swapDevices, "{ device = \"$dev\"; size = $swapSizeMiB; }";
+        } else {
+            die "Unsupported swap type: $swapType\n";
+        }
     }
 }
 
