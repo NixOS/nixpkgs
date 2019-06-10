@@ -61,6 +61,7 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = with maintainers; [ marcweber yurrriq ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 
   patches = [ ./findlib.patch ];
