@@ -3099,6 +3099,11 @@
     github = "matklad";
     name = "matklad";
   };
+  matoruru = {
+    email = "nixos@shgt.jp";
+    github = "matoruru";
+    name = "Tomoki Shigeta";
+  };
   matthewbauer = {
     email = "mjbauer95@gmail.com";
     github = "matthewbauer";
