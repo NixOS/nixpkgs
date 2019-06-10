@@ -421,9 +421,6 @@ in {
       { source = "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
         target = "NetworkManager/VPN/nm-l2tp-service.name";
       }
-      { source = "${networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
-        target = "NetworkManager/VPN/nm-strongswan-service.name";
-      }
       { source = "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
         target = "NetworkManager/VPN/nm-iodine-service.name";
       }
@@ -436,11 +433,15 @@ in {
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
         mode = "0544";
       }) cfg.dispatcherScripts
-      ++ optional (dynamicHostsEnabled)
+      ++ optional dynamicHostsEnabled
            { target = "NetworkManager/dnsmasq.d/dyndns.conf";
              text = concatMapStrings (n: ''
                hostsdir=/run/NetworkManager/hostsdirs/${n}
              '') (attrNames cfg.dynamicHosts.hostsDirs);
+           }
+      ++ optional cfg.enableStrongSwan
+           { source = "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
+             target = "NetworkManager/VPN/nm-strongswan-service.name";
            };
 
     environment.systemPackages = cfg.packages;
