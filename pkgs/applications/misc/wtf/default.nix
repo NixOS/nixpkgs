@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.10.3";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ffpydxlc2c9rpr6rnlqk3ca8xc4hjl2107wzcxzx9id1hw8fb40";
+    sha256 = "1b671jhf3xaaisgpiad5apmvwkp40qr2hm4n21m0ya7k5ckps09z";
   };
 
   modSha256 = "0as736nnx7ci4w9gdp27g55g6dny9bh1fryz3g89gxm2sa2nlb9l";
