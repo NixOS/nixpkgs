@@ -13641,24 +13641,24 @@ in
         src = fetchFromGitHub {
           owner = "KhronosGroup";
           repo = "SPIRV-Tools";
-          rev = "5994ae2a045015004cce24802dc47c33736486ea";
-          sha256 = "1w1zkql03aggma31nz4xb1b5waxxf2jcg99slzvmihg9ngmmlbm6";
+          rev = "26c1b8878315a7a5c188df45e0bc236bb222b698";
+          sha256 = "1q76vaqwxf4q2l4rd7j2p2jqgcqpys0m235drzx0drkn2qd50n1b";
         };
       });
       spirv-headers = spirv-tools.overrideAttrs (_: {
         src = fetchFromGitHub {
           owner = "KhronosGroup";
           repo = "SPIRV-Headers";
-          rev = "79b6681aadcb53c27d1052e5f8a0e82a981dbf2f";
-          sha256 = "0flng2rdmc4ndq3j71h6wk1ibcjvhjrg2rzd6rv445vcsf0jh2pj";
+          rev = "2434b89345a50c018c84f42a310b0fad4f3fd94f";
+          sha256 = "1m902q1alm0rbh69zlskkx4n453xijijp9mf3wzwphi2j36gygwm";
         };
       });
     }).overrideAttrs (_: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "glslang";
-        rev = "5432f0dd8f331f15182681664d7486681e8514e6";
-        sha256 = "0spdm93qkx83z8bks61am2g3ary7fkibvhqq706nj4z9wx4k0cbm";
+        rev = "e06c7e9a515b716c731bda13f507546f107775d1";
+        sha256 = "04y4dd1cqdkd4qffmhgmg3agf9j07ii2w38vpp4jw53ir818bqdq";
       };
     });
   };
