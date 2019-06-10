@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   # gcc: error: ../../device_mapper/libdevice-mapper.a: No such file or directory
   enableParallelBuilding = false;
 
-  #patches = [ ./purity.patch ];
+  # Patches safe on all, but limit to musl for now
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       name = "fix-stdio-usage.patch";
@@ -62,13 +62,15 @@ stdenv.mkDerivation rec {
   doCheck = false; # requires root
 
   # To prevent make install from failing.
-  preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
+  installFlags = [ "OWNER=" "GROUP=" "confdir=${placeholder "out"}/etc" ];
 
   # Install systemd stuff.
   #installTargets = "install install_systemd_generators install_systemd_units install_tmpfiles_configuration";
 
   postInstall =
     ''
+      # This no longer matches the expected blkid invocation,
+      # and can probably be removed.
       substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
         --replace $out/sbin/blkid ${utillinux}/sbin/blkid
 
@@ -76,6 +78,9 @@ stdenv.mkDerivation rec {
       mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators
       cp scripts/blk_availability_systemd_red_hat.service $out/etc/systemd/system
       cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
+
+      substituteInPlace $out/lib/udev/rules.d/69-dm-lvm-metad.rules \
+        --replace $out/bin/systemd-run ${systemd}/bin/systemd-run
     '';
 
   meta = with stdenv.lib; {
