@@ -267,6 +267,7 @@ in
   radicale = handleTest ./radicale.nix {};
   redis = handleTest ./redis.nix {};
   redmine = handleTest ./redmine.nix {};
+  resilio = handleTest ./resilio.nix {};
   restic = handleTest ./restic.nix {};
   roundcube = handleTest ./roundcube.nix {};
   rspamd = handleTest ./rspamd.nix {};
