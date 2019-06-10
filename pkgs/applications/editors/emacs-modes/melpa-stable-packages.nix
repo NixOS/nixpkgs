@@ -207,6 +207,10 @@ self:
       window-numbering = markBroken super.window-numbering;
     };
 
-    melpaStablePackages = super // overrides;
+    melpaStablePackages =
+      removeAttrs (super // overrides)
+      [
+        "lenlen-theme"  # missing dependency: color-theme-solarized
+      ];
   in
     melpaStablePackages // { inherit melpaStablePackages; }

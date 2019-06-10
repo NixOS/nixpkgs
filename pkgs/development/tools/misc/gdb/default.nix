@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
     sha256 = "0bnpzz0rl672xg5547q5qck2sxi6cnyixmk8bbb4gifw17ipwbw0";
   };
 
+  postPatch = if stdenv.isDarwin then ''
+    substituteInPlace gdb/darwin-nat.c \
+      --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+  '' else null;
+
   patches = [
     ./debug-info-from-env.patch
   ] ++ stdenv.lib.optionals stdenv.isDarwin [

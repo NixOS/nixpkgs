@@ -3,14 +3,14 @@
 let
   common = { stname, target, postInstall ? "" }:
     buildGoPackage rec {
-      version = "1.1.3";
+      version = "1.1.4";
       name = "${stname}-${version}";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "00jshqa0nkwj06bfq16p359ss6nl6h49s31hag79wl9gwkca38va";
+        sha256 = "0a19l1kp4cwyzcd53v9yzv3ms69gn78gajkyfawafr7ls0i8x82f";
       };
 
       goPackagePath = "github.com/syncthing/syncthing";

@@ -1157,6 +1157,20 @@ let
     };
   };
 
+  Carton = buildPerlPackage rec {
+    name = "Carton-v1.0.34";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "77d42b92732bcfc18a59d341e56ce476205b1c4d380eab3a07224f5745c23e45";
+    };
+    propagatedBuildInputs = [ ClassTiny MenloLegacy ModuleCPANfile PathTiny TryTiny ];
+    meta = {
+      homepage = https://github.com/perl-carton/carton;
+      description = "Perl module dependency manager (aka Bundler for Perl)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CatalystActionRenderView = buildPerlPackage rec {
     name = "Catalyst-Action-RenderView-0.16";
     src = fetchurl {
@@ -2776,6 +2790,21 @@ let
     propagatedBuildInputs = [ CompressBzip2 DataCompare ModuleSignature ];
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CPANCommonIndex = buildPerlPackage rec {
+    name = "CPAN-Common-Index-0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
+      sha256 = "c43ddbb22fd42b06118fe6357f53700fbd77f531ba3c427faafbf303cbf4eaf0";
+    };
+    buildInputs = [ TestDeep TestFailWarnings TestFatal ];
+    propagatedBuildInputs = [ CPANDistnameInfo ClassTiny TieHandleOffset URI ];
+    meta = {
+      homepage = https://github.com/Perl-Toolchain-Gang/CPAN-Common-Index;
+      description = "Common library for searching CPAN modules, authors and distributions";
+      license = stdenv.lib.licenses.asl20;
     };
   };
 
@@ -7566,6 +7595,20 @@ let
      };
   };
 
+  HTTPTinyish = buildPerlPackage rec {
+    name = "HTTP-Tinyish-0.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "5d65f0ee20a9e4744acdb3ef12edae78c121f53dcbc9cf00867c5725c4513aa5";
+    };
+    propagatedBuildInputs = [ FileWhich IPCRun3 ];
+    meta = {
+      homepage = https://github.com/miyagawa/HTTP-Tinyish;
+      description = "HTTP::Tiny compatible HTTP client wrappers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   iCalParser = buildPerlPackage rec {
     name = "iCal-Parser-1.21";
     src = fetchurl {
@@ -9606,6 +9649,34 @@ let
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "https://github.com/neilb/Memoize-ExpireLRU";
      };
+  };
+
+  Menlo = buildPerlPackage rec {
+    name = "Menlo-1.9019";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "3b573f68e7b3a36a87c860be258599330fac248b518854dfb5657ac483dca565";
+    };
+    propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo CPANMetaCheck CaptureTiny ClassTiny ExtUtilsConfig ExtUtilsHelpers ExtUtilsInstallPaths FileWhich Filepushd HTTPTinyish ModuleCPANfile ParsePMFile StringShellQuote URI Win32ShellQuote locallib ];
+    meta = {
+      homepage = https://github.com/miyagawa/cpanminus;
+      description = "A CPAN client";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MenloLegacy = buildPerlPackage rec {
+    name = "Menlo-Legacy-1.9022";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "a6acac3fee318a804b439de54acbc7c27f0b44cfdad8551bbc9cd45986abc201";
+    };
+    propagatedBuildInputs = [ Menlo ];
+    meta = {
+      homepage = https://github.com/miyagawa/cpanminus;
+      description = "Legacy internal and client support for Menlo";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   MetaBuilder = buildPerlModule {
@@ -16884,6 +16955,19 @@ let
     };
   };
 
+  TieHandleOffset = buildPerlPackage rec {
+    name = "Tie-Handle-Offset-0.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
+      sha256 = "ee9f39055dc695aa244a252f56ffd37f8be07209b337ad387824721206d2a89e";
+    };
+    meta = {
+      homepage = https://github.com/dagolden/tie-handle-offset;
+      description = "Tied handle that hides the beginning of a file";
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
   TieHashIndexed = buildPerlPackage {
     name = "Tie-Hash-Indexed-0.05";
     src = fetchurl {
@@ -17507,6 +17591,18 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROBIN/${name}.tar.gz";
       sha256 = "1xsjylbxxcbkjazqms49ipi94j1hd2ykdikk29cq7dscil5p9r5l";
+    };
+  };
+
+  Win32ShellQuote = buildPerlPackage rec {
+    name = "Win32-ShellQuote-0.003001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "aa74b0e3dc2d41cd63f62f853e521ffd76b8d823479a2619e22edb4049b4c0dc";
+    };
+    meta = {
+      description = "Quote argument lists for Win32";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

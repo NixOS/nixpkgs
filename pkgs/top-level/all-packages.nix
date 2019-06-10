@@ -2525,6 +2525,8 @@ in
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
 
+  docear = callPackage ../applications/office/docear { };
+
   dockbarx = callPackage ../applications/misc/dockbarx { };
 
   dog = callPackage ../tools/system/dog { };
@@ -5855,9 +5857,7 @@ in
 
   silc_server = callPackage ../servers/silc-server { };
 
-  sile = callPackage ../tools/typesetting/sile {
-  inherit (lua52Packages) lua luaexpat lua-zlib luafilesystem lpeg luasocket luasec;
-  };
+  sile = callPackage ../tools/typesetting/sile { };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
 
@@ -8389,8 +8389,8 @@ in
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
-  php = php72;
-  phpPackages = php72Packages;
+  php = php73;
+  phpPackages = php73Packages;
 
   php71Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php71;
@@ -8425,7 +8425,7 @@ in
     php72
     php73;
 
-  php-embed = php72-embed;
+  php-embed = php73-embed;
 
   php71-embed = php71.override {
     config.php.embed = true;
@@ -8442,7 +8442,7 @@ in
     config.php.apxs2 = false;
   };
 
-  php-unit = php72-unit;
+  php-unit = php73-unit;
 
   php71-unit = php71.override {
     config.php.embed = true;
@@ -14747,6 +14747,11 @@ in
 
   sensu = callPackage ../servers/monitoring/sensu { };
 
+  inherit (callPackages ../servers/monitoring/sensu-go { })
+    sensu-go-agent
+    sensu-go-backend
+    sensu-go-cli;
+
   uchiwa = callPackage ../servers/monitoring/uchiwa { };
 
   shishi = callPackage ../servers/shishi {
@@ -16080,6 +16085,8 @@ in
 
   adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
 
+  adementary-theme = callPackage ../data/themes/adementary { };
+
   agave = callPackage ../data/fonts/agave { };
 
   aileron = callPackage ../data/fonts/aileron { };
@@ -16657,8 +16664,6 @@ in
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 
   termtekst = callPackage ../misc/emulators/termtekst { };
-
-  tetra-gtk-theme = callPackage ../data/themes/tetra { };
 
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
@@ -18098,6 +18103,8 @@ in
   gitRepo = callPackage ../applications/version-management/git-repo {
     python = python27;
   };
+
+  git-quick-stats = callPackage ../development/tools/git-quick-stats {};
 
   git-review = callPackage ../applications/version-management/git-review { };
 

@@ -5071,6 +5071,11 @@
     github = "thedavidmeister";
     name = "David Meister";
   };
+  thefloweringash = {
+    email = "lorne@cons.org.nz";
+    github = "thefloweringash";
+    name = "Andrew Childs";
+  };
   thesola10 = {
     email = "thesola10@bobile.fr";
     github = "thesola10";
