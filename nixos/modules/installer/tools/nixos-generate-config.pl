@@ -264,6 +264,11 @@ if (scalar @bcacheDevices > 0) {
     push @initrdAvailableKernelModules, "bcache";
 }
 
+# Prevent unbootable systems if LVM snapshots are present at boot time.
+if (`lsblk -o TYPE` =~ "lvm") {
+    push @initrdKernelModules, "dm-snapshot";
+}
+
 my $virt = `systemd-detect-virt`;
 chomp $virt;
 
@@ -526,6 +531,7 @@ sub multiLineList {
 }
 
 my $initrdAvailableKernelModules = toNixStringList(uniq @initrdAvailableKernelModules);
+my $initrdKernelModules = toNixStringList(uniq @initrdKernelModules);
 my $kernelModules = toNixStringList(uniq @kernelModules);
 my $modulePackages = toNixList(uniq @modulePackages);
 
@@ -545,6 +551,7 @@ my $hwConfig = <<EOF;
   imports =${\multiLineList("    ", @imports)};
 
   boot.initrd.availableKernelModules = [$initrdAvailableKernelModules ];
+  boot.initrd.kernelModules = [$initrdKernelModules ];
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap
