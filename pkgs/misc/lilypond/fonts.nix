@@ -86,8 +86,8 @@ rec {
   };
   lilyjazz = olpFont {
     fontName = "lilyjazz";
-    rev = "8f1f2dd";
-    sha256 = "0k44dl5hfcn7wn2b6c51mbw6hsb1sprmx95xiabvcbpxnkplbmac";
+    rev = "8fa7d554";
+    sha256 = "1z7px7k2sn7snnj7yfjv0p9axwbn452vn9ww9icmb1249b0d1qry";
   };
   lv-goldenage = olpFont {
     fontName = "lv-goldenage";
