@@ -19,5 +19,7 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [pSub];
     license = stdenv.lib.licenses.bsd2;
+    broken = true;
+    hydraPlatforms = [];
   };
 }
