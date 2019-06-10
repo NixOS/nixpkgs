@@ -47,7 +47,7 @@
     meta = with stdenv.lib; {
       description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
       license = licenses.mit;
-      maintainers = with maintainers; [ FlorianFranzen minijackson ];
+      maintainers = with maintainers; [ FlorianFranzen minijackson synthetica ];
       platforms = platforms.unix;
     };
   }
