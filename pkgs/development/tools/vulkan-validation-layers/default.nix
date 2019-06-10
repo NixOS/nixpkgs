@@ -3,17 +3,17 @@
 , pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
 stdenv.mkDerivation rec {
   name = "vulkan-validation-layers-${version}";
-  version = "1.1.101.0"; # WARNING: glslang overrides in all-packages.nix must be updated to match known-good.json!
+  version = "1.1.106.0"; # WARNING: glslang overrides in all-packages.nix must be updated to match known-good.json!
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "sdk-${version}";
-    sha256 = "00gz72m393i3m3rh5hv9d0znzlz39cpw35ifchzb4cr11bi4mzyz";
+    sha256 = "1sq42j8ikll2dyi9ygaz80lx89mvq9d21pkaf49gzhg4xjcd97dp";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake python3 vulkan-headers vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
+  nativeBuildInputs = [ pkgconfig cmake python3  ];
+  buildInputs = [ vulkan-headers vulkan-loader libxcb libXrandr wayland ];
   enableParallelBuilding = true;
 
   cmakeFlags = [ "-DGLSLANG_INSTALL_DIR=${glslang}" ];
