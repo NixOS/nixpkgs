@@ -90,6 +90,35 @@
    <arg>
     <option>--show-trace</option>
    </arg>
+   <arg>
+    <option>-I</option>
+    <replaceable>path</replaceable>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--verbose</option></arg>
+     <arg choice='plain'><option>-v</option></arg>
+    </group>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--max-jobs</option></arg>
+     <arg choice='plain'><option>-j</option></arg>
+    </group>
+    <replaceable>number</replaceable>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--keep-failed</option></arg>
+     <arg choice='plain'><option>-K</option></arg>
+    </group>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--keep-going</option></arg>
+     <arg choice='plain'><option>-k</option></arg>
+    </group>
+   </arg>
   </cmdsynopsis>
  </refsynopsisdiv>
  <refsection>
