@@ -64,19 +64,19 @@ let
     });
   '';
 
-  ns = xs: writeText "nameservers" (
+  ns = xs: pkgs.writeText "nameservers" (
     concatStrings (map (s: "nameserver ${s}\n") xs)
   );
 
-  overrideNameserversScript = writeScript "02overridedns" ''
+  overrideNameserversScript = pkgs.writeScript "02overridedns" ''
     #!/bin/sh
-    tmp=`${coreutils}/bin/mktemp`
-    ${gnused}/bin/sed '/nameserver /d' /etc/resolv.conf > $tmp
-    ${gnugrep}/bin/grep 'nameserver ' /etc/resolv.conf | \
-      ${gnugrep}/bin/grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
-    ${optionalString (cfg.appendNameservers != []) "${coreutils}/bin/cat $tmp $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf"}
-    ${optionalString (cfg.insertNameservers != []) "${coreutils}/bin/cat $tmp ${ns cfg.insertNameservers} $tmp.ns > /etc/resolv.conf"}
-    ${coreutils}/bin/rm -f $tmp $tmp.ns
+    PATH=${with pkgs; makeBinPath [ gnused gnugrep coreutils ]}
+    tmp=`mktemp`
+    sed '/nameserver /d' /etc/resolv.conf > $tmp
+    grep 'nameserver ' /etc/resolv.conf | \
+      grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
+    cat $tmp ${ns cfg.insertNameservers} $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf
+    rm -f $tmp $tmp.ns
   '';
 
   dispatcherTypesSubdirMap = {
