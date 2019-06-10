@@ -23320,12 +23320,16 @@ in
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
+
   lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { };
+
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix {
     lilypond = lilypond-unstable;
   };
 
-  openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
+  openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix {
+    lilypond = lilypond-unstable;
+  };
 
   loop = callPackage ../tools/misc/loop { };
 
