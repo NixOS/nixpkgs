@@ -8,14 +8,14 @@
 , mpdSupport   ? true,  mpd_clientlib
 }:
   stdenv.mkDerivation rec {
-    name = "waybar-${version}";
-    version = "0.6.7";
+    pname = "waybar";
+    version = "0.6.8";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "1rkqxszay2fns8c2q0b668mjacr4wb7drlbfi55z9w5f9cfxgifw";
+      sha256 = "0wyp1p9r1k8jnjq8clp2fx8xa3f4lfrgbp67fxrjh9718p4br0ab";
     };
 
     nativeBuildInputs = [
