@@ -17,12 +17,16 @@ stdenv.mkDerivation rec {
     scheme-basic
     collection-pstricks
     collection-fontsrecommended
+    l3kernel
+    l3packages
     mathastext
     pgf
     relsize
     sfmath
+    siunitx
     xcolor
     xkeyval
+    xstring
     ;};
   buildInputs = [ hepmc imagemagick python2 latex makeWrapper ];
   propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];
