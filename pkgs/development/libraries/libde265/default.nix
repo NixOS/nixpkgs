@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = "https://github.com/strukturag/libde265";
     description = "Open h.265 video codec implementation";
