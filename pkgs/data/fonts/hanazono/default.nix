@@ -5,7 +5,7 @@ let
 in fetchzip {
   name = "hanazono-${version}";
 
-  url = "mirror://sourceforgejp/hanazono-font/68253/hanazono-${version}.zip";
+  url = "mirror://osdn/hanazono-font/68253/hanazono-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
