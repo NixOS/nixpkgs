@@ -1,14 +1,5 @@
 --- a/setup.py
 +++ b/setup.py
-@@ -1885,7 +1885,7 @@
-     if OSX:
-         pycairo = "py3cairo"
-     else:
--        pycairo = "pycairo"
-+        pycairo = "py3cairo"
-     cython_add(Extension("xpra.client.gtk3.cairo_workaround",
-                 ["xpra/client/gtk3/cairo_workaround.pyx"],
-                 **pkgconfig(pycairo)
 @@ -2363,10 +2363,7 @@
      v4l2_pkgconfig = pkgconfig()
      #fuly warning: cython makes this difficult,
