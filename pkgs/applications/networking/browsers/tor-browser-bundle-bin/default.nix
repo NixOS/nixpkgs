@@ -107,7 +107,7 @@ let
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0lgxwb9hll29sk7rpnraw9gfz7f9sb81gjsbxdnmm34y1vrabjv7";
+      sha256 = "160k5qdys6zy5cpsad2rm24ghfc2bd9b9gj3l0159di6hg21rk9k";
     };
   };
 in
