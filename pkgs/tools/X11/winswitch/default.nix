@@ -38,6 +38,7 @@ let
     doCheck = false;
 
     meta.platforms = stdenv.lib.platforms.linux;
+    meta.broken = true; # Needs older XPRA? See https://github.com/NixOS/nixpkgs/pull/58151#issuecomment-491594198
   };
 in stdenv.lib.overrideDerivation base (b: {
   postFixup = b.postFixup + ''
