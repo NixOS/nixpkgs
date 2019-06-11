@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee
+    export BITLBEE_DATADIR=$out/share/bitlbee
     ./autogen.sh
   '';
 
