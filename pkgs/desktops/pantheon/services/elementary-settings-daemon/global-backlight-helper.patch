@@ -22,5 +22,5 @@ index f16300f8..f19bba3e 100644
 -    <annotate key="org.freedesktop.policykit.exec.path">@libexecdir@/gsd-backlight-helper</annotate>
 +    <annotate key="org.freedesktop.policykit.exec.path">/run/current-system/sw/bin/elementary-settings-daemon/gsd-backlight-helper</annotate>
    </action>
-
+ 
  </policyconfig>
