@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "papirus-icon-theme-${version}";
+  pname = "papirus-icon-theme";
   version = "20190521";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
-    repo = "papirus-icon-theme";
+    repo = pname;
     rev = version;
     sha256 = "192s14bf2ni46jkiifbsl82qy1miy8fnxs2fpqwf6s6jlv9x4zxs";
   };
