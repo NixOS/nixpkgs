@@ -3628,9 +3628,8 @@ in {
 
   cachetools = callPackage ../development/python-modules/cachetools {};
 
-  cmd2_8 = callPackage ../development/python-modules/cmd2/old.nix {};
   cmd2_9 = callPackage ../development/python-modules/cmd2 {};
-  cmd2 = if isPy27 then self.cmd2_8 else self.cmd2_9;
+  cmd2 = self.cmd2_9;
 
   warlock = callPackage ../development/python-modules/warlock { };
 
