@@ -22,7 +22,7 @@ let
       srcs = [ "lib.py" ],
     )
 
-    py_test(
+    py_binary(
       name = "bin",
       srcs = [ "bin.py" ],
       deps = [ ":lib" ],
@@ -46,10 +46,9 @@ let
     # about why to create a subdir for the workspace.
     cp -r ${workspaceDir} wd && chmod u+w wd && cd wd
     ${bazel}/bin/bazel \
-      test \
-        --test_output=errors \
+      run \
         --host_javabase='@local_jdk//:jdk' \
-        //...
+        //python:bin
 
     touch $out
   '';
