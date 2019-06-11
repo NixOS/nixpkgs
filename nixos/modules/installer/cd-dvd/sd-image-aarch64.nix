@@ -26,6 +26,11 @@ in
   # Also increase the amount of CMA to ensure the virtual console on the RPi3 works.
   boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
 
+  boot.initrd.availableKernelModules = [
+    # Allows early (earlier) modesetting for the Raspberry Pi
+    "vc4" "bcm2835_dma" "i2c_bcm2835"
+  ];
+
   sdImage = {
     populateBootCommands = let
       configTxt = pkgs.writeText "config.txt" ''
