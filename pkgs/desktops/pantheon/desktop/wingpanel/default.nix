@@ -1,6 +1,5 @@
-{ stdenv, fetchFromGitHub, pantheon, fetchpatch, wrapGAppsHook, pkgconfig, meson, ninja
-, vala, gala, gtk3, libgee, granite, gettext, glib-networking, mutter, json-glib
-, python3, gobject-introspection }:
+{ stdenv, fetchFromGitHub, pantheon, wrapGAppsHook, pkgconfig, meson, ninja
+, vala, gala, gtk3, libgee, granite, gettext, mutter, json-glib, python3, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
@@ -21,7 +20,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gettext
-    glib-networking
     gobject-introspection
     meson
     ninja
