@@ -15728,6 +15728,8 @@ in
   nettools = if stdenv.isLinux then callPackage ../os-specific/linux/net-tools { }
              else unixtools.nettools;
 
+  nettools_mptcp = callPackage ../os-specific/linux/net-tools/mptcp.nix { };
+
   nftables = callPackage ../os-specific/linux/nftables { };
 
   noah = callPackage ../os-specific/darwin/noah {
