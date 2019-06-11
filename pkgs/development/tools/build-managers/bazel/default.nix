@@ -93,6 +93,8 @@ let
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
 
+  platforms = lib.platforms.linux ++ lib.platforms.darwin;
+
 in
 stdenv.mkDerivation rec {
 
@@ -103,7 +105,7 @@ stdenv.mkDerivation rec {
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = [ maintainers.mboes ];
-    platforms = platforms.linux ++ platforms.darwin;
+    inherit platforms;
   };
 
   # Additional tests that check bazel’s functionality. Execute
@@ -115,6 +117,7 @@ stdenv.mkDerivation rec {
     let
       runLocal = name: attrs: script: runCommandCC name ({
         preferLocalBuild = true;
+        meta.platforms = platforms;
       } // attrs) script;
 
       # bazel wants to extract itself into $install_dir/install every time it runs,
