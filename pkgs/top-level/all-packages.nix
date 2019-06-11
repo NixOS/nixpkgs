@@ -24102,6 +24102,8 @@ in
 
   sequelpro = callPackage ../applications/misc/sequelpro {};
 
+  sidequest = callPackage ../applications/misc/sidequest {};
+
   maphosts = callPackage ../tools/networking/maphosts {};
 
   zimg = callPackage ../development/libraries/zimg { };
