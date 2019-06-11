@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       --replace "case Kcmd+'v':" "case 0x16: case Kcmd+'v':"
   '';
 
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [
+  buildInputs = [
     which perl libX11 fontconfig xorgproto libXt libXext
     freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
   ];
@@ -59,6 +59,27 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS="-lgcc_s";
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/9 rc -c 'echo rc is working.'
+
+    # 9l can find and use its libs
+    cd $TMP
+    cat >test.c <<EOF
+    #include <u.h>
+    #include <libc.h>
+    #include <thread.h>
+    void
+    threadmain(int argc, char **argv)
+    {
+        threadexitsall(nil);
+    }
+    EOF
+    $out/bin/9 9c -o test.o test.c
+    $out/bin/9 9l -o test test.o
+    ./test
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://9fans.github.io/plan9port/;
