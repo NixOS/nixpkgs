@@ -259,6 +259,18 @@
       (<literal>/var/lib/systemd/timesync</literal>), if required.
     </para>
   </listitem>
- </itemizedlist>
+  <listitem>
+    <para>
+     The package <literal>avahi</literal> is now built to look up service
+     definitions from <literal>/etc/avahi/services</literal> instead of its
+     output directory in the nix store. Accordingly the module
+     <option>avahi</option> now supports custom service definitions via
+     <option>services.avahi.extraServiceFiles</option>, which are then placed
+     in the aforementioned directory. See <citerefentry>
+     <refentrytitle>avahi.service</refentrytitle><manvolnum>5</manvolnum>
+     </citerefentry> for more information on custom service definitions.
+    </para>
+   </listitem>
+  </itemizedlist>
  </section>
 </section>
