@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     # darwin gives hash mismatch in source, probably because of file names differing only in case
     platforms = platforms.linux;
+    maintainers = with maintainers; [ romildo ];
   };
 }
