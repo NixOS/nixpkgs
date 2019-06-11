@@ -1,4 +1,4 @@
-{ stdenv, lib, writeText, runCommandCC, bazel }:
+{ stdenv, lib, writeText, bazel, bazelTest, runLocal }:
 
 let
   WORKSPACE = writeText "WORKSPACE" ''
@@ -29,9 +29,7 @@ let
     )
   '';
 
-  runLocal = name: script: runCommandCC name { preferLocalBuild = true; } script;
-
-  workspaceDir = runLocal "our_workspace" ''
+  workspaceDir = runLocal "our_workspace" {} ''
     mkdir $out
     cp ${WORKSPACE} $out/WORKSPACE
     mkdir $out/python
@@ -40,17 +38,15 @@ let
     cp ${pythonBUILD} $out/python/BUILD.bazel
   '';
 
-  testBazel = runLocal "bazel-test-builtin-rules" ''
-    export HOME=$(mktemp -d)
-    # Note https://github.com/bazelbuild/bazel/issues/5763#issuecomment-456374609
-    # about why to create a subdir for the workspace.
-    cp -r ${workspaceDir} wd && chmod u+w wd && cd wd
-    ${bazel}/bin/bazel \
-      run \
-        --host_javabase='@local_jdk//:jdk' \
-        //python:bin
-
-    touch $out
-  '';
+  testBazel = bazelTest {
+    name = "bazel-test-builtin-rules";
+    inherit workspaceDir;
+    bazelScript = ''
+      ${bazel}/bin/bazel \
+        run \
+          --host_javabase='@local_jdk//:jdk' \
+          //python:bin
+    '';
+  };
 
 in testBazel
