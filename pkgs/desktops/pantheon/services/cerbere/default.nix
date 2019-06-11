@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, glib, libgee, vala, gobject-introspection, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, glib, libgee, vala, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cerbere";
@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig

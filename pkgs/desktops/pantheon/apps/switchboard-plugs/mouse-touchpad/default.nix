@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pantheon, fetchpatch, meson, ninja, pkgconfig, vala
-, libgee, granite, gtk3, switchboard, elementary-settings-daemon, gobject-introspection }:
+, libgee, granite, gtk3, switchboard, elementary-settings-daemon }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig

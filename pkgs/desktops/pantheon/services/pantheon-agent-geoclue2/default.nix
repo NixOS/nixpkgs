@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, pantheon, pkgconfig, meson, ninja, vala, glib
-, gtk3, libgee, desktop-file-utils, geoclue2, gobject-introspection, wrapGAppsHook }:
+, gtk3, libgee, desktop-file-utils, geoclue2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-geoclue2";
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig

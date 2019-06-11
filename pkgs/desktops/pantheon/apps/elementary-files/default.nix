@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, gettext, vala
 , python3, desktop-file-utils, libcanberra, gtk3, libgee, granite, libnotify
 , libunity, pango, plank, bamf, sqlite, libdbusmenu-gtk3, zeitgeist, glib-networking
-, elementary-icon-theme, gobject-introspection, wrapGAppsHook }:
+, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "files";
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     gettext
     glib-networking
-    gobject-introspection
     meson
     ninja
     pkgconfig

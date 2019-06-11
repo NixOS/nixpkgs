@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, desktop-file-utils
 , gtk3, glib, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2, fetchpatch
 , granite, gst_all_1, libgudev, json-glib, libraw, librest, libsoup, sqlite, python3
-, scour, webkitgtk, libwebp, appstream, libunity, wrapGAppsHook, gobject-introspection, elementary-icon-theme }:
+, scour, webkitgtk, libwebp, appstream, libunity, wrapGAppsHook, elementary-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "photos";
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig
