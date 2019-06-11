@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pantheon, substituteAll, meson, ninja, pkgconfig, vala, libgee
-, granite, gtk3, libxml2, libgnomekbd, libxklavier, xorg, switchboard, gobject-introspection }:
+{ stdenv, fetchFromGitHub, pantheon, substituteAll, meson, ninja, pkgconfig
+, vala, libgee, granite, gtk3, libxml2, libgnomekbd, libxklavier, xorg, switchboard }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     libxml2
     meson
     ninja

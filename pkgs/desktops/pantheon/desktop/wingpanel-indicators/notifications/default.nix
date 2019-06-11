@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, gtk3, granite
-, wingpanel, libgee, libwnck3, gobject-introspection, elementary-icon-theme, wrapGAppsHook }:
+, wingpanel, libgee, libwnck3, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-notifications";
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
