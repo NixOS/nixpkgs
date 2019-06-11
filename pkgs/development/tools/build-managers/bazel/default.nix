@@ -1,5 +1,7 @@
-{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
-, zip, unzip, bash, writeCBin, coreutils
+{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, runCommandCC, makeWrapper
+# this package (through the fixpoint glass)
+, bazel
+, lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # Apple dependencies
 , cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
@@ -109,10 +111,61 @@ stdenv.mkDerivation rec {
   #     nix-build . -A bazel.tests
   #
   # in the nixpkgs checkout root to exercise them locally.
-  passthru.tests = {
-    pythonBinPath = callPackage ./python-bin-path-test.nix {};
-    bashTools = callPackage ./bash-tools-test.nix {};
-  };
+  passthru.tests =
+    let
+      runLocal = name: attrs: script: runCommandCC name ({
+        preferLocalBuild = true;
+      } // attrs) script;
+
+      # bazel wants to extract itself into $install_dir/install every time it runs,
+      # so let’s do that only once.
+      extracted =
+        let install_dir =
+          # `install_base` field printed by `bazel info`, minus the hash.
+          # yes, this path is kinda magic. Sorry.
+          "$HOME/.cache/bazel/_bazel_nixbld";
+        in runLocal "bazel-extracted-homedir" { passthru.install_dir = install_dir; } ''
+            export HOME=$(mktemp -d)
+            touch WORKSPACE # yeah, everything sucks
+            install_base="$(${bazel}/bin/bazel info | grep install_base)"
+            # assert it’s actually below install_dir
+            [[ "$install_base" =~ ${install_dir} ]] \
+              || (echo "oh no! $install_base but we are \
+            trying to copy ${install_dir} to $out instead!"; exit 1)
+            cp -R ${install_dir} $out
+          '';
+
+      bazelTest = { name, bazelScript, workspaceDir }:
+        runLocal name {} (
+          # skip extraction caching on Darwin, because nobody knows how Darwin works
+          (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+            # set up home with pre-unpacked bazel
+            export HOME=$(mktemp -d)
+            mkdir -p ${extracted.install_dir}
+            cp -R ${extracted}/install ${extracted.install_dir}
+
+            # https://stackoverflow.com/questions/47775668/bazel-how-to-skip-corrupt-installation-on-centos6
+            # Bazel checks whether the mtime of the install dir files
+            # is >9 years in the future, otherwise it extracts itself again.
+            # see PosixFileMTime::IsUntampered in src/main/cpp/util
+            # What the hell bazel.
+            ${lr}/bin/lr -0 -U ${extracted.install_dir} | ${xe}/bin/xe -N0 -0 touch --date="9 years 6 months" {}
+          '')
+          +
+          ''
+            # Note https://github.com/bazelbuild/bazel/issues/5763#issuecomment-456374609
+            # about why to create a subdir for the workspace.
+            cp -r ${workspaceDir} wd && chmod u+w wd && cd wd
+
+            ${bazelScript}
+
+            touch $out
+          '');
+
+    in {
+      pythonBinPath = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
+      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
+    };
 
   name = "bazel-${version}";
 
