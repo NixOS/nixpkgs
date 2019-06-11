@@ -15004,6 +15004,18 @@ let
     };
   };
 
+  DeviceSerialPort = buildPerlPackage rec {
+    name = "Device-SerialPort-1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/COOK/${name}.tar.gz";
+      sha256 = "1mz9a2qzkz6fbz76wcwmp48h6ckjxpcazb70q03acklvndy5d4nk";
+    };
+    meta = with stdenv.lib; {
+      description = "Linux/POSIX emulation of Win32::SerialPort functions.";
+      license = with licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ServerStarter = buildPerlModule {
     pname = "Server-Starter";
     version = "0.34";
