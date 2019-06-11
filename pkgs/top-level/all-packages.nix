@@ -9935,7 +9935,7 @@ in
   belr = callPackage ../development/libraries/belr { };
 
   beignet = callPackage ../development/libraries/beignet {
-    inherit (llvmPackages_39) llvm clang-unwrapped;
+    inherit (llvmPackages_6) llvm clang-unwrapped;
   };
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
