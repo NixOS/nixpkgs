@@ -23918,7 +23918,7 @@ in
     inherit wineBuild;
 
     inherit (callPackage ./wine-packages.nix {})
-      minimal base full stable unstable staging;
+      minimal base full stable unstable staging fonts;
   });
 
   winePackages = recurseIntoAttrs (winePackagesFor (config.wine.build or "wine32"));
