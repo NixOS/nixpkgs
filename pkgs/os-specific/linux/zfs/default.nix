@@ -132,7 +132,7 @@ let
         rm -rf $out/share/zfs/zfs-tests
 
         # Add Bash completions.
-        install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d
+        install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
       '';
 
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
