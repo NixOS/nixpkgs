@@ -492,6 +492,8 @@ in {
 
   hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
 
+  http-ece = callPackage ../development/python-modules/http-ece { };
+
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   httptools = callPackage ../development/python-modules/httptools { };
@@ -877,7 +879,11 @@ in {
 
   pytricia =  callPackage ../development/python-modules/pytricia { };
 
+  py-vapid = callPackage ../development/python-modules/py-vapid { };
+
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
+
+  pywebpush = callPackage ../development/python-modules/pywebpush { };
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
 
