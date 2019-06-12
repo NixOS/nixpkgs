@@ -4,7 +4,7 @@ let
   self = with self; {
     buildPecl = import ../build-support/build-pecl.nix {
       inherit php;
-      inherit (pkgs) stdenv autoreconfHook fetchurl;
+      inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
     };
 
     # Wrap mkDerivation to prepend pname with "php-" to make names consistent
@@ -73,12 +73,12 @@ let
   };
 
   composer = mkDerivation rec {
-    version = "1.8.5";
+    version = "1.8.6";
     pname = "composer";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "05qfgh2dz8pjf47ndyhkicqbnqzwypk90cczd4c6d8jl9gbiqk2f";
+      sha256 = "0hnm7njab9nsifpb1qbwx54yfpsi00g8mzny11s13ibjvd9rnvxn";
     };
 
     unpackPhase = ":";
@@ -143,12 +143,17 @@ let
   };
 
   event = buildPecl rec {
-    version = "2.5.1";
+    version = "2.5.2";
     pname = "event";
 
-    sha256 = "0hnvmlbl994fjliqc3c65gv6f6syh9zmlfcbizqs3k67bbmkhiad";
+    sha256 = "0b9zbwyyfcrzs1gcpqn2dkjq6jliw89g2m981f8ildbp84snkpcf";
 
-    configureFlags = [ "--with-event-libevent-dir=${pkgs.libevent.dev}" ];
+    configureFlags = [
+      "--with-event-libevent-dir=${pkgs.libevent.dev}"
+      "--with-event-core"
+      "--with-event-extra"
+      "--with-event-pthreads"
+    ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [ openssl libevent ];
 
@@ -216,7 +221,7 @@ let
 
     sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
 
-    buildInputs = [ pkgs.re2c pkgs.oracle-instantclient ];
+    buildInputs = [ pkgs.oracle-instantclient ];
     configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient}/lib" ];
   };
 
