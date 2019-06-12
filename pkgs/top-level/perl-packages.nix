@@ -14991,6 +14991,20 @@ let
     };
   };
 
+  TermShell = buildPerlModule rec {
+    name = "Term-Shell-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "7d1f824c2db22769b60000b5b9ca2ad469c154939f9ec1cd3f0e06e9c967dda3";
+    };
+    propagatedBuildInputs = [ TermReadKey TextAutoformat ];
+    meta = with stdenv.lib; {
+      homepage = http://metacpan.org/release/Term-Shell;
+      description = "A simple command-line shell framework";
+      license = with licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TermShellUI = buildPerlPackage rec {
     name = "Term-ShellUI-0.92";
     src = fetchurl {
