@@ -8961,6 +8961,8 @@ in
 
   cl-launch = callPackage ../development/tools/misc/cl-launch {};
 
+  cloud-nuke = callPackage ../development/tools/cloud-nuke { };
+
   cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli { };
 
   coan = callPackage ../development/tools/analysis/coan { };
