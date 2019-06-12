@@ -1,4 +1,6 @@
-{stdenv, fetchurl, openssl, libX11, libgssglue, pkgconfig} :
+{stdenv, fetchurl, openssl, libX11, libgssglue, pkgconfig
+, enableCredssp ? (!stdenv.isDarwin)
+} :
 
 stdenv.mkDerivation (rec {
   pname = "rdesktop";
@@ -11,18 +13,19 @@ stdenv.mkDerivation (rec {
   };
 
   nativeBuildInputs = [pkgconfig];
-  buildInputs = [openssl libX11 libgssglue];
+  buildInputs = [openssl libX11]
+    ++ stdenv.lib.optional enableCredssp libgssglue;
 
   configureFlags = [
     "--with-ipv6"
     "--with-openssl=${openssl.dev}"
     "--disable-smartcard"
-  ];
+  ] ++ stdenv.lib.optional (!enableCredssp) "--disable-credssp";
 
   meta = {
     description = "Open source client for Windows Terminal Services";
     homepage = http://www.rdesktop.org/;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     license = stdenv.lib.licenses.gpl2;
   };
 })

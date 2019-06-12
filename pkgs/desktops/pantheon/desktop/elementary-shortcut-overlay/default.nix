@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, libxml2, desktop-file-utils
-, gtk3, glib, granite, libgee, elementary-icon-theme, gobject-introspection, wrapGAppsHook }:
+, gtk3, glib, granite, libgee, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "shortcut-overlay";
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     libxml2
     meson
     ninja

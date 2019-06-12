@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, libgee
-, granite, gtk3, bluez, switchboard, gobject-introspection }:
+{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig
+, vala, libgee, granite, gtk3, bluez, switchboard }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-bluetooth";
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig

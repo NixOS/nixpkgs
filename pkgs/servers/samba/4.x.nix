@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
-, fetchpatch
+{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
+, fetchpatch, fixDarwinDylibNames
 , docbook_xml_dtd_42, readline
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
 , krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
       ./4.x-fix-makeflags-parsing.patch
     ];
 
+  nativeBuildInputs = optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ];
+
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
       docbook_xml_dtd_45 */ readline popt iniparser jansson
@@ -60,6 +62,9 @@ stdenv.mkDerivation rec {
     sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
 
     patchShebangs ./buildtools/bin
+  '' + optionalString stdenv.isDarwin ''
+     substituteInPlace libcli/dns/wscript_build \
+       --replace "bld.SAMBA_BINARY('resolvconftest'" "True or bld.SAMBA_BINARY('resolvconftest'"
   '';
 
   configureFlags =
@@ -70,6 +75,7 @@ stdenv.mkDerivation rec {
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
+      "--disable-rpath"
     ]
     ++ [(if enableDomainController
          then "--with-experimental-mit-ad-dc"

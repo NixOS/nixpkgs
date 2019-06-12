@@ -18,12 +18,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "jellyfin";
-  version = "10.3.4";
+  version = "10.3.5";
 
   # Impossible to build anything offline with dotnet
   src = fetchurl {
     url = "https://github.com/jellyfin/jellyfin/releases/download/v${version}/jellyfin_${version}_portable.tar.gz";
-    sha256 = "0wc69dnc3bvzn26nw9ql814y2v7rypjlrw9iqkdganba9pkxa74j";
+    sha256 = "12asyrj2ax699gaf8402xfx049n6x0v8j5sba229vw1s66c2m8j2";
   };
 
   buildInputs = [

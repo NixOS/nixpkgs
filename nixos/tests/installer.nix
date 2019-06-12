@@ -273,7 +273,7 @@ let
       };
     };
 
-    makeLuksRootTest = name: luksFormatOpts: makeInstallerTest "luksroot-format2"
+    makeLuksRootTest = name: luksFormatOpts: makeInstallerTest name
       { createPartitions = ''
           $machine->succeed(
             "flock /dev/vda parted --script /dev/vda -- mklabel msdos"

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
 , ninja, vala, gtk3, granite, wingpanel, accountsservice
-, libgee, gobject-introspection, elementary-icon-theme, wrapGAppsHook }:
+, libgee, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-session";
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
