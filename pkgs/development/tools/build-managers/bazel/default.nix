@@ -1,5 +1,7 @@
-{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
-, zip, unzip, bash, writeCBin, coreutils
+{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, runCommandCC, makeWrapper
+# this package (through the fixpoint glass)
+, bazel
+, lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # Apple dependencies
 , cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
@@ -14,14 +16,42 @@
 
 let
   srcDeps = [
+    # From: $REPO_ROOT/WORKSPACE
     (fetchurl {
       url = "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
       sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
     })
-
     (fetchurl {
-        url = "https://mirror.bazel.build/bazel_java_tools/java_tools_pkg-0.5.1.tar.gz";
-        sha256 = "1ld8m5cj9j0r474f56pixcfi0xvx3w7pzwahxngs8f6ns0yimz5w";
+        url = "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz";
+        sha256 = "4a1318fed4831697b83ce879b3ab70ae09592b167e5bda8edaff45132d1c3b3f";
+    })
+    (fetchurl {
+        url = "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/f83cb8dd6f5658bc574ccd873e25197055265d1c.tar.gz";
+        sha256 = "ba5d15ca230efca96320085d8e4d58da826d1f81b444ef8afccd8b23e0799b52";
+    })
+    (fetchurl {
+      url = "https://mirror.bazel.build/github.com/bazelbuild/rules_sass/archive/8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz";
+      sha256 = "d868ce50d592ef4aad7dec4dd32ae68d2151261913450fac8390b3fd474bb898";
+    })
+     (fetchurl {
+         url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_linux-v3.1.zip";
+         sha256 = "a0cd51f9db1bf05a722ff7f5c60a07fa1c7d27428fff0815c342d32aa6c53576";
+     })
+    (fetchurl {
+        url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_darwin-v3.1.zip";
+        sha256 = "c646aad8808b8ec5844d6a80a1287fc8e13203375fe40d6af4819eff48b9bbaf";
+    })
+    (fetchurl {
+        url = "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v1.0.zip";
+        sha256 = "cc470e529fafb6165b5be3929ff2d99b38429b386ac100878687416603a67889";
+    })
+    (fetchurl {
+        url = "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip";
+        sha256 = "9b72bb0aea72d7cbcfc82a01b1e25bf3d85f791e790ddec16c65e2d906382ee0";
+    })
+    (fetchurl {
+        url = "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.2.tar.gz";
+        sha256 = "04f85f2dd049e87805511e3babc5cea3f5e72332b1627e34f3a5461cc38e815f";
     })
   ];
 
@@ -63,17 +93,19 @@ let
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
 
+  platforms = lib.platforms.linux ++ lib.platforms.darwin;
+
 in
 stdenv.mkDerivation rec {
 
-  version = "0.24.0";
+  version = "0.26.0";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = [ maintainers.mboes ];
-    platforms = platforms.linux ++ platforms.darwin;
+    inherit platforms;
   };
 
   # Additional tests that check bazel’s functionality. Execute
@@ -81,16 +113,68 @@ stdenv.mkDerivation rec {
   #     nix-build . -A bazel.tests
   #
   # in the nixpkgs checkout root to exercise them locally.
-  passthru.tests = {
-    pythonBinPath = callPackage ./python-bin-path-test.nix {};
-    bashTools = callPackage ./bash-tools-test.nix {};
-  };
+  passthru.tests =
+    let
+      runLocal = name: attrs: script: runCommandCC name ({
+        preferLocalBuild = true;
+        meta.platforms = platforms;
+      } // attrs) script;
+
+      # bazel wants to extract itself into $install_dir/install every time it runs,
+      # so let’s do that only once.
+      extracted =
+        let install_dir =
+          # `install_base` field printed by `bazel info`, minus the hash.
+          # yes, this path is kinda magic. Sorry.
+          "$HOME/.cache/bazel/_bazel_nixbld";
+        in runLocal "bazel-extracted-homedir" { passthru.install_dir = install_dir; } ''
+            export HOME=$(mktemp -d)
+            touch WORKSPACE # yeah, everything sucks
+            install_base="$(${bazel}/bin/bazel info | grep install_base)"
+            # assert it’s actually below install_dir
+            [[ "$install_base" =~ ${install_dir} ]] \
+              || (echo "oh no! $install_base but we are \
+            trying to copy ${install_dir} to $out instead!"; exit 1)
+            cp -R ${install_dir} $out
+          '';
+
+      bazelTest = { name, bazelScript, workspaceDir }:
+        runLocal name {} (
+          # skip extraction caching on Darwin, because nobody knows how Darwin works
+          (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+            # set up home with pre-unpacked bazel
+            export HOME=$(mktemp -d)
+            mkdir -p ${extracted.install_dir}
+            cp -R ${extracted}/install ${extracted.install_dir}
+
+            # https://stackoverflow.com/questions/47775668/bazel-how-to-skip-corrupt-installation-on-centos6
+            # Bazel checks whether the mtime of the install dir files
+            # is >9 years in the future, otherwise it extracts itself again.
+            # see PosixFileMTime::IsUntampered in src/main/cpp/util
+            # What the hell bazel.
+            ${lr}/bin/lr -0 -U ${extracted.install_dir} | ${xe}/bin/xe -N0 -0 touch --date="9 years 6 months" {}
+          '')
+          +
+          ''
+            # Note https://github.com/bazelbuild/bazel/issues/5763#issuecomment-456374609
+            # about why to create a subdir for the workspace.
+            cp -r ${workspaceDir} wd && chmod u+w wd && cd wd
+
+            ${bazelScript}
+
+            touch $out
+          '');
+
+    in {
+      pythonBinPath = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
+      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
+    };
 
   name = "bazel-${version}";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
-    sha256 = "11gsc00ghxqkbci8nrflkwq1lcvqawlgkaryj458b24si6bjl7b2";
+    sha256 = "d26dadf62959255d58e523da3448a6222af768fe1224e321b120c1d5bbe4b4f2";
   };
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
@@ -148,16 +232,15 @@ stdenv.mkDerivation rec {
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
 
-      # 10.10 apple_sdk Foundation doesn't have type arguments on classes
-      # Remove this when we update apple_sdk
-      sed -i -e 's/<.*\*>//g' tools/osx/xcode_locator.m
-
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -e "s;/usr/bin/xcrun clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
         scripts/bootstrap/compile.sh \
         src/tools/xcode/realpath/BUILD \
         src/tools/xcode/stdredirect/BUILD \
         tools/osx/BUILD
+
+      # nixpkgs's libSystem cannot use pthread headers directly, must import GCD headers instead
+      sed -i -e "/#include <pthread\/spawn.h>/i #include <dispatch/dispatch.h>" src/main/cpp/blaze_util_darwin.cc
 
       # clang installed from Xcode has a compatibility wrapper that forwards
       # invocations of gcc to clang, but vanilla clang doesn't
@@ -193,7 +276,7 @@ stdenv.mkDerivation rec {
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/sh ${customBash}/bin/bash
+          --replace /bin/bash ${customBash}/bin/bash
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
@@ -297,7 +380,9 @@ stdenv.mkDerivation rec {
     cp ./bazel_src/scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
   '';
 
-  doInstallCheck = true;
+  # Temporarily disabling for now. A new approach is needed for this derivation as Bazel
+  # accesses the internet during the tests which fails in a sandbox.
+  doInstallCheck = false;
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 
