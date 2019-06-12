@@ -34,12 +34,12 @@ let
       sha256 = "d868ce50d592ef4aad7dec4dd32ae68d2151261913450fac8390b3fd474bb898";
     })
      (fetchurl {
-         url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_linux-v3.1.zip";
-         sha256 = "a0cd51f9db1bf05a722ff7f5c60a07fa1c7d27428fff0815c342d32aa6c53576";
+         url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.2/java_tools_javac10_linux-v3.2.zip";
+         sha256 = "b93e7c556b01815afb6c248aa73f06b7ec912805bde8898eedac1e20d08f2e67";
      })
     (fetchurl {
-        url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_darwin-v3.1.zip";
-        sha256 = "c646aad8808b8ec5844d6a80a1287fc8e13203375fe40d6af4819eff48b9bbaf";
+        url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.2/java_tools_javac10_darwin-v3.2.zip";
+        sha256 = "1437327179b4284f7082cee0bdc3328f040e62fc5cc59c32f6824b8c520e2b7b";
     })
     (fetchurl {
         url = "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v1.0.zip";
@@ -98,7 +98,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  version = "0.26.0";
+  version = "0.26.1";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -174,7 +174,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
-    sha256 = "d26dadf62959255d58e523da3448a6222af768fe1224e321b120c1d5bbe4b4f2";
+    sha256 = "000ny51hwnjyizm1md4w8q7m832jhf3c767pgbvg6nc7h67lzsf0";
   };
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
