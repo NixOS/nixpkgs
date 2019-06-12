@@ -38,6 +38,9 @@ in stdenv.mkDerivation rec {
 
   doBuild = false;
 
+  patches = [
+    ./gcloud-path.patch
+  ];
 
   installPhase = ''
     mkdir -p $out/google-cloud-sdk
