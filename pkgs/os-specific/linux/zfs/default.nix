@@ -130,6 +130,9 @@ let
 
         # Remove tests because they add a runtime dependency on gcc
         rm -rf $out/share/zfs/zfs-tests
+
+        # Add Bash completions.
+        install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d
       '';
 
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
