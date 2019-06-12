@@ -17,7 +17,10 @@
  <warning>
   <para>
    Unfortunately, Nixpkgs currently lacks a way to query available
-   configuration options.
+   configuration options from command line. You can however go to
+   <link xlink:href="https://nixos.org/nixos/options.html"> this page</link> to
+   get the available options for the last stable version, or directly read the
+   module sources.
   </para>
  </warning>
 
