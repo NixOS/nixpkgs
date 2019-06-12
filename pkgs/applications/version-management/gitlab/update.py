@@ -38,7 +38,7 @@ class GitLabRepo:
         versions = filter(self.version_regex.match, versions)
         
         # sort, but ignore v and -ee for sorting comparisons
-        versions.sort(key=lambda x: LooseVersion(x.replace("v", "").replace("-ee", "")), reverse=True)
+        versions = sorted(versions, key=lambda x: LooseVersion(x.replace("v", "").replace("-ee", "")), reverse=True)
         return versions
 
     def get_git_hash(self, rev: str):
