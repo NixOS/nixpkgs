@@ -1745,6 +1745,8 @@ in {
 
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
+  pytest-watch = callPackage ../development/python-modules/pytest-watch { };
+
   pytestpep8 = callPackage ../development/python-modules/pytest-pep8 { };
 
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
