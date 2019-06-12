@@ -1624,6 +1624,8 @@ in {
 
   idna = callPackage ../development/python-modules/idna { };
 
+  infix = callPackage ../development/python-modules/infix { };
+
   mahotas = callPackage ../development/python-modules/mahotas { };
 
   MDP = callPackage ../development/python-modules/mdp {};
