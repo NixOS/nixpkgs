@@ -12230,7 +12230,9 @@ in
   # libGL.so/libEGL.so/... to link agains them. Android NDK provides
   # an OpenGL implementation, we can just use that.
   libGL = if stdenv.hostPlatform.useAndroidPrebuilt then stdenv
-          else mesa.stubs;
+          else callPackage ../development/libraries/mesa/stubs.nix {
+            inherit (darwin.apple_sdk.frameworks) OpenGL;
+          };
 
   # Default libGLU
   libGLU = mesa_glu;
