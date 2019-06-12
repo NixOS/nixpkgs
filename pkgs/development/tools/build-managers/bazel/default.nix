@@ -3,6 +3,8 @@
 , bazel
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, python, gawk, gnused, gnutar, gnugrep, gzip, findutils
+# updater
+, python3, writeScript
 # Apple dependencies
 , cctools, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
@@ -15,45 +17,35 @@
 }:
 
 let
-  srcDeps = [
-    # From: $REPO_ROOT/WORKSPACE
-    (fetchurl {
-      url = "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
-      sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
-    })
-    (fetchurl {
-        url = "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz";
-        sha256 = "4a1318fed4831697b83ce879b3ab70ae09592b167e5bda8edaff45132d1c3b3f";
-    })
-    (fetchurl {
-        url = "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/f83cb8dd6f5658bc574ccd873e25197055265d1c.tar.gz";
-        sha256 = "ba5d15ca230efca96320085d8e4d58da826d1f81b444ef8afccd8b23e0799b52";
-    })
-    (fetchurl {
-      url = "https://mirror.bazel.build/github.com/bazelbuild/rules_sass/archive/8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz";
-      sha256 = "d868ce50d592ef4aad7dec4dd32ae68d2151261913450fac8390b3fd474bb898";
-    })
-     (fetchurl {
-         url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.2/java_tools_javac10_linux-v3.2.zip";
-         sha256 = "b93e7c556b01815afb6c248aa73f06b7ec912805bde8898eedac1e20d08f2e67";
-     })
-    (fetchurl {
-        url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.2/java_tools_javac10_darwin-v3.2.zip";
-        sha256 = "1437327179b4284f7082cee0bdc3328f040e62fc5cc59c32f6824b8c520e2b7b";
-    })
-    (fetchurl {
-        url = "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v1.0.zip";
-        sha256 = "cc470e529fafb6165b5be3929ff2d99b38429b386ac100878687416603a67889";
-    })
-    (fetchurl {
-        url = "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip";
-        sha256 = "9b72bb0aea72d7cbcfc82a01b1e25bf3d85f791e790ddec16c65e2d906382ee0";
-    })
-    (fetchurl {
-        url = "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.2.tar.gz";
-        sha256 = "04f85f2dd049e87805511e3babc5cea3f5e72332b1627e34f3a5461cc38e815f";
-    })
-  ];
+  version = "0.26.1";
+
+  src = fetchurl {
+    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+    sha256 = "000ny51hwnjyizm1md4w8q7m832jhf3c767pgbvg6nc7h67lzsf0";
+  };
+
+  # Update with `eval $(nix-build -A bazel.updater)`,
+  # then add new dependencies from the dict in ./src-deps.json as required.
+  srcDeps =
+    let
+      srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
+      toFetchurl = d: fetchurl {
+        name = d.name;
+        urls = d.urls;
+        sha256 = d.sha256;
+      };
+    in map toFetchurl [
+      srcs.desugar_jdk_libs
+      srcs.io_bazel_skydoc
+      srcs.bazel_skylib
+      srcs.io_bazel_rules_sass
+      (if stdenv.hostPlatform.isDarwin
+       then srcs.${"java_tools_javac10_darwin-v3.2.zip"}
+       else srcs.${"java_tools_javac10_linux-v3.2.zip"})
+      srcs.${"coverage_output_generator-v1.0.zip"}
+      srcs.build_bazel_rules_nodejs
+      srcs.${"android_tools_pkg-0.2.tar.gz"}
+    ];
 
   distDir = runCommand "bazel-deps" {} ''
     mkdir -p $out
@@ -97,8 +89,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-
-  version = "0.26.1";
+  name = "bazel-${version}";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -107,6 +98,14 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.mboes ];
     inherit platforms;
   };
+
+  inherit src;
+  sourceRoot = ".";
+
+  patches = [
+    ./python-stub-path-fix.patch
+  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
+
 
   # Additional tests that check bazel’s functionality. Execute
   #
@@ -176,22 +175,18 @@ stdenv.mkDerivation rec {
       bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
     };
 
-  name = "bazel-${version}";
-
-  src = fetchurl {
-    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
-    sha256 = "000ny51hwnjyizm1md4w8q7m832jhf3c767pgbvg6nc7h67lzsf0";
-  };
+  # update the list of workspace dependencies
+  passthru.updater = writeScript "update-bazel-deps.sh" ''
+    #!${runtimeShell}
+    cat ${runCommand "bazel-deps.json" {} ''
+        ${unzip}/bin/unzip ${src} WORKSPACE
+        ${python3}/bin/python3 ${./update-srcDeps.py} ./WORKSPACE > $out
+    ''} > ${builtins.toString ./src-deps.json}
+  '';
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Bazel starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
-
-  sourceRoot = ".";
-
-  patches = [
-    ./python-stub-path-fix.patch
-  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
