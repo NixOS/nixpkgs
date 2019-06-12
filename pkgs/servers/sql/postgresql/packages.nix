@@ -9,6 +9,8 @@ self: super: {
 
     pg_auto_failover = super.callPackage ./ext/pg_auto_failover.nix { };
 
+    pg_bigm = super.callPackage ./ext/pg_bigm.nix { };
+
     pg_repack = super.callPackage ./ext/pg_repack.nix { };
 
     pg_similarity = super.callPackage ./ext/pg_similarity.nix { };
