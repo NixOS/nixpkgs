@@ -259,6 +259,30 @@
       (<literal>/var/lib/systemd/timesync</literal>), if required.
     </para>
   </listitem>
- </itemizedlist>
+  <listitem>
+    <para>
+      Since version 0.1.19, <literal>cargo-vendor</literal> honors package
+      includes that are specified in the <filename>Cargo.toml</filename>
+      file of Rust crates. <literal>rustPlatform.buildRustPackage</literal> uses
+      <literal>cargo-vendor</literal> to collect and build dependent crates.
+      Since this change in <literal>cargo-vendor</literal> changes the set of
+      vendored files for most Rust packages, the hash that use used to verify
+      the dependencies, <literal>cargoSha256</literal>, also changes.
+    </para>
+    <para>
+      The <literal>cargoSha256</literal> hashes of all in-tree derivations that
+      use <literal>buildRustPackage</literal> have been updated to reflect this
+      change. However, third-party derivations that use
+      <literal>buildRustPackage</literal> may have to be updated as well.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The default resample-method for PulseAudio has been changed from the upstream default <literal>speex-float-1</literal>
+      to <literal>speex-float-5</literal>. Be aware that low-powered ARM-based and MIPS-based boards will struggle with this
+      so you'll need to set <option>hardware.pulseaudio.daemon.config.resample-method</option> back to <literal>speex-float-1</literal>.
+    </para>
+   </listitem>
+  </itemizedlist>
  </section>
 </section>

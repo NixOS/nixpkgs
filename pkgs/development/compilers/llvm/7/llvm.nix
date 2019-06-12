@@ -84,6 +84,14 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+  '' + optionalString stdenv.hostPlatform.isAarch32 ''
+    # skip failing X86 test cases on armv7l
+    rm test/DebugInfo/X86/debug_addr.ll
+    rm test/tools/llvm-dwarfdump/X86/debug_addr.s
+    rm test/tools/llvm-dwarfdump/X86/debug_addr_address_size_mismatch.s
+    rm test/tools/llvm-dwarfdump/X86/debug_addr_dwarf4.s
+    rm test/tools/llvm-dwarfdump/X86/debug_addr_unsupported_version.s
+    rm test/tools/llvm-dwarfdump/X86/debug_addr_version_mismatch.s
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';
