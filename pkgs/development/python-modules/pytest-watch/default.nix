@@ -21,7 +21,7 @@ buildPythonPackage rec {
   
   meta = with lib; {
     homepage = "https://github.com/joeyespo/pytest-watch";
-    description = "Local continuous test runner with pytest and watchdog.";
+    description = "Local continuous test runner with pytest and watchdog";
     license = licenses.mit;
     maintainers = with maintainers; [ dmvianna ];
   };
