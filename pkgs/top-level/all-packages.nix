@@ -9131,6 +9131,8 @@ in
 
   drip = callPackage ../development/tools/drip { };
 
+  drm_info = callPackage ../development/tools/drm_info { };
+
   drush = callPackage ../development/tools/misc/drush { };
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
