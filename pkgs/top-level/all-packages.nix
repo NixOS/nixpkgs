@@ -6025,6 +6025,8 @@ in
 
   super-user-spark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
 
+  svgbob = callPackage ../tools/graphics/svgbob { };
+
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
