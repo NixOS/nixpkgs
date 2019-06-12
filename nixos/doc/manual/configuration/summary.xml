@@ -215,6 +215,17 @@ xlink:href="http://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
      </entry>
      <entry>Apply a function to every element of a list (evaluates to <literal>[ 2 4 6 ]</literal>)</entry>
     </row>
+    <row>
+     <entry><literal>&lt;foo/bar&gt;</literal>
+     </entry>
+     <entry>Search in the environment variable <envar>NIX_PATH</envar> a
+        path containing <filename>foo/bar</filename> and returns the absolute
+        path of the <filename>foo/bar</filename> file/folder. If
+        <envar>NIX_PATH</envar> contains an entry
+        <literal>foo=/mypath/</literal>, it will instead try the path
+        <filename>/mypath/bar</filename>. Fore more details, see
+        <link xlink:href="https://nixos.org/nix/manual/#sec-common-env"><envar>NIX_PATH</envar> documentation</link>.</entry>
+    </row>
 <!--
       <row>
         <entry><literal>throw "Urgh"</literal></entry>

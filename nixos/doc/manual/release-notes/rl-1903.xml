@@ -63,15 +63,14 @@
     </para>
    </listitem>
    <listitem>
-     <para>
-       There is now a set of <option>confinement</option> options for
-       <option>systemd.services</option>, which allows to restrict services
-       into a <citerefentry>
-        <refentrytitle>chroot</refentrytitle>
-        <manvolnum>2</manvolnum>
-      </citerefentry>ed environment that only contains the store paths from
-      the runtime closure of the service.
-     </para>
+    <para>
+     There is now a set of <option>confinement</option> options for
+     <option>systemd.services</option>, which allows to restrict services into
+     a <citerefentry>
+     <refentrytitle>chroot</refentrytitle>
+     <manvolnum>2</manvolnum> </citerefentry>ed environment that only contains
+     the store paths from the runtime closure of the service.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -523,17 +522,18 @@
    </listitem>
    <listitem>
     <para>
-      The option <literal>users.ldap.bind.password</literal> was renamed to <literal>users.ldap.bind.passwordFile</literal>,
-      and needs to be readable by the <literal>nslcd</literal> user.
-      Same applies to the new <literal>users.ldap.daemon.rootpwmodpwFile</literal> option.
+     The option <literal>users.ldap.bind.password</literal> was renamed to
+     <literal>users.ldap.bind.passwordFile</literal>, and needs to be readable
+     by the <literal>nslcd</literal> user. Same applies to the new
+     <literal>users.ldap.daemon.rootpwmodpwFile</literal> option.
     </para>
    </listitem>
    <listitem>
-     <para>
-       <literal>nodejs-6_x</literal> is end-of-life.
-       <literal>nodejs-6_x</literal>, <literal>nodejs-slim-6_x</literal> and
-       <literal>nodePackages_6_x</literal> are removed.
-     </para>
+    <para>
+     <literal>nodejs-6_x</literal> is end-of-life.
+     <literal>nodejs-6_x</literal>, <literal>nodejs-slim-6_x</literal> and
+     <literal>nodePackages_6_x</literal> are removed.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
