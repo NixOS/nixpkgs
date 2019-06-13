@@ -5849,7 +5849,6 @@ broken-packages:
   - hslinks
   - hslogger-reader
   - hslogstash
-  - hslua-module-system
   - hsluv-haskell
   - hsmagick
   - HSmarty
