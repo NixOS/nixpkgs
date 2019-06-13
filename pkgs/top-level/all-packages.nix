@@ -23620,8 +23620,6 @@ in
 
   pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
 
-  phabricator = callPackage ../misc/phabricator { };
-
   physlock = callPackage ../misc/screensavers/physlock { };
 
   pjsip = callPackage ../applications/networking/pjsip { };
