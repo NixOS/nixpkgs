@@ -189,12 +189,12 @@ sub pciCheck {
     # Can't rely on $module here, since the module may not be loaded
     # due to missing firmware.  Ideally we would check modules.pcimap
     # here.
-    push @attrs, "networking.enableIntel2200BGFirmware = true;" if
+    push @attrs, "hardware.enableRedistributableFirmware = true;" if
         $vendor eq "0x8086" &&
         ($device eq "0x1043" || $device eq "0x104f" || $device eq "0x4220" ||
          $device eq "0x4221" || $device eq "0x4223" || $device eq "0x4224");
 
-    push @attrs, "networking.enableIntel3945ABGFirmware = true;" if
+    push @attrs, "hardware.enableRedistributableFirmware = true;" if
         $vendor eq "0x8086" &&
         ($device eq "0x4229" || $device eq "0x4230" ||
          $device eq "0x4222" || $device eq "0x4227");
