@@ -1333,11 +1333,6 @@
     github = "dmjio";
     name = "David Johnson";
   };
-  dmvianna = {
-    email = "dmlvianna@gmail.com";
-    github = "dmvianna";
-    name = "Daniel Vianna";
-  };
   dochang = {
     email = "dochang@gmail.com";
     github = "dochang";
