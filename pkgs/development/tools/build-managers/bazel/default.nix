@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
 
       # bazel wants to extract itself into $install_dir/install every time it runs,
       # so let’s do that only once.
-      extracted =
+      extracted = bazelPkg:
         let install_dir =
           # `install_base` field printed by `bazel info`, minus the hash.
           # yes, this path is kinda magic. Sorry.
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
         in runLocal "bazel-extracted-homedir" { passthru.install_dir = install_dir; } ''
             export HOME=$(mktemp -d)
             touch WORKSPACE # yeah, everything sucks
-            install_base="$(${bazel}/bin/bazel info | grep install_base)"
+            install_base="$(${bazelPkg}/bin/bazel info | grep install_base)"
             # assert it’s actually below install_dir
             [[ "$install_base" =~ ${install_dir} ]] \
               || (echo "oh no! $install_base but we are \
@@ -138,21 +138,23 @@ stdenv.mkDerivation rec {
             cp -R ${install_dir} $out
           '';
 
-      bazelTest = { name, bazelScript, workspaceDir }:
-        runLocal name {} (
+      bazelTest = { name, bazelScript, workspaceDir, bazelPkg }:
+        let
+          be = extracted bazelPkg;
+        in runLocal name {} (
           # skip extraction caching on Darwin, because nobody knows how Darwin works
           (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
             # set up home with pre-unpacked bazel
             export HOME=$(mktemp -d)
-            mkdir -p ${extracted.install_dir}
-            cp -R ${extracted}/install ${extracted.install_dir}
+            mkdir -p ${be.install_dir}
+            cp -R ${be}/install ${be.install_dir}
 
             # https://stackoverflow.com/questions/47775668/bazel-how-to-skip-corrupt-installation-on-centos6
             # Bazel checks whether the mtime of the install dir files
             # is >9 years in the future, otherwise it extracts itself again.
             # see PosixFileMTime::IsUntampered in src/main/cpp/util
             # What the hell bazel.
-            ${lr}/bin/lr -0 -U ${extracted.install_dir} | ${xe}/bin/xe -N0 -0 touch --date="9 years 6 months" {}
+            ${lr}/bin/lr -0 -U ${be.install_dir} | ${xe}/bin/xe -N0 -0 touch --date="9 years 6 months" {}
           '')
           +
           ''
@@ -165,9 +167,13 @@ stdenv.mkDerivation rec {
             touch $out
           '');
 
+      bazelWithNixHacks = bazel.override { enableNixHacks = true; };
     in {
-      pythonBinPath = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
-      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
+      pythonBinPathWithoutNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
+      bashToolsWithoutNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
+
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
     };
 
   name = "bazel-${version}";
