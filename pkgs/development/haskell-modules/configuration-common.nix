@@ -1273,4 +1273,7 @@ self: super: {
   # https://github.com/hslua/tasty-lua/issues/1
   tasty-lua = dontCheck super.tasty-lua;
 
+  # Test suite won't link for no apparent reason.
+  constraints-deriving = dontCheck super.constraints-deriving;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
