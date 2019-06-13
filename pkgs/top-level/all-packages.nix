@@ -6023,6 +6023,8 @@ in
 
   super-user-spark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
 
+  svgbob = callPackage ../tools/graphics/svgbob { };
+
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
@@ -8845,7 +8847,9 @@ in
 
   bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
 
-  bazel-watcher = callPackage ../development/tools/bazel-watcher { };
+  bazel-watcher = callPackage ../development/tools/bazel-watcher {
+    buildBazelPackage = buildBazelPackage.override { enableNixHacks = false; };
+  };
 
   bazelisk = callPackage ../development/tools/bazelisk { };
 
@@ -16332,6 +16336,8 @@ in
 
   iwona = callPackage ../data/fonts/iwona { };
 
+  jost = callPackage ../data/fonts/jost { };
+
   junicode = callPackage ../data/fonts/junicode { };
 
   kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
@@ -23373,7 +23379,8 @@ in
     nix
     nix1
     nixStable
-    nixUnstable;
+    nixUnstable
+    nixFlakes;
 
   nixops = callPackage ../tools/package-management/nixops { };
 
