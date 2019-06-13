@@ -80,7 +80,7 @@ wrapped-full = runCommand unwrapped.name
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = with luajitPackages; [
       luasec luasocket # trust anchor bootstrap, prefill module
-      lfs # prefill module
+      luafilesystem # prefill module
       http # for http module; brings lots of deps; some are useful elsewhere
     ];
     preferLocalBuild = true;
