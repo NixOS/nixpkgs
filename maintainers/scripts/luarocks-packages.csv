@@ -3,9 +3,13 @@ ansicolors,,,,,
 argparse,,,,,
 basexx,,,,,
 binaryheap,,,,,vcunat
-busted,,http://luarocks.org/manifests/teto,,,
+bit32,,,,lua5_1,lblasc
+busted,,,,,
 cjson,lua-cjson,,,,
-coxpcall,,https://luarocks.org/manifests/hisham,1.17.0-1,,
+compat53,,,,,vcunat
+coxpcall,,,1.17.0-1,,
+cqueues,,,,,vcunat
+cyrussasl,,,,,vcunat
 digestif,,http://luarocks.org/dev,,lua5_3,
 dkjson,,,,,
 fifo,,,,,
@@ -18,6 +22,7 @@ lpeg_patterns,,,,,
 lpeglabel,,,,,
 lpty,,,,,
 lrexlib-gnu,,,,,
+lrexlib-pcre,,,,,vyp
 lrexlib-posix,,,,,
 ltermbox,,,,,
 lua-cmsgpack,,,,,
@@ -27,18 +32,29 @@ lua-messagepack,,,,,
 lua-term,,,,,
 lua-toml,,,,,
 lua-zlib,,,,,koral
-lua_cliargs,,,3.0-1,,
+lua_cliargs,,,,,
 luabitop,,,,,
 luacheck,,,,,
+luadbi,,,,,
+luadbi-mysql,,,,,
+luadbi-postgresql,,,,,
+luadbi-sqlite3,,,,,
 luaevent,,,,,
+luaexpat,,,,,flosse
 luaffi,,http://luarocks.org/dev,,,
+luafilesystem,,,1.7.0-2,,flosse vcunat
+luaossl,,,,lua5_1,vcunat
 luaposix,,,,,vyp lblasc
+luasec,,,,,flosse
+luasocket,,,,,
+luasql-sqlite3,,,,,vyp
+luassert,,,,,
 luasystem,,,,,
 luazip,,,,,
 luuid,,,,,
 luv,,,,,
 markdown,,,,,
-mediator_lua,,http://luarocks.org/manifests/teto,,,
+mediator_lua,,,,,
 mpack,,,,,
 nvim-client,,,,,
 penlight,,,,,
@@ -46,3 +62,4 @@ rapidjson,,,,,
 say,,,,,
 std__debug,std._debug,,,,
 std_normalize,std.normalize,,,,
+stdlib,,,,,vyp
