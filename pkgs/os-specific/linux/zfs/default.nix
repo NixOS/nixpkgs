@@ -133,6 +133,7 @@ let
 
         # Add Bash completions.
         install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
+        (cd $out/share/bash-completion/completions; ln -s zfs zpool)
       '';
 
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
