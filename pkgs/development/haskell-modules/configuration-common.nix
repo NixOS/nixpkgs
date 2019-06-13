@@ -1217,7 +1217,7 @@ self: super: {
 
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  pandoc = doDistribute super.pandoc_2_7_2;
+  pandoc = doDistribute super.pandoc_2_7_3;
   pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_2;
 
   # Current versions of tasty-hedgehog need hedgehog 1.x, which
