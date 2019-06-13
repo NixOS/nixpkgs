@@ -16336,6 +16336,8 @@ in
 
   iwona = callPackage ../data/fonts/iwona { };
 
+  jost = callPackage ../data/fonts/jost { };
+
   junicode = callPackage ../data/fonts/junicode { };
 
   kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
