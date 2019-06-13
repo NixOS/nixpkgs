@@ -43,7 +43,6 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  - ghc-lib-parser ==0.20190523  # newer versions break hlint
   # LTS Haskell 13.25
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
