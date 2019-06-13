@@ -31,6 +31,7 @@ let
 
   testBazel = bazelTest {
     name = "bazel-test-bash-tools";
+    bazelPkg = bazel;
     inherit workspaceDir;
 
     bazelScript = ''

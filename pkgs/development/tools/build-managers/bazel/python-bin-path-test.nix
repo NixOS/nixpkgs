@@ -41,6 +41,7 @@ let
   testBazel = bazelTest {
     name = "bazel-test-builtin-rules";
     inherit workspaceDir;
+    bazelPkg = bazel;
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
