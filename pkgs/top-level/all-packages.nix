@@ -10384,6 +10384,8 @@ in
 
   fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
 
+  fizz = callPackage ../development/libraries/fizz { };
+
   folly = callPackage ../development/libraries/folly { };
 
   folks = callPackage ../development/libraries/folks { };
