@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "scopes";
-  version = "unstable-2019-05-09";
+  version = "unstable-2019-06-13";
 
   src = fetchFromBitbucket {
     owner = "duangle";
     repo = "scopes";
-    rev = "6f44049";
-    sha256 = "1dhvfyj2clkqj1mw83dfzwiqmarfsaj20znrrq6rl15882xw3y2r";
+    rev = "bd29af1";
+    sha256 = "0czhww3mpznapqv9y2sy3ilfzd7q9580scmlvdjz357fkvyr4pra";
   };
 
   nativeBuildInputs = [ genie spirv-tools spirv-cross ];
@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
         sha256 = "1h94n92b6biacbvni2ygqcpdyc8sqr4w3mk7clyijkbhziriphkh";
       };
       inherit clang llvm clangh libch;
+    })
+    (fetchpatch {
+        url = https://bitbucket.org/jacereda/scopes/commits/94d8f2ac1f6c3415d6ae4e319cf7ea91378e25ee/raw;
+        sha256 = "1ikimqz52ndf5gvby3s20z6ljvjg7cqz0f342cccwq16l3lyxnk5";
     })
   ];
 
