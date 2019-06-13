@@ -16,7 +16,8 @@ buildPythonPackage rec {
   };
 
   doCheck = true;
-  buildInputs = with pythonPackages; [ colorama docopt pytest watchdog ];
+  buildInputs = with pythonPackages; [ pytest ];
+  propagatedBuildInputs = with pythonPackages; [ colorama docopt watchdog ];
   
   meta = with lib; {
     homepage = "https://github.com/joeyespo/pytest-watch";
