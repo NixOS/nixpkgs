@@ -21628,6 +21628,8 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
+  cd-hit = callPackage ../applications/science/biology/cd-hit { };
+
   cmtk = callPackage ../applications/science/biology/cmtk { };
 
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
