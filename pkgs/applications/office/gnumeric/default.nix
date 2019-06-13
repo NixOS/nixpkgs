@@ -14,6 +14,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0c8dl1kvnj3g32qy3s92qpqpqfy0in59cx005gjvvzsflahav61h";
   };
 
+  postPatch = "sed '4i#include <math.h>' -i src/numbers.h";
+
   configureFlags = [ "--disable-component" ];
 
   nativeBuildInputs = [ pkgconfig intltool bison itstool wrapGAppsHook ];
