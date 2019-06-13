@@ -1405,11 +1405,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xcalc = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "xcalc-1.0.7";
+    name = "xcalc-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xcalc-1.0.7.tar.bz2;
-      sha256 = "08bzaldi76vrj7350d7b04pq7qa1qhi81x8i806yv42zcp8p3lkh";
+      url = mirror://xorg/individual/app/xcalc-1.1.0.tar.bz2;
+      sha256 = "1sxmlcb0sb3h4z05kl5l0kxnhrc0h8c74p9m3zdc7bv58jaldmym";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

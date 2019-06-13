@@ -101,7 +101,7 @@ rec {
   mergeOneOption = loc: defs:
     if defs == [] then abort "This case should never happen."
     else if length defs != 1 then
-      throw "The unique option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
+      throw "The unique option `${showOption loc}' is defined multiple times, in:\n - ${concatStringsSep "\n - " (getFiles defs)}."
     else (head defs).value;
 
   /* "Merge" option definitions by checking that they all have the same value. */

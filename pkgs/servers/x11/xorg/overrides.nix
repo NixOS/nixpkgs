@@ -699,4 +699,15 @@ self: super:
       rm $out/bin/xkeystone
     '';
   });
+
+  xcalc = super.xcalc.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or [] ++ [
+      "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
+    ];
+    nativeBuildInputs = attrs.nativeBuildInputs or [] ++ [ makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/bin/xcalc \
+        --set XAPPLRESDIR ${placeholder "out"}/share/X11/app-defaults
+    '';
+  });
 }
