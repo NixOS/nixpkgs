@@ -6001,6 +6001,7 @@ broken-packages:
   - hw-dump
   - hw-eliasfano
   - hw-excess
+  - hw-fingertree
   - hw-ip
   - hw-json
   - hw-json-lens
