@@ -10388,6 +10388,8 @@ in
 
   folly = callPackage ../development/libraries/folly { };
 
+  wangle = callPackage ../development/libraries/wangle { };
+
   folks = callPackage ../development/libraries/folks { };
 
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
