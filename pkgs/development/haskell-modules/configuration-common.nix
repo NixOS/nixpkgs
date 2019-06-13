@@ -860,7 +860,7 @@ self: super: {
   # Wrap the generated binaries to include their run-time dependencies in
   # $PATH. Also, cryptol needs a version of sbl that's newer than what we have
   # in LTS-13.x.
-  cryptol = overrideCabal (super.cryptol.override { sbv = self.sbv_8_2; }) (drv: {
+  cryptol = overrideCabal (super.cryptol.override { sbv = self.sbv_8_3; }) (drv: {
     buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
     postInstall = drv.postInstall or "" + ''
       for b in $out/bin/cryptol $out/bin/cryptol-html; do
