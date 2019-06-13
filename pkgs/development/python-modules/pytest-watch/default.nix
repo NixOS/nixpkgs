@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pytest-watch";
   version = "4.2.0";
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +16,7 @@ buildPythonPackage rec {
   };
 
   doCheck = true;
-  propagatedBuildInputs = with pythonPackages; [ colorama docopt pytest watchdog ];
+  buildInputs = with pythonPackages; [ colorama docopt pytest watchdog ];
   
   meta = with lib; {
     homepage = "https://github.com/joeyespo/pytest-watch";
