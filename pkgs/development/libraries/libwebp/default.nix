@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
     ++ optional tiffSupport libtiff
     ++ optional gifSupport giflib;
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Tools and library for the WebP image format";
     homepage = https://developers.google.com/speed/webp/;
