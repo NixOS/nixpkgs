@@ -10388,6 +10388,8 @@ in
 
   folly = callPackage ../development/libraries/folly { };
 
+  rsocket-cpp = callPackage ../development/libraries/rsocket-cpp { };
+
   wangle = callPackage ../development/libraries/wangle { };
 
   folks = callPackage ../development/libraries/folks { };
