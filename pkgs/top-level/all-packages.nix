@@ -15690,6 +15690,10 @@ in
 
   nftables = callPackage ../os-specific/linux/nftables { };
 
+  noah = callPackage ../os-specific/darwin/noah {
+    inherit (darwin.apple_sdk.frameworks) Hypervisor;
+  };
+
   numactl = callPackage ../os-specific/linux/numactl { };
 
   numad = callPackage ../os-specific/linux/numad { };
