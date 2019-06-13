@@ -8849,7 +8849,9 @@ in
 
   bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
 
-  bazel-watcher = callPackage ../development/tools/bazel-watcher { };
+  bazel-watcher = callPackage ../development/tools/bazel-watcher {
+    buildBazelPackage = buildBazelPackage.override { enableNixHacks = false; };
+  };
 
   bazelisk = callPackage ../development/tools/bazelisk { };
 
