@@ -500,6 +500,8 @@ in {
 
   imutils = callPackage ../development/python-modules/imutils { };
 
+  infix = callPackage ../development/python-modules/infix { };
+
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
   intake = callPackage ../development/python-modules/intake { };
