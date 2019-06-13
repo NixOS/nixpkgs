@@ -1,11 +1,8 @@
-{ stdenv, callPackage }:
+{ stdenv, mingw_w64 }:
 
-let
-  inherit (callPackage ./common.nix {}) name src;
-
-in stdenv.mkDerivation {
-  name = name + "-pthreads";
-  inherit src;
+stdenv.mkDerivation {
+  name = "${mingw_w64.name}-pthreads";
+  inherit (mingw_w64) src meta;
 
   preConfigure = ''
     cd mingw-w64-libraries/winpthreads

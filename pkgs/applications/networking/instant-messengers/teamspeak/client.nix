@@ -31,7 +31,7 @@ in
 stdenv.mkDerivation rec {
   name = "teamspeak-client-${version}";
 
-  version = "3.1.8";
+  version = "3.1.10";
 
   src = fetchurl {
     urls = [
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
       "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
     ];
     sha256 = if stdenv.is64bit
-                then "0yav71sfklqg2k3ayd0bllsixd486l0587s5ygjlc9gnchw3zg6z"
-                else "1agf6jf5hkyxazxqcnvcjfb263p5532ahi7h4rkifnnvqay36v5i";
+                then "17gylj5pxba14c1c98b5rdyyb87c58z8l8yrd1iw5k293wf7iwv3"
+                else "1bkn3ykrc73wr02qaqwpr4garlqm3424y3dm2fjx6lqcfzm3ms2k";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
       rm *.so.* *.so
       rm QtWebEngineProcess
       rm qt.conf
+      rm -r platforms # contains libqxcb.so
 
       # Install files.
       mkdir -p $out/lib/teamspeak
@@ -91,7 +92,7 @@ stdenv.mkDerivation rec {
 
       wrapProgram $out/bin/ts3client \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-        --set QT_PLUGIN_PATH "$out/lib/teamspeak/platforms" \
+        --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}" \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
 

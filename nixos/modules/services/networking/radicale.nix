@@ -59,7 +59,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "radicale";
         uid = config.ids.uids.radicale;
         description = "radicale user";
@@ -67,7 +67,7 @@ in
         createHome = true;
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "radicale";
         gid = config.ids.gids.radicale;
       };

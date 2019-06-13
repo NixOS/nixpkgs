@@ -13,8 +13,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ readline ];
 
   meta = {
-    homepage = http://www.nongnu.org/renameutils/;
+    homepage = https://www.nongnu.org/renameutils/;
     description = "A set of programs to make renaming of files faster";
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

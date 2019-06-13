@@ -6,6 +6,7 @@
 , enableAsioLib ? false, boost ? null
 , enableGetAssets ? false, libxml2 ? null
 , enableJemalloc ? false, jemalloc ? null
+, enableApp ? !stdenv.hostPlatform.isWindows
 }:
 
 assert enableHpack -> jansson != null;
@@ -16,12 +17,12 @@ assert enableJemalloc -> jemalloc != null;
 let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
-  name = "nghttp2-${version}";
-  version = "1.24.0";
+  pname = "nghttp2";
+  version = "1.38.0";
 
   src = fetchurl {
-    url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    sha256 = "18ys6p39yvm9wjjzhhlw35c9m8f5gf4dk9jbshibj19q4js1pnv9";
+    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    sha256 = "156r3myrglkmrdv4zh151g9zcr7b92zjn15wx5i9ypw0naanjc4g";
   };
 
   outputs = [ "bin" "out" "dev" "lib" ];
@@ -35,8 +36,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--with-spdylay=no" "--disable-examples" "--disable-python-bindings" "--enable-app" ]
-    ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib";
+  configureFlags = [
+    "--with-spdylay=no"
+    "--disable-examples"
+    "--disable-python-bindings"
+    (stdenv.lib.enableFeature enableApp "app")
+  ] ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib";
 
   #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
 
@@ -45,6 +50,5 @@ stdenv.mkDerivation rec {
     description = "A C implementation of HTTP/2";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

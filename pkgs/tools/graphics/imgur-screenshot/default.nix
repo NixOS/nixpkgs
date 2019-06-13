@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool for easy screencapping and uploading to imgur";
-    homepage = https://https://github.com/jomo/imgur-screenshot/;
+    homepage = https://github.com/jomo/imgur-screenshot/;
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ lw ];

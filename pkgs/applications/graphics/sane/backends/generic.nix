@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv
 , avahi, libjpeg, libusb1, libv4l, net_snmp, libpng
 , gettext, pkgconfig
 

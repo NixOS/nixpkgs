@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, cmake, xlibsWrapper, libGLU_combined, SDL, openal, freealut, libogg, libvorbis }:
+{ fetchurl, stdenv, cmake, xlibsWrapper, libGLU_combined, SDL, openal, freealut, libogg, libvorbis, runtimeShell }:
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp AstroMenace $out
     cp gamedata.vfs $out
     cat > $out/bin/AstroMenace << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     $out/AstroMenace --dir=$out
     EOF
     chmod 755 $out/bin/AstroMenace
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Hardcore 3D space shooter with spaceship upgrade possibilities";
-    homepage = http://www.viewizard.com/;
+    homepage = https://www.viewizard.com/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
   };

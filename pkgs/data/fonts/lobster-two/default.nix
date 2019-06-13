@@ -70,10 +70,11 @@ in
     outputHash = "0if9l8pzwgfnbdjg5yblcy08dwn9yj3wzz29l0fycia46xlzd4ym";
 
     meta = with stdenv.lib; {
-      homepage = http://www.impallari.com/lobstertwo;
+      homepage = https://github.com/librefonts/lobstertwo;
       description = "Script font with many ligatures";
       license = licenses.ofl;
       platforms = platforms.all;
       maintainers = [maintainers.rycee];
+      broken = true; # googlecode.com RIP; can be built from sources
     };
   }

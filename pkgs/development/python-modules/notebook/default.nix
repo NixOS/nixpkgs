@@ -20,15 +20,16 @@
 , requests
 , send2trash
 , pexpect
+, prometheus_client
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.4.1";
+  version = "5.7.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01l6yp78sp27vns4cxh8ybr7x0pixxn97cp0i3w6s0lv1v8l6qbx";
+    sha256 = "573e0ae650c5d76b18b6e564ba6d21bf321d00847de1d215b418acb64f056eb8";
   };
 
   LC_ALL = "en_US.utf8";
@@ -39,11 +40,18 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
+    prometheus_client
   ];
 
   # disable warning_filters
   preCheck = lib.optionalString (!isPy3k) ''
     echo "" > setup.cfg
+  '';
+
+  postPatch = ''
+    # Remove selenium tests
+    rm -rf notebook/tests/selenium
+
   '';
 
   checkPhase = ''
@@ -58,7 +66,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh globin ];
   };

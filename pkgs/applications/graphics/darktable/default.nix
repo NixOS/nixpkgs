@@ -3,38 +3,47 @@
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
 , libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
 , openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
+, ocl-icd, pcre, gtk-mac-integration, isocodes
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.2";
+  version = "2.6.2";
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "10asz918kv2248px3w9bn5k8cfrad5xrci58x9y61l0yf5hcpk0r";
+    sha256 = "0igvgyd042j7hm4y8fcm6dc1qqjs4d1r7y6f0pzpa0x416xyzfcw";
   };
 
   nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
 
   buildInputs = [
-    cairo curl exiv2 glib gtk3 ilmbase lcms2 lensfun libX11 libexif
+    cairo curl exiv2 glib gtk3 ilmbase lcms2 lensfun libexif
     libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
     libsoup graphicsmagick json-glib openjpeg lua pugixml
-    colord colord-gtk libwebp libsecret gnome3.adwaita-icon-theme
-    osm-gps-map
-  ];
+    libwebp libsecret gnome3.adwaita-icon-theme osm-gps-map pcre isocodes
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    colord colord-gtk libX11 ocl-icd
+  ] ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration;
 
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DUSE_COLORD=OFF"
+    "-DUSE_KWALLET=OFF"
   ];
+
 
   # darktable changed its rpath handling in commit
   # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the
   # binaries can't find libdarktable.so, so change LD_LIBRARY_PATH in
   # the wrappers:
-  preFixup = ''
+  preFixup = let
+    libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    libPathPrefix = "$out/lib/darktable" + stdenv.lib.optionalString stdenv.isLinux ":${ocl-icd}/lib";
+  in ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH ":" "$out/lib/darktable"
+      --prefix ${libPathEnvVar} ":" "${libPathPrefix}"
     )
   '';
 
@@ -42,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = https://www.darktable.org;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ goibhniu rickynils flosse mrVanDalo ];
   };
 }

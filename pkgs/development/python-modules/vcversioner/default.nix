@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "vcversioner";
   version = "2.16.0.0";
 

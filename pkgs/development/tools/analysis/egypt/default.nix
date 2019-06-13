@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, buildPerlPackage }:
+{ stdenv, fetchurl, perlPackages }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "egypt-${version}";
   version = "1.10";
 
   src = fetchurl {
     sha256 = "0r0wj6v8z9fzlh9pb5617kyjdf92ppmlbzajaarrq729bbb6ln5m";
-    url = "http://www.gson.org/egypt/download/${name}.tar.gz";
+    url = "https://www.gson.org/egypt/download/${name}.tar.gz";
   };
 
   outputs = [ "out" ];
@@ -27,6 +27,6 @@ buildPerlPackage rec {
     '';
     homepage = http://www.gson.org/egypt/;
     license = with licenses; [ artistic1 gpl1Plus ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

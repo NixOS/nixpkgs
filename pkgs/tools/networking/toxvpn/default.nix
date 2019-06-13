@@ -1,25 +1,22 @@
 { stdenv, fetchFromGitHub, cmake, nlohmann_json,
-libtoxcore, libsodium, systemd, libcap, zeromq }:
+  libtoxcore, libsodium, libcap, zeromq,
+  systemd ? null }:
 
 with stdenv.lib;
 
-let
-  systemdOrNull = if stdenv.system == "x86_64-darwin" then null else systemd;
-  if_systemd = optional (systemdOrNull != null);
-in stdenv.mkDerivation rec {
-  name = "toxvpn-${version}";
-  version = "2017-06-25";
+stdenv.mkDerivation rec {
+  name = "toxvpn-2018-04-17";
 
   src = fetchFromGitHub {
     owner  = "cleverca22";
     repo   = "toxvpn";
-    rev    = "7bd6f169d69c511affa8c9672e8f794e4e205a44";
-    sha256 = "1km8hkrxmrnca1b49vbw5kyldayaln5plvz78vhf8325r6c5san0";
+    rev    = "dc766f98888f500ea51f002f59007eac3f3a0a06";
+    sha256 = "19br3fmrdm45fvymj9kvwikkn8m657yd5fkhx6grv35ckrj83mxz";
   };
 
   buildInputs = [ libtoxcore nlohmann_json libsodium zeromq ]
-    ++ if_systemd systemd
-    ++ optional (stdenv.system != "x86_64-darwin") libcap;
+    ++ optionals stdenv.isLinux [ libcap systemd ];
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = optional stdenv.isLinux [ "-DSYSTEMD=1" ];

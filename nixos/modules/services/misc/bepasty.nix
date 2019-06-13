@@ -2,10 +2,10 @@
 
 with lib;
 let
-  gunicorn = pkgs.pythonPackages.gunicorn;
+  gunicorn = pkgs.python3Packages.gunicorn;
   bepasty = pkgs.bepasty;
-  gevent = pkgs.pythonPackages.gevent;
-  python = pkgs.pythonPackages.python;
+  gevent = pkgs.python3Packages.gevent;
+  python = pkgs.python3Packages.python;
   cfg = config.services.bepasty;
   user = "bepasty";
   group = "bepasty";
@@ -143,7 +143,7 @@ in
           serviceConfig = {
             Type = "simple";
             PrivateTmp = true;
-            ExecStartPre = assert !isNull server.secretKeyFile; pkgs.writeScript "bepasty-server.${name}-init" ''
+            ExecStartPre = assert server.secretKeyFile != null; pkgs.writeScript "bepasty-server.${name}-init" ''
               #!/bin/sh
               mkdir -p "${server.workDir}"
               mkdir -p "${server.dataDir}"
@@ -168,14 +168,14 @@ in
         })
     ) cfg.servers;
 
-    users.extraUsers = [{
+    users.users = [{
       uid = config.ids.uids.bepasty;
       name = user;
       group = group;
       home = default_home;
     }];
 
-    users.extraGroups = [{
+    users.groups = [{
       name = group;
       gid = config.ids.gids.bepasty;
     }];

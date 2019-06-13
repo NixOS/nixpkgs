@@ -1,22 +1,23 @@
-{ stdenv, pythonPackages, runCommand, curl }:
+{ stdenv, pythonPackages }:
 
 with stdenv.lib;
 with pythonPackages;
 
-let
-  version = "1.5.0";
-in buildPythonApplication rec {
-  inherit version;
+buildPythonApplication rec {
   pname = "pantsbuild.pants";
-  name  = "${pname}-${version}";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7c0a1206594c615fce0a7f6daa4ea1028645bc20afa5599c2cf0ad7c06223fa7";
+    sha256 = "1d7ff1383287c8e72f2c9855cfef982d362274a64e2707a93c070f988ba80a37";
   };
+
+  # No tests
+  doCheck = false;
 
   prePatch = ''
     sed -E -i "s/'([[:alnum:].-]+)[=><][[:digit:]=><.,]*'/'\\1'/g" setup.py
+    substituteInPlace setup.py --replace "requests[security]<2.19,>=2.5.0" "requests[security]<2.22,>=2.5.0"
   '';
 
   # Unnecessary, and causes some really weird behavior around .class files, which
@@ -27,7 +28,7 @@ in buildPythonApplication rec {
     twitter-common-collections setproctitle ansicolors packaging pathspec
     scandir twitter-common-dirutil psutil requests pystache pex docutils
     markdown pygments twitter-common-confluence fasteners pywatchman
-    futures cffi subprocess32 contextlib2 faulthandler pyopenssl
+    futures cffi subprocess32 contextlib2 faulthandler pyopenssl wheel
   ];
 
   meta = {
@@ -35,6 +36,6 @@ in buildPythonApplication rec {
     homepage    = "https://www.pantsbuild.org/";
     license     = licenses.asl20;
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.unix;
+    broken = true;
   };
 }

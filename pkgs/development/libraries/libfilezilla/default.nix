@@ -1,13 +1,16 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, pkgconfig, nettle }:
 
 stdenv.mkDerivation rec {
-  name = "libfilezilla-${version}";
-  version = "0.12.1";
+  pname = "libfilezilla";
+  version = "0.16.0";
 
   src = fetchurl {
-    url = "http://download.filezilla-project.org/libfilezilla/${name}.tar.bz2";
-    sha256 = "1gbqm42dd0m3fvqz3bk53889479dvn8679zp6ba8a9q2br2wkvv0";
+    url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "1fd71vmllzvljff5l5ka5wnzbdsxx4i54dpxpklydmbsqpilnv1v";
   };
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ nettle ];
 
   meta = with stdenv.lib; {
     homepage = https://lib.filezilla-project.org/;

@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       It is more than a routed replacement, it can be used as a Route Server and
       a Route Reflector.
     '';
-    homepage = http://www.nongnu.org/quagga/;
+    homepage = https://www.nongnu.org/quagga/;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ tavyc ];

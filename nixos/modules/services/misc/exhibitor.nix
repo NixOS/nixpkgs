@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.exhibitor;
-  exhibitor = cfg.package;
   exhibitorConfig = ''
     zookeeper-install-directory=${cfg.baseDir}/zookeeper
     zookeeper-data-directory=${cfg.zkDataDir}
@@ -406,9 +405,12 @@ in
         cp -Rf ${pkgs.zookeeper}/* ${cfg.baseDir}/zookeeper
         chown -R zookeeper ${cfg.baseDir}/zookeeper/conf
         chmod -R u+w ${cfg.baseDir}/zookeeper/conf
+        replace_what=$(echo ${pkgs.zookeeper} | sed 's/[\/&]/\\&/g')
+        replace_with=$(echo ${cfg.baseDir}/zookeeper | sed 's/[\/&]/\\&/g')
+        sed -i 's/'"$replace_what"'/'"$replace_with"'/g' ${cfg.baseDir}/zookeeper/bin/zk*.sh
       '';
     };
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "zookeeper";
       uid = config.ids.uids.zookeeper;
       description = "Zookeeper daemon user";

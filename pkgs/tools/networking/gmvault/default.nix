@@ -12,8 +12,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = with pythonPackages; [ gdata IMAPClient Logbook
-    argparse chardet ];
+  propagatedBuildInputs = with pythonPackages; [ gdata IMAPClient Logbook chardet ];
 
   startScript = ./gmvault.py;
 

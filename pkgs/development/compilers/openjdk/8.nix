@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, bash, cpio, pkgconfig, file, which, unzip, zip, cups, freetype
 , alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib, lndir
-, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor
+, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
@@ -21,45 +21,44 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "172";
-  build = "02";
+  update = "212";
+  build = "ga";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
-  repover = "jdk8u${update}-b${build}";
-  paxflags = if stdenv.isi686 then "msp" else "m";
+  repover = "jdk8u${update}-${build}";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "0y28by4ifsaxhfrzq35654i8h9jjgvrw51hbxyg8pgfink0n30r2";
+             sha256 = "00rl33h4cl4b4p3hcid765h38x2jdkb14ylh8k1zhnd0ka76crgg";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "0rxp4920xpd9khdg2ia1v1djcw1nndsjfis68whawi7s95zwpxy5";
+             sha256 = "0va6g2dccf1ph6mpwxswbks5axp7zz258cl89qq9r8jn4ni04agw";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "0sdf6rww290wgfqhaix1vjac244drdgg7hapb67wgj733kkdl711";
+             sha256 = "0sgr9df10hs49pjld6c6kr374v4zwd9s52pc3drz68zrlk71ja4s";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "0vl3aryw3nclqprc35b2iriwfyr9fch3x8snjry1z5ajbdyd5c8b";
+             sha256 = "1hq0sr4k4k4iv815kg72i9lvd7n7mn5pmw96ckk9p1rnyagn9z03";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "1y5fnzxdll3q0jgqxsap3xb21bm1napdlqzs7h6c2l5qldyvw692";
+             sha256 = "1fc59jrbfq8l067mggzy5dnrvni7lwaqd7hahs4nqv87kyrfg545";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "1yg1ik1klg8pl4b7izi2waqhs7vr6ln3fzc4k1siir4va5qhrhlm";
+             sha256 = "1ka2fvyxdmpfhk814s314gx53yvdr19vpsqygx283v9nbq90l1yg";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "03srcj6hhvbdg1iqw85mfm1pwd6yvpykyz5nn4ydf930g4dyxfkf";
+             sha256 = "15vlgs5v2ax8sqwh7bg50fnlrwlpnkp0myzrvpqs1mcza8pyasp8";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "12nn02jiq3vqgwhqh5yvxq1k92fy3n0jpvfpj1npq9fvimywry2k";
+             sha256 = "1jzn0yi0v6lda5y8ib07g1p6zymnbcx9yy6iz8niggpm7205y93h";
           };
   openjdk8 = stdenv.mkDerivation {
-    name = "openjdk-8u${update}b${build}";
+    name = "openjdk-8u${update}-${build}";
 
     srcs = [ jdk8 langtools hotspot corba jdk jaxws jaxp nashorn ];
     sourceRoot = ".";
@@ -70,7 +69,7 @@ let
     buildInputs = [
       cpio file which unzip zip perl bootjdk zlib cups freetype alsaLib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
-      libXi libXinerama libXcursor lndir fontconfig
+      libXi libXinerama libXcursor libXrandr lndir fontconfig
     ] ++ lib.optionals (!minimal && enableGnome2) [
       gtk2 gnome_vfs GConf glib
     ];
@@ -96,10 +95,13 @@ let
       ./swing-use-gtk-jdk8.patch
     ];
 
+    # Hotspot cares about the host(!) version otherwise
+    DISABLE_HOTSPOT_OS_VERSION_CHECK = "ok";
+
     preConfigure = ''
       chmod +x configure
       substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
-      substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "$shell"
+      substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "${stdenv.shell}"
       substituteInPlace hotspot/make/linux/makefiles/dtrace.make --replace /usr/include/sys/sdt.h "/no-such-path"
     ''
     # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
@@ -132,6 +134,8 @@ let
     ];
 
     buildFlags = [ "all" ];
+
+    doCheck = false; # fails with "No rule to make target 'y'."
 
     installPhase = ''
       mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
@@ -174,14 +178,6 @@ let
       rm -rf $out/lib/openjdk/jre/lib/cmm
       ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
 
-      # Set PaX markings
-      exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-      echo "to mark: *$exes*"
-      for file in $exes; do
-        echo "marking *$file*"
-        paxmark ${paxflags} "$file"
-      done
-
       # Remove duplicate binaries.
       for i in $(cd $out/lib/openjdk/bin && echo *); do
         if [ "$i" = java ]; then continue; fi
@@ -204,7 +200,7 @@ let
 
     # FIXME: this is unnecessary once the multiple-outputs branch is merged.
     preFixup = ''
-      prefix=$jre stripDirs "$stripDebugList" "''${stripDebugFlags:--S}"
+      prefix=$jre stripDirs "$STRIP" "$stripDebugList" "''${stripDebugFlags:--S}"
       patchELF $jre
       propagatedBuildInputs+=" $jre"
 

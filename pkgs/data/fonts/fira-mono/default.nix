@@ -3,17 +3,17 @@
 fetchzip {
   name = "fira-mono-3.206";
 
-  url = http://www.carrois.com/downloads/fira_mono_3_2/FiraMonoFonts3206.zip;
+  url = https://github.com/mozilla/Fira/archive/4.106.zip;
 
   postFetch = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+    unzip -j $downloadedFile Fira-4.106/otf/FiraMono\*.otf -d $out/share/fonts/opentype
   '';
 
-  sha256 = "0m4kdjh4xjyznybpgh21a0gibv4wsxq0rqyl3wv942zk6mclmgdf";
+  sha256 = "1ci3fxhdwabvfj4nl16pwcgqnh7s2slp8vblribk8zkpx8cbp1dj";
 
   meta = with stdenv.lib; {
-    homepage = http://www.carrois.com/fira-4-1/;
+    homepage = https://mozilla.github.io/Fira/;
     description = "Monospace font for Firefox OS";
     longDescription = ''
       Fira Mono is a monospace font designed by Erik Spiekermann,

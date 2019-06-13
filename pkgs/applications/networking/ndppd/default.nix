@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gzip, ... }:
+{ stdenv, fetchFromGitHub, fetchurl, gzip }:
 
 stdenv.mkDerivation rec {
   name = "ndppd-${version}";
@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace Makefile --replace /bin/gzip ${gzip}/bin/gzip
+  '';
+
+  postInstall = ''
+    mkdir -p $out/etc
+    cp ndppd.conf-dist $out/etc/ndppd.conf
   '';
 
   meta = {

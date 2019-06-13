@@ -1,29 +1,44 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, expat,
+{ stdenv, pkgconfig, glib, libxml2, expat,
   fftw, orc, lcms, imagemagick, openexr, libtiff, libjpeg, libgsf, libexif,
-  python27, libpng, matio ? null, cfitsio ? null, libwebp ? null
+  ApplicationServices,
+  python27, libpng ? null,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk-doc,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
   name = "vips-${version}";
-  version = "8.6.3";
+  version = "8.8.0";
 
-  src = fetchurl {
-    url = "https://github.com/jcupitt/libvips/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "14h9w61gaimldmqaym0zhf9fkxjj1pkd5lhglhs6pxphynwxnnpq";
+  src = fetchFromGitHub {
+    owner = "libvips";
+    repo = "libvips";
+    rev = "v${version}";
+    sha256 = "17wz4rxn3jb171lrh8v3dxiykjhzwwzs5r7ly651dspcbi6s3r6c";
+    # Remove unicode file names which leads to different checksums on HFS+
+    # vs. other filesystems because of unicode normalisation.
+    extraPostFetch = ''
+      rm -r $out/test/test-suite/images/
+    '';
   };
 
-  buildInputs =
-    [ pkgconfig glib libxml2 fftw orc lcms
-      imagemagick openexr libtiff libjpeg
-      libgsf libexif python27 libpng
-      expat
-    ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook gtk-doc gobject-introspection ];
+  buildInputs = [ glib libxml2 fftw orc lcms
+    imagemagick openexr libtiff libjpeg
+    libgsf libexif python27 libpng expat ]
+    ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
+
+  autoreconfPhase = ''
+    ./autogen.sh
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.vips.ecs.soton.ac.uk;
+    homepage = "https://libvips.github.io/libvips/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ kovirobi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

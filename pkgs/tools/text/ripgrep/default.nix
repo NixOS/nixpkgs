@@ -1,19 +1,26 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, asciidoc, docbook_xsl, libxslt  }:
+{ stdenv, fetchFromGitHub, rustPlatform, asciidoc, docbook_xsl, libxslt
+, Security
+, withPCRE2 ? false, pcre2 ? null
+}:
 
 rustPlatform.buildRustPackage rec {
-  name = "ripgrep-${version}";
-  version = "0.8.1";
+  pname = "ripgrep";
+  version = "11.0.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = "ripgrep";
-    rev = "${version}";
-    sha256 = "1h7k9ik723qzplwl0a5i0anzdr115wwklfgp0n11p4k2ckh7nygn";
+    repo = pname;
+    rev = version;
+    sha256 = "0vak82d4vyw0w8agswbyxa6g3zs2h9mxm2xjw0xs9qccvmi7whbb";
   };
 
-  cargoSha256 = "1gld93dxfm4vyiz1b43smbdhxmyzdk2236ksp8vw1zb1yyzn83nf";
+  cargoSha256 = "1k1wg27p7w8b3cgygnkr6yhsc4hpnvrpa227s612vy2zfcmgb1kx";
+
+  cargoBuildFlags = stdenv.lib.optional withPCRE2 "--features pcre2";
 
   nativeBuildInputs = [ asciidoc docbook_xsl libxslt ];
+  buildInputs = (stdenv.lib.optional withPCRE2 pcre2)
+    ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   preFixup = ''
     mkdir -p "$out/man/man1"

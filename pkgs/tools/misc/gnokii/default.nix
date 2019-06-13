@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "0sjjhm40662bj6j0jh3sd25b8nww54nirpwamz618rg6pb5hjwm8";
-    url = "http://www.gnokii.org/download/gnokii/${name}.tar.gz";
+    url = "https://www.gnokii.org/download/gnokii/${name}.tar.gz";
   };
 
   buildInputs = [

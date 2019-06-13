@@ -2,6 +2,7 @@
 , ncurses, libX11, libXt, libXpm, libXaw, libXext
 , libusb1, docbook_xml_dtd_412, docbook_xsl, bc
 , libxslt, xmlto, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
+, pps-tools
 , python2Packages
 }:
 
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
   name = "gpsd-3.16";
 
   src = fetchurl {
-    url = "http://download-mirror.savannah.gnu.org/releases/gpsd/${name}.tar.gz";
+    url = "https://download-mirror.savannah.gnu.org/releases/gpsd/${name}.tar.gz";
     sha256 = "0a90ph4qrlz5kkcz2mwkfk3cmwy9fmglp94znz2y0gsd7bqrlmq3";
   };
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python2Packages.python dbus dbus-glib ncurses libX11 libXt libXpm libXaw libXext
-    libxslt libusb1
+    libxslt libusb1 pps-tools
   ];
 
   pythonPath = [
@@ -37,28 +38,36 @@ stdenv.mkDerivation rec {
 
     # TODO: remove the patch with the next release
     ./0001-Use-pkgconfig-for-dbus-library.patch
+    # to be able to find pps-tools
+    ./0002-scons-envs-patch.patch
   ];
 
   # - leapfetch=no disables going online at build time to fetch leap-seconds
   #   info. See <gpsd-src>/build.txt for more info.
-  buildPhase = ''
+  preBuild = ''
     patchShebangs .
     sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConstruct
-    scons prefix="$out" leapfetch=no gpsd_user=${gpsdUser} gpsd_group=${gpsdGroup} \
-        systemd=yes udevdir="$out/lib/udev" \
-        python_libdir="$out/lib/${python2Packages.python.libPrefix}/site-packages"
+
+    sconsFlags+=" udevdir=$out/lib/udev"
+    sconsFlags+=" python_libdir=$out/lib/${python2Packages.python.libPrefix}/site-packages"
   '';
 
-  checkPhase = ''
+  sconsFlags = [
+    "leapfetch=no"
+    "gpsd_user=${gpsdUser}"
+    "gpsd_group=${gpsdGroup}"
+    "systemd=yes"
+  ];
+
+  preCheck = ''
     export LD_LIBRARY_PATH="$PWD"
-    scons check
   '';
 
   # TODO: the udev rules file and the hotplug script need fixes to work on NixOS
-  installPhase = ''
+  preInstall = ''
     mkdir -p "$out/lib/udev/rules.d"
-    scons install udev-install
   '';
+  installTargets = "install udev-install";
 
   postFixup = ''
     wrapPythonProgramsIn $out/bin "$out $pythonPath"

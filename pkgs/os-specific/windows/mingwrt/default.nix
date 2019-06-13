@@ -1,29 +1,17 @@
-{stdenv, fetchurl, binutils ? null, gccCross ? null, onlyHeaders ? false}:
+{ stdenv, lib, fetchurl }:
 
-let
-  name = "mingwrt-3.20";
-in
-stdenv.mkDerivation (rec {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "mingwrt-5.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/mingw/MinGW/Base/mingw-rt/${name}-mingw32-src.tar.gz";
-    sha256 = "02pydg1m8y35nxb4k34nlb5c341y2waq76z42mgdzlcf661r91pi";
+    sha256 = "02pydg1m8y35nxb4k34nlb5c341y2waq76z42mgdzlcf661r91p0";
   };
 
-} //
-(if onlyHeaders then {
-  name = name + "-headers";
-  phases = [ "unpackPhase" "installPhase" ];
-  installPhase = ''
-    mkdir -p $out
-    cp -R include $out
-  '';
-} else {
-  buildInputs = [ gccCross binutils ];
-
-  crossConfig = gccCross.crossConfig;
+  meta = {
+    platforms = lib.platforms.windows;
+  };
 
   dontStrip = true;
-})
-)
+  hardeningDisable = [ "stackprotector" "fortify" ];
+}

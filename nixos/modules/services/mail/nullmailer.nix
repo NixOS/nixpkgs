@@ -201,16 +201,20 @@ with lib;
     };
 
     users = {
-      extraUsers = singleton {
+      users = singleton {
         name = cfg.user;
         description = "Nullmailer relay-only mta user";
         group = cfg.group;
       };
 
-      extraGroups = singleton {
+      groups = singleton {
         name = cfg.group;
       };
     };
+
+    systemd.tmpfiles.rules = [
+      "d /var/spool/nullmailer - ${cfg.user} - - -"
+    ];
 
     systemd.services.nullmailer = {
       description = "nullmailer";
@@ -220,13 +224,11 @@ with lib;
       preStart = ''
         mkdir -p /var/spool/nullmailer/{queue,tmp}
         rm -f /var/spool/nullmailer/trigger && mkfifo -m 660 /var/spool/nullmailer/trigger
-        chown ${cfg.user} /var/spool/nullmailer/*
       '';
 
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        PermissionsStartOnly=true;
         ExecStart = "${pkgs.nullmailer}/bin/nullmailer-send";
         Restart = "always";
       };

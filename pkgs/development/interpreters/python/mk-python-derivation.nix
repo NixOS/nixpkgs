@@ -1,6 +1,7 @@
 # Generic builder.
 
 { lib
+, config
 , python
 , wrapPython
 , setuptools
@@ -9,6 +10,8 @@
 # Whether the derivation provides a Python module or not.
 , toPythonModule
 , namePrefix
+, writeScript
+, update-python-libraries
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -30,6 +33,9 @@
 # DEPRECATED: use propagatedBuildInputs
 , pythonPath ? []
 
+# Enabled to detect some (native)BuildInputs mistakes
+, strictDeps ? true
+
 # used to disable derivation, useful for specific python versions
 , disabled ? false
 
@@ -43,6 +49,9 @@
 # Skip wrapping of python programs altogether
 , dontWrapPythonPrograms ? false
 
+# Skip setting the PYTHONNOUSERSITE environment variable in wrapped programs
+, permitUserSite ? false
+
 # Remove bytecode from bin folder.
 # When a Python script has the extension `.py`, bytecode is generated
 # Typically, executables in bin have no extension, so no bytecode is generated.
@@ -53,7 +62,7 @@
 
 , passthru ? {}
 
-, doCheck ? false
+, doCheck ? config.doCheckByDefault or false
 
 , ... } @ attrs:
 
@@ -63,28 +72,35 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
+let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts"
   ] // {
 
   name = namePrefix + name;
 
-  nativeBuildInputs = [ ensureNewerSourcesForZipFilesHook ]
-    ++ nativeBuildInputs;
+  nativeBuildInputs = [
+    python
+    wrapPython
+    ensureNewerSourcesForZipFilesHook
+    setuptools
+#     ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
+  ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
+    unzip
+  ] ++ nativeBuildInputs;
 
-  buildInputs = [ wrapPython ]
-    ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
-    ++ lib.optionals doCheck checkInputs
-    ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
-    ++ buildInputs
-    ++ pythonPath;
+  buildInputs = buildInputs ++ pythonPath;
 
   # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
+  inherit strictDeps;
+
+  LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
+
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
   doInstallCheck = doCheck;
+  installCheckInputs = checkInputs;
 
   postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
@@ -97,12 +113,20 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     # Check if we have two packages with the same name in the closure and fail.
     # If this happens, something went wrong with the dependencies specs.
     # Intentionally kept in a subdirectory, see catch_conflicts/README.md.
-    ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
+    ${python.pythonForBuild.interpreter} ${./catch_conflicts}/catch_conflicts.py
   '' + attrs.postFixup or '''';
+
+  # Python packages built through cross-compilation are always for the host platform.
+  disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
 
   meta = {
     # default to python's platforms
     platforms = python.meta.platforms;
     isBuildPythonPackage = python.meta.platforms;
   } // meta;
-}))
+}));
+
+passthru.updateScript = let
+    filename = builtins.head (lib.splitString ":" self.meta.position);
+  in attrs.passthru.updateScript or [ update-python-libraries filename ];
+in lib.extendDerivation true passthru self

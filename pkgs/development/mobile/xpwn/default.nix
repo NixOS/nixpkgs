@@ -20,10 +20,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake zlib libpng bzip2 libusb openssl ];
 
-  cmakeFlags = [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET="
-  ];
-
   meta = with stdenv.lib; {
     homepage    = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";
     description = "Custom NOR firmware loader/IPSW generator for the iPhone";

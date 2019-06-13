@@ -1,16 +1,19 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerApp }:
 
-bundlerEnv {
-  name = "taskjuggler-3.5.0";
-
-  inherit ruby;
+bundlerApp {
+  pname = "taskjuggler";
   gemdir = ./.;
 
-  meta = {
-    broken = true; # needs ruby 2.0
+  exes = [
+    "tj3" "tj3client" "tj3d" "tj3man" "tj3ss_receiver" "tj3ss_sender"
+    "tj3ts_receiver" "tj3ts_sender" "tj3ts_summary" "tj3webd"
+  ];
+
+  meta = with lib; {
     description = "A modern and powerful project management tool";
     homepage    = http://taskjuggler.org/;
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.unix;
+    license     = licenses.gpl2;
+    platforms   = platforms.unix;
+    maintainers = [ maintainers.manveru ];
   };
 }

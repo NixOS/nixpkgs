@@ -10,6 +10,14 @@ let
                      optionals cfg.enableContribAndExtras
                      [ self.xmonad-contrib self.xmonad-extras ];
   };
+  xmonadBin = pkgs.writers.writeHaskell "xmonad" {
+    ghc = cfg.haskellPackages.ghc;
+    libraries = [ cfg.haskellPackages.xmonad ] ++
+                cfg.extraPackages cfg.haskellPackages ++
+                optionals cfg.enableContribAndExtras
+                (with cfg.haskellPackages; [ xmonad-contrib xmonad-extras ]);
+  } cfg.config;
+
 in
 {
   options = {
@@ -48,13 +56,36 @@ in
         type = lib.types.bool;
         description = "Enable xmonad-{contrib,extras} in Xmonad.";
       };
+
+      config = mkOption {
+        default = null;
+        type = with lib.types; nullOr (either path string);
+        description = ''
+          Configuration from which XMonad gets compiled. If no value
+          is specified, the xmonad config from $HOME/.xmonad is taken.
+          If you use xmonad --recompile, $HOME/.xmonad will be taken as
+          the configuration, but on the next restart of display-manager
+          this config will be reapplied.
+        '';
+        example = ''
+          import XMonad
+
+          main = launch defaultConfig
+                 { modMask = mod4Mask -- Use Super instead of Alt
+                 , terminal = "urxvt"
+                 }
+        '';
+      };
     };
   };
   config = mkIf cfg.enable {
     services.xserver.windowManager = {
       session = [{
         name = "xmonad";
-        start = ''
+        start = if (cfg.config != null) then ''
+          ${xmonadBin}
+          waitPID=$!
+        '' else ''
           ${xmonad}/bin/xmonad &
           waitPID=$!
         '';

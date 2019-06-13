@@ -1,41 +1,59 @@
-{ stdenv, intltool, fetchurl, pkgconfig, gtk3, defaultIconTheme
-, glib, desktop-file-utils, bash, appdata-tools
-, wrapGAppsHook, gnome3, itstool, libxml2
-, callPackage, unzip, gobjectIntrospection }:
+{ stdenv, intltool, fetchFromGitLab, fetchpatch, pkgconfig, gtk3, adwaita-icon-theme
+, glib, desktop-file-utils, gtk-doc, autoconf, automake, libtool
+, wrapGAppsHook, gnome3, itstool, libxml2, yelp-tools
+, docbook_xsl, docbook_xml_dtd_412, gsettings-desktop-schemas
+, callPackage, unzip, gobject-introspection }:
 
-stdenv.mkDerivation rec {
-  name = "gucharmap-${version}";
-  version = "10.0.4";
+let
+  unicode-data = callPackage ./unicode-data.nix {};
+in stdenv.mkDerivation rec {
+  pname = "gucharmap";
+  version = "12.0.1";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gucharmap/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "00gh3lll6wykd2qg1lrj05a4wvscsypmrx7rpb6jsbvb4scnh9mv";
+  outputs = [ "out" "lib" "dev" "devdoc" ];
+
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = version;
+    sha256 = "0si3ymyfzc5v7ly0dmcs3qgw2wp8cyasycq5hmcr8frl09lr6gkw";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gucharmap"; };
-  };
+  nativeBuildInputs = [
+    pkgconfig wrapGAppsHook unzip intltool itstool
+    autoconf automake libtool gtk-doc docbook_xsl docbook_xml_dtd_412
+    yelp-tools libxml2 desktop-file-utils gobject-introspection
+  ];
+
+  buildInputs = [ gtk3 glib gsettings-desktop-schemas adwaita-icon-theme ];
+
+  configureFlags = [
+    "--with-unicode-data=${unicode-data}"
+    "--enable-gtk-doc"
+  ];
 
   doCheck = true;
 
-  preConfigure = "patchShebangs gucharmap/gen-guch-unicode-tables.pl";
+  postPatch = ''
+    patchShebangs gucharmap/gen-guch-unicode-tables.pl
+  '';
 
-  nativeBuildInputs = [
-    pkgconfig wrapGAppsHook unzip intltool itstool appdata-tools
-    gnome3.yelp-tools libxml2 desktop-file-utils gobjectIntrospection
-  ];
+  preConfigure = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
-  buildInputs = [ gtk3 glib gnome3.gsettings-desktop-schemas defaultIconTheme ];
-
-  unicode-data = callPackage ./unicode-data.nix {};
-
-  configureFlags = "--with-unicode-data=${unicode-data}";
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Gucharmap;
     description = "GNOME Character Map, based on the Unicode Character Database";
-    maintainers = gnome3.maintainers;
+    homepage = https://wiki.gnome.org/Apps/Gucharmap;
     license = licenses.gpl3;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

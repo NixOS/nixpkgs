@@ -20,7 +20,7 @@
 , speex
 , boost
 , opendht
-, libmsgpack
+, msgpack
 , gnutls
 , zlib
 , jsoncpp
@@ -30,7 +30,6 @@
 , openssl
 , perl
 , python3
-, bash
 , libupnp
 , speexdsp
 , fetchFromGitHub
@@ -109,7 +108,7 @@ stdenv.mkDerivation rec {
     speex
     boost
     opendht
-    libmsgpack
+    msgpack
     gnutls
     zlib
     jsoncpp

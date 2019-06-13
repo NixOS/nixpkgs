@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, libnotify
-, gtk , libxfce4util, libxfce4ui, xfconf }:
+, gtk , libxfce4util, libxfce4ui, xfconf, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-notifyd";
@@ -13,10 +13,9 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool libnotify gtk libxfce4util libxfce4ui xfconf ];
+  buildInputs = [ intltool libnotify gtk libxfce4util libxfce4ui xfconf hicolor-icon-theme ];
 
   preFixup = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
     # to be able to run the daemon we need it in PATH
     ln -rs $out/lib/xfce4/notifyd/xfce4-notifyd $out/bin
   '';

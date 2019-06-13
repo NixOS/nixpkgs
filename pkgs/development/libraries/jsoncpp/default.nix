@@ -1,10 +1,7 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, python
-}:
+{ stdenv , fetchFromGitHub , cmake , python }:
+
 stdenv.mkDerivation rec {
-  name = "jsoncpp-${version}";
+  pname = "jsoncpp";
   version = "1.8.4";
 
   src = fetchFromGitHub {
@@ -36,13 +33,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_STATIC_LIBS=OFF"
+    "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
   ];
 
   meta = with stdenv.lib; {
     inherit version;
     homepage = https://github.com/open-source-parsers/jsoncpp;
     description = "A C++ library for interacting with JSON.";
-    maintainers = with maintainers; [ ttuegel cpages ];
+    maintainers = with maintainers; [ ttuegel cpages nand0p ];
     license = licenses.mit;
     platforms = platforms.all;
   };

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "XStatic";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "09npcsyf1ccygjs0qc8kdsv4qqy8gm1m6iv63g9y1fgbcry3vj8f";
+    sha256 = "80b78dfe37bce6dee4343d64c65375a80bcf399b46dd47c0c7d56161568a23a8";
   };
 
   # no tests implemented

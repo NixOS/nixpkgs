@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "bitstring";
   version = "3.1.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +14,7 @@ buildPythonPackage rec {
     description = "Module for binary data manipulation";
     homepage = "https://github.com/scott-griffiths/bitstring";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
   };
 }

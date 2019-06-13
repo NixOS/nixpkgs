@@ -1,28 +1,23 @@
-{ stdenv, python3Packages, acl, libb2, lz4, zstd, openssl, openssh }:
+{ stdenv, fetchpatch, python3, acl, libb2, lz4, zstd, openssl, openssh }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.5";
+  version = "1.1.10";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "4356e6c712871f389e3cb1d6382e341ea635f9e5c65de1cd8fcd103d0fb66d3d";
+    sha256 = "1pp70p4n5kamvcbl4d8021ggrxhyykmg9isjg4yd3wags8b19d7g";
   };
 
-  postPatch = ''
-    # loosen constraint on msgpack version, only 0.5.0 had problems
-    sed -i "s/'msgpack-python.*'/'msgpack-python'/g" setup.py
-  '';
-
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python3.pkgs; [
     # For building documentation:
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    libb2 lz4 zstd openssl python3Packages.setuptools_scm
+    libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
-  propagatedBuildInputs = with python3Packages; [
-    cython msgpack-python
+  propagatedBuildInputs = with python3.pkgs; [
+    cython
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
   preConfigure = ''
@@ -44,13 +39,33 @@ python3Packages.buildPythonApplication rec {
     make -C docs man
     mkdir -p $out/share/man
     cp -R docs/_build/man $out/share/man/man1
+
+    mkdir -p $out/share/bash-completion/completions
+    cp scripts/shell_completions/bash/borg $out/share/bash-completion/completions/
+
+    mkdir -p $out/share/fish/vendor_completions.d
+    cp scripts/shell_completions/fish/borg.fish $out/share/fish/vendor_completions.d/
+
+    mkdir -p $out/share/zsh/site-functions
+    cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
   '';
+
+  checkInputs = with python3.pkgs; [
+    pytest
+  ];
+
+  checkPhase = ''
+    HOME=$(mktemp -d) py.test --pyargs borg.testsuite
+  '';
+
+  # 63 failures, needs pytest-benchmark
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";
-    homepage = https://borgbackup.github.io/;
+    homepage = https://www.borgbackup.org;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli dotlambda ];
   };
 }

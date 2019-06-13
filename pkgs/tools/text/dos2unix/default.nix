@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
     --replace /usr $out
     '';
 
-  buildInputs = [ perl gettext ];
+  nativeBuildInputs = [ perl gettext ];
 
   meta = with stdenv.lib; {
     homepage = http://waterlan.home.xs4all.nl/dos2unix.html;
     description = "Tools to transform text files from dos to unix formats and vicervesa";
     license = licenses.bsd2;
-    maintainers = with maintainers; [viric ndowens ];
+    maintainers = with maintainers; [ndowens ];
 
   };
 }

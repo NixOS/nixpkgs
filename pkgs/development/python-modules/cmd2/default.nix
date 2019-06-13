@@ -1,17 +1,16 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonOlder
-, pyperclip, six, pyparsing, vim
-, contextlib2 ? null, subprocess32 ? null
-, pytest, mock, which, fetchFromGitHub, glibcLocales
+{ stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
+, pyperclip, six, pyparsing, vim, wcwidth, colorama, attrs
+, contextlib2 ? null, typing ? null, setuptools_scm
+, pytest, mock ? null, pytest-mock
+, which, glibcLocales
 }:
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "0.8.0";
+  version = "0.9.12";
 
-  src = fetchFromGitHub {
-    owner = "python-cmd2";
-    repo = "cmd2";
-    rev = version;
-    sha256 = "0nw2b7n7zg51bc3glxw0l9fn91mwjnjshklhmxhyvjbsg7khf64z";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "14pyvihikml1z7q21q9cvdfxvvlf8lhbaasj05hpiq6fjyvd7zsc";
   };
 
   LC_ALL="en_US.UTF-8";
@@ -19,27 +18,39 @@ buildPythonPackage rec {
   postPatch = stdenv.lib.optional stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     mkdir bin
-    echo '#/bin/sh' > bin/pbpaste
-    echo '#/bin/sh' > bin/pbcopy
+    echo '#${stdenv.shell}' > bin/pbpaste
+    echo '#${stdenv.shell}' > bin/pbcopy
     chmod +x bin/{pbcopy,pbpaste}
     export PATH=$(realpath bin):$PATH
   '';
 
-  checkInputs= [ pytest mock which vim glibcLocales ];
+  disabled = !isPy3k;
+
+  buildInputs = [
+    setuptools_scm
+  ];
+
+  propagatedBuildInputs = [
+    colorama
+    pyperclip
+    six
+    pyparsing
+    wcwidth
+    attrs
+  ]
+  ++ stdenv.lib.optionals (pythonOlder "3.5") [contextlib2 typing]
+  ;
+
+
+  doCheck = !stdenv.isDarwin;
+  # pytest-cov
+  # argcomplete  will generate errors
+  checkInputs= [ pytest mock which vim glibcLocales pytest-mock ]
+        ++ stdenv.lib.optional (pythonOlder "3.6") [ mock ];
   checkPhase = ''
     # test_path_completion_user_expansion might be fixed in the next release
     py.test -k 'not test_path_completion_user_expansion'
   '';
-  doCheck = !stdenv.isDarwin;
-
-  propagatedBuildInputs = [
-    pyperclip
-    six
-    pyparsing
-  ]
-  ++ stdenv.lib.optional (pythonOlder "3.5") contextlib2
-  ++ stdenv.lib.optional (pythonOlder "3.0") subprocess32
-  ;
 
   meta = with stdenv.lib; {
     description = "Enhancements for standard library's cmd module";

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnused-${version}";
-  version = "4.4";
+  version = "4.7";
 
   src = fetchurl {
     url = "mirror://gnu/sed/sed-${version}.tar.xz";
-    sha256 = "0fv88bcnraixc8jvpacvxshi30p5x9m7yb8ns1hfv07hmb2ypmnb";
+    sha256 = "0smxcx66vx29djzb542nxcynl7qnzxqa5032ibazi7x2s267d198";
   };
 
   outputs = [ "out" "info" ];
@@ -14,16 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   preConfigure = "patchShebangs ./build-aux/help2man";
 
-  crossAttrs = {
-    # The tarball ships with a fine prebuilt manpage, but the make rules try to rebuild it,
-    # which won't work when cross compiling as help2man needs to execute the binaries.
-    postConfigure = ''
-      sed -i Makefile -e 's|doc/sed\.1:|dummy:|'
-    '';
-  };
+  # Prevents attempts of running 'help2man' on cross-built binaries.
+  PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
 
   meta = {
-    homepage = http://www.gnu.org/software/sed/;
+    homepage = https://www.gnu.org/software/sed/;
     description = "GNU sed, a batch stream editor";
 
     longDescription = ''
@@ -37,7 +32,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ ];
   };
 }

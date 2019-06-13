@@ -6,6 +6,13 @@ let
   cfg = config.services.boinc;
   allowRemoteGuiRpcFlag = optionalString cfg.allowRemoteGuiRpc "--allow_remote_gui_rpc";
 
+  fhsEnv = pkgs.buildFHSUserEnv {
+    name = "boinc-fhs-env";
+    targetPkgs = pkgs': [ cfg.package ] ++ cfg.extraEnvPackages;
+    runScript = "/bin/boinc_client";
+  };
+  fhsEnvExecutable = "${fhsEnv}/bin/${fhsEnv.name}";
+
 in
   {
     options.services.boinc = {
@@ -49,6 +56,43 @@ in
           See also: <link xlink:href="http://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access"/>
         '';
       };
+
+      extraEnvPackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = "[ pkgs.virtualbox ]";
+        description = ''
+          Additional packages to make available in the environment in which
+          BOINC will run. Common choices are:
+          <variablelist>
+            <varlistentry>
+              <term><varname>pkgs.virtualbox</varname></term>
+              <listitem><para>
+                The VirtualBox virtual machine framework. Required by some BOINC
+                projects, such as ATLAS@home.
+              </para></listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><varname>pkgs.ocl-icd</varname></term>
+              <listitem><para>
+                OpenCL infrastructure library. Required by BOINC projects that
+                use OpenCL, in addition to a device-specific OpenCL driver.
+              </para></listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><varname>pkgs.linuxPackages.nvidia_x11</varname></term>
+              <listitem><para>
+                Provides CUDA libraries. Required by BOINC projects that use
+                CUDA. Note that this requires an NVIDIA graphics device to be
+                present on the system.
+              </para><para>
+                Also provides OpenCL drivers for NVIDIA GPUs;
+                <varname>pkgs.ocl-icd</varname> is also needed in this case.
+              </para></listitem>
+            </varlistentry>
+          </variablelist>
+        '';
+      };
     };
 
     config = mkIf cfg.enable {
@@ -70,7 +114,7 @@ in
           chown boinc ${cfg.dataDir}
         '';
         script = ''
-          ${cfg.package}/bin/boinc_client --dir ${cfg.dataDir} --redirectio ${allowRemoteGuiRpcFlag}
+          ${fhsEnvExecutable} --dir ${cfg.dataDir} --redirectio ${allowRemoteGuiRpcFlag}
         '';
         serviceConfig = {
           PermissionsStartOnly = true; # preStart must be run as root

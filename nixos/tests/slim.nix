@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ aszlig ];
   };
 
-  machine = { pkgs, lib, ... }: {
+  machine = { pkgs, ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.windowManager.default = "icewm";
@@ -48,7 +48,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   enableOCR = true;
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.extraUsers.alice;
+    user = nodes.machine.config.users.users.alice;
   in ''
     startAll;
     $machine->waitForText(qr/Username:/);

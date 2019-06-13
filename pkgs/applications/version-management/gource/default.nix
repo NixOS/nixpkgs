@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.48";
+  version = "0.49";
   name = "gource-${version}";
 
   src = fetchurl {
     url = "https://github.com/acaudwell/Gource/releases/download/${name}/${name}.tar.gz";
-    sha256 = "04qxcm05qiyr9rg2kv6abfy7kkzqr8ziw4iyp1d14lniv93m61dp";
+    sha256 = "12hf5ipcsp9dxsqn84n4kr63xaiskrnf5a084wr29qk171lj7pd9";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://gource.io/;
+    homepage = https://gource.io/;
     description = "A Software version control visualization tool";
     license = licenses.gpl3Plus;
     longDescription = ''

@@ -1,0 +1,92 @@
+From f6a978f024d01202f954483423af1b2d5d5159a6 Mon Sep 17 00:00:00 2001
+From: Yegor Timoshenko <yegortimoshenko@riseup.net>
+Date: Fri, 28 Sep 2018 03:27:04 +0000
+Subject: [PATCH] If root is in Nix store, set ETag to its path hash
+
+---
+ src/http/ngx_http_core_module.c | 56 +++++++++++++++++++++++++++++----
+ 1 file changed, 50 insertions(+), 6 deletions(-)
+
+diff --git a/src/http/ngx_http_core_module.c b/src/http/ngx_http_core_module.c
+index c57ec00c..b7992de2 100644
+--- a/src/http/ngx_http_core_module.c
++++ b/src/http/ngx_http_core_module.c
+@@ -1583,6 +1583,7 @@ ngx_http_set_etag(ngx_http_request_t *r)
+ {
+     ngx_table_elt_t           *etag;
+     ngx_http_core_loc_conf_t  *clcf;
++    u_char                    *real, *ptr1, *ptr2;
+ 
+     clcf = ngx_http_get_module_loc_conf(r, ngx_http_core_module);
+ 
+@@ -1598,16 +1599,61 @@ ngx_http_set_etag(ngx_http_request_t *r)
+     etag->hash = 1;
+     ngx_str_set(&etag->key, "ETag");
+ 
+-    etag->value.data = ngx_pnalloc(r->pool, NGX_OFF_T_LEN + NGX_TIME_T_LEN + 3);
+-    if (etag->value.data == NULL) {
++    real = ngx_realpath(clcf->root.data, NULL);
++
++    if (real == NULL) {
+         etag->hash = 0;
+         return NGX_ERROR;
+     }
+ 
+-    etag->value.len = ngx_sprintf(etag->value.data, "\"%xT-%xO\"",
+-                                  r->headers_out.last_modified_time,
+-                                  r->headers_out.content_length_n)
+-                      - etag->value.data;
++    #define NIX_STORE_DIR "@nixStoreDir@"
++    #define NIX_STORE_LEN @nixStoreDirLen@
++
++    if (r->headers_out.last_modified_time == 1
++        && !ngx_strncmp(real, NIX_STORE_DIR, NIX_STORE_LEN)
++        && real[NIX_STORE_LEN] == '/'
++        && real[NIX_STORE_LEN + 1] != '\0')
++    {
++        ptr1 = real + NIX_STORE_LEN;
++        *ptr1 = '"';
++
++        ptr2 = (u_char *) ngx_strchr(ptr1, '-');
++
++        if (ptr2 == NULL) {
++            ngx_free(real);
++            etag->hash = 0;
++            return NGX_ERROR;
++        }
++
++        *ptr2++ = '"';
++        *ptr2 = '\0';
++
++        etag->value.len = ngx_strlen(ptr1);
++        etag->value.data = ngx_pnalloc(r->pool, etag->value.len);
++
++        if (etag->value.data == NULL) {
++            ngx_free(real);
++            etag->hash = 0;
++            return NGX_ERROR;
++        }
++
++        ngx_memcpy(etag->value.data, ptr1, etag->value.len);
++    } else {
++        etag->value.data = ngx_pnalloc(r->pool, NGX_OFF_T_LEN + NGX_TIME_T_LEN + 3);
++
++        if (etag->value.data == NULL) {
++            ngx_free(real);
++            etag->hash = 0;
++            return NGX_ERROR;
++        }
++
++        etag->value.len = ngx_sprintf(etag->value.data, "\"%xT-%xO\"",
++                                      r->headers_out.last_modified_time,
++                                      r->headers_out.content_length_n)
++                          - etag->value.data;
++    }
++
++    ngx_free(real);
+ 
+     r->headers_out.etag = etag;
+ 
+-- 
+2.19.0
+

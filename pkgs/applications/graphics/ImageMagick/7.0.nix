@@ -1,21 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
-, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libtool
+, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
+, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
-, buildPlatform, hostPlatform
 }:
 
 let
   arch =
-    if stdenv.system == "i686-linux" then "i686"
-    else if stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin" then "x86-64"
-    else if stdenv.system == "armv7l-linux" then "armv7l"
-    else if stdenv.system == "aarch64-linux" then "aarch64"
+    if stdenv.hostPlatform.system == "i686-linux" then "i686"
+    else if stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin" then "x86-64"
+    else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.7-27";
-    sha256 = "04v7m1s2a89xi57fpxbq30hzxqg3fawr3lms6wfmaq4j2ax0qw6k";
+    version = "7.0.8-46";
+    sha256 = "1si3rv3b9jgjkwyny5ja76s8c0z9vyic28fm63j1jrqdd2jyq3pk";
     patches = [];
   };
 in
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     inherit (cfg) sha256;
   };
 
-  patches = [ ./imagetragick.patch ] ++ cfg.patches;
+  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
       [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
         "--with-gslib"
       ]
-    ++ lib.optionals hostPlatform.isMinGW
+    ++ lib.optionals stdenv.hostPlatform.isMinGW
       [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
     ;
 
@@ -54,15 +53,15 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2
+      libpng libtiff libxml2 libheif djvulibre
     ]
-    ++ lib.optionals (!hostPlatform.isMinGW)
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
     ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]
-    ++ lib.optionals (!hostPlatform.isMinGW)
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ libX11 libXext libXt libwebp ]
     ;
 
@@ -84,6 +83,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.imagemagick.org/;
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ the-kenny wkennington ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ the-kenny ];
   };
 }

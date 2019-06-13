@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "zipfile36";
   version = "0.1.3";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,6 +27,6 @@ buildPythonPackage rec {
     description = "Read and write ZIP files - backport of the zipfile module from Python 3.6";
     homepage = https://gitlab.com/takluyver/zipfile36;
     license = lib.licenses.psfl;
-    maintainer = lib.maintainers.fridh;
+    maintainers = lib.maintainers.fridh;
   };
 }

@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.scollector;
 
-  collectors = pkgs.runCommand "collectors" {}
+  collectors = pkgs.runCommand "collectors" { preferLocalBuild = true; }
     ''
     mkdir -p $out
     ${lib.concatStringsSep
@@ -123,13 +123,13 @@ in {
       };
     };
 
-    users.extraUsers.scollector = {
+    users.users.scollector = {
       description = "scollector user";
       group = "scollector";
       uid = config.ids.uids.scollector;
     };
 
-    users.extraGroups.scollector.gid = config.ids.gids.scollector;
+    users.groups.scollector.gid = config.ids.gids.scollector;
 
   };
 

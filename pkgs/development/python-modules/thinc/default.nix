@@ -1,17 +1,16 @@
 { stdenv
 , lib
-, pkgs
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , pytest
 , cython
 , cymem
+, darwin
 , msgpack-numpy
 , msgpack-python
 , preshed
 , numpy
-, python
 , murmurhash
 , pathlib
 , hypothesis
@@ -20,27 +19,28 @@
 , plac
 , six
 , mock
-, termcolor
 , wrapt
 , dill
+, blis
+, srsly
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "6.10.2";
+  version = "7.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xia81wvfrhyriywab184s49g8rpl42vcf5fy3x6xxw50a2yn7cs";
+    sha256 = "14v8ygjrkj63dwd4pi490ld6i2d8n8wzcf15hnacjjfwij93pa1q";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "msgpack-python==" "msgpack-python>=" \
-      --replace "msgpack-numpy==" "msgpack-numpy>="
-  '';
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Accelerate CoreFoundation CoreGraphics CoreVideo
+  ]);
 
   propagatedBuildInputs = [
+   blis
    cython
    cymem
    msgpack-numpy
@@ -48,31 +48,26 @@ buildPythonPackage rec {
    preshed
    numpy
    murmurhash
-   pytest
-   hypothesis
    tqdm
    cytoolz
    plac
    six
-   mock
-   termcolor
+   srsly
    wrapt
    dill
+   wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
 
   checkInputs = [
+    hypothesis
+    mock
     pytest
   ];
 
   prePatch = ''
-    substituteInPlace setup.py --replace \
-      "'pathlib>=1.0.0,<2.0.0'," \
-      "\"pathlib>=1.0.0,<2.0.0; python_version<'3.4'\","
-
-    substituteInPlace setup.py --replace \
-      "'cytoolz>=0.8,<0.9'," \
-      "'cytoolz>=0.8',"
+    substituteInPlace setup.py \
+      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6"
   '';
 
   # Cannot find cython modules.

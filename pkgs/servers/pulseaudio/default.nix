@@ -1,12 +1,9 @@
 { lib, stdenv, fetchurl, fetchpatch, pkgconfig, intltool, autoreconfHook
-, libsndfile, libtool
-, xorg, libcap, alsaLib, glib
+, libsndfile, libtool, makeWrapper
+, xorg, libcap, alsaLib, glib, gnome3
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
-, speexdsp, systemd, webrtc-audio-processing, gconf ? null
-
-# Database selection
-, tdb ? null, gdbm ? null
+, speexdsp, systemd, webrtc-audio-processing
 
 , x11Support ? false
 
@@ -19,8 +16,6 @@
   ossWrapper ? true
 
 , airtunesSupport ? false
-
-, gconfSupport ? false
 
 , bluetoothSupport ? false
 
@@ -36,27 +31,16 @@
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "11.1";
+  version = "12.2";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "17ndr6kc7hpv4ih4gygwlcpviqifbkvnk4fbwf4n25kpb991qlpj";
+    sha256 = "0ma0p8iry7fil7qb4pm2nx2pm65kq9hk9xc4r5wkf14nqbzni5l0";
   };
-
-  patches = [ ./caps-fix.patch (fetchpatch {
-    name = "glibc-2.27.patch";
-    url = "https://cgit.freedesktop.org/pulseaudio/pulseaudio/patch/?id=dfb0460fb4743aec047cdf755a660a9ac2d0f3fb";
-    sha256 = "1bi6rbfdjyl6wn0jql4k18xa4hm5l2lpf1sc5j77f8l6jw956afv";
-  }) ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
-      name = "padsp-fix.patch";
-      url = "https://git.alpinelinux.org/cgit/aports/plain/testing/pulseaudio/0001-padsp-Make-it-compile-on-musl.patch?id=167be02bf4618a90328e2b234f6a63a5dc05f244";
-      sha256 = "0gf4w25zi123ghk0njapysvrlljkc3hyanacgiswfnnm1i8sab1q";
-    });
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig intltool autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig intltool autoreconfHook makeWrapper ];
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];
@@ -72,7 +56,6 @@ stdenv.mkDerivation rec {
       ++ lib.optional useSystemd systemd
       ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
       ++ lib.optional airtunesSupport openssl
-      ++ lib.optional gconfSupport gconf
       ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
       ++ lib.optional remoteControlSupport lirc
       ++ lib.optional zeroconfSupport  avahi
@@ -128,11 +111,30 @@ stdenv.mkDerivation rec {
   ''
     + ''moveToOutput lib/cmake "$dev" '';
 
+  preFixup = lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/libexec/pulse/gsettings-helper \
+     --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
+     --prefix GIO_EXTRA_MODULES : "${lib.getLib gnome3.dconf}/lib/gio/modules"
+  '';
+
+  patches = [
+    (fetchpatch {
+      name = "alsa-asoundlib-include.patch";
+      url = "https://gitlab.freedesktop.org/pulseaudio/pulseaudio/commit/993d3fd89e5611997f1e165bf03edefb0204b0a4.patch";
+      sha256 = "17icnf8026947j1dqw4k16f91vy6zyg7q41zv2j6pxh9fncb1s71";
+    })
+    (fetchpatch {
+      name = "alsa-use-case-include.patch";
+      url = "https://gitlab.freedesktop.org/pulseaudio/pulseaudio/commit/b89d33bb182c42db5ad3987b0e91b7bf62f421e8.patch";
+      sha256 = "0jccpc0dgkb0v4xrkyca2pm2k4i6pvahs9bq4hbg34173p23g5nb";
+    })
+  ];
+
   meta = {
     description = "Sound server for POSIX and Win32 systems";
     homepage    = http://www.pulseaudio.org/;
     license     = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ lovek323 wkennington ];
+    maintainers = with lib.maintainers; [ lovek323 ];
     platforms   = lib.platforms.unix;
 
     longDescription = ''

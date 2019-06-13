@@ -1,6 +1,8 @@
 { package ? null
 , maintainer ? null
 , path ? null
+, max-workers ? null
+, keep-going ? null
 }:
 
 # TODO: add assert statements
@@ -18,7 +20,9 @@ let
       in
         [x] ++ nubOn f xs;
 
-  pkgs = import ./../../default.nix { };
+  pkgs = import ./../../default.nix {
+    overlays = [];
+  };
 
   packagesWith = cond: return: set:
     nubOn (pkg: pkg.updateScript)
@@ -65,9 +69,12 @@ let
     let
       attrSet = pkgs.lib.attrByPath (pkgs.lib.splitString "." path) null pkgs;
     in
-      packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg)
-                     (name: pkg: pkg)
-                     attrSet;
+      if attrSet == null then
+        builtins.throw "Attribute path `${path}` does not exists."
+      else
+        packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg)
+                       (name: pkg: pkg)
+                       attrSet;
 
   packageByName = name:
     let
@@ -105,26 +112,31 @@ let
         % nix-shell maintainers/scripts/update.nix --argstr path gnome3
 
     to run update script for all package under an attribute path.
+
+    You can also add
+
+        --argstr max-workers 8
+
+    to increase the number of jobs in parallel, or
+
+        --argstr keep-going true
+
+    to continue running when a single update fails.
   '';
 
-  runUpdateScript = package: ''
-    echo -ne " - ${package.name}: UPDATING ..."\\r
-    ${package.updateScript} &> ${(builtins.parseDrvName package.name).name}.log
-    CODE=$?
-    if [ "$CODE" != "0" ]; then
-      echo " - ${package.name}: ERROR       "
-      echo ""
-      echo "--- SHOWING ERROR LOG FOR ${package.name} ----------------------"
-      echo ""
-      cat ${(builtins.parseDrvName package.name).name}.log
-      echo ""
-      echo "--- SHOWING ERROR LOG FOR ${package.name} ----------------------"
-      exit $CODE
-    else
-      rm ${(builtins.parseDrvName package.name).name}.log
-    fi
-    echo " - ${package.name}: DONE.       "
-  '';
+  packageData = package: {
+    name = package.name;
+    pname = (builtins.parseDrvName package.name).name;
+    updateScript = map builtins.toString (pkgs.lib.toList package.updateScript);
+  };
+
+  packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
+
+  optionalArgs =
+    pkgs.lib.optional (max-workers != null) "--max-workers=${max-workers}"
+    ++ pkgs.lib.optional (keep-going == "true") "--keep-going";
+
+  args = [ packagesJson ] ++ optionalArgs;
 
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-script";
@@ -139,21 +151,7 @@ in pkgs.stdenv.mkDerivation {
     exit 1
   '';
   shellHook = ''
-    echo ""
-    echo "Going to be running update for following packages:"
-    echo "${builtins.concatStringsSep "\n" (map (x: " - ${x.name}") packages)}"
-    echo ""
-    read -n1 -r -p "Press space to continue..." confirm
-    if [ "$confirm" = "" ]; then
-      echo ""
-      echo "Running update for:"
-      ${builtins.concatStringsSep "\n" (map runUpdateScript packages)}
-      echo ""
-      echo "Packages updated!"
-      exit 0
-    else
-      echo "Aborting!"
-      exit 1
-    fi
+    unset shellHook # do not contaminate nested shells
+    exec ${pkgs.python3.interpreter} ${./update.py} ${builtins.concatStringsSep " " args}
   '';
 }

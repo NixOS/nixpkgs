@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   name = "palemoon-${version}";
-  version = "27.8.3";
+  version = "27.9.4";
 
   src = fetchFromGitHub {
     name   = "palemoon-src";
     owner  = "MoonchildProductions";
     repo   = "Pale-Moon";
     rev    = version + "_Release";
-    sha256 = "1v3wliq8k5yq17ms214fhwka8x4l3sq8kja59dx4pbvczzb1zyzh";
+    sha256 = "0ir5gzhw98gfn15x58g1fwi11jd7gysvacqxg1v0jdjhgdl4m5sx";
   };
 
   desktopItem = makeDesktopItem {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libpulseaudio sqlite unzip which yasm zip zlib
   ] ++ (with xorg; [
     libX11 libXext libXft libXi libXrender libXScrnSaver
-    libXt pixman scrnsaverproto xextproto
+    libXt pixman xorgproto
   ]);
 
   enableParallelBuilding = true;
@@ -79,6 +79,8 @@ stdenv.mkDerivation rec {
     chmod u+w .
   '';
 
+  hardeningDisable = [ "format" ];
+  
   buildPhase = ''
     cd $builddir
     $src/mach build

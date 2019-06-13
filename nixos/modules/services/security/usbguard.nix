@@ -188,11 +188,14 @@ in {
       wants = [ "systemd-udevd.service" "local-fs.target" ];
 
       # make sure an empty rule file and required directories exist
-      preStart = ''mkdir -p $(dirname "${cfg.ruleFile}") "${cfg.IPCAccessControlFiles}" && ([ -f "${cfg.ruleFile}" ] || touch ${cfg.ruleFile})'';
+      preStart = ''
+        mkdir -p $(dirname "${cfg.ruleFile}") $(dirname "${cfg.auditFilePath}") "${cfg.IPCAccessControlFiles}" \
+          && ([ -f "${cfg.ruleFile}" ] || touch ${cfg.ruleFile})
+      '';
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = ''${pkgs.usbguard}/bin/usbguard-daemon -P -d -k -c ${daemonConfFile}'';
+        ExecStart = ''${pkgs.usbguard}/bin/usbguard-daemon -P -k -c ${daemonConfFile}'';
         Restart = "on-failure";
       };
     };

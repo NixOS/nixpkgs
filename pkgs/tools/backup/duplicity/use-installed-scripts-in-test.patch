@@ -1,0 +1,13 @@
+--- a/setup.py
++++ b/setup.py
+@@ -92,10 +92,6 @@ class TestCommand(test):
+                 except Exception:
+                     pass
+
+-        os.environ['PATH'] = "%s:%s" % (
+-            os.path.abspath(build_scripts_cmd.build_dir),
+-            os.environ.get('PATH'))
+-
+         test.run(self)
+
+     def run_tests(self):

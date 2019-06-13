@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "A masquerading SIP Proxy Server";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

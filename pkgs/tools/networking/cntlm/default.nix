@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ which ];
 
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace "xlc_r gcc" "xlc_r gcc $CC"
+    substitute Makefile Makefile.$CC --replace "CC=gcc" "CC=$CC"
+  '';
+
   installPhase = ''
     mkdir -p $out/bin; cp cntlm $out/bin/;
     mkdir -p $out/share/; cp COPYRIGHT README VERSION doc/cntlm.conf $out/share/;
@@ -21,11 +26,12 @@ stdenv.mkDerivation rec {
     description = "NTLM/NTLMv2 authenticating HTTP proxy";
     homepage = http://cntlm.sourceforge.net/;
     license = licenses.gpl2;
-    maintainers = 
+    maintainers =
       [
         maintainers.qknight
         maintainers.markWot
+        maintainers.carlosdagos
       ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

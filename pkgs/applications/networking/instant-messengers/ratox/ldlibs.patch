@@ -1,5 +1,0 @@
---- a/config.mk
-+++ b/config.mk
-@@ -13 +13 @@ LDFLAGS  = -L/usr/local/lib
--LDLIBS   = -ltoxcore -ltoxav -ltoxencryptsave -lsodium -lopus -lvpx -lm -lpthread
-+LDLIBS   = -ltoxcore -ltoxav -ltoxencryptsave -lm -lpthread

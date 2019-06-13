@@ -26,11 +26,11 @@ with lib;
         nano zile
         texinfo # for the stand-alone Info reader
       ]
-      ++ stdenv.lib.optional (!stdenv.isArm) grub2;
+      ++ stdenv.lib.optional (!stdenv.isAarch32) grub2;
 
 
     # GNU GRUB, where available.
-    boot.loader.grub.enable = !pkgs.stdenv.isArm;
+    boot.loader.grub.enable = !pkgs.stdenv.isAarch32;
     boot.loader.grub.version = 2;
 
     # GNU lsh.

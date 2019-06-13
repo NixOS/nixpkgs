@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple shell based CA utility";
-    homepage = http://openvpn.net/;
+    homepage = https://openvpn.net/;
     license = licenses.gpl2;
     maintainers = [ maintainers.offline ];
     platforms = platforms.linux;

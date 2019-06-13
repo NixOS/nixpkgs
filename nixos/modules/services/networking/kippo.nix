@@ -73,12 +73,12 @@ rec {
         ${cfg.extraConfig}
     '';
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "kippo";
       description = "kippo web server privilege separation user";
       uid = 108; # why does config.ids.uids.kippo give an error?
     };
-    users.extraGroups = singleton { name = "kippo";gid=108; };
+    users.groups = singleton { name = "kippo";gid=108; };
 
     systemd.services.kippo = with pkgs; {
       description = "Kippo Web Server";

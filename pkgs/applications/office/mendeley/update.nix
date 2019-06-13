@@ -1,6 +1,7 @@
-{ writeScript }:
+{ stdenv, writeScript, runtimeShell }:
 
 writeScript "update-mendeley" ''
+  #!${runtimeShell}
   function follow() {
     local URL=$1
     while true; do
@@ -15,9 +16,9 @@ writeScript "update-mendeley" ''
   }
 
   amd64URL=$(follow https://www.mendeley.com/repositories/ubuntu/stable/amd64/mendeleydesktop-latest)
-  amd64V=$(basename $amd64URL|grep -m1 -o "[0-9]\+\.[0-9]\+\.[0-9]\+")
+  amd64V=$(basename $amd64URL|grep -m1 -o "[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?")
   i386URL=$(follow https://www.mendeley.com/repositories/ubuntu/stable/i386/mendeleydesktop-latest)
-  i386V=$(basename $i386URL|grep -m1 -o "[0-9]\+\.[0-9]\+\.[0-9]\+")
+  i386V=$(basename $i386URL|grep -m1 -o "[0-9]\+\.[0-9]\+\(\.[0-9]\+\)\?")
 
   echo "amd64 version: $amd64V"
   echo "i386 version:  $i386V"

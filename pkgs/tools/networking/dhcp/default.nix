@@ -1,14 +1,15 @@
 { stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper
 , coreutils, gnused, openldap ? null
+, buildPackages, lib
 }:
 
 stdenv.mkDerivation rec {
   name = "dhcp-${version}";
-  version = "4.3.6-P1";
+  version = "4.4.1";
 
   src = fetchurl {
-    url = "http://ftp.isc.org/isc/dhcp/${version}/${name}.tar.gz";
-    sha256 = "1hx3az6ckvgvybr1ag4k9kqr8zfcpzcww4vpw5gz0mi8y2z7gl9g";
+    url = "https://ftp.isc.org/isc/dhcp/${version}/${name}.tar.gz";
+    sha256 = "025nfqx4zwdgv4b3rkw26ihcj312vir08jk6yi57ndmb4a4m08ia";
   };
 
   patches =
@@ -19,7 +20,11 @@ stdenv.mkDerivation rec {
       ./set-hostname.patch
     ];
 
-  buildInputs = [ perl makeWrapper openldap ];
+  nativeBuildInputs = [ perl ];
+
+  buildInputs = [ makeWrapper openldap ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configureFlags = [
     "--enable-failover"
@@ -31,6 +36,7 @@ stdenv.mkDerivation rec {
     "--enable-early-chroot"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.optional stdenv.isLinux "--with-randomdev=/dev/random")
   ] ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=pointer-compare" ];
@@ -57,6 +63,8 @@ stdenv.mkDerivation rec {
       substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
       sed -i "includes/dhcpd.h" \
 	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
+
+      export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
     '';
 
   meta = with stdenv.lib; {
@@ -72,6 +80,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.isc.org/products/DHCP/;
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

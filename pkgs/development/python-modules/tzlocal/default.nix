@@ -1,8 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi
-, tzlocal, pytz }:
+, pytz }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "tzlocal";
   version = "1.5.1";
 

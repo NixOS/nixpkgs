@@ -1,4 +1,4 @@
-{ config, lib, pkgs, serverInfo, php, ... }:
+{ config, lib, pkgs, serverInfo, ... }:
 # http://codex.wordpress.org/Hardening_WordPress
 
 with lib;
@@ -85,10 +85,10 @@ let
       # remove bundled themes(s) coming with wordpress
       rm -Rf $out/wp-content/themes/*
 
-      # symlink additional theme(s)
-      ${concatMapStrings (theme: "ln -s ${theme} $out/wp-content/themes/${theme.name}\n") config.themes}
-      # symlink additional plugin(s)
-      ${concatMapStrings (plugin: "ln -s ${plugin} $out/wp-content/plugins/${plugin.name}\n") (config.plugins) }
+      # copy additional theme(s)
+      ${concatMapStrings (theme: "cp -r ${theme} $out/wp-content/themes/${theme.name}\n") config.themes}
+      # copy additional plugin(s)
+      ${concatMapStrings (plugin: "cp -r ${plugin} $out/wp-content/plugins/${plugin.name}\n") (config.plugins) }
 
       # symlink additional translation(s)
       mkdir -p $out/wp-content/languages
@@ -273,7 +273,7 @@ in
     if [ ! -d ${serverInfo.fullConfig.services.mysql.dataDir}/${config.dbName} ]; then
       echo "Need to create the database '${config.dbName}' and grant permissions to user named '${config.dbUser}'."
       # Wait until MySQL is up
-      while [ ! -e ${serverInfo.fullConfig.services.mysql.pidDir}/mysqld.pid ]; do
+      while [ ! -S /run/mysqld/mysqld.sock ]; do
         sleep 1
       done
       ${pkgs.mysql}/bin/mysql -e 'CREATE DATABASE ${config.dbName};'

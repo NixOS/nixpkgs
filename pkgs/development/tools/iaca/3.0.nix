@@ -1,5 +1,4 @@
-{ stdenv, requireFile, patchelf, unzip }:
-assert stdenv.system == "x86_64-linux";
+{ stdenv, requireFile, unzip }:
 with stdenv.lib;
 
 stdenv.mkDerivation {

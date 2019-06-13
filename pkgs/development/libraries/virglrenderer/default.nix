@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
 
   name = "virglrenderer-${version}";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/virgl/${name}.tar.bz2";
-    sha256 = "a549e351e0eb2ad1df471386ddcf85f522e7202808d1616ee9ff894209066e1a";
+    sha256 = "041agg1d6i8hg250y30f08n3via0hs9rbijxdrfifb8ara805v0m";
   };
 
   buildInputs = [ libGLU epoxy libX11 libdrm mesa_noglu ];

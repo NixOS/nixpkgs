@@ -1,31 +1,32 @@
-{ stdenv, fetchFromGitHub, gnome3, libtool, intltool, pkgconfig, gtk3, hicolor-icon-theme, wrapGAppsHook } :
+{ stdenv, fetchFromGitLab, gnome3, meson, ninja, gettext, pkgconfig, libxml2, gtk3, hicolor-icon-theme, wrapGAppsHook }:
 
 let
-  version = "2.2";
+  version = "2.3.1";
 in stdenv.mkDerivation {
   name = "gcolor3-${version}";
 
-  src = fetchFromGitHub {
-    owner = "hjdskes";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
     repo = "gcolor3";
     rev = "v${version}";
-    sha256 = "1rbahsi33pfggpj5cigy6wy5333g3rpm8v2q0b35c6m7pwhmf2gr";
+    sha256 = "10cfzlkflwkb7f51rnrxmgxpfryh1qzvqaydj6lffjq9zvnhigg7";
   };
 
-  nativeBuildInputs = [ gnome3.gnome-common libtool intltool pkgconfig hicolor-icon-theme wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja gettext pkgconfig libxml2 wrapGAppsHook ];
 
-  buildInputs = [ gtk3 ];
+  buildInputs = [ gtk3 hicolor-icon-theme ];
 
-  configureScript = "./autogen.sh";
+  postPatch = ''
+    chmod +x meson_install.sh # patchShebangs requires executable file
+    patchShebangs meson_install.sh
+  '';
 
-  # clang-4.0: error: argument unused during compilation: '-pthread'
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-error=unused-command-line-argument";
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A simple color chooser written in GTK3";
-    homepage = https://hjdskes.github.io/projects/gcolor3/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ jtojnar ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = https://www.hjdskes.nl/projects/gcolor3/;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
   };
 }

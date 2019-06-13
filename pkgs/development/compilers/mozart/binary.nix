@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  src = binaries."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
+  src = binaries."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc

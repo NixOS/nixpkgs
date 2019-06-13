@@ -1,13 +1,13 @@
 { stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_52, glib
-, gnome3, substituteAll }:
+, gnome3, gnome-menus, substituteAll }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extensions-${version}";
-  version = "3.28.0";
+  version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell-extensions/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "00xm5r4q40c0ji80vrsqg2fkrvzb1nm75p3ikv6bsmd3gfvwwp91";
+    url = "mirror://gnome/sources/gnome-shell-extensions/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "07libf6z24n42hpdsq163w0j8xyrav0lxqrwxrvq5kbz8zxv5ch2";
   };
 
   passthru = {
@@ -20,14 +20,16 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix_gmenu.patch;
-      gmenu_path = "${gnome3.gnome-menus}/lib/girepository-1.0";
+      gmenu_path = "${gnome-menus}/lib/girepository-1.0";
     })
   ];
 
   doCheck = true;
+  # 52 is required for tests
+  # https://gitlab.gnome.org/GNOME/gnome-shell-extensions/blob/3.30.1/meson.build#L25
+  checkInputs = [ spidermonkey_52 ];
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext glib ];
-  buildInputs = [ spidermonkey_52 ];
 
   mesonFlags = [ "-Dextension_set=all" ];
 
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
     # Fixup adapted from export-zips.sh in the source.
 
     extensiondir=$out/share/gnome-shell/extensions
-    schemadir=$out/share/gsettings-schemas/gnome-shell-extensions-3.28.0/glib-2.0/schemas/
+    schemadir=$out/share/gsettings-schemas/${name}/glib-2.0/schemas/
 
     glib-compile-schemas $schemadir
 

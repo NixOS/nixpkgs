@@ -7,7 +7,7 @@
 , sha256 ? null
 , rev ? "v${version}"
 , src ? fetchFromGitHub { inherit rev sha256; owner = "elixir-lang"; repo = "elixir"; }
-}:
+} @ args:
 
 let
   inherit (stdenv.lib) getVersion versionAtLeast;
@@ -37,8 +37,10 @@ in
 
     preBuild = ''
       # The build process uses ./rebar. Link it to the nixpkgs rebar
-      rm -v rebar
+      rm -vf rebar
       ln -s ${rebar}/bin/rebar rebar
+
+      patchShebangs lib/elixir/generate_app.escript || true
 
       substituteInPlace Makefile \
         --replace "/usr/local" $out
@@ -60,6 +62,7 @@ in
             --replace "/usr/bin/env elixir" "${coreutils}/bin/env elixir"
     '';
 
+    pos = builtins.unsafeGetAttrPos "sha256" args;
     meta = with stdenv.lib; {
       homepage = https://elixir-lang.org/;
       description = "A functional, meta-programming aware language built on top of the Erlang VM";

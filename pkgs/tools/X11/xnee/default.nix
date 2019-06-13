@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, libX11, xproto, libXext, xextproto, libXtst
-, gtk2, libXi, inputproto, pkgconfig, recordproto, texinfo }:
+{ fetchurl, stdenv, libX11, xorgproto, libXext, libXtst
+, gtk2, libXi, pkgconfig, texinfo }:
 
 stdenv.mkDerivation rec {
   version = "3.19";
@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
   patchPhase =
     '' for i in `find cnee/test -name \*.sh`
        do
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g ; s|/usr/bin/env bash|/bin/sh|g'
+         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g ; s|/usr/bin/env bash|${stdenv.shell}|g'
        done
     '';
 
   buildInputs =
-    [ libX11 xproto libXext xextproto libXtst gtk2
-      libXi inputproto pkgconfig recordproto
+    [ libX11 xorgproto libXext libXtst gtk2
+      libXi pkgconfig
       texinfo
     ];
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/xnee/;
+    homepage = https://www.gnu.org/software/xnee/;
 
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

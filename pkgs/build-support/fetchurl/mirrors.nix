@@ -10,26 +10,29 @@ rec {
 
   # SourceForge.
   sourceforge = [
-    http://downloads.sourceforge.net/
-    http://prdownloads.sourceforge.net/
-    http://heanet.dl.sourceforge.net/sourceforge/
-    http://surfnet.dl.sourceforge.net/sourceforge/
-    http://dfn.dl.sourceforge.net/sourceforge/
-    http://osdn.dl.sourceforge.net/sourceforge/
-    http://kent.dl.sourceforge.net/sourceforge/
+    https://downloads.sourceforge.net/
+    https://prdownloads.sourceforge.net/
+    https://heanet.dl.sourceforge.net/sourceforge/
+    https://surfnet.dl.sourceforge.net/sourceforge/
+    https://dfn.dl.sourceforge.net/sourceforge/
+    https://osdn.dl.sourceforge.net/sourceforge/
+    https://kent.dl.sourceforge.net/sourceforge/
   ];
 
-  # SourceForge.jp.
-  sourceforgejp = [
-    http://osdn.dl.sourceforge.jp/
-    http://jaist.dl.sourceforge.jp/
+  # OSDN (formerly SourceForge.jp).
+  osdn = [
+    https://osdn.dl.osdn.jp/
+    https://osdn.mirror.constant.com/
+    https://mirrors.gigenet.com/OSDN/
+    https://osdn.dl.sourceforge.jp/
+    https://jaist.dl.sourceforge.jp/
   ];
 
-  # GNU (http://www.gnu.org/prep/ftp.html).
+  # GNU (https://www.gnu.org/prep/ftp.html).
   gnu = [
     # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
     # mirror.
-    http://ftpmirror.gnu.org/
+    https://ftpmirror.gnu.org/
 
     http://ftp.nluug.nl/pub/gnu/
     http://mirrors.kernel.org/gnu/
@@ -44,6 +47,8 @@ rec {
 
   # GCC.
   gcc = [
+    https://bigsearcher.com/mirrors/gcc/
+    http://mirror.koddos.net/gcc/
     ftp://ftp.nluug.nl/mirror/languages/gcc/
     ftp://ftp.fu-berlin.de/unix/languages/gcc/
     ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/
@@ -70,13 +75,15 @@ rec {
     ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/
   ];
 
-  # Mirrors of ftp://ftp.kde.org/pub/kde/.
+  # Mirrors from https://download.kde.org/extra/download-mirrors.html
   kde = [
-    "http://download.kde.org/download.php?url="
-    http://ftp.gwdg.de/pub/x11/kde/
-    ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
+    "https://download.kde.org/download.php?url="
+    https://ftp.gwdg.de/pub/linux/kde/
+    https://mirrors.ocf.berkeley.edu/kde/
+    http://mirrors.mit.edu/kde/
+    https://mirrors.ustc.edu.cn/kde/
+    http://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
     ftp://ftp.kde.org/pub/kde/
-    ftp://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
   ];
 
   # Gentoo files.
@@ -157,12 +164,8 @@ rec {
 
   # CPAN mirrors.
   cpan = [
-    http://ftp.gwdg.de/pub/languages/perl/CPAN/
-    ftp://download.xs4all.nl/pub/mirror/CPAN/
-    http://ftp.tuwien.ac.at/pub/CPAN/
-    http://ftp.funet.fi/pub/CPAN/
     https://cpan.metacpan.org/
-    http://cpan.perl.org/
+    https://cpan.perl.org/
     http://backpan.perl.org/  # for old releases
   ];
 
@@ -259,9 +262,8 @@ rec {
 
   # X.org.
   xorg = [
-    http://xorg.freedesktop.org/releases/
-    http://ftp.gwdg.de/pub/x11/x.org/pub/
-    http://ftp.x.org/pub/ # often incomplete (e.g. files missing from X.org 7.4)
+    https://xorg.freedesktop.org/releases/
+    https://ftp.x.org/archive/
   ];
 
   # Apache mirrors (see http://www.apache.org/mirrors/).
@@ -309,6 +311,8 @@ rec {
   hackage = [
     http://hackage.haskell.org/package/
     http://hdiff.luite.com/packages/archive/package/
+    http://hackage.fpcomplete.com/package/
+    http://objects-us-east-1.dream.io/hackage-mirror/package/
   ];
 
   # Roy marples mirrors
@@ -319,56 +323,52 @@ rec {
   ];
 
   # Sage mirrors (http://www.sagemath.org/mirrors.html)
-  sagemath = [
+  sageupstream = [
     # Africa
-    http://sagemath.polytechnic.edu.na/src/
-    ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/src/
-    http://sagemath.mirror.ac.za/src/
-    https://ftp.leg.uct.ac.za/pub/packages/sage/src/
-    http://mirror.ufs.ac.za/sagemath/src/
+    http://sagemath.polytechnic.edu.na/spkg/upstream/
+    ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/spkg/upstream/
+    http://sagemath.mirror.ac.za/spkg/upstream/
+    https://ftp.leg.uct.ac.za/pub/packages/sage/spkg/upstream/
+    http://mirror.ufs.ac.za/sagemath/spkg/upstream/
 
     # America, North
-    http://mirrors-usa.go-parts.com/sage/sagemath/src/
-    http://mirrors.mit.edu/sage/src/
-    http://www.cecm.sfu.ca/sage/src/
-    http://files.sagemath.org/src/
-    http://mirror.clibre.uqam.ca/sage/src/
-    https://mirrors.xmission.com/sage/src/
+    http://mirrors-usa.go-parts.com/sage/sagemath/spkg/upstream/
+    http://mirrors.mit.edu/sage/spkg/upstream/
+    http://www.cecm.sfu.ca/sage/spkg/upstream/
+    http://files.sagemath.org/spkg/upstream/
+    http://mirror.clibre.uqam.ca/sage/spkg/upstream/
+    https://mirrors.xmission.com/sage/spkg/upstream/
 
     # America, South
-    http://sagemath.c3sl.ufpr.br/src/
-    http://linorg.usp.br/sage/
+    http://sagemath.c3sl.ufpr.br/spkg/upstream/
+    http://linorg.usp.br/sage/spkg/upstream
 
     # Asia
-    http://sage.asis.io/src/
-    http://mirror.hust.edu.cn/sagemath/src/
-    https://ftp.iitm.ac.in/sage/src/
-    http://ftp.kaist.ac.kr/sage/src/
-    http://ftp.riken.jp/sagemath/src/
-    https://mirrors.tuna.tsinghua.edu.cn/sagemath/src/
-    https://mirrors.ustc.edu.cn/sagemath/src/
-    http://ftp.tsukuba.wide.ad.jp/software/sage/src/
-    http://ftp.yz.yamagata-u.ac.jp/pub/math/sage/src/
-    https://mirror.yandex.ru/mirrors/sage.math.washington.edu/src/
+    http://sage.asis.io/spkg/upstream/
+    http://mirror.hust.edu.cn/sagemath/spkg/upstream/
+    https://ftp.iitm.ac.in/sage/spkg/upstream/
+    http://ftp.kaist.ac.kr/sage/spkg/upstream/
+    http://ftp.riken.jp/sagemath/spkg/upstream/
+    https://mirrors.tuna.tsinghua.edu.cn/sagemath/spkg/upstream/
+    https://mirrors.ustc.edu.cn/sagemath/spkg/upstream/
+    http://ftp.tsukuba.wide.ad.jp/software/sage/spkg/upstream/
+    http://ftp.yz.yamagata-u.ac.jp/pub/math/sage/spkg/upstream/
+    https://mirror.yandex.ru/mirrors/sage.math.washington.edu/spkg/upstream/
 
     # Australia
-    http://echidna.maths.usyd.edu.au/sage/src/
+    http://echidna.maths.usyd.edu.au/sage/spkg/upstream/
 
     # Europe
-    http://sage.mirror.garr.it/mirrors/sage/src/
-    http://sunsite.rediris.es/mirror/sagemath/src/
-    http://mirror.switch.ch/mirror/sagemath/src/
-    http://mirrors.fe.up.pt/pub/sage/src/
-    http://www-ftp.lip6.fr/pub/math/sagemath/src/
-    http://ftp.ntua.gr/pub/sagemath/src/
-
-    # Old versions
-    http://sagemath.org/src-old/
+    http://sage.mirror.garr.it/mirrors/sage/spkg/upstream/
+    http://sunsite.rediris.es/mirror/sagemath/spkg/upstream/
+    http://mirror.switch.ch/mirror/sagemath/spkg/upstream/
+    http://mirrors.fe.up.pt/pub/sage/spkg/upstream/
+    http://www-ftp.lip6.fr/pub/math/sagemath/spkg/upstream/
+    http://ftp.ntua.gr/pub/sagemath/spkg/upstream/
   ];
 
   # MySQL mirrors
   mysql = [
-    http://mysql.mirrors.pair.com/Downloads/
     http://cdn.mysql.com/Downloads/
   ];
 
@@ -405,5 +405,13 @@ rec {
   maven = [
     http://repo1.maven.org/maven2/
     http://central.maven.org/maven2/
+  ];
+
+  # Alsa Project
+  alsa = [
+     ftp://ftp.alsa-project.org/pub/
+     http://alsa.cybermirror.org/
+     http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/
+     http://alsa.mirror.fr/
   ];
 }

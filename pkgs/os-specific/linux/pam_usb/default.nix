@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkgconfig, pmount, pythonPackages, writeScript }:
+{ stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkgconfig, pmount, pythonPackages, writeScript, runtimeShell }:
 
 let
 
@@ -11,7 +11,7 @@ let
       bin = "${drv}${path}";
     in assert name != "";
       writeScript "setUID-${name}" ''
-        #!${stdenv.shell}
+        #!${runtimeShell}
         inode=$(stat -Lc %i ${bin})
         for file in $(type -ap ${name}); do
           case $(stat -Lc %a $file) in

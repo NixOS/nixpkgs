@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, buildPythonPackage, tornado }:
+{ stdenv, fetchPypi, buildPythonPackage, tornado }:
 
 buildPythonPackage rec {
   pname = "snakeviz";
-  name = "${pname}-${version}";
-  version = "0.4.1";
+  version = "2.0.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/snakeviz/${name}.tar.gz";
-    sha256 = "18vsaw1wmf903fg21zkk6a9b49gj47g52jm5h52g4iygngjhpx79";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0hvfc7c25cz6p3m3p3klm3njiysp7lkrs9sxm4p40spldl0jlfpa";
   };
 
   # Upstream doesn't run tests from setup.py

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     done
     '';
 
-  configureFlags = "--with-perl=${perl}/bin/perl";
+  configureFlags = [ "--with-perl=${perl}/bin/perl" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libpcap bison cyrus_sasl tcp_wrappers flex ];

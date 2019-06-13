@@ -1,9 +1,8 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "UkPostcodeParser";
   version = "1.1.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

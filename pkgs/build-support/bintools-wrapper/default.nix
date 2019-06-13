@@ -6,9 +6,10 @@
 # compiler and the linker just "work".
 
 { name ? ""
-, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, bintools ? null, libc ? null
-, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, stdenvNoCC
+, bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, propagateDoc ? bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , buildPackages ? {}
 , useMacosReexportHack ? false
@@ -43,10 +44,8 @@ let
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
-  dashlessTarget = stdenv.lib.replaceStrings ["-"] ["_"] targetPlatform.config;
-
   # See description in cc-wrapper.
-  infixSalt = dashlessTarget;
+  infixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   # The dynamic linker has different names on different platforms. This is a
   # shell glob that ought to match it.
@@ -54,10 +53,11 @@ let
     /**/ if libc == null then null
     else if targetPlatform.libc == "musl"             then "${libc_lib}/lib/ld-musl-*"
     else if targetPlatform.libc == "bionic"           then "/system/bin/linker"
+    else if targetPlatform.libc == "nblibc"           then "${libc_lib}/libexec/ld.elf_so"
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
-    else if (with targetPlatform; isArm && isLinux)   then "${libc_lib}/lib/ld-linux*.so.3"
+    else if (with targetPlatform; isAarch32 && isLinux)   then "${libc_lib}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux"  then "${libc_lib}/lib/ld-linux-aarch64.so.1"
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isMips                     then "${libc_lib}/lib/ld.so.1"
@@ -74,7 +74,7 @@ in
 
 stdenv.mkDerivation {
   name = targetPrefix
-    + (if name != "" then name else "${bintoolsName}-wrapper")
+    + (if name != "" then name else stdenv.lib.removePrefix targetPrefix "${bintoolsName}-wrapper")
     + (stdenv.lib.optionalString (bintools != null && bintoolsVersion != "") "-${bintoolsVersion}");
 
   preferLocalBuild = true;
@@ -173,24 +173,36 @@ stdenv.mkDerivation {
       else if targetPlatform.isWindows then "pe"
       else "elf" + toString targetPlatform.parsed.cpu.bits;
     endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
-    sep = optionalString (!targetPlatform.isMips) "-";
+    sep = optionalString (!targetPlatform.isMips && !targetPlatform.isPower) "-";
     arch =
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
-      else if targetPlatform.isArm     then endianPrefix + "arm"
+      else if targetPlatform.isAarch32     then endianPrefix + "arm"
       else if targetPlatform.isx86_64  then "x86-64"
-      else if targetPlatform.isi686    then "i386"
+      else if targetPlatform.isx86_32  then "i386"
       else if targetPlatform.isMips    then {
           "mips"     = "btsmipn32"; # n32 variant
           "mipsel"   = "ltsmipn32"; # n32 variant
           "mips64"   = "btsmip";
           "mips64el" = "ltsmip";
         }.${targetPlatform.parsed.cpu.name}
-      else throw "unknown emulation for platform: " + targetPlatform.config;
-    in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
+      else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
+      else if targetPlatform.isSparc then "sparc"
+      else if targetPlatform.isMsp430 then "msp430"
+      else if targetPlatform.isAvr then "avr"
+      else if targetPlatform.isAlpha then "alpha"
+      else throw "unknown emulation for platform: ${targetPlatform.config}";
+    in if targetPlatform.useLLVM or false then ""
+       else targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
+  strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
 
-  setupHook = ./setup-hook.sh;
+  wrapperName = "BINTOOLS_WRAPPER";
+
+  setupHooks = [
+    ../setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
 
   postFixup =
     ''
@@ -202,7 +214,7 @@ stdenv.mkDerivation {
       ## General libc support
       ##
 
-      echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
+      echo "-L${libc_lib}${libc.libdir or "/lib"}" > $out/nix-support/libc-ldflags
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
@@ -261,9 +273,8 @@ stdenv.mkDerivation {
       ## Man page and info support
       ##
 
-      mkdir -p $man/nix-support $info/nix-support
-      printWords ${bintools.man or ""} >> $man/nix-support/propagated-build-inputs
-      printWords ${bintools.info or ""} >> $info/nix-support/propagated-build-inputs
+      ln -s ${bintools.man} $man
+      ln -s ${bintools.info} $info
     ''
 
     + ''
@@ -285,11 +296,21 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" pic"
     ''
 
+    + optionalString targetPlatform.isAvr ''
+      hardening_unsupported_flags+=" relro bindnow"
+    ''
+
+    + optionalString (libc != null && targetPlatform.isAvr) ''
+      for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
+        echo "-L${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
+      done
+    ''
+
     + ''
       set +u
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
-      substituteAll ${../cc-wrapper/utils.sh} $out/nix-support/utils.sh
+      substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
 
       ##
       ## Extra custom steps
@@ -300,7 +321,7 @@ stdenv.mkDerivation {
 
   inherit dynamicLinker expand-response-params;
 
-  # for substitution in utils.sh
+  # for substitution in utils.bash
   expandResponseParams = "${expand-response-params}/bin/expand-response-params";
 
   meta =
@@ -309,6 +330,7 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
+      priority = 10;
   } // optionalAttrs useMacosReexportHack {
     platforms = stdenv.lib.platforms.darwin;
   };

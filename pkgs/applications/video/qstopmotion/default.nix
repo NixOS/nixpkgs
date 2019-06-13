@@ -1,23 +1,29 @@
-{ stdenv, fetchurl, qt5, gstreamer, gstreamermm, gst_plugins_bad
-, gst_plugins_base, gst_plugins_good, ffmpeg, guvcview, automoc4
-, cmake, libxml2, gettext, pkgconfig, libgphoto2, gphoto2, v4l_utils
-, libv4l, pcre }:
+{ stdenv, lib, fetchurl, qt5, ffmpeg, guvcview, cmake, ninja, libxml2
+, gettext, pkgconfig, libgphoto2, gphoto2, v4l_utils, libv4l, pcre
+, qwt, extra-cmake-modules }:
 
 stdenv.mkDerivation rec {
   pname = "qstopmotion";
-  version = "2.3.2";
+  version = "2.4.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/Version_2_3_2/${name}-Source.tar.gz";
-    sha256 = "1vbiznwyc05jqg0dpmgxmvf7kdzmlck0i8v2c5d69kgrdnaypcrf";
+    url = "mirror://sourceforge/project/${pname}/Version_${builtins.replaceStrings ["."] ["_"] version}/${name}-Source.tar.gz";
+    sha256 = "03r6jxyq0bak2vsy2b78nk27m7fm96hnl8cx11l3l17704j4iglh";
   };
 
-  buildInputs = [ qt5.qtbase gstreamer gstreamermm gst_plugins_bad gst_plugins_good
-                  gst_plugins_base ffmpeg guvcview v4l_utils libv4l pcre
-		];
+  buildInputs = with qt5; [ v4l_utils libv4l pcre qtbase qtmultimedia ffmpeg guvcview
+                            qwt qtquickcontrols qtimageformats qtxmlpatterns ];
 
-  nativeBuildInputs = [ pkgconfig cmake gettext libgphoto2 gphoto2 libxml2 libv4l ];
+  nativeBuildInputs = [ pkgconfig cmake extra-cmake-modules ninja
+                        gettext libgphoto2 gphoto2 libxml2 libv4l ];
+
+  patchPhase = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml" \
+                "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml Multimedia"
+    grep -rl 'qwt' . | xargs sed -i 's@<qwt/qwt_slider.h>@<qwt_slider.h>@g'
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.qstopmotion.org;
@@ -31,6 +37,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ maintainers.leenaars ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }

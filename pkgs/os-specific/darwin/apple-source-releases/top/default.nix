@@ -1,7 +1,8 @@
-{xcbuild, appleDerivation, apple_sdk, ncurses, libutil-new, lib}:
+{xcbuildHook, appleDerivation, apple_sdk, ncurses, libutil, lib}:
 
 appleDerivation {
-  buildInputs = [ xcbuild apple_sdk.frameworks.IOKit ncurses libutil-new ];
+  nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ apple_sdk.frameworks.IOKit ncurses libutil ];
   NIX_LDFLAGS = "-lutil";
   installPhase = ''
     install -D Products/Release/libtop.a $out/lib/libtop.a

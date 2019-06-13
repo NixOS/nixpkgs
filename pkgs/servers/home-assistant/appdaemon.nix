@@ -1,4 +1,4 @@
-{ lib, python3, fetchpatch }:
+{ lib, python3 }:
 
 let
   python = python3.override {
@@ -10,6 +10,9 @@ let
           inherit version;
           sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
         };
+        # TODO: remove after pinning aiohttp to a newer version
+        propagatedBuildInputs = with self; [ chardet multidict async-timeout yarl idna-ssl ];
+        doCheck = false;
       });
 
       yarl = super.yarl.overridePythonAttrs (oldAttrs: rec {
@@ -17,6 +20,14 @@ let
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "6af895b45bd49254cc309ac0fe6e1595636a024953d710e01114257736184698";
+        };
+      });
+
+      jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
+        version = "2.10.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013";
         };
       });
 
@@ -28,21 +39,29 @@ let
         };
       });
 
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "436bc774ecf7c103814098159fbb84c2715d25980175292c648f2da143909f95";
+        };
+      });
+
     };
   };
 
 in python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "3.0.0";
+  version = "3.0.5";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "ed925d3cb25db2c3f57304a0bca8fd0d9072d7ffe347ac5fcf68c4a30b7f1721";
+    sha256 = "623897ce08dc2efe24d04380df36e4b7fb35c0e4007e882857d4047f0b60349d";
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp aiohttp-jinja2 astral bcrypt daemonize feedparser iso8601
-    jinja2 pyyaml requests sseclient voluptuous websocket_client yarl
+    daemonize astral requests sseclient websocket_client aiohttp yarl jinja2
+    aiohttp-jinja2 pyyaml voluptuous feedparser iso8601 bcrypt paho-mqtt
   ];
 
   # no tests implemented

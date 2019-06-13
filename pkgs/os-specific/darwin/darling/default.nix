@@ -1,14 +1,19 @@
-{stdenv, lib, fetchFromGitHub, cmake, bison, flex}:
+{stdenv, lib, fetchzip}:
 
 stdenv.mkDerivation rec {
   pname = "darling";
   name = pname;
 
-  src = fetchFromGitHub {
-    repo = pname;
-    owner = "darlinghq";
-    rev = "d2cc5fa748003aaa70ad4180fff0a9a85dc65e9b";
-    sha256 = "1mkcnzy1cfpwghgvb9pszhy9jy6534y8krw8inwl9fqfd0w019wz";
+  src = fetchzip {
+    url = "https://github.com/darlinghq/darling/archive/d2cc5fa748003aaa70ad4180fff0a9a85dc65e9b.tar.gz";
+    sha256 = "11b51fw47nl505h63bgx5kqiyhf3glhp1q6jkpb6nqfislnzzkrf";
+    postFetch = ''
+      # Get rid of case conflict
+      mkdir $out
+      cd $out
+      tar -xzf $downloadedFile --strip-components=1
+      rm -r $out/src/libm
+    '';
   };
 
   # only packaging sandbox for now
@@ -21,6 +26,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
     cp -rL src/sandbox/include/ $out/
     cp libsystem_sandbox.dylib $out/lib/
+
+    mkdir -p $out/include
+    cp src/libaks/include/* $out/include
   '';
 
   # buildInputs = [ cmake bison flex ];

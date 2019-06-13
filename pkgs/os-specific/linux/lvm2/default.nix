@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid
-, thin-provisioning-tools, enable_dmeventd ? false }:
+{ stdenv, fetchgit, fetchpatch, pkgconfig, systemd, udev, utillinux, libuuid
+, thin-provisioning-tools, libaio
+, enable_dmeventd ? false }:
 
 let
-  version = "2.02.177";
+  version = "2.03.01";
 in
 
 stdenv.mkDerivation {
   name = "lvm2-${version}";
 
-  src = fetchurl {
-    url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
-    sha256 = "1wl0isn0yz5wvglwylnlqkppafwmvhliq5bd92vjqp5ir4za49a0";
+  src = fetchgit {
+    url = "git://sourceware.org/git/lvm2.git";
+    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    sha256 = "0jlaswf1srdxiqpgpp97j950ddjds8z0kr4pbwmal2za2blrgvbl";
   };
 
   configureFlags = [
@@ -27,7 +29,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libudev libuuid thin-provisioning-tools ];
+  buildInputs = [ udev libuuid thin-provisioning-tools libaio ];
 
   preConfigure =
     ''
@@ -38,7 +40,8 @@ stdenv.mkDerivation {
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
     '';
 
-  enableParallelBuilding = true;
+  # gcc: error: ../../device_mapper/libdevice-mapper.a: No such file or directory
+  enableParallelBuilding = false;
 
   #patches = [ ./purity.patch ];
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
@@ -59,6 +62,8 @@ stdenv.mkDerivation {
     })
   ];
 
+  doCheck = false; # requires root
+
   # To prevent make install from failing.
   preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
 
@@ -76,11 +81,12 @@ stdenv.mkDerivation {
       cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://sourceware.org/lvm2/;
     description = "Tools to support Logical Volume Management (LVM) on Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 bsd2 lgpl21 ];
+    maintainers = with maintainers; [raskin];
     inherit version;
     downloadPage = "ftp://sources.redhat.com/pub/lvm2/";
   };

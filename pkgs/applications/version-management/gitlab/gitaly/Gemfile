@@ -1,0 +1,38 @@
+source 'https://rubygems.org'
+
+# Require bundler >= 1.16.5 to avoid this bug: https://github.com/bundler/bundler/issues/6537
+gem 'bundler', '>= 1.16.5'
+
+gem 'rugged', '~> 0.28'
+gem 'github-linguist', '~> 6.1', require: 'linguist'
+gem 'gitlab-markup', '~> 1.7.0'
+gem 'gitaly-proto', '~> 1.22.0'
+gem 'activesupport', '~> 5.0.2'
+gem 'rdoc', '~> 4.2'
+gem 'gitlab-gollum-lib', '~> 4.2.7.7', require: false
+gem 'gitlab-gollum-rugged_adapter', '~> 0.4.4.2', require: false
+gem 'grpc', '~> 1.15.0'
+gem 'sentry-raven', '~> 2.9.0', require: false
+gem 'faraday', '~> 0.12'
+gem 'rbtrace', require: false
+
+# Detects the open source license the repository includes
+# This version needs to be in sync with GitLab CE/EE
+gem 'licensee', '~> 8.9.0'
+
+gem 'google-protobuf', '~> 3.6'
+
+group :development, :test do
+  gem 'rubocop', '~> 0.50', require: false
+  gem 'rspec', require: false
+  gem 'rspec-parameterized', require: false
+  gem 'timecop', require: false
+  gem 'factory_bot', require: false
+  gem 'pry', '~> 0.12.2', require: false
+
+  # gitlab-shell spec gems
+  gem 'listen', '~> 0.5.0'
+  gem 'simplecov', '~> 0.9.0', require: false
+  gem 'vcr', '~> 4.0.0'
+  gem 'webmock', '~> 3.4.0'
+end

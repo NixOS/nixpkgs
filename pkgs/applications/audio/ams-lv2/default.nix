@@ -1,24 +1,19 @@
-{ stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig, python }:
+{ stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig, python3
+, wafHook }:
 
 stdenv.mkDerivation  rec {
   name = "ams-lv2-${version}";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "blablack";
     repo = "ams-lv2";
     rev = version;
-    sha256 = "1n1dnqnj24xhiy9323lj52nswr5120cj56fpckg802miss05sr6x";
+    sha256 = "1lz2mvk4gqsyf92yxd3aaldx0d0qi28h4rnnvsaz4ls0ccqm80nk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cairo fftw gtkmm2 lv2 lvtk python ];
-
-  configurePhase = "python waf configure --prefix=$out";
-
-  buildPhase = "python waf";
-
-  installPhase = "python waf install";
+  nativeBuildInputs = [ pkgconfig wafHook ];
+  buildInputs = [ cairo fftw gtkmm2 lv2 lvtk ];
 
   meta = with stdenv.lib; {
     description = "An LV2 port of the internal modules found in Alsa Modular Synth";
@@ -26,5 +21,7 @@ stdenv.mkDerivation  rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
+    # Build uses `-msse` and `-mfpmath=sse`
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

@@ -14,6 +14,12 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ncurses ];
   propagatedBuildInputs = [ camlpdf ];
 
+  makeFlags = with stdenv.lib;
+  optionals (versionAtLeast ocaml.version "4.06") [
+    "OCAMLBCFLAGS+=-unsafe-string"
+    "OCAMLNCFLAGS+=-unsafe-string"
+  ];
+
   createFindlibDestdir = true;
 
   postInstall = ''
@@ -24,10 +30,11 @@ stdenv.mkDerivation {
     cp cpdfmanual.pdf $out/share/doc/cpdf/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.coherentpdf.com/;
     platforms = ocaml.meta.platforms or [];
     description = "PDF Command Line Tools";
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.vbgl ];
   };
 }

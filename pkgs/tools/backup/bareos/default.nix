@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool, flex
+{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, flex
 , readline ? null, openssl ? null, python2 ? null, ncurses ? null, rocksdb
 , sqlite ? null, postgresql ? null, mysql ? null, zlib ? null, lzo ? null
 , jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
@@ -12,14 +12,14 @@ let
 in
 stdenv.mkDerivation rec {
   name = "bareos-${version}";
-  version = "17.2.5";
+  version = "17.2.7";
 
   src = fetchFromGitHub {
     owner = "bareos";
     repo = "bareos";
     rev = "Release/${version}";
     name = "${name}-src";
-    sha256 = "1mgh25lhd05m26sq1sj5ir2b4n7560x93ib25cvf9vmmypm1c7pn";
+    sha256 = "1awf5i4mw2nfd7z0dmqnywapnx9nz6xwqv8rxp0y2mnrhzdpbrbz";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
     "--with-working-dir=/var/lib/bareos"
     "--with-bsrdir=/var/lib/bareos"
     "--with-logdir=/var/log/bareos"
-    "--with-pid-dir=/var/run/bareos"
-    "--with-subsys-dir=/var/run/bareos"
+    "--with-pid-dir=/run/bareos"
+    "--with-subsys-dir=/run/bareos"
     "--enable-ndmp"
     "--enable-lmdb"
     "--enable-batch-insert"
@@ -77,6 +77,5 @@ stdenv.mkDerivation rec {
     description = "A fork of the bacula project";
     license = licenses.agpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

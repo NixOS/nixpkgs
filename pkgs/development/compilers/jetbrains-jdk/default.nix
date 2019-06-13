@@ -1,22 +1,22 @@
 { stdenv, lib, fetchurl, file, glib, libxml2, libav_0_8, ffmpeg, libxslt
 , libGL , xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo
-, gdk_pixbuf, atk }:
+, gdk_pixbuf, atk, zlib }:
 
 # TODO: Investigate building from source instead of patching binaries.
 # TODO: Binary patching for not just x86_64-linux but also x86_64-darwin i686-linux
 
 let drv = stdenv.mkDerivation rec {
   pname = "jetbrainsjdk";
-  version = "152b1136.20";
+  version = "164";
   name = pname + "-" + version;
 
-  src = if stdenv.system == "x86_64-linux" then
+  src = if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchurl {
-      url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbsdk8u${version}_linux_x64.tar.gz";
-      sha256 = "0sqr8f3z062kwcxh3dxnan45ldas438blbc69z0pypbhc8c2sk2b";
+      url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbrsdk-11_0_2-linux-x64-b${version}.tar.gz";
+      sha256 = "121yzgvkfx7lq0k9s8wjnhz09a564br5y7zlkxgh191sbm2i7zdi";
     }
   else
-    throw "unsupported system: ${stdenv.system}";
+    throw "unsupported system: ${stdenv.hostPlatform.system}";
 
   nativeBuildInputs = [ file ];
 
@@ -25,25 +25,11 @@ let drv = stdenv.mkDerivation rec {
   installPhase = ''
     cd ..
 
-    exes=$(file $sourceRoot/bin/* $sourceRoot/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-    for file in $exes; do
-      paxmark m "$file"
-    done
-
     mv $sourceRoot $out
     jrePath=$out/jre
   '';
 
-  postFixup = let
-    arch = "amd64";
-    rSubPaths = [
-      "lib/${arch}/jli"
-      "lib/${arch}/server"
-      "lib/${arch}/xawt"
-      "lib/${arch}"
-    ];
-    in ''
-    rpath+="''${rpath:+:}${stdenv.lib.concatStringsSep ":" (map (a: "$jrePath/${a}") rSubPaths)}"
+  postFixup = ''
     find $out -type f -perm -0100 \
         -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "$rpath" {} \;
@@ -52,10 +38,11 @@ let drv = stdenv.mkDerivation rec {
 
   rpath = lib.makeLibraryPath ([
     stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
-    alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk
+    alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk zlib
+    (placeholder "out")
   ] ++ (with xorg; [
     libX11 libXext libXtst libXi libXp libXt libXrender libXxf86vm
-  ]));
+  ])) + ":${placeholder "out"}/lib/jli";
 
   passthru.home = drv;
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "3.9";
 
   src = fetchurl {
-    url = "http://distfiles.audacious-media-player.org/audacious-${version}-gtk3.tar.bz2";
+    url = "https://distfiles.audacious-media-player.org/audacious-${version}-gtk3.tar.bz2";
     sha256 = "0dc7fg0v2l2j4h9cz1baz7rf4n0a5jgk09qvsj806sh6jp7w6ipm";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gettext glib gtk3 libmowgli dbus-glib libxml2
-    xorg.libXcomposite gnome3.defaultIconTheme alsaLib libjack2
+    xorg.libXcomposite gnome3.adwaita-icon-theme alsaLib libjack2
     libpulseaudio fluidsynth libmad libogg libvorbis libcdio
     libcddb flac ffmpeg mpg123 libcue libmms libbs2b libsndfile
     libmodplug libsamplerate soxr lirc curl wavpack neon faad2

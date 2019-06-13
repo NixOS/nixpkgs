@@ -3,13 +3,13 @@ fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "oysttyer-${version}";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner  = "oysttyer";
     repo   = "oysttyer";
     rev    = "${version}";
-    sha256 = "05bfak4jr8ln4847rkj5qkazqnjym65k1phav3yicbyr3mxywhjw";
+    sha256 = "0cm1hvi68iqgjsg15xdii271pklgzjn9j9afb1c460z71kgy3wz2";
   };
 
   buildInputs = [

@@ -1,10 +1,10 @@
 { stdenv, pkgconfig, ocaml, findlib, fetchurl, curl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ocurl-0.8.0";
+  name = "ocurl-0.8.1";
   src = fetchurl {
     url = "http://ygrek.org.ua/p/release/ocurl/${name}.tar.gz";
-    sha256 = "0292knvm9g038br0dc03lcsnbjqycyiqha256dp4bxkz3vmmz4wr";
+    sha256 = "08ldzbx1k3mbjc01fmzsn86ll4paf331bcjss6iig6y6hgc9q3ry";
   };
 
   buildInputs = [ pkgconfig ocaml findlib ncurses ];

@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, buildPerlPackage, perlPackages, gnused, nix, dmidecode, pciutils, usbutils, iproute, nettools
+{ stdenv, lib, fetchurl, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
 , fetchFromGitHub, makeWrapper
 }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "FusionInventory-Agent-${version}";
   version = "2.3.21";
 
@@ -49,7 +49,7 @@ buildPerlPackage rec {
     IOSocketSSL
     IPCRun
     JSON
-    LWPProtocolhttps
+    LWPProtocolHttps
     ModuleInstall
     NetSNMP
     TestCompile

@@ -1,23 +1,52 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
-, openglSupport ? false, libGL, libGLU
-, alsaSupport ? true, alsaLib
-, x11Support ? hostPlatform == buildPlatform, libXext, libICE, libXrandr
-, pulseaudioSupport ? true, libpulseaudio
+{ stdenv, config, libGLSupported, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
+, openglSupport ? libGLSupported, libGL, libGLU
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, libXext, libICE, libXrandr
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
-, hostPlatform, buildPlatform
+, cf-private
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
-with lib;
+with stdenv.lib;
 
-assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
-assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null && libGLU != null);
+stdenv.mkDerivation rec {
+  name    = "SDL-${version}";
+  version = "1.2.15";
 
-let
+  src = fetchurl {
+    url    = "https://www.libsdl.org/release/${name}.tar.gz";
+    sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
+  };
 
-  configureFlagsFun = attrs: [
+  # make: *** No rule to make target 'build/*.lo', needed by 'build/libSDL.la'.  Stop.
+  postPatch = "patchShebangs ./configure";
+
+  outputs = [ "out" "dev" ];
+  outputBin = "dev"; # sdl-config
+
+  nativeBuildInputs = [ pkgconfig ]
+    ++ optional stdenv.isLinux libcap;
+
+  propagatedBuildInputs = [ libiconv ]
+    ++ optionals x11Support [ libXext libICE libXrandr ]
+    ++ optionals openglSupport [ libGL libGLU ]
+    ++ optional alsaSupport alsaLib
+    ++ optional pulseaudioSupport libpulseaudio
+    ++ optional stdenv.isDarwin Cocoa;
+
+  buildInputs = [ ]
+    ++ optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
+    ++ optionals stdenv.isDarwin [
+      AudioUnit CoreAudio CoreServices Kernel OpenGL
+      # Needed for NSDefaultRunLoopMode symbols.
+      cf-private
+    ];
+
+  configureFlags = [
     "--disable-oss"
     "--disable-video-x11-xme"
     "--enable-rpath"
@@ -29,44 +58,7 @@ let
   # Please try revert the change that introduced this comment when updating SDL.
   ] ++ optional stdenv.isDarwin "--disable-x11-shared"
     ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib";
-
-in
-
-stdenv.mkDerivation rec {
-  name    = "SDL-${version}";
-  version = "1.2.15";
-
-  src = fetchurl {
-    url    = "http://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
-  };
-
-  # make: *** No rule to make target 'build/*.lo', needed by 'build/libSDL.la'.  Stop.
-  postPatch = "patchShebangs ./configure";
-
-  outputs = [ "out" "dev" ];
-  outputBin = "dev"; # sdl-config
-
-  nativeBuildInputs = [ pkgconfig ];
-
-  propagatedBuildInputs = [ ]
-    ++ optionals x11Support [ libXext libICE libXrandr ]
-    ++ optional stdenv.isLinux libcap
-    ++ optionals openglSupport [ libGL libGLU ]
-    ++ optional alsaSupport alsaLib
-    ++ optional pulseaudioSupport libpulseaudio
-    ++ optional stdenv.isDarwin Cocoa;
-
-  buildInputs = [ libiconv ]
-    ++ optional (!hostPlatform.isMinGW) audiofile
-    ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
-
-  configureFlags = configureFlagsFun { inherit alsaLib; };
-
-  crossAttrs = {
-    configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
-  };
+    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib";
 
   patches = [
     ./find-headers.patch
@@ -97,7 +89,7 @@ stdenv.mkDerivation rec {
     # Ticket: https://bugs.freedesktop.org/show_bug.cgi?id=27222
     (fetchpatch {
       name = "SDL_SetGamma.patch";
-      url = "http://src.fedoraproject.org/cgit/rpms/SDL.git/plain/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch?id=04a3a7b1bd88c2d5502292fad27e0e02d084698d";
+      url = "https://src.fedoraproject.org/cgit/rpms/SDL.git/plain/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch?id=04a3a7b1bd88c2d5502292fad27e0e02d084698d";
       sha256 = "0x52s4328kilyq43i7psqkqg7chsfwh0aawr50j566nzd7j51dlv";
     })
     # Fix a build failure on OS X Mavericks
@@ -120,7 +112,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for lib in $out/lib/*.so* ; do
       if [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${makeLibraryPath propagatedBuildInputs}" "$lib"
       fi
     done
   '';
@@ -128,6 +120,8 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   passthru = { inherit openglSupport; };
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";

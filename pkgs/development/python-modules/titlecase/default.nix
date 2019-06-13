@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "titlecase";
-  name = "${pname}-${version}";
   version = "0.12.0";
 
   src = fetchPypi {

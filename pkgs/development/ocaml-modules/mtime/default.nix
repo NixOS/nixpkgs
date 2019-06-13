@@ -19,11 +19,9 @@ stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-mtime-${param.version}";
 
   src = fetchurl {
-    url = "http://erratique.ch/software/mtime/releases/mtime-${param.version}.tbz";
+    url = "https://erratique.ch/software/mtime/releases/mtime-${param.version}.tbz";
     inherit (param) sha256;
   };
-
-  unpackCmd = "tar xjf $src";
 
   buildInputs = [ ocaml findlib ocamlbuild topkg ]
   ++ stdenv.lib.optional jsooSupport js_of_ocaml;
@@ -34,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Monotonic wall-clock time for OCaml";
-    homepage = http://erratique.ch/software/mtime;
+    homepage = https://erratique.ch/software/mtime;
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;

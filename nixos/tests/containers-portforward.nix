@@ -10,11 +10,11 @@ in
 import ./make-test.nix ({ pkgs, ...} : {
   name = "containers-portforward";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aristid aszlig eelco chaoflow kampfschlaefer ianwookim ];
+    maintainers = [ aristid aszlig eelco kampfschlaefer ianwookim ];
   };
 
   machine =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
@@ -28,7 +28,6 @@ import ./make-test.nix ({ pkgs, ...} : {
             { services.httpd.enable = true;
               services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
-              networking.firewall.allowPing = true;
             };
         };
 

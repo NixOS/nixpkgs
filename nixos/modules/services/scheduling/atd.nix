@@ -57,14 +57,14 @@ in
 
     security.pam.services.atd = {};
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "atd";
         uid = config.ids.uids.atd;
         description = "atd user";
         home = "/var/empty";
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "atd";
         gid = config.ids.gids.atd;
       };

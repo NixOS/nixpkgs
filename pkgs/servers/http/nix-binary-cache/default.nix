@@ -1,4 +1,4 @@
-{stdenv, fetchurl
+{stdenv
 , coreutils, findutils, nix, xz, bzip2, gnused, gnugrep, openssl
 , lighttpd, iproute }:
 stdenv.mkDerivation rec {

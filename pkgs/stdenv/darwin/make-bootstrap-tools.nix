@@ -3,7 +3,7 @@
 with import pkgspath { inherit system; };
 
 let
-  llvmPackages = llvmPackages_4;
+  llvmPackages = llvmPackages_7;
 in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -11,6 +11,10 @@ in rec {
     # Cannot use a single binary build, or it gets dynamically linked against gmp.
     singleBinary = false;
   });
+
+  # We want a version of cctools without LLVM, because the LTO support ends up making
+  # the bootstrap tools huge and isn't really necessary for bootstrap
+  cctools_ = darwin.cctools.override { llvm = null; };
 
   # Avoid debugging larger changes for now.
   bzip2_ = bzip2.override (args: { linkStatic = true; });
@@ -73,16 +77,17 @@ in rec {
       cp -d ${gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
       cp -d ${ncurses.out}/lib/libncurses*.dylib $out/lib
+      cp -d ${libxml2.out}/lib/libxml2*.dylib $out/lib
 
       # Copy what we need of clang
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang $out/bin
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang++ $out/bin
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang-[0-9].[0-9] $out/bin
+      cp -d ${llvmPackages.clang-unwrapped}/bin/clang* $out/bin
 
       cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
       cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
       cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
+      cp -d ${libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
       cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
@@ -93,8 +98,8 @@ in rec {
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib
 
       # Copy binutils.
-      for i in as ld ar ranlib nm strip otool install_name_tool dsymutil lipo; do
-        cp ${darwin.cctools}/bin/$i $out/bin
+      for i in as ld ar ranlib nm strip otool install_name_tool lipo; do
+        cp ${cctools_}/bin/$i $out/bin
       done
 
       cp -rd ${pkgs.darwin.CF}/Library $out
@@ -104,9 +109,9 @@ in rec {
       nuke-refs $out/bin/*
 
       rpathify() {
-        local libs=$(${darwin.cctools}/bin/otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
+        local libs=$(${cctools_}/bin/otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
         for lib in $libs; do
-          ${darwin.cctools}/bin/install_name_tool -change $lib "@rpath/$(basename $lib)" "$1"
+          ${cctools_}/bin/install_name_tool -change $lib "@rpath/$(basename $lib)" "$1"
         done
       }
 
@@ -178,6 +183,9 @@ in rec {
   unpack = stdenv.mkDerivation (bootstrapFiles // {
     name = "unpack";
 
+    reexportedLibrariesFile =
+      ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
+
     # This is by necessity a near-duplicate of unpack-bootstrap-tools.sh. If we refer to it directly,
     # we can't make any changes to it due to our testing stdenv depending on it. Think of this as the
     # unpack-bootstrap-tools.sh for the next round of bootstrap tools.
@@ -209,7 +217,7 @@ in rec {
         $out/lib/system/libsystem_kernel.dylib
 
       # TODO: this logic basically duplicates similar logic in the Libsystem expression. Deduplicate them!
-      libs=$(otool -arch x86_64 -L /usr/lib/libSystem.dylib | tail -n +3 | awk '{ print $1 }')
+      libs=$(cat $reexportedLibrariesFile | grep -v '^#')
 
       for i in $libs; do
         if [ "$i" != "/usr/lib/system/libsystem_kernel.dylib" ] && [ "$i" != "/usr/lib/system/libsystem_c.dylib" ]; then

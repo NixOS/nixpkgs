@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ automake pkgconfig gettext perl zip ];
   buildInputs = [ wxGTK gtk2 libxml2 freetype pango ];
 
-  configureFlags = "--disable-svnversion";
+  configureFlags = [ "--disable-svnversion" ];
 
   patches = map fetchurl (import ./debian-patches.nix);
 

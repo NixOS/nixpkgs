@@ -1,12 +1,13 @@
 { stdenv, fetchFromGitHub, pkgconfig, python2Packages, makeWrapper
+, fetchpatch
 , bash, libsamplerate, libsndfile, readline, eigen, celt
+, wafHook
 # Darwin Dependencies
-, aften, AudioToolbox, CoreAudio, CoreFoundation
+, aften, AudioUnit, CoreAudio, cf-private, libobjc, Accelerate
 
 # Optional Dependencies
 , dbus ? null, libffado ? null, alsaLib ? null
 , libopus ? null
-, darwin
 
 # Extra options
 , prefix ? ""
@@ -15,7 +16,7 @@
 with stdenv.lib;
 let
   inherit (python2Packages) python dbus-python;
-  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   libOnly = prefix == "lib";
 
@@ -36,46 +37,31 @@ stdenv.mkDerivation rec {
     sha256 = "0ynpyn0l77m94b50g7ysl795nvam3ra65wx5zb46nxspgbf6wnkh";
   };
 
-  nativeBuildInputs = [ pkgconfig python makeWrapper ];
+  nativeBuildInputs = [ pkgconfig python makeWrapper wafHook ];
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ aften AudioToolbox CoreAudio CoreFoundation ];
-
-  # CoreFoundation 10.10 doesn't include CFNotificationCenter.h yet.
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin-cf.patch ];
+  ] ++ optionals stdenv.isDarwin [
+    aften AudioUnit CoreAudio Accelerate cf-private libobjc
+  ];
 
   prePatch = ''
     substituteInPlace svnversion_regenerate.sh \
         --replace /bin/bash ${bash}/bin/bash
   '';
 
-  # It looks like one of the frameworks depends on <CoreFoundation/CFAttributedString.h>
-  # since frameworks are impure we also have to use the impure CoreFoundation here.
-  # FIXME: remove when CoreFoundation is updated to 10.11
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
-  '';
+  patches = [ (fetchpatch {
+    url = "https://github.com/jackaudio/jack2/commit/d851fada460d42508a6f82b19867f63853062583.patch";
+    sha256 = "1iwwxjzvgrj7dz3s8alzlhcgmcarjcbkrgvsmy6kafw21pyyw7hp";
+  }) ];
 
-  configurePhase = ''
-    runHook preConfigure
+  wafConfigureFlags = [
+    "--classic"
+    "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
+  ] ++ optional (optDbus != null) "--dbus"
+    ++ optional (optLibffado != null) "--firewire"
+    ++ optional (optAlsaLib != null) "--alsa";
 
-    python waf configure --prefix=$out \
-      ${optionalString (optDbus != null) "--dbus"} \
-      --classic \
-      ${optionalString (optLibffado != null) "--firewire"} \
-      ${optionalString (optAlsaLib != null) "--alsa"} \
-      --autostart=${if (optDbus != null) then "dbus" else "classic"} \
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    python waf build
-  '';
-
-  installPhase = ''
-    python waf install
-  '' + (if libOnly then ''
+  postInstall = (if libOnly then ''
     rm -rf $out/{bin,share}
     rm -rf $out/lib/{jack,libjacknet*,libjackserver*}
   '' else ''
@@ -87,6 +73,6 @@ stdenv.mkDerivation rec {
     homepage = http://jackaudio.org;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ goibhniu wkennington ];
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

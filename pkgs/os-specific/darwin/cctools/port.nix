@@ -1,50 +1,41 @@
-{ stdenv, fetchFromGitHub, makeWrapper, autoconf, automake, libtool_2
-, llvm, libcxx, libcxxabi, clang, libuuid
-, libobjc ? null, maloader ? null, xctoolchain ? null
-, hostPlatform, targetPlatform
-, enableDumpNormalizedLibArgs ? false
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
+, libcxxabi, libuuid, llvm
+, libobjc ? null, maloader ? null
+, enableTapiSupport ? true, libtapi
 }:
 
 let
+
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
   targetPrefix = stdenv.lib.optionalString
-    (targetPlatform != hostPlatform)
-    "${targetPlatform.config}-";
+    (stdenv.targetPlatform != stdenv.hostPlatform)
+    "${stdenv.targetPlatform.config}-";
 in
 
 # Non-Darwin alternatives
-assert (!hostPlatform.isDarwin) -> (maloader != null && xctoolchain != null);
+assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
 
 let
   baseParams = rec {
     name = "${targetPrefix}cctools-port-${version}";
     version = "895";
 
-    src = fetchFromGitHub (if enableDumpNormalizedLibArgs then {
+    src = fetchFromGitHub {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
-      # master with https://github.com/tpoechtrager/cctools-port/pull/34
-      rev    = "8395d4b2c3350356e2fb02f5e04f4f463c7388df";
-      sha256 = "10vbf1cfzx02q8chc77s84fp2kydjpx2y682mr6mrbb7sq5rwh8f";
-    } else {
-      owner  = "tpoechtrager";
-      repo   = "cctools-port";
-      rev    = "2e569d765440b8cd6414a695637617521aa2375b"; # From branch 895-ld64-274.2
-      sha256 = "0l45mvyags56jfi24rawms8j2ihbc45mq7v13pkrrwppghqrdn52";
-    });
+      rev    = "07619027f8311fa61b4a549c75994b88739a82d8";
+      sha256 = "12g94hhz5v5bmy2w0zb6fb4bjlmn992gygc60h9nai15kshj2spi";
+    };
 
     outputs = [ "out" "dev" ];
 
-    nativeBuildInputs = [ autoconf automake libtool_2 ];
-    buildInputs = [ libuuid ] ++
-      # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
-      stdenv.lib.optionals (!stdenv.isDarwin) [ llvm clang ] ++
-      stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
+    nativeBuildInputs = [ autoconf automake libtool autoreconfHook ];
+    buildInputs = [ libuuid ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
+      ++ stdenv.lib.optional enableTapiSupport libtapi;
 
-    patches = [
-      ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
-    ];
+    patches = [ ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch ./apfs.patch ];
 
     __propagatedImpureHostDeps = [
       # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
@@ -55,12 +46,17 @@ let
     enableParallelBuilding = true;
 
     # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-    configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
-    configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [
-      "CXXFLAGS=-I${libcxx}/include/c++/v1"
-    ];
+    configurePlatforms = [ "build" "host" ]
+      ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    configureFlags = [ "--disable-clang-as" ]
+      ++ stdenv.lib.optionals enableTapiSupport [
+        "--enable-tapi-support"
+        "--with-libtapi=${libtapi}"
+      ];
 
-    postPatch = ''
+    postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace cctools/Makefile.am --replace libobjc2 ""
+    '' + ''
       sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
 
       # FIXME: there are far more absolute path references that I don't want to fix right now
@@ -84,14 +80,13 @@ let
       #  include_next "unistd.h"
       #endif
       EOF
-    '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-      sed -i -e 's|clang++|& -I${libcxx}/include/c++/v1|' cctools/autogen.sh
+
+      cd cctools
     '';
 
     # TODO: this builds an ld without support for LLVM's LTO. We need to teach it, but that's rather
     # hairy to handle during bootstrap. Perhaps it could be optional?
     preConfigure = ''
-      cd cctools
       sh autogen.sh
     '';
 
@@ -101,31 +96,16 @@ let
       popd
     '';
 
-    postInstall =
-      if hostPlatform.isDarwin
-      then ''
-        cat >$out/bin/dsymutil << EOF
-        #!${stdenv.shell}
-        EOF
-        chmod +x $out/bin/dsymutil
-      ''
-      else ''
-        for tool in dyldinfo dwarfdump dsymutil; do
-          ${makeWrapper}/bin/makeWrapper "${maloader}/bin/ld-mac" "$out/bin/${targetPlatform.config}-$tool" \
-            --add-flags "${xctoolchain}/bin/$tool"
-          ln -s "$out/bin/${targetPlatform.config}-$tool" "$out/bin/$tool"
-        done
-      '';
-
     passthru = {
       inherit targetPrefix;
     };
 
     meta = {
-      broken = !targetPlatform.isDarwin; # Only supports darwin targets
+      broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
       homepage = http://www.opensource.apple.com/source/cctools/;
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
+      maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
     };
   };
 in stdenv.mkDerivation baseParams

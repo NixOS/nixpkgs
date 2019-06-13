@@ -1,5 +1,6 @@
-{ stdenv
+{ config, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , fdk_aac
 , ffmpeg
@@ -10,6 +11,7 @@
 , libXdmcp
 , qtbase
 , qtx11extras
+, qtsvg
 , speex
 , libv4l
 , x264
@@ -18,10 +20,16 @@
 , makeWrapper
 , pkgconfig
 , vlc
+, mbedtls
 
-, alsaSupport ? false
+, scriptingSupport ? true
+, luajit
+, swig
+, python3
+
+, alsaSupport ? stdenv.isLinux
 , alsaLib
-, pulseaudioSupport ? false
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 }:
 
@@ -29,16 +37,14 @@ let
   optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "21.1.1";
+  version = "23.1.0";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
     rev = "${version}";
-    sha256 = "11gr4szjypihp0562r23pvkmaln6vjz1z4y4ls34bmc8n9ixrdcv";
+    sha256 = "1iavrkjp7vgg0blm4lmj4mc4hrfx8yjaiwx55wmc5ynw80v37ybc";
   };
-
-  patches = [ ./find-xcb.patch ];
 
   nativeBuildInputs = [ cmake
                         pkgconfig
@@ -55,11 +61,14 @@ in stdenv.mkDerivation rec {
                   libXdmcp
                   qtbase
                   qtx11extras
+                  qtsvg
                   speex
                   x264
                   vlc
                   makeWrapper
+                  mbedtls
                 ]
+                ++ optional scriptingSupport [ luajit swig python3 ]
                 ++ optional alsaSupport alsaLib
                 ++ optional pulseaudioSupport libpulseaudio;
 
@@ -83,6 +92,6 @@ in stdenv.mkDerivation rec {
     homepage = https://obsproject.com;
     maintainers = with maintainers; [ jb55 MP2E ];
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

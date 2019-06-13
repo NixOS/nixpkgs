@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchFromGitLab, cmake, pkgconfig, makeWrapper, python27, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU_combined, gettext, glib, gtk2, portaudio, SDL
-, ffmpeg, pcre, libevdev, libpng, libjpeg, libudev, libvorbis
+, ffmpeg, pcre, libevdev, libpng, libjpeg, udev, libvorbis
 , miniupnpc, sfml, xorg, zlib }:
 
 let
@@ -22,9 +22,9 @@ let
       COREDIR="$out/lib/retroarch/cores"
       mkdir -p $out/bin
       mkdir -p $COREDIR
-      mv ${d2u core}_libretro.so $COREDIR/.
+      mv ${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $COREDIR/.
       makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
-        --add-flags "-L $COREDIR/${d2u core}_libretro.so $@"
+        --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
     '';
 
     enableParallelBuilding = true;
@@ -39,7 +39,7 @@ let
       homepage = https://www.libretro.com/;
       inherit license;
       maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
   } // a);
 
@@ -67,7 +67,7 @@ in with stdenv.lib.licenses;
     buildPhase = "make";
   };
 
-  beetle-pce-fast = (mkLibRetroCore rec {
+  beetle-pce-fast = let der = (mkLibRetroCore rec {
     core = "mednafen-pce-fast";
     src = fetchRetro {
       repo = "beetle-pce-fast-libretro";
@@ -76,12 +76,12 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's PC Engine core to libretro";
     license = gpl2;
-  }).override {
+  }); in der.override {
     buildPhase = "make";
-    name = "beetle-pce-fast";
+    name = "beetle-pce-fast-${der.version}";
   };
 
-  beetle-psx = (mkLibRetroCore rec {
+  beetle-psx = let der = (mkLibRetroCore rec {
     core = "mednafen-psx";
     src = fetchRetro {
       repo = "beetle-psx-libretro";
@@ -90,12 +90,12 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's PSX Engine core to libretro";
     license = gpl2;
-  }).override {
+  }); in der.override {
     buildPhase = "make";
-    name = "beetle-psx";
+    name = "beetle-psx-${der.version}";
   };
 
-  beetle-saturn = (mkLibRetroCore rec {
+  beetle-saturn = let der = (mkLibRetroCore rec {
     core = "mednafen-saturn";
     src = fetchRetro {
       repo = "beetle-saturn-libretro";
@@ -104,9 +104,9 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's Saturn core to libretro";
     license = gpl2;
-  }).override {
+  }); in der.override {
     buildPhase = "make";
-    name = "beetle-saturn";
+    name = "beetle-saturn-${der.version}";
     meta.platforms = [ "x86_64-linux" ];
   };
 
@@ -149,8 +149,8 @@ in with stdenv.lib.licenses;
     extraBuildInputs = [
       cmake curl libGLU_combined pcre pkgconfig sfml miniupnpc
       gettext glib gtk2 hidapi
-      libevdev libudev
-    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil ]);
+      libevdev udev
+    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXinerama libXxf86vm ]);
   }).override {
     cmakeFlags = [
         "-DLINUX_LOCAL_DEV=true"
@@ -178,7 +178,7 @@ in with stdenv.lib.licenses;
     buildPhase = ''
       cd svn-current/trunk \
       && make -f makefile.libretro \
-      && mv fbalpha2012_libretro.so fba_libretro.so
+      && mv fbalpha2012_libretro${stdenv.hostPlatform.extensions.sharedLibrary} fba_libretro${stdenv.hostPlatform.extensions.sharedLibrary}
     '';
   };
 
@@ -232,11 +232,10 @@ in with stdenv.lib.licenses;
 
   mame = (mkLibRetroCore {
     core = "mame";
-    version = "2018-03-02";
     src = fetchRetro {
       repo = "mame";
-      rev = "893f1ac2231b348b63209fd5b2545f770458ae8f";
-      sha256 = "1j9p82q9jhf5lf4w392zd09bq0j4iw1afhznymg0v60jv592h3gz";
+      rev = "9f9e6b6c9bde4d50c72e9a5c80496a1fec6b8aa9";
+      sha256 = "0lfj8bjchkcvyb5x0x29cg10fkfklxndk80947k4qfysclijxpkv";
     };
     description = "Port of MAME to libretro";
     license = gpl2Plus;
@@ -273,7 +272,7 @@ in with stdenv.lib.licenses;
 
     extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
-    buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
+    buildPhase = "make WITH_DYNAREC=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
 
   nestopia = (mkLibRetroCore rec {
@@ -301,7 +300,7 @@ in with stdenv.lib.licenses;
 
     extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
-    buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
+    buildPhase = "make WITH_DYNAREC=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
 
   picodrive = (mkLibRetroCore rec {
@@ -413,7 +412,7 @@ in with stdenv.lib.licenses;
   }).override {
     buildPhase = ''
       make -f Makefile.libretro
-      mv snes9x2010_libretro.so snes9x_next_libretro.so
+      mv snes9x2010_libretro${stdenv.hostPlatform.extensions.sharedLibrary} snes9x_next_libretro${stdenv.hostPlatform.extensions.sharedLibrary}
     '';
   };
 

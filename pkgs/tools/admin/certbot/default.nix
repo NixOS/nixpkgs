@@ -1,34 +1,32 @@
-{ stdenv, pythonPackages, fetchFromGitHub, dialog }:
+{ stdenv, python3Packages, fetchFromGitHub, dialog }:
 
-# Latest version of certbot supports python3 and python3 version of pythondialog
-
-pythonPackages.buildPythonApplication rec {
-  name = "certbot-${version}";
-  version = "0.22.2";
+python3Packages.buildPythonApplication rec {
+  pname = "certbot";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
-    owner = "certbot";
-    repo = "certbot";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "08x80x9d71j84mwjm5wzd0x5gcw6gwyvkvadi2js39js6hfnc6jg";
+    sha256 = "0rwjxmkpicyc9a5janvj1lfi430nq6ha94nyfgp11ds9fyydbh1s";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     ConfigArgParse
     acme
     configobj
     cryptography
+    josepy
     parsedatetime
     psutil
     pyRFC3339
     pyopenssl
-    python2-pythondialog
     pytz
     six
     zope_component
     zope_interface
   ];
-  buildInputs = [ dialog ] ++ (with pythonPackages; [ nose mock gnureadline ]);
+  buildInputs = [ dialog ] ++ (with python3Packages; [ mock gnureadline ]);
 
   patchPhase = ''
     substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
@@ -41,6 +39,8 @@ pythonPackages.buildPythonApplication rec {
                        --prefix PATH : "${dialog}/bin:$PATH"
     done
   '';
+
+  doCheck = !stdenv.isDarwin; # On Hydra Darwin tests fail with "Too many open files".
 
   meta = with stdenv.lib; {
     homepage = src.meta.homepage;

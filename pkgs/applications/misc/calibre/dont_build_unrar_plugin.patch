@@ -6,7 +6,7 @@ index 938ab24..1e095f8 100644
      description = _('Extract common e-book formats from archive files '
          '(ZIP/RAR). Also try to autodetect if they are actually '
          'CBZ/CBR files.')
--    file_types = set(['zip', 'rar'])
-+    file_types = set(['zip'])
+-    file_types = {'zip', 'rar'}
++    file_types = {'zip'}
      supported_platforms = ['windows', 'osx', 'linux']
      on_import = True

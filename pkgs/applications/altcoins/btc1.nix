@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode, libevent
-, withGui }:
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, hexdump, openssl, db48
+, boost, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode, libevent
+, AppKit
+, withGui ? !stdenv.isDarwin
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec{
@@ -12,11 +14,10 @@ stdenv.mkDerivation rec{
     sha256 = "0v0g2wb4nsnhddxzb63vj2bc1mgyj05vqm5imicjfz8prvgc0si8";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib
-                  miniupnpc protobuf libevent]
-                  ++ optionals stdenv.isLinux [ utillinux ]
-                  ++ optionals withGui [ qt4 qrencode ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook hexdump ];
+  buildInputs = [ openssl db48 boost zlib miniupnpc protobuf libevent ]
+    ++ optionals withGui [ qt4 qrencode ]
+    ++ optional stdenv.isDarwin AppKit;
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];

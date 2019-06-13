@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "rivet-${version}";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "007rwal8wx2k9gs0r6kym6ix0siz0x9l55q9myq41siirpf2jcpv";
+    url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
+    sha256 = "1bxcb99a3l5d2gl93zgfzgw6v95kx1ss5045mkz3ciyw8w5nmb9l";
   };
 
   patches = [
@@ -17,19 +17,25 @@ stdenv.mkDerivation rec {
     scheme-basic
     collection-pstricks
     collection-fontsrecommended
+    l3kernel
+    l3packages
     mathastext
     pgf
     relsize
     sfmath
+    siunitx
     xcolor
     xkeyval
+    xstring
     ;};
   buildInputs = [ hepmc imagemagick python2 latex makeWrapper ];
   propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];
 
   preConfigure = ''
+    substituteInPlace analyses/Makefile.in \
+      --replace "!(tmp)" ""
     substituteInPlace bin/rivet-buildplugin.in \
-      --replace '"which"' '"${which}/bin/which"' \
+      --replace 'which' '"${which}/bin/which"' \
       --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
       --replace 'mycxxflags="' "mycxxflags=\"-std=c++11 $NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
   '';

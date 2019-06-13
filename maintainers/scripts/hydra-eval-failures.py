@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python -p pythonFull pythonPackages.requests pythonPackages.pyquery pythonPackages.click
+#!nix-shell -i python3 -p 'python3.withPackages(ps: with ps; [ requests pyquery click ])'
 
 # To use, just execute this script with --help to display help.
 
@@ -16,7 +16,7 @@ maintainers_json = subprocess.check_output([
     'nix-instantiate', '-E', 'import ./maintainers/maintainer-list.nix {}', '--eval', '--json'
 ])
 maintainers = json.loads(maintainers_json)
-MAINTAINERS = {v: k for k, v in maintainers.iteritems()}
+MAINTAINERS = {v: k for k, v in maintainers.items()}
 
 
 def get_response_text(url):
@@ -45,6 +45,17 @@ def get_maintainers(attr_name):
     except:
        return []
 
+def print_build(table_row):
+    a = pq(table_row)('a')[1]
+    print("- [ ] [{}]({})".format(a.text, a.get('href')), flush=True)
+    
+    maintainers = get_maintainers(a.text)
+    if maintainers:
+        print("  - maintainers: {}".format(", ".join(map(lambda u: '@' + u, maintainers))))
+    # TODO: print last three persons that touched this file
+    # TODO: pinpoint the diff that broke this build, or maybe it's transient or maybe it never worked?
+    
+    sys.stdout.flush()
 
 @click.command()
 @click.option(
@@ -73,23 +84,17 @@ def cli(jobset):
 
     # TODO: aborted evaluations
     # TODO: dependency failed without propagated builds
+    print('\nFailures:')
     for tr in d('img[alt="Failed"]').parents('tr'):
-        a = pq(tr)('a')[1]
-        print("- [ ] [{}]({})".format(a.text, a.get('href')))
+        print_build(tr)
 
-        sys.stdout.flush()
-
-        maintainers = get_maintainers(a.text)
-        if maintainers:
-            print("  - maintainers: {}".format(", ".join(map(lambda u: '@' + u, maintainers))))
-        # TODO: print last three persons that touched this file
-        # TODO: pinpoint the diff that broke this build, or maybe it's transient or maybe it never worked?
-
-        sys.stdout.flush()
+    print('\nDependency failures:')
+    for tr in d('img[alt="Dependency failed"]').parents('tr'):
+        print_build(tr)
 
 
 if __name__ == "__main__":
     try:
         cli()
-    except:
+    except Exception as e:
         import pdb;pdb.post_mortem()

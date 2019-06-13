@@ -50,7 +50,7 @@ in
 
       package = mkOption {
         internal = true;
-        type     = types.path;
+        type     = types.nullOr types.path;
         default  = null;
         description = ''
           The input method method package.

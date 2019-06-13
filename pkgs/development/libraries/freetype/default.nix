@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, copyPathsToStore
-, hostPlatform
+{ stdenv, fetchurl
+, buildPackages
 , pkgconfig, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 
@@ -10,11 +10,11 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
-  name = "freetype-${version}";
-  version = "2.9";
+  pname = "freetype";
+  version = "2.10.0";
 
   meta = with stdenv.lib; {
     description = "A font rendering engine";
@@ -32,8 +32,8 @@ in stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://savannah/freetype/${name}.tar.bz2";
-    sha256 = "12jcdz1in20yaa55izxalg3hm1pf7nydfrzps5bzb4zgihybmzz6";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "01mybx78n3n9dhzylbrdy42wxdwfn8rp514qdkzjy6b5ij965k7w";
   };
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
@@ -49,24 +49,24 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" ];
+  configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" "--enable-freetype-config" ];
+
+  # native compiler to generate building tool
+  CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
 
   # The asm for armel is written with the 'asm' keyword.
-  CFLAGS = optionalString stdenv.isArm "-std=gnu99";
+  CFLAGS = optionalString stdenv.isAarch32 "-std=gnu99";
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
   postInstall = glib.flattenInclude + ''
+    substituteInPlace $dev/bin/freetype-config \
+      --replace ${buildPackages.pkgconfig} ${pkgconfig}
+
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
   '';
 
-  crossAttrs = stdenv.lib.optionalAttrs (hostPlatform.libc or null != "msvcrt") {
-    # Somehow it calls the unwrapped gcc, "i686-pc-linux-gnu-gcc", instead
-    # of gcc. I think it's due to the unwrapped gcc being in the PATH. I don't
-    # know why it's on the PATH.
-    configureFlags = "--disable-static CC_BUILD=gcc";
-  };
 }

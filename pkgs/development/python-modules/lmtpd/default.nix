@@ -1,7 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchFromGitHub }:
+{ stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "lmtpd";
   version = "6.0.0";
 

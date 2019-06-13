@@ -13,8 +13,9 @@ stdenv.mkDerivation {
     makeFlagsArray=(SBINDIR=$out/sbin MANDIR=$out/share/man/man8)
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://sourceforge.net/projects/mingetty;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

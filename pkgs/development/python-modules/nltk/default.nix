@@ -1,18 +1,16 @@
-{ fetchurl, buildPythonPackage, isPy33, lib, six, pythonAtLeast, pythonOlder }:
+{ fetchPypi, buildPythonPackage, lib, six, singledispatch, isPy3k, fetchpatch }:
 
 buildPythonPackage rec {
-  version = "3.2.5";
+  version = "3.4.3";
   pname = "nltk";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/n/nltk/nltk-${version}.tar.gz";
-    sha256 = "2661f9971d983db314bbebd51ba770811a362c6597fd0f303bb1d3beadcb4834";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
+    sha256 = "1cjkv4jmmlr0w4qi399ncgb6lp41mb9i352934288wh9xad15mqj";
   };
 
-  propagatedBuildInputs = [ six ];
-
-  disabled = pythonOlder "2.7" || pythonOlder "3.4" && (pythonAtLeast "3.0");
+  propagatedBuildInputs = [ six ] ++ lib.optional (!isPy3k) singledispatch;
 
   # Tests require some data, the downloading of which is impure. It would
   # probably make sense to make the data another derivation, but then feeding

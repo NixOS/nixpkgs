@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
+{ stdenv, fetchFromGitHub, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
 , libXScrnSaver, speex, curl, libxml2, libxslt, sqlcipher, libmicrohttpd, opencv, qmake, ffmpeg
 , qtmultimedia, qtx11extras, qttools }:
 
@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
+    broken = true; # broken by libupnp: 1.6.21 -> 1.8.3 (#41684)
   };
 }

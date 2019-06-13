@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, vte, gtk }:
 
 stdenv.mkDerivation rec {
-  name = "stupidterm-2018-03-10";
+  pname = "stupidterm";
+  version = "2019-03-26";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -10,17 +11,19 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "esmil";
     repo = "stupidterm";
-    rev = "0463519a96c9e4f9ce9fdc99d8e776499346ccba";
-    sha256 = "1vbk53xyjn33myb3fix6y7sxb1x3rndrkk5l9qa60qaw2ivkr965";
+    rev = "f824e41c2ca9016db73556c5d2f5a2861e235c8e";
+    sha256 = "1f73wvqqvj5pr3fvb7jjc4bi1iwgkkknz24k8n69mdb75jnfjipp";
   };
 
   makeFlags = "PKGCONFIG=${pkgconfig}/bin/pkg-config binary=stupidterm";
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/applications $out/share/stupidterm
-    cp stupidterm $out/bin
-    substituteAll ${./stupidterm.desktop} $out/share/applications/stupidterm.desktop
-    substituteAll stupidterm.ini $out/share/stupidterm/stupidterm.ini
+    install -D stupidterm $out/bin/stupidterm
+    install -D -m 644 stupidterm.desktop $out/share/applications/stupidterm.desktop
+    install -D -m 644 stupidterm.ini $out/share/stupidterm/stupidterm.ini
+
+    substituteInPlace $out/share/applications/stupidterm.desktop \
+      --replace "Exec=st" "Exec=$out/bin/stupidterm"
   '';
 
   meta = with stdenv.lib; {

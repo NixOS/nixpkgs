@@ -13,7 +13,7 @@ in {
   options = {
 
     hardware.bluetooth = {
-      enable = mkEnableOption "support for Bluetooth.";
+      enable = mkEnableOption "support for Bluetooth";
 
       powerOnBoot = mkOption {
         type    = types.bool;
@@ -25,9 +25,14 @@ in {
         type = types.package;
         default = pkgs.bluez;
         defaultText = "pkgs.bluez";
-        example = "pkgs.bluez.override { enableMidi = true; }";
+        example = "pkgs.bluezFull";
         description = ''
           Which BlueZ package to use.
+
+          <note><para>
+            Use the <literal>pkgs.bluezFull</literal> package to enable all
+            bluez plugins.
+          </para></note>
         '';
       };
 

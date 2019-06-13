@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "mplleaflet";
   version = "0.0.5";
-  name = "${pname}-${version}";
 
   propagatedBuildInputs = [ jinja2 six ];
 

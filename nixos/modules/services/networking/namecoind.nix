@@ -1,3 +1,4 @@
+
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -43,7 +44,7 @@ in
 
     services.namecoind = {
 
-      enable = mkEnableOption "namecoind, Namecoin client.";
+      enable = mkEnableOption "namecoind, Namecoin client";
 
       wallet = mkOption {
         type = types.path;
@@ -153,7 +154,7 @@ in
       config = ${configFile}
     '';
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "namecoin";
       uid  = config.ids.uids.namecoin;
       description = "Namecoin daemon user";
@@ -161,7 +162,7 @@ in
       createHome = true;
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = "namecoin";
       gid  = config.ids.gids.namecoin;
     };

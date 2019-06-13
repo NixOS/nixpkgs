@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "yaws-${version}";
-  version = "2.0.4";
+  version = "2.0.6";
 
   src = fetchurl {
     url = "http://yaws.hyber.org/download/${name}.tar.gz";
-    sha256 = "1ig6q4waqlb6h1hhrly7hslfnqczlbm79vvhr5j7rp5a2p1pfrns";
+    sha256 = "03nh97g7smsgm6sw5asssmlq7zgx6y2gnn7jn0lv2x5mkf5nzyb9";
   };
 
   # The tarball includes a symlink yaws -> yaws-1.95, which seems to be
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cd $name
   '';
 
-  configureFlags = "--with-extrainclude=${pam}/include/security";
+  configureFlags = [ "--with-extrainclude=${pam}/include/security" ];
 
   buildInputs = [ erlang pam perl ];
 

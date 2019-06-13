@@ -1,6 +1,6 @@
-{stdenv, buildOcamlJane, fetchurl, core_kernel,
+{stdenv, buildOcamlJane, core_kernel,
  bin_prot, fieldslib,
- sexplib, herelib, opam, js_build_tools, ocaml_oasis}:
+ sexplib, herelib}:
 
 buildOcamlJane rec {
   name = "async_kernel";

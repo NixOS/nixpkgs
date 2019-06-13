@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sed -e 's@#! */bin/bash@#! ${stdenv.shell}@' -i configure
     find . -name Makefile -exec sed -e "s@/usr/local@$out@g" -i '{}' ';'
 
-    rm src/utilities/4s-backend 
+    rm src/utilities/4s-backend
     sed -e 's@/var/lib/4store@${db_dir}@g' -i configure.ac src/utilities/*
     sed -e '/FS_STORE_ROOT/d' -i src/utilities/Makefile*
   '';
@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     homepage = https://4store.danielknoell.de/;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
+    broken = true; # since 2018-04-11
   };
 }

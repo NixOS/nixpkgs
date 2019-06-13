@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ buildPythonPackage
 , certbot
-, nose
+, pytest
 , cryptography
 , pyasn1
 , pyopenssl
@@ -8,6 +8,7 @@
 , josepy
 , pytz
 , requests
+, requests-toolbelt
 , six
 , werkzeug
 , mock
@@ -18,14 +19,17 @@ buildPythonPackage rec {
   inherit (certbot) src version;
 
   pname = "acme";
-  name = "${pname}-${version}";
 
   propagatedBuildInputs = [
-    cryptography pyasn1 pyopenssl pyRFC3339 pytz requests six werkzeug mock
-    ndg-httpsclient josepy
+    cryptography pyasn1 pyopenssl pyRFC3339 pytz requests requests-toolbelt six
+    werkzeug mock ndg-httpsclient josepy
   ];
 
-  checkInputs = [ nose ];
+  checkInputs = [ pytest ];
 
-  postUnpack = "sourceRoot=\${sourceRoot}/acme";
+  sourceRoot = "source/${pname}";
+
+  meta = certbot.meta // {
+    description = "ACME protocol implementation in Python";
+  };
 }

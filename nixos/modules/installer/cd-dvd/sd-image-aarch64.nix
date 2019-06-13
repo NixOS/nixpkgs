@@ -5,7 +5,7 @@
 let
   extlinux-conf-builder =
     import ../../system/boot/loader/generic-extlinux-compatible/extlinux-conf-builder.nix {
-      inherit pkgs;
+      pkgs = pkgs.buildPackages;
     };
 in
 {
@@ -15,26 +15,16 @@ in
     ./sd-image.nix
   ];
 
-  assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "aarch64-linux";
-    message = "sd-image-aarch64.nix can be only built natively on Aarch64 / ARM64; " +
-      "it cannot be cross compiled";
-  };
-
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.consoleLogLevel = lib.mkDefault 7;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # The serial ports listed here are:
   # - ttyS0: for Tegra (Jetson TX1)
   # - ttyAMA0: for QEMU's -machine virt
   # Also increase the amount of CMA to ensure the virtual console on the RPi3 works.
   boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
-
-  # FIXME: this probably should be in installation-device.nix
-  users.extraUsers.root.initialHashedPassword = "";
 
   sdImage = {
     populateBootCommands = let

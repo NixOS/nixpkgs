@@ -1,14 +1,14 @@
-{ qt5, stdenv }:
+{ qt5 }:
 
 let
   mkTelegram = args: qt5.callPackage (import ./generic.nix args) { };
   stableVersion = {
     stable = true;
-    version = "1.2.17";
-    sha256Hash = "1lswjn3rnrbps1pd2xhnhggcn1z0i7y71dpr0v9wb1yc8qhh4pi0";
+    version = "1.7.7";
+    sha256Hash = "0w3jq02qzpx58xlmwaj0lgav5lx6s9hdidnq9v1npp4qmpdnsn75";
     # svn log svn://svn.archlinux.org/community/telegram-desktop/trunk
-    archPatchesRevision = "310557";
-    archPatchesHash = "1v134dal3xiapgh3akfr61vh62j24m9vkb62kckwvap44iqb0hlk";
+    archPatchesRevision = "476826";
+    archPatchesHash = "1vnlvba60hxd5jlh0fvsa50xmb9xgcphdsx6j1ld7f12m7ik68zr";
   };
 in {
   stable = mkTelegram stableVersion;

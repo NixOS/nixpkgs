@@ -16,10 +16,28 @@ in
       default = false;
       type = lib.types.bool;
     };
+    withUtempter = mkOption {
+      description = ''
+        Whether to enable libutempter for mosh.
+        This is required so that mosh can write to /var/run/utmp (which can be queried with `who` to display currently connected user sessions).
+        Note, this will add a guid wrapper for the group utmp!
+      '';
+      default = true;
+      type = lib.types.bool;
+    };
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ mosh ];
     networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];
+    security.wrappers = mkIf cfg.withUtempter {
+      utempter = {
+        source = "${pkgs.libutempter}/lib/utempter/utempter";
+        owner = "nobody";
+        group = "utmp";
+        setuid = false;
+        setgid = true;
+      };
+    };
   };
 }

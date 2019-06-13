@@ -70,6 +70,8 @@ in
 
       systemd.services."softether-init" = {
         description = "SoftEther VPN services initial task";
+        after = [ "keys.target" ];
+        wants = [ "keys.target" ];
         wantedBy = [ "network.target" ];
         serviceConfig = {
           Type = "oneshot";

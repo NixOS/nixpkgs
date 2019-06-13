@@ -12,13 +12,14 @@ in
   options = {
 
     services.xserver.desktopManager.xterm.enable = mkOption {
+      type = types.bool;
       default = true;
       description = "Enable a xterm terminal as a desktop manager.";
     };
 
   };
 
-  config = mkIf (config.services.xserver.enable && cfg.enable) {
+  config = mkIf cfg.enable {
 
     services.xserver.desktopManager.session = singleton
       { name = "xterm";

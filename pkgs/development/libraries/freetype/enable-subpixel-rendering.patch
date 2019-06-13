@@ -1,13 +1,12 @@
-Index: freetype-2.7.1/include/freetype/config/ftoption.h
-===================================================================
---- freetype-2.7.1.orig/include/freetype/config/ftoption.h
-+++ freetype-2.7.1/include/freetype/config/ftoption.h
-@@ -122,7 +122,7 @@ FT_BEGIN_HEADER
-   /* This is done to allow FreeType clients to run unmodified, forcing     */
-   /* them to display normal gray-level anti-aliased glyphs.                */
-   /*                                                                       */
+Index: freetype-2.10.0/include/freetype/config/ftoption.h
+--- a/include/freetype/config/ftoption.h
++++ b/include/freetype/config/ftoption.h
+@@ -126,7 +126,7 @@ FT_BEGIN_HEADER
+    * macro is not defined, FreeType offers alternative LCD rendering
+    * technology that produces excellent output without LCD filtering.
+    */
 -/* #define FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
 +#define FT_CONFIG_OPTION_SUBPIXEL_RENDERING
  
  
-   /*************************************************************************/
+   /**************************************************************************

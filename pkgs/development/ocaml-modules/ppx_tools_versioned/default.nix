@@ -1,10 +1,8 @@
-{ stdenv, buildOcaml, fetchFromGitHub, ocaml-migrate-parsetree }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocaml-migrate-parsetree }:
 
-buildOcaml rec {
-  name = "ppx_tools_versioned";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-ppx_tools_versioned-${version}";
   version = "5.1";
-
-  minimumSupportedOcamlVersion = "4.02";
 
   src = fetchFromGitHub {
     owner = "let-def";
@@ -12,6 +10,8 @@ buildOcaml rec {
     rev = version;
     sha256 = "1c7kvca67qpyr4hiy492yik5x31lmkhyhy5wpl0l0fbx7fr7l624";
   };
+
+  buildInputs = [ ocaml findlib ];
 
   propagatedBuildInputs = [ ocaml-migrate-parsetree ];
 

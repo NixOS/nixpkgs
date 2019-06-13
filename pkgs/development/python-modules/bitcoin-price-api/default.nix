@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "bitcoin-price-api";
   version = "0.0.4";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

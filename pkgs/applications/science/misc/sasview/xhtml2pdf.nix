@@ -3,6 +3,7 @@
 let
   #xhtml2pdf specifically requires version "1.0b10" of html5lib
   html5 = html5lib.overrideAttrs( oldAttrs: rec{
+    name = "${oldAttrs.pname}-${version}";
     version = "1.0b10";
     src = oldAttrs.src.override {
       inherit version;

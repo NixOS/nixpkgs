@@ -2,7 +2,6 @@
 , fetchurl
 , makeWrapper
 
-, perl
 , perlPackages
 
 , cdparanoia
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pk9152wll6fmkj1pki3fz3ijlf06jyk32v31yarwvdkwrk7s9xz";
   };
 
-  buildInputs = [ perl perlPackages.CDDB_get ];
+  buildInputs = [ perlPackages.perl perlPackages.CDDB_get ];
   nativeBuildInputs = [ makeWrapper ];
 
   toolDeps = makeBinPath [
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
         --replace '$editor = "vim";' '$editor = "${nano}/bin/nano";'
 
       wrapProgram $out/bin/$script \
-        --set PERL5LIB "${makePerlPath [ perlPackages.CDDB_get ]}" \
+        --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.CDDB_get ]}" \
         --set PATH "${toolDeps}"
     done
   '';

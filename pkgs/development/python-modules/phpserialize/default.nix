@@ -1,7 +1,6 @@
 {lib, buildPythonPackage, fetchPypi}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "phpserialize";
   version = "1.3";
 

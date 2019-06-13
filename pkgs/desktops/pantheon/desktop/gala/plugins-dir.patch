@@ -1,0 +1,22 @@
+diff --git a/meson.build b/meson.build
+index 6b20a60..205699b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -38,7 +38,7 @@ conf.set_quoted('PACKAGE_VERSION', gala_version)
+ conf.set_quoted('DATADIR', data_dir)
+ conf.set_quoted('PKGDATADIR', pkgdata_dir)
+ conf.set_quoted('PKGLIBDIR', pkglib_dir)
+-conf.set_quoted('PLUGINSDIR', plugins_dir)
++conf.set_quoted('PLUGINSDIR',  '/run/current-system/sw/lib/gala/plugins')
+ conf.set_quoted('RELEASE_NAME', 'Window Manager.')
+ conf.set_quoted('VERSION', gala_version)
+ conf.set_quoted('VERSION_INFO', (is_release ? 'Release' : 'Development'))
+@@ -83,7 +83,7 @@ add_project_arguments([
+ 		'-DDATADIR="@0@"'.format(data_dir),
+ 		'-DPKGDATADIR="@0@"'.format(pkgdata_dir),
+ 		'-DPKGLIBDIR="@0@"'.format(pkglib_dir),
+-		'-DPLUGINDIR="@0@"'.format(plugins_dir),
++		'-DPLUGINDIR="@0@"'.format('/run/current-system/sw/lib/gala/plugins'),
+ 		'-DSCHEMA="org.pantheon.desktop.gala"',
+ 		'-DRESOURCEPATH="/org/pantheon/desktop/gala"',
+

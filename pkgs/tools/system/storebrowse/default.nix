@@ -1,7 +1,5 @@
 { stdenv, fetchurl, fetchhg, go, sqlite}:
 
-assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64 || stdenv.isArm);
-
 stdenv.mkDerivation rec {
   name = "storebrowse-20130318212204";
 
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
     mkdir $TMPDIR/go
     export GOPATH=$TMPDIR/go
 
-    ${stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "export GOARM=5"}
+    ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "export GOARM=5"}
 
     GOSQLITE=$GOPATH/src/code.google.com/p/gosqlite
     mkdir -p $GOSQLITE

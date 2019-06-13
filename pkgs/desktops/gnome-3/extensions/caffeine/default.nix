@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-caffeine-${version}";
-  version = "unstable-2017-06-21";
+  version = "unstable-2019-04-02";
 
   src = fetchFromGitHub {
     owner = "eonpatapon";
     repo = "gnome-shell-extension-caffeine";
-    rev = "ce0d0d4d3a9fed4b35b82cf59609a00502862271";
-    sha256 = "01gf9c8nhhm78iakqf30900y6lywxks1pm5h2cs0jvp8d3ygd7sd";
+    rev = "a6b37dee108cddf50a0f0a19f0101854a75bf173";
+    sha256 = "1j3q12j36v97551sjb0c8qc8zr7a7gmxibygczryfdfmwjzp6icl";
   };
 
   uuid = "caffeine@patapon.info";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     ${bash}/bin/bash ./update-locale.sh
-    ${glib.dev}/bin/glib-compile-schemas --strict --targetdir=caffeine@patapon.info/schemas/ caffeine@patapon.info/schemas
+    glib-compile-schemas --strict --targetdir=caffeine@patapon.info/schemas/ caffeine@patapon.info/schemas
   '';
 
   installPhase = ''

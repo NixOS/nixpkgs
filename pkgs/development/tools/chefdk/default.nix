@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, ruby_2_4, perl, autoconf }:
+{ lib, bundlerEnv, ruby_2_4, perl, autoconf }:
 
 bundlerEnv {
   # Last updated via:

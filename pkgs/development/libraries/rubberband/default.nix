@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "High quality software library for audio time-stretching and pitch-shifting";
-    homepage = http://www.breakfastquay.com/rubberband/index.html;
+    homepage = https://www.breakfastquay.com/rubberband/index.html;
     # commercial license available as well, see homepage. You'll get some more optimized routines
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];

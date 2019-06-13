@@ -1,18 +1,23 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, mpi, openssh }:
+{ stdenv, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.0.0";
-  name = "${pname}-${version}";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mzgd26dfv4vwbci8gq77ss9f0x26i9aqzq9b9vs9ndxhlnv0mxl";
+    sha256 = "0ld8rjmsjr0dklvj2g1gr3ax32sdq0xjxyh0cspknc1i36waajb5";
   };
 
   passthru = {
     inherit mpi;
   };
+
+  patches = [ ( fetchpatch {
+    # Upstream patch to ensure compatibility with openmpi-4.0.1
+    url = "https://github.com/mpi4py/mpi4py/commit/42f5e35a6a90454516c11131549a08cd766edbb0.patch";
+    sha256 = "1dm0i3amwj1cddzz1m9ssd7qp655c8rv1wzjs9ww3kzd90fm4w72";
+  })];
 
   postPatch = ''
     substituteInPlace test/test_spawn.py --replace \
@@ -42,7 +47,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
 
-  buildInputs = [ mpi openssh ];
+  nativeBuildInputs = [ mpi openssh ];
 
   meta = {
     description =

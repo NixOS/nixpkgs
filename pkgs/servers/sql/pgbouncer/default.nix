@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pgbouncer-${version}";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://pgbouncer.github.io/downloads/files/${version}/${name}.tar.gz";
-    sha256 = "1j4d7rkivg3vg27pvirigq9cy4v7pi48x7w57baq131c5lmdx2zs";
+    sha256 = "012zh9l68r1ramrd66yam6y3al0i85dvvg4wwwkn6qwq6dhskv1r";
   };
 
   buildInputs = [ libevent openssl ];

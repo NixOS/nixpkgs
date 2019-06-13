@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip
-, coreutils, gnugrep, which, git, python, unzip, libsecret
+{ stdenv, makeDesktopItem, makeWrapper, patchelf, p7zip
+, coreutils, gnugrep, which, git, unzip, libsecret, libnotify
 }:
 
-{ name, product, version, src, wmClass, jdk, meta } @ attrs:
+{ name, product, version, src, wmClass, jdk, meta }:
 
 with stdenv.lib;
 
@@ -26,7 +26,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     '';
   };
 
-  buildInputs = [ makeWrapper patchelf p7zip unzip ];
+  nativeBuildInputs = [ makeWrapper patchelf p7zip unzip ];
 
   patchPhase = ''
       get_file_size() {
@@ -42,7 +42,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       }
 
       interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-      if [ "${stdenv.system}" == "x86_64-linux" ]; then
+      if [ "${stdenv.hostPlatform.system}" == "x86_64-linux" ]; then
         target_size=$(get_file_size bin/fsnotifier64)
         patchelf --set-interpreter "$interpreter" bin/fsnotifier64
         munge_size_hack bin/fsnotifier64 $target_size
@@ -67,6 +67,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
         # Some internals want libstdc++.so.6
         stdenv.cc.cc.lib libsecret
+        libnotify
       ]}" \
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \

@@ -1,15 +1,27 @@
 MD_TARGETS=$(addsuffix .xml, $(basename $(wildcard ./*.md ./**/*.md)))
 
 .PHONY: all
-all: validate out/html/index.html out/epub/manual.epub
+all: validate format out/html/index.html out/epub/manual.epub
 
 .PHONY: debug
 debug:
 	nix-shell --run "xmloscopy --docbook5 ./manual.xml ./manual-full.xml"
 
+.PHONY: format
+format:
+	find . -iname '*.xml' -type f | while read f; do \
+		echo $$f ;\
+		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i $$f ;\
+	done
+
+.PHONY: fix-misc-xml
+fix-misc-xml:
+	find . -iname '*.xml' -type f \
+		-exec ../nixos/doc/varlistentry-fixer.rb {} ';'
+
 .PHONY: clean
 clean:
-	rm -f ${MD_TARGETS} .version manual-full.xml
+	rm -f ${MD_TARGETS} .version manual-full.xml functions/library/locations.xml functions/library/generated
 	rm -rf ./out/ ./highlightjs
 
 .PHONY: validate
@@ -59,12 +71,21 @@ highlightjs:
 	cp -r "$$HIGHLIGHTJS/loader.js" highlightjs/
 
 
-manual-full.xml: ${MD_TARGETS} .version *.xml
+manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml functions/library/generated *.xml **/*.xml **/**/*.xml
 	xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
 
 .version:
 	nix-instantiate --eval \
-		-E '(import ../lib).nixpkgsVersion' > .version
+		-E '(import ../lib).version' > .version
+
+functions/library/locations.xml:
+	nix-build ./lib-function-locations.nix \
+		--out-link $@
+
+functions/library/generated: functions/library/locations.xml
+	nix-build ./lib-function-docs.nix \
+		--arg locationsXml $< \
+		--out-link $@
 
 %.section.xml: %.section.md
 	pandoc $^ -w docbook+smart \

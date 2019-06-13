@@ -1,38 +1,27 @@
-{ stdenv, fetchurl, ghostscript, texinfo, imagemagick, texi2html, guile
-, python2, gettext, flex, perl, bison, pkgconfig, dblatex
+{ stdenv, fetchgit, ghostscript, texinfo, imagemagick, texi2html, guile
+, python2, gettext, flex, perl, bison, pkgconfig, autoreconfHook, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
-, fetchsvn, makeWrapper, t1utils
+, makeWrapper, t1utils
 , texlive, tex ? texlive.combine {
     inherit (texlive) scheme-small lh metafont epsf;
   }
 }:
 
-stdenv.mkDerivation rec{
-  majorVersion="2.18";
-  minorVersion="2";
-  version="${majorVersion}.${minorVersion}";
-  name = "lilypond-${version}";
+let
 
-  urwfonts = fetchsvn {
-    url = "http://svn.ghostscript.com/ghostscript/tags/urw-fonts-1.0.7pre44";
-    sha256 = "0al5vdsb66db6yzwi0qgs1dnd1i1fb77cigdjxg8zxhhwf6hhwpn";
+  version = "2.18.2";
+
+in
+
+stdenv.mkDerivation {
+  pname = "lilypond";
+  inherit version;
+
+  src = fetchgit {
+    url = "https://git.savannah.gnu.org/r/lilypond.git";
+    rev = "release/${version}-1";
+    sha256 = "0fk045fmmb6fcv7jdvkbqr04qlwnxzwclr2gzx3gja714xy6a76x";
   };
-
-  src = fetchurl {
-    url = "http://download.linuxaudio.org/lilypond/sources/v${majorVersion}/lilypond-${version}.tar.gz";
-    sha256 = "01xs9x2wjj7w9appaaqdhk15r1xvvdbz9qwahzhppfmhclvp779j";
-  };
-
-  preConfigure=''
-    sed -e "s@mem=mf2pt1@mem=$PWD/mf/mf2pt1@" -i scripts/build/mf2pt1.pl
-
-    # At some point our fontforge had path 2n…-fontforge-2015… and it
-    # confused the version detection…
-    sed -re 's%("[$]exe" --version .*)([|\\] *$)%\1 | sed -re "s@/nix/store/[a-z0-9]{32}-@@" \2%' \
-      -i configure
-
-    export HOME=$TMPDIR/home
-  '';
 
   postInstall = ''
     for f in "$out/bin/"*; do
@@ -44,22 +33,35 @@ stdenv.mkDerivation rec{
     done
   '';
 
-  configureFlags = [ "--disable-documentation" "--with-ncsb-dir=${urwfonts}"];
+  configureFlags = [
+    "--disable-documentation"
+    "--with-ncsb-dir=${ghostscript}/share/ghostscript/fonts"
+  ];
+
+  preConfigure = ''
+    sed -e "s@mem=mf2pt1@mem=$PWD/mf/mf2pt1@" -i scripts/build/mf2pt1.pl
+    export HOME=$TMPDIR/home
+  '';
+
+  nativeBuildInputs = [ makeWrapper pkgconfig autoreconfHook ];
+
+  autoreconfPhase = "NOCONFIGURE=1 sh autogen.sh";
 
   buildInputs =
     [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm
-      python2 gettext flex perl bison pkgconfig fontconfig freetype pango
-      fontforge help2man groff makeWrapper t1utils
+      python2 gettext flex perl bison fontconfig freetype pango
+      fontforge help2man groff t1utils
     ];
 
-  #enableParallelBuilding = true; # fatal error: parser.hh: No such file or directory
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Music typesetting system";
     homepage = http://lilypond.org/;
     license = licenses.gpl3;
-    maintainers = [ maintainers.marcweber ];
+    maintainers = with maintainers; [ marcweber yurrriq ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 
   patches = [ ./findlib.patch ];

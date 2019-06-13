@@ -2,13 +2,13 @@
 
 with stdenv.lib; stdenv.mkDerivation rec {
   name = "tbb-${version}";
-  version = "2018_U1";
+  version = "2019_U7";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "tbb";
     rev = version;
-    sha256 = "1lygz07va6hsv2vlx9zwz5d2n81rxsdhmh0pqxgj8n1bvb1rp0qw";
+    sha256 = "0hf8vkb1g2dqihqw7fzhc90i1p7yvp45gbamj0mnnhffz2ablz1b";
   };
 
   makeFlags = concatStringsSep " " (
@@ -19,11 +19,10 @@ with stdenv.lib; stdenv.mkDerivation rec {
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
 
   installPhase = ''
-    mkdir -p $out/{lib,share/doc}
+    mkdir -p $out/lib
     cp "build/"*release*"/"*${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib/
     mv include $out/
     rm $out/include/index.html
-    mv doc/html $out/share/doc/tbb
   '';
 
   enableParallelBuilding = true;
@@ -41,6 +40,6 @@ with stdenv.lib; stdenv.mkDerivation rec {
       details and threading mechanisms for scalability and performance.
     '';
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ peti thoughtpolice dizfer ];
+    maintainers = with maintainers; [ thoughtpolice dizfer ];
   };
 }

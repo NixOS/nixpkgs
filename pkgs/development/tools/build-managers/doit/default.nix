@@ -15,17 +15,19 @@ in python3Packages.buildPythonApplication {
 
   buildInputs = with python3Packages; [ mock pytest ];
 
-  propagatedBuildInputs = with python3Packages; [ cloudpickle pyinotify ];
+  propagatedBuildInputs = with python3Packages; [ cloudpickle ]
+    ++ stdenv.lib.optional stdenv.isLinux pyinotify
+    ++ stdenv.lib.optional stdenv.isDarwin macfsevents;
 
   # Tests fail due to mysterious gdbm.open() resource temporarily
   # unavailable errors.
   doCheck = false;
   checkPhase = "py.test";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://pydoit.org/;
     description = "A task management & automation tool";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     longDescription = ''
       doit is a modern open-source build-tool written in python
       designed to be simple to use and flexible to deal with complex
@@ -33,6 +35,7 @@ in python3Packages.buildPythonApplication {
       custom work-flows where there is no out-of-the-box solution
       available.
     '';
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.all;
   };
 }

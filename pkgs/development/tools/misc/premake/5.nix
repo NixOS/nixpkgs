@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/release/premake5 $out/bin/premake5
   '';
 
+  premake_cmd = "premake5";
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = https://premake.github.io;
     description = "A simple build configuration and project generation tool using lua";

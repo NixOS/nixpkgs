@@ -1,31 +1,39 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, substituteAll
 , pkgconfig, autoreconfHook
 , gmp, python, iptables, ldns, unbound, openssl, pcsclite
 , openresolv
 , systemd, pam
-
-, enableTNC            ? false, curl, trousers, sqlite, libxml2
+, curl
+, kmod
+, enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
+, libpcap
+, darwin
 }:
+
+# Note on curl support: If curl is built with gnutls as its backend, the
+# strongswan curl plugin may break.
+# See https://wiki.strongswan.org/projects/strongswan/wiki/Curl for more info.
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.6.2";
+  version = "5.8.0"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchurl {
-    url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "14ifqay54brw2b2hbmm517bxw8bs9631d7jm4g139igkxcq0m9p0";
+    url = "https://download.strongswan.org/${name}.tar.bz2";
+    sha256 = "0cq9m86ydd2i0awxkv4a256f4926p2f9pzlisyskl9fngl6f3c8m";
   };
 
   dontPatchELF = true;
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs =
-    [ gmp python iptables ldns unbound openssl pcsclite ]
-    ++ optionals enableTNC [ curl trousers sqlite libxml2 ]
-    ++ optionals stdenv.isLinux [ systemd.dev pam ]
+    [ curl gmp python ldns unbound openssl pcsclite ]
+    ++ optionals enableTNC [ trousers sqlite libxml2 ]
+    ++ optionals stdenv.isLinux [ systemd.dev pam iptables ]
+    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
     ++ optionals enableNetworkManager [ networkmanager ];
 
   patches = [
@@ -34,39 +42,36 @@ stdenv.mkDerivation rec {
     ./updown-path.patch
   ];
 
-  postPatch = ''
-    substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
-
-    # swanctl can be configured by files in SWANCTLDIR which defaults to
-    # $out/etc/swanctl. Since that directory is in the nix store users can't
-    # modify it. Ideally swanctl accepts a command line option for specifying
-    # the configuration files. In the absence of that we patch swanctl to look
-    # for configuration files in /etc/swanctl.
-    substituteInPlace src/swanctl/swanctl.h --replace "SWANCTLDIR" "\"/etc/swanctl\""
+  postPatch = optionalString stdenv.isLinux ''
     # glibc-2.26 reorganized internal includes
     sed '1i#include <stdint.h>' -i src/libstrongswan/utils/utils/memory.h
+
+    substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
     '';
 
-  preConfigure = ''
-    configureFlagsArray+=("--with-systemdsystemunitdir=$out/etc/systemd/system")
-  '';
-
   configureFlags =
-    [ "--enable-swanctl" "--enable-cmd" "--enable-systemd"
-      "--enable-farp" "--enable-dhcp"
+    [ "--enable-swanctl"
+      "--enable-cmd"
       "--enable-openssl"
       "--enable-eap-sim" "--enable-eap-sim-file" "--enable-eap-simaka-pseudonym"
       "--enable-eap-simaka-reauth" "--enable-eap-identity" "--enable-eap-md5"
       "--enable-eap-gtc" "--enable-eap-aka" "--enable-eap-aka-3gpp2"
       "--enable-eap-mschapv2" "--enable-eap-radius" "--enable-xauth-eap" "--enable-ext-auth"
-      "--enable-forecast" "--enable-connmark" "--enable-acert"
+      "--enable-acert"
       "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
-      "--enable-af-alg" "--enable-xauth-pam" "--enable-chapoly" ]
+      "--enable-chapoly"
+      "--enable-curl" ]
+    ++ optionals stdenv.isLinux [
+      "--enable-farp" "--enable-dhcp"
+      "--enable-systemd" "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+      "--enable-xauth-pam"
+      "--enable-forecast"
+      "--enable-connmark"
+      "--enable-af-alg" ]
     ++ optionals stdenv.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
-    ++ optional (stdenv.system == "i686-linux") "--enable-padlock"
+    ++ optional (stdenv.hostPlatform.system == "i686-linux") "--enable-padlock"
     ++ optionals enableTNC [
          "--disable-gmp" "--disable-aes" "--disable-md5" "--disable-sha1" "--disable-sha2" "--disable-fips-prf"
-         "--enable-curl"
          "--enable-eap-tnc" "--enable-eap-ttls" "--enable-eap-dynamic" "--enable-tnccs-20"
          "--enable-tnc-imc" "--enable-imc-os" "--enable-imc-attestation"
          "--enable-tnc-imv" "--enable-imv-attestation"
@@ -74,14 +79,27 @@ stdenv.mkDerivation rec {
          "--with-tss=trousers"
          "--enable-aikgen"
          "--enable-sqlite" ]
-    ++ optional enableNetworkManager "--enable-nm";
+    ++ optionals enableNetworkManager [
+         "--enable-nm"
+         "--with-nm-ca-dir=/etc/ssl/certs" ]
+    # Taken from: https://wiki.strongswan.org/projects/strongswan/wiki/MacOSX
+    ++ optionals stdenv.isDarwin [
+      "--disable-systemd"
+      "--disable-xauth-pam"
+      "--disable-kernel-netlink"
+      "--enable-kernel-pfkey"
+      "--enable-kernel-pfroute"
+      "--enable-kernel-libipsec"
+      "--enable-osx-attr"
+      "--disable-scripts"
+    ];
 
   postInstall = ''
     # this is needed for l2tp
     echo "include /etc/ipsec.secrets" >> $out/etc/ipsec.secrets
   '';
 
-  NIX_LDFLAGS = "-lgcc_s" ;
+  NIX_LDFLAGS = optionalString stdenv.cc.isGNU "-lgcc_s" ;
 
   meta = {
     description = "OpenSource IPsec-based VPN Solution";

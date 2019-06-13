@@ -1,45 +1,43 @@
 { stdenv, fetchFromGitHub, lilypond }:
 
-with stdenv.lib;
-
 let
-  olpFont = a@{
-    fontName,
-    rev,
-    sha256,
-    version ? rev,
-    ...
-  }:
-    stdenv.mkDerivation (a // rec {
+
+  olpFont = { fontName, rev, sha256, version ? rev, ... }:
+    stdenv.mkDerivation {
       inherit version;
-      name = "openlilypond-font-${fontName}-${version}";
+      pname = "openlilypond-font-${fontName}";
+
 
       src = fetchFromGitHub {
         inherit rev sha256;
         owner = "OpenLilyPondFonts";
-        repo = a.fontName;
+        repo = fontName;
       };
 
       phases = [ "unpackPhase" "installPhase" ];
 
       installPhase = ''
-        for f in {otf,supplementary-fonts}/**.{o,t}tf; do
-          install -Dt $out/otf -m755 $f
+        local fontsdir="$out/share/lilypond/${lilypond.version}/fonts"
+
+        install -m755 -d "$fontsdir/otf"
+        for font in {otf,supplementary-fonts}/**.{o,t}tf; do
+          install -Dt "$fontsdir/otf" -m755 "$font"
         done
 
-        for f in svg/**.{svg,woff}; do
-          install -Dt $out/svg -m755 $f
+        install -m755 -d "$fontsdir/svg"
+        for font in svg/**.{svg,woff}; do
+          install -Dt "$fontsdir/svg" -m755 "$font"
         done
       '';
 
-      meta = {
+      meta = with stdenv.lib; {
         inherit (src.meta) homepage;
+        inherit (lilypond.meta) platforms;
         description = "${fontName} font for LilyPond";
-        license = a.license or licenses.ofl;
-        platforms = lilypond.meta.platforms;
-        maintainers = (a.meta.maintainers or []) ++ [ maintainers.yurrriq ];
+        license = licenses.ofl;
+        maintainers = with maintainers; [ yurrriq ];
       };
-    });
+    };
 
 in
 
@@ -86,8 +84,8 @@ rec {
   };
   lilyjazz = olpFont {
     fontName = "lilyjazz";
-    rev = "8f1f2dd";
-    sha256 = "0k44dl5hfcn7wn2b6c51mbw6hsb1sprmx95xiabvcbpxnkplbmac";
+    rev = "8fa7d554";
+    sha256 = "1z7px7k2sn7snnj7yfjv0p9axwbn452vn9ww9icmb1249b0d1qry";
   };
   lv-goldenage = olpFont {
     fontName = "lv-goldenage";

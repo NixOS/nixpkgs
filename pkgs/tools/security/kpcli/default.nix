@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   phases = [ "installPhase" "fixupPhase" ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp ${src} $out/bin/kpcli
-    chmod +x $out/bin/kpcli
+    mkdir -p $out/{bin,share}
+    cp ${src} $out/share/kpcli.pl
+    chmod +x $out/share/kpcli.pl
 
-    wrapProgram $out/bin/kpcli --set PERL5LIB \
-      "${with perlPackages; stdenv.lib.makePerlPath ([
+    makeWrapper $out/share/kpcli.pl $out/bin/kpcli --set PERL5LIB \
+      "${with perlPackages; makePerlPath ([
          CaptureTiny Clipboard Clone CryptRijndael SortNaturally TermReadKey TermShellUI FileKeePass TermReadLineGnu XMLParser
       ] ++ stdenv.lib.optional stdenv.isDarwin MacPasteboard)}"
   '';

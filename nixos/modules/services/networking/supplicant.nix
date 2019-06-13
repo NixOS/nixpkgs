@@ -132,7 +132,7 @@ in
           extraCmdArgs = mkOption {
             type = types.str;
             default = "";
-            example = "-e/var/run/wpa_supplicant/entropy.bin";
+            example = "-e/run/wpa_supplicant/entropy.bin";
             description =
               "Command line arguments to add when executing <literal>wpa_supplicant</literal>.";
           };
@@ -164,7 +164,7 @@ in
   
             socketDir = mkOption {
               type = types.str;
-              default = "/var/run/wpa_supplicant";
+              default = "/run/wpa_supplicant";
               description = "Directory of sockets for controlling wpa_supplicant.";
             };
   
@@ -183,7 +183,7 @@ in
 
       example = literalExample ''
         { "wlan0 wlan1" = {
-            configFile = "/etc/wpa_supplicant";
+            configFile.path = "/etc/wpa_supplicant.conf";
             userControlled.group = "network";
             extraConf = '''
               ap_scan=1

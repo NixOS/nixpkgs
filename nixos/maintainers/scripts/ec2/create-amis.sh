@@ -6,11 +6,11 @@
 set -e
 set -o pipefail
 
-version=$(nix-instantiate --eval --strict '<nixpkgs>' -A lib.nixpkgsVersion | sed s/'"'//g)
+version=$(nix-instantiate --eval --strict '<nixpkgs>' -A lib.version | sed s/'"'//g)
 major=${version:0:5}
 echo "NixOS version is $version ($major)"
 
-stateDir=/var/tmp/ec2-image-$version
+stateDir=/home/deploy/amis/ec2-image-$version
 echo "keeping state in $stateDir"
 mkdir -p $stateDir
 
@@ -161,6 +161,7 @@ for type in $types; do
                         # Create a snapshot.
                         if [ -z "$snapId" ]; then
                             echo "creating snapshot..."
+                            # FIXME: this can fail with InvalidVolume.NotFound. Eventual consistency yay.
                             snapId=$(aws ec2 create-snapshot --volume-id "$volId" --region "$region" --description "$description" | jq -r .SnapshotId)
                             if [ "$snapId" = null ]; then exit 1; fi
                             echo -n "$snapId" > $stateDir/$region.$type.snap-id

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, autoconf, automake, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  nativeBuildInputs = [ pkgconfig autoconf automake gettext intltool ];
+  nativeBuildInputs = [ pkgconfig autoconf automake gettext intltool
+    wrapGAppsHook
+  ];
   buildInputs = [
     gtk3 lcms2 exiv2 libchamplain clutter-gtk ffmpegthumbnailer fbida
   ];
@@ -49,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = http://geeqie.sourceforge.net;
 
     maintainers = with maintainers; [ jfrankenau pSub ];
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

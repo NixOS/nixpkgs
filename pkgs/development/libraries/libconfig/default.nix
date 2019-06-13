@@ -1,13 +1,15 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libconfig-${version}";
-  version = "1.5";
+  pname = "libconfig";
+  version = "1.7.2";
 
   src = fetchurl {
-    url = "http://www.hyperrealm.com/libconfig/${name}.tar.gz";
-    sha256 = "e31daa390d8e4461c8830512fe2e13ba1a3d6a02a2305a02429eec61e68703f6";
+    url = "https://hyperrealm.github.io/${pname}/dist/${pname}-${version}.tar.gz";
+    sha256 = "1ngs2qx3cx5cbwinc5mvadly0b5n7s86zsc68c404czzfff7lg3w";
   };
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.hyperrealm.com/libconfig;

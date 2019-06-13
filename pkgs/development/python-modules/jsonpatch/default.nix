@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "jsonpatch";
   version = "1.23";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

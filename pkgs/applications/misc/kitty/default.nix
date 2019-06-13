@@ -1,50 +1,122 @@
-{ stdenv, fetchFromGitHub, pkgs, python3Packages, glfw, libunistring, harfbuzz,
-  fontconfig, zlib, pkgconfig, ncurses, imagemagick, makeWrapper, xsel,
+{ stdenv, substituteAll, fetchFromGitHub, python3Packages, glfw, libunistring,
+  harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
-  libxkbcommon, libXi, libXext }:
+  libxkbcommon, libXi, libXext, wayland-protocols, wayland,
+  which, dbus, fetchpatch,
+  Cocoa,
+  CoreGraphics,
+  Foundation,
+  IOKit,
+  Kernel,
+  OpenGL,
+  cf-private,
+  libicns,
+  libpng,
+  librsvg,
+  optipng,
+  python3,
+  zlib,
+}:
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "0.8.2";
-  name = "kitty-${version}";
+  pname = "kitty";
+  version = "0.14.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "08s8l59bib363ykg4djcxrc1968n5j1cjlp6fwwv7xmf18wd1a6c";
+    sha256 = "15iv3k7iryf10n8n67d37x24pzcarq97a3dr42lbld00k1lx19az";
   };
 
   buildInputs = [
-    fontconfig glfw ncurses libunistring harfbuzz libX11
+    ncurses harfbuzz
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    Cocoa
+    CoreGraphics
+    Foundation
+    IOKit
+    Kernel
+    OpenGL
+    cf-private
+    libpng
+    python3
+    zlib
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    fontconfig glfw libunistring libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
+    wayland-protocols wayland dbus
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig which sphinx ncurses
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    imagemagick
+    libicns  # For the png2icns tool.
+    librsvg
+    optipng
+  ];
 
-  postPatch = ''
-    substituteInPlace kitty/utils.py \
-      --replace "find_library('startup-notification-1')" "'${libstartup_notification}/lib/libstartup-notification-1.so'"
-    '';
+  outputs = [ "out" "terminfo" ];
 
-  buildPhase = ''
-    python3 setup.py linux-package
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
+    })
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    ./no-lto.patch
+    ./no-werror.patch
+    ./png2icns.patch
+  ];
+
+  buildPhase = if stdenv.isDarwin then ''
+    make app
+  '' else ''
+    ${python.interpreter} setup.py linux-package
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out
+    ${if stdenv.isDarwin then ''
+    mkdir "$out/bin"
+    ln -s ../Applications/kitty.app/Contents/MacOS/kitty-deref-symlink "$out/bin/kitty"
+    mkdir "$out/Applications"
+    cp -r kitty.app "$out/Applications/kitty.app"
+    '' else ''
     cp -r linux-package/{bin,share,lib} $out
+    ''}
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ]}"
     runHook postInstall
+
+    # ZSH completions need to be invoked with `source`:
+    # https://github.com/kovidgoyal/kitty/blob/8ceb941051b89b7c50850778634f0b6137aa5e6e/docs/index.rst#zsh
+    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
+    "$out/bin/kitty" + complete setup fish > "$out/share/fish/vendor_completions.d/kitty.fish"
+    "$out/bin/kitty" + complete setup bash > "$out/share/bash-completion/completions/kitty.bash"
+  '';
+
+  postInstall = ''
+    terminfo_src=${if stdenv.isDarwin then
+      ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
+      else
+      "$out/share/terminfo"}
+
+    mkdir -p $terminfo/share
+    mv "$terminfo_src" $terminfo/share/terminfo
+
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/kovidgoyal/kitty;
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tex ];
+    platforms = platforms.darwin ++ platforms.linux;
+    maintainers = with maintainers; [ tex rvolosatovs ];
   };
 }

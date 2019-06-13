@@ -1,14 +1,14 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gnome-doc-utils, intltool, lib
 , mono, gtk-sharp-2_0, gnome-sharp, hyena
-, which, makeWrapper, glib, gnome3, poppler, wrapGAppsHook
+, which, makeWrapper, glib, gnome2, poppler, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "pdfmod-${version}";
+  pname = "pdfmod";
   version = "0.9.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pdfmod/0.9/pdfmod-${version}.tar.bz2";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "eb7c987514a053106ddf03f26544766c751c801d87762909b36415d46bc425c9";
   };
 
@@ -34,15 +34,16 @@ stdenv.mkDerivation rec {
       --add-flags "$out/lib/pdfmod/PdfMod.exe" \
       --prefix MONO_GAC_PREFIX : ${gtk-sharp-2_0} \
       --prefix MONO_GAC_PREFIX : ${gnome-sharp} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gnome-sharp gnome3.gconf gtk-sharp-2_0 gtk-sharp-2_0.gtk poppler ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gnome-sharp gnome2.GConf gtk-sharp-2_0 gtk-sharp-2_0.gtk poppler ]}
   '';
 
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/PdfMod;
+    homepage = "https://wiki.gnome.org/Attic/PdfMod";
     description = "A simple application for modifying PDF documents";
     platforms = platforms.all;
     maintainers = with maintainers; [ obadz ];
+    license = licenses.gpl2Plus;
   };
 }

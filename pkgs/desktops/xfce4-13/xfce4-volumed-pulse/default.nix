@@ -1,13 +1,13 @@
-{ lib, mkXfceDerivation, gtk2, libnotify ? null, libpulseaudio, keybinder, xfconf }:
+{ lib, mkXfceDerivation, gtk3, libnotify ? null, libpulseaudio, keybinder3, xfconf }:
 
 mkXfceDerivation rec {
   category = "apps";
   pname = "xfce4-volumed-pulse";
-  version = "0.2.2";
+  version = "0.2.3";
 
-  sha256 = "0ccb98b433lx5fgdqd3nqqppg4sldr5p1is6pnx85h9wyxx5svhp";
+  sha256 = "1rsjng9qmq7vzrx5bfxq76h63y501cfl1mksrxkf1x39by9r628j";
 
-  buildInputs = [ gtk2 libnotify libpulseaudio keybinder xfconf ];
+  buildInputs = [ gtk3 libnotify libpulseaudio keybinder3 xfconf ];
 
   meta = with lib; {
     license = licenses.gpl3Plus;

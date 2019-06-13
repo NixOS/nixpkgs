@@ -1,17 +1,13 @@
 { lib
-, pkgs
 , buildPythonPackage
-, python
 , fetchPypi
 , pythonOlder
-, html5lib
 , pytest
 , preshed
 , ftfy
 , numpy
 , murmurhash
 , plac
-, six
 , ujson
 , dill
 , requests
@@ -21,25 +17,24 @@
 , pathlib
 , msgpack-python
 , msgpack-numpy
+, jsonschema
+, blis
+, wasabi
+, srsly
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.0.9";
+  version = "2.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ihkhflhyz67bp73kfjqfrbcgdxi2msz5asbrh0pkk590c4vmms5";
+    sha256 = "03m4c59aaqpqr2x5yhv7y37z0vxhmmkfi6dv4cbp9nxsq9wv100d";
   };
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "html5lib==" "html5lib>=" \
-      --replace "regex==" "regex>=" \
-      --replace "ftfy==" "ftfy>=" \
-      --replace "msgpack-python==" "msgpack-python>=" \
-      --replace "msgpack-numpy==" "msgpack-numpy>=" \
-      --replace "pathlib" "pathlib; python_version<\"3.4\""
+      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
   '';
 
   propagatedBuildInputs = [
@@ -49,8 +44,6 @@ buildPythonPackage rec {
    preshed
    thinc
    plac
-   six
-   html5lib
    ujson
    dill
    requests
@@ -58,6 +51,10 @@ buildPythonPackage rec {
    ftfy
    msgpack-python
    msgpack-numpy
+   jsonschema
+   blis
+   wasabi
+   srsly
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [

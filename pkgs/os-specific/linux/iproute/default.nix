@@ -1,12 +1,12 @@
-{ fetchurl, stdenv, lib, flex, bash, bison, db, iptables, pkgconfig }:
+{ fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf }:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-${version}";
-  version = "4.16.0";
+  pname = "iproute2";
+  version = "5.1.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "02pfalg319jpbjz273ph725br8dnkzpfvi98azi9yd6p1w128p0c";
+    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1kvvrz5mlpjxqcm7vl6i8w6l1cb2amp6p5xyq006pgzafc49hnnw";
   };
 
   preConfigure = ''
@@ -16,14 +16,16 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace " netem " " "
   '';
 
+  outputs = [ "out" "dev"];
+
   makeFlags = [
     "DESTDIR="
     "LIBDIR=$(out)/lib"
     "SBINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man"
     "BASH_COMPDIR=$(out)/share/bash-completion/completions"
-    "DOCDIR=$(TMPDIR)/share/doc/${name}" # Don't install docs
-    "HDRDIR=$(TMPDIR)/include/iproute2" # Don't install headers
+    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
+    "HDRDIR=$(dev)/include/iproute2"
   ];
 
   buildFlags = [
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
     "CONFDIR=$(out)/etc/iproute2"
   ];
 
-  buildInputs = [ db iptables ];
+  buildInputs = [ db iptables libelf ];
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;
@@ -48,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ eelco wkennington fpletz ];
+    maintainers = with maintainers; [ primeos eelco fpletz ];
   };
 }

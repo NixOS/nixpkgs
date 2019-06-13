@@ -1,37 +1,40 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gnome3, gtk3
-, gobjectIntrospection, gdk_pixbuf, librsvg, libgweather, autoreconfHook
-, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, file, libsoup
+{ stdenv, fetchurl, meson, ninja, gettext, python3, pkgconfig, gnome3, gtk3
+, gobject-introspection, gdk_pixbuf, librsvg, libgweather
+, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, libsoup, gsettings-desktop-schemas
 , webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
 
 let
   pname = "gnome-maps";
-  version = "3.28.1";
+  version = "3.32.2.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "19xx1v25ycr8ih4jwb1vc662jcx6kynaf7baj4i569ccrcwaj2d5";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1m191iq1gjaqz79ci3dkbmwrkxp7pzknngimlf5bqib5x8yairlb";
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [ intltool wrapGAppsHook file autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext python3 wrapGAppsHook ];
   buildInputs = [
-    gobjectIntrospection
+    gobject-introspection
     gtk3 geoclue2 gjs libgee folks gfbgraph
     geocode-glib libchamplain libsoup
     gdk_pixbuf librsvg libgweather
-    gnome3.gsettings-desktop-schemas evolution-data-server
-    gnome-online-accounts gnome3.defaultIconTheme
+    gsettings-desktop-schemas evolution-data-server
+    gnome-online-accounts gnome3.adwaita-icon-theme
     webkitgtk
   ];
 
-  # The .service file isn't wrapped with the correct environment
-  # so misses GIR files when started. By re-pointing from the gjs
-  # entry point to the wrapped binary we get back to a wrapped
-  # binary.
-  preConfigure = ''
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+
+    # The .service file isn't wrapped with the correct environment
+    # so misses GIR files when started. By re-pointing from the gjs
+    # entry point to the wrapped binary we get back to a wrapped
+    # binary.
     substituteInPlace "data/org.gnome.Maps.service.in" \
         --replace "Exec=@pkgdatadir@/org.gnome.Maps" \
                   "Exec=$out/bin/gnome-maps"
@@ -48,7 +51,7 @@ in stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Apps/Maps;
     description = "A map application for GNOME 3";
     maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

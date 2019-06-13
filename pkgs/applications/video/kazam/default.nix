@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, python3, gst_all_1, wrapGAppsHook, gobjectIntrospection
+{ stdenv, fetchurl, substituteAll, python3, gst_all_1, wrapGAppsHook, gobject-introspection
 , gtk3, libwnck3, keybinder3, intltool, libcanberra-gtk3, libappindicator-gtk3, libpulseaudio }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1qygnrvm6aqixbyivhssp70hs0llxwk7lh3j7idxa2jbkk06hj4f";
   };
 
-  nativeBuildInputs = [ gobjectIntrospection python3.pkgs.distutils_extra intltool wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection python3.pkgs.distutils_extra intltool wrapGAppsHook ];
   buildInputs = [
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gtk3 libwnck3
     keybinder3 libappindicator-gtk3

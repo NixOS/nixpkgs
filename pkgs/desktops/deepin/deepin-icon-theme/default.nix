@@ -1,39 +1,46 @@
-{ stdenv, fetchFromGitHub, gtk3, papirus-icon-theme }:
+{ stdenv, fetchFromGitHub, gtk3, xcursorgen, papirus-icon-theme, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-icon-theme";
-  version = "15.12.52";
+  version = "15.12.69";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "141in9jlflmckd8rg4605dfks84p1p6b1zdbhbiwrg11xbl66f3l";
-    
-    # Get rid of case collision in file names, which is an issue in
-    # darwin where file names are case insensitive.
-    extraPostFetch = ''
-      rm "$out"/Sea/apps/scalable/TeXmacs.svg
-      rm "$out"/deepin/apps/48/TeXmacs.svg
-    ''; 
+    sha256 = "1y6r2as3acqkq8z1d44c82jfplihscmqc9fgpq1j0anznwcdj73k";
   };
 
-  nativeBuildInputs = [ gtk3 papirus-icon-theme ];
+  nativeBuildInputs = [ gtk3 xcursorgen ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  buildInputs = [ papirus-icon-theme ];
 
-  postFixup = ''
-    for theme in $out/share/icons/*; do
-      gtk-update-icon-cache $theme
-    done
+  postPatch = ''
+    patchShebangs tools/hicolor.links
+    patchShebangs tools/display_unused_links.sh
+    patchShebangs cursors-src/cursors/bitmaps/make.sh
+    patchShebangs cursors-src/render-cursors.sh
+
+    # keep icon-theme.cache
+    sed -i -e 's|\(-rm -f .*/icon-theme.cache\)|# \1|g' Makefile
   '';
 
+  buildTargets = "all hicolor-links";
+  installTargets = "install-icons install-cursors";
+  installFlags = [ "PREFIX=${placeholder ''out''}" ];
+
+  postInstall = ''
+    cp -a ./Sea ./usr/share/icons/hicolor "$out"/share/icons/
+  '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
+
   meta = with stdenv.lib; {
-    description = "Deepin icon theme";
+    description = "Icons for the Deepin Desktop Environment";
     homepage = https://github.com/linuxdeepin/deepin-icon-theme;
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];
   };
 }

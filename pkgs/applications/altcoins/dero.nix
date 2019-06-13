@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkgconfig, unbound, openssl, boost
-, libunwind, lmdb, miniupnpc, readline }:
+, lmdb, miniupnpc, readline }:
 
 stdenv.mkDerivation rec {
   name = "dero-${version}";

@@ -1,0 +1,27 @@
+From c1832eabb99cec47f1714f696275285e1e28da34 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Tue, 2 Apr 2019 16:20:50 +0200
+Subject: [PATCH] Don't resolve symlinks when trying to find INSTALL_PATH
+
+Nix specific patch. This behavior breaks roundcube setups where plugins
+are in a store path with symlinks to the actual source.
+---
+ bin/update.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bin/update.sh b/bin/update.sh
+index 08e3bb5..b2ad498 100755
+--- a/bin/update.sh
++++ b/bin/update.sh
+@@ -19,7 +19,7 @@
+  +-----------------------------------------------------------------------+
+ */
+ 
+-define('INSTALL_PATH', realpath(__DIR__ . '/..') . '/' );
++define('INSTALL_PATH', __DIR__ . '/../' );
+ 
+ require_once INSTALL_PATH . 'program/include/clisetup.php';
+ 
+-- 
+2.19.2
+

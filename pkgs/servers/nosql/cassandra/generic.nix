@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, makeWrapper, gawk, bash, getopt, procps
-, which, jre, version, sha256, ...
+, which, jre, version, sha256, coreutils, ...
 }:
 
 let
@@ -16,6 +16,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "cassandra-${version}";
+  inherit version;
 
   src = fetchurl {
     inherit sha256;
@@ -42,16 +43,30 @@ stdenv.mkDerivation rec {
       rmdir $out/doc
     fi
 
-    for cmd in bin/cassandra bin/nodetool bin/sstablekeys \
-      bin/sstableloader bin/sstableupgrade \
-      tools/bin/cassandra-stress tools/bin/cassandra-stressd \
-      tools/bin/sstablemetadata tools/bin/sstableofflinerelevel \
-      tools/bin/token-generator tools/bin/sstablelevelreset; do
+
+    for cmd in bin/cassandra \
+               bin/nodetool \
+               bin/sstablekeys \
+               bin/sstableloader \
+               bin/sstablescrub \
+               bin/sstableupgrade \
+               bin/sstableutil \
+               bin/sstableverify \
+               tools/bin/cassandra-stress \
+               tools/bin/cassandra-stressd \
+               tools/bin/sstabledump \
+               tools/bin/sstableexpiredblockers \
+               tools/bin/sstablelevelreset \
+               tools/bin/sstablemetadata \
+               tools/bin/sstableofflinerelevel \
+               tools/bin/sstablerepairedset \
+               tools/bin/sstablesplit \
+               tools/bin/token-generator; do
 
       # check if file exists because some bin tools don't exist across all
       # cassandra versions
       if [ -f $out/$cmd ]; then
-        wrapProgram $out/$cmd \
+        makeWrapper $out/$cmd $out/bin/$(${coreutils}/bin/basename "$cmd") \
           --suffix-each LD_LIBRARY_PATH : ${libPath} \
           --prefix PATH : ${binPath} \
           --set JAVA_HOME ${jre}

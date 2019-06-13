@@ -3,7 +3,6 @@
 let
   cfg = config.services.crashplansb;
   crashplansb = pkgs.crashplansb.override { maxRam = cfg.maxRam; };
-  varDir = "/var/lib/crashplan";
 in
 
 with lib;

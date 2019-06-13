@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "chunksync-${version}";
 
   src = fetchurl {
-    url = "http://chunksync.florz.de/chunksync_${version}.tar.gz";
+    url = "https://chunksync.florz.de/chunksync_${version}.tar.gz";
     sha256 = "1gwqp1kjwhcmwhynilakhzpzgc0c6kk8c9vkpi30gwwrwpz3cf00";
   };
 

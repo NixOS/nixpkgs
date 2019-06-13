@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.libsdl.org/projects/SDL_mixer/;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
+    license     = licenses.zlib;
   };
 }

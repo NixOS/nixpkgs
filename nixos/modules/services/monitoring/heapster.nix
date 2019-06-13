@@ -49,7 +49,7 @@ in {
       };
     };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "heapster";
       uid = config.ids.uids.heapster;
       description = "Heapster user";

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "demjson";
   version = "2.2.4";
-  name = "${pname}-${version}";
   disabled = isPy36;
 
   src = fetchPypi {

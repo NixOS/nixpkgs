@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urlscan";
-  version = "0.8.7";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = pname;
     rev = version;
-    sha256 = "1jxjcq869jimsq1ihk2fbjhp5lj7yga0hbp0msskxyz92afl1kz8";
+    sha256 = "0z24k8sk2zfp2pwysyp844vmhr5vbkj74frwy4i0v5pj60i9jl0v";
   };
 
   propagatedBuildInputs = [ python3Packages.urwid ];

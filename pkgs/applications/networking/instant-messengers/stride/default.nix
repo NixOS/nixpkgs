@@ -33,12 +33,12 @@ let
   ] + ":${stdenv.cc.cc.lib}/lib64";
 in
 stdenv.mkDerivation rec {
-  version = "1.8.18";
+  version = "1.17.82";
   name = "stride-${version}";
 
   src = fetchurl {
     url = "https://packages.atlassian.com/stride-apt-client/pool/stride_${version}_amd64.deb";
-    sha256 = "0hpj3i3xbvckxm7fphqqb3scb31w2cg4riwp593y0gnbivpc0hym";
+    sha256 = "0lx61gdhw0kv4f9fwbfg69yq52dsp4db7c4li25d6wn11qanzqhy";
   };
 
   dontBuild = true;

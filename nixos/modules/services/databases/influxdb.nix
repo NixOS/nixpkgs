@@ -98,6 +98,7 @@ let
 
   configFile = pkgs.runCommand "config.toml" {
     buildInputs = [ pkgs.remarshal ];
+    preferLocalBuild = true;
   } ''
     remarshal -if json -of toml \
       < ${pkgs.writeText "config.json" (builtins.toJSON configOptions)} \
@@ -156,20 +157,19 @@ in
 
   config = mkIf config.services.influxdb.enable {
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.influxdb = {
       description = "InfluxDB Server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''${cfg.package}/bin/influxd -config "${configFile}"'';
-        User = "${cfg.user}";
-        Group = "${cfg.group}";
-        PermissionsStartOnly = true;
+        User = cfg.user;
+        Group = cfg.group;
       };
-      preStart = ''
-        mkdir -m 0770 -p ${cfg.dataDir}
-        if [ "$(id -u)" = 0 ]; then chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}; fi
-      '';
       postStart =
         let
           scheme = if configOptions.http.https-enabled then "-k https" else "http";
@@ -182,13 +182,13 @@ in
         '';
     };
 
-    users.extraUsers = optional (cfg.user == "influxdb") {
+    users.users = optional (cfg.user == "influxdb") {
       name = "influxdb";
       uid = config.ids.uids.influxdb;
       description = "Influxdb daemon user";
     };
 
-    users.extraGroups = optional (cfg.group == "influxdb") {
+    users.groups = optional (cfg.group == "influxdb") {
       name = "influxdb";
       gid = config.ids.gids.influxdb;
     };

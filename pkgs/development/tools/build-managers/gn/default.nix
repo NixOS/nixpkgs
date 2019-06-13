@@ -1,77 +1,64 @@
-{ stdenv, lib, fetchgit, fetchurl, libevent, ninja, python }:
+{ stdenv, lib, fetchgit, fetchzip, fetchpatch, darwin, writeText
+, git, ninja, python2 }:
 
 let
-  depsGit = {
-    "tools/gn" = fetchgit {
-      url = "https://chromium.googlesource.com/chromium/src/tools/gn";
-      rev = "d0c518db129975ce88ff1de26c857873b0619c4b";
-      sha256 = "0l15vzmjyx6bwlz1qhn3fy7yx3qzzxr3drnkj3l0p0fmyxza52vx";
-    };
-    "base" = fetchgit {
-      url = "https://chromium.googlesource.com/chromium/src/base";
-      rev = "bc6e3ce8ca01b894751e1f7b22b561e3ae2e7f17";
-      sha256 = "1yl49v6nxbrfms52xf7fiwh7d4301m2aj744pa3hzzh989c5j6g5";
-    };
-    "build" = fetchgit {
-      url = "https://chromium.googlesource.com/chromium/src/build";
-      rev = "e934a19ae908081fba13769924e4ea45a7a451ce";
-      sha256 = "0jhy418vaiin7djg9zvk83f8zhasigki4442x5j7gkmgmgmyc4am";
-    };
-    "config" = fetchgit {
-      url = "https://chromium.googlesource.com/chromium/src/build/config";
-      rev = "df16c6a2c070704b0a25efe46ee9af16de1e65b3";
-      sha256 = "1x18syzz1scwhd8lf448hy5lnfpq118l403x9qmwm0np318w09wg";
-    };
-    "testing/gtest" = fetchgit {
-      url = "https://chromium.googlesource.com/chromium/testing/gtest";
-      rev = "585ec31ea716f08233a815e680fc0d4699843938";
-      sha256 = "0csn1cza66851nmxxiw42smsm3422mx67vcyykwn0a71lcjng6rc";
-    };
-  };
+  rev = "96ff462cddf35f98e25fd5d098fc27bc81eab94a";
+  sha256 = "1ny23sprl7ygb2lpdnqxv60m8kaf4h2dmpqjp61l5vc2s7f32g97";
+
+  shortRev = builtins.substring 0 7 rev;
+  lastCommitPosition = writeText "last_commit_position.h" ''
+    #ifndef OUT_LAST_COMMIT_POSITION_H_
+    #define OUT_LAST_COMMIT_POSITION_H_
+
+    #define LAST_COMMIT_POSITION "(${shortRev})"
+
+    #endif  // OUT_LAST_COMMIT_POSITION_H_
+  '';
 
 in
-  stdenv.mkDerivation rec {
-    name = "gn";
-    version = "0.0.0.20170629";
-    sourceRoot = ".";
+stdenv.mkDerivation rec {
+  name = "gn-${version}";
+  version = "20181031";
 
-    unpackPhase = ''
-      ${lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (n: v: ''
-          mkdir -p $sourceRoot/${n}
-          cp -r ${v}/* $sourceRoot/${n}
-        '') depsGit)}
-    '';
+  src = fetchgit {
+    url = "https://gn.googlesource.com/gn";
+    inherit rev sha256;
+  };
 
-    postPatch = ''
-      # Patch shebands (for sandbox build)
-      chmod u+w -R build
-      patchShebangs build
+  postPatch = ''
+    # FIXME Needed with old Apple SDKs
+    substituteInPlace base/mac/foundation_util.mm \
+      --replace "NSArray<NSString*>*" "NSArray*"
+  '';
 
-      # Patch out Chromium-bundled libevent
-      chmod u+w tools/gn/bootstrap tools/gn/bootstrap/bootstrap.py
-      sed -i -e '/static_libraries.*libevent/,/^ *\]\?[})]$/d' \
-          tools/gn/bootstrap/bootstrap.py
-    '';
+  nativeBuildInputs = [ ninja python2 git ];
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
+    libobjc
+    cctools
 
-    NIX_LDFLAGS = "-levent";
+    # frameworks
+    ApplicationServices
+    Foundation
+    AppKit
+  ]);
 
-    nativeBuildInputs = [ ninja python ];
-    buildInputs = [ libevent ];
+  buildPhase = ''
+    python build/gen.py --no-sysroot --no-last-commit-position
+    ln -s ${lastCommitPosition} out/last_commit_position.h
+    ninja -j $NIX_BUILD_CORES -C out gn
+  '';
 
-    buildPhase = ''
-      python tools/gn/bootstrap/bootstrap.py -s
-    '';
+  installPhase = ''
+    install -vD out/gn "$out/bin/gn"
+  '';
 
-    installPhase = ''
-      install -vD out/Release/gn "$out/bin/gn"
-    '';
+  setupHook = ./setup-hook.sh;
 
-    meta = with stdenv.lib; {
-      description = "A meta-build system that generates NinjaBuild files";
-      homepage = https://chromium.googlesource.com/chromium/src/tools/gn;
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.stesie ];
-    };
-  }
+  meta = with lib; {
+    description = "A meta-build system that generates NinjaBuild files";
+    homepage = https://gn.googlesource.com/gn;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ stesie matthewbauer ];
+  };
+}

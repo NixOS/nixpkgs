@@ -1,23 +1,36 @@
-{ stdenv, fetchurl, runCommand, pkgconfig, hexdump, which
+{ stdenv, fetchurl, fetchpatch, runCommand, pkgconfig, hexdump, which
 , knot-dns, luajit, libuv, lmdb, gnutls, nettle
 , cmocka, systemd, dns-root-data, makeWrapper
 , extraFeatures ? false /* catch-all if defaults aren't enough */
-, hiredis, libmemcached, luajitPackages
+, luajitPackages
 }:
 let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional optionals optionalString concatStringsSep;
+inherit (stdenv.lib) optional concatStringsSep;
 
 unwrapped = stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "2.2.0";
+  version = "3.2.1";
 
   src = fetchurl {
-    url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "1yhlwvpl81klyfb8hhvrhii99q7wvydi3vandmq9j7dvig6z1dvv";
+    url = "https://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
+    sha256 = "d1396888ec3a63f19dccdf2b7dbcb0d16a5d8642766824b47f4c21be90ce362b";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "support-libzscanner-2.8.diff";
+      url = "https://gitlab.labs.nic.cz/knot/knot-resolver/commit/186f263.diff";
+      sha256 = "19zqigvc7m2a4j6bk9whx7gj0v009568rz5qwk052z7pzfikr8mk";
+    })
+  ];
+
+  # Short-lived cross fix, as upstream is migrating to meson anyway.
+  postPatch = ''
+    substituteInPlace platform.mk --replace "objdump" "$OBJDUMP"
+  '';
 
   outputs = [ "out" "dev" ];
 
@@ -27,10 +40,11 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns luajit libuv gnutls nettle lmdb ]
-    ++ optional doCheck cmocka
     ++ optional stdenv.isLinux systemd # sd_notify
     ## optional dependencies; TODO: libedit, dnstap
     ;
+
+  checkInputs = [ cmocka ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -61,22 +75,24 @@ unwrapped = stdenv.mkDerivation rec {
   };
 };
 
-wrapped-full = with luajitPackages; let
-    luaPkgs =  [ luasec luasocket ]; # TODO: cqueues and others for http2 module
-  in runCommand unwrapped.name
+wrapped-full = runCommand unwrapped.name
   {
     nativeBuildInputs = [ makeWrapper ];
+    buildInputs = with luajitPackages; [
+      luasec luasocket # trust anchor bootstrap, prefill module
+      lfs # prefill module
+      http # for http module; brings lots of deps; some are useful elsewhere
+    ];
     preferLocalBuild = true;
     allowSubstitutes = false;
   }
   ''
-    mkdir -p "$out/sbin" "$out/share"
-    makeWrapper '${unwrapped}/sbin/kresd' "$out"/sbin/kresd \
-      --set LUA_PATH  '${concatStringsSep ";" (map getLuaPath  luaPkgs)}' \
-      --set LUA_CPATH '${concatStringsSep ";" (map getLuaCPath luaPkgs)}'
+    mkdir -p "$out"/{bin,share}
+    makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
+      --set LUA_PATH  "$LUA_PATH" \
+      --set LUA_CPATH "$LUA_CPATH"
     ln -sr '${unwrapped}/share/man' "$out"/share/
-    ln -sr "$out"/{sbin,bin}
+    ln -sr "$out"/{bin,sbin}
   '';
 
 in result
-

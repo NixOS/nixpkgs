@@ -3,14 +3,12 @@
  libpulseaudio, libxml2, libxslt, libGLU_combined, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
 
-assert stdenv.system == "x86_64-linux";
-
 stdenv.mkDerivation rec {
   name = "viber-${version}";
   version = "7.0.0.1035";
 
   src = fetchurl {
-    url = "http://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
     sha256 = "06mp2wvqx4y6rd5gs2mh442qcykjrrvwnkhlpx0lara331i2p0lj";
   };
 
@@ -99,7 +97,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.viber.com;
     description = "An instant messaging and Voice over IP (VoIP) app";
     license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ jagajaga ];
   };
 

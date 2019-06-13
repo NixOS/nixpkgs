@@ -1,9 +1,9 @@
-{stdenv, fetchFromGitHub, bash, which, m4, python, bison, flex, llvmPackages, clangWrapSelf,
+{stdenv, fetchFromGitHub, fetchpatch, which, m4, python, bison, flex, llvmPackages,
 testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.9.2";
+  version = "1.10.0";
   rev = "v${version}";
 
   inherit testedTargets;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "ispc";
     repo = "ispc";
     inherit rev;
-    sha256 = "0zaw7mwvly1csbdcbz9j8ry89n0r1fag1m1f579l4mgg1x6ksqry";
+    sha256 = "1x07n2gaff3v32yvddrb659mx5gg12bnbsqbyfimp396wn04w60b";
   };
 
   # there are missing dependencies in the Makefile, causing sporadic build failures
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     llvmPackages.clang-unwrapped # we need to link against libclang, so we need the unwrapped
   ];
 
-  postPatch = "sed -i -e 's/\\/bin\\///g' -e 's/-lcurses/-lncurses/g' Makefile";
+  postPatch = "sed -i -e 's,/bin/,,g' -e 's/-lcurses/-lncurses/g' Makefile";
 
   # TODO: this correctly catches errors early, but also some things that are just weird and don't seem to be real
   # errors

@@ -81,12 +81,6 @@ in stdenv.mkDerivation rec {
 
   postBuild = ''
     rm -fR $out
-
-    paxmark m bin/{lli,llvm-rtdyld}
-
-    paxmark m unittests/ExecutionEngine/JIT/JITTests
-    paxmark m unittests/ExecutionEngine/MCJIT/MCJITTests
-    paxmark m unittests/Support/SupportTests
   '';
 
   enableParallelBuilding = true;
@@ -97,7 +91,7 @@ in stdenv.mkDerivation rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "armv7l-linux"];
   };
 }

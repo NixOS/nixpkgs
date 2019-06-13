@@ -1,25 +1,37 @@
-{ stdenv, fetchurl, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
-, libiconv, openssl, pcre, boost, judy, bison, libxml2
-, libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
+{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
+, libiconv, openssl, pcre, boost, judy, bison, libxml2, libkrb5
+, libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
+, asio, buildEnv, check, scons
 }:
 
 with stdenv.lib;
 
 let # in mariadb # spans the whole file
 
+libExt = stdenv.hostPlatform.extensions.sharedLibrary;
+
 mariadb = everything // {
   inherit client; # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
   server = everything; # a full single-output build, including everything in `client` again
   inherit connector-c; # libmysqlclient.so
+  inherit galera;
+};
+
+galeraLibs = buildEnv {
+  name = "galera-lib-inputs-united";
+  paths = [ openssl.out boost check ];
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.14";
+  version = "10.3.15";
 
   src = fetchurl {
-    url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "0zizf3q0hdkmsn6rpwdbfm5xkj21cwpnnzq9knjfpwcadqnyqhrl";
+    urls = [
+      "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
+      "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
+    ];
+    sha256 = "0s399nxk2z8fgdr527p64y74zwjc3gpv7psf1n2r6ksl9njr3wr7";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -27,7 +39,7 @@ common = rec { # attributes common to both builds
 
   buildInputs = [
     ncurses openssl zlib pcre jemalloc libiconv
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd libkrb5 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   prePatch = ''
@@ -35,44 +47,46 @@ common = rec { # attributes common to both builds
   '';
 
   patches = [ ./cmake-includedir.patch ]
-    ++ stdenv.lib.optional stdenv.cc.isClang ./clang-isfinite.patch;
+    ++ optionals stdenv.isDarwin [
+      # Derived from "Fixed c++11 narrowing error"
+      # https://github.com/MariaDB/server/commit/a0dfefb0f8a47145e599a5f1b0dc576fa7634b92
+      ./fix-c++11-narrowing-error.patch
+    ];
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
     "-DMANUFACTURER=NixOS.org"
-    "-DDEFAULT_CHARSET=utf8"
-    "-DDEFAULT_COLLATION=utf8_general_ci"
+    "-DDEFAULT_CHARSET=utf8mb4"
+    "-DDEFAULT_COLLATION=utf8mb4_unicode_ci"
     "-DSECURITY_HARDENED=ON"
 
-    "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
+    "-DINSTALL_UNIX_ADDRDIR=/run/mysqld/mysqld.sock"
+    "-DINSTALL_BINDIR=bin"
+    "-DINSTALL_DOCDIR=share/doc/mysql"
+    "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
+    "-DINSTALL_INCLUDEDIR=include/mysql"
+    "-DINSTALL_INFODIR=share/mysql/docs"
+    "-DINSTALL_MANDIR=share/man"
     "-DINSTALL_MYSQLSHAREDIR=share/mysql"
+    "-DINSTALL_SCRIPTDIR=bin"
+    "-DINSTALL_SUPPORTFILESDIR=share/doc/mysql"
+    "-DINSTALL_MYSQLTESTDIR=OFF"
+    "-DINSTALL_SQLBENCHDIR=OFF"
 
     "-DWITH_ZLIB=system"
     "-DWITH_SSL=system"
     "-DWITH_PCRE=system"
-
+    "-DWITH_SAFEMALLOC=OFF"
+    "-DEMBEDDED_LIBRARY=OFF"
+  ] ++ optional stdenv.isDarwin [
     # On Darwin without sandbox, CMake will find the system java and attempt to build with java support, but
     # then it will fail during the actual build. Let's just disable the flag explicitly until someone decides
-    # to pass in java explicitly. This should have no effect on Linux.
+    # to pass in java explicitly.
     "-DCONNECT_WITH_JDBC=OFF"
-
-    # Same as above. Somehow on Darwin CMake decides that we support GSS even though we aren't provding the
-    # library through Nix, and then breaks later on. This should have no effect on Linux.
-    "-DPLUGIN_AUTH_GSSAPI=NO"
-    "-DPLUGIN_AUTH_GSSAPI_CLIENT=NO"
-  ]
-    ++ optional stdenv.isDarwin "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
-    ++ optional stdenv.hostPlatform.isMusl "-DWITHOUT_TOKUDB=1" # mariadb docs say disable this for musl
-    ;
-
-  preConfigure = ''
-    cmakeFlags="$cmakeFlags -DINSTALL_INCLUDEDIR=''${!outputDev}/include/mysql"
-  '';
-
-  postInstall = ''
-    rm "$out"/lib/*.a
-    find "''${!outputBin}/bin" -name '*test*' -delete
-  '';
+    "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+  ] ++ optional stdenv.hostPlatform.isMusl [
+    "-DWITHOUT_TOKUDB=1" # mariadb docs say disable this for musl
+  ];
 
   passthru.mysqlVersion = "5.7";
 
@@ -80,7 +94,7 @@ common = rec { # attributes common to both builds
     description = "An enhanced, drop-in replacement for MySQL";
     homepage    = https://mariadb.org/;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ thoughtpolice wkennington ];
+    maintainers = with maintainers; [ thoughtpolice ];
     platforms   = platforms.all;
   };
 };
@@ -88,28 +102,27 @@ common = rec { # attributes common to both builds
 client = stdenv.mkDerivation (common // {
   name = "mariadb-client-${common.version}";
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "out" "dev" "man" ];
 
   propagatedBuildInputs = [ openssl zlib ]; # required from mariadb.pc
 
+  patches = [ ./cmake-plugin-includedir.patch ];
+
   cmakeFlags = common.cmakeFlags ++ [
     "-DWITHOUT_SERVER=ON"
+    "-DWITH_WSREP=OFF"
   ];
 
-  preConfigure = common.preConfigure + ''
-    cmakeFlags="$cmakeFlags \
-      -DINSTALL_BINDIR=$bin/bin \
-      -DINSTALL_SCRIPTDIR=$bin/bin \
-      -DINSTALL_SUPPORTFILESDIR=$bin/share/mysql \
-      -DINSTALL_DOCDIR=$bin/share/doc/mysql \
-      -DINSTALL_DOCREADMEDIR=$bin/share/doc/mysql \
-      "
-  '';
-
-  # prevent cycle; it needs to reference $dev
-  postInstall = common.postInstall + ''
-    moveToOutput bin/mysql_config "$dev"
-    moveToOutput bin/mariadb_config "$dev"
+  postInstall = ''
+    rm -r "$out"/share/mysql
+    rm -r "$out"/share/doc
+    rm "$out"/bin/{msql2mysql,mysql_plugin,mytop,wsrep_sst_rsync_wan,mysql_config,mariadb_config}
+    rm "$out"/lib/plugin/{daemon_example.ini,dialog.so,mysql_clear_password.so,sha256_password.so}
+    libmysqlclient_path=$(readlink -f $out/lib/libmysqlclient${libExt})
+    rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
+    mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
+    ln -sv libmysqlclient${libExt} "$out"/lib/libmysqlclient_r${libExt}
+    mkdir -p "$dev"/lib && mv "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a} "$dev"/lib
   '';
 
   enableParallelBuilding = true; # the client should be OK
@@ -118,60 +131,66 @@ client = stdenv.mkDerivation (common // {
 everything = stdenv.mkDerivation (common // {
   name = "mariadb-${common.version}";
 
+  outputs = [ "out" "dev" "man" ];
+
   nativeBuildInputs = common.nativeBuildInputs ++ [ bison ];
 
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ] ++ optional (stdenv.isLinux && !stdenv.isArm) numactl;
+  ] ++ optional (stdenv.isLinux && !stdenv.isAarch32) numactl;
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
-    "-DINSTALL_SYSCONFDIR=etc/mysql"
-    "-DINSTALL_INFODIR=share/mysql/docs"
-    "-DINSTALL_MANDIR=share/man"
     "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
-    "-DINSTALL_SCRIPTDIR=bin"
-    "-DINSTALL_SUPPORTFILESDIR=share/mysql"
-    "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
-    "-DINSTALL_DOCDIR=share/doc/mysql"
-    "-DINSTALL_SHAREDIR=share/mysql"
-    "-DINSTALL_MYSQLTESTDIR=OFF"
-    "-DINSTALL_SQLBENCHDIR=OFF"
-
-    "-DENABLED_LOCAL_INFILE=ON"
+    "-DENABLED_LOCAL_INFILE=OFF"
     "-DWITH_READLINE=ON"
-    "-DWITH_EXTRA_CHARSETS=complex"
-    "-DWITH_EMBEDDED_SERVER=ON"
-    "-DWITH_ARCHIVE_STORAGE_ENGINE=1"
-    "-DWITH_BLACKHOLE_STORAGE_ENGINE=1"
-    "-DWITH_INNOBASE_STORAGE_ENGINE=1"
-    "-DWITH_PARTITION_STORAGE_ENGINE=1"
-    "-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1"
-    "-DWITHOUT_FEDERATED_STORAGE_ENGINE=1"
+    "-DWITH_EXTRA_CHARSETS=all"
+    "-DWITH_EMBEDDED_SERVER=OFF"
+    "-DWITH_UNIT_TESTS=OFF"
     "-DWITH_WSREP=ON"
+    "-DWITH_INNODB_DISALLOW_WRITES=ON"
+    "-DWITHOUT_EXAMPLE=1"
+    "-DWITHOUT_FEDERATED=1"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
+    "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_TOKUDB=1"
   ];
 
-  postInstall = common.postInstall + ''
-    rm -r "$out"/data # Don't need testing data
-    rm "$out"/share/man/man1/mysql-test-run.pl.1
-    rm "$out"/bin/rcmysql
+  preConfigure = ''
+    cmakeFlags="$cmakeFlags \
+      -DINSTALL_SHAREDIR=$dev/share/mysql
+      -DINSTALL_SUPPORTFILESDIR=$dev/share/mysql"
   '';
 
-  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive"
-    + optionalString stdenv.isDarwin " -std=c++11";
+  postInstall = ''
+    chmod +x "$out"/bin/wsrep_sst_common
+    rm -r "$out"/data # Don't need testing data
+    rm "$out"/bin/{mysql_find_rows,mysql_waitpid,mysqlaccess,mysqladmin,mysqlbinlog,mysqlcheck}
+    rm "$out"/bin/{mysqldump,mysqlhotcopy,mysqlimport,mysqlshow,mysqlslap,mysqltest}
+    ${ # We don't build with GSSAPI on Darwin
+      optionalString (! stdenv.isDarwin) ''
+        rm "$out"/lib/mysql/plugin/auth_gssapi_client.so
+      ''
+    }
+    rm "$out"/lib/mysql/plugin/{client_ed25519.so,daemon_example.ini}
+    rm "$out"/lib/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
+    mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
+    mkdir -p "$dev"/lib && mv "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a} "$dev"/lib
+  '' + optionalString (! stdenv.isDarwin) ''
+    sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
+  '';
+
+  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
 });
 
 connector-c = stdenv.mkDerivation rec {
   name = "mariadb-connector-c-${version}";
-  version = "2.3.4";
+  version = "2.3.7";
 
   src = fetchurl {
-    url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
-    sha256 = "1g1sq5knarxkfhpkcczr6qxmq12pid65cdkqnhnfs94av89hbswb";
+    url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//nyc2.mirrors.digitalocean.com/mariadb/";
+    sha256 = "13izi35vvxhiwl2dsnqrz75ciisy2s2k30giv7hrm01qlwnmiycl";
     name   = "mariadb-connector-c-${version}-src.tar.gz";
   };
 
@@ -206,4 +225,53 @@ connector-c = stdenv.mkDerivation rec {
   };
 };
 
+galera = stdenv.mkDerivation rec {
+  name = "mariadb-galera-${version}";
+  version = "25.3.26";
+
+  src = fetchFromGitHub {
+    owner = "codership";
+    repo = "galera";
+    rev = "release_${version}";
+    sha256 = "0fs0c1px9lknf1a5wwb12z1hj7j7b6hsfjddggikvkdkrnr2xs1f";
+    fetchSubmodules = true;
+  };
+
+  buildInputs = [ asio boost check openssl scons ];
+
+  postPatch = ''
+    substituteInPlace SConstruct \
+      --replace "boost_library_path = '''" "boost_library_path = '${boost}/lib'"
+  '';
+
+  preConfigure = ''
+    export CPPFLAGS="-I${asio}/include -I${boost.dev}/include -I${check}/include -I${openssl.dev}/include"
+    export LIBPATH="${galeraLibs}/lib"
+  '';
+
+  sconsFlags = "ssl=1 system_asio=0 strict_build_flags=0";
+
+  installPhase = ''
+    # copied with modifications from scripts/packages/freebsd.sh
+    GALERA_LICENSE_DIR="$share/licenses/${name}"
+    install -d $out/{bin,lib/galera,share/doc/galera,$GALERA_LICENSE_DIR}
+    install -m 555 "garb/garbd"                       "$out/bin/garbd"
+    install -m 444 "libgalera_smm.so"                 "$out/lib/galera/libgalera_smm.so"
+    install -m 444 "scripts/packages/README"          "$out/share/doc/galera/"
+    install -m 444 "scripts/packages/README-MySQL"    "$out/share/doc/galera/"
+    install -m 444 "scripts/packages/freebsd/LICENSE" "$out/$GALERA_LICENSE_DIR"
+    install -m 444 "LICENSE"                          "$out/$GALERA_LICENSE_DIR/GPLv2"
+    install -m 444 "asio/LICENSE_1_0.txt"             "$out/$GALERA_LICENSE_DIR/LICENSE.asio"
+    install -m 444 "www.evanjones.ca/LICENSE"         "$out/$GALERA_LICENSE_DIR/LICENSE.crc32c"
+    install -m 444 "chromium/LICENSE"                 "$out/$GALERA_LICENSE_DIR/LICENSE.chromium"
+  '';
+
+  meta = {
+    description = "Galera 3 wsrep provider library";
+    homepage = http://galeracluster.com/;
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ izorkin ];
+    platforms = platforms.all;
+  };
+};
 in mariadb

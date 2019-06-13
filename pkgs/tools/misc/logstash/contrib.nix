@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "logstash-contrib-${version}";
 
   src = fetchzip {
-   url = "http://download.elasticsearch.org/logstash/logstash/logstash-contrib-${version}.tar.gz";
+   url = "https://download.elasticsearch.org/logstash/logstash/logstash-contrib-${version}.tar.gz";
    sha256 = "1yj8sf3b526gixh3c6zhgkfpg4f0c72p1lzhfhdx8b3lw7zjkj0k";
   };
 

@@ -1,20 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi, nose, mercurial, isPy3k }:
+{ stdenv, buildPythonPackage, fetchPypi, substituteAll, python, nose, mercurial }:
 
 buildPythonPackage rec {
   pname = "python-hglib";
-  version = "2.5";
-  name = "${pname}-${version}";
+  version = "2.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fee180bb6796e5d2d25158b2d3c9f048648e427dd28b23a58d369adb14dd67cb";
+    sha256 = "7c1fa0cb4d332dd6ec8409b04787ceba4623e97fb378656f7cab0b996c6ca3b2";
   };
 
-  checkInputs = [ nose ];
-  buildInputs = [ mercurial ];
+  patches = [
+    (substituteAll {
+      src = ./hgpath.patch;
+      hg = "${mercurial}/bin/hg";
+    })
+  ];
 
-  checkPhase = ''python test.py'';
-  doCheck = if isPy3k then false else true;
+  checkInputs = [ nose ];
+
+  checkPhase = ''
+    ${python.interpreter} test.py --with-hg "${mercurial}/bin/hg"
+  '';
 
   meta = with stdenv.lib; {
     description = "Mercurial Python library";

@@ -1,44 +1,85 @@
-{ stdenv, fetchzip, fetchurl, boost, cmake, z3 }:
+{ stdenv, fetchzip, fetchFromGitHub, boost, cmake, ncurses, python2
+, z3Support ? true, z3 ? null
+}:
+
+assert z3Support -> z3 != null;
+assert z3Support -> stdenv.lib.versionAtLeast z3.version "4.6.0";
 
 let
-  version = "0.4.20";
-  jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz;
+  version = "0.5.9";
+  rev = "c68bc34e9466ef22326dd9072d557c56160e9092";
+  sha256 = "1b611piwnwiwk4dcvn2qm4wjb9msa385lpx81y3k669ga3ip9rkc";
+  jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.8.4.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
-    sha256 = "0jz93zv17ir7lbxb3dv8ph2n916rajs8i96immwx9vb45pqid3n0";
+    sha256 = "1z0gj7a6jypkijmpknis04qybs1hkd04d1arr3gy89lnxmp6qzlm";
   };
+  buildSharedLibs = stdenv.hostPlatform.isLinux;
 in
-
 stdenv.mkDerivation {
   name = "solc-${version}";
 
-  # Cannot use `fetchFromGitHub' because of submodules
-  src = fetchurl {
-    url = "https://github.com/ethereum/solidity/releases/download/v${version}/solidity_${version}.tar.gz";
-    sha256 = "0jyqnykj537ksfsf2m6ww9vganmpa6yd5fmlfpa5qm1076kq7zd6";
+  src = fetchFromGitHub {
+    owner = "ethereum";
+    repo = "solidity";
+    inherit rev sha256;
   };
 
-  patchPhase = ''
+  patches = stdenv.lib.optionals buildSharedLibs [ ./patches/shared-libs-install.patch ];
+
+  postPatch = ''
+    touch prerelease.txt
+    echo >commit_hash.txt "${rev}"
     substituteInPlace cmake/jsoncpp.cmake \
-      --replace '${jsoncppURL}' ${jsoncpp}
-    substituteInPlace cmake/EthCompilerSettings.cmake \
-      --replace 'add_compile_options(-Werror)' ""
+      --replace "${jsoncppURL}" ${jsoncpp}
   '';
 
   cmakeFlags = [
     "-DBoost_USE_STATIC_LIBS=OFF"
+  ] ++ stdenv.lib.optionals buildSharedLibs [
+    "-DBUILD_SHARED_LIBS=ON"
+  ] ++ stdenv.lib.optionals (!z3Support) [
+    "-DUSE_Z3=OFF"
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost z3 ];
+  buildInputs = [ boost ] ++ stdenv.lib.optionals z3Support [ z3 ];
+  checkInputs = [ ncurses python2 ];
 
-  meta = {
+  # Test fails on darwin for unclear reason
+  doCheck = stdenv.hostPlatform.isLinux;
+
+  checkPhase = ''
+    while IFS= read -r -d ''' dir
+    do
+      LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/$dir
+      export LD_LIBRARY_PATH
+    done <   <(find . -type d -print0)
+
+    pushd ..
+    # IPC tests need aleth avaliable, so we disable it
+    sed -i "s/IPC_ENABLED=true/IPC_ENABLED=false\nIPC_FLAGS=\"--no-ipc\"/" ./scripts/tests.sh
+    for i in ./scripts/*.sh; do
+      patchShebangs "$i"
+    done
+    for i in ./scripts/*.py; do
+      patchShebangs "$i"
+    done
+    for i in ./test/*.sh; do
+      patchShebangs "$i"
+    done
+    TERM=xterm ./scripts/tests.sh
+    popd
+  '';
+
+  outputs = [ "out" "dev" ];
+
+  meta = with stdenv.lib; {
     description = "Compiler for Ethereum smart contract language Solidity";
-    longDescription = "This package also includes `lllc', the LLL compiler.";
     homepage = https://github.com/ethereum/solidity;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = [ stdenv.lib.maintainers.dbrock ];
+    license = licenses.gpl3;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ dbrock akru lionello sifmelcara ];
     inherit version;
   };
 }

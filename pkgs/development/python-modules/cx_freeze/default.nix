@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy35, ncurses }:
+{ stdenv, buildPythonPackage, fetchPypi, ncurses }:
 
 buildPythonPackage rec {
   pname = "cx_Freeze";

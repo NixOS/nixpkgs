@@ -1,57 +1,93 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, pixman, celt, alsaLib
-, openssl, libXrandr, libXfixes, libXext, libXrender, libXinerama
-, libjpeg, zlib, spice-protocol, python, pyparsing, glib, cyrus_sasl
-, lz4 }:
-
-with stdenv.lib;
+{ stdenv
+, substituteAll
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, pixman
+, alsaLib
+, openssl
+, libXrandr
+, libXfixes
+, libXext
+, libXrender
+, libXinerama
+, libjpeg
+, zlib
+, spice-protocol
+, python3
+, glib
+, cyrus_sasl
+, libcacard
+, lz4
+, libopus
+, gst_all_1
+, orc
+}:
 
 stdenv.mkDerivation rec {
-  name = "spice-0.13.3";
+  pname = "spice";
+  version = "0.14.2";
 
   src = fetchurl {
-    url = "http://www.spice-space.org/download/releases/${name}.tar.bz2";
-    sha256 = "17mqgwamdhj8sx8vhahrjl5937x693kjnw6cp6v0akjrwz011xrh";
+    url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.bz2";
+    sha256 = "19r999py9v9c7md2bb8ysj809ag1hh6djl1ik8jcgx065s4b60xj";
   };
 
   patches = [
-    # the following three patches fix CVE-2016-9577 and CVE-2016-9578
-    (fetchpatch {
-      name = "0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch";
-      url = "http://src.fedoraproject.org/cgit/rpms/spice.git/plain/0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch?id=d919d639ae5f83a9735a04d843eed675f9357c0d";
-      sha256 = "11x5566lx5zyl7f39glwsgpzkxb7hpcshx8va5ab3imrns07130q";
-    })
-    (fetchpatch {
-      name = "0002-Prevent-integer-overflows-in-capability-checks.patch";
-      url = "http://src.fedoraproject.org/cgit/rpms/spice.git/plain/0002-Prevent-integer-overflows-in-capability-checks.patch?id=d919d639ae5f83a9735a04d843eed675f9357c0d";
-      sha256 = "1r1bhq98w93cvvrlrz6jwdfsy261xl3xqs0ppchaa2igyxvxv5z5";
-    })
-    (fetchpatch {
-      name = "0003-main-channel-Prevent-overflow-reading-messages-from.patch";
-      url = "https://cgit.freedesktop.org/spice/spice/patch/?id=1d3e26c0ee75712fa4bbbcfa09d8d5866b66c8af";
-      sha256 = "030mm551aipck99rqiz39vsvk071pn8715zynr5j6chwzgpflwm3";
-    })
+    # submitted https://gitlab.freedesktop.org/spice/spice/merge_requests/4
+    ./correct-meson.patch
   ];
 
-  buildInputs = [ pixman celt alsaLib openssl libjpeg zlib
-                  libXrandr libXfixes libXrender libXext libXinerama
-                  python pyparsing glib cyrus_sasl lz4 ];
+  postPatch = ''
+    patchShebangs build-aux
+  '';
 
-  nativeBuildInputs = [ pkgconfig spice-protocol ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    spice-protocol
+    python3
+    python3.pkgs.six
+    python3.pkgs.pyparsing
+  ];
+
+  buildInputs = [
+    alsaLib
+    cyrus_sasl
+    glib
+    gst_all_1.gst-plugins-base
+    libXext
+    libXfixes
+    libXinerama
+    libXrandr
+    libXrender
+    libcacard
+    libjpeg
+    libopus
+    lz4
+    openssl
+    orc
+    pixman
+    python3.pkgs.pyparsing
+    zlib
+  ];
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  configureFlags = [
-    "--with-sasl"
-    "--disable-smartcard"
-    "--enable-client"
-    "--enable-lz4"
+  mesonFlags = [
+    "-Dauto_features=enabled"
+    "-Dgstreamer=1.0"
+    "-Dcelt051=disabled"
   ];
 
   postInstall = ''
     ln -s spice-server $out/include/spice
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Complete open source solution for interaction with virtualized desktop devices";
     longDescription = ''
       The Spice project aims to provide a complete open source solution for interaction
@@ -60,7 +96,7 @@ stdenv.mkDerivation rec {
       VD-Interfaces. The VD-Interfaces (VDI) enable both ends of the solution to be easily
       utilized by a third-party component.
     '';
-    homepage = http://www.spice-space.org/;
+    homepage = https://www.spice-space.org/;
     license = licenses.lgpl21;
 
     maintainers = [ maintainers.bluescreen303 ];

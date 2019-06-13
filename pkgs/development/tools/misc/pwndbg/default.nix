@@ -1,18 +1,33 @@
-{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper, gdb }:
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, gdb
+, future
+, isort
+, psutil
+, pycparser
+, pyelftools
+, python-ptrace
+, ROPGadget
+, six
+, unicorn
+, pygments
+, }:
 
 stdenv.mkDerivation rec {
-  name = "pwndbg-2018-04-06";
+  name = "pwndbg-${version}";
+  version = "2019.01.25";
 
   src = fetchFromGitHub {
     owner = "pwndbg";
     repo = "pwndbg";
-    rev = "e225ba9f647ab8f7f4871075529c0ec239f43300";
-    sha256 = "1s6m93qi3baclgqqii4fnmzjmg0c6ipkscg7xiljaj5z4bs371j4";
+    rev = version;
+    sha256 = "0k7n6pcrj62ccag801yzf04a9mj9znghpkbnqwrzz0qn3rs42vgs";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = [
     future
     isort
     psutil
@@ -23,7 +38,6 @@ stdenv.mkDerivation rec {
     six
     unicorn
     pygments
-    enum34
   ];
 
   installPhase = ''

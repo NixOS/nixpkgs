@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Python interpreter written in Java";
-    homepage = http://jython.org/;
+    homepage = https://jython.org/;
     license = stdenv.lib.licenses.psfl;
     platforms = jre.meta.platforms;
   };

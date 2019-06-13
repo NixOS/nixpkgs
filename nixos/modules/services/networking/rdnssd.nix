@@ -64,7 +64,7 @@ in
       };
     };
 
-    users.extraUsers.rdnssd = {
+    users.users.rdnssd = {
       description = "RDNSSD Daemon User";
       uid = config.ids.uids.rdnssd;
     };

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "096w4gxj08m3vwmyv4sxpmbl8dn6mzqfmrhc32jgyca6qzlrdin8";
   };
 
-  configureFlags = "--enable-runas-user=nobody";
+  configureFlags = [ "--enable-runas-user=nobody" ];
 
   prePatch = ''
     substituteInPlace Makefile.in --replace 02770 0770

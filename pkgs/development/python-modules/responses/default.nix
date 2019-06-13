@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ buildPythonPackage, fetchPypi
 , cookies, mock, requests, six }:
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.9.0";
+  version = "0.10.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6082710f4abfb60793899ca5f21e7ceb25aabf321560cc0726f8b59006811c9";
+    sha256 = "502d9c0c8008439cfcdef7e251f507fcfdd503b56e8c0c87c3c3e3393953f790";
   };
 
   propagatedBuildInputs = [ cookies mock requests six ];

@@ -2,10 +2,10 @@
 
 let wrapper = stdenv.mkDerivation rec {
   name = "wrapper-${version}";
-  version = "3.5.32";
+  version = "3.5.35";
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "1v388p5jjbpwybw0zjv5glzny17fwdwppaci2lqcsnm6qw0667f1";
+    sha256 = "0mjyw9ays9v6lnj21pmfd3qdvd9b6rwxfmw3pg6z0kyf2jadixw2";
   };
   buildInputs = [ jdk ];
   buildPhase = ''
@@ -27,10 +27,10 @@ let wrapper = stdenv.mkDerivation rec {
 in
 
 stdenv.mkDerivation rec {
-  name = "i2p-0.9.33";
+  name = "i2p-0.9.39";
   src = fetchurl {
     url = "https://github.com/i2p/i2p.i2p/archive/${name}.tar.gz";
-    sha256 = "1hlildi34p34xgpm0gqh09r2jb6nsa7a52gr074r6203xkl2racw";
+    sha256 = "0d6g0ffv2b0ghjjp3ndal8n9maw5y0n36vqrylhh5zr1hffvxx9i";
   };
   buildInputs = [ jdk ant gettext which ];
   patches = [ ./i2p.patch ];

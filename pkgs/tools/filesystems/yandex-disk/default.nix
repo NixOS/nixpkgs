@@ -1,26 +1,24 @@
 { stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
 
-assert stdenv.isLinux;
-
 let
   p = if stdenv.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.cc.cc.lib}/lib64";
-      sha256 = "1skbzmrcjbw00a3jnbl2llqwz3ahsgvq74mjav68s2hw1wjidvk6";
+      sha256 = "1hxsizk3hm1465wkxwdbbcffgi3r64y3r0zsfzsvhvnzx4y5dadm";
     }
     else {
       arch = "i386";
       gcclib = "${stdenv.cc.cc.lib}/lib";
-      sha256 = "09h71i3k9d24ki81jdwhnav63fqbc44glbx228s9g3cr4ap41jcx";
+      sha256 = "1s829q8gy9xgz0jm7w70aljqs2h49x402blqfr9zvn806aprmrm5";
     };
-in 
+in
 stdenv.mkDerivation rec {
 
   name = "yandex-disk-${version}";
-  version = "0.1.5.978";
+  version = "0.1.5.1010";
 
   src = fetchurl {
-    url = "http://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
+    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
     sha256 = p.sha256;
   };
 
@@ -64,4 +62,3 @@ stdenv.mkDerivation rec {
     '';
   };
 }
-

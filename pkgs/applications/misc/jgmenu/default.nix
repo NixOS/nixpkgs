@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, pango, librsvg, libxml2, menu-cache, xorg }:
+{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, pango, librsvg, libxml2, menu-cache, xorg, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "jgmenu-${version}";
-  version = "0.8.2";
+  pname = "jgmenu";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "johanmalm";
-    repo = "jgmenu";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0nflj4fcpz7rcd1s0zlyi5ikxjykkmz3p5w4gzica1fdbyn2l7x3";
+    sha256 = "01r92nili4v4pdmw4g5z0rsg1q7m7q3a5hjc47mnchgibdiissvl";
   };
 
   nativeBuildInputs = [
     pkgconfig
+    makeWrapper
     python3Packages.wrapPython
   ];
 
@@ -22,12 +23,17 @@ stdenv.mkDerivation rec {
     libxml2
     menu-cache
     xorg.libXinerama
+    xorg.libXrandr
+    python3Packages.python
   ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postFixup = ''
     wrapPythonProgramsIn "$out/lib/jgmenu"
+    for f in $out/bin/jgmenu{,_run}; do
+      wrapProgram $f --prefix PATH : $out/bin
+    done
   '';
 
   meta = with stdenv.lib; {

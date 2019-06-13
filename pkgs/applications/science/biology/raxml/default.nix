@@ -1,20 +1,19 @@
 { stdenv
 , fetchFromGitHub
-, zlib
 , pkgs
 , mpi ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "RAxML";
-  version = "8.2.11";
+  version = "8.2.12";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "stamatak";
     repo = "standard-${pname}";
     rev = "v${version}";
-    sha256 = "08fmqrr7y5a2fmmrgfz2p0hmn4mn71l5yspxfcwwsqbw6vmdfkhg";
+    sha256 = "1jqjzhch0rips0vp04prvb8vmc20c5pdmsqn8knadcf91yy859fh";
   };
 
   buildInputs = if mpi then [ pkgs.openmpi ] else [];

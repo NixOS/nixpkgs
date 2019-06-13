@@ -25,8 +25,9 @@ let
         blackhole { badnetworks; };
         forward first;
         forwarders { ${concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
-        directory "/var/run/named";
-        pid-file "/var/run/named/named.pid";
+        directory "/run/named";
+        pid-file "/run/named/named.pid";
+        ${cfg.extraOptions}
       };
 
       ${cfg.extraConfig}
@@ -141,6 +142,15 @@ in
         ";
       };
 
+      extraOptions = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra lines to be added verbatim to the options section of the
+          generated named configuration file.
+        '';
+      };
+
       configFile = mkOption {
         type = types.path;
         default = confFile;
@@ -160,7 +170,7 @@ in
 
   config = mkIf config.services.bind.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = bindUser;
         uid = config.ids.uids.bind;
         description = "BIND daemon user";
@@ -174,11 +184,11 @@ in
       preStart = ''
         mkdir -m 0755 -p /etc/bind
         if ! [ -f "/etc/bind/rndc.key" ]; then
-          ${pkgs.bind.out}/sbin/rndc-confgen -r /dev/urandom -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
+          ${pkgs.bind.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
         fi
 
-        ${pkgs.coreutils}/bin/mkdir -p /var/run/named
-        chown ${bindUser} /var/run/named
+        ${pkgs.coreutils}/bin/mkdir -p /run/named
+        chown ${bindUser} /run/named
       '';
 
       serviceConfig = {

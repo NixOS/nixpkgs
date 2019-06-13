@@ -35,8 +35,9 @@ let
 
     NIX_CFLAGS_COMPILE = [
       "-Wno-error=deprecated-declarations"
-      "-Wno-error=unused-function"
       "-Wno-error=int-in-bool-context"
+      "-Wno-error=maybe-uninitialized"
+      "-Wno-error=unused-function"
     ];
   };
 

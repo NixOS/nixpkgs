@@ -17,7 +17,7 @@
 stdenv.mkDerivation {
   name = "lldb-${version}";
 
-  src = fetch "lldb" "0m6l2ks4banfmdh7xy7l77ri85kmzavgfy81gkc4gl6wg8flrxa6";
+  src = fetch "lldb" "05178zkyh84x32n91md6wm22lkzzrrfwa5cpmgzn0yrg3y2771bb";
 
   postPatch = ''
     # Fix up various paths that assume llvm and clang are installed in the same place
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake python which swig ];
   buildInputs = [ ncurses zlib libedit libxml2 llvm ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa darwin.cf-private ];
 
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];

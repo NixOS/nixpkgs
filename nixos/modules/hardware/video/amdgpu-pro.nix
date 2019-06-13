@@ -1,6 +1,6 @@
 # This module provides the proprietary AMDGPU-PRO drivers.
 
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -11,7 +11,7 @@ let
   enabled = elem "amdgpu-pro" drivers;
 
   package = config.boot.kernelPackages.amdgpu-pro;
-  package32 = pkgs_i686.linuxPackages.amdgpu-pro.override { libsOnly = true; kernel = null; };
+  package32 = pkgs.pkgsi686Linux.linuxPackages.amdgpu-pro.override { libsOnly = true; kernel = null; };
 
   opengl = config.hardware.opengl;
 

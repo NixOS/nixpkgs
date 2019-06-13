@@ -8,12 +8,13 @@ let
     libpulseaudio
     alsaLib
     openalSoft
-    libva1-full
+    libva1
     libvdpau
     vulkan-loader
-    gcc.cc
+    gcc.cc.lib
     nss
     nspr
+    xorg.libxcb
   ]);
 
   allPkgs = overridePkgs ++ [ steam-runtime ];

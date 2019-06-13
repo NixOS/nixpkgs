@@ -54,7 +54,7 @@ in
     enable = mkEnableOption "strongSwan";
 
     secrets = mkOption {
-      type = types.listOf types.path;
+      type = types.listOf types.str;
       default = [];
       example = [ "/run/keys/ipsec-foo.secret" ];
       description = ''

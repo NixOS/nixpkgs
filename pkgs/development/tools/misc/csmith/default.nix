@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, m4, makeWrapper, libbsd, perl, SysCPU }:
+{ stdenv, fetchurl, m4, makeWrapper, libbsd, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "csmith-${version}";
   version = "2.3.0";
 
   src = fetchurl {
-    url = "http://embed.cs.utah.edu/csmith/${name}.tar.gz";
+    url = "https://embed.cs.utah.edu/csmith/${name}.tar.gz";
     sha256 = "1mb5zgixsyf86slggs756k8a5ddmj980md3ic9sa1y75xl5cqizj";
   };
 
   nativeBuildInputs = [ m4 makeWrapper ];
-  buildInputs = [ perl SysCPU libbsd ];
+  buildInputs = [ libbsd ] ++ (with perlPackages; [ perl SysCPU ]);
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \

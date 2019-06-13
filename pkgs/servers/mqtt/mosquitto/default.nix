@@ -1,36 +1,50 @@
-{ stdenv, fetchurl, openssl, libuuid, cmake, libwebsockets, c-ares, libuv }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, docbook_xsl, libxslt
+, openssl, libuuid, libwebsockets, c-ares, libuv
+, systemd ? null, withSystemd ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
-  pname = "mosquitto";
-  version = "1.4.15";
+  name = "mosquitto-${version}";
+  version = "1.6.2";
 
-  name = "${pname}-${version}";
-
-  src = fetchurl {
-    url = "http://mosquitto.org/files/source/mosquitto-${version}.tar.gz";
-    sha256 = "10wsm1n4y61nz45zwk4zjhvrfd86r2cq33370m5wjkivb8j3wfvx";
+  src = fetchFromGitHub {
+    owner  = "eclipse";
+    repo   = "mosquitto";
+    rev    = "v${version}";
+    sha256 = "1n0rr4564a80b1km72myqa8qx4ak2jk55irx7d1vlgihgp88j3wm";
   };
 
-  buildInputs = [ openssl libuuid libwebsockets c-ares libuv ]
-    ++ stdenv.lib.optional stdenv.isDarwin cmake;
-
-  makeFlags = stdenv.lib.optionals stdenv.isLinux [
-    "DESTDIR=$(out)"
-    "PREFIX="
-  ];
-
   postPatch = ''
-    substituteInPlace config.mk \
-      --replace "/usr/local" ""
-    substituteInPlace config.mk \
-      --replace "WITH_WEBSOCKETS:=no" "WITH_WEBSOCKETS:=yes"
+    for f in html manpage ; do
+      substituteInPlace man/$f.xsl \
+        --replace http://docbook.sourceforge.net/release/xsl/current ${docbook_xsl}/share/xml/docbook-xsl
+    done
+
+    for f in {lib,lib/cpp,src}/CMakeLists.txt ; do
+      substituteInPlace $f --replace /sbin/ldconfig true
+    done
+
+    # the manpages are not generated when using cmake
+    pushd man
+    make
+    popd
   '';
 
-  meta = {
-    homepage = http://mosquitto.org/;
+  buildInputs = [
+    openssl libuuid libwebsockets c-ares libuv
+  ] ++ lib.optional withSystemd systemd;
+
+  nativeBuildInputs = [ cmake docbook_xsl libxslt ];
+
+  cmakeFlags = [
+    "-DWITH_THREADING=ON"
+    "-DWITH_WEBSOCKETS=ON"
+  ] ++ lib.optional withSystemd "-DWITH_SYSTEMD=ON";
+
+  meta = with stdenv.lib; {
     description = "An open source MQTT v3.1/3.1.1 broker";
-    platforms = stdenv.lib.platforms.unix;
-    # http://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
-    license = stdenv.lib.licenses.epl10;
+    homepage = http://mosquitto.org/;
+    license = licenses.epl10;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
   };
 }

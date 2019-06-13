@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "rssguard";
-  version = "3.5.6";
+  version = "3.5.7";
 
   src = fetchFromGitHub {
     owner = "martinrotter";
     repo = pname;
     rev = version;
-    sha256 = "1pdas7hg3nzykm3qi951fk25c9s6gjb7my82b9xzjn2yd7ks71by";
+    sha256 = "1v0m2p6y7szdqbd2gl3972ah6cp6prfv2gp2a55ac1l8ba2dma4v";
   };
 
   buildInputs =  [ qtwebengine qttools ];

@@ -1,89 +1,67 @@
 { fetchPypi
 , lib
 , buildPythonPackage
-, python
 , isPy3k
 , appdirs
+, attrs
 , cached-property
 , defusedxml
 , isodate
 , lxml
-, pytz
+, requests
 , requests_toolbelt
 , six
+, pytz
+, tornado
+, aiohttp
 # test dependencies
 , freezegun
 , mock
-, nose
 , pretend
-, pytest
+, pytest_3
 , pytestcov
 , requests-mock
-, testtools
-, tornado
+, aioresponses
 }:
 
-let
+buildPythonPackage rec {
   pname = "zeep";
-  version = "2.5.0";
-in buildPythonPackage {
-  name = "${pname}-${version}";
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4f9db52c7d269813fc6251da4cb050869158858aeea75a055b4550f19e52ac84";
+    sha256 = "f58328e36264a2fda2484dd20bb1695f4102a9cc918178d60c4d7cf8339c65d0";
   };
 
   propagatedBuildInputs = [
     appdirs
+    attrs
     cached-property
     defusedxml
     isodate
     lxml
-    pytz
+    requests
     requests_toolbelt
     six
-  ];
+    pytz
 
-  # testtools dependency not supported for py3k
-  doCheck = !isPy3k;
+    # optional requirements
+    tornado
+  ] ++ lib.optional isPy3k aiohttp;
 
   checkInputs = [
-    tornado
-  ];
-
-  buildInputs = if isPy3k then [] else [
     freezegun
     mock
-    nose
     pretend
-    pytest
     pytestcov
+    pytest_3
     requests-mock
-  ];
-
-  patchPhase = ''
-    # remove overly strict bounds and lint requirements
-    sed -e "s/freezegun==.*'/freezegun'/" \
-        -e "s/pytest-cov==.*'/pytest-cov'/" \
-        -e "s/'isort.*//" \
-        -e "s/'flake8.*//" \
-        -i setup.py
-
-    # locale.preferredencoding() != 'utf-8'
-    sed -e "s/xsd', 'r')/xsd', 'r', encoding='utf-8')/" -i tests/*.py
-
-    # cache defaults to home directory, which doesn't exist
-    sed -e "s|SqliteCache()|SqliteCache(path='./zeeptest.db')|" \
-        -i tests/test_transports.py
-
-    # requires xmlsec python module
-    rm tests/test_wsse_signature.py
-  '';
+  ] ++ lib.optional isPy3k aioresponses;
 
   checkPhase = ''
     runHook preCheck
-    ${python.interpreter} -m pytest tests
+    # ignored tests requires xmlsec python module
+    HOME=$(mktemp -d) pytest tests --ignore tests/test_wsse_signature.py
     runHook postCheck
   '';
 

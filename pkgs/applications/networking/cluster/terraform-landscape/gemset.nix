@@ -11,18 +11,18 @@
     dependencies = ["highline"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "165yr8qzan3gnk241mnwxsvdfwp6p1afg13z0mqdily6lh95acl9";
+      sha256 = "11sd2sb0id2dbxkv4pvymdiia1xxhms45kh4nr8mryqybad0fwwf";
       type = "gem";
     };
-    version = "4.4.4";
+    version = "4.4.6";
   };
   diffy = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "015nn9zaciqj43mfpjlw619r5dvnfkrjcka8nsa6j260v6qya941";
+      sha256 = "119imrkn01agwhx5raxhknsi331y5i4yda7r0ws0an6905ximzjg";
       type = "gem";
     };
-    version = "3.2.0";
+    version = "3.2.1";
   };
   highline = {
     source = {
@@ -44,18 +44,18 @@
     dependencies = ["colorize" "commander" "diffy" "treetop"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1bx8nfqbpxb2hnxnnl1m4sq6jlzf451c85m047jfq04b6w9691fl";
+      sha256 = "1i93pih7r6zcqpjhsmvkpfkgbh0l66c60i6fkiymq7vy2xd6wnns";
       type = "gem";
     };
-    version = "0.1.17";
+    version = "0.2.1";
   };
   treetop = {
     dependencies = ["polyglot"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0sdkd1v2h8dhj9ncsnpywmqv7w1mdwsyc5jwyxlxwriacv8qz8bd";
+      sha256 = "0g31pijhnv7z960sd09lckmw9h8rs3wmc8g4ihmppszxqm99zpv7";
       type = "gem";
     };
-    version = "1.6.9";
+    version = "1.6.10";
   };
 }

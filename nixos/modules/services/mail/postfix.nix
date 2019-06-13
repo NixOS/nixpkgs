@@ -602,7 +602,7 @@ in
             target = "postfix";
           };
 
-        # This makes comfortable for root to run 'postqueue' for example.
+        # This makes it comfortable to run 'postqueue/postdrop' for example.
         systemPackages = [ pkgs.postfix ];
       };
 
@@ -616,14 +616,30 @@ in
         setgid = true;
       };
 
-      users.extraUsers = optional (user == "postfix")
+      security.wrappers.postqueue = {
+        program = "postqueue";
+        source = "${pkgs.postfix}/bin/postqueue";
+        group = setgidGroup;
+        setuid = false;
+        setgid = true;
+      };
+
+      security.wrappers.postdrop = {
+        program = "postdrop";
+        source = "${pkgs.postfix}/bin/postdrop";
+        group = setgidGroup;
+        setuid = false;
+        setgid = true;
+      };
+
+      users.users = optional (user == "postfix")
         { name = "postfix";
           description = "Postfix mail server user";
           uid = config.ids.uids.postfix;
           group = group;
         };
 
-      users.extraGroups =
+      users.groups =
         optional (group == "postfix")
         { name = group;
           gid = config.ids.gids.postfix;

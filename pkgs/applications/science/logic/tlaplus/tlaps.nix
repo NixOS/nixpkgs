@@ -1,8 +1,6 @@
-{ lib
-, fetchurl
-, makeWrapper
+{ fetchurl
 , stdenv
-, ocaml, gawk, isabelle, cvc3, perl, wget, which
+, ocaml, isabelle, cvc3, perl, wget, which
 }:
 
 stdenv.mkDerivation rec {

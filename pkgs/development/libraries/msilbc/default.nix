@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
     "MEDIASTREAMER_LIBS=mediastreamer" "MEDIASTREAMER_CFLAGS=-I${mediastreamer}/include"
   ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "Mediastreamer plugin for the iLBC audio codec";
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

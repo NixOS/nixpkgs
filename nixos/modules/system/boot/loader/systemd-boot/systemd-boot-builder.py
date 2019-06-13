@@ -33,6 +33,15 @@ initrd {initrd}
 options {kernel_params}
 """
 
+# The boot loader entry for memtest86.
+#
+# TODO: This is hard-coded to use the 64-bit EFI app, but it could probably
+# be updated to use the 32-bit EFI app on 32-bit systems.  The 32-bit EFI
+# app filename is BOOTIA32.efi.
+MEMTEST_BOOT_ENTRY = """title MemTest86
+efi /efi/memtest86/BOOTX64.efi
+"""
+
 def write_loader_conf(profile, generation):
     with open("@efiSysMountPoint@/loader/loader.conf.tmp", 'w') as f:
         if "@timeout@" != "":
@@ -42,7 +51,8 @@ def write_loader_conf(profile, generation):
         else:
             f.write("default nixos-generation-%d\n" % (generation))
         if not @editor@:
-            f.write("editor 0");
+            f.write("editor 0\n");
+        f.write("console-mode @consoleMode@\n");
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
 def profile_path(profile, generation, name):
@@ -144,7 +154,7 @@ def remove_old_entries(gens):
         except ValueError:
             pass
     for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
-        if not path in known_paths:
+        if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)
 
 def get_profiles():
@@ -197,6 +207,24 @@ def main():
         write_entry(*gen, machine_id)
         if os.readlink(system_dir(*gen)) == args.default_config:
             write_loader_conf(*gen)
+
+    memtest_entry_file = "@efiSysMountPoint@/loader/entries/memtest86.conf"
+    if os.path.exists(memtest_entry_file):
+        os.unlink(memtest_entry_file)
+    shutil.rmtree("@efiSysMountPoint@/efi/memtest86", ignore_errors=True)
+    if "@memtest86@" != "":
+        mkdir_p("@efiSysMountPoint@/efi/memtest86")
+        for path in glob.iglob("@memtest86@/*"):
+            if os.path.isdir(path):
+                shutil.copytree(path, os.path.join("@efiSysMountPoint@/efi/memtest86", os.path.basename(path)))
+            else:
+                shutil.copy(path, "@efiSysMountPoint@/efi/memtest86/")
+
+        memtest_entry_file = "@efiSysMountPoint@/loader/entries/memtest86.conf"
+        memtest_entry_file_tmp_path = "%s.tmp" % memtest_entry_file
+        with open(memtest_entry_file_tmp_path, 'w') as f:
+            f.write(MEMTEST_BOOT_ENTRY)
+        os.rename(memtest_entry_file_tmp_path, memtest_entry_file)
 
     # Since fat32 provides little recovery facilities after a crash,
     # it can leave the system in an unbootable state, when a crash/outage

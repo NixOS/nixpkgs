@@ -1,13 +1,12 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchurl, xmpppy }:
+{ stdenv, buildPythonPackage, isPy3k, fetchPypi, xmpppy }:
 
 buildPythonPackage rec {
   pname = "jabberbot";
   version = "0.16";
-  name = "${pname}-${version}";
 
   disabled = isPy3k;
-  src = fetchurl {
-    url = "mirror://pypi/j/jabberbot/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "1qr7c5p9a0nzsvri1djnd5r3d7ilh2mdxvviqn1s2hcc70rha65d";
   };
 

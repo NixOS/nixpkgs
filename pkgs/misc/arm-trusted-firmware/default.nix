@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPackages }:
+{ stdenv, fetchFromGitHub, pkgsCross, buildPackages }:
 
 let
   buildArmTrustedFirmware = { filesToInstall
@@ -6,20 +6,24 @@ let
             , platform
             , extraMakeFlags ? []
             , extraMeta ? {}
+            , version ? "2.1"
             , ... } @ args:
            stdenv.mkDerivation (rec {
 
     name = "arm-trusted-firmware-${platform}-${version}";
-    version = "1.5";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "refs/tags/v${version}";
-      sha256 = "1gm0bn2llzfzz9bfsz11fhwxj5lxvyrq7bc13fjj033nljzxn7k8";
+      sha256 = "1gy5qskrjy8n3kxdcm1dx8b45l5b75n0pm8pq80wl6xic1ycy24r";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+    # For Cortex-M0 firmware in RK3399
+    nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
 
     makeFlags = [
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
@@ -53,15 +57,7 @@ in rec {
   inherit buildArmTrustedFirmware;
 
   armTrustedFirmwareAllwinner = buildArmTrustedFirmware rec {
-    version = "1.0";
-    src = fetchFromGitHub {
-      owner = "apritzel";
-      repo = "arm-trusted-firmware";
-      # Branch: `allwinner`
-      rev = "91f2402d941036a0db092d5375d0535c270b9121";
-      sha256 = "0lbipkxb01w97r6ah8wdbwxir3013rp249fcqhlzh2gjwhp5l1ys";
-    };
-    platform = "sun50iw1p1";
+    platform = "sun50i_a64";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };
@@ -79,6 +75,13 @@ in rec {
   armTrustedFirmwareRK3328 = buildArmTrustedFirmware rec {
     extraMakeFlags = [ "bl31" ];
     platform = "rk3328";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
+  };
+
+  armTrustedFirmwareRK3399 = buildArmTrustedFirmware rec {
+    extraMakeFlags = [ "bl31" ];
+    platform = "rk3399";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
   };

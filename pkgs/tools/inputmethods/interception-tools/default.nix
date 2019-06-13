@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, cmake, libyamlcpp,
-  libevdev, libudev }:
+{ stdenv, fetchurl, pkgconfig, cmake, libyamlcpp,
+  libevdev, udev }:
 
 let
   version = "0.1.1";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libevdev libudev libyamlcpp ];
+  buildInputs = [ libevdev udev libyamlcpp ];
 
   prePatch = ''
     substituteInPlace CMakeLists.txt --replace \

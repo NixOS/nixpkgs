@@ -2,11 +2,11 @@
 
 let self =
 stdenv.mkDerivation rec {
-  name = "c-ares-1.13.0";
+  name = "c-ares-1.15.0";
 
   src = fetchurl {
-    url = "http://c-ares.haxx.se/download/${name}.tar.gz";
-    sha256 = "19qxhv9aiw903fr808y77r6l9js0fq9m3gcaqckan9jan7qhixq3";
+    url = "https://c-ares.haxx.se/download/${name}.tar.gz";
+    sha256 = "0lk8knip4xk6qzksdkn7085mmgm4ixfczdyyjw656c193y3rgnvc";
   };
 
   meta = with stdenv.lib; {
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
 
       set_target_properties(c-ares::cares PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${self}/include"
-        INTERFACE_LINK_LIBRARIES "nsl;rt"
+        ${stdenv.lib.optionalString stdenv.isLinux ''INTERFACE_LINK_LIBRARIES "nsl;rt"''}
       )
       set_property(TARGET c-ares::cares APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
       set_target_properties(c-ares::cares PROPERTIES
-        IMPORTED_LOCATION_RELEASE "${self}/lib/libcares.so.2.2.0"
-        IMPORTED_SONAME_RELEASE "libcares.so.2"
+        IMPORTED_LOCATION_RELEASE "${self}/lib/libcares${stdenv.targetPlatform.extensions.sharedLibrary}"
+        IMPORTED_SONAME_RELEASE "libcares${stdenv.targetPlatform.extensions.sharedLibrary}"
         )
       add_library(c-ares::cares_shared INTERFACE IMPORTED)
       set_target_properties(c-ares::cares_shared PROPERTIES INTERFACE_LINK_LIBRARIES "c-ares::cares")

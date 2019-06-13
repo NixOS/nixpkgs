@@ -56,7 +56,7 @@ perlPackages.buildPerlPackage rec {
     description = "Real-time logfile analyzer to get advanced statistics";
     homepage = http://awstats.org;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 

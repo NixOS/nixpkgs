@@ -1,5 +1,5 @@
 # Avahi daemon.
-{ config, lib, utils, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -37,6 +37,7 @@ let
 
     [reflector]
     enable-reflector=${yesNo reflector}
+    ${extraConfig}
   '';
 
 in
@@ -176,6 +177,14 @@ in
         '';
       };
 
+      extraConfig = mkOption {
+        default = "";
+        type = types.lines;
+        description = ''
+          Extra config to append to avahi-daemon.conf.
+        '';
+      };
+
     };
 
   };
@@ -187,14 +196,14 @@ in
 
     services.avahi.hostName = mkDefault config.networking.hostName;
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "avahi";
         uid = config.ids.uids.avahi;
         description = "`avahi-daemon' privilege separation user";
         home = "/var/empty";
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "avahi";
         gid = config.ids.gids.avahi;
       };
@@ -205,7 +214,7 @@ in
 
     systemd.sockets.avahi-daemon =
       { description = "Avahi mDNS/DNS-SD Stack Activation Socket";
-        listenStreams = [ "/var/run/avahi-daemon/socket" ];
+        listenStreams = [ "/run/avahi-daemon/socket" ];
         wantedBy = [ "sockets.target" ];
       };
 
@@ -220,7 +229,7 @@ in
 
         path = [ pkgs.coreutils pkgs.avahi ];
 
-        preStart = "mkdir -p /var/run/avahi-daemon";
+        preStart = "mkdir -p /run/avahi-daemon";
 
         script =
           ''

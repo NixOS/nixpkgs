@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "micro-httpd-20140814";
 
   src = fetchurl {
-    url   = "http://acme.com/software/micro_httpd/micro_httpd_14Aug2014.tar.gz";
+    url   = "https://acme.com/software/micro_httpd/micro_httpd_14Aug2014.tar.gz";
     sha256 = "0mlm24bi31s0s8w55i0sysv2nc1n2x4cfp6dm47slz49h2fz24rk";
   };
 

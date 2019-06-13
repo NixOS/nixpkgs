@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit }:
+{ stdenv, buildGoPackage, fetchgit }:
 
 with builtins;
 

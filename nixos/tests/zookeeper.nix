@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    server = { pkgs, config, ... }: {
+    server = { ... }: {
       services.zookeeper = {
         enable = true;
       };

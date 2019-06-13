@@ -1,21 +1,31 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, fetchpatch, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   name = "hy-${version}";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "mirror://pypi/h/hy/${name}.tar.gz";
-    sha256 = "0cbdh1q0zm00p4h7i44kir4qhw0p6sid78xf6llrx2p21llsnv98";
+    sha256 = "00lq38ppikrpyw38fn5iy9iwrsamsv22507cp146dsjbzkwjpzrd";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ appdirs clint astor rply ];
+  patches = [
+    (fetchpatch {
+      name = "bytecode-error-handling.patch";
+      url = "https://github.com/hylang/hy/commit/57326785b97b7b0a89f6258fe3d04dccdc06cfc0.patch";
+      sha256 = "1lxxs7mxbh0kaaa25b1pbqs9d8asyjnlf2n86qg8hzsv32jfcq92";
+      excludes = [ "AUTHORS" "NEWS.rst" ];
+    })
+  ];
 
-  # The build generates a .json parser file in the home directory under .cache.
-  # This is needed to get it to not try and open files in /homeless-shelter
-  preConfigure = ''
-    export HOME=$TMP
-  '';
+  propagatedBuildInputs = with pythonPackages; [
+    appdirs
+    astor
+    clint
+    fastentrypoints
+    funcparserlib
+    rply
+  ];
 
   meta = {
     description = "A LISP dialect embedded in Python";

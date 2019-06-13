@@ -27,6 +27,7 @@ in
   };
   serviceOpts = {
     serviceConfig = {
+      RuntimeDirectory = "prometheus-node-exporter";
       ExecStart = ''
         ${pkgs.prometheus-node-exporter}/bin/node_exporter \
           ${concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \

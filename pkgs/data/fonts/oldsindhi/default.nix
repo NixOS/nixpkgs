@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, p7zip }:
+{ lib, fetchzip, p7zip }:
 
 let
   version = "0.1";
@@ -10,15 +10,13 @@ in fetchzip rec {
   postFetch = ''
     ${p7zip}/bin/7z x $downloadedFile
 
-    mkdir -p $out/share/fonts/truetype
-    mkdir -p $out/share/doc/${name}
-    cp -v OldSindhi/*.ttf $out/share/fonts/truetype/
-    cp -v OldSindhi/README OldSindhi/*.txt $out/share/doc/${name}
+    install -m444 -Dt $out/share/fonts/truetype OldSindhi/*.ttf
+    install -m444 -Dt $out/share/doc/${name}    OldSindhi/README OldSindhi/*.txt
   '';
 
-  sha256 = "1na3lxyz008fji5ln3fqzyr562k6kch1y824byhfs4y0rwwz3f3q";
+  sha256 = "0d4l9cg2vmh2pvnqsla8mgcwvc7wjxzcabhlli6633h3ifj2yp7b";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/MihailJP/oldsindhi;
     description = "Free Sindhi Khudabadi font";
     maintainers = with maintainers; [ mathnerd314 ];

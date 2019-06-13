@@ -7,13 +7,13 @@ stdenv.mkDerivation rec {
   pname = "libsidplayfp";
   major = "1";
   minor = "8";
-  level = "6";
+  level = "7";
   version = "${major}.${minor}.${level}";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sidplay-residfp/${pname}/${major}.${minor}/${name}.tar.gz";
-    sha256 = "0lzivfdq0crmfr01c6f5h883yr7wvagq198xkk3srdmvshhxmwnw";
+    sha256 = "14k1sbdcbhykwfcadq5lbpnm9xp2r7vs7fyi84h72g89y8pjg0da";
   };
 
   nativeBuildInputs = [ pkgconfig ]

@@ -7,16 +7,6 @@ let
 
   cfg = config.services.disnix;
 
-  dysnomia = pkgs.dysnomia.override (origArgs: {
-    enableApacheWebApplication = config.services.httpd.enable;
-    enableAxis2WebService = config.services.tomcat.axis2.enable;
-    enableEjabberdDump = config.services.ejabberd.enable;
-    enableMySQLDatabase = config.services.mysql.enable;
-    enablePostgreSQLDatabase = config.services.postgresql.enable;
-    enableSubversionRepository = config.services.svnserve.enable;
-    enableTomcatWebApplication = config.services.tomcat.enable;
-    enableMongoDatabase = config.services.mongodb.enable;
-  });
 in
 
 {
@@ -57,7 +47,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.dysnomia.enable = true;
+    dysnomia.enable = true;
 
     environment.systemPackages = [ pkgs.disnix ] ++ optional cfg.useWebServiceInterface pkgs.DisnixWebService;
 
@@ -71,7 +61,7 @@ in
       ++ optional cfg.useWebServiceInterface "${pkgs.dbus_java}/share/java/dbus.jar";
     services.tomcat.webapps = optional cfg.useWebServiceInterface pkgs.DisnixWebService;
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "disnix";
         gid = config.ids.gids.disnix;
       };

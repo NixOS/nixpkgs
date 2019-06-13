@@ -1,14 +1,14 @@
 {stdenv, fetchFromGitHub, cmake}:
 
 stdenv.mkDerivation rec {
-  version = "1.2.3";
+  version = "1.3.0";
   name = "nanoflann-${version}";
   
   src = fetchFromGitHub {
     owner = "jlblancoc";
     repo = "nanoflann";
     rev = "v${version}";
-    sha256 = "1jrh73kjvdv7s7zc1sc3z254i17lpvn77b19wx32nvzsfxs4g44i";
+    sha256 = "1bwdmrz1qygp9qy2nzrp1axa1i4nvm0ljkn6mnhlcvbfsyvhzigv";
   };
 
   buildInputs = [ cmake ];

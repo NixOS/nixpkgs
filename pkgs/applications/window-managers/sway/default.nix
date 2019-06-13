@@ -1,40 +1,55 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig, asciidoc, libxslt, docbook_xsl
-, wayland, wlc, libxkbcommon, pcre, json_c, dbus_libs
-, pango, cairo, libinput, libcap, pam, gdk_pixbuf, libpthreadstubs
-, libXdmcp
-, buildDocs ? true
+{ stdenv, fetchFromGitHub, makeWrapper
+, meson, ninja
+, pkgconfig, scdoc
+, wayland, libxkbcommon, pcre, json_c, dbus, libevdev
+, pango, cairo, libinput, libcap, pam, gdk_pixbuf
+, wlroots, wayland-protocols, swaybg
 }:
 
 stdenv.mkDerivation rec {
-  name = "sway-${version}";
-  version = "0.15.2";
+  pname = "sway";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "1p9j5gv85lsgj4z28qja07dqyvqk41w6mlaflvvm9yxafx477g5n";
+    sha256 = "0yhn9zdg9mzfhn97c440lk3pw6122nrhx0is5sqmvgr6p814f776";
   };
 
-  nativeBuildInputs = [
-    cmake pkgconfig
-  ] ++ stdenv.lib.optional buildDocs [ asciidoc libxslt docbook_xsl ];
+  patches = [
+    ./sway-config-no-nix-store-references.patch
+    ./load-configuration-from-etc.patch
+  ];
+
+  nativeBuildInputs = [ pkgconfig meson ninja scdoc makeWrapper ];
+
   buildInputs = [
-    wayland wlc libxkbcommon pcre json_c dbus_libs
-    pango cairo libinput libcap pam gdk_pixbuf libpthreadstubs
-    libXdmcp
+    wayland libxkbcommon pcre json_c dbus libevdev
+    pango cairo libinput libcap pam gdk_pixbuf
+    wlroots wayland-protocols
   ];
 
   enableParallelBuilding = true;
 
-  cmakeFlags = "-DVERSION=${version} -DLD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib";
+  mesonFlags = [
+    "-Ddefault-wallpaper=false" "-Dxwayland=enabled" "-Dgdk-pixbuf=enabled"
+    "-Dtray=enabled" "-Dman-pages=enabled"
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/sway --prefix PATH : "${swaybg}/bin"
+  '';
+
+  postPatch = ''
+    sed -i "s/version: '1.0'/version: '${version}'/" meson.build
+  '';
 
   meta = with stdenv.lib; {
-    description = "i3-compatible window manager for Wayland";
-    homepage    = http://swaywm.org;
+    description = "i3-compatible tiling Wayland compositor";
+    homepage    = https://swaywm.org;
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos ]; # Trying to keep it up-to-date.
+    maintainers = with maintainers; [ primeos synthetica ];
   };
 }

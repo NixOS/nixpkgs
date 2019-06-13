@@ -1,12 +1,30 @@
-{ stdenv, lib, fetchurl, dpkg, gnome2, atk, cairo, gdk_pixbuf, glib, freetype,
-fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr,
-libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss,
-nspr, alsaLib, cups, expat, udev
+{ stdenv, lib, fetchurl, dpkg, wrapGAppsHook
+, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
+, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
+, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
+, cups, expat, udev, libnotify, libuuid
+# Unfortunately this also overwrites the UI language (not just the spell
+# checking language!):
+, hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
+# For a full list of available languages:
+# $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
 }:
+
 let
+  customLanguageWrapperArgs = (with lib;
+    let
+      # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
+      spellLangComponents = splitString "_" spellcheckerLanguage;
+      hunspellDict = elemAt spellLangComponents 0 + "-" + toLower (elemAt spellLangComponents 1);
+    in if spellcheckerLanguage != null
+      then ''
+        --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
+        --set LC_MESSAGES "${spellcheckerLanguage}"''
+      else "");
   rpath = lib.makeLibraryPath [
     alsaLib
     atk
+    at-spi2-atk
     cairo
     cups
     dbus
@@ -16,8 +34,10 @@ let
     gdk_pixbuf
     glib
     gnome2.GConf
-    gnome2.gtk
-    gnome2.pango
+    gtk3
+    pango
+    libnotify
+    libuuid
     libX11
     libXScrnSaver
     libXcomposite
@@ -31,59 +51,62 @@ let
     libXtst
     nspr
     nss
-    stdenv.cc.cc
     udev
     xorg.libxcb
   ];
 
-in
-  stdenv.mkDerivation rec {
-    name = "signal-desktop-${version}";
+in stdenv.mkDerivation rec {
+  name = "signal-desktop-${version}";
+  version = "1.25.1";
 
-    version = "1.7.1";
+  src = fetchurl {
+    url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
+    sha256 = "1185psv93amqj0s7rgm8bhl3y4jcxc1945paslvjbmw01vi3p1lp";
+  };
 
-    src =
-      if stdenv.system == "x86_64-linux" then
-        fetchurl {
-          url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-          sha256 = "02zx8ynbvvs260mrvqbsg0fi561da4ni3i9f4bjh53vqn92vhvvq";
-        }
-      else
-        throw "Signal for Desktop is not currently supported on ${stdenv.system}";
+  phases = [ "unpackPhase" "installPhase" ];
 
-    phases = [ "unpackPhase" "installPhase" ];
-    nativeBuildInputs = [ dpkg ];
-    unpackPhase = "dpkg-deb -x $src .";
-    installPhase = ''
-      mkdir -p $out
-      cp -R opt $out
+  nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
-      mv ./usr/share $out/share
-      mv $out/opt/Signal $out/libexec
-      rmdir $out/opt
+  unpackPhase = "dpkg-deb -x $src .";
 
-      chmod -R g-w $out
+  installPhase = ''
+    mkdir -p $out
+    cp -R opt $out
 
-      # Patch signal
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-               --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
+    mv ./usr/share $out/share
+    mv $out/opt/Signal $out/libexec
+    rmdir $out/opt
 
-      # Symlink to bin
-      mkdir -p $out/bin
-      ln -s $out/libexec/signal-desktop $out/bin/signal-desktop
+    chmod -R g-w $out
 
-      # Fix the desktop link
-      substituteInPlace $out/share/applications/signal-desktop.desktop \
-        --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
+    # Patch signal
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+             --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
+    wrapProgram $out/libexec/signal-desktop \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc.lib}/lib" \
+      ${customLanguageWrapperArgs} \
+      "''${gappsWrapperArgs[@]}"
+
+    # Symlink to bin
+    mkdir -p $out/bin
+    ln -s $out/libexec/signal-desktop $out/bin/signal-desktop
+
+    # Fix the desktop link
+    substituteInPlace $out/share/applications/signal-desktop.desktop \
+      --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
+  '';
+
+  meta = {
+    description = "Private, simple, and secure messenger";
+    longDescription = ''
+      Signal Desktop is an Electron application that links with your
+      "Signal Android" or "Signal iOS" app.
     '';
-
-    meta = {
-      description = "Signal Private Messenger for the Desktop.";
-      homepage    = https://signal.org/;
-      license     = lib.licenses.gpl3;
-      maintainers = [ lib.maintainers.ixmatus ];
-      platforms   = [
-        "x86_64-linux"
-      ];
-    };
-  }
+    homepage    = https://signal.org/;
+    license     = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ixmatus primeos ];
+    platforms   = [ "x86_64-linux" ];
+  };
+}

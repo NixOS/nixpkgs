@@ -1,4 +1,4 @@
-{ stdenv, python, buildPythonPackage
+{ stdenv, fetchpatch, python, buildPythonPackage, isPy37
 , protobuf, google_apputils, pyext, libcxx
 , disabled, doCheck ? true }:
 
@@ -13,8 +13,19 @@ buildPythonPackage rec {
     optional stdenv.isDarwin "-I${libcxx}/include/c++/v1"
     ++ optional (versionOlder protobuf.version "2.7.0") "-std=c++98";
 
-  propagatedBuildInputs = [ protobuf google_apputils ];
-  buildInputs = [ google_apputils pyext ];
+  propagatedBuildInputs = [ google_apputils ];
+  propagatedNativeBuildInputs = [ protobuf ];  # For protoc.
+  nativeBuildInputs = [ google_apputils pyext ];
+  buildInputs = [ protobuf ];
+
+  patches = optional (isPy37 && (versionOlder protobuf.version "3.6.1.2"))
+    # Python 3.7 compatibility (not needed for protobuf >= 3.6.1.2)
+    (fetchpatch {
+      url = "https://github.com/protocolbuffers/protobuf/commit/0a59054c30e4f0ba10f10acfc1d7f3814c63e1a7.patch";
+      sha256 = "09hw22y3423v8bbmc9xm07znwdxfbya6rp78d4zqw6fisdvjkqf1";
+      stripLen = 1;
+    })
+  ;
 
   prePatch = ''
     while [ ! -d python ]; do
@@ -28,8 +39,11 @@ buildPythonPackage rec {
     export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
   '';
 
-  preBuild = optionalString (versionAtLeast protobuf.version "2.6.0") ''
-    ${python}/bin/${python.executable} setup.py build_ext --cpp_implementation
+  preBuild = ''
+    # Workaround for https://github.com/google/protobuf/issues/2895
+    ${python.interpreter} setup.py build
+  '' + optionalString (versionAtLeast protobuf.version "2.6.0") ''
+    ${python.interpreter} setup.py build_ext --cpp_implementation
   '';
 
   installFlags = optional (versionAtLeast protobuf.version "2.6.0")

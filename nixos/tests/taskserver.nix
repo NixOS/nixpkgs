@@ -18,7 +18,7 @@ import ./make-test.nix ({ pkgs, ... }: let
     crlTemplate = pkgs.writeText "snakeoil-crl.template" ''
       expiration_days = -1
     '';
-    userCertTemplace = pkgs.writeText "snakoil-user-cert.template" ''
+    userCertTemplate = pkgs.writeText "snakeoil-user-cert.template" ''
       organization = snakeoil
       cn = server
       expiration_days = -1
@@ -49,7 +49,7 @@ import ./make-test.nix ({ pkgs, ... }: let
     certtool -p --bits 4096 | sed -n \
       -e '/^----* *BEGIN/,/^----* *END/p' > "$out/alice.key"
 
-    certtool -c --template "$userCertTemplace" \
+    certtool -c --template "$userCertTemplate" \
                 --load-privkey "$out/alice.key" \
                 --load-ca-privkey ca.key \
                 --load-ca-certificate "$cacert" \
@@ -82,8 +82,9 @@ in {
       # This is to avoid assigning a different network address to the new
       # generation.
       networking = lib.mapAttrs (lib.const lib.mkForce) {
+        interfaces.eth1.ipv4 = nodes.server.config.networking.interfaces.eth1.ipv4;
         inherit (nodes.server.config.networking)
-          hostName interfaces primaryIPAddress extraHosts;
+          hostName primaryIPAddress extraHosts;
       };
     };
 

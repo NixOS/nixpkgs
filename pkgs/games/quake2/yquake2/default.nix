@@ -3,6 +3,7 @@
 , oggSupport ? true, libogg, libvorbis
 , openalSupport ? true, openal
 , zipSupport ? true, zlib
+, Cocoa, OpenAL
 }:
 
 let
@@ -14,13 +15,13 @@ let
 
   yquake2 = stdenv.mkDerivation rec {
     name = "yquake2-${version}";
-    version = "7.20";
+    version = "7.30";
 
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
       rev = "QUAKE2_${builtins.replaceStrings ["."] ["_"] version}";
-      sha256 = "1yrmn8vajab3zd0fni029s6wrvv2ljn1kyhaiw02wm1dc5yyzb2g";
+      sha256 = "0xfr620k1hns70dckv6k0kc72jbiwyghcys904jpriv5x94lnrlc";
     };
 
     enableParallelBuilding = true;
@@ -28,6 +29,7 @@ let
     nativeBuildInputs = [ cmake ];
 
     buildInputs = [ SDL2 libGL ]
+      ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ]
       ++ lib.optionals oggSupport [ libogg libvorbis ]
       ++ lib.optional openalSupport openal
       ++ lib.optional zipSupport zlib;

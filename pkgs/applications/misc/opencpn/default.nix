@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "opencpn-${version}";
-  version = "4.8.2";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
     rev = "v${version}";
-    sha256 = "0r6a279xhhf4jrmjb2xi5arxb4xd5wvqbs4hyyildlgpr1x7bd09";
+    sha256 = "1xv3h6svw9aay5ixpql231md3pf00qxvhg62z88daraf18hlkfja";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A concise ChartPlotter/Navigator";
     maintainers = [ stdenv.lib.maintainers.kragniz ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;
     homepage = https://opencpn.org/;
   };

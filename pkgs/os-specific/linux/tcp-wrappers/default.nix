@@ -20,11 +20,22 @@ in stdenv.mkDerivation rec {
   prePatch = ''
     tar -xaf $debian
     patches="$(cat debian/patches/series | sed 's,^,debian/patches/,') $patches"
+
+    substituteInPlace Makefile --replace STRINGS STRINGDEFS
+    substituteInPlace debian/patches/13_shlib_weaksym --replace STRINGS STRINGDEFS
+  '';
+
+  # Fix __BEGIN_DECLS usage (even if it wasn't non-standard, this doesn't include sys/cdefs.h)
+  patches = [ ./cdecls.patch ];
+
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace Makefile \
+      --replace '-DNETGROUP' '-DUSE_GETDOMAIN'
   '';
 
   buildInputs = [ libnsl ];
 
-  makeFlags = [ "STRINGS=" "REAL_DAEMON_DIR=$(out)/bin" "linux" ];
+  makeFlags = [ "REAL_DAEMON_DIR=$(out)/bin" "linux" "AR:=$(AR)" ];
 
   installPhase = ''
     mkdir -p "$out/bin"

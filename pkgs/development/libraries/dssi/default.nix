@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ladspaH, libjack2, liblo, alsaLib, qt4, libX11, libsndfile, libSM
-, libsamplerate, libtool, autoconf, automake, xproto, libICE, pkgconfig
+, libsamplerate, libtool, autoconf, automake, xorgproto, libICE, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ ladspaH libjack2 liblo alsaLib qt4 libX11 libsndfile libSM
-      libsamplerate libtool autoconf automake xproto libICE pkgconfig
+      libsamplerate libtool autoconf automake xorgproto libICE pkgconfig
     ];
 
   meta = with stdenv.lib; {
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     license = licenses.lgpl21;
-    downloadPage = "http://sourceforge.net/projects/dssi/files/dssi/";
+    downloadPage = "https://sourceforge.net/projects/dssi/files/dssi/";
   };
 }

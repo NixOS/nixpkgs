@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -11,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "mozlog";
-  version = "3.7";
+  version = "3.8";
 
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "414141131c4f5e7242e69a939d2b74f4ed8dbac12bef93eee4e7125cd1a131e9";
+    sha256 = "00x28z6diw06gakb5isbfha5z2n63yyncv4za303nsgzxvlihmx0";
   };
 
   propagatedBuildInputs = [ blessings mozterm six ];

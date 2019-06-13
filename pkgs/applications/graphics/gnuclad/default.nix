@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, lib, fetchurl, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnuclad";
+  name = "gnuclad-${version}";
   version = "0.2.4";
 
   src = fetchurl {
-    url = "https://launchpad.net/gnuclad/trunk/0.2/+download/${name}-${version}.tar.gz";
+    url = "https://launchpad.net/gnuclad/trunk/${lib.versions.majorMinor version}/+download/${name}.tar.gz";
     sha256 = "0ka2kscpjff7gflsargv3r9fdaxhkf3nym9mfaln3pnq6q7fwdki";
   };
 

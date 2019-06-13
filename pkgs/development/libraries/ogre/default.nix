@@ -1,19 +1,21 @@
 { fetchurl, stdenv, lib
 , cmake, libGLU_combined
-, freetype, freeimage, zziplib, randrproto, libXrandr
+, freetype, freeimage, zziplib, xorgproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
-, xproto, libX11, libXmu, libSM, pkgconfig
-, libXxf86vm, xf86vidmodeproto, libICE
-, renderproto, libXrender
+, libX11, libXmu, libSM, pkgconfig
+, libXxf86vm, libICE
+, unzip
+, libXrender
 , withNvidiaCg ? false, nvidia_cg_toolkit
 , withSamples ? false }:
 
-stdenv.mkDerivation {
-  name = "ogre-1.10.11";
+stdenv.mkDerivation rec {
+  name = "ogre-${version}";
+  version = "1.12.0";
 
   src = fetchurl {
-     url = "https://bitbucket.org/sinbad/ogre/get/v1-10-11.tar.gz";
-     sha256 = "1zwvlx5dz9nwjazhnrhzb0w8ilpa84r0hrxrmmy69pgr1p1yif5a";
+     url = "https://github.com/OGRECave/ogre/archive/v${version}.zip";
+     sha256 = "1hkkg5prixppiq1p5jz7wz1npm5s7kwm1s86079280waccvr2v6x";
   };
 
   cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
@@ -25,12 +27,14 @@ stdenv.mkDerivation {
 
   buildInputs =
    [ cmake libGLU_combined
-     freetype freeimage zziplib randrproto libXrandr
+     freetype freeimage zziplib xorgproto libXrandr
      libXaw freeglut libXt libpng boost ois
-     xproto libX11 libXmu libSM pkgconfig
-     libXxf86vm xf86vidmodeproto libICE
-     renderproto libXrender
+     libX11 libXmu libSM pkgconfig
+     libXxf86vm libICE
+     libXrender
    ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
+
+  nativeBuildInputs = [ unzip ];
 
   meta = {
     description = "A 3D engine";

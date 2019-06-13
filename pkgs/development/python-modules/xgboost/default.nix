@@ -1,35 +1,36 @@
 { stdenv
-, lib
-, pkgs
 , buildPythonPackage
+, pytest
 , nose
 , scipy
+, scikitlearn
 , xgboost
+, substituteAll
+, pandas
+, matplotlib
+, graphviz
+, datatable
 }:
 
 buildPythonPackage rec {
-  name = "xgboost-${version}";
-
+  pname = "xgboost";
   inherit (xgboost) version src meta;
 
+  patches = [
+    (substituteAll {
+      src = ./lib-path-for-python.patch;
+      libpath = "${xgboost}/lib";
+    })
+  ];
+
+  postPatch = "cd python-package";
+
   propagatedBuildInputs = [ scipy ];
-  checkInputs = [ nose ];
+  buildInputs = [ xgboost ];
+  checkInputs = [ nose pytest scikitlearn pandas matplotlib graphviz datatable ];
 
-  postPatch = let
-    libname = if stdenv.isDarwin then "libxgboost.dylib" else "libxgboost.so";
-
-  in ''
-    cd python-package
-
-    sed "s/CURRENT_DIR = os.path.dirname(__file__)/CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))/g" -i setup.py
-    sed "/^LIB_PATH.*/a LIB_PATH = [os.path.relpath(LIB_PATH[0], CURRENT_DIR)]" -i setup.py
-    cat <<EOF >xgboost/libpath.py
-    def find_lib_path():
-      return ["${xgboost}/lib/${libname}"]
-    EOF
-  '';
-
-  postInstall = ''
-    rm -rf $out/xgboost
+  checkPhase = ''
+    ln -sf ../demo .
+    nosetests ../tests/python
   '';
 }

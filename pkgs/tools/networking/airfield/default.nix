@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, callPackage, python, utillinux
+{ stdenv, fetchFromGitHub
 , pkgs, makeWrapper, buildEnv
-, nodejs
+, nodejs, runtimeShell
 }:
 
 let
   nodePackages = import ./node.nix {
     inherit pkgs;
-    system = stdenv.system;
+    system = stdenv.hostPlatform.system;
   };
 
   runtimeEnv = buildEnv {
@@ -49,7 +49,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cat >$out/bin/airfield <<EOF
-      #!${stdenv.shell}/bin/sh
+      #!${runtimeShell}
       ${nodejs}/bin/node ${src}/airfield.js
     EOF
   '';

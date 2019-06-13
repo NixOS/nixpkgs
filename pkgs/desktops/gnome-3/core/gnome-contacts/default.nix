@@ -1,42 +1,46 @@
 { stdenv, gettext, fetchurl, evolution-data-server
-, pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, gtk3, glib, cheese
+, pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, python3, gtk3, glib, cheese
 , libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
 , wrapGAppsHook, folks, libxml2, gnome3, telepathy-glib
-, vala, meson, ninja }:
+, vala, meson, ninja, libhandy, gsettings-desktop-schemas }:
 
 let
-  version = "3.28.1";
+  version = "3.32.1";
 in stdenv.mkDerivation rec {
   name = "gnome-contacts-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "17iinxqf221kk9yppv3yhg0m7jxk5zvwxmdf3hjygf9xgfw7z3zi";
+    url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "17g1gh8yj58cfpdx69h2szivlbjgvv982kmhnkkh0i5bwj0zs2yy";
   };
 
   propagatedUserEnvPkgs = [ evolution-data-server ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gettext libxslt docbook_xsl docbook_xml_dtd_42 wrapGAppsHook
+    meson ninja pkgconfig vala gettext libxslt docbook_xsl docbook_xml_dtd_42 python3 wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 glib evolution-data-server gnome3.gsettings-desktop-schemas
-    folks gnome-desktop telepathy-glib
+    gtk3 glib evolution-data-server gsettings-desktop-schemas
+    folks gnome-desktop telepathy-glib libhandy
     libxml2 gnome-online-accounts cheese
-    gnome3.defaultIconTheme libchamplain clutter-gtk geocode-glib
+    gnome3.adwaita-icon-theme libchamplain clutter-gtk geocode-glib
+  ];
+
+  mesonFlags = [
+    "-Dtelepathy=true"
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
   '';
 
   # In file included from src/gnome-contacts@exe/contacts-avatar-selector.c:30:0:
   # /nix/store/*-cheese-3.28.0/include/cheese/cheese-widget.h:26:10: fatal error: clutter-gtk/clutter-gtk.h: No such file or directory
   #  #include <clutter-gtk/clutter-gtk.h>
   #           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-  NIX_CFLAGS_COMPILE = "-I${clutter-gtk}/include/clutter-gtk-1.0";
+  NIX_CFLAGS_COMPILE = "-I${stdenv.lib.getDev clutter-gtk}/include/clutter-gtk-1.0";
 
   doCheck = true;
 

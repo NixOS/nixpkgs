@@ -1,6 +1,9 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 
 let
 
@@ -17,7 +20,7 @@ let
         maintainers = [ adisbladis ];
       };
 
-      machine = { config, lib, pkgs, ... }:
+      machine = { pkgs, ... }:
         {
           virtualisation.emptyDiskImages = [ 4096 ];
           networking.hostId = "deadbeef";

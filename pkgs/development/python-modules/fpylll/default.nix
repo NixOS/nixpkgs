@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , pkgconfig
 , gmp
@@ -14,11 +14,13 @@
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.3.0dev";
+  version = "0.4.1dev";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0bjkh02fnxsrxwjzai8ij12zl2wq319z8y25sn9pvvzla5izgnp9";
+  src = fetchFromGitHub {
+    owner = "fplll";
+    repo = "fpylll";
+    rev = version;
+    sha256 = "01x2sqdv0sbjj4g4waj0hj4rcn4bq7h17442xaqwbznym9azmn9w";
   };
 
   buildInputs = [

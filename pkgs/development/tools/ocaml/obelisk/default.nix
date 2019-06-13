@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
 	name = "obelisk-${version}";
-	version = "0.3.0";
+	version = "0.4.0";
 	src = fetchFromGitHub {
 		owner = "lelio-brun";
 		repo = "obelisk";
 		rev = "v${version}";
-		sha256 = "12gldzi1mp15vwkk6llz2ignpc8ndqlycm88njb4k7r9hpv59m97";
+		sha256 = "0rw85knbwqj2rys1hh5qy8sfdqb4mb1wsriy38n7zcpbwim47vb8";
 	};
 
 	buildInputs = with ocamlPackages; [ ocaml findlib ocamlbuild menhir ];

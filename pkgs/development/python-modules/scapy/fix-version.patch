@@ -1,0 +1,26 @@
+--- a/setup.py	2018-02-15 22:14:08.531591678 +0100
++++ b/setup.py	2018-03-27 17:15:38.617315539 +0200
+@@ -47,7 +47,7 @@
+ 
+ setup(
+     name='scapy',
+-    version=__import__('scapy').VERSION,
++    version='NIXPKGS_SCAPY_VERSION',
+     packages=[
+         'scapy',
+         'scapy/arch',
+--- a/scapy/__init__.py	2018-03-27 17:38:52.706481269 +0200
++++ b/scapy/__init__.py	2018-03-27 17:39:56.576688890 +0200
+@@ -82,9 +82,10 @@
+             if match:
+                 return "git-archive.dev" + match.group(1)
+             elif sha1:
+-                return "git-archive.dev" + sha1
++                return 'NIXPKGS_SCAPY_VERSION'
+             else:
+-                return 'unknown.version'
++                return 'NIXPKGS_SCAPY_VERSION'
++
+ 
+ VERSION = _version()
+ 

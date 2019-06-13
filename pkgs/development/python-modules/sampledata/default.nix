@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "sampledata";
-  name = "${pname}-${version}";
   version = "0.3.7";
 
   meta = {

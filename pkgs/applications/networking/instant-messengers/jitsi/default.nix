@@ -1,9 +1,7 @@
 { stdenv, lib, fetchurl, makeDesktopItem, unzip, ant, jdk
 # Optional, Jitsi still runs without, but you may pass null:
-, alsaLib, dbus_libs, gtk2, libpulseaudio, openssl, xorg
+, alsaLib, dbus, gtk2, libpulseaudio, openssl, xorg
 }:
-
-assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name = "jitsi-${version}";
@@ -27,13 +25,11 @@ stdenv.mkDerivation rec {
 
   libPath = lib.makeLibraryPath ([
     stdenv.cc.cc  # For libstdc++.
-  ] ++ lib.filter (x: x != null) [
     alsaLib
-    dbus_libs
+    dbus
     gtk2
     libpulseaudio
     openssl
-  ] ++ lib.optionals (xorg != null) [
     xorg.libX11
     xorg.libXext
     xorg.libXScrnSaver

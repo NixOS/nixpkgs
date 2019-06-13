@@ -1,0 +1,20 @@
+--- a/session-helper/flatpak-session-helper.c
++++ b/session-helper/flatpak-session-helper.c
+@@ -624,7 +624,7 @@
+   g_auto(GStrv) stdout_lines = NULL;
+   int i;
+   char *p11_argv[] = {
+-    "p11-kit", "server",
++    "@p11@/bin/p11-kit", "server",
+     /* We explicitly request --sh here, because we then fail on earlier versions that doesn't support
+      * this flag. This is good, because those earlier versions did not properly daemonize and caused
+      * the spawn_sync to hang forever, waiting for the pipe to close.
+@@ -770,7 +770,7 @@
+       exit (1);
+     }
+ 
+-  if (g_find_program_in_path ("p11-kit"))
++  if (TRUE)
+     start_p11_kit_server (flatpak_dir);
+   else
+     g_debug ("p11-kit not found");

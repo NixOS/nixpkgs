@@ -1,23 +1,16 @@
 # Module for MiniDLNA, a simple DLNA server.
-
 { config, lib, pkgs, ... }:
 
 with lib;
 
 let
-
   cfg = config.services.minidlna;
-
   port = 8200;
-
 in
 
 {
-
   ###### interface
-
   options = {
-
     services.minidlna.enable = mkOption {
       type = types.bool;
       default = false;
@@ -43,37 +36,61 @@ in
         '';
     };
 
+    services.minidlna.loglevel = mkOption {
+      type = types.str;
+      default = "warn";
+      example = "general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn";
+      description =
+        ''
+          Defines the type of messages that should be logged, and down to
+          which level of importance they should be considered.
+
+          The possible types are “artwork”, “database”, “general”, “http”,
+          “inotify”, “metadata”, “scanner”, “ssdp” and “tivo”.
+
+          The levels are “off”, “fatal”, “error”, “warn”, “info” and
+          “debug”, listed here in order of decreasing importance.  “off”
+          turns off logging messages entirely, “fatal” logs the most
+          critical messages only, and so on down to “debug” that logs every
+          single messages.
+
+          The types are comma-separated, followed by an equal sign (‘=’),
+          followed by a level that applies to the preceding types. This can
+          be repeated, separating each of these constructs with a comma.
+
+          Defaults to “general,artwork,database,inotify,scanner,metadata,
+          http,ssdp,tivo=warn” which logs every type of message at the
+          “warn” level.
+        '';
+    };
+
     services.minidlna.config = mkOption {
       type = types.lines;
       description = "The contents of MiniDLNA's configuration file.";
     };
-
   };
 
-
   ###### implementation
-
   config = mkIf cfg.enable {
-
     services.minidlna.config =
       ''
         port=${toString port}
         friendly_name=${config.networking.hostName} MiniDLNA
         db_dir=/var/cache/minidlna
-        log_level=warn
+        log_level=${cfg.loglevel}
         inotify=yes
         ${concatMapStrings (dir: ''
           media_dir=${dir}
         '') cfg.mediaDirs}
       '';
 
-    users.extraUsers.minidlna = {
+    users.users.minidlna = {
       description = "MiniDLNA daemon user";
       group = "minidlna";
       uid = config.ids.uids.minidlna;
     };
 
-    users.extraGroups.minidlna.gid = config.ids.gids.minidlna;
+    users.groups.minidlna.gid = config.ids.gids.minidlna;
 
     systemd.services.minidlna =
       { description = "MiniDLNA Server";
@@ -98,7 +115,5 @@ in
               " -f ${pkgs.writeText "minidlna.conf" cfg.config}";
           };
       };
-
   };
-
 }

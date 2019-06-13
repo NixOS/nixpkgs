@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip {
   name = "lmmath-0.903";
@@ -21,7 +21,6 @@ fetchzip {
 
   meta = {
     description = "Latin Modern font";
-    platforms = stdenv.lib.platforms.unix;
   };
 }
 

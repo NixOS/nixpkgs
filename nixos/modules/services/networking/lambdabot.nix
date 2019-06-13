@@ -67,7 +67,7 @@ in
       };
     };
 
-    users.extraUsers.lambdabot = {
+    users.users.lambdabot = {
       group = "lambdabot";
       description = "Lambdabot daemon user";
       home = "/var/lib/lambdabot";
@@ -75,7 +75,7 @@ in
       uid = config.ids.uids.lambdabot;
     };
 
-    users.extraGroups.lambdabot.gid = config.ids.gids.lambdabot;
+    users.groups.lambdabot.gid = config.ids.gids.lambdabot;
 
   };
 

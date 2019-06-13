@@ -1,7 +1,9 @@
-{ stdenv, hostPlatform, buildPlatform, buildPackages, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , bzip2
+, expat
+, libffi
 , gdbm
-, fetchpatch
+, db
 , ncurses
 , openssl
 , readline
@@ -10,16 +12,17 @@
 , zlib
 , callPackage
 , self
-, gettext
-, db
-, expat
-, libffi
 , CF, configd, coreutils
 , python-setup-hook
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
 , ucsEncoding ? 4
 # For the Python package set
-, pkgs, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: {})
+, buildPackages
+, sourceVersion
+, sha256
+, passthruFun
+, static ? false
 }:
 
 assert x11Support -> tcl != null
@@ -30,17 +33,26 @@ assert x11Support -> tcl != null
 with stdenv.lib;
 
 let
-  majorVersion = "2.7";
-  minorVersion = "14";
-  minorVersionSuffix = "";
-  pythonVersion = majorVersion;
-  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
-  libPrefix = "python${majorVersion}";
-  sitePackages = "lib/${libPrefix}/site-packages";
+
+  pythonForBuild = buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"};
+
+  passthru = passthruFun rec {
+    inherit self sourceVersion packageOverrides;
+    implementation = "cpython";
+    libPrefix = "python${pythonVersion}";
+    executable = libPrefix;
+    pythonVersion = with sourceVersion; "${major}.${minor}";
+    sitePackages = "lib/${libPrefix}/site-packages";
+    inherit hasDistutilsCxxPatch pythonForBuild;
+  } // {
+    inherit ucsEncoding;
+  };
+
+  version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
   src = fetchurl {
-    url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0rka541ys16jwzcnnvjp2v12m4cwgd2jp6wj4kj511p715pb5zvi";
+    url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
+    inherit sha256;
   };
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -58,7 +70,15 @@ let
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
 
-      ./properly-detect-curses.patch
+      # Fix python bug #27177 (https://bugs.python.org/issue27177)
+      # The issue is that `match.group` only recognizes python integers
+      # instead of everything that has `__index__`.
+      # This bug was fixed upstream, but not backported to 2.7
+      (fetchpatch {
+        name = "re_match_index.patch";
+        url = "https://bugs.python.org/file43084/re_match_index.patch";
+        sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
+      })
 
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
@@ -71,7 +91,7 @@ let
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
 
-    ] ++ optionals hostPlatform.isCygwin [
+    ] ++ optionals stdenv.hostPlatform.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
       ./2.6.2-ssl-threads.patch
@@ -90,6 +110,8 @@ let
       # only works for GCC and Apple Clang. This makes distutils to call C++
       # compiler when needed.
       ./python-2.7-distutils-C++.patch
+    ] ++ optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+      ./cross-compile.patch
     ];
 
   preConfigure = ''
@@ -111,14 +133,14 @@ let
     "--enable-shared"
     "--with-threads"
     "--enable-unicode=ucs${toString ucsEncoding}"
-  ] ++ optionals (hostPlatform.isCygwin || hostPlatform.isAarch64) [
+  ] ++ optionals (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) [
     "--with-system-ffi"
-  ] ++ optionals hostPlatform.isCygwin [
+  ] ++ optionals stdenv.hostPlatform.isCygwin [
     "--with-system-expat"
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
-  ] ++ optionals (hostPlatform != buildPlatform) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "PYTHON_FOR_BUILD=${getBin buildPackages.python}/bin/python"
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
@@ -140,22 +162,22 @@ let
     "ac_cv_computed_gotos=yes"
     "ac_cv_file__dev_ptmx=yes"
     "ac_cv_file__dev_ptc=yes"
-  ];
-
-  postConfigure = if hostPlatform.isCygwin then ''
-    sed -i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
-  '' else null;
+  ]
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no"
+  ++ optional static "LDFLAGS=-static";
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib ]
-    ++ optional (hostPlatform.isCygwin || hostPlatform.isAarch64) libffi
-    ++ optional hostPlatform.isCygwin expat
+    ++ optional (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) libffi
+    ++ optional stdenv.hostPlatform.isCygwin expat
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
   nativeBuildInputs =
-    optionals (hostPlatform != buildPlatform)
+    optionals (stdenv.hostPlatform != stdenv.buildPlatform)
     [ buildPackages.stdenv.cc buildPackages.python ];
 
   mkPaths = paths: {
@@ -163,21 +185,24 @@ let
     LIBRARY_PATH = makeLibraryPath paths;
   };
 
+  # Python 2.7 needs this
+  crossCompileEnv = stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform)
+                      { _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config; };
+
   # Build the basic Python interpreter without modules that have
   # external dependencies.
 
-in stdenv.mkDerivation {
-    name = "python-${version}";
-    pythonVersion = majorVersion;
+in with passthru; stdenv.mkDerivation ({
+    pname = "python";
+    inherit version;
 
-    inherit majorVersion version src patches buildInputs nativeBuildInputs
-            preConfigure configureFlags;
+    inherit src patches buildInputs nativeBuildInputs preConfigure configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
-      + optionalString hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
+      + optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
     DETERMINISTIC_BUILD = 1;
 
     setupHook = python-setup-hook sitePackages;
@@ -190,7 +215,7 @@ in stdenv.mkDerivation {
       ''
         # needed for some packages, especially packages that backport
         # functionality to 2.x from 3.x
-        for item in $out/lib/python${majorVersion}/test/*; do
+        for item in $out/lib/${libPrefix}/test/*; do
           if [[ "$item" != */test_support.py*
              && "$item" != */test/support
              && "$item" != */test/regrtest.py* ]]; then
@@ -199,12 +224,10 @@ in stdenv.mkDerivation {
             echo $item
           fi
         done
-        touch $out/lib/python${majorVersion}/test/__init__.py
-        ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
-        ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
+        touch $out/lib/${libPrefix}/test/__init__.py
+        ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb
+        ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb${sourceVersion.major}.${sourceVersion.minor}
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
-
-        paxmark E $out/bin/python${majorVersion}
 
         # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
         echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
@@ -222,24 +245,15 @@ in stdenv.mkDerivation {
         find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
-      '' + optionalString hostPlatform.isCygwin ''
+      '' + optionalString stdenv.hostPlatform.isCygwin ''
         cp libpython2.7.dll.a $out/lib
       '';
 
-    passthru = let
-      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
-    in rec {
-      inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch ucsEncoding;
-      executable = libPrefix;
-      buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
-      pkgs = pythonPackages;
-      isPy2 = true;
-      isPy27 = true;
-      interpreter = "${self}/bin/${executable}";
-    };
+    inherit passthru;
 
     enableParallelBuilding = true;
+
+    doCheck = false; # expensive, and fails
 
     meta = {
       homepage = http://python.org;
@@ -260,4 +274,4 @@ in stdenv.mkDerivation {
       # in case both 2 and 3 are installed.
       priority = -100;
     };
-  }
+  } // crossCompileEnv)

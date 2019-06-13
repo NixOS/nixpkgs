@@ -5,11 +5,11 @@ import ./make-test.nix ({ pkgs, ... } : {
   };
 
   nodes = {
-    machine = { config, pkgs, ... }: {
+    machine = { ... }: {
       services.cadvisor.enable = true;
     };
 
-    influxdb = { config, pkgs, lib, ... }: with lib; {
+    influxdb = { lib, ... }: with lib; {
       services.cadvisor.enable = true;
       services.cadvisor.storageDriver = "influxdb";
       services.influxdb.enable = true;

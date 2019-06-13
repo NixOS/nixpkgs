@@ -11,14 +11,15 @@ buildPythonApplication rec {
           sha256 = "0kxhp38c8a8hc8l86y53l2z5zpzxc4b8lx5zyzmq1badcrfc4mh4";
         };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool to aggregate several remote shells into one";
     longDescription = ''
       Polysh is a tool to aggregate several remote shells into one. It
       is used to launch an interactive remote shell on many machines
       at once.
     '';
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
+    maintainers = [ maintainers.astsmtl ];
     homepage = http://guichaz.free.fr/polysh/;
+    license = licenses.gpl2;
   };
 }

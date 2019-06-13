@@ -10,45 +10,45 @@
   backports = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1zcgqw7m7jb8n7b2jwla5cq0nw9wsgddxfmn0a9v89ihzd4i1a5k";
+      sha256 = "1hshjxww2h7s0dk57njrygq4zpp0nlqrjfya7zwm27iq3rhc3y8g";
       type = "gem";
     };
-    version = "3.6.8";
+    version = "3.11.4";
   };
   ethon = {
     dependencies = ["ffi"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1i873cvma4j52xmij7kasjylh66vf60cy5prkp4cz4hcn9jlkznl";
+      sha256 = "0y70szwm2p0b9qfvpqrzjrgm3jz0ig65vlbfr6ppc3z0m1h7kv48";
       type = "gem";
     };
-    version = "0.10.1";
+    version = "0.11.0";
   };
   faraday = {
     dependencies = ["multipart-post"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "18p1csdivgwmshfw3mb698a3bn0yrykg30khk5qxjf6n168g91jr";
+      sha256 = "14lg0c4bphk16rccc5jmaan6nfcvmy0caiahpc61f9zfwpsj7ymg";
       type = "gem";
     };
-    version = "0.11.0";
+    version = "0.15.2";
   };
   faraday_middleware = {
     dependencies = ["faraday"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0bcarc90brm1y68bl957w483bddsy9idj2gghqnysk6bbxpsvm00";
+      sha256 = "1p7icfl28nvl8qqdsngryz1snqic9l8x6bk0dxd7ygn230y0k41d";
       type = "gem";
     };
-    version = "0.11.0.1";
+    version = "0.12.2";
   };
   ffi = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "034f52xf7zcqgbvwbl20jwdyjwznvqnwpbaps9nk18v9lgb1dpx0";
+      sha256 = "0jpm2dis1j7zvvy3lg7axz9jml316zrn7s0j59vyq3qr127z0m7q";
       type = "gem";
     };
-    version = "1.9.18";
+    version = "1.9.25";
   };
   gh = {
     dependencies = ["addressable" "backports" "faraday" "multi_json" "net-http-persistent" "net-http-pipeline"];
@@ -62,18 +62,18 @@
   highline = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1nf5lgdn6ni2lpfdn4gk3gi47fmnca2bdirabbjbz1fk9w4p8lkr";
+      sha256 = "01ib7jp85xjc4gh4jg0wyzllm46hwv8p0w1m4c75pbgi41fps50y";
       type = "gem";
     };
-    version = "1.7.8";
+    version = "1.7.10";
   };
   json = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0cpw154il64w6q20rrnsbjx1cdfz1yrzz1lgdbpn59lcwc6mprql";
+      sha256 = "01v6jjpvh3gnq6sgllpfqahlgxzj50ailwhj9b3cd20hi2dx0vxp";
       type = "gem";
     };
-    version = "2.0.3";
+    version = "2.1.0";
   };
   launchy = {
     dependencies = ["addressable"];
@@ -87,10 +87,10 @@
   multi_json = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1wpc23ls6v2xbk3l1qncsbz16npvmw8p0b38l8czdzri18mp51xk";
+      sha256 = "1rl0qy4inf1mp8mybfk56dfga0mvx97zwpmq5xmiwl5r770171nv";
       type = "gem";
     };
-    version = "1.12.1";
+    version = "1.13.1";
   };
   multipart-post = {
     source = {
@@ -129,10 +129,10 @@
     dependencies = ["backports" "faraday" "faraday_middleware" "gh" "highline" "launchy" "pusher-client" "typhoeus"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "02bjz73f6r9b7nskwzcvcbr4hlvgwrf9rnr6d218d2i1rk4ww936";
+      sha256 = "0lw206zr2waic1kmm6x9qj91975g035wfsvbqs09z1cy8cvp63yw";
       type = "gem";
     };
-    version = "1.8.8";
+    version = "1.8.9";
   };
   typhoeus = {
     dependencies = ["ethon"];
@@ -146,9 +146,9 @@
   websocket = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1shymfaw14p8jdi74nwz4nsgc9cmpli166lkp5g5wbhjmhmpvrnh";
+      sha256 = "0f11rcn4qgffb1rq4kjfwi7di79w8840x9l74pkyif5arp0mb08x";
       type = "gem";
     };
-    version = "1.2.4";
+    version = "1.2.8";
   };
 }

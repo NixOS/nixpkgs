@@ -1,19 +1,31 @@
-{ stdenv, lib, fetchgit, cmake, pkgconfig
-, qtbase, openal, glew, llvm_4, vulkan-loader, libpng, ffmpeg, libevdev
+{ stdenv, lib, fetchgit, cmake, pkgconfig, git
+, qt5, openal, glew, vulkan-loader, libpng, ffmpeg, libevdev, python27
 , pulseaudioSupport ? true, libpulseaudio
 , waylandSupport ? true, wayland
 , alsaSupport ? true, alsaLib
 }:
 
+let
+  majorVersion = "0.0.6";
+  gitVersion = "8187-790962425"; # echo $(git rev-list HEAD --count)-$(git rev-parse --short HEAD)
+in
 stdenv.mkDerivation rec {
   name = "rpcs3-${version}";
-  version = "2018-02-23";
+  version = "${majorVersion}-${gitVersion}";
 
   src = fetchgit {
     url = "https://github.com/RPCS3/rpcs3";
-    rev = "41bd07274f15b8f1be2475d73c3c75ada913dabb";
-    sha256 = "1v28m64ahakzj4jzjkmdd7y8q75pn9wjs03vprbnl0z6wqavqn0x";
+    rev = "790962425cfb893529f72b3ef0dd1424fcc42973";
+    sha256 = "154ys29b9xdws3bp4b7rb3kc0h9hd49g2yf3z9268cdq8aclahaa";
   };
+
+  preConfigure = ''
+    cat > ./rpcs3/git-version.h <<EOF
+    #define RPCS3_GIT_VERSION "${gitVersion}"
+    #define RPCS3_GIT_BRANCH "HEAD"
+    #define RPCS3_GIT_VERSION_NO_UPDATE 1
+    EOF
+  '';
 
   cmakeFlags = [
     "-DUSE_SYSTEM_LIBPNG=ON"
@@ -21,10 +33,10 @@ stdenv.mkDerivation rec {
     "-DUSE_NATIVE_INSTRUCTIONS=OFF"
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig git ];
 
   buildInputs = [
-    qtbase openal glew llvm_4 vulkan-loader libpng ffmpeg libevdev
+    qt5.qtbase qt5.qtquickcontrols openal glew vulkan-loader libpng ffmpeg libevdev python27
   ] ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional alsaSupport alsaLib
     ++ lib.optional waylandSupport wayland;
@@ -34,7 +46,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar nocent ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
   };

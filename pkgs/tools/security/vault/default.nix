@@ -1,36 +1,28 @@
 { stdenv, fetchFromGitHub, go, gox, removeReferencesTo }:
 
-let
-  vaultBashCompletions = fetchFromGitHub {
-    owner = "iljaweis";
-    repo = "vault-bash-completion";
-    rev = "e2f59b64be1fa5430fa05c91b6274284de4ea77c";
-    sha256 = "10m75rp3hy71wlmnd88grmpjhqy0pwb9m8wm19l0f463xla54frd";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "vault-${version}";
-  version = "0.9.5";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "1ddki3bnp6yrajc0cxxjkbdlfp0xqx407nxvvv611lsnlbr2sz5g";
+    sha256 = "1916zqmh4cam9nw3k95wiqizlpkbbm5qhfz4lblqba8pzc2y9v32";
   };
 
   nativeBuildInputs = [ go gox removeReferencesTo ];
 
-  buildPhase = ''
+  preBuild = ''
     patchShebangs ./
     substituteInPlace scripts/build.sh --replace 'git rev-parse HEAD' 'echo ${src.rev}'
     sed -i s/'^GIT_DIRTY=.*'/'GIT_DIRTY="+NixOS"'/ scripts/build.sh
 
-    mkdir -p src/github.com/hashicorp
+    mkdir -p .git/hooks src/github.com/hashicorp
     ln -s $(pwd) src/github.com/hashicorp/vault
 
-    mkdir -p .git/hooks
-
-    GOPATH=$(pwd) make
+    export GOPATH=$(pwd)
+    export GOCACHE="$TMPDIR/go-cache"
   '';
 
   installPhase = ''
@@ -39,7 +31,7 @@ in stdenv.mkDerivation rec {
     cp pkg/*/* $out/bin/
     find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
 
-    cp ${vaultBashCompletions}/vault-bash-completion.sh $out/share/bash-completion/completions/vault
+    echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
   '';
 
   meta = with stdenv.lib; {
@@ -47,6 +39,6 @@ in stdenv.mkDerivation rec {
     description = "A tool for managing secrets";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem offline pradeepchhetri ];
+    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri ];
   };
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitLab, git, bash }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.2";
+  version = "1.3.0";
   name = "git-latexdiff-${version}";
 
   src = fetchFromGitLab {
-    sha256 = "1alnrjcf3f1qv7fk8h9yachmdz7mjgcynlgsvchfgcb2cpdavxjg";
+    sha256 = "05fnhr1pqvj8l25vi9hdccwfk4mv2f0pfhn05whbdvf66gyl4fs9";
     rev = "v${version}";
     repo = "git-latexdiff";
     owner = "git-latexdiff";
@@ -15,11 +15,12 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  patches = [ ./shebang.patch ./version-test.patch ];
+  patches = [ ./version-test.patch ];
 
   postPatch = ''
     substituteInPlace git-latexdiff \
       --replace "@GIT_LATEXDIFF_VERSION@" "v${version}"
+    patchShebangs git-latexdiff
   '';
 
   installPhase = ''
@@ -30,8 +31,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "View diff on LaTeX source files on the generated PDF files";
+    homepage = https://gitlab.com/git-latexdiff/git-latexdiff;
     maintainers = [ ];
-    license = licenses.free; # https://gitlab.com/git-latexdiff/git-latexdiff/issues/9
+    license = licenses.bsd3; # https://gitlab.com/git-latexdiff/git-latexdiff/issues/9
     platforms = platforms.unix;
   };
 }

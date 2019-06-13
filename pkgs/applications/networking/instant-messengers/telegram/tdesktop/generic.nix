@@ -1,8 +1,8 @@
 { stable, version, sha256Hash, archPatchesRevision, archPatchesHash }:
 
-{ mkDerivation, lib, fetchgit, fetchsvn
-, pkgconfig, pythonPackages, cmake, wrapGAppsHook
-, qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify
+{ mkDerivation, lib, fetchFromGitHub, fetchsvn
+, pkgconfig, pythonPackages, cmake, wrapGAppsHook, gcc8
+, qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
 
@@ -13,8 +13,9 @@ mkDerivation rec {
   inherit version;
 
   # Telegram-Desktop with submodules
-  src = fetchgit {
-    url = "git://github.com/telegramdesktop/tdesktop";
+  src = fetchFromGitHub {
+    owner = "telegramdesktop";
+    repo = "tdesktop";
     rev = "v${version}";
     sha256 = sha256Hash;
     fetchSubmodules = true;
@@ -28,7 +29,8 @@ mkDerivation rec {
   };
 
   # TODO: libtgvoip.patch no-gtk2.patch
-  patches = [ "${archPatches}/tdesktop.patch" ];
+  # TODO: Avoid tdesktop_lottie_animation_qtdebug.patch and tdesktop_qtlottie_qtdebug.patch
+  patches = [ "${archPatches}/tdesktop.patch" "${archPatches}/tdesktop_lottie_animation_qtdebug.patch" ];
 
   postPatch = ''
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp \
@@ -37,7 +39,7 @@ mkDerivation rec {
       --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
   '';
 
-  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook gcc8 ];
 
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;
@@ -76,6 +78,9 @@ mkDerivation rec {
     pushd "Telegram/ThirdParty/libtgvoip"
     patch -Np1 -i "${archPatches}/libtgvoip.patch"
     popd
+    pushd "Telegram/ThirdParty/qtlottie"
+    patch -Np1 -i "${archPatches}/tdesktop_qtlottie_qtdebug.patch"
+    popd
 
     sed -i Telegram/gyp/telegram_linux.gypi \
       -e 's,/usr,/does-not-exist,g' \
@@ -90,7 +95,13 @@ mkDerivation rec {
     sed -i Telegram/gyp/qt_rcc.gypi \
       -e "s,/usr/bin/rcc,rcc,g"
 
+    # Build system assumes x86, but it works fine on non-x86 if we patch this one flag out
+    sed -i Telegram/ThirdParty/libtgvoip/libtgvoip.gyp \
+      -e "/-msse2/d"
+
     gyp \
+      -Dapi_id=17349 \
+      -Dapi_hash=344583e45741c457fe1862106095a5eb \
       -Dbuild_defines=${GYP_DEFINES} \
       -Gconfig=Release \
       --depth=Telegram/gyp \
@@ -114,7 +125,7 @@ mkDerivation rec {
     install -m444 "$src/lib/xdg/telegramdesktop.desktop" "$out/share/applications/telegram-desktop.desktop"
     sed "s,/usr/bin,$out/bin,g" $archPatches/tg.protocol > $out/share/kde4/services/tg.protocol
     for icon_size in 16 32 48 64 128 256 512; do
-      install -Dm644 "../../../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram-desktop.png"
+      install -Dm644 "../../../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram.png"
     done
   '';
 
@@ -124,6 +135,7 @@ mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       --prefix QT_PLUGIN_PATH : "${qtbase}/${qtbase.qtPluginPrefix}" \
+      --prefix PATH : ${xdg_utils}/bin \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
@@ -133,7 +145,7 @@ mkDerivation rec {
     description = "Telegram Desktop messaging app "
       + (if stable then "(stable version)" else "(pre-release)");
     license = licenses.gpl3;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.linux;
     homepage = https://desktop.telegram.org/;
     maintainers = with maintainers; [ primeos abbradar garbas ];
   };

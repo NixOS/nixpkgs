@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "rabbitmq-java-client-3.3.4";
 
   src = fetchurl {
-    url = "http://www.rabbitmq.com/releases/rabbitmq-java-client/v3.3.4/rabbitmq-java-client-3.3.4.tar.gz";
+    url = "https://www.rabbitmq.com/releases/rabbitmq-java-client/v3.3.4/rabbitmq-java-client-3.3.4.tar.gz";
     sha256 = "03kspkgzzjsbq6f8yl2zj5m30qwgxv3l58hrbf6gcgxb5rpfk6sh";
   };
 

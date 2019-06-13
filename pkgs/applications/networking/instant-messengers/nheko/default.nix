@@ -1,36 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchurl, cmake, doxygen, lmdb, qt5 }:
+{ lib, stdenv, fetchFromGitHub, fetchurl
+, cmake, cmark, lmdb, qt5, qtmacextras, mtxclient
+, boost, spdlog, olm, pkgconfig
+}:
 
 let
-  json_hpp = fetchurl {
-    url = https://github.com/nlohmann/json/releases/download/v3.1.2/json.hpp;
-    sha256 = "fbdfec4b4cf63b3b565d09f87e6c3c183bdd45c5be1864d3fcb338f6f02c1733";
-  };
-
-  variant_hpp = fetchurl {
-    url = https://github.com/mpark/variant/releases/download/v1.3.0/variant.hpp;
-    sha256 = "1vjiz1x5l8ynqqyb5l9mlrzgps526v45hbmwjilv4brgyi5445fq";
-  };
-
-  matrix-structs = stdenv.mkDerivation rec {
-    name = "matrix-structs-git";
-
-    src = fetchFromGitHub {
-      owner = "mujx";
-      repo = "matrix-structs";
-      rev = "91bb2b85a75d664007ef81aeb500d35268425922";
-      sha256 = "1v544pv18sd91gdrhbk0nm54fggprsvwwrkjmxa59jrvhwdk7rsx";
-    };
-
-    postUnpack = ''
-      cp ${json_hpp} "$sourceRoot/include/json.hpp"
-      cp ${variant_hpp} "$sourceRoot/include/variant.hpp"
-    '';
-
-    patches = [ ./fetchurls.patch ];
-
-    nativeBuildInputs = [ cmake doxygen ];
-  };
-
   tweeny = fetchFromGitHub {
     owner = "mobius3";
     repo = "tweeny";
@@ -47,37 +20,56 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nheko-${version}";
-  version = "0.3.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
-    owner = "mujx";
+    owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1dqd698p6wicz0x1lb6mzlwcp68sjkivanb9lwz3yy1mlmy8i3jn";
+    sha256 = "1h95lixciiq904dnfpwxhyf545yfsrphhwqyvs4yrzdfr9k0cf98";
   };
 
-  # This patch is likely not strictly speaking needed, but will help detect when
-  # a dependency is updated, so that the fetches up there can be updated too
-  patches = [ ./external-deps.patch ];
+  # If, on Darwin, you encounter the error
+  #   error: must specify at least one argument for '...' parameter of variadic
+  #   macro [-Werror,-Wgnu-zero-variadic-macro-arguments]
+  # Then adding this parameter is likely the fix you want.
+  #
+  # However, it looks like either cmake doesn't honor this CFLAGS variable, or
+  # darwin's compiler doesn't have the same syntax as gcc for turning off
+  # -Werror selectively.
+  #
+  # Anyway, this is something that will have to be debugged with access to a
+  # darwin-based OS. Sorry about that!
+  #
+  #preConfigure = lib.optionalString stdenv.isDarwin ''
+  #  export CFLAGS=-Wno-error=gnu-zero-variadic-macro-arguments
+  #'';
+
+  postPatch = ''
+    mkdir -p .deps/include/
+    ln -s ${tweeny}/include .deps/include/tweeny
+    ln -s ${spdlog} .deps/spdlog
+  '';
 
   cmakeFlags = [
-    "-DMATRIX_STRUCTS_LIBRARY=${matrix-structs}/lib/static/libmatrix_structs.a"
-    "-DMATRIX_STRUCTS_INCLUDE_DIR=${matrix-structs}/include/matrix_structs"
-    "-DTWEENY_INCLUDE_DIR=${tweeny}/include"
+    "-DTWEENY_INCLUDE_DIR=.deps/include"
     "-DLMDBXX_INCLUDE_DIR=${lmdbxx}"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    lmdb lmdbxx matrix-structs qt5.qtbase qt5.qtmultimedia qt5.qttools tweeny
-  ];
+    mtxclient olm boost lmdb spdlog cmark
+    qt5.qtbase qt5.qtmultimedia qt5.qttools
+  ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Desktop client for the Matrix protocol";
-    maintainers = with maintainers; [ ekleog ];
-    platforms = platforms.all;
+    homepage = https://github.com/Nheko-Reborn/nheko;
+    maintainers = with maintainers; [ ekleog fpletz ];
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
   };
 }

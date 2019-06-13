@@ -1,8 +1,8 @@
-{ stdenv, lib, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk2, libXrender, pango, gnome2, cairo, freetype, fontconfig
+{ stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
+, libXfixes, atk, gtk3, libXrender, pango, gnome2, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem
+, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme
 }:
 
 with stdenv.lib;
@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "3.4.0";
+  version = "5.0.4";
 
   src = fetchurl {
-    url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "0jj3a02bz30xa7p4migyhvxd9s0cllymsp1rdh2pbh40p79g1fp1";
+    url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
+    sha256 = "1fq0w8djkcx5jr2pw6izlq5rkwbq3r3f15xr3dmmbz6gjvi3nra0";
   };
 
   libPath = makeLibraryPath [
@@ -49,46 +49,52 @@ stdenv.mkDerivation rec {
     libXcomposite
     libXfixes
     libXrender
-    gtk2
+    gtk3
     gnome2.GConf
     libgnome-keyring
+    openssl
   ];
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  dontBuild = true;
 
   desktopItem = makeDesktopItem {
     name = "gitkraken";
     exec = "gitkraken";
-    icon = "app";
+    icon = "gitkraken";
     desktopName = "GitKraken";
     genericName = "Git Client";
     categories = "Application;Development;";
     comment = "Graphical Git client from Axosoft";
   };
 
-  buildInputs = [ dpkg ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
 
-  unpackPhase = "true";
-  buildCommand = ''
-    mkdir -p $out
-    dpkg -x $src $out
-    substituteInPlace $out/usr/share/applications/gitkraken.desktop \
+  unpackCmd = ''
+    mkdir out
+    dpkg -x $curSrc out
+  '';
+
+  installPhase = ''
+    mkdir $out
+    pushd usr
+    pushd share
+    substituteInPlace applications/gitkraken.desktop \
       --replace /usr/share/gitkraken $out/bin
-    cp -av $out/usr/* $out
-    rm -rf $out/etc $out/usr $out/share/lintian
-    chmod -R g-w $out
+    popd
+    rm -rf bin/gitkraken share/lintian
+    cp -av share bin $out/
+    popd
 
-    for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
+    ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
+  '';
+
+  postFixup = ''
+    pushd $out/share/gitkraken
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" gitkraken
+
+    for file in $(find . -type f \( -name \*.node -o -name gitkraken -o -name \*.so\* \) ); do
       patchelf --set-rpath ${libPath}:$out/share/gitkraken $file || true
     done
-
-    find $out/share/gitkraken -name "*.node" -exec patchelf --set-rpath "${libPath}:$out/share/gitkraken" {} \;
-
-    rm $out/bin/gitkraken
-    ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
+    popd
   '';
 
   meta = {

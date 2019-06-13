@@ -1,8 +1,7 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "1.002";
-  hash = "1b1ys28hyjcl4qwbnsyi6527nj01g3d6id9jl23fv6f8fjm4ph0f";
 in fetchzip {
   name = "zilla-slab-${version}";
 
@@ -12,9 +11,9 @@ in fetchzip {
     mkdir -p $out/share/fonts/truetype
     cp -v zilla-slab/ttf/*.ttf $out/share/fonts/truetype/
   '';
-  sha256 = hash;
+  sha256 = "1b1ys28hyjcl4qwbnsyi6527nj01g3d6id9jl23fv6f8fjm4ph0f";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/mozilla/zilla-slab;
     description = "Zilla Slab fonts";
     longDescription = ''

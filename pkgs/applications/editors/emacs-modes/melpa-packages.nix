@@ -52,41 +52,36 @@ self:
       # part of a larger package
       caml = dontConfigure super.caml;
 
-      # part of a larger package
-      # upstream issue: missing package version
-      cmake-mode = markBroken (dontConfigure super.cmake-mode);
-
       # Expects bash to be at /bin/bash
       company-rtags = markBroken super.company-rtags;
-
-      # upstream issue: missing file header
-      connection = markBroken super.connection;
-
-      # upstream issue: missing file header
-      dictionary = markBroken super.dictionary;
 
       easy-kill-extras = super.easy-kill-extras.override {
         inherit (self.melpaPackages) easy-kill;
       };
 
-      # missing git
-      egg = markBroken super.egg;
+      egg = super.egg.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
       # upstream issue: missing file header
       elmine = markBroken super.elmine;
-
-      # upstream issue: missing dependency redshank
-      emr = markBroken super.emr;
 
       ess-R-data-view = super.ess-R-data-view.override {
         inherit (self.melpaPackages) ess ctable popup;
       };
 
-      # upstream issue: missing dependency highlight
-      evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
+      evil-magit = super.evil-magit.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
-      # upstream issue: missing dependency highlight
-      floobits  = markBroken super.floobits;
+      # missing dependencies
+      evil-search-highlight-persist = super.evil-search-highlight-persist.overrideAttrs (attrs: {
+        packageRequires = with self; [ evil highlight ];
+      });
 
       # missing OCaml
       flycheck-ocaml = markBroken super.flycheck-ocaml;
@@ -94,8 +89,11 @@ self:
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
 
-      # upstream issue: missing dependency
-      fold-dwim-org = markBroken super.fold-dwim-org;
+      forge = super.forge.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
       # build timeout
       graphene = markBroken super.graphene;
@@ -106,11 +104,24 @@ self:
       # Expects bash to be at /bin/bash
       helm-rtags = markBroken super.helm-rtags;
 
+      # Build same version as Haskell package
+      hindent = super.hindent.overrideAttrs (attrs: {
+        version = external.hindent.version;
+        src = external.hindent.src;
+        packageRequires = [ self.haskell-mode ];
+        propagatedUserEnvPkgs = [ external.hindent ];
+      });
+
       # upstream issue: missing file header
       ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
 
       # upstream issue: missing file header
       initsplit = super.initsplit;
+
+      # tries to write a log file to $HOME
+      insert-shebang = super.insert-shebang.overrideAttrs (attrs: {
+        HOME = "/tmp";
+      });
 
       # Expects bash to be at /bin/bash
       ivy-rtags = markBroken super.ivy-rtags;
@@ -119,16 +130,50 @@ self:
       jsfmt = markBroken super.jsfmt;
 
       # upstream issue: missing file header
-      link = markBroken super.link;
-
-      # upstream issue: missing file header
       maxframe = markBroken super.maxframe;
 
-      # version of magit-popup needs to match magit
-      # https://github.com/magit/magit/issues/3286
-      magit = super.magit.override {
-        inherit (self.melpaPackages) magit-popup;
-      };
+      magit =
+        super.magit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+      magit-annex = super.magit-annex.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-gitflow = super.magit-gitflow.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magithub = super.magithub.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-svn = super.magit-svn.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-todos = super.magit-todos.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-filenotify = super.magit-filenotify.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
       # missing OCaml
       merlin = markBroken super.merlin;
@@ -146,11 +191,17 @@ self:
       # missing OCaml
       ocp-indent = markBroken super.ocp-indent;
 
-      # upstream issue: missing dependency
-      org-readme = markBroken super.org-readme;
+      orgit =
+        (super.orgit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+         }));
 
-      # upstream issue: truncated file
-      powershell = markBroken super.powershell;
+      # tries to write to $HOME
+      php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
+        HOME = "/tmp";
+      });
 
       # upstream issue: mismatched filename
       processing-snippets = markBroken super.processing-snippets;
@@ -158,11 +209,15 @@ self:
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
 
+      racer = super.racer.overrideAttrs (attrs: {
+        postPatch = attrs.postPatch or "" + ''
+          substituteInPlace racer.el \
+            --replace /usr/local/src/rust/src ${external.rustPlatform.rustcSrc}
+        '';
+      });
+
       # upstream issue: missing file footer
       seoul256-theme = markBroken super.seoul256-theme;
-
-      # upstream issue: missing dependency highlight
-      sonic-pi  = markBroken super.sonic-pi;
 
       spaceline = super.spaceline.override {
         inherit (self.melpaPackages) powerline;
@@ -183,11 +238,14 @@ self:
       # missing OCaml
       utop = markBroken super.utop;
 
+      vdiff-magit =
+        (super.vdiff-magit.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        }));
+
       # upstream issue: missing file header
       voca-builder = markBroken super.voca-builder;
-
-      # upstream issue: missing dependency
-      weechat-alert = markBroken super.weechat-alert;
 
       # upstream issue: missing file header
       window-numbering = markBroken super.window-numbering;
@@ -204,6 +262,11 @@ self:
       });
     };
 
-    melpaPackages = super // overrides;
+    melpaPackages =
+      removeAttrs (super // overrides)
+      [
+        "show-marks"  # missing dependency: fm
+        "lenlen-theme"  # missing dependency: color-theme-solarized
+      ];
   in
     melpaPackages // { inherit melpaPackages; }

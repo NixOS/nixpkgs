@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''xmls'';
-  version = ''1.7'';
+  version = ''3.0.2'';
 
-  parasites = [ "xmls/test" ];
+  parasites = [ "xmls/octets" "xmls/test" "xmls/unit-test" ];
 
   description = '''';
 
-  deps = [ ];
+  deps = [ args."cl-ppcre" args."fiveam" args."flexi-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/xmls/2015-04-07/xmls-1.7.tgz'';
-    sha256 = ''1pch221g5jv02rb21ly9ik4cmbzv8ca6bnyrs4s0yfrrq0ji406b'';
+    url = ''http://beta.quicklisp.org/archive/xmls/2018-04-30/xmls-3.0.2.tgz'';
+    sha256 = ''1r7mvw62zjcg45j3hm8jlbiisad2b415pghn6qcmhl03dmgp7kgi'';
   };
 
   packageName = "xmls";
@@ -20,7 +20,10 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM xmls DESCRIPTION NIL SHA256
-    1pch221g5jv02rb21ly9ik4cmbzv8ca6bnyrs4s0yfrrq0ji406b URL
-    http://beta.quicklisp.org/archive/xmls/2015-04-07/xmls-1.7.tgz MD5
-    697c9f49a60651b759e24ea0c1eb1cfe NAME xmls FILENAME xmls DEPS NIL
-    DEPENDENCIES NIL VERSION 1.7 SIBLINGS NIL PARASITES (xmls/test)) */
+    1r7mvw62zjcg45j3hm8jlbiisad2b415pghn6qcmhl03dmgp7kgi URL
+    http://beta.quicklisp.org/archive/xmls/2018-04-30/xmls-3.0.2.tgz MD5
+    2462bab4a5d74e87ef7bdef41cd06dc8 NAME xmls FILENAME xmls DEPS
+    ((NAME cl-ppcre FILENAME cl-ppcre) (NAME fiveam FILENAME fiveam)
+     (NAME flexi-streams FILENAME flexi-streams))
+    DEPENDENCIES (cl-ppcre fiveam flexi-streams) VERSION 3.0.2 SIBLINGS NIL
+    PARASITES (xmls/octets xmls/test xmls/unit-test)) */

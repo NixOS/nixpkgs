@@ -1,13 +1,17 @@
-{ lib, buildPythonPackage, fetchurl, flask, webassets, flask_script, nose }:
+{ lib, buildPythonPackage, fetchPypi, flask, webassets, flask_script, nose }:
 
 buildPythonPackage rec {
-  name = "Flask-Assets-${version}";
+  pname = "Flask-Assets";
   version = "0.12";
 
-  src = fetchurl {
-    url = "mirror://pypi/F/Flask-Assets/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0ivqsihk994rxw58vdgzrx4d77d7lpzjm4qxb38hjdgvi5xm4cb0";
   };
+
+  patchPhase = ''
+    substituteInPlace tests/test_integration.py --replace 'static_path=' 'static_url_path='
+  '';
 
   propagatedBuildInputs = [ flask webassets flask_script nose ];
 

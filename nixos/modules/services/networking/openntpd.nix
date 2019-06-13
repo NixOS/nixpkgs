@@ -7,7 +7,7 @@ let
 
   package = pkgs.openntpd_nixos;
 
-  cfgFile = pkgs.writeText "openntpd.conf" ''
+  configFile = ''
     ${concatStringsSep "\n" (map (s: "server ${s}") cfg.servers)}
     ${cfg.extraConfig}
   '';
@@ -31,8 +31,8 @@ in
       type = with types; lines;
       default = "";
       example = ''
-        listen on 127.0.0.1 
-        listen on ::1 
+        listen on 127.0.0.1
+        listen on ::1
       '';
       description = ''
         Additional text appended to <filename>openntpd.conf</filename>.
@@ -57,7 +57,9 @@ in
     # Add ntpctl to the environment for status checking
     environment.systemPackages = [ package ];
 
-    users.extraUsers = singleton {
+    environment.etc."ntpd.conf".text = configFile;
+
+    users.users = singleton {
       name = "ntp";
       uid = config.ids.uids.ntp;
       description = "OpenNTP daemon user";
@@ -71,7 +73,7 @@ in
       before = [ "time-sync.target" ];
       after = [ "dnsmasq.service" "bind.service" "network-online.target" ];
       serviceConfig = {
-        ExecStart = "${package}/sbin/ntpd -f ${cfgFile} -p ${pidFile} ${cfg.extraOptions}";
+        ExecStart = "${package}/sbin/ntpd -p ${pidFile} ${cfg.extraOptions}";
         Type = "forking";
         PIDFile = pidFile;
       };

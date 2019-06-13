@@ -7,12 +7,13 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
       virtualisation.vlans = [];
 
+      networking.useDHCP = false;
       networking.bridges = {
         br0 = {
           interfaces = [];
@@ -43,7 +44,6 @@ import ./make-test.nix ({ pkgs, ...} : {
           config =
             {
               networking.firewall.allowedTCPPorts = [ 80 ];
-              networking.firewall.allowPing = true;
             };
         };
 

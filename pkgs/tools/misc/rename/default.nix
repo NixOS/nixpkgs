@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, buildPerlPackage }:
+{ stdenv, fetchFromGitHub, perlPackages }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "rename-${version}";
   version = "1.9";
   outputs = [ "out" ];
@@ -12,7 +12,6 @@ buildPerlPackage rec {
   };
   meta = with stdenv.lib; {
     description = "Rename files according to a Perl rewrite expression";
-    homepage = http://search.cpan.org/~pederst/rename-1.9/bin/rename.PL;
     maintainers = with maintainers; [ mkg ];
     license = with licenses; [ gpl1Plus ];
   };

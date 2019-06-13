@@ -5,37 +5,25 @@ with types;
 
 let
 
-  # Converts a plan like
-  #   { "1d" = "1h"; "1w" = "1d"; }
-  # into
-  #   "1d=>1h,1w=>1d"
-  attrToPlan = attrs: concatStringsSep "," (builtins.attrValues (
-    mapAttrs (n: v: "${n}=>${v}") attrs));
-
   planDescription = ''
       The znapzend backup plan to use for the source.
-    </para>
-    <para>
+
       The plan specifies how often to backup and for how long to keep the
       backups. It consists of a series of retention periodes to interval
       associations:
-    </para>
-    <para>
+
       <literal>
         retA=>intA,retB=>intB,...
       </literal>
-    </para>
-    <para>
-    Both intervals and retention periods are expressed in standard units
-    of time or multiples of them. You can use both the full name or a
-    shortcut according to the following listing:
-    </para>
-    <para>
+
+      Both intervals and retention periods are expressed in standard units
+      of time or multiples of them. You can use both the full name or a
+      shortcut according to the following listing:
+
       <literal>
         second|sec|s, minute|min, hour|h, day|d, week|w, month|mon|m, year|y
       </literal>
-    </para>
-    <para>
+
       See <citerefentry><refentrytitle>znapzendzetup</refentrytitle><manvolnum>1</manvolnum></citerefentry> for more info.
   '';
   planExample = "1h=>10min,1d=>1h,1w=>1d,1m=>1w,1y=>1m";
@@ -146,12 +134,10 @@ let
           type = nullOr ints.u16;
           description = ''
               Port to use for <command>mbuffer</command>.
-            </para>
-            <para>
+
               If this is null, it will run <command>mbuffer</command> through
               ssh.
-            </para>
-            <para>
+
               If this is not null, it will run <command>mbuffer</command>
               directly through TCP, which is not encrypted but faster. In that
               case the given port needs to be open on the destination host.
@@ -262,7 +248,7 @@ let
   cfg = config.services.znapzend;
 
   onOff = b: if b then "on" else "off";
-  nullOff = b: if isNull b then "off" else toString b;
+  nullOff = b: if b == null then "off" else toString b;
   stripSlashes = replaceStrings [ "/" ] [ "." ];
 
   attrsToFile = config: concatStringsSep "\n" (builtins.attrValues (
@@ -270,7 +256,7 @@ let
 
   mkDestAttrs = dst: with dst;
     mapAttrs' (n: v: nameValuePair "dst_${label}${n}" v) ({
-      "" = optionalString (! isNull host) "${host}:" + dataset;
+      "" = optionalString (host != null) "${host}:" + dataset;
       _plan = plan;
     } // optionalAttrs (presend != null) {
       _precmd = presend;
@@ -389,8 +375,10 @@ in
             | xargs -I{} ${pkgs.znapzend}/bin/znapzendzetup delete "{}"
         '' + concatStringsSep "\n" (mapAttrsToList (dataset: config: ''
           echo Importing znapzend zetup ${config} for dataset ${dataset}
-          ${pkgs.znapzend}/bin/znapzendzetup import --write ${dataset} ${config}
-        '') files);
+          ${pkgs.znapzend}/bin/znapzendzetup import --write ${dataset} ${config} &
+        '') files) + ''
+          wait
+        '';
 
         serviceConfig = {
           ExecStart = let

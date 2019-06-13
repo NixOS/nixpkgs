@@ -27,17 +27,20 @@
 , libXtst
 , libnotify
 , libpulseaudio
+, libuuid
 , nspr
 , nss
 , pango
 , stdenv
 , systemd
+, at-spi2-atk
+, at-spi2-core
 }:
 
 let
 
   mirror = https://get.geo.opera.com/pub/opera/desktop;
-  version = "50.0.2762.45";
+  version = "60.0.3255.109";
 
   rpath = stdenv.lib.makeLibraryPath [
 
@@ -54,7 +57,7 @@ let
     freetype.out
     gdk_pixbuf.out
     glib.out
-    gnome2.GConf.out
+    gnome2.GConf
     gtk3.out
     libX11.out
     libXScrnSaver.out
@@ -69,6 +72,7 @@ let
     libXtst.out
     libxcb.out
     libnotify.out
+    libuuid.out
     nspr.out
     nss.out
     pango.out
@@ -81,6 +85,9 @@ let
 
     # Works fine without this except there is no sound.
     libpulseaudio.out
+
+    at-spi2-atk
+    at-spi2-core
   ];
 
 in stdenv.mkDerivation {
@@ -89,7 +96,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/opera-stable_${version}_amd64.deb";
-    sha256 = "1ajdr6yzqc9xkvdcgkps6j5996n60ibjhj518gmminx90da6x5dy";
+    sha256 = "0y3cjjzp41pa15sw8bp7n5ab8j8b1kk5h11b4pl6w8spsyk2cpqh";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
@@ -112,7 +119,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.opera.com;
+    homepage = https://www.opera.com;
     description = "Web browser";
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.unfree;

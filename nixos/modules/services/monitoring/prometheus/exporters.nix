@@ -18,17 +18,23 @@ let
   #  systemd service must be provided by specifying either
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
   exporterOpts = {
-    blackbox = import ./exporters/blackbox.nix { inherit config lib pkgs; };
-    collectd = import ./exporters/collectd.nix { inherit config lib pkgs; };
-    fritzbox = import ./exporters/fritzbox.nix { inherit config lib pkgs; };
-    json     = import ./exporters/json.nix     { inherit config lib pkgs; };
-    minio    = import ./exporters/minio.nix    { inherit config lib pkgs; };
-    nginx    = import ./exporters/nginx.nix    { inherit config lib pkgs; };
-    node     = import ./exporters/node.nix     { inherit config lib pkgs; };
-    postfix  = import ./exporters/postfix.nix  { inherit config lib pkgs; };
-    snmp     = import ./exporters/snmp.nix     { inherit config lib pkgs; };
-    unifi    = import ./exporters/unifi.nix    { inherit config lib pkgs; };
-    varnish  = import ./exporters/varnish.nix  { inherit config lib pkgs; };
+    blackbox  = import ./exporters/blackbox.nix  { inherit config lib pkgs; };
+    collectd  = import ./exporters/collectd.nix  { inherit config lib pkgs; };
+    dnsmasq   = import ./exporters/dnsmasq.nix   { inherit config lib pkgs; };
+    dovecot   = import ./exporters/dovecot.nix   { inherit config lib pkgs; };
+    fritzbox  = import ./exporters/fritzbox.nix  { inherit config lib pkgs; };
+    json      = import ./exporters/json.nix      { inherit config lib pkgs; };
+    minio     = import ./exporters/minio.nix     { inherit config lib pkgs; };
+    nginx     = import ./exporters/nginx.nix     { inherit config lib pkgs; };
+    node      = import ./exporters/node.nix      { inherit config lib pkgs; };
+    postfix   = import ./exporters/postfix.nix   { inherit config lib pkgs; };
+    snmp      = import ./exporters/snmp.nix      { inherit config lib pkgs; };
+    surfboard = import ./exporters/surfboard.nix { inherit config lib pkgs; };
+    tor       = import ./exporters/tor.nix       { inherit config lib pkgs; };
+    unifi     = import ./exporters/unifi.nix     { inherit config lib pkgs; };
+    varnish   = import ./exporters/varnish.nix   { inherit config lib pkgs; };
+    bind      = import ./exporters/bind.nix      { inherit config lib pkgs; };
+    wireguard = import ./exporters/wireguard.nix { inherit config lib pkgs; };
   };
 
   mkExporterOpts = ({ name, port }: {
@@ -70,7 +76,7 @@ let
       description = ''
         Specify a filter for iptables to use when
         <option>services.prometheus.exporters.${name}.openFirewall</option>
-        is true. It is used as `ip46tables -I INPUT <option>firewallFilter</option> -j ACCEPT`.
+        is true. It is used as `ip46tables -I nixos-fw <option>firewallFilter</option> -j nixos-fw-accept`.
       '';
     };
     user = mkOption {
@@ -91,7 +97,7 @@ let
     };
   });
 
-  mkSubModule = { name, port, extraOpts, serviceOpts }: {
+  mkSubModule = { name, port, extraOpts, ... }: {
     ${name} = mkOption {
       type = types.submodule {
         options = (mkExporterOpts {
@@ -113,21 +119,20 @@ let
 
   mkExporterConf = { name, conf, serviceOpts }:
     mkIf conf.enable {
-      networking.firewall.extraCommands = mkIf conf.openFirewall ''
-        ip46tables -I INPUT ${conf.firewallFilter} -j ACCEPT
-      '';
+      networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
+        "ip46tables -A nixos-fw ${conf.firewallFilter} "
+        "-m comment --comment ${name}-exporter -j nixos-fw-accept"
+      ]);
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        serviceConfig = {
-          Restart = mkDefault "always";
-          PrivateTmp = mkDefault true;
-          WorkingDirectory = mkDefault /tmp;
-        } // mkIf (!(serviceOpts.serviceConfig.DynamicUser or false)) {
-          User = conf.user;
-          Group = conf.group;
-        };
-      } serviceOpts ]);
+        serviceConfig.Restart = mkDefault "always";
+        serviceConfig.PrivateTmp = mkDefault true;
+        serviceConfig.WorkingDirectory = mkDefault /tmp;
+      } serviceOpts ] ++ optional (!(serviceOpts.serviceConfig.DynamicUser or false)) {
+        serviceConfig.User = conf.user;
+        serviceConfig.Group = conf.group;
+      });
   };
 in
 {
@@ -168,5 +173,8 @@ in
     }) exporterOpts)
   );
 
-  meta.doc = ./exporters.xml;
+  meta = {
+    doc = ./exporters.xml;
+    maintainers = [ maintainers.willibutz ];
+  };
 }

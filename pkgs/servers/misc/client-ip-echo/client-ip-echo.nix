@@ -1,17 +1,16 @@
 { mkDerivation, fetchFromGitHub, base, bytestring, network, stdenv }:
 mkDerivation {
   pname = "client-ip-echo";
-  version = "0.1.0.1";
+  version = "0.1.0.4";
   src = fetchFromGitHub {
     owner = "jerith666";
     repo = "client-ip-echo";
-    rev = "f6e3e115a1e61a387cf79956ead36d7ac25a2901";
-    sha256 = "0irxcaiwxxn4ggd2dbya1mvpnyfanx0x06whp8ccrha141cafwqp";
+    rev = "58d1bc627c21008236afb1af4c09ba8153c95dad";
+    sha256 = "153fab87qq080a819bqbdan925045icqwxldwj3ps40w2ssn7a53";
   };
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [ base bytestring network ];
   description = "accepts TCP connections and echoes the client's IP address back to it";
   license = stdenv.lib.licenses.lgpl3;
-  broken = true; # 2018-04-10
 }

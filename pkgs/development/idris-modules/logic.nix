@@ -1,15 +1,13 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , bifunctors
 , lib
-, idris
 }:
 build-idris-package  {
   name = "logic";
   version = "2016-12-02";
 
-  idrisDeps = [ prelude bifunctors ];
+  idrisDeps = [ bifunctors ];
 
   src = fetchFromGitHub {
     owner = "yurrriq";
@@ -26,6 +24,5 @@ build-idris-package  {
     homepage = https://github.com/yurrriq/idris-logic;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

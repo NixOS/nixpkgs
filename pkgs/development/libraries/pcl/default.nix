@@ -1,15 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, qhull, flann, boost, vtk, eigen, pkgconfig, qtbase
+{ stdenv, fetchFromGitHub, fetchpatch, cmake
+, qhull, flann, boost, vtk, eigen, pkgconfig, qtbase
 , libusb1, libpcap, libXt, libpng, Cocoa, AGL, cf-private, OpenGL
 }:
 
 stdenv.mkDerivation rec {
-  name = "pcl-1.8.1";
+  name = "pcl-1.9.1";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     rev = name;
-    sha256 = "05wvqqi2fyk5innw4mg356r71c1hmc9alc7xkf4g81ds3b3867xq";
+    sha256 = "0g0am3bf14sadfw231l5nmf5d2g1p9i7yq12c6q8rl7nw501ny9j";
   };
 
   enableParallelBuilding = true;
@@ -20,7 +21,6 @@ stdenv.mkDerivation rec {
 
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa AGL cf-private ];
   cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_SYSROOT=" "-DCMAKE_OSX_DEPLOYMENT_TARGET="
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
   ];
 

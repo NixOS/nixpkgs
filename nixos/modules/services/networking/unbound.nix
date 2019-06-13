@@ -60,7 +60,7 @@ in
       };
 
       interfaces = mkOption {
-        default = [ "127.0.0.1" "::1" ];
+        default = [ "127.0.0.1" ] ++ optional config.networking.enableIPv6 "::1";
         type = types.listOf types.str;
         description = "What addresses the server should listen on.";
       };
@@ -112,8 +112,8 @@ in
         mkdir -m 0755 -p ${stateDir}/dev/
         cp ${confFile} ${stateDir}/unbound.conf
         ${optionalString cfg.enableRootTrustAnchor ''
-        ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
-        chown unbound ${stateDir} ${rootTrustAnchorFile}
+          ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
+          chown unbound ${stateDir} ${rootTrustAnchorFile}
         ''}
         touch ${stateDir}/dev/random
         ${pkgs.utillinux}/bin/mount --bind -n /dev/urandom ${stateDir}/dev/random
@@ -126,8 +126,13 @@ in
         ProtectSystem = true;
         ProtectHome = true;
         PrivateDevices = true;
+        Restart = "always";
+        RestartSec = "5s";
       };
     };
+
+    # If networkmanager is enabled, ask it to interface with unbound.
+    networking.networkmanager.dns = "unbound";
 
   };
 

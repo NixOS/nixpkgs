@@ -8,24 +8,18 @@ stdenv.mkDerivation rec {
     url = "http://pelulamu.net/${pname}/${name}-src.tar.gz";
     sha256 = "0qcxcnqz2nlwfzlrn115kkp3n8dd7593h762vxs6vfqm13i39lq1";
   };
-  nativeBuildInputs = [perl bdftopcf perlPackages.TextCharWidth fontforge 
+  nativeBuildInputs = [perl bdftopcf perlPackages.TextCharWidth fontforge
     SDL SDL_image];
   preConfigure = ''
     patchShebangs .
   '';
   installPhase = ''
-    mkdir -p "$out/share/fonts"/{truetype,opentype,web,svg}
-    cp *.hex "$out/share/fonts/"
-    cp *.pcf "$out/share/fonts/"
-    cp *.ttf "$out/share/fonts/truetype"
-    cp *.otf "$out/share/fonts/opentype"
-    cp *.svg "$out/share/fonts/svg"
-    cp *.woff "$out/share/fonts/web"
+    install -m444 -Dt $out/share/fonts          *.hex *.pcf
+    install -m444 -Dt $out/share/fonts/truetype *.ttf
+    install -m444 -Dt $out/share/fonts/opentype *.otf
+    install -m444 -Dt $out/share/fonts/svg      *.svg
+    install -m444 -Dt $out/share/fonts/web      *.woff
   '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "03zvczdka665zcyf9fjrnx434mwpr5q8396j34kjmc67w7nhc49r";
 
   meta = {
     inherit version;
@@ -34,7 +28,6 @@ stdenv.mkDerivation rec {
     # version. The reduced version is public domain.
     license = http://unifoundry.com/LICENSE.txt;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
     homepage = http://pelulamu.net/unscii/;
   };
 }

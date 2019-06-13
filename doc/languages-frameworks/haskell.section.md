@@ -55,7 +55,7 @@ package `haskell-pandoc`, for example, installs both a library and an
 application. You can install and use Haskell executables just like any other
 program in Nixpkgs, but using Haskell libraries for development is a bit
 trickier and we'll address that subject in great detail in section [How to
-create a development environment].
+create a development environment](#how-to-create-a-development-environment).
 
 Attribute paths are deterministic inside of Nixpkgs, but the path necessary to
 reach Nixpkgs varies from system to system. We dodged that problem by giving
@@ -127,7 +127,7 @@ Also, the attributes `haskell.compiler.ghcXYC` and
 
 A simple development environment consists of a Haskell compiler and one or both
 of the tools `cabal-install` and `stack`. We saw in section
-[How to install Haskell packages] how you can install those programs into your
+[How to install Haskell packages](#how-to-install-haskell-packages) how you can install those programs into your
 user profile:
 ```shell
 nix-env -f "<nixpkgs>" -iA haskellPackages.ghc haskellPackages.cabal-install
@@ -162,7 +162,7 @@ nix-shell -p haskell.compiler.ghc784
 to bring GHC 7.8.4 into `$PATH`. Alternatively, you can use Stack instead of
 `nix-shell` directly to select compiler versions and other build tools
 per-project. It uses `nix-shell` under the hood when Nix support is turned on.
-See [How to build a Haskell project using Stack].
+See [How to build a Haskell project using Stack](#how-to-build-a-haskell-project-using-stack).
 
 If you're using `cabal-install`, re-running `cabal configure` inside the spawned
 shell switches your build to use that compiler instead. If you're working on
@@ -312,7 +312,7 @@ For example, installing the following environment
 allows one to browse module documentation index [not too dissimilar to
 this](https://downloads.haskell.org/~ghc/latest/docs/html/libraries/index.html)
 for all the specified packages and their dependencies by directing a browser of
-choice to `~/.nix-profiles/share/doc/hoogle/index.html` (or
+choice to `~/.nix-profile/share/doc/hoogle/index.html` (or
 `/run/current-system/sw/share/doc/hoogle/index.html` in case you put it in
 `environment.systemPackages` in NixOS).
 
@@ -334,10 +334,29 @@ navigate there.
 
 Finally, you can run
 ```shell
-hoogle server -p 8080 --local
+hoogle server --local -p 8080
 ```
 and navigate to http://localhost:8080/ for your own local
-[Hoogle](https://www.haskell.org/hoogle/).
+[Hoogle](https://www.haskell.org/hoogle/). The `--local` flag makes the hoogle
+server serve files from your nix store over http, without the flag it will use
+`file://` URIs. Note, however, that Firefox and possibly other browsers
+disallow navigation from `http://` to `file://` URIs for security reasons,
+which might be quite an inconvenience. Versions before v5 did not have this
+flag. See
+[this page](http://kb.mozillazine.org/Links_to_local_pages_do_not_work) for
+workarounds.
+
+For NixOS users there's a service which runs this exact command for you.
+Specify the `packages` you want documentation for and the `haskellPackages` set
+you want them to come from. Add the following to `configuration.nix`.
+
+```nix
+services.hoogle = {
+  enable = true;
+  packages = (hpkgs: with hpkgs; [text cryptonite]);
+  haskellPackages = pkgs.haskellPackages;
+};
+```
 
 ### How to build a Haskell project using Stack
 
@@ -347,7 +366,7 @@ automatically select the right version of GHC and other build tools to build,
 test and execute apps in an existing project downloaded from somewhere on the
 Internet. Pass the `--nix` flag to any `stack` command to do so, e.g.
 ```shell
-git clone --recursive http://github.com/yesodweb/wai
+git clone --recursive https://github.com/yesodweb/wai
 cd wai
 stack --nix build
 ```
@@ -666,6 +685,112 @@ prefer one built with GHC 7.8.x in the first place. However, for users who
 cannot use GHC 7.10.x at all for some reason, the approach of downgrading to an
 older version might be useful.
 
+### How to override packages in all compiler-specific package sets
+
+In the previous section we learned how to override a package in a single
+compiler-specific package set. You may have some overrides defined that you want
+to use across multiple package sets. To accomplish this you could use the
+technique that we learned in the previous section by repeating the overrides for
+all the compiler-specific package sets. For example:
+
+```nix
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    haskell = super.haskell // {
+      packages = super.haskell.packages // {
+        ghc784 = super.haskell.packages.ghc784.override {
+          overrides = self: super: {
+            my-package = ...;
+            my-other-package = ...;
+          };
+        };
+        ghc822 = super.haskell.packages.ghc784.override {
+          overrides = self: super: {
+            my-package = ...;
+            my-other-package = ...;
+          };
+        };
+        ...
+      };
+    };
+  };
+}
+```
+
+However there's a more convenient way to override all compiler-specific package
+sets at once:
+
+```nix
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    haskell = super.haskell // {
+      packageOverrides = self: super: {
+        my-package = ...;
+        my-other-package = ...;
+      };
+    };
+  };
+}
+```
+
+### How to specify source overrides for your Haskell package
+
+When starting a Haskell project you can use `developPackage`
+to define a derivation for your package at the `root` path
+as well as source override versions for Hackage packages, like so:
+
+```nix
+# default.nix
+{ compilerVersion ? "ghc842" }:
+let
+  # pinning nixpkgs using new Nix 2.0 builtin `fetchGit`
+  pkgs = import (fetchGit (import ./version.nix)) { };
+  compiler = pkgs.haskell.packages."${compilerVersion}";
+  pkg = compiler.developPackage {
+    root = ./.;
+    source-overrides = {
+      # Let's say the GHC 8.4.2 haskellPackages uses 1.6.0.0 and your test suite is incompatible with >= 1.6.0.0
+      HUnit = "1.5.0.0";
+    };
+  };
+in pkg
+```
+
+This could be used in place of a simplified `stack.yaml` defining a Nix
+derivation for your Haskell package.
+
+As you can see this allows you to specify only the source version found on
+Hackage and nixpkgs will take care of the rest.
+
+You can also specify `buildInputs` for your Haskell derivation for packages
+that directly depend on external libraries like so:
+
+```nix
+# default.nix
+{ compilerVersion ? "ghc842" }:
+let
+  # pinning nixpkgs using new Nix 2.0 builtin `fetchGit`
+  pkgs = import (fetchGit (import ./version.nix)) { };
+  compiler = pkgs.haskell.packages."${compilerVersion}";
+  pkg = compiler.developPackage {
+    root = ./.;
+    source-overrides = {
+      HUnit = "1.5.0.0"; # Let's say the GHC 8.4.2 haskellPackages uses 1.6.0.0 and your test suite is incompatible with >= 1.6.0.0
+    };
+  };
+  # in case your package source depends on any libraries directly, not just transitively.
+  buildInputs = [ zlib ];
+in pkg.overrideAttrs(attrs: {
+  buildInputs = attrs.buildInputs ++ buildInputs;
+})
+```
+
+Notice that you will need to override (via `overrideAttrs` or similar) the
+derivation returned by the `developPackage` Nix lambda as there is no `buildInputs`
+named argument you can pass directly into the `developPackage` lambda.
+
 ### How to recover from GHC's infamous non-deterministic library ID bug
 
 GHC and distributed build farms don't get along well:
@@ -810,7 +935,7 @@ The implementation can be found in the
 [integer-gmp](http://hackage.haskell.org/package/integer-gmp) package.
 
 A potential problem with this is that GMP is licensed under the
-[GNU Lesser General Public License (LGPL)](http://www.gnu.org/copyleft/lesser.html),
+[GNU Lesser General Public License (LGPL)](https://www.gnu.org/copyleft/lesser.html),
 a kind of "copyleft" license. According to the terms of the LGPL, paragraph 5,
 you may distribute a program that is designed to be compiled and dynamically
 linked with the library under the terms of your choice (i.e., commercially) but
@@ -828,7 +953,7 @@ is essentially a "free software" license (BSD3), according to
 paragraph 2 of the LGPL, GHC must be distributed under the terms of the LGPL!
 
 To work around these problems GHC can be build with a slower but LGPL-free
-alternative implemention for Integer called
+alternative implementation for Integer called
 [integer-simple](http://hackage.haskell.org/package/integer-simple).
 
 To get a GHC compiler build with `integer-simple` instead of `integer-gmp` use
@@ -921,6 +1046,19 @@ error: build of ‘/nix/store/3lc51cxj2j57y3zfpq5i69qbzjpvyci1-scientific-0.3.5.
 As you can see, `packunused` finds out that although the testsuite component has
 no redundant dependencies the library component of `scientific-0.3.5.1` depends
 on `ghc-prim` which is unused in the library.
+
+### Using hackage2nix with nixpkgs
+
+Hackage package derivations are found in the
+[`hackage-packages.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/haskell-modules/hackage-packages.nix)
+file within `nixpkgs` and are used as the initial package set for
+`haskellPackages`. The `hackage-packages.nix` file is not meant to be edited
+by hand, but rather autogenerated by [`hackage2nix`](https://github.com/NixOS/cabal2nix/tree/master/hackage2nix),
+which by default uses the [`configuration-hackage2nix.yaml`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/haskell-modules/configuration-hackage2nix.yaml)
+file to generate all the derivations.
+
+To modify the contents `configuration-hackage2nix.yaml`, follow the
+instructions on [`hackage2nix`](https://github.com/NixOS/cabal2nix/tree/master/hackage2nix).
 
 ## Other resources
 

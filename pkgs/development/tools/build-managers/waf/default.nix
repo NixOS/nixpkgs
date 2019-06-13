@@ -1,15 +1,24 @@
-{ lib, stdenv, fetchurl, python2 }:
+{ stdenv, fetchFromGitLab, fetchpatch, python, ensureNewerSourcesForZipFilesHook }:
 
 stdenv.mkDerivation rec {
   name = "waf-${version}";
-  version = "2.0.6";
+  version = "2.0.15";
 
-  src = fetchurl {
-    url = "https://waf.io/waf-${version}.tar.bz2";
-    sha256 = "1wyl0jl10i0p2rj49sig5riyppgkqlkqmbvv35d5bqxri3y4r38q";
+  src = fetchFromGitLab {
+    owner = "ita1024";
+    repo = "waf";
+    rev = name;
+    sha256 = "0i86dbn6l01n4h4rzyl4mvizqabbqn5w7fywh83z7fxpha13c3bz";
   };
 
-  buildInputs = [ python2 ];
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/grahamc/waf/commit/fc1c98f1fb575fb26b867a61cbca79aa894db2ea.patch";
+      sha256 = "0kzfrr6nh1ay8nyk0i69nhkkrq7hskn7yw1qyjxrda1y3wxj6jp8";
+    })
+  ];
+
+  buildInputs = [ python ensureNewerSourcesForZipFilesHook ];
 
   configurePhase = ''
     python waf-light configure
@@ -23,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Meta build system";
-    homepage    = "https://waf.io/";
+    homepage    = https://waf.io;
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ vrthra ];

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
+, fetchpatch
 , doit
 , glibcLocales
 , pytest
@@ -18,36 +19,54 @@
 , PyRSS2Gen
 , Logbook
 , blinker
-, setuptools
 , natsort
 , requests
 , piexif
 , markdown
 , phpserialize
 , jinja2
+, Babel
+, freezegun
+, toml
+, notebook
+, ruamel_yaml
+, aiohttp
+, watchdog
 }:
 
 buildPythonPackage rec {
   pname = "Nikola";
-  version = "7.8.14";
+  version = "8.0.2";
 
   # Nix contains only Python 3 supported version of doit, which is a dependency
   # of Nikola. Python 2 support would require older doit 0.29.0 (which on the
   # other hand doesn't support Python 3.3). So, just disable Python 2.
   disabled = !isPy3k;
 
-  checkInputs = [ pytest pytestcov mock glibcLocales ];
+  checkInputs = [ pytest pytestcov mock glibcLocales freezegun ];
 
   propagatedBuildInputs = [
-    pygments pillow dateutil docutils Mako unidecode lxml Yapsy PyRSS2Gen
-    Logbook blinker setuptools natsort requests piexif markdown phpserialize
-    jinja2 doit
+    # requirements.txt
+    doit pygments pillow dateutil docutils Mako markdown unidecode
+    lxml Yapsy PyRSS2Gen Logbook blinker natsort requests piexif Babel
+    # requirements-extras.txt
+    phpserialize jinja2 toml notebook ruamel_yaml aiohttp watchdog
   ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d838817ac30ac6d4b8139a2adc8b49bed22dbb8fbc6261958d2775e10447d92";
+    sha256 = "1a5y1qriy76hl4yxvbf365b1ggsxybm06mi1pwb5jkgbkwk2gkrf";
   };
+
+  patchPhase = ''
+    # upstream added bound so that requires.io doesn't send mails about update
+    # nikola should work with markdown 3.0: https://github.com/getnikola/nikola/pull/3175#issue-220147596
+    sed -i 's/Markdown>.*/Markdown/' requirements.txt
+  '';
+
+  checkPhase = ''
+    LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" py.test .
+  '';
 
   meta = {
     homepage = https://getnikola.com/;

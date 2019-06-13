@@ -1,31 +1,32 @@
 { stdenv, gettext, fetchurl, pkgconfig, gtkmm3, libxml2, polkit
-, bash, gtk3, glib, wrapGAppsHook
-, itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
+, bash, gtk3, glib, wrapGAppsHook, meson, ninja, python3
+, gsettings-desktop-schemas, itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
 
 stdenv.mkDerivation rec {
   name = "gnome-system-monitor-${version}";
-  version = "3.28.1";
+  version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-system-monitor/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0wdpd5mfrm0gwmwjvcj556c3mpxf3pcfnvh7x698i8if53ci0gw7";
+    url = "mirror://gnome/sources/gnome-system-monitor/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1wd43qdgjav6xamq5z5cy8fri5zr01jga3plc9w95gcia0rk3ha8";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
-    pkgconfig gettext itstool wrapGAppsHook
+    pkgconfig gettext itstool wrapGAppsHook meson ninja python3
     polkit # for ITS file
   ];
   buildInputs = [
-    bash gtk3 glib libxml2 gtkmm3 libgtop gdk_pixbuf gnome3.defaultIconTheme librsvg
-    gnome3.gsettings-desktop-schemas systemd
+    bash gtk3 glib libxml2 gtkmm3 libgtop gdk_pixbuf gnome3.adwaita-icon-theme librsvg
+    gsettings-desktop-schemas systemd
   ];
 
-  # fails to build without --enable-static
-  configureFlags = ["--enable-systemd" "--enable-static"];
-
-  enableParallelBuilding = true;
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+    sed -i '/gtk-update-icon-cache/s/^/#/' meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

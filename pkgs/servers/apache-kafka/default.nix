@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash,
+{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, gnugrep, gnused,
   majorVersion ? "1.0" }:
 
 let
@@ -9,19 +9,39 @@ let
       sha256 = "0ykcjv5dz9i5bws9my2d60pww1g9v2p2nqr67h0i2xrjm7az8a6v";
     };
     "0.10" = {
-      kafkaVersion = "0.10.2.1";
+      kafkaVersion = "0.10.2.2";
       scalaVersion = "2.12";
-      sha256 = "0iszr6r0n9yjgq7kcp1hf00fg754m86gs4jzqc18542an94b88z5";
+      sha256 = "13wibnz7n7znv2g13jlpkz1r0y73qy5b02pdqhsq7cl72h9s6wms";
     };
     "0.11" = {
-      kafkaVersion = "0.11.0.1";
+      kafkaVersion = "0.11.0.3";
       scalaVersion = "2.12";
-      sha256 = "1wj639h95aq5n132fq1rbyzqh5rsa4mlhbg3c5mszqglnzdz4xn7";
+      sha256 = "0zkzp9a8lcfcpavks131119v10hpn90sc0pw4f90jc4zn2yw3rgd";
     };
     "1.0" = {
-      kafkaVersion = "1.0.0";
+      kafkaVersion = "1.0.2";
       scalaVersion = "2.12";
-      sha256 = "1cs4nmp39m99gqjpy5klsffqksc0h9pz514jkq99qb95a83x1cfm";
+      sha256 = "0cmq8ww1lbkp3ipy9d1q8c1yz4kfwj0v4ynnhsk1i48sqlmvwybj";
+    };
+    "1.1" = {
+      kafkaVersion = "1.1.1";
+      scalaVersion = "2.12";
+      sha256 = "13vg0wm2fsd06pfw05m4bhcgbjmb2bmd4i31zfs48w0f7hjc8qf2";
+    };
+    "2.0" = {
+      kafkaVersion = "2.0.1";
+      scalaVersion = "2.12";
+      sha256 = "0i62q3542cznf711kiskaa30l06gq9ckszlxja4k1vs1flxz5khl";
+    };
+    "2.1" = {
+      kafkaVersion = "2.1.1";
+      scalaVersion = "2.12";
+      sha256 = "1gm7xiqkbg415mbj9mlazcndmky81xvg4wmz0h94yv1whp7fslr0";
+    };
+    "2.2" = {
+      kafkaVersion = "2.2.0";
+      scalaVersion = "2.12";
+      sha256 = "09q028kagpkzrvfdb040z8q9mspv8n7f2igrd1cs73v7mr7n42d0";
     };
   };
 in
@@ -37,7 +57,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ jre makeWrapper bash ];
+  buildInputs = [ jre makeWrapper bash gnugrep gnused coreutils ];
 
   installPhase = ''
     mkdir -p $out
@@ -45,6 +65,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp bin/kafka* $out/bin
+    cp bin/connect* $out/bin
 
     # allow us the specify logging directory using env
     substituteInPlace $out/bin/kafka-run-class.sh \
@@ -54,7 +75,7 @@ stdenv.mkDerivation rec {
       wrapProgram $p \
         --set JAVA_HOME "${jre}" \
         --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
-        --prefix PATH : "${bash}/bin"
+        --prefix PATH : "${bash}/bin:${coreutils}/bin:${gnugrep}/bin:${gnused}/bin"
     done
     chmod +x $out/bin\/*
   '';

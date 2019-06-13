@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy26, argparse, attrs, hypothesis, py
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
+, atomicwrites, mock, writeText, pathlib2
 }:
 buildPythonPackage rec {
-  version = "3.5.0";
+  version = "4.2.1";
   pname = "pytest";
 
   preCheck = ''
@@ -12,18 +13,35 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fae491d1874f199537fd5872b5e1f0e74a009b979df9d53d1553fd03da1703e1";
+    sha256 = "c2396a15726218a2dfef480861c4ba37bd3952ebaaa5b0fede3fc23fddcd7f8c";
   };
 
-  checkInputs = [ hypothesis ];
+  checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools ]
-    ++ (stdenv.lib.optional (!isPy3k) funcsigs)
-    ++ (stdenv.lib.optional isPy26 argparse);
+  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites]
+    ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
+    ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+
+  checkPhase = ''
+    runHook preCheck
+    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths"
+    runHook postCheck
+  '';
+
+  # Remove .pytest_cache when using py.test in a Nix build
+  setupHook = writeText "pytest-hook" ''
+    pytestcachePhase() {
+        find $out -name .pytest_cache -type d -exec rm -rf {} +
+    }
+
+    preDistPhases+=" pytestcachePhase"
+  '';
 
   meta = with stdenv.lib; {
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
-    platforms = platforms.unix;
+    homepage = https://docs.pytest.org;
     description = "Framework for writing tests";
+    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
+  makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
+
   installPhase = ''
     mkdir -p $out/bin $out/include $out/lib
 
@@ -27,10 +29,11 @@ stdenv.mkDerivation rec {
     mv ../include/openssl $out/include
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Free TLS/SSL implementation";
     homepage    = "https://boringssl.googlesource.com";
-    platforms   = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    platforms   = platforms.all;
+    maintainers = [ maintainers.thoughtpolice ];
+    license = with licenses; [ openssl isc mit bsd3 ];
   };
 }

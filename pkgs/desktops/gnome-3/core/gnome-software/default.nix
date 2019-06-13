@@ -1,14 +1,15 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
-, glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobjectIntrospection
-, json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, gtk-doc, desktop-file-utils }:
+, glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobject-introspection, flatpak, fwupd
+, gtk3, gsettings-desktop-schemas, gnome-desktop, libxmlb, gnome-online-accounts, hicolor-icon-theme
+, json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gtk-doc, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   name = "gnome-software-${version}";
-  version = "3.28.1";
+  version = "3.32.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-software/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0j27zygb3g08q9i8ygwpxqf6g0lrivq2vhj7p7g9x0zh9r0vzlbs";
+    url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1r24q2c0i5xwp7dahw4wzycrhijix0nl7bxq1x0za57qm62ysfl9";
   };
 
   patches = [
@@ -19,24 +20,22 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext wrapGAppsHook libxslt docbook_xml_dtd_42
-    valgrind-light docbook_xsl gtk-doc desktop-file-utils gobjectIntrospection
+    meson ninja pkgconfig gettext wrapGAppsHook libxslt docbook_xml_dtd_42 docbook_xml_dtd_43
+    valgrind-light docbook_xsl gtk-doc desktop-file-utils gobject-introspection
+    hicolor-icon-theme # for setup-hook
   ];
 
   buildInputs = [
-    gnome3.gtk glib packagekit appstream-glib libsoup
-    gnome3.gsettings-desktop-schemas gnome3.gnome-desktop
+    gtk3 glib packagekit appstream-glib libsoup
+    gsettings-desktop-schemas gnome-desktop
     gspell json-glib libsecret ostree
-    polkit
+    polkit flatpak fwupd
+    libxmlb gnome-online-accounts
   ];
 
   mesonFlags = [
-    "-Denable-flatpak=false"
-    "-Denable-rpm=false"
-    "-Denable-fwupd=false"
-    "-Denable-oauth=false"
-    "-Denable-ubuntu-reviews=false"
-    "-Denable-gudev=false"
+    "-Dubuntu_reviews=false"
+    "-Dgudev=false"
   ];
 
   passthru = {

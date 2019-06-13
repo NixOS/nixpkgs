@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "nsq-${version}";

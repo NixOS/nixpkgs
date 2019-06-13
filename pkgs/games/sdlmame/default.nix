@@ -1,12 +1,10 @@
 { stdenv, fetchurl, alsaLib, qt48, SDL, fontconfig, freetype, SDL_ttf, xorg }:
 
-assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
-
 stdenv.mkDerivation rec {
   version = "0.151.u0-1";
   name    = "sdlmame-${version}";
 
-  src = if stdenv.system == "x86_64-linux"
+  src = if stdenv.hostPlatform.system == "x86_64-linux"
     then fetchurl {
       url    = "http://seblu.net/a/archive/packages/s/sdlmame/${name}-x86_64.pkg.tar.xz";
       sha256 = "1j9vjxhrhsskrlk5wr7al4wk2hh3983kcva42mqal09bmc8qg3m9";
@@ -39,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "A port of the popular Multiple Arcade Machine Emulator using SDL with OpenGL support";
     license     = "MAME";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.linux;
+    platforms   = [ "x86_64-linux" "i686-linux" ];
   };
 }

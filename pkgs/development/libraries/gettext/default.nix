@@ -1,14 +1,25 @@
-{ stdenv, lib, hostPlatform, fetchurl, libiconv, xz }:
+{ stdenv, lib, fetchurl, libiconv, xz, bison, automake115x, autoconf }:
 
+let allowBisonDependency = !stdenv.isDarwin; in
 stdenv.mkDerivation rec {
   name = "gettext-${version}";
-  version = "0.19.8";
+  version = "0.19.8.1";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "13ylc6n3hsk919c7xl0yyibc3pfddzb53avdykn4hmk8g6yzd91x";
+    sha256 = "0hsw28f9q9xaggjlsdp2qmbp2rbd1mp0njzan2ld9kiqwkq2m57z";
   };
-  patches = [ ./absolute-paths.diff ];
+  patches = [
+    ./absolute-paths.diff
+    (fetchurl {
+      name = "CVE-2018-18751.patch";
+      url = "https://git.savannah.gnu.org/gitweb/?p=gettext.git;a=patch;h=dce3a16e5e9368245735e29bf498dcd5e3e474a4";
+      sha256 = "1lpjwwcjr1sb879faj0xyzw02kma0ivab6xwn3qciy13qy6fq5xn";
+    })
+  ] ++ lib.optionals (!allowBisonDependency) [
+    # Only necessary for CVE-2018-18751.patch:
+    ./CVE-2018-18751-bison.patch
+  ];
 
   outputs = [ "out" "man" "doc" "info" ];
 
@@ -16,44 +27,55 @@ stdenv.mkDerivation rec {
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
-  configureFlags = [ "--disable-csharp" "--with-xz" ]
+  configureFlags = [
+     "--disable-csharp" "--with-xz"
      # avoid retaining reference to CF during stdenv bootstrap
-     ++ lib.optionals stdenv.isDarwin [
-            "gt_cv_func_CFPreferencesCopyAppValue=no"
-            "gt_cv_func_CFLocaleCopyCurrent=no"
-        ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    "gt_cv_func_CFPreferencesCopyAppValue=no"
+    "gt_cv_func_CFLocaleCopyCurrent=no"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # On cross building, gettext supposes that the wchar.h from libc
+    # does not fulfill gettext needs, so it tries to work with its
+    # own wchar.h file, which does not cope well with the system's
+    # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
+    "gl_cv_func_wcwidth_works=yes"
+  ];
 
   postPatch = ''
    substituteAllInPlace gettext-runtime/src/gettext.sh.in
    substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
-  '' + lib.optionalString hostPlatform.isCygwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
     sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
   '';
 
-  # On cross building, gettext supposes that the wchar.h from libc
-  # does not fulfill gettext needs, so it tries to work with its
-  # own wchar.h file, which does not cope well with the system's
-  # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
-  preConfigure = ''
-    if test -n "$crossConfig"; then
-      echo gl_cv_func_wcwidth_works=yes > cachefile
-      configureFlags="$configureFlags --cache-file=`pwd`/cachefile"
-    fi
-  '';
-
-  nativeBuildInputs = [ xz xz.bin ];
+  nativeBuildInputs = [
+    xz
+    xz.bin
+  ]
+  # Only necessary for CVE-2018-18751.patch (unless CVE-2018-18751-bison.patch
+  # is also applied):
+  ++ lib.optional allowBisonDependency bison
+  ++ [
+    # Only necessary for CVE-2018-18751.patch:
+    automake115x
+    autoconf
+  ];
   # HACK, see #10874 (and 14664)
-  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv;
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) libiconv;
 
-  setupHook = ./gettext-setup-hook.sh;
-  gettextNeedsLdflags = hostPlatform.libc != "glibc" && !hostPlatform.isMusl;
+  setupHooks = [
+    ../../../build-support/setup-hooks/role.bash
+    ./gettext-setup-hook.sh
+  ];
+  gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
 
   enableParallelBuilding = true;
+  enableParallelChecking = false; # fails sometimes
 
-  meta = {
+  meta = with lib; {
     description = "Well integrated set of translation tools and documentation";
 
     longDescription = ''
@@ -75,10 +97,11 @@ stdenv.mkDerivation rec {
       GNU packages produce multi-lingual messages.
     '';
 
-    homepage = http://www.gnu.org/software/gettext/;
+    homepage = https://www.gnu.org/software/gettext/;
 
-    maintainers = with lib.maintainers; [ zimbatm vrthra ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ zimbatm vrthra ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
   };
 }
 

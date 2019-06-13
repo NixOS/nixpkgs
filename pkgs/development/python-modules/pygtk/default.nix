@@ -4,18 +4,16 @@
 buildPythonPackage rec {
   pname = "pygtk";
   version = "2.24.0";
-  name = pname + "-" + version;
 
   disabled = isPy3k;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pygtk/2.24/${name}.tar.bz2";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "04k942gn8vl95kwf0qskkv6npclfm31d78ljkrkgyqxxcni1w76d";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ]
-    ++ stdenv.lib.optional (libglade != null) libglade;
+  buildInputs = stdenv.lib.optional (libglade != null) libglade;
 
   propagatedBuildInputs = [ gtk2 pygobject2 pycairo ];
 
@@ -50,6 +48,13 @@ buildPythonPackage rec {
     rm $out/bin/pygtk-codegen-2.0
     ln -s ${pygobject2}/bin/pygobject-codegen-2.0  $out/bin/pygtk-codegen-2.0
     ln -s ${pygobject2}/lib/${python.libPrefix}/site-packages/pygobject-${pygobject2.version}.pth \
-                  $out/lib/${python.libPrefix}/site-packages/${name}.pth
+                  $out/lib/${python.libPrefix}/site-packages/${pname}-${version}.pth
   '';
+
+  meta = with stdenv.lib; {
+    description = "GTK+-2 bindings";
+    homepage = "https://gitlab.gnome.org/Archive/pygtk";
+    platforms = platforms.all;
+    license = with licenses; [ lgpl21Plus ];
+  };
 }

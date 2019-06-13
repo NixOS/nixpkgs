@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, fetchpatch
+, libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip
 , hunspell, libevent, libstartup_notification
-, cairo, gstreamer, gst-plugins-base, icu, libpng, jemalloc
+, icu, libpng, jemalloc
 , autoconf213, which, m4
-, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
+, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl, runtimeShell
+, cargo, rustc, llvmPackages
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
 , enableCalendar ? true
 , debugBuild ? false
@@ -20,21 +21,15 @@
 
 let
   wrapperTool = if enableGTK3 then wrapGAppsHook else makeWrapper;
+  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "52.7.0";
+  version = "60.7.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "875ad6f2b030c65d248ecec4f4a5b51767c3ee7944ac72893237efd2af50145ec2e4a9efa8d60807b78bcfb8189969e5a67d15124710e8b0091f639cddfbfe21";
+    sha512 = "0l773bl9kkrz905rm4ipsic5ykkrw2lmg3i9c5vxpc0j1qgmz3p3x5db1kbk2yy2i5hx9lkn5szhgjf71d7dgvf7935z67d5djqnhk0";
   };
-
-  # New sed no longer tolerates this mistake.
-  postPatch = ''
-    for f in mozilla/{js/src,}/configure; do
-      substituteInPlace "$f" --replace '[:space:]*' '[[:space:]]*'
-    done
-  '';
 
   # from firefox, but without sound libraries
   buildInputs =
@@ -42,19 +37,32 @@ in stdenv.mkDerivation rec {
       dbus dbus-glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       nspr nss libnotify xorg.pixman yasm libGLU_combined
-      xorg.libXScrnSaver xorg.scrnsaverproto
-      xorg.libXext xorg.xextproto sqlite unzip
+      xorg.libXScrnSaver xorg.xorgproto
+      xorg.libXext sqlite unzip
       hunspell libevent libstartup_notification /* cairo */
       icu libpng jemalloc
     ]
-    ++ lib.optionals enableGTK3 [ gtk3 gnome3.defaultIconTheme ];
+    ++ lib.optionals enableGTK3 [ gtk3 gnome3.adwaita-icon-theme ];
 
   # from firefox + m4 + wrapperTool
-  nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool ];
+  nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
+
+  patches = [
+    # Remove buildconfig.html to prevent a dependency on clang etc.
+    ./no-buildconfig.patch
+
+    # Needed on older branches since rustc: 1.32.0 -> 1.33.0
+    (fetchurl {
+      name = "missing-documentation.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/deny_missing_docs.patch"
+          + "?h=firefox-esr&id=03bdd01f9cf";
+      sha256 = "1i33n3fgwc8d0v7j4qn7lbdax0an6swar12gay3q2nwrhg3ic4fb";
+    })
+  ];
 
   configureFlags =
     [ # from firefox, but without sound libraries (alsa, libvpx, pulseaudio)
-      "--enable-application=mail"
+      "--enable-application=comm/mail"
       "--disable-alsa"
       "--disable-pulseaudio"
 
@@ -66,6 +74,7 @@ in stdenv.mkDerivation rec {
       "--with-system-libevent"
       "--with-system-png" # needs APNG support
       "--with-system-icu"
+      #"--enable-rust-simd" # not supported since rustc 1.32.0 -> 1.33.0; TODO: probably OK since 68.0.0
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"
@@ -79,41 +88,43 @@ in stdenv.mkDerivation rec {
       "--enable-jemalloc"
       "--disable-gconf"
       "--enable-default-toolkit=cairo-gtk${if enableGTK3 then "3" else "2"}"
+      "--enable-js-shell"
     ]
       ++ lib.optional enableCalendar "--enable-calendar"
       ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                         else [ "--disable-debug" "--enable-release"
                                "--disable-debug-symbols"
                                "--enable-optimize" "--enable-strip" ])
-      ++ lib.optional enableOfficialBranding "--enable-official-branding";
+      ++ lib.optional enableOfficialBranding "--enable-official-branding"
+      ++ lib.optionals (lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
+        # on i686-linux: --with-libclang-path is not available in this configuration
+        "--with-libclang-path=${llvmPackages.libclang}/lib"
+        "--with-clang-path=${llvmPackages.clang}/bin/clang"
+      ];
 
   enableParallelBuilding = true;
 
   preConfigure =
     ''
+      cxxLib=$( echo -n ${gcc}/include/c++/* )
+      archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
+
+      test -f layout/style/ServoBindings.toml && sed -i -e '/"-DRUST_BINDGEN"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
+
       configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
     '';
 
-  preInstall =
-    ''
-      # The following is needed for startup cache creation on grsecurity kernels.
-      paxmark m ../objdir/dist/bin/xpcshell
-    '';
-
   dontWrapGApps = true; # we do it ourselves
   postInstall =
     ''
-      # For grsecurity kernels
-      paxmark m $out/lib/thunderbird-[0-9]*/thunderbird
-
       # TODO: Move to a dev output?
       rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
 
       # $binary is a symlink to $target.
       # We wrap $target by replacing the $binary symlink.
-      local target="$out/lib/thunderbird-${version}/thunderbird"
+      local target="$out/lib/thunderbird/thunderbird"
       local binary="$out/bin/thunderbird"
 
       # Wrap correctly, this is needed to
@@ -139,7 +150,7 @@ in stdenv.mkDerivation rec {
           name = "thunderbird";
           exec = "thunderbird %U";
           desktopName = "Thunderbird";
-          icon = "$out/lib/thunderbird-${version}/chrome/icons/default/default256.png";
+          icon = "$out/lib/thunderbird/chrome/icons/default/default256.png";
           genericName = "Mail Reader";
           categories = "Application;Network";
           mimeType = stdenv.lib.concatStringsSep ";" [
@@ -163,8 +174,8 @@ in stdenv.mkDerivation rec {
     # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
     ''
       patchelf --set-rpath "${lib.getLib libnotify
-        }/lib:$(patchelf --print-rpath "$out"/lib/thunderbird-*/libxul.so)" \
-          "$out"/lib/thunderbird-*/libxul.so
+        }/lib:$(patchelf --print-rpath "$out"/lib/thunderbird*/libxul.so)" \
+          "$out"/lib/thunderbird*/libxul.so
     '';
 
   doInstallCheck = true;
@@ -173,6 +184,8 @@ in stdenv.mkDerivation rec {
       # Some basic testing
       "$out/bin/thunderbird" --version
     '';
+
+  disallowedRequisites = [ stdenv.cc ];
 
   meta = with stdenv.lib; {
     description = "A full-featured e-mail client";
@@ -188,6 +201,6 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
+    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl runtimeShell;
   };
 }

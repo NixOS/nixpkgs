@@ -8,33 +8,72 @@ with lib.strings;
 
 rec {
 
+  /* Returns true when the given argument is an option
+
+     Type: isOption :: a -> bool
+
+     Example:
+       isOption 1             // => false
+       isOption (mkOption {}) // => true
+  */
   isOption = lib.isType "option";
+
+  /* Creates an Option attribute set. mkOption accepts an attribute set with the following keys:
+
+     All keys default to `null` when not given.
+
+     Example:
+       mkOption { }  // => { _type = "option"; }
+       mkOption { defaultText = "foo"; } // => { _type = "option"; defaultText = "foo"; }
+  */
   mkOption =
-    { default ? null # Default value used when no definition is given in the configuration.
-    , defaultText ? null # Textual representation of the default, for in the manual.
-    , example ? null # Example value used in the manual.
-    , description ? null # String describing the option.
-    , relatedPackages ? null # Related packages used in the manual (see `genRelatedPackages` in ../nixos/doc/manual/default.nix).
-    , type ? null # Option type, providing type-checking and value merging.
-    , apply ? null # Function that converts the option value to something else.
-    , internal ? null # Whether the option is for NixOS developers only.
-    , visible ? null # Whether the option shows up in the manual.
-    , readOnly ? null # Whether the option can be set only once
-    , options ? null # Obsolete, used by types.optionSet.
+    {
+    # Default value used when no definition is given in the configuration.
+    default ? null,
+    # Textual representation of the default, for the manual.
+    defaultText ? null,
+    # Example value used in the manual.
+    example ? null,
+    # String describing the option.
+    description ? null,
+    # Related packages used in the manual (see `genRelatedPackages` in ../nixos/doc/manual/default.nix).
+    relatedPackages ? null,
+    # Option type, providing type-checking and value merging.
+    type ? null,
+    # Function that converts the option value to something else.
+    apply ? null,
+    # Whether the option is for NixOS developers only.
+    internal ? null,
+    # Whether the option shows up in the manual.
+    visible ? null,
+    # Whether the option can be set only once
+    readOnly ? null,
+    # Deprecated, used by types.optionSet.
+    options ? null
     } @ attrs:
     attrs // { _type = "option"; };
 
-  mkEnableOption = name: mkOption {
+  /* Creates an Option attribute set for a boolean value option i.e an
+     option to be toggled on or off:
+
+     Example:
+       mkEnableOption "foo"
+       => { _type = "option"; default = false; description = "Whether to enable foo."; example = true; type = { ... }; }
+  */
+  mkEnableOption =
+    # Name for the created option
+    name: mkOption {
     default = false;
     example = true;
     description = "Whether to enable ${name}.";
     type = lib.types.bool;
   };
 
-  # This option accept anything, but it does not produce any result.  This
-  # is useful for sharing a module across different module sets without
-  # having to implement similar features as long as the value of the options
-  # are not expected.
+  /* This option accepts anything, but it does not produce any result.
+
+     This is useful for sharing a module across different module sets
+     without having to implement similar features as long as the
+     values of the options are not accessed. */
   mkSinkUndeclaredOptions = attrs: mkOption ({
     internal = true;
     visible = false;
@@ -62,7 +101,7 @@ rec {
   mergeOneOption = loc: defs:
     if defs == [] then abort "This case should never happen."
     else if length defs != 1 then
-      throw "The unique option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
+      throw "The unique option `${showOption loc}' is defined multiple times, in:\n - ${concatStringsSep "\n - " (getFiles defs)}."
     else (head defs).value;
 
   /* "Merge" option definitions by checking that they all have the same value. */
@@ -74,7 +113,24 @@ rec {
       else
         val) (head defs).value defs;
 
+  /* Extracts values of all "value" keys of the given list.
+
+     Type: getValues :: [ { value :: a } ] -> [a]
+
+     Example:
+       getValues [ { value = 1; } { value = 2; } ] // => [ 1 2 ]
+       getValues [ ]                               // => [ ]
+  */
   getValues = map (x: x.value);
+
+  /* Extracts values of all "file" keys of the given list
+
+     Type: getFiles :: [ { file :: a } ] -> [a]
+
+     Example:
+       getFiles [ { file = "file1"; } { file = "file2"; } ] // => [ "file1" "file2" ]
+       getFiles [ ]                                         // => [ ]
+  */
   getFiles = map (x: x.file);
 
   # Generate documentation template from the list of option declaration like
@@ -87,7 +143,7 @@ rec {
         docOption = rec {
           loc = opt.loc;
           name = showOption opt.loc;
-          description = opt.description or (throw "Option `${name}' has no description.");
+          description = opt.description or (lib.warn "Option `${name}' has no description." "This option has no description.");
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
           visible = opt.visible or true;
@@ -107,10 +163,13 @@ rec {
 
 
   /* This function recursively removes all derivation attributes from
-     `x' except for the `name' attribute.  This is to make the
-     generation of `options.xml' much more efficient: the XML
-     representation of derivations is very large (on the order of
-     megabytes) and is not actually used by the manual generator. */
+     `x` except for the `name` attribute.
+
+     This is to make the generation of `options.xml` much more
+     efficient: the XML representation of derivations is very large
+     (on the order of megabytes) and is not actually used by the
+     manual generator.
+  */
   scrubOptionValue = x:
     if isDerivation x then
       { type = "derivation"; drvPath = x.name; outPath = x.name; name = x.name; }
@@ -119,15 +178,29 @@ rec {
     else x;
 
 
-  /* For use in the ‘example’ option attribute.  It causes the given
-     text to be included verbatim in documentation.  This is necessary
-     for example values that are not simple values, e.g.,
-     functions. */
+  /* For use in the `example` option attribute. It causes the given
+     text to be included verbatim in documentation. This is necessary
+     for example values that are not simple values, e.g., functions.
+  */
   literalExample = text: { _type = "literalExample"; inherit text; };
 
+  # Helper functions.
 
-  /* Helper functions. */
-  showOption = concatStringsSep ".";
+  /* Convert an option, described as a list of the option parts in to a
+     safe, human readable version.
+
+     Example:
+       (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
+       (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
+  */
+  showOption = parts: let
+    escapeOptionPart = part:
+      let
+        escaped = lib.strings.escapeNixString part;
+      in if escaped == "\"${part}\""
+         then part
+         else escaped;
+    in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
   unknownModule = "<unknown-file>";
 

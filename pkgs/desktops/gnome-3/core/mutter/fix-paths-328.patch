@@ -1,0 +1,13 @@
+diff --git a/src/core/util.c b/src/core/util.c
+index 5b8de18c7..546352a95 100644
+--- a/src/core/util.c
++++ b/src/core/util.c
+@@ -635,7 +635,7 @@ meta_show_dialog (const char *type,
+
+   args = g_ptr_array_new ();
+
+-  append_argument (args, "zenity");
++  append_argument (args, "@zenity@/bin/zenity");
+   append_argument (args, type);
+
+   if (display)

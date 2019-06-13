@@ -1,42 +1,96 @@
 [{
-  "pname": "es_core_web_md",
-  "version": "1.0.0",
-  "sha256": "0ikyakdhnj6rrfpr8k83695d1gd3z9n60a245hwwchv94jmr7r6s",
+  "pname": "de_core_news_md",
+  "version": "2.1.0",
+  "sha256": "0q1flyrp2n8ja11kdlw6x1k0gll0r096pxy8ba4xv15hjng2zay1",
   "license": "cc-by-sa-40"
 },
 {
-  "pname": "fr_depvec_web_lg",
-  "version": "1.0.0",
-  "sha256": "0nxmdszs1s5by2874cz37azrmwamh1ngdsiylffkfihzq6s8bhka",
-  "license": "cc-by-nc-sa-40"
+  "pname": "de_core_news_sm",
+  "version": "2.1.0",
+  "sha256": "0fj4dqa915i6niyskxmw2318fxzjhgdjhjx79h9cpp4mxw719w95",
+  "license": "cc-by-sa-40"
+},
+{
+  "pname": "el_core_news_md",
+  "version": "2.1.0",
+  "sha256": "1rgy9hlb92amhlbwkd91yh87xssqj2a1ign0wm59aai69rb79q3s",
+  "license": "cc-by-sa-40"
+},
+{
+  "pname": "el_core_news_sm",
+  "version": "2.1.0",
+  "sha256": "07n7qg0nnzg5gjq7vs72j9qc6z4zjx65qsrrj0hjhiihk3ps378z",
+  "license": "cc-by-sa-40"
+},
+{
+  "pname": "en_core_web_lg",
+  "version": "2.1.0",
+  "sha256": "0ywcczd9nsxmpfwknxa7z54h566bwi7chq0jzx3sqk2a6lva4q52",
+  "license": "cc-by-sa-40"
 },
 {
   "pname": "en_core_web_md",
-  "version": "1.2.1",
-  "sha256": "12prr4hcbfdaky9rcna1y1ykr417jkhkks2r8l06g8fb7am3pvp3",
-  "license": "cc-by-sa-40"
-},
-{
-  "pname": "en_depent_web_md",
-  "version": "1.2.1",
-  "sha256": "0giyr35q5lpp5drpcamyvb5gsjnhj62mk3ndfr49nm1s6d5f6m52",
+  "version": "2.1.0",
+  "sha256": "10vgq1xd6dpdl7xdssgf0kywbq7xpxp79yqc2vcnl3c4axfpwk5q",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "en_core_web_sm",
-  "version": "1.2.0",
-  "sha256": "0vc4l77dcwa9lmzyqdci8ikjc0m2rhasl2zvyba547vf76qb0528",
+  "version": "2.1.0",
+  "sha256": "1wg5a7nxq82sfmnc3j5xfr8il65rprmcx2h36va5dvydm1h6icad",
   "license": "cc-by-sa-40"
 },
 {
-  "pname": "de_core_news_md",
-  "version": "1.0.0",
-  "sha256": "072jz2rdi1nckny7k16avp86vjg4didfdsw816kfl9zwr88iny6g",
+  "pname": "en_vectors_web_lg",
+  "version": "2.1.0",
+  "sha256": "1sq41pr70215f2s8k35x5ni4w0i4xhbzbfg3iyxgbp1b35gizg94",
   "license": "cc-by-sa-40"
 },
 {
-  "pname": "en_vectors_glove_md",
-  "version": "1.0.0",
-  "sha256": "1jbr27xnh5fdww8yphpvk2brfnzb174wfnxkzdqwv3iyi02zsin6",
+  "pname": "es_core_news_md",
+  "version": "2.1.0",
+  "sha256": "02v7hm711r9ma8p5yk057z7hm2pcvpfjgnjszc697d0ymfn4avby",
+  "license": "cc-by-sa-40"
+},
+{
+  "pname": "es_core_news_sm",
+  "version": "2.1.0",
+  "sha256": "1smyyb1gqp090sailqdqp5v5ww4kf99a3hcd9d9rdhn1wgsv28dh",
+  "license": "cc-by-sa-40"
+},
+{
+  "pname": "fr_core_news_md",
+  "version": "2.1.0",
+  "sha256": "0n94ja7y4jbvz0k0x5bij2dypy11ikvgpd9dav0m0hw1wpqgls1i",
+  "license": "cc-by-sa-40"
+},
+{
+  "pname": "fr_core_news_sm",
+  "version": "2.1.0",
+  "sha256": "1czr40y5sqs0n2dd4s37kc2xawkh2nsj41wvmsx48bw0aksb1n75",
+  "license": "cc-by-sa-40"
+},
+{
+  "pname": "it_core_news_sm",
+  "version": "2.1.0",
+  "sha256": "1i8dm703mf1l39jwis3mn5mb9azpx6bsimh66iriax94612x64mb",
+  "license": "cc-by-sa-40"
+},
+{
+  "pname": "nl_core_news_sm",
+  "version": "2.1.0",
+  "sha256": "0ywyn7jprsfr10bvwnm3qk270raxm9s9rvzyp1cp7ca037ab633y",
+  "license": "cc-by-sa-40"
+},
+{
+  "pname": "pt_core_news_sm",
+  "version": "2.1.0",
+  "sha256": "0vigc9x7158sdqxjgcxgvp6458k5936jlmlp2qdmlmzxr5wmfrbc",
+  "license": "cc-by-sa-40"
+},
+{
+  "pname": "xx_ent_wiki_sm",
+  "version": "2.1.0",
+  "sha256": "19sfsxwjqdzlfm43gb4hbyj0hgqcfhcfxwdib4g5i1pcfx1v3pf4",
   "license": "cc-by-sa-40"
 }]

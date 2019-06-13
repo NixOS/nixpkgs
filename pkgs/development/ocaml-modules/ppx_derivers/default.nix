@@ -1,29 +1,22 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder }:
+{ stdenv, fetchFromGitHub, buildDunePackage }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
-then throw "ppx_derivers is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+	pname = "ppx_derivers";
+	version = "1.2.1";
 
-stdenv.mkDerivation rec {
-	name = "ocaml${ocaml.version}-ppx_derivers-${version}";
-	version = "1.2";
+  minimumOCamlVersion = "4.02";
 
 	src = fetchFromGitHub {
 		owner = "diml";
-		repo = "ppx_derivers";
+		repo = pname;
 		rev = version;
-		sha256 = "0bnhihl1w31as5w2czly1v3d6pbir9inmgsjg2cj6aaj9v1dzd85";
+		sha256 = "0yqvqw58hbx1a61wcpbnl9j30n495k23qmyy2xwczqs63mn2nkpn";
 	};
-
-	buildInputs = [ ocaml findlib jbuilder ];
-
-	inherit (jbuilder) installPhase;
 
 	meta = {
 		description = "Shared [@@deriving] plugin registry";
 		license = stdenv.lib.licenses.bsd3;
 		maintainers = [ stdenv.lib.maintainers.vbgl ];
 		inherit (src.meta) homepage;
-		inherit (ocaml.meta) platforms;
 	};
 }

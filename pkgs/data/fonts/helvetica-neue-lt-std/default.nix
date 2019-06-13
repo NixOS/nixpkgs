@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "2013.06.07"; # date of most recent file in distribution
@@ -28,8 +28,8 @@ in fetchzip rec {
       font. The numbers are well spaced and defined with high accuracy. The
       punctuation marks are heavily detailed as well.
     '';
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.romildo ];
+    platforms = lib.platforms.all;
   };
 }

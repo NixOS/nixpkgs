@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   makePackage = {variant, language, region, sha256}: let
@@ -19,9 +19,8 @@ let
     meta = {
       description = "${language} subset of an open source Pan-CJK sans-serif typeface";
       homepage = https://github.com/adobe-fonts/source-han-sans;
-      license = stdenv.lib.licenses.ofl;
-      platforms = stdenv.lib.platforms.unix;
-      maintainers = with stdenv.lib.maintainers; [ taku0 ];
+      license = lib.licenses.ofl;
+      maintainers = with lib.maintainers; [ taku0 ];
     };
   };
 in

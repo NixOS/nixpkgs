@@ -1,13 +1,18 @@
-{ stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, libnotify, libxcb, nspr, nss, systemd, xorg }:
+{ stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
+cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk_pixbuf,
+libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
+at-spi2-atk, libuuid,
+darkMode ? false,
+darkModeCssUrl ? "https://cdn.rawgit.com/laCour/slack-night-mode/master/css/raw/black.css"
+}:
 
 let
 
-  version = "3.1.0";
+  version = "3.4.2";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
+    at-spi2-atk
     atk
     cairo
     cups
@@ -18,15 +23,17 @@ let
     freetype
     glib
     gnome2.GConf
-    gnome2.gdk_pixbuf
-    gnome2.gtk
-    gnome2.pango
+    gdk_pixbuf
+    gtk3
+    pango
     libnotify
     libxcb
+    libappindicator-gtk3
     nspr
     nss
     stdenv.cc.cc
     systemd
+    libuuid
 
     xorg.libxkbfile
     xorg.libX11
@@ -43,20 +50,26 @@ let
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "1y8xxfpqvz4q6y1zkna4cp3rqi7p03w5xgr8h1cmym8z66bj7dq3";
+        sha256 = "0qbj41ymckz8w1p2pazyxg7pimgn9gmpvxz4ygcm0nyivfmw2crq";
       }
     else
-      throw "Slack is not supported on ${stdenv.system}";
+      throw "Slack is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
   name = "slack-${version}";
 
   inherit src;
 
-  buildInputs = [ dpkg ];
+  buildInputs = [
+    dpkg
+    gtk3  # needed for GSETTINGS_SCHEMAS_PATH
+  ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
   unpackPhase = "true";
   buildCommand = ''
     mkdir -p $out
@@ -72,14 +85,30 @@ in stdenv.mkDerivation {
       patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
     done
 
-    # Fix the symlink
+    # Replace the broken bin/slack symlink with a startup wrapper
     rm $out/bin/slack
-    ln -s $out/lib/slack/slack $out/bin/slack
+    makeWrapper $out/lib/slack/slack $out/bin/slack \
+      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \
       --replace /usr/bin/ $out/bin/ \
       --replace /usr/share/ $out/share/
+  '' + stdenv.lib.optionalString darkMode ''
+    cat <<EOF >> $out/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js
+    document.addEventListener('DOMContentLoaded', function() {
+    let tt__customCss = ".menu ul li a:not(.inline_menu_link) {color: #fff !important;}"
+    $.ajax({
+        url: '${darkModeCssUrl}',
+        success: function(css) {
+            \$("<style></style>").appendTo('head').html(css + tt__customCss);
+            \$("<style></style>").appendTo('head').html('#reply_container.upload_in_threads .inline_message_input_container {background: padding-box #545454}');
+            \$("<style></style>").appendTo('head').html('.p-channel_sidebar {background: #363636 !important}');
+            \$("<style></style>").appendTo('head').html('#client_body:not(.onboarding):not(.feature_global_nav_layout):before {background: inherit;}');
+        }
+      });
+    });
+    EOF
   '';
 
   meta = with stdenv.lib; {

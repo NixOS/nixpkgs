@@ -1,8 +1,10 @@
-perl:
+{ lib, stdenv, perl, buildPerl, toPerlModule }:
 
-{ nativeBuildInputs ? [], name, ... } @ attrs:
+{ buildInputs ? [], nativeBuildInputs ? [], name, ... } @ attrs:
 
-perl.stdenv.mkDerivation (
+toPerlModule(stdenv.mkDerivation (
+  (
+  lib.recursiveUpdate
   {
     outputs = [ "out" "devdoc" ];
 
@@ -20,14 +22,22 @@ perl.stdenv.mkDerivation (
     # authors to skip certain tests (or include certain tests) when
     # the results are not being monitored by a human being."
     AUTOMATED_TESTING = true;
+
+    # current directory (".") is removed from @INC in Perl 5.26 but many old libs rely on it
+    # https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
+    PERL_USE_UNSAFE_INC = "1";
+
+    meta.homepage = "https://metacpan.org/release/${(builtins.parseDrvName name).name}";
+    meta.platforms = perl.meta.platforms;
   }
-  //
   attrs
+  )
   //
   {
-    name = "perl-" + name;
+    name = "perl${perl.version}-${name}";
     builder = ./builder.sh;
+    buildInputs = buildInputs ++ [ perl ];
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
-    inherit perl;
+    fullperl = buildPerl;
   }
-)
+))

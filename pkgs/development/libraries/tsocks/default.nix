@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ edwtjo phreedom ];
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

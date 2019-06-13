@@ -1,36 +1,27 @@
 { stdenv, fetchpatch, fetchFromGitHub, meson, ninja, pkgconfig, gettext
 , xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
-, libstemmer, glib, xapian, libxml2, libyaml, gobjectIntrospection
-, pcre, itstool
+, libstemmer, glib, xapian, libxml2, libyaml, gobject-introspection
+, pcre, itstool, gperf, vala
 }:
 
 stdenv.mkDerivation rec {
   name = "appstream-${version}";
-  version = "0.11.8";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner  = "ximion";
     repo   = "appstream";
     rev    = "APPSTREAM_${stdenv.lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "07vzz57g1p5byj2jfg17y5n3il0g07d9wkiynzwra71mcxar1p08";
+    sha256 = "0hbl26aw3g2hag7z4di9z59qz057qcywrxpnnmp86z7rngvjbqpx";
   };
-
-  patches = [
-    # drop this in version 0.11.9 and above
-    (fetchpatch {
-      name   = "define-location-and-soname.patch";
-      url    = "https://github.com/ximion/appstream/commit/3e58f9c9.patch";
-      sha256 = "1ffgbdfg80yq5vahjrvdd4f8xsp32ksm9vyasfmc7hzhx294s78w";
-    })
-  ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext
     libxslt xmlto docbook_xsl docbook_xml_dtd_45
-    gobjectIntrospection itstool
+    gobject-introspection itstool vala
   ];
 
-  buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml ];
+  buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml gperf ];
 
   prePatch = ''
     substituteInPlace meson.build \
@@ -43,7 +34,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dapidocs=false"
     "-Ddocs=false"
-    "-Dgir=false"
+    "-Dvapi=true"
   ];
 
   meta = with stdenv.lib; {

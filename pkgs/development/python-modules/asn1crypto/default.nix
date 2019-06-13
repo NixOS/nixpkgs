@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "asn1crypto";
   version = "0.24.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

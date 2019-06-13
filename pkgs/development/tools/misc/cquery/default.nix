@@ -1,12 +1,13 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, cmake, llvmPackages, ncurses }:
+{ fetchFromGitHub, makeWrapper
+, cmake, llvmPackages, ncurses
+, runtimeShell }:
 
 let
   src = fetchFromGitHub {
     owner = "cquery-project";
     repo = "cquery";
-    rev = "e45a9ebbb6d8bfaf8bf1a3135b6faa910afea37e";
-    sha256 = "049gkqbamq4r2nz9yjcwq369zrmwrikzbhfza2x2vndqzaavq5yg";
+    rev = "a95a6503d68a85baa25465ce147b7fc20f4a552e";
+    sha256 = "0rxbdln7dqkdw4q8rhclssgwypq16g9flkwmaabsr8knckbszxrx";
     fetchSubmodules = true;
   };
 
@@ -15,7 +16,7 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "cquery-${version}";
-  version = "2018-03-25";
+  version = "2018-10-14";
 
   inherit src;
 
@@ -25,13 +26,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DSYSTEM_CLANG=ON"
     "-DCLANG_CXX=ON"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
   ];
 
-  shell = stdenv.shell;
+  shell = runtimeShell;
   postFixup = ''
     # We need to tell cquery where to find the standard library headers.
 
-    standard_library_includes="\\\"-isystem\\\", \\\"${if (stdenv.hostPlatform.libc == "glibc") then stdenv.cc.libc.dev else stdenv.cc.libc}/include\\\""
+    standard_library_includes="\\\"-isystem\\\", \\\"${stdenv.lib.getDev stdenv.cc.libc}/include\\\""
     standard_library_includes+=", \\\"-isystem\\\", \\\"${llvmPackages.libcxx}/include/c++/v1\\\""
     export standard_library_includes
 
@@ -46,8 +48,11 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     pushd ${src}
-    $out/bin/cquery --ci --clang-sanity-check && \
     $out/bin/cquery --ci --test-unit
+
+    # The integration tests have to be disabled because cquery ignores `--init`
+    # if they are invoked, which means it won't find the system includes.
+    #$out/bin/cquery --ci --test-index
   '';
 
   meta = with stdenv.lib; {
@@ -56,6 +61,5 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.tobim ];
-    priority    = 3;
   };
 }

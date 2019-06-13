@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, boost, gtest }:
+{ stdenv, fetchurl, cmake, boost, gtest }:
 
 stdenv.mkDerivation rec {
   name = "lucene++-${version}";

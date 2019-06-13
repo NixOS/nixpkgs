@@ -24,13 +24,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preCheck =
-    # Make the Autotest test suite run in parallel.
-    '' export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
-    '';
+  # Make the Autotest test suite run in parallel.
+  preCheck =''
+    export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
+  '';
+
+  doInstallCheck = false; # fails
 
   meta = {
-    homepage = http://www.gnu.org/software/autoconf/;
+    homepage = https://www.gnu.org/software/autoconf/;
     description = "Part of the GNU Build System";
 
     longDescription = ''

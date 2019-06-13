@@ -1,11 +1,11 @@
-Index: kservice-5.21.0/src/sycoca/kbuildsycoca.cpp
-===================================================================
---- kservice-5.21.0.orig/src/sycoca/kbuildsycoca.cpp
-+++ kservice-5.21.0/src/sycoca/kbuildsycoca.cpp
-@@ -203,7 +203,7 @@ bool KBuildSycoca::build()
-         QSet<QString> relFiles;
+diff --git a/src/sycoca/kbuildsycoca.cpp b/src/sycoca/kbuildsycoca.cpp
+index b125299..0682b90 100644
+--- a/src/sycoca/kbuildsycoca.cpp
++++ b/src/sycoca/kbuildsycoca.cpp
+@@ -207,7 +207,7 @@ bool KBuildSycoca::build()
          const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, m_resourceSubdir, QStandardPaths::LocateDirectory);
-         Q_FOREACH (const QString &dir, dirs) {
+         qCDebug(SYCOCA) << "Looking for subdir" << m_resourceSubdir << "=>" << dirs;
+         for (const QString &dir : dirs) {
 -            QDirIterator it(dir, QDirIterator::Subdirectories);
 +            QDirIterator it(dir, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
              while (it.hasNext()) {

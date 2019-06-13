@@ -1,4 +1,4 @@
-{ stdenv, requireFile, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
+{ stdenv, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
 , xdg_utils
 # For glewinfo
 , libXmu, libXi, libXext }:
@@ -10,10 +10,10 @@ let
   libPath = "${stdenv.lib.makeLibraryPath packages}";
 in
 stdenv.mkDerivation rec {
-  name = "genymotion-${version}";
+  pname = "genymotion";
   version = "2.8.0";
-  src = requireFile {
-    url = https://www.genymotion.com/download/;
+  src = fetchurl {
+    url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
     name = "genymotion-${version}-linux_x64.bin";
     sha256 = "0lvfdlpmmsyq2i9gs4mf6a8fxkfimdr4rhyihqnfhjij3fzxz4lk";
   };
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     mkdir -p phony-home $out/share/applications
     export HOME=$TMP/phony-home
 
-    mkdir ${name}
-    echo "y" | sh $src -d ${name}
-    sourceRoot=${name}
+    mkdir ${pname}
+    echo "y" | sh $src -d ${pname}
+    sourceRoot=${pname}
 
     substitute phony-home/.local/share/applications/genymobile-genymotion.desktop \
-      $out/share/applications/genymobile-genymotion.desktop --replace "$TMP/${name}" "$out/libexec"
+      $out/share/applications/genymobile-genymotion.desktop --replace "$TMP/${pname}" "$out/libexec"
   '';
 
   installPhase = ''

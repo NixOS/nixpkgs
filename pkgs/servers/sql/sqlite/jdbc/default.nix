@@ -1,25 +1,28 @@
-{ lib, stdenv, fetchurl }:
+{ stdenv, fetchMavenArtifact }:
 
 stdenv.mkDerivation rec {
-  version = "3.20.0";
   pname = "sqlite-jdbc";
   name = "${pname}-${version}";
+  version = "3.25.2";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/xerial/${pname}/downloads/${name}.jar";
-    sha256 = "0wxfxnq2ghiwy2mwz3rljgmy1lciafhrw80lprvqz6iw8l51qfql";
+  src = fetchMavenArtifact {
+    groupId = "org.xerial";
+    artifactId = "sqlite-jdbc";
+    inherit version;
+    sha256 = "1xk5fi2wzq3jspvbdm5hvs78501i14jy3v7x6fjnh5fnpqdacpd4";
   };
 
   phases = [ "installPhase" ];
 
   installPhase = ''
-    install -D "${src}" "$out/share/java/${name}.jar"
+    install -m444 -D ${src}/share/java/*${name}.jar "$out/share/java/${name}.jar"
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     homepage = "https://github.com/xerial/sqlite-jdbc";
-    description = "SQLite JDBC Driver";
+    description = "Library for accessing and creating SQLite database files in Java";
     license = licenses.asl20;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ jraygauthier ];
   };
 }

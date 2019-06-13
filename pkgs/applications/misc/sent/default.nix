@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, farbfeld, libX11, libXft
+{ stdenv, fetchurl, farbfeld, libX11, libXft, makeWrapper
 , patches ? [] }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0cxysz5lp25mgww73jl0mgip68x7iyvialyzdbriyaff269xxwvv";
   };
 
-  buildInputs = [ farbfeld libX11 libXft ];
+  buildInputs = [ libX11 libXft ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # unpacking doesn't create a directory
   sourceRoot = ".";
@@ -17,6 +18,9 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   installFlags = [ "PREFIX=$(out)" ];
+  postInstall = ''
+    wrapProgram "$out/bin/sent" --prefix PATH : "${farbfeld}/bin"
+  '';
 
   meta = with stdenv.lib; {
     description = "A simple plaintext presentation tool";

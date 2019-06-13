@@ -1,34 +1,32 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, git, gtk, pkgs, gettext,
-  gcc_multi, libressl }:
+  gcc_multi, libressl, gnome3, steam }:
 
 let
-  version = "0.7.2";
-  steamBinPath = "${stdenv.lib.makeBinPath (with pkgs; [ steam ])}/steam";
-  zenityBinPath = "${stdenv.lib.makeBinPath (with pkgs; [ gnome3.zenity ])}/zenity";
+  version = "0.7.3";
 
 in stdenv.mkDerivation rec {
   name = "linux-steam-integration-${version}";
 
-  nativeBuildInputs = [ meson ninja pkgconfig git gettext gcc_multi ];
-  buildInputs = [ gtk libressl ];
-
   src = fetchFromGitHub {
-    owner = "solus-project";
+    owner = "clearlinux";
     repo = "linux-steam-integration";
     rev = "v${version}";
-    sha256 = "0yn71fvjqi63dxk04jsndb26pgipl0nla10sy94bi7q95pk3sdf6";
+    sha256 = "0brv3swx8h170ycxksb31sf5jvj85csfpx7gjlf6yrfz7jw2j6vp";
     fetchSubmodules = true;
   };
+
+  nativeBuildInputs = [ meson ninja pkgconfig git gettext gcc_multi ];
+  buildInputs = [ gtk libressl ];
 
   # Patch lib paths (AUDIT_PATH and REDIRECT_PATH) in shim.c
   # Patch path to lsi-steam in lsi-steam.desktop
   # Patch path to zenity in lsi.c
   postPatch = ''
-    sed -i -e "s|/usr/|$out/|g" src/shim/shim.c
-    sed -i -e "s|/usr/|$out/|g" data/lsi-steam.desktop
-    sed -i -e "s|zenity|${zenityBinPath}|g" src/lsi/lsi.c
-    sed -i -e "s|Name=Linux Steam Integration|Name=Linux Steam Integration Settings|" data/lsi-settings.desktop.in
-
+    substituteInPlace src/shim/shim.c --replace "/usr/" $out
+    substituteInPlace data/lsi-steam.desktop --replace "/usr/" $out
+    substituteInPlace src/lsi/lsi.c --replace zenity ${gnome3.zenity}/bin/zenity
+    substituteInPlace data/lsi-settings.desktop.in \
+      --replace "Name=Linux Steam Integration" "Name=Linux Steam Integration Settings"
   '';
 
   configurePhase = ''
@@ -36,7 +34,7 @@ in stdenv.mkDerivation rec {
     meson build                           \
       -Dwith-shim=co-exist                \
       -Dwith-frontend=true                \
-      -Dwith-steam-binary=${steamBinPath} \
+      -Dwith-steam-binary=${steam}/bin/steam \
       -Dwith-new-libcxx-abi=true          \
       -Dwith-libressl-mode=native         \
       --prefix /                          \
@@ -74,7 +72,7 @@ in stdenv.mkDerivation rec {
       various workarounds to get games working, and fixes long standing bugs in
       both games and the client
     '';
-    homepage = https://github.com/solus-project/linux-steam-integration;
+    homepage = https://github.com/clearlinux/linux-steam-integration;
     license = licenses.lgpl21;
     maintainers = [ maintainers.etu ];
     platforms = [ "x86_64-linux" ];

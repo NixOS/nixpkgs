@@ -1,13 +1,13 @@
 { stdenv, fetchgit }:
 let
-  version = "2017-09-18";
+  version = "2018-12-06";
 in stdenv.mkDerivation rec {
   name = "edid-decode-unstable-${version}";
 
   src = fetchgit {
-    url = "git://anongit.freedesktop.org/xorg/app/edid-decode";
-    rev = "f56f329ed23a25d002352dedba1e8f092a47286f";
-    sha256 = "1qzaq342dsdid0d99y7kj60p6bzgp2zjsmspyckddc68mmz4cs9n";
+    url = "git://linuxtv.org/edid-decode.git";
+    rev = "6def7bc83dfb0338632e06a8b14c93faa6af8879";
+    sha256 = "0v6d6jy309pb02l377l0fpmgfsvcpiqc5bvyrli34v413mhq6p15";
   };
 
   installPhase = ''

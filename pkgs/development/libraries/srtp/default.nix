@@ -5,13 +5,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libsrtp-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "libsrtp";
     rev = "v${version}";
-    sha256 = "1q2rf1d2bsypdnw9k8ag6hrh9vbinfa504d1f42fdgdqw31d6lib";
+    sha256 = "1ac7xs1djb03j131f1gmqyfmrplblid9qqyxahs0shdy707r5ll6";
   };
 
   nativeBuildInputs = [ pkgconfig ];

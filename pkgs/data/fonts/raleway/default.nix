@@ -1,16 +1,18 @@
-{ stdenv, fetchzip }:
+{ lib, fetchFromGitHub }:
 
 let
   version = "2016-08-30";
-in fetchzip {
+in fetchFromGitHub {
   name = "raleway-${version}";
 
-  url = https://github.com/impallari/Raleway/archive/fa27f47b087fc093c6ae11cfdeb3999ac602929a.zip;
+  owner = "impallari";
+  repo = "Raleway";
+  rev = "fa27f47b087fc093c6ae11cfdeb3999ac602929a";
 
   postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*-Original.otf  -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.txt \*.md     -d $out
+    tar xf $downloadedFile --strip=1
+    find . -name "*-Original.otf" -exec install -Dt $out/share/fonts/opentype {} \;
+    cp *.txt *.md -d $out
   '';
 
   sha256 = "16jr7drqg2wib2q48ajlsa7rh1jxjibl1wd4rjndi49vfl463j60";
@@ -33,8 +35,8 @@ in fetchzip {
     '';
 
     homepage = https://github.com/impallari/Raleway;
-    license = stdenv.lib.licenses.ofl;
+    license = lib.licenses.ofl;
 
-    maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
+    maintainers = with lib.maintainers; [ Profpatsch ];
   };
 }

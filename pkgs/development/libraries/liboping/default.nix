@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses perl ];
 
-  configureFlags = stdenv.lib.optionalString (perl == null) "--with-perl-bindings=no";
+  configureFlags = stdenv.lib.optional (perl == null) "--with-perl-bindings=no";
 
   meta = with stdenv.lib; {
     description = "C library to generate ICMP echo requests (a.k.a. ping packets)";

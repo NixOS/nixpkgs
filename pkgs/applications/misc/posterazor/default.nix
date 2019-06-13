@@ -28,10 +28,11 @@ stdenv.mkDerivation rec {
     cp PosteRazor $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://posterazor.sourceforge.net/;
     description = "Cuts a raster image into pieces which can afterwards be printed out and assembled to a poster";
-    maintainers = [ stdenv.lib.maintainers.madjar ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.madjar ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

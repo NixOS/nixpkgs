@@ -1,5 +1,5 @@
 { stdenv, buildPackages
-, fetchurl, autoreconfHook264, bison, binutils-unwrapped
+, autoreconfHook, bison, binutils-unwrapped
 , libiberty, libbfd
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook264 bison ];
+  nativeBuildInputs = [ autoreconfHook bison ];
   buildInputs = [ libiberty ];
   # dis-asm.h includes bfd.h
   propagatedBuildInputs = [ libbfd ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library from binutils for manipulating machine code";
-    homepage = http://www.gnu.org/software/binutils/;
+    homepage = https://www.gnu.org/software/binutils/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;

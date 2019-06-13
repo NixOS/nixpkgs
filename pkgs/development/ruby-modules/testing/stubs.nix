@@ -1,15 +1,12 @@
 { stdenv, lib, ruby, callPackage, ... }:
 let
-  real = {
-    inherit (stdenv) mkDerivation;
-  };
   mkDerivation = {name, ...}@argSet:
   derivation {
     inherit name;
     text = (builtins.toJSON (lib.filterAttrs ( n: v: builtins.any (x: x == n) ["name" "system"]) argSet));
     builder = stdenv.shell;
     args = [ "-c" "echo  $(<$textPath) > $out"];
-    system = stdenv.system;
+    system = stdenv.hostPlatform.system;
     passAsFile = ["text"];
   };
   fetchurl = {url?"", urls ? [],...}: "fetchurl:${if urls == [] then url else builtins.head urls}";

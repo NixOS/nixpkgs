@@ -1,20 +1,24 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, makeWrapper, jre_headless }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.3";
+  version = "3.0.2";
   name = "graylog-${version}";
 
   src = fetchurl {
     url = "https://packages.graylog2.org/releases/graylog/graylog-${version}.tgz";
-    sha256 = "0kwgg9m9sqzl4y2ri69fpi7w9961psbmfdq3avjsbgbs60ly1hn6";
+    sha256 = "1xw9fxdb3n9h595sw1imns6g5a5339ppn2plx8qw4ngnkzd9pvhj";
   };
 
   dontBuild = true;
   dontStrip = true;
 
+  buildInputs = [ makeWrapper ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${jre_headless}/bin" ];
+
   installPhase = ''
     mkdir -p $out
-    cp -r {graylog.jar,lib,bin,plugin,data} $out
+    cp -r {graylog.jar,lib,bin,plugin} $out
+    wrapProgram $out/bin/graylogctl $makeWrapperArgs
   '';
 
   meta = with stdenv.lib; {

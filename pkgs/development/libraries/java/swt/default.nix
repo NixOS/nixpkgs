@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, unzip, jdk, pkgconfig, gtk2
-, libXt, libXtst, libXi, libGLU_combined, webkit, libsoup, xorg
+, libXt, libXtst, libXi, libGLU_combined, webkitgtk, libsoup, xorg
 , pango, gdk_pixbuf, glib
 }:
 
@@ -16,7 +16,7 @@ let
         sha256 = "00k1mfbncvyh8klgmk0891w8jwnd5niqb16j1j8yacrm2smmlb05"; };
   };
 
-  metadata = assert platformMap ? ${stdenv.system}; platformMap.${stdenv.system};
+  metadata = assert platformMap ? ${stdenv.hostPlatform.system}; platformMap.${stdenv.hostPlatform.system};
 
 in stdenv.mkDerivation rec {
   version = "4.5";
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   nativeBuildInputs = [ unzip pkgconfig ];
-  buildInputs = [ jdk gtk2 libXt libXtst libXi libGLU_combined webkit libsoup ];
+  buildInputs = [ jdk gtk2 libXt libXtst libXi libGLU_combined webkitgtk libsoup ];
 
   NIX_LFLAGS = (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk_pixbuf glib ]) ++
     [ "-lX11" "-lpango-1.0" "-lgdk_pixbuf-2.0" "-lglib-2.0" ];

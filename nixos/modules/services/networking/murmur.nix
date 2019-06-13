@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.murmur;
+  forking = cfg.logFile != null;
   configFile = pkgs.writeText "murmurd.ini" ''
     database=/var/lib/murmur/murmur.sqlite
     dbDriver=QSQLITE
@@ -12,8 +13,8 @@ let
     autobanTimeframe=${toString cfg.autobanTimeframe}
     autobanTime=${toString cfg.autobanTime}
 
-    logfile=/var/log/murmur/murmurd.log
-    pidfile=${cfg.pidfile}
+    logfile=${optionalString (cfg.logFile != null) cfg.logFile}
+    ${optionalString forking "pidfile=/run/murmur/murmurd.pid"}
 
     welcometext="${cfg.welcometext}"
     port=${toString cfg.port}
@@ -50,7 +51,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "If enabled, start the Murmur Service.";
+        description = "If enabled, start the Murmur Mumble server.";
       };
 
       autobanAttempts = mkOption {
@@ -78,10 +79,11 @@ in
         description = "The amount of time an IP ban lasts (in seconds).";
       };
 
-      pidfile = mkOption {
-        type = types.path;
-        default = "/tmp/murmurd.pid";
-        description = "Path to PID file for Murmur daemon.";
+      logFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/var/log/murmur/murmurd.log";
+        description = "Path to the log file for Murmur daemon. Empty means log to journald.";
       };
 
       welcometext = mkOption {
@@ -238,7 +240,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.murmur = {
+    users.users.murmur = {
       description     = "Murmur Service user";
       home            = "/var/lib/murmur";
       createHome      = true;
@@ -248,21 +250,16 @@ in
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target "];
+      after       = [ "network-online.target "];
 
       serviceConfig = {
-        Type      = "forking";
-        PIDFile   = cfg.pidfile;
-        Restart   = "always";
+        # murmurd doesn't fork when logging to the console.
+        Type      = if forking then "forking" else "simple";
+        PIDFile   = mkIf forking "/run/murmur/murmurd.pid";
+        RuntimeDirectory = mkIf forking "murmur";
         User      = "murmur";
         ExecStart = "${pkgs.murmur}/bin/murmurd -ini ${configFile}";
-        PermissionsStartOnly = true;
       };
-
-      preStart = ''
-        mkdir -p /var/log/murmur
-        chown -R murmur /var/log/murmur
-      '';
     };
   };
 }

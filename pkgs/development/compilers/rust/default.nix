@@ -1,41 +1,69 @@
-{ stdenv, callPackage, recurseIntoAttrs, makeRustPlatform, llvm, fetchurl
-, targets ? []
-, targetToolchains ? []
-, targetPatches ? []
-}:
+{ stdenv, lib, overrideCC
+, buildPackages
+, newScope, callPackage
+, CoreFoundation, Security
+, llvmPackages_5
+, pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
+}: rec {
+  makeRustPlatform = { rustc, cargo, ... }: {
+    rust = {
+      inherit rustc cargo;
+    };
 
-let
-  rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.25.0";
-  cargoVersion = "0.26.0";
-  src = fetchurl {
-    url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "0baxjr99311lvwdq0s38bipbnj72pn6fgbk6lcq7j555xq53mxpf";
-  };
-in rec {
-  rustc = callPackage ./rustc.nix {
-    inherit stdenv llvm targets targetPatches targetToolchains rustPlatform version src;
+    buildRustPackage = callPackage ../../../build-support/rust {
+      inherit rustc cargo;
 
-    forceBundledLLVM = true;
+      fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
+        inherit cargo;
+      };
+    };
 
-    configureFlags = [ "--release-channel=stable" ];
-
-    # Upstream is not running tests on aarch64:
-    # see https://github.com/rust-lang/rust/issues/49807#issuecomment-380860567
-    # So we do the same.
-    doCheck = !stdenv.isAarch64;
-
-    patches = [
-      ./patches/0001-Disable-fragile-tests-libstd-net-tcp-on-Darwin-Linux.patch
-    ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
-
+    rustcSrc = callPackage ./rust-src.nix {
+      inherit rustc;
+    };
   };
 
-  cargo = callPackage ./cargo.nix rec {
-    version = cargoVersion;
-    inherit src;
-    inherit stdenv;
-    inherit rustc; # the rustc that will be wrapped by cargo
-    inherit rustPlatform; # used to build cargo
+  # This just contains tools for now. But it would conceivably contain
+  # libraries too, say if we picked some default/recommended versions from
+  # `cratesIO` to build by Hydra and/or try to prefer/bias in Cargo.lock for
+  # all vendored Carnix-generated nix.
+  #
+  # In the end game, rustc, the rust standard library (`core`, `std`, etc.),
+  # and cargo would themselves be built with `buildRustCreate` like
+  # everything else. Tools and `build.rs` and procedural macro dependencies
+  # would be taken from `buildRustPackages` (and `bootstrapRustPackages` for
+  # anything provided prebuilt or their build-time dependencies to break
+  # cycles / purify builds). In this way, nixpkgs would be in control of all
+  # bootstrapping.
+  packages = {
+    prebuilt = callPackage ./bootstrap.nix {};
+    stable = lib.makeScope newScope (self: let
+      # Like `buildRustPackages`, but may also contain prebuilt binaries to
+      # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
+      # nothing in the final package set should refer to this.
+      bootstrapRustPackages = self.buildRustPackages.overrideScope' (_: _:
+        lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
+          buildPackages.rust.packages.prebuilt);
+      bootRustPlatform = makeRustPlatform bootstrapRustPackages;
+    in {
+      # Packages suitable for build-time, e.g. `build.rs`-type stuff.
+      buildRustPackages = buildPackages.rust.packages.stable;
+      # Analogous to stdenv
+      rustPlatform = makeRustPlatform self.buildRustPackages;
+      rustc = self.callPackage ./rustc.nix ({
+        # Use boot package set to break cycle
+        rustPlatform = bootRustPlatform;
+      } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
+        stdenv = llvmPackages_5.stdenv;
+        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+      });
+      cargo = self.callPackage ./cargo.nix {
+        # Use boot package set to break cycle
+        rustPlatform = bootRustPlatform;
+        inherit CoreFoundation Security;
+      };
+    });
   };
 }

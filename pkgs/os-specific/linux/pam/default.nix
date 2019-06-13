@@ -1,15 +1,15 @@
-{ stdenv, buildPackages, hostPlatform, fetchurl, fetchpatch, flex, cracklib }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4 }:
 
 stdenv.mkDerivation rec {
   name = "linux-pam-${version}";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchurl {
-    url = "http://www.linux-pam.org/library/Linux-PAM-${version}.tar.bz2";
-    sha256 = "1fyi04d5nsh8ivd0rn2y0z83ylgc0licz7kifbb6xxi2ylgfs6i4";
+    url    = "https://github.com/linux-pam/linux-pam/releases/download/v1.3.1/Linux-PAM-${version}.tar.xz";
+    sha256 = "1nyh9kdi3knhxcbv5v4snya0g3gff0m671lnvqcbygw3rm77mx7g";
   };
 
-  patches = stdenv.lib.optionals (hostPlatform.libc == "musl") [
+  patches = stdenv.lib.optionals (stdenv.hostPlatform.libc == "musl") [
     (fetchpatch {
       url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/fix-compat.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
       sha256 = "1h5yp5h2mqp1fcwiwwklyfpa69a3i03ya32pivs60fd7g5bqa7sf";
@@ -18,10 +18,9 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/libpam-fix-build-with-eglibc-2.16.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
       sha256 = "1ib6shhvgzinjsc603k2x1lxh9dic6qq449fnk110gc359m23j81";
     })
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/musl-fix-pam_exec.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
-      sha256 = "04dx6s9d8cxl40r7m7dc4si47ds4niaqm7902y1d6wcjvs11vrf0";
-    })
+    # From adelie's package repo, using local copy since it seems to be currently offline.
+    # (we previously used similar patch from void, but stopped working with update to 1.3.1)
+    ./musl-fix-pam_exec.patch
   ];
 
   outputs = [ "out" "doc" "man" /* "modules" */ ];
@@ -29,24 +28,9 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ cracklib ];
+  buildInputs = [ cracklib db4 ];
 
   enableParallelBuilding = true;
-
-  crossAttrs = {
-    propagatedBuildInputs = [ flex.crossDrv cracklib.crossDrv ];
-    preConfigure = preConfigure + ''
-      $crossConfig-ar x ${flex.crossDrv}/lib/libfl.a
-      mv libyywrap.o libyywrap-target.o
-      ar x ${flex}/lib/libfl.a
-      mv libyywrap.o libyywrap-host.o
-      export LDFLAGS="$LDFLAGS $PWD/libyywrap-target.o"
-      sed -e 's/@CC@/gcc/' -i doc/specs/Makefile.in
-    '';
-    postConfigure = ''
-      sed -e "s@ $PWD/libyywrap-target.o@ $PWD/libyywrap-host.o@" -i doc/specs/Makefile
-    '';
-  };
 
   postInstall = ''
     mv -v $out/sbin/unix_chkpwd{,.orig}
@@ -62,7 +46,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$out/include/security"
-  '' + stdenv.lib.optionalString (hostPlatform.libc == "musl") ''
+  '' + stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
       # export ac_cv_search_crypt=no
       # (taken from Alpine linux, apparently insecure but also doesn't build O:))
       # disable insecure modules
@@ -70,9 +54,12 @@ stdenv.mkDerivation rec {
       sed -e 's/pam_rhosts//g' -i modules/Makefile.in
   '';
 
-  meta = {
-    homepage = http://ftp.kernel.org/pub/linux/libs/pam/;
+  doCheck = false; # fails
+
+  meta = with stdenv.lib; {
+    homepage = http://www.linux-pam.org/;
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
 }

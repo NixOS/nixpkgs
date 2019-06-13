@@ -1,9 +1,9 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip rec {
   name = "ubuntu-font-family-0.83";
 
-  url = "http://font.ubuntu.com/download/${name}.zip";
+  url = "https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
@@ -19,8 +19,8 @@ fetchzip rec {
     contemporary style and contains characteristics unique to
     the Ubuntu brand that convey a precise, reliable and free attitude.";
     homepage = http://font.ubuntu.com/;
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.antono ];
+    license = lib.licenses.free;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.antono ];
   };
 }

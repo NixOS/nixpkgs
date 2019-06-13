@@ -1,28 +1,22 @@
-{stdenv, fetchurl, cmake}:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "qhull-2012.1";
+  name = "qhull-2016.1";
 
-  src = fetchurl {
-    url = "${meta.homepage}/download/${name}-src.tgz";
-    sha256 = "127zpjp6sm8c101hz239k82lpxqcqf4ksdyfqc2py2sm22kclpm3";
+  src = fetchFromGitHub {
+    owner = "qhull";
+    repo = "qhull";
+    rev = "5bbc75608c817b50383a0c24c3977cc09d0bbfde";
+    sha256 = "0wrgqc2mih7h8fs9v5jcn9dr56afqi9bgh2w9dcvzvzvxizr9kjj";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = "-DMAN_INSTALL_DIR=share/man/man1 -DDOC_INSTALL_DIR=share/doc/qhull";
-
-  hardeningDisable = [ "format" ];
-
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i 's/namespace std { struct bidirectional_iterator_tag; struct random_access_iterator_tag; }/#include <iterator>/' ./src/libqhullcpp/QhullIterator.h
-    sed -i 's/namespace std { struct bidirectional_iterator_tag; struct random_access_iterator_tag; }/#include <iterator>/' ./src/libqhullcpp/QhullLinkedList.h
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.qhull.org/;
-    description = "Computes the convex hull, Delaunay triangulation, Voronoi diagram and more";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.unix;
+    description = "Compute the convex hull, Delaunay triangulation, Voronoi diagram and more";
+    license = licenses.free;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ orivej ];
   };
 }

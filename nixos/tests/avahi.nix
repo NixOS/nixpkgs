@@ -2,11 +2,11 @@
 import ./make-test.nix ({ pkgs, ... } : {
   name = "avahi";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   nodes = let
-    cfg = { config, pkgs, ... }: {
+    cfg = { ... }: {
       services.avahi = {
         enable = true;
         nssmdns = true;

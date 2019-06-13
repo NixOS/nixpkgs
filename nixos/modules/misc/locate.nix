@@ -1,4 +1,4 @@
-{ config, options, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -101,7 +101,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = mkIf isMLocate { mlocate = {}; };
+    users.groups = mkIf isMLocate { mlocate = {}; };
 
     security.wrappers = mkIf isMLocate {
       locate = {

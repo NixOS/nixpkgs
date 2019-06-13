@@ -2,6 +2,10 @@
 
 assert stdenv.lib.versionOlder "4.00" (stdenv.lib.getVersion ocaml);
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "fieldslib-109.20.03 is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation {
   name = "ocaml-fieldslib-109.20.03";
 

@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "A command-line screen capture utility";
     platforms = platforms.linux;
     maintainers = with maintainers; [ garbas ];
+    license = licenses.mit;
   };
 }

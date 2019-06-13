@@ -1,6 +1,6 @@
-{ lib, pythonPackages, fetchurl, git }:
+{ lib, python3Packages, fetchurl, git }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "nox-${version}";
   version = "0.0.6";
   namePrefix = "";
@@ -12,9 +12,9 @@ pythonPackages.buildPythonApplication rec {
 
   patches = [ ./nox-review-wip.patch ];
 
-  buildInputs = [ pythonPackages.pbr git ];
+  buildInputs = [ python3Packages.pbr git ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
       dogpile_cache
       click
       requests

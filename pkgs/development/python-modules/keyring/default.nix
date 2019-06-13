@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "12.0.1";
+  version = "18.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "846c9c709ee1203bac5444abec19b5228f4601377686f33cba672aa0ba313abd";
+    sha256 = "67d6cc0132bd77922725fae9f18366bb314fd8f95ff4d323a4df41890a96a838";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -17,9 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
 
-  # all tests with flake8 are broken right now
-  # https://github.com/tholo/pytest-flake8/issues/45
-  doCheck = false;
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     py.test

@@ -6,8 +6,6 @@ with lib;
 
 let
 
-  cfge = config.environment;
-
   cfg = config.programs.xonsh;
 
 in
@@ -52,7 +50,6 @@ in
 
     environment.shells =
       [ "/run/current-system/sw/bin/xonsh"
-        "/var/run/current-system/sw/bin/xonsh"
         "${pkgs.xonsh}/bin/xonsh"
       ];
 

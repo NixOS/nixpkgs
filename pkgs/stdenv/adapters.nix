@@ -31,14 +31,23 @@ rec {
 
   # Return a modified stdenv that tries to build statically linked
   # binaries.
-  makeStaticBinaries = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = "-static";
-        configureFlags =
-          toString args.configureFlags or ""
-          + " --disable-shared"; # brrr...
+  makeStaticBinaries = stdenv:
+    let stdenv' = if stdenv.hostPlatform.libc != "glibc" then stdenv else
+      stdenv.override (prev: {
+          extraBuildInputs = prev.extraBuildInputs or [] ++ [
+              stdenv.glibc.static
+            ];
+        });
+    in stdenv' //
+    { mkDerivation = args:
+      if stdenv'.hostPlatform.isDarwin
+      then throw "Cannot build fully static binaries on Darwin/macOS"
+      else stdenv'.mkDerivation (args // {
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+        configureFlags = (args.configureFlags or []) ++ [
+            "--disable-shared" # brrr...
+          ];
       });
-      isStatic = true;
     };
 
 
@@ -47,51 +56,13 @@ rec {
   makeStaticLibraries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontDisableStatic = true;
-        configureFlags =
-          toString args.configureFlags or ""
-          + " --enable-static --disable-shared";
+        configureFlags = (args.configureFlags or []) ++ [
+          "--enable-static"
+          "--disable-shared"
+        ];
+        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
     };
-
-
-  # Return a modified stdenv that adds a cross compiler to the
-  # builds.
-  makeStdenvCross = { stdenv
-                    , cc
-                    , buildPlatform, hostPlatform, targetPlatform
-                    , # Prior overrides are surely not valid as packages built
-                      # with this run on a different platform, so disable by
-                      # default.
-                      overrides ? _: _: {}
-                    } @ overrideArgs: let
-    stdenv = overrideArgs.stdenv.override {
-      inherit
-        buildPlatform hostPlatform targetPlatform
-        cc overrides;
-
-      allowedRequisites = null;
-      extraBuildInputs = [ ]; # Old ones run on wrong platform
-    };
-  in stdenv // {
-    mkDerivation =
-      { nativeBuildInputs ? []
-      , ...
-      } @ args:
-
-        stdenv.mkDerivation (args // {
-          nativeBuildInputs = nativeBuildInputs
-              # without proper `file` command, libtool sometimes fails
-              # to recognize 64-bit DLLs
-            ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
-            ++ stdenv.lib.optional
-                 (hostPlatform.isAarch64 || hostPlatform.isMips || hostPlatform.libc == "musl")
-                 pkgs.updateAutotoolsGnuConfigScriptsHook
-            ;
-
-          crossConfig = hostPlatform.config;
-        } // args.crossAttrs or {});
-  };
-
 
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.
@@ -158,7 +129,7 @@ rec {
      with the following function:
 
      isFree = license: with builtins;
-       if isNull license then true
+       if license == null then true
        else if isList license then lib.all isFree license
        else license != "non-free" && license != "unfree";
 
@@ -208,6 +179,21 @@ rec {
   useGoldLinker = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
+      });
+    };
+
+
+  /* Modify a stdenv so that it builds binaries optimized specifically
+     for the machine they are built on.
+
+     WARNING: this breaks purity! */
+  impureUseNativeOptimizations = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
+        NIX_ENFORCE_NO_NATIVE = false;
+
+        preferLocalBuild = true;
+        allowSubstitutes = false;
       });
     };
 }

@@ -1,33 +1,30 @@
-# Monit system watcher
-# http://mmonit.org/monit/
-
 {config, pkgs, lib, ...}:
 
-let inherit (lib) mkOption mkIf;
+with lib;
+
+let
+  cfg = config.services.monit;
 in
 
 {
-  options = {
-    services.monit = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run Monit system watcher.
-        '';
-      };
-      config = mkOption {
-        default = "";
-        description = "monitrc content";
-      };
+  options.services.monit = {
+
+    enable = mkEnableOption "Monit";
+
+    config = mkOption {
+      type = types.lines;
+      default = "";
+      description = "monitrc content";
     };
+
   };
 
-  config = mkIf config.services.monit.enable {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.monit ];
 
     environment.etc."monitrc" = {
-      text = config.services.monit.config;
+      text = cfg.config;
       mode = "0400";
     };
 

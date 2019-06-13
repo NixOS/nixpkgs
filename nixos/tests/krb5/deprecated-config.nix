@@ -8,7 +8,7 @@ import ../make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { config, pkgs, ... }: {
+    { ... }: {
       krb5 = {
         enable = true;
         defaultRealm = "ATHENA.MIT.EDU";

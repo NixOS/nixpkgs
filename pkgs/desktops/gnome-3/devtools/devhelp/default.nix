@@ -1,21 +1,28 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, glib, appstream-glib, gobjectIntrospection
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gtk3, wrapGAppsHook
+, glib, amtk, appstream-glib, gobject-introspection, python3
 , webkitgtk, gettext, itstool, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   name = "devhelp-${version}";
-  version = "3.28.1";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/devhelp/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "08a8xizjqz68k30zd37r7g516azhan9bbrjsvv10hjd5dg3f476s";
+    url = "mirror://gnome/sources/devhelp/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "06sa83zggk29wcg75fl3gqh0rmi7cd3gsbk09a2z23r7vpy7xanq";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext itstool wrapGAppsHook appstream-glib gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook appstream-glib gobject-introspection python3 ];
   buildInputs = [
-    glib gtk3 webkitgtk
-    gnome3.defaultIconTheme gsettings-desktop-schemas
+    glib gtk3 webkitgtk amtk
+    gnome3.adwaita-icon-theme gsettings-desktop-schemas
   ];
+
+  doCheck = true;
+
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

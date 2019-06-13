@@ -5,29 +5,34 @@
 , drivers ? []
 }:
 let
-  version = "3.8.1";
+  version = "3.9.1";
 in stdenv.mkDerivation rec {
   name = "squirrel-sql-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";
-    sha256 = "1vv38i4rwm8c8h0p9mmz21dyafd71pqprj7b8i5vx7f4q8xns2d2";
+    sha256 = "1xpkh9kwdjzd0zks8c4mq3add9ivc24hb0hflp11dl32dsdmzrai";
   };
 
-  buildInputs = [
-    jre makeWrapper stdenv unzip
-  ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ jre ];
 
   unpackPhase = ''
+    runHook preUnpack
     unzip ${src}
+    runHook postUnpack
   '';
 
   buildPhase = ''
+    runHook preBuild
     cd squirrelsql-${version}-standard
     chmod +x squirrel-sql.sh
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+    
     mkdir -p $out/share/squirrel-sql
     cp -r . $out/share/squirrel-sql
 
@@ -42,11 +47,15 @@ in stdenv.mkDerivation rec {
     makeWrapper $out/share/squirrel-sql/squirrel-sql.sh $out/bin/squirrel-sql \
       --set CLASSPATH "$cp" \
       --set JAVA_HOME "${jre}"
+    # Make sure above `CLASSPATH` gets picked up
+    substituteInPlace $out/share/squirrel-sql/squirrel-sql.sh --replace "-cp \"\$CP\"" "-cp \"\$CLASSPATH:\$CP\""
 
     mkdir -p $out/share/icons/hicolor/32x32/apps
     ln -s $out/share/squirrel-sql/icons/acorn.png \
       $out/share/icons/hicolor/32x32/apps/squirrel-sql.png
     ln -s ${desktopItem}/share/applications $out/share
+    
+    runHook postInstall
   '';
 
   desktopItem = makeDesktopItem {
@@ -59,11 +68,11 @@ in stdenv.mkDerivation rec {
     icon = "squirrel-sql";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Universal SQL Client";
     homepage = http://squirrel-sql.sourceforge.net/;
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ khumba ];
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ khumba ];
   };
 }

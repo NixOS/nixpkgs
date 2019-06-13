@@ -1,4 +1,4 @@
-{ config, options, lib, pkgs, utils, stdenv, ... }:
+{ config, options, lib, pkgs, utils, ... }:
 
 with lib;
 with utils;
@@ -45,22 +45,6 @@ let
       exit 1
     '';
   });
-
-  # Collect all interfaces that are defined for a device
-  # as device:interface key:value pairs.
-  wlanDeviceInterfaces =
-    let
-      allDevices = unique (mapAttrsToList (_: v: v.device) cfg.wlanInterfaces);
-      interfacesOfDevice = d: filterAttrs (_: v: v.device == d) cfg.wlanInterfaces;
-    in
-      genAttrs allDevices (d: interfacesOfDevice d);
-
-  # Convert device:interface key:value pairs into a list, and if it exists,
-  # place the interface which is named after the device at the beginning.
-  wlanListDeviceFirst = device: interfaces:
-    if hasAttr device interfaces
-    then mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n==device) interfaces) ++ mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n!=device) interfaces)
-    else mapAttrsToList (n: v: v // {_iName = n;}) interfaces;
 
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
@@ -357,7 +341,7 @@ in
         You should try to make this ID unique among your machines. You can
         generate a random 32-bit ID using the following commands:
 
-        <literal>cksum /etc/machine-id | while read c rest; do printf "%x" $c; done</literal>
+        <literal>head -c 8 /etc/machine-id</literal>
 
         (this derives it from the machine-id that systemd generates) or
 
@@ -1011,7 +995,7 @@ in
       '';
 
     environment.etc."hostid" = mkIf (cfg.hostId != null)
-      { source = pkgs.runCommand "gen-hostid" {} ''
+      { source = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
           hi="${cfg.hostId}"
           ${if pkgs.stdenv.isBigEndian then ''
             echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
@@ -1069,7 +1053,7 @@ in
       };
     } // (listToAttrs (flip map interfaces (i:
       let
-        deviceDependency = if config.boot.isContainer
+        deviceDependency = if (config.boot.isContainer || i.name == "lo")
           then []
           else [ (subsystemDevice i.name) ];
       in

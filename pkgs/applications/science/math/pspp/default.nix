@@ -1,5 +1,7 @@
 { stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk3, gsl
 , pkgconfig, gtksourceview, pango, gettext
+, makeWrapper, gsettings-desktop-schemas, hicolor-icon-theme
+, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -12,14 +14,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libxml2 readline zlib perl cairo gtk3 gsl
-    gtksourceview pango gettext ];
+    gtksourceview pango gettext
+    makeWrapper gsettings-desktop-schemas hicolor-icon-theme ];
 
   doCheck = false;
 
   enableParallelBuilding = true;
 
+  preFixup = ''
+    wrapProgram "$out/bin/psppire" \
+     --prefix XDG_DATA_DIRS : "$out/share" \
+     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS" \
+     --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+     --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
+  '';
+
   meta = {
-    homepage = http://www.gnu.org/software/pspp/;
+    homepage = https://www.gnu.org/software/pspp/;
     description = "A free replacement for SPSS, a program for statistical analysis of sampled data";
     license = stdenv.lib.licenses.gpl3Plus;
 
@@ -35,6 +46,6 @@ stdenv.mkDerivation rec {
       more traditional syntax commands.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

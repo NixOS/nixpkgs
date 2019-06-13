@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
+{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
 , gstreamer, gst-plugins-base, GConf, setfile
-, withMesa ? true, libGLU ? null, libGL ? null
+, libGLSupported
+, withMesa ? libGLSupported, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
 , Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
 }:
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
+    [ gtk2 libXinerama libSM libXxf86vm xorgproto gstreamer
       gst-plugins-base GConf ]
     ++ optional withMesa libGLU
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];
@@ -73,12 +74,13 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  
+
   meta = {
     platforms = with platforms; darwin ++ linux;
     license = licenses.wxWindows;
     homepage = https://www.wxwidgets.org/;
     description = "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
     longDescription = "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

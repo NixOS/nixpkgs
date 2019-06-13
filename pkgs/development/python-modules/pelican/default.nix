@@ -1,20 +1,18 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy26
-, glibcLocales, pandoc, git
+{ stdenv, buildPythonPackage, fetchFromGitHub
+, glibcLocales, git
 , mock, nose, markdown, lxml, typogrify
 , jinja2, pygments, docutils, pytz, unidecode, six, dateutil, feedgenerator
 , blinker, pillow, beautifulsoup4, markupsafe }:
 
 buildPythonPackage rec {
   pname = "pelican";
-  name = "${pname}-${version}";
-  version = "3.7.1";
-  disabled = isPy26;
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "getpelican";
     repo = "pelican";
     rev = version;
-    sha256 = "0nkxrb77k2bra7bqckg7f5k73wk98hcbz7rimxl8sw05b2bvd62g";
+    sha256 = "09fcwnnfln0cl5v0qpxzrllj27znrg6dbhaksxrl0192c3mbyjvl";
   };
 
   doCheck = true;
@@ -27,7 +25,7 @@ buildPythonPackage rec {
     glibcLocales
     # Note: Pelican has to adapt to a changed CLI of pandoc before enabling this
     # again. Compare https://github.com/getpelican/pelican/pull/2252.
-    # Version 3.7.1 is incompatible with our current pandoc version.
+    # Version 4.0.1 is incompatible with our current pandoc version.
     # pandoc
     git
     mock
@@ -44,6 +42,11 @@ buildPythonPackage rec {
   postPatch= ''
     substituteInPlace pelican/tests/test_pelican.py \
       --replace "'git'" "'${git}/bin/git'"
+
+    # Markdown-3.1 changed footnote separator to colon
+    # https://github.com/getpelican/pelican/issues/2493#issuecomment-491723744
+    sed -i '/test_article_with_footnote/i\
+        @unittest.skip("")' pelican/tests/test_readers.py
   '';
 
   LC_ALL="en_US.UTF-8";

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!@shell@
 
 inBinDir=$1
 out=$2

@@ -38,12 +38,15 @@ index 75abede50..10f039376 100644
  
  find_dependency(Boost "@Boost_MINIMUM_VERSION@")
  
-@@ -22,4 +22,4 @@ include(${CMAKE_CURRENT_LIST_DIR}/KF5AkonadiTargets.cmake)
+@@ -22,7 +22,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/KF5AkonadiTargets.cmake)
  include(${CMAKE_CURRENT_LIST_DIR}/KF5AkonadiMacros.cmake)
  
  # The directory where akonadi-xml.xsd and kcfg2dbus.xsl are installed
 -set(KF5Akonadi_DATA_DIR "@PACKAGE_KF5Akonadi_DATA_DIR@")
 +set(KF5Akonadi_DATA_DIR "@KF5Akonadi_DATA_DIR@")
+
+ ####################################################################################
+ # CMAKE_AUTOMOC
 -- 
 2.15.1
 

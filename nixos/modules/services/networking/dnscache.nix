@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.dnscache;
 
-  dnscache-root = pkgs.runCommand "dnscache-root" {} ''
+  dnscache-root = pkgs.runCommand "dnscache-root" { preferLocalBuild = true; } ''
     mkdir -p $out/{servers,ip}
 
     ${concatMapStrings (ip: ''
@@ -84,7 +84,7 @@ in {
 
   config = mkIf config.services.dnscache.enable {
     environment.systemPackages = [ pkgs.djbdns ];
-    users.extraUsers.dnscache = {};
+    users.users.dnscache = {};
 
     systemd.services.dnscache = {
       description = "djbdns dnscache server";

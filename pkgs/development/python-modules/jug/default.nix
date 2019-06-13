@@ -4,9 +4,8 @@
 , zlib }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Jug";
-  version = "1.6.6";
+  version = "1.6.7";
   buildInputs = [ nose numpy ];
   propagatedBuildInputs = [
     bottle
@@ -19,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "897ffbbbe8061772c238b4f436512ea3696016a04473c45a716d78c0de103ec1";
+    sha256 = "a7faba838f3437163ae8459bff96e2c6ca1298312bdb9104c702685178d17269";
   };
 
   meta = with stdenv.lib; {

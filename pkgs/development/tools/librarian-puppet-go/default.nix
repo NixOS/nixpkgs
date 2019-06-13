@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
   name = "librarian-puppet-go-${version}";
@@ -18,7 +18,7 @@ buildGoPackage rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "librarian-puppet implementation in go.";
-    license = licenses.unfree; # still unspecified https://github.com/tmtk75/librarian-puppet-go/issues/5
+    license = licenses.mit;
     maintainers = with maintainers; [ womfoo ];
     platforms = [ "x86_64-linux" ];
   };

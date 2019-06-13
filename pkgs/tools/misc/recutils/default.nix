@@ -1,22 +1,19 @@
-{ fetchurl, stdenv, gettext, emacs, curl, check, bc }:
+{ fetchurl, stdenv, emacs, curl, check, bc }:
 
 stdenv.mkDerivation rec {
-  name = "recutils-1.7";
+  name = "recutils-1.8";
 
   src = fetchurl {
     url = "mirror://gnu/recutils/${name}.tar.gz";
-    sha256 = "0cdwa4094x3yx7vn98xykvnlp9rngvd58d19vs3vh5hrvggccg93";
+    sha256 = "14xiln4immfsw8isnvwvq0h23f6z0wilpgsc4qzabnrzb5lsx3nz";
   };
-
-  doCheck = true;
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ curl emacs ] ++ (stdenv.lib.optionals doCheck [ check bc ]);
+  buildInputs = [ curl emacs ];
 
-  postInstall = ''
-    ${emacs}/bin/emacs -Q -batch -f batch-byte-compile $out/share/emacs/site-lisp/*.el #*/
-  '';
+  checkInputs = [ check bc ];
+  doCheck = true;
 
   meta = {
     description = "Tools and libraries to access human-editable, text-based databases";
@@ -28,7 +25,7 @@ stdenv.mkDerivation rec {
          number of named fields.
       '';
 
-    homepage = http://www.gnu.org/software/recutils/;
+    homepage = https://www.gnu.org/software/recutils/;
 
     license = stdenv.lib.licenses.gpl3Plus;
 

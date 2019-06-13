@@ -14,15 +14,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-ppl-version.patch ];
 
-  configureFlags = "--with-ppl=${ppl}";
+  configureFlags = [ "--with-ppl=${ppl}" ];
 
   preAutoreconf = ''
     touch NEWS ChangeLog AUTHORS
   '';
-
-  crossAttrs = {
-    configureFlags = "--with-ppl=${ppl.crossDrv}";
-  };
 
   doCheck = true;
 

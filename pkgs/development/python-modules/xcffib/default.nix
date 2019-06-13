@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.6.0";
+  version = "0.8.0";
   pname = "xcffib";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "36142cb72535933e8e1ed39ff2c45559fa7038823bd6be6961ef8ee5bb0f6912";
+    sha256 = "1lf5plgfi92ir6bsjyjb9yvqjbxzh2cag33c8jl435iaxmnh76f3";
   };
 
   patchPhase = ''

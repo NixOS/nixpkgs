@@ -4,22 +4,22 @@ let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
   cmd = ''
-    @${pkgs.jre}/bin/java java \
+    @${cfg.jrePackage}/bin/java java \
         ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
         ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
         -jar ${stateDir}/lib/ace.jar
   '';
   mountPoints = [
     {
-      what = "${pkgs.unifi}/dl";
+      what = "${cfg.unifiPackage}/dl";
       where = "${stateDir}/dl";
     }
     {
-      what = "${pkgs.unifi}/lib";
+      what = "${cfg.unifiPackage}/lib";
       where = "${stateDir}/lib";
     }
     {
-      what = "${pkgs.mongodb}/bin";
+      what = "${cfg.mongodbPackage}/bin";
       where = "${stateDir}/bin";
     }
     {
@@ -38,6 +38,33 @@ in
       default = false;
       description = ''
         Whether or not to enable the unifi controller service.
+      '';
+    };
+
+    services.unifi.jrePackage = mkOption {
+      type = types.package;
+      default = pkgs.jre8;
+      defaultText = "pkgs.jre8";
+      description = ''
+        The JRE package to use. Check the release notes to ensure it is supported.
+      '';
+    };
+
+    services.unifi.unifiPackage = mkOption {
+      type = types.package;
+      default = pkgs.unifiLTS;
+      defaultText = "pkgs.unifiLTS";
+      description = ''
+        The unifi package to use.
+      '';
+    };
+
+    services.unifi.mongodbPackage = mkOption {
+      type = types.package;
+      default = pkgs.mongodb;
+      defaultText = "pkgs.mongodb";
+      description = ''
+        The mongodb package to use.
       '';
     };
 
@@ -87,18 +114,19 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.unifi = {
+    users.users.unifi = {
       uid = config.ids.uids.unifi;
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
 
     networking.firewall = mkIf cfg.openPorts {
-      # https://help.ubnt.com/hc/en-us/articles/204910084-UniFi-Change-Default-Ports-for-Controller-and-UAPs
+      # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
         8080  # Port for UAP to inform controller.
         8880  # Port for HTTP portal redirect, if guest portal is enabled.
         8843  # Port for HTTPS portal redirect, ditto.
+        6789  # Port for UniFi mobile speed test.
       ];
       allowedUDPPorts = [
         3478  # UDP port used for STUN.
@@ -137,7 +165,7 @@ in
         rm -rf "${stateDir}/webapps"
         mkdir -p "${stateDir}/webapps"
         chown unifi "${stateDir}/webapps"
-        ln -s "${pkgs.unifi}/webapps/ROOT" "${stateDir}/webapps/ROOT"
+        ln -s "${cfg.unifiPackage}/webapps/ROOT" "${stateDir}/webapps/ROOT"
       '';
 
       postStop = ''
@@ -157,4 +185,5 @@ in
 
   };
 
+  meta.maintainers = with lib.maintainers; [ erictapen ];
 }

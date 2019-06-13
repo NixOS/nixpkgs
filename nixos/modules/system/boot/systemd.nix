@@ -65,13 +65,12 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.machine1.service"
       "user@.service"
+      "user-runtime-dir@.service"
 
       # Journal.
       "systemd-journald.socket"
       "systemd-journald.service"
       "systemd-journal-flush.service"
-      "systemd-journal-gatewayd.socket"
-      "systemd-journal-gatewayd.service"
       "systemd-journal-catalog-update.service"
       "systemd-journald-audit.socket"
       "systemd-journald-dev-log.socket"
@@ -160,8 +159,10 @@ let
       "systemd-binfmt.service"
       "systemd-exit.service"
       "systemd-update-done.service"
-    ]
-    ++ cfg.additionalUpstreamSystemUnits;
+    ] ++ optionals config.services.journald.enableHttpGateway [
+      "systemd-journal-gatewayd.socket"
+      "systemd-journal-gatewayd.service"
+    ] ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
     [ "sysinit.target.wants"
@@ -188,14 +189,11 @@ let
       "timers.target"
     ];
 
-  boolToString = value: if value then "yes" else "no";
-
   makeJobScript = name: text:
-    let mkScriptName =  s: (replaceChars [ "\\" ] [ "-" ] (shellEscape s) );
-        x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${mkScriptName name}"; inherit text; };
-    in "${x}/bin/${mkScriptName name}";
+    let mkScriptName =  s: "unit-script-" + (replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape s) );
+    in  pkgs.writeTextFile { name = mkScriptName name; executable = true; inherit text; };
 
-  unitConfig = { name, config, ... }: {
+  unitConfig = { config, options, ... }: {
     config = {
       unitConfig =
         optionalAttrs (config.requires != [])
@@ -221,7 +219,9 @@ let
         // optionalAttrs (config.documentation != []) {
           Documentation = toString config.documentation; }
         // optionalAttrs (config.onFailure != []) {
-          OnFailure = toString config.onFailure;
+          OnFailure = toString config.onFailure; }
+        // optionalAttrs (options.startLimitIntervalSec.isDefined) {
+          StartLimitIntervalSec = toString config.startLimitIntervalSec;
         };
     };
   };
@@ -277,7 +277,7 @@ let
       ];
   };
 
-  mountConfig = { name, config, ... }: {
+  mountConfig = { config, ... }: {
     config = {
       mountConfig =
         { What = config.what;
@@ -290,7 +290,7 @@ let
     };
   };
 
-  automountConfig = { name, config, ... }: {
+  automountConfig = { config, ... }: {
     config = {
       automountConfig =
         { Where = config.where;
@@ -321,7 +321,9 @@ let
             in concatMapStrings (n:
               let s = optionalString (env."${n}" != null)
                 "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
-              in if stringLength s >= 2048 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
+              # systemd max line length is now 1MiB
+              # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
+              in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
           ${if def.reloadIfChanged then ''
             X-ReloadIfChanged=true
           '' else if !def.restartIfChanged then ''
@@ -389,7 +391,7 @@ let
 
   logindHandlerType = types.enum [
     "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
-    "hibernate" "hybrid-sleep" "lock"
+    "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
   ];
 
 in
@@ -515,7 +517,7 @@ in
     };
 
     systemd.globalEnvironment = mkOption {
-      type = types.attrs;
+      type = with types; attrsOf (nullOr (either str (either path package)));
       default = {};
       example = { TZ = "CET"; };
       description = ''
@@ -548,7 +550,7 @@ in
     };
 
     services.journald.rateLimitInterval = mkOption {
-      default = "10s";
+      default = "30s";
       type = types.str;
       description = ''
         Configures the rate limiting interval that is applied to all
@@ -561,7 +563,7 @@ in
     };
 
     services.journald.rateLimitBurst = mkOption {
-      default = 100;
+      default = 1000;
       type = types.int;
       description = ''
         Configures the rate limiting burst limit (number of messages per
@@ -589,13 +591,41 @@ in
       '';
     };
 
+    services.journald.forwardToSyslog = mkOption {
+      default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
+      defaultText = "services.rsyslogd.enable || services.syslog-ng.enable";
+      type = types.bool;
+      description = ''
+        Whether to forward log messages to syslog.
+      '';
+    };
+
     services.logind.extraConfig = mkOption {
       default = "";
       type = types.lines;
       example = "IdleAction=lock";
       description = ''
-        Extra config options for systemd-logind. See man logind.conf for
-        available options.
+        Extra config options for systemd-logind. See
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html">
+        logind.conf(5)</link> for available options.
+      '';
+    };
+
+    services.logind.killUserProcesses = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Specifies whether the processes of a user should be killed
+        when the user logs out.  If true, the scope unit corresponding
+        to the session and all processes inside that scope will be
+        terminated.  If false, the scope is "abandoned" (see
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.scope.html#">
+        systemd.scope(5)</link>), and processes are not killed.
+        </para>
+
+        <para>
+        See <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=">logind.conf(5)</link>
+        for more details.
       '';
     };
 
@@ -617,6 +647,19 @@ in
       description = ''
         Specifies what to be done when the laptop lid is closed
         and another screen is added.
+      '';
+    };
+
+    services.logind.lidSwitchExternalPower = mkOption {
+      default = config.services.logind.lidSwitch;
+      defaultText = "services.logind.lidSwitch";
+      example = "ignore";
+      type = logindHandlerType;
+
+      description = ''
+        Specifies what to do when the laptop lid is closed and the system is
+        on external power. By default use the same action as specified in
+        services.logind.lidSwitch.
       '';
     };
 
@@ -717,7 +760,10 @@ in
     environment.etc = let
       # generate contents for /etc/systemd/system-generators from
       # systemd.generators and systemd.generator-packages
-      generators = pkgs.runCommand "system-generators" { packages = cfg.generator-packages; } ''
+      generators = pkgs.runCommand "system-generators" {
+          preferLocalBuild = true;
+          packages = cfg.generator-packages;
+        } ''
         mkdir -p $out
         for package in $packages
         do
@@ -749,20 +795,25 @@ in
 
       "systemd/journald.conf".text = ''
         [Journal]
+        Storage=persistent
         RateLimitInterval=${config.services.journald.rateLimitInterval}
         RateLimitBurst=${toString config.services.journald.rateLimitBurst}
         ${optionalString (config.services.journald.console != "") ''
           ForwardToConsole=yes
           TTYPath=${config.services.journald.console}
         ''}
+        ${optionalString (config.services.journald.forwardToSyslog) ''
+          ForwardToSyslog=yes
+        ''}
         ${config.services.journald.extraConfig}
       '';
 
       "systemd/logind.conf".text = ''
         [Login]
-        KillUserProcesses=no
+        KillUserProcesses=${if config.services.logind.killUserProcesses then "yes" else "no"}
         HandleLidSwitch=${config.services.logind.lidSwitch}
         HandleLidSwitchDocked=${config.services.logind.lidSwitchDocked}
+        HandleLidSwitchExternalPower=${config.services.logind.lidSwitchExternalPower}
         ${config.services.logind.extraConfig}
       '';
 
@@ -785,26 +836,13 @@ in
 
     services.dbus.enable = true;
 
-    system.activationScripts.systemd = stringAfter [ "groups" ]
-      ''
-        mkdir -m 0755 -p /var/lib/udev
-
-        if ! [ -e /etc/machine-id ]; then
-          ${systemd}/bin/systemd-machine-id-setup
-        fi
-
-        # Keep a persistent journal. Note that systemd-tmpfiles will
-        # set proper ownership/permissions.
-        mkdir -m 0700 -p /var/log/journal
-      '';
-
-    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
-    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
-    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
-    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
+    users.users.systemd-network.uid = config.ids.uids.systemd-network;
+    users.groups.systemd-network.gid = config.ids.gids.systemd-network;
+    users.users.systemd-resolve.uid = config.ids.uids.systemd-resolve;
+    users.groups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
 
     # Target for ‘charon send-keys’ to hook into.
-    users.extraGroups.keys.gid = config.ids.gids.keys;
+    users.groups.keys.gid = config.ids.gids.keys;
 
     systemd.targets.keys =
       { description = "Security Keys";
@@ -840,9 +878,9 @@ in
         "TMPFS_XATTR" "SECCOMP"
       ];
 
-    users.extraGroups.systemd-journal.gid = config.ids.gids.systemd-journal;
-    users.extraUsers.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
-    users.extraGroups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
+    users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
+    users.users.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
+    users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =
@@ -881,6 +919,7 @@ in
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
+    systemd.services.systemd-udev-settle.restartIfChanged = false; # Causes long delays in nixos-rebuild
     # Restarting systemd-logind breaks X11
     # - upstream commit: https://cgit.freedesktop.org/xorg/xserver/commit/?id=dc48bd653c7e101
     # - systemd announcement: https://github.com/systemd/systemd/blob/22043e4317ecd2bc7834b48a6d364de76bb26d91/NEWS#L103-L112
@@ -888,6 +927,9 @@ in
     #systemd.services.systemd-logind.restartTriggers = [ config.environment.etc."systemd/logind.conf".source ];
     systemd.services.systemd-logind.restartIfChanged = false;
     systemd.services.systemd-logind.stopIfChanged = false;
+    # The user-runtime-dir@ service is managed by systemd-logind we should not touch it or else we break the users' sessions.
+    systemd.services."user-runtime-dir@".stopIfChanged = false;
+    systemd.services."user-runtime-dir@".restartIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
     systemd.services.systemd-journald.stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;

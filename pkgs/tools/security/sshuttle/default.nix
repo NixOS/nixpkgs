@@ -1,34 +1,23 @@
-{ stdenv, python3Packages, fetchurl, makeWrapper, pandoc
+{ stdenv, python3Packages, fetchurl, makeWrapper
 , coreutils, iptables, nettools, openssh, procps, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   name = "sshuttle-${version}";
-  version = "0.78.3";
+  version = "0.78.5";
 
   src = fetchurl {
-    sha256 = "12xyq5h77b57cnkljdk8qyjxzys512b73019s20x6ck5brj1m8wa";
+    sha256 = "0vp13xwrhx4m6zgsyzvai84lkq9mzkaw47j58dk0ll95kaymk2x8";
     url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
   };
 
-  patches = [
-    ./sudo.patch
-    (fetchpatch {
-      url = "https://github.com/sshuttle/sshuttle/commit/91aa6ff625f7c89a19e6f8702425cfead44a146f.patch";
-      sha256 = "0sqcc6kj53wlas2d3klbyilhns6vakzwbbp8y7j9wlmbnc530pks";
-    })
-    # fix macos patch
-    (fetchpatch {
-      url = "https://github.com/sshuttle/sshuttle/commit/884bd6deb0b699a5648bb1c7bdfbc7be8ea0e7df.patch";
-      sha256 = "1nn0wx0rckxl9yzw9dxjji44zw4xqz7ws4qwjdvfn48w1f786lmz";
-    })
-  ];
+  patches = [ ./sudo.patch ];
 
-  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.system != "i686-linux") pandoc;
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ];
   buildInputs =
     [ coreutils openssh procps nettools ]
     ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];
 
-  checkInputs = with python3Packages; [ mock pytest pytestrunner ];
+  checkInputs = with python3Packages; [ mock pytest pytestcov pytestrunner flake8 ];
 
   postInstall = let
     mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
@@ -42,10 +31,11 @@ python3Packages.buildPythonApplication rec {
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''
       Forward connections over SSH, without requiring administrator access to the
-      target network (though it does require Python 2 at both ends).
+      target network (though it does require Python 2.7, Python 3.5 or later at both ends).
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
-    maintainers = with maintainers; [ domenkozar ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ domenkozar carlosdagos ];
     platforms = platforms.unix;
   };
 }

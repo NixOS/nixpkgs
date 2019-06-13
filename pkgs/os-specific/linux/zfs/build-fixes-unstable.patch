@@ -1,0 +1,36 @@
+From b323e7a7ebb2327943851fa3fd139399eb24d3dd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Mon, 13 Aug 2018 22:58:21 +0200
+Subject: [PATCH] build fixes needed for nixos
+
+---
+ module/Makefile.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/module/Makefile.in b/module/Makefile.in
+index 935bd2663..afb08df81 100644
+--- a/module/Makefile.in
++++ b/module/Makefile.in
+@@ -44,15 +44,15 @@ clean:
+ modules_install:
+ 	@# Install the kernel modules
+ 	$(MAKE) -C @LINUX_OBJ@ M=`pwd` $@ \
+-		INSTALL_MOD_PATH=$(DESTDIR)$(INSTALL_MOD_PATH) \
++		INSTALL_MOD_PATH=@prefix@/$(INSTALL_MOD_PATH) \
+ 		INSTALL_MOD_DIR=$(INSTALL_MOD_DIR) \
+ 		KERNELRELEASE=@LINUX_VERSION@
+ 	@# Remove extraneous build products when packaging
+-	kmoddir=$(DESTDIR)$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@; \
+-	if [ -n "$(DESTDIR)" ]; then \
++	kmoddir=@prefix@$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@; \
++	if [ -n "@prefix@" ]; then \
+ 		find $$kmoddir -name 'modules.*' | xargs $(RM); \
+ 	fi
+-	sysmap=$(DESTDIR)$(INSTALL_MOD_PATH)/boot/System.map-@LINUX_VERSION@; \
++	sysmap=@prefix@$(INSTALL_MOD_PATH)/boot/System.map-@LINUX_VERSION@; \
+ 	if [ -f $$sysmap ]; then \
+ 		depmod -ae -F $$sysmap @LINUX_VERSION@; \
+ 	fi
+-- 
+2.19.2
+

@@ -3,30 +3,25 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-ssh">
+ <title>Secure Shell Access</title>
 
-<title>Secure Shell Access</title>
-
-<para>Secure shell (SSH) access to your machine can be enabled by
-setting:
-
+ <para>
+  Secure shell (SSH) access to your machine can be enabled by setting:
 <programlisting>
-services.openssh.enable = true;
+<xref linkend="opt-services.openssh.enable"/> = true;
 </programlisting>
+  By default, root logins using a password are disallowed. They can be disabled
+  entirely by setting <xref linkend="opt-services.openssh.permitRootLogin"/> to
+  <literal>"no"</literal>.
+ </para>
 
-By default, root logins using a password are disallowed.  They can be
-disabled entirely by setting
-<literal>services.openssh.permitRootLogin</literal> to
-<literal>"no"</literal>.</para>
-
-<para>You can declaratively specify authorised RSA/DSA public keys for
-a user as follows:
-
+ <para>
+  You can declaratively specify authorised RSA/DSA public keys for a user as
+  follows:
 <!-- FIXME: this might not work if the user is unmanaged. -->
 <programlisting>
-users.extraUsers.alice.openssh.authorizedKeys.keys =
+<link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">users.users.alice.openssh.authorizedKeys.keys</link> =
   [ "ssh-dss AAAAB3NzaC1kc3MAAACBAPIkGWVEt4..." ];
 </programlisting>
-
-</para>
-
+ </para>
 </section>

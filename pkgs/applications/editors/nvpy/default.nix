@@ -1,10 +1,10 @@
-{ pkgs, fetchurl, tk, python2Packages }:
+{ pkgs, fetchurl, python2Packages }:
 
 let
   pythonPackages = python2Packages;
 in pythonPackages.buildPythonApplication rec {
   version = "0.9.7";
-  name = "nvpy-${version}";
+  pname = "nvpy";
 
   src = fetchurl {
     url = "https://github.com/cpbotha/nvpy/archive/v${version}.tar.gz";

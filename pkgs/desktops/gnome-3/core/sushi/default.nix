@@ -1,45 +1,35 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, gobjectIntrospection, glib
-, clutter-gtk, clutter-gst, gnome3, gtksourceview, libmusicbrainz
-, webkitgtk, libmusicbrainz5, icu, makeWrapper, gst_all_1
-, gdk_pixbuf, librsvg, gtk3, harfbuzz }:
+{ stdenv, fetchurl, pkgconfig, meson, gettext, gobject-introspection, glib
+, clutter-gtk, clutter-gst, gnome3, gtksourceview, gjs
+, webkitgtk, libmusicbrainz5, icu, wrapGAppsHook, gst_all_1
+, gdk_pixbuf, librsvg, gtk3, harfbuzz, ninja }:
 
 stdenv.mkDerivation rec {
   name = "sushi-${version}";
-  version = "3.24.0";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sushi/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "f90bb95172664486f8d529995007fd12f0df9d0c998e20658b6203f46ce70d48";
+    url = "mirror://gnome/sources/sushi/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0f1i8qp39gq749h90f7nwgrj4q6y55jnyh62n1v8hxvlk0b2wqnx";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "sushi"; attrPath = "gnome3.sushi"; };
-  };
-
-  propagatedUserEnvPkgs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ file intltool gobjectIntrospection glib gtk3
-                  clutter-gtk clutter-gst gnome3.gjs gtksourceview gdk_pixbuf
-                  librsvg gnome3.defaultIconTheme libmusicbrainz5 webkitgtk
-                  gnome3.evince icu makeWrapper harfbuzz ];
+  nativeBuildInputs = [
+    pkgconfig meson ninja gettext gobject-introspection wrapGAppsHook
+  ];
+  buildInputs = [
+    glib gtk3 gnome3.evince icu harfbuzz
+    clutter-gtk clutter-gst gjs gtksourceview gdk_pixbuf
+    librsvg libmusicbrainz5 webkitgtk
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+  ];
 
   enableParallelBuilding = true;
 
-  postConfigure = ''
-    substituteInPlace src/libsushi/sushi-font-widget.h \
-        --replace "<hb-ft.h>" "<harfbuzz/hb-ft.h>"
-    substituteInPlace src/libsushi/sushi-font-widget.c \
-        --replace "<hb-glib.h>" "<harfbuzz/hb-glib.h>"
-  '';
-
-  preFixup = ''
-    wrapProgram $out/libexec/sushi-start \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-  '';
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "sushi";
+      attrPath = "gnome3.sushi";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://en.wikipedia.org/wiki/Sushi_(software)";

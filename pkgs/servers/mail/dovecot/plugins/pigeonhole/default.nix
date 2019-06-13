@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "dovecot-pigeonhole-${version}";
-  version = "0.5.1";
+  version = "0.5.6";
 
   src = fetchurl {
-    url = "http://pigeonhole.dovecot.org/releases/2.3/dovecot-2.3-pigeonhole-${version}.tar.gz";
-    sha256 = "0ivmaxic6cygfphvlrvy0xgggydm7j7kjv1ssfqbr08q4rcsmc73";
+    url = "https://pigeonhole.dovecot.org/releases/2.3/dovecot-2.3-pigeonhole-${version}.tar.gz";
+    sha256 = "1f7m2213w4hvqr3lvr03bv4lh92k35gxl01c2x8q8akk7viffbvw";
   };
 
   buildInputs = [ dovecot openssl ];

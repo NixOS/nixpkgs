@@ -1,0 +1,26 @@
+diff --git a/src/sage/misc/package.py b/src/sage/misc/package.py
+index 3bca15d53b..7cf04ff8d1 100644
+--- a/src/sage/misc/package.py
++++ b/src/sage/misc/package.py
+@@ -478,16 +478,16 @@ def package_manifest(package):
+ 
+     EXAMPLES::
+ 
+-        sage: from sage.misc.package import package_manifest
+-        sage: sagetex_manifest = package_manifest('sagetex')
+-        sage: sagetex_manifest['package_name'] == 'sagetex'
++        sage: from sage.misc.package import package_manifest # optional - buildsystem
++        sage: sagetex_manifest = package_manifest('sagetex') # optional - buildsystem
++        sage: sagetex_manifest['package_name'] == 'sagetex' # optional - buildsystem
+         True
+-        sage: 'files' in sagetex_manifest
++        sage: 'files' in sagetex_manifest # optional - buildsystem
+         True
+ 
+     Test a nonexistent package::
+ 
+-        sage: package_manifest('dummy-package')
++        sage: package_manifest('dummy-package') # optional - buildsystem
+         Traceback (most recent call last):
+         ...
+         KeyError: 'dummy-package'

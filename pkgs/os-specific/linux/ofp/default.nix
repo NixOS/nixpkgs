@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure.ac --replace m4_esyscmd m4_esyscmd_s
-    substituteInPlace scripts/git_hash.sh --replace /bin/bash /bin/sh
+    substituteInPlace scripts/git_hash.sh --replace /bin/bash ${stdenv.shell}
     echo ${version} > .scmversion
   '';
 

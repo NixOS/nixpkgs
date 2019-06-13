@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/erikd/libsndfile/commit/85c877d5072866aadbe8ed0c3e0590fbb5e16788.patch";
       sha256 = "0kc7vp22qsxidhvmlc6nfamw7k92n0hcfpmwhb3gaksjamwhb2df";
     })
+    (fetchurl {
+      name = "CVE-2018-13139.patch";
+      url = "https://github.com/erikd/libsndfile/commit/aaea680337267bfb6d2544da878890ee7f1c5077.patch";
+      sha256 = "01q3m7pa3xqkh05ijmfgv064v8flkg4p24bgy9wxnc6wfcdifggx";
+    })
   ];
 
   nativeBuildInputs = [ pkgconfig ];

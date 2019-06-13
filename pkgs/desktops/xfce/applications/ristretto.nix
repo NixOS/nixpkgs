@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/applications/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/applications/${p_name}";
     description = "A fast and lightweight picture-viewer for the Xfce desktop environment";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

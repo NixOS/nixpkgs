@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.3.0.132";
 
   src = fetchurl {
-    url = "http://download.newrelic.com/server_monitor/archive/${version}/newrelic-sysmond-${version}-linux.tar.gz";
+    url = "https://download.newrelic.com/server_monitor/archive/${version}/newrelic-sysmond-${version}-linux.tar.gz";
     sha256 = "0cdvffdsadfahfn1779zjfawz6l77awab3g9mw43vsba1568jh4f";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "System-wide monitoring for newrelic";
-    homepage = http://newrelic.com/;
+    homepage = https://newrelic.com/;
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lnl7 ];

@@ -3,14 +3,13 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-luks-file-systems">
+ <title>LUKS-Encrypted File Systems</title>
 
-<title>LUKS-Encrypted File Systems</title>
-
-<para>NixOS supports file systems that are encrypted using
-<emphasis>LUKS</emphasis> (Linux Unified Key Setup).  For example,
-here is how you create an encrypted Ext4 file system on the device
-<filename>/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d</filename>:
-
+ <para>
+  NixOS supports file systems that are encrypted using
+  <emphasis>LUKS</emphasis> (Linux Unified Key Setup). For example, here is how
+  you create an encrypted Ext4 file system on the device
+  <filename>/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d</filename>:
 <screen>
 # cryptsetup luksFormat /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d
 
@@ -27,20 +26,15 @@ Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
 
 # mkfs.ext4 /dev/mapper/crypted
 </screen>
-
-To ensure that this file system is automatically mounted at boot time
-as <filename>/</filename>, add the following to
-<filename>configuration.nix</filename>:
-
+  To ensure that this file system is automatically mounted at boot time as
+  <filename>/</filename>, add the following to
+  <filename>configuration.nix</filename>:
 <programlisting>
-boot.initrd.luks.devices.crypted.device = "/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d";
-fileSystems."/".device = "/dev/mapper/crypted";
+<link linkend="opt-boot.initrd.luks.devices._name__.device">boot.initrd.luks.devices.crypted.device</link> = "/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d";
+<xref linkend="opt-fileSystems"/>."/".device = "/dev/mapper/crypted";
 </programlisting>
-
-Should grub be used as bootloader, and <filename>/boot</filename> is located
-on an encrypted partition, it is necessary to add the following grub option:
-<programlisting>boot.loader.grub.enableCryptodisk = true;</programlisting>
-
-</para>
-
+  Should grub be used as bootloader, and <filename>/boot</filename> is located
+  on an encrypted partition, it is necessary to add the following grub option:
+<programlisting><xref linkend="opt-boot.loader.grub.enableCryptodisk"/> = true;</programlisting>
+ </para>
 </section>

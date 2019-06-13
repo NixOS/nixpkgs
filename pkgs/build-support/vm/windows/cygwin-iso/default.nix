@@ -17,7 +17,7 @@ let
   };
 
   cygwinCross = (import ../../../../.. {
-    inherit (stdenv) system;
+    localSystem = stdenv.hostPlatform;
     crossSystem = {
       libc = "msvcrt";
       platform = {};

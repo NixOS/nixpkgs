@@ -135,12 +135,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = optional (cfg.group == "gocd-agent") {
+    users.groups = optional (cfg.group == "gocd-agent") {
       name = "gocd-agent";
       gid = config.ids.gids.gocd-agent;
     };
 
-    users.extraUsers = optional (cfg.user == "gocd-agent") {
+    users.users = optional (cfg.user == "gocd-agent") {
       name = "gocd-agent";
       description = "gocd-agent user";
       createHome = true;

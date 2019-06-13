@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     homepage = https://contextfreeart.org/;
+    license = licenses.gpl2;
     downloadPage = "https://contextfreeart.org/mediawiki/index.php/Download_page";
   };
 }

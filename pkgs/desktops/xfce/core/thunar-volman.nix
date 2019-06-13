@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, exo, gtk, libxfce4util, libxfce4ui
-, xfconf, udev, libgudev, libnotify }:
+, xfconf, udev, libgudev, libnotify, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   p_name  = "thunar-volman";
@@ -15,14 +15,13 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool exo gtk udev libgudev libxfce4ui libxfce4util
-      xfconf libnotify
+      xfconf libnotify hicolor-icon-theme
     ];
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://goodies.xfce.org/projects/thunar-plugins/thunar-volman;
+    homepage = https://goodies.xfce.org/projects/thunar-plugins/thunar-volman;
     description = "Thunar extension for automatic management of removable drives and media";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

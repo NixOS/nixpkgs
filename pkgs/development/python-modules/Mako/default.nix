@@ -4,20 +4,20 @@
 , markupsafe
 , nose
 , mock
-, pytest
+, pytest_3
 , isPyPy
 }:
 
 buildPythonPackage rec {
   pname = "Mako";
-  version = "1.0.7";
+  version = "1.0.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e02fde57bd4abb5ec400181e4c314f56ac3e49ba4fb8b0d50bba18cb27d25ae";
+    sha256 = "0728c404877cd4ca72c409c0ea372dc5f3b53fa1ad2bb434e1d216c0444ff1fd";
   };
 
-  checkInputs = [ markupsafe nose mock pytest ];
+  checkInputs = [ markupsafe nose mock pytest_3 ];
   propagatedBuildInputs = [ markupsafe ];
 
   doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25

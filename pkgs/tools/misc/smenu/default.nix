@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "v0.9.11";
+  version = "0.9.15";
   name = "smenu-${version}";
 
   src = fetchFromGitHub {
     owner  = "p-gen";
     repo   = "smenu";
-    rev    = version;
-    sha256 = "1va5gsxniin02casgdrqxvpzccm0vwjiql60qrsvncrq6nm6bz0d";
+    rev    = "v${version}";
+    sha256 = "0s9qhg6dln33x8r2g8igvgkyrv8g1z26wf8gcnqp3kbp6fw12izi";
   };
 
   buildInputs = [ ncurses ];
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
       your selection will be sent to standard output.
     '';
     license     = licenses.gpl2;
-    maintainers = [ ];
-    platforms   = platforms.linux;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms   = platforms.unix;
   };
 }
 

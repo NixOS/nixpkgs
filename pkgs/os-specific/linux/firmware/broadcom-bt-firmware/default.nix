@@ -27,10 +27,14 @@ stdenv.mkDerivation rec {
       linkname=$(basename $filename | awk 'match($0,/^(BCM)[0-9A-Z]+(-[0-9a-z]{4}-[0-9a-z]{4}\.hcd)$/,c) { print c[1]c[2] }')
       if ! [ -z $linkname ]
       then
-        ln -s -T $filename $out/lib/firmware/brcm/$linkname
+        ln -s --relative -T $filename $out/lib/firmware/brcm/$linkname
       fi
     done
   '';
+
+  outputHashMode = "recursive";
+  outputHashAlgo = "sha256";
+  outputHash = "042frb2dmrqfj8q83h5p769q6hg2b3i8fgnyvs9r9a71z7pbsagq";
 
   meta = with stdenv.lib; {
     description = "Firmware for Broadcom WIDCOMM® Bluetooth devices";

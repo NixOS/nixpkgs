@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{pkgs, ...}:
 
 {
   hardware.firmware = [ pkgs.zd1211fw ];

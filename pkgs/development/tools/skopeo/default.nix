@@ -1,22 +1,22 @@
 { stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
-, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree, libselinux
+, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, ostree, libselinux
 , go-md2man }:
 
 with stdenv.lib;
 
 let
-  version = "0.1.29";
+  version = "0.1.36";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    owner = "projectatomic";
+    owner = "containers";
     repo = "skopeo";
-    sha256 = "1lhzbyj2mm25x12s7g2jx4v8w19izjwlgx4lml13r5yy1spn65k2";
+    sha256 = "0q0d6dzx9q57fim0drxs7l45500f3228wq50vzj232x5qx5h00sj";
   };
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
 
-  goPackagePath = "github.com/projectatomic/skopeo";
+  goPackagePath = "github.com/containers/skopeo";
 
 in
 buildGoPackage rec {
@@ -28,19 +28,23 @@ buildGoPackage rec {
   excludedPackages = "integration";
 
   nativeBuildInputs = [ pkgconfig (lib.getBin go-md2man) ];
-  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree libselinux ];
+  buildInputs = [ gpgme ] ++ lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs ostree libselinux ];
 
-  buildFlagsArray = "-ldflags= -X github.com/projectatomic/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}";
+  buildFlagsArray = ''
+    -ldflags=
+    -X github.com/containers/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}
+    -X github.com/containers/skopeo/vendor/github.com/containers/image/internal/tmpdir.unixTempDirForBigFiles=/tmp
+  '';
 
   preBuild = ''
-    export CGO_CFLAGS="-I${getDev gpgme}/include -I${getDev libgpgerror}/include -I${getDev devicemapper}/include -I${getDev btrfs-progs}/include"
-    export CGO_LDFLAGS="-L${getLib gpgme}/lib -L${getLib libgpgerror}/lib -L${getLib devicemapper}/lib"
+    export CGO_CFLAGS="$CFLAGS"
+    export CGO_LDFLAGS="$LDFLAGS"
   '';
 
   postBuild = ''
     # depends on buildGoPackage not changing …
     pushd ./go/src/${goPackagePath}
-    make install-docs MANINSTALLDIR="$man"
+    make install-docs MANINSTALLDIR="$man/share/man"
     popd
   '';
 

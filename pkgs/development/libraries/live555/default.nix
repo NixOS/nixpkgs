@@ -1,44 +1,62 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, lib, darwin }:
 
 # Based on https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD
-let
-  version = "2018.02.28";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "live555-${version}";
+  version = "2019.05.29";
 
   src = fetchurl { # the upstream doesn't provide a stable URL
-    url = "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz";
-    sha256 = "0zi47asv1qmb09g321m02q684i3c90vci0mgkdh1mlmx2rbg1d1d";
+    urls = [
+      "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
+      "https://download.videolan.org/contrib/live555/live.${version}.tar.gz"
+    ];
+    sha256 = "08i63jr8ihn1xiq5z5n3yls3yz6li5sg0s454l56p5bcvbrw81my";
   };
 
-  postPatch = "sed 's,/bin/rm,rm,g' -i genMakefiles"
-  + stdenv.lib.optionalString (stdenv ? glibc) ''
-
+  postPatch = ''
+    sed 's,/bin/rm,rm,g' -i genMakefiles
+    sed \
+      -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
+      -i config.linux
+  '' + stdenv.lib.optionalString (stdenv ? glibc) ''
     substituteInPlace liveMedia/include/Locale.hh \
       --replace '<xlocale.h>' '<locale.h>'
   '';
 
   configurePhase = ''
-    sed \
-      -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
-      -i config.linux
+    runHook preConfigure
 
-    ./genMakefiles linux
+    ./genMakefiles ${{
+      x86_64-darwin = "macosx";
+      i686-linux = "linux";
+      x86_64-linux = "linux-64bit";
+      aarch64-linux = "linux-64bit";
+    }.${stdenv.hostPlatform.system}}
+
+    runHook postConfigure
   '';
 
   installPhase = ''
+    runHook preInstall
+
     for dir in BasicUsageEnvironment groupsock liveMedia UsageEnvironment; do
       install -dm755 $out/{bin,lib,include/$dir}
       install -m644 $dir/*.a "$out/lib"
       install -m644 $dir/include/*.h* "$out/include/$dir"
     done
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = lib.optional stdenv.isDarwin darwin.cctools;
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
     homepage = http://www.live555.com/liveMedia/;
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

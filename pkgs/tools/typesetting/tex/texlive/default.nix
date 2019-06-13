@@ -20,23 +20,17 @@ let
 
   # map: name -> fixed-output hash
   # sha1 in base32 was chosen as a compromise between security and length
-  # warning: the following generator command takes lots of resources
-  # nix-build ../../../../.. -Q -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes-new.nix
-  # mv ./fixedHashes{-new,}.nix
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv fastUnique lib makeWrapper writeText
+    inherit bin combinePkgs buildEnv lib makeWrapper writeText
       stdenv python ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    /* # beware: the URL below changes contents continuously
-      curl http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
-        | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix */
     orig = import ./pkgs.nix tl;
     removeSelfDep = lib.mapAttrs
       (n: p: if p ? deps then p // { deps = lib.filterAttrs (dn: _: n != dn) p.deps; }
@@ -109,13 +103,13 @@ let
               map (up: "${up}/${urlName}.tar.xz") urlPrefixes
             );
 
-      # Upstream refuses to distribute stable tarballs, so we host snapshots on IPFS.
+      # Upstream refuses to distribute stable tarballs,
+      # so we host snapshots on IPFS or on our own servers.
       # Common packages should get served from the binary cache anyway.
       # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
       urlPrefixes = args.urlPrefixes or [
-        http://146.185.144.154/texlive-2017
-        # IPFS GW is second, as it doesn't have a good time-outing behavior
-        http://gateway.ipfs.io/ipfs/QmRLK45EC828vGXv5YDaBsJBj2LjMjjA2ReLVrXsasRzy7/texlive-2017
+        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
+        ftp://tug.org/texlive/historic/2018/tlnet-final/archive
       ];
 
       src = fetchurl { inherit urls sha512; };
@@ -140,7 +134,7 @@ let
         downloadToTemp = true;
         postFetch = ''mkdir "$out";'' + unpackCmd "$downloadedFile";
         # TODO: perhaps override preferHashedMirrors and allowSubstitutes
-      }
+     }
         // passthru
 
     else runCommand "texlive-${tlName}"
@@ -162,12 +156,6 @@ let
   combinePkgs = pkgSet: lib.concatLists # uniqueness is handled in `combine`
     (lib.mapAttrsToList (_n: a: a.pkgs) pkgSet);
 
-  # TODO: replace by buitin once it exists
-  fastUnique = comparator: list: with lib;
-    let un_adj = l: if length l < 2 then l
-      else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
-    in un_adj (lib.sort comparator list);
-
 in
   tl // {
     inherit bin combine;
@@ -182,7 +170,7 @@ in
             platforms = lib.platforms.all;
             hydraPlatforms = lib.optionals
               (lib.elem pname ["scheme-small" "scheme-basic"]) platforms;
-            maintainers = [ lib.maintainers.vcunat ];
+            maintainers = with lib.maintainers;  [ vcunat veprbl ];
           }
           (combine {
             ${pname} = attrs;
@@ -190,9 +178,8 @@ in
           })
         )
         { inherit (tl)
-            scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
+            scheme-basic scheme-context scheme-full scheme-gust
             scheme-medium scheme-minimal scheme-small scheme-tetex;
         }
     );
   }
-

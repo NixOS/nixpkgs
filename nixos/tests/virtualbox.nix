@@ -1,6 +1,28 @@
-{ system ? builtins.currentSystem, debug ? false }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; },
+  debug ? false,
+  enableUnfree ? false,
+  # Nested KVM virtualization (https://www.linux-kvm.org/page/Nested_Guests)
+  # requires a modprobe flag on the build machine: (kvm-amd for AMD CPUs)
+  #   boot.extraModprobeConfig = "options kvm-intel nested=Y";
+  # Without this VirtualBox will use SW virtualization and will only be able
+  # to run 32-bit guests.
+  useKvmNestedVirt ? false,
+  # Whether to run 64-bit guests instead of 32-bit. Requires nested KVM.
+  use64bitGuest ? false,
+  # Whether to enable the virtual UART in VirtualBox guests, allowing to see
+  # the guest console. There is currently a bug in VirtualBox where this will
+  # cause a crash if running with SW virtualization
+  # (https://www.virtualbox.org/ticket/18632). If you need to debug the tests
+  # then enable this and nested KVM to work around the crash (see above).
+  enableVBoxUART ? false
+}:
 
-with import ../lib/testing.nix { inherit system; };
+assert use64bitGuest -> useKvmNestedVirt;
+assert enableVBoxUART -> useKvmNestedVirt; # VirtualBox bug, see above
+
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -89,7 +111,7 @@ let
 
   testVM = vmName: vmScript: let
     cfg = (import ../lib/eval-config.nix {
-      system = "i686-linux";
+      system = if use64bitGuest then "x86_64-linux" else "i686-linux";
       modules = [
         ../modules/profiles/minimal.nix
         (testVMConfig vmName vmScript)
@@ -136,13 +158,15 @@ let
     sharePath = "/home/alice/vboxshare-${name}";
 
     createFlags = mkFlags [
-      "--ostype Linux26"
+      "--ostype ${if use64bitGuest then "Linux26_64" else "Linux26"}"
       "--register"
     ];
 
-    vmFlags = mkFlags ([
-      "--uart1 0x3F8 4"
-      "--uartmode1 client /run/virtualbox-log-${name}.sock"
+    vmFlags = mkFlags (
+      (optionals enableVBoxUART [
+        "--uart1 0x3F8 4"
+        "--uartmode1 client /run/virtualbox-log-${name}.sock"
+      ]) ++ [
       "--memory 768"
       "--audio none"
     ] ++ (attrs.vmFlags or []));
@@ -175,7 +199,7 @@ let
     ];
   in {
     machine = {
-      systemd.sockets."vboxtestlog-${name}" = {
+      systemd.sockets."vboxtestlog-${name}" = mkIf enableVBoxUART {
         description = "VirtualBox Test Machine Log Socket For ${name}";
         wantedBy = [ "sockets.target" ];
         before = [ "multi-user.target" ];
@@ -183,7 +207,7 @@ let
         socketConfig.Accept = true;
       };
 
-      systemd.services."vboxtestlog-${name}@" = {
+      systemd.services."vboxtestlog-${name}@" = mkIf enableVBoxUART {
         description = "VirtualBox Test Machine Log For ${name}";
         serviceConfig.StandardInput = "socket";
         serviceConfig.StandardOutput = "syslog";
@@ -293,6 +317,11 @@ let
     "--hostonlyadapter2 vboxnet0"
   ];
 
+  # The VirtualBox Oracle Extension Pack lets you use USB 3.0 (xHCI).
+  enableExtensionPackVMFlags = [
+    "--usbxhci on"
+  ];
+
   dhcpScript = pkgs: ''
     ${pkgs.dhcp}/bin/dhclient \
       -lf /run/dhcp.leases \
@@ -323,20 +352,28 @@ let
     headless.services.xserver.enable = false;
   };
 
-  mkVBoxTest = name: testScript: makeTest {
+  vboxVMsWithExtpack = mapAttrs createVM {
+    testExtensionPack.vmFlags = enableExtensionPackVMFlags;
+  };
+
+  mkVBoxTest = useExtensionPack: vms: name: testScript: makeTest {
     name = "virtualbox-${name}";
 
     machine = { lib, config, ... }: {
       imports = let
         mkVMConf = name: val: val.machine // { key = "${name}-config"; };
-        vmConfigs = mapAttrsToList mkVMConf vboxVMs;
+        vmConfigs = mapAttrsToList mkVMConf vms;
       in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
+      virtualisation.qemu.options =
+        if useKvmNestedVirt then ["-cpu" "kvm64,vmx=on"] else [];
       virtualisation.virtualbox.host.enable = true;
       services.xserver.displayManager.auto.user = "alice";
-      users.extraUsers.alice.extraGroups = let
+      users.users.alice.extraGroups = let
         inherit (config.virtualisation.virtualbox.host) enableHardening;
       in lib.mkIf enableHardening (lib.singleton "vboxusers");
+      virtualisation.virtualbox.host.enableExtensionPack = useExtensionPack;
+      nixpkgs.config.allowUnfree = useExtensionPack;
     };
 
     testScript = ''
@@ -353,7 +390,7 @@ let
         return join("\n", grep { $_ !~ /^UUID:/ } split(/\n/, $_[0]))."\n";
       }
 
-      ${concatStrings (mapAttrsToList (_: getAttr "testSubs") vboxVMs)}
+      ${concatStrings (mapAttrsToList (_: getAttr "testSubs") vms)}
 
       $machine->waitForX;
 
@@ -363,11 +400,31 @@ let
     '';
 
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ aszlig wkennington ];
+      maintainers = [ aszlig cdepillabout ];
     };
   };
 
-in mapAttrs mkVBoxTest {
+  unfreeTests = mapAttrs (mkVBoxTest true vboxVMsWithExtpack) {
+    enable-extension-pack = ''
+      createVM_testExtensionPack;
+      vbm("startvm testExtensionPack");
+      waitForStartup_testExtensionPack;
+      $machine->screenshot("cli_started");
+      waitForVMBoot_testExtensionPack;
+      $machine->screenshot("cli_booted");
+
+      $machine->nest("Checking for privilege escalation", sub {
+        $machine->fail("test -e '/root/VirtualBox VMs'");
+        $machine->fail("test -e '/root/.config/VirtualBox'");
+        $machine->succeed("test -e '/home/alice/VirtualBox VMs'");
+      });
+
+      shutdownVM_testExtensionPack;
+      destroyVM_testExtensionPack;
+    '';
+  };
+
+in mapAttrs (mkVBoxTest false vboxVMs) {
   simple-gui = ''
     createVM_simple;
     $machine->succeed(ru "VirtualBox &");
@@ -376,9 +433,14 @@ in mapAttrs mkVBoxTest {
     );
     $machine->sleep(5);
     $machine->screenshot("gui_manager_started");
+    # Home to select Tools, down to move to the VM, enter to start it.
+    $machine->sendKeys("home");
+    $machine->sendKeys("down");
     $machine->sendKeys("ret");
     $machine->screenshot("gui_manager_sent_startup");
     waitForStartup_simple (sub {
+      $machine->sendKeys("home");
+      $machine->sendKeys("down");
       $machine->sendKeys("ret");
     });
     $machine->screenshot("gui_started");
@@ -473,4 +535,4 @@ in mapAttrs mkVBoxTest {
     destroyVM_test1;
     destroyVM_test2;
   '';
-}
+} // (if enableUnfree then unfreeTests else {})

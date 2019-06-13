@@ -1,12 +1,13 @@
-{ stdenv, fetchFromGitHub, bc, python, fuse, libarchive }:
+{ stdenv, fetchFromGitHub, bc, python, bison, flex, fuse, libarchive
+, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "lkl-2018-03-10";
-  rev  = "8772a4da6064444c5b70766b806fe272b0287c31";
+  name = "lkl-2018-08-22";
+  rev  = "5221c547af3d29582703f01049617a6bf9f6232a";
 
   outputs = [ "dev" "lib" "out" ];
 
-  nativeBuildInputs = [ bc python ];
+  nativeBuildInputs = [ bc bison flex python ];
 
   buildInputs = [ fuse libarchive ];
 
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     owner  = "lkl";
     repo   = "linux";
-    sha256 = "1m6gh4zcx1q7rv05d0knjpk3ivk2b3kc0kwjndciadqc45kws4wh";
+    sha256 = "1k2plyx40xaphm8zsk2dd1lyv6dhsp7kj6hfmdgiamvl80bjajqy";
   };
 
   # Fix a /usr/bin/env reference in here that breaks sandboxed builds
@@ -30,7 +31,9 @@ stdenv.mkDerivation rec {
     cp tools/lkl/{cptofs,fs2tar,lklfuse} $out/bin
     ln -s cptofs $out/bin/cpfromfs
     cp -r tools/lkl/include $dev/
-    cp tools/lkl/liblkl*.{a,so} $lib/lib
+    cp tools/lkl/liblkl.a \
+       tools/lkl/lib/liblkl.so \
+       tools/lkl/lib/hijack/liblkl-hijack.so $lib/lib
   '';
 
   # We turn off format and fortify because of these errors (fortify implies -O2, which breaks the jitter entropy code):
@@ -38,7 +41,12 @@ stdenv.mkDerivation rec {
   #   crypto/jitterentropy.c:54:3: error: #error "The CPU Jitter random number generator must not be compiled with optimizations. See documentation. Use the compiler switch -O0 for compiling jitterentropy.c."
   hardeningDisable = [ "format" "fortify" ];
 
-  makeFlags = "-C tools/lkl";
+  makeFlags = [
+    "-C tools/lkl"
+    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
 
   enableParallelBuilding = true;
 

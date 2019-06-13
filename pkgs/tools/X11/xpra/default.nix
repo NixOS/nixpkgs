@@ -1,38 +1,49 @@
-{ stdenv, lib, fetchurl, python2Packages, pkgconfig
-, xorg, gtk2, glib, pango, cairo, gdk_pixbuf, atk
-, makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf
-, ffmpeg, x264, libvpx, libwebp
+{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig
+, xorg, gtk3, glib, pango, cairo, gdk_pixbuf, atk
+, wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
+, ffmpeg_4, x264, libvpx, libwebp, x265
 , libfakeXinerama
-, gst_all_1, pulseaudioLight, gobjectIntrospection
+, gst_all_1, pulseaudio, gobject-introspection
 , pam }:
 
 with lib;
 
 let
-  inherit (python2Packages) python cython buildPythonApplication;
+  inherit (python3.pkgs) cython buildPythonApplication;
+
+  xf86videodummy = callPackage ./xf86videodummy { };
 in buildPythonApplication rec {
-  name = "xpra-${version}";
-  version = "2.2.5";
+  pname = "xpra";
+  version = "2.5";
 
   src = fetchurl {
-    url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "1q2l00nc3bgwlhjzkbk4a8x2l8z9w1799yn31icsx5hrgh98a1js";
+    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
+    sha256 = "0q6c7ijgpp2wk6jlh0pzqki1w60i36wyl2zfwkg0gpdh40ypab3x";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit (xorg) xkeyboardconfig;
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
+  '';
+
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  buildInputs = with xorg; [
+    libX11 xorgproto libXrender libXi
+    libXtst libXfixes libXcomposite libXdamage
+    libXrandr libxkbfile
+    ] ++ [
     cython
 
-    xorg.libX11 xorg.renderproto xorg.libXrender xorg.libXi xorg.inputproto xorg.kbproto
-    xorg.randrproto xorg.damageproto xorg.compositeproto xorg.xextproto xorg.recordproto
-    xorg.xproto xorg.fixesproto xorg.libXtst xorg.libXfixes xorg.libXcomposite xorg.libXdamage
-    xorg.libXrandr xorg.libxkbfile
+    pango cairo gdk_pixbuf atk.out gtk3 glib
 
-    pango cairo gdk_pixbuf atk gtk2 glib
+    ffmpeg_4 libvpx x264 libwebp x265
 
-    ffmpeg libvpx x264 libwebp
-
-    gobjectIntrospection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -40,38 +51,43 @@ in buildPythonApplication rec {
     gst_all_1.gst-libav
 
     pam
-
-    makeWrapper
+    gobject-introspection
+  ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pillow rencode pycrypto cryptography pycups lz4 dbus-python
+    netifaces numpy pygobject3 pycairo gst-python pam
+    pyopengl paramiko opencv python-uinput pyxdg
+    ipaddress idna
   ];
 
-  propagatedBuildInputs = with python2Packages; [
-    pillow pygtk pygobject2 rencode pycrypto cryptography pycups lz4 dbus-python
-    netifaces numpy websockify pygobject3 gst-python pam
+  NIX_CFLAGS_COMPILE = [
+    # error: 'import_cairo' defined but not used
+    "-Wno-error=unused-function"
   ];
 
-  preBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0) $(pkg-config --cflags xtst)"
-    substituteInPlace xpra/server/auth/pam_auth.py --replace "/lib/libpam.so.1" "${pam}/lib/libpam.so"
+  setupPyBuildFlags = [
+    "--with-Xdummy"
+    "--without-strict"
+    "--with-gtk3"
+    "--without-gtk2"
+    # Override these, setup.py checks for headers in /usr/* paths
+    "--with-pam"
+    "--with-vsock"
+  ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set XPRA_INSTALL_PREFIX "$out"
+      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
+      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudio ]}
+    )
   '';
-  setupPyBuildFlags = ["--with-Xdummy" "--without-strict"];
 
-  postInstall = ''
-    wrapProgram $out/bin/xpra \
-      --set XPRA_INSTALL_PREFIX "$out" \
-      --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
-      --set GST_PLUGIN_SYSTEM_PATH_1_0 "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib  \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudioLight ]}
-  '';
+  doCheck = false;
 
-  preCheck = "exit 0";
+  enableParallelBuilding = true;
 
-  #TODO: replace postInstall with postFixup to avoid double wrapping of xpra; needs more work though
-  #postFixup = ''
-  #  sed -i '3iexport FONTCONFIG_FILE="${fontsConf}"' $out/bin/xpra
-  #  sed -i '4iexport PATH=${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux ]}\${PATH:+:}\$PATH' $out/bin/xpra
-  #'';
-
+  passthru = { inherit xf86videodummy; };
 
   meta = {
     homepage = http://xpra.org/;
@@ -79,6 +95,7 @@ in buildPythonApplication rec {
     downloadURLRegexp = "xpra-.*[.]tar[.]xz$";
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tstrobel offline ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ tstrobel offline numinit ];
   };
 }

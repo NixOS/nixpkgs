@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, vscode-utils, unzip, dos2unix, mono46, clang-tools, writeScript
-, gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise. 
+{ stdenv, fetchzip, vscode-utils, jq, mono, clang-tools, writeScript, runtimeShell
+, gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
 assert gdbUseFixed -> null != gdb;
@@ -33,12 +33,11 @@ let
   langComponentBinaries = stdenv.mkDerivation {
     name = "cpptools-language-component-binaries";
 
-    src = fetchurl {
-      url = https://download.visualstudio.microsoft.com/download/pr/11151953/d3cc8b654bffb8a2f3896d101f3c3155/Bin_Linux.zip;
-      sha256 = "12qbxsrdc73cqjb84xdck1xafzhfkcyn6bqbpcy1bxxr3b7hxbii";
+    src = fetchzip {
+      # Follow https://go.microsoft.com/fwlink/?linkid=2037608
+      url = "https://download.visualstudio.microsoft.com/download/pr/97ed3eeb-b31e-421c-92dc-4f3a98af301e/069a1e6ab1b4b017853a7e9e08067744/bin_linux.zip";
+      sha256 = "19flm4vcrg89x0b20bd0g45apabzfqgvcpjddnmyk312jc242gmb";
     };
-
-    buildInputs = [ unzip ];
 
     patchPhase = ''
       elfInterpreter="${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2"
@@ -53,22 +52,15 @@ let
     '';
   };
 
-  cpptoolsJsonFile = fetchurl {
-    url = https://download.visualstudio.microsoft.com/download/pr/11070848/7b97d6724d52cae8377c61bb4601c989/cpptools.json;
-    sha256 = "124f091aic92rzbg2vg831y22zr5wi056c1kh775djqs3qv31ja6";
-  };
-
-
-
   openDebugAD7Script = writeScript "OpenDebugAD7" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     BIN_DIR="$(cd "$(dirname "$0")" && pwd -P)"
     ${if gdbUseFixed
         then ''
           export PATH=''${PATH}''${PATH:+:}${gdb}/bin
         ''
         else ""}
-    ${mono46}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
+    ${mono}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
   '';
 in
 
@@ -76,23 +68,24 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "0.12.3";
-    sha256 = "1dcqy54n1w29xhbvxscd41hdrbdwar6g12zx02f6kh2f1kw34z5z";
+    version = "0.23.1";
+    sha256 = "08kfzvyl8vgjmhqzpp7pxw0gd87jr5g7z15ag4cpcil4inq4c8k3";
   };
 
   buildInputs = [
-    dos2unix
-  ];
-
-  prePatch = ''
-    dos2unix package.json      
-  '';
-
-  patches = [
-    ./vscode-cpptools-0-12-3-package-json.patch
+    jq
   ];
 
   postPatch = ''
+    mv ./package.json ./package_ori.json
+
+    # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
+    # 2. Patch `packages.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
+    cat ./package_ori.json | \
+      jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
+      jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
+      ./package.json
+
     # Patch `packages.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
     substituteInPlace "./package.json" \
       --replace "\"default\": \"/usr/bin/gdb\"" "\"default\": \"${gdbDefaultsTo}\""
@@ -102,9 +95,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
     # Move unused files out of the way.
     mv ./debugAdapters/bin/OpenDebugAD7.exe.config ./debugAdapters/bin/OpenDebugAD7.exe.config.unused
-
-    # Bring the `cpptools.json` file at the root of the package, same as the extension would do.
-    cp -p "${cpptoolsJsonFile}" "./cpptools.json"
 
     # Combining the language component binaries as part of our package.
     find "${langComponentBinaries}/bin" -mindepth 1 -maxdepth 1 | xargs cp -p -t "./bin"
@@ -120,8 +110,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
     meta = with stdenv.lib; {
       license = licenses.unfree;
-      maintainer = [ maintainers.jraygauthier ];
-      # A 32 bit linux would also be possible with some effort (specific download of binaries + 
+      maintainers = [ maintainers.jraygauthier ];
+      # A 32 bit linux would also be possible with some effort (specific download of binaries +
       # patching of the elf files with 32 bit interpreter).
       platforms = [ "x86_64-linux" ];
     };

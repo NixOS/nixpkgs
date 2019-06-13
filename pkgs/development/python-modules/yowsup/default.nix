@@ -3,19 +3,18 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "yowsup";
-  version = "2.5.2";
+  version = "2.5.7";
 
-  # python2 is currently incompatible with yowsup:
-  # https://github.com/tgalal/yowsup/issues/2325#issuecomment-343516519
+  # The Python 2.x support of this package is incompatible with `six==1.11`:
+  # https://github.com/tgalal/yowsup/issues/2416#issuecomment-365113486
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "tgalal";
     repo = "yowsup";
     rev = "v${version}";
-    sha256 = "16l8jmr32wwvl11m0a4r4id3dkfqj2n7dn6gky1077xwmj2da4fl";
+    sha256 = "1p0hdj5x38v2cxjnhdnqcnp5g7la57mbi365m0z83wa01x2n73w6";
   };
 
   checkInputs = [ pytest ];

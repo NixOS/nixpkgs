@@ -68,7 +68,7 @@ for arg; do
             --leave-dotGit) leaveDotGit=true;;
             --fetch-submodules) fetchSubmodules=true;;
             --builder) builder=true;;
-            --help) usage; exit;;
+            -h|--help) usage; exit;;
             *)
                 : $((++argi))
                 case $argi in
@@ -152,7 +152,7 @@ checkout_ref(){
     if "$deepClone"; then
         # The caller explicitly asked for a deep clone.  Deep clones
         # allow "git describe" and similar tools to work.  See
-        # http://thread.gmane.org/gmane.linux.distributions.nixos/3569
+        # https://marc.info/?l=nix-dev&m=139641582514772
         # for a discussion.
         return 1
     fi
@@ -185,7 +185,7 @@ init_submodules(){
 
         # checkout each submodule
         hash=$(echo "$l" | awk '{print $1}' | tr -d '-')
-        dir=$(echo "$l" | awk '{print $2}')
+        dir=$(echo "$l" | sed -n 's/^.[0-9a-f]\+ \(.*[^)]*\)\( (.*)\)\?$/\1/p')
         name=$(
             git config -f .gitmodules --get-regexp submodule\..*\.path |
             sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
@@ -356,7 +356,7 @@ print_results() {
   "rev": "$(json_escape "$fullRev")",
   "date": "$(json_escape "$commitDateStrict8601")",
   "$(json_escape "$hashType")": "$(json_escape "$hash")",
-  "fetchSubmodules": $([[ -n "fetchSubmodules" ]] && echo true || echo false)
+  "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false)
 }
 EOF
     fi

@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, bc, perl, pam, libXext, libXScrnSaver, libX11
+{ stdenv, fetchurl, pkgconfig, bc, perl, perlPackages, pam, libXext, libXScrnSaver, libX11
 , libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, libGLU_combined, gtk2
 , libxml2, libglade, intltool, xorg, makeWrapper, gle
 , forceInstallAllHacks ? false
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.38";
+  version = "5.40";
   name = "xscreensaver-${version}";
 
   src = fetchurl {
     url = "https://www.jwz.org/xscreensaver/${name}.tar.gz";
-    sha256 = "1f58h5rgjbxr4hh40m6zkpkzbzg68l7nqzjwal0b17yysafbmsf6";
+    sha256 = "1q2sr7h6ps6d3hk8895g12rrcqiihjl7py1ly077ikv4866r181h";
   };
 
   buildInputs =
@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
       wrapProgram $out/bin/xscreensaver-text \
         --prefix PATH : ${stdenv.lib.makeBinPath [xorg.appres]}
+      wrapProgram $out/bin/xscreensaver-getimage-file \
+        --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
+              EncodeLocale HTTPDate HTTPMessage IOSocketSSL LWP LWPProtocolHttps
+              MozillaCA NetHTTP NetSSLeay TryTiny URI
+              ]}"
   ''
   + stdenv.lib.optionalString forceInstallAllHacks ''
     make -C hacks/glx dnalogo

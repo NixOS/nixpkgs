@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "nlojet++";
+  name = "nlojet++-${version}";
   version = "4.1.3";
 
   src = fetchurl {
-    url = "http://desy.de/~znagy/hep-programs/nlojet++/nlojet++-${version}.tar.gz";
+    url = "https://desy.de/~znagy/hep-programs/nlojet++/nlojet++-${version}.tar.gz";
     sha256 = "18qfn5kjzvnyh29x40zm2maqzfmrnay9r58n8pfpq5lcphdhhv8p";
   };
 

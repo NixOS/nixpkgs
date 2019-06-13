@@ -3,15 +3,6 @@
 with lib;
 
 let
-
-  # Remove packages of ys from xs, based on their names
-  removePackagesByName = xs: ys:
-    let
-      pkgName = drv: (builtins.parseDrvName drv.name).name;
-      ysNames = map pkgName ys;
-    in
-      filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
-
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.lxqt;
 
@@ -35,12 +26,24 @@ in
 
   };
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf cfg.enable {
 
     services.xserver.desktopManager.session = singleton {
       name = "lxqt";
       bgSupport = true;
       start = ''
+        # Upstream installs default configuration files in
+        # $prefix/share/lxqt instead of $prefix/etc/xdg, (arguably)
+        # giving distributors freedom to ship custom default
+        # configuration files more easily. In order to let the session
+        # manager find them the share subdirectory is added to the
+        # XDG_CONFIG_DIRS environment variable.
+        #
+        # For an explanation see
+        # https://github.com/lxqt/lxqt/issues/1521#issuecomment-405097453
+        #
+        export XDG_CONFIG_DIRS=$XDG_CONFIG_DIRS''${XDG_CONFIG_DIRS:+:}${config.system.path}/share
+
         exec ${pkgs.lxqt.lxqt-session}/bin/startlxqt
       '';
     };
@@ -48,21 +51,16 @@ in
     environment.systemPackages =
       pkgs.lxqt.preRequisitePackages ++
       pkgs.lxqt.corePackages ++
-      (removePackagesByName
+      (pkgs.gnome3.removePackagesByName
         pkgs.lxqt.optionalPackages
         config.environment.lxqt.excludePackages);
 
     # Link some extra directories in /run/current-system/software/share
-    environment.pathsToLink = [
-      "/share/desktop-directories"
-      "/share/icons"
-      "/share/lxqt"
-    ];
+    environment.pathsToLink = [ "/share" ];
 
     environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
 
     services.upower.enable = config.powerManagement.enable;
   };
-
 
 }

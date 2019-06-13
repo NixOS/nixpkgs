@@ -1,16 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k, pytest, mock, setuptools_scm }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pytest, mock, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "1.8.0";
- 
+  version = "1.10.4";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2dd545496af6a0559432b11de79f1fd4fa4a541ae2e01892d5ba6041f85f0994";
+    sha256 = "5bf5771b1db93beac965a7347dc81c675ec4090cb841e49d9d34637a25c30568";
   };
 
-  propagatedBuildInputs = [ pytest ] ++ lib.optional (!isPy3k) mock;
-  nativeBuildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = lib.optional (!isPy3k) mock;
+  nativeBuildInputs = [ setuptools_scm pytest ];
 
   checkPhase = ''
     py.test

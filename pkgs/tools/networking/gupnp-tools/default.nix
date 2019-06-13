@@ -1,18 +1,45 @@
-{fetchurl, stdenv, gupnp, gssdp, pkgconfig, gtk3, libuuid, intltool, gupnp-av, gnome3, wrapGAppsHook}:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, gupnp
+, gssdp
+, pkgconfig
+, gtk3
+, libuuid
+, gettext
+, gupnp-av
+, gtksourceview4
+, gnome3
+, wrapGAppsHook
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gupnp-tools";
-  version = "0.8.13";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "0.10.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1vbr4iqi7nl7kq982agd3liw10gx67s95idd0pjy5h1jsnwyqgda";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "13d1qr1avz9r76989nvgxhhclmqzr025xjk4rfnja94fpbspznj1";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
-  buildInputs = [ gupnp libuuid gssdp gtk3 gupnp-av gnome3.defaultIconTheme ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gupnp
+    libuuid
+    gssdp
+    gtk3
+    gupnp-av
+    gtksourceview4
+    gnome3.adwaita-icon-theme
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {

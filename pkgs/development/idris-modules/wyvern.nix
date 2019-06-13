@@ -1,16 +1,14 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , effects
 , lib
-, idris
 }:
 build-idris-package  {
   name = "wyvern";
   version = "2017-06-26";
 
-  idrisDeps = [ prelude contrib effects ];
+  idrisDeps = [ contrib effects ];
 
   src = fetchFromGitHub {
     owner = "ericqweinstein";
@@ -28,6 +26,5 @@ build-idris-package  {
     homepage = https://github.com/ericqweinstein/wyvern;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

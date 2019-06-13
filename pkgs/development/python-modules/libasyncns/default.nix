@@ -3,7 +3,6 @@
 
 buildPythonPackage rec {
   pname = "libasyncns-python";
-  name = "${pname}-${version}";
   version = "0.7.1";
 
   src = fetchurl {

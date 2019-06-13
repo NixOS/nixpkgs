@@ -1,19 +1,20 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-stdint-${version}";
-  version = "0.5.0";
+  pname = "stdint";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  version = "0.5.1";
   src = fetchFromGitHub {
     owner = "andrenth";
     repo = "ocaml-stdint";
     rev = version;
-    sha256 = "1xjzqq13m7cqrfwa6vcwxirm17w8bx025dgnjqjgd3k2lxfgd1j7";
+    sha256 = "0z2z77m3clna9m9k0f8fd1400cdlglvy1kr893qs3907b3v0c057";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
+  buildInputs = [ ocaml findlib dune ];
 
-  createFindlibDestdir = true;
+  buildPhase = "dune build -p ${pname}";
+  inherit (dune) installPhase;
 
   meta = {
     description = "Various signed and unsigned integers for OCaml";

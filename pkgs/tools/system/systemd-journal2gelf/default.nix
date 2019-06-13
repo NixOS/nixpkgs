@@ -19,6 +19,6 @@ buildGoPackage rec {
     description = "Export entries from systemd's journal and send them to a graylog server using gelf";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fadenb fpletz globin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

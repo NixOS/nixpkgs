@@ -1,14 +1,23 @@
-{ stdenv, fetchFromGitHub }:
+{ libsmbios, stdenv, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "netperf-2.7.0";
+  name = "netperf-${version}";
+  version = "20180613";
 
   src = fetchFromGitHub {
     owner = "HewlettPackard";
     repo = "netperf";
-    rev = name;
-    sha256 = "034indn3hicwbvyzgw9f32bv2i7c5iv8b4a11imyn03pw97jzh10";
+    rev = "bcb868bde7f0203bbab69609f65d4088ba7398db";
+    sha256 = "1wbbgdvhadd3qs3afv6i777argdpcyxkwz4yv6aqp223n8ki6dm8";
   };
+
+  buildInputs = stdenv.lib.optional (stdenv.hostPlatform.isx86) libsmbios;
+  nativeBuildInputs = [ autoreconfHook ];
+  autoreconfPhase = ''
+    autoreconf -i -I src/missing/m4
+  '';
+  configureFlags = [ "--enable-demo" ];
+  enableParallelBuilding = true;
 
   meta = {
     description = "Benchmark to measure the performance of many different types of networking";
@@ -16,6 +25,6 @@ stdenv.mkDerivation rec {
     license = "Hewlett-Packard BSD-like license";
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [];
+    maintainers = [ stdenv.lib.maintainers.mmlb ];
   };
 }

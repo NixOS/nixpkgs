@@ -11,14 +11,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   # First install the `File::MMagic' Perl module.
-  # !!! this shouldn't refer to Perl 5.10.0!
   preConfigure = ''
-    ( cd File-MMagic &&				\
-      perl Makefile.PL				\
-        LIB="$out/lib/perl5/site_perl/5.10.0"	\
-        INSTALLSITEMAN3DIR="$out/man" &&	\
+    ( cd File-MMagic &&                              \
+      perl Makefile.PL                               \
+        LIB="$out/${perl.libPrefix}/${perl.version}" \
+        INSTALLSITEMAN3DIR="$out/man" &&             \
       make && make install )
-    export PERL5LIB="$out/lib/perl5/site_perl/5.10.0:$PERL5LIB"
+    export PERL5LIB="$out/${perl.libPrefix}/${perl.version}:$PERL5LIB"
   '';
 
   # FIXME: The `tests/namazu-6' test fails on GNU/Linux, presumably because
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://namazu.org/;
 
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
     maintainers = [ ];
     broken = true; # File-MMagic is not compatible with our Perl version
   };

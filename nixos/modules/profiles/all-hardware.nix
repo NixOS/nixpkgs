@@ -3,7 +3,7 @@
 # enabled in the initrd.  Its primary use is in the NixOS installation
 # CDs.
 
-{ config, pkgs, ... }:
+{ ... }:
 
 {
 
@@ -33,7 +33,7 @@
 
       # USB support, especially for booting from USB CD-ROM
       # drives.
-      "usb_storage"
+      "uas"
 
       # Firewire support.  Not tested.
       "ohci1394" "sbp2"

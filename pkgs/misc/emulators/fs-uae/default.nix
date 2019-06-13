@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       create customized Amigas.
     '';
     license = licenses.gpl2Plus;
-    homepage = http://fs-uae.net;
+    homepage = https://fs-uae.net;
     maintainers = with stdenv.lib; [ maintainers.AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

@@ -1,12 +1,9 @@
-{ version, sha256, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{ version, src, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation {
   name = "menhir-${version}";
 
-  src = fetchurl {
-    url = "http://pauillac.inria.fr/~fpottier/menhir/menhir-${version}.tar.gz";
-    inherit sha256;
-  };
+  inherit src;
 
   buildInputs = [ ocaml findlib ocamlbuild ];
 

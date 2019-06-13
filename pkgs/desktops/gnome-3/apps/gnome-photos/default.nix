@@ -4,32 +4,44 @@
 , grilo, gnome-online-accounts
 , desktop-file-utils, wrapGAppsHook
 , gnome3, gdk_pixbuf, gexiv2, geocode-glib
-, dleyna-renderer }:
+, dleyna-renderer, dbus, meson, ninja, python3, gsettings-desktop-schemas }:
 
 let
   pname = "gnome-photos";
-  version = "3.28.0";
+  version = "3.32.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1n280j7crgwlzyf09j66f1zkrnnhfrr8pshn824njs1xyk3g0q11";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "160vqmcqvyzby27wd2lzwzgbfl6jxxk7phhnqh9498r3clr73haj";
   };
 
   # doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig gettext itstool libxml2 desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [
+    pkgconfig gettext itstool meson ninja libxml2
+    desktop-file-utils wrapGAppsHook python3
+  ];
   buildInputs = [
     gtk3 glib gegl babl libgdata libdazzle
-    gnome3.gsettings-desktop-schemas
-    gdk_pixbuf gnome3.defaultIconTheme
+    gsettings-desktop-schemas
+    gdk_pixbuf gnome3.adwaita-icon-theme
     gfbgraph grilo-plugins grilo
     gnome-online-accounts tracker
     gexiv2 geocode-glib dleyna-renderer
     tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
+    dbus
   ];
 
+  mesonFlags = [
+    "--buildtype=plain" # don't do any git commands
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

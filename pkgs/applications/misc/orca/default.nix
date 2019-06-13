@@ -1,41 +1,43 @@
-{ stdenv, lib, pkgconfig, fetchurl, buildPythonApplication
-, autoreconfHook, wrapGAppsHook
+{ stdenv, pkgconfig, fetchurl, buildPythonApplication
+, autoreconfHook, wrapGAppsHook, gobject-introspection
 , intltool, yelp-tools, itstool, libxmlxx3
 , python, pygobject3, gtk3, gnome3, substituteAll
 , at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
-, xkbcomp, gsettings-desktop-schemas, liblouis
-, speechd, brltty, setproctitle, gst_all_1, gst-python
+, xkbcomp, procps, lsof, coreutils, gsettings-desktop-schemas
+, speechd, brltty, liblouis, setproctitle, gst_all_1, gst-python
 }:
 
-with lib;
-let
+buildPythonApplication rec {
   pname = "orca";
-  version = "3.28.0";
-in buildPythonApplication rec {
-  name = "${pname}-${version}";
+  version = "3.32.0";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1jy2zxs50ah1rg4zgiaj2l2sm1zyyvs37phws0hwmy3xd90ljfc2";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "05jqzlg0f1x53hyl0l9282ynmw37159g6dsbrid12b7sjs12cc1i";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
+      cat = "${coreutils}/bin/cat";
+      lsof = "${lsof}/bin/lsof";
+      pgrep = "${procps}/bin/pgrep";
       xkbcomp = "${xkbcomp}/bin/xkbcomp";
     })
   ];
 
   nativeBuildInputs = [
     autoreconfHook wrapGAppsHook pkgconfig libxmlxx3
-    intltool yelp-tools itstool
+    intltool yelp-tools itstool gobject-introspection
   ];
 
   propagatedBuildInputs = [
     pygobject3 pyatspi dbus-python pyxdg brltty liblouis speechd gst-python setproctitle
   ];
+
+  strictDeps = false;
 
   buildInputs = [
     python gtk3 at-spi2-atk at-spi2-core dbus gsettings-desktop-schemas
@@ -53,7 +55,7 @@ in buildPythonApplication rec {
     };
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Orca;
     description = "Screen reader";
     longDescription = ''

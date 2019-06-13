@@ -7,13 +7,12 @@ let
   encDevs = filter (dev: dev.encrypted.enable) fileSystems;
   keyedEncDevs = filter (dev: dev.encrypted.keyFile != null) encDevs;
   keylessEncDevs = filter (dev: dev.encrypted.keyFile == null) encDevs;
-  isIn = needle: haystack: filter (p: p == needle) haystack != [];
   anyEncrypted =
     fold (j: v: v || j.encrypted.enable) false encDevs;
 
   encryptedFSOptions = {
 
-    encrypted = {
+    options.encrypted = {
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -48,10 +47,10 @@ in
 
   options = {
     fileSystems = mkOption {
-      options = [encryptedFSOptions];
+      type = with lib.types; loaOf (submodule encryptedFSOptions);
     };
     swapDevices = mkOption {
-      options = [encryptedFSOptions];
+      type = with lib.types; listOf (submodule encryptedFSOptions);
     };
   };
 

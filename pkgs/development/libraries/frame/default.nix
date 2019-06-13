@@ -1,5 +1,5 @@
 { enableX11 ? true
-,  stdenv, fetchurl, pkgconfig, xorg, xorgserver, xinput }:
+,  stdenv, fetchurl, pkgconfig, xorg }:
 
 stdenv.mkDerivation rec {
   name = "frame-${version}";

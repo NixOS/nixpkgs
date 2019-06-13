@@ -1,17 +1,20 @@
-{ stdenv, fetchurl, substituteAll, meson, ninja, pkgconfig, vala_0_40, gettext
+{ stdenv, fetchFromGitLab, substituteAll, meson, ninja, pkgconfig, vala_0_40, gettext
 , gnome3, libnotify, itstool, glib, gtk3, libxml2
-, coreutils, libsecret, pcre, libxkbcommon, wrapGAppsHook
+, coreutils, libpeas, libsecret, pcre, libxkbcommon, wrapGAppsHook
 , libpthreadstubs, libXdmcp, epoxy, at-spi2-core, dbus, libgpgerror
 , appstream-glib, desktop-file-utils, duplicity
 }:
 
 stdenv.mkDerivation rec {
-  name = "deja-dup-${version}";
-  version = "36.3";
+  pname = "deja-dup";
+  version = "38.3";
 
-  src = fetchurl {
-    url = "https://launchpad.net/deja-dup/36/${version}/+download/deja-dup-${version}.tar.xz";
-    sha256 = "08pwybzp7ynfcf0vqxfc3p8ir4gnzcv4v4cq5bwidbff9crklhrc";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = pname;
+    rev = version;
+    sha256 = "1bnvmdlm67k1b6115x75j3nl92x5yl4psq5pna2w6cg9npxdd3fa";
   };
 
   patches = [
@@ -19,7 +22,12 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit coreutils;
     })
+    ./hardcode-gsettings.patch
   ];
+
+  postPatch = ''
+    substituteInPlace deja-dup/nautilus/NautilusExtension.c --subst-var-by DEJA_DUP_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
+  '';
 
   nativeBuildInputs = [
     meson ninja pkgconfig vala_0_40 gettext itstool
@@ -27,14 +35,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-   libnotify gnome3.libpeas glib gtk3 libsecret
+   libnotify libpeas glib gtk3 libsecret
    pcre libxkbcommon libpthreadstubs libXdmcp epoxy gnome3.nautilus
    at-spi2-core dbus gnome3.gnome-online-accounts libgpgerror
   ];
 
   propagatedUserEnvPkgs = [ duplicity ];
 
-  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "lib/nautilus/extensions-3.0";
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
@@ -52,9 +60,9 @@ stdenv.mkDerivation rec {
       of backing up the Right Way (encrypted, off-site, and regular) \
       and uses duplicity as the backend.
     '';
-    homepage = https://launchpad.net/deja-dup;
-    license = with licenses; gpl3;
+    homepage = https://wiki.gnome.org/Apps/DejaDup;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar joncojonathan ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }
