@@ -9127,7 +9127,6 @@ broken-packages:
   - tasty-jenkins-xml
   - tasty-laws
   - tasty-lens
-  - tasty-lua
   - tasty-quickcheck-laws
   - tasty-stats
   - tasty-tap

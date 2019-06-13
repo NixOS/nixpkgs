@@ -1270,4 +1270,7 @@ self: super: {
   # https://github.com/pruvisto/heap/issues/11
   heap = dontCheck super.heap;
 
+  # https://github.com/hslua/tasty-lua/issues/1
+  tasty-lua = dontCheck super.tasty-lua;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
