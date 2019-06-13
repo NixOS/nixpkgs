@@ -24,14 +24,12 @@
     
    <arg>
     <option>--help</option>
-  </arg>
-
-  <arg>
-    <option>--option</option>
-    <replaceable>name</replaceable>
-    <replaceable>value</replaceable>
-  </arg>
-
+   </arg>
+    
+   <arg>
+    <option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable>
+   </arg>
+    
    <arg choice="plain">
     <replaceable>network.nix</replaceable>
    </arg>
@@ -126,10 +124,12 @@
      <option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable>
     </term>
     <listitem>
-     <para>Set the Nix configuration option
-      <replaceable>name</replaceable> to <replaceable>value</replaceable>.
-      This overrides settings in the Nix configuration file (see
-      <citerefentry><refentrytitle>nix.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>).
+     <para>
+      Set the Nix configuration option <replaceable>name</replaceable> to
+      <replaceable>value</replaceable>. This overrides settings in the Nix
+      configuration file (see <citerefentry>
+      <refentrytitle>nix.conf</refentrytitle>
+      <manvolnum>5</manvolnum></citerefentry>).
      </para>
     </listitem>
    </varlistentry>
