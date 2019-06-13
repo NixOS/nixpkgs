@@ -10,13 +10,13 @@
 
 buildBazelPackage rec {
   name = "bazel-watcher-${version}";
-  version = "0.9.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "1gjbv67ydyb0mafpp59qr9n8f8vva2mwhgan6lxxl0i9yfx7qc6p";
+    sha256 = "17z4nqqsdrainbh8fmhf6sgrxwf7aknadmn94z1yqpxa7kb9x33v";
   };
 
   nativeBuildInputs = [ go git python ];
@@ -49,7 +49,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "0p6yarz4wlb6h33n4slkczkdkaa93zc9jx55h8wl9vv81ahp0md5";
+    sha256 = "1ck1rsg5msd77abs889nl2n2i3jlah4d4vjz5wbsb3jyhzn8n5ny";
   };
 
   buildAttrs = {
