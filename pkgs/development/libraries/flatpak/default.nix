@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     ./respect-xml-catalog-files-var.patch
     ./use-flatpak-from-path.patch
     ./unset-env-vars.patch
+    ./validate-icon-pixbuf.patch
   ];
 
   nativeBuildInputs = [
