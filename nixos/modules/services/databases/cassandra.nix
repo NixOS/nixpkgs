@@ -251,7 +251,7 @@ in {
       example = literalExample "null";
       description = ''
           Set the interval how often incremental repairs are run, i.e.
-          <literal>nodetool repair<literal> is executed. See
+          <literal>nodetool repair</literal> is executed. See
           https://cassandra.apache.org/doc/latest/operating/repair.html
           for more information.
 
