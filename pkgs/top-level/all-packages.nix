@@ -22302,6 +22302,8 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
+  cd-hit = callPackage ../applications/science/biology/cd-hit { };
+
   cmtk = callPackage ../applications/science/biology/cmtk { };
 
   clustal-omega = callPackage ../applications/science/biology/clustal-omega { };
