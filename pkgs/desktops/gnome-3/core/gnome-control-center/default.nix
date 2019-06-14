@@ -34,6 +34,7 @@ in stdenv.mkDerivation rec {
     grilo libpwquality cracklib vino libcanberra-gtk3 libgudev libsecret
     gdk_pixbuf adwaita-icon-theme librsvg clutter clutter-gtk cheese
     networkmanager modemmanager gnome-bluetooth tracker
+    mutter # schemas for the keybindings
   ];
 
   patches = [
