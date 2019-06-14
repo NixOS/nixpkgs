@@ -1,5 +1,12 @@
-{ symlinkJoin, lib, makeWrapper, vdr, plugins ? [] }:
-symlinkJoin {
+{ symlinkJoin, lib, makeWrapper, vdr
+, plugins ? []
+}: let
+
+  makeXinePluginPath = l: lib.concatStringsSep ":" (map (p: "${p}/lib/xine/plugins") l);
+
+  requiredXinePlugins = lib.flatten (map (p: p.passthru.requiredXinePlugins or []) plugins);
+
+in symlinkJoin {
 
   name = "vdr-with-plugins-${(builtins.parseDrvName vdr.name).version}";
 
@@ -8,7 +15,9 @@ symlinkJoin {
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/vdr --add-flags "-L $out/lib/vdr --localedir=$out/share/locale"
+    wrapProgram $out/bin/vdr \
+      --add-flags "-L $out/lib/vdr --localedir=$out/share/locale" \
+      --prefix XINE_PLUGIN_PATH ":" ${makeXinePluginPath requiredXinePlugins}
   '';
 
   meta = with vdr.meta; {
