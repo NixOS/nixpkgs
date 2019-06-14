@@ -38,7 +38,7 @@ let
                     -f --cluster ${clusterName} --id ${daemonId} --setuser ceph \
                     --setgroup ${if daemonType == "osd" then "disk" else "ceph"}'';
     } // extraServiceConfig
-      // optionalAttrs (daemonType == "osd") { ExecStartPre = ''${ceph.out}/libexec/ceph/ceph-osd-prestart.sh \
+      // optionalAttrs (daemonType == "osd") { ExecStartPre = ''${ceph.lib}/libexec/ceph/ceph-osd-prestart.sh \
                                                               --id ${daemonId} --cluster ${clusterName}''; };
     } // optionalAttrs (builtins.elem daemonType [ "mds" "mon" "rgw" "mgr" ]) {
       preStart = ''
@@ -85,6 +85,14 @@ in
         default = "ceph";
         description = ''
           Name of cluster
+        '';
+      };
+
+      mgrModulePath = mkOption {
+        type = types.path;
+        default = "${pkgs.ceph.lib}/lib/ceph/mgr";
+        description = ''
+          Path at which to find ceph-mgr modules.
         '';
       };
 

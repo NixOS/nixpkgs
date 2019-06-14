@@ -7,6 +7,7 @@ import ./make-test.nix ({pkgs, lib, ...}: rec {
   nodes = {
     aio = { pkgs, ... }: {
       virtualisation = {
+        memorySize = 1536;
         emptyDiskImages = [ 20480 20480 ];
         vlans = [ 1 ];
       };
@@ -24,9 +25,6 @@ import ./make-test.nix ({pkgs, lib, ...}: rec {
         ceph
         xfsprogs
       ];
-      nixpkgs.config.packageOverrides = super: {
-        ceph = super.ceph.override({ nss = super.nss; libxfs = super.libxfs; libaio = super.libaio; jemalloc = super.jemalloc; });
-      };
 
       boot.kernelModules = [ "xfs" ];
 
@@ -40,9 +38,6 @@ import ./make-test.nix ({pkgs, lib, ...}: rec {
       services.ceph.mon = {
         enable = true;
         daemons = [ "aio" ];
-        extraConfig = {
-          "mgr initial modules" = "dashboard";
-        };
       };
 
       services.ceph.mgr = {
@@ -67,23 +62,26 @@ import ./make-test.nix ({pkgs, lib, ...}: rec {
 
     # Create the ceph-related directories
     $aio->mustSucceed(
-      "mkdir -p /var/lib/ceph/mgr/ceph-aio/",
-      "mkdir -p /var/lib/ceph/mon/ceph-aio/",
-      "mkdir -p /var/lib/ceph/osd/ceph-{0..1}/",
-      "chown ceph:ceph -R /var/lib/ceph/"
+      "mkdir -p /var/lib/ceph/mgr/ceph-aio",
+      "mkdir -p /var/lib/ceph/mon/ceph-aio",
+      "mkdir -p /var/lib/ceph/osd/ceph-{0,1}",
+      "chown ceph:ceph -R /var/lib/ceph/",
+      "mkdir -p /etc/ceph",
+      "chown ceph:ceph -R /etc/ceph"
     );
 
     # Bootstrap ceph-mon daemon
     $aio->mustSucceed(
       "sudo -u ceph ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'",
-      "ceph-authtool --create-keyring /etc/ceph/ceph.client.admin.keyring --gen-key -n client.admin --set-uid=0 --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow *' --cap mgr 'allow *'",
-      "ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring",
-            "monmaptool --create --add aio 192.168.1.1 --fsid 066ae264-2a5d-4729-8001-6ad265f50b03 /tmp/monmap",
+      "sudo -u ceph ceph-authtool --create-keyring /etc/ceph/ceph.client.admin.keyring --gen-key -n client.admin --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow *' --cap mgr 'allow *'",
+      "sudo -u ceph ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring",
+      "monmaptool --create --add aio 192.168.1.1 --fsid 066ae264-2a5d-4729-8001-6ad265f50b03 /tmp/monmap",
       "sudo -u ceph ceph-mon --mkfs -i aio --monmap /tmp/monmap --keyring /tmp/ceph.mon.keyring",
-      "touch /var/lib/ceph/mon/ceph-aio/done",
+      "sudo -u ceph touch /var/lib/ceph/mon/ceph-aio/done",
       "systemctl start ceph-mon-aio"
     );
     $aio->waitForUnit("ceph-mon-aio");
+    $aio->mustSucceed("ceph mon enable-msgr2");
 
     # Can't check ceph status until a mon is up
     $aio->succeed("ceph -s | grep 'mon: 1 daemons'");
@@ -95,7 +93,7 @@ import ./make-test.nix ({pkgs, lib, ...}: rec {
     );
     $aio->waitForUnit("ceph-mgr-aio");
     $aio->waitUntilSucceeds("ceph -s | grep 'quorum aio'");
-    $aio->waitUntilSucceeds("ceph -s | grep 'mgr: aio(active)'");
+    $aio->waitUntilSucceeds("ceph -s | grep 'mgr: aio(active,'");
 
     # Bootstrap both OSDs
     $aio->mustSucceed(
@@ -118,8 +116,8 @@ import ./make-test.nix ({pkgs, lib, ...}: rec {
       "systemctl start ceph-osd-1"
     );
 
-    $aio->waitUntilSucceeds("ceph osd stat | grep '2 osds: 2 up, 2 in'");
-    $aio->waitUntilSucceeds("ceph -s | grep 'mgr: aio(active)'");
+    $aio->waitUntilSucceeds("ceph osd stat | grep -e '2 osds: 2 up[^,]*, 2 in'");
+    $aio->waitUntilSucceeds("ceph -s | grep 'mgr: aio(active,'");
     $aio->waitUntilSucceeds("ceph -s | grep 'HEALTH_OK'");
 
     $aio->mustSucceed(
@@ -156,8 +154,8 @@ import ./make-test.nix ({pkgs, lib, ...}: rec {
     $aio->waitForUnit("ceph-osd-1");
     $aio->succeed("ceph -s | grep 'mon: 1 daemons'");
     $aio->waitUntilSucceeds("ceph -s | grep 'quorum aio'");
-    $aio->waitUntilSucceeds("ceph osd stat | grep '2 osds: 2 up, 2 in'");
-    $aio->waitUntilSucceeds("ceph -s | grep 'mgr: aio(active)'");
+    $aio->waitUntilSucceeds("ceph osd stat | grep -e '2 osds: 2 up[^,]*, 2 in'");
+    $aio->waitUntilSucceeds("ceph -s | grep 'mgr: aio(active,'");
     $aio->waitUntilSucceeds("ceph -s | grep 'HEALTH_OK'");
   '';
 })
