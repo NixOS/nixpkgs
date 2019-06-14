@@ -3,7 +3,10 @@
 , pythonPackages
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
+, docopt
+, colorama
+, pytest
+, watchdog
 }:
 
 buildPythonPackage rec {

@@ -3,7 +3,8 @@
 , pythonPackages
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
+, coverage
+, pytest
 }:
 
 buildPythonPackage rec {
