@@ -12631,8 +12631,12 @@ in
   primesieve = callPackage ../development/libraries/science/math/primesieve { };
 
   prison = callPackage ../development/libraries/prison { };
+  
+  proj = proj_6_1_0;
 
-  proj = callPackage ../development/libraries/proj { };
+  proj_6_1_0 = callPackage ../development/libraries/proj { };
+
+  proj_5_2_0 = callPackage ../development/libraries/proj/5.2.0.nix { };
 
   proselint = callPackage ../tools/text/proselint {
     inherit (python3Packages)
