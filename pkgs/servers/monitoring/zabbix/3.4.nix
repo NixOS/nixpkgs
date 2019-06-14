@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcre, libiconv, openssl }:
+{ stdenv, fetchurl, pcre, libiconv, openssl, postgresql }:
 
 
 let
@@ -30,6 +30,35 @@ in
     meta = with stdenv.lib; {
       inherit branch;
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
+      homepage = https://www.zabbix.com/;
+      license = licenses.gpl2;
+      maintainers = [ maintainers.eelco ];
+      platforms = platforms.linux;
+    };
+  };
+
+  proxy = stdenv.mkDerivation {
+    name = "zabbix-proxy-${version}";
+
+    inherit src;
+
+     configureFlags = [
+      "--enable-proxy"
+      "--with-postgresql"
+      "--with-libpcre=${pcre.dev}"
+      "--with-iconv=${libiconv}"
+    ];
+
+    buildInputs = [ postgresql libiconv pcre ];
+
+    postInstall = ''
+      mkdir -p $out/share/zabbix/db/schema
+      cp -pvd database/postgresql/schema.sql $out/share/zabbix/db/schema/postgresql.sql
+    '';
+
+    meta = with stdenv.lib; {
+      inherit branch;
+      description = "An enterprise-class open source distributed monitoring solution (client-server proxy)";
       homepage = https://www.zabbix.com/;
       license = licenses.gpl2;
       maintainers = [ maintainers.eelco ];
