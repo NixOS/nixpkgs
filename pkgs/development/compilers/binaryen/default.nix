@@ -1,11 +1,11 @@
 { stdenv, cmake, python, fetchFromGitHub, emscriptenRev ? null }:
 
 let
-  defaultVersion = "83";
+  defaultVersion = "84";
 
   # Map from git revs to SHA256 hashes
   sha256s = {
-    "version_83" = "0vggd9n6anfxsdk4kiyylysi4cfm2rp39f66sq9zkg0h7vw5x5sm";
+    "version_84" = "189zqc5gp8fm7clsgby9h2s758ijil7ma4liwbf81wnwkb4kqxc0";
     "1.38.28" = "172s7y5f38736ic8ri3mnbdqcrkadd40a26cxcfwbscc53phl11v";
   };
 in

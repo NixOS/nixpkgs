@@ -17,10 +17,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "67.0";
+    ffversion = "67.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0lwljfcbb1avnlafyrw5z08l3wxixfk6nv91blp6sc45mvsk89l77ckfyay7jy4v6c84q4a9h0wbh2mnx0r1xm3fhy9lshlm1n0s051";
+      sha512 = "289bhd8ynanb2zpclzaqqyz4082w529kcf3fd7li3k4pn0ayvkxfv4kmmhfz4xxrwsx6f489ffcj9a48ckk1czi9kykvj3i6ni0mnhl";
     };
 
     patches = [
@@ -246,7 +246,7 @@ in rec {
 
   tor-browser-8-5 = tbcommon rec {
     ffversion = "60.7.0esr";
-    tbversion = "8.5.0";
+    tbversion = "8.5.0"; # TODO: update to match binary bundle (8.5.1 currently)
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {

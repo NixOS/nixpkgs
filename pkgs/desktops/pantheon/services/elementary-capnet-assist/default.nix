@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, vala
-, desktop-file-utils, gtk3, granite, libgee, gcr, webkitgtk, gobject-introspection, wrapGAppsHook }:
+, desktop-file-utils, gtk3, granite, libgee, gcr, webkitgtk, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "capnet-assist";
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig

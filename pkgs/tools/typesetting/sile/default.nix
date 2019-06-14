@@ -1,5 +1,5 @@
 { stdenv, darwin, fetchurl, makeWrapper, pkgconfig
-, harfbuzz, icu, lpeg, luaexpat, lua-zlib, luafilesystem, luasocket, luasec
+, harfbuzz, icu
 , fontconfig, lua, libiconv
 , makeFontsConf, gentium, gentium-book-basic, dejavu_fonts
 }:
@@ -7,13 +7,7 @@
 with stdenv.lib;
 
 let
-
-  libs          = [ lpeg luaexpat lua-zlib luafilesystem luasocket luasec ];
-  getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
-  getLuaPath    = lib : getPath lib "lua";
-  getLuaCPath   = lib : getPath lib "so";
-  luaPath       = concatStringsSep ";" (map getLuaPath libs);
-  luaCPath      = concatStringsSep ";" (map getLuaCPath libs);
+  luaEnv = lua.withPackages(ps: with ps;[ lpeg luaexpat lua-zlib luafilesystem luasocket luasec]);
 
 in
 
@@ -27,8 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [pkgconfig makeWrapper];
-  buildInputs = [ harfbuzz icu lua fontconfig libiconv ]
-  ++ libs
+  buildInputs = [ harfbuzz icu fontconfig libiconv luaEnv ]
   ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
 
@@ -37,9 +30,6 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework AppKit";
-
-  LUA_PATH = luaPath;
-  LUA_CPATH = luaCPath;
 
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [
@@ -60,10 +50,6 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/sile \
-      --set LUA_PATH "${luaPath};" \
-      --set LUA_CPATH "${luaCPath};" \
-
     install -D -t $out/share/doc/sile documentation/*.pdf
   '';
 

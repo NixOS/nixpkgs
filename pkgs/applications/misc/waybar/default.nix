@@ -9,13 +9,13 @@
 }:
   stdenv.mkDerivation rec {
     name = "waybar-${version}";
-    version = "0.6.6";
+    version = "0.6.7";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "0wxd03lkgssz0vsib9qc040vfg1i6nrg7ac2c6qwficx62j2zlm1";
+      sha256 = "1rkqxszay2fns8c2q0b668mjacr4wb7drlbfi55z9w5f9cfxgifw";
     };
 
     nativeBuildInputs = [
@@ -31,12 +31,16 @@
       ++ optional  swaySupport  sway
       ++ optional  mpdSupport   mpd_clientlib;
 
-    mesonFlags = [
-      "-Ddbusmenu-gtk=${ if traySupport then "enabled" else "disabled" }"
-      "-Dpulseaudio=${ if pulseSupport then "enabled" else "disabled" }"
-      "-Dlibnl=${ if nlSupport then "enabled" else "disabled" }"
-      "-Dlibudev=${ if udevSupport then "enabled" else "disabled" }"
-      "-Dmpd=${ if mpdSupport then "enabled" else "disabled" }"
+    mesonFlags = (stdenv.lib.mapAttrsToList
+      (option: enable: "-D${option}=${if enable then "enabled" else "disabled"}")
+      {
+        dbusmenu-gtk = traySupport;
+        pulseaudio = pulseSupport;
+        libnl = nlSupport;
+        libudev = udevSupport;
+        mpd = mpdSupport;
+      }
+    ) ++ [
       "-Dout=${placeholder "out"}"
     ];
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, callPackage
 , ninja, vala, python3, desktop-file-utils, gtk3, granite, libgee
-, libcanberra, gobject-introspection, elementary-icon-theme, wrapGAppsHook }:
+, libcanberra, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "screenshot-tool"; # This will be renamed to "screenshot" soon. See -> https://github.com/elementary/screenshot/pull/93
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig

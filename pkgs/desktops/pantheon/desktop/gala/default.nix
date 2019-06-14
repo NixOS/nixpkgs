@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, vala
 , desktop-file-utils, gettext, libxml2, gtk3, granite, libgee, bamf, libcanberra
-, libcanberra-gtk3, gnome-desktop, mutter, clutter, plank, gobject-introspection
-, elementary-icon-theme, elementary-settings-daemon, wrapGAppsHook }:
+, libcanberra-gtk3, gnome-desktop, mutter, clutter, plank, elementary-icon-theme
+, elementary-settings-daemon, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gala";
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     desktop-file-utils
     gettext
-    gobject-introspection
     libxml2
     meson
     ninja

@@ -2,14 +2,14 @@
 
 buildPythonApplication rec {
   pname = "detect-secrets";
-  version = "0.11.4";
+  version = "0.12.4";
 
   # PyPI tarball doesn't ship tests
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "detect-secrets";
     rev = "v${version}";
-    sha256 = "1ydigridkjirrfhyfr8barw0yrd4hw6w0k9g7mbd0gdqng6gpmgc";
+    sha256 = "01y5xd0irxxib4wnf5834gwa7ibb81h5y4dl8b26gyzgvm5zfpk1";
   };
 
   propagatedBuildInputs = [ pyyaml ]

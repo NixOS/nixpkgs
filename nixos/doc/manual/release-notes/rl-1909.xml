@@ -23,6 +23,11 @@
      End of support is planned for end of April 2020, handing over to 20.03.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     PHP now defaults to PHP 7.3, updated from 7.2.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -131,6 +136,12 @@
       and <option>services.limesurvey.virtualHost</option> options.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The setopt declarations will be evaluated at the end of <literal>/etc/zshrc</literal>, so any code in <xref linkend="opt-programs.zsh.interactiveShellInit" />,
+      <xref linkend="opt-programs.zsh.loginShellInit" /> and <xref linkend="opt-programs.zsh.promptInit" /> may break if it relies on those options being set.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -198,6 +209,31 @@
       <literal>ExecStartPost=</literal> phases.
       To accomplish that, runtime and data directory setup was delegated to
       RuntimeDirectory and tmpfiles.
+    </para>
+   </listitem>
+  <listitem>
+    <para>
+      Since version 0.1.19, <literal>cargo-vendor</literal> honors package
+      includes that are specified in the <filename>Cargo.toml</filename>
+      file of Rust crates. <literal>rustPlatform.buildRustPackage</literal> uses
+      <literal>cargo-vendor</literal> to collect and build dependent crates.
+      Since this change in <literal>cargo-vendor</literal> changes the set of
+      vendored files for most Rust packages, the hash that use used to verify
+      the dependencies, <literal>cargoSha256</literal>, also changes.
+    </para>
+
+    <para>
+      The <literal>cargoSha256</literal> hashes of all in-tree derivations that
+      use <literal>buildRustPackage</literal> have been updated to reflect this
+      change. However, third-party derivations that use
+      <literal>buildRustPackage</literal> may have to be updated as well.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The default resample-method for PulseAudio has been changed from the upstream default <literal>speex-float-1</literal>
+      to <literal>speex-float-5</literal>. Be aware that low-powered ARM-based and MIPS-based boards will struggle with this
+      so you'll need to set <option>hardware.pulseaudio.daemon.config.resample-method</option> back to <literal>speex-float-1</literal>.
     </para>
    </listitem>
   </itemizedlist>

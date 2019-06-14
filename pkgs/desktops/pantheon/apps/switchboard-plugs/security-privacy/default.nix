@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pantheon, meson, python3, ninja
 , pkgconfig, vala, libgee, granite, gtk3, polkit, zeitgeist
-, switchboard, lightlocker, pantheon-agent-geoclue2, gobject-introspection }:
+, switchboard, lightlocker, pantheon-agent-geoclue2 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig

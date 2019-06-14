@@ -382,6 +382,7 @@ wincent/ferret
 xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview
+Yggdroot/indentLine
 zah/nim.vim
 zchee/deoplete-clang
 zchee/deoplete-go

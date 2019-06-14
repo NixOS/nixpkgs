@@ -20,7 +20,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.21.0";
+  version = "2.22.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 in
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0a0d0b07rmvs985zpndxxy0vzr0vq53kq5kyd68iv6gf8gkirjwc";
+    sha256 = "17zj6jwx3s6bybd290f1mj5iym1r64560rmnf0p63x4akxclp7hm";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
@@ -96,7 +96,9 @@ stdenv.mkDerivation {
 
   postBuild = ''
     make -C contrib/subtree
-  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + (stdenv.lib.optionalString perlSupport ''
+    make -C contrib/diff-highlight
+  '') + (stdenv.lib.optionalString stdenv.isDarwin ''
     make -C contrib/credential/osxkeychain
   '') + (stdenv.lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret

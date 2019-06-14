@@ -820,10 +820,6 @@
     github = "c0deaddict";
     name = "Jos van Bakel";
   };
-  c0dehero = {
-    email = "codehero@nerdpol.ch";
-    name = "CodeHero";
-  };
   calbrecht = {
     email = "christian.albrecht@mayflower.de";
     github = "calbrecht";
@@ -1336,6 +1332,11 @@
     email = "djohnson.m@gmail.com";
     github = "dmjio";
     name = "David Johnson";
+  };
+  dmvianna = {
+    email = "dmlvianna@gmail.com";
+    github = "dmvianna";
+    name = "Daniel Vianna";
   };
   dochang = {
     email = "dochang@gmail.com";
@@ -4095,6 +4096,11 @@
     email = "patrick.callahan@latitudeengineering.com";
     name = "Patrick Callahan";
   };
+  pyrolagus = {
+    email = "pyrolagus@gmail.com";
+    github = "PyroLagus";
+    name = "Danny Bautista";
+  };
   q3k = {
     email = "q3k@q3k.org";
     github = "q3k";
@@ -5070,6 +5076,11 @@
     github = "thedavidmeister";
     name = "David Meister";
   };
+  thefloweringash = {
+    email = "lorne@cons.org.nz";
+    github = "thefloweringash";
+    name = "Andrew Childs";
+  };
   thesola10 = {
     email = "thesola10@bobile.fr";
     github = "thesola10";
@@ -5153,6 +5164,11 @@
     email = "nix@tobim.fastmail.fm";
     github = "tobimpub";
     name = "Tobias Mayer";
+  };
+  tobiasBora = {
+    email = "tobias.bora.list@gmail.com";
+    github = "tobiasBora";
+    name = "Tobias Bora";
   };
   tohl = {
     email = "tom@logand.com";

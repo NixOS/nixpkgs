@@ -36,25 +36,26 @@
 , systemd
 , tzdata
 , upower
+, libXtst
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
-  version = "3.32.0";
+  version = "3.30.2";
 
   projectName = "gnome-settings-daemon";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${projectName}/${stdenv.lib.versions.majorMinor version}/${projectName}-${version}.tar.xz";
-    sha256 = "15w3sn9qf1zqlmk8c93kgrh2a20s62m5yfizkp21m5ylrrd07f63";
+    sha256 = "0c663csa3gnsr6wm0xfll6aani45snkdj7zjwjfzcwfh8w4a3z12";
   };
 
   # Source for ubuntu's patchset
   src2 = fetchgit {
     url = "https://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/${projectName}";
     rev = "refs/tags/ubuntu/${version}-1ubuntu1";
-    sha256 = "0ayd50mr0pv2h4j1r1haf8y2hj8jv59vypa7lx8jis0llrm7s3yn";
+    sha256 = "02awkhw6jqm7yh812mw0nsdmsljfi8ksz8mvd2qpns5pcv002g2c";
   };
 
   # We've omitted the 53_sync_input_sources_to_accountsservice patch because it breaks the build.
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
     "${patchPath}/64_restore_terminal_keyboard_shortcut_schema.patch"
     "${patchPath}/correct_logout_action.patch"
     "${patchPath}/ubuntu-lid-close-suspend.patch"
+    "${patchPath}/revert-wacom-migration.patch"
     "${patchPath}/revert-gsettings-removals.patch"
     "${patchPath}/revert-mediakeys-dbus-interface-drop.patch"
     "${patchPath}/ubuntu_ibus_configs.patch"
@@ -129,6 +131,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk3
     lcms2
+    libXtst
     libcanberra-gtk3
     libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
     libgudev
