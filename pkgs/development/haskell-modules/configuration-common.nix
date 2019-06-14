@@ -1099,7 +1099,14 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-  stack = generateOptparseApplicativeCompletion "stack" super.stack;
+  stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: {
+    ansi-terminal = self.ansi-terminal_0_9_1;
+    concurrent-output = self.concurrent-output_1_10_10; # needed for new ansi-terminal version
+    rio = self.rio_0_1_9_2;
+    hi-file-parser = dontCheck super.hi-file-parser;    # Avoid depending on newer hspec versions.
+    http-download = dontCheck super.http-download;
+    pantry-tmp = dontCheck super.pantry-tmp;
+  }));
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
@@ -1174,7 +1181,7 @@ self: super: {
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
-  # The LTS-13.x version doesn't suffice to build hlint, hoogle, etc.
+  # The LTS-13.x versions doesn't suffice to build these packages.
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
   hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
 

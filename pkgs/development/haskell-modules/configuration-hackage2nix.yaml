@@ -8287,7 +8287,6 @@ broken-packages:
   - riff
   - ring-buffer
   - ring-buffers
-  - rio-prettyprint
   - riot
   - risc386
   - riscv-isa
