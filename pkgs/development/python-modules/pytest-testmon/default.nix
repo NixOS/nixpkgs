@@ -15,10 +15,11 @@ buildPythonPackage rec {
     sha256 = "df00594e55f8f8f826e0e345dc23863ebac066eb749f8229c515a0373669c5bb";
   };
 
-  buildInputs = with pythonPackages; [ pytest ];
-  propagatedBuildInputs = with pythonPackages; [ coverage ];
-  checkPhase = with pythonPackages; ''
-    ${pytest}/bin/pytest test
+  buildInputs = [ pytest ];
+  propagatedBuildInputs = [ coverage ];
+  checkInputs = [ pytest ];
+  checkPhase = ''
+    pytest test
     '';
 
   meta = with lib; {
