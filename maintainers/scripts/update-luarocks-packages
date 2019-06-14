@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p parallel nix-prefetch-scripts luarocks-nix -i bash
+#!nix-shell update-luarocks-shell.nix -i bash
 
 # You'll likely want to use
 # ``
@@ -13,6 +13,12 @@ set -eu -o pipefail
 
 CSV_FILE="maintainers/scripts/luarocks-packages.csv"
 TMP_FILE="$(mktemp)"
+# Set in the update-luarocks-shell.nix
+NIXPKGS_PATH="$LUAROCKS_NIXPKGS_PATH"
+
+# 10 is a pretty arbitrary number of simultaneous jobs, but it is generally
+# impolite to hit a webserver with *too* many simultaneous connections :)
+PARALLEL_JOBS=10
 
 exit_trap() {
     local lc="$BASH_COMMAND" rc=$?
@@ -96,7 +102,8 @@ function convert_pkg() {
         luarocks_args+=("--maintainers=$maintainers")
     fi
     if [[ -n $lua_version ]]; then
-        luarocks_args+=("--lua-dir=$(nix path-info "nixpkgs.$lua_version")/bin")
+        lua_drv_path=$(nix-build --no-out-link "$NIXPKGS_PATH" -A "$lua_version")
+        luarocks_args+=("--lua-dir=$lua_drv_path/bin")
     fi
     luarocks_args+=("$lua_pkg_name")
     if [[ -n $pkg_version ]]; then
@@ -104,7 +111,6 @@ function convert_pkg() {
     fi
     echo "Running 'luarocks ${luarocks_args[*]}'" >&2
     if drv="$nix_pkg_name = $(luarocks "${luarocks_args[@]}")"; then
-        # echo "$drv" | tee -a "$TMP_FILE"
         echo "$drv"
     else
         echo "Failed to convert $nix_pkg_name" >&2
@@ -115,12 +121,11 @@ function convert_pkg() {
 # params needed when called via callPackage
 echo "$HEADER" | tee "$TMP_FILE"
 
+# Ensure parallel can run our bash function
 export -f convert_pkg
 export SHELL=bash
 # Read each line in the csv file and run convert_pkg for each, in parallel
-# 10 is a pretty arbitrary number of simultaneous jobs, but it is generally
-# impolite to hit a webserver with *too* many simultaneous connections :)
-parallel --group --keep-order --halt now,fail=1 --jobs 10 --colsep ',' convert_pkg {} <"$CSV_FILE" | tee -a "$TMP_FILE"
+parallel --group --keep-order --halt now,fail=1 --jobs "$PARALLEL_JOBS" --colsep ',' convert_pkg {} <"$CSV_FILE" | tee -a "$TMP_FILE"
 
 # close the set
 echo "$FOOTER" | tee -a "$TMP_FILE"
