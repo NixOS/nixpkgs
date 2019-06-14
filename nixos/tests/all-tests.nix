@@ -262,5 +262,6 @@ in
   xrdp = handleTest ./xrdp.nix {};
   xss-lock = handleTest ./xss-lock.nix {};
   yabar = handleTest ./yabar.nix {};
+  zabbix-proxy = handleTest ./zabbix-proxy.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
 }
