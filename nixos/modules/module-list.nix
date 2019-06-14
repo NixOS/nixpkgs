@@ -513,6 +513,7 @@
   ./services/monitoring/uptime.nix
   ./services/monitoring/vnstat.nix
   ./services/monitoring/zabbix-agent.nix
+  ./services/monitoring/zabbix-proxy.nix
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/beegfs.nix
   ./services/network-filesystems/cachefilesd.nix
