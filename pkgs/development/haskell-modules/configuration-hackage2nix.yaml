@@ -8146,7 +8146,6 @@ broken-packages:
   - refh
   - refined
   - reflection-extras
-  - reflex
   - reflex-animation
   - reflex-backend-wai
   - reflex-basic-host
