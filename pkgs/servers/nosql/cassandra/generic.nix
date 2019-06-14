@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     url = "mirror://apache/cassandra/${version}/apache-${name}-bin.tar.gz";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper coreutils ];
 
   installPhase = ''
     mkdir $out
@@ -51,8 +51,17 @@ stdenv.mkDerivation rec {
                bin/sstablescrub \
                bin/sstableupgrade \
                bin/sstableutil \
-               bin/sstableverify \
-               tools/bin/cassandra-stress \
+               bin/sstableverify; do
+      # Check if file exists because some don't exist across all versions
+      if [ -f $out/$cmd ]; then
+        wrapProgram $out/bin/$(basename "$cmd") \
+          --suffix-each LD_LIBRARY_PATH : ${libPath} \
+          --prefix PATH : ${binPath} \
+          --set JAVA_HOME ${jre}
+      fi
+    done
+
+    for cmd in tools/bin/cassandra-stress \
                tools/bin/cassandra-stressd \
                tools/bin/sstabledump \
                tools/bin/sstableexpiredblockers \
@@ -62,11 +71,9 @@ stdenv.mkDerivation rec {
                tools/bin/sstablerepairedset \
                tools/bin/sstablesplit \
                tools/bin/token-generator; do
-
-      # check if file exists because some bin tools don't exist across all
-      # cassandra versions
+      # Check if file exists because some don't exist across all versions
       if [ -f $out/$cmd ]; then
-        makeWrapper $out/$cmd $out/bin/$(${coreutils}/bin/basename "$cmd") \
+        makeWrapper $out/$cmd $out/bin/$(basename "$cmd") \
           --suffix-each LD_LIBRARY_PATH : ${libPath} \
           --prefix PATH : ${binPath} \
           --set JAVA_HOME ${jre}
