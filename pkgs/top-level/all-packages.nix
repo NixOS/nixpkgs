@@ -8044,8 +8044,9 @@ in
 
   scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
   scala_2_11 = callPackage ../development/compilers/scala/2.11.nix { };
-  scala_2_12 = callPackage ../development/compilers/scala { jre = jre8; };
-  scala = scala_2_12;
+  scala_2_12 = callPackage ../development/compilers/scala/2.12.nix { jre = jre8; };
+  scala_2_13 = callPackage ../development/compilers/scala/2.13.nix { jre = jre8; };
+  scala = scala_2_13;
 
   scalafix = callPackage ../development/tools/scalafix { };
   scalafmt = callPackage ../development/tools/scalafmt { };
@@ -10004,6 +10005,8 @@ in
   cachix = callPackage ../development/tools/cachix { };
 
   capnproto = callPackage ../development/libraries/capnproto { };
+
+  captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
@@ -20149,6 +20152,8 @@ in
   };
   cura = qt5.callPackage ../applications/misc/cura { };
 
+  curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
+
   curaLulzbot = callPackage ../applications/misc/cura/lulzbot.nix { };
 
   curaByDagoma = callPackage ../applications/misc/curabydagoma { };
@@ -22296,6 +22301,8 @@ in
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
   bftools = callPackage ../applications/science/biology/bftools { };
+
+  cd-hit = callPackage ../applications/science/biology/cd-hit { };
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
 

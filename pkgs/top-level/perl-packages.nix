@@ -16818,6 +16818,19 @@ let
     };
   };
 
+  TextNSP = buildPerlPackage rec {
+    name = "Text-NSP-1.31";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TP/TPEDERSE/${name}.tar.gz";
+      sha256 = "a01201beb29636b3e41ecda2a6cf6522fd265416bd6d994fad02f59fb49cf595";
+    };
+    meta = {
+      description = "Extract collocations and Ngrams from text";
+      license = stdenv.lib.licenses.free;
+      maintainers = [ maintainers.bzizou ];
+    };
+  };
+
   TextvFileasData = buildPerlPackage rec {
     name = "Text-vFile-asData-0.08";
     src = fetchurl {
