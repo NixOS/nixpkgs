@@ -21971,6 +21971,8 @@ in
 
   seaview = callPackage ../applications/science/biology/seaview { };
 
+  trimal = callPackage ../applications/science/biology/trimal { };
+
   varscan = callPackage ../applications/science/biology/varscan { };
 
   hmmer = callPackage ../applications/science/biology/hmmer { };
