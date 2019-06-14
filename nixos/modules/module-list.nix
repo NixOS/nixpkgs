@@ -92,6 +92,7 @@
   ./programs/bcc.nix
   ./programs/blcr.nix
   ./programs/browserpass.nix
+  ./programs/captive-browser.nix
   ./programs/ccache.nix
   ./programs/cdemu.nix
   ./programs/chromium.nix

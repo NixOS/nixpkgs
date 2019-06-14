@@ -258,6 +258,11 @@ foreach my $path (glob "/sys/class/{block,mmc_host}/*") {
     }
 }
 
+# Add bcache module, if needed.
+my @bcacheDevices = glob("/dev/bcache*");
+if (scalar @bcacheDevices > 0) {
+    push @initrdAvailableKernelModules, "bcache";
+}
 
 my $virt = `systemd-detect-virt`;
 chomp $virt;

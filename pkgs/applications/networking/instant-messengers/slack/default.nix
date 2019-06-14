@@ -1,7 +1,10 @@
-{ darkMode ? false, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
+{ stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
 cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk_pixbuf,
 libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
-at-spi2-atk, libuuid }:
+at-spi2-atk, libuuid,
+darkMode ? false,
+darkModeCssUrl ? "https://cdn.rawgit.com/laCour/slack-night-mode/master/css/raw/black.css"
+}:
 
 let
 
@@ -96,7 +99,7 @@ in stdenv.mkDerivation {
     document.addEventListener('DOMContentLoaded', function() {
     let tt__customCss = ".menu ul li a:not(.inline_menu_link) {color: #fff !important;}"
     $.ajax({
-        url: 'https://cdn.rawgit.com/laCour/slack-night-mode/master/css/raw/black.css',
+        url: '${darkModeCssUrl}',
         success: function(css) {
             \$("<style></style>").appendTo('head').html(css + tt__customCss);
             \$("<style></style>").appendTo('head').html('#reply_container.upload_in_threads .inline_message_input_container {background: padding-box #545454}');
