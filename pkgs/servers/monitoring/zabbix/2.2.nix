@@ -101,4 +101,31 @@ in
     };
   };
 
+  proxy = stdenv.mkDerivation {
+    name = "zabbix-proxy-${version}";
+
+    inherit src preConfigure;
+
+    configureFlags = [
+			"--enable-proxy"
+			"--with-postgresql"
+		];
+
+		buildInputs = [ postgresql ];
+
+    postInstall = ''
+      mkdir -p $out/share/zabbix/db/schema
+      cp -prvd database/postgresql/schema.sql $out/share/zabbix/db/schema/postgresql.sql
+    '';
+
+    meta = with stdenv.lib; {
+      inherit branch;
+      description = "An enterprise-class open source distributed monitoring solution (client-server proxy)";
+      homepage = https://www.zabbix.com/;
+      license = licenses.gpl2;
+      maintainers = [ maintainers.eelco ];
+      platforms = platforms.linux;
+    };
+  };
+
 }
