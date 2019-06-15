@@ -17,6 +17,7 @@
 , pexpect
 , appnope
 , backcall
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,13 @@ buildPythonPackage rec {
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ipython/ipython/commit/e1b53e9ef91a43b9e275bb9e48b4253218375d87.patch";
+      sha256 = "sha256:0q7zsgalwxss6aikhakbdkvvz0g4ac4sa3ncrklm74ksqh56rsgb";
+    })
+  ];
 
   buildInputs = [ glibcLocales ];
 
