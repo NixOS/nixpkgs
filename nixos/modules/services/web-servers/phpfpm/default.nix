@@ -6,8 +6,6 @@ let
   cfg = config.services.phpfpm;
   enabled = cfg.poolConfigs != {} || cfg.pools != {};
 
-  stateDir = "/run/phpfpm";
-
   poolConfigs =
     (mapAttrs mapPoolConfig cfg.poolConfigs) //
     (mapAttrs mapPool cfg.pools);
@@ -21,8 +19,9 @@ let
   mapPool = n: p: {
     phpPackage = p.phpPackage;
     phpOptions = p.phpOptions;
+    userPool = p.user;
+    groupPool = p.group;
     config = ''
-      listen = ${p.listen}
       ${p.extraConfig}
     '';
   };
@@ -34,6 +33,7 @@ let
     ${cfg.extraConfig}
 
     [${pool}]
+    listen = /run/phpfpm-${pool}/${cfg.pools.${pool}.socketName}.sock
     ${conf}
   '';
 
@@ -49,7 +49,6 @@ let
   '';
 
 in {
-
   options = {
     services.phpfpm = {
       extraConfig = mkOption {
@@ -114,21 +113,23 @@ in {
         }));
         default = {};
         example = literalExample ''
-         {
-           mypool = {
-             listen = "/path/to/unix/socket";
-             phpPackage = pkgs.php;
-             extraConfig = '''
-               user = nobody
-               pm = dynamic
-               pm.max_children = 75
-               pm.start_servers = 10
-               pm.min_spare_servers = 5
-               pm.max_spare_servers = 20
-               pm.max_requests = 500
-             ''';
-           }
-         }'';
+          {
+            mypool = {
+              socketName = "example";
+              phpPackage = pkgs.php;
+              user = "phpfpm";
+              group = "phpfpm";
+              extraConfig = '''
+                pm = dynamic
+                pm.max_children = 75
+                pm.start_servers = 10
+                pm.min_spare_servers = 5
+                pm.max_spare_servers = 20
+                pm.max_requests = 500
+              ''';
+            }
+          }
+        '';
         description = ''
           PHP-FPM pools. If no pools or poolConfigs are defined, the PHP-FPM
           service is disabled.
@@ -154,9 +155,6 @@ in {
         after = [ "network.target" ];
         wantedBy = [ "phpfpm.target" ];
         partOf = [ "phpfpm.target" ];
-        preStart = ''
-          mkdir -p ${stateDir}
-        '';
         serviceConfig = let
           cfgFile = fpmCfgFile pool poolConfig.config;
           iniFile = phpIni poolConfig;
@@ -166,10 +164,19 @@ in {
           ProtectSystem = "full";
           ProtectHome = true;
           # XXX: We need AF_NETLINK to make the sendmail SUID binary from postfix work
-          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
           Type = "notify";
-          ExecStart = "${poolConfig.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
+          ExecStart = "${poolConfig.phpPackage}/bin/php-fpm -y '${cfgFile}' -c '${iniFile}'";
           ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+          # User and group
+          User = "${poolConfig.userPool}";
+          Group = "${poolConfig.groupPool}";
+          # Runtime directory and mode
+          RuntimeDirectory = "phpfpm-${pool}";
+          RuntimeDirectoryMode = "0750";
+          # Capabilities
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" "CAP_CHOWN" "CAP_SYS_RESOURCE" ];
+          CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" "CAP_CHOWN" "CAP_SYS_RESOURCE" ];
         };
       }
    );

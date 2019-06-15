@@ -8,9 +8,9 @@ with lib; {
 
   options = {
 
-    listen = mkOption {
+    socketName = mkOption {
       type = types.str;
-      example = "/path/to/unix/socket";
+      example = "php-fpm";
       description = ''
         The address on which to accept FastCGI requests.
       '';
@@ -34,10 +34,21 @@ with lib; {
       '';
     };
 
+    user = mkOption {
+      type = types.string;
+      default = "phpfpm";
+      description = "User account under which phpfpm runs.";
+    };
+
+    group = mkOption {
+      type = types.string;
+      default = "phpfpm";
+      description = "Group account under which phpfpm runs.";
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       example = ''
-        user = nobody
         pm = dynamic
         pm.max_children = 75
         pm.start_servers = 10
