@@ -838,6 +838,7 @@
   ./services/x11/hardware/wacom.nix
   ./services/x11/gdk-pixbuf.nix
   ./services/x11/redshift.nix
+  ./services/x11/dunst.nix
   ./services/x11/urxvtd.nix
   ./services/x11/window-managers/awesome.nix
   ./services/x11/window-managers/default.nix
