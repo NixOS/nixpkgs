@@ -8,7 +8,9 @@ Dont forget to unmount before:
 2. Started installation on Lenovo t420s. `wpa_supplicant.conf` was not available, also the 
 option in `/etc/nixos/configuration.nix` to uncomment `networking.wireless.enable = true;` was not
 available. So
+
 2.1. connect with `nmcli dev wifi connect "SSID" password "password"`  or
+
 2.2. use ethernet cable and configure the wifi later.
 In my case i decided to go with 2.2.
 
