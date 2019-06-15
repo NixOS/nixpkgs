@@ -6021,6 +6021,8 @@ in
 
   super-user-spark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
 
+  svgbob = callPackage ../tools/graphics/svgbob { };
+
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
@@ -8040,8 +8042,9 @@ in
 
   scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
   scala_2_11 = callPackage ../development/compilers/scala/2.11.nix { };
-  scala_2_12 = callPackage ../development/compilers/scala { jre = jre8; };
-  scala = scala_2_12;
+  scala_2_12 = callPackage ../development/compilers/scala/2.12.nix { jre = jre8; };
+  scala_2_13 = callPackage ../development/compilers/scala/2.13.nix { jre = jre8; };
+  scala = scala_2_13;
 
   scalafix = callPackage ../development/tools/scalafix { };
   scalafmt = callPackage ../development/tools/scalafmt { };
@@ -8843,7 +8846,9 @@ in
 
   bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
 
-  bazel-watcher = callPackage ../development/tools/bazel-watcher { };
+  bazel-watcher = callPackage ../development/tools/bazel-watcher {
+    buildBazelPackage = buildBazelPackage.override { enableNixHacks = false; };
+  };
 
   bazelisk = callPackage ../development/tools/bazelisk { };
 
@@ -9998,6 +10003,8 @@ in
   cachix = callPackage ../development/tools/cachix { };
 
   capnproto = callPackage ../development/libraries/capnproto { };
+
+  captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
@@ -16330,6 +16337,8 @@ in
 
   iwona = callPackage ../data/fonts/iwona { };
 
+  jost = callPackage ../data/fonts/jost { };
+
   junicode = callPackage ../data/fonts/junicode { };
 
   kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
@@ -17284,6 +17293,7 @@ in
   deadbeefPlugins = {
     headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
     infobar = callPackage ../applications/audio/deadbeef/plugins/infobar.nix { };
+    lyricbar = callPackage ../applications/audio/deadbeef/plugins/lyricbar.nix { };
     mpris2 = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
   };
 
@@ -20141,6 +20151,8 @@ in
   };
   cura = qt5.callPackage ../applications/misc/cura { };
 
+  curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
+
   curaLulzbot = callPackage ../applications/misc/cura/lulzbot.nix { };
 
   curaByDagoma = callPackage ../applications/misc/curabydagoma { };
@@ -22289,6 +22301,8 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
+  cd-hit = callPackage ../applications/science/biology/cd-hit { };
+
   cmtk = callPackage ../applications/science/biology/cmtk { };
 
   clustal-omega = callPackage ../applications/science/biology/clustal-omega { };
@@ -23371,7 +23385,8 @@ in
     nix
     nix1
     nixStable
-    nixUnstable;
+    nixUnstable
+    nixFlakes;
 
   nixops = callPackage ../tools/package-management/nixops { };
 
