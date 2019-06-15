@@ -46,7 +46,7 @@ with lib.licenses;
 let
 
   elpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
-    inherit fetchurl lib stdenv texinfo;
+    inherit lib stdenv texinfo;
   };
 
   melpaStablePackages = import ../applications/editors/emacs-modes/melpa-stable-packages.nix {
