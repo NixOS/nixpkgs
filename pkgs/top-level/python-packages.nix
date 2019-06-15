@@ -2471,6 +2471,8 @@ in {
 
   validictory = callPackage ../development/python-modules/validictory { };
 
+  validate-email = callPackage ../development/python-modules/validate-email { };
+
   venusian = callPackage ../development/python-modules/venusian { };
 
   chameleon = callPackage ../development/python-modules/chameleon { };
