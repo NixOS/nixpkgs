@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  CFLAGS = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
+
   postInstall = "" + optionalString stdenv.isDarwin ''
     ln -s $out/lib/mod_spatialite.{so,dylib}
   '';
