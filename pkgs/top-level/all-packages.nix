@@ -9588,6 +9588,8 @@ in
     withPEPatterns = true;
   };
 
+  reviewdog = callPackage ../development/tools/misc/reviewdog { };
+
   rman = callPackage ../development/tools/misc/rman { };
 
   rolespec = callPackage ../development/tools/misc/rolespec { };
