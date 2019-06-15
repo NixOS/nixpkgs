@@ -23761,6 +23761,10 @@ in
 
   sndio = callPackage ../misc/sndio { };
 
+  # Oclgrind 18.3 does not work with newer LLVMs (but HEAD does, so
+  # fix this after next release).
+  oclgrind = callPackage ../development/tools/analysis/oclgrind { llvmPackages = llvmPackages_6; };
+
   opkg = callPackage ../tools/package-management/opkg { };
 
   opkg-utils = callPackage ../tools/package-management/opkg-utils { };
