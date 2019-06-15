@@ -8,7 +8,6 @@
 , gdb
 , numpy
 , ncurses
-, fetchpatch
 }:
 
 let

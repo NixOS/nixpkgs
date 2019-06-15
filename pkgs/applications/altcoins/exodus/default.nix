@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, gnome2,
+{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, gnome2,
 atk, cairo, gdk_pixbuf, xorg, xorg_sys_opengl, utillinux, alsaLib, dbus, at-spi2-atk,
 cups, vivaldi-ffmpeg-codecs, libpulseaudio }:
 

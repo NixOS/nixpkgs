@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, cmake, writeText, python3
+{ stdenv, fetchFromGitHub, cmake, writeText, python3
 , vulkan-headers, vulkan-loader, glslang
 , pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
 stdenv.mkDerivation rec {

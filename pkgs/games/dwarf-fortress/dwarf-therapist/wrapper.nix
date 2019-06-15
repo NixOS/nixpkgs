@@ -1,4 +1,4 @@
-{ pkgs, stdenv, symlinkJoin, lib, dwarf-therapist, dwarf-fortress, makeWrapper }:
+{ pkgs, stdenv, dwarf-therapist, dwarf-fortress, makeWrapper }:
 
 let
   platformSlug = if stdenv.targetPlatform.is32bit then

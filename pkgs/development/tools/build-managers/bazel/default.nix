@@ -1,10 +1,10 @@
-{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, runCommandCC, makeWrapper
+{ stdenv, callPackage, lib, fetchurl, runCommand, runCommandCC, makeWrapper
 # this package (through the fixpoint glass)
 , bazel
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
-, which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
+, which, python, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # Apple dependencies
-, cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
+, cctools, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , buildJdkName

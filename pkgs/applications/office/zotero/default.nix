@@ -29,8 +29,6 @@
 , nspr
 , nss
 , pango
-, coreutils
-, gnused
 , gsettings-desktop-schemas
 }:
 

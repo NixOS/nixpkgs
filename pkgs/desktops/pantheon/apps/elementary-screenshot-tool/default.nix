@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, callPackage
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
 , ninja, vala, python3, desktop-file-utils, gtk3, granite, libgee
 , libcanberra, elementary-icon-theme, wrapGAppsHook }:
 

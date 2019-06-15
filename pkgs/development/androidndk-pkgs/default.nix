@@ -1,5 +1,4 @@
 { androidenv, buildPackages, pkgs, targetPackages
-, includeSources ? true, licenseAccepted ? false
 }:
 
 rec {

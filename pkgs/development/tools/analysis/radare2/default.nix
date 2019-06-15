@@ -1,6 +1,5 @@
 {stdenv, fetchFromGitHub
 , buildPackages
-, callPackage
 , pkgconfig
 , libusb, readline, libewf, perl, zlib, openssl
 , libuv, file, libzip, xxHash
@@ -23,7 +22,7 @@ let
   inherit (stdenv.lib) optional;
 
   generic = {
-    version_commit,
+    version_commit, # unused
     gittap,
     gittip,
     rev,

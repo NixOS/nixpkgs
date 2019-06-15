@@ -1,4 +1,4 @@
-{ lib, bundlerApp, fetchurl, ruby, makeWrapper,
+{ lib, bundlerApp, ruby, makeWrapper,
   withPngcrush ? true,       pngcrush ? null,
   withPngout ? true,         pngout ? null,
   withAdvpng ? true,         advancecomp ? null,

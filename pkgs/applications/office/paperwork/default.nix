@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitLab, gtk3, cairo
+{ lib, python3Packages, gtk3, cairo
 , aspellDicts, buildEnv
 , gnome3, hicolor-icon-theme, librsvg
 , xvfb_run, dbus, libnotify

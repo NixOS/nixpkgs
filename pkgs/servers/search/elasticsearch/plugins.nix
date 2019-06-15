@@ -1,9 +1,7 @@
-{ pkgs, lib, stdenv, fetchurl, unzip, javaPackages, elasticsearch }:
+{ pkgs, lib, stdenv, fetchurl, unzip, elasticsearch }:
 
 let
   esVersion = elasticsearch.version;
-
-  majorVersion = lib.head (builtins.splitVersion esVersion);
 
   esPlugin = a@{
     pluginName,

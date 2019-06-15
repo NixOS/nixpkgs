@@ -1,6 +1,6 @@
 { qtModule, stdenv, lib, fetchurl
 , qtbase, qtdeclarative, qtlocation, qtmultimedia, qtsensors, qtwebchannel
-, fontconfig, gdk_pixbuf, gtk2, libwebp, libxml2, libxslt
+, fontconfig, gtk2, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
 , bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , darwin

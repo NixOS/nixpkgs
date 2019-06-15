@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, fetchpatch }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "rclone";

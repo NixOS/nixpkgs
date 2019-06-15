@@ -1,8 +1,6 @@
 { lib, newScope, pkgs, config }:
 
 let
-  inherit (pkgs.stdenv.hostPlatform) system;
-
   liftJaneStreet = self: super: super.janeStreet // super;
 
   mkOcamlPackages = ocaml:

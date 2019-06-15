@@ -9,7 +9,6 @@
 , version
 , release_version
 , zlib
-, libcxxabi
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? !enableManpages

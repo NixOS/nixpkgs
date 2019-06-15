@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , givaro
 , pkgconfig

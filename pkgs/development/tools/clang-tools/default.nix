@@ -1,4 +1,4 @@
-{ stdenv, writeScript, llvmPackages }:
+{ stdenv, llvmPackages }:
 
 let
   clang = llvmPackages.clang-unwrapped;

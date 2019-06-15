@@ -8,7 +8,7 @@
 , luaSupport ? false, lua5
 }:
 
-let inherit (stdenv.lib) optional optionalString;
+let inherit (stdenv.lib) optional;
 in
 
 assert sslSupport -> aprutil.sslSupport && openssl != null;

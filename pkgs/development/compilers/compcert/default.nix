@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, makeWrapper
+{ stdenv, lib, fetchFromGitHub, makeWrapper
 , coq, ocamlPackages, coq2html
 , tools ? stdenv.cc
 }:

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, flex, bison, meson, ninja, pkgconfig, libffi, python3
-, libintl, cctools, cairo, gnome3, glibcLocales, fetchpatch
+, libintl, cctools, cairo, gnome3, glibcLocales
 , substituteAll, nixStoreDir ? builtins.storeDir
 , x11Support ? true
 }:

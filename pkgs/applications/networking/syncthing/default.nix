@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchpatch, stdenv, lib, procps, fetchFromGitHub }:
+{ buildGoPackage, stdenv, lib, procps, fetchFromGitHub }:
 
 let
   common = { stname, target, postInstall ? "" }:

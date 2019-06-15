@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, nasm }:
+{ stdenv, fetchurl, cmake, nasm }:
 
 stdenv.mkDerivation rec {
 

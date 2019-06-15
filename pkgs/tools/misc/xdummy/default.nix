@@ -1,4 +1,4 @@
-{ stdenv, writeText, writeScriptBin, xorg, xkeyboard_config, runtimeShell }:
+{ writeText, writeScriptBin, xorg, xkeyboard_config, runtimeShell }:
 
 let
   xorgConfig = writeText "dummy-xorg.conf" ''

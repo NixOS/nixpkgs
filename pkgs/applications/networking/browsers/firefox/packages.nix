@@ -1,4 +1,4 @@
-{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3, overrideCC, gccStdenv, gcc6 }:
+{ lib, callPackage, fetchurl, fetchFromGitHub, python3, overrideCC, gccStdenv, gcc6 }:
 
 let
 

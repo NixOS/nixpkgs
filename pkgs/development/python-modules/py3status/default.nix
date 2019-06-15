@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , requests
 , pytz
 , tzlocal

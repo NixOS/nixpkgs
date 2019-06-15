@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , isPyPy
-, python
 , snappy
 , cffi
 , nose

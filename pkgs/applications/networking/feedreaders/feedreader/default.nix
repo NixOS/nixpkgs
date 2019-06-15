@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkgconfig, vala, gettext, python3
-, appstream-glib, desktop-file-utils, glibcLocales, wrapGAppsHook
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, vala, gettext, python3
+, appstream-glib, desktop-file-utils, wrapGAppsHook
 , gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas, hicolor-icon-theme
 , curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo, libxml2
 }:

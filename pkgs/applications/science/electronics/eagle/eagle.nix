@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeDesktopItem, patchelf
+{ stdenv, fetchurl, makeDesktopItem
 , libXrender, libXrandr, libXcursor, libX11, libXext, libXi, libxcb
-, cups , libGL, glib, nss, nspr, expat, alsaLib
+ , libGL, glib, nss, nspr, expat, alsaLib
 , qtbase, qtdeclarative, qtsvg, qtlocation, qtwebchannel, qtwebengine
 }:
 

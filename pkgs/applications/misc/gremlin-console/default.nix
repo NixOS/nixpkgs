@@ -1,4 +1,4 @@
-{ pkgs, fetchzip, stdenv, makeWrapper, openjdk }:
+{ fetchzip, stdenv, makeWrapper, openjdk }:
 
 stdenv.mkDerivation rec {
   name = "gremlin-console-${version}";

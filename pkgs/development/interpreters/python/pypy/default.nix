@@ -1,7 +1,7 @@
 { stdenv, substituteAll, fetchurl
 , zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
-, callPackage, self, gdbm, db, lzma
+, self, gdbm, db, lzma
 , python-setup-hook
 # For the Python package set
 , packageOverrides ? (self: super: {})

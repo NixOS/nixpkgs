@@ -1,4 +1,4 @@
-{ callPackage, stdenv }:
+{ callPackage }:
 
 let
   stableVersion = "2.1.21";

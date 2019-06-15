@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, removeReferencesTo
+{ stdenv, fetchurl, pkgconfig, removeReferencesTo
 , zlib, libjpeg, libpng, libtiff, pam, dbus, systemd, acl, gmp, darwin
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
 , coreutils

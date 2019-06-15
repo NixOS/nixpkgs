@@ -32,7 +32,7 @@ let
     };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
-      , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+      , fetchurl, fetchFromGitHub
       , useRailsExpress ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true

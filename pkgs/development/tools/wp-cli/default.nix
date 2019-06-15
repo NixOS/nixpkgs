@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, writeScript, writeText, php, runtimeShell }:
+{ stdenv, lib, fetchurl, php, runtimeShell }:
 
 let
   version = "2.0.1";

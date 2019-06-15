@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lib}:
+{fetchurl, lib}:
 
 with lib;
 

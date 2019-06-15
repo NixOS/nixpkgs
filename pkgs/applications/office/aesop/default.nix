@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pantheon, pkgconfig, meson, ninja, python3, gtk3
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3, gtk3
 , desktop-file-utils, json-glib, libsoup, libgee, poppler, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {

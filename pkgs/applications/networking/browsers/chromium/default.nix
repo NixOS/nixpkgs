@@ -1,5 +1,5 @@
 { newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_8
-, makeWrapper, makeDesktopItem, ed
+, makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 , libva ? null
 

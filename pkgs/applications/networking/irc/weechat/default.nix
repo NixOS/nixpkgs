@@ -5,12 +5,11 @@
 , asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
-, perlSupport ? true, perl, perlPackages
+, perlSupport ? true, perl
 , pythonSupport ? true, pythonPackages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
 , extraBuildInputs ? []
-, fetchpatch
 }:
 
 let

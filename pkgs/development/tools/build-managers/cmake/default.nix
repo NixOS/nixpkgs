@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
+{ stdenv, fetchurl, pkgconfig
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes

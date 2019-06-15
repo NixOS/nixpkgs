@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts
-, hdf5, vtk, medfile, zlib, python27Packages, swig, gfortran, fetchpatch
-, soqt, libf2c, makeWrapper, makeDesktopItem
+, hdf5, vtk, medfile, zlib, python27Packages, swig, gfortran
+, soqt, libf2c, makeWrapper
 , mpi ? null }:
 
 assert mpi != null;

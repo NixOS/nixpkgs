@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pantheon, pkgconfig, meson, ninja, vala, glib
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, glib
 , gtk3, libgee, desktop-file-utils, geoclue2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {

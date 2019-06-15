@@ -13,7 +13,6 @@
 , libpeas
 , gnome-online-accounts
 , gsettings-desktop-schemas
-, adwaita-icon-theme
 , evolution-data-server
 , libxml2
 , libsoup

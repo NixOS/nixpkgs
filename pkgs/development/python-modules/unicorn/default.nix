@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, buildPythonPackage, fetchPypi, isPy3k }:
+{ stdenv, buildPackages, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   name  = "${pname}-${version}";

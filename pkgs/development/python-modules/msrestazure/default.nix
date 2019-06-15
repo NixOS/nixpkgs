@@ -1,7 +1,6 @@
 { pkgs
 , buildPythonPackage
 , fetchPypi
-, python
 , adal
 , msrest
 }:

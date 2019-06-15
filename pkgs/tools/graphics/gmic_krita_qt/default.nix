@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, ninja, pkgconfig
+{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
 , opencv, openexr, graphicsmagick, fftw, zlib, libjpeg, libtiff, libpng
 , curl, krita, qtbase, qttools
 , fetchgit }:

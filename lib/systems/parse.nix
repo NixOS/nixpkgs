@@ -428,7 +428,7 @@ rec {
 
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
 
-  doubleFromSystem = { cpu, vendor, kernel, abi, ... }:
+  doubleFromSystem = { cpu, kernel, abi, ... }:
     /**/ if abi == abis.cygnus       then "${cpu.name}-cygwin"
     else if kernel.families ? darwin then "${cpu.name}-darwin"
     else "${cpu.name}-${kernel.name}";

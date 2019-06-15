@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, lib, grpc, grpcio}:
+{ stdenv, buildPythonPackage, fetchPypi, lib, grpcio}:
 
 buildPythonPackage rec {
   pname = "grpcio-tools";

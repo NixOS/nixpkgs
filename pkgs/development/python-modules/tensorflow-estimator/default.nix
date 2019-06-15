@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, isPy3k
+{ stdenv, fetchPypi, buildPythonPackage
 , numpy
 , absl-py 
 , mock

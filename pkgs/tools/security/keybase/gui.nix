@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, alsaLib, atk, cairo, cups, udev, hicolor-icon-theme
-, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, gtk3, gnome3
+{ stdenv, fetchurl, alsaLib, atk, cairo, cups, udev
+, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, gtk3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
 , runtimeShell, gsettings-desktop-schemas }:
 

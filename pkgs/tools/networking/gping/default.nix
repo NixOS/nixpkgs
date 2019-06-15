@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , iputils
 , python3
 , python3Packages

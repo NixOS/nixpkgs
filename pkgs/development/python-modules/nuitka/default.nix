@@ -3,7 +3,6 @@
 , fetchurl
 , vmprof
 , pyqt4
-, scons
 , isPyPy
 , pkgs
 }:

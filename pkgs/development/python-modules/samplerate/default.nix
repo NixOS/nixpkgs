@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, fetchgit
 , numpy
 , pkgs
 }:

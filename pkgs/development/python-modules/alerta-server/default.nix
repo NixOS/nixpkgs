@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, makeWrapper, pythonOlder, pyyaml
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pyyaml
 , python-dateutil, requests, pymongo, raven, bcrypt, flask, pyjwt, flask-cors, psycopg2, pytz, flask-compress, jinja2
 }:
 

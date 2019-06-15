@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pip
 , pbr
 , mock
 , python-jenkins

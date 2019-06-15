@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, python3, acl, libb2, lz4, zstd, openssl, openssh }:
+{ stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";

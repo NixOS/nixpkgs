@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, nettle, gnutls
 , libev, protobufc, guile, geoip, libseccomp, gperf, readline
-, lz4, libgssglue, ronn, coreutils, pam
+, lz4, libgssglue, ronn, pam
 }:
 
 stdenv.mkDerivation rec {

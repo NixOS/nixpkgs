@@ -32,7 +32,7 @@
 #   `meta` with `platforms` and `homepage` set to something you are
 #   unlikely to want to override for most packages
 
-{ lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, fetchpatch, runCommand, writeText
+{ lib, newScope, stdenv, fetchurl, fetchFromGitHub, runCommand, writeText
 
 , emacs, texinfo, lndir, makeWrapper
 , trivialBuild

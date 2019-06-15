@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, docbook_xsl, libxslt
+{ stdenv, lib, fetchFromGitHub, cmake, docbook_xsl, libxslt
 , openssl, libuuid, libwebsockets, c-ares, libuv
 , systemd ? null, withSystemd ? stdenv.isLinux }:
 

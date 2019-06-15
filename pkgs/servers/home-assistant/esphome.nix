@@ -1,4 +1,4 @@
-{ lib, python3, fetchpatch, platformio, esptool, git, protobuf3_7 }:
+{ lib, python3, platformio, esptool, git, protobuf3_7 }:
 
 let
   python = python3.override {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, gobject-introspection
+{ stdenv, fetchurl, pkgconfig, glib, gobject-introspection
 , meson
 , ninja
 , python3

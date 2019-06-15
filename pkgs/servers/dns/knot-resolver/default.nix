@@ -8,7 +8,7 @@ let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional concatStringsSep;
+inherit (stdenv.lib) optional;
 
 unwrapped = stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";

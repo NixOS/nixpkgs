@@ -5,7 +5,6 @@ with lib;
 let
 
   cfg = config.services.rspamd;
-  opts = options.services.rspamd;
   postfixCfg = config.services.postfix;
 
   bindSocketOpts = {options, config, ... }: {

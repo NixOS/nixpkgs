@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook
-, openssl, lib
+, openssl
 , libcap, libpcap, libnfnetlink, libnetfilter_conntrack, libnetfilter_queue
 }:
 

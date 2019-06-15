@@ -1,7 +1,6 @@
 # Generic builder for lua packages
 { lib
 , lua
-, stdenv
 , wrapLua
 # Whether the derivation provides a lua module or not.
 , toLuaModule
