@@ -4350,7 +4350,16 @@ in {
 
   scapy = callPackage ../development/python-modules/scapy { };
 
-  scipy = callPackage ../development/python-modules/scipy { };
+  scipy = let
+    scipy_ = callPackage ../development/python-modules/scipy { };
+    scipy_1_2 = scipy_.overridePythonAttrs(oldAttrs: {
+      version = "1.2.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "e085d1babcb419bbe58e2e805ac61924dac4ca45a07c9fa081144739e500aa3c";
+      };
+    });
+  in if pythonOlder "3.5" then scipy_1_2 else scipy_;
 
   scikitimage = callPackage ../development/python-modules/scikit-image { };
 
