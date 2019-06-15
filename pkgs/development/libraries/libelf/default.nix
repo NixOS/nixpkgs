@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./dont-hardcode-ar.patch
+    # Fix warnings from preprocessor instructions.
+    # https://github.com/NixOS/nixpkgs/issues/59929
+    ./preprocessor-warnings.patch
   ];
 
   doCheck = true;
