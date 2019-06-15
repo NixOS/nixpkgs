@@ -82,6 +82,11 @@ stdenv.mkDerivation rec {
       url = "https://git.qemu.org/?p=qemu.git;a=patch;h=b05b267840515730dbf6753495d5b7bd8b04ad1c";
       sha256 = "03a5vc5wvirbyi5r8kb2r4m2w6f1zmh9bqsr2psh4pblwar0nf55";
     })
+    (fetchpatch {
+      url = "https://git.qemu.org/?p=qemu.git;a=patch;h=d52680fc932efb8a2f334cc6993e705ed1e31e99";
+      name = "CVE-2019-12155.patch";
+      sha256 = "0h2q71mcz3gvlrbfkqcgla74jdg73hvzcrwr4max2ckpxx8x9207";
+    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optional pulseSupport ./fix-hda-recording.patch
     ++ optionals stdenv.hostPlatform.isMusl [
