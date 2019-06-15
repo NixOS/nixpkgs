@@ -15,6 +15,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.captive-browser;
+        defaultText = "pkgs.captive-browser";
+        description = "Which package to use for captive-browser";
       };
 
       interface = mkOption {
@@ -35,7 +37,7 @@ in
                                          ''http://cache.nixos.org/''
                                        ];
         description = ''
-          the shell (/bin/sh) command executed once the proxy starts.
+          The shell (/bin/sh) command executed once the proxy starts.
           When browser exits, the proxy exits. An extra env var PROXY is available.
 
           Here, we use a separate Chrome instance in Incognito mode, so that
@@ -51,7 +53,7 @@ in
       dhcp-dns = mkOption {
         type = types.str;
         description = ''
-          the shell (/bin/sh) command executed to obtain the DHCP
+          The shell (/bin/sh) command executed to obtain the DHCP
           DNS server address. The first match of an IPv4 regex is used.
           IPv4 only, because let's be real, it's a captive portal.
         '';
@@ -61,6 +63,16 @@ in
         type = types.str;
         default = "localhost:1666";
         description = ''the listen address for the SOCKS5 proxy server'';
+      };
+
+      bindInterface = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''
+          Binds <package>captive-browser</package> to the network interface declared in
+          <literal>cfg.interface</literal>. This can be used to avoid collisions
+          with private subnets.
+        '';
       };
     };
   };
@@ -99,7 +111,9 @@ in
                                                   browser = """${cfg.browser}"""
                                                   dhcp-dns = """${cfg.dhcp-dns}"""
                                                   socks5-addr = """${cfg.socks5-addr}"""
-                                                  bind-device = """${cfg.interface}"""
+                                                  ${optionalString cfg.bindInterface ''
+                                                    bind-device = """${cfg.interface}"""
+                                                  ''}
                                                 ''}
                         exec ${cfg.package}/bin/captive-browser
                       '';
