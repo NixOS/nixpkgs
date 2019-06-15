@@ -19,7 +19,7 @@ let
 
   useCustomDir = cfg.storageDir != null;
 
-  socket = "/run/phpfpm/${dirName}.sock";
+  socket = "/run/phpfpm-zoneminder/zoneminder.sock";
 
   zms = "/cgi-bin/zms";
 
@@ -278,7 +278,10 @@ in {
 
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
-          listen = socket;
+          socketName = "zoneminder";
+          phpPackage = pkgs.php;
+          user = "${user}";
+          group = "${group}";
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
 
@@ -286,9 +289,6 @@ in {
             "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
           '';
           extraConfig = ''
-            user = ${user}
-            group = ${group}
-
             listen.owner = ${user}
             listen.group = ${group}
             listen.mode = 0660
