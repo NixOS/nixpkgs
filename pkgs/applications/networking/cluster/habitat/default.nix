@@ -36,6 +36,6 @@ buildRustPackage rec {
     homepage = https://www.habitat.sh;
     license = licenses.asl20;
     maintainers = [ maintainers.boj maintainers.rushmorem ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }
