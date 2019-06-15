@@ -112,5 +112,7 @@ nmcli device wifi connect "SSID" --ask
 ```
 followed by entering the correct password
 9. Installed git by typeing `nix-env -iA nixos.pkgs.gitAndTools.gitFull`, created ssh key (`ssh-keygen`).
+
 10. Forked the github nixos repo, set the ssh-key and `git clone https://github.com/nixos/nixpkgs ~/nixpkfs`
+
 11. Now i am ready to start with my fresh NixOS. 
