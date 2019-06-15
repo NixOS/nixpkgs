@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q4sp6ppjiqlsz3h43q9iya4n3qkhx6ng16bcbacfxdyrp9xvcf9";
+    sha256 = "6640acd76e6cab84648e4fec16c9d19de6700971f9d91d045e7120622167bfda";
   };
 
   checkInputs = [ click ipython ];
