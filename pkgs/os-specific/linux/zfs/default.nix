@@ -159,9 +159,9 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.8.0";
+    version = "0.8.1";
 
-    sha256 = "1lqb9q2im5bbm4l8kfb31cb6rvy37h5ni6rnqlki127ynilymkj8";
+    sha256 = "0wlbziijx08a9bmbyq4gfz4by9l5jrx44g18i99qnfm78k2q8a84";
 
     extraPatches = [
       ./build-fixes-unstable.patch
