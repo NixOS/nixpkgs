@@ -10385,7 +10385,15 @@ in
 
   fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
 
+  fbthrift = callPackage ../development/libraries/fbthrift { };
+
+  fizz = callPackage ../development/libraries/fizz { };
+
   folly = callPackage ../development/libraries/folly { };
+
+  rsocket-cpp = callPackage ../development/libraries/rsocket-cpp { };
+
+  wangle = callPackage ../development/libraries/wangle { };
 
   folks = callPackage ../development/libraries/folks { };
 
