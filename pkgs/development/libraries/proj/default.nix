@@ -10,7 +10,10 @@ stdenv.mkDerivation {
 
   doCheck = stdenv.is64bit;
 
-  buildInputs = [ sqlite pkg-config ];
+  buildInputs = [ sqlite ];
+
+  nativeBuildInputs = [ pkg-config ];
+
   meta = with stdenv.lib; {
     description = "Cartographic Projections Library";
     homepage = https://proj4.org;
