@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, pkgconfig
+ { stdenv, lib, fetchFromGitHub, rustPlatform, pkgconfig, darwin
 , libsodium, libarchive, openssl, zeromq }:
 
 with rustPlatform;
