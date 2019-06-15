@@ -7,38 +7,45 @@ let
 
   cfg = config.services.zabbixProxy;
 
-  stateDir = "/run/zabbix";
+  StateDirectory = "/run/zabbix";
 
-  logDir = "/var/log/zabbix";
+  LogsDirectory = "/var/log/zabbix";
 
-  libDir = "/var/lib/zabbix";
+  RuntimeDirectory = "/var/lib/zabbix";
 
-  pidFile = "${stateDir}/zabbix_proxy.pid";
+  pidFile = "${StateDirectory}/zabbix_proxy.pid";
 
-  configFile = pkgs.writeText "zabbix_proxy.conf"
-    ''
+  configFile = pkgs.writeText "zabbix_proxy.conf" ''
       Server = ${cfg.server}
 
-      LogFile = ${logDir}/zabbix_proxy
+      LogFile = ${LogsDirectory}/zabbix_proxy
 
       PidFile = ${pidFile}
 
-      ${optionalString (cfg.dbServer != "localhost") ''
-        DBHost = ${cfg.dbServer}
+      ${optionalString (cfg.database.server != "localhost") ''
+        DBHost = ${cfg.database.server}
+      ''}
+
+      ${optionalString (cfg.database.port != "3306") ''
+        DBSocket = ${cfg.database.port}
+      ''}
+
+      ${optionalString (cfg.database.schema != "postgresql") ''
+        DBSchema = ${cfg.database.schema}
       ''}
 
       DBName = zabbix
 
       DBUser = zabbix
 
-      ${optionalString (cfg.dbPassword != "") ''
-        DBPassword = ${cfg.dbPassword}
+      ${optionalString (cfg.database.passwordFile != "") ''
+        DBPassword = #dbpass#
       ''}
 
       ${config.services.zabbixProxy.extraConfig}
-    '';
+  '';
 
-  useLocalPostgres = cfg.dbServer == "localhost" || cfg.dbServer == "";
+  useLocalPostgres = cfg.database.server == "localhost" || cfg.database.server == "";
 
 in
 
@@ -48,7 +55,9 @@ in
 
   options = {
 
-    services.zabbixProxy.enable = mkOption {
+    services.zabbixProxy = {
+
+    enable = mkEnableOption {
       default = false;
       type = types.bool;
       description = ''
@@ -56,29 +65,46 @@ in
       '';
     };
 
-    services.zabbixProxy.server = mkOption {
-       default = "127.0.0.1";
+    server = mkOption {
+      default = "127.0.0.1";
+      type = types.str;
        description = ''
          The IP address or hostname of the Zabbix server to connect to.
        '';
     };
 
-    services.zabbixProxy.dbServer = mkOption {
-      default = "localhost";
-      type = types.str;
-      description = ''
-        Hostname or IP address of the database server.
-        Use an empty string ("") to use peer authentication.
-      '';
-    };
+    database = {
 
-    services.zabbixProxy.dbPassword = mkOption {
-      default = "";
-      type = types.str;
-      description = "Password used to connect to the database server.";
-    };
+      server = mkOption {
+       default = "localhost";
+       type = types.str;
+       description = ''
+         Hostname or IP address of the database server.
+         Use an empty string ("") to use peer authentication.
+       '';
+      };
 
-    services.zabbixProxy.extraConfig = mkOption {
+      passwordFile = mkOption {
+       default = "";
+        type = types.str;
+       description = "A file containing the password used to connect to the database server.";
+      };
+
+      port = mkOption {
+        type = types.str;
+        default = "3306";
+        description = "Path to MySQL socket. Database port when not using local socket. Ignored for SQLite.";
+      };
+
+      schema = mkOption {
+        type = types.str;
+        default = "postgresql";
+        description = "Schema name. Used for IBM DB2 and PostgreSQL.";
+      };
+
+   };
+
+    extraConfig = mkOption {
       default = "";
       type = types.lines;
       description = ''
@@ -88,11 +114,21 @@ in
 
   };
 
+ };
+
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    services.postgresql.enable = useLocalPostgres;
+    services.postgresql = {
+      enable = true;
+      ensureDatabases = [ "zabbix" ];
+      ensureUsers = [
+        { name = "zabbix";
+          ensurePermissions = { "DATABASE zabbix" = "ALL PRIVILEGES"; };
+        }
+      ];
+    };
 
     users.users = singleton
       { name = "zabbix";
@@ -100,33 +136,60 @@ in
         description = "Zabbix daemon user";
       };
 
+    systemd.tmpfiles.rules = [
+        "d '${StateDirectory}' - zabbix - - -"
+        "d '${LogsDirectory}' - zabbix - - -"
+        "d '${RuntimeDirectory}' - zabbix - - -"
+      ];
+
     systemd.services."zabbix-proxy" =
       { description = "Zabbix Proxy";
-
         wantedBy = [ "multi-user.target" ];
         after = optional useLocalPostgres "postgresql.service";
 
+        path = with pkgs; [
+          config.services.postgresql.package
+          nettools
+        ];
+
         preStart =
           ''
-            mkdir -m 0755 -p ${stateDir} ${logDir} ${libDir}
-            chown zabbix ${stateDir} ${logDir} ${libDir}
+            # Handling the password from a file and its permissions
+            DBPASS=$(head -n1 ${cfg.database.passwordFile})
+            cp -r ${configFile} ${StateDirectory}/zabbix_proxy.conf
+            sed -e "s,#dbpass#,$DBPASS,g" -i ${StateDirectory}/zabbix_proxy.conf
+            chmod 440 ${StateDirectory}/zabbix_proxy.conf
 
-            if ! test -e "${libDir}/db-created"; then
-                ${pkgs.su}/bin/su -s "$SHELL" ${config.services.postgresql.superUser} -c '${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole zabbix' || true
-                ${pkgs.su}/bin/su -s "$SHELL" ${config.services.postgresql.superUser} -c '${pkgs.postgresql}/bin/createdb --owner zabbix zabbix' || true
-                cat ${pkgs.zabbix.server}/share/zabbix/db/schema/postgresql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
-                touch "${libDir}/db-created"
+            if ! test -e "${RuntimeDirectory}/db-schema-imported"; then
+                cat ${pkgs.zabbix.server}/share/zabbix/db/schema/postgresql.sql | ${pkgs.postgresql}/bin/psql -U zabbix zabbix
+                touch "${RuntimeDirectory}/db-schema-imported"
             fi
           '';
 
-        path = [ pkgs.nettools ];
-
-        serviceConfig.ExecStart = "@${pkgs.zabbix.proxy}/sbin/zabbix_proxy zabbix_proxy --config ${configFile}";
-        serviceConfig.Type = "forking";
-        serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = 2;
-        serviceConfig.PIDFile = pidFile;
+        serviceConfig = {
+          ExecStart = "@${pkgs.zabbix.proxy}/sbin/zabbix_proxy zabbix_proxy --config ${configFile}";
+          WorkingDirectory = RuntimeDirectory;
+          User = "zabbix";
+          Type = "forking";
+          Restart = "always";
+          RestartSec = 2;
+          PIDFile = pidFile;
+        };
       };
+
+    services.logrotate = {
+      enable = true;
+      config = ''
+        ${LogsDirectory}/*.log {
+            daily
+            rotate 7
+            compress
+            missingok
+            notifempty
+            create 0600 zabbix zabbix
+        }
+      '';
+    };
 
   };
 
