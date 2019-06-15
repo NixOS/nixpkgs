@@ -4,21 +4,22 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-mpv-${version}";
-  version = "0.13";
+  pname = "gnome-mpv";
+  version = "0.16";
 
   src = fetchFromGitHub {
-    owner = "gnome-mpv";
-    repo = "gnome-mpv";
-    rev = "0d73b33d60050fd32bf8fae77d831548970a0b69"; # upstream forgot to update appdata
-    # rev = "v${version}";
-    sha256 = "1cjhw3kz163iwj2japhnv354i1lr112xyyfkxw82cwy2554cfim4";
+    owner = "celluloid-player";
+    repo = "celluloid";
+    rev = "v${version}";
+    sha256 = "1fj5mr1dwd07jpnigk7z85xdm6yaf7spbvf60aj3mz12m05b1b2w";
   };
 
   nativeBuildInputs = [ meson ninja python3 appstream-glib gettext pkgconfig desktop-file-utils wrapGAppsHook ];
   buildInputs = [ epoxy glib gtk3 mpv ];
 
-  enableParallelBuilding = true;
+  patches = [
+    ./appdata-validate.patch
+  ];
 
   postPatch = ''
     patchShebangs meson_post_install.py
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
       allowing access to mpv's powerful playback capabilities through an
       easy-to-use user interface.
     '';
-    homepage = https://github.com/gnome-mpv/gnome-mpv;
+    homepage = "https://github.com/celluloid-player/celluloid";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
