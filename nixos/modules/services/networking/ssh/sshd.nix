@@ -4,7 +4,15 @@ with lib;
 
 let
 
-  sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ cfgc.package ]; } ''
+  # The splicing information needed for nativeBuildInputs isn't available
+  # on the derivations likely to be used as `cfgc.package`.
+  # This middle-ground solution ensures *an* sshd can do their basic validation
+  # on the configuration.
+  validationPackage = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
+    then [ cfgc.package ]
+    else [ pkgs.buildPackages.openssh ];
+
+  sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ validationPackage ]; } ''
     cat >$out <<EOL
     ${cfg.extraConfig}
     EOL
