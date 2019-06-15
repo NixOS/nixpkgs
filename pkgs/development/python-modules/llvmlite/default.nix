@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.28.0";
+  version = "0.29.0";
 
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a189c0cd8a80e8bbd002a1e422b1efcc2bceab2cb63b961f2d03ab711c3ba45b";
+    sha256 = "3adb0d4c9a17ad3dca82c7e88118babd61eeee0ee985ce31fa43ec27aa98c963";
   };
 
   nativeBuildInputs = [ llvm ];
@@ -28,11 +28,6 @@ buildPythonPackage rec {
     substituteInPlace ffi/Makefile.linux --replace "-static-libstdc++" ""
 
     substituteInPlace llvmlite/tests/test_binding.py --replace "test_linux" "nope"
-
-    # llvm 7.1 is not officially supported but works fine.
-    # Remove when going to 0.29.0 / llvm 8
-    substituteInPlace ffi/build.py --replace "7.0." "7."
-    substituteInPlace llvmlite/tests/test_binding.py --replace "test_version" "dont_test_version"
   '';
   # Set directory containing llvm-config binary
   preConfigure = ''

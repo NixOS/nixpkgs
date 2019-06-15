@@ -3239,7 +3239,7 @@ in {
 
   locustio = callPackage ../development/python-modules/locustio { };
 
-  llvmlite = callPackage ../development/python-modules/llvmlite { llvm = pkgs.llvm_7; };
+  llvmlite = callPackage ../development/python-modules/llvmlite { llvm = pkgs.llvm_8; };
 
   lockfile = callPackage ../development/python-modules/lockfile { };
 
