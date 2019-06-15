@@ -1465,6 +1465,8 @@ in
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
+  eksctl = callPackage ../tools/admin/eksctl { };
+
   elementary-xfce-icon-theme = callPackage ../data/icons/elementary-xfce-icon-theme { };
 
   ell = callPackage ../os-specific/linux/ell { };
