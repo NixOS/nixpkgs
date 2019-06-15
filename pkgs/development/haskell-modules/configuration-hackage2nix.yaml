@@ -5571,7 +5571,6 @@ broken-packages:
   - hharp
   - HHDL
   - hhp
-  - hi-file-parser
   - hi3status
   - hiccup
   - hichi
@@ -5986,7 +5985,6 @@ broken-packages:
   - http-conduit-browser
   - http-conduit-downloader
   - http-dispatch
-  - http-download
   - http-enumerator
   - http-grammar
   - http-kinder
@@ -7528,7 +7526,6 @@ broken-packages:
   - pang-a-lambda
   - pangraph
   - panpipe
-  - pantry-tmp
   - papa-export
   - papa-implement
   - papa-include
@@ -8149,7 +8146,6 @@ broken-packages:
   - refh
   - refined
   - reflection-extras
-  - reflex
   - reflex-animation
   - reflex-backend-wai
   - reflex-basic-host

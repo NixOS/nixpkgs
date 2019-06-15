@@ -357,6 +357,7 @@ self: super: {
   pwstore-cli = dontCheck super.pwstore-cli;
   quantities = dontCheck super.quantities;
   redis-io = dontCheck super.redis-io;
+  reflex = dontCheck super.reflex; # test suite uses hlint, which has different haskell-src-exts version
   rethinkdb = dontCheck super.rethinkdb;
   Rlang-QQ = dontCheck super.Rlang-QQ;
   safecopy = dontCheck super.safecopy;
@@ -1225,7 +1226,7 @@ self: super: {
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
   cmark-gfm = self.cmark-gfm_0_2_0;
-  pandoc = doDistribute super.pandoc_2_7_3;
+  pandoc = dontCheck (doDistribute super.pandoc_2_7_3);  # test suite failure: https://github.com/jgm/pandoc/issues/5582
   pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_2;
   skylighting = self.skylighting_0_8_1_1;
   skylighting-core = self.skylighting-core_0_8_1_1;
