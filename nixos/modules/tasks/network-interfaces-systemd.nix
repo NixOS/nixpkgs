@@ -12,7 +12,7 @@ let
     i.ipv4.addresses
     ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
-  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "none";
+  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "no";
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
@@ -59,7 +59,14 @@ in
           in {
             DHCP = override (dhcpStr cfg.useDHCP);
           } // optionalAttrs (gateway != [ ]) {
-            gateway = override gateway;
+            routes = override [
+              {
+                routeConfig = {
+                  Gateway = gateway;
+                  GatewayOnLink = false;
+                };
+              }
+            ];
           } // optionalAttrs (domains != [ ]) {
             domains = override domains;
           };

@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, lvm2, libaio, gzip, readline, systemd, liburcu }:
+{ stdenv, fetchurl, pkgconfig, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c }:
 
 stdenv.mkDerivation rec {
   name = "multipath-tools-${version}";
-  version = "0.6.2";
+  version = "0.8.1";
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "https://git.opensvc.com/?p=multipath-tools/.git;a=snapshot;h=${version};sf=tgz";
-    sha256 = "159hxvbk9kh1qay9x04w0gsqzg0hkl5yghfc1wi9kv2n5pcwbkpm";
+    url = "https://git.opensvc.com/gitweb.cgi?p=multipath-tools/.git;a=snapshot;h=refs/tags/${version};sf=tgz";
+    sha256 = "0669zl4dpai63dl04lf8vpwnpsff6qf19fifxfc4frawnh699k95";
   };
 
   postPatch = ''
+    substituteInPlace libmultipath/Makefile --replace /usr/include/libdevmapper.h ${lvm2}/include/libdevmapper.h
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
     ' libmultipath/defaults.h
@@ -20,8 +21,8 @@ stdenv.mkDerivation rec {
       Makefile.inc
   '';
 
-  nativeBuildInputs = [ gzip ];
-  buildInputs = [ systemd lvm2 libaio readline liburcu ];
+  nativeBuildInputs = [ gzip pkgconfig perl ];
+  buildInputs = [ systemd lvm2 libaio readline liburcu json_c ];
 
   makeFlags = [
     "LIB=lib"

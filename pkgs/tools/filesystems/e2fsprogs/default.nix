@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.45.1";
+  version = "1.45.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0zi8jz28hs66vhjvrfxmkmr1via19aygcbzpnw3lp0crhizaasgf";
+    sha256 = "1bhqljgcngys1diaxh7rnxc85d1jsril8xd7bach9imdjwr1wlm8";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];

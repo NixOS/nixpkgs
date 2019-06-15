@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-static"
-    "--enable-gtk-doc"
+#    "--enable-gtk-doc"
     "--enable-man"
     "--enable-valgrind-tests"
     "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"

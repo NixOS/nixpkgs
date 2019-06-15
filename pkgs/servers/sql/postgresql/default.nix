@@ -38,7 +38,7 @@ let
 
     enableParallelBuilding = !stdenv.isDarwin;
 
-    makeFlags = [ "world" ];
+    buildFlags = [ "world" ];
 
     NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
 
@@ -60,6 +60,7 @@ let
         (if atLeast "9.6" then ./patches/less-is-more-96.patch             else ./patches/less-is-more.patch)
         (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
         ./patches/specify_pkglibdir_at_runtime.patch
+        ./patches/findstring.patch
       ] ++ lib.optional stdenv.isLinux ./patches/socketdir-in-run.patch;
 
     installTargets = [ "install-world" ];
