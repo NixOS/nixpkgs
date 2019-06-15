@@ -23,6 +23,9 @@ buildPythonPackage rec {
     pytest
   '';
 
+  # Prevent infinite recursion with pytest
+  doCheck = false;
+
   meta = with lib; {
     description = "Pathlib-compatible object wrapper for zip files";
     homepage = https://github.com/jaraco/zipp;
