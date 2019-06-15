@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, isPy27, futures, backports_functools_lru_cache, mock, pytest }:
 
 let
-  skipTests = lib.optional isPy27 "test_standard_library_deprecates_user_issue_778";
+  skipTests = [ "test_requirements_finder" "test_pipfile_finder" ] ++ lib.optional isPy27 "test_standard_library_deprecates_user_issue_778";
   testOpts = lib.concatMapStringsSep " " (t: "--deselect test_isort.py::${t}") skipTests;
 in buildPythonPackage rec {
   pname = "isort";
