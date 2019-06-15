@@ -12645,11 +12645,7 @@ in
 
   prison = callPackage ../development/libraries/prison { };
   
-  proj = proj_6_1_0;
-
-  proj_6_1_0 = callPackage ../development/libraries/proj { };
-
-  proj_5_2_0 = callPackage ../development/libraries/proj/5.2.0.nix { };
+  proj = callPackage ../development/libraries/proj { };
 
   proselint = callPackage ../tools/text/proselint {
     inherit (python3Packages)
