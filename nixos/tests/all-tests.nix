@@ -210,6 +210,7 @@ in
   prometheus2 = handleTest ./prometheus-2.nix {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
   prosody = handleTest ./xmpp/prosody.nix {};
+  prosodyMysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
   quagga = handleTest ./quagga.nix {};
   quake3 = handleTest ./quake3.nix {};
