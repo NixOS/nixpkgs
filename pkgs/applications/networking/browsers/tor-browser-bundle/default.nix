@@ -299,7 +299,6 @@ stdenv.mkDerivation rec {
       TOR_SOCKS_PORT="\''${TOR_SOCKS_PORT:-}" \
       \
       $self/firefox \
-        -no-remote \
         -profile "\$HOME/TorBrowser/Data/Browser/profile.default" \
         "\$@"
     EOF
