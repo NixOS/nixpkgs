@@ -16,7 +16,11 @@ buildRustPackage rec {
   cargoSha256 = "04a48drfx6cz4m51iffhr472jb5ar5yfd2588qm5pkhdkmvv6kx2";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libsodium libarchive openssl zeromq ];
+  buildInputs = [
+    libsodium libarchive openssl zeromq
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   cargoBuildFlags = ["--package hab"];
 
