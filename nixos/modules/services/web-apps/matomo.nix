@@ -4,13 +4,14 @@ let
   cfg = config.services.matomo;
 
   user = "matomo";
+  group = "matomo";
   dataDir = "/var/lib/${user}";
   deprecatedDataDir = "/var/lib/piwik";
 
   pool = user;
-  # it's not possible to use /run/phpfpm/${pool}.sock because /run/phpfpm/ is root:root 0770,
+  # it's not possible to use /run/phpfpm-${pool}/${pool}.sock because /run/phpfpm/ is root:root 0770,
   # and therefore is not accessible by the web server.
-  phpSocket = "/run/phpfpm-${pool}.sock";
+  phpSocket = "/run/phpfpm-${pool}/${pool}.sock";
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
@@ -137,9 +138,12 @@ in {
       isSystemUser = true;
       createHome = true;
       home = dataDir;
-      group  = user;
+      group  = "${group}";
     };
-    users.groups.${user} = {};
+    users.users.${config.services.nginx.user} = {
+      extraGroups = [ "${group}" ];
+    };
+    users.groups.${group} = {};
 
     systemd.services.matomo-setup-update = {
       # everything needs to set up and up to date before Matomo php files are executed
@@ -169,7 +173,7 @@ in {
           echo "Migrating from ${deprecatedDataDir} to ${dataDir}"
           mv -T ${deprecatedDataDir} ${dataDir}
         fi
-        chown -R ${user}:${user} ${dataDir}
+        chown -R ${user}:${group} ${dataDir}
         chmod -R ug+rwX,o-rwx ${dataDir}
         '';
       script = ''
@@ -225,22 +229,26 @@ in {
       serviceConfig.UMask = "0007";
     };
 
-    services.phpfpm.poolConfigs = let
+    services.phpfpm.pools = let
       # workaround for when both are null and need to generate a string,
       # which is illegal, but as assertions apparently are being triggered *after* config generation,
       # we have to avoid already throwing errors at this previous stage.
       socketOwner = if (cfg.nginx != null) then config.services.nginx.user
       else if (cfg.webServerUser != null) then cfg.webServerUser else "";
     in {
-      ${pool} = ''
-        listen = "${phpSocket}"
-        listen.owner = ${socketOwner}
-        listen.group = root
-        listen.mode = 0600
-        user = ${user}
-        env[PIWIK_USER_PATH] = ${dataDir}
-        ${cfg.phpfpmProcessManagerConfig}
-      '';
+      ${pool} = {
+        socketName = "${pool}";
+        phpPackage = pkgs.php;
+        user = "${user}";
+        group = "${group}";
+        extraConfig = ''
+          listen.owner = ${socketOwner}
+          listen.group = ${group}
+          listen.mode = 0600
+          env[PIWIK_USER_PATH] = ${dataDir}
+          ${cfg.phpfpmProcessManagerConfig}
+        '';
+      };
     };
 
 
