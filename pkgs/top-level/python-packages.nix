@@ -508,6 +508,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  inquirer = callPackage ../development/python-modules/inquirer { };
+
   jira = callPackage ../development/python-modules/jira { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
