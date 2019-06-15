@@ -49,9 +49,9 @@ in
 
     meta = {
       description = "An enterprise-class open source distributed monitoring solution";
-      homepage = https://www.zabbix.com/;
+      homepage = "https://www.zabbix.com/";
       license = "GPL";
-      maintainers = [ stdenv.lib.maintainers.eelco ];
+      maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.mmahut ];
       platforms = stdenv.lib.platforms.linux;
     };
   };
@@ -65,9 +65,9 @@ in
 
     meta = with stdenv.lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
-      homepage = https://www.zabbix.com/;
+      homepage = "https://www.zabbix.com/";
       license = licenses.gpl2;
-      maintainers = [ maintainers.eelco ];
+      maintainers = [ maintainers.eelco maintainers.mmahut ];
       platforms = platforms.linux;
     };
   };
@@ -91,9 +91,9 @@ in
 
     meta = with stdenv.lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-server proxy)";
-      homepage = https://www.zabbix.com/;
+      homepage = "https://www.zabbix.com/";
       license = licenses.gpl2;
-      maintainers = [ maintainers.eelco ];
+      maintainers = [ maintainers.eelco maintainers.mmahut ];
       platforms = platforms.linux;
     };
   };
