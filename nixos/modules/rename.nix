@@ -240,6 +240,12 @@ with lib;
     # binfmt
     (mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
 
+    # PHP-FPM
+    (mkRemovedOptionModule [ "services" "phpfpm" "poolConfigs" ] "Use services.phpfpm.pools instead.")
+    (mkRemovedOptionModule [ "services" "phpfpm" "phpPackage" ] "Use services.phpfpm.pools.<name>.phpPackage instead.")
+    (mkRemovedOptionModule [ "services" "phpfpm" "phpOptions" ] "Use services.phpfpm.pools.<name>.phpOptions instead.")
+    (mkRenamedOptionModule [ "services" "phpfpm" "extraConfig" ] [ "services" "phpfpm" "globalExtraConfig" ])
+
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]
