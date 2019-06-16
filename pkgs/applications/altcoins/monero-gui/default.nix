@@ -25,13 +25,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.14.0.0";
+  version = "0.14.1.0";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1l4kx2vidr7bpds43jdbwyaz0q1dy7sricpz061ff1fkappbxdh8";
+    sha256 = "0ilx47771faygf97wilm64xnqxgxa3b43q0g9v014npk0qj8pc31";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];
