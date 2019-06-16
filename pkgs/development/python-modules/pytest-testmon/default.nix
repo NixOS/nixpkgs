@@ -21,7 +21,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   checkPhase = ''
     pytest test
-    '';
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/tarpas/pytest-testmon/";
