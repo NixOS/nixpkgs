@@ -40,7 +40,7 @@ stdenv.mkDerivation {
    version easily:
 <programlisting>
 stdenv.mkDerivation rec {
-  name = "libfoo";
+  pname = "libfoo";
   version = "1.2.3";
   src = fetchurl {
     url = "http://example.org/libfoo-source-${version}.tar.bz2";
