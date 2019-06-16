@@ -223,30 +223,35 @@ let
     after = [ "docker.service" "docker.socket" ];
     requires = [ "docker.service" "docker.socket" ];
     serviceConfig = {
-      ExecStart = concatStringsSep " \\\n  " ([
-        "${pkgs.docker}/bin/docker run"
-        "--rm"
-        "--name=%n"
-        "--log-driver=${container.log-driver}"
-        "--network=${container.network}"
-      ] ++ optional (container.entrypoint != null)
-        "--entrypoint=${escapeShellArg container.entrypoint}"
-        ++ map (d: "--device ${escapeShellArg d}") container.devices
-        ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
-        ++ optional (container.hostname != null)
-        "-h ${escapeShellArg container.hostname}"
-        ++ map (l: "-l ${escapeShellArg l}") container.labels
-        ++ map (p: "-p ${escapeShellArg p}") container.ports
-        ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
-        ++ map (v: "-v ${escapeShellArg v}") container.volumes
-        ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
-        ++ map escapeShellArg container.extraDockerOptions
-        ++ [container.image]
-        ++ map escapeShellArg container.cmd
-      );
-      ExecStartPre = "-${pkgs.docker}/bin/docker rm -f %n";
+      ExecStartPre = [
+        # The - at the beginning of this rm command denotes that it is optional
+        # (ie if the RM fails because the container, say, doesn't exist, systemd will continue)
+        "-${pkgs.docker}/bin/docker rm -f %n" 
+        "${pkgs.docker}/bin/docker pull ${container.image}"
+        (concatStringsSep " \\\n  " ([
+          "${pkgs.docker}/bin/docker create"
+          "--name=%n"
+          "--log-driver=${container.log-driver}"
+          "--network=${container.network}"
+        ] ++ optional (container.entrypoint != null)
+          "--entrypoint=${escapeShellArg container.entrypoint}"
+          ++ map (d: "--device ${escapeShellArg d}") container.devices
+          ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
+          ++ optional (container.hostname != null)
+          "-h ${escapeShellArg container.hostname}"
+          ++ map (l: "-l ${escapeShellArg l}") container.labels
+          ++ map (p: "-p ${escapeShellArg p}") container.ports
+          ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
+          ++ map (v: "-v ${escapeShellArg v}") container.volumes
+          ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
+          ++ map escapeShellArg container.extraDockerOptions
+          ++ [container.image]
+          ++ map escapeShellArg container.cmd
+        ))
+      ];
+      ExecStart = "${pkgs.docker}/bin/docker start -a %n";
       ExecStop = "${pkgs.docker}/bin/docker stop %n";
-      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f %n";
+      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f %n"; # see - optional note as above
 
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their
