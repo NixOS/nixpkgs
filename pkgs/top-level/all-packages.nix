@@ -19310,6 +19310,17 @@ in
 
   polybar = callPackage ../applications/misc/polybar { };
 
+  polybarFull = callPackage ../applications/misc/polybar {
+    alsaSupport = true;
+    githubSupport = true;
+    mpdSupport = true;
+    pulseSupport  = true;
+    iwSupport = true;
+    nlSupport = true;
+    i3Support = true;
+    i3GapsSupport = true;
+  };
+
   ptex = callPackage ../development/libraries/ptex {};
 
   qtcurve = libsForQt5.callPackage ../misc/themes/qtcurve {};
