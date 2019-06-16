@@ -132,6 +132,7 @@ in import ./make-test.nix {
     };
 
     store = { pkgs, ... }: {
+      virtualisation.diskSize = 2 * 1024;
       environment.systemPackages = with pkgs; [ jq thanos ];
       services.thanos.store = {
         enable = true;
