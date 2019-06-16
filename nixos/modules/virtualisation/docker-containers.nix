@@ -65,7 +65,12 @@ let
 
         hostname = mkOption {
           type = with types; nullOr str;
-          description = "Set the hostname inside the container. Not required if using Host networking.";
+          description = ''
+            Set the hostname inside the container.
+            If this is not set, the container will assume a hostname corresponding
+            to its engine ID, or the host's hostname if using host networking
+            (see the "network" option)
+          '';
           default = null;
           example = "MyFancyDockerContainer";
         };
@@ -219,7 +224,7 @@ let
           default = [];
           description = "Extra options for <command>docker run</command>.";
           example = literalExample ''
-            ["--network=host"]
+            ["--cpus 1"]
           '';
         };
       };
