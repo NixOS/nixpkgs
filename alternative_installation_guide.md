@@ -1,3 +1,5 @@
+#NixOS manual help out
+
 This guide results from the official NixOS manual installation guide. 
 I tried to follow exactly the official manual and had to face some issues.
 I installed NixOs 19.03 from an bootable USB to Lenovo t420s (previous OS Win10) with UEFI.
