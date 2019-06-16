@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "i3-wk-switch";
-  version = "2019-05-10";
+  version = "2019-06-14";
 
   src = fetchFromGitHub {
     owner = "tmfink";
     repo = pname;
-    rev = "05a2d5d35e9841d2a26630f1866fc0a0e8e708eb";
-    sha256 = "0ln192abdqrrs7rdazp9acbji2y6pf68z2d1by4nf2q529dh24dc";
+    rev = "522b63f6d265e0b7108a7f26fb0ce76810a2f480";
+    sha256 = "0m9zdj7w9z93lcrdgpflrqn1cnp91ann3jf1l4ipjl1nzz2kin13";
   };
 
   propagatedBuildInputs = with python3Packages; [ i3ipc ];
