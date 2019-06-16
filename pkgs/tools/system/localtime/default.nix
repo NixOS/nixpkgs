@@ -13,7 +13,10 @@ buildGoPackage rec {
 
   buildInputs = [ m4 ];
 
-  makeFlags = [ "PREFIX=$(out)" "BINDIR=$(bin)/bin" ];
+  makeFlags = [ 
+    "PREFIX=${placeholder "out"}" 
+    "BINDIR=${placeholder "bin"}/bin" 
+  ];
 
   buildPhase = ''
     cd go/src/${goPackagePath}
