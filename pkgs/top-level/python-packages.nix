@@ -809,6 +809,10 @@ in {
     inherit (pkgs) cmake qt5 llvmPackages;
   });
 
+  pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
+    inherit (pkgs) cmake qt5;
+  });
+
   pyslurm = callPackage ../development/python-modules/pyslurm {
     slurm = pkgs.slurm;
   };
