@@ -358,6 +358,19 @@ in
           The default Nix expression search path, used by the Nix
           evaluator to look up paths enclosed in angle brackets
           (e.g. <literal>&lt;nixpkgs&gt;</literal>).
+
+          If you want to add a non-standard search path and do not want
+          to deal with managing the defaults use <literal>nix.extraNixPath</literal>
+          instead.
+        '';
+      };
+
+      extraNixPath = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Like <literal>nix.nixPath</literal> but only appends additional
+          search paths.
         '';
       };
 
@@ -448,7 +461,7 @@ in
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars //
-      { NIX_PATH = cfg.nixPath;
+      { NIX_PATH = cfg.nixPath ++ cfg.extraNixPath;
       };
 
     environment.extraInit = optionalString (!isNix20)
