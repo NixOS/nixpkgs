@@ -1,6 +1,5 @@
 { pkgs
 , lib
-, pythonPackages
 , buildPythonPackage
 , fetchPypi
 , coverage
