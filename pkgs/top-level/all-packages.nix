@@ -24155,6 +24155,8 @@ in
   vdrPlugins = recurseIntoAttrs (callPackages ../applications/video/vdr/plugins.nix { });
   wrapVdr = callPackage ../applications/video/vdr/wrapper.nix {};
 
+  chrome-export = callPackage ../tools/misc/chrome-export {};
+
   chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
 
   chrome-token-signing = libsForQt5.callPackage ../tools/security/chrome-token-signing {};
