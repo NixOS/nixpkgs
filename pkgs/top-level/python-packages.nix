@@ -980,6 +980,8 @@ in {
 
   tomlkit = callPackage ../development/python-modules/tomlkit { };
 
+  toggl-cli = callPackage ../development/python-modules/toggl-cli { };
+
   unifi = callPackage ../development/python-modules/unifi { };
 
   uvloop = callPackage ../development/python-modules/uvloop { };
