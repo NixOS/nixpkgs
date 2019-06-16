@@ -21,13 +21,7 @@
 }:
 
 let
-  major = "0.21";
-  minor = "9";
-
   lib = stdenv.lib;
-  mkDisable = f: "-D${f}=disabled";
-  mkEnable = f: "-D${f}=enabled";
-  keys = lib.mapAttrsToList (k: v: k);
 
   featureDependencies = {
     # Storage plugins
@@ -84,20 +78,30 @@ let
 
   run = { features ? null }:
     let
-      fl = if (features == null )
-        then keys featureDependencies
-        else features;
-
       # Disable platform specific features if needed
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
       platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smb" ]
                   ++ lib.optionals (!stdenv.isLinux) [ "alsa" "systemd" ];
-      features_ = lib.subtractLists platformMask fl;
+
+      knownFeatures = builtins.attrNames featureDependencies;
+      platformFeatures = lib.subtractLists platformMask knownFeatures;
+
+      features_ = if (features == null )
+        then platformFeatures
+        else
+          let unknown = lib.subtractLists knownFeatures features; in
+          if (unknown != [])
+            then throw "Unknown feature(s): ${lib.concatStringsSep " " unknown}"
+            else
+              let unsupported = lib.subtractLists platformFeatures features; in
+              if (unsupported != [])
+                then throw "Feature(s) ${lib.concatStringsSep " " unsupported} are not supported on ${stdenv.hostPlatform.system}"
+                else features;
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "${major}${if minor == "" then "" else "." + minor}";
+      version = "0.21.9";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
@@ -115,10 +119,11 @@ let
       enableParallelBuilding = true;
 
       mesonFlags =
-        map mkEnable features_ ++ map mkDisable (lib.subtractLists features_ (keys featureDependencies))
-        ++ lib.optional (lib.any (x: x == "zeroconf") features_)
+        map (x: "-D${x}=enabled") features_
+        ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
+        ++ lib.optional (builtins.elem "zeroconf" features_)
           "-Dzeroconf=avahi"
-        ++ lib.optional stdenv.isLinux
+        ++ lib.optional (builtins.elem "systemd" features_)
           "-Dsystemd_system_unit_dir=etc/systemd/system";
 
       meta = with stdenv.lib; {
@@ -139,13 +144,17 @@ in
 {
   mpd = run { };
   mpd-small = run { features = [
-    "webdav" "curl" "mms" "nfs" "bzip2" "zzip"
+    "webdav" "curl" "mms" "bzip2" "zzip"
     "audiofile" "faad" "flac" "gme" "mad"
-    "mpg123" "opus" "vorbis"
-    "vorbisenc" "lame" "libsamplerate"
-    "alsa" "shout" "libmpdclient"
-    "id3tag" "expat" "pcre" "yajl" "sqlite"
+    "mpg123" "opus" "vorbis" "vorbisenc"
+    "lame" "libsamplerate" "shout"
+    "libmpdclient" "id3tag" "expat" "pcre"
+    "yajl" "sqlite"
     "soundcloud" "qobuz" "tidal"
-    "systemd"
+  ] ++ lib.optionals stdenv.isLinux [
+    "alsa" "systemd"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "mad" "jack" "nfs"
   ]; };
+  mpdWithFeatures = run;
 }
