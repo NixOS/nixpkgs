@@ -893,6 +893,8 @@ in {
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
+  releases = callPackage ../development/python-modules/releases { };
+
   reproject = callPackage ../development/python-modules/reproject { };
 
   remotecv = callPackage ../development/python-modules/remotecv { };
