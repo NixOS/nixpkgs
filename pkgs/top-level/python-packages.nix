@@ -807,6 +807,8 @@ in {
     slurm = pkgs.slurm;
   };
 
+  pysmf = callPackage ../development/python-modules/pysmf { };
+
   pyspinel = callPackage ../development/python-modules/pyspinel {};
 
   pyssim = callPackage ../development/python-modules/pyssim { };
