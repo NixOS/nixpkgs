@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "epiphany-${version}";
-  version = "3.32.2";
+  version = "3.32.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1yhc8hpylj7i2i15nrbjldhi38xpz7pdwjdj7b358dxsxaghvrwa";
+    sha256 = "0gx386k1p78ppjhvdanv99hfiwana0ccn9d499qrp0rvlicnijrw";
   };
 
   # Tests need an X display
