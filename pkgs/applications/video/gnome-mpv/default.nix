@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, python3
+{ stdenv, fetchFromGitHub, fetchpatch, meson, ninja, python3
 , gettext, pkgconfig, desktop-file-utils, wrapGAppsHook
 , appstream-glib, epoxy, glib, gtk3, mpv
 }:
@@ -18,7 +18,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ epoxy glib gtk3 mpv ];
 
   patches = [
-    ./appdata-validate.patch
+    # fix appstream validation in sandbox
+    # https://github.com/celluloid-player/celluloid/pull/437
+    (fetchpatch {
+      url = https://github.com/celluloid-player/celluloid/commit/5a0b2e892bb715278d309c859a7e521d64433d85.patch;
+      sha256 = "0naci8lr6128yilal39h46yvq9x3la7g7fhvr5xlwyh30iqrbm3i";
+    })
   ];
 
   postPatch = ''
