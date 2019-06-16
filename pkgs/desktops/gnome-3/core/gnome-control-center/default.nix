@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     gdk_pixbuf adwaita-icon-theme librsvg clutter clutter-gtk cheese
     networkmanager modemmanager gnome-bluetooth tracker
     udisks2 gsound libhandy
+    mutter # schemas for the keybindings
   ];
 
   patches = [

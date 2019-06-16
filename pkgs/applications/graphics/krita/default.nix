@@ -12,7 +12,6 @@ let
 
 major = "4.2";
 minor = "1";
-patch = null;
 
 in
 

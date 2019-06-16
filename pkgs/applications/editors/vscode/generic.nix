@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeDesktopItem
+{ stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig

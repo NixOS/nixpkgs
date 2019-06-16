@@ -1,5 +1,5 @@
 {
-  stdenv, makeWrapper, fetchFromGitHub, substituteAll,
+  stdenv, makeWrapper, fetchFromGitHub,
   imagemagick, i3lock-color, xdpyinfo, xrandr, bc, feh
 }:
 

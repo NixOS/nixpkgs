@@ -45,7 +45,6 @@ let
     "sophus-*"
     "tomlib-*"
   ];
-  standardPackages = requiredPackages ++ autoloadedPackages;
   keepAll = keepAllPackages || (packageSet == "full");
   packagesToKeep = requiredPackages ++ lib.optionals (packageSet == "standard") autoloadedPackages;
 

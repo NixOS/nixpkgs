@@ -3,7 +3,6 @@
 , extraOutputsToInstall ? []
 , postBuild ? ""
 , ignoreCollisions ? false
-, lib
 , requiredLuaModules
 , makeWrapperArgs ? []
 }:

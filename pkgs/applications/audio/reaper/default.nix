@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoPatchelfHook, makeWrapper
 , alsaLib, xorg
-, gnome3, gtk3, pango, gdk_pixbuf, cairo, glib, freetype
+, gtk3, pango, gdk_pixbuf, cairo, glib, freetype
 , libpulseaudio, xdg_utils
 }:
 

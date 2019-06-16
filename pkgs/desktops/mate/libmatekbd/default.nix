@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gtk3, libxklavier }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxklavier }:
 
 stdenv.mkDerivation rec {
   name = "libmatekbd-${version}";

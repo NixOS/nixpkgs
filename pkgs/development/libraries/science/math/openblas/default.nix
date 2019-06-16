@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, gfortran, perl, which, config
+{ stdenv, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43, docbook_xsl, which, libxml2
 , gobject-introspection, gtk-doc, intltool, libxslt, pkgconfig, xmlto, appstream-glib, substituteAll, glibcLocales, yacc, xdg-dbus-proxy, p11-kit
-, bubblewrap, bzip2, dbus, glib, gpgme, json-glib, libarchive, libcap, libseccomp, coreutils, gettext, python2, hicolor-icon-theme
-, libsoup, lzma, ostree, polkit, python3, systemd, xorg, valgrind, glib-networking, wrapGAppsHook, gnome3, gsettings-desktop-schemas }:
+, bubblewrap, bzip2, dbus, glib, gpgme, json-glib, libarchive, libcap, libseccomp, coreutils, gettext, hicolor-icon-theme
+, libsoup, lzma, ostree, polkit, python3, systemd, xorg, valgrind, glib-networking, wrapGAppsHook, gnome3, gsettings-desktop-schemas, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     ./respect-xml-catalog-files-var.patch
     ./use-flatpak-from-path.patch
     ./unset-env-vars.patch
+    ./validate-icon-pixbuf.patch
   ];
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     bubblewrap bzip2 dbus gnome3.dconf glib gpgme json-glib libarchive libcap libseccomp
     libsoup lzma ostree polkit python3 systemd xorg.libXau
     gsettings-desktop-schemas glib-networking
+    librsvg # for flatpak-validate-icon
   ];
 
   checkInputs = [ valgrind ];

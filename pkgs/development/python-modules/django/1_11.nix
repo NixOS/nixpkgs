@@ -1,5 +1,4 @@
 { stdenv, buildPythonPackage, fetchurl, substituteAll,
-  pythonOlder,
   geos, gdal, pytz,
   withGdal ? false
 }:

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, requests, six, requests_oauthlib }:
+{ lib, buildPythonPackage, fetchPypi, requests, six, requests_oauthlib }:
 
 buildPythonPackage rec {
   pname = "tweepy";

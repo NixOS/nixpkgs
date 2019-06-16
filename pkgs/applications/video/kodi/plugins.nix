@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, fetchFromGitHub, unzip
+{ stdenv, callPackage, fetchFromGitHub
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
 , steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
 , python2Packages, expat, glib, nspr, nss, openssl

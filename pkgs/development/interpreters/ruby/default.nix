@@ -1,5 +1,5 @@
 { stdenv, buildPackages, lib
-, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+, fetchurl, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
@@ -11,7 +11,7 @@ let
   opString = lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygems = import ./rubygems { inherit stdenv lib fetchurl fetchpatch; };
+  rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -32,7 +32,7 @@ let
     };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
-      , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+      , fetchurl, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true

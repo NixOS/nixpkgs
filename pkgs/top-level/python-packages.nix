@@ -139,9 +139,7 @@ in {
 
   setuptools = toPythonModule (callPackage ../development/python-modules/setuptools { });
 
-  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit {
-    boost = pkgs.boost160;
-  };
+  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
   acoustics = callPackage ../development/python-modules/acoustics { };
 
@@ -1030,7 +1028,7 @@ in {
 
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
-  aiohttp-cors = callPackage ../development/python-modules/aiohttp/cors.nix { };
+  aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
 

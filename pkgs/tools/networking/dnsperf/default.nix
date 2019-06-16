@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, autoreconfHook
-, bind, libseccomp, zlib, openssl, libcap
+, bind, zlib, openssl, libcap
 }:
 
 stdenv.mkDerivation rec {

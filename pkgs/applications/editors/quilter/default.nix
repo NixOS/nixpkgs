@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, meson, ninja, python3
+{ stdenv, fetchFromGitHub, pkgconfig, meson, ninja, python3
 , gtk3, desktop-file-utils, gtksourceview, webkitgtk, gtkspell3, pantheon
 , libgee, discount, wrapGAppsHook }:
 

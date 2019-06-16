@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bash, libconfig, libevent, openssl
+{ stdenv, fetchgit, libconfig, libevent, openssl
 , readline, zlib, lua5_2, python, pkgconfig, jansson
 , runtimeShell
 }:

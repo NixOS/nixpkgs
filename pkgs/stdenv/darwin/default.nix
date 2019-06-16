@@ -199,7 +199,6 @@ in rec {
       ninja = super.ninja.override { buildDocs = false; };
       darwin = super.darwin // {
         cctools = super.darwin.cctools.override {
-          llvm = null;
           enableTapiSupport = false;
         };
       };

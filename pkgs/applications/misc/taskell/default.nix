@@ -1,4 +1,4 @@
-{ haskell, lib, haskellPackages, fetchFromGitHub }:
+{ lib, haskellPackages, fetchFromGitHub }:
 
 let
   version = "1.4.3";

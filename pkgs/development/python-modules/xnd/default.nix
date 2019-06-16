@@ -1,6 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{ buildPythonPackage
 , ndtypes
 , libndtypes
 , libxnd

@@ -3,7 +3,6 @@
 , fetchPypi
 , pytools
 , numpy
-, pytest
 }:
 
 buildPythonPackage rec {

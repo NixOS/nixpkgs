@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub
 , ninja
-, boost
 , meson
 , pkgconfig
 , wrapGAppsHook
@@ -12,7 +11,6 @@
 , python3Packages
 , file
 , cairo
-, sqlite
 , gettext
 , gnome3
 }:

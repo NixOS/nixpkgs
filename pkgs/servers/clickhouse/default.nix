@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, libtool
+{ stdenv, fetchFromGitHub, cmake, libtool
 , boost, capnproto, cctz, clang-unwrapped, double-conversion, gperftools, icu
 , libcpuid, libxml2, lld, llvm, lz4 , mysql, openssl, poco, re2, rdkafka
 , readline, sparsehash, unixODBC, zstd, ninja, jemalloc, brotli, protobuf, xxHash

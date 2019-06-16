@@ -6,10 +6,6 @@
 let
   version = "1.0.0-rc15";
   truffleMake = ./truffle.make;
-  R = fetchurl {
-    url = "http://cran.rstudio.com/src/base/R-3/R-3.5.1.tar.gz";
-    sha256 = "1vap2k8kj5icy9naw61f9zyphf4rs0c9rxvil0zxkwx0xvsvyqq4";
-  };
   makeMxGitCache = list: out: ''
      mkdir ${out}
     ${lib.concatMapStrings ({ url, name, rev, sha256 }: ''

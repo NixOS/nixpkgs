@@ -2,7 +2,7 @@
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  which, dbus, fetchpatch,
+  which, dbus,
   Cocoa,
   CoreGraphics,
   Foundation,

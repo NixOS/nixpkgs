@@ -4,7 +4,7 @@
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
 , openssl, gperf, cppunit, GConf, ORBit2, poppler, utillinux
-, librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw, mariadb
+, librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw, mysql
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
@@ -345,24 +345,25 @@ in stdenv.mkDerivation rec {
     make slowcheck
   '';
 
+  nativeBuildInputs = [ wrapGAppsHook gdb fontforge autoconf automake bison pkgconfig libtool ];
+
   buildInputs = with xorg;
-    [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
+    [ ant ArchiveZip boost cairo clucene_core
       IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gtk3 gtk2
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs libGLU_combined mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base glib mariadb
+      gst_all_1.gst-plugins-base glib mysql.connector-c
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
       python3 sablotron sane-backends unzip vigra which zip zlib
-      mdds bluez5 libcmis libwps libabw libzmf libtool
+      mdds bluez5 libcmis libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
       librevenge libe-book libmwaw glm glew ncurses epoxy
       libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
     ]
     ++ lib.optional kdeIntegration kdelibs4;
-  nativeBuildInputs = [ wrapGAppsHook gdb fontforge ];
 
   passthru = {
     inherit srcs jdk;

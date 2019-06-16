@@ -1,5 +1,4 @@
 { stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
-, fetchpatch
 
 , akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
 , kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement

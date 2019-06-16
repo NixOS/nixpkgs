@@ -1,14 +1,12 @@
 { stdenv
 , fetchurl
 , pkgconfig
-, fetchpatch
 , meson
 , ninja
 , python3
 , spice-protocol
 , gettext
 , openssl
-, libpulseaudio
 , pixman
 , gobject-introspection
 , libjpeg_turbo

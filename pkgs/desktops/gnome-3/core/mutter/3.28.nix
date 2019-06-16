@@ -1,7 +1,7 @@
 { fetchFromGitLab, stdenv, substituteAll, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
 , glib, gtk3, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3, fetchpatch
 , gsettings-desktop-schemas, gnome-desktop, wrapGAppsHook
-, libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
+, libtool, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , geocode-glib, libgudev, libwacom, xwayland, autoreconfHook }:
 
 stdenv.mkDerivation rec {

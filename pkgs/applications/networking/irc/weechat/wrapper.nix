@@ -1,4 +1,4 @@
-{ stdenv, lib, runCommand, writeScriptBin, buildEnv
+{ lib, runCommand, writeScriptBin, buildEnv
 , pythonPackages, perlPackages, runtimeShell
 }:
 

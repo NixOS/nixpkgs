@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
-, perl, fetchpatch
+, perl
 , configFile ? "all"
 
 # Userspace dependencies

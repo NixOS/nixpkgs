@@ -1,4 +1,4 @@
-{ stdenv, fetch, fetchpatch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)

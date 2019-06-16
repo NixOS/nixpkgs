@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, python
+{ stdenv, buildPythonPackage, fetchPypi
 , gfortran, glibcLocales
 , numpy, scipy, pytest, pillow
 }:

@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, openssl, icu, enableNpm ? true }:
+{ callPackage, openssl, icu, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix { inherit openssl icu; };

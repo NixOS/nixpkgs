@@ -14,7 +14,6 @@
 , libnotify
 , sqlite
 , gst_all_1
-, libsoup
 , json-glib
 , libgee
 , wrapGAppsHook

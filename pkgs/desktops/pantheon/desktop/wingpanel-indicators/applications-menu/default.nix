@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pantheon, substituteAll, meson, ninja, python3
 , pkgconfig, vala, granite, libgee, gettext, gtk3, appstream, gnome-menus
-, json-glib, plank, bamf, switchboard, libunity, libsoup, wingpanel, libwnck3
-, zeitgeist, bc }:
+, json-glib, plank, bamf, switchboard, libunity, libsoup, wingpanel, zeitgeist
+, bc }:
 
 stdenv.mkDerivation rec {
   pname = "applications-menu";
@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
     libgee
     libsoup
     libunity
-    libwnck3
     plank
     switchboard
     wingpanel

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, gnome3, meson, ninja, gettext, pkgconfig, libxml2, gtk3, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchFromGitLab, meson, ninja, gettext, pkgconfig, libxml2, gtk3, hicolor-icon-theme, wrapGAppsHook }:
 
 let
   version = "2.3.1";

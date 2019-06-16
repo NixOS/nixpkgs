@@ -357,6 +357,7 @@ self: super: {
   pwstore-cli = dontCheck super.pwstore-cli;
   quantities = dontCheck super.quantities;
   redis-io = dontCheck super.redis-io;
+  reflex = dontCheck super.reflex; # test suite uses hlint, which has different haskell-src-exts version
   rethinkdb = dontCheck super.rethinkdb;
   Rlang-QQ = dontCheck super.Rlang-QQ;
   safecopy = dontCheck super.safecopy;
@@ -860,7 +861,7 @@ self: super: {
   # Wrap the generated binaries to include their run-time dependencies in
   # $PATH. Also, cryptol needs a version of sbl that's newer than what we have
   # in LTS-13.x.
-  cryptol = overrideCabal (super.cryptol.override { sbv = self.sbv_8_2; }) (drv: {
+  cryptol = overrideCabal (super.cryptol.override { sbv = self.sbv_8_3; }) (drv: {
     buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
     postInstall = drv.postInstall or "" + ''
       for b in $out/bin/cryptol $out/bin/cryptol-html; do
@@ -1099,7 +1100,14 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-  stack = generateOptparseApplicativeCompletion "stack" super.stack;
+  stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: {
+    ansi-terminal = self.ansi-terminal_0_9_1;
+    concurrent-output = self.concurrent-output_1_10_10; # needed for new ansi-terminal version
+    rio = self.rio_0_1_9_2;
+    hi-file-parser = dontCheck super.hi-file-parser;    # Avoid depending on newer hspec versions.
+    http-download = dontCheck super.http-download;
+    pantry-tmp = dontCheck super.pantry-tmp;
+  }));
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
@@ -1174,7 +1182,7 @@ self: super: {
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
-  # The LTS-13.x version doesn't suffice to build hlint, hoogle, etc.
+  # The LTS-13.x versions doesn't suffice to build these packages.
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
   hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
 
@@ -1217,8 +1225,11 @@ self: super: {
 
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  pandoc = doDistribute super.pandoc_2_7_2;
+  cmark-gfm = self.cmark-gfm_0_2_0;
+  pandoc = dontCheck (doDistribute super.pandoc_2_7_3);  # test suite failure: https://github.com/jgm/pandoc/issues/5582
   pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_2;
+  skylighting = self.skylighting_0_8_1_1;
+  skylighting-core = self.skylighting-core_0_8_1_1;
 
   # Current versions of tasty-hedgehog need hedgehog 1.x, which
   # we don't have in LTS-13.x.
@@ -1269,5 +1280,14 @@ self: super: {
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
   heap = dontCheck super.heap;
+
+  # https://github.com/hslua/tasty-lua/issues/1
+  tasty-lua = dontCheck super.tasty-lua;
+
+  # Test suite won't link for no apparent reason.
+  constraints-deriving = dontCheck super.constraints-deriving;
+
+  # The old LTS-13.x version does not compile.
+  ip = self.ip_1_5_0;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

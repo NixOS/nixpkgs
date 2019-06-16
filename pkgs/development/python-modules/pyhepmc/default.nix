@@ -3,7 +3,6 @@
 , fetchPypi
 , fetchFromBitbucket
 , isPy3k
-, fetchurl
 , pkgs
 , python
 }:

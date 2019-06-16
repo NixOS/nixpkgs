@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, fetchpatch
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip
 , libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip
@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.7.0";
+  version = "60.7.1";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "0l773bl9kkrz905rm4ipsic5ykkrw2lmg3i9c5vxpc0j1qgmz3p3x5db1kbk2yy2i5hx9lkn5szhgjf71d7dgvf7935z67d5djqnhk0";
+    sha512 = "25dgbshgfmalxyah9rrgrxi4n0bmj0agcllz2hzv37w7makkl7qpf4wr859ykymmmvawcs8n747ppq9x73gn32bw88bjyxv2bn4l78q";
   };
 
   # from firefox, but without sound libraries

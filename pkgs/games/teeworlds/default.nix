@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchurl, stdenv, bam, pkgconfig, makeWrapper, python, alsaLib
+{ fetchFromGitHub, stdenv, bam, pkgconfig, python, alsaLib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack
 }:
 

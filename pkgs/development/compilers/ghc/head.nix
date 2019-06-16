@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchgit, fetchurl, fetchpatch, perl, python3, m4, sphinx
+, autoconf, automake, coreutils, fetchgit, fetchpatch, perl, python3, m4, sphinx
 , bash
 
 , libiconv ? null, ncurses
@@ -27,7 +27,7 @@
 , # Whetherto build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "8.7.20190115"
+, version ? "8.9.20190601"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -89,13 +89,23 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "c9756dbf1ee58b117ea5c4ded45dea88030efd65";
-    sha256 = "0ja3ivyz4jrqkw6z1mdgsczxaqkjy5vw0nyyqlqr0bqxiw9p8834";
+    rev = "9bc10993bb300d3712b0f13ec6e28621d75d4204";
+    sha256 = "1s7vbinywx8ffj09nxr0h32nggjiqpssrvgmj7820k32w2yi7i8v";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = [
+    (fetchpatch rec { # https://github.com/haskell/haddock/issues/900
+     url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/983.diff";
+     name = "loadpluginsinmodules.diff";
+     sha256 = "0bvvv0zsfq2581zsir97zfkggc1kkircbbajc2fz3b169ycpbha1";
+     extraPrefix = "utils/haddock/";
+     stripLen = 1;
+   })
+  ];
 
   postPatch = "patchShebangs .";
 

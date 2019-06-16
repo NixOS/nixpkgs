@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildPackages
+{ stdenv, fetchurl, buildPackages
 , name ? "luajit-${version}"
 , isStable
 , sha256

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, lilypond, ghostscript, gyre-fonts }:
+{ fetchgit, lilypond, ghostscript, gyre-fonts }:
 
 let
 

@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , pbr
 , pythonix

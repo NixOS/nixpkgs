@@ -84,6 +84,7 @@
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
+  ./misc/nixops-autoluks.nix
   ./programs/adb.nix
   ./programs/atop.nix
   ./programs/autojump.nix
@@ -443,7 +444,6 @@
   ./services/misc/packagekit.nix
   ./services/misc/paperless.nix
   ./services/misc/parsoid.nix
-  ./services/misc/phd.nix
   ./services/misc/plex.nix
   ./services/misc/tautulli.nix
   ./services/misc/pykms.nix

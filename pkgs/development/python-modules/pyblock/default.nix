@@ -1,5 +1,4 @@
 { stdenv
-, fetchurl
 , python
 , pkgs
 , isPy3k

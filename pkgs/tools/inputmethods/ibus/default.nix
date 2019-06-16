@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, fetchurl, runCommand, fetchFromGitHub, autoreconfHook, gettext, makeWrapper, pkgconfig
+{ stdenv, substituteAll, fetchurl, fetchFromGitHub, autoreconfHook, gettext, makeWrapper, pkgconfig
 , vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobject-introspection, gtk2
 , gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePython2Library ? false
 , enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null

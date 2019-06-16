@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch }:
+{ stdenv, callPackage, fetchurl }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -12,17 +12,17 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    "i686-linux" = "1vr3mblg5223k56yqi9fqwa7yg8qi4r3nkw6ssf87gs8jwfxa47l";
-    "x86_64-linux" = "1vqq365zw44ll22i06bxxviyywv1v2f71c2mricrz3faz25c3lvm";
-    "x86_64-darwin" = "0pa5cz8kq45q375b74kaa8qn1h0r1mp9amh5gsprg3hx89xzvhxi";
+    "i686-linux" = "0i572kxc7h63jxl6mw5k3gv08m9padqkky5k1f3w0d638hxhfl23";
+    "x86_64-linux" = "0577lqpfrjgwbj27hm59kflb558mkl2nx00ys0hwndayqv0bfnvg";
+    "x86_64-darwin" = "047sj0j9k74fvw9fc1ripqk2vy4v17jw488m7r95nf0cyyk08xg0";
   }.${system};
 in
   callPackage ./generic.nix rec {
 
-    version = "1.34.0";
+    version = "1.35.1";
     pname = "vscodium";
 
-    executableName = "vscodium";
+    executableName = "codium";
     longName = "VSCodium";
     shortName = "Codium";
 

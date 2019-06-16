@@ -83,6 +83,7 @@ in
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   flatpak = handleTest ./flatpak.nix {};
+  flatpak-builder = handleTest ./flatpak-builder.nix {};
   fsck = handleTest ./fsck.nix {};
   fwupd = handleTestOn ["x86_64-linux"] ./fwupd.nix {}; # libsmbios is unsupported on aarch64
   gdk-pixbuf = handleTest ./gdk-pixbuf.nix {};
@@ -240,6 +241,7 @@ in
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
+  systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};

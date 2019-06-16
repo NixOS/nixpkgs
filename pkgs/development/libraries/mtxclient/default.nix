@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig
-, boost, openssl, zlib, libsodium, olm, gtest, spdlog, nlohmann_json }:
+, boost, openssl, zlib, libsodium, olm, nlohmann_json }:
 
 stdenv.mkDerivation rec {
   name = "mtxclient-${version}";

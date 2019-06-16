@@ -1,4 +1,4 @@
-{ config, stdenv, lib, runCommand
+{ config, stdenv, lib
 , fetchFromGitHub
 , fetchurl
 , cmake

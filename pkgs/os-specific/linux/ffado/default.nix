@@ -1,7 +1,7 @@
 { stdenv, fetchurl, scons, pkgconfig, which, makeWrapper, python3
 , libraw1394, libconfig, libavc1394, libiec61883, libxmlxx3
 , glibmm
-, alsaLib, dbus, dbus_cplusplus
+, dbus, dbus_cplusplus
 }:
 
 let

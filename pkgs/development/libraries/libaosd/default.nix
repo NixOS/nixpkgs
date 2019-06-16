@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cairo, pango,
+{ stdenv, fetchFromGitHub, pkgconfig, cairo, pango,
   libX11, libXcomposite, autoconf, automake }:
 
 stdenv.mkDerivation rec {

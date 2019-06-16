@@ -10,7 +10,6 @@
 , sqlite
 , tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
 , zlib
-, callPackage
 , self
 , CF, configd, coreutils
 , python-setup-hook

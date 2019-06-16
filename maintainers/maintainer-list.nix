@@ -507,6 +507,11 @@
     github = "aszlig";
     name = "aszlig";
   };
+  athas = {
+    email = "athas@sigkill.dk";
+    github = "athas";
+    name = "Troels Henriksen";
+  };
   atnnn = {
     email = "etienne@atnnn.com";
     github = "atnnn";
@@ -4438,6 +4443,10 @@
     email = "robert@rycee.net";
     github = "rycee";
     name = "Robert Helgesson";
+    keys = [{
+      longkeyid = "rsa4096/0x3573356C25C424D4";
+      fingerprint = "36CA CF52 D098 CC0E 78FB  0CB1 3573 356C 25C4 24D4";
+    }];
   };
   ryneeverett = {
     email = "ryneeverett@gmail.com";

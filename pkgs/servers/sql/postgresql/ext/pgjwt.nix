@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name    = "pgjwt-${version}";

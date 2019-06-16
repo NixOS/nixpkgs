@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, which, gnuplot
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, which, gnuplot
 , giflib, libjpeg, libpng, libtiff, libwebp, openjpeg, zlib
 }:
 
