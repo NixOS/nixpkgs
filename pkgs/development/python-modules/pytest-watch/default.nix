@@ -1,6 +1,5 @@
 { lib
 , pkgs
-, pythonPackages
 , buildPythonPackage
 , fetchPypi
 , docopt
