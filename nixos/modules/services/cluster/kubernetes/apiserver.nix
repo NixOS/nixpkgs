@@ -132,8 +132,8 @@ in
 
     extraOpts = mkOption {
       description = "Kubernetes apiserver extra command line options.";
-      default = "";
-      type = str;
+      default = null;
+      type = nullOr str;
     };
 
     extraSANs = mkOption {
@@ -318,67 +318,73 @@ in
           before = [ "kube-control-plane-online.target" ];
           serviceConfig = {
             Slice = "kubernetes.slice";
-            ExecStart = ''${top.package}/bin/kube-apiserver \
-              --allow-privileged=${boolToString cfg.allowPrivileged} \
-              --authorization-mode=${concatStringsSep "," cfg.authorizationMode} \
-                ${optionalString (elem "ABAC" cfg.authorizationMode)
-                  "--authorization-policy-file=${
-                    pkgs.writeText "kube-auth-policy.jsonl"
-                    (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.authorizationPolicy)
-                  }"
-                } \
-                ${optionalString (elem "Webhook" cfg.authorizationMode)
-                  "--authorization-webhook-config-file=${cfg.webhookConfig}"
-                } \
-              --bind-address=${cfg.bindAddress} \
-              ${optionalString (cfg.advertiseAddress != null)
-                "--advertise-address=${cfg.advertiseAddress}"} \
-              ${optionalString (cfg.clientCaFile != null)
-                "--client-ca-file=${cfg.clientCaFile}"} \
-              --disable-admission-plugins=${concatStringsSep "," cfg.disableAdmissionPlugins} \
-              --enable-admission-plugins=${concatStringsSep "," cfg.enableAdmissionPlugins} \
-              --etcd-servers=${concatStringsSep "," cfg.etcd.servers} \
-              ${optionalString (cfg.etcd.caFile != null)
-                "--etcd-cafile=${cfg.etcd.caFile}"} \
-              ${optionalString (cfg.etcd.certFile != null)
-                "--etcd-certfile=${cfg.etcd.certFile}"} \
-              ${optionalString (cfg.etcd.keyFile != null)
-                "--etcd-keyfile=${cfg.etcd.keyFile}"} \
-              ${optionalString (cfg.featureGates != [])
-                "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-              ${optionalString (cfg.basicAuthFile != null)
-                "--basic-auth-file=${cfg.basicAuthFile}"} \
-              --kubelet-https=${boolToString cfg.kubeletHttps} \
-              ${optionalString (cfg.kubeletClientCaFile != null)
-                "--kubelet-certificate-authority=${cfg.kubeletClientCaFile}"} \
-              ${optionalString (cfg.kubeletClientCertFile != null)
-                "--kubelet-client-certificate=${cfg.kubeletClientCertFile}"} \
-              ${optionalString (cfg.kubeletClientKeyFile != null)
-                "--kubelet-client-key=${cfg.kubeletClientKeyFile}"} \
-              ${optionalString (cfg.preferredAddressTypes != null)
-                "--kubelet-preferred-address-types=${cfg.preferredAddressTypes}"} \
-              ${optionalString (cfg.proxyClientCertFile != null)
-                "--proxy-client-cert-file=${cfg.proxyClientCertFile}"} \
-              ${optionalString (cfg.proxyClientKeyFile != null)
-                "--proxy-client-key-file=${cfg.proxyClientKeyFile}"} \
-              --insecure-bind-address=${cfg.insecureBindAddress} \
-              --insecure-port=${toString cfg.insecurePort} \
-              ${optionalString (cfg.runtimeConfig != "")
-                "--runtime-config=${cfg.runtimeConfig}"} \
-              --secure-port=${toString cfg.securePort} \
-              ${optionalString (cfg.serviceAccountKeyFile!=null)
-                "--service-account-key-file=${cfg.serviceAccountKeyFile}"} \
-              --service-cluster-ip-range=${cfg.serviceClusterIpRange} \
-              --storage-backend=${cfg.storageBackend} \
-              ${optionalString (cfg.tlsCertFile != null)
-                "--tls-cert-file=${cfg.tlsCertFile}"} \
-              ${optionalString (cfg.tlsKeyFile != null)
-                "--tls-private-key-file=${cfg.tlsKeyFile}"} \
-              ${optionalString (cfg.tokenAuthFile != null)
-                "--token-auth-file=${cfg.tokenAuthFile}"} \
-              ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-              ${cfg.extraOpts}
-            '';
+            ExecStart =
+              let
+                authPolicy = pkgs.writeText "kube-auth-policy.jsonl" (
+                  concatMapStringsSep "\n" (l: builtins.toJSON l)
+                    cfg.authorizationPolicy);
+                options = [
+                  "--allow-privileged=${boolToString cfg.allowPrivileged}"
+                  ''--authorization-mode=${concatStringsSep "," cfg.authorizationMode}''
+                  "--bind-address=${cfg.bindAddress}"
+                  ''--disable-admission-plugins=${concatStringsSep "," cfg.disableAdmissionPlugins}''
+                  ''--enable-admission-plugins=${concatStringsSep "," cfg.enableAdmissionPlugins}''
+                  ''--etcd-servers=${concatStringsSep "," cfg.etcd.servers}''
+                  "--kubelet-https=${boolToString cfg.kubeletHttps}"
+                  "--insecure-bind-address=${cfg.insecureBindAddress}"
+                  "--insecure-port=${toString cfg.insecurePort}"
+                  "--secure-port=${toString cfg.securePort}"
+                  "--service-cluster-ip-range=${cfg.serviceClusterIpRange}"
+                  "--storage-backend=${cfg.storageBackend}"
+                  ]
+                  ++ optional (elem "ABAC" cfg.authorizationMode)
+                    "--authorization-policy-file=${authPolicy}"
+                  ++ optional (elem "Webhook" cfg.authorizationMode)
+                    "--authorization-webhook-config-file=${cfg.webhookConfig}"
+                  ++ optional (cfg.advertiseAddress != null)
+                    "--advertise-address=${cfg.advertiseAddress}"
+                  ++ optional (cfg.clientCaFile != null)
+                    "--client-ca-file=${cfg.clientCaFile}"
+                  ++ optional (cfg.etcd.caFile != null)
+                    "--etcd-cafile=${cfg.etcd.caFile}"
+                  ++ optional (cfg.etcd.certFile != null)
+                    "--etcd-certfile=${cfg.etcd.certFile}"
+                  ++ optional (cfg.etcd.keyFile != null)
+                    "--etcd-keyfile=${cfg.etcd.keyFile}"
+                  ++ optional (cfg.featureGates != [])
+                  ''--feature-gates=${concatMapStringsSep ","
+                    (feature: "${feature}=true") cfg.featureGates}''
+                  ++ optional (cfg.basicAuthFile != null)
+                    "--basic-auth-file=${cfg.basicAuthFile}"
+                  ++ optional (cfg.kubeletClientCaFile != null)
+                    "--kubelet-certificate-authority=${cfg.kubeletClientCaFile}"
+                  ++ optional (cfg.kubeletClientCertFile != null)
+                    "--kubelet-client-certificate=${cfg.kubeletClientCertFile}"
+                  ++ optional (cfg.kubeletClientKeyFile != null)
+                    "--kubelet-client-key=${cfg.kubeletClientKeyFile}"
+                  ++ optional (cfg.preferredAddressTypes != null)
+                    "--kubelet-preferred-address-types=${cfg.preferredAddressTypes}"
+                  ++ optional (cfg.proxyClientCertFile != null)
+                    "--proxy-client-cert-file=${cfg.proxyClientCertFile}"
+                  ++ optional (cfg.proxyClientKeyFile != null)
+                    "--proxy-client-key-file=${cfg.proxyClientKeyFile}"
+                  ++ optional (cfg.runtimeConfig != "")
+                    "--runtime-config=${cfg.runtimeConfig}"
+                  ++ optional (cfg.serviceAccountKeyFile!=null)
+                    "--service-account-key-file=${cfg.serviceAccountKeyFile}"
+                  ++ optional (cfg.tlsCertFile != null)
+                    "--tls-cert-file=${cfg.tlsCertFile}"
+                  ++ optional (cfg.tlsKeyFile != null)
+                    "--tls-private-key-file=${cfg.tlsKeyFile}"
+                  ++ optional (cfg.tokenAuthFile != null)
+                    "--token-auth-file=${cfg.tokenAuthFile}"
+                  ++ optional (cfg.verbosity != null)
+                    "--v=${toString cfg.verbosity}"
+                  ++ optional (cfg.extraOpts != null)
+                    cfg.extraOpts;
+              in ''${top.package}/bin/kube-apiserver \
+                ${concatStringsSep " \\\n" options}
+              '';
             WorkingDirectory = top.dataDir;
             User = "kubernetes";
             Group = "kubernetes";
