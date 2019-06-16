@@ -101,13 +101,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.21.9";
+      version = "0.21.10";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "1qiigs62pima7pxb6fa7jm0xbgvb7897v89qcl8y2g3gm7sim7g2";
+        sha256 = "1syh4qa4x7w7syh49qjz0m7gaiwnpjwkglbb21191csqh6jdk2nk";
       };
 
       buildInputs = [ glib boost ]
