@@ -1695,6 +1695,8 @@ in
 
   metabase = callPackage ../servers/metabase { };
 
+  mididings = callPackage ../tools/audio/mididings { };
+
   miniserve = callPackage ../tools/misc/miniserve { };
 
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
