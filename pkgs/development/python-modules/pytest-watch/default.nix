@@ -1,6 +1,4 @@
 { lib
-, pkgs
-, pythonPackages
 , buildPythonPackage
 , fetchPypi
 , docopt
@@ -20,7 +18,6 @@ buildPythonPackage rec {
 
   # No Tests
   doCheck = false;
-  buildInputs = [ pytest ];
   propagatedBuildInputs = [ colorama docopt watchdog ];
   
   meta = with lib; {
