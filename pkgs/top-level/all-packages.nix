@@ -1071,8 +1071,9 @@ in
 
   libtensorflow = callPackage ../development/libraries/libtensorflow {
     inherit (linuxPackages) nvidia_x11;
-    cudatoolkit = cudatoolkit_9_0;
-    cudnn = cudnn_cudatoolkit_9_0;
+    cudatoolkit = cudatoolkit_10_0;
+    cudnn = cudnn_cudatoolkit_10_0;
+    nccl = nccl_cudatoolkit_10;
   };
 
   behdad-fonts = callPackage ../data/fonts/behdad-fonts { };

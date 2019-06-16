@@ -1,80 +1,88 @@
-{ config, stdenv
-, fetchurl
-, patchelf
-, cudaSupport ? config.cudaSupport or false, symlinkJoin, cudatoolkit, cudnn, nvidia_x11
+{ stdenv
+, fetchurl, python3, which
+, patchelf, fetchFromGitHub, buildBazelPackage
+, cudatoolkit, cudnn, nccl, nvidia_x11, symlinkJoin
+, binutils, gcc, binutils-unwrapped, gcc-unwrapped
+, glibcLocales
+, features ? ["sse4.2" "avx" "avx2" "fma"]
+, arch ? "x86-64"
+, cudaSupport ? false
+, computeCapabilities ? [] # example: [ "7.5" ], see https://developer.nvidia.com/cuda-gpus
 }:
-with stdenv.lib;
 let
-  tfType = if cudaSupport then "gpu" else "cpu";
-  system =
-    if stdenv.isx86_64
-    then if      stdenv.isLinux  then "linux-x86_64"
-         else if stdenv.isDarwin then "darwin-x86_64" else unavailable
-    else unavailable;
-  unavailable = throw "libtensorflow is not available for this platform!";
+  inherit (stdenv) lib;
   cudatoolkit_joined = symlinkJoin {
     name = "unsplit_cudatoolkit";
     paths = [ cudatoolkit.out
               cudatoolkit.lib ];};
-  rpath = makeLibraryPath ([stdenv.cc.libc stdenv.cc.cc.lib] ++
-            optionals cudaSupport [ cudatoolkit_joined cudnn nvidia_x11 ]);
-  patchLibs =
-    if stdenv.isDarwin
-    then ''
-      install_name_tool -id $out/lib/libtensorflow.so $out/lib/libtensorflow.so
-      install_name_tool -id $out/lib/libtensorflow_framework.so $out/lib/libtensorflow_framework.so
-    ''
-    else ''
-      ${patchelf}/bin/patchelf --set-rpath "${rpath}:$out/lib" $out/lib/libtensorflow.so
-      ${patchelf}/bin/patchelf --set-rpath "${rpath}" $out/lib/libtensorflow_framework.so
-    '';
-
-in stdenv.mkDerivation rec {
-  pname = "libtensorflow";
-  version = "1.9.0";
-  name = "${pname}-${version}";
-  src = fetchurl {
-    url = "https://storage.googleapis.com/tensorflow/${pname}/${pname}-${tfType}-${system}-${version}.tar.gz";
-    sha256 =
-      if system == "linux-x86_64" then
-        if cudaSupport
-        then "1q3mh06x344im25z7r3vgrfksfdsi8fh8ldn6y2mf86h4d11yxc3"
-        else "0l9ps115ng5ffzdwphlqmj3jhidps2v5afppdzrbpzmy41xz0z21"
-      else if system == "darwin-x86_64" then
-        if cudaSupport
-        then unavailable
-        else "1qj0v1706w6mczycdsh38h2glyv5d25v62kdn98wxd5rw8f9v657"
-      else unavailable;
+  gcc_joined = symlinkJoin {
+    name = "gcc-joined";
+    paths = [ binutils gcc binutils-unwrapped gcc-unwrapped ];
   };
-
-  # Patch library to use our libc, libstdc++ and others
-  buildCommand = ''
-    . $stdenv/setup
-    mkdir -pv $out
-    tar -C $out -xzf $src
-    chmod +w $out/lib/libtensorflow.so
-    chmod +w $out/lib/libtensorflow_framework.so
-    ${patchLibs}
-    chmod -w $out/lib/libtensorflow.so
-    chmod -w $out/lib/libtensorflow_framework.so
-
-    # Write pkgconfig file.
-    mkdir $out/lib/pkgconfig
-    cat > $out/lib/pkgconfig/tensorflow.pc << EOF
-    Name: TensorFlow
-    Version: ${version}
-    Description: Library for computation using data flow graphs for scalable machine learning
-    Requires:
-    Libs: -L$out/lib -ltensorflow
-    Cflags: -I$out/include/tensorflow
-    EOF
+in
+buildBazelPackage rec {
+  pname = "tensorflow";
+  version = "1.14.0";
+  name = "${pname}-${version}";
+  bazelFlags = [ "--incompatible_no_support_tools_in_action_inputs=false" ];
+  bazelTarget = "//tensorflow/tools/lib_package:libtensorflow";
+  fetchAttrs = {
+    sha256 = if cudaSupport then
+      "127xxwy3a2h1qsv2sqfhrh65g69hlb1q003vyyg7yjfqgfah9p2z"
+      else "1di1pnknr1hxdpn75lxf9c6dvb5kgllmgb9r9rgh5c2g9iil17zy";
+  };
+  CC_OPT_FLAGS = "-march=${arch} " + stdenv.lib.concatMapStringsSep " " (f: "-m"+f) features;
+  NIX_CFLAGS_COMPILE = CC_OPT_FLAGS;
+  TF_NEED_CUDA = if cudaSupport then "1" else "0";
+  TF_IGNORE_MAX_BAZEL_VERSION = "1";
+  TF_CUDA_COMPUTE_CAPABILITIES = stdenv.lib.concatStringsSep "," computeCapabilities;
+  nativeBuildInputs = [ glibcLocales python3 which ]
+    ++ (lib.optionals cudaSupport [
+    cudatoolkit_joined cudnn nvidia_x11
+  ]);
+  TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn}";
+  src = fetchFromGitHub {
+    repo = "tensorflow";
+    owner = "tensorflow";
+    rev = "v${version}";
+    sha256 = "06jvwlsm14b8rqwd8q8796r0vmn0wk64s4ps2zg0sapkmp9vvcmi";
+  };
+  prePatch = ''
+    # doesn't work:
+    sed -i '/saved_model_portable_proto/d' tensorflow/cc/saved_model/BUILD
+    # calls ldconfig -p:
+    sed -i 's/+ _get_ld_config_paths()//' third_party/gpus/find_cuda_config.py
+    patchShebangs ./configure
+    patchShebangs tensorflow/tools/lib_package/concat_licenses.sh
+    patchShebangs third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
   '';
-
-  meta = {
+  GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${gcc_joined}/bin";
+  configurePhase = ''
+    runHook preConfigure
+    ./configure
+    runHook postConfigure
+  '';
+  buildAttrs = {
+    installPhase = ''
+      mkdir -p $out
+      tar -xf bazel-bin/tensorflow/tools/lib_package/libtensorflow.tar.gz -C $out
+      # Write pkgconfig file.
+      mkdir $out/lib/pkgconfig
+      cat > $out/lib/pkgconfig/tensorflow.pc << EOF
+      Name: TensorFlow
+      Version: ${version}
+      Description: Library for computation using data flow graphs for scalable machine learning
+      Requires:
+      Libs: -L$out/lib -ltensorflow
+      Cflags: -I$out/include/tensorflow
+      EOF
+    '';
+  };
+  meta = with lib; {
     description = "C API for TensorFlow";
     homepage = https://www.tensorflow.org/versions/master/install/install_c;
     license = licenses.asl20;
     platforms = with platforms; linux ++ darwin;
-    maintainers = [maintainers.basvandijk];
+    maintainers = with maintainers; [ basvandijk yorickvp ];
   };
 }
