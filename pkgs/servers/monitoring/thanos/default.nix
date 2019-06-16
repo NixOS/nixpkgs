@@ -1,11 +1,4 @@
-{ stdenv, runCommandNoCC, makeWrapper, buildGoModule, fetchFromGitHub, bazaar }:
-let
-  bazaarNoCertValidation =
-    runCommandNoCC "bzr-no-cert-validation" {
-      inherit bazaar;
-      buildInputs = [ makeWrapper ];
-    } "makeWrapper $bazaar/bin/bzr $out/bin/bzr --add-flags -Ossl.cert_reqs=none";
-in
+{ stdenv, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "thanos";
   version = "0.5.0";
@@ -15,12 +8,6 @@ buildGoModule rec {
     owner = "improbable-eng";
     repo = "thanos";
     sha256 = "0my0653mkb14m93s4x3nyf8khyljkvi5sq049lir8yqzqn7p1654";
-  };
-
-  overrideModAttrs = oldAttrs : {
-    nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [
-      bazaarNoCertValidation
-    ];
   };
 
   modSha256 = "1236cg00h8077fmvyddwjsnw85r69ac18b2chcpgzd85xdcaxavk";
