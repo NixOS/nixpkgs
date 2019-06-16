@@ -1,5 +1,4 @@
-{ pkgs
-, lib
+{ lib
 , pythonPackages
 , buildPythonPackage
 , fetchPypi
