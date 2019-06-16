@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, vala, glib, gjs, mutter, fetchpatch
-, pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobject-introspection }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, vala, glib, gjs, mutter
+, pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   version = "3.32.0";

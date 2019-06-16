@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, python3, protobuf3_6
+{ lib, fetchFromGitHub, python3, protobuf3_6
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? []

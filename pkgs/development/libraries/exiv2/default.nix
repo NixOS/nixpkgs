@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, zlib, expat, gettext
+{ stdenv, fetchFromGitHub, zlib, expat, gettext
 , autoconf }:
 
 stdenv.mkDerivation rec {

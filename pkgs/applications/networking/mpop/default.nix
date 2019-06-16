@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, pkgconfig, gnutls, gsasl, libidn, Security }:
+{ stdenv, fetchurl, pkgconfig, gnutls, gsasl, libidn, Security }:
 
 with stdenv.lib;
 

@@ -20,8 +20,7 @@ let
       startupNotify = "true";
     };
 
-    attrs' = builtins.removeAttrs attrs ["version" "sha256"];
-    in stdenv.mkDerivation rec {
+  in stdenv.mkDerivation rec {
       name = "charles-${version}";
       inherit version;
 

@@ -269,17 +269,6 @@ let
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
-  mkBasicAuth = vhostName: authDef: let
-    htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
-      concatStringsSep "\n" (mapAttrsToList (user: password: ''
-        ${user}:{PLAIN}${password}
-      '') authDef)
-    );
-  in ''
-    auth_basic secured;
-    auth_basic_user_file ${htpasswdFile};
-  '';
-
   mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
     concatStringsSep "\n" (mapAttrsToList (user: password: ''
       ${user}:{PLAIN}${password}

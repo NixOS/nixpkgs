@@ -5,7 +5,6 @@
 , coverage
 , glibcLocales
 , flake8
-, stdenv
 }:
 
 buildPythonPackage rec {

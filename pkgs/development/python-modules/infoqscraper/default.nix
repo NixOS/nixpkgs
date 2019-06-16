@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
 , html5lib
 , six
 , beautifulsoup4

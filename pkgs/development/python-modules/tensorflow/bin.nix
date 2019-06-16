@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, isPy36, pythonOlder
+, isPy3k, pythonOlder
 , astor
 , gast
 , numpy
@@ -13,7 +13,6 @@
 , grpcio
 , mock
 , backports_weakref
-, enum34
 , tensorflow-estimator
 , tensorflow-tensorboard
 , cudaSupport ? false

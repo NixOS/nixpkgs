@@ -2,7 +2,7 @@
 , perl, libassuan, libgcrypt
 , perlPackages, lockfileProgs, gnupg, coreutils
 # For the tests:
-, bash, openssh, which, socat, cpio, hexdump, procps, openssl
+, openssh, which, socat, cpio, hexdump, procps, openssl
 }:
 
 let

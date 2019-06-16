@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pcre, fetchpatch }:
+{ stdenv, fetchurl, ncurses, pcre }:
 
 let
   version = "5.7.1";

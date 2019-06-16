@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchpatch, pythonPackages, pkgconfig
+{ lib, fetchurl, pythonPackages, pkgconfig
 , qmake, lndir, qtbase, qtsvg, qtwebengine, dbus
 , withConnectivity ? false, qtconnectivity
 , withWebKit ? false, qtwebkit

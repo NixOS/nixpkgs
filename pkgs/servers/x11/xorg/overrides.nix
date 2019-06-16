@@ -1,6 +1,6 @@
 { abiCompat ? null,
-  stdenv, makeWrapper, lib, fetchurl, fetchpatch, buildPackages,
-  automake, autoconf, gettext, libiconv, libtool, intltool, mtdev, libevdev, libinput,
+  stdenv, makeWrapper, fetchurl, fetchpatch, buildPackages,
+  automake, autoconf, gettext, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,

@@ -1,4 +1,4 @@
-{ stdenv, writeText, runCommandCC, bazel, runLocal, bazelTest }:
+{ writeText, bazel, runLocal, bazelTest }:
 
 # Tests that certain executables are available in bazel-executed bash shells.
 

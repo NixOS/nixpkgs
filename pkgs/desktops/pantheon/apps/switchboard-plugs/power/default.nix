@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pantheon, substituteAll, meson, ninja
 , pkgconfig, vala, libgee, elementary-dpms-helper, elementary-settings-daemon
-, makeWrapper, granite, gtk3, dbus, polkit, switchboard }:
+, granite, gtk3, dbus, polkit, switchboard }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-power";

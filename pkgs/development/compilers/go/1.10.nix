@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
+, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , fetchpatch
 }:
 

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg, fftw, jack2,
-  liblo, libpulseaudio, libsndfile, makeWrapper, pkgconfig, python3Packages,
+{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg, jack2,
+  liblo, libpulseaudio, libsndfile, pkgconfig, python3Packages,
   which, withFrontend ? true,
   withQt ? true, qtbase ? null,
   withGtk2 ? true, gtk2 ? null,

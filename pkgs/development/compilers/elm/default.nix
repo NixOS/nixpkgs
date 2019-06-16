@@ -1,6 +1,6 @@
-{ lib, stdenv, buildEnv
+{ lib, stdenv
 , haskell, nodejs
-, fetchurl, fetchpatch, makeWrapper, git }:
+, fetchurl, fetchpatch, makeWrapper }:
 
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };

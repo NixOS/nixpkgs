@@ -1,4 +1,4 @@
-{ stdenv, lib, src, pkgconfig, tcl, libXft, fontconfig, patches ? []
+{ stdenv, lib, src, pkgconfig, tcl, libXft, patches ? []
 , enableAqua ? stdenv.isDarwin, darwin
 , ... }:
 

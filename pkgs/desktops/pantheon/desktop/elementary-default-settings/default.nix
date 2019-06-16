@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pantheon }:
+{ stdenv, fetchFromGitHub, pantheon }:
 
 stdenv.mkDerivation rec {
   pname = "default-settings";

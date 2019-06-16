@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lib
+{ stdenv, fetchurl, lib
 , cmocka, curl, pandoc, pkgconfig, openssl, tpm2-tss }:
 
 stdenv.mkDerivation rec {

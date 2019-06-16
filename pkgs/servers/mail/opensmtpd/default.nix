@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, autoconf, automake, libtool, bison
+{ stdenv, fetchurl, autoconf, automake, libtool, bison
 , libasr, libevent, zlib, libressl, db, pam, nixosTests
 }:
 

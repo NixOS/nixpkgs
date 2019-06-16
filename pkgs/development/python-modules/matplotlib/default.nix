@@ -1,6 +1,6 @@
 { stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkgconfig, mock, pytz, pygobject3, functools32, subprocess32
+, freetype, libpng, pkgconfig, mock, pytz, pygobject3
 , enableGhostscript ? true, ghostscript ? null, gtk3
 , enableGtk2 ? false, pygtk ? null, gobject-introspection
 , enableGtk3 ? false, cairo

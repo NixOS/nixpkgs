@@ -1,5 +1,4 @@
 { stdenv
-, lib
 , python3Packages
 , python3
 , fetchFromGitHub

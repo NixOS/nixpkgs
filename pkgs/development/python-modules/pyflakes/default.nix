@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, unittest2 }:
+{ stdenv, buildPythonPackage, fetchPypi, unittest2 }:
 
 buildPythonPackage rec {
   pname = "pyflakes";

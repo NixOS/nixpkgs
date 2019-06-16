@@ -1,4 +1,4 @@
-{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, yacc, flex, bash
+{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, yacc, flex
 , writeText, buildPackages, splicePackages, symlinkJoin }:
 
 let

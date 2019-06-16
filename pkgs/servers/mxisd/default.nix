@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, jre, git, gradle_4_10, perl, makeWrapper, writeText }:
+{ stdenv, fetchFromGitHub, jre, git, gradle_4_10, perl, makeWrapper }:
 
 let
   name = "mxisd-${version}";

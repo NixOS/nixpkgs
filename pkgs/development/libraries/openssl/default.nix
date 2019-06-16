@@ -7,7 +7,7 @@
 with stdenv.lib;
 
 let
-  common = args@{ version, sha256, patches ? [], withDocs ? false }: stdenv.mkDerivation rec {
+  common = { version, sha256, patches ? [], withDocs ? false }: stdenv.mkDerivation rec {
     name = "openssl-${version}";
 
     src = fetchurl {

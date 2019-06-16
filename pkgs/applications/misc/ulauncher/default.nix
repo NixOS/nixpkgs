@@ -1,12 +1,9 @@
 { stdenv
-, fetchFromGitHub
 , fetchurl
 , python27Packages
-, substituteAll
 , gnome3
 , gobject-introspection
 , wrapGAppsHook
-, gtk3
 , webkitgtk
 , libnotify
 , keybinder3

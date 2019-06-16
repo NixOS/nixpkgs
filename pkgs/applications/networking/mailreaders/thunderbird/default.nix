@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, fetchpatch
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip
 , libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip

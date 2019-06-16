@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake
 , qtbase, qtquickcontrols, qtkeychain, qtmultimedia, qttools
-, libqmatrixclient_0_4, libqmatrixclient_0_5 }:
+, libqmatrixclient_0_5 }:
 
 let
   generic = version: sha256: prefix: library: stdenv.mkDerivation rec {

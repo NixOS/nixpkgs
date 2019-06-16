@@ -14,7 +14,6 @@
   runCommand,
   rsync,
   shadow,
-  stdenv,
   storeDir ? builtins.storeDir,
   utillinux,
   vmTools,

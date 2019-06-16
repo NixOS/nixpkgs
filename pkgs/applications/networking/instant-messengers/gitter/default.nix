@@ -3,7 +3,7 @@
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libappindicator-gtk3, libcxx
 , libnotify, libpulseaudio, libxcb, makeDesktopItem, makeWrapper, nspr, nss
-, nwjs, pango, systemd }:
+, pango, systemd }:
 
 let gitterDirectorySuffix = "opt/gitter";
     doELFPatch = target: ''

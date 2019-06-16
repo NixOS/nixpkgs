@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, libvirt, pkgconfig, minikube }:
+{ stdenv, buildGoPackage, libvirt, pkgconfig, minikube }:
 
 buildGoPackage rec {
   pname = "docker-machine-kvm2";

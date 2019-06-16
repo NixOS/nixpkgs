@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
+  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkOption;
   inherit (lib) mapAttrs optional optionalString types;
 
   cfg = config.services.limesurvey;

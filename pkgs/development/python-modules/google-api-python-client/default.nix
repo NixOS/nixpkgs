@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi
 , httplib2, google_auth, google-auth-httplib2, six, uritemplate, oauth2client }:
 
 buildPythonPackage rec {

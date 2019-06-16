@@ -1,4 +1,4 @@
-{stdenv, fetchurl, requireFile, makeWrapper, unzip, autoPatchelfHook, pkgs, pkgs_i686, licenseAccepted ? false}:
+{requireFile, autoPatchelfHook, pkgs, pkgs_i686, licenseAccepted ? false}:
 
 { toolsVersion ? "25.2.5"
 , platformToolsVersion ? "28.0.1"

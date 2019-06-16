@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchFromGitHub
-, qmake, qtbase, qtquickcontrols, qtsvg
-, python3, pyotherside, ncurses
+{ stdenv, fetchurl
+, qmake, qtbase, qtquickcontrols
+, python3, pyotherside
 , pcsclite, yubikey-personalization
 , yubikey-manager, makeWrapper }:
 

@@ -29,7 +29,7 @@
 , lens
 , parallel, safe, shelly, split, stringsearch, syb
 , tar, terminfo
-, vector, yaml, fetchgit, fetchFromGitHub
+, vector, yaml
 , alex, happy, git, gnumake, autoconf, patch
 , automake, libtool
 , cryptohash

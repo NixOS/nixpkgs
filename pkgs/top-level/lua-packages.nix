@@ -5,13 +5,12 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{ fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig
+{ fetchurl, stdenv, lua, unzip, pkgconfig
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
-, glib, gobject-introspection, libevent, zlib, autoreconfHook, gnum4
+, autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
-, fetchFromGitHub, libmpack, which, fetchpatch, writeText
+, fetchFromGitHub, which, writeText
 , pkgs
-, fetchgit
 , lib
 }:
 

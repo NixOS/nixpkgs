@@ -41,8 +41,6 @@ let
 
   majorVersion = substring 0 1 pythonVersion;
 
-  setupHook = python-setup-hook sitePackages;
-
   deps = [
     bzip2
     zlib

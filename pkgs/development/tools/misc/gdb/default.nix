@@ -1,7 +1,7 @@
 { stdenv
 
 # Build time
-, fetchurl, fetchpatch, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, zlib, dejagnu

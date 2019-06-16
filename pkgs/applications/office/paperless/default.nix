@@ -5,11 +5,9 @@
 , callPackage
 
 , python3
-, file
 , imagemagick7
 , ghostscript
 , optipng
-, poppler
 , tesseract
 , unpaper
 }:

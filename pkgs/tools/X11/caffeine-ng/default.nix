@@ -1,4 +1,4 @@
-{ gdk_pixbuf, glib, gobject-introspection, gtk3, lib, libnotify, pkgs,
+{ gdk_pixbuf, glib, gobject-introspection, gtk3, lib, libnotify,
   pythonPackages, wrapGAppsHook
 }:
 

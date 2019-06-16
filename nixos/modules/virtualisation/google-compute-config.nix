@@ -2,7 +2,6 @@
 with lib;
 let
   gce = pkgs.google-compute-engine;
-  cfg = config.virtualisation.googleComputeImage;
 in
 {
   imports = [

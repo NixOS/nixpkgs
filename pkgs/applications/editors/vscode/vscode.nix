@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, isInsiders ? false }:
+{ stdenv, lib, callPackage, fetchurl, isInsiders ? false }:
 
 let
   inherit (stdenv.hostPlatform) system;

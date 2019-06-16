@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, makeWrapper
+{ stdenv, fetchurl, makeWrapper
 , alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
 , factorio-utils
 , releaseType

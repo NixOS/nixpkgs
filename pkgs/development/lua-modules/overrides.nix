@@ -1,4 +1,4 @@
-{ pkgs,  ... }@args:
+{ pkgs,  ... }:
 self: super:
 with super;
 {

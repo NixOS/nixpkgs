@@ -8,7 +8,6 @@
 
 let
   androidSdkArgNames = builtins.attrNames (builtins.functionArgs composeAndroidPackages);
-  extraParams = removeAttrs args ([ "name" ] ++ androidSdkArgNames);
 
   # Extract the parameters meant for the Android SDK
   androidParams = {

@@ -1,4 +1,4 @@
-{ stdenv, lib, file, fetchurl, makeWrapper,
+{ stdenv, file, fetchurl, makeWrapper,
   autoPatchelfHook, jsoncpp, libpulseaudio }:
 let
   versionMajor = "6.6";

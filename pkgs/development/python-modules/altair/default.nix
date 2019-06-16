@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+{ stdenv, buildPythonPackage, fetchPypi
 , pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
 , entrypoints, jsonschema, numpy, pandas, six, toolz, typing
 , pythonOlder, recommonmark }:

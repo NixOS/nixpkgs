@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
   patchPhase =
     let disableTest = ''sed -i '1i discard \"\"\"\n  disabled: true\n\"\"\"\n\n' '';
         disableStdLibTest = ''sed -i -e '/^when isMainModule/,/^END$/{s/^/#/}' '';
-        disableCompile = ''sed -i -e 's/^/#/' '';
     in ''
       substituteInPlace ./tests/async/tioselectors.nim --replace "/bin/sleep" "sleep"
       substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin" "${coreutils}/bin"

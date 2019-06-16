@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, vdr, ffmpeg_2, alsaLib, fetchFromGitHub
+{ stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
 , libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
 , libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg, ncurses }:
 let

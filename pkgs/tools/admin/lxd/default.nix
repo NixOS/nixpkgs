@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl, fetchpatch
+{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
 , squashfsTools, iproute, iptables, ebtables, libcap, dqlite
 , sqlite-replication

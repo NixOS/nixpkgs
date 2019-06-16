@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeWrapper, perl, rsync, perlPackages }:
+{ fetchurl, stdenv, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "dirvish-1.2.1";

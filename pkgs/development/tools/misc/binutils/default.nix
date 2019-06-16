@@ -6,7 +6,6 @@
 , noSysDirs
 , gold ? !stdenv.buildPlatform.isDarwin || stdenv.hostPlatform == stdenv.targetPlatform
 , bison ? null
-, fetchpatch
 }:
 
 let
