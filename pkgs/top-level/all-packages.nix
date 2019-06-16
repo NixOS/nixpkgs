@@ -18439,8 +18439,6 @@ in
   wlc = callPackage ../development/libraries/wlc { };
   wlroots = callPackage ../development/libraries/wlroots { };
 
-  orbment = callPackage ../applications/window-managers/orbment { };
-
   sway = callPackage ../applications/window-managers/sway { };
   swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
