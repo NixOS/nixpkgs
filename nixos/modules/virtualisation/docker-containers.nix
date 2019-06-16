@@ -123,7 +123,7 @@ let
             <link xlink:href="https://docs.docker.com/engine/reference/run/#network-settings">
             Docker engine documentation</link>
           '';
-          example = "host"
+          example = "host";
         };
 
         ports = mkOption {
