@@ -4311,6 +4311,8 @@ in
 
   libfann = callPackage ../development/libraries/libfann { };
 
+  libfsm = callPackage ../development/libraries/libfsm { };
+
   libgaminggear = callPackage ../development/libraries/libgaminggear { };
 
   libhandy = callPackage ../development/libraries/libhandy { };
