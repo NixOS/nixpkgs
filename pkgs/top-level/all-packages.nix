@@ -8982,7 +8982,7 @@ in
 
   corundum = callPackage ../development/tools/corundum { };
 
-  confluent = callPackage ../servers/confluent {};
+  confluent-platform = callPackage ../servers/confluent-platform {};
 
   ctags = callPackage ../development/tools/misc/ctags { };
 
