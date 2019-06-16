@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, makeWrapper }:
+{ stdenv, fetchurl, jdk, w3m, makeWrapper }:
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
 
     makeWrapper $out/bin/picolisp $out/bin/pil \
+      --prefix PATH : ${w3m}/bin \
       --add-flags "$out/lib/picolisp/lib.l" \
       --add-flags "@lib/misc.l" \
       --add-flags "@lib/btree.l" \

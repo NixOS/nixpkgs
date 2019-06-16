@@ -1,18 +1,15 @@
 { stdenv, lib, fetchurl, jre, makeWrapper, bash, gnused }:
 
-with lib;
-
-let
-  confluentVersion = "4.1.1";
-  scalaVersion = "2.11";
-  sha256 = "e00eb4c6c7445ad7a43c9cd237778d1cd184322aebf5ff64a8e9806ba2cc27aa";
-in stdenv.mkDerivation rec {
-  name = "confluent-${version}";
-  version = "${confluentVersion}-${scalaVersion}";
+let 
+  scalaVersion = "2.12"; 
+in
+stdenv.mkDerivation rec {
+  name = "confluent-platform-${version}";
+  version = "5.2.1";
 
   src = fetchurl {
-    url = "http://packages.confluent.io/archive/${versions.majorMinor confluentVersion}/confluent-oss-${version}.tar.gz";
-    inherit sha256;
+    url = "http://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}-${scalaVersion}.tar.gz";
+    sha256 = "11fdcc557aca782e87352ed6e655c37c71fb7b3a003796ee956970b01dedbbb1";
   };
 
   buildInputs = [ jre makeWrapper bash ];
@@ -41,7 +38,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://www.confluent.io/;
-    description = "Confluent platform";
+    description = "Confluent event streaming platform based on Apache Kafka";
     license = licenses.asl20;
     maintainers = [ maintainers.offline ];
     platforms = platforms.unix;

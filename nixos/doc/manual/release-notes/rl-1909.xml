@@ -291,6 +291,12 @@
       so you'll need to set <option>hardware.pulseaudio.daemon.config.resample-method</option> back to <literal>speex-float-1</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>phabricator</literal> package and associated <literal>httpd.extraSubservice</literal>, as well as the
+     <literal>phd</literal> service have been removed from nixpkgs due to lack of maintainer.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

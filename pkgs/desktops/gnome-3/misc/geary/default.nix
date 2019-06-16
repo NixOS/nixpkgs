@@ -2,7 +2,7 @@
 , desktop-file-utils, gnome-online-accounts, gsettings-desktop-schemas, adwaita-icon-theme
 , libnotify, libcanberra-gtk3, libsecret, gmime, isocodes, libxml2, gettext
 , sqlite, gcr, json-glib, itstool, libgee, gnome3, webkitgtk, python3
-, xvfb_run, dbus, shared-mime-info, libunwind, folks, glib-networking }:
+, xvfb_run, dbus, shared-mime-info, libunwind, libunity, folks, glib-networking }:
 
 stdenv.mkDerivation rec {
   pname = "geary";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme enchant2 gcr gmime gnome-online-accounts
     gsettings-desktop-schemas gtk3 isocodes json-glib libcanberra-gtk3
     libgee libnotify libsecret sqlite webkitgtk glib-networking
-    libunwind folks
+    libunwind libunity folks
   ];
 
   checkInputs = [ xvfb_run dbus ];
