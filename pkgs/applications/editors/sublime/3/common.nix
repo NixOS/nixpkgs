@@ -1,12 +1,9 @@
 { buildVersion, x32sha256, x64sha256, dev ? false }:
 
 { fetchurl, stdenv, xorg, glib, glibcLocales, gtk2, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
-, pkexecPath ? "/run/wrappers/bin/pkexec", gksuSupport ? false, gksu
-, writeScript, common-updater-scripts, curl, gnugrep
+, gksu, writeScript, common-updater-scripts, curl, gnugrep
 , openssl, bzip2, bash, unzip, zip
 }:
-
-assert gksuSupport -> gksu != null;
 
 let
   pname = "sublimetext3";
@@ -31,8 +28,7 @@ let
       "x64";
 
   libPath = stdenv.lib.makeLibraryPath [ xorg.libX11 glib (if usesGtk2 then gtk2 else gtk3) cairo pango ];
-  redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
-    ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
+  redirects = [ "/usr/bin/gksudo=${gksu}/bin/gksudo" ];
 in let
   binaryPackage = stdenv.mkDerivation {
     pname = "${pname}-bin";
