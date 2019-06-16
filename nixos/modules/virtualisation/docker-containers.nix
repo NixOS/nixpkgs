@@ -71,15 +71,22 @@ let
         };
 
         labels = mkOption {
-          type = with types; listOf str;
-          default = [];
+          type = with types; attrsOf str;
+          default = {};
           description = ''
-            Labels that should be set on this container.
+            Labels that should be applied to this container.
 
             For more details on labels, refer to the
             <link xlink:href="https://docs.docker.com/config/labels-custom-metadata/">
             Docker documentation</link>
           '';
+          example = literalExample ''
+            {
+              "traefik.port" = "80";
+              "traefik.enable" = "true"
+              "mylabel.container.is-cool" = "true";
+            }
+        '';
         };
 
         log-driver = mkOption {
@@ -239,7 +246,7 @@ let
           ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
           ++ optional (container.hostname != null)
           "-h ${escapeShellArg container.hostname}"
-          ++ map (l: "-l ${escapeShellArg l}") container.labels
+          ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
           ++ map (p: "-p ${escapeShellArg p}") container.ports
           ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
           ++ map (v: "-v ${escapeShellArg v}") container.volumes
