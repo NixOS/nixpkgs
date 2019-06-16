@@ -1,8 +1,10 @@
 { stdenv, fetchurl, makeWrapper, symlinkJoin, writeShellScriptBin, callPackage, defaultCrateOverrides
-, wayland, wlc, cairo, libxkbcommon, pam, python3Packages, lemonbar, gdk_pixbuf
+, wayland, cairo, libxkbcommon, pam, python3Packages, lemonbar, gdk_pixbuf
 }:
 
 let
+  wlc = callPackage ./wlc.nix {};
+
   # refer to
   # https://github.com/way-cooler/way-cooler.github.io/blob/master/way-cooler-release-i3-default.sh
   # for version numbers

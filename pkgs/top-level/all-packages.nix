@@ -18436,7 +18436,6 @@ in
 
   super-productivity = callPackage ../applications/networking/super-productivity { };
 
-  wlc = callPackage ../development/libraries/wlc { };
   wlroots = callPackage ../development/libraries/wlroots { };
 
   sway = callPackage ../applications/window-managers/sway { };
