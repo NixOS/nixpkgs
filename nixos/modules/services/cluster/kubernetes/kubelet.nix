@@ -136,8 +136,8 @@ in
 
     extraOpts = mkOption {
       description = "Kubernetes kubelet extra command line options.";
-      default = "";
-      type = str;
+      default = null;
+      type = nullOr str;
     };
 
     featureGates = mkOption {
@@ -274,45 +274,53 @@ in
           MemoryAccounting = true;
           Restart = "on-failure";
           RestartSec = "1000ms";
-          ExecStart = ''${top.package}/bin/kubelet \
-            --address=${cfg.address} \
-            --allow-privileged=${boolToString cfg.allowPrivileged} \
-            --authentication-token-webhook \
-            --authentication-token-webhook-cache-ttl="10s" \
-            --authorization-mode=Webhook \
-            ${optionalString (cfg.clientCaFile != null)
-              "--client-ca-file=${cfg.clientCaFile}"} \
-            ${optionalString (cfg.clusterDns != "")
-              "--cluster-dns=${cfg.clusterDns}"} \
-            ${optionalString (cfg.clusterDomain != "")
-              "--cluster-domain=${cfg.clusterDomain}"} \
-            --cni-conf-dir=${cniConfig} \
-            ${optionalString (cfg.featureGates != [])
-              "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-            --hairpin-mode=hairpin-veth \
-            --healthz-bind-address=${cfg.healthz.bind} \
-            --healthz-port=${toString cfg.healthz.port} \
-            --hostname-override=${cfg.hostname} \
-            --kubeconfig=${kubeconfig} \
-            ${optionalString (cfg.networkPlugin != null)
-              "--network-plugin=${cfg.networkPlugin}"} \
-            ${optionalString (cfg.nodeIp != null)
-              "--node-ip=${cfg.nodeIp}"} \
-            --pod-infra-container-image=pause \
-            ${optionalString (cfg.manifests != {})
-              "--pod-manifest-path=/etc/${manifestPath}"} \
-            --port=${toString cfg.port} \
-            --register-node=${boolToString cfg.registerNode} \
-            ${optionalString (taints != "")
-              "--register-with-taints=${taints}"} \
-            --root-dir=${top.dataDir} \
-            ${optionalString (cfg.tlsCertFile != null)
-              "--tls-cert-file=${cfg.tlsCertFile}"} \
-            ${optionalString (cfg.tlsKeyFile != null)
-              "--tls-private-key-file=${cfg.tlsKeyFile}"} \
-            ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-            ${cfg.extraOpts}
-          '';
+          ExecStart =
+            let
+              options = [
+                "--address=${cfg.address}"
+                "--allow-privileged=${boolToString cfg.allowPrivileged}"
+                "--authentication-token-webhook"
+                ''--authentication-token-webhook-cache-ttl="10s"''
+                "--authorization-mode=Webhook"
+                "--cni-conf-dir=${cniConfig}"
+                "--hairpin-mode=hairpin-veth"
+                "--healthz-bind-address=${cfg.healthz.bind}"
+                "--healthz-port=${toString cfg.healthz.port}"
+                "--hostname-override=${cfg.hostname}"
+                "--kubeconfig=${kubeconfig}"
+                "--pod-infra-container-image=pause"
+                "--port=${toString cfg.port}"
+                "--register-node=${boolToString cfg.registerNode}"
+                "--root-dir=${top.dataDir}"
+                ]
+                ++ optional (cfg.clientCaFile != null)
+                  "--client-ca-file=${cfg.clientCaFile}"
+                ++ optional (cfg.clusterDns != "")
+                  "--cluster-dns=${cfg.clusterDns}"
+                ++ optional (cfg.clusterDomain != "")
+                  "--cluster-domain=${cfg.clusterDomain}"
+                ++ optional (cfg.featureGates != [])
+                  "--feature-gates=${concatMapStringsSep ","
+                  (feature: "${feature}=true") cfg.featureGates}"
+                ++ optional (cfg.networkPlugin != null)
+                  "--network-plugin=${cfg.networkPlugin}"
+                ++ optional (cfg.nodeIp != null)
+                  "--node-ip=${cfg.nodeIp}"
+                ++ optional (cfg.manifests != {})
+                  "--pod-manifest-path=/etc/${manifestPath}"
+                ++ optional (taints != "")
+                  "--register-with-taints=${taints}"
+                ++ optional (cfg.tlsCertFile != null)
+                  "--tls-cert-file=${cfg.tlsCertFile}"
+                ++ optional (cfg.tlsKeyFile != null)
+                  "--tls-private-key-file=${cfg.tlsKeyFile}"
+                ++ optional (cfg.verbosity != null)
+                  "--v=${toString cfg.verbosity}"
+                ++ optional (cfg.extraOpts != null)
+                  cfg.extraOpts;
+            in ''${top.package}/bin/kubelet \
+              ${concatStringsSep " \\\n" options}
+            '';
           WorkingDirectory = top.dataDir;
         };
         unitConfig.ConditionPathExists = kubeletPaths;
