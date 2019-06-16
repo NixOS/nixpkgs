@@ -1095,6 +1095,8 @@ in
 
   bmon = callPackage ../tools/misc/bmon { };
 
+  bmake = callPackage ../development/tools/build-managers/bmake { };
+
   bochs = callPackage ../applications/virtualization/bochs { };
 
   bubblewrap = callPackage ../tools/admin/bubblewrap { };
