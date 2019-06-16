@@ -8,13 +8,13 @@ let
 in
 buildGoModule rec {
   pname = "thanos";
-  version = "0.5.0-rc.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "improbable-eng";
     repo = "thanos";
-    sha256 = "1m7jj5g7s4c7nhbyc6vwn08ripp4d3ciim48siillwhm90gbphrw";
+    sha256 = "0my0653mkb14m93s4x3nyf8khyljkvi5sq049lir8yqzqn7p1654";
   };
 
   overrideModAttrs = oldAttrs : {
