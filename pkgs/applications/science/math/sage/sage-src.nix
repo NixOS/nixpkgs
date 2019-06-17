@@ -68,6 +68,9 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch/?h=c4d966e7cb0c7b87c55d52dc6f46518433a2a0a2";
       sha256 = "0pqbbsx8mriwny422s9mp3z5d095cnam32sm62q4mxk8g8jb9vm9";
     })
+
+    # https://trac.sagemath.org/ticket/28007
+    ./patches/threejs-offline.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
