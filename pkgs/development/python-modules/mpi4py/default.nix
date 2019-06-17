@@ -52,7 +52,8 @@ buildPythonPackage rec {
   # generated with incompatible cython versions.
   setupPyBuildFlags = [ "--mpicc=${mpi}/bin/mpicc" "build_src --force" ];
 
-  buildInputs = [ cython mpi openssh ];
+  nativeBuildInputs = [ cython ];
+  buildInputs = [ mpi openssh ];
 
   meta = {
     description =
