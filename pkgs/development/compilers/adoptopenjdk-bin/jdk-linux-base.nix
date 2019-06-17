@@ -27,6 +27,8 @@ assert swingSupport -> xorg != null;
 let
   rSubPaths = [
     "lib/jli"
+    "lib/amd64"
+    "lib/amd64/jli"
     "lib/server"
     "lib/compressedrefs" # OpenJ9
     "lib/j9vm" # OpenJ9
@@ -74,7 +76,7 @@ let result = stdenv.mkDerivation rec {
 
     # Remove embedded freetype to avoid problems like
     # https://github.com/NixOS/nixpkgs/issues/57733
-    rm $out/lib/libfreetype.so
+    rm -f $out/lib/libfreetype.so
 
     # for backward compatibility
     ln -s $out $out/jre

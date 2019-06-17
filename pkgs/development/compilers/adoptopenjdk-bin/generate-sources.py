@@ -1,12 +1,12 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure -i python3 -p "python3.withPackages (ps: with ps; [ requests ])"
+#!nix-shell --pure -i python3 -p "python3.withPackages (ps: with ps; [ requests semver ])"
 
 import json
-import re
 import requests
 import sys
+import semver
 
-releases = ["openjdk11"]
+releases = ["openjdk11", "openjdk8"]
 oses = ["mac", "linux"]
 types = ["jre", "jdk"]
 impls = ["hotspot", "openj9"]
@@ -23,7 +23,6 @@ def get_sha256(url):
         sys.exit(1)
     return resp.text.strip().split(" ")[0]
 
-RE_RELEASE_NAME = re.compile(r'[^-]+-([0-9.]+)\+([0-9]+)') # example release name: jdk-11.0.1+13
 def generate_sources(release, assets):
     out = {}
     for asset in assets:
@@ -32,9 +31,9 @@ def generate_sources(release, assets):
         if asset["openjdk_impl"] not in impls: continue
         if asset["heap_size"] != "normal": continue
         if asset["architecture"] not in arch_to_nixos: continue
-
-        version, build = RE_RELEASE_NAME.match(asset["release_name"]).groups()
-
+        vi = semver.VersionInfo.parse(asset['version_data']['semver'])
+        version = '{0.major}.{0.minor}.{0.patch}'.format(vi)
+        build = vi.build
         type_map = out.setdefault(asset["os"], {})
         impl_map = type_map.setdefault(asset["binary_type"], {})
         arch_map = impl_map.setdefault(asset["openjdk_impl"], {

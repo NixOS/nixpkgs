@@ -7062,6 +7062,29 @@ in
 
   abcl = callPackage ../development/compilers/abcl {};
 
+  adoptopenjdk-bin-8-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk8-linux.nix;
+  adoptopenjdk-bin-8-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk8-darwin.nix;
+
+  adoptopenjdk-hotspot-bin-8 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-8-packages-linux.jdk-hotspot {}
+    else callPackage adoptopenjdk-bin-8-packages-darwin.jdk-hotspot {};
+  adoptopenjdk-jre-hotspot-bin-8 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-8-packages-linux.jre-hotspot {}
+    else callPackage adoptopenjdk-bin-8-packages-darwin.jre-hotspot {};
+
+  adoptopenjdk-openj9-bin-8 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-8-packages-linux.jdk-openj9 {}
+    else callPackage adoptopenjdk-bin-8-packages-darwin.jdk-openj9 {};
+
+  adoptopenjdk-jre-openj9-bin-8 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-8-packages-linux.jre-openj9 {}
+    else callPackage adoptopenjdk-bin-8-packages-darwin.jre-openj9 {};
+
+  adoptopenjdk-bin-8 = adoptopenjdk-hotspot-bin-8;
+  adoptopenjdk-jre-bin-8 = adoptopenjdk-jre-hotspot-bin-8;
+  adoptopenjdk8-bin = adoptopenjdk-hotspot-bin-8;
+  adoptopenjdk8-jre-bin = adoptopenjdk-jre-hotspot-bin-8;
+
   adoptopenjdk-bin-11-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk11-linux.nix;
   adoptopenjdk-bin-11-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk11-darwin.nix;
 
@@ -7663,7 +7686,7 @@ in
 
   openjdk8 =
     if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk/darwin/8.nix { }
+      adoptopenjdk8-jre-bin
     else
       callPackage ../development/compilers/openjdk/8.nix {
         bootjdk = bootjdk.override { version = "8"; };
