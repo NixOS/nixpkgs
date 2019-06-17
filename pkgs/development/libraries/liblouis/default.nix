@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "3.9.0";
+  version = "3.10.0";
 in stdenv.mkDerivation rec {
   name = "liblouis-${version}";
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${version}";
-    sha256 = "11vq9rnmrfqka3fiyrxs0q1gpvpj4m9jmrkwd1yvrq94fndgvh1m";
+    sha256 = "1wimv2wfl566jp8hhrxr91dmx20hldqzj70dar8i9k3hzq1kmb4q";
   };
 
   outputs = [ "out" "dev" "man" "info" "doc" ];
