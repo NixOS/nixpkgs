@@ -537,7 +537,7 @@ exportImage {
 
   name = someLayeredImage.name;
 }
-  </programlisting>
+</programlisting>
   </example>
 
   <para>

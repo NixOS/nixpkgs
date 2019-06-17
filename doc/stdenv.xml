@@ -343,7 +343,7 @@ let f(h, t, i) = i + (if i &lt;= 0 then h else t - 1)
 let f(h, h + 1, i) = i + (if i &lt;= 0 then h else (h + 1) - 1)
 let f(h, h + 1, i) = i + (if i &lt;= 0 then h else h)
 let f(h, h + 1, i) = i + h
-  </programlisting>
+</programlisting>
    This is where "sum-like" comes in from above: We can just sum all of the
    host offsets to get the host offset of the transitive dependency. The target
    offset is the transitive dependency is simply the host offset + 1, just as
@@ -2229,7 +2229,7 @@ someVar=$(stripHash $name)
    array by doing something like
 <programlisting language="bash">
 addEnvHooks "$hostOffset" myBashFunction
-  </programlisting>
+</programlisting>
   </para>
 
   <para>
@@ -2667,8 +2667,8 @@ addEnvHooks "$hostOffset" myBashFunction
        that is supposed to be inspected, add <literal>breakpointHook</literal>
        to <literal>nativeBuildInputs</literal>.
 <programlisting>
-         nativeBuildInputs = [ breakpointHook ];
-       </programlisting>
+nativeBuildInputs = [ breakpointHook ];
+</programlisting>
        When a build failure happens there will be an instruction printed that
        shows how to attach with <literal>cntr</literal> to the build sandbox.
       </para>
@@ -2863,7 +2863,7 @@ addEnvHooks "$hostOffset" myBashFunction
          printf(help_message);
                             ^
 cc1plus: some warnings being treated as errors
-    </programlisting>
+</programlisting>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -2885,7 +2885,7 @@ cc1plus: some warnings being treated as errors
 <programlisting>
 bin/blib.a(bios_console.o): In function `bios_handle_cup':
 /tmp/nix-build-ipxe-20141124-5cbdc41.drv-0/ipxe-5cbdc41/src/arch/i386/firmware/pcbios/bios_console.c:86: undefined reference to `__stack_chk_fail'
-    </programlisting>
+</programlisting>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -2914,19 +2914,19 @@ bin/blib.a(bios_console.o): In function `bios_handle_cup':
 <programlisting>
 malloc.c:404:15: error: return type is an incomplete type
 malloc.c:410:19: error: storage size of 'ms' isn't known
-    </programlisting>
+</programlisting>
 <programlisting>
 strdup.h:22:1: error: expected identifier or '(' before '__extension__'
-    </programlisting>
+</programlisting>
 <programlisting>
 strsep.c:65:23: error: register name not specified for 'delim'
-    </programlisting>
+</programlisting>
 <programlisting>
 installwatch.c:3751:5: error: conflicting types for '__open_2'
-    </programlisting>
+</programlisting>
 <programlisting>
 fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
-    </programlisting>
+</programlisting>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -2951,7 +2951,7 @@ fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute erro
 <programlisting>
 ccbLfRgg.s: Assembler messages:
 ccbLfRgg.s:33: Error: missing or invalid displacement expression `private_key_len@GOTOFF'
-    </programlisting>
+</programlisting>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -3015,7 +3015,7 @@ ccbLfRgg.s:33: Error: missing or invalid displacement expression `private_key_le
      </para>
 <programlisting>
 intel_drv.so: undefined symbol: vgaHWFreeHWRec
-    </programlisting>
+</programlisting>
     </listitem>
    </varlistentry>
   </variablelist>

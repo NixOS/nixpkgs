@@ -52,7 +52,7 @@ spot sensor temperature 0.000000, unit celsius, color scheme 0, calibration: off
 
 <prompt>$ </prompt>file -k type2.AppImage
 type2.AppImage: ELF 64-bit LSB executable, x86-64, version 1 (SYSV) (Lepton 3.x), scale 232-60668, spot sensor temperature -4.187500, color scheme 15, show scale bar, calibration: offset -0.000000, slope 0.000000 (Lepton 2.x), scale 4111-45000, spot sensor temperature 412442.250000, color scheme 3, minimum point enabled, calibration: offset -75402534979642766821519867692934234112.000000, slope 5815371847733706829839455140374904832.000000, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.18, BuildID[sha1]=79dcc4e55a61c293c5e19edbd8d65b202842579f, stripped\012- data
-  </screen>
+</screen>
 
   <para>
    Note how the type 1 AppImage is described as an <literal>ISO 9660 CD-ROM

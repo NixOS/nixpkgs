@@ -26,7 +26,7 @@
 texlive.combine {
   inherit (texlive) scheme-small collection-langkorean algorithms cm-super;
 }
-      </programlisting>
+</programlisting>
      There are all the schemes, collections and a few thousand packages, as
      defined upstream (perhaps with tiny differences).
     </para>
@@ -44,7 +44,7 @@ texlive.combine {
   # elem tlType [ "run" "bin" "doc" "source" ]
   # there are also other attributes: version, name
 }
-      </programlisting>
+</programlisting>
     </para>
    </listitem>
    <listitem>
