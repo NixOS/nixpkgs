@@ -33,7 +33,7 @@ let
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint ecl arb;
-        inherit sage-src pynac singular;
+        inherit sage-src env-locations pynac singular;
         linbox = pkgs.linbox.override { withSage = true; };
         pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
       };
