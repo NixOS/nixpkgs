@@ -525,7 +525,7 @@ $ nix-env -i w3m</screen>
 
   <example xml:id='ex-config'>
    <title>NixOS Configuration</title>
-<screen>
+<programlisting>
 { config, pkgs, ... }: {
   imports = [
     # Include the results of the hardware scan.
@@ -543,7 +543,7 @@ $ nix-env -i w3m</screen>
   # Enable the OpenSSH server.
   services.sshd.enable = true;
 }
-  </screen>
+</programlisting>
   </example>
  </section>
  <section xml:id="sec-installation-additional-notes">

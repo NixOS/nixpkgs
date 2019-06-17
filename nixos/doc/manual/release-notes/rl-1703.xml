@@ -626,17 +626,17 @@
     xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
      overlays</link>. For example, the following code:
 <programlisting>
-  let
-    pkgs = import &lt;nixpkgs&gt; {};
-  in
-    pkgs.overridePackages (self: super: ...)
+let
+  pkgs = import &lt;nixpkgs&gt; {};
+in
+  pkgs.overridePackages (self: super: ...)
 </programlisting>
      should be replaced by:
 <programlisting>
-  let
-    pkgs = import &lt;nixpkgs&gt; {};
-  in
-    import pkgs.path { overlays = [(self: super: ...)]; }
+let
+  pkgs = import &lt;nixpkgs&gt; {};
+in
+  import pkgs.path { overlays = [(self: super: ...)]; }
 </programlisting>
     </para>
    </listitem>
