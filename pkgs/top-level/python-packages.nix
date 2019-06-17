@@ -5471,6 +5471,8 @@ in {
 
   strict-rfc3339 = callPackage ../development/python-modules/strict-rfc3339 { };
 
+  strictyaml = callPackage ../development/python-modules/strictyaml { };
+
   twilio = callPackage ../development/python-modules/twilio { };
 
   uranium = callPackage ../development/python-modules/uranium { };
