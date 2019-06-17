@@ -3,13 +3,13 @@
 , go-md2man }:
 
 let
-  version = "1.8.3";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "containers";
     repo   = "buildah";
-    sha256 = "12fi67pnp07zrk72zniiciw2nhmzn6lmbkydv5sib08x765izn6s";
+    sha256 = "19yf93pq4vw24h76kl32c6ryvg5fp5mixakw9c6sqydf7m74z9i8";
   };
 
   goPackagePath = "github.com/containers/buildah";
