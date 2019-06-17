@@ -7,8 +7,6 @@ let
     # to build it. This is a bit confusing for cross compilation.
     inherit (stdenv) hostPlatform;
   };
-
-  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in rec {
   # `mkDerivation` wraps the builtin `derivation` function to
   # produce derivations that use this stdenv and its shell.
@@ -55,7 +53,9 @@ in rec {
       # Including it then would cause needless mass rebuilds.
       #
       # TODO(@Ericson2314): Make [ "build" "host" ] always the default.
-      configurePlatforms ? lib.optionals isCross [ "build" "host" ]
+      configurePlatforms ? lib.optionals
+        (stdenv.hostPlatform != stdenv.buildPlatform)
+        [ "build" "host" ]
 
     # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
@@ -66,7 +66,7 @@ in rec {
     , doInstallCheck ? config.doCheckByDefault or false
 
     , # TODO(@Ericson2314): Make always true and remove
-      strictDeps ? isCross
+      strictDeps ? stdenv.hostPlatform != stdenv.buildPlatform
     , meta ? {}
     , passthru ? {}
     , pos ? # position used in error messages and for meta.position
@@ -93,8 +93,8 @@ in rec {
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
       # no package has `doCheck = true`.
-      doCheck' = doCheck && !isCross;
-      doInstallCheck' = doInstallCheck && !isCross;
+      doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+      doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
 
       separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
       outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
@@ -181,7 +181,7 @@ in rec {
            "sandboxProfile" "propagatedSandboxProfile"])
         // lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version) {
           name = "${attrs.pname}-${attrs.version}";
-        } // lib.optionalAttrs (isCross && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version))) {
+        } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version))) {
           # Fixed-output derivations like source tarballs shouldn't get a host
           # suffix. But we have some weird ones with run-time deps that are
           # just used for their side-affects. Those might as well since the
@@ -233,7 +233,7 @@ in rec {
           outputs = outputs';
 
           inherit patches;
-        } // lib.optionalAttrs isCross {
+        } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
              else if cmakeFlags == null      then []
