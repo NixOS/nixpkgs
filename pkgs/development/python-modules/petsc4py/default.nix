@@ -4,10 +4,9 @@
 , buildPythonPackage
 , cython
 , numpy
-, petsc
 , openmpi
 , openssh
-, mpi4py
+, petsc
 , pytest }:
 
 buildPythonPackage rec {
@@ -21,20 +20,14 @@ buildPythonPackage rec {
 
   PETSC_DIR = "${petsc}";
 
+  # The "build_src --force" flag is used to re-build the package's cython code.
+  # This prevents issues when using multiple cython-based packages
+  # together (for example, mpi4py and petsc4py) due to code that has been
+  # generated with incompatible cython versions.
   setupPyBuildFlags = [ "build_src --force" ];
 
-  buildInputs = [
-    cython
-    numpy
-    openssh
-    mpi4py
-  ];
-
-  propagatedBuildInputs = [
-    petsc
-    openmpi
-  ];
-
+  nativeBuildInputs = [ cython openmpi openssh ];
+  propagatedBuildInputs = [ numpy ];
   checkInputs = [ pytest ];
 
   meta = {
