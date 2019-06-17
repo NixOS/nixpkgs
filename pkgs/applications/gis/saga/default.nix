@@ -3,7 +3,7 @@
   unixODBC , poppler, hdf4, hdf5, netcdf, sqlite, qhull, giflib }:
 
 stdenv.mkDerivation rec {
-  name = "saga-6.3.0";
+  name = "saga-7.2.0";
 
   # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
   # for why the have additional buildInputs on darwin
@@ -14,13 +14,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = [ ./finite-6.3.0.patch];
-
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11 -Wno-narrowing";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/saga-gis/SAGA%20-%206/SAGA%20-%206.3.0/saga-6.3.0.tar.gz";
-    sha256 = "0hyjim8fcp3mna1hig22nnn4ki3j6b7096am2amcs99sdr09jjxv";
+    url = "mirror://sourceforge/project/saga-gis/SAGA%20-%207/SAGA%20-%207.2.0/saga-7.2.0.tar.gz";
+    sha256 = "10gjc5mc5kwg2c2la22hgwx6s5q60z9xxffjpjw0zrlhksijl5an";
   };
 
   meta = with stdenv.lib; {
