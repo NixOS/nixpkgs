@@ -187,6 +187,10 @@ in rec {
       ];
     });
 
+    CoreFoundation = stdenv.lib.overrideDerivation super.CoreFoundation (drv: {
+      setupHook = ./cf-setup-hook.sh;
+    });
+
     CoreMedia = stdenv.lib.overrideDerivation super.CoreMedia (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/Frameworks/CoreImage.framework"
@@ -222,7 +226,7 @@ in rec {
 
   bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;
-    inherit (pkgs.darwin) cf-private libobjc;
+    inherit (pkgs.darwin) libobjc;
   });
 
   frameworks = bareFrameworks // overrides bareFrameworks;

@@ -36,9 +36,8 @@ in
     libcxxabi = pkgs.libcxxabi;
   };
 
-  cf-private = callPackage ../os-specific/darwin/cf-private {
-    inherit (darwin) CF apple_sdk;
-  };
+  # TODO: remove alias.
+  cf-private = darwin.apple_sdk.frameworks.CoreFoundation;
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
 

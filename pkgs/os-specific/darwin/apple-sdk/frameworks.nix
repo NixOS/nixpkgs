@@ -2,7 +2,7 @@
 # Epic weird knot-tying happening here.
 # TODO: clean up the process for generating this and include it
 
-{ frameworks, libs, libobjc, cf-private }:
+{ frameworks, libs, libobjc, }:
 
 with frameworks; with libs; {
   AGL                     = [ Carbon OpenGL ];
@@ -47,8 +47,8 @@ with frameworks; with libs; {
   ExceptionHandling       = [];
   FWAUserLib              = [];
   ForceFeedback           = [ IOKit ];
-  Foundation              = [ cf-private libobjc Security ApplicationServices SystemConfiguration ];
-  GLKit                   = [ ];
+  Foundation              = [ libobjc CoreFoundation Security ApplicationServices SystemConfiguration ];
+  GLKit                   = [];
   GLUT                    = [ OpenGL ];
   GSS                     = [];
   GameController          = [];
