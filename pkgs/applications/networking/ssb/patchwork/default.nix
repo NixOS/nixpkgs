@@ -12,12 +12,12 @@
 stdenv.mkDerivation rec {
   # latest version that runs without errors
   # https://github.com/ssbc/patchwork/issues/972
-  version = "3.11.4";
+  version = "3.14.1";
   pname = "patchwork";
 
   src = fetchurl {
-    url = "https://github.com/ssbc/patchwork/releases/download/v${version}/Patchwork-${version}-linux-x86_64.AppImage";
-    sha256 = "1blsprpkvm0ws9b96gb36f0rbf8f5jgmw4x6dsb1kswr4ysf591s";
+    url = "https://github.com/ssbc/patchwork/releases/download/v${version}/ssb-patchwork-${version}-x86_64.AppImage";
+    sha256 = "01vsldabv9nmbx8kzlgw275zykm72s1dxglnaq4jz5vbysbyn0qd";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
