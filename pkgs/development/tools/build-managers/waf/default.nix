@@ -4,7 +4,7 @@
 }:
 let
   wafToolsArg = with stdenv.lib.strings;
-    optionalString (!isNull withTools) "--tools=\"${concatStringsSep "," withTools}\"";
+    optionalString (!isNull withTools) " --tools=\"${concatStringsSep "," withTools}\"";
 in
 stdenv.mkDerivation rec {
   name = "waf-${version}";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     python waf-light configure
   '';
   buildPhase = ''
-    python waf-light build ${wafToolsArg}
+    python waf-light build${wafToolsArg}
   '';
   installPhase = ''
     install waf $out
