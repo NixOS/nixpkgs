@@ -42,11 +42,11 @@
 whether PostgreSQL works by running <command>psql</command>:
 
 <screen>
-$ psql
+<prompt>$ </prompt>psql
 psql (9.2.9)
 Type "help" for help.
 
-alice=>
+<prompt>alice=></prompt>
 </screen>
 -->
 

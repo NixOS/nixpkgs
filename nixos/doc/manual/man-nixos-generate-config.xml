@@ -13,18 +13,18 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-generate-config</command> 
+   <command>nixos-generate-config</command>
    <arg>
     <option>--force</option>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--root</option>
     </arg>
      <replaceable>root</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--dir</option>
@@ -154,7 +154,7 @@
    file systems on <filename>/mnt</filename> and
    <filename>/mnt/boot</filename>, you would run:
 <screen>
-$ nixos-generate-config --root /mnt
+<prompt>$ </prompt>nixos-generate-config --root /mnt
 </screen>
    The resulting file
    <filename>/mnt/etc/nixos/hardware-configuration.nix</filename> might look
@@ -204,7 +204,7 @@ $ nixos-generate-config --root /mnt
   <para>
    After installation, if your hardware configuration changes, you can run:
 <screen>
-$ nixos-generate-config
+<prompt>$ </prompt>nixos-generate-config
 </screen>
    to update <filename>/etc/nixos/hardware-configuration.nix</filename>. Your
    <filename>/etc/nixos/configuration.nix</filename> will

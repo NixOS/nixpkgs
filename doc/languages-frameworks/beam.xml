@@ -131,8 +131,8 @@
    in <literal>beamPackages</literal>, use the following command:
   </para>
 
-<programlisting>
-$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A beamPackages
+<screen>
+<prompt>$ </prompt>nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A beamPackages
 beamPackages.esqlite    esqlite-0.2.1
 beamPackages.goldrush   goldrush-0.1.7
 beamPackages.ibrowse    ibrowse-4.2.2
@@ -140,16 +140,16 @@ beamPackages.jiffy      jiffy-0.14.5
 beamPackages.lager      lager-3.0.2
 beamPackages.meck       meck-0.8.3
 beamPackages.rebar3-pc  pc-1.1.0
-</programlisting>
+</screen>
 
   <para>
    To install any of those packages into your profile, refer to them by their
    attribute path (first column):
   </para>
 
-<programlisting>
-$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA beamPackages.ibrowse
-</programlisting>
+<screen>
+<prompt>$ </prompt>nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA beamPackages.ibrowse
+</screen>
 
   <para>
    The attribute path of any BEAM package corresponds to the name of that

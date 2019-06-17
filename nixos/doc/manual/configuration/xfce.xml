@@ -64,7 +64,7 @@ Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with db
    Session and Startup settings panel. Alternatively, you can run this command
    to do the same thing.
 <programlisting>
-$ xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
+<prompt>$ </prompt>xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
 </programlisting>
    A log-out and re-log will be needed for this to take effect.
   </para>

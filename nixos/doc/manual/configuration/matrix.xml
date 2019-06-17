@@ -141,15 +141,15 @@ in {
    <option>services.matrix-synapse.registration_shared_secret</option>. To
    create a new user or admin, run the following after you have set the secret
    and have rebuilt NixOS:
-<programlisting>
-$ nix run nixpkgs.matrix-synapse
-$ register_new_matrix_user -k &lt;your-registration-shared-secret&gt; http://localhost:8008
-New user localpart: &lt;your-username&gt;
-Password:
-Confirm password:
-Make admin [no]:
+<screen>
+<prompt>$ </prompt>nix run nixpkgs.matrix-synapse
+<prompt>$ </prompt>register_new_matrix_user -k <replaceable>your-registration-shared-secret</replaceable> http://localhost:8008
+<prompt>New user localpart: </prompt><replaceable>your-username</replaceable>
+<prompt>Password:</prompt>
+<prompt>Confirm password:</prompt>
+<prompt>Make admin [no]:</prompt>
 Success!
-</programlisting>
+</screen>
    In the example, this would create a user with the Matrix Identifier
    <literal>@your-username:example.org</literal>. Note that the registration
    secret ends up in the nix store and therefore is world-readable by any user

@@ -36,8 +36,8 @@
          </listitem>
         </itemizedlist>
 <screen>
-$ git checkout 0998212
-$ git checkout -b 'fix/pkg-name-update'
+<prompt>$ </prompt>git checkout 0998212
+<prompt>$ </prompt>git checkout -b 'fix/pkg-name-update'
 </screen>
        </para>
       </listitem>
