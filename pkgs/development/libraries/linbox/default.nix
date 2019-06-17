@@ -11,14 +11,14 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "linbox";
-  version = "1.6.2";
+  version = "1.6.3";
 
 
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "038br15hhc8dc1hq0pkv6vb1qx9hjr7hjv3w9fq9qwkd870h2v1q";
+    sha256 = "10j6dspbsq7d2l4q3y0c1l1xwmaqqba2fxg59q5bhgk9h5d7q571";
   };
 
   nativeBuildInputs = [
