@@ -156,7 +156,7 @@ in rec {
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit pkgs.darwin.CF CoreGraphics CoreServices CoreText
+        OpenGL ApplicationServices Carbon IOKit CoreGraphics CoreServices CoreText
       ];
 
       installPhase = ''
@@ -222,7 +222,7 @@ in rec {
 
   bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;
-    inherit (pkgs.darwin) CF cf-private libobjc;
+    inherit (pkgs.darwin) cf-private libobjc;
   });
 
   frameworks = bareFrameworks // overrides bareFrameworks;

@@ -10,6 +10,10 @@ in
 
   callPackage = newScope (darwin.apple_sdk.frameworks // darwin);
 
+  stdenvNoCF = stdenv.override {
+    extraBuildInputs = [];
+  };
+
   apple_sdk = callPackage ../os-specific/darwin/apple-sdk { };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
