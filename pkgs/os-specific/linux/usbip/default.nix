@@ -5,6 +5,11 @@ stdenv.mkDerivation rec {
 
   src = kernel.src;
 
+  patches = [
+    # fixes build with gcc8
+    ./fix-snprintf-truncation.patch
+  ];
+
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ udev ];
 
