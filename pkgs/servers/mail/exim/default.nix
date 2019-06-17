@@ -1,4 +1,4 @@
-{ coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, stdenv
+{ coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, stdenv, fetchpatch
 , enableLDAP ? false, openldap
 , enableMySQL ? false, mysql, zlib
 , enableAuthDovecot ? false, dovecot
@@ -12,6 +12,16 @@ stdenv.mkDerivation rec {
     url = "https://ftp.exim.org/pub/exim/exim4/${name}.tar.xz";
     sha256 = "066ip7a5lqfn9rcr14j4nm0kqysw6mzvbbb0ip50lmfm0fqsqmzc";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-10149.patch";
+      url = https://git.exim.org/exim.git/patch/d740d2111f189760593a303124ff6b9b1f83453d;
+      stripLen = 1;
+      includes = ["src/deliver.c"];
+      sha256 = "0va872q2d3nizr001hfs1yaa4w5lffppk4hkim2ywcpq8ap5kxfk";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ coreutils db openssl perl pcre ]
