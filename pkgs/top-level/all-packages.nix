@@ -9188,7 +9188,9 @@ in
 
   fsatrace = callPackage ../development/tools/misc/fsatrace { };
 
-  fswatch = callPackage ../development/tools/misc/fswatch { };
+  fswatch = callPackage ../development/tools/misc/fswatch {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
