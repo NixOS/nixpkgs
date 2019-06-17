@@ -537,6 +537,15 @@
     github = "averelld";
     name = "averelld";
   };
+  avitex = {
+    email = "theavitex@gmail.com";
+    github = "avitex";
+    name = "avitex";
+    keys = [{
+      longkeyid = "rsa4096/0x8B366C443CABE942";
+      fingerprint = "271E 136C 178E 06FA EA4E  B854 8B36 6C44 3CAB E942";
+    }];
+  };
   avnik = {
     email = "avn@avnik.info";
     github = "avnik";
