@@ -12,13 +12,14 @@
     inherit name;
 
     src = fetchurl {
-      name = "src.tgz";
-      url = "https://sourceforge.net/projects/xineliboutput/files/xineliboutput/${name}/${name}.tgz/download";
-      sha256 = "6af99450ad0792bd646c6f4058f6e49541aab8ba3a10e131f82752f4d5ed19de";
+      url = "mirror://sourceforge/project/xineliboutput/xineliboutput/${name}/${name}.tgz";
+      sha256 = "1phrxpaz8li7z0qy241spawalhcmwkv5hh3gdijbv4h7mm899yba";
     };
 
-    configurePhase = ''
-      ./configure
+    # configure don't accept argument --prefix
+    dontAddPrefix = true;
+
+    postConfigure = ''
       sed -i config.mak \
         -e 's,XINEPLUGINDIR=/[^/]*/[^/]*/[^/]*/,XINEPLUGINDIR=/,'
     '';
@@ -53,11 +54,11 @@
     passthru.requiredXinePlugins = [ xineLib self ];
 
     meta = with lib;{
-      homepage = https://sourceforge.net/projects/xineliboutput/;
-      description = "xine-lib based software output device for VDR.";
+      homepage = "https://sourceforge.net/projects/xineliboutput/";
+      description = "Xine-lib based software output device for VDR";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
-      platforms = [ "i686-linux" "x86_64-linux" ];
+      inherit (vdr.meta) platforms;
     };
   };
 in self
