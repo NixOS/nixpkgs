@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, gettext, fetchurl, fetchpatch, evince, gjs
+{ stdenv, meson, ninja, gettext, fetchurl, evince, gjs
 , pkgconfig, gtk3, glib, tracker, tracker-miners
 , itstool, libxslt, webkitgtk, libgdata
 , gnome-desktop, libzapojit, libgepub

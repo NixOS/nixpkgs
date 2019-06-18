@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python, setuptoolsTrial, mock, twisted, future }:
+{ lib, buildPythonPackage, fetchPypi, setuptoolsTrial, mock, twisted, future }:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";

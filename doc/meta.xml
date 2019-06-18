@@ -30,7 +30,7 @@ meta = with stdenv.lib; {
   The meta-attributes of a package can be queried from the command-line using
   <command>nix-env</command>:
 <screen>
-$ nix-env -qa hello --json
+<prompt>$ </prompt>nix-env -qa hello --json
 {
     "hello": {
         "meta": {
@@ -70,7 +70,7 @@ $ nix-env -qa hello --json
   <command>nix-env</command> knows about the <varname>description</varname>
   field specifically:
 <screen>
-$ nix-env -qa hello --description
+<prompt>$ </prompt>nix-env -qa hello --description
 hello-2.3  A program that produces a familiar, friendly greeting
 </screen>
  </para>

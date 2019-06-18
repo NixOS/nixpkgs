@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerApp}:
+{ lib, bundlerApp}:
 
 bundlerApp rec {
   pname = "github_changelog_generator";

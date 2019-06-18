@@ -7,7 +7,6 @@
   deepin,
   deepin-gettext-tools,
   fontconfig,
-  glib,
   go,
   go-dbus-factory,
   go-gir-generator,

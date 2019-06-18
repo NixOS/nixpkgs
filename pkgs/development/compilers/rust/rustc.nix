@@ -1,6 +1,6 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, fetchurl, fetchgit, fetchzip, file, python2, tzdata, ps
-, llvm_7, ncurses, darwin, git, cmake, curl, rustPlatform
+, fetchurl, file, python2, tzdata, ps
+, llvm_7, darwin, git, cmake, rustPlatform
 , which, libffi, gdb
 , withBundledLLVM ? false
 }:

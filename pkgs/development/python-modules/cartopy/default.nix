@@ -1,6 +1,6 @@
 { buildPythonPackage, lib, fetchPypi
 , pytest, filelock, mock, pep8
-, cython, isPy27, isPy37, glibcLocales
+, cython, isPy27
 , six, pyshp, shapely, geos, proj, numpy
 , gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
 , xvfb_run

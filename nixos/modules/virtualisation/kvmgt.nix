@@ -46,22 +46,24 @@ in {
       message = "KVMGT is not properly supported for kernels older than 4.16";
     };
     boot.kernelParams = [ "i915.enable_gvt=1" ];
+    systemd.paths = mapAttrs' (name: value:
+      nameValuePair "kvmgt-${name}" {
+        description = "KVMGT VGPU ${name} path";
+        wantedBy = [ "multi-user.target" ];
+        pathConfig = {
+          PathExists = "/sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create";
+        };
+      }
+    ) cfg.vgpus;
     systemd.services = mapAttrs' (name: value:
       nameValuePair "kvmgt-${name}" {
         description = "KVMGT VGPU ${name}";
         serviceConfig = {
-          Type = "forking";
+          Type = "oneshot";
           RemainAfterExit = true;
-          Restart = "on-failure";
-          RestartSec = 5;
           ExecStart = "${pkgs.runtimeShell} -c 'echo ${value.uuid} > /sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create'";
           ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/bus/pci/devices/${cfg.device}/${value.uuid}/remove'";
         };
-        unitConfig = {
-          StartLimitBurst = 5;
-          StartLimitIntervalSec = 30;
-        };
-        wantedBy = [ "multi-user.target" ];
       }
     ) cfg.vgpus;
   };

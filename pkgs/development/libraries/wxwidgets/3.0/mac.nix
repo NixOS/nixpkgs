@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fetchpatch, expat, libiconv, libjpeg, libpng, libtiff, zlib
+{ stdenv, fetchzip, expat, libiconv, libjpeg, libpng, libtiff, zlib
 # darwin only attributes
 , cf-private, derez, rez, setfile
 , AGL, Cocoa, Kernel

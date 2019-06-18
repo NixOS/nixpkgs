@@ -1,4 +1,4 @@
-{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
+{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus

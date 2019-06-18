@@ -1,7 +1,6 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, gettext, python3
 , ncurses, swig, glib, utillinux, cryptsetup, nss, gpgme
 , autoconf, automake, libtool
-, writeShellScriptBin
 , buildPackages
 }:
 

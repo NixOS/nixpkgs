@@ -854,9 +854,7 @@ in
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
 
-  titaniumenv = callPackage ../development/mobile/titaniumenv {
-    pkgs_i686 = pkgsi686Linux;
-  };
+  titaniumenv = callPackage ../development/mobile/titaniumenv { };
 
   abootimg = callPackage ../development/mobile/abootimg {};
 
@@ -4310,6 +4308,8 @@ in
   libevdev = callPackage ../development/libraries/libevdev { };
 
   libfann = callPackage ../development/libraries/libfann { };
+
+  libfsm = callPackage ../development/libraries/libfsm { };
 
   libgaminggear = callPackage ../development/libraries/libgaminggear { };
 
@@ -9188,7 +9188,9 @@ in
 
   fsatrace = callPackage ../development/tools/misc/fsatrace { };
 
-  fswatch = callPackage ../development/tools/misc/fswatch { };
+  fswatch = callPackage ../development/tools/misc/fswatch {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
@@ -9715,6 +9717,8 @@ in
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
   texi2mdoc = callPackage ../tools/misc/texi2mdoc { };
+
+  tflint = callPackage ../development/tools/analysis/tflint { };
 
   todoist = callPackage ../applications/misc/todoist { };
 
@@ -11140,7 +11144,7 @@ in
 
   libao = callPackage ../development/libraries/libao {
     usePulseAudio = config.pulseaudio or stdenv.isLinux;
-    inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit AudioToolbox;
+    inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit;
   };
 
   libaosd = callPackage ../development/libraries/libaosd { };
@@ -13106,7 +13110,6 @@ in
 
   simavr = callPackage ../development/tools/simavr {
     avrgcc = pkgsCross.avr.buildPackages.gcc;
-    avrbinutils = pkgsCross.avr.buildPackages.binutils;
     avrlibc = pkgsCross.avr.libcCross;
     inherit (darwin.apple_sdk.frameworks) GLUT;
   };
@@ -17004,7 +17007,6 @@ in
     libxkbcommon = libxkbcommon_7;
   };
   bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
-    inherit (gnome3) zenity;
     inherit (pkgs) bitwig-studio1;
   };
   bitwig-studio = bitwig-studio2;
@@ -17639,7 +17641,7 @@ in
 
   emacsPackagesNgFor = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv;
-    inherit fetchFromGitHub fetchgit fetchhg fetchurl fetchpatch;
+    inherit fetchFromGitHub fetchurl;
     inherit emacs texinfo makeWrapper runCommand writeText;
     inherit (xorg) lndir;
 
@@ -18359,7 +18361,8 @@ in
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
-  slack-dark = pkgs.slack.override { darkMode = true; };
+  slack-theme-black = callPackage ../applications/networking/instant-messengers/slack/dark-theme.nix { };
+  slack-dark = pkgs.slack.override { theme = slack-theme-black; };
 
   slack-cli = callPackage ../tools/networking/slack-cli { };
 
@@ -23922,7 +23925,7 @@ in
     inherit wineBuild;
 
     inherit (callPackage ./wine-packages.nix {})
-      minimal base full stable unstable staging;
+      minimal base full stable unstable staging fonts;
   });
 
   winePackages = recurseIntoAttrs (winePackagesFor (config.wine.build or "wine32"));

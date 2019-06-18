@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, enableNpm ? true }:
+{ callPackage, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix {};

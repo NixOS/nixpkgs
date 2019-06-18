@@ -1,4 +1,4 @@
-{ stdenv, lib, runCommand, buildEnv, vscode, makeWrapper
+{ lib, runCommand, buildEnv, vscode, makeWrapper
 , vscodeExtensions ? [] }:
 
 /*

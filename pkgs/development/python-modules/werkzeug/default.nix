@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi
 , itsdangerous, hypothesis
-, pytest, requests, glibcLocales }:
+, pytest, requests }:
 
 buildPythonPackage rec {
   pname = "Werkzeug";

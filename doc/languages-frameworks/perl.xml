@@ -47,13 +47,13 @@ foo = import ../path/to/foo.nix {
   in <filename>all-packages.nix</filename>. You can test building a Perl
   package as follows:
 <screen>
-$ nix-build -A perlPackages.ClassC3
+<prompt>$ </prompt>nix-build -A perlPackages.ClassC3
 </screen>
   <varname>buildPerlPackage</varname> adds <literal>perl-</literal> to the
   start of the name attribute, so the package above is actually called
   <literal>perl-Class-C3-0.21</literal>. So to install it, you can say:
 <screen>
-$ nix-env -i perl-Class-C3
+<prompt>$ </prompt>nix-env -i perl-Class-C3
 </screen>
   (Of course you can also install using the attribute name: <literal>nix-env -i
   -A perlPackages.ClassC3</literal>.)
@@ -148,7 +148,7 @@ ClassC3Componentised = buildPerlPackage rec {
   </para>
 
 <screen>
-$ nix-env -i nix-generate-from-cpan
+<prompt>$ </prompt>nix-env -i nix-generate-from-cpan
 </screen>
 
   <para>
@@ -156,7 +156,7 @@ $ nix-env -i nix-generate-from-cpan
    unpacks the corresponding package, and prints a Nix expression on standard
    output. For example:
 <screen>
-$ nix-generate-from-cpan XML::Simple
+<prompt>$ </prompt>nix-generate-from-cpan XML::Simple
   XMLSimple = buildPerlPackage rec {
     name = "XML-Simple-2.22";
     src = fetchurl {

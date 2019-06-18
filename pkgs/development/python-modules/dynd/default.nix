@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
 , isPyPy
 , isPy3k
 , cython

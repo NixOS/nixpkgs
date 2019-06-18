@@ -9,7 +9,7 @@
   With the command <command>nix-env</command>, you can install and uninstall
   packages from the command line. For instance, to install Mozilla Thunderbird:
 <screen>
-$ nix-env -iA nixos.thunderbird</screen>
+<prompt>$ </prompt>nix-env -iA nixos.thunderbird</screen>
   If you invoke this as root, the package is installed in the Nix profile
   <filename>/nix/var/nix/profiles/default</filename> and visible to all users
   of the system; otherwise, the package ends up in
@@ -25,7 +25,7 @@ $ nix-env -iA nixos.thunderbird</screen>
   Packages come from the NixOS channel. You typically upgrade a package by
   updating to the latest version of the NixOS channel:
 <screen>
-$ nix-channel --update nixos
+<prompt>$ </prompt>nix-channel --update nixos
 </screen>
   and then running <literal>nix-env -i</literal> again. Other packages in the
   profile are <emphasis>not</emphasis> affected; this is the crucial difference
@@ -34,21 +34,21 @@ $ nix-channel --update nixos
   their current versions in the NixOS channel. You can however upgrade all
   packages for which there is a newer version by doing:
 <screen>
-$ nix-env -u '*'
+<prompt>$ </prompt>nix-env -u '*'
 </screen>
  </para>
 
  <para>
   A package can be uninstalled using the <option>-e</option> flag:
 <screen>
-$ nix-env -e thunderbird
+<prompt>$ </prompt>nix-env -e thunderbird
 </screen>
  </para>
 
  <para>
   Finally, you can roll back an undesirable <command>nix-env</command> action:
 <screen>
-$ nix-env --rollback
+<prompt>$ </prompt>nix-env --rollback
 </screen>
  </para>
 

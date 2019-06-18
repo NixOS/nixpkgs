@@ -139,9 +139,7 @@ in {
 
   setuptools = toPythonModule (callPackage ../development/python-modules/setuptools { });
 
-  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit {
-    boost = pkgs.boost160;
-  };
+  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
   acoustics = callPackage ../development/python-modules/acoustics { };
 
@@ -253,6 +251,8 @@ in {
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
 
   azure-common = callPackage ../development/python-modules/azure-common { };
+
+  azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
 
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
@@ -704,6 +704,8 @@ in {
 
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
 
+  pydocumentdb = callPackage ../development/python-modules/pydocumentdb { };
+
   pyexiv2 = disabledIf isPy3k (toPythonModule (callPackage ../development/python-modules/pyexiv2 {}));
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
@@ -822,6 +824,8 @@ in {
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
+
+  pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
@@ -1744,6 +1748,8 @@ in {
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
+
+  pytest-watch = callPackage ../development/python-modules/pytest-watch { };
 
   pytestpep8 = callPackage ../development/python-modules/pytest-pep8 { };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , cmake, ccid, qttools, qttranslations
 , pkgconfig, pcsclite, hicolor-icon-theme 
 }:

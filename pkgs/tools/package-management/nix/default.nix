@@ -9,7 +9,7 @@
 let
 
 common =
-  { lib, stdenv, fetchurl, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
+  { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline
   , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns, jq
   , busybox-sandbox-shell

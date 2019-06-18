@@ -2,8 +2,7 @@
 
 let
   mkCoqPackages' = self: coq:
-    let newScope = self.newScope;
-        callPackage = self.callPackage; in {
+    let callPackage = self.callPackage; in {
       inherit coq;
       coqPackages = self;
 

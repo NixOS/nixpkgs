@@ -1,5 +1,4 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
 , eigen
 , nlopt

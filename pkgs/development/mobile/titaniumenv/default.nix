@@ -1,4 +1,4 @@
-{pkgs, pkgs_i686, androidenv, xcodeenv, tiVersion ? "7.1.0.GA"}:
+{pkgs, androidenv, xcodeenv, tiVersion ? "7.1.0.GA"}:
 
 rec {
   titaniumsdk = let

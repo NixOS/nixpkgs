@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, bison, jq, python, spirv-tools, spirv-headers }:
+{ stdenv, fetchFromGitHub, cmake, bison, jq, python, spirv-tools, spirv-headers }:
 stdenv.mkDerivation rec {
   name = "glslang-${version}";
   version = "7.11.3113";

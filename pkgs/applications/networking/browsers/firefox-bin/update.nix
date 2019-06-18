@@ -1,5 +1,4 @@
-{ stdenv
-, name
+{ name
 , channel
 , writeScript
 , xidel

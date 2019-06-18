@@ -1,4 +1,4 @@
-{ stdenv, lib, writeText, bazel, bazelTest, runLocal }:
+{ writeText, bazel, bazelTest, runLocal }:
 
 let
   WORKSPACE = writeText "WORKSPACE" ''

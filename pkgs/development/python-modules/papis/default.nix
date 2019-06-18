@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, xdg_utils
+{ lib, buildPythonPackage, fetchFromGitHub, xdg_utils
 , requests, filetype, pyparsing, configparser, arxiv2bib
 , pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
 , pylibgen, click, python-slugify, habanero, isbnlib

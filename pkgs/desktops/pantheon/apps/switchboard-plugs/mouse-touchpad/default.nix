@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pantheon, fetchpatch, meson, ninja, pkgconfig, vala
+{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala
 , libgee, granite, gtk3, switchboard, elementary-settings-daemon }:
 
 stdenv.mkDerivation rec {

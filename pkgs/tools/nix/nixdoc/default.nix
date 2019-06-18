@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, rustPlatform, darwin }:
+{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   name    = "nixdoc-${version}";

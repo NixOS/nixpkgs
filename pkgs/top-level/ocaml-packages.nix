@@ -1,8 +1,6 @@
 { lib, newScope, pkgs, config }:
 
 let
-  inherit (pkgs.stdenv.hostPlatform) system;
-
   liftJaneStreet = self: super: super.janeStreet // super;
 
   mkOcamlPackages = ocaml:
@@ -782,8 +780,8 @@ let
     janeStreet = import ../development/ocaml-modules/janestreet {
       inherit janePackage ocamlbuild angstrom ctypes cryptokit;
       inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
-      inherit ppx_deriving re zarith ppxlib;
-      inherit (pkgs) stdenv openssl;
+      inherit ppx_deriving re ppxlib;
+      inherit (pkgs) openssl;
     };
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {

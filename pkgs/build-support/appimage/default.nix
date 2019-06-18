@@ -1,4 +1,4 @@
-{ pkgs, stdenv, libarchive, patchelf, zlib, buildFHSUserEnv, writeScript }:
+{ stdenv, libarchive, patchelf, zlib, buildFHSUserEnv, writeScript }:
 
 rec {
   # Both extraction functions could be unified, but then

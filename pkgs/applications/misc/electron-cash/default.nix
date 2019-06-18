@@ -1,11 +1,5 @@
 { lib, fetchurl, python3Packages, qtbase, makeWrapper }:
 
-let
-
-  python = python3Packages.python;
-
-in
-
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
   version = "4.0.2";

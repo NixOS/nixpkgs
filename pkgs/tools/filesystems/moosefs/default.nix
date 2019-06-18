@@ -1,12 +1,10 @@
 { stdenv
-, fetchzip
 , fetchFromGitHub
 , makeWrapper
 , python
 , fuse
 , pkgconfig
 , libpcap
-, file
 , zlib 
 }:
 

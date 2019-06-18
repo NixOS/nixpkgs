@@ -1,5 +1,4 @@
 { stdenv
-, substituteAll
 , fetchurl
 , meson
 , ninja

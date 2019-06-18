@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
 , tornado
 , futures
 , html5lib

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "dpkg-${version}";
-  version = "1.19.6";
+  version = "1.19.7";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "0s1pyj7g8ign630biqq1ycjy8cw733fk1dgas9w59mav3wns3caf";
+    sha256 = "1s4nlaqz4c3p5r85f4il8m21825sfy2s9wgz4ajhl332vzggw9sc";
   };
 
   configureFlags = [

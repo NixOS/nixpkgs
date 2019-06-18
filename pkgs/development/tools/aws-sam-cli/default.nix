@@ -1,6 +1,5 @@
 { lib
 , python
-, fetchFromGitHub
 }:
 
 let

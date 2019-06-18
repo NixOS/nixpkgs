@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, feh, libxslt,
+{ stdenv, python3Packages, fetchFromGitHub, libxslt,
   gobject-introspection, gtk3, wrapGAppsHook, gnome3 }:
 
 python3Packages.buildPythonApplication rec {

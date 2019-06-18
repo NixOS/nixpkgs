@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitHub
-, autoreconfHook, zlib, gmock, which, buildPackages
+, autoreconfHook, zlib, gmock, buildPackages
 , version, sha256
 , ...
 }:

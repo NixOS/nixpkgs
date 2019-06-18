@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , cryptography
 , bcrypt, gssapi, libnacl, libsodium, nettle, pyopenssl
 , openssl, openssh }:

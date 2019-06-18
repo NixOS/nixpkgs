@@ -1,7 +1,5 @@
 { buildBazelPackage
-, cacert
 , fetchFromGitHub
-, fetchpatch
 , git
 , go
 , python

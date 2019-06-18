@@ -9,7 +9,7 @@
 { stdenv, fetchurl, fetchzip
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
-, llvm, cmake
+, cmake
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
 # standard library dependencies

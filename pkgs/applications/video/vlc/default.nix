@@ -11,7 +11,6 @@
 , onlyLibVLC ? false
 , withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null
 , jackSupport ? false
-, fetchpatch
 , removeReferencesTo
 , chromecastSupport ? true, protobuf, libmicrodns
 }:

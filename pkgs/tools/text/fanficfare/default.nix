@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ stdenv, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "FanFicFare";
