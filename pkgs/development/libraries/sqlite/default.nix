@@ -71,7 +71,9 @@ stdenv.mkDerivation rec {
     sed -i $out/lib/libsqlite3.la -e "s/dependency_libs=.*/dependency_libs='''/"
   '';
 
-  enableParallelBuilding = true;
+  # Parallel building fails on 6c/12t Ryzen: https://github.com/NixOS/nixpkgs/issues/63157
+  enableParallelBuilding = false;
+
   doCheck = false; # fails to link against tcl
 
   meta = {
