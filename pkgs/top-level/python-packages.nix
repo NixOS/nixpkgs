@@ -4312,6 +4312,8 @@ in {
 
   robotframework-selenium2library = callPackage ../development/python-modules/robotframework-selenium2library { };
 
+  robotframework-sshlibrary = callPackage ../development/python-modules/robotframework-sshlibrary { };
+
   robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
 
   robotstatuschecker = callPackage ../development/python-modules/robotstatuschecker { };
