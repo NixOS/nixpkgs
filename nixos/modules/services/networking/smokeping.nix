@@ -101,17 +101,17 @@ in
         '';
         example = literalExample ''
           # near constant pings.
-					step     = 30
-					pings    = 20
-					# consfn mrhb steps total
-					AVERAGE  0.5   1  10080
-					AVERAGE  0.5  12  43200
-							MIN  0.5  12  43200
-							MAX  0.5  12  43200
-					AVERAGE  0.5 144   7200
-							MAX  0.5 144   7200
-							MIN  0.5 144   7200
-				'';
+          step     = 30
+          pings    = 20
+          # consfn mrhb steps total
+          AVERAGE  0.5   1  10080
+          AVERAGE  0.5  12  43200
+              MIN  0.5  12  43200
+              MAX  0.5  12  43200
+          AVERAGE  0.5 144   7200
+              MAX  0.5 144   7200
+              MIN  0.5 144   7200
+        '';
         description = ''Configure the ping frequency and retention of the rrd files.
           Once set, changing the interval will require deletion or migration of all
           the collected data.'';

@@ -86,10 +86,10 @@ in
 
           <note>
             <para>If you use the firewall consider adding the following:</para>
-            <programlisting>
-              networking.firewall.allowedTCPPorts = [ 139 445 ];
-              networking.firewall.allowedUDPPorts = [ 137 138 ];
-            </programlisting>
+          <programlisting>
+            networking.firewall.allowedTCPPorts = [ 139 445 ];
+            networking.firewall.allowedUDPPorts = [ 137 138 ];
+          </programlisting>
           </note>
         '';
       };

@@ -13,39 +13,39 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-rebuild</command><group choice='req'> 
+   <command>nixos-rebuild</command><group choice='req'>
    <arg choice='plain'>
     <option>switch</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>boot</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>test</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>build</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>dry-build</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>dry-activate</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>edit</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>build-vm</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>build-vm-with-bootloader</option>
    </arg>
@@ -54,33 +54,33 @@
    <arg>
     <option>--upgrade</option>
    </arg>
-    
+
    <arg>
     <option>--install-bootloader</option>
    </arg>
-    
+
    <arg>
     <option>--no-build-nix</option>
    </arg>
-    
+
    <arg>
     <option>--fast</option>
    </arg>
-    
+
    <arg>
     <option>--rollback</option>
    </arg>
-    
+
    <arg>
     <option>--builders</option> <replaceable>builder-spec</replaceable>
    </arg>
    <sbr />
    <arg>
-    <group choice='req'> 
+    <group choice='req'>
     <arg choice='plain'>
      <option>--profile-name</option>
     </arg>
-     
+
     <arg choice='plain'>
      <option>-p</option>
     </arg>
@@ -160,7 +160,7 @@
        the current directory, which points to the output of the top-level
        “system” derivation. This is essentially the same as doing
 <screen>
-$ nix-build /path/to/nixpkgs/nixos -A system
+<prompt>$ </prompt>nix-build /path/to/nixpkgs/nixos -A system
 </screen>
        Note that you do not need to be <literal>root</literal> to run
        <command>nixos-rebuild build</command>.
@@ -215,8 +215,8 @@ $ nix-build /path/to/nixpkgs/nixos -A system
        at the script that starts the VM. Thus, to test a NixOS configuration in
        a virtual machine, you should do the following:
 <screen>
-$ nixos-rebuild build-vm
-$ ./result/bin/run-*-vm
+<prompt>$ </prompt>nixos-rebuild build-vm
+<prompt>$ </prompt>./result/bin/run-*-vm
 </screen>
       </para>
       <para>
@@ -375,7 +375,7 @@ $ ./result/bin/run-*-vm
       <filename>test.nix</filename> without affecting the default system
       profile, you would do:
 <screen>
-$ nixos-rebuild switch -p test -I nixos-config=./test.nix
+<prompt>$ </prompt>nixos-rebuild switch -p test -I nixos-config=./test.nix
 </screen>
       The new configuration will appear in the GRUB 2 submenu “NixOS -
       Profile 'test'”.

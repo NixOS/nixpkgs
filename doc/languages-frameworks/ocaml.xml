@@ -62,7 +62,7 @@ buildDunePackage rec {
     maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
   };
 }
- </programlisting>
+</programlisting>
 
  <para>
   Here is a second example, this time using a source archive generated with
@@ -93,5 +93,5 @@ buildDunePackage rec {
     maintainers = [ maintainers.eqyiel ];
   };
 }
- </programlisting>
+</programlisting>
 </section>

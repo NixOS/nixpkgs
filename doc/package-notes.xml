@@ -92,9 +92,9 @@ modulesTree = [kernel]
         <para>
          If needed you can also run <literal>make menuconfig</literal>:
 <screen>
-$ nix-env -i ncurses
-$ export NIX_CFLAGS_LINK=-lncurses
-$ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
+<prompt>$ </prompt>nix-env -i ncurses
+<prompt>$ </prompt>export NIX_CFLAGS_LINK=-lncurses
+<prompt>$ </prompt>make menuconfig ARCH=<replaceable>arch</replaceable></screen>
         </para>
        </listitem>
        <listitem>
@@ -142,8 +142,8 @@ $ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
   <para>
    The generator is invoked as follows:
 <screen>
-$ cd pkgs/servers/x11/xorg
-$ cat tarballs-7.5.list extra.list old.list \
+<prompt>$ </prompt>cd pkgs/servers/x11/xorg
+<prompt>$ </prompt>cat tarballs-7.5.list extra.list old.list \
   | perl ./generate-expr-from-tarballs.pl
 </screen>
    For each of the tarballs in the <filename>.list</filename> files, the script
@@ -160,8 +160,8 @@ $ cat tarballs-7.5.list extra.list old.list \
    A file like <filename>tarballs-7.5.list</filename> contains all tarballs in
    a X.org release. It can be generated like this:
 <screen>
-$ export i="mirror://xorg/X11R7.4/src/everything/"
-$ cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) \
+<prompt>$ </prompt>export i="mirror://xorg/X11R7.4/src/everything/"
+<prompt>$ </prompt>cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) \
   | perl -e 'while (&lt;>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' \
   | sort > tarballs-7.4.list
 </screen>
@@ -210,7 +210,7 @@ $ cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) \
    often available. It is possible to list available Eclipse packages by
    issuing the command:
 <screen>
-$ nix-env -f '&lt;nixpkgs&gt;' -qaP -A eclipses --description
+<prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -qaP -A eclipses --description
 </screen>
    Once an Eclipse variant is installed it can be run using the
    <command>eclipse</command> command, as expected. From within Eclipse it is
@@ -250,7 +250,7 @@ packageOverrides = pkgs: {
    available for installation using <varname>eclipseWithPlugins</varname> by
    running
 <screen>
-$ nix-env -f '&lt;nixpkgs&gt;' -qaP -A eclipses.plugins --description
+<prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -qaP -A eclipses.plugins --description
 </screen>
   </para>
 
