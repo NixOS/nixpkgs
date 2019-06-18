@@ -807,6 +807,18 @@ in {
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
+  pyside2 = toPythonModule (callPackage ../development/python-modules/pyside2 {
+    inherit (pkgs) cmake qt5 ninja;
+  });
+
+  shiboken2 = toPythonModule (callPackage ../development/python-modules/shiboken2 {
+    inherit (pkgs) cmake qt5 llvmPackages;
+  });
+
+  pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
+    inherit (pkgs) cmake qt5;
+  });
+
   pyslurm = callPackage ../development/python-modules/pyslurm {
     slurm = pkgs.slurm;
   };
