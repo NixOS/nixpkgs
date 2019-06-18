@@ -673,6 +673,8 @@ let
 
     ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
 
+    printbox = callPackage ../development/ocaml-modules/printbox { };
+
     process = callPackage ../development/ocaml-modules/process { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
