@@ -19,7 +19,6 @@ python3.pkgs.buildPythonApplication rec {
     click
     effect
     jinja2
-    requests
   ];
   meta = with stdenv.lib; {
     description = "Prefetch sources from github";
