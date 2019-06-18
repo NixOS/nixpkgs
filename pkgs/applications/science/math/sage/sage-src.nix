@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
       sha256 = "07p9i0fwjgapmfvmi436yn6v60p8pvmxqjc93wsssqgh5kd8qw3n";
       stripLen = 1;
     })
+
+    # https://trac.sagemath.org/ticket/28007
+    ./patches/threejs-offline.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
