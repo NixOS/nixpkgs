@@ -480,9 +480,9 @@ pullImage {
     <literal>nix-prefetch-docker</literal> command can be used to get required
     image parameters:
 
-<programlisting>
-$ nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql --image-tag 5
-</programlisting>
+<screen>
+<prompt>$ </prompt>nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql --image-tag 5
+</screen>
 
     Since a given <varname>imageName</varname> may transparently refer to a
     manifest list of images which support multiple architectures and/or
@@ -491,17 +491,17 @@ $ nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql 
     By default it will match the OS and architecture of the host the command is
     run on.
 
-<programlisting>
-$ nix-prefetch-docker --image-name mysql --image-tag 5 --arch x86_64 --os linux
-</programlisting>
+<screen>
+<prompt>$ </prompt>nix-prefetch-docker --image-name mysql --image-tag 5 --arch x86_64 --os linux
+</screen>
 
     Desired image name and tag can be set using
     <option>--final-image-name</option> and <option>--final-image-tag</option>
     arguments:
 
-<programlisting>
-$ nix-prefetch-docker --image-name mysql --image-tag 5 --final-image-name eu.gcr.io/my-project/mysql --final-image-tag prod
-</programlisting>
+<screen>
+<prompt>$ </prompt>nix-prefetch-docker --image-name mysql --image-tag 5 --final-image-name eu.gcr.io/my-project/mysql --final-image-tag prod
+</screen>
   </para>
  </section>
 
@@ -537,7 +537,7 @@ exportImage {
 
   name = someLayeredImage.name;
 }
-  </programlisting>
+</programlisting>
   </example>
 
   <para>

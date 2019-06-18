@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.19.5";
+  version = "0.20.0";
 
   src =
     let
@@ -10,11 +10,11 @@ rustPlatform.buildRustPackage rec {
         owner = "sagiegurari";
         repo = pname;
         rev = version;
-        sha256 = "0xjyzsi3n3lb5g4gl6v0s4p87nazkqgjf244m792iji9i568ynjb";
+        sha256 = "0hf8g91iv4c856whaaqrv5s8z56gi3086pva6vdwmn75gwxkw7zk";
       };
       cargo-lock = fetchurl {
-        url = "https://gist.githubusercontent.com/xrelkd/e4c9c7738b21f284d97cb7b1d181317d/raw/285cf8f9b0ab33db0d656fdc8e759feed55c0167/cargo-make-Cargo.lock";
-        sha256 = "0l2i2hq43k482m2w6hpapaq53r8bjljfcszp6csljj4fvxcl62yj";
+        url = "https://gist.githubusercontent.com/xrelkd/e4c9c7738b21f284d97cb7b1d181317d/raw/8b4ca42376199d4e4781473b4112ef8f18bbd1cc/cargo-make-Cargo.lock";
+        sha256 = "1zffq7r1cnzdqw4d3vdvlwj56pfak9gj14ibn1g0j7lncwxw2dgs";
       };
     in
     runCommand "cargo-make-src" {} ''
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "1rmdmvr5wc2m0yv3dy07cv9y1xrwlfri3hk97zjwv5f73wgncspy";
+  cargoSha256 = "1r2fiwcjf739rkprrwidgsd9i5pjgk723ipazmlccz2jpwbrk7zr";
 
   # Some tests fail because they need network access.
   # However, Travis ensures a proper build.

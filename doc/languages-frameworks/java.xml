@@ -68,7 +68,7 @@ installPhase =
   can be done in a generic fashion with the <literal>--set</literal> argument
   of <literal>makeWrapper</literal>:
 <programlisting>
-  --set JAVA_HOME ${jdk.home}
+--set JAVA_HOME ${jdk.home}
 </programlisting>
  </para>
 

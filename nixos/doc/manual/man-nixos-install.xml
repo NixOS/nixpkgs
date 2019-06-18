@@ -13,72 +13,72 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-install</command> 
+   <command>nixos-install</command>
    <arg>
     <arg choice='plain'>
      <option>-I</option>
     </arg>
      <replaceable>path</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--root</option>
     </arg>
      <replaceable>root</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--system</option>
     </arg>
      <replaceable>path</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--no-channel-copy</option>
     </arg>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--no-root-passwd</option>
     </arg>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--no-bootloader</option>
     </arg>
    </arg>
-    
+
    <arg>
-    <group choice='req'> 
+    <group choice='req'>
     <arg choice='plain'>
      <option>--max-jobs</option>
     </arg>
-     
+
     <arg choice='plain'>
      <option>-j</option>
     </arg>
      </group> <replaceable>number</replaceable>
    </arg>
-    
+
    <arg>
     <option>--cores</option> <replaceable>number</replaceable>
    </arg>
-    
+
    <arg>
     <option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--show-trace</option>
     </arg>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--help</option>
@@ -255,12 +255,12 @@
    on an <literal>ext4</literal> file system created in
    <filename>/dev/sda1</filename>:
 <screen>
-$ mkfs.ext4 /dev/sda1
-$ mount /dev/sda1 /mnt
-$ nixos-generate-config --root /mnt
-$ # edit /mnt/etc/nixos/configuration.nix
-$ nixos-install
-$ reboot
+<prompt>$ </prompt>mkfs.ext4 /dev/sda1
+<prompt>$ </prompt>mount /dev/sda1 /mnt
+<prompt>$ </prompt>nixos-generate-config --root /mnt
+<prompt>$ </prompt># edit /mnt/etc/nixos/configuration.nix
+<prompt>$ </prompt>nixos-install
+<prompt>$ </prompt>reboot
 </screen>
   </para>
  </refsection>
