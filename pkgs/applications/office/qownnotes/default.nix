@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qownnotes";
-  version = "19.5.7";
+  version = "19.6.1";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
     # Can grab official version like so:
     # $ curl https://download.tuxfamily.org/qownnotes/src/qownnotes-19.1.8.tar.xz.sha256
-    sha256 = "0dpzv1ww7a7bymgv1ljka5i0zaa1m4zii5ckl390vfpihqy766z3";
+    sha256 = "0m56klcs1bq5xhbn2kmlzv8nalscxw6wimrmqjmharif97cyddc6";
   };
 
   nativeBuildInputs = [ qmake qttools ];
