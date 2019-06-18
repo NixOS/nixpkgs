@@ -1768,7 +1768,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoamdgpu = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa_noglu, libGL, libdrm, udev, xorgserver }: stdenv.mkDerivation {
+  xf86videoamdgpu = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa, libGL, libdrm, udev, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-amdgpu-19.0.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1777,7 +1777,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ xorgproto mesa_noglu libGL libdrm udev xorgserver ];
+    buildInputs = [ xorgproto mesa libGL libdrm udev xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -1820,7 +1820,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoati = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa_noglu, libGL, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
+  xf86videoati = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa, libGL, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-ati-19.0.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1829,7 +1829,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ xorgproto mesa_noglu libGL libdrm udev libpciaccess xorgserver ];
+    buildInputs = [ xorgproto mesa libGL libdrm udev libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 

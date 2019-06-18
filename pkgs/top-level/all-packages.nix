@@ -1083,9 +1083,7 @@ in
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
 
-  blsd = callPackage ../tools/misc/blsd {
-    libgit2 = libgit2_0_27;
-  };
+  blsd = callPackage ../tools/misc/blsd { };
 
   bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
 
@@ -10216,7 +10214,7 @@ in
   # Multi-arch "drivers" which we want to build for i686.
   driversi686Linux = recurseIntoAttrs {
     inherit (pkgsi686Linux)
-      mesa_drivers
+      mesa
       vaapiIntel
       libvdpau-va-gl
       vaapiVdpau
@@ -10509,10 +10507,6 @@ in
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
   libgit2 = callPackage ../development/libraries/git2 {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  libgit2_0_27 = callPackage ../development/libraries/git2/0.27.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -12236,7 +12230,7 @@ in
   # libGL.so/libEGL.so/... to link agains them. Android NDK provides
   # an OpenGL implementation, we can just use that.
   libGL = if stdenv.hostPlatform.useAndroidPrebuilt then stdenv
-          else mesa_noglu.stubs;
+          else mesa.stubs;
 
   # Default libGLU
   libGLU = mesa_glu;
@@ -12251,28 +12245,16 @@ in
     extraOutputsToInstall = [ "dev" ];
   };
 
-  # Default derivation with libGL.so.1 to link into /run/opengl-drivers (if need)
-  libGL_driver = mesa_drivers;
-
-  libGLSupported = lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms;
-
-  mesa_noglu = callPackage ../development/libraries/mesa {
+  mesa = callPackage ../development/libraries/mesa {
     # 7 is the default, but only on Linux, so keep this for now
     llvmPackages = llvmPackages_7;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
-  mesa = mesa_noglu;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
-
-  # NOTE: 2018-07-12: legacy alias:
-  # gcsecurity bussiness is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
-  # floating point textures patents are expired,
-  # so package reduced to alias
-  mesa_drivers = mesa_noglu.drivers;
 
   ## End libGL/libGLU/Mesa stuff
 

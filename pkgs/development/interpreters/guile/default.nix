@@ -12,11 +12,11 @@
 
 (rec {
   name = "guile-${version}";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "11j01agvnci2cx32wwpqs9078856yxmvs15gcsz7ganpkj2ahlw3";
+    sha256 = "07p3g0v2ba2vlfbfidqzlgbhnzdx46wh2rgc5gszq1mjyx5bks6r";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -42,7 +42,6 @@
 
   patches = [
     ./eai_system.patch
-    ./riscv.patch
   ] ++ stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
     ++ stdenv.lib.optional stdenv.isDarwin (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";

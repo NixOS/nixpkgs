@@ -250,6 +250,10 @@ in {
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
 
+  azure-cli-core = callPackage ../development/python-modules/azure-cli-core { };
+
+  azure-cli-telemetry = callPackage ../development/python-modules/azure-cli-telemetry { };
+
   azure-common = callPackage ../development/python-modules/azure-common { };
 
   azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
@@ -1090,6 +1094,8 @@ in {
 
   amqplib = callPackage ../development/python-modules/amqplib {};
 
+  antlr4-python2-runtime = callPackage ../development/python-modules/antlr4-python2-runtime {};
+
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {};
 
   apipkg = callPackage ../development/python-modules/apipkg {};
@@ -1688,9 +1694,9 @@ in {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
-  pytest = self.pytest_42;
+  pytest = self.pytest_4;
 
-  pytest_42 = callPackage ../development/python-modules/pytest {
+  pytest_4 = callPackage ../development/python-modules/pytest {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
@@ -3157,6 +3163,8 @@ in {
   konfig = callPackage ../development/python-modules/konfig { };
 
   kitchen = callPackage ../development/python-modules/kitchen { };
+
+  knack = callPackage ../development/python-modules/knack { };
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
