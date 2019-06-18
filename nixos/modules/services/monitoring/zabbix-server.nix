@@ -17,6 +17,8 @@ let
 
   configFile = pkgs.writeText "zabbix_server.conf"
     ''
+      ListenPort = ${cfg.listenPort}
+
       LogFile = ${logDir}/zabbix_server
 
       PidFile = ${pidFile}
@@ -25,18 +27,18 @@ let
         DBHost = ${cfg.dbServer}
       ''}
 
-      DBName = zabbix
+      DBName = ${cfg.dbName}
 
-      DBUser = zabbix
+      DBUser = ${cfg.dbUser}
 
-      ${optionalString (cfg.dbPassword != "") ''
-        DBPassword = ${cfg.dbPassword}
-      ''}
+      DBPort = ${cfg.dbPort}
+
+      DBPassword = ${cfg.dbPassword}
 
       ${config.services.zabbixServer.extraConfig}
     '';
 
-  useLocalPostgres = cfg.dbServer == "localhost" || cfg.dbServer == "";
+  useLocalMysql = cfg.dbServer == "localhost" || cfg.dbServer == "";
 
 in
 
@@ -64,9 +66,32 @@ in
     };
 
     services.zabbixServer.dbPassword = mkOption {
-      default = "";
       type = types.str;
       description = "Password used to connect to the database server.";
+    };
+
+    services.zabbixServer.dbUser = mkOption {
+      default = "zabbix";
+      type = types.str;
+      description = "User used to connect to the database server.";
+    };
+
+    services.zabbixServer.dbPort = mkOption {
+      default = "3306";
+      type = types.str;
+      description = "Port used to connect to the database server.";
+    };
+
+    services.zabbixServer.dbName = mkOption {
+      default = "zabbix";
+      type = types.str;
+      description = "Port used to connect to the database server.";
+    };
+
+    services.zabbixServer.listenPort = mkOption {
+      default = "10051";
+      type = types.str;
+      description = "Port used to listen to the agent.";
     };
 
     services.zabbixServer.extraConfig = mkOption {
@@ -76,14 +101,14 @@ in
         Configuration that is injected verbatim into the configuration file.
       '';
     };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    services.postgresql.enable = useLocalPostgres;
+    services.mysql.enable = useLocalMysql;
+    services.mysql.package = pkgs.mysql;
 
     users.users = singleton
       { name = "zabbix";
@@ -95,32 +120,28 @@ in
       { description = "Zabbix Server";
 
         wantedBy = [ "multi-user.target" ];
-        after = optional useLocalPostgres "postgresql.service";
+        after = optional useLocalMysql "mysql.service";
 
         preStart =
           ''
             mkdir -m 0755 -p ${stateDir} ${logDir} ${libDir}
             chown zabbix ${stateDir} ${logDir} ${libDir}
-
-            if ! test -e "${libDir}/db-created"; then
-                ${pkgs.su}/bin/su -s "$SHELL" ${config.services.postgresql.superUser} -c '${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole zabbix' || true
-                ${pkgs.su}/bin/su -s "$SHELL" ${config.services.postgresql.superUser} -c '${pkgs.postgresql}/bin/createdb --owner zabbix zabbix' || true
-                cat ${pkgs.zabbix.server}/share/zabbix/db/schema/postgresql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
-                cat ${pkgs.zabbix.server}/share/zabbix/db/data/images_pgsql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
-                cat ${pkgs.zabbix.server}/share/zabbix/db/data/data.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
+            ${lib.optionalString (useLocalMysql) ''
+              if ! test -e "${libDir}/db-created"; then
+                ${pkgs.sudo}/bin/sudo -u ${config.services.mysql.user} ${pkgs.mysql}/bin/mysql -uroot -e 'CREATE DATABASE ${cfg.dbName}'
+                ${pkgs.sudo}/bin/sudo -u ${config.services.mysql.user} ${pkgs.mysql}/bin/mysql -uroot -e "GRANT ALL ON ${cfg.dbName}.* TO ${cfg.dbUser}@localhost IDENTIFIED BY \"${cfg.dbPassword}\";"
+                cat ${pkgs.zabbix.server}/share/zabbix/db/schema/mysql.sql | ${pkgs.sudo}/bin/sudo -u zabbix ${pkgs.mysql}/bin/mysql -u${cfg.dbUser} -p${cfg.dbPassword} ${cfg.dbName}
+                cat ${pkgs.zabbix.server}/share/zabbix/db/data/images.sql | ${pkgs.sudo}/bin/sudo -u zabbix ${pkgs.mysql}/bin/mysql -u${cfg.dbUser} -p${cfg.dbPassword} ${cfg.dbName}
+                cat ${pkgs.zabbix.server}/share/zabbix/db/data/data.sql | ${pkgs.sudo}/bin/sudo -u zabbix ${pkgs.mysql}/bin/mysql -u${cfg.dbUser} -p${cfg.dbPassword} ${cfg.dbName}
                 touch "${libDir}/db-created"
-            fi
+              fi''}
           '';
 
         path = [ pkgs.nettools ];
 
-        serviceConfig.ExecStart = "@${pkgs.zabbix.server}/sbin/zabbix_server zabbix_server --config ${configFile}";
+        serviceConfig.ExecStart = "${pkgs.zabbix.server}/sbin/zabbix_server --config ${configFile}";
         serviceConfig.Type = "forking";
-        serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = 2;
         serviceConfig.PIDFile = pidFile;
       };
-
   };
-
 }

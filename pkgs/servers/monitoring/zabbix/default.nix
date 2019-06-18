@@ -1,22 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib }:
+{ stdenv, fetchurl, pkgconfig, curl, openssl, zlib, pcre, libevent, mysql, libiconv, libxml2 }:
 
 let
-
-  version = "1.8.22";
+  version = "4.0.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "0cjj3c4j4b9sl3hgh1fck330z9q0gz2k68g227y0paal6k6f54g7";
+    url = "https://netix.dl.sourceforge.net/project/zabbix/ZABBIX%20Latest%20Stable/${version}/zabbix-${version}.tar.gz";
+    sha256 = "aa0bc9b5e5ca8e1b49b7551e2c5d86e0342c8630cba3a0b0e0e5d9c846e784d1";
   };
-
-  preConfigure =
-    ''
-      substituteInPlace ./configure \
-        --replace " -static" "" \
-        ${stdenv.lib.optionalString (stdenv.cc.libc != null) ''
-          --replace /usr/include/iconv.h ${stdenv.lib.getDev stdenv.cc.libc}/include/iconv.h
-        ''}
-    '';
 
 in
 
@@ -25,51 +15,62 @@ in
   server = stdenv.mkDerivation {
     name = "zabbix-${version}";
 
-    inherit src preConfigure;
-
+    inherit src;
+    NIX_CFLAGS_COMPILE = "-L${mysql.connector-c}/lib/mysql -I${mysql.connector-c}/include/mysql";
     configureFlags = [
-      "--enable-agent"
       "--enable-server"
-      "--with-pgsql"
+      "--with-mysql"
       "--with-libcurl"
+      "--with-libxml2"
+      "--with-zlib"
+      "--with-libpcre=${pcre.dev}"
+      "--with-libevent=${libevent.dev}"
+      "--with-iconv=${libiconv}"
+      "--with-openssl=${openssl.dev}"
     ];
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ postgresql curl openssl zlib ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ mysql curl openssl zlib pcre libxml2 libevent ] ;
 
     postInstall =
       ''
         mkdir -p $out/share/zabbix
         cp -prvd frontends/php $out/share/zabbix/php
         mkdir -p $out/share/zabbix/db/data
-        cp -prvd create/data/*.sql $out/share/zabbix/db/data
+        cp -prvd database/mysql/data.sql $out/share/zabbix/db/data/data.sql
+        cp -prvd database/mysql/images.sql $out/share/zabbix/db/data/images.sql
         mkdir -p $out/share/zabbix/db/schema
-        cp -prvd create/schema/*.sql $out/share/zabbix/db/schema
+        cp -prvd database/mysql/schema.sql $out/share/zabbix/db/schema/mysql.sql
       '';
 
-    meta = {
-      description = "An enterprise-class open source distributed monitoring solution";
-      homepage = https://www.zabbix.com/;
-      license = "GPL";
-      maintainers = [ stdenv.lib.maintainers.eelco ];
-      platforms = stdenv.lib.platforms.linux;
+    meta = with stdenv.lib; {
+      description = "An enterprise-class open source distributed monitoring solution (server)";
+      homepage = http://www.zabbix.com/;
+      license = licenses.gpl2;
+      maintainers = [ maintainers.psyanticy ];
+      platforms = platforms.linux;
     };
   };
 
   agent = stdenv.mkDerivation {
     name = "zabbix-agent-${version}";
 
-    inherit src preConfigure;
+    inherit src;
 
-    configureFlags = [ "--enable-agent" ];
+    configureFlags = [
+      "--enable-agent"
+      "--with-libpcre=${pcre.dev}"
+      "--with-iconv=${libiconv}"
+      "--with-openssl=${openssl.dev}"
+    ];
+    buildInputs = [ pcre libiconv openssl ];
 
     meta = with stdenv.lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
-      homepage = https://www.zabbix.com/;
+      homepage = http://www.zabbix.com/;
       license = licenses.gpl2;
-      maintainers = [ maintainers.eelco ];
+      maintainers = [ maintainers.psyanticy ];
       platforms = platforms.linux;
     };
   };
-
 }
