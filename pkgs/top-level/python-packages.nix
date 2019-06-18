@@ -252,6 +252,8 @@ in {
 
   azure-common = callPackage ../development/python-modules/azure-common { };
 
+  azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
+
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
