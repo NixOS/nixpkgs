@@ -5,6 +5,7 @@
 , makeWrapper
 , buildFHSUserEnv
 , libselinux
+, libarchive
 , xorg
 # Conda installs its packages and environments under this directory
 , installationPath ? "~/.conda"
@@ -59,6 +60,7 @@ in
       # Some other required environment variables
       export FONTCONFIG_FILE=/etc/fonts/fonts.conf
       export QTCOMPOSE=${xorg.libX11}/share/X11/locale
+      export LIBARCHIVE=${libarchive.lib}/lib/libarchive.so
     '';
 
     meta = {
