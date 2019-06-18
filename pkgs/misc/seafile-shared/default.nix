@@ -1,14 +1,14 @@
 {stdenv, fetchFromGitHub, which, autoreconfHook, pkgconfig, curl, vala, python, intltool, fuse, ccnet}:
 
 stdenv.mkDerivation rec {
-  version = "6.2.11";
+  version = "7.0.1";
   name = "seafile-shared-${version}";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
     rev = "v${version}";
-    sha256 = "16d4m5n5zhip13l6pv951lm081pnwxpiqcm7j4gxqm1ian48m787";
+    sha256 = "0d53r3s6ylr4zlbsrxi8z0z7s2lzh05wbqhfxz4n1vva6izz11bk";
   };
 
   nativeBuildInputs = [ pkgconfig which autoreconfHook vala intltool ];
