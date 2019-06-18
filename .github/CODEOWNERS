@@ -107,8 +107,8 @@
 # Eclipse
 /pkgs/applications/editors/eclipse @rycee
 
-# https://github.com/NixOS/nixpkgs/issues/31401
-/lib/licenses.nix @ghost
+# Licenses
+/lib/licenses.nix @alyssais
 
 # Qt / KDE
 /pkgs/applications/kde @ttuegel
