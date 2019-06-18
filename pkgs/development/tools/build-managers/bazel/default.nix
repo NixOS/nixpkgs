@@ -2,9 +2,9 @@
 # this package (through the fixpoint glass)
 , bazel
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
-, which, python, gawk, gnused, gnutar, gnugrep, gzip, findutils
+, which, python3, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
-, python3, writeScript
+, writeScript
 # Apple dependencies
 , cctools, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
@@ -17,11 +17,11 @@
 }:
 
 let
-  version = "0.26.1";
+  version = "0.27.0";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "000ny51hwnjyizm1md4w8q7m832jhf3c767pgbvg6nc7h67lzsf0";
+    sha256 = "0yn662dzgfr8ls4avfl12k5sr4f210bab12wml18bh4sjlxhs263";
   };
 
   # TODO: turn those into a test and turn them back on
@@ -85,7 +85,7 @@ let
     #        ],
     #     )
     #
-    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip ];
+    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip python3 ];
 
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
@@ -263,8 +263,8 @@ stdenv.mkDerivation rec {
       # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
       # See also `postFixup` where python is added to $out/nix-support
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
-          --replace "/usr/bin/env python" "${python}/bin/python" \
-          --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
+          --replace "/usr/bin/env python" "${python3}/bin/python" \
+          --replace "NIX_STORE_PYTHON_PATH" "${python3}/bin/python" \
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|' \
@@ -338,7 +338,7 @@ stdenv.mkDerivation rec {
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
     zip
-    python
+    python3
     unzip
     makeWrapper
     which
@@ -429,7 +429,7 @@ stdenv.mkDerivation rec {
     echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
-    echo "${python}" >> $out/nix-support/depends
+    echo "${python3}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;
