@@ -53,6 +53,11 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    # prevent build tools from leaking into closure
+    echo 'See `nix-store --query --tree ${placeholder "out"}`.' > $out/lib/libffado/static_info.txt
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://www.ffado.org;
     description = "FireWire audio drivers";
