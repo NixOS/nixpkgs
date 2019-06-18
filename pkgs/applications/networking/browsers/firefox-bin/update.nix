@@ -24,7 +24,7 @@ in writeScript "update-${name}" ''
   pushd ${basePath}
 
   HOME=`mktemp -d`
-  cat ${./firefox.key} | gpg --import
+  gpg --keyserver hkps://gpg.mozilla.org --recv-keys 14F26682D0916CDD81E37B6D61B7B526D98F0353
 
   tmpfile=`mktemp`
   url=${baseUrl}
