@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "geopy";
-  version = "1.18.1";
+  version = "1.20.0";
   disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07a21f699b3daaef726de7278f5d65f944609306ab8a389e9f56e09abf86eac8";
+    sha256 = "9419bc90ee6231590c4ae7acf1cf126cefbd0736942da7a6a1436946e80830e2";
   };
 
   doCheck = false;  # too much

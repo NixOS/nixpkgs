@@ -261,6 +261,14 @@
   </listitem>
   <listitem>
     <para>
+     The package <literal>avahi</literal> is now built to look up service
+     definitions from <literal>/etc/avahi/services</literal> instead of its
+     output directory in the nix store. Accordingly the module
+     <option>avahi</option> now supports custom service definitions via
+     <option>services.avahi.extraServiceFiles</option>, which are then placed
+     in the aforementioned directory. See <citerefentry>
+     <refentrytitle>avahi.service</refentrytitle><manvolnum>5</manvolnum>
+     </citerefentry> for more information on custom service definitions.
       Since version 0.1.19, <literal>cargo-vendor</literal> honors package
       includes that are specified in the <filename>Cargo.toml</filename>
       file of Rust crates. <literal>rustPlatform.buildRustPackage</literal> uses
