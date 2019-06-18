@@ -12,9 +12,8 @@ let
   primaryBinary = "sublime_merge";
   primaryBinaryAliases = [ "smerge" ];
   downloadUrl = "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
-  downloadArchiveType = "tar.xz";
   versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
-  versionFile = "pkgs/applications/version-management/sublime-merge/default.nix";
+  versionFile = builtins.toString ./default.nix;
   archSha256 = sha256;
   arch = "x64";
 
@@ -26,7 +25,6 @@ in let
     version = buildVersion;
 
     src = fetchurl {
-      name = "${pname}-bin-${buildVersion}.${downloadArchiveType}";
       url = downloadUrl;
       sha256 = archSha256;
     };

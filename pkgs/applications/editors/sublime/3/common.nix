@@ -13,9 +13,8 @@ let
   primaryBinary = "sublime_text";
   primaryBinaryAliases = [ "subl" "sublime" "sublime3" ];
   downloadUrl = "https://download.sublimetext.com/sublime_text_3_build_${buildVersion}_${arch}.tar.bz2";
-  downloadArchiveType = "tar.bz2";
   versionUrl = "https://www.sublimetext.com/${if dev then "3dev" else "3"}";
-  versionFile = "pkgs/applications/editors/sublime/3/packages.nix";
+  versionFile = builtins.toString ./packages.nix;
   archSha256 =
     if stdenv.hostPlatform.system == "i686-linux" then
       x32sha256
@@ -35,7 +34,6 @@ in let
     version = buildVersion;
 
     src = fetchurl {
-      name = "${pname}-bin-${buildVersion}.${downloadArchiveType}";
       url = downloadUrl;
       sha256 = archSha256;
     };
