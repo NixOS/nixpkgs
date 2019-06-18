@@ -38,6 +38,11 @@ in stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gvfs/commit/bed1e9685c9f65f6a3ff3b39dd8547db3e7e77f6.patch";
       sha256 = "0hfybfaz2gfx3yyw5ymx6q0pqwkx2r1i7gzprfp80bplwslq0d4h";
     })
+    # CVE-2019-12795
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gvfs/commit/e3808a1b4042761055b1d975333a8243d67b8bfe.patch";
+      sha256 = "1lx6yxykx24mnq5izijqk744zj6rgww6ba76z0qjal4y0z3gsdqp";
+    })
   ];
 
   postPatch = ''
