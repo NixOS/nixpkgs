@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "slurp";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "slurp";
     rev = "v${version}";
-    sha256 = "15fqspg3cjl830l95ibibprxf9p13mc2rpyf9bdwsdx2f4qrkq62";
+    sha256 = "0580m6kaiilgsrcj608r837r37sl6a25y7w21p7d6ij20fs3gvg1";
   };
 
   nativeBuildInputs = [
