@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, fftw }:
 
 stdenv.mkDerivation rec {
-  name = "speexdsp-1.2rc3";
+  name = "speexdsp-1.2.0";
 
   src = fetchurl {
     url = "http://downloads.us.xiph.org/releases/speex/${name}.tar.gz";
-    sha256 = "1wcjyrnwlkayb20zdhp48y260rfyzg925qpjpljd5x9r01h8irja";
+    sha256 = "0wa7sqpk3x61zz99m7lwkgr6yv62ml6lfgs5xja65vlvdzy44838";
   };
 
   patches = [ ./build-fix.patch ];
