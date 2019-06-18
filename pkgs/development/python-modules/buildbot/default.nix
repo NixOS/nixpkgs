@@ -25,7 +25,7 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.3.1";
+    version = "2.3.1";   # don't forget to update hashes in plugins.nix
 
     src = fetchPypi {
       inherit pname version;
