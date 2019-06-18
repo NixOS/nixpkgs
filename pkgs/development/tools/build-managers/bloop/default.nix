@@ -2,7 +2,7 @@
 
 let
   baseName = "bloop";
-  version = "1.2.5";
+  version = "1.3.2";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -16,14 +16,14 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "19373fyb0g7irrdzb1vsjmyv5xj84qwbcfb6lm076px7wfyn0w1c";
+    outputHash     = "1npq02npk6qiwghgr3bqd1ala1kv8hwq1qkmyffvigcq7frkz4r8";
   };
 in
 stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
 
   # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
-  nailgunCommit = "0c325237";
+  nailgunCommit = "9327a60a";
 
   buildInputs = [ jdk makeWrapper deps ];
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
 
   client = fetchurl {
     url = "https://raw.githubusercontent.com/scalacenter/nailgun/${nailgunCommit}/pynailgun/ng.py";
-    sha256 = "0qjw4nsyb4cxg96jj1yv5c0ivcxvmscxxqfzll5w9p1pjb30bq0n";
+    sha256 = "6495926cda0c68ebef71ec0174de5b6700e2a3620932cd0b096dfeba62d18a7c";
   };
 
   zshCompletion = fetchurl {
     url = "https://raw.githubusercontent.com/scalacenter/bloop/v${version}/etc/zsh/_bloop";
-    sha256 = "1id6f1fgy2rk0q5aad6ffivhbxa94fallzsc04l9n0y1s2xdhqpm";
+    sha256 = "170a9031dd15ebceaee82023f947706e30f1a5c2422f29acc214ab8d102a1827";
   };
 
   installPhase = ''
