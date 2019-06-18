@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "1q3c4qsy4vb00a4p15km4w5d5xcppigf7rp4mqr3wln7i4d4lvnx";
   };
 
+  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" ];
+
   # Fix the install phase which tries to install into the pgsql extension dir,
   # and cannot be manually overridden. This is rather fragile but works OK.
   patchPhase = ''
