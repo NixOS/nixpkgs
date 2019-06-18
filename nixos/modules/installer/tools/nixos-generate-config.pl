@@ -264,6 +264,11 @@ if (scalar @bcacheDevices > 0) {
     push @initrdAvailableKernelModules, "bcache";
 }
 
+# Prevent unbootable systems if LVM snapshots are present at boot time.
+if (`lsblk -o TYPE` =~ "lvm") {
+    push @initrdKernelModules, "dm-snapshot";
+}
+
 my $virt = `systemd-detect-virt`;
 chomp $virt;
 
@@ -324,10 +329,19 @@ my @swapDevices;
 if (@swaps) {
     shift @swaps;
     foreach my $swap (@swaps) {
-        $swap =~ /^(\S+)\s/;
-        next unless -e $1;
-        my $dev = findStableDevPath $1;
-        push @swapDevices, "{ device = \"$dev\"; }";
+        my @fields = split ' ', $swap;
+        my $swapFilename = $fields[0];
+        my $swapType = $fields[1];
+        next unless -e $swapFilename;
+        my $dev = findStableDevPath $swapFilename;
+        if ($swapType =~ "partition") {
+            push @swapDevices, "{ device = \"$dev\"; }";
+        } elsif ($swapType =~ "file") {
+            # swap *files* are more likely specified in configuration.nix, so
+            # ignore them here.
+        } else {
+            die "Unsupported swap type: $swapType\n";
+        }
     }
 }
 
@@ -427,6 +441,10 @@ EOF
         }
     }
 
+    # Don't emit tmpfs entry for /tmp, because it most likely comes from the
+    # boot.tmpOnTmpfs option in configuration.nix (managed declaratively).
+    next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
+
     # Emit the filesystem.
     $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
@@ -517,6 +535,7 @@ sub multiLineList {
 }
 
 my $initrdAvailableKernelModules = toNixStringList(uniq @initrdAvailableKernelModules);
+my $initrdKernelModules = toNixStringList(uniq @initrdKernelModules);
 my $kernelModules = toNixStringList(uniq @kernelModules);
 my $modulePackages = toNixList(uniq @modulePackages);
 
@@ -536,6 +555,7 @@ my $hwConfig = <<EOF;
   imports =${\multiLineList("    ", @imports)};
 
   boot.initrd.availableKernelModules = [$initrdAvailableKernelModules ];
+  boot.initrd.kernelModules = [$initrdKernelModules ];
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap

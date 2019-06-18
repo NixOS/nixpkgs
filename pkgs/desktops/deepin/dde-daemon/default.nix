@@ -3,7 +3,7 @@
   deepin-gettext-tools, dde-api, deepin-desktop-schemas,
   deepin-wallpapers, deepin-desktop-base, alsaLib, glib, gtk3,
   libgudev, libinput, libnl, librsvg, linux-pam, networkmanager,
-  pulseaudio, xorg, python3, hicolor-icon-theme, glibc, tzdata, go,
+  pulseaudio, python3, hicolor-icon-theme, glibc, tzdata, go,
   deepin, makeWrapper, wrapGAppsHook }:
 
 buildGoPackage rec {

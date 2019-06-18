@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, mtdev, gsettings-qt ,
-  lxqt, qtx11extras, qtmultimedia, qtsvg, fontconfig, freetype ,
+{ stdenv, fetchFromGitHub, pkgconfig, qmake, mtdev ,
+  lxqt, qtx11extras, qtmultimedia, qtsvg ,
   qt5dxcb-plugin, qtstyleplugins, dtkcore, dtkwidget, deepin }:
 
 stdenv.mkDerivation rec {

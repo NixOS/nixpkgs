@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, writeScript, pantheon, gnome-keyring, gnome-session, wingpanel, orca, at-spi2-core, elementary-default-settings, writeTextFile, writeShellScriptBin, elementary-settings-daemon, runtimeShell }:
+{ stdenv, fetchFromGitHub, substituteAll, writeScript, pantheon, gnome-keyring, gnome-session, wingpanel, orca, at-spi2-core, elementary-default-settings, writeShellScriptBin, elementary-settings-daemon, runtimeShell }:
 
 let
 

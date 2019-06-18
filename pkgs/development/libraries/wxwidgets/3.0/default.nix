@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, fetchpatch, pkgconfig
+{ stdenv, fetchFromGitHub, fetchurl, pkgconfig
 , gtk2, gtk3, libXinerama, libSM, libXxf86vm
 , xorgproto, gstreamer, gst-plugins-base, GConf, setfile
 , libGLSupported

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch }:
+{ stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "rubygems";

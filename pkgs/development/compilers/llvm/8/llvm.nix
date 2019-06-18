@@ -1,6 +1,5 @@
 { stdenv
 , fetch
-, fetchpatch
 , cmake
 , python
 , libffi

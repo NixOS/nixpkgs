@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  kernelPackages = config.boot.kernelPackages;
-
   # Abbreviations.
   cfg = config.services.xserver;
   xorg = pkgs.xorg;

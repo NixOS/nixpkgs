@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, cmake, luajit,
   SDL2, SDL2_image, SDL2_ttf, physfs,
   openal, libmodplug, libvorbis, solarus,
-  qtbase, qttools, fetchpatch, glm }:
+  qtbase, qttools, glm }:
 
 stdenv.mkDerivation rec {
   name = "solarus-quest-editor-${version}";

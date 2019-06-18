@@ -14,7 +14,6 @@
 , argyllcms
 , meson
 , ninja
-, libxml2
 , vala
 , libgudev
 , wrapGAppsHook
@@ -25,7 +24,6 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , libxslt
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {

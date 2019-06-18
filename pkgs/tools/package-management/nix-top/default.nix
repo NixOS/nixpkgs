@@ -5,7 +5,6 @@
 , makeWrapper
 , getent               # /etc/passwd
 , ncurses              # tput
-, procps               # ps
 , binutils-unwrapped   # strings
 , coreutils
 , findutils

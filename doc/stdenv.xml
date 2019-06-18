@@ -31,9 +31,28 @@ stdenv.mkDerivation {
    separate Nix expression from <filename>pkgs/all-packages.nix</filename>, you
    need to pass it as a function argument.) Specifying a
    <varname>name</varname> and a <varname>src</varname> is the absolute minimum
-   you need to do. Many packages have dependencies that are not provided in the
-   standard environment. It’s usually sufficient to specify those
-   dependencies in the <varname>buildInputs</varname> attribute:
+   Nix requires. For convenience, you can also use <varname>pname</varname> and
+   <varname>version</varname> attributes and <literal>mkDerivation</literal>
+   will automatically set <varname>name</varname> to
+   <literal>"${pname}-${version}"</literal> by default. Since
+   <link xlink:href="https://github.com/NixOS/rfcs/pull/35">RFC 0035</link>,
+   this is preferred for packages in Nixpkgs, as it allows us to reuse the
+   version easily:
+<programlisting>
+stdenv.mkDerivation rec {
+  pname = "libfoo";
+  version = "1.2.3";
+  src = fetchurl {
+    url = "http://example.org/libfoo-source-${version}.tar.bz2";
+    sha256 = "0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m";
+  };
+}</programlisting>
+  </para>
+
+  <para>
+   Many packages have dependencies that are not provided in the standard
+   environment. It’s usually sufficient to specify those dependencies in the
+   <varname>buildInputs</varname> attribute:
 <programlisting>
 stdenv.mkDerivation {
   name = "libfoo-1.2.3";

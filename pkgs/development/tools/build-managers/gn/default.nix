@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchzip, fetchpatch, darwin, writeText
+{ stdenv, lib, fetchgit, darwin, writeText
 , git, ninja, python2 }:
 
 let

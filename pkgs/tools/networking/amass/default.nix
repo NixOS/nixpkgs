@@ -1,6 +1,5 @@
 { buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , lib
 }:
 

@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, flex, bison, libxslt, autoconf, automake, autoreconfHook
-, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll, gnome3
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, flex, bison, libxslt, autoconf, autoreconfHook
+, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
 }:
 
 let

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, desktop-file-utils
-, gtk3, glib, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2, fetchpatch
+, gtk3, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2
 , granite, gst_all_1, libgudev, json-glib, libraw, librest, libsoup, sqlite, python3
 , scour, webkitgtk, libwebp, appstream, libunity, wrapGAppsHook, elementary-icon-theme }:
 

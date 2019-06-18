@@ -1,4 +1,4 @@
-{ stdenv, rebar3, curl }:
+{ stdenv, rebar3 }:
 
 { name, version, sha256, src
 , meta ? {}
@@ -29,4 +29,5 @@ stdenv.mkDerivation ({
   outputHash = sha256;
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
+  inherit meta;
 })

@@ -1,12 +1,10 @@
 {stdenv
 , removeReferencesTo
 , lib
-, fetchgit
 , fetchFromGitHub
 , utillinux
 , openssl
 , coreutils
-, gawk
 , go
 , which
 , makeWrapper

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
+{ stdenv, fetchurl, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc
 
 # Enable the Sun Grid Engine bindings

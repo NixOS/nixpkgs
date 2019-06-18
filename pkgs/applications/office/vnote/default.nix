@@ -2,14 +2,6 @@
 
 let
   description = "A note-taking application that knows programmers and Markdown better";
-  desktopItem = makeDesktopItem {
-    name = "VNote";
-    exec = "vnote";
-    icon = "vnote";
-    comment = description;
-    desktopName = "VNote";
-    categories = "Office";
-  };
 in stdenv.mkDerivation rec {
   version = "2.6";
   pname = "vnote";

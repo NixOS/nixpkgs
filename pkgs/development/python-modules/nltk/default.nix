@@ -1,4 +1,4 @@
-{ fetchPypi, buildPythonPackage, lib, six, singledispatch, isPy3k, fetchpatch }:
+{ fetchPypi, buildPythonPackage, lib, six, singledispatch, isPy3k }:
 
 buildPythonPackage rec {
   version = "3.4.3";

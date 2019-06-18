@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libexecinfo }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";

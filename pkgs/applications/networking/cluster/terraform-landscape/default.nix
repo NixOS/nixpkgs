@@ -1,7 +1,6 @@
 { lib, bundlerApp, ruby }:
-let
-  version = (import ./gemset.nix).terraform_landscape.version;
-in bundlerApp {
+
+bundlerApp {
   pname = "terraform_landscape";
 
   inherit ruby;

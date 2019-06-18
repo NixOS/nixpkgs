@@ -1,7 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, cmake, makeWrapper, pkgconfig
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, mysql, nettools, pcre, perl, perlPackages
+, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
-, avahi, dbus, gettext, git, gnutar, gzip, bzip2, libiconv, openssl, python
 , coreutils, procps, psmisc }:
 
 # NOTES:

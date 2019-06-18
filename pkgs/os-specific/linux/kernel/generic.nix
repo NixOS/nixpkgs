@@ -1,5 +1,4 @@
 { buildPackages
-, ncurses
 , callPackage
 , perl
 , bison ? null

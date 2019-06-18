@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
 }:
 
 buildPythonPackage rec {

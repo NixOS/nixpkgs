@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, makeWrapper, jre
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper, jre
 , useCCTweaked ? true
 }:
 

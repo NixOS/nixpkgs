@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl
+{ lib, stdenv, fetchFromGitHub
 , cmake, cmark, lmdb, qt5, qtmacextras, mtxclient
 , boost, spdlog, olm, pkgconfig
 }:

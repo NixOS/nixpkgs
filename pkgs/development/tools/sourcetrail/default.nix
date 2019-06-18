@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoPatchelfHook
-, icu, zlib, expat, dbus, libheimdal, openssl}:
+, zlib, expat, dbus, openssl}:
 
 stdenv.mkDerivation rec {
   name = "sourcetrail-${version}";

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl
+{ stdenv, fetchFromGitHub, fetchurl
 , cmake, pkgconfig, dbus, makeWrapper
 , gtest
 , boost

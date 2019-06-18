@@ -5,8 +5,6 @@ let
 
   ver = "6.0.1";
 
-  majorVer = builtins.elemAt (lib.splitString "." ver) 0;
-
   badArch = throw "${name} requires i686-linux or x86_64-linux";
 
   architecture =

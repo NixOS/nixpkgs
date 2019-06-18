@@ -1,6 +1,5 @@
 { config, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , fdk_aac
 , ffmpeg

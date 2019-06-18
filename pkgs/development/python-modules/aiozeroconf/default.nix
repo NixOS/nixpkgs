@@ -3,7 +3,6 @@
 , fetchPypi
 , netifaces
 , isPy27
-, python
 }:
 
 buildPythonPackage rec {

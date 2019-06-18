@@ -1,6 +1,5 @@
 { stdenv, lib, fetchurl, alsaLib, bison, flex, libsndfile, which
 , AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel
-, xcbuild
 }:
 
 stdenv.mkDerivation rec {

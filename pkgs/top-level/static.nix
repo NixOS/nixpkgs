@@ -12,9 +12,8 @@
 
 self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
-                                 overrideInStdenv
                                  makeStaticLibraries;
-  inherit (super.lib) foldl optional flip id optionalAttrs composeExtensions;
+  inherit (super.lib) foldl optional flip id composeExtensions;
   inherit (super) makeSetupHook;
 
   # Best effort static binaries. Will still be linked to libSystem,

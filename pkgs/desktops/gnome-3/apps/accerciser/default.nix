@@ -3,7 +3,6 @@
 , pkgconfig
 , gnome3
 , gtk3
-, glib
 , wrapGAppsHook
 , gobject-introspection
 , itstool

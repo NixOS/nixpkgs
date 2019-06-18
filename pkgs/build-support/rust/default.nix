@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, rustc, cargo-vendor, fetchcargo, python3, buildPackages }:
+{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages }:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"

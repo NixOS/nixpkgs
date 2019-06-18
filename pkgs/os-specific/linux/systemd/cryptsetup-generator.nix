@@ -1,4 +1,4 @@
-{ stdenv, systemd, cryptsetup }:
+{ systemd, cryptsetup }:
 
 systemd.overrideAttrs (p: {
   version = p.version;

@@ -2,7 +2,6 @@
 , enableUnfree ? true
 , stdenv
 , makeWrapper
-, fetchzip
 , fetchurl
 , nodejs-10_x
 , coreutils

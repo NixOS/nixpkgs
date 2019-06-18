@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, qt5, fetchFromGitHub }:
+{ stdenv, pkgconfig, qt5, fetchFromGitHub }:
 
 with qt5;
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook
 , asciidoctor, pkgconfig, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
-, json_c, kmod, which, file, utillinux, systemd, keyutils
+, json_c, kmod, which, utillinux, systemd, keyutils
 }:
 
 stdenv.mkDerivation rec {

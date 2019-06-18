@@ -1,5 +1,5 @@
-{ stdenv, pkgs, buildFHSUserEnv, makeDesktopItem, fetchFromGitHub, fetchpatch
-, wrapGAppsHook, python2Packages, python3Packages }:
+{ stdenv, pkgs, buildFHSUserEnv, makeDesktopItem, fetchFromGitHub
+, wrapGAppsHook, python3Packages }:
 
 let
   qt5Deps = with pkgs; with qt5; [ qtbase qtmultimedia ];

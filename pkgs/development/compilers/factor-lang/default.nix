@@ -1,12 +1,9 @@
-{ stdenv, fetchurl, glib, glibc, git,
+{ stdenv, fetchurl, glib, git,
   rlwrap, curl, pkgconfig, perl, makeWrapper, tzdata, ncurses,
   pango, cairo, gtk2, gdk_pixbuf, gtkglext,
   mesa, xorg, openssl, unzip }:
 
-let
-  inherit (stdenv.lib) optional;
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "factor-lang-${version}";
   version = "0.98";
   rev = "7999e72aecc3c5bc4019d43dc4697f49678cc3b4";

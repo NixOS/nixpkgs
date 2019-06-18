@@ -131,7 +131,7 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchElf = true;
 
-  updateScript = import ./update.nix { inherit stdenv writeScript runtimeShell; };
+  updateScript = import ./update.nix { inherit writeScript runtimeShell; };
 
   meta = with stdenv.lib; {
     homepage = https://www.mendeley.com;

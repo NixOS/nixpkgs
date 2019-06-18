@@ -72,13 +72,6 @@ let
       default = null;
     };
   };
-
-  kubeConfigDefaults = {
-    server = mkDefault cfg.kubeconfig.server;
-    caFile = mkDefault cfg.kubeconfig.caFile;
-    certFile = mkDefault cfg.kubeconfig.certFile;
-    keyFile = mkDefault cfg.kubeconfig.keyFile;
-  };
 in {
 
   ###### interface

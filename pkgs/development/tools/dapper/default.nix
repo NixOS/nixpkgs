@@ -1,7 +1,6 @@
 { buildGoPackage
 , lib
 , fetchFromGitHub
-, fetchpatch
 }:
 
 buildGoPackage rec {

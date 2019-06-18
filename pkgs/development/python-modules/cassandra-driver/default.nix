@@ -2,7 +2,6 @@
 , libev
 , buildPythonPackage
 , fetchPypi
-, pkgs
 , cython
 , futures
 , six

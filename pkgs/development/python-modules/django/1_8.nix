@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchurl
-, pythonOlder
 }:
 
 buildPythonPackage rec {
