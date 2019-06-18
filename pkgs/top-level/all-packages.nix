@@ -15313,14 +15313,6 @@ in
       ];
   };
 
-  linux_5_0 = callPackage ../os-specific/linux/kernel/linux-5.0.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.modinst_arg_list_too_long
-        kernelPatches.export_kernel_fpu_functions
-      ];
-  };
-
   linux_5_1 = callPackage ../os-specific/linux/kernel/linux-5.1.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -15530,7 +15522,6 @@ in
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
-  linuxPackages_5_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_0);
   linuxPackages_5_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_1);
 
   # When adding to this list:
