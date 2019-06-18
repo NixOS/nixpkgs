@@ -175,6 +175,8 @@ in
 
   dockerTools = callPackage ../build-support/docker { };
 
+  snapTools = callPackage ../build-support/snap { };
+
   nix-prefetch-docker = callPackage ../build-support/docker/nix-prefetch-docker.nix { };
 
   docker-compose = python3Packages.callPackage ../applications/virtualization/docker-compose {};
