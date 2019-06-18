@@ -508,6 +508,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  inquirer = callPackage ../development/python-modules/inquirer { };
+
   jira = callPackage ../development/python-modules/jira { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
@@ -981,6 +983,8 @@ in {
   toml = callPackage ../development/python-modules/toml { };
 
   tomlkit = callPackage ../development/python-modules/tomlkit { };
+
+  toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
   unifi = callPackage ../development/python-modules/unifi { };
 
@@ -2477,6 +2481,8 @@ in {
 
   validictory = callPackage ../development/python-modules/validictory { };
 
+  validate-email = callPackage ../development/python-modules/validate-email { };
+
   venusian = callPackage ../development/python-modules/venusian { };
 
   chameleon = callPackage ../development/python-modules/chameleon { };
@@ -3867,6 +3873,8 @@ in {
     prompt_toolkit = self.prompt_toolkit;
   };
 
+  ptable = callPackage ../development/python-modules/ptable { };
+
   publicsuffix = callPackage ../development/python-modules/publicsuffix {};
 
   py = callPackage ../development/python-modules/py { };
@@ -4259,6 +4267,8 @@ in {
   readme = callPackage ../development/python-modules/readme { };
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
+
+  readchar = callPackage ../development/python-modules/readchar { };
 
   rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
     python2 = python;
