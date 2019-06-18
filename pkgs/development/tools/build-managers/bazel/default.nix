@@ -24,33 +24,38 @@ let
     sha256 = "000ny51hwnjyizm1md4w8q7m832jhf3c767pgbvg6nc7h67lzsf0";
   };
 
+  # TODO: turn those into a test and turn them back on
+  # srcDeps is only needed for the tests, not for the main
+  # build, and since we disabled the tests for now, we don’t
+  # use them.
+
   # Update with `eval $(nix-build -A bazel.updater)`,
   # then add new dependencies from the dict in ./src-deps.json as required.
-  srcDeps =
-    let
-      srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
-      toFetchurl = d: fetchurl {
-        name = d.name;
-        urls = d.urls;
-        sha256 = d.sha256;
-      };
-    in map toFetchurl [
-      srcs.desugar_jdk_libs
-      srcs.io_bazel_skydoc
-      srcs.bazel_skylib
-      srcs.io_bazel_rules_sass
-      (if stdenv.hostPlatform.isDarwin
-       then srcs.${"java_tools_javac10_darwin-v3.2.zip"}
-       else srcs.${"java_tools_javac10_linux-v3.2.zip"})
-      srcs.${"coverage_output_generator-v1.0.zip"}
-      srcs.build_bazel_rules_nodejs
-      srcs.${"android_tools_pkg-0.2.tar.gz"}
-    ];
+  # srcDeps =
+  #   let
+  #     srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
+  #     toFetchurl = d: fetchurl {
+  #       name = d.name;
+  #       urls = d.urls;
+  #       sha256 = d.sha256;
+  #     };
+  #   in map toFetchurl [
+  #     srcs.desugar_jdk_libs
+  #     srcs.io_bazel_skydoc
+  #     srcs.bazel_skylib
+  #     srcs.io_bazel_rules_sass
+  #     (if stdenv.hostPlatform.isDarwin
+  #      then srcs.${"java_tools_javac10_darwin-v3.2.zip"}
+  #      else srcs.${"java_tools_javac10_linux-v3.2.zip"})
+  #     srcs.${"coverage_output_generator-v1.0.zip"}
+  #     srcs.build_bazel_rules_nodejs
+  #     srcs.${"android_tools_pkg-0.2.tar.gz"}
+  #   ];
 
-  distDir = runCommand "bazel-deps" {} ''
-    mkdir -p $out
-    for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
-  '';
+  # distDir = runCommand "bazel-deps" {} ''
+  #   mkdir -p $out
+  #   for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
+  # '';
 
   defaultShellPath = lib.makeBinPath
     # Keep this list conservative. For more exotic tools, prefer to use
@@ -281,8 +286,6 @@ stdenv.mkDerivation rec {
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
-      build --experimental_distdir=${distDir}
-      fetch --experimental_distdir=${distDir}
       build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
       build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
       build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
@@ -381,8 +384,10 @@ stdenv.mkDerivation rec {
     cp ./bazel_src/scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
   '';
 
+  # TODO
   # Temporarily disabling for now. A new approach is needed for this derivation as Bazel
   # accesses the internet during the tests which fails in a sandbox.
+  # See sourceDeps above.
   doInstallCheck = false;
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
