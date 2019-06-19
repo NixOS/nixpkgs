@@ -14896,13 +14896,10 @@ in
 
   xqilla = callPackage ../development/tools/xqilla { };
 
-  xquartz = callPackage ../servers/x11/xquartz {
-    inherit (darwin) cf-private;
-  };
+  xquartz = callPackage ../servers/x11/xquartz { };
 
   quartz-wm = callPackage ../servers/x11/quartz-wm {
     stdenv = clangStdenv;
-    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
