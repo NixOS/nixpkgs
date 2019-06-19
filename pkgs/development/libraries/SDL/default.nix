@@ -6,7 +6,6 @@
 , libXext, libICE, libXrandr
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
-, cf-private
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -41,11 +40,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ]
     ++ optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
-    ++ optionals stdenv.isDarwin [
-      AudioUnit CoreAudio CoreServices Kernel OpenGL
-      # Needed for NSDefaultRunLoopMode symbols.
-      cf-private
-    ];
+    ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
   configureFlags = [
     "--disable-oss"
