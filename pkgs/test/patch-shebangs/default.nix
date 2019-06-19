@@ -3,7 +3,7 @@
 let
   bad-shebang = stdenv.mkDerivation {
     name         = "bad-shebang";
-    unpackPhase  = ":";
+    dontUnpack = true;
     installPhase = ''
       mkdir -p $out/bin
       echo "#!/bin/sh" > $out/bin/test

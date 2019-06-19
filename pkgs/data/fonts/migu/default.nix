@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     find $srcs -name '*.ttf' | xargs install -m644 --target $out/share/fonts/truetype/migu -D

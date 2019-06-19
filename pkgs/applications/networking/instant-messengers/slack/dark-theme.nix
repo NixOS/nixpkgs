@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     inherit sha256;
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildCommand = ''
     mkdir $out

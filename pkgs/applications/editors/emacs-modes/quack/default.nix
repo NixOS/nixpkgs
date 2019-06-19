@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ emacs ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
   dontConfigure = true;
   installPhase = "true";
 

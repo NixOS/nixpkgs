@@ -57,7 +57,7 @@ in stdenv.mkDerivation {
   inherit src;
 
   buildInputs = [ dpkg ];
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildCommand = ''
     IFS=$'\n'

@@ -68,7 +68,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
   buildCommand = ''
     mkdir -p $out
     dpkg -x $src $out

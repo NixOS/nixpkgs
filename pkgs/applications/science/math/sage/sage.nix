@@ -11,7 +11,7 @@
 # A wrapper that makes sure sage finds its docs (if they were build) and the
 # jupyter kernel spec.
 
-let 
+let
   # generate kernel spec + default kernels
   kernel-specs = jupyter-kernel.create {
     definitions = jupyter-kernel.default // {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sage-tests
   ];
 
-  unpackPhase = "#do nothing";
+  dontUnpack = true;
   configurePhase = "#do nothing";
   buildPhase = "#do nothing";
 

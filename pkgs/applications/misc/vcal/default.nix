@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ]; # for pod2man
 
-  unpackPhase = ":";
+  dontUnpack = true;
   dontBuild = true;
   installPhase = ''
     runHook preInstall

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     find $srcs -name '*.ttf' -exec install -m644 -Dt $out/share/fonts/truetype/migmix {} \;

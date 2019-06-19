@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yang94mcdqg362qbi85b63746hk6gczxrk619hyj91v5763n4vx";
   };
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   buildPhase = ''
     cc -O2 -o nuttcp $src
