@@ -12987,6 +12987,8 @@ in
 
   qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
+  qtpbfimageplugin = libsForQt5.callPackage ../development/libraries/qtpbfimageplugin { };
+
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
