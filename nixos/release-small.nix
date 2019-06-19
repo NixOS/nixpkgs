@@ -11,7 +11,7 @@ let
 
   nixpkgsSrc = nixpkgs; # urgh
 
-  pkgs = import ./.. {};
+  pkgs = import ./.. { system = "x86_64-linux"; };
 
   lib = pkgs.lib;
 
