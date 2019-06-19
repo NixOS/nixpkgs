@@ -1309,6 +1309,8 @@ in {
 
   channels = callPackage ../development/python-modules/channels {};
 
+  channels_redis = callPackage ../development/python-modules/channels_redis { };
+
   cheroot = callPackage ../development/python-modules/cheroot {};
 
   chevron = callPackage ../development/python-modules/chevron {};
