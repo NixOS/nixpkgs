@@ -1,8 +1,11 @@
 {
   stdenv, fetchurl, lib,
-  libxslt, pandoc, asciidoctor, pkgconfig,
-  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf, qtbase, qttools, qtsvg,
-  audit,
+  pkgconfig, libxml2, libxslt,
+  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf, audit,
+  withGui ? true,
+  qtbase ? null,
+  qttools ? null,
+  qtsvg ? null,
   libgcrypt ? null,
   libsodium ? null
 }:
@@ -23,10 +26,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    libxslt
-    asciidoctor
-    pandoc # for rendering documentation
     pkgconfig
+    libxslt # xsltproc
+    libxml2 # xmllint
   ];
 
   buildInputs = [
@@ -37,23 +39,20 @@ stdenv.mkDerivation rec {
     polkit
     protobuf
     audit
-
-    qtbase
-    qtsvg
-    qttools
   ]
   ++ (lib.optional (libgcrypt != null) libgcrypt)
-  ++ (lib.optional (libsodium != null) libsodium);
+  ++ (lib.optional (libsodium != null) libsodium)
+  ++ (lib.optionals withGui [ qtbase qtsvg qttools ]);
 
   configureFlags = [
     "--with-bundled-catch"
     "--with-bundled-pegtl"
     "--with-dbus"
-    "--with-gui-qt=qt5"
     "--with-polkit"
   ]
   ++ (lib.optional (libgcrypt != null) "--with-crypto-library=gcrypt")
-  ++ (lib.optional (libsodium != null) "--with-crypto-library=sodium");
+  ++ (lib.optional (libsodium != null) "--with-crypto-library=sodium")
+  ++ (lib.optional withGui "--with-gui-qt=qt5");
 
   enableParallelBuilding = true;
 

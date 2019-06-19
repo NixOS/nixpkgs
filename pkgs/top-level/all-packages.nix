@@ -16057,6 +16057,10 @@ in
     libgcrypt = null;
   };
 
+  usbguard-nox = usbguard.override {
+    withGui = false;
+  };
+
   usbutils = callPackage ../os-specific/linux/usbutils { };
 
   usermount = callPackage ../os-specific/linux/usermount { };
