@@ -22,6 +22,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/carltongibson/django-filter/tree/master";
     license = licenses.bsdOriginal;
     description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically.";
+    maintainers = with maintainers; [ BadDecisionsAlex ];
   };
 
 }
