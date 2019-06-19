@@ -567,6 +567,11 @@
     github = "backuitist";
     name = "Bruno Bieth";
   };
+  BadDecisionsAlex = {
+    email = "Alex.Ameen.TX@gmail.com";
+    github = "BadDecisionsAlex";
+    name = "Alex Ameen";
+  };
   badi = {
     email = "abdulwahidc@gmail.com";
     github = "badi";
