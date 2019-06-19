@@ -23079,7 +23079,7 @@ in
 
   veriT = callPackage ../applications/science/logic/verit {};
 
-  why3 = callPackage ../applications/science/logic/why3 {};
+  why3 = callPackage ../applications/science/logic/why3 { };
 
   workcraft = callPackage ../applications/science/logic/workcraft {};
 
