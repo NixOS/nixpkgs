@@ -1988,6 +1988,8 @@ in {
 
   ezdxf = callPackage ../development/python-modules/ezdxf {};
 
+  ez_setup = callPackage ../development/python-modules/ez_setup { };
+
   facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
 
   face_recognition = callPackage ../development/python-modules/face_recognition { };
