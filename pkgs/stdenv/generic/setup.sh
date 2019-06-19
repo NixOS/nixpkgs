@@ -1283,6 +1283,7 @@ genericBuild() {
     fi
 
     for curPhase in $phases; do
+        if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
         if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
         if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi
         if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then continue; fi
