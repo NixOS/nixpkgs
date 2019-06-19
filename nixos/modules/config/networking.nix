@@ -25,6 +25,16 @@ in
 
   options = {
 
+    networking.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description =
+        ''
+          Whether to enable networking.  Disabling this option
+          also disables all services which require network access.
+        '';
+    };
+
     networking.hosts = lib.mkOption {
       type = types.attrsOf (types.listOf types.str);
       example = literalExample ''
@@ -150,7 +160,7 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
 
     assertions = [{
       assertion = localhostMapped4;

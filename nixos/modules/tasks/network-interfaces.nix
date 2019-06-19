@@ -920,7 +920,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf cfg.enable {
 
     warnings = concatMap (i: i.warnings) interfaces;
 

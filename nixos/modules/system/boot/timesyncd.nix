@@ -23,7 +23,7 @@ with lib;
     };
   };
 
-  config = mkIf config.services.timesyncd.enable {
+  config = mkIf (config.networking.enable && config.services.timesyncd.enable) {
 
     systemd.additionalUpstreamSystemUnits = [ "systemd-timesyncd.service" ];
 

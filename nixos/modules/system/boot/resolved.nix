@@ -128,7 +128,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (config.networking.enable && cfg.enable) {
 
     assertions = [
       { assertion = !config.networking.useHostResolvConf;
