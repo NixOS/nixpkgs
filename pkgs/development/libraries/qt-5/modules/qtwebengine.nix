@@ -200,14 +200,6 @@ EOF
     (runCommand "MacOS_SDK_sandbox.h" {} ''
       install -Dm444 "${lib.getDev darwin.apple_sdk.sdk}"/include/sandbox.h "$out"/include/sandbox.h
     '')
-
-    # For:
-    # _NSDefaultRunLoopMode
-    # _OBJC_CLASS_$_NSDate
-    # _OBJC_CLASS_$_NSDictionary
-    # _OBJC_CLASS_$_NSRunLoop
-    # _OBJC_CLASS_$_NSURL
-    darwin.cf-private
   ]);
 
   __impureHostDeps = optional stdenv.isDarwin "/usr/lib/libsandbox.1.dylib";

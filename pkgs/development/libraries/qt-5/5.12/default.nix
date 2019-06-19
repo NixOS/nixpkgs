@@ -20,7 +20,7 @@ top-level attribute to `top-level/all-packages.nix`.
   stdenv, fetchurl, fetchFromGitHub, makeSetupHook,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
-  cf-private, llvmPackages_5,
+  llvmPackages_5,
 
   # options
   developerBuild ? false,
@@ -97,17 +97,13 @@ let
       };
 
       qtcharts = callPackage ../modules/qtcharts.nix {};
-      qtconnectivity = callPackage ../modules/qtconnectivity.nix {
-        inherit cf-private;
-      };
+      qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
-      qtmacextras = callPackage ../modules/qtmacextras.nix {
-        inherit cf-private;
-      };
+      qtmacextras = callPackage ../modules/qtmacextras.nix {};
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };

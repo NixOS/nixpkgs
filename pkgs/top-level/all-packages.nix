@@ -12757,7 +12757,7 @@ in
     # XXX: mariadb doesn't built on fbsd as of nov 2015
     mysql = if (!stdenv.isFreeBSD) then mysql else null;
 
-    inherit (pkgs.darwin) cf-private libobjc;
+    inherit (pkgs.darwin) libobjc;
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL Cocoa AGL;
   };
 
@@ -12783,7 +12783,6 @@ in
       harfbuzz = harfbuzzFull;
       inherit libGL;
       inherit perl;
-      inherit (darwin) cf-private;
       inherit (gst_all_1) gstreamer gst-plugins-base;
     });
 
@@ -12798,7 +12797,6 @@ in
       harfbuzz = harfbuzzFull;
       inherit libGL;
       inherit perl;
-      inherit (darwin) cf-private;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit gtk3;
       inherit (gnome3) dconf;
@@ -12815,7 +12813,6 @@ in
       harfbuzz = harfbuzzFull;
       inherit libGL;
       inherit perl;
-      inherit (darwin) cf-private;
       inherit gtk3;
       inherit (gnome3) dconf;
       inherit (gst_all_1) gstreamer gst-plugins-base;
@@ -12833,7 +12830,6 @@ in
       harfbuzz = harfbuzzFull;
       inherit libGL;
       inherit perl;
-      inherit (darwin) cf-private;
       inherit gtk3;
       inherit (gnome3) dconf;
       inherit (gst_all_1) gstreamer gst-plugins-base;
