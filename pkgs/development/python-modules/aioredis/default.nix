@@ -1,4 +1,4 @@
-{ lib
+{ stdenv
 , fetchPypi
 , buildPythonPackage
 , hiredis-py, hiredis, async-timeout
@@ -23,10 +23,11 @@ buildPythonPackage rec {
   ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     homepage = "http://github.com/django/channels_redis";
     license = licenses.mit;
     description = "asyncio (PEP 3156) Redis client library.";
+    maintainers = [ BadDecisionsAlex ];
   };
 
 }
