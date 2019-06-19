@@ -18,6 +18,7 @@ buildPythonPackage rec {
     homepage = "http://github.com/maraujop/django-crispy-forms";
     license = licenses.mit;
     description = "Best way to have Django DRY forms";
+    maintainers = with maintainers; [ BadDecisionsAlex ];
   };
 
 }
