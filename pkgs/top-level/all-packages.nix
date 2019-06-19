@@ -17495,7 +17495,6 @@ in
     imagemagick = null;
     acl = null;
     gpm = null;
-    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
   };
 
@@ -17514,7 +17513,6 @@ in
     imagemagick = null;
     acl = null;
     gpm = null;
-    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
   };
 
@@ -17525,7 +17523,6 @@ in
   }));
 
   emacsMacport = callPackage ../applications/editors/emacs/macport.nix {
-    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks)
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
       ImageCaptureCore GSS ImageIO;
