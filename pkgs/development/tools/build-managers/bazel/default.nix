@@ -14,14 +14,16 @@
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
+, gcc-unwrapped
+, autoPatchelfHook
 }:
 
 let
-  version = "0.26.1";
+  version = "0.27.0";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "000ny51hwnjyizm1md4w8q7m832jhf3c767pgbvg6nc7h67lzsf0";
+    sha256 = "0yn662dzgfr8ls4avfl12k5sr4f210bab12wml18bh4sjlxhs263";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -40,12 +42,12 @@ let
       srcs.bazel_skylib
       srcs.io_bazel_rules_sass
       (if stdenv.hostPlatform.isDarwin
-       then srcs.${"java_tools_javac10_darwin-v3.2.zip"}
-       else srcs.${"java_tools_javac10_linux-v3.2.zip"})
+       then srcs.${"java_tools_javac11_darwin-v2.0.zip"}
+       else srcs.${"java_tools_javac11_linux-v2.0.zip"})
       srcs.${"coverage_output_generator-v1.0.zip"}
       srcs.build_bazel_rules_nodejs
-      srcs.${"android_tools_pkg-0.2.tar.gz"}
-    ];
+      srcs.${"android_tools_pkg-0.4.tar.gz"}
+      ];
 
   distDir = runCommand "bazel-deps" {} ''
     mkdir -p $out
@@ -87,6 +89,36 @@ let
 
   platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
+  # This repository is fetched by bazel at runtime
+  # however it contains prebuilt java binaries, with wrong interpreter
+  # and libraries path.
+  # We prefetch it, patch it, and override it in a global bazelrc.
+  system = if stdenv.hostPlatform.isDarwin
+           then "darwin" else "linux";
+
+  remote_java_tools = stdenv.mkDerivation {
+    name = "remote_java_tools_${system}";
+
+    src = fetchurl {
+      url = "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v2.0/java_tools_javac11_${system}-v2.0.zip";
+      sha256 = "074d624fb34441df369afdfd454e75dba821d5d54932fcfee5ba598d17dc1b99";
+    };
+
+    nativeBuildInputs = [ autoPatchelfHook unzip ];
+    buildInputs = [ gcc-unwrapped ];
+
+    sourceRoot = ".";
+
+    buildPhase = ''
+      mkdir $out;
+    '';
+
+    installPhase = ''
+      cp -Ra * $out/
+      touch $out/WORKSPACE
+    '';
+  };
+
 in
 stdenv.mkDerivation rec {
   name = "bazel-${version}";
@@ -117,6 +149,7 @@ stdenv.mkDerivation rec {
       runLocal = name: attrs: script: runCommandCC name ({
         preferLocalBuild = true;
         meta.platforms = platforms;
+        buildInputs = [ python3 ];
       } // attrs) script;
 
       # bazel wants to extract itself into $install_dir/install every time it runs,
@@ -275,6 +308,11 @@ stdenv.mkDerivation rec {
           --replace /bin/true ${coreutils}/bin/true
       done
 
+      # bazel test runner include references to /bin/bash
+      substituteInPlace tools/build_rules/test_rules.bzl \
+        --replace /bin/bash ${customBash}/bin/bash
+
+
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
           --replace /bin/bash ${customBash}/bin/bash
@@ -323,12 +361,20 @@ stdenv.mkDerivation rec {
       mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
 
       patchShebangs .
+
+      # bazel reads its system bazelrc in /etc
+      # override this path to a builtin one
+      substituteInPlace \
+        src/main/cpp/option_processor.cc \
+        --replace BAZEL_SYSTEM_BAZELRC_PATH "\"$out/etc/bazelrc\""
     '';
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
 
   buildInputs = [
     buildJdk
+    python3 # bazel build requires python3. However we still use python2 for most of the other tasks
+            # This will have to be refactored later.
   ];
 
   # when a command can’t be found in a bazel build, you might also
@@ -374,6 +420,12 @@ stdenv.mkDerivation rec {
     mv ./bazel_src/output/bazel $out/bin/bazel-real
 
     wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
+
+    # generates the system bazelrc
+    # warning: the name of the repository depends on the system, hence
+    # the reference to .name
+    mkdir $out/etc
+    echo "build --override_repository=${remote_java_tools.name}=${remote_java_tools}" > $out/etc/bazelrc
 
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
