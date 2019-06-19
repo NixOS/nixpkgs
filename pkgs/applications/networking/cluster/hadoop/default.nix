@@ -19,7 +19,7 @@ let
         # perform fake build to make a fixed-output derivation of dependencies downloaded from maven central (~100Mb in ~3000 files)
         fetched-maven-deps = stdenv.mkDerivation {
           name = "hadoop-${version}-maven-deps";
-          inherit src postUnpack nativeBuildInputs buildInputs configurePhase;
+          inherit src postUnpack nativeBuildInputs buildInputs;
           buildPhase = ''
             while mvn package -Dmaven.repo.local=$out/.m2 ${mavenFlags} -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
               echo "timeout, restart maven to continue downloading"
@@ -51,7 +51,7 @@ let
             fi
           done
         '';
-        configurePhase = "true"; # do not trigger cmake hook
+        dontConfigure = true; # do not trigger cmake hook
         mavenFlags = "-Drequire.snappy -Drequire.bzip2 -DskipTests -Pdist,native -e";
         buildPhase = ''
           # 'maven.repo.local' must be writable

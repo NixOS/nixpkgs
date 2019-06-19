@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ emacs ];
 
   unpackPhase = "true";
-  configurePhase = "true";
+  dontConfigure = true;
   installPhase = "true";
 
   buildPhase = ''

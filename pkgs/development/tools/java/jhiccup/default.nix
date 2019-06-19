@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hsvi8wjh615fnjf75h7b5afp04chqcgvini30vfcn3m9a5icbgy";
   };
 
-  configurePhase = ":";
+  dontConfigure = true;
   buildPhase     = ":";
   installPhase = ''
     mkdir -p $out/bin $out/share/java

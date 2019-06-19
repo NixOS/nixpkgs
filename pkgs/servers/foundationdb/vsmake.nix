@@ -20,7 +20,7 @@ let
       sha256 = "14mc7gsnnahdjaxbbslzk79rc0d12h1i681cd3srdwr3fzynlar2";
     };
 
-    configurePhase = ":";
+    dontConfigure = true;
     buildPhase = ":";
     installPhase = "mkdir -p $out/include && cp -R boost $out/include/";
   };

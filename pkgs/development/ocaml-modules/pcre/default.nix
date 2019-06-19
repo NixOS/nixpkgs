@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  configurePhase = "true";	# Skip configure phase
+  dontConfigure = true;	# Skip configure phase
 
   meta = with stdenv.lib; {
     homepage = https://bitbucket.org/mmottl/pcre-ocaml;
