@@ -6,15 +6,18 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.7";
+  version = "0.7.0";
   pname = "uproot-methods";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4a00d1db828c44d2ba35801aeff7d1ea890b7dfa337895395e3b06284c14857b";
+    sha256 = "0awxd4p8yr27k4iayc0phw99bxgw04dnd3lb372hj9wjvldm0hzr";
   };
 
   propagatedBuildInputs = [ numpy awkward ];
+
+  # No tests on PyPi
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/scikit-hep/uproot-methods;
