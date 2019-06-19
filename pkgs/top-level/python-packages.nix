@@ -1454,6 +1454,8 @@ in {
 
   zc_buildout221 = callPackage ../development/python-modules/buildout { };
 
+  z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
+
   bunch = callPackage ../development/python-modules/bunch { };
 
   can = callPackage ../development/python-modules/can {};
