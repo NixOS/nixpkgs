@@ -6,6 +6,7 @@
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
 , executableName, longName, shortName, pname
+, postInstall ? "", preInstall ? ""
 }:
 
 let
@@ -13,7 +14,7 @@ let
 in
   stdenv.mkDerivation rec {
 
-    inherit pname version src sourceRoot;
+    inherit pname version src sourceRoot postInstall preInstall;
 
     passthru = {
       inherit executableName;
@@ -69,6 +70,8 @@ in
 
     installPhase =
       if system == "x86_64-darwin" then ''
+        runHook preInstall
+
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
         ln -s $out/lib/vscode/Contents/Resources/app/bin/${executableName} $out/bin
@@ -92,6 +95,8 @@ in
         # Override the previously determined VSCODE_PATH with the one we know to be correct
         sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName}
         grep -q "VSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName} # check if sed succeeded
+
+        runHook postInstall
       '';
 
     preFixup = lib.optionalString (system == "i686-linux" || system == "x86_64-linux") ''

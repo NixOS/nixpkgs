@@ -33,6 +33,11 @@ in
 
     sourceRoot = ".";
 
+    postInstall = ''
+      # Install legacy support:
+      ln -s $out/bin/${executableName} $out/bin/vscodium
+    '';
+
     meta = with stdenv.lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
