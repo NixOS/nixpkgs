@@ -1,5 +1,6 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage, isPy27
 , awkward
+, backports_lzma
 , cachetools
 , lz4
 , pytestrunner
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     pytest
     requests
     xxhash
-  ];
+  ] ++ lib.optional isPy27 backports_lzma;
 
   propagatedBuildInputs = [
     numpy
