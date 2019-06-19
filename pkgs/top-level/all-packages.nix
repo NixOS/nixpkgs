@@ -10274,6 +10274,10 @@ in
 
   directfb = callPackage ../development/libraries/directfb { };
 
+  discord-rpc = callPackage ../development/libraries/discord-rpc {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+
   dlib = callPackage ../development/libraries/dlib { };
 
   docopt_cpp = callPackage ../development/libraries/docopt_cpp { };
