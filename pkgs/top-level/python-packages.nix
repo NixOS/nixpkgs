@@ -346,6 +346,8 @@ in {
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  cnvkit = callPackage ../development/python-modules/cnvkit { };
+
   cozy = callPackage ../development/python-modules/cozy { };
 
   curio = callPackage ../development/python-modules/curio { };
