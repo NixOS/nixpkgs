@@ -482,6 +482,8 @@ in {
 
   histbook = callPackage ../development/python-modules/histbook { };
 
+  hiredis = callPackage ../development/python-modules/hiredis { };
+
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
   holoviews = callPackage ../development/python-modules/holoviews { };
