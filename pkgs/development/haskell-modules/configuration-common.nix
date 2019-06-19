@@ -1103,10 +1103,11 @@ self: super: {
   stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: {
     ansi-terminal = self.ansi-terminal_0_9_1;
     concurrent-output = self.concurrent-output_1_10_10; # needed for new ansi-terminal version
+    hi-file-parser = dontCheck (unmarkBroken super.hi-file-parser);  # Avoid depending on newer hspec versions.
+    http-download = dontCheck (unmarkBroken super.http-download);
+    pantry-tmp = dontCheck (unmarkBroken super.pantry-tmp);
     rio = self.rio_0_1_9_2;
-    hi-file-parser = dontCheck super.hi-file-parser;    # Avoid depending on newer hspec versions.
-    http-download = dontCheck super.http-download;
-    pantry-tmp = dontCheck super.pantry-tmp;
+    rio-prettyprint  = unmarkBroken super.rio-prettyprint;
   }));
 
   # musl fixes
