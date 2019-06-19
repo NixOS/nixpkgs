@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , isPy3k
 , requests
 , requests_oauthlib
@@ -18,16 +18,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.6.4";
+  version = "0.6.7";
   pname = "msrest";
 
-  # no tests in PyPI tarball
-  # see https://github.com/Azure/msrest-for-python/pull/152
-  src = fetchFromGitHub {
-    owner = "Azure";
-    repo = "msrest-for-python";
-    rev = "v${version}";
-    sha256 = "0ilrc06qq0dw4qqzq1dq2vs6nymc39h19w52dwcyawwfalalnjzi";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "07136g3j7zgcvkxki4v6q1p2dm1nzzc28181s8dwic0y4ml8qlq5";
   };
 
   propagatedBuildInputs = [
@@ -48,6 +44,6 @@ buildPythonPackage rec {
     description = "The runtime library 'msrest' for AutoRest generated Python clients.";
     homepage = "https://azure.microsoft.com/en-us/develop/python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ bendlas ];
+    maintainers = with maintainers; [ bendlas jonringer ];
   };
 }
