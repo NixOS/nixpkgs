@@ -1940,6 +1940,11 @@
     github = "glenns";
     name = "Glenn Searby";
   };
+  gloaming = {
+    email = "ch9871@gmail.com";
+    github = "gloaming";
+    name = "Craig Hall";
+  };
   globin = {
     email = "mail@glob.in";
     github = "globin";
