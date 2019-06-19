@@ -26,6 +26,7 @@ buildPythonPackage rec {
     description = "Python client for Redis key-value store";
     homepage = "https://pypi.python.org/pypi/redis/";
     license = licenses.mit;
+    maintainers = with maintainers; [ BadDecisionsAlex ];
   };
 
 }

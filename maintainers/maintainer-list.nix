@@ -1985,6 +1985,11 @@
     github = "gridaphobe";
     name = "Eric Seidel";
   };
+  BadDecisionsAlex = {
+    email = "Alex.Ameen.TX@gmail.com";
+    github = "BadDecisionsAlex";
+    name = "Alex Ameen";
+  };
   guibert = {
     email = "david.guibert@gmail.com";
     github = "dguibert";
@@ -3015,11 +3020,6 @@
     email = "Marc.Fontaine@gmx.de";
     github = "MarcFontaine";
     name = "Marc Fontaine";
-  };
-  magenbluten = {
-    email = "magenbluten@codemonkey.cc";
-    github = "magenbluten";
-    name = "magenbluten";
   };
   magnetophon = {
     email = "bart@magnetophon.nl";
