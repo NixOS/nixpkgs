@@ -21270,7 +21270,6 @@ in
 
   zola = callPackage ../applications/misc/zola {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-    inherit (darwin) cf-private;
   };
 
   zoom-us = libsForQt59.callPackage ../applications/networking/instant-messengers/zoom-us { };
