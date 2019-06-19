@@ -13605,7 +13605,7 @@ in
   vte-ng = callPackage ../development/libraries/vte/ng.nix { };
 
   vtk = callPackage ../development/libraries/vtk {
-    inherit (darwin) cf-private libobjc;
+    inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
                                           IOKit CFNetwork Security ApplicationServices
