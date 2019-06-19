@@ -307,6 +307,7 @@ in
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/conf' - ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/custom' - ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/custom/conf' - ${cfg.user} gitea - -"
       "d '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
       "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
