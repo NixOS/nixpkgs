@@ -110,7 +110,8 @@ with frameworks; with libs; {
   ApplicationServices = [ CoreServices CoreText ImageIO ];
   Carbon              = [ ApplicationServices CoreServices Foundation IOKit Security QuartzCore ];
   CoreBluetooth       = [];
-  CoreServices        = [ CFNetwork CoreAudio CoreData DiskArbitration Security NetFS OpenDirectory ServiceManagement ];
+  # TODO: figure out which part of the umbrella depends on CoreFoundation and move it there.
+  CoreServices        = [ CFNetwork CoreFoundation CoreAudio CoreData DiskArbitration Security NetFS OpenDirectory ServiceManagement ];
   IOBluetooth         = [ IOKit ];
   JavaVM              = [];
   OpenDirectory       = [];
