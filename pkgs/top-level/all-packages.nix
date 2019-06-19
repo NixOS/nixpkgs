@@ -21541,7 +21541,7 @@ in
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
   gargoyle = callPackage ../games/gargoyle {
-    inherit (darwin) cctools cf-private;
+    inherit (darwin) cctools;
   };
 
   gav = callPackage ../games/gav { };
