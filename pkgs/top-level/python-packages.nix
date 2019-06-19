@@ -177,6 +177,8 @@ in {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  aioredis = callPackage ../development/python-modules/aioredis { };
+
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
   anytree = callPackage ../development/python-modules/anytree {
