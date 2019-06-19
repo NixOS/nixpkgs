@@ -2654,6 +2654,7 @@ broken-packages:
   - acme-stringly-typed
   - acme-zalgo
   - acme-zero
+  - acousticbrainz-client
   - ActionKid
   - activehs
   - activehs-base
@@ -3096,6 +3097,7 @@ broken-packages:
   - Biobase
   - BiobaseBlast
   - BiobaseDotP
+  - BiobaseENA
   - BiobaseEnsembl
   - BiobaseFasta
   - BiobaseFR3D
@@ -3610,6 +3612,8 @@ broken-packages:
   - competition
   - compilation
   - complexity
+  - componentm
+  - componentm-devel
   - compose-trans
   - composite-aeson
   - composite-aeson-refined
@@ -4683,6 +4687,7 @@ broken-packages:
   - function-instances-algebra
   - functional-arrow
   - functor
+  - functor-combinators
   - functorm
   - funflow
   - funflow-nix
@@ -5566,6 +5571,7 @@ broken-packages:
   - hharp
   - HHDL
   - hhp
+  - hi-file-parser
   - hi3status
   - hiccup
   - hichi
@@ -5980,10 +5986,12 @@ broken-packages:
   - http-conduit-browser
   - http-conduit-downloader
   - http-dispatch
+  - http-download
   - http-enumerator
   - http-grammar
   - http-kinder
   - http-monad
+  - http-pony
   - http-pony-serve-wai
   - http-proxy
   - http-querystring
@@ -6189,6 +6197,7 @@ broken-packages:
   - inject-function
   - inline-java
   - inserts
+  - inspection-proxy
   - inspector-wrecker
   - instana-haskell-trace-sdk
   - instant-aeson
@@ -6473,7 +6482,13 @@ broken-packages:
   - lambda2js
   - lambdaBase
   - lambdabot
+  - lambdabot-core
   - lambdabot-haskell-plugins
+  - lambdabot-irc-plugins
+  - lambdabot-misc-plugins
+  - lambdabot-novelty-plugins
+  - lambdabot-reference-plugins
+  - lambdabot-social-plugins
   - lambdabot-utils
   - lambdabot-zulip
   - lambdacms-core
@@ -6499,6 +6514,7 @@ broken-packages:
   - LambdaShell
   - lambdatex
   - lambdatwit
+  - Lambdaya
   - lambdaya-bus
   - lambdiff
   - lame
@@ -6624,6 +6640,7 @@ broken-packages:
   - liboleg
   - libpafe
   - libpq
+  - libraft
   - librandomorg
   - librato
   - libsystemd-daemon
@@ -7104,6 +7121,7 @@ broken-packages:
   - morphisms-objects
   - morte
   - mosaico-lib
+  - moss
   - moto
   - moto-postgresql
   - motor
@@ -7270,6 +7288,8 @@ broken-packages:
   - netwire-vinylglfw-examples
   - network-address
   - network-anonymous-i2p
+  - network-anonymous-tor
+  - network-bsd
   - network-builder
   - network-bytestring
   - network-connection
@@ -7284,7 +7304,10 @@ broken-packages:
   - network-rpca
   - network-server
   - network-service
+  - network-simple
   - network-simple-sockaddr
+  - network-simple-tls
+  - network-simple-ws
   - network-simple-wss
   - network-stream
   - network-topic-models
@@ -7321,6 +7344,7 @@ broken-packages:
   - Ninjas
   - nirum
   - nitro
+  - niv
   - nix-eval
   - nixfromnpm
   - nixpkgs-update
@@ -7521,6 +7545,7 @@ broken-packages:
   - pang-a-lambda
   - pangraph
   - panpipe
+  - pantry-tmp
   - papa-export
   - papa-implement
   - papa-include
@@ -7702,6 +7727,9 @@ broken-packages:
   - pipes-illumina
   - pipes-io
   - pipes-key-value-csv
+  - pipes-network
+  - pipes-network-tls
+  - pipes-network-ws
   - pipes-p2p
   - pipes-p2p-examples
   - pipes-protolude
@@ -7775,6 +7803,7 @@ broken-packages:
   - polynomial
   - polysemy
   - polysemy-plugin
+  - polysemy-RandomFu
   - polysemy-zoo
   - polyseq
   - polysoup
@@ -8267,6 +8296,7 @@ broken-packages:
   - rfc-psql
   - rfc-redis
   - rfc-servant
+  - rfc1413-server
   - rhine
   - rhine-gloss
   - rhythm-game-tutorial
@@ -8278,6 +8308,7 @@ broken-packages:
   - riff
   - ring-buffer
   - ring-buffers
+  - rio-prettyprint
   - riot
   - risc386
   - riscv-isa
@@ -8917,6 +8948,28 @@ broken-packages:
   - stable-marriage
   - stable-memo
   - stable-tree
+  - stack-bump
+  - stack-hpc-coveralls
+  - stack-lib
+  - stack-network
+  - stack-prism
+  - stack-run
+  - stack-run-auto
+  - stack-type
+  - stack2cabal
+  - stack2nix
+  - stackage
+  - stackage-build-plan
+  - stackage-cabal
+  - stackage-cli
+  - stackage-curator
+  - stackage-metadata
+  - stackage-sandbox
+  - stackage-setup
+  - stackage-to-hackage
+  - stackage-types
+  - stackage-upload
+  - stackage2nix
   - standalone-derive-topdown
   - standalone-haddock
   - starling
@@ -8994,6 +9047,7 @@ broken-packages:
   - streaming-postgresql-simple
   - streaming-process
   - streaming-sort
+  - streaming-utils
   - strelka
   - strict-data
   - StrictBench
@@ -9443,6 +9497,7 @@ broken-packages:
   - tsparse
   - tsuntsun
   - tsvsql
+  - tsweb
   - ttask
   - ttn-client
   - tttool
@@ -9532,6 +9587,7 @@ broken-packages:
   - uhc-light
   - uhc-util
   - uhexdump
+  - uhttpc
   - ui-command
   - UMM
   - unagi-bloomfilter
