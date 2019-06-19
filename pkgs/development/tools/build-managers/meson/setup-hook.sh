@@ -21,7 +21,7 @@ mesonConfigurePhase() {
         -Dwrap_mode=${mesonWrapMode:-nodownload} \
         $mesonFlags"
 
-    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-release} $mesonFlags"
+    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-plain} $mesonFlags"
 
     echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
 
