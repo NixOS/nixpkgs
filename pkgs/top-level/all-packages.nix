@@ -24135,7 +24135,20 @@ in
 
   togglesg-download = callPackage ../tools/misc/togglesg-download { };
 
-  discord = callPackage ../applications/networking/instant-messengers/discord { };
+  discord = import ../applications/networking/instant-messengers/discord {
+    branch = "stable";
+    inherit pkgs;
+  };
+
+  discord-ptb = import ../applications/networking/instant-messengers/discord {
+    branch = "ptb";
+    inherit pkgs;
+  };
+
+  discord-canary = import ../applications/networking/instant-messengers/discord {
+    branch = "canary";
+    inherit pkgs;
+  };
 
   golden-cheetah = libsForQt56.callPackage ../applications/misc/golden-cheetah {};
 
