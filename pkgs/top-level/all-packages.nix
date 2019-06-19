@@ -5053,6 +5053,8 @@ in
     stdenv = clangStdenv;
   };
 
+  oppai-ng = callPackage ../tools/misc/oppai-ng { };
+
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
   opae = callPackage ../development/libraries/opae { };
