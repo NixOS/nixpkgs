@@ -482,6 +482,8 @@ in {
 
   helper = callPackage ../development/python-modules/helper { };
 
+  hiredis-py = callPackage ../development/python-modules/hiredis-py { };
+
   histbook = callPackage ../development/python-modules/histbook { };
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
