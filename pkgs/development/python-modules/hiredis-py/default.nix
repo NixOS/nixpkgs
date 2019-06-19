@@ -18,6 +18,7 @@ buildPythonPackage {
     homepage = "http://github.com/redis/hiredis-py";
     license = licenses.bsdOriginal;
     description = "Python extension that wraps protocol parsing code in hiredis. It primarily speeds up parsing of multi bulk replies.";
+    maintainers = with maintainers; [ BadDecisionsAlex ];
   };
 
 }
