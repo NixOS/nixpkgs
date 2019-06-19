@@ -17246,6 +17246,8 @@ in
 
   cubicsdr = callPackage ../applications/radio/cubicsdr { wxGTK = wxGTK31; };
 
+  cum = callPackage ../applications/misc/cum { };
+
   cuneiform = callPackage ../tools/graphics/cuneiform {};
 
   curseradio = callPackage ../applications/audio/curseradio { };
