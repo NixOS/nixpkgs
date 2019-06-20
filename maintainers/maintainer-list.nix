@@ -3457,6 +3457,11 @@
     github = "mrkkrp";
     name = "Mark Karpov";
   };
+  mrmebelman = {
+    email = "burzakovskij@protonmail.com";
+    github = "MrMebelMan";
+    name = "Vladyslav Burzakovskyy";
+  };
   mrVanDalo = {
     email = "contact@ingolf-wagner.de";
     github = "mrVanDalo";
