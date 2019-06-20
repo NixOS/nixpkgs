@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "shadowsocks-libev";
-  version = "3.2.5";
+  version = "3.3.0";
 
   # Git tag includes CMake build files which are much more convenient.
   src = fetchFromGitHub {
     owner = "shadowsocks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "09z20y35zjzsx5fd5cnnxxgbfcrh2bp0z7m15l59wlmlsfp7r2pw";
+    sha256 = "0f6fk7p49b1m78v4ipacbl522nma9b3qzrvihzp2mmsa6j3cysgr";
     fetchSubmodules = true;
   };
 
@@ -21,12 +21,6 @@ stdenv.mkDerivation rec {
                         docbook_xsl libxslt ];
 
   cmakeFlags = [ "-DWITH_STATIC=OFF"  "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON" ];
-
-  postInstall = ''
-    cp lib/* $out/lib
-    chmod +x $out/bin/*
-    mv $out/pkgconfig $out/lib
-  '';
 
   meta = with stdenv.lib; {
     description = "A lightweight secured SOCKS5 proxy";
