@@ -53,8 +53,9 @@ stdenv.mkDerivation rec {
     ++ optional cupsSupport cups;
   #TODO: colord?
 
-  # demos fail to install, no idea where's the problem
-  preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
+  ## (2019-06-12) Demos seem to install fine now. Keeping this around in case it fails again.
+  ## (2014-03-27) demos fail to install, no idea where's the problem
+  #preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
 
   enableParallelBuilding = true;
 
