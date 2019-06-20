@@ -13697,7 +13697,11 @@ in
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
   };
 
-  wxGTK31 = callPackage ../development/libraries/wxwidgets/3.1 {};
+  wxGTK31 = callPackage ../development/libraries/wxwidgets/3.1 {
+    inherit (gnome2) GConf;
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
+  };
 
   wxmac = callPackage ../development/libraries/wxwidgets/3.0/mac.nix {
     inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel;
