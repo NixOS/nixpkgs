@@ -828,7 +828,10 @@ default-package-overrides:
   - ghost-buster ==0.1.1.0
   - gi-atk ==2.0.18
   - gi-cairo ==1.0.17
+  - gi-dbusmenu ==0.4.4
+  - gi-dbusmenugtk3 ==0.4.5
   - gi-gdk ==3.0.16
+  - gi-gdkx11 ==3.0.6
   - gi-gdkpixbuf ==2.0.20
   - gi-gio ==2.0.19
   - gi-glib ==2.0.17
@@ -837,8 +840,9 @@ default-package-overrides:
   - gi-gtk-hs ==0.3.6.3
   - gi-gtksource ==3.0.16
   - gi-javascriptcore ==4.0.16
-  - gingersnap ==0.3.1.0
   - gi-pango ==1.0.19
+  - gi-xlib ==2.0.5
+  - gingersnap ==0.3.1.0
   - giphy-api ==0.6.0.1
   - githash ==0.1.3.1
   - github-release ==1.2.4
@@ -1968,6 +1972,7 @@ default-package-overrides:
   - system-fileio ==0.3.16.4
   - system-filepath ==0.4.14
   - tabular ==0.2.2.7
+  - taffybar ==3.2.0
   - tagchup ==0.4.1.1
   - tagged ==0.8.6
   - tagged-binary ==0.2.0.1
