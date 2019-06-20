@@ -534,6 +534,8 @@ in
 
   ammonite = callPackage ../development/tools/ammonite {};
 
+  amp = callPackage ../applications/editors/amp {};
+
   amtterm = callPackage ../tools/system/amtterm {};
 
   analog = callPackage ../tools/admin/analog {};
