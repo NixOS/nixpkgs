@@ -1,6 +1,6 @@
-{ fetchzip }:
+{ lib, fetchzip }:
 
-{ owner, repo, rev, name ? "source"
+{ owner, repo, rev, name ? (lib.sourceName repo rev)
 , ... # For hash agility
 }@args: fetchzip ({
   inherit name;

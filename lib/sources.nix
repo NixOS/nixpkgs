@@ -101,4 +101,13 @@ rec {
   pathHasContext = builtins.hasContext or (lib.hasPrefix builtins.storeDir);
 
   canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext (toString src));
+
+  sourceName = repo: rev: let
+    baseRevision = baseNameOf rev;
+    baseName = baseNameOf repo;
+    isHash = rev: null != builtins.match "[0-9a-z]{30,}" rev;
+    shortRev = if isHash baseRevision
+      then lib.substring 0 10 baseRevision
+      else lib.removePrefix "-" (lib.removePrefix baseName baseRevision);
+  in "${baseName}-${shortRev}-source";
 }

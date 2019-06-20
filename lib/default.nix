@@ -99,7 +99,7 @@ let
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
-      canCleanSource;
+      canCleanSource sourceName;
     inherit (modules) evalModules closeModules unifyModuleSyntax
       applyIfFunction unpackSubmodule packSubmodule mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions

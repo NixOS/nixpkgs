@@ -11,12 +11,9 @@
   stripRoot ? true
 , url
 , extraPostFetch ? ""
-, name ? "source"
 , ... } @ args:
 
 (fetchurl ({
-  inherit name;
-
   recursiveHash = true;
 
   downloadToTemp = true;

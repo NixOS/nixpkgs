@@ -1,7 +1,7 @@
-{ fetchzip }:
+{ lib, fetchzip }:
 
 # cgit example, snapshot support is optional in cgit
-{ repo, rev, name ? "source"
+{ repo, rev, name ? (lib.sourceName repo rev)
 , ... # For hash agility
 }@args: fetchzip ({
   inherit name;
