@@ -867,19 +867,19 @@ luaevent = buildLuarocksPackage {
 };
 luaexpat = buildLuarocksPackage {
   pname = "luaexpat";
-  version = "1.3.3-1";
+  version = "1.3.0-1";
 
   src = fetchurl {
-    url    = https://luarocks.org/luaexpat-1.3.3-1.src.rock;
-    sha256 = "0ahpfnby9qqgj22bajmrqvqq70nx19388lmjm9chljfzszy0hndm";
+    url    = https://luarocks.org/luaexpat-1.3.0-1.src.rock;
+    sha256 = "15jqz5q12i9zvjyagzwz2lrpzya64mih8v1hxwr0wl2gsjh86y5a";
   };
-  disabled = (luaOlder "5.0");
+  disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.keplerproject.org/luaexpat/";
     description = "XML Expat parsing";
-    maintainers = with maintainers; [ flosse ];
+    maintainers = with maintainers; [ arobyn flosse ];
     license = {
       fullName = "MIT/X11";
     };
