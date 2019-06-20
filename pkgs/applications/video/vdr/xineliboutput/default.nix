@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, vdr
 , libav, libcap, libvdpau
-, xineLib, libjpeg, libextractor, mesa_noglu, libGLU
+, xineLib, libjpeg, libextractor, mesa, libGLU
 , libX11, libXext, libXrender, libXrandr
 , makeWrapper
 }: let
@@ -46,7 +46,7 @@
       libXrandr
       libXrender
       libX11
-      mesa_noglu
+      mesa
       vdr
       xineLib
     ];
