@@ -59,7 +59,9 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       # Patching symlinks to remove build directory reference
       find $bazelOut/external -type l | while read symlink; do
-        ln -sf $(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,") "$symlink"
+        new_target="$(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,")"
+        rm "$symlink"
+        ln -sf "$new_target" "$symlink"
       done
 
       cp -r $bazelOut/external $out
