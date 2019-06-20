@@ -5785,7 +5785,9 @@ in
 
   scrypt = callPackage ../tools/security/scrypt { };
 
-  sd = callPackage ../tools/text/sd { };
+  sd = callPackage ../tools/text/sd {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   sdate = callPackage ../tools/misc/sdate { };
 
