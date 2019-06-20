@@ -38,8 +38,9 @@ let
           '';
           example = literalExample ''
             [
-              "/dev/dvb:/dev/dvb"
+              "/dev/dvb"
               "/dev/dri:/dev/dri:r"
+              "/dev/sdb:/dev/sdb:rw"
             ]
           '';
         };
