@@ -8,7 +8,7 @@ buildGoPackage rec {
   version = "4.0.0";
 
   goPackagePath = "github.com/keybase/client";
-  subPackages = [ "go/keybase" ];
+  subPackages = [ "go/keybase" "go/kbfs/kbfsgit/git-remote-keybase" ];
 
   dontRenameImports = true;
 
