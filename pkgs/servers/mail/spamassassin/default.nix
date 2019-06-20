@@ -1,10 +1,11 @@
 { stdenv, fetchurl, perlPackages, makeWrapper, gnupg }:
 
 perlPackages.buildPerlPackage rec {
-  name = "SpamAssassin-3.4.2";
+  pname = "SpamAssassin";
+  version = "3.4.2";
 
   src = fetchurl {
-    url = "mirror://apache/spamassassin/source/Mail-${name}.tar.bz2";
+    url = "mirror://apache/spamassassin/source/Mail-${pname}-${version}.tar.bz2";
     sha256 = "1np8h293bzg33i0xn9gj9krwgr7k6xbyf1yhxr2j2xci95d080yg";
   };
 

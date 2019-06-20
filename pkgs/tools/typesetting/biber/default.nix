@@ -4,8 +4,8 @@ let
   biberSource = stdenv.lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
 in
 
-perlPackages.buildPerlModule rec {
-  name = "biber-${version}";
+perlPackages.buildPerlModule {
+  pname = "biber";
   inherit (biberSource) version;
 
   src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
