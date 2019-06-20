@@ -447,6 +447,7 @@
   ./services/misc/mame.nix
   ./services/misc/mathics.nix
   ./services/misc/matrix-synapse.nix
+  ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
   ./services/misc/mesos-master.nix
