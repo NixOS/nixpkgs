@@ -1,7 +1,8 @@
 { stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
 , libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
-, libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg, ncurses }:
-let
+, libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg, ncurses
+, callPackage
+}: let
   mkPlugin = name: stdenv.mkDerivation {
     name = "vdr-${vdr.version}-${name}";
     inherit (vdr) src;
@@ -10,6 +11,8 @@ let
     installFlags = [ "DESTDIR=$(out)" ];
   };
 in {
+
+  xineliboutput = callPackage ./xineliboutput {};
 
   skincurses = (mkPlugin "skincurses").overrideAttrs(oldAttr: {
     buildInputs = oldAttr.buildInputs ++ [ ncurses ];
