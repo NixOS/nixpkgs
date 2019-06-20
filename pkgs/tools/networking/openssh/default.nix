@@ -88,6 +88,8 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin "--disable-libutil"
     ++ optional (!linkOpenssl) "--without-openssl";
 
+  buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
+
   enableParallelBuilding = true;
 
   hardeningEnable = [ "pie" ];
