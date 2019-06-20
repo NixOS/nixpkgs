@@ -152,6 +152,13 @@ stdenv.mkDerivation rec {
       rev = "c11d9cfa23ff9f77681a8f12742f68143eed4504";
       sha256 = "0xzra7mbgqvahk9v45bjwir2mqz73hrhhy314jq5nxrb35ysdxyi";
     })
+
+    # https://trac.sagemath.org/ticket/26718
+    (fetchpatch {
+      name = "threejs-r100.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=86c5bb000259e6de5d7c60afc608a4b0d010b690";
+      sha256 = "0sgqqd4df2bxsq19b6kfy7dvgyxprlpg7f3xx7g3fs8ij937m352";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
