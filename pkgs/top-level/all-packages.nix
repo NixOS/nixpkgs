@@ -7668,6 +7668,14 @@ in
 
   bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "10"; };
 
+  openjfx11 =
+    if stdenv.isDarwin then
+      null
+    else
+      callPackage ../development/compilers/openjdk/openjfx/11.nix {
+        openjdk = openjdk11;
+      };
+
   openjdk8 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin/8.nix { }
@@ -7682,6 +7690,7 @@ in
       callPackage ../development/compilers/openjdk/darwin/11.nix { }
     else
       callPackage ../development/compilers/openjdk/11.nix {
+        openjfx = openjfx11;
         inherit (gnome2) GConf gnome_vfs;
       };
 
