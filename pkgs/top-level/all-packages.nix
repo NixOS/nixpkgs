@@ -19567,6 +19567,7 @@ in
     inherit (gnome2) libgnomecanvas;
   };
 
+  pdfcpu = callPackage ../applications/graphics/pdfcpu { };
   pdftk = callPackage ../tools/typesetting/pdftk { };
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
