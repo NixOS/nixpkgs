@@ -10671,6 +10671,7 @@ in
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
     callPackage = newScope { libav = pkgs.ffmpeg_4; };
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
   });
 
   gstreamer = callPackage ../development/libraries/gstreamer/legacy/gstreamer { };
