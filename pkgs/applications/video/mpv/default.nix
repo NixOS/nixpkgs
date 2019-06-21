@@ -46,7 +46,7 @@
 , youtubeSupport     ? true,           youtube-dl    ? null
 , archiveSupport     ? false,          libarchive    ? null
 , jackaudioSupport   ? false,          libjack2      ? null
-, openalSupport      ? false,          openalSoft    ? null
+, openalSupport      ? true,          openalSoft    ? null
 , vapoursynthSupport ? false,          vapoursynth   ? null
 }:
 
