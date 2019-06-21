@@ -71,6 +71,7 @@ in rec {
       mysql
       nginx
       nodejs
+      nodejs-10_x
       openssh
       php
       postgresql
