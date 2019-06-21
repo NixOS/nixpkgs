@@ -1423,6 +1423,8 @@ in
 
   dislocker = callPackage ../tools/filesystems/dislocker { };
 
+  distgen = callPackage ../development/tools/distgen {};
+
   distrobuilder = callPackage ../tools/virtualization/distrobuilder { };
 
   ditaa = callPackage ../tools/graphics/ditaa { };
