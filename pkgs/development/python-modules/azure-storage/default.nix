@@ -1,35 +1,34 @@
-{ pkgs
-, buildPythonPackage
+{ buildAzurePythonPackage
 , fetchPypi
+, lib
+, isPy3k
 , python
 , azure-common
-, futures
 , dateutil
+, futures
 , requests
-, isPy3k
 }:
 
-buildPythonPackage rec {
-  version = "0.20.3";
+buildAzurePythonPackage rec {
+  version = "0.36.0";
   pname = "azure-storage";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "06bmw6k2000kln5jwk5r9bgcalqbyvqirmdh9gq4s6nb4fv3c0jb";
+    sha256 = "0pyasfxkin6j8j00qmky7d9cvpxgis4fi9bscgclj6yrpvf14qpv";
   };
 
   propagatedBuildInputs = [ azure-common dateutil requests ]
-                            ++ pkgs.lib.optionals (!isPy3k) [ futures ];
+                            ++ lib.optionals (!isPy3k) [ futures ];
 
-  postInstall = ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-  '';
+  # source package doesn't contain tests
+  # github repo contains over 80 other azure namespace packages
+  doCheck = false;
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "Microsoft Azure SDK for Python";
-    homepage = "https://azure.microsoft.com/en-us/develop/python/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ olcai ];
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ olcai jonringer ];
   };
 }
