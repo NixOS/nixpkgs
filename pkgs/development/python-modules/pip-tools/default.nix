@@ -18,12 +18,12 @@ buildPythonPackage rec {
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) [
     # Depend on network tests:
     "test_editable_package_vcs"
-    "test_generate_hashes_all_platforms"
-    "test_generate_hashes_without_interfering_with_each_other"
-    "test_realistic_complex_sub_dependencies"
-    "test_generate_hashes_with_editable"
     "test_filter_pip_markes"
+    "test_generate_hashes_all_platforms"
+    "test_generate_hashes_with_editable"
+    "test_generate_hashes_without_interfering_with_each_other"
     "test_get_hashes_local_repository_cache_miss"
+    "test_realistic_complex_sub_dependencies"
     "test_upgrade_packages_option"
     # Expect specific version of "six":
     "test_editable_package"
