@@ -21,6 +21,9 @@ pythonPackages.buildPythonApplication {
         --replace /usr/sbin/sendmail sendmail \
         --replace /usr/bin/whois whois
     done
+
+    substituteInPlace config/filter.d/dovecot.conf \
+      --replace dovecot.service dovecot2.service
   '';
 
   doCheck = false;
