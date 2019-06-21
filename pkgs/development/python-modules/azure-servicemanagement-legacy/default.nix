@@ -1,24 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{ buildAzurePythonPackage
+, fetchPypi
+, lib
+, isPy3k
+, python
 , azure-common
 , requests
 }:
 
-buildPythonPackage rec {
-  version = "0.20.7";
+buildAzurePythonPackage rec {
+  version = "0.20.6";
   pname = "azure-servicemanagement-legacy";
 
-  src = fetchFromGitHub {
-    owner = "Azure";
-    repo = "azure-sdk-for-python";
-    rev = "ab01fc1f23462f130c69f46505524b88101023dc";
-    sha256 = "0w2bm9hkwy1m94l8r2klnpqn4192y8bir3z8bymxgfx9y0b1mn2q";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
+    sha256 = "07cq21f9xa7fg8irdmggllmcmzm9j9ywps24jdxwpx6llf7zz0y8";
   };
-
-  preBuild = ''
-    cd ./azure-servicemanagement-legacy
-  '';
 
   propagatedBuildInputs = [
     azure-common
@@ -30,8 +27,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Service Management Legacy Client Library";
-    homepage = https://github.com/Azure/azure-sdk-for-python/tree/master/azure-servicemanagement-legacy;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai mwilsoninsight ];
+    maintainers = with maintainers; [ olcai jonringer mwilsoninsight ];
   };
 }
