@@ -22566,6 +22566,8 @@ in
 
   nauty = callPackage ../applications/science/math/nauty {};
 
+  osi = callPackage ../development/libraries/science/math/osi { };
+
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     pythonProtobuf = pythonPackages.protobuf;
   };
