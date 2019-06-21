@@ -4831,6 +4831,11 @@
     github = "severen";
     name = "Severen Redwood";
   };
+  steell = {
+    email = "steve@steellworks.com";
+    github = "Steell";
+    name = "Steve Elliott";
+  };
   stephenmw = {
     email = "stephen@q5comm.com";
     github = "stephenmw";
