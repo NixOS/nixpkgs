@@ -1,16 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{ lib, buildAzureMgmtPythonPackage, fetchPypi, isPy3k, python
+, azure-common
+, azure-mgmt-nspkg
 , msrest
 , msrestazure
-, azure-common
-, isPy3k
-, azure-mgmt-nspkg
 }:
 
-buildPythonPackage rec {
-  pname = "azure-mgmt-advisor";
+buildAzureMgmtPythonPackage rec {
   version = "2.0.1";
+  pname = "azure-mgmt-advisor";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,8 +28,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Advisor Client Library";
-    homepage = https://github.com/Azure/azure-sdk-for-python/tree/master/azure-mgmt-advisor;
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/advisor/azure-mgmt-advisor";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ mwilsoninsight jonringer ];
   };
 }
