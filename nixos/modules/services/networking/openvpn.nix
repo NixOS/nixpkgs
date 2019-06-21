@@ -78,6 +78,14 @@ in
 
   options = {
 
+    services.openvpn.enableForwarding = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Set up IP forwarding on the host.
+      '';
+      };
+
     services.openvpn.servers = mkOption {
       default = {};
 
@@ -210,6 +218,8 @@ in
     environment.systemPackages = [ openvpn ];
 
     boot.kernelModules = [ "tun" ];
+
+    boot.kernel.sysctl = lib.mkIf cfg.enableForwarding { "net.ipv4.ip_forward" = true; };
 
   };
 
