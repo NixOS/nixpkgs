@@ -145,10 +145,10 @@ let
   ];
 
   graal-mxcachegit = [
-    { sha256 = "0vj37hxmklq9i3pz7l2sqcan6xhmb0rmbn2m41mw744x4qz8m8na"; name = "graaljs";     url = "https://github.com/graalvm/graaljs.git";     rev = "vm-${version}"; }
+    { sha256 = "1dyzxng70mfgfpl2blpjllmlqpdxi69jp7251z36lq36igin3lr2"; name = "graaljs";     url = "https://github.com/graalvm/graaljs.git";     rev = "vm-${version}"; }
     { sha256 = "1zyaaygzd8fc1a1684h75h21k8rs2rnhkr5y217wlazyd78j65nr"; name = "truffleruby"; url = "https://github.com/oracle/truffleruby.git";  rev = "vm-${version}"; }
     { sha256 = "0kyzx5y2kag08m9vla5x117al9ijs10783qpnv8b7zr116fwi28h"; name = "fastr";       url = "https://github.com/oracle/fastr.git";        rev = "vm-${version}"; }
-    { sha256 = "1r3afr4176lvk3jyha0sbaaripizla12vcsjlflh7r06w7gxqz3m"; name = "graalpython"; url = "https://github.com/graalvm/graalpython.git"; rev = "vm-${version}"; }
+    { sha256 = "17gphvzsl08q3mn9gclvkkpcdkjir9bhnibls2x1cas0n5x3v4mw"; name = "graalpython"; url = "https://github.com/graalvm/graalpython.git"; rev = "vm-${version}"; }
   ];
 
   ninja-syntax = python27.pkgs.buildPythonPackage rec {
