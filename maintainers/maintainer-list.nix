@@ -1353,6 +1353,11 @@
     github = "domenkozar";
     name = "Domen Kozar";
   };
+  doronbehar = {
+    email = "me@doronbehar.com";
+    github = "doronbehar";
+    name = "Doron Behar";
+  };
   dotlambda = {
     email = "rschuetz17@gmail.com";
     github = "dotlambda";
