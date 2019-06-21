@@ -171,6 +171,8 @@ in
 
   digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
 
+  grsync = callPackage ../applications/misc/grsync { };
+
   dockerTools = callPackage ../build-support/docker { };
 
   nix-prefetch-docker = callPackage ../build-support/docker/nix-prefetch-docker.nix { };
@@ -531,6 +533,8 @@ in
   };
 
   ammonite = callPackage ../development/tools/ammonite {};
+
+  amp = callPackage ../applications/editors/amp {};
 
   amtterm = callPackage ../tools/system/amtterm {};
 
@@ -5779,7 +5783,9 @@ in
 
   scrypt = callPackage ../tools/security/scrypt { };
 
-  sd = callPackage ../tools/text/sd { };
+  sd = callPackage ../tools/text/sd {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   sdate = callPackage ../tools/misc/sdate { };
 
@@ -8008,6 +8014,7 @@ in
 
   cargo-download = callPackage ../tools/package-management/cargo-download { };
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+  cargo-graph = callPackage ../tools/package-management/cargo-graph { };
   cargo-outdated = callPackage ../tools/package-management/cargo-outdated {};
   cargo-release = callPackage ../tools/package-management/cargo-release {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -8965,6 +8972,8 @@ in
   cide = callPackage ../development/tools/continuous-integration/cide { };
 
   cl-launch = callPackage ../development/tools/misc/cl-launch {};
+
+  cloud-nuke = callPackage ../development/tools/cloud-nuke { };
 
   cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli { };
 
@@ -10140,6 +10149,8 @@ in
 
   cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
 
+  ctypes_sh = callPackage ../development/libraries/ctypes_sh { };
+
   curlcpp = callPackage ../development/libraries/curlcpp { };
 
   curlpp = callPackage ../development/libraries/curlpp { };
@@ -10653,7 +10664,7 @@ in
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
-    callPackage = newScope { libav = pkgs.ffmpeg; };
+    callPackage = newScope { libav = pkgs.ffmpeg_4; };
   });
 
   gstreamer = callPackage ../development/libraries/gstreamer/legacy/gstreamer { };
@@ -13015,7 +13026,7 @@ in
 
   rlog = callPackage ../development/libraries/rlog { };
 
-  rocksdb = callPackage ../development/libraries/rocksdb { jemalloc = jemalloc450; };
+  rocksdb = callPackage ../development/libraries/rocksdb { };
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
 
@@ -17226,6 +17237,8 @@ in
 
   cubicsdr = callPackage ../applications/radio/cubicsdr { wxGTK = wxGTK31; };
 
+  cum = callPackage ../applications/misc/cum { };
+
   cuneiform = callPackage ../tools/graphics/cuneiform {};
 
   curseradio = callPackage ../applications/audio/curseradio { };
@@ -18878,8 +18891,7 @@ in
   };
 
   luakit = callPackage ../applications/networking/browsers/luakit {
-    inherit (lua51Packages) luafilesystem;
-    lua5 = lua5_1;
+    inherit (luajitPackages) luafilesystem;
   };
 
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
@@ -19538,6 +19550,7 @@ in
     inherit (gnome2) libgnomecanvas;
   };
 
+  pdfcpu = callPackage ../applications/graphics/pdfcpu { };
   pdftk = callPackage ../tools/typesetting/pdftk { };
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
@@ -21637,7 +21650,7 @@ in
   mrrescue = callPackage ../games/mrrescue { };
 
   mudlet = libsForQt5.callPackage ../games/mudlet {
-    inherit (lua51Packages) luafilesystem lrexlib luazip luasqlite3;
+    inherit (lua51Packages) luafilesystem lrexlib-pcre luazip luasql-sqlite3;
   };
 
   n2048 = callPackage ../games/n2048 {};

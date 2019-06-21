@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cfgv";
-  version = "1.6.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vxjwga8x9nn5xqbhf5sql7jab3s1la07mxbaqgcfjz8lpp2z7vf";
+    sha256 = "0zn3nc7cyfsvg9gp7558656n2sn1m01j30l79ci22ibgvq4vxv9j";
   };
 
   propagatedBuildInputs = [ six ];

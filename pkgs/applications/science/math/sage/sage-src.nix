@@ -68,6 +68,9 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch/?h=c4d966e7cb0c7b87c55d52dc6f46518433a2a0a2";
       sha256 = "0pqbbsx8mriwny422s9mp3z5d095cnam32sm62q4mxk8g8jb9vm9";
     })
+
+    # https://trac.sagemath.org/ticket/28007
+    ./patches/threejs-offline.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
@@ -148,6 +151,13 @@ stdenv.mkDerivation rec {
       base = "8.8.beta4";
       rev = "c11d9cfa23ff9f77681a8f12742f68143eed4504";
       sha256 = "0xzra7mbgqvahk9v45bjwir2mqz73hrhhy314jq5nxrb35ysdxyi";
+    })
+
+    # https://trac.sagemath.org/ticket/26718
+    (fetchpatch {
+      name = "threejs-r100.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=86c5bb000259e6de5d7c60afc608a4b0d010b690";
+      sha256 = "0sgqqd4df2bxsq19b6kfy7dvgyxprlpg7f3xx7g3fs8ij937m352";
     })
   ];
 

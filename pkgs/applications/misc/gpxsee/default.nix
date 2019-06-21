@@ -1,25 +1,29 @@
-{ stdenv, fetchFromGitHub, qmake, qttools }:
+{ stdenv, fetchFromGitHub, qmake, qttools, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "7.8";
+  version = "7.9";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "1ymqz4wrl9ghkyyqi2vrnlyvz3fc84s3p8a1dkiqlvyvj360ck9j";
+    sha256 = "029l5dhc9nnxiw7p0s4gyfkcqw709z7lz96aq8krs75mfk4fv07k";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake makeWrapper ];
   buildInputs = [ qttools ];
 
   preConfigure = ''
-    substituteInPlace src/common/programpaths.cpp --replace /usr/share/ $out/share/
     lrelease lang/*.ts
   '';
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/gpxsee \
+      --prefix XDG_DATA_DIRS ":" $out/share
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://www.gpxsee.org/;

@@ -1,8 +1,10 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, cmark, lmdb, qt5, qtmacextras, mtxclient
-, boost, spdlog, olm, pkgconfig
+, boost, spdlog, olm, pkgconfig, nlohmann_json
 }:
 
+# These hashes and revisions are based on those from here:
+# https://github.com/Nheko-Reborn/nheko/blob/v0.6.4/deps/CMakeLists.txt#L52
 let
   tweeny = fetchFromGitHub {
     owner = "mobius3";
@@ -20,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nheko-${version}";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1h95lixciiq904dnfpwxhyf545yfsrphhwqyvs4yrzdfr9k0cf98";
+    sha256 = "19dkc98l1q4070v6mli4ybqn0ip0za607w39hjf0x8rqdxq45iwm";
   };
 
   # If, on Darwin, you encounter the error
@@ -54,6 +56,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DTWEENY_INCLUDE_DIR=.deps/include"
     "-DLMDBXX_INCLUDE_DIR=${lmdbxx}"
+    "-Dnlohmann_json_DIR=${nlohmann_json}/lib/cmake/nlohmann_json"
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];

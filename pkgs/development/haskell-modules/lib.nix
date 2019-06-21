@@ -161,6 +161,7 @@ rec {
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
 
   markBroken = drv: overrideCabal drv (drv: { broken = true; hydraPlatforms = []; });
+  unmarkBroken = drv: overrideCabal drv (drv: { broken = false; });
   markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
 
   enableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = true; });
