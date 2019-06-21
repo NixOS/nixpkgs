@@ -27,8 +27,7 @@ let
       };
 
       email = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+        type = types.str;
         description = "Contact email address for the CA to be able to reach you.";
       };
 
@@ -63,20 +62,6 @@ let
           be reloaded.
 
           Executed in the same directory with the new certificate.
-        '';
-      };
-
-      plugins = mkOption {
-        type = types.listOf (types.enum [
-          "cert.der" "cert.pem" "chain.pem" "external.sh"
-          "fullchain.pem" "full.pem" "key.der" "key.pem" "account_key.json"
-        ]);
-        default = [ "fullchain.pem" "full.pem" "key.pem" "account_key.json" ];
-        description = ''
-          Plugins to enable. With default settings simp_le will
-          store public certificate bundle in <filename>fullchain.pem</filename>,
-          private key in <filename>key.pem</filename> and those two previous
-          files combined in <filename>full.pem</filename> in its state directory.
         '';
       };
 
@@ -115,13 +100,28 @@ let
           own server roots if needed.
         '';
       };
+
+      dnsProvider = mkOption {
+        type = types.nullOr types.str;
+        example = "route53";
+        default = null;
+        description = "DNS Challenge provider";
+      };
+
+      credentialsFile = mkOption {
+        type = types.str;
+        description = ''
+          File containing DNS provider credentials passed as environment variables.
+          See https://go-acme.github.io/lego/dns/ for more information.
+        '';
+        example = "/var/src/secrets/example.org-route53-api-token";
+      };
     };
   };
 
 in
 
 {
-
   ###### interface
 
   options = {
@@ -136,8 +136,8 @@ in
 
       validMin = mkOption {
         type = types.int;
-        default = 30 * 24 * 3600;
-        description = "Minimum remaining validity before renewal in seconds.";
+        default = 30;
+        description = "Minimum remaining validity before renewal in days.";
       };
 
       renewInterval = mkOption {
@@ -212,11 +212,14 @@ in
                 cpath = lpath + optionalString (data.activationDelay != null) ".staging";
                 lpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                cmdline = [ "-v" "-d" data.domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
-                          ++ optionals (data.email != null) [ "--email" data.email ]
-                          ++ concatMap (p: [ "-f" p ]) data.plugins
-                          ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains)
-                          ++ optionals (!cfg.production) ["--server" "https://acme-staging.api.letsencrypt.org/directory"];
+                renewHook = pkgs.writeScript "lego-renew-hook" ''
+                  touch /tmp/success
+                '';
+                globalOpts = optionals (!cfg.production) ["--server" "https://acme-staging-v02.api.letsencrypt.org/directory"]
+                          ++ concatLists (mapAttrsToList (name: root: [ "--domains" name ]) data.extraDomains)
+                          ++ [ "--domains" data.domain "--email" data.email "--accept-tos" ]
+                          ++ (if data.dnsProvider != null then [ "--dns" data.dnsProvider ] else [ "--http.webroot" data.webroot ]);
+                renewOpts = [ "renew" "--renew-hook" renewHook "--days" (toString cfg.validMin) ];
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];
@@ -228,8 +231,9 @@ in
                     User = data.user;
                     Group = data.group;
                     PrivateTmp = true;
+                    EnvironmentFile = data.credentialsFile;
                   };
-                  path = with pkgs; [ simp_le systemd ];
+                  path = with pkgs; [ lego systemd ];
                   preStart = ''
                     mkdir -p '${cfg.directory}'
                     chown 'root:root' '${cfg.directory}'
@@ -239,22 +243,34 @@ in
                     fi
                     chmod ${rights} '${cpath}'
                     chown -R '${data.user}:${data.group}' '${cpath}'
-                    mkdir -p '${data.webroot}/.well-known/acme-challenge'
-                    chown -R '${data.user}:${data.group}' '${data.webroot}/.well-known/acme-challenge'
+                    ${optionalString (data.dnsProvider != null) ''
+                      mkdir -p '${data.webroot}/.well-known/acme-challenge'
+                      chown -R '${data.user}:${data.group}' '${data.webroot}/.well-known/acme-challenge'
+                    ''}
                   '';
                   script = ''
                     cd '${cpath}'
                     set +e
-                    simp_le ${escapeShellArgs cmdline}
+                    lego ${escapeShellArgs (globalOpts ++ renewOpts)}
                     EXITCODE=$?
                     set -e
-                    echo "$EXITCODE" > /tmp/lastExitCode
-                    exit "$EXITCODE"
+                    if [ "$EXITCODE" != "0" ]; then
+                      echo "initial lego certificate query"
+                      lego ${escapeShellArgs (globalOpts ++ [ "run" ])} && ${renewHook}
+                    fi
                   '';
                   postStop = ''
                     cd '${cpath}'
 
-                    if [ -e /tmp/lastExitCode ] && [ "$(cat /tmp/lastExitCode)" = "0" ]; then
+                    if [ -e /tmp/success ]; then
+                      cp .lego/certificates/${data.domain}.crt cert.pem
+                      cp .lego/certificates/${data.domain}.issuer.crt chain.pem
+                      cp .lego/certificates/${data.domain}.key key.pem
+                      cat .lego/certificates/${data.domain}.crt .lego/certificates/${data.domain}.issuer.crt > fullchain.pem
+                      cat .lego/certificates/${data.domain}.key .lego/certificates/${data.domain}.crt .lego/certificates/${data.domain}.issuer.crt > full.pem
+                      chmod ${rights} "${cpath}/"{key,fullchain,full,chain,cert}.pem
+                      chown '${data.user}:${data.group}' "${cpath}/"{key,fullchain,full,chain,cert}.pem
+
                       ${if data.activationDelay != null then ''
 
                       ${data.preDelay}
@@ -270,6 +286,7 @@ in
                       # activationDelay == null and postRun == ""
                       true
                     fi
+                    exit 0
                   '';
 
                   before = [ "acme-certificates.target" ];
