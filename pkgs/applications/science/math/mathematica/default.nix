@@ -99,8 +99,9 @@ stdenv.mkDerivation rec {
 
     # Fix xkeyboard config path for Qt
     for path in mathematica Mathematica; do
-      line=$(grep -n QT_PLUGIN_PATH $path | sed 's/:.*//')
-      sed -i -e "$line iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"" $path
+      for line in $(grep -n QT_PLUGIN_PATH $path | sed 's/:.*//'); do
+          sed -i -e "$line iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"" $path
+      done
     done
   '';
 
