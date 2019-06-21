@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, fetchgit, mercurial, python27,
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, fetchgit, mercurial, python27, setJavaClassPath,
   zlib, makeWrapper, openjdk, unzip, git, clang, llvm, which, icu, ruby, bzip2, glibc
   # gfortran, readline, bzip2, lzma, pcre, curl, ed, tree ## WIP: fastr deps
 }:
@@ -267,8 +267,21 @@ in rec {
       mv openjdk1.8.0_*/linux-amd64/product/* $out
       install -v -m0555 -D $MX_CACHE_DIR/hsdis*/hsdis.so $out/jre/lib/amd64/hsdis-amd64.so
     '';
-    dontFixup = true; # do not nuke path of ffmpeg etc
-    dontStrip = true; # why? see in oraclejdk derivation
+    # copy-paste openjdk's preFixup
+    preFixup = ''
+      # Propagate the setJavaClassPath setup hook from the JRE so that
+      # any package that depends on the JRE has $CLASSPATH set up
+      # properly.
+      mkdir -p $out/nix-support
+      printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
+
+      # Set JAVA_HOME automatically.
+      mkdir -p $out/nix-support
+      cat <<EOF > $out/nix-support/setup-hook
+      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+      EOF
+    '';
+    dontStrip = true; # stripped javac crashes with "segmentaion fault"
     inherit (openjdk) meta;
     inherit (openjdk) postFixup;
   };
@@ -363,12 +376,10 @@ in rec {
       cp -rf ${glibc}/lib/* $out/jre/lib/svm/clibraries/linux-amd64/
       cp ${glibc.static}/lib/* $out/jre/lib/svm/clibraries/linux-amd64/
       cp ${zlib.static}/lib/libz.a $out/jre/lib/svm/clibraries/linux-amd64/libz.a
-      # Organize the out dir
-      mkdir -p $out/share && mv $out/man $out/share
     '';
 
-    dontFixup = true; # do not nuke path of ffmpeg etc
-    dontStrip = true; # why? see in oraclejdk derivation
+    inherit (jvmci8) preFixup;
+    dontStrip = true; # stripped javac crashes with "segmentaion fault"
     doInstallCheck = true;
     installCheckPhase = ''
       echo ${lib.escapeShellArg ''
@@ -403,7 +414,7 @@ in rec {
       description = "High-Performance Polyglot VM";
       license = licenses.gpl2;
       maintainers = with maintainers; [ volth hlolli ];
-      platforms = [ "x86_64-linux" ];
+      platforms = [ "x86_64-linux" "aarch64-linux" ];
     };
   };
 }
