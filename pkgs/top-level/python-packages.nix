@@ -273,6 +273,8 @@ in {
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
 
+  azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
+
   azure-cli-core = callPackage ../development/python-modules/azure-cli-core { };
 
   azure-cli-telemetry = callPackage ../development/python-modules/azure-cli-telemetry { };
@@ -280,8 +282,6 @@ in {
   azure-common = callPackage ../development/python-modules/azure-common { };
 
   azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
-
-  azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
 
   azure-batch = callPackage ../development/python-modules/azure-batch { };
 

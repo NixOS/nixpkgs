@@ -1,18 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{ lib, buildAzurePythonPackage, fetchPypi
 , azure-common
 , msrest
 }:
 
-buildPythonPackage rec {
-  pname = "azure-applicationinsights";
+buildAzurePythonPackage rec {
   version = "0.1.0";
+  pname = "azure-applicationinsights";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "6e1839169bb6ffd2d2c21ee3f4afbdd068ea428ad47cf884ea3167ecf7fd0859";
+    sha256 = "0n88zpvyqrrixa2ghz6li91fls6hpnpz9qqyqb9d5zxnkcb3j63f";
   };
 
   propagatedBuildInputs = [
@@ -25,8 +23,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Application Insights Client Library";
-    homepage = https://github.com/Azure/azure-sdk-for-python/tree/master/azure-applicotioninsights;
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/applicationinsights/azure-applicationinsights";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ mwilsoninsight jonringer ];
   };
 }
