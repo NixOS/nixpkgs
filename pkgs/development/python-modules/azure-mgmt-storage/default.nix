@@ -1,35 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{ lib, buildAzureMgmtPythonPackage, fetchPypi, isPy3k, python
+, azure-common
 , azure-mgmt-common
-, isPy3k
+, azure-mgmt-nspkg
+, msrest
+, msrestazure
 }:
 
-buildPythonPackage rec {
-  version = "3.3.0";
+buildAzureMgmtPythonPackage rec {
+  version = "4.0.0";
   pname = "azure-mgmt-storage";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1kffay8hr8h3hf78wb1kisvffpwxsxy6lixbgh9dbv0p781sgyh6";
+    sha256 = "1kxd30s2axn3g4qx3v7q3d5l744a29xlfk3q06ra0rqm1p6prvgv";
   };
 
-  postInstall = if isPy3k then "" else ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-  '';
-
-  propagatedBuildInputs = [ azure-mgmt-common ];
+  propagatedBuildInputs = [
+    azure-common
+    msrest
+    msrestazure
+  ] ++ lib.optional (!isPy3k) azure-mgmt-nspkg;
 
   # has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure Storage Management Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/storage?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/storage/azure-mgmt-storage";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai mwilsoninsight ];
+    maintainers = with maintainers; [ olcai mwilsoninsight jonringer ];
   };
 }
