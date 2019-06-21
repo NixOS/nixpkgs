@@ -85,7 +85,7 @@ let
       for i in $import_progs $run_progs; do
         if [[ ! -x $i ]]; then
           echo "FAIL"
-          echo "$i is called in udev rules but is not executable"
+          echo "$i is called in udev rules but is not executable or does not exist"
           exit 1
         fi
       done
