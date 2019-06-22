@@ -1,34 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
+{ lib, buildAzurePythonPackage, fetchPypi, isPy3k
 , azure-common
 , msrestazure
 }:
 
-buildPythonPackage rec {
+buildAzurePythonPackage rec {
+  version = "7.0.0";
   pname = "azure-batch";
-  version = "6.0.1";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "d5b0de3db0058cd69baf30e059874094abf865e24ccd82e3cd25f3a48b9676d1";
+    sha256 = "1q8mdjdbz408z2j0y1zxqg9zg8j1v84p0dnh621vq73a2x1g298j";
   };
 
   propagatedBuildInputs = [
-    msrest
-    msrestazure
     azure-common
+    msrestazure
   ];
 
-  # has no tests
+  # tests not included in source package
+  # github repo contains over 80 other azure namespace packages
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure Batch Client Library";
     homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/batch?view=azure-python;
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ mwilsoninsight jonringer ];
   };
 }
