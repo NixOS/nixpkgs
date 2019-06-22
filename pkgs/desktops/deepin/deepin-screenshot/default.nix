@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-screenshot";
-  version = "4.1.10";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "00zmmnvm5wv9fkc9fbqs23jsqs1mnr68afl4irj6y287ic0pj61i";
+    sha256 = "16wy1ywp4lm7fg488laqxgxpir745rbpj9z410r6x7krpgjds189";
   };
 
   nativeBuildInputs = [

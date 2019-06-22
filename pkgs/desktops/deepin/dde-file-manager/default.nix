@@ -11,13 +11,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-file-manager";
-  version = "4.8.6.2";
+  version = "4.8.6.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1qw9slssvy6c4j9czyqrhlr3pq6hzxybb86darja2vka84zmvwip";
+    sha256 = "1m0ykw5a91rm5xcah8bzk21xsambqvncj8104ihdhf9h0z9kdmm2";
   };
 
   nativeBuildInputs = [
