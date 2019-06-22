@@ -474,6 +474,8 @@ in {
 
   cozy = callPackage ../development/python-modules/cozy { };
 
+  codespell = callPackage ../development/python-modules/codespell { };
+
   curio = callPackage ../development/python-modules/curio { };
 
   dendropy = callPackage ../development/python-modules/dendropy { };
