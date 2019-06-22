@@ -22,6 +22,8 @@ let
 
     editor = if cfg.editor then "True" else "False";
 
+    configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
+
     inherit (cfg) consoleMode;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
@@ -52,6 +54,19 @@ in {
         gaining root access by passing init=/bin/sh as a kernel
         parameter. However, it is enabled by default for backwards
         compatibility.
+      '';
+    };
+
+    configurationLimit = mkOption {
+      default = null;
+      example = 120;
+      type = types.nullOr types.int;
+      description = ''
+        Maximum number of latest generations in the boot menu. 
+        Useful to prevent boot partition running out of disk space.
+
+        <literal>null</literal> means no limit i.e. all generations 
+        that were not garbage collected yet.
       '';
     };
 
