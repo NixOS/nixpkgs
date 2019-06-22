@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   ]
   ++ optional gtkSupport gtk3 # for gtksink
   ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
-  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 libgudev jack2 ]
+  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 libgudev ]
   ++ optionals (stdenv.isLinux && enableJack) [
     jack2
   ];
