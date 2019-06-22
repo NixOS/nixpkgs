@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    video_transcoding (0.25.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  video_transcoding
+
+BUNDLED WITH
+   1.17.2

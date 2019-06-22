@@ -2807,6 +2807,8 @@ in
     inherit (pythonPackages) sphinx;
   };
 
+  video-transcoding = callPackage ../tools/video/video-transcoding { };
+
   wallutils = callPackage ../tools/graphics/wallutils { };
 
   wev = callPackage ../tools/misc/wev { };
