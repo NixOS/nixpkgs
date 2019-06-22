@@ -1,7 +1,11 @@
-{ stdenv, lib, fetchurl, makeWrapper, perl, unrar, unzip, gzip, file, extraBackends ? [] }:
+{ stdenv, lib, fetchurl, makeWrapper, perl
+, unzip, gzip, file
+# extractors which are added to unp’s PATH
+, extraBackends ? []
+}:
 
 let
-  runtime_bins =  [ file unrar unzip gzip ] ++ extraBackends;
+  runtime_bins =  [ file unzip gzip ] ++ extraBackends;
 
 in stdenv.mkDerivation rec {
   name = "unp-${version}";
