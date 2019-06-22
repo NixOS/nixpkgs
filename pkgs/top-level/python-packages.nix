@@ -2099,6 +2099,8 @@ in {
 
   google-music-utils = callPackage ../development/python-modules/google-music-utils { };
 
+  google-pasta = callPackage ../development/python-modules/google-pasta { };
+
   gpapi = callPackage ../development/python-modules/gpapi { };
   gplaycli = callPackage ../development/python-modules/gplaycli { };
 
