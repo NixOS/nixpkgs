@@ -1445,6 +1445,8 @@ in
     gtk = gtk3;
   };
 
+  drm_info = callPackage ../tools/graphics/drm_info { };
+
   dtools = callPackage ../development/tools/dtools { };
 
   dtrx = callPackage ../tools/compression/dtrx { };
