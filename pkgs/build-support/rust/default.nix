@@ -108,13 +108,6 @@ in stdenv.mkDerivation (args // {
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
-    # rename the output dir to a architecture independent one
-    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
-    for target in "''${targets[@]}"; do
-      rm -rf "$target/../../${buildType}"
-      ln -srf "$target" "$target/../../"
-    done
-
     runHook postBuild
   '';
 
