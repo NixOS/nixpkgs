@@ -42,20 +42,20 @@ stdenv.mkDerivation rec {
     docbook_xsl docbook_xml_dtd_412
   ];
 
-  buildInputs = [ libunwind ]
-    ++ lib.optionals stdenv.isLinux [ libcap elfutils ]
+  buildInputs =
+       lib.optionals stdenv.isLinux [ libcap libunwind elfutils ]
     ++ lib.optional stdenv.isDarwin CoreServices;
 
   propagatedBuildInputs = [ glib ];
 
   mesonFlags = [
     # Enables all features, so that we know when new dependencies are necessary.
-    # "-Dauto_features=enabled"
+    "-Dauto_features=enabled"
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
   ]
     # darwin.libunwind doesn't have pkgconfig definitions so meson doesn't detect it.
-    ++ stdenv.lib.optional stdenv.isDarwin "-DHAVE_UNWIND=1";
+    ++ stdenv.lib.optionals stdenv.isDarwin [ "-Dlibunwind=disabled" "-Dlibdw=disabled" ];
 
   postInstall = ''
     for prog in "$dev/bin/"*; do
