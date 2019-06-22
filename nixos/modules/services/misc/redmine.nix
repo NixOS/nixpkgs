@@ -1,8 +1,10 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkDefault mkEnableOption mkIf mkOption types;
+  inherit (lib) concatStringsSep literalExample mapAttrsToList;
+  inherit (lib) optional optionalAttrs optionalString singleton versionAtLeast;
+
   cfg = config.services.redmine;
 
   bundle = "${cfg.package}/share/redmine/bin/bundle";
@@ -58,11 +60,7 @@ in
 {
   options = {
     services.redmine = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the Redmine service.";
-      };
+      enable = mkEnableOption "Redmine";
 
       # default to the 4.x series not forcing major version upgrade of those on the 3.x series
       package = mkOption {
@@ -110,7 +108,8 @@ in
         description = ''
           Extra configuration in configuration.yml.
 
-          See https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+          See <link xlink:href="https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration"/>
+          for details.
         '';
         example = literalExample ''
           email_delivery:
@@ -127,7 +126,8 @@ in
         description = ''
           Extra configuration in additional_environment.rb.
 
-          See https://svn.redmine.org/redmine/trunk/config/additional_environment.rb.example
+          See <link xlink:href="https://svn.redmine.org/redmine/trunk/config/additional_environment.rb.example"/>
+          for details.
         '';
         example = literalExample ''
           config.logger.level = Logger::DEBUG
@@ -272,8 +272,6 @@ in
         }
       ];
     };
-
-    environment.systemPackages = [ cfg.package ];
 
     # create symlinks for the basic directory layout the redmine package expects
     systemd.tmpfiles.rules = [
