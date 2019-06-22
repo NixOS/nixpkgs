@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
 
   preFixup = ''
     mkdir -p "$out/man/man1"
-    cp target/release/build/ripgrep-*/out/rg.1 "$out/man/man1/"
+    cp $releaseDir/build/ripgrep-*/out/rg.1 "$out/man/man1/"
 
     mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
-    cp target/release/build/ripgrep-*/out/rg.bash "$out/share/bash-completion/completions/"
-    cp target/release/build/ripgrep-*/out/rg.fish "$out/share/fish/vendor_completions.d/"
+    cp $releaseDir/build/ripgrep-*/out/rg.bash "$out/share/bash-completion/completions/"
+    cp $releaseDir/build/ripgrep-*/out/rg.fish "$out/share/fish/vendor_completions.d/"
     cp "$src/complete/_rg" "$out/share/zsh/site-functions/"
   '';
 

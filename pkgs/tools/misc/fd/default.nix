@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
   preFixup = ''
     install -Dm644 "$src/doc/fd.1" "$out/man/man1/fd.1"
 
-    install -Dm644 target/release/build/fd-find-*/out/fd.bash \
+    install -Dm644 $releaseDir/build/fd-find-*/out/fd.bash \
       "$out/share/bash-completion/completions/fd.bash"
-    install -Dm644 target/release/build/fd-find-*/out/fd.fish \
+    install -Dm644 $releaseDir/build/fd-find-*/out/fd.fish \
       "$out/share/fish/vendor_completions.d/fd.fish"
-    install -Dm644 target/release/build/fd-find-*/out/_fd \
+    install -Dm644 $releaseDir/build/fd-find-*/out/_fd \
       "$out/share/zsh/site-functions/_fd"
   '';
 

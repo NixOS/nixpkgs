@@ -22,7 +22,7 @@ buildRustPackage rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -p target/release/racerd $out/bin/
+    cp -p $releaseDir/racerd $out/bin/
     wrapProgram $out/bin/racerd --set RUST_SRC_PATH "$RUST_SRC_PATH"
   '';
 

@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/xsessions
-    cp -p target/release/wtftw $out/bin/
+    cp -p $releaseDir/wtftw $out/bin/
     echo "[Desktop Entry]
       Name=wtftw
       Exec=$out/bin/wtftw
