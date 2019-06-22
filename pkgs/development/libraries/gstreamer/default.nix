@@ -1,7 +1,7 @@
-{ callPackage }:
+{ callPackage, CoreServices }:
 
 rec {
-  gstreamer = callPackage ./core { };
+  gstreamer = callPackage ./core { inherit CoreServices; };
 
   gstreamermm = callPackage ./gstreamermm { };
 

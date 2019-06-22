@@ -1088,9 +1088,32 @@ self: super: {
   # https://github.com/haskell-hvr/hgettext/issues/14
   hgettext = doJailbreak super.hgettext;
 
+  # haddock-api-2.22.0: Break out of “QuickCheck ==2.11.*, hspec >=2.4.4 && <2.6”
+  haddock-api = dontHaddock (doJailbreak (super.haddock-api));
+
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
+
+  # haskell-names-0.9.4: Break out of “tasty >=0.12 && <1.2”
+  haskell-names = doJailbreak super.haskell-names;
+
+  haskell-names_0_9_6 = super.haskell-names_0_9_6.overrideScope (self: super: {
+    haskell-src-exts = self.haskell-src-exts_1_21_0;
+  });
+
+  # hdocs-0.5.3.1: Break out of “haddock-api ==2.21.*”
+  # cannot use doJailbreak due to https://github.com/peti/jailbreak-cabal/issues/7
+  hdocs = overrideCabal super.hdocs (drv: {
+    postPatch = ''
+      sed -i 's#haddock-api == 2\.21\.\*,#haddock-api == 2.22.*,#' hdocs.cabal
+    '';
+  });
+
+  hsdev_0_3_3_1 = super.hsdev_0_3_3_1.overrideScope (self: super: {
+    haskell-names = self.haskell-names_0_9_6;
+    network = self.network_3_0_1_1;
+  });
 
   # Break out of tasty >=0.10 && <1.2.
   aeson-compat = doJailbreak super.aeson-compat;

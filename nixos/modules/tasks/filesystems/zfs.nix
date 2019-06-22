@@ -314,10 +314,6 @@ in
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
-        {
-          assertion = cfgZfs.requestEncryptionCredentials -> cfgZfs.enableUnstable;
-          message = "This feature is only available for zfs unstable. Set the NixOS option boot.zfs.enableUnstable.";
-        }
       ];
 
       virtualisation.lxd.zfsSupport = true;

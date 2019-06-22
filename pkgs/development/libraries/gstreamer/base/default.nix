@@ -75,7 +75,8 @@ stdenv.mkDerivation rec {
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
   ;
 
-  buildInputs = [ orc libtheora libintl libopus isocodes libjpeg libvisual tremor ]
+  buildInputs = [ orc libtheora libintl libopus isocodes libjpeg tremor ]
+    ++ lib.optional (!stdenv.isDarwin) libvisual
     ++ lib.optional enableAlsa alsaLib
     ++ lib.optionals enableX11 [ libXv pango ]
     ++ lib.optional enableWayland wayland

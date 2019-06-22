@@ -246,15 +246,15 @@ in rec {
 
   tor-browser-8-5 = tbcommon rec {
     ffversion = "60.7.0esr";
-    tbversion = "8.5.0"; # TODO: update to match binary bundle (8.5.1 currently)
+    tbversion = "8.5.2";
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-60.7.0esr-8.5-1-slnos"
-      rev   = "8c69066856962116205c5c7508a0991dfb8ccd11";
-      sha256 = "1dshn7g9y6233vdqidrkg886ad6qjnl13vz2382ymbx180r2j73k";
+      # branch "tor-browser-60.7.0esr-8.5-2-slnos"
+      rev   = "b8216328bf6bf1996fcd794d4531689a7c373a2f";
+      sha256 = "0zmqam3c91iww33jpfyl6q6wacj20nqkfzyqryalfvnvx3zi0i1q";
     };
 
     patches = [

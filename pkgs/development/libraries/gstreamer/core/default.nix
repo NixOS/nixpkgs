@@ -7,6 +7,7 @@
 , docbook_xsl, docbook_xml_dtd_412
 , gtk-doc
 , lib
+, CoreServices
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
        lib.optionals stdenv.isLinux [ libcap libunwind elfutils ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreServices;
+    ++ lib.optional stdenv.isDarwin CoreServices;
 
   propagatedBuildInputs = [ glib ];
 
@@ -52,7 +53,9 @@ stdenv.mkDerivation rec {
     "-Dauto_features=enabled"
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-  ];
+  ]
+    # darwin.libunwind doesn't have pkgconfig definitions so meson doesn't detect it.
+    ++ stdenv.lib.optionals stdenv.isDarwin [ "-Dlibunwind=disabled" "-Dlibdw=disabled" ];
 
   postInstall = ''
     for prog in "$dev/bin/"*; do
