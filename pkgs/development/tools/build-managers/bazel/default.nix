@@ -1,4 +1,5 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, runCommand, runCommandCC, makeWrapper
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub
+, runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
@@ -11,6 +12,8 @@
 , buildJdk, runJdk
 , buildJdkName
 , runtimeShell
+# Downstream packages for tests
+, bazel-watcher
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
@@ -221,10 +224,18 @@ stdenv.mkDerivation rec {
       pythonBinPath = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; };
 
       bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+
       cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
       javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
       protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
       pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+
+      # downstream packages using buildBazelPackage
+      # fixed-output hashes of the fetch phase need to be spot-checked manually
+      downstream = recurseIntoAttrs {
+        inherit (python3.pkgs) dm-sonnet;
+        inherit bazel-watcher;
+      };
     };
 
   # update the list of workspace dependencies
