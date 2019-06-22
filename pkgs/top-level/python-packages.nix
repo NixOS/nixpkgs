@@ -251,7 +251,7 @@ in {
         '';
       postInstall =
         if isPy3k then pkgs.lib.concatMapStrings
-          (namespace: ''rm -f "$out/${python.sitePackages}/${namespace}/__init__.py"'')
+          (namespace: ''rm -f "$out/${python.sitePackages}/${namespace}/__init__.py";'')
           (namespaceDirs namespaces)
         else pkgs.lib.concatMapStrings
           (namespace: ''

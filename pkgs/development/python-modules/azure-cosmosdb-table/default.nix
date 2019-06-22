@@ -1,39 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
+{ lib, buildAzureCosmosdbPythonPackage, fetchPypi, isPy3k
 , azure-common
-, azure-storage-common
 , azure-cosmosdb-nspkg
+, azure-nspkg
+, azure-storage-common
+, cryptography
+, dateutil
 , futures
-, isPy3k
+, requests
+, vcrpy
 }:
 
-buildPythonPackage rec {
-  pname = "azure-cosmosdb-table";
+buildAzureCosmosdbPythonPackage rec {
   version = "1.0.5";
+  pname = "azure-cosmosdb-table";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4a34c2c792036afc2a3811f4440ab967351e9ceee6542cc96453b63c678c0145";
+    sha256 = "0i81iikkrdjkck4jqm76xsf1wdb7p4549x0i70mgqsh3jb3w4d2a";
   };
 
   propagatedBuildInputs = [
-    cryptography
     azure-common
-    azure-storage-common
     azure-cosmosdb-nspkg
-  ] ++ lib.optionals (!isPy3k) [
-    futures
-  ];
+    azure-nspkg
+    azure-storage-common
+    cryptography
+    dateutil
+    requests
+  ] ++ lib.optionals (!isPy3k) [ futures ];
 
-  # has no tests
+  # tests are weird with namespace packages
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure Log Analytics Client Library";
     homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/cosmosdb?view=azure-python;
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ mwilsoninsight jonringer ];
   };
 }
