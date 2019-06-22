@@ -111,5 +111,11 @@
    <link xlink:href="https://github.com/NixOS/nixpkgs/issues/49783">#49783</link>,
    for now it's unfortunately necessary to manually work around these issues.
   </para>
+
+  <para>
+   Right now app installation and configuration is done imperatively in the nextcloud web ui or via the <literal>nextcloud-occ</literal> command line utility.
+   You can activate auto updates for your apps via
+   <literal><link linkend="opt-services.nextcloud.autoUpdateApps.enable">services.nextcloud.autoUpdateApps</link></literal>.
+  </para>
  </section>
 </chapter>

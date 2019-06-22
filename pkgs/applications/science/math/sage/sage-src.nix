@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
       sha256 = "07p9i0fwjgapmfvmi436yn6v60p8pvmxqjc93wsssqgh5kd8qw3n";
       stripLen = 1;
     })
+
+    # https://trac.sagemath.org/ticket/28007
+    ./patches/threejs-offline.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
@@ -143,6 +146,13 @@ stdenv.mkDerivation rec {
 
     # https://trac.sagemath.org/ticket/27405
     ./patches/ignore-pip-deprecation.patch
+
+    # https://trac.sagemath.org/ticket/26718
+    (fetchpatch {
+      name = "threejs-r100.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=86c5bb000259e6de5d7c60afc608a4b0d010b690";
+      sha256 = "0sgqqd4df2bxsq19b6kfy7dvgyxprlpg7f3xx7g3fs8ij937m352";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

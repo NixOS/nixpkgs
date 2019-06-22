@@ -11,8 +11,6 @@ bundlerApp {
 
   exes = [
     "asciidoctor"
-    "asciidoctor-bespoke"
-    "asciidoctor-latex"
     "asciidoctor-pdf"
     "asciidoctor-safe"
   ];

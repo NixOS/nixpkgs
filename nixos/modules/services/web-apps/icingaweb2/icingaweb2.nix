@@ -215,7 +215,7 @@ in {
 
     # /etc/icingaweb2
     environment.etc = let
-      doModule = name: optionalAttrs (cfg.modules."${name}".enable) (nameValuePair "icingaweb2/enabledModules/${name}" { source = "${pkgs.icingaweb2}/modules/${name}"; });
+      doModule = name: optionalAttrs (cfg.modules."${name}".enable) { "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}"; };
     in {}
       # Module packages
       // (mapAttrs' (k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }) cfg.modulePackages)
