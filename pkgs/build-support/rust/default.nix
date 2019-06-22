@@ -103,7 +103,7 @@ in stdenv.mkDerivation (args // {
       "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
       "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
       cargo build \
-        --${buildType} \
+        ${stdenv.lib.optionalString (buildType != "debug") "--${buildType}"} \
         --target ${stdenv.hostPlatform.config} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
