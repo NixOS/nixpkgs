@@ -19,7 +19,7 @@ in
       };
 
       interface = mkOption {
-        default = "lo";
+        default = "127.0.0.1";
         type = types.str;
         description = ''
           Listening interface for the web UI
