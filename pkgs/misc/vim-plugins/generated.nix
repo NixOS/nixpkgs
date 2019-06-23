@@ -180,6 +180,17 @@ let
     };
   };
 
+  camelcasemotion = buildVimPluginFrom2Nix {
+    pname = "camelcasemotion";
+    version = "2019-06-06";
+    src = fetchFromGitHub {
+      owner = "bkad";
+      repo = "camelcasemotion";
+      rev = "2a62526721b6a4324bec3408e4ed9f8eebf96f3b";
+      sha256 = "1pj7q0ic6hs6niflp64izk5v3kdw951ram035v3xv1gjsp1aa5a6";
+    };
+  };
+
   caw-vim = buildVimPluginFrom2Nix {
     pname = "caw-vim";
     version = "2019-06-13";
