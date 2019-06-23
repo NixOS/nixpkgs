@@ -2922,6 +2922,8 @@ in {
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
+  django-jenkins = callPackage ../development/python-modules/django-jenkins { };
+
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
 
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
