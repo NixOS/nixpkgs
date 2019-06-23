@@ -24149,6 +24149,8 @@ in
 
   iterm2 = callPackage ../applications/misc/iterm2 {};
 
+  sccache = callPackage ../development/tools/misc/sccache { };
+
   sequeler = callPackage ../applications/misc/sequeler { };
 
   sequelpro = callPackage ../applications/misc/sequelpro {};
