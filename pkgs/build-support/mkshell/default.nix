@@ -25,6 +25,7 @@ let
     "nativeBuildInputs"
     "propagatedBuildInputs"
     "propagatedNativeBuildInputs"
+    "shellHook"
   ];
 in
 
@@ -36,6 +37,9 @@ stdenv.mkDerivation ({
   nativeBuildInputs = mergeInputs "nativeBuildInputs";
   propagatedBuildInputs = mergeInputs "propagatedBuildInputs";
   propagatedNativeBuildInputs = mergeInputs "propagatedNativeBuildInputs";
+
+  shellHook = lib.concatStringsSep "\n" (lib.catAttrs "shellHook"
+    (lib.reverseList inputsFrom ++ [attrs]));
 
   nobuildPhase = ''
     echo
