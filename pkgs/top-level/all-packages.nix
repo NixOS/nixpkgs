@@ -21121,7 +21121,9 @@ in
     inherit (gnome2) libgnomeprint libgnomeprintui libgnomecanvas;
   };
 
-  xournalpp = callPackage ../applications/graphics/xournalpp { };
+  xournalpp = callPackage ../applications/graphics/xournalpp {
+    lua = lua5_3;
+  };
 
   apvlv = callPackage ../applications/misc/apvlv { };
 
