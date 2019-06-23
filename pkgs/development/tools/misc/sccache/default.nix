@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cargo, rustc, rustPlatform, pkgconfig, glib, openssl }:
+{ stdenv, fetchFromGitHub, cargo, rustc, rustPlatform, pkgconfig, glib, openssl, darwin }:
 
 rustPlatform.buildRustPackage rec {
   version = "0.2.8";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     openssl
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   # Tests fail because of client server setup which is not possible inside the pure environment,
   # see https://github.com/mozilla/sccache/issues/460
   checkPhase = null;
