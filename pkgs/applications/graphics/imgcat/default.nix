@@ -1,25 +1,24 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "imgcat-${version}";
-  version = "2.3.0";
+  pname = "imgcat";
+  version = "2.3.1";
 
-  buildInputs = [ autoconf automake libtool ncurses ];
+  nativeBuildInputs = [ autoconf automake libtool ];
+  buildInputs = [ ncurses ];
 
   preConfigure = ''
     ${autoconf}/bin/autoconf
     sed -i -e "s|-ltermcap|-L ${ncurses}/lib -lncurses|" Makefile
   '';
 
-  preInstall = ''
-    makeFlagsArray=(PREFIX="$out");
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   src = fetchFromGitHub {
     owner = "eddieantonio";
-    repo = "imgcat";
-    rev = "3d854c72f785dce0eecd9485767a7f972d54890c";
-    sha256 = "0m83c33rzxvs0w214njql2c7q3fg06wnyijch3l2s88i7frl121f";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0frz40rjwi73nx2dlqvmnn56zwr29bmnngfb11hhwr7v58yfajdi";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
