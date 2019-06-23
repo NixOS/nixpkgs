@@ -18,10 +18,7 @@
 , poppler
 , portaudio
 , zlib
-
-# Plugins don't appear to be working in this version, so disable them by not
-# building with Lua support by default. In a future version, try switching this
-# to 'true' and seeing if the top-level Plugin menu appears.
+# plugins
 , withLua ? true, lua
 }:
 
