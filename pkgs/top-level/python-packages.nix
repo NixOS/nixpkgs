@@ -2238,6 +2238,8 @@ in {
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik { };
 
+  midiutil = callPackage ../development/python-modules/midiutil {};
+
   misaka = callPackage ../development/python-modules/misaka {};
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
