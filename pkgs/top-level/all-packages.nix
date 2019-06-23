@@ -18430,6 +18430,8 @@ in
 
   i3-easyfocus = callPackage ../applications/window-managers/i3/easyfocus.nix { };
 
+  i3-layout-manager = callPackage ../applications/window-managers/i3/layout-manager.nix { };
+
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
 
   i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };
