@@ -2732,6 +2732,8 @@ in {
 
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
+  pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
+
   pyspf = callPackage ../development/python-modules/pyspf { };
 
   pysptk = callPackage ../development/python-modules/pysptk { };
