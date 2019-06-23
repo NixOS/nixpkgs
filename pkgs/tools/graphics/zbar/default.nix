@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   pname = "zbar";
   version = "0.23";
 
+  outputs = [ "out" "py" "lib" "dev" "doc" "man" ];
+
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "zbar";
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = (if enableDbus then [
-    "--with-dbusconfdir=${placeholder "out"}/etc/dbus-1/system.d"
+    "--with-dbusconfdir=${placeholder "out"}/etc"
   ] else [
     "--without-dbus"
   ]) ++ lib.optionals (!enableVideo) [
@@ -63,9 +65,10 @@ stdenv.mkDerivation rec {
     "--without-qt"
   ];
 
-  postInstall = optionalString enableDbus ''
-    install -Dm644 dbus/org.linuxtv.Zbar.conf $out/etc/dbus-1/system.d/org.linuxtv.Zbar.conf
-  '';
+  makeFlags = [
+    "pyexecdir=${placeholder "py"}/${python.sitePackages}"
+    "pythondir=${placeholder "py"}/${python.sitePackages}"
+  ];
 
   meta = with lib; {
     description = "Bar code reader";
