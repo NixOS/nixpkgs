@@ -1705,6 +1705,8 @@ in
 
   mkspiffs-presets = recurseIntoAttrs (callPackages ../tools/filesystems/mkspiffs/presets.nix { });
 
+  mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
+
   monetdb = callPackage ../servers/sql/monetdb { };
 
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
