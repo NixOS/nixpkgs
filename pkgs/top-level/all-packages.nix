@@ -151,6 +151,8 @@ in
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  conftest = callPackage ../development/tools/conftest {};
+
   corgi = callPackage ../development/tools/corgi { };
 
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
@@ -6462,6 +6464,8 @@ in
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
 
+  video2midi = callPackage ../tools/audio/video2midi { };
+
   vifm = callPackage ../applications/misc/vifm { };
 
   viking = callPackage ../applications/misc/viking {
@@ -8238,7 +8242,7 @@ in
   beam = callPackage ./beam-packages.nix { };
 
   inherit (beam.interpreters)
-    erlang erlangR18 erlangR19 erlangR20 erlangR21
+    erlang erlangR18 erlangR19 erlangR20 erlangR21 erlangR22
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
     elixir elixir_1_8 elixir_1_7 elixir_1_6 elixir_1_5 elixir_1_4
     lfe lfe_1_2;
@@ -8560,6 +8564,7 @@ in
   svg2tikz = python27Packages.svg2tikz;
 
   pew = callPackage ../development/tools/pew {};
+  poetry = with python3Packages; toPythonApplication poetry;
   pipenv = python3Packages.callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {};
@@ -15297,6 +15302,7 @@ in
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.export_kernel_fpu_functions
       ];
   };
 
@@ -15304,6 +15310,7 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.export_kernel_fpu_functions
       ];
   };
 
@@ -15695,6 +15702,10 @@ in
              else unixtools.nettools;
 
   nftables = callPackage ../os-specific/linux/nftables { };
+
+  noah = callPackage ../os-specific/darwin/noah {
+    inherit (darwin.apple_sdk.frameworks) Hypervisor;
+  };
 
   numactl = callPackage ../os-specific/linux/numactl { };
 
@@ -21092,7 +21103,9 @@ in
     inherit (gnome2) libgnomeprint libgnomeprintui libgnomecanvas;
   };
 
-  xournalpp = callPackage ../applications/graphics/xournalpp { };
+  xournalpp = callPackage ../applications/graphics/xournalpp {
+    lua = lua5_3;
+  };
 
   apvlv = callPackage ../applications/misc/apvlv { };
 
@@ -24117,6 +24130,8 @@ in
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
   iterm2 = callPackage ../applications/misc/iterm2 {};
+
+  sccache = callPackage ../development/tools/misc/sccache { };
 
   sequeler = callPackage ../applications/misc/sequeler { };
 

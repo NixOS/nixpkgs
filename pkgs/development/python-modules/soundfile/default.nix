@@ -10,13 +10,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PySoundFile";
-  version = "0.9.0.post1";
-  name = pname + "-" + version;
+  pname = "soundfile";
+  version = "0.10.2";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "43dd46a2afc0484c26930a7e59eef9365cee81bce7a4aadc5699f788f60d32c3";
+    pname = "SoundFile";
+    inherit version;
+    sha256 = "0w8mjadairg6av88090kwsridd0k115672b91zlcmf37r0c64zv3";
   };
 
     checkInputs = [ pytest ];
@@ -29,10 +29,11 @@ buildPythonPackage rec {
       maintainers = with lib.maintainers; [ fridh ];
     };
 
-    prePatch = ''
-      substituteInPlace soundfile.py --replace "'sndfile'" "'${libsndfile.out}/lib/libsndfile.so'"
+    postPatch = ''
+      substituteInPlace soundfile.py --replace "_find_library('sndfile')" "'${libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
     '';
 
     # https://github.com/bastibe/PySoundFile/issues/157
     disabled = isPyPy ||  stdenv.isi686;
+
 }

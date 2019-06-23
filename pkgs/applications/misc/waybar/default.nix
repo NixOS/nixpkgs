@@ -8,14 +8,14 @@
 , mpdSupport   ? true,  mpd_clientlib
 }:
   stdenv.mkDerivation rec {
-    name = "waybar-${version}";
-    version = "0.6.7";
+    pname = "waybar";
+    version = "0.7.0";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "1rkqxszay2fns8c2q0b668mjacr4wb7drlbfi55z9w5f9cfxgifw";
+      sha256 = "0fylq8sz00zv7jvjp7pgckabvmhanpcsqfvpw8c84vy4d8dvqbkx";
     };
 
     nativeBuildInputs = [
@@ -47,7 +47,7 @@
     meta = with stdenv.lib; {
       description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
       license = licenses.mit;
-      maintainers = with maintainers; [ FlorianFranzen minijackson ];
+      maintainers = with maintainers; [ FlorianFranzen minijackson synthetica ];
       platforms = platforms.unix;
     };
   }

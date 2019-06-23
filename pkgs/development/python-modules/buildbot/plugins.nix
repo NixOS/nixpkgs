@@ -11,7 +11,7 @@
     src = fetchPypi {
       inherit pname version format;
       python = "py3";
-      sha256 = "134b8y498bq5fp4863hj9058wr7mcw0xgl74br0f1dy9n7jdcl39";
+      sha256 = "1ii01py78wkda9x4lqm0bxqmb4dhvbdmmz7sncm1lw7bhmhqh84w";
     };
 
     meta = with lib; {
@@ -28,7 +28,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1yh8xij3wizz0f88chjpdijm7i35ql87g84ph3f76sqyr6aj6ckw";
+      sha256 = "1y523hadw3398jwfpmi2f4g0s6dp9y191qzycrsbvbj147dp0qra";
     };
 
     propagatedBuildInputs = [ buildbot-pkg ];
@@ -48,7 +48,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "04iihy1s9r4n5jlk57pdjy3yvp6zym2iv2bgqjhw6fy0hff5j8ys";
+      sha256 = "1prfr03igcmagydvxqhrh6k6wz16vk6fwgrm143jh3xmml6f16ll";
     };
 
     propagatedBuildInputs = [ buildbot-pkg ];
@@ -68,7 +68,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0bcilhcz9xnr8799d5j4sm6qz8pdjlckdck7a282nfs64liajsrh";
+      sha256 = "1xkqiwxjppyns2s0239zzvbnr8b7vdakypj95mca89mmnyniflxj";
     };
 
     propagatedBuildInputs = [ buildbot-pkg ];
@@ -88,7 +88,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "13lr7lzi9sv0s6xrfalq0dkcys6fp7hn0787rjhnz9gc7x83aqjv";
+      sha256 = "1jhvq61x0bzh03nd2ac11swdjn0ndnx3ac7x9v3m3v0pgr08rc28";
     };
 
     propagatedBuildInputs = [ buildbot-pkg ];

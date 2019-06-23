@@ -1,6 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, python
-, gfortran, glibcLocales, joblib, pythonOlder
-, numpy, scipy, pytest, pillow, cython
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, gfortran, glibcLocales
+, numpy, scipy, pytest, pillow
+, cython
+, joblib
+, llvmPackages
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -11,13 +18,28 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0aafc312a55ebf58073151b9308761a5fcfa45b7f7730cea4b1f066f824c72db";
+    sha256 = "1nvj9j16y1hz9gm0qwzpnx2zmz55c63k1fai643migsyll9c7bqa";
   };
 
-  buildInputs = [ pillow gfortran glibcLocales ];
-  propagatedBuildInputs = [ numpy scipy numpy.blas joblib ];
+  buildInputs = [
+    pillow
+    gfortran
+    glibcLocales
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
+
+  nativeBuildInputs = [
+    cython
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    numpy.blas
+    joblib
+  ];
   checkInputs = [ pytest ];
-  nativeBuildInputs = [ cython ];
 
   LC_ALL="en_US.UTF-8";
 
