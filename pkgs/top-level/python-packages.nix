@@ -4415,6 +4415,8 @@ in {
   pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
            else callPackage ../development/python-modules/pylint/1.9.nix { };
 
+  pylint-django = callPackage ../development/python-modules/pylint-django { };
+
   pylint-plugin-utils = callPackage ../development/python-modules/pylint-plugin-utils { };
 
   pyomo = callPackage ../development/python-modules/pyomo { };
