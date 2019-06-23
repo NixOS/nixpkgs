@@ -171,6 +171,7 @@ in
         after = [ "sys-subsystem-net-devices-${escapedInterface}.device" ];
         bindsTo = [ "sys-subsystem-net-devices-${escapedInterface}.device" ];
         requiredBy = [ "network-link-${cfg.interface}.service" ];
+        wantedBy = [ "multi-user.target" ];
 
         serviceConfig =
           { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";
