@@ -1695,6 +1695,8 @@ in
 
   massren = callPackage ../tools/misc/massren { };
 
+  megasync = callPackage ../applications/misc/megasync { };
+
   meritous = callPackage ../games/meritous { };
 
   opendune = callPackage ../games/opendune { };

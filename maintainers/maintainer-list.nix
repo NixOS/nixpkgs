@@ -3278,6 +3278,11 @@
     github = "michelk";
     name = "Michel Kuhlmann";
   };
+  michojel = {
+    email = "mic.liamg@gmail.com";
+    github = "michojel";
+    name = "Michal Minář";
+  };
   mickours = {
     email = "mickours@gmail.com<";
     github = "mickours";
