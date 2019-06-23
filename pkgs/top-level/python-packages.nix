@@ -2979,6 +2979,8 @@ in {
 
   django_silk = callPackage ../development/python-modules/django_silk { };
 
+  django-tables2 = callPackage ../development/python-modules/django-tables2 { };
+
   django_taggit = callPackage ../development/python-modules/django_taggit { };
 
   django_treebeard = callPackage ../development/python-modules/django_treebeard { };
