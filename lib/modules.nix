@@ -327,7 +327,9 @@ rec {
       # function to the merged value.  This allows options to yield a
       # value computed from the definitions.
       value =
-        if !res.isDefined then
+        if opt.applyOptional or false then
+          opt.apply res.optionalValue
+        else if !res.isDefined then
           throw "The option `${showOption loc}' is used but not defined."
         else if opt ? apply then
           opt.apply res.mergedValue
@@ -719,6 +721,7 @@ rec {
         inherit visible;
         description = "Alias of <option>${showOption to}</option>.";
         apply = x: use (toOf config);
+        applyOptional = true;
       });
       config = mkMerge [
         {

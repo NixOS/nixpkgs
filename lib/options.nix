@@ -42,6 +42,11 @@ rec {
     type ? null,
     # Function that converts the option value to something else.
     apply ? null,
+    # Whether the apply function should be applied even if the option
+    # isn't defined. If `applyOptional' is true, the function is applied
+    # to an optional value, i.e. an empty attrset or an attrset with
+    # a single attribute `value'.
+    applyOptional ? false,
     # Whether the option is for NixOS developers only.
     internal ? null,
     # Whether the option shows up in the manual.
