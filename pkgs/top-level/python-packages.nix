@@ -2276,6 +2276,8 @@ in {
 
   elementpath = callPackage ../development/python-modules/elementpath { };
 
+  entrypoint2 = callPackage ../development/python-modules/entrypoint2 { };
+
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
   enzyme = callPackage ../development/python-modules/enzyme {};
