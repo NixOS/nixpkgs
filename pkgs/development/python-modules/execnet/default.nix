@@ -3,21 +3,21 @@
 , buildPythonPackage
 , isPyPy
 , fetchPypi
-, pytest_3
+, pytest
 , setuptools_scm
 , apipkg
 }:
 
 buildPythonPackage rec {
   pname = "execnet";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a";
+    sha256 = "1lvj8z6fikpb5r4rq9n53x3lmsm3vlbr58ikz28x85kly633fakm";
   };
 
-  checkInputs = [ pytest_3 ];
+  checkInputs = [ pytest ];
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ apipkg ];
 
@@ -33,9 +33,6 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test testing
   '';
-
-  # not yet compatible with pytest 4
-  doCheck = false;
 
   __darwinAllowLocalNetworking = true;
 
