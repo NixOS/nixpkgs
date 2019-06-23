@@ -2242,6 +2242,8 @@ in {
 
   misaka = callPackage ../development/python-modules/misaka {};
 
+  mlrose = callPackage ../development/python-modules/mlrose { };
+
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
   mwlib = callPackage ../development/python-modules/mwlib { };
