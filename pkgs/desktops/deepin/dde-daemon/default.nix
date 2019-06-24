@@ -4,7 +4,7 @@
   deepin-wallpapers, deepin-desktop-base, alsaLib, glib, gtk3,
   libgudev, libinput, libnl, librsvg, linux-pam, networkmanager,
   pulseaudio, python3, hicolor-icon-theme, glibc, tzdata, go,
-  deepin, makeWrapper, wrapGAppsHook }:
+  deepin, makeWrapper, xkeyboard_config, wrapGAppsHook }:
 
 buildGoPackage rec {
   name = "${pname}-${version}";
@@ -63,6 +63,7 @@ buildGoPackage rec {
     librsvg
     pulseaudio
     tzdata
+    xkeyboard_config
   ];
 
   postPatch = ''
@@ -70,12 +71,16 @@ buildGoPackage rec {
     patchShebangs network/nm_generator/gen_nm_consts.py
 
     fixPath $out /usr/share/dde/data launcher/manager.go dock/dock_manager_init.go
+    fixPath $out /usr/share/dde-daemon launcher/manager.go gesture/config.go
     fixPath ${networkmanager.dev} /usr/share/gir-1.0/NM-1.0.gir network/nm_generator/Makefile
     fixPath ${glibc.bin} /usr/bin/getconf systeminfo/utils.go
     fixPath ${deepin-desktop-base} /etc/deepin-version systeminfo/version.go accounts/deepinversion.go
     fixPath ${tzdata} /usr/share/zoneinfo timedate/zoneinfo/zone.go
     fixPath ${dde-api} /usr/lib/deepin-api grub2/modify_manger.go accounts/image_blur.go
     fixPath ${deepin-wallpapers} /usr/share/wallpapers appearance/background/list.go accounts/user.go
+    fixPath ${xkeyboard_config} /usr/share/X11/xkb inputdevices/layout_list.go
+
+    # TODO: deepin-system-monitor comes from dde-extra
 
     sed -i -e "s|{DESTDIR}/etc|{DESTDIR}$out/etc|" Makefile
     sed -i -e "s|{DESTDIR}/lib|{DESTDIR}$out/lib|" Makefile
