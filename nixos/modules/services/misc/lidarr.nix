@@ -9,6 +9,13 @@ in
   options = {
     services.lidarr = {
       enable = mkEnableOption "Lidarr";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.lidarr;
+        defaultText = "pkgs.lidarr";
+        description = "The Lidarr package to use";
+      };
     };
   };
 
@@ -22,7 +29,7 @@ in
         Type = "simple";
         User = "lidarr";
         Group = "lidarr";
-        ExecStart = "${pkgs.lidarr}/bin/Lidarr";
+        ExecStart = "${cfg.package}/bin/Lidarr";
         Restart = "on-failure";
 
         StateDirectory = "lidarr";
