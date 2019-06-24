@@ -100,6 +100,16 @@
     </listitem>
     <listitem>
      <para>
+      Remove software that we know we will not be able to support,
+      especially if there is a stable alternative. E.g. Check that our
+      Linux kernels'
+      <link xlink:href="https://www.kernel.org/category/releases.html">
+      projected end-of-life</link> are after our release projected
+      end-of-life
+     </para>
+    </listitem>
+    <listitem>
+     <para>
       Edit changelog at
       <literal>nixos/doc/manual/release-notes/rl-1709.xml</literal> (double
       check desktop versions are noted)
