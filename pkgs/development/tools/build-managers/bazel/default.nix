@@ -100,10 +100,7 @@ let
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
-    src = fetchurl {
-      url = "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v2.0/java_tools_javac11_${system}-v2.0.zip";
-      sha256 = "074d624fb34441df369afdfd454e75dba821d5d54932fcfee5ba598d17dc1b99";
-    };
+    src = srcDepsSet."java_tools_javac11_${system}-v2.0.zip";
 
     nativeBuildInputs = [ autoPatchelfHook unzip ];
     buildInputs = [ gcc-unwrapped ];
