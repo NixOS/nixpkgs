@@ -1,14 +1,12 @@
-{ lib
-, stdenv
+{ stdenv
 , autoconf
 , automake
-, bash
-, bashInteractive
 , c-ares
 , cryptopp
 , curl
 , doxygen
 , fetchFromGitHub
+, ffmpeg
 , hicolor-icon-theme
 , libmediainfo
 , libraw
@@ -17,17 +15,13 @@
 , libuv
 , libzen
 , lsb-release
-, makeDesktopItem
 , pkgconfig
 , qt5
 , sqlite
 , swig
 , unzip
 , wget
-, enableFFmpeg   ? true, ffmpeg  ? ffmpeg
 }:
-
-assert enableFFmpeg   -> ffmpeg != null;
 
 stdenv.mkDerivation rec {
   name = "megasync-${version}";
@@ -39,17 +33,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}_Linux";
     sha256 = "0lc228q3s9xp78dxjn22g6anqlsy1hi7a6yfs4q3l6gyfc3qcxl2";
     fetchSubmodules = true;
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "megasync";
-    exec = "megasync";
-    icon = "megasync";
-    comment = meta.description;
-    desktopName = "MEGASync";
-    genericName = "File Synchronizer";
-    categories = "Network;FileTransfer;";
-    startupNotify = "false";
   };
 
   nativeBuildInputs = [
@@ -66,7 +49,7 @@ stdenv.mkDerivation rec {
     c-ares
     cryptopp
     curl
-    #freeimage    # unreferenced
+    ffmpeg
     hicolor-icon-theme
     libmediainfo
     libraw
@@ -79,21 +62,29 @@ stdenv.mkDerivation rec {
     sqlite
     unzip
     wget
-  ] ++ stdenv.lib.optionals enableFFmpeg   [ ffmpeg ];
+  ];
 
   patchPhase = ''
     for file in $(find src/ -type f \( -iname configure -o -iname \*.sh  \) ); do
-      substituteInPlace "$file" \
-        --replace "/bin/bash" "${bashInteractive}/bin/bash"
+      substituteInPlace "$file" --replace "/bin/bash" "${stdenv.shell}"
     done
+
+    # Distro and version targets attempt to use lsb_release which is broken
+    # (see issue: https://github.com/NixOS/nixpkgs/issues/22729)
+    substituteInPlace src/MEGASync/platform/platform.pri \
+      --replace "INSTALLS += distro" "# INSTALLS += distro"
+
+    # megasync target is not part of the install rule thanks to a commented block
+    sed -i '/#\s*isEmpty(PREFIX)/,/#\s*INSTALLS\s*+=\s*target/s/^\s*#//' \
+      src/MEGASync/MEGASync.pro
   '';
+
+  dontUseQmakeConfigure = true;
 
   preConfigure = ''
     cd src/MEGASync/mega
     ./autogen.sh
   '';
-
-  configureScript = "./configure";
 
   configureFlags = [
           "--disable-examples"
@@ -103,34 +94,25 @@ stdenv.mkDerivation rec {
           "--with-cares"
           "--with-cryptopp"
           "--with-curl"
+          "--with-ffmpeg"
           "--without-freeimage"  # unreferenced even when found
           "--without-readline"
           "--without-termcap"
           "--with-sodium"
           "--with-sqlite"
           "--with-zlib"
-    ] ++ stdenv.lib.optionals enableFFmpeg ["--with-ffmpeg"];
+    ];
 
-  # TODO: unless overriden, qmake is called instead ??
-  configurePhase = ''
-    runHook preConfigure
-    ./configure ${toString configureFlags}
-    runHook postConfigure
+  postConfigure = ''
+    cd ../..
   '';
-
-  postConfigure = "cd ../..";
 
   preBuild = ''
     qmake CONFIG+="release" MEGA.pro
-    lrelease MEGASync/MEGASync.pro
-  '';
-
-  # TODO: install bindings
-  installPhase = ''
-    mkdir -p $out/share/icons
-    install -Dm 755 MEGASync/megasync $out/bin/megasync
-    cp -r ${desktopItem}/share/applications $out/share
-    cp MEGASync/gui/images/uptodate.svg $out/share/icons/megasync.svg
+    pushd MEGASync
+      lrelease MEGASync.pro
+      DESKTOP_DESTDIR="$out" qmake PREFIX="$out" -o Makefile MEGASync.pro CONFIG+=release
+    popd
   '';
 
   meta = with stdenv.lib; {
