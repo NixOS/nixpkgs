@@ -20,7 +20,7 @@
   enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
+  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform && !stdenv.targetPlatform.isAarch32
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
@@ -32,10 +32,6 @@
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "perf-cross"
-
-, # Whether to disable the large address space allocator
-  # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-  disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -98,20 +94,17 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
-  patches = [
-    (fetchpatch rec { # https://phabricator.haskell.org/D5123
-     url = "http://tarballs.nixos.org/sha256/${sha256}";
-     name = "D5123.diff";
-     sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
-    })
-    (fetchpatch rec { # https://github.com/haskell/haddock/issues/900
-     url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/983.diff";
-     name = "loadpluginsinmodules.diff";
-     sha256 = "0bvvv0zsfq2581zsir97zfkggc1kkircbbajc2fz3b169ycpbha1";
-     extraPrefix = "utils/haddock/";
-     stripLen = 1;
-   })
-  ];
+  patches = [(fetchpatch rec { # https://phabricator.haskell.org/D5123
+    url = "http://tarballs.nixos.org/sha256/${sha256}";
+    name = "D5123.diff";
+    sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
+  }) (fetchpatch rec { # https://github.com/haskell/haddock/issues/900
+    url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/983.diff";
+    name = "loadpluginsinmodules.diff";
+    sha256 = "0bvvv0zsfq2581zsir97zfkggc1kkircbbajc2fz3b169ycpbha1";
+    extraPrefix = "utils/haddock/";
+    stripLen = 1;
+  })];
 
   postPatch = "patchShebangs .";
 
@@ -167,7 +160,7 @@ stdenv.mkDerivation (rec {
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optionals (libffi != null) ["--with-system-libffi" "--with-ffi-includes=${targetPackages.libffi.dev}/include" "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
+  ] ++ stdenv.lib.optional (!enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
@@ -177,15 +170,16 @@ stdenv.mkDerivation (rec {
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
-  ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
+  ] ++ stdenv.lib.optionals (targetPlatform.isDarwin && targetPlatform.isAarch64) [
+    # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
     "--disable-large-address-space"
   ];
 
+  # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
+  dontAddExtraLibs = true;
+
   # Make sure we never relax`$PATH` and hooks support for compatability.
   strictDeps = true;
-
-  # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
-	dontAddExtraLibs = true;
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3 sphinx
@@ -209,7 +203,9 @@ stdenv.mkDerivation (rec {
 
   checkTarget = "test";
 
-  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable = [ "format" ]
+                   ++ stdenv.lib.optional stdenv.targetPlatform.isAarch32 "pic"
+                   ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
   postInstall = ''
     # Install the bash completion file.
