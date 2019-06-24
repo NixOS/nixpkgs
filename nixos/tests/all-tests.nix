@@ -242,6 +242,7 @@ in
   systemd = handleTest ./systemd.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
+  systemd-networkd-wireguard = handleTest ./systemd-networkd-wireguard.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};

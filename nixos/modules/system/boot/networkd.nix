@@ -93,6 +93,27 @@ let
     (assertRange "FlowLabel" 0 1048575)
   ];
 
+  # NOTE The PrivateKey directive is missing on purpose here, please
+  # do not add it to this list. The nix store is world-readable let's
+  # refrain ourselves from providing a footgun.
+  checkWireguard = checkUnitConfig "WireGuard" [
+    (assertOnlyFields [
+      "PrivateKeyFile" "ListenPort" "FwMark"
+    ])
+    (assertRange "FwMark" 1 4294967295)
+  ];
+
+  # NOTE The PresharedKey directive is missing on purpose here, please
+  # do not add it to this list. The nix store is world-readable,let's
+  # refrain ourselves from providing a footgun.
+  checkWireguardPeer = checkUnitConfig "WireGuardPeer" [
+    (assertOnlyFields [
+      "PublicKey" "PresharedKeyFile" "AllowedIPs"
+      "Endpoint" "PersistentKeepalive"
+    ])
+    (assertRange "PersistentKeepalive" 1 65535)
+  ];
+
   checkTunnel = checkUnitConfig "Tunnel" [
     (assertOnlyFields [
       "Local" "Remote" "TOS" "TTL" "DiscoverPathMTU" "IPv6FlowLabel" "CopyDSCP"
@@ -353,6 +374,46 @@ let
         <literal>[VXLAN]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    wireguardConfig = mkOption {
+      default = {};
+      example = {
+        PrivateKeyFile = "/etc/wireguard/secret.key";
+        ListenPort = 51820;
+        FwMark = 42;
+      };
+      type = types.addCheck (types.attrsOf unitOption) checkWireguard;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[WireGuard]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        Use <literal>PrivateKeyFile</literal> instead of
+        <literal>PrivateKey</literal>: the nix store is
+        world-readable.
+      '';
+    };
+
+    wireguardPeerConfig = mkOption {
+      default = {};
+      example = {
+        Endpoint = "192.168.1.1:51820";
+        PublicKey = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
+        PresharedKeyFile = "/etc/wireguard/psk.key";
+        AllowedIPs = [ "10.0.0.1/32" ];
+        PersistentKeepalive = 15;
+      };
+      type = types.addCheck (types.attrsOf unitOption) checkWireguardPeer;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[WireGuardPeer]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        Use <literal>PresharedKeyFile</literal> instead of
+        <literal>PresharedKey</literal>: the nix store is
+        world-readable.
       '';
     };
 
@@ -705,6 +766,16 @@ let
           ${optionalString (def.vxlanConfig != { }) ''
             [VXLAN]
             ${attrsToSection def.vxlanConfig}
+
+          ''}
+          ${optionalString (def.wireguardConfig != {}) ''
+            [WireGuard]
+            ${attrsToSection def.wireguardConfig}
+
+          ''}
+          ${optionalString (def.wireguardConfig != {}) ''
+            [WireGuardPeer]
+            ${attrsToSection def.wireguardPeerConfig}
 
           ''}
           ${optionalString (def.tunnelConfig != { }) ''
