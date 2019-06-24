@@ -31,6 +31,7 @@ let
 
 in stdenv.mkDerivation ({
   name = "llvm-${version}";
+  inherit version;
 
   src = fetch "llvm" "0r1p5didv4rkgxyvbkyz671xddg6i3dxvbpsi1xxipkla0l9pk0v";
   polly_src = fetch "polly" "16qkns4ab4x0azrvhy4j7cncbyb2rrbdrqj87zphvqxm5pvm8m1h";
