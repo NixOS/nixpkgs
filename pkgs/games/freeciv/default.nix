@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib, bzip2, pkgconfig, curl, lzma, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
-, gtkClient ? false, gtk2
+, gtkClient ? false, gtk3
 , server ? true, readline
 , enableSqlite ? true, sqlite
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib bzip2 curl lzma gettext libiconv ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
-    ++ optionals gtkClient [ gtk2 ]
+    ++ optionals gtkClient [ gtk3 ]
     ++ optional server readline
     ++ optional enableSqlite sqlite;
 
