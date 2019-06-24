@@ -100,7 +100,7 @@
     </listitem>
     <listitem>
      <para>
-      Remove software that we know we will not be able to support,
+      Remove attributes that we know we will not be able to support,
       especially if there is a stable alternative. E.g. Check that our
       Linux kernels'
       <link xlink:href="https://www.kernel.org/category/releases.html">
