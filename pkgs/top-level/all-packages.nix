@@ -22566,6 +22566,8 @@ in
 
   nauty = callPackage ../applications/science/math/nauty {};
 
+  osi = callPackage ../development/libraries/science/math/osi { };
+
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     pythonProtobuf = pythonPackages.protobuf;
   };
@@ -22817,6 +22819,8 @@ in
       then smlnjBootstrap
       else smlnj;
   };
+
+  fast-downward = callPackage ../applications/science/logic/fast-downward { };
 
   twelf = callPackage ../applications/science/logic/twelf {
     smlnj = if stdenv.isDarwin
