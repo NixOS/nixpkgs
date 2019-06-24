@@ -379,8 +379,10 @@ rec {
     name = "drools-${version}";
     version = "7.17.0.Final";
 
+    srcUrl = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
+
     src = fetchzip {
-      url = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
+      url = srcUrl;
       hash = "sha512-dWTS72R2VRgGnG6JafMwZ+wd+1e13pil0SAz2HDMXUmtgYa9iLLtma3SjcDJeWdOoblzWHRu7Ihblx3+Ogb2sQ==";
       postFetch = ''
         # update site is a couple levels deep, alongside some other irrelevant stuff
@@ -389,6 +391,26 @@ rec {
         rmdir sources;
         mv binaries/org.drools.updatesite/* .;
         rmdir binaries/org.drools.updatesite binaries;
+      '';
+    };
+
+    #the plugin's preferences must be configured to point to this
+    #recommended mechanism to make it available is by setting
+    #environment.etc.droolsruntime.source = eclipses.plugins.drools.runtime;
+    #in configuration.nix
+    runtime = fetchzip {
+      url = srcUrl;
+      sha512 = "17id5biqgfjxv7qfjx4i6x1dkp4b2lsr42sgxyy8dp71ankajjiwhz499wmyl869873n1kgz790la04jya8b0nkdqsq4vyr3i591l07";
+      postFetch = ''
+        chmod go-w $out;
+
+        #runtime is comingled with update site, separate it out as above
+        cd $out;
+        find . -type f -not -path ./binaries/\* -exec rm {} \;
+        rm -rf binaries/org.drools.updatesite;
+        rmdir sources;
+        mv binaries/* .;
+        rmdir binaries;
       '';
     };
 
