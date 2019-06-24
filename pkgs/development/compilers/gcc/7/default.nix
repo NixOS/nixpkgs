@@ -78,6 +78,7 @@ in
 
 stdenv.mkDerivation ({
   name = "${crossNameAddon}${name}${if stripped then "" else "-debug"}-${version}";
+  inherit version;
 
   builder = ../builder.sh;
 
