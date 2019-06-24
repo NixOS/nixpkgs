@@ -19,6 +19,9 @@ rustPlatform.buildRustPackage rec {
   # a nightly compiler is required unless we use this cheat code.
   RUSTC_BOOTSTRAP=1;
 
+  # rls-rustc links to rustc_private crates
+  CARGO_BUILD_RUSTFLAGS = if stdenv.isDarwin then "-C rpath" else null;
+
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ openssh openssl curl zlib libiconv ]
     ++ (stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security ]);
@@ -27,6 +30,11 @@ rustPlatform.buildRustPackage rec {
   preCheck = ''
     # client tests are flaky
     rm tests/client.rs
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/rls --version
   '';
 
   meta = with stdenv.lib; {
