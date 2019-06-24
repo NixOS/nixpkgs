@@ -93,9 +93,9 @@ assert nativeLibc == bintools.nativeLibc;
 assert nativePrefix == bintools.nativePrefix;
 
 stdenv.mkDerivation {
-  name = targetPrefix
-    + (if name != "" then name else "${ccName}-wrapper")
-    + (stdenv.lib.optionalString (cc != null && ccVersion != "") "-${ccVersion}");
+  pname = targetPrefix
+    + (if name != "" then name else "${ccName}-wrapper");
+  version = if cc == null then null else ccVersion;
 
   preferLocalBuild = true;
 
