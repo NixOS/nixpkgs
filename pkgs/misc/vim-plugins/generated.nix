@@ -248,12 +248,12 @@ let
 
   coc-nvim = buildVimPluginFrom2Nix {
     pname = "coc-nvim";
-    version = "2019-06-21";
+    version = "2019-06-24";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "0cf54ed4f19374a7d6a81528675497ef82214e95";
-      sha256 = "1dvwwzhw26rf82k03j1a82axga07nsihlnx6vhj9v9ab2di005i1";
+      rev = "5e9594d9da22e4eb840cb102513bebc77bab7300";
+      sha256 = "036ig6902vwrqnj052s6631lx4k4m0p5y2238287p8qmxgj7x9d6";
     };
   };
 
