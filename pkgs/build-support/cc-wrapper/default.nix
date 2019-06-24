@@ -96,6 +96,7 @@ stdenv.mkDerivation {
   name = targetPrefix
     + (if name != "" then name else stdenv.lib.removePrefix targetPrefix "${ccName}-wrapper")
     + (stdenv.lib.optionalString (cc != null && ccVersion != "") "-${ccVersion}");
+  version = ccVersion;
 
   preferLocalBuild = true;
 
