@@ -1,4 +1,20 @@
-{ stdenv, fetchurl, python3, bdftopcf, mkfontdir, mkfontscale }:
+{ stdenv, fetchurl, python3, bdftopcf, mkfontdir, mkfontscale
+# Some characters are implemented in two variants. See the font homepage
+# for examples. If you want to combine hi2 with dv1 and/or ka2, apply
+# hi2 and then hi2-dv1 and/or hi2-ka2, as mentioned in the README file.
+, ao2Variant ? false      # `a' like `o'
+, br1Variant ? false      # Braille
+, dv1Variant ? false      # ru `dv'
+, ge2Variant ? false      # ru `g'
+, gq2Variant ? false      # quote
+, hi2Variant ? false      # higher upper case letters, digits etc.
+, hi2-dv1Variant ? false  # hi2 and dv1 combo
+, hi2-ka2Variant ? false  # hi2 and ka2 combo
+, ij1Variant ? false      # ru `i'
+, ka2Variant ? false      # ru `k'
+, ll2Variant ? false      # distinct `l' (should pass the il1I test)
+, td1Variant ? false      # center tilde
+}:
 
 stdenv.mkDerivation rec {
   pname = "terminus-font";
@@ -14,7 +30,19 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
-  '';
+    '' + stdenv.lib.optionalString ao2Variant ''patch -p1 -i alt/ao2.diff
+    '' + stdenv.lib.optionalString br1Variant ''patch -p1 -i alt/br1.diff
+    '' + stdenv.lib.optionalString dv1Variant ''patch -p1 -i alt/dv1.diff
+    '' + stdenv.lib.optionalString ge2Variant ''patch -p1 -i alt/ge2.diff
+    '' + stdenv.lib.optionalString gq2Variant ''patch -p1 -i alt/gq2.diff
+    '' + stdenv.lib.optionalString hi2Variant ''patch -p1 -i alt/hi2.diff
+    '' + stdenv.lib.optionalString hi2-dv1Variant ''patch -p1 -i alt/hi2-dv1.diff
+    '' + stdenv.lib.optionalString hi2-ka2Variant ''patch -p1 -i alt/hi2-ka2.diff
+    '' + stdenv.lib.optionalString ij1Variant ''patch -p1 -i alt/ij1.diff
+    '' + stdenv.lib.optionalString ka2Variant ''patch -p1 -i alt/ka2.diff
+    '' + stdenv.lib.optionalString ll2Variant ''patch -p1 -i alt/ll2.diff
+    '' + stdenv.lib.optionalString td1Variant ''patch -p1 -i alt/td1.diff
+    '';
 
   enableParallelBuilding = true;
 
