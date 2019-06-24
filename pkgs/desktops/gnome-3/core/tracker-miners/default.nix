@@ -104,7 +104,6 @@ stdenv.mkDerivation rec {
     "-Dfunctional_tests=false"
     "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
     "-Dsystemd_user_services=${placeholder "out"}/lib/systemd/user"
-    "-Dauto_features=enabled"
   ];
 
   patches = [
