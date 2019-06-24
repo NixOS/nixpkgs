@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cairo, libjpeg, meson, ninja, wayland, pkgconfig, wayland-protocols }:
+{ stdenv, fetchFromGitHub, cairo, libjpeg, meson, ninja, wayland, pkgconfig, scdoc, wayland-protocols }:
 
 stdenv.mkDerivation rec {
   pname = "grim";
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
+    scdoc
   ];
 
   buildInputs = [
