@@ -16572,7 +16572,9 @@ in
 
   plano-theme = callPackage ../data/themes/plano { };
 
-  plata-theme = callPackage ../data/themes/plata {};
+  plata-theme = callPackage ../data/themes/plata {
+    inherit (mate) marco;
+  };
 
   poly = callPackage ../data/fonts/poly { };
 

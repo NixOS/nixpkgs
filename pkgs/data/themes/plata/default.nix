@@ -1,10 +1,11 @@
 { stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel
-, sassc, inkscape, libxml2, gnome2, gdk_pixbuf, librsvg, gtk-engine-murrine
+, sassc, inkscape, libxml2, glib, gdk_pixbuf, librsvg, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
 , openboxSupport ? true
 , xfceSupport ? true
+, mateSupport ? true, gtk3 ? null, marco ? null
 , gtkNextSupport ? false
 , plankSupport ? false
 , steamSupport ? false
@@ -16,17 +17,18 @@
 , destructionColor ? null # Tertiary color for 'destructive' buttons (Default: #F44336 = Red500)
 }:
 
+assert mateSupport -> gtk3 != null && marco != null;
 assert telegramSupport -> zip != null;
 
 stdenv.mkDerivation rec {
   pname = "plata-theme";
-  version = "0.8.3";
+  version = "0.8.6";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "0ibgymdrw91lnng76lb0x55zg6nm9f2vap19wk7qsq3bcw6ny2zi";
+    sha256 = "1iwz6lxnrsxkh3ivz8kilprwca3h8kf09rf33a5r6m7ysgiqvl7j";
   };
 
   preferLocalBuild = true;
@@ -38,8 +40,9 @@ stdenv.mkDerivation rec {
     sassc
     inkscape
     libxml2
-    gnome2.glib.dev
+    glib.dev
   ]
+  ++ stdenv.lib.optionals mateSupport [ gtk3 marco ]
   ++ stdenv.lib.optional telegramSupport zip;
 
   buildInputs = [
@@ -62,6 +65,7 @@ stdenv.mkDerivation rec {
       (enableFeature gnomeShellSupport "gnome")
       (enableFeature openboxSupport "openbox")
       (enableFeature xfceSupport "xfce")
+      (enableFeature mateSupport "mate")
       (enableFeature gtkNextSupport "gtk_next")
       (enableFeature plankSupport "plank")
       (enableFeature steamSupport "airforsteam")
