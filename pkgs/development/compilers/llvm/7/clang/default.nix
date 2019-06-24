@@ -7,6 +7,7 @@
 let
   self = stdenv.mkDerivation ({
     name = "clang-${version}";
+    inherit version;
 
     src = fetch "cfe" "0vc4i87qwxnw9lci4ayws9spakg0z6w5w670snj9f8g5m9rc8zg9";
 
