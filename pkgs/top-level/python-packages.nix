@@ -2453,6 +2453,8 @@ in {
 
   schema = callPackage ../development/python-modules/schema {};
 
+  simple-salesforce = callPackage ../development/python-modules/simple-salesforce {};
+
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server {};
 
   stem = callPackage ../development/python-modules/stem { };
