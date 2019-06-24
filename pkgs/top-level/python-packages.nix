@@ -931,6 +931,8 @@ in {
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
 
+  sentinel = callPackage ../development/python-modules/sentinel { };
+
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk {};
 
   sepaxml = callPackage ../development/python-modules/sepaxml { };
