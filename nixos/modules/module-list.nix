@@ -50,6 +50,7 @@
   ./hardware/logitech.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
+  ./hardware/network/intel-2200bg.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
