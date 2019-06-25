@@ -86,20 +86,17 @@ in with lib; {
       '';
     };
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 750 zeronet zeronet - -"
+      "d '${cfg.logDir}' 750 zeronet zeronet - -"
+    ];
+
     systemd.services.zeronet = {
       description = "zeronet";
       after = [ "network.target" (optionalString cfg.tor "tor.service") ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        # Ensure folder exists or create it and permissions are correct
-        mkdir -p ${escapeShellArg cfg.dataDir} ${escapeShellArg cfg.logDir}
-        chmod 750 ${escapeShellArg cfg.dataDir} ${escapeShellArg cfg.logDir}
-        chown zeronet:zeronet ${escapeShellArg cfg.dataDir} ${escapeShellArg cfg.logDir}
-      '';
-
       serviceConfig = {
-        PermissionsStartOnly = true;
         PrivateTmp = "yes";
         User = "zeronet";
         Group = "zeronet";

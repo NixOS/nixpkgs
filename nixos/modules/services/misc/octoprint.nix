@@ -97,6 +97,10 @@ in
         gid = config.ids.gids.octoprint;
       });
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.octoprint = {
       description = "OctoPrint, web interface for 3D printers";
       wantedBy = [ "multi-user.target" ];
@@ -105,7 +109,6 @@ in
       environment.PYTHONPATH = makeSearchPathOutput "lib" pkgs.python.sitePackages [ pluginsEnv ];
 
       preStart = ''
-        mkdir -p "${cfg.stateDir}"
         if [ -e "${cfg.stateDir}/config.yaml" ]; then
           ${pkgs.yaml-merge}/bin/yaml-merge "${cfg.stateDir}/config.yaml" "${cfgUpdate}" > "${cfg.stateDir}/config.yaml.tmp"
           mv "${cfg.stateDir}/config.yaml.tmp" "${cfg.stateDir}/config.yaml"
@@ -113,14 +116,12 @@ in
           cp "${cfgUpdate}" "${cfg.stateDir}/config.yaml"
           chmod 600 "${cfg.stateDir}/config.yaml"
         fi
-        chown -R ${cfg.user}:${cfg.group} "${cfg.stateDir}"
       '';
 
       serviceConfig = {
         ExecStart = "${pkgs.octoprint}/bin/octoprint serve -b ${cfg.stateDir}";
         User = cfg.user;
         Group = cfg.group;
-        PermissionsStartOnly = true;
       };
     };
 
