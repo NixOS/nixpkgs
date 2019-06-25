@@ -7192,6 +7192,8 @@ in
   })
     crystal_0_25
     crystal_0_26
+    crystal_0_27
+    crystal_0_29
     crystal;
 
   icr = callPackage ../development/tools/icr {};
