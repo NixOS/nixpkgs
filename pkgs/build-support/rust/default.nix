@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages }:
+{ stdenv, lib, cacert, git, cargo, rustc, fetchcargo, buildPackages }:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
@@ -103,8 +103,7 @@ in stdenv.mkDerivation (args // {
       "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
       "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
       cargo build \
-        --${buildType} \
-        --target ${stdenv.hostPlatform.config} \
+        ${lib.optionalString (buildType == "release") "--release"} --target ${stdenv.hostPlatform.config} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
