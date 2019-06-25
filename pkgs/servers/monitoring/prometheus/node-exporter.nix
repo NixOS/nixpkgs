@@ -17,6 +17,12 @@ buildGoPackage rec {
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
 
+  buildFlagsArray = ''
+    -ldflags=
+        -X ${goPackagePath}/vendor/github.com/prometheus/common/version.Version=${version}
+        -X ${goPackagePath}/vendor/github.com/prometheus/common/version.Revision=${rev}
+  '';
+
   meta = with stdenv.lib; {
     description = "Prometheus exporter for machine metrics";
     homepage = https://github.com/prometheus/node_exporter;
