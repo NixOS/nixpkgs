@@ -106,18 +106,19 @@ in {
         #     Core or Cache offsets have no effect. It is not possible to set different offsets for
         #     CPU Core and Cache. The CPU will take the smaller of the two offsets, and apply that to
         #     both CPU and Cache. A warning message will be displayed if you attempt to set different offsets.
-        ExecStart = ''
-          ${pkgs.undervolt}/bin/undervolt \
-            ${optionalString cfg.verbose "--verbose"} \
-            ${optionalString (cfg.coreOffset != null) "--core ${cfg.coreOffset}"} \
-            ${optionalString (cfg.coreOffset != null) "--cache ${cfg.coreOffset}"} \
-            ${optionalString (cfg.gpuOffset != null) "--gpu ${cfg.gpuOffset}"} \
-            ${optionalString (cfg.uncoreOffset != null) "--uncore ${cfg.uncoreOffset}"} \
-            ${optionalString (cfg.analogioOffset != null) "--analogio ${cfg.analogioOffset}"} \
-            ${optionalString (cfg.temp != null) "--temp ${cfg.temp}"} \
-            ${optionalString (cfg.tempAc != null) "--temp-ac ${cfg.tempAc}"} \
-            ${optionalString (cfg.tempBat != null) "--temp-bat ${cfg.tempBat}"}
-        '';
+        ExecStart = concatStringsSep " "
+          [
+            "${pkgs.undervolt}/bin/undervolt"
+            (optionalString cfg.verbose "--verbose")
+            (optionalString (cfg.coreOffset != null) "--core ${cfg.coreOffset}")
+            (optionalString (cfg.coreOffset != null) "--cache ${cfg.coreOffset}")
+            (optionalString (cfg.gpuOffset != null) "--gpu ${cfg.gpuOffset}")
+            (optionalString (cfg.uncoreOffset != null) "--uncore ${cfg.uncoreOffset}")
+            (optionalString (cfg.analogioOffset != null) "--analogio ${cfg.analogioOffset}")
+            (optionalString (cfg.temp != null) "--temp ${cfg.temp}")
+            (optionalString (cfg.tempAc != null) "--temp-ac ${cfg.tempAc}")
+            (optionalString (cfg.tempBat != null) "--temp-bat ${cfg.tempBat}")
+          ];
       };
     };
 
