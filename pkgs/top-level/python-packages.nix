@@ -921,6 +921,8 @@ in {
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
+  rig = callPackage ../development/python-modules/rig { };
+
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
 
   rlp = callPackage ../development/python-modules/rlp { };
@@ -934,6 +936,8 @@ in {
   seekpath = callPackage ../development/python-modules/seekpath { };
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
+
+  sentinel = callPackage ../development/python-modules/sentinel { };
 
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk {};
 
@@ -2248,6 +2252,8 @@ in {
 
   misaka = callPackage ../development/python-modules/misaka {};
 
+  mlrose = callPackage ../development/python-modules/mlrose { };
+
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
   mwlib = callPackage ../development/python-modules/mwlib { };
@@ -3007,6 +3013,8 @@ in {
   grpc_google_iam_v1 = callPackage ../development/python-modules/grpc_google_iam_v1 { };
 
   gspread = callPackage ../development/python-modules/gspread { };
+
+  gtts-token = callPackage ../development/python-modules/gtts-token { };
 
   gym = callPackage ../development/python-modules/gym { };
 

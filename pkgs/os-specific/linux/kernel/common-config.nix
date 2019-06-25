@@ -710,6 +710,9 @@ let
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      # Enables support for the Allwinner Display Engine 2.0
+      SUN8I_DE2_CCU = whenAtLeast "4.13" yes;
     };
   };
 in

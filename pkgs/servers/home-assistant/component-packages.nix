@@ -259,7 +259,7 @@
     "google_domains" = ps: with ps; [  ];
     "google_maps" = ps: with ps; [  ];
     "google_pubsub" = ps: with ps; [ google_cloud_pubsub ];
-    "google_translate" = ps: with ps; [  ];
+    "google_translate" = ps: with ps; [ gtts-token ];
     "google_travel_time" = ps: with ps; [  ];
     "google_wifi" = ps: with ps; [  ];
     "googlehome" = ps: with ps; [  ];

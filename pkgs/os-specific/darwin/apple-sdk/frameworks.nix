@@ -74,6 +74,8 @@ with frameworks; with libs; {
   MediaAccessibility      = [ CF CoreGraphics CoreText QuartzCore ];
   MediaToolbox            = [ AudioToolbox AudioUnit CF CoreMedia ];
   Metal                   = [];
+  MetalKit                = [ ModelIO Metal ];
+  ModelIO                 = [ ];
   NetFS                   = [ CF ];
   OSAKit                  = [ Carbon ];
   OpenAL                  = [];

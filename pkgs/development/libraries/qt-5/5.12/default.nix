@@ -66,6 +66,7 @@ let
         ./qtwebkit-darwin-no-readline.patch
         ./qtwebkit-darwin-no-qos-classes.patch
       ];
+    qttools = [ ./qttools.patch ];
   };
 
   mkDerivation =

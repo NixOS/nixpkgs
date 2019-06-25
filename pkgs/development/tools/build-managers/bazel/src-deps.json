@@ -23,11 +23,11 @@
             "https://github.com/bazelbuild/rules_sass/archive/8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz"
         ]
     },
-    "android_tools_pkg-0.2.tar.gz": {
-        "name": "android_tools_pkg-0.2.tar.gz",
-        "sha256": "04f85f2dd049e87805511e3babc5cea3f5e72332b1627e34f3a5461cc38e815f",
+    "android_tools_pkg-0.4.tar.gz": {
+        "name": "android_tools_pkg-0.4.tar.gz",
+        "sha256": "331e7706f2bcae8a68057d8ddd3e3f1574bca26c67c65802fc4a8ac6164fa912",
         "urls": [
-            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.2.tar.gz"
+            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.4.tar.gz"
         ]
     },
     "bazel_j2objc": {
@@ -134,25 +134,25 @@
             "https://github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz"
         ]
     },
-    "java_tools_javac10_darwin-v3.2.zip": {
-        "name": "java_tools_javac10_darwin-v3.2.zip",
-        "sha256": "1437327179b4284f7082cee0bdc3328f040e62fc5cc59c32f6824b8c520e2b7b",
+    "java_tools_javac11_darwin-v2.0.zip": {
+        "name": "java_tools_javac11_darwin-v2.0.zip",
+        "sha256": "0ceb0c9ff91256fe33508306bc9cd9e188dcca38df78e70839d426bdaef67a38",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.2/java_tools_javac10_darwin-v3.2.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v2.0/java_tools_javac11_darwin-v2.0.zip"
         ]
     },
-    "java_tools_javac10_linux-v3.2.zip": {
-        "name": "java_tools_javac10_linux-v3.2.zip",
-        "sha256": "b93e7c556b01815afb6c248aa73f06b7ec912805bde8898eedac1e20d08f2e67",
+    "java_tools_javac11_linux-v2.0.zip": {
+        "name": "java_tools_javac11_linux-v2.0.zip",
+        "sha256": "074d624fb34441df369afdfd454e75dba821d5d54932fcfee5ba598d17dc1b99",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.2/java_tools_javac10_linux-v3.2.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v2.0/java_tools_javac11_linux-v2.0.zip"
         ]
     },
-    "java_tools_javac10_windows-v3.2.zip": {
-        "name": "java_tools_javac10_windows-v3.2.zip",
-        "sha256": "86d3cc7fa0dc91ccb8f78ae3af8440fe459177e22062043ee4b83d55e6b7dfb0",
+    "java_tools_javac11_windows-v2.0.zip": {
+        "name": "java_tools_javac11_windows-v2.0.zip",
+        "sha256": "2c3fc0ce7d30d60e26f4b8a36e2eadcf9e6a9d5a51b667d3d13b78db53b24251",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.2/java_tools_javac10_windows-v3.2.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v2.0/java_tools_javac11_windows-v2.0.zip"
         ]
     },
     "java_tools_langtools_javac10": {
@@ -160,6 +160,13 @@
         "sha256": "e379c71e051eb83e3fc9a08c9b404712707d8920ffcf1e8fd59c844965f0b0dd",
         "urls": [
             "https://mirror.bazel.build/bazel_java_tools/jdk_langtools/langtools_jdk10.zip"
+        ]
+    },
+    "java_tools_langtools_javac11": {
+        "name": "java_tools_langtools_javac11",
+        "sha256": "128a63f39d3f828a761f6afcfe3c6115279336a72ea77f60d7b3acf1841c9acb",
+        "urls": [
+            "https://mirror.bazel.build/bazel_java_tools/jdk_langtools/langtools_jdk11.zip"
         ]
     },
     "java_tools_langtools_javac9": {

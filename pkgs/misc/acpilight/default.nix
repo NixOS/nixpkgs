@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python3, udev, coreutils }:
+{ stdenv, fetchgit, python3, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "acpilight";
@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     substituteInPlace 90-backlight.rules --replace /bin ${coreutils}/bin
+    substituteInPlace Makefile --replace udevadm true
   '';
 
-  buildInputs = [ pyenv udev ];
+  buildInputs = [ pyenv ];
 
   makeFlags = [ "DESTDIR=$(out) prefix=" ];
 
