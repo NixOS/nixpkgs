@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig wayland-protocols ];
   buildInputs = [ wayland ];
-  mesonFlags = [ "-Dauto_features=enabled" ];
 
   meta = with stdenv.lib; {
     description = "Command-line copy/paste utilities for Wayland";

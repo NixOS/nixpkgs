@@ -104,7 +104,6 @@ stdenv.mkDerivation rec {
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
 
   mesonFlags = [
-    "-Dauto_features=enabled"
     "-Dnautilus=false"
     "-Dps=enabled"
     "-Dgtk_doc=false"

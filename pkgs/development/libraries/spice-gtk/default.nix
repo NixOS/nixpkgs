@@ -109,7 +109,6 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   mesonFlags = [
-    "-Dauto_features=enabled"
     "-Dcelt051=disabled"
     "-Dpulse=disabled" # is deprecated upstream
   ];
