@@ -1,32 +1,56 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, makeWrapper, shared-mime-info, isocodes
-, expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobject-introspection, fribidi
-, xorg, epoxy, json-glib, libxkbcommon, gmp, gnome3, autoreconfHook, gsettings-desktop-schemas
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, gettext
+, perl
+, makeWrapper
+, shared-mime-info
+, isocodes
+, expat
+, glib
+, cairo
+, pango
+, gdk_pixbuf
+, atk
+, at-spi2-atk
+, gobject-introspection
+, fribidi
+, xorg
+, epoxy
+, json-glib
+, libxkbcommon
+, gmp
+, gnome3
+, autoreconfHook
+, gsettings-desktop-schemas
 , x11Support ? stdenv.isLinux
-, waylandSupport ? stdenv.isLinux, mesa, wayland, wayland-protocols
+, waylandSupport ? stdenv.isLinux
+, mesa
+, wayland
+, wayland-protocols
 , xineramaSupport ? stdenv.isLinux
-, cupsSupport ? stdenv.isLinux, cups ? null
-, AppKit, Cocoa
+, cupsSupport ? stdenv.isLinux
+, cups ? null
+, AppKit
+, Cocoa
 }:
 
 assert cupsSupport -> cups != null;
 
 with stdenv.lib;
 
-let
-  version = "3.24.8";
-in
 stdenv.mkDerivation rec {
-  name = "gtk+3-${version}";
+  pname = "gtk+3";
+  version = "3.24.8";
+
+  outputs = [ "out" "dev" ];
+  outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
     sha256 = "16f71bbkhwhndcsrpyhjia3b77cb5ksf5c45lyfgws4pkgg64sb6";
   };
-
-  outputs = [ "out" "dev" ];
-  outputBin = "dev";
-
-  nativeBuildInputs = [ pkgconfig gettext gobject-introspection perl makeWrapper autoreconfHook ];
 
   patches = [
     ./3.0-immodules.cache.patch
@@ -42,22 +66,52 @@ stdenv.mkDerivation rec {
     ./3.0-darwin-x11.patch
   ];
 
-  buildInputs = [ libxkbcommon epoxy json-glib isocodes ]
-    ++ optional stdenv.isDarwin AppKit;
-  propagatedBuildInputs = with xorg; with stdenv.lib;
-    [ expat glib cairo pango gdk_pixbuf atk at-spi2-atk gsettings-desktop-schemas fribidi
-      libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
-    ++ optional stdenv.isDarwin Cocoa  # explicitly propagated, always needed
-    ++ optionals waylandSupport [ mesa wayland wayland-protocols ]
-    ++ optional xineramaSupport libXinerama
-    ++ optional cupsSupport cups;
+  nativeBuildInputs = [
+    autoreconfHook
+    gettext
+    gobject-introspection
+    makeWrapper
+    perl
+    pkgconfig
+  ];
+
+  buildInputs = [
+    libxkbcommon
+    epoxy
+    json-glib
+    isocodes
+  ]
+  ++ optional stdenv.isDarwin AppKit
+  ;
+
+  propagatedBuildInputs = with xorg; [
+    at-spi2-atk
+    atk
+    cairo
+    expat
+    fribidi
+    gdk_pixbuf
+    glib
+    gsettings-desktop-schemas
+    libICE
+    libSM
+    libXcomposite
+    libXcursor
+    libXi
+    libXrandr
+    libXrender
+    pango
+  ]
+  ++ optional stdenv.isDarwin Cocoa  # explicitly propagated, always needed
+  ++ optionals waylandSupport [ mesa wayland wayland-protocols ]
+  ++ optional xineramaSupport libXinerama
+  ++ optional cupsSupport cups
+  ;
   #TODO: colord?
 
   ## (2019-06-12) Demos seem to install fine now. Keeping this around in case it fails again.
   ## (2014-03-27) demos fail to install, no idea where's the problem
   #preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
-
-  enableParallelBuilding = true;
 
   configureFlags = optional stdenv.isDarwin [
     "--disable-debug"
@@ -94,9 +148,8 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
-
     longDescription = ''
       GTK+ is a highly usable, feature rich toolkit for creating
       graphical user interfaces which boasts cross platform
@@ -107,11 +160,8 @@ stdenv.mkDerivation rec {
       proprietary software with GTK+ without any license fees or
       royalties.
     '';
-
     homepage = https://www.gtk.org/;
-
     license = licenses.lgpl2Plus;
-
     maintainers = with maintainers; [ raskin vcunat lethalman ];
     platforms = platforms.all;
   };
