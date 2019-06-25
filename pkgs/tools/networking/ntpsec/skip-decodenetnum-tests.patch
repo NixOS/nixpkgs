@@ -1,0 +1,37 @@
+From c3707ef882cbb52a26db4b7d2e677a728b370773 Mon Sep 17 00:00:00 2001
+From: George Shammas <george@shamm.as>
+Date: Fri, 22 Feb 2019 19:28:51 -0500
+Subject: [PATCH] skip decodenetnum tests
+
+---
+ tests/common/tests_main.c | 1 -
+ tests/wscript             | 1 -
+ 2 files changed, 2 deletions(-)
+
+diff --git a/tests/common/tests_main.c b/tests/common/tests_main.c
+index 3f4da1d7e..02d33c16e 100644
+--- a/tests/common/tests_main.c
++++ b/tests/common/tests_main.c
+@@ -43,7 +43,6 @@ static void RunAllTests(void)
+ 	RUN_TEST_GROUP(calendar);
+ 	RUN_TEST_GROUP(clocktime);
+ 	RUN_TEST_GROUP(endian);
+-	RUN_TEST_GROUP(decodenetnum);
+ 	RUN_TEST_GROUP(dolfptoa);
+ 	RUN_TEST_GROUP(hextolfp);
+ 	RUN_TEST_GROUP(lfpfunc);
+diff --git a/tests/wscript b/tests/wscript
+index 8f46ef9a3..726da9568 100644
+--- a/tests/wscript
++++ b/tests/wscript
+@@ -38,7 +38,6 @@ def build(ctx):
+         "libntp/ntp_endian.c",
+         "libntp/ntp_random.c",
+         "libntp/clocktime.c",
+-        "libntp/decodenetnum.c",
+         "libntp/dolfptoa.c",
+         "libntp/hextolfp.c",
+         "libntp/lfpfunc.c",
+-- 
+2.19.2
+
