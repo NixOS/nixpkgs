@@ -204,12 +204,6 @@ in
         '';
       };
 
-      # FIXME: remove this option; it's a really bad idea.
-      rootPassword = mkOption {
-        default = null;
-        description = "Path to a file containing the root password, modified on the first startup. Not specifying a root password will leave the root password empty.";
-      };
-
       replication = {
         role = mkOption {
           type = types.enum [ "master" "slave" "none" ];
@@ -398,16 +392,6 @@ in
                     # using toString to avoid copying the file to nix store if given as path instead of string,
                     # as it might contain credentials
                     cat ${toString cfg.initialScript} | ${mysql}/bin/mysql -u root -N
-                  ''}
-
-                ${optionalString (cfg.rootPassword != null)
-                  ''
-                    # Change root password
-
-                    ( echo "use mysql;"
-                      echo "update user set Password=password('$(cat ${cfg.rootPassword})') where User='root';"
-                      echo "flush privileges;"
-                    ) | ${mysql}/bin/mysql -u root -N
                   ''}
 
               rm /tmp/mysql_init
