@@ -64,22 +64,22 @@ stdenv.mkDerivation rec {
     wget
   ];
 
-  patchPhase = ''
+  patches = [
+    # Distro and version targets attempt to use lsb_release which is broken
+    # (see issue: https://github.com/NixOS/nixpkgs/issues/22729)
+    ./noinstall-distro-version.patch
+    # megasync target is not part of the install rule thanks to a commented block
+    ./install-megasync.patch
+  ];
+
+  postPatch = ''
     for file in $(find src/ -type f \( -iname configure -o -iname \*.sh  \) ); do
       substituteInPlace "$file" --replace "/bin/bash" "${stdenv.shell}"
     done
-
-    # Distro and version targets attempt to use lsb_release which is broken
-    # (see issue: https://github.com/NixOS/nixpkgs/issues/22729)
-    substituteInPlace src/MEGASync/platform/platform.pri \
-      --replace "INSTALLS += distro" "# INSTALLS += distro"
-
-    # megasync target is not part of the install rule thanks to a commented block
-    sed -i '/#\s*isEmpty(PREFIX)/,/#\s*INSTALLS\s*+=\s*target/s/^\s*#//' \
-      src/MEGASync/MEGASync.pro
   '';
 
   dontUseQmakeConfigure = true;
+  enableParallelBuilding = true;
 
   preConfigure = ''
     cd src/MEGASync/mega
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Easy automated syncing between your computers and your MEGA Cloud Drive";
     homepage    = https://mega.nz/;
-    license     = licenses.free;
+    license     = licenses.unfree;
     platforms   = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ maintainers.michojel ];
   };
