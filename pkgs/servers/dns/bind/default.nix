@@ -8,14 +8,14 @@
 assert enableSeccomp -> libseccomp != null;
 assert enablePython -> python3 != null;
 
-let version = "9.14.2"; in
+let version = "9.14.3"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "033zqajnj5ys45g899132xkhh9f0hsh76ffv7302wl166xbjfh0f";
+    sha256 = "1ymxr38c62w6961j8g2vllnv0s72z7zk4b2j2k8ixdh1rymqm1yf";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -23,12 +23,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./dont-keep-configure-flags.patch
     ./remove-mkdir-var.patch
-    # Fix build on armv6l
-    (fetchpatch {
-      url = "https://gitlab.isc.org/isc-projects/bind9/commit/f546769b8b1077a0ebfe270b8a283469ea3158d0.patch";
-      sha256 = "060f35lj6rr2qg7sy9pwy3946q2bsps4m9knmw15x6n6nmzvxrcv";
-      excludes = [ "CHANGES" ];
-    })
   ];
 
   nativeBuildInputs = [ perl ];

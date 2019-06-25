@@ -119,11 +119,11 @@
     md5name = "7e8d8ff34f27831aca3bc6f9cc532c2f90d2057c778963b884ff3d1e34dfe1f9-libe-book-0.1.3.tar.xz";
   }
   {
-    name = "libepoxy-1.5.2.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/libepoxy-1.5.2.tar.xz";
-    sha256 = "a9562386519eb3fd7f03209f279f697a8cba520d3c155d6e253c3e138beca7d8";
+    name = "libepoxy-1.5.3.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/libepoxy-1.5.3.tar.xz";
+    sha256 = "002958c5528321edd53440235d3c44e71b5b1e09b9177e8daf677450b6c4433d";
     md5 = "";
-    md5name = "a9562386519eb3fd7f03209f279f697a8cba520d3c155d6e253c3e138beca7d8-libepoxy-1.5.2.tar.xz";
+    md5name = "002958c5528321edd53440235d3c44e71b5b1e09b9177e8daf677450b6c4433d-libepoxy-1.5.3.tar.xz";
   }
   {
     name = "epm-3.7.tar.gz";
@@ -462,11 +462,11 @@
     md5name = "b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523-libjpeg-turbo-1.5.3.tar.gz";
   }
   {
-    name = "language-subtag-registry-2018-04-23.tar.bz2";
-    url = "http://dev-www.libreoffice.org/src/language-subtag-registry-2018-04-23.tar.bz2";
-    sha256 = "14c21f4533ca74e3af9e09184d6756a750d0cd46099015ba8c595e48499aa878";
+    name = "language-subtag-registry-2019-04-03.tar.bz2";
+    url = "http://dev-www.libreoffice.org/src/language-subtag-registry-2019-04-03.tar.bz2";
+    sha256 = "a1d7fb901764bb8f251d4f686cdf565764f9987d0fb5d9315d54a7366a84822d";
     md5 = "";
-    md5name = "14c21f4533ca74e3af9e09184d6756a750d0cd46099015ba8c595e48499aa878-language-subtag-registry-2018-04-23.tar.bz2";
+    md5name = "a1d7fb901764bb8f251d4f686cdf565764f9987d0fb5d9315d54a7366a84822d-language-subtag-registry-2019-04-03.tar.bz2";
   }
   {
     name = "JLanguageTool-1.7.0.tar.bz2";
@@ -700,11 +700,11 @@
     md5name = "e80ebae4da01e77f68744319f01d52a3-pixman-0.34.0.tar.gz";
   }
   {
-    name = "libpng-1.6.34.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/libpng-1.6.34.tar.xz";
-    sha256 = "2f1e960d92ce3b3abd03d06dfec9637dfbd22febf107a536b44f7a47c60659f6";
+    name = "libpng-1.6.37.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/libpng-1.6.37.tar.xz";
+    sha256 = "505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca";
     md5 = "";
-    md5name = "2f1e960d92ce3b3abd03d06dfec9637dfbd22febf107a536b44f7a47c60659f6-libpng-1.6.34.tar.xz";
+    md5name = "505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca-libpng-1.6.37.tar.xz";
   }
   {
     name = "poppler-0.74.0.tar.xz";

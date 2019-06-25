@@ -22,7 +22,7 @@ let
 
     editor = if cfg.editor then "True" else "False";
 
-    inherit (cfg) consoleMode;
+    inherit (cfg) consoleMode configurationLimit;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
@@ -54,6 +54,16 @@ in {
         gaining root access by passing init=/bin/sh as a kernel
         parameter. However, it is enabled by default for backwards
         compatibility.
+      '';
+    };
+
+    configurationLimit = mkOption {
+      default = 100;
+      example = 120;
+      type = types.int;
+      description = ''
+        Maximum of configurations in boot menu. Otherwise boot partition could
+        run out of disk space.
       '';
     };
 

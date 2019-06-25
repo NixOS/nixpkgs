@@ -29,7 +29,7 @@ let
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "cf35d2a87b11aba29c59e47e843deba1be9649114e792e830252ed8f7c35f963";
+      sha256 = "0qzr6my8zvaj0a1jwyaf254rdgm1xcyq8zp4b6fa5aqigfld4dfg";
     };
 
     propagatedBuildInputs = [

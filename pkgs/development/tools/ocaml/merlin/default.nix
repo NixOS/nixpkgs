@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "merlin";
-  version = "3.3.0";
+  version = "3.3.1";
 
   minimumOCamlVersion = "4.02.1";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "ocaml";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1s4y7jz581hj4gqv4pkk3980khw4lm0qzcj416b4ckji40q7nf9d";
+    sha256 = "1z2m6jykgn3nylh4bfirhxlb0bwamifv4fgml6j34ggk1drs8xrl";
   };
 
   buildInputs = [ yojson ];

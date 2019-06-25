@@ -114,7 +114,7 @@ in
     '';
 
     passthru.updateScript = import ./update.nix {
-      inherit stdenv writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
+      inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
       inherit (stdenv) lib;
       inherit majorVersion;
     };

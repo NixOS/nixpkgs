@@ -160,7 +160,7 @@ stdenv.mkDerivation {
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit name stdenv writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
+    inherit name writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";

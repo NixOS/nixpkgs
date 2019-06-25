@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "eksctl";
-  version = "0.1.35";
+  version = "0.1.38";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "eksctl";
     rev = version;
-    sha256 = "0b3s7vh85k68wawmsdp96q9l4yhikwhyjn1c7cwxys0aia4i8wkv";
+    sha256 = "1nhsy4d1a1vh7g2ibcxnzgxnldfyh51hiq4v4vy123487b6ndqd0";
   };
 
   goPackagePath = "github.com/weaveworks/eksctl";

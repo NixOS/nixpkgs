@@ -320,7 +320,7 @@ let
     dontUseCmakeBuildDir = true;
     doCheck = true;
     packageRequires = [ emacs ];
-    nativeBuildInputs = [ external.cmake external.llvmPackages.llvm ];
+    nativeBuildInputs = [ external.cmake external.llvmPackages.llvm external.llvmPackages.clang ];
     meta = {
       homepage = "https://melpa.org/#/irony";
       license = lib.licenses.gpl3;

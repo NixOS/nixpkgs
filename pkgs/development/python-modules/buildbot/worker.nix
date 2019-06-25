@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, setuptoolsTrial, mock, twisted, future }:
+{ lib, buildPythonPackage, fetchPypi, setuptoolsTrial, mock, twisted, future,
+  coreutils }:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
@@ -6,7 +7,7 @@ buildPythonPackage (rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a26c68debb70f15abee307aff7b225e91a2eedca9c8d571212c391e615c36f53";
+    sha256 = "0lvgqcayd4f32895g3cwrbnjw6p94nrggbq7wfz5mwbhpgg6hv52";
   };
 
   propagatedBuildInputs = [ twisted future ];
@@ -14,7 +15,8 @@ buildPythonPackage (rec {
   checkInputs = [ setuptoolsTrial mock ];
 
   postPatch = ''
-    substituteInPlace buildbot_worker/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+    substituteInPlace buildbot_worker/scripts/logwatcher.py \
+      --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
 
   meta = with lib; {

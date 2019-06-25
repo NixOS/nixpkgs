@@ -512,6 +512,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  inquirer = callPackage ../development/python-modules/inquirer { };
+
   jira = callPackage ../development/python-modules/jira { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
@@ -684,6 +686,8 @@ in {
     inherit (pkgs) pkgconfig;
   };
 
+  pycategories = callPackage ../development/python-modules/pycategories { };
+
   pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie {
     inherit (pkgs) pkgconfig;
   });
@@ -809,6 +813,18 @@ in {
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
+  pyside2 = toPythonModule (callPackage ../development/python-modules/pyside2 {
+    inherit (pkgs) cmake qt5 ninja;
+  });
+
+  shiboken2 = toPythonModule (callPackage ../development/python-modules/shiboken2 {
+    inherit (pkgs) cmake qt5 llvmPackages;
+  });
+
+  pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
+    inherit (pkgs) cmake qt5;
+  });
+
   pyslurm = callPackage ../development/python-modules/pyslurm {
     slurm = pkgs.slurm;
   };
@@ -907,6 +923,8 @@ in {
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
+  rig = callPackage ../development/python-modules/rig { };
+
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
 
   rlp = callPackage ../development/python-modules/rlp { };
@@ -920,6 +938,8 @@ in {
   seekpath = callPackage ../development/python-modules/seekpath { };
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
+
+  sentinel = callPackage ../development/python-modules/sentinel { };
 
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk {};
 
@@ -985,6 +1005,8 @@ in {
   toml = callPackage ../development/python-modules/toml { };
 
   tomlkit = callPackage ../development/python-modules/tomlkit { };
+
+  toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
   unifi = callPackage ../development/python-modules/unifi { };
 
@@ -2228,7 +2250,11 @@ in {
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik { };
 
+  midiutil = callPackage ../development/python-modules/midiutil {};
+
   misaka = callPackage ../development/python-modules/misaka {};
+
+  mlrose = callPackage ../development/python-modules/mlrose { };
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
@@ -2482,6 +2508,8 @@ in {
   zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
 
   validictory = callPackage ../development/python-modules/validictory { };
+
+  validate-email = callPackage ../development/python-modules/validate-email { };
 
   venusian = callPackage ../development/python-modules/venusian { };
 
@@ -2987,6 +3015,8 @@ in {
   grpc_google_iam_v1 = callPackage ../development/python-modules/grpc_google_iam_v1 { };
 
   gspread = callPackage ../development/python-modules/gspread { };
+
+  gtts-token = callPackage ../development/python-modules/gtts-token { };
 
   gym = callPackage ../development/python-modules/gym { };
 
@@ -3814,7 +3844,9 @@ in {
 
   pysftp = callPackage ../development/python-modules/pysftp { };
 
-  pysoundfile = callPackage ../development/python-modules/pysoundfile { };
+  soundfile = callPackage ../development/python-modules/soundfile { };
+
+  pysoundfile = self.soundfile;  # Alias added 23-06-2019
 
   python3pika = callPackage ../development/python-modules/python3pika { };
 
@@ -3874,6 +3906,8 @@ in {
   ptpython = callPackage ../development/python-modules/ptpython {
     prompt_toolkit = self.prompt_toolkit;
   };
+
+  ptable = callPackage ../development/python-modules/ptable { };
 
   publicsuffix = callPackage ../development/python-modules/publicsuffix {};
 
@@ -4268,6 +4302,8 @@ in {
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
+  readchar = callPackage ../development/python-modules/readchar { };
+
   rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
     python2 = python;
   }));
@@ -4309,6 +4345,8 @@ in {
   robotframework-seleniumlibrary = callPackage ../development/python-modules/robotframework-seleniumlibrary { };
 
   robotframework-selenium2library = callPackage ../development/python-modules/robotframework-selenium2library { };
+
+  robotframework-sshlibrary = callPackage ../development/python-modules/robotframework-sshlibrary { };
 
   robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
 
@@ -4377,9 +4415,11 @@ in {
 
   scikitimage = callPackage ../development/python-modules/scikit-image { };
 
-  scikitlearn = callPackage ../development/python-modules/scikitlearn {
-    inherit (pkgs) gfortran glibcLocales;
-  };
+  scikitlearn = let
+    args = { inherit (pkgs) gfortran glibcLocales; };
+  in
+    if isPy3k then callPackage ../development/python-modules/scikitlearn args
+    else callPackage ../development/python-modules/scikitlearn/0.20.nix args;
 
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
 

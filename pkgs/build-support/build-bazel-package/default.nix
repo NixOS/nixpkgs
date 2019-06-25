@@ -34,8 +34,10 @@ in stdenv.mkDerivation (fBuildAttrs // {
       # https://github.com/bazelbuild/bazel/blob/9323c57607d37f9c949b60e293b573584906da46/src/main/cpp/startup_options.cc#L123-L124
       #
       # On macOS Bazel will use the system installed Xcode or CLT toolchain instead of the one in the PATH unless we pass BAZEL_USE_CPP_ONLY_TOOLCHAIN
-      #
-      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 USER=homeless-shelter bazel --output_base="$bazelOut" --output_user_root="$bazelUserRoot" fetch $bazelFlags $bazelTarget
+
+      # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
+      # https://github.com/bazelbuild/bazel/issues/6502
+      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 USER=homeless-shelter bazel --output_base="$bazelOut" --output_user_root="$bazelUserRoot" fetch --loading_phase_threads=1 $bazelFlags $bazelTarget
 
       runHook postBuild
     '';
@@ -59,7 +61,9 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       # Patching symlinks to remove build directory reference
       find $bazelOut/external -type l | while read symlink; do
-        ln -sf $(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,") "$symlink"
+        new_target="$(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,")"
+        rm "$symlink"
+        ln -sf "$new_target" "$symlink"
       done
 
       cp -r $bazelOut/external $out

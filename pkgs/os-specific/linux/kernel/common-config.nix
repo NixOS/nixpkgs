@@ -234,6 +234,7 @@ let
       USB_DEBUG = { optional = true; tristate = whenOlder "4.18" "n";};
       USB_EHCI_ROOT_HUB_TT = yes; # Root Hub Transaction Translators
       USB_EHCI_TT_NEWSCHED = yes; # Improved transaction translator scheduling
+      USB_HIDDEV = yes; # USB Raw HID Devices (like monitor controls and Uninterruptable Power Supplies)
     };
 
     # Filesystem options - in particular, enable extended attributes and
@@ -709,6 +710,9 @@ let
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      # Enables support for the Allwinner Display Engine 2.0
+      SUN8I_DE2_CCU = whenAtLeast "4.13" yes;
     };
   };
 in

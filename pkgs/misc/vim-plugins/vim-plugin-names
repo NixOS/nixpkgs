@@ -18,6 +18,7 @@ bbchung/clighter8
 benmills/vimux
 bhurlow/vim-parinfer
 bitc/vim-hdevtools
+bkad/camelcasemotion
 bling/vim-bufferline
 bronson/vim-trailing-whitespace
 brooth/far.vim
@@ -376,6 +377,7 @@ vmchale/dhall-vim
 w0rp/ale
 wakatime/vim-wakatime
 wellle/targets.vim
+wellle/tmux-complete.vim
 will133/vim-dirdiff
 wincent/command-t
 wincent/ferret

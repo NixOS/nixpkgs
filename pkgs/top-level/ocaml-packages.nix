@@ -61,6 +61,8 @@ let
 
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
 
+    bistro = callPackage ../development/ocaml-modules/bistro { };
+
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
     bitv = callPackage ../development/ocaml-modules/bitv { };
@@ -426,6 +428,8 @@ let
 
     markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
 
+    mdx = callPackage ../development/ocaml-modules/mdx { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
@@ -670,6 +674,8 @@ let
       else null;
 
     ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
+
+    printbox = callPackage ../development/ocaml-modules/printbox { };
 
     process = callPackage ../development/ocaml-modules/process { };
 
