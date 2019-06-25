@@ -682,6 +682,8 @@ in {
     inherit (pkgs) pkgconfig;
   };
 
+  pycategories = callPackage ../development/python-modules/pycategories { };
+
   pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie {
     inherit (pkgs) pkgconfig;
   });
