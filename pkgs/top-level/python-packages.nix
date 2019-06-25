@@ -520,6 +520,8 @@ in {
 
   langdetect = callPackage ../development/python-modules/langdetect { };
 
+  ldh-client = callPackage ../development/python-modules/ldh-client { };
+
   libmr = callPackage ../development/python-modules/libmr { };
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
