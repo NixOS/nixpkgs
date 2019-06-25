@@ -1,0 +1,175 @@
+From 4d5e59c54a805ba4e7311fe58c9adc492ca1b35a Mon Sep 17 00:00:00 2001
+From: Alexander Volkov <a.volkov@rusbitech.ru>
+Date: Mon, 4 Feb 2019 18:42:35 +0300
+Subject: [PATCH] QSystemTrayIcon/X11: Create tray icon window when system tray
+ appears
+
+... and destroy it otherwise.
+
+Fixes: QTBUG-61898
+Fixes: QTBUG-73459
+Done-with: Gatis Paeglis <gatis.paeglis@qt.io>
+Change-Id: I6bd8f397f7ccdb123f6a60d4fa466f7b0d760dfc
+---
+ src/widgets/util/qsystemtrayicon_p.h     |  4 ++
+ src/widgets/util/qsystemtrayicon_x11.cpp | 75 ++++++++++++++++++++++----------
+ 2 files changed, 57 insertions(+), 22 deletions(-)
+
+diff --git a/src/widgets/util/qsystemtrayicon_p.h b/src/widgets/util/qsystemtrayicon_p.h
+index 5bdf020a472..e31532ea193 100644
+--- a/src/widgets/util/qsystemtrayicon_p.h
++++ b/src/widgets/util/qsystemtrayicon_p.h
+@@ -69,6 +69,7 @@
+ QT_BEGIN_NAMESPACE
+ 
+ class QSystemTrayIconSys;
++class QSystemTrayWatcher;
+ class QPlatformSystemTrayIcon;
+ class QToolButton;
+ class QLabel;
+@@ -90,6 +91,8 @@ public:
+     void showMessage_sys(const QString &title, const QString &msg, const QIcon &icon,
+                          QSystemTrayIcon::MessageIcon msgIcon, int msecs);
+ 
++    void destroyIcon();
++
+     static bool isSystemTrayAvailable_sys();
+     static bool supportsMessages_sys();
+ 
+@@ -101,6 +104,7 @@ public:
+     QSystemTrayIconSys *sys;
+     QPlatformSystemTrayIcon *qpa_sys;
+     bool visible;
++    QSystemTrayWatcher *trayWatcher;
+ 
+ private:
+     void install_sys_qpa();
+diff --git a/src/widgets/util/qsystemtrayicon_x11.cpp b/src/widgets/util/qsystemtrayicon_x11.cpp
+index 86532456c76..70e5f3678ea 100644
+--- a/src/widgets/util/qsystemtrayicon_x11.cpp
++++ b/src/widgets/util/qsystemtrayicon_x11.cpp
+@@ -92,9 +92,6 @@ protected:
+     virtual void resizeEvent(QResizeEvent *) override;
+     virtual void moveEvent(QMoveEvent *) override;
+ 
+-private slots:
+-    void systemTrayWindowChanged(QScreen *screen);
+-
+ private:
+     QSystemTrayIcon *q;
+ };
+@@ -116,15 +113,6 @@ QSystemTrayIconSys::QSystemTrayIconSys(QSystemTrayIcon *qIn)
+     setMouseTracking(true);
+ }
+ 
+-void QSystemTrayIconSys::systemTrayWindowChanged(QScreen *)
+-{
+-    if (!locateSystemTray()) {
+-        QBalloonTip::hideBalloon();
+-        hide(); // still no luck
+-        destroy();
+-    }
+-}
+-
+ QRect QSystemTrayIconSys::globalGeometry() const
+ {
+     return QRect(mapToGlobal(QPoint(0, 0)), size());
+@@ -199,10 +187,41 @@ void QSystemTrayIconSys::resizeEvent(QResizeEvent *event)
+ }
+ ////////////////////////////////////////////////////////////////////////////
+ 
++class QSystemTrayWatcher: public QObject
++{
++    Q_OBJECT
++public:
++    QSystemTrayWatcher(QSystemTrayIcon *trayIcon)
++        : QObject(trayIcon)
++        , mTrayIcon(trayIcon)
++    {
++        // This code uses string-based syntax because we want to connect to a signal
++        // which is defined in XCB plugin - QXcbNativeInterface::systemTrayWindowChanged().
++        connect(qGuiApp->platformNativeInterface(), SIGNAL(systemTrayWindowChanged(QScreen*)),
++                this, SLOT(systemTrayWindowChanged(QScreen*)));
++    }
++
++private slots:
++    void systemTrayWindowChanged(QScreen *)
++    {
++        auto icon = static_cast<QSystemTrayIconPrivate *>(QObjectPrivate::get(mTrayIcon));
++        icon->destroyIcon();
++        if (icon->visible && locateSystemTray()) {
++            icon->sys = new QSystemTrayIconSys(mTrayIcon);
++            icon->sys->show();
++        }
++    }
++
++private:
++    QSystemTrayIcon *mTrayIcon = nullptr;
++};
++////////////////////////////////////////////////////////////////////////////
++
+ QSystemTrayIconPrivate::QSystemTrayIconPrivate()
+     : sys(0),
+       qpa_sys(QGuiApplicationPrivate::platformTheme()->createPlatformSystemTrayIcon()),
+-      visible(false)
++      visible(false),
++      trayWatcher(nullptr)
+ {
+ }
+ 
+@@ -213,16 +232,21 @@ QSystemTrayIconPrivate::~QSystemTrayIconPrivate()
+ 
+ void QSystemTrayIconPrivate::install_sys()
+ {
++    Q_Q(QSystemTrayIcon);
++
+     if (qpa_sys) {
+         install_sys_qpa();
+         return;
+     }
+-    Q_Q(QSystemTrayIcon);
+-    if (!sys && locateSystemTray()) {
+-        sys = new QSystemTrayIconSys(q);
+-        QObject::connect(QGuiApplication::platformNativeInterface(), SIGNAL(systemTrayWindowChanged(QScreen*)),
+-                         sys, SLOT(systemTrayWindowChanged(QScreen*)));
+-        sys->show();
++
++    if (!sys) {
++        if (!trayWatcher)
++            trayWatcher = new QSystemTrayWatcher(q);
++
++        if (locateSystemTray()) {
++            sys = new QSystemTrayIconSys(q);
++            sys->show();
++        }
+     }
+ }
+ 
+@@ -241,14 +265,21 @@ void QSystemTrayIconPrivate::remove_sys()
+         remove_sys_qpa();
+         return;
+     }
++
++    destroyIcon();
++}
++
++void QSystemTrayIconPrivate::destroyIcon()
++{
+     if (!sys)
+         return;
+     QBalloonTip::hideBalloon();
+-    sys->hide(); // this should do the trick, but...
+-    delete sys; // wm may resize system tray only for DestroyEvents
+-    sys = 0;
++    sys->hide();
++    delete sys;
++    sys = nullptr;
+ }
+ 
++
+ void QSystemTrayIconPrivate::updateIcon_sys()
+ {
+     if (qpa_sys) {
+-- 
+2.16.3
+

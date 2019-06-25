@@ -54,6 +54,7 @@ let
       ./qtbase-darwin.patch
       ./qtbase-revert-no-macos10.10.patch
       ./qtbase-fixguicmake.patch
+      ./trayicons.patch
     ] ++ optionals stdenv.isDarwin [
       ./qtbase-darwin-nseventtype.patch
     ];
