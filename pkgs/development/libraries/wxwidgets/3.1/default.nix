@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   ";
 
   passthru = {
-    inherit compat24 compat26 unicode;
+    inherit compat28 compat30 unicode;
     gtk = if withGtk2 then gtk2 else gtk3;
   };
 
