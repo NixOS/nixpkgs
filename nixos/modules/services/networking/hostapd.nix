@@ -30,10 +30,11 @@ let
     ctrl_interface=/run/hostapd
     ctrl_interface_group=${cfg.group}
 
-    ${if cfg.wpa then ''
+    ${optionalString cfg.wpa ''
       wpa=2
       wpa_passphrase=${cfg.wpaPassphrase}
-      '' else ""}
+    ''}
+    ${optionalString cfg.noScan "noscan=1"}
 
     ${cfg.extraConfig}
   '' ;
@@ -66,6 +67,14 @@ in
         example = "wlp2s0";
         description = ''
           The interfaces <command>hostapd</command> will use.
+        '';
+      };
+
+      noScan = mkOption {
+        default = false;
+        description = ''
+          Do not scan for overlapping BSSs in HT40+/- mode.
+          Caution: turning this on will violate regulatory requirements!
         '';
       };
 
@@ -162,6 +171,7 @@ in
         after = [ "sys-subsystem-net-devices-${escapedInterface}.device" ];
         bindsTo = [ "sys-subsystem-net-devices-${escapedInterface}.device" ];
         requiredBy = [ "network-link-${cfg.interface}.service" ];
+        wantedBy = [ "multi-user.target" ];
 
         serviceConfig =
           { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";

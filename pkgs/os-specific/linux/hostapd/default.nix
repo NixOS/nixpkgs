@@ -1,7 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
+let noScanPatch = fetchurl {
+      url="https://git.telliq.com/gtu/openwrt/raw/master/package/network/services/hostapd/patches/300-noscan.patch";
+      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";
+  };
+in stdenv.mkDerivation rec {
   name = "hostapd-${version}";
   version = "2.8";
 
@@ -12,6 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libnl openssl sqlite ];
+
+  patches = [ noScanPatch ];
 
   outputs = [ "out" "man" ];
 
@@ -66,7 +72,7 @@ stdenv.mkDerivation rec {
     repositories.git = git://w1.fi/hostap.git;
     description = "A user space daemon for access point and authentication servers";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom ];
+    maintainers = with maintainers; [ phreedom ninjatrappeur ];
     platforms = platforms.linux;
   };
 }
