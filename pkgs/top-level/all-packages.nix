@@ -21500,6 +21500,11 @@ in
     sdlClient = false;
   };
 
+  freeciv_qt = freeciv.override {
+    qtClient = true;
+    sdlClient = false;
+  };
+
   freedink = callPackage ../games/freedink { };
 
   freeorion = callPackage ../games/freeorion { };
