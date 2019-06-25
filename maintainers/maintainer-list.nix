@@ -2384,6 +2384,15 @@
     githubId = 1176131;
     name = "George Whewell";
   };
+  georgyo = {
+    email = "georgyo@gmail.com";
+    github = "georgyo";
+    name = "George Shammas";
+    keys = [{
+      longkeyid = "rsa4096/0x82BB70D541AE2DB4";
+      fingerprint = "D0CF 440A A703 E0F9 73CB  A078 82BB 70D5 41AE 2DB4";
+    }];
+  };
   gerschtli = {
     email = "tobias.happ@gmx.de";
     github = "Gerschtli";
