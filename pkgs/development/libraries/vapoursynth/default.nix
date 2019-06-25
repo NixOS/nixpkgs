@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, makeWrapper
 , zimg, libass, python3, libiconv
 , ApplicationServices, nasm
 , ocrSupport ?  false, tesseract ? null
@@ -11,7 +11,7 @@ assert imwriSupport -> imagemagick7 != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "vapoursynth-${version}";
+  pname = "vapoursynth";
   version = "R46";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xbwva12l68awplardf47ydlx904wifw468npaxa9cx9dvd5mv13";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook nasm ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook nasm makeWrapper ];
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
@@ -37,12 +37,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    wrapProgram $out/bin/vspipe \
+        --prefix PYTHONPATH : $out/${python3.sitePackages}
+  '';
+
   meta = with stdenv.lib; {
     description = "A video processing framework with the future in mind";
     homepage    = http://www.vapoursynth.com/;
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj tadeokondrak ];
   };
 
 }
