@@ -445,7 +445,7 @@ in
       type = types.bool;
       default = !config.boot.isContainer;
       description = ''
-        Whether to enable support for nixos containers.
+        Whether to enable support for NixOS containers.
       '';
     };
 

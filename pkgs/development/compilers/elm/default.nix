@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenv, pkgs
 , haskell, nodejs
 , fetchurl, fetchpatch, makeWrapper, writeScriptBin }:
 let
@@ -8,7 +8,7 @@ let
 
   elmNodePackages =
     import ./packages/node-composition.nix {
-      inherit nodejs;
+      inherit nodejs pkgs;
       inherit (stdenv.hostPlatform) system;
     };
 

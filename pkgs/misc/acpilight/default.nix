@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "acpilight";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchgit {
     url = "https://gitlab.com/wavexx/acpilight.git";
     rev = "v${version}";
-    sha256 = "0kykrl71fb146vaq8207c3qp03h2djkn8hn6psryykk8gdzkv3xd";
+    sha256 = "1r0r3nx6x6vkpal6vci0zaa1n9dfacypldf6k8fxg7919vzxdn1w";
   };
 
   pyenv = python3.withPackages (pythonPackages: with pythonPackages; [
