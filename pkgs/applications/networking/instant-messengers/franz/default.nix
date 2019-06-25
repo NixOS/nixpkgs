@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, autoPatchelfHook, dpkg
+{ stdenv, fetchurl, makeWrapper, wrapGAppsHook, autoPatchelfHook, dpkg
 , xorg, atk, glib, pango, gdk_pixbuf, cairo, freetype, fontconfig, gtk3
 , gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper dpkg ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapGAppsHook dpkg ];
   buildInputs = (with xorg; [
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
     libXrender libX11 libXtst libXScrnSaver
@@ -37,8 +37,12 @@ in stdenv.mkDerivation rec {
       --replace Exec=\"/opt/Franz/franz\" Exec=franz
   '';
 
+  dontWrapGApps = true;
+
   postFixup = ''
-    wrapProgram $out/opt/Franz/franz --prefix PATH : ${xdg_utils}/bin
+    wrapProgram $out/opt/Franz/franz \
+      --prefix PATH : ${xdg_utils}/bin \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   meta = with stdenv.lib; {
