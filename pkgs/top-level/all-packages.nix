@@ -9182,6 +9182,8 @@ in
 
   drip = callPackage ../development/tools/drip { };
 
+  drm_info = callPackage ../development/tools/drm_info { };
+
   drush = callPackage ../development/tools/misc/drush { };
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
@@ -19014,7 +19016,7 @@ in
 
   mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
 
-  merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
+  merkaartor = libsForQt59.callPackage ../applications/misc/merkaartor { };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 

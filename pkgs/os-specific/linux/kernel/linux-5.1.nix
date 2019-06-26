@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 buildLinux (args // rec {
-  version = "5.1.14";
+  version = "5.1.15";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
   modDirVersion = if (modDirVersionArg == null) then concatStrings (intersperse "." (take 3 (splitString "." "${version}.0"))) else modDirVersionArg;
@@ -13,6 +13,6 @@ buildLinux (args // rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-    sha256 = "0bhiqgfm0wcs0r9al800syrjnxp54bk2n2472ccpwp2nn6mv6dkl";
+    sha256 = "168kvin7s7f1rxfy187bw4dfzhm1dr2ypfs4gkrskkl04rq2i8g8";
   };
 } // (args.argsOverride or {}))

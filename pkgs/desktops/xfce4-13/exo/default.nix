@@ -1,15 +1,16 @@
-{ mkXfceDerivation, docbook_xsl, libxslt, perlPackages, gtk2, gtk3
+{ mkXfceDerivation, docbook_xsl, libxslt, perlPackages, gtk3
 , libxfce4ui, libxfce4util }:
 
 mkXfceDerivation rec {
   category = "xfce";
   pname = "exo";
-  version = "0.12.2";
+  version = "4.14pre1";
+  rev = "xfce-4.14pre1";
 
-  sha256 = "1b4hl9yxvf8b8akqf2zngq3m93yqnqcmxqqds1dwzm9vm5sqydgh";
+  sha256 = "1gf9fb48nkafb4jj0hmm2s00mpl32dp5iqxfaxm5i1nc6884hipw";
 
   nativeBuildInputs = [ libxslt perlPackages.URI ];
-  buildInputs = [ gtk2 gtk3 libxfce4ui libxfce4util ];
+  buildInputs = [ gtk3 libxfce4ui libxfce4util ];
 
   postPatch = ''
     substituteInPlace docs/reference/Makefile.am \

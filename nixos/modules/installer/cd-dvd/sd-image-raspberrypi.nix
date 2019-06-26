@@ -22,7 +22,7 @@ in
   boot.kernelPackages = pkgs.linuxPackages_rpi;
 
   sdImage = {
-    populateBootCommands = let
+    populateFirmwareCommands = let
       configTxt = pkgs.writeText "config.txt" ''
         # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
         # when attempting to show low-voltage or overtemperature warnings.

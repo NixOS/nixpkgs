@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
     sed -i tools/script/dtk-translate.py -e "s,#!env,#!/usr/bin/env,"
   '';
 
-  qmakeFlags = [ "MKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs" ];
+  qmakeFlags = [
+    "DTK_VERSION=${version}"
+    "MKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs"
+  ];
 
   postFixup = ''
     chmod +x $out/lib/dtk2/*.py

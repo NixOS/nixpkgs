@@ -1,18 +1,12 @@
-{ lib, mkXfceDerivation, exo, gtk2, gtk3 ? null, libwnck3 ? null, libXmu }:
+{ lib, mkXfceDerivation, exo, gtk3, libwnck3, libXmu }:
 
-let
-  inherit (lib) enableFeature;
-in
-
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "xfce4-taskmanager";
-  version = "1.2.1";
+  version = "1.2.2";
 
-  sha256 = "1p0496r1fb5zqvn6c41kb6rjqwlqghqahgg6hkzw0gjy911im99w";
+  sha256 = "03js0pmhrybxa7hrp3gx4rm7j061ansv0bp2dwhnbrdpmzjysysc";
 
   nativeBuildInputs = [ exo ];
-  buildInputs = [ gtk2 gtk3 libwnck3 libXmu ];
-
-  configureFlags = [ (enableFeature (gtk3 != null) "gtk3") ];
+  buildInputs = [ gtk3 libwnck3 libXmu ];
 }

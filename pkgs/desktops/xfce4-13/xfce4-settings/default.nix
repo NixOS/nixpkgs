@@ -5,9 +5,10 @@
 mkXfceDerivation rec {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.13.4";
+  version = "4.14pre1";
+  rev = "xfce-4.14pre1";
 
-  sha256 = "0qnnpvcs2hpfq3n4byjwq343p95i9xw96rq7ym4md4mahnk176dy";
+  sha256 = "0q6jh3fqw9n9agp018xiwidrld445irnli5jgwpszi9hc435dbpc";
 
   postPatch = ''
     automakeAddFlags xfce4-settings-editor/Makefile.am xfce4_settings_editor_CFLAGS DBUS_GLIB_CFLAGS
