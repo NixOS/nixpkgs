@@ -24211,6 +24211,8 @@ in
 
   xrq = callPackage ../applications/misc/xrq { };
 
+  libnitrokey = callPackage ../tools/security/libnitrokey { };
+  nitro_luks = callPackage ../tools/security/nitro_luks { };
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
   nitrokey-udev-rules = callPackage ../tools/security/nitrokey-app/udev-rules.nix { };
 

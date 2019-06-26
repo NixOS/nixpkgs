@@ -389,6 +389,11 @@ let
 
     ${if (luks.yubikeySupport && (yubikey != null)) || (luks.gpgSupport && (gpgCard != null)) then ''
     open_with_hardware
+    '' else ${if (luks.nitrokeySupport) then ''
+       ${nitro_luks} > ${keyFile}
+       if [$? -eq 1]; then
+         open_normally
+       fi
     '' else ''
     open_normally
     ''}
