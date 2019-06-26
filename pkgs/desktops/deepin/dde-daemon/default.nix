@@ -9,7 +9,7 @@
 buildGoPackage rec {
   name = "${pname}-${version}";
   pname = "dde-daemon";
-  version = "3.27.2.5";
+  version = "3.27.2.6";
 
   goPackagePath = "pkg.deepin.io/dde/daemon";
 
@@ -17,7 +17,7 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "117yhsb0axwblncyj02fhcyl4b7jl7vvh1bbx08bscih5lnvjihx";
+    sha256 = "14g138h23f1lh1y98pdrfhnph1m7pw8lq8ypiwv9qf3fmdyn35d4";
   };
 
   patches = [
