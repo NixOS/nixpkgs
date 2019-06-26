@@ -5,7 +5,7 @@
 
 { stdenv
 , fetchFromGitHub
-, rustPlatform 
+, rustPlatform
 , pkgconfig
 , openssl
 , systemd
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Fast, light, robust Ethereum implementation";
-    homepage = http://parity.io;
+    homepage = "http://parity.io";
     license = licenses.gpl3;
     maintainers = [ maintainers.akru ];
     platforms = platforms.linux;
