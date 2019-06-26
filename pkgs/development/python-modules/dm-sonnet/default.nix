@@ -38,6 +38,11 @@ let
       sha256 = "0q7mz69nzng8i6pn3h0va79q4nh60jfjjj9crric8g6dmdwc3h1i";
     };
 
+    bazelFlags = [
+      # https://github.com/deepmind/sonnet/issues/134
+      "--incompatible_disable_deprecated_attr_params=false"
+    ];
+
     buildAttrs = {
       preBuild = ''
         patchShebangs .
