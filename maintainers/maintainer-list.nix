@@ -2428,6 +2428,11 @@
     github = "gavinrogers";
     name = "Gavin Rogers";
   };
+  gazally = {
+    email = "gazally@runbox.com";
+    github = "gazally";
+    name = "Gemini Lasswell";
+  };
   gebner = {
     email = "gebner@gebner.org";
     github = "gebner";
