@@ -12,6 +12,8 @@
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
+, expect ? null # optional, for running the testsuite.
+, dejagnu ? null # optional, for running the testsuite.
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
@@ -192,7 +194,9 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl);
+    ++ (optional (perl != null) perl)
+    ++ (optional (expect != null) expect)
+    ++ (optional (expect != null) dejagnu);
 
   # For building runtime libs
   depsBuildTarget =
