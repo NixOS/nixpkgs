@@ -1,11 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
 
-with stdenv.lib;
-let noScanPatch = fetchurl {
-      url="https://git.telliq.com/gtu/openwrt/raw/master/package/network/services/hostapd/patches/300-noscan.patch";
-      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "hostapd-${version}";
   version = "2.8";
 
@@ -17,7 +12,13 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libnl openssl sqlite ];
 
-  patches = [ noScanPatch ];
+  patches = [
+    (fetchurl {
+      # Note: fetchurl seems to be unhappy with openwrt git
+      # server's URLs containing semicolons. Using the github mirror instead.
+      url = "https://raw.githubusercontent.com/openwrt/openwrt/master/package/network/services/hostapd/patches/300-noscan.patch";
+      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";})
+  ];
 
   outputs = [ "out" "man" ];
 
@@ -48,7 +49,7 @@ in stdenv.mkDerivation rec {
     CONFIG_INTERNETWORKING=y
     CONFIG_HS20=y
     CONFIG_ACS=y
-  '' + optionalString (sqlite != null) ''
+  '' + stdenv.lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
 
@@ -67,7 +68,7 @@ in stdenv.mkDerivation rec {
     install -vD hostapd_cli.1 -t $man/share/man/man1
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://hostap.epitest.fi;
     repositories.git = git://w1.fi/hostap.git;
     description = "A user space daemon for access point and authentication servers";
