@@ -35,6 +35,7 @@
         pkgs.deepin.dde-calendar
         pkgs.deepin.dde-daemon
         pkgs.deepin.dde-dock
+        pkgs.deepin.dde-launcher
         pkgs.deepin.dde-file-manager
         pkgs.deepin.dde-session-ui
         pkgs.deepin.deepin-anything
@@ -47,6 +48,7 @@
         pkgs.deepin.dde-calendar
         pkgs.deepin.dde-daemon
         pkgs.deepin.dde-dock
+        pkgs.deepin.dde-launcher
         pkgs.deepin.dde-file-manager
         pkgs.deepin.dde-session-ui
         pkgs.deepin.deepin-anything
