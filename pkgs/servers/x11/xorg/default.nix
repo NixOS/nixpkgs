@@ -58,11 +58,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   encodings = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
-    name = "encodings-1.0.4";
+    name = "encodings-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/font/encodings-1.0.4.tar.bz2;
-      sha256 = "0ffmaw80vmfwdgvdkp6495xgsqszb6s0iira5j0j6pd4i0lk3mnf";
+      url = mirror://xorg/individual/font/encodings-1.0.5.tar.bz2;
+      sha256 = "0caafx0yqqnqyvbalxhh3mb0r9v36xmcy5zjhygb2i508dhy35mx";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
