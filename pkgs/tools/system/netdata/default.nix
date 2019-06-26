@@ -1,12 +1,12 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, zlib, libuuid, libossp_uuid, CoreFoundation, IOKit, lm_sensors }:
 
 stdenv.mkDerivation rec{
-  version = "1.11.1";
+  version = "1.15.0";
   name = "netdata-${version}";
 
   src = fetchurl {
     url = "https://github.com/netdata/netdata/releases/download/v${version}/netdata-v${version}.tar.gz";
-    sha256 = "0djph4586cc14vavj6za6k255lscf3b415dx8k45q3nsc2hb4l01";
+    sha256 = "04frfy08k6m70y3s8j3gvnfnqqd9d5mwj3j6krk9dsh34332abvx";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec{
   postInstall = stdenv.lib.optionalString (!stdenv.isDarwin) ''
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
-      $out/libexec/netdata/plugins.d/apps.plugin.org
+       $out/libexec/netdata/plugins.d/apps.plugin.org
   '';
 
   preConfigure = ''
