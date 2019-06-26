@@ -88,8 +88,8 @@ in stdenv.mkDerivation (fBuildAttrs // {
   '';
 
   preConfigure = ''
-    mkdir -p $bazelOut/external
-    cp -r $deps/* $bazelOut/external
+    mkdir -p "$bazelOut"
+    cp -r $deps $bazelOut/external
     chmod -R +w $bazelOut
     find $bazelOut -type l | while read symlink; do
       ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
