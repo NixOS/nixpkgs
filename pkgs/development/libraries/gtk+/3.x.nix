@@ -3,7 +3,9 @@
 , fetchpatch
 , pkgconfig
 , gettext
-, perl
+, meson
+, ninja
+, python3
 , makeWrapper
 , shared-mime-info
 , isocodes
@@ -22,7 +24,7 @@
 , libxkbcommon
 , gmp
 , gnome3
-, autoreconfHook
+, hicolor-icon-theme
 , gsettings-desktop-schemas
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
@@ -42,14 +44,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.8";
+  version = "3.24.10";
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
+  setupHook = ./gtk3-setup-hook.sh;
+
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "16f71bbkhwhndcsrpyhjia3b77cb5ksf5c45lyfgws4pkgg64sb6";
+    sha256 = "00qvq1r96ikdalv7xzgng1kad9i0rcahqk01gwhxl3xrw83z3a1m";
   };
 
   patches = [
@@ -66,13 +70,36 @@ stdenv.mkDerivation rec {
     ./3.0-darwin-x11.patch
   ];
 
+  mesonFlags = [
+    "-Dtests=false"
+  ];
+
+  postPatch = ''
+    files=(
+      build-aux/meson/post-install.py
+      demos/gtk-demo/geninclude.py
+      gdk/broadway/gen-c-array.py
+      gdk/gen-gdk-gresources-xml.py
+      gtk/cursor/dnd-copy.png
+      gtk/gen-gtk-gresources-xml.py
+      gtk/gen-rc.py
+      gtk/gentypefuncs.py
+    )
+
+    chmod +x ''${files[@]}
+    patchShebangs ''${files[@]}
+  '';
+
   nativeBuildInputs = [
-    autoreconfHook
     gettext
     gobject-introspection
+    hicolor-icon-theme # setup-hook
     makeWrapper
-    perl
+    meson
+    ninja
     pkgconfig
+    python3
+    setupHook
   ];
 
   buildInputs = [
@@ -109,27 +136,9 @@ stdenv.mkDerivation rec {
   ;
   #TODO: colord?
 
-  ## (2019-06-12) Demos seem to install fine now. Keeping this around in case it fails again.
-  ## (2014-03-27) demos fail to install, no idea where's the problem
-  #preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
-
-  configureFlags = optional stdenv.isDarwin [
-    "--disable-debug"
-    "--disable-dependency-tracking"
-    "--disable-glibtest"
-  ] ++ optional (stdenv.isDarwin && !x11Support)
-    "--enable-quartz-backend"
-    ++ optional x11Support [
-    "--enable-x11-backend"
-  ] ++ optional waylandSupport [
-    "--enable-wayland-backend"
-  ];
-
   doCheck = false; # needs X11
 
   postInstall = optionalString (!stdenv.isDarwin) ''
-    substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \
-      --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'
     # The updater is needed for nixos env and it's tiny.
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
