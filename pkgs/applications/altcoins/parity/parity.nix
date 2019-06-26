@@ -29,6 +29,8 @@ rustPlatform.buildRustPackage rec {
     systemd.lib systemd.dev openssl openssl.dev
   ];
 
+  cargoBuildFlags = [ "--features final" ];
+
   # test result: FAILED. 80 passed; 12 failed; 0 ignored; 0 measured; 0 filtered out
   doCheck = false;
 
