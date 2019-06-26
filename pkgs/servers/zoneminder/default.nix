@@ -89,6 +89,8 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./default-to-http-1dot1.patch
+    # Explicitly link with dynamic linking library to fix build
+    ./link-with-libdl.patch
   ];
 
   postPatch = ''
