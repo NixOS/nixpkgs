@@ -898,11 +898,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXi = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXfixes }: stdenv.mkDerivation {
-    name = "libXi-1.7.9";
+    name = "libXi-1.7.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.9.tar.bz2;
-      sha256 = "0idg1wc01hndvaa820fvfs7phvd1ymf0lldmq6386i7rhkzvirn2";
+      url = mirror://xorg/individual/lib/libXi-1.7.10.tar.bz2;
+      sha256 = "0q8hz3slga3w3ch8wp0k7ay9ilhz315qnab0w1y2x9w3cf7hv8rn";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
