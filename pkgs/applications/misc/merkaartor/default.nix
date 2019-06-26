@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, pkgconfig, boost, gdal, proj
+{ stdenv, fetchFromGitHub, makeWrapper, qmake, pkgconfig, boost, gdal, proj
 , qtbase, qtsvg, qtwebkit }:
 
 stdenv.mkDerivation rec {
@@ -12,11 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "0ls3q8m1hxiwyrypy6qca8wczhl4969ncl0sszfdwfv70rzxjk88";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ makeWrapper qmake pkgconfig ];
 
   buildInputs = [ boost gdal proj qtbase qtsvg qtwebkit ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/merkaartor \
+      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms
+  '';
 
   meta = with stdenv.lib; {
     description = "OpenStreetMap editor";
