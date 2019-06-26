@@ -1,6 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "hostapd-${version}";
   version = "2.8";
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
     CONFIG_INTERNETWORKING=y
     CONFIG_HS20=y
     CONFIG_ACS=y
-  '' + optionalString (sqlite != null) ''
+  '' + stdenv.lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
 
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
     install -vD hostapd_cli.1 -t $man/share/man/man1
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://hostap.epitest.fi;
     repositories.git = git://w1.fi/hostap.git;
     description = "A user space daemon for access point and authentication servers";
