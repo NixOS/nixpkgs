@@ -6217,6 +6217,8 @@ in
 
   timetrap = callPackage ../applications/office/timetrap { };
 
+  timetable = callPackage ../applications/office/timetable { };
+
   tzupdate = callPackage ../applications/misc/tzupdate { };
 
   tinc = callPackage ../tools/networking/tinc { };
