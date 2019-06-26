@@ -225,7 +225,9 @@ in {
     environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
       ++ (pkgs.gnome3.removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [
       pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-    ];
+    ] ++ (lib.optionals (config.networking.networkmanager.enable &&
+                         config.hardware.bluetooth.enable)
+          [ pkgs.gnome3.networkmanagerapplet ]);
 
     # Use the correct gnome3 packageSet
     networking.networkmanager.basePackages =
