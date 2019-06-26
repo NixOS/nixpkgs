@@ -137,6 +137,11 @@
     githubId = 2321000;
     name = "Ruslan Babayev";
   };
+  acairncross = {
+    email = "acairncross@gmail.com";
+    github = "acairncross";
+    name = "Aiken Cairncross";
+  };
   acowley = {
     email = "acowley@gmail.com";
     github = "acowley";

@@ -39,7 +39,7 @@ let
       platforms   = platforms.unix;
       license     = if includeGplCode then licenses.gpl2 else licenses.mit;
       homepage    = https://github.com/sambayless/monosat;
-      broken = true;
+      maintainers = [ maintainers.acairncross ];
     };
   };
 
