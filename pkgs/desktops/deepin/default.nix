@@ -9,6 +9,7 @@ let
     dbus-factory = callPackage ./dbus-factory { };
     dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
+    dde-control-center = callPackage ./dde-control-center { };
     dde-daemon = callPackage ./dde-daemon { };
     dde-dock = callPackage ./dde-dock { };
     dde-file-manager = callPackage ./dde-file-manager { };
