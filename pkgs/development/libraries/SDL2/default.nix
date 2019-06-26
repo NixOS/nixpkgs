@@ -1,4 +1,5 @@
-{ stdenv, config, libGLSupported, fetchurl, pkgconfig
+{ stdenv, config, fetchurl, pkgconfig
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid

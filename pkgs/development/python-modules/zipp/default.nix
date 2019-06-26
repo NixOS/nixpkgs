@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "zipp";
-  version = "0.3.3";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "55ca87266c38af6658b84db8cfb7343cdb0bf275f93c7afaea0d8e7a209c7478";
+    sha256 = "ca943a7e809cc12257001ccfb99e3563da9af99d52f261725e96dfe0f9275bc3";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -22,6 +22,9 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest
   '';
+
+  # Prevent infinite recursion with pytest
+  doCheck = false;
 
   meta = with lib; {
     description = "Pathlib-compatible object wrapper for zip files";

@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig
-, wayland, libGL, mesa_noglu, libxkbcommon, cairo, libxcb
+{ stdenv, fetchurl, meson, ninja, pkgconfig, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
 , colord, lcms2
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
   buildInputs = [
-    wayland libGL mesa_noglu libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
+    wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
     mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
     libwebp wayland-protocols
     colord lcms2

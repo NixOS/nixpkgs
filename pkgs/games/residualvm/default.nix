@@ -1,5 +1,5 @@
 { stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib
-, libGLSupported
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGLU_combined ? null
 }:
 

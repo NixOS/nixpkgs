@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Rapid multi-Python deployment";
     license = licenses.gpl2;
-    homepage = "http://codespeak.net/execnet";
+    homepage = "https://execnet.readthedocs.io/";
     maintainers = with maintainers; [ nand0p ];
   };
 
