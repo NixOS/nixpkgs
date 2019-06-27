@@ -14,10 +14,6 @@ stdenv.mkDerivation rec {
     sha256 = "1wkcywcwwszj9mldr0lngczqdz7hys08rr1nd2k6rs8ykzs2z7m4";
   };
 
-  mesonFlags = [
-    "--buildtype=plain"
-  ];
-
   nativeBuildInputs = [
     meson ninja pkgconfig gettext libxslt desktop-file-utils
     docbook_xsl docbook_xml_dtd_42 wrapGAppsHook python3
