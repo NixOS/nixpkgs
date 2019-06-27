@@ -3,9 +3,9 @@ with lib;
 let
   cfg = config.services.selfoss;
 
-  poolName = "selfoss_pool";
-  phpfpmSocketName = "/run/phpfpm/${poolName}.sock";
-
+  poolName = "selfoss";
+  phpfpmSocketName = "/run/phpfpm-${poolName}/${poolName}.sock";
+  group = "${cfg.user}";
   dataDir = "/var/lib/selfoss";
 
   selfoss-config =
@@ -116,21 +116,25 @@ in
 
   config = mkIf cfg.enable {
 
-    services.phpfpm.poolConfigs = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = ''
-        listen = "${phpfpmSocketName}";
-        listen.owner = nginx
-        listen.group = nginx
-        listen.mode = 0600
-        user = nginx
-        pm = dynamic
-        pm.max_children = 75
-        pm.start_servers = 10
-        pm.min_spare_servers = 5
-        pm.max_spare_servers = 20
-        pm.max_requests = 500
-        catch_workers_output = 1
-      '';
+    services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
+      "${poolName}" = {
+        socketName = "${poolName}";
+        phpPackage = pkgs.php;
+        user = "${cfg.user}";
+        group = "${group}";
+        extraConfig = ''
+          listen.owner = ${config.services.nginx.user}
+          listen.group = ${config.services.nginx.group}
+          listen.mode = 0600
+          pm = dynamic
+          pm.max_children = 75
+          pm.start_servers = 10
+          pm.min_spare_servers = 5
+          pm.max_spare_servers = 20
+          pm.max_requests = 500
+          catch_workers_output = 1
+        '';
+      };
     };
 
     systemd.services.selfoss-config = {
@@ -145,7 +149,7 @@ in
         # Create the files
         cp -r "${pkgs.selfoss}/"* "${dataDir}"
         ln -sf "${selfoss-config}" "${dataDir}/config.ini"
-        chown -R "${cfg.user}" "${dataDir}"
+        chown -R "${cfg.user}":"${group}" "${dataDir}"
         chmod -R 755 "${dataDir}"
       '';
       wantedBy = [ "multi-user.target" ];
@@ -162,5 +166,8 @@ in
 
     };
 
+    users.users.nginx = {
+      extraGroups = [ "${group}" ];
+     };
   };
 }

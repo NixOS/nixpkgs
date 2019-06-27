@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }: with lib; let
   cfg = config.services.icingaweb2;
   poolName = "icingaweb2";
-  phpfpmSocketName = "/var/run/phpfpm/${poolName}.sock";
 
   defaultConfig = {
     global = {
@@ -162,19 +161,23 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.phpfpm.poolConfigs = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = ''
-        listen = "${phpfpmSocketName}"
-        listen.owner = nginx
-        listen.group = nginx
-        listen.mode = 0600
-        user = icingaweb2
-        pm = dynamic
-        pm.max_children = 75
-        pm.start_servers = 2
-        pm.min_spare_servers = 2
-        pm.max_spare_servers = 10
-      '';
+    services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
+      "${poolName}" = {
+        socketName = "${poolName}";
+        phpPackage = pkgs.php;
+        user = "icingaweb2";
+        group = "icingaweb2";
+        extraConfig = ''
+          listen.owner = ${config.services.nginx.user}
+          listen.group = ${config.services.nginx.group}
+          listen.mode = 0600
+          pm = dynamic
+          pm.max_children = 75
+          pm.start_servers = 2
+          pm.min_spare_servers = 2
+          pm.max_spare_servers = 10
+        '';
+      };
     };
 
     services.phpfpm.phpOptions = mkIf (cfg.pool == "${poolName}")
@@ -206,7 +209,7 @@ in {
             include ${config.services.nginx.package}/conf/fastcgi.conf;
             try_files $uri =404;
             fastcgi_split_path_info ^(.+\.php)(/.+)$;
-            fastcgi_pass unix:${phpfpmSocketName};
+            fastcgi_pass unix:/run/phpfpm-${poolName}/${poolName}.sock;
             fastcgi_param SCRIPT_FILENAME ${pkgs.icingaweb2}/public/index.php;
           '';
         };
@@ -238,6 +241,9 @@ in {
       description = "Icingaweb2 service user";
       group = "icingaweb2";
       isSystemUser = true;
+    };
+    users.users.nginx = {
+      extraGroups = [ "icingaweb2" ];
     };
   };
 }
