@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, autoconf, automake, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
-, wrapGAppsHook
+, wrapGAppsHook, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "0ciygvcxb78pqg59r6p061mkbpvkgv2rv3r79j3kgv3kalb3ln2w";
   };
 
-  # Do not build the changelog as this requires markdown.
-  patches = [ ./geeqie-no-changelog.patch ];
+  patches = [
+    # Do not build the changelog as this requires markdown.
+    ./geeqie-no-changelog.patch
+    # Fixes build with exiv2 0.27.1
+    (fetchpatch {
+      name = "geeqie-exiv2-0.27.patch";
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/geeqie-exiv2-0.27.patch?h=packages/geeqie&id=dee28a8b3e9039b9cd6927b5a93ef2a07cd8271d";
+      sha256 = "05skpbyp8pcq92psgijyccc8liwfy2cpwprw6m186pf454yb5y9p";
+    })
+  ];
 
   preConfigure = "./autogen.sh";
 
