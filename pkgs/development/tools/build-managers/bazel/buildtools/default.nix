@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "bazel-buildtools-${version}";
-  version = "0.22.0";
+  version = "0.26.0";
 
   goPackagePath = "github.com/bazelbuild/buildtools";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "buildtools";
-    rev = "55b64c3d2ddfb57f06477c1d94ef477419c96bd6";
-    sha256 = "0n6q8pkgy3vvmwyrxvkmjfbcxc31i31czg2bjdzq7awwrr4fdbwy";
+    rev = "${version}";
+    sha256 = "12dhhsnwp1r5w8x593d5fpgdlyikmnppa3mfkq1ynx3ax6szybcf";
   };
 
   goDeps = ./deps.nix;
