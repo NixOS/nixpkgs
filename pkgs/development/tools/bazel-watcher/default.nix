@@ -1,11 +1,27 @@
 { buildBazelPackage
 , fetchFromGitHub
+, fetchpatch
 , git
 , go
 , python
 , stdenv
 }:
 
+let
+  patches = [
+    ./use-go-in-path.patch
+
+    # update rules_go to fix the build. Remove these when updating past 0.10.3
+    (fetchpatch {
+      url = "https://github.com/bazelbuild/bazel-watcher/commit/686130f50cea274f7453f6abc8c5249654047462.patch";
+      sha256 = "0rzs01sfiinl5d3dq9sx1bhl8kkzppdwh964fr7bzafqcxv5llmb";
+    })
+    (fetchpatch {
+      url = "https://github.com/bazelbuild/bazel-watcher/commit/18bdb44832ccc533e0ab3923ef80060eeb24582d.patch";
+      sha256 = "0k5hvlxlg4n092d53cbfxqqhzc6f1jv4licdhhi1dhckkhb4sdk6";
+    })
+  ];
+in
 buildBazelPackage rec {
   name = "bazel-watcher-${version}";
   version = "0.10.3";
@@ -22,11 +38,10 @@ buildBazelPackage rec {
   bazelTarget = "//ibazel";
 
   fetchAttrs = {
+    inherit patches;
+
     preBuild = ''
       patchShebangs .
-
-      # tell rules_go to use the Go binary found in the PATH
-      sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
     '';
 
     preInstall = ''
@@ -47,15 +62,14 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "1ck1rsg5msd77abs889nl2n2i3jlah4d4vjz5wbsb3jyhzn8n5ny";
+    sha256 = "01d4m4kb2mhz8fxl9apzsdq0pd7i79w3q49x51rwa524caml9zfv";
   };
 
   buildAttrs = {
+    inherit patches;
+
     preBuild = ''
       patchShebangs .
-
-      # tell rules_go to use the Go binary found in the PATH
-      sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
     '';
 
     installPhase = ''
