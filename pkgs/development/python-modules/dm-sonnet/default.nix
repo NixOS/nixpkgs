@@ -11,6 +11,7 @@
 , wrapt
 , tensorflow
 , tensorflow-probability
+, tensorflow-estimator
 }:
 
 let
@@ -73,6 +74,7 @@ in buildPythonPackage rec {
     wrapt
     tensorflow
     tensorflow-probability
+    tensorflow-estimator
   ];
 
   # not sure how to properly run the real test suite -- through bazel?
