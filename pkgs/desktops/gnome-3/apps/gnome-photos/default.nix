@@ -34,10 +34,6 @@ in stdenv.mkDerivation rec {
     dbus
   ];
 
-  mesonFlags = [
-    "--buildtype=plain" # don't do any git commands
-  ];
-
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
