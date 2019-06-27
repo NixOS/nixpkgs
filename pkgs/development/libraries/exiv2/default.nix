@@ -7,6 +7,9 @@
 , libxml2
 , python3
 , gettext
+, doxygen
+, graphviz
+, libxslt
 }:
 
 stdenv.mkDerivation rec {
@@ -25,11 +28,19 @@ stdenv.mkDerivation rec {
     ./fix-cmake.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  cmakeFlags = [
+    "-DEXIV2_BUILD_PO=ON"
+    "-DEXIV2_BUILD_DOC=ON"
+  ];
+
+  outputs = [ "out" "dev" "doc" "man" ];
 
   nativeBuildInputs = [
     cmake
+    doxygen
     gettext
+    graphviz
+    libxslt
   ];
 
   propagatedBuildInputs = [
@@ -41,6 +52,10 @@ stdenv.mkDerivation rec {
     libxml2.bin
     python3
     which
+  ];
+
+  buildFlags = [
+    "doc"
   ];
 
   doCheck = stdenv.isLinux;
