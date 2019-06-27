@@ -16145,6 +16145,8 @@ in
 
   aileron = callPackage ../data/fonts/aileron { };
 
+  amiri = callPackage ../data/fonts/amiri { };
+
   andagii = callPackage ../data/fonts/andagii { };
 
   andika = callPackage ../data/fonts/andika { };
