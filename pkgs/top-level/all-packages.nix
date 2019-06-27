@@ -22955,12 +22955,6 @@ in
     ecl-fasl = true;
     sbcl = null;
   };
-  # old version temporarily kept for sage
-  maxima-ecl-5_41 = callPackage ../applications/science/math/maxima/5.41.nix {
-    ecl = ecl_16_1_2;
-    ecl-fasl = true;
-    sbcl = null;
-  };
 
   mxnet = callPackage ../applications/science/math/mxnet {
     inherit (linuxPackages) nvidia_x11;
