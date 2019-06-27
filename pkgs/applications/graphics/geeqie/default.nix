@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Do not build the changelog as this requires markdown.
-    ./geeqie-no-changelog.patch
+    (fetchpatch {
+      name = "geeqie-1.4-goodbye-changelog.patch";
+      url = "https://src.fedoraproject.org/rpms/geeqie/raw/132fb04a1a5e74ddb333d2474f7edb9a39dc8d27/f/geeqie-1.4-goodbye-changelog.patch";
+      sha256 = "00a35dds44kjjdqsbbfk0x9y82jspvsbpm2makcm1ivzlhjjgszn";
+    })
     # Fixes build with exiv2 0.27.1
     (fetchpatch {
       name = "geeqie-exiv2-0.27.patch";
