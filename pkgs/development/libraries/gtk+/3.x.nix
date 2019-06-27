@@ -26,6 +26,7 @@
 , gnome3
 , hicolor-icon-theme
 , gsettings-desktop-schemas
+, sassc
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
 , mesa
@@ -99,6 +100,7 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
+    sassc
     setupHook
   ];
 
