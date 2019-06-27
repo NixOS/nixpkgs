@@ -22433,6 +22433,8 @@ in
 
   niftyseg = callPackage ../applications/science/biology/niftyseg { };
 
+  octopus-caller = callPackage ../applications/science/biology/octopus { };
+
   paml = callPackage ../applications/science/biology/paml { };
 
   picard-tools = callPackage ../applications/science/biology/picard-tools { };
