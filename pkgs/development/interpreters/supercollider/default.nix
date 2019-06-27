@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Programming language for real time audio synthesis";
     homepage = http://supercollider.sourceforge.net/;
     maintainers = with maintainers; [ mrmebelman ];
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3;
     platforms = [ "x686-linux" "x86_64-linux" ];
   };
 }
