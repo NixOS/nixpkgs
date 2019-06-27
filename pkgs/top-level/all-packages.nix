@@ -13838,6 +13838,8 @@ in
 
   yajl = callPackage ../development/libraries/yajl { };
 
+  yaml-cpp = callPackage ../development/libraries/yaml-cpp { };
+
   yder = callPackage ../development/libraries/yder { };
 
   yojimbo = callPackage ../development/libraries/yojimbo { };
