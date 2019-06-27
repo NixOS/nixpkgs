@@ -65,8 +65,8 @@ in {
 
             phpPackage = mkOption {
               type = types.package;
-              default = fpmCfg.phpPackage;
-              defaultText = "config.services.phpfpm.phpPackage";
+              default = pkgs.php;
+              defaultText = "pkgs.php";
               description = ''
                 The PHP package to use for running this PHP-FPM pool.
               '';
@@ -74,10 +74,9 @@ in {
 
             phpOptions = mkOption {
               type = types.lines;
-              default = fpmCfg.phpOptions;
-              defaultText = "config.services.phpfpm.phpOptions";
+              default = "";
               description = ''
-                "Options appended to the PHP configuration file <filename>php.ini</filename> used for this PHP-FPM pool."
+                Options appended to the PHP configuration file <filename>php.ini</filename> used for this PHP-FPM pool.
               '';
             };
 
