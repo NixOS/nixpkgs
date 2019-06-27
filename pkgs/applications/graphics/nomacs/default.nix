@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     sha256 = "12582i5v85da7vwjxj8grj99hxg34ij5cn3b1578wspdfw1xfy1i";
   };
 
+  patches = [
+    ./nomacs-iostream.patch
+  ];
+
   enableParallelBuilding = true;
 
   setSourceRoot = ''
