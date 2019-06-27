@@ -6,8 +6,6 @@ let
   cfg = config.services.phpfpm;
   enabled = cfg.poolConfigs != {} || cfg.pools != {};
 
-  stateDir = "/run/phpfpm";
-
   poolConfigs =
     (mapAttrs mapPoolConfig cfg.poolConfigs) //
     (mapAttrs mapPool cfg.pools);
@@ -154,9 +152,6 @@ in {
         after = [ "network.target" ];
         wantedBy = [ "phpfpm.target" ];
         partOf = [ "phpfpm.target" ];
-        preStart = ''
-          mkdir -p ${stateDir}
-        '';
         serviceConfig = let
           cfgFile = fpmCfgFile pool poolConfig.config;
           iniFile = phpIni poolConfig;
@@ -170,6 +165,9 @@ in {
           Type = "notify";
           ExecStart = "${poolConfig.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
           ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+
+          RuntimeDirectory = "phpfpm";
+          RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
         };
       }
    );
