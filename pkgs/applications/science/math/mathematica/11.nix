@@ -26,7 +26,7 @@ let
   l10n =
     with stdenv.lib;
     with callPackage ./l10ns.nix {};
-    flip (findFirst (l: l.lang == lang)) l10ns
+    flip (findFirst (l: l.lang == lang && l.version >= "11" && l.version < "12")) l10ns
       (throw "Language '${lang}' not supported");
 in
 stdenv.mkDerivation rec {
