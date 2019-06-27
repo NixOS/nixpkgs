@@ -76,6 +76,8 @@ in stdenv.mkDerivation rec {
     "--with-esx"
     "--with-remote"
   ] ++ optionals stdenv.isLinux [
+    "QEMU_BRIDGE_HELPER=/run/wrappers/bin/qemu-bridge-helper"
+    "QEMU_PR_HELPER=/run/libvirt/nix-helpers/qemu-pr-helper"
     "--with-attr"
     "--with-apparmor"
     "--with-secdriver-apparmor"
