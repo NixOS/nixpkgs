@@ -34,7 +34,7 @@ let
     ++ lib.optionals (pciePlatform || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "nouveau" ]
     ++ lib.optionals stdenv.hostPlatform.isx86 [ "svga" ]
     ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "vc4" ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "freedreno" "etnaviv" "imx" ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "freedreno" "etnaviv" ]
   );
   defaultDriDrivers = optionals (elem "drm" eglPlatforms) ([ ]
     ++ lib.optionals pciePlatform [ "r200" ]
