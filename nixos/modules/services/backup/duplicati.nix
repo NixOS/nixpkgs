@@ -48,7 +48,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = "duplicati";
-        StateDirectory = "/var/lib/duplicati";
+        StateDirectory = "duplicati";
         ExecStart = "${pkgs.duplicati}/bin/duplicati-server --webservice-interface=${cfg.interface} --webservice-port=${toString cfg.port} --server-datafolder=/var/lib/duplicati";
         Restart = "on-failure";
       };
