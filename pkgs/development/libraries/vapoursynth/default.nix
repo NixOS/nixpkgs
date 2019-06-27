@@ -12,13 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "vapoursynth-${version}";
-  version = "R45.1";
+  version = "R46";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "09fj4k75cksx1imivqfyr945swlr8k392kkdgzldwc4404qv82s6";
+    sha256 = "1xbwva12l68awplardf47ydlx904wifw468npaxa9cx9dvd5mv13";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook nasm ];
