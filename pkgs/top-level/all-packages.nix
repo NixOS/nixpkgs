@@ -3949,6 +3949,8 @@ in
 
   kakoune = callPackage ../applications/editors/kakoune { };
 
+  kak-lsp = callPackage ../tools/misc/kak-lsp { };
+
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
