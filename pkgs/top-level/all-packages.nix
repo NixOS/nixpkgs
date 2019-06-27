@@ -15205,6 +15205,8 @@ in
 
   iproute = callPackage ../os-specific/linux/iproute { };
 
+  iproute_mptcp = callPackage ../os-specific/linux/iproute/mptcp.nix { };
+
   iputils = callPackage ../os-specific/linux/iputils { };
 
   iptables = callPackage ../os-specific/linux/iptables { };
@@ -15727,6 +15729,8 @@ in
 
   nettools = if stdenv.isLinux then callPackage ../os-specific/linux/net-tools { }
              else unixtools.nettools;
+
+  nettools_mptcp = callPackage ../os-specific/linux/net-tools/mptcp.nix { };
 
   nftables = callPackage ../os-specific/linux/nftables { };
 
