@@ -1,5 +1,6 @@
 { lib }:
-{ # haskellPathsInDir : Path -> Map String Path
+rec {
+  # haskellPathsInDir : Path -> Map String Path
   # A map of all haskell packages defined in the given path,
   # identified by having a cabal file with the same name as the
   # directory itself.
@@ -17,6 +18,7 @@
             builtins.pathExists (value + "/${name}.cabal")
           ) root-files-with-paths;
     in builtins.listToAttrs cabal-subdirs;
+
   # locateDominatingFile :  RegExp
   #                      -> Path
   #                      -> Nullable { path : Path;
@@ -42,4 +44,25 @@
               type = (builtins.readDir parent).${base} or null;
           in file == /. || type == "directory";
     in go (if isDir then file else parent);
+
+  # filterMapDir :  ( String -> String -> Bool )
+  #              -> ( Path -> String -> a )
+  #              -> Path
+  #              -> { Path = a }
+  # This maps a function `f` over the entries filtered by `filter` in a directory located at `path`. 
+  # It doesn't recurse over subdirectories.
+  filterMapDir = filter: f: path:
+    #Sets are lexically sorted by key
+    let files = builtins.readDir path;
+        matches = lib.filterAttrs filter files;
+    in
+      builtins.mapAttrs (n: v: f (path + ("/" + n)) v) matches;
+
+  # mapDirFiles :  ( Path -> a )
+  #             -> Path
+  #             -> { Path = a }
+  # This maps a function `f` over the "regular" files in a directory located at `path`.
+  # It doesn't recurse over subdirectories.
+  mapDirFiles = f: path:
+    filterMapDir (n: v: v == "regular") (n: v: f n) path;
 }

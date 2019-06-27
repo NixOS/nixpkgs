@@ -134,5 +134,6 @@ let
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       fakeSha256 fakeSha512
       nixType imap;
+    inherit (filesystem) filterMapDir mapDirFiles;
   });
 in lib
