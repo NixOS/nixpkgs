@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DWITH_STATIC=OFF"  "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON" ];
 
+  postInstall = ''
+    cp lib/* $out/lib
+  '';
+
   meta = with stdenv.lib; {
     description = "A lightweight secured SOCKS5 proxy";
     longDescription = ''
