@@ -288,5 +288,6 @@ in
   xrdp = handleTest ./xrdp.nix {};
   xss-lock = handleTest ./xss-lock.nix {};
   yabar = handleTest ./yabar.nix {};
+  yggdrasil = handleTest ./yggdrasil.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
 }
