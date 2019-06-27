@@ -6,6 +6,9 @@
 , stdenv
 }:
 
+let
+  patches = [ ./use-go-in-path.patch ];
+in
 buildBazelPackage rec {
   name = "bazel-watcher-${version}";
   version = "0.10.3";
@@ -22,11 +25,10 @@ buildBazelPackage rec {
   bazelTarget = "//ibazel";
 
   fetchAttrs = {
+    inherit patches;
+
     preBuild = ''
       patchShebangs .
-
-      # tell rules_go to use the Go binary found in the PATH
-      sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
     '';
 
     preInstall = ''
@@ -51,11 +53,10 @@ buildBazelPackage rec {
   };
 
   buildAttrs = {
+    inherit patches;
+
     preBuild = ''
       patchShebangs .
-
-      # tell rules_go to use the Go binary found in the PATH
-      sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
     '';
 
     installPhase = ''
