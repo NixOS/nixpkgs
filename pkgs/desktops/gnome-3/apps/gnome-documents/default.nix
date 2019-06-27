@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgetting-started=true"
-    "--buildtype=plain"
   ];
 
   nativeBuildInputs = [
