@@ -152,6 +152,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  # Make all demo related things in dev
+  postFixup =  ''
+    moveToOutput share/icons/hicolor "$dev"
+    moveToOutput share/applications "$dev"
+    moveToOutput share/gsettings-schemas "$dev"
+
+    demos=(gtk3-demo gtk3-demo-application gtk3-icon-browser gtk3-widget-factory)
+
+    for program in ''${demos[@]}; do
+      wrapProgram $dev/bin/$program \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$dev/share/gsettings-schemas/${pname}-${version}"
+    done
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gtk+";
