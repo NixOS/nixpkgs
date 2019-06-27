@@ -72,6 +72,17 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (!withGtk3) ''
       rm -f $out/lib/libnvidia-gtk3.so.*
     ''}
+
+    # Install the desktop file and icon.
+    # The template has substitution variables intended to be replaced resulting
+    # in absolute paths. Because absolute paths break after the desktop file is
+    # copied by a desktop environment, make Exec and Icon be just a name.
+    sed -i doc/nvidia-settings.desktop \
+      -e "s|^Exec=.*$|Exec=nvidia-settings|" \
+      -e "s|^Icon=.*$|Icon=nvidia-settings|" \
+      -e "s|__NVIDIA_SETTINGS_DESKTOP_CATEGORIES__|Settings|g"
+    install doc/nvidia-settings.desktop -D -t $out/share/applications/
+    install doc/nvidia-settings.png -D -t $out/share/icons/hicolor/128x128/apps/
   '';
 
   binaryName = if withGtk3 then ".nvidia-settings-wrapped" else "nvidia-settings";
