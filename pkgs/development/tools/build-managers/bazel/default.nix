@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchurl, runCommand, runCommandCC, makeWrapper
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, runCommand, runCommandCC, makeWrapper
 # this package (through the fixpoint glass)
 , bazel
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
@@ -133,6 +133,11 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   patches = [
+    # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
+    # This is breaking the build of any C target. This patch removes the last
+    # argument if it's found to be an empty string.
+    ./trim-last-argument-to-gcc-if-empty.patch
+
     ./python-stub-path-fix.patch
   ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
@@ -198,12 +203,24 @@ stdenv.mkDerivation rec {
           '');
 
       bazelWithNixHacks = bazel.override { enableNixHacks = true; };
-    in {
-      pythonBinPathWithoutNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
-      bashToolsWithoutNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
 
-      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      bazel-examples = fetchFromGitHub {
+        owner = "bazelbuild";
+        repo = "examples";
+        rev = "5d8c8961a2516ebf875787df35e98cadd08d43dc";
+        sha256 = "03c1bwlq5bs3hg96v4g4pg2vqwhqq6w538h66rcpw02f83yy7fs8";
+      };
+
+    in {
+      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
+      cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; };
+      protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; };
+      pythonBinPath = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
+
       bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
+      protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
     };
 
   # update the list of workspace dependencies
