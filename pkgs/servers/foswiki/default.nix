@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perlPackages }:
 
 perlPackages.buildPerlPackage rec {
-  name = "foswiki-${version}";
+  pname = "foswiki";
   version = "2.1.0";
 
   src = fetchurl {
@@ -17,7 +17,7 @@ perlPackages.buildPerlPackage rec {
     EmailMIME Encode Error FileCopyRecursive HTMLParser HTMLTree
     IOSocketSSL JSON
     LocaleMaketextLexicon LocaleMsgfmt
-    LWP URI perlPackages.version
+    LWP URI perlPackages.Version
     /*# optional dependencies
     libapreq2 DBI DBDmysql DBDPg DBDSQLite FCGI FCGIProcManager
     CryptSMIME CryptX509 ConvertPEM

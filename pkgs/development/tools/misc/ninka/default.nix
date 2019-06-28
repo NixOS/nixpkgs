@@ -3,7 +3,7 @@
 assert stdenv ? glibc;
 
 perlPackages.buildPerlPackage rec {
-  name = "ninka-${version}";
+  pname = "ninka";
   version = "2.0-pre";
 
   src = fetchFromGitHub {

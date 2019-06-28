@@ -285,7 +285,8 @@ dvipng = stdenv.mkDerivation {
 
 
 latexindent = perlPackages.buildPerlPackage rec {
-  inherit (src) name version;
+  pname = "latexindent";
+  inherit (src) version;
 
   src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs);
 
