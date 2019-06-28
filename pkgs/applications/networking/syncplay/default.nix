@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "syncplay";
-  version = "1.6.4";
+  version = "1.6.4a";
 
   format = "other";
 
@@ -10,7 +10,7 @@ buildPythonApplication rec {
     owner = "Syncplay";
     repo = "syncplay";
     rev = "v${version}";
-    sha256 = "0afh2a0l1c3hwgj5q6wy0v5iimg8qcjam3pw7b8mf63lasx6iqk4";
+    sha256 = "0zz4a3vzfg808z1qkqz31z4818wzpfa2lika7wl0jgpmw4zi85ix";
   };
 
   propagatedBuildInputs = [ pyside2 shiboken2 twisted certifi ] ++ twisted.extras.tls;
