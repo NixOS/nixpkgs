@@ -1669,6 +1669,8 @@ in
 
   link-grammar = callPackage ../tools/text/link-grammar { };
 
+  linuxptp = callPackage ../os-specific/linux/linuxptp { };
+
   loadwatch = callPackage ../tools/system/loadwatch { };
 
   loccount = callPackage ../development/tools/misc/loccount { };
