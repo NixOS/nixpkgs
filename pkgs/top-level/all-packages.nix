@@ -4240,12 +4240,10 @@ in
   };
   nodejs-12_x = callPackage ../development/web/nodejs/v12.nix {
     openssl = openssl_1_1;
-    icu = icu63;
   };
   nodejs-slim-12_x = callPackage ../development/web/nodejs/v12.nix {
     enableNpm = false;
     openssl = openssl_1_1;
-    icu = icu63;
   };
 
   # Update this when adding the newest nodejs major version!
