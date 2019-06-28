@@ -53,6 +53,16 @@ let cfg = config.system.autoUpgrade; in
         '';
       };
 
+      allowReboot = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Shall the system be rebooted if the new configuration
+          uses a different kernel, kernel modules or initrd
+          than the booted system?
+        '';
+      };
+
     };
 
   };
@@ -78,11 +88,27 @@ let cfg = config.system.autoUpgrade; in
           HOME = "/root";
         } // config.networking.proxy.envVars;
 
-      path = [ pkgs.gnutar pkgs.xz.bin pkgs.gitMinimal config.nix.package.out ];
+      path = [ pkgs.coreutils pkgs.gnutar pkgs.xz.bin pkgs.gitMinimal config.nix.package.out ];
 
       script = ''
-        ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}
-      '';
+        ${lib.optionalString cfg.allowReboot ''
+          set -euo pipefail
+          T=$(mktemp -d)
+          cd "$T"
+          ${config.system.build.nixos-rebuild}/bin/nixos-rebuild build ${toString cfg.flags}
+          booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
+          built="$(readlink result/{initrd,kernel,kernel-modules})"
+          cd /tmp
+          rm -rf "$T"
+          if [ "$booted" = "$built" ]; then
+            ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}
+          else
+            ${config.system.build.nixos-rebuild}/bin/nixos-rebuild boot ${toString cfg.flags}
+            /run/current-system/sw/bin/shutdown -r +1
+          fi
+          ''}
+          ${lib.optionalString (!cfg.allowReboot) "${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}"}
+        '';
 
       startAt = cfg.dates;
     };
