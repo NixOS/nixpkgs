@@ -143,7 +143,7 @@ rec {
    * Automatically includes interpreter above the contents passed.
    *
    * Example:
-   * # Writes my-file to /nix/store/<store path>/my-file and makes executable.
+   * # Writes my-file to /nix/store/<store path> and makes executable.
    * writeShellScript "my-file"
    *   ''
    *   Contents of File
