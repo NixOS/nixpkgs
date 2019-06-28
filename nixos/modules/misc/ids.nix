@@ -340,6 +340,7 @@
       cockroachdb = 313;
       zoneminder = 314;
       paperless = 315;
+      apache-flume = 316;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
