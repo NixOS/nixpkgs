@@ -132,6 +132,7 @@
 , "typescript"
 , "typescript-language-server"
 , "uglify-js"
+, "undollar"
 , "ungit"
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
