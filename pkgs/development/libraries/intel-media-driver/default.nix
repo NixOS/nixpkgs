@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DINSTALL_DRIVER_SYSCONF=OFF"
     "-DLIBVA_DRIVERS_PATH=${placeholder "out"}/lib/dri"
+    # Works only on hosts with suitable CPUs.
+    "-DMEDIA_RUN_TEST_SUITE=OFF"
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
