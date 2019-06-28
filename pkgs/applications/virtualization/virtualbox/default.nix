@@ -4,7 +4,7 @@
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
 , alsaLib, curl, libvpx, nettools, dbus
 , makeself, perl
-, javaBindings ? false, jdk ? null
+, javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
 , extensionPack ? null, fakeroot ? null
 , pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
