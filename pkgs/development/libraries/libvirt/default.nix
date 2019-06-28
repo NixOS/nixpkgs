@@ -17,19 +17,19 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "4.10.0";
+  version = "5.3.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${name}.tar.xz";
-        sha256 = "0v17zzyyb25nn9l18v5244myg7590dp6ppwgi8xysipifc0q77bz";
+        sha256 = "00f1blazv589cbfc85p4347x68kr45mz1r37z9bkjyw10vavsr45";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "0dlpv3v6jpbmgvhpn29ryp0w2a1xny8ciqid8hnlf3klahz9kwz9";
+        sha256 = "10amj2aibc1cywiwn989n09sdngiw8ghp5jvdr7lwh9wdb0a3r57";
         fetchSubmodules = true;
       };
 
@@ -84,7 +84,6 @@ in stdenv.mkDerivation rec {
     "--with-numad"
     "--with-macvtap"
     "--with-virtualport"
-    "--with-init-script=systemd+redhat"
     "--with-storage-disk"
   ] ++ optionals (stdenv.isLinux && zfs != null) [
     "--with-storage-zfs"
