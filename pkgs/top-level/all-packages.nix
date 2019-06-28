@@ -19536,6 +19536,8 @@ in
 
   vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
 
+  vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
+
   openmpt123 = callPackage ../applications/audio/openmpt123 { };
 
   opusfile = callPackage ../applications/audio/opusfile { };
