@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonApplication, pyside, twisted, certifi }:
+{ lib, fetchFromGitHub, buildPythonApplication, pyside2, shiboken2, twisted, certifi }:
 
 buildPythonApplication rec {
   pname = "syncplay";
@@ -13,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "0afh2a0l1c3hwgj5q6wy0v5iimg8qcjam3pw7b8mf63lasx6iqk4";
   };
 
-  propagatedBuildInputs = [ pyside twisted certifi ] ++ twisted.extras.tls;
+  propagatedBuildInputs = [ pyside2 shiboken2 twisted certifi ] ++ twisted.extras.tls;
 
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
 
