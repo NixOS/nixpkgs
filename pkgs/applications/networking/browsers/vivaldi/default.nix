@@ -50,8 +50,8 @@ in stdenv.mkDerivation rec {
       --set-rpath "${libPath}" \
       opt/${vivaldiName}/vivaldi-bin
   '' + stdenv.lib.optionalString proprietaryCodecs ''
-    sed -i '/^VIVALDI_FFMPEG_FOUND/ a \
-    checkffmpeg "${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so"' opt/${vivaldiName}/vivaldi
+    sed -i '/^if \[ "$VIVALDI_FFMPEG_FOUND/i \
+      VIVALDI_FFMPEG_FOUND=YES\nCACHED_FFMPEG=${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so' opt/${vivaldiName}/vivaldi
   '' + ''
     echo "Finished patching Vivaldi binaries"
   '';
