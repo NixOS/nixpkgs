@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, lib, fetchurl, pkgconfig
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes
@@ -13,21 +13,18 @@
 assert withQt5 -> useQt4 == false;
 assert useQt4 -> withQt5 == false;
 
-let
-  lib = stdenv.lib;
-  os = lib.optionalString;
-  version = "3.14.5";
-  # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-  sha256 = "505ae49ebe3c63c595fa5f814975d8b72848447ee13b6613b0f8b96ebda18c06";
-in
-
 stdenv.mkDerivation rec {
-  pname = "cmake${os isBootstrap "-boot"}${os useNcurses "-cursesUI"}${os withQt5 "-qt5UI"}${os useQt4 "-qt4UI"}";
-  inherit version;
+  pname = "cmake"
+          + lib.optionalString isBootstrap "-boot"
+          + lib.optionalString useNcurses "-cursesUI"
+          + lib.optionalString withQt5 "-qt5UI"
+          + lib.optionalString useQt4 "-qt4UI";
+  version = "3.14.5";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
-    inherit sha256;
+    # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
+    sha256 = "505ae49ebe3c63c595fa5f814975d8b72848447ee13b6613b0f8b96ebda18c06";
   };
 
   patches = [
