@@ -7007,6 +7007,7 @@
     githubId = 2130305;
     name = "Marek Fajkus";
   };
+
   melling = {
     email = "mattmelling@fastmail.com";
     github = "mattmelling";
@@ -7018,5 +7019,10 @@
     github = "wd15";
     githubId = 1986844;
     name = "Daniel Wheeler";
+
+  Rakesh4G = {
+    email = "rakeshgupta4u@gmail.com";
+    github = "Rakesh4G";
+    name = "Rakesh Gupta";
   };
 }
