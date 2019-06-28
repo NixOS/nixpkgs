@@ -1687,6 +1687,21 @@ let
     };
   };
 
+  Catmandu = buildPerlModule rec {
+    name = "Catmandu-1.2002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NI/NICS/${name}.tar.gz";
+      sha256 = "d845dc3c74862433345989096e23bd37004ed20c160cdab643e596a40b46003f";
+    };
+    buildInputs = [ LogAnyAdapterLog4perl LogLog4perl ModuleBuild TestDeep TestException TestLWPUserAgent TestPod ];
+    propagatedBuildInputs = [ AnyURIEscape AppCmd CGIExpand Clone ConfigOnion CpanelJSONXS DataCompare DataUUID DataUtil HashMergeSimple IOHandleUtil LWP ListMoreUtils LogAny MIMETypes ModuleInfo Moo MooXAliases ParserMGC PathIteratorRule PathTiny StringCamelCase SubExporter SubQuote TextCSV TextHogan Throwable TryTinyByClass URI URITemplate YAMLLibYAML asa namespaceclean ];
+    meta = {
+      homepage = https://github.com/LibreCat/Catmandu;
+      description = "A data toolkit";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CDDB_get = buildPerlPackage rec {
     name = "CDDB_get-2.28";
     src = fetchurl {
