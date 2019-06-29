@@ -10407,6 +10407,20 @@ let
       maintainers = [ maintainers.eelco ];
     };
   };
+  
+  MooXAliases = buildPerlPackage rec {
+    name = "MooX-Aliases-0.001006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "016031278cac61263d01952dfe5bfb5f3b46b4b842b2fffa9f2c9b88aac63867";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ ClassMethodModifiers Moo strictures ];
+    meta = {
+      description = "Easy aliasing of methods and attributes in Moo";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
   MooXHandlesVia = buildPerlPackage rec {
     name = "MooX-HandlesVia-0.001008";
