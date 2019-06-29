@@ -9,18 +9,25 @@
 , withGeolocation ? true
 , withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
 , withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
+
+, wlrootsSupport ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "redshift-${version}";
+  name = "redshift${stdenv.lib.optionalString wlrootsSupport "-wlroots"}-${version}";
   version = "1.12";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitHub (if wlrootsSupport then {
+    owner = "minus7";
+    repo = "redshift";
+    rev = "eecbfedac48f827e96ad5e151de8f41f6cd3af66";
+    sha256 = "0rs9bxxrw4wscf4a8yl776a8g880m5gcm75q06yx2cn3lw2b7v22";
+  } else {
     owner = "jonls";
     repo = "redshift";
     rev = "v${version}";
     sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
-  };
+  });
 
   patches = [
     # https://github.com/jonls/redshift/pull/575
