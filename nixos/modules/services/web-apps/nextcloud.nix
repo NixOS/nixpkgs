@@ -394,14 +394,13 @@ in {
                 phpOptions)));
         in {
           phpOptions = phpOptionsExtensions;
-          socketName = "nextcloud";
           phpPackage = phpPackage;
-          user = "nextcloud";
-          group = "${config.services.nginx.group}";
+          listen = "/run/phpfpm/nextcloud";
           extraConfig = ''
-            listen.owner = ${config.services.nginx.user}
-            listen.group = ${config.services.nginx.group}
-            listen.mode = 0600
+            listen.owner = nginx
+            listen.group = nginx
+            user = nextcloud
+            group = nginx
             ${cfg.poolConfig}
             env[NEXTCLOUD_CONFIG_DIR] = ${cfg.home}/config
             env[PATH] = /run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin
@@ -467,7 +466,7 @@ in {
                   fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
                   fastcgi_param modHeadersAvailable true;
                   fastcgi_param front_controller_active true;
-                  fastcgi_pass unix:/run/phpfpm-nextcloud/nextcloud.sock;
+                  fastcgi_pass unix:/run/phpfpm/nextcloud;
                   fastcgi_intercept_errors on;
                   fastcgi_request_buffering off;
                   fastcgi_read_timeout 120s;
