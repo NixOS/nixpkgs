@@ -2582,6 +2582,20 @@ let
     };
   };
 
+  ConfigOnion = buildPerlPackage rec {
+    name = "Config-Onion-1.007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DS/DSHEROH/${name}.tar.gz";
+      sha256 = "327fddf68e138b2469e5a2bae37c733f87ca84caf61e1cfaa949be3d950da8af";
+    };
+    buildInputs = [ TestException YAML ];
+    propagatedBuildInputs = [ ConfigAny HashMergeSimple Moo ];
+    meta = {
+      description = "Layered configuration, because configs are like ogres";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ConfigStd = buildPerlModule {
     name = "Config-Std-0.903";
     src = fetchurl {
