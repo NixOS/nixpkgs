@@ -519,6 +519,8 @@ in {
 
   emcee = callPackage ../development/python-modules/emcee { };
 
+  emailthreads = callPackage ../development/python-modules/emailthreads { };
+
   email_validator = callPackage ../development/python-modules/email-validator { };
 
   ewmh = callPackage ../development/python-modules/ewmh { };
