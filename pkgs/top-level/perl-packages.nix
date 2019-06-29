@@ -4608,6 +4608,19 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
+  
+  DispatchClass = buildPerlPackage rec {
+    name = "Dispatch-Class-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAUKE/${name}.tar.gz";
+      sha256 = "d74db43b1af9e8bd46ffc15bfe4df1e5d810c42ce8582e937510dc2a2ca16582";
+    };
+    propagatedBuildInputs = [ ExporterTiny ];
+    meta = {
+      description = "Dispatch on the type (class) of an argument";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
   DistCheckConflicts = buildPerlPackage rec {
     name = "Dist-CheckConflicts-0.11";
