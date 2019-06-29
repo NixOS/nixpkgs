@@ -7,7 +7,7 @@
 , ... }:
 
 buildMix rec {
-  name    = "plemora";
+  name    = "pleroma";
   version = "1.0.0";
 
   src = fetchgit {
