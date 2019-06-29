@@ -271,6 +271,19 @@ let
     };
     propagatedBuildInputs = [ Moose Mouse ];
   };
+  
+  AnyURIEscape = buildPerlPackage rec {
+    name = "Any-URI-Escape-0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PH/PHRED/${name}.tar.gz";
+      sha256 = "e3813cec9f108fa5c0be66e08c1986bfba4d242151b0f9f4ec5e0c5e17108c4c";
+    };
+    propagatedBuildInputs = [ URI ];
+    meta = {
+      description = "Load URI::Escape::XS preferentially over URI::Escape";
+      license = stdenv.lib.licenses.unknown;
+    };
+  };
 
   ApacheAuthCookie = buildPerlPackage rec {
     name = "Apache-AuthCookie-3.27";
