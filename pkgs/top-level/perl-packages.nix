@@ -8932,6 +8932,20 @@ let
     };
   };
 
+  LogAnyAdapterLog4perl = buildPerlPackage rec {
+    name = "Log-Any-Adapter-Log4perl-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PR/PREACTION/${name}.tar.gz";
+      sha256 = "1197d3e412214be208800cf7bf5057b1fea15424539a2a7927cfe46f716ec1a5";
+    };
+    propagatedBuildInputs = [ LogAny LogLog4perl ];
+    meta = {
+      homepage = https://github.com/preaction/Log-Any-Adapter-Log4perl;
+      description = "Log::Any adapter for Log::Log4perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   LogContextual = buildPerlPackage rec {
     name = "Log-Contextual-0.008001";
     src = fetchurl {
