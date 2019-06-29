@@ -6433,6 +6433,8 @@ in
 
   ssldump = callPackage ../tools/networking/ssldump { };
 
+  sslsplit = callPackage ../tools/networking/sslsplit { };
+
   sstp = callPackage ../tools/networking/sstp {};
 
   strip-nondeterminism = perlPackages.strip-nondeterminism;
