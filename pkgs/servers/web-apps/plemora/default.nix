@@ -1,4 +1,10 @@
-{ stdenv, pkgs, lib, buildMix, fetchgit, ... }:
+{ stdenv
+, pkgs
+, lib
+, buildMix
+, fetchgit
+, git
+, ... }:
 
 buildMix rec {
   name    = "plemora";
@@ -9,6 +15,8 @@ buildMix rec {
     rev = "v${version}";
     sha256 = "0bgdzbl7jd9lk7amnadpwy2fsqchz2vls3qymllgl917gn6a7r2j";
   };
+
+  nativeBuildInputs = [ git ]; # does not work as expected
 
   meta = with lib; {
     homepage        = "https://git.pleroma.social";
