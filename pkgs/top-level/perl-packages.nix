@@ -278,10 +278,10 @@ let
       url = "mirror://cpan/authors/id/P/PH/PHRED/${name}.tar.gz";
       sha256 = "e3813cec9f108fa5c0be66e08c1986bfba4d242151b0f9f4ec5e0c5e17108c4c";
     };
-    propagatedBuildInputs = [ URI ];
+    propagatedBuildInputs = [ URI URIEscapeXS];
     meta = {
       description = "Load URI::Escape::XS preferentially over URI::Escape";
-      license = stdenv.lib.licenses.unknown;
+      license = stdenv.lib.licenses.publicDomain;
     };
   };
 
@@ -1706,7 +1706,7 @@ let
       url = "mirror://cpan/authors/id/N/NI/NICS/${name}.tar.gz";
       sha256 = "d845dc3c74862433345989096e23bd37004ed20c160cdab643e596a40b46003f";
     };
-    buildInputs = [ LogAnyAdapterLog4perl LogLog4perl ModuleBuild TestDeep TestException TestLWPUserAgent TestPod ];
+    buildInputs = [ AnyURIEscape LogLog4perl ModuleBuild TestDeep TestException TestLWPUserAgent TestPod ];
     propagatedBuildInputs = [ URIEscapeXS AppCmd CGIExpand Clone ConfigOnion CpanelJSONXS DataCompare DataUUID DataUtil HashMergeSimple IOHandleUtil LWP ListMoreUtils LogAny MIMETypes ModuleInfo Moo MooXAliases ParserMGC PathIteratorRule PathTiny StringCamelCase SubExporter SubQuote TextCSV TextHogan Throwable TryTinyByClass URI URITemplate YAMLLibYAML asa namespaceclean ];
     meta = {
       homepage = https://github.com/LibreCat/Catmandu;
