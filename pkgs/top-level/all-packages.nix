@@ -6987,6 +6987,8 @@ in
 
   zsh-command-time = callPackage ../shells/zsh/zsh-command-time { };
 
+  zsh-you-should-use = callPackage ../shells/zsh/zsh-you-should-use { };
+
   zssh = callPackage ../tools/networking/zssh { };
 
   zstd = callPackage ../tools/compression/zstd { };
