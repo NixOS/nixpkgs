@@ -5,9 +5,9 @@
 , libelf, libvdpau, python3Packages
 , libglvnd
 , enableRadv ? true
-, galliumDrivers ? null
-, driDrivers ? null
-, vulkanDrivers ? null
+, galliumDrivers ? ["auto"]
+, driDrivers ? ["auto"]
+, vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
 , OpenGL, Xplugin
 , withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
@@ -25,43 +25,6 @@
 */
 
 with stdenv.lib;
-
-let
-  # platforms that have PCIe slots and thus can use most non-integrated GPUs
-  pciePlatform = !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64;
-  defaultGalliumDrivers = optionals (elem "drm" eglPlatforms) ([ "virgl" ]
-    ++ lib.optionals pciePlatform [ "r300" "r600" "radeonsi" ]
-    ++ lib.optionals (pciePlatform || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "nouveau" ]
-    ++ lib.optionals stdenv.hostPlatform.isx86 [ "svga" ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "vc4" ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "freedreno" "etnaviv" "imx" ]
-  );
-  defaultDriDrivers = optionals (elem "drm" eglPlatforms) ([ ]
-    ++ lib.optionals pciePlatform [ "r200" ]
-    ++ lib.optionals (pciePlatform || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "nouveau" ]
-    ++ lib.optionals stdenv.hostPlatform.isx86 [ "i915" "i965" ]);
-  defaultVulkanDrivers = optionals stdenv.hostPlatform.isLinux ([ ]
-    ++ lib.optional stdenv.hostPlatform.isx86 "intel"
-    ++ lib.optional enableRadv "amd");
-in
-
-let gallium_ = galliumDrivers; dri_ = driDrivers; vulkan_ = vulkanDrivers; in
-
-let
-  galliumDrivers =
-    (if gallium_ == null
-          then defaultGalliumDrivers
-          else gallium_)
-    ++ lib.optional stdenv.isLinux "swrast";
-  driDrivers =
-    (if dri_ == null
-      then optionals (elem "drm" eglPlatforms) defaultDriDrivers
-      else dri_);
-  vulkanDrivers =
-    if vulkan_ == null
-    then defaultVulkanDrivers
-    else vulkan_;
-in
 
 let
   version = "19.1.1";
@@ -110,8 +73,7 @@ let self = stdenv.mkDerivation rec {
       })
     ];
 
-  outputs = [ "out" "dev" "drivers" ]
-            ++ lib.optional (elem "swrast" galliumDrivers) "osmesa";
+  outputs = [ "out" "dev" "drivers" "osmesa" ];
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
@@ -135,28 +97,11 @@ let self = stdenv.mkDerivation rec {
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
-
-    "-Dgallium-vdpau=true"
-    "-Dgallium-xvmc=true"
-    "-Dgallium-opencl=disabled"
-    "-Dshared-glapi=true"
-    "-Dgles1=true"
-    "-Dgles2=true"
-    "-Dglx=dri"
+  ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
-    "-Dllvm=true"
-    "-Dshared-llvm=true"
-    "-Dglx-direct=true"
-  ] ++ optional (elem "swrast" galliumDrivers) "-Dosmesa=gallium" # used by wine
-    ++ optionals (stdenv.isLinux) [
-      "-Ddri3=true"
-      "-Dgallium-omx=bellagio"
-      "-Dgallium-va=true"
-      "-Dgallium-xa=true" # used in vmware driver
-      "-Dgallium-nine=true" # Direct3D in Wine
-      "-Dgbm=true"
-      "-Degl=true"
-    ];
+    "-Dosmesa=gallium" # used by wine
+    "-Dgallium-nine=true" # Direct3D in Wine
+  ];
 
   buildInputs = with xorg; [
     expat llvmPackages.llvm libglvnd xorgproto
@@ -183,8 +128,8 @@ let self = stdenv.mkDerivation rec {
 
   postInstall = ''
     # Some installs don't have any drivers so this directory is never created.
-    mkdir -p $drivers
-  '' + optionalString (galliumDrivers != []) ''
+    mkdir -p $drivers $osmesa
+  '' + optionalString stdenv.isLinux ''
     mkdir -p $drivers/lib
 
     # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
@@ -206,7 +151,7 @@ let self = stdenv.mkDerivation rec {
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
       substituteInPlace "$js" --replace '"libEGL_' '"'"$drivers/lib/libEGL_"
     done
-  '' + optionalString (vulkanDrivers != []) ''
+
     # Update search path used by Vulkan (it's pointing to $out but
     # drivers are in $drivers)
     for js in $drivers/share/vulkan/icd.d/*.json; do
@@ -217,7 +162,7 @@ let self = stdenv.mkDerivation rec {
   # TODO:
   #  check $out doesn't depend on llvm: builder failures are ignored
   #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
-  postFixup = optionalString (galliumDrivers != []) ''
+  postFixup = optionalString stdenv.isLinux ''
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace "$drivers" "${libglvnd.driverLink}"
 
@@ -237,6 +182,8 @@ let self = stdenv.mkDerivation rec {
       fi
     done
   '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-fno-common";
 
   passthru = {
     inherit libdrm version;
