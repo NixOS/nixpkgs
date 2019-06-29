@@ -863,6 +863,7 @@
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix
   ./services/torrent/rtorrent.nix
+  ./services/torrent/synapse-bt.nix
   ./services/torrent/transmission.nix
   ./services/ttys/getty.nix
   ./services/ttys/gpm.nix
