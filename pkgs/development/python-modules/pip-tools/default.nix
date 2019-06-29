@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, buildPythonPackage, pip, pytest, click, six, first
+{ stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six, first
 , setuptools_scm, git, glibcLocales, mock }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
   version = "3.3.2";
-  name = pname + "-" + version;
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pip-tools/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "100496b15463155f4da3df04c2ca0068677e1ee74d346ebade2d85eef4de8cda";
   };
 
