@@ -12365,6 +12365,21 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
+  
+  PathIteratorRule = buildPerlPackage rec {
+    name = "Path-Iterator-Rule-1.014";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
+      sha256 = "3f7401d8bed43fc9303409ef6d9f34b85a203de6944050bbeb95855d3298b1a6";
+    };
+    buildInputs = [ Filepushd PathTiny TestDeep TestFilename ];
+    propagatedBuildInputs = [ NumberCompare TextGlob TryTiny self."if" ];
+    meta = {
+      homepage = https://github.com/dagolden/Path-Iterator-Rule;
+      description = "Iterative, recursive file finder";
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
 
   PathTiny = buildPerlPackage {
     name = "Path-Tiny-0.108";
