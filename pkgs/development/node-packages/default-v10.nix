@@ -91,7 +91,7 @@ nodePackages // {
     buildInputs = [ pkgs.automake pkgs.autoconf nodePackages.node-gyp-build ];
   };
 
-  tedicross = nodePackages."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
+  tedicross = nodePackages."tedicross-git+https://github.com/TediCross/TediCross.git#v0.9.1".override {
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
       makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
