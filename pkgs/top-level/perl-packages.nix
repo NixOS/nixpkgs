@@ -3598,6 +3598,20 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
+  
+  DataUtil = buildPerlModule rec {
+    name = "Data-Util-0.66";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SY/SYOHEX/${name}.tar.gz";
+      sha256 = "c35d39db452096ea5a695b54668d99d58b954c72fc9ef822e3e0a627f115c6f4";
+    };
+    buildInputs = [ HashUtilFieldHashCompat ModuleBuild ModuleBuildXSUtil ScopeGuard TestException ];
+    meta = {
+      homepage = https://github.com/gfx/Perl-Data-Util;
+      description = "A selection of utilities for data and data types";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
   DataUUID = buildPerlPackage rec {
     name = "Data-UUID-1.224";
