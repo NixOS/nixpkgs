@@ -16641,6 +16641,20 @@ let
       sha256 = "11sj62fynfgwrlgkv5a051cq6yn0pagxqjsz27dxx8phsd4wv706";
     };
   };
+  
+  TextHogan = buildPerlPackage rec {
+    name = "Text-Hogan-2.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAORU/${name}.tar.gz";
+      sha256 = "a33d7bb8c8c8efd201405750f4fb225d564653e7bc08015bbd7e85ef08fd702c";
+    };
+    buildInputs = [ DataVisitor PathTiny TryTiny YAML ];
+    propagatedBuildInputs = [ Clone TextTrim ];
+    meta = {
+      description = "Text::Hogan - A mustache templating engine statement-for-statement cloned from hogan.js";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
   TextIconv = buildPerlPackage {
     name = "Text-Iconv-1.7";
