@@ -24,6 +24,7 @@ buildPythonPackage rec {
     "test_generate_hashes_with_editable"
     "test_filter_pip_markes"
     "test_get_hashes_local_repository_cache_miss"
+    "test_upgrade_packages_option"
     # Expect specific version of "six":
     "test_editable_package"
     "test_input_file_without_extension"
