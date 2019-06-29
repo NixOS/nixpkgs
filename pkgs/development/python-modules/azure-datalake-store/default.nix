@@ -1,39 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{ lib, buildAzurePythonPackage, fetchPypi, python, isPy27
+, cffi
 , adal
-, azure-common
-, futures
+, requests
 , pathlib2
-, isPy3k
+, futures
+, azure-nspkg
 }:
 
-buildPythonPackage rec {
+buildAzurePythonPackage rec {
+  version = "0.0.46";
   pname = "azure-datalake-store";
-  version = "0.0.45";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k2wkpdv30wjmi53zdcsa5xfqw8gyak39na73ja6rb7wy8196wbd";
+    sha256 = "0hw5nlx77h2c3sis6bvlsplc311b63jzn9mr7bh2864a23p61iav";
   };
 
-  propagatedBuildInputs = [
-    requests
-    adal
-    azure-common
-  ] ++ lib.optionals (!isPy3k) [
-    futures
-    pathlib2
-  ];
+  propagatedBuildInputs = [ cffi adal requests ]
+    ++ lib.optionals isPy27 [ pathlib2 futures azure-nspkg ];
 
-  # has no tests
+  # These tests require a provisioned azure-datalake-store service
   doCheck = false;
 
   meta = with lib; {
     description = "This project is the Python filesystem library for Azure Data Lake Store";
     homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/data-lake-store?view=azure-python;
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ mwilsoninsight jonringer ];
   };
 }
