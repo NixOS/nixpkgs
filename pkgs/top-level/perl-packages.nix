@@ -17558,6 +17558,19 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
+  
+  URITemplate = buildPerlPackage rec {
+    name = "URI-Template-0.24";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BR/BRICAS/${name}.tar.gz";
+      sha256 = "68ae2d61b57e14dcad0f82afaffdc5ec05b507a1e9c8df5aa6138aaa2a5b11de";
+    };
+    propagatedBuildInputs = [ URI ];
+    meta = {
+      description = "Object for handling URI templates (RFC 6570)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
   URIws = buildPerlPackage rec {
     name = "URI-ws-0.03";
