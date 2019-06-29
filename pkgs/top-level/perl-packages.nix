@@ -17324,7 +17324,18 @@ let
     };
   };
   
-  
+  TryTinyByClass = buildPerlPackage rec {
+    name = "Try-Tiny-ByClass-0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAUKE/${name}.tar.gz";
+      sha256 = "038e4ef529295f269c280fef999a5e4db9156942f091ac3cad769b1e4570f146";
+    };
+    propagatedBuildInputs = [ DispatchClass TryTiny ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Twiggy = buildPerlPackage rec {
      name = "Twiggy-0.1025";
      src = fetchurl {
