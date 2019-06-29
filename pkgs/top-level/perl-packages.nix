@@ -16872,19 +16872,6 @@ let
     };
     buildInputs = [ TestMoreUTF8 TestWarnings ];
   };
-    TestFilename = buildPerlPackage rec {
-    name = "Test-Filename-0.03";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "6a450cc4c6281ed1129f32a1c0741f228967feda2e32a2915ff621c36525fcbe";
-    };
-    propagatedBuildInputs = [ PathTiny ];
-    meta = {
-      homepage = https://metacpan.org/release/Test-Filename;
-      description = "Portable filename comparison";
-      license = stdenv.lib.licenses.asl20;
-    };
-  };
   
   TestFilename = buildPerlPackage rec {
     name = "Test-Filename-0.03";
@@ -16899,7 +16886,6 @@ let
       license = stdenv.lib.licenses.asl20;
     };
   };
-
   
   TestTrap = buildPerlModule rec {
     name = "Test-Trap-0.3.4";
