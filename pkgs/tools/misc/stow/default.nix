@@ -1,17 +1,26 @@
-{ stdenv, fetchurl, perl, perlPackages }:
+{ stdenv, fetchurl, perl, perlPackages, makeWrapper }:
 
 let
-  version = "2.2.2";
+  pname = "stow";
+  version = "2.3.0";
 in
 stdenv.mkDerivation {
-  name = "stow-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/stow/stow-${version}.tar.bz2";
-    sha256 = "1zd6g9cm3whvy5f87j81j4npl7q6kxl25f7z7p9ahiqfjqs200m0";
+    sha256 = "1fnn83wwx3yaxpqkq8xyya3aiibz19fwrfj30nsiikm7igmwgiv5";
   };
 
-  buildInputs = with perlPackages; [ perl IOStringy TestOutput ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = with perlPackages; [ perl IOStringy TestOutput HashMerge Clone CloneChoose ];
+
+  postFixup = ''
+    wrapProgram "$out"/bin/stow \
+    --set PERL5LIB "$out/lib/perl5/site_perl:${with perlPackages; makePerlPath [
+      HashMerge Clone CloneChoose
+    ]}"
+  '';
 
   doCheck = true;
 
