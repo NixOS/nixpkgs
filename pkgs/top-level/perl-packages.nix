@@ -1707,7 +1707,7 @@ let
       sha256 = "d845dc3c74862433345989096e23bd37004ed20c160cdab643e596a40b46003f";
     };
     buildInputs = [ LogAnyAdapterLog4perl LogLog4perl ModuleBuild TestDeep TestException TestLWPUserAgent TestPod ];
-    propagatedBuildInputs = [ AnyURIEscape AppCmd CGIExpand Clone ConfigOnion CpanelJSONXS DataCompare DataUUID DataUtil HashMergeSimple IOHandleUtil LWP ListMoreUtils LogAny MIMETypes ModuleInfo Moo MooXAliases ParserMGC PathIteratorRule PathTiny StringCamelCase SubExporter SubQuote TextCSV TextHogan Throwable TryTinyByClass URI URITemplate YAMLLibYAML asa namespaceclean ];
+    propagatedBuildInputs = [ URIEscapeXS AppCmd CGIExpand Clone ConfigOnion CpanelJSONXS DataCompare DataUUID DataUtil HashMergeSimple IOHandleUtil LWP ListMoreUtils LogAny MIMETypes ModuleInfo Moo MooXAliases ParserMGC PathIteratorRule PathTiny StringCamelCase SubExporter SubQuote TextCSV TextHogan Throwable TryTinyByClass URI URITemplate YAMLLibYAML asa namespaceclean ];
     meta = {
       homepage = https://github.com/LibreCat/Catmandu;
       description = "A data toolkit";
@@ -17485,6 +17485,18 @@ let
     propagatedBuildInputs = [ URINested ];
     meta = {
       description = "Database URIs";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+  
+  URIEscapeXS = buildPerlPackage rec {
+    name = "URI-Escape-XS-0.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
+      sha256 = "c39ac50c6c2b831ae4bf08692e6ca5d4a3f9c57dc4d7f9c4cb0663e2c86c2759";
+    };
+    meta = {
+      description = "Drop-In replacement for URI::Escape";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
