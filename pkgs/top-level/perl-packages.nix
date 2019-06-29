@@ -12339,6 +12339,20 @@ let
       sha256 = "659a2145441ef36d9835decaf83da308fcd03f49138cb3d90928e8bfc9f139d9";
     };
   };
+  
+  ParserMGC = buildPerlPackage rec {
+    name = "Parser-MGC-0.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/${name}.tar.gz";
+      sha256 = "744461c5f0c838012f3be8c58042a5560921200cc16db0e7d004a7f2b8137b91";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ FileSlurpTiny ];
+    meta = {
+      description = "Build simple recursive-descent parsers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
   PathClass = buildPerlModule {
     name = "Path-Class-0.37";
