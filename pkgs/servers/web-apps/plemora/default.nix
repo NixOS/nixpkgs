@@ -7,7 +7,7 @@ buildMix rec {
   src = fetchgit {
     url = "https://git.pleroma.social/pleroma/pleroma/";
     rev = "v${version}";
-    sha256 = "811263f061ba677bda3e0d7f8884730eb51c14d7bc6526647c46cce659f1b054";
+    sha256 = "0bgdzbl7jd9lk7amnadpwy2fsqchz2vls3qymllgl917gn6a7r2j";
   };
 
   meta = with lib; {
