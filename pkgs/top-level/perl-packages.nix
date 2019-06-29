@@ -15639,6 +15639,21 @@ let
     };
   };
 
+  TestLWPUserAgent = buildPerlPackage rec {
+    name = "Test-LWP-UserAgent-0.033";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "4bb7c74377d80f71e681c0aaf4c8d6cb511a22e3538c12f625595e578c94d20d";
+    };
+    buildInputs = [ PathTiny TestDeep TestFatal TestNeeds TestRequiresInternet TestWarnings self."if" ];
+    propagatedBuildInputs = [ HTTPDate HTTPMessage LWP SafeIsa TryTiny URI namespaceclean ];
+    meta = {
+      homepage = https://github.com/karenetheridge/Test-LWP-UserAgent;
+      description = "A LWP::UserAgent suitable for simulating and testing network calls";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestMemoryCycle = buildPerlPackage rec {
     name = "Test-Memory-Cycle-1.06";
     src = fetchurl {
