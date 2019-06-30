@@ -82,6 +82,13 @@ pythonPackages.buildPythonApplication {
 
   makeWrapperArgs = [ "--prefix" "PATH" ":" "${nettools}/bin" ];
 
+  patches = [
+    # remove ImageProcessor usage, it causes segfaults, see
+    # https://bugs.launchpad.net/hplip/+bug/1788706
+    # https://bugs.launchpad.net/hplip/+bug/1787289
+    ./image-processor.patch
+  ];
+
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
