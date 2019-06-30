@@ -181,8 +181,6 @@ pythonPackages.buildPythonApplication {
 
     mkdir -p $out/var/lib/hp
     cp ${hplipState} $out/var/lib/hp/hplip.state
-
-    rm $out/etc/udev/rules.d/56-hpmud.rules
   '';
 
   # The installed executables are just symlinks into $out/share/hplip,
@@ -210,9 +208,9 @@ pythonPackages.buildPythonApplication {
 
   postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
-  '' + stdenv.lib.optionalString (!withPlugin) ''
-    # A udev rule to notify users that they need the binary plugin.
-    # Needs a lot of patching but might save someone a bit of confusion:
+    # Patch udev rules:
+    # with plugin, they upload firmware to printers,
+    # without plugin, they complain about the missing plugin.
     substituteInPlace $out/etc/udev/rules.d/56-hpmud.rules \
       --replace {,${bash}}/bin/sh \
       --replace /usr/bin/nohup "" \
