@@ -15879,7 +15879,7 @@ in
 
   semodule-utils = callPackage ../os-specific/linux/semodule-utils { };
 
-  powerdns = callPackage ../servers/dns/powerdns { };
+  powerdns = callPackage ../servers/dns/powerdns { libressl = libressl_2_8; };
 
   dnsdist = callPackage ../servers/dns/dnsdist { };
 
