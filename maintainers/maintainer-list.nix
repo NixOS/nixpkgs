@@ -3442,6 +3442,11 @@
     github = "mpickering";
     name = "Matthew Pickering";
   };
+  mpoquet = {
+    email = "millian.poquet@gmail.com";
+    github = "mpoquet";
+    name = "Millian Poquet";
+  };
   mpscholten = {
     email = "marc@mpscholten.de";
     github = "mpscholten";
