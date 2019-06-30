@@ -1,0 +1,3 @@
+[
+	{ "firefox-send": "git+https://github.com/mozilla/send#v3.0.12" }
+]

@@ -14274,6 +14274,8 @@ in
   firebird = callPackage ../servers/firebird { icu = null; stdenv = gcc5Stdenv; };
   firebirdSuper = firebird.override { icu = icu58; superServer = true; stdenv = gcc5Stdenv; };
 
+  firefox-send = callPackage ../servers/web-apps/firefox-send { nodejs = nodejs-10_x; };
+
   foswiki = callPackage ../servers/foswiki { };
 
   frab = callPackage ../servers/web-apps/frab { };
