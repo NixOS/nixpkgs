@@ -12,16 +12,16 @@
 let
 
   name = "hplip-${version}";
-  version = "3.19.1";
+  version = "3.19.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "1kl1q4753xx1w76dhp92wgrhn5k1yx1ib35pyi0vi3mw0njbhrzm";
+    sha256 = "0vfnc6pg7wzs68qn5mlk3cyl969d8n55bydgydq2wzfikvpfvnpw";
   };
 
   plugin = fetchurl {
     url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "1fwjypy1ycyi7rr1vk1yxhbdhx51n7fxhvjb36mzw8qz71dif2i3";
+    sha256 = "1b5gys04kh41gg7r7rzlpdbc2f4jirl2ik22cd935mm85k7abfwq";
   };
 
   hplipState = substituteAll {
