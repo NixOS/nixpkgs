@@ -8,7 +8,7 @@
 , fontconfig, sound-theme-freedesktop, grilo, python3
 , gtk3, glib, glib-networking, gsettings-desktop-schemas
 , gnome-desktop, gnome-settings-daemon, gnome-online-accounts
-, vino, gnome-bluetooth, tracker, adwaita-icon-theme, mutter }:
+, vino, gnome-bluetooth, tracker, adwaita-icon-theme, mutter, cups }:
 
 let
   pname = "gnome-control-center";
@@ -34,13 +34,16 @@ in stdenv.mkDerivation rec {
     grilo libpwquality cracklib vino libcanberra-gtk3 libgudev libsecret
     gdk_pixbuf adwaita-icon-theme librsvg clutter clutter-gtk cheese
     networkmanager modemmanager gnome-bluetooth tracker
+    mutter # schemas for the keybindings
   ];
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
+      gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
+      inherit cups networkmanagerapplet;
     })
   ];
 
