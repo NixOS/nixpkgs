@@ -8013,6 +8013,8 @@ in
 
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
 
+  qbe = callPackage ../development/compilers/qbe { };
+
   rgbds = callPackage ../development/compilers/rgbds { };
 
   rtags = callPackage ../development/tools/rtags {
