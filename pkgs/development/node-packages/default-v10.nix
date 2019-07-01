@@ -7,6 +7,15 @@ let
   };
 in
 nodePackages // {
+  aws-azure-login = nodePackages.aws-azure-login.override {
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
+
+    buildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      wrapProgram "$out/bin/aws-azure-login" --set PUPPETEER_EXECUTABLE_PATH "${pkgs.chromium}/bin/chromium"
+    '';
+  };
+
   bower2nix = nodePackages.bower2nix.override {
     buildInputs = [ pkgs.makeWrapper ];
     postInstall = ''

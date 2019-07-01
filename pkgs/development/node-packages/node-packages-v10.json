@@ -1,6 +1,7 @@
 [
   "@angular/cli"
 , "asar"
+, "aws-azure-login"
 , "azure-functions-core-tools"
 , "bash-language-server"
 , "bower"
