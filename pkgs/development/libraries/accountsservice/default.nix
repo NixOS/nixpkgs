@@ -1,22 +1,51 @@
-{ stdenv, fetchurl, pkgconfig, glib, intltool, makeWrapper, shadow
-, gobject-introspection, polkit, systemd, coreutils, meson, dbus
-, ninja, python3 }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, glib
+, intltool
+, makeWrapper
+, shadow
+, gobject-introspection
+, polkit
+, systemd
+, coreutils
+, meson
+, dbus
+, ninja
+, python3
+}:
 
 stdenv.mkDerivation rec {
-  name = "accountsservice-${version}";
+  pname = "accountsservice";
   version = "0.6.55";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
     sha256 = "16wwd633jak9ajyr1f1h047rmd09fhf3kzjz6g5xjsz0lwcj8azz";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper meson ninja python3 ];
+  nativeBuildInputs = [
+    makeWrapper
+    meson
+    ninja
+    pkgconfig
+    python3
+  ];
 
-  buildInputs = [ glib intltool gobject-introspection polkit systemd dbus ];
+  buildInputs = [
+    dbus
+    glib
+    gobject-introspection
+    intltool
+    polkit
+    systemd
+  ];
 
-  mesonFlags = [ "-Dsystemdsystemunitdir=etc/systemd/system"
-                 "-Dlocalstatedir=/var" ];
+  mesonFlags = [
+    "-Dsystemdsystemunitdir=etc/systemd/system"
+    "-Dlocalstatedir=/var"
+  ];
+
   prePatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
