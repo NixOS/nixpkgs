@@ -14730,7 +14730,11 @@ in
 
   rake = callPackage ../development/tools/build-managers/rake { };
 
-  redis = callPackage ../servers/nosql/redis { };
+  redis  = callPackage ../servers/nosql/redis { };
+  redis5 = callPackage ../servers/nosql/redis { };
+  redis4 = callPackage ../servers/nosql/redis/4.x.nix { };
+  redis3 = callPackage ../servers/nosql/redis/3.x.nix { };
+  redis2 = callPackage ../servers/nosql/redis/2.x.nix { };
 
   redstore = callPackage ../servers/http/redstore { };
 
