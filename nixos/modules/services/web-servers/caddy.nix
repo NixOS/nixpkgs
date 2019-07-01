@@ -36,6 +36,36 @@ in {
       type = types.string;
       description = "Email address (for Let's Encrypt certificate)";
     };
+    
+    httpPort = mkOption {
+      default = "80";
+      type = types.string;
+      description = ''Default port to use for HTTP (default "80")'';
+    };
+    
+    httpsPort = mkOption {
+      default = "443";
+      type = types.string;
+      description = ''Default port to use for HTTPS (default "443")'';
+    };
+    
+    port = mkOption {
+      default = "2015";
+      type = types.string;
+      description = ''Default port (default "2015")'';
+    };
+    
+    http2 = mkOption {
+      default = true;
+      type = types.bool;
+      description = "Use HTTP/2 (default true)";
+    };
+    
+    cpu = mkOption {
+      default = "100%";
+      type = types.string;
+      description = ''CPU cap (default "100%")'';
+    };
 
     agree = mkOption {
       default = false;
@@ -71,7 +101,8 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${cfg.package.bin}/bin/caddy -root=/var/tmp -conf=${configFile} \
-            -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"}
+            -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"} -http-port=${cfg.httpPort} \
+            -https-port=${cfg.httpsPort} -port=${cfg.port} -http2=${cfg.http2} -cpu=${cfg.cpu} 
         '';
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Type = "simple";
