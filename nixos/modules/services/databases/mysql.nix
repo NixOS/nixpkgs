@@ -412,7 +412,9 @@ in
                   '') cfg.ensureUsers}
               '';
             in
-              setupScript;
+              # ensureDatbases & ensureUsers depends on this script being run as root
+              # when the user has secured their mysql install
+              "+${setupScript}";
         };
       };
 
