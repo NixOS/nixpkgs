@@ -1,0 +1,41 @@
+diff --git a/Lib/py_compile.py b/Lib/py_compile.py
+index 978da73..3559eb9 100644
+--- a/Lib/py_compile.py
++++ b/Lib/py_compile.py
+@@ -120,16 +120,27 @@ def compile(file, cfile=None, dfile=None, doraise=False):
+             return
+     if cfile is None:
+         cfile = file + (__debug__ and 'c' or 'o')
+-    with open(cfile, 'wb') as fc:
+-        fc.write('\0\0\0\0')
+-        if "DETERMINISTIC_BUILD" in os.environ:
++    # Atomically write the pyc/pyo file.  Issue #13146.
++    # id() is used to generate a pseudo-random filename.
++    path_tmp = '{}.{}'.format(cfile, id(cfile))
++    try:
++        with open(path_tmp, 'wb') as fc:
+             fc.write('\0\0\0\0')
+-        else:
+-            wr_long(fc, timestamp)
+-        marshal.dump(codeobject, fc)
+-        fc.flush()
+-        fc.seek(0, 0)
+-        fc.write(MAGIC)
++            if "DETERMINISTIC_BUILD" in os.environ:
++                fc.write('\0\0\0\0')
++            else:
++                wr_long(fc, timestamp)
++            marshal.dump(codeobject, fc)
++            fc.flush()
++            fc.seek(0, 0)
++            fc.write(MAGIC)
++        os.rename(path_tmp, cfile)
++    except OSError:
++        try:
++            os.unlink(path_tmp)
++        except OSError:
++            pass
++        raise
+ 
+ def main(args=None):
+     """Compile several source files.
