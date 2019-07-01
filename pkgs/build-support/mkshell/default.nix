@@ -11,8 +11,13 @@
   ...
 }@attrs:
 let
-  mergeInputs = name: lib.concatLists (lib.catAttrs name
-    ([attrs] ++ inputsFrom));
+  mergeInputs = name:
+    let
+      op = item: sum: sum ++ item."${name}" or [];
+      nul = [];
+      list = [attrs] ++ inputsFrom;
+    in
+      lib.foldr op nul list;
 
   rest = builtins.removeAttrs attrs [
     "inputsFrom"
