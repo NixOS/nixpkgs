@@ -297,6 +297,11 @@
      <literal>phd</literal> service have been removed from nixpkgs due to lack of maintainer.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>mercurial</literal> <literal>httpd.extraSubservice</literal> has been removed from nixpkgs due to lack of maintainer.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
