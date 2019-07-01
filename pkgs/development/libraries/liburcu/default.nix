@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  version = "0.11.0";
+  version = "0.11.1";
   name = "liburcu-${version}";
 
   src = fetchurl {
     url = "https://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";
-    sha256 = "1rxk5vbkbmqlsnjnvkjz0pkx2076mqnq6jzblpmz8rk29x66kx8s";
+    sha256 = "0l1kxgzch4m8fxiz2hc8fwg56hrvzzspp7n0svnl7i7iycdrgfcj";
   };
 
   checkInputs = [ perl ];
