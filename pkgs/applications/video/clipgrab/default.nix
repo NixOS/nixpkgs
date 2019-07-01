@@ -5,6 +5,9 @@
 
 stdenv.mkDerivation rec {
   name = "clipgrab-${version}";
+  # The websites clipgrab deals with are a very moving target. That means that
+  # downloads break constantly. Because of that, updates should always be backported
+  # to the latest stable release.
   version = "3.8.3";
 
   src = fetchurl {
