@@ -19846,8 +19846,6 @@ in
 
   qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
 
-  qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
-
   qtractor = libsForQt5.callPackage ../applications/audio/qtractor { };
 
   qtscrobbler = callPackage ../applications/audio/qtscrobbler { };

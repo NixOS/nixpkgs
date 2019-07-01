@@ -280,6 +280,7 @@ mapAliases ({
   qt_gstreamer1 = qt-gstreamer1;  # added 2017-02
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
+  qtpfsgui = throw "Is now luminanceHDR"; # added 2019-06-26
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
   rhc = throw "deprecated in 2019-04-09: abandoned by upstream.";
