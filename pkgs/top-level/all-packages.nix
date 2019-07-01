@@ -1786,6 +1786,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
+
   scour = with python3Packages; toPythonApplication scour;
 
   s2png = callPackage ../tools/graphics/s2png { };
