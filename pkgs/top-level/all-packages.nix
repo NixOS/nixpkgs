@@ -2657,6 +2657,8 @@ in
 
   sonota = callPackage ../tools/misc/sonota { };
 
+  sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
+
   tealdeer = callPackage ../tools/misc/tealdeer { };
 
   teamocil = callPackage ../tools/misc/teamocil { };
