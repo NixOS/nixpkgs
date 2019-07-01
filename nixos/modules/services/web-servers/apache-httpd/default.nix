@@ -637,6 +637,8 @@ in
                      message = "SSL is enabled for httpd, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
 
+    warnings = map (cfg: "apache-httpd's extraSubservices option is deprecated. Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.") (lib.filter (cfg: cfg.extraSubservices != []) allHosts);
+
     users.users = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
         group = mainCfg.group;
