@@ -18,17 +18,17 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath $libPath \
       $out/bin/p4
-    '';
+  '';
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.libc ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Helix Command-Line Client (p4)";
     homepage = https://www.perforce.com;
-    license = stdenv.lib.licenses.unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.nathyong ];
+    maintainers = [ maintainers.nathyong ];
   };
 }
 
