@@ -329,6 +329,11 @@
      from nixpkgs due to lack of maintainer.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>tomcat-connector</literal> <literal>httpd.extraSubservice</literal> has been removed from nixpkgs.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
