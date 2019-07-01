@@ -4,11 +4,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec{
 
   name = "galaxis-${version}";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchurl{
     url = "http://www.catb.org/~esr/galaxis/${name}.tar.gz";
-    sha256 = "1dsypk5brfbc399pg4fk9myyh5yyln0ljl1aiqkypws8h4nsdphl";
+    sha256 = "1181x3z4r0794v2bkpigb5fablw1nayj42wvhy2am79p7j1iqq5r";
   };
 
   buildInputs = [ ncurses xmlto ];
