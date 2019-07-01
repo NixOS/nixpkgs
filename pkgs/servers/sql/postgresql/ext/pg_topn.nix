@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{lib,share/extension}
 
     cp *.so      $out/lib
-    cp *.sql     $out/share/extension
-    cp *.control $out/share/extension
+    cp *.sql     $out/share/postgresql/extension
+    cp *.control $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {
