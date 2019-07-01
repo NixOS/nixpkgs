@@ -22,7 +22,7 @@ let
     ${cfg.globalExtraConfig}
 
     [${pool}]
-    ${optionalString (cfg.pools.${pool}.listenTCP == "") "listen = /run/phpfpm-${pool}/${cfg.pools.${pool}.socketName}.sock"}
+    ${optionalString (cfg.pools.${pool}.listenTCP == "") "listen = /run/phpfpm-${pool}/${cfg.pools.${pool}.listenSocketName}.sock"}
     ${optionalString (cfg.pools.${pool}.listenTCP != "") "listen = ${cfg.pools.${pool}.listenTCP}"}
     ${cfg.pools.${pool}.extraConfig}
   '';
@@ -73,12 +73,12 @@ in {
         default = {};
         type = types.attrsOf (types.submodule {
           options = {
-            socketName = mkOption {
+            listenSocketName = mkOption {
               type = types.str;
               example = "php-fpm";
               description = ''
                 The socket name on which to accept FastCGI requests.
-                Socket opens at path "/run/phpfpm-''${pool}/''${socketName}.sock"
+                Socket opens at path "/run/phpfpm-''${pool}/''${listenSocketName}.sock"
               '';
             };
 
@@ -143,7 +143,7 @@ in {
         example = literalExample ''
           {
             mypool = {
-              socketName = "example";
+              listenSocketName = "example";
               phpPackage = pkgs.php;
               user = "phpfpm";
               group = "phpfpm";
