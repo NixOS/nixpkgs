@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-    configureFlags="--datadir=$out/share --datarootdir=$out/share --bindir=$out/bin --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
+    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
 
-    makeFlags="PERL=${perl}/bin/perl datadir=$out/share pkglibdir=$out/lib bindir=$out/bin"
+    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin"
   '';
   postConfigure = ''
     sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;

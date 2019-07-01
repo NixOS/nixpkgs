@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D -t $out/bin src/bin/pg_autoctl/pg_autoctl
     install -D -t $out/lib src/monitor/pgautofailover.so
-    install -D -t $out/share/extension src/monitor/*.sql
-    install -D -t $out/share/extension src/monitor/pgautofailover.control
+    install -D -t $out/share/postgresql/extension src/monitor/*.sql
+    install -D -t $out/share/postgresql/extension src/monitor/pgautofailover.control
   '';
 
   meta = with stdenv.lib; {

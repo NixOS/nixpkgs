@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   buildPhase = ":";
   installPhase = ''
     mkdir -p $out/bin  # current postgresql extension mechanism in nixos requires bin directory
-    mkdir -p $out/share/extension
-    cp pg*sql *.control $out/share/extension
+    mkdir -p $out/share/postgresql/extension
+    cp pg*sql *.control $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {
