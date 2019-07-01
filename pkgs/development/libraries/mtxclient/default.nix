@@ -27,5 +27,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
+
+    # As of 2019-06-30, all of the dependencies are available on macOS but the
+    # package itself does not build.
+    broken = stdenv.isDarwin;
   };
 }
