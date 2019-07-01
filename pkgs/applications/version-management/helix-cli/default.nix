@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     [ stdenv.cc.libc ];
 
   meta = with stdenv.lib; {
-    description = "Helix Command-Line Client (p4)";
+    description = "Perforce Helix Command-Line Client";
     homepage = https://www.perforce.com;
     license = licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
