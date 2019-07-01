@@ -1,5 +1,16 @@
 = Dell XPS 13 9380 =
 
+== Firmware upgrades ==
+
+Note that this device is supported by [https://fwupd.org/ fwupd].
+To perform firmware upgrades just activate the service
+
+<code>
+services.fwupd.enable = true;
+</code>
+
+Then use <code>fwupdmgr</code> to perform updates.
+
 == Battery drain when sleeping ==
 
 The laptop uses the S2 sleep mode by default instead of S3, which leads to
