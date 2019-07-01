@@ -21,10 +21,9 @@ let
     else [{ip = "*"; port = 80;}];
 
   getListen = cfg:
-    let list = (lib.optional (cfg.port != 0) {ip = "*"; port = cfg.port;}) ++ cfg.listen;
-    in if list == []
-        then defaultListen cfg
-        else list;
+    if cfg.listen == []
+      then defaultListen cfg
+      else cfg.listen;
 
   listenToString = l: "${l.ip}:${toString l.port}";
 
@@ -637,8 +636,6 @@ in
                                     && mainCfg.sslServerKey != null;
                      message = "SSL is enabled for httpd, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
-
-    warnings = map (cfg: ''apache-httpd's port option is deprecated. Use listen = [{/*ip = "*"; */ port = ${toString cfg.port};}]; instead'' ) (lib.filter (cfg: cfg.port != 0) allHosts);
 
     users.users = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
