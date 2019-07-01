@@ -2663,6 +2663,8 @@ in
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
+  trompeloeil = callPackage ../development/libraries/trompeloeil { };
+
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
