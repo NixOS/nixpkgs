@@ -15896,6 +15896,8 @@ in
 
   procdump = callPackage ../os-specific/linux/procdump { };
 
+  prototool = callPackage ../development/tools/prototool { };
+
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
 
   # See `xenPackages` source for explanations.
