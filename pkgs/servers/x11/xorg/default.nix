@@ -2847,7 +2847,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xtrap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXt }: stdenv.mkDerivation {
+  xtrap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXTrap, libXt }: stdenv.mkDerivation {
     name = "xtrap-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2855,8 +2855,8 @@ lib.makeScope newScope (self: with self; {
       sha256 = "0sqm4j1zflk1s94iq4waa70hna1xcys88v9a70w0vdw66czhvj2j";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXt ];
+    nativeBuildInputs = [ pkgconfig utilmacros ];
+    buildInputs = [ libX11 libXTrap libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
