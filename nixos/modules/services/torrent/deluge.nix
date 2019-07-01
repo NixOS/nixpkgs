@@ -134,6 +134,16 @@ in {
             Group under which deluge runs.
           '';
         };
+
+        extraPackages = mkOption {
+          type = types.listOf types.package;
+          default = [];
+          description = ''
+            Extra packages available at runtime to enable Deluge's plugins. For example,
+            extraction utilities are required for the built-in "Extractor" plugin.
+            This always contains unzip, gnutar, xz, p7zip and bzip2.
+          '';
+        };
       };
 
       deluge.web = {
@@ -160,6 +170,9 @@ in {
 
   config = mkIf cfg.enable {
 
+    # Provide a default set of `extraPackages`.
+    services.deluge.extraPackages = with pkgs; [ unzip gnutar xz p7zip bzip2 ];
+
     systemd.tmpfiles.rules = [ "d '${configDir}' 0770 ${cfg.user} ${cfg.group}" ]
     ++ optional (cfg.config ? "download_location")
       "d '${cfg.config.download_location}' 0770 ${cfg.user} ${cfg.group}"
@@ -172,7 +185,7 @@ in {
       after = [ "network.target" ];
       description = "Deluge BitTorrent Daemon";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.deluge ];
+      path = [ pkgs.deluge ] ++ cfg.extraPackages;
       serviceConfig = {
         ExecStart = ''
           ${pkgs.deluge}/bin/deluged \
