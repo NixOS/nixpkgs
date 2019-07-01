@@ -22,7 +22,8 @@ let
     ${cfg.globalExtraConfig}
 
     [${pool}]
-    listen = /run/phpfpm-${pool}/${cfg.pools.${pool}.socketName}.sock
+    ${optionalString (cfg.pools.${pool}.listenTCP == "") "listen = /run/phpfpm-${pool}/${cfg.pools.${pool}.socketName}.sock"}
+    ${optionalString (cfg.pools.${pool}.listenTCP != "") "listen = ${cfg.pools.${pool}.listenTCP}"}
     ${cfg.pools.${pool}.extraConfig}
   '';
 
@@ -76,7 +77,17 @@ in {
               type = types.str;
               example = "php-fpm";
               description = ''
-                The address on which to accept FastCGI requests.
+                The socket name on which to accept FastCGI requests.
+                Socket opens at path "/run/phpfpm-''${pool}/''${socketName}.sock"
+              '';
+            };
+
+            listenTCP = mkOption {
+              type = types.str;
+              default = "";
+              example = "127.0.0.1:9000";
+              description = ''
+                The network address on which to accept FastCGI requests.
               '';
             };
 
