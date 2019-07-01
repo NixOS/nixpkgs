@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "byacc-${version}";
-  version = "20180609";
+  version = "20190617";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/byacc/${name}.tgz"
       "https://invisible-mirror.net/archives/byacc/${name}.tgz"
     ];
-    sha256 = "173l9yai5yndbyn8nzdl6q11wv4x959bd0w392i82nfsqcz0pfsv";
+    sha256 = "13ai0az00c86s4k94cpgh48nf5dfccpvccpw635z42wjgcb6hy7q";
   };
 
   configureFlags = [
