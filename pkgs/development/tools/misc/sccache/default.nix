@@ -1,17 +1,21 @@
 { stdenv, fetchFromGitHub, cargo, rustc, rustPlatform, pkgconfig, glib, openssl, darwin }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.2.8";
+  version = "0.2.9";
   name = "sccache-${version}";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
     rev = version;
-    sha256 = "08v8s24q6246mdjzl5lirqg0csxcmd17szmw4lw373hvq4xvf0yk";
+    sha256 = "0glaaan6fh19a2d8grgsgnbgw5w53vjl0qmvvnq0ldp3hax90v46";
   };
-  cargoSha256 = "1lafzin92h1hb1hqmbrsxja44nj8mpbsxhwcjr6rf5yrclgwmcxj";
+  cargoSha256 = "0chfdyhj9lyxydbnmldc8rh2v9dda46sxhv35g34a5137sjrizfh";
   cargoBuildFlags = [ "--features=all" ];
+  # see https://github.com/mozilla/sccache/issues/467
+  postPatch = ''
+    sed -i 's/\(version = "0.2.9\)-alpha.0"/\1"/g' Cargo.lock
+  '';
   nativeBuildInputs = [
     pkgconfig cargo rustc
   ];
