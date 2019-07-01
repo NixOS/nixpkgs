@@ -3,11 +3,12 @@
 with pythonPackages;
 
 buildPythonApplication rec {
-  pname = "td-watson";
+  pname = "watson";
   version = "1.7.0";
 
   src = fetchPypi {
-    inherit version pname;
+    inherit version;
+    pname = "td-watson";
     sha256 = "249313996751f32f38817d424cbf8d74956461df1439f0ee3a962fcc3c77225d";
   };
 
