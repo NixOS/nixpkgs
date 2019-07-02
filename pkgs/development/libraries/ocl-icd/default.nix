@@ -2,24 +2,23 @@
 
 stdenv.mkDerivation rec {
   name = "ocl-icd-${version}";
-  version = "2.2.10";
+  version = "2.2.12";
 
   src = fetchFromGitHub {
     owner = "OCL-dev";
     repo = "ocl-icd";
-    rev = "v${version}";
-    sha256 = "1cvay1lif71v60hhgyicc25ysy9ifh3da1gp12ri5klyvx4jj3ji";
+    # Only doc changes since release version
+    rev = "b5880e5cfcedfb104681790d3f43d141845d8e36";
+    sha256 = "18wpqm28c094c1pgizvnf5nw59s722nlkr775hqjvr1hlnynlkmd";
   };
 
   nativeBuildInputs = [ addOpenGLRunpath autoconf automake libtool ruby ];
 
   buildInputs = [ opencl-headers ];
 
-  postPatch = ''
-    sed -i 's,"/etc/OpenCL/vendors","${addOpenGLRunpath.driverLink}/etc/OpenCL/vendors",g' ocl_icd_loader.c
-  '';
-
   preConfigure = "./bootstrap";
+
+  configureFlags = [ "--enable-custom-vendordir=${addOpenGLRunpath.driverLink}/etc/OpenCL/vendors" ];
 
   # Set RUNPATH so that driver libraries in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
