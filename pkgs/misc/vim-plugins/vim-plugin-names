@@ -288,6 +288,7 @@ sheerun/vim-polyglot
 Shougo/context_filetype.vim
 Shougo/denite.nvim
 Shougo/deol.nvim
+Shougo/deoplete-lsp
 Shougo/deoplete.nvim
 Shougo/echodoc.vim
 Shougo/neco-syntax
