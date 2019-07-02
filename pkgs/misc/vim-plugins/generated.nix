@@ -2443,6 +2443,17 @@ let
     };
   };
 
+  vim-bufkill = buildVimPluginFrom2Nix {
+    pname = "vim-bufkill";
+    version = "2018-03-20";
+    src = fetchFromGitHub {
+      owner = "qpkorr";
+      repo = "vim-bufkill";
+      rev = "795dd38f3cff69d0d8fe9e71847907e200860959";
+      sha256 = "1nji86vjjbfjw4xy52yazq53hrlsr7v30xkx2awgiakz7ih0bdxa";
+    };
+  };
+
   vim-choosewin = buildVimPluginFrom2Nix {
     pname = "vim-choosewin";
     version = "2018-06-11";
