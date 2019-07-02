@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, fetchurl, boost, brotli, cmake, flatbuffers, gtest, gflags, lz4, python, rapidjson, snappy, zlib, zstd }:
+{ stdenv, symlinkJoin, fetchurl, fixDarwinDylibNames, boost, brotli, cmake, flatbuffers, gtest, gflags, lz4, python, rapidjson, snappy, zlib, zstd }:
 
 stdenv.mkDerivation rec {
   name = "arrow-cpp-${version}";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "apache-arrow-${version}/cpp";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = [ boost python.pkgs.python python.pkgs.numpy ];
 
   preConfigure = ''
