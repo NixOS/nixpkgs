@@ -1,13 +1,13 @@
 { stdenvNoCC, fetchzip }:
 
 let
-  mspgccVersion = "6_1_0_0";
-  version = "1.206";
-in stdenvNoCC.mkDerivation {
-  name = "msp430-gcc-support-files-${version}";
+  mspgccVersion = "6_1_1_0";
+in stdenvNoCC.mkDerivation rec {
+  pname = "msp430-gcc-support-files";
+  version = "1.207";
   src = fetchzip {
     url = "http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSPGCC/${mspgccVersion}/exports/msp430-gcc-support-files-${version}.zip";
-    sha256 = "0h297jms3gkmdcqmfpr3cg6v9wxnms34qbwvwl2fkmrz20vk766q";
+    sha256 = "1gyi9zc5vh9c1lxd22dwvk6b17dcd17hah2rayr062p4l51kzam1";
   };
 
   buildCommand = ''
