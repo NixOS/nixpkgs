@@ -40,6 +40,7 @@ chrisgeo/sparkup
 chriskempson/base16-vim
 christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
+CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim
