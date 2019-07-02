@@ -484,7 +484,7 @@ let
     pname = "deoplete-jedi";
     version = "2019-06-30";
     src = fetchFromGitHub {
-      owner = "zchee";
+      owner = "deoplete-plugins";
       repo = "deoplete-jedi";
       rev = "763c7befa7bbe44aa00a0c832916958a16e71254";
       sha256 = "1dvw8l8f0k9hkfv4n791lgm1lipf5n2xhjyrwx1px92j1h94i8f1";

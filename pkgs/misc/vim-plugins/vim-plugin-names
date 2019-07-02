@@ -45,6 +45,7 @@ dag/vim-fish
 dag/vim2hs
 dannyob/quickfixstatus
 davidhalter/jedi-vim
+deoplete-plugins/deoplete-jedi
 derekelkins/agda-vim
 derekwyatt/vim-scala
 dhruvasagar/vim-table-mode
@@ -388,5 +389,4 @@ Yggdroot/indentLine
 zah/nim.vim
 zchee/deoplete-clang
 zchee/deoplete-go
-zchee/deoplete-jedi
 zig-lang/zig.vim
