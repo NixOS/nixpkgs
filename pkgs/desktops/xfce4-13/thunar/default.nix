@@ -4,10 +4,10 @@
 mkXfceDerivation rec {
   category = "xfce";
   pname = "thunar";
-  version = "4.14pre1";
-  rev = "xfce-4.14pre1";
+  version = "4.14pre2";
+  rev = "xfce-4.14pre2";
 
-  sha256 = "13l1nw526jz80p0ynhxqd3a8flp561z0321z7h4rvnidicvdr32n";
+  sha256 = "0b17yf8ss8s8xyr65v4zrq15ayr5nskqpxy4wxah33n7lz09dh8r";
 
   postPatch = ''
     substituteInPlace docs/Makefile.am \
