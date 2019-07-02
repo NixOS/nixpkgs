@@ -5,6 +5,7 @@
 , fetchurl
 , gccStdenv
 , lib
+, openjdk8
 , runLocal
 , runtimeShell
 , writeScript
@@ -77,6 +78,8 @@ let
   personProto = writeText "person.proto" ''
     syntax = "proto3";
 
+    package person;
+
     message Person {
       string name = 1;
       int32 id = 2;
@@ -134,10 +137,15 @@ let
     name = "bazel-test-protocol-buffers";
     inherit workspaceDir;
     bazelPkg = bazel;
+    buildInputs = [ openjdk8 ];
     bazelScript = ''
       ${bazel}/bin/bazel \
-        build --verbose_failures \
-          //person:person_proto
+        build \
+          --host_javabase='@local_jdk//:jdk' \
+          --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+          --javabase='@local_jdk//:jdk' \
+          --verbose_failures \
+          //...
     '';
   };
 
