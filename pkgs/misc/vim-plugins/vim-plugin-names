@@ -147,6 +147,7 @@ kana/vim-operator-replace
 kana/vim-operator-user
 kana/vim-tabpagecd
 kana/vim-textobj-function
+kana/vim-textobj-user
 kassio/neoterm
 kchmck/vim-coffee-script
 KeitaNakamura/neodark.vim
