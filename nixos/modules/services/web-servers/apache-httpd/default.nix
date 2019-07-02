@@ -671,7 +671,7 @@ in
 
         wantedBy = [ "multi-user.target" ];
         wants = [ "keys.target" ];
-        after = [ "network.target" "fs.target" "postgresql.service" "keys.target" ];
+        after = [ "network.target" "fs.target" "keys.target" ];
 
         path =
           [ httpd pkgs.coreutils pkgs.gnugrep ]
