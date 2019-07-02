@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoconf, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, uriparser, which, zlib, zstd }:
+{ stdenv, fetchurl, fetchFromGitHub, fixDarwinDylibNames, autoconf, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, uriparser, which, zlib, zstd }:
 
 let
   parquet-testing = fetchFromGitHub {
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     ./darwin.patch
     ];
 
-  nativeBuildInputs = [ cmake autoconf /* for vendored jemalloc */ ];
+  nativeBuildInputs = [ cmake autoconf /* for vendored jemalloc */ ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = [
     boost brotli double-conversion flatbuffers gflags glog gtest lz4 rapidjson
     snappy thrift uriparser zlib zstd python.pkgs.python python.pkgs.numpy
