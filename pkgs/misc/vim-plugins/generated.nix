@@ -2806,6 +2806,17 @@ let
     };
   };
 
+  vim-flutter = buildVimPluginFrom2Nix {
+    pname = "vim-flutter";
+    version = "2019-06-23";
+    src = fetchFromGitHub {
+      owner = "thosakwe";
+      repo = "vim-flutter";
+      rev = "8d7a9158cca84c4ea2a5ebc066607652fab7a9e8";
+      sha256 = "0kjr7nlqkkzlvh6p9j996bbcgd0frakla591y4ln12qwa7ys0gd1";
+    };
+  };
+
   vim-ft-diff_fold = buildVimPluginFrom2Nix {
     pname = "vim-ft-diff_fold";
     version = "2013-02-10";
