@@ -8,7 +8,7 @@ let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional;
+inherit (stdenv.lib) optional concatMapStringsSep;
 
 unwrapped = stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
@@ -76,15 +76,20 @@ unwrapped = stdenv.mkDerivation rec {
 };
 
 wrapped-full = runCommand unwrapped.name
-  {
+  rec {
     nativeBuildInputs = [ makeWrapper ];
-    buildInputs = with luajitPackages; [
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+
+    luaDepends = with luajitPackages; [
       luasec luasocket # trust anchor bootstrap, prefill module
       luafilesystem # prefill module
       http # for http module; brings lots of deps; some are useful elsewhere
     ];
-    preferLocalBuild = true;
-    allowSubstitutes = false;
+
+    LUA_VERSION = luajitPackages.lua.luaversion;
+    LUA_PATH = concatMapStringsSep ";" (pkg: "${pkg}/share/lua/${LUA_VERSION}/?.lua") luaDepends;
+    LUA_CPATH = concatMapStringsSep ";" (pkg: "${pkg}/lib/lua/${LUA_VERSION}/?.so") luaDepends;
   }
   ''
     mkdir -p "$out"/{bin,share}
