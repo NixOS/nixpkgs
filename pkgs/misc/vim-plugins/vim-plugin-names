@@ -21,6 +21,7 @@ bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
 bling/vim-bufferline
+bogado/file-line
 bronson/vim-trailing-whitespace
 brooth/far.vim
 carlitux/deoplete-ternjs

@@ -670,6 +670,17 @@ let
     };
   };
 
+  file-line = buildVimPluginFrom2Nix {
+    pname = "file-line";
+    version = "2016-10-21";
+    src = fetchFromGitHub {
+      owner = "bogado";
+      repo = "file-line";
+      rev = "559088afaf10124ea663ee0f4f73b1de48fb1632";
+      sha256 = "1w183g0hj8jvzm6m1jw7m6xz3x1dld8n8342vnycsh6hyzdcg3mg";
+    };
+  };
+
   flake8-vim = buildVimPluginFrom2Nix {
     pname = "flake8-vim";
     version = "2017-02-17";
