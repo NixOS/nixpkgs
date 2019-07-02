@@ -164,6 +164,7 @@ lepture/vim-jinja
 lervag/vimtex
 lfilho/cosco.vim
 LnL7/vim-nix
+LucHermitte/lh-vim-lib
 ludovicchabant/vim-gutentags
 ludovicchabant/vim-lawrencium
 lukaszkorecki/workflowish

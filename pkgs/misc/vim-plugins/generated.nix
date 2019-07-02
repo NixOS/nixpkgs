@@ -1013,6 +1013,17 @@ let
     };
   };
 
+  lh-vim-lib = buildVimPluginFrom2Nix {
+    pname = "lh-vim-lib";
+    version = "2019-05-24";
+    src = fetchFromGitHub {
+      owner = "LucHermitte";
+      repo = "lh-vim-lib";
+      rev = "113fe7d485a484471b0f8c78cea9acc897728661";
+      sha256 = "1fp3i8mbsb361f5llfxhdryymdzzb4b53sh6gsv49axg34sx4i53";
+    };
+  };
+
   lightline-vim = buildVimPluginFrom2Nix {
     pname = "lightline-vim";
     version = "2019-06-12";
