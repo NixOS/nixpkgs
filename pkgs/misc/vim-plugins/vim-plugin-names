@@ -41,8 +41,8 @@ christoomey/vim-tmux-navigator
 cocopon/iceberg.vim
 ctjhoa/spacevim
 ctrlpvim/ctrlp.vim
-dag/vim2hs
 dag/vim-fish
+dag/vim2hs
 dannyob/quickfixstatus
 davidhalter/jedi-vim
 derekelkins/agda-vim
@@ -219,9 +219,9 @@ ncm2/ncm2-ultisnips
 neoclide/coc.nvim
 neoclide/vim-easygit
 neomake/neomake
+neovim/nvimdev.nvim
 neovimhaskell/haskell-vim
 neovimhaskell/nvim-hs.vim
-neovim/nvimdev.nvim
 neutaaaaan/iosvkem
 nixprime/cpsm
 NLKNguyen/papercolor-theme
@@ -346,15 +346,14 @@ valloric/youcompleteme
 vhda/verilog_systemverilog.vim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
-vimoutliner/vimoutliner
 vim-pandoc/vim-pandoc
 vim-pandoc/vim-pandoc-after
 vim-pandoc/vim-pandoc-syntax
 vim-ruby/vim-ruby
+vim-scripts/a.vim
 vim-scripts/align
 vim-scripts/argtextobj.vim
 vim-scripts/autoload_cscope.vim
-vim-scripts/a.vim
 vim-scripts/bats.vim
 vim-scripts/changeColorScheme.vim
 vim-scripts/Colour-Sampler-Pack
@@ -372,6 +371,7 @@ vim-scripts/taglist.vim
 vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
 vim-utils/vim-husk
+vimoutliner/vimoutliner
 vimwiki/vimwiki
 vmchale/dhall-vim
 w0rp/ale
