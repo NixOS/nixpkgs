@@ -1739,6 +1739,17 @@ let
     };
   };
 
+  sky-color-clock-vim = buildVimPluginFrom2Nix {
+    pname = "sky-color-clock-vim";
+    version = "2018-11-03";
+    src = fetchFromGitHub {
+      owner = "mopp";
+      repo = "sky-color-clock.vim";
+      rev = "9d4232cc249083f3c5d2eb4e2848e491b52df4ca";
+      sha256 = "1ln50rahb177vilzr4zc7v9znm8xfid1v8gddl83gr9srdbn2bbz";
+    };
+  };
+
   sourcemap-vim = buildVimPluginFrom2Nix {
     pname = "sourcemap-vim";
     version = "2012-09-19";
