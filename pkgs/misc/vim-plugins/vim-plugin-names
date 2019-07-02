@@ -82,6 +82,7 @@ flazz/vim-colorschemes
 floobits/floobits-neovim
 frigoeu/psc-ide-vim
 garbas/vim-snipmate
+glts/vim-textobj-comment
 gmarik/vundle
 godlygeek/csapprox
 godlygeek/tabular

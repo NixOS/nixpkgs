@@ -3918,6 +3918,17 @@ let
     };
   };
 
+  vim-textobj-comment = buildVimPluginFrom2Nix {
+    pname = "vim-textobj-comment";
+    version = "2014-04-11";
+    src = fetchFromGitHub {
+      owner = "glts";
+      repo = "vim-textobj-comment";
+      rev = "58ae4571b76a5bf74850698f23d235eef991dd4b";
+      sha256 = "00wc14chwjfx95gl3yzbxm1ajx88zpzqz0ckl7xvd7gvkrf0mx04";
+    };
+  };
+
   vim-textobj-multiblock = buildVimPluginFrom2Nix {
     pname = "vim-textobj-multiblock";
     version = "2014-06-02";
