@@ -580,6 +580,17 @@ let
     };
   };
 
+  DoxygenToolkit-vim = buildVimPluginFrom2Nix {
+    pname = "DoxygenToolkit-vim";
+    version = "2010-11-06";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "DoxygenToolkit.vim";
+      rev = "afd8663d36d2ec19d26befdb10e89e912d26bbd3";
+      sha256 = "1za8li02j4nhqjjsyxg4p78638h5af4izim37zc0p1x55zr3i85r";
+    };
+  };
+
   echodoc-vim = buildVimPluginFrom2Nix {
     pname = "echodoc-vim";
     version = "2019-06-12";

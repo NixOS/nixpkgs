@@ -374,6 +374,7 @@ vim-scripts/autoload_cscope.vim
 vim-scripts/bats.vim
 vim-scripts/changeColorScheme.vim
 vim-scripts/Colour-Sampler-Pack
+vim-scripts/DoxygenToolkit.vim
 vim-scripts/emodeline
 vim-scripts/Improved-AnsiEsc
 vim-scripts/jdaddy.vim
