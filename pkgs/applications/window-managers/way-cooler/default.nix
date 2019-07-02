@@ -107,5 +107,6 @@ in symlinkJoin rec {
     maintainers = [ maintainers.miltador ];
     broken = stdenv.hostPlatform.isAarch64; # fails to build wc-bg (on aarch64)
     platforms = platforms.all;
+    broken = true;
   };
 }
