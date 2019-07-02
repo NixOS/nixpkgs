@@ -246,6 +246,8 @@ in
 
   packer = callPackage ../development/tools/packer { };
 
+  packr = callPackage ../development/libraries/packr { };
+
   pet = callPackage ../development/tools/pet { };
 
   mod = callPackage ../development/tools/mod { };
