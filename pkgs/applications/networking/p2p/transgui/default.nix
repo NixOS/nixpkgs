@@ -1,14 +1,15 @@
-{ stdenv, fetchsvn, pkgconfig, makeDesktopItem, unzip, fpc, lazarus,
+{ stdenv, fetchFromGitHub, pkgconfig, makeDesktopItem, unzip, fpc, lazarus,
 libX11, glib, gtk2, gdk_pixbuf, pango, atk, cairo, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "transgui-5.0.1-svn-r${revision}";
-  revision = "988";
+  pname = "transgui";
+  version = "5.17.0";
 
-  src = fetchsvn {
-    url = "https://svn.code.sf.net/p/transgui/code/trunk/";
-    rev = revision;
-    sha256 = "1i6ysxs6d2wsmqi6ha10rl3n562brmhizlanhcfad04i53y8pyxf";
+  src = fetchFromGitHub {
+    owner = "transmission-remote-gui";
+    repo = "transgui";
+    rev = "v${version}";
+    sha256 = "0p76vavny5asi5naa4jn67raxlarsmrkbchfn96y6gh5p2vzwpl7";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -27,9 +28,9 @@ stdenv.mkDerivation rec {
     substituteInPlace restranslator.pas --replace /usr/ $out/
   '';
 
-  patches = [
-    ./r988-compile-fix.patch
-  ];
+  preBuild = ''
+    lazbuild -B transgui.lpr --lazarusdir=${lazarus}/share/lazarus
+  '';
 
   makeFlags = [
     "FPC=fpc"
