@@ -47,6 +47,7 @@ ctrlpvim/ctrlp.vim
 dag/vim-fish
 dag/vim2hs
 dannyob/quickfixstatus
+dart-lang/dart-vim-plugin
 davidhalter/jedi-vim
 deoplete-plugins/deoplete-jedi
 derekelkins/agda-vim

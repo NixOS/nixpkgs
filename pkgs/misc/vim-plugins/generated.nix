@@ -401,6 +401,17 @@ let
     };
   };
 
+  dart-vim-plugin = buildVimPluginFrom2Nix {
+    pname = "dart-vim-plugin";
+    version = "2019-05-04";
+    src = fetchFromGitHub {
+      owner = "dart-lang";
+      repo = "dart-vim-plugin";
+      rev = "8ffc3e208c282f19afa237d343fa1533146bd2b4";
+      sha256 = "1ypcn3212d7gzfgvarrsma0pvaial692f3m2c0blyr1q83al1pm8";
+    };
+  };
+
   denite-extra = buildVimPluginFrom2Nix {
     pname = "denite-extra";
     version = "2019-03-29";
