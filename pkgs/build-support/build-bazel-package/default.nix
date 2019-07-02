@@ -51,8 +51,10 @@ in stdenv.mkDerivation (fBuildAttrs // {
       rm -rf $bazelOut/external/{local_*,\@local_*}
 
       # Patching markers to make them deterministic
-      sed -i 's, -\?[0-9][0-9]*$, 1,' $bazelOut/external/\@*.marker
-      sed -i '/^ENV:TMP.*/d' $bazelOut/external/\@*.marker
+      find $bazelOut/external -name '@*\.marker' -exec sed -i \
+        -e 's, -\?[0-9][0-9]*$, 1,' \
+        -e '/^ENV:TMP.*/d' \
+        '{}' \;
 
       # Remove all vcs files
       rm -rf $(find $bazelOut/external -type d -name .git)
@@ -86,8 +88,8 @@ in stdenv.mkDerivation (fBuildAttrs // {
   '';
 
   preConfigure = ''
-    mkdir -p $bazelOut/external
-    cp -r $deps/* $bazelOut/external
+    mkdir -p "$bazelOut"
+    cp -r $deps $bazelOut/external
     chmod -R +w $bazelOut
     find $bazelOut -type l | while read symlink; do
       ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
