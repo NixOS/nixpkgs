@@ -2,33 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-pidgin-im-integration";
-  version = "1.0.1";
+  version = "32";
 
   src = fetchFromGitHub {
     owner = "muffinmad";
     repo = "pidgin-im-gnome-shell-extension";
     rev = "v${version}";
-    sha256 = "1567s2sfqig4jw0nrn134f5vkx0yq31q044grv3xk4vpl1f3z2lr";
+    sha256 = "1jyg8r0s1v83sgg6y0jbsj2v37mglh8rvd8vi27fxnjq9xmg8kpc";
   };
 
-  buildInputs = [ glib ];
+  dontConfigure = true;
+  dontBuild = true;
 
-  configurePhase = "";
-  buildPhase = "";
   installPhase = ''
     share_dir="$prefix/share"
     extensions_dir="$share_dir/gnome-shell/extensions/pidgin@muffinmad"
     mkdir -p "$extensions_dir"
-    mv *.js metadata.json dbus.xml gnome-shell-extension-pidgin.pot "$extensions_dir"
-
-    schemas_dir="$share_dir/gsettings-schemas/${pname}-${version}/glib-2.0/schemas"
-    mkdir -p "$schemas_dir"
-    mv schemas/* "$schemas_dir" # fix Emacs syntax highlighting: */
-    glib-compile-schemas "$schemas_dir"
-
-    locale_dir="$share_dir/locale"
-    mkdir -p "$locale_dir"
-    mv locale/* $locale_dir # fix Emacs syntax highlighting: */
+    mv *.js metadata.json dbus.xml schemas locale "$extensions_dir"
   '';
 
   meta = with stdenv.lib; {
