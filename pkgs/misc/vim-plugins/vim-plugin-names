@@ -198,6 +198,7 @@ martinda/Jenkinsfile-vim-syntax
 mattn/emmet-vim
 mattn/gist-vim
 mattn/webapi-vim
+maximbaz/lightline-ale
 mbbill/undotree
 megaannum/forms
 megaannum/self
