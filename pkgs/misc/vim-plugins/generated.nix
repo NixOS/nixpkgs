@@ -1013,6 +1013,17 @@ let
     };
   };
 
+  lh-brackets = buildVimPluginFrom2Nix {
+    pname = "lh-brackets";
+    version = "2019-05-23";
+    src = fetchFromGitHub {
+      owner = "LucHermitte";
+      repo = "lh-brackets";
+      rev = "f3240c3782a97720e9a344b5bd5f6808e156722b";
+      sha256 = "1qyh58xxp6hh86bykk17934pgg72q7xfsngrhrrr3cxb8jpnmx7z";
+    };
+  };
+
   lh-vim-lib = buildVimPluginFrom2Nix {
     pname = "lh-vim-lib";
     version = "2019-05-24";
