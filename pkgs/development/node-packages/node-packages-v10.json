@@ -97,6 +97,7 @@
 , "react-native-cli"
 , "reveal.js"
 , "s3http"
+, "sass"
 , "scuttlebot"
 , "semver"
 , "serve"
