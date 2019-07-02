@@ -1,12 +1,34 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
+{ lib
+, python3Packages
+, stdenv
+, writeTextDir
+, substituteAll
+, targetPackages
+
+# for testing
+, pkgconfig
+, ninja
+, zlib
+, glib
+
+# optional testing — null them out to disable these tests
+, cmake ? null
+, dmd ? null
+, swift ? null
+, gfortran ? null
+, cudatoolkit ? null
+, gcj ? null
+, rustc ? null
+, vala ? null
+}:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.49.2";
+  version = "0.51.0";
   pname = "meson";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0ckkzq0kbnnk4rwv20lggm9a4fb5054jbv99i9pwjhid23qy7059";
+    sha256 = "1nadi700wjslfsmgp7aav88lvawpwwvk701b7gamfql32qhrm9dr";
   };
 
   postFixup = ''
@@ -74,9 +96,20 @@ python3Packages.buildPythonApplication rec {
   '';
 
   # 0.45 update enabled tests but they are failing
+  # mostly due to expecting /usr/bin/env and to the difficulty of
+  # providing an environment that can build both static and dynamic
+  # binaries
   doCheck = false;
-  # checkInputs = [ ninja pkgconfig ];
-  # checkPhase = "python ./run_project_tests.py";
+  # checkInputs = [
+  #   ninja pkgconfig zlib glib
+  #   swift cmake dmd
+  #   # gfortran # this needs the Fortran zlib, which I don't think is packaged
+  #   # gcj vala rustc cudatoolkit # these depend on meson, so infinitely recurse
+  # ];
+  # checkPhase = ''
+  #   patchShebangs .
+  #   python ./run_project_tests.py
+  # '';
 
   inherit (stdenv) cc;
 
@@ -84,7 +117,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = http://mesonbuild.com;
-    description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
+    description = "Open-source build system meant to be fast and user friendly";
     license = licenses.asl20;
     maintainers = with maintainers; [ mbe rasendubi ];
     platforms = platforms.all;
