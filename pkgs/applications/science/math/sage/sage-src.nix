@@ -10,14 +10,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.8";
+  version = "8.9.beta0";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0jm7zdkz8wfgrmf6620jfr8kgvprrz3qfl8gzx6rl5z5cm734b6x";
+    sha256 = "1bp6sdfk6h966y9jcpqnsrjfs0f5xgc1xmjw75h2y18hdgiadiy6";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -48,10 +48,6 @@ stdenv.mkDerivation rec {
     # Not necessary since library location is set explicitly
     # https://trac.sagemath.org/ticket/27660#ticket
     ./patches/do-not-test-find-library.patch
-
-
-    # https://trac.sagemath.org/ticket/28007
-    ./patches/threejs-offline.patch
 
     # Parallelize docubuild using subprocesses, fixing an isolation issue. See
     # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
