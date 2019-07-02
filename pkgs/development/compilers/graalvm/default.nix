@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "19.0.2";
+  version = "19.1.0";
   truffleMake = ./truffle.make;
   R = fetchurl {
     url = "http://cran.rstudio.com/src/base/R-3/R-3.5.1.tar.gz";
@@ -114,11 +114,11 @@ let
     rec { sha1 = "280c265b789e041c02e5c97815793dfc283fb1e6"; name = "LIBFFI_SOURCES_${sha1}/libffi-sources.tar.gz";                                    url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/libffi-3.2.1.tar.gz; }
     rec { sha1 = "8819cea8bfe22c9c63f55465e296b3855ea41786"; name = "TruffleJSON_${sha1}/trufflejson.jar";                                             url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/trufflejson-20180130.jar; }
     rec { sha1 = "9712a8124c40298015f04a74f61b3d81a51513af"; name = "CHECKSTYLE_8.8_${sha1}/checkstyle-8.8.jar";                                       url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/checkstyle-8.8-all.jar; }
-    rec { sha1 = "d8fa9c04a7c3095b1a8013efd70d6b813fba51db"; name = "VISUALVM_COMMON_${sha1}/visualvm-common.tar.gz";                                  url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm/visualvm-19_0_0-8.tar.gz; }
-    rec { sha1 = "8510f966695ec4221f83e9ff3fc1e303172f8740"; name = "VISUALVM_PLATFORM_SPECIFIC_${sha1}/visualvm-platform-specific.tar.gz";            url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm/visualvm-19_0_0-8-linux-amd64.tar.gz; }
+    rec { sha1 = "158ba6f2b346469b5f8083d1700c3f55b8b9082c"; name = "VISUALVM_COMMON_${sha1}/visualvm-common.tar.gz";                                  url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm/visualvm-19_0_0-11.tar.gz; }
+    rec { sha1 = "eb5ffa476ed2f6fac0ecd4bb2ae32741f9646932"; name = "VISUALVM_PLATFORM_SPECIFIC_${sha1}/visualvm-platform-specific.tar.gz";            url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm/visualvm-19_0_0-11-linux-amd64.tar.gz; }
     rec { sha1 = "e6e60889b7211a80b21052a249bd7e0f88f79fee"; name = "Java-WebSocket_${sha1}/java-websocket.jar";                                       url = mirror://maven/org/java-websocket/Java-WebSocket/1.3.9/Java-WebSocket-1.3.9.jar; }
     rec { sha1 = "7a4d00d5ec5febd252a6182e8b6e87a0a9821f81"; name = "ICU4J_${sha1}/icu4j.jar";                                                         url = mirror://maven/com/ibm/icu/icu4j/62.1/icu4j-62.1.jar; }
-   # This duplication of asm with underscore and minus is totally weird
+    # This duplication of asm with underscore and minus is totally weird
     rec { sha1 = "c01b6798f81b0fc2c5faa70cbe468c275d4b50c7"; name = "ASM-6.2.1_${sha1}/asm-6.2.1.jar";                                                 url = mirror://maven/org/ow2/asm/asm/6.2.1/asm-6.2.1.jar; }
     rec { sha1 = "cee28077ac7a63d3de0b205ec314d83944ff6267"; name = "ASM-6.2.1_${sha1}/asm-6.2.1.sources.jar";                                         url = mirror://maven/org/ow2/asm/asm/6.2.1/asm-6.2.1-sources.jar; }
     rec { sha1 = "332b022092ecec53cdb6272dc436884b2d940615"; name = "ASM_TREE-6.2.1_${sha1}/asm-tree-6.2.1.jar";                                       url = mirror://maven/org/ow2/asm/asm-tree/6.2.1/asm-tree-6.2.1.jar; }
@@ -145,10 +145,10 @@ let
   ];
 
   graal-mxcachegit = [
-    { sha256 = "1dyzxng70mfgfpl2blpjllmlqpdxi69jp7251z36lq36igin3lr2"; name = "graaljs";     url = "https://github.com/graalvm/graaljs.git";     rev = "vm-${version}"; }
-    { sha256 = "1zyaaygzd8fc1a1684h75h21k8rs2rnhkr5y217wlazyd78j65nr"; name = "truffleruby"; url = "https://github.com/oracle/truffleruby.git";  rev = "vm-${version}"; }
-    { sha256 = "0kyzx5y2kag08m9vla5x117al9ijs10783qpnv8b7zr116fwi28h"; name = "fastr";       url = "https://github.com/oracle/fastr.git";        rev = "vm-${version}"; }
-    { sha256 = "17gphvzsl08q3mn9gclvkkpcdkjir9bhnibls2x1cas0n5x3v4mw"; name = "graalpython"; url = "https://github.com/graalvm/graalpython.git"; rev = "vm-${version}"; }
+    { sha256 = "0wmdqbiydrr3rhcxgfxa644gsdqndhmqqn93kw6l4c9yzgnkk3w1"; name = "graaljs";     url = "https://github.com/graalvm/graaljs.git";     rev = "vm-${version}"; }
+    { sha256 = "0ai5x4n1c2lcfkfpp29zn1bcmp3khc5hvssyw1qr1l2zy79fxwjp"; name = "truffleruby"; url = "https://github.com/oracle/truffleruby.git";  rev = "vm-${version}"; }
+    { sha256 = "010079qsl6dff3yca8vlzcahq9z1ppyr758shjkm1f7izwphjv7p"; name = "fastr";       url = "https://github.com/oracle/fastr.git";        rev = "vm-${version}"; }
+    { sha256 = "00r9wdd7xfj1q6w91kwz9zcaapi8hd6yq19inyq1jklab8r68psi"; name = "graalpython"; url = "https://github.com/graalvm/graalpython.git"; rev = "vm-${version}"; }
   ];
 
   ninja-syntax = python27.pkgs.buildPythonPackage rec {
@@ -172,13 +172,13 @@ let
 in rec {
 
   mx = stdenv.mkDerivation rec {
-    version = "5.224.1";
+    version = "5.224.10";
     pname = "mx";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "mx";
       rev    = version;
-      sha256 = "1gf8fbzn6mfg3p71mxx89ks4n6zlr6ia9zj2sq0dflp4aa0acx6q";
+      sha256 = "13qa31flabsflsbjcm785zfxrgp6sgdxcmglz2bw0rcfcln00zq4";
     };
     nativeBuildInputs = [ makeWrapper ];
     prePatch = ''
@@ -217,13 +217,13 @@ in rec {
   };
 
   jvmci8 = stdenv.mkDerivation rec {
-    version = "19-b04";
+    version = "20-b04";
     name = "jvmci-${version}";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
       rev    = "jvmci-${version}";
-      sha256 = "062vd8cxs74nn47xcdymycb7vrlyk139g2rbhdayfw02jvvhanyv";
+      sha256 = "1k9szvnl5j3vg645si7s9lb93bkfl4ifc2z8ngnlb23ircsn3qdx";
     };
     buildInputs = [ mx mercurial openjdk ];
     postUnpack = ''
@@ -289,7 +289,7 @@ in rec {
       owner  = "oracle";
       repo   = "graal";
       rev    = "vm-${version}";
-      sha256 = "168qqngxjri4qw3v6khlnfkl05rlynpflcjq1h3gq6rhasvgr92f";
+      sha256 = "00142hyspgjblj8j49qmdvgc24193n0g95fh2if9c7574q3zspvd";
     };
     patches = [ ./002_setjmp.c.patch ./003_mx_truffle.py.patch ];
     buildInputs = [ mx zlib mercurial jvmci8 git clang llvm
@@ -410,7 +410,7 @@ in rec {
       description = "High-Performance Polyglot VM";
       license = licenses.gpl2;
       maintainers = with maintainers; [ volth hlolli ];
-      platforms = [ "x86_64-linux" "aarch64-linux" ];
+      platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     };
   };
 }
