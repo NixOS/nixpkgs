@@ -375,6 +375,11 @@
      installer after creating <literal>/var/lib/nextcloud</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <varname>mkOverrideUnset</varname> function and <varname>mkUnset</varname> constant have been added to <varname>lib</varname>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

@@ -352,7 +352,16 @@ rec {
         ) defs;
 
         # Process mkOverride properties.
-        defs'' = filterOverrides' defs';
+        defs'' =
+          let
+            winners = filterOverrides' defs';
+            setDefs = filter (def: def ? value) winners.values;
+            unsetDefs = filter (def: !(def ? value)) winners.values;
+          in
+            if length setDefs > 0 && length unsetDefs > 0 then
+              throw "The option `${showOption loc}' is defined in:\n - ${concatStringsSep "\n - " (getFiles setDefs)}\nand unset in:\n - ${concatStringsSep "\n - " (getFiles unsetDefs)}."
+            else
+              winners // { values = setDefs; };
 
         # Sort mkOrder properties.
         defs''' =
@@ -399,7 +408,7 @@ rec {
       concatMap pushDownProperties cfg.contents
     else if cfg._type or "" == "if" then
       map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
-    else if cfg._type or "" == "override" then
+    else if cfg._type or "" == "override" && cfg ? content then
       map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
     else # FIXME: handle mkOrder?
       [ cfg ];
@@ -453,7 +462,12 @@ rec {
     let
       getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPriority;
       highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
-      strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
+      strip = def:
+        if def.value._type or "" == "override" then
+          if def.value ? content
+          then def // { value = def.value.content; }
+          else removeAttrs def ["value"]
+        else def;
     in {
       values = concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
       inherit highestPrio;
@@ -525,6 +539,13 @@ rec {
   mkStrict = builtins.trace "`mkStrict' is obsolete; use `mkOverride 0' instead." (mkOverride 0);
 
   mkFixStrictness = id; # obsolete, no-op
+
+  mkOverrideUnset = priority:
+    { _type = "override";
+      inherit priority;
+    };
+
+  mkUnset = mkOverrideUnset 50;
 
   mkOrder = priority: content:
     { _type = "order";

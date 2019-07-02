@@ -46,7 +46,7 @@ checkConfigError() {
         reportFailure "$@"
         return 1
     else
-        if echo "$err" | grep --silent "$errorContains" ; then
+        if echo "$err" | grep -z --silent "$errorContains" ; then
             pass=$((pass + 1))
             return 0;
         else
@@ -154,6 +154,20 @@ checkConfigOutput "true" config.enable ./alias-with-priority.nix
 checkConfigOutput "true" config.enableAlias ./alias-with-priority.nix
 checkConfigOutput "false" config.enable ./alias-with-priority-can-override.nix
 checkConfigOutput "false" config.enableAlias ./alias-with-priority-can-override.nix
+
+# Check mkUnset.
+checkConfigOutput "alpha bravo charlie" config.names ./declare-attrs.nix
+checkConfigOutput "alpha charlie" config.names ./declare-attrs.nix ./unset-attrs-bravo.nix
+checkConfigError "attribute 'bravo' in selection path 'config.attrs.bravo' not found" config.attrs.bravo ./declare-attrs.nix ./unset-attrs-bravo.nix
+
+# Check that mkUnset/mkOverrideUnset compete with mkForce/mkOverride.
+set -- ./declare-attrs.nix ./unset-attrs-bravo.nix ./define-attrs-bravo-override.nix
+checkConfigOutput "alpha bravo charlie" config.names "$@"
+checkConfigOutput "1 29 3" config.values "$@"
+checkConfigError $'The option .* is defined in:\n - .*/define-attrs-bravo-force\\.nix\nand unset in: - .*/unset-attrs-bravo\\.nix\\.' config.names ./declare-attrs.nix ./unset-attrs-bravo.nix ./define-attrs-bravo-force.nix
+set -- ./declare-attrs.nix ./define-attrs-bravo-overrideUnset.nix ./define-attrs-bravo-force.nix
+checkConfigOutput "alpha charlie" config.names "$@"
+checkConfigOutput "1 3" config.values "$@"
 
 cat <<EOF
 ====== module tests ======

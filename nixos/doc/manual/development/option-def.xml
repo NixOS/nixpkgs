@@ -74,6 +74,15 @@ services.openssh.enable = mkOverride 10 false;
    discarded. The function <varname>mkForce</varname> is equal to
    <varname>mkOverride 50</varname>.
   </para>
+  <para>
+   The function <varname>mkOverrideUnset</varname> can be used instead to
+   remove an attribute that was defined in another module. It also takes a
+   priority, but no replacement value. For convenience,
+   <varname>mkUnset</varname> is equal to <varname>mkOverrideUnset 50</varname>.
+   Note that attempting to unset an attribute with the same priority as a
+   definition for that attribute is an error (unless they are both overridden by
+   a definition with a lower priority).
+  </para>
  </simplesect>
 
  <simplesect xml:id="sec-option-definitions-merging">
