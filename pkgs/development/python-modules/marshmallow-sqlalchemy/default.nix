@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
-  version = "0.16.3";
+  version = "0.17.0";
 
   meta = {
     homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qzpl53r58fk328cn41365c6jkliwmj41v16zkyjxb9d4s2mvn14";
+    sha256 = "17pnbv28n9vy3q66ckxfdbb9k1riy6s8lg63zfm5jsx00f0zqqnn";
   };
 
   propagatedBuildInputs = [ marshmallow sqlalchemy ];
