@@ -1937,6 +1937,17 @@ let
     };
   };
 
+  tcomment_vim = buildVimPluginFrom2Nix {
+    pname = "tcomment_vim";
+    version = "2019-04-28";
+    src = fetchFromGitHub {
+      owner = "tomtom";
+      repo = "tcomment_vim";
+      rev = "622cc0551bef87a3dfb2846cb339412eeb8ef133";
+      sha256 = "0zd23520hn5lflcz2jpi22x13kvmy6ry7qqzbi438xyw4j4gwpfs";
+    };
+  };
+
   tender-vim = buildVimPluginFrom2Nix {
     pname = "tender-vim";
     version = "2019-06-15";

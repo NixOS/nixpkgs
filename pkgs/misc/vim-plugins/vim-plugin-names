@@ -327,6 +327,7 @@ thosakwe/vim-flutter
 tomasr/molokai
 tomlion/vim-solidity
 tommcdo/vim-lion
+tomtom/tcomment_vim
 tomtom/tlib_vim
 tpope/vim-abolish
 tpope/vim-commentary
