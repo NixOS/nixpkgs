@@ -15,8 +15,10 @@ let
     availablePlugins = let
         simplePlugin = name: {pluginFile = "${weechat.${name}}/lib/weechat/plugins/${name}.so";};
       in rec {
-        python = {
-          pluginFile = "${weechat.python}/lib/weechat/plugins/python.so";
+        python = (simplePlugin "python") // {
+          extraEnv = ''
+            export PATH="${pythonPackages.python}/bin:$PATH"
+          '';
           withPackages = pkgsFun: (python // {
             extraEnv = ''
               export PYTHONHOME="${pythonPackages.python.withPackages pkgsFun}"
