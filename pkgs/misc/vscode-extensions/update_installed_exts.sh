@@ -35,12 +35,14 @@ function get_vsixpkg() {
     # I don't like 'rm -Rf' lurking in my scripts but this seems appropriate
 
     cat <<-EOF
-  {
-    name = "$2";
-    publisher = "$1";
-    version = "$VER";
-    sha256 = "$SHA";
-  }
+  $1.$2 = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "$2";
+      publisher = "$1";
+      version = "$VER";
+      sha256 = "$SHA";
+    };
+  };
 EOF
 }
 
@@ -60,10 +62,19 @@ fi
 trap clean_up SIGINT
 
 # Begin the printing of the nix expression that will house the list of extensions.
-printf '{ extensions = [\n'
+printf '{ pkgs }:\n\nself: {\n'
 
 # Note that we are only looking to update extensions that are already installed.
-for i in $($CODE --list-extensions)
+EXTENSIONS=""
+if [ -p /dev/stdin ]; then
+    while IFS= read line; do
+        EXTENSIONS="$EXTENSIONS $line"
+    done
+else
+    EXTENSIONS=$($CODE --list-extensions)
+fi
+
+for i in $EXTENSIONS
 do
     OWNER=$(echo "$i" | cut -d. -f1)
     EXT=$(echo "$i" | cut -d. -f2)
@@ -71,4 +82,4 @@ do
     get_vsixpkg "$OWNER" "$EXT"
 done
 # Close off the nix expression.
-printf '];\n}'
+printf '}'
