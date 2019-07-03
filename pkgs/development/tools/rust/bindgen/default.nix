@@ -3,13 +3,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
-  version = "0.49.3";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "032sgg27pdxlmas67clqldvamd2ncdiw1hmk1hiprcxng7073f4y";
+    sha256 = "1vm7g7z15kmk7jkhhkb3477snwcww5dgdy349b52fgjjzp75h7z7";
   };
 
   cargoSha256 = "1311d0wjjj99m59zd2n6r4aq6lwbbpyj54ha2z9g4yd1hn344r91";
