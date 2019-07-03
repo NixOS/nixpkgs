@@ -13,6 +13,6 @@ buildPythonPackage rec {
     homepage = http://www.buildout.org;
     description = "A software build and configuration system";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

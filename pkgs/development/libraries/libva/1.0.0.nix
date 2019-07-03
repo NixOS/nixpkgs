@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "VAAPI library: Video Acceleration API";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

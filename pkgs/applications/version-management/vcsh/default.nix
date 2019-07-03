@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Version Control System for $HOME";
     homepage = https://github.com/RichiH/vcsh;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ garbas ttuegel ];
+    maintainers = with maintainers; [ ttuegel ];
     platforms = platforms.unix;
   };
 }
