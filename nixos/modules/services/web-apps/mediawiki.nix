@@ -403,7 +403,7 @@ in
             <Directory "${pkg}/share/mediawiki">
               <FilesMatch "\.php$">
                 <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.listen}|fcgi://localhost/"
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
                 </If>
               </FilesMatch>
 

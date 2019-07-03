@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.nextcloud;
+  fpm = config.services.phpfpm.pools.nextcloud;
 
   phpPackage = pkgs.php73;
   phpPackages = pkgs.php73Packages;
@@ -418,7 +419,6 @@ in {
         in {
           phpOptions = phpOptionsExtensions;
           phpPackage = phpPackage;
-          listen = "/run/phpfpm/nextcloud";
           extraConfig = ''
             listen.owner = nginx
             listen.group = nginx
@@ -489,7 +489,7 @@ in {
                   fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
                   fastcgi_param modHeadersAvailable true;
                   fastcgi_param front_controller_active true;
-                  fastcgi_pass unix:/run/phpfpm/nextcloud;
+                  fastcgi_pass unix:${fpm.socket};
                   fastcgi_intercept_errors on;
                   fastcgi_request_buffering off;
                   fastcgi_read_timeout 120s;

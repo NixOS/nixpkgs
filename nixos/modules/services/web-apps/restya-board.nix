@@ -9,11 +9,11 @@ with lib;
 
 let
   cfg = config.services.restya-board;
+  fpm = config.services.phpfpm.pools.${poolName};
 
   runDir = "/run/restya-board";
 
   poolName = "restya-board";
-  phpfpmSocketName = "/run/phpfpm/${poolName}.sock";
 
 in
 
@@ -180,7 +180,6 @@ in
 
     services.phpfpm.pools = {
       "${poolName}" = {
-        listen = phpfpmSocketName;
         phpOptions = ''
           date.timezone = "CET"
 
@@ -241,7 +240,7 @@ in
         tryFiles = "$uri =404";
         extraConfig = ''
           include ${pkgs.nginx}/conf/fastcgi_params;
-          fastcgi_pass    unix:${phpfpmSocketName};
+          fastcgi_pass    unix:${fpm.socket};
           fastcgi_index   index.php;
           fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
           fastcgi_param   PHP_VALUE "upload_max_filesize=9G \n post_max_size=9G \n max_execution_time=200 \n max_input_time=200 \n memory_limit=256M";

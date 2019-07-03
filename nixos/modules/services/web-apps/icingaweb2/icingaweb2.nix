@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }: with lib; let
   cfg = config.services.icingaweb2;
+  fpm = config.services.phpfpm.pools.${poolName};
   poolName = "icingaweb2";
-  phpfpmSocketName = "/var/run/phpfpm/${poolName}.sock";
 
   defaultConfig = {
     global = {
@@ -166,7 +166,6 @@ in {
   config = mkIf cfg.enable {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       "${poolName}" = {
-        listen = phpfpmSocketName;
         extraConfig = ''
           listen.owner = nginx
           listen.group = nginx
@@ -210,7 +209,7 @@ in {
             include ${config.services.nginx.package}/conf/fastcgi.conf;
             try_files $uri =404;
             fastcgi_split_path_info ^(.+\.php)(/.+)$;
-            fastcgi_pass unix:${phpfpmSocketName};
+            fastcgi_pass unix:${fpm.socket};
             fastcgi_param SCRIPT_FILENAME ${pkgs.icingaweb2}/public/index.php;
           '';
         };

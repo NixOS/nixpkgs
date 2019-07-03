@@ -14,7 +14,7 @@ let
     ${cfg.extraConfig}
 
     [${pool}]
-    listen = ${poolOpts.listen}
+    listen = ${poolOpts.socket}
     ${poolOpts.extraConfig}
   '';
 
@@ -29,11 +29,24 @@ let
     cat $phpPackage/etc/php.ini $nixDefaultsPath $phpOptionsPath > $out
   '';
 
-  poolOpts = { lib, ... }:
+  poolOpts = { lib, name, ... }:
+    let
+      poolOpts = cfg.pools."${name}";
+    in
     {
       options = {
+        socket = mkOption {
+          type = types.str;
+          readOnly = true;
+          description = ''
+            Path to the unix socket file on which to accept FastCGI requests.
+            <note><para>This option is read-only and managed by NixOS.</para></note>
+          '';
+        };
+
         listen = mkOption {
           type = types.str;
+          default = "";
           example = "/path/to/unix/socket";
           description = ''
             The address on which to accept FastCGI requests.
@@ -76,6 +89,10 @@ let
             details on configuration directives.
           '';
         };
+      };
+
+      config = {
+        socket = if poolOpts.listen == "" then "${stateDir}/${name}.sock" else poolOpts.listen;
       };
     };
 
@@ -121,7 +138,6 @@ in {
         example = literalExample ''
          {
            mypool = {
-             listen = "/path/to/unix/socket";
              phpPackage = pkgs.php;
              extraConfig = '''
                user = nobody
@@ -143,6 +159,12 @@ in {
   };
 
   config = mkIf (cfg.pools != {}) {
+
+    warnings =
+      mapAttrsToList (pool: poolOpts: ''
+        Using config.services.phpfpm.pools.${pool}.listen is deprecated and will become unsupported. Please reference the read-only option config.services.phpfpm.pools.${pool}.socket to access the path of your socket.
+      '') (filterAttrs (pool: poolOpts: poolOpts.listen != "") cfg.pools)
+    ;
 
     systemd.slices.phpfpm = {
       description = "PHP FastCGI Process manager pools slice";

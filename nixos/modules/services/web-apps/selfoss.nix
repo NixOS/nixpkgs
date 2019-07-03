@@ -4,7 +4,6 @@ let
   cfg = config.services.selfoss;
 
   poolName = "selfoss_pool";
-  phpfpmSocketName = "/run/phpfpm/${poolName}.sock";
 
   dataDir = "/var/lib/selfoss";
 
@@ -118,7 +117,6 @@ in
 
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       "${poolName}" = {
-        listen = phpfpmSocketName;
         extraConfig = ''
           listen.owner = nginx
           listen.group = nginx

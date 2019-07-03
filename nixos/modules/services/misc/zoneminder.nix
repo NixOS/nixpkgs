@@ -2,6 +2,7 @@
 
 let
   cfg = config.services.zoneminder;
+  fpm = config.services.phpfpm.pools.zoneminder;
   pkg = pkgs.zoneminder;
 
   dirName = pkg.dirName;
@@ -18,8 +19,6 @@ let
   home = if useCustomDir then cfg.storageDir else defaultDir;
 
   useCustomDir = cfg.storageDir != null;
-
-  socket = "/run/phpfpm/${dirName}.sock";
 
   zms = "/cgi-bin/zms";
 
@@ -274,7 +273,7 @@ in {
                   fastcgi_param SCRIPT_FILENAME $request_filename;
                   fastcgi_param HTTP_PROXY "";
 
-                  fastcgi_pass unix:${socket};
+                  fastcgi_pass unix:${fpm.socket};
                 }
               }
             '';
@@ -284,7 +283,6 @@ in {
 
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
-          listen = socket;
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
 
