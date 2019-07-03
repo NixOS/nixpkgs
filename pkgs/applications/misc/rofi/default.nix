@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Window switcher, run dialog and dmenu replacement";
     homepage = https://github.com/davatorium/rofi;
     license = licenses.mit;
-    maintainers = with maintainers; [ mbakke garbas ma27 ];
+    maintainers = with maintainers; [ mbakke ma27 ];
     platforms = with platforms; linux;
   };
 }

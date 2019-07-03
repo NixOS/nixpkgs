@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage    = https://goaccess.io;
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ ederoyd46 garbas ];
+    maintainers = with stdenv.lib.maintainers; [ ederoyd46 ];
   };
 }

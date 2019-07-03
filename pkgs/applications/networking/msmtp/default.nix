@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
     homepage = https://marlam.de/msmtp/;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ garbas peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
   };
 }

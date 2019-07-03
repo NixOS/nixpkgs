@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       hardware.
     '';
     homepage = http://haproxy.1wt.eu;
-    maintainers = with stdenv.lib.maintainers; [ fuzzy-id garbas ];
+    maintainers = with stdenv.lib.maintainers; [ fuzzy-id ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
     license = stdenv.lib.licenses.gpl2;
   };

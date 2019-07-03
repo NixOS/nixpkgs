@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Extensible i3status wrapper";
     license = licenses.bsd3;
     homepage = https://github.com/ultrabug/py3status;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

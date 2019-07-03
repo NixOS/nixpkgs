@@ -35,7 +35,7 @@ buildPythonPackage rec {
     description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
     homepage = "https://docs.openstack.org/infra/system-config/jjb.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 
 }

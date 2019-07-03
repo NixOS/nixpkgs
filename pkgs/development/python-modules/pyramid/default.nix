@@ -40,7 +40,7 @@ buildPythonPackage rec {
     description = "The Pyramid Web Framework, a Pylons project";
     homepage = https://trypyramid.com/;
     license = licenses.bsd0;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

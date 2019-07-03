@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "VAAPI library: Video Acceleration API";
     homepage = http://www.freedesktop.org/wiki/Software/vaapi;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

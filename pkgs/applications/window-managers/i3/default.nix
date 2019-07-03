@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A tiling window manager";
     homepage    = "https://i3wm.org";
-    maintainers = with maintainers; [ garbas modulistic fpletz ];
+    maintainers = with maintainers; [ modulistic fpletz ];
     license     = licenses.bsd3;
     platforms   = platforms.all;
 

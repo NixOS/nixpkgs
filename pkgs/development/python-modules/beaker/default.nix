@@ -71,6 +71,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Session and Caching library with WSGI Middleware";
-    maintainers = with lib.maintainers; [ garbas domenkozar ];
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }
