@@ -3,10 +3,26 @@ source $stdenv/setup
 export PLAN9=$out/plan9
 export PLAN9_TARGET=$PLAN9
 
+plan9portLinkFlags()
+{
+    local -a linkFlags=()
+    eval set -- "$NIX_LDFLAGS"
+    while (( $# > 0 )); do
+        if [[ $1 = -rpath ]]; then
+            linkFlags+=( "-Wl,-rpath,$2" )
+            shift 2
+        else
+            linkFlags+=( "$1" )
+            shift
+        fi
+    done
+    echo "${linkFlags[*]}"
+}
+
 configurePhase()
 {
-    echo CFLAGS=\"-I${fontconfig_dev}/include -I${xorgproto_exp}/include -I${libX11_dev}/include -I${libXt_dev}/include -I${libXext_dev}/include -I${freetype_dev}/include -I${zlib_dev}/include\" > LOCAL.config
-    echo LDFLAGS=\"-L${fontconfig_lib}/lib -L${xorgproto_exp}/lib -L${libX11_exp}/lib -L${libXt_exp}/lib -L${libXext_exp}/lib -L${freetype_exp}/lib -L${zlib_exp}/lib\" >> LOCAL.config    
+    echo CFLAGS=\"$NIX_CFLAGS_COMPILE\" > LOCAL.config
+    echo LDFLAGS=\"$(plan9portLinkFlags)\" >> LOCAL.config
     echo X11=\"${libXt_dev}/include\" >> LOCAL.config
 
     for f in `grep -l -r /usr/local/plan9`; do
@@ -17,7 +33,7 @@ configurePhase()
 buildPhase()
 {
     mkdir -p $PLAN9
-    ./INSTALL -b
+    NPROC=$NIX_BUILD_CORES ./INSTALL -b
 }
 
 installPhase()
