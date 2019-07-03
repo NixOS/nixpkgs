@@ -23635,7 +23635,11 @@ in
 
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 
-  kops = callPackage ../applications/networking/cluster/kops { };
+  inherit (callPackage ../applications/networking/cluster/kops {})
+    mkKops
+    kops_1_12
+    ;
+  kops = kops_1_12;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
