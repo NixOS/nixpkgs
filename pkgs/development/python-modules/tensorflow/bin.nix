@@ -2,9 +2,11 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, isPy36, pythonOlder
+, isPy3k, pythonOlder
 , astor
 , gast
+, google-pasta
+, wrapt
 , numpy
 , six
 , termcolor
@@ -13,7 +15,6 @@
 , grpcio
 , mock
 , backports_weakref
-, enum34
 , tensorflow-estimator
 , tensorflow-tensorboard
 , cudaSupport ? false
@@ -42,7 +43,7 @@ let
 
 in buildPythonPackage rec {
   pname = "tensorflow";
-  version = "1.13.1";
+  version = "1.14.0";
   format = "wheel";
 
   src = let
@@ -54,9 +55,23 @@ in buildPythonPackage rec {
     dls = import (./. + "/tf${version}-hashes.nix");
   in fetchurl dls.${key};
 
-  propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-estimator tensorflow-tensorboard keras-applications keras-preprocessing ]
-                 ++ lib.optional (!isPy3k) mock
-                 ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
+  propagatedBuildInputs = [
+    protobuf
+    numpy
+    termcolor
+    grpcio
+    six
+    astor
+    absl-py
+    gast
+    google-pasta
+    wrapt
+    tensorflow-estimator
+    tensorflow-tensorboard
+    keras-applications
+    keras-preprocessing
+  ] ++ lib.optional (!isPy3k) mock
+    ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
   # and the propageted input tensorflow-tensorboard which causes environment collisions.

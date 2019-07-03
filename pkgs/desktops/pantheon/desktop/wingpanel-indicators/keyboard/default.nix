@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja
 , substituteAll, vala, gtk3, granite, libxml2, wingpanel, libgee
-, xorg, libgnomekbd, gobject-introspection, elementary-icon-theme, wrapGAppsHook }:
+, xorg, libgnomekbd, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-keyboard";
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     libxml2
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
 
   meta = with stdenv.lib; {
     description = "Keyboard Indicator for Wingpanel";

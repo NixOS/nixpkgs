@@ -1,6 +1,13 @@
-import ./make-test.nix ({ lib, pkgs, ... }:
+{ system ? builtins.currentSystem
+, config ? {}
+, pkgs ? import ../.. { inherit system config; }
+}:
+
+with pkgs.lib;
+with import ../lib/testing.nix { inherit system pkgs; };
+
 let
-  escape' = str: lib.replaceChars [''"'' "$" "\n"] [''\\\"'' "\\$" ""] str;
+  escape' = str: replaceChars [''"'' "$" "\n"] [''\\\"'' "\\$" ""] str;
 
 /*
  * The attrset `exporterTests` contains one attribute
@@ -50,6 +57,25 @@ let
  */
 
   exporterTests = {
+
+    bind = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.bind.enable = true;
+        services.bind.extraConfig = ''
+          statistics-channels {
+            inet 127.0.0.1 port 8053 allow { localhost; };
+          };
+        '';
+      };
+      exporterTest = ''
+        waitForUnit("prometheus-bind-exporter.service");
+        waitForOpenPort(9119);
+        succeed("curl -sSf http://localhost:9119/metrics" | grep -q 'bind_query_recursions_total 0');
+      '';
+    };
 
     blackbox = {
       exporterConfig = {
@@ -103,25 +129,6 @@ let
         waitForUnit("prometheus-dnsmasq-exporter.service");
         waitForOpenPort(9153);
         succeed("curl -sSf http://localhost:9153/metrics | grep -q 'dnsmasq_leases 0'");
-      '';
-    };
-
-    bind = {
-      exporterConfig = {
-        enable = true;
-      };
-      metricProvider = {
-        services.bind.enable = true;
-        services.bind.extraConfig = ''
-          statistics-channels {
-            inet 127.0.0.1 port 8053 allow { localhost; };
-          };
-        '';
-      };
-      exporterTest = ''
-        waitForUnit("prometheus-bind-exporter.service");
-        waitForOpenPort(9119);
-        succeed("curl -sSf http://localhost:9119/metrics" | grep -q 'bind_query_recursions_total 0');
       '';
     };
 
@@ -308,28 +315,47 @@ let
         succeed("curl -sSf http://localhost:9131/metrics | grep -q 'varnish_up 1'");
       '';
     };
-  };
 
-  nodes = lib.mapAttrs (exporter: testConfig: lib.mkMerge [{
-    services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
-  } testConfig.metricProvider or {}]) exporterTests;
+    wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in {
+      exporterConfig.enable = true;
+      metricProvider = {
+        networking.wireguard.interfaces.wg0 = {
+          ips = [ "10.23.42.1/32" "fc00::1/128" ];
+          listenPort = 23542;
 
-  testScript = lib.concatStrings (lib.mapAttrsToList (exporter: testConfig: (''
-    subtest "${exporter}", sub {
-      ${"$"+exporter}->start();
-      ${lib.concatStringsSep "  " (map (line: ''
-        ${"$"+exporter}->${line};
-      '') (lib.splitString "\n" (lib.removeSuffix "\n" testConfig.exporterTest)))}
-      ${"$"+exporter}->shutdown();
+          inherit (snakeoil.peer0) privateKey;
+
+          peers = singleton {
+            allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
+
+            inherit (snakeoil.peer1) publicKey;
+          };
+        };
+      };
+      exporterTest = ''
+        waitForUnit("prometheus-wireguard-exporter.service");
+        waitForOpenPort(9586);
+        succeed("curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'");
+      '';
     };
-  '')) exporterTests);
+  };
 in
-{
-  name = "prometheus-exporters";
+mapAttrs (exporter: testConfig: (makeTest {
+  name = "prometheus-${exporter}-exporter";
 
-  inherit nodes testScript;
+  nodes.${exporter} = mkMerge [{
+    services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
+  } testConfig.metricProvider or {}];
 
-  meta = with lib.maintainers; {
+  testScript = ''
+    ${"$"+exporter}->start();
+    ${concatStringsSep "  " (map (line: ''
+      ${"$"+exporter}->${line};
+    '') (splitString "\n" (removeSuffix "\n" testConfig.exporterTest)))}
+    ${"$"+exporter}->shutdown();
+  '';
+
+  meta = with maintainers; {
     maintainers = [ willibutz ];
   };
-})
+})) exporterTests

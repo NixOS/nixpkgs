@@ -11,7 +11,6 @@
 , six
 , typing
 , wheel
-, pythonOlder
 , watchdog
 , pytest
 , hypothesis

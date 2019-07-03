@@ -13,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.8-22";
-    sha256 = "1ivljgf192xh7pq1apdic923pvcb3aq74mx8d4hi65hhc9748gv7";
+    version = "7.0.8-46";
+    sha256 = "1si3rv3b9jgjkwyny5ja76s8c0z9vyic28fm63j1jrqdd2jyq3pk";
     patches = [];
   };
 in
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     inherit (cfg) sha256;
   };
 
-  patches = [ ./imagetragick.patch ] ++ cfg.patches;
+  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -84,7 +84,6 @@ stdenv.mkDerivation rec {
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
-    broken = ghostscript != null; # https://github.com/NixOS/nixpkgs/issues/55118
     maintainers = with maintainers; [ the-kenny ];
   };
 }

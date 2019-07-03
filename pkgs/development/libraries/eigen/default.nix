@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, cmake}:
+{stdenv, fetchurl, cmake}:
 
 let
   version = "3.3.7";

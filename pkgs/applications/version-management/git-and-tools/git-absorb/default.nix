@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  cargoSha256 = "0fvxs09b9x38vp0psvlvbj09myxrhabp95pp3nz7nxsgr7fxflrr";
+  cargoSha256 = "0q40qcki49dw23n3brgdz5plvigmsf61jm0kfy48j89mijih8zy7";
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

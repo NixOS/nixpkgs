@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-timepp-${version}";
-  version = "2018.03.17";
+  version = "unstable-2019-03-30";
 
   src = fetchFromGitHub {
     owner = "zagortenay333";
     repo = "timepp__gnome";
-    rev = "440cf85dc68d9e6ba876793f13910ee6239622cf";
-    sha256 = "0idsqsii5rvynvj78w2j7xiiz9rrl3384m5mj6bf6rg8vprpfi8v";
+    rev = "f90fb5573b37ac89fb57bf62e07d6d3bdb6a2c63";
+    sha256 = "0p6rsbm6lf61vzly775qkwc2rcjjl38bkqdxnv4sccqmw2wwclnp";
   };
 
   uuid = "timepp@zagortenay333";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = " A todo.txt manager, time tracker, timer, stopwatch, pomodoro, and alarms gnome-shell extension.";
+    description = "A todo.txt manager, time tracker, timer, stopwatch, pomodoro, and alarms gnome-shell extension.";
     homepage = https://github.com/zagortenay333/timepp__gnome;
     license = licenses.gpl3;
     maintainers = with maintainers; [ svsdep ];

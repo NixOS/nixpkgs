@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, makeFontsConf, makeWrapper
+{ stdenv, fetchurl, makeFontsConf
 , cacert
 , cairo, coreutils, fontconfig, freefont_ttf
 , glib, gmp
 , gtk3
 , libedit, libffi
 , libiconv
+, libGL
+, libGLU
 , libjpeg
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
@@ -28,6 +30,8 @@ let
     gtk3
     gsettings-desktop-schemas
     libedit
+    libGL
+    libGLU
     libjpeg
     libpng
     mpfr
@@ -42,7 +46,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "7.2"; # always change at once with ./minimal.nix
+  version = "7.3"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl rec {
@@ -51,7 +55,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     inherit name;
-    sha256 = "12cq0kiigmf9bxb4rcgxdhwc2fcdwvlyb1q3f8x4hswcpgq1ybg4";
+    sha256 = "0h6072njhb87rkz4arijvahxgjzn8r14s4wns0ijvxm89bg136yl";
   };
 
   FONTCONFIG_FILE = fontsConf;

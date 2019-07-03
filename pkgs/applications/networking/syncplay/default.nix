@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, python3Packages }:
+{ lib, fetchFromGitHub, buildPythonApplication, pyside, twisted, certifi }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   name = "syncplay-${version}";
-  version = "1.6.2";
+  version = "1.6.3";
 
   format = "other";
 
-  src = fetchurl {
-    url = https://github.com/Syncplay/syncplay/archive/v1.6.2.tar.gz;
-    sha256 = "1850icvifq4487gqh8awvmvrjdbbkx2kshmysr0fbi6vcf0f3wj2";
+  src = fetchFromGitHub {
+    owner = "Syncplay";
+    repo = "syncplay";
+    rev = "v${version}";
+    sha256 = "03xw44lxdk1h9kbvfviqzpmxxld6zvp07i0hvdm1chchyp0a109h";
   };
 
-  propagatedBuildInputs = with python3Packages; [ pyside twisted ];
+  propagatedBuildInputs = [ pyside twisted certifi ] ++ twisted.extras.tls;
 
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://syncplay.pl/;
     description = "Free software that synchronises media players";
     license = licenses.asl20;

@@ -12,7 +12,7 @@ To update the list of packages from MELPA,
 
 */
 
-{ fetchurl, lib, stdenv, texinfo }:
+{ lib, stdenv, texinfo }:
 
 self:
 
@@ -45,6 +45,7 @@ self:
       stream = markBroken super.stream; # requires emacs-25
       cl-lib = null; # builtin
       tle = null; # builtin
+      advice = null; # builtin
     };
 
     elpaPackages = super // overrides;

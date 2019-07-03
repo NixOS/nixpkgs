@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, bc, python, bison, flex, fuse, libarchive }:
+{ stdenv, fetchFromGitHub, bc, python, bison, flex, fuse, libarchive
+, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "lkl-2018-08-22";
@@ -40,7 +41,12 @@ stdenv.mkDerivation rec {
   #   crypto/jitterentropy.c:54:3: error: #error "The CPU Jitter random number generator must not be compiled with optimizations. See documentation. Use the compiler switch -O0 for compiling jitterentropy.c."
   hardeningDisable = [ "format" "fortify" ];
 
-  makeFlags = "-C tools/lkl";
+  makeFlags = [
+    "-C tools/lkl"
+    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
 
   enableParallelBuilding = true;
 

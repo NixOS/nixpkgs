@@ -9,11 +9,11 @@ in
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "3.14.4";
+  version = "3.14.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ecac135cc4e5824b6bf8242679fc7225f44885877677701da6de7703f060f518";
+    sha256 = "2e1889a0981381f557b0d14cba900adf7476817c53c13bfb04e2a30b3db0f1d3";
   };
 
   propagatedBuildInputs = [ six ];

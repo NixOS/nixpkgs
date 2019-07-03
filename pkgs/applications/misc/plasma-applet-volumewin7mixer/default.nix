@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "plasma-applet-volumewin7mixer-${version}";
-  version = "23";
+  version = "24";
 
   src = fetchFromGitHub {
     owner = "Zren";
     repo = "plasma-applet-volumewin7mixer";
     rev = "v${version}";
-    sha256 = "1j2bq343lnhwqz26qfsvg7vjxv84ibzbc4y86rjkh07nqjwb3xsc";
+    sha256 = "1pms71229y7fv3zs38a0l9mdcg5qkcdv9yrcvdm6xqpdyk21jbz2";
   };
 
   patches = [ ./cmake.patch ];

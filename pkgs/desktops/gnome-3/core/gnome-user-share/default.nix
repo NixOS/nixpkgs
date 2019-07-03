@@ -1,24 +1,29 @@
-{ stdenv, intltool, fetchurl, apacheHttpd, nautilus
-, pkgconfig, gtk3, glib, libxml2, systemd, adwaita-icon-theme
-, wrapGAppsHook, itstool, libnotify, libtool, mod_dnssd
-, gnome3, librsvg, gdk_pixbuf, file, libcanberra-gtk3 }:
+{ stdenv
+, gettext
+, fetchurl
+, apacheHttpd
+, nautilus
+, pkgconfig
+, gtk3
+, glib
+, libxml2
+, systemd
+, wrapGAppsHook
+, itstool
+, libnotify
+, mod_dnssd
+, gnome3
+, libcanberra-gtk3
+}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-user-share-${version}";
-  version = "3.28.0";
+  pname = "gnome-user-share";
+  version = "3.32.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-user-share/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "04wjnrcdlmyszj582nsda32sgi44nwgrw2ksy11xp17nb09d7m09";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "16w6n0cjyzp8vln3zspvab8jhjprpvs88xc9x7bvigg0wry74945";
   };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-user-share"; attrPath = "gnome3.gnome-user-share"; };
-  };
-
-  doCheck = true;
-
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   preConfigure = ''
     sed -e 's,^LoadModule dnssd_module.\+,LoadModule dnssd_module ${mod_dnssd}/modules/mod_dnssd.so,' \
@@ -29,22 +34,35 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-httpd=${apacheHttpd.out}/bin/httpd"
     "--with-modules-path=${apacheHttpd.dev}/modules"
-    "--with-systemduserunitdir=$(out)/etc/systemd/user"
-    "--with-nautilusdir=$(out)/lib/nautilus/extensions-3.0"
+    "--with-systemduserunitdir=${placeholder ''out''}/etc/systemd/user"
+    "--with-nautilusdir=${placeholder ''out''}/lib/nautilus/extensions-3.0"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    gettext
+    itstool
+    libxml2
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    gtk3 glib intltool itstool libxml2 libtool
-    wrapGAppsHook file gdk_pixbuf adwaita-icon-theme librsvg
-    nautilus libnotify libcanberra-gtk3 systemd
+    gtk3
+    glib
+    nautilus
+    libnotify
+    libcanberra-gtk3
+    systemd
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/gsettings-schemas/$name
-    mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name
-    glib-compile-schemas "$out/share/gsettings-schemas/$name/glib-2.0/schemas"
-  '';
+  doCheck = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://help.gnome.org/users/gnome-user-share/3.8;

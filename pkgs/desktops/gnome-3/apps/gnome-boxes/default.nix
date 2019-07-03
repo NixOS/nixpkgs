@@ -3,19 +3,19 @@
 , spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
 , libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
 , mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
-, libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk
+, libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk, vte
 }:
 
 # TODO: ovirt (optional)
 
 let
-  version = "3.30.3";
+  version = "3.32.1";
 in stdenv.mkDerivation rec {
   name = "gnome-boxes-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0a9ljwhkanszzyzl0bhad8vmzk7v4wafl9b1zn09pf57znyymf3s";
+    sha256 = "159sxii3g4s5pjb4s4i3kc4q162w5vicp4g6wvk1y2yv68bgmcl4";
   };
 
   doCheck = true;
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     libvirt spice-gtk spice-protocol libsoup json-glib webkitgtk libosinfo systemd
     tracker tracker-miners libcap yajl gmp gdbm cyrus_sasl libusb libarchive
     gnome3.adwaita-icon-theme librsvg acl libgudev libsecret
-    libcap_ng numactl xen libapparmor
+    libcap_ng numactl xen libapparmor vte
   ];
 
   preFixup = ''

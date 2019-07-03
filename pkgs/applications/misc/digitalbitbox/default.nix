@@ -3,7 +3,6 @@
 , curl
 , fetchFromGitHub
 , git
-, libcap
 , libevent
 , libtool
 , qrencode

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchpatch, fetchgit, cmake, pkgconfig, libusb1 }:
+{ stdenv, fetchgit, cmake, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation rec {
   name = "rtl-sdr-${version}";

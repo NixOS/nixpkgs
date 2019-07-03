@@ -1,18 +1,21 @@
-{ stdenv, fetchzip }:
+{ lib, fetchFromGitHub }:
 
-fetchzip rec {
+fetchFromGitHub {
   name = "oxygenfonts-20160824";
 
-  url = https://github.com/vernnobile/oxygenFont/archive/62db0ebe3488c936406685485071a54e3d18473b.zip;
+  owner = "vernnobile";
+  repo = "oxygenFont";
+  rev = "62db0ebe3488c936406685485071a54e3d18473b";
 
   postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile '*/Oxygen-Sans.ttf' '*/Oxygen-Sans-Bold.ttf' '*/OxygenMono-Regular.ttf' -d $out/share/fonts/truetype
+    tar xf $downloadedFile --strip=1
+    mkdir -p $out/share/fonts/truetype
+    cp */Oxygen-Sans.ttf */Oxygen-Sans-Bold.ttf */OxygenMono-Regular.ttf $out/share/fonts/truetype
   '';
 
   sha256 = "17m86p1s7a7d90zqjsr46h5bpmas4vxsgj7kd0j5c8cb7lw92jyf";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop/gui font for integrated use with the KDE desktop";
     longDescription = ''
       Oxygen Font is a font family originally aimed as a desktop/gui

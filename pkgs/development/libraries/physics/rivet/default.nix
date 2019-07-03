@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "rivet-${version}";
-  version = "2.7.0";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
@@ -17,12 +17,16 @@ stdenv.mkDerivation rec {
     scheme-basic
     collection-pstricks
     collection-fontsrecommended
+    l3kernel
+    l3packages
     mathastext
     pgf
     relsize
     sfmath
+    siunitx
     xcolor
     xkeyval
+    xstring
     ;};
   buildInputs = [ hepmc imagemagick python2 latex makeWrapper ];
   propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];

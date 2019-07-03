@@ -10,16 +10,16 @@
   upload while the builder can fetch faster directly from the source. To use
   it, put the following snippet as a new overlay:
 <programlisting>
-    self: super:
-      (super.prefer-remote-fetch self super)
-  </programlisting>
+self: super:
+  (super.prefer-remote-fetch self super)
+</programlisting>
   A full configuration example for that sets the overlay up for your own
   account, could look like this
-<programlisting>
-    $ mkdir ~/.config/nixpkgs/overlays/
-    $ cat &gt; ~/.config/nixpkgs/overlays/prefer-remote-fetch.nix &lt;&lt;EOF
-      self: super: super.prefer-remote-fetch self super
-    EOF
-  </programlisting>
+<screen>
+<prompt>$ </prompt>mkdir ~/.config/nixpkgs/overlays/
+<prompt>$ </prompt>cat &gt; ~/.config/nixpkgs/overlays/prefer-remote-fetch.nix &lt;&lt;EOF
+  self: super: super.prefer-remote-fetch self super
+EOF
+</screen>
  </para>
 </section>

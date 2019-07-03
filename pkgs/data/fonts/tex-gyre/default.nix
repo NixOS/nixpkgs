@@ -20,7 +20,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = outputHash;
+    inherit outputHash;
 
     meta = with stdenv.lib; {
       homepage = http://www.gust.org.pl/projects/e-foundry/tex-gyre;

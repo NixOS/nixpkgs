@@ -19,7 +19,6 @@ let
     cmakeFlags =
       (args.cmakeFlags or [])
       ++ [
-        "-DBUILD_TESTING=OFF"
         ("-DCMAKE_BUILD_TYPE=" + (if debug then "Debug" else "Release"))
       ];
 

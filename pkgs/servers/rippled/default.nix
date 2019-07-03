@@ -101,13 +101,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "rippled-${version}";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "ripple";
     repo = "rippled";
     rev = version;
-    sha256 = "1zx8qs32v5ibkwm9nm6m0qh0gcr0vcigr2wbxpd40pqqk73cqb3q";
+    sha256 = "1lm0zzz0hi2sh2f4iqq3scapzdjbxcjgr700fgham9wqgaj2ash5";
   };
 
   hardeningDisable = ["format"];

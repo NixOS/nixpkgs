@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "s-tar-${version}";
-  version = "1.5.3";
+  version = "1.6";
   src = fetchurl {
     url = "mirror://sourceforge/s-tar/star-${version}.tar.bz2";
-    sha256 = "0nsg3adv8lwqsbizicgmyxx8w26d1f4almprkcb08cd87s1l40q7";
+    sha256 = "0xpp8gf0ghwdgncdwx17fpadxislwrj48gcm42851hz6p8p6c60v";
   };
 
   preConfigure = "rm configure";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, python3, xxd, boost }:
+{ stdenv, fetchFromGitHub, cmake, python3, xxd, boost }:
 
 stdenv.mkDerivation rec {
   name = "cryptominisat-${version}";

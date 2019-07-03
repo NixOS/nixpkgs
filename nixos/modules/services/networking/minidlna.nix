@@ -98,16 +98,10 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" "local-fs.target" ];
 
-        preStart =
-          ''
-            mkdir -p /var/cache/minidlna
-            chown -R minidlna:minidlna /var/cache/minidlna
-          '';
-
         serviceConfig =
           { User = "minidlna";
             Group = "minidlna";
-            PermissionsStartOnly = true;
+            CacheDirectory = "minidlna";
             RuntimeDirectory = "minidlna";
             PIDFile = "/run/minidlna/pid";
             ExecStart =

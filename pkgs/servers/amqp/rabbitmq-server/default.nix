@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
   name = "rabbitmq-server-${version}";
 
-  version = "3.7.12";
+  version = "3.7.15";
 
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${name}.tar.xz";
-    sha256 = "14w7czxqdxgmsqxrvphzpyha1nq3yfhka4vy8wyzwixindgj493q";
+    sha256 = "14ipnvcrwln9mwr4r32461js2gdlrr4h4hy92393ixbkscf9wdir";
   };
 
   buildInputs =

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, makeDesktopItem, makeWrapper
+{ stdenv, fetchzip, makeDesktopItem, makeWrapper
 , jre
 }:
 

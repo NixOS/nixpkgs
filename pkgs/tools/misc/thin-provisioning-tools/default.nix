@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       #    dynamically using sysconf(_SC_PAGE_SIZE) instead of hardcoded value that hopefully is correct.
       # [1] http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/limits.h.html
       # [2] http://www.openwall.com/lists/musl/2015/09/11/8
-      url = "https://raw.githubusercontent.com/voidlinux/void-packages/a0ece13ad7ab2aae760e09e41e0459bd999a3695/srcpkgs/thin-provisioning-tools/patches/musl.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/a0ece13ad7ab2aae760e09e41e0459bd999a3695/srcpkgs/thin-provisioning-tools/patches/musl.patch";
       sha256 = "1m8r3vhrnsy8drgs0svs3fgpi3mmxzdcqsv6bmvc0j52cvfqvhvy";
       extraPrefix = ""; # empty means add 'a/' and 'b/'
     })

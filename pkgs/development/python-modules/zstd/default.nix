@@ -1,13 +1,13 @@
-{ stdenv, pkgconfig, fetchpatch, fetchPypi, buildPythonPackage
+{ stdenv, pkgconfig, fetchPypi, buildPythonPackage
 , zstd, pytest }:
 
 buildPythonPackage rec {
   pname = "zstd";
-  version = "1.3.8.1";
+  version = "1.4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d89e884da59c35e480439f1663cb3cb4cf372e42ba0eb0bdf22b9625414702a3";
+    sha256 = "01prq9rwz1gh42idnj2162w79dzs8gf3ac8pn12lz347w280kjbk";
   };
 
   postPatch = ''

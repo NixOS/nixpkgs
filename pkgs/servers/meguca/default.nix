@@ -1,34 +1,35 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, cmake, ffmpeg-full, ghostscript
-, graphicsmagick, quicktemplate, go-bindata, easyjson, nodePackages, emscripten, opencv }:
+{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, cmake, ffmpeg-full
+, ghostscript, graphicsmagick, quicktemplate, go-bindata, easyjson
+, nodePackages, emscripten, opencv, statik }:
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-12-06";
+  version = "2019-03-12";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
 
   src = fetchFromGitHub {
     owner = "bakape";
     repo = "meguca";
-    rev = "300b007cab238838f813faa9aad6abb3f22ad4d2";
-    sha256 = "1rvnvhkm8l7h9rvw9vr8pm1qrr3zz5x7vayaw0caqx99xlyp93r9";
+    rev = "21b08de09b38918061c5cd0bbd0dc9bcc1280525";
+    sha256 = "1nb3bf1bscbdma83sp9fbgvmxxlxh21j9h80wakfn85sndcrws5i";
     fetchSubmodules = true;
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson emscripten opencv ];
+
+  buildInputs = [
+    ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata
+    easyjson emscripten opencv statik
+  ];
 
   buildPhase = ''
     export HOME=`pwd`
-    export GOPATH=$GOPATH:$HOME/go/src/github.com/bakape/meguca/server
-    cd $HOME/go/src/github.com/bakape/meguca
+    cd go/src/github.com/bakape/meguca
     ln -sf ${nodePackages.meguca}/lib/node_modules/meguca/node_modules
     sed -i "/npm install --progress false --depth 0/d" Makefile
-    make generate_clean
-    go generate meguca/...
-    go build -v -p $NIX_BUILD_CORES meguca
-    make -j $NIX_BUILD_CORES client
+    make -j $NIX_BUILD_CORES generate all
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     make -j $NIX_BUILD_CORES wasm
   '';

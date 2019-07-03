@@ -60,6 +60,7 @@ rec {
           "--enable-static"
           "--disable-shared"
         ];
+        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
     };
 
@@ -128,7 +129,7 @@ rec {
      with the following function:
 
      isFree = license: with builtins;
-       if isNull license then true
+       if license == null then true
        else if isList license then lib.all isFree license
        else license != "non-free" && license != "unfree";
 

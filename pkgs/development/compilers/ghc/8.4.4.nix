@@ -1,8 +1,9 @@
-{ stdenv, targetPackages
+{ stdenv, pkgsBuildTarget, targetPackages
 
 # build-tools
 , bootPkgs
 , autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx
+, bash
 
 , libiconv ? null, ncurses
 
@@ -72,11 +73,9 @@ let
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
-  toolsForTarget =
-    if hostPlatform == buildPlatform then
-      [ targetPackages.stdenv.cc ] ++ stdenv.lib.optional useLLVM llvmPackages.llvm
-    else assert targetPlatform == hostPlatform; # build != host == target
-      [ stdenv.cc ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
+  toolsForTarget = [
+    pkgsBuildTarget.targetPackages.stdenv.cc
+  ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
 
@@ -197,7 +196,7 @@ stdenv.mkDerivation (rec {
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = [ perl ] ++ (libDeps hostPlatform);
+  buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
   propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;

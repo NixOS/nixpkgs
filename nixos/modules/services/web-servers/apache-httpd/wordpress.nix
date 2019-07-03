@@ -273,7 +273,7 @@ in
     if [ ! -d ${serverInfo.fullConfig.services.mysql.dataDir}/${config.dbName} ]; then
       echo "Need to create the database '${config.dbName}' and grant permissions to user named '${config.dbUser}'."
       # Wait until MySQL is up
-      while [ ! -e ${serverInfo.fullConfig.services.mysql.pidDir}/mysqld.pid ]; do
+      while [ ! -S /run/mysqld/mysqld.sock ]; do
         sleep 1
       done
       ${pkgs.mysql}/bin/mysql -e 'CREATE DATABASE ${config.dbName};'

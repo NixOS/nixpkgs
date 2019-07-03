@@ -30,6 +30,10 @@ wrapGAppsHook() {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$prefix/share")
   fi
 
+  if [ -d "$prefix/lib/gio/modules" ] && [ -n "$(ls -A $prefix/lib/gio/modules)" ] ; then
+    gappsWrapperArgs+=(--prefix GIO_EXTRA_MODULES : "$prefix/lib/gio/modules")
+  fi
+
   for v in $wrapPrefixVariables GST_PLUGIN_SYSTEM_PATH_1_0 GI_TYPELIB_PATH GRL_PLUGIN_PATH; do
     eval local dummy="\$$v"
     gappsWrapperArgs+=(--prefix $v : "$dummy")

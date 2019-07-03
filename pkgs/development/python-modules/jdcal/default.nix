@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "jdcal";
-  version = "1.4";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea0a5067c5f0f50ad4c7bdc80abad3d976604f6fb026b0b3a17a9d84bb9046c9";
+    sha256 = "472872e096eb8df219c23f2689fc336668bdb43d194094b5cc1707e1640acfc8";
   };
 
   checkInputs = [ pytest ];

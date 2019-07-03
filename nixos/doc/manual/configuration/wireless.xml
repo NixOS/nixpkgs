@@ -23,23 +23,21 @@
     psk = "abcdefgh";
   };
   "free.wifi" = {};
-}
+};
 </programlisting>
   Be aware that keys will be written to the nix store in plaintext! When no
   networks are set, it will default to using a configuration file at
   <literal>/etc/wpa_supplicant.conf</literal>. You should edit this file
-  yourself to define wireless networks, WPA keys and so on (see
-  <citerefentry>
-    <refentrytitle>wpa_supplicant.conf</refentrytitle>
-    <manvolnum>5</manvolnum>
-  </citerefentry>).
+  yourself to define wireless networks, WPA keys and so on (see <citerefentry>
+  <refentrytitle>wpa_supplicant.conf</refentrytitle>
+  <manvolnum>5</manvolnum> </citerefentry>).
  </para>
 
  <para>
   If you are using WPA2 you can generate pskRaw key using
   <command>wpa_passphrase</command>:
 <screen>
-$ wpa_passphrase ESSID PSK
+<prompt>$ </prompt>wpa_passphrase ESSID PSK
 network={
         ssid="echelon"
         #psk="abcdefgh"
@@ -56,10 +54,10 @@ network={
   or you can use it to directly generate the
   <literal>wpa_supplicant.conf</literal>:
 <screen>
-# wpa_passphrase ESSID PSK > /etc/wpa_supplicant.conf</screen>
+<prompt># </prompt>wpa_passphrase ESSID PSK > /etc/wpa_supplicant.conf</screen>
   After you have edited the <literal>wpa_supplicant.conf</literal>, you need to
   restart the wpa_supplicant service.
 <screen>
-# systemctl restart wpa_supplicant.service</screen>
+<prompt># </prompt>systemctl restart wpa_supplicant.service</screen>
  </para>
 </section>

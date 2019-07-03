@@ -15,7 +15,7 @@ in
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (darwin) cctools;
     inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages_5) llvm;
+    inherit (pkgs.llvmPackages_7) llvm;
   };
 
   binutils = pkgs.wrapBintoolsWith {
@@ -27,13 +27,13 @@ in
   };
 
   cctools = callPackage ../os-specific/darwin/cctools/port.nix {
-    inherit (darwin) libobjc maloader;
+    inherit (darwin) libobjc maloader libtapi;
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
     libcxxabi = pkgs.libcxxabi;
   };
 
   cf-private = callPackage ../os-specific/darwin/cf-private {
-    inherit (darwin) CF apple_sdk osx_private_sdk;
+    inherit (darwin) CF apple_sdk;
   };
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
@@ -59,12 +59,6 @@ in
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 
-  osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { };
-
-  security_tool = darwin.callPackage ../os-specific/darwin/security-tool {
-    Security-framework = darwin.apple_sdk.frameworks.Security;
-  };
-
   stubs = callPackages ../os-specific/darwin/stubs { };
 
   trash = darwin.callPackage ../os-specific/darwin/trash { };
@@ -82,5 +76,7 @@ in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { inherit (darwin) apple_sdk_sierra xnu; };
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
+
+  libtapi = callPackage ../os-specific/darwin/libtapi {};
 
 })

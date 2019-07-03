@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     cd build/
   '';
-  resources = ./resources;
 
   installPhase = ''
     mkdir -p "$prefix/lib/$name"

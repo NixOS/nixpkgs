@@ -1,7 +1,7 @@
 { config, stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_4
 , freefont_ttf, freetype, libass, libpthreadstubs, mujs
-, lua, libuchardet, libiconv ? null, darwin
+, nv-codec-headers, lua, libuchardet, libiconv ? null, darwin
 
 , waylandSupport ? stdenv.isLinux
   , wayland           ? null
@@ -166,6 +166,7 @@ in stdenv.mkDerivation rec {
     ++ optional xvSupport          libXv
     ++ optional youtubeSupport     youtube-dl
     ++ optional stdenv.isDarwin    libiconv
+    ++ optional stdenv.isLinux     nv-codec-headers
     ++ optionals cddaSupport       [ libcdio libcdio-paranoia ]
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]

@@ -16,14 +16,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.7.1";
+  version = "1.9.0";
   name = "unit-${version}";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
     rev = "${version}";
-    sha256 = "1nz5xcwbwpr0jdbx9j052byarnc2qn987pdainy85in1aj0b57kf";
+    sha256 = "0f7smgshfzksks2jfhi53g87wiyy38vwgj6aa70ql61m135dx7b1";
   };
 
   nativeBuildInputs = [ which ];
@@ -41,8 +41,10 @@ stdenv.mkDerivation rec {
     ++ optional withSSL openssl;
 
   configureFlags = [
-    "--control=unix:/run/control.unit.sock"
-    "--pid=/run/unit.pid"
+    "--control=unix:/run/unit/control.unit.sock"
+    "--pid=/run/unit/unit.pid"
+    "--user=unit"
+    "--group=unit"
   ] ++ optional withSSL     [ "--openssl" ]
     ++ optional (!withIPv6) [ "--no-ipv6" ]
     ++ optional withDebug   [ "--debug" ];

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "ndisc6-1.0.3";
+  name = "ndisc6-1.0.4";
 
   src = fetchurl {
     url = "https://www.remlab.net/files/ndisc6/archive/${name}.tar.bz2";
-    sha256 = "08f8xrsck2ykszp12yxx4ssf6wnkn7l6m59456hw3vgjyp5dch8g";
+    sha256 = "07swyar1hl83zxmd7fqwb2q0c0slvrswkcfp3nz5lknrk15dmcdb";
   };
 
   buildInputs = [ perl ];

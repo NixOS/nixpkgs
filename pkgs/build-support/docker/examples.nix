@@ -88,8 +88,9 @@ rec {
   nixFromDockerHub = pullImage {
     imageName = "nixos/nix";
     imageDigest = "sha256:85299d86263a3059cf19f419f9d286cc9f06d3c13146a8ebbb21b3437f598357";
-    sha256 = "0vnp3mhpk4ny3xa3cgngqsargnmvfgld54d5sn4b5av6yqzzp67z";
+    sha256 = "07q9y9r7fsd18sy95ybrvclpkhlal12d30ybnf089hq7v1hgxbi7";
     finalImageTag = "2.2.1";
+    finalImageName = "nix";
   };
 
   # 5. example of multiple contents, emacs and vi happily coexisting
@@ -186,4 +187,51 @@ rec {
     runAsRoot = "touch /example-file";
     fromImage = bash;
   };
+
+  # 13. example of 3 layers images This image is used to verify the
+  # order of layers is correct.
+  # It allows to validate
+  # - the layer of parent are below
+  # - the order of parent layer is preserved at image build time
+  #   (this is why there are 3 images)
+  layersOrder = let
+    l1 = pkgs.dockerTools.buildImage {
+      name = "l1";
+      tag = "latest";
+      extraCommands = ''
+        mkdir -p tmp
+        echo layer1 > tmp/layer1
+        echo layer1 > tmp/layer2
+        echo layer1 > tmp/layer3
+      '';
+    };
+    l2 = pkgs.dockerTools.buildImage {
+      name = "l2";
+      fromImage = l1;
+      tag = "latest";
+      extraCommands = ''
+        mkdir -p tmp
+        echo layer2 > tmp/layer2
+        echo layer2 > tmp/layer3
+      '';
+    };
+  in pkgs.dockerTools.buildImage {
+    name = "l3";
+    fromImage = l2;
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    extraCommands = ''
+      mkdir -p tmp
+      echo layer3 > tmp/layer3
+    '';
+  };
+
+  # 14. Create another layered image, for comparing layers with image 10.
+  another-layered-image = pkgs.dockerTools.buildLayeredImage {
+    name = "another-layered-image";
+    tag = "latest";
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+    contents = [ pkgs.hello ];
+  };
+
 }

@@ -2,18 +2,17 @@
 
 let
   pname = "kdev-python";
-  version = "5.3.1";
+  version = "5.3.2";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/KDE/${pname}/archive/v${version}.tar.gz";
-    sha256 = "11hf8n6vrlaz31c0p3xbnf0df2q5j6ykgc9ip0l5g33kadwn5b9j";
+    sha256 = "0gqv1abzfpxkrf538rb62d2291lmlra8rghm9q9r3x8a46wh96zm";
   };
 
   cmakeFlags = [
-    "-DBUILD_TESTING=OFF"
     "-DPYTHON_EXECUTABLE=${python}/bin/python"
   ];
 

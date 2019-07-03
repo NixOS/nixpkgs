@@ -12,9 +12,8 @@
 
 self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
-                                 overrideInStdenv
                                  makeStaticLibraries;
-  inherit (super.lib) foldl optional flip id optionalAttrs composeExtensions;
+  inherit (super.lib) foldl optional flip id composeExtensions;
   inherit (super) makeSetupHook;
 
   # Best effort static binaries. Will still be linked to libSystem,
@@ -82,9 +81,6 @@ in {
   busybox = super.busybox.override {
     enableStatic = true;
   };
-  v8 = super.v8.override {
-    static = true;
-  };
   libiberty = super.libiberty.override {
     staticBuild = true;
   };
@@ -95,9 +91,6 @@ in {
     static = true;
     shared = false;
   };
-  libjpeg = super.libjpeg.override {
-    static = true;
-  };
   gifsicle = super.gifsicle.override {
     static = true;
   };
@@ -107,6 +100,7 @@ in {
   optipng = super.optipng.override {
     static = true;
   };
+  openblas = super.openblas.override { enableStatic = true; };
   openssl = super.openssl.override {
     static = true;
 
@@ -150,5 +144,19 @@ in {
       enableStatic = true;
     };
   };
+
+  llvmPackages_8 = super.llvmPackages_8 // {
+    libraries = super.llvmPackages_8.libraries // rec {
+      libcxxabi = super.llvmPackages_8.libraries.libcxxabi.override {
+        enableShared = false;
+      };
+      libcxx = super.llvmPackages_8.libraries.libcxx.override {
+        enableShared = false;
+        inherit libcxxabi;
+      };
+    };
+  };
+
+  python27 = super.python27.override { static = true; };
 
 }

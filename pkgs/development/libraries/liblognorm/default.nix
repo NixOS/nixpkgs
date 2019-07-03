@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-regexp" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.liblognorm.com/;
+    homepage = https://www.liblognorm.com/;
     description = "Help to make sense out of syslog data, or, actually, any event data that is present in text form";
     license = licenses.lgpl21;
     platforms = platforms.all;

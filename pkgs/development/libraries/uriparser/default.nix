@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       API documentation is available on uriparser website.
     '';
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ bosu ];
   };
 }

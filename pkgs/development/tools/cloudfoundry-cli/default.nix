@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, go }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "cloudfoundry-cli-${version}";

@@ -30,7 +30,6 @@ python2Packages.buildPythonApplication rec {
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [
-      jgeerds
     ];
   };
 }

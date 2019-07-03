@@ -1,25 +1,18 @@
-{ stdenv, fetchgit, fetchpatch, flex, bison, pkgconfig, python2, swig, which }:
+{ stdenv, fetchgit, flex, bison, pkgconfig, python2, swig, which }:
 
 stdenv.mkDerivation rec {
   pname = "dtc";
-  version = "1.4.7";
+  version = "1.5.0";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0l787g1wmd4d6izsp91m5r2qms2h2jg2hhzllfi9qkbnplyz21wn";
+    sha256 = "075gj8bbahfdb8dlif3d2dpzjrkyf3bwbcmx96zpwhlgs0da8jxh";
   };
 
   nativeBuildInputs = [ flex bison pkgconfig swig which ];
   buildInputs = [ python2 ];
 
-  patches = [
-    # Fix setup.py
-    (fetchpatch {
-      url = "https://github.com/dezgeg/dtc/commit/d94a745148ba5c9198143ccc0f7d877fe498ab73.patch";
-      sha256 = "0hpryx04j1swvmjisrfhvss08zzz4nxz9iv72lp4jdgg6vg0argl";
-    })
-  ];
   postPatch = ''
     patchShebangs pylibfdt/
   '';

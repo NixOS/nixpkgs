@@ -104,6 +104,25 @@ let
       };
     };
 
+    curaenginelegacy = buildPlugin rec {
+      pname = "CuraEngineLegacy";
+      version = "1.0.2";
+
+      src = fetchFromGitHub {
+        owner = "OctoPrint";
+        repo = "OctoPrint-${pname}";
+        rev = version;
+        sha256 = "1cdb276wfyf3wcfj5g3migd6b6aqmkrxncrqjfcfx4j4k3xac965";
+      };
+
+      meta = with stdenv.lib; {
+        description = "Plugin for slicing via Cura Legacy from within OctoPrint";
+        homepage = "https://github.com/OctoPrint/OctoPrint-CuraEngineLegacy";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ gebner ];
+      };
+    };
+
   };
 
 in self

@@ -78,11 +78,6 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        PermissionsStartOnly = true;
-        ExecStartPre = optionals cfg.enableUnixSocket [
-          "${pkgs.coreutils}/bin/install -d -o ${cfg.user} /run/memcached/"
-          "${pkgs.coreutils}/bin/chown -R ${cfg.user} /run/memcached/"
-        ];
         ExecStart =
         let
           networking = if cfg.enableUnixSocket
@@ -91,12 +86,13 @@ in
         in "${memcached}/bin/memcached ${networking} -m ${toString cfg.maxMemory} -c ${toString cfg.maxConnections} ${concatStringsSep " " cfg.extraOptions}";
 
         User = cfg.user;
+        RuntimeDirectory = "memcached";
       };
     };
   };
   imports = [
     (mkRemovedOptionModule ["services" "memcached" "socket"] ''
-      This option was replaced by a fixed unix socket path at /run/memcached/memcached.sock enabled using services.memached.enableUnixSocket.
+      This option was replaced by a fixed unix socket path at /run/memcached/memcached.sock enabled using services.memcached.enableUnixSocket.
     '')
   ];
 

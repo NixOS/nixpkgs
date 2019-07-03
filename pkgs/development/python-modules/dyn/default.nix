@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Dynect dns lib";
-    homepage = "http://dyn.readthedocs.org/en/latest/intro.html";
+    homepage = "https://dyn.readthedocs.org/en/latest/intro.html";
     license = licenses.bsd3;
   };
 }

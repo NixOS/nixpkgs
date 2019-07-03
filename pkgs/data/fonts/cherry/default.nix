@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, bdftopcf }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "cherry";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "turquoise-hexagon";
     repo = pname;
     rev = version;
-    sha256 = "1sfajzndv78v8hb156876i2rw3zw8xys6qi8zr4yi0isgsqj5yx5";
+    sha256 = "1zaiqspf6y0hpszhihdsvsyw33d3ffdap4dym7w45wfrhdpvpi0p";
   };
 
   nativeBuildInputs = [ bdftopcf ];

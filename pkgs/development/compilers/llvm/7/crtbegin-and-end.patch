@@ -156,7 +156,7 @@ Index: compiler-rt/lib/crt/CMakeLists.txt
 ===================================================================
 --- /dev/null
 +++ compiler-rt/lib/crt/CMakeLists.txt
-@@ -0,0 +1,101 @@
+@@ -0,0 +1,102 @@
 +add_compiler_rt_component(crt)
 +
 +function(check_cxx_section_exists section output)
@@ -216,7 +216,7 @@ Index: compiler-rt/lib/crt/CMakeLists.txt
 +    OUTPUT_VARIABLE CHECK_OUTPUT
 +    ERROR_VARIABLE CHECK_ERROR
 +  )
-+  string(FIND ${CHECK_OUTPUT} ${section} SECTION_FOUND)
++  string(FIND "${CHECK_OUTPUT}" "${section}" SECTION_FOUND)
 +
 +  if(NOT SECTION_FOUND EQUAL -1)
 +    set(${output} TRUE PARENT_SCOPE)
@@ -231,6 +231,7 @@ Index: compiler-rt/lib/crt/CMakeLists.txt
 +  SOURCE "__attribute__((constructor)) void f() {}\nint main() { return 0; }\n")
 +
 +append_list_if(COMPILER_RT_HAS_INITFINI_ARRAY -DCRT_HAS_INITFINI_ARRAY CRT_CFLAGS)
++append_list_if(COMPILER_RT_HAS_FPIC_FLAG -fPIC CRT_CFLAGS)
 +
 +foreach(arch ${CRT_SUPPORTED_ARCH})
 +  add_compiler_rt_runtime(clang_rt.crtbegin
@@ -243,7 +244,7 @@ Index: compiler-rt/lib/crt/CMakeLists.txt
 +    OBJECT
 +    ARCHS ${arch}
 +    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/crtbegin.c
-+    CFLAGS ${CRT_CFLAGS} -DCRT_SHARED -fPIC
++    CFLAGS ${CRT_CFLAGS} -DCRT_SHARED
 +    PARENT_TARGET crt)
 +  add_compiler_rt_runtime(clang_rt.crtend
 +    OBJECT
@@ -255,14 +256,14 @@ Index: compiler-rt/lib/crt/CMakeLists.txt
 +    OBJECT
 +    ARCHS ${arch}
 +    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/crtend.c
-+    CFLAGS ${CRT_CFLAGS} -DCRT_SHARED -fPIC
++    CFLAGS ${CRT_CFLAGS} -DCRT_SHARED
 +    PARENT_TARGET crt)
 +endforeach()
 Index: compiler-rt/lib/crt/crtbegin.c
 ===================================================================
 --- /dev/null
 +++ compiler-rt/lib/crt/crtbegin.c
-@@ -0,0 +1,110 @@
+@@ -0,0 +1,108 @@
 +/* ===-- crtbegin.c - Start of constructors and destructors ----------------===
 + *
 + *      	       The LLVM Compiler Infrastructure
@@ -282,8 +283,8 @@ Index: compiler-rt/lib/crt/crtbegin.c
 +void *__dso_handle = (void *)0;
 +#endif
 +
-+static long __EH_FRAME_LIST__[] __attribute__((
-+    section(".eh_frame"), aligned(sizeof(void *)), visibility("hidden"))) = {};
++static long __EH_FRAME_LIST__[]
++    __attribute__((section(".eh_frame"), aligned(sizeof(void *)))) = {};
 +
 +extern void __register_frame_info(const void *, void *) __attribute__((weak));
 +extern void *__deregister_frame_info(const void *) __attribute__((weak));
@@ -292,9 +293,8 @@ Index: compiler-rt/lib/crt/crtbegin.c
 +typedef void (*fp)(void);
 +
 +static fp __CTOR_LIST__[]
-+    __attribute__((section(".ctors"), aligned(sizeof(fp)), visibility("hidden"),
-+                   used)) = {(fp)-1};
-+extern fp __CTOR_LIST_END__[] __attribute__((visibility("hidden")));
++    __attribute__((section(".ctors"), aligned(sizeof(fp)), used)) = {(fp)-1};
++extern fp __CTOR_LIST_END__[];
 +#endif
 +
 +#ifdef CRT_SHARED
@@ -334,9 +334,8 @@ Index: compiler-rt/lib/crt/crtbegin.c
 +
 +#ifndef CRT_HAS_INITFINI_ARRAY
 +static fp __DTOR_LIST__[]
-+    __attribute__((section(".dtors"), aligned(sizeof(fp)), visibility("hidden"),
-+                   used)) = {(fp)-1};
-+extern fp __DTOR_LIST_END__[] __attribute__((visibility("hidden")));
++    __attribute__((section(".dtors"), aligned(sizeof(fp)), used)) = {(fp)-1};
++extern fp __DTOR_LIST_END__[];
 +#endif
 +
 +static void __attribute__((used)) __do_fini() {
@@ -377,7 +376,7 @@ Index: compiler-rt/lib/crt/crtend.c
 ===================================================================
 --- /dev/null
 +++ compiler-rt/lib/crt/crtend.c
-@@ -0,0 +1,23 @@
+@@ -0,0 +1,24 @@
 +/* ===-- crtend.c - End of constructors and destructors --------------------===
 + *
 + *      	       The LLVM Compiler Infrastructure
@@ -392,7 +391,8 @@ Index: compiler-rt/lib/crt/crtend.c
 +
 +// Put 4-byte zero which is the length field in FDE at the end as a terminator.
 +const int32_t __EH_FRAME_LIST_END__[]
-+    __attribute__((section(".eh_frame"), aligned(sizeof(int32_t)), used)) = {0};
++    __attribute__((section(".eh_frame"), aligned(sizeof(int32_t)),
++                   visibility("hidden"), used)) = {0};
 +
 +#ifndef CRT_HAS_INITFINI_ARRAY
 +typedef void (*fp)(void);

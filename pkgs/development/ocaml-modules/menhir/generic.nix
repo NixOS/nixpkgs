@@ -1,4 +1,4 @@
-{ version, src, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{ version, src, stdenv, ocaml, findlib, ocamlbuild, ... }:
 
 stdenv.mkDerivation {
   name = "menhir-${version}";

@@ -2,20 +2,22 @@
 , pythonPackages
 , cmake
 , llvmPackages
+, libffi, libxml2, zlib
 , withMan ? true
 }:
 stdenv.mkDerivation rec {
 
-  name    = "${pname}-${version}";
   pname   = "CastXML";
-  version = "20180403";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
-    owner  = "CastXML";
-    repo   = "CastXML";
-    rev    = "c2a44d06d9379718292b696f4e13a2725ff9d95e";
-    sha256 = "1hjh8ihjyp1m2jb5yypp5c45bpbz8k004f4p1cjw4gc7pxhjacdj";
+    owner  = pname;
+    repo   = pname;
+    rev    = "v${version}";
+    sha256 = "1qpgr5hyb692h7l5igmq53m6a6vi4d9qp8ks893cflfx9955h3ip";
   };
+
+  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optionals withMan [ pythonPackages.sphinx ];
 
   cmakeFlags = [
     "-DCLANG_RESOURCE_DIR=${llvmPackages.clang-unwrapped}"
@@ -23,16 +25,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cmake
     llvmPackages.clang-unwrapped
     llvmPackages.llvm
-  ] ++ stdenv.lib.optionals withMan [ pythonPackages.sphinx ];
+    libffi libxml2 zlib
+  ];
 
-  propagatedbuildInputs = [ llvmPackages.libclang ];
+  propagatedBuildInputs = [ llvmPackages.libclang ];
 
-  # 97% tests passed, 96 tests failed out of 2866
+  # 97% tests passed, 97 tests failed out of 2881
   # mostly because it checks command line and nix append -isystem and all
-  doCheck=false;
+  doCheck = false;
   checkPhase = ''
     # -E exclude 4 tests based on names
     # see https://github.com/CastXML/CastXML/issues/90
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.kitware.com;
+    homepage = "https://github.com/CastXML/CastXML";
     license = licenses.asl20;
     description = "Abstract syntax tree XML output tool";
     platforms = platforms.unix;

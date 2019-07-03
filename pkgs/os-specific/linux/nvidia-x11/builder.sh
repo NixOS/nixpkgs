@@ -102,7 +102,11 @@ installPhase() {
     do
       # I'm lazy to differentiate needed libs per-library, as the closure is the same.
       # Unfortunately --shrink-rpath would strip too much.
-      patchelf --set-rpath "$out/lib:$libPath" "$libname"
+      if [[ -n $lib32 && $libname == "$lib32/lib/"* ]]; then
+        patchelf --set-rpath "$lib32/lib:$libPath32" "$libname"
+      else
+        patchelf --set-rpath "$out/lib:$libPath" "$libname"
+      fi
 
       libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
 

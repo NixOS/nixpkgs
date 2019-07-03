@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.5.2";
+  version = "1.5.3";
   name = "rofi-unwrapped-${version}";
 
   src = fetchurl {
     url = "https://github.com/DaveDavenport/rofi/releases/download/${version}/rofi-${version}.tar.gz";
-    sha256 = "1rczxz6l32vnclarzga1sm1d5iq9rfscb9j7f8ih185n59hf0517";
+    sha256 = "1mskknfnpgmaghplwcyc44qc8swb1f9qiyi67fz9i77jijjpj1lx";
   };
 
   preConfigure = ''
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Window switcher, run dialog and dmenu replacement";
-    homepage = https://davedavenport.github.io/rofi;
+    homepage = https://github.com/davatorium/rofi;
     license = licenses.mit;
-    maintainers = with maintainers; [ mbakke garbas ma27 ];
+    maintainers = with maintainers; [ mbakke ma27 ];
     platforms = with platforms; linux;
   };
 }

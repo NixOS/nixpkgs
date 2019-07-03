@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Runtime for ANTLR";
-    homepage = "http://www.antlr.org/";
+    homepage = "https://www.antlr.org/";
     license = stdenv.lib.licenses.bsd3;
   };
 }

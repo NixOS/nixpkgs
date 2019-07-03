@@ -127,13 +127,14 @@ in
       default = [];
       example = literalExample
         ''
-          [ (self: super: {
+          [
+            (self: super: {
               openssh = super.openssh.override {
                 hpnSupport = true;
                 kerberos = self.libkrb5;
               };
-            };
-          ) ]
+            })
+          ]
         '';
       type = types.listOf overlayType;
       description = ''

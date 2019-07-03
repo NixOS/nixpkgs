@@ -11,7 +11,7 @@
   <link linkend="opt-services.xserver.desktopManager.xfce.enable">xfce.enable</link> = true;
   <link linkend="opt-services.xserver.desktopManager.default">default</link> = "xfce";
 };
-        </programlisting>
+</programlisting>
  </para>
  <para>
   Optionally, <emphasis>compton</emphasis> can be enabled for nice graphical
@@ -24,7 +24,7 @@
   <link linkend="opt-services.compton.shadow">shadow</link>          = true;
   <link linkend="opt-services.compton.fadeDelta">fadeDelta</link>       = 4;
 };
-        </programlisting>
+</programlisting>
  </para>
  <para>
   Some Xfce programs are not installed automatically. To install them manually
@@ -37,7 +37,7 @@
    To enable <emphasis>Thunar</emphasis> volume support, put
 <programlisting>
 <xref linkend="opt-services.xserver.desktopManager.xfce.enable"/> = true;
-            </programlisting>
+</programlisting>
    into your <emphasis>configuration.nix</emphasis>.
   </para>
  </simplesect>
@@ -58,14 +58,14 @@
    on start (look at <command>journalctl --user -b</command>).
 <programlisting>
 Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with dbus name org.gtk.Private.UDisks2VolumeMonitor is not supported
-            </programlisting>
+</programlisting>
    This is caused by some needed GNOME services not running. This is all fixed
    by enabling "Launch GNOME services on startup" in the Advanced tab of the
    Session and Startup settings panel. Alternatively, you can run this command
    to do the same thing.
 <programlisting>
-$ xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
-            </programlisting>
+<prompt>$ </prompt>xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
+</programlisting>
    A log-out and re-log will be needed for this to take effect.
   </para>
  </simplesect>

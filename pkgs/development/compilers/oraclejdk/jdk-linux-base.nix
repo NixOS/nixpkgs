@@ -89,8 +89,9 @@ let result = stdenv.mkDerivation rec {
       armv7l-linux  = "linux-arm32-vfp-hflt";
       aarch64-linux = "linux-arm64-vfp-hflt";
     }.${stdenv.hostPlatform.system};
+    javadlPlatformName = "linux-i586";
   in fetchurl {
-   url = "http://download.oracle.com/otn-pub/java/jdk/${productVersion}u${patchVersion}-b${buildVersion}/${releaseToken}/jdk-${productVersion}u${patchVersion}-${platformName}.tar.gz";
+   url = "http://javadl.oracle.com/webapps/download/GetFile/1.${productVersion}.0_${patchVersion}-b${buildVersion}/${releaseToken}/${javadlPlatformName}/jdk-${productVersion}u${patchVersion}-${platformName}.tar.gz";
    curlOpts = "-b oraclelicense=a";
    sha256 = sha256.${stdenv.hostPlatform.system};
   };

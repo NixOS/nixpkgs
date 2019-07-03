@@ -75,7 +75,7 @@
 , libdc1394 ? null, libraw1394 ? null # IIDC-1394 grabbing (ieee 1394)
 , libiconv ? null
 #, libiec61883 ? null, libavc1394 ? null # iec61883 (also uses libraw1394)
-#, libmfx ? null # Hardware acceleration vis libmfx
+, libmfx ? null # Hardware acceleration vis libmfx
 , libmodplug ? null # ModPlug support
 , libmysofa ? null # HRTF support via SOFAlizer
 #, libnut ? null # NUT (de)muxer, native (de)muser exists
@@ -97,8 +97,7 @@
 , libXv ? null # Xlib support
 , libXext ? null # Xlib support
 , lzma ? null # xz-utils
-, nvenc ? false, nvidia-video-sdk ? null, nv-codec-headers ? null # NVIDIA NVENC support
-, callPackage # needed for NVENC to access external ffmpeg nvidia headers
+, nvenc ? true, nv-codec-headers ? null # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
@@ -156,12 +155,13 @@
  *
  * Not packaged:
  *   aacplus avisynth cdio-paranoia crystalhd libavc1394 libiec61883
- *   libmxf libnut libquvi nvenc opencl openh264 oss shine twolame
+ *   libnut libquvi nvenc opencl openh264 oss shine twolame
  *   utvideo vo-aacenc vo-amrwbenc xvmc zvbi blackmagic-design-desktop-video
  *
  * Need fixes to support Darwin:
- *   frei0r, game-music-emu, gsm, libjack2, libssh, libvpx(stable 1.3.0), openal, openjpeg,
- *   pulseaudio, rtmpdump, samba, vid-stab, wavpack, x265. xavs
+ *   frei0r game-music-emu gsm libjack2 libmfx(intel-media-sdk) libssh
+ *   libvpx(stable 1.3.0) openal openjpeg pulseaudio rtmpdump samba vid-stab
+ *   wavpack x265 xavs
  *
  * Not supported:
  *   stagefright-h264(android only)
@@ -227,15 +227,14 @@ assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
 assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
-assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "4.1.1";
+  version = "4.1.3";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "11id9pm4azfrhpa4vr2yaw31dzgd55kl1zsxwn24sczx9n14jdrp";
+    sha256 = "0gdnprc7gk4b7ckq8wbxbrj7i00r76r9a5g9mj7iln40512j0c0c";
   };
 
   prePatch = ''
@@ -343,7 +342,7 @@ stdenv.mkDerivation rec {
     (enableFeature (if isLinux then libdc1394 != null && libraw1394 != null else false) "libdc1394")
     (enableFeature (libiconv != null) "iconv")
     #(enableFeature (if isLinux then libiec61883 != null && libavc1394 != null && libraw1394 != null else false) "libiec61883")
-    #(enableFeature (libmfx != null) "libmfx")
+    (enableFeature (if isLinux then libmfx != null else false) "libmfx")
     (enableFeature (libmodplug != null) "libmodplug")
     (enableFeature (libmysofa != null) "libmysofa")
     #(enableFeature (libnut != null) "libnut")
@@ -416,13 +415,14 @@ stdenv.mkDerivation rec {
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
-    ++ optionals nvenc [ nvidia-video-sdk nv-codec-headers ]
+    ++ optional (isLinux && libmfx != null) libmfx
+    ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
                                    libiconv cf-private /* For _OBJC_EHTYPE_$_NSException */ ];
 
-  # Build qt-faststart executable
-  buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';
+  buildFlags = [ "all" ]
+    ++ optional qtFaststartProgram "tools/qt-faststart"; # Build qt-faststart executable
 
   # Hacky framework patching technique borrowed from the phantomjs2 package
   postInstall = optionalString qtFaststartProgram ''

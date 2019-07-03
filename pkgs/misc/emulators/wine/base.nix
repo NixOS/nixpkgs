@@ -7,7 +7,7 @@
 
 with import ./util.nix { inherit lib; };
 
-stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
+stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   builder = buildScript;
 }) // rec {
   inherit name src configureFlags;
@@ -51,7 +51,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals openglSupport [ pkgs.libGLU_combined pkgs.mesa_noglu.osmesa pkgs.libdrm ]
+  ++ lib.optionals openglSupport [ pkgs.libGLU_combined pkgs.mesa.osmesa pkgs.libdrm ]
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
@@ -114,8 +114,8 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   passthru = { inherit pkgArches; };
   meta = {
     inherit version platforms;
-    homepage = http://www.winehq.org/;
-    license = "LGPL";
+    homepage = "https://www.winehq.org/";
+    license = with stdenv.lib.licenses; [ lgpl21Plus ];
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     maintainers = with stdenv.lib.maintainers; [ avnik raskin bendlas ];
   };

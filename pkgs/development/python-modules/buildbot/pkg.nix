@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "buildbot-pkg";
-  version = "1.8.1";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16gjdzkris6475bvsgvb0v6rkn4xb6f55s468q37n0l1r6n8snc3";
+    sha256 = "0bpqiih15b5kzx1r542m8j7ydbnmgzhdnkaxv0z7gjv21k78m5i5";
   };
 
   postPatch = ''

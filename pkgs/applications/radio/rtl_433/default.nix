@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1, rtl-sdr }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, libusb1, rtl-sdr, soapysdr-with-plugins
+}:
+
 stdenv.mkDerivation rec {
 
   version = "18.12";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ libusb1 rtl-sdr ];
+  buildInputs = [ libusb1 rtl-sdr soapysdr-with-plugins ];
 
   meta = with stdenv.lib; {
     description = "Decode traffic from devices that broadcast on 433.9 MHz";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     install -D tsearch_extras.so -t $out/lib/
-    install -D ./{tsearch_extras--1.0.sql,tsearch_extras.control} -t $out/share/extension
+    install -D ./{tsearch_extras--1.0.sql,tsearch_extras.control} -t $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {

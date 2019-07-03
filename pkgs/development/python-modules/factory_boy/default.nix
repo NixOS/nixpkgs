@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "factory_boy";
-  version = "2.11.1";
+  version = "2.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f25cc4761ac109efd503f096e2ad99421b1159f01a29dbb917359dcd68e08ca";
+    sha256 = "0w53hjgag6ad5i2vmrys8ysk54agsqvgbjy9lg8g0d8pi9h8vx7s";
   };
 
   propagatedBuildInputs = [ faker ];

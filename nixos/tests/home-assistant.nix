@@ -33,11 +33,13 @@ in {
               longitude = "0.0";
               elevation = 0;
               auth_providers = [
-                { type = "legacy_api_password"; }
+                {
+                  type = "legacy_api_password";
+                  api_password = apiPassword;
+                }
               ];
             };
             frontend = { };
-            http.api_password = apiPassword;
             mqtt = { # Use hbmqtt as broker
               password = mqttPassword;
             };

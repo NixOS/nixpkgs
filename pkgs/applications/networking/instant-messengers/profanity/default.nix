@@ -20,13 +20,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "profanity-${version}";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "boothj5";
     repo = "profanity";
     rev = "${version}";
-    sha256 = "1ppr02wivhlrqr62r901clnycna8zpn6kr7n5rw8y3zfw21ny17z";
+    sha256 = "0f5kfzy22wzyj7rnd2nbj93q96ga87b53wlg8lfg83qdphx1ymz9";
   };
 
   patches = [ ./patches/packages-osx.patch ./patches/undefined-macros.patch ];
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       Profanity is a console based XMPP client written in C using ncurses and
       libstrophe, inspired by Irssi.
     '';
-    homepage = http://profanity.im/;
+    homepage = http://www.profanity.im/;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];

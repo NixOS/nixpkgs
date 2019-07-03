@@ -5,7 +5,6 @@
 , requests-cache
 , pygments
 , pyquery
-, python
 }:
 
 buildPythonPackage rec {

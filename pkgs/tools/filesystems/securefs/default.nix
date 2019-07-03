@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   name = "securefs-${version}";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
-    sha256 = "0m3nv748g31b5nzxbwqqqjvygmz41x9vmhrjh655086g26gzrfib";
+    sha256 = "0nf0bd163gz844mikqab2mh7xjlj31ixa6hi85qxdifyjpfjv7y4";
     rev = version;
     repo = "securefs";
     owner = "netheril96";

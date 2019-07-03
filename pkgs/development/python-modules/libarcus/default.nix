@@ -1,16 +1,16 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, buildPythonPackage, python, fetchFromGitHub
 , cmake, sip, protobuf, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "3.6.0";
+  version = "4.1.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "1zbp6axai47k3p2q497wiajls1h17wss143zynbwbwrqinsfiw43";
+    sha256 = "1x06daijxbrqj0dlxmi2zn7ap74zf6hih3krmkwhvarm2nr052g4";
   };
 
   disabled = pythonOlder "3.4.0";
@@ -20,8 +20,7 @@ buildPythonPackage rec {
   buildInputs = [ protobuf ];
 
   postPatch = ''
-    # To workaround buggy SIP detection which overrides PYTHONPATH
-    sed -i '/SET(ENV{PYTHONPATH}/d' cmake/FindSIP.cmake
+    sed -i 's#''${Python3_SITELIB}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
   meta = with stdenv.lib; {

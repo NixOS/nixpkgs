@@ -19,7 +19,7 @@ python2Packages.buildPythonApplication rec {
   version = "9.3.1";
 
   nativeBuildInputs = [ gettext ];
-  propagatedBuildInputs = (with python2Packages; [ 
+  pythonPath = (with python2Packages; [
     requests
   ]) ++ [ gettext ];
 

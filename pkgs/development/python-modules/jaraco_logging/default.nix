@@ -1,5 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, setuptools_scm
-, tempora, six, pytest, pytest-flake8 }:
+, tempora, six, pytest
+}:
 
 buildPythonPackage rec {
   pname = "jaraco.logging";
@@ -10,9 +11,11 @@ buildPythonPackage rec {
     sha256 = "1lb846j7qs1hgqwkyifv51nhl3f8jimbc4lk8yn9nkaynw0vyzcg";
   };
 
+  patches = [ ./0001-Don-t-run-flake8-checks-during-the-build.patch ];
+
   buildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ tempora six ];
-  checkInputs = [ pytest pytest-flake8 ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     PYTHONPATH=".:$PYTHONPATH" pytest

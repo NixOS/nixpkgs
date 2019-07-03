@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "easyjson-unstable-${version}";
-  version = "2018-08-23";
+  version = "2019-02-21";
   goPackagePath = "github.com/mailru/easyjson";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
     owner = "mailru";
     repo = "easyjson";
-    rev = "60711f1a8329503b04e1c88535f419d0bb440bff";
-    sha256 = "0234jp6134wkihdpdwq1hvzqblgl5khc1wp6dyi2h0hgh88bhdk1";
+    rev = "6243d8e04c3f819e79757e8bc3faa15c3cb27003";
+    sha256 = "160sj5pq4bv9jshniimkd5f9zcg6xrbgb027lhr9l895nsv4dlib";
   };
 
   enableParallelBuilding = true;

@@ -1,4 +1,4 @@
-{ stdenv, pass, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "pass-genphrase-${version}";

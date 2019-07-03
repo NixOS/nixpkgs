@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.services.clickhouse;
-  confDir = "/etc/clickhouse-server";
-  stateDir = "/var/lib/clickhouse";
 in
 with lib;
 {
@@ -43,20 +41,13 @@ with lib;
 
       after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -p ${stateDir}
-        chown clickhouse:clickhouse ${confDir} ${stateDir}
-      '';
-
-      script = ''
-        cd "${confDir}"
-        exec ${pkgs.clickhouse}/bin/clickhouse-server
-      '';
-
       serviceConfig = {
         User = "clickhouse";
         Group = "clickhouse";
-        PermissionsStartOnly = true;
+        ConfigurationDirectory = "clickhouse-server";
+        StateDirectory = "clickhouse";
+        LogsDirectory = "clickhouse";
+        ExecStart = "${pkgs.clickhouse}/bin/clickhouse-server --config-file=${pkgs.clickhouse}/etc/clickhouse-server/config.xml";
       };
     };
 

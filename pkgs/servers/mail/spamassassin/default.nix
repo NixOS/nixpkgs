@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, gnupg1 }:
+{ stdenv, fetchurl, perlPackages, makeWrapper, gnupg }:
 
 perlPackages.buildPerlPackage rec {
   name = "SpamAssassin-3.4.2";
@@ -27,7 +27,7 @@ perlPackages.buildPerlPackage rec {
     mv "rules/"* $out/share/spamassassin/
 
     for n in "$out/bin/"*; do
-      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : "${gnupg1}/bin"
+      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : "${gnupg}/bin"
     done
   '';
 

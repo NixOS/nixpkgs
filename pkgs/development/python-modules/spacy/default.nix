@@ -17,20 +17,23 @@
 , pathlib
 , msgpack-python
 , msgpack-numpy
+, jsonschema
+, blis
+, wasabi
+, srsly
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.0.18";
+  version = "2.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mybdms7c40jvk8ak180n65anjiyg4c8gkaqwkzicrd1mxq3ngqj";
+    sha256 = "03m4c59aaqpqr2x5yhv7y37z0vxhmmkfi6dv4cbp9nxsq9wv100d";
   };
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "regex==" "regex>=" \
       --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
   '';
 
@@ -48,6 +51,10 @@ buildPythonPackage rec {
    ftfy
    msgpack-python
    msgpack-numpy
+   jsonschema
+   blis
+   wasabi
+   srsly
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [

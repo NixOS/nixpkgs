@@ -24,6 +24,9 @@
 , flatpak
 , gitMinimal
 , glib
+, glibcLocales
+, gnumake
+, gnupg
 , gnutar
 , json-glib
 , libcap
@@ -32,20 +35,23 @@
 , libyaml
 , ostree
 , patch
+, python2
 , rpm
 , unzip
 }:
 
 let
-  version = "1.0.5";
+  installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
+  installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
+  version = "1.0.8";
 in stdenv.mkDerivation rec {
   name = "flatpak-builder-${version}";
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${name}.tar.xz";
-    sha256 = "1l5hpxkc7f3mp9v8wyagpbc8vvfn0m0jq8rsk1h7vwyyjmijv6mb";
+    sha256 = "0ns1vv2phhd3vsi2749cajwapapx7xa841kkvssixwgfa575d912";
   };
 
   nativeBuildInputs = [
@@ -95,7 +101,37 @@ in stdenv.mkDerivation rec {
       eustrip = "${elfutils}/bin/eu-strip";
       euelfcompress = "${elfutils}/bin/eu-elfcompress";
     })
+
+    # The test scripts in Flatpak repo were updated so we are basing
+    # this on our patch for Flatpak 0.99.
+    (substituteAll {
+      src = ./fix-test-paths.patch;
+      inherit glibcLocales python2;
+    })
   ];
+
+  configureFlags = [
+    "--enable-installed-tests"
+  ];
+
+  makeFlags = [
+    "installed_testdir=${installed_testdir}"
+    "installed_test_metadir=${installed_test_metadir}"
+  ];
+
+  # Some scripts used by tests  need to use shebangs that are available in Flatpak runtimes.
+  dontPatchShebangs = true;
+
+  # Installed tests
+  postFixup = ''
+    for file in ${installed_testdir}/{test-builder.sh,test-builder-python.sh}; do
+      patchShebangs $file
+    done
+  '';
+
+  passthru = {
+    installedTestsDependencies = [ gnupg ostree python2 gnumake ];
+  };
 
   meta = with stdenv.lib; {
     description = "Tool to build flatpaks from source";

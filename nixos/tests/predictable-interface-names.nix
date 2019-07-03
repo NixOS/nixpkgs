@@ -20,8 +20,7 @@ in pkgs.lib.listToAttrs (pkgs.lib.crossLists (predictable: withNetworkd: {
 
     testScript = ''
       print $machine->succeed("ip link");
-      $machine->succeed("ip link show ${if predictable then "ens3" else "eth0"}");
-      $machine->fail("ip link show ${if predictable then "eth0" else "ens3"}");
+      $machine->${if predictable then "fail" else "succeed"}("ip link show eth0 ");
     '';
   };
 }) [[true false] [true false]])

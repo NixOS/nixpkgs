@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
-, makeWrapper, cppunit, gnuradio-osmosdr
+, makeWrapper, cppunit, gr-osmosdr
 , pythonSupport ? true, python, swig
 }:
 
 assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
-  name = "gnuradio-ais-${version}";
+  name = "gr-ais-${version}";
   version = "2015-12-20";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake boost gnuradio makeWrapper cppunit gnuradio-osmosdr
+    cmake boost gnuradio makeWrapper cppunit gr-osmosdr
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''

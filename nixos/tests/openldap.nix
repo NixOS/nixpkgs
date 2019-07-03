@@ -4,16 +4,12 @@ import ./make-test.nix {
   machine = { pkgs, ... }: {
     services.openldap = {
       enable = true;
-      extraConfig = ''
-        include ${pkgs.openldap}/etc/schema/core.schema
-        include ${pkgs.openldap}/etc/schema/cosine.schema
-        include ${pkgs.openldap}/etc/schema/inetorgperson.schema
-        include ${pkgs.openldap}/etc/schema/nis.schema
-        database bdb
-        suffix dc=example
+      suffix = "dc=example";
+      rootdn = "cn=root,dc=example";
+      rootpw = "notapassword";
+      database = "bdb";
+      extraDatabaseConfig = ''
         directory /var/db/openldap
-        rootdn cn=root,dc=example
-        rootpw notapassword
       '';
       declarativeContents = ''
         dn: dc=example

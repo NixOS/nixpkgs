@@ -1,5 +1,5 @@
 { lib, python3Packages, fetchFromGitHub, wrapGAppsHook, gobject-introspection
-, gnome3, libappindicator-gtk3, libnotify }:
+, gtksourceview3, libappindicator-gtk3, libnotify }:
 
 python3Packages.buildPythonApplication rec {
   name = "autokey-${version}";
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   # Note: no dependencies included for Qt GUI because Qt ui is poorly
   # maintained—see https://github.com/autokey/autokey/issues/51
 
-  buildInputs = [ wrapGAppsHook gobject-introspection gnome3.gtksourceview
+  buildInputs = [ wrapGAppsHook gobject-introspection gtksourceview3
     libappindicator-gtk3 libnotify ];
 
   propagatedBuildInputs = with python3Packages; [

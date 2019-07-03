@@ -19,8 +19,6 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patches = [ ./darwin-fix-clock-gettime.patch ];
-
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {

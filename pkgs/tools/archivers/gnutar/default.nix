@@ -2,17 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "gnutar-${version}";
-  version = "1.31";
+  version = "1.32";
 
   src = fetchurl {
     url = "mirror://gnu/tar/tar-${version}.tar.xz";
-    sha256 = "1h9dxhjhz1jnyhmh6jfhqw1g1sxqbg3cd32vpwg7x2xxxqffzwrp";
+    sha256 = "1n7xy657ii0sa42zx6944v2m4v9qrh6sqgmw17l3nch3y43sxlyh";
   };
 
   # avoid retaining reference to CF during stdenv bootstrap
   configureFlags = stdenv.lib.optionals stdenv.isDarwin [
     "gt_cv_func_CFPreferencesCopyAppValue=no"
     "gt_cv_func_CFLocaleCopyCurrent=no"
+    "gt_cv_func_CFLocaleCopyPreferredLanguages=no"
   ];
 
   # gnutar tries to call into gettext between `fork` and `exec`,
@@ -62,5 +63,7 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
+
+    priority = 10;
   };
 }

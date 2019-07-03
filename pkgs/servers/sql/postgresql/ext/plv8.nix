@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, v8, perl, postgresql }:
 
 stdenv.mkDerivation rec {
-  name = "plv8-${version}";
-  version = "2.3.8";
+  pname = "plv8";
+  version = "2.3.11";
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ v8 postgresql ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "plv8";
     repo = "plv8";
     rev = "v${version}";
-    sha256 = "0hrmn1zzzdf52zwldg6axv57p0f3b279l9s8lbpijcv60fqrzx16";
+    sha256 = "0bv2b8xxdqqhj6nwyc8kwhi5m5i7i1yl078sk3bnnc84b0mnza5x";
   };
 
   makeFlags = [ "--makefile=Makefile.shared" ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     install -D plv8*.so                                        -t $out/lib
-    install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/extension
+    install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {

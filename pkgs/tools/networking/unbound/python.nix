@@ -5,7 +5,7 @@ let
 in stdenv.mkDerivation rec {
   pname = "pyunbound";
   name = "${pname}-${version}";
-  version = "1.7.3";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/unbound-${version}.tar.gz";

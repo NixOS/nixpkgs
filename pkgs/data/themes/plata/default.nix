@@ -3,12 +3,12 @@
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
-, mateSupport ? true
 , openboxSupport ? true
 , xfceSupport ? true
 , gtkNextSupport ? false
 , plankSupport ? false
-, telegramSupport ? false
+, steamSupport ? false
+, telegramSupport ? false, zip ? null
 , tweetdeckSupport ? false
 , selectionColor ? null # Primary color for 'selected-items' (Default: #3F51B5 = Indigo500)
 , accentColor ? null # Secondary color for notifications and OSDs (Default: #7986CB = Indigo300)
@@ -16,15 +16,17 @@
 , destructionColor ? null # Tertiary color for 'destructive' buttons (Default: #F44336 = Red500)
 }:
 
+assert telegramSupport -> zip != null;
+
 stdenv.mkDerivation rec {
-  name = "plata-theme-${version}";
-  version = "0.6.0";
+  pname = "plata-theme";
+  version = "0.8.3";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "182i2wbviwpdvmkmayyqggjx6fvlpf4vsmhsyi6nlg9m4n1djxp8";
+    sha256 = "0ibgymdrw91lnng76lb0x55zg6nm9f2vap19wk7qsq3bcw6ny2zi";
   };
 
   preferLocalBuild = true;
@@ -37,7 +39,8 @@ stdenv.mkDerivation rec {
     inkscape
     libxml2
     gnome2.glib.dev
-  ];
+  ]
+  ++ stdenv.lib.optional telegramSupport zip;
 
   buildInputs = [
     gdk_pixbuf
@@ -57,11 +60,11 @@ stdenv.mkDerivation rec {
       (enableFeature cinnamonSupport "cinnamon")
       (enableFeature gnomeFlashbackSupport "flashback")
       (enableFeature gnomeShellSupport "gnome")
-      (enableFeature mateSupport "mate")
       (enableFeature openboxSupport "openbox")
       (enableFeature xfceSupport "xfce")
       (enableFeature gtkNextSupport "gtk_next")
       (enableFeature plankSupport "plank")
+      (enableFeature steamSupport "airforsteam")
       (enableFeature telegramSupport "telegram")
       (enableFeature tweetdeckSupport "tweetdeck")
     ]
@@ -69,6 +72,13 @@ stdenv.mkDerivation rec {
     ++ (withOptional accentColor "accent_color")
     ++ (withOptional suggestionColor "suggestion_color")
     ++ (withOptional destructionColor "destruction_color");
+
+  postInstall = ''
+    for dest in $out/share/gtksourceview-{3.0,4}/styles; do
+      mkdir -p $dest
+      cp $out/share/themes/Plata-{Noir,Lumine}/gtksourceview/*.xml $dest
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "A Gtk+ theme based on Material Design Refresh";

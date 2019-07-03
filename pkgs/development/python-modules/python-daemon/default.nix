@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to implement a well-behaved Unix daemon process";
-    homepage = https://alioth.debian.org/projects/python-daemon/;
+    homepage = "https://pagure.io/python-daemon/";
     license = [ licenses.gpl3Plus licenses.asl20 ];
   };
 }

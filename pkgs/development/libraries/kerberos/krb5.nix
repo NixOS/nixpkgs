@@ -14,12 +14,12 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}krb5-${version}";
-  majorVersion = "1.15";
-  version = "${majorVersion}.2";
+  majorVersion = "1.17";
+  version = "${majorVersion}";
 
   src = fetchurl {
-    url = "${meta.homepage}dist/krb5/${majorVersion}/krb5-${version}.tar.gz";
-    sha256 = "0zn8s7anb10hw3nzwjz7vg10fgmmgvwnibn2zrn3nppjxn9f6f8n";
+    url = "https://kerberos.org/dist/krb5/${majorVersion}/krb5-${version}.tar.gz";
+    sha256 = "1xc1ly09697b7g2vngvx76szjqy9769kpgn27lnp1r9xln224vjs";
   };
 
   outputs = [ "out" "dev" ];
@@ -39,8 +39,9 @@ stdenv.mkDerivation rec {
     ++ optional (!libOnly) yacc
     # Provides the mig command used by the build scripts
     ++ optional stdenv.isDarwin bootstrap_cmds;
+
   buildInputs = [ openssl ]
-    ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic") [ keyutils ]
+    ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
   preConfigure = "cd ./src";

@@ -4,24 +4,23 @@
 
 stdenv.mkDerivation rec {
   name = "lightsoff-${version}";
-  version = "3.30.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/lightsoff/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1cv5pkw0n8k5wb98ihx0z1z615w1wc09y884wk608wy40bgq46wp";
+    sha256 = "0vc3ibjs9ynnm0gxlhhin7jpnsx22vnn4ygaybxwmv9w2q49cs9f";
   };
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-    sed -i '/gtk-update-icon-cache/s/^/#/' meson_post_install.py
-  '';
 
   nativeBuildInputs = [
     vala pkgconfig wrapGAppsHook itstool gettext appstream-glib libxml2
     meson ninja python3
   ];
   buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk_pixbuf librsvg clutter clutter-gtk ];
+
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

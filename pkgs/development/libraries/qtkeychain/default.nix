@@ -1,6 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, qt4 ? null
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt4 ? null
 , withQt5 ? false, qtbase ? null, qttools ? null
 , darwin ? null
+, libsecret
 }:
 
 assert withQt5 -> qtbase != null;
@@ -22,11 +23,14 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) [ pkgconfig ] # for finding libsecret
+  ;
 
-  buildInputs = if withQt5 then [ qtbase qttools ] else [ qt4 ]
+  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) [ libsecret ]
+    ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ])
     ++ stdenv.lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-         CoreFoundation Security
+      CoreFoundation Security
     ])
   ;
 

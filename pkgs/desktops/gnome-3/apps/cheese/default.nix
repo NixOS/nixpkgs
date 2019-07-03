@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "cheese-${version}";
-  version = "3.30.0";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0zz2bgjaf2lsmfs3zn24925vbjb0rycr39i288brlbzixrpcyljr";
+    sha256 = "1xlmsm4zsx05ahvpd4mgy1hfhxbag0r5i6p63bksjxdligdd36kv";
   };
 
   passthru = {

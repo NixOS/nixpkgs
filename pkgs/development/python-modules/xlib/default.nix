@@ -3,24 +3,34 @@
 , fetchFromGitHub
 , six
 , setuptools_scm
-, pkgs
+, xorg
+, python
+, mock
+, nose
+, utillinux
 }:
 
 buildPythonPackage rec {
   pname = "xlib";
-  version = "0.17";
+  version = "0.25";
 
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
-    rev = "${version}";
-    sha256 = "1iiz2nq2hq9x6laavngvfngnmxbgnwh54wdbq6ncx4va7v98liyi";
+    rev = version;
+    sha256 = "1nncx7v9chmgh56afg6dklz3479s5zg3kq91mzh4mj512y0skyki";
   };
 
-  # Tests require `pyutil' so disable them to avoid circular references.
-  doCheck = false;
+  checkPhase = ''
+    ${python.interpreter} runtests.py
+  '';
 
-  propagatedBuildInputs = [ six setuptools_scm pkgs.xorg.libX11 ];
+  checkInputs = [ mock nose utillinux /* mcookie */ xorg.xauth xorg.xorgserver /* xvfb */ ];
+  nativeBuildInputs = [ setuptools_scm ];
+  buildInputs = [ xorg.libX11 ];
+  propagatedBuildInputs = [ six ];
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     description = "Fully functional X client library for Python programs";

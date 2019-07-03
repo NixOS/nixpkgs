@@ -2,32 +2,32 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
-    eventmachine (1.2.7)
+    backport (1.0.0)
     htmlentities (4.3.4)
-    jaro_winkler (1.5.1)
+    jaro_winkler (1.5.2)
     kramdown (1.17.0)
-    mini_portile2 (2.3.0)
-    nokogiri (1.8.5)
-      mini_portile2 (~> 2.3.0)
-    parallel (1.12.1)
-    parser (2.5.3.0)
+    mini_portile2 (2.4.0)
+    nokogiri (1.10.3)
+      mini_portile2 (~> 2.4.0)
+    parallel (1.17.0)
+    parser (2.6.3.0)
       ast (~> 2.4.0)
-    powerpack (0.1.2)
     rainbow (3.0.0)
     reverse_markdown (1.1.0)
       nokogiri
-    rubocop (0.60.0)
+    rubocop (0.68.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
-      powerpack (~> 0.1)
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
-      unicode-display_width (~> 1.4.0)
+      unicode-display_width (>= 1.4.0, < 1.6)
     ruby-progressbar (1.10.0)
-    solargraph (0.29.1)
-      eventmachine (~> 1.2, >= 1.2.5)
+    solargraph (0.32.1)
+      backport (~> 1.0)
+      bundler (>= 1.17.2)
       htmlentities (~> 4.3, >= 4.3.4)
+      jaro_winkler (~> 1.5)
       kramdown (~> 1.16)
       parser (~> 2.3)
       reverse_markdown (~> 1.0, >= 1.0.5)
@@ -37,8 +37,8 @@ GEM
       yard (~> 0.9)
     thor (0.20.3)
     tilt (2.0.9)
-    unicode-display_width (1.4.0)
-    yard (0.9.16)
+    unicode-display_width (1.5.0)
+    yard (0.9.19)
 
 PLATFORMS
   ruby
@@ -47,4 +47,4 @@ DEPENDENCIES
   solargraph!
 
 BUNDLED WITH
-   1.17.1
+   1.17.2

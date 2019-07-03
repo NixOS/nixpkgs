@@ -1,4 +1,4 @@
-{ stdenv, pkgs, xsel, curl, fetchFromGitLab, makeWrapper}:
+{ stdenv, xsel, curl, fetchFromGitLab, makeWrapper}:
 
 stdenv.mkDerivation rec {
   name = "0x0-${version}";

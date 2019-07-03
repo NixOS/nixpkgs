@@ -1,13 +1,13 @@
-{ stdenv, autoconf, automake, bash, fetchFromGitHub, libgcc, libjpeg_turbo,
+{ stdenv, autoconf, automake, fetchFromGitHub, libgcc, libjpeg_turbo,
   libpng, libtool, libxml2, pkgconfig, which, xorg }:
 stdenv.mkDerivation rec {
   name = "nx-libs-${version}";
-  version = "3.5.99.18";
+  version = "3.5.99.20";
   src = fetchFromGitHub {
     owner = "ArcticaProject";
     repo = "nx-libs";
     rev = version;
-    sha256 = "07559zk9flzfnyr2ngcdr3nzccga4bl30wghalhrvpgpyljivdyv";
+    sha256 = "1c3xjbmnylw53h04g77lk9va1sk1dgg7zhirwz3mpn73r6dkyzix";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig which

@@ -36,7 +36,7 @@ in
 
 
   config = mkMerge [
-    (mkIf (xcfg.enable && cfg.enable) {
+    (mkIf cfg.enable {
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
         bgSupport = true;
@@ -161,7 +161,6 @@ in
 
           qtvirtualkeyboard
 
-          libsForQt56.phonon-backend-gstreamer
           libsForQt5.phonon-backend-gstreamer
 
           xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
@@ -244,7 +243,7 @@ in
 
         # Remove the kbuildsyscoca5 cache. It will be regenerated
         # immediately after. This is necessary for kbuildsyscoca5 to
-        recognize that software that has been removed.
+        # recognize that software that has been removed.
         rm -fv $HOME/.cache/ksycoca*
 
         ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5

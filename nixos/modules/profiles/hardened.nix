@@ -14,6 +14,8 @@ with lib;
 
   nix.allowedUsers = mkDefault [ "@users" ];
 
+  environment.memoryAllocator.provider = mkDefault "graphene-hardened";
+
   security.hideProcessInformation = mkDefault true;
 
   security.lockKernelModules = mkDefault true;

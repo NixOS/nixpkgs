@@ -78,15 +78,14 @@ manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml function
 	nix-instantiate --eval \
 		-E '(import ../lib).version' > .version
 
-function_locations := $(shell nix-build --no-out-link ./lib-function-locations.nix)
-
 functions/library/locations.xml:
-	ln -s $(function_locations) ./functions/library/locations.xml
+	nix-build ./lib-function-locations.nix \
+		--out-link $@
 
-functions/library/generated:
+functions/library/generated: functions/library/locations.xml
 	nix-build ./lib-function-docs.nix \
-		--arg locationsXml $(function_locations)\
-		--out-link ./functions/library/generated
+		--arg locationsXml $< \
+		--out-link $@
 
 %.section.xml: %.section.md
 	pandoc $^ -w docbook+smart \

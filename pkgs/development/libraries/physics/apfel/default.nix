@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A PDF Evolution Library";
     license     = licenses.gpl3;
-    homepage    = http://apfel.mi.infn.it/;
+    homepage    = https://apfel.mi.infn.it/;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };

@@ -1,32 +1,32 @@
 {
   "ce": {
-    "version": "11.7.5",
-    "repo_hash": "0bbyx9zmscf9273fgypb82gw166psy7d3p7dnwb6f5r9yz7rmhbn",
-    "deb_hash": "1m6hdvrz467q33z626l9f3d5pssl0bbj2hkqy5g0b05wvdznmldy",
-    "deb_url": "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_11.7.5-ce.0_amd64.deb/download.deb",
+    "version": "11.10.5",
+    "repo_hash": "00bkdylcnz171jf8di05ygviplqzssazrfaqpwmbqwdjab2ax4yr",
+    "deb_hash": "1zsg4fhpl07pz76i4yynk38xs7cp9w4jcryxk7larbr25m48q4rb",
+    "deb_url": "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_11.10.5-ce.0_amd64.deb/download.deb",
     "owner": "gitlab-org",
     "repo": "gitlab-ce",
-    "rev": "v11.7.5",
+    "rev": "v11.10.5",
     "passthru": {
-      "GITALY_SERVER_VERSION": "1.12.2",
-      "GITLAB_PAGES_VERSION": "1.3.1",
-      "GITLAB_SHELL_VERSION": "8.4.4",
-      "GITLAB_WORKHORSE_VERSION": "8.0.2"
+      "GITALY_SERVER_VERSION": "1.34.1",
+      "GITLAB_PAGES_VERSION": "1.5.0",
+      "GITLAB_SHELL_VERSION": "9.0.0",
+      "GITLAB_WORKHORSE_VERSION": "8.5.2"
     }
   },
   "ee": {
-    "version": "11.7.5",
-    "repo_hash": "05dzvqrdgxbzsrf9rbis5m3iic04midx2arxgg3g4f78qfjxzylm",
-    "deb_hash": "1nfd68vzy3zc6a3xn5lhr83kqv9d7aaxvzv4ca9awcz4va5b33kc",
-    "deb_url": "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_11.7.5-ee.0_amd64.deb/download.deb",
+    "version": "11.10.5",
+    "repo_hash": "0nla908l3513r87i3x2fa87j48wgykzpf7cqxddnahk98m0wgxvi",
+    "deb_hash": "02ri9b4xd77wqjnd49h5n77aylrb5xlq6xa26xn39kl326isaj41",
+    "deb_url": "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_11.10.5-ee.0_amd64.deb/download.deb",
     "owner": "gitlab-org",
     "repo": "gitlab-ee",
-    "rev": "v11.7.5-ee",
+    "rev": "v11.10.5-ee",
     "passthru": {
-      "GITALY_SERVER_VERSION": "1.12.2",
-      "GITLAB_PAGES_VERSION": "1.3.1",
-      "GITLAB_SHELL_VERSION": "8.4.4",
-      "GITLAB_WORKHORSE_VERSION": "8.0.2"
+      "GITALY_SERVER_VERSION": "1.34.1",
+      "GITLAB_PAGES_VERSION": "1.5.0",
+      "GITLAB_SHELL_VERSION": "9.0.0",
+      "GITLAB_WORKHORSE_VERSION": "8.5.2"
     }
   }
 }

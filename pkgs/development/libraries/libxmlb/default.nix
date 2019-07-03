@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "libxmlb-${version}";
-  version = "0.1.7";
+  version = "0.1.10";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    sha256 = "17q1kjkff0frvm26agbqi0hdhg5d4icwn36qzf3y53wrdv5s148x";
+    sha256 = "1ismh3bdwd0l1fjlhwycam89faxjmpb0wxqlbv58m0z6cxykp6rd";
   };
 
   nativeBuildInputs = [ meson ninja python3 pkgconfig gobject-introspection gtk-doc shared-mime-info docbook_xsl docbook_xml_dtd_43 ];
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/hughsie/libxmlb;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

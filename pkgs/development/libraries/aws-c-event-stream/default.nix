@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, aws-checksums }:
+{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, aws-checksums, libexecinfo }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-event-stream";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ aws-c-common aws-checksums ];
+  buildInputs = [ aws-c-common aws-checksums ] ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
 
   cmakeFlags = [
     "-DCMAKE_MODULE_PATH=${aws-c-common}/lib/cmake"

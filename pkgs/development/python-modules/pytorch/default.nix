@@ -81,11 +81,11 @@ in buildPythonPackage rec {
      cmake
      utillinux
      which
-  ];
+  ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
   buildInputs = [
      numpy.blas
-  ] ++ lib.optionals cudaSupport [ cudatoolkit_joined cudnn ]
+  ] ++ lib.optionals cudaSupport [ cudnn ]
     ++ lib.optionals stdenv.isLinux [ numactl ];
 
   propagatedBuildInputs = [

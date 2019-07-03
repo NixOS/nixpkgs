@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-common";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ab607f9b8fd27b817482194b1e7d43484c65dcf2605aae21ad8706c6891934d";
+    sha256 = "4ec87c7537d457ec95252e0e46477e2c1ccf33774ffefd05d8544682cb0ae401";
   };
 
   propagatedBuildInputs = [

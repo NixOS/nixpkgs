@@ -1,17 +1,17 @@
 { stdenv, rustPlatform, fetchFromGitHub, pkgconfig, dbus, libpulseaudio }:
 
 rustPlatform.buildRustPackage rec {
-  name = "i3status-rust-${version}";
-  version = "0.9.0.2019-02-15";
+  pname = "i3status-rust";
+  version = "0.9.0.2019-04-27";
 
   src = fetchFromGitHub {
     owner = "greshake";
-    repo = "i3status-rust";
-    rev = "2dc958995834b529a245c22c510b57d5c928c747";
-    sha256 = "091a2pqgkiwnya2xv5rw5sj730hf6lvkp2kk5midsa3wz2dfbc2j";
+    repo = pname;
+    rev = "d04d08cbd4d13c64b1e3b7a8d21c46acee3bc281";
+    sha256 = "0x23qv7kwsqy1yx25fn1z56fx8w865qarr5xdx8s22x42ym4zyha";
   };
 
-  cargoSha256 = "06izzv86nkn1izapldysyryz9zvjxvq23c742z284bnxjfq5my6i";
+  cargoSha256 = "0vl2zn9n7ijmjxi2lyglnghvaw4qi2bah5i6km15schlsm8c641g";
 
   nativeBuildInputs = [ pkgconfig ];
 

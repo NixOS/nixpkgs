@@ -141,7 +141,7 @@ rec {
     name = "antlr-runtime-4.5.3";
 
     src = fetchurl {
-      url = "http://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "0lm78i2annlczlc2cg5xvby0g1dyl0sh1y5xc2pymjlmr67a1g4k";
     };
 
@@ -153,7 +153,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = http://www.antlr.org/;
+      homepage = https://www.antlr.org/;
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -164,7 +164,7 @@ rec {
     name = "antlr-runtime-4.7.1";
 
     src = fetchurl {
-      url = "http://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "07f91mjclacrvkl8a307w2abq5wcqp0gcsnh0jg90ddfpqcnsla3";
     };
 
@@ -176,7 +176,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = http://www.antlr.org/;
+      homepage = https://www.antlr.org/;
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -282,7 +282,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://eclipse-cs.sourceforge.net/;
+      homepage = https://eclipse-cs.sourceforge.net/;
       description = "Checkstyle integration into the Eclipse IDE";
       license = licenses.lgpl21;
       platforms = platforms.all;
@@ -384,31 +384,8 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://www.eclemma.org/;
+      homepage = https://www.eclemma.org/;
       description = "EclEmma is a free Java code coverage tool for Eclipse";
-      license = licenses.epl10;
-      platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
-    };
-  };
-
-  emacsplus = buildEclipsePlugin rec {
-    name = "emacsplus-${version}";
-    version = "4.2.0";
-
-    srcFeature = fetchurl {
-      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/features/com.mulgasoft.emacsplus.feature_${version}.jar";
-      sha256 = "0wja3cd7gq8w25797fxnafvcncjnmlv8qkl5iwqj7zja2f45vka8";
-    };
-
-    srcPlugin = fetchurl {
-      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/plugins/com.mulgasoft.emacsplus_${version}.jar";
-      sha256 = "08yw45nr90mlpdzim74vsvdaxj41sgpxcrqk5ia6l2dzvrqlsjs1";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = http://www.mulgasoft.com/emacsplus/;
-      description = "Provides a more Emacs-like experience in the Eclipse text editors";
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -614,7 +591,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://testng.org/;
+      homepage = https://testng.org/doc/;
       description = "Eclipse plugin for the TestNG testing framework";
       license = licenses.asl20;
       platforms = platforms.all;

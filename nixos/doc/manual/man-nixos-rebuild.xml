@@ -70,9 +70,9 @@
    <arg>
     <option>--rollback</option>
    </arg>
+
    <arg>
-     <option>--builders</option>
-     <replaceable>builder-spec</replaceable>
+    <option>--builders</option> <replaceable>builder-spec</replaceable>
    </arg>
    <sbr />
    <arg>
@@ -160,7 +160,7 @@
        the current directory, which points to the output of the top-level
        “system” derivation. This is essentially the same as doing
 <screen>
-$ nix-build /path/to/nixpkgs/nixos -A system
+<prompt>$ </prompt>nix-build /path/to/nixpkgs/nixos -A system
 </screen>
        Note that you do not need to be <literal>root</literal> to run
        <command>nixos-rebuild build</command>.
@@ -198,7 +198,7 @@ $ nix-build /path/to/nixpkgs/nixos -A system
      </term>
      <listitem>
       <para>
-        Opens <filename>configuration.nix</filename> in the default editor.
+       Opens <filename>configuration.nix</filename> in the default editor.
       </para>
      </listitem>
     </varlistentry>
@@ -215,8 +215,8 @@ $ nix-build /path/to/nixpkgs/nixos -A system
        at the script that starts the VM. Thus, to test a NixOS configuration in
        a virtual machine, you should do the following:
 <screen>
-$ nixos-rebuild build-vm
-$ ./result/bin/run-*-vm
+<prompt>$ </prompt>nixos-rebuild build-vm
+<prompt>$ </prompt>./result/bin/run-*-vm
 </screen>
       </para>
       <para>
@@ -334,25 +334,23 @@ $ ./result/bin/run-*-vm
     </listitem>
    </varlistentry>
    <varlistentry>
-     <term>
-       <option>--builders</option>
-       <replaceable>builder-spec</replaceable>
-     </term>
-     <listitem>
-       <para>
-         Allow ad-hoc remote builders for building the new system.
-         This requires the user executing <command>nixos-rebuild</command> (usually
-         root) to be configured as a trusted user in the Nix daemon. This can be
-         achieved by using the <literal>nix.trustedUsers</literal> NixOS option.
-         Examples values for that option are described in the
-		 <literal>Remote builds chapter</literal> in the Nix manual,
-         (i.e. <command>--builders "ssh://bigbrother x86_64-linux"</command>).
-         By specifying an empty string existing builders specified in
-         <filename>/etc/nix/machines</filename> can be ignored:
-         <command>--builders ""</command> for example when they are not
-         reachable due to network connectivity.
-       </para>
-     </listitem>
+    <term>
+     <option>--builders</option> <replaceable>builder-spec</replaceable>
+    </term>
+    <listitem>
+     <para>
+      Allow ad-hoc remote builders for building the new system. This requires
+      the user executing <command>nixos-rebuild</command> (usually root) to be
+      configured as a trusted user in the Nix daemon. This can be achieved by
+      using the <literal>nix.trustedUsers</literal> NixOS option. Examples
+      values for that option are described in the <literal>Remote builds
+      chapter</literal> in the Nix manual, (i.e. <command>--builders
+      "ssh://bigbrother x86_64-linux"</command>). By specifying an empty string
+      existing builders specified in <filename>/etc/nix/machines</filename> can
+      be ignored: <command>--builders ""</command> for example when they are
+      not reachable due to network connectivity.
+     </para>
+    </listitem>
    </varlistentry>
    <varlistentry>
     <term>
@@ -377,7 +375,7 @@ $ ./result/bin/run-*-vm
       <filename>test.nix</filename> without affecting the default system
       profile, you would do:
 <screen>
-$ nixos-rebuild switch -p test -I nixos-config=./test.nix
+<prompt>$ </prompt>nixos-rebuild switch -p test -I nixos-config=./test.nix
 </screen>
       The new configuration will appear in the GRUB 2 submenu “NixOS -
       Profile 'test'”.

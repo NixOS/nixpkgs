@@ -1,18 +1,15 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3Packages }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "termtosvg";
   version = "0.8.0";
 
-  # tests are not available when fetching from pypi
-  src = fetchFromGitHub {
-    owner = "nbedos";
-    repo = pname;
-    rev = version;
-    sha256 = "0si5l8cdbzapcibr4yavhld2vhfrpk7qj4cy7m4ws7js8g9iwzd4";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "e3a0a7bd511028c96d242525df807a23e6f22e55b111a7ee861f294a86224b0c";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ lxml pyte ];
+  propagatedBuildInputs = with python3Packages; [ lxml pyte ];
 
   meta = with lib; {
     homepage = https://nbedos.github.io/termtosvg/;

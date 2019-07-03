@@ -7,13 +7,14 @@
 }:
 
 buildGoPackage rec {
-  name = "lxd-3.10";
+  pname = "lxd";
+  version = "3.13";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://github.com/lxc/lxd/releases/download/${name}/${name}.tar.gz";
-    sha256 = "0vd0p3xf54s7f9vcjfiin29py6hxyyxnisvp6am67l5nwhg7rnnc";
+    url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "1kasnzd8hw9biyx8avbjmpfax1pdbp9g543g8hs6xpksmk93hl82";
   };
 
   preBuild = ''

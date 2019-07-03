@@ -1,27 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, automake, autoconf, libtool
-, glib, vala, dee, gobject-introspection, libdbusmenu
-, gtk3, intltool, gnome-common, python3, icu }:
+{ stdenv
+, fetchgit
+, pkgconfig
+, glib
+, vala
+, dee
+, gobject-introspection
+, libdbusmenu
+, gtk3
+, intltool
+, python3
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "libunity";
-  version = "7.1.4";
+  version = "unstable-2019-03-19";
 
-  name = "${pname}-${version}";
+  outputs = [ "out" "dev" "py" ];
 
-  outputs = [ "out" "dev" ];
-
-  src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${version}+15.10.20151002.orig.tar.gz";
-    sha256 = "1sf98qcjkxfibxk03firnc12dm6il8jzaq5763qam8ydg4li4gij";
+  src = fetchgit {
+    url = "https://git.launchpad.net/ubuntu/+source/libunity";
+    rev = "import/7.1.4+19.04.20190319-0ubuntu1";
+    sha256 = "15b49v88v74q20a5c0lq867qnlz7fx20xifl6j8ha359r0zkfwzj";
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    gnome-common
+    autoreconfHook
     gobject-introspection
     intltool
-    libtool
     pkgconfig
     python3
     vala
@@ -32,16 +38,19 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  propagatedBuildInputs = [ dee libdbusmenu ];
+  propagatedBuildInputs = [
+    dee
+    libdbusmenu
+  ];
 
-  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
+  preConfigure = ''
+    intltoolize
+  '';
 
   configureFlags = [
     "--disable-static"
-    "--with-pygi-overrides-dir=$(out)/${python3.sitePackages}/gi/overrides"
+    "--with-pygi-overrides-dir=${placeholder ''py''}/${python3.sitePackages}/gi/overrides"
   ];
-
-  NIX_LDFLAGS = "-L${icu}/lib";
 
   meta = with stdenv.lib; {
     description = "A library for instrumenting and integrating with all aspects of the Unity shell";

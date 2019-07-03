@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  version = "2.2.0";
-  name = "oxipng-${version}";
+  version = "2.2.1";
+  pname = "oxipng";
 
   src = fetchFromGitHub {
     owner = "shssoichiro";
-    repo = "oxipng";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "00ys1dy8r1g84j04w50qcjas0qnfw4vphazvbfasd9q2b1p5z69l";
+    sha256 = "1r195x3wdkshjwy23fpqsyyrw7iaj7yb39nhcnx9d4nhgq8w0pcl";
   };
 
-  cargoSha256 = "125r3jmgwcq8qddm8hjpyzaam96kkifaxixksyaw2iqk9xq0nrpm";
+  cargoSha256 = "1mjqkjrnh5gw39qjni574qh7k4p891xbb4ip2q69cm177ffbghiz";
 
   # https://crates.io/crates/cloudflare-zlib#arm-vs-nightly-rust
   cargoBuildFlags = [ "--features=cloudflare-zlib/arm-always" ];

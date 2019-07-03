@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coq, mathcomp }:
+{ stdenv, fetchFromGitHub, coq }:
 
 let param =
   {

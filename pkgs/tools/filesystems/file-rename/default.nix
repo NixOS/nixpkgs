@@ -15,6 +15,8 @@ perlPackages.buildPerlPackage rec {
       --prefix PERL5LIB : $out/${perlPackages.perl.libPrefix}
   '';
 
+  doCheck = !stdenv.isDarwin;
+
   meta = with stdenv.lib; {
     description = "Perl extension for renaming multiple files";
     license = licenses.artistic1;

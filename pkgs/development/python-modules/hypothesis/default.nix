@@ -3,13 +3,13 @@
 , doCheck ? true, pytest, pytest_xdist, flaky, mock
 }:
 buildPythonPackage rec {
-  # http://hypothesis.readthedocs.org/en/latest/packaging.html
+  # https://hypothesis.readthedocs.org/en/latest/packaging.html
 
   # Hypothesis has optional dependencies on the following libraries
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "3.88.3";
+  version = "4.7.3";
   pname = "hypothesis";
 
   # Use github tarballs that includes tests

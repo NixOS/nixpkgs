@@ -1,14 +1,12 @@
-{ lib, bundlerEnv, ruby
+{ lib, bundlerApp
 , withPostgresql ? true, postgresql
 , withSqlite ? false, sqlite
 }:
 
-bundlerEnv rec {
-  name = "ledger-web-${version}";
-
-  version = (import ./gemset.nix).ledger_web.version;
-  inherit ruby;
+bundlerApp rec {
+  pname = "ledger_web";
   gemdir = ./.;
+  exes = [ "ledger_web" ];
 
   buildInputs =    lib.optional withPostgresql postgresql
                 ++ lib.optional withSqlite sqlite;
@@ -17,7 +15,7 @@ bundlerEnv rec {
     description = "A web frontend to the Ledger CLI tool";
     homepage = https://github.com/peterkeen/ledger-web;
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg manveru ];
     platforms = platforms.linux;
   };
 }

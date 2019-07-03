@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder ''out''}"
     "GOCACHE=$(TMPDIR)/go-cache"
   ];
 

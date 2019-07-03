@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, qt5, ffmpeg, guvcview, cmake, ninja, libxml2
+{ stdenv, fetchurl, qt5, ffmpeg, guvcview, cmake, ninja, libxml2
 , gettext, pkgconfig, libgphoto2, gphoto2, v4l_utils, libv4l, pcre
 , qwt, extra-cmake-modules }:
 

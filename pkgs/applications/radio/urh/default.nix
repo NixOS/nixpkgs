@@ -2,14 +2,14 @@
 , hackrf, rtl-sdr, airspy, limesuite }:
 
 python3Packages.buildPythonApplication rec {
-  name = "urh-${version}";
-  version = "2.5.5";
+  pname = "urh";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "jopohl";
-    repo = "urh";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "14aw8bvqb32976qmm124i5sv99nwv1jvs1r9ylbsmlg31dvla7ql";
+    sha256 = "14027dcq0ag2qjpxcmsb9n1c64ypmi4rycwxzm2hajj7hk2736hv";
   };
 
   buildInputs = [ hackrf rtl-sdr airspy limesuite ];
@@ -20,9 +20,9 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/jopohl/urh";
     description = "Universal Radio Hacker: investigate wireless protocols like a boss";
-    license = licenses.asl20;
+    license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
   };

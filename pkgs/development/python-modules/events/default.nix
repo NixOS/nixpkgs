@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = http://events.readthedocs.org;
+    homepage = https://events.readthedocs.org;
     description = "Bringing the elegance of C# EventHanlder to Python";
     license = licenses.bsd3;
   };

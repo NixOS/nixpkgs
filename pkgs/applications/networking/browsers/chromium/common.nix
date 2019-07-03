@@ -1,4 +1,4 @@
-{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
+{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -20,10 +20,12 @@
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
+, libva ? null # useVaapi
 
 # package customization
 , enableNaCl ? false
 , enableWideVine ? false
+, useVaapi ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -126,6 +128,7 @@ let
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
+      ++ optional useVaapi libva
       ++ optional pulseSupport libpulseaudio
       ++ optional (versionAtLeast version "72") jdk.jre;
 
@@ -143,6 +146,9 @@ let
       # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
       #
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
+    ] ++ optionals (useVaapi) [
+      # source: https://aur.archlinux.org/cgit/aur.git/plain/chromium-vaapi.patch?h=chromium-vaapi
+      ./patches/chromium-vaapi.patch
     ] ++ optionals (!stdenv.cc.isClang && (versionRange "71" "72")) [
       ( githubPatch "65be571f6ac2f7942b4df9e50b24da517f829eec" "1sqv0aba0mpdi4x4f21zdkxz2cf8ji55ffgbfcr88c5gcg0qn2jh" )
     ] ++ optional stdenv.isAarch64
@@ -244,7 +250,7 @@ let
       treat_warnings_as_errors = false;
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
-      remove_webcore_debug_symbols = true;
+      blink_symbol_level = 0;
       enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
@@ -260,6 +266,8 @@ let
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
       ffmpeg_branding = "Chrome";
+    } // optionalAttrs useVaapi {
+      use_vaapi = true;
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;

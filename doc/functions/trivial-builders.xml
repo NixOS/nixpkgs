@@ -35,25 +35,25 @@
      An example of using <literal>runCommand</literal> is provided below.
     </para>
 <programlisting>
-       (import &lt;nixpkgs&gt; {}).runCommand "my-example" {} ''
-         echo My example command is running
+(import &lt;nixpkgs&gt; {}).runCommand "my-example" {} ''
+  echo My example command is running
 
-         mkdir $out
+  mkdir $out
 
-         echo I can write data to the Nix store > $out/message
+  echo I can write data to the Nix store > $out/message
 
-         echo I can also run basic commands like:
+  echo I can also run basic commands like:
 
-         echo ls
-         ls
+  echo ls
+  ls
 
-         echo whoami
-         whoami
+  echo whoami
+  whoami
 
-         echo date
-         date
-       ''
-     </programlisting>
+  echo date
+  date
+''
+</programlisting>
    </listitem>
   </varlistentry>
   <varlistentry>

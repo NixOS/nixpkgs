@@ -1,6 +1,5 @@
 { stdenv
 , fetch
-, fetchpatch
 , cmake
 , python
 , libffi
@@ -15,15 +14,17 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-, enablePFM ? !stdenv.isDarwin
+, enablePFM ? !(stdenv.isDarwin
+  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+)
 , enablePolly ? false
 }:
 
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
-  src = fetch "llvm" "1h9zqgf968si0nzdmsa9rz634zrmz6mprvz2ifw6ky0h7va5rcvq";
-  polly_src = fetch "polly" "1wwnn0cxnrmiqb6kg577myz6kb8sm18jwc020lf0b1k5as7aw2kq";
+  src = fetch "llvm" "0k124sxkfhfi1rca6kzkdraf4axhx99x3cw2rk55056628dvwwl8";
+  polly_src = fetch "polly" "1x4xv3j226rqdddp7b61d71wsx2b8vmmri02ycx27y2fg7ba7xg3";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
@@ -71,6 +72,8 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+    # valgrind unhappy with musl or glibc, but fails w/musl only
+    rm test/CodeGen/AArch64/wineh4.mir
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, SDL, SDL_net, SDL_sound, libGLU_combined, libpng }:
+{ stdenv, lib, fetchurl, makeDesktopItem, SDL, SDL_net, SDL_sound, libGLU_combined, libpng, graphicsmagick }:
 
 stdenv.mkDerivation rec {
   name = "dosbox-0.74-2";
@@ -12,11 +12,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL SDL_net SDL_sound libGLU_combined libpng ];
 
+  nativeBuildInputs = [ graphicsmagick ];
+
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 
   desktopItem = makeDesktopItem {
     name = "dosbox";
     exec = "dosbox";
+    icon = "dosbox";
     comment = "x86 emulator with internal DOS";
     desktopName = "DOSBox";
     genericName = "DOS emulator";
@@ -26,6 +29,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
      mkdir -p $out/share/applications
      cp ${desktopItem}/share/applications/* $out/share/applications
+
+     mkdir -p $out/share/icons/hicolor/256x256/apps
+     gm convert src/dosbox.ico $out/share/icons/hicolor/256x256/apps/dosbox.png
   '';
 
   enableParallelBuilding = true;

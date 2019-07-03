@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "luarocks";
-  version = "3.0.4";
+  version = "3.1.3";
 
   src = fetchurl {
     url="http://luarocks.org/releases/luarocks-${version}.tar.gz";
-    sha256="1pqfzwvjy8dzqg4fqjq2cgqcr00fgrdd7nwzxm7nqmawr83s6dhj";
+    sha256="04q5k6drypsnbp1wspr9ns72k8kjf62a787a6jg1bb2s95gl6wy5";
   };
 
-  patches = [ ./darwin.patch ];
+  patches = [ ./darwin-3.1.3.patch ];
   preConfigure = ''
     lua -e "" || {
         luajit -e "" && {

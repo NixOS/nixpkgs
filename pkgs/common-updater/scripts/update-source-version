@@ -29,6 +29,9 @@ for arg in "$@"; do
                 die "Could not find provided file $nixFile"
             fi
         ;;
+        --ignore-same-hash)
+            ignoreSameHash="true"
+        ;;
         --help)
             usage
             exit 0
@@ -83,14 +86,14 @@ if [ $(grep -c "$oldHash" "$nixFile") != 1 ]; then
     die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
 fi
 
-oldUrl=$(nix-instantiate $systemArg --eval -E "with import ./. {}; builtins.elemAt $attr.src.drvAttrs.urls 0" | tr -d '"')
+oldUrl=$(nix-instantiate $systemArg --eval -E "with import ./. {}; builtins.elemAt ($attr.src.drvAttrs.urls or [ $attr.src.url ]) 0" | tr -d '"')
 
 if [ -z "$oldUrl" ]; then
-    die "Couldn't evaluate source url from '$attr.name'!"
+    die "Couldn't evaluate source url from '$attr.src'!"
 fi
 
 drvName=$(nix-instantiate $systemArg --eval -E "with import ./. {}; (builtins.parseDrvName $attr.name).name" | tr -d '"')
-oldVersion=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.version or (builtins.parseDrvName $attr.name).version" | tr -d '"')
+oldVersion=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
 
 if [ -z "$drvName" -o -z "$oldVersion" ]; then
     die "Couldn't evaluate name and version from '$attr.name'!"
@@ -102,13 +105,13 @@ if [ "$oldVersion" = "$newVersion" ]; then
 fi
 
 # Escape regex metacharacter that are allowed in store path names
-oldVersion=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
-oldUrl=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
+oldVersionEscaped=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
+oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
 
-if [ $(grep -c -E "^\s*(let\b)?\s*$versionKey\s*=\s*\"$oldVersion\"" "$nixFile") = 1 ]; then
-    pattern="/\b$versionKey\b\s*=/ s|\"$oldVersion\"|\"$newVersion\"|"
-elif [ $(grep -c -E "^\s*(let\b)?\s*name\s*=\s*\"[^\"]+-$oldVersion\"" "$nixFile") = 1 ]; then
-    pattern="/\bname\b\s*=/ s|-$oldVersion\"|-$newVersion\"|"
+if [ $(grep -c -E "^\s*(let\b)?\s*$versionKey\s*=\s*\"$oldVersionEscaped\"" "$nixFile") = 1 ]; then
+    pattern="/\b$versionKey\b\s*=/ s|\"$oldVersionEscaped\"|\"$newVersion\"|"
+elif [ $(grep -c -E "^\s*(let\b)?\s*name\s*=\s*\"[^\"]+-$oldVersionEscaped\"" "$nixFile") = 1 ]; then
+    pattern="/\bname\b\s*=/ s|-$oldVersionEscaped\"|-$newVersion\"|"
 else
     die "Couldn't figure out where out where to patch in new version in '$attr'!"
 fi
@@ -121,7 +124,7 @@ fi
 
 # Replace new URL
 if [ -n "$newUrl" ]; then
-    sed -i "$nixFile" -re "s|\"$oldUrl\"|\"$newUrl\"|"
+    sed -i "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
 
     if cmp -s "$nixFile" "$nixFile.bak"; then
         die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
@@ -154,7 +157,7 @@ if [ -z "$newHash" ]; then
     die "Couldn't figure out new hash of '$attr.src'!"
 fi
 
-if [ "$oldVersion" != "$newVersion" ] && [ "$oldHash" = "$newHash" ]; then
+if [ -z "${ignoreSameHash}" ] && [ "$oldVersion" != "$newVersion" ] && [ "$oldHash" = "$newHash" ]; then
     mv "$nixFile.bak" "$nixFile"
     die "Both the old and new source hashes of '$attr.src' were equivalent. Please fix the package's source URL to be dependent on '\${version}'!"
 fi

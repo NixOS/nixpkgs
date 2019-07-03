@@ -11,9 +11,9 @@ let
   videoDrivers = config.services.xserver.videoDrivers;
 
   makePackage = p: pkgs.buildEnv {
-    name = "mesa-drivers+txc-${p.mesa_drivers.version}";
+    name = "mesa-drivers+txc-${p.mesa.version}";
     paths =
-      [ p.mesa_drivers
+      [ p.mesa.drivers
         (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
       ];
   };

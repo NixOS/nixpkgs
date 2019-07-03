@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, wrapGAppsHook,
+{ stdenv, fetchurl, perlPackages, wrapGAppsHook,
   librsvg, sane-backends, sane-frontends,
   imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper,
   xvfb_run, hicolor-icon-theme, liberation_ttf, file, pdftk }:

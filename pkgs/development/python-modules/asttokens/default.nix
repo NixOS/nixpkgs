@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, astroid, six, coverage
+{ lib, fetchPypi, buildPythonPackage, fetchpatch, astroid, six, coverage
 , lazy-object-proxy, nose, wrapt
 }:
 
@@ -10,6 +10,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1vd4djlxmgznz84gzakkv45avnrcpgl1kir92l1pxyp0z5c0dh2m";
   };
+
+  patches = [
+    # Fix tests for astroid 2.2 in python 3. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/gristlabs/asttokens/commit/21caaaa74105c410b3d84c3d8ff0dc2f612aac9a.patch";
+      sha256 = "182xfr0cx4pxx0dv1l50a1c281h8ywir8vvd1zh5iicflivim1nv";
+    })
+  ];
 
   propagatedBuildInputs = [ lazy-object-proxy six wrapt astroid ];
 

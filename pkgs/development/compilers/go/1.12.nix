@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
+{ stdenv, fetchurl, tzdata, iana-etc, runCommand
+, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
-, buildPackages, targetPackages }:
+, buildPackages, pkgsTargetTarget
+}:
 
 let
 
@@ -28,12 +29,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "go-${version}";
-  version = "1.12";
+  pname = "go";
+  version = "1.12.6";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1wl8kq21fbzmv4plnaza5acz8dhbaaq6smjzk3r6cf3l6qrkvi09";
+    sha256 = "1jmlj8pygg4hjpkziicihcf76lz61w1qljdpm3hqlqsmfk65qv69";
   };
 
   # perl is used for testing go vet
@@ -127,6 +128,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.11.patch
+    ./ssl-cert-file-1.12.1.patch
     ./remove-test-pie.patch
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
@@ -139,9 +141,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     find . -name '*.orig' -exec rm {} ';'
-  '' + optionalString stdenv.isDarwin ''
-    echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
-    substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
   '';
 
   GOOS = stdenv.targetPlatform.parsed.kernel.name;
@@ -154,16 +153,12 @@ stdenv.mkDerivation rec {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
-      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc"
-    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${stdenv.cc.targetPrefix}cc"
+  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
     else
       null;
-  CXX_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
-      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++"
-    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${stdenv.cc.targetPrefix}c++"
+  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++"
     else
       null;
 
@@ -195,7 +190,7 @@ stdenv.mkDerivation rec {
     (cd src && ./make.bash)
   '';
 
-  doCheck = stdenv.hostPlatform == stdenv.targetPlatform;
+  doCheck = stdenv.hostPlatform == stdenv.targetPlatform && !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
