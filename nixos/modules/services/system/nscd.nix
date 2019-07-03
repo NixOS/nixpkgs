@@ -39,11 +39,6 @@ in
   config = mkIf cfg.enable {
     environment.etc."nscd.conf".text = cfg.config;
 
-    users.users.nscd =
-      { isSystemUser = true;
-        description = "Name service cache daemon user";
-      };
-
     systemd.services.nscd =
       { description = "Name Service Cache Daemon";
 
@@ -60,6 +55,8 @@ in
         serviceConfig =
           { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd";
             Type = "forking";
+            User = "nscd";
+            DynamicUser = true;
             RuntimeDirectory = "nscd";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
