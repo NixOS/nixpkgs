@@ -1453,6 +1453,8 @@ in
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
+  dua = callPackage ../tools/misc/dua { };
+
   inherit (ocamlPackages) dune;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
