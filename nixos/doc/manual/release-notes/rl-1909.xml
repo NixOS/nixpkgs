@@ -23,6 +23,23 @@
      End of support is planned for end of April 2020, handing over to 20.03.
     </para>
    </listitem>
+
+   <listitem>
+    <para>
+      <command>sudo</command> now defaults to setting a
+      <literal>secure_path</literal> via
+      <option>security.sudo.enableSecurePath</option>. The default
+      secure path includes only software installed by root
+      (<option>security.sudo.securePathEntries</option>).
+      Specifically, this defaults to including the default profile
+      (<filename>/nix/var/nix/profiles/default/bin</filename>), the
+      current system's <option>environment.systemPackages</option>
+      (<filename>/run/current-system/sw/bin</filename>), and setuid
+      wrapped programs in <option>security.wrappers</option>
+      (<filename>/run/wrappers/bin</filename>).
+    </para>
+   </listitem>
+
    <listitem>
     <para>
      PHP now defaults to PHP 7.3, updated from 7.2.

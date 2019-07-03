@@ -42,6 +42,37 @@ in
         '';
     };
 
+    security.sudo.enableSecurePath = mkOption {
+      type = types.bool;
+      default = true;
+      description =
+        ''
+          Restrict <command>sudo</command>'s default path to software
+          paths listed in <option>security.sudo.securePathEntries</option>.
+          By default, this list contains only software installed by root.
+        '';
+    };
+
+    security.sudo.securePathEntries = mkOption {
+      type = types.listOf types.string;
+      default = [
+        config.security.wrapperDir
+        "/nix/var/nix/profiles/default/bin"
+        "/run/current-system/sw/bin"
+      ];
+      description =
+        ''
+          Paths to include in <command>sudo</command>'s path.
+
+          By default, it includes the default profile
+          (<filename>/nix/var/nix/profiles/default/bin</filename>),
+          the current system's <option>environment.systemPackages</option>
+          (<filename>/run/current-system/sw/bin</filename>), and setuid
+          wrapped programs in <option>security.wrappers</option>
+          (<filename>${config.security.wrapperDir}</filename>).
+        '';
+    };
+
     security.sudo.wheelNeedsPassword = mkOption {
       type = types.bool;
       default = true;
@@ -185,6 +216,11 @@ in
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
 
+        ${if cfg.enableSecurePath then ''
+        # Remove arbitrary user programs from the PATH
+        Defaults secure_path="${concatStringsSep ":" cfg.securePathEntries}"
+
+        '' else ""}
         # "root" is allowed to do anything.
         root        ALL=(ALL:ALL) SETENV: ALL
 
