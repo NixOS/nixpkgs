@@ -681,6 +681,11 @@
     github = "bergey";
     name = "Daniel Bergey";
   };
+  betaboon = {
+    email = "betaboon@0x80.ninja";
+    github = "betaboon";
+    name = "betaboon";
+  };
   bfortz = {
     email = "bernard.fortz@gmail.com";
     github = "bfortz";
@@ -1940,6 +1945,11 @@
     github = "glenns";
     name = "Glenn Searby";
   };
+  gloaming = {
+    email = "ch9871@gmail.com";
+    github = "gloaming";
+    name = "Craig Hall";
+  };
   globin = {
     email = "mail@glob.in";
     github = "globin";
@@ -2753,6 +2763,11 @@
     github = "lasandell";
     name = "Luke Sandell";
   };
+  lambda-11235 = {
+    email = "taranlynn0@gmail.com";
+    github = "lambda-11235";
+    name = "Taran Lynn";
+  };
   lassulus = {
     email = "lassulus@gmail.com";
     github = "Lassulus";
@@ -3558,6 +3573,11 @@
     email = "nathan@nathan.gs";
     github = "nathan-gs";
     name = "Nathan Bijnens";
+  };
+  nathyong = {
+    email = "nathyong@noreply.github.com";
+    github = "nathyong";
+    name = "Nathan Yong";
   };
   nckx = {
     email = "github@tobias.gr";
@@ -4840,6 +4860,11 @@
     email = "severen@shrike.me";
     github = "severen";
     name = "Severen Redwood";
+  };
+  steell = {
+    email = "steve@steellworks.com";
+    github = "Steell";
+    name = "Steve Elliott";
   };
   stephenmw = {
     email = "stephen@q5comm.com";

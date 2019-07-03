@@ -39,7 +39,7 @@ let
     meta = with lib; {
       description = "Free TLS/SSL implementation";
       homepage    = "https://www.libressl.org";
-      license = with licenses; [ publicDomain bsdOriginal bsd0 bsd3 gpl3 isc ];
+      license = with licenses; [ publicDomain bsdOriginal bsd0 bsd3 gpl3 isc openssl ];
       platforms   = platforms.all;
       maintainers = with maintainers; [ thoughtpolice fpletz globin ];
     };

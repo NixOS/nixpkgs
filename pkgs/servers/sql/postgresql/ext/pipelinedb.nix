@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     install -D -t $out/lib/ pipelinedb.so
-    install -D -t $out/share/extension {pipelinedb-*.sql,pipelinedb.control}
+    install -D -t $out/share/postgresql/extension {pipelinedb-*.sql,pipelinedb.control}
   '';
 
   meta = with stdenv.lib; {

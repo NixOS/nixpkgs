@@ -14,7 +14,9 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-, enablePFM ? !stdenv.isDarwin
+, enablePFM ? !(stdenv.isDarwin
+  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+)
 , enablePolly ? false
 }:
 

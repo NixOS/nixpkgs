@@ -35,6 +35,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./fix-install-path.patch
+    ./fix-aac-defaults.patch
   ];
 
   nativeBuildInputs = [

@@ -143,7 +143,6 @@ in {
         User = cfg.user;
         Group = cfg.group;
         Environment="PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
-        PermissionsStartOnly = true;
         ExecStart = "${pkgs.netdata}/bin/netdata -D -c ${configFile}";
         TimeoutStopSec = 60;
       };

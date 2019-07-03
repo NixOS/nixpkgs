@@ -13,7 +13,7 @@ let
   runDir = "/run/restya-board";
 
   poolName = "restya-board";
-  phpfpmSocketName = "/run/phpfpm/${poolName}.sock";
+  phpfpmSocketName = "/run/phpfpm-${poolName}/${poolName}.sock";
 
 in
 
@@ -178,9 +178,12 @@ in
 
   config = mkIf cfg.enable {
 
-    services.phpfpm.poolConfigs = {
+    services.phpfpm.pools = {
       "${poolName}" = {
-        listen = phpfpmSocketName;
+        socketName = "${poolName}";
+        phpPackage = pkgs.php;
+        user = "${cfg.user}";
+        group = "${cfg.group}";
         phpOptions = ''
           date.timezone = "CET"
 
@@ -192,11 +195,9 @@ in
           ''}
         '';
         extraConfig = ''
-          listen.owner = nginx
-          listen.group = nginx
+          listen.owner = ${config.services.nginx.user}
+          listen.group = ${config.services.nginx.group}
           listen.mode = 0600
-          user = ${cfg.user}
-          group = ${cfg.group}
           pm = dynamic
           pm.max_children = 75
           pm.start_servers = 10
@@ -365,6 +366,9 @@ in
       home = runDir;
       group  = "restya-board";
     };
+    users.users.nginx = {
+      extraGroups = [ "restya-board" ];
+     };
     users.groups.restya-board = {};
 
     services.postgresql.enable = mkIf (cfg.database.host == null) true;

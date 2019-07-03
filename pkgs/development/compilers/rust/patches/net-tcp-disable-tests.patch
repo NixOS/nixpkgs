@@ -1,8 +1,7 @@
-diff --git a/src/libstd/net/tcp.rs b/src/libstd/net/tcp.rs
-index 86ecb10edf..626be0a52d 100644
---- a/src/libstd/net/tcp.rs
-+++ b/src/libstd/net/tcp.rs
-@@ -955,6 +955,7 @@ mod tests {
+diff -ru -x '*~' rustc-1.35.0-src-orig/src/libstd/net/tcp.rs rustc-1.35.0-src/src/libstd/net/tcp.rs
+--- rustc-1.35.0-src-orig/src/libstd/net/tcp.rs	2019-05-20 14:10:15.000000000 +0200
++++ rustc-1.35.0-src/src/libstd/net/tcp.rs	2019-06-13 19:59:46.740611889 +0200
+@@ -973,6 +973,7 @@
          }
      }
  
@@ -10,7 +9,7 @@ index 86ecb10edf..626be0a52d 100644
      #[test]
      fn listen_localhost() {
          let socket_addr = next_test_ip4();
-@@ -1013,6 +1014,7 @@ mod tests {
+@@ -1031,6 +1032,7 @@
          })
      }
  
@@ -18,7 +17,7 @@ index 86ecb10edf..626be0a52d 100644
      #[test]
      fn read_eof() {
          each_ip(&mut |addr| {
-@@ -1032,6 +1034,7 @@ mod tests {
+@@ -1050,6 +1052,7 @@
          })
      }
  
@@ -26,7 +25,7 @@ index 86ecb10edf..626be0a52d 100644
      #[test]
      fn write_close() {
          each_ip(&mut |addr| {
-@@ -1058,6 +1061,7 @@ mod tests {
+@@ -1076,6 +1079,7 @@
          })
      }
  
@@ -34,7 +33,7 @@ index 86ecb10edf..626be0a52d 100644
      #[test]
      fn multiple_connect_serial() {
          each_ip(&mut |addr| {
-@@ -1080,6 +1084,7 @@ mod tests {
+@@ -1098,6 +1102,7 @@
          })
      }
  
@@ -42,7 +41,7 @@ index 86ecb10edf..626be0a52d 100644
      #[test]
      fn multiple_connect_interleaved_greedy_schedule() {
          const MAX: usize = 10;
-@@ -1116,6 +1121,7 @@ mod tests {
+@@ -1134,6 +1139,7 @@
      }
  
      #[test]
@@ -50,7 +49,7 @@ index 86ecb10edf..626be0a52d 100644
      fn multiple_connect_interleaved_lazy_schedule() {
          const MAX: usize = 10;
          each_ip(&mut |addr| {
-@@ -1394,6 +1400,7 @@ mod tests {
+@@ -1467,6 +1473,7 @@
      }
  
      #[test]
@@ -58,7 +57,7 @@ index 86ecb10edf..626be0a52d 100644
      fn clone_while_reading() {
          each_ip(&mut |addr| {
              let accept = t!(TcpListener::bind(&addr));
-@@ -1504,7 +1511,10 @@ mod tests {
+@@ -1597,7 +1604,10 @@
  
      // FIXME: re-enabled bitrig/openbsd tests once their socket timeout code
      //        no longer has rounding errors.
@@ -67,30 +66,30 @@ index 86ecb10edf..626be0a52d 100644
 +                   target_os = "netbsd",
 +                   target_os = "openbsd",
 +                   target_os = "macos"), ignore)]
+     #[cfg_attr(target_env = "sgx", ignore)] // FIXME: https://github.com/fortanix/rust-sgx/issues/31
      #[test]
      fn timeouts() {
-         let addr = next_test_ip4();
-@@ -1591,6 +1601,7 @@ mod tests {
+@@ -1643,6 +1653,7 @@
          drop(listener);
      }
  
 +    #[cfg_attr(target_os = "macos", ignore)]
      #[test]
+     #[cfg_attr(target_env = "sgx", ignore)] // FIXME: https://github.com/fortanix/rust-sgx/issues/31
+     fn test_read_with_timeout() {
+@@ -1687,6 +1698,7 @@
+         drop(listener);
+     }
+ 
++    #[cfg_attr(target_os = "macos", ignore)]
+     #[test]
+     #[cfg_attr(target_env = "sgx", ignore)]
      fn nodelay() {
-         let addr = next_test_ip4();
-@@ -1605,6 +1616,7 @@ mod tests {
-         assert_eq!(false, t!(stream.nodelay()));
+@@ -1719,6 +1731,7 @@
+         assert_eq!(ttl, t!(stream.ttl()));
      }
  
 +    #[cfg_attr(target_os = "macos", ignore)]
      #[test]
-     fn ttl() {
-         let ttl = 100;
-@@ -1642,6 +1654,7 @@ mod tests {
-         }
-     }
- 
-+    #[cfg_attr(target_os = "macos", ignore)]
-     #[test]
-     fn peek() {
-         each_ip(&mut |addr| {
+     #[cfg_attr(target_env = "sgx", ignore)]
+     fn set_nonblocking() {

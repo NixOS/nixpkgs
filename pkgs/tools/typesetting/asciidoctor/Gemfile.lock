@@ -54,9 +54,10 @@ GEM
     prawn-templates (0.1.1)
       pdf-reader (~> 2.0)
       prawn (~> 2.2)
-    public_suffix (3.1.0)
+    public_suffix (3.1.1)
     pygments.rb (1.2.1)
       multi_json (>= 1.0.0)
+    rouge (3.5.1)
     ruby-enum (0.7.2)
       i18n
     ruby-rc4 (0.1.5)
@@ -76,6 +77,7 @@ DEPENDENCIES
   asciidoctor-pdf
   coderay
   pygments.rb
+  rouge
 
 BUNDLED WITH
    1.17.2

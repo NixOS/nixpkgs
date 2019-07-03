@@ -213,6 +213,7 @@ with lib;
     (mkRemovedOptionModule [ "boot" "zfs" "enableLegacyCrypto" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "winstone" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd")
+    (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
@@ -239,6 +240,12 @@ with lib;
 
     # binfmt
     (mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
+
+    # PHP-FPM
+    (mkRemovedOptionModule [ "services" "phpfpm" "poolConfigs" ] "Use services.phpfpm.pools instead.")
+    (mkRemovedOptionModule [ "services" "phpfpm" "phpPackage" ] "Use services.phpfpm.pools.<name>.phpPackage instead.")
+    (mkRemovedOptionModule [ "services" "phpfpm" "phpOptions" ] "Use services.phpfpm.pools.<name>.phpOptions instead.")
+    (mkRenamedOptionModule [ "services" "phpfpm" "extraConfig" ] [ "services" "phpfpm" "globalExtraConfig" ])
 
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"

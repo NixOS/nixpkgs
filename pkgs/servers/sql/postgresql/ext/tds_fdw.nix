@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D tds_fdw.so                  -t $out/lib
-    install -D sql/tds_fdw--${version}.sql -t $out/share/extension
-    install -D tds_fdw.control             -t $out/share/extension
+    install -D sql/tds_fdw--${version}.sql -t $out/share/postgresql/extension
+    install -D tds_fdw.control             -t $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {

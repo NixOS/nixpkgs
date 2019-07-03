@@ -9,7 +9,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "sqlite";
+  name = "sqlite-${version}";
   version = "3.28.0";
 
   # NB! Make sure to update analyzer.nix src (in the same directory).
@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
     sed -i $out/lib/libsqlite3.la -e "s/dependency_libs=.*/dependency_libs='''/"
   '';
 
-  enableParallelBuilding = true;
   doCheck = false; # fails to link against tcl
 
   meta = {

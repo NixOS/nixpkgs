@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     install -D pgroonga.so -t $out/lib/
-    install -D ./{pgroonga-*.sql,pgroonga.control} -t $out/share/extension
+    install -D ./{pgroonga-*.sql,pgroonga.control} -t $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {

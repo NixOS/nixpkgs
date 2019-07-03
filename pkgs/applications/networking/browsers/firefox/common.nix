@@ -94,7 +94,14 @@ let
 
   browserPatches = [
     ./env_var_for_system_dir.patch
-  ] ++ lib.optionals (stdenv.isAarch64 && lib.versionAtLeast ffversion "66" && lib.versionOlder ffversion "67") [
+  ]
+  ++ lib.optional (lib.versionAtLeast ffversion "63" && lib.versionOlder ffversion "69")
+    (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29
+      name = "write_error-parallel_make.diff";
+      url = "https://hg.mozilla.org/mozilla-central/raw-diff/562655fe/python/mozbuild/mozbuild/action/node.py";
+      sha256 = "11d7rgzinb4mwl7yzhidjkajynmxgmffr4l9isgskfapyax9p88y";
+    })
+  ++ lib.optionals (stdenv.isAarch64 && lib.versionAtLeast ffversion "66" && lib.versionOlder ffversion "67") [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/arm.patch";
       sha256 = "1vbpih23imhv5r3g21m3m541z08n9n9j1nvmqax76bmyhn7mxp32";

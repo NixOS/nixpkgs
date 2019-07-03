@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     install -D plv8*.so                                        -t $out/lib
-    install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/extension
+    install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {

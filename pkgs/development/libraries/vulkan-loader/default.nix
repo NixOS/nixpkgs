@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake python3 xlibsWrapper libxcb libXrandr libXext wayland ];
   enableParallelBuilding = true;
 
+  patches = [ ./system-search-path.patch ];
+
   cmakeFlags = [
-    "-DFALLBACK_DATA_DIRS=${addOpenGLRunpath.driverLink}/share:/usr/local/share:/usr/share"
+    "-DSYSTEM_SEARCH_PATH=${addOpenGLRunpath.driverLink}/share"
     "-DVULKAN_HEADERS_INSTALL_DIR=${vulkan-headers}"
   ];
 

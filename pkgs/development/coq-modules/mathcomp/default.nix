@@ -3,6 +3,9 @@
 }:
 with builtins // stdenv.lib;
 let
+  ####################################
+  # CONFIGURATION (please edit this) #
+  ####################################
   # sha256 of released mathcomp versions
   mathcomp-sha256 = {
     "1.9.0" = "0lid9zaazdi3d38l8042lczb02pw5m9wq0yysiilx891hgq2p81r";
@@ -19,8 +22,16 @@ let
   };
   # computes the default version of mathcomp given a version of Coq
   max-mathcomp-version = last (naturalSort (attrNames mathcomp-coq-versions));
-  default-mathcomp-version = let v = last (naturalSort (["0.0.0"]
-     ++ (attrNames (filterAttrs (_: vs: vs coq.coq-version) mathcomp-coq-versions))));
+  # mathcomp prefered version by decreasing order
+  # (the first version in the list will be tried first)
+  mathcomp-version-preference = [ "1.8.0" "1.9.0" "1.7.0" "1.6.1" ];
+
+  ##############################################################
+  # COMPUTED using the configuration above (edit with caution) #
+  ##############################################################
+  default-mathcomp-version = let v = head (
+    filter (mc: mathcomp-coq-versions."${mc}" coq.coq-version)
+            mathcomp-version-preference ++ ["0.0.0"]);
      in if v == "0.0.0" then max-mathcomp-version else v;
 
   # list of core mathcomp packages sorted by dependency order

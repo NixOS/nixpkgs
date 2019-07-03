@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchurl, runCommand, runCommandCC, makeWrapper
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, runCommand, runCommandCC, makeWrapper
 # this package (through the fixpoint glass)
 , bazel
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
@@ -94,8 +94,7 @@ let
   # however it contains prebuilt java binaries, with wrong interpreter
   # and libraries path.
   # We prefetch it, patch it, and override it in a global bazelrc.
-  system = if stdenv.hostPlatform.isDarwin
-           then "darwin" else "linux";
+  system = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
 
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
@@ -133,6 +132,11 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   patches = [
+    # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
+    # This is breaking the build of any C target. This patch removes the last
+    # argument if it's found to be an empty string.
+    ./trim-last-argument-to-gcc-if-empty.patch
+
     ./python-stub-path-fix.patch
   ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
@@ -144,11 +148,16 @@ stdenv.mkDerivation rec {
   # in the nixpkgs checkout root to exercise them locally.
   passthru.tests =
     let
-      runLocal = name: attrs: script: runCommandCC name ({
+      runLocal = name: attrs: script:
+      let
+        attrs' = removeAttrs attrs [ "buildInputs" ];
+        buildInputs = [ python3 ] ++ (attrs.buildInputs or []);
+      in
+      runCommandCC name ({
+        inherit buildInputs;
         preferLocalBuild = true;
         meta.platforms = platforms;
-        buildInputs = [ python3 ];
-      } // attrs) script;
+      } // attrs') script;
 
       # bazel wants to extract itself into $install_dir/install every time it runs,
       # so let’s do that only once.
@@ -168,10 +177,10 @@ stdenv.mkDerivation rec {
             cp -R ${install_dir} $out
           '';
 
-      bazelTest = { name, bazelScript, workspaceDir, bazelPkg }:
+      bazelTest = { name, bazelScript, workspaceDir, bazelPkg, buildInputs ? [] }:
         let
           be = extracted bazelPkg;
-        in runLocal name {} (
+        in runLocal name { inherit buildInputs; } (
           # skip extraction caching on Darwin, because nobody knows how Darwin works
           (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
             # set up home with pre-unpacked bazel
@@ -198,12 +207,26 @@ stdenv.mkDerivation rec {
           '');
 
       bazelWithNixHacks = bazel.override { enableNixHacks = true; };
-    in {
-      pythonBinPathWithoutNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
-      bashToolsWithoutNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
 
-      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      bazel-examples = fetchFromGitHub {
+        owner = "bazelbuild";
+        repo = "examples";
+        rev = "5d8c8961a2516ebf875787df35e98cadd08d43dc";
+        sha256 = "03c1bwlq5bs3hg96v4g4pg2vqwhqq6w538h66rcpw02f83yy7fs8";
+      };
+
+    in {
+      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
+      cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; };
+      java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; };
+      protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; };
+      pythonBinPath = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
+
       bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
+      javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
+      protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
     };
 
   # update the list of workspace dependencies
@@ -220,7 +243,6 @@ stdenv.mkDerivation rec {
   __darwinAllowLocalNetworking = true;
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
-
   customBash = writeCBin "bash" ''
     #include <stdio.h>
     #include <stdlib.h>

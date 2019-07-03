@@ -163,6 +163,8 @@ in
 
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
+  protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
+
   demoit = callPackage ../servers/demoit { };
 
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
@@ -243,6 +245,8 @@ in
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
   packer = callPackage ../development/tools/packer { };
+
+  packr = callPackage ../development/libraries/packr { };
 
   pet = callPackage ../development/tools/pet { };
 
@@ -1669,6 +1673,8 @@ in
 
   link-grammar = callPackage ../tools/text/link-grammar { };
 
+  linuxptp = callPackage ../os-specific/linux/linuxptp { };
+
   loadwatch = callPackage ../tools/system/loadwatch { };
 
   loccount = callPackage ../development/tools/misc/loccount { };
@@ -1783,6 +1789,8 @@ in
   procs = callPackage ../tools/admin/procs {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
 
   scour = with python3Packages; toPythonApplication scour;
 
@@ -2660,6 +2668,8 @@ in
   teamocil = callPackage ../tools/misc/teamocil { };
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
+
+  trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
   uudeview = callPackage ../tools/misc/uudeview { };
 
@@ -3947,7 +3957,10 @@ in
 
   kalibrate-hackrf = callPackage ../applications/radio/kalibrate-hackrf { };
 
-  kakoune = callPackage ../applications/editors/kakoune { };
+  wrapKakoune = callPackage ../applications/editors/kakoune/wrapper.nix { };
+  kakounePlugins = callPackage ../applications/editors/kakoune/plugins.nix { };
+  kakoune-unwrapped = callPackage ../applications/editors/kakoune { };
+  kakoune = wrapKakoune kakoune-unwrapped { };
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
@@ -4237,12 +4250,10 @@ in
   };
   nodejs-12_x = callPackage ../development/web/nodejs/v12.nix {
     openssl = openssl_1_1;
-    icu = icu63;
   };
   nodejs-slim-12_x = callPackage ../development/web/nodejs/v12.nix {
     enableNpm = false;
     openssl = openssl_1_1;
-    icu = icu63;
   };
 
   # Update this when adding the newest nodejs major version!
@@ -4834,9 +4845,7 @@ in
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = callPackage ../applications/networking/cluster/nomad {
-    buildGoPackage = buildGo110Package;
-  };
+  nomad = callPackage ../applications/networking/cluster/nomad { };
 
   notable = callPackage ../applications/misc/notable { };
 
@@ -6213,6 +6222,8 @@ in
   timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
 
   timetrap = callPackage ../applications/office/timetrap { };
+
+  timetable = callPackage ../applications/office/timetable { };
 
   tzupdate = callPackage ../applications/misc/tzupdate { };
 
@@ -7672,6 +7683,14 @@ in
 
   bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "10"; };
 
+  openjfx11 =
+    if stdenv.isDarwin then
+      null
+    else
+      callPackage ../development/compilers/openjdk/openjfx/11.nix {
+        openjdk = openjdk11;
+      };
+
   openjdk8 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin/8.nix { }
@@ -7686,6 +7705,7 @@ in
       callPackage ../development/compilers/openjdk/darwin/11.nix { }
     else
       callPackage ../development/compilers/openjdk/11.nix {
+        openjfx = openjfx11;
         inherit (gnome2) GConf gnome_vfs;
       };
 
@@ -7996,6 +8016,8 @@ in
   };
 
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
+
+  qbe = callPackage ../development/compilers/qbe { };
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
@@ -9181,6 +9203,8 @@ in
   drake = callPackage ../development/tools/build-managers/drake { };
 
   drip = callPackage ../development/tools/drip { };
+
+  drm_info = callPackage ../development/tools/drm_info { };
 
   drush = callPackage ../development/tools/misc/drush { };
 
@@ -14548,11 +14572,6 @@ in
 
   influxdb = callPackage ../servers/nosql/influxdb { };
 
-  mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
-    inherit (darwin) cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-
   mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
     inherit (darwin) cctools developer_cmds;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -14738,6 +14757,8 @@ in
       enableStatic = true;
     };
   };
+
+  roon-server = callPackage ../servers/roon-server { };
 
   s6 = skawarePackages.s6;
 
@@ -15197,6 +15218,8 @@ in
   iotop = callPackage ../os-specific/linux/iotop { };
 
   iproute = callPackage ../os-specific/linux/iproute { };
+
+  iproute_mptcp = callPackage ../os-specific/linux/iproute/mptcp.nix { };
 
   iputils = callPackage ../os-specific/linux/iputils { };
 
@@ -15721,6 +15744,8 @@ in
   nettools = if stdenv.isLinux then callPackage ../os-specific/linux/net-tools { }
              else unixtools.nettools;
 
+  nettools_mptcp = callPackage ../os-specific/linux/net-tools/mptcp.nix { };
+
   nftables = callPackage ../os-specific/linux/nftables { };
 
   noah = callPackage ../os-specific/darwin/noah {
@@ -15864,7 +15889,7 @@ in
 
   semodule-utils = callPackage ../os-specific/linux/semodule-utils { };
 
-  powerdns = callPackage ../servers/dns/powerdns { };
+  powerdns = callPackage ../servers/dns/powerdns { libressl = libressl_2_8; };
 
   dnsdist = callPackage ../servers/dns/dnsdist { };
 
@@ -15880,6 +15905,8 @@ in
            else unixtools.procps;
 
   procdump = callPackage ../os-specific/linux/procdump { };
+
+  prototool = callPackage ../development/tools/prototool { };
 
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
 
@@ -16133,6 +16160,8 @@ in
   agave = callPackage ../data/fonts/agave { };
 
   aileron = callPackage ../data/fonts/aileron { };
+
+  amiri = callPackage ../data/fonts/amiri { };
 
   andagii = callPackage ../data/fonts/andagii { };
 
@@ -19014,7 +19043,7 @@ in
 
   mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
 
-  merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
+  merkaartor = libsForQt59.callPackage ../applications/misc/merkaartor { };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 
@@ -19519,6 +19548,8 @@ in
 
   vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
 
+  vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
+
   openmpt123 = callPackage ../applications/audio/openmpt123 { };
 
   opusfile = callPackage ../applications/audio/opusfile { };
@@ -19822,8 +19853,6 @@ in
   qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { };
 
   qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
-
-  qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
   qtractor = libsForQt5.callPackage ../applications/audio/qtractor { };
 
@@ -21808,6 +21837,8 @@ in
 
   racer = callPackage ../games/racer { };
 
+  redeclipse = callPackage ../games/redeclipse { };
+
   residualvm = callPackage ../games/residualvm { };
 
   rftg = callPackage ../games/rftg { };
@@ -22420,6 +22451,8 @@ in
 
   niftyseg = callPackage ../applications/science/biology/niftyseg { };
 
+  octopus-caller = callPackage ../applications/science/biology/octopus { };
+
   paml = callPackage ../applications/science/biology/paml { };
 
   picard-tools = callPackage ../applications/science/biology/picard-tools { };
@@ -22941,12 +22974,6 @@ in
     ecl = null;
   };
   maxima-ecl = maxima.override {
-    ecl = ecl_16_1_2;
-    ecl-fasl = true;
-    sbcl = null;
-  };
-  # old version temporarily kept for sage
-  maxima-ecl-5_41 = callPackage ../applications/science/math/maxima/5.41.nix {
     ecl = ecl_16_1_2;
     ecl-fasl = true;
     sbcl = null;
@@ -24308,5 +24335,7 @@ in
   bemenu = callPackage ../applications/misc/bemenu { };
 
   dapper = callPackage ../development/tools/dapper { };
+
+  kube3d =  callPackage ../applications/networking/cluster/kube3d {};
 
 }
