@@ -93,7 +93,7 @@ done
 if [[ -e /etc/os-release ]]; then
   . /etc/os-release
 else
-  echo "/etc/os-release is not present.  Aborting" >&2
+  echo "/etc/os-release is not present. Aborting" >&2
   exit 1
 fi
 
