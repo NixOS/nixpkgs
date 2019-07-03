@@ -1,12 +1,11 @@
 #! @shell@
 
-# Program name (e.g. /.../nixos-version -> nixos-version)
-# Helps with alternative names like lsb_release
-pname="${0##*/}"
+set -o errexit
+set -o nounset
 
 show_help() {
   cat << EOF
-Usage: $pname [options]
+Usage: lsb_release [options]
 
 Options:
   -h, --help         show this help message and exit
@@ -14,7 +13,6 @@ Options:
   -i, --id           show distributor ID
   -d, --description  show description of this distribution
   -r, --release      show release number of this distribution
-  --revision, --hash show revision (abbreviated commit hash) of this distribution
   -c, --codename     show code name of this distribution
   -a, --all          show all of the above information
   -s, --short        show requested information in short format
@@ -27,19 +25,18 @@ version=0
 id=0
 description=0
 release=0
-revision=0
 codename=0
 all=0
 short=0
 
-getopt --test > /dev/null
-if [[ $? -ne 4 ]]; then
+getopt --test > /dev/null && rc=$? || rc=$?
+if [[ $rc -ne 4 ]]; then
   # This shouldn't happen on any recent GNU system.
-  echo "Enhanced getopt not supported, please open an issue."
+  echo "Warning: Enhanced getopt not supported, please open an issue." >&2
 else
   # Define all short and long options.
   SHORT=hvidrcas
-  LONG=help,version,id,description,release,revision,hash,codename,all,short
+  LONG=help,version,id,description,release,codename,all,short
 
   # Parse all options.
   PARSED=`getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@"`
@@ -54,7 +51,7 @@ fi
 
 # Process each argument, and set the appropriate flag if we recognize it.
 while [[ $# -ge 1 ]]; do
-  case $1 in
+  case "$1" in
     -v|--version)
       version=1
       ;;
@@ -66,9 +63,6 @@ while [[ $# -ge 1 ]]; do
       ;;
     -r|--release)
       release=1
-      ;;
-    --revision|--hash)
-      revision=1
       ;;
     -c|--codename)
       codename=1
@@ -87,8 +81,8 @@ while [[ $# -ge 1 ]]; do
       break
       ;;
     *)
-      echo "$pname: unrecognized option '$1'"
-      echo "Type '$pname -h' for a list of available options."
+      echo "lsb_release: unrecognized option '$1'"
+      echo "Type 'lsb_release -h' for a list of available options."
       exit 1
       ;;
   esac
@@ -103,18 +97,11 @@ else
   exit 1
 fi
 
-# Default output (depending on the executable name)
-# Stays compatible to nixos-version *and* lsb_release
+# Default output
 if [[ "$version" = "0" ]] && [[ "$id" = "0" ]] && \
    [[ "$description" = "0" ]] && [[ "$release" = "0" ]] && \
-   [[ "$revision" = "0" ]] && [[ "$codename" = "0" ]] && \
-   [[ "$all" = "0" ]]; then
-  if [[ $pname = "lsb_release" ]]; then
-    echo "No LSB modules are available."
-  else
-    echo $VERSION
-    # was: echo "@nixosVersion@ (@nixosCodeName@)"
-  fi
+   [[ "$codename" = "0" ]] && [[ "$all" = "0" ]]; then
+  echo "No LSB modules are available."
   exit 0
 fi
 
@@ -146,21 +133,11 @@ if [[ "$all" = "1" ]] || [[ "$release" = "1" ]]; then
   echo $VERSION_ID
 fi
 
-# TODO: For all (incompatible with lsb_release)?
-if [[ "$all" = "1" ]] || [[ "$revision" = "1" ]]; then
-  if [[ "$short" = "0" ]]; then
-    printf "Revision:\t"
-  fi
-  # Revision comes from: VERSION_ID="16.09.git.effc189" -> effc189
-  echo $(echo $VERSION_ID | rev | cut -d. -f1 | rev)
-  # was: echo "@nixosRevision@"
-fi
-
 if [[ "$all" = "1" ]] || [[ "$codename" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
     printf "Codename:\t"
   fi
-  echo $(echo $VERSION_CODENAME)
+  echo $VERSION_CODENAME
 fi
 
 # Success
