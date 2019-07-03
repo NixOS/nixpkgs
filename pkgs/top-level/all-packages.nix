@@ -15956,6 +15956,8 @@ in
 
   smem = callPackage ../os-specific/linux/smem { };
 
+  smimesign = callPackage ../os-specific/darwin/smimesign { };
+
   speedometer = callPackage ../os-specific/linux/speedometer { };
 
   statik = callPackage ../development/tools/statik { };
