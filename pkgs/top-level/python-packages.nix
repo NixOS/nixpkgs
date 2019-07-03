@@ -4789,6 +4789,8 @@ in {
 
   timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
 
+  timew-report = callPackage ../development/python-modules/timew-report { };
+
   pid = callPackage ../development/python-modules/pid { };
 
   pip2nix = callPackage ../development/python-modules/pip2nix { };
