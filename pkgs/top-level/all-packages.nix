@@ -19094,7 +19094,7 @@ in
   };
 
   monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui {
-    boost = boost15x;
+    boost = boost16x;
   };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
