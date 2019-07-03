@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   # Skip configure and build phases.
   # We just want something from the support directory
-  configurePhase = "true";
+  dontConfigure = true;
   dontBuild = true;
 
   postPatch = ''

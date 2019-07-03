@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     makeWrapper ${jre}/bin/java $out/bin/metabase --add-flags "-jar $src"

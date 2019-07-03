@@ -12301,7 +12301,9 @@ in
   # libGL.so/libEGL.so/... to link agains them. Android NDK provides
   # an OpenGL implementation, we can just use that.
   libGL = if stdenv.hostPlatform.useAndroidPrebuilt then stdenv
-          else mesa.stubs;
+          else callPackage ../development/libraries/mesa/stubs.nix {
+            inherit (darwin.apple_sdk.frameworks) OpenGL;
+          };
 
   # Default libGLU
   libGLU = mesa_glu;
@@ -12717,8 +12719,6 @@ in
 
   protobuf3_7 = callPackage ../development/libraries/protobuf/3.7.nix { };
   protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix { };
-  protobuf3_5 = callPackage ../development/libraries/protobuf/3.5.nix { };
-  protobuf3_4 = callPackage ../development/libraries/protobuf/3.4.nix { };
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 

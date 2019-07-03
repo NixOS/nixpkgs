@@ -5,7 +5,7 @@ let
     name = emacs.name + "-sources";
     src = emacs.src;
 
-    configurePhase = ":";
+    dontConfigure = true;
     dontBuild = true;
     doCheck = false;
     fixupPhase = ":";

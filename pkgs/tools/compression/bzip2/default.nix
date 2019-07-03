@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./CVE-2016-3189.patch
+    ./cve-2019-12900.patch
   ];
 
   postPatch = ''

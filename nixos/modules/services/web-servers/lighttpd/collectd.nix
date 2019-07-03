@@ -12,7 +12,7 @@ let
 
   defaultCollectionCgi = config.services.collectd.package.overrideDerivation(old: {
     name = "collection.cgi";
-    configurePhase = "true";
+    dontConfigure = true;
     buildPhase = "true";
     installPhase = ''
       substituteInPlace contrib/collection.cgi --replace '"/etc/collection.conf"' '$ENV{COLLECTION_CONF}'
