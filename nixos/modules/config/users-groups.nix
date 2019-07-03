@@ -354,17 +354,8 @@ let
     };
   };
 
-  mkSubuidEntry = user: concatStrings (
-    map (range: "${user.name}:${toString range.startUid}:${toString range.count}\n")
-      user.subUidRanges);
-
-  subuidFile = concatStrings (map mkSubuidEntry (attrValues cfg.users));
-
-  mkSubgidEntry = user: concatStrings (
-    map (range: "${user.name}:${toString range.startGid}:${toString range.count}\n")
-        user.subGidRanges);
-
-  subgidFile = concatStrings (map mkSubgidEntry (attrValues cfg.users));
+  # format a list of lists into the colon-separated lines of /etc/passwd and similar
+  mkDatabase = concatMapStrings (entry: concatMapStringsSep ":" toString entry + "\n");
 
   idsAreUnique = set: idAttr: !(fold (name: args@{ dup, acc }:
     let
@@ -546,14 +537,21 @@ in {
     environment.systemPackages = systemShells;
 
     environment.etc = {
+
       "subuid" = {
-        text = subuidFile;
+        text = mkDatabase (concatMap (
+          user: map (range: [user.name range.startUid range.count]) user.subUidRanges
+        ) (attrValues cfg.users));
         mode = "0644";
       };
+
       "subgid" = {
-        text = subgidFile;
+        text = mkDatabase (concatMap (
+          user: map (range: [user.name range.startGid range.count]) user.subGidRanges
+        ) (attrValues cfg.users));
         mode = "0644";
       };
+
     } // (mapAttrs' (name: { packages, ... }: {
       name = "profiles/per-user/${name}";
       value.source = pkgs.buildEnv {
