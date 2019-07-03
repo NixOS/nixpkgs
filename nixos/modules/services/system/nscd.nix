@@ -75,15 +75,6 @@ in
                 "${pkgs.glibc.bin}/sbin/nscd --invalidate hosts"
               ];
           };
-
-        # Urgggggh... Nscd forks before opening its socket and writing
-        # its pid. So wait until it's ready.
-        postStart =
-          ''
-            while ! ${pkgs.glibc.bin}/sbin/nscd -g > /dev/null; do
-              sleep 0.2
-            done
-          '';
       };
 
   };
