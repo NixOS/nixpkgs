@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, gtk3, cf-private, Cocoa }:
+{ stdenv, fetchgit, cmake, pkgconfig, gtk3, Cocoa }:
 
 let
   shortName = "libui";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = stdenv.lib.optional stdenv.isLinux gtk3
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa cf-private /* For NSDefaultRunLoopMode */ ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
 
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/set(CMAKE_OSX_DEPLOYMENT_TARGET "10.8")//' ./CMakeLists.txt

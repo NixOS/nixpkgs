@@ -9,7 +9,6 @@
   IOKit,
   Kernel,
   OpenGL,
-  cf-private,
   libicns,
   libpng,
   librsvg,
@@ -40,7 +39,6 @@ buildPythonApplication rec {
     IOKit
     Kernel
     OpenGL
-    cf-private
     libpng
     python3
     zlib
