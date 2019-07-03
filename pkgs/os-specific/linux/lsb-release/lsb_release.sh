@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 
 show_help() {
-  cat << EOF
+  @coreutils@/bin/cat << EOF
 Usage: lsb_release [options]
 
 Options:
@@ -29,9 +29,9 @@ codename=0
 all=0
 short=0
 
-getopt --test > /dev/null && rc=$? || rc=$?
+@getopt@/bin/getopt --test > /dev/null && rc=$? || rc=$?
 if [[ $rc -ne 4 ]]; then
-  # This shouldn't happen on any recent GNU system.
+  # This shouldn't happen.
   echo "Warning: Enhanced getopt not supported, please open an issue." >&2
 else
   # Define all short and long options.
@@ -39,11 +39,7 @@ else
   LONG=help,version,id,description,release,codename,all,short
 
   # Parse all options.
-  PARSED=`getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@"`
-  if [[ $? -ne 0 ]]; then
-    # getopt will print an error
-    exit 1
-  fi
+  PARSED=`@getopt@/bin/getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@"`
 
   eval set -- "$PARSED"
 fi

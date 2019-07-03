@@ -1,4 +1,6 @@
-{ substituteAll, lib }:
+{ substituteAll, lib
+, coreutils, getopt
+}:
 
 substituteAll {
   name = "lsb_release";
@@ -7,6 +9,8 @@ substituteAll {
 
   dir = "bin";
   isExecutable = true;
+
+  inherit coreutils getopt;
 
   meta = with lib; {
     description = "Prints certain LSB (Linux Standard Base) and Distribution information";
