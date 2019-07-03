@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake javac ];
 
-  configurePhase = "true";
+  dontConfigure = true;
   buildPhase = "./build-hdfjava-unix.sh";
   installPhase = ''
     mkdir -p $out

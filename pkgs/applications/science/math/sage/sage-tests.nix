@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sage-with-env
   ];
 
-  unpackPhase = "#do nothing";
+  dontUnpack = true;
   configurePhase = "#do nothing";
   buildPhase = "#do nothing";
 

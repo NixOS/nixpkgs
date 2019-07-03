@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ emacs ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/share/emacs/site-lisp"

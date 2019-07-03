@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ${python.interpreter} build.py --system-libclang --clang-completer --system-boost
   '';
 
-  configurePhase = ":";
+  dontConfigure = true;
 
   # remove the tests
   #

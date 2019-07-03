@@ -33,7 +33,7 @@ let
   };
   emojiData = stdenv.mkDerivation {
     name = "emoji-data-5.0";
-    unpackPhase = ":";
+    dontUnpack = true;
     installPhase = ''
       mkdir $out
       ${builtins.toString (flip mapAttrsToList emojiSrcs (k: v: "cp ${v} $out/emoji-${k}.txt;"))}
@@ -62,7 +62,7 @@ let
   };
   ucd = stdenv.mkDerivation rec {
     name = "ucd-12.0.0";
-    unpackPhase = ":";
+    dontUnpack = true;
     installPhase = ''
       mkdir $out
       ${builtins.toString (flip mapAttrsToList ucdSrcs (k: v: "cp ${v} $out/${k}.txt;"))}

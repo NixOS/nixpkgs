@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper jdk wrapGAppsHook gtk3 gsettings-desktop-schemas ];
 
-  unpackPhase = "#";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin $out/share/java $out/share/icons

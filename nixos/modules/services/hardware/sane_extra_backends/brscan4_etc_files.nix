@@ -19,7 +19,7 @@ nix-shell -E 'with import <nixpkgs> { }; brscan4-etc-files.override{netDevices=[
 
 */
 
-with lib; 
+with lib;
 
 let
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ brscan4 ];
 
-  configurePhase = ":";
+  dontConfigure = true;
 
   buildPhase = ''
     TARGET_DIR="$out/etc/opt/brother/scanner/brscan4"

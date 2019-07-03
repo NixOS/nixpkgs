@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   name = "ccemux-${version}";
 
   src = jar;
-  unpackPhase = "true";
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];

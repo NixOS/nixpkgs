@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "stgit";
   name = "${pname}-2009-10-28";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   src = fetchurl {
     url = "https://raw.githubusercontent.com/miracle2k/stgit/master/contrib/stgit.el";

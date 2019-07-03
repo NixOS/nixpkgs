@@ -17,7 +17,7 @@ let
 
   createTrivialProject = pkgs.stdenv.mkDerivation {
     name = "create-trivial-project";
-    unpackPhase = ":";
+    dontUnpack = true;
     buildInputs = [ pkgs.makeWrapper ];
     installPhase = "install -m755 -D ${./create-trivial-project.sh} $out/bin/create-trivial-project.sh";
     postFixup = ''

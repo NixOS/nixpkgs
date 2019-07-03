@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups ghostscript dpkg a2ps ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   brprintconf_mfcj6510dw_script = ''
     #!${runtimeShell}

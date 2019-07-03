@@ -7,7 +7,7 @@ in
 
 stdenv.mkDerivation {
   name = "clang-tools-${version}";
-  unpackPhase = ":";
+  dontUnpack = true;
   installPhase = ''
     mkdir -p $out/bin
     for tool in \

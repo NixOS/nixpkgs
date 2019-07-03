@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ruby ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin"

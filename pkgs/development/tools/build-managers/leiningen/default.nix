@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   JARNAME = "${name}-standalone.jar";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ jdk ];

@@ -77,7 +77,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ dpkg ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
   installPhase = ''
     mkdir -p $out
     dpkg -x $src $out

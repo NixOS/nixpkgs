@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libXScrnSaver libX11 ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sd3cwpamcbq9pv0mvcm8x6minqrlb4i0r12q3jg91girqswm2dp";
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = "install -D $src $out/share/lib/${name}/${name}.jar";
 
