@@ -3014,6 +3014,7 @@ broken-packages:
   - bdcs-api
   - beam
   - beam-newtype-field
+  - beam-postgres
   - beam-th
   - beamable
   - beautifHOL
@@ -4375,6 +4376,7 @@ broken-packages:
   - event-monad
   - eventful-dynamodb
   - eventful-postgresql
+  - eventlog2html
   - eventloop
   - EventSocket
   - eventsource-geteventstore-store
@@ -4526,6 +4528,7 @@ broken-packages:
   - find-clumpiness
   - find-conduit
   - find-source-files
+  - findhttp
   - fingertree-psqueue
   - fingertree-tf
   - FiniteMap
@@ -4708,6 +4711,8 @@ broken-packages:
   - fwgl-glfw
   - fwgl-javascript
   - g-npm
+  - g2
+  - g2q
   - g4ip
   - gact
   - game-probability
@@ -5207,6 +5212,7 @@ broken-packages:
   - happstack-state
   - happstack-util
   - happstack-yui
+  - happy-hour
   - happy-meta
   - happybara
   - happybara-webkit
@@ -5529,6 +5535,7 @@ broken-packages:
   - hevm
   - hevolisa
   - hevolisa-dph
+  - HExcel
   - hexchat
   - hexif
   - hexmino
@@ -5988,6 +5995,7 @@ broken-packages:
   - http-client-streams
   - http-conduit-browser
   - http-conduit-downloader
+  - http-directory
   - http-dispatch
   - http-download
   - http-enumerator
@@ -6049,6 +6057,8 @@ broken-packages:
   - hw-json
   - hw-json-lens
   - hw-json-simd
+  - hw-json-simple-cursor
+  - hw-json-standard-cursor
   - hw-packed-vector
   - hw-parser
   - hw-prim
@@ -6343,6 +6353,7 @@ broken-packages:
   - JsContracts
   - jsmw
   - json-api
+  - json-api-lib
   - json-ast-json-encoder
   - json-ast-quickcheck
   - json-b
@@ -6608,9 +6619,11 @@ broken-packages:
   - leksah-server
   - lendingclub
   - lens-accelerate
+  - lens-filesystem
   - lens-prelude
   - lens-text-encoding
   - lens-time
+  - lens-toml-parser
   - lens-tutorial
   - lensref
   - level-monad
@@ -6883,6 +6896,7 @@ broken-packages:
   - markdown2svg
   - marked-pretty
   - markov-processes
+  - markov-realization
   - markup
   - marmalade-upload
   - marquise
@@ -6990,6 +7004,7 @@ broken-packages:
   - midimory
   - midisurface
   - mighttpd
+  - mighttpd2
   - mighty-metropolis
   - mikmod
   - mikrokosmos
@@ -7011,6 +7026,7 @@ broken-packages:
   - minst-idx
   - mios
   - mirror-tweet
+  - miso-action-logger
   - miss
   - miss-porcelain
   - missing-py2
@@ -7027,6 +7043,7 @@ broken-packages:
   - mmtl-base
   - moan
   - Mobile-Legends-Hack-Cheats
+  - mockazo
   - model
   - modelicaparser
   - modify-fasta
@@ -7140,6 +7157,7 @@ broken-packages:
   - mpris
   - mprover
   - mps
+  - mptcp-pm
   - mpvguihs
   - mqtt
   - mqtt-hs
@@ -7753,6 +7771,7 @@ broken-packages:
   - pkcs10
   - pkcs7
   - pkggraph
+  - pkgtreediff
   - plailude
   - plan-applicative
   - plan-b
@@ -7890,6 +7909,7 @@ broken-packages:
   - primes-type
   - primitive-addr
   - primitive-atomic
+  - primitive-checked
   - primitive-containers
   - primitive-extras
   - primitive-indexed
@@ -7937,6 +7957,7 @@ broken-packages:
   - pronounce
   - proof-combinators
   - propane
+  - propellor
   - Proper
   - properties
   - property-list
@@ -8247,6 +8268,7 @@ broken-packages:
   - repa-v4l2
   - repl
   - RepLib
+  - replica
   - replicant
   - ReplicateEffects
   - repo-based-blog
@@ -8377,6 +8399,7 @@ broken-packages:
   - ruin
   - ruler
   - ruler-core
+  - run-st
   - rungekutta
   - runmany
   - runtime-arbitrary
@@ -8557,6 +8580,7 @@ broken-packages:
   - servant-auth-token-leveldb
   - servant-auth-token-persistent
   - servant-auth-token-rocksdb
+  - servant-cli
   - servant-client-namedargs
   - servant-csharp
   - servant-db
@@ -8754,6 +8778,7 @@ broken-packages:
   - slot-lambda
   - sloth
   - slug
+  - small-bytearray-builder
   - smallarray
   - smallcaps
   - smallcheck-laws
@@ -8967,6 +8992,7 @@ broken-packages:
   - stackage-cli
   - stackage-curator
   - stackage-metadata
+  - stackage-query
   - stackage-sandbox
   - stackage-setup
   - stackage-to-hackage
@@ -9548,6 +9574,7 @@ broken-packages:
   - type-combinators-singletons
   - type-digits
   - type-eq
+  - type-errors
   - type-indexed-queues
   - type-int
   - type-interpreter
@@ -9791,6 +9818,7 @@ broken-packages:
   - wacom-daemon
   - waddle
   - wahsp
+  - wai-app-file-cgi
   - wai-devel
   - wai-git-http
   - wai-graceful
@@ -10140,6 +10168,7 @@ broken-packages:
   - yesod-sass
   - yesod-session-redis
   - yesod-static-angular
+  - yesod-static-remote
   - yesod-test-json
   - yesod-tls
   - yesod-vend
