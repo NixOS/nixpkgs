@@ -93,7 +93,7 @@ done
 if [[ -e /etc/os-release ]]; then
   . /etc/os-release
 else
-  echo "/etc/os-release is not present. Aborting" >&2
+  echo "Error: /etc/os-release is not present, aborting." >&2
   exit 1
 fi
 
@@ -101,7 +101,7 @@ fi
 if [[ "$version" = "0" ]] && [[ "$id" = "0" ]] && \
    [[ "$description" = "0" ]] && [[ "$release" = "0" ]] && \
    [[ "$codename" = "0" ]] && [[ "$all" = "0" ]]; then
-  echo "No LSB modules are available."
+  echo "No LSB modules are available." >&2
   exit 0
 fi
 
@@ -109,7 +109,7 @@ fi
 # what the original lsb_release used.
 
 if [[ "$all" = "1" ]] || [[ "$version" = "1" ]]; then
-  echo "No LSB modules are available."
+  echo "No LSB modules are available." >&2
 fi
 
 if [[ "$all" = "1" ]] || [[ "$id" = "1" ]]; then
@@ -139,6 +139,3 @@ if [[ "$all" = "1" ]] || [[ "$codename" = "1" ]]; then
   fi
   echo $VERSION_CODENAME
 fi
-
-# Success
-exit 0
