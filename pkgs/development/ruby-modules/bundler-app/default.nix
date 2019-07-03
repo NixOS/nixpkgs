@@ -49,7 +49,7 @@ let
 in
   runCommand basicEnv.name cmdArgs ''
     mkdir -p $out/bin
-    ${(lib.concatMapStrings (x: "ln -s '${basicEnv}/bin/${x}' $out/bin/${x};\n") exes)}
+    ${(lib.concatMapStrings (x: "ln -s ${basicEnv}/bin/${x} $out/bin/;\n") exes)}
     ${(lib.concatMapStrings (s: "makeWrapper $out/bin/$(basename ${s}) $srcdir/${s} " +
                                 "--set BUNDLE_GEMFILE ${basicEnv.confFiles}/Gemfile "+
                                 "--set BUNDLE_PATH ${basicEnv}/${ruby.gemPath} "+
