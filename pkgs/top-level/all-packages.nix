@@ -8075,6 +8075,9 @@ in
   };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
+  cargo-generate = callPackage ../development/tools/rust/cargo-generate {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
