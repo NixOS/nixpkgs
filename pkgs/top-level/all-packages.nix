@@ -22004,6 +22004,8 @@ in
 
   tome4 = callPackage ../games/tome4 { };
 
+  toppler = callPackage ../games/toppler { };
+
   trackballs = callPackage ../games/trackballs { };
 
   tremulous = callPackage ../games/tremulous { };
