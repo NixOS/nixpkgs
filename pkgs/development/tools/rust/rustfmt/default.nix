@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "rustfmt-${version}";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustfmt";
     rev = "v${version}";
-    sha256 = "153pas7d5fchkmiw6mkbhn75lv3y69k85spzmm5i4lqnq7f0yqap";
+    sha256 = "1k9p6sp8q87flx9vzg46880ir7likvbydai3g6q76278h86rn0v8";
   };
 
   cargoSha256 = "08x6vy5v2vgrk3gsw3qcvv52a7hifsgcsnsg1phlk1ikaff21y4z";

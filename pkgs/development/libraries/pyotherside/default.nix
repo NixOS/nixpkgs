@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pyotherside";
-  version = "1.5.6";
+  version = "1.5.8";
 
   src = fetchFromGitHub {
     owner = "thp";
     repo = "pyotherside";
     rev = version;
-    sha256 = "1cjx0fbrq9qvbirwy76pw1f5skm2afd51k4qb269ql4gpl67d5lv";
+    sha256 = "0dnsvyg990ln3bdjdyc5b4lbb63wcjij0skq8pb4x4jglfy7vz4z";
   };
 
   nativeBuildInputs = [ qmake ];

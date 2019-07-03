@@ -38,6 +38,7 @@ let
     HTTP_PORT = ${toString cfg.httpPort}
     ROOT_URL = ${cfg.rootUrl}
     STATIC_ROOT_PATH = ${cfg.staticRootPath}
+    LFS_JWT_SECRET = #jwtsecret#
 
     [session]
     COOKIE_NAME = session
@@ -326,21 +327,28 @@ in
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
         secretKey = "${cfg.stateDir}/custom/conf/secret_key";
+        jwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret";
       in ''
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
           cp -f ${configFile} ${runConfig}
 
           if [ ! -e ${secretKey} ]; then
-              head -c 16 /dev/urandom | base64 > ${secretKey}
+              ${gitea.bin}/bin/gitea generate secret SECRET_KEY > ${secretKey}
           fi
 
-          KEY=$(head -n1 ${secretKey})
-          DBPASS=$(head -n1 ${cfg.database.passwordFile})
+          if [ ! -e ${jwtSecret} ]; then
+              ${gitea.bin}/bin/gitea generate secret LFS_JWT_SECRET > ${jwtSecret}
+          fi
+
+          KEY="$(head -n1 ${secretKey})"
+          DBPASS="$(head -n1 ${cfg.database.passwordFile})"
+          JWTSECRET="$(head -n1 ${jwtSecret})"
           sed -e "s,#secretkey#,$KEY,g" \
               -e "s,#dbpass#,$DBPASS,g" \
+              -e "s,#jwtsecet#,$JWTSECET,g" \
               -i ${runConfig}
-          chmod 640 ${runConfig} ${secretKey}
+          chmod 640 ${runConfig} ${secretKey} ${jwtSecret}
         ''}
 
         # update all hooks' binary paths

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "rivet-${version}";
-  version = "2.7.0";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";

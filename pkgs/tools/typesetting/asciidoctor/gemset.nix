@@ -237,10 +237,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1c7c5xxkx91hwj4572hbnyvxmydb90q69wlpr2l0dxrmwx2p365l";
+      sha256 = "0g9ds2ffzljl6jjmkjffwxc1z6lh5nkqqmhhkxjk71q5ggv0rkpm";
       type = "gem";
     };
-    version = "3.1.0";
+    version = "3.1.1";
   };
   "pygments.rb" = {
     dependencies = ["multi_json"];
@@ -252,6 +252,16 @@
       type = "gem";
     };
     version = "1.2.1";
+  };
+  rouge = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0yfhazlhjc4abgzhkgq8zqmdphvkh52211widkl4zhsbhqh8wg2q";
+      type = "gem";
+    };
+    version = "3.5.1";
   };
   ruby-enum = {
     dependencies = ["i18n"];

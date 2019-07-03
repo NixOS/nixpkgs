@@ -1,10 +1,10 @@
-{ stdenv, lib, bundlerApp, ruby
+{ stdenv, lib, bundlerApp, ruby, bundix, mkShell
   # Dependencies of the 'mathematical' package
 , cmake, bison, flex, glib, pkgconfig, cairo
 , pango, gdk_pixbuf, libxml2, python3, patchelf
 }:
 
-bundlerApp {
+bundlerApp rec {
   inherit ruby;
   pname = "asciidoctor";
   gemdir = ./.;
@@ -41,6 +41,12 @@ bundlerApp {
           "$soPath"
       '';
     };
+  };
+
+  passthru.updateShell = mkShell {
+    buildInputs = (gemConfig.mathematical {}).buildInputs ++ [
+      bundix
+    ];
   };
 
   meta = with lib; {

@@ -202,13 +202,13 @@ in
     };
 
     services.phpfpm.pools.limesurvey = {
+      socketName = "limesurvey";
       phpPackage = php;
-      listen = "/run/phpfpm/limesurvey.sock";
+      user = "${user}";
+      group = "${group}";
       extraConfig = ''
         listen.owner = ${config.services.httpd.user};
         listen.group = ${config.services.httpd.group};
-        user = ${user};
-        group = ${group};
 
         env[LIMESURVEY_CONFIG] = ${limesurveyConfig}
 
@@ -241,7 +241,7 @@ in
             <Directory "${pkg}/share/limesurvey">
               <FilesMatch "\.php$">
                 <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:/run/phpfpm/limesurvey.sock|fcgi://localhost/"
+                  SetHandler "proxy:unix:/run/phpfpm-limesurvey/limesurvey.sock|fcgi://localhost/"
                 </If>
               </FilesMatch>
 

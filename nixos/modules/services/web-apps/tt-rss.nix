@@ -512,12 +512,14 @@ let
 
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       "${poolName}" = {
-        listen = "/var/run/phpfpm/${poolName}.sock";
+        socketName = "${poolName}";
+        phpPackage = pkgs.php;
+        user = "${config.services.nginx.user}";
+        group = "${config.services.nginx.group}";
         extraConfig = ''
-          listen.owner = nginx
-          listen.group = nginx
+          listen.owner = ${config.services.nginx.user}
+          listen.group = ${config.services.nginx.group}
           listen.mode = 0600
-          user = ${cfg.user}
           pm = dynamic
           pm.max_children = 75
           pm.start_servers = 10
@@ -543,7 +545,7 @@ let
           locations."~ \.php$" = {
             extraConfig = ''
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
-              fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.listen};
+              fastcgi_pass unix:/run/phpfpm-${poolName}/${poolName}.sock;
               fastcgi_index index.php;
             '';
           };

@@ -6,10 +6,12 @@ with super;
   #### manual fixes for generated packages
   ##########################################3
   bit32 = super.bit32.override({
-    disabled = !isLua51;
-    # Theoretically works with luajit, but it does redefine at least one Lua
-    # 5.2 function that Luajit 2.1 provides, see:
-    # https://github.com/LuaJIT/LuaJIT/issues/325
+    # Small patch in order to no longer redefine a Lua 5.2 function that Luajit
+    # 2.1 also provides, see https://github.com/LuaJIT/LuaJIT/issues/325 for
+    # more
+    patches = [
+      ./bit32.patch
+    ];
   });
 
   busted = super.busted.override({

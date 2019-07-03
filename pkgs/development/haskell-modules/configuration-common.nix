@@ -1262,14 +1262,14 @@ self: super: {
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
     (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
-      version = "20190307-git";
+      version = "20190625-git";
       src = pkgs.fetchFromGitHub {
         owner = "haskell-CI";
         repo = "haskell-ci";
-        rev = "2baceb59bc2f36e798ff9fb6e8865c449f01d3a2";
-        sha256 = "1wqhqajxni6h9rrj22xj6421d4m0gs8qk2glghpdp307ns5gr2j4";
+        rev = "260f967c6973dfb22ecc8061a1811a2ea4b79e01";
+        sha256 = "1mvn6pqa6wfcm4jxhlhm4l54pwrlgnz7vdrmkwabliwz4q0bzgqk";
       };
-  }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck]));
+  }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck exceptions temporary]));
 
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;

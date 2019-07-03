@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, bootstrap-chicken ? null }:
 
 let
-  version = "5.0.0";
+  version = "5.1.0";
   platform = with stdenv;
     if isDarwin then "macosx"
     else if isCygwin then "cygwin"
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
-    sha256 = "15b5yrzfa8aimzba79x7v6y282f898rxqxfxrr446sjx9jwlpfd8";
+    sha256 = "0jsbp3kp0134f318j3wpd1n85gf8qzh034fn198gvazsv2l024aw";
   };
 
   setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;

@@ -33,6 +33,7 @@
       environment.systemPackages = [
         pkgs.deepin.dde-api
         pkgs.deepin.dde-calendar
+        pkgs.deepin.dde-control-center
         pkgs.deepin.dde-daemon
         pkgs.deepin.dde-dock
         pkgs.deepin.dde-launcher
@@ -46,6 +47,7 @@
       services.dbus.packages = [
         pkgs.deepin.dde-api
         pkgs.deepin.dde-calendar
+        pkgs.deepin.dde-control-center
         pkgs.deepin.dde-daemon
         pkgs.deepin.dde-dock
         pkgs.deepin.dde-launcher
