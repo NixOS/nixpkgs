@@ -4,41 +4,22 @@ with lib;
 
 let
   cfg = config.services.phpfpm;
-  enabled = cfg.poolConfigs != {} || cfg.pools != {};
 
   stateDir = "/run/phpfpm";
 
-  poolConfigs =
-    (mapAttrs mapPoolConfig cfg.poolConfigs) //
-    (mapAttrs mapPool cfg.pools);
-
-  mapPoolConfig = n: p: {
-    phpPackage = cfg.phpPackage;
-    phpOptions = cfg.phpOptions;
-    config = p;
-  };
-
-  mapPool = n: p: {
-    phpPackage = p.phpPackage;
-    phpOptions = p.phpOptions;
-    config = ''
-      listen = ${p.listen}
-      ${p.extraConfig}
-    '';
-  };
-
-  fpmCfgFile = pool: conf: pkgs.writeText "phpfpm-${pool}.conf" ''
+  fpmCfgFile = pool: poolOpts: pkgs.writeText "phpfpm-${pool}.conf" ''
     [global]
     error_log = syslog
     daemonize = no
     ${cfg.extraConfig}
 
     [${pool}]
-    ${conf}
+    listen = ${poolOpts.listen}
+    ${poolOpts.extraConfig}
   '';
 
-  phpIni = pool: pkgs.runCommand "php.ini" {
-    inherit (pool) phpPackage phpOptions;
+  phpIni = poolOpts: pkgs.runCommand "php.ini" {
+    inherit (poolOpts) phpPackage phpOptions;
     preferLocalBuild = true;
     nixDefaults = ''
       sendmail_path = "/run/wrappers/bin/sendmail -t -i"
@@ -84,30 +65,6 @@ in {
           "Options appended to the PHP configuration file <filename>php.ini</filename>.";
       };
 
-      poolConfigs = mkOption {
-        default = {};
-        type = types.attrsOf types.lines;
-        example = literalExample ''
-          { mypool = '''
-              listen = /run/phpfpm/mypool
-              user = nobody
-              pm = dynamic
-              pm.max_children = 75
-              pm.start_servers = 10
-              pm.min_spare_servers = 5
-              pm.max_spare_servers = 20
-              pm.max_requests = 500
-            ''';
-          }
-        '';
-        description = ''
-          A mapping between PHP-FPM pool names and their configurations.
-          See the documentation on <literal>php-fpm.conf</literal> for
-          details on configuration directives. If no pools are defined,
-          the phpfpm service is disabled.
-        '';
-      };
-
       pools = mkOption {
         type = types.attrsOf (types.submodule (import ./pool-options.nix {
           inherit lib config;
@@ -130,14 +87,14 @@ in {
            }
          }'';
         description = ''
-          PHP-FPM pools. If no pools or poolConfigs are defined, the PHP-FPM
+          PHP-FPM pools. If no pools are defined, the PHP-FPM
           service is disabled.
         '';
       };
     };
   };
 
-  config = mkIf enabled {
+  config = mkIf (cfg.pools != {}) {
 
     systemd.slices.phpfpm = {
       description = "PHP FastCGI Process manager pools slice";
@@ -148,7 +105,7 @@ in {
       wantedBy = [ "multi-user.target" ];
     };
 
-    systemd.services = flip mapAttrs' poolConfigs (pool: poolConfig:
+    systemd.services = mapAttrs' (pool: poolOpts:
       nameValuePair "phpfpm-${pool}" {
         description = "PHP FastCGI Process Manager service for pool ${pool}";
         after = [ "network.target" ];
@@ -158,8 +115,8 @@ in {
           mkdir -p ${stateDir}
         '';
         serviceConfig = let
-          cfgFile = fpmCfgFile pool poolConfig.config;
-          iniFile = phpIni poolConfig;
+          cfgFile = fpmCfgFile pool poolOpts;
+          iniFile = phpIni poolOpts;
         in {
           Slice = "phpfpm.slice";
           PrivateDevices = true;
@@ -168,10 +125,10 @@ in {
           # XXX: We need AF_NETLINK to make the sendmail SUID binary from postfix work
           RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
           Type = "notify";
-          ExecStart = "${poolConfig.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
+          ExecStart = "${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
           ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
         };
       }
-   );
+    ) cfg.pools;
   };
 }

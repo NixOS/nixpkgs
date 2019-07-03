@@ -178,6 +178,9 @@ with lib;
        The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
 
+    # phpfpm
+    (mkRemovedOptionModule [ "services" "phpfpm" "poolConfigs" ] "Use services.phpfpm.pools instead.")
+
     # zabbixServer
     (mkRenamedOptionModule [ "services" "zabbixServer" "dbServer" ] [ "services" "zabbixServer" "database" "host" ])
 
