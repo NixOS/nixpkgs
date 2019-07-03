@@ -20,11 +20,24 @@ nix-build -A netboot nixos/release.nix
 </programlisting>
 
  <para>
-  This will create a <literal>result</literal> directory containing: *
-  <literal>bzImage</literal> – the Linux kernel * <literal>initrd</literal>
-  – the initrd file * <literal>netboot.ipxe</literal> – an example ipxe
-  script demonstrating the appropriate kernel command line arguments for this
-  image
+  This will create a <literal>result</literal> directory containing: 
+   
+  <listitem>
+   <para>
+     <literal>bzImage</literal> – the Linux kernel 
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     <literal>initrd</literal> – the initrd file 
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     <literal>netboot.ipxe</literal> – an example ipxe script demonstrating the appropriate kernel command line arguments for this image
+   </para>
+  </listitem>
+ </orderedlist>
  </para>
 
  <para>
