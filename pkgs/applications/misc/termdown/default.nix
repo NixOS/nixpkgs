@@ -6,11 +6,11 @@ with stdenv.lib;
 buildPythonApplication rec {
 
   name    = "termdown-${version}";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     rev    = version;
-    sha256 = "0jgjzglna0gwp0j31l48pny69szslczl13aahwjfjypkv9lx8w2a";
+    sha256 = "08l03yk5jc1g0gps789q1s2knnaqzlidy4s5q5nhwg9g25la19nr";
     repo   = "termdown";
     owner  = "trehn";
   };
