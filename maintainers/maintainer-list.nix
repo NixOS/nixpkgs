@@ -1570,6 +1570,11 @@
     github = "endgame";
     name = "Jack Kelly";
   };
+  enorris = {
+      name = "Eric Norris";
+      email = "erictnorris@gmail.com";
+      github = "ericnorris";
+  };
   enzime = {
     email = "enzime@users.noreply.github.com";
     github = "enzime";
