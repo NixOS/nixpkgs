@@ -1,7 +1,11 @@
-{ stdenv, fetchFromGitHub, which, libX11, libXt, fontconfig, freetype
+{ stdenv, fetchFromGitHub, which
+, darwin ? null
 , xorgproto ? null
+, libX11
 , libXext ? null
-, zlib ? null
+, libXt ? null
+, fontconfig ? null
+, freetype ? null
 , perl ? null  # For building web manuals
 }:
 
@@ -15,6 +19,12 @@ stdenv.mkDerivation {
     rev = "047fd921744f39a82a86d9370e03f7af511e6e84";
     sha256 = "1lp17948q7vpl8rc2bf5a45bc8jqyj0s3zffmks9r25ai42vgb43";
   };
+
+  patches = [
+    ./tmpdir.patch
+    ./darwin-sw_vers.patch
+    ./darwin-cfframework.patch
+  ];
 
   postPatch = ''
     #hardcoded path
@@ -34,30 +44,16 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    which perl libX11 fontconfig xorgproto libXt libXext
+    which perl
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    xorgproto libX11 libXext libXt fontconfig
     freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    darwin.cf-private Carbon Cocoa IOKit Metal QuartzCore
+  ]);
 
   builder = ./builder.sh;
-
-  libX11_dev = libX11.dev;
   libXt_dev = libXt.dev;
-  libXext_dev = libXext.dev;
-  fontconfig_dev = fontconfig.dev;
-  freetype_dev = freetype.dev;
-  zlib_dev = zlib.dev;
-
-  xorgproto_exp = xorgproto;
-  libX11_exp = libX11;
-  libXt_exp = libXt;
-  libXext_exp = libXext;
-  freetype_exp = freetype;
-  zlib_exp = zlib;
-
-  fontconfig_lib = fontconfig.lib;
-
-  NIX_LDFLAGS="-lgcc_s";
-  enableParallelBuilding = true;
 
   doInstallCheck = true;
   installCheckPhase = ''
