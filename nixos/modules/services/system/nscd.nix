@@ -51,13 +51,6 @@ in
 
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
-        preStart =
-          ''
-            mkdir -m 0755 -p /run/nscd
-            rm -f /run/nscd/nscd.pid
-            mkdir -m 0755 -p /var/db/nscd
-          '';
-
         restartTriggers = [
           config.environment.etc.hosts.source
           config.environment.etc."nsswitch.conf".source
@@ -67,6 +60,7 @@ in
         serviceConfig =
           { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd";
             Type = "forking";
+            RuntimeDirectory = "nscd";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
             ExecReload =
