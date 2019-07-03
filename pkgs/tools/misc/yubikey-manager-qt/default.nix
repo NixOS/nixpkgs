@@ -27,11 +27,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "yubikey-manager-qt";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "0hcfl0mh4gqy9c8ghmi58asqr8v009n6li0mgcy3r8fyjr7qryvy";
+    sha256 = "01ax8zjrahs2sjbgsys2ahh57sdcap0ij3y1r1bbvsgzr7xxm2q8";
   };
 
   nativeBuildInputs = [ makeWrapper python3.pkgs.wrapPython qmake ];
