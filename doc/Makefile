@@ -36,6 +36,10 @@ out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 		doc-support/result/xhtml.xsl \
 		./manual-full.xml
 
+	cp doc-support/result/elasticlunr/elasticlunr.min.js out/html/
+	cp doc-support/result/search.js out/html/
+	cp doc-support/result/index.json out/html/
+
 	mkdir -p out/html/highlightjs/
 	cp -r highlightjs out/html/
 
