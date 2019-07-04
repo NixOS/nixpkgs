@@ -6,6 +6,8 @@
 , mock
 , isPy3k
 , pysqlite
+, withPsycopg2 ? true
+, psycopg2
 }:
 
 buildPythonPackage rec {
@@ -26,6 +28,8 @@ buildPythonPackage rec {
       sha256 = "1x25aj5hqmgjdak4hllya0rf0srr937k1hwaxb24i9ban607hjri";
     })
   ];
+
+  propagatedBuildInputs = lib.optional withPsycopg2 psycopg2;
 
   checkInputs = [
     pytest
