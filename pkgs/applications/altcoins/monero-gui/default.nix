@@ -102,10 +102,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Private, secure, untraceable currency";
-    homepage    = https://getmonero.org/;
-    license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ rnhmjoj ];
+    description  = "Private, secure, untraceable currency";
+    homepage     = https://getmonero.org/;
+    license      = licenses.bsd3;
+    platforms    = platforms.all;
+    badPlatforms = platforms.darwin;
+    maintainers  = with maintainers; [ rnhmjoj ];
   };
 }
