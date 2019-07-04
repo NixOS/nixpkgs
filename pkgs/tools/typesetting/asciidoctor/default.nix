@@ -8,6 +8,7 @@ let app = bundlerApp {
       "asciidoctor"
       "asciidoctor-pdf"
       "asciidoctor-safe"
+      "asciidoctor-epub3"
     ];
 
     meta = with lib; {
@@ -22,6 +23,7 @@ let app = bundlerApp {
   shell = mkShell { 
     buildInputs = 
       app.gems.mathematical.buildInputs ++ 
+      app.gems.nokogiri.buildInputs ++ 
       [ bundix ]; 
   };
 in app.overrideAttrs (attrs: { passthru = attrs.passthru // { updateShell = shell; }; })
