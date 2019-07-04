@@ -11930,6 +11930,8 @@ in
 
   libmodplug = callPackage ../development/libraries/libmodplug {};
 
+  libmodule = callPackage ../development/libraries/libmodule { };
+
   libmpcdec = callPackage ../development/libraries/libmpcdec { };
 
   libmp3splt = callPackage ../development/libraries/libmp3splt { };
