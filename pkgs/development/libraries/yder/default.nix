@@ -17,6 +17,15 @@ stdenv.mkDerivation rec {
     # We set CMAKE_INSTALL_LIBDIR to the absolute path in $out, so
     # prefix and exec_prefix cannot be $out, too
     ./fix-pkgconfig.patch
+
+    # - ORCANIA_LIBRARIES must be set before target_link_libraries is called
+    # - librt is not available, nor needed on Darwin
+    # - The test binary is not linked against all necessary libraries
+    # - Test for journald logging is not systemd specific and fails on darwin
+    # - If the working directory is different from the build directory, the
+    #   dynamic linker can't find libyder
+    # - Return correct error code from y_init_logs when journald is disabled
+    ./fix-darwin.patch
   ];
 
   nativeBuildInputs = [ cmake ];
