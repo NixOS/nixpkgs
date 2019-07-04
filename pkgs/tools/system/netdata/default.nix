@@ -6,6 +6,7 @@
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withSsl ? true, openssl
+, withDebug ? false
 }:
 
 with stdenv.lib;
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
   patches = [
     ./no-files-in-etc-and-var.patch
   ];
+
+  NIX_CFLAGS_COMPILE = optional withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = optionalString (!stdenv.isDarwin) ''
     # rename this plugin so netdata will look for setuid wrapper
