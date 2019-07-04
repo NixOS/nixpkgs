@@ -1,4 +1,4 @@
-{ stdenv, gettext, fetchurl, evolution-data-server
+{ stdenv, gettext, fetchurl, evolution-data-server, fetchpatch
 , pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, python3, gtk3, glib, cheese
 , libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
 , wrapGAppsHook, folks, libxml2, gnome3, telepathy-glib
@@ -29,6 +29,18 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dtelepathy=true"
+  ];
+
+  patches = [
+    # Fixes build with libhandy >= 0.0.10
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-contacts/commit/c5eee38cd2556403a640a0a4c11d36cbf9a5a798.patch";
+      sha256 = "0s2cl7z6b0x3ky4y28yyxc9x5zp4r3vqmvbhz5m2fm6830fyjg13";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-contacts/commit/1f1500ca01098ffda6392f5ec9ce3a29a48a84b1.patch";
+      sha256 = "082zaaj2l5cgr2qy145x8yknja87r0vpigrhidal40041kd5nldg";
+    })
   ];
 
   postPatch = ''
