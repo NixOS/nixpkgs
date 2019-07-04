@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dxwayland-path=${xwayland}/bin/Xwayland"
+    "-Dinstalled_tests=false" # TODO: enable these
   ];
 
   propagatedBuildInputs = [
