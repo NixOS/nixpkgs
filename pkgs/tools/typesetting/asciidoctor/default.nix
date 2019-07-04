@@ -1,11 +1,12 @@
-{ lib, bundlerApp, makeWrapper, 
+{ lib, bundlerApp, makeWrapper,
   # Optional dependencies, can be null
-  epubcheck, kindlegen, 
+  epubcheck, kindlegen,
   # For the update shell
-  mkShell, bundix 
+  mkShell, bundix
 }:
 
-let app = bundlerApp {
+let
+  app = bundlerApp {
     pname = "asciidoctor";
     gemdir = ./.;
 
@@ -24,6 +25,10 @@ let app = bundlerApp {
           ${lib.optionalString (kindlegen != null) "--set KINDLEGEN ${kindlegen}/bin/kindlegen"}
       '';
 
+    passthru = {
+      inherit updateShell;
+    };
+
     meta = with lib; {
       description = "A faster Asciidoc processor written in Ruby";
       homepage = https://asciidoctor.org/;
@@ -33,9 +38,9 @@ let app = bundlerApp {
     };
   };
 
-  # Can't be defined directly in the passthru, since app.gems isn't defined at that point.
-  shell = mkShell { 
-    inputsFrom = lib.mapAttrs app.gems;
-    buildInputs = [ bundix ]; 
+  updateShell = mkShell {
+    inputsFrom = lib.attrValues app.gems;
+    buildInputs = [ bundix ];
   };
-in app.overrideAttrs (attrs: { passthru = attrs.passthru // { updateShell = shell; }; })
+in
+  app
