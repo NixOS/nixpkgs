@@ -14,6 +14,7 @@ in pkgs.runCommand "doc-support" {}
     ln -s ${pkgs.docbook5}/xml/rng/docbook/docbook.rng ./docbook.rng
     ln -s ${pkgs.docbook_xsl_ns}/xml/xsl ./xsl
 
+    ln -s ${../../nixos/doc/xmlformat.conf} ./xmlformat.conf
     ln -s ${pkgs.documentation-highlighter} ./highlightjs
 
     echo -n "${version}" > ./version

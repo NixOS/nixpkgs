@@ -8,10 +8,10 @@ debug:
 	nix-shell --run "xmloscopy --docbook5 ./manual.xml ./manual-full.xml"
 
 .PHONY: format
-format:
+format: doc-support/result
 	find . -iname '*.xml' -type f | while read f; do \
 		echo $$f ;\
-		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i $$f ;\
+		xmlformat --config-file "doc-support/result/xmlformat.conf" -i $$f ;\
 	done
 
 .PHONY: fix-misc-xml
