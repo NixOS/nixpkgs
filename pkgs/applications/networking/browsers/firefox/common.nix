@@ -11,7 +11,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, nodejs, nasm
+, rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
 
 ### optionals
@@ -92,7 +92,14 @@ let
 
   browserPatches = [
     ./env_var_for_system_dir.patch
-  ] ++ patches;
+  ]
+  ++ lib.optional (lib.versionAtLeast ffversion "63" && lib.versionOlder ffversion "69")
+    (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29
+      name = "write_error-parallel_make.diff";
+      url = "https://hg.mozilla.org/mozilla-central/raw-diff/562655fe/python/mozbuild/mozbuild/action/node.py";
+      sha256 = "11d7rgzinb4mwl7yzhidjkajynmxgmffr4l9isgskfapyax9p88y";
+    })
+  ++ patches;
 
 in
 

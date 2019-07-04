@@ -35,14 +35,12 @@
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
-, meta ? {}, ... } @ args':
+, meta ? {}, ... } @ args:
 
 
 with builtins;
 
 let
-  args = lib.filterAttrs (name: _: name != "extraSrcs") args';
-
   removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
@@ -75,7 +73,7 @@ let
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;
   package = go.stdenv.mkDerivation (
-    (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
+    (builtins.removeAttrs args [ "goPackageAliases" "disabled" "extraSrcs"]) // {
 
     nativeBuildInputs = [ removeReferencesTo go ]
       ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
