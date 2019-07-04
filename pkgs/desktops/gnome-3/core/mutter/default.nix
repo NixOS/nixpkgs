@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   pname = "mutter";
   version = "3.32.2";
 
+  outputs = [ "out" "dev" "man" ];
+
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1h577i2ap7dpfy1jg101jvc6nzccc0csgvd55ahydlr8f94frcva";
