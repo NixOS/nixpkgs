@@ -17335,6 +17335,8 @@ in
 
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
 
+  clight = callPackage ../applications/misc/clight { };
+
   clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
   clipgrab = qt5.callPackage ../applications/video/clipgrab { };
