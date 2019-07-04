@@ -30,10 +30,10 @@ validate: manual-full.xml doc-support/result
 
 out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 	mkdir -p out/html
-	xsltproc ${xsltFlags} \
+	xsltproc \
 		--nonet --xinclude \
 		--output $@ \
-		doc-support/result/xsl/docbook/xhtml/docbook.xsl \
+		doc-support/result/xhtml.xsl \
 		./manual-full.xml
 
 	mkdir -p out/html/highlightjs/
@@ -48,9 +48,9 @@ out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 
 out/epub/manual.epub: manual-full.xml
 	mkdir -p out/epub/scratch
-	xsltproc ${xsltFlags} --nonet \
+	xsltproc --nonet \
 		--output out/epub/scratch/ \
-		doc-support/result/xsl/docbook/epub/docbook.xsl \
+		doc-support/result/epub.xsl \
 		./manual-full.xml
 
 	cp ./overrides.css out/epub/scratch/OEBPS
