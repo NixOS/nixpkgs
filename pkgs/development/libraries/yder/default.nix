@@ -1,4 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, cmake, orcania, systemd, check, subunit }:
+{ stdenv, lib, fetchFromGitHub, cmake, orcania, systemd, check, subunit
+, withSystemd ? stdenv.isLinux
+}:
+assert withSystemd -> systemd != null;
 stdenv.mkDerivation rec {
   pname = "yder";
   version = "1.4.6";
@@ -18,13 +21,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ orcania ];
+  buildInputs = [ orcania ] ++ lib.optional withSystemd systemd;
 
   checkInputs = [ check subunit ];
 
   cmakeFlags = [
     "-DBUILD_YDER_TESTING=on"
-  ];
+  ] ++ lib.optional (!withSystemd) "-DWITH_JOURNALD=off";
 
   doCheck = true;
 
@@ -37,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/babelouest/yder";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ johnazoidberg ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
