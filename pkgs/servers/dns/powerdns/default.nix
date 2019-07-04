@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Authoritative DNS server";
     homepage = https://www.powerdns.com;
-    platforms = platforms.linux;
-    # cannot find postgresql libs on macos x
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     license = licenses.gpl2;
     maintainers = with maintainers; [ mic92 disassembler ];
   };
