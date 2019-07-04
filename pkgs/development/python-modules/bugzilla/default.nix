@@ -21,10 +21,10 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://fedorahosted.org/python-bugzilla/;
+    homepage = https://github.com/python-bugzilla/python-bugzilla;
     description = "Bugzilla XMLRPC access module";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with maintainers; [ pierron peti ];
   };
 }
