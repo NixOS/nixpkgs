@@ -19654,6 +19654,8 @@ in
 
   purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
 
+  purple-instagram = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-instagram { };
+
   purple-lurch = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-lurch { };
 
   purple-matrix = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-matrix { };
