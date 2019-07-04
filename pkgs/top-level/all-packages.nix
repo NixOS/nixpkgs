@@ -22152,6 +22152,8 @@ in
 
   zangband = callPackage ../games/zangband { };
 
+  zaz = callPackage ../games/zaz { };
+
   zdbsp = callPackage ../games/zdoom/zdbsp.nix { };
 
   zdoom = callPackage ../games/zdoom { };
