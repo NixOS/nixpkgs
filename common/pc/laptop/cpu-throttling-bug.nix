@@ -6,7 +6,7 @@
   # See https://wiki.archlinux.org/index.php/Lenovo_ThinkPad_X1_Carbon_(Gen_6)#Power_management.2FThrottling_issues
   systemd.services.cpu-throttling = {
     enable = true;
-    description = "Sets the offset to 3 °C, so the new trip point is 97 °C";
+    description = "CPU Throttling Fix";
     documentation = [
       "https://wiki.archlinux.org/index.php/Lenovo_ThinkPad_X1_Carbon_(Gen_6)#Power_management.2FThrottling_issues"
     ];
@@ -22,7 +22,7 @@
 
   systemd.timers.cpu-throttling = {
     enable = true;
-    description = "Set cpu heating limit to 97 °C";
+    description = "CPU Throttling Fix";
     documentation = [
       "https://wiki.archlinux.org/index.php/Lenovo_ThinkPad_X1_Carbon_(Gen_6)#Power_management.2FThrottling_issues"
     ];
