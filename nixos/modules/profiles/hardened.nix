@@ -89,4 +89,7 @@ with lib;
   #
   # The value is taken from the KSPP recommendations (Debian uses 4096).
   boot.kernel.sysctl."vm.mmap_min_addr" = mkDefault 65536;
+
+  # Disable ftrace debugging
+  boot.kernel.sysctl."kernel.ftrace_enabled" = mkDefault false;
 }
