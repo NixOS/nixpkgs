@@ -13,6 +13,7 @@ let
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;
   cfgScrub = config.services.zfs.autoScrub;
+  cfgZED = config.services.zfs.zed;
 
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
@@ -89,6 +90,87 @@ let
       "${zpoolCmd}" import -d "${cfgZfs.devNodes}" -N $ZFS_FORCE "$pool"
     }
   '';
+
+  zedConf = concatStrings [
+    (if cfgZED.debugLog == null then ''
+      #ZED_DEBUG_LOG="/tmp/zed.debug.log"
+    '' else ''
+      #ZED_DEBUG_LOG="${cfgZED.debugLog}"
+    '')
+
+    (if cfgZED.email.addresses == null then ''
+      #ZED_EMAIL_ADDR=""
+    '' else ''
+      ZED_EMAIL_ADDR="${concatStringsSep " " cfgZED.email.addresses}"
+    '')
+
+    (if cfgZED.email.program == null then ''
+      #ZED_EMAIL_PROG="mail"
+    '' else ''
+      ZED_EMAIL_PROG="${cfgZED.email.program}"
+    '')
+
+    (if cfgZED.email.options == null then ''
+      #ZED_EMAIL_OPTS="-s '@SUBJECT@' @ADDRESS@"
+    '' else ''
+      ZED_EMAIL_OPTS="${cfgZED.email.options}"
+    '')
+
+    ''
+      #ZED_LOCKDIR="/var/lock"
+    ''
+
+    (if cfgZED.notify.interval == null then ''
+      #ZED_NOTIFY_INTERVAL_SECS=3600
+    '' else ''
+      ZED_NOTIFY_INTERVAL_SECS=${toString cfgZED.notify.interval}
+    '')
+
+    (if cfgZED.email.program == false then ''
+      ZED_NOTIFY_VERBOSE=0
+    '' else ''
+      ZED_NOTIFY_VERBOSE=1
+    '')
+
+    ''
+      #ZED_NOTIFY_DATA=
+    ''
+
+    (if cfgZED.pushbullet.accessToken == null then ''
+      #ZED_PUSHBULLET_ACCESS_TOKEN=""
+    '' else ''
+      ZED_PUSHBULLET_ACCESS_TOKEN="${cfgZED.pushbullet.accessToken}"
+    '')
+
+    (if cfgZED.pushbullet.channelTag == null then ''
+      #ZED_PUSHBULLET_CHANNEL_TAG=""
+    '' else ''
+      ZED_PUSHBULLET_CHANNEL_TAG="${cfgZED.pushbullet.channelTag}"
+    '')
+
+    ''
+      #ZED_RUNDIR="/var/run"
+    ''
+
+    (if cfgZED.enclosureLED == false then ''
+      ZED_USE_ENCLOSURE_LEDS=0
+    '' else ''
+      ZED_USE_ENCLOSURE_LEDS=1
+    '')
+
+    (if cfgZED.scrubAfterResilver == false then ''
+      ZED_SCRUB_AFTER_RESILVER=0
+    '' else ''
+      ZED_SCRUB_AFTER_RESILVER=1
+    '')
+
+    ''
+      #ZED_SYSLOG_PRIORITY="daemon.notice"
+      #ZED_SYSLOG_TAG="zed"
+      #ZED_SYSLOG_SUBCLASS_INCLUDE="checksum|scrub_*|vdev.*"
+      #ZED_SYSLOG_SUBCLASS_EXCLUDE="statechange|config_*|history_event"
+    ''
+  ];
 
 in
 
@@ -299,7 +381,116 @@ in
         '';
       };
     };
-  };
+
+    services.zfs.zed = {
+      debugLog = mkOption {
+        default = null;
+        type = types.nullOr types.path;
+        example = "/tmp/zed.debug.log";
+        description = ''
+          Absolute path to the debug output file.
+        '';
+      };
+ 
+      email.addresses = mkOption {
+        default = [ ];
+        type = types.listOf types.str;
+        example = [ "user@domain.tld" ];        
+        description = ''
+          Email address of the zpool administrator for receipt of notifications.
+          Email will only be sent if value is defined.
+        '';
+      };
+
+      email.program = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "mail";
+        description = ''
+          Name or path of executable responsible for sending notifications via email;
+          the mail program must be capable of reading a message body from stdin.
+          Email will only be sent if an email address is defined.
+        '';
+      };
+
+      email.options = mkOption {
+        type = types.str;
+        default = "-s '@SUBJECT' @ADDRESS@";
+        description = ''
+          Command-line options for the email program.
+          The string @ADDRESS@ will be replaced with the recipient email address(es).
+          The string @SUBJECT@ will be replaced with the notification subject;
+          this should be protected with quotes to prevent word-splitting.
+          Email will only be sent if an email address is defined.
+        '';
+      };
+
+      notify.interval = mkOption {
+        type = types.int;
+        default = 3600;
+        description = ''
+          Minimum number of seconds between notifications for a similar event.
+        '';
+      };
+
+      notify.verbosity = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Notification verbosity.
+          If set to false, suppress notification if the pool is healthy.
+          If set to true, send notification regardless of pool health.
+        '';
+      };
+
+      pushbullet.accessToken = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Pushbullet access token.
+          This grants full access to your account -- protect it accordingly!
+          &#60;https://www.pushbullet.com/get-started&#62;
+          &#60;https://www.pushbullet.com/account&#62;
+          NOTICE: Filling your access token in here will make it world-readable
+          for any user on the system.
+        '';
+      };
+
+      pushbullet.channelTag = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Pushbullet channel tag for push notification feeds that can be subscribed to.
+          &#60;https://www.pushbullet.com/my-channel&#62;
+          If not defined, push notifications will instead be sent to all devices
+          associated with the account specified by the access token.
+        '';
+      };
+
+      enclosureLED = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Turn on/off enclosure LEDs when drives get DEGRADED/FAULTED.  This works for
+          device mapper and multipath devices as well.  Your enclosure must be
+          supported by the Linux SES driver for this to work.
+          If set to true, enclosure LEDs are turned on.
+          If set to false, enclosure LEDs are turned off.
+        '';
+      };
+
+      scrubAfterResilver = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Run a scrub after every resilver
+          If set to true, scrub runs after every resilver.
+          If set to false, scrub won't run after a resilver.
+        '';
+      };
+    };
+
+ };
 
   ###### implementation
 
@@ -376,7 +567,21 @@ in
         zfsSupport = true;
       };
 
-      environment.etc."zfs/zed.d".source = "${packages.zfsUser}/etc/zfs/zed.d/";
+      
+      environment.etc."zfs/zed.d/all-syslog.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/all-syslog.sh";
+      environment.etc."zfs/zed.d/data-notify.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/data-notify.sh";
+      environment.etc."zfs/zed.d/pool_import-led.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/pool_import-led.sh";
+      environment.etc."zfs/zed.d/resilver_finish-notify.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/resilver_finish-notify.sh";
+      environment.etc."zfs/zed.d/resilver_finish-start-scrub.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/resilver_finish-start-scrub.sh";
+      environment.etc."zfs/zed.d/scrub_finish-notify.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/scrub_finish-notify.sh";
+      environment.etc."zfs/zed.d/statechange-led.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/statechange-led.sh";
+      environment.etc."zfs/zed.d/statechange-notify.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/statechange-notify.sh";
+      environment.etc."zfs/zed.d/vdev_attach-led.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/vdev_attach-led.sh";
+      environment.etc."zfs/zed.d/vdev_clear-led.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/vdev_clear-led.sh";
+      environment.etc."zfs/zed.d/zed-functions.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/zed-functions.sh";
+      environment.etc."zfs/zed.d/zed.rc".text = ''
+        ${zedConf}
+      '';
 
       system.fsPackages = [ packages.zfsUser ]; # XXX: needed? zfs doesn't have (need) a fsck
       environment.systemPackages = [ packages.zfsUser ]
