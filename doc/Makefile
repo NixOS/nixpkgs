@@ -74,11 +74,10 @@ highlightjs:
 manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml functions/library/generated *.xml **/*.xml **/**/*.xml
 	xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
 
-.version:
-	nix-instantiate --eval \
-		-E '(import ../lib).version' > .version
+.version: doc-support/result
+	ln -rfs ./doc-support/result/version .version
 
-doc-support/result:
+doc-support/result: doc-support/default.nix
 	(cd doc-support; nix-build)
 
 functions/library/locations.xml: doc-support/result

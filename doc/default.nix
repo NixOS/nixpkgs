@@ -29,7 +29,7 @@ in pkgs.stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    echo ${lib.version} > .version
+    ln -s ${doc-support} ./doc-support/result
   '';
 
   installPhase = ''
