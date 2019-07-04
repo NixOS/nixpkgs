@@ -5089,7 +5089,7 @@ in {
 
   larch = callPackage ../development/python-modules/larch { };
 
-  websocket_client = callPackage ../development/python-modules/websockets_client { };
+  websocket_client = callPackage ../development/python-modules/websocket_client { };
 
   webhelpers = callPackage ../development/python-modules/webhelpers { };
 
