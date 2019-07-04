@@ -1928,7 +1928,7 @@ in
     enableExtraPlugins = true;
   });
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { kindlegen = null; };
 
   asunder = callPackage ../applications/audio/asunder { };
 
