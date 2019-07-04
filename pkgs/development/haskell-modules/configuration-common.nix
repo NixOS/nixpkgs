@@ -159,16 +159,11 @@ self: super: {
     then super.double-conversion
     else addExtraLibrary super.double-conversion pkgs.libcxx;
 
-  inline-c-cpp = if !pkgs.stdenv.isDarwin
-    then super.inline-c-cpp
-    else
-      let drv = addExtraLibrary (overrideCabal super.inline-c-cpp (drv: {
-          postPatch = ''
-            substituteInPlace inline-c-cpp.cabal --replace  stdc++ c++
-          '';
-        })) pkgs.libcxx;
-      in # https://github.com/fpco/inline-c/issues/75
-         dontCheck drv;
+  inline-c-cpp = overrideCabal super.inline-c-cpp (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace inline-c-cpp.cabal --replace "-optc-std=c++11" ""
+    '';
+  });
 
   inline-java = addBuildDepend super.inline-java pkgs.jdk;
 
