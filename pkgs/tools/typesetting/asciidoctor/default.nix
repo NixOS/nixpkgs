@@ -1,4 +1,9 @@
-{ lib, bundlerApp, mkShell, bundix }:
+{ lib, bundlerApp, makeWrapper, 
+  # Optional dependencies, can be null
+  epubcheck, kindlegen, 
+  # For the update shell
+  mkShell, bundix 
+}:
 
 let app = bundlerApp {
     pname = "asciidoctor";
@@ -10,6 +15,14 @@ let app = bundlerApp {
       "asciidoctor-safe"
       "asciidoctor-epub3"
     ];
+
+    buildInputs = [ makeWrapper ];
+
+    postBuild = ''
+        wrapProgram "$out/bin/asciidoctor-epub3" \
+          ${lib.optionalString (epubcheck != null) "--set EPUBCHECK ${epubcheck}/bin/epubcheck"} \
+          ${lib.optionalString (kindlegen != null) "--set KINDLEGEN ${kindlegen}/bin/kindlegen"}
+      '';
 
     meta = with lib; {
       description = "A faster Asciidoc processor written in Ruby";
