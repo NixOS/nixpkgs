@@ -546,6 +546,8 @@ in {
 
   matchpy = callPackage ../development/python-modules/matchpy { };
 
+  maxminddb = callPackage ../development/python-modules/maxminddb { };
+
   monty = callPackage ../development/python-modules/monty { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
