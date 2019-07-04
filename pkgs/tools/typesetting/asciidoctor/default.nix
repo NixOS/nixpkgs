@@ -1,4 +1,4 @@
-{ lib, bundlerApp, mkShell, bundix, defaultGemConfig }:
+{ lib, bundlerApp, mkShell, bundix }:
 
 let app = bundlerApp {
     pname = "asciidoctor";
@@ -20,10 +20,9 @@ let app = bundlerApp {
     };
   };
 
+  # Can't be defined directly in the passthru, since app.gems isn't defined at that point.
   shell = mkShell { 
-    buildInputs = 
-      app.gems.mathematical.buildInputs ++ 
-      app.gems.nokogiri.buildInputs ++ 
-      [ bundix ]; 
+    inputsFrom = lib.mapAttrs app.gems;
+    buildInputs = [ bundix ]; 
   };
 in app.overrideAttrs (attrs: { passthru = attrs.passthru // { updateShell = shell; }; })
