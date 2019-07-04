@@ -28,12 +28,12 @@ clean:
 validate: manual-full.xml doc-support/result
 	jing doc-support/result/docbook.rng manual-full.xml
 
-out/html/index.html: manual-full.xml style.css highlightjs
+out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 	mkdir -p out/html
 	xsltproc ${xsltFlags} \
 		--nonet --xinclude \
 		--output $@ \
-		"$$XSL/docbook/xhtml/docbook.xsl" \
+		doc-support/result/xsl/docbook/xhtml/docbook.xsl \
 		./manual-full.xml
 
 	mkdir -p out/html/highlightjs/
@@ -43,20 +43,20 @@ out/html/index.html: manual-full.xml style.css highlightjs
 	cp ./style.css out/html/style.css
 
 	mkdir -p out/html/images/callouts
-	cp "$$XSL/docbook/images/callouts/"*.svg out/html/images/callouts/
+	cp doc-support/result/xsl/docbook/images/callouts/*.svg out/html/images/callouts/
 	chmod u+w -R out/html/
 
 out/epub/manual.epub: manual-full.xml
 	mkdir -p out/epub/scratch
 	xsltproc ${xsltFlags} --nonet \
 		--output out/epub/scratch/ \
-		"$$XSL/docbook/epub/docbook.xsl" \
+		doc-support/result/xsl/docbook/epub/docbook.xsl \
 		./manual-full.xml
 
 	cp ./overrides.css out/epub/scratch/OEBPS
 	cp ./style.css out/epub/scratch/OEBPS
 	mkdir -p out/epub/scratch/OEBPS/images/callouts/
-	cp "$$XSL/docbook/images/callouts/"*.svg out/epub/scratch/OEBPS/images/callouts/
+	cp doc-support/result/xsl/docbook/images/callouts/*.svg out/epub/scratch/OEBPS/images/callouts/
 	echo "application/epub+zip" > mimetype
 	zip -0Xq "out/epub/manual.epub" mimetype
 	rm mimetype
