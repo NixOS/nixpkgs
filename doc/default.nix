@@ -13,7 +13,6 @@ in pkgs.stdenv.mkDerivation {
   # nix-shell between each test, maybe even:
   # $ nix-shell --run "make clean all"
   # otherwise they won't reapply :)
-  HIGHLIGHTJS = pkgs.documentation-highlighter;
   XMLFORMAT_CONFIG = ../nixos/doc/xmlformat.conf;
   xsltFlags = lib.concatStringsSep " " [
     "--param section.autolabel 1"

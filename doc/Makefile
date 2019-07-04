@@ -63,12 +63,12 @@ out/epub/manual.epub: manual-full.xml
 	cd "out/epub/scratch/" && zip -Xr9D "../manual.epub" *
 	rm -rf "out/epub/scratch/"
 
-highlightjs:
+highlightjs: doc-support/result
 	mkdir -p highlightjs
-	cp -r "$$HIGHLIGHTJS/highlight.pack.js" highlightjs/
-	cp -r "$$HIGHLIGHTJS/LICENSE" highlightjs/
-	cp -r "$$HIGHLIGHTJS/mono-blue.css" highlightjs/
-	cp -r "$$HIGHLIGHTJS/loader.js" highlightjs/
+	cp -r doc-support/result/highlightjs/highlight.pack.js highlightjs/
+	cp -r doc-support/result/highlightjs/LICENSE highlightjs/
+	cp -r doc-support/result/highlightjs/mono-blue.css highlightjs/
+	cp -r doc-support/result/highlightjs/loader.js highlightjs/
 
 
 manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml functions/library/generated *.xml **/*.xml **/**/*.xml
