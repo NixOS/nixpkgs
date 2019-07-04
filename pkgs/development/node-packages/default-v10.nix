@@ -77,6 +77,10 @@ nodePackages // {
     postInstall = "npm run-script prepublish";
   };
 
+  mathoid = nodePackages."mathoid".override {
+    buildInputs = [ pkgs.pkg-config pkgs.librsvg ];
+  };
+
   pnpm = nodePackages.pnpm.override {
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
