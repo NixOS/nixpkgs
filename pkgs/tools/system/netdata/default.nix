@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
        $out/libexec/netdata/plugins.d/apps.plugin.org
+    ${optionalString withIpmi ''
+      mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
+         $out/libexec/netdata/plugins.d/freeipmi.plugin.org
+    ''}
   '';
 
   preConfigure =  optionalString (!stdenv.isDarwin) ''
