@@ -25,8 +25,8 @@ clean:
 	rm -rf ./out/ ./highlightjs
 
 .PHONY: validate
-validate: manual-full.xml
-	jing "$$RNG" manual-full.xml
+validate: manual-full.xml doc-support/result
+	jing doc-support/result/docbook.rng manual-full.xml
 
 out/html/index.html: manual-full.xml style.css highlightjs
 	mkdir -p out/html

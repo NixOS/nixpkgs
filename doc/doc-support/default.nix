@@ -10,6 +10,9 @@ in pkgs.runCommand "doc-support" {}
     cd result
     ln -s ${locationsXml} ./function-locations.xml
     ln -s ${functionDocs} ./function-docs
+
+    ln -s ${pkgs.docbook5}/xml/rng/docbook/docbook.rng ./docbook.rng
+
     echo -n "${version}" > ./version
   )
   mv result $out

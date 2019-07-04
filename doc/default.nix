@@ -15,7 +15,6 @@ in pkgs.stdenv.mkDerivation {
   # otherwise they won't reapply :)
   HIGHLIGHTJS = pkgs.documentation-highlighter;
   XSL = "${pkgs.docbook_xsl_ns}/xml/xsl";
-  RNG = "${pkgs.docbook5}/xml/rng/docbook/docbook.rng";
   XMLFORMAT_CONFIG = ../nixos/doc/xmlformat.conf;
   xsltFlags = lib.concatStringsSep " " [
     "--param section.autolabel 1"
