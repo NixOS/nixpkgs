@@ -182,6 +182,11 @@
       <xref linkend="opt-programs.zsh.loginShellInit" /> and <xref linkend="opt-programs.zsh.promptInit" /> may break if it relies on those options being set.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       Nodejs 8 is scheduled EOL under the lifetime of 19.09 and has been dropped.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 

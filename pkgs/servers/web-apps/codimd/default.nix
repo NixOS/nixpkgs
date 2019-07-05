@@ -1,5 +1,5 @@
 { stdenv, pkgs, buildEnv, fetchFromGitHub, makeWrapper
-, fetchpatch, nodejs-8_x, phantomjs2, runtimeShell }:
+, fetchpatch, nodejs-10_x, phantomjs2, runtimeShell }:
 let
   nodePackages = let
     # Some packages fail to install with ENOTCACHED due to a mistakenly added
@@ -96,7 +96,7 @@ let
       # has resolved the issue.
       (import ./js-sequence-diagrams {
         inherit pkgs;
-        nodejs = nodejs-8_x;
+        nodejs = nodejs-10_x;
         extraNodePackages = {
           lodash = nodePackages."lodash-^4.17.4";
           eve = nodePackages."eve-^0.5.4";
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
   inherit name version src;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ nodejs-8_x ];
+  buildInputs = [ nodejs-10_x ];
 
   NODE_PATH = "${nodeEnv}/lib/node_modules";
 
@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # due to the `dontNpmInstall` workaround, `node_modules/.bin` isn't created anymore.
     substituteInPlace package.json \
-      --replace "webpack --config" "${nodejs-8_x}/bin/node ./node_modules/webpack/bin/webpack.js --config"
+      --replace "webpack --config" "${nodejs-10_x}/bin/node ./node_modules/webpack/bin/webpack.js --config"
   '';
 
   buildPhase = ''
@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cat > $out/bin/codimd <<EOF
       #!${runtimeShell}
-      ${nodejs-8_x}/bin/node $out/app.js
+      ${nodejs-10_x}/bin/node $out/app.js
     EOF
     cp -R {app.js,bin,lib,locales,package.json,public} $out/
   '';
