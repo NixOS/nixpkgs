@@ -333,6 +333,8 @@ in
     inherit url;
   };
 
+  lazydocker = callPackage ../tools/misc/lazydocker { };
+
   ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
     ../build-support/setup-hooks/ld-is-cc-hook.sh;
 
