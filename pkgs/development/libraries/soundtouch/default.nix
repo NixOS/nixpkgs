@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
       name = "CVE-2018-1000223.patch";
       sha256 = "1ji8xrc3qyp9jdycrdv9bwpfpgw63nnd7xwl32sjwbf8v80xpdkp";
     })
+    (fetchpatch {
+      url = "https://gitlab.com/soundtouch/soundtouch/commit/107f2c5d201a4dfea1b7f15c5957ff2ac9e5f260.patch";
+      name = "CVE-2018-14044-CVE-2018-14045.patch";
+      sha256 = "0cfsf527fdbj8vd306d6ijvgsfp81dbkyaq5g2z7pk351qkqd0dw";
+    })
   ];
 
   buildInputs = [ autoconf automake libtool ];
