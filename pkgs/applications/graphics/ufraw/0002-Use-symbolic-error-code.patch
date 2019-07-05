@@ -1,0 +1,26 @@
+From b85e03dd607fb697f69eb9afb044924f046f9eb3 Mon Sep 17 00:00:00 2001
+From: Neil Mayhew <neil_mayhew@users.sourceforge.net>
+Date: Fri, 5 Jul 2019 13:08:35 -0600
+Subject: [PATCH 2/2] Use symbolic error code
+Content-Type: text/plain; charset=utf-8
+
+---
+ ufraw_exiv2.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ufraw_exiv2.cc b/ufraw_exiv2.cc
+index 9a6ec86..5958b3d 100644
+--- a/ufraw_exiv2.cc
++++ b/ufraw_exiv2.cc
+@@ -66,7 +66,7 @@ extern "C" int ufraw_exif_read_input(ufraw_data *uf)
+         if (exifData.empty()) {
+             std::string error(uf->filename);
+             error += ": No Exif data found in the file";
+-            throw Exiv2::Error(1, error);
++            throw Exiv2::Error(Exiv2::kerErrorMessage, error);
+         }
+ 
+         /* List of tag names taken from exiv2's printSummary() in actions.cpp */
+-- 
+2.22.0
+

@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     gtk2 gtkimageview bzip2 zlib
     libjpeg libtiff cfitsio exiv2 lcms2 lensfun
   ] ++ stdenv.lib.optional withGimpPlugin gimp;
+  patches = [
+    ./0001-Change-use-of-header-files.patch # Needed for exiv2 0.27.1
+    ./0002-Use-symbolic-error-code.patch    # Needed for exiv2 0.27.1
+  ];
 
   configureFlags = [
     "--enable-extras"

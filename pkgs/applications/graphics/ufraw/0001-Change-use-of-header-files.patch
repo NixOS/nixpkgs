@@ -1,0 +1,30 @@
+From a9fc8b39010640fd8e931e8d635160430ade57bc Mon Sep 17 00:00:00 2001
+From: Neil Mayhew <neil_mayhew@users.sourceforge.net>
+Date: Fri, 5 Jul 2019 13:08:18 -0600
+Subject: [PATCH 1/2] Change use of header files to follow best practices
+Content-Type: text/plain; charset=utf-8
+
+This also fixes build errors after recent changes to dependencies
+---
+ ufraw_exiv2.cc | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/ufraw_exiv2.cc b/ufraw_exiv2.cc
+index f03011b..9a6ec86 100644
+--- a/ufraw_exiv2.cc
++++ b/ufraw_exiv2.cc
+@@ -15,9 +15,8 @@
+ #include "ufraw.h"
+ 
+ #ifdef HAVE_EXIV2
+-#include <exiv2/image.hpp>
+-#include <exiv2/easyaccess.hpp>
+-#include <exiv2/exif.hpp>
++#include <exiv2/exiv2.hpp>
++#include <iostream>
+ #include <sstream>
+ #include <cassert>
+ 
+-- 
+2.22.0
+
