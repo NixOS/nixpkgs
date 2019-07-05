@@ -32,9 +32,6 @@ stdenv.mkDerivation rec {
     cp -pr release/chessx "$out/bin"
     cp -pr unix/chessx.desktop "$out/share/applications"
 
-    wrapProgram $out/bin/chessx \
-      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
-
     runHook postInstall
   '';
 

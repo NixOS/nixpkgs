@@ -1,7 +1,7 @@
 { stable, version, sha256Hash, archPatchesRevision, archPatchesHash }:
 
 { mkDerivation, lib, fetchFromGitHub, fetchsvn
-, pkgconfig, pythonPackages, cmake, wrapGAppsHook, gcc8
+, pkgconfig, pythonPackages, cmake, wrapGAppsHook, wrapQtAppsHook, gcc8
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
@@ -39,7 +39,7 @@ mkDerivation rec {
       --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
   '';
 
-  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook gcc8 ];
+  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook wrapQtAppsHook gcc8 ];
 
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;
@@ -129,12 +129,13 @@ mkDerivation rec {
     done
   '';
 
+  dontWrapQtApps = true;
   postFixup = ''
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
-      --prefix QT_PLUGIN_PATH : "${qtbase}/${qtbase.qtPluginPrefix}" \
+      "''${qtWrapperArgs[@]}" \
       --prefix PATH : ${xdg_utils}/bin \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
