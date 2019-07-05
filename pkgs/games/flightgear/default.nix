@@ -62,12 +62,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p "$out/share/applications/"
     cp "${desktopItem}"/share/applications/* "$out/share/applications/" #*/
-
-    for f in $out/bin/* #*/
-    do
-      wrapProgram $f --set FG_ROOT "${data}/share/FlightGear"
-    done
   '';
+
+  qtWrapperArgs = [
+    ''--set FG_ROOT "${data}/share/FlightGear"''
+  ];
 
   enableParallelBuilding = true;
 

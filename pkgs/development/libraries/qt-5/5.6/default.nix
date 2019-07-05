@@ -26,7 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   newScope,
-  stdenv, fetchurl, fetchpatch, makeSetupHook,
+  stdenv, fetchurl, fetchpatch, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base,
 
@@ -104,14 +104,18 @@ let
     ];
   };
 
-  mkDerivation =
-    import ../mkDerivation.nix
-    { inherit stdenv; inherit (stdenv) lib; }
-    { inherit debug; };
-
   qtModule =
     import ../qtModule.nix
-    { inherit mkDerivation perl; inherit (stdenv) lib; }
+    {
+      inherit perl;
+      inherit (stdenv) lib;
+      # Use a variant of mkDerivation that does not include wrapQtApplications
+      # to avoid cyclic dependencies between Qt modules.
+      mkDerivation =
+        import ../mkDerivation.nix
+        { inherit (stdenv) lib; inherit debug; wrapQtAppsHook = null; }
+        stdenv.mkDerivation;
+    }
     { inherit self srcs patches; };
 
   addPackages = self: with self;
@@ -119,7 +123,11 @@ let
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
     in {
 
-      inherit mkDerivation;
+      mkDerivationWith =
+        import ../mkDerivation.nix
+        { inherit (stdenv) lib; inherit debug; inherit (self) wrapQtAppsHook; };
+
+      mkDerivation = mkDerivationWith stdenv.mkDerivation;
 
       qtbase = callPackage ../modules/qtbase.nix {
         inherit bison cups harfbuzz libGL;
@@ -173,6 +181,12 @@ let
         deps = [ self.qtbase.dev ];
         substitutions = { inherit (stdenv) isDarwin; };
       } ../hooks/qmake-hook.sh;
+
+      wrapQtAppsHook = makeSetupHook {
+        deps =
+          [ self.qtbase.dev makeWrapper ]
+          ++ optional stdenv.isLinux self.qtwayland.dev;
+      } ../hooks/wrap-qt-apps-hook.sh;
     };
 
    self = makeScope newScope addPackages;

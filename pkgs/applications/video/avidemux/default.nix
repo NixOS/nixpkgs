@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, cmake, pkgconfig
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
-, makeWrapper, libXext, libGLU, qttools, qtbase
+, makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
 , alsaLib
 , withX265 ? true, x265
 , withX264 ? true, x264
@@ -37,7 +37,9 @@ stdenv.mkDerivation rec {
     ./bootstrap_logging.patch
   ];
 
-  nativeBuildInputs = [ yasm cmake pkgconfig ];
+  nativeBuildInputs =
+    [ yasm cmake pkgconfig ]
+    ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
     freetype alsaLib libXext libGLU makeWrapper
@@ -55,7 +57,10 @@ stdenv.mkDerivation rec {
 
   buildCommand = let
     qtVersion = "5.${stdenv.lib.versions.minor qtbase.version}";
-    wrapProgram = f: "wrapProgram ${f} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+    wrapWith = makeWrapper: filename:
+      "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+    wrapQtApp = wrapWith "wrapQtApp";
+    wrapProgram = wrapWith "wrapProgram";
   in ''
     unpackPhase
     cd "$sourceRoot"
@@ -74,8 +79,8 @@ stdenv.mkDerivation rec {
     ${wrapProgram "$out/bin/avidemux3_cli"}
 
     ${stdenv.lib.optionalString withQT ''
-      ${wrapProgram "$out/bin/avidemux3_qt5"} --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtVersion}/plugins
-      ${wrapProgram "$out/bin/avidemux3_jobs_qt5"} --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtVersion}/plugins
+      ${wrapQtApp "$out/bin/avidemux3_qt5"}
+      ${wrapQtApp "$out/bin/avidemux3_jobs_qt5"}
     ''}
 
     ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
