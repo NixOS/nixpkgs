@@ -722,6 +722,8 @@ in {
 
   pyfakefs = callPackage ../development/python-modules/pyfakefs {};
 
+  pyfaidx = callPackage ../development/python-modules/pyfaidx { };
+
   pyfttt = callPackage ../development/python-modules/pyfttt { };
 
   pyftdi = callPackage ../development/python-modules/pyftdi { };
