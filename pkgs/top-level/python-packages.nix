@@ -446,6 +446,8 @@ in {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  geoip2 = callPackage ../development/python-modules/geoip2 { };
+
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
   gin-config = callPackage ../development/python-modules/gin-config { };
@@ -545,6 +547,8 @@ in {
   markerlib = callPackage ../development/python-modules/markerlib { };
 
   matchpy = callPackage ../development/python-modules/matchpy { };
+
+  maxminddb = callPackage ../development/python-modules/maxminddb { };
 
   monty = callPackage ../development/python-modules/monty { };
 
