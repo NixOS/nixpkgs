@@ -151,6 +151,8 @@ in {
         # Runtime directory and mode
         RuntimeDirectory = "netdata";
         RuntimeDirectoryMode = "0755";
+        # Performance
+        LimitNOFILE = "30000";
       };
     };
 
@@ -169,6 +171,11 @@ in {
       group = cfg.group;
       permissions = "u+rx,g+rx,o-rwx";
     };
+
+    security.pam.loginLimits = [
+      { domain = "netdata"; type = "soft"; item = "nofile"; value = "10000"; }
+      { domain = "netdata"; type = "hard"; item = "nofile"; value = "30000"; }
+    ];
 
     users.users = optional (cfg.user == defaultUser) {
       name = defaultUser;
