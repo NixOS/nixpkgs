@@ -1,4 +1,4 @@
-{stdenv, fetchurl, autoconf, automake, libtool}:
+{stdenv, fetchurl, autoconf, automake, libtool, fetchpatch}:
 
 stdenv.mkDerivation rec {
   pName = "soundtouch";
@@ -7,6 +7,14 @@ stdenv.mkDerivation rec {
     url = "https://www.surina.net/soundtouch/${name}.tar.gz";
     sha256 = "09cxr02mfyj2bg731bj0i9hh565x8l9p91aclxs8wpqv8b8zf96j";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/soundtouch/soundtouch/commit/9e02d9b04fda6c1f44336ff00bb5af1e2ffc039e.patch";
+      name = "CVE-2018-1000223.patch";
+      sha256 = "1ji8xrc3qyp9jdycrdv9bwpfpgw63nnd7xwl32sjwbf8v80xpdkp";
+    })
+  ];
 
   buildInputs = [ autoconf automake libtool ];
 
