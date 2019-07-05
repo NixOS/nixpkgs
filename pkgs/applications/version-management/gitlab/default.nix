@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, procps, nettools, nixosTests
+, ruby, tzdata, git, nettools, nixosTests
 , gitlabEnterprise ? false
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = sources.gitlab;
 
   buildInputs = [
-    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git procps nettools
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
 
   patches = [ ./remove-hardcoded-locations.patch ];
@@ -48,9 +48,6 @@ stdenv.mkDerivation rec {
     rm lib/tasks/test.rake
 
     rm config/initializers/gitlab_shell_secret_token.rb
-
-    substituteInPlace app/controllers/admin/background_jobs_controller.rb \
-        --replace "ps -U" "${procps}/bin/ps -U"
 
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
     sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
