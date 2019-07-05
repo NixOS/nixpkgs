@@ -8,20 +8,13 @@
 , python3Packages
 }:
 
-let
-
-major = "4.2";
-minor = "1";
-
-in
-
 mkDerivation rec {
-  name = "krita-${version}";
-  version = "${major}.${minor}";
+  pname = "krita";
+  version = "4.2.2";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/krita/${major}.${minor}/${name}.tar.gz";
-    sha256 = "1jm9kj9cq2nhaqg3kvyb193hhkd6al1gh23fkl54dj88x3fpldim";
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1pzk5bqp3kh22djhvsvmsc7ybirs4hsnkpg1y9677m2gxwbqnnps";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
