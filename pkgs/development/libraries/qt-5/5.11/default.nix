@@ -17,7 +17,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 {
   newScope,
-  stdenv, fetchurl, fetchFromGitHub, makeSetupHook,
+  stdenv, fetchurl, fetchFromGitHub, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
   cf-private, llvmPackages_5,
@@ -33,6 +33,8 @@ with stdenv.lib;
 let
 
   qtCompatVersion = "5.11";
+
+  stdenvActual = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
 
   mirror = "https://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; } // {
@@ -64,16 +66,18 @@ let
     qtwebkit = [ ./qtwebkit.patch ];
   };
 
-  mkDerivation =
-    import ../mkDerivation.nix {
-      inherit (stdenv) lib;
-      stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
-    }
-    { inherit debug; };
-
   qtModule =
     import ../qtModule.nix
-    { inherit mkDerivation perl; inherit (stdenv) lib; }
+    {
+      inherit perl;
+      inherit (stdenv) lib;
+      # Use a variant of mkDerivation that does not include wrapQtApplications
+      # to avoid cyclic dependencies between Qt modules.
+      mkDerivation =
+        import ../mkDerivation.nix
+        { inherit (stdenv) lib; inherit debug; wrapQtAppsHook = null; }
+        stdenvActual.mkDerivation;
+    }
     { inherit self srcs patches; };
 
   addPackages = self: with self;
@@ -81,7 +85,11 @@ let
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
     in {
 
-      inherit mkDerivation;
+      mkDerivationWith =
+        import ../mkDerivation.nix
+        { inherit (stdenv) lib; inherit debug; inherit (self) wrapQtAppsHook; };
+
+      mkDerivation = mkDerivationWith stdenvActual.mkDerivation;
 
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
@@ -146,6 +154,12 @@ let
           fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
         };
       } ../hooks/qmake-hook.sh;
+
+      wrapQtAppsHook = makeSetupHook {
+        deps =
+          [ self.qtbase.dev makeWrapper ]
+          ++ optional stdenv.isLinux self.qtwayland.dev;
+      } ../hooks/wrap-qt-apps-hook.sh;
     };
 
    self = makeScope newScope addPackages;
