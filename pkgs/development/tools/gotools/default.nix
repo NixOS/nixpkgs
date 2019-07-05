@@ -11,6 +11,16 @@ buildGoModule rec {
     sha256 = "0c0s5aiwj807vxfzwrah32spwq8cnxvy0j117i5cbsqw2df80pgv";
   };
 
+  # Build of golang.org/x/tools/gopls fails with:
+  #   can't load package: package golang.org/x/tools/gopls: unknown import path "golang.org/x/tools/gopls": cannot find module providing package golang.org/x/tools/gopls
+  # That is most probably caused by golang.org/x/tools/gopls containing a separate Go module.
+  # In order to fix this, we simply remove the module.
+  # Note that build of golang.org/x/tools/cmd/gopls provides identical binary as golang.org/x/tools/gopls.
+  # See https://github.com/NixOS/nixpkgs/pull/64335.
+  postPatch = ''
+    rm -rf gopls
+  '';
+
   modSha256 = "16nkrpki9fnxsrxxxs9ljz49plcz393z0sqq2knkk30pmncpwd3q";
 
   postConfigure = ''
