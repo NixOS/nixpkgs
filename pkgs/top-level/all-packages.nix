@@ -647,7 +647,7 @@ in
 
   iamy = callPackage ../tools/admin/iamy { };
 
-  azure-cli = nodePackages_8_x.azure-cli;
+  azure-cli = nodePackages_10_x.azure-cli;
 
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
