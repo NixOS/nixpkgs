@@ -17,11 +17,12 @@ buildGoModule rec {
   '';
 
   src = fetchFromGitHub {
-  sha256 = "1ywppn97gfgrwlq1nrj4kdvrdanq5ahqaa636ynyp9yiv9ibziq6";
+    sha256 = "1ywppn97gfgrwlq1nrj4kdvrdanq5ahqaa636ynyp9yiv9ibziq6";
     rev = "v${version}";
     repo = "kustomize";
     owner = "kubernetes-sigs";
   };
+
   modSha256 = "0w8sp73pmj2wqrg7x7z8diglyfq6c6gn9mmck0k1gk90nv7s8rf1";
 
   meta = with lib; {
