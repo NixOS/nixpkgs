@@ -490,7 +490,11 @@ self: super: builtins.intersectAttrs super {
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
   # https://github.com/haskell-servant/servant/pull/1128
-  servant-client-core = appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch;
+  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.15" then
+    appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch
+  else
+    super.servant-client-core;
+
 
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
