@@ -168,6 +168,9 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     };
 
     buildInputs = with pkgs; [ lensfun exiv2 ];
+    patches = [
+      ./patches/lensfun-Fix-header-files.patch # Needed for exiv2 0.27.1
+    ];
 
     installPhase = "
       installPlugins gimp-lensfun

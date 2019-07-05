@@ -1,0 +1,27 @@
+From e9b550d563bf6f1cf8296df2c175ed16c133478f Mon Sep 17 00:00:00 2001
+From: Neil Mayhew <neil_mayhew@users.sourceforge.net>
+Date: Fri, 5 Jul 2019 13:37:39 -0600
+Subject: [PATCH] Change use of exiv2 header files to follow best practices
+Content-Type: text/plain; charset=utf-8
+
+---
+ src/gimplensfun.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/gimplensfun.cpp b/src/gimplensfun.cpp
+index da2a94c..2fe1284 100644
+--- a/src/gimplensfun.cpp
++++ b/src/gimplensfun.cpp
+@@ -31,8 +31,7 @@
+ #include <libgimp/gimp.h>
+ #include <libgimp/gimpui.h>
+ 
+-#include <exiv2/image.hpp>
+-#include <exiv2/exif.hpp>
++#include <exiv2/exiv2.hpp>
+ 
+ #define VERSIONSTR "0.2.5-dev"
+ 
+-- 
+2.22.0
+
