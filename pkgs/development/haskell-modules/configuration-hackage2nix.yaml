@@ -3650,7 +3650,6 @@ broken-packages:
   - conductive-base
   - conductive-hsc3
   - conductive-song
-  - conduit-algorithms
   - conduit-audio-lame
   - conduit-audio-samplerate
   - conduit-find
@@ -3661,7 +3660,6 @@ broken-packages:
   - conduit-tokenize-attoparsec
   - conduit-vfs
   - conduit-vfs-zip
-  - conduit-zstd
   - conf
   - confcrypt
   - conffmt
