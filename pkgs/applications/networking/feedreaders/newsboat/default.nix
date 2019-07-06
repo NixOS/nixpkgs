@@ -3,14 +3,14 @@
 
 rustPlatform.buildRustPackage rec {
   name = "newsboat-${version}";
-  version = "2.15";
+  version = "2.16.1";
 
   src = fetchurl {
     url = "https://newsboat.org/releases/${version}/${name}.tar.xz";
-    sha256 = "1dqdcp34jmphqf3d8ik0xdhg0s66nd5rky0y8y591nidq29wws6s";
+    sha256 = "0lxdsfcwa4byhfnn0gv34w3rr531f4nfqgi8j4qqmh3gncbwh8s0";
   };
 
-  cargoSha256 = "06r682vvr8m7gl443qx9ncmq8dpmdxcls68f29d0mmf7llddy5sa";
+  cargoSha256 = "0ck2dgfk4fay4cjl66wqkbnq4rqrd717jl63l1mvqmvad9i19igm";
 
   postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ pkgconfig asciidoc docbook_xml_dtd_45 libxslt docbook_xsl ]
-    ++ stdenv.lib.optional stdenv.isDarwin [ makeWrapper libiconv ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper libiconv ];
 
   buildInputs = [ stfl sqlite curl gettext libxml2 json_c ncurses ]
     ++ stdenv.lib.optional stdenv.isDarwin Security;
@@ -29,7 +29,8 @@ rustPlatform.buildRustPackage rec {
     make
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=sign-compare" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "-Wno-error=format-security";
 
   doCheck = true;
 
@@ -48,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     homepage    = https://newsboat.org/;
-    description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console.";
+    description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with maintainers; [ dotlambda nicknovitski ];
     license     = licenses.mit;
     platforms   = platforms.unix;
