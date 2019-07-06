@@ -12,11 +12,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "palemoon-bin-${version}";
-  version = "28.5.2";
+  version = "28.6.0.1";
 
   src = fetchurl {
     url = "https://linux.palemoon.org/datastore/release/palemoon-${version}.${arch}.tar.bz2";
-    sha256 = "0r1vl2z4dd47d454ba7k7748x6bir1l23wbivjrbxvmiwar5z1ak";
+    sha256 = "0diggv9q9rhas2lyvq6zp8lbkqqgkfydimph9c0d9asrbn40m6ss";
   };
   outputs = [ "out" "orig" ];
   sourceRoot = ".";
