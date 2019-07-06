@@ -736,6 +736,8 @@ in
 
   crumbs = callPackage ../applications/misc/crumbs { };
 
+  cue = callPackage ../development/tools/cue { };
+
   deskew = callPackage ../applications/graphics/deskew { };
 
   detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
