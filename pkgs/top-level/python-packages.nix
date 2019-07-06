@@ -542,6 +542,8 @@ in {
 
   macropy = callPackage ../development/python-modules/macropy { };
 
+  mando = callPackage ../development/python-modules/mando { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   manhole = callPackage ../development/python-modules/manhole { };
