@@ -18470,7 +18470,9 @@ in
 
   i3lock-pixeled = callPackage ../misc/screensavers/i3lock-pixeled { };
 
-  betterlockscreen = callPackage ../misc/screensavers/betterlockscreen { };
+  betterlockscreen = callPackage ../misc/screensavers/betterlockscreen {
+    inherit (xorg) xrdb;
+  };
 
   i3minator = callPackage ../tools/misc/i3minator { };
 
