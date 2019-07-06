@@ -93,7 +93,7 @@ let self = stdenv.mkDerivation {
   ];
 
   outputs = [ "out" "dev" "drivers" ]
-            ++ lib.optional (elem "swrast" galliumDrivers) "osmesa";
+            ++ lib.optionals (elem "swrast" galliumDrivers) [ "swrast" "osmesa" ];
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   configureFlags = [
@@ -196,6 +196,13 @@ let self = stdenv.mkDerivation {
 
     # move vendor files
     mv $out/share/ $drivers/
+
+    # move swrast to its own output
+    if [ -n "$swrast" ]; then
+      mkdir -p $swrast/lib
+      mv $drivers/lib/lib*_mesa* $swrast/lib
+      ln -s $swrast/lib $drivers/lib
+    fi
 
     # Update search path used by glvnd
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do

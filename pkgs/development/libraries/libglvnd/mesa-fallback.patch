@@ -1,0 +1,19 @@
+Fallback to mesa when no drivers are found.
+
+diff --git a/src/GLX/libglxmapping.c b/src/GLX/libglxmapping.c
+index be384f8..a8d751f 100644
+--- a/src/GLX/libglxmapping.c
++++ b/src/GLX/libglxmapping.c
+@@ -429,6 +429,12 @@ __GLXvendorInfo *__glXLookupVendorByName(const char *vendorName)
+             if (filename) {
+                 vendor->dlhandle = dlopen(filename, RTLD_LAZY);
+             }
++
++            if (vendor->dlhandle == NULL) {
++                // Try the bundled vendor name if the above fails
++                filename = ConstructVendorLibraryFilename("mesa");
++                vendor->dlhandle = dlopen(filename, RTLD_LAZY);
++            }
+             free(filename);
+             if (vendor->dlhandle == NULL) {
+                 goto fail;

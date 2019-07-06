@@ -5,6 +5,11 @@
 # actually sets RUNPATH not RPATH, which applies only to dependencies of the binary
 # it set on (including for dlopen), so the RUNPATH must indeed be set on these
 # libraries and would not work if set only on executables.
+
+# When no installed OpenGL drivers are available, we can fall back to
+# the vendor-neutral mesa swrast driver. This is about 1MB, but it’s
+# very important to have a fallback if we can’t find any drivers
+# installed.
 addOpenGLRunpath() {
     local forceRpath=
 
@@ -23,7 +28,6 @@ addOpenGLRunpath() {
     for file in "$@"; do
         if ! isELF "$file"; then continue; fi
         local origRpath="$(patchelf --print-rpath "$file")"
-        patchelf --set-rpath "@driverLink@/lib:$origRpath" ${forceRpath:+--force-rpath} "$file"
+        patchelf --set-rpath "@driverLink@/lib:$origRpath:@swrast@/lib" ${forceRpath:+--force-rpath} "$file"
     done
 }
-
