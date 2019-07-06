@@ -55,7 +55,6 @@ in
         serviceConfig =
           { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd";
             Type = "forking";
-            User = "nscd";
             DynamicUser = true;
             RuntimeDirectory = "nscd";
             PIDFile = "/run/nscd/nscd.pid";
