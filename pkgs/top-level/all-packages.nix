@@ -2840,6 +2840,7 @@ in
   ddrutility = callPackage ../tools/system/ddrutility { };
 
   deluge = callPackage ../applications/networking/p2p/deluge {
+    libtorrentRasterbar = libtorrentRasterbar-1_1_x;
     pythonPackages = python2Packages;
   };
 
@@ -13241,7 +13242,11 @@ in
 
   libtomcrypt = callPackage ../development/libraries/libtomcrypt { };
 
-  libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
+  libtorrentRasterbar-1_2_x = callPackage ../development/libraries/libtorrent-rasterbar/1.2 { };
+
+  libtorrentRasterbar-1_1_x = callPackage ../development/libraries/libtorrent-rasterbar/1.1 { };
+
+  libtorrentRasterbar = libtorrentRasterbar-1_2_x;
 
   # this is still the new version of the old API
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };

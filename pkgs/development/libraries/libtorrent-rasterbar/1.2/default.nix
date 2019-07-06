@@ -1,9 +1,9 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, automake, autoconf
-, zlib, boost, openssl, libtool, python, libiconv, geoip, ncurses
+, zlib, boost, openssl, libtool, python, libiconv, ncurses
 }:
 
 let
-  version = "1.1.11";
+  version = "1.2.5";
   formattedVersion = lib.replaceChars ["."] ["_"] version;
 
   # Make sure we override python, so the correct version is chosen
@@ -17,13 +17,13 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "libtorrent_${formattedVersion}";
-    sha256 = "0nwdsv6d2gkdsh7l5a46g6cqx27xwh3msify5paf02l1qzjy4s5l";
+    rev = "libtorrent-${formattedVersion}";
+    sha256 = "0y2fzqbvb1bxvf93d7sphwzxih6j40p5p3fay943k26w0nrq802w";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = [ boostPython openssl zlib python libiconv geoip ncurses ];
+  buildInputs = [ boostPython openssl zlib python libiconv ncurses ];
   preConfigure = "./autotool.sh";
 
   postInstall = ''
@@ -35,11 +35,9 @@ in stdenv.mkDerivation {
 
   configureFlags = [
     "--enable-python-binding"
-    "--with-libgeoip=system"
     "--with-libiconv=yes"
     "--with-boost=${boostPython.dev}"
     "--with-boost-libdir=${boostPython.out}/lib"
-    "--with-libiconv=yes"
   ];
 
   meta = with stdenv.lib; {
