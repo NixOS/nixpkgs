@@ -8,6 +8,7 @@ let
   wrappedPlugins = pkgs.runCommand "wrapped-plugins" { preferLocalBuild = true; } ''
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
+    ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
   '';
 
   plugins = [
@@ -156,6 +157,13 @@ in {
       permissions = "u+rx,g+rx,o-rwx";
     };
 
+    security.wrappers."freeipmi.plugin" = {
+      source = "${pkgs.netdata}/libexec/netdata/plugins.d/freeipmi.plugin.org";
+      capabilities = "cap_dac_override,cap_fowner+ep";
+      owner = cfg.user;
+      group = cfg.group;
+      permissions = "u+rx,g+rx,o-rwx";
+    };
 
     users.users = optional (cfg.user == defaultUser) {
       name = defaultUser;

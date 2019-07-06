@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Geolocation framework and some data providers";
     homepage = https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home;
-    maintainers = with maintainers; [ raskin garbas ];
+    maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl2;
   };

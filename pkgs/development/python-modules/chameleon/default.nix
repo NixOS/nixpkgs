@@ -16,7 +16,7 @@ buildPythonPackage rec {
     homepage = https://chameleon.readthedocs.io/;
     description = "Fast HTML/XML Template Compiler";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

@@ -333,6 +333,8 @@ in
     inherit url;
   };
 
+  lazydocker = callPackage ../tools/misc/lazydocker { };
+
   ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
     ../build-support/setup-hooks/ld-is-cc-hook.sh;
 
@@ -739,6 +741,8 @@ in
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
   crumbs = callPackage ../applications/misc/crumbs { };
+
+  cue = callPackage ../development/tools/cue { };
 
   deskew = callPackage ../applications/graphics/deskew { };
 
@@ -1453,6 +1457,8 @@ in
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
+  dua = callPackage ../tools/misc/dua { };
+
   inherit (ocamlPackages) dune;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
@@ -1926,7 +1932,7 @@ in
     enableExtraPlugins = true;
   });
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { kindlegen = null; };
 
   asunder = callPackage ../applications/audio/asunder { };
 
@@ -6768,14 +6774,7 @@ in
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
   waf = callPackage ../development/tools/build-managers/waf { python = python3; };
-  wafHook = makeSetupHook {
-    deps = [ python ];
-    substitutions = {
-      inherit waf;
-      crossFlags = lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system)
-        ''--cross-compile "--cross-execute=${stdenv.targetPlatform.emulator pkgs}"'';
-    };
-  } ../development/tools/build-managers/waf/setup-hook.sh;
+  wafHook = callPackage ../development/tools/build-managers/wafHook { };
 
   wakelan = callPackage ../tools/networking/wakelan { };
 
@@ -8276,7 +8275,7 @@ in
   inherit (beam.interpreters)
     erlang erlangR18 erlangR19 erlangR20 erlangR21 erlangR22
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
-    elixir elixir_1_8 elixir_1_7 elixir_1_6 elixir_1_5 elixir_1_4
+    elixir elixir_1_9 elixir_1_8 elixir_1_7 elixir_1_6 elixir_1_5
     lfe lfe_1_2;
 
   inherit (beam.packages.erlang)
@@ -8443,10 +8442,6 @@ in
   php = php73;
   phpPackages = php73Packages;
 
-  php71Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php71;
-  });
-
   php72Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php72;
   });
@@ -8456,10 +8451,6 @@ in
   });
 
   phpPackages-unit = php72Packages-unit;
-
-  php71Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php71-unit;
-  });
 
   php72Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php72-unit;
@@ -8472,16 +8463,10 @@ in
   inherit (callPackages ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   })
-    php71
     php72
     php73;
 
   php-embed = php73-embed;
-
-  php71-embed = php71.override {
-    config.php.embed = true;
-    config.php.apxs2 = false;
-  };
 
   php72-embed = php72.override {
     config.php.embed = true;
@@ -8494,15 +8479,6 @@ in
   };
 
   php-unit = php73-unit;
-
-  php71-unit = php71.override {
-    config.php.embed = true;
-    config.php.apxs2 = false;
-    config.php.systemd = false;
-    config.php.phpdbg = false;
-    config.php.cgi = false;
-    config.php.fpm = false;
-  };
 
   php72-unit = php72.override {
     config.php.embed = true;
@@ -12613,6 +12589,8 @@ in
 
   openrct2 = callPackage ../games/openrct2 { };
 
+  orcania = callPackage ../development/libraries/orcania { };
+
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
 
   osinfo-db = callPackage ../data/misc/osinfo-db { };
@@ -13819,6 +13797,8 @@ in
 
   yajl = callPackage ../development/libraries/yajl { };
 
+  yder = callPackage ../development/libraries/yder { };
+
   yojimbo = callPackage ../development/libraries/yojimbo { };
 
   yubioath-desktop = libsForQt5.callPackage ../applications/misc/yubioath-desktop { };
@@ -14416,7 +14396,6 @@ in
   neard = callPackage ../servers/neard { };
 
   unit = callPackage ../servers/http/unit {
-    php71 = php71-unit;
     php72 = php72-unit;
     php73 = php73-unit;
   };
@@ -15984,6 +15963,8 @@ in
   skopeo = callPackage ../development/tools/skopeo { };
 
   smem = callPackage ../os-specific/linux/smem { };
+
+  smimesign = callPackage ../os-specific/darwin/smimesign { };
 
   speedometer = callPackage ../os-specific/linux/speedometer { };
 
@@ -19102,11 +19083,11 @@ in
 
   monero = callPackage ../applications/altcoins/monero {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
-    boost = boost15x;
+    boost = boost16x;
   };
 
   monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui {
-    boost = boost15x;
+    boost = boost16x;
   };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
@@ -19801,6 +19782,7 @@ in
   qemu = callPackage ../applications/virtualization/qemu {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor;
     inherit (darwin.stubs) rez setfile;
+    python = python3;
   };
 
   qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
@@ -21458,6 +21440,9 @@ in
 
   crrcsim = callPackage ../games/crrcsim {};
 
+  curseofwar = callPackage ../games/curseofwar { SDL = null; };
+  curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
+
   cutemaze = libsForQt5.callPackage ../games/cutemaze {};
 
   cuyo = callPackage ../games/cuyo { };
@@ -22008,6 +21993,8 @@ in
 
   tome4 = callPackage ../games/tome4 { };
 
+  toppler = callPackage ../games/toppler { };
+
   trackballs = callPackage ../games/trackballs { };
 
   tremulous = callPackage ../games/tremulous { };
@@ -22060,6 +22047,8 @@ in
   vapoursynth = callPackage ../development/libraries/vapoursynth {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
+
+  vapoursynth-editor = libsForQt5.callPackage ../development/libraries/vapoursynth/editor.nix { };
 
   vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
 
@@ -22153,6 +22142,8 @@ in
   };
 
   zangband = callPackage ../games/zangband { };
+
+  zaz = callPackage ../games/zaz { };
 
   zdbsp = callPackage ../games/zdoom/zdbsp.nix { };
 

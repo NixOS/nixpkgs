@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     description = "A Python-ish, BASHwards-compatible shell";
     homepage = http://xon.sh/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ spwhitt garbas vrthra ];
+    maintainers = with maintainers; [ spwhitt vrthra ];
     platforms = platforms.all;
   };
 

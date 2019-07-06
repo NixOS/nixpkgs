@@ -6,7 +6,7 @@
 
 with pkgs; stdenv.mkDerivation {
   name = "nixpkgs-lib-docs";
-  src = ./../lib;
+  src = ./../../lib;
 
   buildInputs = [ nixdoc ];
   installPhase = ''

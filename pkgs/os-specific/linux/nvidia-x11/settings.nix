@@ -24,6 +24,10 @@ let
       cd src/libXNVCtrl
     '';
 
+    makeFlags = [
+      "OUTPUTDIR=." # src/libXNVCtrl
+    ];
+
     installPhase = ''
       mkdir -p $out/lib
       mkdir -p $out/include/NVCtrl

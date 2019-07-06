@@ -28,6 +28,9 @@ buildPythonPackage rec {
       # The patches were not backported due to Django 1.8 having reached EOL
       https://www.djangoproject.com/weblog/2018/aug/01/security-releases/
       https://www.djangoproject.com/weblog/2019/jan/04/security-releases/
+      https://www.djangoproject.com/weblog/2019/feb/11/security-releases/
+      https://www.djangoproject.com/weblog/2019/jun/03/security-releases/
+      https://www.djangoproject.com/weblog/2019/jul/01/security-releases/
     ];
   };
 

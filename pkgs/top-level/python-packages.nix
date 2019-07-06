@@ -446,6 +446,8 @@ in {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  geoip2 = callPackage ../development/python-modules/geoip2 { };
+
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
   gin-config = callPackage ../development/python-modules/gin-config { };
@@ -532,6 +534,8 @@ in {
 
   logster = callPackage ../development/python-modules/logster { };
 
+  loguru = callPackage ../development/python-modules/loguru { };
+
   logzero = callPackage ../development/python-modules/logzero { };
 
   macropy = callPackage ../development/python-modules/macropy { };
@@ -543,6 +547,8 @@ in {
   markerlib = callPackage ../development/python-modules/markerlib { };
 
   matchpy = callPackage ../development/python-modules/matchpy { };
+
+  maxminddb = callPackage ../development/python-modules/maxminddb { };
 
   monty = callPackage ../development/python-modules/monty { };
 
@@ -5089,7 +5095,7 @@ in {
 
   larch = callPackage ../development/python-modules/larch { };
 
-  websocket_client = callPackage ../development/python-modules/websockets_client { };
+  websocket_client = callPackage ../development/python-modules/websocket_client { };
 
   webhelpers = callPackage ../development/python-modules/webhelpers { };
 
@@ -5533,6 +5539,8 @@ in {
   stripe = callPackage ../development/python-modules/stripe { };
 
   strict-rfc3339 = callPackage ../development/python-modules/strict-rfc3339 { };
+
+  strictyaml = callPackage ../development/python-modules/strictyaml { };
 
   twilio = callPackage ../development/python-modules/twilio { };
 

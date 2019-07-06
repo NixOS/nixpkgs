@@ -24,6 +24,7 @@
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
+, bison, flex, pango, python3, patchelf
 , libselinux ? null, libsepol ? null
 }@args:
 
@@ -243,6 +244,32 @@ in
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
     ];
+  };
+
+  mathematical = attrs: {
+    buildInputs = [
+      cmake
+      bison
+      flex
+      glib
+      pkgconfig
+      cairo
+      pango
+      gdk_pixbuf
+      libxml2
+      python3
+    ];
+
+    # The ruby build script takes care of this
+    dontUseCmakeConfigure = true;
+
+    # For some reason 'mathematical.so' is missing cairo and glib in its RPATH, add them explicitly here
+    postFixup = lib.optionalString stdenv.isLinux ''
+      soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
+      ${patchelf}/bin/patchelf \
+        --set-rpath "${lib.makeLibraryPath [ glib cairo ]}:$(${patchelf}/bin/patchelf --print-rpath "$soPath")" \
+        "$soPath"
+    '';
   };
 
   magic = attrs: {
