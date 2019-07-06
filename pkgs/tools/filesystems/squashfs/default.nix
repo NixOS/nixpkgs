@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     # This patch adds an option to pad filesystems (increasing size) in
     # exchange for better chunking / binary diff calculation.
-    ./squashfs-tools-4.3-4k-align.patch
+    ./squashfs-tools-4.4-4k-align.patch
   ] ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
 
   buildInputs = [ zlib xz zstd ]
