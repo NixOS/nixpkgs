@@ -36,6 +36,11 @@ out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 		doc-support/result/chunk-xhtml.xsl \
 		./manual-full.xml
 
+	# Assert that every generated HTML file has a ToC
+	for f in $$(find ./out/html -name '*.html'); do \
+		grep -q 'class="toc"' "$$f"; \
+	done
+
 	cp doc-support/result/elasticlunr/elasticlunr.min.js out/html/
 	cp doc-support/result/search.js out/html/
 	/home/grahamc/projects/github.com/grahamc/docbook-index/target/debug/docbook-index \
