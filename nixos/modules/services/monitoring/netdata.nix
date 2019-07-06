@@ -141,11 +141,18 @@ in {
       path = (with pkgs; [ gawk curl ]) ++ lib.optional cfg.python.enable
         (pkgs.python3.withPackages cfg.python.extraPackages);
       serviceConfig = {
+        Environment="PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
+        ExecStart = "${pkgs.netdata}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
+        ExecReload = "${pkgs.utillinux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
+        TimeoutStopSec = 60;
+        # User and group
         User = cfg.user;
         Group = cfg.group;
-        Environment="PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
-        ExecStart = "${pkgs.netdata}/bin/netdata -D -c ${configFile}";
-        TimeoutStopSec = 60;
+        # Runtime directory and mode
+        RuntimeDirectory = "netdata";
+        RuntimeDirectoryMode = "0755";
+        # Performance
+        LimitNOFILE = "30000";
       };
     };
 
@@ -164,6 +171,11 @@ in {
       group = cfg.group;
       permissions = "u+rx,g+rx,o-rwx";
     };
+
+    security.pam.loginLimits = [
+      { domain = "netdata"; type = "soft"; item = "nofile"; value = "10000"; }
+      { domain = "netdata"; type = "hard"; item = "nofile"; value = "30000"; }
+    ];
 
     users.users = optional (cfg.user == defaultUser) {
       name = defaultUser;
