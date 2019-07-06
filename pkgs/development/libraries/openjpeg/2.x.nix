@@ -13,5 +13,15 @@ callPackage ./generic.nix (args // rec {
 
   patches = [
     ./fix-cmake-config-includedir.patch
+    (fetchpatch {
+      url = "https://github.com/uclouvain/openjpeg/commit/21399f6b7d318fcdf4406d5e88723c4922202aa3.patch";
+      name = "CVE-2019-12973-1.patch";
+      sha256 = "161yvnfbzy2016qqapm0ywfgglgs1v8ljnk6fj8d2bwdh1cxxz8f";
+    })
+    (fetchpatch {
+      url = "https://github.com/uclouvain/openjpeg/commit/3aef207f90e937d4931daf6d411e092f76d82e66.patch";
+      name = "CVE-2019-12973-2.patch";
+      sha256 = "1jkkfw13l7nx4hxdhc7z17f4vfgqcaf09zpl235kypbxx1ygc7vq";
+    })
   ];
 })
