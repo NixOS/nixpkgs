@@ -164,7 +164,7 @@ stdenv.mkDerivation {
       EOS
       )"
       perl -0777 -i -pe "$SCRIPT" \
-        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,stash,submodule,subtree,web--browse}
+        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse}
 
 
       # Also put git-http-backend into $PATH, so that we can use smart
