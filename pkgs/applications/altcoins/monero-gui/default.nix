@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./move-log-file.patch
-    ./move-translations-dir.patch
   ];
 
   postPatch = ''
@@ -82,10 +81,6 @@ stdenv.mkDerivation rec {
     # install desktop entry
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
-
-    # install translations
-    mkdir -p $out/share/translations
-    cp translations/*.qm $out/share/translations/
 
     # install icons
     for n in 16 24 32 48 64 96 128 256; do
