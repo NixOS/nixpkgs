@@ -28,7 +28,7 @@ clean:
 validate: manual-full.xml doc-support/result
 	jing doc-support/result/docbook.rng manual-full.xml
 
-out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
+out/html/index.html: doc-support/result manual-full.xml style.css highlightjs toc.xml
 	mkdir -p out/html
 	xsltproc \
 		--nonet --xinclude \
@@ -77,6 +77,13 @@ highlightjs: doc-support/result
 
 manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml functions/library/generated *.xml **/*.xml **/**/*.xml
 	xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
+
+toc.xml:
+	xsltproc -o toc.xml \
+	  --stringparam chunk.section.depth 8 \
+	  --stringparam chunk.first.sections 1 \
+	  doc-support/result/xsl/docbook/html/maketoc.xsl \
+	  manual-full.xml
 
 .version: doc-support/result
 	ln -rfs ./doc-support/result/version .version

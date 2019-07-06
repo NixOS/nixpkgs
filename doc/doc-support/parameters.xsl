@@ -13,6 +13,7 @@
  <xsl:param name="toc.section.depth" select="99" />
  <xsl:param name="admon.style" select="''" />
  <xsl:param name="callout.graphics.extension" select="'.svg'" />
+ <xsl:param name="chunk.toc" select="'toc.xml'" />
 <!-- <xsl:param name="qanda.in.toc" select="1" />-->
 <xsl:template name="make.toc">
   <xsl:param name="toc-context" select="."/>
