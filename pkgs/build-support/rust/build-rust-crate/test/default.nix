@@ -58,7 +58,6 @@ let
     cases = {
       libPath =  { libPath = "src/my_lib.rs"; src = mkLib "src/my_lib.rs"; };
       srcLib =  { src = mkLib "src/lib.rs"; };
-      customLibName =  { libName = "test_lib"; src = mkLib "src/test_lib.rs"; };
       customLibNameAndLibPath =  { libName = "test_lib"; libPath = "src/best-lib.rs"; src = mkLib "src/best-lib.rs"; };
       crateBinWithPath =  { crateBin = [{ name = "test_binary1"; path = "src/foobar.rs"; }]; src = mkBin "src/foobar.rs"; };
       crateBinNoPath1 =  { crateBin = [{ name = "my-binary2"; }]; src = mkBin "src/my_binary2.rs"; };

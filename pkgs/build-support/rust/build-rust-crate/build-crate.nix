@@ -85,8 +85,6 @@
        build_lib ${libPath}
     elif [[ -e src/lib.rs ]]; then
        build_lib src/lib.rs
-    elif [[ -e src/${libName}.rs ]]; then
-       build_lib src/${libName}.rs
     fi
 
     echo "$EXTRA_LINK_SEARCH" | while read i; do
