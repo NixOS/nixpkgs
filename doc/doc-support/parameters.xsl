@@ -9,6 +9,7 @@
  <xsl:param name="html.script" select="'./highlightjs/highlight.pack.js ./highlightjs/loader.js ./search.js ./elasticlunr.min.js'" />
  <xsl:param name="xref.with.number.and.title" select="1" />
  <xsl:param name="use.id.as.filename" select="1" />
+ <xsl:param name="chunker.output.encoding" select="'UTF-8'" />
  <xsl:param name="toc.section.depth" select="99" />
  <xsl:param name="admon.style" select="''" />
  <xsl:param name="callout.graphics.extension" select="'.svg'" />
