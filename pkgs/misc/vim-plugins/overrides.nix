@@ -111,10 +111,10 @@ self: super: {
 
 
   coc-nvim = let
-    version = "0.0.71";
+    version = "0.0.72";
     index_js = fetchzip {
         url = "https://github.com/neoclide/coc.nvim/releases/download/v${version}/coc.tar.gz";
-        sha256 = "1bhkyrmrpriizg3f76x4vp94f2bfwcf7a6cp3jvv7vj4zaqhsjzz";
+        sha256 = "128wlbnpz4gwpfnmzry5k52d58fyp9nccha314ndfnr9xgd6r52y";
       };
   in super.coc-nvim.overrideAttrs(old: {
     # you still need to enable the node js provider in your nvim config
