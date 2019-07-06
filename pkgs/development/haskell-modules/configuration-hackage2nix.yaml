@@ -2719,9 +2719,6 @@ broken-packages:
   - airship
   - airtable-api
   - aivika-distributed
-  - aivika-experiment-cairo
-  - aivika-experiment-chart
-  - aivika-experiment-diagrams
   - ajhc
   - AlanDeniseEricLauren
   - alerta
@@ -3022,8 +3019,6 @@ broken-packages:
   - Befunge93
   - bein
   - belka
-  - bench-graph
-  - bench-show
   - BenchmarkHistory
   - bencodex
   - berkeleydb
@@ -3426,10 +3421,6 @@ broken-packages:
   - chalkboard
   - chalkboard-viewer
   - charade
-  - Chart
-  - Chart-cairo
-  - Chart-diagrams
-  - Chart-gtk
   - chart-histogram
   - Chart-simple
   - chart-unit
@@ -3637,7 +3628,6 @@ broken-packages:
   - concrete-haskell-autogen
   - concrete-relaxng-parser
   - concrete-typerep
-  - concurrency-benchmarks
   - concurrent-buffer
   - Concurrent-Cache
   - concurrent-machines
@@ -4806,7 +4796,6 @@ broken-packages:
   - ghc-man-completion
   - ghc-mod
   - ghc-parmake
-  - ghc-parser
   - ghc-pkg-autofix
   - ghc-pkg-lib
   - ghc-proofs
@@ -5208,7 +5197,6 @@ broken-packages:
   - happstack-state
   - happstack-util
   - happstack-yui
-  - happy-hour
   - happy-meta
   - happybara
   - happybara-webkit
@@ -5610,7 +5598,6 @@ broken-packages:
   - hinter
   - hinvaders
   - hinze-streams
-  - hip
   - hipbot
   - hipchat-hs
   - hipe
@@ -6250,7 +6237,6 @@ broken-packages:
   - iptables-helpers
   - iptadmin
   - IPv6DB
-  - ipython-kernel
   - Irc
   - irc-dcc
   - irc-fun-bot
@@ -7410,13 +7396,11 @@ broken-packages:
   - numeric-qq
   - numeric-ranges
   - numerical
-  - numhask
   - numhask-array
   - numhask-hedgehog
   - numhask-histogram
   - numhask-prelude
   - numhask-range
-  - numhask-space
   - numhask-test
   - Nussinov78
   - Nutri
@@ -7789,7 +7773,6 @@ broken-packages:
   - Plot-ho-matic
   - plot-lab
   - plot-light-examples
-  - plots
   - PlslTools
   - plugins
   - plugins-auto
@@ -8770,7 +8753,6 @@ broken-packages:
   - Slides
   - slim
   - sloane
-  - slope-field
   - slot-lambda
   - sloth
   - slug
@@ -9059,7 +9041,6 @@ broken-packages:
   - stream-monad
   - streamdeck
   - streamed
-  - streaming-benchmarks
   - streaming-brotli
   - streaming-cassava
   - streaming-concurrency
@@ -9244,7 +9225,6 @@ broken-packages:
   - tcp
   - tcp-streams-openssl
   - tdd-util
-  - tdigest-Chart
   - tds
   - TeaHS
   - teams
@@ -9945,7 +9925,6 @@ broken-packages:
   - wolf
   - word2vec-model
   - WordAlignment
-  - wordchoice
   - wordify
   - WordNet
   - WordNet-ghc74
@@ -10222,7 +10201,6 @@ broken-packages:
   - zeromq3-haskell
   - zeromq4-clone-pattern
   - zeromq4-conduit
-  - zeromq4-haskell == 0.7.*
   - zeromq4-patterns
   - zeromq4-simple
   - zeroth
