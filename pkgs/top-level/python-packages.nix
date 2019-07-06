@@ -2191,6 +2191,8 @@ in {
 
   JPype1 = callPackage ../development/python-modules/JPype1 {};
 
+  jpylyzer = callPackage ../development/python-modules/jpylyzer {};
+
   josepy = callPackage ../development/python-modules/josepy {};
 
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
