@@ -128,6 +128,7 @@
    <xsl:attribute name="class">
     <xsl:value-of select="local-name(.)"/>
     <xsl:if test=". = $toc-context"> current-page</xsl:if>
+    <xsl:if test="./descendant::node() = $toc-context"> current-section</xsl:if>
    </xsl:attribute>
    
    <!-- * if $autotoc.label.in.hyperlink is zero, then output the label -->
