@@ -5000,6 +5000,8 @@ in {
 
   webtest = callPackage ../development/python-modules/webtest { };
 
+  wily = callPackage ../development/python-modules/wily { };
+
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
   wurlitzer = callPackage ../development/python-modules/wurlitzer { };
