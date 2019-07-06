@@ -3944,6 +3944,8 @@ in
 
   jpegrescan = callPackage ../applications/graphics/jpegrescan { };
 
+  jpylyzer = with pythonPackages; toPythonApplication jpylyzer;
+
   jq = callPackage ../development/tools/jq { };
 
   jo = callPackage ../development/tools/jo { };
