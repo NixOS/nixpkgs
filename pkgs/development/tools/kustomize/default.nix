@@ -1,12 +1,13 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   name = "kustomize-${version}";
-  version = "2.0.3";
-  # rev is the 2.0.3 commit, mainly for kustomize version command output
-  rev = "a6f65144121d1955266b0cd836ce954c04122dc8";
+  version = "3.0.0";
+  # rev is the 3.0.0 commit, mainly for kustomize version command output
+  rev = "e0bac6ad192f33d993f11206e24f6cda1d04c4ec";
 
   goPackagePath = "sigs.k8s.io/kustomize";
+  subPackages = [ "cmd/kustomize" ];
 
   buildFlagsArray = let t = "${goPackagePath}/pkg/commands/misc"; in ''
     -ldflags=
@@ -16,11 +17,13 @@ buildGoPackage rec {
   '';
 
   src = fetchFromGitHub {
-    sha256 = "1dfkpx9rllj1bzm5f52bx404kdds3zx1h38yqri9ha3p3pcb1bbb";
+    sha256 = "1ywppn97gfgrwlq1nrj4kdvrdanq5ahqaa636ynyp9yiv9ibziq6";
     rev = "v${version}";
     repo = "kustomize";
     owner = "kubernetes-sigs";
   };
+
+  modSha256 = "0w8sp73pmj2wqrg7x7z8diglyfq6c6gn9mmck0k1gk90nv7s8rf1";
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
