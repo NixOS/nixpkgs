@@ -438,6 +438,8 @@ in {
 
   filemagic = callPackage ../development/python-modules/filemagic { };
 
+  flake8-polyfill = callPackage ../development/python-modules/flake8-polyfill { };
+
   fuse = callPackage ../development/python-modules/fuse-python {
     inherit (pkgs) fuse pkgconfig;
   };
