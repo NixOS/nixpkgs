@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dm6l8fypkimmzvld35zyykbg957cm5zb4ny3lchgv68amwfz1fi";
   };
 
+  patches = [ ./fix-aarch64.patch ];
+
   buildInputs = [ openssl libsamplerate alsaLib ];
 
   preConfigure = ''
