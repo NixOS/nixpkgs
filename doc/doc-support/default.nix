@@ -10,17 +10,27 @@ let
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       version="1.0">
       <xsl:import href="${pkgs.docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl" />
-      <xsl:import href="${./parameters.xml}"/>
+      <xsl:import href="${./parameters.xsl}"/>
     </xsl:stylesheet>
   '';
 
-  xhtml-xsl = pkgs.writeText "xhtml.xsl" ''
+  chunk-xhtml-xsl = pkgs.writeText "chunk-xhtml.xsl" ''
     <?xml version='1.0'?>
     <xsl:stylesheet
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       version="1.0">
-      <xsl:import href="${pkgs.docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunk.xsl" />
-      <xsl:import href="${./parameters.xml}"/>
+      <xsl:import href="${builtins.toString ./../../docbook-xsl-1.79.2/xhtml/chunk.xsl}" />
+      <xsl:import href="${builtins.toString ./parameters.xsl}"/>
+    </xsl:stylesheet>
+  '';
+
+  onepage-xhtml-xsl = pkgs.writeText "onepage-xhtml.xsl" ''
+    <?xml version='1.0'?>
+    <xsl:stylesheet
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+      version="1.0">
+      <xsl:import href="${pkgs.docbook_xsl_ns}/xml/xsl/docbook/xhtml/docbook.xsl" />
+      <xsl:import href="${builtins.toString ./parameters.xsl}"/>
     </xsl:stylesheet>
   '';
 
@@ -44,7 +54,8 @@ in pkgs.runCommand "doc-support" {}
     ln -s ${pkgs.docbook5}/xml/rng/docbook/docbook.rng ./docbook.rng
     ln -s ${pkgs.docbook_xsl_ns}/xml/xsl ./xsl
     ln -s ${epub-xsl} ./epub.xsl
-    ln -s ${xhtml-xsl} ./xhtml.xsl
+    ln -s ${chunk-xhtml-xsl} ./chunk-xhtml.xsl
+    ln -s ${onepage-xhtml-xsl} ./onepage-xhtml.xsl
 
     ln -s ${../../nixos/doc/xmlformat.conf} ./xmlformat.conf
     ln -s ${pkgs.documentation-highlighter} ./highlightjs

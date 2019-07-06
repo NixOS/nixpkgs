@@ -33,7 +33,7 @@ out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 	xsltproc \
 		--nonet --xinclude \
 		--output $@ \
-		doc-support/result/xhtml.xsl \
+		doc-support/result/chunk-xhtml.xsl \
 		./manual-full.xml
 
 	cp doc-support/result/elasticlunr/elasticlunr.min.js out/html/
