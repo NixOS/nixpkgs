@@ -2464,7 +2464,8 @@ in
   ddrutility = callPackage ../tools/system/ddrutility { };
 
   deluge = callPackage ../applications/networking/p2p/deluge {
-    pythonPackages = python2Packages;
+    pythonPackages = python3Packages;
+    libtorrentRasterbar = libtorrentRasterbar.override { python = python3; };
   };
 
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };

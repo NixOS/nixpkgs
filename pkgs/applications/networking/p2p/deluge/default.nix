@@ -1,34 +1,37 @@
-{ stdenv, fetchurl, fetchpatch, intltool, libtorrentRasterbar, pythonPackages }:
+{ stdenv, fetchurl, fetchpatch, intltool, libtorrentRasterbar, pythonPackages
+, gtk3, gobjectIntrospection, librsvg, wrapGAppsHook }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "deluge-${version}";
-  version = "1.3.15";
+  pname = "deluge";
+  version = "2.0.3";
 
   src = fetchurl {
-    url = "http://download.deluge-torrent.org/source/${name}.tar.bz2";
-    sha256 = "1467b9hmgw59gf398mhbf40ggaka948yz3afh6022v753c9j7y6w";
+    url = "http://download.deluge-torrent.org/source/2.0/${pname}-${version}.tar.xz";
+    sha256 = "14d8kn2pvr1qv8mwqrxmj85jycr73vwfqz12hzag0ararbkfhyky";
   };
 
-  patches = [
-    # Fix preferences when built against libtorrent >=0.16
-    (fetchpatch {
-      url = "https://git.deluge-torrent.org/deluge/patch/?id=38d7b7cdfde3c50d6263602ffb03af92fcbfa52e";
-      sha256 = "0la3i0lkj6yv4725h4kbd07mhfwcb34w7prjl9gxg12q7px6c31d";
-    })
-  ];
-
   propagatedBuildInputs = with pythonPackages; [
-    pyGtkGlade twisted Mako chardet pyxdg pyopenssl service-identity
+    twisted Mako chardet pyxdg pyopenssl service-identity
     libtorrentRasterbar.dev libtorrentRasterbar.python
+    setproctitle pillow rencode six zope_interface
+    dbus-python pygobject3 pycairo
+    gtk3 gobjectIntrospection librsvg
   ];
 
-  nativeBuildInputs = [ intltool ];
+  nativeBuildInputs = [ intltool wrapGAppsHook ];
+
+  checkInputs = with pythonPackages; [
+    pytest /* pytest-twisted */ pytestcov mock
+    mccabe pylint
+  ];
+
+  doCheck = false; # until pytest-twisted is packaged
 
   postInstall = ''
      mkdir -p $out/share/applications
-     cp -R deluge/data/pixmaps $out/share/
-     cp -R deluge/data/icons $out/share/
-     cp deluge/data/share/applications/deluge.desktop $out/share/applications
+     cp -R deluge/ui/data/pixmaps $out/share/
+     cp -R deluge/ui/data/icons $out/share/
+     cp deluge/ui/data/share/applications/deluge.desktop $out/share/applications
   '';
 
   meta = with stdenv.lib; {
