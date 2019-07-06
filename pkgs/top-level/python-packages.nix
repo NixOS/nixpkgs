@@ -4296,6 +4296,8 @@ in {
 
   qutip = callPackage ../development/python-modules/qutip { };
 
+  radon = callPackage ../development/python-modules/radon { };
+
   rcssmin = callPackage ../development/python-modules/rcssmin { };
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
