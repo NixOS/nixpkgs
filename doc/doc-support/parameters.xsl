@@ -14,13 +14,11 @@
  <xsl:param name="admon.style" select="''" />
  <xsl:param name="callout.graphics.extension" select="'.svg'" />
 <!-- <xsl:param name="qanda.in.toc" select="1" />-->
- <xsl:template name="make.toc">
+<xsl:template name="make.toc">
   <xsl:param name="toc-context" select="."/>
   <xsl:param name="toc.title.p" select="true()"/>
   <xsl:param name="nodes" select="/NOT-AN-ELEMENT"/>
   <xsl:variable name="root-nodes" select="/"/>
-  
-  <xsl:variable name="root-toc-context" select="/"/>
   
   <xsl:variable name="nodes.plus" select="$root-nodes | d:qandaset"/>
   
@@ -59,7 +57,7 @@
       <xsl:copy-of select="$toc.title"/>
       <xsl:element name="{$toc.list.type}" namespace="http://www.w3.org/1999/xhtml">
        <xsl:call-template name="toc.list.attributes">
-        <xsl:with-param name="toc-context" select="$root-toc-context"/>
+        <xsl:with-param name="toc-context" select="$toc-context"/>
         <xsl:with-param name="toc.title.p" select="$toc.title.p"/>
         <xsl:with-param name="nodes" select="$root-nodes"/>
        </xsl:call-template>
@@ -78,12 +76,12 @@
         <xsl:copy-of select="$toc.title"/>
         <xsl:element name="{$toc.list.type}" namespace="http://www.w3.org/1999/xhtml">
          <xsl:call-template name="toc.list.attributes">
-          <xsl:with-param name="toc-context" select="$root-toc-context"/>
+          <xsl:with-param name="toc-context" select="$toc-context"/>
           <xsl:with-param name="toc.title.p" select="$toc.title.p"/>
           <xsl:with-param name="nodes" select="$root-nodes"/>
          </xsl:call-template>
          <xsl:apply-templates select="$nodes.plus" mode="toc">
-          <xsl:with-param name="toc-context" select="$root-toc-context"/>
+          <xsl:with-param name="toc-context" select="$toc-context"/>
          </xsl:apply-templates>
         </xsl:element>
        </div>
@@ -95,12 +93,12 @@
         <xsl:copy-of select="$toc.title"/>
         <xsl:element name="{$toc.list.type}" namespace="http://www.w3.org/1999/xhtml">
          <xsl:call-template name="toc.list.attributes">
-          <xsl:with-param name="toc-context" select="$root-toc-context"/>
+          <xsl:with-param name="toc-context" select="$toc-context"/>
           <xsl:with-param name="toc.title.p" select="$toc.title.p"/>
           <xsl:with-param name="nodes" select="$root-nodes"/>
          </xsl:call-template>
          <xsl:apply-templates select="$root-nodes" mode="toc">
-          <xsl:with-param name="toc-context" select="$root-toc-context"/>
+          <xsl:with-param name="toc-context" select="$toc-context"/>
          </xsl:apply-templates>
         </xsl:element>
        </div>
