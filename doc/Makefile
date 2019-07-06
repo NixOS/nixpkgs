@@ -38,7 +38,10 @@ out/html/index.html: doc-support/result manual-full.xml style.css highlightjs to
 
 	cp doc-support/result/elasticlunr/elasticlunr.min.js out/html/
 	cp doc-support/result/search.js out/html/
-	cp doc-support/result/index.json out/html/
+	/home/grahamc/projects/github.com/grahamc/docbook-index/target/debug/docbook-index \
+		./manual-full.xml \
+		./out/html/ \
+		./out/html/index.json
 
 	mkdir -p out/html/highlightjs/
 	cp -r highlightjs out/html/

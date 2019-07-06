@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE chapter [
-  <!ENTITY ndash "&#x2013;"> <!-- @vcunat likes to use this one ;-) -->
-]>
+<!DOCTYPE chapter >
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-multiple-output">
@@ -114,7 +112,7 @@
    <title>File type groups</title>
 
    <para>
-    The support code currently recognizes some particular kinds of outputs and either instructs the build system of the package to put files into their desired outputs or it moves the files during the fixup phase. Each group of file types has an <varname>outputFoo</varname> variable specifying the output name where they should go. If that variable isn't defined by the derivation writer, it is guessed &ndash; a default output name is defined, falling back to other possibilities if the output isn't defined.
+    The support code currently recognizes some particular kinds of outputs and either instructs the build system of the package to put files into their desired outputs or it moves the files during the fixup phase. Each group of file types has an <varname>outputFoo</varname> variable specifying the output name where they should go. If that variable isn't defined by the derivation writer, it is guessed &#x2013; a default output name is defined, falling back to other possibilities if the output isn't defined.
    </para>
 
    <variablelist>
