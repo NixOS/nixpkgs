@@ -1,12 +1,20 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, cmake, sqlite }:
 
-stdenv.mkDerivation {
-  name = "proj-5.2.0";
+stdenv.mkDerivation rec {
+  pname = "proj";
+  version = "6.1.1";
 
   src = fetchurl {
-    url = https://download.osgeo.org/proj/proj-5.2.0.tar.gz;
-    sha256 = "0q3ydh2j8qhwlxmnac72pg69rw2znbi5b6k5wama8qmwzycr94gg";
+    url = "https://download.osgeo.org/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0gsh5ng3cvz5qhd42r8j02bgs51v7xzvinryqljdgd9818va5w2w";
   };
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ sqlite ];
+
+  # Avoid attempts to fetch and build gtest for its own use:
+  # (I couldn't seem to convince it to use a provided version instead)
+  cmakeFlags = [ "-DPROJ_TESTS=OFF" ];
 
   doCheck = stdenv.is64bit;
 
