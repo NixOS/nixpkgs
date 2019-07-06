@@ -13,6 +13,13 @@
  <xsl:param name="toc.section.depth" select="99" />
  <xsl:param name="admon.style" select="''" />
  <xsl:param name="callout.graphics.extension" select="'.svg'" />
+ <!--
+  Interacts with chunking to make sure each chunk (ie: .html output file)
+  gets a ToC.
+  http://www.sagehill.net/docbookxsl/TOCcontrol.html#SectionTocs
+ -->
+ <xsl:param name="generate.section.toc.level" select="1" />
+ 
 <!-- <xsl:param name="qanda.in.toc" select="1" />-->
 <xsl:template name="make.toc">
   <xsl:param name="toc-context" select="."/>
