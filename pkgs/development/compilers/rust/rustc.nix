@@ -206,6 +206,8 @@ in stdenv.mkDerivation rec {
   # https://github.com/rust-lang/rust/issues/30181
   # enableParallelBuilding = false;
 
+  setupHooks = ./setup-hook.sh;
+
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with stdenv.lib; {
