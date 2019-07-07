@@ -5489,6 +5489,7 @@ in
   projectm = callPackage ../applications/audio/projectm { };
 
   proot = callPackage ../tools/system/proot { };
+  proot-termux = callPackage ../tools/system/proot/termux.nix { };
 
   prototypejs = callPackage ../development/libraries/prototypejs { };
 
