@@ -53,7 +53,7 @@ in
         ];
 
         serviceConfig =
-          { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd";
+          { ExecStart = "!@${pkgs.glibc.bin}/sbin/nscd nscd";
             Type = "forking";
             DynamicUser = true;
             RuntimeDirectory = "nscd";
