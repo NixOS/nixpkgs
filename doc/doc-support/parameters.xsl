@@ -125,17 +125,34 @@
  
  
  
+ <xsl:template name="toc.contexutalization.classes">
+  <xsl:param name="toc-context" />
+  <xsl:param name="initial" select="''" /> 
+  
+  <xsl:attribute name="class">
+   <xsl:value-of select="$initial" />
+   <xsl:if test=". = $toc-context"> current-page</xsl:if>
+   <xsl:if test="./descendant-or-self::node() = $toc-context"> current-section</xsl:if>
+  </xsl:attribute>
+ </xsl:template>
+ 
  <xsl:template name="toc.line">
   <xsl:param name="toc-context" select="."/>
   <xsl:param name="depth" select="1"/>
   <xsl:param name="depth.from.context" select="8"/>
   
+  <xsl:call-template name="toc.contexutalization.classes">
+   <xsl:with-param name="toc-context" select="$toc-context" />
+  </xsl:call-template>
+  
   <span>
-   <xsl:attribute name="class">
-    <xsl:value-of select="local-name(.)"/>
-    <xsl:if test=". = $toc-context"> current-page</xsl:if>
-    <xsl:if test="./descendant::node() = $toc-context"> current-section</xsl:if>
-   </xsl:attribute>
+   
+   <xsl:call-template name="toc.contexutalization.classes">
+    <xsl:with-param name="toc-context" select="$toc-context" />
+    <xsl:with-param name="initial">
+     <xsl:value-of select="local-name(.)"/>
+    </xsl:with-param>
+   </xsl:call-template>
    
    <!-- * if $autotoc.label.in.hyperlink is zero, then output the label -->
    <!-- * before the hyperlinked title (as the DSSSL stylesheet does) -->
