@@ -308,6 +308,9 @@ let
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
     in concatStringsSep "\n" commands;
+
+    # With --strip-unneeded the chrome binary becomes much smaller.
+    stripDebugFlags = ["--strip-unneeded"];
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.
