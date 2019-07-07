@@ -1,6 +1,6 @@
-diff -ru -x '*~' rustc-1.35.0-src-orig/src/libstd/net/tcp.rs rustc-1.35.0-src/src/libstd/net/tcp.rs
---- rustc-1.35.0-src-orig/src/libstd/net/tcp.rs	2019-05-20 14:10:15.000000000 +0200
-+++ rustc-1.35.0-src/src/libstd/net/tcp.rs	2019-06-13 19:59:46.740611889 +0200
+diff -ru rustc-1.36.0-src-orig/src/libstd/net/tcp.rs rustc-1.36.0-src/src/libstd/net/tcp.rs
+--- rustc-1.36.0-src-orig/src/libstd/net/tcp.rs	2019-07-03 10:00:00.000000000 +0200
++++ rustc-1.36.0-src/src/libstd/net/tcp.rs	2019-07-07 11:33:35.378130207 +0200
 @@ -973,6 +973,7 @@
          }
      }
@@ -57,19 +57,16 @@ diff -ru -x '*~' rustc-1.35.0-src-orig/src/libstd/net/tcp.rs rustc-1.35.0-src/sr
      fn clone_while_reading() {
          each_ip(&mut |addr| {
              let accept = t!(TcpListener::bind(&addr));
-@@ -1597,7 +1604,10 @@
+@@ -1597,7 +1604,7 @@
  
-     // FIXME: re-enabled bitrig/openbsd tests once their socket timeout code
+     // FIXME: re-enabled openbsd tests once their socket timeout code
      //        no longer has rounding errors.
--    #[cfg_attr(any(target_os = "bitrig", target_os = "netbsd", target_os = "openbsd"), ignore)]
-+    #[cfg_attr(any(target_os = "bitrig",
-+                   target_os = "netbsd",
-+                   target_os = "openbsd",
-+                   target_os = "macos"), ignore)]
+-    #[cfg_attr(any(target_os = "netbsd", target_os = "openbsd"), ignore)]
++    #[cfg_attr(any(target_os = "netbsd", target_os = "openbsd", target_os = "macos"), ignore)]
      #[cfg_attr(target_env = "sgx", ignore)] // FIXME: https://github.com/fortanix/rust-sgx/issues/31
      #[test]
      fn timeouts() {
-@@ -1643,6 +1653,7 @@
+@@ -1643,6 +1650,7 @@
          drop(listener);
      }
  
@@ -77,7 +74,7 @@ diff -ru -x '*~' rustc-1.35.0-src-orig/src/libstd/net/tcp.rs rustc-1.35.0-src/sr
      #[test]
      #[cfg_attr(target_env = "sgx", ignore)] // FIXME: https://github.com/fortanix/rust-sgx/issues/31
      fn test_read_with_timeout() {
-@@ -1687,6 +1698,7 @@
+@@ -1687,6 +1695,7 @@
          drop(listener);
      }
  
@@ -85,7 +82,7 @@ diff -ru -x '*~' rustc-1.35.0-src-orig/src/libstd/net/tcp.rs rustc-1.35.0-src/sr
      #[test]
      #[cfg_attr(target_env = "sgx", ignore)]
      fn nodelay() {
-@@ -1719,6 +1731,7 @@
+@@ -1719,6 +1728,7 @@
          assert_eq!(ttl, t!(stream.ttl()));
      }
  
