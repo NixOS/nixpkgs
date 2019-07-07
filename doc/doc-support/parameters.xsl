@@ -3,6 +3,12 @@
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
  xmlns:d="http://docbook.org/ns/docbook"
  version="1.0">
+ <!--
+  `ul` option puts the `ul` underneat the parent's `li`, whereas `dd` and `dt` (default)
+   puts the list of child articles in a peer to the parent. Using ul is easier to target
+   with pure CSS.
+ -->
+ <xsl:param name="toc.list.type" select="'ul'" />
  <xsl:param name="section.autolabel" select="1" />
  <xsl:param name="section.label.includes.component.label" select="1" />
  <xsl:param name="html.stylesheet" select="'style.css overrides.css highlightjs/mono-blue.css'" />
