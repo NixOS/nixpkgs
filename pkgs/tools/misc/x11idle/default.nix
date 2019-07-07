@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  version = "9.1.13";
+  version = "9.2.4";
   name = "x11idle-org-${version}";
 
   src = fetchurl {
