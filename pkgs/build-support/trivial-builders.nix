@@ -94,17 +94,21 @@ rec {
 
   /*
    * Writes a text file to nix store in a specific directory with no
-   * optional parameters available. Name passed is the destination.
+   * optional parameters available.
    *
    * Example:
-   * # Writes contents of file to /nix/store/<store path>/<name>
+   * # Writes contents of file to /nix/store/<store path>/share/my-file
    * writeTextDir "share/my-file"
    *   ''
    *   Contents of File
    *   '';
    *
   */
-  writeTextDir = name: text: writeTextFile {inherit name text; destination = "/${name}";};
+  writeTextDir = path: text: writeTextFile {
+    inherit text;
+    name = builtins.baseNameOf path;
+    destination = "/${path}";
+  };
 
   /*
    * Writes a text file to /nix/store/<store path> and marks the file as
