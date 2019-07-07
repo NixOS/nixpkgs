@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       autoreconf -fi
       LDFLAGS=-L${cndrvcups-common}/usr/lib \
         LIBS='-lpthread -lgdk-x11-2.0 -lgobject-2.0 -lglib-2.0 -latk-1.0 -lgdk_pixbuf-2.0' \
-        CPPFLAGS=-I${cndrvcups-common}/usr/include -I${libxml2.dev}/include/libxml2 \
+        CPPFLAGS="-I${cndrvcups-common}/usr/include -I${libxml2.dev}/include/libxml2" \
         ./autogen.sh --prefix=$out/usr --disable-static
     popd
 
