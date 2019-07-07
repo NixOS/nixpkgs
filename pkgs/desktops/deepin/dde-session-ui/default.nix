@@ -3,11 +3,13 @@
   deepin-gettext-tools, deepin-icon-theme, deepin-wallpapers, dtkcore,
   dtkwidget, gnugrep, gsettings-qt, lightdm_qt,
   onboard, qtsvg, qttools, qtx11extras, setxkbmap, utillinux, which,
-  xkeyboard_config, xorg, xrandr, wrapGAppsHook }:
+  xkeyboard_config, xorg, xrandr, wrapGAppsHook, linkFarm, dde-session-ui }:
 
 mkDerivation rec {
   pname = "dde-session-ui";
   version = "5.0.0";
+
+  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
@@ -113,7 +115,14 @@ mkDerivation rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru = {
+    updateScript = deepin.updateScript { inherit name; };
+
+    xgreeters = linkFarm "deepin-greeter-xgreeters" [{
+      path = "${dde-session-ui}/share/xgreeters/lightdm-deepin-greeter.desktop";
+      name = "lightdm-deepin-greeter.desktop";
+    }];
+  };
 
   meta = with stdenv.lib; {
     description = "Deepin desktop-environment - Session UI module";
