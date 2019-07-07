@@ -24,24 +24,10 @@ stdenv.mkDerivation rec {
     ghostscript
   ];
 
-  phases = [
-    "configPhase"
-    "buildPhase"
-    "installPhase"
-  ];
-
   # install directions based on arch PKGBUILD file
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=capt-src
 
-  configPhase = ''
-    # set -xe
-    mkdir -p $out
-
-    ##HACK: `autoreconf -fi` need write access the directory
-    mkdir -p _build && cd _build
-    cp -r $src/* .
-    chmod -R +w .
-
+  configurePhase = ''
     pushd buftool
       autoreconf -fi
       ./autogen.sh --prefix=$out/usr --libdir=$out/usr/lib
@@ -68,6 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    mkdir -p $out
     for _dir in buftool cngplp backend
     do
         pushd $_dir
