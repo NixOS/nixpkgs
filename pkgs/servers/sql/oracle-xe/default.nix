@@ -1,7 +1,5 @@
 { stdenv, makeWrapper, requireFile, patchelf, rpmextract, libaio }:
 
-assert stdenv.system == "x86_64-linux";
-
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
@@ -79,5 +77,6 @@ stdenv.mkDerivation rec {
     description = "Oracle Database Express Edition";
     homepage = http://www.oracle.com/technetwork/products/express-edition/;
     license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
 }

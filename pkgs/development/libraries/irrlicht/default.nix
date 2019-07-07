@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, mesa, unzip, libXrandr, libX11, libXxf86vm }:
+{ stdenv, fetchzip, libGLU_combined, unzip, libXrandr, libX11, libXxf86vm }:
 
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  buildInputs = [ unzip mesa libXrandr libX11 libXxf86vm ];
+  buildInputs = [ unzip libGLU_combined libXrandr libX11 libXxf86vm ];
 
   meta = {
     homepage = http://irrlicht.sourceforge.net/;

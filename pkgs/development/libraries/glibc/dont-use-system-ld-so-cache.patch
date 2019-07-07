@@ -1,7 +1,7 @@
-diff -ru glibc-2.16.0-orig/elf/ldconfig.c glibc-2.16.0/elf/ldconfig.c
---- glibc-2.16.0-orig/elf/ldconfig.c	2012-06-30 15:12:34.000000000 -0400
-+++ glibc-2.16.0/elf/ldconfig.c	2012-09-18 11:59:27.463284814 -0400
-@@ -50,7 +50,7 @@
+diff -Naur glibc-2.27-orig/elf/ldconfig.c glibc-2.27/elf/ldconfig.c
+--- glibc-2.27-orig/elf/ldconfig.c	2018-02-01 11:17:18.000000000 -0500
++++ glibc-2.27/elf/ldconfig.c	2018-02-17 22:43:17.232175182 -0500
+@@ -51,7 +51,7 @@
  #endif
  
  #ifndef LD_SO_CONF
@@ -10,31 +10,31 @@ diff -ru glibc-2.16.0-orig/elf/ldconfig.c glibc-2.16.0/elf/ldconfig.c
  #endif
  
  /* Get libc version number.  */
-diff -ru glibc-2.16.0-orig/elf/Makefile glibc-2.16.0/elf/Makefile
---- glibc-2.16.0-orig/elf/Makefile	2012-06-30 15:12:34.000000000 -0400
-+++ glibc-2.16.0/elf/Makefile	2012-09-18 12:03:30.031955196 -0400
-@@ -415,12 +415,12 @@
+diff -Naur glibc-2.27-orig/elf/Makefile glibc-2.27/elf/Makefile
+--- glibc-2.27-orig/elf/Makefile	2018-02-01 11:17:18.000000000 -0500
++++ glibc-2.27/elf/Makefile	2018-02-17 22:44:50.334006750 -0500
+@@ -559,13 +559,13 @@
  
  $(objpfx)ldconfig: $(ldconfig-modules:%=$(objpfx)%.o)
  
 -SYSCONF-FLAGS := -D'SYSCONFDIR="$(sysconfdir)"'
--CFLAGS-ldconfig.c = $(SYSCONF-FLAGS) -D'LIBDIR="$(libdir)"' \
+-CFLAGS-ldconfig.c += $(SYSCONF-FLAGS) -D'LIBDIR="$(libdir)"' \
 +PREFIX-FLAGS := -D'PREFIX="$(prefix)"'
-+CFLAGS-ldconfig.c = $(PREFIX-FLAGS) -D'LIBDIR="$(libdir)"' \
++CFLAGS-ldconfig.c += $(PREFIX-FLAGS) -D'LIBDIR="$(libdir)"' \
  		    -D'SLIBDIR="$(slibdir)"'
  libof-ldconfig = ldconfig
--CFLAGS-dl-cache.c = $(SYSCONF-FLAGS)
--CFLAGS-cache.c = $(SYSCONF-FLAGS)
--CFLAGS-rtld.c = $(SYSCONF-FLAGS)
-+CFLAGS-dl-cache.c = $(PREFIX-FLAGS)
-+CFLAGS-cache.c = $(PREFIX-FLAGS)
-+CFLAGS-rtld.c = $(PREFIX-FLAGS)
+-CFLAGS-dl-cache.c += $(SYSCONF-FLAGS)
+-CFLAGS-cache.c += $(SYSCONF-FLAGS)
+-CFLAGS-rtld.c += $(SYSCONF-FLAGS)
++CFLAGS-dl-cache.c += $(PREFIX-FLAGS)
++CFLAGS-cache.c += $(PREFIX-FLAGS)
++CFLAGS-rtld.c += $(PREFIX-FLAGS)
  
  cpp-srcs-left := $(all-rtld-routines:=.os)
  lib := rtld
-diff -ru glibc-2.16.0-orig/sysdeps/generic/dl-cache.h glibc-2.16.0/sysdeps/generic/dl-cache.h
---- glibc-2.16.0-orig/sysdeps/generic/dl-cache.h	2012-06-30 15:12:34.000000000 -0400
-+++ glibc-2.16.0/sysdeps/generic/dl-cache.h	2012-09-18 11:59:27.465284809 -0400
+diff -Naur glibc-2.27-orig/sysdeps/generic/dl-cache.h glibc-2.27/sysdeps/generic/dl-cache.h
+--- glibc-2.27-orig/sysdeps/generic/dl-cache.h	2018-02-01 11:17:18.000000000 -0500
++++ glibc-2.27/sysdeps/generic/dl-cache.h	2018-02-17 22:45:20.471598816 -0500
 @@ -28,7 +28,7 @@
  #endif
  

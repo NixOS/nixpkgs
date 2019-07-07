@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "fcitx-m17n-${version}";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx-m17n/${name}.tar.xz";
-    sha256 = "0ffyhsg7bc6525k94kfhnja1h6ajlfprq72d286dp54cksnakyc4";
+    sha256 = "15s52h979xz967f8lm0r0qkplig2w3wjck1ymndbg9kvj25ib0ng";
   };
 
   nativeBuildInputs = [ pkgconfig ];

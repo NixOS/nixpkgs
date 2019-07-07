@@ -1,0 +1,143 @@
+diff --git a/BLACS/SRC/blacs_get_.c b/BLACS/SRC/blacs_get_.c
+index e979767..d4b04cf 100644
+--- a/BLACS/SRC/blacs_get_.c
++++ b/BLACS/SRC/blacs_get_.c
+@@ -23,7 +23,7 @@ F_VOID_FUNC blacs_get_(int *ConTxt, int *what, int *val)
+    case SGET_MSGIDS:
+       if (BI_COMM_WORLD == NULL) Cblacs_pinfo(val, &val[1]);
+       iptr = &val[1];
+-      ierr=MPI_Attr_get(MPI_COMM_WORLD, MPI_TAG_UB, (BVOID **) &iptr,val);
++      ierr=MPI_Comm_get_attr(MPI_COMM_WORLD, MPI_TAG_UB, (BVOID **) &iptr,val);
+       val[0] = 0;
+       val[1] = *iptr;
+       break;
+diff --git a/BLACS/SRC/cgamn2d_.c b/BLACS/SRC/cgamn2d_.c
+index 2db6ccb..6958f32 100644
+--- a/BLACS/SRC/cgamn2d_.c
++++ b/BLACS/SRC/cgamn2d_.c
+@@ -221,7 +221,7 @@ F_VOID_FUNC cgamn2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
+       {
+ #endif
+       i = 2;
+-      ierr=MPI_Type_struct(i, len, disp, dtypes, &MyType);
++      ierr=MPI_Type_create_struct(i, len, disp, dtypes, &MyType);
+       ierr=MPI_Type_commit(&MyType);
+       bp->N = bp2->N = 1;
+       bp->dtype = bp2->dtype = MyType;
+diff --git a/BLACS/SRC/cgamx2d_.c b/BLACS/SRC/cgamx2d_.c
+index 707c0b6..f802d01 100644
+--- a/BLACS/SRC/cgamx2d_.c
++++ b/BLACS/SRC/cgamx2d_.c
+@@ -221,7 +221,7 @@ F_VOID_FUNC cgamx2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
+       {
+ #endif
+       i = 2;
+-      ierr=MPI_Type_struct(i, len, disp, dtypes, &MyType);
++      ierr=MPI_Type_create_struct(i, len, disp, dtypes, &MyType);
+       ierr=MPI_Type_commit(&MyType);
+       bp->N = bp2->N = 1;
+       bp->dtype = bp2->dtype = MyType;
+diff --git a/BLACS/SRC/dgamn2d_.c b/BLACS/SRC/dgamn2d_.c
+index dff23b4..a2627ac 100644
+--- a/BLACS/SRC/dgamn2d_.c
++++ b/BLACS/SRC/dgamn2d_.c
+@@ -221,7 +221,7 @@ F_VOID_FUNC dgamn2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
+       {
+ #endif
+       i = 2;
+-      ierr=MPI_Type_struct(i, len, disp, dtypes, &MyType);
++      ierr=MPI_Type_create_struct(i, len, disp, dtypes, &MyType);
+       ierr=MPI_Type_commit(&MyType);
+       bp->N = bp2->N = 1;
+       bp->dtype = bp2->dtype = MyType;
+diff --git a/BLACS/SRC/dgamx2d_.c b/BLACS/SRC/dgamx2d_.c
+index a51f731..2a644d0 100644
+--- a/BLACS/SRC/dgamx2d_.c
++++ b/BLACS/SRC/dgamx2d_.c
+@@ -221,7 +221,7 @@ F_VOID_FUNC dgamx2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
+       {
+ #endif
+       i = 2;
+-      ierr=MPI_Type_struct(i, len, disp, dtypes, &MyType);
++      ierr=MPI_Type_create_struct(i, len, disp, dtypes, &MyType);
+       ierr=MPI_Type_commit(&MyType);
+       bp->N = bp2->N = 1;
+       bp->dtype = bp2->dtype = MyType;
+diff --git a/BLACS/SRC/igamn2d_.c b/BLACS/SRC/igamn2d_.c
+index 16bc003..f6a7859 100644
+--- a/BLACS/SRC/igamn2d_.c
++++ b/BLACS/SRC/igamn2d_.c
+@@ -218,7 +218,7 @@ F_VOID_FUNC igamn2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
+       {
+ #endif
+       i = 2;
+-      ierr=MPI_Type_struct(i, len, disp, dtypes, &MyType);
++      ierr=MPI_Type_create_struct(i, len, disp, dtypes, &MyType);
+       ierr=MPI_Type_commit(&MyType);
+       bp->N = bp2->N = 1;
+       bp->dtype = bp2->dtype = MyType;
+diff --git a/BLACS/SRC/igamx2d_.c b/BLACS/SRC/igamx2d_.c
+index 8165cbe..a7cfcc6 100644
+--- a/BLACS/SRC/igamx2d_.c
++++ b/BLACS/SRC/igamx2d_.c
+@@ -218,7 +218,7 @@ F_VOID_FUNC igamx2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
+       {
+ #endif
+       i = 2;
+-      ierr=MPI_Type_struct(i, len, disp, dtypes, &MyType);
++      ierr=MPI_Type_create_struct(i, len, disp, dtypes, &MyType);
+       ierr=MPI_Type_commit(&MyType);
+       bp->N = bp2->N = 1;
+       bp->dtype = bp2->dtype = MyType;
+diff --git a/BLACS/SRC/sgamn2d_.c b/BLACS/SRC/sgamn2d_.c
+index d6c95e5..569c797 100644
+--- a/BLACS/SRC/sgamn2d_.c
++++ b/BLACS/SRC/sgamn2d_.c
+@@ -221,7 +221,7 @@ F_VOID_FUNC sgamn2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
+       {
+ #endif
+       i = 2;
+-      ierr=MPI_Type_struct(i, len, disp, dtypes, &MyType);
++      ierr=MPI_Type_create_struct(i, len, disp, dtypes, &MyType);
+       ierr=MPI_Type_commit(&MyType);
+       bp->N = bp2->N = 1;
+       bp->dtype = bp2->dtype = MyType;
+diff --git a/BLACS/SRC/sgamx2d_.c b/BLACS/SRC/sgamx2d_.c
+index 4b0af6f..8897ece 100644
+--- a/BLACS/SRC/sgamx2d_.c
++++ b/BLACS/SRC/sgamx2d_.c
+@@ -221,7 +221,7 @@ F_VOID_FUNC sgamx2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
+       {
+ #endif
+       i = 2;
+-      ierr=MPI_Type_struct(i, len, disp, dtypes, &MyType);
++      ierr=MPI_Type_create_struct(i, len, disp, dtypes, &MyType);
+       ierr=MPI_Type_commit(&MyType);
+       bp->N = bp2->N = 1;
+       bp->dtype = bp2->dtype = MyType;
+diff --git a/BLACS/SRC/zgamn2d_.c b/BLACS/SRC/zgamn2d_.c
+index 9de2b23..37897df 100644
+--- a/BLACS/SRC/zgamn2d_.c
++++ b/BLACS/SRC/zgamn2d_.c
+@@ -221,7 +221,7 @@ F_VOID_FUNC zgamn2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
+       {
+ #endif
+       i = 2;
+-      ierr=MPI_Type_struct(i, len, disp, dtypes, &MyType);
++      ierr=MPI_Type_create_struct(i, len, disp, dtypes, &MyType);
+       ierr=MPI_Type_commit(&MyType);
+       bp->N = bp2->N = 1;
+       bp->dtype = bp2->dtype = MyType;
+diff --git a/BLACS/SRC/zgamx2d_.c b/BLACS/SRC/zgamx2d_.c
+index 414c381..0e9d474 100644
+--- a/BLACS/SRC/zgamx2d_.c
++++ b/BLACS/SRC/zgamx2d_.c
+@@ -221,7 +221,7 @@ F_VOID_FUNC zgamx2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
+       {
+ #endif
+       i = 2;
+-      ierr=MPI_Type_struct(i, len, disp, dtypes, &MyType);
++      ierr=MPI_Type_create_struct(i, len, disp, dtypes, &MyType);
+       ierr=MPI_Type_commit(&MyType);
+       bp->N = bp2->N = 1;
+       bp->dtype = bp2->dtype = MyType;

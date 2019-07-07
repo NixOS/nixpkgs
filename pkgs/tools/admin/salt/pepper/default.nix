@@ -1,17 +1,20 @@
 { lib
-, fetchurl
-, python2Packages
+, pythonPackages
+, salt
 }:
 
-python2Packages.buildPythonApplication rec {
-  name = "salt-pepper-${version}";
-  version = "0.5.0";
-  src = fetchurl {
-    url = "https://github.com/saltstack/pepper/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0gf4v5y1kp16i1na4c9qw7cgrpsh21p8ldv9r6b8gdwcxzadxbck";
+pythonPackages.buildPythonApplication rec {
+  pname = "salt-pepper";
+  version = "0.7.5";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "1wh6yidwdk8jvjpr5g3azhqgsk24c5rlzmw6l86dmi0mpvmxm94w";
   };
 
-  doCheck = false; # no tests available
+  buildInputs = with pythonPackages; [ setuptools setuptools_scm salt ];
+  checkInputs = with pythonPackages; [
+    pytest mock pyzmq pytest-rerunfailures pytestcov cherrypy tornado_4
+  ];
 
   meta = with lib; {
     description = "A CLI front-end to a running salt-api system";

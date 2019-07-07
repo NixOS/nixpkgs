@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl,
-  pkgconfig, pure, glpk, gmp, libtool, mysql, libiodbc, zlib }:
+  pkgconfig, pure, glpk, gmp, libtool, mysql, libiodbc }:
 
 stdenv.mkDerivation rec {
   baseName = "glpk";

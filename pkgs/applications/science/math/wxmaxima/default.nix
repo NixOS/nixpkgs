@@ -4,16 +4,16 @@
 
 stdenv.mkDerivation rec {
   name = "wxmaxima-${version}";
-  version = "17.10.1";
+  version = "19.03.0";
 
   src = fetchFromGitHub {
     owner = "andrejv";
     repo = "wxmaxima";
     rev = "Version-${version}";
-    sha256 = "088h8dlc9chkppwl4ck9i0fgf2d1dcpi5kq8qbpr5w75vhwsb6qm";
+    sha256 = "0s7bdykc77slqix28cyaa6x8wvxrn8461mkdgxflvi2apwsl56aa";
   };
 
-  buildInputs = [ wxGTK maxima gnome3.defaultIconTheme ];
+  buildInputs = [ wxGTK maxima gnome3.adwaita-icon-theme ];
 
   nativeBuildInputs = [ wrapGAppsHook cmake gettext ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Cross platform GUI for the computer algebra system Maxima";
     license = licenses.gpl2;
-    homepage = http://wxmaxima.sourceforge.net;
+    homepage = https://wxmaxima-developers.github.io/wxmaxima/;
     platforms = platforms.linux;
     maintainers = [ maintainers.peti ];
   };

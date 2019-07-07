@@ -28,10 +28,10 @@
 # $ conda-shell
 # $ conda install spyder
 let
-  version = "4.3.31";
+  version = "4.6.14";
   src = fetchurl {
       url = "https://repo.continuum.io/miniconda/Miniconda3-${version}-Linux-x86_64.sh";
-      sha256 = "1rklq81s9v7xz1q0ha99w2sl6kyc5vhk6b21cza0jr3b8cgz0lam";
+      sha256 = "1gn43z1y5zw4yv93q1qajwbmmqs83wx5ls5x4i4llaciba4j6sqd";
   };
 
   conda = runCommand "conda-install" { buildInputs = [ makeWrapper ]; }

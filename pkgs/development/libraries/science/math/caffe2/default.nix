@@ -3,7 +3,7 @@
 , glog, google-gflags, gtest
 , protobuf, snappy
 , python, future, six, python-protobuf, numpy, pydot
-, eigen3
+, eigen
 , doxygen
 , useCuda ? (config.cudaSupport or false), cudatoolkit ? null
 , useCudnn ? (config.cudnnSupport or false), cudnn ? null
@@ -56,6 +56,8 @@ let
     };
     dst = "pybind11";
   };
+
+  ccVersion = (builtins.parseDrvName stdenv.cc.name).version;
 in
 
 stdenv.mkDerivation rec {
@@ -72,7 +74,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" ];
   propagatedBuildOutputs = [ ]; # otherwise propagates out -> bin cycle
 
-  buildInputs = [ glog google-gflags protobuf snappy eigen3 ]
+  buildInputs = [ glog google-gflags protobuf snappy eigen ]
     ++ lib.optional useCuda cudatoolkit
     ++ lib.optional useCudnn cudnn
     ++ lib.optional useOpenmp openmp
@@ -84,7 +86,9 @@ stdenv.mkDerivation rec {
   ;
   propagatedBuildInputs = [ numpy future six python-protobuf pydot ];
 
-  patches = lib.optional stdenv.cc.isClang [ ./update_clang_cvtsh_bugfix.patch ];
+  patches = lib.optional (stdenv.cc.isGNU && lib.versionAtLeast ccVersion "7.0.0") [
+    ./fix_compilation_on_gcc7.patch
+  ] ++ lib.optional stdenv.cc.isClang [ ./update_clang_cvtsh_bugfix.patch ];
 
   cmakeFlags = [ ''-DBUILD_TEST=OFF''
                  ''-DBUILD_PYTHON=ON''
@@ -112,7 +116,7 @@ stdenv.mkDerivation rec {
     ${installExtraSrc cub}
     ${installExtraSrc pybind11}
     # XXX hack
-    export NIX_CFLAGS_COMPILE="-I ${eigen3}/include/eigen3/ $NIX_CFLAGS_COMPILE"
+    export NIX_CFLAGS_COMPILE="-I ${eigen}/include/eigen3/ $NIX_CFLAGS_COMPILE"
   '';
 
   postInstall = ''
@@ -133,7 +137,7 @@ stdenv.mkDerivation rec {
       algorithms. You can bring your creations to scale using the power of GPUs in the
       cloud or to the masses on mobile with Caffe2's cross-platform libraries.
     '';
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    platforms = with stdenv.lib.platforms; linux;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
   };

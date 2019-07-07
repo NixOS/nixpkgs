@@ -13,14 +13,14 @@ let
 in
 
 python.pkgs.buildPythonApplication rec {
-  pname = "pytrainer";
-  version = "1.11.0";
+  name = "pytrainer-${version}";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
     rev = "v${version}";
-    sha256 = "1x4f1ydjql0aisvxs5kyi9lx35b4q3768dx42fyzq1nxdwzaqyvy";
+    sha256 = "0rzf8kks96qzlknh6g3b9pjq04j7qk6rmz58scp7sck8xz9rjbwx";
   };
 
   namePrefix = "";
@@ -35,8 +35,13 @@ python.pkgs.buildPythonApplication rec {
     ./pytrainer-webkit.patch
   ];
 
+  postPatch = ''
+    substituteInPlace ./setup.py \
+      --replace "'mysqlclient'," ""
+  '';
+
   propagatedBuildInputs = with python.pkgs; [
-    dateutil lxml matplotlibGtk pyGtkGlade sqlalchemy_migrate
+    dateutil lxml matplotlibGtk pyGtkGlade sqlalchemy sqlalchemy_migrate psycopg2
   ] ++ stdenv.lib.optional withWebKit [ pywebkitgtk ];
 
   buildInputs = [ perl gpsbabel sqlite ];

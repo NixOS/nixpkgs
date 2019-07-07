@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "tintin-2.01.1";
+  name = "tintin-2.01.8";
 
   src = fetchurl {
     url    = "mirror://sourceforge/tintin/${name}.tar.gz";
-    sha256 = "195wrfcys8yy953gdrl1gxryhjnx9lg1vqgxm3dyzm8bi18aa2yc";
+    sha256 = "056g82yi784mf4gbrida9fxqmz347m2l9vad2ksv2fhl7g553y2s";
   };
 
   buildInputs = [ zlib pcre ];

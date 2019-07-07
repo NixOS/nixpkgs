@@ -1,5 +1,5 @@
 { stdenv, fetchgit, autoconf, automake, libtool, pkgconfig
-, git, xorg, gnum4, libxcb, gperf }:
+, xorg, gnum4, libxcb, gperf }:
 
 stdenv.mkDerivation rec {
   name = "xcb-util-cursor-0.1.1-3-unstable-${version}";

@@ -22,16 +22,18 @@ with lib;
   config = {
 
     # Enable in installer, even if the minimal profile disables it.
-    services.nixosManual.enable = mkForce true;
+    documentation.enable = mkForce true;
 
     # Show the manual.
+    documentation.nixos.enable = mkForce true;
     services.nixosManual.showManual = true;
 
     # Let the user play Rogue on TTY 8 during the installation.
     #services.rogue.enable = true;
 
     # Disable some other stuff we don't need.
-    security.sudo.enable = false;
+    security.sudo.enable = mkDefault false;
+    services.udisks2.enable = mkDefault false;
 
     # Automatically log in at the virtual consoles.
     services.mingetty.autologinUser = "root";
@@ -61,7 +63,7 @@ with lib;
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't
     # (yet) have swap set up.
-    environment.variables.GC_INITIAL_HEAP_SIZE = "100000";
+    environment.variables.GC_INITIAL_HEAP_SIZE = "1M";
 
     # Make the installer more likely to succeed in low memory
     # environments.  The kernel's overcommit heustistics bite us
@@ -72,13 +74,20 @@ with lib;
 
     # To speed up installation a little bit, include the complete
     # stdenv in the Nix store on the CD.
-    system.extraDependencies = with pkgs; [ stdenv stdenvNoCC busybox ];
+    system.extraDependencies = with pkgs;
+      [
+        stdenv
+        stdenvNoCC # for runCommand
+        busybox
+        jq # for closureInfo
+      ];
 
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
     networking.firewall.logRefusedConnections = mkDefault false;
 
-    environment.systemPackages = [ pkgs.vim ];
+    # Allow the user to log in as root without a password.
+    users.users.root.initialHashedPassword = "";
   };
 }

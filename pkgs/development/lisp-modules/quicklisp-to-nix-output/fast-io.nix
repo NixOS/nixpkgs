@@ -5,7 +5,7 @@ rec {
 
   description = ''Alternative I/O mechanism to a stream or vector'';
 
-  deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."static-vectors" args."trivial-features" args."trivial-gray-streams" ];
+  deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."static-vectors" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/fast-io/2017-10-23/fast-io-20171023-git.tgz'';
@@ -23,10 +23,11 @@ rec {
     MD5 89105f8277f3bf3709fae1b789e3d5ad NAME fast-io FILENAME fast-io DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
+     (NAME cffi-toolchain FILENAME cffi-toolchain)
      (NAME static-vectors FILENAME static-vectors)
      (NAME trivial-features FILENAME trivial-features)
      (NAME trivial-gray-streams FILENAME trivial-gray-streams))
     DEPENDENCIES
-    (alexandria babel cffi cffi-grovel static-vectors trivial-features
-     trivial-gray-streams)
+    (alexandria babel cffi cffi-grovel cffi-toolchain static-vectors
+     trivial-features trivial-gray-streams)
     VERSION 20171023-git SIBLINGS (fast-io-test) PARASITES NIL) */

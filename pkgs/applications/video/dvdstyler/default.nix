@@ -6,7 +6,7 @@
 , cdrtools, dvdauthor, dvdplusrwtools
 , dvdisasterSupport ? true, dvdisaster ? null
 , thumbnailSupport ? true, libgnomeui ? null
-, udevSupport ? true, libudev ? null
+, udevSupport ? true, udev ? null
 , dbusSupport ? true, dbus ? null
 , makeWrapper }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lwc0hn94m9r8fi07sjqz3fr618l6lnw3zsakxw7nlgnxbjsk7pi";
   };
 
-  nativeBuildInputs = 
+  nativeBuildInputs =
   [ pkgconfig ];
 
   packagesToBinPath =
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     docbook5 zip makeWrapper ]
   ++ packagesToBinPath
   ++ optionals dvdisasterSupport [ dvdisaster ]
-  ++ optionals udevSupport [ libudev ]
+  ++ optionals udevSupport [ udev ]
   ++ optionals dbusSupport [ dbus ]
   ++ optionals thumbnailSupport [ libgnomeui ];
 

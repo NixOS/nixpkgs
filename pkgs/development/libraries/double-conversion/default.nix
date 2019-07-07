@@ -1,19 +1,24 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, lib, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   name = "double-conversion-${version}";
-  version = "3.0.0";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "double-conversion";
     rev = "v${version}";
-    sha256 = "05m78wlwrg310mxh1cl3d8d0ishzfvzh84x64xmvng252m0vc8yz";
+    sha256 = "0csy4pjw1p8rp6g5qxi2h0ychhhp1fldv7gb761627fs2mclw9gv";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+
+  # Case sensitivity issue
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    rm BUILD
+  '';
 
   enableParallelBuilding = true;
 

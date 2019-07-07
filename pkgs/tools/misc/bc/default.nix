@@ -1,4 +1,6 @@
-{stdenv, autoreconfHook, buildPackages, fetchurl, flex, readline, ed, texinfo}:
+{ stdenv, autoreconfHook, buildPackages
+, fetchurl, flex, readline, ed, texinfo
+}:
 
 stdenv.mkDerivation rec {
   name = "bc-1.07.1";
@@ -19,18 +21,19 @@ stdenv.mkDerivation rec {
     # Libraries for build
     buildPackages.readline buildPackages.ncurses
   ];
-  buildInputs = [ readline ];
+  buildInputs = [ readline flex ];
 
   doCheck = true; # not cross
 
   # Hack to make sure we never to the relaxation `$PATH` and hooks support for
   # compatability. This will be replaced with something clearer in a future
   # masss-rebuild.
-  crossConfig = true;
+  strictDeps = true;
 
   meta = {
     description = "GNU software calculator";
-    homepage = http://www.gnu.org/software/bc/;
+    homepage = https://www.gnu.org/software/bc/;
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };
 }

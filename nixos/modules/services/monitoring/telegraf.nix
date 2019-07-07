@@ -7,6 +7,7 @@ let
 
   configFile = pkgs.runCommand "config.toml" {
     buildInputs = [ pkgs.remarshal ];
+    preferLocalBuild = true;
   } ''
     remarshal -if json -of toml \
       < ${pkgs.writeText "config.json" (builtins.toJSON cfg.extraConfig)} \
@@ -62,7 +63,7 @@ in {
       };
     };
 
-    users.extraUsers = [{
+    users.users = [{
       name = "telegraf";
       uid = config.ids.uids.telegraf;
       description = "telegraf daemon user";

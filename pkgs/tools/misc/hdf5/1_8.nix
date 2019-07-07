@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, gcc
 , removeReferencesTo
 , cpp ? false
 , gfortran ? null

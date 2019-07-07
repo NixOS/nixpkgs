@@ -5,11 +5,11 @@ let
   base = pythonPackages.buildPythonApplication rec {
     name = "winswitch-${version}";
     namePrefix = "";
-    version = "0.12.16";
+    version = "0.12.23";
 
     src = fetchurl {
       url = "http://winswitch.org/src/${name}.src.tar.bz2";
-      sha256 = "0ix122d7rgzdkk70f2q3sd7a4pvyaqsyxkw93pc4zkcg1xh9z3y8";
+      sha256 = "1m0akjcdlsgng426rwvzlcl76kjm993icj0pggvha40cizig1yd9";
     };
 
     propagatedBuildInputs = with pythonPackages; [

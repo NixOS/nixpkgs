@@ -2,23 +2,24 @@
 
 buildPythonPackage rec {
   pname = "discid";
-  version = "1.1.1";
-  name = "${pname}-${version}";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78a3bf6c8377fdbe3d85e914a209ff97aa43e35605779639847b510ced31f7b9";
+    sha256 = "1fc6kvnqwaz9lrs2qgsp8wh0nabf49010r0r53wnsmpmafy315nd";
   };
 
-  patchPhase = ''
-    substituteInPlace discid/libdiscid.py \
-      --replace '_open_library(_LIB_NAME)' "_open_library('${libdiscid}/lib/libdiscid.so.0')"
-  '';
+  patchPhase =
+    let extension = stdenv.hostPlatform.extensions.sharedLibrary; in
+    ''
+      substituteInPlace discid/libdiscid.py \
+        --replace "_open_library(_LIB_NAME)" \
+                  "_open_library('${libdiscid}/lib/libdiscid${extension}')"
+    '';
 
   meta = with stdenv.lib; {
     description = "Python binding of libdiscid";
     homepage    = "https://python-discid.readthedocs.org/";
     license     = licenses.lgpl3Plus;
-    platforms   = platforms.linux;
   };
 }

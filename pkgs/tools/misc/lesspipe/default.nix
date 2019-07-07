@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ stdenv, fetchFromGitHub, substituteAll, perl, file, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "lesspipe-${version}";
@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0vb7bpap8vy003ha10hc7hxl17y47sgdnrjpihgqxkn8k0bfqbbq";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      file = "${file}/bin/file";
+      tput = "${ncurses}/bin/tput";
+    })
+  ];
 
   meta = with stdenv.lib; {
     description = "A preprocessor for less";

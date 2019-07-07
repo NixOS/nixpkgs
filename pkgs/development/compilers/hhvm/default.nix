@@ -59,9 +59,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "High-performance JIT compiler for PHP/Hack";
-    homepage    = "http://hhvm.com";
+    homepage    = "https://hhvm.com";
     license     = "PHP/Zend";
     platforms   = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    broken = true; # Since 2018-04-21, see https://hydra.nixos.org/build/73059373
   };
 }

@@ -31,6 +31,15 @@ in
         default = null;
         description = ''
           The path to the file used for signing derivation data.
+          Generate with:
+
+          ```
+          nix-store --generate-binary-cache-key key-name secret-key-file public-key-file
+          ```
+
+          Make sure user `nix-serve` has read access to the private key file.
+
+          For more details see <citerefentry><refentrytitle>nix-store</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
         '';
       };
 
@@ -55,6 +64,8 @@ in
       environment.NIX_SECRET_KEY_FILE = cfg.secretKeyFile;
 
       serviceConfig = {
+        Restart = "always";
+        RestartSec = "5s";
         ExecStart = "${pkgs.nix-serve}/bin/nix-serve " +
           "--listen ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}";
         User = "nix-serve";
@@ -62,7 +73,7 @@ in
       };
     };
 
-    users.extraUsers.nix-serve = {
+    users.users.nix-serve = {
       description = "Nix-serve user";
       uid = config.ids.uids.nix-serve;
     };

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "14.01.1";
 
   src = fetchurl {
-    url    = "http://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
+    url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
     sha256 = "12z8qi3da8q50mcsjsy5bnr4ia6ny5lkxvzy01a3c9blgbgcpxwq";
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "http://mercurylang.org";
     license     = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ ];
   };
 }

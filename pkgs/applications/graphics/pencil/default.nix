@@ -1,8 +1,8 @@
 { stdenv, fetchurl, lib, makeWrapper,
   # build dependencies
   alsaLib, atk, cairo, cups, dbus, expat, fontconfig,
-  freetype, gdk_pixbuf, glib, gnome2, nspr, nss, xlibs,
-  glibc, udev
+  freetype, gdk_pixbuf, glib, gnome2, nspr, nss, xorg,
+  glibc, systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ar p "$src" data.tar.xz | tar xJ
   '';
 
-  buildPhase = ":";
+  dontBuild = true;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -55,17 +55,17 @@ stdenv.mkDerivation rec {
       gnome2.pango
       nspr
       nss
-      xlibs.libX11
-      xlibs.libXScrnSaver
-      xlibs.libXcomposite
-      xlibs.libXcursor
-      xlibs.libXdamage
-      xlibs.libXext
-      xlibs.libXfixes
-      xlibs.libXi
-      xlibs.libXrandr
-      xlibs.libXrender
-      xlibs.libXtst
+      xorg.libX11
+      xorg.libXScrnSaver
+      xorg.libXcomposite
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXi
+      xorg.libXrandr
+      xorg.libXrender
+      xorg.libXtst
       stdenv.cc.cc.lib
       stdenv.cc.cc
       glibc
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     chmod a+x $out/opt/Pencil/libffmpeg.so
 
     # fix missing libudev
-    ln -s ${udev}/lib/systemd/libsystemd-shared.so $out/opt/Pencil/libudev.so.1
+    ln -s ${systemd.lib}/lib/libudev.so.1 $out/opt/Pencil/libudev.so.1
     wrapProgram $out/opt/Pencil/pencil \
       --prefix LD_LIBRARY_PATH : $out/opt/Pencil
   '';

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison openmpi flex zlib ];
 
   src = fetchurl {
-    url = "http://gforge.inria.fr/frs/download.php/file/34618/${src_name}.tar.gz";
+    url = "https://gforge.inria.fr/frs/download.php/file/34618/${src_name}.tar.gz";
     sha256 = "f53f4d71a8345ba15e2dd4e102a35fd83915abf50ea73e1bf6efe1bc2b4220c7";
   };
 

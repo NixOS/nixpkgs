@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.1";
+  version = "1.5";
   name = "pastebinit-${version}";
 
   src = fetchurl {
     url = "https://launchpad.net/pastebinit/trunk/${version}/+download/${name}.tar.bz2";
-    sha256 = "1rl854izwn1fpaaib6zj7a1a9bis8n7w4zfxcapgfffj37zj0dy2";
+    sha256 = "0mw48fgm9lyh9d3pw997fccmglzsjccf2y347gxjas74wx6aira2";
   };
 
   buildInputs = [ python3 ];

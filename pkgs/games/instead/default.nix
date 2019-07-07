@@ -1,7 +1,7 @@
 { stdenv, fetchurl, SDL, SDL_ttf, SDL_image, SDL_mixer, pkgconfig, lua, zlib, unzip }:
 
 let
-  version = "3.2.0";
+  version = "3.3.0";
 
   # I took several games at random from http://instead.syscall.ru/games/
   games = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/instead/instead/${version}/instead_${version}.tar.gz";
-    sha256 = "0l57qdngxv9nbfj4ixr4fyanlazmdib2kr1nzv3g578308xzjv6a";
+    sha256 = "0kskwrq2gy1gpp97134sjrw08ip1h6i5dc64zrbl9yv7jaz4by69";
   };
 
   NIX_LDFLAGS = "-llua -lgcc_s";

@@ -1,7 +1,7 @@
-{stdenv, lib, fetchurl, gettext, perl, perlXMLParser, intltool, pkgconfig, glib,
-  libxml2, sqlite, libusb1, zlib, sg3_utils, gdk_pixbuf, taglib,
+{stdenv, lib, fetchurl, gettext, perlPackages, intltool, pkgconfig, glib,
+  libxml2, sqlite, zlib, sg3_utils, gdk_pixbuf, taglib,
   libimobiledevice, pythonPackages, mutagen,
-  monoSupport ? true, mono, gtk-sharp-2_0
+  monoSupport ? false, mono, gtk-sharp-2_0
 }:
 
 let
@@ -25,14 +25,15 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib libxml2 sqlite zlib sg3_utils
     gdk_pixbuf taglib libimobiledevice python pygobject2 mutagen ];
 
-  nativeBuildInputs = [ gettext perlXMLParser intltool pkgconfig perl
-    libimobiledevice.swig ] ++ lib.optionals monoSupport [ mono gtk-sharp-2_0 ];
+  nativeBuildInputs = [ gettext intltool pkgconfig ]
+    ++ (with perlPackages; [ perl XMLParser ])
+    ++ lib.optionals monoSupport [ mono gtk-sharp-2_0 ];
 
   meta = {
-    homepage = http://gtkpod.sourceforge.net/;
+    homepage = https://gtkpod.sourceforge.net/;
     description = "Library used by gtkpod to access the contents of an ipod";
     license = "LGPL";
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
     maintainers = [ ];
   };
 }

@@ -9,7 +9,7 @@ let
 
   etcFiles = pkgs.callPackage ./brscan4_etc_files.nix { netDevices = netDeviceList; };
 
-  netDeviceOpts = { name, config, ... }: {
+  netDeviceOpts = { name, ... }: {
 
     options = {
 

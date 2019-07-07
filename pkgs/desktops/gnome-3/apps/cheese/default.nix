@@ -5,7 +5,17 @@
 , adwaita-icon-theme, librsvg, totem, gdk_pixbuf, gnome3, gnome-desktop, libxml2 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "cheese-${version}";
+  version = "3.32.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1xlmsm4zsx05ahvpd4mgy1hfhxbag0r5i6p63bksjxdligdd36kv";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "cheese"; attrPath = "gnome3.cheese"; };
+  };
 
   nativeBuildInputs = [
     pkgconfig intltool itstool vala wrapGAppsHook libxml2 appstream-glib

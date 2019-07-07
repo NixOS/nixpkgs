@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ stdenv, fetchFromGitHub, openssl, runtimeShell }:
 
 let
   version = "3.0.0";
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
     # Helper utility
     cat > $out/bin/easyrsa-init <<EOF
-    #!${stdenv.shell} -e
+    #!${runtimeShell} -e
     cp -r $out/share/easyrsa/* .
     EOF
     chmod +x $out/bin/easyrsa-init
@@ -32,9 +32,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple shell based CA utility";
-    homepage = http://openvpn.net/;
+    homepage = https://openvpn.net/;
     license = licenses.gpl2;
     maintainers = [ maintainers.offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

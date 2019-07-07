@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, glib, openssl, expat, libmesode
-, ncurses, libotr, curl, readline, libuuid
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
+, glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
+, cmocka, libmicrohttpd, stabber, expat, libmesode
+, autoconf-archive
 
-, autoAwaySupport ? false,       libXScrnSaver ? null, libX11 ? null
-, notifySupport ? false,         libnotify ? null, gdk_pixbuf ? null
-, traySupport ? false,           gnome2 ? null
+, autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
+, notifySupport ? true,         libnotify ? null, gdk_pixbuf ? null
+, traySupport ? true,           gnome2 ? null
 , pgpSupport ? true,            gpgme ? null
 , pythonPluginSupport ? true,   python ? null
 }:
@@ -18,20 +20,26 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "profanity-${version}";
-  version = "0.5.1";
+  version = "0.6.0";
 
-  src = fetchurl {
-    url = "http://www.profanity.im/profanity-${version}.tar.gz";
-    sha256 = "1f7ylw3mhhnii52mmk40hyc4kqhpvjdr3hmsplzkdhsfww9kflg3";
+  src = fetchFromGitHub {
+    owner = "boothj5";
+    repo = "profanity";
+    rev = "${version}";
+    sha256 = "0f5kfzy22wzyj7rnd2nbj93q96ga87b53wlg8lfg83qdphx1ymz9";
   };
+
+  patches = [ ./patches/packages-osx.patch ./patches/undefined-macros.patch ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    autoreconfHook autoconf-archive glibcLocales pkgconfig
+  ];
 
   buildInputs = [
-    readline libuuid libmesode
-    glib openssl expat ncurses libotr curl
+    expect readline libuuid glib openssl expat ncurses libotr
+    curl libmesode cmocka libmicrohttpd stabber
   ] ++ optionals autoAwaySupport     [ libXScrnSaver libX11 ]
     ++ optionals notifySupport       [ libnotify gdk_pixbuf ]
     ++ optionals traySupport         [ gnome2.gtk ]
@@ -45,13 +53,21 @@ stdenv.mkDerivation rec {
     ++ optionals pgpSupport          [ "--enable-pgp" ]
     ++ optionals pythonPluginSupport [ "--enable-python-plugins" ];
 
+  preAutoreconf = ''
+    mkdir m4
+  '';
+
+  doCheck = true;
+
+  LC_ALL = "en_US.utf8";
+
   meta = {
     description = "A console based XMPP client";
     longDescription = ''
       Profanity is a console based XMPP client written in C using ncurses and
       libstrophe, inspired by Irssi.
     '';
-    homepage = http://profanity.im/;
+    homepage = http://www.profanity.im/;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];

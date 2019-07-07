@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "1gs43qgcyfn83abrkhvvw1s67d1sbkbj3hab9m17ysn6swafiycx";
-    url = "http://www.ip2location.com/downloads/ip2location-c-${version}.tar.gz";
+    url = "https://www.ip2location.com/downloads/ip2location-c-${version}.tar.gz";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "xbomb-2.2b";
   src = fetchurl {
-    url    = "http://www.gedanken.org.uk/software/xbomb/download/${name}.tgz";
+    url    = "https://www.gedanken.org.uk/software/xbomb/download/${name}.tgz";
     sha256 = "0692gjw28qvh8wj9l58scjw6kxj7jdyb3yzgcgs9wcznq11q839m";
   };
 

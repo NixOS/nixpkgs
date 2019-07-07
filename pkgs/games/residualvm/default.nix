@@ -1,8 +1,9 @@
 { stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib
-, openglSupport ? false, mesa ? null
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, openglSupport ? libGLSupported, libGLU_combined ? null
 }:
 
-assert openglSupport -> mesa != null;
+assert openglSupport -> libGLU_combined != null;
 
 with stdenv.lib;
 
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ stdenv SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib ]
-    ++ optional openglSupport mesa;
+    ++ optional openglSupport libGLU_combined;
 
   configureFlags = [ "--enable-all-engines" ];
 

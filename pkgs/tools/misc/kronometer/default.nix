@@ -6,17 +6,19 @@
 
 let
   pname = "kronometer";
-  version = "2.1.3";
+  version = "2.2.2";
 in
 mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "1z06gvaacm3d3a9smlmgg2vf0jdab5kqxx24r6v7iprqzgdpsn4i";
+    sha256 = "142f1kqygil6d4pvh6pallin355h2rq5s1hs6gd11plcin6rkg2j";
   };
 
   meta = with lib; {
+    homepage = "https://kde.org/applications/utilities/kronometer/";
+    description = "A stopwatch application";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };

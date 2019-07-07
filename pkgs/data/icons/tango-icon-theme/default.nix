@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ intltool iconnamingutils imagemagick librsvg ];
 
-  configureFlags = "--enable-png-creation";
+  configureFlags = [ "--enable-png-creation" ];
 
   postInstall = '''${gtk.out}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
 

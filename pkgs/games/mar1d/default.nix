@@ -1,8 +1,8 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, mesa_glu
-, x11
+, libGLU
+, xlibsWrapper
 , xorg
 , xinput_calibrator
 , doxygen
@@ -41,12 +41,13 @@ stdenv.mkDerivation rec {
       doxygen
       libao
       libpthreadstubs
-      mesa_glu
-      x11
+      libGLU
+      xlibsWrapper
       xinput_calibrator
       xorg.libXrandr
       xorg.libXi
       xorg.xinput
+      xorg.libXxf86vm
     ];
 
   preConfigure = ''

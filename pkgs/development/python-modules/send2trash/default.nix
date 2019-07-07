@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pytest
 , configparser
+, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
   checkPhase = "HOME=. py.test";
-  checkInputs = [ pytest configparser ];
+  checkInputs = [ pytest ] ++ lib.optional (!isPy3k) configparser;
 
   meta = with lib; {
     description = "Send file to trash natively under macOS, Windows and Linux";

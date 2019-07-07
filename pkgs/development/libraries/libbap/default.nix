@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "libbap-${version}";
-  version = "master-2017-02-08";
+  version = "master-2019-04-05";
 
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap-bindings";
-    rev = "b3da5bd5cdb3d646015ccdeb886b5ea8fd85a108";
-    sha256 = "0cwfyfpxbi9bm4kkpamyd7mgsm5b6j1rh217fqb5gi05wg45rkbb";
+    rev = "1a89db62f1239a15d310b400f74e151c0a64f37f";
+    sha256 = "0mln9adjgxzhjmjayq06ahgiay4vj5kmnzdxqz3nsik9h3npycd6";
   };
 
   nativeBuildInputs = [ autoreconfHook which ];
@@ -20,10 +20,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/include
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/binaryanalysisplatform/bap-bindings;
     description = "A C library for interacting with BAP";
-    maintainers = [ stdenv.lib.maintainers.maurer ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.maurer ];
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

@@ -15,7 +15,7 @@ mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://codesynthesis.com/download/libcutl/1.9/${name}.tar.bz2";
+    url = "https://codesynthesis.com/download/libcutl/1.9/${name}.tar.bz2";
     sha1 = "0e8d255145afbc339a3284ef85a43f4baf3fec43";
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, requireFile, cmake, mesa, libX11, libXi }:
+{ stdenv, requireFile, cmake, libGLU_combined, libX11, libXi }:
 
 let 
   sourceInfo = rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   inherit (sourceInfo) name version;
-  buildInputs = [ cmake mesa libX11 libXi ];
+  buildInputs = [ cmake libGLU_combined libX11 libXi ];
 
   sourceRoot = "liquidfun/Box2D/";
 

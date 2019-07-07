@@ -54,5 +54,6 @@ in stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.bjg ];
     platforms = stdenv.lib.platforms.all;
+    hydraPlatforms = stdenv.lib.platforms.linux; # sdl-config times out on darwin
   };
 }

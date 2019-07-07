@@ -6,12 +6,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "${pname}-${stdenv.lib.optionalString contribPlugins "full-"}${version}";
-  version = "16.01";
+  version = "17.12";
   pname = "codeblocks";
 
   src = fetchurl {
-    url = "mirror://sourceforge/codeblocks/Sources/${version}/codeblocks_${version}.tar.gz";
-    sha256 = "00sskm91r20ywydwqwx6v7z3nwn9lyh5297c5wp3razldlh9vyrh";
+    url = "mirror://sourceforge/codeblocks/Sources/${version}/codeblocks_${version}.tar.xz";
+    sha256 = "1q2pph7md1p10i83rir2l4gvy7ym2iw8w6sk5vl995knf851m20k";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libtool file zip ];
@@ -22,11 +22,7 @@ stdenv.mkDerivation rec {
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
   postConfigure = optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
   configureFlags = [ "--enable-pch=no" ]
-    ++ optional contribPlugins "--with-contrib-plugins";
-
-  # Fix boost 1.59 compat
-  # Try removing in the next version
-  #CPPFLAGS = "-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED";
+    ++ optional contribPlugins [ "--with-contrib-plugins" "--with-boost-libdir=${boost}/lib" ];
 
   meta = {
     maintainers = [ maintainers.linquize ];

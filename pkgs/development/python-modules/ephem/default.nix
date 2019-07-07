@@ -3,7 +3,6 @@
 
 buildPythonPackage rec {
   pname = "ephem";
-  name = "${pname}-${version}";
   version = "3.7.6.0";
 
   src = fetchPypi {

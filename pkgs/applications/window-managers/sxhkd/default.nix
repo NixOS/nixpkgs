@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "sxhkd-${version}";
-  version = "0.5.8";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "sxhkd";
     rev = version;
-    sha256 = "0vnm0d2ckijsp8kc2v8jz4raamb487vg62v58v01a3rb9gzzgl06";
+    sha256 = "1cz4vkm7fqd51ly9qjkf5q76kdqdzfhaajgvrs4anz5dyzrdpw68";
   };
 
   buildInputs = [ asciidoc libxcb xcbutil xcbutilkeysyms xcbutilwm ];

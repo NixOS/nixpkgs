@@ -100,8 +100,8 @@ in
             in
             pkgs.writeText "fcron.conf" ''
               fcrontabs   =       /var/spool/fcron
-              pidfile     =       /var/run/fcron.pid
-              fifofile    =       /var/run/fcron.fifo
+              pidfile     =       /run/fcron.pid
+              fifofile    =       /run/fcron.fifo
               fcronallow  =       /etc/fcron.allow
               fcrondeny   =       /etc/fcron.deny
               shell       =       /bin/sh
@@ -115,7 +115,7 @@ in
       ];
 
     environment.systemPackages = [ pkgs.fcron ];
-    users.extraUsers.fcron = {
+    users.users.fcron = {
       uid = config.ids.uids.fcron;
       home = "/var/spool/fcron";
       group = "fcron";
@@ -128,6 +128,7 @@ in
         owner = "fcron";
         group = "fcron";
         setgid = true;
+        setuid = true;
       };
       fcrondyn = {
         source = "${pkgs.fcron}/bin/fcrondyn";

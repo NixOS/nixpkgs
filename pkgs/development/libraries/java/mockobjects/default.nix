@@ -9,7 +9,9 @@ stdenv.mkDerivation {
     sha256 = "18rnyqfcyh0s3dwkkaszdd50ssyjx5fa1y3ii309ldqg693lfgnz";
   };
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Generic unit testing framework and methodology for testing any kind of code";
+    platforms = platforms.unix;
+    license = licenses.asl20;
   };
 }

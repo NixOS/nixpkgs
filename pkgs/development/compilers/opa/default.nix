@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
 
-  configureFlags = "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind ";
+  configureFlags = [ "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind" ];
 
   buildInputs = [ which perl jdk openssl coreutils zlib ncurses
     makeWrapper gcc binutils gnumake nodejs

@@ -2,7 +2,6 @@
 , fetchPypi
 , python
 , stdenv
-, fetchurl
 , pytest
 , glibcLocales
 , cython
@@ -17,29 +16,32 @@
 , lxml
 , html5lib
 , beautifulsoup4
+, hypothesis
 , openpyxl
 , tables
 , xlwt
+, runtimeShell
 , libcxx ? null
 }:
 
 let
-  inherit (stdenv.lib) optional optionalString concatStringsSep;
+  inherit (stdenv.lib) optional optionals optionalString;
   inherit (stdenv) isDarwin;
+
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.22.0";
-  name = "${pname}-${version}";
+  version = "0.24.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44a94091dd71f05922eec661638ec1a35f26d573c119aa2fad964f10a2880e6c";
+    sha256 = "18imlm8xbhcbwy4wa957a1fkamrcb0z988z006jpfda3ki09z4ag";
   };
 
-  LC_ALL = "en_US.UTF-8";
-  buildInputs = [ pytest glibcLocales ] ++ optional isDarwin libcxx;
+  checkInputs = [ pytest glibcLocales moto hypothesis ];
+
+  nativeBuildInputs = [ cython ];
+  buildInputs = optional isDarwin libcxx;
   propagatedBuildInputs = [
-    cython
     dateutil
     scipy
     numexpr
@@ -65,7 +67,30 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-  checkInputs = [ moto ];
+
+  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
+    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
+    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
+    "test_fallback_plural"
+    "test_ambiguous_flags"
+    "test_ambiguous_compat"
+    # Locale-related
+    "test_names"
+    "test_dt_accessor_datetime_name_accessors"
+    "test_datetime_name_accessors"
+    # Can't import from test folder
+    "test_oo_optimizable"
+    # Disable IO related tests because IO data is no longer distributed
+    "io"
+    # KeyError Timestamp
+    "test_to_excel"
+  ] ++ optionals isDarwin [
+    "test_locale"
+    "test_clipboard"
+  ]);
+
+  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
+
   checkPhase = ''
     runHook preCheck
   ''
@@ -73,18 +98,12 @@ in buildPythonPackage rec {
   #       Until then we disable the tests.
   + optionalString isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
-    echo "#!/bin/sh" > pbcopy
-    echo "#!/bin/sh" > pbpaste
+    echo "#!${runtimeShell}" > pbcopy
+    echo "#!${runtimeShell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
-    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
-    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
-    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network \
-      -k "not test_fallback_plural and \
-          not test_ambiguous_flags and \
-          not test_ambiguous_compat \
-          ${optionalString isDarwin "and not test_locale and not test_clipboard"}"
+    LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
     runHook postCheck
   '';
 

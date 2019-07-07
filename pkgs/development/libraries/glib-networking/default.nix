@@ -1,32 +1,45 @@
-{ stdenv, fetchurl, pkgconfig, glib, intltool, gnutls, libproxy
+{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gettext, python3, gnutls, p11-kit, libproxy, gnome3
 , gsettings-desktop-schemas }:
 
 let
-  ver_maj = "2.54";
-  ver_min = "1";
+  pname = "glib-networking";
+  version = "2.60.2";
 in
 stdenv.mkDerivation rec {
-  name = "glib-networking-${ver_maj}.${ver_min}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib-networking/${ver_maj}/${name}.tar.xz";
-    sha256 = "0bq16m9nh3gcz9x2fvygr0iwxd2pxcbrm3lj3kihsnh1afv8g9za";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0cl74q7hvq4xqqc88vlzmfw1sh5n9hdh1yvn2v1vg9am1z8z68n0";
   };
 
   outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
 
-  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
+  PKG_CONFIG_GIO_2_0_GIOMODULEDIR = "${placeholder "out"}/lib/gio/modules";
 
-  preBuild = ''
-    sed -e "s@${glib.out}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ pkgconfig intltool ];
-  propagatedBuildInputs = [ glib gnutls libproxy gsettings-desktop-schemas ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext
+    python3 # install_script
+  ];
+  propagatedBuildInputs = [ glib gnutls p11-kit libproxy gsettings-desktop-schemas ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  mesonFlags = [
+    # Default auto detection doesn't work
+    "-Dgnutls=enabled"
+  ];
 
   doCheck = false; # tests need to access the certificates (among other things)
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Network-related giomodules for glib";
@@ -34,4 +47,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

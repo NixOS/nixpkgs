@@ -19,22 +19,17 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        mkdir -p /var/lib/couchpotato
-        chown -R couchpotato:couchpotato /var/lib/couchpotato
-      '';
-
       serviceConfig = {
         Type = "simple";
         User = "couchpotato";
         Group = "couchpotato";
-        PermissionsStartOnly = "true";
+        StateDirectory = "couchpotato";
         ExecStart = "${pkgs.couchpotato}/bin/couchpotato";
         Restart = "on-failure";
       };
     };
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "couchpotato";
         group = "couchpotato";
         home = "/var/lib/couchpotato/";
@@ -42,7 +37,7 @@ in
         uid = config.ids.uids.couchpotato;
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "couchpotato";
         gid = config.ids.gids.couchpotato;
       };

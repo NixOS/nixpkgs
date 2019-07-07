@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtheora, xvidcore, mesa, SDL, SDL_ttf, SDL_mixer
+{ stdenv, fetchurl, libtheora, xvidcore, libGLU_combined, SDL, SDL_ttf, SDL_mixer
 , curl, libjpeg, libpng, gettext, cunit, enableEditor?false }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enableEditor "--enable-uforadiant";
 
   buildInputs = [
-    libtheora xvidcore mesa SDL SDL_ttf SDL_mixer
+    libtheora xvidcore libGLU_combined SDL SDL_ttf SDL_mixer
     curl libjpeg libpng gettext cunit
   ];
 

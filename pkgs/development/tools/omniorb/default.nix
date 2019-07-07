@@ -3,11 +3,11 @@ stdenv.mkDerivation rec {
 
   name = "omniorb-${version}";
 
-  version = "4.2.0";
+  version = "4.2.3";
 
   src = fetchurl rec {
     url = "mirror://sourceforge/project/omniorb/omniORB/omniORB-${version}/omniORB-${version}.tar.bz2";
-    sha256 = "1g58xcw4641wyisp9wscrkzaqrz0vf123dgy52qq2a3wk7y77hkl";
+    sha256 = "1jlb0wps6311dmhnphn64gv46z0bl8grch4fd9dcx5dlib02lh96";
   };
 
   buildInputs = [ python2 ];

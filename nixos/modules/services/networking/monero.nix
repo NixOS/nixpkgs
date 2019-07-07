@@ -51,7 +51,7 @@ in
 
     services.monero = {
 
-      enable = mkEnableOption "Monero node daemon.";
+      enable = mkEnableOption "Monero node daemon";
 
       mining.enable = mkOption {
         type = types.bool;
@@ -197,7 +197,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "monero";
       uid  = config.ids.uids.monero;
       description = "Monero daemon user";
@@ -205,7 +205,7 @@ in
       createHome = true;
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = "monero";
       gid  = config.ids.gids.monero;
     };

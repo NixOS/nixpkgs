@@ -5,7 +5,7 @@
                      return l.replace('libboost', 'boost')
  
 -libboost = get_libboost_name()
-+libboost = 'boost_python3'
++libboost = 'boost_python@version@'
  
  setup(
      name='py3exiv2',

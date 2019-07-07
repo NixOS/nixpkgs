@@ -1,4 +1,4 @@
-{ config, options, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -97,11 +97,11 @@ in {
         Whether not to index bind mounts
       '';
     };
-    
+
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = mkIf isMLocate { mlocate = {}; };
+    users.groups = mkIf isMLocate { mlocate = {}; };
 
     security.wrappers = mkIf isMLocate {
       locate = {
@@ -133,13 +133,26 @@ in {
     systemd.services.update-locatedb =
       { description = "Update Locate Database";
         path = mkIf (!isMLocate) [ pkgs.su ];
+
+        # mlocate's updatedb takes flags via a configuration file or
+        # on the command line, but not by environment variable.
         script =
+          if isMLocate
+          then let toFlags = x: optional (cfg.${x} != [])
+                                         "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
+                   args = concatLists (map toFlags ["pruneFS" "pruneNames" "prunePaths"]);
+               in ''
+            exec ${cfg.locate}/bin/updatedb \
+              --output ${toString cfg.output} ${concatStringsSep " " args} \
+              --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
+              ${concatStringsSep " " cfg.extraFlags}
           ''
+          else ''
             exec ${cfg.locate}/bin/updatedb \
               ${optionalString (cfg.localuser != null && ! isMLocate) ''--localuser=${cfg.localuser}''} \
               --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
-        environment = {
+        environment = optionalAttrs (!isMLocate) {
           PRUNEFS = concatStringsSep " " cfg.pruneFS;
           PRUNEPATHS = concatStringsSep " " cfg.prunePaths;
           PRUNENAMES = concatStringsSep " " cfg.pruneNames;

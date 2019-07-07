@@ -38,7 +38,7 @@ pythonPackages.buildPythonApplication rec {
   ];
   meta = {
     description = "A declarative language to describe PostgreSQL databases";
-    homepage = http://perseas.github.io/;
+    homepage = https://perseas.github.io/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ pmeunier ];
   };

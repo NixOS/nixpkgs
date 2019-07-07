@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "burp-${version}";
-  version = "2.1.28";
+  version = "2.2.18";
 
   src = fetchFromGitHub {
     owner = "grke";
     repo = "burp";
     rev = version;
-    sha256 = "1i8j15pmnn9cn6cd4dnp28qbisq8cl9l4y3chsmil4xqljr9fi5x";
+    sha256 = "1zhq240kz881vs2s620qp0kifmgr582caalm85ls789w9rmdkhjl";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "BURP - BackUp and Restore Program";
-    homepage    = http://burp.grke.org;
+    homepage    = https://burp.grke.org;
     license     = licenses.agpl3;
     maintainers = with maintainers; [ tokudan ];
     platforms   = platforms.all;

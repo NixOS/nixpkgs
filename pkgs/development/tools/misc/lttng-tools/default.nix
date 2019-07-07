@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "lttng-tools-${version}";
-  version = "2.10.1";
+  version = "2.10.7";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-tools/${name}.tar.bz2";
-    sha256 = "005axllajfbxh73vh1cacbapdvbxjsi3pkzq40giih4ps9x4pg10";
+    sha256 = "04hkga0hnyjmv42mxj3njaykqmq9x4abd5qfyds5r62x1khfnwgd";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tracing tools (kernel + user space) for Linux";
-    homepage = http://lttng.org/;
+    homepage = https://lttng.org/;
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

@@ -15,28 +15,34 @@ in
 
   options = {
 
-    virtualisation.lxd.enable =
-      mkOption {
+    virtualisation.lxd = {
+      enable = mkOption {
         type = types.bool;
         default = false;
-        description =
-          ''
-            This option enables lxd, a daemon that manages
-            containers. Users in the "lxd" group can interact with
-            the daemon (e.g. to start or stop containers) using the
-            <command>lxc</command> command line tool, among others.
-          '';
+        description = ''
+          This option enables lxd, a daemon that manages
+          containers. Users in the "lxd" group can interact with
+          the daemon (e.g. to start or stop containers) using the
+          <command>lxc</command> command line tool, among others.
+        '';
       };
-
+      zfsSupport = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          enables lxd to use zfs as a storage for containers.
+          This option is enabled by default if a zfs pool is configured
+          with nixos.
+        '';
+      };
+    };
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages =
-      [ pkgs.lxd ];
+    environment.systemPackages = [ pkgs.lxd ];
 
     security.apparmor = {
       enable = true;
@@ -47,31 +53,31 @@ in
       packages = [ pkgs.lxc ];
     };
 
-    systemd.services.lxd =
-      { description = "LXD Container Management Daemon";
+    systemd.services.lxd = {
+      description = "LXD Container Management Daemon";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "systemd-udev-settle.service" ];
 
-        # TODO(wkennington): Add lvm2 and thin-provisioning-tools
-        path = with pkgs; [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ];
+      path = lib.optional cfg.zfsSupport pkgs.zfs;
 
-        preStart = ''
-          mkdir -m 0755 -p /var/lib/lxc/rootfs
-        '';
+      preStart = ''
+        mkdir -m 0755 -p /var/lib/lxc/rootfs
+      '';
 
-        serviceConfig.ExecStart = "@${pkgs.lxd.bin}/bin/lxd lxd --syslog --group lxd";
-        serviceConfig.Type = "simple";
-        serviceConfig.KillMode = "process"; # when stopping, leave the containers alone
+      serviceConfig = {
+        ExecStart = "@${pkgs.lxd.bin}/bin/lxd lxd --group lxd";
+        Type = "simple";
+        KillMode = "process"; # when stopping, leave the containers alone
       };
 
-    users.extraGroups.lxd.gid = config.ids.gids.lxd;
+    };
 
-    users.extraUsers.root = {
+    users.groups.lxd.gid = config.ids.gids.lxd;
+
+    users.users.root = {
       subUidRanges = [ { startUid = 1000000; count = 65536; } ];
       subGidRanges = [ { startGid = 1000000; count = 65536; } ];
     };
-
   };
-
 }

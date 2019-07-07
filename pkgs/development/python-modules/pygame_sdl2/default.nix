@@ -1,21 +1,29 @@
-{ stdenv, pkgs, buildPythonPackage, fetchFromGitHub, isPy27
+{ stdenv, buildPythonPackage, fetchurl, isPy27
 , cython, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng }:
 
 buildPythonPackage rec {
   pname = "pygame_sdl2";
-  version = "6.99.10.1227";
-  name = "${pname}-${version}";
+  version = "2.1.0";
+  renpy_version = "7.2.0";
+  name = "${pname}-${version}-${renpy_version}";
 
-  src = fetchFromGitHub {
-    owner = "renpy";
-    repo = "${pname}";
-    rev = "renpy-${version}";
-    sha256 = "10n6janvqh5adn7pcijqwqfh234sybjz788kb8ac6b4l11hy2lx1";
+  src = fetchurl {
+    url = "https://www.renpy.org/dl/${renpy_version}/pygame_sdl2-${version}-for-renpy-${renpy_version}.tar.gz";
+    sha256 = "1amgsb6mm8ssf7vdcs5dr8rlxrgyhh29m4i573z1cw61ynd7vgcw";
   };
+
+  # force rebuild of headers needed for install
+  prePatch = ''
+    rm -rf gen gen3
+  '';
+
+  nativeBuildInputs = [
+    SDL2.dev cython
+  ];
 
   buildInputs = [
     SDL2 SDL2_image SDL2_ttf SDL2_mixer
-    cython libjpeg libpng
+    libjpeg libpng
   ];
 
 

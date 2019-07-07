@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, unzip
-, buildPlatform, hostPlatform
-}:
+{ stdenv, fetchurl, unzip }:
 
 let
   # Generated upstream information
@@ -13,11 +11,9 @@ let
     sha256="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
   };
 
-  compileFlags = stdenv.lib.concatStringsSep " " ([ "-O3" "-mtune=generic" "-DNDEBUG" ]
-    ++ stdenv.lib.optional (hostPlatform.isUnix) "-Dunix -pthread"
-    ++ stdenv.lib.optional (hostPlatform.isi686) "-march=i686"
-    ++ stdenv.lib.optional (hostPlatform.isx86_64) "-march=nocona"
-    ++ stdenv.lib.optional (!hostPlatform.isx86) "-DNOJIT");
+  compileFlags = stdenv.lib.concatStringsSep " " ([ "-O3" "-DNDEBUG" ]
+    ++ stdenv.lib.optional (stdenv.hostPlatform.isUnix) "-Dunix -pthread"
+    ++ stdenv.lib.optional (!stdenv.hostPlatform.isx86) "-DNOJIT");
 in
 stdenv.mkDerivation {
   inherit (s) name version;

@@ -1,14 +1,14 @@
 { stdenv, fetchurl, alsaLib, freetype, ftgl, libjack2, libX11, lv2
-, mesa, pkgconfig, ttf_bitstream_vera
+, libGLU_combined, pkgconfig, ttf_bitstream_vera
 }:
 
 stdenv.mkDerivation  rec {
   name = "setbfree-${version}";
-  version = "0.8.5";
+  version = "0.8.8";
 
   src = fetchurl {
     url = "https://github.com/pantherb/setBfree/archive/v${version}.tar.gz";
-    sha256 = "0qfccny0hh9lq54272mzmxvfz2jmzcgigjkjwn6v9h6n00gi5bw4";
+    sha256 = "1ldxwds99azingkjh246kz7x3j7307jhr0fls5rjjbcfchpg7v99";
   };
 
   patchPhase = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    alsaLib freetype ftgl libjack2 libX11 lv2 mesa
+    alsaLib freetype ftgl libjack2 libX11 lv2 libGLU_combined
     ttf_bitstream_vera
   ];
 

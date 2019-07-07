@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, nodejs, which, python27, utillinux }:
 
-let version = "20.1"; in
+let version = "20.3"; in
 stdenv.mkDerivation {
   name = "cjdns-"+version;
 
@@ -8,15 +8,16 @@ stdenv.mkDerivation {
     owner = "cjdelisle";
     repo = "cjdns";
     rev = "cjdns-v${version}";
-    sha256 = "033q8av46y0q8vxyqvb4yjh1lz6a17mmk8lhdpwdcqnsws8xjjsw";
+    sha256 = "02cxrjmpi7pyf0qfvhkqg3y5rq7vlnib55n2hhxnyhzznxhgrsgy";
   };
 
   buildInputs = [ which python27 nodejs ] ++
     # for flock
     stdenv.lib.optional stdenv.isLinux utillinux;
 
+  CFLAGS = "-O2";
   buildPhase =
-    stdenv.lib.optionalString stdenv.isArm "Seccomp_NO=1 "
+    stdenv.lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
     + "bash do";
   installPhase = ''
     install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6

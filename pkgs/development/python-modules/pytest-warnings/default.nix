@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pytest-warnings";
   version = "0.3.0";
 

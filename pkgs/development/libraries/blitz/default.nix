@@ -19,7 +19,7 @@
 assert enableSerialization -> boost != null;
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optional optionals;
 in
 
 stdenv.mkDerivation rec {

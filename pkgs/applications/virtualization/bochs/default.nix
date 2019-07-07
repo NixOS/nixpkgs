@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , pkgconfig, libtool
-, gtk2, mesa, readline, libX11, libXpm
+, gtk2, libGLU_combined, readline, libX11, libXpm
 , docbook_xml_dtd_45, docbook_xsl
 , sdlSupport ? true, SDL2 ? null
 , termSupport ? true, ncurses ? null
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   patches = [ ./bochs-2.6.9-glibc-2.26.patch ];
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig libtool gtk2 mesa readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
+  [ pkgconfig libtool gtk2 libGLU_combined readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
   ++ optionals termSupport [ ncurses ]
   ++ optionals sdlSupport [ SDL2 ]
   ++ optionals wxSupport [ wxGTK ]

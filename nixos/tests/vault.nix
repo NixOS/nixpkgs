@@ -4,7 +4,7 @@ import ./make-test.nix ({ pkgs, ... }:
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ lnl7 ];
   };
-  machine = { config, pkgs, ... }: {
+  machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.vault ];
     environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
     services.vault.enable = true;
@@ -17,7 +17,7 @@ import ./make-test.nix ({ pkgs, ... }:
       $machine->waitForUnit('multi-user.target');
       $machine->waitForUnit('vault.service');
       $machine->waitForOpenPort(8200);
-      $machine->succeed('vault init');
-      $machine->succeed('vault status | grep "Sealed: true"');
+      $machine->succeed('vault operator init');
+      $machine->succeed('vault status | grep Sealed | grep true');
     '';
 })

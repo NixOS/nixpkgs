@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ... }: {
   name = "powerdns";
 
-  nodes.server = { config, pkgs, ... }: {
+  nodes.server = { ... }: {
     services.powerdns.enable = true;
   };
 

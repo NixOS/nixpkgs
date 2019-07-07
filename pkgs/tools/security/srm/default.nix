@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = http://srm.sourceforge.net;
     license = licenses.mit;
     maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

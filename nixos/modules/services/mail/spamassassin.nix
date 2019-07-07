@@ -128,14 +128,14 @@ in
       systemPackages = [ pkgs.spamassassin ];
     };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "spamd";
       description = "Spam Assassin Daemon";
       uid = config.ids.uids.spamd;
       group = "spamd";
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = "spamd";
       gid = config.ids.gids.spamd;
     };
@@ -174,7 +174,7 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --siteconfigpath=${spamdEnv} --virtual-config-dir=/var/lib/spamassassin/user-%u --allow-tell --pidfile=/var/run/spamd.pid";
+        ExecStart = "${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --siteconfigpath=${spamdEnv} --virtual-config-dir=/var/lib/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
 

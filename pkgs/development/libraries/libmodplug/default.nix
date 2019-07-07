@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 let
-  version = "0.8.8.5";
+  version = "0.8.9.0";
 in stdenv.mkDerivation rec {
   name = "libmodplug-${version}";
 
@@ -15,6 +15,6 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/modplug-xmms/libmodplug/${version}/${name}.tar.gz";
-    sha256 = "1bfsladg7h6vnii47dd66f5vh1ir7qv12mfb8n36qiwrxq92sikp";
+    sha256 = "1pnri98a603xk47smnxr551svbmgbzcw018mq1k6srbrq6kaaz25";
   };
 }

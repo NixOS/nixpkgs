@@ -1,13 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  version = "0.7.5";
+  version = "0.8.post1";
   pname = "pyfiglet";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04jy4182hn5xfs6jf432gxclfj1rhssd7bsf0b4gymrjzkhr8qa4";
+    sha256 = "c6c2321755d09267b438ec7b936825a4910fec696292139e664ca8670e103639";
   };
 
   doCheck = false;

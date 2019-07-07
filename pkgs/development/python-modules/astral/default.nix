@@ -1,19 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytz, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, pytz, requests, pytest }:
 
 buildPythonPackage rec {
   pname = "astral";
-  version = "1.5";
+  version = "1.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "527628fbfe90c1596c3950ff84ebd07ecc10c8fb1044c903a0519b5057700cb6";
+    sha256 = "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1";
   };
 
-  propagatedBuildInputs = [ pytz ];
+  propagatedBuildInputs = [ pytz requests ];
 
   checkInputs = [ pytest ];
   checkPhase = ''
-    py.test -k "not test_GoogleLocator"
+    py.test -m "not webtest"
   '';
 
   meta = with stdenv.lib; {

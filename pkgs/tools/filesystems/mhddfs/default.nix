@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
     ./fix-format-security-error.patch
   ];
 
+  postPatch = ''
+    substituteInPlace src/main.c --replace "attr/xattr.h" "sys/xattr.h"
+    substituteInPlace src/tools.c --replace "attr/xattr.h" "sys/xattr.h"
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     cp mhddfs $out/bin/

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "opencryptoki-${version}";
-  version = "3.8.1";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "opencryptoki";
     repo = "opencryptoki";
     rev = "v${version}";
-    sha256 = "1m618pjfzw18irmh6i4pfq1gvcxgyfh9ikjn33nrdj55v2l27g31";
+    sha256 = "1rf7cmibmx636vzv7p54g212478a8wim2lfjf2861hfd0m96nv4l";
   };
 
   nativeBuildInputs = [ autoreconfHook libtool bison flex ];

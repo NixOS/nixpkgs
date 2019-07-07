@@ -24,14 +24,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/share/{doc,fonts/truetype}
-    cp -va _release/* $out/share/fonts/truetype
-    cp -va Readme.md $out/share/doc
+    install -m444 -Dt $out/share/fonts/truetype _release/*
+    install -m444 -Dt $out/share/doc            Readme.md
   '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "0lbipgygiva3gg1pqw07phpnnf0s6ka9vqdk1pw7bkybjw3f7wzm";
 
   meta = with stdenv.lib; {
     homepage = http://larsenwork.com/monoid;

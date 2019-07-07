@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A C++ platform for building dynamic and reflexive systems with an emphasis on audio and media";
-    homepage = https://jamoma.org;
+    homepage = http://www.jamoma.org;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true; # 2018-04-10
   };
 }

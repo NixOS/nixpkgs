@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src, python }:
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python }:
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
@@ -15,7 +15,7 @@ let
 
     nativeBuildInputs = [ cmake ];
 
-    buildInputs = [ libedit libxml2 llvm python ];
+    buildInputs = [ libxml2 llvm python ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
@@ -29,6 +29,8 @@ let
     postPatch = ''
       sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
+    '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/Tools.cpp
     '';
 
     outputs = [ "out" "lib" "python" ];
@@ -36,7 +38,10 @@ let
     # Clang expects to find LLVMgold in its own prefix
     # Clang expects to find sanitizer libraries in its own prefix
     postInstall = ''
-      ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      if [ -e ${llvm}/lib/LLVMgold.so ]; then
+        ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      fi
+
       ln -sv ${llvm}/lib/clang/${version}/lib $out/lib/clang/${version}/
       ln -sv $out/bin/clang $out/bin/cpp
 

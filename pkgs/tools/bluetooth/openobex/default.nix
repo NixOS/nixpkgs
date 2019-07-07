@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, bluez, libusb, cmake }:
    
 stdenv.mkDerivation rec {
-  name = "openobex-1.7.1";
+  name = "openobex-1.7.2";
    
   src = fetchurl {
     url = "mirror://sourceforge/openobex/${name}-Source.tar.gz";
-    sha256 = "0mza0mrdrbcw4yix6qvl31kqy7bdkgxjycr0yx7yl089v5jlc9iv";
+    sha256 = "1z6l7pbwgs5pjx3861cyd3r6vq5av984bdp4r3hgrw2jxam6120m";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, gcc, zlib }:
+{ stdenv, fetchurl, cmake, zlib }:
 
 stdenv.mkDerivation rec {
   name = "diamond-0.8.36";

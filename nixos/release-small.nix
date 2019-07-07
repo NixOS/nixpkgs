@@ -33,6 +33,7 @@ in rec {
       inherit (nixos'.tests)
         containers-imperative
         containers-ipv4
+        containers-ipv6
         firewall
         ipv6
         login
@@ -49,6 +50,10 @@ in rec {
           lvm
           separateBoot
           simple;
+      };
+      boot = {
+        inherit (nixos'.tests.boot)
+          biosCdrom;
       };
     };
   };

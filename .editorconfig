@@ -13,8 +13,8 @@ charset = utf-8
 
 # see https://nixos.org/nixpkgs/manual/#chap-conventions
 
-# Match nix/ruby files, set indent to spaces with width of two
-[*.{nix,rb}]
+# Match nix/ruby/docbook files, set indent to spaces with width of two
+[*.{nix,rb,xml}]
 indent_style = space
 indent_size = 2
 

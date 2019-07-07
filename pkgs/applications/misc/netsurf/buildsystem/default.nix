@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "netsurf-buildsystem-${version}";
-  version = "1.5";
+  version = "1.7";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/buildsystem-${version}.tar.gz";
-    sha256 = "0wdgvasrjik1dgvvpqbppbpyfzkqd1v45x3g9rq7p67n773azinv";
+    sha256 = "1q23aaycv35ma5471l1gxib8lfq2s9kprrkaqgfc926d04rlbmhw";
   };
 
   makeFlags = [

@@ -2,26 +2,26 @@
 , openssl, db48, boost, zlib, miniupnpc
 , qrencode, glib, protobuf, yasm, libevent
 , utillinux
-, enable_Upnp ? false 
+, enable_Upnp ? false
 , disable_Wallet ? false
 , disable_Daemon ? false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "dashpay-${version}";
-  version = "0.12.1.3";
+  version = "0.12.2.3";
 
   src = fetchFromGitHub {
     owner = "dashpay";
     repo= "dash";
     rev = "v${version}";
-    sha256 = "0h0fxhh30wy5vp06l1mkswhz565qs6j9y0dm84fmn28rdfvhv2aj";
+    sha256 = "0l1gcj2xf2bal9ph9y11x8yd28fd25f55f48xbm45bfw3ij7nbaa";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ glib openssl db48 yasm boost zlib libevent 
+  buildInputs = [ glib openssl db48 yasm boost zlib libevent
                   miniupnpc protobuf qrencode utillinux ];
-                  
+
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib --with-gui=no" ]
                     ++ optional enable_Upnp "--enable-upnp-default"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       with instant transactions.  It allows you to keep your finances
       private as you make transactions without waits, similar to cash.
     '';
-    homepage = http://dashpay.io;
+    homepage = https://www.dash.org;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };

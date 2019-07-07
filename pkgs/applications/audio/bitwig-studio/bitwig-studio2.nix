@@ -1,18 +1,16 @@
-{ stdenv, fetchurl, bitwig-studio1,
-  xdg_utils, zenity, ffmpeg }:
+{ fetchurl, bitwig-studio1,
+  pulseaudio }:
 
 bitwig-studio1.overrideAttrs (oldAttrs: rec {
   name = "bitwig-studio-${version}";
-  version = "2.2.2";
+  version = "2.5";
 
   src = fetchurl {
     url    = "https://downloads.bitwig.com/stable/${version}/bitwig-studio-${version}.deb";
-    sha256 = "1x4wka32xlygmhdh9rb15s37zh5qjrgap2qk35y34c52lf5aak22";
+    sha256 = "1zkiz36lhck3qvl0cp0dq6pwbv4lx4sh9wh0ga92kx5zhvbjm098";
   };
 
-  buildInputs = bitwig-studio1.buildInputs ++ [ ffmpeg ];
-
-  binPath = stdenv.lib.makeBinPath [
-    ffmpeg xdg_utils zenity
+  runtimeDependencies = [
+    pulseaudio
   ];
 })

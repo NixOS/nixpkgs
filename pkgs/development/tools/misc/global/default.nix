@@ -1,14 +1,14 @@
 { fetchurl, stdenv, libtool, makeWrapper
-, coreutils, ctags, ncurses, pythonPackages, sqlite, universal-ctags, pkgconfig
+, coreutils, ctags, ncurses, pythonPackages, sqlite, universal-ctags
 }:
 
 stdenv.mkDerivation rec {
   name = "global-${version}";
-  version = "6.5.7";
+  version = "6.6.3";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "0cnd7a7d1pl46yk15q6mnr9i9w3xi8pxgchw4ia9njgr4jjqzh6r";
+    sha256 = "0735pj47dnspf20n0j1px24p59nwjinlmlb2n32ln1hvdkprivnb";
   };
 
   nativeBuildInputs = [ libtool makeWrapper ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       independence of any editor.  It runs on a UNIX (POSIX) compatible
       operating system like GNU and BSD.
     '';
-    homepage = http://www.gnu.org/software/global/;
+    homepage = https://www.gnu.org/software/global/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub peterhoeg ];
     platforms = platforms.unix;

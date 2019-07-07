@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, popt, avahi, pkgconfig, python, gtk2, runCommand
 , gcc, autoconf, automake, which, procps, libiberty_static
+, runtimeShell
 , sysconfDir ? ""   # set this parameter to override the default value $out/etc
 , static ? false
 }:
@@ -53,7 +54,7 @@ let
           mkdir -p $out/bin
           if [ -x "${gcc.cc}/bin/gcc" ]; then
             cat > $out/bin/gcc << EOF
-            #!/bin/sh
+            #!${runtimeShell}
             ${extraConfig}
             exec ${distcc}/bin/distcc gcc "\$@"
           EOF
@@ -61,7 +62,7 @@ let
           fi
           if [ -x "${gcc.cc}/bin/g++" ]; then
             cat > $out/bin/g++ << EOF
-            #!/bin/sh
+            #!${runtimeShell}
             ${extraConfig}
             exec ${distcc}/bin/distcc g++ "\$@"
           EOF

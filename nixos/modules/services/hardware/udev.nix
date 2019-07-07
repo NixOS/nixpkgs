@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  inherit (pkgs) stdenv writeText procps;
-
   udev = config.systemd.package;
 
   cfg = config.services.udev;
@@ -87,7 +85,7 @@ let
       for i in $import_progs $run_progs; do
         if [[ ! -x $i ]]; then
           echo "FAIL"
-          echo "$i is called in udev rules but not installed by udev"
+          echo "$i is called in udev rules but is not executable or does not exist"
           exit 1
         fi
       done
@@ -118,10 +116,6 @@ let
         exit 1
       fi
 
-      ${optionalString config.networking.usePredictableInterfaceNames ''
-        cp ${./80-net-setup-link.rules} $out/80-net-setup-link.rules
-      ''}
-
       # If auto-configuration is disabled, then remove
       # udev's 80-drivers.rules file, which contains rules for
       # automatically calling modprobe.
@@ -146,7 +140,7 @@ let
 
       echo "Generating hwdb database..."
       # hwdb --update doesn't return error code even on errors!
-      res="$(${udev}/bin/udevadm hwdb --update --root=$(pwd) 2>&1)"
+      res="$(${pkgs.buildPackages.udev}/bin/udevadm hwdb --update --root=$(pwd) 2>&1)"
       echo "$res"
       [ -z "$(echo "$res" | egrep '^Error')" ]
       mv etc/udev/hwdb.bin $out
@@ -283,6 +277,8 @@ in
     services.udev.packages = [ extraUdevRules extraHwdbFile ];
 
     services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux udev ];
+
+    boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
     environment.etc =
       [ { source = udevRules;

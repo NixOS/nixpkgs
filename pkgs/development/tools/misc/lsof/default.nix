@@ -1,16 +1,16 @@
 { stdenv, fetchurl, buildPackages, ncurses }:
 
-let dialect = with stdenv.lib; last (splitString "-" stdenv.system); in
+let dialect = with stdenv.lib; last (splitString "-" stdenv.hostPlatform.system); in
 
 stdenv.mkDerivation rec {
   name = "lsof-${version}";
-  version = "4.89";
+  version = "4.91";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ ncurses ];
 
   src = fetchurl {
-    urls =
+    urls = ["https://fossies.org/linux/misc/lsof_${version}.tar.bz2"] ++ # Mirrors seem to be down...
       ["ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_${version}.tar.bz2"]
       ++ map (
         # the tarball is moved after new version is released
@@ -23,22 +23,23 @@ stdenv.mkDerivation rec {
         + "${stdenv.lib.optionalString isOld "OLD/"}lsof_${version}.tar.bz2"
       ) [ false true ]
       ;
-    sha256 = "061p18v0mhzq517791xkjs8a5dfynq1418a1mwxpji69zp2jzb41";
+    sha256 = "18sh4hbl9jw2szkf0gvgan8g13f3g4c6s2q9h3zq5gsza9m99nn9";
   };
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";
 
-  patches = [ ./dfile.patch ];
+  patches = [ ./no-build-info.patch ] ++ stdenv.lib.optional stdenv.isDarwin ./darwin-dfile.patch;
 
   postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's|lcurses|lncurses|g' Configure
   '';
 
   # Stop build scripts from searching global include paths
-  LSOF_INCLUDE = "${stdenv.cc.libc}/include";
+  LSOF_INCLUDE = "${stdenv.lib.getDev stdenv.cc.libc}/include";
   configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
   preBuild = ''
-    sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;' -e 's/-lcurses/-lncurses/'
     for filepath in $(find dialects/${dialect} -type f); do
       sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath
     done
@@ -50,15 +51,16 @@ stdenv.mkDerivation rec {
     cp lsof $out/bin
   '';
 
-  meta = {
-    homepage = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/;
+  meta = with stdenv.lib; {
+    homepage = https://people.freebsd.org/~abe/;
     description = "A tool to list open files";
     longDescription = ''
       List open files. Can show what process has opened some file,
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.dezgeg ];
+    platforms = platforms.unix;
+    license = licenses.purdueBsd;
   };
 }

@@ -184,11 +184,14 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.workDir}' 0701 - - - -"
+    ];
     systemd.services.mesos-slave = {
       description = "Mesos Slave";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = [ pkgs.stdenv.shellPackage ];
+      after = [ "network.target" ] ++ optionals cfg.withDocker [ "docker.service" ] ;
+      path = [ pkgs.runtimeShellPackage ];
       serviceConfig = {
         ExecStart = ''
           ${pkgs.mesos}/bin/mesos-slave \
@@ -210,11 +213,7 @@ in {
             --executor_environment_variables=${lib.escapeShellArg (builtins.toJSON cfg.executorEnvironmentVariables)} \
             ${toString cfg.extraCmdLineOptions}
         '';
-        PermissionsStartOnly = true;
       };
-      preStart = ''
-        mkdir -m 0700 -p ${cfg.workDir}
-      '';
     };
   };
 

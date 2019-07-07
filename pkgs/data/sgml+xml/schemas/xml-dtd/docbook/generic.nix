@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, src, name, postInstall ? "true", meta ? {}, findXMLCatalogs }:
+{ stdenv, unzip, src, name, postInstall ? "true", meta ? {}, findXMLCatalogs }:
 
 stdenv.mkDerivation {
   inherit src name postInstall;

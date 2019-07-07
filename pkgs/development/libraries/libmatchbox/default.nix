@@ -6,9 +6,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libXft libICE pango libjpeg ];
   propagatedBuildInputs = [ libX11 libXext libpng ];
+  NIX_LDFLAGS = [
+    "-lX11"
+  ];
 
   src = fetchurl {
-    url = "http://downloads.yoctoproject.org/releases/matchbox/libmatchbox/${version}/libmatchbox-${version}.tar.bz2";
+    url = "https://downloads.yoctoproject.org/releases/matchbox/libmatchbox/${version}/libmatchbox-${version}.tar.bz2";
     sha256 = "0lvv44s3bf96zvkysa4ansxj2ffgj3b5kgpliln538q4wd9ank15";
   };
 

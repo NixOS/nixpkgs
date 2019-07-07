@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "hubicfuse-${version}";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "TurboGit";
     repo = "hubicfuse";
     rev = "v${version}";
-    sha256 = "1y4n63bk9vd6n1l5psjb9xm9h042kw4yh2ni33z7agixkanajv1s";
+    sha256 = "1x988hfffxgvqxh083pv3lj5031fz03sbgiiwrjpaiywfbhm8ffr";
   };
 
   nativeBuildInputs = [ pkgconfig ];

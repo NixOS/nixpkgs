@@ -6,26 +6,27 @@
 , libuuid
 , zlib
 , curl
-, patchelf
 }:
 
 let
   rpath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc libunwind libuuid icu openssl zlib curl ];
 in
   stdenv.mkDerivation rec {
-    version = "2.0.3";
-    name = "dotnet-sdk-${version}";
+    version = "2.2.203";
+    netCoreVersion = "2.2.4";
+    pname = "dotnet-sdk";
 
     src = fetchurl {
-      url = "https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.3-servicing-007037/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz";
-      sha256 = "0kqk1f0vfdfyb9mp7d4y83airkxyixmxb7lrx0h0hym2a9661ch8";
+      url = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-linux-x64.tar.gz";
+      # use sha512 from the download page
+      sha512 = "8DA955FA0AEEBB6513A6E8C4C23472286ED78BD5533AF37D79A4F2C42060E736FDA5FD48B61BF5AEC10BBA96EB2610FACC0F8A458823D374E1D437B26BA61A5C";
     };
 
-    unpackPhase = "tar xvzf $src";
+    sourceRoot = ".";
 
     buildPhase = ''
       runHook preBuild
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./dotnet
+      patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ./dotnet
       patchelf --set-rpath "${rpath}" ./dotnet
       find -type f -name "*.so" -exec patchelf --set-rpath "${rpath}" {} \;
       echo -n "dotnet-sdk version: "
@@ -45,7 +46,7 @@ in
 
     meta = with stdenv.lib; {
       homepage = https://dotnet.github.io/;
-      description = ".NET Core SDK 2.0.2 with .NET Core 2.0.0";
+      description = ".NET Core SDK ${version} with .NET Core ${netCoreVersion}";
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ kuznero ];
       license = licenses.mit;

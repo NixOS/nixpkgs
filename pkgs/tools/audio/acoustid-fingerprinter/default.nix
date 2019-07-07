@@ -15,10 +15,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DTAGLIB_MIN_VERSION=${(builtins.parseDrvName taglib.name).version}" ];
 
-  patches = [ (fetchpatch {
-    url = "https://bitbucket.org/acoustid/acoustid-fingerprinter/commits/632e87969c3a5562a5d4842b03613267ba6236b2/raw";
-    sha256 = "15hm9knrpqn3yqrwyjz4zh2aypwbcycd0c5svrsy1fb2h2rh05jk";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://bitbucket.org/acoustid/acoustid-fingerprinter/commits/632e87969c3a5562a5d4842b03613267ba6236b2/raw";
+      sha256 = "15hm9knrpqn3yqrwyjz4zh2aypwbcycd0c5svrsy1fb2h2rh05jk";
+    })
+    ./ffmpeg.patch
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://acoustid.org/fingerprinter;

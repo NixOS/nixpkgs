@@ -118,7 +118,7 @@ with lib;
     default = [];
     example = [
       { urlPath = "/foo/bar.png";
-        files = "/home/eelco/some-file.png";
+        file = "/home/eelco/some-file.png";
       }
     ];
     description = ''

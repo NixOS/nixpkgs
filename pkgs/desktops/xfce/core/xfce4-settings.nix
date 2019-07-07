@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.xfce.org/projects/xfce4-settings;
+    homepage = https://www.xfce.org/projects/xfce4-settings;
     description = "Settings manager for Xfce";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

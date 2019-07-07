@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "mlterm-${version}";
-  version = "3.8.0";
+  version = "3.8.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/mlterm/01release/${name}/${name}.tar.gz";
-    sha256 = "00dzx5rqsp73shgvn2jvgk85v3lirby06wxkqjcm1i1xwigidq3b";
+    sha256 = "1jq3fv2wqhszfipkzj8d0lykr6g0zzksn7xy4d3kwincmzfskv7k";
   };
 
   nativeBuildInputs = [ pkgconfig autoconf ];

@@ -1,15 +1,15 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libxkbcommon, pango, which, git
-, cairo, glib, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
+, cairo, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
 , bison, flex, librsvg, check
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.2";
-  name = "rofi-${version}";
+  version = "1.5.3";
+  name = "rofi-unwrapped-${version}";
 
   src = fetchurl {
-    url = "https://github.com/DaveDavenport/rofi/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0ys7grazqz5hw3nx2393df54ykcd5gw0zn66kik5fvzijpg3qfcx";
+    url = "https://github.com/DaveDavenport/rofi/releases/download/${version}/rofi-${version}.tar.gz";
+    sha256 = "1mskknfnpgmaghplwcyc44qc8swb1f9qiyi67fz9i77jijjpj1lx";
   };
 
   preConfigure = ''
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxkbcommon pango cairo git bison flex librsvg check
     libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm which
   ];
-  doCheck = true;
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Window switcher, run dialog and dmenu replacement";
-    homepage = https://davedavenport.github.io/rofi;
+    homepage = https://github.com/davatorium/rofi;
     license = licenses.mit;
-    maintainers = with maintainers; [ mbakke garbas ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ mbakke ma27 ];
+    platforms = with platforms; linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, kernel }:
+{ stdenv, fetchurl, fetchpatch, kernel, runtimeShell }:
 
 let
   baseName = "bbswitch";
@@ -36,12 +36,12 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin
     tee $out/bin/discrete_vga_poweroff << EOF
-    #!/bin/sh
+    #!${runtimeShell}
 
     echo -n OFF > /proc/acpi/bbswitch
     EOF
     tee $out/bin/discrete_vga_poweron << EOF
-    #!/bin/sh
+    #!${runtimeShell}
 
     echo -n ON > /proc/acpi/bbswitch
     EOF
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A module for powering off hybrid GPUs";
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = https://github.com/Bumblebee-Project/bbswitch;
     maintainers = with maintainers; [ abbradar ];
   };

@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "1i9qly13bwwmgj68vma766hgvsd1m75236haqsp9zgh5znlmkm3z";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://musicbrainz.org/doc/libmusicbrainz;
     description = "MusicBrainz Client Library (3.x version)";
     longDescription = ''
       The libmusicbrainz (also known as mb_client or MusicBrainz Client
       Library) is a development library geared towards developers who wish to
       add MusicBrainz lookup capabilities to their applications.'';
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.lgpl21;
   };
 }

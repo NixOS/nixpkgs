@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, gnutls, gtk2, libgcrypt, pkgconfig, gettext, qt4
+{ stdenv, fetchurl, gnutls, openssl, libgcrypt, libgpgerror, pkgconfig, gettext
+, which
+
+# GUI support
+, gtk2, gtk3, qt5
 
 , pluginSearchPaths ? [
     "/run/current-system/sw/lib/gwenhywfar/plugins"
@@ -6,19 +10,29 @@
   ]
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit ((import ./sources.nix).gwenhywfar) sha256 releaseId version;
+in stdenv.mkDerivation rec {
   name = "gwenhywfar-${version}";
-  version = "4.15.3";
+  inherit version;
 
   src = let
-    inherit ((import ./sources.nix).gwenhywfar) sha256 releaseId;
-    qstring = "package=01&release=${releaseId}&file=01";
+    qstring = "package=01&release=${releaseId}&file=02";
     mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
   in fetchurl {
     name = "${name}.tar.gz";
     urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
     inherit sha256;
   };
+
+  configureFlags = [
+    "--with-openssl-includes=${openssl.dev}/include"
+    "--with-openssl-libs=${openssl.out}/lib"
+  ];
+
+  preConfigure = ''
+    configureFlagsArray+=("--with-guis=gtk2 gtk3 qt5")
+  '';
 
   postPatch = let
     isRelative = path: builtins.substring 0 1 path != "/";
@@ -43,11 +57,9 @@ stdenv.mkDerivation rec {
       configure
   '';
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkgconfig gettext which ];
 
-  buildInputs = [ gtk2 qt4 gnutls libgcrypt ];
-
-  QTDIR = qt4;
+  buildInputs = [ gtk2 gtk3 qt5.qtbase gnutls openssl libgcrypt libgpgerror ];
 
   meta = with stdenv.lib; {
     description = "OS abstraction functions used by aqbanking and related tools";

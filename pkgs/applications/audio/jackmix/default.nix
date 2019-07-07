@@ -17,12 +17,8 @@ stdenv.mkDerivation rec {
     jack
   ];
 
-  buildPhase = ''
-    scons
-  '';
   installPhase = ''
-    mkdir -p $out/bin
-    cp jackmix/jackmix $out/bin
+    install -D jackmix/jackmix $out/bin/jackmix
   '';
 
   meta = {

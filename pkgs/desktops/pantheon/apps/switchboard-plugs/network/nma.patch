@@ -1,0 +1,43 @@
+diff --git a/src/Widgets/SettingsButton.vala b/src/Widgets/SettingsButton.vala
+index 19fd514..bc800d9 100644
+--- a/src/Widgets/SettingsButton.vala
++++ b/src/Widgets/SettingsButton.vala
+@@ -23,7 +23,7 @@
+             label = _("Edit Connections…");
+             clicked.connect (() => {
+                 try {
+-                    var appinfo = AppInfo.create_from_commandline ("nm-connection-editor", null, AppInfoCreateFlags.NONE);
++                    var appinfo = AppInfo.create_from_commandline ("@networkmanagerapplet@/bin/nm-connection-editor", null, AppInfoCreateFlags.NONE);
+                     appinfo.launch (null, null);
+                 } catch (Error e) {
+                     warning ("%s", e.message);
+@@ -61,13 +61,13 @@
+             label = title;
+             clicked.connect (() => {
+                 edit_connection_uuid (connection.get_uuid ());
+-            });  
++            });
+         }
+ 
+         private void edit_connection_uuid (string uuid) {
+             try {
+                 var appinfo = AppInfo.create_from_commandline (
+-                    "nm-connection-editor --edit=%s".printf (uuid), null, AppInfoCreateFlags.NONE
++                    "@networkmanagerapplet@/bin/nm-connection-editor --edit=%s".printf (uuid), null, AppInfoCreateFlags.NONE
+                 );
+ 
+                 appinfo.launch (null, null);
+diff --git a/src/Widgets/VPN/VPNPage.vala b/src/Widgets/VPN/VPNPage.vala
+index 23c3ae9..c71984c 100644
+--- a/src/Widgets/VPN/VPNPage.vala
++++ b/src/Widgets/VPN/VPNPage.vala
+@@ -86,8 +86,7 @@ namespace Network {
+             add_button.tooltip_text = _("Add VPN Connection…");
+             add_button.clicked.connect (() => {
+                 add_button.sensitive = false;
+-                var command = new Granite.Services.SimpleCommand ("/usr/bin",
+-                                                    "nm-connection-editor --create --type=vpn");
++                var command = new Granite.Services.SimpleCommand ("@networkmanagerapplet@", "bin/nm-connection-editor --create --type=vpn");
+                 command.done.connect ((exit) => {
+                     if (exit != 0) {
+                         var dialog = new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, "%s", _("Failed to run Connection Editor."));

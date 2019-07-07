@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ givaro_3_7 openblas gmpxx];
-  configureFlags = "--with-blas=-lopenblas --with-gmp=${gmpxx.dev} --with-givaro=${givaro_3_7}";
+  configureFlags = [
+    "--with-blas=-lopenblas"
+    "--with-gmp=${gmpxx.dev}"
+    "--with-givaro=${givaro_3_7}"
+  ];
   meta = {
     inherit version;
     description = ''Finite Field Linear Algebra Subroutines'';

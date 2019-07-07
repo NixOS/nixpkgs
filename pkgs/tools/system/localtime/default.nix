@@ -1,6 +1,6 @@
-{ stdenv, go, systemd, polkit, fetchFromGitHub, m4 }:
+{ stdenv, fetchFromGitHub, buildGoPackage, m4 }:
 
-stdenv.mkDerivation {
+buildGoPackage rec {
   name = "localtime-2017-11-07";
 
   src = fetchFromGitHub {
@@ -9,14 +9,28 @@ stdenv.mkDerivation {
     rev = "2e7b4317c723406bd75b2a1d640219ab9f8090ce";
     sha256 = "04fyna8p7q7skzx9fzmncd6gx7x5pwa9jh8a84hpljlvj0kldfs8";
   };
-  
-  buildInputs = [ go systemd polkit m4 ];
+  goPackagePath = "github.com/Stebalien/localtime";
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  buildInputs = [ m4 ];
 
-  meta = {
+  makeFlags = [ 
+    "PREFIX=${placeholder "out"}" 
+    "BINDIR=${placeholder "bin"}/bin" 
+  ];
+
+  buildPhase = ''
+    cd go/src/${goPackagePath}
+    make $makeFlags
+  '';
+
+  installPhase = ''
+    make install $makeFlags
+  '';
+
+  meta = with stdenv.lib; {
     description = "A daemon for keeping the system timezone up-to-date based on the current location";
     homepage = https://github.com/Stebalien/localtime;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl3;
   };
 }

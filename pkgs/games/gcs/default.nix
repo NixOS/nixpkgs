@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, runCommand
 , jdk8, ant
 , jre8, makeWrapper
-, findutils
 }:
 
 let

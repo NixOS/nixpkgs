@@ -1,13 +1,12 @@
 { stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "easydict";
-  version = "1.7";
+  version = "1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xpnwjdw4x5kficjgcajqcal6bxcb0ax8l6hdkww9fp6lrh28x8v";
+    sha256 = "3f3f0dab07c299f0f4df032db1f388d985bb57fa4c5be30acd25c5f9a516883b";
   };
 
   docheck = false; # No tests in archive

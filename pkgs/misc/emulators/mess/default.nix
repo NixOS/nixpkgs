@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, pkgconfig, SDL, gtk2, GConf, mesa
+{ stdenv, fetchurl, unzip, pkgconfig, SDL, gtk2, GConf, libGLU_combined
 , expat, zlib }:
 
 let
@@ -18,7 +18,7 @@ let
 
 in
 
-stdenv.mkDerivation { 
+stdenv.mkDerivation {
   name = "mess-0.${version}";
 
   unpackPhase =
@@ -32,16 +32,16 @@ stdenv.mkDerivation {
   makeFlags = "TARGET=mess BUILD_EXPAT= BUILD_ZLIB= NOWERROR=1";
 
   buildInputs =
-    [ unzip pkgconfig SDL gtk2 GConf mesa expat zlib ];
+    [ unzip pkgconfig SDL gtk2 GConf libGLU_combined expat zlib ];
 
   installPhase =
     ''
       mkdir -p $out/bin
-      cp mess* $out/bin/mess 
+      cp mess* $out/bin/mess
     '';
 
   meta = {
-    homepage = http://www.mess.org/;
+    homepage = https://www.mess.org/;
     license = "non-commercial";
     description = "Multi Emulator Super System, an emulator of many game consoles and computer systems";
     broken = true;

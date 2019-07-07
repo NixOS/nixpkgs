@@ -3,18 +3,18 @@
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "2.10";
+  version = "2.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4";
+    sha256 = "065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013";
   };
 
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ markupsafe ];
 
   checkPhase = ''
-    pytest -v
+    pytest -v tests
   '';
 
   meta = with stdenv.lib; {
@@ -26,6 +26,6 @@ buildPythonPackage rec {
       Django inspired non-XML syntax but supports inline expressions and
       an optional sandboxed environment.
     '';
-    maintainers = with maintainers; [ pierron garbas sjourdois ];
+    maintainers = with maintainers; [ pierron sjourdois ];
   };
 }

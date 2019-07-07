@@ -1,0 +1,12 @@
+diff --git a/SConstruct b/SConstruct
+index 4358a23..0d862e7 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -155,6 +155,7 @@ if sys.platform == 'win32':
+ env = Environment(variables=opts,
+                   tools=('default', 'textfile',),
+                   CPPPATH=['.', ],
++                  ENV=os.environ,
+                   )
+ 
+ env.Append(BUILDERS = {

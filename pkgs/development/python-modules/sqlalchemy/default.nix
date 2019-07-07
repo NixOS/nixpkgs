@@ -1,22 +1,31 @@
 { lib
 , fetchPypi
+, fetchpatch
 , buildPythonPackage
 , pytest
 , mock
-, pytest_xdist
 , isPy3k
 , pysqlite
 }:
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  name = "${pname}-${version}";
-  version = "1.2.3";
+  version = "1.2.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e9ec143e2e246f385cfb2de8daa89d2fa466279addcb7be9e102988fdf33d24";
+    sha256 = "9de7c7dabcf06319becdb7e15099c44e5e34ba7062f9ba10bc00e562f5db3d04";
   };
+
+  patches = [
+    # fix for failing doc tests
+    # https://bitbucket.org/zzzeek/sqlalchemy/issues/4370/sqlite-325x-docs-tutorialrst-doctests-fail
+    (fetchpatch {
+      name = "doc-test-fixes.patch";
+      url = https://bitbucket.org/zzzeek/sqlalchemy/commits/63279a69e2b9277df5e97ace161fa3a1bb4f29cd/raw;
+      sha256 = "1x25aj5hqmgjdak4hllya0rf0srr937k1hwaxb24i9ban607hjri";
+    })
+  ];
 
   checkInputs = [
     pytest
@@ -26,7 +35,7 @@ buildPythonPackage rec {
   ] ++ lib.optional (!isPy3k) pysqlite;
 
   checkPhase = ''
-    py.test
+    py.test -k "not test_round_trip_direct_type_affinity"
   '';
 
   meta = with lib; {

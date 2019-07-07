@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "libconfuse-${version}";
-  version = "3.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
-    sha256 = "0021768bxqdxn84yaipncgi64889zrhc0r4ifmlfxirwq101dgr5";
+    sha256 = "0djjq7j9iiyqxqqrlzm476xkibjasqvgzjwkalgj1l3f2smi53aw";
     rev = "v${version}";
     repo = "libconfuse";
     owner = "martinh";
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # On darwin the tests depend on the installed libraries because of install_name.
+  doInstallCheck = true;
+  installCheckTarget = "check";
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

@@ -1,10 +1,10 @@
 { fetchFromGitHub, stdenv, lib
-, cmake, mesa
-, freetype, freeimage, zziplib, randrproto, libXrandr
+, cmake, libGLU_combined
+, freetype, freeimage, zziplib, xorgproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
-, xproto, libX11, libXmu, libSM, pkgconfig
-, libXxf86vm, xf86vidmodeproto, libICE
-, renderproto, libXrender
+, libX11, libXmu, libSM, pkgconfig
+, libXxf86vm, libICE
+, libXrender
 , withNvidiaCg ? false, nvidia_cg_toolkit
 , withSamples ? false }:
 
@@ -28,17 +28,17 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs =
-   [ cmake mesa
-     freetype freeimage zziplib randrproto libXrandr
+   [ cmake libGLU_combined
+     freetype freeimage zziplib xorgproto libXrandr
      libXaw freeglut libXt libpng boost ois
-     xproto libX11 libXmu libSM pkgconfig
-     libXxf86vm xf86vidmodeproto libICE
-     renderproto libXrender
+     libX11 libXmu libSM pkgconfig
+     libXxf86vm libICE
+     libXrender
    ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
 
   meta = {
     description = "A 3D engine";
-    homepage = http://www.ogre3d.org/;
+    homepage = https://www.ogre3d.org/;
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;

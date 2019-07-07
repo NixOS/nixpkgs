@@ -1,25 +1,28 @@
 { stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
-, boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff, libjpeg, mesa, glew, libxslt }:
+, boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
+, libjpeg, libGLU_combined, glew, libxslt
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.4.7.1";
+  version = "0.4.8";
   name = "freeorion-${version}";
 
   src = fetchFromGitHub {
     owner  = "freeorion";
     repo   = "freeorion";
-    rev    = "v${version}";
-    sha256 = "1m05l3a6ilqd7p2g3aqjpq89grb571cg8n9bpgz0y3sxskcym6sp";
+    rev = "v${version}";
+    sha256 = "1lj1q2ljjgbbiqxb53wdrrcz0zxxr3vv9jqrhbzvfsss7q808jfw";
   };
 
-  buildInputs = [ boost SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg mesa glew ];
+  buildInputs = [
+	(boost.override { enablePython = true; })
+    SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg libGLU_combined glew ];
 
   nativeBuildInputs = [ cmake doxygen graphviz makeWrapper ];
 
   enableParallelBuilding = true;
 
   patches = [
-    ./fix_rpaths.patch
   ];
 
   postInstall = ''
@@ -30,11 +33,13 @@ stdenv.mkDerivation rec {
       --subst-var-by out "$out/"
     substitute ${./fix-paths.sh} $out/fixpaths/fix-paths \
       --subst-var-by libxsltBin ${libxslt.bin} \
+      --subst-var-by shell ${stdenv.shell} \
       --subst-var out
     chmod +x $out/fixpaths/fix-paths
 
     wrapProgram $out/bin/freeorion \
-      --run $out/fixpaths/fix-paths
+      --run $out/fixpaths/fix-paths \
+      --prefix LD_LIBRARY_PATH : $out/lib/freeorion
   '';
 
   meta = with stdenv.lib; {
@@ -42,5 +47,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.freeorion.org;
     license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;
+    maintainers = with maintainers; [ tex ];
   };
 }

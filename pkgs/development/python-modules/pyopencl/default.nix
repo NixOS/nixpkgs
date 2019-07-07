@@ -11,25 +11,30 @@
 , six
 , opencl-headers
 , ocl-icd
+, pybind11
 }:
 
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2018.1";
+  version = "2018.2.5";
 
   checkInputs = [ pytest ];
-  buildInputs = [ opencl-headers ocl-icd ];
+  buildInputs = [ opencl-headers ocl-icd pybind11 ];
 
   propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b692966bbaaa65ef8949ee25660d6b0cc7cbadc7f4a35eb9c5139dfa4dde6d4a";
+    sha256 = "1qgi6diw9m7yldmql9kh08792053ib6zkplh8v2mqv6waaflmrnn";
   };
 
   # py.test is not needed during runtime, so remove it from `install_requires`
   postPatch = ''
     substituteInPlace setup.py --replace "pytest>=2" ""
+  '';
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
   '';
 
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory

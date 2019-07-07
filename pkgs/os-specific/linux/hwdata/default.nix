@@ -1,17 +1,25 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "hwdata-${version}";
-  version = "0.308";
+  version = "0.316";
 
-  src = fetchurl {
-    url = "https://github.com/vcrhonek/hwdata/archive/v0.308.tar.gz";
-    sha256 = "17zcwplw41dfwb2l9jfgvm65rjzlsbv30f56d6vgiix042f92vcq";
+  src = fetchFromGitHub {
+    owner = "vcrhonek";
+    repo = "hwdata";
+    rev = "v${version}";
+    sha256 = "0k3fypykbq9943cnxlmmpk0xp9nhhf46pfdhkgm99iaa27b8s1gb";
   };
 
   preConfigure = "patchShebangs ./configure";
 
-  configureFlags = "--datadir=$(prefix)/data";
+  configureFlags = [ "--datadir=${placeholder "out"}/share" ];
+
+  doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)
+
+  outputHashMode = "recursive";
+  outputHashAlgo = "sha256";
+  outputHash = "0g2w4jr4p1hykracp2za7jb0rcr51kks1m43pzcaf7g99x8669ww";
 
   meta = {
     homepage = https://github.com/vcrhonek/hwdata;

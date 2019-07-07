@@ -2,7 +2,7 @@
 , avahi, bluez, boost, eigen, fftw, glib, glib-networking
 , glibmm, gsettings-desktop-schemas, gtkmm2, libjack2
 , ladspaH, libav, librdf, libsndfile, lilv, lv2, serd, sord, sratom
-, wrapGAppsHook, zita-convolver, zita-resampler
+, wrapGAppsHook, zita-convolver, zita-resampler, curl, wafHook
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
@@ -12,23 +12,23 @@ in
 
 stdenv.mkDerivation rec {
   name = "guitarix-${version}";
-  version = "0.36.1";
+  version = "0.38.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "1g5949jwh2n755xjs3kcbdb8a1wxr5mn0m115wdnk27dxcdn93b0";
+    sha256 = "0bw7xnrx062nwb1bfj9x660h7069ncmz77szcs8icpqxrvhs7z80";
   };
 
-  nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python2 ];
+  nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python2 wafHook ];
 
   buildInputs = [
     avahi bluez boost eigen fftw glib glibmm glib-networking.out
     gsettings-desktop-schemas gtkmm2 libjack2 ladspaH libav librdf
     libsndfile lilv lv2 serd sord sratom zita-convolver
-    zita-resampler
+    zita-resampler curl
   ];
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--shared-lib"
     "--no-desktop-update"
     "--enable-nls"
@@ -37,12 +37,6 @@ stdenv.mkDerivation rec {
     "--includeresampler"
     "--convolver-ffmpeg"
   ] ++ optional optimizationSupport "--optimization";
-
-  configurePhase = ''python2 waf configure --prefix=$out $configureFlags'';
-
-  buildPhase = ''python2 waf build'';
-
-  installPhase = ''python2 waf install'';
 
   meta = with stdenv.lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";

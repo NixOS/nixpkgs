@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     description = "Simple tool for doing everyday things with PDF documents";
     homepage = https://www.pdflabs.com/tools/pdftk-server/;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [viric raskin];
+    maintainers = with stdenv.lib.maintainers; [raskin];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

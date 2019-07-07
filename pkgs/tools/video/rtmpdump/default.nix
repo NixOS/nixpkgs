@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage    = http://rtmpdump.mplayerhq.hu/;
     license     = licenses.gpl2;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ codyopel viric ];
+    maintainers = with maintainers; [ codyopel ];
   };
 }

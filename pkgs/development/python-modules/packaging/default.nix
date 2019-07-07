@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "packaging";
-  version = "16.8";
+  version = "19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d50835fdf0a7edf0b55e311b7c887786504efea1177abd7e69329a8e5ea619e";
+    sha256 = "0c98a5d0be38ed775798ece1b9727178c4469d9c3b4ada66e8e6b7849f8732af";
   };
 
   propagatedBuildInputs = [ pyparsing six ];
@@ -17,6 +17,9 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test tests
   '';
+
+  # Prevent circular dependency
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Core utilities for Python packages";

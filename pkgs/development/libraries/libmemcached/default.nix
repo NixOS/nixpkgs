@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-fpermissive"/*gcc7*/ ];
 
   meta = with stdenv.lib; {
-    homepage = http://libmemcached.org;
+    homepage = https://libmemcached.org;
     description = "Open source C/C++ client library and tools for the memcached server";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;

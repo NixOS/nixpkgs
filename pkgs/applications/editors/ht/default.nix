@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  patches = [ ./gcc7.patch ];
+
   meta = with lib; {
     description = "File editor/viewer/analyzer for executables";
     homepage = http://hte.sourceforge.net;

@@ -26,9 +26,9 @@
 , lib ? import ../../lib
 }:
 
-let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system;
+let extraArgs_ = extraArgs; pkgs_ = pkgs;
     extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-                   in if e == "" then [] else [(import (builtins.toPath e))];
+                   in if e == "" then [] else [(import e)];
 in
 
 let
@@ -36,7 +36,11 @@ let
     _file = ./eval-config.nix;
     key = _file;
     config = {
-      nixpkgs.system = lib.mkDefault system_;
+      # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
+      # this.  Since the latter defaults to the former, the former should
+      # default to the argument. That way this new default could propagate all
+      # they way through, but has the last priority behind everything else.
+      nixpkgs.system = lib.mkDefault system;
       _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };
   };
@@ -47,15 +51,16 @@ in rec {
   # system configuration.
   inherit (lib.evalModules {
     inherit prefix check;
-    modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
+    modules = baseModules ++ extraModules ++ [ pkgsModule ] ++ modules;
     args = extraArgs;
-    specialArgs = { modulesPath = ../modules; } // specialArgs;
+    specialArgs =
+      { modulesPath = builtins.toString ../modules; } // specialArgs;
   }) config options;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
   extraArgs = extraArgs_ // {
-    inherit modules baseModules;
+    inherit baseModules extraModules modules;
   };
 
   inherit (config._module.args) pkgs;

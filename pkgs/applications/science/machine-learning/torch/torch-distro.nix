@@ -1,6 +1,6 @@
-{ luarocks, lib , stdenv,  writeText , readline,  makeWrapper,
-  less, ncurses, cmake, openblas, coreutils, fetchgit, libuuid, czmq, openssl,
-  gnuplot, fetchurl, lua, src, libjpeg, libpng
+{ luarocks, lib , stdenv,  readline,  makeWrapper,
+  less, ncurses, cmake, coreutils, fetchgit, libuuid, czmq, openssl,
+  gnuplot, lua, src, libjpeg, libpng
 } :
 
 let
@@ -9,7 +9,7 @@ let
     homepage = http://torch.ch;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ smironov ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 
   distro_src = src;
@@ -56,6 +56,8 @@ let
 
       in
       stdenv.mkDerivation (args // {
+
+        name = "${args.name}-${lua.luaversion}";
 
         inherit preBuild postInstall;
 
@@ -131,6 +133,7 @@ let
       name = "sundown";
       src = "${distro_src}/pkg/sundown";
       rockspec = "rocks/${name}-scm-1.rockspec";
+      meta.broken = true; # 2018-04-11
     };
 
     cwrap = buildLuaRocks rec {
@@ -289,6 +292,7 @@ let
         rev = "1e9e4f1e0bf589a0ed39f58acc185ec5e213d207";
         sha256 = "1i1fpy9v6r4w3lrmz7bmf5ppq65925rv90gx39b3pykfmn0hcb9c";
       };
+      meta.broken = true; # 2018-04-11
     };
 
     luuid = stdenv.mkDerivation rec {

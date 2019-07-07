@@ -1,44 +1,41 @@
-{ stdenv, lib, go, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, go, buildGoModule, fetchgit }:
 
-buildGoPackage rec {
-  name = "gotools-${version}";
-  version = "20170807-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "5d2fd3ccab986d52112bf301d47a819783339d0e";
-
-  goPackagePath = "golang.org/x/tools";
-  goPackageAliases = [ "code.google.com/p/go.tools" ];
+buildGoModule rec {
+  name = "gotools-unstable-${version}";
+  version = "2019-06-03";
+  rev = "8aaa1484dc108aa23dcf2d4a09371c0c9e280f6b";
 
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/tools";
-    sha256 = "0r3fp7na6pg0bc5xfycjvv951f0vma1qfnpw5zy6l75yxm5r47kn";
+    sha256 = "0sa41fi38b6pvz7jjr6vqrd152qjvmbcagm1qdxw41vqcdw3ljx3";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "0cm7fwb1k5hvbhh86kagzsw5vwgkr6dr7glhbjxg5xaahlhx2w5w";
 
-  preConfigure = ''
+  postConfigure = ''
     # Make the builtin tools available here
-    mkdir -p $bin/bin
+    mkdir -p $out/bin
     eval $(go env | grep GOTOOLDIR)
     find $GOTOOLDIR -type f | while read x; do
-      ln -sv "$x" "$bin/bin"
+      ln -sv "$x" "$out/bin"
     done
-    export GOTOOLDIR=$bin/bin
+    export GOTOOLDIR=$out/bin
   '';
 
   excludedPackages = "\\("
     + stdenv.lib.concatStringsSep "\\|" ([ "testdata" ] ++ stdenv.lib.optionals (stdenv.lib.versionAtLeast go.meta.branch "1.5") [ "vet" "cover" ])
     + "\\)";
 
+  # Set GOTOOLDIR for derivations adding this to buildInputs
+  postInstall = ''
+    mkdir -p $out/nix-support
+    substituteAll ${../../go-modules/tools/setup-hook.sh} $out/nix-support/setup-hook.tmp
+    cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
+    rm $out/nix-support/setup-hook.tmp
+  '';
+
   # Do not copy this without a good reason for enabling
   # In this case tools is heavily coupled with go itself and embeds paths.
   allowGoReference = true;
-
-  # Set GOTOOLDIR for derivations adding this to buildInputs
-  postInstall = ''
-    mkdir -p $bin/nix-support
-    substituteAll ${../../go-modules/tools/setup-hook.sh} $bin/nix-support/setup-hook.tmp
-    cat $bin/nix-support/setup-hook.tmp >> $bin/nix-support/setup-hook
-    rm $bin/nix-support/setup-hook.tmp
-  '';
 }

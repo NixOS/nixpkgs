@@ -210,6 +210,15 @@ in rec {
       '';
     };
 
+    startLimitIntervalSec = mkOption {
+       type = types.int;
+       description = ''
+         Configure unit start rate limiting. Units which are started
+         more than burst times within an interval time interval are
+         not permitted to start any more.
+       '';
+    };
+
   };
 
 
@@ -217,7 +226,7 @@ in rec {
 
     environment = mkOption {
       default = {};
-      type = types.attrs; # FIXME
+      type = with types; attrsOf (nullOr (either str (either path package)));
       example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
       description = "Environment variables passed to the service's processes.";
     };
@@ -394,7 +403,7 @@ in rec {
         Each attribute in this set specifies an option in the
         <literal>[Timer]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.timer</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry> and
+        <manvolnum>5</manvolnum></citerefentry> and
         <citerefentry><refentrytitle>systemd.time</refentrytitle>
         <manvolnum>7</manvolnum></citerefentry> for details.
       '';

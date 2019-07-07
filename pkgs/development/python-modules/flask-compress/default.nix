@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage, flask }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   version = "1.4.0";
   pname = "Flask-Compress";
 

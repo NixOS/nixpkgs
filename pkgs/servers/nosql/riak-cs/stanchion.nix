@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, erlang, git, wget, which, pam, coreutils, riak 
+{ stdenv, lib, fetchurl, unzip, erlang, git, wget, which, pam 
 , Carbon ? null, Cocoa ? null }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux [ pam ];
 
   src = fetchurl {
-    url = "http://s3.amazonaws.com/downloads.basho.com/stanchion/2.1/2.1.1/stanchion-2.1.1.tar.gz";
+    url = "https://s3.amazonaws.com/downloads.basho.com/stanchion/2.1/2.1.1/stanchion-2.1.1.tar.gz";
     sha256 = "1443arwgg7qvlx3msyg99qvvhck7qxphdjslcp494i60fhr2g8ja";
   };
 

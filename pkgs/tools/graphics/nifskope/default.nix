@@ -1,57 +1,68 @@
-{ stdenv, fetchurl, qt4, qmake4Hook }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "nifskope-1.1.3";
+  name = "nifskope-${version}";
+  version = "2.0.dev7";
 
-  src = fetchurl {
-    url = "https://github.com/niftools/nifskope/releases/download/${name}/${name}.tar.bz2";
-    sha256 = "0fcvrcjyvivww10sjhxamcip797b9ykbf5p3rm2k24xhkwdaqp72";
+  src = fetchFromGitHub {
+    owner = "niftools";
+    repo = "nifskope";
+    rev = "47b788d26ae0fa12e60e8e7a4f0fa945a510c7b2"; # `v${version}` doesn't work with submodules
+    sha256 = "1wqpn53rkq28ws3apqghkzyrib4wis91x171ns64g8kp4q6mfczi";
+    fetchSubmodules = true;
   };
 
-  patches = [ ./gcc-6.patch ];
+  patches = [
+    ./external-lib-paths.patch
+    (substituteAll {
+      src = ./qttools-bins.patch;
+      qttools = "${qttools.dev}/bin";
+    })
+  ];
 
-  buildInputs = [ qt4 ];
+  buildInputs = [ qtbase qttools libGLU.dev makeWrapper ];
+  nativeBuildInputs = [ qmake ];
 
-  nativeBuildInputs = [ qmake4Hook ];
-
-  preConfigure =
-    ''
-      for i in *.cpp gl/*.cpp widgets/*.cpp; do
-        substituteInPlace $i --replace /usr/share/nifskope $out/share/nifskope
-      done
-    '';
-
-  qmakeFlags = [ "-after TARGET=nifskope" ];
+  preConfigure = ''
+    shopt -s globstar
+    for i in **/*.cpp; do
+      substituteInPlace $i --replace /usr/share/nifskope $out/share/nifskope
+    done
+  '';
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "format" ];
+  # Inspired by install/linux-install/nifskope.spec.in.
+  installPhase = let
+    qtVersion = "5.${stdenv.lib.versions.minor qtbase.version}";
+  in ''
+    runHook preInstall
 
-  # Inspired by linux-install/nifskope.spec.in.
-  installPhase =
-    ''
-      d=$out/share/nifskope
-      mkdir -p $out/bin $out/share/applications $out/share/pixmaps $d/{shaders,doc,lang}
-      cp release/nifskope $out/bin/
-      cp nifskope.png $out/share/pixmaps/
-      cp nif.xml kfm.xml style.qss $d/
-      cp shaders/*.frag shaders/*.prog shaders/*.vert $d/shaders/
-      cp doc/*.html doc/docsys.css doc/favicon.ico $d/doc/
-      cp lang/*.ts lang/*.tm $d/lang/
+    d=$out/share/nifskope
+    mkdir -p $out/bin $out/share/applications $out/share/pixmaps $d/{shaders,lang}
+    cp release/NifSkope $out/bin/
+    cp ./res/nifskope.png $out/share/pixmaps/
+    cp release/{nif.xml,kfm.xml,style.qss} $d/
+    cp res/shaders/*.frag res/shaders/*.prog res/shaders/*.vert $d/shaders/
+    cp ./res/lang/*.ts ./res/lang/*.tm $d/lang/
+    cp ./install/linux-install/nifskope.desktop $out/share/applications
 
-      substituteInPlace nifskope.desktop \
-        --replace 'Exec=nifskope' "Exec=$out/bin/nifskope" \
-        --replace 'Icon=nifskope' "Icon=$out/share/pixmaps/nifskope.png"
-      cp nifskope.desktop $out/share/applications/
+    substituteInPlace $out/share/applications/nifskope.desktop \
+      --replace 'Exec=nifskope' "Exec=$out/bin/NifSkope" \
+      --replace 'Icon=nifskope' "Icon=$out/share/pixmaps/nifskope.png"
 
-      find $out/share -type f -exec chmod -x {} \;
-    ''; # */
+    find $out/share -type f -exec chmod -x {} \;
 
-  meta = {
-    homepage = https://github.com/niftools/nifskope/;
+    wrapProgram $out/bin/NifSkope --prefix QT_PLUGIN_PATH : "${qtbase}/lib/qt-${qtVersion}/plugins"
+
+    runHook postInstall
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = http://niftools.sourceforge.net/wiki/NifSkope;
     description = "A tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.bsd3;
+    maintainers = with maintainers; [ eelco ma27 ];
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
 }

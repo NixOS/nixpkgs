@@ -13,6 +13,5 @@ stdenv.mkDerivation rec {
     description = "DB independent interface to DB";
     license = licenses.lgpl21;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

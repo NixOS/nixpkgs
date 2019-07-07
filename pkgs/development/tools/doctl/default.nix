@@ -4,7 +4,7 @@ buildGoPackage rec {
   name = "doctl-${version}";
   version = "${major}.${minor}.${patch}";
   major = "1";
-  minor = "5";
+  minor = "18";
   patch = "0";
   goPackagePath = "github.com/digitalocean/doctl";
 
@@ -19,9 +19,9 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     owner = "digitalocean";
-    repo = "doctl";
-    rev = "v${version}";
-    sha256 = "0dk7l4b0ngqkwdlx8qgr99jzipyzazvkv7dybi75dnp725lwxkl2";
+    repo   = "doctl";
+    rev    = "v${version}";
+    sha256 = "1p43q1iyjj597gr47hn589fv7n26mny9niq7yb9hlmslkplsrb0a";
   };
 
   meta = {

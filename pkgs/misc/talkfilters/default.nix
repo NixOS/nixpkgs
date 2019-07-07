@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Converts English text into text that mimics a stereotyped or humorous dialect";
-    homepage = "http://http://www.hyperrealm.com/${pname}";
+    homepage = http://www.hyperrealm.com/talkfilters/talkfilters.html;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ ikervagyok ];
     platforms = with stdenv.lib.platforms; unix;

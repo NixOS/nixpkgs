@@ -1,30 +1,26 @@
 { stdenv, buildPythonPackage, fetchPypi
-, secretstorage
-, fs, gdata, python_keyczar, pyasn1, pycrypto, six, setuptools_scm
-, mock, pytest, pytestrunner }:
+, setuptools_scm, entrypoints, secretstorage
+, pytest, pytest-flake8 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "keyring";
-  version = "11.0.0";
+  version = "18.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b4607520a7c97be96be4ddc00f4b9dac65f47a45af4b4cd13ed5a8879641d646";
+    sha256 = "67d6cc0132bd77922725fae9f18366bb314fd8f95ff4d323a4df41890a96a838";
   };
 
-  buildInputs = [
-    fs gdata python_keyczar pyasn1 pycrypto six setuptools_scm
-  ];
+  nativeBuildInputs = [ setuptools_scm ];
 
-  checkInputs = [ mock pytest pytestrunner ];
+  checkInputs = [ pytest pytest-flake8 ];
 
-  propagatedBuildInputs = [ secretstorage ];
+  propagatedBuildInputs = [ entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
 
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    py.test $out
+    py.test
   '';
 
   meta = with stdenv.lib; {

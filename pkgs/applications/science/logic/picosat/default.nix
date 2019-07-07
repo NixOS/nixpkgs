@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
 
   configurePhase = "./configure.sh --shared --trace";
 
+  makeFlags = stdenv.lib.optional stdenv.isDarwin
+    "SONAME=-Wl,-install_name,$(out)/lib/libpicosat.so";
+
   installPhase = ''
    mkdir -p $out/bin $out/lib $out/share $out/include/picosat
    cp picomus picomcs picosat picogcnf "$out"/bin

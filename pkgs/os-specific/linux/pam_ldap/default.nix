@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./vers_string
+    substituteInPlace vers_string --replace "cvslib.pl" "./cvslib.pl"
   '';
 
   preInstall = "

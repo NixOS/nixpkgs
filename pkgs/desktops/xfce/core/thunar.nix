@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, runCommand, makeWrapper, lndir, thunar-build
+{ stdenv, buildEnv, runCommand, makeWrapper, lndir, thunar-bare
 , thunarPlugins ? []
 }:
 
@@ -6,7 +6,7 @@ with stdenv.lib;
 
 let
 
-  build = thunar-build;
+  build = thunar-bare;
 
   replaceLnExeListWithWrapped = exeDir: exeNameList: mkWrapArgs: ''
     exeDir="${exeDir}"
@@ -50,7 +50,7 @@ runCommand name {
 } 
 (let
   buildWithPlugins = buildEnv {
-    name = "thunar-build-with-plugins";
+    name = "thunar-bare-with-plugins";
     paths = [ build ] ++ thunarPlugins;
   };
 

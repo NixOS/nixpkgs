@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    cbor-diag (0.5.2)
+      json
+      treetop (~> 1)
+    json (2.1.0)
+    polyglot (0.3.5)
+    treetop (1.6.10)
+      polyglot (~> 0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cbor-diag
+
+BUNDLED WITH
+   1.14.6

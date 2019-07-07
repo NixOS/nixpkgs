@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, python }:
 
 with python.pkgs;
 
 buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.3.5";
+  version = "1.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bdbbbf5980d6ec21838396a46cd5b599787e8540782b8e2e3f20d2135560a5d3";
+    sha256 = "0vxnq5r3h32dvznh4lal29q5ny70rd861r7435gn7sa6v5ajs2f1";
   };
 
   postPatch = ''
@@ -29,9 +29,8 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Manage tmux workspaces from JSON and YAML";
-    homepage = http://tmuxp.readthedocs.io;
+    homepage = https://tmuxp.git-pull.com/;
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
   };
 }

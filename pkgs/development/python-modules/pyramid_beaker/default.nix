@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, beaker, pyramid }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyramid_beaker";
   version = "0.8";
 
@@ -15,7 +14,7 @@ buildPythonPackage rec {
     py.test -k 'not test_includeme' pyramid_beaker/tests.py
   '';
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
 
   propagatedBuildInputs = [ beaker pyramid ];
 

@@ -1,6 +1,6 @@
 { stdenv, fetchzip }:
 stdenv.mkDerivation rec {
-  name = "hid-listen";
+  pname = "hid-listen";
   version = "1.01";
 
   src = fetchzip {

@@ -54,7 +54,7 @@ in
   environment.systemPackages =
     [ pkgs.w3m # needed for the manual anyway
       pkgs.testdisk # useful for repairing boot problems
-      pkgs.mssys # for writing Microsoft boot sectors / MBRs
+      pkgs.ms-sys # for writing Microsoft boot sectors / MBRs
       pkgs.parted
       pkgs.ddrescue
       pkgs.ccrypt

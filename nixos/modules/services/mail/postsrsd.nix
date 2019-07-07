@@ -90,13 +90,13 @@ in {
 
     services.postsrsd.domain = mkDefault config.networking.hostName;
 
-    users.extraUsers = optionalAttrs (cfg.user == "postsrsd") (singleton
+    users.users = optionalAttrs (cfg.user == "postsrsd") (singleton
       { name = "postsrsd";
         group = cfg.group;
         uid = config.ids.uids.postsrsd;
       });
 
-    users.extraGroups = optionalAttrs (cfg.group == "postsrsd") (singleton
+    users.groups = optionalAttrs (cfg.group == "postsrsd") (singleton
       { name = "postsrsd";
         gid = config.ids.gids.postsrsd;
       });

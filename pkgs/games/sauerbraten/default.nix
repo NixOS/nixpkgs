@@ -1,5 +1,5 @@
-{ stdenv, fetchsvn, mesa, SDL, SDL_image, SDL_mixer
-, libpng, zlib, libjpeg, imagemagick, libX11
+{ stdenv, fetchsvn, libGLU_combined, SDL, SDL_image, SDL_mixer
+, libpng, zlib, libjpeg, imagemagick, libX11, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    mesa SDL SDL_image SDL_mixer libpng zlib libjpeg imagemagick
+    libGLU_combined SDL SDL_image SDL_mixer libpng zlib libjpeg imagemagick
     libX11
   ];
 
@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     cp -rv packages $out/share/sauerbraten/
     cp -rv data $out/share/sauerbraten/
     cat > $out/bin/sauerbraten_server <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $out/share/sauerbraten
     ./sauer_server "\$@"
     EOF
     cat > $out/bin/sauerbraten_client <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $out/share/sauerbraten
     ./sauer_client "\$@"
     EOF

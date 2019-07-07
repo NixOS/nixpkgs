@@ -1,17 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, fetchFromGitHub, pythonOlder, python }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, python }:
 
 buildPythonPackage rec {
   pname = "asynctest";
-  version = "0.11.1";
+  version = "0.13.0";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.5";
 
-  # PyPI tarball doesn't ship test/__init__.py
-  src = fetchFromGitHub {
-    owner = "Martiusweb";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1vvh5vbq2fbz6426figs85z8779r7svb4dp2v3xynhhv05nh2y6v";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1b3zsy7p84gag6q8ai2ylyrhx213qdk2h2zb6im3xn0m5n264y62";
   };
 
   postPatch = ''

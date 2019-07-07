@@ -31,7 +31,7 @@ let
   # use latest when no version is passed
   makeCacheConf = { version ? null }:
     let
-      fcPackage = if builtins.isNull version
+      fcPackage = if version == null
                   then "fontconfig"
                   else "fontconfig_${version}";
       makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
@@ -55,7 +55,9 @@ let
   localConf = pkgs.writeText "fc-local.conf" cfg.localConf;
 
   # The configuration to be included in /etc/font/
-  penultimateConf = pkgs.runCommand "font-penultimate-conf" {} ''
+  penultimateConf = pkgs.runCommand "font-penultimate-conf" {
+    preferLocalBuild = true;
+    } ''
     support_folder=$out/etc/fonts/conf.d
     latest_folder=$out/etc/fonts/${latestVersion}/conf.d
 
@@ -269,7 +271,7 @@ in
 
   };
 
-  config = mkIf (config.fonts.fontconfig.enable && cfg.enable) {
+  config = mkIf (config.fonts.fontconfig.enable && config.fonts.fontconfig.penultimate.enable) {
 
     fonts.fontconfig.confPackages = [ penultimateConf ];
 

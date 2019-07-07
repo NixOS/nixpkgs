@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "libnxml-0.18.3";
 
   src = fetchurl {
-    url = "http://www.autistici.org/bakunin/libnxml/libnxml-0.18.3.tar.gz";
+    url = "https://www.autistici.org/bakunin/libnxml/libnxml-0.18.3.tar.gz";
     sha256 = "0ix5b9bxd7r517vhgcxwdviq4m0g0pq46s5g3h04gcqnpbin150g";
   };
 

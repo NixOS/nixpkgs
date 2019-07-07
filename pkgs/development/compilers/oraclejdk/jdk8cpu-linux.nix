@@ -1,12 +1,14 @@
+# http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html;
+# jce download url: http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html;
 import ./jdk-linux-base.nix {
   productVersion = "8";
-  patchVersion = "161";
-  downloadUrl = http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html;
-  sha256.i686-linux = "1p6p93msn3bsg9775rq171kd4160w4w8z57p0qpjdjycfix62sfg";
-  sha256.x86_64-linux = "07h2wah80qr78y0f821z12lbdmsv90xbckdn3glnj2riwfh5dg3d";
-  sha256.armv7l-linux = "0mngw2lnhx3hzgp444advybhjn5hjk3mi14y72km4kp03gh82a7x";
-  sha256.aarch64-linux = "18l5fny7yxhpj5c935rnlq4pvwadyr5zkid6yh9x87frl401shy7";
+  patchVersion = "211";
+  buildVersion = "12";
+  sha256.i686-linux = "0mdrljs0rw9s4pvaa3sn791nqgdrp8749z3qn80y7hhad74kvsnp";
+  sha256.x86_64-linux = "13b6qk4sn8jdhxa22na9d2aazm4yjh6yxrlxr189gxy3619y9dy0";
+  sha256.armv7l-linux = "1ij1x925k7lyp5f98gy8r0xfr41qhczf2rb74plwwmrccc1k00p5";
+  sha256.aarch64-linux = "041r615qj9qy34a9gxm8968qlmf060ba2as5w97v86mbik4rca05";
+  releaseToken = "478a62b7d4e34b78b671c754eaaf38ab";
   jceName = "jce_policy-8.zip";
-  jceDownloadUrl = http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html;
   sha256JCE = "0n8b6b8qmwb14lllk2lk1q1ahd3za9fnjigz5xn65mpg48whl0pk";
 }

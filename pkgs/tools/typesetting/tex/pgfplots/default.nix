@@ -19,7 +19,10 @@ stdenv.mkDerivation {
     cp -prd * $out/share/texmf-nix
   ";
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "TeX package to draw plots directly in TeX in two and three dimensions";
+    homepage = http://pgfplots.sourceforge.net;
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
   };
 }

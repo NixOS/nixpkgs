@@ -1,6 +1,5 @@
-{ stdenv, ghc, pkgconfig, glibcLocales, cacert, stack }@depArgs:
-
-with stdenv.lib;
+{ stdenv, ghc, pkgconfig, glibcLocales
+, cacert, stack, makeSetupHook, lib }@depArgs:
 
 { buildInputs ? []
 , extraArgs ? []
@@ -10,23 +9,27 @@ with stdenv.lib;
 , ...
 }@args:
 
-let stackCmd = "stack --internal-re-exec-version=${stack.version}";
+let
+
+  stackCmd = "stack --internal-re-exec-version=${stack.version}";
+
+  # Add all dependencies in buildInputs including propagated ones to
+  # STACK_IN_NIX_EXTRA_ARGS.
+  stackHook = makeSetupHook {} ./stack-hook.sh;
+
 in stdenv.mkDerivation (args // {
 
-  buildInputs =
-    buildInputs ++
-    optional stdenv.isLinux glibcLocales ++
-    [ ghc pkgconfig stack ];
+  buildInputs = buildInputs
+    ++ lib.optional (stdenv.hostPlatform.libc == "glibc") glibcLocales;
 
-  STACK_PLATFORM_VARIANT="nix";
-  STACK_IN_NIX_SHELL=1;
-  STACK_IN_NIX_EXTRA_ARGS =
-    concatMap (pkg: ["--extra-lib-dirs=${getLib pkg}/lib"
-                     "--extra-include-dirs=${getDev pkg}/include"]) buildInputs ++
-    extraArgs;
+  nativeBuildInputs = [ ghc pkgconfig stack stackHook ];
+
+  STACK_PLATFORM_VARIANT = "nix";
+  STACK_IN_NIX_SHELL = 1;
+  STACK_IN_NIX_EXTRA_ARGS = extraArgs;
 
   # XXX: workaround for https://ghc.haskell.org/trac/ghc/ticket/11042.
-  LD_LIBRARY_PATH = makeLibraryPath (LD_LIBRARY_PATH ++ buildInputs);
+  LD_LIBRARY_PATH = lib.makeLibraryPath (LD_LIBRARY_PATH ++ buildInputs);
                     # ^^^ Internally uses `getOutput "lib"` (equiv. to getLib)
 
   # Non-NixOS git needs cert
@@ -37,17 +40,33 @@ in stdenv.mkDerivation (args // {
 
   preferLocalBuild = true;
 
-  configurePhase = args.configurePhase or ''
+  preConfigure = ''
     export STACK_ROOT=$NIX_BUILD_TOP/.stack
   '';
 
-  buildPhase = args.buildPhase or "${stackCmd} build";
+  buildPhase = args.buildPhase or ''
+    runHook preBuild
 
-  checkPhase = args.checkPhase or "${stackCmd} test";
+    ${stackCmd} build
+
+    runHook postBuild
+  '';
+
+  checkPhase = args.checkPhase or ''
+    runHook preCheck
+
+    ${stackCmd} test
+
+    runHook postCheck
+  '';
 
   doCheck = args.doCheck or true;
 
   installPhase = args.installPhase or ''
+    runHook preInstall
+
     ${stackCmd} --local-bin-path=$out/bin build --copy-bins
+
+    runHook postInstall
   '';
 })

@@ -1,22 +1,22 @@
-{ stdenv, fetchzip }:
+{ lib, fetchFromGitHub }:
 
 let
-  version = "5.0.6";
-in fetchzip rec {
+  version = "5.9.0";
+in fetchFromGitHub rec {
   name = "font-awesome-${version}";
 
-  url = "https://github.com/FortAwesome/Font-Awesome/archive/${version}.zip";
+  owner = "FortAwesome";
+  repo = "Font-Awesome";
+  rev = version;
 
   postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile "Font-Awesome-${version}/use-on-desktop/Font Awesome 5 Brands-Regular-400.otf" -d $out/share/fonts/opentype
-    unzip -j $downloadedFile "Font-Awesome-${version}/use-on-desktop/Font Awesome 5 Free-Regular-400.otf" -d $out/share/fonts/opentype
-    unzip -j $downloadedFile "Font-Awesome-${version}/use-on-desktop/Font Awesome 5 Free-Solid-900.otf" -d $out/share/fonts/opentype
+    tar xf $downloadedFile --strip=1
+    install -m444 -Dt $out/share/fonts/opentype otfs/*.otf
   '';
 
-  sha256 = "1p7xb8s371r62rx0akcnlkk4mspjid6y0s9h04gakx83ymgjlfg4";
+  sha256 = "0sz7mn7g968vp5hszs05grpphd7zr3073az8lyy1lj0096zvjjii";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Font Awesome - OTF font";
     longDescription = ''
       Font Awesome gives you scalable vector icons that can instantly be customized.

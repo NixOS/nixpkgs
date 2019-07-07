@@ -1,17 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi, django }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, python, django, dj-database-url }:
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
-  version = "2.0.2";
-  name = "${pname}-${version}";
+  version = "2.0.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e1821d7b5874509a158a0f22bebf544330e0944c481c5a3e6da6cac8887e4e88";
+  # PyPI tarball is missing some test files
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "08qk3rbk0xlphwalkigbhqpmfaqjk1sxmlfh8zy8s8dw7fw1myk4";
   };
 
-  checkInputs = [ django ];
+  checkInputs = [ dj-database-url ];
   propagatedBuildInputs = [ django ];
+
+  checkPhase = ''
+    ${python.interpreter} runtests.py
+  '';
 
   meta = {
     homepage = https://github.com/django-polymorphic/django-polymorphic;

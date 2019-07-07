@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1017rd0wsjfyq2jvpjjhpszaa7kmig6q1nimw76qx3cjz2868lrn";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   buildPhase = ''
     make -C build/gmake.unix/
@@ -22,11 +22,14 @@ stdenv.mkDerivation {
     install -Dm755 bin/release/premake4 $out/bin/premake4
   '';
 
+  premake_cmd = "premake4";
+  setupHook = ./setup-hook.sh;
+
   meta = with stdenv.lib; {
     homepage = http://industriousone.com/premake;
     description = "A simple build configuration and project generation tool using lua";
     license = stdenv.lib.licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

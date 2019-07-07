@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Configurable lightweight battery charge indicator and autohider";
     license = licenses.gpl2;
+    broken = true; # not compatable with latest GNOME
     maintainers = with maintainers; [ jonafato ];
     homepage = https://github.com/milliburn/gnome-shell-extension-battery_status;
   };

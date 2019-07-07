@@ -17,7 +17,7 @@ sub get_latest_versions {
   my @channels = get("http://www.jetbrains.com/updates/updates.xml") =~ /(<channel .+?<\/channel>)/gs;
   my %h = {};
   for my $ch (@channels) {
-    my ($id) = $ch =~ /^<channel id="([^"]+)"/;
+    my ($id) = $ch =~ /^<channel id="[^"]+" name="([^"]+)"/;
     my @builds = $ch =~ /(<build .+?<\/build>)/gs;
     my $latest_build = reduce {
       my ($aversion) = $a =~ /^<build [^>]*version="([^"]+)"/; die "no version in $a" unless $aversion;

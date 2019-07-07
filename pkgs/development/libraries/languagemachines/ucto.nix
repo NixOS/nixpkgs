@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , automake, autoconf, libtool, pkgconfig, autoconf-archive
-, libxml2, icu
+, libxml2, icu, bzip2, libtar
 , languageMachines
 }:
 
@@ -9,13 +9,13 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ucto";
+  name = "ucto-${release.version}";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "ucto-${release.version}.tar.gz"; };
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ automake autoconf libtool autoconf-archive
-                  icu libxml2
+  buildInputs = [ automake autoconf bzip2 libtool autoconf-archive
+                  icu libtar libxml2
                   languageMachines.ticcutils
                   languageMachines.libfolia
                   languageMachines.uctodata

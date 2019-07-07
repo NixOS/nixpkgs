@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "quagga-${version}";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://savannah/quagga/${name}.tar.gz";
-    sha256 = "0c99rjjc62xl5kwvx2pwyvs0709vbwax1qydqbqf6r7fpvr24bjj";
+    sha256 = "1lsksqxij5f1llqn86pkygrf5672kvrqn1kvxghi169hqf1c0r73";
   };
 
   buildInputs =
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       It is more than a routed replacement, it can be used as a Route Server and
       a Route Reflector.
     '';
-    homepage = http://www.nongnu.org/quagga/;
+    homepage = https://www.nongnu.org/quagga/;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ tavyc ];

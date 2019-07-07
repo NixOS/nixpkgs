@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = {
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [];
     homepage = https://cloud.google.com/storage/docs/gcs-fuse;
     description =

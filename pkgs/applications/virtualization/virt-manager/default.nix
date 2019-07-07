@@ -1,35 +1,37 @@
-{ stdenv, fetchurl, python2Packages, intltool, file
-, wrapGAppsHook, gtkvnc, vte, avahi, dconf
-, gobjectIntrospection, libvirt-glib, system-libvirt
+{ stdenv, fetchurl, python3Packages, intltool, file
+, wrapGAppsHook, gtk-vnc, vte, avahi, dconf
+, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
 , spiceSupport ? true, spice-gtk ? null
+, cpio, e2fsprogs, findutils, gzip
 }:
 
 with stdenv.lib;
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "1.5.0";
+  version = "2.2.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "d43a7b99d40acdcb8e9455e7874beee132cfcfce9eed0d6252e8f254a82cadc6";
+    sha256 = "0186c2fjqm3wdr3wik4fcyl5l3gv5j6sxn18d0vclw83w4yrhjz9";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook intltool file
-    gobjectIntrospection # for setup hook populating GI_TYPELIB_PATH
+    gobject-introspection # for setup hook populating GI_TYPELIB_PATH
   ];
 
-  buildInputs =
-    [ libvirt-glib vte dconf gtkvnc gnome3.defaultIconTheme avahi
-      gsettings-desktop-schemas libosinfo gtk3
-    ] ++ optional spiceSupport spice-gtk;
+  buildInputs = [
+    libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
+    gsettings-desktop-schemas libosinfo gtk3
+    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
+  ] ++ optional spiceSupport spice-gtk;
 
-  propagatedBuildInputs = with python2Packages;
+  propagatedBuildInputs = with python3Packages;
     [
-      pygobject3 ipaddr libvirt libxml2 requests
+      pygobject3 ipaddress libvirt libxml2 requests
     ];
 
   patchPhase = ''
@@ -38,7 +40,7 @@ python2Packages.buildPythonApplication rec {
   '';
 
   postConfigure = ''
-    ${python2Packages.python.interpreter} setup.py configure --prefix=$out
+    ${python3Packages.python.interpreter} setup.py configure --prefix=$out
   '';
 
   postInstall = ''
@@ -47,6 +49,8 @@ python2Packages.buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
+    # these are called from virt-install in initrdinject.py
+    gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
   '';
 
   # Failed tests

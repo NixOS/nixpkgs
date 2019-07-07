@@ -102,14 +102,14 @@ in
       ${cfg.extraAdvancedConfig}
     '';
 
-    users.extraUsers.riak = {
+    users.users.riak = {
       name = "riak";
       uid = config.ids.uids.riak;
       group = "riak";
       description = "Riak server user";
     };
 
-    users.extraGroups.riak.gid = config.ids.gids.riak;
+    users.groups.riak.gid = config.ids.gids.riak;
 
     systemd.services.riak = {
       description = "Riak Server";

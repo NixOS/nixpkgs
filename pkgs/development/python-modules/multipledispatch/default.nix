@@ -1,20 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, six
 }:
 
 buildPythonPackage rec {
   pname = "multipledispatch";
-  version = "0.4.9";
-  name = "${pname}-${version}";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bda6abb8188d9abb429bd17ed15bc7433f77f1b05a78cfff761711ed81daa7a2";
+    sha256 = "a7ab1451fd0bf9b92cab3edbd7b205622fb767aeefb4fb536c2e3de9e0a38bea";
   };
 
   # No tests in archive
   doCheck = false;
+
+  propagatedBuildInputs = [ six ];
 
   meta = {
     homepage = https://github.com/mrocklin/multipledispatch/;

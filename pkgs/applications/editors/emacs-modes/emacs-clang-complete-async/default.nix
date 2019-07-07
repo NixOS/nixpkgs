@@ -1,4 +1,4 @@
-{ clangStdenv, fetchgit, llvmPackages, clang }:
+{ clangStdenv, fetchgit, llvmPackages }:
 
 clangStdenv.mkDerivation {
   name = "emacs-clang-complete-async-20130218";

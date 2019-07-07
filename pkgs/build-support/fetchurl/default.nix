@@ -87,12 +87,14 @@ in
 
   # Passthru information, if any.
 , passthru ? {}
+  # Doing the download on a remote machine just duplicates network
+  # traffic, so don't do that by default
+, preferLocalBuild ? true
 }:
 
 assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
 
 let
-
   urls_ =
     if urls != [] && url == "" then
       (if lib.isList urls then urls
@@ -107,7 +109,6 @@ let
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
     else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
     else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
-
 in
 
 stdenvNoCC.mkDerivation {
@@ -135,9 +136,9 @@ stdenvNoCC.mkDerivation {
 
   impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
 
-  # Doing the download on a remote machine just duplicates network
-  # traffic, so don't do that.
-  preferLocalBuild = true;
+  nixpkgsVersion = lib.trivial.release;
+
+  inherit preferLocalBuild;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}

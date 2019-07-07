@@ -1,22 +1,36 @@
-{lib, fetchPypi, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas}:
+{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile }:
 
-buildPythonPackage rec {
+let
+  blasImplementation = lib.nameFromURL blas.name "-";
+  cfg = writeTextFile {
+    name = "site.cfg";
+    text = (lib.generators.toINI {} {
+      "${blasImplementation}" = {
+        include_dirs = "${blas}/include";
+        library_dirs = "${blas}/lib";
+      } // lib.optionalAttrs (blasImplementation == "mkl") {
+        mkl_libs = "mkl_rt";
+        lapack_libs = "";
+      };
+    });
+  };
+in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.14.0";
-  name = "${pname}-${version}";
+  version = "1.16.4";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "3de643935b212307b420248018323a44ec51987a336d1d747c1322afc3c099fb";
+    sha256 = "7242be12a58fec245ee9734e625964b97cf7e3f2f7d016603f9e56660ce479c7";
   };
 
-  disabled = isPyPy;
-  buildInputs = [ gfortran nose blas ];
+  nativeBuildInputs = [ gfortran pytest ];
+  buildInputs = [ blas ];
 
-  patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
-    # See cpython 2.7 patches.
-    # numpy.distutils is used by cython during it's check phase
+  patches = lib.optionals python.hasDistutilsCxxPatch [
+    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+    # Patching of numpy.distutils is needed to prevent it from undoing the
+    # patch to distutils.
     ./numpy-distutils-C++.patch
   ];
 
@@ -26,12 +40,7 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    echo "Creating site.cfg file..."
-    cat << EOF > site.cfg
-    [openblas]
-    include_dirs = ${blas}/include
-    library_dirs = ${blas}/lib
-    EOF
+    ln -s ${cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
@@ -44,12 +53,9 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  postInstall = ''
-    ln -s $out/bin/f2py* $out/bin/f2py
-  '';
-
   passthru = {
     blas = blas;
+    inherit blasImplementation cfg;
   };
 
   # Disable two tests

@@ -7,16 +7,6 @@ let
 
   taskd = "${pkgs.taskserver}/bin/taskd";
 
-  mkVal = val:
-    if val == true then "true"
-    else if val == false then "false"
-    else if isList val then concatStringsSep ", " val
-    else toString val;
-
-  mkConfLine = key: val: let
-    result = "${key} = ${mkVal val}";
-  in optionalString (val != null && val != []) result;
-
   mkManualPkiOption = desc: mkOption {
     type = types.nullOr types.path;
     default = null;
@@ -58,7 +48,7 @@ let
     type = types.nullOr types.int;
     default = null;
     example = 365;
-    apply = val: if isNull val then -1 else val;
+    apply = val: if val == null then -1 else val;
     description = mkAutoDesc ''
       The expiration time of ${desc} in days or <literal>null</literal> for no
       expiration time.
@@ -92,9 +82,9 @@ let
          then attrByPath newPath (notFound newPath) cfg.pki.manual
          else findPkiDefinitions newPath val;
     in flatten (mapAttrsToList mkSublist attrs);
-  in all isNull (findPkiDefinitions [] manualPkiOptions);
+  in all (x: x == null) (findPkiDefinitions [] manualPkiOptions);
 
-  orgOptions = { name, ... }: {
+  orgOptions = { ... }: {
     options.users = mkOption {
       type = types.uniq (types.listOf types.str);
       default = [];
@@ -119,7 +109,7 @@ let
   nixos-taskserver = pkgs.pythonPackages.buildPythonApplication {
     name = "nixos-taskserver";
 
-    src = pkgs.runCommand "nixos-taskserver-src" {} ''
+    src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
       mkdir -p "$out"
       cat "${pkgs.substituteAll {
         src = ./helper-tool.py;

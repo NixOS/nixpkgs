@@ -1,0 +1,12 @@
+diff --git a/truffle/mx.truffle/mx_truffle.py b/truffle/mx.truffle/mx_truffle.py
+index 8889c5ad810..add211a45c5 100644
+--- a/truffle/mx.truffle/mx_truffle.py
++++ b/truffle/mx.truffle/mx_truffle.py
+@@ -695,6 +695,7 @@ class LibffiBuildTask(mx.AbstractNativeBuildTask):
+                      os.path.relpath(self.subject.delegate.dir, self.subject.suite.vc_dir)]
+         for patch in self.subject.patches:
+             mx.run(git_apply + [patch], cwd=self.subject.suite.vc_dir)
++        mx.run(['cp', os.path.join(os.getenv('TMP'), 'truffle.make'), os.path.join(self.subject.delegate.dir, 'Makefile')])
+ 
+         self.delegate.logBuild()
+         self.delegate.build()

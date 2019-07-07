@@ -1,20 +1,23 @@
-{ stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{ stdenv, fetchFromGitHub, rustPlatform, CoreServices, darwin }:
 
 rustPlatform.buildRustPackage rec {
   name = "mdbook-${version}";
-  version = "0.1.3";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "mdBook";
     rev = "v${version}";
-    sha256 = "0m0vprjpd02z4nr3vd4qha2jka7l36k4liw8jcbf4xs09c584sjv";
+    sha256 = "1xmw4v19ff6mvimwk5l437wslzw5npy60zdb8r4319bjf32pw9pn";
   };
 
-  cargoSha256 = "19hpr78p9rzgirq6fjw8v11d5mgcglms6vbqgjyvg49xmkklsqzr";
-  depsSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
+  cargoSha256 = "1xpsc4qff2lrq15mz1gvmw6n5vl88sfwpjbsnp5ja5k1im156lam";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+    CoreServices
+    # This is needed to avoid an undefined symbol error for "_CFURLResourceIsReachable"
+    darwin.cf-private
+  ];
 
   meta = with stdenv.lib; {
     description = "Create books from MarkDown";
@@ -22,9 +25,5 @@ rustPlatform.buildRustPackage rec {
     license = [ licenses.asl20 licenses.mit ];
     maintainers = [ maintainers.havvy ];
     platforms = platforms.all;
-
-    # Because CoreServices needs to be updated,
-    # but Apple won't release the source.
-    broken = stdenv.isDarwin;
   };
 }

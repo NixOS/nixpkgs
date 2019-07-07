@@ -4,21 +4,24 @@ with python.pkgs;
 
 buildPythonApplication rec {
   pname = "mkdocs";
-  version = "0.16.3";
-  name = "${pname}-${version}";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = "mkdocs";
     rev = version;
-    sha256 = "0gssa5gbd1y2v3azdhf2zh7ayx4ncfag4r2a6fi96jbic64r3qrs";
+    sha256 = "1x35vgiskgz4wwrvi4m1mri5wlphf15p90fr3rxsy5bf19v3s9hs";
   };
 
   checkInputs = [
     nose nose-exclude mock
   ];
 
-  NOSE_EXCLUDE_TESTS="mkdocs.tests.gh_deploy_tests.TestGitHubDeploy;mkdocs.tests.config.config_tests.ConfigTests";
+  NOSE_EXCLUDE_TESTS = lib.concatStringsSep ";" [
+    "mkdocs.tests.gh_deploy_tests.TestGitHubDeploy"
+    "mkdocs.tests.config.config_tests.ConfigTests"
+    "mkdocs.tests.config.config_options_tests.DirTest"
+  ];
 
   checkPhase = "nosetests mkdocs";
 
@@ -29,6 +32,7 @@ buildPythonApplication rec {
     pyyaml
     markdown
     jinja2
+    backports_tempfile
   ];
 
   meta = {

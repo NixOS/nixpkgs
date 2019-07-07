@@ -1,0 +1,8 @@
+--- a/geocode-glib/tests/meson.build
++++ b/geocode-glib/tests/meson.build
+@@ -1,4 +1,4 @@
+-install_dir = get_option('libexecdir') + '/installed-tests/geocode-glib'
++install_dir = '@installedTests@/libexec/installed-tests/geocode-glib'
+ 
+ e = executable('geo-uri',
+                'geo-uri.c',

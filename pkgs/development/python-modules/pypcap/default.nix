@@ -1,13 +1,12 @@
-{ stdenv, lib, writeText, buildPythonPackage, fetchPypi, libpcap, dpkt }:
+{ lib, writeText, buildPythonPackage, fetchPypi, libpcap, dpkt }:
 
 buildPythonPackage rec {
   pname = "pypcap";
-  version = "1.2.0";
-  name = "${pname}-${version}";
+  version = "1.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n01xjgg8n5mf1cs9yg9ljsx1kvir8cm6wwrd2069fawjxdbk0b9";
+    sha256 = "07ww25z4xydp11hb38halh1940gmp5lca11hwfb63zv3bps248x3";
   };
 
   patches = [
@@ -17,26 +16,24 @@ buildPythonPackage rec {
       ''
       --- a/setup.py
       +++ b/setup.py
-      @@ -27,7 +27,8 @@ def recursive_search(path, target_files):
+      @@ -28,6 +28,7 @@ def recursive_search(path, target_files):
 
-       def get_extension():
-           # A list of all the possible search directories
-      -    dirs = ['/usr', sys.prefix] + glob.glob('/opt/libpcap*') + \
-      +    dirs = ['${libpcap}', '/usr', sys.prefix] + \
-      +        glob.glob('/opt/libpcap*') + \
-               glob.glob('../libpcap*') + glob.glob('../wpdpack*') + \
-               glob.glob('/Applications/Xcode.app/Contents/Developer/Platforms/' +
-                         'MacOSX.platform/Developer/SDKs/*')
+       def find_prefix_and_pcap_h():
+           prefixes = chain.from_iterable((
+      +        '${libpcap}',
+               ('/usr', sys.prefix),
+               glob.glob('/opt/libpcap*'),
+               glob.glob('../libpcap*'),
       '')
   ];
 
   buildInputs = [ libpcap ];
-  nativeBuildInputs = [ dpkt ];
+  checkInputs = [ dpkt ];
 
-  meta = {
+  meta = with lib; {
     homepage = https://github.com/pynetwork/pypcap;
     description = "Simplified object-oriented Python wrapper for libpcap";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ geistesk ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ geistesk ];
   };
 }

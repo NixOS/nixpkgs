@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A generic, highly customizable, and efficient menu for the X Window System";
-    homepage = http://tools.suckless.org/dmenu;
+    homepage = https://tools.suckless.org/dmenu;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; all;

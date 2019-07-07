@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "openntpd-${version}";
-  version = "6.2p1";
+  version = "6.2p3";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenNTPD/${name}.tar.gz";
-    sha256 = "1g6hi03ylhv47sbar3xxgsrar8schqfwn4glckh6m6lni67ndq85";
+    sha256 = "0fn12i4kzsi0zkr4qp3dp9bycmirnfapajqvdfx02zhr4hanj0kv";
   };
 
   prePatch = ''
@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     description = "OpenBSD NTP daemon (Debian port)";
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

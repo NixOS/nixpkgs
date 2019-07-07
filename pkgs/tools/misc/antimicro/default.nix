@@ -22,5 +22,6 @@ mkDerivation rec {
     maintainers = with maintainers; [ jb55 ];
     license = licenses.gpl3;
     platforms = with platforms; linux;
+    broken = true; # 2018-04-10
   };
 }

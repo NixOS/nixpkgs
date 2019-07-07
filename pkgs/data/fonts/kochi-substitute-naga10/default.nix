@@ -1,11 +1,11 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let version = "20030809";
 in
 fetchzip {
   name = "kochi-substitute-naga10-${version}";
 
-  url = "mirror://sourceforgejp/efont/5411/kochi-substitute-${version}.tar.bz2";
+  url = "mirror://osdn/efont/5411/kochi-substitute-${version}.tar.bz2";
 
   postFetch = ''
     tar -xjf $downloadedFile --strip-components=1
@@ -25,8 +25,8 @@ fetchzip {
       this font may not be sold commercially. See kochi-substitute for the free
       Debian version.
     '';
-    homepage = http://sourceforge.jp/projects/efont/;
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = [ stdenv.lib.maintainers.auntie ];
+    homepage = "https://osdn.net/projects/efont/";
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = [ lib.maintainers.auntie ];
   };
 }

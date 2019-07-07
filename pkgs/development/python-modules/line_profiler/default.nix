@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "line_profiler";
   version = "2.1.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

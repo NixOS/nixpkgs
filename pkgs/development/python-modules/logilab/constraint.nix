@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "logilab-constraint";
   version = "0.6.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "logilab-database provides some classes to make unified access to different";
-    homepage = "http://www.logilab.org/project/logilab-database";
+    homepage = "https://www.logilab.org/project/logilab-database";
   };
 }
 

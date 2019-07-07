@@ -43,7 +43,7 @@ if [ ! -e /proc/1 ]; then
         local options="$3"
         local fsType="$4"
 
-        mkdir -m 0755 -p "$mountPoint"
+        install -m 0755 -d "$mountPoint"
         mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
     }
     source @earlyMountScript@
@@ -71,7 +71,7 @@ fi
 
 
 # Provide a /etc/mtab.
-mkdir -m 0755 -p /etc
+install -m 0755 -d /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
 rm -f /etc/mtab* # not that we care about stale locks
 ln -s /proc/mounts /etc/mtab
@@ -79,10 +79,9 @@ ln -s /proc/mounts /etc/mtab
 
 # More special file systems, initialise required directories.
 [ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
-mkdir -m 01777 -p /tmp
-mkdir -m 0755 -p /var/{log,lib,db} /nix/var /etc/nixos/ \
+install -m 01777 -d /tmp
+install -m 0755 -d /var/{log,lib,db} /nix/var /etc/nixos/ \
     /run/lock /home /bin # for the /bin/sh symlink
-install -m 0700 -d /root
 
 
 # Miscellaneous boot time cleanup.
@@ -153,6 +152,14 @@ ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 @shell@ @postBootCommands@
 
 
+# Ensure systemd doesn't try to populate /etc, by forcing its first-boot
+# heuristic off. It doesn't matter what's in /etc/machine-id for this purpose,
+# and systemd will immediately fill in the file when it starts, so just
+# creating it is enough. This `: >>` pattern avoids forking and avoids changing
+# the mtime if the file already exists.
+: >> /etc/machine-id
+
+
 # Reset the logging file descriptors.
 exec 1>&$logOutFd 2>&$logErrFd
 exec {logOutFd}>&- {logErrFd}>&-
@@ -160,6 +167,6 @@ exec {logOutFd}>&- {logErrFd}>&-
 
 # Start systemd.
 echo "starting systemd..."
-PATH=/run/current-system/systemd/lib/systemd \
+PATH=/run/current-system/systemd/lib/systemd:@fsPackagesPath@ \
     LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
     exec systemd

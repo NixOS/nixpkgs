@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cmake, pkgconfig, xorg, libjpeg, libpng
-, fontconfig, freetype, pam, dbus_libs, makeWrapper }:
+{ stdenv, fetchurl, fetchpatch, cmake, pkgconfig, xorg, libjpeg, libpng
+, fontconfig, freetype, pam, dbus, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "slim-1.3.6";
@@ -26,7 +26,10 @@ stdenv.mkDerivation rec {
       # Allow to set logfile to a special "/dev/stderr" in order to continue
       # logging to stderr and thus to the journal.
       ./no-logfile.patch
-    ];
+    ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/musl/8eddda8072add075ebf56cf6d288bc1450d6b5f8/x11-misc/slim/files/slim-1.3.6-add-missing-libgen_h.patch";
+      sha256 = "0f82672s2r2cmdqfn2mbg3di76mbla9n0ik20p2gv4igi6p866xm";
+    });
 
   preConfigure = "substituteInPlace CMakeLists.txt --replace /lib $out/lib";
 
@@ -38,7 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ cmake pkgconfig libjpeg libpng fontconfig freetype
-      pam dbus_libs
+      pam dbus
       xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft makeWrapper
     ];
 
@@ -47,5 +50,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://sourceforge.net/projects/slim.berlios/; # berlios shut down; I found no replacement yet
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

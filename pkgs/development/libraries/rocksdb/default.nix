@@ -1,79 +1,43 @@
-{ stdenv
-, fetchFromGitHub
-, fixDarwinDylibNames
-, which, perl
+{ stdenv, fetchFromGitHub, lib, bzip2, cmake, gflags, lz4, snappy, zlib, zstd, enableLite ? false }:
 
-# Optional Arguments
-, snappy ? null, google-gflags ? null, zlib ? null, bzip2 ? null, lz4 ? null
-, numactl ? null
-
-# Malloc implementation
-, jemalloc ? null, gperftools ? null
-
-, enableLite ? false
-}:
-
-let
-  malloc = if jemalloc != null then jemalloc else gperftools;
-in
 stdenv.mkDerivation rec {
-  name = "rocksdb-${version}";
-  version = "5.10.2";
+  pname = "rocksdb";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
-    repo = "rocksdb";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "00qnd56v4qyzxg0b3ya3flf2jhbbfaibj1y53bd5ciaw3af6zxnd";
+    sha256 = "0gy2zjga3r8k9pbn2b0b5fzv4m0h2ip3zmyja1i7fli9n56civ3y";
   };
-  
-  nativeBuildInputs = [ which perl ];
-  buildInputs = [ snappy google-gflags zlib bzip2 lz4 malloc fixDarwinDylibNames ];
 
-  postPatch = ''
-    # Hack to fix typos
-    sed -i 's,#inlcude,#include,g' build_tools/build_detect_platform
-  '';
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ bzip2 gflags lz4 snappy zlib zstd ];
 
-  # Environment vars used for building certain configurations
-  PORTABLE = "1";
-  USE_SSE = "1";
-  CMAKE_CXX_FLAGS = "-std=gnu++11";
-  JEMALLOC_LIB = stdenv.lib.optionalString (malloc == jemalloc) "-ljemalloc";
+  patches = [ ./0001-findzlib.patch ];
 
-  ${if enableLite then "LIBNAME" else null} = "librocksdb_lite";
-  ${if enableLite then "CXXFLAGS" else null} = "-DROCKSDB_LITE=1";
-  
-  buildAndInstallFlags = [
-    "USE_RTTI=1"
-    "DEBUG_LEVEL=0"
-    "DISABLE_WARNING_AS_ERROR=1"     
+  cmakeFlags = [
+    "-DPORTABLE=1"
+    "-DWITH_JEMALLOC=0"
+    "-DWITH_JNI=0"
+    "-DWITH_TESTS=0"
+    "-DWITH_TOOLS=0"
+    "-DWITH_BZ2=1"
+    "-DWITH_LZ4=1"
+    "-DWITH_SNAPPY=1"
+    "-DWITH_ZLIB=1"
+    "-DWITH_ZSTD=1"
+    (lib.optional
+        (stdenv.hostPlatform.system == "i686-linux"
+         || stdenv.hostPlatform.system == "x86_64-linux")
+        "-DFORCE_SSE42=1")
+    (lib.optional enableLite "-DROCKSDB_LITE=1")
   ];
-
-  buildFlags = buildAndInstallFlags ++ [
-    "shared_lib"
-    "static_lib"
-  ];
-
-  installFlags = buildAndInstallFlags ++ [
-    "INSTALL_PATH=\${out}"
-    "install-shared"
-    "install-static"
-  ];
-
-  postInstall = ''
-    # Might eventually remove this when we are confident in the build process
-    echo "BUILD CONFIGURATION FOR SANITY CHECKING"
-    cat make_config.mk
-  '';
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://rocksdb.org;
+    homepage = https://rocksdb.org;
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
-    license = licenses.bsd3;
-    platforms = platforms.allBut [ "i686-linux" ];
-    maintainers = with maintainers; [ adev wkennington ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ adev magenbluten ];
   };
 }

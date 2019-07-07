@@ -1,12 +1,13 @@
 { stdenv, fetchFromGitHub, inkscape, imagemagick, potrace, svgo, scfbuild }:
 
 stdenv.mkDerivation rec {
-  name = "twemoji-color-font-${meta.version}";
+  pname = "twemoji-color-font";
+  version = "12.0.1";
   src = fetchFromGitHub {
     owner = "eosrei";
     repo = "twemoji-color-font";
-    rev = "v${meta.version}";
-    sha256 = "0i7krmg99nrrj7mbjjd2cw6dx24aja63571mcyp6d7q1z09asz9k";
+    rev = "v${version}";
+    sha256 = "00pbgqpkq21wl8fs0q1xp49xb10m48b9sz8cdc58flkd2vqfssw2";
   };
 
   nativeBuildInputs = [ inkscape imagemagick potrace svgo scfbuild ];
@@ -14,10 +15,13 @@ stdenv.mkDerivation rec {
   preBuild = "export HOME=\"$NIX_BUILD_ROOT\"";
   makeFlags = [ "SCFBUILD=${scfbuild}/bin/scfbuild" ];
   enableParallelBuilding = true;
-  installPhase = "install -Dm755 build/TwitterColorEmoji-SVGinOT.ttf $out/share/fonts/truetype/TwitterColorEmoji-SVGinOT.ttf";
+
+  installPhase = ''
+    install -Dm755 build/TwitterColorEmoji-SVGinOT.ttf $out/share/fonts/truetype/TwitterColorEmoji-SVGinOT.ttf
+    install -Dm644 linux/fontconfig/56-twemoji-color.conf $out/etc/fonts/conf.d/56-twemoji-color.conf
+  '';
 
   meta = with stdenv.lib; {
-    version = "1.3";
     description = "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
     longDescription = ''
       A color and B&W emoji SVGinOT font built from the Twitter Emoji for
@@ -34,6 +38,5 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/eosrei/twemoji-color-font/releases";
     license = with licenses; [ cc-by-40 mit ];
     maintainers = [ maintainers.fgaz ];
-    platforms = platforms.all;
   };
 }

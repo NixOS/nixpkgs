@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "luftdaten";
-  version = "0.1.4";
+  version = "0.6.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3e3af830ad2b731c36af223bbb5d47d68aa3786b2965411216917a7381e1179";
+    sha256 = "0jxp9yfabdgn2d6w69ijrw1bk1d9g897425cyybiyc13zhhs0kwg";
   };
 
   propagatedBuildInputs = [ aiohttp async-timeout ];

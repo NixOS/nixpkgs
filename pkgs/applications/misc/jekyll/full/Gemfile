@@ -10,7 +10,7 @@ gem "jemoji"
 # Optional dependencies:
 gem "coderay", "~> 1.1.0"
 gem "jekyll-coffeescript"
-gem "jekyll-docs"
+#gem "jekyll-docs"
 gem "jekyll-feed", "~> 0.9"
 gem "jekyll-gist"
 gem "jekyll-paginate"

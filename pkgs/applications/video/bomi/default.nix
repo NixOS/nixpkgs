@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, perl, python, which
-, libX11, libxcb, mesa
+{ config, stdenv, fetchFromGitHub
+, fetchpatch, pkgconfig, perl, python, which
+, libX11, libxcb, libGLU_combined
 , qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmake, makeWrapper
 , libchardet
 , ffmpeg
@@ -15,7 +16,7 @@
 , libbluray
 , jackSupport ? false, jack ? null
 , portaudioSupport ? false, portaudio ? null
-, pulseSupport ? true, libpulseaudio ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , cddaSupport ? false, libcdda ? null
 , youtubeSupport ? true, youtube-dl ? null
 }:
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
                 [ libX11
                   libxcb
-                  mesa
+                  libGLU_combined
                   qtbase
                   qtx11extras
                   qtdeclarative

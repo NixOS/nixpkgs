@@ -1,26 +1,36 @@
-{ stdenv, fetchgit, autoconf, automake, pkgconfig, gettext, libtool, git, pandoc, which, attr, libiconv }:
+{ stdenv, fetchFromGitHub, automake, autoconf, pkgconfig, gettext, libtool, pandoc, which, attr, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "mergerfs-${version}";
-  version = "2.23.1";
+  pname = "mergerfs";
+  version = "2.28.1";
 
-  # not using fetchFromGitHub because of changelog being built with git log
-  src = fetchgit {
-    url = "https://github.com/trapexit/mergerfs";
-    rev = "refs/tags/${version}";
-    sha256 = "0kbw64fkp3pjc7qm3y1q0ja20v3lhxi0nsq6gd19rq3m7ch9hcgl";
-    deepClone = true;
-    leaveDotGit = true;
+  src = fetchFromGitHub {
+    owner = "trapexit";
+    repo = pname;
+    rev = version;
+    sha256 = "18yc80ccpqf785gah5xw6jg5524wfra8bf3pcjr7idzdz4ca7nvf";
   };
 
-  nativeBuildInputs = [ autoconf automake pkgconfig gettext libtool git pandoc which ];
+  nativeBuildInputs = [
+    automake autoconf pkgconfig gettext libtool pandoc which
+  ];
   buildInputs = [ attr libiconv ];
 
-  makeFlags = [ "PREFIX=$(out)" "XATTR_AVAILABLE=1" ];
+  preConfigure = ''
+    echo "${version}" > VERSION
+  '';
+
+  makeFlags = [ "PREFIX=${placeholder "out"}" "XATTR_AVAILABLE=1" ];
+  enableParallelBuilding = true;
+
+  postFixup = ''
+    ln -srf $out/bin/mergerfs $out/bin/mount.fuse.mergerfs
+    ln -srf $out/bin/mergerfs $out/bin/mount.mergerfs
+  '';
 
   meta = {
     description = "A FUSE based union filesystem";
-    homepage = https://github.com/trapexit/mergerfs;
+    homepage = "https://github.com/trapexit/mergerfs";
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ jfrankenau makefu ];

@@ -1,14 +1,16 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  name = "peru-${version}";
-  version = "1.1.0";
+  pname = "peru";
+  version = "1.2.0";
+
+  disabled = python3Packages.pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "buildinspace";
     repo = "peru";
     rev = "${version}";
-    sha256 = "0hvp6pvpsz0f98az4f1wl93gqlz6wj24pjnc5zs1har9rqlpq8y8";
+    sha256 = "0p4j51m89glx12cd65lcnbwpvin0v49wkhrx06755skr7v37pm2a";
   };
 
   propagatedBuildInputs = with python3Packages; [ pyyaml docopt ];

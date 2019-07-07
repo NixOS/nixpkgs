@@ -1,6 +1,6 @@
---- a/test.sh
-+++ b/test.sh
-@@ -2669,23 +2669,6 @@ SUITE_cleanup() {
+--- a/test/suites/cleanup.bash
++++ b/test/suites/cleanup.bash
+@@ -94,23 +94,6 @@
 
      $CCACHE -F 0 -M 256K >/dev/null
      CCACHE_LOGFILE=/tmp/foo $CCACHE -c >/dev/null

@@ -1,35 +1,37 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , cython
-, python
 }:
 
 buildPythonPackage rec {
   pname = "murmurhash";
-  version = "0.26.4";
-  name = pname + "-" + version;
+  version = "1.0.2";
 
-  src = fetchFromGitHub {
-    owner = "explosion";
-    repo = "murmurhash";
-    rev = "0.26.4";
-    sha256 = "0n2j0glhlv2yh3fjgbg4d79j1c1fpchgjd4vnpw908l9mzchhmdv";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "c7a646f6b07b033642b4f52ae2e45efd8b80780b3b90e8092a0cec935fbf81e2";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "'wheel>=0.32.0,<0.33.0'" ""
+  '';
 
   buildInputs = [
    cython
   ];
 
+  # No test
+  doCheck = false;
+
   checkPhase = ''
-    cd murmurhash/tests
-    ${python.interpreter} -m unittest discover -p "*test*"
+    pytest murmurhash
   '';
 
   meta = with stdenv.lib; {
     description = "Cython bindings for MurmurHash2";
     homepage = https://github.com/explosion/murmurhash;
     license = licenses.mit;
-    maintainers = with maintainers; [ sdll ];
-    };
+    maintainers = with maintainers; [ aborsu sdll ];
+  };
 }
