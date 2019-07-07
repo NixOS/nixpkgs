@@ -68,6 +68,7 @@ in
     users.users = mkIf (cfg.user == "lidarr") {
       lidarr = {
         group = cfg.group;
+        home = "/var/lib/lidarr";
         uid = config.ids.uids.lidarr;
       };
     };
