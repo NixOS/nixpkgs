@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, octoprint, python2Packages }:
+{ stdenv, fetchFromGitHub, octoprint, python2Packages, marlin-calc }:
 
 let
   buildPlugin = args: python2Packages.buildPythonPackage (args // {
@@ -161,6 +161,31 @@ let
       meta = with stdenv.lib; {
         description = "OctoPrint plugin to control ATX/AUX power supply";
         homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ gebner ];
+      };
+    };
+
+    printtimegenius = buildPlugin rec {
+      pname = "PrintTimeGenius";
+      version = "1.3.1";
+
+      src = fetchFromGitHub {
+        owner = "eyal0";
+        repo = "OctoPrint-${pname}";
+        rev = version;
+        sha256 = "0ijv1nxmikv06a00hqqkqri6wnydqh6lwcx07pmvw6jy706jhy28";
+      };
+
+      preConfigure = ''
+        # PrintTimeGenius ships with marlin-calc binaries for multiple architectures
+        rm */analyzers/marlin-calc*
+        sed 's@"{}.{}".format(binary_base_name, machine)@"${marlin-calc}/bin/marlin-calc"@' -i */analyzers/analyze_progress.py
+      '';
+
+      meta = with stdenv.lib; {
+        description = "Better print time estimation for OctoPrint";
+        homepage = "https://github.com/eyal0/OctoPrint-PrintTimeGenius";
         license = licenses.agpl3;
         maintainers = with maintainers; [ gebner ];
       };
