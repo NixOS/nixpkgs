@@ -2470,6 +2470,8 @@ in {
 
   mwlib-rl = callPackage ../development/python-modules/mwlib-rl { };
 
+  myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
+
   natsort = callPackage ../development/python-modules/natsort { };
 
   naturalsort = callPackage ../development/python-modules/naturalsort { };
