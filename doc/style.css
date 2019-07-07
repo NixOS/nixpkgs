@@ -1,3 +1,12 @@
+/* stuff from samueldr */
+
+.toc li:not(.current-section) > ul {
+    display: none;
+}
+ul.toc > li > ul > li:not(.current-section) {
+    display: none;
+}
+
 /* Copied from http://bakefile.sourceforge.net/, which appears
    licensed under the GNU GPL. */
 
