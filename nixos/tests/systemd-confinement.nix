@@ -50,7 +50,7 @@ import ./make-test.nix {
           $machine->succeed(
             # 'test "$(chroot-exec ls -1 / | paste -sd,)" = bin,nix',
             'test "$(chroot-exec id -u)" = 0',
-            'chroot-exec chown 65534 /bin',
+            # 'chroot-exec chown 65534 /bin',
           );
         '';
       }
@@ -61,7 +61,7 @@ import ./make-test.nix {
           );
           $machine->succeed(
             'test "$(chroot-exec id -u)" = 0',
-            'chroot-exec chown 0 /bin',
+            # 'chroot-exec chown 0 /bin',
           );
         '';
       }
@@ -102,7 +102,7 @@ import ./make-test.nix {
         # config.serviceConfig.ConfigurationDirectory = "testme";
         config.serviceConfig.DynamicUser = true;
         testScript = ''
-          $machine->succeed("systemd-analyze log-level debug");
+          # $machine->succeed("systemd-analyze log-level debug");
           $machine->succeed('chroot-exec touch /tmp/canary');
           $machine->succeed('chroot-exec "echo works > /var/lib/testme/foo"');
           $machine->succeed('test "$(< /var/lib/testme/foo)" = works');

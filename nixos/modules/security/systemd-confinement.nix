@@ -61,7 +61,7 @@ in {
 
       options.confinement.usrbinenv = lib.mkOption {
         type = types.nullOr types.path;
-        default = topLevelConfig.environment.usrbinenv;
+        default = toplevelConfig.environment.usrbinenv;
         defaultText = "config.environment.usrbinenv";
         example = lib.literalExample "\${pkgs.busybox}/bin/env";
         description = ''
@@ -121,16 +121,16 @@ in {
       in lib.mkIf config.confinement.enable {
         serviceConfig = {
           RootDirectory = pkgs.runCommand rootName {} ''
-            mkdir -p $out/{proc,usr/bin,etc,sys,var,var/lib,var/cache,var/log,/var/tmp,dev,home,run/user,nix/store,root,tmp,bin}
+            mkdir -p $out/{proc,usr/bin,etc,sys,var/lib,var/cache,var/log,/var/tmp,dev,home,run/user,nix/store,root,tmp,bin}
           '';
           TemporaryFileSystem = [
-            "/nix/store"   # read-write such that we can mount arbitrary amount of nix paths
-            "/run"
-            "/bin"         # literally only for /bin/sh I think? 
-            # "/var"
-            "/var/lib"     # read-write such that StateDirectory can be mount
-            "/var/cache"   # read-write such that Cachedirectory can be mount
-            "/var/log"     # read-write such that Cachedirectory can be mount
+            "/nix/store:ro"   
+            "/run"            # RuntimeDirectory is transient state
+            "/bin:ro"         # for /bin/sh
+            "/usr/bin:ro"     # for /usr/bin/env
+            "/var/lib:ro"     # StateDirectory mounts go here
+            "/var/cache:ro"   # CacheDirectory mounts go here
+            "/var/log:ro"     # LogDirectory mounts go here
           ];
           PrivateMounts = lib.mkDefault true;
 
