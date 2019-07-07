@@ -105,8 +105,18 @@ in {
         wantsAPIVFS = lib.mkDefault (config.confinement.mode == "full-apivfs");
       in lib.mkIf config.confinement.enable {
         serviceConfig = {
-          RootDirectory = pkgs.runCommand rootName {} "mkdir \"$out\"";
-          TemporaryFileSystem = "/";
+          RootDirectory = pkgs.runCommand rootName {} ''
+            mkdir -p $out/{proc,etc,sys,var,var/lib,var/cache,var/log,/var/tmp,dev,home,run/user,nix/store,root,tmp,bin}
+          '';
+          TemporaryFileSystem = [
+            "/nix/store"   # read-write such that we can mount arbitrary amount of nix paths
+            "/run"
+            "/bin"         # literally only for /bin/sh I think? 
+            # "/var"
+            "/var/lib"     # read-write such that StateDirectory can be mount
+            "/var/cache"   # read-write such that Cachedirectory can be mount
+            "/var/log"     # read-write such that Cachedirectory can be mount
+          ];
           PrivateMounts = lib.mkDefault true;
 
           # https://github.com/NixOS/nixpkgs/issues/14645 is a future attempt
@@ -154,11 +164,6 @@ in {
               + " doesn't support restricting bind-mounts to 'ExecStart'."
               + " Please either define a separate service or find a way to run"
               + " commands other than ExecStart within the chroot.";
-    }
-    { assertion = !cfg.serviceConfig.DynamicUser or false;
-      message = "${whatOpt "DynamicUser"}. Please create a dedicated user via"
-              + " the 'users.users' option instead as this combination is"
-              + " currently not supported.";
     }
   ]) config.systemd.services);
 
