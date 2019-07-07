@@ -233,7 +233,7 @@ in
           oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip};
           allToString = set: concatMapStringsSep "\n" (oneToString set) (attrNames set);
         in ''
-          ${allToString cfg.hosts}
+          ${allToString (filterAttrs (_: v: v != []) cfg.hosts)}
           ${cfg.extraHosts}
         '';
 
