@@ -19,8 +19,8 @@ let
     <xsl:stylesheet
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       version="1.0">
-      <xsl:import href="${builtins.toString ./../../docbook-xsl-1.79.2/xhtml/chunkfast.xsl}" />
-      <xsl:import href="${builtins.toString ./parameters.xsl}"/>
+      <xsl:import href="${pkgs.docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunkfast.xsl" />
+      <xsl:import href="${./parameters.xsl}"/>
     </xsl:stylesheet>
   '';
 
@@ -30,7 +30,7 @@ let
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       version="1.0">
       <xsl:import href="${pkgs.docbook_xsl_ns}/xml/xsl/docbook/xhtml/docbook.xsl" />
-      <xsl:import href="${builtins.toString ./parameters.xsl}"/>
+      <xsl:import href="${./parameters.xsl}"/>
     </xsl:stylesheet>
   '';
 
