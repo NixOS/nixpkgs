@@ -142,6 +142,30 @@ let
       };
     };
 
+    psucontrol = buildPlugin rec {
+      pname = "PSUControl";
+      version = "0.1.8";
+
+      src = fetchFromGitHub {
+        owner = "kantlivelong";
+        repo = "OctoPrint-${pname}";
+        rev = version;
+        sha256 = "0aj38d7b7d5pzmzq841pip18cpg18wy2vrxq2nd13875597y54b8";
+      };
+
+      preConfigure = ''
+        # optional; RPi.GPIO is broken on vanilla kernels
+        sed /RPi.GPIO/d -i requirements.txt
+      '';
+
+      meta = with stdenv.lib; {
+        description = "OctoPrint plugin to control ATX/AUX power supply";
+        homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ gebner ];
+      };
+    };
+
   };
 
 in self
