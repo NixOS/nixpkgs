@@ -123,6 +123,25 @@ let
       };
     };
 
+    touchui = buildPlugin rec {
+      pname = "TouchUI";
+      version = "0.3.13";
+
+      src = fetchFromGitHub {
+        owner = "BillyBlaze";
+        repo = "OctoPrint-${pname}";
+        rev = version;
+        sha256 = "0qk12ysabdzy6cna3l4f8v3qcnppppwxxsjx2i0xn1nd0cv6yzwh";
+      };
+
+      meta = with stdenv.lib; {
+        description = "Touch friendly interface for a small TFT module or phone for OctoPrint";
+        homepage = "https://github.com/BillyBlaze/OctoPrint-TouchUI";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ gebner ];
+      };
+    };
+
   };
 
 in self
