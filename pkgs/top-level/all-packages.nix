@@ -5954,6 +5954,8 @@ in
 
   sshguard = callPackage ../tools/security/sshguard {};
 
+  suricata = callPackage ../applications/networking/ids/suricata { };
+
   softhsm = callPackage ../tools/security/softhsm {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Security;
