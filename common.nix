@@ -30,18 +30,18 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     pushd buftool
       autoreconf -fi
-      ./autogen.sh --prefix=$out/usr --libdir=$out/usr/lib
+      ./autogen.sh --prefix=$out --libdir=$out/lib
     popd
 
     pushd cngplp
       autoreconf -fi
       LIBS='-lgmodule-2.0 -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0'\
-        ./autogen.sh --prefix=$out/usr --libdir=$out/usr/lib
+        ./autogen.sh --prefix=$out --libdir=$out/lib
     popd
 
     pushd backend
       autoreconf -fi
-      ./autogen.sh --prefix=$out/usr --libdir=$out/usr/lib
+      ./autogen.sh --prefix=$out --libdir=$out/lib
     popd
   '';
 
@@ -63,15 +63,15 @@ stdenv.mkDerivation rec {
     done
 
     pushd c3plmod_ipc
-      DESTDIR=$out LIBDIR=$out/usr/lib make install
+      DESTDIR=$out LIBDIR=$out/lib make install
     popd
 
     ##HACK: `make install` install files to wrong directory
-    cp -rv $out/$out/usr/* $out/usr
+    cp -rv $out/$out/* $out
     rm -r $out/nix
 
-    install -dm755 $out/usr/bin
-    install -c -m 755 libs/c3pldrv $out/usr/bin
+    install -dm755 $out/bin
+    install -c -m 755 libs/c3pldrv $out/bin
     install -dm755 $out/lib
     install -c -m 755 libs/libcaiowrap.so.1.0.0   $out/lib
     install -c -m 755 libs/libcaiousb.so.1.0.0    $out/lib
@@ -100,8 +100,8 @@ stdenv.mkDerivation rec {
       ln -s libColorGearC.so.0.0.0 libColorGearC.so
     popd
 
-    install -dm755 $out/usr/share/caepcm
-    install -c -m 644 data/*.ICC  $out/usr/share/caepcm
+    install -dm755 $out/share/caepcm
+    install -c -m 644 data/*.ICC  $out/share/caepcm
   '';
 
   meta = with stdenv.lib; {
