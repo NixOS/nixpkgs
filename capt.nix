@@ -26,23 +26,11 @@ stdenv.mkDerivation rec {
     cndrvcups-common
   ];
 
-  phases = [
-    "configPhase"
-    "buildPhase"
-    "installPhase"
-  ];
-
   # install directions based on arch PKGBUILD file
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=capt-src
 
-  configPhase = ''
+  configurePhase = ''
     set -xe
-    mkdir -p $out
-
-    ##HACK: `autoreconf -fi` need write access the directory
-    mkdir -p _build && cd _build
-    cp -r $src/* .
-    chmod -R +w .
 
     for _dir in driver ppd backend pstocapt pstocapt2 pstocapt3
     do
@@ -82,6 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    mkdir -p $out
     # for _dir in driver ppd backend pstocapt pstocapt2 pstocapt3 statusui cngplp
     # do
     #     pushd $_dir
