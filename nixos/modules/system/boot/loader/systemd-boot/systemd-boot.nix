@@ -120,8 +120,7 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
-
+        assertion = config.boot.kernelPackages.kernel.features.efiBootStub or true;
         message = "This kernel does not support the EFI boot stub";
       }
     ];
