@@ -2661,6 +2661,8 @@ in
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
 
+  docbook-index = callPackage ../tools/misc/docbook-index { };
+
   docear = callPackage ../applications/office/docear { };
 
   dockbarx = callPackage ../applications/misc/dockbarx { };
