@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     ];
     sha256 = if stdenv.is64bit
       then "1bzmqqqpwn6q2pvkrkkxq0ggs8crxbkwaxlggcdxjlyg95cyq8k1"
-      else "0s835dnaw662sb2v5ahqiwry0qjcpl7ff9krnhbw2iblsbqis3fj";
+      else "0p5rqwdsvbria5dzjjm5mj8vfy0zpfs669wpbwxd4g3n4vh03kyw";
   };
 
   buildInputs = [ makeWrapper ];
@@ -51,8 +51,9 @@ stdenv.mkDerivation {
       ln -s $out/lib/teamspeak/ts3server $out/bin/ts3server
       ln -s $out/lib/teamspeak/tsdnsserver $out/bin/tsdnsserver
 
-      wrapProgram $out/lib/teamspeak/ts3server --prefix LD_LIBRARY_PATH : $out/lib/teamspeak
-      wrapProgram $out/lib/teamspeak/tsdnsserver --prefix LD_LIBRARY_PATH : $out/lib/tsdnsserver
+      wrapProgram $out/lib/teamspeak/ts3server \
+        --prefix LD_LIBRARY_PATH : ${stdenv.cc.cc.lib}/${libDir} \
+        --prefix LD_LIBRARY_PATH : $out/lib/teamspeak
     '';
 
   dontStrip = true;
