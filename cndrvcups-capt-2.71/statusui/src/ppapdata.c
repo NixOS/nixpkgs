@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include <cups/cups.h>
+#include <cups/ppd.h>
 #include "uimain.h"
 #include "cnsktmodule.h"
 
