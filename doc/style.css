@@ -7,6 +7,11 @@ ul.toc > li > ul > li:not(.current-section) {
     display: none;
 }
 
+
+#searchresult em {
+    font-weight: bold;
+}
+
 /* Copied from http://bakefile.sourceforge.net/, which appears
    licensed under the GNU GPL. */
 
