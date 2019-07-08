@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "sauce-connect-${version}";
   version = "4.5.4";
 
-  src = fetchurl (
+   src = with stdenv.hostPlatform; fetchurl (
     if stdenv.hostPlatform.system == "x86_64-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux.tar.gz";
       sha256 = "1w8fw47q4bzpk5jfagmc0cbp69jdd6jcv2xl1gx91cbp7xd8mcbf";
