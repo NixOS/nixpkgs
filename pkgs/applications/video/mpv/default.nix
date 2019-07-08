@@ -20,9 +20,10 @@
   , libcdio-paranoia ? null
 
 , vulkanSupport ? stdenv.isLinux
-  , shaderc ? null
+  , shaderc        ? null
   , vulkan-headers ? null
-  , vulkan-loader ? null
+  , vulkan-loader  ? null
+  , libplacebo     ? null
 
 , drmSupport ? stdenv.isLinux
   , libdrm ? null
@@ -37,12 +38,12 @@
 , dvdreadSupport     ? stdenv.isLinux, libdvdread    ? null
 , libpngSupport      ? true,           libpng        ? null
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
-, rubberbandSupport  ? stdenv.isLinux, rubberband ? null
+, rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
 , speexSupport       ? true,           speex         ? null
 , theoraSupport      ? true,           libtheora     ? null
-, vaapiSupport       ? stdenv.isLinux, libva ? null
+, vaapiSupport       ? stdenv.isLinux, libva         ? null
 , vdpauSupport       ? true,           libvdpau      ? null
 , xineramaSupport    ? stdenv.isLinux, libXinerama   ? null
 , xvSupport          ? stdenv.isLinux, libXv         ? null
@@ -95,16 +96,16 @@ let
              "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
     sha256 = "0j7sbn3w6bgslvwwh5v9527w3gi2sd08kskrgxamx693y0b0i3ia";
   };
-  luaEnv = lua.withPackages(ps: with ps; [ luasocket ]);
+  luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 
 in stdenv.mkDerivation rec {
-  name = "mpv-${version}";
+  pname = "mpv";
   version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
-    repo  = "mpv";
-    rev    = "v${version}";
+    repo = "mpv";
+    rev = "v${version}";
     sha256 = "138921kx8g6qprim558xin09xximjhsj9ss8b71ifg2m6kclym8m";
   };
 
@@ -174,7 +175,7 @@ in stdenv.mkDerivation rec {
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
     ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
-    ++ optionals vulkanSupport     [ shaderc vulkan-headers vulkan-loader ]
+    ++ optionals vulkanSupport     [ shaderc vulkan-headers vulkan-loader libplacebo ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreFoundation Cocoa CoreAudio
     ]);
