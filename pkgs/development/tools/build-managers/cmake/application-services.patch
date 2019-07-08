@@ -47,3 +47,14 @@ index d7af6e2..d4808fc 100644
  add_subdirectory(libarchive)
  
  install(FILES COPYING DESTINATION ${CMAKE_DOC_DIR}/cmlibarchive)
+index e505bdd..f45557d 100644
+--- a/Utilities/cmlibuv/src/unix/darwin-proctitle.c
++++ b/Utilities/cmlibuv/src/unix/darwin-proctitle.c
+@@ -30,7 +30,6 @@
+
+ #if !TARGET_OS_IPHONE
+ # include <CoreFoundation/CoreFoundation.h>
+-# include <ApplicationServices/ApplicationServices.h>
+ #endif
+
+ #define S(s) pCFStringCreateWithCString(NULL, (s), kCFStringEncodingUTF8)
