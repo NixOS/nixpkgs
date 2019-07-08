@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "plv8";
-  version = "2.3.11";
+  version = "2.3.12";
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ v8 postgresql ];
@@ -11,26 +11,26 @@ stdenv.mkDerivation rec {
     owner = "plv8";
     repo = "plv8";
     rev = "v${version}";
-    sha256 = "0bv2b8xxdqqhj6nwyc8kwhi5m5i7i1yl078sk3bnnc84b0mnza5x";
+    sha256 = "1yi1ibiibvd0x4z5dm698w32ljrj3yr4j25jm1zkgkwd4ii8y644";
   };
 
-  makeFlags = [ "--makefile=Makefile.shared" ];
+  makefile = "Makefile.shared";
+
+  buildFlags = [ "all" ];
 
   preConfigure = ''
     patchShebangs ./generate_upgrade.sh
   '';
 
-  buildPhase = "make -f Makefile.shared all";
-
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin    # For buildEnv to setup proper symlinks. See #22653
     install -D plv8*.so                                        -t $out/lib
     install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {
-    description = "PL/v8 - A Procedural Language in JavaScript powered by V8";
-    homepage = https://pgxn.org/dist/plv8/;
+    description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
+    homepage = "https://plv8.github.io/";
     maintainers = with maintainers; [ volth ];
     platforms = platforms.linux;
     license = licenses.postgresql;
