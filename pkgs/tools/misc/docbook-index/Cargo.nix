@@ -6,12 +6,12 @@ let inherit (lib.lists) fold;
 in
 rec {
   crates = cratesIO;
-  docbook_index = crates.crates.docbook_index."0.1.1" deps;
+  docbook_index = crates.crates.docbook_index."0.1.2" deps;
   __all = [ (docbook_index {}) ];
   deps.aho_corasick."0.7.4" = {
     memchr = "2.2.0";
   };
-  deps.docbook_index."0.1.1" = {
+  deps.docbook_index."0.1.2" = {
     elasticlunr_rs = "2.3.5";
     glob = "0.3.0";
     xml_rs = "0.8.0";
