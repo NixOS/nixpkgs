@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.programs.firejail;
+  fj=pkgs.firejail;
 
   wrappedBins = pkgs.stdenv.mkDerivation rec {
     name = "firejail-wrapped-binaries";
@@ -24,6 +25,10 @@ in {
   options.programs.firejail = {
     enable = mkEnableOption "firejail";
 
+    firecfg = mkEnableOption "automatic setup of links and desktop file via firecfg" // {
+      default = true;
+    };
+
     wrappedBinaries = mkOption {
       type = types.attrs;
       default = {};
@@ -39,9 +44,15 @@ in {
   };
 
   config = mkIf cfg.enable {
-    security.wrappers.firejail.source = "${lib.getBin pkgs.firejail}/bin/firejail";
+    security.wrappers.firejail.source = "${lib.getBin fj}/bin/firejail";
 
-    environment.systemPackages = [ wrappedBins ];
+    environment.systemPackages = [ wrappedBins ] ++ optional cfg.firecfg fj;
+
+    environment.extraSetup = optionalString cfg.firecfg ''
+      mkdir tmp
+      cp -r $out tmp
+      chroot tmp firecfg
+    '';
   };
 
   meta.maintainers = with maintainers; [ peterhoeg ];
