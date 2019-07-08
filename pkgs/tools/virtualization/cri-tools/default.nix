@@ -3,12 +3,12 @@
 buildGoPackage
 rec {
   pname = "cri-tools";
-  version = "1.14.0";
+  version = "1.15.0";
   src = fetchFromGitHub {
     owner = "kubernetes-incubator";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0v5i7shbn7b6av1d2z6r5czyjdll9i7xim9975lpnz1136xb6li7";
+    sha256 = "03fhddncwqrdyxz43m3bak9dlrsqzibqqja3p94nic4ydk2hry62";
   };
 
   goPackagePath = "github.com/kubernetes-incubator/cri-tools";
