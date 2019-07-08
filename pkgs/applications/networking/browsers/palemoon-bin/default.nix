@@ -11,7 +11,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "palemoon-bin-${version}";
+  pname = "palemoon-bin";
+  name = "${pname}-${version}";
   version = "28.6.0.1";
 
   src = fetchurl {
