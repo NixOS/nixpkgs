@@ -1647,10 +1647,10 @@ in {
 
   openant = callPackage ../development/python-modules/openant { };
 
-  opencv = toPythonModule (pkgs.opencv.override {
+  opencv = disabledIf isPy3k (toPythonModule (pkgs.opencv.override {
     enablePython = true;
     pythonPackages = self;
-  });
+  }));
 
   opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;
