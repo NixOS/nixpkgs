@@ -248,12 +248,12 @@ let
 
   coc-nvim = buildVimPluginFrom2Nix {
     pname = "coc-nvim";
-    version = "2019-07-08";
+    version = "2019-07-09";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "8c7241d7e3f56bc2efda92c05e0148dcf7c41bc6";
-      sha256 = "0agn16dj800sydqwjdr85m3d66hfbn8hh1azb2hsniwd5d1qkr6v";
+      rev = "b24601e6af3677dd5fd0d70bdcdc97a30591ae37";
+      sha256 = "0zxbrjy141ci02hwds200b6v1gj1bm98wbhr5wjmir8r9k4hrqg9";
     };
   };
 
@@ -436,12 +436,12 @@ let
 
   denite-nvim = buildVimPluginFrom2Nix {
     pname = "denite-nvim";
-    version = "2019-07-08";
+    version = "2019-07-09";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "denite.nvim";
-      rev = "8a9f52235c32011c91ad3630bed88cdcc6b55b08";
-      sha256 = "0wvawl32w3zg04l513h7cby0ks4zzxli6m3yzyyv92ajnkmj4n0h";
+      rev = "0538a6449e9d1237d6df738ec612b7c3fe01b6f1";
+      sha256 = "0jznqn9hpiy3z2smss7z7lv0d37brm6a104cagbxbk7qar6dl97w";
     };
   };
 
@@ -538,12 +538,12 @@ let
 
   deoplete-ternjs = buildVimPluginFrom2Nix {
     pname = "deoplete-ternjs";
-    version = "2019-07-03";
+    version = "2019-07-09";
     src = fetchFromGitHub {
       owner = "carlitux";
       repo = "deoplete-ternjs";
-      rev = "d82a008e26e323b8b3290c58ee87fe9e3dbd83cd";
-      sha256 = "0bzvd3wn46p8bv0mmwlhcr68mpghg5sj9gnc52syjn2302kibkar";
+      rev = "fe5935dcf3cbaa663c81e2b9705a93840a407e56";
+      sha256 = "04yqw92yjcvimwvx1dqqc50y52j3y4zkvjkxmpmfnyx86ah730fk";
     };
   };
 
@@ -1103,12 +1103,12 @@ let
 
   limelight-vim = buildVimPluginFrom2Nix {
     pname = "limelight-vim";
-    version = "2016-06-23";
+    version = "2019-07-09";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "limelight.vim";
-      rev = "106fb5749d227a0de72e36068ed72798c6fd48e6";
-      sha256 = "0fp4yp50n5v5zx3a7afh9wip4nwcfhmdgdzwpnl79jvild1z9fgh";
+      rev = "26e913a2e061195245bc62d24009ab67143a3c32";
+      sha256 = "0bxmihv9i96k6pl37pzgri03vbvjwlp34rl4gkj8w2ajhhi6nsnn";
     };
   };
 
@@ -1312,12 +1312,12 @@ let
 
   neomake = buildVimPluginFrom2Nix {
     pname = "neomake";
-    version = "2019-07-07";
+    version = "2019-07-09";
     src = fetchFromGitHub {
       owner = "neomake";
       repo = "neomake";
-      rev = "3fe8bea59e6f19538968ea41ac33d6418071ffd6";
-      sha256 = "0rnwzwk4vqvnp42854vxzxllyqap44p9wfppp89c1j0x2hi3ylih";
+      rev = "bc68b453e2e28bcaa5fa1bf841c78a0a4b0cc5ec";
+      sha256 = "0y6qjj1czk2wiax60zsnjbixa3lp10y9777ll7r65jdrhjrysd7v";
     };
   };
 
@@ -2874,12 +2874,12 @@ let
 
   vim-fugitive = buildVimPluginFrom2Nix {
     pname = "vim-fugitive";
-    version = "2019-07-08";
+    version = "2019-07-09";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-fugitive";
-      rev = "102b3a50e20d857b38e4c392b78be9a340669a70";
-      sha256 = "0q7icsjycxw4l5awapkj8sig297f37hcyk5s4ns0ldrylh0xckl9";
+      rev = "5f9602e12f27bd59e38a0814c524c7c385ef4137";
+      sha256 = "1w12n7m607sa8rl704m1wq763zzz556ii1izsqnlyyrag0ld51cq";
     };
   };
 
@@ -2951,12 +2951,12 @@ let
 
   vim-go = buildVimPluginFrom2Nix {
     pname = "vim-go";
-    version = "2019-07-04";
+    version = "2019-07-09";
     src = fetchFromGitHub {
       owner = "fatih";
       repo = "vim-go";
-      rev = "3ab5d6c5448258d6ec3939d900f6ad431c3bad86";
-      sha256 = "16ngnyy31xyghiz02gmpdr3l08inp95ncfknf57y7bd711jjj09m";
+      rev = "09edd7a4ff02895ffe48a51b6c83e104b7cd013a";
+      sha256 = "0mki5zy1r36vbs8fn2arb6nbw4b88iqsgdw00lw3263c8bdw23z7";
     };
   };
 
@@ -3370,12 +3370,12 @@ let
 
   vim-markdown = buildVimPluginFrom2Nix {
     pname = "vim-markdown";
-    version = "2019-06-05";
+    version = "2019-07-09";
     src = fetchFromGitHub {
       owner = "plasticboy";
       repo = "vim-markdown";
-      rev = "0e43b4c5b06466cb54540b7452db6c6b22e33539";
-      sha256 = "0wl7i071ql5h1aqhjj1kiwzl8f1s69n1a37cmsrh2czdc8s85qlj";
+      rev = "da5a7ac96f517e0fd6f886bc3fbe27156ca1f946";
+      sha256 = "198bsv88njz6l2pf9yjxb8292aj7x8n2sxi50q3cdsg29a3y2i5c";
     };
   };
 
