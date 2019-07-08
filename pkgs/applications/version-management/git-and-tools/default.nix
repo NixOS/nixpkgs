@@ -89,6 +89,10 @@ let
 
   git-extras = callPackage ./git-extras { };
 
+  git-gone = callPackage ./git-gone {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-hub = callPackage ./git-hub { };
 
   git-ignore = callPackage ./git-ignore { };
