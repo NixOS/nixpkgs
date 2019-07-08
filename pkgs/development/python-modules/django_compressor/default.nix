@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
     meta = with stdenv.lib; {
       description = "Compresses linked and inline JavaScript or CSS into single cached files";
-      homepage = http://django-compressor.readthedocs.org/en/latest/;
+      homepage = https://django-compressor.readthedocs.org/en/latest/;
       license = licenses.mit;
       maintainers = with maintainers; [ desiderius ];
     };

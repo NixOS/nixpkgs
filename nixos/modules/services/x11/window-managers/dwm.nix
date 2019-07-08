@@ -25,7 +25,7 @@ in
       { name = "dwm";
         start =
           ''
-            ${pkgs.dwm}/bin/dwm &
+            dwm &
             waitPID=$!
           '';
       };

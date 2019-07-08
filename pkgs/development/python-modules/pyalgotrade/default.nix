@@ -1,23 +1,36 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, matplotlib
 , numpy
-, scipy
+, python-dateutil
 , pytz
+, requests
+, retrying
+, scipy
+, six
+, tornado
+, tweepy
+, ws4py
 }:
 
 buildPythonPackage rec {
   pname = "pyalgotrade";
-  version = "0.16";
-  disabled = isPy3k;
+  version = "0.20";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "a253617254194b91cfebae7bfd184cb109d4e48a8c70051b9560000a2c0f94b3";
+    pname = "PyAlgoTrade";
+    inherit version;
+    sha256 = "7927c87af202869155280a93ff6ee934bb5b46cdb1f20b70f7407337f8541cbd";
   };
 
-  propagatedBuildInputs = [ numpy scipy pytz ];
+  propagatedBuildInputs = [
+    matplotlib numpy python-dateutil pytz requests
+    retrying scipy six tornado tweepy ws4py
+  ];
+
+  # no tests in PyPI tarball
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python Algorithmic Trading";

@@ -67,6 +67,8 @@ my $efiInstallAsRemovable = get("efiInstallAsRemovable");
 my $efiSysMountPoint = get("efiSysMountPoint");
 my $gfxmodeEfi = get("gfxmodeEfi");
 my $gfxmodeBios = get("gfxmodeBios");
+my $gfxpayloadEfi = get("gfxpayloadEfi");
+my $gfxpayloadBios = get("gfxpayloadBios");
 my $bootloaderId = get("bootloaderId");
 my $forceInstall = get("forceInstall");
 my $font = get("font");
@@ -293,10 +295,10 @@ else {
               insmod gfxterm
               if [ \"\${grub_platform}\" = \"efi\" ]; then
                 set gfxmode=$gfxmodeEfi
-                set gfxpayload=keep
+                set gfxpayload=$gfxpayloadEfi
               else
                 set gfxmode=$gfxmodeBios
-                set gfxpayload=text
+                set gfxpayload=$gfxpayloadBios
               fi
               terminal_output gfxterm
             fi

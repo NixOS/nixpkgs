@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The GNU Portable Threads library";
-    homepage = http://www.gnu.org/software/pth;
+    homepage = https://www.gnu.org/software/pth;
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
+    broken = stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isAarch64;
   };
 }

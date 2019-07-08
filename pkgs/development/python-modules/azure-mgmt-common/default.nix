@@ -5,6 +5,7 @@
 , azure-common
 , azure-mgmt-nspkg
 , requests
+, msrestazure
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1rmzpz3733wv31rsnqpdy4bbafvk5dhbqx7q0xf62dlz7p0i4f66";
   };
 
-  propagatedBuildInputs = [ azure-common azure-mgmt-nspkg requests ];
+  propagatedBuildInputs = [ azure-common azure-mgmt-nspkg requests msrestazure ];
 
   postInstall = ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py

@@ -45,10 +45,10 @@ rec {
     filterEmptySets (
       (mapParamsRecursive (path: name: param:
         let value = attrByPath path null cfg;
-        in optionalAttrs (!isNull value) (param.render name value)
+        in optionalAttrs (value != null) (param.render name value)
       ) ps));
 
-  filterEmptySets = set : filterAttrs (n: v: !(isNull v)) (mapAttrs (name: value:
+  filterEmptySets = set : filterAttrs (n: v: (v != null)) (mapAttrs (name: value:
     if isAttrs value
     then let value' = filterEmptySets value;
          in if value' == {}

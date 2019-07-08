@@ -11,11 +11,11 @@
 }:
 
 buildPythonPackage rec {
-  name = "qutip";
+  pname = "qutip";
   version = "2.2.0";
 
   src = fetchurl {
-    url = "https://qutip.googlecode.com/files/QuTiP-2.2.0.tar.gz";
+    url = "https://qutip.googlecode.com/files/QuTiP-${version}.tar.gz";
     sha256 = "a26a639d74b2754b3a1e329d91300e587e8c399d8a81d8f18a4a74c6d6f02ba3";
   };
 

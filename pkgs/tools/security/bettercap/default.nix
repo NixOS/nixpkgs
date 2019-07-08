@@ -1,19 +1,20 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, libpcap, libnfnetlink, libnetfilter_queue }:
+{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, libpcap, libnfnetlink, libnetfilter_queue, libusb1 }:
 
 buildGoPackage rec {
-  name = "bettercap-${version}";
-  version = "2.4";
+  pname = "bettercap";
+  version = "2.24";
 
   goPackagePath = "github.com/bettercap/bettercap";
 
   src = fetchFromGitHub {
-    owner = "bettercap";
-    repo = "bettercap";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1k1ank8z9sr3vxm86dfcrn1y3qa3gfwyb2z0fvkvi38gc88pfljb";
+    sha256 = "1f8bzxbcyf0bpyqj6hz4l8dp5xknnb537xy9y5skcznp03i44h55";
   };
 
-  buildInputs = [libpcap libnfnetlink libnetfilter_queue pkgconfig];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpcap libnfnetlink libnetfilter_queue libusb1 ];
 
   goDeps = ./deps.nix;
 

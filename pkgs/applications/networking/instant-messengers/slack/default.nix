@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, dpkg, makeWrapper
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gtk3, gdk_pixbuf, libnotify, libxcb, nspr, nss, pango
-, systemd, xorg }:
+{ theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
+cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk_pixbuf,
+libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
+at-spi2-atk, libuuid
+}:
 
 let
 
-  version = "3.3.3";
+  version = "3.4.2";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
+    at-spi2-atk
     atk
     cairo
     cups
@@ -24,10 +26,12 @@ let
     pango
     libnotify
     libxcb
+    libappindicator-gtk3
     nspr
     nss
     stdenv.cc.cc
     systemd
+    libuuid
 
     xorg.libxkbfile
     xorg.libX11
@@ -47,7 +51,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "01x4anbm62y49zfkyfvxih5rk8g2qi32ppb8j2a5pwssyw4wqbfi";
+        sha256 = "0qbj41ymckz8w1p2pazyxg7pimgn9gmpvxz4ygcm0nyivfmw2crq";
       }
     else
       throw "Slack is not supported on ${stdenv.hostPlatform.system}";
@@ -88,6 +92,21 @@ in stdenv.mkDerivation {
     substituteInPlace $out/share/applications/slack.desktop \
       --replace /usr/bin/ $out/bin/ \
       --replace /usr/share/ $out/share/
+  '' + stdenv.lib.optionalString (theme != null) ''
+    cat <<EOF >> $out/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js
+    document.addEventListener('DOMContentLoaded', function() {
+    let tt__customCss = ".menu ul li a:not(.inline_menu_link) {color: #fff !important;}"
+    $.ajax({
+        url: '${theme}/theme.css',
+        success: function(css) {
+            \$("<style></style>").appendTo('head').html(css + tt__customCss);
+            \$("<style></style>").appendTo('head').html('#reply_container.upload_in_threads .inline_message_input_container {background: padding-box #545454}');
+            \$("<style></style>").appendTo('head').html('.p-channel_sidebar {background: #363636 !important}');
+            \$("<style></style>").appendTo('head').html('#client_body:not(.onboarding):not(.feature_global_nav_layout):before {background: inherit;}');
+        }
+      });
+    });
+    EOF
   '';
 
   meta = with stdenv.lib; {

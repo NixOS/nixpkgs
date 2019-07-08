@@ -6,12 +6,12 @@ let
   };
 in {
   fuse_2 = mkFuse {
-    version = "2.9.8";
-    sha256Hash = "0s04ln4k9zvvbjih8ybaa19fxg8xv7dcsz2yrlbk35psnf3l67af";
+    version = "2.9.9";
+    sha256Hash = "1yxxvm58c30pc022nl1wlg8fljqpmwnchkywic3r74zirvlcq23n";
   };
 
   fuse_3 = mkFuse {
-    version = "3.3.0";
-    sha256Hash = "1pwrnfm8jkxxqhrjz0v1gaw36hshgznchyj961qdk2y697y4zp19";
+    version = "3.6.1";
+    sha256Hash = "1118r2nx64cpv9s5a6dgh49y0pnjcc5ybpkh5pigxf14bpqa26pb";
   };
 }

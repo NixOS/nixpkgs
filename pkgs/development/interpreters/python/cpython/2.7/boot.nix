@@ -77,8 +77,6 @@ stdenv.mkDerivation rec {
     ''
       ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
 
-      paxmark E $out/bin/python2.7
-
       rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
     '';
 
@@ -100,6 +98,6 @@ stdenv.mkDerivation rec {
     '';
     license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ lnl7 chaoflow domenkozar ];
+    maintainers = with stdenv.lib.maintainers; [ lnl7 domenkozar ];
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, gnome3
-, gtk-doc, gtk2, python2Packages, lua, gobjectIntrospection
+, gtk-doc, gtk2, python2Packages, lua, gobject-introspection
 }:
 
 let
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     autoconf automake libtool gnome3.gnome-common gtk-doc gtk2
-    python pygtk lua gobjectIntrospection
+    python pygtk lua gobject-introspection
   ];
 
   preConfigure = ''

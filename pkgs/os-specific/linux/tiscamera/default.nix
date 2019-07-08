@@ -8,7 +8,7 @@
 , libusb1
 , libzip
 , glib
-, gobjectIntrospection
+, gobject-introspection
 , gst_all_1
 , libwebcam
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libusb1
     libzip
     glib
-    gobjectIntrospection
+    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     libwebcam

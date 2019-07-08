@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mv swaks $out/bin/
 
     wrapProgram $out/bin/swaks --set PERL5LIB \
-      "${with perlPackages; stdenv.lib.makePerlPath [
+      "${with perlPackages; makePerlPath [
         NetSSLeay AuthenSASL NetDNS IOSocketInet6
       ]}"
   '';

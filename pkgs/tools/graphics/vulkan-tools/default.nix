@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, python3, vulkan-loader,
+{ stdenv, fetchFromGitHub, cmake, python3, vulkan-loader, vulkan-headers,
   glslang, pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
 
 stdenv.mkDerivation rec {
   name = "vulkan-tools-${version}";
-  version = "1.1.85.0";
+  version = "1.1.106.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "sdk-${version}";
-    sha256 = "0f4dfr8g0vy7y1hvs6z9lw52kissailzisby4qnz4akv0zz5y5s5";
+    sha256 = "0swqyk16mbkivyk79dpqbhpw05a7yrakqynywznr5zgqbc0z4gj8";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ python3 vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
+  buildInputs = [ python3 vulkan-headers vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
   enableParallelBuilding = true;
 
   cmakeFlags = [ "-DBUILD_ICD=OFF" "-DGLSLANG_INSTALL_DIR=${glslang}" ];

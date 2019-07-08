@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     description = "A C library to interact with the CCID-part of the Yubikey NEO";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

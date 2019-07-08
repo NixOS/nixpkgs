@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "ghq-${version}";
-  version = "0.8.0";
+  version = "0.10.2";
 
   goPackagePath = "github.com/motemen/ghq";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "motemen";
     repo = "ghq";
     rev = "v${version}";
-    sha256 = "1gdi0sbmq9kfi8hzd0dpgmhbmcf8q93jy3x08dd8smayrhbbwmld";
+    sha256 = "1i7zmgv7760nrw8sayag90b8vvmbsiifgiqki5s3gs3ldnvlki5w";
   };
 
   goDeps = ./deps.nix;

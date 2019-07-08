@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
   buildInputs = [
     xorg.libXinerama
     xorg.libAppleWM
-    xorg.applewmproto
+    xorg.xorgproto
     xorg.libXrandr
     xorg.libXext
     pixman

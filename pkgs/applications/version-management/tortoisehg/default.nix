@@ -2,11 +2,11 @@
 
 python2Packages.buildPythonApplication rec {
     name = "tortoisehg-${version}";
-    version = "4.8";
+    version = "4.9.1";
 
     src = fetchurl {
       url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
-      sha256 = "1zp74nb24pq0qrla5zf7kridxb8rky3n25z7xya0gwp0c0d0aygh";
+      sha256 = "0c5gp5wyaiyh8w2zzy1q0f2qv8aa3219shb6swpsdzqr2j9gkk4b";
     };
 
     pythonPath = with python2Packages; [ pyqt4 mercurial qscintilla iniparse ];
@@ -30,7 +30,7 @@ python2Packages.buildPythonApplication rec {
 
     meta = {
       description = "Qt based graphical tool for working with Mercurial";
-      homepage = http://tortoisehg.bitbucket.org/;
+      homepage = https://tortoisehg.bitbucket.io/;
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ danbst ];

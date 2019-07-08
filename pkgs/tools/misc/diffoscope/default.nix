@@ -1,6 +1,6 @@
 { lib, stdenv, fetchgit, python3Packages, docutils, help2man
 , acl, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg1, gnutar
+, e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
 , gzip, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
 , squashfsTools, tcpdump, unoconv, unzip, xxd, xz
 , enableBloat ? false
@@ -9,12 +9,12 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   name = "diffoscope-${version}";
-  version = "99";
+  version = "110";
 
   src = fetchgit {
     url    = "https://anonscm.debian.org/git/reproducible/diffoscope.git";
     rev    = "refs/tags/${version}";
-    sha256 = "04a2sqv43g002b7s0crk9gnpdvf90j8j8p01b6shinxh6an8prs2";
+    sha256 = "0rhjxigwxbqbqk7xv7n4m4rh693rg3cbp4x565jv68iy423mf2fb";
   };
 
   patches = [
@@ -41,8 +41,9 @@ python3Packages.buildPythonApplication rec {
       dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
       libarchive libcaca lz4 pgpdump progressbar33 sng sqlite squashfsTools unzip xxd xz
     ] ++ lib.optionals enableBloat [
-      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg1 gnumeric imagemagick
+      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg gnumeric imagemagick
       llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
+      python3Packages.guestfs
     ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root

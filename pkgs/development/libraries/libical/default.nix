@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, perl, pkgconfig, cmake, ninja, vala, gobjectIntrospection
-, python3, tzdata, gtk-doc, docbook_xsl, docbook_xml_dtd_43, glib, libxml2, icu }:
+{ stdenv, fetchFromGitHub, perl, pkgconfig, cmake, ninja, vala, gobject-introspection
+, python3, tzdata, glib, libxml2, icu }:
 
 stdenv.mkDerivation rec {
   name = "libical-${version}";
   version = "3.0.4";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]; #"devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libical";
@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    perl pkgconfig cmake ninja vala gobjectIntrospection
+    perl pkgconfig cmake ninja vala gobject-introspection
     (python3.withPackages (pkgs: with pkgs; [ pygobject3 ])) # running libical-glib tests
-    gtk-doc docbook_xsl docbook_xml_dtd_43 # docs
+# Docs building fails: https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
+#    gtk-doc docbook_xsl docbook_xml_dtd_43 # docs
   ];
   buildInputs = [ glib libxml2 icu ];
 
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   # Using install check so we do not have to manually set
   # LD_LIBRARY_PATH and GI_TYPELIB_PATH variables
   doInstallCheck = true;
+  enableParallelChecking = false;
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -49,6 +51,5 @@ stdenv.mkDerivation rec {
     description = "An Open Source implementation of the iCalendar protocols";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

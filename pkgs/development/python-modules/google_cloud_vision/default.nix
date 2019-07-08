@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "0.34.0";
+  version = "0.35.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50392b2c68e40dbf725c531ba4d325bd910da6441a472ed0a3fadfd0ab8548f7";
+    sha256 = "25b537d4b76305e9758fe2f57fd5929a04bf3a46cb4e8d0f731e984f46405be8";
   };
 
   checkInputs = [ pytest mock ];

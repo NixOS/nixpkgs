@@ -1,14 +1,13 @@
 { stdenv, fetchurl, m4, perl, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "bison-3.1";
+  pname = "bison";
+  version = "3.4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/bison/${name}.tar.gz";
-    sha256 = "0ip9krjf0lw57pk3wfbxgjhif1i18hm3vh35d1ifrvhnafskdjx7";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "15ah05gharrzcxs8q5pm9mli5dp5lw19nd95apzzmyqnqa4zq1vh";
   };
-
-  patches = []; # remove on another rebuild
 
   nativeBuildInputs = [ m4 perl ] ++ stdenv.lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = false; # fails
 
   meta = {
-    homepage = http://www.gnu.org/software/bison/;
+    homepage = https://www.gnu.org/software/bison/;
     description = "Yacc-compatible parser generator";
     license = stdenv.lib.licenses.gpl3Plus;
 

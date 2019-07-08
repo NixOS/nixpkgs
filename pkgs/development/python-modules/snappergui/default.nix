@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "Snapper-GUI";
+  pname = "Snapper-GUI";
   version = "0.1";
 
   src = fetchgit {

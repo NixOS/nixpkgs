@@ -1,22 +1,38 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , mock
 , nose
 , pamqp
 }:
 
 buildPythonPackage rec {
-  version = "0.26.2";
+  version = "1.0.0";
   pname = "rabbitpy";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0pgijv7mgxc4sm7p9s716dhl600l8isisxzyg4hz7ng1sk09p1w3";
+  # No tests in the pypi tarball, so we directly fetch from git
+  src = fetchFromGitHub {
+    owner = "gmr";
+    repo = pname;
+    rev = version;
+    sha256 = "0fd80zlr4p2sh77rxyyfi9l0h2zqi2csgadr0rhnpgpqsy10qck6";
   };
 
-  buildInputs = [ mock nose ];
   propagatedBuildInputs = [ pamqp ];
+  checkInputs = [ mock nose ];
+
+  checkPhase = ''
+    runHook preCheck
+    rm tests/integration_tests.py # Impure tests requiring network
+    nosetests tests
+    runHook postCheck
+  '';
+
+  postPatch = ''
+    # See: https://github.com/gmr/rabbitpy/issues/118
+    substituteInPlace setup.py \
+      --replace 'pamqp>=1.6.1,<2.0' 'pamqp'
+  '';
 
   meta = with stdenv.lib; {
     description = "A pure python, thread-safe, minimalistic and pythonic RabbitMQ client library";

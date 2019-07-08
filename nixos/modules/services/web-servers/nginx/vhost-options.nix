@@ -31,6 +31,7 @@ with lib;
         addr = mkOption { type = str;  description = "IP address.";  };
         port = mkOption { type = int;  description = "Port number."; default = 80; };
         ssl  = mkOption { type = bool; description = "Enable SSL.";  default = false; };
+        extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = []; example = [ "reuseport" "deferred" ]; };
       }; });
       default = [];
       example = [
@@ -69,7 +70,7 @@ with lib;
     acmeRoot = mkOption {
       type = types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = "Directory to store certificates and keys managed by the ACME service.";
+      description = "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
     };
 
     acmeFallbackHost = mkOption {

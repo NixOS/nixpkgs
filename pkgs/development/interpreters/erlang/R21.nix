@@ -1,8 +1,8 @@
 { mkDerivation }:
 
 mkDerivation rec {
-  version = "21.1.2";
-  sha256 = "0kn6ghr151b1qmbazc1c8k1r0wpsrqh9l3wrhfyxix3ld5yc3a5c";
+  version = "21.3.8.3";
+  sha256 = "1szybirrcpqsl2nmlmpbkxjqnm6i7l7bma87m5cpwi0kpvlxwmcw";
 
   prePatch = ''
     substituteInPlace configure.in --replace '`sw_vers -productVersion`' '10.10'

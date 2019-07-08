@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip rec {
   name = "wqy-microhei-0.2.0-beta";
@@ -15,9 +15,9 @@ fetchzip rec {
   meta = {
     description = "A (mainly) Chinese Unicode font";
     homepage = http://wenq.org;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.pkmx ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.pkmx ];
+    platforms = lib.platforms.all;
   };
 }
 

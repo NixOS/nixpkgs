@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, qt5, glib }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, qtbase, glib }:
 
 stdenv.mkDerivation rec {
-  name = "lxqt-build-tools-${version}";
-  version = "0.5.0";
+  pname = "lxqt-build-tools";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = "lxqt-build-tools";
+    repo = pname;
     rev = version;
-    sha256 = "0dcwzrijmn4sgivmy2zwz3xa4y69pwhranyw0m90g0pp55di2psz";
+    sha256 = "0i7m9s4g5rsw28vclc9nh0zcapx85cqfwxkx7rrw7wa12svy7pm2";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ qt5.qtbase glib pcre ];
+  buildInputs = [ qtbase glib pcre ];
 
   preConfigure = ''cmakeFlags+=" -DLXQT_ETC_XDG_DIR=$out/etc/xdg"'';
 

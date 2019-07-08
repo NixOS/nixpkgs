@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libGLU, epoxy, libX11, libdrm, mesa_noglu }:
+{ stdenv, fetchurl, pkgconfig, libGLU, epoxy, libX11, libdrm, mesa }:
 
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "041agg1d6i8hg250y30f08n3via0hs9rbijxdrfifb8ara805v0m";
   };
 
-  buildInputs = [ libGLU epoxy libX11 libdrm mesa_noglu ];
+  buildInputs = [ libGLU epoxy libX11 libdrm mesa ];
 
   nativeBuildInputs = [ pkgconfig ];
 

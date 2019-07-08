@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
-, libcxxabi, libuuid, llvm
+, libcxxabi, libuuid
 , libobjc ? null, maloader ? null
+, enableTapiSupport ? true, libtapi
 }:
 
 let
@@ -29,15 +30,12 @@ let
 
     outputs = [ "out" "dev" ];
 
-    nativeBuildInputs = [
-      autoconf automake libtool autoreconfHook
-    ];
-    buildInputs = [ libuuid ] ++
-      stdenv.lib.optionals stdenv.isDarwin [ llvm libcxxabi libobjc ];
+    nativeBuildInputs = [ autoconf automake libtool autoreconfHook ];
+    buildInputs = [ libuuid ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
+      ++ stdenv.lib.optional enableTapiSupport libtapi;
 
-    patches = [
-      ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
-    ];
+    patches = [ ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch ./apfs.patch ];
 
     __propagatedImpureHostDeps = [
       # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
@@ -48,7 +46,13 @@ let
     enableParallelBuilding = true;
 
     # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-    configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    configurePlatforms = [ "build" "host" ]
+      ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    configureFlags = [ "--disable-clang-as" ]
+      ++ stdenv.lib.optionals enableTapiSupport [
+        "--enable-tapi-support"
+        "--with-libtapi=${libtapi}"
+      ];
 
     postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace cctools/Makefile.am --replace libobjc2 ""
@@ -92,13 +96,6 @@ let
       popd
     '';
 
-    postInstall = ''
-      cat >$out/bin/dsymutil << EOF
-      #!${stdenv.shell}
-      EOF
-      chmod +x $out/bin/dsymutil
-    '';
-
     passthru = {
       inherit targetPrefix;
     };
@@ -108,6 +105,7 @@ let
       homepage = http://www.opensource.apple.com/source/cctools/;
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
+      maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
     };
   };
 in stdenv.mkDerivation baseParams

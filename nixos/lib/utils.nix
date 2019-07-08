@@ -7,9 +7,8 @@ rec {
                      || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
 
   # Check whenever `b` depends on `a` as a fileSystem
-  # FIXME: it's incorrect to simply use hasPrefix here: "/dev/a" is not a parent of "/dev/ab"
-  fsBefore = a: b: ((any (x: elem x [ "bind" "move" ]) b.options) && (a.mountPoint == b.device))
-                || (hasPrefix a.mountPoint b.mountPoint);
+  fsBefore = a: b: a.mountPoint == b.device
+                || hasPrefix "${a.mountPoint}${optionalString (!(hasSuffix "/" a.mountPoint)) "/"}" b.mountPoint;
 
   # Escape a path according to the systemd rules, e.g. /dev/xyzzy
   # becomes dev-xyzzy.  FIXME: slow.

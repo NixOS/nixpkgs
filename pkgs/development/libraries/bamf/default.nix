@@ -1,6 +1,6 @@
 { stdenv, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
-, libstartup_notification, gobjectIntrospection, gtk-doc, docbook_xsl
-, xorgserver, dbus, python2 }:
+, libstartup_notification, gobject-introspection, gtk-doc, docbook_xsl
+, xorgserver, dbus, python2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "bamf-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     automake
     docbook_xsl
     gnome3.gnome-common
-    gobjectIntrospection
+    gobject-introspection
     gtk-doc
     libtool
     pkgconfig
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     python2.pkgs.libxml2
     dbus
     xorgserver
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -32,14 +32,14 @@ rec {
 
     import ./eval-config.nix {
       inherit system;
-      modules = configurations ++
+      modules = configurations ++ extraConfigurations;
+      baseModules =  (import ../modules/module-list.nix) ++
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; documentation.nixos.enable = false; }
           { key = "qemu"; system.build.qemu = qemu; }
-        ] ++ optional minimal ../modules/testing/minimal-kernel.nix
-          ++ extraConfigurations;
-      extraArgs = { inherit nodes; };
+          { key = "nodes"; _module.args.nodes = nodes; }
+        ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
     };
 
 
@@ -83,6 +83,8 @@ rec {
                     (m': let config = (getAttr m' nodes).config; in
                       optionalString (config.networking.primaryIPAddress != "")
                         ("${config.networking.primaryIPAddress} " +
+                         optionalString (config.networking.domain != null)
+                           "${config.networking.hostName}.${config.networking.domain} " +
                          "${config.networking.hostName}\n"));
 
                   virtualisation.qemu.options =

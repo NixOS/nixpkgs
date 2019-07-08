@@ -65,9 +65,12 @@ in  {
       after    = [ "network-online.target" "keys.target" ];
       wants    = [ "keys.target" ];
       path = with pkgs; [ kmod iproute iptables utillinux ];
-      environment.STRONGSWAN_CONF = pkgs.writeTextFile {
-        name = "strongswan.conf";
-        text = cfg.strongswan.extraConfig;
+      environment = {
+        STRONGSWAN_CONF = pkgs.writeTextFile {
+          name = "strongswan.conf";
+          text = cfg.strongswan.extraConfig;
+        };
+        SWANCTL_DIR = "/etc/swanctl";
       };
       restartTriggers = [ config.environment.etc."swanctl/swanctl.conf".source ];
       serviceConfig = {

@@ -1,32 +1,26 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, docbook_xsl, libxslt
-, openssl, libuuid, libwebsockets, c-ares, libuv }:
+{ stdenv, lib, fetchFromGitHub, cmake, docbook_xsl, libxslt
+, openssl, libuuid, libwebsockets, c-ares, libuv
+, systemd ? null, withSystemd ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
   name = "mosquitto-${version}";
-  version = "1.5.3";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner  = "eclipse";
     repo   = "mosquitto";
     rev    = "v${version}";
-    sha256 = "0bknmnvssix7c1cps6mzjjnw9zxdlyfsy6ksqx4zfglcw41p8gnz";
+    sha256 = "1xvfcqi6pa5pdnqd88gz9qx6kl2q47xp7l3q5wwgj0l9y9mlxp99";
   };
 
-  patches = [
-    # https://github.com/eclipse/mosquitto/issues/983
-    (fetchpatch {
-      url    = "https://github.com/eclipse/mosquitto/commit/7f1419e4de981f5cc38aa3a9684369b1de27ba46.patch";
-      sha256 = "05npr0h79mbaxzjyhdw78hi9gs1cwydf2fv67bqxm81jzj2yhx2s";
-      name   = "fix_threading_on_cmake.patch";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace man/manpage.xsl \
-      --replace /usr/share/xml/docbook/stylesheet/ ${docbook_xsl}/share/xml/
+    for f in html manpage ; do
+      substituteInPlace man/$f.xsl \
+        --replace http://docbook.sourceforge.net/release/xsl/current ${docbook_xsl}/share/xml/docbook-xsl
+    done
 
     for f in {lib,lib/cpp,src}/CMakeLists.txt ; do
-      substituteInPlace $f --replace /sbin/ldconfig ldconfig
+      substituteInPlace $f --replace /sbin/ldconfig true
     done
 
     # the manpages are not generated when using cmake
@@ -35,16 +29,16 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  buildInputs = [ openssl libuuid libwebsockets c-ares libuv ];
+  buildInputs = [
+    openssl libuuid libwebsockets c-ares libuv
+  ] ++ lib.optional withSystemd systemd;
 
   nativeBuildInputs = [ cmake docbook_xsl libxslt ];
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DWITH_THREADING=ON"
     "-DWITH_WEBSOCKETS=ON"
-  ];
+  ] ++ lib.optional withSystemd "-DWITH_SYSTEMD=ON";
 
   meta = with stdenv.lib; {
     description = "An open source MQTT v3.1/3.1.1 broker";

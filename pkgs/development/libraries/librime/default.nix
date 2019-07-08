@@ -2,14 +2,14 @@
   libyamlcpp, gmock }:
 
 stdenv.mkDerivation rec {
-  name = "librime-${version}";
-  version = "1.3.1";
+  pname = "librime";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "librime";
     rev = "${version}";
-    sha256 = "1y0h3nnz97smx9z8h5fzk4c27mvrwv8kajxffqc43bhyvxvb2jd6";
+    sha256 = "10wvh1l4317yzcys4rzlkw42i6cj5p8g62r1xzyjw32ky2d0ndxl";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "bear-${version}";
-  version = "2.3.13";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = "Bear";
     rev = version;
-    sha256 = "0imvvs22gyr1v6ydgp5yn2nq8fb8llmz0ra1m733ikjaczl3jm7z";
+    sha256 = "0r5mhacn8v4b2kjni91nxh3b6g86cbkrnlk4f6sj4mdrvx25dp39";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/rizsotto/Bear;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat maintainers.babariviere ];
+    maintainers = [ maintainers.babariviere ];
   };
 }

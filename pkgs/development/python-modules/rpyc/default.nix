@@ -7,18 +7,18 @@
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "3.3.0";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "43fa845314f0bf442f5f5fab15bb1d1b5fe2011a8fc603f92d8022575cef8b4b";
+    sha256 = "1pz90h21f74n8i3cx5ndxm4r3rismkx5qbw1c0cmfci9a3009rq5";
   };
 
   propagatedBuildInputs = [ nose plumbum ];
 
   meta = with stdenv.lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
-    homepage = http://rpyc.readthedocs.org;
+    homepage = https://rpyc.readthedocs.org;
     license = licenses.mit;
   };
 

@@ -2,7 +2,7 @@
 , fetchurl
 , intltool
 , python3Packages
-, gobjectIntrospection
+, gobject-introspection
 , gtk3
 , libwnck3
 , keybinder3
@@ -14,7 +14,7 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "kupfer-${version}";
+  pname = "kupfer";
   version = "319";
 
   src = fetchurl {
@@ -25,10 +25,14 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     wrapGAppsHook intltool
     # For setup hook
-    gobjectIntrospection wafHook
+    gobject-introspection wafHook
   ];
   buildInputs = [ hicolor-icon-theme docutils libwnck3 keybinder3 ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
+
+  # without strictDeps kupfer fails to build: Could not find the python module 'gi.repository.Gtk'
+  # see https://github.com/NixOS/nixpkgs/issues/56943 for details
+  strictDeps = false;
 
   postInstall = let
     pythonPath = (stdenv.lib.concatMapStringsSep ":"

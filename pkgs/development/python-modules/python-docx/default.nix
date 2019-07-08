@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "python-docx";
-  version = "0.8.7";
+  version = "0.8.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ba9f2a7ca391b78ab385d796b38af3f21bab23c727fc8e0c5e630448d1a11fe3";
+    sha256 = "bc76ecac6b2d00ce6442a69d03a6f35c71cd72293cd8405a7472dfe317920024";
   };
 
   checkInputs = [ behave mock pyparsing pytest ];

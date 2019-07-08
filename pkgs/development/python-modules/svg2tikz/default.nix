@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage {
-  name = "svg2tikz";
+  pname = "svg2tikz";
   version = "1.0.0";
   disabled = ! isPy27;
 

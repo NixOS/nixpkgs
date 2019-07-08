@@ -9,6 +9,7 @@
 body
 {
     font-family: "Nimbus Sans L", sans-serif;
+    font-size: 1em;
     background: white;
     margin: 2em 1em 2em 1em;
 }
@@ -26,6 +27,25 @@ h1 /* title */
 h2 /* chapters, appendices, subtitle */
 {
     font-size: 180%;
+}
+
+div.book
+{
+    text-align: center;
+}
+
+div.book > div
+{
+    /*
+     * based on https://medium.com/@zkareemz/golden-ratio-62b3b6d4282a
+     * we do 70 characters per line to fit code listings better
+     * 70 * (font-size / 1.618)
+     * expression for emacs:
+     * (* 70 (/ 1 1.618))
+     */
+    max-width: 43.2em;
+    text-align: left;
+    margin: auto;
 }
 
 /* Extra space between chapters, appendices. */
@@ -102,8 +122,8 @@ pre.screen, pre.programlisting
 {
     border: 1px solid #b0b0b0;
     padding: 3px 3px;
-    margin-left: 1.5em;
-    margin-right: 1.5em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
 
     background: #f4f4f8;
     font-family: monospace;

@@ -1,5 +1,6 @@
 [
   "alloy"
+, "azure-cli"
 , "bower"
 , "coffee-script"
 , "grunt-cli"
@@ -7,5 +8,6 @@
 , "node-gyp-build"
 , "node-pre-gyp"
 , "pnpm"
+, "stf"
 , "titanium"
 ]

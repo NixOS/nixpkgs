@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
 , openssl, libXrender, libXrandr, libXcursor, libX11, libXext, libXi
-, libxcb, cups, xkeyboardconfig
+, libxcb, cups, xkeyboardconfig, runtimeShell
 }:
 
 let
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     dynlinker="$(cat $NIX_CC/nix-support/dynamic-linker)"
     mkdir -p "$out"/bin
     cat > "$out"/bin/eagle << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:${libPath}"
     export LD_PRELOAD="$out/lib/eagle_fixer.so"
     export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"

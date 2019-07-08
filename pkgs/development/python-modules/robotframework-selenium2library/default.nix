@@ -1,30 +1,24 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, robotframework
-, selenium
-, docutils
-, decorator
-}:
+{ stdenv, buildPythonPackage, fetchPypi, robotframework-seleniumlibrary }:
 
 buildPythonPackage rec {
-  version = "1.6.0";
+  version = "3.0.0";
   pname = "robotframework-selenium2library";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1asdwrpb4s7q08bx641yrh3yicgba14n3hxmsqs58mqf86ignwly";
+    sha256 = "2a8e942b0788b16ded253039008b34d2b46199283461b294f0f41a579c70fda7";
   };
 
-  # error: invalid command 'test'
-  #doCheck = false;
+  # Neither the PyPI tarball nor the repository has tests
+  doCheck = false;
 
-  propagatedBuildInputs = [ robotframework selenium docutils decorator ];
+  propagatedBuildInputs = [ robotframework-seleniumlibrary ];
 
   meta = with stdenv.lib; {
     description = "Web testing library for Robot Framework";
-    homepage = http://robotframework.org/;
+    homepage = https://github.com/robotframework/Selenium2Library;
     license = licenses.asl20;
+    maintainers = [ maintainers.marsam ];
   };
 
 }

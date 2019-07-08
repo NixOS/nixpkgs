@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "atd";
   version = "2.0.0";
 
+  minimumOCamlVersion = "4.02";
+
   src = fetchFromGitHub {
     owner = "mjambon";
     repo = pname;

@@ -6,8 +6,9 @@
 , qtbase
 , qtxmlpatterns
 , qtsvg
-, qtwebkit
+, qtwebengine
 
+, akonadi-contacts
 , kcalcore
 , kconfigwidgets
 , kcoreaddons
@@ -23,6 +24,7 @@
 , boost
 , eigen
 , exiv2
+, ffmpeg
 , flex
 , jasper
 , lcms2
@@ -49,14 +51,14 @@
 }:
 
 mkDerivation rec {
-  name    = "digikam-${version}";
-  version = "5.9.0";
+  pname   = "digikam";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "digikam";
     rev    = "v${version}";
-    sha256 = "09diw273h9i7rss89ba82yrfy6jb2njv3k0dknrrg7bb998vrw2d";
+    sha256 = "0h0jqfgpanhxfi3r7cgip58ppypqx79z6c5jj7i7f19hp2zziip8";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -66,6 +68,7 @@ mkDerivation rec {
     boost
     eigen
     exiv2
+    ffmpeg
     flex
     jasper
     lcms2
@@ -84,8 +87,9 @@ mkDerivation rec {
     qtbase
     qtxmlpatterns
     qtsvg
-    qtwebkit
+    qtwebengine
 
+    akonadi-contacts
     kcalcore
     kconfigwidgets
     kcoreaddons
@@ -105,10 +109,12 @@ mkDerivation rec {
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
     "-DENABLE_MEDIAPLAYER=1"
+    "-DENABLE_QWEBENGINE=on"
   ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
+    gappsWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"

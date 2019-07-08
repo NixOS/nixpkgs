@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pydenticon";
-  version = "0.2";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "035dawcspgjw2rksbnn863s7b0i9ac8cc1nshshvd1l837ir1czp";
+    sha256 = "2ef363cdd6f4f0193ce62257486027e36884570f6140bbde51de72df321b77f1";
   };
 
   propagatedBuildInputs = [ pillow mock ];

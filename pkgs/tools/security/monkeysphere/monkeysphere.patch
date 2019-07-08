@@ -10,15 +10,6 @@ diff --git a/Makefile b/Makefile
  	-e 's:__SYSCONFDIR_PREFIX__:$(ETCPREFIX):' \
  	-e 's:__SYSDATADIR_PREFIX__:$(LOCALSTATEDIR):'
  
-diff --git a/src/share/checkperms b/src/share/checkperms
---- a/src/share/checkperms
-+++ b/src/share/checkperms
-@@ -1,4 +1,4 @@
--#!/usr/bin/perl -T
-+#!/usr/bin/perl
- 
- # checkperms: ensure as best we can that a given file can only be
- # modified by the given user (or the superuser, naturally).  This
 diff --git a/src/share/keytrans b/src/share/keytrans
 --- a/src/share/keytrans
 +++ b/src/share/keytrans

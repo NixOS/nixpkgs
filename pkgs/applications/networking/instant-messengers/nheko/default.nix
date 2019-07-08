@@ -1,8 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl
+{ lib, stdenv, fetchFromGitHub
 , cmake, cmark, lmdb, qt5, qtmacextras, mtxclient
-, boost, spdlog, olm, pkgconfig
+, boost, spdlog, olm, pkgconfig, nlohmann_json
 }:
 
+# These hashes and revisions are based on those from here:
+# https://github.com/Nheko-Reborn/nheko/blob/v0.6.4/deps/CMakeLists.txt#L52
 let
   tweeny = fetchFromGitHub {
     owner = "mobius3";
@@ -20,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nheko-${version}";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
-    owner = "mujx";
+    owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "014k68mmw3ys7ldgj96kkr1i1lyv2nk89wndkqznsizcr3097fn5";
+    sha256 = "19dkc98l1q4070v6mli4ybqn0ip0za607w39hjf0x8rqdxq45iwm";
   };
 
   # If, on Darwin, you encounter the error
@@ -54,6 +56,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DTWEENY_INCLUDE_DIR=.deps/include"
     "-DLMDBXX_INCLUDE_DIR=${lmdbxx}"
+    "-Dnlohmann_json_DIR=${nlohmann_json}/lib/cmake/nlohmann_json"
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -67,9 +70,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Desktop client for the Matrix protocol";
+    homepage = https://github.com/Nheko-Reborn/nheko;
     maintainers = with maintainers; [ ekleog fpletz ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
-    knownVulnerabilities = [ "No longer maintained" ];
   };
 }

@@ -5,7 +5,7 @@ pythonPackages.buildPythonApplication rec {
   version = "3.2";
 
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/mimms/mimms-${version}.tar.bz2";
+    url = "https://download.savannah.gnu.org/releases/mimms/mimms-${version}.tar.bz2";
     sha256 = "0zmcd670mpq85cs3nvdq3i805ba0d1alqahfy1m9cpf7kxrivfml";
   };
 

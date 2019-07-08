@@ -1,12 +1,12 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "yattag";
-  version = "1.10.1";
+  version = "1.11.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r3pwfygvpkgc0hzxc6z8dl56g6brlh52r0x8kcjhywr1biahqb2";
+    sha256 = "0grf7hskbxfxj60qmd44xiwmr9mzmi09inilvhykw28m0c84s8fp";
   };
 
   meta = with lib; {

@@ -1,7 +1,7 @@
 { pkgs, version, configTxt }:
 
 let
-  isAarch64 = pkgs.stdenv.isAarch64;
+  isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
 
   uboot =
     if version == 0 then

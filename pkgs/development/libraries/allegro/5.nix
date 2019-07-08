@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, texinfo, libXext, xextproto, libX11, xproto
+{ stdenv, fetchFromGitHub, fetchpatch, texinfo, libXext, xorgproto, libX11
 , libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
-, libXxf86dga, libXxf86misc, xf86dgaproto, xf86miscproto
-, xf86vidmodeproto, libXxf86vm, openal, libGLU_combined, kbproto, libjpeg, flac
-, inputproto, libXi, fixesproto, libXfixes, freetype, libopus, libtheora
+, libXxf86dga, libXxf86misc
+, libXxf86vm, openal, libGLU_combined, libjpeg, flac
+, libXi, libXfixes, freetype, libopus, libtheora
 , physfs, enet, pkgconfig, gtk2, pcre, libpulseaudio, libpthreadstubs
 , libXdmcp
 }:
@@ -19,16 +19,24 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    texinfo libXext xextproto libX11 xproto libXpm libXt libXcursor
+    texinfo libXext xorgproto libX11 libXpm libXt libXcursor
     alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
-    xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal libGLU_combined
-    kbproto libjpeg flac
-    inputproto libXi fixesproto libXfixes
+    libXxf86vm openal libGLU_combined
+    libjpeg flac
+    libXi libXfixes
     enet libtheora freetype physfs libopus pkgconfig gtk2 pcre libXdmcp
     libpulseaudio libpthreadstubs
   ];
 
-  patchPhase = ''
+  patches = [
+   # fix compilation with mesa 18.2.5
+   (fetchpatch {
+     url = "https://github.com/liballeg/allegro5/commit/a40d30e21802ecf5c9382cf34af9b01bd3781e47.patch";
+     sha256 = "1f1xlj5y2vr6wzmcz04s8kxn8cfdwrg9kjlnvpz9dix1z3qjnd4m";
+   })
+  ];
+
+  postPatch = ''
     sed -e 's@/XInput2.h@/XI2.h@g' -i CMakeLists.txt "src/"*.c
   '';
 

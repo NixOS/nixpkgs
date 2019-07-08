@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.36.0";
+  version = "0.39.1";
 
   # no tests on PyPI
   src = fetchFromGitHub {
     owner = "pennersr";
     repo = pname;
     rev = version;
-    sha256 = "1c863cmd521j6cwpyd50jxz5y62fdschrhm15jfqihicyr9imjan";
+    sha256 = "1kplkanhj26z3i6p0l1r5lczha4pavcx96vj3kpcp1rvyk1v0f7r";
   };
 
   propagatedBuildInputs = [ requests requests_oauthlib django python3-openid ];

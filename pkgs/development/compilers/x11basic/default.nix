@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, fetchFromGitHub
 , automake, autoconf, readline
 , libX11, bluez, SDL2
 }:

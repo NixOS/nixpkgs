@@ -112,7 +112,7 @@ rec {
     # Function to call
     f:
     # Argument to check for null before passing it to `f`
-    a: if isNull a then a else f a;
+    a: if a == null then a else f a;
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
@@ -134,7 +134,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Koi";
+  codeName = "Loris";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -259,9 +259,10 @@ rec {
   # TODO: figure out a clever way to integrate location information from
   # something like __unsafeGetAttrPos.
 
-  warn = msg: builtins.trace "WARNING: ${msg}";
+  warn = msg: builtins.trace "[1;31mwarning: ${msg}[0m";
   info = msg: builtins.trace "INFO: ${msg}";
 
+  showWarnings = warnings: res: lib.fold (w: x: warn w x) res warnings;
 
   ## Function annotations
 

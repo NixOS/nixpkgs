@@ -6,9 +6,10 @@
 mkXfceDerivation rec {
   category = "xfce";
   pname = "tumbler";
-  version = "0.2.1";
+  version = "4.14pre1";
+  rev = "xfce-4.14pre1";
 
-  sha256 = "0vgk3s6jnsrs8bawrfc11s8nwsm4jvcl3aidbaznk52g97xiyxz0";
+  sha256 = "1bvcxqs3391dkf36gpfr0hbylsk84nqhv6kf3lf1hq6p7s9f9z3z";
 
   buildInputs = [ gdk_pixbuf ffmpegthumbnailer libgsf poppler ];
 }

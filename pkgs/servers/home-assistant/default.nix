@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, python
+{ lib, fetchFromGitHub, python3, protobuf3_6
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? []
@@ -18,41 +18,52 @@ let
 
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
-    (mkOverride "aiohttp" "3.4.4"
-      "51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa")
-    (mkOverride "astral" "1.7.1"
-      "88086fd2006c946567285286464b2da3294a3b0cbba4410b7008ec2458f82a07")
+    (mkOverride "aiohttp" "3.5.4"
+      "9c4c83f4fa1938377da32bc2d59379025ceeee8e24b89f72fcbccd8ca22dc9bf")
+    (mkOverride "astral" "1.10.1"
+      "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
     (mkOverride "async-timeout" "3.0.1"
       "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f")
-    (mkOverride "attrs" "18.2.0"
-      "10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69")
-    (mkOverride "bcrypt" "3.1.4"
-      "67ed1a374c9155ec0840214ce804616de49c3df9c5bc66740687c1c9b1cd9e8d")
-    (mkOverride "pyjwt" "1.6.4"
-      "4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176")
-    (mkOverride "cryptography" "2.3.1"
-      "8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6")
-    (mkOverride "cryptography_vectors" "2.3.1" # required by cryptography==2.3.1
-      "bf4d9b61dce69c49e830950aa36fad194706463b0b6dfe81425b9e0bc6644d46")
-    (mkOverride "requests" "2.20.0"
-      "99dcfdaaeb17caf6e526f32b6a7b780461512ab3f1d992187801694cba42770c")
-    (mkOverride "ruamel_yaml" "0.15.72"
-      "97652b9e3a76958cf6684d5d963674adf345d8cc192ddd95e2a21b22cda29f40")
+    (mkOverride "attrs" "19.1.0"
+      "f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399")
+    (mkOverride "bcrypt" "3.1.6"
+      "44636759d222baa62806bbceb20e96f75a015a6381690d1bc2eda91c01ec02ea")
+    (mkOverride "pyjwt" "1.7.1"
+      "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96")
+    (mkOverride "cryptography" "2.6.1"
+      "26c821cbeb683facb966045e2064303029d572a87ee69ca5a1bf54bf55f93ca6")
+    (mkOverride "cryptography_vectors" "2.6.1" # required by cryptography==2.6.1
+      "03f38115dccb266dd96538f94067442a877932c2322661bdc5bf2502c76658af")
+    (mkOverride "python-slugify" "3.0.2"
+      "57163ffb345c7e26063435a27add1feae67fa821f1ef4b2f292c25847575d758")
+    (mkOverride "pyyaml" "3.13"
+      "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf")
+    (mkOverride "requests" "2.21.0"
+      "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e")
+    (mkOverride "ruamel_yaml" "0.15.94"
+      "0939bcb399ad037ef903d74ccf2f8a074f06683bc89133ad19305067d34487c8")
     (mkOverride "voluptuous" "0.11.5"
       "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
-    (mkOverride "voluptuous-serialize" "2.0.0"
-      "44be04d87aec34bd7d31ab539341fadc505205f2299031ed9be985112c21aa41")
+    (mkOverride "voluptuous-serialize" "2.1.0"
+      "d30fef4f1aba251414ec0b315df81a06da7bf35201dcfb1f6db5253d738a154f")
 
     # used by auth.mfa_modules.totp
-    (mkOverride "pyotp" "2.2.6"
-      "dd9130dd91a0340d89a0f06f887dbd76dd07fb95a8886dc4bc401239f2eebd69")
+    (mkOverride "pyotp" "2.2.7"
+      "be0ffeabddaa5ee53e7204e7740da842d070cf69168247a3d0c08541b84de602")
 
     # used by check_config script
     # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
-    (mkOverride "colorlog" "3.1.4"
-      "418db638c9577f37f0fae4914074f395847a728158a011be2a193ac491b9779d")
+    (mkOverride "colorlog" "4.0.2"
+      "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
 
-    # hass-frontend does not exist in python.pkgs
+    # required by aioesphomeapi
+    (self: super: {
+      protobuf = super.protobuf.override {
+        protobuf = protobuf3_6;
+      };
+    })
+
+    # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
     })
@@ -68,7 +79,7 @@ let
       });
     };
     
-  py = python.override {
+  py = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
@@ -85,7 +96,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.82.1";
+  hassVersion = "0.93.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -100,27 +111,29 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "0d53xp5miz1vm1b5qfznzx33qzxcxi65plp412dyk4r1ag7rh38v";
+    sha256 = "01zdg6yfj6qal8jpr9bskmq25crrvz7w3vifrfxmlqws6hv35gc8";
   };
 
   propagatedBuildInputs = [
     # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi jinja2 pyjwt cryptography pip pytz pyyaml requests ruamel_yaml voluptuous voluptuous-serialize
+    aiohttp astral async-timeout attrs bcrypt certifi jinja2 pyjwt cryptography pip
+    python-slugify pytz pyyaml requests ruamel_yaml voluptuous voluptuous-serialize
     # From http, frontend and recorder components and auth.mfa_modules.totp
     sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
-    pytest requests-mock pydispatcher pytest-aiohttp
+    asynctest pytest pytest-aiohttp requests-mock pydispatcher aiohue
   ];
 
   checkPhase = ''
     # The components' dependencies are not included, so they cannot be tested
-    py.test --ignore tests/components
+    # test_webhook_create_cloudhook imports hass_nabucasa and is thus excluded
+    py.test --ignore tests/components -k "not test_webhook_create_cloudhook"
     # Some basic components should be tested however
     py.test \
-      tests/components/{group,http,frontend,config,websocket_api} \
-      tests/components/test_{api,configurator,demo,discovery,init,introduction,logger,script,shell_command,system_log}.py
+      tests/components/{api,config,configurator,demo,discovery,frontend,group,history,history_graph} \
+      tests/components/{homeassistant,http,logger,script,shell_command,system_log,websocket_api}
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, doxygen, graphviz, makeWrapper
+{ stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
 , boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
 , libjpeg, libGLU_combined, glew, libxslt
 }:
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
       --subst-var-by out "$out/"
     substitute ${./fix-paths.sh} $out/fixpaths/fix-paths \
       --subst-var-by libxsltBin ${libxslt.bin} \
+      --subst-var-by shell ${stdenv.shell} \
       --subst-var out
     chmod +x $out/fixpaths/fix-paths
 

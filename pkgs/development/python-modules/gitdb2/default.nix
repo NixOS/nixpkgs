@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "gitdb2";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb4c85b8a58531c51373c89f92163b92f30f81369605a67cd52d1fc21246c044";
+    sha256 = "83361131a1836661a155172932a13c08bda2db3674e4caa32368aa6eb02f38c2";
   };
 
   propagatedBuildInputs = [ smmap2 ];

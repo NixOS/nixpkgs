@@ -2,9 +2,11 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, isPy36, pythonOlder
+, isPy3k, pythonOlder
 , astor
 , gast
+, google-pasta
+, wrapt
 , numpy
 , six
 , termcolor
@@ -13,7 +15,7 @@
 , grpcio
 , mock
 , backports_weakref
-, enum34
+, tensorflow-estimator
 , tensorflow-tensorboard
 , cudaSupport ? false
 , cudatoolkit ? null
@@ -41,20 +43,35 @@ let
 
 in buildPythonPackage rec {
   pname = "tensorflow";
-  version = "1.11.0";
+  version = "1.14.0";
   format = "wheel";
 
   src = let
-    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) "${python.majorVersion}";
+    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) "${python.pythonVersion}";
     pyver = if stdenv.isDarwin then builtins.substring 0 1 pyVerNoDot else pyVerNoDot;
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyver}_${unit}";
-    dls = import ./tf1.11.0-hashes.nix;
+    dls = import (./. + "/tf${version}-hashes.nix");
   in fetchurl dls.${key};
 
-  propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-tensorboard keras-applications keras-preprocessing ]
-                 ++ lib.optional (!isPy3k) mock;
+  propagatedBuildInputs = [
+    protobuf
+    numpy
+    termcolor
+    grpcio
+    six
+    astor
+    absl-py
+    gast
+    google-pasta
+    wrapt
+    tensorflow-estimator
+    tensorflow-tensorboard
+    keras-applications
+    keras-preprocessing
+  ] ++ lib.optional (!isPy3k) mock
+    ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
   # and the propageted input tensorflow-tensorboard which causes environment collisions.
@@ -64,7 +81,6 @@ in buildPythonPackage rec {
     rm $out/bin/tensorboard
   '';
 
-  installFlags = "--no-dependencies"; # tensorflow wants setuptools 39, can't allow that.
   # Note that we need to run *after* the fixup phase because the
   # libraries are loaded at runtime. If we run in preFixup then
   # patchelf --shrink-rpath will remove the cuda libraries.

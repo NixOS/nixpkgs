@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, coreutils, perl, bicpl, libminc, zlib, minc_tools,
-  makeWrapper, GetoptTabular, MNI-Perllib }:
+{ stdenv, fetchFromGitHub, cmake, coreutils, perlPackages, bicpl, libminc, zlib, minc_tools,
+  makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "conglomerate";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libminc zlib bicpl ];
-  propagatedBuildInputs = [ coreutils minc_tools perl GetoptTabular MNI-Perllib ];
+  propagatedBuildInputs = [ coreutils minc_tools ] ++ (with perlPackages; [ perl GetoptTabular MNI-Perllib ]);
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DBICPL_DIR=${bicpl}/lib/" ];
 

@@ -66,8 +66,9 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ cmake ];
+
   buildInputs = [
-    cmake
     cython
     nose
   ];

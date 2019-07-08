@@ -5,11 +5,11 @@
 stdenv.mkDerivation rec {
   pname = "mpDris2";
   name = "${pname}-${version}";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchurl {
     url = "https://github.com/eonpatapon/${pname}/archive/${version}.tar.gz";
-    sha256 = "095swrjw59lh8qiwmjjjdbxl9587axilkj4mh2sx5m0kiq929z21";
+    sha256 = "14a3va3929qaq1sp9hs9w4bs6lykdvshkbc58kbsc5nzvlgmrcdn";
   };
 
   preConfigure = ''

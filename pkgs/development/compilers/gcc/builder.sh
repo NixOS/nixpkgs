@@ -282,11 +282,6 @@ postInstall() {
         fi
     done
 
-    # Disable RANDMMAP on grsec, which causes segfaults when using
-    # precompiled headers.
-    # See https://bugs.gentoo.org/show_bug.cgi?id=301299#c31
-    paxmark r $out/libexec/gcc/*/*/{cc1,cc1plus}
-
     # Two identical man pages are shipped (moving and compressing is done later)
     ln -sf gcc.1 "$out"/share/man/man1/g++.1
 }

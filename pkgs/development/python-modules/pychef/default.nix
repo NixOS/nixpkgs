@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/coderanger/pychef;
+    homepage = https://github.com/coderanger/pychef;
     description = "Python implementation of a Chef API client";
     license = licenses.bsd0;
   };

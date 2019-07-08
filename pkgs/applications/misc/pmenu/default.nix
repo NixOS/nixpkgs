@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, python2Packages, gnome3 }:
+{ stdenv, fetchFromGitLab, python2Packages, gnome-menus }:
 
 stdenv.mkDerivation rec {
   name = "pmenu-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python2Packages.wrapPython ];
 
-  buildInputs = [ python2Packages.pygtk gnome3.gnome-menus ];
+  buildInputs = [ python2Packages.pygtk gnome-menus ];
 
   pythonPath = [ python2Packages.pygtk ];
     

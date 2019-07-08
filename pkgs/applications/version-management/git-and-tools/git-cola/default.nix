@@ -2,15 +2,16 @@
 
 let
   inherit (pythonPackages) buildPythonApplication pyqt5 sip pyinotify;
+
 in buildPythonApplication rec {
   name = "git-cola-${version}";
-  version = "3.2";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    sha256 = "1ivaqhvdbmlp0lmrwb2pv3kjqlcpqbxbinbvjjn3g81r4avjs7yy";
+    sha256 = "0754d56dprhb1nhb8fwp4my5pyqcgarwzba1l6zx7il87d7vyi5m";
   };
 
   buildInputs = [ git gettext ];

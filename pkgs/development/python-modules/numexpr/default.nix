@@ -3,28 +3,22 @@
 , fetchPypi
 , python
 , numpy
-, llvmPackages ? null
 }:
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.6.8";
+  version = "2.6.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee8bc7201aa2f1962c67d27c326a11eef9df887d7b87b1278a1d4e722bf44375";
+    sha256 = "fc218b777cdbb14fa8cff8f28175ee631bacabbdd41ca34e061325b6c44a6fa6";
   };
 
   # Remove existing site.cfg, use the one we built for numpy.
-  # Somehow openmp needs to be added to LD_LIBRARY_PATH
-  # https://software.intel.com/en-us/forums/intel-system-studio/topic/611682
   preBuild = ''
     rm site.cfg
     ln -s ${numpy.cfg} site.cfg
-    export LD_LIBRARY_PATH=${llvmPackages.openmp}/lib
   '';
-
-  buildInputs = [] ++ lib.optional (numpy.blasImplementation == "mkl") llvmPackages.openmp;
 
   propagatedBuildInputs = [ numpy ];
 

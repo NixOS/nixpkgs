@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   # TODO: Remove the `aclocal' wrapper when $ACLOCAL_PATH support is
   # available upstream; see
-  # <http://debbugs.gnu.org/cgi/bugreport.cgi?bug=9026>.
+  # <https://debbugs.gnu.org/cgi/bugreport.cgi?bug=9026>.
   builder = ./builder.sh;
 
   setupHook = ./setup-hook.sh;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     branch = "1.11";
-    homepage = http://www.gnu.org/software/automake/;
+    homepage = https://www.gnu.org/software/automake/;
     description = "GNU standard-compliant makefile generator";
 
     longDescription = ''

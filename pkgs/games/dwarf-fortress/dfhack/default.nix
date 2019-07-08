@@ -54,9 +54,6 @@ let
 
   version = release.dfHackRelease;
 
-  warning = if release.prerelease then builtins.trace "[DFHack] Version ${version} is a prerelease. Careful!"
-                                  else null;
-
   # revision of library/xml submodule
   xmlRev = release.xmlRev;
 

@@ -19,7 +19,7 @@
 
 buildGoPackage rec {
   name = "terraform-provider-libvirt-${version}";
-  version = "0.4";
+  version = "0.5.1";
 
   goPackagePath = "github.com/dmacvicar/terraform-provider-libvirt";
 
@@ -27,7 +27,7 @@ buildGoPackage rec {
     owner = "dmacvicar";
     repo = "terraform-provider-libvirt";
     rev = "v${version}";
-    sha256 = "05jkjp1kis4ncryv34pkb9cz2yhzbwg62x9qmlqsqlxwz9hqny3r";
+    sha256 = "0shnj5byqj3qzyqniiy1dcygd8xw1h2bx9z6mgcydw8k64fkm4bw";
   };
 
   buildInputs = [ libvirt pkgconfig makeWrapper ];

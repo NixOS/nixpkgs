@@ -2,8 +2,8 @@
 
 let
   mkCoqPackages' = self: coq:
-    let callPackage = newScope self ; in rec {
-      inherit callPackage coq;
+    let callPackage = self.callPackage; in {
+      inherit coq;
       coqPackages = self;
 
       contribs = recurseIntoAttrs
@@ -17,25 +17,62 @@ let
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
       CoLoR = callPackage ../development/coq-modules/CoLoR {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
+      coq-extensible-records = callPackage ../development/coq-modules/coq-extensible-records {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
+      coqhammer = callPackage ../development/coq-modules/coqhammer {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
+      corn = callPackage ../development/coq-modules/corn {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       equations = callPackage ../development/coq-modules/equations { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
+      gappalib = callPackage ../development/coq-modules/gappalib {};
       heq = callPackage ../development/coq-modules/heq {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
       interval = callPackage ../development/coq-modules/interval {};
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
       iris = callPackage ../development/coq-modules/iris {};
+      ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
-      mathcomp = callPackage ../development/coq-modules/mathcomp { };
+      inherit (callPackage ../development/coq-modules/mathcomp { })
+        mathcompGen mathcompGenSingle ssreflect
+
+        mathcompCorePkgs mathcomp
+        mathcomp-ssreflect mathcomp-fingroup mathcomp-algebra
+        mathcomp-solvable mathcomp-field mathcomp-character
+
+        mathcompCorePkgs_1_7 mathcomp_1_7
+        mathcomp-ssreflect_1_7 mathcomp-fingroup_1_7 mathcomp-algebra_1_7
+        mathcomp-solvable_1_7 mathcomp-field_1_7 mathcomp-character_1_7
+
+        mathcompCorePkgs_1_8 mathcomp_1_8
+        mathcomp-ssreflect_1_8 mathcomp-fingroup_1_8 mathcomp-algebra_1_8
+        mathcomp-solvable_1_8 mathcomp-field_1_8 mathcomp-character_1_8
+
+        mathcompCorePkgs_1_9 mathcomp_1_9
+        mathcomp-ssreflect_1_9 mathcomp-fingroup_1_9 mathcomp-algebra_1_9
+        mathcomp-solvable_1_9 mathcomp-field_1_9 mathcomp-character_1_9;
+      inherit (callPackage ../development/coq-modules/mathcomp/extra.nix { })
+        mathcompExtraGen multinomials coqeal
+
+        mathcomp-finmap mathcomp-bigenough mathcomp-analysis
+        mathcomp-multinomials mathcomp-real-closed mathcomp-coqeal
+
+        mathcomp_1_7-finmap mathcomp_1_7-bigenough mathcomp_1_7-analysis
+        mathcomp_1_7-multinomials mathcomp_1_7-real-closed
+        mathcomp_1_7-finmap_1_0
+
+        mathcomp_1_8-finmap mathcomp_1_8-bigenough mathcomp_1_8-analysis
+        mathcomp_1_8-multinomials mathcomp_1_8-real-closed mathcomp_1_8-coqeal
+
+        mathcomp_1_9-finmap mathcomp_1_9-bigenough mathcomp_1_9-analysis
+        mathcomp_1_9-multinomials mathcomp_1_9-real-closed;
       metalib = callPackage ../development/coq-modules/metalib { };
-      multinomials = callPackage ../development/coq-modules/multinomials {};
       paco = callPackage ../development/coq-modules/paco {};
+      paramcoq = callPackage ../development/coq-modules/paramcoq {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
-      ssreflect = callPackage ../development/coq-modules/ssreflect { };
+      simple-io = callPackage ../development/coq-modules/simple-io { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
@@ -43,11 +80,17 @@ let
       Verdi = callPackage ../development/coq-modules/Verdi {};
     };
 
-  filterCoqPackages = coq:
-    lib.filterAttrsRecursive
-    (_: p:
-      let pred = p.compatibleCoqVersions or (_: true);
-      in pred coq.coq-version
+  filterCoqPackages = coq: set:
+    lib.listToAttrs (
+      lib.concatMap (name:
+        let v = set.${name}; in
+        let p = v.compatibleCoqVersions or (_: true); in
+        lib.optional (p coq.coq-version)
+          (lib.nameValuePair name (
+            if lib.isAttrs v && v.recurseForDerivations or false
+            then filterCoqPackages coq v
+            else v))
+      ) (lib.attrNames set)
     );
 
 in rec {
@@ -61,7 +104,7 @@ in rec {
    * a `dontFilter` attribute into the Coq derivation.
    */
   mkCoqPackages = coq:
-    let self = mkCoqPackages' self coq; in
+    let self = lib.makeScope newScope (lib.flip mkCoqPackages' coq); in
     if coq.dontFilter or false then self
     else filterCoqPackages coq self;
 
@@ -80,7 +123,10 @@ in rec {
     version = "8.8.2";
   };
   coq_8_9 = callPackage ../applications/science/logic/coq {
-    version = "8.9+beta1";
+    version = "8.9.1";
+  };
+  coq_8_10 = callPackage ../applications/science/logic/coq {
+    version = "8.10+beta1";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
@@ -88,7 +134,10 @@ in rec {
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
   coqPackages_8_9 = mkCoqPackages coq_8_9;
-  coqPackages = coqPackages_8_8;
+  coqPackages_8_10 = mkCoqPackages coq_8_10;
+  coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
+    coqPackages_8_8
+  );
   coq = coqPackages.coq;
 
 }

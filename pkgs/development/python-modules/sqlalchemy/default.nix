@@ -1,5 +1,6 @@
 { lib
 , fetchPypi
+, fetchpatch
 , buildPythonPackage
 , pytest
 , mock
@@ -9,12 +10,22 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.2.12";
+  version = "1.2.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c5951d9ef1d5404ed04bae5a16b60a0779087378928f997a294d1229c6ca4d3e";
+    sha256 = "9de7c7dabcf06319becdb7e15099c44e5e34ba7062f9ba10bc00e562f5db3d04";
   };
+
+  patches = [
+    # fix for failing doc tests
+    # https://bitbucket.org/zzzeek/sqlalchemy/issues/4370/sqlite-325x-docs-tutorialrst-doctests-fail
+    (fetchpatch {
+      name = "doc-test-fixes.patch";
+      url = https://bitbucket.org/zzzeek/sqlalchemy/commits/63279a69e2b9277df5e97ace161fa3a1bb4f29cd/raw;
+      sha256 = "1x25aj5hqmgjdak4hllya0rf0srr937k1hwaxb24i9ban607hjri";
+    })
+  ];
 
   checkInputs = [
     pytest

@@ -5,18 +5,19 @@
 , grpc_google_iam_v1
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6ef386ba065a167670ad1b67f15fb7ba9e21ce33579fa6d7fafafd5b970b3e8a";
+    sha256 = "11d19052c84dd8e5bc936f5276443e14c2a5ccaae031b2a39415a9f3832a1029";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 grpc_google_iam_v1 google_api_core ];
 
   checkPhase = ''

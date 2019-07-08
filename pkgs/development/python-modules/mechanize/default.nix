@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "mechanize";
-  version = "0.3.7";
+  version = "0.4.2";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1licf3wiy21pncg8hkx58r7xj4ylrqa8jcfh9n4rh23rmykf2rpf";
+    sha256 = "b680ca1b4fabe5ef52024d120f40b8e2ed7d175ed4d67225d2c477dac7c7a58b";
   };
 
   propagatedBuildInputs = [ html5lib ];

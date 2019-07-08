@@ -22,11 +22,11 @@
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "5.4.0";
+  version = "5.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a8a2749f972592aa9250db975304af6b7337f32337e523a2c995cc9e12c07807";
+    sha256 = "138381baa41d83584459b5cfecfc38c800ccf1f37d9ddd0bd440783346a4c39c";
   };
 
   checkInputs = [ nose pytest glibcLocales ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Converting Jupyter Notebooks";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh globin ];
   };

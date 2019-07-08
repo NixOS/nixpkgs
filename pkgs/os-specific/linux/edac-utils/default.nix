@@ -33,6 +33,5 @@ stdenv.mkDerivation {
     description = "Handles the reporting of hardware-related memory errors";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

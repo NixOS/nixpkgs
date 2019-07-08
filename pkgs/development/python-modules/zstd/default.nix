@@ -1,16 +1,13 @@
-{ stdenv, pkgconfig, fetchpatch, fetchFromGitHub, buildPythonPackage
+{ stdenv, pkgconfig, fetchPypi, buildPythonPackage
 , zstd, pytest }:
 
 buildPythonPackage rec {
   pname = "zstd";
-  version = "1.3.5.1";
+  version = "1.4.0.0";
 
-  # Switch back to fetchPypi when tests/ is included, see https://github.com/NixOS/nixpkgs/pull/49339
-  src = fetchFromGitHub {
-    owner = "sergey-dryabzhinsky";
-    repo = "python-zstd";
-    rev = "v${version}";
-    sha256 = "08n1vz4zavas4cgzpdfcbpy33lnv39xxhq5mgj0zv3xi03ypc1rl";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "01prq9rwz1gh42idnj2162w79dzs8gf3ac8pn12lz347w280kjbk";
   };
 
   postPatch = ''

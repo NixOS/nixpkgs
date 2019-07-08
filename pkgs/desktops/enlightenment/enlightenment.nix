@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, efl,
   xcbutilkeysyms, libXrandr, libXdmcp, libxcb, libffi, pam, alsaLib,
-  luajit, bzip2, libpthreadstubs, gdbm, libcap, mesa_noglu,
+  luajit, bzip2, libpthreadstubs, gdbm, libcap, mesa,
   xkeyboard_config, pcre
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libpthreadstubs
     gdbm
     pcre
-    mesa_noglu
+    mesa
     xkeyboard_config
   ] ++
     stdenv.lib.optionals stdenv.isLinux [ libcap ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     # installer to try to do this, the file $out/e-wrappers.nix is created,
     # containing the needed configuration for wrapping those programs. It
     # can be used in the enlightenment module. The idea is:
-    # 
+    #
     #  1) rename the original binary adding the extension .orig
     #  2) wrap the renamed binary at /run/wrappers/bin/
     #  3) create a new symbolic link using the original binary name (in the

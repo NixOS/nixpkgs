@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , cmake, gcc-arm-embedded, binutils-arm-embedded, python
-, qt5, SDL, gmock
+, qt5, SDL, gtest
 , dfu-util, avrdude
 }:
 
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   buildInputs = with qt5; [
     python python.pkgs.pyqt4
     qtbase qtmultimedia qttranslations
-    SDL gmock
+    SDL
   ];
 
   postPatch = ''
@@ -38,11 +38,12 @@ in stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
+    "-DGTEST_ROOT=${gtest.src}/googletest"
     "-DQT_TRANSLATIONS_DIR=${qt5.qttranslations}/translations"
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"
-    "-DNANO=OFF"
+    "-DNANO=NO"
   ];
 
   meta = with stdenv.lib; {

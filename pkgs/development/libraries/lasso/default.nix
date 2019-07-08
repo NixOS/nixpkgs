@@ -1,4 +1,4 @@
-{ stdenv, autoconf, automake, autoreconfHook, fetchurl, glib, gobjectIntrospection, gtk-doc, libtool, libxml2, libxslt, openssl, pkgconfig, python27Packages, xmlsec, zlib }:
+{ stdenv, autoconf, automake, autoreconfHook, fetchurl, glib, gobject-introspection, gtk-doc, libtool, libxml2, libxslt, openssl, pkgconfig, python27Packages, xmlsec, zlib }:
 
 stdenv.mkDerivation rec {
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ autoconf automake glib gobjectIntrospection gtk-doc libtool libxml2 libxslt openssl python27Packages.six xmlsec zlib ];
+  buildInputs = [ autoconf automake glib gobject-introspection gtk-doc libtool libxml2 libxslt openssl python27Packages.six xmlsec zlib ];
 
   configurePhase = ''
     ./configure --with-pkg-config=$PKG_CONFIG_PATH \
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://lasso.entrouvert.org/;
+    homepage = https://lasso.entrouvert.org/;
     description = "Liberty Alliance Single Sign-On library";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

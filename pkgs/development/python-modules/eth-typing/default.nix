@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "eth-typing";
-  version = "1.3.0";
+  version = "2.0.0";
 
   # Tests are missing from the PyPI source tarball so let's use GitHub
   # https://github.com/ethereum/eth-typing/issues/8
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0703z7vlsfa3dvgcq22f9rzmj0svyp2a8wc7h73d0aac28ydhpv9";
+    sha256 = "017rshrz9kzax851hdbd3924jmr06h2sx3xdq7m4dwhgz3pgqfcy";
   };
 
   # setuptools-markdown uses pypandoc which is broken at the moment

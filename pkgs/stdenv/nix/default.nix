@@ -1,10 +1,10 @@
 { lib
-, crossSystem, config, overlays
+, crossSystem, localSystem, config, overlays
 , bootStages
 , ...
 }:
 
-assert crossSystem == null;
+assert crossSystem == localSystem;
 
 bootStages ++ [
   (prevStage: {

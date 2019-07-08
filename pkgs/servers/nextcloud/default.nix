@@ -1,19 +1,13 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "nextcloud-${version}";
-  version = "14.0.3";
+  version = "16.0.1";
 
   src = fetchurl {
     url = "https://download.nextcloud.com/server/releases/${name}.tar.bz2";
-    sha256 = "1vykmvkqds1mjz9hl0xapi70s5s66xd8ysw0sczgavir7092gl6p";
+    sha256 = "1vlaswq9j3vkiikq8bj0qi6wsijkawg321wplvxv4c79x63fa358";
   };
-
-  patches = [ (fetchpatch {
-    name = "Mailer-discover-sendmail-path-instead-of-hardcoding-.patch";
-    url = https://github.com/nextcloud/server/pull/11404.patch;
-    sha256 = "1h0cqnfwn735vqrm3yh9nh6a7h6srr9h29p13vywd6rqbcndqjjd";
-  }) ];
 
   installPhase = ''
     mkdir -p $out/

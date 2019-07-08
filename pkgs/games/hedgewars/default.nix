@@ -5,16 +5,16 @@
 
 let
   ghc = ghcWithPackages (pkgs: with pkgs; [
-          network vector utf8-string bytestring-show random hslogger
+          network vector utf8-string /* broken: bytestring-show */ random hslogger
           SHA entropy pkgs.zlib sandi regex-tdfa
         ]);
 in
 stdenv.mkDerivation rec {
-  version = "0.9.24.1";
+  version = "0.9.25";
   name = "hedgewars-${version}";
   src = fetchurl {
     url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
-    sha256 = "1f2vbndh9fnwklwjicrhy5zv2ciyhadfsny2cdqnc6lim90hldl1";
+    sha256 = "08x7fqpy0hpnbfq2k06g522xayi7s53bca819zfhalvqnqs76pdk";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -74,5 +74,7 @@ stdenv.mkDerivation rec {
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
     platforms = ghc.meta.platforms;
+    hydraPlatforms = [];
+    broken = true;  # depends on broken Haskell package bytestring-show
   };
 }

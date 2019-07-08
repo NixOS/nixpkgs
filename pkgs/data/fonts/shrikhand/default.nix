@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "2016-03-03";
@@ -11,7 +11,7 @@ in fetchzip {
 
   sha256 = "0s54k9cs1g2yz6lwg5gakqb12vg5qkfdz3pc8mh7mib2s6q926hs";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://jonpinhorn.github.io/shrikhand/;
     description = "A vibrant and playful typeface for both Latin and Gujarati writing systems";
     maintainers = with maintainers; [ sternenseemann ];

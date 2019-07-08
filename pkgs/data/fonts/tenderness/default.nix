@@ -1,4 +1,4 @@
-{ stdenv,  fetchzip }:
+{ lib, fetchzip }:
 
 let
   majorVersion = "0";
@@ -17,7 +17,7 @@ fetchzip rec {
     unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dotcolon.net/font/${pname}/";
     description = "Serif font designed by Sora Sagano with old-style figures";
     platforms = platforms.all;

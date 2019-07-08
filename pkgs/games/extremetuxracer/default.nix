@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, libGLU_combined, libX11, xproto, tcl, freeglut, freetype
-, sfml, libXi, inputproto
-, libXmu, libXext, xextproto, libXt, libSM, libICE
+{ stdenv, fetchurl, libGLU_combined, libX11, xorgproto, tcl, freeglut, freetype
+, sfml, libXi
+, libXmu, libXext, libXt, libSM, libICE
 , libpng, pkgconfig, gettext, intltool
 }:
 
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libGLU_combined libX11 xproto tcl freeglut freetype
-    sfml libXi inputproto
-    libXmu libXext xextproto libXt libSM libICE
+    libGLU_combined libX11 xorgproto tcl freeglut freetype
+    sfml libXi
+    libXmu libXext libXt libSM libICE
     libpng pkgconfig gettext intltool
   ];
 

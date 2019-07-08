@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libXi, inputproto, autoconf, automake, libtool, m4, xlibsWrapper, pkgconfig }:
+{ stdenv, fetchurl, libXi, xorgproto, autoconf, automake, libtool, m4, xlibsWrapper, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "xinput_calibrator";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh --with-gui=X11";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ inputproto libXi autoconf automake libtool m4 xlibsWrapper ];
+  buildInputs = [ xorgproto libXi autoconf automake libtool m4 xlibsWrapper ];
 
   meta = {
     homepage = https://github.com/tias/xinput_calibrator;

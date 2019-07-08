@@ -1,16 +1,16 @@
-{ lib, buildPythonApplication, fetchPypi, pythonPackages, ffmpeg }:
+{ lib, python3Packages, ffmpeg }:
 
-buildPythonApplication rec {
-  version = "1.4.1";
+python3Packages.buildPythonApplication rec {
+  version = "2.0";
   pname   = "sigal";
 
-  src = fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit version pname;
-    sha256 = "1fg32ii26j3xpq3cryi212lx9z33qnicm1cszwv1wfpg6sr2rr61";
+    sha256 = "0ff8hpihbd30xjy155ksfpypjskilqg4zmyavgvpri8jaf1qpv89";
   };
 
-  buildInputs = with pythonPackages; [ pytest ];
-  propagatedBuildInputs = with pythonPackages; [
+  checkInputs = with python3Packages; [ pytest ];
+  propagatedBuildInputs = with python3Packages; [
     jinja2
     markdown
     pillow
@@ -29,7 +29,6 @@ buildPythonApplication rec {
     description = "Yet another simple static gallery generator";
     homepage    = http://sigal.saimon.org/en/latest/index.html;
     license     = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ domenkozar matthiasbeyer ];
   };
 }
-

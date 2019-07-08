@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , fetchzip
 , lib
 , callPackage
@@ -70,8 +71,8 @@ let
   yaramod = fetchFromGitHub {
     owner = "avast-tl";
     repo = "yaramod";
-    rev = "v2.1.2";
-    sha256 = "1rpyqzkrqvk721hf75wb7aasw5mzp9wz4j89p0x1l9p5x1b3maz3";
+    rev = "v2.2.2";
+    sha256 = "0cq9h4h686q9ybamisbl797g6xjy211s3cq83nixkwkigmz48ccp";
   };
   jsoncpp = fetchFromGitHub {
     owner = "open-source-parsers";
@@ -181,6 +182,20 @@ in stdenv.mkDerivation rec {
     (yaramod // { dep_name = "yaramod"; })
   ];
 
+  # Use newer yaramod to fix w/bison 3.2+
+  patches = [
+    # 2.1.2 -> 2.2.1
+    (fetchpatch {
+      url = https://github.com/avast-tl/retdec/commit/c9d23da1c6e23c149ed684c6becd3f3828fb4a55.patch;
+      sha256 = "0hdq634f72fihdy10nx2ajbps561w03dfdsy5r35afv9fapla6mv";
+    })
+    # 2.2.1 -> 2.2.2
+    (fetchpatch {
+      url = https://github.com/avast-tl/retdec/commit/fb85f00754b5d13b781385651db557741679721e.patch;
+      sha256 = "0a8mwmwb39pr5ag3q11nv81ncdk51shndqrkm92shqrmdq14va52";
+    })
+  ];
+
   postPatch = (lib.concatMapStrings patchDep external_deps) + ''
     # install retdec-support
     echo "Checking version of retdec-support"
@@ -206,6 +221,8 @@ in stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     ${python3.interpreter} "$out/bin/retdec-tests-runner.py"
+
+    rm -rf $out/bin/__pycache__
   '';
 
   meta = with lib; {

@@ -1,15 +1,15 @@
 { stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
 , lame, flac, glyr
-, perl, MusicBrainz, MusicBrainzDiscID
+, perlPackages
 , makeWrapper }:
 
-let version = "2.9.2";
+let version = "2.9.3";
 in
   stdenv.mkDerivation {
     name = "abcde-${version}";
     src = fetchurl {
       url = "https://abcde.einval.com/download/abcde-${version}.tar.gz";
-      sha256 = "13c5yvp87ckqgha160ym5rdr1a4divgvyqbjh0yb6ffclip6qd9l";
+      sha256 = "091ip2iwb6b67bhjsj05l0sxyq2whqjycbzqpkfbpm4dlyxx0v04";
     };
 
     # FIXME: This package does not support `distmp3', `eject', etc.
@@ -29,7 +29,7 @@ in
 
     nativeBuildInputs = [ makeWrapper ];
 
-    buildInputs = [ perl MusicBrainz MusicBrainzDiscID ];
+    buildInputs = with perlPackages; [ perl MusicBrainz MusicBrainzDiscID ];
 
     installFlags = [ "sysconfdir=$(out)/etc" ];
 

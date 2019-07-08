@@ -33,6 +33,8 @@ let
     tor       = import ./exporters/tor.nix       { inherit config lib pkgs; };
     unifi     = import ./exporters/unifi.nix     { inherit config lib pkgs; };
     varnish   = import ./exporters/varnish.nix   { inherit config lib pkgs; };
+    bind      = import ./exporters/bind.nix      { inherit config lib pkgs; };
+    wireguard = import ./exporters/wireguard.nix { inherit config lib pkgs; };
   };
 
   mkExporterOpts = ({ name, port }: {
@@ -118,7 +120,7 @@ let
   mkExporterConf = { name, conf, serviceOpts }:
     mkIf conf.enable {
       networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
-        "ip46tables -I nixos-fw ${conf.firewallFilter} "
+        "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{
@@ -127,7 +129,7 @@ let
         serviceConfig.Restart = mkDefault "always";
         serviceConfig.PrivateTmp = mkDefault true;
         serviceConfig.WorkingDirectory = mkDefault /tmp;
-      } serviceOpts ] ++ optional (serviceOpts.serviceConfig.DynamicUser or false) {
+      } serviceOpts ] ++ optional (!(serviceOpts.serviceConfig.DynamicUser or false)) {
         serviceConfig.User = conf.user;
         serviceConfig.Group = conf.group;
       });

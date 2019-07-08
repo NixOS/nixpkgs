@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = http://mahotas.readthedocs.io/;
     maintainers = with maintainers; [ luispedro ];
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

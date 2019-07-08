@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "ofxtools";
-  version = "0.3.8";
+  version = "0.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "88f289a60f4312a1599c38a8fb3216e2b46d10cc34476f9a16a33ac8aac7ec35";
+    sha256 = "83e1ca0a61463fca99d096a694466726a49979a5d2b8a36a65514c7a8617d3ea";
   };
 
   checkPhase = ''

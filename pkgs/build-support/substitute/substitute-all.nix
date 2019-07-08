@@ -8,4 +8,5 @@ stdenvNoCC.mkDerivation ({
   builder = ./substitute-all.sh;
   inherit (args) src;
   preferLocalBuild = true;
+  allowSubstitutes = false;
 } // args)

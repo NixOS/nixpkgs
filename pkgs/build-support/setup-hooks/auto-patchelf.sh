@@ -15,8 +15,10 @@ isExecutable() {
     # *or* there is an INTERP section. This also catches position-independent
     # executables, as they typically have an INTERP section but their ELF type
     # is DYN.
-    LANG=C readelf -h -l "$1" 2> /dev/null \
-        | grep -q '^ *Type: *EXEC\>\|^ *INTERP\>'
+    isExeResult="$(LANG=C readelf -h -l "$1" 2> /dev/null \
+        | grep '^ *Type: *EXEC\>\|^ *INTERP\>')"
+    # not using grep -q, because it can cause Broken pipe
+    [ -n "$isExeResult" ]
 }
 
 # We cache dependencies so that we don't need to search through all of them on
@@ -207,10 +209,11 @@ autoPatchelf() {
       isELF "$file" || continue
       segmentHeaders="$(LANG=C readelf -l "$file")"
       # Skip if the ELF file doesn't have segment headers (eg. object files).
-      echo "$segmentHeaders" | grep -q '^Program Headers:' || continue
+      # not using grep -q, because it can cause Broken pipe
+      [ -n "$(echo "$segmentHeaders" | grep '^Program Headers:')" ] || continue
       if isExecutable "$file"; then
           # Skip if the executable is statically linked.
-          echo "$segmentHeaders" | grep -q "^ *INTERP\\>" || continue
+          [ -n "$(echo "$segmentHeaders" | grep "^ *INTERP\\>")" ] || continue
       fi
       autoPatchelfFile "$file"
     done < <(find "$@" ${norecurse:+-maxdepth 1} -type f -print0)

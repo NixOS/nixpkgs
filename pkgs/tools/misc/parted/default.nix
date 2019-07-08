@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       which also serves as a sample implementation and script backend.
     '';
 
-    homepage = http://www.gnu.org/software/parted/;
+    homepage = https://www.gnu.org/software/parted/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [

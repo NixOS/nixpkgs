@@ -121,6 +121,7 @@ in
       environment.YOUTRACK_JVM_OPTS = "${extraAttr}";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [ unixtools.hostname ];
       serviceConfig = {
         Type = "simple";
         User = "youtrack";

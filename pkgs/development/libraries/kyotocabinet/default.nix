@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     description = "A library of routines for managing a database";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

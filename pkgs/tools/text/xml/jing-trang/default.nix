@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "A RELAX NG validator in Java";
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".
-    homepage = "http://www.thaiopensource.com/relaxng/trang.html";
+    homepage = https://www.thaiopensource.com/relaxng/trang.html;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };

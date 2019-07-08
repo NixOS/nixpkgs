@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nix-prefetch-github";
-  version = "1.3";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "seppeljordan";
     repo = "nix-prefetch-github";
-    rev = "${version}";
-    sha256 = "1rinbv1q4q8m27ih6l81w1lsmwn6cz7q3iyjiycklywpi8684dh6";
+    rev = "v${version}";
+    sha256 = "0b2hgfyxhlqq6lyi5cr98dz6if5kl6b3kq67f2lzfkalydywl1dh";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -19,7 +19,6 @@ python3.pkgs.buildPythonApplication rec {
     click
     effect
     jinja2
-    requests
   ];
   meta = with stdenv.lib; {
     description = "Prefetch sources from github";

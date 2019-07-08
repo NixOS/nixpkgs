@@ -1,16 +1,16 @@
 { stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
-, pyperclip, six, pyparsing, vim, wcwidth, colorama
+, pyperclip, six, pyparsing, vim, wcwidth, colorama, attrs
 , contextlib2 ? null, typing ? null, setuptools_scm
 , pytest, mock ? null, pytest-mock
 , which, glibcLocales
 }:
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "0.9.6";
+  version = "0.9.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0279p76n6yny6psys9fc6yjdrqiisbpmrl59a2vxy56hi7094kaw";
+    sha256 = "0rllwc4h89xdivy85nmgqdi2s0sk1zw31mlvrnlr9gz2902cnq93";
   };
 
   LC_ALL="en_US.UTF-8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   postPatch = stdenv.lib.optional stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     mkdir bin
-    echo '#/bin/sh' > bin/pbpaste
-    echo '#/bin/sh' > bin/pbcopy
+    echo '#${stdenv.shell}' > bin/pbpaste
+    echo '#${stdenv.shell}' > bin/pbcopy
     chmod +x bin/{pbcopy,pbpaste}
     export PATH=$(realpath bin):$PATH
   '';
@@ -36,6 +36,7 @@ buildPythonPackage rec {
     six
     pyparsing
     wcwidth
+    attrs
   ]
   ++ stdenv.lib.optionals (pythonOlder "3.5") [contextlib2 typing]
   ;

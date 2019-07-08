@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, pytest, pytest-asyncio }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy35, pytest, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "async_generator";
@@ -16,6 +16,9 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest -W error -ra -v --pyargs async_generator
   '';
+
+  # disable tests on python3.5 to avoid circular dependency with pytest-asyncio
+  doCheck = !isPy35;
 
   meta = with lib; {
     description = "Async generators and context managers for Python 3.5+";

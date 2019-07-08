@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages } :
+{ stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages, runtimeShell } :
 
 stdenv.mkDerivation rec {
   name = "pyIRCt-${version}";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sed -e '/configFiles/iimport os' -i config.py
     cp * $out/share/${name}
     cat > $out/bin/pyIRCt <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cd $out/share/${name}
       ./irc.py \"$@\"
     EOF

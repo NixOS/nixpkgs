@@ -1,32 +1,29 @@
-{ fetchFromGitHub, stdenv, autoconf, automake, pkgconfig
-, curl, libsigcxx, SDL2, SDL2_image, freetype, libvorbis, libpng, assimp, libGLU_combined
+{ fetchFromGitHub, stdenv, cmake, pkgconfig, curl, libsigcxx, SDL2
+, SDL2_image, freetype, libvorbis, libpng, assimp, libGLU_combined
+, glew
 }:
 
 stdenv.mkDerivation rec {
-  name = "pioneer-${version}";
-  version = "20180203";
+  pname = "pioneer";
+  version = "20190203";
 
   src = fetchFromGitHub{
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    sha256 = "0hp2mf36kj2v93hka8m8lxw2qhmnjc62wjlpw7c7ix0r8xa01i6h";
+    sha256 = "1g34wvgyvz793dhm1k64kl82ib0cavkbg0f2p3fp05b457ycljff";
   };
 
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng assimp libGLU_combined ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2}/include/SDL2"
+  buildInputs = [
+    curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng
+    assimp libGLU_combined glew
   ];
 
   preConfigure = ''
-     export PIONEER_DATA_DIR="$out/share/pioneer/data";
-    ./bootstrap
+    export PIONEER_DATA_DIR="$out/share/pioneer/data";
   '';
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A space adventure game set in the Milky Way galaxy at the turn of the 31st century";

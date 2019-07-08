@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dynamips";
-  version = "0.2.18";
+  version = "0.2.20";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jrwvrpl61rqbjjphv8v7ryhdwfjrpps76dbvkpl43hpn5hqqis2";
+    sha256 = "1841h0m0k0p3c3ify4imafjk7jigcj2zlr8rn3iyp7jnafkxqik7";
   };
 
   nativeBuildInputs = [ cmake ];

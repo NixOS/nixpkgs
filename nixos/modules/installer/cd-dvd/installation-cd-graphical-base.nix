@@ -1,7 +1,7 @@
 # This module contains the basic configuration for building a graphical NixOS
 # installation CD.
 
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 with lib;
 
@@ -30,6 +30,10 @@ with lib;
   # KDE complains if power management is disabled (to be precise, if
   # there is no power management backend such as upower).
   powerManagement.enable = true;
+
+  # Enable sound in graphical iso's.
+  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.systemWide = true; # Needed since we run plasma as root.
 
   environment.systemPackages = [
     # Include gparted for partitioning disks.

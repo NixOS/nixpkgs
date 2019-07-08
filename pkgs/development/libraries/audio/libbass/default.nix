@@ -11,7 +11,7 @@ let
         x86_64-linux = "x64/libbass.so";
       };
       urlpath = "bass${version}-linux.zip";
-      sha256 = "0alxx7knkvzwwifqrmzavafwq53flja7s1ckaabk6p2ir2f0j5cp";
+      sha256 = "1hjxp1akj8367qlglv5rqpwq2dimfz3bkllwq39abavz4sp8smjz";
     };
 
     bass_fx = {
@@ -21,7 +21,7 @@ let
         x86_64-linux = "x64/libbass_fx.so";
       };
       urlpath = "z/0/bass_fx${version}-linux.zip";
-      sha256 = "0j1cbq88j3vnqf2bibcqnfhciz904w48ldgycyh9d8954hwyg22m";
+      sha256 = "1q0g74z7iyhxqps5b3gnnbic8v2jji1r0mkvais57lsx8y21sbin";
     };
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
 let
   pname = "xmlm";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"

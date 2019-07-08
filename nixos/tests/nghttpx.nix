@@ -1,5 +1,5 @@
 let
-  nginxRoot = "/var/run/nginx";
+  nginxRoot = "/run/nginx";
 in
   import ./make-test.nix ({...}: {
     name  = "nghttpx";

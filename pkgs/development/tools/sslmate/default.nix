@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, perl, makeWrapper, openssl }:
+{ stdenv, fetchurl, perlPackages, makeWrapper, openssl }:
 
 stdenv.mkDerivation rec {
   name = "sslmate-1.7.0";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=$(out)";
 
-  buildInputs = [ perl makeWrapper ];
+  buildInputs = [ perlPackages.perl makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/sslmate --prefix PERL5LIB : \
-      "${with perlPackages; stdenv.lib.makePerlPath [
+      "${with perlPackages; makePerlPath [
         URI
         JSONPP
         TermReadKey

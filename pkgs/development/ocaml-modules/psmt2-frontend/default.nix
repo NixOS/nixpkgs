@@ -5,14 +5,14 @@ then throw "psmt2-frontend is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "0.1";
+  version = "0.2";
   name = "ocaml${ocaml.version}-psmt2-frontend-${version}";
 
   src = fetchFromGitHub {
     owner = "Coquera";
     repo = "psmt2-frontend";
     rev = version;
-    sha256 = "0k7jlsbkdyg7hafmvynp0ik8xk7mfr00wz27vxn4ncnmp20yz4vn";
+    sha256 = "097zmbrx4gp2gnrxdmsm9lkkp5450gwi0blpxqy3833m6k5brx3n";
   };
 
   prefixKey = "-prefix ";

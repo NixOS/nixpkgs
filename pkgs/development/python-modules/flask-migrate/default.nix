@@ -4,15 +4,15 @@ with stdenv.lib;
 
 buildPythonPackage rec {
   pname = "Flask-Migrate";
-  version = "2.3.0";
+  version = "2.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19rxhva9i5n643vm3d11f8p98jwai2pavysa217p5w5h5cnksnx2";
+    sha256 = "00nm76w4xymsiih6hq8y46wp026v7zkzq15cx39hp929ba3z2vx9";
   };
 
-  checkInputs = optional isPy3k glibcLocales;
-  propagatedBuildInputs = [ flask flask_sqlalchemy flask_script alembic ];
+  checkInputs = [ flask_script ] ++ optional isPy3k glibcLocales;
+  propagatedBuildInputs = [ flask flask_sqlalchemy alembic ];
 
   # tests invoke the flask cli which uses click and therefore has py3k encoding troubles
   preCheck = optionalString isPy3k ''

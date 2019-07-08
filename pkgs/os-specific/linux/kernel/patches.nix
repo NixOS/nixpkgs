@@ -58,4 +58,8 @@ rec {
     };
   };
 
+  export_kernel_fpu_functions = rec {
+    name = "export_kernel_fpu_functions";
+    patch = ./export_kernel_fpu_functions.patch;
+  };
 }

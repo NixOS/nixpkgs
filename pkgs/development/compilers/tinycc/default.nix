@@ -33,10 +33,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  postFixup = ''
-    paxmark m $out/bin/tcc
-  '';
-
   meta = {
     description = "Small, fast, and embeddable C compiler and interpreter";
 

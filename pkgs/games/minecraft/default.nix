@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper
-, jdk, jre, libpulseaudio
+, jdk, jre, libpulseaudio, libXxf86vm
 }:
 
 let
@@ -12,6 +12,11 @@ let
     genericName = "minecraft";
     categories = "Game;";
   };
+
+  libPath = stdenv.lib.makeLibraryPath [
+    libpulseaudio
+    libXxf86vm # Needed only for versions <1.13
+  ];
 
 in stdenv.mkDerivation {
   name = "minecraft-2015-07-24";
@@ -30,7 +35,7 @@ in stdenv.mkDerivation {
 
     makeWrapper ${jre}/bin/java $out/bin/minecraft \
       --add-flags "-jar $out/share/minecraft/minecraft.jar" \
-      --suffix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libpulseaudio ]}
+      --suffix LD_LIBRARY_PATH : ${libPath}
 
     cp $src $out/share/minecraft/minecraft.jar
     cp -r ${desktopItem}/share/applications $out/share

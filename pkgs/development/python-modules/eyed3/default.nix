@@ -9,18 +9,17 @@
 , six
 , pathlib
 , python_magic
-, isPy3k
 , lib
 }:
 
 buildPythonPackage rec {
-  version = "0.8.7";
+  version = "0.8.10";
   pname    = "eyeD3";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fzqy6hkg73xvpapdjrdzr3r0fsamnplvjfl7dz7rzgzx2r4x4pg";
+    sha256 = "1jb22n1jczxgbpcnfiw12r8dcs74556g1d09mzms44f52kgs7lgc";
   };
 
   # https://github.com/nicfit/eyeD3/pull/284

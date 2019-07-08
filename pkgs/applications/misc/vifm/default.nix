@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A vi-like file manager";
-    maintainers = with maintainers; [ raskin garbas ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
     license = licenses.gpl2;
     downloadPage = "https://vifm.info/downloads.shtml";
     homepage = https://vifm.info/;

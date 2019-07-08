@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.xrdp;
-  confDir = pkgs.runCommand "xrdp.conf" { } ''
+  confDir = pkgs.runCommand "xrdp.conf" { preferLocalBuild = true; } ''
     mkdir $out
 
     cp ${cfg.package}/etc/xrdp/{km-*,xrdp,sesman,xrdp_keyboard}.ini $out
@@ -17,7 +17,7 @@ let
     chmod +x $out/startwm.sh
 
     substituteInPlace $out/xrdp.ini \
-      --replace "#rsakeys_ini=" "rsakeys_ini=/var/run/xrdp/rsakeys.ini" \
+      --replace "#rsakeys_ini=" "rsakeys_ini=/run/xrdp/rsakeys.ini" \
       --replace "certificate=" "certificate=${cfg.sslCert}" \
       --replace "key_file=" "key_file=${cfg.sslKey}" \
       --replace LogFile=xrdp.log LogFile=/dev/null \
@@ -26,6 +26,12 @@ let
     substituteInPlace $out/sesman.ini \
       --replace LogFile=xrdp-sesman.log LogFile=/dev/null \
       --replace EnableSyslog=1 EnableSyslog=0
+
+    # Ensure that clipboard works for non-ASCII characters
+    sed -i -e '/.*SessionVariables.*/ a\
+    LANG=${config.i18n.defaultLocale}\
+    LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
+    ' $out/sesman.ini
   '';
 in
 {
@@ -126,9 +132,9 @@ in
             chown root:xrdp ${cfg.sslKey} ${cfg.sslCert}
             chmod 440 ${cfg.sslKey} ${cfg.sslCert}
           fi
-          if [ ! -s /var/run/xrdp/rsakeys.ini ]; then
-            mkdir -p /var/run/xrdp
-            ${cfg.package}/bin/xrdp-keygen xrdp /var/run/xrdp/rsakeys.ini
+          if [ ! -s /run/xrdp/rsakeys.ini ]; then
+            mkdir -p /run/xrdp
+            ${cfg.package}/bin/xrdp-keygen xrdp /run/xrdp/rsakeys.ini
           fi
         '';
         serviceConfig = {

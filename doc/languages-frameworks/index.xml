@@ -10,12 +10,14 @@
   Nixpkgs to easily build packages for other programming languages, such as
   Perl or Haskell. These are described in this chapter.
  </para>
+ <xi:include href="android.section.xml" />
  <xi:include href="beam.xml" />
  <xi:include href="bower.xml" />
  <xi:include href="coq.xml" />
  <xi:include href="go.xml" />
  <xi:include href="haskell.section.xml" />
  <xi:include href="idris.section.xml" />
+ <xi:include href="ios.section.xml" />
  <xi:include href="java.xml" />
  <xi:include href="lua.xml" />
  <xi:include href="node.section.xml" />
@@ -27,6 +29,7 @@
  <xi:include href="ruby.xml" />
  <xi:include href="rust.section.xml" />
  <xi:include href="texlive.xml" />
+ <xi:include href="titanium.section.xml" />
  <xi:include href="vim.section.xml" />
  <xi:include href="emscripten.section.xml" />
 </chapter>

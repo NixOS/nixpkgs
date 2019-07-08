@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, which }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.6";
+  version = "1.3.8";
   name = "rhash-${version}";
 
   src = fetchFromGitHub {
     owner = "rhash";
     repo = "RHash";
     rev = "v${version}";
-    sha256 = "1c8gngjj34ylx1f56hjbvml22bif0bx1b88dx2cyxbix8praxqh7";
+    sha256 = "0i00wl63hn80g0s9gdi772gchbghwgkvn4nbb5227y2wwy30yyi2";
   };
 
   nativeBuildInputs = [ which ];
@@ -16,10 +16,11 @@ stdenv.mkDerivation rec {
   # configure script is not autotools-based, doesn't support these options
   configurePlatforms = [ ];
 
-  doCheck = false; # fails
+  doCheck = true;
 
-  installTargets = [ "install" "install-lib-shared" "install-lib-so-link" ];
-  postInstall = "make -C librhash install-headers";
+  checkTarget = "test-full";
+
+  installTargets = [ "install" "install-lib-shared" "install-lib-so-link" "install-lib-headers" ];
 
   meta = with stdenv.lib; {
     homepage = http://rhash.anz.ru;

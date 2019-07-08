@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "tstack";
     repo = "lnav";
     rev = "v${meta.version}";
-    sha256 = "0wzzny0sgrq1ga9qw9nr8ly4j3vy4agszma73902dsw2rwf17j6y";
+    sha256 = "0z8bsr0falxlkmd1b5gy871vyafyih0sw7lgg858lqnbsy0q2m4i";
     inherit name;
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    version = "0.8.4";
+    version = "0.8.5";
     maintainers = [ maintainers.dochang ];
     platforms = platforms.unix;
   };

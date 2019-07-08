@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "qgnomeplatform-${version}";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QGnomePlatform";
     rev = version;
-    sha256 = "1403300d435g7ngcxsgnllhryk63nrhl1ahx16b28wkxnh2vi9ly";
+    sha256 = "01ncj21cxd5p7pch6p3zbhv5wp0dgn9vy5hrw54g49fmqnbb1ymz";
   };
 
   nativeBuildInputs = [

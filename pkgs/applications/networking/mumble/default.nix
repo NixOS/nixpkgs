@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig
-, qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeWrapper, pkgconfig
+, qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf3_6, speex, libcap
 , alsaLib, python
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
@@ -22,7 +22,10 @@ let
     nativeBuildInputs = [ pkgconfig python ]
       ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmake ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
-    buildInputs = [ boost protobuf avahi ]
+
+    # protobuf is freezed to 3.6 because of this bug: https://github.com/mumble-voip/mumble/issues/3617
+    # this could be reverted to the latest version in a future release of mumble as it is already fixed in master
+    buildInputs = [ boost protobuf3_6 avahi ]
       ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"
       ++ (overrides.buildInputs or [ ]);
 
@@ -63,7 +66,7 @@ let
       description = "Low-latency, high quality voice chat software";
       homepage = https://mumble.info;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ jgeerds wkennington ];
+      maintainers = with maintainers; [ ];
       platforms = platforms.linux;
     };
   });
@@ -154,5 +157,12 @@ in {
   murmur     = server stableSource;
   murmur_git = (server gitSource).overrideAttrs (old: {
     meta = old.meta // { broken = iceSupport; };
+
+    nativeBuildInputs = old.nativeBuildInputs or [] ++ [ makeWrapper ];
+
+    installPhase = old.installPhase or "" + ''
+      wrapProgram $out/bin/murmurd --suffix QT_PLUGIN_PATH : \
+        ${getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}
+    '';
   });
 }

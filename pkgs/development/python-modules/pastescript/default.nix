@@ -6,20 +6,19 @@
 , paste
 , PasteDeploy
 , cheetah
-, argparse
 }:
 
 buildPythonPackage rec {
-  version = "1.7.5";
+  version = "3.0.0";
   pname = "PasteScript";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b685be69d6ac8bc0fe6f558f119660259db26a15e16a4943c515fbee8093539";
+    sha256 = "d9d4d98df8606ad3bfa77be4722207d1a53a0fbcc714ee75d0fcd8a5c3f775c3";
   };
 
   buildInputs = [ nose ];
-  propagatedBuildInputs = [ six paste PasteDeploy cheetah argparse ];
+  propagatedBuildInputs = [ six paste PasteDeploy cheetah ];
 
   doCheck = false;
 

@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "mox3";
-  version = "0.23.0";
+  version = "0.26.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q26sg0jasday52a7y0cch13l0ssjvr4yqnvswqxsinj1lv5ld88";
+    sha256 = "b13c0b8459d6fb0688f9a4e70feeec43fa2cca05b727fc01156789596e083bb1";
   };
 
   patchPhase = ''

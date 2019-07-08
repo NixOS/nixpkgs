@@ -18,6 +18,19 @@ index 005db4248..685c5b1b2 100644
      // env import paths
      if (Q_UNLIKELY(!qEnvironmentVariableIsEmpty("QML2_IMPORT_PATH"))) {
          const QString envImportPath = qEnvironmentVariable("QML2_IMPORT_PATH");
+diff --git a/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake b/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake
+index 56cb3fb55..74509d601 100644
+--- a/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake
++++ b/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake
+@@ -17,7 +17,7 @@ function(QTQUICK_COMPILER_ADD_RESOURCES outfiles)
+ 
+     find_package(Qt5 COMPONENTS Qml Core)
+ 
+-    set(compiler_path "${_qt5Core_install_prefix}/bin/qmlcachegen")
++    set(compiler_path "qmlcachegen")
+ 
+     get_target_property(rcc_path ${Qt5Core_RCC_EXECUTABLE} IMPORTED_LOCATION)
+ 
 diff --git a/tools/qmlcachegen/qmlcache.prf b/tools/qmlcachegen/qmlcache.prf
 index 537eaf62e..e21de58f6 100644
 --- a/tools/qmlcachegen/qmlcache.prf

@@ -17,8 +17,8 @@ buildPythonPackage rec {
     py.test -k "not test_sdist"
   '';
 
-  # Needs some fixing for 3.7
-  doCheck = !isPy37;
+  # Needs some fixing
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Utilities to support code that runs unmodified on Twisted and asyncio.";

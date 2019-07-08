@@ -39,6 +39,8 @@ stdenv.mkDerivation (rec {
     rm -rf $out/docs
   '';
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   checkPhase = ''

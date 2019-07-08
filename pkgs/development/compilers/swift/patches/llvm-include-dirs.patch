@@ -2,7 +2,7 @@ Only use the Nix include dirs when no sysroot is configured.
 
 --- clang/lib/Driver/ToolChains/Linux.cpp	2018-10-05 18:01:15.731109551 +0200
 +++ clang/lib/Driver/ToolChains/Linux.cpp	2018-10-05 18:00:27.959509924 +0200
-@@ -565,7 +565,7 @@
+@@ -641,7 +641,7 @@
  
    // Check for configure-time C include directories.
    StringRef CIncludeDirs(C_INCLUDE_DIRS);

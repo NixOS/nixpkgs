@@ -1,10 +1,11 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
 , cmocka, libmicrohttpd, stabber, expat, libmesode
+, autoconf-archive
 
-, autoAwaySupport ? false,       libXScrnSaver ? null, libX11 ? null
-, notifySupport ? false,         libnotify ? null, gdk_pixbuf ? null
-, traySupport ? false,           gnome2 ? null
+, autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
+, notifySupport ? true,         libnotify ? null, gdk_pixbuf ? null
+, traySupport ? true,           gnome2 ? null
 , pgpSupport ? true,            gpgme ? null
 , pythonPluginSupport ? true,   python ? null
 }:
@@ -19,20 +20,22 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "profanity-${version}";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "boothj5";
     repo = "profanity";
     rev = "${version}";
-    sha256 = "1ppr02wivhlrqr62r901clnycna8zpn6kr7n5rw8y3zfw21ny17z";
+    sha256 = "0f5kfzy22wzyj7rnd2nbj93q96ga87b53wlg8lfg83qdphx1ymz9";
   };
 
   patches = [ ./patches/packages-osx.patch ./patches/undefined-macros.patch ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook glibcLocales pkgconfig ];
+  nativeBuildInputs = [
+    autoreconfHook autoconf-archive glibcLocales pkgconfig
+  ];
 
   buildInputs = [
     expect readline libuuid glib openssl expat ncurses libotr
@@ -58,19 +61,13 @@ stdenv.mkDerivation rec {
 
   LC_ALL = "en_US.utf8";
 
-  NIX_CFLAGS_COMPILE = [ ]
-    ++ optionals pythonPluginSupport [ "-I${python}/include/${python.libPrefix}" ];
-
-  LDFLAGS = [ ]
-    ++ optionals pythonPluginSupport [ "-L${python}/lib" "-lpython${python.majorVersion}m" ];
-
   meta = {
     description = "A console based XMPP client";
     longDescription = ''
       Profanity is a console based XMPP client written in C using ncurses and
       libstrophe, inspired by Irssi.
     '';
-    homepage = http://profanity.im/;
+    homepage = http://www.profanity.im/;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];

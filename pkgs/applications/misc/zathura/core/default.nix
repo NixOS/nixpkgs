@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, meson, ninja, makeWrapper, pkgconfig
+{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig
 , appstream-glib, desktop-file-utils, python3
 , gtk, girara, gettext, libxml2
-, file, sqlite, glib, texlive, libintl, libseccomp
+, sqlite, glib, texlive, libintl, libseccomp
+, file, librsvg
 , gtk-mac-integration, synctexSupport ? true
 }:
 
@@ -11,34 +12,41 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "zathura-core-${version}";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura/download/zathura-${version}.tar.xz";
-    sha256 = "1znr3psqda06xklzj8mn452w908llapcg1rj468jwpg0wzv6pxfn";
+    sha256 = "0hgx5x09i6d0z45llzdmh4l348fxh1y102sb1w76f2fp4r21j4ky";
   };
 
+  outputs = [ "bin" "man" "dev" "out" ];
+
+  # Flag list:
+  # https://github.com/pwmt/zathura/blob/master/meson_options.txt
+  mesonFlags = [
+    "-Dsqlite=enabled"
+    "-Dmagic=enabled"
+    # "-Dseccomp=enabled"
+    "-Dmanpages=enabled"
+    "-Dconvert-icon=enabled"
+  ] ++ optional synctexSupport "-Dsynctex=enabled";
+
   nativeBuildInputs = [
-    meson ninja pkgconfig appstream-glib desktop-file-utils python3.pkgs.sphinx
-    gettext makeWrapper libxml2
-  ];
+    meson ninja pkgconfig desktop-file-utils python3.pkgs.sphinx
+    gettext wrapGAppsHook libxml2
+  ] ++ optional stdenv.isLinux appstream-glib;
 
   buildInputs = [
-    file gtk girara libintl libseccomp
-    sqlite glib
+    gtk girara libintl sqlite glib file librsvg
   ] ++ optional synctexSupport texlive.bin.core
-    ++ optional stdenv.isDarwin [ gtk-mac-integration ];
-
-  postInstall = ''
-    wrapProgram "$out/bin/zathura" \
-      --prefix PATH ":" "${makeBinPath [ file ]}"
-  '';
+    ++ optional stdenv.isLinux libseccomp
+    ++ optional stdenv.isDarwin gtk-mac-integration;
 
   meta = {
     homepage = https://pwmt.org/projects/zathura/;
     description = "A core component for zathura PDF viewer";
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -7,21 +7,18 @@
 , pyyaml
 , requests
 , testtools
-, six
-, python_mimeparse
 }:
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ddce23a2dd0abba6d19775e9bf7ba64e184b15a0e7163e65f62af63354193f63";
+    sha256 = "eea593cf466b9c126ce667f6d30503624ef24459f118c75594a69353b6c3d5fc";
   };
 
   checkInputs = [coverage ddt nose pyyaml requests testtools];
-  propagatedBuildInputs = [ six python_mimeparse ];
 
   # The travis build fails since the migration from multiprocessing to threading for hosting the API under test.
   # OSError: [Errno 98] Address already in use
@@ -29,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An unladen web framework for building APIs and app backends";
-    homepage = http://falconframework.org;
+    homepage = "https://falconframework.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];
   };

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   name = "mbedtls-${version}";
-  version = "2.14.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
     rev = name;
-    sha256 = "0115qk69j4dvkvw5ci34zlajzhk2hbkiqbjyzr0lxf0mnqacl03i";
+    sha256 = "1mk3xv61wvqqrzd6jnrz8csyfnwwwwpjzywj3fsfy99p51d7wqgw";
   };
 
   nativeBuildInputs = [ cmake ninja perl python ];
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

@@ -1,8 +1,8 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
-buildGoPackage rec {
+buildGoModule rec {
   name = "golangci-lint-${version}";
-  version = "1.9.2";
+  version = "1.16.0";
   goPackagePath = "github.com/golangci/golangci-lint";
 
   subPackages = [ "cmd/golangci-lint" ];
@@ -11,14 +11,16 @@ buildGoPackage rec {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    sha256 = "0r05j6ayk5778fkd5r1sgcwq675ra0vq82lqs125g70291ryha08";
+    sha256 = "1yzcfmrxyrxhq3vx13qm7czvhvdnaqay75v8ry1lgpg0bnh9pakx";
   };
+
+  modSha256 = "1dsaj6qsac9y4rkssjbmk46vaqbblzdim2rbdh3dgn1m0vdpv505";
 
   meta = with lib; {
     description = "Linters Runner for Go. 5x faster than gometalinter. Nice colored output.";
     homepage = https://golangci.com/;
     license = licenses.agpl3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.manveru ];
+    maintainers = with maintainers; [ anpryl manveru ];
   };
 }

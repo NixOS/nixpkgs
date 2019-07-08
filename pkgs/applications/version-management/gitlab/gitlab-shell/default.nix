@@ -1,14 +1,14 @@
 { stdenv, ruby, bundler, fetchFromGitLab, go }:
 
 stdenv.mkDerivation rec {
-  version = "8.4.1";
+  version = "9.0.0";
   name = "gitlab-shell-${version}";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "00jzrpdfqgrba2qi5ngc0g07p7gmip7my563hw542gg8l88d27xq";
+    sha256 = "0437pigcgd5qi9ars8br1l058h2mijyv02axlr8wdb1vjsss857g";
   };
 
   buildInputs = [ ruby bundler go ];
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   patches = [ ./remove-hardcoded-locations.patch ];
 
   installPhase = ''
+    export GOCACHE="$TMPDIR/go-cache"
+
     ruby bin/compile
     mkdir -p $out/
     cp -R . $out/

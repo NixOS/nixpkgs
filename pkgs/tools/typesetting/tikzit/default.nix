@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, qmake, qttools, qtbase, flex, bison }:
+{ stdenv, fetchFromGitHub, qmake, qttools, qtbase, libsForQt5, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "tikzit-${version}";
-  version = "2.0";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "tikzit";
     repo = "tikzit";
-    rev = "v${version}";
-    sha256 = "0fwxr9rc9vmw2jzpj084rygzyhp4xm3vm737668az600ln2scyad";
+    rev = "v2.1.4";
+    sha256 = "121pgl2cdkksw48mjg6hzk7324ax6iw6fq7q3v1kdgwm8rwxm1fl";
   };
 
   nativeBuildInputs = [ qmake qttools flex bison ];
-  buildInputs = [ qtbase ];
+  buildInputs = [ qtbase libsForQt5.poppler ];
 
-  enableParallelBuilding = true;
+  # src/data/tikzlexer.l:29:10: fatal error: tikzparser.parser.hpp: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     description = "A graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
       TikZiT is a simple GUI editor for graphs and string diagrams.
       Its native file format is a subset of PGF/TikZ, which means TikZiT files
       can be included directly in papers typeset using LaTeX.
+      For preview support the texlive package 'preview' has to be installed.
     '';
     homepage = https://tikzit.github.io/;
     license = licenses.gpl3Plus;

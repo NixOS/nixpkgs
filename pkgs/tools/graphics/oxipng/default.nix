@@ -1,17 +1,20 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  version = "2.1.6";
-  name = "oxipng-${version}";
+  version = "2.2.1";
+  pname = "oxipng";
 
   src = fetchFromGitHub {
     owner = "shssoichiro";
-    repo = "oxipng";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0n3v2dxybfkf07hb4p2hbhhkwx907b85wzj8wa4whwil89igyrdm";
+    sha256 = "1r195x3wdkshjwy23fpqsyyrw7iaj7yb39nhcnx9d4nhgq8w0pcl";
   };
 
-  cargoSha256 = "1ycacwhwbn27i81jpp55m1446b9a50knlqv0kzkjcv8yf27213y9";
+  cargoSha256 = "1mjqkjrnh5gw39qjni574qh7k4p891xbb4ip2q69cm177ffbghiz";
+
+  # https://crates.io/crates/cloudflare-zlib#arm-vs-nightly-rust
+  cargoBuildFlags = [ "--features=cloudflare-zlib/arm-always" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/shssoichiro/oxipng;
@@ -19,8 +22,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
-
-    # Needs newer/unstable rust: error[E0658]: macro is_arm_feature_detected! is unstable
-    broken = stdenv.isAarch64;
   };
 }

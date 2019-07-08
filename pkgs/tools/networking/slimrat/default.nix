@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, WWWMechanize, LWP, makeWrapper}:
+{stdenv, fetchurl, perlPackages, makeWrapper}:
 
 stdenv.mkDerivation {
   name = "slimrat-1.0";
@@ -7,10 +7,10 @@ stdenv.mkDerivation {
     sha256 = "139b71d45k4b1y47iq62a9732cnaqqbh8s4knkrgq2hx0jxpsk5a";
   };
 
-  buildInputs = [ perl WWWMechanize LWP makeWrapper ];
+  buildInputs = [ makeWrapper ] ++ (with perlPackages; [ perl WWWMechanize LWP ]);
 
   patchPhase = ''
-    sed -e 's,#!.*,#!${perl}/bin/perl,' -i src/{slimrat,slimrat-gui}
+    sed -e 's,#!.*,#!${perlPackages.perl}/bin/perl,' -i src/{slimrat,slimrat-gui}
   '';
 
   installPhase = ''

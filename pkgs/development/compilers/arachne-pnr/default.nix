@@ -4,10 +4,10 @@ with builtins;
 
 stdenv.mkDerivation rec {
   name = "arachne-pnr-${version}";
-  version = "2018.09.08";
+  version = "2018.09.09";
 
   src = fetchFromGitHub {
-    owner  = "cseed";
+    owner  = "yosyshq";
     repo   = "arachne-pnr";
     rev    = "840bdfdeb38809f9f6af4d89dd7b22959b176fdd";
     sha256 = "1dqvjvgvsridybishv4pnigw9gypxh7r7nrqp9z9qq92v7c5rxzl";

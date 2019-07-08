@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, xercesc
+{ stdenv, cmake, xercesc
 
 # The target version of Geant4
 , geant4
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # Fix for boost 1.67+
     substituteInPlace CMakeLists.txt \
-    --replace "find_package(Boost)" "find_package(Boost 1.40 REQUIRED COMPONENTS python${builtins.replaceStrings ["."] [""] python.majorVersion})"
+    --replace "find_package(Boost)" "find_package(Boost 1.40 REQUIRED COMPONENTS python${builtins.replaceStrings ["."] [""] python.pythonVersion})"
     for f in `find . -name CMakeLists.txt`; do
       substituteInPlace "$f" \
         --replace "boost_python" "\''${Boost_LIBRARIES}"

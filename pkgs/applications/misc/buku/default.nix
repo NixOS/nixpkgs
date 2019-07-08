@@ -1,14 +1,14 @@
-{ stdenv, python3, fetchFromGitHub, fetchpatch }:
+{ stdenv, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "3.8";
+  version = "4.2.2";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "0gv26c4rr1akcaiff1nrwil03sv7d58mfxr86pgsw6nwld67ns0r";
+    sha256 = "1wy5i1av1s98yr56ybiq66kv0vg48zci3fp91zfgj04nh2966w1w";
   };
 
   checkInputs = [
@@ -18,6 +18,7 @@ with python3.pkgs; buildPythonApplication rec {
     pylint
     flake8
     pyyaml
+    mypy_extensions
   ];
 
   propagatedBuildInputs = [
@@ -33,7 +34,16 @@ with python3.pkgs; buildPythonApplication rec {
     arrow
     werkzeug
     click
+    html5lib
+    vcrpy
   ];
+
+  postPatch = ''
+    # Jailbreak problematic dependencies
+    sed -i \
+      -e "s,'PyYAML.*','PyYAML',g" \
+      setup.py
+  '';
 
   preCheck = ''
     # Fixes two tests for wrong encoding
@@ -60,7 +70,7 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = https://github.com/jarun/Buku;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [ matthiasbeyer infinisil ];
   };
 }
 

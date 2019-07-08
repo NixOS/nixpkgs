@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libnl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libnl, iptables }:
 
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
@@ -9,15 +9,13 @@ stdenv.mkDerivation {
 
   src = sourceAttrs.src;
 
-  setSourceRoot = ''
-    sourceRoot=$(echo */usr)
-  '';
-
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libnl ];
+  buildInputs = [ libnl iptables ];
 
-  postPatch = ''
-    chmod u+w -R ../common
+  makeFlags = "-C src/usr";
+
+  prePatch = ''
+    sed -e 's%^XTABLES_SO_DIR = .*%XTABLES_SO_DIR = '"$out"'/lib/xtables%g' -i src/usr/iptables/Makefile
   '';
 
   meta = with stdenv.lib; {

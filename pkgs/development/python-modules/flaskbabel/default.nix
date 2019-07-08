@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-Babel";
-  version = "0.11.1";
+  version = "0.12.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16b80cipdba9xj3jlaiaq6wgrgpjb70w3j01jjy9hbp4k71kd6yj";
+    sha256 = "316ad183e42003f3922957fa643d0a1e8e34a0f0301a88c3a8f605bc37ba5c86";
   };
 
   propagatedBuildInputs = [ flask jinja2 speaklater Babel pytz ];

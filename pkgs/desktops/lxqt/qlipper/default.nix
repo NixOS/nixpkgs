@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qt5 }:
+{ stdenv, fetchFromGitHub, cmake, qtbase, qttools }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ qt5.qtbase qt5.qttools ];
+  buildInputs = [ qtbase qttools ];
 
   meta = with stdenv.lib; {
     description = "Cross-platform clipboard history applet";

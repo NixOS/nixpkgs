@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "nose-progressive";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mfbjv3dcg23q0a130670g7xpfyvgza4wxkj991xxh8w9hs43ga4";
+    sha256 = "1mzmgq0wnfizmg9m2wn0c9g9282rdgv1jnphp8ww5h8kwqrjhvis";
   };
 
   buildInputs = [ nose ];

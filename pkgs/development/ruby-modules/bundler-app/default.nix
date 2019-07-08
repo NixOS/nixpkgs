@@ -12,8 +12,9 @@
 {
   # use the name of the name in question; its version will be picked up from the gemset
   pname
-  # gemdir is the location of the Gemfile{,.lock} and gemset.nix; usually ./.
-, gemdir
+  # Gemdir is the location of the Gemfile{,.lock} and gemset.nix; usually ./.
+  # This is required unless gemfile, lockfile, and gemset are all provided
+, gemdir ? null
   # Exes is the list of executables provided by the gems in the Gemfile
 , exes ? []
   # Scripts are ruby programs depend on gems in the Gemfile (e.g. scripts/rails)
@@ -29,15 +30,21 @@
 , buildInputs ? []
 , postBuild ? ""
 , gemConfig ? null
+, passthru ? {}
 }@args:
 
 let
   basicEnv = (callPackage ../bundled-common {}) args;
 
-  cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" ] // {
+  cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" "passthru" ] // {
     inherit preferLocalBuild allowSubstitutes; # pass the defaults
 
     buildInputs = buildInputs ++ lib.optional (scripts != []) makeWrapper;
+
+    passthru = basicEnv.passthru // {
+      inherit basicEnv;
+      inherit (basicEnv) env;
+    } // passthru;
   };
 in
   runCommand basicEnv.name cmdArgs ''
@@ -57,6 +64,4 @@ in
       find -L ${basicEnv}/${ruby.gemPath}/gems/${basicEnv.name} \( -wholename "*/man/*.$section" -o -wholename "*/man/man$section/*.$section" \) -print -execdir mkdir -p $mandir \; -execdir cp '{}' $mandir \;
     done
     ''}
-
-    ${postBuild}
   ''

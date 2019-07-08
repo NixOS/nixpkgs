@@ -18,8 +18,6 @@ stdenv.mkDerivation rec { pname = "EZminc";
                  "-DEZMINC_BUILD_MRFSEG=TRUE"
                  "-DEZMINC_BUILD_DD=TRUE" ];
 
-  checkPhase = "ctest --output-on-failure ../tests/";  # but ctest doesn't find the tests ...
-
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {

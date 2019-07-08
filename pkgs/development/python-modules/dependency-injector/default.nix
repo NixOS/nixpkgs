@@ -1,19 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, unittest2 }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, unittest2 }:
+
+let
+  testPath =
+    if isPy3k
+    then "test_*_py3.py"
+    else "test_*_py2_py3.py";
+in
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "3.13.2";
+  version = "3.14.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kgb40qspibr1x8ksv0whrr7v0jy20dnqzmc591hm2y4kwzl5hdw";
+    sha256 = "2e1889a0981381f557b0d14cba900adf7476817c53c13bfb04e2a30b3db0f1d3";
   };
 
   propagatedBuildInputs = [ six ];
   checkInputs = [ unittest2 ];
 
   checkPhase = ''
-    unit2 discover tests/unit
+    unit2 discover -s tests/unit -p "${testPath}"
   '';
 
   meta = with stdenv.lib; {

@@ -4,18 +4,19 @@
 , enum34
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-language";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2450e3265df129241cb21badb9d4ce2089d2652581df38e03c14a7ec85679ecb";
+    sha256 = "e4742b98e2d69ca21864e3218805a9db7e04e06f0672f2385cf6b5361ee35605";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 google_api_core ];
 
   checkPhase = ''

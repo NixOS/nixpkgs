@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "libzmf";
   version = "0.0.2";
-  
+
   src = fetchurl {
     url = "http://dev-www.libreoffice.org/src/libzmf/${name}.tar.xz";
     sha256 = "08mg5kmkjrmqrd8j5rkzw9vdqlvibhb1ynp6bmfxnzq5rcq1l197";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = ''A library that parses the file format of Zoner Callisto/Draw documents'';
     license = stdenv.lib.licenses.mpl20;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     homepage = https://wiki.documentfoundation.org/DLP/Libraries/libzmf;
     downloadPage = "http://dev-www.libreoffice.org/src/libzmf/";
     updateWalker = true;

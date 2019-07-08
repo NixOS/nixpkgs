@@ -3,18 +3,19 @@
 , fetchPypi
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6064bc6e2761694b708878ff3d5902c6ce5eb44a770a921e7a99caf6c2533ae3";
+    sha256 = "ec1d049cb54fc036887d946ce0391bde481a3da7263e55908eaf9694079ec46f";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ google_api_core ];
 
   checkPhase = ''

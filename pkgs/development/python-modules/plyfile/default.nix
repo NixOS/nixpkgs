@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "plyfile";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "067e384e3723f28dbbd8e8f976a9712dadf6761b2d62c4c1a90821e3c5310bce";
+    sha256 = "84ba5ee8c70a4924f64aa7edff5764b929f3b7842d53a3197d0b753818ad7089";
   };
 
   propagatedBuildInputs = [ numpy ];

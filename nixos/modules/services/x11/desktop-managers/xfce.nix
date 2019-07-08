@@ -53,7 +53,7 @@ in
 
       # Supplies some abstract icons such as:
       # utilities-terminal, accessories-text-editor
-      gnome3.defaultIconTheme
+      gnome3.adwaita-icon-theme
 
       hicolor-icon-theme
       tango-icon-theme

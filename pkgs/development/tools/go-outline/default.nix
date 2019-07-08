@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "go-outline-${version}";
-  version = "unstable-2017-08-04";
-  rev = "9e9d089bb61a5ce4f8e0c8d8dc5b4e41b0e02a48";
+  version = "unstable-2018-11-22";
+  rev = "7182a932836a71948db4a81991a494751eccfe77";
 
   goPackagePath = "github.com/ramya-rao-a/go-outline";
   goDeps = ./deps.nix;
@@ -12,7 +12,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "ramya-rao-a";
     repo = "go-outline";
-    sha256 = "0kbkv4d6q9w0d41m00sqdm10l0sg56mv8y6rmidqs152mm2w13x0";
+    sha256 = "0p381yvwvff0i4i7mf5v1k2q1lb0rs2xkjgv67n1cw2573c613r1";
   };
 
   meta = {

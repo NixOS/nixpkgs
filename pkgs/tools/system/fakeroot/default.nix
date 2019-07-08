@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, getopt, libcap }:
+{ stdenv, fetchurl, fetchpatch, getopt, libcap, gnused }:
 
 stdenv.mkDerivation rec {
   version = "1.23";
@@ -29,14 +29,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ getopt ]
+  buildInputs = [ getopt gnused ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) libcap
     ;
 
   postUnpack = ''
-    for prog in getopt; do
-      sed -i "s@getopt@$(type -p getopt)@g" ${name}/scripts/fakeroot.in
-    done
+    sed -i -e "s@getopt@$(type -p getopt)@g" -e "s@sed@$(type -p sed)@g" ${name}/scripts/fakeroot.in
   '';
 
   meta = {

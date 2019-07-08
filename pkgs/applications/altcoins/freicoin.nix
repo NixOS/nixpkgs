@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1v1qwv4x5agjba82s1vknmdgq67y26wzdwbmwwqavv7f7y3y860h";
   };
 
+  enableParallelBuilding = false;
+
   qmakeFlags = ["USE_UPNP=-"];
 
   # I think that openssl and zlib are required, but come through other

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, gfortran, perl, libnl, rdma-core, zlib
-, numactl
+{ stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
+, rdma-core, zlib, numactl, libevent, hwloc
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -9,22 +9,30 @@
 }:
 
 let
-  version = "3.1.3";
+  version = "4.0.1";
 
 in stdenv.mkDerivation rec {
   name = "openmpi-${version}";
 
   src = with stdenv.lib.versions; fetchurl {
     url = "http://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${name}.tar.bz2";
-    sha256 = "1dks11scivgaskjs5955y9wprsl12wr3gn5r7wfl0l8gq03l7q4b";
+    sha256 = "02cpzcp113gj5hb0j2xc0cqma2fn04i2i0bzf80r71120p9bdryc";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "openmpi-mca_btl_vader_component_close-segfault.patch";
+      url = "https://github.com/open-mpi/ompi/pull/6526.patch";
+      sha256 = "0s7ac9rkcj3fi6ampkvy76njlj478yyr4zvypjc7licy6dgr595x";
+    })
+  ];
 
   postPatch = ''
     patchShebangs ./
   '';
 
   buildInputs = with stdenv; [ gfortran zlib ]
-    ++ lib.optionals isLinux [ libnl numactl ]
+    ++ lib.optionals isLinux [ libnl numactl libevent hwloc ]
     ++ lib.optional (isLinux || isFreeBSD) rdma-core;
 
   nativeBuildInputs = [ perl ];

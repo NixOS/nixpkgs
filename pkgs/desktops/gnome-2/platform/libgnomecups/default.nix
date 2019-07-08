@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, gettext, libxml2, intltool, libart_lgpl }:
+{ stdenv, fetchurl, pkgconfig, gtk2, gettext, libxml2, intltool, libart_lgpl }:
 
 stdenv.mkDerivation rec {
   name = "libgnomecups-0.2.3";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patches = [ ./glib.patch ./cups_1.6.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk gettext intltool libart_lgpl ];
+  buildInputs = [ gtk2 gettext intltool libart_lgpl ];
 
   propagatedBuildInputs = [ libxml2 ];
 }

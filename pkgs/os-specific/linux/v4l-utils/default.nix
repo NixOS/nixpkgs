@@ -8,18 +8,18 @@
 
 stdenv.mkDerivation rec {
   name = "v4l-utils-${version}";
-  version = "1.16.0";
+  version = "1.16.6";
 
   src = fetchurl {
     url = "https://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
-    sha256 = "1b8bx9zfaw0crjkfh0wwyixbv4683mkw0cb3nxwc7fl489c2bd7i";
+    sha256 = "1bkqlrizx0j2rd6ybam2x17bjrpwzl4v4szmnzm3cmixis3w3npr";
   };
 
   outputs = [ "out" "dev" ];
 
   configureFlags =
     if withUtils then [
-      "--with-udevdir=\${out}/lib/udev"
+      "--with-udevdir=${placeholder "out"}/lib/udev"
     ] else [
       "--disable-v4l-utils"
     ];
