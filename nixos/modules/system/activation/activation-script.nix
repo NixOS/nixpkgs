@@ -5,17 +5,19 @@ with lib;
 
 let
 
-  addAttributeName = mapAttrs (a: v: v // {
+  sortSnippets = set: let withHeadlines = mapAttrs (a: v:
+    let entry = if isString v then noDepEntry v else v;
+    in entry // {
     text = ''
       #### Activation script snippet ${a}:
       _localstatus=0
-      ${v.text}
+      ${entry.text}
 
       if (( _localstatus > 0 )); then
         printf "Activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
       fi
     '';
-  });
+  }) set; in textClosureMap id (withHeadlines) (attrNames withHeadlines);
 
   path = with pkgs; map getBin
     [ coreutils
@@ -82,12 +84,7 @@ in
             # Ensure a consistent umask.
             umask 0022
 
-            ${
-              let
-                set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
-                withHeadlines = addAttributeName set';
-              in textClosureMap id (withHeadlines) (attrNames withHeadlines)
-            }
+            ${sortSnippets set}
 
             # Make this configuration the current configuration.
             # The readlink is there to ensure that when $systemConfig = /system
@@ -137,12 +134,7 @@ in
           _status=0
           trap "_status=1 _localstatus=\$?" ERR
 
-          ${
-            let
-              set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
-              withHeadlines = addAttributeName set';
-            in textClosureMap id (withHeadlines) (attrNames withHeadlines)
-          }
+          ${sortSnippets set}
 
           exit $_status
         '';
