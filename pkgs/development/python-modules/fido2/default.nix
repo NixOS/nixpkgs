@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pl8d2pr6jzqj4y9qiaddhjgnl92kikjxy0bgzm2jshkzzic8mp3";
+    sha256 = "11wdcjymw8y6wxgp29gbhdxff3lpc5yp5fcqnr5vnj88g192ic27";
   };
 
   propagatedBuildInputs = [ six cryptography ];
