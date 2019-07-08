@@ -1699,6 +1699,8 @@ in
 
   lynis = callPackage ../tools/security/lynis { };
 
+  marlin-calc = callPackage ../tools/misc/marlin-calc {};
+
   mathics = pythonPackages.mathics;
 
   masscan = callPackage ../tools/security/masscan {
