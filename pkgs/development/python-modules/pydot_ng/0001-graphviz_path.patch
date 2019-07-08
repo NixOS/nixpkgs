@@ -1,0 +1,130 @@
+diff --git a/pydot_ng/__init__.py b/pydot_ng/__init__.py
+index 70fc198..162d276 100644
+--- a/pydot_ng/__init__.py
++++ b/pydot_ng/__init__.py
+@@ -478,122 +478,9 @@ def find_graphviz():
+     If this fails, it returns None.
+     """
+ 
+-    # Method 1 (Windows only)
+-    if os.sys.platform == 'win32':
+-
+-        HKEY_LOCAL_MACHINE = 0x80000002
+-        KEY_QUERY_VALUE = 0x0001
+-
+-        RegOpenKeyEx = None
+-        RegQueryValueEx = None
+-        RegCloseKey = None
+-
+-        try:
+-            import win32api
+-            RegOpenKeyEx = win32api.RegOpenKeyEx
+-            RegQueryValueEx = win32api.RegQueryValueEx
+-            RegCloseKey = win32api.RegCloseKey
+-
+-        except ImportError:
+-            # Print a messaged suggesting they install these?
+-            pass
+-
+-        try:
+-            import ctypes
+-
+-            def RegOpenKeyEx(key, subkey, opt, sam):
+-                result = ctypes.c_uint(0)
+-                ctypes.windll.advapi32.RegOpenKeyExA(key, subkey, opt, sam,
+-                                                     ctypes.byref(result))
+-                return result.value
+-
+-            def RegQueryValueEx(hkey, valuename):
+-                data_type = ctypes.c_uint(0)
+-                data_len = ctypes.c_uint(1024)
+-                data = ctypes.create_string_buffer(1024)
+-
+-                # this has a return value, which we should probably check
+-                ctypes.windll.advapi32.RegQueryValueExA(
+-                    hkey, valuename, 0, ctypes.byref(data_type),
+-                    data, ctypes.byref(data_len))
+-
+-                return data.value
+-
+-            RegCloseKey = ctypes.windll.advapi32.RegCloseKey
+-
+-        except ImportError:
+-            # Print a messaged suggesting they install these?
+-            pass
+-
+-        if RegOpenKeyEx is not None:
+-            # Get the GraphViz install path from the registry
+-            hkey = None
+-            potentialKeys = [
+-                "SOFTWARE\\ATT\\Graphviz",
+-                "SOFTWARE\\AT&T Research Labs\\Graphviz"]
+-            for potentialKey in potentialKeys:
+-
+-                try:
+-                    hkey = RegOpenKeyEx(
+-                        HKEY_LOCAL_MACHINE,
+-                        potentialKey, 0, KEY_QUERY_VALUE)
+-
+-                    if hkey is not None:
+-                        path = RegQueryValueEx(hkey, "InstallPath")
+-                        RegCloseKey(hkey)
+-
+-                        # The regitry variable might exist, left by
+-                        # old installations but with no value, in those cases
+-                        # we keep searching...
+-                        if not path:
+-                            continue
+-
+-                        # Now append the "bin" subdirectory:
+-                        path = os.path.join(path, "bin")
+-                        progs = __find_executables(path)
+-                        if progs is not None:
+-                            return progs
+-
+-                except Exception:
+-                    pass
+-                else:
+-                    break
+-
+-    # Method 2 (Linux, Windows etc)
+-    if 'PATH' in os.environ:
+-        for path in os.environ['PATH'].split(os.pathsep):
+-            progs = __find_executables(path)
+-            if progs is not None:
+-                return progs
+-
+-    # Method 3 (Windows only)
+-    if os.sys.platform == 'win32':
+-
+-        # Try and work out the equivalent of "C:\Program Files" on this
+-        # machine (might be on drive D:, or in a different language)
+-        if 'PROGRAMFILES' in os.environ:
+-            # Note, we could also use the win32api to get this
+-            # information, but win32api may not be installed.
+-            path = os.path.join(os.environ['PROGRAMFILES'], 'ATT',
+-                                'GraphViz', 'bin')
+-        else:
+-            # Just in case, try the default...
+-            path = r"C:\Program Files\att\Graphviz\bin"
+-
+-        progs = __find_executables(path)
+-
+-        if progs is not None:
+-            return progs
+-
+-    for path in (
+-            '/usr/bin', '/usr/local/bin',
+-            '/opt/local/bin',
+-            '/opt/bin', '/sw/bin', '/usr/share',
+-            '/Applications/Graphviz.app/Contents/MacOS/'):
+-
+-        progs = __find_executables(path)
+-        if progs is not None:
+-            return progs
++    progs = __find_executables(NIX_GRAPHVIZ_PATH)
++    if progs is not None:
++        return progs
+ 
+     # Failed to find GraphViz
+     return None
