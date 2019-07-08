@@ -416,19 +416,19 @@ self: super: {
   youcompleteme = super.youcompleteme.overrideAttrs(old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
-        --replace "'ycm_path_to_python_interpreter', '''" \
-        "'ycm_path_to_python_interpreter', '${python}/bin/python'"
+        --replace "'ycm_python_interpreter_path', '''" \
+        "'ycm_python_interpreter_path', '${python3}/bin/python'"
 
       rm -r third_party/ycmd
       ln -s ${ycmd}/lib/ycmd third_party
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A code-completion engine for Vim";
-      homepage = https://github.com/Valloric/YouCompleteMe;
-      license = stdenv.lib.licenses.gpl3;
-      maintainers = with stdenv.lib.maintainers; [marcweber jagajaga];
-      platforms = stdenv.lib.platforms.unix;
+      homepage = "https://github.com/Valloric/YouCompleteMe";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ marcweber jagajaga ];
+      platforms = platforms.unix;
     };
   });
 
