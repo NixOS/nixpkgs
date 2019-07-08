@@ -1,11 +1,11 @@
 {
   busybox = import <nix/fetchurl.nix> {
-    url = https://wdtz.org/files/030q34q7fk6jdfxkgcqp5rzr4yhw3pgx-stdenv-bootstrap-tools-x86_64-unknown-linux-musl/on-server/busybox;
-    sha256 = "16lzrwwvdk6q3g08gs45pldz0rh6xpln2343xr444960h6wqxl5v";
+    url = https://wdtz.org/files/gywxhjgl70sxippa0pxs0vj5qcgz1wi8-stdenv-bootstrap-tools/on-server/busybox;
+    sha256 = "0779c2wn00467h76xpqil678gfi1y2p57c7zq2d917jsv2qj5009";
     executable = true;
   };
   bootstrapTools = import <nix/fetchurl.nix> {
-    url = https://wdtz.org/files/030q34q7fk6jdfxkgcqp5rzr4yhw3pgx-stdenv-bootstrap-tools-x86_64-unknown-linux-musl/on-server/bootstrap-tools.tar.xz;
-    sha256 = "0ly0wj8wzbikn2j8sn727vikk90bq36drh98qvfx1kkh5k5azm2j";
+    url = https://wdtz.org/files/gywxhjgl70sxippa0pxs0vj5qcgz1wi8-stdenv-bootstrap-tools/on-server/bootstrap-tools.tar.xz;
+    sha256 = "1dwiqw4xvnm0b5fdgl89lz2qq45f6s9icwxn6n6ams71xw0dbqyi";
   };
 }

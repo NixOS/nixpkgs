@@ -1,0 +1,27 @@
+--- f2fs-tools/configure.ac.orig	2018-11-29 05:05:57.154988687 +0300
++++ f2fs-tools/configure.ac	2018-11-29 05:06:12.667316101 +0300
+@@ -20,14 +20,16 @@
+ 				[\([0-9]*\).\([0-9]*\)\(\w\|\W\)*], [\2]),
+ 				[Minor version for f2fs-tools])
+ 
+-AC_CHECK_FILE(.git,
+-	AC_DEFINE([F2FS_TOOLS_DATE],
+-		"m4_bpatsubst(f2fs_tools_gitdate,
+-		[\([0-9-]*\)\(\w\|\W\)*], [\1])",
+-		[f2fs-tools date based on Git commits]),
+-	AC_DEFINE([F2FS_TOOLS_DATE],
+-		"f2fs_tools_date",
+-		[f2fs-tools date based on Source releases]))
++dnl AC_CHECK_FILE(.git,
++dnl 	AC_DEFINE([F2FS_TOOLS_DATE],
++dnl 		"m4_bpatsubst(f2fs_tools_gitdate,
++dnl 		[\([0-9-]*\)\(\w\|\W\)*], [\1])",
++dnl 		[f2fs-tools date based on Git commits]),
++dnl 	AC_DEFINE([F2FS_TOOLS_DATE],
++dnl 		"f2fs_tools_date",
++dnl 		[f2fs-tools date based on Source releases]))
++
++AC_DEFINE([F2FS_TOOLS_DATE], "f2fs_tools_date", [f2fs-tools date based on Source releases])
+ 
+ AC_CONFIG_SRCDIR([config.h.in])
+ AC_CONFIG_HEADER([config.h])

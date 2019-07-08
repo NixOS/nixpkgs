@@ -1,21 +1,29 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pkgs
+, python
+, c-ares
+, cffi
 }:
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "2.3.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0h4fxw5drrhfyslzmfpljk0qnnpbhhb20hnnndzahhbwylyw1x1n";
+    sha256 = "b253f5dcaa0ac7076b79388a3ac80dd8f3bd979108f813baade40d3a9b8bf0bd";
   };
 
-  propagatedBuildInputs = [ pkgs.c-ares ];
+  buildInputs = [ c-ares ];
 
-  # No tests included
+  propagatedBuildInputs = [ cffi ];
+
+  checkPhase = ''
+    ${python.interpreter} tests/tests.py
+  '';
+
+  # requires network access
   doCheck = false;
 
   meta = with stdenv.lib; {

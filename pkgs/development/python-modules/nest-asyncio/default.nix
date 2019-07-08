@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.9.1";
+  version = "1.0.0";
   pname = "nest_asyncio";
   disabled = !(pythonAtLeast "3.5");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0844af67deda3243389d47cd8754b6775c5c828345e0277beca7bd008d273392";
+    sha256 = "bd1cb7df2ea979e57d8ad02493ad85f9afbf1fcea3dfe34239da8c0dda98087e";
   };
 
   meta = with stdenv.lib; {

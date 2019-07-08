@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "eradicate";
-  version = "0.2.1";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "092zmck919bn6sl31ixrzhn88g9nvhwzmwzpq8dzgn6c8k2h3bzr";
+    sha256 = "06nhs8wml5f5k96gbq7jl417bmsqnxy8aykpzbzrvm3gmqmaizag";
   };
 
   meta = with lib; {

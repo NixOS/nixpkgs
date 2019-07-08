@@ -59,6 +59,7 @@ let
 
     [Wayland]
     EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+    SessionDir=${dmcfg.session.desktops}/share/wayland-sessions
 
     ${optionalString cfg.autoLogin.enable ''
     [Autologin]
@@ -194,6 +195,11 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
+      { assertion = xcfg.enable;
+        message = ''
+          SDDM requires services.xserver.enable to be true
+        '';
+      }
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
@@ -202,7 +208,7 @@ in
       { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
         message = ''
           SDDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
+          services.xserver.windowManager.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
         '';
       }
@@ -263,8 +269,8 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
-    environment.pathsToLink = [ 
-      "/share/sddm" 
+    environment.pathsToLink = [
+      "/share/sddm"
     ];
 
     users.groups.sddm.gid = config.ids.gids.sddm;

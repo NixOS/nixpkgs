@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, autoconf, automake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
 , gtk, glib, pcre, libappindicator, libpthreadstubs, libXdmcp
 , libxkbcommon, epoxy, at-spi2-core, dbus, libdbusmenu
 }:
 
 stdenv.mkDerivation rec {
   name = "gromit-mpx-${version}";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "bk138";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake autoreconfHook
+    cmake
     gtk glib pcre libappindicator libpthreadstubs
     libXdmcp libxkbcommon epoxy at-spi2-core
     dbus libdbusmenu

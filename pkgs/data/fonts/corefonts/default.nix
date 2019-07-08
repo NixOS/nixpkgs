@@ -41,12 +41,10 @@ stdenv.mkDerivation {
 
     cabextract --lowercase viewer1.cab
 
-    fontDir=$out/share/fonts/truetype
-    mkdir -p $fontDir
-    cp *.ttf $fontDir
+    install -m444 -Dt $out/share/fonts/truetype *.ttf
 
     # Also put the EULA there to be on the safe side.
-    cp ${eula} $fontDir/eula.html
+    cp ${eula} $out/share/fonts/truetype/eula.html
 
     # Set up no-op font configs to override any aliases set up by
     # other packages.

@@ -17,7 +17,7 @@
 , postBuild ? null
 , document ? []
 , meta ? {}
-, groups ? ["default"]
+, groups ? null
 , ignoreCollisions ? false
 , buildInputs ? []
 , ...

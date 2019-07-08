@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, python3
-, gnome3, vala, gobjectIntrospection, wrapGAppsHook
-, gtk3, granite
-, json-glib, glib, glib-networking
+, meson, ninja, pkgconfig, python3, libgee, gsettings-desktop-schemas
+, gnome3, pantheon, gobject-introspection, wrapGAppsHook
+, gtk3, json-glib, glib, glib-networking, hicolor-icon-theme
 }:
 
 let
@@ -18,10 +17,18 @@ in stdenv.mkDerivation rec {
     sha256 = "1z3wyx316nns6gi7vlvcfmalhvxncmvcmmlgclbv6b6hwl5x2ysi";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig python3 vala gobjectIntrospection wrapGAppsHook ];
+  nativeBuildInputs = [
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    python3
+    pantheon.vala
+    wrapGAppsHook
+  ];
   buildInputs = [
-    gtk3 granite json-glib glib glib-networking
-    gnome3.libgee gnome3.libsoup gnome3.gsettings-desktop-schemas
+    gtk3 pantheon.granite json-glib glib glib-networking hicolor-icon-theme
+    libgee gnome3.libsoup gsettings-desktop-schemas
   ];
 
   postPatch = ''

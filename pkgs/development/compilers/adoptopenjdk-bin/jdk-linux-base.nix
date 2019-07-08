@@ -1,7 +1,4 @@
-{ name
-, url
-, sha256
-}:
+sourcePerArch:
 
 { swingSupport ? true
 , stdenv
@@ -45,13 +42,19 @@ let
     xorg.libXrender
     stdenv.cc.cc
   ]);
+
+  cpuName = stdenv.hostPlatform.parsed.cpu.name;
 in
 
 let result = stdenv.mkDerivation rec {
-  inherit name;
+  name = if sourcePerArch.packageType == "jdk"
+    then "adoptopenjdk-${sourcePerArch.vmType}-bin-${version}"
+    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${version}";
+
+  version = sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
 
   src = fetchurl {
-    inherit url sha256;
+    inherit (sourcePerArch.${cpuName}) url sha256;
   };
 
   nativeBuildInputs = [ file ];
@@ -62,20 +65,16 @@ let result = stdenv.mkDerivation rec {
   installPhase = ''
     cd ..
 
-    # Set PaX markings
-    exes=$(file $sourceRoot/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-    for file in $exes; do
-      paxmark m "$file"
-      # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
-      ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$file"''}
-    done
-
     mv $sourceRoot $out
 
     rm -rf $out/demo
 
     # Remove some broken manpages.
     rm -rf $out/man/ja*
+
+    # Remove embedded freetype to avoid problems like
+    # https://github.com/NixOS/nixpkgs/issues/57733
+    rm $out/lib/libfreetype.so
 
     # for backward compatibility
     ln -s $out $out/jre
@@ -112,7 +111,7 @@ let result = stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
-    platforms = [ "x86_64-linux" ]; # some inherit jre.meta.platforms
+    platforms = stdenv.lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms
     maintainers = with stdenv.lib.maintainers; [ taku0 ];
   };
 

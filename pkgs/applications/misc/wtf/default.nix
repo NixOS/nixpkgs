@@ -1,20 +1,20 @@
-{ buildGoPackage
+{ buildGoModule
 , fetchFromGitHub
 , lib
 }:
 
-buildGoPackage rec {
-  name = "wtf-${version}";
-  version = "0.4.0";
-
-  goPackagePath = "github.com/senorprogrammer/wtf";
+buildGoModule rec {
+  pname = "wtf";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
-    owner = "senorprogrammer";
-    repo = "wtf";
-    rev = "${version}";
-    sha256 = "1vgjqmw27baiq9brmnafic3w3hw11p5qc6ahbdxi5n5n4bx7j6vn";
+    owner = "wtfutil";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1b671jhf3xaaisgpiad5apmvwkp40qr2hm4n21m0ya7k5ckps09z";
   };
+
+  modSha256 = "0as736nnx7ci4w9gdp27g55g6dny9bh1fryz3g89gxm2sa2nlb9l";
 
   buildFlagsArray = [ "-ldflags=" "-X main.version=${version}" ];
 

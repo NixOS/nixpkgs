@@ -3,17 +3,17 @@
 
 let
   pname = "atomix";
-  version = "3.29.3";
+  version = "3.32.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1k8bvwywpvw5f13pw40brk6c3rz2mdz9cd4zhcawg7qdm77dvcvb";
+    sha256 = "19wpm7mn6r7x6jz1r0kkqg3xa69iycvgb7g7i8wi0d3cx0rsgjkl";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 ];
-  buildInputs = [ glib gtk3 gdk_pixbuf libgnome-games-support gnome3.defaultIconTheme ];
+  buildInputs = [ glib gtk3 gdk_pixbuf libgnome-games-support gnome3.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x meson_post_install.py

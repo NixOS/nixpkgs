@@ -16,11 +16,11 @@ let
     } // (optionalAttrs vhostConfig.enableACME {
       sslCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
       sslCertificateKey = "${acmeDirectory}/${serverName}/key.pem";
-      sslTrustedCertificate = "${acmeDirectory}/${serverName}/full.pem";
+      sslTrustedCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
     }) // (optionalAttrs (vhostConfig.useACMEHost != null) {
       sslCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
       sslCertificateKey = "${acmeDirectory}/${vhostConfig.useACMEHost}/key.pem";
-      sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/full.pem";
+      sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -44,7 +44,7 @@ let
     }
   ''));
 
-  configFile = pkgs.writeText "nginx.conf" ''
+  configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log ${cfg.logError};
     daemon off;
@@ -64,7 +64,7 @@ let
       include ${cfg.package}/conf/uwsgi_params;
 
       ${optionalString (cfg.resolver.addresses != []) ''
-        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
+        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"} ${optionalString (!cfg.resolver.ipv6) "ipv6=off"};
       ''}
       ${upstreamConfig}
 
@@ -182,11 +182,12 @@ let
             then filter (x: x.ssl) defaultListen
             else defaultListen;
 
-        listenString = { addr, port, ssl, ... }:
+        listenString = { addr, port, ssl, extraParameters ? [], ... }:
           "listen ${addr}:${toString port} "
           + optionalString ssl "ssl "
           + optionalString (ssl && vhost.http2) "http2 "
           + optionalString vhost.default "default_server "
+          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
           + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
@@ -263,21 +264,11 @@ let
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
       ${optionalString (config.alias != null) "alias ${config.alias};"}
+      ${optionalString (config.return != null) "return ${config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
-  mkBasicAuth = vhostName: authDef: let
-    htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
-      concatStringsSep "\n" (mapAttrsToList (user: password: ''
-        ${user}:{PLAIN}${password}
-      '') authDef)
-    );
-  in ''
-    auth_basic secured;
-    auth_basic_user_file ${htpasswdFile};
-  '';
-
   mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
     concatStringsSep "\n" (mapAttrsToList (user: password: ''
       ${user}:{PLAIN}${password}
@@ -360,7 +351,7 @@ in
       preStart =  mkOption {
         type = types.lines;
         default = ''
-          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs  
+          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs
           test `stat -c %a ${cfg.stateDir}` = "750" || chmod 750 ${cfg.stateDir}
           test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
           chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
@@ -479,8 +470,8 @@ in
 
       sslProtocols = mkOption {
         type = types.str;
-        default = "TLSv1.2";
-        example = "TLSv1 TLSv1.1 TLSv1.2";
+        default = "TLSv1.2 TLSv1.3";
+        example = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
         description = "Allowed TLS protocol versions.";
       };
 
@@ -517,6 +508,15 @@ in
               description = ''
                 By default, nginx caches answers using the TTL value of a response.
                 An optional valid parameter allows overriding it
+              '';
+            };
+            ipv6 = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
+                If looking up of IPv6 addresses is not desired, the ipv6=off parameter can be
+                specified.
               '';
             };
           };

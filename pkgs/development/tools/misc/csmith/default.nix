@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, makeWrapper, libbsd, perl, SysCPU }:
+{ stdenv, fetchurl, m4, makeWrapper, libbsd, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "csmith-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ m4 makeWrapper ];
-  buildInputs = [ perl SysCPU libbsd ];
+  buildInputs = [ libbsd ] ++ (with perlPackages; [ perl SysCPU ]);
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \

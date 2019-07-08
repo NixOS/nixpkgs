@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "eprover-${version}";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchurl {
     url = "https://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_${version}/E.tgz";
-    sha256 = "08ihpwgkz0l7skr42iw8lm202kqr51i792bs61qsbnk9gsjlab1c";
+    sha256 = "15pbmi195812a2pwrvfa4gwad0cy7117d5kaw98651g6fzgd4rjk";
   };
 
   buildInputs = [ which ];

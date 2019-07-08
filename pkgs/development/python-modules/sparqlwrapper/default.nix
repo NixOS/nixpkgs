@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "SPARQLWrapper";
-  version = "1.7.6";
+  version = "1.8.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y12hpsfjd779yi29bhvl6g4vszadjvd8jw38z5rg77b034vxjnw";
+    sha256 = "21928e7a97f565e772cdeeb0abad428960f4307e3a13dbdd8f6d3da8a6a506c9";
   };
 
   # break circular dependency loop

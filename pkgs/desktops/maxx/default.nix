@@ -1,43 +1,34 @@
-{ stdenv, fetchurl, makeWrapper, autoPatchelfHook
-, libredirect, gcc-unwrapped, bash, gtk-engine-murrine, gtk_engines, librsvg
+{ stdenv, fetchurl, makeWrapper, autoPatchelfHook, gnused
+, gcc, bash, gtk-engine-murrine, gtk_engines, librsvg
 
 , libX11, libXext, libXi, libXau, libXrender, libXft, libXmu, libSM, libXcomposite, libXfixes, libXpm
 , libXinerama, libXdamage, libICE, libXtst, libXaw, fontconfig, pango, cairo, glib, libxml2, atk, gtk2
-, gdk_pixbuf, libGL, ncurses
+, gdk_pixbuf, libGL, ncurses5
 
-, xclock, xsettingsd }:
+, dmidecode, pciutils, usbutils
+}:
 
-let
-  version = "Indy-1.1.0";
-
-  runtime_deps = [
-    xclock xsettingsd
-  ];
-in stdenv.mkDerivation {
-  name = "MaXX-${version}";
+stdenv.mkDerivation rec {
+  pname = "MaXX";
+  version = "2.0.1";
+  codename = "Indigo";
 
   srcs = [
     (fetchurl {
-      url = "http://maxxdesktop.arcadedaydream.com/Indy-Releases/Installers/MaXX-${version}-NO-ARCH.tar.gz";
-      sha256 = "1d23j08wwrrn5cp7csv70pcz9jppcn0xb1894wkp0caaliy7g31y";
-    })
-    (fetchurl {
-      url = "http://maxxdesktop.arcadedaydream.com/Indy-Releases/Installers/MaXX-${version}-x86_64.tar.gz";
-      sha256 = "156p2lra184wyvibrihisd7cr1ivqaygsf0zfm26a12gx23b7708";
+      url = "http://maxxdesktop.arcadedaydream.com/${codename}-Releases/Installers/MaXX-${codename}-${version}-x86_64.tar.gz";
+      sha256 = "17hd3j8773kmvvhyf657in6zmhnw4mbvyn4r6dfip5bdaz66pj01";
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook gnused ];
   buildInputs = [
     stdenv.cc.cc libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
     libXinerama libXdamage libICE libXtst libXaw fontconfig pango cairo glib libxml2 atk gtk2
-    gdk_pixbuf libGL ncurses
+    gdk_pixbuf libGL ncurses5
   ];
 
   buildPhase = ''
-    while IFS= read -r -d ''$'\0' i; do
-      substituteInPlace "$i" --replace /opt/MaXX $out/opt/MaXX
-    done < <(find "." -type f -exec grep -Iq /opt/MaXX {} \; -and -print0)
+    sed -i "s/\(LD_LIBRARY_PATH=.*\)$/\1:\$LD_LIBRARY_PATH/p" etc/system.desktopenv
 
     substituteInPlace bin/adminterm \
       --replace /bin/bash ${bash}/bin/bash
@@ -55,33 +46,25 @@ in stdenv.mkDerivation {
 
     wrapProgram $maxx/etc/skel/Xsession.dt \
       --prefix GTK_PATH : "${gtk-engine-murrine}/lib/gtk-2.0:${gtk_engines}/lib/gtk-2.0" \
-      --prefix GDK_PIXBUF_MODULE_FILE : "$(echo ${librsvg.out}/lib/gdk-pixbuf-2.0/*/loaders.cache)" \
-      --prefix PATH : ${stdenv.lib.makeBinPath runtime_deps}
+      --prefix GDK_PIXBUF_MODULE_FILE : "$(echo ${librsvg.out}/lib/gdk-pixbuf-2.0/*/loaders.cache)"
 
     while IFS= read -r -d ''$'\0' i; do
       if isExecutable "$i"; then
         wrapProgram "$i" \
-          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-          --set NIX_REDIRECTS /opt/MaXX=$maxx \
-          --prefix PATH : $maxx/sbin
+          --prefix PATH : ${gcc}/bin
       fi
     done < <(find "$maxx" -type f -print0)
 
-    cp ${gcc-unwrapped}/bin/cpp ${gcc-unwrapped}/libexec/gcc/*/*/cc1 $maxx/sbin
-    for i in $maxx/sbin/cpp $maxx/sbin/cc1
-    do
-      wrapProgram "$i" \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-        --set NIX_REDIRECTS /opt/MaXX=$maxx
-    done
+    wrapProgram $maxx/bin/hinv \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ dmidecode pciutils usbutils ]}
   '';
 
   meta = with stdenv.lib; {
     description = "A replica of IRIX Interactive Desktop";
-    homepage = http://www.maxxinteractive.com;
+    homepage = https://www.facebook.com/maxxdesktop/;
     license = {
       fullName = "The MaXX Interactive Desktop for Linux License Agreement";
-      url = http://www.maxxinteractive.com/site/?page_id=97;
+      url = http://maxxdesktop.arcadedaydream.com/Indigo-Releases/docs/license.html;
       free = false; # redistribution is only allowed to *some* hardware, etc.
     };
     maintainers = [ maintainers.gnidorah ];

@@ -1,4 +1,5 @@
 { sage-src
+, env-locations
 , perl
 , buildPythonPackage
 , arb
@@ -20,7 +21,7 @@
 , jinja2
 , lcalc
 , lrcalc
-, libgap
+, gap
 , linbox
 , m4ri
 , m4rie
@@ -30,6 +31,7 @@
 , numpy
 , pari
 , pkgconfig
+, pkg-config
 , planarity
 , ppl
 , pynac
@@ -46,6 +48,8 @@
 , jupyter_core
 , libhomfly
 , libbraiding
+, gmpy2
+, pplpy
 }:
 
 # This is the core sage python package. Everything else is just wrappers gluing
@@ -63,11 +67,14 @@ buildPythonPackage rec {
     iml
     perl
     jupyter_core
+    pkg-config
+    pip # needed to query installed packages
   ];
 
   buildInputs = [
     gd
     readline
+    iml
   ];
 
   propagatedBuildInputs = [
@@ -88,7 +95,7 @@ buildPythonPackage rec {
     glpk
     gsl
     lcalc
-    libgap
+    gap
     libmpc
     linbox
     lrcalc
@@ -111,14 +118,19 @@ buildPythonPackage rec {
     cysignals
     libhomfly
     libbraiding
+    gmpy2
+    pplpy
   ];
 
   buildPhase = ''
     export SAGE_ROOT="$PWD"
     export SAGE_LOCAL="$SAGE_ROOT"
     export SAGE_SHARE="$SAGE_LOCAL/share"
-    export JUPYTER_PATH="$SAGE_LOCAL/jupyter"
 
+    # set locations of dependencies (needed for nbextensions like threejs)
+    . ${env-locations}/sage-env-locations
+
+    export JUPYTER_PATH="$SAGE_LOCAL/jupyter"
     export PATH="$SAGE_ROOT/build/bin:$SAGE_ROOT/src/bin:$PATH"
 
     export SAGE_NUM_THREADS="$NIX_BUILD_CORES"

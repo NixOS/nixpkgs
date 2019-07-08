@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python3, androidsdk, makeWrapper }:
+{ stdenv, fetchgit, python3, platform-tools, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "adb-sync-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y016bjky5sn58v91jyqfz7vw8qfqnfhb9s9jd32k8y29hy5vy4d";
   };
 
-  buildInputs = [ python3 androidsdk makeWrapper ];
+  buildInputs = [ python3 platform-tools makeWrapper ];
 
   phases = "installPhase";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp $src/adb-channel $src/adb-sync $out/bin/
     patchShebangs $out/bin
-    wrapProgram $out/bin/adb-sync --suffix PATH : ${androidsdk}/bin
+    wrapProgram $out/bin/adb-sync --suffix PATH : ${platform-tools}/bin
   '';
 
   meta = with stdenv.lib; {

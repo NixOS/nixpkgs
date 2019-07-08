@@ -2,16 +2,12 @@
 , libobjc }:
 
 stdenv.mkDerivation rec {
-  version = "38.2.1.rc0";
+  version = "38.8.0";
   name = "spidermonkey-${version}";
 
-  # the release notes point to some guys home directory, see
-  # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Releases/38
-  # probably it would be more ideal to pull a particular tag/revision
-  # from the mercurial repo
   src = fetchurl {
-    url = "https://people.freebsd.org/~sunpoet/sunpoet/mozjs-${version}.tar.bz2";
-    sha256 = "0p4bmbpgkfsj54xschcny0a118jdrdgg0q29rwxigg3lh5slr681";
+    url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.bz2";
+    sha256 = "10lrync6cxnjlnadc0j3vg8r2dq9b3wwanw8qj1h6ncxwb7asxcl";
   };
 
   buildInputs = [ libffi readline icu zlib nspr ]

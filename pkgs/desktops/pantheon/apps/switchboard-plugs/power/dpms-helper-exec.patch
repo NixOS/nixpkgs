@@ -1,0 +1,13 @@
+diff --git a/src/MainView.vala b/src/MainView.vala
+index 1654e68..175f220 100644
+--- a/src/MainView.vala
++++ b/src/MainView.vala
+@@ -317,7 +317,7 @@ public class Power.MainView : Gtk.Grid {
+
+     private static void run_dpms_helper () {
+         try {
+-            string[] argv = { "io.elementary.dpms-helper" };
++            string[] argv = { "@elementary_dpms_helper@/bin/io.elementary.dpms-helper" };
+             Process.spawn_async (null, argv, Environ.get (),
+                 SpawnFlags.SEARCH_PATH | SpawnFlags.STDERR_TO_DEV_NULL | SpawnFlags.STDOUT_TO_DEV_NULL,
+                 null, null);

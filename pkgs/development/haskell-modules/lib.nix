@@ -161,6 +161,7 @@ rec {
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
 
   markBroken = drv: overrideCabal drv (drv: { broken = true; hydraPlatforms = []; });
+  unmarkBroken = drv: overrideCabal drv (drv: { broken = false; });
   markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
 
   enableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = true; });
@@ -180,6 +181,8 @@ rec {
 
   enableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = true; });
   disableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = false; });
+
+  enableSeparateBinOutput = drv: overrideCabal drv (drv: { enableSeparateBinOutput = true; });
 
   appendPatch = drv: x: appendPatches drv [x];
   appendPatches = drv: xs: overrideCabal drv (drv: { patches = (drv.patches or []) ++ xs; });
@@ -258,6 +261,9 @@ rec {
      This includes buildFromSdist and failOnAllWarnings.
    */
   buildStrictly = pkg: buildFromSdist (failOnAllWarnings pkg);
+
+  /* Disable core optimizations, significantly speeds up build time */
+  disableOptimization = pkg: appendConfigureFlag pkg "--disable-optimization";
 
   /* Turn on most of the compiler warnings and fail the build if any
      of them occur. */
@@ -405,4 +411,11 @@ rec {
   */
   generateOptparseApplicativeCompletions = commands: pkg:
     pkgs.lib.foldr generateOptparseApplicativeCompletion pkg commands;
+
+  # Don't fail at configure time if there are multiple versions of the
+  # same package in the (recursive) dependencies of the package being
+  # built. Will delay failures, if any, to compile time.
+  allowInconsistentDependencies = drv: overrideCabal drv (drv: {
+    allowInconsistentDependencies = true;
+  });
 }

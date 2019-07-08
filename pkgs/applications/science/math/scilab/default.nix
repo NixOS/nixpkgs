@@ -2,13 +2,13 @@
 , ncurses
 , withXaw3d ? false
 #, withPVMlib ? false
-, tcl, tk, withTk ? false
+, tcl, tk, withTk ? true
 , gtk2, withGtk ? false # working ?
 #, withF2c ? false
-, ocaml, withOCaml ? false
+, ocaml, withOCaml ? true
 #, withJava ? false
 #, atlasMath, withAtlas ? false
-, xlibsWrapper, withX ? false
+, xlibsWrapper, withX ? true
 }:
 
 stdenv.mkDerivation rec {

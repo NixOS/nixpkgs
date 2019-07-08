@@ -2,17 +2,17 @@
 , llvm, clang-unwrapped
 , flex
 , zlib
-, perl, ExporterLite, FileWhich, GetoptTabular, RegexpCommon, TermReadKey
+, perlPackages
 , utillinux
 }:
 
 stdenv.mkDerivation rec {
-  name = "creduce-${version}";
-  version = "2.8.0";
+  pname = "creduce";
+  version = "2.9.0";
 
   src = fetchurl {
-    url = "https://embed.cs.utah.edu/creduce/${name}.tar.gz";
-    sha256 = "1vqx73ymfscvlyig03972a5m7ar3gx2yv6m8c6h2mibz792j5xkp";
+    url = "https://embed.cs.utah.edu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1b833z0g1hich68kzbkpfc26xb8w2phfl5savy8c6ir9ihwy1a8w";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
     # Actual deps:
     llvm clang-unwrapped
     flex zlib
-    perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey
-  ];
+  ] ++ (with perlPackages; [ perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey ]);
 
   # On Linux, c-reduce's preferred way to reason about
   # the cpu architecture/topology is to use 'lscpu',

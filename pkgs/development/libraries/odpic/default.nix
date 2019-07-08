@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "odpic-${version}";
-  version = "2.4.2";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://github.com/oracle/odpi/archive/v${version}.tar.gz";
-    sha256 = "0hw6b38vnh0cgm1iwpgkqa2am86baal6irp9bglacblwh8sshqdi";
+    sha256 = "0m6g7lbvfir4amf2cnap9wz9fmqrihqpihd84igrd7fp076894c0";
   };
 
   nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];

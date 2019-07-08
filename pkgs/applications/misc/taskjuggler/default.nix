@@ -1,9 +1,7 @@
-{ lib, bundlerApp, ruby }:
+{ lib, bundlerApp }:
 
 bundlerApp {
   pname = "taskjuggler";
-
-  inherit ruby;
   gemdir = ./.;
 
   exes = [
@@ -11,11 +9,11 @@ bundlerApp {
     "tj3ts_receiver" "tj3ts_sender" "tj3ts_summary" "tj3webd"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A modern and powerful project management tool";
     homepage    = http://taskjuggler.org/;
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.unix;
-    maintainers = [ lib.maintainers.manveru ];
+    license     = licenses.gpl2;
+    platforms   = platforms.unix;
+    maintainers = [ maintainers.manveru ];
   };
 }

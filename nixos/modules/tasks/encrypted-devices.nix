@@ -12,7 +12,7 @@ let
 
   encryptedFSOptions = {
 
-    encrypted = {
+    options.encrypted = {
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -47,10 +47,10 @@ in
 
   options = {
     fileSystems = mkOption {
-      options = [encryptedFSOptions];
+      type = with lib.types; loaOf (submodule encryptedFSOptions);
     };
     swapDevices = mkOption {
-      options = [encryptedFSOptions];
+      type = with lib.types; listOf (submodule encryptedFSOptions);
     };
   };
 

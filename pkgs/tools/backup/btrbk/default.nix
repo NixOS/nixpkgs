@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "btrbk-${version}";
-  version = "0.27.0";
+  version = "0.28.0";
 
   src = fetchurl {
     url = "https://digint.ch/download/btrbk/releases/${name}.tar.xz";
-    sha256 = "0nsqpmfymh9df32fy8qg6bhimd65yxdjpany97s1n08qb110zh2y";
+    sha256 = "1bqgcbkdd5s3l3ba1ifa9l523r8cr5y3arjdy9f6rmm840kn7xzf";
   };
 
   nativeBuildInputs = [ asciidoc makeWrapper ];

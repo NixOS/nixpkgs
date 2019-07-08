@@ -26,6 +26,9 @@ in stdenv.mkDerivation rec {
     qtconnectivity
   ];
   nativeBuildInputs = [ flex makeWrapper qmake yacc ];
+  NIX_LDFLAGS = [
+    "-lz"
+  ];
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri

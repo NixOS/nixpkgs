@@ -1,73 +1,59 @@
 { stdenv, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg, boost, cmake, SDL2, unshield, openal
-, libXt, writeScriptBin, makeWrapper, symlinkJoin, ncurses, libGL, terra }:
+, libXt, writeScriptBin, makeWrapper, ncurses, libGL, luajit }:
 
 let
-  mygui_ = mygui.override {
-    inherit stdenv;
-  };
-  terra_ = symlinkJoin {
-    name = "terra";
-    paths = [ terra.static terra.dev ];
-  };
+  version = "0.7.0-alpha";
   TES3MP = fetchFromGitHub {
     owner = "TES3MP";
     repo = "openmw-tes3mp";
-    rev = "f61664ff6d521e10db761a550c97c6edce8f0046";
-    sha256 = "12h01kafyzq0h1cgf1c8d4mlvlplg5lvcnsc5m5h602r763pzgbb";
+    rev = version;
+    sha256 = "012f50f9jd29qcdww2vk4habg6pmxvxl0q6rrjq8xchb0566712q";
   };
   CallFF = fetchFromGitHub {
     owner = "Koncord";
     repo = "CallFF";
-    rev = "4aa5a31b7543a8f784852a5a109202b2783e93d9";
-    sha256 = "0cf7r8hfh79bsg4p4k1iwhxapyakkvi0hcwwvzg1ln0fqm2yqp57";
+    rev = "da94b59ffe95d45bf98b9264e3d1279c9f6ebb6b";
+    sha256 = "10wgiqmknh0av968c6r74n5n2izxsx8qawfrab57kkmj9h0zp0pm";
   };
-  RakNet = fetchFromGitHub {
+  CrabNet = fetchFromGitHub {
     owner = "TES3MP";
-    repo = "RakNet";
-    rev = "9ace90a385f60e0b919bd84964a53fb1d42438ba";
-    sha256 = "0mkf5wx23w20fw9cmbiyfs86gmf0r11pdpd8y7qd4k4wl9c7n45q";
+    repo = "CrabNet";
+    rev = "ab1306050fe0f5b0f9c4f56893a79e56a9459567";
+    sha256 = "03q76pjv9mdi7w832b23q1mj4r2wb0hsnh4kpvwai607g04l0pp0";
   };
-  PluginExamples = fetchFromGitHub {
+  CoreScripts = fetchFromGitHub {
     owner = "TES3MP";
-    repo = "PluginExamples";
-    rev = "213e72f315a8029eec71437e56de0eaeba5b3670";
-    sha256 = "1q0cvz1s0zyq982066wgplnylqbiszz0bmcv2prqv78vq9is1l6b";
+    repo = "CoreScripts";
+    rev = "1e9f69f98051b2639b18203f989ffbd0a4b427ea";
+    sha256 = "03ysi7rh0k78kv4slvmkxpymxvdpr8b6hwr1lvjdgq7rq0ljy0lg";
   };
 
   fakegit = writeScriptBin "git" ''
     #! ${stdenv.shell}
-    if [ "$*" = "rev-list --tags --max-count=1" ] ||
-       [ "$*" = "rev-parse HEAD" ]; then
-      echo "${TES3MP.rev}"
-    else
-      exit 1
-    fi
   '';
 in stdenv.mkDerivation rec {
-  version = "0.6.0";
+  inherit version;
   name = "tes3mp-${version}";
 
   src = fetchFromGitHub {
     owner = "GrimKriegor";
     repo = "TES3MP-deploy";
-    rev = "ac2e862c3b96206d8e0678d422ece30f9f2d0f45";
-    sha256 = "0nysr6h7sa1j5ijyd52k6sw052vcdqdx4wjjmmy7p8wh1i0jkvv6";
+    rev = "1dd78a3e2cf9f4fe85bf7ca9c393251968a9c325";
+    sha256 = "1bp9c4kds9q0xhbn4sxb7n0f6rvb45gzx7ljdgc56wz4j5rfi3xn";
   };
 
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [ cmake makeWrapper fakegit ];
-  buildInputs = [ boost ffmpeg qtbase bullet mygui_ openscenegraph SDL2 unshield openal libXt
-    ncurses libGL ];
+  buildInputs = [ boost ffmpeg qtbase bullet mygui openscenegraph SDL2 unshield openal libXt
+    ncurses libGL luajit ];
 
   buildPhase = ''
     mkdir dependencies keepers
     cp --no-preserve=mode -r ${TES3MP} code
-    mkdir code/.git
     cp --no-preserve=mode -r ${CallFF} dependencies/callff
-    cp --no-preserve=mode -r ${RakNet} dependencies/raknet
-    cp --no-preserve=mode -r ${PluginExamples} keepers/PluginExamples
-    ln -s ${terra_} dependencies/terra
+    cp --no-preserve=mode -r ${CrabNet} dependencies/raknet
+    cp --no-preserve=mode -r ${CoreScripts} keepers/CoreScripts
 
     substituteInPlace tes3mp-deploy.sh \
       --replace "-DBUILD_OPENCS=OFF" "-DBUILD_OPENCS=OFF -DCMAKE_INSTALL_PREFIX=$out"
@@ -86,6 +72,8 @@ in stdenv.mkDerivation rec {
     mv build/resources $prefix/build
     mv build/{settings-default.cfg,openmw.cfg,gamecontrollerdb.txt} $out/etc/openmw
     mv keepers $prefix
+    mv build/tes3mp-credits.md $prefix/build
+    mv -f $prefix/keepers/version $prefix/build/resources
 
     for i in tes3mp.sh tes3mp-browser.sh tes3mp-server.sh
     do
@@ -100,8 +88,8 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/tes3mp-server \
       --run "mkdir -p ~/.config/openmw" \
       --run "cd ~/.config/openmw" \
-      --run "[ -d PluginExamples ] || cp --no-preserve=mode -r $prefix/keepers/PluginExamples ." \
-      --run "[ -f tes3mp-server.cfg ] || echo \"[Plugins] home = \$HOME/.config/openmw/PluginExamples\" > tes3mp-server.cfg"
+      --run "[ -d CoreScripts ] || cp --no-preserve=mode -r $prefix/keepers/CoreScripts ." \
+      --run "[ -f tes3mp-server.cfg ] || echo \"[Plugins] home = \$HOME/.config/openmw/CoreScripts\" > tes3mp-server.cfg"
   '';
 
   meta = with stdenv.lib; {

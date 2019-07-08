@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyepsg";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ng0k140kzq3xcffi4vy10py4cmwzfy8anccysw3vgn1x30ghzjr";
+    sha256 = "2d08fad1e7a8b47a90a4e43da485ba95705923425aefc4e2a3efa540dbd470d7";
   };
 
   propagatedBuildInputs = [ requests ];

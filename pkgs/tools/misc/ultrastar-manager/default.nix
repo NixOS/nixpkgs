@@ -2,9 +2,9 @@
 , qtbase, qtmultimedia, taglib, libmediainfo, libzen, libbass }:
 
 let
-  version = "2017-05-24";
-  rev = "eed5dc41c849ab29b2dee37d97852fffdb45e390";
-  sha256 = "1ymdgaffazndg9vhh47qqjr5873ld7j066hycp670r08bm519ysg";
+  version = "2019-04-23";
+  rev = "ef4524e2239ddbb60f26e05bfba1f4f28cb7b54f";
+  sha256 = "0dl2qp686vbs160b3i9qypb7sv37phy2wn21kgzljbk3wnci3yv4";
   buildInputs = [ qtbase qtmultimedia taglib libmediainfo libzen libbass ];
 
   plugins = [

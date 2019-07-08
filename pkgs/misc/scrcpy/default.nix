@@ -3,27 +3,37 @@
 , ninja
 , pkgconfig
 
-, platformTools
+, platform-tools
 , ffmpeg
 , SDL2
 }:
 
 let
-  version = "1.3";
+  version = "1.8";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}.jar";
-    sha256 = "1ha04wfmghblwr9ajfl96cswacfgrk0b7klq2ixfvw1kgwhmm6hg";
+    sha256 = "1h755k5xpchlm7wq2yk5mlwjnh7y4yhviffixacby0srj3pmb443";
   };
 in
 stdenv.mkDerivation rec {
-  name = "scrcpy-${version}";
+  pname = "scrcpy";
   inherit version;
+
   src = fetchFromGitHub {
     owner = "Genymobile";
-    repo = "scrcpy";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "02szi8w3w0lacyz42hlayxififi863qpm63yg9qir3jcl2vs7vdk";
+    sha256 = "1cx7y3w699s3i8s53l1mb7lkrnbix457hf17liwh00jzb0i7aga7";
   };
+
+  # postPatch:
+  #   screen.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
+  #   This can happen when running on non-NixOS because then scrcpy seems to have a hard time using the host OpenGL-supporting hardware.
+  #   It would be better to fix the OpenGL problem, but that seems much more intrusive.
+  postPatch = ''
+    substituteInPlace app/src/screen.c \
+      --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
+  '';
 
   nativeBuildInputs = [ makeWrapper meson ninja pkgconfig ];
 
@@ -34,12 +44,13 @@ stdenv.mkDerivation rec {
     echo -n > server/meson.build
   '';
 
+  mesonFlags = ["-Doverride_server_path=${prebuilt_server}"];
   postInstall = ''
     mkdir -p "$out/share/scrcpy"
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server.jar"
 
     # runtime dep on `adb` to push the server
-    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platformTools}/bin"
+    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
   '';
 
   meta = with stdenv.lib; {

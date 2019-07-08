@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "git-extras-${version}";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src = fetchurl {
     url = "https://github.com/tj/git-extras/archive/${version}.tar.gz";
-    sha256 = "1jp5wi2h4jqbrjv0iqa45s0f9h3n5k1dxs89jkhg5n5k9jjs7fp3";
+    sha256 = "0pab4f5kmmcn333aswkgndf1fgilc41h8h0rk3lviz0yi8j59vaq";
   };
 
   dontBuild = true;
 
-  installFlags = [ "DESTDIR=$(out) PREFIX=" ];
+  installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
 
   postInstall = ''
     install -D etc/git-extras-completion.zsh $out/share/zsh/site-functions/_git_extras

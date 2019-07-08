@@ -24,7 +24,7 @@ buildGoPackage rec {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
     homepage    = "https://github.com/aws/amazon-ssm-agent";
     license     = licenses.asl20;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ copumpkin ];
   };
 }

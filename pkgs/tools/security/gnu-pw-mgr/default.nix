@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "gnu-pw-mgr-${version}";
   version = "2.4.2";
   src = fetchurl {
-    url = "http://ftp.gnu.org/gnu/gnu-pw-mgr/${name}.tar.xz";
+    url = "https://ftp.gnu.org/gnu/gnu-pw-mgr/${name}.tar.xz";
     sha256 = "1yvdzc5w37qrjrkby5699ygj9bhkvgi3zk9k9jcjry1j6b7wdl17";
   };
 

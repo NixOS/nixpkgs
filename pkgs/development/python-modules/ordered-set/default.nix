@@ -1,14 +1,14 @@
-{ buildPythonPackage, fetchPypi, lib, pytest, pytestrunner }:
+{ buildPythonPackage, fetchPypi, lib, pytest }:
 
 buildPythonPackage rec {
   pname = "ordered-set";
-  version = "3.0.2";
+  version = "3.1.1";
 
-  buildInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytest ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d292b866fa44f339ac6e624e3d338accfb415ce0a8431595d51990fbdf61d3b";
+    sha256 = "094pww79pawgmjgwi47r0fji9irb7sr4xc9xwjbb0wwcficaigx7";
   };
 
   checkPhase = ''

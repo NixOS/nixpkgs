@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, symlinkJoin, gsignond, gsignondPlugins, plugins }:
+{ makeWrapper, symlinkJoin, gsignond, plugins }:
 
 symlinkJoin {
   name = "gsignond-with-plugins-${gsignond.version}";
@@ -20,4 +20,6 @@ symlinkJoin {
     substitute ${gsignond}/share/dbus-1/services/com.google.code.AccountsSSO.SingleSignOn.service $out/share/dbus-1/services/com.google.code.AccountsSSO.SingleSignOn.service \
       --replace ${gsignond} $out
   '';
+
+  inherit (gsignond) meta;
 }

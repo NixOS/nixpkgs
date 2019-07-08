@@ -45,7 +45,7 @@ let
 
   eventToShellCmds = event: if builtins.hasAttr event cfg.hooks then (shellCmdsForEventScript event (builtins.getAttr event cfg.hooks)) else "";
 
-  scriptDir = pkgs.runCommand "apcupsd-scriptdir" {} (''
+  scriptDir = pkgs.runCommand "apcupsd-scriptdir" { preferLocalBuild = true; } (''
     mkdir "$out"
     # Copy SCRIPTDIR from apcupsd package
     cp -r ${pkgs.apcupsd}/etc/apcupsd/* "$out"/

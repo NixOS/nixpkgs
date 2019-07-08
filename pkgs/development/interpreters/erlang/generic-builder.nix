@@ -1,5 +1,5 @@
 { pkgs, stdenv, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
-, libxml2, libxslt, ncurses, openssl, perl, autoreconfHook
+, libxml2, libxslt, ncurses, openssl, perl, autoconf
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
 , libGLU_combined ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
@@ -48,7 +48,7 @@ in stdenv.mkDerivation ({
 
   inherit src version;
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper perl gnum4 libxslt libxml2 ];
+  nativeBuildInputs = [ autoconf makeWrapper perl gnum4 libxslt libxml2 ];
 
   buildInputs = [ ncurses openssl ]
     ++ optionals wxSupport wxPackages2
@@ -59,7 +59,8 @@ in stdenv.mkDerivation ({
 
   debugInfo = enableDebugInfo;
 
-  enableParallelBuilding = true;
+  # On some machines, parallel build reliably crashes on `GEN    asn1ct_eval_ext.erl` step
+  enableParallelBuilding = false;
 
   # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
   prePatch = ''

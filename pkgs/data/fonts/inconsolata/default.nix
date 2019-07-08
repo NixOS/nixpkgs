@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.levien.com/type/myfonts/inconsolata.html;
+    homepage = https://www.levien.com/type/myfonts/inconsolata.html;
     description = "A monospace font for both screen and print";
     maintainers = with maintainers; [ mikoim raskin rycee ];
     license = licenses.ofl;

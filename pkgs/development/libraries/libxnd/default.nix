@@ -6,23 +6,32 @@
 
 stdenv.mkDerivation rec {
   name = "libxnd-${version}";
-  version = "0.2.0dev3";
+  version = "unstable-2018-11-27";
 
   src = fetchFromGitHub {
     owner = "plures";
     repo = "xnd";
-    rev = "v${version}";
-    sha256 = "0byq7jspyr2wxrhihw4q7nf0y4sb6j5ax0ndd5dnq5dz88c7qqm2";
+    rev = "8a9f3bd1d01d872828b40bc9dbd0bc0184524da3";
+    sha256 = "10jh2kqvhpzwy50adayh9az7z2lm16yxy4flrh99alzzbqdyls44";
   };
 
   buildInputs = [ libndtypes ];
 
   # Override linker with cc (symlink to either gcc or clang)
   # Library expects to use cc for linking
-  configureFlags = [ "LD=${stdenv.cc.targetPrefix}cc" ];
+  configureFlags = [
+      # Override linker with cc (symlink to either gcc or clang)
+      # Library expects to use cc for linking
+      "LD=${stdenv.cc.targetPrefix}cc"
+      # needed for tests
+      "--with-includes=${libndtypes}/include"
+      "--with-libs=${libndtypes}/lib"
+  ];
+
+  doCheck = true;
 
   meta = {
-    description = "General container that maps a wide range of Python values directly to memory";
+    description = "C library for managing typed memory blocks and Python container module";
     homepage = https://xnd.io/;
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ costrouc ];

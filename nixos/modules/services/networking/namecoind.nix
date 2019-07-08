@@ -1,3 +1,4 @@
+
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -43,7 +44,7 @@ in
 
     services.namecoind = {
 
-      enable = mkEnableOption "namecoind, Namecoin client.";
+      enable = mkEnableOption "namecoind, Namecoin client";
 
       wallet = mkOption {
         type = types.path;

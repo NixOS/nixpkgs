@@ -4,45 +4,11 @@ Date:   Sun Nov 16 15:19:38 2014 +0100
 
     Use a template for taskwarrior install path.
 
-diff --git a/taskw/warrior.py b/taskw/warrior.py
-index 21dde88..e0509f2 100644
 --- a/taskw/warrior.py
 +++ b/taskw/warrior.py
-@@ -451,17 +451,17 @@ class TaskWarriorShellout(TaskWarriorBase):
-     def _execute(self, *args):
-         """ Execute a given taskwarrior command with arguments
- 
-         Returns a 2-tuple of stdout and stderr (respectively).
- 
-         """
-         command = (
-             [
+@@ -449 +449 @@ class TaskWarriorShellout(TaskWarriorBase):
 -                'task',
 +                '@@taskwarrior@@/bin/task',
-                 'rc:%s' % self.config_filename,
-             ]
-             + self.get_configuration_override_args()
-             + [six.text_type(arg) for arg in args]
-         )
- 
-         # subprocess is expecting bytestrings only, so nuke unicode if present
-         for i in range(len(command)):
-@@ -525,17 +525,17 @@ class TaskWarriorShellout(TaskWarriorBase):
-         except OSError:
-             # OSError is raised if subprocess.Popen fails to find
-             # the executable.
-             return False
- 
-     @classmethod
-     def get_version(cls):
-         taskwarrior_version = subprocess.Popen(
--            ['task', '--version'],
-+            ['@@taskwarrior@@/bin/task', '--version'],
-             stdout=subprocess.PIPE
-         ).communicate()[0]
-         return LooseVersion(taskwarrior_version.decode())
- 
-     def sync(self, init=False):
-         if self.get_version() < LooseVersion('2.3'):
-             raise UnsupportedVersionException(
-                 "'sync' requires version 2.3 of taskwarrior or later."
+@@ -553 +553 @@ class TaskWarriorShellout(TaskWarriorBase):
+-                ['task', '--version'],
++                ['@@taskwarrior@@/bin/task', '--version'],

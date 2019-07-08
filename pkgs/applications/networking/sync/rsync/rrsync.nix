@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, perl, rsync }:
+{ stdenv, fetchurl, perl, rsync }:
 
 let
   base = import ./base.nix { inherit stdenv fetchurl; };

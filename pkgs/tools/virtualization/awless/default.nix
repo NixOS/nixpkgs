@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "awless-${version}";
-  version = "0.0.14";
+  version = "0.1.11";
 
   goPackagePath = "github.com/wallix/awless";
 
   src = fetchFromGitHub {
     owner  = "wallix";
     repo   = "awless";
-    rev    = version;
-    sha256 = "1syxw8d9y1b4bdb1arsx05m5mxnd0dqp3nj7fk5j1v7cnnbja3hj";
+    rev    = "v${version}";
+    sha256 = "187i21yrm10r3f5naj3jl0rmydr5dkhmdhxs90hhf8hjp59a89kg";
   };
 
   meta = with stdenv.lib; {
@@ -18,6 +18,6 @@ buildGoPackage rec {
     description = "A Mighty CLI for AWS";
     platforms = with platforms; linux ++ darwin;
     license = licenses.asl20;
-    maintainers = with maintainers; [ pradeepchhetri ];
+    maintainers = with maintainers; [ pradeepchhetri swdunlop ];
   };
 }

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "0.28.1";
+  version = "0.28.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc29c11dcbe9208261d377185a1ae5331bab43f2a592222a25c8aca9c8031308";
+    sha256 = "ae43be426532b875c161625626ab759ecef633801e21f14b2ef8380884a2193b";
   };
 
   checkInputs = [ pytest mock ];

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, perl, cf-private, AppKit, Cocoa, ScriptingBridge }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.1";
+  version = "0.9.2";
   name = "trash-${version}";
 
   src = fetchFromGitHub {
     owner = "ali-rantakari";
     repo = "trash";
     rev = "v${version}";
-    sha256 = "0ylkf7jxfy1pj7i1s48w28kzqjdfd57m2pw0jycsgcj5bkzwll41";
+    sha256 = "1d3rc03vgz32faj7qi18iiggxvxlqrj9lsk5jkpa9r1mcs5d89my";
   };
 
   buildInputs = [

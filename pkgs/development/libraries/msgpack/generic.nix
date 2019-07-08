@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "MessagePack implementation for C and C++";
     homepage    = https://msgpack.org;
     license     = licenses.asl20;
-    maintainers = with maintainers; [ redbaron wkennington ];
+    maintainers = with maintainers; [ redbaron ];
     platforms   = platforms.all;
   };
 }

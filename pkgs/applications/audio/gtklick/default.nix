@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
     pyGtkGlade
   ];
 
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   propagatedBuildInputs = [ klick ];
 

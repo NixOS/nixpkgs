@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pidgin, unzip, glib, json-glib, nss, nspr, libgnome-keyring } :
+{ stdenv, fetchFromGitHub, pidgin, glib, json-glib, nss, nspr, libgnome-keyring } :
 
 stdenv.mkDerivation rec {
   name = "pidgin-opensteamworks-${version}";
@@ -13,12 +13,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "cd steam-mobile";
   installFlags = [
-    "DESTDIR=$(out)"
-    "PLUGIN_DIR_PURPLE=/lib/purple-2"
-    "DATA_ROOT_DIR_PURPLE=/share"
+    "PLUGIN_DIR_PURPLE=${placeholder "out"}/lib/purple-2"
+    "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
   ];
 
-  buildInputs = [ pidgin unzip glib json-glib nss nspr libgnome-keyring ];
+  buildInputs = [ pidgin glib json-glib nss nspr libgnome-keyring ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/EionRobb/pidgin-opensteamworks;

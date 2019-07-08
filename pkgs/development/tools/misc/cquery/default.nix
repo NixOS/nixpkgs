@@ -1,5 +1,6 @@
 { fetchFromGitHub, makeWrapper
-, cmake, llvmPackages, ncurses }:
+, cmake, llvmPackages, ncurses
+, runtimeShell }:
 
 let
   src = fetchFromGitHub {
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
   ];
 
-  shell = stdenv.shell;
+  shell = runtimeShell;
   postFixup = ''
     # We need to tell cquery where to find the standard library headers.
 

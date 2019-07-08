@@ -1,9 +1,8 @@
-{ stdenv, lib, fetchzip, pkgconfig, cmake, perl, curl, gtest, lzma, bzip2 , lz4
+{ stdenv, lib, fetchzip, pkgconfig, cmake, perlPackages, curl, gtest, lzma, bzip2, lz4
 , db, dpkg, libxslt, docbook_xsl, docbook_xml_dtd_45
 
 # used when WITH_DOC=ON
 , w3m
-, Po4a
 , doxygen
 
 # used when WITH_NLS=ON
@@ -27,16 +26,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
-    cmake perl curl gtest lzma bzip2 lz4 db dpkg libxslt.bin
+    cmake perlPackages.perl curl gtest lzma bzip2 lz4 db dpkg libxslt.bin
   ] ++ lib.optionals withDocs [
-    doxygen Po4a w3m docbook_xml_dtd_45
+    doxygen perlPackages.Po4a w3m docbook_xml_dtd_45
   ] ++ lib.optionals withNLS [
     gettext
   ];
 
   preConfigure = ''
-    export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${Po4a}/lib/perl5";
-
     cmakeFlagsArray+=(
       -DBERKELEY_DB_INCLUDE_DIRS=${db.dev}/include
       -DDOCBOOK_XSL="${docbook_xsl}"/share/xml/docbook-xsl

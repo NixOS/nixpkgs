@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "py3dns";
-  version = "3.1.1a";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0z0qmx9j1ivpgg54gqqmh42ljnzxaychc5inz2gbgv0vls765smz";
+    sha256 = "8e88c0648c4d38a880f08aeb05a6e5cb48b8ce2602d381caafc6c71698ee3c21";
   };
 
   preConfigure = ''

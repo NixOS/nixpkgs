@@ -81,6 +81,7 @@ in
     ./lightdm-greeters/gtk.nix
     ./lightdm-greeters/mini.nix
     ./lightdm-greeters/enso-os.nix
+    ./lightdm-greeters/pantheon.nix
   ];
 
   options = {
@@ -188,6 +189,11 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
+      { assertion = xcfg.enable;
+        message = ''
+          LightDM requires services.xserver.enable to be true
+        '';
+      }
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
@@ -196,7 +202,7 @@ in
       { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
         message = ''
           LightDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
+          services.xserver.windowManager.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
         '';
       }

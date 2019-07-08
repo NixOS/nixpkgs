@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-keyring-${version}";
-  version = "3.28.2";
+  version = "3.31.91";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-keyring/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0sk4las4ji8wv9nx8mldzqccmpmkvvr9pdwv9imj26r10xyin5w1";
+    sha256 = "1fjylqw4xp0rqsylq4gbxzw1sql2sy55h1mnz1pprrxb9py0mnd4";
   };
 
   outputs = [ "out" "dev" ];
@@ -23,15 +23,19 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-pkcs11-config=$$out/etc/pkcs11/" # installation directories
-    "--with-pkcs11-modules=$$out/lib/pkcs11/"
+    "--with-pkcs11-config=${placeholder ''out''}/etc/pkcs11/" # installation directories
+    "--with-pkcs11-modules=${placeholder ''out''}/lib/pkcs11/"
   ];
 
   postPatch = ''
     patchShebangs build
   '';
 
-  doCheck = !stdenv.isi686; # https://github.com/NixOS/nixpkgs/issues/51121
+  # Tends to fail non-deterministically.
+  # - https://github.com/NixOS/nixpkgs/issues/55293
+  # - https://github.com/NixOS/nixpkgs/issues/51121
+  doCheck = false;
+
   # In 3.20.1, tests do not support Python 3
   checkInputs = [ dbus python2 ];
 
@@ -40,6 +44,16 @@ stdenv.mkDerivation rec {
     dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       make check
+  '';
+
+  # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
+  postFixup = ''
+    files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
+
+    for file in ''${files[*]}; do
+      substituteInPlace $file \
+        --replace "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
+    done
   '';
 
   passthru = {

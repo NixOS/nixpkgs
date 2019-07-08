@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "fwts-${version}";
-  version = "18.11.00";
+  version = "19.06.00";
 
   src = fetchzip {
     url = "http://fwts.ubuntu.com/release/fwts-V${version}.tar.gz";
-    sha256 = "14dxw0ny5z681kz4dpm2phyanr2q4c8fqml3mhdr1mb2ndrrwqgz";
+    sha256 = "1aza6j323a908vlz3vkn0hda0jm34njg81aak1g4pqvmzhrg47ls";
     stripRoot = false;
   };
 
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode"
     substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/iasl"       "${iasl}/bin/iasl"
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = "https://wiki.ubuntu.com/FirmwareTestSuite";

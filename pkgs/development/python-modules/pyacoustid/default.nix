@@ -8,16 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyacoustid";
-  version = "1.1.0";
+  version = "1.1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0117039cb116af245e6866e8e8bf3c9c8b2853ad087142bd0c2dfc0acc09d452";
+    sha256 = "07394a8ae84625a0a6fef2d891d19687ff59cd955caaf48097da2826043356fd";
   };
 
   propagatedBuildInputs = [ requests audioread ];
-
-  patches = [ ./pyacoustid-py3.patch ];
 
   postPatch = ''
     sed -i \

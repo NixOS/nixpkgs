@@ -25,7 +25,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  prayerCfg = pkgs.runCommand "prayer.cf" { } ''
+  prayerCfg = pkgs.runCommand "prayer.cf" { preferLocalBuild = true; } ''
     # We have to remove the http_port 80, or it will start a server there
     cat ${prayer}/etc/prayer.cf | grep -v http_port > $out
     cat ${prayerExtraCfg} >> $out

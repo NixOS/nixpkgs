@@ -6,12 +6,12 @@ let
   allSpecs = {
     "x86_64-linux" = {
       system = "linux64";
-      sha256 = "0x45d2fq01w5v28vipvl4g37ld7d9m8rij9dnwq2zcvyz0rfdfmk";
+      sha256 = "0iq015nyhdn1z50aj6k2d38cf1vbp59x7qi48aikb4z1h3h1j6a6";
     };
 
     "x86_64-darwin" = {
       system = "mac64";
-      sha256 = "1blp4ig5fm6ar8mxm78dc2gvv7n82mq3kqswbyjrcizl91qs4cpx";
+      sha256 = "0bf59g7vx7qbz9lx6wgk82zjbf8isag1n3lbi0gw4b2bgv8md8ia";
     };
   };
 
@@ -28,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "chromedriver-${version}";
-  version = "2.43";
+  version = "2.46";
 
   src = fetchurl {
     url = "https://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";

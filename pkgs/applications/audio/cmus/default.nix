@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
+{ config, stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
 , libiconv, CoreAudio
 
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
@@ -7,7 +7,8 @@
 , jackSupport ? false, libjack ? null
 , samplerateSupport ? jackSupport, libsamplerate ? null
 , ossSupport ? false, alsaOss ? null
-, pulseaudioSupport ? false, libpulseaudio ? null
+, pulseaudioSupport ? config.pulseaudio or false, libpulseaudio ? null
+, mprisSupport ? stdenv.isLinux, systemd ? null
 
 # TODO: add these
 #, artsSupport
@@ -60,6 +61,7 @@ let
     (mkFlag samplerateSupport "CONFIG_SAMPLERATE=y" libsamplerate)
     (mkFlag ossSupport        "CONFIG_OSS=y"        alsaOss)
     (mkFlag pulseaudioSupport "CONFIG_PULSE=y"      libpulseaudio)
+    (mkFlag mprisSupport      "CONFIG_MPRIS=y"      systemd)
 
     #(mkFlag artsSupport      "CONFIG_ARTS=y")
     #(mkFlag roarSupport      "CONFIG_ROAR=y")
@@ -100,13 +102,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "cmus-${version}";
-  version = "2.7.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
     rev    = "v${version}";
-    sha256 = "0xd96py21bl869qlv1353zw7xsgq6v5s8szr0ldr63zj5fgc2ps5";
+    sha256 = "1ydnvq13ay8b8mfmmgwi5qsgyf220yi1d01acbnxqn775dghmwar";
   };
 
   patches = [ ./option-debugging.patch ];

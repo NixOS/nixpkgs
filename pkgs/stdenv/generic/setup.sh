@@ -182,10 +182,8 @@ addToSearchPathWithCustomDelimiter() {
     fi
 }
 
-PATH_DELIMITER=':'
-
 addToSearchPath() {
-    addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+    addToSearchPathWithCustomDelimiter ":" "$@"
 }
 
 # Add $1/lib* into rpaths.
@@ -279,10 +277,6 @@ fi
 if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
 BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
-
-# Dummy implementation of the paxmark function. On Linux, this is
-# overwritten by paxctl's setup hook.
-paxmark() { true; }
 
 
 # Execute the pre-hook.
@@ -512,7 +506,7 @@ activatePackage() {
     fi
 
     if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
-        addToSearchPath HOST_PATH "$pkg/bin"
+        addToSearchPath _HOST_PATH "$pkg/bin"
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
@@ -562,6 +556,10 @@ _addToEnv() {
             (( "$depHostOffset" <= "$depTargetOffset" )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
             if [[ -z "${strictDeps-}" ]]; then
+
+                # Keep track of which packages we have visited before.
+                local visitedPkgs=""
+
                 # Apply environment hooks to all packages during native
                 # compilation to ease the transition.
                 #
@@ -574,7 +572,11 @@ _addToEnv() {
                     ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
                     ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
                 do
+                    if [[ "$visitedPkgs" = *"$pkg"* ]]; then
+                        continue
+                    fi
                     runHook "${!hookRef}" "$pkg"
+                    visitedPkgs+=" $pkg"
                 done
             else
                 local pkgsRef="${pkgsVar}[$depTargetOffset - $depHostOffset]"
@@ -613,9 +615,14 @@ fi
 
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
+HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
+    echo "final host path: $HOST_PATH"
 fi
+
+unset _PATH
+unset _HOST_PATH
 
 
 # Make GNU Make produce nested output.
@@ -639,10 +646,13 @@ fi
 export NIX_BUILD_CORES
 
 
-# Prevent OpenSSL-based applications from using certificates in
-# /etc/ssl.
-# Leave it in shells for convenience.
-if [ -z "${SSL_CERT_FILE:-}" ] && [ -z "${IN_NIX_SHELL:-}" ]; then
+# Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
+# Leave it in impure shells for convenience.
+if [ -z "${NIX_SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+  export NIX_SSL_CERT_FILE=/no-cert-file.crt
+fi
+# Another variant left for compatibility.
+if [ -z "${SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
   export SSL_CERT_FILE=/no-cert-file.crt
 fi
 
@@ -653,7 +663,8 @@ fi
 
 substituteStream() {
     local var=$1
-    shift
+    local description=$2
+    shift 2
 
     while (( "$#" )); do
         case "$1" in
@@ -661,6 +672,14 @@ substituteStream() {
                 pattern="$2"
                 replacement="$3"
                 shift 3
+                local savedvar
+                savedvar="${!var}"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
+                if [ "$pattern" != "$replacement" ]; then
+                    if [ "${!var}" == "$savedvar" ]; then
+                        echo "substituteStream(): WARNING: pattern '$pattern' doesn't match anything in $description" >&2
+                    fi
+                fi
                 ;;
 
             --subst-var)
@@ -677,11 +696,13 @@ substituteStream() {
                 fi
                 pattern="@$varName@"
                 replacement="${!varName}"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 ;;
 
             --subst-var-by)
                 pattern="@$2@"
                 replacement="$3"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 shift 3
                 ;;
 
@@ -690,8 +711,6 @@ substituteStream() {
                 return 1
                 ;;
         esac
-
-        eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
     done
 
     printf "%s" "${!var}"
@@ -719,7 +738,7 @@ substitute() {
     consumeEntire content < "$input"
 
     if [ -e "$output" ]; then chmod +w "$output"; fi
-    substituteStream content "$@" > "$output"
+    substituteStream content "file '$input'" "$@" > "$output"
 }
 
 substituteInPlace() {
@@ -741,7 +760,7 @@ substituteAllStream() {
     local -a args=()
     _allFlags
 
-    substituteStream "$1" "${args[@]}"
+    substituteStream "$1" "$2" "${args[@]}"
 }
 
 # Substitute all environment variables that start with a lowercase character and
@@ -1007,13 +1026,11 @@ buildPhase() {
     else
         foundMakefile=1
 
-        # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
-        makeFlags="SHELL=$SHELL $makeFlags"
-
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
@@ -1052,6 +1069,7 @@ checkPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
             ${checkTarget}
@@ -1077,6 +1095,7 @@ installPhase() {
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
+        SHELL=$SHELL
         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
         $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
         ${installTargets:-install}
@@ -1152,7 +1171,7 @@ fixupPhase() {
         for hook in $setupHooks; do
             local content
             consumeEntire content < "$hook"
-            substituteAllStream content >> "${!outputDev}/nix-support/setup-hook"
+            substituteAllStream content "file '$hook'" >> "${!outputDev}/nix-support/setup-hook"
             unset -v content
         done
         unset -v hook
@@ -1184,6 +1203,7 @@ installCheckPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            SHELL=$SHELL
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
             ${installCheckTarget:-installcheck}

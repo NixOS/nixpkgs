@@ -1,28 +1,33 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , pytestcov
 , numpy
 , scipy
 , cython
+, numba
 , six
 }:
 
 buildPythonPackage rec {
   pname = "resampy";
-  version = "0.1.4";
+  version = "0.2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cf4f149d8699af70a1b4b0769fa16fab21835d936ea7ff25e98446aa49e743d4";
+  # No tests in PyPi Archive
+  src = fetchFromGitHub {
+    owner = "bmcfee";
+    repo = pname;
+    rev = version;
+    sha256 = "0a2bxj042y62dimm2i4vglbhpwbybam07mcl67cb6pmfsw9fbqhj";
   };
 
   checkInputs = [ pytest pytestcov ];
-  propagatedBuildInputs = [ numpy scipy cython six ];
+  propagatedBuildInputs = [ numpy scipy cython numba six ];
 
-  # No tests included
-  doCheck = false;
+  checkPhase = ''
+    pytest tests
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/bmcfee/resampy;

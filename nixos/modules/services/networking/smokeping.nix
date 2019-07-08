@@ -101,17 +101,17 @@ in
         '';
         example = literalExample ''
           # near constant pings.
-					step     = 30
-					pings    = 20
-					# consfn mrhb steps total
-					AVERAGE  0.5   1  10080
-					AVERAGE  0.5  12  43200
-							MIN  0.5  12  43200
-							MAX  0.5  12  43200
-					AVERAGE  0.5 144   7200
-							MAX  0.5 144   7200
-							MIN  0.5 144   7200
-				'';
+          step     = 30
+          pings    = 20
+          # consfn mrhb steps total
+          AVERAGE  0.5   1  10080
+          AVERAGE  0.5  12  43200
+              MIN  0.5  12  43200
+              MAX  0.5  12  43200
+          AVERAGE  0.5 144   7200
+              MAX  0.5 144   7200
+              MIN  0.5 144   7200
+        '';
         description = ''Configure the ping frequency and retention of the rrd files.
           Once set, changing the interval will require deletion or migration of all
           the collected data.'';
@@ -285,12 +285,12 @@ in
       uid = config.ids.uids.smokeping;
       description = "smokeping daemon user";
       home = smokepingHome;
+      createHome = true;
     };
     systemd.services.smokeping = {
       wantedBy = [ "multi-user.target"];
       serviceConfig = {
         User = cfg.user;
-        PermissionsStartOnly = true;
         Restart = "on-failure";
       };
       preStart = ''
@@ -300,7 +300,6 @@ in
         cp ${cgiHome} ${smokepingHome}/smokeping.fcgi
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
-        chown -R ${cfg.user} ${smokepingHome}
       '';
       script = ''${cfg.package}/bin/smokeping --config=${configPath} --nodaemon'';
     };

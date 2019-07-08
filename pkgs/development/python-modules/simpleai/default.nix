@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-   version = "0.7.11";
+   version = "0.8.2";
    pname = "simpleai";
    disabled = isPy3k;
 
    src = fetchPypi {
      inherit pname version;
-     sha256 = "03frjc5jxsz9xm24jz7qa4hcp0dicgazrxkdsa2rsnir672lwkwz";
+     sha256 = "2927d460b09ff6dd177999c2f48f3275c84c956efe5b41b567b5316e2259d21e";
    };
 
    propagatedBuildInputs = [ numpy ];

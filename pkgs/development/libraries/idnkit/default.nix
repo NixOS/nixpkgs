@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     description = "Provides functionalities about i18n domain name processing";
     license = "idnkit-2 license";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -102,7 +102,10 @@ let
 
   # wrappers to beegfs tools. Avoid typing path of config files
   utilWrappers = mapAttrsToList ( name: cfg:
-      ( pkgs.runCommand "beegfs-utils-${name}" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+    ( pkgs.runCommand "beegfs-utils-${name}" {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        preferLocalBuild = true;
+        } ''
         mkdir -p $out/bin
 
         makeWrapper ${pkgs.beegfs}/bin/beegfs-check-servers \

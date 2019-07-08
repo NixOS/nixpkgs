@@ -67,7 +67,7 @@ in with stdenv.lib.licenses;
     buildPhase = "make";
   };
 
-  beetle-pce-fast = (mkLibRetroCore rec {
+  beetle-pce-fast = let der = (mkLibRetroCore rec {
     core = "mednafen-pce-fast";
     src = fetchRetro {
       repo = "beetle-pce-fast-libretro";
@@ -76,12 +76,12 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's PC Engine core to libretro";
     license = gpl2;
-  }).override {
+  }); in der.override {
     buildPhase = "make";
-    name = "beetle-pce-fast";
+    name = "beetle-pce-fast-${der.version}";
   };
 
-  beetle-psx = (mkLibRetroCore rec {
+  beetle-psx = let der = (mkLibRetroCore rec {
     core = "mednafen-psx";
     src = fetchRetro {
       repo = "beetle-psx-libretro";
@@ -90,12 +90,12 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's PSX Engine core to libretro";
     license = gpl2;
-  }).override {
+  }); in der.override {
     buildPhase = "make";
-    name = "beetle-psx";
+    name = "beetle-psx-${der.version}";
   };
 
-  beetle-saturn = (mkLibRetroCore rec {
+  beetle-saturn = let der = (mkLibRetroCore rec {
     core = "mednafen-saturn";
     src = fetchRetro {
       repo = "beetle-saturn-libretro";
@@ -104,9 +104,9 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's Saturn core to libretro";
     license = gpl2;
-  }).override {
+  }); in der.override {
     buildPhase = "make";
-    name = "beetle-saturn";
+    name = "beetle-saturn-${der.version}";
     meta.platforms = [ "x86_64-linux" ];
   };
 
@@ -150,7 +150,7 @@ in with stdenv.lib.licenses;
       cmake curl libGLU_combined pcre pkgconfig sfml miniupnpc
       gettext glib gtk2 hidapi
       libevdev udev
-    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil ]);
+    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXinerama libXxf86vm ]);
   }).override {
     cmakeFlags = [
         "-DLINUX_LOCAL_DEV=true"

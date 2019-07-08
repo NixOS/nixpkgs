@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.7.4";
+  version = "0.7.5";
   pname = "pickleshare";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84a9257227dfdd6fe1b4be1319096c20eb85ff1e82c7932f36efccfe1b09737b";
+    sha256 = "87683d47965c1da65cdacaf31c8441d12b8044cdec9aca500cd78fc2c683afca";
   };
 
   propagatedBuildInputs = [ pathpy ]

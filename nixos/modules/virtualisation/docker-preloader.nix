@@ -78,12 +78,11 @@ in
     };
   };
 
-  config = {
+  config = mkIf (cfg.dockerPreloader.images != []) {
     assertions = [{
       # If docker.storageDriver is null, Docker choose the storage
       # driver. So, in this case, we cannot be sure overlay2 is used.
-      assertion = cfg.dockerPreloader.images == []
-        || cfg.docker.storageDriver == "overlay2"
+      assertion = cfg.docker.storageDriver == "overlay2"
         || cfg.docker.storageDriver == "overlay"
         || cfg.docker.storageDriver == null;
       message = "The Docker image Preloader only works with overlay2 storage driver!";

@@ -25,8 +25,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/simplegeo/python-oauth2";
     description = "Library for OAuth version 1.0";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 
 }

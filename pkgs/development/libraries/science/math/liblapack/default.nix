@@ -7,8 +7,7 @@
   shared ? false
 }:
 let
-  usedLibExtension = if shared then ".so" else ".a";
-  inherit (stdenv.lib) optional optionals;
+  inherit (stdenv.lib) optional;
   version = "3.8.0";
 in
 
@@ -29,10 +28,6 @@ stdenv.mkDerivation rec {
   ++ (optional shared "-DBUILD_SHARED_LIBS=ON");
 
   doCheck = ! shared;
-
-  checkPhase = "
-    ctest
-  ";
 
   enableParallelBuilding = true;
 

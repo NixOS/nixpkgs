@@ -3,8 +3,9 @@
 , libzip, rtaudio, rtmidi, speex }:
 
 let
-  glfw-git = glfw.overrideAttrs (oldAttrs: {
-    name = "glfw-git-20180529";
+  glfw-git = glfw.overrideAttrs (oldAttrs: rec {
+    name = "glfw-git-${version}";
+    version = "unstable-2018-05-29";
     src = fetchFromGitHub {
       owner = "glfw";
       repo = "glfw";
@@ -71,8 +72,9 @@ with stdenv.lib; stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Open-source virtual modular synthesizer";
     homepage = http://vcvrack.com/;
-    # The source is BSD-3 licensed, some of the art is CC-BY-NC 4.0 or unfree
-    license = [ licenses.bsd3 licenses.cc-by-nc-40 licenses.unfree ];
+    # The source is BSD-3 licensed, some of the art is CC-BY-NC 4.0 or under a
+    # no-derivatives clause
+    license = with licenses; [ bsd3 cc-by-nc-40 unfreeRedistributable ];
     maintainers = with maintainers; [ moredread ];
     platforms = platforms.linux;
   };

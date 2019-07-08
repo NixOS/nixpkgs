@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
         homepage = http://fungi.yuggoth.org/weather;
         description = "Quick access to current weather conditions and forecasts";
         license = stdenv.lib.licenses.isc;
-        maintainers = with stdenv.lib.maintainers; [ ];
+        maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
         platforms = with stdenv.lib.platforms; linux; # my only platform
     };
 }

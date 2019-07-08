@@ -2,24 +2,23 @@
 , buildPythonPackage
 , fetchPypi
 , ruamel_base
-, typing
 , ruamel_ordereddict
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "ruamel.yaml";
-  version = "0.15.35";
+  version = "0.15.96";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xggyfaj6vprggahf7cq8kp9j79rb7hn8ndk3bxj2sxvwhhliiwd";
+    sha256 = "343ace5ffbab036536a3da65e4cfd31b8292388a389f6305744984581a479b2a";
   };
 
   # Tests cannot load the module to test
   doCheck = false;
 
-  propagatedBuildInputs = [ ruamel_base typing ]
+  propagatedBuildInputs = [ ruamel_base ]
     ++ stdenv.lib.optional (!isPy3k) ruamel_ordereddict;
 
   meta = with stdenv.lib; {

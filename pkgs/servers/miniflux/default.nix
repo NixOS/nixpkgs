@@ -1,38 +1,33 @@
-{ stdenv
-, buildGoPackage
-, fetchFromGitHub
-}:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "miniflux-${version}";
-  version = "2.0.12";
-
-  goPackagePath = "miniflux.app";
+buildGoModule rec {
+  pname = "miniflux";
+  version = "2.0.16";
 
   src = fetchFromGitHub {
-    owner = "miniflux";
-    repo = "miniflux";
-    rev = "refs/tags/${version}";
-    sha256 = "13d1dwcwig7b5phymgxqm227k5l3zzzvx997cywarbl953ji2y1d";
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "09fwhbcpp84l5lw4zizm46ssri6irzvjx2w7507a1xhp6iq73p2d";
   };
-    
-  goDeps = ./deps.nix;
+
+  modSha256 = "0060px0av7l9x4xgmkci9d8yl4lgxzqrikqagnz0f17a944p9xdr";
 
   doCheck = true;
 
   buildFlagsArray = ''
-    -ldflags=-X ${goPackagePath}/version.Version=${version}
+    -ldflags=-X miniflux.app/version.Version=${version}
   '';
 
   postInstall = ''
-    mv $bin/bin/miniflux.app $bin/bin/miniflux
+    mv $out/bin/miniflux.app $out/bin/miniflux
   '';
 
   meta = with stdenv.lib; {
-    description = "Miniflux is a minimalist and opinionated feed reader.";
+    description = "Minimalist and opinionated feed reader";
     homepage = https://miniflux.app/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benpye ];
+    maintainers = with maintainers; [ rvolosatovs benpye ];
   };
 }
 

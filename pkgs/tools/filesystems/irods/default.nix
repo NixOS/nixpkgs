@@ -59,7 +59,7 @@ in rec {
      version = "4.2.2";
      name = "irods-icommands-${version}";
      src = fetchurl {
-       url = "http://github.com/irods/irods_client_icommands/archive/${version}.tar.gz";
+       url = "https://github.com/irods/irods_client_icommands/archive/${version}.tar.gz";
        sha256 = "15zcxrx0q5c3rli3snd0b2q4i0hs3zzcrbpnibbhsip855qvs77h";
      };
 

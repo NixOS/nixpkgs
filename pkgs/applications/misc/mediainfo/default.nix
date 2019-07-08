@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, libmediainfo, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "18.08.1";
+  version = "19.04";
   name = "mediainfo-${version}";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "0rq2dczjq26g5i0ac8px7xmxjvqq4h0rzd97fy5824yb2c5ksxs9";
+    sha256 = "11wag23gx7nprrm1qlgvbc83rs9zxdsshqrp98zwia80xh8c9bk5";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

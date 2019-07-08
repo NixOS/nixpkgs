@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
+, runtimeShell
 }:
 
 # This file is responsible for fetching the sage source and adding necessary patches.
@@ -9,14 +10,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.4";
-  name = "sage-src-${version}";
+  version = "8.8";
+  pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0gips1hagiz9m7s21bg5as8hrrm2x5k47h1bsq0pc46iplfwmv2d";
+    sha256 = "0jm7zdkz8wfgrmf6620jfr8kgvprrz3qfl8gzx6rl5z5cm734b6x";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -36,17 +37,31 @@ stdenv.mkDerivation rec {
     # https://github.com/python/cpython/pull/7476
     ./patches/python-5755-hotpatch.patch
 
-    # Revert the commit that made the sphinx build fork even in the single thread
-    # case. For some yet unknown reason, that breaks the docbuild on nix and archlinux.
-    # See https://groups.google.com/forum/#!msg/sage-packaging/VU4h8IWGFLA/mrmCMocYBwAJ.
-    # https://trac.sagemath.org/ticket/26608
-    ./patches/revert-sphinx-always-fork.patch
-
     # Make sure py2/py3 tests are only run when their expected context (all "sage"
     # tests) are also run. That is necessary to test dochtml individually. See
     # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
+
+    # Fixes a potential race condition which can lead to transient doctest failures.
+    ./patches/fix-ecl-race.patch
+
+    # Not necessary since library location is set explicitly
+    # https://trac.sagemath.org/ticket/27660#ticket
+    ./patches/do-not-test-find-library.patch
+
+
+    # https://trac.sagemath.org/ticket/28007
+    ./patches/threejs-offline.patch
+
+    # Parallelize docubuild using subprocesses, fixing an isolation issue. See
+    # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
+    ./patches/sphinx-docbuild-subprocesses.patch
   ];
+
+  # Since sage unfortunately does not release bugfix releases, packagers must
+  # fix those bugs themselves. This is for critical bugfixes, where "critical"
+  # == "causes (transient) doctest failures / somebody complained".
+  bugfixPatches = [ ];
 
   # Patches needed because of package updates. We could just pin the versions of
   # dependencies, but that would lead to rebuilds, confusion and the burdons of
@@ -58,8 +73,9 @@ stdenv.mkDerivation rec {
     # Fetch a diff between `base` and `rev` on sage's git server.
     # Used to fetch trac tickets by setting the `base` to the last release and the
     # `rev` to the last commit of the ticket.
-    fetchSageDiff = { base, rev, ...}@args: (
+    fetchSageDiff = { base, rev, name ? "sage-diff-${base}-${rev}.patch", ...}@args: (
       fetchpatch ({
+        inherit name;
         url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
         # We don't care about sage's own build system (which builds all its dependencies).
         # Exclude build system changes to avoid conflicts.
@@ -68,6 +84,7 @@ stdenv.mkDerivation rec {
     );
   in [
     # New glpk version has new warnings, filter those out until upstream sage has found a solution
+    # Should be fixed with glpk > 4.65.
     # https://trac.sagemath.org/ticket/24824
     ./patches/pari-stackwarn.patch # not actually necessary since the pari upgrade, but necessary for the glpk patch to apply
     (fetchpatch {
@@ -76,46 +93,16 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
 
-    # https://trac.sagemath.org/ticket/25260
-    ./patches/numpy-1.15.1.patch
-
-    # needed for ntl update
-    # https://trac.sagemath.org/ticket/25532
-    (fetchpatch {
-      name = "lcalc-c++11.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
-      sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
-    })
-
-    (fetchpatch {
-      name = "cython-0.29.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=f77de1d0e7f90ee12761140500cb8cbbb789ab20";
-      sha256 = "14wrpy8jgbnpza1j8a2nx8y2r946y82pll1fv3cn6gpfmm6640l3";
-    })
-    # https://trac.sagemath.org/ticket/26360
-    (fetchpatch {
-      name = "arb-2.15.1.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=30cc778d46579bd0c7537ed33e8d7a4f40fd5c31";
-      sha256 = "13vc2q799dh745sm59xjjabllfj0sfjzcacf8k59kwj04x755d30";
-    })
-
-    # https://trac.sagemath.org/ticket/26326
-    # needs to be split because there is a merge commit in between
+    # https://trac.sagemath.org/ticket/26932
     (fetchSageDiff {
-      name = "networkx-2.2-1.patch";
-      base = "8.4";
-      rev = "68f5ad068184745b38ba6716bf967c8c956c52c5";
-      sha256 = "112b5ywdqgyzgvql2jj5ss8la9i8rgnrzs8vigsfzg4shrcgh9p6";
-    })
-    (fetchSageDiff {
-      name = "networkx-2.2-2.patch";
-      base = "626485bbe5f33bf143d6dfba4de9c242f757f59b~1";
-      rev = "db10d327ade93711da735a599a67580524e6f7b4";
-      sha256 = "09v87id25fa5r9snfn4mv79syhc77jxfawj5aizmdpwdmpgxjk1f";
+      name = "givaro-4.1.0_fflas-ffpack-2.4.0_linbox-1.6.0.patch";
+      base = "8.8.beta4";
+      rev = "c11d9cfa23ff9f77681a8f12742f68143eed4504";
+      sha256 = "0xzra7mbgqvahk9v45bjwir2mqz73hrhhy314jq5nxrb35ysdxyi";
     })
   ];
 
-  patches = nixPatches ++ packageUpgradePatches;
+  patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
 
   postPatch = ''
     # make sure shebangs etc are fixed, but sage-python23 still works
@@ -123,8 +110,14 @@ stdenv.mkDerivation rec {
       -e 's/sage-python23/python/g' \
       -i {} \;
 
-    echo '#!${stdenv.shell}
+    echo '#!${runtimeShell}
     python "$@"' > build/bin/sage-python23
+
+    # Make sure sage can at least be imported without setting any environment
+    # variables. It won't be close to feature complete though.
+    sed -i \
+      "s|var('SAGE_LOCAL',.*|var('SAGE_LOCAL', '$out/src')|" \
+      src/sage/env.py
 
     # Do not use sage-env-config (generated by ./configure).
     # Instead variables are set manually.

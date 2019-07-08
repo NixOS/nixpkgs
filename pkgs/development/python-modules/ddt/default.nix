@@ -1,16 +1,23 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, nose, six, pyyaml, mock
 }:
 
 buildPythonPackage rec {
   pname = "ddt";
-  version = "1.0.0";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e24ecb7e2cf0bf43fa9d4255d3ae2bd0b7ce30b1d1b89ace7aa68aca1152f37a";
+    sha256 = "d13e6af8f36238e89d00f4ebccf2bda4f6d1878be560a6600689e42077e164e3";
   };
+
+  checkInputs = [ nose six pyyaml mock ];
+
+  checkPhase = ''
+    nosetests -s
+  '';
 
   meta = with stdenv.lib; {
     description = "Data-Driven/Decorated Tests, a library to multiply test cases";

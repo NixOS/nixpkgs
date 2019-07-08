@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchzip, python3, python3Packages, writeScript }:
+{ stdenv, makeWrapper, fetchzip, python3, python3Packages }:
 let
   threaded_servers = python3Packages.buildPythonPackage {
     name = "threaded_servers";
@@ -12,7 +12,7 @@ let
   };
   wrappedPython = python3.withPackages (_: [ threaded_servers ]);
 in stdenv.mkDerivation {
-  name = "quickserve";
+  pname = "quickserve";
   version = "2018";
 
   unpackPhase = ":";

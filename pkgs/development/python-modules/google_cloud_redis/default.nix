@@ -4,18 +4,19 @@
 , enum34
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c0fa00cafbce3e9a0e35fb7f9d754ac70b450b6496c62c20bb3a1f500aeca9e4";
+    sha256 = "449fd11699f9ae23ec2ccf1b06681bb90b4c1788f82fbbf1ce1c1d2e77833eb1";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ enum34 google_api_core ];
 
   # requires old version of google-api-core (override)

@@ -27,7 +27,7 @@ let
 
       meta = with stdenv.lib; {
         description = "C++ target for ANTLR 4";
-        homepage = http://www.antlr.org/;
+        homepage = https://www.antlr.org/;
         license = licenses.bsd3;
         platforms = platforms.unix;
       };
@@ -73,7 +73,7 @@ let
         frameworks. From a grammar, ANTLR generates a parser that can build and
         walk parse trees.
       '';
-      homepage = http://www.antlr.org/;
+      homepage = https://www.antlr.org/;
       license = licenses.bsd3;
       platforms = platforms.unix;
     };

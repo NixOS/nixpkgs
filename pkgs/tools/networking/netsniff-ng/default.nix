@@ -1,24 +1,24 @@
 { stdenv, fetchFromGitHub, makeWrapper, bison, flex, geoip, geolite-legacy
 , libcli, libnet, libnetfilter_conntrack, libnl, libpcap, libsodium
-, liburcu, ncurses, perl, pkgconfig, zlib }:
+, liburcu, ncurses, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "netsniff-ng-${version}";
-  version = "0.6.5";
+  pname = "netsniff-ng";
+  version = "0.6.6";
 
   # Upstream recommends and supports git
   src = fetchFromGitHub rec {
-    repo = "netsniff-ng";
-    owner = repo;
+    repo = pname;
+    owner = pname;
     rev = "v${version}";
-    sha256 = "0bcbdiik69g6jnravkkid8gxw2akg01i372msc5x1w9fh9wh2phw";
+    sha256 = "0spp8dl4i5xcqfbqxxcpdf3gwcmyf4ywl1dd79w6gzbr07p894p5";
   };
 
-  patches = [ ./glibc-2.26.patch ];
-
-  buildInputs = [ bison flex geoip geolite-legacy libcli libnet libnl
-    libnetfilter_conntrack libpcap libsodium liburcu ncurses perl
-    pkgconfig zlib makeWrapper ];
+  nativeBuildInputs = [ pkgconfig makeWrapper bison flex ];
+  buildInputs = [
+    geoip geolite-legacy libcli libnet libnl
+    libnetfilter_conntrack libpcap libsodium liburcu ncurses zlib
+  ];
 
   # ./configure is not autoGNU but some home-brewn magic
   configurePhase = ''

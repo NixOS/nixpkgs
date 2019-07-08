@@ -4,19 +4,19 @@
 
 stdenv.mkDerivation rec {
   name = "libmodsecurity-${version}";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "SpiderLabs";
     repo = "ModSecurity";
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "0jhyqsvcjxq9ybndcinc08awknrg3sbkaby5w3qw03aqbfjkpywc";
+    sha256 = "00g2407g2679zv73q67zd50z0f1g1ij734ssv2pp77z4chn5dzib";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig doxygen ];
 
-  buildInputs = [ doxygen perl valgrind curl geoip libxml2 lmdb lua pcre yajl];
+  buildInputs = [ perl valgrind curl geoip libxml2 lmdb lua pcre yajl ];
 
   configureFlags = [
     "--enable-static"
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     "--with-pcre=${pcre.dev}"
     "--with-yajl=${yajl}"
   ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = ''

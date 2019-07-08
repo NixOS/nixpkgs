@@ -10,6 +10,8 @@ let
     "commands/test_ci.py::test_ci_boards"
     "commands/test_ci.py::test_ci_project_conf"
     "commands/test_ci.py::test_ci_lib_and_board"
+    "commands/test_ci.py::test_ci_build_dir"
+    "commands/test_ci.py::test_ci_keep_build_dir"
     "commands/test_init.py::test_init_enable_auto_uploading"
     "commands/test_init.py::test_init_custom_framework"
     "commands/test_init.py::test_init_incorrect_board"
@@ -44,14 +46,14 @@ let
 
 in buildPythonApplication rec {
   pname = "platformio";
-  version = "3.6.1";
+  version = "3.6.6";
 
-  # pypi tarball doesn't contain tests
+  # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    sha256 = "01xz9figqrzb0m9467q14lg51vmgq0hbaap0xdx08n5v2ycmzj0v";
+    sha256 = "1qwd6684y2xagl375sv8fm6a535hcdqx296hknjlbvsgc1jc514a";
   };
 
   propagatedBuildInputs =  [

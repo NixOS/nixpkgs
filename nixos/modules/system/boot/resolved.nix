@@ -35,7 +35,7 @@ in
         when resolving single-label host names (domain names which
         contain no dot), in order to qualify them into fully-qualified
         domain names (FQDNs).
-        </para><para>
+
         For compatibility reasons, if this setting is not specified,
         the search domains listed in
         <filename>/etc/resolv.conf</filename> are used instead, if
@@ -50,8 +50,9 @@ in
       description = ''
         Controls Link-Local Multicast Name Resolution support
         (RFC 4795) on the local host.
-        </para><para>
+
         If set to
+
         <variablelist>
         <varlistentry>
           <term><literal>"true"</literal></term>

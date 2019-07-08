@@ -1,13 +1,13 @@
 { stdenv, fetchurl, withoutInitTools ? false }:
 
-let version = "2.89"; in
+let version = "2.95"; in
 
 stdenv.mkDerivation {
   name = (if withoutInitTools then "sysvtools" else "sysvinit") + "-" + version;
 
   src = fetchurl {
-    url = "mirror://savannah/sysvinit/sysvinit-${version}.tar.bz2";
-    sha256 = "0rdw5lgg2rpcfdmq90br388qr01w89vsqmpvrqcqjqsmxk9zw3c2";
+    url = "mirror://savannah/sysvinit/sysvinit-${version}.tar.xz";
+    sha256 = "1j46dydib9yd2a46w43is9b61lplwrsry46fw7cbmfrn7ywrq0n9";
   };
 
   prePatch = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    homepage = http://www.nongnu.org/sysvinit/;
+    homepage = https://www.nongnu.org/sysvinit/;
     description = "Utilities related to booting and shutdown";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;

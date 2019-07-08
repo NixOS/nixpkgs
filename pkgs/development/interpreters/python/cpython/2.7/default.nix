@@ -1,24 +1,27 @@
-{ stdenv, buildPackages, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , bzip2
+, expat
+, libffi
 , gdbm
-, fetchpatch
+, db
 , ncurses
 , openssl
 , readline
 , sqlite
 , tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
 , zlib
-, callPackage
 , self
-, db
-, expat
-, libffi
 , CF, configd, coreutils
 , python-setup-hook
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
 , ucsEncoding ? 4
 # For the Python package set
 , packageOverrides ? (self: super: {})
+, buildPackages
+, sourceVersion
+, sha256
+, passthruFun
+, static ? false
 }:
 
 assert x11Support -> tcl != null
@@ -29,16 +32,26 @@ assert x11Support -> tcl != null
 with stdenv.lib;
 
 let
-  majorVersion = "2.7";
-  minorVersion = "15";
-  minorVersionSuffix = "";
-  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
-  libPrefix = "python${majorVersion}";
-  sitePackages = "lib/${libPrefix}/site-packages";
+
+  pythonForBuild = buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"};
+
+  passthru = passthruFun rec {
+    inherit self sourceVersion packageOverrides;
+    implementation = "cpython";
+    libPrefix = "python${pythonVersion}";
+    executable = libPrefix;
+    pythonVersion = with sourceVersion; "${major}.${minor}";
+    sitePackages = "lib/${libPrefix}/site-packages";
+    inherit hasDistutilsCxxPatch pythonForBuild;
+  } // {
+    inherit ucsEncoding;
+  };
+
+  version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
   src = fetchurl {
-    url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0x2mvz9dp11wj7p5ccvmk9s0hzjk2fa1m462p395l4r6bfnb3n92";
+    url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
+    inherit sha256;
   };
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -66,20 +79,6 @@ let
         sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
       })
 
-      # "`type_getattro()` calls `tp_descr_get(self, obj, type)` without actually owning a reference to "self".
-      # In very rare cases, this can cause a segmentation fault if "self" is deleted by the descriptor."
-      # https://github.com/python/cpython/pull/6118
-      (fetchpatch {
-        name = "type_getattro.patch";
-        url = "file://${./type_getattro.patch}";
-        sha256 = "11v9yx20hs3jmw0wggzvmw39qs4mxay4kb8iq2qjydwy9ya61nrd";
-      })
-
-      (fetchpatch {
-        name = "CVE-2018-1000802.patch";
-        url = "https://github.com/python/cpython/pull/8985.patch";
-        sha256 = "1c8nq2c9sjqa8ipl62hiandg6a7lzrwwfhi3ky6jd3pxgyalrh97";
-      })
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
@@ -165,7 +164,8 @@ let
   ]
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
-  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no";
+  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no"
+  ++ optional static "LDFLAGS=-static";
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
@@ -191,12 +191,11 @@ let
   # Build the basic Python interpreter without modules that have
   # external dependencies.
 
-in stdenv.mkDerivation ({
-    name = "python-${version}";
-    pythonVersion = majorVersion;
+in with passthru; stdenv.mkDerivation ({
+    pname = "python";
+    inherit version;
 
-    inherit majorVersion version src patches buildInputs nativeBuildInputs
-            preConfigure configureFlags;
+    inherit src patches buildInputs nativeBuildInputs preConfigure configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
@@ -215,7 +214,7 @@ in stdenv.mkDerivation ({
       ''
         # needed for some packages, especially packages that backport
         # functionality to 2.x from 3.x
-        for item in $out/lib/python${majorVersion}/test/*; do
+        for item in $out/lib/${libPrefix}/test/*; do
           if [[ "$item" != */test_support.py*
              && "$item" != */test/support
              && "$item" != */test/regrtest.py* ]]; then
@@ -224,12 +223,10 @@ in stdenv.mkDerivation ({
             echo $item
           fi
         done
-        touch $out/lib/python${majorVersion}/test/__init__.py
-        ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
-        ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
+        touch $out/lib/${libPrefix}/test/__init__.py
+        ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb
+        ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb${sourceVersion.major}.${sourceVersion.minor}
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
-
-        paxmark E $out/bin/python${majorVersion}
 
         # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
         echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
@@ -251,21 +248,7 @@ in stdenv.mkDerivation ({
         cp libpython2.7.dll.a $out/lib
       '';
 
-    passthru = let
-      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {
-        python = self;
-        overrides = packageOverrides;
-      };
-    in rec {
-      inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch ucsEncoding;
-      executable = libPrefix;
-      buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
-      pkgs = pythonPackages;
-      isPy2 = true;
-      isPy27 = true;
-      interpreter = "${self}/bin/${executable}";
-    };
+    inherit passthru;
 
     enableParallelBuilding = true;
 

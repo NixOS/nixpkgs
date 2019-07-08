@@ -55,7 +55,7 @@ let
     check = builtins.isAttrs;
   };
 
-  defaultPkgs = import ../../../pkgs/top-level/default.nix {
+  defaultPkgs = import ../../.. {
     inherit (cfg) config overlays localSystem crossSystem;
   };
 
@@ -68,7 +68,7 @@ in
 
     pkgs = mkOption {
       defaultText = literalExample
-        ''import "''${nixos}/../pkgs/top-level" {
+        ''import "''${nixos}/.." {
             inherit (cfg) config overlays localSystem crossSystem;
           }
         '';
@@ -127,13 +127,14 @@ in
       default = [];
       example = literalExample
         ''
-          [ (self: super: {
+          [
+            (self: super: {
               openssh = super.openssh.override {
                 hpnSupport = true;
                 kerberos = self.libkrb5;
               };
-            };
-          ) ]
+            })
+          ]
         '';
       type = types.listOf overlayType;
       description = ''

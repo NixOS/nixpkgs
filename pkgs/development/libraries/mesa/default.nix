@@ -2,7 +2,7 @@
 , pkgconfig, intltool, autoreconfHook
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, valgrind-light, python2
+, libelf, libvdpau, python2, python2Packages
 , libglvnd
 , enableRadv ? true
 , galliumDrivers ? null
@@ -10,6 +10,7 @@
 , vulkanDrivers ? null
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
 , OpenGL, Xplugin
+, withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
 }:
 
 /** Packaging design:
@@ -25,27 +26,23 @@
 
 with stdenv.lib;
 
-if ! elem stdenv.hostPlatform.system platforms.mesaPlatforms then
-  throw "unsupported platform for Mesa"
-else
-
 let
-  defaultGalliumDrivers =
-    optionals (elem "drm" eglPlatforms)
-    (if stdenv.isAarch32
-    then ["virgl" "nouveau" "freedreno" "vc4" "etnaviv" "imx"]
-    else if stdenv.isAarch64
-    then ["virgl" "nouveau" "vc4" ]
-    else ["virgl" "svga" "i915" "r300" "r600" "radeonsi" "nouveau"]);
-  defaultDriDrivers =
-    optionals (elem "drm" eglPlatforms)
-    (if (stdenv.isAarch32 || stdenv.isAarch64)
-    then ["nouveau"]
-    else ["i915" "i965" "nouveau" "radeon" "r200"]);
-  defaultVulkanDrivers =
-    optionals stdenv.isLinux (if (stdenv.isAarch32 || stdenv.isAarch64)
-    then []
-    else ["intel"] ++ lib.optional enableRadv "radeon");
+  # platforms that have PCIe slots and thus can use most non-integrated GPUs
+  pciePlatform = !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64;
+  defaultGalliumDrivers = optionals (elem "drm" eglPlatforms) ([ "virgl" ]
+    ++ lib.optionals pciePlatform [ "r300" "r600" "radeonsi" ]
+    ++ lib.optionals (pciePlatform || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "nouveau" ]
+    ++ lib.optionals stdenv.hostPlatform.isx86 [ "i915" "svga" ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "vc4" ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "freedreno" "etnaviv" "imx" ]
+  );
+  defaultDriDrivers = optionals (elem "drm" eglPlatforms) ([ ]
+    ++ lib.optionals pciePlatform [ "radeon" "r200" ]
+    ++ lib.optionals (pciePlatform || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "nouveau" ]
+    ++ lib.optionals stdenv.hostPlatform.isx86 [ "i915" "i965" ]);
+  defaultVulkanDrivers = optionals stdenv.hostPlatform.isLinux ([ ]
+    ++ lib.optional stdenv.hostPlatform.isx86 "intel"
+    ++ lib.optional enableRadv "radeon");
 in
 
 let gallium_ = galliumDrivers; dri_ = driDrivers; vulkan_ = vulkanDrivers; in
@@ -67,12 +64,12 @@ let
 in
 
 let
-  version = "18.2.4";
+  version = "18.3.4";
   branch  = head (splitString "." version);
 in
 
 let self = stdenv.mkDerivation {
-  name = "mesa-noglu-${version}";
+  name = "mesa-${version}";
 
   src =  fetchurl {
     urls = [
@@ -81,7 +78,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "0knbr6nl7qk5bijz6p7yqr8fc806gvmz9p6jlnvdaxkqnpmil7b2";
+    sha256 = "01xv03ah4l5lcfx015n3fg1620dh4nbbv6gmhh6zhdsx6sj4sc9j";
   };
 
   prePatch = "patchShebangs .";
@@ -93,7 +90,7 @@ let self = stdenv.mkDerivation {
     ./symlink-drivers.patch
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ] ++ lib.optional stdenv.isDarwin ./darwin-clock-gettime.patch;
+  ];
 
   outputs = [ "out" "dev" "drivers" ]
             ++ lib.optional (elem "swrast" galliumDrivers) "osmesa";
@@ -111,7 +108,7 @@ let self = stdenv.mkDerivation {
     "--enable-texture-float"
     (enableFeature stdenv.isLinux "dri3")
     (enableFeature stdenv.isLinux "nine") # Direct3D in Wine
-    "--enable-libglvnd"
+    (enableFeature stdenv.isLinux "libglvnd")
     "--enable-dri"
     "--enable-driglx-direct"
     "--enable-gles1"
@@ -134,22 +131,24 @@ let self = stdenv.mkDerivation {
     "--disable-opencl"
   ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig file ];
+  nativeBuildInputs = [
+    autoreconfHook intltool pkgconfig file
+    python2 python2Packages.Mako
+  ];
 
-  propagatedBuildInputs = with xorg;
-    [ libXdamage libXxf86vm ]
-    ++ optional stdenv.isLinux libdrm
+  propagatedBuildInputs = with xorg; [
+    libXdamage libXxf86vm
+  ] ++ optional stdenv.isLinux libdrm
     ++ optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
   buildInputs = with xorg; [
-    expat llvmPackages.llvm libglvnd
-    glproto dri2proto dri3proto presentproto
+    expat llvmPackages.llvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
-    libpthreadstubs openssl/*or another sha1 provider*/
-    valgrind-light python2 python2.pkgs.Mako
+    libpthreadstubs openssl /*or another sha1 provider*/
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ];
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
+    ++ lib.optional withValgrind valgrind-light;
 
   enableParallelBuilding = true;
   doCheck = false;
@@ -161,7 +160,10 @@ let self = stdenv.mkDerivation {
   ];
 
   # TODO: probably not all .la files are completely fixed, but it shouldn't matter;
-  postInstall = optionalString (galliumDrivers != []) ''
+  postInstall = ''
+    # Some installs don't have any drivers so this directory is never created.
+    mkdir -p $drivers
+  '' + optionalString (galliumDrivers != []) ''
     # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
     mv -t "$drivers/lib/"    \
       $out/lib/libXvMC*      \
@@ -229,12 +231,51 @@ let self = stdenv.mkDerivation {
     inherit libdrm version;
     inherit (libglvnd) driverLink;
 
+    # Use stub libraries from libglvnd and headers from Mesa.
     stubs = stdenv.mkDerivation {
       name = "libGL-${libglvnd.version}";
       outputs = [ "out" "dev" ];
 
-      # Use stub libraries from libglvnd and headers from Mesa.
-      buildCommand = ''
+      # On macOS, libglvnd is not supported, so we just use what mesa
+      # build. We need to also include OpenGL.framework, and some
+      # extra tricks to go along with. We add mesa’s libGLX to support
+      # the X extensions to OpenGL.
+      buildCommand = if stdenv.hostPlatform.isDarwin then ''
+        mkdir -p $out/nix-support $dev
+        echo ${OpenGL} >> $out/nix-support/propagated-build-inputs
+        ln -s ${self.out}/lib $out/lib
+
+        mkdir -p $dev/lib/pkgconfig $dev/nix-support
+        echo "$out" > $dev/nix-support/propagated-build-inputs
+        ln -s ${self.dev}/include $dev/include
+
+        cat <<EOF >$dev/lib/pkgconfig/gl.pc
+      Name: gl
+      Description: gl library
+      Version: ${self.version}
+      Libs: -L${self.out}/lib -lGL
+      Cflags: -I${self.dev}/include
+      EOF
+
+        cat <<EOF >$dev/lib/pkgconfig/glesv1_cm.pc
+      Name: glesv1_cm
+      Description: glesv1_cm library
+      Version: ${self.version}
+      Libs: -L${self.out}/lib -lGLESv1_CM
+      Cflags: -I${self.dev}/include
+      EOF
+
+        cat <<EOF >$dev/lib/pkgconfig/glesv2.pc
+      Name: glesv2
+      Description: glesv2 library
+      Version: ${self.version}
+      Libs: -L${self.out}/lib -lGLESv2
+      Cflags: -I${self.dev}/include
+      EOF
+      ''
+
+      # Otherwise, setup gl stubs to use libglvnd.
+      else ''
         mkdir -p $out/nix-support
         ln -s ${libglvnd.out}/lib $out/lib
 
@@ -259,8 +300,6 @@ let self = stdenv.mkDerivation {
         genPkgConfig egl EGL
         genPkgConfig glesv1_cm GLESv1_CM
         genPkgConfig glesv2 GLESv2
-      '' + lib.optionalString stdenv.isDarwin ''
-        echo ${OpenGL} > $out/nix-support/propagated-build-inputs
       '';
     };
   };
@@ -269,7 +308,7 @@ let self = stdenv.mkDerivation {
     description = "An open source implementation of OpenGL";
     homepage = https://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ vcunat ];
   };
 };

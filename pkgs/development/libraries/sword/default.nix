@@ -24,7 +24,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ "--without-conf" "--enable-tests=no CXXFLAGS=-Wno-unused-but-set-variable" ];
+  configureFlags = [ "--without-conf" "--enable-tests=no" ];
+  CXXFLAGS = [
+    "-Wno-unused-but-set-variable"
+    # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
+    "-DU_USING_ICU_NAMESPACE=1"
+  ];
 
   meta = with stdenv.lib; {
     description = "A software framework that allows research manipulation of Biblical texts";

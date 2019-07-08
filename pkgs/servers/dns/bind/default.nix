@@ -1,33 +1,35 @@
-{ stdenv, lib, fetchurl
+{ config, stdenv, lib, fetchurl, fetchpatch
 , perl
 , libcap, libtool, libxml2, openssl
-, enablePython ? false, python3 ? null
+, enablePython ? config.bind.enablePython or false, python3 ? null
 , enableSeccomp ? false, libseccomp ? null, buildPackages
 }:
 
 assert enableSeccomp -> libseccomp != null;
 assert enablePython -> python3 != null;
 
-let version = "9.12.3"; in
+let version = "9.14.3"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0f5rjs6zsq8sp6iv5r4q5y65xv05dk2sgvsj6lcir3i564k7d00f";
+    sha256 = "1ymxr38c62w6961j8g2vllnv0s72z7zk4b2j2k8ixdh1rymqm1yf";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
 
-  patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ] ++
-    stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
+  patches = [
+    ./dont-keep-configure-flags.patch
+    ./remove-mkdir-var.patch
+  ];
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ libtool libxml2 openssl ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
-    ++ lib.optional enablePython python3;
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 
@@ -75,7 +77,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # requires root and the net
 
   meta = {
-    homepage = http://www.isc.org/software/bind;
+    homepage = https://www.isc.org/downloads/bind/;
     description = "Domain name server";
     license = stdenv.lib.licenses.mpl20;
 

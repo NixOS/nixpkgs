@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub, fuse, pkgconfig }:
+{ stdenv, fetchFromGitHub, fuse, pkgconfig, pcre }:
 
 stdenv.mkDerivation rec {
   name = "tup-${version}";
-  version = "0.7.5";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "gittup";
     repo = "tup";
     rev = "v${version}";
-    sha256 = "0jzp1llq6635ldb7j9qb29j2k0x5mblimdqg3179dvva1hv0ia23";
+    sha256 = "07dmz712zbs5kayf98kywp7blssgh0y2gc1623jbsynmqwi77mcb";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fuse ];
+  buildInputs = [ fuse pcre ];
 
   configurePhase = ''
-    sed -i 's/`git describe`/v${version}/g' Tupfile
+    sed -i 's/`git describe`/v${version}/g' src/tup/link.sh
+    sed -i 's/pcre-confg/pkg-config pcre/g' Tupfile Tuprules.tup
   '';
 
   # Regular tup builds require fusermount to have suid, which nix cannot
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   # generate' instead
   buildPhase = ''
     ./build.sh
+    ./build/tup init
     ./build/tup generate script.sh
     ./script.sh
   '';

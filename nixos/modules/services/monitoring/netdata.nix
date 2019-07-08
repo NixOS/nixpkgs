@@ -5,14 +5,20 @@ with lib;
 let
   cfg = config.services.netdata;
 
-  wrappedPlugins = pkgs.runCommand "wrapped-plugins" {} ''
+  wrappedPlugins = pkgs.runCommand "wrapped-plugins" { preferLocalBuild = true; } ''
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
+    ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
   '';
+
+  plugins = [
+    "${pkgs.netdata}/libexec/netdata/plugins.d"
+    "${wrappedPlugins}/libexec/netdata/plugins.d"
+  ] ++ cfg.extraPluginPaths;
 
   localConfig = {
     global = {
-      "plugins directory" = "${pkgs.netdata}/libexec/netdata/plugins.d ${wrappedPlugins}/libexec/netdata/plugins.d";
+      "plugins directory" = concatStringsSep " " plugins;
     };
     web = {
       "web files owner" = "root";
@@ -78,6 +84,24 @@ in {
         };
       };
 
+      extraPluginPaths = mkOption {
+        type = types.listOf types.path;
+        default = [ ];
+        example = literalExample ''
+          [ "/path/to/plugins.d" ]
+        '';
+        description = ''
+          Extra paths to add to the netdata global "plugins directory"
+          option.  Useful for when you want to include your own
+          collection scripts.
+          </para><para>
+          Details about writing a custom netdata plugin are available at:
+          <link xlink:href="https://docs.netdata.cloud/collectors/plugins.d/"/>
+          </para><para>
+          Cannot be combined with configText.
+        '';
+      };
+
       config = mkOption {
         type = types.attrsOf types.attrs;
         default = {};
@@ -117,12 +141,18 @@ in {
       path = (with pkgs; [ gawk curl ]) ++ lib.optional cfg.python.enable
         (pkgs.python3.withPackages cfg.python.extraPackages);
       serviceConfig = {
+        Environment="PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
+        ExecStart = "${pkgs.netdata}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
+        ExecReload = "${pkgs.utillinux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
+        TimeoutStopSec = 60;
+        # User and group
         User = cfg.user;
         Group = cfg.group;
-        Environment="PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
-        PermissionsStartOnly = true;
-        ExecStart = "${pkgs.netdata}/bin/netdata -D -c ${configFile}";
-        TimeoutStopSec = 60;
+        # Runtime directory and mode
+        RuntimeDirectory = "netdata";
+        RuntimeDirectoryMode = "0755";
+        # Performance
+        LimitNOFILE = "30000";
       };
     };
 
@@ -134,6 +164,18 @@ in {
       permissions = "u+rx,g+rx,o-rwx";
     };
 
+    security.wrappers."freeipmi.plugin" = {
+      source = "${pkgs.netdata}/libexec/netdata/plugins.d/freeipmi.plugin.org";
+      capabilities = "cap_dac_override,cap_fowner+ep";
+      owner = cfg.user;
+      group = cfg.group;
+      permissions = "u+rx,g+rx,o-rwx";
+    };
+
+    security.pam.loginLimits = [
+      { domain = "netdata"; type = "soft"; item = "nofile"; value = "10000"; }
+      { domain = "netdata"; type = "hard"; item = "nofile"; value = "30000"; }
+    ];
 
     users.users = optional (cfg.user == defaultUser) {
       name = defaultUser;

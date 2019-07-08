@@ -71,6 +71,11 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
+  NIX_LDFLAGS = [
+    "-lavcodec"
+    "-lavutil"
+  ];
+
   patches = [ ./kino-1.3.4-v4l1.patch ./kino-1.3.4-libav-0.7.patch ./kino-1.3.4-libav-0.8.patch ]; #./kino-1.3.4-libavcodec-pkg-config.patch ];
 
   postInstall = "

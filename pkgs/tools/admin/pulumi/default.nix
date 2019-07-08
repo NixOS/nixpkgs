@@ -1,18 +1,20 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, autoPatchelfHook }:
+
+with lib;
 
 let
 
-  version = "0.16.2";
+  version = "0.17.17";
 
   # switch the dropdown to “manual” on https://pulumi.io/quickstart/install.html # TODO: update script
   pulumiArchPackage = {
     "x86_64-linux" = {
       url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-linux-x64.tar.gz";
-      sha256 = "16qgy2pj3xkf1adi3882fpsl99jwsm19111fi5vzh1xqf39sg549";
+      sha256 = "1h1z8bngix1gvma3hahfyprrx3af5yncgvrsvr1cdsaa79bzvc5c";
     };
     "x86_64-darwin" = {
       url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-darwin-x64.tar.gz";
-      sha256 = "18ck9khspa0x798bdlwk8dzylbsq7s35xmla8yasd9qqlab1yy1a";
+      sha256 = "0pipykwpqqnhqg28s27lnkbrm55rshf25ikil7ycwq05p9ynf5gq";
     };
   };
 
@@ -27,7 +29,9 @@ in stdenv.mkDerivation rec {
     cp * $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  buildInputs = optionals stdenv.isLinux [ autoPatchelfHook ];
+
+  meta = {
     homepage = https://pulumi.io/;
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
     license = with licenses; [ asl20 ];

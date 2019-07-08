@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    homepage = http://www.gnu.org/software/gv/;
+    homepage = https://www.gnu.org/software/gv/;
     description = "PostScript/PDF document viewer";
 
     longDescription = ''

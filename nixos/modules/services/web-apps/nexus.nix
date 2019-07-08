@@ -83,6 +83,8 @@ in
     users.users."${cfg.user}" = {
       isSystemUser = true;
       group = cfg.group;
+      home = cfg.home;
+      createHome = true;
     };
 
     users.groups."${cfg.group}" = {};
@@ -104,8 +106,6 @@ in
       preStart = ''
         mkdir -p ${cfg.home}/nexus3/etc
 
-        chown -R ${cfg.user}:${cfg.group} ${cfg.home}
-
         if [ ! -f ${cfg.home}/nexus3/etc/nexus.properties ]; then
           echo "# Jetty section" > ${cfg.home}/nexus3/etc/nexus.properties
           echo "application-port=${toString cfg.listenPort}" >> ${cfg.home}/nexus3/etc/nexus.properties
@@ -124,7 +124,6 @@ in
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
-        PermissionsStartOnly = true;
         LimitNOFILE = 102642;
       };
     };

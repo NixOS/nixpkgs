@@ -1,18 +1,18 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
   fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps,
   libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkgconfig, glib, gtk, gtkmm, iproute, dbus, systemd, which,
+  pkgconfig, glib, gtk3, gtkmm3, iproute, dbus, systemd, which,
   withX ? true }:
 
 stdenv.mkDerivation rec {
   name = "open-vm-tools-${version}";
-  version = "10.3.5";
+  version = "10.3.10";
 
   src = fetchFromGitHub {
     owner  = "vmware";
     repo   = "open-vm-tools";
     rev    = "stable-${version}";
-    sha256 = "10x24gkqcg9lnfxghq92nr76h40s5v3xrv0ymi9c7aqrqry404z7";
+    sha256 = "0x2cyccnb4sycrw7r5mzby2d196f9jiph8vyqi0x8v8r2b4vi4yj";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
   buildInputs = [ fuse glib icu libdnet libmspack openssl pam procps xercesc ]
-      ++ lib.optionals withX [ gtk gtkmm libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
+      ++ lib.optionals withX [ gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
   patches = [ ./recognize_nixos.patch ];
   postPatch = ''

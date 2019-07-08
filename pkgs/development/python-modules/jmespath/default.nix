@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "jmespath";
-  version = "0.9.0";
+  version = "0.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g9xvl69y7nr3w7ag4fsp6sm4fqf6vrqjw7504x2hzrrsh3ampq8";
+    sha256 = "bde2aef6f44302dfb30320115b17d030798de8c4110e28d5cf6cf91a7a31074c";
   };
 
   buildInputs = [ nose ];

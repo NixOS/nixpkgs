@@ -1,10 +1,10 @@
 { stdenv, fetchurl, which, coq, ssreflect }:
 
 stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-coquelicot-3.0.1";
+  name = "coq${coq.coq-version}-coquelicot-3.0.2";
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/37045/coquelicot-3.0.1.tar.gz";
-    sha256 = "0hsyhsy2lwqxxx2r8xgi5csmirss42lp9bkb9yy35mnya0w78c8r";
+    url = "https://gforge.inria.fr/frs/download.php/file/37523/coquelicot-3.0.2.tar.gz";
+    sha256 = "1biia7nfqf7vaqq5gmykl4rwjyvrcwss6r2jdf0in5pvp2rnrj2w";
   };
 
   nativeBuildInputs = [ which ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" ];
   };
 
 }

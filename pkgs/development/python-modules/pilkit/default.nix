@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pilkit";
-  version = "1.1.4";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e00585f5466654ea2cdbf7decef9862cb00e16fd363017fa7ef6623a16b0d2c7";
+    sha256 = "ddb30c2f0198a147e56b151476c3bb9fe045fbfd5b0a0fa2a3148dba62d1559f";
   };
 
   preConfigure = ''
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   buildInputs = [ pillow nose_progressive nose mock blessings ];
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/matthewwithanm/pilkit/;
+    homepage = https://github.com/matthewwithanm/pilkit/;
     description = "A collection of utilities and processors for the Python Imaging Libary";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];

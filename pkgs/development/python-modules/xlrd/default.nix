@@ -1,22 +1,22 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, nose
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "xlrd";
-  version = "0.9.4";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e8d3359f39541a6ff937f4030db54864836a06e42988c452db5b6b86d29ea72";
+    sha256 = "546eb36cee8db40c3eaa46c351e67ffee6eeb5fa2650b71bc4c758a29a1b29b2";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
-    nosetests -v
+    py.test -k "not test_tilde_path_expansion"
   '';
 
   meta = with stdenv.lib; {

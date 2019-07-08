@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An offline reader for Web content";
-    homepage = http://kiwix.org;
+    homepage = https://kiwix.org;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ robbinch ];

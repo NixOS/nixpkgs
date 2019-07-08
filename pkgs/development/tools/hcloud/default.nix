@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "hcloud-${version}";
-  version = "1.9.1";
+  version = "1.11.0";
   
   goPackagePath = "github.com/hetznercloud/cli";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "hetznercloud";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0qc4mzjd1q3xv1j0dxv5qvk443bdhh5hlbv3i3444v36wycj3171";
+    sha256 = "0iknw14728l2mynrvb3fiqm7y893ppp22gbb3mppi6iy3as94f1f";
   };
 
   goDeps = ./deps.nix;

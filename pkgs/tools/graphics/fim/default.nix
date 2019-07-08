@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       to be a highly customizable and scriptable for users who are comfortable
       with software like the VIM text editor or the Mutt mail user agent.
     '';
-    homepage = http://www.nongnu.org/fbi-improved/;
+    homepage = https://www.nongnu.org/fbi-improved/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

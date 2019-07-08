@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     description = "Lightweight signal-safe logging library";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

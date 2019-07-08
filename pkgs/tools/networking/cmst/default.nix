@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "cmst-${version}";
-  version = "2018.01.06";
+  version = "2019.01.13";
 
   src = fetchFromGitHub {
     repo = "cmst";
     owner = "andrew-bibb";
     rev = name;
-    sha256 = "1a3v7z75ghziymdj2w8603ql9nfac5q224ylfsqfxcqxw4bdip4r";
+    sha256 = "13739f0ddld34dcqlfhylzn1zqz5a7jbp4a4id7gj7pcxjx1lafh";
   };
 
   nativeBuildInputs = [ qmake ];

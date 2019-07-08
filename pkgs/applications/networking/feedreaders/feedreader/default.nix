@@ -1,50 +1,43 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, vala_0_40, gettext, python3
-, appstream-glib, desktop-file-utils, glibcLocales, wrapGAppsHook
-, curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, vala, gettext, python3
+, appstream-glib, desktop-file-utils, wrapGAppsHook
+, gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas, hicolor-icon-theme
+, curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo, libxml2
 }:
 
-let
-  pname = "FeedReader";
-  version = "2.4.1";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+stdenv.mkDerivation rec {
+  pname = "feedreader";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "jangernert";
     repo = pname;
-    rev = "v" + version;
-    sha256 = "1fk2iiqwvrw58hpp96xypr4wh1sq15aixnz4760mnfynhjq5s3jh";
+    rev = "v${version}";
+    sha256 = "1468kl1gip7h2k5l9x3shp3vxdnx08mr1n4845zinaqz4dpa70jv";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala_0_40 gettext appstream-glib desktop-file-utils
-    python3 glibcLocales wrapGAppsHook
+    meson ninja pkgconfig vala gettext appstream-glib desktop-file-utils
+    libxml2 python3 wrapGAppsHook
   ];
 
   buildInputs = [
-    curl glib json-glib libnotify libsecret sqlite gumbo
-  ] ++ (with gnome3; [
-    gtk libgee libpeas libsoup rest webkitgtk gnome-online-accounts
-    gsettings-desktop-schemas
-  ]) ++ (with gst_all_1; [
+    curl glib json-glib libnotify libsecret sqlite gumbo gtk3
+    libgee libpeas gnome3.libsoup librest webkitgtk gsettings-desktop-schemas
+    gnome3.gnome-online-accounts
+    hicolor-icon-theme # for setup hook
+  ] ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good
   ]);
 
-  # TODO: fix https://github.com/NixOS/nixpkgs/issues/39547
-  LIBRARY_PATH = stdenv.lib.makeLibraryPath [ curl ];
-
-  # vcs_tag function fails with UnicodeDecodeError
-  LC_ALL = "en_US.UTF-8";
-
   postPatch = ''
-    patchShebangs meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
   '';
 
   meta = with stdenv.lib; {
-    description = "A modern desktop application designed to complement existing web-based RSS accounts.";
+    description = "A modern desktop application designed to complement existing web-based RSS accounts";
     homepage = https://jangernert.github.io/FeedReader/;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [ edwtjo worldofpeace ];
     platforms = platforms.linux;
   };
 }

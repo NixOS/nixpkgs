@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec
 {
   name = "openvdb-${version}";
-  version = "5.2.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "dreamworksanimation";
     repo = "openvdb";
     rev = "v${version}";
-    sha256 = "1yykrbc3nnnmpmmk0dz4b4y5xl4hl3ayjpqw0baq8yx2614r46b5";
+    sha256 = "0rs50741c4m0jgc7k2fdyinvm7hhjrbg0wls6whqaghbbaf1lhpk";
   };
 
   outputs = [ "out" ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec
 
   meta = with stdenv.lib; {
     description = "An open framework for voxel";
-    homepage = "http://www.openvdb.org";
+    homepage = "https://www.openvdb.org";
     maintainers = [ maintainers.guibou ];
     platforms = platforms.linux;
     license = licenses.mpl20;

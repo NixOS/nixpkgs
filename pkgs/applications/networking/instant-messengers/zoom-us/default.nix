@@ -4,7 +4,7 @@
 , qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
 , qttools, qtwayland, qtwebchannel, qtwebengine
 # Runtime
-, coreutils, libjpeg_turbo, pciutils, procps, utillinux
+, coreutils, libjpeg_turbo, pciutils, procps, utillinux, libv4l
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
@@ -13,11 +13,11 @@ assert pulseaudioSupport -> libpulseaudio != null;
 let
   inherit (stdenv.lib) concatStringsSep makeBinPath optional;
 
-  version = "2.4.129780.0915";
+  version = "2.8.252201.0616";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "0s4014ymc92rwpagcwjhmwwfz0vq35wiq2nhh6nlxcrr6jl4wd78";
+      sha256 = "1w7pwn6pvyacbz6s795r1qp5qaszr5yn9anq63zz6cgmzy8d1366";
     };
   };
 
@@ -41,15 +41,11 @@ in stdenv.mkDerivation {
 
   runtimeDependencies = optional pulseaudioSupport libpulseaudio;
 
-  # Don't remove runtimeDependencies from RPATH via patchelf --shrink-rpath
-  dontPatchELF = true;
-
   installPhase =
     let
       files = concatStringsSep " " [
         "*.pcm"
         "*.png"
-        "ZXMPPROOT.cer"
         "ZoomLauncher"
         "config-dump.sh"
         "timezones"
@@ -76,6 +72,7 @@ in stdenv.mkDerivation {
 
       makeWrapper $packagePath/zoom $out/bin/zoom-us \
         --prefix PATH : "${makeBinPath [ coreutils glib.dev pciutils procps qttools.dev utillinux ]}" \
+        --prefix LD_PRELOAD : "${libv4l}/lib/libv4l/v4l2convert.so" \
         --run "cd $packagePath"
 
       runHook postInstall

@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytest_3
 , isPyPy
 }:
 
@@ -16,9 +16,9 @@ buildPythonPackage rec {
     sha256 = "1s4radwf38kdh3jrn5acbidqlr66sx786fkwi0rgq61hn4n2bdqw";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest_3 ];
 
-  preBuild = ''
+  postPatch = ''
     # fails
     substituteInPlace tests/test_transport_http.py \
       --replace "test_sending_unicode_data" "noop"

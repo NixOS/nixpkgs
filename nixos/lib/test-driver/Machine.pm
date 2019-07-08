@@ -10,6 +10,7 @@ use Cwd;
 use File::Basename;
 use File::Path qw(make_path);
 use File::Slurp;
+use Time::HiRes qw(clock_gettime CLOCK_MONOTONIC);
 
 
 my $showGraphics = defined $ENV{'DISPLAY'};
@@ -155,10 +156,8 @@ sub start {
         $ENV{USE_TMPDIR} = 1;
         $ENV{QEMU_OPTS} =
             ($self->{allowReboot} ? "" : "-no-reboot ") .
-            "-monitor unix:./monitor " .
-            "-chardev socket,id=shell,path=./shell -device virtio-serial -device virtconsole,chardev=shell " .
-            # socket backdoor, see "Debugging NixOS tests" section in NixOS manual
-            "-chardev socket,id=backdoor,path=./backdoor,server,nowait -device virtio-serial -device virtconsole,chardev=backdoor " .
+            "-monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
+            "-device virtio-serial -device virtconsole,chardev=shell " .
             "-device virtio-rng-pci " .
             ($showGraphics ? "-serial stdio" : "-nographic") . " " . ($ENV{QEMU_OPTS} || "");
         chdir $self->{stateDir} or die;
@@ -249,12 +248,15 @@ sub connect {
 
         $self->start;
 
+        my $now = clock_gettime(CLOCK_MONOTONIC);
         local $SIG{ALRM} = sub { die "timed out waiting for the VM to connect\n"; };
-        alarm 300;
+        alarm 600;
         readline $self->{socket} or die "the VM quit before connecting\n";
         alarm 0;
 
         $self->log("connected to guest root shell");
+        # We're interested in tracking how close we are to `alarm`.
+        $self->log(sprintf("(connecting took %.2f seconds)", clock_gettime(CLOCK_MONOTONIC) - $now));
         $self->{connected} = 1;
 
     });

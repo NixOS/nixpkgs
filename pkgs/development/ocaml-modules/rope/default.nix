@@ -3,9 +3,9 @@
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.03"
   then {
-    version = "0.6";
-    url = " https://github.com/Chris00/ocaml-rope/releases/download/0.6/rope-0.6.tbz";
-    sha256 = "06pkbnkad2ck50jn59ggwv154yd9vb01abblihvam6p27m4za1pc";
+    version = "0.6.1";
+    url = " https://github.com/Chris00/ocaml-rope/releases/download/0.6.1/rope-0.6.1.tbz";
+    sha256 = "1zqh28jz1zjb0l354wi1046qpkwmk582ssz0gsqh6d44wpspdxk2";
     buildInputs = [ dune ];
     extra = {
       buildPhase = "dune build -p rope";

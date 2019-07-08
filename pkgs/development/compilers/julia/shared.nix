@@ -2,11 +2,14 @@
 , minorVersion
 , maintenanceVersion
 , src_sha256
+# source deps
+, libuvVersion
+, libuvSha256
 }:
 { stdenv, fetchurl, fetchzip
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2, paxctl
-, llvm, cmake
+, gfortran, m4, makeWrapper, patchelf, perl, which, python2
+, cmake
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
 # standard library dependencies
@@ -34,10 +37,9 @@ let
     sha256 = "03kaqbjbi6viz0n33dk5jlf6ayxqlsq4804n7kwkndiga9s4hd42";
   };
 
-  libuvVersion = "ed3700c849289ed01fe04273a7bf865340b2bd7e";
   libuv = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
-    sha256 = "137w666zsjw1p0ma3lf94d75hr1q45sgkfmbizkyji2qm57cnxjs";
+    sha256 = libuvSha256;
   };
 
   rmathVersion = "0.1";
@@ -95,7 +97,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001.1-use-system-utf8proc.patch
-  ] ++ stdenv.lib.optional stdenv.needsPax ./0004-hardened.patch;
+
+    # Julia recompiles a precompiled file if the mtime stored *in* the
+    # .ji file differs from the mtime of the .ji file.  This
+    # doesn't work in Nix because Nix changes the mtime of files in
+    # the Nix store to 1. So patch Julia to accept mtimes of 1.
+    ./allow_nix_mtime.patch
+  ];
 
   postPatch = ''
     patchShebangs . contrib
@@ -117,13 +125,12 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
   ;
 
-  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ]
-    ++ stdenv.lib.optional stdenv.needsPax paxctl;
+  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
 
   makeFlags =
     let
       arch = head (splitString "-" stdenv.system);
-      march = { "x86_64" = "x86-64"; "i686" = "pentium4"; }."${arch}"
+      march = { "x86_64" = stdenv.hostPlatform.platform.gcc.arch or "x86-64"; "i686" = "pentium4"; }."${arch}"
               or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
       cpuTarget = { "x86_64" = "x86-64"; "i686" = "pentium4"; }."${arch}"
@@ -166,15 +173,10 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_ZLIB=1"
     ];
 
-  NIX_CFLAGS_COMPILE = [ "-fPIC" ];
-
   LD_LIBRARY_PATH = makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
     openspecfun pcre2
   ];
-
-  dontStrip = true;
-  dontPatchELF = true;
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas, writeTextFile }:
+{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile }:
 
 let
   blasImplementation = lib.nameFromURL blas.name "-";
@@ -16,36 +16,23 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.15.3";
+  version = "1.16.4";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1c0c80e74759fa4942298044274f2c11b08c86230b25b8b819e55e644f5ff2b6";
+    sha256 = "7242be12a58fec245ee9734e625964b97cf7e3f2f7d016603f9e56660ce479c7";
   };
 
-  disabled = isPyPy;
   nativeBuildInputs = [ gfortran pytest ];
   buildInputs = [ blas ];
 
-  patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
+  patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
     # Patching of numpy.distutils is needed to prevent it from undoing the
     # patch to distutils.
     ./numpy-distutils-C++.patch
   ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-    # Use fenv.h
-    sed -i \
-      numpy/core/src/npymath/ieee754.c.src \
-      numpy/core/include/numpy/ufuncobject.h \
-      -e 's/__GLIBC__/__linux__/'
-    # Don't use various complex trig functions
-    substituteInPlace numpy/core/src/private/npy_config.h \
-      --replace '#if defined(__GLIBC__)' "#if 1" \
-      --replace '#if !__GLIBC_PREREQ(2, 18)' "#if 1"
-  '';
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
@@ -70,8 +57,6 @@ in buildPythonPackage rec {
     blas = blas;
     inherit blasImplementation cfg;
   };
-
-  doCheck = blasImplementation != "mkl";
 
   # Disable two tests
   # - test_f2py: f2py isn't yet on path.

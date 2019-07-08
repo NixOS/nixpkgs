@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "numactl-${version}";
@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/numactl/numactl;
     license = with licenses; [ gpl2 lgpl21 ]; # libnuma is lgpl21
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ wkennington ];
   };
 }

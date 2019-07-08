@@ -13,12 +13,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   baseName = "virt-viewer";
-  version = "7.0";
+  version = "8.0";
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
-    sha256 = "00y9vi69sja4pkrfnvrkwsscm41bqrjzvp8aijb20pvg6ymczhj7";
+    sha256 = "1vdnjmhrva7r1n9nv09j8gc12hy0j9j5l4rka4hh0jbsbpnmiwyw";
   };
 
   nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     spice-gtk spice-protocol libcap gdbm
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
+
+  # Required for USB redirection PolicyKit rules file
+  propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
 
   meta = {
     description = "A viewer for remote virtual machines";

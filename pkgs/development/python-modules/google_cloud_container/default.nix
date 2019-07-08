@@ -3,18 +3,19 @@
 , fetchPypi
 , google_api_core
 , pytest
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a89afcb1fe96bc9361c231c223c3bbe19fa3787caeb4697cd5778990e1077270";
+    sha256 = "566834ef43e79917b112e3bd2848e84cfb0f4d7b565581607e2548f5c8e5d87a";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ google_api_core ];
 
   checkPhase = ''

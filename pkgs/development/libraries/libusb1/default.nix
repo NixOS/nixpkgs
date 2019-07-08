@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, systemd ? null, libobjc, IOKit }:
+{ stdenv, fetchurl, pkgconfig, systemd ? null, libobjc, IOKit, withStatic ? false }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libusb-1.0.22";
 
   src = fetchurl {
@@ -32,4 +32,8 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+} // stdenv.lib.optionalAttrs withStatic {
+  # Carefully added here to avoid a mass rebuild.
+  # Inline this the next time this package changes.
+  dontDisableStatic = withStatic;
+})

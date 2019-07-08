@@ -1,12 +1,13 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
-, python, perl, gdk_pixbuf, libiconv, libintl }:
+, python, perl, gdk_pixbuf, libiconv, libintl, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "libgsf-1.14.44";
+  pname = "libgsf";
+  version = "1.14.46";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/libgsf/1.14/${name}.tar.xz";
-    sha256 = "1ppzfk3zmmgrg9jh8vc4dacddbfngjslq2wpj94pcr3i0c8dxgk8";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0bddmlzg719sjhlbzqlhb7chwk93qc7g68m2r9r8xz112jdradpa";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];
@@ -20,6 +21,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = "patchShebangs ./tests/";
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "GNOME's Structured File Library";

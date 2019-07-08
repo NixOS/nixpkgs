@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pam, xmlsec, autoreconfHook, pkgconfig, libxml2, gtkdoc, perl, gengetopt, bison, help2man }:
+{ stdenv, fetchFromGitLab, pam, xmlsec, autoreconfHook, pkgconfig, libxml2, gtk-doc, perl, gengetopt, bison, help2man }:
 
 let
   securityDependency =
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ securityDependency libxml2 perl gengetopt bison ];
 
-  nativeBuildInputs = [ autoreconfHook gtkdoc help2man pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook gtk-doc help2man pkgconfig ];
 
   # man file generation fails when true
   enableParallelBuilding = false;
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Components for building one-time password authentication systems";
-    homepage = http://www.nongnu.org/oath-toolkit/;
+    homepage = https://www.nongnu.org/oath-toolkit/;
     platforms = with platforms; linux ++ darwin;
   };
 }

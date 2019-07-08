@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl,
-  cmake, extra-cmake-modules, qtwebkit, qtwebengine, qtscript, grantlee,
+  cmake, extra-cmake-modules, qtwebengine, qtscript, grantlee,
   kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
   kiconthemes, knewstuff, sqlcipher, qca-qt5, kactivities, karchive,
   kguiaddons, knotifyconfig, krunner, kwindowsystem, libofx, shared-mime-info
@@ -7,11 +7,11 @@
 
 mkDerivation rec {
   name = "skrooge-${version}";
-  version = "2.16.2";
+  version = "2.20.0";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/skrooge/${name}.tar.xz";
-    sha256 = "0idvqbra8a71jb5kq9y5v377l7k3shf4z7w71apc3rjvb4l0jkhj";
+    sha256 = "0rakfngp7j2x7h1isg6lbc5kva6k1kg99dz0zl43dc28s15can1w";
   };
 
   nativeBuildInputs = [
@@ -19,7 +19,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    qtwebkit qtwebengine qtscript grantlee kxmlgui kwallet kparts
+    qtwebengine qtscript grantlee kxmlgui kwallet kparts
     kjobwidgets kdesignerplugin kiconthemes knewstuff sqlcipher qca-qt5
     kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
   ];

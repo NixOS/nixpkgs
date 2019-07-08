@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./calling_convention.patch
+    ./undefined_behavior.patch
   ];
+
+  CXXFLAGS = "-Werror=return-type";
 
   preConfigure =
   # Fix F77LD to workaround for a following build error:

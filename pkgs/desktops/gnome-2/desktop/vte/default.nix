@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, intltool, pkgconfig, glib, gtk, ncurses
+{ stdenv, fetchurl, fetchpatch, intltool, pkgconfig, glib, gtk2, ncurses
 , pythonSupport ? false, python27Packages}:
 
 let
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool glib gtk ncurses ] ++
+  buildInputs = [ intltool glib gtk2 ncurses ] ++
                 stdenv.lib.optionals pythonSupport [python pygtk];
 
   configureFlags = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, python
+{ stdenv, fetchgit, flex, bison, python, autoconf, automake, gnulib, libtool
 , gettext, ncurses, libusb, freetype, qemu, lvm2, unifont, pkgconfig
 , fuse # only needed for grub-mount
 , zfs ? null
@@ -31,7 +31,7 @@ let
   canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
   inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "2.02";
+  version = "2.04-rc1";
 
 in (
 
@@ -42,13 +42,18 @@ assert !(efiSupport && xenSupport);
 stdenv.mkDerivation rec {
   name = "grub-${version}";
 
-  src = fetchurl {
-    url = "mirror://gnu/grub/${name}.tar.xz";
-    sha256 = "03vvdfhdmf16121v7xs8is2krwnv15wpkhkf16a4yf8nsfc3f2w1";
+  src = fetchgit {
+    url = "git://git.savannah.gnu.org/grub.git";
+    rev = name;
+    sha256 = "0xkcfxs0hbzvi33kg4abkayl8b7gym9sv8ljbwlh2kpz8i4kmnk0";
   };
 
-  nativeBuildInputs = [ bison flex python pkgconfig ];
-  buildInputs = [ ncurses libusb freetype gettext lvm2 fuse ]
+  patches = [
+    ./fix-bash-completion.patch
+  ];
+
+  nativeBuildInputs = [ bison flex python pkgconfig autoconf automake ];
+  buildInputs = [ ncurses libusb freetype gettext lvm2 fuse libtool ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 
@@ -57,14 +62,10 @@ stdenv.mkDerivation rec {
   # Work around a bug in the generated flex lexer (upstream flex bug?)
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  postPatch = ''
-    substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
-  '';
-
   preConfigure =
     '' for i in "tests/util/"*.in
        do
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
        done
 
        # Apparently, the QEMU executable is no longer called
@@ -80,9 +81,16 @@ stdenv.mkDerivation rec {
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
 
       unset CPP # setting CPP intereferes with dependency calculation
-    '';
 
-  patches = [ ./fix-bash-completion.patch ];
+      cp -r ${gnulib} $PWD/gnulib
+      chmod u+w -R $PWD/gnulib
+
+      patchShebangs .
+
+      ./bootstrap --no-git --gnulib-srcdir=$PWD/gnulib
+
+      substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
+    '';
 
   configureFlags = [ "--enable-grub-mount" ] # dep of os-prober
     ++ optional zfsSupport "--enable-libzfs"
@@ -100,8 +108,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    paxmark pms $out/sbin/grub-{probe,bios-setup}
-
     # Avoid a runtime reference to gcc
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
   '';
@@ -121,7 +127,7 @@ stdenv.mkDerivation rec {
          operating system (e.g., GNU).
       '';
 
-    homepage = http://www.gnu.org/software/grub/;
+    homepage = https://www.gnu.org/software/grub/;
 
     license = licenses.gpl3Plus;
 

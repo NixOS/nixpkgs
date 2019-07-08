@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchurl, python, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "cmdstan-2.17.1";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/cmdstan/bin/stanc $out/bin/stanc
     ln -s $out/opt/cmdstan/bin/stansummary $out/bin/stansummary
     cat > $out/bin/stan <<EOF
-    #!/bin/sh
+    #!${runtimeShell}
     make -C $out/opt/cmdstan "\$(realpath "\$1")"
     EOF
     chmod a+x $out/bin/stan
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       inference with Variational inference (ADVI) and penalized maximum
       likelihood estimation with Optimization (L-BFGS).
     '';
-    homepage = http://mc-stan.org/interfaces/cmdstan.html;
+    homepage = https://mc-stan.org/interfaces/cmdstan.html;
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
   };

@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "dkimpy";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cfj2jsfqbwkrg9y5inz61wxf8z4rrs5js6dizjgsd4lyb3b5inj";
+    sha256 = "83d5ddc1b83304dbccba1dc7b9e0ee37bec4269bb9ad5779480991525c3811d6";
 };
 
   checkInputs = [ pytest ];

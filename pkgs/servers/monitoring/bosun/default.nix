@@ -19,6 +19,6 @@ buildGoPackage rec {
     license = licenses.mit;
     homepage = https://bosun.org;
     maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

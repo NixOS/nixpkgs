@@ -1,11 +1,27 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig
-, python3, gtk3, gst_all_1, libsecret, libsoup
-, appstream-glib, desktop-file-utils, gnome3
-, gobjectIntrospection, wrapGAppsHook }:
+{ lib
+, fetchgit
+, meson
+, ninja
+, pkgconfig
+, python3
+, gtk3
+, gst_all_1
+, libsecret
+, libsoup
+, appstream-glib
+, desktop-file-utils
+, totem-pl-parser
+, hicolor-icon-theme
+, gobject-introspection
+, wrapGAppsHook
+, lastFMSupport ? true
+, wikipediaSupport ? true
+, youtubeSupport ? true, youtube-dl
+}:
 
 python3.pkgs.buildPythonApplication rec  {
-  version = "0.9.611";
-  name = "lollypop-${version}";
+  pname = "lollypop";
+  version = "1.1.3.1";
 
   format = "other";
   doCheck = false;
@@ -14,13 +30,13 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "1k78a26sld0xd14c9hr4qv8c7qaq1m8zqk1mzrh4pl7ysqqg9p20";
+    sha256 = "1mini63ngmi62g3xq0bvq316k2vv3ck7q5qn3mfqph38na605waj";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -28,7 +44,7 @@ python3.pkgs.buildPythonApplication rec  {
   ];
 
   buildInputs = with gst_all_1; [
-    gnome3.totem-pl-parser
+    gobject-introspection
     gst-libav
     gst-plugins-bad
     gst-plugins-base
@@ -36,19 +52,21 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
-    libsecret
+    hicolor-icon-theme
     libsoup
-  ];
+    totem-pl-parser
+  ] ++ lib.optional lastFMSupport libsecret;
 
-  pythonPath = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
-    gst-python
     pillow
     pycairo
-    pydbus
     pygobject3
-    pylast
-  ];
+  ]
+  ++ lib.optional lastFMSupport pylast
+  ++ lib.optional wikipediaSupport wikipedia
+  ++ lib.optional youtubeSupport youtube-dl
+  ;
 
   postPatch = ''
     chmod +x meson_post_install.py
@@ -56,15 +74,16 @@ python3.pkgs.buildPythonApplication rec  {
   '';
 
   preFixup = ''
-    buildPythonPath "$out/libexec/lollypop-sp $pythonPath"
+    buildPythonPath "$out $propagatedBuildInputs"
     patchPythonScript "$out/libexec/lollypop-sp"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern music player for GNOME";
-    homepage    = https://wiki.gnome.org/Apps/Lollypop;
-    license     = licenses.gpl3Plus;
+    homepage = https://wiki.gnome.org/Apps/Lollypop;
+    license = licenses.gpl3Plus;
+    changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
     maintainers = with maintainers; [ worldofpeace ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

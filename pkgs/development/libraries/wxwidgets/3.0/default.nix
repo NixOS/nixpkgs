@@ -1,7 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchurl, fetchpatch, pkgconfig
+{ stdenv, fetchFromGitHub, fetchurl, pkgconfig
 , gtk2, gtk3, libXinerama, libSM, libXxf86vm
-, xf86vidmodeproto , gstreamer, gst-plugins-base, GConf, setfile
-, withMesa ? true, libGLU ? null, libGL ? null
+, xorgproto, gstreamer, gst-plugins-base, GConf, setfile
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
 , withGtk2 ? true
 , withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk ? null
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
+    [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xorgproto gstreamer
       gst-plugins-base GConf ]
     ++ optional withMesa libGLU
     ++ optional withWebKit (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk)
@@ -88,5 +90,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.wxwidgets.org/;
     description = "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
     longDescription = "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

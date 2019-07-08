@@ -1,4 +1,4 @@
-{ stdenv, python, xmpppy, pythonPackages, fetchcvs } :
+{ stdenv, python, xmpppy, pythonPackages, fetchcvs, runtimeShell } :
 
 stdenv.mkDerivation rec {
   name = "pyMAILt-${version}";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sed -e '/configFiles/iimport os' -i config.py
     cp * $out/share/$name
     cat > $out/bin/pyMAILt <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cd $out/share/${name}
       ./mail.py \"$@\"
     EOF

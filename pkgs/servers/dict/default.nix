@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   patchPhase = "patch -p0 < ${./buildfix.diff}";
   configureFlags = [
     "--enable-dictorg"
-    "--datadir=/run/current-systems/sw/share/dictd"
+    "--datadir=/run/current-system/sw/share/dictd"
   ];
 
   meta = with stdenv.lib; {

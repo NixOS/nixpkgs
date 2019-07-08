@@ -22,9 +22,11 @@ let
 
     editor = if cfg.editor then "True" else "False";
 
-    inherit (cfg) consoleMode;
+    inherit (cfg) consoleMode configurationLimit;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
+
+    memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
   };
 in {
 
@@ -55,6 +57,16 @@ in {
       '';
     };
 
+    configurationLimit = mkOption {
+      default = 100;
+      example = 120;
+      type = types.int;
+      description = ''
+        Maximum of configurations in boot menu. Otherwise boot partition could
+        run out of disk space.
+      '';
+    };
+
     consoleMode = mkOption {
       default = "keep";
 
@@ -62,8 +74,7 @@ in {
 
       description = ''
         The resolution of the console. The following values are valid:
-        </para>
-        <para>
+
         <itemizedlist>
           <listitem><para>
             <literal>"0"</literal>: Standard UEFI 80x25 mode
@@ -85,6 +96,19 @@ in {
           </para></listitem>
         </itemizedlist>
       '';
+    };
+
+    memtest86 = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Make MemTest86 available from the systemd-boot menu. MemTest86 is a
+          program for testing memory.  MemTest86 is an unfree program, so
+          this requires <literal>allowUnfree</literal> to be set to
+          <literal>true</literal>.
+        '';
+      };
     };
   };
 

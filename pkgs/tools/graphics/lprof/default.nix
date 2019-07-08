@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, scons, qt3, lcms1, libtiff, vigra }:
+{ stdenv, fetchurl, sconsPackages, qt3, lcms1, libtiff, vigra }:
 
 /*  how to calibrate your monitor:
     Eg see https://wiki.archlinux.org/index.php/ICC_Profiles#Loading_ICC_Profiles
 */
 stdenv.mkDerivation {
   name = "lprof-1.11.4.1";
-  nativeBuildInputs = [ scons ];
+  nativeBuildInputs = [ sconsPackages.scons_3_0_1 ];
   buildInputs = [ qt3 lcms1 libtiff vigra ];
 
   hardeningDisable = [ "format" ];

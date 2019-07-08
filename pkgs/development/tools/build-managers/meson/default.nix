@@ -1,12 +1,22 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages, fetchpatch }:
+{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
 
+let
+  # See https://mesonbuild.com/Reference-tables.html#cpu-families
+  cpuFamilies = {
+    "aarch64" = "aarch64";
+    "armv6l"  = "arm";
+    "armv7l"  = "arm";
+    "i686"    = "x86";
+    "x86_64"  = "x86_64";
+  };
+in
 python3Packages.buildPythonApplication rec {
-  version = "0.46.1";
+  version = "0.49.2";
   pname = "meson";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1jdxs2mkniy1hpdjc4b4jb95axsjp6j5fzphmm6d4gqmqyykjvqc";
+    sha256 = "0ckkzq0kbnnk4rwv20lggm9a4fb5054jbv99i9pwjhid23qy7059";
   };
 
   postFixup = ''
@@ -16,6 +26,9 @@ python3Packages.buildPythonApplication rec {
       mv ".$i-wrapped" "$i"
     done
     popd
+
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
   '';
 
   patches = [
@@ -41,12 +54,13 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
-
-    # Support Python 3.7. This is part of 0.47 and 0.48.1.
-    (fetchpatch {
-      url = https://github.com/mesonbuild/meson/commit/a87496addd9160300837aa50193f4798c6f1d251.patch;
-      sha256 = "1jfn9dgib5bc8frcd65cxn3fzhp19bpbjadxjkqzbjk1v4hdbl88";
-    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # We use custom Clang, which makes Meson think *not Apple*, while still
+    # relying on system linker. When it detects standard Clang, Meson will
+    # pass it `-Wl,-O1` flag but optimizations are not recognized by
+    # Mac linker.
+    # https://github.com/mesonbuild/meson/issues/4784
+    ./fix-objc-linking.patch
   ];
 
   setupHook = ./setup-hook.sh;
@@ -58,13 +72,15 @@ python3Packages.buildPythonApplication rec {
     ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
     strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
     pkgconfig = 'pkg-config'
+    ld = '${targetPackages.stdenv.cc.targetPrefix}ld'
+    objcopy = '${targetPackages.stdenv.cc.targetPrefix}objcopy'
 
     [properties]
     needs_exe_wrapper = true
 
     [host_machine]
     system = '${targetPackages.stdenv.targetPlatform.parsed.kernel.name}'
-    cpu_family = '${targetPackages.stdenv.targetPlatform.parsed.cpu.family}'
+    cpu_family = '${cpuFamilies.${targetPackages.stdenv.targetPlatform.parsed.cpu.name}}'
     cpu = '${targetPackages.stdenv.targetPlatform.parsed.cpu.name}'
     endian = ${if targetPackages.stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
   '';

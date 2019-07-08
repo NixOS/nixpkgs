@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "wabt-${version}";
-  version = "1.0.6";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner  = "WebAssembly";
     repo   = "wabt";
     rev    = version;
-    sha256 = "0lqsf4wmg24mb3ksmib8xwvmghx8m2vzrjrs8dazwlmik7rill8i";
+    sha256 = "0hn88vlqyclpk79v3wg3lrssd9vwhjdgvb41g03jqakygxxgnmp5";
   };
 
   nativeBuildInputs = [ cmake ];

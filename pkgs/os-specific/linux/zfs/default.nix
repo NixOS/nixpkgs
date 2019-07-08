@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
-, perl, fetchpatch
+, perl
 , configFile ? "all"
 
 # Userspace dependencies
-, zlib, libuuid, python, attr, openssl
+, zlib, libuuid, python3, attr, openssl
 , libtirpc
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
 
 # Kernel dependencies
-, kernel ? null, spl ? null
+, kernel ? null
 }:
 
 with stdenv.lib;
@@ -20,10 +20,8 @@ let
   common = { version
     , sha256
     , extraPatches
-    , spl
     , rev ? "zfs-${version}"
     , isUnstable ? false
-    , isLegacyCrypto ? false
     , incompatibleKernelVersion ? null }:
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
@@ -52,10 +50,8 @@ let
 
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
         ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
-      buildInputs =
-           optionals buildKernel [ spl ]
-        ++ optionals buildUser [ zlib libuuid python attr ]
-        ++ optionals (buildUser && (isUnstable || isLegacyCrypto)) [ openssl ]
+      buildInputs = optionals buildUser [ zlib libuuid python3 attr ]
+        ++ optionals (buildUser) [ openssl ]
         ++ optional stdenv.hostPlatform.isMusl [ libtirpc ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
@@ -93,6 +89,7 @@ let
 
       configureFlags = [
         "--with-config=${configFile}"
+        "--with-python=${python3.interpreter}"
       ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
@@ -106,8 +103,6 @@ let
       ] ++ optionals buildKernel [
         "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
         "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-      ] ++ optionals (buildKernel && spl != null) [
-        "--with-spl=${spl}/libexec/spl"
       ];
 
       enableParallelBuilding = true;
@@ -135,6 +130,10 @@ let
 
         # Remove tests because they add a runtime dependency on gcc
         rm -rf $out/share/zfs/zfs-tests
+
+        # Add Bash completions.
+        install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
+        (cd $out/share/bash-completion/completions; ln -s zfs zpool)
       '';
 
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
@@ -149,7 +148,7 @@ let
         homepage = http://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
-        maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
+        maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
       };
     };
 in {
@@ -158,21 +157,16 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    # incompatibleKernelVersion = "4.19";
+    # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.7.12";
+    version = "0.8.1";
 
-    sha256 = "1j432nb3a86isghdysir9xi6l5djmb5fbc5s9zr0rwg4ziisskbh";
+    sha256 = "0wlbziijx08a9bmbyq4gfz4by9l5jrx44g18i99qnfm78k2q8a84";
 
     extraPatches = [
-      (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc3...nixos-zfs-0.7.0-rc3.patch";
-        sha256 = "1vlw98v8xvi8qapzl1jwm69qmfslwnbg3ry1lmacndaxnyckkvhh";
-      })
+      ./build-fixes-unstable.patch
     ];
-
-    inherit spl;
   };
 
   zfsUnstable = common rec {
@@ -180,19 +174,14 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.0-rc2";
+    # This is now "stable". Move to zfsStable after it's tested more.
+    version = "0.8.1";
 
-    rev = "af2e8411dacbc694b1aaf9074e68a9d12270e74c";
-    sha256 = "0wm7x9dwrw30jnjlnz6a224h88qd6a5794pzbjsih50lqb10g2gy";
+    sha256 = "0wlbziijx08a9bmbyq4gfz4by9l5jrx44g18i99qnfm78k2q8a84";
     isUnstable = true;
 
     extraPatches = [
-      (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/${rev}...nixos-zfs-2018-08-13.patch";
-        sha256 = "1sdcr1w2jp3djpwlf1f91hrxxmc34q0jl388smdkxh5n5bpw5gzw";
-      })
+      ./build-fixes-unstable.patch
     ];
-
-    spl = null;
   };
 }

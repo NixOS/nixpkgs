@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     
   script = substituteAll {
     src = ./rpmextract.sh;
+    isExecutable = true;
     inherit rpm cpio;
+    inherit (stdenv) shell;
   };
 
   meta = with stdenv.lib; {

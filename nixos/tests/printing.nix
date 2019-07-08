@@ -3,7 +3,7 @@
 import ./make-test.nix ({pkgs, ... }: {
   name = "printing";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ domenkozar eelco chaoflow jgeerds ];
+    maintainers = [ domenkozar eelco ];
   };
 
   nodes = {
@@ -39,8 +39,10 @@ import ./make-test.nix ({pkgs, ... }: {
       $client->waitForUnit("cups.service");
       $client->sleep(10); # wait until cups is fully initialized
       $client->succeed("lpstat -r") =~ /scheduler is running/ or die;
+      # check local encrypted connections work without error
+      $client->succeed("lpstat -E -r") =~ /scheduler is running/ or die;
       # Test that UNIX socket is used for connections.
-      $client->succeed("lpstat -H") =~ "/var/run/cups/cups.sock" or die;
+      $client->succeed("lpstat -H") =~ "/run/cups/cups.sock" or die;
       # Test that HTTP server is available too.
       $client->succeed("curl --fail http://localhost:631/");
       $client->succeed("curl --fail http://server:631/");

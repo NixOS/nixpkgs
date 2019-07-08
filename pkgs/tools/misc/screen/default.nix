@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/screen/;
+    homepage = https://www.gnu.org/software/screen/;
     description = "A window manager that multiplexes a physical terminal";
     license = licenses.gpl2Plus;
 
@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ peti jgeerds vrthra ];
+    maintainers = with maintainers; [ peti vrthra ];
   };
 }

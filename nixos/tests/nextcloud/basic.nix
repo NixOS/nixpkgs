@@ -22,6 +22,10 @@ in {
           # Don't inherit adminuser since "root" is supposed to be the default
           inherit adminpass;
         };
+        autoUpdateApps = {
+          enable = true;
+          startAt = "20:00";
+        };
       };
     };
   };

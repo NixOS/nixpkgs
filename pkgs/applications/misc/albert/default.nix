@@ -1,24 +1,22 @@
 { mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase,
-  qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3 }:
+  qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3,
+  qtcharts }:
 
-let
-  pname = "albert";
-  version = "0.14.22";
-in
 mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "albert";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "0i9kss5szirmd0pzw3cm692kl9rhkan1zfywfqrjdf3i3b6914sg";
+    sha256 = "04sr35fqz66i24lv7r2p9qfqxs55i8xpj7aam0v9yakcr33lf55a";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
-  buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 ];
+  buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 qtcharts ];
 
   enableParallelBuilding = true;
 
@@ -27,7 +25,7 @@ mkDerivation rec {
 
   postPatch = ''
     sed -i "/QStringList dirs = {/a    \"$out/libs\"," \
-      lib/albertcore/src/core/albert.cpp
+      src/app/main.cpp
   '';
 
   preBuild = ''

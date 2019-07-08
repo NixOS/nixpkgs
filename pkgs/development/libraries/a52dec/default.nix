@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0czccp4fcpf2ykp16xcrzdfmnircz1ynhls334q374xknd5747d2";
   };
 
+  configureFlags = [
+    "--enable-shared"
+  ];
+
   # fails 1 out of 1 tests with "BAD GLOBAL SYMBOLS" on i686
   # which can also be fixed with
   # hardeningDisable = stdenv.lib.optional stdenv.isi686 "pic";

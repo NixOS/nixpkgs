@@ -6,11 +6,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "feh-${version}";
-  version = "3.0";
+  version = "3.1.3";
 
   src = fetchurl {
     url = "https://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "00fwf8yz7k8vzd30ly5ndlj6ax9w85dkjzjnlk95vd0zdrf4wyxn";
+    sha256 = "1vsnxf4as3vyzjfhd8frzb1a8i7wnq7ck5ljx7qxqrnfqvxl1s4z";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -20,24 +20,21 @@ stdenv.mkDerivation rec {
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
   makeFlags = [
-    "PREFIX=$(out)" "exif=1"
+    "PREFIX=${placeholder "out"}" "exif=1"
   ] ++ optional stdenv.isDarwin "verscmp=0";
 
-  postBuild = ''
-    pushd man
-    make
-    popd
-  '';
-
+  installTargets = [ "install" ];
   postInstall = ''
     wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg.bin}/bin" \
                                --add-flags '--theme=feh'
-    install -D -m 644 man/*.1 $out/share/man/man1
   '';
 
-  checkInputs = [ perlPackages.TestCommand perlPackages.TestHarness ];
+  checkInputs = [ perlPackages.perl perlPackages.TestCommand ];
   preCheck = ''
-    export PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl"
+    export PERL5LIB="${perlPackages.TestCommand}/${perlPackages.perl.libPrefix}"
+  '';
+  postCheck = ''
+    unset PERL5LIB
   '';
 
   doCheck = true;

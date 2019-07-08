@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "libffi-3.2.1";
 
   src = fetchurl {
-    url = "ftp://sourceware.org/pub/libffi/${name}.tar.gz";
+    url = "https://sourceware.org/pub/libffi/${name}.tar.gz";
     sha256 = "0dya49bnhianl0r65m65xndz6ls2jn1xngyn72gd28ls3n7bnvnh";
   };
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
       conversions for values passed between the two languages.
     '';
     homepage = http://sourceware.org/libffi/;
-    # See http://github.com/atgreen/libffi/blob/master/LICENSE .
+    # See https://github.com/atgreen/libffi/blob/master/LICENSE .
     license = licenses.free;
     maintainers = [ ];
     platforms = platforms.all;

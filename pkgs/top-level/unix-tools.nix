@@ -16,11 +16,14 @@ let
   version = "1003.1-2008";
 
   singleBinary = cmd: providers: let
-      provider = providers.${stdenv.hostPlatform.parsed.kernel.name};
+      provider = providers.${stdenv.hostPlatform.parsed.kernel.name} or providers.linux;
       bin = "${getBin provider}/bin/${cmd}";
       manpage = "${getOutput "man" provider}/share/man/man1/${cmd}.1.gz";
     in runCommand "${cmd}-${version}" {
-      meta.platforms = map (n: { kernel.name = n; }) (attrNames providers);
+      meta = {
+        priority = 10;
+        platforms = lib.platforms.${stdenv.hostPlatform.parsed.kernel.name} or lib.platforms.all;
+      };
       passthru = { inherit provider; };
       preferLocalBuild = true;
     } ''
@@ -54,6 +57,10 @@ let
     col = {
       linux = pkgs.utillinux;
       darwin = pkgs.darwin.text_cmds;
+    };
+    column = {
+      linux = pkgs.utillinux;
+      darwin = pkgs.netbsd.column;
     };
     eject = {
       linux = pkgs.utillinux;
@@ -182,7 +189,7 @@ let
   compat = with bins; lib.mapAttrs makeCompat {
     procps = [ ps sysctl top watch ];
     utillinux = [ fsck fdisk getopt hexdump mount
-                  script umount whereis write col ];
+                  script umount whereis write col column ];
     nettools = [ arp hostname ifconfig netstat route ];
   };
 in bins // compat

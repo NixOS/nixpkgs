@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "0.31.0";
+  version = "0.32.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b6c8572697b5fdc7fcb95d88f87b8c84cea5a7aef2d57d3de0d6a9e2b0e8424f";
+    sha256 = "40d1fc8009c228f70bd0e2176e73a3f101051ad73889b3d25a5df672c029a8bd";
   };
 
   checkInputs = [ pytest mock ];

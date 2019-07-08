@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     # These guys don't use ftp.gnu.org...
-    url = "http://www.gnu.org/software/emms/download/${name}.tar.gz";
+    url = "https://www.gnu.org/software/emms/download/${name}.tar.gz";
     sha256 = "151mfx97x15lfpd1qc2sqbvhwhvg46axgh15qyqmdy42vh906xav";
   };
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       support, with no effort from your side.
     '';
 
-    homepage = http://www.gnu.org/software/emms/;
+    homepage = https://www.gnu.org/software/emms/;
 
     license = stdenv.lib.licenses.gpl3Plus;
 

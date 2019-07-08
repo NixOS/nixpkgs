@@ -180,7 +180,7 @@ in {
           type = types.attrsOf types.unspecified;
           default = {};
           description = ''Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.'';
-          example = literalExample ''{ flat-volumes = "no"; }'';
+          example = literalExample ''{ realtime-scheduling = "yes"; }'';
         };
       };
 
@@ -241,6 +241,12 @@ in {
         { target = "libao.conf";
           source = writeText "libao.conf" "default_driver=pulse"; }
       ];
+
+      # Disable flat volumes to enable relative ones
+      hardware.pulseaudio.daemon.config.flat-volumes = mkDefault "no";
+
+      # Upstream defaults to speex-float-1 which results in audible artifacts
+      hardware.pulseaudio.daemon.config.resample-method = mkDefault "speex-float-5";
 
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;

@@ -23,13 +23,13 @@ rustPlatform.buildRustPackage rec {
       sha256 = "118ig42qzr2xyra7r8zfxq38xidaxfc98ja9836jwnn9fgbigczr";
   };
   sourceRoot = "source/relay-rust";
-  cargoSha256 = "0370jbllahcdhs132szbxb2yr675s5smm74sx58qi8jhykbb5qs7";
+  cargoSha256 = "1500lfwbfnc0k2hn7r1n629fq11zfqm3fg13dddmhchq4i3sqkfb";
 
   patchFlags = [ "-p2" ];
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      adb = "${androidenv.platformTools}/bin/adb";
+      adb = "${androidenv.androidPkgs_9_0.platform-tools}/bin/adb";
       inherit apk;
     })
   ];

@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pkgs
+, kerberos
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,10 @@ buildPythonPackage rec {
     sha256 = "19663qxmma0i8bfbjc2iwy5hgq0g4pfb75r023v5dps68zfvffgh";
   };
 
-  buildInputs = [ pkgs.kerberos ];
+  nativeBuildInputs = [ kerberos ];
+
+  # No tests in archive
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Kerberos high-level interface";

@@ -3,19 +3,17 @@
 with lib;
 
 let
-  cfg = config.services.vmwareGuest;
+  cfg = config.virtualisation.vmware.guest;
   open-vm-tools = if cfg.headless then pkgs.open-vm-tools-headless else pkgs.open-vm-tools;
   xf86inputvmmouse = pkgs.xorg.xf86inputvmmouse;
 in
 {
-  options = {
-    services.vmwareGuest = {
-      enable = mkEnableOption "VMWare Guest Support";
-      headless = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to disable X11-related features.";
-      };
+  options.virtualisation.vmware.guest = {
+    enable = mkEnableOption "VMWare Guest Support";
+    headless = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to disable X11-related features.";
     };
   };
 
@@ -24,6 +22,8 @@ in
       assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
       message = "VMWare guest is not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } ];
+
+    boot.initrd.kernelModules = [ "vmw_pvscsi" ];
 
     environment.systemPackages = [ open-vm-tools ];
 

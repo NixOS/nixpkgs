@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkgconfig, SDL, SDL_gfx
-, withMinimal ? false
+, withMinimal ? true
 }:
 
 # TODO:

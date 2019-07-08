@@ -4,11 +4,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "cherrytree-${version}";
-  version = "0.38.6";
+  version = "0.38.8";
 
   src = fetchurl {
     url = "https://www.giuspen.com/software/${name}.tar.xz";
-    sha256 = "0b83ygv0y4lrclsyagmllkwiia62xkwij14i6z53avba191jvhma";
+    sha256 = "1ns87xl2sgrf3nha4xkhp0xcxlycqszlp6xdrn95lg6vzm0fa8dg";
   };
 
   buildInputs = with pythonPackages;

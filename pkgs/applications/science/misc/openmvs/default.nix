@@ -58,5 +58,7 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mdaiter ];
+    # 20190414-174115: CMake cannot find CGAL which is passed as build input
+    broken = true;
   };
 }

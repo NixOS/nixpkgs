@@ -5,17 +5,16 @@
 , elasticsearch
 , ipaddress
 , python-dateutil
-, pytz
 , six
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
-  version = "6.2.1";
+  version = "7.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f0w23kzyym0fkzisdkcl4xpnm8fsi97v1kskyvfrhj3mxy179fh";
+    sha256 = "08kgpcf6lp8gjan6dvdx35340i4yqa77klapk8j7165svfjc5v9a";
   };
 
   propagatedBuildInputs = [ elasticsearch python-dateutil six ]

@@ -1,32 +1,23 @@
-{ stdenv, fetchpatch, python3Packages, acl, libb2, lz4, zstd, openssl, openssh }:
+{ stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.7";
+  version = "1.1.10";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "f7b51a132e9edfbe1cacb4f478b28caf3622d79fffcb369bdae9f92d8c8a7fdc";
+    sha256 = "1pp70p4n5kamvcbl4d8021ggrxhyykmg9isjg4yd3wags8b19d7g";
   };
 
-  patches = [
-    # Workarounds for https://github.com/borgbackup/borg/issues/4093
-    # Can be deleted when 1.1.8 comes out
-    (fetchpatch {
-      url = "https://github.com/borgbackup/borg/commit/975cc33206e0e3644626fb7204c34d2157715b61.patch";
-      sha256 = "0b7apaixpa7bk0sy7g5ycm98cjpkg5gkwcgm7m37xj35lzxdlxhc";
-    })
-  ];
-
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python3.pkgs; [
     # For building documentation:
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    libb2 lz4 zstd openssl python3Packages.setuptools_scm
+    libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
-  propagatedBuildInputs = with python3Packages; [
-    cython msgpack-python
+  propagatedBuildInputs = with python3.pkgs; [
+    cython
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
   preConfigure = ''
@@ -59,7 +50,7 @@ python3Packages.buildPythonApplication rec {
     cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
   '';
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python3.pkgs; [
     pytest
   ];
 

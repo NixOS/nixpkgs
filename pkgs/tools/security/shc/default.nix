@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "shc-${version}";
-  version = "4.0.0";
+  version = "4.0.2";
   rev = "${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "neurobin";
     repo = "shc";
-    sha256 = "1ghvggrygvs1nxjbmq4pqskfr3mzjhcprql9qfkyhz6ii6si75v8";
+    sha256 = "1vd9dldm6h234awn5fhpgq4lb85ylcawr2p2108332ffy70kvdix";
   };
 
   meta = with stdenv.lib; {

@@ -1,21 +1,44 @@
-{ stdenv, buildPythonPackage, fetchPypi, python
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
 , gfortran, glibcLocales
 , numpy, scipy, pytest, pillow
+, cython
+, joblib
+, llvmPackages
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.20.0";
+  version = "0.21.2";
   # UnboundLocalError: local variable 'message' referenced before assignment
-  disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
+  disabled = stdenv.isi686 || (pythonOlder "3.5");  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "064cbxsis6m7l6pr09ijjwqdv0c0yrfnazabwq8p09gcz1qxklcp";
+    sha256 = "1nvj9j16y1hz9gm0qwzpnx2zmz55c63k1fai643migsyll9c7bqa";
   };
 
-  buildInputs = [ pillow gfortran glibcLocales ];
-  propagatedBuildInputs = [ numpy scipy numpy.blas ];
+  buildInputs = [
+    pillow
+    gfortran
+    glibcLocales
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
+
+  nativeBuildInputs = [
+    cython
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    numpy.blas
+    joblib
+  ];
   checkInputs = [ pytest ];
 
   LC_ALL="en_US.UTF-8";

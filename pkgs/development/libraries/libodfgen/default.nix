@@ -25,6 +25,6 @@ stdenv.mkDerivation {
     description = ''A base library for generating ODF documents'';
     license = stdenv.lib.licenses.mpl20 ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

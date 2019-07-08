@@ -3,8 +3,7 @@
 with lib;
 
 let
-
-  uid = config.ids.uids.squeezelite;
+  dataDir = "/var/lib/squeezelite";
   cfg = config.services.squeezelite;
 
 in {
@@ -16,14 +15,6 @@ in {
     services.squeezelite= {
 
       enable = mkEnableOption "Squeezelite, a software Squeezebox emulator";
-
-      dataDir = mkOption {
-        default = "/var/lib/squeezelite";
-        type = types.str;
-        description = ''
-          The directory where Squeezelite stores its name file.
-        '';
-      };
 
       extraArguments = mkOption {
         default = "";
@@ -46,20 +37,12 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "sound.target" ];
       description = "Software Squeezebox emulator";
-      preStart = "mkdir -p ${cfg.dataDir} && chown -R squeezelite ${cfg.dataDir}";
       serviceConfig = {
-        ExecStart = "${pkgs.squeezelite}/bin/squeezelite -N ${cfg.dataDir}/player-name ${cfg.extraArguments}";
-        User = "squeezelite";
-        PermissionsStartOnly = true;
+        DynamicUser = true;
+        ExecStart = "${pkgs.squeezelite}/bin/squeezelite -N ${dataDir}/player-name ${cfg.extraArguments}";
+        StateDirectory = builtins.baseNameOf dataDir;
+        SupplementaryGroups = "audio";
       };
-    };
-
-    users.users.squeezelite= {
-      inherit uid;
-      group = "nogroup";
-      extraGroups = [ "audio" ];
-      description = "Squeezelite user";
-      home = "${cfg.dataDir}";
     };
 
   };

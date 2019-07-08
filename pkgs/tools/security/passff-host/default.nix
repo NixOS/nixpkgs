@@ -2,23 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "passff-host-${version}";
-  version = "1.0.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "passff";
     repo = "passff-host";
     rev = version;
-    sha256 = "1zks34rg9i8vphjrj1h80y5rijadx33z911qxa7pslf7ahmjqdv3";
+    sha256 = "0ydfwvhgnw5c3ydx2gn5d7ys9g7cxlck57vfddpv6ix890v21451";
   };
 
   buildInputs = [ python3 ];
 
   patchPhase = ''
-    sed -i 's#COMMAND      = "pass"#COMMAND = "${pass}/bin/pass"#' src/passff.py
+    sed -i 's#COMMAND = "pass"#COMMAND = "${pass}/bin/pass"#' src/passff.py
   '';
-
-  preBuild = "cd src";
-  postBuild = "cd ..";
 
   installPhase = ''
     install -D bin/testing/passff.py $out/share/passff-host/passff.py

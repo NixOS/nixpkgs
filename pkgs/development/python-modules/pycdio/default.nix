@@ -23,8 +23,8 @@ buildPythonPackage rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
-  buildInputs = [ setuptools nose pkgs.swig pkgs.libcdio ]
+  nativeBuildInputs = [ nose pkgs.pkgconfig pkgs.swig ];
+  buildInputs = [ setuptools pkgs.libcdio ]
     ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
 
   # Run tests using nosetests but first need to install the binaries
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/libcdio/;
+    homepage = https://www.gnu.org/software/libcdio/;
     description = "Wrapper around libcdio (CD Input and Control library)";
     maintainers = with maintainers; [ rycee ];
     license = licenses.gpl3Plus;

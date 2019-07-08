@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchzip, isPy3k, requests }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, requests }:
 with lib;
 buildPythonPackage rec {
   pname = "requests-aws4auth";

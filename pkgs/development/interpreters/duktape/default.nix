@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An embeddable Javascript engine, with a focus on portability and compact footprint";
-    homepage = "http://duktape.org/";
-    downloadPage = "http://duktape.org/download.html";
+    homepage = https://duktape.org/;
+    downloadPage = https://duktape.org/download.html;
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
     platforms = platforms.linux;

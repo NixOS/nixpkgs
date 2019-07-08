@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pox";
-  version = "0.2.2";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "22e97ac6d2918c754e65a9581dbe02e9d00ae4a54ca48d05118f87c1ea92aa19";
+    sha256 = "2b53fbdf02596240483dc2cb94f94cc21252ad1b1858c7b1c151afeec9022cc8";
   };
 
   meta = with stdenv.lib; {

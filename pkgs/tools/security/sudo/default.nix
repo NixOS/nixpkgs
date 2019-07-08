@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.25p1";
+  name = "sudo-1.8.27";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "0nqri46d4dpycj96zin2f2wszmhm7q9mr68hhj9sp81pgmx9rjcx";
+    sha256 = "1h1f7v9pv0rzp14cxzv8kaa8mdd717fbqv83l7c5dvvi8jwnisvv";
   };
 
   prePatch = ''

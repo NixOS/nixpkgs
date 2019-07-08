@@ -1,15 +1,15 @@
 { stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
-, unittest2, scripttest, pytz, pylint, mock
+, unittest2, scripttest, pytz, mock
 , testtools, pbr, tempita, decorator, sqlalchemy
 , six, sqlparse, testrepository
 }:
 buildPythonPackage rec {
   pname = "sqlalchemy-migrate";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ld2bihp9kmf57ykgzrfgxs4j9kxlw79sgdj9sfn47snw3izb2p6";
+    sha256 = "1bngmbcry97kwhrxwm0d74zg9qg7gmiws6rd78xshyfgpcqdmylc";
   };
 
   # See: https://review.openstack.org/#/c/608382/
@@ -20,6 +20,8 @@ buildPythonPackage rec {
 
   checkInputs = [ unittest2 scripttest pytz mock testtools testrepository ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
+
+  doCheck = !stdenv.isDarwin;
 
   prePatch = ''
     sed -i -e /tempest-lib/d \

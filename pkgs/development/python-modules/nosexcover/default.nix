@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "nosexcover";
-  version = "1.0.10";
+  version = "1.0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f5b3a7c936c4f703f15418c1f325775098184b69fa572f868edb8a99f8f144a8";
+    sha256 = "298c3c655da587f6cab8a666e9f4b150320032431062dea91353988d45c8b883";
   };
 
   propagatedBuildInputs = [ coverage nose ];

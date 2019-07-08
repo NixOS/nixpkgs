@@ -1,12 +1,12 @@
 { fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf }:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-${version}";
-  version = "4.19.0";
+  pname = "iproute2";
+  version = "5.1.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "114rlb3bvrf7q6yr03mn1rj6gl7mrg0psvm2dx0qb2kxyjhmrv6r";
+    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1kvvrz5mlpjxqcm7vl6i8w6l1cb2amp6p5xyq006pgzafc49hnnw";
   };
 
   preConfigure = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "SBINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man"
     "BASH_COMPDIR=$(out)/share/bash-completion/completions"
-    "DOCDIR=$(TMPDIR)/share/doc/${name}" # Don't install docs
+    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
   ];
 
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ eelco wkennington fpletz ];
+    maintainers = with maintainers; [ primeos eelco fpletz ];
   };
 }

@@ -38,6 +38,8 @@ let
 
   git-fame = callPackage ./git-fame {};
 
+  gita = python3Packages.callPackage ./gita {};
+
   # The full-featured Git.
   gitFull = gitBase.override {
     svnSupport = true;
@@ -58,6 +60,15 @@ let
   };
 
   git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
+
+  git-annex-remote-dbx = callPackage ./git-annex-remote-dbx {
+    inherit (python3Packages)
+    buildPythonApplication
+    fetchPypi
+    dropbox
+    annexremote
+    humanfriendly;
+  };
 
   git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
 
@@ -80,6 +91,8 @@ let
 
   git-hub = callPackage ./git-hub { };
 
+  git-ignore = callPackage ./git-ignore { };
+
   git-imerge = callPackage ./git-imerge { };
 
   git-octopus = callPackage ./git-octopus { };
@@ -94,13 +107,19 @@ let
 
   git-remote-hg = callPackage ./git-remote-hg { };
 
+  git-reparent = callPackage ./git-reparent { };
+
   git-secret = callPackage ./git-secret { };
 
   git-secrets = callPackage ./git-secrets { };
 
+  git-standup = callPackage ./git-standup { };
+
   git-stree = callPackage ./git-stree { };
 
   git-sync = callPackage ./git-sync { };
+
+  git-test = callPackage ./git-test { };
 
   git2cl = callPackage ./git2cl { };
 
@@ -110,6 +129,8 @@ let
 
   gitflow = callPackage ./gitflow { };
 
+  gitstatus = callPackage ./gitstatus { };
+
   grv = callPackage ./grv { };
 
   hub = callPackage ./hub {
@@ -117,6 +138,8 @@ let
   };
 
   hubUnstable = throw "use gitAndTools.hub instead";
+
+  lab = callPackage ./lab { };
 
   pre-commit = callPackage ./pre-commit { };
 

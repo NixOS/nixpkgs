@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pipes-${version}";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://github.com/pipeseroni/pipes.sh/archive/v${version}.tar.gz";
-    sha256 = "1v0xhgq30zkfjk9l5g8swpivh7rxfjbzhbjpr2c5c836wgn026fb";
+    sha256 = "09m4alb3clp3rhnqga5v6070p7n1gmnwp2ssqhq87nf2ipfpcaak";
   };
 
   buildInputs = with pkgs; [ bash ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/pipeseroni/pipes.sh;
     description = "Animated pipes terminal screensaver";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.unix;
   };
 }

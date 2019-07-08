@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = https://taskwarrior.org;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ makefu ];
+    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer makefu ];
   };
 }

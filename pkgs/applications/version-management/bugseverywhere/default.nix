@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
         homepage = http://www.bugseverywhere.org/;
         license = licenses.gpl2Plus;
         platforms = platforms.all;
-        maintainers = [ ];
+        maintainers = [ maintainers.matthiasbeyer ];
     };
 }
 

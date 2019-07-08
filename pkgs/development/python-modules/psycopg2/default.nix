@@ -2,17 +2,17 @@
 
 buildPythonPackage rec {
   pname = "psycopg2";
-  version = "2.7.5";
+  version = "2.7.7";
 
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17klx964gw8z0znl0raz3by8vdc7cq5gxj4pdcrfcina84nrdkzc";
+    sha256 = "f4526d078aedd5187d0508aa5f9a01eae6a48a470ed678406da94b4cd6524b7e";
   };
 
   buildInputs = lib.optional stdenv.isDarwin openssl;
-  propagatedBuildInputs = [ postgresql ];
+  nativeBuildInputs = [ postgresql ];
 
   doCheck = false;
 

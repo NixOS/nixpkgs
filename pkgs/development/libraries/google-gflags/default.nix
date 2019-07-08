@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_STATIC_LIBS=ON"
-    "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}"
   ];
 
   doCheck = false;

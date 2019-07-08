@@ -12,8 +12,10 @@ perlPackages.buildPerlPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/rename \
-      --prefix PERL5LIB : $out/lib/perl5/site_perl
+      --prefix PERL5LIB : $out/${perlPackages.perl.libPrefix}
   '';
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     description = "Perl extension for renaming multiple files";

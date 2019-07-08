@@ -34,8 +34,6 @@ in stdenv.mkDerivation rec {
 
     find $out/share/parity-ui -name "*.node" -exec patchelf --set-rpath "${uiEnv.libPath}:$out/share/parity-ui" {} \;
 
-    paxmark m $out/share/parity-ui/parity-ui
-
     mkdir -p $out/bin
     ln -s $out/share/parity-ui/parity-ui $out/bin/parity-ui
   '';

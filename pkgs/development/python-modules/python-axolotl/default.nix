@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-axolotl";
-  version = "0.1.42";
+  version = "0.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef78c2efabcd4c33741669334bdda04710a3ef0e00b653f00127acff6460a7f0";
+    sha256 = "1bwdp24fmriffwx91aigs9k162albb51iskp23nc939z893q23py";
   };
 
   propagatedBuildInputs = [ cryptography python-axolotl-curve25519 protobuf ];

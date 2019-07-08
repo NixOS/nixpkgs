@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "The Jupyter Notebook format";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh globin ];
   };
