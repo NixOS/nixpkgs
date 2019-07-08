@@ -11955,6 +11955,8 @@ in
 
   libphonenumber = callPackage ../development/libraries/libphonenumber { };
 
+  libplacebo = callPackage ../development/libraries/libplacebo { };
+
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
