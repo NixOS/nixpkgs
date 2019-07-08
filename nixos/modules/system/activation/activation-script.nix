@@ -8,7 +8,7 @@ let
   sortSnippets = set: let withHeadlines = mapAttrs (a: v:
     let entry = if isString v then noDepEntry v else v;
     in entry // {
-    text = ''
+    text = optionalString (entry.text != "") ''
       #### Activation script snippet ${a}:
       _localstatus=0
       ${entry.text}
@@ -16,8 +16,9 @@ let
       if (( _localstatus > 0 )); then
         printf "Activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
       fi
+
     '';
-  }) set; in textClosureMap id (withHeadlines) (attrNames withHeadlines);
+  }) set; in concatStrings (textClosureList withHeadlines (attrNames withHeadlines));
 
   path = with pkgs; map getBin
     [ coreutils
