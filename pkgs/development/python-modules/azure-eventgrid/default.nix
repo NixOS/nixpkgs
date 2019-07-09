@@ -1,25 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
+{ lib, buildAzurePythonPackage, fetchPypi
 , azure-common
+, msrest
 , msrestazure
 }:
 
-buildPythonPackage rec {
+buildAzurePythonPackage rec {
+  version = "1.3.0";
   pname = "azure-eventgrid";
-  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7ebbe1c4266ba176aa4969d9755c08f10b89848ad50fb0bfd16fa82e29234f95";
+    sha256 = "0vn8d1hq1ln9d5k0bssahwrxgipdljvg35cgrrlyrbjrxbv4nb68";
   };
 
   propagatedBuildInputs = [
+    azure-common
     msrest
     msrestazure
-    azure-common
   ];
 
   # has no tests
@@ -27,8 +25,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A fully-managed intelligent event routing service that allows for uniform event consumption using a publish-subscribe model";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/event-grid?view=azure-python;
+    homepage = "https://docs.microsoft.com/en-us/python/api/overview/azure/event-grid";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ mwilsoninsight jonringer ];
   };
 }
