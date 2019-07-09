@@ -5130,7 +5130,6 @@ broken-packages:
   - hakyll-dir-list
   - hakyll-favicon
   - hakyll-filestore
-  - hakyll-images
   - hakyll-ogmarkup
   - hakyll-R
   - hakyll-sass
