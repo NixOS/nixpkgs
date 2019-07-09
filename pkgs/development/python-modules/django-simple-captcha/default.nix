@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, python, buildPythonPackage, six, testfixtures,
+{ stdenv, buildPythonPackage, fetchFromGitHub, python, six, testfixtures,
 django, django-ranged-response, pillow }:
 
 buildPythonPackage rec {
   pname = "django-simple-captcha";
   version = "0.5.11";
 
-  src = fetchurl {
-    url = "https://files.pythonhosted.org/packages/86/d4/5baf10bfc9eb7844872c256898a405e81f22f7213e008ec90875689f913d/django-simple-captcha-0.5.11.zip";
-    sha256 = "0zws9my33ayrxpprxw4k68mimpj8ganff28343xxzqvv415mqkp1";
+  src = fetchFromGitHub {
+    owner = "mbi";
+    repo = "django-simple-captcha";
+    rev = "v${version}";
+    sha256 = "0wdfhag3ybvsmxyklly0fi0p5zbi6bf46z9si64glgk3nq3ipg7z";
   };
 
   checkInputs = [ testfixtures ];
