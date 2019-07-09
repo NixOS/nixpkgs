@@ -172,7 +172,7 @@ let
       ExecStart = concatStringsSep " \\\n  " ([
         "${pkgs.docker}/bin/docker run"
         "--rm"
-        "--name=%n"
+        "--name=${name}"
         "--log-driver=${container.log-driver}"
       ] ++ optional (container.entrypoint != null)
         "--entrypoint=${escapeShellArg container.entrypoint}"
@@ -185,9 +185,9 @@ let
         ++ [container.image]
         ++ map escapeShellArg container.cmd
       );
-      ExecStartPre = "-${pkgs.docker}/bin/docker rm -f %n";
-      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${pkgs.docker}/bin/docker stop %n"'';
-      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f %n";
+      ExecStartPre = "-${pkgs.docker}/bin/docker rm -f ${name}";
+      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${pkgs.docker}/bin/docker stop ${name}"'';
+      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f ${name}";
 
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their
