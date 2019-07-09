@@ -134,7 +134,7 @@ let
           as IntelliJ.
         '';
         maintainers = with maintainers; [ edwtjo ];
-        platforms = platforms.linux;
+        platforms = platforms.linux ++ platforms.darwin;
       };
     });
 
