@@ -1,12 +1,19 @@
 { stdenv, fetchurl, slang, ncurses }:
 
-stdenv.mkDerivation {
-  name = "most-5.0.0a";
+stdenv.mkDerivation rec {
+  pname = "most";
+  version = "5.1.0";
 
   src = fetchurl {
-    url = ftp://space.mit.edu/pub/davis/most/most-5.0.0a.tar.bz2;
-    sha256 = "1aas904g8x48vsfh3wcr2k6mjzkm5808lfgl2qqhdfdnf4p5mjwl";
+    url = "https://www.jedsoft.org/releases/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "008537ns659pw2aag15imwjrxj73j26aqq90h285is6kz8gmv06v";
   };
+
+  outputs = [ "out" "doc" ];
+
+  makeFlags = [
+    "DOC_DIR=${placeholder ''doc''}/share/doc/most"
+  ];
 
   preConfigure = ''
     sed -i -e "s|-ltermcap|-lncurses|" configure
@@ -19,15 +26,15 @@ stdenv.mkDerivation {
 
   buildInputs = [ slang ncurses ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A terminal pager similar to 'more' and 'less'";
     longDescription = ''
       MOST is a powerful paging program for Unix, VMS, MSDOS, and win32
       systems. Unlike other well-known paging programs most supports multiple
       windows and can scroll left and right. Why settle for less?
     '';
-    homepage = http://www.jedsoft.org/most/index.html;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://www.jedsoft.org/most/index.html";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }
