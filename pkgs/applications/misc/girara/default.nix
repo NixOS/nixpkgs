@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.zlib;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.garbas ];
+    maintainers = [ ];
   };
 }

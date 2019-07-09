@@ -72,7 +72,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1jqsv02w84r3gxp5cihwkw3sz06n32z72kvrdg0hkq997pv4vm6a";
+      sha256 = "02vj13qyzjbk14ddpabycq2mwzggsk63vddffjyzaqpy9d7x35s9";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1129,8 +1129,8 @@ self: super: {
     hi-file-parser = dontCheck (unmarkBroken super.hi-file-parser);  # Avoid depending on newer hspec versions.
     http-download = dontCheck (unmarkBroken super.http-download);
     pantry-tmp = dontCheck (unmarkBroken super.pantry-tmp);
-    rio = self.rio_0_1_9_2;
-    rio-prettyprint  = unmarkBroken super.rio-prettyprint;
+    rio = self.rio_0_1_10_0;
+    rio-prettyprint = unmarkBroken super.rio-prettyprint;
   }));
 
   # musl fixes
@@ -1313,5 +1313,8 @@ self: super: {
 
   # The old LTS-13.x version does not compile.
   ip = self.ip_1_5_0;
+
+  # Needs deque >= 0.3, but latest version on stackage is 2.7
+  butcher = super.butcher.override { deque = self.deque_0_4_2_3; };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

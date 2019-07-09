@@ -1129,10 +1129,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "173769xdvqqmbiz3qlybdlg023vz2kxxmzwxql1wqczf0j57vmv1";
+      sha256 = "03h59n89nngna6rxs81rigf1bzhhqbvmpzb0fqaks7sskqp70f2s";
       type = "gem";
     };
-    version = "1.19.0";
+    version = "1.22.1";
   };
   github-markup = {
     source = {

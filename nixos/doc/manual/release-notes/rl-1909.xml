@@ -28,6 +28,11 @@
      PHP now defaults to PHP 7.3, updated from 7.2.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     PHP 7.1 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 19.09 release.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -131,9 +136,10 @@
    </listitem>
    <listitem>
     <para>
-      The limesurvey apache subservice was replaced with a full NixOS module.
-      One can configure it using the <option>services.limesurvey.enable</option>
-      and <option>services.limesurvey.virtualHost</option> options.
+      Several of the apache subservices have been replaced with full NixOS
+      modules including LimeSurvey and WordPress.
+      These modules can be enabled using the <option>services.limesurvey.enable</option>
+      and <option>services.wordpress.enable</option> options.
     </para>
    </listitem>
    <listitem>
@@ -282,6 +288,12 @@
       use <literal>buildRustPackage</literal> have been updated to reflect this
       change. However, third-party derivations that use
       <literal>buildRustPackage</literal> may have to be updated as well.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>consul</literal> package was upgraded past version <literal>1.5</literal>,
+      so its deprecated legacy UI is no longer available.
     </para>
    </listitem>
    <listitem>

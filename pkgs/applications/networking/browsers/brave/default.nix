@@ -16,6 +16,7 @@
 , gnome3
 , gsettings-desktop-schemas
 , gtk3
+, libpulseaudio
 , libuuid
 , libX11
 , libXcomposite
@@ -55,6 +56,7 @@ rpath = lib.makeLibraryPath [
   glib
   gnome2.GConf
   gtk3
+  libpulseaudio
   libX11
   libXScrnSaver
   libXcomposite

@@ -75,24 +75,36 @@ unwrapped = stdenv.mkDerivation rec {
   };
 };
 
-wrapped-full = runCommand unwrapped.name
-  {
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = with luajitPackages; [
+# FIXME: revert this back after resolving
+# https://github.com/NixOS/nixpkgs/pull/63108#issuecomment-508670438
+wrapped-full =
+  with stdenv.lib;
+  with luajitPackages;
+  let
+    luaPkgs = [
       luasec luasocket # trust anchor bootstrap, prefill module
       luafilesystem # prefill module
       http # for http module; brings lots of deps; some are useful elsewhere
+      cqueues fifo lpeg lpeg_patterns luaossl compat53 basexx binaryheap
     ];
+  in runCommand unwrapped.name
+  {
+    nativeBuildInputs = [ makeWrapper ];
     preferLocalBuild = true;
     allowSubstitutes = false;
   }
   ''
     mkdir -p "$out"/{bin,share}
     makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
-      --set LUA_PATH  "$LUA_PATH" \
-      --set LUA_CPATH "$LUA_CPATH"
+      --set LUA_PATH  '${concatStringsSep ";" (map getLuaPath  luaPkgs)}' \
+      --set LUA_CPATH '${concatStringsSep ";" (map getLuaCPath luaPkgs)}'
+
     ln -sr '${unwrapped}/share/man' "$out"/share/
     ln -sr "$out"/{bin,sbin}
+
+    echo "Checking that 'http' module loads, i.e. lua search paths work:"
+    echo "modules.load('http')" > test-http.lua
+    echo -e 'quit()' | env -i "$out"/bin/kresd -a 127.0.0.1#53535 -c test-http.lua
   '';
 
 in result

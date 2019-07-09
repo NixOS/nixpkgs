@@ -83,9 +83,6 @@ self:
         packageRequires = with self; [ evil highlight ];
       });
 
-      # missing OCaml
-      flycheck-ocaml = markBroken super.flycheck-ocaml;
-
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
 
@@ -174,9 +171,6 @@ self:
         nativeBuildInputs =
           (attrs.nativeBuildInputs or []) ++ [ external.git ];
       });
-
-      # missing OCaml
-      merlin = markBroken super.merlin;
 
       mhc = super.mhc.override {
         inherit (self.melpaPackages) calfw;

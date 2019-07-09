@@ -148,6 +148,6 @@ mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = https://desktop.telegram.org/;
-    maintainers = with maintainers; [ primeos abbradar garbas ];
+    maintainers = with maintainers; [ primeos abbradar ];
   };
 }

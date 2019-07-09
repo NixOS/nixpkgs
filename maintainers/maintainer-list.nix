@@ -1570,6 +1570,11 @@
     github = "endgame";
     name = "Jack Kelly";
   };
+  enorris = {
+      name = "Eric Norris";
+      email = "erictnorris@gmail.com";
+      github = "ericnorris";
+  };
   enzime = {
     email = "enzime@users.noreply.github.com";
     github = "enzime";
@@ -2622,6 +2627,11 @@
     email = "kierdavis@gmail.com";
     github = "kierdavis";
     name = "Kier Davis";
+  };
+  killercup = {
+    email = "killercup@gmail.com";
+    github = "killercup";
+    name = "Pascal Hertleif";
   };
   kiloreux = {
     email = "kiloreux@gmail.com";

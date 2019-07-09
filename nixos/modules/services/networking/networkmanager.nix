@@ -17,6 +17,7 @@ let
     plugins=keyfile
     dhcp=${cfg.dhcp}
     dns=${cfg.dns}
+    rc-manager=${cfg.rc-manager}
 
     [keyfile]
     ${optionalString (cfg.unmanaged != [])
@@ -90,11 +91,29 @@ let
     default = "preserve";
     example = "00:11:22:33:44:55";
     description = ''
-      "XX:XX:XX:XX:XX:XX": MAC address of the interface.
-      <literal>permanent</literal>: use the permanent MAC address of the device.
-      <literal>preserve</literal>: don’t change the MAC address of the device upon activation.
-      <literal>random</literal>: generate a randomized value upon each connect.
-      <literal>stable</literal>: generate a stable, hashed MAC address.
+      Set the MAC address of the interface.
+      <variablelist>
+        <varlistentry>
+          <term>"XX:XX:XX:XX:XX:XX"</term>
+          <listitem><para>MAC address of the interface</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"permanent"</literal></term>
+          <listitem><para>Use the permanent MAC address of the device</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"preserve"</literal></term>
+          <listitem><para>Don’t change the MAC address of the device upon activation</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"random"</literal></term>
+          <listitem><para>Generate a randomized value upon each connect</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"stable"</literal></term>
+          <listitem><para>Generate a stable, hashed MAC address</para></listitem>
+        </varlistentry>
+      </variablelist>
     '';
   };
 
@@ -123,6 +142,16 @@ in {
         default = "";
         description = ''
           Configuration appended to the generated NetworkManager.conf.
+          Refer to
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
+          </link>
+          or
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for more information.
         '';
       };
 
@@ -131,8 +160,16 @@ in {
         default = [];
         description = ''
           List of interfaces that will not be managed by NetworkManager.
-          Interface name can be specified here, but if you need more fidelity
-          see "Device List Format" in NetworkManager.conf man page.
+          Interface name can be specified here, but if you need more fidelity,
+          refer to
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec
+          </link>
+          or the "Device List Format" Appendix of
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>.
         '';
       };
 
@@ -219,67 +256,34 @@ in {
           Set the DNS (<literal>resolv.conf</literal>) processing mode.
           </para>
           <para>
-          Options:
-          <variablelist>
-          <varlistentry>
-            <term><literal>"default"</literal></term>
-            <listitem><para>
-              NetworkManager will update <literal>/etc/resolv.conf</literal> to
-              reflect the nameservers provided by currently active connections.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"dnsmasq"</literal></term>
-            <listitem>
-              <para>
-                Enable NetworkManager's dnsmasq integration. NetworkManager will
-                run dnsmasq as a local caching nameserver, using a "split DNS"
-                configuration if you are connected to a VPN, and then update
-                <literal>resolv.conf</literal> to point to the local nameserver.
-              </para>
-              <para>
-                It is possible to pass custom options to the dnsmasq instance by
-                adding them to files in the
-                <literal>/etc/NetworkManager/dnsmasq.d/</literal> directory.
-              </para>
-              <para>
-                When multiple upstream servers are available, dnsmasq will
-                initially contact them in parallel and then use the fastest to
-                respond, probing again other servers after some time.  This
-                behavior can be modified passing the
-                <literal>all-servers</literal> or <literal>strict-order</literal>
-                options to dnsmasq (see the manual page for more details).
-              </para>
-              <para>
-                Note that this option causes NetworkManager to launch and manage
-                its own instance of the dnsmasq daemon, which is
-                <emphasis>not</emphasis> the same as setting
-                <literal>services.dnsmasq.enable = true;</literal>.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"unbound"</literal></term>
-            <listitem><para>
-              NetworkManager will talk to unbound and dnssec-triggerd,
-              providing a "split DNS" configuration with DNSSEC support.
-              <literal>/etc/resolv.conf</literal> will be managed by
-              dnssec-trigger daemon.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"systemd-resolved"</literal></term>
-            <listitem><para>
-              NetworkManager will push the DNS configuration to systemd-resolved.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"none"</literal></term>
-            <listitem><para>
-              NetworkManager will not modify resolv.conf.
-            </para></listitem>
-          </varlistentry>
-          </variablelist>
+          A description of these modes can be found in the main section of
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
+          </link>
+          or in
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>.
+        '';
+      };
+
+      rc-manager = mkOption {
+        type = types.enum [ "symlink" "file" "resolvconf" "netconfig" "unmanaged" "none" ];
+        default = "resolvconf";
+        description = ''
+          Set the <literal>resolv.conf</literal> management mode.
+          </para>
+          <para>
+          A description of these modes can be found in the main section of
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
+          </link>
+          or in
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>.
         '';
       };
 
