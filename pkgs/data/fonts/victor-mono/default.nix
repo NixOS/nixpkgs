@@ -5,7 +5,7 @@ let
 in fetchzip rec {
   name = "victor-mono-${version}";
 
-  url = "https://github.com/rubjo/victor-mono/archive/v1.2.1.zip";
+  url = "https://github.com/rubjo/victor-mono/archive/v${version}.zip";
 
   # Grab VictorMonoAll.zip via versioned zip from github,
   # instead of unversioned URL on main website.
