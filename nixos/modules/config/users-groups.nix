@@ -357,6 +357,31 @@ let
   # format a list of lists into the colon-separated lines of /etc/passwd and similar
   mkDatabase = concatMapStrings (entry: concatMapStringsSep ":" toString entry + "\n");
 
+  accountsAreDeterministic = !cfg.mutableUsers &&
+    # assigning IDs based on unused ones would lead to those IDs changing
+    # whenever other config options turn preassigned IDs on or off
+    all (u: u.uid != null) (attrValues cfg.users) &&
+    all (g: g.gid != null) (attrValues cfg.groups);
+
+  # If accountsAreDeterministic, then IDs are all integers, not null, so we can
+  # sort by ID instead of by name.
+  sortedUsers = sort (u1: u2: u1.uid < u2.uid) (attrValues cfg.users);
+  sortedGroups = sort (g1: g2: g1.gid < g2.gid) (attrValues cfg.groups);
+
+  needsShadow = u: u.password != null || u.passwordFile != null;
+  accountsNeedShadow = accountsAreDeterministic && any needsShadow (attrValues cfg.users);
+
+  # If all groups have declaratively-defined GIDs, then we can look up a GID by
+  # group name while Nix is building a configuration. To match behavior of
+  # update-users-groups.pl, a group "name" which consists only of digits is
+  # treated as a numeric GID and returned as-is; while anything else is looked
+  # up in config.users.groups. If neither one yields a GID, then return the
+  # caller-specified default.
+  getGIDByName = group: default:
+    if builtins.match "[0-9]+" group != null
+    then group
+    else (cfg.groups).${group}.gid or default;
+
   idsAreUnique = set: idAttr: !(fold (name: args@{ dup, acc }:
     let
       id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
@@ -522,6 +547,7 @@ in {
     system.activationScripts.users-before-etc =
       ''
         install -m 0700 -d /root
+      '' + optionalString (!accountsAreDeterministic) ''
 
         ${pkgs.perl}/bin/perl -w \
           -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} \
@@ -539,6 +565,32 @@ in {
         chown ${u.name}: ${u.home}
       '') (attrValues cfg.users)
     );
+
+    # As long as /etc/shadow is only readable by root, it's at least as secure
+    # as all the passwords which went into it, no matter how we construct it.
+    # TODO: make this a systemd service wantedBy/before nss-user-lookup.target
+    # because neither activation scripts nor systemd need to check passwords
+    # but it also needs to run during activation on an already-booted system
+    system.activationScripts.shadow = stringAfter [ "users" ] (optionalString accountsNeedShadow (
+      let
+        mkhash = u:
+          if u.passwordFile != null
+          then "cat ${escapeShellArg u.passwordFile}"
+          else "${pkgs.mkpasswd}/bin/mkpasswd -m SHA-512 ${escapeShellArg u.password}";
+
+        # If hashing the password fails for any reason, such as a missing
+        # passwordFile, then make sure the password field is set to '!', to
+        # prevent login, rather than '', which allows login without a password.
+        mkentry = u:
+          "  printf '%s:%s:1::::::\\n' ${escapeShellArg u.name} \"$(${mkhash u} || echo '!')\"";
+      in ''
+      SHADOWTMP=$(umask 0377; mktemp /etc/shadow.XXXXXXXXXX)
+      (
+      ${concatMapStringsSep "\n" mkentry (filter needsShadow sortedUsers)}
+      ) > "$SHADOWTMP"
+      mv -f "$SHADOWTMP" /etc/shadow
+      ''
+    ));
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
@@ -560,6 +612,47 @@ in {
           user: map (range: [user.name range.startGid range.count]) user.subGidRanges
         ) (attrValues cfg.users));
         mode = "0644";
+      };
+
+    } // optionalAttrs accountsAreDeterministic {
+
+      # If passwd or group is a symlink, when nscd sets up an inotify watch on
+      # them, the watch will be on the target of the symlink, which is in the
+      # Nix store and does not change. So when using nscd, copy them instead.
+
+      passwd = {
+        mode = mkIf config.services.nscd.enable "444";
+        text = mkDatabase (map (u: [
+          u.name
+          (if needsShadow u then "x" else if u.hashedPassword != null then u.hashedPassword else "!")
+          u.uid
+          (getGIDByName u.group ids.gids.nogroup)
+          u.description
+          u.home
+          (utils.toShellPath u.shell)
+        ]) sortedUsers);
+      };
+
+      group = {
+        mode = mkIf config.services.nscd.enable "444";
+        text = mkDatabase (map (g: [
+          g.name
+          "x"
+          g.gid
+          (concatStringsSep "," (g.members ++ concatMap (
+            u: optional (elem g.name u.extraGroups) u.name
+          ) sortedUsers))
+        ]) sortedGroups);
+      };
+
+      shadow = {
+        # If /etc/shadow is necessary then we have to create it in an
+        # activation snippet, but otherwise, make sure there's an empty file
+        # there in case anything tries to look at it. nscd doesn't cache the
+        # shadow database so this can always safely be a symlink.
+        enable = !accountsNeedShadow;
+        source = "/dev/null";
+        mode = "direct-symlink";
       };
 
     } // (mapAttrs' (name: { packages, ... }: {
@@ -600,6 +693,12 @@ in {
           You must set one to prevent being locked out of your system.'';
       }
     ];
+
+    warnings = optionals accountsAreDeterministic (
+      concatMap (u: optional (getGIDByName u.group null == null)
+        "user ‘${u.name}’ has unknown group ‘${u.group}’"
+      ) sortedUsers
+    );
 
   };
 
