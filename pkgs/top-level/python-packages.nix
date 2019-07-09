@@ -2589,6 +2589,8 @@ in {
 
   django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
 
+  django-simple-captcha = callPackage ../development/python-modules/django-simple-captcha { };
+
   django-sites = callPackage ../development/python-modules/django-sites { };
 
   django-sr = callPackage ../development/python-modules/django-sr { };
