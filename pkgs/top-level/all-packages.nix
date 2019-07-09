@@ -8537,6 +8537,7 @@ in
   python35Full = python35.override{x11Support=true;};
   python36Full = python36.override{x11Support=true;};
   python37Full = python37.override{x11Support=true;};
+  python38Full = python38.override{x11Support=true;};
 
   # pythonPackages further below, but assigned here because they need to be in sync
   pythonPackages = python.pkgs;
@@ -8544,13 +8545,14 @@ in
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python {};
-  inherit (pythonInterpreters) python27 python35 python36 python37 pypy27 pypy35;
+  inherit (pythonInterpreters) python27 python35 python36 python37 python38 pypy27 pypy35;
 
   # Python package sets.
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
   python35Packages = python35.pkgs;
   python36Packages = python36.pkgs;
   python37Packages = recurseIntoAttrs python37.pkgs;
+  python38Packages = python38.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
