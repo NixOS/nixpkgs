@@ -770,6 +770,8 @@ in
 
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
+  claws = callPackage ../tools/misc/claws { };
+
   codespell = with python3Packages; toPythonApplication codespell;
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
