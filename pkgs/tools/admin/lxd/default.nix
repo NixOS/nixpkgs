@@ -39,6 +39,9 @@ buildGoPackage rec {
         exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
       '')
     ]}
+
+    mkdir -p "$bin/share/bash-completion/completions/"
+    cp -av go/src/github.com/lxc/lxd/scripts/bash/lxd-client "$bin/share/bash-completion/completions/lxc"
   '';
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
