@@ -79,8 +79,11 @@ tryHashedMirrors() {
     fi
 
     for mirror in $hashedMirrors; do
-        # TODO: detect hash format
-        outputHash_base16="$(base32to16 "$outputHash")"
+        # TODO: handle other hash types
+        outputHash_base16="$outputHash"
+        if [ "$outputHashAlgo" == "sha256" ] && [ "$(echo -n $outputHash | wc -m)" -ne 64 ]; then
+            outputHash_base16="$(base32to16 "$outputHash")"
+        fi
         url="$(echo -n "$mirror" | sed -e "s/@outputHashAlgo@/$outputHashAlgo/g" -e "s/@outputHash@/$outputHash/g" -e "s/@outputHash_base16@/$outputHash_base16/g")"
         if "${curl[@]}" --retry 0 --connect-timeout "${NIX_CONNECT_TIMEOUT:-15}" \
             --fail --silent --show-error --head "$url" \
