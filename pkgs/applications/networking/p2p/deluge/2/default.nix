@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, libtorrentRasterbar, pythonPackages
-, gtk3, gobjectIntrospection, librsvg, wrapGAppsHook }:
+, gtk3, gobject-introspection, librsvg, wrapGAppsHook }:
 
 pythonPackages.buildPythonPackage rec {
   pname = "deluge";
@@ -15,7 +15,7 @@ pythonPackages.buildPythonPackage rec {
     libtorrentRasterbar.dev libtorrentRasterbar.python setuptools
     setproctitle pillow rencode six zope_interface
     dbus-python pygobject3 pycairo
-    gtk3 gobjectIntrospection librsvg
+    gtk3 gobject-introspection librsvg
   ];
 
   nativeBuildInputs = [ intltool wrapGAppsHook ];
