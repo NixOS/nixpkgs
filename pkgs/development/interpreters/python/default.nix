@@ -90,10 +90,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "3";
+      patch = "4";
       suffix = "";
     };
-    sha256 = "066ka8csjwkycqpgyv424d8hhqhfd7r6svsp4sfcvkylci0baq6s";
+    sha256 = "0gxiv5617zd7dnqm5k9r4q2188lk327nf9jznwq9j6b8p0s92ygv";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
