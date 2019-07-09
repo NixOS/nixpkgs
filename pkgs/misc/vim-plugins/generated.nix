@@ -4391,6 +4391,17 @@ let
     };
   };
 
+  wmgraphviz-vim = buildVimPluginFrom2Nix {
+    pname = "wmgraphviz-vim";
+    version = "2018-04-26";
+    src = fetchFromGitHub {
+      owner = "wannesm";
+      repo = "wmgraphviz.vim";
+      rev = "f08ff5becd1e6e81d681ff2926f2cce29f63cb18";
+      sha256 = "12mb0lbkrzrxyawd9gg6igmsaylvsixcslim0lcgsrd551l9lq2l";
+    };
+  };
+
   wombat256-vim = buildVimPluginFrom2Nix {
     pname = "wombat256-vim";
     version = "2010-10-18";
