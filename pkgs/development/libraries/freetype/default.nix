@@ -44,8 +44,9 @@ in stdenv.mkDerivation rec {
     ++ optional (!stdenv.isLinux) gnumake;
 
   patches =
-    [ ./enable-table-validation.patch ] ++
-  optional useEncumberedCode ./enable-subpixel-rendering.patch;
+    [ ./enable-table-validation.patch
+    ] ++
+    optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
   outputs = [ "out" "dev" ];
 
