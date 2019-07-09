@@ -409,9 +409,10 @@ rec {
 
   # Alsa Project
   alsa = [
-     ftp://ftp.alsa-project.org/pub/
-     http://alsa.cybermirror.org/
-     http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/
-     http://alsa.mirror.fr/
+    https://www.alsa-project.org/files/pub/
+    ftp://ftp.alsa-project.org/pub/
+    http://alsa.cybermirror.org/
+    http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/
+    http://alsa.mirror.fr/
   ];
 }
