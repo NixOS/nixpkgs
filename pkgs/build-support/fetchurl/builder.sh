@@ -33,6 +33,8 @@ tryDownload() {
 
     success=
 
+    if echo "$url" | grep -v softwareheritage; then break; fi
+
     # if we get error code 18, resume partial download
     while [ $curlexit -eq 18 ]; do
        # keep this inside an if statement, since on failure it doesn't abort the script
@@ -79,6 +81,7 @@ tryHashedMirrors() {
     fi
 
     for mirror in $hashedMirrors; do
+        echo $outputHash
         # TODO: handle other hash types
         outputHash_base16="$outputHash"
         if [ "$outputHashAlgo" == "sha256" ] && [ "$(echo -n $outputHash | wc -m)" -ne 64 ]; then
