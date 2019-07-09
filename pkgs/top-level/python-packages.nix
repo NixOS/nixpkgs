@@ -5293,6 +5293,8 @@ in {
 
   pluggy = callPackage ../development/python-modules/pluggy {};
 
+  pluggy_0_8 = callPackage ../development/python-modules/pluggy/0_8.nix {};
+
   xcffib = callPackage ../development/python-modules/xcffib {};
 
   pafy = callPackage ../development/python-modules/pafy { };
