@@ -1610,6 +1610,8 @@ in {
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
+  django-maintenance-mode = callPackage ../development/python-modules/django-maintenance-mode { };
+
   django_nose = callPackage ../development/python-modules/django_nose { };
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
