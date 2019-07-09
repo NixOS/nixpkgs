@@ -1,22 +1,23 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "pytricia";
-  version = "unstable-2019-01-16";
+  version = "1.0.0";
 
-  src = fetchFromGitHub {
-    owner = "jsommers";
-    repo = pname;
-    rev = "4ba88f68c3125f789ca8cd1cfae156e1464bde87";
-    sha256 = "0qp5774xkm700g35k5c76pck8pdzqlyzbaqgrz76a1yh67s2ri8h";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1nlhmnx2y3x17fcnspl4jargl1q9w8clwr8bqk32b6j5bbh0swy8";
   };
 
-  meta = with stdenv.lib; {
+  # no tests in pypi, and no github releases
+  doCheck = false;
+
+  meta = with lib; {
     description = "A library for fast IP address lookup in Python";
-    homepage = https://github.com/jsommers/pytricia;
+    homepage = "https://github.com/jsommers/pytricia";
     license = with licenses; [ lgpl3Plus ];
     maintainers = with maintainers; [ mkg ];
   };
