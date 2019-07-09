@@ -72,7 +72,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "02vj13qyzjbk14ddpabycq2mwzggsk63vddffjyzaqpy9d7x35s9";
+      sha256 = "11d4qyhmc774h2xyrpyn9rxx99x3vjs0fcxsg49gj5ayzmykafap";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;

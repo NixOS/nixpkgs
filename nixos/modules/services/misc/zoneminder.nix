@@ -262,7 +262,7 @@ in {
                   fastcgi_pass ${fcgi.socketType}:${fcgi.socketAddress};
                 }
 
-                location /cache {
+                location /cache/ {
                   alias /var/cache/${dirName};
                 }
 

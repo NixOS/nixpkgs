@@ -98,6 +98,19 @@ in {
     inherit passthruFun;
   };
 
+  python38 = callPackage ./cpython {
+    self = python38;
+    sourceVersion = {
+      major = "3";
+      minor = "8";
+      patch = "0";
+      suffix = "b2";
+    };
+    sha256 = "1rh9dz5vmc56y45d6j2wfjw4m7x25i6v8vyld4mrqh06s2gn1hbl";
+    inherit (darwin) CF configd;
+    inherit passthruFun;
+  };
+
   pypy27 = callPackage ./pypy {
     self = pypy27;
     sourceVersion = {
