@@ -391,6 +391,7 @@ vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
 vim-utils/vim-husk
 vimwiki/vimwiki
+vito-c/jq.vim
 vmchale/dhall-vim
 w0rp/ale
 wakatime/vim-wakatime

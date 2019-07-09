@@ -1002,6 +1002,17 @@ let
     };
   };
 
+  jq-vim = buildVimPluginFrom2Nix {
+    pname = "jq-vim";
+    version = "2019-05-21";
+    src = fetchFromGitHub {
+      owner = "vito-c";
+      repo = "jq.vim";
+      rev = "6e056fa297ce58d45500b0937b8214400e9a50fa";
+      sha256 = "0dfsym34xiza9221bdsr51jykcxmz8bnkzi846bqxxjxiw0p3yk1";
+    };
+  };
+
   julia-vim = buildVimPluginFrom2Nix {
     pname = "julia-vim";
     version = "2019-06-26";
