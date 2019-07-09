@@ -96,6 +96,12 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/f6556ec7d126b31da37c08d7cb657250505e01a0.patch";
       sha256 = "0z6phi8hbrbb32kkp1js7ggzviq7faz1ria36wi4jbc4in2392d9";
     })
+    ++ lib.optional stdenv.isDarwin
+      (fetchpatch { # https://bugs.freedesktop.org/show_bug.cgi?id=111016
+        name = "allow-glx-without-drivers.diff";
+        url = "https://gitlab.freedesktop.org/mesa/mesa/commit/b8ace41f5b0.diff";
+        sha256 = "0p15axc2927w8vbxs4rwqi6fc6v2cz8x6syxlj860zwwvj12ls6m";
+      })
     ++ lib.optionals (lib.versionOlder version "19.1.0") [
       # do not prefix user provided d3d-drivers-path
       (fetchpatch {
