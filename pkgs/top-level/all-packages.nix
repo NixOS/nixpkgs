@@ -2997,6 +2997,8 @@ in
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
+  foliate = callPackage ../applications/office/foliate { inherit (gnome3) gjs; };
+
   hmetis = pkgsi686Linux.callPackage ../applications/science/math/hmetis { };
 
   libbsd = callPackage ../development/libraries/libbsd { };
