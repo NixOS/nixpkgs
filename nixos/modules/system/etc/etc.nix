@@ -150,7 +150,7 @@ in
 
     system.build.etc = etc;
 
-    system.activationScripts.etc = stringAfter [ "users" "groups" ]
+    system.activationScripts.etc = stringAfter [ "users-before-etc" ]
       ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."

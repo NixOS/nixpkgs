@@ -519,7 +519,7 @@ in {
       render.gid = ids.gids.render;
     };
 
-    system.activationScripts.users = stringAfter [ "stdio" ]
+    system.activationScripts.users-before-etc =
       ''
         install -m 0700 -d /root
         install -m 0755 -d /home
@@ -529,6 +529,10 @@ in {
           -I${pkgs.perlPackages.JSON}/${pkgs.perl.libPrefix} \
           ${./update-users-groups.pl} ${spec}
       '';
+
+    # allow either "users-before-etc" or "etc" to create passwd/group; either
+    # way, "users" just exists to be a target for later snippets to depend on.
+    system.activationScripts.users = stringAfter [ "etc" ] "";
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
