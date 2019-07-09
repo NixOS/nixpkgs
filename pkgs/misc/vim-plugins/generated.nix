@@ -2938,6 +2938,17 @@ let
     };
   };
 
+  vim-glsl = buildVimPluginFrom2Nix {
+    pname = "vim-glsl";
+    version = "2017-10-15";
+    src = fetchFromGitHub {
+      owner = "tikhomirov";
+      repo = "vim-glsl";
+      rev = "697eca9784ffac39308e1fd45e0300582c3d060b";
+      sha256 = "0qj00wgshx0pm6w1p682kc6s4xnzshnwx0sr65b24g1m495ck4q4";
+    };
+  };
+
   vim-go = buildVimPluginFrom2Nix {
     pname = "vim-go";
     version = "2019-07-04";
