@@ -67,6 +67,22 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapPythonPrograms
+
+    pushd $out/share/bash-completion/completions/
+    mv lxc lxc-start
+    ln -sfn lxc-start lxc-attach
+    ln -sfn lxc-start lxc-cgroup
+    ln -sfn lxc-start lxc-console
+    ln -sfn lxc-start lxc-destroy
+    ln -sfn lxc-start lxc-device
+    ln -sfn lxc-start lxc-execute
+    ln -sfn lxc-start lxc-freeze
+    ln -sfn lxc-start lxc-info
+    ln -sfn lxc-start lxc-monitor
+    ln -sfn lxc-start lxc-snapshot
+    ln -sfn lxc-start lxc-stop
+    ln -sfn lxc-start lxc-unfreeze
+    popd
   '';
 
   meta = {
