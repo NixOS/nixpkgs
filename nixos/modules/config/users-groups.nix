@@ -374,7 +374,7 @@ let
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home createHome isSystemUser
+          name uid group description home isSystemUser
           password passwordFile hashedPassword
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
@@ -522,7 +522,6 @@ in {
     system.activationScripts.users-before-etc =
       ''
         install -m 0700 -d /root
-        install -m 0755 -d /home
 
         ${pkgs.perl}/bin/perl -w \
           -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} \
@@ -530,9 +529,16 @@ in {
           ${./update-users-groups.pl} ${spec}
       '';
 
-    # allow either "users-before-etc" or "etc" to create passwd/group; either
-    # way, "users" just exists to be a target for later snippets to depend on.
-    system.activationScripts.users = stringAfter [ "etc" ] "";
+    # Allow either "users-before-etc" or "etc" to create passwd/group; either
+    # way, "users" is late enough to create home directories. Note: in case the
+    # specified group doesn't exist, let chown look up what primary group the
+    # user actually got assigned.
+    system.activationScripts.users = stringAfter [ "etc" ] (
+      concatMapStrings (u: optionalString u.createHome ''
+        test -d ${u.home} || install -m 0700 -d ${u.home}
+        chown ${u.name}: ${u.home}
+      '') (attrValues cfg.users)
+    );
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
