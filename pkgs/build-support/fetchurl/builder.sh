@@ -63,13 +63,24 @@ finish() {
 }
 
 
+function base32to16() {
+    base32="$1"
+    base16=`echo -n "${outputHash}0===" | tr "0123456789abcdfghijklmnpqrsvwxyz" "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567" | base32 -d | od -t x1 -w33 -An | tr -d ' '`
+
+    for i in `seq 64 -2 1`; do
+        echo -n "$base16" | cut -b $i-`expr $i + 1` | tr -d '\r\n' | dd conv=lcase 2>/dev/null
+    done
+}
+
+
 tryHashedMirrors() {
     if test -n "$NIX_HASHED_MIRRORS"; then
         hashedMirrors="$NIX_HASHED_MIRRORS"
     fi
 
     for mirror in $hashedMirrors; do
-        outputHash_base16="$(nix-hash --to-base16 --type "$outputHashAlgo" "$outputHash")"
+        # TODO: detect hash format
+        outputHash_base16="$(base32to16 "$outputHash")"
         url="$(echo -n "$mirror" | sed -e "s/@outputHashAlgo@/$outputHashAlgo/g" -e "s/@outputHash@/$outputHash/g" -e "s/@outputHash_base16@/$outputHash_base16/g")"
         if "${curl[@]}" --retry 0 --connect-timeout "${NIX_CONNECT_TIMEOUT:-15}" \
             --fail --silent --show-error --head "$url" \
