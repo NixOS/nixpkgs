@@ -6998,6 +6998,8 @@ in
 
   zsh-command-time = callPackage ../shells/zsh/zsh-command-time { };
 
+  zsh-you-should-use = callPackage ../shells/zsh/zsh-you-should-use { };
+
   zssh = callPackage ../tools/networking/zssh { };
 
   zstd = callPackage ../tools/compression/zstd { };
@@ -18475,6 +18477,8 @@ in
   i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
 
   i3-easyfocus = callPackage ../applications/window-managers/i3/easyfocus.nix { };
+
+  i3-layout-manager = callPackage ../applications/window-managers/i3/layout-manager.nix { };
 
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
 
