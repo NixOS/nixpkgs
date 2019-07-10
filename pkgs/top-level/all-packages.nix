@@ -2695,6 +2695,8 @@ in
 
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
+  zabbixctl = callPackage ../tools/misc/zabbixctl { };
+
   zzuf = callPackage ../tools/security/zzuf { };
 
   ### DEVELOPMENT / EMSCRIPTEN
