@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "proot";
-  version = "20190510";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     repo = "proot";
     owner = "proot-me";
-    rev = "803e54d8a1b3d513108d3fc413ba6f7c80220b74";
-    sha256 = "0gwzqm5wpscj3fchlv3qggf3zzn0v00s4crb5ciwljan1zrqadhy";
+    rev = "v${version}";
+    sha256 = "0azsqis99gxldmbcg43girch85ysg4hwzf0h1b44bmapnsm89fbz";
   };
 
   postPatch = ''
