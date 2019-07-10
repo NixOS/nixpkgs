@@ -23,11 +23,11 @@ exportLuaPathsFor = luaPkgs: ''
 
 unwrapped = stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "37161d931e64535ce38c33b9635f06a43cd1541945bf2c79a55e37f230de1631";
+    sha256 = "2fe470f9bb1007667cdd448f758087244b7195a0234c2b100a9beeed0a2d3e68";
   };
 
   outputs = [ "out" "dev" ];
@@ -61,7 +61,8 @@ unwrapped = stdenv.mkDerivation rec {
     rm "$out"/lib/libkres.a
   '';
 
-  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  # aarch64: see https://github.com/wahern/cqueues/issues/223
+  doInstallCheck = with stdenv; hostPlatform == buildPlatform && !hostPlatform.isAarch64;
   installCheckInputs = [ cmocka which ];
   installCheckPhase = ''
     meson test --print-errorlogs
@@ -71,8 +72,7 @@ unwrapped = stdenv.mkDerivation rec {
     description = "Caching validating DNS resolver, from .cz domain registry";
     homepage = https://knot-resolver.cz;
     license = licenses.gpl3Plus;
-    # Platforms using negative pointers for stack won't work ATM due to LuaJIT impl.
-    platforms = filter (p: p != "aarch64-linux") platforms.unix;
+    platforms = platforms.unix;
     maintainers = [ maintainers.vcunat /* upstream developer */ ];
   };
 };
