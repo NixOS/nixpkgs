@@ -4,11 +4,24 @@
 }:
 
 let
-  rubyEnv = bundlerEnv {
+  rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
     inherit ruby;
     gemdir = ./rubyEnv- + "${if gitlabEnterprise then "ee" else "ce"}";
+    gemset =
+      let x = import (gemdir + "/gemset.nix");
+      in x // {
+        # grpc expects the AR environment variable to contain `ar rpc`. See the
+        # discussion in nixpkgs #63056.
+        grpc = x.grpc // {
+          patches = [ ./fix-grpc-ar.patch ];
+          dontBuild = false;
+        };
+      };
     groups = [ "default" "unicorn" "ed25519" "metrics" ];
+    # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
+    # `console` executable.
+    ignoreCollisions = true;
   };
 
   flavour = if gitlabEnterprise then "ee" else "ce";
