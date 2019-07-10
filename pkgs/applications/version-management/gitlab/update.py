@@ -35,8 +35,8 @@ class GitLabRepo:
         tree = ElementTree.fromstring(r.content)
         versions = [e.text for e in tree.findall('{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}title')]
         # filter out versions not matching version_regex
-        versions = filter(self.version_regex.match, versions)
-        
+        versions = list(filter(self.version_regex.match, versions))
+
         # sort, but ignore v and -ee for sorting comparisons
         versions.sort(key=lambda x: LooseVersion(x.replace("v", "").replace("-ee", "")), reverse=True)
         return versions
