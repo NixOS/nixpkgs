@@ -11,13 +11,16 @@
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 
+# coc-go dependency
+, go
+
 # vim-go denpencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
 
-# vCoolor dep
+# vCoolor dependency
 , gnome3
 }:
 
@@ -109,6 +112,12 @@ self: super: {
     '';
   });
 
+  coc-go = super.coc-go.overrideAttrs(old: {
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/coc-go/src/utils/tools.ts \
+        --replace 'const cmd = `GOPATH=''${gopath}; go ''${args}`' 'const cmd = `GOPATH=''${gopath}; ${go}/bin/go ''${args}`'
+    '';
+  });
 
   coc-nvim = let
     version = "0.0.72";
