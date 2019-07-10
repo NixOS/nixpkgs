@@ -21,7 +21,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://ethereum.github.io/go-ethereum/;
+    homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3 gpl3 ];
     maintainers = with maintainers; [ adisbladis asymmetric lionello ];
