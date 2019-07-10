@@ -4312,6 +4312,8 @@ in {
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
+  scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
+
   scp = callPackage ../development/python-modules/scp {};
 
   seaborn = callPackage ../development/python-modules/seaborn { };
