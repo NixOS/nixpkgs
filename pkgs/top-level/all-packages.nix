@@ -24046,6 +24046,8 @@ in
 
   wraith = callPackage ../applications/networking/irc/wraith { };
 
+  writefreely = callPackage ../applications/networking/writefreely { };
+
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
   wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
