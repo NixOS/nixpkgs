@@ -53,7 +53,7 @@ unwrapped = stdenv.mkDerivation rec {
   ]
   ++ optionals doInstallCheck [
     "-Dunit_tests=enabled"
-    "-Dconfig_tests=enabled"
+    #"-Dconfig_tests=enabled" #FIXME: check-no-ca-store.diff - as gnutls isn't patched
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
   ];
 
@@ -62,7 +62,7 @@ unwrapped = stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  installCheckInputs = [ cmocka which cacert ];
+  installCheckInputs = [ cmocka which ];
   installCheckPhase = ''
     meson test --print-errorlogs
   '';
