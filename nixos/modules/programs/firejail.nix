@@ -22,6 +22,7 @@ let
   };
 
 in {
+  disabledModules=[<nixpkgs/nixos/modules/programs/firejail.nix>];
   options.programs.firejail = {
     enable = mkEnableOption "firejail";
 
@@ -49,9 +50,8 @@ in {
     environment.systemPackages = [ wrappedBins ] ++ optional cfg.firecfg fj;
 
     environment.extraSetup = optionalString cfg.firecfg ''
-      mkdir tmp
-      cp -r $out tmp
-      chroot tmp firecfg
+      SUDO_USER= #TODO:username of the current builder
+      ${fj}/bin/firecfg --bindir=$out
     '';
   };
 
