@@ -51,11 +51,10 @@ unwrapped = stdenv.mkDerivation rec {
     "-Dinstall_kresd_conf=disabled" # not really useful; examples are inside share/doc/
     "--default-library=static" # not used by anyone
   ]
-  ++ optionals doInstallCheck [
-    "-Dunit_tests=enabled"
-    "-Dconfig_tests=enabled"
+  ++ optional doInstallCheck "-Dunit_tests=enabled"
+  ++ optional (doInstallCheck && !stdenv.isDarwin) "-Dconfig_tests=enabled"
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
-  ];
+  ;
 
   postInstall = ''
     rm "$out"/lib/libkres.a
