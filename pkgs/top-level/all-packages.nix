@@ -740,6 +740,8 @@ in
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
+  cordless = callPackage ../applications/networking/instant-messengers/cordless { };
+
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
   crumbs = callPackage ../applications/misc/crumbs { };
