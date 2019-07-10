@@ -185,7 +185,7 @@ foreach my $u (@{$spec->{users}}) {
     my $name = $u->{name};
 
     # Resolve the gid of the user.
-    if ($u->{group} =~ /^[0-9]$/) {
+    if ($u->{group} =~ /^[0-9]+$/) {
         $u->{gid} = $u->{group};
     } elsif (defined $groupsOut{$u->{group}}) {
         $u->{gid} = $groupsOut{$u->{group}}->{gid} // die;
