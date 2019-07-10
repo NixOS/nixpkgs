@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, makeWrapper
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, wrapQtAppsHook
 , qtbase, libuuid, libcap, uwsgi, grantlee, pcre
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "09cgfpr2k1jp98h1ahxqm5lmv3qbk0bcxpqpill6n5wmq2c8kl8b";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
   buildInputs = [ qtbase libuuid libcap uwsgi grantlee pcre ];
 
   cmakeFlags = [
@@ -29,12 +29,6 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     unset LD_LIBRARY_PATH
-  '';
-
-  postInstall = ''
-    for prog in $out/bin/*; do
-      wrapProgram "$prog" --set QT_PLUGIN_PATH '${qtbase}/${qtbase.qtPluginPrefix}'
-    done
   '';
 
   meta = with lib; {

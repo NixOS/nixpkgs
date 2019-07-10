@@ -3,7 +3,7 @@
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
 , harfbuzz, mypaint-brushes, libwebp, libheif, libgudev, openexr
-, AppKit, Cocoa, gtk-mac-integration-gtk2, cf-private }:
+, AppKit, Cocoa, gtk-mac-integration-gtk2 }:
 
 let
   inherit (python2Packages) pygtk wrapPython python;
@@ -24,9 +24,7 @@ in stdenv.mkDerivation rec {
     libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp libheif
     python pygtk libexif xorg.libXpm glib-networking libmypaint mypaint-brushes
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    # cf-private is needed to get some things not in swift-corefoundation.
-    # For instance _OBJC_CLASS_$_NSArray is missing.
-    AppKit Cocoa gtk-mac-integration-gtk2 cf-private
+    AppKit Cocoa gtk-mac-integration-gtk2
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];
 
   pythonPath = [ pygtk ];

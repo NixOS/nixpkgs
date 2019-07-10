@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     bison cmake extra-cmake-modules flex pkgconfig
-  ];
+  ] ++ optional withQt qt5.wrapQtAppsHook;
 
   buildInputs = [
     gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
@@ -70,12 +70,9 @@ in stdenv.mkDerivation {
         done
     done
 
-    wrapProgram $out/Applications/Wireshark.app/Contents/MacOS/Wireshark \
-        --set QT_PLUGIN_PATH ${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}
+    wrapQtApp $out/Applications/Wireshark.app/Contents/MacOS/Wireshark
   '' else optionalString withQt ''
     install -Dm644 -t $out/share/applications ../wireshark.desktop
-    wrapProgram $out/bin/wireshark \
-        --set QT_PLUGIN_PATH ${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}
 
     substituteInPlace $out/share/applications/*.desktop \
         --replace "Exec=wireshark" "Exec=$out/bin/wireshark"

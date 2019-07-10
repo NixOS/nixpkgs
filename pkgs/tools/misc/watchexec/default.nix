@@ -13,11 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1sqwplvpg0n9j0h9j94m7a6ylgqi4y4wyx489y09z9gm7aqgrsjc";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
-    CoreServices
-    # This is needed to avoid an undefined symbol error "_CFURLResourceIsReachable"
-    darwin.cf-private
-  ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with stdenv.lib; {
     description = "Executes commands in response to file modifications";

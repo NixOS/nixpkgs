@@ -14,7 +14,7 @@
 , examples ? false
 , demos ? false
 # darwin support
-, cf-private, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
+, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
 }:
 
 let
@@ -189,7 +189,7 @@ stdenv.mkDerivation rec {
       postgresql sqlite libjpeg libmng libtiff icu ]
     ++ lib.optionals (mysql != null) [ mysql.connector-c ]
     ++ lib.optionals gtkStyle [ gtk2 gdk_pixbuf ]
-    ++ lib.optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
 

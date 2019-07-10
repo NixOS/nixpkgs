@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, makeWrapper, makeDesktopItem
+, wrapQtAppsHook, makeDesktopItem
 , qtbase, qmake, qtmultimedia, qttools
 , qtgraphicaleffects, qtdeclarative
 , qtlocation, qtquickcontrols, qtquickcontrols2
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ilx47771faygf97wilm64xnqxgxa3b43q0g9v014npk0qj8pc31";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
 
   buildInputs = [
     qtbase qtmultimedia qtgraphicaleffects
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     qtwebchannel qtwebengine qtx11extras
     qtxmlpatterns monero unbound readline
     boost libunwind libsodium pcsclite zeromq
-    cppzmq makeWrapper hidapi
+    cppzmq hidapi
   ];
 
   patches = [
@@ -94,11 +94,6 @@ stdenv.mkDerivation rec {
       cp $src/images/appicons/$size.png \
          $out/share/icons/hicolor/$size/apps/monero.png
     done;
-
-    # wrap runtime dependencies
-    wrapProgram $out/bin/monero-wallet-gui \
-      --set QML2_IMPORT_PATH "${qml2ImportPath}" \
-      --set QT_PLUGIN_PATH "${qtbase.bin}/${qtbase.qtPluginPrefix}"
   '';
 
   meta = {

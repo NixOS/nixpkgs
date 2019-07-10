@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeWrapper, pkgconfig
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig
 , qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf3_6, speex, libcap
 , alsaLib, python
 , jackSupport ? false, libjack2 ? null
@@ -158,11 +158,6 @@ in {
   murmur_git = (server gitSource).overrideAttrs (old: {
     meta = old.meta // { broken = iceSupport; };
 
-    nativeBuildInputs = old.nativeBuildInputs or [] ++ [ makeWrapper ];
-
-    installPhase = old.installPhase or "" + ''
-      wrapProgram $out/bin/murmurd --suffix QT_PLUGIN_PATH : \
-        ${getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}
-    '';
+    nativeBuildInputs = old.nativeBuildInputs or [] ++ [ qt5.wrapQtAppsHook ];
   });
 }

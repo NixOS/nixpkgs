@@ -1,4 +1,4 @@
-{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile }:
+{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile, isPyPy }:
 
 let
   blasImplementation = lib.nameFromURL blas.name "-";
@@ -44,6 +44,8 @@ in buildPythonPackage rec {
   '';
 
   enableParallelBuilding = true;
+
+  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
 
   checkPhase = ''
     runHook preCheck

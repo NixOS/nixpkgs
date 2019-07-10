@@ -78,8 +78,6 @@ stdenv.mkDerivation {
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
-       # Needed for OBJC_CLASS_$_NSDate symbols.
-    ++ lib.optional stdenv.isDarwin darwin.cf-private
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.connector-c

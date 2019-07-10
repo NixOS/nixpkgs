@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, openssl, perl, pkgconfig, rustPlatform
-, CoreServices, Security, cf-private
+, CoreServices, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,11 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1f4sj260q4rlzbajwimya1yhh90hmmbhr47yfg9i8xcv5cg0cqjn";
 
   nativeBuildInputs = [ openssl perl pkgconfig ];
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
-    CoreServices Security
-    # Needed for CFURLResourceIsReachable symbols.
-    cf-private
-  ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   meta = with stdenv.lib; {
     description = "A Cargo subcommand for the client-side Web";

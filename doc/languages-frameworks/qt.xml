@@ -4,71 +4,173 @@
  <title>Qt</title>
 
  <para>
-  Qt is a comprehensive desktop and mobile application development toolkit for
-  C++. Legacy support is available for Qt 3 and Qt 4, but all current
-  development uses Qt 5. The Qt 5 packages in Nixpkgs are updated frequently to
-  take advantage of new features, but older versions are typically retained
-  until their support window ends. The most important consideration in
-  packaging Qt-based software is ensuring that each package and all its
-  dependencies use the same version of Qt 5; this consideration motivates most
-  of the tools described below.
+   This section describes the differences between Nix expressions for Qt
+   libraries and applications and Nix expressions for other C++ software. Some
+   knowledge of the latter is assumed. There are primarily two problems which
+   the Qt infrastructure is designed to address: ensuring consistent versioning
+   of all dependencies and finding dependencies at runtime.
  </para>
 
- <section xml:id="ssec-qt-libraries">
-  <title>Packaging Libraries for Nixpkgs</title>
+ <example xml:id='qt-default-nix'>
+   <title>Nix expression for a Qt package (<filename>default.nix</filename>)</title>
+   <programlisting>
+{ mkDerivation, lib, qtbase }: <co xml:id='qt-default-nix-co-1' />
 
-  <para>
-   Whenever possible, libraries that use Qt 5 should be built with each
-   available version. Packages providing libraries should be added to the
-   top-level function <varname>mkLibsForQt5</varname>, which is used to build a
-   set of libraries for every Qt 5 version. A special
-   <varname>callPackage</varname> function is used in this scope to ensure that
-   the entire dependency tree uses the same Qt 5 version. Import dependencies
-   unqualified, i.e., <literal>qtbase</literal> not
-   <literal>qt5.qtbase</literal>. <emphasis>Do not</emphasis> import a package
-   set such as <literal>qt5</literal> or <literal>libsForQt5</literal>.
-  </para>
+mkDerivation { <co xml:id='qt-default-nix-co-2' />
+  pname = "myapp";
+  version = "1.0";
 
-  <para>
-   If a library does not support a particular version of Qt 5, it is best to
-   mark it as broken by setting its <literal>meta.broken</literal> attribute. A
-   package may be marked broken for certain versions by testing the
-   <literal>qtbase.version</literal> attribute, which will always give the
-   current Qt 5 version.
-  </para>
- </section>
+  buildInputs = [ qtbase ]; <co xml:id='qt-default-nix-co-3' />
+}
+   </programlisting>
+ </example>
 
- <section xml:id="ssec-qt-applications">
-  <title>Packaging Applications for Nixpkgs</title>
+ <calloutlist>
+   <callout arearefs='qt-default-nix-co-1'>
+     <para>
+       Import <literal>mkDerivation</literal> and Qt (such as
+       <literal>qtbase</literal> modules directly. <emphasis>Do not</emphasis>
+       import Qt package sets; the Qt versions of dependencies may not be
+       coherent, causing build and runtime failures.
+     </para>
+   </callout>
+   <callout arearefs='qt-default-nix-co-2'>
+     <para>
+       Use <literal>mkDerivation</literal> instead of
+       <literal>stdenv.mkDerivation</literal>. <literal>mkDerivation</literal>
+       is a wrapper around <literal>stdenv.mkDerivation</literal> which
+       applies some Qt-specific settings.
+       This deriver accepts the same arguments as
+       <literal>stdenv.mkDerivation</literal>; refer to
+       <xref linkend='chap-stdenv' /> for details.
+     </para>
+     <para>
+       To use another deriver instead of
+       <literal>stdenv.mkDerivation</literal>, use
+       <literal>mkDerivationWith</literal>:
+<programlisting>
+mkDerivationWith myDeriver {
+  # ...
+}
+</programlisting>
+       If you cannot use <literal>mkDerivationWith</literal>, please refer to
+       <xref linkend='qt-runtime-dependencies' />.
+     </para>
+   </callout>
+   <callout arearefs='qt-default-nix-co-3'>
+     <para>
+       <literal>mkDerivation</literal> accepts the same arguments as
+       <literal>stdenv.mkDerivation</literal>, such as
+       <literal>buildInputs</literal>.
+     </para>
+   </callout>
+ </calloutlist>
 
-  <para>
-   Call your application expression using
-   <literal>libsForQt5.callPackage</literal> instead of
-   <literal>callPackage</literal>. Import dependencies unqualified, i.e.,
-   <literal>qtbase</literal> not <literal>qt5.qtbase</literal>. <emphasis>Do
-   not</emphasis> import a package set such as <literal>qt5</literal> or
-   <literal>libsForQt5</literal>.
-  </para>
+ <formalpara xml:id='qt-runtime-dependencies'>
+   <title>Locating runtime dependencies</title>
+   <para>
+     Qt applications need to be wrapped to find runtime dependencies.  If you
+     cannot use <literal>mkDerivation</literal> or
+     <literal>mkDerivationWith</literal> above, include
+     <literal>wrapQtAppsHook</literal> in <literal>nativeBuildInputs</literal>:
+<programlisting>
+stdenv.mkDerivation {
+  # ...
 
-  <para>
-   Qt 5 maintains strict backward compatibility, so it is generally best to
-   build an application package against the latest version using the
-   <varname>libsForQt5</varname> library set. In case a package does not build
-   with the latest Qt version, it is possible to pick a set pinned to a
-   particular version, e.g. <varname>libsForQt55</varname> for Qt 5.5, if that
-   is the latest version the package supports. If a package must be pinned to
-   an older Qt version, be sure to file a bug upstream; because Qt is strictly
-   backwards-compatible, any incompatibility is by definition a bug in the
-   application.
-  </para>
+  nativeBuildInputs = [ wrapQtAppsHook ];
+}
+</programlisting>
+   </para>
+ </formalpara>
 
-  <para>
-   When testing applications in Nixpkgs, it is a common practice to build the
-   package with <literal>nix-build</literal> and run it using the created
-   symbolic link. This will not work with Qt applications, however, because
-   they have many hard runtime requirements that can only be guaranteed if the
-   package is actually installed. To test a Qt application, install it with
-   <literal>nix-env</literal> or run it inside <literal>nix-shell</literal>.
-  </para>
- </section>
+ <para>
+   Entries added to <literal>qtWrapperArgs</literal> are used to modify the
+   wrappers created by <literal>wrapQtAppsHook</literal>. The entries are
+   passed as arguments to <xref linkend='fun-wrapProgram' />.
+<programlisting>
+mkDerivation {
+  # ...
+
+  qtWrapperArgs = [ ''--prefix PATH : /path/to/bin'' ];
+}
+</programlisting>
+ </para>
+
+ <para>
+  Set <literal>dontWrapQtApps</literal> to stop applications from being
+  wrapped automatically. It is required to wrap applications manually with
+  <literal>wrapQtApp</literal>, using the syntax of
+  <xref linkend='fun-wrapProgram' />:
+<programlisting>
+mkDerivation {
+  # ...
+
+  dontWrapQtApps = true;
+  preFixup = ''
+      wrapQtApp "$out/bin/myapp" --prefix PATH : /path/to/bin
+  '';
+}
+</programlisting>
+ </para>
+
+ <para>
+  Libraries are built with every available version of Qt. Use the <literal>meta.broken</literal>
+  attribute to disable the package for unsupported Qt versions:
+<programlisting>
+mkDerivation {
+  # ...
+
+  # Disable this library with Qt &lt; 5.9.0
+  meta.broken = builtins.compareVersions qtbase.version "5.9.0" &lt; 0;
+}
+</programlisting>
+ </para>
+
+ <formalpara>
+   <title>Adding a library to Nixpkgs</title>
+   <para>
+     Add a Qt library to <filename>all-packages.nix</filename> by adding it to the
+     collection inside <literal>mkLibsForQt5</literal>. This ensures that the
+     library is built with every available version of Qt as needed.
+     <example xml:id='qt-library-all-packages-nix'>
+       <title>Adding a Qt library to <filename>all-packages.nix</filename></title>
+<programlisting>
+{
+  # ...
+
+  mkLibsForQt5 = self: with self; {
+    # ...
+
+    mylib = callPackage ../path/to/mylib {};
+  };
+
+  # ...
+}
+</programlisting>
+     </example>
+   </para>
+ </formalpara>
+
+ <formalpara>
+   <title>Adding an application to Nixpkgs</title>
+   <para>
+     Add a Qt application to <filename>all-packages.nix</filename> using
+     <literal>libsForQt5.callPackage</literal> instead of the usual
+     <literal>callPackage</literal>. The former ensures that all dependencies
+     are built with the same version of Qt.
+     <example xml:id='qt-application-all-packages-nix'>
+       <title>Adding a Qt application to <filename>all-packages.nix</filename></title>
+<programlisting>
+{
+  # ...
+
+  myapp = libsForQt5.callPackage ../path/to/myapp/ {};
+
+  # ...
+}
+</programlisting>
+     </example>
+   </para>
+ </formalpara>
+
 </section>

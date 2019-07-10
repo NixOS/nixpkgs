@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtsvg, qtdeclarative, qttools, full,
-  libsecret, libGL, libpulseaudio, glib, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtsvg, qtdeclarative, qttools, full
+, libsecret, libGL, libpulseaudio, glib, wrapQtAppsHook, makeDesktopItem }:
 
 let
   version = "1.1.5-1";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1y5mphrs60zd6km9z64vskk70q9zzw4g6js7qvgl572wv81w2l75";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   sourceRoot = ".";
 
@@ -60,18 +60,11 @@ in stdenv.mkDerivation rec {
       libpulseaudio
       glib
     ];
-
-    qtPath = prefix: "${full}/${prefix}";
   in ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${rpath}" \
       $out/lib/protonmail-bridge
-
-    wrapProgram $out/lib/protonmail-bridge \
-      --set QT_PLUGIN_PATH "${qtPath qtbase.qtPluginPrefix}" \
-      --set QML_IMPORT_PATH "${qtPath qtbase.qtQmlPrefix}" \
-      --set QML2_IMPORT_PATH "${qtPath qtbase.qtQmlPrefix}" \
   '';
 
   meta = with stdenv.lib; {
