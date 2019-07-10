@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xorg, mesa }:
+{ stdenv, fetchurl, pkgconfig, xorg, mesa_drivers }:
 
 stdenv.mkDerivation rec {
   name = "libvdpau-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ xorg.libX11 ];
 
   configureFlags = stdenv.lib.optional stdenv.isLinux
-    "--with-module-dir=${mesa.drivers.driverLink}/lib/vdpau";
+    "--with-module-dir=${mesa_drivers.driverLink}/lib/vdpau";
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lX11" else null;
 

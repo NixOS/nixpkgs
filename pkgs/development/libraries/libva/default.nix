@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
 , libXext, libdrm, libXfixes, wayland, libffi, libX11
-, libGL, mesa
+, libGL, mesa_drivers
 , minimal ? false, libva-minimal
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     # Add FHS paths for non-NixOS applications.
-    "--with-drivers-path=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
+    "--with-drivers-path=${mesa_drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
   ] ++ lib.optionals (!minimal) [ "--enable-glx" ];
 
   installFlags = [

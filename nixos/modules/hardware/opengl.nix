@@ -13,7 +13,7 @@ let
   makePackage = p: pkgs.buildEnv {
     name = "mesa-drivers+txc-${p.mesa.version}";
     paths =
-      [ p.mesa.drivers
+      [ p.mesa_drivers
         (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
       ];
   };
