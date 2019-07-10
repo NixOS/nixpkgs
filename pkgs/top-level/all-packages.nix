@@ -10172,6 +10172,8 @@ in
 
   cppdb = callPackage ../development/libraries/cppdb { };
 
+  cpp-utilities = callPackage ../development/libraries/cpp-utilities { };
+
   cpp-hocon = callPackage ../development/libraries/cpp-hocon { };
 
   cpp-ipfs-api = callPackage ../development/libraries/cpp-ipfs-api { };
