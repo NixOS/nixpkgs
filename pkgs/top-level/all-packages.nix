@@ -12955,6 +12955,8 @@ in
       withQt5 = true;
     };
 
+    qtutilities = callPackage ../development/libraries/qtutilities { };
+
     qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
     qtkeychain = callPackage ../development/libraries/qtkeychain {
