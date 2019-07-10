@@ -28,7 +28,7 @@ in
       runHook preBuild
       patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ./dotnet
       patchelf --set-rpath "${rpath}" ./dotnet
-      find -type f -name "*.so" -exec patchelf --set-rpath "${rpath}" {} \;
+      find -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
       echo -n "dotnet-sdk version: "
       ./dotnet --version
       runHook postBuild
