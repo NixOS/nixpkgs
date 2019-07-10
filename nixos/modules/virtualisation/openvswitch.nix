@@ -54,7 +54,7 @@ in {
     # The path to the an initialized version of the database
     db = pkgs.stdenv.mkDerivation {
       name = "vswitch.db";
-      unpackPhase = "true";
+      dontUnpack = true;
       buildPhase = "true";
       buildInputs = with pkgs; [
         cfg.package

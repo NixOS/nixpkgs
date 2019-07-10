@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     substituteInPlace man/Makefile --replace "man4" ""
   '';
 
-  configurePhase = "true";
+  dontConfigure = true;
 
   GMAKE_NOWARN = true;
 

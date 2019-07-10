@@ -334,7 +334,7 @@ let
     version = "2.12";
     src = external.rtags.src;
 
-    configurePhase = ":";
+    dontConfigure = true;
 
     propagatedUserEnvPkgs = [ external.rtags ];
     recipe = writeText "recipe" ''

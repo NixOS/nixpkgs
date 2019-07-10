@@ -149,7 +149,7 @@ let
     name = "gitlab-rake";
     buildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
-    unpackPhase = ":";
+    dontUnpack = true;
     installPhase = ''
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rake $out/bin/gitlab-rake \
@@ -164,7 +164,7 @@ let
     name = "gitlab-rails";
     buildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
-    unpackPhase = ":";
+    dontUnpack = true;
     installPhase = ''
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \

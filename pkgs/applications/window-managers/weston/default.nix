@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
+{ stdenv, fetchurl, meson, ninja, pkgconfig
+, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
 , colord, lcms2
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null

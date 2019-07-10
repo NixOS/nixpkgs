@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 perlPackages.buildPerlPackage rec {
-  name = "get_iplayer-${version}";
+  pname = "get_iplayer";
   version = "2.99";
 
   src = fetchFromGitHub {

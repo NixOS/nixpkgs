@@ -11,7 +11,7 @@ in
 stdenv.mkDerivation rec {
   name = "yi-custom-${version}";
   version = "0.0.0.1";
-  unpackPhase = "true";
+  dontUnpack = true;
   nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''

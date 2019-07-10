@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase ];
 
-  configurePhase = ":";
+  dontConfigure = true;
 
   installPhase = ''
     mkdir -p $out/bin

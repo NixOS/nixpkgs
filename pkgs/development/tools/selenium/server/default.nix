@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     sha256 = "11v340nm8vzqc2bkmbjfm9a7j4dj0bi9bfk8wdpfan0fb8prf772";
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildInputs = [ jre makeWrapper ];
 
