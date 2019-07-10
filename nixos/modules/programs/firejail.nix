@@ -22,7 +22,6 @@ let
   };
 
 in {
-  disabledModules=[<nixpkgs/nixos/modules/programs/firejail.nix>];
   options.programs.firejail = {
     enable = mkEnableOption "firejail";
 
