@@ -13,8 +13,10 @@ let
 
     "i686-cygwin" "i686-freebsd" "i686-linux" "i686-netbsd" "i686-openbsd"
 
-    "x86_64-cygwin" "x86_64-darwin" "x86_64-freebsd" "x86_64-linux"
+    "x86_64-cygwin" "x86_64-freebsd" "x86_64-linux"
     "x86_64-netbsd" "x86_64-openbsd" "x86_64-solaris"
+
+    "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin"
 
     "x86_64-windows" "i686-windows"
 
