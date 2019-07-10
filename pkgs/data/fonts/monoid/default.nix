@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "monoid-${version}";
-  version = "2016-07-21";
+  version = "0.61";
 
   src = fetchFromGitHub {
     owner = "larsenwork";
     repo = "monoid";
-    rev = "e9d77ec18c337dc78ceae787a673328615f0b120";
-    sha256 = "07h5q6cn6jjpmxp9vyag1bxx481waz344sr2kfs7d37bba8yjydj";
+    rev = "0.61";
+    sha256 = "1h18r93klpsc0h744cnlx6ca7p790k427j0lq0y4gnhcbw14zr4f";
   };
 
   nativeBuildInputs = [ python fontforge ];
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://larsenwork.com/monoid;
     description = "Customisable coding font with alternates, ligatures and contextual positioning";
+    homepage = "http://larsenwork.com/monoid";
     license = [ licenses.ofl licenses.mit ];
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];
