@@ -33,7 +33,6 @@ let
     let
       srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
-        name = d.name;
         urls = d.urls;
         sha256 = d.sha256;
         });
@@ -339,8 +338,8 @@ stdenv.mkDerivation rec {
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
-      build --experimental_distdir=${distDir}
-      fetch --experimental_distdir=${distDir}
+      build --distdir=${distDir}
+      fetch --distdir=${distDir}
       build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
       build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
       build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
@@ -456,24 +455,8 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 
-    tar xf ${srcDepsSet.io_bazel_skydoc} -C $TEST_TMPDIR
-    mv $(ls | grep skydoc-) io_bazel_skydoc
-
-    tar xf ${srcDepsSet.bazel_skylib} -C $TEST_TMPDIR
-    mv $(ls | grep bazel-skylib-) bazel_skylib
-
-    tar xf ${srcDepsSet.io_bazel_rules_sass} -C $TEST_TMPDIR
-    mv $(ls | grep rules_sass-) rules_sass
-
-    unzip ${srcDepsSet.build_bazel_rules_nodejs} -d $TEST_TMPDIR
-    mv rules_nodejs-0.16.2 build_bazel_rules_nodejs
-
     hello_test () {
-      $out/bin/bazel test \
-        --override_repository=io_bazel_skydoc=$TEST_TMPDIR/io_bazel_skydoc \
-        --override_repository=bazel_skylib=$TEST_TMPDIR/bazel_skylib \
-        --override_repository=io_bazel_rules_sass=$TEST_TMPDIR/rules_sass \
-        --override_repository=build_bazel_rules_nodejs=$TEST_TMPDIR/build_bazel_rules_nodejs \
+      $out/bin/bazel test --distdir=${distDir} \
         --test_output=errors \
         --java_toolchain='${javaToolchain}' \
         examples/cpp:hello-success_test \
