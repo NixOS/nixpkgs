@@ -17,7 +17,12 @@ buildPythonPackage rec {
     sha256 = "8c8073b97aa7030c28118961e2c6c92f046e4cb57aeba7df87146f7baa6530c5";
   };
 
-  patches = [ ./0001-graphviz_path.patch ];
+  patches = [ 
+    (substituteAll {
+      src = ./0001-graphviz_path.patch;
+      graphviz = "${pkgs.graphviz}/bin";
+    })
+  ];
 
   postPatch =
     ''
