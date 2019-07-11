@@ -53,3 +53,5 @@ stdenv.mkDerivation {
 6. run it `$ nix-shell how_u_called_it.nix`
 7. In `requirements.txt` list whatever python modules e.g. matplotlib, pandas
 8. Therefore you could look for packages e.g. numpy `$ nix-env -qa '.*numpy.*'`
+9. Exit `$ nix-shell` like Ctrl+D or type `$ exit`.
+10. Now u should be ready to have an easy imperativ venv
