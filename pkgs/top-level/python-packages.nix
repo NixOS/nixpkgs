@@ -1088,6 +1088,8 @@ in {
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 {};
 
+  anonip = callPackage ../development/python-modules/anonip { };
+
   asgiref = callPackage ../development/python-modules/asgiref { };
 
   python-editor = callPackage ../development/python-modules/python-editor { };
