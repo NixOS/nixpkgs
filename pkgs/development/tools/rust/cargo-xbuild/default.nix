@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-xbuild";
-  version = "0.5.13";
+  version = "0.5.14";
 
   src = fetchFromGitHub {
     owner = "rust-osdev";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1y072acbbgic8qqhnjhxwbjflqx78hnwqn8ffq0axfgzhc6bppgk";
+    rev = version;
+    sha256 = "1f87rz17bdpdipc9x2j4gq1zq181gcshhn7vc9pnn6f487hz0bgq";
   };
 
   cargoSha256 = "1r9i79lymfwpbcx2lp509v435qpkl9bqly1ya369p41n5yprrcjv";
