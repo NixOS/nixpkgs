@@ -1593,6 +1593,8 @@ in {
 
   openidc-client = callPackage ../development/python-modules/openidc-client {};
 
+  optuna = callPackage ../development/python-modules/optuna { };
+
   idna = callPackage ../development/python-modules/idna { };
 
   mahotas = callPackage ../development/python-modules/mahotas { };
