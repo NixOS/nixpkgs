@@ -7,38 +7,37 @@ let
 
   cfg = config.users.ldap;
 
+  commonConfig = ''
+    uri ${cfg.server}
+    base ${cfg.base}
+    timelimit ${toString cfg.timeLimit}
+    bind_timelimit ${toString cfg.bind.timeLimit}
+    ${optionalString (cfg.bind.distinguishedName != "") ''
+      binddn ${cfg.bind.distinguishedName}
+    ''}
+  '';
+
   # Careful: OpenLDAP seems to be very picky about the indentation of
   # this file.  Directives HAVE to start in the first column!
   ldapConfig = {
     target = "ldap.conf";
     source = writeText "ldap.conf" ''
-      uri ${cfg.server}
-      base ${cfg.base}
-      timelimit ${toString cfg.timeLimit}
-      bind_timelimit ${toString cfg.bind.timeLimit}
       bind_policy ${cfg.bind.policy}
       ${optionalString cfg.useTLS ''
         ssl start_tls
       ''}
-      ${optionalString (cfg.bind.distinguishedName != "") ''
-        binddn ${cfg.bind.distinguishedName}
-      ''}
-      ${optionalString (cfg.extraConfig != "") cfg.extraConfig }
+      ${commonConfig}
+      ${cfg.extraConfig}
     '';
   };
 
   nslcdConfig = writeText "nslcd.conf" ''
     uid nslcd
     gid nslcd
-    uri ${cfg.server}
-    base ${cfg.base}
-    timelimit ${toString cfg.timeLimit}
-    bind_timelimit ${toString cfg.bind.timeLimit}
-    ${optionalString (cfg.bind.distinguishedName != "")
-      "binddn ${cfg.bind.distinguishedName}" }
     ${optionalString (cfg.daemon.rootpwmoddn != "")
       "rootpwmoddn ${cfg.daemon.rootpwmoddn}" }
-    ${optionalString (cfg.daemon.extraConfig != "") cfg.daemon.extraConfig }
+    ${commonConfig}
+    ${cfg.daemon.extraConfig}
   '';
 
   # nslcd normally reads configuration from /etc/nslcd.conf.
