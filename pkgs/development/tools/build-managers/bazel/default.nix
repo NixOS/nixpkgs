@@ -19,11 +19,11 @@
 }:
 
 let
-  version = "0.27.0";
+  version = "0.28.0";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0yn662dzgfr8ls4avfl12k5sr4f210bab12wml18bh4sjlxhs263";
+    sha256 = "26ad8cdadd413b8432cf46d9fc3801e8db85d9922f85dd8a7f5a92fec876557f";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -41,12 +41,13 @@ let
       srcs.io_bazel_skydoc
       srcs.bazel_skylib
       srcs.io_bazel_rules_sass
+      srcs.platforms
       (if stdenv.hostPlatform.isDarwin
        then srcs.${"java_tools_javac11_darwin-v2.0.zip"}
        else srcs.${"java_tools_javac11_linux-v2.0.zip"})
       srcs.${"coverage_output_generator-v1.0.zip"}
       srcs.build_bazel_rules_nodejs
-      srcs.${"android_tools_pkg-0.4.tar.gz"}
+      srcs.${"android_tools_pkg-0.7.tar.gz"}
       ]);
 
   distDir = runCommand "bazel-deps" {} ''
@@ -331,6 +332,11 @@ stdenv.mkDerivation rec {
       substituteInPlace tools/build_rules/test_rules.bzl \
         --replace /bin/bash ${customBash}/bin/bash
 
+      for i in $(find tools/cpp/ -type f)
+      do
+        substituteInPlace $i \
+          --replace /bin/bash ${customBash}/bin/bash
+      done
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
