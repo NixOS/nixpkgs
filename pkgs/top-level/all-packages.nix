@@ -15002,6 +15002,8 @@ in
 
   couchpotato = callPackage ../servers/couchpotato {};
 
+  cyrus_imapd = callPackage ../servers/mail/cyrus-imapd { };
+
   dex-oidc = callPackage ../servers/dex { };
 
   doh-proxy = callPackage ../servers/dns/doh-proxy {
