@@ -318,6 +318,11 @@
      The <literal>mercurial</literal> <literal>httpd.extraSubservice</literal> has been removed from nixpkgs due to lack of maintainer.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>trac</literal> <literal>httpd.extraSubservice</literal> has been removed from nixpkgs because it was unmaintained.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
