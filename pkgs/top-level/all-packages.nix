@@ -12707,6 +12707,8 @@ in
 
   proj = callPackage ../development/libraries/proj { };
 
+  proj-datumgrid = callPackage ../development/libraries/proj-datumgrid { };
+
   proselint = callPackage ../tools/text/proselint {
     inherit (python3Packages)
     buildPythonApplication click future six;
