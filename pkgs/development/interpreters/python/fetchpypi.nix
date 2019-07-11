@@ -3,20 +3,26 @@
 , makeOverridable
 }:
 
-makeOverridable( {format ? "setuptools", ... } @attrs:
-  let
-    fetchWheel = {pname, version, sha256, python ? "py2.py3", abi ? "none", platform ? "any"}:
+let
+  computeUrl = {format ? "setuptools", ... } @attrs: let
+    computeWheelUrl = {pname, version, python ? "py2.py3", abi ? "none", platform ? "any"}:
     # Fetch a wheel. By default we fetch an universal wheel.
     # See https://www.python.org/dev/peps/pep-0427/#file-name-convention for details regarding the optional arguments.
-      let
-        url = "https://files.pythonhosted.org/packages/${python}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
-      in fetchurl {inherit url sha256;};
-    fetchSource = {pname, version, sha256, extension ? "tar.gz"}:
+      "https://files.pythonhosted.org/packages/${python}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
+
+    computeSourceUrl = {pname, version, extension ? "tar.gz"}:
     # Fetch a source tarball.
-      let
-        url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.${extension}";
-      in fetchurl {inherit url sha256;};
-    fetcher = (if format == "wheel" then fetchWheel
-      else if format == "setuptools" then fetchSource
+      "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.${extension}";
+
+    compute = (if format == "wheel" then computeWheelUrl
+      else if format == "setuptools" then computeSourceUrl
       else throw "Unsupported format ${format}");
-  in fetcher (builtins.removeAttrs attrs ["format"]) )
+
+  in compute (builtins.removeAttrs attrs ["format"]);
+
+in makeOverridable( {format ? "setuptools", sha256, ... } @attrs:
+  let
+    url = computeUrl (builtins.removeAttrs attrs ["sha256"]) ;
+  in fetchurl {
+    inherit url sha256;
+  })
