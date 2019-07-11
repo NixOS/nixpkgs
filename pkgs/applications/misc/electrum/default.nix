@@ -14,14 +14,14 @@
 }:
 
 let
-  version = "3.3.7";
+  version = "3.3.8";
 
   # Not provided in official source releases, which are what upstream signs.
   tests = fetchFromGitHub {
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1g2kbbsi6k105q6s0la20h12gz8dzka5kdcjbdhs12jqsjfx3lr0";
+    sha256 = "1di8ba77kgapcys0d7h5nx1qqakv3s60c6sp8skw8p69ramsl73c";
 
     extraPostFetch = ''
       mv $out ./all
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "13ahc4zqpgzmck2r663sqqgz86xsd83r5qqi26mh2vazy1i6pykz";
+    sha256 = "1g00cj1pmckd4xis8r032wmraiv3vd3zc803hnyxa2bnhj8z3bg2";
   };
 
   postUnpack = ''
