@@ -36,6 +36,12 @@ let
     });
 
 in {
+  minecraft-server_1_14_3 = common {
+    version = "1.14.3";
+    url    = "https://launcher.mojang.com/v1/objects/d0d0fe2b1dc6ab4c65554cb734270872b72dadd6/server.jar";
+    sha256 = "0f0v0kqz2v5758551yji1vj6xf43lvbma30v3crz4h7cpzq5c8ll";
+  };
+
   minecraft-server_1_14 = common {
     version = "1.14";
     url    = "https://launcher.mojang.com/v1/objects/f1a0073671057f01aa843443fef34330281333ce/server.jar";
@@ -53,5 +59,4 @@ in {
     url = "https://s3.amazonaws.com/Minecraft.Download/versions/1.12.2/minecraft_server.1.12.2.jar";
     sha256 = "0zhnac6yvkdgdaag0gb0fgrkgizbwrpf7s76yqdiknfswrs947zy";
   };
-
 }

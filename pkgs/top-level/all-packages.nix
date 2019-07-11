@@ -21720,9 +21720,10 @@ in
 
   minecraft = callPackage ../games/minecraft { };
 
-  minecraft-server = minecraft-server_1_14;
+  minecraft-server = minecraft-server_1_14_3;
 
   inherit (callPackages ../games/minecraft-server { })
+    minecraft-server_1_14_3
     minecraft-server_1_14
     minecraft-server_1_13_2
     minecraft-server_1_12_2;
