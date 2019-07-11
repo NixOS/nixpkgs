@@ -2,7 +2,7 @@
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
 , gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
-, spiceSupport ? true, spice-gtk ? null
+, gtksourceview4, spiceSupport ? true, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
 }:
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
-    gsettings-desktop-schemas libosinfo gtk3
+    gsettings-desktop-schemas libosinfo gtk3 gtksourceview4
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ optional spiceSupport spice-gtk;
 
