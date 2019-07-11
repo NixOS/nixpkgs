@@ -222,8 +222,8 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-
+  config = mkIf cfg.enable (mkMerge [
+  {
     assertions = [{
       assertion = config.services.nscd.enable;
       message = ''
@@ -231,10 +231,14 @@ in
         (otherwise most programs won't be able to find the LDAP NSS module)
       '';
     }];
+  }
 
-    environment.etc = optional (!cfg.daemon.enable) ldapConfig;
+  (mkIf (!cfg.daemon.enable) {
+    system.nssModules = [ nss_ldap ];
 
-    system.activationScripts = mkIf (!cfg.daemon.enable) {
+    environment.etc = ldapConfig;
+
+    system.activationScripts = {
       ldap = stringAfter [ "etc" "groups" "users" ] ''
         if test -f "${cfg.bind.passwordFile}" ; then
           umask 0077
@@ -245,12 +249,12 @@ in
         fi
       '';
     };
+  })
 
-    system.nssModules = singleton (
-      if cfg.daemon.enable then nss_pam_ldapd else nss_ldap
-    );
+  (mkIf cfg.daemon.enable {
+    system.nssModules = [ nss_pam_ldapd ];
 
-    users = mkIf cfg.daemon.enable {
+    users = {
       groups.nslcd = {
         gid = config.ids.gids.nslcd;
       };
@@ -262,7 +266,7 @@ in
       };
     };
 
-    systemd.services = mkIf cfg.daemon.enable {
+    systemd.services = {
       nslcd = {
         wantedBy = [ "multi-user.target" ];
 
@@ -292,8 +296,9 @@ in
       };
 
     };
+  })
 
-  };
+  ]);
 
   imports =
     [ (mkRenamedOptionModule [ "users" "ldap" "bind" "password"] [ "users" "ldap" "bind" "passwordFile"])
