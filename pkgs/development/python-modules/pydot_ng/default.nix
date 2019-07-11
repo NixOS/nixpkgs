@@ -33,7 +33,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest unittest2 mock ];
   propagatedBuildInputs = [ pkgs.graphviz pyparsing ];
 
-  checkPhase = "py.test test";
+  checkPhase = "pytest test";
 
   meta = with stdenv.lib; {
     homepage = "https://pypi.python.org/pypi/pydot-ng";
