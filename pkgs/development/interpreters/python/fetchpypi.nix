@@ -20,9 +20,9 @@ let
 
   in compute (builtins.removeAttrs attrs ["format"]);
 
-in makeOverridable( {format ? "setuptools", sha256, ... } @attrs:
+in makeOverridable( {format ? "setuptools", sha256 ? "", hash ? "", ... } @attrs:
   let
-    url = computeUrl (builtins.removeAttrs attrs ["sha256"]) ;
+    url = computeUrl (builtins.removeAttrs attrs ["sha256" "hash"]) ;
   in fetchurl {
-    inherit url sha256;
+    inherit url sha256 hash;
   })
