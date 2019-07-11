@@ -38,7 +38,7 @@
    <para>
     The following expression packages GNU Hello as a Snapcraft snap.
    </para>
-<programlisting><xi:include href="../../pkgs/build-support/snap/example-hello.nix" parse="text" /></programlisting>
+<programlisting><xi:include href="./snap/example-hello.nix" parse="text" /></programlisting>
    <para>
     <command>nix-build</command> this expression and install it with
     <command>snap install ./result --dangerous</command>.
@@ -57,7 +57,7 @@
     example uses Firefox as an example, because it is one of the most
     complicated programs we could package.
    </para>
-<programlisting><xi:include href="../../pkgs/build-support/snap/example-firefox.nix" parse="text" /></programlisting>
+<programlisting><xi:include href="./snap/example-firefox.nix" parse="text" /></programlisting>
    <para>
     <command>nix-build</command> this expression and install it with
     <command>snap install ./result --dangerous</command>.

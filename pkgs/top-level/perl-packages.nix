@@ -16133,7 +16133,7 @@ let
     };
     propagatedBuildInputs = [ TermReadKey TextAutoformat ];
     meta = with stdenv.lib; {
-      homepage = http://metacpan.org/release/Term-Shell;
+      homepage = https://metacpan.org/release/Term-Shell;
       description = "A simple command-line shell framework";
       license = with licenses; [ artistic1 gpl1Plus ];
     };

@@ -5,17 +5,17 @@
 
 stdenv.mkDerivation rec {
   name = "swayidle-${version}";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
     rev = version;
-    sha256 = "04agcbhc473jkk7npb40i94ny8naykxzpjcw2lvl05kxv65y5d9v";
+    sha256 = "1fpacy9jwfi3vd94sgsy8qgx5092rm3vsplj2zjbmxkak1gjn56n";
   };
 
   postPatch = ''
-    sed -iE "s/version: '1\.2',/version: '${version}',/" meson.build
+    sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
   '';
 
   nativeBuildInputs = [ meson ninja pkgconfig scdoc ];

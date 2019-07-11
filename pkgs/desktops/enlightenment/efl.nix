@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Enlightenment foundation libraries";
-    homepage = http://enlightenment.org/;
+    homepage = https://enlightenment.org/;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;
     maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];

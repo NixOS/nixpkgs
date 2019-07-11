@@ -16,7 +16,7 @@ let
     "x86_64-cygwin" "x86_64-freebsd" "x86_64-linux"
     "x86_64-netbsd" "x86_64-openbsd" "x86_64-solaris"
 
-    "x86_64-darwin" "aarch64-ios" "armv7a-ios" "x86_64-ios" "i686-ios"
+    "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin"
 
     "x86_64-windows" "i686-windows"
 

@@ -38,7 +38,10 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
 
-  mesonFlags = stdenv.lib.optional isFuse3 "-Dudevrulesdir=etc/udev/rules.d";
+  mesonFlags = stdenv.lib.optionals isFuse3 [
+    "-Dudevrulesdir=/udev/rules.d"
+    "-Duseroot=false"
+  ];
 
   preConfigure = ''
     export MOUNT_FUSE_PATH=$out/sbin
