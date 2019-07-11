@@ -1,3 +1,5 @@
+This is a result from python.section.md and it has a lack of full explanation. For me its kinda reminder how to start. 
+
 1. Global installation of Python in `configuration.nix` in `environment.systemPackages` with e.g. `(python36.withPackages(ps: with ps; [ numpy ]))` here i chose python 3.6 any ohter version should work that way. 
 2. Create a nix expression like `python.nix` with all dependencies for Python: 
 
