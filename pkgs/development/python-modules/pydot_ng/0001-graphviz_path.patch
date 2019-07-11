@@ -122,7 +122,7 @@ index 70fc198..162d276 100644
 -        progs = __find_executables(path)
 -        if progs is not None:
 -            return progs
-+    progs = __find_executables(NIX_GRAPHVIZ_PATH)
++    progs = __find_executables(@graphviz@)
 +    if progs is not None:
 +        return progs
  
