@@ -224,6 +224,14 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions = [{
+      assertion = config.services.nscd.enable;
+      message = ''
+        `users.ldap.enable = true` requires `services.nscd.enable = true`
+        (otherwise most programs won't be able to find the LDAP NSS module)
+      '';
+    }];
+
     environment.etc = optional (!cfg.daemon.enable) ldapConfig;
 
     system.activationScripts = mkIf (!cfg.daemon.enable) {
