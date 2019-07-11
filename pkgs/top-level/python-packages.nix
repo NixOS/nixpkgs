@@ -4633,6 +4633,8 @@ in {
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
+  scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
+
   scp = callPackage ../development/python-modules/scp {};
 
   seaborn = callPackage ../development/python-modules/seaborn { };
