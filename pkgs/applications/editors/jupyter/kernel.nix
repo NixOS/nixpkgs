@@ -40,7 +40,7 @@ in
       ${concatStringsSep "\n" (mapAttrsToList (kernelName: unfilteredKernel:
         let
           allowedKernelKeys = ["argv" "displayName" "language" "interruptMode" "env" "metadata" "logo32" "logo64"];
-          kernel = traceVal (filterAttrs (n: v: (any (x: x == n) allowedKernelKeys)) unfilteredKernel);
+          kernel = filterAttrs (n: v: (any (x: x == n) allowedKernelKeys)) unfilteredKernel;
           config = builtins.toJSON (
             kernel
             // {display_name = if (kernel.displayName != "") then kernel.displayName else kernelName;}
