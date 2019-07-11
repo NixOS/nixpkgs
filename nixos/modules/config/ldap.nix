@@ -12,16 +12,16 @@ let
   ldapConfig = {
     target = "ldap.conf";
     source = writeText "ldap.conf" ''
-      uri ${config.users.ldap.server}
-      base ${config.users.ldap.base}
-      timelimit ${toString config.users.ldap.timeLimit}
-      bind_timelimit ${toString config.users.ldap.bind.timeLimit}
-      bind_policy ${config.users.ldap.bind.policy}
-      ${optionalString config.users.ldap.useTLS ''
+      uri ${cfg.server}
+      base ${cfg.base}
+      timelimit ${toString cfg.timeLimit}
+      bind_timelimit ${toString cfg.bind.timeLimit}
+      bind_policy ${cfg.bind.policy}
+      ${optionalString cfg.useTLS ''
         ssl start_tls
       ''}
-      ${optionalString (config.users.ldap.bind.distinguishedName != "") ''
-        binddn ${config.users.ldap.bind.distinguishedName}
+      ${optionalString (cfg.bind.distinguishedName != "") ''
+        binddn ${cfg.bind.distinguishedName}
       ''}
       ${optionalString (cfg.extraConfig != "") cfg.extraConfig }
     '';
