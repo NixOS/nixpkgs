@@ -19,6 +19,13 @@ stdenv.mkDerivation rec {
     ./disable-getdtablesize-test.patch
   ];
 
+  postPatch = ''
+    # Skip default locale tests. These appear to assume that
+    # setlocale(LC_ALL, "") = "C" when the default in Nixpkgs is
+    # "C.UTF-8"
+    echo "int main() { return 77; }" > tests/test-localename.c
+  '';
+
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.

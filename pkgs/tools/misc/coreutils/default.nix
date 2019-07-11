@@ -47,6 +47,11 @@ stdenv.mkDerivation rec {
 
     sed '2i print "Skipping env -S test";  exit 77;' -i ./tests/misc/env-S.pl
 
+    # Skip default locale tests. These appear to assume that
+    # setlocale(LC_ALL, "") = "C" when the default in Nixpkgs is
+    # "C.UTF-8"
+    echo "int main() { return 77; }" > gnulib-tests/test-localename.c
+
     # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
     for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
       sed '2i echo Skipping chgrp && exit 77' -i "$f"
