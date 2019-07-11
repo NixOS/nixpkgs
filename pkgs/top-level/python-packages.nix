@@ -4900,6 +4900,8 @@ in {
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
+  swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
+
   freezegun = callPackage ../development/python-modules/freezegun { };
 
   taskw = callPackage ../development/python-modules/taskw { };
