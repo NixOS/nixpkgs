@@ -7,48 +7,95 @@ let
 
   cfg = config.users.ldap;
 
+  # Generate a list of shell commands which emit config directives for the
+  # given secret. If `key` is set, then there should be a corresponding secret
+  # in `file`, which should be included in the config file as the value of the
+  # `option` setting. Otherwise this secret is not necessary, so this function
+  # returns an empty list.
+  secretFileFor = key: option: file: optional (key != "") ''
+    test -s ${escapeShellArg file} && echo "${option} $(cat ${escapeShellArg file})"
+  '';
+
   commonConfig = ''
     uri ${cfg.server}
     base ${cfg.base}
     timelimit ${toString cfg.timeLimit}
     bind_timelimit ${toString cfg.bind.timeLimit}
-    ${optionalString (cfg.bind.distinguishedName != "") ''
-      binddn ${cfg.bind.distinguishedName}
-    ''}
+    ${optionalString (cfg.bind.distinguishedName != "")
+      "binddn ${cfg.bind.distinguishedName}"}
   '';
+
+  commonSecrets = secretFileFor cfg.bind.distinguishedName "bindpw" cfg.bind.passwordFile;
 
   # Careful: OpenLDAP seems to be very picky about the indentation of
   # this file.  Directives HAVE to start in the first column!
   ldapConfig = {
     target = "ldap.conf";
-    source = writeText "ldap.conf" ''
+    text = ''
       bind_policy ${cfg.bind.policy}
-      ${optionalString cfg.useTLS ''
-        ssl start_tls
-      ''}
+      ${optionalString cfg.useTLS "ssl start_tls"}
       ${commonConfig}
       ${cfg.extraConfig}
     '';
+    secrets = commonSecrets;
+    secretPath = "/run/nscd/ldap.conf";
+    secretOwner = "nscd";
   };
 
-  nslcdConfig = writeText "nslcd.conf" ''
-    uid nslcd
-    gid nslcd
-    ${optionalString (cfg.daemon.rootpwmoddn != "")
-      "rootpwmoddn ${cfg.daemon.rootpwmoddn}" }
-    ${commonConfig}
-    ${cfg.daemon.extraConfig}
-  '';
+  nslcdConfig = {
+    target = "nslcd.conf";
+    text = ''
+      uid nslcd
+      gid nslcd
+      ${optionalString (cfg.daemon.rootpwmoddn != "")
+        "rootpwmoddn ${cfg.daemon.rootpwmoddn}"}
+      ${commonConfig}
+      ${cfg.daemon.extraConfig}
+    '';
+    secrets = commonSecrets ++
+      secretFileFor cfg.daemon.rootpwmoddn "rootpwmodpw" cfg.daemon.rootpwmodpwFile;
+    secretPath = "/run/nslcd/nslcd.conf";
+    secretOwner = "nslcd";
+  };
 
-  # nslcd normally reads configuration from /etc/nslcd.conf.
-  # this file might contain secrets. We append those at runtime,
-  # so redirect its location to something more temporary.
-  nslcdWrapped = runCommandNoCC "nslcd-wrapped" { nativeBuildInputs = [ makeWrapper ]; } ''
-    mkdir -p $out/bin
-    makeWrapper ${nss_pam_ldapd}/sbin/nslcd $out/bin/nslcd \
-      --set LD_PRELOAD    "${pkgs.libredirect}/lib/libredirect.so" \
-      --set NIX_REDIRECTS "/etc/nslcd.conf=/run/nslcd/nslcd.conf"
-  '';
+  # Set up a symlink in /etc to the right configuration file. If the config has
+  # no use for secrets, then it will be a symlink to a file in the Nix store;
+  # otherwise it's a symlink to a file which mkConfigScript is responsible for
+  # creating.
+  mkEtc = thisConfig: { ${thisConfig.target} =
+    if thisConfig.secrets == []
+    then { inherit (thisConfig) text; }
+    else {
+      source = thisConfig.secretPath;
+      mode = "direct-symlink";
+    };
+  };
+
+  # Construct a list of commands, suitable for serviceConfig.ExecStartPre,
+  # which will arrange that thisConfig.target includes any secrets it needs. If
+  # the config has no use for secrets, this will be an empty list. Otherwise
+  # the returned command will start with "!", which tells systemd to run this
+  # command as root even if the service is configured to run as a different
+  # user.
+  mkConfigScript = thisConfig: optional (thisConfig.secrets != []) "!${
+    let baseconf = writeText (baseNameOf thisConfig.target) thisConfig.text;
+    in writeScript "${baseNameOf thisConfig.target}-append-secrets" ''
+      #!${pkgs.runtimeShell} -e
+      umask 0377
+      secrets=$(mktemp ${escapeShellArg thisConfig.secretPath}.XXXXXXXXXX)
+      {
+        ${concatStringsSep "  " thisConfig.secrets}
+      } > "$secrets"
+      if test -s "$secrets"; then
+        cat ${baseconf} >> "$secrets"
+        mv -fT "$secrets" ${escapeShellArg thisConfig.secretPath}
+        chown ${thisConfig.secretOwner} ${escapeShellArg thisConfig.secretPath}
+      else
+        rm -f "$secrets"
+        ln -sfn ${baseconf} ${escapeShellArg thisConfig.secretPath}
+      fi
+    ''
+  }";
 
 in
 
@@ -234,20 +281,8 @@ in
 
   (mkIf (!cfg.daemon.enable) {
     system.nssModules = [ nss_ldap ];
-
-    environment.etc = ldapConfig;
-
-    system.activationScripts = {
-      ldap = stringAfter [ "etc" "groups" "users" ] ''
-        if test -f "${cfg.bind.passwordFile}" ; then
-          umask 0077
-          conf="$(mktemp)"
-          printf 'bindpw %s\n' "$(cat ${cfg.bind.passwordFile})" |
-          cat ${ldapConfig.source} - >"$conf"
-          mv -fT "$conf" /etc/ldap.conf
-        fi
-      '';
-    };
+    environment.etc = mkEtc ldapConfig;
+    systemd.services.nscd.serviceConfig.ExecStartPre = mkConfigScript ldapConfig;
   })
 
   (mkIf cfg.daemon.enable {
@@ -265,26 +300,14 @@ in
       };
     };
 
+    environment.etc = mkEtc nslcdConfig;
     systemd.services = {
       nslcd = {
         wantedBy = [ "multi-user.target" ];
 
-        preStart = ''
-          umask 0077
-          conf="$(mktemp)"
-          {
-            cat ${nslcdConfig}
-            test -z '${cfg.bind.distinguishedName}' -o ! -f '${cfg.bind.passwordFile}' ||
-            printf 'bindpw %s\n' "$(cat '${cfg.bind.passwordFile}')"
-            test -z '${cfg.daemon.rootpwmoddn}' -o ! -f '${cfg.daemon.rootpwmodpwFile}' ||
-            printf 'rootpwmodpw %s\n' "$(cat '${cfg.daemon.rootpwmodpwFile}')"
-          } >"$conf"
-          mv -fT "$conf" /run/nslcd/nslcd.conf
-        '';
-        restartTriggers = [ "/run/nslcd/nslcd.conf" ];
-
         serviceConfig = {
-          ExecStart = "${nslcdWrapped}/bin/nslcd";
+          ExecStartPre = mkConfigScript nslcdConfig;
+          ExecStart = "${nss_pam_ldapd}/sbin/nslcd";
           Type = "forking";
           Restart = "always";
           User = "nslcd";
