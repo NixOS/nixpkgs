@@ -70,7 +70,7 @@ let
   overrideNameserversScript = pkgs.writeScript "02overridedns" ''
     #!/bin/sh
     PATH=${with pkgs; makeBinPath [ gnused gnugrep coreutils ]}
-    tmp=`mktemp`
+    tmp=$(mktemp)
     sed '/nameserver /d' /etc/resolv.conf > $tmp
     grep 'nameserver ' /etc/resolv.conf | \
       grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
