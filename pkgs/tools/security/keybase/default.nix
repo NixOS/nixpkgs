@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHubtchurl
+{ stdenv, lib, buildGoPackage, fetchFromGitHub
 , AVFoundation, AudioToolbox, ImageIO, CoreMedia
 , Foundation, CoreGraphics, MediaToolbox
 }:

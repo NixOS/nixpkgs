@@ -2,7 +2,7 @@
 , libXfixes, atk, gtk3, libXrender, pango, gnome2, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme
+, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme, at-spi2-atk, libuuid
 }:
 
 with stdenv.lib;
@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "5.0.4";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "1fq0w8djkcx5jr2pw6izlq5rkwbq3r3f15xr3dmmbz6gjvi3nra0";
+    sha256 = "1ykjdnzl34pqr6dhfnswix44i412c7gcba1pk95a8670wmc29a1f";
   };
 
   libPath = makeLibraryPath [
@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     gnome2.GConf
     libgnome-keyring
     openssl
+    at-spi2-atk
+    libuuid
   ];
 
   desktopItem = makeDesktopItem {

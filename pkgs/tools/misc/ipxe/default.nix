@@ -5,8 +5,7 @@
 let
   date = "20190318";
   rev = "ebf2eaf515e46abd43bc798e7e4ba77bfe529218";
-  targets = [
-    "bin-x86_64-efi/ipxe.efi"
+  targets = (lib.optional stdenv.isx86_64 "bin-x86_64-efi/ipxe.efi") ++ [
     "bin/ipxe.dsk"
     "bin/ipxe.usb"
     "bin/ipxe.iso"

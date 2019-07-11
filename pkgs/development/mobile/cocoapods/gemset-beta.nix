@@ -46,10 +46,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0c0xh7wh8l34wqiiwwhdakm6zin8xd5svgh63c6pb2pd1d4phhyv";
+      sha256 = "1h0cnrxh5k61yfh3f3kdx67gwfkvnvaqgsmwbmqpl7ffbpsg5gsc";
       type = "gem";
     };
-    version = "1.7.3";
+    version = "1.7.4";
   };
   cocoapods-core = {
     dependencies = ["activesupport" "fuzzy_match" "nap"];
@@ -57,10 +57,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0p76z708fbb61x0m585iaf912f0s3qw0a1mryhpqa2wyrjrlmg31";
+      sha256 = "0xbpaisml77q9k5bk5f7hfkzmnjymzczinvhgim34nvwd00rd30c";
       type = "gem";
     };
-    version = "1.7.3";
+    version = "1.7.4";
   };
   cocoapods-deintegrate = {
     groups = ["default"];
@@ -292,9 +292,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1x2ypkxyfsr6k8qy75iy64p6af6b024fqnlmw8qvzzzixmwrr8q7";
+      sha256 = "1h73ilwyjwyyhj761an3pmicllw50514gxb6b1r4z4klc9rzxw4j";
       type = "gem";
     };
-    version = "1.10.0";
+    version = "1.11.0";
   };
 }

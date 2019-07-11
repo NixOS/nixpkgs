@@ -1716,6 +1716,8 @@ in
 
   metabase = callPackage ../servers/metabase { };
 
+  mididings = callPackage ../tools/audio/mididings { };
+
   miniserve = callPackage ../tools/misc/miniserve { };
 
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
@@ -2689,6 +2691,8 @@ in
   z-lua = callPackage ../tools/misc/z-lua { };
 
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
+
+  zabbixctl = callPackage ../tools/misc/zabbixctl { };
 
   zzuf = callPackage ../tools/security/zzuf { };
 
@@ -10161,6 +10165,8 @@ in
   ctpl = callPackage ../development/libraries/ctpl { };
 
   cppdb = callPackage ../development/libraries/cppdb { };
+
+  cpp-utilities = callPackage ../development/libraries/cpp-utilities { };
 
   cpp-hocon = callPackage ../development/libraries/cpp-hocon { };
 
