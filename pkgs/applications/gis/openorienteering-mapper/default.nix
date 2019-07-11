@@ -20,9 +20,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
-    # Required by the build to be specified
-    "-DPROJ4_ROOT=${proj}"
-
     # Building the manual and bundling licenses fails
     "-DLICENSING_PROVIDER:BOOL=OFF"
     "-DMapper_MANUAL_QTHELP:BOOL=OFF"
@@ -43,6 +40,8 @@ stdenv.mkDerivation rec {
     "-DMapper_PACKAGE_GDAL=0"
     ]);
 
+  # Needs to be available when proj_api.h gets evaluted by CPP
+  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H" ];
 
   postInstall =
     stdenv.lib.optionalString stdenv.isDarwin ''
