@@ -331,6 +331,8 @@ in {
 
   clikit = callPackage ../development/python-modules/clikit { };
 
+  cliff = callPackage ../development/python-modules/cliff { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   cozy = callPackage ../development/python-modules/cozy { };
