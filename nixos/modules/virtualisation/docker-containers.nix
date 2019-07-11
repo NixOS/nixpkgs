@@ -185,7 +185,7 @@ let
         ++ [container.image]
         ++ map escapeShellArg container.cmd
       );
-      ExecStartPre = "-${pkgs.docker}/bin/docker rm -f ${name}";
+      ExecStartPre = [ "${pkgs.docker}/bin/docker pull ${container.image}" "-${pkgs.docker}/bin/docker rm -f ${name}" ];
       ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${pkgs.docker}/bin/docker stop ${name}"'';
       ExecStopPost = "-${pkgs.docker}/bin/docker rm -f ${name}";
 
