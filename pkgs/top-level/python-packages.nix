@@ -2215,6 +2215,8 @@ in {
 
   lightblue = callPackage ../development/python-modules/lightblue { };
 
+  lightgbm = callPackage ../development/python-modules/lightgbm { };
+
   lightning = callPackage ../development/python-modules/lightning { };
 
   jupyter = callPackage ../development/python-modules/jupyter { };
