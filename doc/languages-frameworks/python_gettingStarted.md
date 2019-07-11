@@ -50,6 +50,6 @@ stdenv.mkDerivation {
   '';
 }
 ```
-
-6. In `requirements.txt` list whatever python modules e.g. matplotlib, pandas
-7. Therefore you could look for packages e.g. numpy `$ nix-env -qa '.*numpy.*'`
+6. run it `$ nix-shell how_u_called_it.nix`
+7. In `requirements.txt` list whatever python modules e.g. matplotlib, pandas
+8. Therefore you could look for packages e.g. numpy `$ nix-env -qa '.*numpy.*'`
