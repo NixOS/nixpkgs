@@ -839,6 +839,8 @@ in {
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
+  pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
+
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
