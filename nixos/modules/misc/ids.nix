@@ -308,7 +308,6 @@
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-<<<<<<< HEAD
       restya-board = 284;
       mighttpd2 = 285;
       hass = 286;
@@ -642,9 +641,7 @@
       cockroachdb = 313;
       zoneminder = 314;
       paperless = 315;
-=======
-      xandikos = 284;
->>>>>>> Add xandikos service
+      xandikos = 316;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
