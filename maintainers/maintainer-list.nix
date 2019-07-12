@@ -4736,6 +4736,11 @@
     github = "sigma";
     name = "Yann Hodique";
   };
+  sikmir = {
+    email = "sikmir@gmail.com";
+    github = "sikmir";
+    name = "Nikolay Korotkiy";
+  };
   simonvandel = {
     email = "simon.vandel@gmail.com";
     github = "simonvandel";
