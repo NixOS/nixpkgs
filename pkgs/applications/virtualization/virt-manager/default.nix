@@ -9,6 +9,10 @@
 
 with stdenv.lib;
 
+# TODO: remove after there's support for setupPyDistFlags
+let
+  setuppy = ../../../development/interpreters/python/run_setup.py;
+in
 python3Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
   version = "2.2.0";
@@ -20,11 +24,12 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool file
+    intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
   ];
 
   buildInputs = [
+    wrapGAppsHook
     libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
@@ -42,6 +47,14 @@ python3Packages.buildPythonApplication rec {
 
   postConfigure = ''
     ${python3Packages.python.interpreter} setup.py configure --prefix=$out
+  '';
+
+  # TODO: remove after there's support for setupPyDistFlags
+  buildPhase = ''
+    runHook preBuild
+    cp ${setuppy} nix_run_setup
+    ${python3Packages.python.pythonForBuild.interpreter} nix_run_setup --no-update-icon-cache build_ext bdist_wheel
+    runHook postBuild
   '';
 
   postInstall = ''
