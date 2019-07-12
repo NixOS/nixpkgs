@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.services.zabbixServer;
+  cfg = config.services.zabbixProxy;
   pgsql = config.services.postgresql;
   mysql = config.services.mysql;
 
@@ -15,11 +15,11 @@ let
   passwordFile = "${runtimeDir}/zabbix-dbpassword.conf";
 
   moduleEnv = pkgs.symlinkJoin {
-    name = "zabbix-server-module-env";
+    name = "zabbix-proxy-module-env";
     paths = attrValues cfg.modules;
   };
 
-  configFile = pkgs.writeText "zabbix_server.conf" ''
+  configFile = pkgs.writeText "zabbix_proxy.conf" ''
     LogType = console
     ListenIP = ${cfg.listen.ip}
     ListenPort = ${toString cfg.listen.port}
@@ -47,13 +47,16 @@ in
 
   options = {
 
-    services.zabbixServer = {
-      enable = mkEnableOption "the Zabbix Server";
+    services.zabbixProxy = {
+      enable = mkEnableOption "the Zabbix Proxy";
 
       package = mkOption {
         type = types.package;
-        default = if cfg.database.type == "mysql" then pkgs.zabbix.server-mysql else pkgs.zabbix.server-pgsql;
-        defaultText = "pkgs.zabbix.server-pgsql";
+        default =
+          if cfg.database.type == "mysql" then pkgs.zabbix.proxy-mysql
+          else if cfg.database.type == "pgsql" then pkgs.zabbix.proxy-pgsql
+          else pkgs.zabbix.proxy-sqlite;
+        defaultText = "pkgs.zabbix.proxy-pgsql";
         description = "The Zabbix package to use.";
       };
 
@@ -89,7 +92,7 @@ in
 
       database = {
         type = mkOption {
-          type = types.enum [ "mysql" "pgsql" ];
+          type = types.enum [ "mysql" "pgsql" "sqlite" ];
           example = "mysql";
           default = "pgsql";
           description = "Database engine to use.";
@@ -166,7 +169,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Open ports in the firewall for the Zabbix Server.
+          Open ports in the firewall for the Zabbix Proxy.
         '';
       };
 
@@ -176,7 +179,7 @@ in
         type = types.lines;
         description = ''
           Configuration that is injected verbatim into the configuration file. Refer to
-          <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_server"/>
+          <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_proxy"/>
           for details on supported values.
         '';
       };
@@ -190,11 +193,14 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
+      { assertion = !config.services.zabbixServer.enable;
+        message = "Please choose one of services.zabbixServer or services.zabbixProxy.";
+      }
       { assertion = cfg.database.createLocally -> cfg.database.user == user;
-        message = "services.zabbixServer.database.user must be set to ${user} if services.zabbixServer.database.createLocally is set true";
+        message = "services.zabbixProxy.database.user must be set to ${user} if services.zabbixProxy.database.createLocally is set true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
-        message = "a password cannot be specified if services.zabbixServer.database.createLocally is set to true";
+        message = "a password cannot be specified if services.zabbixProxy.database.createLocally is set to true";
       }
     ];
 
@@ -237,19 +243,14 @@ in
       fping.source = "${pkgs.fping}/bin/fping";
     };
 
-    systemd.services."zabbix-server" = {
-      description = "Zabbix Server";
+    systemd.services."zabbix-proxy" = {
+      description = "Zabbix Proxy";
 
       wantedBy = [ "multi-user.target" ];
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
 
       path = [ "/run/wrappers" ] ++ cfg.extraPackages;
-      preStart = ''
-        # pre 19.09 compatibility
-        if test -e "${runtimeDir}/db-created"; then
-          mv "${runtimeDir}/db-created" "${stateDir}/"
-        fi
-      '' + optionalString pgsqlLocal ''
+      preStart = optionalString pgsqlLocal ''
         if ! test -e "${stateDir}/db-created"; then
           cat ${cfg.package}/share/zabbix/database/postgresql/schema.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
           cat ${cfg.package}/share/zabbix/database/postgresql/images.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
@@ -272,7 +273,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "@${cfg.package}/sbin/zabbix_server zabbix_server -f --config ${configFile}";
+        ExecStart = "@${cfg.package}/sbin/zabbix_proxy zabbix_proxy -f --config ${configFile}";
         Restart = "always";
         RestartSec = 2;
 
@@ -283,10 +284,6 @@ in
         PrivateTmp = true;
       };
     };
-
-    systemd.services.httpd.after =
-      optional (config.services.zabbixWeb.enable && mysqlLocal) "mysql.service" ++
-      optional (config.services.zabbixWeb.enable && pgsqlLocal) "postgresql.service";
 
   };
 
