@@ -247,6 +247,7 @@ in
 
         security.pam.services.samba = {};
 
+        environment.systemPackages = [ pkgs.samba ];
       })
     ];
 
