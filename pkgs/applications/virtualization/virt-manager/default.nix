@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
 , gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
+, gsettings-desktop-schemas, glib, libosinfo, gnome3
 , gtksourceview4
 , spiceSupport ? true, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
