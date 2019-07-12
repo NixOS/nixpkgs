@@ -6368,6 +6368,11 @@ in
 
   trilium = callPackage ../applications/office/trilium { };
 
+  trilinos = callPackage ../development/libraries/science/math/trilinos {
+    mpi = pkgs.openmpi;
+    blas = pkgs.openblas;
+  };
+
   trousers = callPackage ../tools/security/trousers { };
 
   trx = callPackage ../tools/audio/trx { };
