@@ -6,6 +6,7 @@
 , unittest2
 , pkgs
 , mock
+, substituteAll
 }:
 
 buildPythonPackage rec {
