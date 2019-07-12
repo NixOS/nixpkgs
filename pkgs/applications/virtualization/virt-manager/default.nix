@@ -57,10 +57,6 @@ python3Packages.buildPythonApplication rec {
     runHook postBuild
   '';
 
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
-  '';
-
   preFixup = ''
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
     # these are called from virt-install in initrdinject.py
