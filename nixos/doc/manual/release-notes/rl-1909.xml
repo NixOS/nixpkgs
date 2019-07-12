@@ -323,6 +323,12 @@
      The <literal>trac</literal> <literal>httpd.extraSubservice</literal> has been removed from nixpkgs because it was unmaintained.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>foswiki</literal> package and associated <literal>httpd.extraSubservice</literal> have been removed
+     from nixpkgs due to lack of maintainer.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
