@@ -3386,6 +3386,8 @@ in {
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
 
+  meshio = callPackage ../development/python-modules/meshio { };
+
   metaphone = callPackage ../development/python-modules/metaphone { };
 
   mezzanine = callPackage ../development/python-modules/mezzanine { };
