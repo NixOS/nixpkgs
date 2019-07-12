@@ -4080,6 +4080,16 @@
     github = "pradeepchhetri";
     name = "Pradeep Chhetri";
   };
+  pradyuman = {
+    email = "me@pradyuman.co";
+    github = "pradyuman";
+    name = "Pradyuman Vig";
+    keys = [
+      { longkeyid = "rsa4096/4F74D5361C4CA31E";
+        fingerprint = "240B 57DE 4271 2480 7CE3  EAC8 4F74 D536 1C4C A31E";
+      }
+    ];
+  };
   prikhi = {
     email = "pavan.rikhi@gmail.com";
     github = "prikhi";
