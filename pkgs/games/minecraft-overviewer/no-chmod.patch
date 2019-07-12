@@ -1,0 +1,45 @@
+commit ffac27719391ac74ef4dcc99f4f97fa4d07b9b80
+Author: Linus Heckemann <steam@bringtnix.sphalerite.tech>
+Date:   Fri Jul 12 21:00:54 2019 +0200
+
+    Disable chmod functionality
+    
+    This allows correct rendering of maps even when Overviewer lives in a
+    read-only location.
+
+diff --git a/overviewer_core/files.py b/overviewer_core/files.py
+index 15647fe..f3c6729 100644
+--- a/overviewer_core/files.py
++++ b/overviewer_core/files.py
+@@ -21,7 +21,7 @@ import logging
+ import stat
+ import errno
+ 
+-default_caps = {"chmod_works": True, "rename_works": True}
++default_caps = {"chmod_works": False, "rename_works": True}
+ 
+ def get_fs_caps(dir_to_test):
+     return {"chmod_works": does_chmod_work(dir_to_test),
+@@ -30,21 +30,7 @@ def get_fs_caps(dir_to_test):
+ 
+ def does_chmod_work(dir_to_test):
+     "Detects if chmod works in a given directory"
+-    # a CIFS mounted FS is the only thing known to reliably not provide chmod
+-
+-    if not os.path.isdir(dir_to_test):
+-        return True
+-
+-    f1 = tempfile.NamedTemporaryFile(dir=dir_to_test)
+-    try:
+-        f1_stat = os.stat(f1.name)
+-        os.chmod(f1.name, f1_stat.st_mode | stat.S_IRUSR)
+-        chmod_works = True
+-        logging.debug("Detected that chmods work in %r" % dir_to_test)
+-    except OSError:
+-        chmod_works = False
+-        logging.debug("Detected that chmods do NOT work in %r" % dir_to_test)
+-    return chmod_works
++    return False
+ 
+ def does_rename_work(dir_to_test):
+     with tempfile.NamedTemporaryFile(dir=dir_to_test) as f1:

@@ -13,6 +13,8 @@ buildPythonApplication rec {
     sha256 = "0qlpliby2gypdhn4bfxwdphhjbvabvjy8smhpw24i4zcnqll97ya";
   };
 
+  patches = [ ./no-chmod.patch ];
+
   preBuild = ''
     unpackFile ${pillow.src}
     ln -s Pillow*/src/libImaging/Im*.h .
