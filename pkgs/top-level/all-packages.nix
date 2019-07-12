@@ -17210,7 +17210,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
-  cdrtools = callPackage ../applications/misc/cdrtools { };
+  cdrtools = callPackage ../applications/misc/cdrtools {
+    inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
+  };
 
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 
