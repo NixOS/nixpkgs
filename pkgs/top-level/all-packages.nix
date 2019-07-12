@@ -22853,6 +22853,8 @@ in
 
   somatic-sniper = callPackage ../applications/science/biology/somatic-sniper { };
 
+  sortmerna = callPackage ../applications/science/biology/sortmerna { };
+
   stacks = callPackage ../applications/science/biology/stacks { };
 
   star = callPackage ../applications/science/biology/star { };
