@@ -5889,6 +5889,8 @@ in
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
+  quickjs = callPackage ../development/interpreters/quickjs { };
+
   quickserve = callPackage ../tools/networking/quickserve { };
 
   quicktun = callPackage ../tools/networking/quicktun { };
