@@ -10341,6 +10341,24 @@ let
     };
   };
 
+  LogJournald = buildPerlModule rec {
+    pname = "Log-Journald";
+    version = "0.30";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/Log-Journald-${version}.tar.gz";
+      sha256 = "55992cf9a1e1fb833f428300525bfa7cf7ed46b83ec414f82a091789b37d08a3";
+    };
+    buildInputs = [ ModuleBuild pkgs.pkgconfig pkgs.systemd ];
+    postPatch = ''
+      substituteInPlace Build.PL \
+        --replace "libsystemd-journal" "libsystemd"
+    '';
+    meta = {
+      description = "Send messages to a systemd journal";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   LogLogLite = buildPerlPackage {
     pname = "Log-LogLite";
     version = "0.82";
