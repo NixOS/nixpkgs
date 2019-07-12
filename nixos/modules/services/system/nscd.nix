@@ -52,6 +52,12 @@ in
           config.environment.etc."nscd.conf".source
         ];
 
+        # We use DynamicUser because in default configurations nscd doesn't
+        # create any files that need to survive restarts. However, in some
+        # configurations, nscd needs to be started as root; it will drop
+        # privileges after all the NSS modules have read their configuration
+        # files. So prefix the ExecStart command with "!" to prevent systemd
+        # from dropping privileges early. See ExecStart in systemd.service(5).
         serviceConfig =
           { ExecStart = "!@${pkgs.glibc.bin}/sbin/nscd nscd";
             Type = "forking";
