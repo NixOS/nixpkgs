@@ -4402,7 +4402,7 @@ in {
 
   scipy = let
     scipy_ = callPackage ../development/python-modules/scipy { };
-    scipy_1_2 = scipy_.overridePythonAttrs(oldAttrs: {
+    scipy_1_2 = scipy_.overridePythonAttrs(oldAttrs: rec {
       version = "1.2.1";
       src = oldAttrs.src.override {
         inherit version;
