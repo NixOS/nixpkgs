@@ -4048,6 +4048,10 @@ in {
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
+  pysparse = callPackage ../development/python-modules/pysparse {
+    blas = pkgs.openblas;
+  };
+
   pyupdate = callPackage ../development/python-modules/pyupdate {};
 
   pyx = callPackage ../development/python-modules/pyx { };
