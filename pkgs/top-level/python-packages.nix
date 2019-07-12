@@ -722,6 +722,8 @@ in {
 
   pygmo = callPackage ../development/python-modules/pygmo { };
 
+  pygmsh = callPackage ../development/python-modules/pygmsh { };
+
   pygobject2 = callPackage ../development/python-modules/pygobject {
     inherit (pkgs) pkgconfig;
   };
