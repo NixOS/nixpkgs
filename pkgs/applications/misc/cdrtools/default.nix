@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-paths.patch ];
 
-  buildInputs =
-    stdenv.lib.optionals (!stdenv.isDarwin) [ acl libcap ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon IOKit ];
+  buildInputs = if stdenv.isDarwin then [ Carbon IOKit ] else [ acl libcap ];
 
   postPatch = ''
     sed "/\.mk3/d" -i libschily/Targets.man
