@@ -3448,6 +3448,8 @@ in
 
   grpcurl = callPackage ../tools/networking/grpcurl { };
 
+  grpcui = callPackage ../tools/networking/grpcui { };
+
   grub = pkgsi686Linux.callPackage ../tools/misc/grub ({
     stdenv = overrideCC stdenv buildPackages.pkgsi686Linux.gcc6;
   } // (config.grub or {}));
