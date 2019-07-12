@@ -4406,7 +4406,7 @@ in {
       version = "1.2.1";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "e085d1babcb419bbe58e2e805ac61924dac4ca45a07c9fa081144739e500aa3c";
+        sha256 = "0g5a03jkjiqlh6h9yz508p5c9ni43735m01fivjvn6dlpjxd31g0";
       };
     });
   in if pythonOlder "3.5" then scipy_1_2 else scipy_;
