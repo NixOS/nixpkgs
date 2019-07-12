@@ -270,6 +270,8 @@ in {
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
+  backports-datetime-fromisoformat = callPackage ../development/python-modules/backports-datetime-fromisoformat {};
+
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
 
   bap = callPackage ../development/python-modules/bap {
@@ -359,6 +361,8 @@ in {
   diff_cover = callPackage ../development/python-modules/diff_cover { };
 
   docrep = callPackage ../development/python-modules/docrep { };
+
+  docxtotxt = callPackage ../development/python-modules/docx2txt { };
 
   dominate = callPackage ../development/python-modules/dominate { };
 
@@ -937,6 +941,8 @@ in {
 
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
 
+  shub = callPackage ../development/python-modules/shub {};
+
   shellingham = callPackage ../development/python-modules/shellingham {};
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
@@ -1253,6 +1259,8 @@ in {
 
   betamax-serializers = callPackage ../development/python-modules/betamax-serializers { };
 
+  betterreads = callPackage ../development/python-modules/betterreads { };
+
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
   bidict = callPackage ../development/python-modules/bidict { };
@@ -1511,6 +1519,8 @@ in {
     callPackage ../development/python-modules/cherrypy { }
   else
     callPackage ../development/python-modules/cherrypy/17.nix { };
+
+  cfscrape = callPackage ../development/python-modules/cfscrape { };
 
   cfgv = callPackage ../development/python-modules/cfgv { };
 
@@ -1969,6 +1979,8 @@ in {
   elasticsearchdsl = self.elasticsearch-dsl;
 
   elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
+
+  enolib = callPackage ../development/python-modules/enolib { };
 
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
@@ -2441,6 +2453,8 @@ in {
 
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server {};
 
+  scrapy-crawlera = callPackage ../development/python-modules/scrapy-crawlera { };
+
   stem = callPackage ../development/python-modules/stem { };
 
   svg-path = callPackage ../development/python-modules/svg-path { };
@@ -2470,6 +2484,8 @@ in {
   pytun = callPackage ../development/python-modules/pytun { };
 
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
+
+  retype = callPackage ../development/python-modules/retype { };
 
   roman = callPackage ../development/python-modules/roman { };
 
@@ -3510,6 +3526,8 @@ in {
 
   pymysqlsa = callPackage ../development/python-modules/pymysqlsa { };
 
+  monkeytype = callPackage ../development/python-modules/monkeytype { };
+
   monosat = disabledIf (!isPy3k) (pkgs.monosat.python { inherit buildPythonPackage; inherit (self) cython; });
 
   monotonic = callPackage ../development/python-modules/monotonic { };
@@ -3845,6 +3863,8 @@ in {
   python3pika = callPackage ../development/python-modules/python3pika { };
 
   python-jenkins = callPackage ../development/python-modules/python-jenkins { };
+
+  python-datemath = callPackage ../development/python-modules/python-datemath { };
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
@@ -4221,6 +4241,8 @@ in {
   rasterio = callPackage ../development/python-modules/rasterio { };
 
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
+
+  rauth = callPackage ../development/python-modules/rauth {};
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
@@ -4703,6 +4725,8 @@ in {
 
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
 
+  rules = callPackage ../development/python-modules/rules { };
+
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
@@ -4712,6 +4736,8 @@ in {
   qpid-python = callPackage ../development/python-modules/qpid-python { };
 
   xattr = callPackage ../development/python-modules/xattr { };
+
+  scrapinghub = callPackage ../development/python-modules/scrapinghub { };
 
   scripttest = callPackage ../development/python-modules/scripttest { };
 
@@ -4732,6 +4758,8 @@ in {
   slowaes = callPackage ../development/python-modules/slowaes { };
 
   sqlite3dbm = callPackage ../development/python-modules/sqlite3dbm { };
+
+  sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 
   sqlobject = callPackage ../development/python-modules/sqlobject { };
 
