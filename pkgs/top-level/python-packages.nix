@@ -4420,6 +4420,8 @@ in {
 
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
+  pyamg = callPackage ../development/python-modules/pyamg { };
+
   pyaml = callPackage ../development/python-modules/pyaml { };
 
   pyyaml = callPackage ../development/python-modules/pyyaml { };
