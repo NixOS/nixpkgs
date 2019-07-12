@@ -2,15 +2,15 @@
 
 buildPythonApplication rec {
   pname = "minecraft-overviewer";
-  version = "0.13.90";
+  version = "0.14.40";
 
   propagatedBuildInputs = [ pillow numpy ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   src = fetchurl {
-    url = "https://overviewer.org/builds/src/131/overviewer-0.13.90.tar.gz";
-    sha256 = "0qlpliby2gypdhn4bfxwdphhjbvabvjy8smhpw24i4zcnqll97ya";
+    url = "https://overviewer.org/builds/src/42/overviewer-${version}.tar.gz";
+    sha256 = "0881sgr1c57jm9hhjzldbzksxmfvvzcl0isz80byyypg4x6rl22w";
   };
 
   patches = [ ./no-chmod.patch ];
