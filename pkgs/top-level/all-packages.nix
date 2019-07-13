@@ -19062,6 +19062,8 @@ in
 
   marp = callPackage ../applications/office/marp { };
 
+  magnetico = callPackage ../applications/networking/p2p/magnetico { };
+
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
