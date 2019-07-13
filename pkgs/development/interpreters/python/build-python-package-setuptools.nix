@@ -5,11 +5,9 @@
 }:
 
 {
-# passed to "python setup.py"
-  setupPyDistFlags ? []
 # passed to "python setup.py build_ext"
 # https://github.com/pypa/pip/issues/881
-,  setupPyBuildFlags ? []
+  setupPyBuildFlags ? []
 # Execute before shell hook
 , preShellHook ? ""
 # Execute after shell hook
@@ -21,16 +19,13 @@ let
   # pip does the same thing: https://github.com/pypa/pip/pull/3265
   setuppy = ./run_setup.py;
 
-  setupPyDistFlagsString = lib.concatStringsSep " " setupPyDistFlags;
-  setupPyBuildExtString = lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags));
-
 in attrs // {
   # we copy nix_run_setup over so it's executed relative to the root of the source
   # many project make that assumption
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
     cp ${setuppy} nix_run_setup
-    ${python.pythonForBuild.interpreter} nix_run_setup ${setupPyDistFlagsString} ${setupPyBuildExtString} bdist_wheel
+    ${python.pythonForBuild.interpreter} nix_run_setup ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
     runHook postBuild
   '';
 
