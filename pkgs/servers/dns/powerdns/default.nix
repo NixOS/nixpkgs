@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  enableParallelBuilding = true;
   doCheck = true;
 
   meta = with stdenv.lib; {
