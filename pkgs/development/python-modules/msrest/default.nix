@@ -18,12 +18,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.6.7";
+  version = "0.6.8";
   pname = "msrest";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07136g3j7zgcvkxki4v6q1p2dm1nzzc28181s8dwic0y4ml8qlq5";
+    sha256 = "0yd43fnmfxkvk3idkyn67ziwjgkwkn261kicr3szjibpqjqcpsf9";
   };
 
   propagatedBuildInputs = [

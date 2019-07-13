@@ -998,7 +998,6 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
      </listitem>
     </varlistentry>
     <varlistentry>
-    <varlistentry>
      <term>
       <varname>dontMakeSourcesWritable</varname>
      </term>

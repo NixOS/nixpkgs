@@ -516,7 +516,7 @@
       tss = 176;
       #memcached = 177; # unused, removed 2018-01-03
       #ntp = 179; # unused
-      #zabbix = 180; # unused
+      zabbix = 180;
       #redis = 181; # unused, removed 2018-01-03
       #unifi = 183; # unused
       #uptimed = 184; # unused
