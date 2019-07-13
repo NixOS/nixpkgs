@@ -3827,6 +3827,8 @@ in {
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
 
+  kmapper = callPackage ../development/python-modules/kmapper { };
+
   kmsxx = (callPackage ../development/libraries/kmsxx {
     inherit (pkgs.kmsxx) stdenv;
     inherit (pkgs) pkgconfig;
