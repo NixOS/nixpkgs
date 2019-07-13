@@ -959,6 +959,8 @@ in {
 
   slackclient = callPackage ../development/python-modules/slackclient { };
 
+  slicedimage = callPackage ../development/python-modules/slicedimage { };
+
   slicerator = callPackage ../development/python-modules/slicerator { };
 
   slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
