@@ -4314,6 +4314,8 @@ in {
     python2 = python;
   }));
 
+  ripser = callPackage ../development/python-modules/ripser { };
+
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
   pysolr = callPackage ../development/python-modules/pysolr { };
