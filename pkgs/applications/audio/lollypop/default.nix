@@ -78,6 +78,15 @@ python3.pkgs.buildPythonApplication rec  {
     patchPythonScript "$out/libexec/lollypop-sp"
   '';
 
+  # Produce only one wrapper using wrap-python passing
+  # gappsWrapperArgs to wrap-python additional wrapper
+  # argument
+  dontWrapGApps = true;
+
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+  ];
+
   meta = with lib; {
     description = "A modern music player for GNOME";
     homepage = https://wiki.gnome.org/Apps/Lollypop;
