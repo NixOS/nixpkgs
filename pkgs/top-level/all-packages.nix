@@ -8890,15 +8890,11 @@ in
   buildozer = bazel-buildtools;
   unused_deps = bazel-buildtools;
 
-  bazel-deps = callPackage ../development/tools/build-managers/bazel/bazel-deps {
-    buildBazelPackage = buildBazelPackage.override { enableNixHacks = false; };
-  };
+  bazel-deps = callPackage ../development/tools/build-managers/bazel/bazel-deps { };
 
   bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
 
-  bazel-watcher = callPackage ../development/tools/bazel-watcher {
-    buildBazelPackage = buildBazelPackage.override { enableNixHacks = false; };
-  };
+  bazel-watcher = callPackage ../development/tools/bazel-watcher { };
 
   bazelisk = callPackage ../development/tools/bazelisk { };
 
