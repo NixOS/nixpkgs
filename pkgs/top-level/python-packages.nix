@@ -2461,6 +2461,8 @@ in {
 
   regex = callPackage ../development/python-modules/regex { };
 
+  regional = callPackage ../development/python-modules/regional { };
+
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
 
   pywatchman = callPackage ../development/python-modules/pywatchman { };
