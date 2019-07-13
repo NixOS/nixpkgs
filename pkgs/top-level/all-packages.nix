@@ -22335,10 +22335,10 @@ in
   solarc-gtk-theme = callPackage ../misc/themes/solarc { };
 
   xfce = xfce4-12;
-  xfceUnstable = xfce4-13;
+  xfceUnstable = xfce4-14;
 
   xfce4-12 = recurseIntoAttrs (callPackage ../desktops/xfce { });
-  xfce4-13 = recurseIntoAttrs (callPackage ../desktops/xfce4-13 { });
+  xfce4-14 = recurseIntoAttrs (callPackage ../desktops/xfce4-14 { });
 
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
 
