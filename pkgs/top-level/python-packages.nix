@@ -4463,6 +4463,8 @@ in {
 
   should-dsl = callPackage ../development/python-modules/should-dsl { };
 
+  showit = callPackage ../development/python-modules/showit { };
+
   simplejson = callPackage ../development/python-modules/simplejson { };
 
   simplekml = callPackage ../development/python-modules/simplekml { };
