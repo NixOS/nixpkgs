@@ -177,6 +177,8 @@ in {
 
   asciimatics = callPackage ../development/python-modules/asciimatics { };
 
+  asciitree = callPackage ../development/python-modules/asciitree { };
+
   ase = callPackage ../development/python-modules/ase { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
