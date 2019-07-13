@@ -4605,6 +4605,8 @@ in {
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
+  umap-learn = callPackage ../development/python-modules/umap-learn { };
+
   umemcache = callPackage ../development/python-modules/umemcache {};
 
   uritools = callPackage ../development/python-modules/uritools { };
