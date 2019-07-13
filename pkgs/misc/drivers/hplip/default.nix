@@ -215,7 +215,7 @@ pythonPackages.buildPythonApplication {
     # Needs a lot of patching but might save someone a bit of confusion:
     substituteInPlace $out/etc/udev/rules.d/56-hpmud.rules \
       --replace {,${bash}}/bin/sh \
-      --replace {/usr,${coreutils}}/bin/nohup \
+      --replace /usr/bin/nohup "" \
       --replace {,${utillinux}/bin/}logger \
       --replace {/usr,$out}/bin
   '';
