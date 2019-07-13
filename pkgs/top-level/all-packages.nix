@@ -6993,6 +6993,8 @@ in
 
   yarn = callPackage ../development/tools/yarn  { };
 
+  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { };
+
   yasr = callPackage ../applications/audio/yasr { };
 
   yank = callPackage ../tools/misc/yank { };
