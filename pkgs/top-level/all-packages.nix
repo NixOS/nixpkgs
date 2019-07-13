@@ -16811,6 +16811,8 @@ in
 
   vegur = callPackage ../data/fonts/vegur { };
 
+  victor-mono = callPackage ../data/fonts/victor-mono { };
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
