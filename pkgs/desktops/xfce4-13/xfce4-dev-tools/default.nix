@@ -4,9 +4,10 @@
 mkXfceDerivation rec {
   category = "xfce";
   pname = "xfce4-dev-tools";
-  version = "4.12.0";
+  version = "4.14pre2";
+  rev = "xfce-4.14pre2";
 
-  sha256 = "0bbmlmw2dpm10q2wv3vy592i0vx7b5h1qnd35j0fdzxqb8x2hbw2";
+  sha256 = "11g5byxjihgkn0wi7gp8627d04wr59k117lpv53vdbsvv2qgksmg";
 
   nativeBuildInputs = [ autoreconfHook ];
 

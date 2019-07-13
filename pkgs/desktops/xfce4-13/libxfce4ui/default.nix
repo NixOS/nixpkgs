@@ -4,10 +4,10 @@
 mkXfceDerivation rec {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.14pre1";
-  rev = "xfce-4.14pre1";
+  version = "4.14pre2";
+  rev = "xfce-4.14pre2";
 
-  sha256 = "0z4sadqwp71b3qmxlbms26d8vnxd9cks84mr2f1qaiww6rp7v69y";
+  sha256 = "0kvqzf91ygxxkcy4drjminby4c3c42c54a3if8jwx0zmgbml7l8q";
 
   buildInputs =  [ gobject-introspection gtk2 gtk3 libstartup_notification xfconf ];
   propagatedBuildInputs = [ libxfce4util libICE libSM ];
