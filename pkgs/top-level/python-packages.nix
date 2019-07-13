@@ -5613,6 +5613,8 @@ in {
 
   node-semver = callPackage ../development/python-modules/node-semver { };
 
+  diskcache = callPackage ../development/python-modules/diskcache { };
+
   distro = callPackage ../development/python-modules/distro { };
 
   bz2file =  callPackage ../development/python-modules/bz2file { };
