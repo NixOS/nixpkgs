@@ -4703,6 +4703,8 @@ in {
 
   persistent = callPackage ../development/python-modules/persistent {};
 
+  persim = callPackage ../development/python-modules/persim { };
+
   xdot = callPackage ../development/python-modules/xdot { };
 
   zetup = callPackage ../development/python-modules/zetup { };
