@@ -2519,6 +2519,8 @@ in {
 
   zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
 
+  validators = callPackage ../development/python-modules/validators { };
+
   validictory = callPackage ../development/python-modules/validictory { };
 
   validate-email = callPackage ../development/python-modules/validate-email { };
