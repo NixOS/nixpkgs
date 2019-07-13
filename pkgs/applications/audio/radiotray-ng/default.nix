@@ -39,14 +39,14 @@ let
   pythonInputs = with python2.pkgs; [ python2 lxml ];
 in
 stdenv.mkDerivation rec {
-  name = "radiotray-ng-${version}";
-  version = "0.2.5";
+  pname = "radiotray-ng";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
     rev = "v${version}";
-    sha256 = "1crvpn1mgrv7bd2k683mpgs59785mkrjvmp1f14iyq4qrr0f9zzi";
+    sha256 = "0khrfxjas2ldh0kksq7l811srqy16ahjxchvz0hhykx5hykymxlb";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
@@ -64,9 +64,10 @@ stdenv.mkDerivation rec {
   patches = [ ./no-dl-googletest.patch ];
 
   postPatch = ''
-    for x in debian/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
+    for x in package/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
       substituteInPlace $x --replace /usr $out
     done
+    substituteInPlace package/CMakeLists.txt --replace /etc/xdg/autostart $out/etc/xdg/autostart
 
     # We don't find the radiotray-ng-notification icon otherwise
     substituteInPlace data/radiotray-ng.desktop \

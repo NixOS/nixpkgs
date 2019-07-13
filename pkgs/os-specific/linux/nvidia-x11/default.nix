@@ -22,10 +22,10 @@ rec {
   beta = stable;
 
   stable_430 = generic {
-    version = "430.26";
-    sha256_64bit = "1rnfxl4dxa3jjidfdvfjmg1a8nc787ss15cakrp2wwrn8jlr9av6";
-    settingsSha256 = "0rjsj697s9jfls7iz1hs7aqp36ihf3l82yz1x1w9wdvlw94a3nym";
-    persistencedSha256 = "1n554i4g37hs49bb631x692ygfncn7a5hzb6mh9kx7hmv69yzazh";
+    version = "430.34";
+    sha256_64bit = "0c3x25gilibbgazvp20d5sfmmgcf0gfqf024nzzqryxg4m05h39b";
+    settingsSha256 = "1xpf9gbpq5xynxm6f401ab09aa243h1sk2vcxvzjwqgcil36zzad";
+    persistencedSha256 = "00dd0m87nwqfv9i23bvbqgcz10x9mvfxg9249nvhp4y3ha65rms6";
   };
 
   # Last one supporting x86

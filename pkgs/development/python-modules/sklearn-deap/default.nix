@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, numpy, scipy, deap, scikitlearn, python }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, numpy, scipy, deap, scikitlearn, python, isPy3k }:
 
 buildPythonPackage rec {
   pname = "sklearn-deap";
@@ -23,6 +23,7 @@ buildPythonPackage rec {
     homepage = https://github.com/rsteca/sklearn-deap;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ psyanticy ];
+    broken = isPy3k; # https://github.com/rsteca/sklearn-deap/issues/65
   };
 }
 

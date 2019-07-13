@@ -5,18 +5,14 @@
 
 stdenv.mkDerivation rec {
   name = "swayidle-${version}";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
     rev = version;
-    sha256 = "1fpacy9jwfi3vd94sgsy8qgx5092rm3vsplj2zjbmxkak1gjn56n";
+    sha256 = "05qi96j58xqxjiighay1d39rfanxcpn6vlynj23mb5dymxvlaq9n";
   };
-
-  postPatch = ''
-    sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
-  '';
 
   nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
   buildInputs = [ wayland wayland-protocols systemd ];
