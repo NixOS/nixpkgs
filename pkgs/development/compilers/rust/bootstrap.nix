@@ -3,16 +3,16 @@
 let
   # Note: the version MUST be one version prior to the version we're
   # building
-  version = "1.34.2";
+  version = "1.35.0";
 
   # fetch hashes by running `print-hashes.sh 1.34.2`
   hashes = {
-    i686-unknown-linux-gnu = "926bafd09eb90ba7d5a0195fcffb8f33dd57e515af4f8987a143459f6b1d3f04";
-    x86_64-unknown-linux-gnu = "2bf6622d980a52832bae141304e96f317c8a1ccd2dfd69a134a14033e6e43c0f";
-    armv7-unknown-linux-gnueabihf = "70d1057fcc133dc3e44377060a00d2f9d3a134e2670963d3f1d93f3dbfa0548e";
-    aarch64-unknown-linux-gnu = "15fc6b7ec121df9d4e42483dd12c677203680bec8c69b6f4f62e5a35a07341a8";
-    i686-apple-darwin = "b9fc44cbb06050975664f1033d1337bb38d5ea73b503a5d3af5409033397be5c";
-    x86_64-apple-darwin = "6fdd4bf7fe26dded0cd57b41ab5f0500a5a99b7bc770523a425e9e34f63d0fd8";
+    i686-unknown-linux-gnu = "05337776b3645e4b8c8c7ced0bcd1615cf9ad1b9c8b3d0f333620e5401e31aee";
+    x86_64-unknown-linux-gnu = "cf600e2273644d8629ed57559c70ca8db4023fd0156346facca9ab3ad3e8f86c";
+    armv7-unknown-linux-gnueabihf = "8f0f32d8ddc6fb7bcb8f50ec5e694078799d93facbf135eec5bd9a8c94d0c11e";
+    aarch64-unknown-linux-gnu = "31e6da56e67838fd2874211ae896a433badf67c13a7b68481f1d5f7dedcc5952";
+    i686-apple-darwin = "6a45ae8db094c5f6c57c5594a00f1a92b08c444a7347a657b4033186d4f08b19";
+    x86_64-apple-darwin = "ac14b1c7dc330dcb53d8641d74ebf9b32aa8b03b9d650bcb9258030d8b10dbd6";
   };
 
   platform =
