@@ -1,41 +1,15 @@
-{ stdenv, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
-, git
-, buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast
-, which, binutils, glibcLocales
-, python, jemalloc, openmpi
+{ stdenv, pkgs, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+# Python deps
+, buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast, python
+# Python libraries
 , numpy, tensorflow-tensorboard, backports_weakref, mock, enum34, absl-py
-, future
-, keras-preprocessing
-, keras-applications
-, astor
-, gast
-, google-pasta
-, termcolor
-, cython
-, flatbuffers
-, giflib
-, libjpeg
-, grpc
-, grpcio
-, hwloc
-, icu
-, jsoncpp
-, lmdb
-, nasm
-, sqlite
-, pcre
-, libpng
-, six
-, snappy
-, swig
-, wrapt
-, zlib
-, protobuf
-, protobuf_cc
-, curl
-, tensorflow-estimator
-, setuptools
-, wheel
+, future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
+, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
+# Common deps
+, git, swig, which, binutils, glibcLocales, cython
+# Common libraries
+, jemalloc, openmpi, astor, gast, grpc, sqlite, openssl, jsoncpp, re2
+, curl, snappy, flatbuffers, icu, double-conversion, libpng, libjpeg, giflib
 , cudaSupport ? false, nvidia_x11 ? null, cudatoolkit ? null, cudnn ? null, nccl ? null
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
@@ -57,48 +31,51 @@ let
   withTensorboard = pythonOlder "3.6";
 
   cudatoolkit_joined = symlinkJoin {
-    name = "${cudatoolkit.name}-unsplit";
+    name = "${cudatoolkit.name}-merged";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
 
-  bazel_cuda_toolkit = symlinkJoin {
-    name = "bazel-gcc-toolkit";
+  cudatoolkit_cc_joined = symlinkJoin {
+    name = "${cudatoolkit.cc.name}-merged";
     paths = [
       cudatoolkit.cc
-      cudatoolkit.out
-      cudatoolkit.lib
       binutils.bintools # for ar, dwp, nm, objcopy, objdump, strip
+    ];
+  };
+
+  # Needed for _some_ system libraries, grep INCLUDEDIR.
+  includes_joined = symlinkJoin {
+    name = "tensorflow-deps-merged";
+    paths = [
+      pkgs.protobuf
+      jsoncpp
     ];
   };
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "1.14";
-  variant = if cudaSupport then "_gpu" else "";
+  version = "1.14.0";
+  variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
-  bazel-wheel = buildBazelPackage rec {
-    # indicate which configuration of the wheel is being built
-    name = let
-      python_tag = with lib.versions; "cp${major python.version}${minor python.version}"; # cp37
-      arch_platform = lib.splitString "-" stdenv.hostPlatform.system;
-      platform = lib.last arch_platform; # "linux"
-      arch = lib.head arch_platform; # "x86_64"
-    in
-      # https://www.python.org/dev/peps/pep-0427/#file-name-convention
-      # tensorflow_gpu-1.14.0-cp27-none-linux_x86_64.whl
-      "${pname}-${version}-${python_tag}-none-${platform}_${arch}.whl";
+  # TODO: remove after there's support for setupPyDistFlags
+  setuppy = ../../../development/interpreters/python/run_setup.py;
+
+  bazel-build = buildBazelPackage rec {
+    name = "${pname}-${version}";
 
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
-      rev = "r${version}";
-      sha256 = "071rndqh3xy4y5idlykqv656lggp25vy4qx1divz4id3im1zlr13";
+      rev = "v${version}";
+      sha256 = "06jvwlsm14b8rqwd8q8796r0vmn0wk64s4ps2zg0sapkmp9vvcmi";
     };
 
     patches = [
       # Work around https://github.com/tensorflow/tensorflow/issues/24752
       ./no-saved-proto.patch
+      # Fixes for NixOS jsoncpp
+      ./system-jsoncpp.patch
 
       # https://github.com/tensorflow/tensorflow/pull/29673
       (fetchpatch {
@@ -118,7 +95,9 @@ let
     # On update, it can be useful to steal the changes from gentoo
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
 
-    nativeBuildInputs = [ swig which ];
+    nativeBuildInputs = [
+      swig which cython
+    ];
 
     buildInputs = [
       python
@@ -130,9 +109,30 @@ let
       # python deps needed during wheel build time
       numpy
       keras-preprocessing
+      protobuf
+      wrapt
+      gast
+      astor
+      absl-py
+      termcolor
+      keras-applications
 
       # libs taken from system through the TF_SYS_LIBS mechanism
-      absl-py
+      grpc
+      sqlite
+      openssl
+      jsoncpp
+      pkgs.protobuf
+      curl
+      snappy
+      flatbuffers
+      icu
+      double-conversion
+      libpng
+      libjpeg
+      giflib
+      re2
+      pkgs.lmdb
 
       # for building the wheel
       setuptools
@@ -146,22 +146,26 @@ let
       nvidia_x11
     ];
 
+
+    # arbitrarily set to the current latest bazel version, overly careful
+    TF_IGNORE_MAX_BAZEL_VERSION = true;
+
     # Take as many libraries from the system as possible. Keep in sync with
     # list of valid syslibs in
-    # https://github.com/perfinion/tensorflow/blob/master/third_party/systemlibs/syslibs_configure.bzl
-    SYSLIBS= [
+    # https://github.com/tensorflow/tensorflow/blob/master/third_party/systemlibs/syslibs_configure.bzl
+    TF_SYSTEM_LIBS = lib.concatStringsSep "," [
       "absl_py"
       "astor_archive"
       "boringssl"
-      "com_github_googleapis_googleapis"
-      "com_github_googlecloudplatform_google_cloud_cpp"
+      # Not packaged in nixpkgs
+      # "com_github_googleapis_googleapis"
+      # "com_github_googlecloudplatform_google_cloud_cpp"
       "com_google_protobuf"
       "com_google_protobuf_cc"
       "com_googlesource_code_re2"
       "curl"
       "cython"
       "double_conversion"
-      "enum34_archive"
       "flatbuffers"
       "gast_archive"
       "gif_archive"
@@ -174,7 +178,7 @@ let
       "lmdb"
       "nasm"
       # "nsync" # not packaged in nixpkgs
-      "sqlite"
+      "org_sqlite"
       "pasta"
       "pcre"
       "png_archive"
@@ -187,6 +191,34 @@ let
       "zlib_archive"
     ];
 
+    INCLUDEDIR = "${includes_joined}/include";
+
+    PYTHON_BIN_PATH = python.interpreter;
+ 
+    TF_NEED_GCP = true;
+    TF_NEED_HDFS = true;
+    TF_ENABLE_XLA = tfFeature xlaSupport;
+
+    CC_OPT_FLAGS = " ";
+
+    # https://github.com/tensorflow/tensorflow/issues/14454
+    TF_NEED_MPI = tfFeature cudaSupport;
+
+    TF_NEED_CUDA = tfFeature cudaSupport;
+    TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
+    GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
+    TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
+
+    postPatch = ''
+      # https://github.com/tensorflow/tensorflow/issues/20919
+      sed -i '/androidndk/d' tensorflow/lite/kernels/internal/BUILD
+
+      # Tensorboard pulls in a bunch of dependencies, some of which may
+      # include security vulnerabilities. So we make it optional.
+      # https://github.com/tensorflow/tensorflow/issues/20280#issuecomment-400230560
+      sed -i '/tensorboard >=/d' tensorflow/tools/pip_package/setup.py
+    '';
+
     preConfigure = ''
       patchShebangs configure
 
@@ -196,52 +228,21 @@ let
       chmod +x dummy-ldconfig/ldconfig
       export PATH="$PWD/dummy-ldconfig:$PATH"
 
-      # arbitrarily set to the current latest bazel version, overly careful
-      export TF_IGNORE_MAX_BAZEL_VERSION=1
-
-      # don't rebuild the world
-      export TF_SYSTEM_LIBS=${lib.concatStringsSep " " SYSLIBS}
-
-      export PYTHON_BIN_PATH="${python.interpreter}"
       export PYTHON_LIB_PATH="$NIX_BUILD_TOP/site-packages"
-      export TF_NEED_GCP=1
-      export TF_NEED_HDFS=1
-      export TF_ENABLE_XLA=${tfFeature xlaSupport}
-      export CC_OPT_FLAGS=" "
-      # https://github.com/tensorflow/tensorflow/issues/14454
-      export TF_NEED_MPI=${tfFeature cudaSupport}
-      export TF_NEED_CUDA=${tfFeature cudaSupport}
-      ${lib.optionalString cudaSupport ''
-        export TF_CUDA_PATHS="${cudatoolkit_joined},${cudnn},${nccl}"
-        export TF_CUDA_VERSION=${cudatoolkit.majorVersion}
-        export TF_CUDNN_VERSION=${cudnn.majorVersion}
-        export GCC_HOST_COMPILER_PATH=${bazel_cuda_toolkit}/bin/gcc
-        export GCC_HOST_COMPILER_PREFIX="${bazel_cuda_toolkit}/bin"
-        export TF_CUDA_COMPUTE_CAPABILITIES=${lib.concatStringsSep "," cudaCapabilities}
-      ''}
-
-      # https://github.com/tensorflow/tensorflow/issues/20919
-      sed -i '/androidndk/d' tensorflow/lite/kernels/internal/BUILD
-
       mkdir -p "$PYTHON_LIB_PATH"
     '';
 
-    # ar, cpp, gcov, strip, gcc, compat-ld, ld, objdump, dwp, nm, objcopy
     configurePhase = ''
       runHook preConfigure
-      # no flags (options provided by previously set environment variables)
-      export AR="${binutils.bintools}/bin/ar"
-      export BAZEL_TOOLS_OVERRIDE="ar=${binutils.bintools}/bin/ar"
-      # crosstool used with cuda
       ./configure
-
       runHook postConfigure
     '';
 
-    # FIXME
-    NIX_LDFLAGS = lib.optionals cudaSupport [ "-lcublas" "-lcudnn" "-lcuda" "-lcudart" ];
+    # FIXME: Tensorflow uses dlopen() for CUDA libraries.
+    # No idea why gpr isn't linked properly; perhaps Tensorflow expects a static library?
+    NIX_LDFLAGS = [ "-lgpr" ] ++ lib.optionals cudaSupport [ "-lcudart" "-lcublas" "-lcufft" "-lcurand" "-lcusolver" "-lcusparse" "-lcudnn" ];
 
-    hardeningDisable = [ "all" ];
+    hardeningDisable = [ "format" ];
 
     bazelFlags = [
       # temporary fixes to make the build work with bazel 0.27
@@ -250,7 +251,7 @@ let
       ++ lib.optional avx2Support "--copt=-mavx2"
       ++ lib.optional fmaSupport "--copt=-mfma";
 
-    bazelTarget = "//tensorflow/tools/pip_package:build_pip_package";
+    bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
 
     fetchAttrs = {
       preInstall = ''
@@ -259,46 +260,36 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "0q1pmw7fzn6l554ap576r48m0zgwb7n1ljhyy1p36708z94scdh4"
+        "0gmwwcld8hm1nfxmx2w2gqxjxq5b5ln7vbxn0x63x9yy7avs3dkp"
       else
-        "14n26h2r4w7wd5sddy4w0s51s2qcwf276n3hvv2505iysa8wqlc3";
+        "1d67h0n461cyfimzlsj6bv9p95iv9jhglr0izdc6y0n6w09z8pw0";
     };
 
     buildAttrs = {
+      outputs = [ "out" "python" ];
+
       preBuild = ''
         patchShebangs .
-
-        # beautiful bash to iterate over files containing a string
-        # https://github.com/bazelbuild/bazel/issues/5915#issuecomment-505100422
-        # .. to make sure the output directory is covered
-        grep -lrZ '/usr/bin/ar\b' .. | while IFS="" read -r -d "" file; do
-            # patch /usr/bin/ar to the proper location
-            echo "File is $file"
-            sed -i \
-              -e 's,/usr/bin/ar\b,${binutils.bintools}/bin/ar,g' \
-              "$file"
-        done
-
-
-        # Tensorboard pulls in a bunch of dependencies, some of which may
-        # include security vulnerabilities. So we make it optional.
-        # https://github.com/tensorflow/tensorflow/issues/20280#issuecomment-400230560
-        sed -i '/tensorboard >=/d' tensorflow/tools/pip_package/setup.py
       '';
 
-      # Could alternatively use --src instead of --dst to output the sources
-      # instead of a whee. Generating a wheel makes it easier to unify handling
-      # of source and binary build though.
       installPhase = ''
-        # work around timestamp issues
-        # https://github.com/NixOS/nixpkgs/issues/270#issuecomment-467583872
-        export SOURCE_DATE_EPOCH=315532800
+        mkdir -p "$out"
+        tar -xf bazel-bin/tensorflow/tools/lib_package/libtensorflow.tar.gz -C "$out"
+        # Write pkgconfig file.
+        mkdir "$out/lib/pkgconfig"
+        cat > "$out/lib/pkgconfig/tensorflow.pc" << EOF
+        Name: TensorFlow
+        Version: ${version}
+        Description: Library for computation using data flow graphs for scalable machine learning
+        Requires:
+        Libs: -L$out/lib -ltensorflow
+        Cflags: -I$out/include/tensorflow
+        EOF
 
-        # bulid the wheel, then move it to $out (building directly to $out
-        # would actually put it into a *directory* called $out, but we want the
-        # file itself in $out)
-        bazel-bin/tensorflow/tools/pip_package/build_pip_package --dst $PWD/dist
-        mv dist/*.whl "$out"
+        # build the source code, then copy it to $python (build_pip_package
+        # actually builds a symlink farm so we must dereference them).
+        bazel-bin/tensorflow/tools/pip_package/build_pip_package --src "$PWD/dist"
+        cp -Lr "$PWD/dist" "$python"
       '';
     };
   };
@@ -306,9 +297,7 @@ let
 in buildPythonPackage rec {
   inherit version pname;
 
-  src = bazel-wheel;
-
-  format = "wheel";
+  src = bazel-build.python;
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
   # and the propagated input tensorflow-tensorboard, which causes environment collisions.
@@ -316,6 +305,14 @@ in buildPythonPackage rec {
   # https://github.com/tensorflow/tensorflow/blob/v1.7.1/tensorflow/tools/pip_package/setup.py#L79
   postInstall = ''
     rm $out/bin/tensorboard
+  '';
+
+  # TODO: remove after there's support for setupPyDistFlags
+  buildPhase = ''
+    runHook preBuild
+    cp ${setuppy} nix_run_setup
+    ${python.interpreter} nix_run_setup --project_name ${pname} bdist_wheel
+    runHook postBuild
   '';
 
   # tensorflow/tools/pip_package/setup.py
@@ -348,6 +345,8 @@ in buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} -c "import tensorflow"
   '';
+
+  passthru.libtensorflow = bazel-build.out;
 
   meta = with stdenv.lib; {
     description = "Computation using data flow graphs for scalable machine learning";
