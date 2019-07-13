@@ -2499,6 +2499,8 @@ in {
 
   statsd = callPackage ../development/python-modules/statsd { };
 
+  starfish = callPackage ../development/python-modules/starfish { };
+
   multi_key_dict = callPackage ../development/python-modules/multi_key_dict { };
 
   random2 = callPackage ../development/python-modules/random2 { };
