@@ -4435,6 +4435,8 @@ in {
 
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
+  scikit-tda = callPackage ../development/python-modules/scikit-tda { };
+
   scp = callPackage ../development/python-modules/scp {};
 
   seaborn = callPackage ../development/python-modules/seaborn { };
