@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     ./fix_pkgconfig_includedir.patch
   ];
 
+  mesonAutoFeatures = "disabled";
+
   postPatch = ''
     sed -i -r -e 's/p(bad|good) = .*/p\1 = pbase/' tests/check/meson.build
   '';
