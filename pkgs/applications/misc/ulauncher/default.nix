@@ -57,7 +57,7 @@ python27Packages.buildPythonApplication rec  {
 
   checkInputs = with python27Packages; [
     mock
-    pytest_3
+    pytest
     pytest-mock
     pytestpep8
     xvfb_run
