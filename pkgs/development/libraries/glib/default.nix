@@ -91,6 +91,12 @@ stdenv.mkDerivation rec {
         name = "CVE-2019-12450.patch";
         sha256 = "03ris8lllbb7i18qvbpqaf7xdwfz1dkskx8mb533dmwlp2ll69hg";
       })
+      # https://gitlab.gnome.org/GNOME/glib/issues/1658
+      (fetchpatch {
+        name = "CVE-2019-13012.patch";
+        url = "https://gitlab.gnome.org/GNOME/glib/commit/5e4da714f00f6bfb2ccd6d73d61329c6f3a08429.patch";
+        sha256 = "0ykfx9i1ipz06n7hvz27qw0l9hy9jslg5gqqxyfiivy81q4p7lnl";
+      })
     ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
