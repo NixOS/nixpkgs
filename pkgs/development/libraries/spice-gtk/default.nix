@@ -87,10 +87,13 @@ stdenv.mkDerivation rec {
     vala
   ];
 
+  propagatedBuildInputs = [
+    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+  ];
+
   buildInputs = [
     cyrus_sasl
     epoxy
-    gst_all_1.gst-plugins-base
     gtk3
     json-glib
     libcacard
