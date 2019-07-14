@@ -13,6 +13,7 @@
 , withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
+, libclc
 }:
 
 /** Packaging design:
@@ -56,7 +57,7 @@ stdenv.mkDerivation {
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
-    ./opencl-install-dir.patch
+    ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
   ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [
@@ -132,12 +133,17 @@ stdenv.mkDerivation {
     "-Dosmesa=${if enableOSMesa then "gallium" else "none"}" # used by wine
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
+    "-Dosmesa=gallium" # used by wine
+    "-Dgallium-nine=true" # Direct3D in Wine
+    "-Dgallium-opencl=icd"
+    "-Dopencl-spirv=false"
+    "-Dclang-libdir=${llvmPackages.clang-unwrapped}/lib"
   ];
 
   buildInputs = with xorg; [
     expat llvmPackages.llvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
-    libffi libvdpau libelf libXvMC
+    libffi libvdpau libelf libXvMC libclc llvmPackages.clang llvmPackages.clang-unwrapped
     libpthreadstubs openssl /*or another sha1 provider*/
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
@@ -176,8 +182,21 @@ stdenv.mkDerivation {
 
     if [ -n "$(shopt -s nullglob; echo "$out"/lib/lib*_mesa*)" ]; then
       # Move other drivers to a separate output
-      mv $out/lib/lib*_mesa* $drivers/lib
+      mv -t $drivers/lib \
+        $out/lib/lib*_mesa*
     fi
+
+    if [ -n "$(shopt -s nullglob; echo "$out"/lib/libMesaOpenCL*)" ]; then
+      # Move OpenCL stuff
+      mv -t "$drivers/lib/"     \
+        $out/lib/gallium-pipe   \
+        $out/lib/libMesaOpenCL*
+    fi
+
+    # We construct our own .icd file that contains an absolute path.
+    rm -rf $out/etc/OpenCL
+    mkdir -p $drivers/etc/OpenCL/vendors/
+    echo $drivers/lib/libMesaOpenCL.so > $drivers/etc/OpenCL/vendors/mesa.icd
 
     # Update search path used by glvnd
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
@@ -221,7 +240,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-fno-common";
+  NIX_CFLAGS_COMPILE =
+    optionals stdenv.isDarwin ["-fno-common"]
+    ++ [ "-UPIPE_SEARCH_DIR"
+         "-DPIPE_SEARCH_DIR=\"${placeholder "drivers"}/lib/gallium-pipe\"" ];
 
   passthru = {
     inherit libdrm;
