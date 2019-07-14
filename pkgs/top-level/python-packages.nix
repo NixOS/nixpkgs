@@ -856,6 +856,8 @@ in {
 
   pygame = callPackage ../development/python-modules/pygame { };
 
+  pygbm = callPackage ../development/python-modules/pygbm { };
+
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
 
   pygdbmi = callPackage ../development/python-modules/pygdbmi { };
