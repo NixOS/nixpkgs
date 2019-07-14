@@ -11,10 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "0safw5prpa63mqcyfw3gr3a535w4c9hg5ayw5pkppiwil7n3pyxs";
   };
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "1pzm26794nwdbsvjnczpfchxiqa1n1zhp517g6g39wfm1nfszz83";
-
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
   patchPhase = ''
