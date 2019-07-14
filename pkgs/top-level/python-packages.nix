@@ -348,6 +348,8 @@ in {
 
   datasette = callPackage ../development/python-modules/datasette { };
 
+  datashader = callPackage ../development/python-modules/datashader { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
