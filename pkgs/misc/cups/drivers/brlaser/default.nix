@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
            Brother DCP-7065DN
            Brother HL-L2300D
            Brother MFC-7360N
+           Brother MFC-7440N (select Brother MFC-7360N in CUPS)
       '';
     homepage = https://github.com/pdewacht/brlaser;
     license = licenses.gpl2;
