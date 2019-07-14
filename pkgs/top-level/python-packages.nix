@@ -466,6 +466,8 @@ in {
 
   cliff = callPackage ../development/python-modules/cliff { };
 
+  clifford = callPackage ../development/python-modules/clifford { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   cozy = callPackage ../development/python-modules/cozy { };
