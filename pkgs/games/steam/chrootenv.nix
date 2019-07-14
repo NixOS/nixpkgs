@@ -83,6 +83,17 @@ in buildFHSUserEnv rec {
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
+    ## screeps dependencies
+    gnome3.gtk
+    dbus
+    zlib
+    glib
+    atk
+    cairo
+    freetype
+    gdk_pixbuf
+    pango
+    fontconfig
   ] ++ (if (!nativeOnly) then [
     (steamPackages.steam-runtime-wrapped.override {
       inherit runtimeOnly;
