@@ -311,6 +311,15 @@ let
             '';
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
+
+        { object = pkgs.writeText "nixos.conf"
+	  ''
+            ${flip concatMapStrings config.boot.initrd.blacklistedKernelModules (name: '' blacklist ${name} '')}
+            ${config.boot.initrd.extraModprobeConfig}
+          '';
+          symlink = "/etc/modprobe.d/nixos.conf";
+        }
+
         { object = pkgs.kmod-debian-aliases;
           symlink = "/etc/modprobe.d/debian.conf";
         }
@@ -387,6 +396,32 @@ in
       description = ''
         Other initrd files to prepend to the final initrd we are building.
       '';
+    };
+
+    boot.initrd.blacklistedKernelModules = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "cirrusfb" "i2c_piix4" ];
+      description = ''
+        List of names of kernel modules that should not be loaded
+        automatically by the hardware probing code in stage 1.
+      '';
+    };
+
+    boot.initrd.extraModprobeConfig = mkOption {
+      default = "";
+      example =
+        ''
+          options parport_pc io=0x378 irq=7 dma=1
+        '';
+      description = ''
+        Any additional configuration to be appended to the generated
+        <filename>modprobe.conf</filename> in stage 1.  This is
+        typically used to specify module options.  See
+        <citerefentry><refentrytitle>modprobe.conf</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+      type = types.lines;
     };
 
     boot.initrd.checkJournalingFS = mkOption {
