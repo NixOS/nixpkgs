@@ -5004,6 +5004,8 @@ in {
 
   xlib = callPackage ../development/python-modules/xlib { };
 
+  yappi = callPackage ../development/python-modules/yappi { };
+
   zbase32 = callPackage ../development/python-modules/zbase32 { };
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
