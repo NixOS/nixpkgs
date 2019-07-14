@@ -62,7 +62,9 @@ rec {
 
   ms-vscode.cpptools = callPackage ./cpptools {};
 
-  ms-python.python = callPackage ./python {};
+  ms-python.python = callPackage ./python {
+    extractNuGet = callPackage ./python/extract-nuget.nix { };
+  };
 
   vscodevim.vim = buildVscodeMarketplaceExtension {
     mktplcRef = {
