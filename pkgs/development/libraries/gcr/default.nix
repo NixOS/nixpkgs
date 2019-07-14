@@ -45,5 +45,17 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     maintainers = gnome3.maintainers;
+    description = "GNOME crypto services (daemon and tools)";
+    homepage    = https://gitlab.gnome.org/GNOME/gcr;
+    license     = licenses.gpl2;
+
+    longDescription = ''
+      GCR is a library for displaying certificates, and crypto UI, accessing
+      key stores. It also provides the viewer for crypto files on the GNOME
+      desktop.
+
+      GCK is a library for accessing PKCS#11 modules like smart cards, in a
+      (G)object oriented way.
+    '';
   };
 }
