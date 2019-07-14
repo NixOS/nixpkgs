@@ -4,13 +4,13 @@
 , isIceCatLike ? false, icversion ? null
 , isTorBrowserLike ? false, tbversion ? null }:
 
-{ lib, stdenv, pkgconfig, pango, perl, python2, zip, libIDL
+{ lib, stdenv, pkgconfig, pango, perl, python2, python3, zip, libIDL
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
-, autoconf213, which, gnused, cargo, rustc, llvmPackages
+, autoconf213, which, gnused, cargo, cargo_1_35, rustc, rustc_1_35, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
 
@@ -158,14 +158,19 @@ stdenv.mkDerivation rec {
     substituteInPlace js/src/jsmath.cpp --replace 'defined(HAVE___SINCOS)' 0
   '' + lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
     substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
+  '' + lib.optionalString (lib.versionAtLeast ffversion "68") ''
+    rm -rf obj-x86_64-pc-linux-gnu
   '';
 
   nativeBuildInputs =
-    [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
+    [ autoconf213 which gnused pkgconfig perl python2 ]
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
+    ++ lib.optional  (lib.versionAtLeast ffversion "61.0") [ python3 ]
     ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ rust-cbindgen nodejs ]
     ++ lib.optionals (lib.versionAtLeast ffversion "67.0") [ llvmPackages.llvm ] # llvm-objdump is required in version >=67.0
+    # Firefox >=68 requires at least rust 1.35
+    ++ (if lib.versionAtLeast ffversion "68.0" then [ rustc_1_35 cargo_1_35 ] else [ cargo rustc ])
     ++ extraNativeBuildInputs;
 
   preConfigure = ''

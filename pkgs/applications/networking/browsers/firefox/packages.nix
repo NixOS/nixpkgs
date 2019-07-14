@@ -1,4 +1,4 @@
-{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, callPackage, fetchurl, fetchFromGitHub, fetchpatch }:
 
 let
 
@@ -10,17 +10,15 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "67.0.4";
+    ffversion = "68.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "3krwkc90m320a74vjyzlrxs4jc63cykbmpgisac9kv8m9n0bis5i1yf0dl9n14d9p4p541wvzhqygx7byj6mnvkhbk5b2l0nlvwias2";
+      sha512 = "0pg8ww2ldlvdlri0zrzv20x69x00gxshr4afq62pnz7rgrnppkdd0pw5snflisgvpxq1syxcrg5750wz1k4bfjwnyq47jk9h3fzddpw";
     };
 
     patches = [
       ./no-buildconfig-ffx65.patch
     ];
-
-    extraNativeBuildInputs = [ python3 ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
