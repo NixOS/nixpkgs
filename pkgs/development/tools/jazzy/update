@@ -3,6 +3,8 @@
 
 set -e
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 rm -f Gemfile.lock
 bundler lock
 bundix
