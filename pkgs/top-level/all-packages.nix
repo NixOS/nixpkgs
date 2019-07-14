@@ -5619,6 +5619,8 @@ in
     jack2 = jack2Full;
   };
 
+  qt-box-editor = libsForQt5.callPackage ../applications/misc/qt-box-editor { };
+
   recutils = callPackage ../tools/misc/recutils { };
 
   recoll = callPackage ../applications/search/recoll { };
