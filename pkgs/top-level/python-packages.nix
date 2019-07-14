@@ -1471,6 +1471,8 @@ in {
 
   circus = callPackage ../development/python-modules/circus {};
 
+  colorcet = callPackage ../development/python-modules/colorcet { };
+
   colorclass = callPackage ../development/python-modules/colorclass {};
 
   colorlog = callPackage ../development/python-modules/colorlog { };
