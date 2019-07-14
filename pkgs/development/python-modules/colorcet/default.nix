@@ -31,6 +31,10 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    export HOME=$(mktemp -d)
+    mkdir -p $HOME/.config/matplotlib
+    echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
+
     pytest colorcet
   '';
 

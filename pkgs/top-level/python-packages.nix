@@ -1917,6 +1917,8 @@ in {
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
+  pytest-mpl = callPackage ../development/python-modules/pytest-mpl { };
+
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
