@@ -1,10 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, pkgconfig
-, libtool, autoconf, automake, cppunit
+, autoreconfHook, cppunit
 , libtorrent, ncurses, libsigcxx, curl
 , zlib, openssl, xmlrpc_c
-
-# This no longer works
-, colorSupport ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -18,20 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0a9dk3cz56f7gad8ghsma79iy900rwdvzngs6k6x08nlwaqid8ga";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    libtool autoconf automake cppunit
-    libtorrent ncurses libsigcxx curl zlib openssl xmlrpc_c
+    cppunit libtorrent ncurses libsigcxx curl zlib openssl xmlrpc_c
   ];
-
-  # Optional patch adds support for custom configurable colors
-  # https://github.com/Chlorm/chlorm_overlay/blob/master/net-p2p/rtorrent/README.md
-  patches = stdenv.lib.optional colorSupport (fetchurl {
-    url = "https://gist.githubusercontent.com/codyopel/a816c2993f8013b5f4d6/raw/b952b32da1dcf14c61820dfcf7df00bc8918fec4/rtorrent-color.patch";
-    sha256 = "00gcl7yq6261rrfzpz2k8bd7mffwya0ifji1xqcvhfw50syk8965";
-  });
-
-  preConfigure = "./autogen.sh";
 
   configureFlags = [ "--with-xmlrpc-c" "--with-posix-fallocate" ];
 
