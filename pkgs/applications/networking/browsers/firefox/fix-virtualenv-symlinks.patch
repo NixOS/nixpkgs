@@ -1,0 +1,256 @@
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/bin/activate_this.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/bin/activate_this.py
+deleted file mode 100644
+index f18193b..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/bin/activate_this.py
++++ /dev/null
+@@ -1,34 +0,0 @@
+-"""By using execfile(this_file, dict(__file__=this_file)) you will
+-activate this virtualenv environment.
+-
+-This can be used when you must use an existing Python interpreter, not
+-the virtualenv bin/python
+-"""
+-
+-try:
+-    __file__
+-except NameError:
+-    raise AssertionError(
+-        "You must run this like execfile('path/to/activate_this.py', dict(__file__='path/to/activate_this.py'))")
+-import sys
+-import os
+-
+-old_os_path = os.environ.get('PATH', '')
+-os.environ['PATH'] = os.path.dirname(os.path.abspath(__file__)) + os.pathsep + old_os_path
+-base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+-if sys.platform == 'win32':
+-    site_packages = os.path.join(base, 'Lib', 'site-packages')
+-else:
+-    site_packages = os.path.join(base, 'lib', 'python%s' % sys.version[:3], 'site-packages')
+-prev_sys_path = list(sys.path)
+-import site
+-site.addsitedir(site_packages)
+-sys.real_prefix = sys.prefix
+-sys.prefix = base
+-# Move the added items to the front of the path:
+-new_sys_path = []
+-for item in list(sys.path):
+-    if item not in prev_sys_path:
+-        new_sys_path.append(item)
+-        sys.path.remove(item)
+-sys.path[:0] = new_sys_path
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/bin/python b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/bin/python
+deleted file mode 120000
+index 8f7a3c1..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/bin/python
++++ /dev/null
+@@ -1 +0,0 @@
+-python2.7
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/bin/python2 b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/bin/python2
+deleted file mode 120000
+index 8f7a3c1..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/bin/python2
++++ /dev/null
+@@ -1 +0,0 @@
+-python2.7
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/UserDict.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/UserDict.py
+deleted file mode 120000
+index 1dcde33..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/UserDict.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/UserDict.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/_abcoll.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/_abcoll.py
+deleted file mode 120000
+index e39c38d..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/_abcoll.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/_abcoll.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/_weakrefset.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/_weakrefset.py
+deleted file mode 120000
+index a3c1cd4..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/_weakrefset.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/_weakrefset.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/abc.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/abc.py
+deleted file mode 120000
+index cb3e5d1..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/abc.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/abc.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/codecs.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/codecs.py
+deleted file mode 120000
+index 50169dc..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/codecs.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/codecs.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/copy_reg.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/copy_reg.py
+deleted file mode 120000
+index 5dc0af3..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/copy_reg.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/copy_reg.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/encodings b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/encodings
+deleted file mode 120000
+index 1250ad8..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/encodings
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/encodings
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/fnmatch.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/fnmatch.py
+deleted file mode 120000
+index ec3e10c..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/fnmatch.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/fnmatch.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/genericpath.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/genericpath.py
+deleted file mode 120000
+index cb8897c..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/genericpath.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/genericpath.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/lib-dynload b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/lib-dynload
+deleted file mode 120000
+index c706a1e..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/lib-dynload
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/lib-dynload
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/linecache.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/linecache.py
+deleted file mode 120000
+index 943c429..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/linecache.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/linecache.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/locale.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/locale.py
+deleted file mode 120000
+index 92c243c..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/locale.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/locale.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/ntpath.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/ntpath.py
+deleted file mode 120000
+index 5659ae1..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/ntpath.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/ntpath.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/os.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/os.py
+deleted file mode 120000
+index 950fc8d..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/os.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/os.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/posixpath.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/posixpath.py
+deleted file mode 120000
+index 30cb8ca..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/posixpath.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/posixpath.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/re.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/re.py
+deleted file mode 120000
+index 56a0731..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/re.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/re.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre.py
+deleted file mode 120000
+index 27f81b9..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/sre.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre_compile.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre_compile.py
+deleted file mode 120000
+index dce5da4..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre_compile.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/sre_compile.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre_constants.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre_constants.py
+deleted file mode 120000
+index b9c9797..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre_constants.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/sre_constants.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre_parse.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre_parse.py
+deleted file mode 120000
+index f33a572..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/sre_parse.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/sre_parse.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/stat.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/stat.py
+deleted file mode 120000
+index c1d654c..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/stat.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/stat.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/types.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/types.py
+deleted file mode 120000
+index 5546478..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/types.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/types.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/warnings.py b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/warnings.py
+deleted file mode 120000
+index a9c4730..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib/python2.7/warnings.py
++++ /dev/null
+@@ -1 +0,0 @@
+-/usr/lib/python2.7/warnings.py
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/local/bin b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/local/bin
+deleted file mode 120000
+index dd1e4ca..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/local/bin
++++ /dev/null
+@@ -1 +0,0 @@
+-/builds/worker/workspace/build/src/obj-x86_64-pc-linux-gnu/_virtualenvs/init/bin
+\ No newline at end of file
+diff --git a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/local/lib b/obj-x86_64-pc-linux-gnu/_virtualenvs/init/local/lib
+deleted file mode 120000
+index b835bc3..0000000
+--- a/obj-x86_64-pc-linux-gnu/_virtualenvs/init/local/lib
++++ /dev/null
+@@ -1 +0,0 @@
+-/builds/worker/workspace/build/src/obj-x86_64-pc-linux-gnu/_virtualenvs/init/lib
+\ No newline at end of file

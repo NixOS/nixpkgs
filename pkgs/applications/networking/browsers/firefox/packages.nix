@@ -17,14 +17,16 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "67.0.4";
+    ffversion = "68.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "3krwkc90m320a74vjyzlrxs4jc63cykbmpgisac9kv8m9n0bis5i1yf0dl9n14d9p4p541wvzhqygx7byj6mnvkhbk5b2l0nlvwias2";
+      sha512 = "0pg8ww2ldlvdlri0zrzv20x69x00gxshr4afq62pnz7rgrnppkdd0pw5snflisgvpxq1syxcrg5750wz1k4bfjwnyq47jk9h3fzddpw";
     };
 
     patches = [
       ./no-buildconfig-ffx65.patch
+      # https://github.com/NixOS/nixpkgs/pull/64577#issuecomment-510131246
+      ./fix-virtualenv-symlinks.patch
     ];
 
     extraNativeBuildInputs = [ python3 ];
