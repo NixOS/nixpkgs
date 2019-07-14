@@ -1172,6 +1172,8 @@ in {
 
   yarg = callPackage ../development/python-modules/yarg { };
 
+  yt = callPackage ../development/python-modules/yt { };
+
   # packages defined here
 
   aafigure = callPackage ../development/python-modules/aafigure { };
