@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "nextcloud-${version}";
-  version = "16.0.1";
+  version = "16.0.2";
 
   src = fetchurl {
     url = "https://download.nextcloud.com/server/releases/${name}.tar.bz2";
-    sha256 = "1vlaswq9j3vkiikq8bj0qi6wsijkawg321wplvxv4c79x63fa358";
+    sha256 = "0h9n8sbls68jn1bv89yg7rsri1ks0dvjhx0gk592a6qwjvbbd7gn";
   };
 
   installPhase = ''
