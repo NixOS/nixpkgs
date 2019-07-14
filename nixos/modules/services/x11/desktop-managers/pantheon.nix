@@ -145,6 +145,9 @@ in
     programs.dconf.enable = true;
     programs.evince.enable = mkDefault true;
     programs.file-roller.enable = mkDefault true;
+    # Otherwise you can't store NetworkManager Secrets with
+    # "Store the password only for this user"
+    programs.nm-applet.enable = true;
 
     # Shell integration for VTE terminals
     programs.bash.vteIntegration = mkDefault true;
