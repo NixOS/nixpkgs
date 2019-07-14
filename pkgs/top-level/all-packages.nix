@@ -18049,6 +18049,8 @@ in
   wireshark-gtk = throw "Not supported anymore. Use wireshark-qt or wireshark-cli instead.";
   wireshark-cli = wireshark.override { withQt = false; };
 
+  sngrep = callPackage ../applications/networking/sniffers/sngrep {};
+
   termshark = callPackage ../tools/networking/termshark { };
 
   fbida = callPackage ../applications/graphics/fbida { };
