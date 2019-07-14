@@ -5464,6 +5464,9 @@ let
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ EmailAbstract EmailAddress MooXTypesMooseLike SubExporter Throwable TryTiny ];
+    postPatch = ''
+      patchShebangs --build util
+    '';
     meta = {
       homepage = https://github.com/rjbs/Email-Sender;
       description = "A library for sending email";
