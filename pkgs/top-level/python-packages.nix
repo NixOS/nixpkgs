@@ -2718,7 +2718,7 @@ in {
 
   filelock = callPackage ../development/python-modules/filelock {};
 
-  fiona = callPackage ../development/python-modules/fiona { gdal = pkgs.gdal; };
+  fiona = callPackage ../development/python-modules/fiona { gdal_2 = pkgs.gdal_2; };
 
   fitbit = callPackage ../development/python-modules/fitbit { };
 
