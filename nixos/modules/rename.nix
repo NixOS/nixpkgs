@@ -248,7 +248,7 @@ with lib;
     # KSM
     (mkRenamedOptionModule [ "hardware" "enableKSM" ] [ "hardware" "ksm" "enable" ])
 
-  ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
+  ] ++ (foreach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]
        (opt: mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''

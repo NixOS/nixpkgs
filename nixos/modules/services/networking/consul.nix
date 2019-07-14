@@ -15,7 +15,7 @@ let
     ++ cfg.extraConfigFiles;
 
   devices = attrValues (filterAttrs (_: i: i != null) cfg.interface);
-  systemdDevices = flip map devices
+  systemdDevices = foreach devices
     (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
 in
 {

@@ -45,7 +45,7 @@ let
         + "</listitem>";
     in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
 
-  optionsListDesc = lib.flip map optionsListVisible (opt: opt // {
+  optionsListDesc = lib.foreach optionsListVisible (opt: opt // {
     # Clean up declaration sites to not refer to the NixOS source tree.
     declarations = map stripAnyPrefixes opt.declarations;
   }
