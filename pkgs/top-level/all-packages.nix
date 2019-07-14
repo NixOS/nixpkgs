@@ -17349,6 +17349,7 @@ in
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-esr-52-unwrapped = firefoxPackages.firefox-esr-52;
   firefox-esr-60-unwrapped = firefoxPackages.firefox-esr-60;
+  firefox-esr-68-unwrapped = firefoxPackages.firefox-esr-68;
   tor-browser-unwrapped = firefoxPackages.tor-browser;
   icecat-unwrapped = firefoxPackages.icecat;
 
@@ -17356,7 +17357,8 @@ in
   firefox-wayland = wrapFirefox firefox-unwrapped { gdkWayland = true; };
   firefox-esr-52 = wrapFirefox firefox-esr-52-unwrapped { };
   firefox-esr-60 = wrapFirefox firefox-esr-60-unwrapped { };
-  firefox-esr = firefox-esr-60;
+  firefox-esr-68 = wrapFirefox firefox-esr-68-unwrapped { };
+  firefox-esr = firefox-esr-68;
   icecat = wrapFirefox icecat-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
