@@ -17,6 +17,18 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace py4j==0.10.7 'py4j>=0.10.7,<0.11'
   '';
 
+  postFixup = ''
+    # find_python_home.py has been wrapped as a shell script
+    substituteInPlace $out/bin/find-spark-home \
+        --replace 'export SPARK_HOME=$($PYSPARK_DRIVER_PYTHON "$FIND_SPARK_HOME_PYTHON_SCRIPT")' \
+                  'export SPARK_HOME=$("$FIND_SPARK_HOME_PYTHON_SCRIPT")'
+
+    # patch PYTHONPATH in pyspark so that it properly looks at SPARK_HOME
+    substituteInPlace $out/bin/pyspark \
+        --replace 'export PYTHONPATH="''${SPARK_HOME}/python/:$PYTHONPATH"' \
+                  'export PYTHONPATH="''${SPARK_HOME}/..:''${SPARK_HOME}/python/:$PYTHONPATH"'
+  '';
+
   propagatedBuildInputs = [ py4j ];
 
   # Tests assume running spark...
