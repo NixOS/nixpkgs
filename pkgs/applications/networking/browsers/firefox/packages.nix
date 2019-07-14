@@ -72,29 +72,27 @@ rec {
     gtk3Support = false;
   };
 
-  firefox-esr-60 = common rec {
+  firefox-esr-68 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.7.2esr";
+    ffversion = "68.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0mw5dgrxd5vj6cngd9v3dy6hzdsg82s0cs9fabhrzrl1dy3pqdkccqqnj9r0hxwmcrdgca3s35i5lwwmlljagq6nyb5q6qv4fzv0n0j";
+      sha512 = "29iqxxwkz2zgk2ppgq05w0bhs8c0938gina5s8brmwn6zn15nv379pa82a9djpzjryl6c5ff0hk0z7gx6n3xvf7w7ky9010h9il0kbg";
     };
 
     patches = [
       ./no-buildconfig-ffx65.patch
-
-      # this one is actually an omnipresent bug
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
-      ./fix-pa-context-connect-retval.patch
-
-      missing-documentation-patch
+      # https://github.com/NixOS/nixpkgs/pull/64577#issuecomment-510131246
+      ./fix-virtualenv-symlinks.patch
     ];
+
+    extraNativeBuildInputs = [ python3 ];
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
     };
     updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-60-unwrapped";
+      attrPath = "firefox-esr-68-unwrapped";
       versionSuffix = "esr";
       versionKey = "ffversion";
     };
