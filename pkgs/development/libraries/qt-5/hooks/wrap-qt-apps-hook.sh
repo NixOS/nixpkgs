@@ -77,7 +77,7 @@ wrapQtAppsHook() {
     [ -z "$wrapQtAppsHookHasRun" ] || return 0
     wrapQtAppsHookHasRun=1
 
-    local targetDirs=( "$prefix/bin" )
+    local targetDirs=( "$prefix/bin" "$prefix/libexec"  )
     echo "wrapping Qt applications in ${targetDirs[@]}"
 
     for targetDir in "${targetDirs[@]}"
