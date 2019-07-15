@@ -1,14 +1,17 @@
 { stdenv, fetchFromGitHub, makeDesktopItem
 , pkgconfig, autoconf213, alsaLib, bzip2, cairo
-, dbus, dbus-glib, file, fontconfig, freetype
-, gnome2, gnum4, gstreamer, gst-plugins-base, gst_all_1
-, gtk2, hunspell, icu, libevent, libjpeg, libnotify
-, libstartup_notification, libvpx, makeWrapper, libGLU_combined
-, nspr, nss, pango, perl, python, libpulseaudio, sqlite
+, dbus, dbus-glib, ffmpeg, file, fontconfig, freetype
+, gnome2, gnum4, gtk2, hunspell, libevent, libjpeg
+, libnotify, libstartup_notification, makeWrapper
+, libGLU_combined, perl, python, libpulseaudio
 , unzip, xorg, wget, which, yasm, zip, zlib
 }:
 
-stdenv.mkDerivation rec {
+let
+
+  libPath = stdenv.lib.makeLibraryPath [ ffmpeg ];
+
+in stdenv.mkDerivation rec {
   pname = "palemoon";
   version = "28.6.0.1";
 
@@ -39,11 +42,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib bzip2 cairo dbus dbus-glib file fontconfig freetype
-    gnome2.GConf gnum4 gst-plugins-base gstreamer gst_all_1.gst-plugins-base gtk2
-    hunspell icu libevent libjpeg libnotify libstartup_notification
-    libvpx makeWrapper libGLU_combined nspr nss pango perl pkgconfig python
-    libpulseaudio sqlite unzip wget which yasm zip zlib
+    alsaLib bzip2 cairo dbus dbus-glib ffmpeg file fontconfig freetype
+    gnome2.GConf gnum4 gtk2 hunspell libevent libjpeg libnotify
+    libstartup_notification makeWrapper libGLU_combined perl
+    pkgconfig python libpulseaudio unzip wget which yasm zip zlib
   ] ++ (with xorg; [
     libX11 libXext libXft libXi libXrender libXScrnSaver
     libXt pixman xorgproto
@@ -107,6 +109,9 @@ stdenv.mkDerivation rec {
       cp $src/application/palemoon/branding/official/default$n.png \
          $out/share/icons/hicolor/$size/apps/palemoon.png
     done
+
+    wrapProgram $out/lib/palemoon-${version}/palemoon \
+      --prefix LD_LIBRARY_PATH : "${libPath}"
   '';
 
   meta = with stdenv.lib; {
