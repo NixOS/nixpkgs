@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase }:
+{ stdenv, fetchFromGitHub, cmake, qtbase, capstone, bison, flex }:
 
 stdenv.mkDerivation rec {
   pname = "boomerang";
-  version = "0.4.0-alpha-2018-07-03";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
-    owner = "ceeac";
-    repo = "boomerang";
-    rev = "377ff2d7db93d892c925e2d3e61aef818371ce7d";
-    sha256 = "1ljbyj3b8xckr1wihyii3h576zgq0q88vli0ylpr3p4jxy5sm57j";
+    owner = "BoomerangDecompiler";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "1q8qg506c39fidihqs8rbmqlr7bgkayyp5sscszgahs34cyvqic7";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qtbase ];
+  nativeBuildInputs = [ cmake bison flex ];
+  buildInputs = [ qtbase capstone ];
 
   postPatch =
   # Look in installation directory for required files, not relative to working directory
