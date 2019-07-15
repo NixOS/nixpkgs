@@ -70,6 +70,7 @@
 , "madoko"
 , "markdown-link-check"
 , "mathjax"
+, "matrix-appservice-irc"
 , "meat"
 , "meguca"
 , "mocha"
