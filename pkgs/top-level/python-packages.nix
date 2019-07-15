@@ -1755,6 +1755,8 @@ in {
 
   pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
 
+  pytest-astropy = callPackage ../development/python-modules/pytest-astropy { };
+
   pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
