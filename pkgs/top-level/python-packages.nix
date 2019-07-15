@@ -1895,6 +1895,8 @@ in {
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
+  pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
+
   pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
