@@ -552,6 +552,8 @@ in {
       description = "Grafana user";
       home = cfg.dataDir;
       createHome = true;
+      group = "grafana";
     };
+    users.groups.grafana = {};
   };
 }
