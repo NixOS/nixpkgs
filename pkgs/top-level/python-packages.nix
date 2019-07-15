@@ -2613,6 +2613,8 @@ in {
 
   subliminal = callPackage ../development/python-modules/subliminal {};
 
+  sunpy = callPackage ../development/python-modules/sunpy { };
+
   hyperlink = callPackage ../development/python-modules/hyperlink {};
 
   zope_copy = callPackage ../development/python-modules/zope_copy {};
