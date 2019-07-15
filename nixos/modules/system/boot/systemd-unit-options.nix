@@ -6,7 +6,7 @@ with import ./systemd-lib.nix { inherit config lib pkgs; };
 let
   checkService = checkUnitConfig "Service" [
     (assertValueOneOf "Type" [
-      "simple" "forking" "oneshot" "dbus" "notify" "idle"
+      "exec" "simple" "forking" "oneshot" "dbus" "notify" "idle"
     ])
     (assertValueOneOf "Restart" [
       "no" "on-success" "on-failure" "on-abnormal" "on-abort" "always"
