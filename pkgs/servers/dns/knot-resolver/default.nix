@@ -51,6 +51,8 @@ unwrapped = stdenv.mkDerivation rec {
     "-Dinstall_kresd_conf=disabled" # not really useful; examples are inside share/doc/
     "--default-library=static" # not used by anyone
   ]
+  # kres-cache-gc won't work on Darwin before 10.12 due to missing clock_gettime()
+  ++ optional stdenv.hostPlatform.isDarwin "-Dutils=disabled"
   ++ optionals doInstallCheck [
     "-Dunit_tests=enabled"
     #"-Dconfig_tests=enabled" #FIXME: check-no-ca-store.diff - as gnutls isn't patched

@@ -192,12 +192,12 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.3${suffix}";
-    suffix = "pre20190612_06010ea";
+    suffix = "pre20190712_aa82f8b";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "06010eaf199005a393f212023ec5e8bc97978537";
-      sha256 = "1fq99fmlag5hxvgzxrclgfsnc1fhhfwnslyshad1934wi9nzx1s2";
+      rev = "aa82f8b2d2a2c42f0d713e8404b668cef1a4b108";
+      sha256 = "158njzx0gqyvjz534f1y63w583kjk45nlgzx4abg8k775043c5ii";
     };
     fromGit = true;
 
