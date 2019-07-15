@@ -4,9 +4,12 @@
 }:
 
 { buildInputs ? []
-# Additional flags to pass to "pip install".
+# `install-options` to pass to `pip install`.
 , installFlags ? []
 , ... } @ attrs:
+
+let
+  installFlagsString = lib.concatMapStringsSep " " (option: "--install-option ${option}") installFlags;
 
 attrs // {
   buildInputs = buildInputs ++ [ python.pythonForBuild.pkgs.bootstrapped-pip ];
@@ -23,7 +26,7 @@ attrs // {
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     pushd dist
-    ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache ${toString installFlags} --build tmpbuild
+    ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache ${installFlagsString} --build tmpbuild
     popd
 
     runHook postInstall

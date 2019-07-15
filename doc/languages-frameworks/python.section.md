@@ -595,7 +595,6 @@ All parameters from `stdenv.mkDerivation` function are still supported. The foll
 * `disabled` ? false: If `true`, package is not build for the particular Python interpreter version.
 * `dontWrapPythonPrograms ? false`: Skip wrapping of python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment variable in wrapped programs.
-* `installFlags ? []`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"]`.
 * `format ? "setuptools"`: Format of the source. Valid options are `"setuptools"`, `"pyproject"`, `"flit"`, `"wheel"`, and `"other"`. `"setuptools"` is for when the source has a `setup.py` and `setuptools` is used to build a wheel, `flit`, in case `flit` should be used to build a wheel, and `wheel` in case a wheel is provided. Use `other` when a custom `buildPhase` and/or `installPhase` is needed.
 * `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to `makeWrapper`, which wraps generated binaries. By default, the arguments to `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling the binary. Additional arguments here can allow a developer to set environment variables which will be available when the binary is run. For example, `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this defaults to `"python3.5-"` for Python 3.5, etc., and in case of applications to `""`.
@@ -603,8 +602,9 @@ All parameters from `stdenv.mkDerivation` function are still supported. The foll
 * `preShellHook`: Hook to execute commands before `shellHook`.
 * `postShellHook`: Hook to execute commands after `shellHook`.
 * `removeBinByteCode ? true`: Remove bytecode from `/bin`. Bytecode is only created when the filenames end with `.py`.
-* `setupPyGlobalFlags ? []`: List of flags passed to `setup.py` command.
-* `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
+* `globalFlags ? []`: List of flags passed to `python setup.py` command.
+* `installFlags ? []`: List of flags passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"]`.
+* `buildFlags ? []`: List of flags passed to `setup.py build_ext` command.
 
 The `stdenv.mkDerivation` function accepts various parameters for describing build inputs (see "Specifying dependencies"). The following are of special
 interest for Python packages, either because these are primarily used, or because their behaviour is different:
