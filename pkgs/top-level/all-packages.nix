@@ -9252,6 +9252,8 @@ in
     inherit (darwin) cf-private;
   };
 
+  fly = callPackage ../development/tools/continuous-integration/fly { };
+
   foreman = callPackage ../tools/system/foreman { };
   goreman = callPackage ../tools/system/goreman { };
 
