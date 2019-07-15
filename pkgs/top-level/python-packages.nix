@@ -1064,6 +1064,8 @@ in {
 
   aioh2 = callPackage ../development/python-modules/aioh2 { };
 
+  aioftp = callPackage ../development/python-modules/aioftp { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
