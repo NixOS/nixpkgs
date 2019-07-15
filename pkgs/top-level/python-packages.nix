@@ -710,6 +710,8 @@ in {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+  itanium_demangler = callPackage ../development/python-modules/itanium_demangler { };
+
   janus = callPackage ../development/python-modules/janus { };
 
   jira = callPackage ../development/python-modules/jira { };
