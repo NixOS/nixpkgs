@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libargon2-${version}";
-  version = "20171227";
+  version = "20190702";
 
   src = fetchFromGitHub {
     owner = "P-H-C";
     repo = "phc-winner-argon2";
     rev = "${version}";
-    sha256 = "0sc9zca1anqk41017vjpas4kxi4cbn0zvicv8vj8p2sb2gy94bh8";
+    sha256 = "0p4ry9dn0mi9js0byijxdyiwx74p1nr8zj7wjpd1fjgqva4sk23i";
   };
 
   installPhase = ''
