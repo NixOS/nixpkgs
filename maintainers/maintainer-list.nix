@@ -2505,6 +2505,11 @@
     github = "jonringer";
     name = "Jonathan Ringer";
   };
+  jorise = {
+    email = "info@jorisengbers.nl";
+    github = "JorisE";
+    name = "Joris Engbers";
+  };
   jorsn = {
     name = "Johannes Rosenberger";
     email = "johannes@jorsn.eu";

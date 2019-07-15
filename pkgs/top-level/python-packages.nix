@@ -328,6 +328,8 @@ in {
 
   clikit = callPackage ../development/python-modules/clikit { };
 
+  cliff = callPackage ../development/python-modules/cliff { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   cozy = callPackage ../development/python-modules/cozy { };
@@ -1654,6 +1656,8 @@ in {
 
   openidc-client = callPackage ../development/python-modules/openidc-client {};
 
+  optuna = callPackage ../development/python-modules/optuna { };
+
   idna = callPackage ../development/python-modules/idna { };
 
   mahotas = callPackage ../development/python-modules/mahotas { };
@@ -2212,6 +2216,8 @@ in {
   libthumbor = callPackage ../development/python-modules/libthumbor { };
 
   lightblue = callPackage ../development/python-modules/lightblue { };
+
+  lightgbm = callPackage ../development/python-modules/lightgbm { };
 
   lightning = callPackage ../development/python-modules/lightning { };
 
@@ -3821,6 +3827,8 @@ in {
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
 
+  kmapper = callPackage ../development/python-modules/kmapper { };
+
   kmsxx = (callPackage ../development/libraries/kmsxx {
     inherit (pkgs.kmsxx) stdenv;
     inherit (pkgs) pkgconfig;
@@ -4306,6 +4314,8 @@ in {
     python2 = python;
   }));
 
+  ripser = callPackage ../development/python-modules/ripser { };
+
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
   pysolr = callPackage ../development/python-modules/pysolr { };
@@ -4423,6 +4433,10 @@ in {
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
+  scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
+
+  scikit-tda = callPackage ../development/python-modules/scikit-tda { };
+
   scp = callPackage ../development/python-modules/scp {};
 
   seaborn = callPackage ../development/python-modules/seaborn { };
@@ -4531,6 +4545,8 @@ in {
 
   tabulate = callPackage ../development/python-modules/tabulate { };
 
+  tadasets = callPackage ../development/python-modules/tadasets { };
+
   tempita = callPackage ../development/python-modules/tempita { };
 
   terminado = callPackage ../development/python-modules/terminado { };
@@ -4588,6 +4604,8 @@ in {
   uarray = callPackage ../development/python-modules/uarray { };
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
+
+  umap-learn = callPackage ../development/python-modules/umap-learn { };
 
   umemcache = callPackage ../development/python-modules/umemcache {};
 
@@ -4688,6 +4706,8 @@ in {
   BTrees = callPackage ../development/python-modules/btrees {};
 
   persistent = callPackage ../development/python-modules/persistent {};
+
+  persim = callPackage ../development/python-modules/persim { };
 
   xdot = callPackage ../development/python-modules/xdot { };
 
@@ -4995,6 +5015,8 @@ in {
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
   xlib = callPackage ../development/python-modules/xlib { };
+
+  yappi = callPackage ../development/python-modules/yappi { };
 
   zbase32 = callPackage ../development/python-modules/zbase32 { };
 

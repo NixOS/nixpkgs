@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with pkgs;
 with lib;
 
 let
@@ -12,7 +11,7 @@ let
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
-  configFile = writeText "NetworkManager.conf" ''
+  configFile = pkgs.writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
     dhcp=${cfg.dhcp}
@@ -65,19 +64,19 @@ let
     });
   '';
 
-  ns = xs: writeText "nameservers" (
+  ns = xs: pkgs.writeText "nameservers" (
     concatStrings (map (s: "nameserver ${s}\n") xs)
   );
 
-  overrideNameserversScript = writeScript "02overridedns" ''
+  overrideNameserversScript = pkgs.writeScript "02overridedns" ''
     #!/bin/sh
-    tmp=`${coreutils}/bin/mktemp`
-    ${gnused}/bin/sed '/nameserver /d' /etc/resolv.conf > $tmp
-    ${gnugrep}/bin/grep 'nameserver ' /etc/resolv.conf | \
-      ${gnugrep}/bin/grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
-    ${optionalString (cfg.appendNameservers != []) "${coreutils}/bin/cat $tmp $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf"}
-    ${optionalString (cfg.insertNameservers != []) "${coreutils}/bin/cat $tmp ${ns cfg.insertNameservers} $tmp.ns > /etc/resolv.conf"}
-    ${coreutils}/bin/rm -f $tmp $tmp.ns
+    PATH=${with pkgs; makeBinPath [ gnused gnugrep coreutils ]}
+    tmp=$(mktemp)
+    sed '/nameserver /d' /etc/resolv.conf > $tmp
+    grep 'nameserver ' /etc/resolv.conf | \
+      grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
+    cat $tmp ${ns cfg.insertNameservers} $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf
+    rm -f $tmp $tmp.ns
   '';
 
   dispatcherTypesSubdirMap = {
@@ -176,7 +175,8 @@ in {
       # Ugly hack for using the correct gnome3 packageSet
       basePackages = mkOption {
         type = types.attrsOf types.package;
-        default = { inherit networkmanager modemmanager wpa_supplicant
+        default = { inherit (pkgs)
+                            networkmanager modemmanager wpa_supplicant
                             networkmanager-openvpn networkmanager-vpnc
                             networkmanager-openconnect networkmanager-fortisslvpn
                             networkmanager-l2tp networkmanager-iodine; };
@@ -425,13 +425,10 @@ in {
       { source = "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
         target = "NetworkManager/VPN/nm-l2tp-service.name";
       }
-      { source = "${networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
-        target = "NetworkManager/VPN/nm-strongswan-service.name";
-      }
       { source = "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
         target = "NetworkManager/VPN/nm-iodine-service.name";
       }
-    ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
+    ] ++ optional (cfg.appendNameservers != [] || cfg.insertNameservers != [])
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
@@ -440,11 +437,15 @@ in {
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
         mode = "0544";
       }) cfg.dispatcherScripts
-      ++ optional (dynamicHostsEnabled)
+      ++ optional dynamicHostsEnabled
            { target = "NetworkManager/dnsmasq.d/dyndns.conf";
              text = concatMapStrings (n: ''
                hostsdir=/run/NetworkManager/hostsdirs/${n}
              '') (attrNames cfg.dynamicHosts.hostsDirs);
+           }
+      ++ optional cfg.enableStrongSwan
+           { source = "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
+             target = "NetworkManager/VPN/nm-strongswan-service.name";
            };
 
     environment.systemPackages = cfg.packages;

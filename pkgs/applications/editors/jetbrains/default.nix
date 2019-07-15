@@ -263,12 +263,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2019.1.3"; /* updated by script */
+    version = "2019.1.4"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "0syp0y4j40j72gql67g6r02n6kndsrz4nmh55ac5g9xs7s4rd5vq"; /* updated by script */
+      sha256 = "0zjcn71fgngkvsixgimzm5afwjbd8zf14zzm6barap4pwp5xx0hb"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
@@ -315,12 +315,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2019.1.2"; /* updated by script */
+    version = "2019.1.3"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1mc7xma1ybp0h1654p10vgp84fnsgvwsvprm86pnmfgks8307860"; /* updated by script */
+      sha256 = "04nrdgnyxywy0yfari26ghc371yni1rx3h0pmc4fw02ibbqx1f1y"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -354,12 +354,12 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2019.1.1"; /* updated by script */
+    version = "2019.1.2"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "0441y92b3xqf7xh8k4vc0m7dfm91psnrwlv3mjzbsv09jrk1kbq7"; /* updated by script */
+      sha256 = "0b0p18pcq4ml8nds4460a1ml8qjsq38kxwdrsh2ca5s194cbaapq"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
     update-channel = "Rider RELEASE";
