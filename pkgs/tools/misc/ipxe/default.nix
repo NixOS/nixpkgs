@@ -42,7 +42,12 @@ stdenv.mkDerivation {
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
 
-  enabledOptions = [ "DOWNLOAD_PROTO_HTTPS" ];
+  enabledOptions = [
+    "PING_CMD"
+    "IMAGE_TRUST_CMD"
+    "DOWNLOAD_PROTO_HTTP"
+    "DOWNLOAD_PROTO_HTTPS"
+  ];
 
   configurePhase = ''
     runHook preConfigure
