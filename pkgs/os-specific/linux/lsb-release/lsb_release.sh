@@ -112,26 +112,26 @@ if [[ "$all" = "1" ]] || [[ "$id" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
     printf "Distributor ID:\t"
   fi
-  echo $NAME
+  echo "$NAME"
 fi
 
 if [[ "$all" = "1" ]] || [[ "$description" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
     printf "Description:\t"
   fi
-  echo $PRETTY_NAME
+  echo "$PRETTY_NAME"
 fi
 
 if [[ "$all" = "1" ]] || [[ "$release" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
     printf "Release:\t"
   fi
-  echo $VERSION_ID
+  echo "$VERSION_ID"
 fi
 
 if [[ "$all" = "1" ]] || [[ "$codename" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
     printf "Codename:\t"
   fi
-  echo $VERSION_CODENAME
+  echo "$VERSION_CODENAME"
 fi
