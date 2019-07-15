@@ -1028,7 +1028,11 @@ in {
 
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
+  airspeed = callPackage ../development/python-modules/airspeed { };
+
   altair = callPackage ../development/python-modules/altair { };
+
+  awscli = callPackage ../development/python-modules/awscli { };
 
   vega = callPackage ../development/python-modules/vega { };
 
@@ -1710,6 +1714,8 @@ in {
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
+  python-jose-ext = callPackage ../development/python-modules/python-jose-ext {};
+
   python-json-logger = callPackage ../development/python-modules/python-json-logger { };
 
   python-ly = callPackage ../development/python-modules/python-ly {};
@@ -2221,6 +2227,12 @@ in {
 
   lightning = callPackage ../development/python-modules/lightning { };
 
+  localstack = callPackage ../development/python-modules/localstack { };
+
+  localstack-client = callPackage ../development/python-modules/localstack-client { };
+
+  localstack-ext = callPackage ../development/python-modules/localstack-ext { };
+
   jupyter = callPackage ../development/python-modules/jupyter { };
 
   jupyter_console = if pythonOlder "3.5" then
@@ -2422,6 +2434,8 @@ in {
   pytools = callPackage ../development/python-modules/pytools { };
 
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
+
+  python-coveralls = callPackage ../development/python-modules/python-coveralls { };
 
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
@@ -2725,6 +2739,8 @@ in {
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
 
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
+
+  flake8-quotes = callPackage ../development/python-modules/flake8-quotes { };
 
   flaky = callPackage ../development/python-modules/flaky { };
 
@@ -3445,6 +3461,8 @@ in {
 
   moto = callPackage ../development/python-modules/moto {};
 
+  moto-ext = callPackage ../development/python-modules/moto-ext {};
+
   mox = callPackage ../development/python-modules/mox { };
 
   mozsvc = callPackage ../development/python-modules/mozsvc { };
@@ -4164,6 +4182,8 @@ in {
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
 
+  pyminifier = callPackage ../development/python-modules/pyminifier { };
+
   pyPdf = callPackage ../development/python-modules/pypdf { };
 
   pypdf2 = callPackage ../development/python-modules/pypdf2 { };
@@ -4500,6 +4520,8 @@ in {
 
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
+  subprocess32-ext = callPackage ../development/python-modules/subprocess32-ext { };
+
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
   sphinxcontrib-bibtex = callPackage ../development/python-modules/sphinxcontrib-bibtex {};
@@ -4674,6 +4696,8 @@ in {
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
+  yappi = callPackage ../development/python-modules/yappi {};
+
   youtube-dl = callPackage ../tools/misc/youtube-dl {};
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
@@ -4742,6 +4766,8 @@ in {
   slob = callPackage ../development/python-modules/slob { };
 
   slowaes = callPackage ../development/python-modules/slowaes { };
+
+  srp-ext = callPackage ../development/python-modules/srp-ext { };
 
   sqlite3dbm = callPackage ../development/python-modules/sqlite3dbm { };
 
@@ -5640,6 +5666,8 @@ in {
   sseclient = callPackage ../development/python-modules/sseclient { };
 
   warrant = callPackage ../development/python-modules/warrant { };
+
+  warrant-ext = callPackage ../development/python-modules/warrant-ext { };
 
   textacy = callPackage ../development/python-modules/textacy { };
 
