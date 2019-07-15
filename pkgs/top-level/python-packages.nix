@@ -858,6 +858,8 @@ in {
 
   pyperf = callPackage ../development/python-modules/pyperf { };
 
+  pefile = callPackage ../development/python-modules/pefile { };
+
   perfplot = callPackage ../development/python-modules/perfplot { };
 
   phonopy = callPackage ../development/python-modules/phonopy { };
