@@ -3781,6 +3781,8 @@ in {
 
   paramz = callPackage ../development/python-modules/paramz { };
 
+  parfive = callPackage ../development/python-modules/parfive { };
+
   parsel = callPackage ../development/python-modules/parsel { };
 
   parso = callPackage ../development/python-modules/parso { };
