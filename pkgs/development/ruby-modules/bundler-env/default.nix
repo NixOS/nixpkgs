@@ -13,6 +13,7 @@
 , document ? []
 , meta ? {}
 , ignoreCollisions ? false
+, passthru ? {}
 , ...
 }@args:
 
@@ -55,5 +56,5 @@ in
       passthru = basicEnv.passthru // {
         inherit basicEnv;
         inherit (basicEnv) env;
-      };
+      } // passthru;
     })
