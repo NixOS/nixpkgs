@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "adwaita-qt";
-  version = "1.0";
+  version = "1.0.91";
 
   name = "${pname}-${version}";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "FedoraQt";
     repo = pname;
     rev = version;
-    sha256 = "0xn8bianmdj15k11mnw52by9vxkmvpqr2s304kl3dbjj1l7v4cd7";
+    sha256 = "1d6ldw0hlvsgrxw5dvp121jkcgibinqd1vp2vcznnlqmm7ifj50l";
   };
 
   nativeBuildInputs = [
