@@ -1253,8 +1253,8 @@ self: super: {
   cmark-gfm = self.cmark-gfm_0_2_0;
   pandoc = dontCheck (doDistribute super.pandoc_2_7_3);  # test suite failure: https://github.com/jgm/pandoc/issues/5582
   pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_2;
-  skylighting = self.skylighting_0_8_1_1;
-  skylighting-core = self.skylighting-core_0_8_1_1;
+  skylighting = self.skylighting_0_8_2;
+  skylighting-core = self.skylighting-core_0_8_2;
 
   # Current versions of tasty-hedgehog need hedgehog 1.x, which
   # we don't have in LTS-13.x.
