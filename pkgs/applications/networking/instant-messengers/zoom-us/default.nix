@@ -13,11 +13,11 @@ assert pulseaudioSupport -> libpulseaudio != null;
 let
   inherit (stdenv.lib) concatStringsSep makeBinPath optional;
 
-  version = "2.8.252201.0616";
+  version = "2.8.264592.0714";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "1w7pwn6pvyacbz6s795r1qp5qaszr5yn9anq63zz6cgmzy8d1366";
+      sha256 = "0ndrsyyawls487v7vlga0yn574xvhmfc14vdjxg23nvn0jxh2dvw";
     };
   };
 
