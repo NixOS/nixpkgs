@@ -1823,6 +1823,8 @@ in {
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
+  pytest-socket = callPackage ../development/python-modules/pytest-socket { };
+
   pytestcov = callPackage ../development/python-modules/pytest-cov { };
 
   pytest-expect = callPackage ../development/python-modules/pytest-expect { };
