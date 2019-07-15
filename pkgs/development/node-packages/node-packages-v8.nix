@@ -1003,13 +1003,13 @@ let
         sha512 = "IM5nUITXMgTFTF4avRxsz/oLcMXLSZEzpukulRRpO1emXBI4EgSIr0++hUo+AZ94MINE2C4DXgCDiQ9P0suYXw==";
       };
     };
-    "azure-common-0.9.21" = {
+    "azure-common-0.9.22" = {
       name = "azure-common";
       packageName = "azure-common";
-      version = "0.9.21";
+      version = "0.9.22";
       src = fetchurl {
-        url = "https://registry.npmjs.org/azure-common/-/azure-common-0.9.21.tgz";
-        sha512 = "bcehnilMA93quFEPTz6Zwioy+N/SW8nBanGEPpY/bqTbqGrZWjC0snB2oN2DqfrZs51n65KUGRqJLzTECKZDZA==";
+        url = "https://registry.npmjs.org/azure-common/-/azure-common-0.9.22.tgz";
+        sha512 = "0r9tK9D+1xl2/VPVtfmGmtkMqfooiBLS87fX+Ab0hOCPVVe/6CgVC4in0wSf2Ta8r65DbvxV5P4/t8fp8Q3EsQ==";
       };
     };
     "azure-gallery-2.0.0-pre.18" = {
@@ -8257,7 +8257,7 @@ in
           sources."underscore-1.9.1"
         ];
       })
-      (sources."azure-common-0.9.21" // {
+      (sources."azure-common-0.9.22" // {
         dependencies = [
           sources."validator-9.4.1"
           (sources."xml2js-0.4.19" // {
