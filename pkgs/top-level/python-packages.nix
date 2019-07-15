@@ -181,6 +181,8 @@ in {
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
+  archinfo = disabledIf (!isPy3k) (callPackage ../development/python-modules/archinfo { });
+
   asana = callPackage ../development/python-modules/asana { };
 
   asdf = callPackage ../development/python-modules/asdf { };
