@@ -109,6 +109,7 @@
 , "s3http"
 , "semver"
 , "serve"
+, "serverless"
 , "shout"
 , "sloc"
 , "smartdc"
