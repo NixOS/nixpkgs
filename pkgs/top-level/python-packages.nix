@@ -6196,6 +6196,8 @@ in {
     inherit python;
   })).python;
 
+  z3-solver = callPackage ../development/python-modules/z3-solver { };
+
   zeroc-ice = callPackage ../development/python-modules/zeroc-ice { };
 
   zm-py = callPackage ../development/python-modules/zm-py { };
