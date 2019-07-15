@@ -25,6 +25,7 @@
   ./config/nsswitch.nix
   ./config/power-management.nix
   ./config/pulseaudio.nix
+  ./config/resolvconf.nix
   ./config/shells-environment.nix
   ./config/swap.nix
   ./config/sysctl.nix
