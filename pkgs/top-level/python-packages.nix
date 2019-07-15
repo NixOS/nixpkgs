@@ -987,6 +987,8 @@ in {
 
   pyres = callPackage ../development/python-modules/pyres { };
 
+  PySMT = callPackage ../development/python-modules/pysmt { };
+
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     inherit (pkgs) pkgconfig;
   };
