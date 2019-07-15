@@ -7597,6 +7597,15 @@ in
   });
   inherit (rust) cargo rustc;
 
+  rust_1_35 = callPackage ../development/compilers/rust-1_35 ({
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    llvm = llvm_7;
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  });
+  cargo_1_35 = rust_1_35.cargo;
+  rustc_1_35 = rust_1_35.rustc;
+
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
   buildRustCrateTests = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { }).tests;
