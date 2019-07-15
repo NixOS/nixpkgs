@@ -740,6 +740,8 @@ in {
   msrestazure = callPackage ../development/python-modules/msrestazure { };
   msrest = callPackage ../development/python-modules/msrest { };
 
+  mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
+
   multiset = callPackage ../development/python-modules/multiset { };
 
   mwclient = callPackage ../development/python-modules/mwclient { };
