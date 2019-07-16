@@ -20,6 +20,7 @@
   ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
+  ./config/locale.nix
   ./config/malloc.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
@@ -33,7 +34,6 @@
   ./config/system-environment.nix
   ./config/system-path.nix
   ./config/terminfo.nix
-  ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/vpnc.nix
