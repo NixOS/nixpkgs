@@ -2,8 +2,9 @@
 
 let version = "3.0.0"; in
 python3Packages.buildPythonApplication {
-  name = "pius-${version}";
+  pname = "pius";
   namePrefix = "";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "jaymzh";
