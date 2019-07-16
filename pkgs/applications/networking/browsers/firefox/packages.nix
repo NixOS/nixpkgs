@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl, fetchFromGitHub, python3, overrideCC, gccStdenv, gcc6 }:
+{ lib, callPackage, fetchurl, fetchFromGitHub, overrideCC, gccStdenv, gcc6 }:
 
 let
 
@@ -17,17 +17,15 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "67.0.4";
+    ffversion = "68.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "3krwkc90m320a74vjyzlrxs4jc63cykbmpgisac9kv8m9n0bis5i1yf0dl9n14d9p4p541wvzhqygx7byj6mnvkhbk5b2l0nlvwias2";
+      sha512 = "0pg8ww2ldlvdlri0zrzv20x69x00gxshr4afq62pnz7rgrnppkdd0pw5snflisgvpxq1syxcrg5750wz1k4bfjwnyq47jk9h3fzddpw";
     };
 
     patches = [
       ./no-buildconfig-ffx65.patch
     ];
-
-    extraNativeBuildInputs = [ python3 ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
@@ -72,10 +70,11 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.7.2esr";
+    ffversion = "60.8.0esr";
+
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0mw5dgrxd5vj6cngd9v3dy6hzdsg82s0cs9fabhrzrl1dy3pqdkccqqnj9r0hxwmcrdgca3s35i5lwwmlljagq6nyb5q6qv4fzv0n0j";
+      sha512 = "0332b6049b97e488e55a3b9540baad3bd159e297084e9a625b8492497c73f86eb3e144219dabc5e9f2c2e4a27630d83d243c919cd4f86b7f59f47133ed3afc54";
     };
 
     patches = [
@@ -93,6 +92,28 @@ rec {
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-60-unwrapped";
+      versionSuffix = "esr";
+      versionKey = "ffversion";
+    };
+  };
+
+  firefox-esr-68 = common rec {
+    pname = "firefox-esr";
+    ffversion = "68.0esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "29iqxxwkz2zgk2ppgq05w0bhs8c0938gina5s8brmwn6zn15nv379pa82a9djpzjryl6c5ff0hk0z7gx6n3xvf7w7ky9010h9il0kbg";
+    };
+
+    patches = [
+      ./no-buildconfig-ffx65.patch
+    ];
+
+    meta = firefox.meta // {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+    };
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-68-unwrapped";
       versionSuffix = "esr";
       versionKey = "ffversion";
     };
