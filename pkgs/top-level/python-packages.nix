@@ -177,6 +177,8 @@ in {
 
   asciimatics = callPackage ../development/python-modules/asciimatics { };
 
+  asciitree = callPackage ../development/python-modules/asciitree { };
+
   ase = callPackage ../development/python-modules/ase { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
@@ -956,6 +958,8 @@ in {
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
+
+  slicedimage = callPackage ../development/python-modules/slicedimage { };
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
@@ -2459,6 +2463,8 @@ in {
 
   regex = callPackage ../development/python-modules/regex { };
 
+  regional = callPackage ../development/python-modules/regional { };
+
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
 
   pywatchman = callPackage ../development/python-modules/pywatchman { };
@@ -2493,6 +2499,8 @@ in {
 
   statsd = callPackage ../development/python-modules/statsd { };
 
+  starfish = callPackage ../development/python-modules/starfish { };
+
   multi_key_dict = callPackage ../development/python-modules/multi_key_dict { };
 
   random2 = callPackage ../development/python-modules/random2 { };
@@ -2510,6 +2518,8 @@ in {
   watchdog = callPackage ../development/python-modules/watchdog { };
 
   zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
+
+  validators = callPackage ../development/python-modules/validators { };
 
   validictory = callPackage ../development/python-modules/validictory { };
 
@@ -4459,6 +4469,8 @@ in {
 
   should-dsl = callPackage ../development/python-modules/should-dsl { };
 
+  showit = callPackage ../development/python-modules/showit { };
+
   simplejson = callPackage ../development/python-modules/simplejson { };
 
   simplekml = callPackage ../development/python-modules/simplekml { };
@@ -4977,6 +4989,8 @@ in {
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
 
   traceback2 = callPackage ../development/python-modules/traceback2 { };
+
+  trackpy = callPackage ../development/python-modules/trackpy { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
@@ -5610,6 +5624,8 @@ in {
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
   node-semver = callPackage ../development/python-modules/node-semver { };
+
+  diskcache = callPackage ../development/python-modules/diskcache { };
 
   distro = callPackage ../development/python-modules/distro { };
 
