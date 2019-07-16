@@ -1,7 +1,12 @@
 {
   stdenv,
-  automake, autoconf, libtool, pkgconfig,
-  cups, glib, gnome2, atk, libxml2, popt, ghostscript,
+  autoconf,
+  automake,
+  libtool,
+  glib,
+  gnome2,
+  pkgconfig,
+  libxml2,
   cndrvcups-common
 }:
 
@@ -10,19 +15,18 @@ stdenv.mkDerivation rec {
   pname = "cndrvcups-capt";
   version = "2.71";
 
+  #TODO: fetch live source
   src = ./cndrvcups-capt-2.71;
 
-  #TODO: prune unused dependencies
   buildInputs = [
-    automake autoconf libtool pkgconfig
-    cups
+    autoconf
+    automake
     glib
-    gnome2.libglade
     gnome2.gtk
-    atk
-    libxml2.dev
-    popt
-    ghostscript
+    gnome2.libglade
+    libtool
+    pkgconfig
+
     cndrvcups-common
   ];
 
@@ -30,8 +34,6 @@ stdenv.mkDerivation rec {
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=capt-src
 
   configurePhase = ''
-    set -xe
-
     for _dir in driver ppd backend pstocapt pstocapt2 pstocapt3
     do
         pushd $_dir
@@ -75,6 +77,10 @@ stdenv.mkDerivation rec {
     ##HACK: `make install` install files to wrong directory
     cp -rv $out/$out/* $out
     rm -r $out/nix
+
+    ##HACK: move files from $out/usr to $out
+    cp -rv $out/usr/* $out
+    rm -r $out/usr
 
     install -dm755 $out/lib
     install -c libs/libcaptfilter.so.1.0.0  $out/lib

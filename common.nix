@@ -1,7 +1,11 @@
 {
   stdenv,
-  automake, autoconf, libtool, pkgconfig,
-  cups, glib, gnome2, atk, libxml2, popt, ghostscript
+  autoconf,
+  automake,
+  glib,
+  gnome2,
+  libtool,
+  pkgconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -9,19 +13,17 @@ stdenv.mkDerivation rec {
   pname = "cndrvcups-common";
   version = "3.21";
 
+  #TODO: fetch live source
   src = ./cndrvcups-common-3.21;
 
-  #TODO: prune unused dependencies
   buildInputs = [
-    automake autoconf libtool pkgconfig
-    cups
+    autoconf
+    automake
     glib
-    gnome2.libglade
     gnome2.gtk
-    atk
-    libxml2
-    popt
-    ghostscript
+    gnome2.libglade
+    libtool
+    pkgconfig
   ];
 
   # install directions based on arch PKGBUILD file
@@ -58,17 +60,21 @@ stdenv.mkDerivation rec {
     for _dir in buftool cngplp backend
     do
         pushd $_dir
-          DESTDIR=$out make install
+          make install DESTDIR=$out
         popd
     done
 
     pushd c3plmod_ipc
-      DESTDIR=$out LIBDIR=$out/lib make install
+      make install DESTDIR=$out LIBDIR=$out/lib
     popd
 
     ##HACK: `make install` install files to wrong directory
     cp -rv $out/$out/* $out
     rm -r $out/nix
+
+    ##HACK: move files from $out/usr to $out
+    cp -rv $out/usr/* $out
+    rm -r $out/usr
 
     install -dm755 $out/bin
     install -c -m 755 libs/c3pldrv $out/bin
@@ -105,9 +111,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Canon CAPT driver";
+    description = "Canon CAPT driver - Common module";
     longDescription = ''
-      Canon CAPT driver
+      Canon CAPT driver (Common module)
     '';
   };
 }
