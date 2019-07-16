@@ -54,6 +54,11 @@ stdenv.mkDerivation rec {
       name = "CVE-2018-19840.patch";
       sha256 = "08y27py8hnki74ad8wbknnd36vj5pzzcm2vk3ngcbsjnj7x5mffz";
     })
+    (fetchpatch {
+      url = "https://github.com/dbry/WavPack/commit/bba5389dc598a92bdf2b297c3ea34620b6679b5b.patch";
+      name = "CVE-2018-19841.patch";
+      sha256 = "08gx5xx51bi86cqqy7cv1d25k669a7wnkksasjspphwkpwkcxymy";
+    })
   ];
 
   meta = with stdenv.lib; {
