@@ -5817,4 +5817,9 @@
     github = "turboMaCk";
     name = "Marek Fajkus";
   };
+  melling = {
+    email = "mattmelling@fastmail.com";
+    github = "mattmelling";
+    name = "Matt Melling";
+  };
 }
