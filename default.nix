@@ -33,7 +33,10 @@ stdenv.mkDerivation rec {
     tree ${doc} > $out/doc_build.log
 
     ##TODO: check how Nix's systemd works and edit `ccpd.service`
-    # Installation of the custom Arch Linux CCPD systemd service
+    ## Installation of the custom Arch Linux CCPD systemd service
+    substituteInPlace ccpd.service \
+      --replace ExecStart=/usr/bin/ccpd ExecStart=${capt}/bin/ccpd
+
     install -dm755 $out/lib/systemd/system/
     install -Dm664 ccpd.service $out/lib/systemd/system/ccpd.service
 
@@ -46,10 +49,10 @@ stdenv.mkDerivation rec {
 
     ##FIXME: how to install a ppd to cups?
     ##       capt's ppd files are in ${capt}/share/cups/model
-    install -dm755 $out/share/ppd/cupsfilters/
-    for _f in ${capt}/share/cups/model/CN*CAPT*.ppd; do
-      ln -s $_f $out/share/ppd/cupsfilters
-    done
+    # install -dm755 $out/share/ppd/cupsfilters/
+    # for _f in ${capt}/share/cups/model/CN*CAPT*.ppd; do
+    #   ln -s $_f $out/share/ppd/cupsfilters
+    # done
   '';
 }
 
