@@ -1,7 +1,7 @@
-{ fetchFromGitHub, stdenv, pythonPackages, gnupg, perl }:
+{ fetchFromGitHub, stdenv, python3Packages, gnupg, perl }:
 
 let version = "3.0.0"; in
-pythonPackages.buildPythonApplication {
+python3Packages.buildPythonApplication {
   name = "pius-${version}";
   namePrefix = "";
 
@@ -19,7 +19,7 @@ pythonPackages.buildPythonApplication {
   '';
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = with pythonPackages; [ six ];
+  propagatedBuildInputs = with python3Packages; [ six ];
 
   meta = {
     homepage = https://www.phildev.net/pius/;
