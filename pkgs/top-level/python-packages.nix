@@ -589,6 +589,8 @@ in {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  geographiclib = callPackage ../development/python-modules/geographiclib { };
+
   geoip2 = callPackage ../development/python-modules/geoip2 { };
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
