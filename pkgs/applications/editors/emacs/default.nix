@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
-        imagemagick gconf ]
+        gconf ]
+    ++ lib.optionals (withX || withNS) [ imagemagick ]
     ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
