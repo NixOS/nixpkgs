@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openmp ];
 
-  buildFlags = [ (optional (isNull openmp) "NO_OPENMP=1") ];
+  buildFlags = [ (optional (openmp == null) "NO_OPENMP=1") ];
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = {

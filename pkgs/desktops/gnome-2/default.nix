@@ -47,9 +47,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   libbonoboui = callPackage ./platform/libbonoboui { };
 
-  gtkhtml = callPackage ./platform/gtkhtml { };
+  gtkhtml = callPackage ./platform/gtkhtml { enchant = pkgs.enchant1; };
 
-  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { };
+  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { enchant = pkgs.enchant1; };
 
   gtkglext = callPackage ./platform/gtkglext { };
 

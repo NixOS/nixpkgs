@@ -9,7 +9,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "lightdm";
-  version = "1.28.0";
+  version = "1.30.0";
 
   outputs = [ "out" "dev" ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "CanonicalLtd";
     repo = pname;
     rev = version;
-    sha256 = "1mmqy1jdvgc0h0h9gli7n4vdv5p8m5019qjr5ni4h73iz6mjdj2b";
+    sha256 = "0i1yygmjbkdjnqdl9jn8zsa1mfs2l19qc4k2capd8q1ndhnjm2dx";
   };
 
   nativeBuildInputs = [

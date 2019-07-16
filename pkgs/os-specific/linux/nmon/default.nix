@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "nmon-${version}";
-  version = "16j";
+  version = "16k";
 
   src = fetchurl {
     url = "mirror://sourceforge/nmon/lmon${version}.c";
-    sha256 = "05a6yc1w421r30qg32a8j0wajjv2ff1mwwsrariv3fz3ng4phf5s";
+    sha256 = "17nbxrnl7kqiaaxn2hwyi65gphbl3wybbyp9vri2q5ifdis3ssib";
   };
 
   buildInputs = [ ncurses ];
-  unpackPhase = ":";
+  dontUnpack = true;
   buildPhase = "cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D X86";
   installPhase = ''
     mkdir -p $out/bin

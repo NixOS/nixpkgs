@@ -9,6 +9,7 @@
 , pcsclite ? null
 , systemd ? null
 , buildServer ? true
+, nocaps ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +32,9 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (pcsclite != null) ''
     substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
       --replace "libpcsclite.so" "${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so"
+  '' + lib.optionalString nocaps ''
+    substituteInPlace "libfreerdp/locale/keyboard_xkbfile.c" \
+      --replace "RDP_SCANCODE_CAPSLOCK" "RDP_SCANCODE_LCONTROL"
   '';
 
   buildInputs = with lib; [

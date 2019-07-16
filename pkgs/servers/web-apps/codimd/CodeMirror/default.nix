@@ -1,4 +1,4 @@
-{ stdenv, pkgs, buildEnv, fetchFromGitHub, nodejs-8_x, phantomjs2, which }:
+{ stdenv, pkgs, fetchFromGitHub, nodejs-8_x, phantomjs2, which }:
 
 let
   nodePackages = import ./node.nix {

@@ -1,34 +1,92 @@
-{ fetchurl, stdenv, pkgconfig, glib, gnome3, nspr, intltool, gobject-introspection
-, vala, sqlite, libxml2, dbus-glib, libsoup, nss, dbus, libgee
-, telepathy-glib, evolution-data-server, libsecret, db }:
+{ fetchurl
+, stdenv
+, pkgconfig
+, meson
+, ninja
+, glib
+, gnome3
+, nspr
+, gettext
+, gobject-introspection
+, vala
+, sqlite
+, libxml2
+, dbus-glib
+, libsoup
+, nss
+, dbus
+, libgee
+, telepathy-glib
+, evolution-data-server
+, libsecret
+, db
+, python3
+, python
+, readline
+, gtk3
+}:
 
 # TODO: enable more folks backends
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.11.4";
+  version = "0.12.1";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16hqh2gxlbx0b0hgq216hndr1m72vj54jvryzii9zqkk0g9kxc57";
+    sha256 = "0xfl6rnzhdbmw1q26xiq34cdiy7a9karpi2r7wyplnnz1zaz5a9w";
   };
 
-  propagatedBuildInputs = [ glib libgee sqlite ];
-
-  buildInputs = [
-    dbus-glib telepathy-glib evolution-data-server
-    libsecret libxml2 libsoup nspr nss db
+  mesonFlags = [
+    # TODO: https://gitlab.gnome.org/GNOME/folks/issues/108
+    "-Ddocs=false"
   ];
 
-  checkInputs = [ dbus ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    gtk3
+    meson
+    ninja
+    pkgconfig
+    python
+    python3
+    vala
+  ];
 
-  nativeBuildInputs = [ pkgconfig intltool vala gobject-introspection ];
+  buildInputs = [
+    db
+    dbus-glib
+    evolution-data-server
+    libsecret
+    libsoup
+    libxml2
+    nspr
+    nss
+    readline
+    telepathy-glib
+  ];
 
-  configureFlags = [ "--disable-fatal-warnings" ];
+  propagatedBuildInputs = [
+    glib
+    libgee
+    sqlite
+  ];
 
-  enableParallelBuilding = true;
+  checkInputs = [
+    dbus
+  ];
 
-  postBuild = "rm -rf $out/share/gtk-doc";
+  # TODO: enable tests
+  # doCheck = true;
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+    patchShebangs tests/tools/manager-file.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -37,11 +95,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library that aggregates people from multiple sources to create metacontacts";
     homepage = https://wiki.gnome.org/Projects/Folks;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     maintainers = gnome3.maintainers;
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

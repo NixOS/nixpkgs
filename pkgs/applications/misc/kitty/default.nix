@@ -21,14 +21,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.13.3";
+  version = "0.14.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "1y0vd75j8g61jdj8miml79w5ri3pqli5rv9iq6zdrxvzfa4b2rmb";
+    sha256 = "15iv3k7iryf10n8n67d37x24pzcarq97a3dr42lbld00k1lx19az";
   };
 
   buildInputs = [
@@ -67,7 +67,6 @@ buildPythonApplication rec {
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
     })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    ./macos-10.11.patch
     ./no-lto.patch
     ./no-werror.patch
     ./png2icns.patch
@@ -84,7 +83,7 @@ buildPythonApplication rec {
     mkdir -p $out
     ${if stdenv.isDarwin then ''
     mkdir "$out/bin"
-    ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
+    ln -s ../Applications/kitty.app/Contents/MacOS/kitty-deref-symlink "$out/bin/kitty"
     mkdir "$out/Applications"
     cp -r kitty.app "$out/Applications/kitty.app"
     '' else ''

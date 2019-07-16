@@ -7,14 +7,14 @@ let
     gemdir = ./.;
   };
 in buildGoPackage rec {
-  version = "1.27.2";
+  version = "1.34.3";
   name = "gitaly-${version}";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "03v8c9ask1f2bk4z51scpm6zh815hcxi5crly5zn7932i2nfvva0";
+    sha256 = "0lv3czkxcan2zv9asd79nn8z1bihyxszi1d5hazmb299v23cppzm";
   };
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";
@@ -27,12 +27,12 @@ in buildGoPackage rec {
 
   postInstall = ''
     mkdir -p $ruby
-    cp -rv $src/ruby/{bin,lib,git-hooks,vendor} $ruby
+    cp -rv $src/ruby/{bin,lib,git-hooks,gitlab-shell} $ruby
 
     # gitlab-shell will try to read its config relative to the source
     # code by default which doesn't work in nixos because it's a
     # read-only filesystem
-    substituteInPlace $ruby/vendor/gitlab-shell/lib/gitlab_config.rb --replace \
+    substituteInPlace $ruby/gitlab-shell/lib/gitlab_config.rb --replace \
        "File.join(ROOT_PATH, 'config.yml')" \
        "'/run/gitlab/shell-config.yml'"
   '';

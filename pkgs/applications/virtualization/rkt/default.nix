@@ -1,4 +1,4 @@
-{ stdenv, lib, autoreconfHook, acl, go, file, git, wget, gnupg1, trousers, squashfsTools,
+{ stdenv, lib, autoreconfHook, acl, go, file, git, wget, gnupg, trousers, squashfsTools,
   cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper, glibc }:
 
 let
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     glibc.out glibc.static
-    autoreconfHook go file git wget gnupg1 trousers squashfsTools cpio acl systemd
+    autoreconfHook go file git wget gnupg trousers squashfsTools cpio acl systemd
     makeWrapper
   ];
 

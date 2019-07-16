@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name    = "ccls-${version}";
-  version = "0.20190301";
+  version = "0.20190314.1";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "1n60mly993czq3mnb82k8yqjrbfnsnx5v5dmr8ylqif3awcsk04i";
+    sha256 = "1yvxliryqx2bc7r6ri4iafbrjx19jk8hnfbvq5xla72q0gqb97lf";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -18,8 +18,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DSYSTEM_CLANG=ON"
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
-    "-DCMAKE_CXX_FLAGS=-fvisibility=hidden"
   ];
+
+  preConfigure = ''
+    cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="-fvisibility=hidden -fno-rtti")
+  '';
 
   shell = runtimeShell;
   postFixup = ''

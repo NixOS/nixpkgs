@@ -1,9 +1,14 @@
 # Builds an ext4 image containing a populated /nix/store with the closure
-# of store paths passed in the storePaths parameter. The generated image
-# is sized to only fit its contents, with the expectation that a script
-# resizes the filesystem at boot time.
+# of store paths passed in the storePaths parameter, in addition to the
+# contents of a directory that can be populated with commands. The
+# generated image is sized to only fit its contents, with the expectation
+# that a script resizes the filesystem at boot time.
 { pkgs
+# List of derivations to be included
 , storePaths
+# Shell commands to populate the ./files directory.
+# All files in that directory are copied to the root of the FS.
+, populateImageCommands ? ""
 , volumeLabel
 , uuid ? "44444444-4444-4444-8888-888888888888"
 , e2fsprogs
@@ -23,13 +28,17 @@ pkgs.stdenv.mkDerivation {
 
   buildCommand =
     ''
+      (
+      mkdir -p ./files
+      ${populateImageCommands}
+      )
       # Add the closures of the top-level store objects.
       storePaths=$(cat ${sdClosureInfo}/store-paths)
 
       # Make a crude approximation of the size of the target image.
       # If the script starts failing, increase the fudge factors here.
-      numInodes=$(find $storePaths | wc -l)
-      numDataBlocks=$(du -c -B 4096 --apparent-size $storePaths | awk '$2 == "total" { print int($1 * 1.03) }')
+      numInodes=$(find $storePaths ./files | wc -l)
+      numDataBlocks=$(du -s -c -B 4096 --apparent-size $storePaths ./files | tail -1 | awk '{ print int($1 * 1.03) }')
       bytes=$((2 * 4096 * $numInodes + 4096 * $numDataBlocks))
       echo "Creating an EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks)"
 
@@ -46,6 +55,12 @@ pkgs.stdenv.mkDerivation {
 
       echo "copying store paths to image..."
       cptofs -t ext4 -i $out $storePaths /nix/store/
+
+      (
+      echo "copying files to image..."
+      cd ./files
+      cptofs -t ext4 -i $out ./* /
+      )
 
       # I have ended up with corrupted images sometimes, I suspect that happens when the build machine's disk gets full during the build.
       if ! fsck.ext4 -n -f $out; then

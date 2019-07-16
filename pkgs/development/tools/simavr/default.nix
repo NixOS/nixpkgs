@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, libelf, which, git, pkgconfig, freeglut
-, avrbinutils, avrgcc, avrlibc
+{ stdenv, fetchFromGitHub, libelf, which, pkgconfig, freeglut
+, avrgcc, avrlibc
 , libGLU_combined
 , GLUT }:
 

@@ -22,7 +22,7 @@
  <para>
   You can get a list of the available packages as follows:
 <screen>
-$ nix-env -qaP '*' --description
+<prompt>$ </prompt>nix-env -qaP '*' --description
 nixos.firefox   firefox-23.0   Mozilla Firefox - the browser, reloaded
 <replaceable>...</replaceable>
 </screen>

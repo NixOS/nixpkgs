@@ -1,7 +1,6 @@
 { buildBazelPackage
 , cacert
 , fetchFromGitHub
-, fetchpatch
 , git
 , go
 , stdenv

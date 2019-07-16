@@ -1,5 +1,4 @@
 { stdenv
-, fetchurl
 , fetchFromGitHub
 , autoreconfHook
 , pkgconfig

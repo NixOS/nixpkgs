@@ -12,7 +12,7 @@ To update the list of packages from MELPA,
 
 */
 
-{ fetchurl, lib, stdenv, texinfo }:
+{ lib, stdenv, texinfo }:
 
 self:
 

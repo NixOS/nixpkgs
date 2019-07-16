@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation {
-  name = "xf86-video-nested-2012-06-15";
+  name = "xf86-video-nested-2017-06-12";
 
   src = fetchgit {
     url = git://anongit.freedesktop.org/xorg/driver/xf86-video-nested;
-    rev = "ad48dc6eb98776a8a886f26f31c0110352fa1da4";
-    sha256 = "0r5k9rk8mq4j51a310qvvfmhhz8a0cmcwr8pl8mkwfsgcpwxbpfg";
+    rev = "6a48b385c41ea89354d0b2ee7f4649a1d1d9ec70";
+    sha256 = "133rd2kvr2q2wmwpx82bb93qbi8wm8qp1vlmbhgc7aslz0j4cqqv";
   };
 
   buildInputs =

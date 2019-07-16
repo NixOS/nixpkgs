@@ -1,35 +1,64 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python3, libxml2Python, libxslt, which
-, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, gettext, itstool
+{ stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkgconfig
+, python3
+, libxml2Python
+, docbook_xml_dtd_43
+, docbook_xsl
+, libxslt
+, gettext
+, gnome3
 , withDblatex ? false, dblatex
 }:
 
 stdenv.mkDerivation rec {
-  name = "gtk-doc-${version}";
-  version = "1.29";
+  pname = "gtk-doc";
+  version = "1.30";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gtk-doc/${version}/${name}.tar.xz";
-    sha256 = "1cc6yl8l275qn3zpjl6f0s4fwmkczngjr9hhsdv74mln4h08wmql";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = "GTK_DOC_${stdenv.lib.replaceStrings ["."] ["_"] version }";
+    sha256 = "05lr6apj3pd3s59a7k6p45k9ywwrp577ra4pvkhxvb5p7v90c2fi";
   };
 
   patches = [
     passthru.respect_xml_catalog_files_var_patch
+    # https://gitlab.gnome.org/GNOME/gtk-doc/issues/84
+    ./0001-highlight-fix-permission-on-file-style.patch
   ];
 
   outputDevdoc = "out";
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs =
-    [ pkgconfig perl python3 libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
-      gnome-doc-utils gettext which itstool
-    ] ++ stdenv.lib.optional withDblatex dblatex;
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+  ];
 
-  configureFlags = [ "--disable-scrollkeeper" ];
+  buildInputs = [
+    docbook_xml_dtd_43
+    docbook_xsl
+    libxslt
+    pkgconfig
+    python3
+    libxml2Python
+  ]
+  ++ stdenv.lib.optional withDblatex dblatex
+  ;
 
-  # Make six available for binaries, python.withPackages creates a wrapper
+  mesonFlags = [
+    "-Dtests=false"
+    "-Dyelp_manual=false"
+  ];
+
+  # Make pygments available for binaries, python.withPackages creates a wrapper
   # but scripts are not allowed in shebangs so we link it into sys.path.
   postInstall = ''
-    ln -s ${python3.pkgs.six}/${python3.sitePackages}/* $out/share/gtk-doc/python/
+    ln -s ${python3.pkgs.pygments}/${python3.sitePackages}/* $out/share/gtk-doc/python/
   '';
 
   doCheck = false; # requires a lot of stuff
@@ -38,11 +67,15 @@ stdenv.mkDerivation rec {
   passthru = {
     # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch
     respect_xml_catalog_files_var_patch = ./respect-xml-catalog-files-var.patch;
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.gtk.org/gtk-doc;
     description = "Tools to extract documentation embedded in GTK+ and GNOME source code";
+    homepage = "https://www.gtk.org/gtk-doc";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
   };

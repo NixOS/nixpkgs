@@ -104,7 +104,7 @@ in
       "VBoxNetNAT"
       "VBoxSDL"
       "VBoxVolInfo"
-      "VirtualBox"
+      "VirtualBoxVM"
     ]));
 
     users.groups.vboxusers.gid = config.ids.gids.vboxusers;

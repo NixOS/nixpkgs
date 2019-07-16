@@ -20,6 +20,7 @@ let
       # docs
       install -dm755 "$out/share/doc"
       install -m644 ${readmeFile} $out/share/doc/${name}.txt
+      runHook postInstall
     '';
   } // args);
 
@@ -107,7 +108,7 @@ let
     };
 
   mkDictFromDicollecte =
-    { shortName, shortDescription, longDescription, dictFileName }:
+    { shortName, shortDescription, longDescription, dictFileName, isDefault ? false }:
     mkDict rec {
       inherit dictFileName;
       version = "5.3";
@@ -130,6 +131,12 @@ let
       sourceRoot = ".";
       unpackCmd = ''
         unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
+      '';
+      postInstall = stdenv.lib.optionalString isDefault ''
+        for ext in aff dic; do
+          ln -sv $out/share/hunspell/${dictFileName}.$ext $out/share/hunspell/fr_FR.$ext
+          ln -sv $out/share/myspell/dicts/${dictFileName}.$ext $out/share/myspell/dicts/fr_FR.$ext
+        done
       '';
     };
 
@@ -483,6 +490,7 @@ in {
       réformées, suivant la lente évolution de l’orthographe actuelle. Ce
       dictionnaire contient les graphies les moins polémiques de la réforme.
     '';
+    isDefault = true;
   };
 
   fr-reforme1990 = mkDictFromDicollecte {

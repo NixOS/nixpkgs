@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, chromaprint, fetchpatch
+{ stdenv, fetchFromGitHub, makeWrapper, chromaprint
 , fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
 , libGLU, libxcb, lilv, lv2, opusfile

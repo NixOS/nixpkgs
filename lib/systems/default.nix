@@ -3,7 +3,6 @@
 
 rec {
   doubles = import ./doubles.nix { inherit lib; };
-  forMeta = import ./for-meta.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };
@@ -15,7 +14,9 @@ rec {
   # `parsed` is inferred from args, both because there are two options with one
   # clearly prefered, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
-  elaborate = args: let
+  elaborate = args': let
+    args = if lib.isString args' then { system = args'; }
+           else args';
     final = {
       # Prefer to parse `config` as it is strictly more informative.
       parsed = parse.mkSystemFromString (if args ? config then args.config else args.system);

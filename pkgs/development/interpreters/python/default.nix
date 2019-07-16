@@ -13,6 +13,7 @@ with pkgs;
     , pythonVersion
     , packageOverrides
     , sitePackages
+    , hasDistutilsCxxPatch
     , pythonForBuild
     , self
     }: let
@@ -40,7 +41,7 @@ with pkgs;
         inherit sourceVersion;
         pythonAtLeast = lib.versionAtLeast pythonVersion;
         pythonOlder = lib.versionOlder pythonVersion;
-        inherit pythonForBuild;
+        inherit hasDistutilsCxxPatch pythonForBuild;
   };
 
 in {
@@ -93,6 +94,19 @@ in {
       suffix = "";
     };
     sha256 = "066ka8csjwkycqpgyv424d8hhqhfd7r6svsp4sfcvkylci0baq6s";
+    inherit (darwin) CF configd;
+    inherit passthruFun;
+  };
+
+  python38 = callPackage ./cpython {
+    self = python38;
+    sourceVersion = {
+      major = "3";
+      minor = "8";
+      patch = "0";
+      suffix = "b2";
+    };
+    sha256 = "1rh9dz5vmc56y45d6j2wfjw4m7x25i6v8vyld4mrqh06s2gn1hbl";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };

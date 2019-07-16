@@ -1,4 +1,4 @@
-{ stdenv, lib, writeScript, python3, common-updater-scripts, coreutils, gnugrep, gnused }:
+{ stdenv, lib, writeScript, python3, common-updater-scripts }:
 { packageName, attrPath ? packageName, versionPolicy ? "odd-unstable" }:
 
 let
@@ -9,7 +9,7 @@ let
     package_name="$1"
     attr_path="$2"
     version_policy="$3"
-    PATH=${lib.makeBinPath [ common-updater-scripts coreutils gnugrep gnused python ]}
+    PATH=${lib.makeBinPath [ common-updater-scripts python ]}
     latest_tag=$(python "${./find-latest-version.py}" "$package_name" "$version_policy" "stable")
     update-source-version "$attr_path" "$latest_tag"
   '';

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tilix";
-  version = "1.9.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
     rev = version;
-    sha256 = "1k8hqpq6bzmn06b4s8c257n37ghgp3fl7l9g6fy0giwk1x0ix735";
+    sha256 = "0mg9y4xd2pnv0smibg7dyy733jarvx6qpdqap3sj7fpyni0jvpph";
   };
 
   nativeBuildInputs = [

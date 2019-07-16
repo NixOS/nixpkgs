@@ -11,7 +11,6 @@
 , onlyLibVLC ? false
 , withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null
 , jackSupport ? false
-, fetchpatch
 , removeReferencesTo
 , chromecastSupport ? true, protobuf, libmicrodns
 }:
@@ -26,11 +25,11 @@ assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null);
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "3.0.6";
+  version = "3.0.7.1";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/${name}.tar.xz";
-    sha256 = "1lvyyahv6g9zv7m5g5qinyrwmw47zdsd5ysimb862j7kw15nvh8q";
+    sha256 = "1xb4c8n0hkwijzfdlbwadhxnx9z8rlhmrdq4c7q74rq9f51q0m86";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of

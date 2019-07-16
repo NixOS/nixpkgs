@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   name = "ibus-anthy-${version}";
-  version = "1.5.10";
+  version = "1.5.11";
 
   meta = with stdenv.lib; {
     isIbusEngine = true;
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0jpqz7pb9brlqiwrbr3i6wvj3b39a9bs9lljl3qa3r77mz8y0cyc";
+    sha256 = "1zwgswpibh67sgbza8kvg03v06maxc08ihkgm5hmh333sjq9d5c0";
   };
 }

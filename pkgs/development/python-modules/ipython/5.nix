@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 # Build dependencies
 , glibcLocales
 # Test dependencies

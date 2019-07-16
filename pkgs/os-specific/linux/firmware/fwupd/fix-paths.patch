@@ -1,15 +1,71 @@
+diff --git a/data/builder/meson.build b/data/builder/meson.build
+index c7a430c0..e69de29b 100644
 --- a/data/builder/meson.build
 +++ b/data/builder/meson.build
 @@ -1,3 +0,0 @@
 -install_data('README.md',
 -  install_dir : join_paths(localstatedir, 'lib', 'fwupd', 'builder')
 -)
+diff --git a/meson_post_install.sh b/meson_post_install.sh
+index 0cbb6f41..d757a81a 100755
 --- a/meson_post_install.sh
 +++ b/meson_post_install.sh
-@@ -11,6 +11,4 @@
+@@ -11,6 +11,4 @@ LOCALSTATEDIR=$2
      echo 'Updating systemd deps'
      mkdir -p ${DESTDIR}${SYSTEMDUNITDIR}/system-update.target.wants
      ln -sf ../fwupd-offline-update.service ${DESTDIR}${SYSTEMDUNITDIR}/system-update.target.wants/fwupd-offline-update.service
 -    echo 'Creating stateful directory'
 -    mkdir -p ${DESTDIR}${LOCALSTATEDIR}/lib/fwupd
  #fi
+diff --git a/plugins/flashrom/fu-plugin-flashrom.c b/plugins/flashrom/fu-plugin-flashrom.c
+index 598e0c42..a0a2c4a7 100644
+--- a/plugins/flashrom/fu-plugin-flashrom.c
++++ b/plugins/flashrom/fu-plugin-flashrom.c
+@@ -52,7 +52,7 @@ fu_plugin_startup (FuPlugin *plugin, GError **error)
+ 	g_autoptr(GError) error_local = NULL;
+
+ 	/* we need flashrom from the host system */
+-	data->flashrom_fn = fu_common_find_program_in_path ("flashrom", &error_local);
++	data->flashrom_fn = fu_common_find_program_in_path ("@flashrom@/bin/flashrom", &error_local);
+
+ 	/* search for devices */
+ 	hwids = fu_plugin_get_hwids (plugin);
+diff --git a/plugins/uefi/fu-plugin-uefi.c b/plugins/uefi/fu-plugin-uefi.c
+index 9293715c..e2e77c58 100644
+--- a/plugins/uefi/fu-plugin-uefi.c
++++ b/plugins/uefi/fu-plugin-uefi.c
+@@ -416,7 +416,7 @@ fu_plugin_update (FuPlugin *plugin,
+ 	fu_plugin_add_report_metadata (plugin, "MissingCapsuleHeader", str);
+
+ 	/* record boot information to system log for future debugging */
+-	efibootmgr_path = fu_common_find_program_in_path ("efibootmgr", NULL);
++	efibootmgr_path = fu_common_find_program_in_path ("@efibootmgr@/bin/efibootmgr", NULL);
+ 	if (efibootmgr_path != NULL) {
+ 		if (!g_spawn_command_line_sync ("efibootmgr -v",
+ 						&boot_variables, NULL, NULL, error))
+diff --git a/plugins/uefi/fu-uefi-pcrs.c b/plugins/uefi/fu-uefi-pcrs.c
+index 5c7e5239..01acbf7f 100644
+--- a/plugins/uefi/fu-uefi-pcrs.c
++++ b/plugins/uefi/fu-uefi-pcrs.c
+@@ -147,7 +147,7 @@ fu_uefi_pcrs_setup (FuUefiPcrs *self, GError **error)
+ 		/* old name, then new name */
+ 		argv0 = fu_common_find_program_in_path ("tpm2_listpcrs", NULL);
+ 		if (argv0 == NULL)
+-			argv0 = fu_common_find_program_in_path ("tpm2_pcrlist", error);
++			argv0 = fu_common_find_program_in_path ("@tpm2_tools@/bin/tpm2_pcrlist", error);
+ 		if (argv0 == NULL)
+ 			return FALSE;
+ 		if (!fu_uefi_pcrs_setup_tpm20 (self, argv0, error))
+diff --git a/src/fu-common.c b/src/fu-common.c
+index bd6faeef..45ba2a60 100644
+--- a/src/fu-common.c
++++ b/src/fu-common.c
+@@ -436,7 +436,7 @@ fu_common_firmware_builder (GBytes *bytes,
+ 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+ 	/* find bwrap in the path */
+-	bwrap_fn = fu_common_find_program_in_path ("bwrap", error);
++	bwrap_fn = fu_common_find_program_in_path ("@bubblewrap@/bin/bwrap", error);
+ 	if (bwrap_fn == NULL)
+ 		return NULL;
+

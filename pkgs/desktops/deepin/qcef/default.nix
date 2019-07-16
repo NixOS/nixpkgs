@@ -1,9 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools,
-  qtwebchannel, qtx11extras, dtkcore, dtkwidget, qt5integration,
-  libXScrnSaver, gnome2, nss, nspr, alsaLib, atk, cairo, cups, dbus,
-  expat, fontconfig, gdk_pixbuf, glib, gtk2, libX11, libXcomposite,
-  libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr,
-  libXrender, libXtst, libxcb, pango, pulseaudio, xorg, deepin }:
+  qtwebchannel, qtx11extras,
+  gnome2, nss, nspr, alsaLib, atk, cairo, cups, dbus,
+  expat, fontconfig, gdk_pixbuf, glib, gtk2,
+  libxcb, pango, pulseaudio, xorg, deepin }:
 
 let
   rpahtLibraries = [
@@ -42,14 +41,14 @@ in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "qcef";
-  version = "1.1.4.6";
+  version = "1.1.6";
 
   srcs = [
     (fetchFromGitHub {
       owner = "linuxdeepin";
       repo = pname;
       rev = version;
-      sha256 = "06909sd0gf7n4hw6p4j96apjym219zabflgpwjafm7v00bgnwxxs";
+      sha256 = "1x0vb4nkfa1lq0nh6iqpxfvsqmb6qfn305pbc92bsqpgiqd7jvb1";
       name = pname;
     })
     (fetchFromGitHub {
@@ -99,6 +98,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/linuxdeepin/qcef;
     license = licenses.lgpl3;
     platforms = platforms.linux;
+    badPlatforms = [ "aarch64-linux" ];  # the cef-binary is not available
     maintainers = with maintainers; [ romildo ];
   };
 }

@@ -1,8 +1,8 @@
-{stdenv, fetchurl, lib}:
+{fetchurl, lib}:
 
 with lib;
 
-let version = "5.2.28";
+let version = "6.0.8";
 in
 fetchurl rec {
   name = "Oracle_VM_VirtualBox_Extension_Pack-${version}.vbox-extpack";
@@ -10,7 +10,7 @@ fetchurl rec {
   sha256 =
     # Manually sha256sum the extensionPack file, must be hex!
     # Thus do not use `nix-prefetch-url` but instead plain old `sha256sum`.
-    let value = "376e07cbf2ff2844c95c800346c8e4697d7bc671ae0e21e46153b2e7b4ccc1d6";
+    let value = "6d89127c7f043fa96592da96ca87ac5ee9a7afd347d788380f91b695b67d7954";
     in assert (builtins.stringLength value) == 64; value;
 
   meta = {
@@ -18,6 +18,6 @@ fetchurl rec {
     license = licenses.virtualbox-puel;
     homepage = https://www.virtualbox.org/;
     maintainers = with maintainers; [ flokli sander cdepillabout ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let version = "1.100"; in
 fetchzip rec {
@@ -13,7 +13,7 @@ fetchzip rec {
 
   sha256 = "1jqx9micfmiarqh9xp330gl96v3vxbwzz9cmg2vi845n9md4im85";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Anka/Coder fonts";
     homepage = https://code.google.com/archive/p/anka-coder-fonts;
     license = licenses.ofl;

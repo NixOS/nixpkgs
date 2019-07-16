@@ -38,7 +38,7 @@ let
 
     enableParallelBuilding = !stdenv.isDarwin;
 
-    makeFlags = [ "world" ];
+    buildFlags = [ "world" ];
 
     NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
 
@@ -60,6 +60,7 @@ let
         (if atLeast "9.6" then ./patches/less-is-more-96.patch             else ./patches/less-is-more.patch)
         (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
         ./patches/specify_pkglibdir_at_runtime.patch
+        ./patches/findstring.patch
       ] ++ lib.optional stdenv.isLinux ./patches/socketdir-in-run.patch;
 
     installTargets = [ "install-world" ];
@@ -100,6 +101,10 @@ let
         # initdb needs access to "locale" command from glibc.
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
+
+    doCheck = !stdenv.isDarwin;
+    # autodetection doesn't seem to able to find this, but it's there.
+    checkTarget = "check";
 
     doInstallCheck = false; # needs a running daemon?
 
@@ -157,41 +162,41 @@ let
 in self: {
 
   postgresql_9_4 = self.callPackage generic {
-    version = "9.4.21";
+    version = "9.4.23";
     psqlSchema = "9.4";
-    sha256 = "01k0s3a7qy8639zsjp1bjbfnnymyl0rgyylrjbkm81m0779b8j80";
+    sha256 = "16qx4gfq7i2nnxm0i3zxpb3z1mmzx05a3fsh95414ay8n049q00d";
     this = self.postgresql_9_4;
     inherit self;
   };
 
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.16";
+    version = "9.5.18";
     psqlSchema = "9.5";
-    sha256 = "0cg10ri0475vg1c8k1sb5qi4i64hiv9k7crmg15qvvnwsjanqmx4";
+    sha256 = "1pgkz794wmp4f40843sbin49k5lgl59jvl6nazvdbb6mgr441jfz";
     this = self.postgresql_9_5;
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.12";
+    version = "9.6.14";
     psqlSchema = "9.6";
-    sha256 = "114xay230xia2fagisxahs5fc2mza8hmmkr6ibd7nxllp938931f";
+    sha256 = "08hsqczy1ixkjyf2vr3s9x69agfz9yr8lh31fir4z0dfr5jw421z";
     this = self.postgresql_9_6;
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.7";
+    version = "10.9";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "1piyfcrcqscjhnnwn91kdvr764s7d0qz4lgygf9bl6qc71ji1vdz";
+    sha256 = "0m0gbf7nwgag6a1z5f9xszwzgf2xhx0ncakyxwxlzs87n1zk32wm";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.2";
+    version = "11.4";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "01clq2lw0v83zh5dc89xdr3mmap0jr37kdkh401ph6f2177bjxi6";
+    sha256 = "12ycjlqncijgmd5z078ybwda8ilas96lc7nxxmdq140mzpgjv002";
     this = self.postgresql_11;
     inherit self;
   };

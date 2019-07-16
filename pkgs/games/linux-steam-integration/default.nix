@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, git, gtk, pkgs, gettext,
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, git, gtk, gettext,
   gcc_multi, libressl, gnome3, steam }:
 
 let

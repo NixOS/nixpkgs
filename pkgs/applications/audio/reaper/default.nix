@@ -1,16 +1,16 @@
 { stdenv, fetchurl, autoPatchelfHook, makeWrapper
 , alsaLib, xorg
-, gnome3, gtk3, pango, gdk_pixbuf, cairo, glib, freetype
+, gtk3, pango, gdk_pixbuf, cairo, glib, freetype
 , libpulseaudio, xdg_utils
 }:
 
 stdenv.mkDerivation rec {
   name = "reaper-${version}";
-  version = "5.974";
+  version = "5.979";
 
   src = fetchurl {
     url = "https://www.reaper.fm/files/${stdenv.lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
-    sha256 = "0pmjdh4d1jsplv99nrgjn437bgjp7hqk6fynvqk3lbn1zw3wk0i9";
+    sha256 = "0v9i7wgl68clwlw5k6rwligk3b3bl6c8xxabklglbxnx5i6iw5ia";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];

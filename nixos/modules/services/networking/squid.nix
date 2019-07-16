@@ -159,7 +159,6 @@ in
       serviceConfig = {
         Type="forking";
         PIDFile="/run/squid.pid";
-        PermissionsStartOnly = true;
         ExecStart  = "${pkgs.squid}/bin/squid -YCs -f ${squidConfig}";
       };
     };

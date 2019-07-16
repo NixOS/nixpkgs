@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, substituteAll, makeWrapper, meson
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, substituteAll, meson
 , ninja, vala, desktop-file-utils, gtk3, granite, libgee, elementary-settings-daemon
-, gnome-desktop, mutter, gobject-introspection, elementary-icon-theme, wingpanel-with-indicators
-, elementary-gtk-theme, nixos-artwork, elementary-default-settings, lightdm, numlockx
+, gnome-desktop, mutter, elementary-icon-theme, wingpanel-with-indicators
+, elementary-gtk-theme, nixos-artwork, lightdm, numlockx
 , clutter-gtk, libGL, dbus, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig

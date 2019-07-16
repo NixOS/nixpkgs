@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, fetchpatch, pkgconfig
 , iproute, lzo, openssl, pam
 , useSystemd ? stdenv.isLinux, systemd ? null, utillinux ? null
 , pkcs11Support ? false, pkcs11helper ? null,
@@ -32,6 +32,13 @@ in stdenv.mkDerivation rec {
                   ++ optionals stdenv.isLinux [ pam iproute ]
                   ++ optional useSystemd systemd
                   ++ optional pkcs11Support pkcs11helper;
+
+  patches = [
+    ( fetchpatch {
+      url = "https://sources.debian.org/data/main/o/openvpn/2.4.7-1/debian/patches/fix-pkcs11-helper-hang.patch";
+      sha256 = "0c8jzbfsmb0mm9f7kkjxac1hk8q6igm267s687vx3mdqs1wys6bm";
+    })
+  ];
 
   configureFlags = optionals stdenv.isLinux [
     "--enable-iproute2"

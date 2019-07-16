@@ -160,16 +160,22 @@ int posix_spawn(pid_t * pid, const char * path,
     return posix_spawn_real(pid, rewrite(path, buf), file_actions, attrp, argv, envp);
 }
 
+int posix_spawnp(pid_t * pid, const char * file,
+    const posix_spawn_file_actions_t * file_actions,
+    const posix_spawnattr_t * attrp,
+    char * const argv[], char * const envp[])
+{
+    int (*posix_spawnp_real) (pid_t *, const char *,
+        const posix_spawn_file_actions_t *,
+        const posix_spawnattr_t *,
+        char * const argv[], char * const envp[]) = dlsym(RTLD_NEXT, "posix_spawnp");
+    char buf[PATH_MAX];
+    return posix_spawnp_real(pid, rewrite(file, buf), file_actions, attrp, argv, envp);
+}
+
 int execv(const char *path, char *const argv[])
 {
     int (*execv_real) (const char *path, char *const argv[]) = dlsym(RTLD_NEXT, "execv");
     char buf[PATH_MAX];
     return execv_real(rewrite(path, buf), argv);
-}
-
-void *dlopen(const char *filename, int flag)
-{
-    void * (*__dlopen_real) (const char *, int) = dlsym(RTLD_NEXT, "dlopen");
-    char buf[PATH_MAX];
-    return __dlopen_real(rewrite(filename, buf), flag);
 }

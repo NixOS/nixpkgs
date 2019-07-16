@@ -8,7 +8,7 @@ let mkPrefetchScript = tool: src: deps:
 
     nativeBuildInputs = [ makeWrapper ];
 
-    unpackPhase = ":";
+    dontUnpack = true;
 
     installPhase = ''
       install -vD ${src} $out/bin/$name;

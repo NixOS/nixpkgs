@@ -1,4 +1,4 @@
-{ stdenv, version, fetch, cmake, libcxx, fetchpatch }:
+{ stdenv, version, fetch, cmake, fetchpatch }:
 
 stdenv.mkDerivation {
   name = "libunwind-${version}";

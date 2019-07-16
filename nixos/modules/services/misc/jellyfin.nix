@@ -48,12 +48,6 @@ in
       jellyfin = {};
     };
 
-    assertions = [
-      {
-        assertion = !config.services.emby.enable;
-        message = "Emby and Jellyfin are incompatible, you cannot enable both";
-      }
-    ];
   };
 
   meta.maintainers = with lib.maintainers; [ minijackson ];

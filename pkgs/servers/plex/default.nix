@@ -4,8 +4,8 @@
 , writeScript
 , plexRaw
 
-# Old argument for overriding the Plex data directory; isn't necessary for this
-# version of Plex to function, but still around for backwards-compatibility.
+# Old argument for overriding the Plex data directory; not used for this
+# version of Plex, but still around for backwards-compatibility.
 , dataDir ? "/var/lib/plex"
 }:
 

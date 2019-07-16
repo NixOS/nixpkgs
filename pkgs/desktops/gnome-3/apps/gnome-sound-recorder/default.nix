@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, gobject-introspection, wrapGAppsHook, gjs, glib, gtk3, gdk_pixbuf, gst_all_1, gnome3
+{ stdenv, fetchurl, pkgconfig, gettext, gobject-introspection, wrapGAppsHook, gjs, glib, gtk3, gdk_pixbuf, gst_all_1, gnome3
 , meson, ninja, python3, hicolor-icon-theme, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
-  version = "3.32.0";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0rchzap5mg9ach3jcf4sci5v2h5pgpdjafjfllfd09w9yg3brspp";
+    sha256 = "0q83b6dabckmwj8mcw0wvhbxaszwdzzcf8ajx5bldll3lyl5yh2b";
   };
 
   nativeBuildInputs = [

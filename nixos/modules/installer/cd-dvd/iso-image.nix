@@ -198,7 +198,7 @@ let
     fi
 
     ${ # When there is a theme configured, use it, otherwise use the background image.
-    if (!isNull config.isoImage.grubTheme) then ''
+    if config.isoImage.grubTheme != null then ''
       # Sets theme.
       set theme=(hd0)/EFI/boot/grub-theme/theme.txt
       # Load theme fonts
@@ -622,7 +622,7 @@ in
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
         }
-      ] ++ optionals (!isNull config.isoImage.grubTheme) [
+      ] ++ optionals (config.isoImage.grubTheme != null) [
         { source = config.isoImage.grubTheme;
           target = "/EFI/boot/grub-theme";
         }

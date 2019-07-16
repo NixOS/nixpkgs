@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile }:
+{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile }:
 
 let
   blasImplementation = lib.nameFromURL blas.name "-";
@@ -16,18 +16,18 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.16.2";
+  version = "1.16.4";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1c4inssky16p6ab63n1gass6dik1dzxrp3y7kmxbdq6xg4w2wsbc";
+    sha256 = "7242be12a58fec245ee9734e625964b97cf7e3f2f7d016603f9e56660ce479c7";
   };
 
   nativeBuildInputs = [ gfortran pytest ];
   buildInputs = [ blas ];
 
-  patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
+  patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
     # Patching of numpy.distutils is needed to prevent it from undoing the
     # patch to distutils.

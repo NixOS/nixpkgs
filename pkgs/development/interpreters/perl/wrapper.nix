@@ -3,9 +3,7 @@
 , extraOutputsToInstall ? []
 , postBuild ? ""
 , ignoreCollisions ? false
-, lib
 , requiredPerlModules
-, makeWrapperArgs ? []
 }:
 
 # Create a perl executable that knows about additional packages.

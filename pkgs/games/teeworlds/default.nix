@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchurl, stdenv, bam, pkgconfig, makeWrapper, python, alsaLib
+{ fetchFromGitHub, stdenv, bam, pkgconfig, python, alsaLib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack
 }:
 
@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     owner = "teeworlds";
     repo = "teeworlds";
     rev = version;
-    sha256 = "05qj6gdw167pan1gwq82ffz03nmlhhzrv1sslpfm8w81nq4b5c72";
+    sha256 = "1hfj22xxswqnm1s74ln3dwl63rs4mk9g4yvpf75plswbxd0020la";
+    fetchSubmodules = true;
   };
 
   postPatch = ''

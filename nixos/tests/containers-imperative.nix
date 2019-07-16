@@ -35,7 +35,17 @@ import ./make-test.nix ({ pkgs, ...} : {
       ];
     };
 
-  testScript =
+  testScript = let
+    tmpfilesContainerConfig = pkgs.writeText "container-config-tmpfiles" ''
+      {
+        systemd.tmpfiles.rules = [ "d /foo - - - - -" ];
+        systemd.services.foo = {
+          serviceConfig.Type = "oneshot";
+          script = "ls -al /foo";
+          wantedBy = [ "multi-user.target" ];
+        };
+      }
+    ''; in
     ''
       # Make sure we have a NixOS tree (required by ‘nixos-container create’).
       $machine->succeed("PAGER=cat nix-env -qa -A nixos.hello >&2");
@@ -92,6 +102,15 @@ import ./make-test.nix ({ pkgs, ...} : {
       # Stop and start (regression test for #4989)
       $machine->succeed("nixos-container stop $id1");
       $machine->succeed("nixos-container start $id1");
+
+      # Ensure tmpfiles are present
+      $machine->log("creating container tmpfiles");
+      $machine->succeed("nixos-container create tmpfiles --config-file ${tmpfilesContainerConfig}");
+      $machine->log("created, starting…");
+      $machine->succeed("nixos-container start tmpfiles");
+      $machine->log("done starting, investigating…");
+      $machine->succeed("echo \$(nixos-container run tmpfiles -- systemctl is-active foo.service) | grep -q active;");
+      $machine->succeed("nixos-container destroy tmpfiles");
 
       # Execute commands via the root shell.
       $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;

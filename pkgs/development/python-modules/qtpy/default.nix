@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "QtPy";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gjg7farw6mkmrwqcg6ms7j74g8py2msvawddji4wy8yfvql1ifl";
+    sha256 = "14hws3zc2d548bfkxk1j2xy4ll368rak3z16bz3pdlj9j259jrpb";
   };
 
   # no concrete propagatedBuildInputs as multiple backends are supposed

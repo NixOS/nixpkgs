@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, python }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.28";
+  version = "2.1.32";
   pname = "Tautulli";
   name = "${pname}-${version}";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "Tautulli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yq2dqljfc7ci1n8c8szpylxcimhbfjr46m24hnsqp623w2gvm46";
+    sha256 = "05z6l3qs2m72c1hcl3qd1lm17hsmyqk48f8dcsvrxa5hibmf84j4";
   };
 
   buildPhase = ":";

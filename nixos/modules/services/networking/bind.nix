@@ -184,7 +184,7 @@ in
       preStart = ''
         mkdir -m 0755 -p /etc/bind
         if ! [ -f "/etc/bind/rndc.key" ]; then
-          ${pkgs.bind.out}/sbin/rndc-confgen -r /dev/urandom -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
+          ${pkgs.bind.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
         fi
 
         ${pkgs.coreutils}/bin/mkdir -p /run/named

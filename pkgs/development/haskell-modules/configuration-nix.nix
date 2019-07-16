@@ -130,17 +130,18 @@ self: super: builtins.intersectAttrs super {
 
   # Prevents needing to add `security_tool` as a run-time dependency for
   # everything using x509-system to give access to the `security` executable.
-  x509-system = if pkgs.stdenv.hostPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
-    then let inherit (pkgs.darwin) security_tool;
-      in pkgs.lib.overrideDerivation (addBuildDepend super.x509-system security_tool) (drv: {
-        # darwin.security_tool is broken in Mojave (#45042)
+  x509-system =
+    if pkgs.stdenv.hostPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
+    then
+      # darwin.security_tool is broken in Mojave (#45042)
 
-        # We will use the system provided security for now.
-        # Beware this WILL break in sandboxes!
+      # We will use the system provided security for now.
+      # Beware this WILL break in sandboxes!
 
-        # TODO(matthewbauer): If someone really needs this to work in sandboxes,
-        # I think we can add a propagatedImpureHost dep here, but I’m hoping to
-        # get a proper fix available soonish.
+      # TODO(matthewbauer): If someone really needs this to work in sandboxes,
+      # I think we can add a propagatedImpureHost dep here, but I’m hoping to
+      # get a proper fix available soonish.
+      overrideCabal super.x509-system (drv: {
         postPatch = (drv.postPatch or "") + ''
           substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
         '';
@@ -279,7 +280,8 @@ self: super: builtins.intersectAttrs super {
                             then dontCheck
                             else pkgs.lib.id;
       in dontCheckDarwin (super.llvm-hs.override {
-        llvm-config = pkgs.llvm_6;
+        llvm-config = pkgs.llvm_8;
+        llvm-hs-pure = super.llvm-hs-pure_8_0_0;
       });
 
   # Needs help finding LLVM.
@@ -490,7 +492,11 @@ self: super: builtins.intersectAttrs super {
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
   # https://github.com/haskell-servant/servant/pull/1128
-  servant-client-core = appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch;
+  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.15" then
+    appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch
+  else
+    super.servant-client-core;
+
 
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
@@ -567,5 +573,17 @@ self: super: builtins.intersectAttrs super {
 
   # Avoid infitite recursion with tonatona.
   tonaparser = dontCheck super.tonaparser;
+
+  # Needs internet to run tests
+  HTTP = dontCheck super.HTTP;
+
+  # Break infinite recursions.
+  Dust-crypto = dontCheck super.Dust-crypto;
+  nanospec = dontCheck super.nanospec;
+  options = dontCheck super.options;
+  snap-server = dontCheck super.snap-server;
+
+  # Tests require internet
+  dhall_1_24_0 = dontCheck super.dhall_1_24_0;
 
 }

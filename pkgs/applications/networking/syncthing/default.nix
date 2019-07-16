@@ -1,16 +1,16 @@
-{ buildGoPackage, fetchpatch, stdenv, lib, procps, fetchFromGitHub }:
+{ buildGoPackage, stdenv, lib, procps, fetchFromGitHub }:
 
 let
   common = { stname, target, postInstall ? "" }:
     buildGoPackage rec {
-      version = "1.1.1";
+      version = "1.1.4";
       name = "${stname}-${version}";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "1nkc4ivc8mg9c1njqlkhb9i5f4c1via1rdqfbhwgkj86s6cnxrg7";
+        sha256 = "0a19l1kp4cwyzcd53v9yzv3ms69gn78gajkyfawafr7ls0i8x82f";
       };
 
       goPackagePath = "github.com/syncthing/syncthing";

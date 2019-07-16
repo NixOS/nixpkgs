@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python3, libcap, glib
-, libssh, zlib, cmake, extra-cmake-modules, fetchpatch, makeWrapper
+, libssh, nghttp2, zlib, cmake, extra-cmake-modules, fetchpatch, makeWrapper
 , withQt ? true, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
 }:
@@ -10,21 +10,21 @@ assert withQt  -> qt5  != null;
 with stdenv.lib;
 
 let
-  version = "3.0.1";
+  version = "3.0.2";
   variant = if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
-  name = "wireshark-${variant}-${version}";
+  pname = "wireshark-${variant}";
+  inherit version;
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "13605bpnnbqsdr8ybqnscbz9g422zmyymn4q5aci28vc1wylr1l6";
+    sha256 = "0fz5lbyiw4a27fqc4ndi1w20bpcb6wi9k7vjv29l9fhd99kca7ky";
   };
 
   cmakeFlags = [
     "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
-    "-DENABLE_QT5=${if withQt then "ON" else "OFF"}"
     "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
   ];
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    gettext pcre perl libpcap lua5 libssh openssl libgcrypt
+    gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
     libgpgerror gnutls geoip c-ares python3 glib zlib makeWrapper
   ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
     ++ optionals stdenv.isLinux  [ libcap libnl ]
@@ -94,6 +94,8 @@ in stdenv.mkDerivation {
   '');
 
   enableParallelBuilding = true;
+
+  dontFixCmake = true;
 
   shellHook = ''
     # to be able to run the resulting binary

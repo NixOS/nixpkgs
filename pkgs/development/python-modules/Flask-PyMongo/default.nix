@@ -8,18 +8,19 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-PyMongo";
-  version = "2.2.0";
+  pname = "flask-pymongo";
+  version = "2.3.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "112625c5d5b4e35aad301ef9e937b7275043d310d75bd76e2b2dd07147c8217a";
+    pname = "Flask-PyMongo";
+    inherit version;
+    sha256 = "051kwdk07y4xm4yawcjhn6bz8swxp9nanv7jj35mz2l0r0nv03k2";
   };
 
   checkInputs = [ pytest ];
 
   checkPhase = ''
-    py.test
+    pytest
   '';
 
   # Tests seem to hang

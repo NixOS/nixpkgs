@@ -6,13 +6,13 @@
 
 let
   pname = "network-manager-applet";
-  version = "1.8.20";
+  version = "1.8.22";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1v1lvw9ak37gxha11rv49sai1vdyv128hdy0kliibiv6alavn385";
+    sha256 = "1vbyhxknixyrf75pbjl3rxcy32m8y9cx5s30s3598vgza081rvzb";
   };
 
   mesonFlags = [

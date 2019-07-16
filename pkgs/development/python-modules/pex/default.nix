@@ -1,20 +1,19 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "1.6.6";
+  version = "1.6.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca887bedc9c6e0eab72fcb4c20eda8fff975d06b75993a85ee1dfc763ba38e86";
+    sha256 = "1hg30y8b4b96r4skhz2qmsp7li1izcg8854q3fi48rks0kcfx5fw";
   };
 
-  prePatch = ''
-    substituteInPlace setup.py --replace 'SETUPTOOLS_REQUIREMENT,' '"setuptools"'
-  '';
+  nativeBuildInputs = [ setuptools ];
 
   # A few more dependencies I don't want to handle right now...
   doCheck = false;
@@ -24,7 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pantsbuild/pex";
     license = licenses.asl20;
     maintainers = with maintainers; [ copumpkin ];
-    broken = true;
   };
 
 }

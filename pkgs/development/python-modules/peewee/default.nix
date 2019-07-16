@@ -10,14 +10,14 @@
 buildPythonPackage rec {
 
   pname = "peewee";
-  version = "3.9.5";
+  version = "3.9.6";
 
   # pypi release does not provide tests
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = pname;
     rev = version;
-    sha256 = "0c2hkkpp9rajnw5px17wd72x95k7wc2a0iy55pjhi5ly2cqd9ylv";
+    sha256 = "1pgmsd7v73d0gqxsa4wnm9s3lyffw46wvvkqn25xgh4v8z869fg2";
   };
 
 

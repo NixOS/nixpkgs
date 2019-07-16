@@ -8,7 +8,7 @@ let
   version = "2.0.0";
 
 in stdenv.mkDerivation rec {
-  name = "gnuradio-limesdr-${version}";
+  name = "gr-limesdr-${version}";
 
   src = fetchFromGitHub {
     owner = "myriadrf";

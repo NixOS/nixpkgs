@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, makeWrapper, jre
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper, jre
 , useCCTweaked ? true
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   name = "ccemux-${version}";
 
   src = jar;
-  unpackPhase = "true";
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];

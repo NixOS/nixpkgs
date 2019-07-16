@@ -9,7 +9,7 @@ in
 stdenv.mkDerivation {
   name = "dotty-${dotty-bare.version}";
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin

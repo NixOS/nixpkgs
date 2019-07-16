@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       ln -sf "${cctools}/bin/$i" "$out/bin/$i"
     done
 
-    ln -s ${llvm}/bin/llvm-dsymutil $out/bin/dsymutil
+    ln -s ${llvm}/bin/dsymutil $out/bin/dsymutil
 
     ln -s ${binutils-unwrapped.out}/share $out/share
 

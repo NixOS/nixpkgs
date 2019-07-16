@@ -5,6 +5,10 @@
 # stripLen acts as the -p parameter when applying a patch.
 
 { lib, fetchurl, buildPackages }:
+let
+  # 0.3.4 would change hashes: https://github.com/NixOS/nixpkgs/issues/25154
+  patchutils = buildPackages.patchutils_0_3_3;
+in
 { stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
 
 fetchurl ({
@@ -14,10 +18,10 @@ fetchurl ({
       echo "error: Fetched patch file '$out' is empty!" 1>&2
       exit 1
     fi
-    "${buildPackages.patchutils}/bin/lsdiff" "$out" \
+    "${patchutils}/bin/lsdiff" "$out" \
       | sort -u | sed -e 's/[*?]/\\&/g' \
       | xargs -I{} \
-        "${buildPackages.patchutils}/bin/filterdiff" \
+        "${patchutils}/bin/filterdiff" \
         --include={} \
         --strip=${toString stripLen} \
         ${lib.optionalString (extraPrefix != null) ''
@@ -32,7 +36,7 @@ fetchurl ({
       cat "$out" 1>&2
       exit 1
     fi
-    ${buildPackages.patchutils}/bin/filterdiff \
+    ${patchutils}/bin/filterdiff \
       -p1 \
       ${builtins.toString (builtins.map (x: "-x ${lib.escapeShellArg x}") excludes)} \
       ${builtins.toString (builtins.map (x: "-i ${lib.escapeShellArg x}") includes)} \
@@ -46,7 +50,7 @@ fetchurl ({
       exit 1
     fi
   '' + lib.optionalString revert ''
-    ${buildPackages.patchutils}/bin/interdiff "$out" /dev/null > "$tmpfile"
+    ${patchutils}/bin/interdiff "$out" /dev/null > "$tmpfile"
     mv "$tmpfile" "$out"
   '' + (args.postFetch or "");
   meta.broken = excludes != [] && includes != [];

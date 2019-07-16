@@ -1,4 +1,4 @@
-{ stdenv, lib, kernel, fetchFromGitHub }:
+{ stdenv, kernel, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "anbox-modules";

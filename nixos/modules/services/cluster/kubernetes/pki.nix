@@ -118,7 +118,6 @@ in
     cfsslCertPathPrefix = "${config.services.cfssl.dataDir}/cfssl";
     cfsslCert = "${cfsslCertPathPrefix}.pem";
     cfsslKey = "${cfsslCertPathPrefix}-key.pem";
-    cfsslPort = toString config.services.cfssl.port;
 
     certmgrPaths = [
       top.caFile
@@ -285,7 +284,7 @@ in
         };
       };
 
-      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
+      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (cfg.etcClusterAdminKubeconfig != null)
         (top.lib.mkKubeConfig "cluster-admin" clusterAdminKubeconfig);
 
       environment.systemPackages = mkIf (top.kubelet.enable || top.proxy.enable) [

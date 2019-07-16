@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
+, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , fetchpatch
 }:
 
@@ -131,11 +131,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = optionalString stdenv.isDarwin ''
-    echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
-    substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
-  '';
-
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
            else if stdenv.hostPlatform.system == "i686-linux" then "386"
@@ -187,5 +182,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ cstrahan orivej velovix mic92 ];
     platforms = platforms.linux ++ platforms.darwin;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

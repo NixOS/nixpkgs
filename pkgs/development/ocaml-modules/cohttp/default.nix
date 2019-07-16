@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildDunePackage
-, ppx_fields_conv, ppx_sexp_conv, ppx_deriving
+, ppx_fields_conv, ppx_sexp_conv
 , base64, fieldslib, jsonm, re, stringext, uri
 }:
 

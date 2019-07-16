@@ -1,5 +1,5 @@
 diff --git a/data/meson.build b/data/meson.build
-index f826864..8b8a25e 100644
+index c189753..12c10cb 100644
 --- a/data/meson.build
 +++ b/data/meson.build
 @@ -7,7 +7,7 @@ if get_option('enable-backend')
@@ -11,7 +11,16 @@ index f826864..8b8a25e 100644
      configure_file(output: 'geoclue.conf',
                     input: 'geoclue.conf.in',
                     configuration: conf,
-@@ -26,7 +26,7 @@ if get_option('enable-backend')
+@@ -16,7 +16,7 @@ if get_option('enable-backend')
+     conf = configuration_data()
+     conf.set('libexecdir', libexecdir)
+     conf.set('dbus_srv_user', get_option('dbus-srv-user'))
+-    conf.set('sysconfdir', sysconfdir)
++    conf.set('sysconfdir', sysconfdir_install)
+ 
+     service_dir = join_paths(datadir, 'dbus-1', 'system-services')
+     configure_file(output: 'org.freedesktop.GeoClue2.service',
+@@ -33,7 +33,7 @@ if get_option('enable-backend')
      # DBus Service policy file
      dbus_service_dir = get_option('dbus-sys-dir')
      if dbus_service_dir == ''
@@ -21,10 +30,10 @@ index f826864..8b8a25e 100644
      configure_file(output: 'org.freedesktop.GeoClue2.conf',
                     input: 'org.freedesktop.GeoClue2.conf.in',
 diff --git a/demo/meson.build b/demo/meson.build
-index 99c094f..a29ca96 100644
+index 1427fbe..2623f16 100644
 --- a/demo/meson.build
 +++ b/demo/meson.build
-@@ -56,7 +56,7 @@ if get_option('demo-agent')
+@@ -54,7 +54,7 @@ if get_option('demo-agent')
                                     install_dir: desktop_dir)
  
      # Also install in the autostart directory.
@@ -34,7 +43,7 @@ index 99c094f..a29ca96 100644
                               desktop_file.full_path(),
                               autostart_dir)
 diff --git a/meson.build b/meson.build
-index d738ef6..c794a1d 100644
+index fde6fa3..39b7b0a 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -12,7 +12,11 @@ gclue_api_version='2.0'
@@ -50,8 +59,8 @@ index d738ef6..c794a1d 100644
  localedir = join_paths(datadir, 'locale')
  
  header_dir = 'libgeoclue-' + gclue_api_version
-@@ -29,7 +33,7 @@ conf.set_quoted('PACKAGE_URL', 'http://www.freedesktop.org/wiki/Software/GeoClue
- conf.set_quoted('PACKAGE_BUGREPORT', 'http://bugs.freedesktop.org/enter_bug.cgi?product=GeoClue')
+@@ -29,7 +33,7 @@ conf.set_quoted('PACKAGE_URL', 'https://gitlab.freedesktop.org/geoclue/geoclue/w
+ conf.set_quoted('PACKAGE_BUGREPORT', 'https://gitlab.freedesktop.org/geoclue/geoclue/issues/new')
  conf.set_quoted('TEST_SRCDIR', meson.source_root() + '/data/')
  conf.set_quoted('LOCALEDIR', localedir)
 -conf.set_quoted('SYSCONFDIR', sysconfdir)

@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = https://github.com/davidhalter/jedi;
     description = "An autocompletion tool for Python that can be used for text editors";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

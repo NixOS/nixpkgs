@@ -17,7 +17,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  bindingCfg = { config, ... }: {
+  bindingCfg = { ... }: {
     options = {
 
       keys = mkOption {

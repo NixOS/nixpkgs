@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch
-    ./quazip5.patch
   ];
 
   cmakeFlags = [

@@ -1,20 +1,21 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl, fetchpatch
+{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
 , squashfsTools, iproute, iptables, ebtables, libcap, dqlite
 , sqlite-replication
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
+, criu
 , bash
 }:
 
 buildGoPackage rec {
   pname = "lxd";
-  version = "3.12";
+  version = "3.13";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0m2cq41mz5209csr07gsnmslqvqdxk2p1l2saa23ddnaybqnjy16";
+    sha256 = "1kasnzd8hw9biyx8avbjmpfax1pdbp9g543g8hs6xpksmk93hl82";
   };
 
   preBuild = ''
@@ -33,11 +34,14 @@ buildGoPackage rec {
     rm $bin/bin/{deps,macaroon-identity,generate}
 
     wrapProgram $bin/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash
+      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash criu
       (writeShellScriptBin "apparmor_parser" ''
         exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
       '')
     ]}
+
+    mkdir -p "$bin/share/bash-completion/completions/"
+    cp -av go/src/github.com/lxc/lxd/scripts/bash/lxd-client "$bin/share/bash-completion/completions/lxc"
   '';
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];

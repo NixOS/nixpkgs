@@ -8,11 +8,11 @@
 
 buildPythonApplication rec {
   pname = "ropper";
-  version = "1.11.13";
+  version = "1.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "245c6a1c8b294209bed039cd6a389f1e298d3fe6783d48ad9c6b2df3a41f51ee";
+    sha256 = "1aignpxz6rcbf6yxy1gjr708p56i6nqrbgblq24nanssz9rhkyzg";
   };
   # XXX tests rely on user-writeable /dev/shm to obtain process locks and return PermissionError otherwise
   # workaround: sudo chmod 777 /dev/shm
@@ -25,7 +25,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ capstone filebytes ];
   meta = with stdenv.lib; {
     homepage = https://scoding.de/ropper/;
-    license = licenses.gpl2;
+    license = licenses.bsd3;
     description = "Show information about files in different file formats";
     maintainers = with maintainers; [ bennofs ];
   };

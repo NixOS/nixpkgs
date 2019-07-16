@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ asciidoc libxslt ];
 
-  configurePhase = "true";
+  dontConfigure = true;
   buildPhase     = "make prefix=$out MANPAGE_DOCBOOK_XSL=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl all doc";
   installPhase   = "make prefix=$out install install_doc";
 

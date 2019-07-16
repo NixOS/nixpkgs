@@ -258,7 +258,7 @@ let
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl_1 ];
     gdtools = [ pkgs.cairo.dev pkgs.fontconfig.lib pkgs.freetype.dev ];
-    git2r = [ pkgs.zlib.dev pkgs.openssl.dev pkgs.libssh2.dev ];
+    git2r = [ pkgs.zlib.dev pkgs.openssl.dev pkgs.libssh2.dev pkgs.libgit2 pkgs.pkgconfig ];
     GLAD = [ pkgs.gsl_1 ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
     gmp = [ pkgs.gmp.dev ];
@@ -535,7 +535,6 @@ let
     "gWidgetstcltk"
     "HH"
     "HiveR"
-    "HomoPolymer"
     "ic50"
     "iDynoR"
     "in2extRemes"
@@ -562,7 +561,6 @@ let
     "MplusAutomation"
     "mpmcorrelogram"
     "mritc"
-    "MTurkR"
     "multgee"
     "multibiplotGUI"
     "nodiv"

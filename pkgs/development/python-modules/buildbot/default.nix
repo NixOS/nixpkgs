@@ -1,7 +1,7 @@
-{ stdenv, lib, buildPythonPackage, /*fetchPypi,*/ fetchFromGitHub, makeWrapper, isPy3k,
+{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, future, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
-  txrequests, txgithub, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
+  txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
   isort, pylint, flake8, buildbot-worker, buildbot-pkg, parameterized,
   glibcLocales }:
 
@@ -25,21 +25,12 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.1.0";
+    version = "2.3.1";
 
-    /*src = fetchPypi {
+    src = fetchPypi {
       inherit pname version;
-      sha256 = "1745hj9s0c0fcdjv6w05bma76xqg1fv42v0dslmi4d8yz9phf37w";
-    };*/
-    # Temporarily use GitHub source because PyPi archive is missing some files
-    # needed for the tests to pass. This has been fixed upstream.
-    # See: https://github.com/buildbot/buildbot/commit/30f5927cf9a80f98ed909241a149469dec3ce68d
-    src = fetchFromGitHub {
-      owner = "buildbot";
-      repo = "buildbot";
-      rev = "v${version}";
-      sha256 = "022ybhdvp0hp2z0cwgx7n41jyh56bpxj3fwm4z7ppzj1qhm7lb65";
-    } + "/master";
+      sha256 = "0qzr6my8zvaj0a1jwyaf254rdgm1xcyq8zp4b6fa5aqigfld4dfg";
+    };
 
     propagatedBuildInputs = [
       # core

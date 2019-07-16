@@ -36,10 +36,15 @@
 let
   basicEnv = (callPackage ../bundled-common {}) args;
 
-  cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" ] // {
+  cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" "passthru" ] // {
     inherit preferLocalBuild allowSubstitutes; # pass the defaults
 
     buildInputs = buildInputs ++ lib.optional (scripts != []) makeWrapper;
+
+    passthru = basicEnv.passthru // {
+      inherit basicEnv;
+      inherit (basicEnv) env;
+    } // passthru;
   };
 in
   runCommand basicEnv.name cmdArgs ''

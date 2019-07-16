@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, yosys, python3 }:
+{ stdenv, fetchFromGitHub, yosys, bash, python3 }:
 
 stdenv.mkDerivation rec {
   name = "symbiyosys-${version}";
@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/sby \
       --replace "##yosys-sys-path##" \
                 "sys.path += [p + \"/share/yosys/python3/\" for p in [\"$out\", \"${yosys}\"]]"
+    substituteInPlace $out/share/yosys/python3/sby_core.py \
+      --replace "/bin/bash" \
+                "${bash}/bin/bash"
   '';
   meta = {
     description = "Tooling for Yosys-based verification flows";

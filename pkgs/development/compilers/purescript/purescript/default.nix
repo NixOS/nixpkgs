@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, gmp, ncurses5, lib }:
+{ stdenv, pkgs, fetchurl, zlib, gmp, ncurses5, lib }:
 
 # from justinwoo/easy-purescript-nix
 # https://github.com/justinwoo/easy-purescript-nix/blob/d383972c82620a712ead4033db14110497bc2c9c/purs.nix
@@ -18,19 +18,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.12.5";
+  version = "0.13.0";
 
   src =
     if stdenv.isDarwin
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "15j9lkrl15dicx37bmh0199b3qdixig7w24wvdzi20jqbacz8nkn";
+      sha256 = "0xpisy38gj6fgyyzm6fdl0v819dhjmil4634xxangvhvs7jf5il0";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "07dva5gxq77g787krscv4dsz5088fzkvpmm9fwxw9a59jszzs7kq";
+      sha256 = "06g5q69yv6c3alq9vr8zjqqzamlii7xf6vj9j52akjq5lww214ba";
     };
 
 
@@ -50,6 +50,11 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/etc/bash_completion.d/
     $PURS --bash-completion-script $PURS > $out/etc/bash_completion.d/purs-completion.bash
   '';
+
+  passthru.tests = {
+    minimal-module = pkgs.callPackage ./test-minimal-module {};
+  };
+
   meta = with stdenv.lib; {
     description = "A strongly-typed functional programming language that compiles to JavaScript";
     homepage = http://www.purescript.org/;

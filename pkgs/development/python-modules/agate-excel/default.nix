@@ -1,4 +1,4 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , agate, openpyxl, xlrd, nose
 }:
 

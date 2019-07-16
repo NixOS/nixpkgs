@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, tinyxml-2, cmake, qtbase, qtmultimedia, fetchpatch }:
+{ stdenv, fetchFromGitHub, tinyxml-2, cmake, qtbase, qtmultimedia }:
 stdenv.mkDerivation rec {
   version = "1.0.13";
   name = "pro-office-calculator-${version}";

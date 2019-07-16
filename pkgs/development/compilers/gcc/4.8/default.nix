@@ -411,13 +411,14 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ peti ];
+    maintainers = with stdenv.lib.maintainers; [ peti veprbl ];
 
     platforms =
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
       stdenv.lib.platforms.illumos ++
       stdenv.lib.platforms.darwin;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }
 

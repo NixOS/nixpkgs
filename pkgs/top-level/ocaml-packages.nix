@@ -1,8 +1,6 @@
 { lib, newScope, pkgs, config }:
 
 let
-  inherit (pkgs.stdenv.hostPlatform) system;
-
   liftJaneStreet = self: super: super.janeStreet // super;
 
   mkOcamlPackages = ocaml:
@@ -57,24 +55,13 @@ let
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
-    bap = callPackage ../development/ocaml-modules/bap {
-      inherit (janeStreet_0_9_0) core_kernel ppx_jane parsexp;
-      ezjsonm = ezjsonm.override {
-        inherit (janeStreet_0_9_0) sexplib;
-        hex = hex.override {
-          cstruct = cstruct.override {
-            inherit (janeStreet_0_9_0) sexplib;
-          };
-        };
-      };
-      uri = uri_1_9.override {
-        inherit (janeStreet_0_9_0) ppx_sexp_conv sexplib;
-      };
-    };
+    bap = callPackage ../development/ocaml-modules/bap { };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
+
+    bistro = callPackage ../development/ocaml-modules/bistro { };
 
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
@@ -230,8 +217,6 @@ let
 
     earley = callPackage ../development/ocaml-modules/earley { };
 
-    earley_ocaml = callPackage ../development/ocaml-modules/earley_ocaml { };
-
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
     elina = callPackage ../development/ocaml-modules/elina { };
@@ -285,6 +270,8 @@ let
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
+
+    hmap = callPackage ../development/ocaml-modules/hmap { };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
@@ -443,6 +430,8 @@ let
 
     markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
 
+    mdx = callPackage ../development/ocaml-modules/mdx { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
@@ -563,6 +552,10 @@ let
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
+
+    opium = callPackage ../development/ocaml-modules/opium { };
+
+    opium_kernel = callPackage ../development/ocaml-modules/opium_kernel { };
 
     opti = callPackage ../development/ocaml-modules/opti { };
 
@@ -688,6 +681,8 @@ let
 
     ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
 
+    printbox = callPackage ../development/ocaml-modules/printbox { };
+
     process = callPackage ../development/ocaml-modules/process { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
@@ -751,10 +746,6 @@ let
       then callPackage ../development/ocaml-modules/uri { }
       else callPackage ../development/ocaml-modules/uri/legacy.nix { };
 
-    uri_1_9 = callPackage ../development/ocaml-modules/uri {
-      legacy = true;
-    };
-
     uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
       legacyVersion = true;
     };
@@ -801,8 +792,8 @@ let
     janeStreet = import ../development/ocaml-modules/janestreet {
       inherit janePackage ocamlbuild angstrom ctypes cryptokit;
       inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
-      inherit ppx_deriving re zarith ppxlib;
-      inherit (pkgs) stdenv openssl;
+      inherit ppx_deriving re ppxlib;
+      inherit (pkgs) openssl;
     };
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
@@ -1093,7 +1084,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_4_08 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.08.nix { });
 
-  ocamlPackages_latest = ocamlPackages_4_07;
+  ocamlPackages_latest = ocamlPackages_4_08;
 
   ocamlPackages = ocamlPackages_4_06;
 }

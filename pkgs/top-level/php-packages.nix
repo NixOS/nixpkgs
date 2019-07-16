@@ -4,7 +4,7 @@ let
   self = with self; {
     buildPecl = import ../build-support/build-pecl.nix {
       inherit php;
-      inherit (pkgs) stdenv autoreconfHook fetchurl;
+      inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
     };
 
     # Wrap mkDerivation to prepend pname with "php-" to make names consistent
@@ -73,15 +73,15 @@ let
   };
 
   composer = mkDerivation rec {
-    version = "1.8.5";
+    version = "1.8.6";
     pname = "composer";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "05qfgh2dz8pjf47ndyhkicqbnqzwypk90cczd4c6d8jl9gbiqk2f";
+      sha256 = "0hnm7njab9nsifpb1qbwx54yfpsi00g8mzny11s13ibjvd9rnvxn";
     };
 
-    unpackPhase = ":";
+    dontUnpack = true;
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -102,7 +102,7 @@ let
   };
 
   couchbase = buildPecl rec {
-    version = "2.6.0";
+    version = "2.6.1";
     pname = "couchbase";
 
     buildInputs = [ pkgs.libcouchbase pkgs.zlib igbinary pcs ];
@@ -111,7 +111,7 @@ let
       owner = "couchbase";
       repo = "php-couchbase";
       rev = "v${version}";
-      sha256 = "0lhcvgd4a0wvxniinxajj48p5krbp44h8932021qq14rv94r4k0b";
+      sha256 = "0jdzgcvab1vpxai23brmmvizjjq2d2dik9aklz6bzspfb512qjd6";
     };
 
     configureFlags = [ "--with-couchbase" ];
@@ -142,6 +142,31 @@ let
     ];
   };
 
+  event = buildPecl rec {
+    version = "2.5.2";
+    pname = "event";
+
+    sha256 = "0b9zbwyyfcrzs1gcpqn2dkjq6jliw89g2m981f8ildbp84snkpcf";
+
+    configureFlags = [
+      "--with-event-libevent-dir=${pkgs.libevent.dev}"
+      "--with-event-core"
+      "--with-event-extra"
+      "--with-event-pthreads"
+    ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [ openssl libevent ];
+
+    meta = with pkgs.lib; {
+      description = ''
+        This is an extension to efficiently schedule I/O, time and signal based
+        events using the best I/O notification mechanism available for specific platform.
+      '';
+      license = licenses.php301;
+      homepage = "https://bitbucket.org/osmanov/pecl-event/";
+    };
+  };
+
   igbinary = buildPecl rec {
     version = "3.0.1";
     pname = "igbinary";
@@ -154,10 +179,10 @@ let
   };
 
   imagick = buildPecl rec {
-    version = "3.4.3";
+    version = "3.4.4";
     pname = "imagick";
 
-    sha256 = "0z2nc92xfc5axa9f2dy95rmsd2c81q8cs1pm4anh0a50x9g5ng0z";
+    sha256 = "0xvhaqny1v796ywx83w7jyjyd0nrxkxf34w9zi8qc8aw8qbammcd";
 
     configureFlags = [ "--with-imagick=${pkgs.imagemagick.dev}" ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
@@ -196,7 +221,7 @@ let
 
     sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
 
-    buildInputs = [ pkgs.re2c pkgs.oracle-instantclient ];
+    buildInputs = [ pkgs.oracle-instantclient ];
     configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient}/lib" ];
   };
 
@@ -217,12 +242,12 @@ let
   };
 
   php-cs-fixer = mkDerivation rec {
-    version = "2.14.2";
+    version = "2.15.1";
     pname = "php-cs-fixer";
 
     src = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-      sha256 = "1d5msgrkiim8iwkkrq3m1cnx7wfi96m1qs6rbh279kw5ysvzkaj9";
+      sha256 = "0qbqdki6vj8bgj5m2k4mi0qgj17r6s2v2q7yc30hhgvksf7vamlc";
     };
 
     phases = [ "installPhase" ];
@@ -347,12 +372,12 @@ let
   };
 
   phpstan = mkDerivation rec {
-    version = "0.11.5";
+    version = "0.11.12";
     pname = "phpstan";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "13akllfr5dav0y61i4ym5ww8z32ynwj5lpvsfiwx6z52avmcrc29";
+      sha256 = "12k74108f7a3k7ms8n4c625vpxrq75qamw1k1q09ndzmbn3i7c9b";
     };
 
     phases = [ "installPhase" ];
@@ -377,6 +402,67 @@ let
       license = licenses.mit;
       homepage = https://github.com/phpstan/phpstan;
       maintainers = with maintainers; [ etu ];
+    };
+  };
+
+  pinba = if isPhp73 then pinba73 else pinba7;
+
+  pinba7 = assert !isPhp73; buildPecl rec {
+    version = "1.1.1";
+    pname = "pinba";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "tony2001";
+      repo = "pinba_extension";
+      rev = "RELEASE_1_1_1";
+      sha256 = "1kdp7vav0y315695vhm3xifgsh6h6y6pny70xw3iai461n58khj5";
+    };
+
+    meta = with pkgs.lib; {
+      description = "PHP extension for Pinba";
+      longDescription = ''
+        Pinba is a MySQL storage engine that acts as a realtime monitoring and
+        statistics server for PHP using MySQL as a read-only interface.
+      '';
+      homepage = "http://pinba.org/";
+    };
+  };
+
+  pinba73 = assert isPhp73; buildPecl rec {
+    version = "1.1.2-dev";
+    pname = "pinba";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "tony2001";
+      repo = "pinba_extension";
+      rev = "edbc313f1b4fb8407bf7d5acf63fbb0359c7fb2e";
+      sha256 = "02sljqm6griw8ccqavl23f7w1hp2zflcv24lpf00k6pyrn9cwx80";
+    };
+
+    meta = with pkgs.lib; {
+      description = "PHP extension for Pinba";
+      longDescription = ''
+        Pinba is a MySQL storage engine that acts as a realtime monitoring and
+        statistics server for PHP using MySQL as a read-only interface.
+      '';
+      homepage = "http://pinba.org/";
+    };
+  };
+
+  protobuf = buildPecl rec {
+    version = "3.8.0";
+    pname = "protobuf";
+
+    sha256 = "09zs7w9iv6432i0js44ihxymbd4pcxlprlzqkcjsxjpbprs4qpv2";
+
+    buildInputs = with pkgs; [ (if isPhp73 then pcre2 else pcre) ];
+
+    meta = with pkgs.lib; {
+      description = ''
+        Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
+      '';
+      license = licenses.bsd3;
+      homepage = "https://developers.google.com/protocol-buffers/";
     };
   };
 

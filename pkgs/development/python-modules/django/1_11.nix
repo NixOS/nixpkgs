@@ -1,16 +1,15 @@
 { stdenv, buildPythonPackage, fetchurl, substituteAll,
-  pythonOlder,
   geos, gdal, pytz,
   withGdal ? false
 }:
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "1.11.20";
+  version = "1.11.22";
 
   src = fetchurl {
     url = "https://www.djangoproject.com/m/releases/1.11/${pname}-${version}.tar.gz";
-    sha256 = "0h90kdq8r4y8wa73hdxmyy5psnwlg61dcq3qsa098cpfiyh9vaa3";
+    sha256 = "0if8p7sgbvpy3m8d25pw1x232s14ndd60w5s5d88jl3hl505s3c3";
   };
 
   patches = stdenv.lib.optionals withGdal [

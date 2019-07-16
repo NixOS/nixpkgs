@@ -9,7 +9,9 @@ layerPath="./layers/$layerNumber"
 echo "Creating layer #$layerNumber for $@"
 
 mkdir -p "$layerPath"
-tar --no-recursion -rf "$layerPath/layer.tar" /nix /nix/store
+tar --no-recursion -rf "$layerPath/layer.tar" \
+    --mtime="@$SOURCE_DATE_EPOCH" \
+    --owner=0 --group=0 /nix /nix/store
 tar -rpf "$layerPath/layer.tar" --hard-dereference --sort=name \
     --mtime="@$SOURCE_DATE_EPOCH" \
     --owner=0 --group=0 "$@"

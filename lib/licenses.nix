@@ -434,12 +434,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   lgpl21 = spdx {
     spdxId = "LGPL-2.1-only";
-    fullName = "GNU Library General Public License v2.1 only";
+    fullName = "GNU Lesser General Public License v2.1 only";
   };
 
   lgpl21Plus = spdx {
     spdxId = "LGPL-2.1-or-later";
-    fullName = "GNU Library General Public License v2.1 or later";
+    fullName = "GNU Lesser General Public License v2.1 or later";
   };
 
   lgpl3 = spdx {
@@ -457,9 +457,9 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "libpng License";
   };
 
-  libpng2 = {
-    fullName = "libpng License v2"; # 1.6.36+
-    url = "http://www.libpng.org/pub/png/src/libpng-LICENSE.txt";
+  libpng2 = spdx {
+    spdxId = "libpng-2.0"; # Used since libpng 1.6.36.
+    fullName = "PNG Reference Library version 2";
   };
 
   libtiff = spdx {

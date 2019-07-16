@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, makeWrapper, openssl_1_1, pcre, qtwebengine, libsecret, fetchpatch
+, inotify-tools, makeWrapper, openssl_1_1, pcre, qtwebengine, libsecret
 , libcloudproviders
 }:
 

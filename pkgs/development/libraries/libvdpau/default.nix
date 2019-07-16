@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xorg, libGL_driver }:
+{ stdenv, fetchurl, pkgconfig, xorg, mesa }:
 
 stdenv.mkDerivation rec {
   name = "libvdpau-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ xorg.libX11 ];
 
   configureFlags = stdenv.lib.optional stdenv.isLinux
-    "--with-module-dir=${libGL_driver.driverLink}/lib/vdpau";
+    "--with-module-dir=${mesa.drivers.driverLink}/lib/vdpau";
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lX11" else null;
 

@@ -83,7 +83,7 @@ rec {
                  # Sometimes git stores the commitId directly in the file but
                  # sometimes it stores something like: «ref: refs/heads/branch-name»
                  matchRef    = match "^ref: (.*)$" fileContent;
-             in if   isNull matchRef
+             in if   matchRef == null
                 then fileContent
                 else readCommitFromFile (lib.head matchRef) path
            # Sometimes, the file isn't there at all and has been packed away in the
@@ -92,7 +92,7 @@ rec {
            then
              let fileContent = readFile packedRefsName;
                  matchRef    = match (".*\n([^\n ]*) " + file + "\n.*") fileContent;
-             in if   isNull matchRef
+             in if   matchRef == null
                 then throw ("Could not find " + file + " in " + packedRefsName)
                 else lib.head matchRef
            else throw ("Not a .git directory: " + path);

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy37, fetchpatch, iana-etc, libredirect
+{ stdenv, buildPythonPackage, fetchPypi, iana-etc, libredirect
 , case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 
@@ -13,6 +13,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements/test.txt \
+      --replace "moto==1.3.7" moto \
       --replace "pytest>=4.3.1,<4.4.0" pytest
   '';
 

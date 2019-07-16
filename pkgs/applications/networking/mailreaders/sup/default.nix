@@ -1,4 +1,4 @@
-{ lib, bundlerApp, rake, which }:
+{ lib, bundlerApp }:
 
 # Updated with:
 # rm gemset.nix Gemfile.lock

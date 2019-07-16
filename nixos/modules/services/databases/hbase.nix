@@ -94,6 +94,11 @@ in {
 
   config = mkIf config.services.hbase.enable {
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.logDir}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.hbase = {
       description = "HBase Server";
       wantedBy = [ "multi-user.target" ];
@@ -103,19 +108,7 @@ in {
         HBASE_LOG_DIR = cfg.logDir;
       };
 
-      preStart =
-        ''
-        mkdir -p ${cfg.dataDir};
-        mkdir -p ${cfg.logDir};
-
-        if [ "$(id -u)" = 0 ]; then
-          chown ${cfg.user}:${cfg.group} ${cfg.dataDir}
-          chown ${cfg.user}:${cfg.group} ${cfg.logDir}
-        fi
-        '';
-
       serviceConfig = {
-        PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
         ExecStart = "${cfg.package}/bin/hbase --config ${configDir} master start";

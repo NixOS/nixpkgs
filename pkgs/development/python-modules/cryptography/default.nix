@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "2.6.1"; # Also update the hash in vectors.nix
+  version = "2.7"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19iwz5avym5zl6jrrrkym1rdaa9h61j20ph4cswsqgv8xg5j3j16";
+    sha256 = "1inlnr36kl36551c9rcad99jmhk81v33by3glkadwdcgmi17fd76";
   };
 
   outputs = [ "out" "dev" ];
@@ -51,14 +51,6 @@ buildPythonPackage rec {
 
   checkPhase = ''
     py.test --disable-pytest-warnings tests
-  '';
-
-  # The test assumes that if we're on Sierra or higher, that we use `getentropy`, but for binary
-  # compatibility with pre-Sierra for binary caches, we hide that symbol so the library doesn't
-  # use it. This boils down to them checking compatibility with `getentropy` in two different places,
-  # so let's neuter the second test.
-  postPatch = ''
-    substituteInPlace ./tests/hazmat/backends/test_openssl.py --replace '"16.0"' '"99.0"'
   '';
 
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we

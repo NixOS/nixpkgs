@@ -10,7 +10,6 @@
 # Whether the derivation provides a Python module or not.
 , toPythonModule
 , namePrefix
-, writeScript
 , update-python-libraries
 }:
 
@@ -48,6 +47,9 @@
 
 # Skip wrapping of python programs altogether
 , dontWrapPythonPrograms ? false
+
+# Skip setting the PYTHONNOUSERSITE environment variable in wrapped programs
+, permitUserSite ? false
 
 # Remove bytecode from bin folder.
 # When a Python script has the extension `.py`, bytecode is generated

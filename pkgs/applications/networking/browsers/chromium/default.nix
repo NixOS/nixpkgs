@@ -1,5 +1,5 @@
-{ newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_7
-, makeWrapper, makeDesktopItem, ed
+{ newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_8
+, makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 , libva ? null
 
@@ -18,8 +18,8 @@
 }:
 
 let
-  stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_7.stdenv;
-  llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_7;
+  stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_8.stdenv;
+  llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_8;
 in let
   stdenv = stdenv_;
   llvmPackages = llvmPackages_;
@@ -43,31 +43,6 @@ in let
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash enableWideVine;
     };
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "chromium-browser";
-    exec = "chromium %U";
-    icon = "chromium";
-    comment = "An open source web browser from Google";
-    desktopName = "Chromium";
-    genericName = "Web browser";
-    mimeType = stdenv.lib.concatStringsSep ";" [
-      "text/html"
-      "text/xml"
-      "application/xhtml+xml"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-      "x-scheme-handler/ftp"
-      "x-scheme-handler/mailto"
-      "x-scheme-handler/webcal"
-      "x-scheme-handler/about"
-      "x-scheme-handler/unknown"
-    ];
-    categories = "Network;WebBrowser";
-    extraEntries = ''
-      StartupWMClass=chromium-browser
-    '';
   };
 
   suffix = if channel != "stable" then "-" + channel else "";
@@ -131,11 +106,10 @@ in stdenv.mkDerivation {
 
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
 
-    mkdir -p "$out/share/applications"
+    mkdir -p "$out/share"
     for f in '${chromium.browser}'/share/*; do # hello emacs */
       ln -s -t "$out/share/" "$f"
     done
-    cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
   inherit (chromium.browser) packageName;

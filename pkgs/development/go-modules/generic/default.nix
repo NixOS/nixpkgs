@@ -54,6 +54,7 @@ let
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
+      mkdir -p "''${GOPATH}/pkg/mod/cache/download"
 
       runHook postConfigure
     '';
@@ -124,7 +125,7 @@ let
         local type;
         type="$1"
         if [ -n "$subPackages" ]; then
-          echo "./$subPackages"
+          echo "$subPackages" | sed "s,\(^\| \),\1./,g"
         else
           find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique
         fi
@@ -143,6 +144,7 @@ let
           export NIX_BUILD_CORES=1
       fi
       for pkg in $(getGoDirs ""); do
+        echo "Building subPackage $pkg"
         buildGoDir install "$pkg"
       done
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

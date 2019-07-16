@@ -6,8 +6,8 @@
 
 # Gtk deps
 # upstream gImagereader supports Qt too
-, gtk3, gobject-introspection, wrapGAppsHook
-, gnome3, gtkmm3, gtksourceview3, gtksourceviewmm, gtkspell3, gtkspellmm, cairomm
+, gobject-introspection, wrapGAppsHook
+, gtkmm3, gtksourceview3, gtksourceviewmm, gtkspell3, gtkspellmm, cairomm
 }:
 
 let

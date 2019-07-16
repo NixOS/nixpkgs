@@ -1,4 +1,4 @@
-{ options, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -95,6 +95,7 @@ in
         PRETTY_NAME="NixOS ${cfg.version} (${cfg.codeName})"
         LOGO="nix-snowflake"
         HOME_URL="https://nixos.org/"
+        DOCUMENTATION_URL="https://nixos.org/nixos/manual/index.html"
         SUPPORT_URL="https://nixos.org/nixos/support.html"
         BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
       '';

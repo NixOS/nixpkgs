@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, gfortran, perl, which, config
+{ stdenv, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -7,6 +7,7 @@
 # Select a specific optimization target (other than the default)
 # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
+, enableStatic ? false
 }:
 
 with stdenv.lib;
@@ -58,6 +59,7 @@ let
       BINARY = 64;
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = true;
+      NO_AVX512 = true;
       USE_OPENMP = true;
     };
   };
@@ -85,12 +87,12 @@ let
 in
 stdenv.mkDerivation rec {
   name = "openblas-${version}";
-  version = "0.3.5";
+  version = "0.3.6";
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "0hwfplr6ciqjvfqkya5vz92z2rx8bhdg5mkh923z246ylhs6d94k";
+    sha256 = "12vg0g3s4m49fr8z04j15yrgscqnaaflnkckjbffqxnrf90fcav1";
   };
 
   inherit blas64;
@@ -123,7 +125,7 @@ stdenv.mkDerivation rec {
     PREFIX = placeholder "out";
     NUM_THREADS = 64;
     INTERFACE64 = blas64;
-    NO_STATIC = true;
+    NO_STATIC = !enableStatic;
     CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
     HOSTCC = "cc";
     # Makefile.system only checks defined status

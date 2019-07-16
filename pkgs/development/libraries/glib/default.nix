@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, fetchpatch, gettext, meson, ninja, pkgconfig, perl, python3, glibcLocales
+{ config, stdenv, fetchurl, gettext, meson, ninja, pkgconfig, perl, python3, glibcLocales
 , libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
@@ -46,7 +46,7 @@ let
   '';
 
   binPrograms = optional (!stdenv.isDarwin) "gapplication" ++ [ "gdbus" "gio" "gsettings" ];
-  version = "2.60.0";
+  version = "2.60.3";
 in
 
 stdenv.mkDerivation rec {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0ls3njqknb345ni5i8hn9nr1n70kn6s8bi0g6kcqj3c4js5mv1i0";
+    sha256 = "1fb0nx9fcmic8rsh0fbp79lqpasfjxljvnshbw2hsya51mb0vaq4";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch

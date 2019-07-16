@@ -141,7 +141,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg_4 freetype libass libpthreadstubs
-    luaEnv libuchardet mujs nv-codec-headers
+    luaEnv libuchardet mujs
   ] ++ optional alsaSupport        alsaLib
     ++ optional archiveSupport     libarchive
     ++ optional bluraySupport      libbluray
@@ -166,6 +166,7 @@ in stdenv.mkDerivation rec {
     ++ optional xvSupport          libXv
     ++ optional youtubeSupport     youtube-dl
     ++ optional stdenv.isDarwin    libiconv
+    ++ optional stdenv.isLinux     nv-codec-headers
     ++ optionals cddaSupport       [ libcdio libcdio-paranoia ]
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]

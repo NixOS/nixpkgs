@@ -3,7 +3,7 @@
 , fetchPypi
 , hopcroftkarp
 , multiset
-, pytest
+, pytest_3
 , pytestrunner
 , hypothesis
 , setuptools_scm
@@ -12,16 +12,20 @@
 
 buildPythonPackage rec {
   pname = "matchpy";
-  version = "0.4.6";
+  version = "0.5.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eefa1e50a10e1255db61bc2522a6768ad0701f8854859f293ebaa442286faadd";
+    sha256 = "1vvf1cd9kw5z1mzvypc9f030nd18lgvvjc8j56b1s9b7dyslli2r";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "hypothesis>=3.6,<4.0" "hypothesis"
+  '';
+
   buildInputs = [ setuptools_scm pytestrunner ];
-  checkInputs = [ pytest hypothesis ];
+  checkInputs = [ pytest_3 hypothesis ];
   propagatedBuildInputs = [ hopcroftkarp multiset ];
 
   meta = with lib; {

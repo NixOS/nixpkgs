@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, isPy3k
+{ stdenv, fetchPypi, buildPythonPackage
 , numpy
 , absl-py 
 , mock
@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-estimator";
-  version = "1.13.0";
+  version = "1.14.0";
   format = "wheel";
 
   src = fetchPypi {
     pname = "tensorflow_estimator";
     inherit version format;
-    sha256 = "068l4w0w7dj9gqkf8avjclq9zsp7ifwzw4rpf4qjylz3hczamzbw";
+    sha256 = "14irpsyj14vn2dpwr601f54058wywci1pv0hss8s01rl0rk3y1ya";
   };
 
   propagatedBuildInputs = [ mock numpy absl-py ];

@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchFromGitLab, cmake, gfortran, perl
+{ stdenv, fetchFromGitLab, cmake, gfortran, perl
 , openblas, hdf5-cpp, python3, texlive
 , armadillo, openmpi, globalarrays, openssh
 , makeWrapper

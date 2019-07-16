@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, mozjpeg, makeWrapper, coreutils, parallel, findutils }:
+{ stdenv, fetchFromGitHub, mozjpeg, makeWrapper, coreutils, parallel, findutils }:
 
 stdenv.mkDerivation rec {
   name = "jpeg-archive-${version}";

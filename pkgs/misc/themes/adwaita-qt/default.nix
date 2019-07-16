@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, ninja, qtbase }:
+{ stdenv, fetchFromGitHub, cmake, ninja, qtbase }:
 
 stdenv.mkDerivation rec {
   pname = "adwaita-qt";

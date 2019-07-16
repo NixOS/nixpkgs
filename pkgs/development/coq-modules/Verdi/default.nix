@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
   passthru = {
-    compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.6";
+    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" "8.9" ];
  };
 }

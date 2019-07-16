@@ -1,6 +1,6 @@
 # This module provides the proprietary NVIDIA X11 / OpenGL drivers.
 
-{ stdenv, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -138,7 +138,6 @@ in
     services.xserver.drivers = singleton {
       name = "nvidia";
       modules = [ nvidia_x11.bin ];
-      libPath = [ nvidia_x11 ];
       deviceSection = optionalString optimusCfg.enable
         ''
           BusID "${optimusCfg.nvidiaBusId}"

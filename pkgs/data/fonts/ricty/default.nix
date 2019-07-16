@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     description = "A high-quality Japanese font based on Inconsolata and Migu 1M";
     homepage = https://www.rs.tus.ac.jp/yyusa/ricty.html;
     license = licenses.unfree;
-    platforms = platforms.unix;
     maintainers = [ maintainers.mikoim ];
   };
 }

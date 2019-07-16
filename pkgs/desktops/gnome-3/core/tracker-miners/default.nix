@@ -1,18 +1,55 @@
-{ stdenv, fetchurl, substituteAll, intltool, itstool, libxslt, gexiv2, tracker
-, meson, ninja, pkgconfig, vala, wrapGAppsHook, bzip2, dbus, evolution-data-server
-, exempi, flac, giflib, glib, gnome3, gst_all_1, icu, json-glib, libcue, libexif
-, libgrss, libgsf, libiptcdata, libjpeg, libpng, libseccomp, libsoup, libtiff, libuuid
-, libvorbis, libxml2, poppler, taglib, upower, totem-pl-parser }:
+{ stdenv
+, fetchurl
+, substituteAll
+, intltool
+, itstool
+, libxslt
+, gexiv2
+, tracker
+, meson
+, ninja
+, pkgconfig
+, vala
+, wrapGAppsHook
+, bzip2
+, dbus
+, evolution-data-server
+, exempi
+, flac
+, giflib
+, glib
+, gnome3
+, gst_all_1
+, icu
+, json-glib
+, libcue
+, libexif
+, libgrss
+, libgsf
+, libgxps
+, libiptcdata
+, libjpeg
+, libosinfo
+, libpng
+, libseccomp
+, libsoup
+, libtiff
+, libuuid
+, libvorbis
+, libxml2
+, poppler
+, taglib
+, upower
+, totem-pl-parser
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "tracker-miners";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1xbjbd994jxhdan7227kzdnmiblfy0f1vnsws5l809ydgk58f0qr";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0kk5xaajamb8jlm6cfdbc2m3axzr6bnph84m7697xmb0pkg8hdiw";
   };
 
   nativeBuildInputs = [
@@ -46,8 +83,10 @@ in stdenv.mkDerivation rec {
     libexif
     libgrss
     libgsf
+    libgxps
     libiptcdata
     libjpeg
+    libosinfo
     libpng
     libseccomp
     libsoup

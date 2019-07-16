@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "trezord-go-${version}";
-  version = "2.0.26";
+  version = "2.0.27";
 
   # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
   hardeningDisable = [ "fortify" ];
@@ -13,14 +13,14 @@ buildGoPackage rec {
     owner  = "trezor";
     repo   = "trezord-go";
     rev    = "v${version}";
-    sha256 = "0z6x3rf0wm1d7ws1n3m0vq8jmjjki2r9qrq4hkdq4nv61mw4ivyc";
+    sha256 = "00d90qmmk1pays78a2jm8gb7dncvlsjjn4033q1yd1ii3fxc6nh8";
   };
 
   meta = with stdenv.lib; {
     description = "TREZOR Communication Daemon aka TREZOR Bridge";
-    homepage = https://trezor.io;
+    homepage = "https://trezor.io";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ canndrew jb55 "1000101" prusnak ];
+    maintainers = with maintainers; [ canndrew jb55 "1000101" prusnak mmahut ];
     platforms = platforms.unix;
   };
 }

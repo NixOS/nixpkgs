@@ -1,0 +1,7 @@
+[
+    "elm-test",
+    "elm-verify-examples",
+    "elm-doc-preview",
+    { "elm-analyse": "0.16.3" },
+    "elm-upgrade"
+]

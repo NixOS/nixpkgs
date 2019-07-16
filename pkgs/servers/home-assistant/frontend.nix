@@ -1,15 +1,13 @@
-{ lib, fetchPypi, buildPythonPackage, user-agents }:
+{ lib, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "home-assistant-frontend";
-  version = "20190331.0";
+  version = "20190514.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d266a4d3d31af9a50debb99b0e9e9650044698f9157753bec785785057264cf";
+    sha256 = "ba8cfa01b00ff2ee94a91cd83197b4d213e9b9df151daaef11dd0a56d34c5414";
   };
-
-  propagatedBuildInputs = [ user-agents ];
 
   # no Python tests implemented
   doCheck = false;

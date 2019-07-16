@@ -9,11 +9,11 @@ assert postgresSupport -> postgresql != null;
 
 (if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
   pname = "libgda";
-  version = "5.2.8";
+  version = "5.2.9";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0id4my5wh2m6rd7ijqp2azsjdb4l4yjrv3imq71kly00gjc6v1z2";
+    sha256 = "16vxv2qvysh22s8h9h6irx96sacagxkz0i4qgi1wc6ibly6fvjjr";
   };
   configureFlags = with stdenv.lib; [ "--enable-gi-system-install=no" ]
     ++ (optional (mysqlSupport) "--with-mysql=yes")

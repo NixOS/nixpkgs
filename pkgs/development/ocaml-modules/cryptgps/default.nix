@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ocaml findlib];
 
-  configurePhase = "true";	# Skip configure phase
+  dontConfigure = true;	# Skip configure phase
 
   createFindlibDestdir = true;
 

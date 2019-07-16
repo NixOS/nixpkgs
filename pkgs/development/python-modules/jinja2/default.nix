@@ -17,9 +17,6 @@ buildPythonPackage rec {
     pytest -v tests
   '';
 
-  # RecursionError: maximum recursion depth exceeded
-  doCheck = false;
-
   meta = with stdenv.lib; {
     homepage = http://jinja.pocoo.org/;
     description = "Stand-alone template engine";
@@ -29,6 +26,6 @@ buildPythonPackage rec {
       Django inspired non-XML syntax but supports inline expressions and
       an optional sandboxed environment.
     '';
-    maintainers = with maintainers; [ pierron garbas sjourdois ];
+    maintainers = with maintainers; [ pierron sjourdois ];
   };
 }

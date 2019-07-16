@@ -34,6 +34,7 @@ let
     unifi     = import ./exporters/unifi.nix     { inherit config lib pkgs; };
     varnish   = import ./exporters/varnish.nix   { inherit config lib pkgs; };
     bind      = import ./exporters/bind.nix      { inherit config lib pkgs; };
+    wireguard = import ./exporters/wireguard.nix { inherit config lib pkgs; };
   };
 
   mkExporterOpts = ({ name, port }: {

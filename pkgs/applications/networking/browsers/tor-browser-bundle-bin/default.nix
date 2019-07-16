@@ -89,7 +89,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "8.0.8";
+  version = "8.5.4";
 
   lang = "en-US";
 
@@ -99,7 +99,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "14ckbhfiyv01cxnd98iihfz7xvrgcd5k4j7pn9ag4a6xb2l80sxi";
+      sha256 = "0nnzynk3nlnd847c8jjghs9anmr5a2hv7nk1qxigigxqa5vqy96z";
     };
 
     "i686-linux" = fetchurl {
@@ -107,7 +107,7 @@ let
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0g9sd104b6xnbl2j3gbq1ga6j2h0x3jccays0gpbd235bxpjs39a";
+      sha256 = "1b34skl3hwvpy0r4l5ykgnnwhbz7cvly2gi9ib4h7lijjfafiys1";
     };
   };
 in
@@ -389,7 +389,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Tor Browser Bundle built by torproject.org";
     longDescription = tor-browser-bundle.meta.longDescription;
-    homepage = https://www.torproject.org/;
+    homepage = "https://www.torproject.org/";
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm ];
     hydraPlatforms = [];

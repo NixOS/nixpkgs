@@ -1,12 +1,12 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "bootstrap-${version}";
-  version = "3.3.7";
+  pname = "bootstrap";
+  version = "4.3.1";
 
   src = fetchurl {
-    url = "https://github.com/twbs/bootstrap/releases/download/v${version}/bootstrap-${version}-dist.zip";
-    sha256 = "0yqvg72knl7a0rlszbpk7xf7f0cs3aqf9xbl42ff41yh5pzsi67l";
+    url = "https://github.com/twbs/bootstrap/releases/download/v${version}/${pname}-${version}-dist.zip";
+    sha256 = "08rkg4q8x36k03g1d81brhncrzb98sh8r53a5wg3i4p1nwqgv3w8";
   };
 
   buildInputs = [ unzip ];

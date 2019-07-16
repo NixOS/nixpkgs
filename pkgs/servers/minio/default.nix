@@ -13,6 +13,8 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/minio/minio";
 
+  subPackages = [ "." ];
+
   buildFlagsArray = [''-ldflags=
     -X github.com/minio/minio/cmd.Version=${version}
   ''];

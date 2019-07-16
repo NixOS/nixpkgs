@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3
 , vala, desktop-file-utils, gtk3, libxml2, granite, libnotify, vte, libgee
-, elementary-icon-theme, appstream, gobject-introspection, wrapGAppsHook }:
+, elementary-icon-theme, appstream, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "terminal";
-  version = "5.3.4";
+  version = "5.3.5";
 
   name = "elementary-${pname}-${version}";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "08vwgd385j7cbi7c8442sjygzw9qy2phsi5lva4jaxwm8l15hk86";
+    sha256 = "1gd5m24digmx3sgs21ggfiqiwhgym6s1dlg1sv9mdqh5wgsa6b8f";
   };
 
   passthru = {
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream
     desktop-file-utils
-    gobject-introspection
     libxml2
     meson
     ninja

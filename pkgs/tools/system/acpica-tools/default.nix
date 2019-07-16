@@ -1,12 +1,12 @@
 { stdenv, fetchurl, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "acpica-tools-${version}";
-  version = "20190405";
+  pname = "acpica-tools";
+  version = "20190703";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "0d4hajb3d82laf74m2xa91kqkjwmym08r25jf0hly1jbbh7cl0fy";
+    sha256 = "031m124a109vv6fx667h4ca2iav0xszrlvif9zcfxcaxbjsn6991";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";

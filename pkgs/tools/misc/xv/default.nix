@@ -1,21 +1,33 @@
-{ stdenv, fetchFromGitHub, rustPlatform, ncurses }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform
+, ncurses ? null
+, darwin ? null }:
+
+let useNcurses = !stdenv.hostPlatform.isWindows; in
+
+assert useNcurses -> ncurses != null;
 
 rustPlatform.buildRustPackage rec {
   pname   = "xv";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner  = "chrisvest";
     repo   = pname;
     rev    = "${version}";
-    sha256 = "1cghg3ypxx6afllvwzc6j4z4h7mylapapipqghpdndrfizk7rsxi";
+    sha256 = "0x2yd21sr4wik3z22rknkx1fgb64j119ynjls919za8gd83zk81g";
   };
 
-  cargoSha256 = "0iwx9cxnxlif135s2v2hji8xil38xk5a1h147ryb54v6nabaxvjw";
+  cargoSha256 = "0m69pcmnx3c3q7lgvbhxc8dl6lavv5ch4r6wg2bhdmapcmb4p7jq";
 
-  buildInputs = [ ncurses ];
+  buildInputs = lib.optionals useNcurses [ ncurses ]
+  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ])
+  ;
 
-  meta = with stdenv.lib; {
+  # I'm picking pancurses for Windows simply because that's the example given in Cursive's
+  # documentation for picking an alternative backend. We could just as easily pick crossterm.
+  cargoBuildFlags = lib.optionals (!useNcurses) [ "--no-default-features" "--features pancurses-backend" ];
+
+  meta = with lib; {
     description = "A visual hex viewer for the terminal";
     longDescription = ''
       XV is a terminal hex viewer with a text user interface, written in 100% safe Rust.

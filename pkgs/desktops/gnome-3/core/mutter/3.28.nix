@@ -1,19 +1,19 @@
 { fetchFromGitLab, stdenv, substituteAll, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
 , glib, gtk3, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3, fetchpatch
 , gsettings-desktop-schemas, gnome-desktop, wrapGAppsHook
-, libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
+, libtool, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , geocode-glib, libgudev, libwacom, xwayland, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.28.3";
+  version = "3.28.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "4af8d9d4752a94612a98d619e65828f0070a7b0e"; # HEAD of https://gitlab.gnome.org/GNOME/mutter/tree/gnome-3-28
-    sha256 = "1rmc1bf80yq776xhygi1jzgia1y44j2mr2n94vlxgzqc0whamx2v";
+    rev = version;
+    sha256 = "0p8ky306dnm4alkncmsnd8r2awpsi37p0bzvkv313pgqw2hbwq9i";
   };
 
   patches = [

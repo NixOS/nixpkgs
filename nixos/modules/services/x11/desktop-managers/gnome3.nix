@@ -120,9 +120,6 @@ in {
     security.polkit.enable = true;
     services.udisks2.enable = true;
     services.accounts-daemon.enable = true;
-    services.geoclue2.enable = mkDefault true;
-    # GNOME should have its own geoclue agent
-    services.geoclue2.enableDemoAgent = false;
     services.dleyna-renderer.enable = mkDefault true;
     services.dleyna-server.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
@@ -190,6 +187,24 @@ in {
         fi
       '') cfg.sessionPath}
     '';
+
+
+    services.geoclue2.enable = mkDefault true;
+    # GNOME should have its own geoclue agent
+    services.geoclue2.enableDemoAgent = false;
+
+    services.geoclue2.appConfig."gnome-datetime-panel" = {
+      isAllowed = true;
+      isSystem = true;
+    };
+    services.geoclue2.appConfig."gnome-color-panel" = {
+      isAllowed = true;
+      isSystem = true;
+    };
+    services.geoclue2.appConfig."org.gnome.Shell" = {
+      isAllowed = true;
+      isSystem = true;
+    };
 
     environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
 

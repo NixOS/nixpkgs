@@ -5,14 +5,14 @@ gem 'bundler', '>= 1.16.5'
 
 gem 'rugged', '~> 0.28'
 gem 'github-linguist', '~> 6.1', require: 'linguist'
-gem 'gitlab-markup', '~> 1.6.5'
-gem 'gitaly-proto', '~> 1.13.0'
+gem 'gitlab-markup', '~> 1.7.0'
+gem 'gitaly-proto', '~> 1.22.0'
 gem 'activesupport', '~> 5.0.2'
 gem 'rdoc', '~> 4.2'
-gem 'gitlab-gollum-lib', '~> 4.2', require: false
-gem 'gitlab-gollum-rugged_adapter', '~> 0.4.4', require: false
+gem 'gitlab-gollum-lib', '~> 4.2.7.7', require: false
+gem 'gitlab-gollum-rugged_adapter', '~> 0.4.4.2', require: false
 gem 'grpc', '~> 1.15.0'
-gem 'sentry-raven', '~> 2.7.2', require: false
+gem 'sentry-raven', '~> 2.9.0', require: false
 gem 'faraday', '~> 0.12'
 gem 'rbtrace', require: false
 

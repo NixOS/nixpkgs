@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake
+{ stdenv, fetchFromGitHub, cmake
 , qhull, flann, boost, vtk, eigen, pkgconfig, qtbase
 , libusb1, libpcap, libXt, libpng, Cocoa, AGL, cf-private, OpenGL
 }:

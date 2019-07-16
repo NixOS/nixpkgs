@@ -3,7 +3,7 @@
 # preferences -> Folders -> Plug-ins
 # same applies for the scripts
 
-{ pkgs, gimp }:
+{ config, pkgs, gimp }:
 let
   inherit (pkgs) stdenv fetchurl pkgconfig intltool glib fetchFromGitHub;
   inherit (gimp) targetPluginDir targetScriptDir;
@@ -35,7 +35,8 @@ let
   };
 
 in
-rec {
+
+stdenv.lib.makeScope pkgs.newScope (self: with self; {
   gap = pluginDerivation {
     /* menu:
        Video
@@ -90,32 +91,15 @@ rec {
     meta.broken = true;
   };
 
-  resynthesizer = pluginDerivation {
+  resynthesizer = pluginDerivation rec {
     /* menu:
-      Filters/Map/Resynthesize
-      Filters/Enhance/Smart enlarge
-      Filters/Enhance/Smart sharpen
-      Filters/Enhance/Smart remove selection
-    */
-    name = "resynthesizer-0.16";
-    buildInputs = with pkgs; [ fftw ];
-    src = fetchurl {
-      url = http://www.logarithmic.net/pfh-files/resynthesizer/resynthesizer-0.16.tar.gz;
-      sha256 = "1k90a1jzswxmajn56rdxa4r60v9v34fmqsiwfdxqcvx3yf4yq96x";
-    };
-
-    installPhase = "
-      installPlugins resynth
-      installScripts smart-{enlarge,remove}.scm
-    ";
-  };
-
-  resynthesizer2 = pluginDerivation rec {
-    /* menu:
-      Filters/Map/Resynthesize
-      Filters/Enhance/Smart enlarge
-      Filters/Enhance/Smart sharpen
-      Filters/Enhance/Smart remove selection
+      Edit/Fill with pattern seamless...
+      Filters/Enhance/Heal selection...
+      Filters/Enhance/Heal transparency...
+      Filters/Enhance/Sharpen by synthesis...
+      Filters/Enhance/Uncrop...
+      Filters/Map/Style...
+      Filters/Render/Texture...
     */
     pname = "resynthesizer";
     version = "2.0.3";
@@ -243,4 +227,8 @@ rec {
   };
   */
 
-}
+} // stdenv.lib.optionalAttrs (config.allowAliases or true) {
+
+  resynthesizer2 = resynthesizer;
+
+})

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3, fetchpatch,
+{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
   pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
   vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
 }:

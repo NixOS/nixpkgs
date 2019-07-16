@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitLab, cmake, ninja, pkgconfig, wrapGAppsHook
 , glib, gtk3, gettext, libxkbfile, libX11
-, freerdp, libssh, libgcrypt, gnutls, makeDesktopItem
+, freerdp, libssh, libgcrypt, gnutls
 , pcre, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, libsoup, spice-protocol, spice-gtk, epoxy, at-spi2-core

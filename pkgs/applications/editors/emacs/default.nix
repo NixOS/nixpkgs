@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchpatch, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm
+{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, cf-private, AppKit, GSS, ImageIO, m17n_lib, libotf
@@ -7,7 +7,7 @@
 , withNS ? stdenv.isDarwin
 , withGTK2 ? false, gtk2-x11 ? null
 , withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
-, withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
+, withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 , siteStart ? ./site-start.el

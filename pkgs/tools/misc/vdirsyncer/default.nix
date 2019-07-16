@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     name = "${name}-native";
     inherit src;
     sourceRoot = "source/rust";
-    cargoSha256 = "02fxxw4vr6rpdbslrc9c1zhzs704bw7i40akrmh5cxl26rsffdgk";
+    cargoSha256 = "1qziwlf6nlkpxb1hamb7qsipqg9ibp871rimgpwil38vqmyd570s";
     buildInputs = [ pkgconfig openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
   };
 

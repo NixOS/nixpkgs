@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant2, isocodes, intltool, gobject-introspection, vala}:
+{stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant, isocodes, intltool, gobject-introspection, vala}:
 
 stdenv.mkDerivation rec {
   name = "gtkspell-${version}";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig intltool gobject-introspection vala ];
-  buildInputs = [ aspell gtk3 enchant2 isocodes ];
-  propagatedBuildInputs = [ enchant2 ];
+  buildInputs = [ aspell gtk3 enchant isocodes ];
+  propagatedBuildInputs = [ enchant ];
 
   configureFlags = [
     "--enable-introspection"

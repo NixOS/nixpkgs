@@ -48,7 +48,7 @@ let
     type = types.nullOr types.int;
     default = null;
     example = 365;
-    apply = val: if isNull val then -1 else val;
+    apply = val: if val == null then -1 else val;
     description = mkAutoDesc ''
       The expiration time of ${desc} in days or <literal>null</literal> for no
       expiration time.
@@ -82,7 +82,7 @@ let
          then attrByPath newPath (notFound newPath) cfg.pki.manual
          else findPkiDefinitions newPath val;
     in flatten (mapAttrsToList mkSublist attrs);
-  in all isNull (findPkiDefinitions [] manualPkiOptions);
+  in all (x: x == null) (findPkiDefinitions [] manualPkiOptions);
 
   orgOptions = { ... }: {
     options.users = mkOption {

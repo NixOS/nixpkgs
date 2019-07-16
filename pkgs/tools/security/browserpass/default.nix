@@ -1,4 +1,4 @@
-{ lib, callPackage, buildGoModule, fetchFromGitHub, makeWrapper, gnupg }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, gnupg }:
 buildGoModule rec {
   pname = "browserpass";
   version = "3.0.6";

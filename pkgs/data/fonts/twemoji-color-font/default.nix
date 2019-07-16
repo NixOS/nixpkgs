@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/eosrei/twemoji-color-font/releases";
     license = with licenses; [ cc-by-40 mit ];
     maintainers = [ maintainers.fgaz ];
-    platforms = platforms.linux;
   };
 }

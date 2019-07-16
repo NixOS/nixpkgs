@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, autoreconfHook,
-glib, libzip, boost, fftw, qtbase,
+{ stdenv, fetchFromGitHub, pkgconfig, cmake,
+libzip, boost, fftw, qtbase,
 libusb, makeWrapper, libsigrok4dsl, libsigrokdecode4dsl
 }:
 

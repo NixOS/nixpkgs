@@ -1,4 +1,4 @@
-{ stdenv, lib, writeScript, coreutils, curl, gnugrep, jq, common-updater-scripts, runtimeShell }:
+{ lib, writeScript, coreutils, curl, gnugrep, jq, common-updater-scripts, runtimeShell }:
 
 writeScript "update-tp_smapi" ''
 #!${runtimeShell}

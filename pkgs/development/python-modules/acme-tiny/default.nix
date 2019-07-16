@@ -1,34 +1,26 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, python, openssl }:
+{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm, fusepy, fuse
+, openssl }:
 
 buildPythonPackage rec {
   pname = "acme-tiny";
-  version = "2016-03-26";
+  version = "4.1.0";
 
-  src = fetchFromGitHub {
-    sha256 = "0ngmr3kxcvlqa9mrv3gx0rg4r67xvdjplqfminxliri3ipak853g";
-    rev = "7a5a2558c8d6e5ab2a59b9fec9633d9e63127971";
-    repo = "acme-tiny";
-    owner = "diafygi";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0jmg525n4n98hwy3hf303jbnq23z79sqwgliji9j7qcnph47gkgq";
   };
 
-  # source doesn't have any python "packaging" as such
-  configurePhase = " ";
-  buildPhase = " ";
-  # the tests are... complex
-  doCheck = false;
-
   patchPhase = ''
-    substituteInPlace acme_tiny.py --replace "openssl" "${openssl.bin}/bin/openssl"
+    substituteInPlace acme_tiny.py --replace '"openssl"' '"${openssl.bin}/bin/openssl"'
+    substituteInPlace tests/monkey.py --replace '"openssl"' '"${openssl.bin}/bin/openssl"'
+    substituteInPlace tests/test_module.py --replace '"openssl"' '"${openssl.bin}/bin/openssl"'
+    substituteInPlace tests/monkey.py --replace /etc/ssl/openssl.cnf ${openssl.out}/etc/ssl/openssl.cnf
   '';
 
-  installPhase = ''
-    mkdir -p $out/${python.sitePackages}/
-    cp acme_tiny.py $out/${python.sitePackages}/
-    mkdir -p $out/bin
-    ln -s $out/${python.sitePackages}/acme_tiny.py $out/bin/acme_tiny
-    chmod +x $out/bin/acme_tiny
-  '';
+  buildInputs = [ setuptools_scm ];
+  checkInputs = [ fusepy fuse ];
+
+  doCheck = false; # seems to hang, not sure
 
   meta = with stdenv.lib; {
     description = "A tiny script to issue and renew TLS certs from Let's Encrypt";

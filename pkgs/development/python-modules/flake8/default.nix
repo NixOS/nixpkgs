@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , mock, pytest, pytestrunner
 , configparser, enum34, mccabe, pycodestyle, pyflakes, entrypoints, functools32, typing
 }:
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Code checking using pep8 and pyflakes";
     homepage = https://pypi.python.org/pypi/flake8;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

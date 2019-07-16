@@ -15,7 +15,6 @@ let
     else cfg.database.port;
 
   poolName = "tt-rss";
-  phpfpmSocketName = "/run/phpfpm/${poolName}.sock";
 
   tt-rss-config = pkgs.writeText "config.php" ''
     <?php

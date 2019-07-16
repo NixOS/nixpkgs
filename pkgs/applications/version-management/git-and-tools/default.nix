@@ -89,6 +89,10 @@ let
 
   git-extras = callPackage ./git-extras { };
 
+  git-gone = callPackage ./git-gone {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-hub = callPackage ./git-hub { };
 
   git-ignore = callPackage ./git-ignore { };
@@ -113,6 +117,8 @@ let
 
   git-secrets = callPackage ./git-secrets { };
 
+  git-standup = callPackage ./git-standup { };
+
   git-stree = callPackage ./git-stree { };
 
   git-sync = callPackage ./git-sync { };
@@ -126,6 +132,8 @@ let
   gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
 
   gitflow = callPackage ./gitflow { };
+
+  gitstatus = callPackage ./gitstatus { };
 
   grv = callPackage ./grv { };
 

@@ -12,7 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "173l9yai5yndbyn8nzdl6q11wv4x959bd0w392i82nfsqcz0pfsv";
   };
 
+  configureFlags = [
+    "--program-transform-name='s,^,b,'"
+  ];
+
   doCheck = true;
+
+  postInstall = ''
+    ln -s $out/bin/byacc $out/bin/yacc
+  '';
 
   meta = with stdenv.lib; {
     description = "Berkeley YACC";

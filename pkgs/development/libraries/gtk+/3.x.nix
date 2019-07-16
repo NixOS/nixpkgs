@@ -2,7 +2,7 @@
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobject-introspection, fribidi
 , xorg, epoxy, json-glib, libxkbcommon, gmp, gnome3, autoreconfHook, gsettings-desktop-schemas
 , x11Support ? stdenv.isLinux
-, waylandSupport ? stdenv.isLinux, mesa_noglu, wayland, wayland-protocols
+, waylandSupport ? stdenv.isLinux, mesa, wayland, wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 , AppKit, Cocoa
@@ -48,13 +48,14 @@ stdenv.mkDerivation rec {
     [ expat glib cairo pango gdk_pixbuf atk at-spi2-atk gsettings-desktop-schemas fribidi
       libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
     ++ optional stdenv.isDarwin Cocoa  # explicitly propagated, always needed
-    ++ optionals waylandSupport [ mesa_noglu wayland wayland-protocols ]
+    ++ optionals waylandSupport [ mesa wayland wayland-protocols ]
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
   #TODO: colord?
 
-  # demos fail to install, no idea where's the problem
-  preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
+  ## (2019-06-12) Demos seem to install fine now. Keeping this around in case it fails again.
+  ## (2014-03-27) demos fail to install, no idea where's the problem
+  #preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
 
   enableParallelBuilding = true;
 

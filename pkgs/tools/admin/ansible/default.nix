@@ -3,25 +3,25 @@
 {
   ansible = with python3Packages; toPythonApplication ansible;
 
-  ansible_2_7 = with python3Packages; toPythonApplication ansible;
+  ansible_2_8 = with python3Packages; toPythonApplication ansible;
 
-  ansible_2_6 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
+  ansible_2_7 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
     pname = "ansible";
-    version = "2.6.15";
+    version = "2.7.11";
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "1l4ji9sryfn0l651hy6cf5zqq8fpwi956c7qzjm4sihz5ps6wyhd";
+      sha256 = "0zipzm9al6k74h88b6zkddpcbxqs4cms7lidid6wn1vx3d3dxrp7";
     };
   }));
 
-  ansible_2_5 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
+  ansible_2_6 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
     pname = "ansible";
-    version = "2.5.15";
+    version = "2.6.17";
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "1w9wfv1s2jq6vkx1hm6n69zwxv2pgjj7nidyg452miwh684jpg7z";
+      sha256 = "0ixr3g1nb02xblqyk87bzag8sj8phy37m24xflabfl1k2zfh0313";
     };
   }));
 }

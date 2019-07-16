@@ -138,13 +138,13 @@ services.gitlab = {
 
   <para>
    For example, to backup a Gitlab instance:
-<programlisting>
-$ sudo -u git -H gitlab-rake gitlab:backup:create
-</programlisting>
+<screen>
+<prompt>$ </prompt>sudo -u git -H gitlab-rake gitlab:backup:create
+</screen>
    A list of all availabe rake tasks can be obtained by running:
-<programlisting>
-$ sudo -u git -H gitlab-rake -T
-</programlisting>
+<screen>
+<prompt>$ </prompt>sudo -u git -H gitlab-rake -T
+</screen>
   </para>
  </section>
 </chapter>

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, fetchpatch, mpir, gmp, mpfr, flint}:
+{stdenv, fetchFromGitHub, mpir, gmp, mpfr, flint}:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "arb";

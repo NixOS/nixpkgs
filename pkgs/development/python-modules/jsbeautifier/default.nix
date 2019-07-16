@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonApplication, EditorConfig, fetchpatch, pytest, six }:
+{ lib, fetchPypi, buildPythonApplication, EditorConfig, pytest, six }:
 
 buildPythonApplication rec {
   pname = "jsbeautifier";

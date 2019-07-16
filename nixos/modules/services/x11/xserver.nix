@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  kernelPackages = config.boot.kernelPackages;
-
   # Abbreviations.
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
@@ -347,6 +345,7 @@ in
 
       xkbDir = mkOption {
         type = types.path;
+        default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
         description = ''
           Path used for -xkbdir xserver parameter.
         '';
@@ -663,10 +662,9 @@ in
         restartIfChanged = false;
 
         environment =
-          {
-            LD_LIBRARY_PATH = concatStringsSep ":" ([ "/run/opengl-driver/lib" ]
-              ++ concatLists (catAttrs "libPath" cfg.drivers));
-          } // cfg.displayManager.job.environment;
+          optionalAttrs config.hardware.opengl.setLdLibraryPath
+            { LD_LIBRARY_PATH = pkgs.addOpenGLRunpath.driverLink; }
+          // cfg.displayManager.job.environment;
 
         preStart =
           ''
@@ -707,8 +705,6 @@ in
       [ xorg.xorgserver.out
         xorg.xf86inputevdev.out
       ];
-
-    services.xserver.xkbDir = mkDefault "${pkgs.xkeyboard_config}/etc/X11/xkb";
 
     system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;

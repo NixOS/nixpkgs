@@ -2,7 +2,7 @@
 , ninja, vala, desktop-file-utils, gtk3, granite, libgee
 , geoclue2, libchamplain, clutter, folks, geocode-glib, python3
 , libnotify, libical, evolution-data-server, appstream-glib
-, elementary-icon-theme, gobject-introspection, wrapGAppsHook }:
+, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "calendar";
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig

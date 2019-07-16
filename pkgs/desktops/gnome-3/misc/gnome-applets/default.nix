@@ -26,13 +26,13 @@
 
 let
   pname = "gnome-applets";
-  version = "3.30.0";
+  version = "3.32.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1cvl32486kqw301wy40l1a1sdhanra7bx4smq0a3lmnl3x01zg43";
+    sha256 = "10kd19ymxl2z65121g90mx96m6vcn2a8a50g6a56prrdjsgbgia1";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   configureFlags = [
-    "--with-libpanel-applet-dir=$(out)/share/gnome-panel/applets"
+    "--with-libpanel-applet-dir=${placeholder ''out''}/share/gnome-panel/applets"
   ];
 
   passthru = {

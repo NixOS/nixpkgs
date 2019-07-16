@@ -1,5 +1,5 @@
 # inspired by pkgs/development/haskell-modules/default.nix
-{ pkgs, stdenv, lib
+{ pkgs, lib
 , lua
 , overrides ? (self: super: {})
 }:

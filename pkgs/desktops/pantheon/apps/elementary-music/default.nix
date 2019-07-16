@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, ninja, vala, desktop-file-utils, libxml2, gtk3, granite
+, ninja, vala, desktop-file-utils, gtk3, granite
 , python3, libgee, clutter-gtk, json-glib, libgda, libgpod
 , libnotify, libpeas, libsoup, zeitgeist, gst_all_1, taglib
 , libdbusmenu, libsignon-glib, libaccounts-glib

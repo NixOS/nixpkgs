@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, gd, ncurses, sqlite }:
+{ stdenv, fetchurl, pkgconfig, gd, ncurses, sqlite, check }:
 
 stdenv.mkDerivation rec {
-  name = "vnstat-${version}";
+  pname = "vnstat";
   version = "2.2";
 
   src = fetchurl {
     sha256 = "0b7020rlc568pz6vkiy28kl8493z88wzrn18wv9b0iq2bv1pn2n6";
-    url = "https://humdi.net/vnstat/${name}.tar.gz";
+    url = "https://humdi.net/${pname}/${pname}-${version}.tar.gz";
   };
-
-  buildInputs = [ gd ncurses sqlite ];
 
   postPatch = ''
     substituteInPlace src/cfg.c --replace /usr/local $out
   '';
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gd ncurses sqlite ];
+
+  checkInputs = [ check ];
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Console-based network statistics utility for Linux";

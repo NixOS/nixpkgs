@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchgit
+{ stdenv, fetchgit
 , cmake, pkgconfig
 , python
 , mpi ? null

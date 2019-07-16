@@ -1,17 +1,17 @@
 { stdenv, rustPlatform, fetchFromGitHub, CoreServices, darwin }:
 
 rustPlatform.buildRustPackage rec {
-  name = "watchexec-${version}";
-  version = "1.10.1";
+  pname = "watchexec";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
-    owner = "watchexec";
-    repo = "watchexec";
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "0azfnqx5v1shsd7jdxzn41awh9dbjykv8h1isrambc86ygr1c1cy";
+    sha256 = "10h9g6r5zkm71zpr33imh49187xx1wcv9sw7bf5dllgnxabd0lql";
   };
 
-  cargoSha256 = "1xlcfr2q2pw47sav9iryjva7w9chv90g18hszq8s0q0w71sccv6j";
+  cargoSha256 = "1sqwplvpg0n9j0h9j94m7a6ylgqi4y4wyx489y09z9gm7aqgrsjc";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [
     CoreServices

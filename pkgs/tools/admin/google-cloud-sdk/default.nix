@@ -36,16 +36,18 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ python makeWrapper ];
 
-  phases = [ "installPhase" "fixupPhase" ];
+  doBuild = false;
+
+  patches = [
+    ./gcloud-path.patch
+  ];
 
   installPhase = ''
-    mkdir -p "$out"
-    tar -xzf "$src" -C "$out" google-cloud-sdk
+    mkdir -p $out/google-cloud-sdk
+    cp -R * .install $out/google-cloud-sdk/
 
-    mkdir $out/google-cloud-sdk/lib/surface/alpha
+    mkdir -p $out/google-cloud-sdk/lib/surface/{alpha,beta}
     cp ${./alpha__init__.py} $out/google-cloud-sdk/lib/surface/alpha/__init__.py
-
-    mkdir $out/google-cloud-sdk/lib/surface/beta
     cp ${./beta__init__.py} $out/google-cloud-sdk/lib/surface/beta/__init__.py
 
     # create wrappers with correct env
@@ -68,8 +70,8 @@ in stdenv.mkDerivation rec {
     disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
-    mkdir -p "$out/etc/bash_completion.d/"
-    mv "$out/google-cloud-sdk/completion.bash.inc" "$out/etc/bash_completion.d/gcloud.inc"
+    mkdir -p $out/etc/bash_completion.d
+    mv $out/google-cloud-sdk/completion.bash.inc $out/etc/bash_completion.d/gcloud.inc
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildPhase = "USE_PGXS=1 make";
   installPhase = ''
     install -D pg_similarity.so -t $out/lib/
-    install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/extension
+    install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/postgresql/extension
   '';
 
   meta = {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
        is tightly integrated in the RDBMS in the sense that it defines operators so instead of the traditional
        operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
     '';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = postgresql.meta.platforms;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ danbst ];
   };

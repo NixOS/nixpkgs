@@ -1,10 +1,11 @@
 { stdenv, fetchurl, buildPerlPackage, DBI, postgresql }:
 
-buildPerlPackage rec {
-  name = "DBD-Pg-3.7.4";
+buildPerlPackage {
+  pname = "DBD-Pg";
+  version = "3.7.4";
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/T/TU/TURNSTEP/${name}.tar.gz";
+    url = "mirror://cpan/authors/id/T/TU/TURNSTEP/DBD-Pg-3.7.4.tar.gz";
     sha256 = "0gkqlvbmzbdm0g4k328nlkjdg3wrjm5i2n9jxj1i8sqxkm79rylz";
   };
 

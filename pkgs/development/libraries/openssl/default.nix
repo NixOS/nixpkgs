@@ -7,7 +7,7 @@
 with stdenv.lib;
 
 let
-  common = args@{ version, sha256, patches ? [], withDocs ? false }: stdenv.mkDerivation rec {
+  common = { version, sha256, patches ? [], withDocs ? false }: stdenv.mkDerivation rec {
     name = "openssl-${version}";
 
     src = fetchurl {
@@ -120,8 +120,8 @@ let
 in {
 
   openssl_1_0_2 = common {
-    version = "1.0.2r";
-    sha256 = "1mnh27zf6r1bhm5d9fxqq9slv2gz0d9z2ij9i679b0wapa5x0ldf";
+    version = "1.0.2s";
+    sha256 = "15mbmg8hf7s12vr3v2bdc0pi9y4pdbnsxhzk4fyyap42jaa5rgfa";
     patches = [
       ./1.0.2/nix-ssl-cert-file.patch
 
@@ -132,8 +132,8 @@ in {
   };
 
   openssl_1_1 = common {
-    version = "1.1.1b";
-    sha256 = "0jza8cmznnyiia43056dij1jdmz62dx17wsn0zxksh9h6817nmaw";
+    version = "1.1.1c";
+    sha256 = "142c7zdlz06hjrrvinb9f276czc78bnkyhd9xma621qmmmwk1yzn";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 

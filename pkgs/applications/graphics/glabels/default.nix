@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "glabels-${version}";
+  pname = "glabels";
   version = "3.4.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glabels/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0f2rki8i27pkd9r0gz03cdl1g4vnmvp0j49nhxqn275vi8lmgr0q";
   };
 
@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/glabels-3" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Create labels and business cards";

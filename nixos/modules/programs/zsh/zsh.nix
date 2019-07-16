@@ -12,7 +12,7 @@ let
 
   zshAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
-      (filterAttrs (k: v: !isNull v) cfg.shellAliases)
+      (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
 in
@@ -194,8 +194,6 @@ in
         HISTSIZE=${toString cfg.histSize}
         HISTFILE=${cfg.histFile}
 
-        ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
-
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
 
         # Tell zsh how to find installed completions
@@ -208,6 +206,8 @@ in
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
+
+        ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
 
         ${zshAliases}
 

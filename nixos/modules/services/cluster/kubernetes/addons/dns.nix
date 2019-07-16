@@ -3,7 +3,7 @@
 with lib;
 
 let
-  version = "1.3.1";
+  version = "1.5.0";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -55,9 +55,9 @@ in {
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
-        imageDigest = "sha256:02382353821b12c21b062c59184e227e001079bb13ebd01f9d3270ba0fcbf1e4";
+        imageDigest = "sha256:e83beb5e43f8513fa735e77ffc5859640baea30a882a11cc75c4c3244a737d3c";
         finalImageTag = version;
-        sha256 = "0vbylgyxv2jm2mnzk6f28jbsj305zsxmx3jr6ngjq461czcl5fi5";
+        sha256 = "15sbmhrxjxidj0j0cccn1qxpg6al175w43m6ngspl0mc132zqc9q";
       };
     };
   };
@@ -160,7 +160,7 @@ in {
               fallthrough in-addr.arpa ip6.arpa
             }
             prometheus :${toString ports.metrics}
-            proxy . /etc/resolv.conf
+            forward . /etc/resolv.conf
             cache 30
             loop
             reload

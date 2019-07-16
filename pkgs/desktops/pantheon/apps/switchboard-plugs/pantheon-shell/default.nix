@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala
 , libgee, granite, gexiv2, elementary-settings-daemon, gtk3, gnome-desktop
-, gala, wingpanel, plank, switchboard, gettext, gobject-introspection, bamf }:
+, gala, wingpanel, plank, switchboard, gettext, bamf }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gettext
-    gobject-introspection
     meson
     ninja
     pkgconfig

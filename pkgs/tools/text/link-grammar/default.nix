@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "5.6.0";
+  version = "5.6.2";
   pname = "link-grammar";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchurl {
     url = "http://www.abisource.com/downloads/${pname}/${version}/${name}.tar.gz";
-    sha256 = "0v4hn72npjlcf5aaw3kqmvf05vf15mp2r1s2nbj5ggxpprjj6dsm";
+    sha256 = "1jc6j5kxdv3y4mm82q0rrjvlak8p26fqh92dzw5bkwxnvjmjjg1k";
   };
 
   nativeBuildInputs = [ pkgconfig python3 ];

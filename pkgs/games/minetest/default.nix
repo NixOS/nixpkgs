@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, xlibsWrapper, sqlite, luajit
+, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, sqlite, luajit
 , freetype, gettext, doxygen, ncurses, graphviz, xorg
 , leveldb, postgresql, hiredis
 }:
@@ -61,7 +61,7 @@ let
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ c0dehero fpletz ];
+      maintainers = with maintainers; [ pyrolagus fpletz ];
     };
   };
 

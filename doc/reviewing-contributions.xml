@@ -153,11 +153,11 @@
        nixpkgs-unstable for easier review by running the following commands
        from a nixpkgs clone.
 <screen>
-$ git remote add channels https://github.com/NixOS/nixpkgs-channels.git <co
+<prompt>$ </prompt>git remote add channels https://github.com/NixOS/nixpkgs-channels.git <co
   xml:id='reviewing-rebase-1' />
-$ git fetch channels nixos-unstable <co xml:id='reviewing-rebase-2' />
-$ git fetch origin pull/PRNUMBER/head <co xml:id='reviewing-rebase-3' />
-$ git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD <co
+<prompt>$ </prompt>git fetch channels nixos-unstable <co xml:id='reviewing-rebase-2' />
+<prompt>$ </prompt>git fetch origin pull/PRNUMBER/head <co xml:id='reviewing-rebase-3' />
+<prompt>$ </prompt>git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD <co
   xml:id='reviewing-rebase-4' />
 </screen>
        <calloutlist>
@@ -197,7 +197,7 @@ $ git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD <co
        request url.
       </para>
 <screen>
-$ nix-shell -p nix-review --run "nix-review pr PRNUMBER"
+<prompt>$ </prompt>nix-shell -p nix-review --run "nix-review pr PRNUMBER"
 </screen>
      </listitem>
     </itemizedlist>

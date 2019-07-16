@@ -1,6 +1,5 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig
-, vala, libgee, granite, gtk3, pulseaudio, libcanberra, libcanberra-gtk3
-, switchboard, gobject-introspection }:
+{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, libgee
+, granite, gtk3, pulseaudio, libcanberra, libcanberra-gtk3, switchboard }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sound";
@@ -20,7 +19,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig

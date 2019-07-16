@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null }:
+{ stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? [ ./xim.patch ] }:
 
 stdenv.mkDerivation rec {
   name = "dmenu-4.9";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk
   '';
+
+  makeFlags = [ "CC:=$(CC)" ];
 
   meta = with stdenv.lib; {
       description = "A generic, highly customizable, and efficient menu for the X Window System";

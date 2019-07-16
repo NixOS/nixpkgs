@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, fetchFromGitHub, unzip
+{ stdenv, callPackage, fetchFromGitHub
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
 , steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
 , python2Packages, expat, glib, nspr, nss, openssl
@@ -59,7 +59,7 @@ let self = rec {
     extraRuntimeDependencies = [ ];
 
     installPhase = ''
-      ${if isNull sourceDir then "" else "cd $src/$sourceDir"}
+      ${if sourceDir == null then "" else "cd $src/$sourceDir"}
       d=$out${pluginDir}/${namespace}
       mkdir -p $d
       sauce="."

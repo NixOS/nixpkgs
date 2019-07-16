@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0srjwxipwsfzmpi0v32d1l5lzk9gi5in8ayg33sq8wyp8ygnbji6";
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out"/{lib/antlr,bin}

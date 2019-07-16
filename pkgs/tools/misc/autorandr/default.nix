@@ -53,7 +53,7 @@ in
 
     meta = {
       homepage = https://github.com/phillipberndt/autorandr/;
-      description = "Auto-detect the connect display hardware and load the appropiate X11 setup using xrandr";
+      description = "Automatically select a display configuration based on connected devices";
       license = stdenv.lib.licenses.gpl3Plus;
       maintainers = [ stdenv.lib.maintainers.coroa ];
       platforms = stdenv.lib.platforms.unix;

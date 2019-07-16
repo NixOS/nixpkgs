@@ -60,6 +60,5 @@ stdenv.mkDerivation rec {
     downloadPage = https://www.donationcoder.com/Software/Jibz/Dina/;
     license = licenses.free;
     maintainers = [ maintainers.prikhi ];
-    platforms = platforms.unix;
   };
 }

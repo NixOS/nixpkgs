@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
-, intltool, itstool, libcanberra-gtk3, libxml2
+, itstool, libcanberra-gtk3, libxml2
 , meson, ninja, python3, vala, desktop-file-utils
 }:
 

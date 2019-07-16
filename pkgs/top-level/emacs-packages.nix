@@ -32,7 +32,7 @@
 #   `meta` with `platforms` and `homepage` set to something you are
 #   unlikely to want to override for most packages
 
-{ lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, fetchpatch, runCommand, writeText
+{ lib, newScope, stdenv, fetchurl, fetchFromGitHub, runCommand, writeText
 
 , emacs, texinfo, lndir, makeWrapper
 , trivialBuild
@@ -46,7 +46,7 @@ with lib.licenses;
 let
 
   elpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
-    inherit fetchurl lib stdenv texinfo;
+    inherit lib stdenv texinfo;
   };
 
   melpaStablePackages = import ../applications/editors/emacs-modes/melpa-stable-packages.nix {
@@ -166,6 +166,7 @@ let
       cd sqlite
       make
     '';
+    stripDebugList = [ "share" ];
     packageRequires = [ emacs emacsql ];
     meta = {
       homepage = "https://melpa.org/#/emacsql-sqlite";
@@ -287,6 +288,45 @@ let
 
   icicles = callPackage ../applications/editors/emacs-modes/icicles { };
 
+  irony = melpaBuild rec {
+    pname = "irony";
+    ename = "irony";
+    version = "20190516";
+    src = fetchFromGitHub {
+      owner = "Sarcasm";
+      repo = "irony-mode";
+      rev = "c3ae899b61124a747ebafc705086345e460ac08e";
+      sha256 = "06ld83vzyklfmrfi6pp893mvlnhacv9if75c9pbipjvy6nwfb63r";
+    };
+    recipe = fetchurl {
+      url = "https://raw.githubusercontent.com/milkypostman/melpa/3cfa28c7314fa57fa9a3aaaadf9ef83f8ae541a9/recipes/irony";
+      sha256 = "1xcxrdrs7imi31nxpszgpaywq4ivni75hrdl4zzrf103xslqpl8a";
+      name = "recipe";
+    };
+    preConfigure = ''
+      cd server
+    '';
+    preBuild = ''
+      make
+    '';
+    postInstall = ''
+      mkdir -p $out
+      mv $out/share/emacs/site-lisp/elpa/*/server/bin $out
+      rm -rf $out/share/emacs/site-lisp/elpa/*/server
+    '';
+    preCheck = ''
+      cd source/server
+    '';
+    dontUseCmakeBuildDir = true;
+    doCheck = true;
+    packageRequires = [ emacs ];
+    nativeBuildInputs = [ external.cmake external.llvmPackages.llvm external.llvmPackages.clang ];
+    meta = {
+      homepage = "https://melpa.org/#/irony";
+      license = lib.licenses.gpl3;
+    };
+  };
+
   redshank = callPackage ../applications/editors/emacs-modes/redshank { };
 
   rtags = melpaBuild rec {
@@ -294,7 +334,7 @@ let
     version = "2.12";
     src = external.rtags.src;
 
-    configurePhase = ":";
+    dontConfigure = true;
 
     propagatedUserEnvPkgs = [ external.rtags ];
     recipe = writeText "recipe" ''

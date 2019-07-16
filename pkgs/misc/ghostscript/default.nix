@@ -51,6 +51,16 @@ stdenv.mkDerivation rec {
       url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=d3537a54740d78c5895ec83694a07b3e4f616f61";
       sha256 = "1hr8bpi87bbg1kvv28kflmfh1dhzxw66p9q0ddvbrj72qd86p3kx";
     })
+    (fetchpatch {
+      name = "CVE-2019-3839-part-1";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=4ec9ca74bed49f2a82acb4bf430eae0d8b3b75c9";
+      sha256 = "0gn1n9fq5msrxxzspidcnmykp1iv3yvx5485fddmgrslr52ngcf9";
+    })
+    (fetchpatch {
+      name = "CVE-2019-3839-part-2";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=db24f253409d5d085c2760c814c3e1d3fa2dac59";
+      sha256 = "1h6kpwc6ryr6jlxjr6bfnvmmf8x0kqmyjlx3hggqjs23n0wsr9p9";
+    })
   ];
 
   outputs = [ "out" "man" "doc" ];

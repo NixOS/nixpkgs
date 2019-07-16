@@ -3,21 +3,21 @@
 , libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, bullet, luajit
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
 , dbus, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
-, curl, libinput, systemd, mesa_noglu, writeText, gtk3
+, curl, libinput, systemd, mesa, writeText, gtk3
 }:
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.22.1";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "04mfjvaxi36b7r6kn4n0nq2gj97cbldk9iqnr5pf8jnm8plyblr0";
+    sha256 = "1l0wdgzxqm2y919277b1p9d37xzg808zwxxaw0nn44arh8gqk68n";
   };
 
   nativeBuildInputs = [ pkgconfig gtk3 ];
 
-  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGL mesa_noglu
+  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGL mesa
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.xorgproto
     xorg.libX11 udev systemd ];
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Enlightenment foundation libraries";
-    homepage = http://enlightenment.org/;
+    homepage = https://enlightenment.org/;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;
     maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
