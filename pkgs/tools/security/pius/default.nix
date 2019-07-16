@@ -1,6 +1,6 @@
 { fetchFromGitHub, stdenv, pythonPackages, gnupg, perl }:
 
-let version = "2.2.7"; in
+let version = "3.0.0"; in
 pythonPackages.buildPythonApplication {
   name = "pius-${version}";
   namePrefix = "";
@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication {
     owner = "jaymzh";
     repo = "pius";
     rev = "v${version}";
-    sha256 = "1kjj44lf9di4ylvmc949dxncllzd8afp0yknr3152dmxkw1vl127";
+    sha256 = "0l87dx7n6iwy8alxnhvval8h1kl4da6a59hsilbi65c6bpj4dh3y";
   };
 
   patchPhase = ''
