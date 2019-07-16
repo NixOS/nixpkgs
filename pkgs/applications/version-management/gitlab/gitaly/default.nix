@@ -6,7 +6,7 @@ let
     inherit ruby;
     gemdir = ./.;
     gemset =
-      let x = import "${gemdir}/gemset.nix";
+      let x = import (gemdir + "/gemset.nix");
       in x // {
         # grpc expects the AR environment variable to contain `ar rpc`. See the
         # discussion in nixpkgs #63056.
