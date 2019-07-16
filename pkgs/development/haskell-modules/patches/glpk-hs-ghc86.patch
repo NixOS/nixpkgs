@@ -1,0 +1,83 @@
+--- a/glpk-hs.cabal
++++ b/glpk-hs.cabal
+@@ -28,7 +28,7 @@
+   main-is:          examples/example1.hs
+   build-depends:    base >= 4 && < 5, array, containers, mtl, deepseq, gasp, glpk-hs
+-  ghc-options:      -O2 -Wall
++  ghc-options:      -O2 -Wall -threaded
+   default-language: Haskell2010
+ 
+ library
+   Build-Depends:    base >= 4 && < 5, array, containers, mtl, deepseq, gasp
+--- a/src/Data/LinearProgram/Common.hs
++++ b/src/Data/LinearProgram/Common.hs
+@@ -5,15 +5,15 @@
+ 	module Algebra.Classes,
+ 	module Data.LinearProgram.Types) where
+ 
+-import Data.LinearProgram.Spec
+-import Algebra.Classes
+-import Data.LinearProgram.Types
++import           Algebra.Classes
++import           Data.LinearProgram.Spec
++import           Data.LinearProgram.Types
+ 
+-import Data.Map
+-import GHC.Exts (build)
++import           Data.Map
++import           GHC.Exts                 (build)
+ 
+ {-# RULES
+-	"assocs" assocs = \ m -> build (\ c n -> foldWithKey (curry c) n m);
+-	"elems" elems = \ m -> build (\ c n -> foldWithKey (const c) n m);
+-	"keys" keys = \ m -> build (\ c n -> foldWithKey (\ k _ -> c k) n m);
++	"assocs" assocs = \ m -> build (\ c n -> foldrWithKey (curry c) n m);
++	"elems" elems = \ m -> build (\ c n -> foldrWithKey (const c) n m);
++	"keys" keys = \ m -> build (\ c n -> foldrWithKey (\ k _ -> c k) n m);
+ 	#-}
+--- a/src/Data/LinearProgram/GLPK/Types.hs
++++ b/src/Data/LinearProgram/GLPK/Types.hs
+@@ -1,22 +1,24 @@
+-{-# LANGUAGE EmptyDataDecls, ForeignFunctionInterface #-}
++{-# LANGUAGE EmptyDataDecls           #-}
++{-# LANGUAGE ForeignFunctionInterface #-}
+ 
+ module Data.LinearProgram.GLPK.Types where
+ 
+-import Control.Concurrent (runInBoundThread)
+-import Control.Exception (bracket)
+-import Control.Monad.Trans (MonadIO (..))
+-import Control.Monad (ap)
++import           Control.Concurrent  (runInBoundThread)
++import           Control.Exception   (bracket)
++import           Control.Monad       (ap)
++import           Control.Monad.Fail
++import           Control.Monad.Trans (MonadIO (..))
+ 
+-import Foreign.Ptr
+-import Foreign.ForeignPtr
++import           Foreign.ForeignPtr
++import           Foreign.Ptr
+ 
+ foreign import ccall unsafe "c_glp_create_prob" glpCreateProb :: IO (Ptr GlpProb)
+ foreign import ccall unsafe "c_glp_delete_prob" glpDelProb :: Ptr GlpProb -> IO ()
+ 
+ data GlpProb
+ 
+-data ReturnCode = Success | InvalidBasis | SingularMatrix | IllConditionedMatrix | 
+-        InvalidBounds | SolverFailed | ObjLowerLimReached | ObjUpperLimReached | 
++data ReturnCode = Success | InvalidBasis | SingularMatrix | IllConditionedMatrix |
++        InvalidBounds | SolverFailed | ObjLowerLimReached | ObjUpperLimReached |
+         IterLimReached | TimeLimReached | NoPrimalFeasible | NoDualFeasible | RootLPOptMissing |
+         SearchTerminated | MipGapTolReached | NoPrimDualFeasSolution | NoConvergence |
+         NumericalInstability | InvalidData | ResultOutOfRange deriving (Eq, Show, Enum)
+@@ -29,6 +31,9 @@
+ runGLPK :: GLPK a -> IO a
+ runGLPK m = runInBoundThread $ bracket glpCreateProb glpDelProb (execGLPK m)
+ 
++instance MonadFail GLPK where
++  fail = error
++
+ instance Monad GLPK where
+         {-# INLINE return #-}
+         {-# INLINE (>>=) #-}

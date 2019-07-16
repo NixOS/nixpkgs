@@ -5098,7 +5098,6 @@ broken-packages:
   - gloss-export
   - gloss-game
   - gloss-sodium
-  - glpk-hs
   - glue
   - gmap
   - gmndl

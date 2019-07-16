@@ -1369,4 +1369,9 @@ self: super: {
     })];
   });
 
+  # https://github.com/jyp/glpk-hs/pull/11
+  # patch is the above PR with conflicts resolved
+  glpk-hs = assert super.glpk-hs.version == "0.7"; 
+    appendPatch super.glpk-hs ./patches/glpk-hs-ghc86.patch;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
