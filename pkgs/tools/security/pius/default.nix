@@ -1,9 +1,10 @@
-{ fetchFromGitHub, stdenv, pythonPackages, gnupg, perl }:
+{ fetchFromGitHub, stdenv, python3Packages, gnupg, perl }:
 
 let version = "3.0.0"; in
-pythonPackages.buildPythonApplication {
-  name = "pius-${version}";
+python3Packages.buildPythonApplication {
+  pname = "pius";
   namePrefix = "";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "jaymzh";
@@ -18,8 +19,7 @@ pythonPackages.buildPythonApplication {
     done
   '';
 
-  nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = with pythonPackages; [ six ];
+  buildInputs = [ perl ];
 
   meta = {
     homepage = https://www.phildev.net/pius/;
