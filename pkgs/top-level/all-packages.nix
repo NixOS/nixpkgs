@@ -10237,6 +10237,8 @@ in
 
   cxxtest = callPackage ../development/libraries/cxxtest { };
 
+  cypress = callPackage ../development/web/cypress { };
+
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
     kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
   };
