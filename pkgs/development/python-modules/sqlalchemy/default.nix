@@ -2,7 +2,6 @@
 , mock
 , pysqlite
 , pytest
-, pytest_xdist
 }:
 
 buildPythonPackage rec {
@@ -17,8 +16,15 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     mock
-    pytest_xdist
   ] ++ lib.optional (!isPy3k) pysqlite;
+
+  postInstall = ''
+    sed -e 's:--max-worker-restart=5::g' -i setup.cfg
+  '';
+
+  checkPhase = ''
+    pytest test
+  '';
 
   meta = with lib; {
     homepage = http://www.sqlalchemy.org/;
