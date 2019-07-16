@@ -163,6 +163,8 @@ in {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  ana = callPackage ../development/python-modules/ana { };
+
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
   anytree = callPackage ../development/python-modules/anytree {
