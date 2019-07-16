@@ -94,10 +94,22 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A modern, secure messenger";
+    description = "A modern, secure messenger for everyone";
+    longDescription = ''
+      Wire Personal is a secure, privacy-friendly messenger. It combines useful
+      and fun features, audited security, and a beautiful, distinct user
+      interface.  It does not require a phone number to register and chat.
+
+        * End-to-end encrypted chats, calls, and files
+        * Crystal clear voice and video calling
+        * File and screen sharing
+        * Timed messages and chats
+        * Synced across your phone, desktop and tablet
+    '';
     homepage = https://wire.com/;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ worldofpeace ];
     platforms = [ "x86_64-linux" ];
+    downloadPage = https://wire.com/download/;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ toonn worldofpeace ];
   };
 }
