@@ -1596,6 +1596,8 @@ in {
 
   argcomplete = callPackage ../development/python-modules/argcomplete { };
 
+  area = callPackage ../development/python-modules/area { };
+
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
   chai = callPackage ../development/python-modules/chai { };
