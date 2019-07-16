@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   makeFlags = [ "HAVE_MSGPACK=1" ];
 
   installPhase = ''
-    mkdir -p $out/bin
     install -D pgroonga.so -t $out/lib/
     install -D ./{pgroonga-*.sql,pgroonga.control} -t $out/share/postgresql/extension
   '';
