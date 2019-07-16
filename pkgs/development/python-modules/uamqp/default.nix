@@ -1,12 +1,15 @@
-{ lib
+{ CFNetwork
+, Security
 , buildPythonPackage
-, fetchPypi
-, cmake
-, openssl
-, six
 , certifi
+, cmake
 , enum34
+, fetchPypi
 , isPy3k
+, lib
+, openssl
+, stdenv
+, six
 }:
 
 buildPythonPackage rec {
@@ -24,6 +27,8 @@ buildPythonPackage rec {
     six
   ] ++ lib.optionals (!isPy3k) [
     enum34
+  ] ++ lib.optionals stdenv.isDarwin [
+    CFNetwork Security
   ];
 
   nativeBuildInputs = [

@@ -1138,7 +1138,9 @@ in {
 
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
-  uamqp = callPackage ../development/python-modules/uamqp { };
+  uamqp = callPackage ../development/python-modules/uamqp {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CFNetwork Security;
+  };
 
   unifi = callPackage ../development/python-modules/unifi { };
 
