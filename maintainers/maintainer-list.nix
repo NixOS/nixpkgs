@@ -5545,6 +5545,11 @@
     github = "vskilet";
     name = "Victor SENE";
   };
+  vyorkin = {
+    email = "vasiliy.yorkin@gmail.com";
+    github = "vyorkin";
+    name = "Vasiliy Yorkin";
+  };
   vyp = {
     email = "elisp.vim@gmail.com";
     github = "vyp";

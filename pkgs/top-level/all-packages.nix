@@ -13473,6 +13473,8 @@ in
 
   tdb = callPackage ../development/libraries/tdb {};
 
+  tdlib = callPackage ../development/libraries/tdlib { };
+
   tecla = callPackage ../development/libraries/tecla { };
 
   tectonic = callPackage ../tools/typesetting/tectonic {
