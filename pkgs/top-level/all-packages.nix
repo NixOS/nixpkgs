@@ -9242,6 +9242,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  fly = callPackage ../development/tools/continuous-integration/fly { };
+
   foreman = callPackage ../tools/system/foreman { };
   goreman = callPackage ../tools/system/goreman { };
 
@@ -10559,6 +10561,8 @@ in
   gdal = callPackage ../development/libraries/gdal { };
 
   gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
+
+  gdal_2 = callPackage ../development/libraries/gdal/2.4.0.nix { };
 
   gdcm = callPackage ../development/libraries/gdcm { };
 
@@ -12706,6 +12710,10 @@ in
 
   proj = callPackage ../development/libraries/proj { };
 
+  proj_5 = callPackage ../development/libraries/proj/5.2.nix { };
+
+  proj-datumgrid = callPackage ../development/libraries/proj-datumgrid { };
+
   proselint = callPackage ../tools/text/proselint {
     inherit (python3Packages)
     buildPythonApplication click future six;
@@ -13438,6 +13446,8 @@ in
   };
 
   tdb = callPackage ../development/libraries/tdb {};
+
+  tdlib = callPackage ../development/libraries/tdlib { };
 
   tecla = callPackage ../development/libraries/tecla { };
 
@@ -19060,7 +19070,9 @@ in
 
   mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
 
-  merkaartor = libsForQt59.callPackage ../applications/misc/merkaartor { };
+  merkaartor = libsForQt59.callPackage ../applications/misc/merkaartor {
+    gdal = gdal_2; # https://github.com/openstreetmap/merkaartor/issues/179
+  };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 
@@ -20214,6 +20226,10 @@ in
   dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };
 
   insync = callPackage ../applications/networking/insync { };
+
+  libstrangle = callPackage ../tools/X11/libstrangle {
+    stdenv = stdenv_32bit;
+  };
 
   lightdm = libsForQt5.callPackage ../applications/display-managers/lightdm { };
 
@@ -21895,10 +21911,6 @@ in
   rrootage = callPackage ../games/rrootage { };
 
   saga = callPackage ../applications/gis/saga {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
-  saga_2_3_2 = callPackage ../applications/gis/saga/lts.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
