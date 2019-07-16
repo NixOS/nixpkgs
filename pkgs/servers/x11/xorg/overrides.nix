@@ -5,7 +5,7 @@
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, epoxy, openssl, pkgconfig, llvm_6,
-  cf-private, ApplicationServices, Carbon, Cocoa, Xplugin
+  ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
 let
@@ -469,11 +469,7 @@ self: super:
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
             nativeBuildInputs = [ pkgconfig ];
-            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ]
-              ++ stdenv.lib.optionals stdenv.isDarwin [
-                # Needed for NSDefaultRunLoopMode symbols.
-                cf-private
-              ];
+            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
             postPatch = stdenv.lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = stdenv.lib.platforms.unix;
         } else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";

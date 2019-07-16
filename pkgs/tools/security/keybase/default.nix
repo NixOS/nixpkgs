@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, cf-private
+{ stdenv, lib, buildGoPackage, fetchFromGitHub
 , AVFoundation, AudioToolbox, ImageIO, CoreMedia
 , Foundation, CoreGraphics, MediaToolbox
 }:
@@ -19,11 +19,7 @@ buildGoPackage rec {
     sha256 = "00mxyy4jhdbcvbwabf4yvq4h5mpnlfp2z93gy2266kz6gkd5myzk";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox
-    # Needed for OBJC_CLASS_$_NSData symbols.
-    cf-private
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox ];
   buildFlags = [ "-tags production" ];
 
   meta = with stdenv.lib; {

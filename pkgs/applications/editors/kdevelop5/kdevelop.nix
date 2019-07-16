@@ -43,6 +43,8 @@ mkDerivation rec {
     "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${(builtins.parseDrvName llvmPackages.clang.name).version}/include"
   ];
 
+  dontWrapQtApps = true;
+
   postPatch = ''
     # FIXME: temporary until https://invent.kde.org/kde/kdevelop/merge_requests/8 is merged
     substituteInPlace kdevplatform/language/backgroundparser/parsejob.cpp --replace \
@@ -55,8 +57,7 @@ mkDerivation rec {
     wrapProgram "$out/bin/kdevelop!" \
       --prefix PATH ":" "${lib.makeBinPath [ qttools kde-cli-tools ]}"
 
-    wrapProgram "$out/bin/kdevelop" \
-      --prefix QT_PLUGIN_PATH : $out/lib/qt-${qtVersion}/plugins
+    wrapQtApp "$out/bin/kdevelop"
 
     # Fix the (now wrapped) kdevelop! to find things in right places:
     # - Fixup the one use where KDEV_BASEDIR is assumed to contain kdevelop.

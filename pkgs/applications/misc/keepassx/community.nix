@@ -17,6 +17,7 @@
 , qtsvg
 , qtx11extras
 , quazip
+, wrapQtAppsHook
 , yubikey-personalization
 , zlib
 
@@ -73,12 +74,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     export LC_ALL="en_US.UTF-8"
-    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
     make test ARGS+="-E testgui --output-on-failure"
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper qttools ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook qttools ];
 
   buildInputs = [
     curl
@@ -102,10 +102,9 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional withKeePassKeeShareSecure quazip
   ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
 
-  postInstall = optionalString stdenv.isDarwin ''
+  preFixup = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.
-    wrapProgram $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC \
-      --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}
+    wrapQtApp $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC
   '';
 
   meta = {

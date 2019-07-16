@@ -81,9 +81,6 @@ stdenv.mkDerivation rec {
     utillinuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-    # Needed for CFURLCreateFromFSRef, etc. which have deen deprecated
-    # since 10.9 and are not part of swift-corelibs CoreFoundation.
-    darwin.cf-private
   ]);
 
   nativeBuildInputs = [
