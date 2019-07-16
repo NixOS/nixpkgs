@@ -24353,4 +24353,6 @@ in
 
   kube3d =  callPackage ../applications/networking/cluster/kube3d {};
 
+  chronograf = callPackage ../servers/monitoring/chronograf {};
+
 }
