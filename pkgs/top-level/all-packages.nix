@@ -18367,6 +18367,8 @@ in
 
   guake = callPackage ../applications/misc/guake { };
 
+  guardian-agent = callPackage ../tools/networking/guardian-agent { };
+
   guitone = callPackage ../applications/version-management/guitone {
     graphviz = graphviz_2_32;
   };
