@@ -1056,6 +1056,8 @@ in
 
   blink = callPackage ../applications/networking/instant-messengers/blink { };
 
+  blockbook = callPackage ../servers/blockbook { };
+
   blockhash = callPackage ../tools/graphics/blockhash { };
 
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
