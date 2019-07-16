@@ -475,12 +475,12 @@ in {
     systemd.tmpfiles.rules = [
       "d /run/gitlab 0755 ${cfg.user} ${cfg.group} -"
       "d ${gitlabEnv.HOME} 0750 ${cfg.user} ${cfg.group} -"
+      "z ${gitlabEnv.HOME}/.ssh/authorized_keys 0600 ${cfg.user} ${cfg.group} -"
       "d ${cfg.backupPath} 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath} 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/builds 0750 ${cfg.user} ${cfg.group} -"
-      "D ${cfg.statePath}/config 0750 ${cfg.user} ${cfg.group} -"
-      "D ${cfg.statePath}/config/initializers 0750 ${cfg.user} ${cfg.group} -"
-      "D ${cfg.statePath}/db 0750 ${cfg.user} ${cfg.group} -"
+      "d ${cfg.statePath}/config 0750 ${cfg.user} ${cfg.group} -"
+      "d ${cfg.statePath}/db 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/log 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/repositories 2770 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/shell 0750 ${cfg.user} ${cfg.group} -"
@@ -604,9 +604,9 @@ in {
       ];
       preStart = ''
         ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -rf ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} chmod u+w ${cfg.statePath}/db/*
+        ${pkgs.sudo}/bin/sudo -u ${cfg.user} rm -rf ${cfg.statePath}/db/*
+        ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
 
         ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
