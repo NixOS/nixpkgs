@@ -1,6 +1,7 @@
 { stdenv
 , coreutils
 , patchelf
+, requireFile
 , callPackage
 , alsaLib
 , dbus
@@ -24,10 +25,11 @@
 
 let
   l10n =
-    with stdenv.lib;
-    with callPackage ./l10ns.nix {};
-    flip (findFirst (l: l.lang == lang)) l10ns
-      (throw "Language '${lang}' not supported");
+    import ./l10ns.nix {
+      lib = stdenv.lib;
+      inherit requireFile lang;
+      majorVersion = "11";
+    };
 in
 stdenv.mkDerivation rec {
   inherit (l10n) version name src;
