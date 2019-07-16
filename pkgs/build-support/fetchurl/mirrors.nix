@@ -268,13 +268,14 @@ rec {
 
   # Apache mirrors (see http://www.apache.org/mirrors/).
   apache = [
+    https://www-eu.apache.org/dist/
+    https://www-us.apache.org/dist/
     http://www.eu.apache.org/dist/
-    http://wwwftp.ciril.fr/pub/apache/
     ftp://ftp.fu-berlin.de/unix/www/apache/
     http://ftp.tudelft.nl/apache/
     http://mirror.cc.columbia.edu/pub/software/apache/
-    http://www.apache.org/dist/
-    http://archive.apache.org/dist/ # fallback for old releases
+    https://www.apache.org/dist/
+    https://archive.apache.org/dist/ # fallback for old releases
     ftp://ftp.funet.fi/pub/mirrors/apache.org/
     http://apache.cs.uu.nl/
     http://apache.cs.utah.edu/
