@@ -1,23 +1,21 @@
-{ stdenv, fetchFromGitHub, pkgconfig, sqlite, libyamlcpp, libuuid, gnome3, epoxy, librsvg, zeromq, cppzmq, glm, libgit2, curl, boost, python3, opencascade, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, pkgconfig, sqlite, libyamlcpp, libuuid, gnome3, epoxy, librsvg, zeromq, cppzmq, glm, libgit2, curl, boost, python3, opencascade, libzip, podofo, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
 	name = "horizon-eda-${version}";
-	version = "20190227";
+	version = "20190716";
 
 	src = fetchFromGitHub {
 		owner = "carrotIndustries";
 		repo = "horizon";
-		rev = "810fc8d1f59096ba3e1aac9d4b2187b1010b202a";
-		sha256 = "0qxw3vsbf9cg6b3pp3z1k2fjl8xrnjdr2gcncnr5jzd1mix6yd4y";
+		rev = "85c171a3dc29d6cab41f5effd230d1769e519b4d";
+		sha256 = "012vi91bxzbvabg6v2ldl916jg24i6pc9lpnniwq3c2pzpvlvndg";
 	};
 
-	# Version in specific format, created by: "git log -1 --pretty="format:%h %ci %s"
 	patchPhase = ''
-		mkdir .git && touch .git/HEAD && touch .git/index
-		echo "const char *gitversion = \"810fc8d 2019-02-27 00:05:27 +0100 fix some includes\";" > src/gitversion.cpp
+		echo "const char *gitversion = \"${src.rev}\";" > src/gitversion.cpp
 	'';
 
-	buildInputs = [ pkgconfig sqlite libyamlcpp libuuid gnome3.gtkmm epoxy librsvg zeromq cppzmq glm libgit2 curl boost python3 opencascade ];
+	buildInputs = [ pkgconfig sqlite libyamlcpp libuuid gnome3.gtkmm epoxy librsvg zeromq cppzmq glm libgit2 curl boost python3 libzip podofo opencascade ];
 
 	nativeBuildInputs = [ wrapGAppsHook ];
 
@@ -25,8 +23,8 @@ stdenv.mkDerivation rec {
 
 	installPhase = ''
 		mkdir -p $out/bin
-		cp horizon-eda $out/bin/
-		cp horizon-imp $out/bin/
+		cp build/horizon-eda $out/bin/
+		cp build/horizon-imp $out/bin/
 	'';
 
 	preFixup = ''
