@@ -52,7 +52,7 @@ let
     gitlab_url = "http+unix://${pathUrlQuote gitlabSocket}";
     http_settings.self_signed_cert = false;
     repos_path = "${cfg.statePath}/repositories";
-    secret_file = "${cfg.statePath}/config/gitlab_shell_secret";
+    secret_file = "${cfg.statePath}/gitlab_shell_secret";
     log_file = "${cfg.statePath}/log/gitlab-shell.log";
     custom_hooks_dir = "${cfg.statePath}/custom_hooks";
     redis = {
@@ -109,7 +109,7 @@ let
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
         hooks_path = "${cfg.statePath}/shell/hooks";
-        secret_file = "${cfg.statePath}/config/gitlab_shell_secret";
+        secret_file = "${cfg.statePath}/gitlab_shell_secret";
         upload_pack = true;
         receive_pack = true;
       };
@@ -132,14 +132,9 @@ let
     HOME = "${cfg.statePath}/home";
     UNICORN_PATH = "${cfg.statePath}/";
     GITLAB_PATH = "${cfg.packages.gitlab}/share/gitlab/";
-    GITLAB_STATE_PATH = cfg.statePath;
-    GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     SCHEMA = "${cfg.statePath}/db/schema.rb";
+    GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
-    GITLAB_SHELL_PATH = "${cfg.packages.gitlab-shell}";
-    GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/shell/config.yml";
-    GITLAB_SHELL_SECRET_PATH = "${cfg.statePath}/config/gitlab_shell_secret";
-    GITLAB_SHELL_HOOKS_PATH = "${cfg.statePath}/shell/hooks";
     GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
@@ -634,7 +629,7 @@ in {
         ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -rf ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
         ${pkgs.sudo}/bin/sudo -u ${cfg.user} chmod u+w ${cfg.statePath}/db/*
 
-        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
+        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/gitlab_shell_secret
 
         ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${cfg.packages.gitlab-shell}/bin/install
 
