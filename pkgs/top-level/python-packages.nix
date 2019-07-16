@@ -483,6 +483,8 @@ in {
 
   connexion = callPackage ../development/python-modules/connexion { };
 
+  cooldict = callPackage ../development/python-modules/cooldict { };
+
   cozy = callPackage ../development/python-modules/cozy { };
 
   codespell = callPackage ../development/python-modules/codespell { };
