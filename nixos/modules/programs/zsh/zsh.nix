@@ -12,7 +12,7 @@ let
 
   zshAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
-      (filterAttrs (k: v: !isNull v) cfg.shellAliases)
+      (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
 in
@@ -77,6 +77,33 @@ in
           Shell script code used to initialise the zsh prompt.
         '';
         type = types.lines;
+      };
+
+      histSize = mkOption {
+        default = 2000;
+        description = ''
+          Change history size.
+        '';
+        type = types.int;
+      };
+
+      histFile = mkOption {
+        default = "$HOME/.zsh_history";
+        description = ''
+          Change history file.
+        '';
+        type = types.str;
+      };
+
+      setOptions = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "HIST_IGNORE_DUPS" "SHARE_HISTORY" "HIST_FCNTL_LOCK"
+        ];
+        example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
+        description = ''
+          Configure zsh options.
+        '';
       };
 
       enableCompletion = mkOption {
@@ -162,12 +189,10 @@ in
 
         . /etc/zinputrc
 
-        # history defaults
-        SAVEHIST=2000
-        HISTSIZE=2000
-        HISTFILE=$HOME/.zsh_history
-
-        setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
+        # Don't export these, otherwise other shells (bash) will try to use same histfile
+        SAVEHIST=${toString cfg.histSize}
+        HISTSIZE=${toString cfg.histSize}
+        HISTFILE=${cfg.histFile}
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
 
@@ -181,6 +206,8 @@ in
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
+
+        ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
 
         ${zshAliases}
 
@@ -203,7 +230,6 @@ in
 
     environment.shells =
       [ "/run/current-system/sw/bin/zsh"
-        "/var/run/current-system/sw/bin/zsh"
         "${pkgs.zsh}/bin/zsh"
       ];
 

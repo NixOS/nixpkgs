@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-tornado";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "214fc59d06fb81696fce3028b56dff522168ac1cfc784cfc0077b7b1e425b4cd";
+    sha256 = "0ncaq7icijls6qh66kv19w3i9av2wnmaycfr4yadyybajr8yvffz";
   };
 
   # package has no tests

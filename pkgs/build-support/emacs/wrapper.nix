@@ -121,21 +121,25 @@ stdenv.mkDerivation {
 
      siteStart="$out/share/emacs/site-lisp/site-start.el"
      siteStartByteCompiled="$siteStart"c
+     subdirs="$out/share/emacs/site-lisp/subdirs.el"
+     subdirsByteCompiled="$subdirs"c
 
-     # A dependency may have brought the original siteStart, delete it and
-     # create our own
+     # A dependency may have brought the original siteStart or subdirs, delete
+     # it and create our own
      # Begin the new site-start.el by loading the original, which sets some
      # NixOS-specific paths. Paths are searched in the reverse of the order
      # they are specified in, so user and system profile paths are searched last.
-     rm -f $siteStart $siteStartByteCompiled
+     rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
      cat >"$siteStart" <<EOF
 (load-file "$emacs/share/emacs/site-lisp/site-start.el")
 (add-to-list 'load-path "$out/share/emacs/site-lisp")
 (add-to-list 'exec-path "$out/bin")
 EOF
+      # Link subdirs.el from the emacs distribution
+      ln -s $emacs/share/emacs/site-lisp/subdirs.el -T $subdirs
 
      # Byte-compiling improves start-up time only slightly, but costs nothing.
-     $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart"
+     $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"
   '';
 
   phases = [ "installPhase" ];

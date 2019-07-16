@@ -14,7 +14,7 @@ in python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook libxml2 ];
-  buildInputs = [ glib gtk3 gnome3.defaultIconTheme libwnck3 gobject-introspection ];
+  buildInputs = [ glib gtk3 gnome3.adwaita-icon-theme libwnck3 gobject-introspection ];
 
   propagatedBuildInputs = with python3Packages; [ pygobject3 pep8 ];
 

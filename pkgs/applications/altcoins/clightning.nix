@@ -1,27 +1,19 @@
 { stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
-  autogen, sqlite, gmp, zlib, fetchzip }:
+  autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "clightning-${version}";
-  version = "0.6.3";
+  version = "0.7.1";
 
-  src = fetchzip {
-    #
-    # NOTE 0.6.3 release zip was bugged, this zip is a fix provided by the team
-    # https://github.com/ElementsProject/lightning/issues/2254#issuecomment-453791475
-    #
-    # replace url with:
-    #   https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip
-    # for future relases
-    #
-    url = "https://github.com/ElementsProject/lightning/files/2752675/clightning-v0.6.3.zip";
-    sha256 = "0k5pwimwn69pcakiq4a7qnjyf4i8w1jlacwrjazm1sfivr6nfiv6";
+  src = fetchurl {
+    url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
+    sha256 = "557be34410f27a8d55d9f31a40717a8f5e99829f2bd114c24e7ca1dd5f6b7d85";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which ];
+  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which unzip ];
   buildInputs = [ sqlite gmp zlib python3 ];
 
   makeFlags = [ "prefix=$(out) VERSION=v${version}" ];
@@ -31,7 +23,6 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    echo "" > tools/refresh-submodules.sh
     patchShebangs tools/generate-wire.py
   '';
 

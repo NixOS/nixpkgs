@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, zsh }:
+{ stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "zsh-history-substring-search-${version}";

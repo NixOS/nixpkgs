@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
     homepage = https://opencv.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
   };
 }

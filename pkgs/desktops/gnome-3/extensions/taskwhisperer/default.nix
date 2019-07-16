@@ -1,36 +1,35 @@
-{ stdenv, substituteAll, fetchFromGitHub, taskwarrior }:
+{ stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-taskwhisperer-${version}";
-  version = "11";
+  version = "12";
 
   src = fetchFromGitHub {
     owner = "cinatic";
     repo = "taskwhisperer";
     rev = "v${version}";
-    sha256 = "1g1301rwnfg5jci78bjpmgxrn78ra80m1zp2inhfsm8jssr1i426";
+    sha256 = "187p6p498dd258avsfqqsm322g58y75pc2wbhb4jpmm9insqm1bj";
   };
 
-  buildInputs = [ taskwarrior ];
+  nativeBuildInputs = [
+    gettext
+  ];
+
+  buildInputs = [
+    taskwarrior
+  ];
 
   uuid = "taskwhisperer-extension@infinicode.de";
 
-  installPhase = ''
-    mkdir -p $out/share/gnome-shell/extensions/${uuid}
-    cp *.js $out/share/gnome-shell/extensions/${uuid}
-    cp -r extra $out/share/gnome-shell/extensions/${uuid}
-    cp -r icons $out/share/gnome-shell/extensions/${uuid}
-    cp -r locale $out/share/gnome-shell/extensions/${uuid}
-    cp -r schemas $out/share/gnome-shell/extensions/${uuid}
-    cp metadata.json $out/share/gnome-shell/extensions/${uuid}
-    cp settings.ui $out/share/gnome-shell/extensions/${uuid}
-    cp stylesheet.css $out/share/gnome-shell/extensions/${uuid}
-  '';
+  makeFlags = [
+    "INSTALLBASE=${placeholder ''out''}/share/gnome-shell/extensions"
+  ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       task = "${taskwarrior}/bin/task";
+      shell = "${runtimeShell}";
     })
   ];
 

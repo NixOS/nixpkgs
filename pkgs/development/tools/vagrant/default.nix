@@ -37,6 +37,7 @@ in buildRubyGem rec {
   src = fetchurl { inherit url sha256; };
 
   patches = [
+    ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
   ];
@@ -81,6 +82,13 @@ in buildRubyGem rec {
       echo 'Vagrant smoke check failed'
       return 1
     fi
+  '';
+
+  # `patchShebangsAuto` patches this one script which is intended to run
+  # on foreign systems.
+  postFixup = ''
+    sed -i -e '1c#!/bin/sh -' \
+      $out/lib/ruby/gems/*/gems/vagrant-*/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
   passthru = {

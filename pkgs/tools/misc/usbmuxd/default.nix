@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "usbmuxd";
-  version = "2018-10-10";
+  version = "2019-03-05";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "96e4aabe0b9a46ea9da4955a10c774a8e58fe677";
-    sha256 = "03xnj4y606adbhl829vv46qa78f6w2ik4mjz19a34x9lhkcrqxqi";
+    rev = "b1b0bf390363fa36aff1bc09443ff751943b9c34";
+    sha256 = "176hapckx98h4x0ni947qpkv2s95f8xfwz00wi2w7rgbr6cviwjq";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ infinisil ];
   };
 }

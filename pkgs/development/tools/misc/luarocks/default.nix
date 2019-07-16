@@ -7,28 +7,16 @@
 , cmake
 }:
 
-let
-  s = # Generated upstream information
-  rec {
-    baseName="luarocks";
-    version="2.4.4";
-    name="${baseName}-${version}";
-    hash="0d7rl60dwh52qh5pfsphgx5ypp7k190h9ri6qpr2yx9kvqrxyf1r";
-    url="http://luarocks.org/releases/luarocks-2.4.4.tar.gz";
-    sha256="0d7rl60dwh52qh5pfsphgx5ypp7k190h9ri6qpr2yx9kvqrxyf1r";
-  };
-  buildInputs = [
-    lua curl makeWrapper which unzip
-  ];
-in
+stdenv.mkDerivation rec {
+  pname = "luarocks";
+  version = "3.1.3";
 
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
   src = fetchurl {
-    inherit (s) url sha256;
+    url="http://luarocks.org/releases/luarocks-${version}.tar.gz";
+    sha256="04q5k6drypsnbp1wspr9ns72k8kjf62a787a6jg1bb2s95gl6wy5";
   };
-  patches = [ ./darwin.patch ];
+
+  patches = [ ./darwin-3.1.3.patch ];
   preConfigure = ''
     lua -e "" || {
         luajit -e "" && {
@@ -41,6 +29,11 @@ stdenv.mkDerivation {
         configureFlags="$configureFlags --with-lua-include=$lua_inc"
     fi
   '';
+
+  buildInputs = [
+    lua curl makeWrapper which
+  ];
+
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
     for i in "$out"/bin/*; do
@@ -68,10 +61,12 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit (s) version;
+    inherit version;
     description = ''A package manager for Lua'';
     license = licenses.mit ;
     maintainers = with maintainers; [raskin teto];
     platforms = platforms.linux ++ platforms.darwin;
+    downloadPage = "http://luarocks.org/releases/";
+    updateWalker = true;
   };
 }

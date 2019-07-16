@@ -65,5 +65,6 @@ stdenv.mkDerivation rec {
     platforms   = [ "x86_64-linux" "x86_64-darwin" ];
     license     = licenses.asl20;
     maintainers = with maintainers; [ mdaiter ];
+    knownVulnerabilities = [ "CVE-2017-3163 - see https://github.com/NixOS/nixpkgs/issues/33876" ];
   };
 }

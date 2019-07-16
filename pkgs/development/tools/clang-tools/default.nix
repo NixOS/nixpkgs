@@ -1,4 +1,4 @@
-{ stdenv, writeScript, llvmPackages }:
+{ stdenv, llvmPackages }:
 
 let
   clang = llvmPackages.clang-unwrapped;
@@ -7,7 +7,7 @@ in
 
 stdenv.mkDerivation {
   name = "clang-tools-${version}";
-  unpackPhase = ":";
+  dontUnpack = true;
   installPhase = ''
     mkdir -p $out/bin
     for tool in \

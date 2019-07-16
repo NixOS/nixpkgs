@@ -1,7 +1,7 @@
 { stdenv
+, libev
 , buildPythonPackage
 , fetchPypi
-, pkgs
 , cython
 , futures
 , six
@@ -20,15 +20,18 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.16.0";
+  version = "3.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gjs2lqy0ba6zhh13a1dhirk59i7lc4zcbl7h50619hdm5kv3g22";
+    sha256 = "1w9a7fdl626m977cjj9zclh4a0mr3s4q9jpwm1fsmpi7v3gbribi";
   };
 
   buildInputs = [
-    pkgs.libev
+    libev
+  ];
+
+  nativeBuildInputs = [
     # NOTE: next version will work with cython 0.29
     # Requires 'Cython!=0.25,<0.29,>=0.20'
     (cython.overridePythonAttrs(old: rec {

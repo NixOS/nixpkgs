@@ -48,6 +48,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "bindnow" "relro" ];
 
+  # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
+  CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
+
   # this is fixed upstream though not yet in an officially released version,
   # should be fine remove on next release (if one ever happens)
   NIX_LDFLAGS = [

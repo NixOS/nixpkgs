@@ -16,7 +16,8 @@ buildPythonPackage rec {
   disabled = !isPy27;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "TileStache";
+    inherit version;
     sha256 = "11e15dd85501345bcfeb18dce5b1c8fb74ac8d867df2520afe0eefe1edd85f27";
   };
 

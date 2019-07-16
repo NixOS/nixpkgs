@@ -1,9 +1,13 @@
 { luarocks, fetchFromGitHub }:
 luarocks.overrideAttrs(old: {
+  pname = "luarocks-nix";
   src = fetchFromGitHub {
     owner = "teto";
     repo = "luarocks";
-    rev = "f9dc7892214bff6bce822d94aca3331048e61df0";
-    sha256 = "117qqbiv87p2qw0zwapl7b0p4wgnn9f8k0qpppkj3653a1bwli05";
+    rev = "38ed82ba3e5682d7d55ef9a870dfb464ca180df9";
+    sha256 = "0vlzywiv3sxkpjg1fzzxicmfr6kh04fxw5q9n8vsd2075xjxg6bs";
   };
+  patches = [
+    ./darwin-3.0.x.patch
+  ];
 })

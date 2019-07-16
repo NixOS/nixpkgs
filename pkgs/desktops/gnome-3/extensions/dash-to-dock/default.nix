@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-dash-to-dock-${version}";
-  version = "64";
+  version = "66";
 
   src = fetchFromGitHub {
     owner = "micheleg";
     repo = "dash-to-dock";
     rev = "extensions.gnome.org-v" + version;
-    sha256 = "1cfkdi4raim50wif47fly4c0lzyamysv40qd5ppr1h824bamzxcm";
+    sha256 = "04krl6rxlp1qc97psraf2kwin7h0mx4c7pnfpi7vhplmvasrwkfh";
   };
 
   nativeBuildInputs = [

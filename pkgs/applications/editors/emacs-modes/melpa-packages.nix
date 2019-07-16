@@ -83,9 +83,6 @@ self:
         packageRequires = with self; [ evil highlight ];
       });
 
-      # missing OCaml
-      flycheck-ocaml = markBroken super.flycheck-ocaml;
-
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
 
@@ -133,11 +130,7 @@ self:
       maxframe = markBroken super.maxframe;
 
       magit =
-        (super.magit.override {
-          # version of magit-popup needs to match magit
-          # https://github.com/magit/magit/issues/3286
-          inherit (self.melpaPackages) magit-popup;
-        }).overrideAttrs (attrs: {
+        super.magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
@@ -178,9 +171,6 @@ self:
         nativeBuildInputs =
           (attrs.nativeBuildInputs or []) ++ [ external.git ];
       });
-
-      # missing OCaml
-      merlin = markBroken super.merlin;
 
       mhc = super.mhc.override {
         inherit (self.melpaPackages) calfw;
@@ -270,6 +260,7 @@ self:
       removeAttrs (super // overrides)
       [
         "show-marks"  # missing dependency: fm
+        "lenlen-theme"  # missing dependency: color-theme-solarized
       ];
   in
     melpaPackages // { inherit melpaPackages; }

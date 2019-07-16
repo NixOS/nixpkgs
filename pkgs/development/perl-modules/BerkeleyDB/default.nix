@@ -1,11 +1,12 @@
 {buildPerlPackage, fetchurl, db}:
 
-buildPerlPackage rec {
-  name = "BerkeleyDB-0.55";
+buildPerlPackage {
+  pname = "BerkeleyDB";
+  version = "0.61";
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-    sha256 = "0kz40wqr7qwag43qnmkpri03cjnqwzb0kj0vc9aw9yz2qx0y2a3g";
+    url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.61.tar.gz";
+    sha256 = "0l65v301cz6a9dxcw6a4ps2mnr5zq358yn81favap6i092krggiz";
   };
 
   preConfigure = ''

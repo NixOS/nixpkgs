@@ -1,18 +1,19 @@
-{ 
-  stdenv, fetchurl, docbook_xsl,
-  docbook_xml_dtd_45, python, pygments, 
-  libxslt 
+{
+  stdenv, fetchFromGitHub, docbook_xsl,
+  docbook_xml_dtd_45, python, pygments,
+  libxslt
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.12.0";
-  name = "csound-manual-${version}";
-  
-  src = fetchurl {
-    url = "https://github.com/csound/manual/archive/${version}.tar.gz";
-    sha256 = "1v1scp468rnfbcajnp020kdj8zigimc2mbcwzxxqi8sf8paccdrp";
-  };
+  pname = "csound-manual";
+  version = "unstable-2019-02-22";
 
+  src = fetchFromGitHub {
+    owner = "csound";
+    repo = "manual";
+    rev = "3b0bdc83f9245261b4b85a57c3ed636d5d924a4f";
+    sha256 = "074byjhaxraapyg54dxgg7hi1d4978aa9c1rmyi50p970nsxnacn";
+  };
 
   prePatch = ''
     substituteInPlace manual.xml \
@@ -41,4 +42,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-

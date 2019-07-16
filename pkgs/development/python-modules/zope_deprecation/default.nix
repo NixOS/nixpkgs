@@ -6,20 +6,20 @@
 
 buildPythonPackage rec {
   pname = "zope.deprecation";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d52e134bbaaa0d72e1e2bc90f0587f1adc116c4bdf15912afaf2f1e8856b224";
+    sha256 = "0d453338f04bacf91bbfba545d8bcdf529aa829e67b705eac8c1a7fdce66e2df";
   };
 
   buildInputs = [ zope_testing ];
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/zopefoundation/zope.deprecation;
+    homepage = https://github.com/zopefoundation/zope.deprecation;
     description = "Zope Deprecation Infrastructure";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

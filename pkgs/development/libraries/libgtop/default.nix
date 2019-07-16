@@ -1,30 +1,34 @@
-{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, perl, gettext, gobject-introspection, libtool, gnome3, gtk-doc }:
-let
-  pname = "libgtop";
-  version = "2.38.0";
-in
+{ stdenv
+, fetchurl
+, glib
+, pkgconfig
+, perl
+, gettext
+, gobject-introspection
+, gnome3
+, gtk-doc
+}:
+
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "libgtop";
+  version = "2.40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "04mnxgzyb26wqk6qij4iw8cxwl82r8pcsna5dg8vz2j3pdi0wv2g";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1m6jbqk8maa52gxrf223442fr5bvvxgb7ham6v039i3r1i62gwvq";
   };
 
-  patches = [
-    # Fix darwin build
-    (fetchpatch {
-        url = https://gitlab.gnome.org/GNOME/libgtop/commit/42b049f338363f92c1e93b4549fc944098eae674.patch;
-        sha256 = "0kf9ihgb0wqji6dcvg36s6igkh7b79k6y1n7w7wzsxya84x3hhyn";
-      })
+  nativeBuildInputs = [
+    pkgconfig
+    gtk-doc
+    perl
+    gettext
+    gobject-introspection
   ];
 
-  propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig gnome3.gnome-common libtool gtk-doc perl gettext gobject-introspection ];
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  propagatedBuildInputs = [
+    glib
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {

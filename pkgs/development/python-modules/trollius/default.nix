@@ -17,6 +17,8 @@ buildPythonPackage rec {
     ./tests.patch
   ];
 
+  disabled = isPy3k;
+
   postPatch = ''
     # Overrides PYTHONPATH causing dependencies not to be found
     sed -i -e "s|test_env_var_debug|skip_test_env_var_debug|g" tests/test_tasks.py
@@ -45,6 +47,6 @@ buildPythonPackage rec {
     description = "Port of the asyncio project to Python 2.7";
     homepage = https://github.com/vstinner/trollius;
     license = licenses.asl20;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

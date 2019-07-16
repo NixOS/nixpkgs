@@ -3,9 +3,9 @@ let
   pname = "yojson";
   param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then rec {
-    version = "1.6.0";
+    version = "1.7.0";
     url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
-    sha256 = "1h73zkgqs6cl9y7p2l0cgjwyqa1fzcrnzv3k6w7wyq2p1q5m84xh";
+    sha256 = "08llz96if8bcgnaishf18si76cv11zbkni0aldb54k3cn7ipiqvd";
     buildInputs = [ dune ];
     extra = { inherit (dune) installPhase; };
   } else rec {

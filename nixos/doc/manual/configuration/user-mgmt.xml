@@ -44,7 +44,7 @@
   A user ID (uid) is assigned automatically. You can also specify a uid
   manually by adding
 <programlisting>
-    uid = 1000;
+uid = 1000;
 </programlisting>
   to the user specification.
  </para>

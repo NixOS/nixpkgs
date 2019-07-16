@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "A simple XFCE panel plugin that lets the user run an alarm at a specified time or at the end of a specified countdown period";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk }:
+{stdenv, fetchurl, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
   version = "0.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ stdenv gtk ];
+  buildInputs = [ stdenv gtk2 ];
 
   preferLocalBuild = true;
 

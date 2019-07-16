@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gecode-${version}";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "Gecode";
     repo = "gecode";
     rev = "release-${version}";
-    sha256 = "1ijjy8ppx7djnkrkawsd00rmlf24qh1z13aap0h1azailw1pbrg4";
+    sha256 = "0b1cq0c810j1xr2x9y9996p894571sdxng5h74py17c6nr8c6dmk";
   };
 
   enableParallelBuilding = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = licenses.mit;
-    homepage = http://www.gecode.org;
+    homepage = https://www.gecode.org;
     description = "Toolkit for developing constraint-based systems";
     platforms = platforms.all;
     maintainers = [ ];

@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Enjoy the mysteries of the sea from the safety of your own terminal!";
-    homepage = https://robobunny.com/projects/asciiquarium/html;
+    homepage = https://robobunny.com/projects/asciiquarium/html/;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.utdemir ];

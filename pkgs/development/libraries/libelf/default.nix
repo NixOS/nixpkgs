@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./dont-hardcode-ar.patch
+    # Fix warnings from preprocessor instructions.
+    # https://github.com/NixOS/nixpkgs/issues/59929
+    ./preprocessor-warnings.patch
   ];
 
   doCheck = true;
@@ -34,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ELF object file access library";
 
-    homepage = http://www.mr511.de/software/english.html;
+    homepage = https://github.com/Distrotech/libelf;
 
     license = stdenv.lib.licenses.lgpl2Plus;
 

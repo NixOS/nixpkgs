@@ -44,14 +44,12 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.1.7";
+  version = "1.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0iyi5w2h42bpssqj52ixm2kxp56yxfxdacb6xv5r24yv3hmwd4yn";
+    sha256 = "f80096ec6cfd7cffc05764bba1749e424877140ef1373193f076bdd843f19016";
   };
-
-  patches = [ ./move-uneeded-requires.patch ];
 
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
@@ -99,7 +97,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://nipy.org/nipype/;
+    homepage = https://nipy.org/nipype/;
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];

@@ -1,9 +1,12 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerApp, ruby }:
 
-bundlerEnv rec {
+bundlerApp rec {
   inherit ruby;
   pname = "jazzy";
   gemdir = ./.;
+  exes = [ "jazzy" ];
+
+  passthru.updateScript = ./update;
 
   meta = with lib; {
     description     = "A command-line utility that generates documentation for Swift or Objective-C";
@@ -12,6 +15,7 @@ bundlerEnv rec {
     platforms       = platforms.darwin;
     maintainers     = with maintainers; [
       peterromfeldhk
+      lilyball
     ];
   };
 }

@@ -12,11 +12,11 @@
 
 buildPythonPackage rec{
   pname = "trezor_agent";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c1ef62903534d8b01260dbd6304780e278bc83e0bc21f6a83beee76e48e1580";
+    sha256 = "e82bf000c1178b1a7612f2a90487eb34c6234d2edb15dc8e310ad875d8298690";
   };
 
   propagatedBuildInputs = [ trezor libagent ecdsa ed25519 mnemonic keepkey semver ];

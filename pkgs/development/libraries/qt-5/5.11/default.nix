@@ -20,7 +20,7 @@ top-level attribute to `top-level/all-packages.nix`.
   stdenv, fetchurl, fetchFromGitHub, makeSetupHook,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
-  cf-private,
+  cf-private, llvmPackages_5,
 
   # options
   developerBuild ? false,
@@ -51,26 +51,24 @@ let
   patches = {
     qtbase = [
       ./qtbase.patch
-      ./qtbase-darwin.patch
-      ./qtbase-revert-no-macos10.10.patch
       ./qtbase-fixguicmake.patch
-    ] ++ optionals stdenv.isDarwin [
-      ./qtbase-darwin-nseventtype.patch
-      ./qtbase-darwin-revert-69221.patch
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
-      ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
-      ++ optional stdenv.isDarwin ./qtwebengine-darwin-sdk-10.10.patch;
+    qtwebengine = [
+      ./qtwebengine-no-build-skip.patch
+      ./qtwebengine-darwin-no-platform-check.patch
+    ];
     qtwebkit = [ ./qtwebkit.patch ];
   };
 
   mkDerivation =
-    import ../mkDerivation.nix
-    { inherit stdenv; inherit (stdenv) lib; }
+    import ../mkDerivation.nix {
+      inherit (stdenv) lib;
+      stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
+    }
     { inherit debug; };
 
   qtModule =
@@ -101,13 +99,14 @@ let
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
-      qtlocation = callPackage ../modules/qtlocation.nix {};
+      qtlocation = callPackage ../modules/qtlocation.nix { };
       qtmacextras = callPackage ../modules/qtmacextras.nix {
         inherit cf-private;
       };
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
+      qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
@@ -125,6 +124,7 @@ let
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
       qtwebkit = callPackage ../modules/qtwebkit.nix {};
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
+      qtwebview = callPackage ../modules/qtwebview.nix {};
       qtx11extras = callPackage ../modules/qtx11extras.nix {};
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
@@ -134,7 +134,7 @@ let
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
-        qtx11extras qtxmlpatterns
+        qtwebview qtx11extras qtxmlpatterns
       ] ++ optional (!stdenv.isDarwin) qtwayland
         ++ optional (stdenv.isDarwin) qtmacextras);
 

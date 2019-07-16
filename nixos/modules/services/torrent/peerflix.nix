@@ -39,6 +39,10 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' - peerflix - - -"
+    ];
+
     systemd.services.peerflix = {
       description = "Peerflix Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -47,13 +51,11 @@ in {
 
       preStart = ''
         mkdir -p "${cfg.stateDir}"/{torrents,.config/peerflix-server}
-        if [ "$(id -u)" = 0 ]; then chown -R peerflix "${cfg.stateDir}"; fi
         ln -fs "${configFile}" "${cfg.stateDir}/.config/peerflix-server/config.json"
       '';
 
       serviceConfig = {
         ExecStart = "${pkgs.nodePackages.peerflix-server}/bin/peerflix-server";
-        PermissionsStartOnly = true;
         User = "peerflix";
       };
     };

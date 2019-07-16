@@ -6,7 +6,7 @@ then throw "octavius is not available for OCaml ${ocaml.version}" else
 stdenv.mkDerivation {
 	name = "ocaml${ocaml.version}-octavius-0.2.0";
 	src = fetchurl {
-		url = http://github.com/ocaml-doc/octavius/releases/download/v0.2.0/octavius-0.2.0.tbz;
+		url = https://github.com/ocaml-doc/octavius/releases/download/v0.2.0/octavius-0.2.0.tbz;
 		sha256 = "02milzzlr4xk5aymg2fjz27f528d5pyscqvld3q0dm41zcpkz5ml";
 	};
 

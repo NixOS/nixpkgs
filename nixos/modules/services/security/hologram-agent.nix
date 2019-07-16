@@ -45,7 +45,7 @@ in {
       wantedBy    = [ "multi-user.target" ];
       requires    = [ "network-link-dummy0.service" "network-addresses-dummy0.service" ]; 
       preStart = ''
-        /run/current-system/sw/bin/rm -fv /var/run/hologram.sock
+        /run/current-system/sw/bin/rm -fv /run/hologram.sock
       '';
       serviceConfig = {
         ExecStart = "${pkgs.hologram.bin}/bin/hologram-agent -debug -conf ${cfgFile} -port ${cfg.httpPort}";

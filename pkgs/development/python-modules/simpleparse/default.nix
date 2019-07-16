@@ -11,7 +11,8 @@ buildPythonPackage rec {
   disabled = isPy3k || isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "SimpleParse";
+    inherit version;
     sha256 = "18ccdc249bb550717af796af04a7d50aef523368901f64036a48eee5daca149d";
   };
 

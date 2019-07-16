@@ -2,12 +2,12 @@
 , pytest, pytestrunner, pytestcov, mock, glibcLocales, lxml, boto3, requests, click, configparser }:
 
 buildPythonPackage rec {
-  version = "1.12.2";
+  version = "1.12.3";
   pname = "aws-adfs";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e35fbd33e1878310099346a95b7eb5244831c9f5f6554bca7193ac50dcd41aa3";
+    sha256 = "b7df3fbe0572eb12294b2e072327ca97fd94d435b39cc10612e460cde914b831";
   };
 
   # Relax version constraint

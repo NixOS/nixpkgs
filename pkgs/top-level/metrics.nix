@@ -19,7 +19,16 @@ runCommand "nixpkgs-metrics"
       shift
 
       echo "running $@"
-      NIX_SHOW_STATS=1 time -o stats-time "$@" 2>stats-nix
+
+      case "$name" in
+        # Redirect stdout to /dev/null to avoid hitting "Output Limit
+        # Exceeded" on Hydra.
+        nix-env.qaDrv|nix-env.qaDrvAggressive)
+          NIX_SHOW_STATS=1 time -o stats-time "$@" 2>stats-nix >/dev/null ;;
+        *)
+          NIX_SHOW_STATS=1 time -o stats-time "$@" 2>stats-nix ;;
+      esac
+
       sed '/^warning:/d' -i stats-nix
 
       cat stats-nix; echo; cat stats-time; echo
@@ -52,8 +61,12 @@ runCommand "nixpkgs-metrics"
     run nix-env.qa nix-env -f ${nixpkgs} -qa
     run nix-env.qaDrv nix-env -f ${nixpkgs} -qa --drv-path --meta --xml
 
+    # It's slightly unclear which of the set to track: qaCount, qaCountDrv, qaCountBroken.
     num=$(nix-env -f ${nixpkgs} -qa | wc -l)
     echo "nix-env.qaCount $num" >> $out/nix-support/hydra-metrics
+    qaCountDrv=$(nix-env -f ${nixpkgs} -qa --drv-path | wc -l)
+    num=$((num - $qaCountDrv))
+    echo "nix-env.qaCountBroken $num" >> $out/nix-support/hydra-metrics
 
     # TODO: this has been ignored for some time
     # GC Warning: Bad initial heap size 128k - ignoring it.

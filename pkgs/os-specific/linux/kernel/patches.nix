@@ -57,4 +57,9 @@ rec {
       sha256 = "1l8xq02rd7vakxg52xm9g4zng0ald866rpgm8kjlh88mwwyjkrwv";
     };
   };
+
+  export_kernel_fpu_functions = rec {
+    name = "export_kernel_fpu_functions";
+    patch = ./export_kernel_fpu_functions.patch;
+  };
 }

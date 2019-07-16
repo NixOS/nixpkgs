@@ -2,13 +2,15 @@
 stdenv.mkDerivation rec {
   name = "compiler-rt-${version}";
   inherit version;
-  src = fetch "compiler-rt" "065ybd8fsc4h2hikbdyricj6pyv4r7r7kpcikhb2y5zf370xybkq";
+  src = fetch "compiler-rt" "1n48p8gjarihkws0i2bay5w9bdwyxyxxbpwyng7ba58jb30dlyq5";
 
   nativeBuildInputs = [ cmake python llvm ];
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   cmakeFlags = [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
+    "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
+    "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
   ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
@@ -17,8 +19,6 @@ stdenv.mkDerivation rec {
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
-    "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
-    "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
   ];
 
@@ -26,9 +26,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./crtbegin-and-end.patch
-    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin ./compiler-rt-clock_gettime.patch;
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./crtbegin-and-end.patch
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
     ln -s "$out/lib"/*/* "$out/lib"
   '' + stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/linux/crtbegin.o
-    ln -s $out/lib/*/cclang_rt.crtend-*.o $out/lib/linux/crtend.o
+    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/linux/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/linux/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/linux/crtendS.o
   '';

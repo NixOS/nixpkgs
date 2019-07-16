@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2, alsaLib, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.1";
+  version = "4.0.0";
   name = "rtmidi-${version}";
 
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtmidi";
     rev = "${version}";
-    sha256 = "11pl45lp8sq5xkpipwk622w508nw0qcxr03ibicqn1lsws0hva96";
+    sha256 = "1g31p6a96djlbk9jh5r4pjly3x76lhccva9hrw6xzdma8dsjzgyq";
   };
 
   enableParallelBuilding = true;

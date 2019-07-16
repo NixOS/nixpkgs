@@ -1,7 +1,7 @@
 { stable, version, sha256Hash, archPatchesRevision, archPatchesHash }:
 
 { mkDerivation, lib, fetchFromGitHub, fetchsvn
-, pkgconfig, pythonPackages, cmake, wrapGAppsHook
+, pkgconfig, pythonPackages, cmake, wrapGAppsHook, gcc8
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
@@ -28,17 +28,22 @@ mkDerivation rec {
     sha256 = archPatchesHash;
   };
 
-  # TODO: libtgvoip.patch no-gtk2.patch
-  patches = [ "${archPatches}/tdesktop.patch" ];
+  patches = [
+    "${archPatches}/tdesktop.patch"
+    "${archPatches}/no-gtk2.patch"
+    # "${archPatches}/Use-system-wide-font.patch"
+    "${archPatches}/tdesktop_lottie_animation_qtdebug.patch"
+    "${archPatches}/issue6219.patch"
+  ];
 
   postPatch = ''
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp \
-      --replace '"appindicator"' '"${libappindicator-gtk3}/lib/libappindicator3.so"'
+      --replace '"appindicator3"' '"${libappindicator-gtk3}/lib/libappindicator3.so"'
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libnotify.cpp \
       --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
   '';
 
-  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook gcc8 ];
 
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;
@@ -74,9 +79,14 @@ mkDerivation rec {
   CPPFLAGS = NIX_CFLAGS_COMPILE;
 
   preConfigure = ''
+    patch -R -Np1 -i "${archPatches}/demibold.patch"
+
     pushd "Telegram/ThirdParty/libtgvoip"
     patch -Np1 -i "${archPatches}/libtgvoip.patch"
     popd
+
+    # disable static-qt for rlottie
+    sed "/RLOTTIE_WITH_STATIC_QT/d" -i "Telegram/gyp/lib_rlottie.gyp"
 
     sed -i Telegram/gyp/telegram_linux.gypi \
       -e 's,/usr,/does-not-exist,g' \
@@ -114,6 +124,8 @@ mkDerivation rec {
     export ASM=$(type -p gcc)
   '';
 
+  cmakeFlags = [ "-UTDESKTOP_OFFICIAL_TARGET" ];
+
   installPhase = ''
     install -Dm755 Telegram $out/bin/telegram-desktop
 
@@ -143,6 +155,6 @@ mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = https://desktop.telegram.org/;
-    maintainers = with maintainers; [ primeos abbradar garbas ];
+    maintainers = with maintainers; [ primeos abbradar ];
   };
 }

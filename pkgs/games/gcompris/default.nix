@@ -1,19 +1,19 @@
-{stdenv, cmake, qtbase, fetchurl, qtdeclarative, qtmultimedia, qttools, qtsensors, qmlbox2d, gettext, qtquickcontrols, qtgraphicaleffects, makeWrapper,
+{stdenv, cmake, qtbase, fetchurl, qtdeclarative, qtmultimedia, qttools, qtsensors, qmlbox2d, gettext, qtquickcontrols, qtgraphicaleffects, qtxmlpatterns, makeWrapper,
   gst_all_1, ninja
 }:
 stdenv.mkDerivation rec {
-  version = "0.95";
+  version = "0.96";
   name = "gcompris-${version}";
 
   src = fetchurl {
     url = "http://gcompris.net/download/qt/src/gcompris-qt-${version}.tar.xz";
-    sha256 = "1aaijjx2b7k1cyx59jhs64hlp1sppw1faa81qxl5lxc79vifrlrl";
+    sha256 = "06483il59l46ny2w771sg45dgzjwv1ph7vidzzbj0wb8wbk2rg52";
   };
 
   cmakeFlags = "-DQML_BOX2D_LIBRARY=${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.0";
 
   nativeBuildInputs = [ cmake ninja makeWrapper ];
-  buildInputs = [ qtbase qtdeclarative qttools qtsensors qmlbox2d gettext qtquickcontrols qtmultimedia qtgraphicaleffects] ++ soundPlugins;
+  buildInputs = [ qtbase qtdeclarative qttools qtsensors qmlbox2d gettext qtquickcontrols qtmultimedia qtgraphicaleffects qtxmlpatterns] ++ soundPlugins;
   soundPlugins = with gst_all_1; [gst-plugins-good gstreamer gst-plugins-base gst-plugins-bad];
 
   postInstall = ''

@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "gocode-gomod-unstable-${version}";
-  version = "2018-10-16";
-  rev = "12640289f65065d652cc942ffa01a52bece1dd53";
+  version = "2019-03-27";
+  rev = "81059208699789f992bb4a4a3fedd734e335468d";
 
   goPackagePath = "github.com/stamblerre/gocode";
 
@@ -19,7 +19,7 @@ buildGoPackage rec {
 
     owner = "stamblerre";
     repo = "gocode";
-    sha256 = "1avv0b5p2l8pv38m5gg97k57ndr5k9yy0rfkmmwjq96pa221hs1q";
+    sha256 = "0y5lc7sq3913mvvczwx8mq5l3l9yg34jzaw742q8jpd1jzqyza94";
   };
 
   goDeps = ./deps.nix;
@@ -45,6 +45,6 @@ buildGoPackage rec {
     homepage = https://github.com/stamblerre/gocode;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [ kalbasit rvolosatovs ];
   };
 }

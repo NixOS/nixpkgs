@@ -261,10 +261,14 @@ let
     fi
   '';
 
+  canonicalizePortList =
+    ports: lib.unique (builtins.sort builtins.lessThan ports);
+
   commonOptions = {
     allowedTCPPorts = mkOption {
-      type = types.listOf types.int;
+      type = types.listOf types.port;
       default = [ ];
+      apply = canonicalizePortList;
       example = [ 22 80 ];
       description =
         '' 
@@ -274,7 +278,7 @@ let
     };
 
     allowedTCPPortRanges = mkOption {
-      type = types.listOf (types.attrsOf types.int);
+      type = types.listOf (types.attrsOf types.port);
       default = [ ];
       example = [ { from = 8999; to = 9003; } ];
       description =
@@ -285,8 +289,9 @@ let
     };
 
     allowedUDPPorts = mkOption {
-      type = types.listOf types.int;
+      type = types.listOf types.port;
       default = [ ];
+      apply = canonicalizePortList;
       example = [ 53 ];
       description =
         ''
@@ -295,7 +300,7 @@ let
     };
 
     allowedUDPPortRanges = mkOption {
-      type = types.listOf (types.attrsOf types.int);
+      type = types.listOf (types.attrsOf types.port);
       default = [ ];
       example = [ { from = 60000; to = 61000; } ];
       description =

@@ -1,12 +1,13 @@
 { stdenv, fetchzip, ocaml, findlib, ocamlbuild, topkg, dune
-, cmdliner, astring, fmt, result
+, cmdliner, astring, fmt, result, uuidm
 }:
 
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
-    version = "0.8.2";
-    sha256 = "1zpg079v89mz2dpnh59f9hk5r03wl26skfn43llrv3kg24abjfpf";
+    version = "0.8.5";
+    sha256 = "1mhckvdcxkikbzgvy24kjz4265l15b86a6swz7m3ynbgvqdcfzqn";
     buildInputs = [ dune ];
+    propagatedBuildInputs = [ uuidm ];
     buildPhase = "dune build -p alcotest";
     inherit (dune) installPhase;
   } else {
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ] ++ param.buildInputs;
 
-  propagatedBuildInputs = [ cmdliner astring fmt result ];
+  propagatedBuildInputs = [ cmdliner astring fmt result ]
+  ++ (param.propagatedBuildInputs or []);
 
   createFindlibDestdir = true;
 

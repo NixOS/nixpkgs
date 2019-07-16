@@ -4,11 +4,11 @@
 , libpulseaudio, libopus, libogg }:
 
 stdenv.mkDerivation rec {
-  name = "gnunet-0.10.1";
+  name = "gnunet-0.11.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${name}.tar.gz";
-    sha256 = "04wxzm3wkgqbn42b8ksr4cx6m5cckyig5cls1adh0nwdczwvnp7n";
+    sha256 = "16kydkrjlf2vxflgls46bwaf9kjczf621p456q0qlphd7cy7lixp";
   };
 
   buildInputs = [

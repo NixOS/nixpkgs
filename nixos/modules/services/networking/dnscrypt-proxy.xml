@@ -18,7 +18,7 @@
    To enable the client proxy, set
 <programlisting>
 <xref linkend="opt-services.dnscrypt-proxy.enable"/> = true;
-    </programlisting>
+</programlisting>
   </para>
 
   <para>
@@ -36,7 +36,7 @@
    the other client to it:
 <programlisting>
 <xref linkend="opt-services.dnscrypt-proxy.localPort"/> = 43;
-    </programlisting>
+</programlisting>
   </para>
 
   <sect2 xml:id="sec-dnscrypt-proxy-forwarder-dsnmasq">
@@ -47,7 +47,7 @@
   <xref linkend="opt-services.dnsmasq.enable"/> = true;
   <xref linkend="opt-services.dnsmasq.servers"/> = [ "127.0.0.1#43" ];
 }
-    </programlisting>
+</programlisting>
    </para>
   </sect2>
 
@@ -59,7 +59,7 @@
   <xref linkend="opt-services.unbound.enable"/> = true;
   <xref linkend="opt-services.unbound.forwardAddresses"/> = [ "127.0.0.1@43" ];
 }
-    </programlisting>
+</programlisting>
    </para>
   </sect2>
  </sect1>

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "jsonpickle";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d43ede55b3d9b5524a8e11566ea0b11c9c8109116ef6a509a1b619d2041e7397";
+    sha256 = "625098cc8e5854b8c23b587aec33bc8e33e0e597636bfaca76152249c78fe5c1";
   };
 
   doCheck = false;

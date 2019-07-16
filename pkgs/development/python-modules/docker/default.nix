@@ -3,12 +3,12 @@
 , ipaddress, backports_ssl_match_hostname, docker_pycreds
 }:
 buildPythonPackage rec {
-  version = "3.5.1";
+  version = "3.7.2";
   pname = "docker";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fbe82af9b94ccced752527c8de07fa20267f9634b48674ba478a0bb4000a0b1e";
+    sha256 = "c456ded5420af5860441219ff8e51cdec531d65f4a9e948ccd4133e063b72f50";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,6 @@ buildPythonPackage rec {
     homepage = https://github.com/docker/docker-py;
     license = licenses.asl20;
     maintainers = with maintainers; [
-      jgeerds
     ];
   };
 }

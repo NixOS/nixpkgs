@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Installs all the Jupyter components in one go";
-    homepage = "http://jupyter.org/";
+    homepage = "https://jupyter.org/";
     license = licenses.bsd3;
     platforms = platforms.all;
     priority = 100; # This is a metapackage which is unimportant

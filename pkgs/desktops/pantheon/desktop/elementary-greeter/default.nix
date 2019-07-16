@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, substituteAll, makeWrapper, meson
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, substituteAll, meson
 , ninja, vala, desktop-file-utils, gtk3, granite, libgee, elementary-settings-daemon
-, gnome-desktop, mutter, gobject-introspection, elementary-icon-theme, wingpanel-with-indicators
-, elementary-gtk-theme, nixos-artwork, elementary-default-settings, lightdm, numlockx
+, gnome-desktop, mutter, elementary-icon-theme, wingpanel-with-indicators
+, elementary-gtk-theme, nixos-artwork, lightdm, numlockx
 , clutter-gtk, libGL, dbus, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -52,13 +51,14 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./gsd.patch;
-      elementary-settings-daemon = "${elementary-settings-daemon}/libexec";
+      elementary_settings_daemon = "${elementary-settings-daemon}/libexec/";
     })
     (substituteAll {
       src = ./numlockx.patch;
       inherit numlockx;
     })
     ./01-sysconfdir-install.patch
+    ./hardcode-theme.patch
   ];
 
   mesonFlags = [
@@ -70,9 +70,6 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # GTK+ reads default settings (such as icons and themes) from elementary's settings.ini here
-      --prefix XDG_CONFIG_DIRS : "${elementary-default-settings}/etc"
-
       # dbus-launch needed in path
       --prefix PATH : "${dbus}/bin"
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       Moscow ML is a light-weight implementation of Standard ML (SML), a strict
       functional language used in teaching and research.
     '';
-    homepage = http://mosml.org/;
+    homepage = https://mosml.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ vaibhavsagar ];

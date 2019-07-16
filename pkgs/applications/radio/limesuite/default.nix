@@ -4,7 +4,7 @@
 } :
 
 let
-  version = "19.01.0";
+  version = "19.04.0";
 
 in stdenv.mkDerivation {
   name = "limesuite-${version}";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     owner = "myriadrf";
     repo = "LimeSuite";
     rev = "v${version}";
-    sha256 = "1r03kc1pvlhkvp19qbw7f5qzxx48z2v638f0xpawf6d1nwfky1n3";
+    sha256 = "1lrjrli0ny25qwg8bw1bvbdb18hf7ffqj4ziibkgzscv3w5v0s45";
   };
 
   enableParallelBuilding = true;

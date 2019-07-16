@@ -1,23 +1,24 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, boost, icu, catch2 }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, icu, catch2 }:
 
 stdenv.mkDerivation rec {
   name = "nuspell-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     rev = "v${version}";
-    sha256 = "0gcw3p1agnx474r7kv27y9jyab20p4j4xx7j9a2yssg54qabm71j";
+    sha256 = "17khkb1sxn1p6rfql72l7a4lxafbxj0dwi95hsmyi6wajvfrg9sy";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ boost icu ];
 
   enableParallelBuilding = true;
 
-  preBuild = ''
-    ln -s ${catch2}/include/catch2/*.hpp tests/
+  postPatch = ''
+    rm -rf external/Catch2
+    ln -sf ${catch2.src} external/Catch2
   '';
 
   meta = with stdenv.lib; {

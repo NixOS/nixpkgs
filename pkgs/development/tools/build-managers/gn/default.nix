@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchzip, fetchpatch, darwin, writeText
+{ stdenv, lib, fetchgit, darwin, writeText
 , git, ninja, python2 }:
 
 let
@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -vD out/gn "$out/bin/gn"
   '';
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "A meta-build system that generates NinjaBuild files";

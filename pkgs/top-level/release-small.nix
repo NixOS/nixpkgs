@@ -162,7 +162,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   utillinux = linux;
   utillinuxMinimal = linux;
   w3m = all;
-  webkit = linux;
+  webkitgtk = linux;
   wget = all;
   which = all;
   wicd = linux;

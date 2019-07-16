@@ -1,4 +1,4 @@
-{ stdenv, fetchHex, fetchRebar3Deps, rebar3Relx }:
+{ fetchHex, fetchRebar3Deps, rebar3Relx }:
 
 rebar3Relx rec {
   name = "relx-exe";

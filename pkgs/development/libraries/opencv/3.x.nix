@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl, fetchFromGitHub, fetchpatch
+, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
 , glog, boost, google-gflags, protobuf
 , config
@@ -31,24 +31,24 @@
 , enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, cf-private, AVFoundation, Cocoa, QTKit, VideoDecodeAcceleration, bzip2
+, cf-private, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
 }:
 
 let
-  version = "3.4.5";
+  version = "3.4.6";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "0hz9316ys2qi0lx9dcbsk3mkn8cn08q12hc96p6zz2d4is6d5wsc";
+    sha256 = "1gf0rbgd5s13q46bdna0bqn4yz9rxfhvlhbp5ds9hs326q8zprg8";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "1fw7qwgibiznqal2dg4alkw8hrrrpjc0jaicf2406604rjm2lx6h";
+    sha256 = "115qcq0k2wmvhxw5lyv14yrd8m6xq3qy0pdby90ml2yl1caymbfy";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -147,6 +147,12 @@ stdenv.mkDerivation rec {
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
 
+  patches = lib.optional stdenv.isDarwin
+    (fetchpatch {
+      url = "https://github.com/opencv/opencv/commit/7621b91769098359e893e68ad474040ca7940fa1.patch";
+      sha256 = "12qb14yd5934ig61lzs4pg29gak9wjyhnj7nmfx5r213jj1a4m21";
+    });
+
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
   # Also, work around https://github.com/NixOS/nixpkgs/issues/26304 with
@@ -200,7 +206,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
     ++ lib.optional enableCuda cudatoolkit
-    ++ lib.optionals stdenv.isDarwin [ cf-private AVFoundation Cocoa QTKit VideoDecodeAcceleration bzip2 ]
+    ++ lib.optionals stdenv.isDarwin [ cf-private AVFoundation Cocoa VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -237,6 +243,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
+    "-DBUILD_opencv_videoio=OFF"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
   ];

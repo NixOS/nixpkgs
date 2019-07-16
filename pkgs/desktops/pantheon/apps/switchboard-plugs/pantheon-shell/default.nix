@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala
 , libgee, granite, gexiv2, elementary-settings-daemon, gtk3, gnome-desktop
-, gala, wingpanel, plank, switchboard, gettext, gobject-introspection, bamf }:
+, gala, wingpanel, plank, switchboard, gettext, bamf }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0yy821hl26jfd9hyigqi7nmaf30iww0lhg9qzcwlfzsvvfwnxagi";
+    sha256 = "1vrnzxqzl84k8gbrais4j1jyap10kvil4cr769jpr3q3bkbblwrw";
   };
 
   passthru = {
@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gettext
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "lib/switchboard";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Desktop Plug";

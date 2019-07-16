@@ -8,12 +8,12 @@
 let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
-  name = "gimp-${version}";
-  version = "2.10.8";
+  pname = "gimp";
+  version = "2.10.12";
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "16sb4kslwin2jbgdb4nhks78pd0af8mvj8g5hap3hj946p7w2jfq";
+    url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "0wdcr8d2ink4swn5r4v13bsiya6s3xm4ya97sdbhs4l40y7bb03x";
   };
 
   nativeBuildInputs = [ pkgconfig intltool gettext wrapPython ];
@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--without-webkit" # old version is required
     "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-    "--with-icc-directory=/var/run/current-system/sw/share/color/icc"
+    "--with-icc-directory=/run/current-system/sw/share/color/icc"
   ];
 
   # on Darwin,

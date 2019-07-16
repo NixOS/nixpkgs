@@ -20,6 +20,7 @@ let
       # docs
       install -dm755 "$out/share/doc"
       install -m644 ${readmeFile} $out/share/doc/${name}.txt
+      runHook postInstall
     '';
   } // args);
 
@@ -107,7 +108,7 @@ let
     };
 
   mkDictFromDicollecte =
-    { shortName, shortDescription, longDescription, dictFileName }:
+    { shortName, shortDescription, longDescription, dictFileName, isDefault ? false }:
     mkDict rec {
       inherit dictFileName;
       version = "5.3";
@@ -130,6 +131,12 @@ let
       sourceRoot = ".";
       unpackCmd = ''
         unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
+      '';
+      postInstall = stdenv.lib.optionalString isDefault ''
+        for ext in aff dic; do
+          ln -sv $out/share/hunspell/${dictFileName}.$ext $out/share/hunspell/fr_FR.$ext
+          ln -sv $out/share/myspell/dicts/${dictFileName}.$ext $out/share/myspell/dicts/fr_FR.$ext
+        done
       '';
     };
 
@@ -483,6 +490,7 @@ in {
       réformées, suivant la lente évolution de l’orthographe actuelle. Ce
       dictionnaire contient les graphies les moins polémiques de la réforme.
     '';
+    isDefault = true;
   };
 
   fr-reforme1990 = mkDictFromDicollecte {
@@ -581,5 +589,33 @@ in {
     shortName = "de-ch";
     shortDescription = "German (Switzerland)";
     dictFileName = "de_CH";
+  };
+
+  /* UKRAINIAN */
+
+  uk-ua = mkDict rec {
+    name = "hunspell-dict-uk-ua-${version}";
+    version = "4.2.5";
+    _version = "4-2.5";
+
+    src = fetchurl {
+      url = "https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/${_version}/@@download/file/dict-uk_UA-${version}.oxt";
+      sha256 = "1s2i9cd569g97kafrswczvwmvg7m9aks8qsbxd1mi73zy2y1r7n4";
+    };
+
+    dictFileName = "uk_UA";
+    readmeFile = "README_uk_UA.txt";
+    nativeBuildInputs = [ unzip ];
+    unpackCmd = ''
+      unzip $src ${dictFileName}/{${dictFileName}.dic,${dictFileName}.aff,${readmeFile}}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Hunspell dictionary for Ukrainian (Ukraine) from LibreOffice";
+      homepage = https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/;
+      license = licenses.mpl20;
+      maintainers = with maintainers; [ dywedir ];
+      platforms = platforms.all;
+    };
   };
 }

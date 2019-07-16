@@ -105,7 +105,7 @@ in symlinkJoin rec {
     homepage = http://way-cooler.org/;
     license = with licenses; [ mit ];
     maintainers = [ maintainers.miltador ];
-    broken = stdenv.hostPlatform.isAarch64; # fails to build wc-bg (on aarch64)
     platforms = platforms.all;
+    broken = true;
   };
 }

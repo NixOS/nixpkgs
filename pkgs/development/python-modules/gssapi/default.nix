@@ -1,5 +1,5 @@
-{ stdenv, pkgs, lib, buildPythonPackage, fetchPypi, six, enum34, decorator,
-nose, shouldbe, gss, krb5Full, which, darwin }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, six, enum34, decorator,
+nose, gss, krb5Full, darwin }:
 
 buildPythonPackage rec {
   pname = "gssapi";
@@ -16,12 +16,14 @@ buildPythonPackage rec {
       --replace "get_output('krb5-config gssapi --prefix')" "'${lib.getDev krb5Full}'"
   '';
 
-  LD_LIBRARY_PATH = "${pkgs.krb5Full}/lib";
+  LD_LIBRARY_PATH = "${krb5Full}/lib";
 
-  buildInputs = [ krb5Full which nose shouldbe ]
+  nativeBuildInputs = [ krb5Full ]
   ++ ( if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.GSS ] else [ gss ] );
 
   propagatedBuildInputs =  [ decorator enum34 six ];
+
+  checkInputs = [ nose ];
 
   doCheck = false; # No such file or directory: '/usr/sbin/kadmin.local'
 

@@ -33,6 +33,13 @@ in
 
   config = mkIf (ldmcfg.enable && cfg.enable) {
 
+    warnings = [
+      ''
+        The Pantheon greeter is suboptimal in NixOS and can possibly put you in
+        a situation where you cannot start a session when switching desktopManagers.
+      ''
+    ];
+
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {

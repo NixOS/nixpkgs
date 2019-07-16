@@ -3,18 +3,18 @@
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-extlib-1.7.5";
+  name = "ocaml${ocaml.version}-extlib-1.7.6";
 
   src = fetchurl {
-    url = http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.5.tar.gz;
-    sha256 = "19slqf5bdj0rrph2w41giwmn6df2qm07942jn058pjkjrnk30d4s";
+    url = http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.6.tar.gz;
+    sha256 = "0wfs20v1yj5apdbj7214wdsr17ayh0qqq7ihidndvc8nmmwfa1dz";
   };
 
   buildInputs = [ ocaml findlib cppo ];
 
   createFindlibDestdir = true;
 
-  configurePhase = "true";      # Skip configure
+  dontConfigure = true;      # Skip configure
   # De facto, option minimal=1 seems to be the default.  See the README.
   buildPhase     = "make ${if minimal then "minimal=1" else ""} build";
   installPhase   = "make ${if minimal then "minimal=1" else ""} install";

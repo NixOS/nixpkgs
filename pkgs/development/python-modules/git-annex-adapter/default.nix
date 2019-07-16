@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch
-, utillinux, pygit2, gitMinimal, git-annex
+{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, substituteAll
+, python, utillinux, pygit2, gitMinimal, git-annex
 }:
 
 buildPythonPackage rec {
@@ -16,22 +16,22 @@ buildPythonPackage rec {
     sha256 = "146q1jhcfc7f96ajkhjffskkljk2xzivs5ih5clb8qx0sh7mj097";
   };
 
-  prePatch = ''
-    substituteInPlace git_annex_adapter/process.py \
-      --replace "'git', 'annex'" "'${git-annex}/bin/git-annex'" \
-      --replace "'git-annex'" "'${git-annex}/bin/git-annex'"
-  '';
+  patches = [
+    (substituteAll {
+      src = ./git-annex-path.patch;
+      gitAnnex = "${git-annex}/bin/git-annex";
+    })
+  ];
 
   checkInputs = [
+    gitMinimal
     utillinux # `rev` is needed in tests/test_process.py
   ];
 
-  propagatedBuildInputs = [ pygit2 gitMinimal ];
-
-  buildInputs = [ git-annex ];
+  propagatedBuildInputs = [ pygit2 ];
 
   checkPhase = ''
-    python -m unittest
+    ${python.interpreter} -m unittest
   '';
 
   meta = with stdenv.lib; {

@@ -21,8 +21,6 @@
 , mediaSupport ? false
 , ffmpeg
 
-, gmp
-
 # Extensions, common
 , zip
 
@@ -34,7 +32,7 @@
 , rsync
 
 # Pluggable transports
-, obfsproxy
+, obfs4
 
 # Customization
 , extraPrefs ? ""
@@ -79,7 +77,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ tor-browser-unwrapped tor ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   buildPhase = ":";
 
@@ -171,9 +169,9 @@ stdenv.mkDerivation rec {
     EOF
 
     # Configure pluggable transports
-    cat >>$TBDATA_PATH/torrc-defaults <<EOF
-    ClientTransportPlugin obfs2,obfs3 exec ${obfsproxy}/bin/obfsproxy managed
-    EOF
+    substituteInPlace $TBDATA_PATH/torrc-defaults \
+      --replace "./TorBrowser/Tor/PluggableTransports/obfs4proxy" \
+                "${obfs4}/bin/obfs4proxy"
 
     # Hard-code path to TBB fonts; xref: FONTCONFIG_FILE in the wrapper below
     sed $bundleData/$bundlePlatform/Data/fontconfig/fonts.conf \
@@ -280,7 +278,7 @@ stdenv.mkDerivation rec {
       TZ=":" \
       \
       DISPLAY="\$DISPLAY" \
-      XAUTHORITY="\$XAUTHORITY" \
+      XAUTHORITY="\''${XAUTHORITY:-}" \
       DBUS_SESSION_BUS_ADDRESS="\$DBUS_SESSION_BUS_ADDRESS" \
       \
       HOME="\$HOME" \
@@ -340,9 +338,7 @@ stdenv.mkDerivation rec {
       `tor-browser-bundle` needs for the bundling using a much simpler patch. See the
       longDescription and expression of the `firefoxPackages.tor-browser` package for more info.
     '';
-    homepage = https://torproject.org/;
-    license = licenses.free;
-    platforms = [ "x86_64-linux" ];
+    inherit (tor-browser-unwrapped.meta) homepage platforms license;
     hydraPlatforms = [ ];
     maintainers = with maintainers; [ joachifm ];
   };

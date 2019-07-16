@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "128";
   
   src =
-    if builtins.isNull releasePath then
+    if releasePath == null then
       throw ''
         This nix expression requires that the cplex installer is already
         downloaded to your machine. Get it from IBM: 
@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
       fi
     done
   '';
+
+  passthru = {
+    libArch = "x86-64_linux";
+    libSuffix = "${version}0";
+  };
   
   meta = with stdenv.lib; {
     description = "Optimization solver for mathematical programming";

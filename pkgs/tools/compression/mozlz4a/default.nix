@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d1ai062kdms34bya9dlykkx011rj8d8nh5l7d76xj8k9kv4ssq6";
   };
 
-  unpackPhase = "true;";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin" "$out/${python3.sitePackages}/"

@@ -3,19 +3,26 @@
 
 stdenv.mkDerivation rec {
   name    = "ccls-${version}";
-  version = "0.20181225.8";
+  version = "0.20190314.1";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "05vih8wi2lzp4zqlqd18fs3va6s8p74ws8sx7vwpcc8vcsdzq5w9";
+    sha256 = "1yvxliryqx2bc7r6ri4iafbrjx19jk8hnfbvq5xla72q0gqb97lf";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = with llvmPackages; [ clang-unwrapped llvm rapidjson ];
 
-  cmakeFlags = [ "-DSYSTEM_CLANG=ON" ];
+  cmakeFlags = [
+    "-DSYSTEM_CLANG=ON"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
+  ];
+
+  preConfigure = ''
+    cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="-fvisibility=hidden -fno-rtti")
+  '';
 
   shell = runtimeShell;
   postFixup = ''
@@ -37,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "A c/c++ language server powered by clang";
     homepage    = https://github.com/MaskRay/ccls;
     license     = licenses.asl20;
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.mic92 ];
   };
 }

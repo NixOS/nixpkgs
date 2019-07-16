@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, gnupg1 }:
+{ stdenv, fetchurl, perlPackages, makeWrapper, gnupg }:
 
 perlPackages.buildPerlPackage rec {
-  name = "SpamAssassin-3.4.1";
+  pname = "SpamAssassin";
+  version = "3.4.2";
 
   src = fetchurl {
-    url = "mirror://apache/spamassassin/source/Mail-${name}.tar.bz2";
-    sha256 = "0la6s5ilamf9129kyjckcma8cr6fpb6b5f2fb64v7106iy0ckhd0";
+    url = "mirror://apache/spamassassin/source/Mail-${pname}-${version}.tar.bz2";
+    sha256 = "1np8h293bzg33i0xn9gj9krwgr7k6xbyf1yhxr2j2xci95d080yg";
   };
 
   # https://bz.apache.org/SpamAssassin/show_bug.cgi?id=7434
@@ -27,7 +28,7 @@ perlPackages.buildPerlPackage rec {
     mv "rules/"* $out/share/spamassassin/
 
     for n in "$out/bin/"*; do
-      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : "${gnupg1}/bin"
+      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : "${gnupg}/bin"
     done
   '';
 

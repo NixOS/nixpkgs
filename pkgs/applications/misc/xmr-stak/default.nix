@@ -12,13 +12,13 @@ in
 
 stdenv'.mkDerivation rec {
   name = "xmr-stak-${version}";
-  version = "2.8.2";
+  version = "2.10.5";
 
   src = fetchFromGitHub {
     owner = "fireice-uk";
     repo = "xmr-stak";
     rev = "${version}";
-    sha256 = "0z0fdh5fmiisx5dgfyyin3ddl8g28fpd64gn8nl8dd6sf3iw8z7p";
+    sha256 = "16b6bj0rsr3cq9x3gxm54j197827d8lnfk7ghfjmaf7qa3q08adx";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";

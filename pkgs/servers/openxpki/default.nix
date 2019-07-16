@@ -3,7 +3,8 @@
 , extraDependencies1 ? false, extraDependencies2 ? false, extraDependencies3 ? false }:
 
 perlPackages.buildPerlPackage {
-  name = "openxpki-git20150807";
+  pname = "openxpki";
+  version = "git20150807";
 
   src = fetchgit {
     url = "https://github.com/openxpki/openxpki";

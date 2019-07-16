@@ -1,11 +1,11 @@
 { stdenv, fetchurl, neon, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "davfs2-1.5.4";
+  name = "davfs2-1.5.5";
 
   src = fetchurl {
     url = "mirror://savannah/davfs2/${name}.tar.gz";
-    sha256 = "1q4ngkzbkq0rfxikvkwg7ccpzi1nkkmlf8bb46326y1aj7qf1i69";
+    sha256 = "0bxd62268pix7w1lg7f9y94v34f4l45fdf6clyarj43qmljnlz2q";
   };
 
   buildInputs = [ neon zlib ];
@@ -30,6 +30,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

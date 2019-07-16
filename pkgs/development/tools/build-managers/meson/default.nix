@@ -1,12 +1,22 @@
 { lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
 
+let
+  # See https://mesonbuild.com/Reference-tables.html#cpu-families
+  cpuFamilies = {
+    "aarch64" = "aarch64";
+    "armv6l"  = "arm";
+    "armv7l"  = "arm";
+    "i686"    = "x86";
+    "x86_64"  = "x86_64";
+  };
+in
 python3Packages.buildPythonApplication rec {
-  version = "0.49.1";
   pname = "meson";
+  version = "0.50.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "05wr4kn88aqq2cbzqx59zj56410c9d42wracb4cjs70mvq0lp50s";
+    sha256 = "05k3wsxjcnnq7a8n5kzxh2cdh5jdkh13xagigz5axs48j36zfai4";
   };
 
   postFixup = ''
@@ -62,13 +72,15 @@ python3Packages.buildPythonApplication rec {
     ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
     strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
     pkgconfig = 'pkg-config'
+    ld = '${targetPackages.stdenv.cc.targetPrefix}ld'
+    objcopy = '${targetPackages.stdenv.cc.targetPrefix}objcopy'
 
     [properties]
     needs_exe_wrapper = true
 
     [host_machine]
     system = '${targetPackages.stdenv.targetPlatform.parsed.kernel.name}'
-    cpu_family = '${targetPackages.stdenv.targetPlatform.parsed.cpu.family}'
+    cpu_family = '${cpuFamilies.${targetPackages.stdenv.targetPlatform.parsed.cpu.name}}'
     cpu = '${targetPackages.stdenv.targetPlatform.parsed.cpu.name}'
     endian = ${if targetPackages.stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
   '';

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "SQLObject";
-  version = "3.7.0";
+  version = "3.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c0d440b638c091027deea7330bb934188b86402cba552a0bbde0535ed8fdab93";
+    sha256 = "8aee27279231bae59e95b299e253b27ac2d78934989f4ccbe317c7b25faab6de";
   };
 
   checkInputs = [ pytest ];

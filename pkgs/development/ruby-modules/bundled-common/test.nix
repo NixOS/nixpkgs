@@ -1,4 +1,4 @@
-{ stdenv, writeText, lib, ruby, defaultGemConfig, callPackage, test, stubs, should }:
+{ lib, ruby, defaultGemConfig, test, should }:
 let
   testConfigs = {
     inherit lib;

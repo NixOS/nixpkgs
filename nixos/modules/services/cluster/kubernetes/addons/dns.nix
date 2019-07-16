@@ -3,7 +3,7 @@
 with lib;
 
 let
-  version = "1.3.1";
+  version = "1.5.0";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -38,14 +38,26 @@ in {
       type = types.int;
     };
 
+    reconcileMode = mkOption {
+      description = ''
+        Controls the addon manager reconciliation mode for the DNS addon.
+
+        Setting reconcile mode to EnsureExists makes it possible to tailor DNS behavior by editing the coredns ConfigMap.
+
+        See: <link xlink:href="https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/addon-manager/README.md"/>.
+      '';
+      default = "Reconcile";
+      type = types.enum [ "Reconcile" "EnsureExists" ];
+    };
+
     coredns = mkOption {
       description = "Docker image to seed for the CoreDNS container.";
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
-        imageDigest = "sha256:02382353821b12c21b062c59184e227e001079bb13ebd01f9d3270ba0fcbf1e4";
+        imageDigest = "sha256:e83beb5e43f8513fa735e77ffc5859640baea30a882a11cc75c4c3244a737d3c";
         finalImageTag = version;
-        sha256 = "0vbylgyxv2jm2mnzk6f28jbsj305zsxmx3jr6ngjq461czcl5fi5";
+        sha256 = "15sbmhrxjxidj0j0cccn1qxpg6al175w43m6ngspl0mc132zqc9q";
       };
     };
   };
@@ -131,7 +143,7 @@ in {
         kind = "ConfigMap";
         metadata = {
           labels = {
-            "addonmanager.kubernetes.io/mode" = "Reconcile";
+            "addonmanager.kubernetes.io/mode" = cfg.reconcileMode;
             "k8s-app" = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
           };
@@ -148,7 +160,7 @@ in {
               fallthrough in-addr.arpa ip6.arpa
             }
             prometheus :${toString ports.metrics}
-            proxy . /etc/resolv.conf
+            forward . /etc/resolv.conf
             cache 30
             loop
             reload
@@ -162,7 +174,7 @@ in {
         kind = "Deployment";
         metadata = {
           labels = {
-            "addonmanager.kubernetes.io/mode" = "Reconcile";
+            "addonmanager.kubernetes.io/mode" = cfg.reconcileMode;
             "k8s-app" = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
             "kubernetes.io/name" = "CoreDNS";

@@ -1,10 +1,11 @@
 { stdenv, fetchurl, perlPackages, ncurses, lynx, makeWrapper }:
 
 perlPackages.buildPerlPackage rec {
-  name = "wml-2.0.11";
+  pname = "wml";
+  version = "2.0.11";
 
   src = fetchurl {
-    url = "http://thewml.org/distrib/${name}.tar.gz";
+    url = "http://thewml.org/distrib/wml-2.0.11.tar.gz";
     sha256 = "0jjxpq91x7y2mgixz7ghqp01m24qa37wl3zz515rrzv7x8cyy4cf";
   };
 

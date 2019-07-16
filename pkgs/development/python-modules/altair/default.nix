@@ -1,27 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+{ stdenv, buildPythonPackage, fetchPypi
 , pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
 , entrypoints, jsonschema, numpy, pandas, six, toolz, typing
 , pythonOlder, recommonmark }:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "2.2.2";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c158699026eb5a19f95c1ca742e2e82bc20c27013ef5785f10836283e2233f8a";
+    sha256 = "1zdznkybw3g8fd280h5j5cnnwcv30610gp8fl8vwqda1w2p6pgvp";
   };
+
+  postPatch = ''
+    # Tests require network
+    rm altair/examples/boxplot_max_min.py altair/examples/line_percent.py
+  '';
 
   checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales recommonmark ];
 
   propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz ]
     ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
-
-  # hack to prevent typing from being required for python > 3.5
-  postPatch = ''
-    substituteInPlace requirements.txt \
-       --replace "typing" ""
-  '';
 
   checkPhase = ''
     export LANG=en_US.UTF-8

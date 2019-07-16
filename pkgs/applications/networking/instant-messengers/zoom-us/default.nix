@@ -4,7 +4,7 @@
 , qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
 , qttools, qtwayland, qtwebchannel, qtwebengine
 # Runtime
-, coreutils, libjpeg_turbo, pciutils, procps, utillinux
+, coreutils, libjpeg_turbo, pciutils, procps, utillinux, libv4l
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
@@ -13,11 +13,11 @@ assert pulseaudioSupport -> libpulseaudio != null;
 let
   inherit (stdenv.lib) concatStringsSep makeBinPath optional;
 
-  version = "2.7.162522.0121";
+  version = "2.8.264592.0714";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "01i4g4kmawk3mclifh4bwcqpdnbvrz0sz49b6l33n0k5ysky20r1";
+      sha256 = "0ndrsyyawls487v7vlga0yn574xvhmfc14vdjxg23nvn0jxh2dvw";
     };
   };
 
@@ -72,6 +72,7 @@ in stdenv.mkDerivation {
 
       makeWrapper $packagePath/zoom $out/bin/zoom-us \
         --prefix PATH : "${makeBinPath [ coreutils glib.dev pciutils procps qttools.dev utillinux ]}" \
+        --prefix LD_PRELOAD : "${libv4l}/lib/libv4l/v4l2convert.so" \
         --run "cd $packagePath"
 
       runHook postInstall

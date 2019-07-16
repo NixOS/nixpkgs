@@ -2,10 +2,10 @@
 
 buildDunePackage rec {
 	pname = "ppxfind";
-	version = "1.2";
+	version = "1.3";
 	src = fetchurl {
 		url = "https://github.com/diml/ppxfind/releases/download/${version}/ppxfind-${version}.tbz";
-		sha256 = "1687jbgii5w5dvvid3ri2cx006ysv0rrspn8dz8x7ma8615whz2h";
+		sha256 = "1r4jp0516378js62ss50a9s8ql2pm8lfdd3mnk214hp7s0kb17fl";
 	};
 
 	minimumOCamlVersion = "4.03";

@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "pyramid";
-  version = "1.10.1";
+  version = "1.10.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "37c3e1c9eae72817e0365e2a38143543aee8b75240701fa5cb3a1be86c01a1c0";
+    sha256 = "d80ccb8cfa550139b50801591d4ca8a5575334adb493c402fce2312f55d07d66";
   };
 
   checkInputs = [ docutils virtualenv webtest zope_component ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     description = "The Pyramid Web Framework, a Pylons project";
     homepage = https://trypyramid.com/;
     license = licenses.bsd0;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

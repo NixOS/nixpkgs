@@ -34,6 +34,7 @@ let
     unifi     = import ./exporters/unifi.nix     { inherit config lib pkgs; };
     varnish   = import ./exporters/varnish.nix   { inherit config lib pkgs; };
     bind      = import ./exporters/bind.nix      { inherit config lib pkgs; };
+    wireguard = import ./exporters/wireguard.nix { inherit config lib pkgs; };
   };
 
   mkExporterOpts = ({ name, port }: {
@@ -119,7 +120,7 @@ let
   mkExporterConf = { name, conf, serviceOpts }:
     mkIf conf.enable {
       networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
-        "ip46tables -I nixos-fw ${conf.firewallFilter} "
+        "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{

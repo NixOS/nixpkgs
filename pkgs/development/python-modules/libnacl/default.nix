@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "05iamhbsqm8binqhc2zchfqdkajlx2icf8xl5vkd5fbrhw6yylad";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ libsodium ];
 
   postPatch =

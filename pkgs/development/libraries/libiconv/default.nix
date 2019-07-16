@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "libiconv-${version}";
-  version = "1.15";
+  version = "1.16";
 
   src = fetchurl {
     url = "mirror://gnu/libiconv/${name}.tar.gz";
-    sha256 = "0y1ij745r4p48mxq84rax40p10ln7fc7m243p8k8sia519i3dxfc";
+    sha256 = "016c57srqr0bza5fxjxfrx6aqxkqy0s3gkhcg7p7fhk5i6sv38g6";
   };
 
   setupHooks = [

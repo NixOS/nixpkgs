@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "qbs-${version}";
 
-  version = "1.12.2";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "qbs";
     repo = "qbs";
     rev = "v${version}";
-    sha256 = "0spkkq7nmh27rbx61p23fzkxffx3qdhjqw95pqgsbc76xczd45sv";
+    sha256 = "1a9mydfsax5pzbnx8g8f9blc4xpk5rdjq8fvkdaiwapdczban1ya";
   };
 
   nativeBuildInputs = [ qmake ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool that helps simplify the build process for developing projects across multiple platforms";
+    homepage = "https://wiki.qt.io/Qbs";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ expipiplus1 ];
     platforms = platforms.linux;

@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The most reliable stable TV fork of the great Sick-Beard to fully automate TV enjoyment with innovation";
     license     = licenses.gpl3;
-    homepage    = https:/github.com/SickGear/SickGear;
+    homepage    = "https://github.com/SickGear/SickGear";
     maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

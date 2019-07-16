@@ -1,12 +1,12 @@
-{ lib, python3, glibcLocales }:
+{ lib, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0yjqjfqr1gc4c9k5z5i7ngcpcwmyp3lzs4xv7allgqvglmw26ji4";
+    sha256 = "a38d4669201ac2afa71b6578a220bf4d6d59131263b278d51ebd1479677f6baf";
   };
 
   postPatch = ''
@@ -14,15 +14,9 @@ python3.pkgs.buildPythonApplication rec {
     sed -i "s/'\(.*\)\(==\|>=\).*'/'\1'/g" setup.py
   '';
 
-  nativeBuildInputs = [
-    glibcLocales
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
     requests netdisco click click-log tabulate jsonpath_rw jinja2 dateparser regex ruamel_yaml aiohttp
   ];
-
-  LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions" "$out/share/zsh/site-functions"

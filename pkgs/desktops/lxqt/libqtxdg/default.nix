@@ -1,25 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg }:
+{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, lxqt-build-tools }:
 
 stdenv.mkDerivation rec {
   pname = "libqtxdg";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0qgqqgy15h0d1fwk4mnbv2hirz8njjjlng64bv33rc6wwrsaa50b";
+    sha256 = "0y3s0hva64m64j9lqgnja1li8zhlywqzv8xwjg8pyd2nr9h918db";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake lxqt-build-tools ];
 
   buildInputs = [ qtbase qtsvg ];
 
   preConfigure = ''
     cmakeFlagsArray+=(
-    "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
     )
   '';
 

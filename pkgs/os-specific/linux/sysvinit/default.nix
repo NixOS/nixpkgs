@@ -1,13 +1,13 @@
 { stdenv, fetchurl, withoutInitTools ? false }:
 
-let version = "2.93"; in
+let version = "2.95"; in
 
 stdenv.mkDerivation {
   name = (if withoutInitTools then "sysvtools" else "sysvinit") + "-" + version;
 
   src = fetchurl {
     url = "mirror://savannah/sysvinit/sysvinit-${version}.tar.xz";
-    sha256 = "1zx84vrzv615na661dd6mg4wh999m0jp25lsa241961x4c74cba7";
+    sha256 = "1j46dydib9yd2a46w43is9b61lplwrsry46fw7cbmfrn7ywrq0n9";
   };
 
   prePatch = ''

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "consul-${version}";
-  version = "1.4.1";
+  version = "1.5.2";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/consul";
@@ -19,7 +19,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = "consul";
     inherit rev;
-    sha256 = "1xd2chx69jdbq2r82d4cgyc8pf1cmmxqvbfz29bf3nvvi6bgq7d5";
+    sha256 = "1fn9xxdszil4zdal08cyq6gbs2larpr4zmjmv2w2ykiacbfhpa6h";
   };
 
   preBuild = ''

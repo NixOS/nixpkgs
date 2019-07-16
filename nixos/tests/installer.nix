@@ -67,6 +67,7 @@ let
   # partitions and filesystems.
   testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
                   , grubIdentifier, preBootCommands, extraConfig
+                  , testCloneConfig
                   }:
     let
       iface = if grubVersion == 1 then "ide" else "virtio";
@@ -85,6 +86,7 @@ let
     in if !isEfi && !(pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
       throw "Non-EFI boot methods are only supported on i686 / x86_64"
     else ''
+
       $machine->start;
 
       # Make sure that we get a login prompt etc.
@@ -185,6 +187,43 @@ let
       ${preBootCommands}
       $machine->waitForUnit("network.target");
       $machine->shutdown;
+
+      # Tests for validating clone configuration entries in grub menu
+      ${optionalString testCloneConfig ''
+        # Reboot Machine
+        $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}", name => "clone-default-config" });
+        ${preBootCommands}
+        $machine->waitForUnit("multi-user.target");
+
+        # Booted configuration name should be Home
+        # This is not the name that shows in the grub menu.
+        # The default configuration is always shown as "Default"
+        $machine->succeed("cat /run/booted-system/configuration-name >&2");
+        $machine->succeed("cat /run/booted-system/configuration-name | grep Home");
+
+        # We should find **not** a file named /etc/gitconfig
+        $machine->fail("test -e /etc/gitconfig");
+
+        # Set grub to boot the second configuration
+        $machine->succeed("grub-reboot 1");
+
+        $machine->shutdown;
+
+        # Reboot Machine
+        $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}", name => "clone-alternate-config" });
+        ${preBootCommands}
+
+        $machine->waitForUnit("multi-user.target");
+        # Booted configuration name should be Work
+        $machine->succeed("cat /run/booted-system/configuration-name >&2");
+        $machine->succeed("cat /run/booted-system/configuration-name | grep Work");
+
+        # We should find a file named /etc/gitconfig
+        $machine->succeed("test -e /etc/gitconfig");
+
+        $machine->shutdown;
+      ''}
+
     '';
 
 
@@ -194,6 +233,7 @@ let
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
     , enableOCR ? false, meta ? {}
+    , testCloneConfig ? false
     }:
     makeTest {
       inherit enableOCR;
@@ -269,9 +309,101 @@ let
 
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands
-                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig;
+                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
+                testCloneConfig;
       };
     };
+
+    makeLuksRootTest = name: luksFormatOpts: makeInstallerTest name
+      { createPartitions = ''
+          $machine->succeed(
+            "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+            . " mkpart primary ext2 1M 50MB" # /boot
+            . " mkpart primary linux-swap 50M 1024M"
+            . " mkpart primary 1024M -1s", # LUKS
+            "udevadm settle",
+            "mkswap /dev/vda2 -L swap",
+            "swapon -L swap",
+            "modprobe dm_mod dm_crypt",
+            "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
+            "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
+            "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
+            "mount LABEL=nixos /mnt",
+            "mkfs.ext3 -L boot /dev/vda1",
+            "mkdir -p /mnt/boot",
+            "mount LABEL=boot /mnt/boot",
+          );
+        '';
+        extraConfig = ''
+          boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+        '';
+        enableOCR = true;
+        preBootCommands = ''
+          $machine->start;
+          $machine->waitForText(qr/Passphrase for/);
+          $machine->sendChars("supersecret\n");
+        '';
+      };
+
+  # The (almost) simplest partitioning scheme: a swap partition and
+  # one big filesystem partition.
+  simple-test-config = { createPartitions =
+       ''
+         $machine->succeed(
+             "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+             . " mkpart primary linux-swap 1M 1024M"
+             . " mkpart primary ext2 1024M -1s",
+             "udevadm settle",
+             "mkswap /dev/vda1 -L swap",
+             "swapon -L swap",
+             "mkfs.ext3 -L nixos /dev/vda2",
+             "mount LABEL=nixos /mnt",
+         );
+       '';
+   };
+
+  simple-uefi-grub-config =
+    { createPartitions =
+        ''
+          $machine->succeed(
+              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+              . " mkpart ESP fat32 1M 50MiB" # /boot
+              . " set 1 boot on"
+              . " mkpart primary linux-swap 50MiB 1024MiB"
+              . " mkpart primary ext2 1024MiB -1MiB", # /
+              "udevadm settle",
+              "mkswap /dev/vda2 -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/vda3",
+              "mount LABEL=nixos /mnt",
+              "mkfs.vfat -n BOOT /dev/vda1",
+              "mkdir -p /mnt/boot",
+              "mount LABEL=BOOT /mnt/boot",
+          );
+        '';
+        bootLoader = "grub";
+        grubUseEfi = true;
+    };
+
+  clone-test-extraconfig = { extraConfig =
+         ''
+         environment.systemPackages = [ pkgs.grub2 ];
+         boot.loader.grub.configurationName = "Home";
+         nesting.clone = [
+         {
+           boot.loader.grub.configurationName = lib.mkForce "Work";
+
+           environment.etc = {
+             "gitconfig".text = "
+               [core]
+                 gitproxy = none for work.com
+                 ";
+           };
+         }
+         ];
+         '';
+       testCloneConfig = true;
+  };
 
 
 in {
@@ -281,21 +413,10 @@ in {
 
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
-  simple = makeInstallerTest "simple"
-    { createPartitions =
-        ''
-          $machine->succeed(
-              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-              . " mkpart primary linux-swap 1M 1024M"
-              . " mkpart primary ext2 1024M -1s",
-              "udevadm settle",
-              "mkswap /dev/vda1 -L swap",
-              "swapon -L swap",
-              "mkfs.ext3 -L nixos /dev/vda2",
-              "mount LABEL=nixos /mnt",
-          );
-        '';
-    };
+  simple = makeInstallerTest "simple" simple-test-config;
+
+  # Test cloned configurations with the simple grub configuration
+  simpleClone = makeInstallerTest "simpleClone" (simple-test-config // clone-test-extraconfig);
 
   # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
   simpleUefiSystemdBoot = makeInstallerTest "simpleUefiSystemdBoot"
@@ -320,28 +441,10 @@ in {
         bootLoader = "systemd-boot";
     };
 
-  simpleUefiGrub = makeInstallerTest "simpleUefiGrub"
-    { createPartitions =
-        ''
-          $machine->succeed(
-              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
-              . " mkpart ESP fat32 1M 50MiB" # /boot
-              . " set 1 boot on"
-              . " mkpart primary linux-swap 50MiB 1024MiB"
-              . " mkpart primary ext2 1024MiB -1MiB", # /
-              "udevadm settle",
-              "mkswap /dev/vda2 -L swap",
-              "swapon -L swap",
-              "mkfs.ext3 -L nixos /dev/vda3",
-              "mount LABEL=nixos /mnt",
-              "mkfs.vfat -n BOOT /dev/vda1",
-              "mkdir -p /mnt/boot",
-              "mount LABEL=BOOT /mnt/boot",
-          );
-        '';
-        bootLoader = "grub";
-        grubUseEfi = true;
-    };
+  simpleUefiGrub = makeInstallerTest "simpleUefiGrub" simple-uefi-grub-config;
+
+  # Test cloned configurations with the uefi grub configuration
+  simpleUefiGrubClone = makeInstallerTest "simpleUefiGrubClone" (simple-uefi-grub-config // clone-test-extraconfig);
 
   # Same as the previous, but now with a separate /boot partition.
   separateBoot = makeInstallerTest "separateBoot"
@@ -446,37 +549,14 @@ in {
         '';
     };
 
-  # Boot off an encrypted root partition
-  luksroot = makeInstallerTest "luksroot"
-    { createPartitions = ''
-        $machine->succeed(
-          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          . " mkpart primary ext2 1M 50MB" # /boot
-          . " mkpart primary linux-swap 50M 1024M"
-          . " mkpart primary 1024M -1s", # LUKS
-          "udevadm settle",
-          "mkswap /dev/vda2 -L swap",
-          "swapon -L swap",
-          "modprobe dm_mod dm_crypt",
-          "echo -n supersecret | cryptsetup luksFormat -q /dev/vda3 -",
-          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
-          "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
-          "mount LABEL=nixos /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
-          "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
-        );
-      '';
-      extraConfig = ''
-        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-      '';
-      enableOCR = true;
-      preBootCommands = ''
-        $machine->start;
-        $machine->waitForText(qr/Passphrase for/);
-        $machine->sendChars("supersecret\n");
-      '';
-    };
+  # Boot off an encrypted root partition with the default LUKS header format
+  luksroot = makeLuksRootTest "luksroot-format1" "";
+
+  # Boot off an encrypted root partition with LUKS1 format
+  luksroot-format1 = makeLuksRootTest "luksroot-format1" "--type=LUKS1";
+
+  # Boot off an encrypted root partition with LUKS2 format
+  luksroot-format2 = makeLuksRootTest "luksroot-format2" "--type=LUKS2";
 
   # Test whether opening encrypted filesystem with keyfile
   # Checks for regression of missing cryptsetup, when no luks device without

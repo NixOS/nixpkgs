@@ -12,7 +12,7 @@ let
 
   pname = "vg";
   version = "0.9.1";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert versionAtLeast ocaml.version "4.02.0";

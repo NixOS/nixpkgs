@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, lvm2, json_c
+{ stdenv, fetchurl, lvm2, json_c
 , openssl, libuuid, pkgconfig, popt
 , enablePython ? false, python2 ? null }:
 
 assert enablePython -> python2 != null;
 
 stdenv.mkDerivation rec {
-  name = "cryptsetup-2.0.6";
+  name = "cryptsetup-2.1.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/cryptsetup/v2.0/${name}.tar.xz";
-    sha256 = "0c1x125s7p4ps13spsqrcsd9dclz01vsrchmypq9msp7y3hgllbw";
+    url = "mirror://kernel/linux/utils/cryptsetup/v2.1/${name}.tar.xz";
+    sha256 = "15y8n547garz0x5kqv09gscdsrz0c0y1y6c5cp8pccwg3xsb5vm3";
   };
 
   # Disable 4 test cases that fail in a sandbox
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lgcc_s";
 
   configureFlags = [
-    "--disable-kernel_crypto"
     "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
   ] ++ stdenv.lib.optional enablePython "--enable-python";

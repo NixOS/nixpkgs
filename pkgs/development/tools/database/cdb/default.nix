@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, writeText }:
+{ stdenv, lib, fetchurl, fetchFromGitHub }:
 
 let
   version = "0.75";
@@ -52,6 +52,6 @@ in stdenv.mkDerivation {
     homepage = "https://cr.yp.to/cdb";
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.Profpatsch ];
-    platforms = [ lib.platforms.unix ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,14 +1,14 @@
-{ buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
+{ buildPythonPackage, fetchPypi, jinja2, werkzeug, flask, cfn-lint
 , requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker, responses
 , six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml, python-jose }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "129de2e04cb250d9f8b2c722ec152ed1b5426ef179b4ebb03e9ec36e6eb3fcc5";
+    sha256 = "9cb02134148fbe3ed81f11d6ab9bd71bbd6bc2db7e59a45de77fb1d0fedb744e";
   };
 
   postPatch = ''
@@ -24,6 +24,7 @@ buildPythonPackage rec {
     aws-xray-sdk
     boto
     boto3
+    cfn-lint
     dateutil
     flask
     httpretty

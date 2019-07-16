@@ -9,14 +9,14 @@ assert unicodeSupport -> ncurses.unicode && ncurses != null;
 
 stdenv.mkDerivation rec {
   name = "dialog-${version}";
-  version = "1.3-20181107";
+  version = "1.3-20190211";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/dialog/${name}.tgz"
       "https://invisible-mirror.net/archives/dialog/${name}.tgz"
     ];
-    sha256 = "0mv4a31sz5kc1hyc51cvg9dq54vhlz0vbizn7jgkm9fx4y0cmspg";
+    sha256 = "1lx0bvradzx1zl7znlrsnyljcs596r7wamkhyq37ikbxsy4y5h29";
   };
 
   buildInputs = [ ncurses ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   installTargets = "install${stdenv.lib.optionalString withLibrary "-full"}";
 
   meta = {
-    homepage = http://invisible-island.net/dialog/dialog.html;
+    homepage = https://invisible-island.net/dialog/dialog.html;
     description = "Display dialog boxes from shell";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.spacefrogg ];

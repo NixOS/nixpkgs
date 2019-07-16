@@ -20,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "1.2.1";
+  version = "1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6aefa6ff89a993af7a7af40d3df3d0387d6663df99797981ec41b1431ec6d1e1";
+    sha256 = "6f6f0fb83c51ffa3a150fa41b5ac118df9ea4a87c2c06dff4ebf9adbe7b52b36";
   };
 
   disabled = !isPy3k;

@@ -14,9 +14,8 @@
   include = includedFiles: src: builtins.filterSource (path: type:
      lib.lists.any (f:
        let p = toString (src + ("/" + f));
-           suff = lib.strings.removePrefix p path;
        in
-       suff == "" || (lib.strings.hasPrefix "/" suff)
+       p == path || (lib.strings.hasPrefix (p + "/") path)
      ) includedFiles
   ) src;
   exclude = excludedFiles: src: builtins.filterSource (path: type:

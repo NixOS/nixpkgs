@@ -6,12 +6,16 @@
 
 buildPythonPackage rec {
   pname = "murmurhash";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02wbyjixvzd6l1mljpm1ci7x835zhk3nqxgy7kvbi4jimvairs9q";
+    sha256 = "c7a646f6b07b033642b4f52ae2e45efd8b80780b3b90e8092a0cec935fbf81e2";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "'wheel>=0.32.0,<0.33.0'" ""
+  '';
 
   buildInputs = [
    cython

@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
 
-  version = "1.1.8";
+  version = "1.1.9";
   name = "ocaml${ocaml.version}-ocp-index-${version}";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocp-index";
     rev = version;
-    sha256 = "0hfiwqi60xnwsmj7fmv1sk2gzr6wxdzbgd5zli2xnfrjvb4ydv12";
+    sha256 = "0dq1kap16xfajc6gg9hbiadax782winpvxnr3dkm2ncznnxds37p";
   };
 
   buildInputs = [ ocaml findlib dune ocp-build cmdliner re ];

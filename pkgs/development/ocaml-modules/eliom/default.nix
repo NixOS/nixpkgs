@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, which, ocsigen_server, ocsigen_deriving, ocaml, lwt_camlp4,
-  lwt_react, cryptokit,
-  ipaddr, ocamlnet, ocaml_pcre,
+{ stdenv, fetchzip, which, ocsigen_server, ocsigen_deriving, ocaml, lwt_camlp4,
+  lwt_react,
   opaline, ppx_tools, ppx_deriving, findlib
 , js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
@@ -11,12 +10,12 @@
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "6.4.0";
+  version = "6.7.0";
   name = "${pname}-${version}";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
-    sha256 = "1ad7ympvj0cb51d9kbp4naxkld3gv8cfp4a037a5dr55761zdhdh";
+    sha256 = "0mrlpvjaihpsf2xr6p1gs0sz4cwzkknf5b1s32bhmqq5qzsh4j8k";
   };
 
   patches = [ ./camlp4.patch ];

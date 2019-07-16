@@ -2,14 +2,14 @@
 , glib, gtk3, gtk-doc, libgudev, pkgconfig, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "iio-sensor-proxy-${version}";
-  version = "2.5";
+  pname = "iio-sensor-proxy";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner  = "hadess";
-    repo   = "iio-sensor-proxy";
+    repo   = pname;
     rev    = version;
-    sha256 = "06x1vvslsa44bgw8s5rr17q9i2ssbw0x04l75zsy3rql9r3y2jzg";
+    sha256 = "05ipljw78d8z90cnkygcrpd0qq4vh14bb9hy06vqxnpdbyq46fxh";
   };
 
   configurePhase = ''

@@ -1,31 +1,40 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2, hicolor-icon-theme
-, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, autoreconfHook, wrapGAppsHook
+, gtk3, hicolor-icon-theme, netpbm }:
 
 stdenv.mkDerivation rec {
-  name = "yad-0.40.0";
+  pname = "yad";
+  version = "0.42.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/yad-dialog/files/${name}.tar.xz";
-    sha256 = "1x0fsv8nfkm8lchdawnf3zw79jaqbnvhv87sk5r8g86knv8vgl62";
+  src = fetchFromGitHub {
+    owner = "v1cont";
+    repo = "yad";
+    rev = "v${version}";
+    sha256 = "0ym8pgbzx7ydk5rmi2kwwdyzi6pdpcps86i0c20cqcjmqh8kdl36";
   };
 
   configureFlags = [
     "--enable-icon-browser"
+    "--with-gtk=gtk3"
+    "--with-rgb=${placeholder "out"}/share/yad/rgb.txt"
   ];
 
-  # for gcc5: c11 inline semantics breaks the build
-  NIX_CFLAGS_COMPILE = "-fgnu89-inline";
+  buildInputs = [ gtk3 hicolor-icon-theme ];
 
-  buildInputs = [ gtk2 hicolor-icon-theme ];
-
-  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig intltool wrapGAppsHook ];
 
   postPatch = ''
     sed -i src/file.c -e '21i#include <glib/gprintf.h>'
     sed -i src/form.c -e '21i#include <stdlib.h>'
+
+    # there is no point to bring in the whole netpbm package just for this file
+    install -Dm644 ${netpbm}/share/netpbm/misc/rgb.txt $out/share/yad/rgb.txt
   '';
 
-  meta = {
+  postAutoreconf = ''
+    intltoolize
+  '';
+
+  meta = with stdenv.lib; {
     homepage = https://sourceforge.net/projects/yad-dialog/;
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
@@ -34,9 +43,8 @@ stdenv.mkDerivation rec {
       dialogs, pop-up menu in notification icon and more.
     '';
 
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ smironov ];
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ smironov ];
+    platforms = with platforms; linux;
   };
 }
-

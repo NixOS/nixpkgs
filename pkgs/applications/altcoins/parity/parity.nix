@@ -5,7 +5,7 @@
 
 { stdenv
 , fetchFromGitHub
-, rustPlatform 
+, rustPlatform
 , pkgconfig
 , openssl
 , systemd
@@ -29,12 +29,14 @@ rustPlatform.buildRustPackage rec {
     systemd.lib systemd.dev openssl openssl.dev
   ];
 
+  cargoBuildFlags = [ "--features final" ];
+
   # test result: FAILED. 80 passed; 12 failed; 0 ignored; 0 measured; 0 filtered out
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Fast, light, robust Ethereum implementation";
-    homepage = http://parity.io;
+    homepage = "http://parity.io";
     license = licenses.gpl3;
     maintainers = [ maintainers.akru ];
     platforms = platforms.linux;

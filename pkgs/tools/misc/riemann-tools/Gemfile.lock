@@ -12,7 +12,7 @@ GEM
       json (~> 1.8)
       riemann-client (>= 0.2.6)
       trollop (>= 1.16.2)
-    trollop (2.1.2)
+    trollop (2.9.9)
 
 PLATFORMS
   ruby
@@ -21,4 +21,4 @@ DEPENDENCIES
   riemann-tools (= 0.2.13)
 
 BUNDLED WITH
-   1.14.6
+   1.17.2

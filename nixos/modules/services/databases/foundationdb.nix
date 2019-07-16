@@ -36,6 +36,10 @@ let
     memory         = ${cfg.memory}
     storage_memory = ${cfg.storageMemory}
 
+    ${optionalString (lib.versionAtLeast cfg.package.version "6.1") ''
+    trace_format   = ${cfg.traceFormat}
+    ''}
+
     ${optionalString (cfg.tls != null) ''
       tls_plugin           = ${pkg}/libexec/plugins/FDBLibTLS.so
       tls_certificate_file = ${cfg.tls.certificate}
@@ -317,9 +321,24 @@ in
       default     = "/run/foundationdb.pid";
       description = "Path to pidfile for fdbmonitor.";
     };
+
+    traceFormat = mkOption {
+      type = types.enum [ "xml" "json" ];
+      default = "xml";
+      description = "Trace logging format.";
+    };
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = lib.versionOlder cfg.package.version "6.1" -> cfg.traceFormat == "xml";
+        message = ''
+          Versions of FoundationDB before 6.1 do not support configurable trace formats (only XML is supported).
+          This option has no effect for version '' + cfg.package.version + '', and enabling it is an error.
+        '';
+      }
+    ];
+
     environment.systemPackages = [ pkg ];
 
     users.users = optionalAttrs (cfg.user == "foundationdb") (singleton
@@ -339,6 +358,13 @@ in
           to = (cfg.listenPortStart + cfg.serverProcesses) - 1;
         }
       ];
+
+    systemd.tmpfiles.rules = [
+      "d /etc/foundationdb 0755 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.logDir}' 0770 ${cfg.user} ${cfg.group} - -"
+      "F '${cfg.pidfile}' - ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.foundationdb = {
       description             = "FoundationDB Service";
@@ -377,25 +403,12 @@ in
       path = [ pkg pkgs.coreutils ];
 
       preStart = ''
-        rm -f ${cfg.pidfile}   && \
-          touch ${cfg.pidfile} && \
-          chown -R ${cfg.user}:${cfg.group} ${cfg.pidfile}
-
-        for x in "${cfg.logDir}" "${cfg.dataDir}"; do
-          [ ! -d "$x" ] && mkdir -m 0700 -vp "$x";
-          chown -R ${cfg.user}:${cfg.group} "$x";
-        done
-
-        [ ! -d /etc/foundationdb ] && \
-          mkdir -m 0775 -vp /etc/foundationdb && \
-          chown -R ${cfg.user}:${cfg.group} "/etc/foundationdb"
-
         if [ ! -f /etc/foundationdb/fdb.cluster ]; then
             cf=/etc/foundationdb/fdb.cluster
             desc=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c8)
             rand=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c8)
             echo ''${desc}:''${rand}@${initialIpAddr}:${builtins.toString cfg.listenPortStart} > $cf
-            chmod 0664 $cf && chown -R ${cfg.user}:${cfg.group} $cf
+            chmod 0664 $cf
             touch "${cfg.dataDir}/.first_startup"
         fi
       '';
@@ -404,7 +417,7 @@ in
 
       postStart = ''
         if [ -e "${cfg.dataDir}/.first_startup" ]; then
-          fdbcli --exec "configure new single memory"
+          fdbcli --exec "configure new single ssd"
           rm -f "${cfg.dataDir}/.first_startup";
         fi
       '';

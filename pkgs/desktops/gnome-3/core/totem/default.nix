@@ -1,29 +1,28 @@
-{ stdenv, fetchurl, meson, ninja, intltool, gst_all_1
+{ stdenv, fetchurl, meson, ninja, gettext, gst_all_1
 , clutter-gtk, clutter-gst, python3Packages, shared-mime-info
 , pkgconfig, gtk3, glib, gobject-introspection, totem-pl-parser
-, wrapGAppsHook, itstool, libxml2, vala, gnome3
-, gdk_pixbuf, tracker, nautilus }:
+, wrapGAppsHook, itstool, libxml2, vala, gnome3, grilo, grilo-plugins
+, libpeas, adwaita-icon-theme, gnome-desktop, gsettings-desktop-schemas
+, gdk_pixbuf, tracker, nautilus, xvfb_run }:
 
 stdenv.mkDerivation rec {
   name = "totem-${version}";
-  version = "3.30.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0rahkybxbmxhlmrrgrzxny1xm7wycx7ib4blxp1i2l1q3i8s84b0";
+    sha256 = "12iykwslvnpgmrm4bcchx5rzn2g4rl5r9s86n2001djn58yw6m6r";
   };
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
-
-  nativeBuildInputs = [ meson ninja vala pkgconfig intltool python3Packages.python itstool gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja vala pkgconfig gettext python3Packages.python itstool gobject-introspection wrapGAppsHook ];
   buildInputs = [
-    gtk3 glib gnome3.grilo clutter-gtk clutter-gst totem-pl-parser gnome3.grilo-plugins
+    gtk3 glib grilo clutter-gtk clutter-gst totem-pl-parser grilo-plugins
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly gst_all_1.gst-libav gnome3.libpeas shared-mime-info
-    gdk_pixbuf libxml2 gnome3.defaultIconTheme gnome3.gnome-desktop
-    gnome3.gsettings-desktop-schemas tracker nautilus
+    gst_all_1.gst-plugins-ugly gst_all_1.gst-libav libpeas shared-mime-info
+    gdk_pixbuf libxml2 adwaita-icon-theme gnome-desktop
+    gsettings-desktop-schemas tracker nautilus
     python3Packages.pygobject3 python3Packages.dbus-python # for plug-ins
   ];
 
@@ -39,6 +38,13 @@ stdenv.mkDerivation rec {
     # https://github.com/mesonbuild/meson/issues/1994
     "-Denable-vala=no"
   ];
+
+  checkInputs = [ xvfb_run ];
+
+  checkPhase = ''
+    xvfb-run -s '-screen 0 800x600x24' \
+      ninja test
+  '';
 
   wrapPrefixVariables = [ "PYTHONPATH" ];
 

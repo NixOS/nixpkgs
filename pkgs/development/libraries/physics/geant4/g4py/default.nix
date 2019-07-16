@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, xercesc
+{ stdenv, cmake, xercesc
 
 # The target version of Geant4
 , geant4

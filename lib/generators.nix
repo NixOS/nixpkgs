@@ -178,7 +178,7 @@ rec {
   toPlist = {}: v: let
     isFloat = builtins.isFloat or (x: false);
     expr = ind: x:  with builtins;
-      if isNull x   then "" else
+      if x == null  then "" else
       if isBool x   then bool ind x else
       if isInt x    then int ind x else
       if isString x then str ind x else

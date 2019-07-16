@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, cudatoolkit }:
+{ stdenv, fetchFromGitHub, which, cudatoolkit, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
   name = "nccl-${version}-cuda-${cudatoolkit.majorVersion}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [ which addOpenGLRunpath ];
 
   buildInputs = [ cudatoolkit ];
 
@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     moveToOutput lib/libnccl_static.a $dev
+
+    # Set RUNPATH so that libnvidia-ml in /run/opengl-driver(-32)/lib can be found.
+    # See the explanation in addOpenGLRunpath.
+    addOpenGLRunpath $out/lib/lib*.so
   '';
 
   NIX_CFLAGS_COMPILE = [ "-Wno-unused-function" ];

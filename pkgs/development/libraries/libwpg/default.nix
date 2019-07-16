@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libwpd, zlib, librevenge }:
 
 stdenv.mkDerivation rec {
-  name = "libwpg-0.3.2";
+  name = "libwpg-0.3.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/libwpg/${name}.tar.xz";
-    sha256 = "0cwc5zkp210c661l0bvk6q21jg9ak5g8gmy578w5fgfnjymz3yjp";
+    sha256 = "074x159immf139szkswv2zapnq75p7xk10dbha2p9193hgwggcwr";
   };
 
   buildInputs = [ libwpd zlib librevenge ];

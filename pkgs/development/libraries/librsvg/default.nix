@@ -1,18 +1,18 @@
 { lib, stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintl, darwin, rust, gnome3
+, bzip2, libcroco, libintl, darwin, rustc, cargo, gnome3
 , withGTK ? false, gtk3 ? null
 , vala, gobject-introspection }:
 
 let
   pname = "librsvg";
-  version = "2.44.11";
+  version = "2.44.14";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "17mgl7is0k236i61fnjj9nw5h1ykl4ff6vk30qp49bsg2zp6wnp4";
+    sha256 = "00z3qimpk909pcqq0jlsis5sskc6kn7cqia20smd9k9rhs3ag1ba";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
 
-  nativeBuildInputs = [ pkgconfig rust.rustc rust.cargo vala gobject-introspection ]
+  nativeBuildInputs = [ pkgconfig rustc cargo vala gobject-introspection ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       ApplicationServices
     ]);

@@ -24,13 +24,14 @@ let
     libcCross = nativePlatforms;
     nix = nativePlatforms;
     nixUnstable = nativePlatforms;
+    mesa = nativePlatforms;
   };
 
   gnuCommon = lib.recursiveUpdate common {
     buildPackages.gcc = nativePlatforms;
     coreutils = nativePlatforms;
     haskell.packages.ghcHEAD.hello = nativePlatforms;
-    haskell.packages.ghc844.hello = nativePlatforms;
+    haskellPackages.hello = nativePlatforms;
   };
 
   linuxCommon = lib.recursiveUpdate gnuCommon {
@@ -52,6 +53,13 @@ let
     libunistring = nativePlatforms;
     windows.wxMSW = nativePlatforms;
     windows.mingw_w64_pthreads = nativePlatforms;
+  };
+
+  wasiCommon = {
+    gmp = nativePlatforms;
+    boehmgc = nativePlatforms;
+    hello = nativePlatforms;
+    zlib = nativePlatforms;
   };
 
   darwinCommon = {
@@ -99,7 +107,6 @@ in
     mapTestEqual = lib.mapAttrsRecursive testEqual;
 
   in mapTestEqual {
-    androidndk = nativePlatforms;
     boehmgc = nativePlatforms;
     libffi = nativePlatforms;
     libiconv = nativePlatforms;
@@ -140,13 +147,15 @@ in
   android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt (linuxCommon // {
   });
 
+  wasi32 = mapTestOnCross lib.systems.examples.wasi32 wasiCommon;
+
+  msp430 = mapTestOnCross lib.systems.examples.msp430 embedded;
   avr = mapTestOnCross lib.systems.examples.avr embedded;
   arm-embedded = mapTestOnCross lib.systems.examples.arm-embedded embedded;
   powerpc-embedded = mapTestOnCross lib.systems.examples.ppc-embedded embedded;
   aarch64-embedded = mapTestOnCross lib.systems.examples.aarch64-embedded embedded;
   i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
   x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
-  alpha-embedded = mapTestOnCross lib.systems.examples.alpha-embedded embedded;
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
