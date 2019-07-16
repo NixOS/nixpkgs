@@ -14,6 +14,9 @@ let
     # Alias so people can keep using "virtualbox" instead of "vboxvideo".
     virtualbox = { modules = [ xorg.xf86videovboxvideo ]; driverName = "vboxvideo"; };
 
+    # Alias so that "radeon" uses the xf86-video-ati driver.
+    radeon = { modules = [ xorg.xf86videoati ]; driverName = "ati"; };
+
     # modesetting does not have a xf86videomodesetting package as it is included in xorgserver
     modesetting = {};
   };
@@ -241,7 +244,7 @@ in
       videoDrivers = mkOption {
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "ati" "cirrus" "vesa" "vmware" "modesetting" ];
+        default = [ "radeon" "cirrus" "vesa" "vmware" "modesetting" ];
         example = [
           "ati_unfree" "amdgpu" "amdgpu-pro"
           "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
