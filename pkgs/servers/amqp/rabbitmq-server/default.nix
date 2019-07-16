@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
 
   version = "3.7.15";
 
+  # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${name}.tar.xz";
     sha256 = "14ipnvcrwln9mwr4r32461js2gdlrr4h4hy92393ixbkscf9wdir";
