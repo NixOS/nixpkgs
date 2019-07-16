@@ -21880,6 +21880,8 @@ in
 
   emboss = callPackage ../applications/science/biology/emboss { };
 
+  est-sfs = callPackage ../applications/science/biology/est-sfs { };
+
   ezminc = callPackage ../applications/science/biology/EZminc { };
 
   hisat2 = callPackage ../applications/science/biology/hisat2 { };
