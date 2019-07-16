@@ -91,25 +91,62 @@ let
     }
   '';
 
-  zedConf = concatStrings [
+  zedConf = concatStrings [ ''
+      ##
+      # zed.rc
+      #
+      # This file should be owned by root and permissioned 0600.
+      ##
+
+      ##
+      # Absolute path to the debug output file.
+      #
+    ''
     (if cfgZED.debugLog == null then ''
       #ZED_DEBUG_LOG="/tmp/zed.debug.log"
     '' else ''
-      #ZED_DEBUG_LOG="${cfgZED.debugLog}"
+      ZED_DEBUG_LOG="${cfgZED.debugLog}"
     '')
 
+    ''
+    
+      ##
+      # Email address of the zpool administrator for receipt of notifications;
+      #   multiple addresses can be specified if they are delimited by whitespace.
+      # Email will only be sent if ZED_EMAIL_ADDR is defined.
+      # Disabled by default; uncomment to enable.
+      #
+    ''
     (if cfgZED.email.addresses == null then ''
-      #ZED_EMAIL_ADDR=""
+      #ZED_EMAIL_ADDR="root-mail"
     '' else ''
       ZED_EMAIL_ADDR="${concatStringsSep " " cfgZED.email.addresses}"
     '')
 
+    ''
+      
+      ##
+      # Name or path of executable responsible for sending notifications via email;
+      #   the mail program must be capable of reading a message body from stdin.
+      # Email will only be sent if ZED_EMAIL_ADDR is defined.
+      #
+    ''
     (if cfgZED.email.program == null then ''
       #ZED_EMAIL_PROG="mail"
     '' else ''
       ZED_EMAIL_PROG="${cfgZED.email.program}"
     '')
 
+    ''
+      
+      ##
+      # Command-line options for ZED_EMAIL_PROG.
+      # The string @ADDRESS@ will be replaced with the recipient email address(es).
+      # The string @SUBJECT@ will be replaced with the notification subject;
+      #   this should be protected with quotes to prevent word-splitting.
+      # Email will only be sent if ZED_EMAIL_ADDR is defined.
+      #
+    ''
     (if cfgZED.email.options == null then ''
       #ZED_EMAIL_OPTS="-s '@SUBJECT@' @ADDRESS@"
     '' else ''
@@ -117,31 +154,74 @@ let
     '')
 
     ''
+      
+      ##
+      # Default directory for zed lock files.
+      #
       #ZED_LOCKDIR="/var/lock"
     ''
 
+    ''
+      
+      ##
+      # Minimum number of seconds between notifications for a similar event.
+      #
+    ''
     (if cfgZED.notify.interval == null then ''
       #ZED_NOTIFY_INTERVAL_SECS=3600
     '' else ''
       ZED_NOTIFY_INTERVAL_SECS=${toString cfgZED.notify.interval}
     '')
 
-    (if cfgZED.email.program == false then ''
+    ''
+      
+      ##
+      # Notification verbosity.
+      #   If set to 0, suppress notification if the pool is healthy.
+      #   If set to 1, send notification regardless of pool health.
+      #
+    ''
+    (if cfgZED.notify.verbosity == false then ''
       ZED_NOTIFY_VERBOSE=0
     '' else ''
       ZED_NOTIFY_VERBOSE=1
     '')
 
     ''
+      
+      ##
+      # Send notifications for 'ereport.fs.zfs.data' events.
+      # Disabled by default, any non-empty value will enable the feature.
+      #
       #ZED_NOTIFY_DATA=
     ''
 
+    ''
+      
+      ##
+      # Pushbullet access token.
+      # This grants full access to your account -- protect it accordingly!
+      #   <https://www.pushbullet.com/get-started>
+      #   <https://www.pushbullet.com/account>
+      # Disabled by default; uncomment to enable.
+      #
+    ''
     (if cfgZED.pushbullet.accessToken == null then ''
       #ZED_PUSHBULLET_ACCESS_TOKEN=""
     '' else ''
       ZED_PUSHBULLET_ACCESS_TOKEN="${cfgZED.pushbullet.accessToken}"
     '')
 
+    ''
+      
+      ##
+      # Pushbullet channel tag for push notification feeds that can be subscribed to.
+      #   <https://www.pushbullet.com/my-channel>
+      # If not defined, push notifications will instead be sent to all devices
+      #   associated with the account specified by the access token.
+      # Disabled by default; uncomment to enable.
+      #
+    ''
     (if cfgZED.pushbullet.channelTag == null then ''
       #ZED_PUSHBULLET_CHANNEL_TAG=""
     '' else ''
@@ -149,15 +229,33 @@ let
     '')
 
     ''
+      
+      ##
+      # Default directory for zed state files.
+      #
       #ZED_RUNDIR="/var/run"
     ''
 
+    ''
+      
+      ##
+      # Turn on/off enclosure LEDs when drives get DEGRADED/FAULTED.  This works for
+      # device mapper and multipath devices as well.  Your enclosure must be
+      # supported by the Linux SES driver for this to work.
+      #
+    ''
     (if cfgZED.enclosureLED == false then ''
       ZED_USE_ENCLOSURE_LEDS=0
     '' else ''
       ZED_USE_ENCLOSURE_LEDS=1
     '')
 
+    ''
+      
+      ##
+      # Run a scrub after every resilver
+      # Disabled by default, 1 to enable and 0 to disable.
+    ''
     (if cfgZED.scrubAfterResilver == false then ''
       ZED_SCRUB_AFTER_RESILVER=0
     '' else ''
@@ -165,8 +263,25 @@ let
     '')
 
     ''
+      
+      ##
+      # The syslog priority (e.g., specified as a "facility.level" pair).
+      #
       #ZED_SYSLOG_PRIORITY="daemon.notice"
+      
+      ##
+      # The syslog tag for marking zed events.
+      #
       #ZED_SYSLOG_TAG="zed"
+      
+      ##
+      # Which set of event subclasses to log
+      # By default, events from all subclasses are logged.
+      # If ZED_SYSLOG_SUBCLASS_INCLUDE is set, only subclasses
+      # matching the pattern are logged. Use the pipe symbol (|)
+      # or shell wildcards (*, ?) to match multiple subclasses.
+      # Otherwise, if ZED_SYSLOG_SUBCLASS_EXCLUDE is set, the
+      # matching subclasses are excluded from logging.
       #ZED_SYSLOG_SUBCLASS_INCLUDE="checksum|scrub_*|vdev.*"
       #ZED_SYSLOG_SUBCLASS_EXCLUDE="statechange|config_*|history_event"
     ''
