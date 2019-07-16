@@ -19,7 +19,6 @@ python3Packages.buildPythonApplication {
   '';
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = with python3Packages; [ six ];
 
   meta = {
     homepage = https://www.phildev.net/pius/;
