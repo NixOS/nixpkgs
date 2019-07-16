@@ -14,9 +14,17 @@ buildPythonPackage rec {
     sha256 = "03e4dece2d1aa91666034f1b2e8bb7a7b8c6be11baf3cf2929b26eea5c6e86f3";
   };
 
-  propagatedBuildInputs = [ pyannotate pytest ];
+  propagatedBuildInputs = [
+    pyannotate
+    pytest
+  ];
 
-  # not testing for a testing module...
+  postConfigure = ''
+    substituteInPlace setup.py \
+      --replace "pytest>=3.2.0,<4.0.0" "pytest"
+  '';
+
+  # no testing in a testing module...
   doCheck = false;
 
   meta = with stdenv.lib; {
