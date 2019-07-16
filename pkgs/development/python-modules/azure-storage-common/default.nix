@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-common";
-  version = "1.4.2";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ec87c7537d457ec95252e0e46477e2c1ccf33774ffefd05d8544682cb0ae401";
+    sha256 = "0227pnbha1npw50p3498y621la8hl272am51ggrvy3xmdxgwv423";
   };
 
   propagatedBuildInputs = [
@@ -24,9 +24,6 @@ buildPythonPackage rec {
     python-dateutil
     requests
   ] ++ lib.optional (!isPy3k) azure-storage-nspkg;
-
-  # has no tests
-  doCheck = false;
 
   meta = with lib; {
     description = "Client library for Microsoft Azure Storage services containing common code shared by blob, file and queue";
