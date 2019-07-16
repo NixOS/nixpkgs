@@ -6,11 +6,15 @@
 
 buildPythonPackage rec {
   pname = "capstone";
-  version = "3.0.4";
+  version = "3.0.5.post1";
+
+  setupPyBuildFlags = [
+    "--plat-name x86_64-linux"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "945d3b8c3646a1c3914824c416439e2cf2df8969dd722c8979cdcc23b40ad225";
+    sha256 = "3c0f73db9f8392f7048c8a244809f154d7c39f354e2167f6c477630aa517ed04";
   };
 
   patches = [
