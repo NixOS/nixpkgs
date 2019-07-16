@@ -4340,8 +4340,6 @@ in
 
   nodePackages = nodePackages_10_x;
 
-  npm2nix = nodePackages.npm2nix;
-
   now-cli = callPackage ../development/web/now-cli {};
 
   file-rename = callPackage ../tools/filesystems/file-rename { };
