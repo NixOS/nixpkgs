@@ -25,11 +25,15 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    export HOME=$(mktemp -d)
+    mkdir -p $HOME/.config/matplotlib
+    echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
+
     pytest
   '';
 
   meta = with lib; {
-    description = "pytest plugin to help with testing figures output from Matplotlib";
+    description = "Pytest plugin to help with testing figures output from Matplotlib";
     homepage = https://github.com/matplotlib/pytest-mpl;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
