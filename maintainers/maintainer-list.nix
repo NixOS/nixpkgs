@@ -3614,6 +3614,11 @@
     github = "neeasade";
     name = "Nathan Isom";
   };
+  nefix = {
+    email = "nefixestrada@gmail.com";
+    github = "nefixestrada";
+    name = "Néfix Estrada";
+  };
   neonfuz = {
     email = "neonfuz@gmail.com";
     github = "neonfuz";
