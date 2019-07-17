@@ -1017,7 +1017,6 @@ in
         pkgs.iproute
         pkgs.iputils
         pkgs.nettools
-        pkgs.openresolv
       ]
       ++ optionals config.networking.wireless.enable [
         pkgs.wirelesstools # FIXME: obsolete?
