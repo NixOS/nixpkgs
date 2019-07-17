@@ -1,5 +1,7 @@
 { stdenv, pkgs, buildFHSUserEnv, makeDesktopItem, fetchFromGitHub
-, wrapGAppsHook, python3Packages }:
+, wrapGAppsHook, python3Packages
+, steam ? pkgs.steam
+}:
 
 let
   qt5Deps = with pkgs; with qt5; [ qtbase qtmultimedia ];
@@ -93,9 +95,6 @@ let
     # Snes9x
     epoxy minizip
 
-    # Steam
-    steam
-
     # Vice
     bison flex
 
@@ -107,7 +106,8 @@ let
 
     # ZDOOM
     soundfont-fluid bzip2 game-music-emu
-  ] ++ qt5Deps
+  ] ++ (if isNull steam then [] else [steam])
+    ++ qt5Deps
     ++ gnome3Deps
     ++ python3Deps
     ++ xorgDeps
