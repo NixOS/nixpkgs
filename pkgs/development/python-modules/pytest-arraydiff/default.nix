@@ -22,14 +22,10 @@ buildPythonPackage rec {
     pytest
   ];
 
-  checkInputs = [
-    pytest
-    astropy
-  ];
-
-  checkPhase = ''
-    pytest
-  '';
+  # The tests requires astropy, which itself requires
+  # pytest-arraydiff. This causes an infinite recursion if the tests
+  # are enabled.
+  doCheck = false;
 
   meta = with lib; {
     description = "Pytest plugin to help with comparing array output from tests";
