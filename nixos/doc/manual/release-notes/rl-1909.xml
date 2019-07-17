@@ -318,6 +318,18 @@
      The <literal>mercurial</literal> <literal>httpd.extraSubservice</literal> has been removed from nixpkgs due to lack of maintainer.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The default locale used by Glibc is now
+       <literal>C.UTF-8</literal> instead of <literal>C</literal>.
+       This means that unicode works in Nix builders out of the box.
+       The previous behavior can be restored by setting
+       <literal>LANG="C"</literal>. More information on these settings
+       is available in the Glibc manual at <link
+       xlink:href="https://www.gnu.org/software/libc/manual/html_node/Locale-Categories.html">
+       7.3 Locale Categories</link>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
