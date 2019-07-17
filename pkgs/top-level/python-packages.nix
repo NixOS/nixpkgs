@@ -4791,6 +4791,8 @@ in {
 
   snowflake-connector-python = callPackage ../development/python-modules/snowflake-connector-python { };
 
+  snowflake-sqlalchemy = callPackage ../development/python-modules/snowflake-sqlalchemy { };
+
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
 
   snscrape = callPackage ../development/python-modules/snscrape { };
