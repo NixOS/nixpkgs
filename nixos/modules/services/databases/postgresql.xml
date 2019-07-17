@@ -80,7 +80,7 @@ Type "help" for help.
   <para>
    Plugins collection for each PostgreSQL version can be accessed with
    <literal>.pkgs</literal>. For example, for
-   <literal>pkgs.postgresql_11</literal> package it's plugin collection is
+   <literal>pkgs.postgresql_11</literal> package, its plugin collection is
    accessed by <literal>pkgs.postgresql_11.pkgs</literal>:
 <screen>
 <prompt>$ </prompt>nix repl '&lt;nixpkgs&gt;'
