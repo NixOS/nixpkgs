@@ -9688,6 +9688,8 @@ in
 
   scss-lint = callPackage ../development/tools/scss-lint { };
 
+  shake = haskell.lib.justStaticExecutables haskellPackages.shake;
+
   shallot = callPackage ../tools/misc/shallot { };
 
   shards = callPackage ../development/tools/build-managers/shards { };
