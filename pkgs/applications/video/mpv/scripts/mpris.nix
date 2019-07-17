@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gobject-introspection mpv ];
 
   installPhase = ''
-    cp mpris.so $out
+    mkdir -p $out/etc/mpv/scripts
+    cp mpris.so $out/etc/mpv/scripts
   '';
 
   meta = with stdenv.lib; {
