@@ -5913,6 +5913,8 @@ in {
 
   IBMQuantumExperience = callPackage ../development/python-modules/ibmquantumexperience { };
 
+  ibis = callPackage ../development/python-modules/ibis { };
+
   qiskit = callPackage ../development/python-modules/qiskit { };
 
   qasm2image = callPackage ../development/python-modules/qasm2image { };
