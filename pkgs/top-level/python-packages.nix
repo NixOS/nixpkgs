@@ -4891,6 +4891,8 @@ in {
 
   texttable = callPackage ../development/python-modules/texttable { };
 
+  timezonefinder = callPackage ../development/python-modules/timezonefinder { };
+
   tiros = callPackage ../development/python-modules/tiros { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
