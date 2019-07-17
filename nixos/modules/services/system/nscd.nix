@@ -59,10 +59,9 @@ in
           '';
 
         restartTriggers = [
-          config.environment.etc.hosts.source
           config.environment.etc."nsswitch.conf".source
           config.environment.etc."nscd.conf".source
-        ];
+        ] ++ optional ((config.environment.etc).hosts.enable or false) config.environment.etc.hosts.source;
 
         serviceConfig =
           { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd";
