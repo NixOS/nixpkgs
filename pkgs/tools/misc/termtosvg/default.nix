@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "termtosvg";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "e3a0a7bd511028c96d242525df807a23e6f22e55b111a7ee861f294a86224b0c";
+    sha256 = "1mf2vlq083mzhja449il78zpvjq6fv36pzakwrqmgxdjbsdyvxbd";
   };
 
-  propagatedBuildInputs = with python3Packages; [ lxml pyte ];
+  propagatedBuildInputs = with python3Packages; [ lxml pyte wcwidth ];
 
   meta = with lib; {
     homepage = https://nbedos.github.io/termtosvg/;

@@ -7,17 +7,15 @@
 , r2-for-cutter
 , python3 }:
 
-let
-  version = "1.8.0";
-in
 stdenv.mkDerivation rec {
-  name = "radare2-cutter-${version}";
+  pname = "radare2-cutter";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "cutter";
     rev = "v${version}";
-    sha256 = "1z3lpzl7k3qn5xabi0qxl83rdbwi00h45blnljx8yfw0am5vfphc";
+    sha256 = "03f3cdckh51anx9gd1b0ndb2fg7061hqngvygf32ky29mm2m2lyv";
   };
 
   postUnpack = "export sourceRoot=$sourceRoot/src";

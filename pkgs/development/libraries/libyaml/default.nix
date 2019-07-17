@@ -1,13 +1,20 @@
-{ stdenv, fetchurl }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "libyaml";
   version = "0.2.2";
 
-  src = fetchurl {
-    url = "https://pyyaml.org/download/libyaml/yaml-${version}.tar.gz";
-    sha256 = "1karpcfgacgppa82wm2drcfn2kb6q2wqfykf5nrhy20sci2i2a3q";
+  src = fetchFromGitHub {
+    owner = "yaml";
+    repo = "libyaml";
+    rev = version;
+    sha256 = "0839nqcmxjzfgjn39j7740pnlsgmvngpkamiw1lfy1qlcqyc3r4v";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
     homepage = https://pyyaml.org/;

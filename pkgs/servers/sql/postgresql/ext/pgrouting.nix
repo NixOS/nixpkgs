@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/bin # for buildEnv, see https://github.com/NixOS/nixpkgs/issues/22653
     install -D lib/*.so                        -t $out/lib
     install -D sql/pgrouting--${version}.sql   -t $out/share/postgresql/extension
     install -D sql/common/pgrouting.control    -t $out/share/postgresql/extension

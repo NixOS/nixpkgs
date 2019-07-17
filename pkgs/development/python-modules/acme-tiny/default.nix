@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "acme-tiny";
-  version = "4.0.4";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vqlmvk34jgvgx3qdsh50q7m4aiy02786jyjjcq45dcws7a4f9f1";
+    sha256 = "0jmg525n4n98hwy3hf303jbnq23z79sqwgliji9j7qcnph47gkgq";
   };
 
   patchPhase = ''

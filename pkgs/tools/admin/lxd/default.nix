@@ -3,6 +3,7 @@
 , squashfsTools, iproute, iptables, ebtables, libcap, dqlite
 , sqlite-replication
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
+, criu
 , bash
 }:
 
@@ -33,11 +34,14 @@ buildGoPackage rec {
     rm $bin/bin/{deps,macaroon-identity,generate}
 
     wrapProgram $bin/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash
+      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash criu
       (writeShellScriptBin "apparmor_parser" ''
         exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
       '')
     ]}
+
+    mkdir -p "$bin/share/bash-completion/completions/"
+    cp -av go/src/github.com/lxc/lxd/scripts/bash/lxd-client "$bin/share/bash-completion/completions/lxc"
   '';
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];

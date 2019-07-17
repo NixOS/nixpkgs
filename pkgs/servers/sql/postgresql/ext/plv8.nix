@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin    # For buildEnv to setup proper symlinks. See #22653
     install -D plv8*.so                                        -t $out/lib
     install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/postgresql/extension
   '';

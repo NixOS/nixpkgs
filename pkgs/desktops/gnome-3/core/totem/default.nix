@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "totem-${version}";
-  version = "3.32.0";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "12iykwslvnpgmrm4bcchx5rzn2g4rl5r9s86n2001djn58yw6m6r";
+    sha256 = "0yra8apc7smpwf7d1k8crhrm8d4wix24ds6i9yxbch1v11jnhr3v";
   };
 
   doCheck = true;

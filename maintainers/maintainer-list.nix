@@ -2228,6 +2228,15 @@
     email = "tkatchev@gmail.com";
     name = "Ivan Tkatchev";
   };
+  ivanbrennan = {
+    email = "ivan.brennan@gmail.com";
+    github = "ivanbrennan";
+    name = "Ivan Brennan";
+    keys = [{
+      longkeyid = "rsa4096/0x79C3C47DC652EA54";
+      fingerprint = "7311 2700 AB4F 4CDF C68C  F6A5 79C3 C47D C652 EA54";
+    }];
+  };
   ivegotasthma = {
     email = "ivegotasthma@protonmail.com";
     github = "ivegotasthma";
@@ -2504,6 +2513,11 @@
     email = "jonringer117@gmail.com";
     github = "jonringer";
     name = "Jonathan Ringer";
+  };
+  jorise = {
+    email = "info@jorisengbers.nl";
+    github = "JorisE";
+    name = "Joris Engbers";
   };
   jorsn = {
     name = "Johannes Rosenberger";
@@ -5531,6 +5545,11 @@
     github = "vskilet";
     name = "Victor SENE";
   };
+  vyorkin = {
+    email = "vasiliy.yorkin@gmail.com";
+    github = "vyorkin";
+    name = "Vasiliy Yorkin";
+  };
   vyp = {
     email = "elisp.vim@gmail.com";
     github = "vyp";
@@ -5816,5 +5835,10 @@
     email = "marek.faj@gmail.com";
     github = "turboMaCk";
     name = "Marek Fajkus";
+  };
+  melling = {
+    email = "mattmelling@fastmail.com";
+    github = "mattmelling";
+    name = "Matt Melling";
   };
 }
