@@ -4789,6 +4789,8 @@ in {
 
   slimit = callPackage ../development/python-modules/slimit { };
 
+  snowflake-connector-python = callPackage ../development/python-modules/snowflake-connector-python { };
+
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
 
   snscrape = callPackage ../development/python-modules/snscrape { };
