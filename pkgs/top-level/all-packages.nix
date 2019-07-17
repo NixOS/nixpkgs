@@ -12391,6 +12391,8 @@ in
 
   mueval = callPackage ../development/tools/haskell/mueval { };
 
+  mumlib = callPackage ../development/libraries/mumlib { };
+
   muparser = callPackage ../development/libraries/muparser { };
 
   mygpoclient = pythonPackages.mygpoclient;
@@ -14410,6 +14412,8 @@ in
   morty = callPackage ../servers/web-apps/morty { };
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
+
+  mumsi = callPackage ../servers/mumsi { };
 
   myserver = callPackage ../servers/http/myserver { };
 
