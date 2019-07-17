@@ -3804,6 +3804,8 @@ in {
 
   numba = callPackage ../development/python-modules/numba { };
 
+  numcodecs = callPackage ../development/python-modules/numcodecs { };
+
   numexpr = callPackage ../development/python-modules/numexpr { };
 
   Nuitka = callPackage ../development/python-modules/nuitka { };
