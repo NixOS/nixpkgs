@@ -296,8 +296,6 @@ in {
 
   azure-mgmt-advisor = callPackage ../development/python-modules/azure-mgmt-advisor { };
 
-  azure-mgmt-advisor = callPackage ../development/python-modules/azure-mgmt-advisor { };
-
   azure-mgmt-applicationinsights = callPackage ../development/python-modules/azure-mgmt-applicationinsights { };
 
   azure-mgmt-authorization = callPackage ../development/python-modules/azure-mgmt-authorization { };

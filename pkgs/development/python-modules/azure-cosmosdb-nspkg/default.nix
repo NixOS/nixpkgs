@@ -1,29 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{ lib, buildAzureCosmosdbPythonPackage, fetchPypi
 , azure-nspkg
 }:
 
-buildPythonPackage rec {
-  pname = "azure-cosmosdb-nspkg";
+buildAzureCosmosdbPythonPackage rec {
   version = "2.0.2";
+  pname = "azure-cosmosdb-nspkg";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "acf691e692818d9a65c653c7a3485eb8e35c0bdc496bba652e5ea3905ba09cd8";
+    sha256 = "1n4wl1dr18sy5rjvlss9vh5mrqxqbr4a7iskqrjrm3c1jbk93xmc";
   };
 
-  propagatedBuildInputs = [
-    azure-nspkg
-  ];
+  propagatedBuildInputs = [ azure-nspkg ];
 
-  # has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure CosmosDB namespace package";
-    homepage = https://github.com/Azure/azure-cosmos-table-python/tree/master/azure-cosmosdb-nspkg;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ mwilsoninsight jonringer ];
   };
 }
