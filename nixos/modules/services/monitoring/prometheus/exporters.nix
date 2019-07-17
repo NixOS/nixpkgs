@@ -102,9 +102,10 @@ let
     };
   });
 
-  mkSubModule = { name, port, extraOpts, ... }: {
+  mkSubModule = { name, port, extraOpts, imports }: {
     ${name} = mkOption {
       type = types.submodule {
+        inherit imports;
         options = (mkExporterOpts {
           inherit name port;
         } // extraOpts);
@@ -117,13 +118,15 @@ let
   mkSubModules = (foldl' (a: b: a//b) {}
     (mapAttrsToList (name: opts: mkSubModule {
       inherit name;
-      inherit (opts) port serviceOpts;
+      inherit (opts) port;
       extraOpts = opts.extraOpts or {};
+      imports = opts.imports or [];
     }) exporterOpts)
   );
 
   mkExporterConf = { name, conf, serviceOpts }:
     mkIf conf.enable {
+      warnings = conf.warnings or [];
       networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
