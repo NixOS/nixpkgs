@@ -1,7 +1,0 @@
-#!/bin/sh
-
-#cd /etc
-#rm -rf cngplp
-
-exit 0
-

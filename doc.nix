@@ -1,5 +1,5 @@
 {
-  stdenv
+  stdenv, fetchzip
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,12 @@ stdenv.mkDerivation rec {
   pname = "cndrvcups-doc";
   version = "2.71";
 
-  src = ./Doc;
+  src = fetchzip {
+    url = "http://gdlp01.c-wss.com/gds/6/0100004596/05/linux-capt-drv-v271-uken.tar.gz";
+    sha256 = "0agpai89vvqmjkkkk2gpmxmphmdjhiq159b96r9gybvd1c1l0dds";
+  };
+
+  postUnpack = "sourceRoot=\${sourceRoot}/Doc";
 
   # install directions based on arch PKGBUILD file
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=capt-src

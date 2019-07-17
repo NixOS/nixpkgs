@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenv, fetchzip,
   autoconf,
   automake,
   glib,
@@ -13,8 +13,19 @@ stdenv.mkDerivation rec {
   pname = "cndrvcups-common";
   version = "3.21";
 
-  #TODO: fetch live source
-  src = ./cndrvcups-common-3.21;
+  src = fetchzip {
+    url = "http://gdlp01.c-wss.com/gds/6/0100004596/05/linux-capt-drv-v271-uken.tar.gz";
+    sha256 = "0agpai89vvqmjkkkk2gpmxmphmdjhiq159b96r9gybvd1c1l0dds";
+  };
+
+  unpackPhase = ''
+    mkdir -p ${name}
+
+    tar -xzf $src/Src/${name}-1.tar.gz \
+      -C ${name} --strip-components=1
+
+    sourceRoot=${name}
+  '';
 
   buildInputs = [
     autoconf

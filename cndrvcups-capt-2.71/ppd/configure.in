@@ -1,5 +1,0 @@
-AC_INIT(CNCUPSLBP3200CAPTJ.ppd)
-AM_INIT_AUTOMAKE(ppdcapt, 1.0.0, no-define)
-AC_PROG_INSTALL
-
-AC_OUTPUT(Makefile)

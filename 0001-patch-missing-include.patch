@@ -1,0 +1,24 @@
+From 8d7a40c2a09a541916bb10f27eb9557414055780 Mon Sep 17 00:00:00 2001
+From: Guillaume Maudoux <guillaume.maudoux@uclouvain.be>
+Date: Sun, 7 Jul 2019 19:57:50 +0200
+Subject: [PATCH] patch missing include
+
+---
+ statusui/src/ppapdata.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/statusui/src/ppapdata.c b/statusui/src/ppapdata.c
+index 980e4e1..4e1c658 100644
+--- a/statusui/src/ppapdata.c
++++ b/statusui/src/ppapdata.c
+@@ -23,6 +23,7 @@
+ #include <string.h>
+ 
+ #include <cups/cups.h>
++#include <cups/ppd.h>
+ #include "uimain.h"
+ #include "cnsktmodule.h"
+ 
+-- 
+2.22.0
+

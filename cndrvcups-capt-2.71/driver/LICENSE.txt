@@ -1,3 +1,0 @@
-LICENSE
-    * These programs are licensed under the terms of the MIT License.
-

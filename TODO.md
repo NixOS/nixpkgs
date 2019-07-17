@@ -1,7 +1,7 @@
-#TODO
+# TODO
 
-- merge /usr/share to /usr?
-- fix the ##FIXME
-- install ppd fils and cups-filters to cups
-- patch/setup systemd service file
+- update META
+- fix the #FIXME, #HACK
+- install ppd fils and cups-filters to cups??
+
 
