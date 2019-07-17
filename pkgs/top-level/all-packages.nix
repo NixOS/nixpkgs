@@ -8888,6 +8888,8 @@ in
     samples = true;
   };
 
+  h3 = callPackage ../development/misc/h3 { };
+
   amtk = callPackage ../development/libraries/amtk { };
 
   avrlibc      = callPackage ../development/misc/avr/libc {};
