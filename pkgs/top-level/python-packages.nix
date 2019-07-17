@@ -5921,6 +5921,8 @@ in {
 
   ibis = callPackage ../development/python-modules/ibis { };
 
+  ibis-framework = callPackage ../development/python-modules/ibis-framework { };
+
   qiskit = callPackage ../development/python-modules/qiskit { };
 
   qasm2image = callPackage ../development/python-modules/qasm2image { };
