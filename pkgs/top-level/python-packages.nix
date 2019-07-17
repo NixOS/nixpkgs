@@ -5449,6 +5449,8 @@ in {
     inherit (pkgs) tiledb;
   };
 
+  timezonefinder = callPackage ../development/python-modules/timezonefinder { };
+
   tiros = callPackage ../development/python-modules/tiros { };
 
   tinydb = callPackage ../development/python-modules/tinydb { };
