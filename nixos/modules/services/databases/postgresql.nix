@@ -181,7 +181,7 @@ in
         default = [];
         example = literalExample "with pkgs.postgresql_11.pkgs; [ postgis pg_repack ]";
         description = ''
-          List of Postgresql plugins. Postgresql version for each plugin should
+          List of PostgreSQL plugins. PostgreSQL version for each plugin should
           match version for <literal>services.postgresql.package</literal> value.
         '';
       };
