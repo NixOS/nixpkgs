@@ -1,4 +1,8 @@
-{ stdenv, python, fetchPypi, makeWrapper, unzip }:
+{ stdenv, python, fetchPypi, makeWrapper, unzip, makeSetupHook
+, pipInstallHook
+, setuptoolsBuildHook
+
+}:
 
 let
   wheel_source = fetchPypi {
@@ -25,6 +29,15 @@ in stdenv.mkDerivation rec {
     sha256 = "993134f0475471b91452ca029d4390dc8f298ac63a712814f101cd1b6db46676";
   };
 
+  dontUseSetuptoolsBuild = true;
+
+  # Should be propagatedNativeBuildInputs
+  propagatedBuildInputs = [
+    # Override to remove dependencies to prevent infinite recursion.
+    (pipInstallHook.override{pip=null;})
+    (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
+  ];
+
   unpackPhase = ''
     mkdir -p $out/${python.sitePackages}
     unzip -d $out/${python.sitePackages} $src
@@ -32,7 +45,7 @@ in stdenv.mkDerivation rec {
     unzip -d $out/${python.sitePackages} ${wheel_source}
   '';
 
-  patchPhase = ''
+  postPatch = ''
     mkdir -p $out/bin
   '';
 
@@ -52,4 +65,5 @@ in stdenv.mkDerivation rec {
       wrapProgram $f --prefix PYTHONPATH ":" $out/${python.sitePackages}/
     done
   '';
+
 }

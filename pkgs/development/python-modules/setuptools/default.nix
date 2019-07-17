@@ -1,15 +1,17 @@
 { stdenv
+, buildPythonPackage
 , fetchPypi
 , python
 , wrapPython
 , unzip
+, callPackage
+, bootstrapped-pip
 }:
 
-# Should use buildPythonPackage here somehow
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "setuptools";
   version = "41.0.1";
-  name = "${python.libPrefix}-${pname}-${version}";
+  format = "other";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,8 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "a222d126f5471598053c9a77f4b5d4f26eaa1f150ad6e01dcf1a42e185d05613";
   };
 
-  nativeBuildInputs = [ unzip wrapPython python.pythonForBuild ];
-  doCheck = false;  # requires pytest
+  # There is nothing to build
+  dontBuild = true;
+
+  nativeBuildInputs = [ bootstrapped-pip ];
+
   installPhase = ''
       dst=$out/${python.sitePackages}
       mkdir -p $dst
@@ -27,13 +32,11 @@ stdenv.mkDerivation rec {
       wrapPythonPrograms
   '';
 
-  pythonPath = [];
+  # Adds setuptools to nativeBuildInputs causing infinite recursion.
+  catchConflicts = false;
 
-  dontPatchShebangs = true;
-
-  # Python packages built through cross-compilation are always for the host platform.
-  disallowedReferences = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ python.pythonForBuild ];
-
+  # Requires pytest, causing infinite recursion.
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";

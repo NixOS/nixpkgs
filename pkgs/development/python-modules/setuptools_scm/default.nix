@@ -8,8 +8,6 @@ buildPythonPackage rec {
     sha256 = "52ab47715fa0fc7d8e6cd15168d1a69ba995feb1505131c3e814eb7087b57358";
   };
 
-  buildInputs = [ pip ];
-
   # Seems to fail due to chroot and would cause circular dependency
   # with pytest
   doCheck = false;
