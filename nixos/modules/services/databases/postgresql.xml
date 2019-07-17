@@ -122,7 +122,7 @@ self: super: {
 </programlisting>
   </para>
   <para>
-    Here's a receipt on how to override a particular plugin through overlay:
+    Here's a recipe on how to override a particular plugin through an overlay:
 <programlisting>
 self: super: {
   postgresql_11 = super.postgresql_11.override { this = self.postgresql_11; } // {
