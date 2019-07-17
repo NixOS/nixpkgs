@@ -3,10 +3,11 @@
 , pkgs ? import ../.. { inherit system config; }
 }:
 
-with pkgs.lib;
-with import ../lib/testing.nix { inherit system pkgs; };
-
 let
+  inherit (import ../lib/testing.nix { inherit system pkgs; }) makeTest;
+  inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
+                     removeSuffix replaceChars singleton splitString;
+
   escape' = str: replaceChars [''"'' "$" "\n"] [''\\\"'' "\\$" ""] str;
 
 /*
