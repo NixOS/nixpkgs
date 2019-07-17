@@ -536,9 +536,11 @@ in {
 
   maxminddb = callPackage ../development/python-modules/maxminddb { };
 
-  monty = callPackage ../development/python-modules/monty { };
-
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
+
+  mkl-service = callPackage ../development/python-modules/mkl-service { };
+
+  monty = callPackage ../development/python-modules/monty { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
