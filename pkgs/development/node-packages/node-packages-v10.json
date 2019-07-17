@@ -42,6 +42,7 @@
 , "html-minifier"
 , "http-server"
 , "hueadm"
+, "inliner"
 , "ionic"
 , "ios-deploy"
 , "imapnotify"
