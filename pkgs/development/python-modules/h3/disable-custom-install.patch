@@ -1,0 +1,41 @@
+diff --git a/setup.py b/setup.py
+index 8e1c220..45297b6 100644
+--- a/setup.py
++++ b/setup.py
+@@ -25,20 +25,6 @@ class CustomBuildExtCommand(build_ext):
+         install_h3(h3_version)
+
+
+-# Tested with wheel v0.29.0
+-class BinaryDistribution(Distribution):
+-    def __init__(self, attrs=None):
+-        Distribution.__init__(self, attrs)
+-        # The values used for the name and sources in the Extension below are
+-        # not important, because we override the build_ext command above.
+-        # The normal C extension building logic is never invoked, and is
+-        # replaced with our own custom logic. However, ext_modules cannot be
+-        # empty, because this signals to other parts of distutils that our
+-        # package contains C extensions and thus needs to be built for
+-        # different platforms separately.
+-        self.ext_modules = [Extension('h3c', [])]
+-
+-
+ long_description = open('README.rst').read()
+
+ setup(
+@@ -52,14 +38,10 @@ setup(
+     url='https://github.com/uber/h3-py.git',
+     packages=find_packages(exclude=['tests', 'tests.*']),
+     install_requires=[],
+-    cmdclass={
+-        'build_ext': CustomBuildExtCommand,
+-    },
+     package_data={
+         'h-py':
+         ['out/*.dylib' if platform.system() == 'Darwin' else (
+             'out/*.dll' if platform.system() == 'Windows' else
+             'out/*.so.*')]
+     },
+-    license='Apache License 2.0',
+-    distclass=BinaryDistribution)
++    license='Apache License 2.0')
