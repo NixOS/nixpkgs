@@ -5464,6 +5464,9 @@ let
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ EmailAbstract EmailAddress MooXTypesMooseLike SubExporter Throwable TryTiny ];
+    postPatch = ''
+      patchShebangs --build util
+    '';
     meta = {
       homepage = https://github.com/rjbs/Email-Sender;
       description = "A library for sending email";
@@ -6220,6 +6223,10 @@ let
       sha256 = "f1f1820ff44042f6b30e4d6be1db860b9e743b1a9836070ea656ad9829e4eca5";
     };
     propagatedBuildInputs = [ FileFindObject NumberCompare TextGlob ];
+    # restore t/sample-data which is corrupted by patching shebangs
+    preCheck = ''
+      tar xf $src */t/sample-data --strip-components=1
+    '';
     meta = {
       homepage = https://www.shlomifish.org/open-source/projects/File-Find-Object/;
       description = "Alternative interface to File::Find::Object";

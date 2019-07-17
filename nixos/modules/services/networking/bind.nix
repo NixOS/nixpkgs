@@ -168,7 +168,9 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.bind.enable {
+  config = mkIf cfg.enable {
+
+    networking.resolvconf.useLocalResolver = mkDefault true;
 
     users.users = singleton
       { name = bindUser;

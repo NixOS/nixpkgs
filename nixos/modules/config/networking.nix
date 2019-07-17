@@ -7,16 +7,6 @@ with lib;
 let
 
   cfg = config.networking;
-  dnsmasqResolve = config.services.dnsmasq.enable &&
-                   config.services.dnsmasq.resolveLocalQueries;
-  hasLocalResolver = config.services.bind.enable ||
-                     config.services.unbound.enable ||
-                     dnsmasqResolve;
-
-  resolvconfOptions = cfg.resolvconfOptions
-    ++ optional cfg.dnsSingleRequest "single-request"
-    ++ optional cfg.dnsExtensionMechanism "edns0";
-
 
   localhostMapped4 = cfg.hosts ? "127.0.0.1" && elem "localhost" cfg.hosts."127.0.0.1";
   localhostMapped6 = cfg.hosts ? "::1"       && elem "localhost" cfg.hosts."::1";
@@ -61,48 +51,6 @@ in
       '';
       description = ''
         The contents of <filename>/etc/host.conf</filename>. See also <citerefentry><refentrytitle>host.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
-      '';
-    };
-
-    networking.dnsSingleRequest = lib.mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Recent versions of glibc will issue both ipv4 (A) and ipv6 (AAAA)
-        address queries at the same time, from the same port. Sometimes upstream
-        routers will systemically drop the ipv4 queries. The symptom of this problem is
-        that 'getent hosts example.com' only returns ipv6 (or perhaps only ipv4) addresses. The
-        workaround for this is to specify the option 'single-request' in
-        /etc/resolv.conf. This option enables that.
-      '';
-    };
-
-    networking.dnsExtensionMechanism = lib.mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Enable the <code>edns0</code> option in <filename>resolv.conf</filename>. With
-        that option set, <code>glibc</code> supports use of the extension mechanisms for
-        DNS (EDNS) specified in RFC 2671. The most popular user of that feature is DNSSEC,
-        which does not work without it.
-      '';
-    };
-
-    networking.extraResolvconfConf = lib.mkOption {
-      type = types.lines;
-      default = "";
-      example = "libc=NO";
-      description = ''
-        Extra configuration to append to <filename>resolvconf.conf</filename>.
-      '';
-    };
-
-    networking.resolvconfOptions = lib.mkOption {
-      type = types.listOf types.str;
-      default = [];
-      example = [ "ndots:1" "rotate" ];
-      description = ''
-        Set the options in <filename>/etc/resolv.conf</filename>.
       '';
     };
 
@@ -240,35 +188,6 @@ in
         # /etc/host.conf: resolver configuration file
         "host.conf".text = cfg.hostConf;
 
-        # /etc/resolvconf.conf: Configuration for openresolv.
-        "resolvconf.conf".text =
-            ''
-              # This is the default, but we must set it here to prevent
-              # a collision with an apparently unrelated environment
-              # variable with the same name exported by dhcpcd.
-              interface_order='lo lo[0-9]*'
-            '' + optionalString config.services.nscd.enable ''
-              # Invalidate the nscd cache whenever resolv.conf is
-              # regenerated.
-              libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
-            '' + optionalString (length resolvconfOptions > 0) ''
-              # Options as described in resolv.conf(5)
-              resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
-            '' + optionalString hasLocalResolver ''
-              # This hosts runs a full-blown DNS resolver.
-              name_servers='127.0.0.1'
-            '' + optionalString dnsmasqResolve ''
-              dnsmasq_conf=/etc/dnsmasq-conf.conf
-              dnsmasq_resolv=/etc/dnsmasq-resolv.conf
-            '' + cfg.extraResolvconfConf + ''
-            '';
-
-      } // optionalAttrs config.services.resolved.enable {
-        # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
-        # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
-        "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
-      } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
-        "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
       } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
         # /etc/rpc: RPC program numbers.
         "rpc".source = pkgs.glibc.out + "/etc/rpc";
@@ -294,29 +213,6 @@ in
 
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;
-
-    # This is needed when /etc/resolv.conf is being overriden by networkd
-    # and other configurations. If the file is destroyed by an environment
-    # activation then it must be rebuilt so that applications which interface
-    # with /etc/resolv.conf directly don't break.
-    system.activationScripts.resolvconf = stringAfter [ "etc" "specialfs" "var" ]
-      ''
-        # Systemd resolved controls its own resolv.conf
-        rm -f /run/resolvconf/interfaces/systemd
-        ${optionalString config.services.resolved.enable ''
-          rm -rf /run/resolvconf/interfaces
-          mkdir -p /run/resolvconf/interfaces
-          ln -s /run/systemd/resolve/resolv.conf /run/resolvconf/interfaces/systemd
-        ''}
-
-        # Make sure resolv.conf is up to date if not managed manually, by systemd or
-        # by NetworkManager
-        ${optionalString (!config.environment.etc?"resolv.conf" &&
-                          (cfg.networkmanager.enable ->
-                            cfg.networkmanager.rc-manager == "resolvconf")) ''
-          ${pkgs.openresolv}/bin/resolvconf -u
-        ''}
-      '';
 
   };
 

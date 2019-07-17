@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gobject-introspection, gtk-doc, docbook_xsl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gobject-introspection, gtk-doc, docbook_xsl
 , glib, libsoup, libxml2, libxslt, check, curl, perl, hwdata, osinfo-db, vala ? null
 }:
 
@@ -21,6 +21,17 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./osinfo-db-data-dir.patch
+    # https://nvd.nist.gov/vuln/detail/CVE-2019-13313
+    (fetchpatch {
+      url = "https://gitlab.com/libosinfo/libosinfo/commit/3654abee6ead9f11f8bb9ba8fc71efd6fa4dabbc.patch";
+      name = "CVE-2019-13313-1.patch";
+      sha256 = "1lybywfj6b41zfjk33ap90bab5l84lf5y3kif7vd2b6wq5r91rcn";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/libosinfo/libosinfo/commit/08fb8316b4ac42fe74c1fa5ca0ac593222cdf81a.patch";
+      name = "CVE-2019-13313-2.patch";
+      sha256 = "1f6rhkrgy3j8nmidk97wnz6p35zs1dsd63d3np76q7qs7ra74w9z";
+    })
   ];
 
   postPatch = ''

@@ -16,7 +16,8 @@ let
     plugins=keyfile
     dhcp=${cfg.dhcp}
     dns=${cfg.dns}
-    rc-manager=${cfg.rc-manager}
+    # If resolvconf is disabled that means that resolv.conf is managed by some other module.
+    rc-manager=${if config.networking.resolvconf.enable then "resolvconf" else "unmanaged"}
 
     [keyfile]
     ${optionalString (cfg.unmanaged != [])
@@ -268,25 +269,6 @@ in {
         '';
       };
 
-      rc-manager = mkOption {
-        type = types.enum [ "symlink" "file" "resolvconf" "netconfig" "unmanaged" "none" ];
-        default = "resolvconf";
-        description = ''
-          Set the <literal>resolv.conf</literal> management mode.
-          </para>
-          <para>
-          A description of these modes can be found in the main section of
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
-            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
-          </link>
-          or in
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>.
-        '';
-      };
-
       dispatcherScripts = mkOption {
         type = types.listOf (types.submodule {
           options = {
@@ -513,7 +495,7 @@ in {
     networking = {
       useDHCP = false;
       # use mkDefault to trigger the assertion about the conflict above
-      wireless.enable = lib.mkDefault false;
+      wireless.enable = mkDefault false;
     };
 
     security.polkit.extraConfig = polkitConf;
