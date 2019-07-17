@@ -234,48 +234,43 @@ in {
     withPython = true;
   });
 
-  buildAzurePythonPackage =
+  buildAzureNamespacePythonPackage =
     let
-      # remove python2 vs python3 namespace workarounds
-      # use GNU+BSD safe sed replacement
-      postPatch = ''
-        sed '/azure-namespace-package/d' setup.cfg > setup.cfg
-        rm -f azure_bdist_wheel.py
-      '';
-      postInstall = (if isPy3k then ''
-        rm -f "$out/${python.sitePackages}"/azure/__init__.py
-      '' else ''
-        echo "__path__ = __import__('pkgutil').extend_path(__path__, __name__)" \
-             > "$out/${python.sitePackages}"/azure/__init__.py
-      '');
+      # namespaceDirs [ "azure" "cli" "mgmt" ] -> [ "azure" "azure/cli" "azure/cli/mgmt"]
+      # would be cleaner if we had lib.foldl1
+      namespaceDirs = namespaces: (pkgs.lib.foldl (accum: namespace:
+      ( let next = if accum.fst == "" then namespace else accum.fst + "/" + namespace;
+        in { fst = next; snd = accum.snd ++ [ next ]; })
+      ) { fst = ""; snd = []; } namespaces).snd;
     in
-      attrs: buildPythonPackage (attrs // { inherit postPatch postInstall; });
+      namespaces: attrs: buildPythonPackage (attrs // {
+        # GNU+BSD sed friendly inplace command
+        postPatch = ''
+          sed '/namespace-package/d' setup.cfg > setup.cfg
+          rm -f azure_bdist_wheel.py
+        '';
+      postInstall =
+        if isPy3k then pkgs.lib.concatMapStrings
+          (namespace: ''rm -f "$out/${python.sitePackages}/${namespace}/__init__.py"'')
+          (namespaceDirs namespaces)
+        else pkgs.lib.concatMapStrings
+          (namespace: ''
+            echo "__path__ = __import__('pkgutil').extend_path(__path__, __name__)" \
+              > "$out/${python.sitePackages}/${namespace}/__init__.py"; '')
+          (namespaceDirs namespaces);
+      });
 
-  buildAzureMgmtPythonPackage =
-    let
-      # remove python2 vs python3 namespace workarounds
-      # use GNU+BSD safe sed replacement
-      postPatch = ''
-        sed '/azure-namespace-package/d' setup.cfg > setup.cfg
-        rm -f azure_bdist_wheel.py
-      '';
-      postInstall = (if isPy3k then ''
-        rm -f "$out/${python.sitePackages}"/azure{,/mgmt}/__init__.py
-      '' else ''
-        echo "__path__ = __import__('pkgutil').extend_path(__path__, __name__)" \
-            | tee "$out/${python.sitePackages}"/azure/__init__.py \
-             > "$out/${python.sitePackages}"/azure/mgmt/__init__.py
-      '');
-    in
-      attrs: buildPythonPackage (attrs // { inherit postPatch postInstall; });
+  buildAzurePythonPackage         = self.buildAzureNamespacePythonPackage [ "azure" ];
 
-  azure = callPackage ../development/python-modules/azure { };
+  buildAzureCosmosdbPythonPackage = self.buildAzureNamespacePythonPackage [ "azure" "cosmosdb" ];
 
-  azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
+  buildAzureMgmtPythonPackage     = self.buildAzureNamespacePythonPackage [ "azure" "mgmt" ];
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
 
   azure-batch = callPackage ../development/python-modules/azure-batch { };
+
+  azure = callPackage ../development/python-modules/azure { };
 
   azure-cli-core = callPackage ../development/python-modules/azure-cli-core { };
 
@@ -299,27 +294,7 @@ in {
 
   azure-loganalytics = callPackage ../development/python-modules/azure-loganalytics { };
 
-  azure-servicebus = callPackage ../development/python-modules/azure-servicebus { };
-
-  azure-servicefabric = callPackage ../development/python-modules/azure-servicefabric { };
-
-  azure-servicemanagement-legacy = callPackage ../development/python-modules/azure-servicemanagement-legacy { };
-
-  azure-storage-nspkg = callPackage ../development/python-modules/azure-storage-nspkg { };
-
-  azure-storage-common = callPackage ../development/python-modules/azure-storage-common { };
-
-  azure-storage = callPackage ../development/python-modules/azure-storage { };
-
-  azure-storage-blob = callPackage ../development/python-modules/azure-storage-blob { };
-
-  azure-storage-file = callPackage ../development/python-modules/azure-storage-file { };
-
-  azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
-
-  azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
-
-  azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
+  azure-mgmt-advisor = callPackage ../development/python-modules/azure-mgmt-advisor { };
 
   azure-mgmt-advisor = callPackage ../development/python-modules/azure-mgmt-advisor { };
 
@@ -327,9 +302,9 @@ in {
 
   azure-mgmt-authorization = callPackage ../development/python-modules/azure-mgmt-authorization { };
 
-  azure-mgmt-batch = callPackage ../development/python-modules/azure-mgmt-batch { };
-
   azure-mgmt-batchai = callPackage ../development/python-modules/azure-mgmt-batchai { };
+
+  azure-mgmt-batch = callPackage ../development/python-modules/azure-mgmt-batch { };
 
   azure-mgmt-billing = callPackage ../development/python-modules/azure-mgmt-billing { };
 
@@ -338,6 +313,8 @@ in {
   azure-mgmt-cognitiveservices = callPackage ../development/python-modules/azure-mgmt-cognitiveservices { };
 
   azure-mgmt-commerce = callPackage ../development/python-modules/azure-mgmt-commerce { };
+
+  azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
 
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
 
@@ -403,15 +380,17 @@ in {
 
   azure-mgmt-notificationhubs = callPackage ../development/python-modules/azure-mgmt-notificationhubs { };
 
+  azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
+
   azure-mgmt-policyinsights = callPackage ../development/python-modules/azure-mgmt-policyinsights { };
 
   azure-mgmt-powerbiembedded = callPackage ../development/python-modules/azure-mgmt-powerbiembedded { };
 
   azure-mgmt-rdbms = callPackage ../development/python-modules/azure-mgmt-rdbms { };
 
-  azure-mgmt-recoveryservices = callPackage ../development/python-modules/azure-mgmt-recoveryservices { };
-
   azure-mgmt-recoveryservicesbackup = callPackage ../development/python-modules/azure-mgmt-recoveryservicesbackup { };
+
+  azure-mgmt-recoveryservices = callPackage ../development/python-modules/azure-mgmt-recoveryservices { };
 
   azure-mgmt-redis = callPackage ../development/python-modules/azure-mgmt-redis { };
 
@@ -440,6 +419,26 @@ in {
   azure-mgmt-trafficmanager = callPackage ../development/python-modules/azure-mgmt-trafficmanager { };
 
   azure-mgmt-web = callPackage ../development/python-modules/azure-mgmt-web { };
+
+  azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
+
+  azure-servicebus = callPackage ../development/python-modules/azure-servicebus { };
+
+  azure-servicefabric = callPackage ../development/python-modules/azure-servicefabric { };
+
+  azure-servicemanagement-legacy = callPackage ../development/python-modules/azure-servicemanagement-legacy { };
+
+  azure-storage-blob = callPackage ../development/python-modules/azure-storage-blob { };
+
+  azure-storage = callPackage ../development/python-modules/azure-storage { };
+
+  azure-storage-common = callPackage ../development/python-modules/azure-storage-common { };
+
+  azure-storage-file = callPackage ../development/python-modules/azure-storage-file { };
+
+  azure-storage-nspkg = callPackage ../development/python-modules/azure-storage-nspkg { };
+
+  azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
