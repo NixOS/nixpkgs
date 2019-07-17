@@ -136,8 +136,6 @@ stdenv.mkDerivation rec {
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
     ./trim-last-argument-to-gcc-if-empty.patch
-
-    ./python-stub-path-fix.patch
   ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
 
@@ -220,13 +218,13 @@ stdenv.mkDerivation rec {
       cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; };
       java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; };
       protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; };
-      pythonBinPath = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
+      pythonBinPath = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; };
 
       bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
       cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
       javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
       protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
-      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
     };
 
   # update the list of workspace dependencies
@@ -310,9 +308,8 @@ stdenv.mkDerivation rec {
     genericPatches = ''
       # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
       # See also `postFixup` where python is added to $out/nix-support
-      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
-          --replace "/usr/bin/env python" "${python3}/bin/python" \
-          --replace "NIX_STORE_PYTHON_PATH" "${python3}/bin/python" \
+      patchShebangs src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt \
+          --replace "#!/usr/bin/env python" "#!${python3}/bin/python"
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|' \
