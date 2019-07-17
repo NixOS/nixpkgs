@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     pushd statusui
       autoreconf -fi
-      CPPFLAGS=-I${libxml2.dev}/include/libxml2 \
+      CPPFLAGS=$(pkg-config --cflags libxml-2.0) \
         LIBS='-lpthread -lgdk-x11-2.0 -lgobject-2.0 -lglib-2.0 -latk-1.0 -lgdk_pixbuf-2.0' \
         ./autogen.sh --prefix=$out --disable-static
     popd
