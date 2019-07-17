@@ -10,9 +10,19 @@ let
       options = {
 
         image = mkOption {
-          type = types.str;
+          type = with types; str;
           description = "Docker image to run.";
           example = "library/hello-world";
+        };
+
+        imageFile = mkOption {
+          type = with types; nullOr package;
+          default = null;
+          description = ''
+            Path to an image file to load instead of pulling from a registry.
+            If defined, do not pull from registry.
+          '';
+          example = literalExample "pkgs.dockerTools.buildDockerImage {...};";
         };
 
         cmd = mkOption {
@@ -153,6 +163,24 @@ let
           example = "/var/lib/hello_world";
         };
 
+        containerDependencies = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            Define which other containers this one depends on. They will be added to both After and Requires for the unit.
+
+            Use the same name as the attribute under <literal>services.docker-containers</literal>.
+          '';
+          example = literalExample ''
+            services.docker-containers = {
+              node1 = {};
+              node2 = {
+                containerDependencies = [ "node1" ];
+              }
+            }
+          '';
+        };
+
         extraDockerOptions = mkOption {
           type = with types; listOf str;
           default = [];
@@ -164,10 +192,13 @@ let
       };
     };
 
-  mkService = name: container: {
+  mkService = name: container: let
+    mkAfter = map (x: "docker-${x}.service") container.containerDependencies;
+  in rec {
     wantedBy = [ "multi-user.target" ];
-    after = [ "docker.service" "docker.socket" ];
-    requires = [ "docker.service" "docker.socket" ];
+    after = [ "docker.service" "docker.socket" ] ++ mkAfter;
+    requires = after;
+
     serviceConfig = {
       ExecStart = concatStringsSep " \\\n  " ([
         "${pkgs.docker}/bin/docker run"
@@ -185,7 +216,13 @@ let
         ++ [container.image]
         ++ map escapeShellArg container.cmd
       );
-      ExecStartPre = [ "${pkgs.docker}/bin/docker pull ${container.image}" "-${pkgs.docker}/bin/docker rm -f ${name}" ];
+
+      ExecStartPre = ["-${pkgs.docker}/bin/docker rm -f ${name}"
+                      "-${pkgs.docker}/bin/docker image prune -f"] ++
+        (if (container.imageFile != null)
+                then ["${pkgs.docker}/bin/docker load -i ${container.imageFile}"]
+                else ["${pkgs.docker}/bin/docker pull ${container.image}"]);
+
       ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${pkgs.docker}/bin/docker stop ${name}"'';
       ExecStopPost = "-${pkgs.docker}/bin/docker rm -f ${name}";
 
