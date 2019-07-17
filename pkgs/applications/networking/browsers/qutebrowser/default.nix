@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchzip, python3Packages
-, makeWrapper, wrapGAppsHook, qtbase, glib-networking
+, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
 , withPdfReader        ? true
@@ -19,7 +19,7 @@ let
     stripRoot = false;
   };
 
-in python3Packages.buildPythonApplication rec {
+in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
   version = "1.6.3";
 
@@ -41,7 +41,7 @@ in python3Packages.buildPythonApplication rec {
   ]);
 
   nativeBuildInputs = [
-    makeWrapper wrapGAppsHook asciidoc
+    wrapQtAppsHook wrapGAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
   ];
 
@@ -56,6 +56,9 @@ in python3Packages.buildPythonApplication rec {
   patches = [
     ./fix-restart.patch
   ];
+
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
 
   postPatch = ''
     substituteInPlace qutebrowser/app.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
@@ -93,6 +96,12 @@ in python3Packages.buildPythonApplication rec {
     for i in $scripts; do
       patchPythonScript "$i"
     done
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/qutebrowser \
+      "''${gappsWrapperArgs[@]}" \
+      "''${qtWrapperArgs[@]}"
   '';
 
   meta = with stdenv.lib; {
