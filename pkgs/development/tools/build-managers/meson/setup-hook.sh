@@ -12,6 +12,7 @@ mesonConfigurePhase() {
 
     # See multiple-outputs.sh and meson’s coredata.py
     mesonFlags="\
+        --buildtype plain \
         --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
         --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
         --includedir=${!outputInclude}/include \
