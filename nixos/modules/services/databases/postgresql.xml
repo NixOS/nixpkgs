@@ -78,7 +78,7 @@ Type "help" for help.
   <title>Plugins</title>
 
   <para>
-   Plugins collection for each Postgresql version can be accessed with
+   Plugins collection for each PostgreSQL version can be accessed with
    <literal>.pkgs</literal>. For example, for
    <literal>pkgs.postgresql_11</literal> package it's plugin collection is
    accessed by <literal>pkgs.postgresql_11.pkgs</literal>:
