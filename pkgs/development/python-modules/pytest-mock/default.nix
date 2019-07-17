@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, pytest, mock, setuptools_scm }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, pytest
+, mock
+, setuptools_scm
+}:
 
 buildPythonPackage rec {
   pname = "pytest-mock";
@@ -10,10 +17,19 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = lib.optional (!isPy3k) mock;
-  nativeBuildInputs = [ setuptools_scm pytest ];
+
+  nativeBuildInputs = [
+   setuptools_scm
+  ];
+
+  checkInputs = [
+    pytest
+  ];
 
   checkPhase = ''
-    py.test
+    # remove disabled test on next release
+    # https://github.com/pytest-dev/pytest-mock/pull/151
+    pytest -k "not test_detailed_introspection"
   '';
 
   meta = with lib; {

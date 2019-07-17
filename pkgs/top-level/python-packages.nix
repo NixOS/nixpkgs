@@ -452,6 +452,8 @@ in {
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
+  glob2 = callPackage ../development/python-modules/glob2 { };
+
   glom = callPackage ../development/python-modules/glom { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
