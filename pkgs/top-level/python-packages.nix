@@ -3528,6 +3528,8 @@ in {
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
 
+  python-unshare = callPackage ../development/python-modules/python-unshare { };
+
   fs = callPackage ../development/python-modules/fs { };
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
