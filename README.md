@@ -1,6 +1,7 @@
 [<img src="https://nixos.org/logo/nixos-hires.png" width="500px" alt="logo" />](https://nixos.org/nixos)
 
 [![Code Triagers Badge](https://www.codetriage.com/nixos/nixpkgs/badges/users.svg)](https://www.codetriage.com/nixos/nixpkgs)
+[![Open Collective supporters](https://opencollective.com/nixos/tiers/supporter/badge.svg?label=Supporter&color=brightgreen)](https://opencollective.com/nixos)
 
 Nixpkgs is a collection of packages for the [Nix](https://nixos.org/nix/) package
 manager. It is periodically built and tested by the [Hydra](https://hydra.nixos.org/)
