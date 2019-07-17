@@ -766,6 +766,8 @@ in {
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
+  monkeyhex = callPackage ../development/python-modules/monkeyhex { };
+
   monty = callPackage ../development/python-modules/monty { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
