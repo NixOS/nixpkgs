@@ -3,15 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "git-crypt-${version}";
+  pname = "git-crypt";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "AGWA";
-    repo = "git-crypt";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "13m9y0m6gc3mlw3pqv9x4i0him2ycbysizigdvdanhh514kga602";
-    inherit name;
   };
 
   nativeBuildInputs = [ libxslt ];
