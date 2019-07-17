@@ -234,6 +234,7 @@ in {
 
       emulatedSystems = mkOption {
         default = [];
+        example = [ "wasm32-wasi" "x86_64-windows" "aarch64-linux" ];
         description = ''
           List of systems to emulate. Will also configure Nix to
           support your new systems.
