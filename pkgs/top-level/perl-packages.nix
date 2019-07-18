@@ -19016,15 +19016,11 @@ let
 
   vidir = buildPerlPackage {
     pname = "App-vidir";
-    version = "0.040";
+    version = "0.042";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WO/WOLDRICH/App-vivid-0.040-woldrich.tar.gz";
-      sha256 = "0c97yx33pyhskbmwpqbwlkxr85awd6kg1baibvqkarhhvc8v7l0h";
+      url = "mirror://cpan/authors/id/W/WO/WOLDRICH/App-vidir-0.042.tar.gz";
+      sha256 = "18xkln3xajysxk0jwfyhavnifrsz38zv81s1gfb1w0xkwky3cla3";
     };
-    # NB: This preInstall a workaround for a problem that is fixed in HEAD.
-    preInstall = ''
-      sed -i -e '/^use encoding/d' bin/vidir
-    '';
     outputs = [ "out" ];
     meta = {
       maintainers = [ maintainers.chreekat ];
