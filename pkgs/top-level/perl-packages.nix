@@ -1271,7 +1271,7 @@ let
       url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Carton-v1.0.34.tar.gz;
       sha256 = "77d42b92732bcfc18a59d341e56ce476205b1c4d380eab3a07224f5745c23e45";
     };
-    propagatedBuildInputs = [ ClassTiny MenloLegacy ModuleCPANfile PathTiny TryTiny ];
+    propagatedBuildInputs = [ MenloLegacy PathTiny TryTiny ];
     meta = {
       homepage = https://github.com/perl-carton/carton;
       description = "Perl module dependency manager (aka Bundler for Perl)";
