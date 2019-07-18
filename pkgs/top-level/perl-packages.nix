@@ -12447,10 +12447,10 @@ let
 
   NetHTTP = buildPerlPackage {
     pname = "Net-HTTP";
-    version = "6.18";
+    version = "6.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/Net-HTTP-6.18.tar.gz;
-      sha256 = "7e42df2db7adce3e0eb4f78b88c450f453f5380f120fd5411232e03374ba951c";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/Net-HTTP-6.19.tar.gz;
+      sha256 = "52b76ec13959522cae64d965f15da3d99dcb445eddd85d2ce4e4f4df385b2fc4";
     };
     propagatedBuildInputs = [ URI ];
     __darwinAllowLocalNetworking = true;
