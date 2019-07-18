@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
+    "-DENABLE_LINTING=OFF"
   ];
 
   meta = with stdenv.lib; {
