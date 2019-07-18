@@ -1,5 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, callPackage
-, isPy27, isPy34
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
 , cleo
 , requests
 , cachy
@@ -7,14 +9,18 @@
 , pyrsistent
 , pyparsing
 , cachecontrol
+, lockfile
 , pkginfo
 , html5lib
 , shellingham
 , tomlkit
+, jsonschema
 , typing
 , pathlib2
+, glob2
 , virtualenv
 , functools32
+, subprocess32
 , pytest
 }:
 
@@ -27,10 +33,6 @@ let
       sha256 = "06zp695hq835rkaq6irr1ds1dp2qfzyf32v60vxpd8rcnxv319l5";
     };
   });
-
-  jsonschema3 = callPackage ./jsonschema.nix { };
-  glob2 = callPackage ./glob2.nix { };
-
 in buildPythonPackage rec {
   pname = "poetry";
   version = "0.12.17";
@@ -41,9 +43,9 @@ in buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace \
-      "requests-toolbelt>=0.8.0,<0.9.0" \
-      "requests-toolbelt>=0.8.0,<0.10.0"
+    substituteInPlace setup.py \
+      --replace "requests-toolbelt>=0.8.0,<0.9.0" "requests-toolbelt" \
+      --replace "glob2>=0.6,<0.7" "glob2" \
   '';
 
   format = "pyproject";
@@ -53,16 +55,23 @@ in buildPythonPackage rec {
     requests
     cachy
     requests-toolbelt
-    jsonschema3
+    jsonschema
     pyrsistent
     pyparsing
+    lockfile
     cachecontrol
     pkginfo
     html5lib
     shellingham
     tomlkit
-  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
-    ++ lib.optionals isPy27 [ virtualenv functools32 ];
+  ] ++ lib.optionals isPy27 [
+    typing
+    pathlib2
+    virtualenv
+    functools32
+    glob2
+    subprocess32
+  ];
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
@@ -84,6 +93,6 @@ in buildPythonPackage rec {
     homepage = https://github.com/sdispater/poetry;
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [ jakewaksbaum costrouc ];
   };
 }
