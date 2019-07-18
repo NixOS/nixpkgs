@@ -19572,10 +19572,10 @@ let
 
   XMLSAX = buildPerlPackage {
     pname = "XML-SAX";
-    version = "1.00";
+    version = "1.02";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-1.00.tar.gz;
-      sha256 = "1qra9k3wszjxvsgbragl55z3qba4nri0ipmjaxfib4l6xxj6bsj5";
+      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-1.02.tar.gz;
+      sha256 = "0am13vnv8qsjafr5ljakwnkhlwpk15sga02z8mxsg9is0j3w61j5";
     };
     propagatedBuildInputs = [ XMLNamespaceSupport XMLSAXBase ];
     postInstall = ''
