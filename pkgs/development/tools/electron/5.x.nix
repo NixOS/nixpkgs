@@ -1,4 +1,4 @@
-{ stdenv, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core }:
+{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core }:
 
 let
   version = "5.0.0";
@@ -35,7 +35,15 @@ let
       };
     }.${stdenv.hostPlatform.system} or throwSystem;
 
-    buildInputs = [ unzip makeWrapper ];
+    buildInputs = [ gtk3 ];
+
+    nativeBuildInputs = [
+      unzip
+      makeWrapper
+      wrapGAppsHook
+    ];
+
+    dontWrapGApps = true; # electron is in lib, we need to wrap it manually
 
     buildCommand = ''
       mkdir -p $out/lib/electron $out/bin
@@ -50,7 +58,8 @@ let
         $out/lib/electron/electron
 
       wrapProgram $out/lib/electron/electron \
-        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
+        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
+        "''${gappsWrapperArgs[@]}"
     '';
   };
 
