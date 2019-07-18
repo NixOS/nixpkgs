@@ -219,7 +219,12 @@ let
       sed -i '/tensorboard >=/d' tensorflow/tools/pip_package/setup.py
     '';
 
-    preConfigure = ''
+    preConfigure = let
+      opt_flags = []
+        ++ lib.optionals sse42Support ["-msse4.2"]
+        ++ lib.optionals avx2Support ["-mavx2"]
+        ++ lib.optionals fmaSupport ["-mfma"];
+    in ''
       patchShebangs configure
 
       # dummy ldconfig
@@ -229,6 +234,7 @@ let
       export PATH="$PWD/dummy-ldconfig:$PATH"
 
       export PYTHON_LIB_PATH="$NIX_BUILD_TOP/site-packages"
+      export CC_OPT_FLAGS="${lib.concatStringsSep " " opt_flags}"
       mkdir -p "$PYTHON_LIB_PATH"
     '';
 
@@ -247,9 +253,10 @@ let
     bazelFlags = [
       # temporary fixes to make the build work with bazel 0.27
       "--incompatible_no_support_tools_in_action_inputs=false"
-    ] ++ lib.optional sse42Support "--copt=-msse4.2"
-      ++ lib.optional avx2Support "--copt=-mavx2"
-      ++ lib.optional fmaSupport "--copt=-mfma";
+    ];
+    bazelBuildFlags = [
+      "--config=opt" # optimize using the flags set in the configure phase
+    ];
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
 
@@ -261,6 +268,7 @@ let
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
         "0gmwwcld8hm1nfxmx2w2gqxjxq5b5ln7vbxn0x63x9yy7avs3dkp"
+        "0000000000000000000000000000000000000000000000000000"
       else
         "1d67h0n461cyfimzlsj6bv9p95iv9jhglr0izdc6y0n6w09z8pw0";
     };
