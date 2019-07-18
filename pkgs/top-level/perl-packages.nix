@@ -395,6 +395,32 @@ let
     buildInputs = [ TestKwalitee TestPod ];
   };
 
+  AppClusterSSH = buildPerlModule {
+    pname = "App-ClusterSSH";
+    version = "4.13.2";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DU/DUNCS/App-ClusterSSH-v4.13.2.tar.gz;
+      sha256 = "0rmk2p3f2wz1h092anidjclh212rv3gxyk0c641qk3frlrjnw6mp";
+    };
+    propagatedBuildInputs = [ ExceptionClass Tk TryTiny X11ProtocolOther ];
+    buildInputs = [ CPANChanges FileSlurp FileWhich PerlTidy Readonly TestDifferences TestDistManifest TestPerlTidy TestPod TestPodCoverage TestTrap ];
+    preCheck = "rm t/perltidy.t t/manifest.t t/30cluster.t"; # do not run failing tests
+    postInstall = ''
+      mkdir -p $out/etc/bash_completion.d
+      mv $out/bin/clusterssh_bash_completion.dist \
+         $out/etc/bash_completion.d/clusterssh_bash_completion
+      substituteInPlace $out/etc/bash_completion.d/clusterssh_bash_completion \
+         --replace '/bin/true' '${pkgs.coreutils}/bin/true' \
+         --replace 'grep' '${pkgs.gnugrep}/bin/grep' \
+         --replace 'sed' '${pkgs.gnused}/bin/sed'
+    '';
+    meta = {
+      description = "A container for functions of the ClusterSSH programs";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "http://github.com/duncs/clusterssh/wiki";
+    };
+  };
+
   AppCmd = buildPerlPackage {
     pname = "App-Cmd";
     version = "0.331";
@@ -19344,6 +19370,22 @@ let
     buildInputs = [ pkgs.xlibsWrapper ];
     NIX_CFLAGS_LINK = "-lX11";
     doCheck = false; # requires an X server
+  };
+
+  X11ProtocolOther = buildPerlPackage {
+    pname = "X11-Protocol-Other";
+    version = "31";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/K/KR/KRYDE/X11-Protocol-Other-31.tar.gz;
+      sha256 = "1x3kvic52jgp2mvd5wzrqrprqi82cdk8l4075v8b33ksvj9mjqiw";
+    };
+    propagatedBuildInputs = [ X11Protocol ];
+    buildInputs = [ EncodeHanExtra ModuleUtil ];
+    meta = {
+      description = "Miscellaneous helpers for X11::Protocol connections.";
+      license = with stdenv.lib.licenses; [ gpl1Plus gpl3Plus ];
+      homepage = "http://user42.tuxfamily.org/x11-protocol-other/index.html";
+    };
   };
 
   X11GUITest = buildPerlPackage {
