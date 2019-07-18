@@ -19134,10 +19134,10 @@ let
 
   WWWFormUrlEncoded = buildPerlModule {
      pname = "WWW-Form-UrlEncoded";
-     version = "0.25";
+     version = "0.26";
      src = fetchurl {
-       url = mirror://cpan/authors/id/K/KA/KAZEBURO/WWW-Form-UrlEncoded-0.25.tar.gz;
-       sha256 = "0kh7qrskhbk4j253pr2q4vpn73q5k6fj517m3lnj8n755z9adxz1";
+       url = mirror://cpan/authors/id/K/KA/KAZEBURO/WWW-Form-UrlEncoded-0.26.tar.gz;
+       sha256 = "1x4h5m5fkwaa0gbn6zp9mjrhr3r989w8wyrjxiii3dqm3xghnj60";
      };
      meta = {
        description = "parser and builder for application/x-www-form-urlencoded";
