@@ -4295,6 +4295,8 @@ in {
 
   mongodict = callPackage ../development/python-modules/mongodict { };
 
+  mongoengine = callPackage ../development/python-modules/mongoengine { };
+
   repoze_who = callPackage ../development/python-modules/repoze_who { };
 
   vobject = callPackage ../development/python-modules/vobject { };
