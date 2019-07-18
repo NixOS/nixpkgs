@@ -372,10 +372,10 @@ let
 
   ApacheTest = buildPerlPackage {
     pname = "Apache-Test";
-    version = "1.40";
+    version = "1.41";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHAY/Apache-Test-1.40.tar.gz;
-      sha256 = "0h5fsi0is6nhclsd3wwkkqx2hfgl3bpdazxycafm9sqxr3qkgx9w";
+      url = mirror://cpan/authors/id/S/SH/SHAY/Apache-Test-1.41.tar.gz;
+      sha256 = "065hka389fq8kq4623li519a6bqk84dmpiwg7c2ahmiisswn1krq";
     };
     doCheck = false;
     meta = {
