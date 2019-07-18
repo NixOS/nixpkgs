@@ -7004,10 +7004,10 @@ let
 
   GeoIP2 = buildPerlPackage {
     pname = "GeoIP2";
-    version = "2.006001";
+    version = "2.006002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MAXMIND/GeoIP2-2.006001.tar.gz;
-      sha256 = "05pb8bj2dkfcn8z56f8dcs76x65xcn05fywm7vifmfh39qgkmm62";
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/GeoIP2-2.006002.tar.gz;
+      sha256 = "0d4qq0k0pd0xd83iykr0jkyizl499ii6ajwwwl93rgg9xsl44189";
     };
     propagatedBuildInputs = [ JSONMaybeXS LWPProtocolHttps MaxMindDBReader ParamsValidate Throwable ];
     buildInputs = [ PathClass TestFatal TestNumberDelta ];
