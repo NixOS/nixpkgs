@@ -10707,11 +10707,11 @@ let
 
   ModernPerl = buildPerlPackage {
     pname = "Modern-Perl";
-    version = "1.20181021";
+    version = "1.20190601";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20181021.tar.gz;
-      sha256 = "1d482b528f7c6c60f868d7d0bf0fcc9c3668250dc44fcb39a95b7c63e092c9c5";
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20190601.tar.gz;
+      sha256 = "923c5d73c97314b15a6f658075ed50f5319de3bcceaf35f41f65e660042384e3";
     };
     meta = {
       homepage = https://github.com/chromatic/Modern-Perl;
