@@ -4537,11 +4537,6 @@
     github = "rzetterberg";
     name = "Richard Zetterberg";
   };
-  s1lvester = {
-    email = "s1lvester@bockhacker.me";
-    github = "s1lvester";
-    name = "Markus Silvester";
-  };
   samdroid-apps = {
     email = "sam@sam.today";
     github = "samdroid-apps";
