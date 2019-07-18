@@ -2971,10 +2971,10 @@ let
 
   CookieBaker = buildPerlModule {
     pname = "Cookie-Baker";
-    version = "0.10";
+    version = "0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KA/KAZEBURO/Cookie-Baker-0.10.tar.gz;
-      sha256 = "b42bad15b12da4cdc5c90c902faf3ad484281a42203fa4e7652866434f6fa4dd";
+      url = mirror://cpan/authors/id/K/KA/KAZEBURO/Cookie-Baker-0.11.tar.gz;
+      sha256 = "59275f474e07c0aa3611e3e684b894e7db913333d8214420be63f12ec18cd7ab";
     };
     buildInputs = [ ModuleBuildTiny TestTime ];
     propagatedBuildInputs = [ URI ];
