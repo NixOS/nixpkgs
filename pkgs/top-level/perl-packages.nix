@@ -10453,10 +10453,10 @@ let
 
   MaxMindDBReader = buildPerlPackage {
     pname = "MaxMind-DB-Reader";
-    version = "1.000013";
+    version = "1.000014";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-1.000013.tar.gz;
-      sha256 = "0w7dmfhpibazrh75bdr7vmpji83fzldsy0zjvhg3cwadr4f35kmq";
+      url = mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-1.000014.tar.gz;
+      sha256 = "1a9rrvarw3q6378w3sqv632w36a9bsh0r90yfa49lzwnkj7hf81q";
     };
     propagatedBuildInputs = [ DataIEEE754 DataPrinter DataValidateIP MaxMindDBCommon ];
     buildInputs = [ PathClass TestBits TestFatal TestNumberDelta TestRequires ];
