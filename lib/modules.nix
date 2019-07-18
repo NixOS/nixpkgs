@@ -9,6 +9,11 @@ with lib.debug;
 with lib.types;
 
 rec {
+  attrPosFormatted = file: k: v: let
+    info = builtins.unsafeGetAttrPos k v;
+  in if info == null
+    then file
+    else toString info.file + ":" + toString info.line + ":" + toString info.column;
 
   /* Evaluate a set of modules.  The result is a set of two
      attributes: ‘options’: the nested set of all option declarations,
@@ -79,7 +84,7 @@ rec {
         if options._module.check.value && set ? _definedNames then
           foldl' (res: m:
             foldl' (res: name:
-              if set ? ${name} then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
+              if set ? ${name.name} then res else throw "The option `${showOption (prefix ++ [name.name])}' defined in `${name.file}' does not exist.")
               res m.names)
             res set._definedNames
         else
@@ -196,7 +201,7 @@ rec {
      /* byName is like foldAttrs, but will look for attributes to merge in the
         specified attribute name.
 
-        byName "foo" (module: value: ["module.hidden=${module.hidden},value=${value}"])
+        byName "foo" (module: file: value: ["module.hidden=${module.hidden},value=${value}"])
         [
           {
             hidden="baz";
@@ -217,21 +222,21 @@ rec {
       byName = attr: f: modules:
         foldl' (acc: module:
                 acc // (mapAttrs (n: v:
-                                   (acc.${n} or []) ++ f module v
+                                   (acc.${n} or []) ++ f module (attrPosFormatted module.file n module.${attr}) v
                                  ) module.${attr}
                        )
                ) {} modules;
       # an attrset 'name' => list of submodules that declare ‘name’.
-      declsByName = byName "options" (module: option:
-          [{ inherit (module) file; options = option; }]
+      declsByName = byName "options" (module: file: option:
+          [{ inherit file; options = option; }]
         ) options;
       # an attrset 'name' => list of submodules that define ‘name’.
-      defnsByName = byName "config" (module: value:
-          map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+      defnsByName = byName "config" (module: file: value:
+          map (config: { inherit file; inherit config; }) (pushDownProperties value)
         ) configs;
       # extract the definitions for each loc
-      defnsByName' = byName "config" (module: value:
-          [{ inherit (module) file; inherit value; }]
+      defnsByName' = byName "config" (module: file: value:
+          [{ inherit file; inherit value; }]
         ) configs;
     in
     (flip mapAttrs declsByName (name: decls:
@@ -254,7 +259,7 @@ rec {
           else
             mergeModules' loc decls defns
       ))
-    // { _definedNames = map (m: { inherit (m) file; names = attrNames m.config; }) configs; };
+    // { _definedNames = map (m: { names = map (name: { inherit name; file = attrPosFormatted m.file name m.config; }) (attrNames m.config); }) configs; };
 
   /* Merge multiple option declarations into a single declaration.  In
      general, there should be only one declaration of each option.
