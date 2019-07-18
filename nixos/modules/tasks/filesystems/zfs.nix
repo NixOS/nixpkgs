@@ -694,9 +694,7 @@ in
       environment.etc."zfs/zed.d/vdev_attach-led.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/vdev_attach-led.sh";
       environment.etc."zfs/zed.d/vdev_clear-led.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/vdev_clear-led.sh";
       environment.etc."zfs/zed.d/zed-functions.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/zed-functions.sh";
-      environment.etc."zfs/zed.d/zed.rc".text = ''
-        ${zedConf}
-      '';
+      environment.etc."zfs/zed.d/zed.rc".text = zedConf;
 
       system.fsPackages = [ packages.zfsUser ]; # XXX: needed? zfs doesn't have (need) a fsck
       environment.systemPackages = [ packages.zfsUser ]
