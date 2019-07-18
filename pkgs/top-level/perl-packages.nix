@@ -6841,17 +6841,18 @@ let
 
   FinanceQuote = buildPerlPackage {
     pname = "Finance-Quote";
-    version = "1.47";
+    version = "1.49";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EC/ECOCODE/Finance-Quote-1.47.tar.gz;
-      sha256 = "0gzbq85738f299jaw4nj3ljnka380j2y6yspmyl71rgfypqjvbr7";
+      url = mirror://cpan/authors/id/E/EC/ECOCODE/Finance-Quote-1.49.tar.gz;
+      sha256 = "0lxz9fsm4ld3l900zxh2w91wjygk0ifn4miw6q5k4mm67d2c9nwm";
     };
-    propagatedBuildInputs = [ CGI DateTime HTMLTableExtract JSON LWPProtocolHttps ];
+    propagatedBuildInputs = [ CGI DateTimeFormatStrptime HTMLTableExtract JSON JSONParse LWPProtocolHttps StringUtil TextTemplate ];
     meta = with stdenv.lib; {
       homepage = http://finance-quote.sourceforge.net/;
       description = "Get stock and mutual fund quotes from various exchanges";
       license = licenses.gpl2;
     };
+    buildInputs = [ TestPod ];
   };
 
   FontAFM = buildPerlPackage {
@@ -9001,6 +9002,19 @@ let
     };
     meta = {
       description = "Helper module in using JSON::PP in Perl 5.6";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  JSONParse = buildPerlPackage {
+    pname = "JSON-Parse";
+    version = "0.55";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BK/BKB/JSON-Parse-0.55.tar.gz;
+      sha256 = "0mnjypkiga8zdxr5kbd7sf49pcbn55ivndn01p5ln4amqgdmd66w";
+    };
+    meta = {
+      description = "Read JSON into a Perl variable";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
