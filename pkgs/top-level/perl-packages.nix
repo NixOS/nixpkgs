@@ -12699,10 +12699,10 @@ let
 
   NetSSLeay = buildPerlPackage {
     pname = "Net-SSLeay";
-    version = "1.85";
+    version = "1.88";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIKEM/Net-SSLeay-1.85.tar.gz;
-      sha256 = "1j5h4ycm8538397l204d2d5fkm9595aj174pj7bkpbhwzfwqi0cx";
+      url = mirror://cpan/authors/id/C/CH/CHRISN/Net-SSLeay-1.88.tar.gz;
+      sha256 = "1pfgh4h3szcpvqlcimc60pjbk9zwls99x5863sva0wc47i4dl010";
     };
     buildInputs = [ pkgs.openssl ];
     doCheck = false; # Test performs network access.
