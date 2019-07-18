@@ -4249,6 +4249,8 @@ in {
 
   ppft = callPackage ../development/python-modules/ppft { };
 
+  prance = callPackage ../development/python-modules/prance { };
+
   praw = callPackage ../development/python-modules/praw { };
 
   prawcore = callPackage ../development/python-modules/prawcore { };
