@@ -8966,10 +8966,10 @@ let
 
   JSONPP = buildPerlPackage {
     pname = "JSON-PP";
-    version = "4.02";
+    version = "4.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-PP-4.02.tar.gz;
-      sha256 = "11wlh4clq0cddiamh1ipps3fh9ly01j4pcdh8f4nw7912bw7pimc";
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-PP-4.04.tar.gz;
+      sha256 = "0smna2b8h9jlzlbfb64i31vabyqyjs3iwhng0f0byjxrsxb1qcc1";
     };
     meta = {
       description = "JSON::XS compatible pure-Perl module";
