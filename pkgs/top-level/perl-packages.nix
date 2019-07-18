@@ -13415,10 +13415,10 @@ let
 
   PDFAPI2 = buildPerlPackage {
     pname = "PDF-API2";
-    version = "2.033";
+    version = "2.034";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.033.tar.gz;
-      sha256 = "9c0866ec1a3053f73afaca5f5cdbe6925903b4ce606f4bf4ac317731a69d27a0";
+      url = mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.034.tar.gz;
+      sha256 = "8aa98818fb6e4bebd6f9096e222989dcdd5fd4c5fa2ad1c7f0149053fc68f1cc";
     };
     buildInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
