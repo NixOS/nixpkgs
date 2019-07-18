@@ -1,0 +1,1049 @@
+From eecbfedac48f827e96ad5e151de8f41f6cd3af66 Mon Sep 17 00:00:00 2001
+From: minus <minus@mnus.de>
+Date: Thu, 18 Apr 2019 00:43:21 +0200
+Subject: [PATCH] Implement Wayland support
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Implement the wlr_gamma_control_unstable_v1 protocol.
+The Wayland backend is prioritized over randr since it will fail in
+an X11 context anyway (but the randr backend would not fail in a Wayland
+context with xwayland support).
+The gamma setting is reset when the client disconnects, thus the
+behavior for oneshot mode blocks, like for Quartz.
+
+Co-Authored-By: Giulio Camuffo <giuliocamuffo@gmail.com>
+Co-Authored-By: Thomas Weißschuh <thomas@t-8ch.de>
+Co-Authored-By: Marek Otahal <markotahal@gmail.com>
+Co-Authored-By: Dominique Martinet <asmadeus@codewreck.org>
+---
+ .gitignore                 |   4 +
+ .travis.yml                |   2 +
+ appveyor.yml               |   2 +-
+ configure.ac               |  27 +++
+ po/POTFILES.in             |   1 +
+ src/Makefile.am            |  30 +++
+ src/gamma-control.xml      | 126 +++++++++++++
+ src/gamma-wl.c             | 366 +++++++++++++++++++++++++++++++++++++
+ src/gamma-wl.h             |  32 ++++
+ src/orbital-authorizer.xml |  61 +++++++
+ src/os-compatibility.c     | 148 +++++++++++++++
+ src/os-compatibility.h     |   9 +
+ src/redshift.c             |  32 ++--
+ 13 files changed, 828 insertions(+), 12 deletions(-)
+ create mode 100644 src/gamma-control.xml
+ create mode 100644 src/gamma-wl.c
+ create mode 100644 src/gamma-wl.h
+ create mode 100644 src/orbital-authorizer.xml
+ create mode 100644 src/os-compatibility.c
+ create mode 100644 src/os-compatibility.h
+
+diff --git a/.gitignore b/.gitignore
+index d56a6b60..202903cd 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -115,6 +115,10 @@ m4/lt~obsolete.m4
+ /src/redshift-gtk/defs.py
+ /src/redshift-gtk/redshift-gtk
+ /src/redshift-gtk/__pycache__/
++/src/gamma-control-client-protocol.h
++/src/gamma-control-protocol.c
++/src/orbital-authorizer-client-protocol.h
++/src/orbital-authorizer-protocol.c
+ 
+ # gettext
+ /po/POTFILES
+diff --git a/.travis.yml b/.travis.yml
+index b165a69f..f6771d3c 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -23,6 +23,8 @@ addons:
+       # VidMode
+       - libx11-dev
+       - libxxf86vm-dev
++      # Wayland
++      - libwayland-dev
+       # GeoClue2
+       - libglib2.0-dev
+       # GUI
+diff --git a/appveyor.yml b/appveyor.yml
+index 0ac39835..b750c4dc 100644
+--- a/appveyor.yml
++++ b/appveyor.yml
+@@ -17,7 +17,7 @@ build_script:
+       $env:MSYSTEM = "MINGW32"
+     }
+ 
+-    $env:CONFIGURE_FLAGS = "--disable-drm --disable-randr --disable-vidmode --enable-wingdi --disable-quartz --disable-geoclue2 --disable-corelocation --disable-gui --disable-ubuntu --disable-nls --host=$env:arch-w64-mingw32"
++    $env:CONFIGURE_FLAGS = "--disable-drm --disable-wayland --disable-randr --disable-vidmode --enable-wingdi --disable-quartz --disable-geoclue2 --disable-corelocation --disable-gui --disable-ubuntu --disable-nls --host=$env:arch-w64-mingw32"
+ 
+ - ps: md (Join-Path $env:APPVEYOR_BUILD_FOLDER root)
+ - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER && ./bootstrap"
+diff --git a/configure.ac b/configure.ac
+index b4116262..157a04e2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -67,6 +67,8 @@ PKG_CHECK_MODULES([XF86VM], [xxf86vm], [have_xf86vm=yes], [have_xf86vm=no])
+ PKG_CHECK_MODULES([XCB], [xcb], [have_xcb=yes], [have_xcb=no])
+ PKG_CHECK_MODULES([XCB_RANDR], [xcb-randr],
+ 	[have_xcb_randr=yes], [have_xcb_randr=no])
++PKG_CHECK_MODULES([WAYLAND], [wayland-client wayland-scanner], [have_wayland=yes], [have_wayland=no])
++PKG_CHECK_VAR(WAYLAND_SCANNER, wayland-scanner, wayland_scanner)
+ 
+ PKG_CHECK_MODULES([GLIB], [glib-2.0 gobject-2.0], [have_glib=yes], [have_glib=no])
+ PKG_CHECK_MODULES([GEOCLUE2], [glib-2.0 gio-2.0 >= 2.26], [have_geoclue2=yes], [have_geoclue2=no])
+@@ -124,6 +126,30 @@ AS_IF([test "x$enable_drm" != xno], [
+ ])
+ AM_CONDITIONAL([ENABLE_DRM], [test "x$enable_drm" = xyes])
+ 
++# Check Wayland method
++AC_MSG_CHECKING([whether to enable Wayland method])
++AC_ARG_ENABLE([wayland], [AC_HELP_STRING([--enable-wayland],
++	[enable Wayland method])],
++	[enable_wayland=$enableval],[enable_wayland=maybe])
++AS_IF([test "x$enable_wayland" != xno], [
++	AS_IF([test $have_wayland = yes], [
++		AC_DEFINE([ENABLE_WAYLAND], 1,
++			[Define to 1 to enable Wayland method])
++		AC_MSG_RESULT([yes])
++		enable_wayland=yes
++	], [
++		AC_MSG_RESULT([missing dependencies])
++		AS_IF([test "x$enable_wayland" = xyes], [
++			AC_MSG_ERROR([missing dependencies for Wayland method])
++		])
++		enable_wayland=no
++	])
++], [
++	AC_MSG_RESULT([no])
++	enable_wayland=no
++])
++AM_CONDITIONAL([ENABLE_WAYLAND], [test "x$enable_wayland" = xyes])
++
+ # Check RANDR method
+ AC_MSG_CHECKING([whether to enable RANDR method])
+ AC_ARG_ENABLE([randr], [AC_HELP_STRING([--enable-randr],
+@@ -376,6 +402,7 @@ echo "
+ 
+     Adjustment methods:
+     DRM:		${enable_drm}
++    Wayland:		${enable_wayland}
+     RANDR:		${enable_randr}
+     VidMode:		${enable_vidmode}
+     Quartz (macOS):	${enable_quartz}
+diff --git a/po/POTFILES.in b/po/POTFILES.in
+index 5ef8dacc..1d255600 100644
+--- a/po/POTFILES.in
++++ b/po/POTFILES.in
+@@ -9,6 +9,7 @@ src/options.c
+ src/config-ini.c
+ 
+ src/gamma-drm.c
++src/gamma-wl.c
+ src/gamma-randr.c
+ src/gamma-vidmode.c
+ src/gamma-quartz.c
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 8aa96ead..5465225a 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -23,6 +23,7 @@ redshift_SOURCES = \
+ 
+ EXTRA_redshift_SOURCES = \
+ 	gamma-drm.c gamma-drm.h \
++	gamma-wl.c gamma-wl.h \
+ 	gamma-randr.c gamma-randr.h \
+ 	gamma-vidmode.c gamma-vidmode.h \
+ 	gamma-quartz.c gamma-quartz.h \
+@@ -43,6 +44,27 @@ redshift_LDADD += \
+ 	$(DRM_LIBS) $(DRM_CFLAGS)
+ endif
+ 
++if ENABLE_WAYLAND
++redshift_SOURCES += gamma-wl.c gamma-wl.h os-compatibility.c os-compatibility.h
++
++AM_CFLAGS += $(WAYLAND_CFLAGS)
++
++redshift_LDADD += \
++	$(WAYLAND_LIBS) $(WAYLAND_CFLAGS)
++
++nodist_redshift_SOURCES = \
++	gamma-control-client-protocol.h \
++	gamma-control-protocol.c \
++	orbital-authorizer-protocol.c \
++	orbital-authorizer-client-protocol.h
++
++BUILT_SOURCES = \
++	gamma-control-protocol.c \
++	gamma-control-client-protocol.h \
++	orbital-authorizer-protocol.c \
++	orbital-authorizer-client-protocol.h
++endif
++
+ if ENABLE_RANDR
+ redshift_SOURCES += gamma-randr.c gamma-randr.h
+ AM_CFLAGS += $(XCB_CFLAGS) $(XCB_RANDR_CFLAGS)
+@@ -103,3 +125,11 @@ endif
+ 
+ .rc.o:
+ 	$(AM_V_GEN)$(WINDRES) -I$(top_builddir) -i $< -o $@
++
++CLEANFILES = *-protocol.c *-client-protocol.h
++
++%-protocol.c : $(srcdir)/%.xml
++	$(AM_V_GEN)$(MKDIR_P) $(dir $@) && $(WAYLAND_SCANNER) code < $< > $@
++
++%-client-protocol.h : $(srcdir)/%.xml
++	$(AM_V_GEN)$(MKDIR_P) $(dir $@) && $(WAYLAND_SCANNER) client-header < $< > $@
+diff --git a/src/gamma-control.xml b/src/gamma-control.xml
+new file mode 100644
+index 00000000..ad71a15c
+--- /dev/null
++++ b/src/gamma-control.xml
+@@ -0,0 +1,126 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<protocol name="wlr_gamma_control_unstable_v1">
++  <copyright>
++    Copyright © 2015 Giulio camuffo
++    Copyright © 2018 Simon Ser
++
++    Permission to use, copy, modify, distribute, and sell this
++    software and its documentation for any purpose is hereby granted
++    without fee, provided that the above copyright notice appear in
++    all copies and that both that copyright notice and this permission
++    notice appear in supporting documentation, and that the name of
++    the copyright holders not be used in advertising or publicity
++    pertaining to distribution of the software without specific,
++    written prior permission.  The copyright holders make no
++    representations about the suitability of this software for any
++    purpose.  It is provided "as is" without express or implied
++    warranty.
++
++    THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS
++    SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
++    FITNESS, IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY
++    SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
++    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
++    AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
++    ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
++    THIS SOFTWARE.
++  </copyright>
++
++  <description summary="manage gamma tables of outputs">
++    This protocol allows a privileged client to set the gamma tables for
++    outputs.
++
++    Warning! The protocol described in this file is experimental and
++    backward incompatible changes may be made. Backward compatible changes
++    may be added together with the corresponding interface version bump.
++    Backward incompatible changes are done by bumping the version number in
++    the protocol and interface names and resetting the interface version.
++    Once the protocol is to be declared stable, the 'z' prefix and the
++    version number in the protocol and interface names are removed and the
++    interface version number is reset.
++  </description>
++
++  <interface name="zwlr_gamma_control_manager_v1" version="1">
++    <description summary="manager to create per-output gamma controls">
++      This interface is a manager that allows creating per-output gamma
++      controls.
++    </description>
++
++    <request name="get_gamma_control">
++      <description summary="get a gamma control for an output">
++        Create a gamma control that can be used to adjust gamma tables for the
++        provided output.
++      </description>
++      <arg name="id" type="new_id" interface="zwlr_gamma_control_v1"/>
++      <arg name="output" type="object" interface="wl_output"/>
++    </request>
++
++    <request name="destroy" type="destructor">
++      <description summary="destroy the manager">
++        All objects created by the manager will still remain valid, until their
++        appropriate destroy request has been called.
++      </description>
++    </request>
++  </interface>
++
++  <interface name="zwlr_gamma_control_v1" version="1">
++    <description summary="adjust gamma tables for an output">
++      This interface allows a client to adjust gamma tables for a particular
++      output.
++
++      The client will receive the gamma size, and will then be able to set gamma
++      tables. At any time the compositor can send a failed event indicating that
++      this object is no longer valid.
++
++      There must always be at most one gamma control object per output, which
++      has exclusive access to this particular output. When the gamma control
++      object is destroyed, the gamma table is restored to its original value.
++    </description>
++
++    <event name="gamma_size">
++      <description summary="size of gamma ramps">
++        Advertise the size of each gamma ramp.
++
++        This event is sent immediately when the gamma control object is created.
++      </description>
++      <arg name="size" type="uint"/>
++    </event>
++
++    <enum name="error">
++      <entry name="invalid_gamma" value="1" summary="invalid gamma tables"/>
++    </enum>
++
++    <request name="set_gamma">
++      <description summary="set the gamma table">
++        Set the gamma table. The file descriptor can be memory-mapped to provide
++        the raw gamma table, which contains successive gamma ramps for the red,
++        green and blue channels. Each gamma ramp is an array of 16-byte unsigned
++        integers which has the same length as the gamma size.
++
++        The file descriptor data must have the same length as three times the
++        gamma size.
++      </description>
++      <arg name="fd" type="fd" summary="gamma table file descriptor"/>
++    </request>
++
++    <event name="failed">
++      <description summary="object no longer valid">
++        This event indicates that the gamma control is no longer valid. This
++        can happen for a number of reasons, including:
++        - The output doesn't support gamma tables
++        - Setting the gamma tables failed
++        - Another client already has exclusive gamma control for this output
++        - The compositor has transfered gamma control to another client
++
++        Upon receiving this event, the client should destroy this object.
++      </description>
++    </event>
++
++    <request name="destroy" type="destructor">
++      <description summary="destroy this control">
++        Destroys the gamma control object. If the object is still valid, this
++        restores the original gamma tables.
++      </description>
++    </request>
++  </interface>
++</protocol>
+diff --git a/src/gamma-wl.c b/src/gamma-wl.c
+new file mode 100644
+index 00000000..ff4eda81
+--- /dev/null
++++ b/src/gamma-wl.c
+@@ -0,0 +1,366 @@
++/* gamma-wl.c -- Wayland gamma adjustment header
++   This file is part of Redshift.
++
++   Redshift is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   Redshift is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with Redshift.  If not, see <http://www.gnu.org/licenses/>.
++
++   Copyright (c) 2015  Giulio Camuffo <giuliocamuffo@gmail.com>
++*/
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <stdint.h>
++#include <string.h>
++#include <alloca.h>
++#include <sys/mman.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
++
++#ifdef ENABLE_NLS
++# include <libintl.h>
++# define _(s) gettext(s)
++#else
++# define _(s) s
++#endif
++
++#include "gamma-wl.h"
++#include "os-compatibility.h"
++#include "colorramp.h"
++
++#include "gamma-control-client-protocol.h"
++#include "orbital-authorizer-client-protocol.h"
++
++typedef struct {
++	struct wl_display *display;
++	struct wl_registry *registry;
++	struct wl_callback *callback;
++	uint32_t gamma_control_manager_id;
++	struct zwlr_gamma_control_manager_v1 *gamma_control_manager;
++	int num_outputs;
++	struct output *outputs;
++	int authorized;
++} wayland_state_t;
++
++struct output {
++	uint32_t global_id;
++	struct wl_output *output;
++	struct zwlr_gamma_control_v1 *gamma_control;
++	uint32_t gamma_size;
++};
++
++static int
++wayland_init(wayland_state_t **state)
++{
++	/* Initialize state. */
++	*state = malloc(sizeof(**state));
++	if (*state == NULL) return -1;
++
++	memset(*state, 0, sizeof **state);
++	return 0;
++}
++
++static void
++authorizer_feedback_granted(void *data, struct orbital_authorizer_feedback *feedback)
++{
++	wayland_state_t *state = data;
++	state->authorized = 1;
++}
++
++static void
++authorizer_feedback_denied(void *data, struct orbital_authorizer_feedback *feedback)
++{
++	fprintf(stderr, _("Fatal: redshift was not authorized to bind the 'zwlr_gamma_control_manager_v1' interface.\n"));
++	exit(EXIT_FAILURE);
++}
++
++static const struct orbital_authorizer_feedback_listener authorizer_feedback_listener = {
++	authorizer_feedback_granted,
++	authorizer_feedback_denied
++};
++
++static void
++registry_global(void *data, struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version)
++{
++	wayland_state_t *state = data;
++
++	if (strcmp(interface, "zwlr_gamma_control_manager_v1") == 0) {
++		state->gamma_control_manager_id = id;
++		state->gamma_control_manager = wl_registry_bind(registry, id, &zwlr_gamma_control_manager_v1_interface, 1);
++	} else if (strcmp(interface, "wl_output") == 0) {
++		state->num_outputs++;
++		if (!(state->outputs = realloc(state->outputs, state->num_outputs * sizeof(struct output)))) {
++			fprintf(stderr, _("Failed to allcate memory\n"));
++			return;
++		}
++
++		struct output *output = &state->outputs[state->num_outputs - 1];
++		output->global_id = id;
++		output->output = wl_registry_bind(registry, id, &wl_output_interface, 1);
++		output->gamma_control = NULL;
++	} else if (strcmp(interface, "orbital_authorizer") == 0) {
++		struct wl_event_queue *queue = wl_display_create_queue(state->display);
++
++		struct orbital_authorizer *auth = wl_registry_bind(registry, id, &orbital_authorizer_interface, 1u);
++		wl_proxy_set_queue((struct wl_proxy *)auth, queue);
++
++		struct orbital_authorizer_feedback *feedback = orbital_authorizer_authorize(auth, "zwlr_gamma_control_manager_v1");
++		orbital_authorizer_feedback_add_listener(feedback, &authorizer_feedback_listener, state);
++
++		int ret = 0;
++		while (!state->authorized && ret >= 0) {
++			ret = wl_display_dispatch_queue(state->display, queue);
++		}
++
++		orbital_authorizer_feedback_destroy(feedback);
++		orbital_authorizer_destroy(auth);
++		wl_event_queue_destroy(queue);
++	}
++}
++
++static void
++registry_global_remove(void *data, struct wl_registry *registry, uint32_t id)
++{
++	wayland_state_t *state = data;
++
++	if (state->gamma_control_manager_id == id) {
++		fprintf(stderr, _("The zwlr_gamma_control_manager_v1 was removed\n"));
++		exit(EXIT_FAILURE);
++	}
++
++	for (int i = 0; i < state->num_outputs; ++i) {
++		struct output *output = &state->outputs[i];
++		if (output->global_id == id) {
++			if (output->gamma_control) {
++				zwlr_gamma_control_v1_destroy(output->gamma_control);
++				output->gamma_control = NULL;
++			}
++			wl_output_destroy(output->output);
++
++			/* If the removed output is not the last one in the array move the last one
++			 * in the now empty slot. Then shrink the array */
++			if (i < --state->num_outputs) {
++				memcpy(output, &state->outputs[state->num_outputs], sizeof(struct output));
++			}
++			state->outputs = realloc(state->outputs, state->num_outputs * sizeof(struct output));
++
++			return;
++		}
++	}
++}
++
++static const struct wl_registry_listener registry_listener = {
++	registry_global,
++	registry_global_remove
++};
++
++static void
++gamma_control_gamma_size(void *data, struct zwlr_gamma_control_v1 *control, uint32_t size)
++{
++	struct output *output = data;
++	output->gamma_size = size;
++}
++
++static void
++gamma_control_failed(void *data, struct zwlr_gamma_control_v1 *control)
++{
++}
++
++
++static const struct zwlr_gamma_control_v1_listener gamma_control_listener = {
++	gamma_control_gamma_size,
++	gamma_control_failed
++};
++
++static int
++wayland_start(wayland_state_t *state)
++{
++	state->display = wl_display_connect(NULL);
++	if (!state->display) {
++		fputs(_("Could not connect to wayland display, exiting.\n"), stderr);
++		return -1;
++	}
++	state->registry = wl_display_get_registry(state->display);
++
++	wl_registry_add_listener(state->registry, &registry_listener, state);
++
++	wl_display_roundtrip(state->display);
++	if (!state->gamma_control_manager) {
++		return -1;
++	}
++	if (state->num_outputs > 0 && !state->outputs) {
++		return -1;
++	}
++
++	return 0;
++}
++
++static void
++wayland_restore(wayland_state_t *state)
++{
++	for (int i = 0; i < state->num_outputs; ++i) {
++		struct output *output = &state->outputs[i];
++		if (output->gamma_control) {
++			zwlr_gamma_control_v1_destroy(output->gamma_control);
++			output->gamma_control = NULL;
++		}
++	}
++	wl_display_flush(state->display);
++}
++
++static void
++wayland_free(wayland_state_t *state)
++{
++	int ret = 0;
++	/* Wait for the sync callback to destroy everything, otherwise
++	 * we could destroy the gamma control before gamma has been set */
++	while (state->callback && ret >= 0) {
++		ret = wl_display_dispatch(state->display);
++	}
++	if (state->callback) {
++		fprintf(stderr, _("Ignoring error on wayland connection while waiting to disconnect: %d\n"), ret);
++		wl_callback_destroy(state->callback);
++	}
++
++	for (int i = 0; i < state->num_outputs; ++i) {
++		struct output *output = &state->outputs[i];
++		if (output->gamma_control) {
++			zwlr_gamma_control_v1_destroy(output->gamma_control);
++			output->gamma_control = NULL;
++		}
++		wl_output_destroy(output->output);
++	}
++
++	if (state->gamma_control_manager) {
++		zwlr_gamma_control_manager_v1_destroy(state->gamma_control_manager);
++	}
++	if (state->registry) {
++		wl_registry_destroy(state->registry);
++	}
++	if (state->display) {
++		wl_display_disconnect(state->display);
++	}
++
++	free(state);
++}
++
++static void
++wayland_print_help(FILE *f)
++{
++	fputs(_("Adjust gamma ramps with a Wayland compositor.\n"), f);
++	fputs("\n", f);
++}
++
++static int
++wayland_set_option(wayland_state_t *state, const char *key, const char *value)
++{
++	return 0;
++}
++
++static void
++callback_done(void *data, struct wl_callback *cb, uint32_t t)
++{
++	wayland_state_t *state = data;
++	state->callback = NULL;
++	wl_callback_destroy(cb);
++}
++
++static const struct wl_callback_listener callback_listener = {
++	callback_done
++};
++
++static int
++wayland_set_temperature(wayland_state_t *state, const color_setting_t *setting)
++{
++	int ret = 0, roundtrip = 0;
++
++	/* We wait for the sync callback to throttle a bit and not send more
++	 * requests than the compositor can manage, otherwise we'd get disconnected.
++	 * This also allows us to dispatch other incoming events such as
++	 * wl_registry.global_remove. */
++	while (state->callback && ret >= 0) {
++		ret = wl_display_dispatch(state->display);
++	}
++	if (ret < 0) {
++		fprintf(stderr, _("The Wayland connection experienced a fatal error: %d\n"), ret);
++		return ret;
++	}
++
++	for (int i = 0; i < state->num_outputs; ++i) {
++		struct output *output = &state->outputs[i];
++		if (!output->gamma_control) {
++			output->gamma_control = zwlr_gamma_control_manager_v1_get_gamma_control(state->gamma_control_manager, output->output);
++			zwlr_gamma_control_v1_add_listener(output->gamma_control, &gamma_control_listener, output);
++			roundtrip = 1;
++		}
++	}
++	if (roundtrip) {
++		wl_display_roundtrip(state->display);
++	}
++
++	for (int i = 0; i < state->num_outputs; ++i) {
++		struct output *output = &state->outputs[i];
++		int size = output->gamma_size;
++		size_t ramp_bytes = size * sizeof(uint16_t);
++		size_t total_bytes = ramp_bytes * 3;
++
++		int fd = os_create_anonymous_file(total_bytes);
++		if (fd < 0) {
++			return -1;
++		}
++
++		void *ptr = mmap(NULL, total_bytes,
++			PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++		if (ptr == MAP_FAILED) {
++			close(fd);
++			return -1;
++		}
++
++		uint16_t *r_gamma = ptr;
++		uint16_t *g_gamma = ptr + ramp_bytes;
++		uint16_t *b_gamma = ptr + 2 * ramp_bytes;
++
++		/* Initialize gamma ramps to pure state */
++		for (int i = 0; i < size; i++) {
++			uint16_t value = (double)i / size * (UINT16_MAX+1);
++			r_gamma[i] = value;
++			g_gamma[i] = value;
++			b_gamma[i] = value;
++		}
++
++		colorramp_fill(r_gamma, g_gamma, b_gamma, size, setting);
++		munmap(ptr, size);
++
++		zwlr_gamma_control_v1_set_gamma(output->gamma_control, fd);
++		close(fd);
++	}
++
++	state->callback = wl_display_sync(state->display);
++	wl_callback_add_listener(state->callback, &callback_listener, state);
++	wl_display_flush(state->display);
++
++	return 0;
++}
++
++const gamma_method_t wl_gamma_method = {
++	"wayland",
++	1,
++	(gamma_method_init_func *) wayland_init,
++	(gamma_method_start_func *) wayland_start,
++	(gamma_method_free_func *) wayland_free,
++	(gamma_method_print_help_func *) wayland_print_help,
++	(gamma_method_set_option_func *) wayland_set_option,
++	(gamma_method_restore_func *) wayland_restore,
++	(gamma_method_set_temperature_func *) wayland_set_temperature,
++};
+diff --git a/src/gamma-wl.h b/src/gamma-wl.h
+new file mode 100644
+index 00000000..333e99b2
+--- /dev/null
++++ b/src/gamma-wl.h
+@@ -0,0 +1,32 @@
++/* gamma-wl.h -- Wayland gamma adjustment header
++   This file is part of Redshift.
++
++   Redshift is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   Redshift is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with Redshift.  If not, see <http://www.gnu.org/licenses/>.
++
++   Copyright (c) 2015  Giulio Camuffo <giuliocamuffo@gmail.com>
++*/
++
++#ifndef REDSHIFT_GAMMA_WAYLAND_H
++#define REDSHIFT_GAMMA_WAYLAND_H
++
++#include <stdint.h>
++
++#include <wayland-client.h>
++
++#include "redshift.h"
++
++extern const gamma_method_t wl_gamma_method;
++
++
++#endif /* ! REDSHIFT_GAMMA_DRM_H */
+diff --git a/src/orbital-authorizer.xml b/src/orbital-authorizer.xml
+new file mode 100644
+index 00000000..bccaa081
+--- /dev/null
++++ b/src/orbital-authorizer.xml
+@@ -0,0 +1,61 @@
++<protocol name="orbital_authorizer">
++
++    <interface name="orbital_authorizer" version="1">
++        <description summary="authorize clients to use certain interfaces">
++            The orbital_authorizer global interface allows clients to
++            ask the compositor the authorization to bind certain restricted
++            global interfaces.
++            Any client that aims to bind restricted interfaces should first
++            request the authorization by using this interface. Failing to do
++            so will result in the compositor sending a protocol error to the
++            client when it binds the restricted interface.
++
++            The list of restricted interfaces is compositor dependant, but must
++            not include the core interfaces defined in wayland.xml.
++        </description>
++
++        <request name="destroy" type="destructor">
++            <description summary="destroy this orbital_authorizer object"/>
++        </request>
++
++        <request name="authorize">
++            <description summary="authorize a global interface">
++                The authorize request allows the client to ask the compositor the
++                authorization to bind a restricted global interface. The newly
++                created orbital_authorizer_feedback will be invalid after the
++                compositor send either the granted or denied event so the client
++                must destroy it immediately after.
++            </description>
++            <arg name="id" type="new_id" interface="orbital_authorizer_feedback" summary="the new feedback object"/>
++            <arg name="global" type="string" summary="the global interface the client wants to bind"/>
++        </request>
++    </interface>
++
++    <interface name="orbital_authorizer_feedback" version="1">
++        <description summary="feedback for an authorization request">
++            The orbital_authorizer_feedback interface is used by requesting
++            an authorization with the orbital_authorizer.authorize request.
++            The compositor will send either the granted or denied event based
++            on the system and user configuration. How the authorization process
++            works is compositor specific, but a compositor is allowed to ask
++            for user input, so the response for an authorization request may
++            come after some time.
++        </description>
++
++        <event name="granted">
++            <description summary="the authorization was granted">
++                The authorization was granted. The client can now bind the restricted
++                interface.
++            </description>
++        </event>
++
++        <event name="denied">
++            <description summary="the authorization was denied">
++                The authorization was denied. The client is not allowed to bind the
++                restricted interface and trying to do so will trigger a protocol
++                error killing the client.
++            </description>
++        </event>
++    </interface>
++
++</protocol>
+diff --git a/src/os-compatibility.c b/src/os-compatibility.c
+new file mode 100644
+index 00000000..32a9109e
+--- /dev/null
++++ b/src/os-compatibility.c
+@@ -0,0 +1,148 @@
++/*
++ * Copyright © 2012 Collabora, Ltd.
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining
++ * a copy of this software and associated documentation files (the
++ * "Software"), to deal in the Software without restriction, including
++ * without limitation the rights to use, copy, modify, merge, publish,
++ * distribute, sublicense, and/or sell copies of the Software, and to
++ * permit persons to whom the Software is furnished to do so, subject to
++ * the following conditions:
++ *
++ * The above copyright notice and this permission notice (including the
++ * next paragraph) shall be included in all copies or substantial
++ * portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++ * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
++ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
++ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#define _POSIX_C_SOURCE 200809L
++#include <errno.h>
++#include <fcntl.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/socket.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <unistd.h>
++#include "os-compatibility.h"
++
++int os_fd_set_cloexec(int fd) {
++	if (fd == -1) {
++		return -1;
++	}
++
++	long flags = fcntl(fd, F_GETFD);
++	if (flags == -1) {
++		return -1;
++	}
++
++	if (fcntl(fd, F_SETFD, flags | FD_CLOEXEC) == -1) {
++		return -1;
++	}
++
++	return 0;
++}
++
++int set_cloexec_or_close(int fd) {
++	if (os_fd_set_cloexec(fd) != 0) {
++		close(fd);
++		return -1;
++	}
++	return fd;
++}
++
++int create_tmpfile_cloexec(char *tmpname) {
++	int fd;
++	mode_t prev_umask = umask(0066);
++#ifdef HAVE_MKOSTEMP
++	fd = mkostemp(tmpname, O_CLOEXEC);
++	if (fd >= 0) {
++		unlink(tmpname);
++	}
++#else
++	fd = mkstemp(tmpname);
++	if (fd >= 0) {
++		fd = set_cloexec_or_close(fd);
++		unlink(tmpname);
++	}
++#endif
++	umask(prev_umask);
++
++	return fd;
++}
++
++/*
++ * Create a new, unique, anonymous file of the given size, and
++ * return the file descriptor for it. The file descriptor is set
++ * CLOEXEC. The file is immediately suitable for mmap()'ing
++ * the given size at offset zero.
++ *
++ * The file should not have a permanent backing store like a disk,
++ * but may have if XDG_RUNTIME_DIR is not properly implemented in OS.
++ *
++ * The file name is deleted from the file system.
++ *
++ * The file is suitable for buffer sharing between processes by
++ * transmitting the file descriptor over Unix sockets using the
++ * SCM_RIGHTS methods.
++ *
++ * If the C library implements posix_fallocate(), it is used to
++ * guarantee that disk space is available for the file at the
++ * given size. If disk space is insufficient, errno is set to ENOSPC.
++ * If posix_fallocate() is not supported, program may receive
++ * SIGBUS on accessing mmap()'ed file contents instead.
++ */
++int os_create_anonymous_file(off_t size) {
++	static const char template[] = "/redshift-shared-XXXXXX";
++
++	const char *path = getenv("XDG_RUNTIME_DIR");
++	if (!path) {
++		errno = ENOENT;
++		return -1;
++	}
++
++	char *name = malloc(strlen(path) + sizeof(template));
++	if (!name) {
++		return -1;
++	}
++
++	strcpy(name, path);
++	strcat(name, template);
++
++	int fd = create_tmpfile_cloexec(name);
++	free(name);
++	if (fd < 0) {
++		return -1;
++	}
++
++#ifdef WLR_HAS_POSIX_FALLOCATE
++	int ret;
++	do {
++		ret = posix_fallocate(fd, 0, size);
++	} while (ret == EINTR);
++	if (ret != 0) {
++		close(fd);
++		errno = ret;
++		return -1;
++	}
++#else
++	int ret;
++	do {
++		ret = ftruncate(fd, size);
++	} while (ret < 0 && errno == EINTR);
++	if (ret < 0) {
++		close(fd);
++		return -1;
++	}
++#endif
++
++	return fd;
++}
+diff --git a/src/os-compatibility.h b/src/os-compatibility.h
+new file mode 100644
+index 00000000..2038025e
+--- /dev/null
++++ b/src/os-compatibility.h
+@@ -0,0 +1,9 @@
++#ifndef UTIL_OS_COMPATIBILITY_H
++#define UTIL_OS_COMPATIBILITY_H
++
++int os_fd_set_cloexec(int fd);
++int set_cloexec_or_close(int fd);
++int create_tmpfile_cloexec(char *tmpname);
++int os_create_anonymous_file(off_t size);
++
++#endif
+diff --git a/src/redshift.c b/src/redshift.c
+index e0221d5e..488503ea 100644
+--- a/src/redshift.c
++++ b/src/redshift.c
+@@ -94,6 +94,10 @@ int poll(struct pollfd *fds, int nfds, int timeout) { abort(); return -1; }
+ # include "gamma-w32gdi.h"
+ #endif
+ 
++#ifdef ENABLE_WAYLAND
++# include "gamma-wl.h"
++#endif
++
+ 
+ #include "location-manual.h"
+ 
+@@ -902,6 +906,9 @@ main(int argc, char *argv[])
+ 
+ 	/* List of gamma methods. */
+ 	const gamma_method_t gamma_methods[] = {
++#ifdef ENABLE_WAYLAND
++		wl_gamma_method,
++#endif
+ #ifdef ENABLE_DRM
+ 		drm_gamma_method,
+ #endif
+@@ -1237,11 +1244,12 @@ main(int argc, char *argv[])
+ 				exit(EXIT_FAILURE);
+ 			}
+ 
+-			/* In Quartz (macOS) the gamma adjustments will
+-			   automatically revert when the process exits.
++			/* In Quartz (macOS) and wayland, the gamma adjustments
++			   will automatically revert when the process exits.
+ 			   Therefore, we have to loop until CTRL-C is received.
+ 			   */
+-			if (strcmp(options.method->name, "quartz") == 0) {
++			if (strcmp(options.method->name, "quartz") == 0 ||
++					strcmp(options.method->name, "wayland") == 0) {
+ 				fputs(_("Press ctrl-c to stop...\n"), stderr);
+ 				pause();
+ 			}
+@@ -1266,10 +1274,11 @@ main(int argc, char *argv[])
+ 			exit(EXIT_FAILURE);
+ 		}
+ 
+-		/* In Quartz (OSX) the gamma adjustments will automatically
+-		   revert when the process exits. Therefore, we have to loop
+-		   until CTRL-C is received. */
+-		if (strcmp(options.method->name, "quartz") == 0) {
++		/* In Quartz (OSX) and wayland, the gamma adjustments will
++		   automatically revert when the process exits.
++		   Therefore, we have to loop until CTRL-C is received. */
++		if (strcmp(options.method->name, "quartz") == 0 ||
++				strcmp(options.method->name, "wayland") == 0) {
+ 			fputs(_("Press ctrl-c to stop...\n"), stderr);
+ 			pause();
+ 		}
+@@ -1288,10 +1297,11 @@ main(int argc, char *argv[])
+ 			exit(EXIT_FAILURE);
+ 		}
+ 
+-		/* In Quartz (OSX) the gamma adjustments will automatically
+-		   revert when the process exits. Therefore, we have to loop
+-		   until CTRL-C is received. */
+-		if (strcmp(options.method->name, "quartz") == 0) {
++		/* In Quartz (OSX) and wayland, the gamma adjustments will
++		   automatically revert when the process exits.
++		   Therefore, we have to loop until CTRL-C is received. */
++		if (strcmp(options.method->name, "quartz") == 0 ||
++				strcmp(options.method->name, "wayland") == 0) {
+ 			fputs(_("Press ctrl-c to stop...\n"), stderr);
+ 			pause();
+ 		}

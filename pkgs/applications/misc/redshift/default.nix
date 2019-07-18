@@ -17,21 +17,21 @@ stdenv.mkDerivation rec {
   name = "redshift${stdenv.lib.optionalString wlrootsSupport "-wlroots"}-${version}";
   version = "1.12";
 
-  src = fetchFromGitHub (if wlrootsSupport then {
-    owner = "minus7";
-    repo = "redshift";
-    rev = "eecbfedac48f827e96ad5e151de8f41f6cd3af66";
-    sha256 = "0rs9bxxrw4wscf4a8yl776a8g880m5gcm75q06yx2cn3lw2b7v22";
-  } else {
+  src = fetchFromGitHub {
     owner = "jonls";
     repo = "redshift";
-    rev = "v${version}";
-    sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
-  });
+    rev = if wlrootsSupport
+          then "04760afe31bff5b26cf18fe51606e7bdeac15504"
+          else "v${version}";
+    sha256 = if wlrootsSupport
+             then "114c9vmri2c0maggy47n4v5q4sqafq7fp4hpshvb4g8l5qrqjm1j"
+             else "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
+  };
 
-  patches = [
+  patches = builtins.filter (a: !builtins.isNull a) [
     # https://github.com/jonls/redshift/pull/575
     ./575.patch
+    (if wlrootsSupport then ./wlroots.patch else null)
   ];
 
   nativeBuildInputs = [
