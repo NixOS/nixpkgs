@@ -87,10 +87,10 @@ let
 
   ack = buildPerlPackage {
     pname = "ack";
-    version = "2.28";
+    version = "3.0.2";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PETDANCE/ack-2.28.tar.gz;
-      sha256 = "16zgn96v1qkibpj5lic571zjl07y8x55v5xql3x7bvlsmgqcnvla";
+      url = mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.0.2.tar.gz;
+      sha256 = "0a4mriclnmwvm8rn9crkfr00qjy6ffgf0b0bg0qz46drpnyv7d33";
     };
     outputs = ["out" "man"];
     # use gnused so that the preCheck command passes
