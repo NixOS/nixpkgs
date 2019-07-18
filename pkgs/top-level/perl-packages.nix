@@ -10527,7 +10527,7 @@ let
       url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Menlo-1.9019.tar.gz;
       sha256 = "3b573f68e7b3a36a87c860be258599330fac248b518854dfb5657ac483dca565";
     };
-    propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo CPANMetaCheck CaptureTiny ClassTiny ExtUtilsConfig ExtUtilsHelpers ExtUtilsInstallPaths FileWhich Filepushd HTTPTinyish ModuleCPANfile ParsePMFile StringShellQuote URI Win32ShellQuote locallib ];
+    propagatedBuildInputs = [ CPANCommonIndex CPANMetaCheck CaptureTiny ExtUtilsHelpers ExtUtilsInstallPaths Filepushd HTTPTinyish ModuleCPANfile ParsePMFile StringShellQuote Win32ShellQuote locallib ];
     meta = {
       homepage = https://github.com/miyagawa/cpanminus;
       description = "A CPAN client";
