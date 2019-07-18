@@ -15308,10 +15308,10 @@ let
 
   Starman = buildPerlModule {
     pname = "Starman";
-    version = "0.4014";
+    version = "0.4015";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4014.tar.gz";
-      sha256 = "1sbb5rb3vs82rlh1fjkgkcmj5pj62b4y9si4ihh45sl9m8c2qxx5";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4015.tar.gz;
+      sha256 = "1y1kn4929k299fbf6sw9lxcsdlq9fvq777p6yrzk591rr9xhkx8h";
     };
     buildInputs = [ LWP ModuleBuildTiny TestRequires TestTCP ];
     propagatedBuildInputs = [ DataDump HTTPParserXS NetServer Plack ];
