@@ -19270,10 +19270,10 @@ let
 
   Workflow = buildPerlModule {
     pname = "Workflow";
-    version = "1.45";
+    version = "1.46";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JO/JONASBN/Workflow-1.45.tar.gz;
-      sha256 = "0w814z4j85gghzqnbxzsr60m8dbqc02yi7137sq58lhbsfshmvhx";
+      url = mirror://cpan/authors/id/J/JO/JONASBN/Workflow-1.46.tar.gz;
+      sha256 = "10zxp39yp11ry5j1c1krhx7s57rb2r8m48jf66k8f4jzm6f0w7pf";
     };
     buildInputs = [ DBDMock ListMoreUtils PodCoverageTrustPod TestException TestKwalitee TestPod TestPodCoverage ];
     propagatedBuildInputs = [ ClassAccessor ClassFactory ClassObservable DBI DataUUID DateTimeFormatStrptime FileSlurp LogDispatch LogLog4perl XMLSimple ];
