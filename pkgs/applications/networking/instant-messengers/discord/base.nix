@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : ${libPath}
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
-    ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${binaryName}.png
+    ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
 
     ln -s "${desktopItem}/share/applications" $out/share/
   '';
