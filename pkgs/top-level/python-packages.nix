@@ -1359,6 +1359,8 @@ in {
 
   apipkg = callPackage ../development/python-modules/apipkg {};
 
+  apispec = callPackage ../development/python-modules/apispec {};
+
   appdirs = callPackage ../development/python-modules/appdirs { };
 
   appleseed = disabledIf isPy3k
