@@ -16602,10 +16602,10 @@ let
 
   TestCompile = buildPerlModule {
     pname = "Test-Compile";
-    version = "1.3.0";
+    version = "2.2.2";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EG/EGILES/Test-Compile-v1.3.0.tar.gz;
-      sha256 = "77527e9477ac5260443c756367a7f7bc3d8f6c6ebbc561b0b2fb3f79303bad33";
+      url = mirror://cpan/authors/id/E/EG/EGILES/Test-Compile-v2.2.2.tar.gz;
+      sha256 = "7853b44a9819eb3e6003260eedf904a1ad80035ea5254296ce014f96084b65d4";
     };
     propagatedBuildInputs = [ UNIVERSALrequire ];
     meta = {
