@@ -119,20 +119,17 @@ self: super: {
     '';
   });
 
-  coc-nvim = let
-    version = "0.0.72";
-    index_js = fetchzip {
-        url = "https://github.com/neoclide/coc.nvim/releases/download/v${version}/coc.tar.gz";
-        sha256 = "128wlbnpz4gwpfnmzry5k52d58fyp9nccha314ndfnr9xgd6r52y";
-      };
-  in super.coc-nvim.overrideAttrs(old: {
-    # you still need to enable the node js provider in your nvim config
-    postInstall = ''
-      mkdir -p $out/share/vim-plugins/coc-nvim/build
-      cp ${index_js}/index.js $out/share/vim-plugins/coc-nvim/build/
-    '';
-
-  });
+  # Only official releases contains the required index.js file
+  coc-nvim = buildVimPluginFrom2Nix rec {
+    pname = "coc-nvim";
+    version = "0.0.73";
+    src = fetchFromGitHub {
+      owner = "neoclide";
+      repo = "coc.nvim";
+      rev = "v${version}";
+      sha256 = "1z7573rbh806nmkh75hr1kbhxr4jysv6k9x01fcyjfwricpa3cf7";
+    };
+  };
 
   command-t = super.command-t.overrideAttrs(old: {
     buildInputs = [ ruby rake ];
