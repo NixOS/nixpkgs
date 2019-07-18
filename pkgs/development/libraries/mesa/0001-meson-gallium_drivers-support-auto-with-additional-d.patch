@@ -1,0 +1,31 @@
+From 1c3bd25af4e2a092e6cb57024fde2ea90971681e Mon Sep 17 00:00:00 2001
+From: Cole Mickens <cole.mickens@gmail.com>
+Date: Thu, 18 Jul 2019 08:42:27 +0000
+Subject: [PATCH] meson: gallium_drivers support auto with additional drivers
+ added
+
+---
+ meson.build | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 13b561f99de..3d2172b4afa 100644
+--- a/meson.build
++++ b/meson.build
+@@ -143,11 +143,11 @@ if gallium_drivers.contains('auto')
+   if system_has_kms_drm
+     # TODO: PPC, Sparc
+     if ['x86', 'x86_64'].contains(host_machine.cpu_family())
+-      gallium_drivers = [
++      gallium_drivers += [
+         'r300', 'r600', 'radeonsi', 'nouveau', 'virgl', 'svga', 'swrast'
+       ]
+     elif ['arm', 'aarch64'].contains(host_machine.cpu_family())
+-      gallium_drivers = [
++      gallium_drivers += [
+         'kmsro', 'v3d', 'vc4', 'freedreno', 'etnaviv', 'nouveau',
+         'tegra', 'virgl', 'lima', 'swrast'
+       ]
+-- 
+2.19.2
+

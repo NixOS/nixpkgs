@@ -5,7 +5,7 @@
 , libelf, libvdpau, python3Packages
 , libglvnd
 , enableRadv ? true
-, galliumDrivers ? ["auto"]
+, galliumDrivers ? ["auto" "iris" ]
 , driDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
+    ./0001-meson-gallium_drivers-support-auto-with-additional-d.patch
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./opencl-install-dir.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
