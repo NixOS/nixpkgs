@@ -4054,10 +4054,10 @@ let
 
   DateTime = buildPerlPackage {
     pname = "DateTime";
-    version = "1.50";
+    version = "1.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.50.tar.gz;
-      sha256 = "165iqk1xvhs5j0kzsipa7aqycx3h37wqsl2r4jl104yqvmqhqszd";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.51.tar.gz;
+      sha256 = "1ibfq6acz1ih28vl613yygbb3r2d8ykx6di669vajhvswl6xl8ny";
     };
     buildInputs = [ CPANMetaCheck TestFatal TestWarnings ];
     propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ];
