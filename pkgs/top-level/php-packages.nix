@@ -81,7 +81,7 @@ let
       sha256 = "0hnm7njab9nsifpb1qbwx54yfpsi00g8mzny11s13ibjvd9rnvxn";
     };
 
-    unpackPhase = ":";
+    dontUnpack = true;
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -372,12 +372,12 @@ let
   };
 
   phpstan = mkDerivation rec {
-    version = "0.11.8";
+    version = "0.11.12";
     pname = "phpstan";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "0xdf0kq5jpbqs6dwyv2fggd3cxjjq16xk5nxz1hgh5d58x5yh14n";
+      sha256 = "12k74108f7a3k7ms8n4c625vpxrq75qamw1k1q09ndzmbn3i7c9b";
     };
 
     phases = [ "installPhase" ];

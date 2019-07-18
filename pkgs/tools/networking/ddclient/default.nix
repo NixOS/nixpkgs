@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perlPackages, iproute, perl }:
 
 perlPackages.buildPerlPackage rec {
-  name = "ddclient-${version}";
+  pname = "ddclient";
   version = "3.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ddclient/${name}.tar.gz";
+    url = "mirror://sourceforge/ddclient/${pname}-${version}.tar.gz";
     sha256 = "0fwyhab8yga2yi1kdfkbqxa83wxhwpagmj1w1mwkg2iffh1fjjlw";
   };
 

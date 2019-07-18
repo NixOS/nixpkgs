@@ -3,7 +3,7 @@
 , makeWrapper, perlPackages }:
 
 let
-  version = "1.5";
+  version = "1.5.90";
 in stdenv.mkDerivation rec {
   name = "qdirstat-${version}";
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     owner = "shundhammer";
     repo = "qdirstat";
     rev = "${version}";
-    sha256 = "1v879kd7zahalb2qazq61wzi364k5cy3lgy6c8wj6mclwxjws1vc";
+    sha256 = "161jzii5p0dflbpixibn3yhp13smjf6aw802rz1q4879s12gqdq6";
   };
 
   nativeBuildInputs = [ qmake makeWrapper ];

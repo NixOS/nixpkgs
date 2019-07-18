@@ -97,7 +97,7 @@
 , libXv ? null # Xlib support
 , libXext ? null # Xlib support
 , lzma ? null # xz-utils
-, nvenc ? true, nv-codec-headers ? null # NVIDIA NVENC support
+, nvenc ? !stdenv.isDarwin, nv-codec-headers ? null # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
@@ -139,7 +139,7 @@
  *  Darwin frameworks
  */
 , Cocoa, CoreAudio, CoreServices, AVFoundation, MediaToolbox
-, VideoDecodeAcceleration, cf-private
+, VideoDecodeAcceleration
 }:
 
 /* Maintainer notes:
@@ -175,7 +175,7 @@
  */
 
 let
-  inherit (stdenv) isCygwin isFreeBSD isLinux;
+  inherit (stdenv) isCygwin isDarwin isFreeBSD isLinux;
   inherit (stdenv.lib) optional optionals optionalString enableFeature;
 in
 
@@ -189,6 +189,10 @@ assert nonfreeLicensing -> gplLicensing && version3Licensing;
  */
 assert networkBuild -> gnutls != null || opensslExtlib;
 assert pixelutilsBuild -> avutilLibrary;
+/*
+ *  Platform dependencies
+ */
+assert isDarwin -> !nvenc;
 /*
  *  Program dependencies
  */
@@ -419,7 +423,7 @@ stdenv.mkDerivation rec {
     ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
-                                   libiconv cf-private /* For _OBJC_EHTYPE_$_NSException */ ];
+                                   libiconv ];
 
   buildFlags = [ "all" ]
     ++ optional qtFaststartProgram "tools/qt-faststart"; # Build qt-faststart executable
@@ -427,14 +431,6 @@ stdenv.mkDerivation rec {
   # Hacky framework patching technique borrowed from the phantomjs2 package
   postInstall = optionalString qtFaststartProgram ''
     cp -a tools/qt-faststart $out/bin/
-  '' + optionalString stdenv.isDarwin ''
-    FILES=($(ls $out/bin/*))
-    FILES+=($(ls $out/lib/*.dylib))
-    for f in ''${FILES[@]}; do
-      if [ ! -h "$f" ]; then
-        install_name_tool -change ${cf-private}/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation "$f"
-      fi
-    done
   '';
 
   enableParallelBuilding = true;

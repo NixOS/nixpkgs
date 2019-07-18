@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, pcre, mesa_noglu, makeWrapper }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, pcre, mesa, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "terminology";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     efl
     pcre
-    mesa_noglu
+    mesa
   ];
 
   meta = {

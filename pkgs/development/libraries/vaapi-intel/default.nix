@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "Intel driver for the VAAPI library";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

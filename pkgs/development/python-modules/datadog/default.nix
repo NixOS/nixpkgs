@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.26.0";
+  version = "0.29.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbaa6b4b2b88fd552605e6730f60d5437017bb76d6b701432eaafbc983735b79";
+    sha256 = "0p47hy1p2hf233blalyz0yr6nf13iwk9ndkqdk428dmf8b8m2plr";
   };
 
   postPatch = ''

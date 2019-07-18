@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.78";
+  version = "1.0.79";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0778silfwvbpqljxdid96nn0vkdii3fszqp6w6w2bn9hdyxhqrjp";
+    sha256 = "18bp7fcpv7879q3ppdxlqj7ayqmlh5zwrkz8gch6rq9lkmmrklrf";
   };
 
   buildInputs = [ libxslt systemd libaio docbook_xsl ];

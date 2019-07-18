@@ -32,7 +32,7 @@ let
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = https://www.varnish-cache.org;
         license = licenses.bsd2;
-        maintainers = with maintainers; [ garbas fpletz ];
+        maintainers = with maintainers; [ fpletz ];
         platforms = platforms.unix;
       };
     };

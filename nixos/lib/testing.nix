@@ -24,7 +24,7 @@ in rec {
 
     buildInputs = [ makeWrapper perl ];
 
-    unpackPhase = "true";
+    dontUnpack = true;
 
     preferLocalBuild = true;
 

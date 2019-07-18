@@ -989,6 +989,16 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
     </varlistentry>
     <varlistentry>
      <term>
+      <varname>dontUnpack</varname>
+     </term>
+     <listitem>
+      <para>
+       Set to true to skip the unpack phase.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <varname>dontMakeSourcesWritable</varname>
      </term>
      <listitem>
@@ -1106,6 +1116,16 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       <para>
        A list of strings passed as additional arguments to the configure
        script.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>dontConfigure</varname>
+     </term>
+     <listitem>
+      <para>
+       Set to true to skip the configure phase.
       </para>
      </listitem>
     </varlistentry>

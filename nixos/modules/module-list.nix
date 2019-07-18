@@ -25,6 +25,7 @@
   ./config/nsswitch.nix
   ./config/power-management.nix
   ./config/pulseaudio.nix
+  ./config/resolvconf.nix
   ./config/shells-environment.nix
   ./config/swap.nix
   ./config/sysctl.nix
@@ -50,6 +51,7 @@
   ./hardware/logitech.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
+  ./hardware/network/intel-2200bg.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
@@ -137,6 +139,7 @@
   ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
+  ./programs/tsm-client.nix
   ./programs/udevil.nix
   ./programs/venus.nix
   ./programs/vim.nix
@@ -190,6 +193,7 @@
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
+  ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
   ./services/audio/snapserver.nix
   ./services/audio/squeezelite.nix
@@ -207,6 +211,7 @@
   ./services/backup/restic-rest-server.nix
   ./services/backup/rsnapshot.nix
   ./services/backup/tarsnap.nix
+  ./services/backup/tsm.nix
   ./services/backup/znapzend.nix
   ./services/cluster/hadoop/default.nix
   ./services/cluster/kubernetes/addons/dns.nix
@@ -490,6 +495,7 @@
   ./services/monitoring/heapster.nix
   ./services/monitoring/incron.nix
   ./services/monitoring/kapacitor.nix
+  ./services/monitoring/loki.nix
   ./services/monitoring/longview.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
@@ -513,6 +519,7 @@
   ./services/monitoring/uptime.nix
   ./services/monitoring/vnstat.nix
   ./services/monitoring/zabbix-agent.nix
+  ./services/monitoring/zabbix-proxy.nix
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/beegfs.nix
   ./services/network-filesystems/cachefilesd.nix
@@ -777,7 +784,9 @@
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/virtlyst.nix
+  ./services/web-apps/wordpress.nix
   ./services/web-apps/youtrack.nix
+  ./services/web-apps/zabbix.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix

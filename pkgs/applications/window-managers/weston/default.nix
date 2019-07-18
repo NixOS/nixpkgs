@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wayland, libGL, mesa_noglu, libxkbcommon, cairo, libxcb
+{ stdenv, fetchurl, meson, ninja, pkgconfig
+, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
 , colord, lcms2
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
@@ -9,16 +10,16 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "weston-${version}";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "04p6hal5kalmdp5dxwh2h5qhkkb4dvbsk7l091zvvcq70slj6qsl";
+    sha256 = "1d2m658ll8x7prlsfk71qgw89c7dz6y7d6nndfxwl49fmrd6sbxz";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
   buildInputs = [
-    wayland libGL mesa_noglu libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
+    wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
     mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
     libwebp wayland-protocols
     colord lcms2

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, perl, libnl
+{ stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc
 
 # Enable the Sun Grid Engine bindings
@@ -15,16 +15,25 @@ in stdenv.mkDerivation rec {
   name = "openmpi-${version}";
 
   src = with stdenv.lib.versions; fetchurl {
-    url = "http://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${name}.tar.bz2";
+    url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${name}.tar.bz2";
     sha256 = "02cpzcp113gj5hb0j2xc0cqma2fn04i2i0bzf80r71120p9bdryc";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "openmpi-mca_btl_vader_component_close-segfault.patch";
+      url = "https://github.com/open-mpi/ompi/pull/6526.patch";
+      sha256 = "0s7ac9rkcj3fi6ampkvy76njlj478yyr4zvypjc7licy6dgr595x";
+    })
+  ];
 
   postPatch = ''
     patchShebangs ./
   '';
 
   buildInputs = with stdenv; [ gfortran zlib ]
-    ++ lib.optionals isLinux [ libnl numactl libevent hwloc ]
+    ++ lib.optionals isLinux [ libnl numactl ]
+    ++ [ libevent hwloc ]
     ++ lib.optional (isLinux || isFreeBSD) rdma-core;
 
   nativeBuildInputs = [ perl ];
@@ -44,7 +53,7 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.open-mpi.org/;
+    homepage = https://www.open-mpi.org/;
     description = "Open source MPI-3 implementation";
     longDescription = "The Open MPI Project is an open source MPI-3 implementation that is developed and maintained by a consortium of academic, research, and industry partners. Open MPI is therefore able to combine the expertise, technologies, and resources from all across the High Performance Computing community in order to build the best MPI library available. Open MPI offers advantages for system and software vendors, application developers and computer science researchers.";
     maintainers = with maintainers; [ markuskowa ];

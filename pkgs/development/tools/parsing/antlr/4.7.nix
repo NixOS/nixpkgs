@@ -41,7 +41,7 @@ let
       sha256 = "1236gwnzchama92apb2swmklnypj01m7bdwwfvwvl8ym85scw7gl";
     };
 
-    unpackPhase = "true";
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p "$out"/{share/java,bin}

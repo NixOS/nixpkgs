@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "A simple VTE-based terminal";
     license = licenses.lgpl2Plus;
     homepage = https://github.com/thestinger/termite/;
-    maintainers = with maintainers; [ koral garbas ];
+    maintainers = with maintainers; [ koral ];
     platforms = platforms.all;
   };
 }

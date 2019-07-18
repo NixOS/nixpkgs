@@ -21,13 +21,13 @@ let
 in
   stdenv.mkDerivation rec {
     name = "neovim-unwrapped-${version}";
-    version = "0.3.7";
+    version = "0.3.8";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "1j6w5jvq5v7kf7diad91qs1acr427nidnk9s24yyrz0hwdd1c2lh";
+      sha256 = "15flii3p4g9f65xy9jpkb8liajrvhm5ck4j39z6d6b1nkxr6ghwb";
     };
 
     patches = [
@@ -122,7 +122,7 @@ in
       # those contributions were copied from Vim (identified in the commit logs
       # by the vim-patch token). See LICENSE for details."
       license = with licenses; [ asl20 vim ];
-      maintainers = with maintainers; [ manveru garbas rvolosatovs ];
+      maintainers = with maintainers; [ manveru rvolosatovs ];
       platforms   = platforms.unix;
     };
   }

@@ -271,6 +271,8 @@ let
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
 
+    hmap = callPackage ../development/ocaml-modules/hmap { };
+
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
     inotify = callPackage ../development/ocaml-modules/inotify { };
@@ -550,6 +552,10 @@ let
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
+
+    opium = callPackage ../development/ocaml-modules/opium { };
+
+    opium_kernel = callPackage ../development/ocaml-modules/opium_kernel { };
 
     opti = callPackage ../development/ocaml-modules/opti { };
 
@@ -1078,7 +1084,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_4_08 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.08.nix { });
 
-  ocamlPackages_latest = ocamlPackages_4_07;
+  ocamlPackages_latest = ocamlPackages_4_08;
 
   ocamlPackages = ocamlPackages_4_06;
 }

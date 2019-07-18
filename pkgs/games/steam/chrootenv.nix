@@ -138,7 +138,7 @@ in buildFHSUserEnv rec {
     libidn
     tbb
     wayland
-    mesa_noglu
+    mesa
     libxkbcommon
 
     # Other things from runtime

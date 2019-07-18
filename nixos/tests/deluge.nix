@@ -8,9 +8,11 @@ import ./make-test.nix ({ pkgs, ...} : {
     simple = {
       services.deluge = {
         enable = true;
-        web.enable = true;
+        web = {
+          enable = true;
+          openFirewall = true;
+        };
       };
-      networking.firewall.allowedTCPPorts = [ 8112 ];
     };
 
     declarative =

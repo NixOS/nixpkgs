@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, makeWrapper, pkgconfig, qmake
+{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkgconfig, qmake
 , curl, grantlee, libgit2, libusb, libssh2, libxml2, libxslt, libzip, zlib
 , qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
 }:
@@ -79,17 +79,12 @@ in stdenv.mkDerivation rec {
     qtbase qtconnectivity qtsvg qttools qtwebkit
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook pkgconfig ];
 
   cmakeFlags = [
     "-DLIBDC_FROM_PKGCONFIG=ON"
     "-DNO_PRINTING=OFF"
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/subsurface \
-      --prefix QT_PLUGIN_PATH : "${googlemaps}/${googlemaps.pluginsSubdir}"
-  '';
 
   enableParallelBuilding = true;
 

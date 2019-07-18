@@ -9,6 +9,7 @@
 , patchelf, makeWrapper
 , isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
+, enableWidevine ? false, vivaldi-widevine ? null
 }:
 
 let
@@ -16,11 +17,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "2.6.1566.40-1";
+  version = "2.6.1566.44-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "03s9kxwyp25nci7jv2zcr7b1s5cqxws49vxg795xgnvq62z5yikv";
+    sha256 = "0bqx78bikcgrpg7qg10jylxa582fcxiwah7g2151hadvy8xl15ab";
   };
 
   unpackPhase = ''
@@ -50,8 +51,8 @@ in stdenv.mkDerivation rec {
       --set-rpath "${libPath}" \
       opt/${vivaldiName}/vivaldi-bin
   '' + stdenv.lib.optionalString proprietaryCodecs ''
-    sed -i '/^VIVALDI_FFMPEG_FOUND/ a \
-    checkffmpeg "${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so"' opt/${vivaldiName}/vivaldi
+    sed -i '/^if \[ "$VIVALDI_FFMPEG_FOUND/i \
+      VIVALDI_FFMPEG_FOUND=YES\nCACHED_FFMPEG=${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so' opt/${vivaldiName}/${vivaldiName}
   '' + ''
     echo "Finished patching Vivaldi binaries"
   '';
@@ -76,7 +77,11 @@ in stdenv.mkDerivation rec {
         "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
     done
     wrapProgram "$out/bin/vivaldi" \
-      --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
+      --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
+      ${stdenv.lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
+  '' + stdenv.lib.optionalString enableWidevine ''
+    rm $out/opt/${vivaldiName}/libwidevinecdm.so
+    ln -s ${vivaldi-widevine}/lib/libwidevinecdm.so $out/opt/${vivaldiName}/libwidevinecdm.so
   '';
 
   meta = with stdenv.lib; {

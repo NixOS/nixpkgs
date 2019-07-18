@@ -12,16 +12,16 @@
 let
 
   name = "hplip-${version}";
-  version = "3.19.1";
+  version = "3.19.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "1kl1q4753xx1w76dhp92wgrhn5k1yx1ib35pyi0vi3mw0njbhrzm";
+    sha256 = "0vfnc6pg7wzs68qn5mlk3cyl969d8n55bydgydq2wzfikvpfvnpw";
   };
 
   plugin = fetchurl {
     url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "1fwjypy1ycyi7rr1vk1yxhbdhx51n7fxhvjb36mzw8qz71dif2i3";
+    sha256 = "1b5gys04kh41gg7r7rzlpdbc2f4jirl2ik22cd935mm85k7abfwq";
   };
 
   hplipState = substituteAll {
@@ -81,6 +81,13 @@ pythonPackages.buildPythonApplication {
   ];
 
   makeWrapperArgs = [ "--prefix" "PATH" ":" "${nettools}/bin" ];
+
+  patches = [
+    # remove ImageProcessor usage, it causes segfaults, see
+    # https://bugs.launchpad.net/hplip/+bug/1788706
+    # https://bugs.launchpad.net/hplip/+bug/1787289
+    ./image-processor.patch
+  ];
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
@@ -174,8 +181,6 @@ pythonPackages.buildPythonApplication {
 
     mkdir -p $out/var/lib/hp
     cp ${hplipState} $out/var/lib/hp/hplip.state
-
-    rm $out/etc/udev/rules.d/56-hpmud.rules
   '';
 
   # The installed executables are just symlinks into $out/share/hplip,
@@ -203,12 +208,12 @@ pythonPackages.buildPythonApplication {
 
   postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
-  '' + stdenv.lib.optionalString (!withPlugin) ''
-    # A udev rule to notify users that they need the binary plugin.
-    # Needs a lot of patching but might save someone a bit of confusion:
+    # Patch udev rules:
+    # with plugin, they upload firmware to printers,
+    # without plugin, they complain about the missing plugin.
     substituteInPlace $out/etc/udev/rules.d/56-hpmud.rules \
       --replace {,${bash}}/bin/sh \
-      --replace {/usr,${coreutils}}/bin/nohup \
+      --replace /usr/bin/nohup "" \
       --replace {,${utillinux}/bin/}logger \
       --replace {/usr,$out}/bin
   '';
@@ -216,6 +221,7 @@ pythonPackages.buildPythonApplication {
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = https://developers.hp.com/hp-linux-imaging-and-printing;
+    downloadPage = https://sourceforge.net/projects/hplip/files/hplip/;
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];

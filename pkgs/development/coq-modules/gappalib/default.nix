@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    compatibleCoqVersions = stdenv.lib.flip stdenv.lib.versionAtLeast "8.7";
+    compatibleCoqVersions = stdenv.lib.flip builtins.elem [ "8.7" "8.8" "8.9" ];
   };
 
 }

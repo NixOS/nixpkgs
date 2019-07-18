@@ -28,12 +28,12 @@ let
     , extraPlugins ? []
     , extraNativeMessagingHosts ? []
     , gdkWayland ? false
+    , cfg ? config.${browserName} or {}
     }:
 
     assert gdkWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
-      cfg = config.${browserName} or {};
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;

@@ -77,6 +77,7 @@ in
   elk = handleTestOn ["x86_64-linux"] ./elk.nix {};
   env = handleTest ./env.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
+  etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix {};
   firewall = handleTest ./firewall.nix {};
@@ -139,6 +140,7 @@ in
   #lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
   login = handleTest ./login.nix {};
+  loki = handleTest ./loki.nix {};
   #logstash = handleTest ./logstash.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
   mathics = handleTest ./mathics.nix {};

@@ -178,7 +178,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.phpfpm.poolConfigs = {
+    services.phpfpm.pools = {
       "${poolName}" = {
         listen = phpfpmSocketName;
         phpOptions = ''

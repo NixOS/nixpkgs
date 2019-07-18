@@ -3,9 +3,9 @@
   automake, autoconf, gettext, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
-  mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
+  mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, epoxy, openssl, pkgconfig, llvm_6,
-  cf-private, ApplicationServices, Carbon, Cocoa, Xplugin
+  ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
 let
@@ -382,7 +382,7 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa_noglu llvm_6 ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ mesa llvm_6 ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
@@ -412,9 +412,6 @@ self: super:
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [intltool];
-
-    #TODO: resurrect patches for US_intl?
-    patches = [ ./xkeyboard-config-eo.patch ];
 
     configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
 
@@ -472,11 +469,7 @@ self: super:
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
             nativeBuildInputs = [ pkgconfig ];
-            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ]
-              ++ stdenv.lib.optionals stdenv.isDarwin [
-                # Needed for NSDefaultRunLoopMode symbols.
-                cf-private
-              ];
+            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
             postPatch = stdenv.lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = stdenv.lib.platforms.unix;
         } else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";
@@ -507,7 +500,7 @@ self: super:
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
-        buildInputs = commonBuildInputs ++ [ libdrm mesa_noglu ];
+        buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];

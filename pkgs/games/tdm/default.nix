@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, binutils-unwrapped, scons, gnum4, p7zip, glibc_multi, mesa_noglu
+{ stdenv, fetchurl, binutils-unwrapped, scons, gnum4, p7zip, glibc_multi, mesa
 , xorg, libGLU_combined, openal
 , lib, makeWrapper, makeDesktopItem }:
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
     p7zip scons gnum4 makeWrapper
   ];
   buildInputs = [
-    glibc_multi mesa_noglu.dev xorg.libX11.dev openal
+    glibc_multi mesa.dev xorg.libX11.dev openal
     xorg.libXext.dev xorg.libXxf86vm.dev
     libGLU_combined
   ];

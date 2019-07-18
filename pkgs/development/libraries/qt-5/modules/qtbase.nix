@@ -56,7 +56,7 @@ stdenv.mkDerivation {
           # TODO: move to buildInputs, this should not be propagated.
           AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL
-          darwin.libobjc libiconv
+          darwin.libobjc libiconv MetalKit
         ]
       else
         [
@@ -78,8 +78,6 @@ stdenv.mkDerivation {
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
-       # Needed for OBJC_CLASS_$_NSDate symbols.
-    ++ lib.optional stdenv.isDarwin darwin.cf-private
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.connector-c

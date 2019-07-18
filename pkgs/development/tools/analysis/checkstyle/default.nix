@@ -1,18 +1,18 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  version = "8.21";
+  version = "8.22";
   name = "checkstyle-${version}";
 
   src = fetchurl {
     url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "1jd6kbfmvgr3mr8kjhhr1fj1i3j36ysnfi14g5027ngwbq7klm7d";
+    sha256 = "0lnpzh4c5m8xkdx8dxywp33i3zrnwj1nhgpqnqgx31aw3x0drw40";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall

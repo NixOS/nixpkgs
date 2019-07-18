@@ -1,7 +1,9 @@
 { stdenv, fetchzip, atk, cairo, dmd, gdk_pixbuf, gnome3, gst_all_1, librsvg
-, pango, pkgconfig, which, vte }:
+, glib, gtk3, gtksourceview, libgda, libpeas, pango, pkgconfig, which, vte }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (gst_all_1) gstreamer gst-plugins-base;
+in stdenv.mkDerivation rec {
   name = "gtkd-${version}";
   version = "3.8.5";
 
@@ -13,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dmd pkgconfig which ];
   propagatedBuildInputs = [
-    atk cairo gdk_pixbuf glib gstreamer gst_plugins_base gtk3 gtksourceview
+    atk cairo gdk_pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview
     libgda libpeas librsvg pango vte
   ];
 
@@ -57,8 +59,8 @@ stdenv.mkDerivation rec {
       --replace libvte-2.91.so.0 ${vte}/lib/libvte-2.91.so.0 \
       --replace libvte-2.91.0.dylib ${vte}/lib/libvte-2.91.0.dylib
     substituteInPlace generated/gstreamer/gstinterfaces/c/functions.d \
-      --replace libgstvideo-1.0.so.0 ${gst_plugins_base}/lib/libgstvideo-1.0.so.0 \
-      --replace libgstvideo-1.0.0.dylib ${gst_plugins_base}/lib/libgstvideo-1.0.0.dylib
+      --replace libgstvideo-1.0.so.0 ${gst-plugins-base}/lib/libgstvideo-1.0.so.0 \
+      --replace libgstvideo-1.0.0.dylib ${gst-plugins-base}/lib/libgstvideo-1.0.0.dylib
     substituteInPlace generated/sourceview/gsv/c/functions.d \
       --replace libgtksourceview-3.0.so.1 ${gtksourceview}/lib/libgtksourceview-3.0.so.1 \
       --replace libgtksourceview-3.0.1.dylib ${gtksourceview}/lib/libgtksourceview-3.0.1.dylib
@@ -83,11 +85,6 @@ stdenv.mkDerivation rec {
   '';
 
   installFlags = "prefix=$(out)";
-
-  inherit atk cairo gdk_pixbuf librsvg pango;
-  inherit (gnome3) glib gtk3 gtksourceview libgda libpeas;
-  inherit (gst_all_1) gstreamer;
-  gst_plugins_base = gst_all_1.gst-plugins-base;
 
   meta = with stdenv.lib; {
     description = "D binding and OO wrapper for GTK+";

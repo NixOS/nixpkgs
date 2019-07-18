@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "mc-${version}";
-  version = "4.8.22";
+  version = "4.8.23";
 
   src = fetchurl {
     url = "http://www.midnight-commander.org/downloads/${name}.tar.xz";
-    sha256 = "060kh3dmk8fmmsibn1l815qjazzfxzbhgqggrhncz604pbbnhy7f";
+    sha256 = "077z7phzq3m1sxyz7li77lyzv4rjmmh3wp2vy86pnc4387kpqzyx";
   };
 
   nativeBuildInputs = [ pkgconfig ];

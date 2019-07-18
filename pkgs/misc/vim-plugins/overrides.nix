@@ -11,13 +11,16 @@
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 
+# coc-go dependency
+, go
+
 # vim-go denpencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
 
-# vCoolor dep
+# vCoolor dependency
 , gnome3
 }:
 
@@ -109,21 +112,24 @@ self: super: {
     '';
   });
 
-
-  coc-nvim = let
-    version = "0.0.69";
-    index_js = fetchzip {
-        url = "https://github.com/neoclide/coc.nvim/releases/download/v${version}/coc.tar.gz";
-        sha256 = "1qnznpb39bbhimzbhsvpsdkg87dv3yxzs1vr3kaikl3kpakik9p8";
-      };
-  in super.coc-nvim.overrideAttrs(old: {
-    # you still need to enable the node js provider in your nvim config
-    postInstall = ''
-      mkdir -p $out/share/vim-plugins/coc-nvim/build
-      cp ${index_js}/index.js $out/share/vim-plugins/coc-nvim/build/
+  coc-go = super.coc-go.overrideAttrs(old: {
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/coc-go/src/utils/tools.ts \
+        --replace 'const cmd = `GOPATH=''${gopath}; go ''${args}`' 'const cmd = `GOPATH=''${gopath}; ${go}/bin/go ''${args}`'
     '';
-
   });
+
+  # Only official releases contains the required index.js file
+  coc-nvim = buildVimPluginFrom2Nix rec {
+    pname = "coc-nvim";
+    version = "0.0.73";
+    src = fetchFromGitHub {
+      owner = "neoclide";
+      repo = "coc.nvim";
+      rev = "v${version}";
+      sha256 = "1z7573rbh806nmkh75hr1kbhxr4jysv6k9x01fcyjfwricpa3cf7";
+    };
+  };
 
   command-t = super.command-t.overrideAttrs(old: {
     buildInputs = [ ruby rake ];
@@ -416,19 +422,19 @@ self: super: {
   youcompleteme = super.youcompleteme.overrideAttrs(old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
-        --replace "'ycm_path_to_python_interpreter', '''" \
-        "'ycm_path_to_python_interpreter', '${python}/bin/python'"
+        --replace "'ycm_python_interpreter_path', '''" \
+        "'ycm_python_interpreter_path', '${python3}/bin/python'"
 
       rm -r third_party/ycmd
       ln -s ${ycmd}/lib/ycmd third_party
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A code-completion engine for Vim";
-      homepage = https://github.com/Valloric/YouCompleteMe;
-      license = stdenv.lib.licenses.gpl3;
-      maintainers = with stdenv.lib.maintainers; [marcweber jagajaga];
-      platforms = stdenv.lib.platforms.unix;
+      homepage = "https://github.com/Valloric/YouCompleteMe";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ marcweber jagajaga ];
+      platforms = platforms.unix;
     };
   });
 

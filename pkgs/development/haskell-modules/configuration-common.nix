@@ -72,7 +72,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1jqsv02w84r3gxp5cihwkw3sz06n32z72kvrdg0hkq997pv4vm6a";
+      sha256 = "11d4qyhmc774h2xyrpyn9rxx99x3vjs0fcxsg49gj5ayzmykafap";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1129,8 +1129,8 @@ self: super: {
     hi-file-parser = dontCheck (unmarkBroken super.hi-file-parser);  # Avoid depending on newer hspec versions.
     http-download = dontCheck (unmarkBroken super.http-download);
     pantry-tmp = dontCheck (unmarkBroken super.pantry-tmp);
-    rio = self.rio_0_1_9_2;
-    rio-prettyprint  = unmarkBroken super.rio-prettyprint;
+    rio = self.rio_0_1_10_0;
+    rio-prettyprint = unmarkBroken super.rio-prettyprint;
   }));
 
   # musl fixes
@@ -1262,14 +1262,14 @@ self: super: {
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
     (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
-      version = "20190307-git";
+      version = "20190625-git";
       src = pkgs.fetchFromGitHub {
         owner = "haskell-CI";
         repo = "haskell-ci";
-        rev = "2baceb59bc2f36e798ff9fb6e8865c449f01d3a2";
-        sha256 = "1wqhqajxni6h9rrj22xj6421d4m0gs8qk2glghpdp307ns5gr2j4";
+        rev = "260f967c6973dfb22ecc8061a1811a2ea4b79e01";
+        sha256 = "1mvn6pqa6wfcm4jxhlhm4l54pwrlgnz7vdrmkwabliwz4q0bzgqk";
       };
-  }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck]));
+  }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck exceptions temporary]));
 
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
@@ -1313,5 +1313,8 @@ self: super: {
 
   # The old LTS-13.x version does not compile.
   ip = self.ip_1_5_0;
+
+  # Needs deque >= 0.3, but latest version on stackage is 2.7
+  butcher = super.butcher.override { deque = self.deque_0_4_2_3; };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

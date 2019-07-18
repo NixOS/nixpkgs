@@ -662,10 +662,9 @@ in
         restartIfChanged = false;
 
         environment =
-          {
-            LD_LIBRARY_PATH = concatStringsSep ":" ([ "/run/opengl-driver/lib" ]
-              ++ concatLists (catAttrs "libPath" cfg.drivers));
-          } // cfg.displayManager.job.environment;
+          optionalAttrs config.hardware.opengl.setLdLibraryPath
+            { LD_LIBRARY_PATH = pkgs.addOpenGLRunpath.driverLink; }
+          // cfg.displayManager.job.environment;
 
         preStart =
           ''

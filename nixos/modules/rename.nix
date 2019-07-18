@@ -171,6 +171,9 @@ with lib;
        The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
 
+    # zabbixServer
+    (mkRenamedOptionModule [ "services" "zabbixServer" "dbServer" ] [ "services" "zabbixServer" "database" "host" ])
+
     # Profile splitting
     (mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
 
@@ -213,6 +216,8 @@ with lib;
     (mkRemovedOptionModule [ "boot" "zfs" "enableLegacyCrypto" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "winstone" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd")
+    (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
+    (mkRemovedOptionModule [ "services" "zabbixServer" "dbPassword" ] "Use services.zabbixServer.database.passwordFile instead.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
@@ -239,6 +244,15 @@ with lib;
 
     # binfmt
     (mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
+
+    # KSM
+    (mkRenamedOptionModule [ "hardware" "enableKSM" ] [ "hardware" "ksm" "enable" ])
+
+    # resolvconf
+    (mkRenamedOptionModule [ "networking" "dnsSingleRequest" ] [ "networking" "resolvconf" "dnsSingleRequest" ])
+    (mkRenamedOptionModule [ "networking" "dnsExtensionMechanism" ] [ "networking" "resolvconf" "dnsExtensionMechanism" ])
+    (mkRenamedOptionModule [ "networking" "extraResolvconfConf" ] [ "networking" "resolvconf" "extraConfig" ])
+    (mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
 
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"

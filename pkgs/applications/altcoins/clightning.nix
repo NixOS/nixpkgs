@@ -4,11 +4,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "clightning-${version}";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "448022c2433cbf19bbd0f726344b0500c0c21ee5cc2291edf6b622f094cb3a15";
+    sha256 = "557be34410f27a8d55d9f31a40717a8f5e99829f2bd114c24e7ca1dd5f6b7d85";
   };
 
   enableParallelBuilding = true;
@@ -17,15 +17,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ sqlite gmp zlib python3 ];
 
   makeFlags = [ "prefix=$(out) VERSION=v${version}" ];
-
-  patches = [
-    # remove after 0.7.0
-    (fetchpatch {
-      name = "fix-0.7.0-build.patch";
-      url = "https://github.com/ElementsProject/lightning/commit/ffc03d2bc84dc42f745959fbb6c8007cf0a6f701.patch";
-      sha256 = "1m5fiz3m8k3nk09nldii8ij94bg6fqllqgdbiwj3sy12vihs8c4v";
-    })
-  ];
 
   configurePhase = ''
     ./configure --prefix=$out --disable-developer --disable-valgrind

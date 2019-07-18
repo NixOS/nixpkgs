@@ -16,21 +16,16 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_418 else legacy_390;
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_430 else legacy_390;
 
   # No active beta right now
-  beta = generic {
-    version = "430.14";
-    sha256_64bit = "05qgakc0sqv9zr6j4i49iqrd271nris8pmnv3l431r71ygx6zm00";
-    settingsSha256 = "1hh07258a6z0g8dl6mxrizdxqcgswv58r4rbamfhhwh9i42fpdgg";
-    persistencedSha256 = "1wmwmg9ma9rfx03s2qa249f0p7yf0lxdpiadab0raajk1lzlrrc8";
-  };
+  beta = stable;
 
-  stable_418 = generic {
-    version = "418.74";
-    sha256_64bit = "03qj42ppzkc9nphdr9zc12968bb8fc9cpcx5f66y29wnrgg3d1yw";
-    settingsSha256 = "15mbqdx5wyk7iq13kl2vd99lykpil618izwpi1kfldlabxdxsi9d";
-    persistencedSha256 = "0442qbby0r1b6l72wyw0b3iwvln6k20s6dn0zqlpxafnia9bvc8c";
+  stable_430 = generic {
+    version = "430.34";
+    sha256_64bit = "0c3x25gilibbgazvp20d5sfmmgcf0gfqf024nzzqryxg4m05h39b";
+    settingsSha256 = "1xpf9gbpq5xynxm6f401ab09aa243h1sk2vcxvzjwqgcil36zzad";
+    persistencedSha256 = "00dd0m87nwqfv9i23bvbqgcz10x9mvfxg9249nvhp4y3ha65rms6";
   };
 
   # Last one supporting x86

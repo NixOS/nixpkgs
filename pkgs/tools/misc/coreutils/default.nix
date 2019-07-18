@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
 
+    # Some target platforms, especially when building inside a container have
+    # issues with the inotify test.
+    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail-2/inotify-dir-recreate.sh
+
     # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
     substituteInPlace ./tests/install/install-C.sh \

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, darwin }:
+{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libiconv, curl, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
   ++ stdenv.lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    libiconv
+    curl
   ];
 
   meta = with stdenv.lib; {

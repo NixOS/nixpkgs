@@ -2,16 +2,16 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkOption;
+  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
   inherit (lib) mapAttrs optional optionalString types;
 
   cfg = config.services.limesurvey;
+  fpm = config.services.phpfpm.pools.limesurvey;
 
   user = "limesurvey";
   group = config.services.httpd.group;
   stateDir = "/var/lib/limesurvey";
 
-  php = pkgs.php;
   pkg = pkgs.limesurvey;
 
   configType = with types; either (either (attrsOf configType) str) (either int bool) // {
@@ -130,7 +130,8 @@ in
         pm.max_requests = 500
       '';
       description = ''
-        Options for LimeSurvey's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+        Options for the LimeSurvey PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+        for details on configuration directives.
       '';
     };
 
@@ -202,7 +203,6 @@ in
     };
 
     services.phpfpm.pools.limesurvey = {
-      phpPackage = php;
       listen = "/run/phpfpm/limesurvey.sock";
       extraConfig = ''
         listen.owner = ${config.services.httpd.user};
@@ -220,8 +220,8 @@ in
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = [
-        (cfg.virtualHost // {
+      virtualHosts = [ (mkMerge [
+        cfg.virtualHost {
           documentRoot = mkForce "${pkg}/share/limesurvey";
           extraConfig = ''
             Alias "/tmp" "${stateDir}/tmp"
@@ -241,7 +241,7 @@ in
             <Directory "${pkg}/share/limesurvey">
               <FilesMatch "\.php$">
                 <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:/run/phpfpm/limesurvey.sock|fcgi://localhost/"
+                  SetHandler "proxy:unix:${fpm.listen}|fcgi://localhost/"
                 </If>
               </FilesMatch>
 
@@ -250,8 +250,8 @@ in
               DirectoryIndex index.php
             </Directory>
           '';
-        })
-      ];
+        }
+      ]) ];
     };
 
     systemd.tmpfiles.rules = [
@@ -270,8 +270,8 @@ in
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
-        ${php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
-        ${php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+        ${pkgs.php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
+        ${pkgs.php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
       '';
       serviceConfig = {
         User = user;

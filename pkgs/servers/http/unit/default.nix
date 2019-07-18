@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub, which
 , withPython ? true, python
-, withPHP71 ? false, php71
 , withPHP72 ? true, php72
 , withPHP73 ? false, php73
 , withPerl ? true, perl
@@ -30,7 +29,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ]
     ++ optional withPython python
-    ++ optional withPHP71 php71
     ++ optional withPHP72 php72
     ++ optional withPHP73 php73
     ++ optional withPerl perl
@@ -51,7 +49,6 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     ${optionalString withPython     "./configure python  --module=python    --config=${python}/bin/python-config  --lib-path=${python}/lib"}
-    ${optionalString withPHP71      "./configure php     --module=php71     --config=${php71.dev}/bin/php-config  --lib-path=${php71}/lib"}
     ${optionalString withPHP72      "./configure php     --module=php72     --config=${php72.dev}/bin/php-config  --lib-path=${php72}/lib"}
     ${optionalString withPHP73      "./configure php     --module=php73     --config=${php73.dev}/bin/php-config  --lib-path=${php73}/lib"}
     ${optionalString withPerl       "./configure perl    --module=perl      --perl=${perl}/bin/perl"}

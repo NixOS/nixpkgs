@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libGL ];
 
-  configurePhase = "true";
+  dontConfigure = true;
 
   buildPhase = "
     $CC src/xdemos/{glxinfo.c,glinfo_common.c} -o glxinfo -lGL -lX11

@@ -29,14 +29,15 @@ let
   });
 
   jsonschema3 = callPackage ./jsonschema.nix { };
+  glob2 = callPackage ./glob2.nix { };
 
 in buildPythonPackage rec {
   pname = "poetry";
-  version = "0.12.16";
+  version = "0.12.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0h4ldchggsh6gli16p1z25c4jj1in3yyzgqf285zidnjc6rlrqc8";
+    sha256 = "0gxwcd65qjmzqzppf53x51sic1rbcd9py6cdzx3aprppipimslvf";
   };
 
   postPatch = ''
@@ -44,6 +45,8 @@ in buildPythonPackage rec {
       "requests-toolbelt>=0.8.0,<0.9.0" \
       "requests-toolbelt>=0.8.0,<0.10.0"
   '';
+
+  format = "pyproject";
 
   propagatedBuildInputs = [
     cleo6
@@ -58,7 +61,7 @@ in buildPythonPackage rec {
     html5lib
     shellingham
     tomlkit
-  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 ]
+  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
     ++ lib.optionals isPy27 [ virtualenv functools32 ];
 
   postInstall = ''

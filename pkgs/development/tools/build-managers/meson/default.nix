@@ -11,12 +11,12 @@ let
   };
 in
 python3Packages.buildPythonApplication rec {
-  version = "0.49.2";
   pname = "meson";
+  version = "0.50.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0ckkzq0kbnnk4rwv20lggm9a4fb5054jbv99i9pwjhid23qy7059";
+    sha256 = "05k3wsxjcnnq7a8n5kzxh2cdh5jdkh13xagigz5axs48j36zfai4";
   };
 
   postFixup = ''

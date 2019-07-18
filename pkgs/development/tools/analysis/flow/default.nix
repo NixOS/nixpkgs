@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, ocamlPackages, cf-private, CoreServices }:
+{ stdenv, fetchFromGitHub, ocamlPackages, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.101.0";
+  version = "0.102.0";
 
   src = fetchFromGitHub {
     owner  = "facebook";
     repo   = "flow";
     rev    = "refs/tags/v${version}";
-    sha256 = "09m9arpb26fqwc16f2zgjgkrlmjg0gj55zd9rfv2s8x1l0lrx5z6";
+    sha256 = "1c49pjzrpcymkvs8vcmb16wd9h1mm62k6w82mibywvhhy8hva1gf";
   };
 
   installPhase = ''
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = (with ocamlPackages; [ ocaml findlib ocamlbuild dtoa core_kernel sedlex ocaml_lwt lwt_log lwt_ppx ppx_deriving ppx_gen_rec ppx_tools_versioned visitors wtf8 ])
-    ++ stdenv.lib.optionals stdenv.isDarwin [ cf-private CoreServices ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with stdenv.lib; {
     description = "A static type checker for JavaScript";

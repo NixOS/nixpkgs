@@ -5,7 +5,7 @@
 , soundtouch, sfml, vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
-, CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
+, CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
 
 let
   desktopItem = makeDesktopItem {
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     bluez udev libevdev alsaLib vulkan-loader
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    CoreBluetooth cf-private OpenGL ForceFeedback IOKit
+    CoreBluetooth OpenGL ForceFeedback IOKit
   ];
 
   cmakeFlags = [

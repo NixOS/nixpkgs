@@ -12,7 +12,9 @@ name ? "${attrs.pname}-${attrs.version}"
 , version
 
 # by default prefix `name` e.g. "lua5.2-${name}"
-, namePrefix ? "lua" + lua.luaversion + "-"
+, namePrefix ? if lua.pkgs.isLuaJIT
+               then lua.name + "-"
+               else "lua" + lua.luaversion + "-"
 
 # Dependencies for building the package
 , buildInputs ? []

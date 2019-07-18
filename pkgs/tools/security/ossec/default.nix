@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "ossec-client-2.6";
 
   src = fetchurl {
-    url = http://www.ossec.net/files/ossec-hids-2.6.tar.gz;
+    url = https://www.ossec.net/files/ossec-hids-2.6.tar.gz;
 
     sha256 = "0k1b59wdv9h50gbyy88qw3cnpdm8hv0nrl0znm92h9a11i5b39ip";
   };
