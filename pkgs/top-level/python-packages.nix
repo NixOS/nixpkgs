@@ -1080,6 +1080,8 @@ in {
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
+  python-openid = callPackage ../development/python-modules/python-openid { };
+
   python-packer = callPackage ../development/python-modules/python-packer { };
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
