@@ -1,6 +1,4 @@
-{ buildFHSUserEnv, lutris-unwrapped
-, optimusSupport ? false
-, nvidiaSmiSupport ? false
+{ lib, buildFHSUserEnv, lutris-unwrapped
 , steamSupport ? true
 }:
 
@@ -14,17 +12,13 @@ let
     xrandr
   ];
 
-  lutris_ = lutris-unwrapped.override {
-    inherit optimusSupport nvidiaSmiSupport steamSupport;
-  };
-
 in buildFHSUserEnv {
   name = "lutris";
 
   runScript = "lutris";
 
   targetPkgs = pkgs: with pkgs; [
-    lutris_
+    lutris-unwrapped
 
     # Common
     libsndfile libtheora libogg libvorbis libopus libGLU libpcap libpulseaudio
@@ -106,11 +100,12 @@ in buildFHSUserEnv {
     soundfont-fluid bzip2 game-music-emu
   ] ++ qt5Deps pkgs
     ++ gnome3Deps pkgs
-    ++ xorgDeps pkgs;
+    ++ xorgDeps pkgs
+    ++ lib.optional steamSupport pkgs.steam;
 
   extraInstallCommands = ''
     mkdir -p $out/share
-    ln -sf ${lutris_}/share/applications $out/share
-    ln -sf ${lutris_}/share/icons $out/share
+    ln -sf ${lutris-unwrapped}/share/applications $out/share
+    ln -sf ${lutris-unwrapped}/share/icons $out/share
   '';
 }

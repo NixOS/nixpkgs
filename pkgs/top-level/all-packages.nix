@@ -19011,7 +19011,6 @@ in
 
   lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
     inherit (gnome3) gnome-desktop libgnome-keyring webkitgtk;
-    nvidia_x11 = linuxPackages.nvidia_x11;
     wine = wineWowPackages.staging;
   };
   lutris = callPackage ../applications/misc/lutris/chrootenv.nix { };

@@ -3,15 +3,12 @@
 , gdk_pixbuf, atk, webkitgtk, gst_all_1
 , evdev, pyyaml, pygobject3, requests, pillow
 , xrandr, pciutils, psmisc, glxinfo, vulkan-tools, xboxdrv, pulseaudio, p7zip, xgamma
-, libstrangle, wine, fluidsynth
-, optimusSupport ? false, primus, bumblebee
-, nvidiaSmiSupport ? false, nvidia_x11
-, steamSupport ? true, steam
+, libstrangle, wine, fluidsynth, xorgserver
 }:
 
 let
   # See lutris/util/linux.py
-  binPath = lib.makeBinPath ([
+  binPath = lib.makeBinPath [
     xrandr
     pciutils
     psmisc
@@ -24,9 +21,8 @@ let
     libstrangle
     wine
     fluidsynth
-  ] ++ lib.optionals optimusSupport [ primus bumblebee ]
-    ++ lib.optional nvidiaSmiSupport nvidia_x11
-    ++ lib.optional steamSupport steam);
+    xorgserver
+  ];
 
   gstDeps = with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
