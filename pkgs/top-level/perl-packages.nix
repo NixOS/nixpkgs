@@ -11132,10 +11132,10 @@ let
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "8.14";
+    version = "8.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.14.tar.gz;
-      sha256 = "0dammdx51cyqn2b35yihk85gz1blgw85w6jv6h04cv4cdahph59q";
+      url = mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.21.tar.gz;
+      sha256 = "1p5ri6ib0pd58jyzzdx98j45b4bj9bs59m6srzx3n21b5gd5jf3y";
     };
     meta = {
       homepage = https://mojolicious.org;
