@@ -13995,10 +13995,10 @@ let
 
   ProcProcessTable = buildPerlPackage {
     pname = "Proc-ProcessTable";
-    version = "0.56";
+    version = "0.59";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JW/JWB/Proc-ProcessTable-0.56.tar.gz;
-      sha256 = "99fb8fd11e4e438399dd362d95b5b2073f1f340e9b3a7f04e76b6c7428170660";
+      url = mirror://cpan/authors/id/J/JW/JWB/Proc-ProcessTable-0.59.tar.gz;
+      sha256 = "f8cc5054d78c35a0ce39fb75430b4ef402e2a99013d2ec37e7997f316594606c";
     };
     meta = {
       description = "Perl extension to access the unix process table";
