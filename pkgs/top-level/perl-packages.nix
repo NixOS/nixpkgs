@@ -13921,13 +13921,13 @@ let
 
   PPI = buildPerlPackage {
     pname = "PPI";
-    version = "1.236";
+    version = "1.270";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.236.tar.gz;
-      sha256 = "c6674b349c0b7d9a6d668e789a5e5215477d88ed4c8203aa69a2a50085308aec";
+      url = mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.270.tar.gz;
+      sha256 = "622a698c781bb85d2bdf7bbfe040fe70d33b79774c9ae01fce2375dc73faf457";
     };
-    buildInputs = [ ClassInspector FileRemove TestDeep TestObject TestSubCalls ];
-    propagatedBuildInputs = [ Clone IOString ListMoreUtils ParamsUtil TaskWeaken ];
+    buildInputs = [ ClassInspector TestDeep TestNoWarnings TestObject TestSubCalls ];
+    propagatedBuildInputs = [ Clone IOString ParamsUtil TaskWeaken ];
 
     # Remove test that fails due to unexpected shebang after
     # patchShebang.
