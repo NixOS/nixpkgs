@@ -14510,10 +14510,10 @@ let
 
   Razor2ClientAgent = buildPerlPackage {
     pname = "Razor2-Client-Agent";
-    version = "2.84";
+    version = "2.86";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Razor2-Client-Agent-2.84.tar.gz;
-      sha256 = "d7c2ed7f347a673b1425e4da7656073d6c52847bc7403bf57e3a404b52f7e501";
+      url = mirror://cpan/authors/id/T/TO/TODDR/Razor2-Client-Agent-2.86.tar.gz;
+      sha256 = "5e062e02ebb65e24b708e7eefa5300c43d6f657bf20d08fec4ca8a0a3b94845f";
     };
     propagatedBuildInputs = [ DigestSHA1 URI ];
     meta = {
