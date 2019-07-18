@@ -14849,10 +14849,10 @@ let
 
   ScopeUpper = buildPerlPackage {
     pname = "Scope-Upper";
-    version = "0.31";
+    version = "0.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/V/VP/VPIT/Scope-Upper-0.31.tar.gz;
-      sha256 = "cc4d2ce0f185b4867d73b4083991117052a523fd409debf15bdd7e374cc16d8c";
+      url = mirror://cpan/authors/id/V/VP/VPIT/Scope-Upper-0.32.tar.gz;
+      sha256 = "ccaff3251c092f2af8b5ad840b76655c4bc4ccf504ff7bde233811822a40abcf";
     };
     meta = {
       description = "Act on upper scopes";
