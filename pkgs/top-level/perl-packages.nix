@@ -2870,10 +2870,10 @@ let
 
   Connector = buildPerlPackage {
     pname = "Connector";
-    version = "1.26";
+    version = "1.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.26.tar.gz;
-      sha256 = "9852c2b43a8201996530deb1d3aa7fda18abe1ce24c80fbdebd7981cd2f05c45";
+      url = mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.27.tar.gz;
+      sha256 = "98ff4700fde2b7872d89566a3308d03c2899c88cb6317af901869513bdbfb603";
     };
     buildInputs = [ ConfigMerge ConfigStd ConfigVersioned DBDSQLite DBI ProcSafeExec TemplateToolkit YAML ];
     propagatedBuildInputs = [ LogLog4perl Moose ];
