@@ -3231,6 +3231,10 @@ in {
 
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
+  flask-mongoengine = callPackage ../development/python-modules/flask-mongoengine { };
+
+  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
+
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 
   flask_principal = callPackage ../development/python-modules/flask-principal { };
