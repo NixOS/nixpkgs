@@ -17556,10 +17556,10 @@ let
 
   TestSynopsis = buildPerlPackage {
     pname = "Test-Synopsis";
-    version = "0.15";
+    version = "0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/Z/ZO/ZOFFIX/Test-Synopsis-0.15.tar.gz;
-      sha256 = "1cxxidhwf8j8n41d423ankvls2wdi7aw755csi3hcv3mj9k67mfi";
+      url = mirror://cpan/authors/id/Z/ZO/ZOFFIX/Test-Synopsis-0.16.tar.gz;
+      sha256 = "09891vnkw9i8v074rswaxbrp6x2d8j8r90gqc306497ppiryq4qv";
     };
     meta = {
       description = "Test your SYNOPSIS code";
