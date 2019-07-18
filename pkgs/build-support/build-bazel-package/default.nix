@@ -1,6 +1,6 @@
 { stdenv, bazel, cacert }:
 
-args@{ name, bazelFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
+args@{ name, bazelFlags ? [], bazelBuildFlags ? [], bazelFetchFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
 
 let
   fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" ];
@@ -8,11 +8,11 @@ let
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
 
 in stdenv.mkDerivation (fBuildAttrs // {
-  inherit name bazelFlags bazelTarget;
+  inherit name bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
     name = "${name}-deps";
-    inherit bazelFlags bazelTarget;
+    inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
 
@@ -45,6 +45,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
         fetch \
         --loading_phase_threads=1 \
         $bazelFlags \
+        $bazelFetchFlags \
         $bazelTarget
 
       runHook postBuild
@@ -117,6 +118,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       build \
       -j $NIX_BUILD_CORES \
       $bazelFlags \
+      $bazelBuildFlags \
       $bazelTarget
 
     runHook postBuild
