@@ -12770,14 +12770,13 @@ let
       url = mirror://cpan/authors/id/B/BS/BSCHMITZ/Net-Whois-IP-1.19.tar.gz;
       sha256 = "08kj2h9qiyfvv3jfz619xl796j93cslg7d96919mnrnjy6hdz6zh";
     };
-
-    propagatedBuildInputs = [ RegexpIPv6 LWPProtocolhttps ];
     doCheck = false;
 
     # https://rt.cpan.org/Public/Bug/Display.html?id=99377
     postPatch = ''
       substituteInPlace IP.pm --replace " AutoLoader" ""
     '';
+    buildInputs = [ RegexpIPv6 ];
   };
 
   NetWorks = buildPerlPackage {
