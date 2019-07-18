@@ -3325,10 +3325,10 @@ let
 
   CryptRijndael = buildPerlPackage {
     pname = "Crypt-Rijndael";
-    version = "1.13";
+    version = "1.14";
     src = fetchurl {
       url = mirror://cpan/authors/id/L/LE/LEONT/Crypt-Rijndael-1.14.tar.gz;
-      sha256 = "0ki16vkgzvzyjdx6mmvjfpngyvhf7cis46pymy6dr8z0vyk0jwnd";
+      sha256 = "03l5nwq97a8q9na4dpd4m3r7vrwpranx225vw8xm40w7zvgw6lb4";
     };
   };
 
