@@ -2232,10 +2232,10 @@ let
 
   ClassEHierarchy = buildPerlPackage {
     pname = "Class-EHierarchy";
-    version = "2.00";
+    version = "2.01";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/CORLISS/Class-EHierarchy/Class-EHierarchy-2.00.tar.gz;
-      sha256 = "8498baaf7539eaa3422c6fe1055a0fc9a0c02e94dad0c63405373528e622bacb";
+      url = mirror://cpan/authors/id/C/CO/CORLISS/Class-EHierarchy/Class-EHierarchy-2.01.tar.gz;
+      sha256 = "637ab76beb3832a9b071b999a1b15bf05d297df6a662ccb1a8004f2987308382";
     };
     meta = {
       description = "Base class for hierarchally ordered objects";
