@@ -10176,10 +10176,10 @@ let
 
   MailTools = buildPerlPackage {
     pname = "MailTools";
-    version = "2.20";
+    version = "2.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/MailTools-2.20.tar.gz;
-      sha256 = "15iizg2x1w7ca0r8rn3wwhp7w160ljvf55prspljwd6cm7vhcmpm";
+      url = mirror://cpan/authors/id/M/MA/MARKOV/MailTools-2.21.tar.gz;
+      sha256 = "1js43bp2dnd8n2rv8clsv749166jnyqnc91k4wkkmw5n4rlbvnaa";
     };
     propagatedBuildInputs = [ TimeDate ];
     meta = {
