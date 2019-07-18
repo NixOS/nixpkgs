@@ -3672,6 +3672,8 @@ in {
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
+  marshmallow-enum = callPackage ../development/python-modules/marshmallow-enum { };
+
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
   manuel = callPackage ../development/python-modules/manuel { };
