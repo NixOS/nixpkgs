@@ -1976,6 +1976,8 @@ in {
 
   jsonlines = callPackage ../development/python-modules/jsonlines { };
 
+  json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
