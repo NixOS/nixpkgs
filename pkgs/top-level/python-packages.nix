@@ -3197,6 +3197,8 @@ in {
 
   flask = callPackage ../development/python-modules/flask { };
 
+  flask-admin = callPackage ../development/python-modules/flask-admin { };
+
   flask-api = callPackage ../development/python-modules/flask-api { };
 
   flask_assets = callPackage ../development/python-modules/flask-assets { };
