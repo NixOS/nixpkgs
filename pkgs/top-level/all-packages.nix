@@ -814,6 +814,8 @@ in
 
   httperf = callPackage ../tools/networking/httperf { };
 
+  ili2c = callPackage ../tools/misc/ili2c { };
+
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
