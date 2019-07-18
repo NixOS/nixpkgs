@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt 2019-07-20 22:51:52.000000000 -0700
++++ b/CMakeLists.txt   2019-07-20 22:53:31.000000000 -0700
+@@ -687,7 +687,7 @@
+
+     # Seemingly --gc-sections causes problems with randomization, so only
+     # turn it on if we are not making a randomized build.
+-    IF (NOT LINK_RANDOMIZE)
++    IF (NOT LINK_RANDOMIZE AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
+       STRING_APPEND(CMAKE_C_LINK_FLAGS " -Wl,--gc-sections")
+       STRING_APPEND(CMAKE_CXX_LINK_FLAGS " -Wl,--gc-sections")
+     ENDIF()
