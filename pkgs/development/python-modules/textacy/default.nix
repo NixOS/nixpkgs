@@ -19,6 +19,7 @@
 , spacy
 , tqdm
 , unidecode
+, mwparserfromhell
 }:
 
 buildPythonPackage rec {
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     spacy
     tqdm
     unidecode
+    mwparserfromhell
   ];
 
   postPatch = ''
