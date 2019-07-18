@@ -3889,6 +3889,8 @@ in {
 
   zake = callPackage ../development/python-modules/zake { };
 
+  zarr = callPackage ../development/python-modules/zarr { };
+
   kazoo = callPackage ../development/python-modules/kazoo { };
 
   FormEncode = callPackage ../development/python-modules/FormEncode { };
