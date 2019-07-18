@@ -723,10 +723,10 @@ let
 
   AuthenRadius = buildPerlPackage {
     pname = "Authen-Radius";
-    version = "0.29";
+    version = "0.31";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PO/PORTAONE/Authen-Radius-0.29.tar.gz;
-      sha256 = "7fb3425546b2f518e4a07edb3bcb55672454fe8e13bece58de2dc43885afb079";
+      url = mirror://cpan/authors/id/P/PO/PORTAONE/Authen-Radius-0.31.tar.gz;
+      sha256 = "bb5191484188ac7d6e281eb199d16c4e09fb0090af7c2187aa275c454c1fc012";
     };
     buildInputs = [ TestNoWarnings ];
     propagatedBuildInputs = [ DataHexDump NetIP ];
