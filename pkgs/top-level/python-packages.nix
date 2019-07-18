@@ -1880,6 +1880,8 @@ in {
 
   eth-utils = callPackage ../development/python-modules/eth-utils { };
 
+  json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
