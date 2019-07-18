@@ -550,6 +550,8 @@ in {
 
   fasttext = callPackage ../development/python-modules/fasttext {  };
 
+  facedancer = callPackage ../development/python-modules/facedancer {  };
+
   favicon = callPackage ../development/python-modules/favicon {  };
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
@@ -2983,6 +2985,10 @@ in {
   };
 
   grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
+
+  greatfet = callPackage ../development/python-modules/greatfet { };
+
+  pygreat = callPackage ../development/python-modules/pygreat { };
 
   pytorch = callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
