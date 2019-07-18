@@ -5965,6 +5965,8 @@ in {
 
   preggy = callPackage ../development/python-modules/preggy { };
 
+  prison = callPackage ../development/python-modules/prison { };
+
   pytoml = callPackage ../development/python-modules/pytoml { };
 
   pypandoc = callPackage ../development/python-modules/pypandoc { };
