@@ -5227,14 +5227,14 @@ let
     };
   };
 
-  DistZillaPluginTestMinimumVersion = buildPerlPackage {
+  DistZillaPluginTestMinimumVersion = buildPerlModule {
     pname = "Dist-Zilla-Plugin-Test-MinimumVersion";
-    version = "2.000008";
+    version = "2.000010";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-MinimumVersion-2.000008.tar.gz;
-      sha256 = "d924ce79aaaa1885510ca6ecfcb4d8bc250fb6995bc96627f1536cb589e3b660";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-MinimumVersion-2.000010.tar.gz;
+      sha256 = "b8b71f4b64b689f4b647a3a87d6aaaae45a68892d35e36baa976f605736370fb";
     };
-    buildInputs = [ TestDeep TestMinimumVersion TestOutput ];
+    buildInputs = [ ModuleBuildTiny TestDeep TestMinimumVersion TestOutput ];
     propagatedBuildInputs = [ DistZilla ];
     meta = {
       description = "Release tests for minimum required versions";
