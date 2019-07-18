@@ -4856,10 +4856,10 @@ let
 
   DevelStackTrace = buildPerlPackage {
     pname = "Devel-StackTrace";
-    version = "2.03";
+    version = "2.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/Devel-StackTrace-2.03.tar.gz;
-      sha256 = "7618cd4ebe24e254c17085f4b418784ab503cb4cb3baf8f48a7be894e59ba848";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/Devel-StackTrace-2.04.tar.gz;
+      sha256 = "cd3c03ed547d3d42c61fa5814c98296139392e7971c092e09a431f2c9f5d6855";
     };
     meta = {
       description = "An object representing a stack trace";
