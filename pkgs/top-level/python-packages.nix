@@ -1590,6 +1590,8 @@ in {
 
   crc16 = callPackage ../development/python-modules/crc16 { };
 
+  croniter = callPackage ../development/python-modules/croniter { };
+
   csscompressor = callPackage ../development/python-modules/csscompressor {};
 
   csvs-to-sqlite = callPackage ../development/python-modules/csvs-to-sqlite { };
