@@ -17032,10 +17032,10 @@ let
 
   SUPER = buildPerlModule {
     pname = "SUPER";
-    version = "1.20141117";
+    version = "1.20190531";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHROMATIC/SUPER-1.20141117.tar.gz;
-      sha256 = "1a620e7d60aee9b13b1b26a44694c43fdb2bba1755cfff435dae83c7d42cc0b2";
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/SUPER-1.20190531.tar.gz;
+      sha256 = "685d1ee76e7f0e9006942923bf7df8b11c107132992917593dcf7397d417d39a";
     };
     propagatedBuildInputs = [ SubIdentify ];
     meta = {
