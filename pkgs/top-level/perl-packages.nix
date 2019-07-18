@@ -1681,6 +1681,21 @@ let
     };
   };
 
+  CatalystPluginSmartURI = buildPerlPackage {
+    pname = "Catalyst-Plugin-SmartURI";
+    version = "0.041";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RK/RKITOVER/Catalyst-Plugin-SmartURI-0.041.tar.gz;
+      sha256 = "0msz3w2vfdb5w4ixi5llq66xlhm0181gjz9xj8yj0lalk232326b";
+    };
+    propagatedBuildInputs = [ CatalystRuntime ClassC3Componentised ];
+    buildInputs = [ CatalystActionREST TestWarnings TimeOut URISmartURI ];
+    meta = {
+      description = "Configurable URIs for Catalyst";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CatalystPluginStackTrace = buildPerlPackage {
     pname = "Catalyst-Plugin-StackTrace";
     version = "0.12";
@@ -18596,6 +18611,17 @@ let
     };
   };
 
+  TimeOut = buildPerlPackage {
+    pname = "Time-Out";
+    version = "0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PA/PATL/Time-Out-0.11.tar.gz;
+      sha256 = "1lhmx1x8j6z1k9vn32bcsw7g44cg22icshnnc37djlnlixlxm5lk";
+    };
+    meta = {
+    };
+  };
+
   TimeParseDate = buildPerlPackage {
     pname = "Time-ParseDate";
     version = "2015.103";
@@ -18942,6 +18968,21 @@ let
     propagatedBuildInputs = [ URI ];
     meta = {
       description = "Nested URIs";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  URISmartURI = buildPerlPackage {
+    pname = "URI-SmartURI";
+    version = "0.032";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RK/RKITOVER/URI-SmartURI-0.032.tar.gz;
+      sha256 = "0b2grkmkbnp37q85wj7jpj5zr93vdbisgxlls2vl5q928rwln5zb";
+    };
+    propagatedBuildInputs = [ ClassC3Componentised FileFindRule ListMoreUtils Moose URI namespaceclean ];
+    buildInputs = [ TestFatal TestNoWarnings ];
+    meta = {
+      description = "Subclassable and hostless URIs";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
