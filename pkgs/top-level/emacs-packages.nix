@@ -434,7 +434,10 @@ let
     };
     stripDebugList = [ "share" ];
     packageRequires = [ emacs ];
-    nativeBuildInputs = [ external.autoconf external.automake external.pkgconfig external.libtool external.zeromq ];
+    nativeBuildInputs = [
+      external.autoconf external.automake external.pkgconfig external.libtool
+      (external.zeromq.override { enableDrafts = true; })
+    ];
     preBuild = ''
       make
     '';
