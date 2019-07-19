@@ -224,6 +224,8 @@ in
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
 
+      xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];
+
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = ''
         # The KDE icon cache is supposed to update itself
