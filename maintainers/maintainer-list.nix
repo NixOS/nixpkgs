@@ -4438,11 +4438,6 @@
     github = "ryanartecona";
     name = "Ryan Artecona";
   };
-  ryansydnor = {
-    email = "ryan.t.sydnor@gmail.com";
-    github = "ryansydnor";
-    name = "Ryan Sydnor";
-  };
   ryantm = {
     email = "ryan@ryantm.com";
     github = "ryantm";
