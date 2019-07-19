@@ -3875,11 +3875,6 @@
     github = "pbogdan";
     name = "Piotr Bogdan";
   };
-  pcarrier = {
-    email = "pc@rrier.ca";
-    github = "pcarrier";
-    name = "Pierre Carrier";
-  };
   periklis = {
     email = "theopompos@gmail.com";
     github = "periklis";
