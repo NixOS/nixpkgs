@@ -282,6 +282,15 @@ in
 
   fet-sh = callPackage ../tools/misc/fet-sh { };
 
+  esy = callPackage ../development/tools/ocaml/esy {
+    ocamlPackages = ocaml-ng.esyOcamlPackages;
+    inherit (ocaml-ng.esyOcamlPackages) reason buildDunePackage;
+    esy-solve-cudf = callPackage ../development/tools/ocaml/esy/solve-cudf.nix {
+      ocamlPackages = ocaml-ng.esyOcamlPackages;
+      buildDunePackage = ocaml-ng.esyOcamlPackages.buildDunePackage;
+    };
+  };
+
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };

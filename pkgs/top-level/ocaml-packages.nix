@@ -191,6 +191,8 @@ let
       inherit (pkgs) curl;
     };
 
+    cudf = callPackage ../development/ocaml-modules/cudf/default.nix { };
+
     curses = callPackage ../development/ocaml-modules/curses { };
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
@@ -210,6 +212,8 @@ let
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
+
+    dose3 = callPackage ../development/ocaml-modules/dose3 { };
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
@@ -1224,4 +1228,23 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_latest = ocamlPackages_4_10;
 
   ocamlPackages = ocamlPackages_4_10;
+
+  esyOcamlPackages = ocamlPackages_4_09.overrideScope' (self: super: {
+    cmdliner = super.cmdliner.overrideAttrs (oldAttrs : {
+      src = pkgs.fetchFromGitHub {
+        owner = "esy-ocaml";
+        repo = "cmdliner";
+        rev = "e9316bc34e4781ffdd51ffe6f2de7c59b36c741e";
+        sha256 = "0dly2gskcfh2cari5s87bfqahkf8jsxrzp2wb0madl3v9dgmil3b";
+      };
+    });
+    angstrom = super.angstrom.overrideAttrs (oldAttrs : {
+      src = pkgs.fetchFromGitHub {
+        owner = "esy-ocaml";
+        repo = "angstrom";
+        rev = "5a06a0c1a1f8fda4252717a5cf2c5daace8bc77d";
+        sha256 = "1a5kha7587ffw1l0q9s21kmh6ma75786p584bscq4bf0bkaywy4g";
+      };
+    });
+  });
 }
