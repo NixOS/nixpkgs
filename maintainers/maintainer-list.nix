@@ -3208,11 +3208,6 @@
     github = "melchips";
     name = "Francois Truphemus";
   };
-  melsigl = {
-    email = "melanie.bianca.sigl@gmail.com";
-    github = "melsigl";
-    name = "Melanie B. Sigl";
-  };
   melkor333 = {
     email = "samuel@ton-kunst.ch";
     github = "melkor333";
