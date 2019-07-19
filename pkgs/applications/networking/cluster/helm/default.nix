@@ -1,14 +1,14 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  version = "2.14.1";
+  version = "2.14.2";
   name = "helm-${version}";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "16gvplqzllcif5h3qlfnlk8ifhkl5za3wj82129nf9darkixs4jh";
+    sha256 = "0hxfyfpmhgr5jilp2xm9d5vxiq5fcgqm2hh4g4izcgiz9bz7b6k0";
   };
 
   goPackagePath = "k8s.io/helm";
