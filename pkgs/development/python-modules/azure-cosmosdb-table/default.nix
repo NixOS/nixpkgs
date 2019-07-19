@@ -7,7 +7,6 @@
 , dateutil
 , futures
 , requests
-, vcrpy
 }:
 
 buildAzureCosmosdbPythonPackage rec {
@@ -33,8 +32,8 @@ buildAzureCosmosdbPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "This is the Microsoft Azure Log Analytics Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/cosmosdb?view=azure-python;
+    description = "Microsoft Azure CosmosDB Table Client Library for Python";
+    homepage = "https://github.com/Azure/azure-cosmosdb-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight jonringer ];
   };
