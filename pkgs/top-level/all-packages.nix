@@ -21690,6 +21690,8 @@ in
 
   cuyo = callPackage ../games/cuyo { };
 
+  devilutionx = callPackage ../games/devilutionx {};
+
   dhewm3 = callPackage ../games/dhewm3 {};
 
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {
