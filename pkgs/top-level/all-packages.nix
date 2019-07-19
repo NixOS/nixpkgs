@@ -21317,6 +21317,8 @@ in
     inherit (gnome2) scrollkeeper libglade;
   };
 
+  xygrib = libsForQt5.callPackage ../applications/misc/xygrib/default.nix {};
+
   xzgv = callPackage ../applications/graphics/xzgv { };
 
   yabar = callPackage ../applications/window-managers/yabar { };
@@ -24412,5 +24414,4 @@ in
   dapper = callPackage ../development/tools/dapper { };
 
   kube3d =  callPackage ../applications/networking/cluster/kube3d {};
-
 }

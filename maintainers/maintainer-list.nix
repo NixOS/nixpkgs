@@ -2271,6 +2271,11 @@
     github = "j-keck";
     name = "Jürgen Keck";
   };
+  j03 = {
+    email = "github@johannesloetzsch.de";
+    github = "johannesloetzsch";
+    name = "Johannes Lötzsch";
+  };
   jagajaga = {
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
