@@ -64,10 +64,6 @@ qtOwnPathsHook() {
 
 preFixupPhases+=" qtOwnPathsHook"
 
-isQtApp () {
-    readelf -d "$1" 2>/dev/null | grep -q -F 'libQt5Core'
-}
-
 # Note: $qtWrapperArgs still gets defined even if $dontWrapQtApps is set.
 wrapQtAppsHook() {
     # skip this hook when requested
@@ -77,7 +73,7 @@ wrapQtAppsHook() {
     [ -z "$wrapQtAppsHookHasRun" ] || return 0
     wrapQtAppsHookHasRun=1
 
-    local targetDirs=( "$prefix/bin" )
+    local targetDirs=( "$prefix/bin" "$prefix/libexec"  )
     echo "wrapping Qt applications in ${targetDirs[@]}"
 
     for targetDir in "${targetDirs[@]}"
@@ -86,7 +82,7 @@ wrapQtAppsHook() {
 
         find "$targetDir" -executable -print0 | while IFS= read -r -d '' file
         do
-            isQtApp "$file" || continue
+            isELF "$file" || continue
 
             if [ -f "$file" ]
             then
